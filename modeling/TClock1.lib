@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGSELECTEDCOMPONENTS version="0.62" copyMaxId="21" decX="278" decY="154" >
+
+<TClassDiagramPanelCopy name="Class Diagram" xSel="278" ySel="154" widthSel="212" heightSel="342" >
+<COMPONENT type="201" id="21" >
+<cdparam x="283" y="167" />
+<sizeparam width="151" height="30" minWidth="150" minHeight="0" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Tclass" value="TClock" />
+<TGConnectingPoint num="0" id="16" />
+<TGConnectingPoint num="1" id="17" />
+<TGConnectingPoint num="2" id="18" />
+<TGConnectingPoint num="3" id="19" />
+<TGConnectingPoint num="4" id="20" />
+<extraparam>
+<Start isStart="false" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="3" >
+<father id="21" num="0" />
+<cdparam x="283" y="198" />
+<sizeparam width="151" height="46" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="46" />
+<cdrectangleparam minX="0" maxX="0" minY="31" maxY="31" />
+<infoparam name="Tclass attributes" value="- value = 0 : Natural;
+- isStart = false : Boolean;
+" />
+<TGConnectingPoint num="0" id="1" />
+<TGConnectingPoint num="1" id="2" />
+<extraparam>
+<Attribute access="0" id="value" value="0" type="0" />
+<Attribute access="0" id="isStart" value="false" type="4" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="6" >
+<father id="21" num="1" />
+<cdparam x="283" y="244" />
+<sizeparam width="151" height="110" minWidth="150" minHeight="30" minDesiredWidth="151" minDesiredHeight="110" />
+<cdrectangleparam minX="0" maxX="0" minY="77" maxY="77" />
+<infoparam name="Tclass gates" value="+ set : Gate;
++ get : Gate;
++ reset : Gate;
++ start : Gate;
++ pause : Gate;
+- internalIncrement : Gate;
+" />
+<TGConnectingPoint num="0" id="4" />
+<TGConnectingPoint num="1" id="5" />
+<extraparam>
+<Attribute access="2" id="set" value="" type="1" />
+<Attribute access="2" id="get" value="" type="1" />
+<Attribute access="2" id="reset" value="" type="1" />
+<Attribute access="2" id="start" value="" type="1" />
+<Attribute access="2" id="pause" value="" type="1" />
+<Attribute access="0" id="internalIncrement" value="" type="1" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="9" >
+<father id="21" num="2" />
+<cdparam x="283" y="355" />
+<sizeparam width="151" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="188" maxY="188" />
+<infoparam name="Tclass operations" value="" />
+<TGConnectingPoint num="0" id="7" />
+<TGConnectingPoint num="1" id="8" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="15" >
+<father id="21" num="3" />
+<cdparam x="283" y="386" />
+<sizeparam width="151" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="219" maxY="219" />
+<infoparam name="Tclass activity Diagram" value="" />
+<TGConnectingPoint num="0" id="10" />
+<TGConnectingPoint num="1" id="11" />
+<TGConnectingPoint num="2" id="12" />
+<TGConnectingPoint num="3" id="13" />
+<TGConnectingPoint num="4" id="14" />
+</SUBCOMPONENT>
+
+
+</TClassDiagramPanelCopy><TActivityDiagramPanel name="TClock" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="14" id="23" >
+<cdparam x="343" y="52" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="22" />
+</COMPONENT>
+
+<COMPONENT type="15" id="26" >
+<cdparam x="459" y="331" />
+<sizeparam width="34" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="start" />
+<TGConnectingPoint num="0" id="24" />
+<TGConnectingPoint num="1" id="25" />
+</COMPONENT>
+
+<COMPONENT type="15" id="29" >
+<cdparam x="127" y="348" />
+<sizeparam width="63" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="set?value" />
+<TGConnectingPoint num="0" id="27" />
+<TGConnectingPoint num="1" id="28" />
+</COMPONENT>
+
+<COMPONENT type="15" id="32" >
+<cdparam x="208" y="348" />
+<sizeparam width="59" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="get!value" />
+<TGConnectingPoint num="0" id="30" />
+<TGConnectingPoint num="1" id="31" />
+</COMPONENT>
+
+<COMPONENT type="19" id="40" >
+<cdparam x="222" y="261" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="choice" value="null" />
+<TGConnectingPoint num="0" id="36" />
+<TGConnectingPoint num="1" id="37" />
+<TGConnectingPoint num="2" id="38" />
+<TGConnectingPoint num="3" id="39" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="33" >
+<father id="40" num="0" />
+<cdparam x="197" y="271" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
+<infoparam name="guard 1" value="[ ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="34" >
+<father id="40" num="1" />
+<cdparam x="257" y="271" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
+<infoparam name="guard 2" value="[ ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="35" >
+<father id="40" num="2" />
+<cdparam x="242" y="306" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
+<infoparam name="guard 3" value="[ ]" />
+</SUBCOMPONENT>
+
+<COMPONENT type="17" id="45" >
+<cdparam x="222" y="421" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="junction" value="" />
+<TGConnectingPoint num="0" id="41" />
+<TGConnectingPoint num="1" id="42" />
+<TGConnectingPoint num="2" id="43" />
+<TGConnectingPoint num="3" id="44" />
+</COMPONENT>
+
+<COMPONENT type="19" id="53" >
+<cdparam x="460" y="251" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="choice" value="null" />
+<TGConnectingPoint num="0" id="49" />
+<TGConnectingPoint num="1" id="50" />
+<TGConnectingPoint num="2" id="51" />
+<TGConnectingPoint num="3" id="52" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="46" >
+<father id="53" num="0" />
+<cdparam x="435" y="261" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
+<infoparam name="guard 1" value="[ ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="47" >
+<father id="53" num="1" />
+<cdparam x="504" y="262" />
+<sizeparam width="78" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
+<infoparam name="guard 2" value="[isStart = true ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="48" >
+<father id="53" num="2" />
+<cdparam x="480" y="296" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
+<infoparam name="guard 3" value="[ ]" />
+</SUBCOMPONENT>
+
+<COMPONENT type="15" id="56" >
+<cdparam x="307" y="344" />
+<sizeparam width="38" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="reset" />
+<TGConnectingPoint num="0" id="54" />
+<TGConnectingPoint num="1" id="55" />
+</COMPONENT>
+
+<COMPONENT type="17" id="61" >
+<cdparam x="461" y="459" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="junction" value="" />
+<TGConnectingPoint num="0" id="57" />
+<TGConnectingPoint num="1" id="58" />
+<TGConnectingPoint num="2" id="59" />
+<TGConnectingPoint num="3" id="60" />
+</COMPONENT>
+
+<COMPONENT type="19" id="69" >
+<cdparam x="345" y="183" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="choice" value="null" />
+<TGConnectingPoint num="0" id="65" />
+<TGConnectingPoint num="1" id="66" />
+<TGConnectingPoint num="2" id="67" />
+<TGConnectingPoint num="3" id="68" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="62" >
+<father id="69" num="0" />
+<cdparam x="320" y="193" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
+<infoparam name="guard 1" value="[ ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="63" >
+<father id="69" num="1" />
+<cdparam x="380" y="193" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
+<infoparam name="guard 2" value="[ ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="64" >
+<father id="69" num="2" />
+<cdparam x="365" y="228" />
+<sizeparam width="9" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
+<infoparam name="guard 3" value="[ ]" />
+</SUBCOMPONENT>
+
+<COMPONENT type="17" id="74" >
+<cdparam x="345" y="133" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="junction" value="" />
+<TGConnectingPoint num="0" id="70" />
+<TGConnectingPoint num="1" id="71" />
+<TGConnectingPoint num="2" id="72" />
+<TGConnectingPoint num="3" id="73" />
+</COMPONENT>
+
+<COMPONENT type="15" id="77" >
+<cdparam x="297" y="382" />
+<sizeparam width="59" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="value = 0" />
+<TGConnectingPoint num="0" id="75" />
+<TGConnectingPoint num="1" id="76" />
+</COMPONENT>
+
+<COMPONENT type="15" id="80" >
+<cdparam x="382" y="310" />
+<sizeparam width="45" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="pause" />
+<TGConnectingPoint num="0" id="78" />
+<TGConnectingPoint num="1" id="79" />
+</COMPONENT>
+
+<COMPONENT type="15" id="83" >
+<cdparam x="362" y="417" />
+<sizeparam width="85" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="isStart = false" />
+<TGConnectingPoint num="0" id="81" />
+<TGConnectingPoint num="1" id="82" />
+</COMPONENT>
+
+<COMPONENT type="15" id="86" >
+<cdparam x="437" y="376" />
+<sizeparam width="79" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="isStart = true" />
+<TGConnectingPoint num="0" id="84" />
+<TGConnectingPoint num="1" id="85" />
+</COMPONENT>
+
+<COMPONENT type="11" id="90" >
+<cdparam x="567" y="298" />
+<sizeparam width="10" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="deterministic delay" value="null" />
+<TGConnectingPoint num="0" id="88" />
+<TGConnectingPoint num="1" id="89" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="87" >
+<father id="90" num="0" />
+<cdparam x="582" y="318" />
+<sizeparam width="7" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
+<infoparam name="value of the delay" value="1" />
+</SUBCOMPONENT>
+
+<COMPONENT type="15" id="93" >
+<cdparam x="503" y="344" />
+<sizeparam width="138" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="internalIncrement!value" />
+<TGConnectingPoint num="0" id="91" />
+<TGConnectingPoint num="1" id="92" />
+</COMPONENT>
+
+<COMPONENT type="15" id="96" >
+<cdparam x="522" y="379" />
+<sizeparam width="101" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="value = value + 1" />
+<TGConnectingPoint num="0" id="94" />
+<TGConnectingPoint num="1" id="95" />
+</COMPONENT>
+
+<CONNECTOR type="101" id="98" >
+<cdparam x="131" y="500" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to action state" value="null" />
+<P1  x="197" y="276" id="37" />
+<P2  x="158" y="343" id="27" />
+<Point x="158" y="276" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="97" >
+<father id="98" num="0" />
+<cdparam x="158" y="276" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="99" >
+<cdparam x="171" y="540" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to action state" value="null" />
+<P1  x="237" y="316" id="39" />
+<P2  x="237" y="343" id="30" />
+</CONNECTOR>
+<CONNECTOR type="101" id="100" >
+<cdparam x="82" y="564" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="158" y="373" id="28" />
+<P2  x="222" y="436" id="42" />
+</CONNECTOR>
+<CONNECTOR type="101" id="101" >
+<cdparam x="242" y="576" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="237" y="373" id="31" />
+<P2  x="237" y="421" id="41" />
+</CONNECTOR>
+<CONNECTOR type="101" id="103" >
+<cdparam x="435" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to action state" value="null" />
+<P1  x="277" y="276" id="38" />
+<P2  x="326" y="339" id="54" />
+<Point x="326" y="276" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="102" >
+<father id="103" num="0" />
+<cdparam x="326" y="276" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="104" >
+<cdparam x="515" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to action state" value="null" />
+<P1  x="475" y="306" id="52" />
+<P2  x="476" y="326" id="24" />
+</CONNECTOR>
+<CONNECTOR type="101" id="105" >
+<cdparam x="608" y="532" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="476" y="401" id="85" />
+<P2  x="476" y="459" id="57" />
+</CONNECTOR>
+<CONNECTOR type="101" id="106" >
+<cdparam x="424" y="100" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from start state to junction" value="null" />
+<P1  x="350" y="72" id="22" />
+<P2  x="360" y="133" id="70" />
+</CONNECTOR>
+<CONNECTOR type="101" id="107" >
+<cdparam x="360" y="163" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from junction to choice" value="null" />
+<P1  x="360" y="163" id="73" />
+<P2  x="360" y="173" id="65" />
+</CONNECTOR>
+<CONNECTOR type="101" id="108" >
+<cdparam x="319" y="199" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to choice" value="null" />
+<P1  x="320" y="198" id="66" />
+<P2  x="237" y="251" id="36" />
+</CONNECTOR>
+<CONNECTOR type="101" id="109" >
+<cdparam x="399" y="199" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to choice" value="null" />
+<P1  x="400" y="198" id="67" />
+<P2  x="475" y="241" id="49" />
+</CONNECTOR>
+<CONNECTOR type="101" id="110" >
+<cdparam x="479" y="387" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="326" y="369" id="55" />
+<P2  x="326" y="377" id="75" />
+</CONNECTOR>
+<CONNECTOR type="101" id="115" >
+<cdparam x="307" y="453" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from junction to junction" value="null" />
+<P1  x="237" y="451" id="44" />
+<P2  x="345" y="148" id="71" />
+<Point x="237" y="463" />
+<Point x="108" y="463" />
+<Point x="108" y="123" />
+<Point x="345" y="123" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="111" >
+<father id="115" num="0" />
+<cdparam x="237" y="463" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="112" >
+<father id="115" num="1" />
+<cdparam x="108" y="463" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="113" >
+<father id="115" num="2" />
+<cdparam x="108" y="123" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="114" >
+<father id="115" num="3" />
+<cdparam x="345" y="123" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="120" >
+<cdparam x="640" y="612" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from junction to junction" value="null" />
+<P1  x="476" y="489" id="60" />
+<P2  x="375" y="148" id="72" />
+<Point x="476" y="508" />
+<Point x="645" y="508" />
+<Point x="645" y="123" />
+<Point x="375" y="123" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="116" >
+<father id="120" num="0" />
+<cdparam x="476" y="508" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="117" >
+<father id="120" num="1" />
+<cdparam x="645" y="508" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="118" >
+<father id="120" num="2" />
+<cdparam x="645" y="123" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="119" >
+<father id="120" num="3" />
+<cdparam x="375" y="123" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="121" >
+<cdparam x="403" y="422" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="326" y="407" id="76" />
+<P2  x="252" y="436" id="43" />
+</CONNECTOR>
+<CONNECTOR type="101" id="122" >
+<cdparam x="476" y="356" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to action state" value="null" />
+<P1  x="476" y="356" id="25" />
+<P2  x="476" y="371" id="84" />
+</CONNECTOR>
+<CONNECTOR type="101" id="124" >
+<cdparam x="435" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to action state" value="null" />
+<P1  x="435" y="266" id="50" />
+<P2  x="404" y="305" id="78" />
+<Point x="404" y="266" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="123" >
+<father id="124" num="0" />
+<cdparam x="404" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="125" >
+<cdparam x="403" y="362" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to action state" value="null" />
+<P1  x="404" y="335" id="79" />
+<P2  x="404" y="412" id="81" />
+</CONNECTOR>
+<CONNECTOR type="101" id="126" >
+<cdparam x="400" y="445" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="404" y="442" id="82" />
+<P2  x="461" y="474" id="58" />
+</CONNECTOR>
+<CONNECTOR type="101" id="128" >
+<cdparam x="515" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to deterministic delay" value="null" />
+<P1  x="515" y="266" id="51" />
+<P2  x="572" y="293" id="88" />
+<Point x="572" y="266" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="127" >
+<father id="128" num="0" />
+<cdparam x="572" y="266" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="101" id="129" >
+<cdparam x="551" y="344" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from deterministic delay to action state" value="null" />
+<P1  x="572" y="333" id="89" />
+<P2  x="572" y="339" id="91" />
+</CONNECTOR>
+<CONNECTOR type="101" id="130" >
+<cdparam x="572" y="403" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to junction" value="null" />
+<P1  x="572" y="404" id="95" />
+<P2  x="491" y="474" id="59" />
+</CONNECTOR>
+<CONNECTOR type="101" id="131" >
+<cdparam x="572" y="369" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to action state" value="null" />
+<P1  x="572" y="369" id="92" />
+<P2  x="572" y="374" id="94" />
+</CONNECTOR>
+
+</TActivityDiagramPanel>
+
+</TURTLEGSELECTEDCOMPONENTS>
