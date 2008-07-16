@@ -94,7 +94,7 @@ public class TIFTreeNode  {
 	}
 	
 	public boolean isLeaf() {
-		return ((son1 == null) && (son2 == null))
+		return ((son1 == null) && (son2 == null));
 	}
     
    
