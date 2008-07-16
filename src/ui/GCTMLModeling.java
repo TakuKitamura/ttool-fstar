@@ -74,9 +74,9 @@ public class GCTMLModeling  {
         tmldp = _tmldp;
     }
 	
-	public GTMLModeling(TMLArchiPanel _tmlap) {
+	/*public GTMLModeling(TMLArchiPanel _tmlap) {
 		tmlap = _tmlap;
-	}
+	}*/
     
     public TMLModeling translateToTMLModeling() {
         tmlm = new TMLModeling();
@@ -539,7 +539,7 @@ public class GCTMLModeling  {
                 tmlforloop = new TMLForLoop("loop", tgc);
                 tmlforloop.setInit(((TMLADForLoop)tgc).getInit());
                 tmlforloop.setCondition(((TMLADForLoop)tgc).getCondition());
-                tmlforloop.setIncrement(modifyActionString((TMLADForLoop)tgc).getIncrement()));
+                tmlforloop.setIncrement(modifyActionString((TMLADForLoop)tgc).getIncrement());
                 activity.addElement(tmlforloop);
 				listE.addCor(tmlforloop, tgc);
 				
@@ -1130,7 +1130,7 @@ public class GCTMLModeling  {
 		}
 		
 		// Cannot mix primitive components and tasks
-		if (panels.size() > && cpanels.size() >0) {
+		if ((panels.size() > 0) && (cpanels.size() >0)) {
 			CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Both Application component and tasks are mapped: they canot be mixed on the same architecture");
 			ce.setTDiagramPanel(tmlap.tmlap);
 			checkingErrors.add(ce);
