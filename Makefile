@@ -48,13 +48,14 @@ TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
 TTOOL_BIN = $(TTOOL_PATH)/bin
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
+TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
 TTOOL_DOC = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
 TTOOL_STD_RELEASE = $(TTOOL_PATH)/release/
 JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
-TTOOL_TARGET = $(TTOOL_PATH)/TTool_install
+TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
 
 RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV7.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml COCOME_V50.xml
 RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
@@ -86,7 +87,7 @@ tmltranslator:
 	cd $(TTOOL_SRC);$(JAR) cmf $(TMLTRANSLATOR_JAR_TXT) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY)  TMLTranslator.class tmltranslator/*.class tmltranslator/*/*.class myutil/*.class translator/*.class uppaaldesc/*.class ui/CheckingError.class compiler/tmlparser/*.class
 
 documentation:
-	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java
+	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 
 release: jttooljar launcher tiftranslator tmltranslator ttooljar_std stdrelease 
 	echo release done
@@ -99,17 +100,31 @@ stdrelease:
 	mkdir -p $(TTOOL_TARGET)/java
 	cp $(TTOOL_BIN)/$(JTTOOL_JAR) $(TTOOL_TARGET)/java
 	cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
-#modeling
+# modeling
 	mkdir -p $(TTOOL_TARGET)/modeling
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_TARGET)/modeling
 	cp $(TTOOL_DOC)/README_modeling $(TTOOL_TARGET)/modeling
-#lib
+# lib
 	mkdir -p $(TTOOL_TARGET)/lib
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_TARGET)/lib
 	cp $(TTOOL_DOC)/README_lib $(TTOOL_TARGET)/lib
-#Licenses
+# simulators
+	mkdir -p $(TTOOL_TARGET)/simulators/version1/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/version1/lib
+	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile $(TTOOL_TARGET)/simulators/version1
+	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile.defs $(TTOOL_TARGET)/simulators/version1
+	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/version1/src_simulator
+	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/version1/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/version2/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/version2/lib
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/version2
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/version2
+	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/version2
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/version2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/version2/src_simulator
+# Licenses
 	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
-#Main readme
+# Main readme
 	cp $(TTOOL_DOC)/README $(TTOOL_TARGET)
 # LOTOS
 	mkdir -p $(TTOOL_TARGET)/lotos
@@ -117,21 +132,23 @@ stdrelease:
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figure
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure
+# Basic doc
+	mkdir -p $(TTOOL_TARGET)/doc
+	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
+	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-#Basic doc
-	mkdir -p $(TTOOL_TARGET)/doc
-	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
-
-test:
-
-	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_TARGET)/bin
+# Basic release
 	cd $(TTOOL_TARGET);$(TAR) cfvz $(TTOOL_STD_RELEASE)/release.tgz *
+# Advanced release
+	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
+	mkdir -p $(TTOOL_TARGET)/src
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
-	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif'  \) -a -exec rm {} \;
-	cp -R $(TTOOL_BIN)/README_src $(TTOOL_TARGET)/src
+	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
+	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
 	cd $(TTOOL_TARGET);$(TAR) cfvz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
 
 
