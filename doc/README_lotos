@@ -1,0 +1,5 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at ENST, http://labsoc.comelec.enst.fr/turtle/
+-------------------------------------------------------------------------------
+
+The lotos directory is intended to store the rt-lotos files generated from TTool. To generate these files, please refer to http://labsoc.comelec.enst.fr/turtle/HELP

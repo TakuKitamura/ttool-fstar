@@ -1,0 +1,10 @@
+Commands:
+caesar.open spec distributor configuration toto
+
+Example configuration file:
+rsh= ssh -x
+rcp= scp 
+cow10
+directory = /homes/apvrille/TTool/bin
+cow12
+directory = /homes/apvrille/TTool/bin

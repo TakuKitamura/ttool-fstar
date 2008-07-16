@@ -1,0 +1,18 @@
+TTool, an open-source UML toolkit for modeling embedded systems and procotols.
+TTool is developed at ENST, http://labsoc.comelec.enst.fr/turtle/
+-------------------------------------------------------------------------------
+
+This directory contain files for starting the TTool's launcher and TTool itself.Assuming "java" is a recognized command of your system, you may:
+1) start the launcher as follows:
+$java -jar launcher.jar
+
+2) start TTool as follows
+$ java -Xmx256m -jar ttool.jar config.xml
+
+Don't forget to correctly configure various settings in your config.xml file.
+
+For more installation on the running of TTool and the configuration of your config.xml, please, see http://labsoc.comelec.enst.fr/turtle/HELP
+
+-------------------------------------------------------------------------------
+Various files:
+configuration.gcf: Configuration file for distributor (CADP)
