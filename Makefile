@@ -1,5 +1,6 @@
 # TTool Makefile
 # Tested under Linux *only*
+# Meant to work with svn
 
 TARGET_ARCH = linux
 
@@ -24,7 +25,7 @@ LAUNCHER_JAR_TXT = launcher.txt
 TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
 TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
 TTOOL_CONFIG = config.xml
-TTOOL_CONFIG_SRC = configcow13.xml
+TTOOL_CONFIG_SRC = config.xml
 JTTOOL_JAR = jttool.jar
 TTOOL_LOTOS_H =  spec
 TTOOL_LOTOS_H_0 = spec_0.h 
@@ -46,14 +47,16 @@ ENTERPRISE_LOGO =  starting_logo_enterprise.gif
 TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
 TTOOL_BIN = $(TTOOL_PATH)/bin
-TTOOL_DOC = $(TTOOL_PATH)/doc/html
+TTOOL_MODELING = $(TTOOL_PATH)/modeling
+TTOOL_DOC = $(TTOOL_PATH)/doc
+TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
 TTOOL_STD_RELEASE = $(TTOOL_PATH)/release/
 JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install
 
-RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV7.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml
+RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV7.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml COCOME_V50.xml
 RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) 
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
@@ -67,8 +70,7 @@ all:
 ttooljar_std:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)
 	cp $(TTOOL_SRC)/ui/images/$(STD_LOGO) $(TTOOL_SRC)/ui/images/$(LOGO) 
-	cd $(TTOOL_SRC);  $(JAR) cmf $(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(TTOOL_BINARY) Main.class automata/*.class compiler/tmlparser/*.class  tmltranslator/*.class tmltranslator/toautomata/*.class tmatrix/*.class tmltranslator/toturtle/*.class tmltranslator/touppaal/*.class tmltranslator/tosystemc/*.class tmltranslator/tomappingsystemc/*.class tmltranslator/tomappingsystemc2/*.class  tpndescription/*.class ddtranslator/*.class launcher/*.class myutil/*.class sddescription/*.class sdtranslator/*.class translator/*.class translator/tojava/*.class  translator/tosimujava/*.class translator/touppaal/*.class translator/totpn/*.class ui/*.class ui/*/*.class ui/*/*/*.class jars/*.jar uppaaldesc/*.class ui/images/*.* ui/images/toolbarButtonGraphics/general/*.gif ui/images/toolbarButtonGraphics/media/*.gif $(TTOOL_BIN)/$(LAUNCHER_BINARY) RTLLauncher.class launcher/*.class fr/inria/oasis/vercors/cttool/model/*.class
-	cp $(TTOOL_SRC)/$(TTOOL_CONFIG_SRC) $(TTOOL_BIN)/$(TTOOL_CONFIG)
+	cd $(TTOOL_SRC);  $(JAR) cmf $(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(TTOOL_BINARY) Main.class automata/*.class compiler/tmlparser/*.class  tmltranslator/*.class tmltranslator/toautomata/*.class tmatrix/*.class tmltranslator/toturtle/*.class tmltranslator/touppaal/*.class tmltranslator/tosystemc/*.class tmltranslator/tomappingsystemc/*.class tmltranslator/tomappingsystemc2/*.class  tpndescription/*.class ddtranslator/*.class launcher/*.class myutil/*.class sddescription/*.class sdtranslator/*.class translator/*.class translator/tojava/*.class  translator/tosimujava/*.class translator/touppaal/*.class translator/totpn/*.class ui/*.class ui/*/*.class ui/*/*/*.class uppaaldesc/*.class ui/images/*.* ui/images/toolbarButtonGraphics/general/*.gif ui/images/toolbarButtonGraphics/media/*.gif $(TTOOL_BIN)/$(LAUNCHER_BINARY) RTLLauncher.class launcher/*.class fr/inria/oasis/vercors/cttool/model/*.class
 
 
 launcher:
@@ -89,21 +91,42 @@ documentation:
 release: jttooljar launcher tiftranslator tmltranslator ttooljar_std stdrelease 
 	echo release done
 
+########## RELEASE
 stdrelease:
-	rm -rf $(TTOOL_TARGET)/src/*
+	mkdir -p $(TTOOL_TARGET)
+	rm -rf $(TTOOL_TARGET)/*
+# java
+	mkdir -p $(TTOOL_TARGET)/java
 	cp $(TTOOL_BIN)/$(JTTOOL_JAR) $(TTOOL_TARGET)/java
-	cd $(TTOOL_BIN); cp $(RELEASE_STD_FILES_XML) $(TTOOL_TARGET)/modeling
-	cd $(TTOOL_BIN); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_TARGET)/lib
-	cd $(TTOOL_BIN); cp $(RELEASE_STD_FILES_BIN) $(TTOOL_TARGET)/bin
-	cd $(TTOOL_BIN); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
-	cd $(TTOOL_BIN); cp README $(TTOOL_TARGET)
-	cp -R $(TTOOL_BIN)/README_modeling $(TTOOL_TARGET)/modeling
-	cp -R $(TTOOL_BIN)/README_lotos $(TTOOL_TARGET)/lotos
-	cp -R $(TTOOL_BIN)/README_bin $(TTOOL_TARGET)/bin
-	cp -R $(TTOOL_BIN)/README_lib $(TTOOL_TARGET)/lib
-	cp -R $(TTOOL_BIN)/README_java $(TTOOL_TARGET)/java
-	cp -R $(TTOOL_BIN)/README_figure $(TTOOL_TARGET)/figure
-	cp -R $(TTOOL_BIN)/README_doc $(TTOOL_TARGET)/doc
+	cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
+#modeling
+	mkdir -p $(TTOOL_TARGET)/modeling
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_XML) $(TTOOL_TARGET)/modeling
+	cp $(TTOOL_DOC)/README_modeling $(TTOOL_TARGET)/modeling
+#lib
+	mkdir -p $(TTOOL_TARGET)/lib
+	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_TARGET)/lib
+	cp $(TTOOL_DOC)/README_lib $(TTOOL_TARGET)/lib
+#Licenses
+	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
+#Main readme
+	cp $(TTOOL_DOC)/README $(TTOOL_TARGET)
+# LOTOS
+	mkdir -p $(TTOOL_TARGET)/lotos
+	cp $(TTOOL_DOC)/README_lotos $(TTOOL_TARGET)/lotos
+# Figure
+	mkdir -p $(TTOOL_TARGET)/figure
+	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure
+# Basic bin
+	mkdir -p $(TTOOL_TARGET)/bin
+	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
+	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
+#Basic doc
+	mkdir -p $(TTOOL_TARGET)/doc
+	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
+
+test:
+
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
 	cd $(TTOOL_TARGET);$(TAR) cfvz $(TTOOL_STD_RELEASE)/release.tgz *
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
