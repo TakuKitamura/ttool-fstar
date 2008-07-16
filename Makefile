@@ -62,7 +62,7 @@ RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIF
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
 all:
-	svn update builder.txt
+	svn update builder.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn commit -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
