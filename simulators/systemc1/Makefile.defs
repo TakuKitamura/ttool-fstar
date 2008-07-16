@@ -1,0 +1,43 @@
+## Variable that points to SystemC installation path
+#SYSTEMC = /packages/Systemc_2.0.1
+SYSTEMC = /packages/systemc_2.1.1
+#SYSTEMC = /homes/muhammad/Systemc2.1
+#SYSTEMC = /homes/rasheed/Works/SystemC/systemc/systemc-2.1
+#SYSTEMC = /homes/petitmen/systemc/pack
+
+# Cristian Macario 21/11/07
+# SystemC directory on my laptop
+#SYSTEMC = /usr/local/systemc-2.2.0
+#SYSTEMC = /home/inizan/Documents/systemC/systemc-2.2.0
+TLM_HOME = /homes/inizan/p01/Simon_dl/TLM-2006-11-29/tlm
+#TLM_HOME = /home/inizan/Documents/systemC/TLM-2006-11-29/tlm
+
+INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SYSTEMC)/include -I$(TLM_HOME)
+LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
+
+LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
+
+
+EXE    = $(MODULE).x
+
+.SUFFIXES: .cpp .o .x
+
+$(EXE): $(OBJS) $(OBJS_simulator) $(SYSTEMC)/lib-$(TARGET_ARCH)/libsystemc.a 
+	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+
+$(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+$(OBJDIR)/%.o: ./%.cpp
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+clean::
+	rm -f $(OBJS_simulator) $(OBJS) *~ $(EXE) core 
+
+ultraclean: clean
+	rm -f Makefile.deps
+
+Makefile.deps:
+#	$(CC) $(CFLAGS) $(INCDIR) -M $(SRCS) >> Makefile.deps
+
+#include Makefile.deps

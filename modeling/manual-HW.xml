@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGMODELING version="0.80beta3c">
+
+<Modeling type="Design" nameTab="Design" >
+<TClassDiagramPanel name="Class Diagram" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="201" id="21" >
+<cdparam x="442" y="107" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="0" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Tclass" value="Greetings" />
+<TGConnectingPoint num="0" id="16" />
+<TGConnectingPoint num="1" id="17" />
+<TGConnectingPoint num="2" id="18" />
+<TGConnectingPoint num="3" id="19" />
+<TGConnectingPoint num="4" id="20" />
+<extraparam>
+<Start isStart="true" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="3" >
+<father id="21" num="0" />
+<cdparam x="442" y="138" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="31" maxY="31" />
+<infoparam name="Tclass attributes" value="" />
+<TGConnectingPoint num="0" id="1" />
+<TGConnectingPoint num="1" id="2" />
+<extraparam>
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="6" >
+<father id="21" num="1" />
+<cdparam x="442" y="169" />
+<sizeparam width="150" height="46" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="46" />
+<cdrectangleparam minX="0" maxX="0" minY="62" maxY="62" />
+<infoparam name="Tclass gates" value="+ HelloWorld : OutGate;
++ DoIt : InGate;
+" />
+<TGConnectingPoint num="0" id="4" />
+<TGConnectingPoint num="1" id="5" />
+<extraparam>
+<Attribute access="2" id="HelloWorld" value="" type="2" />
+<Attribute access="2" id="DoIt" value="" type="3" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="9" >
+<father id="21" num="2" />
+<cdparam x="442" y="214" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="107" maxY="107" />
+<infoparam name="Tclass operations" value="" />
+<TGConnectingPoint num="0" id="7" />
+<TGConnectingPoint num="1" id="8" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="15" >
+<father id="21" num="3" />
+<cdparam x="442" y="245" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="138" maxY="138" />
+<infoparam name="Tclass activity Diagram" value="" />
+<TGConnectingPoint num="0" id="10" />
+<TGConnectingPoint num="1" id="11" />
+<TGConnectingPoint num="2" id="12" />
+<TGConnectingPoint num="3" id="13" />
+<TGConnectingPoint num="4" id="14" />
+</SUBCOMPONENT>
+
+<COMPONENT type="201" id="42" >
+<cdparam x="84" y="115" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="0" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Tclass" value="Controller" />
+<TGConnectingPoint num="0" id="37" />
+<TGConnectingPoint num="1" id="38" />
+<TGConnectingPoint num="2" id="39" />
+<TGConnectingPoint num="3" id="40" />
+<TGConnectingPoint num="4" id="41" />
+<extraparam>
+<Start isStart="true" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="24" >
+<father id="42" num="0" />
+<cdparam x="84" y="146" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="31" maxY="31" />
+<infoparam name="Tclass attributes" value="" />
+<TGConnectingPoint num="0" id="22" />
+<TGConnectingPoint num="1" id="23" />
+<extraparam>
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="27" >
+<father id="42" num="1" />
+<cdparam x="84" y="177" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="62" maxY="62" />
+<infoparam name="Tclass gates" value="+ DoIt : OutGate;
+" />
+<TGConnectingPoint num="0" id="25" />
+<TGConnectingPoint num="1" id="26" />
+<extraparam>
+<Attribute access="2" id="DoIt" value="" type="2" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="30" >
+<father id="42" num="2" />
+<cdparam x="84" y="208" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="93" maxY="93" />
+<infoparam name="Tclass operations" value="" />
+<TGConnectingPoint num="0" id="28" />
+<TGConnectingPoint num="1" id="29" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="36" >
+<father id="42" num="3" />
+<cdparam x="84" y="239" />
+<sizeparam width="150" height="30" minWidth="150" minHeight="30" minDesiredWidth="150" minDesiredHeight="30" />
+<cdrectangleparam minX="0" maxX="0" minY="124" maxY="124" />
+<infoparam name="Tclass activity Diagram" value="" />
+<TGConnectingPoint num="0" id="31" />
+<TGConnectingPoint num="1" id="32" />
+<TGConnectingPoint num="2" id="33" />
+<TGConnectingPoint num="3" id="34" />
+<TGConnectingPoint num="4" id="35" />
+</SUBCOMPONENT>
+
+<COMPONENT type="205" id="48" >
+<cdparam x="288" y="91" />
+<sizeparam width="100" height="25" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="synchro composition operator between Controller and Greetings" value="Synchro" />
+<TGConnectingPoint num="0" id="44" />
+<TGConnectingPoint num="1" id="45" />
+<TGConnectingPoint num="2" id="46" />
+<TGConnectingPoint num="3" id="47" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="43" >
+<father id="48" num="0" />
+<cdparam x="244" y="148" />
+<sizeparam width="36" height="18" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="OCL formula listing all synchronization gates" value="" />
+<extraparam>
+<Synchro t1="42" g1="DoIt" t2="21" g2="DoIt" />
+</extraparam>
+</SUBCOMPONENT>
+
+<CONNECTOR type="102" id="50" >
+<cdparam x="248" y="184" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Tclass gates to Tclass gates" value="null" />
+<TGConnectingPoint num="0" id="49" />
+<P1  x="234" y="192" id="26" />
+<P2  x="442" y="192" id="4" />
+</CONNECTOR>
+<CONNECTOR type="103" id="51" >
+<cdparam x="338" y="191" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Tclass gates to synchro composition operator" value="null" />
+<P1  x="338" y="192" id="49" />
+<P2  x="338" y="116" id="46" />
+</CONNECTOR>
+
+</TClassDiagramPanel>
+
+<TActivityDiagramPanel name="Greetings" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="14" id="53" >
+<cdparam x="144" y="13" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="52" />
+</COMPONENT>
+
+<COMPONENT type="18" id="57" >
+<cdparam x="152" y="100" />
+<sizeparam width="8" height="32" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="non deterministic delay" value="null" />
+<TGConnectingPoint num="0" id="55" />
+<TGConnectingPoint num="1" id="56" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="54" >
+<father id="57" num="0" />
+<cdparam x="165" y="120" />
+<sizeparam width="14" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="8" maxX="18" minY="11" maxY="31" />
+<infoparam name="value of the latency" value="20" />
+</SUBCOMPONENT>
+
+<COMPONENT type="15" id="60" >
+<cdparam x="118" y="159" />
+<sizeparam width="71" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="HelloWorld" />
+<TGConnectingPoint num="0" id="58" />
+<TGConnectingPoint num="1" id="59" />
+</COMPONENT>
+
+<COMPONENT type="13" id="62" >
+<cdparam x="143" y="207" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="61" />
+</COMPONENT>
+
+<COMPONENT type="15" id="65" >
+<cdparam x="136" y="55" />
+<sizeparam width="32" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="DoIt" />
+<TGConnectingPoint num="0" id="63" />
+<TGConnectingPoint num="1" id="64" />
+</COMPONENT>
+
+<CONNECTOR type="101" id="66" >
+<cdparam x="155" y="40" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from start state to non deterministic delay" value="null" />
+<P1  x="151" y="33" id="52" />
+<P2  x="152" y="50" id="63" />
+</CONNECTOR>
+<CONNECTOR type="101" id="67" >
+<cdparam x="156" y="106" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from non deterministic delay to action state" value="null" />
+<P1  x="152" y="137" id="56" />
+<P2  x="153" y="154" id="58" />
+</CONNECTOR>
+<CONNECTOR type="101" id="68" >
+<cdparam x="156" y="154" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to stop state" value="null" />
+<P1  x="153" y="184" id="59" />
+<P2  x="153" y="202" id="61" />
+</CONNECTOR>
+<CONNECTOR type="101" id="69" >
+<cdparam x="229" y="70" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to non deterministic delay" value="null" />
+<P1  x="152" y="80" id="64" />
+<P2  x="152" y="95" id="55" />
+</CONNECTOR>
+
+</TActivityDiagramPanel>
+
+<TActivityDiagramPanel name="Controller" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="14" id="71" >
+<cdparam x="122" y="24" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="70" />
+</COMPONENT>
+
+<COMPONENT type="11" id="75" >
+<cdparam x="124" y="72" />
+<sizeparam width="10" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="deterministic delay" value="null" />
+<TGConnectingPoint num="0" id="73" />
+<TGConnectingPoint num="1" id="74" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="72" >
+<father id="75" num="0" />
+<cdparam x="139" y="92" />
+<sizeparam width="7" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
+<infoparam name="value of the delay" value="2" />
+</SUBCOMPONENT>
+
+<COMPONENT type="15" id="78" >
+<cdparam x="113" y="131" />
+<sizeparam width="32" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="action state" value="DoIt" />
+<TGConnectingPoint num="0" id="76" />
+<TGConnectingPoint num="1" id="77" />
+</COMPONENT>
+
+<COMPONENT type="13" id="80" >
+<cdparam x="119" y="178" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="79" />
+</COMPONENT>
+
+<CONNECTOR type="101" id="81" >
+<cdparam x="129" y="44" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from start state to deterministic delay" value="null" />
+<P1  x="129" y="44" id="70" />
+<P2  x="129" y="67" id="73" />
+</CONNECTOR>
+<CONNECTOR type="101" id="82" >
+<cdparam x="130" y="105" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from deterministic delay to action state" value="null" />
+<P1  x="129" y="107" id="74" />
+<P2  x="129" y="126" id="76" />
+</CONNECTOR>
+<CONNECTOR type="101" id="83" >
+<cdparam x="129" y="156" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from action state to stop state" value="null" />
+<P1  x="129" y="156" id="77" />
+<P2  x="129" y="173" id="79" />
+</CONNECTOR>
+
+</TActivityDiagramPanel>
+
+</Modeling>
+
+
+
+
+</TURTLEGMODELING>

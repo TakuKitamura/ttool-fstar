@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGMODELING version="0.80beta3c">
+
+<Modeling type="Analysis" nameTab="Analysis" >
+<InteractionOverviewDiagramPanel name="Interaction Overview Diagram" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="501" id="8" >
+<cdparam x="305" y="279" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="choice" value="null" />
+<TGConnectingPoint num="0" id="4" />
+<TGConnectingPoint num="1" id="5" />
+<TGConnectingPoint num="2" id="6" />
+<TGConnectingPoint num="3" id="7" />
+</COMPONENT>
+<SUBCOMPONENT type="-1" id="1" >
+<father id="8" num="0" />
+<cdparam x="230" y="289" />
+<sizeparam width="66" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
+<infoparam name="guard 1" value="[client / x&lt;3 ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="2" >
+<father id="8" num="1" />
+<cdparam x="360" y="289" />
+<sizeparam width="66" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
+<infoparam name="guard 2" value="[client / x&gt;2 ]" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="3" >
+<father id="8" num="2" />
+<cdparam x="325" y="324" />
+<sizeparam width="79" height="16" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
+<infoparam name="guard 3" value="[client / x == 1 ]" />
+</SUBCOMPONENT>
+
+<COMPONENT type="502" id="10" >
+<cdparam x="396" y="25" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="9" />
+</COMPONENT>
+
+<COMPONENT type="506" id="13" >
+<cdparam x="390" y="347" />
+<sizeparam width="120" height="35" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Reference to a SD" value="ConnectionRelease" />
+<TGConnectingPoint num="0" id="11" />
+<TGConnectingPoint num="1" id="12" />
+</COMPONENT>
+
+<COMPONENT type="503" id="15" >
+<cdparam x="440" y="425" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="14" />
+</COMPONENT>
+
+<COMPONENT type="506" id="18" >
+<cdparam x="195" y="354" />
+<sizeparam width="82" height="35" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Reference to a SD" value="DataTransfer" />
+<TGConnectingPoint num="0" id="16" />
+<TGConnectingPoint num="1" id="17" />
+</COMPONENT>
+
+<COMPONENT type="504" id="23" >
+<cdparam x="304" y="226" />
+<sizeparam width="30" height="30" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="junction" value="" />
+<TGConnectingPoint num="0" id="19" />
+<TGConnectingPoint num="1" id="20" />
+<TGConnectingPoint num="2" id="21" />
+<TGConnectingPoint num="3" id="22" />
+</COMPONENT>
+
+<COMPONENT type="506" id="26" >
+<cdparam x="351" y="67" />
+<sizeparam width="105" height="35" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Reference to a SD" value="ConnectionSetup" />
+<TGConnectingPoint num="0" id="24" />
+<TGConnectingPoint num="1" id="25" />
+</COMPONENT>
+
+<COMPONENT type="507" id="33" >
+<cdparam x="328" y="171" />
+<sizeparam width="150" height="5" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="parallel / synchro" value="null" />
+<TGConnectingPoint num="0" id="27" />
+<TGConnectingPoint num="1" id="28" />
+<TGConnectingPoint num="2" id="29" />
+<TGConnectingPoint num="3" id="30" />
+<TGConnectingPoint num="4" id="31" />
+<TGConnectingPoint num="5" id="32" />
+</COMPONENT>
+
+<COMPONENT type="506" id="36" >
+<cdparam x="455" y="220" />
+<sizeparam width="112" height="35" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="Reference to a SD" value="ConnectionBroken" />
+<TGConnectingPoint num="0" id="34" />
+<TGConnectingPoint num="1" id="35" />
+</COMPONENT>
+
+<COMPONENT type="503" id="38" >
+<cdparam x="501" y="291" />
+<sizeparam width="20" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="stop state" value="null" />
+<TGConnectingPoint num="0" id="37" />
+</COMPONENT>
+
+<CONNECTOR type="105" id="39" >
+<cdparam x="367" y="294" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to Reference to a SD" value="null" />
+<P1  x="360" y="294" id="6" />
+<P2  x="450" y="342" id="11" />
+</CONNECTOR>
+<CONNECTOR type="105" id="40" >
+<cdparam x="425" y="183" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from start state to choice" value="null" />
+<P1  x="403" y="45" id="9" />
+<P2  x="403" y="62" id="24" />
+</CONNECTOR>
+<CONNECTOR type="105" id="41" >
+<cdparam x="450" y="387" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Reference to a SD to stop state" value="null" />
+<P1  x="450" y="387" id="12" />
+<P2  x="450" y="420" id="14" />
+</CONNECTOR>
+<CONNECTOR type="105" id="42" >
+<cdparam x="287" y="294" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from choice to Reference to a SD" value="null" />
+<P1  x="280" y="294" id="5" />
+<P2  x="236" y="349" id="16" />
+</CONNECTOR>
+<CONNECTOR type="105" id="43" >
+<cdparam x="320" y="240" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from junction to choice" value="null" />
+<P1  x="319" y="256" id="22" />
+<P2  x="320" y="269" id="4" />
+</CONNECTOR>
+<CONNECTOR type="105" id="48" >
+<cdparam x="236" y="394" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Reference to a SD to junction" value="null" />
+<P1  x="236" y="394" id="17" />
+<P2  x="304" y="241" id="20" />
+<Point x="236" y="419" />
+<Point x="177" y="419" />
+<Point x="177" y="200" />
+<Point x="304" y="200" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="44" >
+<father id="48" num="0" />
+<cdparam x="236" y="419" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="45" >
+<father id="48" num="1" />
+<cdparam x="177" y="419" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="46" >
+<father id="48" num="2" />
+<cdparam x="177" y="200" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="47" >
+<father id="48" num="3" />
+<cdparam x="304" y="200" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="105" id="49" >
+<cdparam x="403" y="107" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Reference to a SD to junction" value="null" />
+<P1  x="403" y="107" id="25" />
+<P2  x="403" y="171" id="27" />
+</CONNECTOR>
+<CONNECTOR type="105" id="50" >
+<cdparam x="380" y="217" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from parallel / synchro to junction" value="null" />
+<P1  x="353" y="176" id="28" />
+<P2  x="319" y="226" id="19" />
+</CONNECTOR>
+<CONNECTOR type="105" id="51" >
+<cdparam x="452" y="148" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from parallel / synchro to Reference to a SD" value="null" />
+<P1  x="452" y="176" id="32" />
+<P2  x="511" y="215" id="34" />
+</CONNECTOR>
+<CONNECTOR type="105" id="52" >
+<cdparam x="511" y="260" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Reference to a SD to stop state" value="null" />
+<P1  x="511" y="260" id="35" />
+<P2  x="511" y="286" id="37" />
+</CONNECTOR>
+
+</InteractionOverviewDiagramPanel>
+
+<SequenceDiagramPanel name="DataTransfer" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="606" id="105" >
+<cdparam x="248" y="103" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="client" />
+<TGConnectingPoint num="0" id="56" />
+<TGConnectingPoint num="1" id="57" />
+<TGConnectingPoint num="2" id="58" />
+<TGConnectingPoint num="3" id="59" />
+<TGConnectingPoint num="4" id="60" />
+<TGConnectingPoint num="5" id="61" />
+<TGConnectingPoint num="6" id="62" />
+<TGConnectingPoint num="7" id="63" />
+<TGConnectingPoint num="8" id="64" />
+<TGConnectingPoint num="9" id="65" />
+<TGConnectingPoint num="10" id="66" />
+<TGConnectingPoint num="11" id="67" />
+<TGConnectingPoint num="12" id="68" />
+<TGConnectingPoint num="13" id="69" />
+<TGConnectingPoint num="14" id="70" />
+<TGConnectingPoint num="15" id="71" />
+<TGConnectingPoint num="16" id="72" />
+<TGConnectingPoint num="17" id="73" />
+<TGConnectingPoint num="18" id="74" />
+<TGConnectingPoint num="19" id="75" />
+<TGConnectingPoint num="20" id="76" />
+<TGConnectingPoint num="21" id="77" />
+<TGConnectingPoint num="22" id="78" />
+<TGConnectingPoint num="23" id="79" />
+<TGConnectingPoint num="24" id="80" />
+<TGConnectingPoint num="25" id="81" />
+<TGConnectingPoint num="26" id="82" />
+<TGConnectingPoint num="27" id="83" />
+<TGConnectingPoint num="28" id="84" />
+<TGConnectingPoint num="29" id="85" />
+<TGConnectingPoint num="30" id="86" />
+<TGConnectingPoint num="31" id="87" />
+<TGConnectingPoint num="32" id="88" />
+<TGConnectingPoint num="33" id="89" />
+<TGConnectingPoint num="34" id="90" />
+<TGConnectingPoint num="35" id="91" />
+<TGConnectingPoint num="36" id="92" />
+<TGConnectingPoint num="37" id="93" />
+<TGConnectingPoint num="38" id="94" />
+<TGConnectingPoint num="39" id="95" />
+<TGConnectingPoint num="40" id="96" />
+<TGConnectingPoint num="41" id="97" />
+<TGConnectingPoint num="42" id="98" />
+<TGConnectingPoint num="43" id="99" />
+<TGConnectingPoint num="44" id="100" />
+<TGConnectingPoint num="45" id="101" />
+<TGConnectingPoint num="46" id="102" />
+<TGConnectingPoint num="47" id="103" />
+<TGConnectingPoint num="48" id="104" />
+</COMPONENT>
+<SUBCOMPONENT type="602" id="53" >
+<father id="105" num="0" />
+<cdparam x="253" y="276" />
+<sizeparam width="50" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
+<infoparam name="action state" value="x = x +1" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="603" id="54" >
+<father id="105" num="1" />
+<cdparam x="266" y="327" />
+<sizeparam width="15" height="25" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="18" maxX="18" minY="-2" maxY="478" />
+<infoparam name="setting timer" value="{timer=myTimer, duration=10}" />
+<extraparam>
+<Interval timer="myTimer" duration="10" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="605" id="55" >
+<father id="105" num="2" />
+<cdparam x="266" y="397" />
+<sizeparam width="15" height="25" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="18" maxX="18" minY="-2" maxY="478" />
+<infoparam name="timer expiration" value="{timer=myTimer}" />
+<extraparam>
+<Interval timer="myTimer" />
+</extraparam>
+</SUBCOMPONENT>
+
+<COMPONENT type="606" id="159" >
+<cdparam x="480" y="103" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="server" />
+<TGConnectingPoint num="0" id="110" />
+<TGConnectingPoint num="1" id="111" />
+<TGConnectingPoint num="2" id="112" />
+<TGConnectingPoint num="3" id="113" />
+<TGConnectingPoint num="4" id="114" />
+<TGConnectingPoint num="5" id="115" />
+<TGConnectingPoint num="6" id="116" />
+<TGConnectingPoint num="7" id="117" />
+<TGConnectingPoint num="8" id="118" />
+<TGConnectingPoint num="9" id="119" />
+<TGConnectingPoint num="10" id="120" />
+<TGConnectingPoint num="11" id="121" />
+<TGConnectingPoint num="12" id="122" />
+<TGConnectingPoint num="13" id="123" />
+<TGConnectingPoint num="14" id="124" />
+<TGConnectingPoint num="15" id="125" />
+<TGConnectingPoint num="16" id="126" />
+<TGConnectingPoint num="17" id="127" />
+<TGConnectingPoint num="18" id="128" />
+<TGConnectingPoint num="19" id="129" />
+<TGConnectingPoint num="20" id="130" />
+<TGConnectingPoint num="21" id="131" />
+<TGConnectingPoint num="22" id="132" />
+<TGConnectingPoint num="23" id="133" />
+<TGConnectingPoint num="24" id="134" />
+<TGConnectingPoint num="25" id="135" />
+<TGConnectingPoint num="26" id="136" />
+<TGConnectingPoint num="27" id="137" />
+<TGConnectingPoint num="28" id="138" />
+<TGConnectingPoint num="29" id="139" />
+<TGConnectingPoint num="30" id="140" />
+<TGConnectingPoint num="31" id="141" />
+<TGConnectingPoint num="32" id="142" />
+<TGConnectingPoint num="33" id="143" />
+<TGConnectingPoint num="34" id="144" />
+<TGConnectingPoint num="35" id="145" />
+<TGConnectingPoint num="36" id="146" />
+<TGConnectingPoint num="37" id="147" />
+<TGConnectingPoint num="38" id="148" />
+<TGConnectingPoint num="39" id="149" />
+<TGConnectingPoint num="40" id="150" />
+<TGConnectingPoint num="41" id="151" />
+<TGConnectingPoint num="42" id="152" />
+<TGConnectingPoint num="43" id="153" />
+<TGConnectingPoint num="44" id="154" />
+<TGConnectingPoint num="45" id="155" />
+<TGConnectingPoint num="46" id="156" />
+<TGConnectingPoint num="47" id="157" />
+<TGConnectingPoint num="48" id="158" />
+</COMPONENT>
+<SUBCOMPONENT type="601" id="107" >
+<father id="159" num="0" />
+<cdparam x="485" y="163" />
+<sizeparam width="40" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-35" maxX="5" minY="10" maxY="490" />
+<infoparam name="Line of relative time constraint" value="rtc" />
+<TGConnectingPoint num="0" id="106" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="601" id="109" >
+<father id="159" num="1" />
+<cdparam x="485" y="213" />
+<sizeparam width="40" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-35" maxX="5" minY="10" maxY="490" />
+<infoparam name="Line of relative time constraint" value="rtc" />
+<TGConnectingPoint num="0" id="108" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="106" id="160" >
+<cdparam x="253" y="163" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="getData" />
+<P1  x="253" y="163" id="61" />
+<P2  x="485" y="163" id="115" />
+</CONNECTOR>
+<CONNECTOR type="106" id="161" >
+<cdparam x="485" y="213" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="data" />
+<P1  x="485" y="213" id="120" />
+<P2  x="253" y="213" id="66" />
+</CONNECTOR>
+<CONNECTOR type="109" id="162" >
+<cdparam x="495" y="163" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="relative time constraint" value="{5..10}" />
+<P1  x="495" y="163" id="106" />
+<P2  x="495" y="213" id="108" />
+<extraparam>
+<Interval minConstraint="5" maxConstraint="10" />
+</extraparam>
+</CONNECTOR>
+
+</SequenceDiagramPanel>
+
+<SequenceDiagramPanel name="ConnectionRelease" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="606" id="212" >
+<cdparam x="265" y="99" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="client" />
+<TGConnectingPoint num="0" id="163" />
+<TGConnectingPoint num="1" id="164" />
+<TGConnectingPoint num="2" id="165" />
+<TGConnectingPoint num="3" id="166" />
+<TGConnectingPoint num="4" id="167" />
+<TGConnectingPoint num="5" id="168" />
+<TGConnectingPoint num="6" id="169" />
+<TGConnectingPoint num="7" id="170" />
+<TGConnectingPoint num="8" id="171" />
+<TGConnectingPoint num="9" id="172" />
+<TGConnectingPoint num="10" id="173" />
+<TGConnectingPoint num="11" id="174" />
+<TGConnectingPoint num="12" id="175" />
+<TGConnectingPoint num="13" id="176" />
+<TGConnectingPoint num="14" id="177" />
+<TGConnectingPoint num="15" id="178" />
+<TGConnectingPoint num="16" id="179" />
+<TGConnectingPoint num="17" id="180" />
+<TGConnectingPoint num="18" id="181" />
+<TGConnectingPoint num="19" id="182" />
+<TGConnectingPoint num="20" id="183" />
+<TGConnectingPoint num="21" id="184" />
+<TGConnectingPoint num="22" id="185" />
+<TGConnectingPoint num="23" id="186" />
+<TGConnectingPoint num="24" id="187" />
+<TGConnectingPoint num="25" id="188" />
+<TGConnectingPoint num="26" id="189" />
+<TGConnectingPoint num="27" id="190" />
+<TGConnectingPoint num="28" id="191" />
+<TGConnectingPoint num="29" id="192" />
+<TGConnectingPoint num="30" id="193" />
+<TGConnectingPoint num="31" id="194" />
+<TGConnectingPoint num="32" id="195" />
+<TGConnectingPoint num="33" id="196" />
+<TGConnectingPoint num="34" id="197" />
+<TGConnectingPoint num="35" id="198" />
+<TGConnectingPoint num="36" id="199" />
+<TGConnectingPoint num="37" id="200" />
+<TGConnectingPoint num="38" id="201" />
+<TGConnectingPoint num="39" id="202" />
+<TGConnectingPoint num="40" id="203" />
+<TGConnectingPoint num="41" id="204" />
+<TGConnectingPoint num="42" id="205" />
+<TGConnectingPoint num="43" id="206" />
+<TGConnectingPoint num="44" id="207" />
+<TGConnectingPoint num="45" id="208" />
+<TGConnectingPoint num="46" id="209" />
+<TGConnectingPoint num="47" id="210" />
+<TGConnectingPoint num="48" id="211" />
+</COMPONENT>
+
+<COMPONENT type="606" id="262" >
+<cdparam x="526" y="99" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="server" />
+<TGConnectingPoint num="0" id="213" />
+<TGConnectingPoint num="1" id="214" />
+<TGConnectingPoint num="2" id="215" />
+<TGConnectingPoint num="3" id="216" />
+<TGConnectingPoint num="4" id="217" />
+<TGConnectingPoint num="5" id="218" />
+<TGConnectingPoint num="6" id="219" />
+<TGConnectingPoint num="7" id="220" />
+<TGConnectingPoint num="8" id="221" />
+<TGConnectingPoint num="9" id="222" />
+<TGConnectingPoint num="10" id="223" />
+<TGConnectingPoint num="11" id="224" />
+<TGConnectingPoint num="12" id="225" />
+<TGConnectingPoint num="13" id="226" />
+<TGConnectingPoint num="14" id="227" />
+<TGConnectingPoint num="15" id="228" />
+<TGConnectingPoint num="16" id="229" />
+<TGConnectingPoint num="17" id="230" />
+<TGConnectingPoint num="18" id="231" />
+<TGConnectingPoint num="19" id="232" />
+<TGConnectingPoint num="20" id="233" />
+<TGConnectingPoint num="21" id="234" />
+<TGConnectingPoint num="22" id="235" />
+<TGConnectingPoint num="23" id="236" />
+<TGConnectingPoint num="24" id="237" />
+<TGConnectingPoint num="25" id="238" />
+<TGConnectingPoint num="26" id="239" />
+<TGConnectingPoint num="27" id="240" />
+<TGConnectingPoint num="28" id="241" />
+<TGConnectingPoint num="29" id="242" />
+<TGConnectingPoint num="30" id="243" />
+<TGConnectingPoint num="31" id="244" />
+<TGConnectingPoint num="32" id="245" />
+<TGConnectingPoint num="33" id="246" />
+<TGConnectingPoint num="34" id="247" />
+<TGConnectingPoint num="35" id="248" />
+<TGConnectingPoint num="36" id="249" />
+<TGConnectingPoint num="37" id="250" />
+<TGConnectingPoint num="38" id="251" />
+<TGConnectingPoint num="39" id="252" />
+<TGConnectingPoint num="40" id="253" />
+<TGConnectingPoint num="41" id="254" />
+<TGConnectingPoint num="42" id="255" />
+<TGConnectingPoint num="43" id="256" />
+<TGConnectingPoint num="44" id="257" />
+<TGConnectingPoint num="45" id="258" />
+<TGConnectingPoint num="46" id="259" />
+<TGConnectingPoint num="47" id="260" />
+<TGConnectingPoint num="48" id="261" />
+</COMPONENT>
+
+<CONNECTOR type="106" id="263" >
+<cdparam x="270" y="159" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="connectionRelease" />
+<P1  x="270" y="159" id="168" />
+<P2  x="531" y="159" id="218" />
+</CONNECTOR>
+<CONNECTOR type="106" id="264" >
+<cdparam x="502" y="209" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="Ok" />
+<P1  x="531" y="209" id="223" />
+<P2  x="270" y="209" id="173" />
+</CONNECTOR>
+
+</SequenceDiagramPanel>
+
+<SequenceDiagramPanel name="ConnectionSetup" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="606" id="314" >
+<cdparam x="227" y="96" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="client" />
+<TGConnectingPoint num="0" id="265" />
+<TGConnectingPoint num="1" id="266" />
+<TGConnectingPoint num="2" id="267" />
+<TGConnectingPoint num="3" id="268" />
+<TGConnectingPoint num="4" id="269" />
+<TGConnectingPoint num="5" id="270" />
+<TGConnectingPoint num="6" id="271" />
+<TGConnectingPoint num="7" id="272" />
+<TGConnectingPoint num="8" id="273" />
+<TGConnectingPoint num="9" id="274" />
+<TGConnectingPoint num="10" id="275" />
+<TGConnectingPoint num="11" id="276" />
+<TGConnectingPoint num="12" id="277" />
+<TGConnectingPoint num="13" id="278" />
+<TGConnectingPoint num="14" id="279" />
+<TGConnectingPoint num="15" id="280" />
+<TGConnectingPoint num="16" id="281" />
+<TGConnectingPoint num="17" id="282" />
+<TGConnectingPoint num="18" id="283" />
+<TGConnectingPoint num="19" id="284" />
+<TGConnectingPoint num="20" id="285" />
+<TGConnectingPoint num="21" id="286" />
+<TGConnectingPoint num="22" id="287" />
+<TGConnectingPoint num="23" id="288" />
+<TGConnectingPoint num="24" id="289" />
+<TGConnectingPoint num="25" id="290" />
+<TGConnectingPoint num="26" id="291" />
+<TGConnectingPoint num="27" id="292" />
+<TGConnectingPoint num="28" id="293" />
+<TGConnectingPoint num="29" id="294" />
+<TGConnectingPoint num="30" id="295" />
+<TGConnectingPoint num="31" id="296" />
+<TGConnectingPoint num="32" id="297" />
+<TGConnectingPoint num="33" id="298" />
+<TGConnectingPoint num="34" id="299" />
+<TGConnectingPoint num="35" id="300" />
+<TGConnectingPoint num="36" id="301" />
+<TGConnectingPoint num="37" id="302" />
+<TGConnectingPoint num="38" id="303" />
+<TGConnectingPoint num="39" id="304" />
+<TGConnectingPoint num="40" id="305" />
+<TGConnectingPoint num="41" id="306" />
+<TGConnectingPoint num="42" id="307" />
+<TGConnectingPoint num="43" id="308" />
+<TGConnectingPoint num="44" id="309" />
+<TGConnectingPoint num="45" id="310" />
+<TGConnectingPoint num="46" id="311" />
+<TGConnectingPoint num="47" id="312" />
+<TGConnectingPoint num="48" id="313" />
+</COMPONENT>
+
+<COMPONENT type="606" id="364" >
+<cdparam x="459" y="96" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="server" />
+<TGConnectingPoint num="0" id="315" />
+<TGConnectingPoint num="1" id="316" />
+<TGConnectingPoint num="2" id="317" />
+<TGConnectingPoint num="3" id="318" />
+<TGConnectingPoint num="4" id="319" />
+<TGConnectingPoint num="5" id="320" />
+<TGConnectingPoint num="6" id="321" />
+<TGConnectingPoint num="7" id="322" />
+<TGConnectingPoint num="8" id="323" />
+<TGConnectingPoint num="9" id="324" />
+<TGConnectingPoint num="10" id="325" />
+<TGConnectingPoint num="11" id="326" />
+<TGConnectingPoint num="12" id="327" />
+<TGConnectingPoint num="13" id="328" />
+<TGConnectingPoint num="14" id="329" />
+<TGConnectingPoint num="15" id="330" />
+<TGConnectingPoint num="16" id="331" />
+<TGConnectingPoint num="17" id="332" />
+<TGConnectingPoint num="18" id="333" />
+<TGConnectingPoint num="19" id="334" />
+<TGConnectingPoint num="20" id="335" />
+<TGConnectingPoint num="21" id="336" />
+<TGConnectingPoint num="22" id="337" />
+<TGConnectingPoint num="23" id="338" />
+<TGConnectingPoint num="24" id="339" />
+<TGConnectingPoint num="25" id="340" />
+<TGConnectingPoint num="26" id="341" />
+<TGConnectingPoint num="27" id="342" />
+<TGConnectingPoint num="28" id="343" />
+<TGConnectingPoint num="29" id="344" />
+<TGConnectingPoint num="30" id="345" />
+<TGConnectingPoint num="31" id="346" />
+<TGConnectingPoint num="32" id="347" />
+<TGConnectingPoint num="33" id="348" />
+<TGConnectingPoint num="34" id="349" />
+<TGConnectingPoint num="35" id="350" />
+<TGConnectingPoint num="36" id="351" />
+<TGConnectingPoint num="37" id="352" />
+<TGConnectingPoint num="38" id="353" />
+<TGConnectingPoint num="39" id="354" />
+<TGConnectingPoint num="40" id="355" />
+<TGConnectingPoint num="41" id="356" />
+<TGConnectingPoint num="42" id="357" />
+<TGConnectingPoint num="43" id="358" />
+<TGConnectingPoint num="44" id="359" />
+<TGConnectingPoint num="45" id="360" />
+<TGConnectingPoint num="46" id="361" />
+<TGConnectingPoint num="47" id="362" />
+<TGConnectingPoint num="48" id="363" />
+</COMPONENT>
+
+<CONNECTOR type="106" id="365" >
+<cdparam x="232" y="156" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="connectionReq" />
+<P1  x="232" y="156" id="270" />
+<P2  x="464" y="156" id="320" />
+</CONNECTOR>
+<CONNECTOR type="106" id="366" >
+<cdparam x="464" y="206" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="connectionOK" />
+<P1  x="464" y="206" id="325" />
+<P2  x="232" y="206" id="275" />
+</CONNECTOR>
+
+</SequenceDiagramPanel>
+
+<SequenceDiagramPanel name="ConnectionBroken" minX="10" maxX="1900" minY="10" maxY="900" >
+<COMPONENT type="606" id="416" >
+<cdparam x="235" y="62" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="client" />
+<TGConnectingPoint num="0" id="367" />
+<TGConnectingPoint num="1" id="368" />
+<TGConnectingPoint num="2" id="369" />
+<TGConnectingPoint num="3" id="370" />
+<TGConnectingPoint num="4" id="371" />
+<TGConnectingPoint num="5" id="372" />
+<TGConnectingPoint num="6" id="373" />
+<TGConnectingPoint num="7" id="374" />
+<TGConnectingPoint num="8" id="375" />
+<TGConnectingPoint num="9" id="376" />
+<TGConnectingPoint num="10" id="377" />
+<TGConnectingPoint num="11" id="378" />
+<TGConnectingPoint num="12" id="379" />
+<TGConnectingPoint num="13" id="380" />
+<TGConnectingPoint num="14" id="381" />
+<TGConnectingPoint num="15" id="382" />
+<TGConnectingPoint num="16" id="383" />
+<TGConnectingPoint num="17" id="384" />
+<TGConnectingPoint num="18" id="385" />
+<TGConnectingPoint num="19" id="386" />
+<TGConnectingPoint num="20" id="387" />
+<TGConnectingPoint num="21" id="388" />
+<TGConnectingPoint num="22" id="389" />
+<TGConnectingPoint num="23" id="390" />
+<TGConnectingPoint num="24" id="391" />
+<TGConnectingPoint num="25" id="392" />
+<TGConnectingPoint num="26" id="393" />
+<TGConnectingPoint num="27" id="394" />
+<TGConnectingPoint num="28" id="395" />
+<TGConnectingPoint num="29" id="396" />
+<TGConnectingPoint num="30" id="397" />
+<TGConnectingPoint num="31" id="398" />
+<TGConnectingPoint num="32" id="399" />
+<TGConnectingPoint num="33" id="400" />
+<TGConnectingPoint num="34" id="401" />
+<TGConnectingPoint num="35" id="402" />
+<TGConnectingPoint num="36" id="403" />
+<TGConnectingPoint num="37" id="404" />
+<TGConnectingPoint num="38" id="405" />
+<TGConnectingPoint num="39" id="406" />
+<TGConnectingPoint num="40" id="407" />
+<TGConnectingPoint num="41" id="408" />
+<TGConnectingPoint num="42" id="409" />
+<TGConnectingPoint num="43" id="410" />
+<TGConnectingPoint num="44" id="411" />
+<TGConnectingPoint num="45" id="412" />
+<TGConnectingPoint num="46" id="413" />
+<TGConnectingPoint num="47" id="414" />
+<TGConnectingPoint num="48" id="415" />
+</COMPONENT>
+
+<COMPONENT type="606" id="471" >
+<cdparam x="467" y="62" />
+<sizeparam width="10" height="500" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<infoparam name="instance" value="server" />
+<TGConnectingPoint num="0" id="422" />
+<TGConnectingPoint num="1" id="423" />
+<TGConnectingPoint num="2" id="424" />
+<TGConnectingPoint num="3" id="425" />
+<TGConnectingPoint num="4" id="426" />
+<TGConnectingPoint num="5" id="427" />
+<TGConnectingPoint num="6" id="428" />
+<TGConnectingPoint num="7" id="429" />
+<TGConnectingPoint num="8" id="430" />
+<TGConnectingPoint num="9" id="431" />
+<TGConnectingPoint num="10" id="432" />
+<TGConnectingPoint num="11" id="433" />
+<TGConnectingPoint num="12" id="434" />
+<TGConnectingPoint num="13" id="435" />
+<TGConnectingPoint num="14" id="436" />
+<TGConnectingPoint num="15" id="437" />
+<TGConnectingPoint num="16" id="438" />
+<TGConnectingPoint num="17" id="439" />
+<TGConnectingPoint num="18" id="440" />
+<TGConnectingPoint num="19" id="441" />
+<TGConnectingPoint num="20" id="442" />
+<TGConnectingPoint num="21" id="443" />
+<TGConnectingPoint num="22" id="444" />
+<TGConnectingPoint num="23" id="445" />
+<TGConnectingPoint num="24" id="446" />
+<TGConnectingPoint num="25" id="447" />
+<TGConnectingPoint num="26" id="448" />
+<TGConnectingPoint num="27" id="449" />
+<TGConnectingPoint num="28" id="450" />
+<TGConnectingPoint num="29" id="451" />
+<TGConnectingPoint num="30" id="452" />
+<TGConnectingPoint num="31" id="453" />
+<TGConnectingPoint num="32" id="454" />
+<TGConnectingPoint num="33" id="455" />
+<TGConnectingPoint num="34" id="456" />
+<TGConnectingPoint num="35" id="457" />
+<TGConnectingPoint num="36" id="458" />
+<TGConnectingPoint num="37" id="459" />
+<TGConnectingPoint num="38" id="460" />
+<TGConnectingPoint num="39" id="461" />
+<TGConnectingPoint num="40" id="462" />
+<TGConnectingPoint num="41" id="463" />
+<TGConnectingPoint num="42" id="464" />
+<TGConnectingPoint num="43" id="465" />
+<TGConnectingPoint num="44" id="466" />
+<TGConnectingPoint num="45" id="467" />
+<TGConnectingPoint num="46" id="468" />
+<TGConnectingPoint num="47" id="469" />
+<TGConnectingPoint num="48" id="470" />
+</COMPONENT>
+<SUBCOMPONENT type="602" id="417" >
+<father id="471" num="0" />
+<cdparam x="472" y="96" />
+<sizeparam width="105" height="20" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
+<infoparam name="action state" value="broke = broke + 1" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="601" id="419" >
+<father id="471" num="1" />
+<cdparam x="472" y="96" />
+<sizeparam width="40" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-35" maxX="5" minY="10" maxY="490" />
+<infoparam name="Line of relative time constraint" value="rtc" />
+<TGConnectingPoint num="0" id="418" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="601" id="421" >
+<father id="471" num="2" />
+<cdparam x="472" y="172" />
+<sizeparam width="40" height="15" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<cdrectangleparam minX="-35" maxX="5" minY="10" maxY="490" />
+<infoparam name="Line of relative time constraint" value="rtc" />
+<TGConnectingPoint num="0" id="420" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="106" id="472" >
+<cdparam x="472" y="172" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from instance to instance" value="connectionBroken" />
+<P1  x="472" y="172" id="432" />
+<P2  x="240" y="172" id="377" />
+</CONNECTOR>
+<CONNECTOR type="109" id="473" >
+<cdparam x="482" y="96" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="relative time constraint" value="{15..15}" />
+<P1  x="482" y="96" id="418" />
+<P2  x="482" y="172" id="420" />
+<extraparam>
+<Interval minConstraint="15" maxConstraint="15" />
+</extraparam>
+</CONNECTOR>
+
+</SequenceDiagramPanel>
+
+</Modeling>
+
+
+
+
+</TURTLEGMODELING>

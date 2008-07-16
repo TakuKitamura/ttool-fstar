@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<TURTLECONFIGURATION>
+<RTLHost data="cow6.eurecom.fr" />
+<RTLPath data="/homes/apvrille/TechTTool/RT-LOTOS.0.12-3_linux/bin/rtl" />
+<DTA2DOTPath data="/homes/apvrille/TechTTool/RT-LOTOS.0.12-3_linux/bin/dta2dot" />
+<RG2TLSAPath data="/homes/apvrille/TechTTool/RT-LOTOS.0.12-3_linux/bin/rg2tlsa" />
+<RGSTRAPPath data="/homes/apvrille/TechTTool/RT-LOTOS.0.12-3_linux/bin/rgstrap" />
+<DOTTYPath data="/usr/bin/dotty" />
+<DOTTYHost data="loupiac.eurecom.fr" />
+<AldebaranHost data="cow6.eurecom.fr" />
+<AldebaranPath data="/packages/cadp/com/aldebaran" />
+<BcgioPath data="/packages/cadp/bin.iX86/bcg_io" />
+<BcgminPath data="/packages/cadp/bin.iX86/bcg_min" />
+<BisimulatorPath data="/packages/cadp/com/bcg_open" />
+<BcgmergePath data="/packages/cadp/com/bcg_merge" />
+<CaesarPath data="/packages/cadp/bin.iX86/caesar" />
+<CaesarOpenPath data="/packages/cadp/com/caesar.open" />
+<TinaPath data="/homes/apvrille/bin/tina-2.8.0/bin/tina" />
+<TinaHost data="loupiac.eurecom.fr" />
+<DOTTYPath data="/homes/apvrille/softs/gv1.7c/bin/dotty" />
+<FILEPath data="U:\TechTTool\TURTLEModeling" />
+<LIBPath data="U:\TechTTool\TURTLELibrary\" />
+<IMGPath data="U:\Figure" />
+<LOTOSPath data="U:\TechTTool\TURTLELOTOS\" />
+<GGraphPath data="U:\TechTTool\TURTLEGraphs\" />
+<TGraphPath data="U:\TechTTool\TURTLEGraphs\" />
+<TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
+<TToolUpdateProxy data="false" />
+<TToolUpdateProxyPort data="8080" />
+<TToolUpdateProxyHost data="To Be Completed" />
+<JavaCodeDirectory data="U:\TechTTool\JavaCode\" />
+<JavaCompilerPath data="[C:\Program Files\j2sdk_nb\j2sdk1.4.2\bin\javac.exe" />
+<TToolClassPath data="U:\TechTTool\JavaCode" />
+<JavaExecutePath data="[C:\Program Files\j2sdk_nb\j2sdk1.4.2\bin\java.exe" />
+<SimuJavaCodeDirectory data="U:\TechTTool\JavaSimulation\" />
+<TToolSimuClassPath data="U:\TechTTool\JavaSimulation\" />
+<JavaHeader data="import java.sql.*;" />
+<SystemCCodeDirectory data="U:\TechTTool\SystemCCode\generated\" />
+<SystemCHost data="loupiac.eurecom.fr"/>
+<SystemCCodeCompileCommand data="make -C /homes/apvrille/TechTTool/SystemCCode/generated" />
+<SystemCCodeExecuteCommand data="/homes/apvrille/TechTTool/SystemCCode/generated/run.x /homes/apvrille/TechTTool/SystemCCode/generated/vcddump" />
+<TMLCodeDirectory data="U:\TechTTool\TMLCode\" />
+<GTKWavePath data="/homes/apvrille/bin/gtkwave" />
+<UPPAALCodeDirectory data="U:\TechTTool\UPPAAL\" />
+<UPPAALVerifierPath data="/packages/uppaal/bin-Linux/verifyta" />
+<UPPAALVerifierHost data="cow6.eurecom.fr" />
+<ExternalCommand1Host data="loupiac.eurecom.fr"/>
+<ExternalCommand1 data="/homes/apvrille/TechTTool/SystemCCode/generated/gtkwave /homes/apvrille/TechTTool/SystemCCode/generated/vcddump.vcd"/>
+<ExternalCommand2Host data="loupiac.eurecom.fr"/>
+<ExternalCommand2 data="/packages/uppaal/uppaal /homes/apvrille/TechTTool/UPPAAL/spec.xml"/>
+
+<LastOpenFile data="U:\TechTTool\TURTLEModeling\Chafic\CSmartCardProtocol_ludo_V01.xml"/>
+
+
+
+<LastWindowAttributes x="112" y="60" width="1326" height="984" max="false" />
+
+</TURTLECONFIGURATION>
+
+
+
+
+

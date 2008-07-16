@@ -1,0 +1,148 @@
+/*Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Daniel Knorreck,
+Ludovic Apvrille, Renaud Pacalet
+ *
+ * ludovic.apvrille AT telecom-paristech.fr
+ *
+ * This software is a computer program whose purpose is to allow the
+ * edition of TURTLE analysis, design and deployment diagrams, to
+ * allow the generation of RT-LOTOS or Java code from this diagram,
+ * and at last to allow the analysis of formal validation traces
+ * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * from INRIA Rhone-Alpes.
+ *
+ * This software is governed by the CeCILL  license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ *
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ *
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ *
+ */
+
+#include <TMLSelectCommand.h>
+#include <TMLEventChannel.h>
+#include <TMLTask.h>
+#include <TMLTransaction.h>
+#include <Bus.h>
+
+TMLSelectCommand::TMLSelectCommand(TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam ):TMLCommand(iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_params(iParam),_numbChannels(iNumbChannels),_indexNextCommand(0),_maxChannelIndex(0){
+}
+
+TMLSelectCommand::~TMLSelectCommand(){
+	if (_channel!=0) delete[] _channel;
+	if (_params!=0){
+		for (unsigned int i=0;i<_numbChannels;i++) delete _params[i];
+		delete [] _params;
+	}
+}
+
+void TMLSelectCommand::execute(){
+	unsigned int i,aLoopLimit=(_maxChannelIndex==0)?_numbChannels:_maxChannelIndex;
+	bool aReadDone=false;
+	//std::cout << "LoopLimit: " << aLoopLimit << std::endl;
+	for (i=0;i<aLoopLimit;i++){
+		if (aReadDone){
+			_channel[i]->cancelReadTransaction();
+			//std::cout << "Channel " << _channel[i]->toString() << " cancelled read transaction.\n";
+		}else{
+			if (_channel[i]->read()){
+				aReadDone=true;
+				_indexNextCommand=i;
+				//std::cout << "Read executed in channel " << _channel[i]->toString() << "\n";
+			}else{
+				_channel[i]->cancelReadTransaction();
+				//std::cout << "Channel " << _channel[i]->toString() << " cancelled read transaction.\n";
+			}
+		}
+	}
+	_currTransaction->setChannel(_channel[_indexNextCommand]);
+	_progress+=_currTransaction->getVirtualLength();
+	_task->setEndLastTransaction(_currTransaction->getEndTime());
+#ifdef ADD_COMMENTS
+	//_task->addComment(new Comment(_task->getEndLastTransaction(), "SelectEvent result: " + _channel[_indexNextCommand]->toShortString()));
+	_task->addComment(new Comment(_task->getEndLastTransaction(), this, _indexNextCommand));
+#endif
+	//_currTransaction=0;
+	_maxChannelIndex=0;
+#if defined BUS_ENABLED && defined EVENTS_MAPPED_ON_BUS
+	Bus* bus=_channel[_indexNextCommand]->getBus();
+	if (bus!=0) bus->addTransaction();
+#endif
+	if (!prepare()) _currTransaction->setTerminatedFlag();
+	if (_progress==0) _currTransaction=0;
+}
+
+bool TMLSelectCommand::prepareNextTransaction(){
+	unsigned int i;
+	//std::cout << "SC: New transaction."<< std::endl;
+	//_currTransaction=new TMLTransaction(this,_progress,(*_pLength)-_progress,_task->getEndLastTransaction());
+	_currTransaction=new TMLTransaction(this,_progress,_length-_progress,_task->getEndLastTransaction());
+	//std::cout << "SC: loop."<< std::endl;
+	for (i=0;i<_numbChannels && _maxChannelIndex==0;i++){
+		//std::cout << "SC: inner."<< i<< std::endl;
+		_currTransaction->setVirtualLength(_length-_progress);
+		_channel[i]->testRead(_currTransaction);
+		if (_currTransaction->getVirtualLength()!=0) _maxChannelIndex=i+1;
+	}
+	//std::cout << "Max channel index:" << _maxChannelIndex << "  virtual length:" << _currTransaction->getVirtualLength()  << std::endl;
+	return true;
+}
+
+TMLTask* TMLSelectCommand::getDependentTask() const{
+	return _channel[_indexNextCommand]->getBlockedWriteTask();
+}
+
+TMLChannel* TMLSelectCommand::getChannel() const{
+	//cannot be determined because there are several channels
+	return _channel[_indexNextCommand];
+}
+
+bool TMLSelectCommand::channelUnknown(){
+	return true;
+}
+
+TMLCommand* TMLSelectCommand::getNextCommand() const{
+	return _nextCommand[_indexNextCommand];
+}
+
+
+Parameter<ParamType>* TMLSelectCommand::getParam(){
+	return (_params==0)?0:_params[_indexNextCommand];
+}
+
+std::string TMLSelectCommand::toString(){
+	std::ostringstream outp;
+	outp << "SelectEvent in " << TMLCommand::toString() << " " << _channel[_indexNextCommand]->toString();
+	return outp.str();
+}
+
+std::string TMLSelectCommand::toShortString(){
+	return "SelectEvent";
+}
+
+std::string TMLSelectCommand::getCommandStr(){
+	return "wait";
+}
+
+std::string TMLSelectCommand::getCommentString(Comment* iCom){
+	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
+}

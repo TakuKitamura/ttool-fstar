@@ -1,0 +1,17 @@
+/* SMART CARD */
+
+1) Open SmartCardProtocol_ludo_v01.xml, and select the TML Design
+
+2) Basically explain the system. Generate some UPPAAL code, and check for the reachability of the receiving of dataReady in Interface Device -> should be reachable but "liveness" property should not be satisfied -> not sure to always get the data.
+
+3) The LOTOS RG may be generated if the nb of packets is set to 1 (~42k states). You may do some minimization using aldebaran: do select only the actions related to InterfaceDevice. You should obtain a 15-state graph, on which InterfaceDevice may be more easily analyzed.
+
+4) Mapping. Open the mapping, and click on the property icon to display CPU and tasks' properties. Generate some SystemC code, compile and execute. You may visualize the simulation results using gtkwave.
+
+
+/* MPPEG2 decoder */
+
+1) Open another modeling: MPEG2 decoder. Show its main modeling blocks, and explain how the modeling has been done regarding memories (NBRNBW internal channels)
+2) The reachability graph may be generated but its size (10 millions of states) makes it hard to handle on a laptop! If you minimize this graph to actions END_IDCT and START_MC, one may prove taht IDCT terminates before Motion Compensation starts.
+
+3) Simulation. I suggest to use the provided mapping. You may try several different values for branching prediction and show that the lower prediction branching failure obviously result in a shorter simulation.
