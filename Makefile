@@ -56,6 +56,7 @@ TTOOL_STD_RELEASE = $(TTOOL_PATH)/release/
 JTTOOL = $(TTOOL_PATH)/javacode
 JTTOOL_DIR = jttool
 TTOOL_TARGET = $(TTOOL_PATH)/TTool_install/TTool
+TTOOL_TARGET_RELEASE = $(TTOOL_PATH)/TTool_install
 
 RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV7.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml COCOME_V50.xml
 RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
@@ -142,14 +143,14 @@ stdrelease:
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_TARGET)/bin
 # Basic release
-	cd $(TTOOL_TARGET);$(TAR) cfvz $(TTOOL_STD_RELEASE)/release.tgz *
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfvz $(TTOOL_STD_RELEASE)/release.tgz *
 # Advanced release
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 	mkdir -p $(TTOOL_TARGET)/src
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
 	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
-	cd $(TTOOL_TARGET);$(TAR) cfvz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfvz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
 
 
 jttooljar:
