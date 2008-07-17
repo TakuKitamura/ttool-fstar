@@ -81,7 +81,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(250, 200);
+		initScaling(200, 150);
 		
 		oldScaleFactor = tdp.getZoom();
 		dtextX = textX * oldScaleFactor;
@@ -258,18 +258,37 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		}
 		
 		// On the name ?
-		if ((displayText) && (_y <= (y + currentFontSize))) {
+		if ((displayText) && (_y <= (y + currentFontSize + textX))) {
 			//System.out.println("Edit on double click x=" + _x + " y=" + _y);
-			String oldValue = value;
+			oldValue = value;
 			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 			JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
 			null,
 			getValue());
 			if ((s != null) && (s.length() > 0)) {
-				setValue(s);
-				((TMLComponentTaskDiagramPanel)(tdp)).renamePrimitiveComponent(oldValue, value);
-				rescaled = true;
-				return true;
+				// Check whether this name is already in use, or not 
+				
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+						"Could not change the name of the component: the new name is not a valid name",
+						"Error",
+						JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				
+				if (((TMLComponentTaskDiagramPanel)(tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+					JOptionPane.showMessageDialog(frame,
+						"Error: the name is already in use",
+						"Name modification",
+						JOptionPane.ERROR_MESSAGE);
+					return false;
+				} else {
+					//System.out.println("Set value with change");
+					setValueWithChange(s);
+					rescaled = true;
+					//System.out.println("return true");
+					return true;
+				}
 			}
 			return false;
 		}

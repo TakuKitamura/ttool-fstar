@@ -1820,7 +1820,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     // returns true if modification on component
     public final boolean doubleClick(JFrame frame, int _x, int _y) {
 		if (multieditable) {
-			editOndoubleClick(frame, _x, _y);
+			return editOndoubleClick(frame, _x, _y);
 		} else if (editable) {
             return editOndoubleClick(frame);
         }

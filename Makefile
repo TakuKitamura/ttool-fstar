@@ -64,9 +64,9 @@ RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIF
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
 all:
-	svn update builder.txt src/ui/DefaultText.java
+	svn update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
-	svn commit -m 'update on build version: builder.txt'
+	svn commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
 ttooljar_std:
@@ -130,6 +130,12 @@ stdrelease:
 # LOTOS
 	mkdir -p $(TTOOL_TARGET)/lotos
 	cp $(TTOOL_DOC)/README_lotos $(TTOOL_TARGET)/lotos
+#TML
+	mkdir -p $(TTOOL_TARGET)/tmlcode
+	cp $(TTOOL_DOC)/README_tml $(TTOOL_TARGET)/tmlcode
+#UPPAAL
+	mkdir -p $(TTOOL_TARGET)/uppaal
+	cp $(TTOOL_DOC)/README_uppaal $(TTOOL_TARGET)/uppaal
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figure
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure

@@ -3174,13 +3174,25 @@ public class GTURTLEModeling {
 			//analysisNl = doc.getElementsByTagName("Analysis");
 
 			//System.out.println("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
+			boolean error = false;
 			for(i=0; i<panelNl.getLength(); i++) {
 				node = panelNl.item(i);
 				//System.out.println("Node = " + dnd);
+				
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					// create design, and get an index for it
-					loadModeling(node);
+					try {
+						loadModeling(node);
+					} catch (MalformedModelingException mme) {
+						Element elt = (Element) node;
+						String type = elt.getAttribute("type");
+						System.out.println("Error when loading diagram:" + type);
+						error = true;
+					}
 				}
+			}
+			if (error == true) {
+				throw new MalformedModelingException();
 			}
 
 		} catch (NumberFormatException nfe) {

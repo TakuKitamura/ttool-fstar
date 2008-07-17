@@ -4341,6 +4341,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return false;
     }
 	
+	public boolean nameComponentInUse(TURTLEPanel tp, String old, String niou) {
+        JTabbedPane jtp = tp.tabbedPane;
+        for(int i = 0; i<jtp.getTabCount(); i++) {
+            if (jtp.getTitleAt(i).equals(niou)) {
+                return true;
+            }
+        }
+		return false;
+	}
+	
 	public boolean newTMLComponentTaskName(TURTLEPanel tp, String old, String niou) {
         JTabbedPane jtp = tp.tabbedPane;
         for(int i = 0; i<jtp.getTabCount(); i++) {
@@ -4348,9 +4358,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 return false;
             }
         }
-        //System.out.println("old " + old + " niou " + niou);
+        System.out.println("old " + old + " niou " + niou);
         for(int i = 0; i<jtp.getTabCount(); i++) {
-            //System.out.println("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
+            System.out.println("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
             if (jtp.getTitleAt(i).equals(old)) {
                 jtp.setTitleAt(i, niou);
                 jtp.setToolTipTextAt(i, "Opens the TML activity diagram of " + niou);

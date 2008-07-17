@@ -63,17 +63,14 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        /*if (tgc instanceof TMLCPrimitiveComponent) {
+		/*System.out.println("Action on double click!");
+        if (tgc instanceof TMLCPrimitiveComponent) {
+			System.out.println("Action on double click primitive");
             TMLCPrimitiveComponent t = (TMLCPrimitiveComponent)tgc;
-            return mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
-        } else if (tgc instanceof TMLActivityDiagramBox) {
-            if (tgc.getFather() instanceof TMLTaskOperator) {
-                mgui.selectTab(tp, tgc.getFather().getValue());
-            }
-            return false; // because no change made on any diagram
+            return (t.oldValue.compareTo(t.getValue()) == 0);
         }*/
 		
-        return true;
+        return false;
     }
     
     public boolean actionOnAdd(TGComponent tgc) {
@@ -133,9 +130,11 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
     
     public boolean actionOnValueChanged(TGComponent tgc) {
+		//System.out.println("Action on value changed on component:" + tgc);
         if (tgc instanceof TMLCPrimitiveComponent) {
             TMLCPrimitiveComponent t = (TMLCPrimitiveComponent)tgc;
-            return mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
+            mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
+			return true;
         }
 		if (tgc instanceof TMLCCompositeComponent) {
 			TMLCCompositeComponent tmlcc = (TMLCCompositeComponent)tgc;
@@ -145,8 +144,14 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     }
 	
 	public boolean renamePrimitiveComponent(String oldValue, String newValue) {
-		return mgui.newTMLTaskName(tp, oldValue, newValue);
+		return mgui.newTMLComponentTaskName(tp, oldValue, newValue);
 	}
+	
+	public boolean namePrimitiveComponentInUse(String oldValue, String newValue) {
+		return mgui.nameComponentInUse(tp, oldValue, newValue);
+	}
+	
+	
 	
 	public LinkedList getPrimitiveComponentList() {
 		LinkedList ll = new LinkedList();

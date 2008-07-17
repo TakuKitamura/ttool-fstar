@@ -210,6 +210,13 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         null,
         getValue());
         if ((s != null) && (s.length() > 0)) {
+			if (!TAttribute.isAValidId(s, false, false)) {
+				JOptionPane.showMessageDialog(frame,
+					"Could not change the name of the component: the new name is not a valid name",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				return false;
+			}
             setValueWithChange(s);
             return true;
         }
