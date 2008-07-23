@@ -72,6 +72,7 @@ public class Mapping2TIF {
     private TURTLEModeling tm;
     private Vector checkingErrors;
 	
+	private boolean showSampleChannels = false;
 	private boolean showChannels = false;
 	private boolean showEvents = false;
 	private boolean showRequests = false;
@@ -116,6 +117,10 @@ public class Mapping2TIF {
     public Vector getCheckingErrors() {
         return checkingErrors;
     }
+	
+	public void setShowSampleChannels(boolean _b) {
+		showSampleChannels = _b;
+	}
 	
 	public void setShowChannels(boolean _b) {
 		showChannels = _b;
@@ -1216,6 +1221,10 @@ public class Mapping2TIF {
 		for(TMLChannel channel: localChannels) {
 			tcpu.addNewParamIfApplicable("toWrite__" + channel.getName(), "nat", "0");
 			tcpu.addNewParamIfApplicable("toRead__" + channel.getName(), "nat", "0");
+			if (showSampleChannels) {
+				tcpu.addNewParamIfApplicable("totalWritten__" + channel.getName(), "nat", "0");
+				tcpu.addNewParamIfApplicable("totalRead__" + channel.getName(), "nat", "0");
+			}
 			switch(channel.getType()) {
 			case TMLChannel.BRBW:
 				//System.out.println("BRBW");
@@ -2047,14 +2056,15 @@ public class Mapping2TIF {
 	private int makeCPUADTaskBehaviorComponent(TClass tcpu, HwCPU cpu, ActivityDiagram ad, ADChoice stateChoice, ADJunction endJunction, TMLTask task, int cpt, ArrayList<TMLTask> tasks, int stateId, int branchStateId, TMLActivityElement element) {
 		
 		ADActionStateWithParam actionp0, actionp1, actionp2, actionp3, actionp4, actionp5, actionp6, actionp7, actionp8, actionp9;
+		ADActionStateWithParam actionpspe = null;
 		ADActionStateWithGate actiong0, actiong1, actiong2, actiongd;
 		Gate g0, g1, g2;
 		TMLSendRequest sendreq;
 		ADComponent previous;
 		TMLRequest req;
 		TMLForLoop tmlforloop;
-		ADChoice choice0, choice1, choice2;
-		ADJunction adj0;
+		ADChoice choice0, choice1 = null, choice2;
+		ADJunction adj0, adj1 = null;
 		Param param0, param1, param2, param3;
 		TMLWriteChannel tmlwc;
 		TMLReadChannel tmlrc;
@@ -2067,8 +2077,8 @@ public class Mapping2TIF {
 		
 		String guard0, guard1, guard2;
 		int index, i;
-		String gateName, paramName, cpts, action0, action1, action2, action3;
-		String name;
+		String gateName, gateName0, paramName, cpts, action0, action1, action2, action3;
+		String name, nameTot;
 		
 		//System.out.println("task=" + task.getName() + " stateid=" + stateId + " elt=" + element);
 		
@@ -2118,9 +2128,35 @@ public class Mapping2TIF {
 			
 			param1 = tcpu.getParamByName("toWrite__" + name);
 			paramName = param1.getName();
-			gateName = cpu.getName() + "__" + task.getName() + "__wr__" + name;
+			gateName = cpu.getName() + "__" + task.getName() + "__wro__" + name;
+			gateName0 = cpu.getName() + "__" + task.getName() + "__wr__" + name;
 			if (showChannels) {
 				tcpu.addNewGateIfApplicable(gateName);
+			}
+			if (showSampleChannels) {
+				//System.out.println("Show sample channels");
+				tcpu.addNewGateIfApplicable(gateName0);
+				nameTot = "totalWritten__" + ch.getName();
+				
+				actionpspe = getActionStateWithParam(tcpu, ad, nameTot, nameTot + " + written");
+				adj1 = new ADJunction();
+				ad.add(adj1);
+				actionpspe.addNext(adj1);
+				choice1 = new ADChoice();
+				ad.add(choice1);
+				adj1.addNext(choice1);
+				
+				guard0 = "[ " + nameTot  + " < " + ch.getSize() + "]";
+				guard1 = "[ not(" + nameTot + " < " + ch.getSize() + ")]";
+				
+				choice1.addGuard(guard1);
+				actiong0 = getActionGate(tcpu, ad, gateName0, "!" + ch.getSize() + "!" + ch.getSize());
+				actionp0 = getActionStateWithParam(tcpu, ad, nameTot, nameTot + " - " + ch.getSize());
+				choice1.addNext(actiong0);
+				actiong0.addNext(actionp0);
+				actionp0.addNext(adj1);
+				
+				choice1.addGuard(guard0);
 			}
 			
 			// Init: nb to write in channel
@@ -2205,12 +2241,18 @@ public class Mapping2TIF {
 				choice2.addNext(actionp5);
 				choice2.addGuard(guard2);
 				actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+				if (showSampleChannels) {
+					choice1.addNext(actionp6);
+					previous = actionpspe;
+				} else {
+					previous = actionp6;
+				}
 				if (showChannels) {
 					actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
 					actionp5.addNext(actiong0);
-					actiong0.addNext(actionp6);
+					actiong0.addNext(previous);
 				} else {
-					actionp5.addNext(actionp6);
+					actionp5.addNext(previous);
 				}
 				actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
 				actionp6.addNext(actionp7);
@@ -2226,12 +2268,18 @@ public class Mapping2TIF {
 				actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
 				choice0.addNext(actionp5);
 				actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+				if (showSampleChannels) {
+					choice1.addNext(actionp6);
+					previous = actionpspe;
+				} else {
+					previous = actionp6;
+				}
 				if (showChannels) {
 					actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
 					actionp5.addNext(actiong0);
-					actiong0.addNext(actionp6);
+					actiong0.addNext(previous);
 				} else {
-					actionp5.addNext(actionp6);
+					actionp5.addNext(previous);
 				}
 				actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
 				actionp6.addNext(actionp7);
@@ -2247,12 +2295,18 @@ public class Mapping2TIF {
 				actionp5 = getActionStateWithParam(tcpu, ad, "written", "min(" + paramName + ", " + cpu.getName() + "__byteDataSize)");
 				choice0.addNext(actionp5);
 				actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+				if (showSampleChannels) {
+					choice1.addNext(actionp6);
+					previous = actionpspe;
+				} else {
+					previous = actionp6;
+				}
 				if (showChannels) {
 					actiong0 = getActionGate(tcpu, ad, gateName, "!written!" + ch.getSize());
 					actionp5.addNext(actiong0);
-					actiong0.addNext(actionp6);
+					actiong0.addNext(previous);
 				} else {
-					actionp5.addNext(actionp6);
+					actionp5.addNext(previous);
 				}
 				actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - written");
 				actionp6.addNext(actionp7);
@@ -2276,9 +2330,37 @@ public class Mapping2TIF {
 			
 			param1 = tcpu.getParamByName("toRead__" + name);
 			paramName = param1.getName();
-			gateName = cpu.getName() + "__" + task.getName() + "__rd__" + name;
+			gateName = cpu.getName() + "__" + task.getName() + "__rdo__" + name;
+			gateName0 = cpu.getName() + "__" + task.getName() + "__rd__" + name;
+			
 			if (showChannels) {
 				tcpu.addNewGateIfApplicable(gateName);
+			}
+			
+			if (showSampleChannels) {
+				//System.out.println("Show sample channels");
+				tcpu.addNewGateIfApplicable(gateName0);
+				nameTot = "totalRead__" + ch.getName();
+				
+				actionpspe = getActionStateWithParam(tcpu, ad, nameTot, nameTot + " + read");
+				adj1 = new ADJunction();
+				ad.add(adj1);
+				actionpspe.addNext(adj1);
+				choice1 = new ADChoice();
+				ad.add(choice1);
+				adj1.addNext(choice1);
+				
+				guard0 = "[ " + nameTot  + " < " + ch.getSize() + "]";
+				guard1 = "[ not(" + nameTot + " < " + ch.getSize() + ")]";
+				
+				choice1.addGuard(guard1);
+				actiong0 = getActionGate(tcpu, ad, gateName0, "!" + ch.getSize() + "!" + ch.getSize());
+				actionp0 = getActionStateWithParam(tcpu, ad, nameTot, nameTot + " - " + ch.getSize());
+				choice1.addNext(actiong0);
+				actiong0.addNext(actionp0);
+				actionp0.addNext(adj1);
+				
+				choice1.addGuard(guard0);
 			}
 			
 			// Init: nb to read from channel
@@ -2306,9 +2388,9 @@ public class Mapping2TIF {
 			case TMLChannel.BRBW:
 			case TMLChannel.BRNBW:
 				choice0.addGuard("[not(" + guard0 + ")]");	
-				choice1 = new ADChoice();
-				ad.add(choice1);
-				choice0.addNext(choice1);
+				choice2 = new ADChoice();
+				ad.add(choice2);
+				choice0.addNext(choice2);
 				
 				guard2 = "n__" + name + "__tmpdest == 0";
 				guard0 = "[" + guard2 + "]";
@@ -2317,8 +2399,8 @@ public class Mapping2TIF {
 				// If nothing in channel -> must block
 				// Blocked branch
 				actionp1 = getStateActionStateWithParam(tcpu, ad, task, "2");
-				choice1.addNext(actionp1);
-				choice1.addGuard(guard0);
+				choice2.addNext(actionp1);
+				choice2.addGuard(guard0);
 				index = allcommunications.indexOf(ch);
 				actionp0 = getBlockedOnActionStateWithParam(tcpu, ad, (2 * index) + 1);
 				actionp1.addNext(actionp0);
@@ -2326,15 +2408,21 @@ public class Mapping2TIF {
 				
 				// Not blocked branch
 				actionp5 = getActionStateWithParam(tcpu, ad, "read", "min(min(" + paramName + ", " + cpu.getName() + "__byteDataSize), n__" + name + "__tmpdest)");
-				choice1.addNext(actionp5);
-				choice1.addGuard(guard1);
+				choice2.addNext(actionp5);
+				choice2.addGuard(guard1);
 				actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+				if (showSampleChannels) {
+					choice1.addNext(actionp6);
+					previous = actionpspe;
+				} else {
+					previous = actionp6;
+				}
 				if (showChannels) {
 					actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
 					actionp5.addNext(actiong0);
-					actiong0.addNext(actionp6);
+					actiong0.addNext(previous);
 				} else {
-					actionp5.addNext(actionp6);
+					actionp5.addNext(previous);
 				}
 				actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
 				actionp6.addNext(actionp7);
@@ -2383,12 +2471,18 @@ public class Mapping2TIF {
 				choice0.addNext(actionp5);
 				choice0.addGuard("[not(" + guard0 + ")]");	
 				actionp6 = getNTickActionStateWithParam(tcpu, cpu, ad);
+				if (showSampleChannels) {
+					choice1.addNext(actionp6);
+					previous = actionpspe;
+				} else {
+					previous = actionp6;
+				}
 				if (showChannels) {
 					actiong0 = getActionGate(tcpu, ad, gateName, "!read!" + ch.getSize());
 					actionp5.addNext(actiong0);
-					actiong0.addNext(actionp6);
+					actiong0.addNext(previous);
 				} else {
-					actionp5.addNext(actionp6);
+					actionp5.addNext(previous);
 				}
 				actionp7 = getActionStateWithParam(tcpu, ad, paramName, paramName + " - read");
 				actionp6.addNext(actionp7);

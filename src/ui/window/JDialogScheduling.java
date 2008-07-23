@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 
 public class JDialogScheduling extends javax.swing.JDialog implements ActionListener, Runnable  {
-	private static boolean channelChecked= false, eventChecked = false, requestChecked = false, execChecked = false, busTransferChecked = false, schedulingChecked = false, taskStateChecked = false, channelStateChecked = false, branchingChecked = false, terminateCPUChecked = false, terminateCPUsChecked = true, clockedChecked = false, clockedEndChecked = false, countTickChecked=false, maxCountTickChecked=false, randomTaskChecked = true;
+	private static boolean sampleChecked=false, channelChecked= false, eventChecked = false, requestChecked = false, execChecked = false, busTransferChecked = false, schedulingChecked = false, taskStateChecked = false, channelStateChecked = false, branchingChecked = false, terminateCPUChecked = false, terminateCPUsChecked = true, clockedChecked = false, clockedEndChecked = false, countTickChecked=false, maxCountTickChecked=false, randomTaskChecked = true;
 	private static String tickIntervalValue = "1", maxCountTickValue = "1000";
 	
 	protected MainGUI mgui;
@@ -75,7 +75,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 	protected JScrollPane jsp;
 	protected JButton checkAll, uncheckAll;
 	
-	protected JCheckBox channel, event, request, exec, busTransfer, scheduling, taskState, channelState, branching, terminateCPU, terminateCPUs, clocked, endClocked, countTick, maxCountTick, randomTask;
+	protected JCheckBox sample, channel, event, request, exec, busTransfer, scheduling, taskState, channelState, branching, terminateCPU, terminateCPUs, clocked, endClocked, countTick, maxCountTick, randomTask;
 	protected JTextField tickIntervalValueText, maxCountTickText;
 	
 	public boolean cancelled = false;
@@ -131,6 +131,11 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c1.fill = GridBagConstraints.BOTH;
 		c1.gridheight = 1;
+		
+		sample = new JCheckBox("Show sample read / write in channels");
+		sample.addActionListener(this);
+		jp1.add(sample, c1);
+		sample.setSelected(sampleChecked);
 		
 		channel = new JCheckBox("Show read / write in channels");
 		channel.addActionListener(this);
@@ -330,6 +335,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 		int size=0, size1;
 		
 		jta.append("Generating TIF specification, please wait\n");
+		sampleChecked = sample.isSelected();
 		channelChecked = channel.isSelected();
 		eventChecked = event.isSelected();
 		requestChecked = request.isSelected();
@@ -348,7 +354,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 		maxCountTickChecked = maxCountTick.isSelected();
 		maxCountTickValue = maxCountTickText.getText();
 		randomTaskChecked = randomTask.isSelected();
-		debug = mgui.gtm.translateTMLMapping(getChannel(), getEvent(), getRequest(), getExec(), getBusTransfer(), getScheduling(), getTaskState(), getChannelState(), getBranching(), getTerminateCPU(), getTerminateCPUs(), getClocked(), getTickIntervalValue(), getEndClocked(), getCountTick(), getMaxCountTick(), getMaxCountTickValue(), getRandomTask());
+		debug = mgui.gtm.translateTMLMapping(getSample(), getChannel(), getEvent(), getRequest(), getExec(), getBusTransfer(), getScheduling(), getTaskState(), getChannelState(), getBranching(), getTerminateCPU(), getTerminateCPUs(), getClocked(), getTickIntervalValue(), getEndClocked(), getCountTick(), getMaxCountTick(), getMaxCountTickValue(), getRandomTask());
 		if (!debug) {
 			setError();
 			jta.append("*** TIF specification generation failed: ***\n"); 
@@ -425,6 +431,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 	}
 	
 	public void checkAll(boolean b) {
+		sample.setSelected(b);
 		channel.setSelected(b);
 		event.setSelected(b);
 		request.setSelected(b);
@@ -443,6 +450,10 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
 		randomTask.setSelected(b);
 		maxCountTickText.setEnabled(maxCountTick.isSelected());
 		tickIntervalValueText.setEnabled(clocked.isSelected());
+	}
+	
+	public boolean getSample() {
+		return sampleChecked;
 	}
 	
 	public boolean getChannel() {

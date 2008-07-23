@@ -214,7 +214,7 @@ public class AUTMappingGraph  extends AUTGraph {
 			return;
 		}
 		
-		System.out.println("Found two transitions to merge: " + aut1.transition + " and " + aut2.transition);
+		//System.out.println("Found two transitions to merge: " + aut1.transition + " and " + aut2.transition);
 		
 		// Must check that this is the same channel
 		String tmp1 = aut1.transition.substring(index1 + keyword.length(), aut1.transition.length());
@@ -420,6 +420,26 @@ public class AUTMappingGraph  extends AUTGraph {
 			for(AUTTransition aut1: state.outTransitions) {
 				aut1.origin = i;
 			}
+		}
+	}
+	
+	public void putFirstStateFirst() {
+		
+		computeStates();
+		AUTState state = findFirstOriginState();
+		if (state == null) {
+			System.out.println("no first state");
+			return;
+		}
+		
+		System.out.println("First state = " + state.id);
+		
+		if ((state != null) && (state != states.get(0))){
+			System.out.println("First state = " + state.id);
+			states.remove(state);
+			states.add(0, state);
+			updateStateIds();
+			putTransitionsFromInitFirst();
 		}
 	}
 	

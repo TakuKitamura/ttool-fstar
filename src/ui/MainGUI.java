@@ -2492,7 +2492,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				dtree.toBeUpdated();
 				return false;
 			}
-			return true;
+			if (!automatic) {
+				return true;
+			}
 		}
 		
 		//System.out.println("generate LOTOS");
@@ -2531,6 +2533,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			jds.setVisible(true); // Blocked until dialog has been closed
 		} else {
 			jds.closeDialog();
+			b = gtm.translateTMLMapping(jds.getSample(), jds.getChannel(), jds.getEvent(), jds.getRequest(), jds.getExec(), jds.getBusTransfer(), jds.getScheduling(), jds.getTaskState(), jds.getChannelState(), jds.getBranching(), jds.getTerminateCPU(), jds.getTerminateCPUs(), jds.getClocked(), jds.getTickIntervalValue(), jds.getEndClocked(), jds.getCountTick(), jds.getMaxCountTick(), jds.getMaxCountTickValue(), jds.getRandomTask());
+			if (b) {
+				setMode(MainGUI.GEN_SYSTEMC_OK);
+				setMode(MainGUI.MODEL_OK);
+				return true;
+			}
+			return false;
 		}
 		
 		if (!jds.isCancelled()) {

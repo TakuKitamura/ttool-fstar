@@ -4022,18 +4022,27 @@ public class GTURTLEModeling {
 		if (tdp == null) {
 			throw new MalformedModelingException();
 		}
-
+		boolean error = false;
+		
 		for(int i=0; i<nl.getLength(); i++) {
 			n = nl.item(i);
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				tgc = makeXMLComponent(n, tdp);
-				if ((tgc != null) && (tgc.getFather() == null)) {
-					//System.out.println("Component added to diagram tgc=" + tgc);
-					tdp.addBuiltComponent(tgc);
-				} else {
-					//System.out.println("Component not added to diagram");
+				try {
+					tgc = makeXMLComponent(n, tdp);
+					if ((tgc != null) && (tgc.getFather() == null)) {
+						//System.out.println("Component added to diagram tgc=" + tgc);
+						tdp.addBuiltComponent(tgc);
+					} else {
+						//System.out.println("Component not added to diagram");
+					}
+				} catch (MalformedModelingException mme) {
+					error = true;
 				}
 			}
+		}
+		
+		if (error) {
+			throw new MalformedModelingException();
 		}
 	}
 
@@ -4851,8 +4860,9 @@ public class GTURTLEModeling {
 		}
 	}
 	
-	public boolean translateTMLMapping(boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {
+	public boolean translateTMLMapping(boolean _sample, boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {
 		Mapping2TIF m2tif = new Mapping2TIF(tmap);
+		m2tif.setShowSampleChannels(_sample);
 		m2tif.setShowChannels(_channel);
 		m2tif.setShowEvents(_event);
 		m2tif.setShowRequests(_request);
@@ -4875,13 +4885,13 @@ public class GTURTLEModeling {
 		m2tif.setRandomTasks(_randomTask);
 		tm = m2tif.generateTURTLEModeling();
 		tmState = 1;
-		System.out.println("tm generated");
+		System.out.println("tm generated from TMAP");
 		checkingErrors = m2tif.getCheckingErrors();
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			return false;
 		} else {
 			// Optimize
-			System.out.println("Optimize");
+			System.out.println("Optimize TIF");
 			//tm.optimize();
 			//System.out.println("Optimize done");
 			//tm.print();

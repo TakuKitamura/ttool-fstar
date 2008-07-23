@@ -345,5 +345,34 @@ public class AUTGraph  implements myutil.Graph {
 			state.met = false;
 		}
 	}
+	
+	public AUTState findFirstOriginState() {
+		AUTState state;
+		
+		for(int i=0; i<states.size(); i++) {
+			state = states.get(i);
+			//System.out.println("id=" + state.id + " transitions to me = " +state.inTransitions.size()); 
+			if (state.inTransitions.size() == 0) {
+				return state;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void putTransitionsFromInitFirst() {
+		ArrayList<AUTTransition> tmp = new ArrayList<AUTTransition>();
+		
+		for(AUTTransition aut1 : transitions) {
+			if (aut1.origin == 0) {
+				tmp.add(aut1);
+			}
+		}
+		
+		for(AUTTransition aut2 : tmp) {
+			transitions.remove(aut2);
+			transitions.add(0, aut2);
+		}
+	}
     
 }

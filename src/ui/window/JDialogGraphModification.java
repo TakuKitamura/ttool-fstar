@@ -406,8 +406,13 @@ public class JDialogGraphModification extends javax.swing.JDialog implements Act
 			//System.out.println("Printing graph:\n" + graph.toAUTStringFormat());
 			jta.append("Splitting transitions\n");
 			graph.splitTransitions();
+			//modifiedGraphAUT = graph.toAUTStringFormat();
+			//System.out.println("Printing graph:\n" + modifiedGraphAUT);
+			
+			jta.append("Reordering transitions\n");
+			graph.putFirstStateFirst();
 			modifiedGraphAUT = graph.toAUTStringFormat();
-			//System.out.println("Printing graph:\n" + modifiedaut);
+			//System.out.println("Printing graph:\n" + modifiedGraphAUT);
 			
 			jta.append("Translation in DOT format\n");
 			
