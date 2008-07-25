@@ -2687,8 +2687,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public void generateTMLTxt() {
-	   //System.out.println("Generating TML code");
-       gtm.generateTMLTxt(file.getAbsolutePath());
+		String path = ConfigurationTTool.FILEPath;
+		if (file != null) {
+			path = file.getAbsolutePath();
+		}
+	  //System.out.println("Generating TML code: "+file.getAbsolutePath());
+       gtm.generateTMLTxt(path);
 	   //System.out.println("Done");
     }
     

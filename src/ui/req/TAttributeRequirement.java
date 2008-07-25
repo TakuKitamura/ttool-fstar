@@ -106,6 +106,14 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
     
     public void internalDrawing(Graphics g) {
         int i;
+		TGComponent tgc = getTopFather();
+		boolean formal = ((tgc instanceof Requirement) && (((Requirement)tgc).isFormal()));
+		String text;
+		if (formal) {
+			text = "TRDD";
+		} else {
+			text = "Text";
+		}
         
         if (!tdp.isScaled()) {
             myG = g;
@@ -128,7 +136,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         for(i=0; i<texts.length; i++) {
             s = texts[i];
             if (i == 0) {
-                s = "text=\"" + s;
+                s = text + "=\"" + s;
             }
             if (i == (texts.length - 1)) {
                 s = s + "\"";
@@ -141,12 +149,12 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         i++;
         g.drawString("Risk=\"" + criticality + "\"", x + textX, y + textY + i* h);
         i++;
-        TGComponent tgc = getTopFather();
-        if( (tgc instanceof Requirement) && (((Requirement)tgc).isFormal())) {
+        
+        /*if(formal) {
             g.drawString("Violated action=\"" + violatedAction + "\"", x + textX, y + textY + i* h);
         } else {
-            g.drawString("Violated action=\"Not Applicable\"", x + textX, y + textY + i* h);
-        }
+            //g.drawString("Violated action=\"Not Applicable\"", x + textX, y + textY + i* h);
+        }*/
     }
     
     public void makeValue() {
@@ -163,17 +171,26 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         if (myG == null) {
             return;
         }
+		
+		TGComponent tgc = getTopFather();
+		boolean formal = ((tgc instanceof Requirement) && (((Requirement)tgc).isFormal()));
+		String text;
+		if (formal) {
+			text = "TRDD";
+		} else {
+			text = "Text";
+		}
         
         //System.out.println("Regular resize" + toString());
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
-        int desiredHeight =  Math.max(minHeight, h * (texts.length +2) + minHeight);
+        int desiredHeight =  Math.max(minHeight, h * (texts.length +1) + minHeight);
         
         String s ;
         for(int i=0; i<texts.length; i++) {
              s = texts[i];
               if (i == 0) {
-                s = "text=\"" + s;
+                s = text + "=\"" + s;
             }
             if (i == (texts.length - 1)) {
                 s = s + "\"";

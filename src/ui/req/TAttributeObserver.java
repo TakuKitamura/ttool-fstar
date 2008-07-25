@@ -66,6 +66,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
     
     protected String text;
     protected String []texts;
+	protected String violatedAction = "noAction";
 
     
     public TAttributeObserver(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -122,7 +123,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
         for(i=0; i<texts.length; i++) {
             s = texts[i];
             if (i == 0) {
-                s = "diagrams=\"" + s;
+                s = "Diagram=\"" + s;
             }
             if (i == (texts.length - 1)) {
                 s = s + "\"";
@@ -130,6 +131,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
             g.drawString(s, x + textX, y + textY + i* h);
             
         }
+		g.drawString("Violated_Action=\"" + violatedAction + "\"", x + textX, y + textY + i* h);
     }
     
     public void makeValue() {
@@ -150,7 +152,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
         //System.out.println("Regular resize" + toString());
         int desiredWidth = minWidth;
         int h = myG.getFontMetrics().getHeight();
-        int desiredHeight =  Math.max(minHeight, h * (texts.length +2) + minHeight);
+        int desiredHeight =  Math.max(minHeight, h * (texts.length +1) + minHeight);
         
         String s ;
         for(int i=0; i<texts.length; i++) {
@@ -162,6 +164,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
                 s = s + "\"";
             }
             desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(s) + 2 * textX);
+			desiredWidth = Math.max(desiredWidth,  myG.getFontMetrics().stringWidth(violatedAction + "Violated action=\"\"") + 2 * textX);
         }
         
         minDesiredWidth = desiredWidth;
@@ -184,7 +187,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-        JDialogObserver jdo = new JDialogObserver(frame, "Setting diagrams of Observer " + ((RequirementObserver)(getTopFather())).getRequirementObserverName(), text);
+        JDialogObserver jdo = new JDialogObserver(frame, "Setting diagrams of Observer " + ((RequirementObserver)(getTopFather())).getRequirementObserverName(), text, violatedAction);
         jdo.setSize(750, 400);
         GraphicLib.centerOnParent(jdo);
         jdo.show();
@@ -194,6 +197,7 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
         }
         
         text = jdo.getText();
+		violatedAction = jdo.getViolatedAction();
 
         makeValue();
         checkMySize();
@@ -218,6 +222,9 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
                 sb.append("\" />\n");
             }
         }
+		sb.append("<violated data=\"");
+        sb.append(violatedAction);
+        sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -254,7 +261,13 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
-                            } 
+                            } else if (elt.getTagName().equals("violated")) {
+                                //System.out.println("Analyzing line");
+                                violatedAction = elt.getAttribute("data");
+                                if (violatedAction.equals("null")) {
+                                    violatedAction = "";
+                                }
+                            }
                         }
                     }
                 }
@@ -267,6 +280,10 @@ public class TAttributeObserver extends TGCWithoutInternalComponent {
         }  
         
         makeValue();
+    }
+	
+	public String getViolatedAction() {
+        return violatedAction;
     }
     
 }

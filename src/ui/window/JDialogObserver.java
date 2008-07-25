@@ -59,12 +59,13 @@ public class JDialogObserver extends javax.swing.JDialog implements ActionListen
     
     private JPanel panel1;
     private Frame frame;
-    private String text;
+    private String diagram;
+	private String violatedAction;
     
     // Panel1
-    protected JTextArea jta;
-    
-    
+    protected JTextField diagramBox;
+    private JTextField violatedActionBox;
+	
     //Panel2
     
     // Main Panel
@@ -72,11 +73,12 @@ public class JDialogObserver extends javax.swing.JDialog implements ActionListen
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogObserver(Frame _frame, String _title, String _text) {
+    public JDialogObserver(Frame _frame, String _title, String _diagram, String _violatedAction) {
         super(_frame, _title, true);
         frame = _frame;
-        text = _text;
-
+        diagram = _diagram;
+		violatedAction = _violatedAction;
+		
         initComponents();
         myInitComponents();
         pack();
@@ -100,14 +102,27 @@ public class JDialogObserver extends javax.swing.JDialog implements ActionListen
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Setting diagrams of observer "));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Setting information of observer "));
         panel1.setPreferredSize(new Dimension(350, 250));
         
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
-        jta = new JTextArea();
+		
+		c1.gridwidth = 1;
+		panel1.add(new JLabel("Diagram:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        diagramBox = new JTextField(diagram, 15);
+        panel1.add(diagramBox, c1);
+		
+		c1.gridwidth = 1;
+        panel1.add(new JLabel("Violated action:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        violatedActionBox = new JTextField(violatedAction, 15);
+        panel1.add(violatedActionBox, c1);
+		
+		
+        /*jta = new JTextArea();
         jta.setEditable(true);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
@@ -115,7 +130,7 @@ public class JDialogObserver extends javax.swing.JDialog implements ActionListen
         jta.setFont(new Font("times", Font.PLAIN, 12));
         jta.setPreferredSize(new Dimension(300, 200));
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        panel1.add(jsp);
+        panel1.add(jsp);*/
         //}
         
 
@@ -175,7 +190,11 @@ public class JDialogObserver extends javax.swing.JDialog implements ActionListen
     }
     
     public String getText() {
-        return jta.getText();
+        return diagramBox.getText();
+    }
+	
+	public String getViolatedAction() {
+        return violatedActionBox.getText();
     }
    
 }
