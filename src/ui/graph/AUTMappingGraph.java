@@ -428,14 +428,14 @@ public class AUTMappingGraph  extends AUTGraph {
 		computeStates();
 		AUTState state = findFirstOriginState();
 		if (state == null) {
-			System.out.println("no first state");
+			//System.out.println("no first state");
 			return;
 		}
 		
-		System.out.println("First state = " + state.id);
+		//System.out.println("First state = " + state.id);
 		
 		if ((state != null) && (state != states.get(0))){
-			System.out.println("First state = " + state.id);
+			//System.out.println("First state = " + state.id);
 			states.remove(state);
 			states.add(0, state);
 			updateStateIds();

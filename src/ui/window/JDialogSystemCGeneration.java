@@ -69,6 +69,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private String textSysC4 = "Execute SystemC application:";
     
     private static String unitCycle = "1";
+	
+	private static String[] simus = {"SystemC Simulator - LabSoC version", "C++ Simulator - LabSoc version"};
+	private static int selectedItem = 0;
     
     protected static String pathCode;
     protected static String pathCompiler;
@@ -90,7 +93,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCppFiles, removeXFiles, debugmode, devmode;
+    protected JCheckBox removeCppFiles, removeXFiles, debugmode;
+	protected JComboBox versionSimulator;
     
     private Thread t;
     private boolean go = false;
@@ -201,12 +205,16 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         debugmode.setSelected(false);
         jp01.add(debugmode, c01);
 		
-		devmode = new JCheckBox("Development version of the simulator");
-        devmode.setSelected(true);
-        jp01.add(devmode, c01);
+		jp01.add(new JLabel("Simulator used:"), c01);
+		
+		versionSimulator = new JComboBox(simus);
+		versionSimulator.setSelectedItem(selectedItem);
+		jp01.add(versionSimulator, c01);
+		//devmode = new JCheckBox("Development version of the simulator");
+        //devmode.setSelected(true);
+        //jp01.add(devmode, c01);
         
         jp01.add(new JLabel(" "), c01);
-        
         jp1.add("Generate code", jp01);
         
         
@@ -401,7 +409,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                     jta.append("Could not generate SystemC file\n");
                 }*/
 				
-				if (!devmode.isSelected()) {
+				selectedItem = versionSimulator.getSelectedIndex();
+				if (selectedItem == 0) {
 					tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
 					if (mgui.gtm.getTMLMapping() == null) {
 						tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());

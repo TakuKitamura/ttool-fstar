@@ -505,6 +505,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			}
 			actions[TGUIAction.ACT_DIAGRAM_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].setEnabled(true);
+			actions[TGUIAction.ACT_GEN_DOC].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_JAVA].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_BIRDEYES].setEnabled(true);
 			break;
@@ -3363,6 +3364,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
         return true;
     }
+	
+	public void generateDocumentation() {
+		System.out.println("Documentation");
+		DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath);
+		docgen.generateDocumentation();
+		System.out.println("Documentation=" + docgen.getDocumentation());
+	}
     
     public int getTypeButtonSelected() {
         return typeButtonSelected;
@@ -4898,6 +4906,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             allDiagramCapture();
         } else if (command.equals(actions[TGUIAction.ACT_SELECTED_CAPTURE].getActionCommand())) {
             selectedCapture();
+        } else if (command.equals(actions[TGUIAction.ACT_GEN_DOC].getActionCommand())) {
+            generateDocumentation();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].getActionCommand())) {
             toggleAttributes();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {
