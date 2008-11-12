@@ -59,6 +59,8 @@ import ui.tmldd.*;
 public class JDialogSelectTMLNodes extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     public static Vector validated, ignored;
 	private static boolean optimized = true;
+	
+	private int clock;
     
     private Vector val, ign, back;
     
@@ -71,16 +73,19 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
     private JButton addOneIgnored;
     private JButton allIgnored;
 	protected JCheckBox optimize;
+	protected JTextField clockField;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogSelectTMLNodes(Frame f, Vector _back, LinkedList componentList, String title) {
+    public JDialogSelectTMLNodes(Frame f, Vector _back, LinkedList componentList, String title, int _clock) {
         super(f, title, true);
         
         back = _back;
+		
+		clock = _clock;
         
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
@@ -217,11 +222,25 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         panel6.setLayout(new BorderLayout());
 		
 		panel5 = new JPanel();
-        panel5.setLayout(new FlowLayout());
+		GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c2 = new GridBagConstraints();
+        panel5.setLayout(gridbag2);
 		
+		c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.gridheight = 1;
+		
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		optimize = new JCheckBox("Optimize TML specification");
 		optimize.setSelected(optimized);
-		panel5.add(optimize);
+		panel5.add(optimize, c2);
+		
+		c2.gridwidth = 1; //end row
+		panel5.add(new JLabel("Master clock (in MHz)"), c2);
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		clockField = new JTextField("" + clock);
+		panel5.add(clockField, c2);
 		
         panel4 = new JPanel();
         panel4.setLayout(new FlowLayout());
@@ -360,6 +379,16 @@ public class JDialogSelectTMLNodes extends javax.swing.JDialog implements Action
         }
     }
     
+	public int getClock() {
+		try {
+			int c = Integer.decode(clockField.getText()).intValue();
+			if (c > 0) {
+				return c;
+			}
+		} catch (Exception e) {
+		}
+		return clock;
+	}
     
     public void valueChanged(ListSelectionEvent e) {
         setButtons();

@@ -251,7 +251,7 @@ public class TML2MappingSystemC {
 		declaration += CR;
 		
 		//Registration of CPUs
-		HwLink link;
+		//HwLink link;
 		declaration += "//Registration of CPUs" + CR;
 		//iterator=tmlmapping.getTMLArchitecture().getHwNodes().listIterator();
 		//for(HwLink link: tmlmapping.getTMLArchitecture().getHwLinks()){
@@ -260,16 +260,34 @@ public class TML2MappingSystemC {
 		PriorityQueue<HwLink> pq=new PriorityQueue<HwLink>(20);
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
 			if (node instanceof HwExecutionNode){
-				//getPriority
-				link = tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
-				if (link==null){
+				ArrayList<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
+				if (nodeLinks.isEmpty())
 					declaration+= "defaultBus.registerMasterDevice(&" + node.getName() + ")" + SCCR;
-				}else{
-					pq.add(link);
-					//declaration+=link.bus.getName() + ".registerMasterDevice(&" + node.getName() + ")" + SCCR;
-				}
+				else
+					pq.addAll(nodeLinks);
+			//getPriority
+				//for(HwLink link: tmlmapping.getTMLArchitecture().getLinkByHwNode(node)){
+				//	if (link==null){
+				//		declaration+= "defaultBus.registerMasterDevice(&" + node.getName() + ")" + SCCR;
+				//	}else{
+				//		pq.add(link);
+				//		//declaration+=link.bus.getName() + ".registerMasterDevice(&" + node.getName() + ")" + SCCR;
+				//	}
+				//}
 			} 
 		}
+		//for(HwLink link: tmlmapping.getTMLArchitecture().getHwLinks()){
+			//if (node instanceof HwExecutionNode){
+				//link = tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
+				//if (link==null){
+				//	declaration+= "defaultBus.registerMasterDevice(&" + node.getName() + ")" + SCCR;
+				//}else{
+					//pq.add(link);
+					//declaration+=link.bus.getName() + ".registerMasterDevice(&" + node.getName() + ")" + SCCR;
+				//}
+			//}
+		//}
+		HwLink link;
 		while (!pq.isEmpty()){
 			link = pq.remove();
 			declaration+=link.bus.getName() + ".registerMasterDevice(&" + link.hwnode.getName() + ")" + SCCR;
@@ -310,7 +328,7 @@ public class TML2MappingSystemC {
 		}
 		declaration += CR;*/
 
-		declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\nsimulate(cpulist,buslist);\nschedule2HTML(cpulist,buslist,len,args);\nschedule2VCD(vcdlist,len,args);\nschedule2Graph(cpulist, len, args);\nreturn 0;\n}\n";
+		declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\nsimulate(cpulist,buslist);\nschedule2HTML(cpulist,buslist,len,args);\nschedule2VCD(vcdlist,len,args);\nschedule2Graph(cpulist, len, args);\nschedule2TXT(cpulist, len, args);\nreturn 0;\n}\n";
   }
   
 

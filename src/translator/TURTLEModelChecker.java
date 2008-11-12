@@ -480,7 +480,7 @@ public class TURTLEModelChecker {
 	
 	/**
 	* Parsing in two steps:
-	* 1. Parsing the expression with no varaible checking
+	* 1. Parsing the expression with no variable checking
 	* 2. Parsing the expression with variables values to see whether variables are well-placed or not
 	* The second parsing is performed iff the first one succeeds
 	*/
@@ -558,9 +558,13 @@ public class TURTLEModelChecker {
 		// Tree analysis: if the tree contains a variable, then, this variable has not been declared
 		ArrayList<String> vars = root.getVariables();
 		for(String s: vars) {
-			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + ": " + ERROR_AD_009_2 + " in expression " + action + " of tclass " + t.getName());
-            error.setTClass(t);
-            errors.add(error);
+			// is that string a variable?
+			if ((s.compareTo("true") != 0) && (s.compareTo("false") != 0) && (s.compareTo("nil") != 0)) {
+				System.out.println("Variable not declared: " +s);
+				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + ": " + ERROR_AD_009_2 + " in expression " + action + " of tclass " + t.getName());
+				error.setTClass(t);
+				errors.add(error);
+			}
 		}
 		
 	}

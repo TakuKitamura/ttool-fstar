@@ -449,7 +449,17 @@ public class TML2TURTLE {
                 adinterval.addNext(adc1);
                 return adinterval;
             
-			
+			// DELAY
+			 } else if (tmle instanceof TMLDelay) {
+                adinterval = new ADTimeInterval();
+                newElements.add(adinterval);
+                baseElements.add(tmle);
+                tclass.getActivityDiagram().add(adinterval);
+                adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adinterval, adjunc);
+                adinterval.setValue(modifyString(((TMLDelay)tmle).getMinDelay()), modifyString(((TMLDelay)tmle).getMaxDelay()));
+                adinterval.addNext(adc1);
+                return adinterval;
+				
 				// TMLRandom
 			} else if (tmle instanceof TMLRandom) {
 				tmlrandom = (TMLRandom)tmle;

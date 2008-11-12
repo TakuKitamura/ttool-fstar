@@ -181,6 +181,8 @@ public class TGComponentManager {
 	public static final int TMLAD_EXECC = 1021;
 	public static final int TMLAD_EXECC_INTERVAL = 1022;
 	public static final int TMLAD_RANDOM = 1024;
+	public static final int TMLAD_DELAY = 1026;
+	public static final int TMLAD_INTERVAL_DELAY = 1028;
 	
 	public static final int TMLARCHI_CPUNODE = 1100;
 	public static final int TMLARCHI_ARTIFACT = 1101;
@@ -438,6 +440,12 @@ public class TGComponentManager {
                 break;
             case TMLAD_EXECC_INTERVAL:
                 tgc = new TMLADExecCInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case TMLAD_DELAY:
+                tgc = new TMLADDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_INTERVAL_DELAY:
+                tgc = new TMLADDelayInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_FOR_LOOP:
                 tgc = new TMLADForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -726,6 +734,10 @@ public class TGComponentManager {
             return TMLAD_EXECC;
         } else if (tgc instanceof TMLADExecCInterval) {
             return TMLAD_EXECC_INTERVAL;
+        } else if (tgc instanceof TMLADDelay) {
+            return TMLAD_DELAY;
+        } else if (tgc instanceof TMLADDelayInterval) {
+            return TMLAD_INTERVAL_DELAY;
         } else if (tgc instanceof TMLADForLoop) {
             return TMLAD_FOR_LOOP;
         } else if (tgc instanceof TMLADForStaticLoop) {

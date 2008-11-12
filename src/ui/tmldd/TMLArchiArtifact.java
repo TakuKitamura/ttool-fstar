@@ -282,6 +282,11 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 	public String getReferenceTaskName() {
         return referenceTaskName;
     }
+	
+	public void setReferenceTaskName(String _referenceTaskName) {
+        referenceTaskName = _referenceTaskName;
+		makeFullValue();
+    }
     
     public String getTaskName() {
         return taskName;

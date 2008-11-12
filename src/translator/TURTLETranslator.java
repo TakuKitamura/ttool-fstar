@@ -130,6 +130,12 @@ public class TURTLETranslator {
 	}
 
 	public String generateLOTOS(boolean xtendedNatural) {
+		
+		//System.out.println("Printing TM");
+		//System.out.println("null? generate");
+		//tm.print();
+		//System.out.println("end null?");
+		
 		buildLOTOS(xtendedNatural);
 		
 		int i;
@@ -153,8 +159,21 @@ public class TURTLETranslator {
 		tm.translateInvocationIntoSynchronization();
 		tm.translateActionStatesWithMultipleParams();
 		
+		//System.out.println("null? generate 1");
+		//tm.print();
+		//System.out.println("end null?");
+		
 		tm.removeUselessVariables();
-		tm.removeUselessGates();
+		
+		//System.out.println("null? generate 12");
+		//tm.print();
+		//System.out.println("end null?");
+		
+		//tm.removeUselessGates();
+		
+		//System.out.println("null? generate 2");
+		//tm.print();
+		//System.out.println("end null?");
 
 		mgm = new MasterGateManager(tm, false);
 		mgm.sort();
@@ -1288,9 +1307,11 @@ public class TURTLETranslator {
 	}
 
 	private String translateADChoice(ADChoice ad) {
+		
 		if (ad.realNbOfNext() < 1)
 			return "";
 
+		//System.out.println("GUARD=" + ad.getGuard(0));
 		if (ad.realNbOfNext() == 1) {
 			if (Conversion.replaceAllString(ad.getGuard(0), " ", "").compareTo("[]") == 0) {
 				translateActivity(ad.getNext(0), ad);

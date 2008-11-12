@@ -79,7 +79,7 @@ public class TMLArchiPanel extends TURTLEPanel {
         
         //Class	diagram
         tmlap = new TMLArchiDiagramPanel(mgui, toolBarTML);
-        tmlap.setName("TML Architecture Diagram");
+        tmlap.setName("DIPLODOCUS architecture and mapping Diagram");
         tmlap.tp = this;
         tdp = tmlap;
         panels.add(tmlap); // Always first in list
@@ -89,7 +89,7 @@ public class TMLArchiPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarTML, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("DIPLODOCUS Architecture Diagram", IconManager.imgic60, toolBarPanel, "Opens DIPLODOCUS architecture diagram");
+        tabbedPane.addTab("DIPLODOCUS architecture and mapping Diagram", IconManager.imgic60, toolBarPanel, "Opens DIPLODOCUS architecture diagram");
         tabbedPane.setSelectedIndex(0);
         
         //jsp.setVisible(true);
@@ -107,5 +107,11 @@ public class TMLArchiPanel extends TURTLEPanel {
     public String toString() {
         return "DIPLODOCUS Architecture: " + mgui.getTitleAt(this);
     }
+	
+	public void renameMapping(String oldName, String newName) {
+		if (tmlap != null) {
+			tmlap.renameMapping(oldName, newName);
+		}
+	}
     
 }

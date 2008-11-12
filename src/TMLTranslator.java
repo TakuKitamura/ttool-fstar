@@ -252,6 +252,41 @@ public class TMLTranslator  {
 		return ret;
 	}
 	
+	public static boolean convertToLOTOSFromMapping() {
+		Mapping2TIF m2tif = new Mapping2TIF(tmap);
+		m2tif.setShowSampleChannels(false);
+		m2tif.setShowChannels(true);
+		m2tif.setShowEvents(true);
+		m2tif.setShowRequests(true);
+		m2tif.setShowExecs(false);
+		m2tif.setShowBusTransfers(false);
+		m2tif.setShowScheduling(false);
+		m2tif.setIsClocked(false);
+		m2tif.setTickValue("10");
+		m2tif.setIsEndClocked(false);
+		m2tif.setIsCountTick(true);
+		m2tif.hasMaxCountTick(false);
+		m2tif.setShowTaskState(false);
+		m2tif.setShowChannelState(false);
+		m2tif.setShowBlockedCPU(false);
+		m2tif.setShowTerminateCPUs(true);
+		m2tif.setShowBranching(false);
+		m2tif.setRandomTasks(false);
+		TURTLEModeling tm = m2tif.generateTURTLEModeling();
+		
+		TURTLETranslator tt = new TURTLETranslator(tm);
+		outputData = tt.generateLOTOS(true);
+		try {
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			fos.write(outputData.getBytes());
+			fos.close();
+		} catch (Exception e) {
+			System.out.println("Error when writing LOTOS file");
+			return false;
+		}
+		return true;
+	}
+	
 	public static boolean convertToLOTOS() {
 		TML2TURTLE totif = new TML2TURTLE(tmlm);
 		TURTLEModeling tm = totif.generateTURTLEModeling();
@@ -422,8 +457,12 @@ public class TMLTranslator  {
 		
 		switch(conversionType) {
 		case 0:
-			convert = convertToLOTOS();
-			break;
+			if (tmap == null) {
+				convert = convertToLOTOS();
+			} else {
+				convert = convertToLOTOSFromMapping();
+			}
+		break;
 		case 1:
 			convert = convertToUPPAAL();
 			break;

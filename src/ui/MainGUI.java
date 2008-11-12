@@ -2323,13 +2323,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
             Vector tmlNodesToValidate = new Vector();
-            JDialogSelectTMLNodes jdstmln = new JDialogSelectTMLNodes(frame, tmlNodesToValidate, tmlap.tmlap.getComponentList(), "Choosing Nodes to validate");
+            JDialogSelectTMLNodes jdstmln = new JDialogSelectTMLNodes(frame, tmlNodesToValidate, tmlap.tmlap.getComponentList(), "Choosing Nodes to validate", tmlap.tmlap.getMasterClockFrequency());
 			if (!automatic) {
 				GraphicLib.centerOnParent(jdstmln);
 				jdstmln.setVisible(true); // Blocked until dialog has been closed
 			} else {
 				jdstmln.closeDialog();
 			}
+			tmlap.tmlap.setMasterClockFrequency(jdstmln.getClock());
+			
             if (tmlNodesToValidate.size() > 0) {
 				tmlap.validated = JDialogSelectTMLNodes.validated;
 				tmlap.ignored = JDialogSelectTMLNodes.ignored;
@@ -3366,10 +3368,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public void generateDocumentation() {
-		System.out.println("Documentation");
-		DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath);
-		docgen.generateDocumentation();
-		System.out.println("Documentation=" + docgen.getDocumentation());
+		//System.out.println("Documentation");
+		ThreadGUIElement t = new ThreadGUIElement(frame, 1, tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName(),"Documentation", "Generating documentation ... Please wait");
+    	t.go();
+		/*DocumentationGenerator docgen = new DocumentationGenerator(tabs, mainTabbedPane, ConfigurationTTool.IMGPath, file.getName());
+		docgen.setFirstHeadingNumber(2);
+		if (docgen.generateDocumentation()) {
+			JOptionPane.showMessageDialog(frame,
+				"All done!",
+				"Documentation generation",
+				JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(frame,
+				"The documentation generation could not be performed",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+		}*/
+		//System.out.println("Documentation=" + docgen.getDocumentation());
 	}
     
     public int getTypeButtonSelected() {
@@ -4480,14 +4495,35 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     
     public void requestRenameTab(int index) {
+		String oldName = mainTabbedPane.getTitleAt(index);
         String s = (String)JOptionPane.showInputDialog(frame, "TURTLE modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, mainTabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
             // name already in use?
-            mainTabbedPane.setTitleAt(index, s);
-            changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
+			if (s.compareTo(oldName) != 0) {
+				mainTabbedPane.setTitleAt(index, s);
+				changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
+				
+				TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+				if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+					renameMapping(oldName, s);
+				}
+				
+			}
         }
         changeMade(null, -1);
     }
+	
+	public void renameMapping(String oldName, String newName) {
+		TURTLEPanel tp;
+		
+		 for(int i = 0; i<mainTabbedPane.getTabCount(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLArchiPanel) {
+				((TMLArchiPanel)tp).renameMapping(oldName, newName);
+			}
+		}
+		
+	}
     
     public boolean selectTDiagramPanel(TDiagramPanel tdp) {
         return (selectTab(getPoint(tdp)) == tdp);
@@ -5111,6 +5147,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_EXECC);
         } else if (command.equals(actions[TGUIAction.TMLAD_EXECC_INTERVAL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_EXECC_INTERVAL);
+        } else if (command.equals(actions[TGUIAction.TMLAD_DELAY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_DELAY);
+        } else if (command.equals(actions[TGUIAction.TMLAD_INTERVAL_DELAY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_INTERVAL_DELAY);
         } else if (command.equals(actions[TGUIAction.TMLAD_FOR_LOOP].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_FOR_LOOP);
         } else if (command.equals(actions[TGUIAction.TMLAD_FOR_STATIC_LOOP].getActionCommand())) {

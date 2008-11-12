@@ -71,7 +71,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private static String unitCycle = "1";
 	
 	private static String[] simus = {"SystemC Simulator - LabSoC version", "C++ Simulator - LabSoc version"};
-	private static int selectedItem = 0;
+	private static int selectedItem = 1;
     
     protected static String pathCode;
     protected static String pathCompiler;
@@ -208,8 +208,11 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 		jp01.add(new JLabel("Simulator used:"), c01);
 		
 		versionSimulator = new JComboBox(simus);
-		versionSimulator.setSelectedItem(selectedItem);
+		versionSimulator.setSelectedIndex(selectedItem);
+		versionSimulator.addActionListener(this);
 		jp01.add(versionSimulator, c01);
+		//System.out.println("selectedItem=" + selectedItem);
+		
 		//devmode = new JCheckBox("Development version of the simulator");
         //devmode.setSelected(true);
         //jp01.add(devmode, c01);
@@ -305,7 +308,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        }
+        } else if (evt.getSource() == versionSimulator) {
+			selectedItem = versionSimulator.getSelectedIndex();
+		}
     }
     
     public void closeDialog() {
@@ -384,7 +389,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 testGo();
                 
                 try {
-                    cycle = Integer.valueOf(unitcycle.getText()).intValue();
+					unitCycle = unitcycle.getText();
+                    cycle = Integer.valueOf(unitCycle).intValue();
                 } catch (Exception e) {
                     jta.append("Wrong number of cycles: " + unitcycle.getText());
                     jta.append("Aborting");
@@ -410,6 +416,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 }*/
 				
 				selectedItem = versionSimulator.getSelectedIndex();
+				//System.out.println("Selected item=" + selectedItem);
 				if (selectedItem == 0) {
 					tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
 					if (mgui.gtm.getTMLMapping() == null) {
@@ -519,6 +526,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         
         checkMode();
         setButtons();
+		
+		//System.out.println("Selected item=" + selectedItem);
     }
     
     protected String processCmd(String cmd) throws LauncherException {

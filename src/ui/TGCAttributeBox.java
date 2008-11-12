@@ -288,6 +288,8 @@ public abstract class TGCAttributeBox extends TGCWithoutInternalComponent {
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
+								
+								//System.out.println("Studying attribute " + id);
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);

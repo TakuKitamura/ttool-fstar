@@ -295,16 +295,12 @@ public class MappedSystemCTask {
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
-				System.out.println("action no append: "+ MKResult);
 			}else{
 				System.out.println("nextCommandCont!=null in ActionState "+ action +CR); 
 				functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
-				//String MKResult =  makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,functionCont,lastSequence);
-				//System.out.println("action append: "+ MKResult);
-				//return MKResult;
-				return  makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,functionCont,lastSequence);
+				return makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,functionCont,lastSequence);
 			}
 
 
@@ -354,8 +350,6 @@ public class MappedSystemCTask {
 			commentNum++;
 			functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 			nextCommand= cmdName + ".setNextCommand(array(2,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,"&"+cmdName,null,null,null) + ",(TMLCommand*)" + makeCommands(currElem.getNextElement(1),false,retElement,null,null,lastSequence) + "))"+ SCCR;
-			//initCommand+="LOOP!!!" + CR;
-			//nextCommand= cmdName + ".setNextCommand(array(2,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,cmdName,null,null,null) + ",(TMLCommand*)" + makeCommands(currElem.getNextElement(1),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLReadChannel){
 			System.out.println("Checking Read\n");
@@ -532,50 +526,47 @@ public class MappedSystemCTask {
 							if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,functionCollection,lastSequence);
 							if (functionCollection.str.isEmpty()){
-								//System.out.println("NO content has been added to "+ code2);
+								System.out.println("NO content has been added to "+ code2);
 								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
-								//System.out.println("RETURN, aaINC NUM "+ returnIndex);
+								System.out.println("RETURN, aaINC NUM "+ returnIndex);
 								returnIndex++;
 								nextCommandTemp+= ",(TMLCommand*)" + MCResult;
-								System.out.println("no append to old, no content in new: "+ MCResult);
 							}else{
-								//System.out.println("OLD RETURN INDEX "+ returnIndex);
+								System.out.println("OLD RETURN INDEX "+ returnIndex);
 								returnIndex = nextCommandCollection.num;
 								//System.out.println("Returned index: "+ returnIndex);
-								//System.out.println("Choice: Content has been added to "+ code2);
+								System.out.println("Choice: Content has been added to "+ code2);
 								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + functionCollection.str + "return " + returnIndex + ";\n}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
 								//returnIndex = nextCommandCollection.num;
-								//System.out.println("RETURN, bbINC NUM "+ returnIndex);
+								System.out.println("RETURN, bbINC NUM "+ returnIndex);
 								returnIndex++;
 								nextCommandTemp+= nextCommandCollection.str+ ",(TMLCommand*)" + MCResult;
-								System.out.println("no append to old, content in new: "+ MCResult);
 							}
 						}else{
-							//System.out.println("Choice: Next command!=0 "+ code2);
+							System.out.println("Choice: Next command!=0 "+ code2);
 							int oldReturnIndex=nextCommandCont.num;
 							functionCont.str += code + "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n";
 							commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 							commentNum++;
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement, nextCommandCont,functionCont,lastSequence);
 							if (oldReturnIndex==nextCommandCont.num){
-								//System.out.println("RETURN, ccINC NUM "+ nextCommandCont.num);
+								System.out.println("RETURN, ccINC NUM "+ nextCommandCont.num);
 								functionCont.str+= "return " + nextCommandCont.num + SCCR;
 								nextCommandCont.num++;
 								nextCommandCont.str += ",(TMLCommand*)" + MCResult;
 							}
 							functionCont.str+= "}\n";
 							code="";
-							System.out.println("append to old: "+ MCResult);
 						}
 					} 
 				}
 				// If there was no else, do a terminate
 				if (nextCommandCont==null){
-					//System.out.println("Choice: finalization, add new command\n");
+					System.out.println("Choice: finalization, add new command\n");
 					if (index1 == -1){
 						code += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
@@ -589,13 +580,13 @@ public class MappedSystemCTask {
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
-					//System.out.println("Choice: finalization, No new command\n");
+					System.out.println("Choice: finalization, No new command\n");
 					if (index1 == -1){
 						functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + nextCommandCont.num + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
 						commentNum++;
 						nextCommandCont.str += ",(TMLCommand*)0";
-						//System.out.println("RETURN, ddINC NUM "+ nextCommandCont.num);
+						System.out.println("RETURN, ddINC NUM "+ nextCommandCont.num);
 						nextCommandCont.num++;
 					}
 					cmdName=MCResult;

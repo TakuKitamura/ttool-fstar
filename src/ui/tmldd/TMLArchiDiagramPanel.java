@@ -53,7 +53,8 @@ import java.util.*;
 import ui.*;
 
 public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
-    
+    private int masterClockFrequency = 200; // in MHz
+	
     public  TMLArchiDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
@@ -107,9 +108,17 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         }*/
         return false;
     }
+	
+	public int getMasterClockFrequency() {
+		return masterClockFrequency;
+	}
+	
+	public void setMasterClockFrequency(int _masterClockFrequency) {
+		masterClockFrequency = _masterClockFrequency;
+	}
     
     public String getXMLHead() {
-        return "<TMLArchiDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + " >";
+        return "<TMLArchiDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
     }
     
     public String getXMLTail() {
@@ -138,6 +147,13 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		s += "\"";
         return s;
     }
+	
+	 public String displayClock() {
+        String s = " masterClockFrequency=\"";
+		s += masterClockFrequency;
+		s += "\"";
+        return s;
+    }
     
     public void loadExtraParameters(Element elt) {
         String s;
@@ -147,11 +163,20 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             //System.out.println("S=" + s);
 			int attr = Integer.decode(s).intValue();
 			setAttributes(attr % 3);
-
         } catch (Exception e) {
             // Model was saved in an older version of TTool
             //System.out.println("older format");
 			setAttributes(0);
+        }
+		
+		try {
+            s = elt.getAttribute("masterClockFrequency");
+            //System.out.println("S=" + s);
+			masterClockFrequency = Math.abs(Integer.decode(s).intValue());
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            //System.out.println("older format");
+			masterClockFrequency = 200;
         }
     }
     
@@ -183,6 +208,14 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             if (tgc instanceof TMLArchiCPUNode) {
                 ll.add(tgc);
             }
+			
+			if (tgc instanceof TMLArchiHWANode) {
+				 ll.add(tgc);
+			}
+			
+			if (tgc instanceof TMLArchiCommunicationNode) {
+				ll.add(tgc);
+			}
         }
         
         return ll;
@@ -225,6 +258,49 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		}
 		
 		return false;
+	}
+	
+	public void renameMapping(String oldName, String newName) {
+		ListIterator iterator = getListOfNodes().listIterator();
+		TMLArchiNode node;
+		Vector v;
+		TMLArchiArtifact artifact;
+		ArrayList<TMLArchiCommunicationArtifact> list;
+		int i;
+		
+		while(iterator.hasNext()) {
+			node = (TMLArchiNode)(iterator.next());
+			
+			// Task mapping
+			
+			if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
+				if (node instanceof TMLArchiCPUNode) {
+					v =  ((TMLArchiCPUNode)(node)).getArtifactList();
+					//System.out.println("CPU:" + node.getName() +  " v:" + v.size());
+				} else {
+					v =  ((TMLArchiHWANode)(node)).getArtifactList();
+					//System.out.println("HWA:" + node.getName() + " v:" + v.size());
+				}
+				
+				for(i=0; i<v.size(); i++) {
+					artifact = (TMLArchiArtifact)(v.get(i));
+					if (artifact.getReferenceTaskName().compareTo(oldName) == 0) {
+						artifact.setReferenceTaskName(newName);
+					}
+				}
+			}
+			
+			// Channel, event, request mapping
+			if (node instanceof TMLArchiCommunicationNode) {
+				list = ((TMLArchiCommunicationNode)node).getArtifactList();
+				
+				for(TMLArchiCommunicationArtifact arti: list) {
+					if (arti.getReferenceCommunicationName().compareTo(oldName) == 0) {
+						arti.setReferenceCommunicationName(newName);
+					}
+				}
+			}
+		}
 	}
     
 

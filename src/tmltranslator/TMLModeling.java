@@ -535,6 +535,7 @@ public class TMLModeling {
 		TMLActivity activity = task.getActivityDiagram();
 		optimizeVariables(task, activity, warnings);
 		optimizeMergeEXECs(activity);
+		optimizeMergeDELAYSs(activity);
 	}
 	
 	/**
@@ -603,6 +604,7 @@ public class TMLModeling {
 		TMLForLoop tmlloop;
 		TMLActivityElementChannel tmlaec;
 		TMLSendRequest tmlasr;
+		TMLSendEvent tmlne; 
 		TMLRandom tmlrandom;
 		int i, j;
 		int usage = 0;
@@ -737,6 +739,13 @@ public class TMLModeling {
 					for(j=0; j<tmlasr.getNbOfParams(); j++) {
 						if (usage == 0) {
 							usage = analyzeStringWithParam(tmlasr.getParam(j), name);
+						}
+					}
+				} else if (element instanceof TMLSendEvent) {
+					tmlne = (TMLSendEvent)element;
+					for(j=0; j<tmlne.getNbOfParams(); j++) {
+						if (usage == 0) {
+							usage = analyzeStringWithParam(tmlne.getParam(j), name);
 						}
 					}
 				} 
@@ -979,6 +988,42 @@ public class TMLModeling {
 			 
 		 }
 	 }
+	 
+	 /**
+	 *  Concatenate Delay operations
+	 */
+	 public void optimizeMergeDELAYSs(TMLActivity activity) {
+		 TMLActivityElement elt0, elt1;
+		 String action0, action1;
+		 TMLDelay del0, del1;
+		 
+		 
+		 for(int i=0; i<activity.nElements(); i++) {
+			 elt0 = activity.get(i);
+			 if ((elt0 instanceof TMLDelay) && (elt0.getNbNext() == 1)) {
+				 elt1 = elt0.getNextElement(0);
+				 if (elt1 instanceof TMLDelay) {
+					 del1 = (TMLDelay)elt1;
+					 del0 = (TMLDelay)elt0;
+					 
+					 if (del1.getUnit().equals(del0.getUnit())) {
+						 // We delete the second i.e. elt1
+						 activity.removeElement(elt1);
+						 
+						 // We link the first one to the nexts of the second one
+						 elt0.setNexts(elt1.getNexts());
+						 
+						 // We modify the value of elt0
+						 del0.setMinDelay(addActions(del0.getMinDelay(), del1.getMinDelay()));
+						 del0.setMaxDelay(addActions(del0.getMaxDelay(), del1.getMaxDelay()));
+						 
+						 i = -1;
+					 }
+				 } 
+			 }
+		 }
+	 }
+	 
 	
 	 public void setNewNexts(TMLActivity activity, TMLActivityElement elt0, TMLActivityElement elt1) {
 		 if (elt0 == elt1) {

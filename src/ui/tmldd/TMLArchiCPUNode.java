@@ -114,7 +114,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         removable = true;
         userResizable = true;
         
-        name = "NodeName";
+        name = tdp.findNodeName("CPU");
 		value = "name";
         
         myImageIcon = IconManager.imgic700;

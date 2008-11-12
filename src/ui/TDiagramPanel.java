@@ -2408,6 +2408,30 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return name;
     }
+	
+	 public String findNodeName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        TGComponent tgc;
+		Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                tgc = (TGComponent)(iterator.next());
+				if (tgc.getName().equals(name + index)) {
+                        ok = false;
+                }                
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
     
     public boolean isTClassNameUnique(String s) {
         Object o;

@@ -4861,6 +4861,7 @@ public class GTURTLEModeling {
 	}
 	
 	public boolean translateTMLMapping(boolean _sample, boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {
+		//System.out.println("TML=" + tmap.toString());
 		Mapping2TIF m2tif = new Mapping2TIF(tmap);
 		m2tif.setShowSampleChannels(_sample);
 		m2tif.setShowChannels(_channel);
@@ -4884,7 +4885,13 @@ public class GTURTLEModeling {
 		m2tif.setShowBranching(_branching);
 		m2tif.setRandomTasks(_randomTask);
 		tm = m2tif.generateTURTLEModeling();
-		tmState = 1;
+		//StringBuffer sb = tm.printToStringBuffer();
+		//System.out.println("tm=" + sb);
+		
+		
+		
+		return true;
+		/*tmState = 1;
 		System.out.println("tm generated from TMAP");
 		checkingErrors = m2tif.getCheckingErrors();
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -4892,7 +4899,8 @@ public class GTURTLEModeling {
 		} else {
 			// Optimize
 			System.out.println("Optimize TIF");
-			//tm.optimize();
+			return true;
+			/*tm.optimize();
 			//System.out.println("Optimize done");
 			//tm.print();
 			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
@@ -4905,7 +4913,7 @@ public class GTURTLEModeling {
 				System.out.println("false");
 				return false;
 			}
-		}
+		}*/
 	}
 
 	//Added by Solange

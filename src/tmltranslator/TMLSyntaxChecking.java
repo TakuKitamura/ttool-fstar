@@ -64,6 +64,7 @@ public class TMLSyntaxChecking {
 	private final String VARIABLE_ERROR = "variable is not used according to its type";
 	private final String UNDECLARED_VARIABLE = "unknown variable";
 	private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
+	private final String TIME_UNIT_ERROR = "unknown time unit";
 	
 	
 	private ArrayList<TMLError> errors;
@@ -222,10 +223,19 @@ public class TMLSyntaxChecking {
 					parsing(t, elt, "actionnat", action);
 				
 				} else if (elt instanceof TMLActivityElementWithIntervalAction) {
+					//System.out.println("Parsing TMLActivityElementWithIntervalAction");
 					action = ((TMLActivityElementWithIntervalAction)elt).getMinDelay();
 					parsing(t, elt, "actionnat", action);
 					action = ((TMLActivityElementWithIntervalAction)elt).getMaxDelay();
 					parsing(t, elt, "actionnat", action);
+					
+					if (elt instanceof TMLDelay) {
+						action = ((TMLDelay)elt).getUnit().trim();
+						
+						if (!(TMLDelay.isAValidUnit(action))) {
+							addError(t, elt, TIME_UNIT_ERROR + "in expression " + action, TMLError.ERROR_BEHAVIOR);
+						}
+					}
 					
 				} else if (elt instanceof TMLActivityElementChannel) {
 					action = ((TMLActivityElementChannel)elt).getNbOfSamples();

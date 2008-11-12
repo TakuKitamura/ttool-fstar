@@ -241,6 +241,7 @@ public class JDialogScheduling extends javax.swing.JDialog implements ActionList
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
+		jta.setRows(10);
 		if (generator == MainGUI.LOTOS) {
 			jta.append("Select options and then, click on 'start' for generating a LOTOS specification\n");
 		} else {

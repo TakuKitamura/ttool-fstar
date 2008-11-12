@@ -48,8 +48,8 @@
 package ui;
 
 import java.awt.*;
-//import java.awt.event.*;
-//import javax.swing.*;
+import java.util.*;
+import javax.swing.*;
 
 import myutil.*;
 import ui.window.*;
@@ -57,9 +57,11 @@ import ui.window.*;
 
 public class ThreadGUIElement extends Thread {
 	private String param0, param1, param2;
+	private Object obj0, obj1, obj2, obj3;
 	private int function;
 	private StoppableGUIElement sge;
 	private JFrameStatistics jfs;
+	private DocumentationGenerator docgen;
 	private JDialogCancel jdc;
 	private Frame frame;
 	private ExternalCall ec;
@@ -69,6 +71,17 @@ public class ThreadGUIElement extends Thread {
 		function = _function;
 		param0 = _param0;
 		param1 = _param1;
+		param2 = _param2;
+	}
+	
+	public ThreadGUIElement (Frame _frame, int _function, Object _obj0, Object _obj1, Object _obj2, Object _obj3, String _param0, String _param2) {
+		frame = _frame;
+		function = _function;
+		obj0 = _obj0;
+		obj1 = _obj1;
+		obj2 = _obj2;
+		obj3 = _obj3;
+		param0 = _param0;
 		param2 = _param2;
 	}
 	
@@ -90,6 +103,11 @@ public class ThreadGUIElement extends Thread {
 			jdc = null;
 		} else {
 			switch(function) {
+			case 1:
+				docgen = new DocumentationGenerator((Vector)obj0, (JTabbedPane)obj1, (String)obj2, (String)obj3);
+				docgen.setFirstHeadingNumber(2);
+				sge = (StoppableGUIElement)docgen;
+				break;
 			case 0:
 			default:
 				jfs = new JFrameStatistics(param0, param1);
@@ -97,8 +115,8 @@ public class ThreadGUIElement extends Thread {
 			}
 			start();
 			jdc = new JDialogCancel(frame, param0, param2, sge);
+			jdc.setSize(400, 200);
 			GraphicLib.centerOnParent(jdc);
-			jdc.setSize(300, 200);
 			jdc.setVisible(true);
 			jdc = null;
 		}
@@ -115,6 +133,23 @@ public class ThreadGUIElement extends Thread {
 			}
 		} else {
 			switch(function) {
+			case 1:
+				boolean res = docgen.generateDocumentation();
+				if (jdc != null) {
+					jdc.stopAll();
+				}
+				if (res && !docgen.hasBeenStopped()) {
+					JOptionPane.showMessageDialog(frame,
+						"All done!",
+						"Documentation generation",
+						JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(frame,
+						"The documentation generation could not be performed",
+				"	Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				}
+				break;
 			case 0:
 			default:
 				jfs.goElement();

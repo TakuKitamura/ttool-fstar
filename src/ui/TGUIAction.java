@@ -178,6 +178,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_EXECI_INTERVAL = 152;
 	public static final int TMLAD_EXECC = 243;
     public static final int TMLAD_EXECC_INTERVAL = 244;
+	public static final int TMLAD_DELAY = 248;
+    public static final int TMLAD_INTERVAL_DELAY = 249;
     public static final int TMLAD_WRITE_CHANNEL = 142;
     public static final int TMLAD_SEND_REQUEST = 143; 
     public static final int TMLAD_SEND_EVENT = 144; 
@@ -352,7 +354,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 248;
+    public static final int NB_ACTION = 250;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -605,6 +607,8 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_EXECI_INTERVAL] = new TAction("add-tmlad-execi-int", "EXECI (time interval)", IconManager.imgic914, IconManager.imgic914, "EXECI (time interval)", "Add an EXECI time interval to the currently opened TML task activity diagram", 0);
         actions[TMLAD_EXECC] = new TAction("add-tmlad-execc", "EXECC", IconManager.imgic920, IconManager.imgic920, "EXECC", "Add an EXECC delay to the currently opened TML task activity diagram", 0);
         actions[TMLAD_EXECC_INTERVAL] = new TAction("add-tmlad-execc-int", "EXECC (time interval)", IconManager.imgic922, IconManager.imgic922, "EXECC (time interval)", "Add an EXECC time interval to the currently opened TML task activity diagram", 0);
+        actions[TMLAD_DELAY] = new TAction("add-tmlad-delay", "DELAY[]", IconManager.imgic214, IconManager.imgic214, "DELAY[]", "Add a physical delay to the currently opened TML task activity diagram", 0);
+        actions[TMLAD_INTERVAL_DELAY] = new TAction("add-tmlad-interval-delay", "DELAY[,]", IconManager.imgic224, IconManager.imgic224, "DELAY[,]", "Add a physical interval delay to the currently opened TML task activity diagram", 0);
         actions[TMLAD_WRITE_CHANNEL] = new TAction("add-tmladd-write-channel", "Write in channel", IconManager.imgic900, IconManager.imgic900, "Write in channel", "Add a write to channel operator opened TML activity diagram", 0);
         actions[TMLAD_SEND_REQUEST] = new TAction("add-tmladd-send-request", "Send request", IconManager.imgic902, IconManager.imgic902, "Send request", "Add a send request operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_SEND_EVENT] = new TAction("add-tmladd-send-event", "Send event", IconManager.imgic904, IconManager.imgic904, "Send event", "Add a send event operator to the currently opened TML activity diagram", 0);

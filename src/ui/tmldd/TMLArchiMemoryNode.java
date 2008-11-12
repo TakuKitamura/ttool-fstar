@@ -105,7 +105,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         removable = true;
         userResizable = true;
         
-        name = "NodeName";
+		name = tdp.findNodeName("Memory");
 		value = "name";
         
         myImageIcon = IconManager.imgic700;

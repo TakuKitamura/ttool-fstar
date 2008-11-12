@@ -466,6 +466,7 @@ public class GCTMLModeling  {
         TMLExecIInterval tmlexecii;
 		TMLExecC tmlexecc;
         TMLExecCInterval tmlexecci;
+		TMLDelay tmldelay;
         TMLForLoop tmlforloop;
         TMLReadChannel tmlreadchannel;
         TMLSendEvent tmlsendevent;
@@ -535,6 +536,20 @@ public class GCTMLModeling  {
                 tmlexecci.setMaxDelay(((TMLADExecCInterval)tgc).getMaxDelayValue());
                 activity.addElement(tmlexecci);
 				listE.addCor(tmlexecci, tgc);
+            } else if (tgc instanceof TMLADDelay) {
+                tmldelay = new TMLDelay("d-delay", tgc);
+                tmldelay.setMinDelay(((TMLADDelay)tgc).getDelayValue());
+				tmldelay.setMaxDelay(((TMLADDelay)tgc).getDelayValue());
+				tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
+                activity.addElement(tmldelay);
+				listE.addCor(tmldelay, tgc);
+            } else if (tgc instanceof TMLADDelayInterval) {
+                tmldelay = new TMLDelay("nd-delay", tgc);
+                tmldelay.setMinDelay(((TMLADDelayInterval)tgc).getMinDelayValue());
+                tmldelay.setMaxDelay(((TMLADDelayInterval)tgc).getMaxDelayValue());
+				tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
+                activity.addElement(tmldelay);
+				listE.addCor(tmldelay, tgc);
             } else if (tgc instanceof TMLADForLoop) {
                 tmlforloop = new TMLForLoop("loop", tgc);
                 tmlforloop.setInit(((TMLADForLoop)tgc).getInit());

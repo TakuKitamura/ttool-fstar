@@ -179,6 +179,8 @@ public class TAttribute {
                 return ((value == null) ||(value.equals("")));
             case OTHER:
                 return ((value == null) ||(value.equals("")));
+			case QUEUE_NAT:
+				return  ((value == null) ||(value.equals("")) || (value.equals("nil")));
             default:
                 return false;
         }
@@ -224,7 +226,7 @@ public class TAttribute {
         } else if (s.equals("InGate")) {
             return INGATE;
         } else if (s.equals("Queue_nat")) {
-            return INGATE;
+            return QUEUE_NAT;
         } else if (!s.equals("")) {
             return OTHER;
         }

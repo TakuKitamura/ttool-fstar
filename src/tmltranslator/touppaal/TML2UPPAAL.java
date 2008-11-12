@@ -471,7 +471,7 @@ public class TML2UPPAAL {
         makeElementBehavior(task, template, elt.getNextElement(0), loc1, end);
 		
       // EXEC operations -> ignored
-      } else if ((elt instanceof TMLExecI) || (elt instanceof TMLExecC) ||(elt instanceof TMLExecIInterval)|| (elt instanceof TMLExecCInterval)) {
+      } else if ((elt instanceof TMLExecI) || (elt instanceof TMLExecC) ||(elt instanceof TMLExecIInterval)|| (elt instanceof TMLExecCInterval)|| (elt instanceof TMLDelay)) {
 		 rtu.addTMLActivityElementLocation(elt, previous, previous);
          makeElementBehavior(task, template, elt.getNextElement(0), previous, end);
 

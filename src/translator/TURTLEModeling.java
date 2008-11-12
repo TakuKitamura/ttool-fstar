@@ -1572,7 +1572,9 @@ public class TURTLEModeling {
         for(i=0; i<tclass.size(); i++) {
             t = (TClass)(tclass.elementAt(i));
             System.out.println("\nTClass " + t.getName());
-			// t.getActivityDiagram().print();
+			t.printParamsValues();
+			t.printGates();
+			//t.getActivityDiagram().print();
         }
         
         for(i=0; i<relation.size(); i++) {

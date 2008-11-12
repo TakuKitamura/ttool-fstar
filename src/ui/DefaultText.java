@@ -58,7 +58,7 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.91-beta5"; /* Set new release September, 19th, 2008 */
+        return "0.91-beta6"; /* Set new release November, 10th, 2008 */
     }
 	
 	public static String getFullVersion() {

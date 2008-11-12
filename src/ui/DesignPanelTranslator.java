@@ -164,6 +164,13 @@ public class DesignPanelTranslator {
 				p.setAccess(a.getAccessString());
 				t.addParameter(p);
 			}
+			
+			if (a.getType() == TAttribute.QUEUE_NAT) {
+				p = new Param(a.getId(), Param.QUEUE_NAT, a.getInitialValue());
+				p.setAccess(a.getAccessString());
+				t.addParameter(p);
+				//System.out.println("Adding queuenat parameter");
+			}
 
 			if (a.getType() == TAttribute.OTHER) {
 				addTDataAttributes(a, t, tdp, tm);
@@ -228,6 +235,12 @@ public class DesignPanelTranslator {
 				}
 				if (b.getType() == TAttribute.BOOLEAN) {
 					p = new Param(a.getId() + "__" + b.getId(), Param.BOOL, b.getInitialValue());
+					p.setAccess(a.getAccessString());
+					t.addParameter(p);
+				}
+				
+				if (b.getType() == TAttribute.QUEUE_NAT) {
+					p = new Param(a.getId() + "__" + b.getId(), Param.QUEUE_NAT, b.getInitialValue());
 					p.setAccess(a.getAccessString());
 					t.addParameter(p);
 				}
@@ -391,7 +404,7 @@ public class DesignPanelTranslator {
 					for(j=0; j<nbActions; j++) {
 						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
 						if (sTmp == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (" + s + "): \"" + s + "\" is not a correct expression");
+							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (0) (" + s + "): \"" + s + "\" is not a correct expression");
 							ce.setTClass(t);
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
@@ -400,7 +413,7 @@ public class DesignPanelTranslator {
 
 						p = t.getParamFromActionState(sTmp);
 						if (p == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state(" + s + "): \"" + sTmp + "\" is not a correct expression");
+							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (1) (" + s + "): \"" + sTmp + "\" is not a correct expression");
 							ce.setTClass(t);
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
@@ -413,7 +426,7 @@ public class DesignPanelTranslator {
 					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
 					listE.addCor(adamp, tgc);
 				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (" + s + "): \"" + s + "\" is not a correct expression");
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);

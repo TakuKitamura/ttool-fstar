@@ -76,7 +76,7 @@ public class TMLTextSpecification {
 	
 	private String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "BRBW", "NBRNBW", 
 		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ELSEIF", "ENDIF", "FOR", "ENDFOR",
-	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "RANDOM"};
+	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM"};
 	
 	private String channeltypes[] = {"BRBW", "NBRNBW", "BRNBW"};
 	private String eventtypes[] = {"INF", "NIB", "NINB"};
@@ -271,6 +271,7 @@ public class TMLTextSpecification {
 		TMLEvent evt;
 		TMLRandom random;
 		int i;
+		String tmp1, tmp2;
 		
 		if (elt instanceof TMLStartState) {
 			return makeBehavior(task, elt.getNextElement(0));
@@ -292,6 +293,16 @@ public class TMLTextSpecification {
 			
 		} else if (elt instanceof TMLExecCInterval) {
 			code = "EXECC" + SP + modifyString(((TMLExecCInterval)elt).getMinDelay()) + SP + modifyString(((TMLExecCInterval)elt).getMaxDelay()) + CR;
+			return code + makeBehavior(task, elt.getNextElement(0));
+			
+		} else if (elt instanceof TMLDelay) {
+			tmp1 = ((TMLDelay)elt).getMinDelay();
+			tmp2 = ((TMLDelay)elt).getMaxDelay();
+			if (tmp1.compareTo(tmp2) == 0) {
+				code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+			} else {
+				code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getMaxDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+			}
 			return code + makeBehavior(task, elt.getNextElement(0));
 			
 		} else if (elt instanceof TMLForLoop) {
@@ -920,6 +931,8 @@ public class TMLTextSpecification {
 			TMLAttribute ta = new TMLAttribute(_split[1], new TMLType(TMLType.getType(_split[0])));
 			if (_split.length > 2) {
 				ta.initialValue = _split[3];
+			} else {
+				ta.initialValue = ta.getDefaultInitialValue();
 			}
 			task.addAttribute(ta);
 		} // Attribute declaration
@@ -1923,10 +1936,63 @@ public class TMLTextSpecification {
 			}
 		} // EXECC
 		
+		// DELAY
+		if((isInstruction("DELAY", _split[0]))) {
+			
+			if (!inTask) {
+				error = "A DELAY operation may only be performed in a task body";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			inDec = false;
+			inTask = true;
+			inTaskDec = false;
+			inTaskBehavior = true;
+			
+			if ((_split.length < 3) ||(_split.length > 5)) {
+				error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1) ;
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (_split.length == 3) {
+				if (!checkParameter("DELAY", _split, 2, 0, _lineNb)) {
+					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+					addError(0, _lineNb, 0, error);
+					return -1;
+				}
+			}
+			
+			if (_split.length == 4) {
+				if (!checkParameter("DELAY", _split, 3, 0, _lineNb)) {
+					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+					addError(0, _lineNb, 0, error);
+					return -1;
+				}
+			}
+			
+			TMLDelay delay = new TMLDelay("delay", null);
+			delay.setMinDelay(_split[1]);
+			if (_split.length == 3) {
+				delay.setMaxDelay(_split[1]);
+				delay.setUnit(_split[2]);
+			} else {
+				delay.setMaxDelay(_split[2]);
+				delay.setUnit(_split[3]);
+			}
+			
+			
+			tmlae.addNext(delay);
+			task.getActivityDiagram().addElement(delay);
+			tmlae = delay;
+			
+		} // EXECC
+		
 		// Other command
 		if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
 			if (!inTask) {
-				error = "Syntax error: unrecognized instruction.";
+				error = "Syntax error in TML modeling: unrecognized instruction:" + _split[0];
 				addError(0, _lineNb, 0, error);
 				return -1;
 			}
@@ -1955,6 +2021,7 @@ public class TMLTextSpecification {
 	// Type 5: '='
 	// Type 6: attribute value
 	// Type 7: id or numeral
+	// Type 8:unit
 	
 	public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
 		boolean err = false;
@@ -2014,6 +2081,11 @@ public class TMLTextSpecification {
 					err = true;
 				}
 				break;	
+			case 8:
+				if (!isAValidUnit(_split[_parameter])) {
+					err = true;
+				}
+				break;	
 			}
 		} else {
 			err = true;
@@ -2048,6 +2120,20 @@ public class TMLTextSpecification {
 	
 	public boolean isANumeral(String _num) {
 		return _num.matches("\\d*");
+	}
+	
+	public boolean isAValidUnit(String s) {
+		if (s.compareTo("ns") == 0) {
+			return true;
+		} else if (s.compareTo("us") == 0) {
+			return true;
+		} else if (s.compareTo("ms") == 0) {
+			return true;
+		} else if (s.compareTo("s") == 0) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public boolean checkKeywords(String _id) {

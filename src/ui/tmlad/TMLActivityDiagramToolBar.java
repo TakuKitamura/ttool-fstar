@@ -74,6 +74,8 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLAD_EXECI_INTERVAL].setEnabled(b);
 		mgui.actions[TGUIAction.TMLAD_EXECC].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_EXECC_INTERVAL].setEnabled(b);
+		mgui.actions[TGUIAction.TMLAD_DELAY].setEnabled(b);
+        mgui.actions[TGUIAction.TMLAD_INTERVAL_DELAY].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_WRITE_CHANNEL].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_READ_CHANNEL].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].setEnabled(b);
@@ -170,6 +172,13 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.TMLAD_EXECC]);
         button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.TMLAD_EXECC_INTERVAL]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.TMLAD_DELAY]);
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLAD_INTERVAL_DELAY]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();

@@ -414,7 +414,8 @@ public class GTMLModeling  {
 					for(int j=0; j<request.getNbOfParams(); j++) {
 						tmltt = new TMLType(request.getType(j).getType());
 						tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
-						System.out.println("Adding " + tmlattr.getName() + " to " + task.getName());
+						tmlattr.initialValue = tmlattr.getDefaultInitialValue();
+						System.out.println("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
 						task.addAttribute(tmlattr);
 					}
 					
@@ -773,6 +774,7 @@ public class GTMLModeling  {
             }
             tmlt = new TMLAttribute(ta.getId(), tt);
             tmlt.initialValue = ta.getInitialValue();
+			//System.out.println("ta =" + ta.getId() + " value=" + ta.getInitialValue());
             tmltask.addAttribute(tmlt);
         }
 		
@@ -884,6 +886,7 @@ public class GTMLModeling  {
         TMLWriteChannel tmlwritechannel;
         TMLSequence tmlsequence;
         TMLSelectEvt tmlselectevt;
+		TMLDelay tmldelay;
 		int staticLoopIndex = 0;
 		String sl = "", tmp;
 		TMLType tt;
@@ -945,6 +948,20 @@ public class GTMLModeling  {
                 tmlexecci.setMaxDelay(((TMLADExecCInterval)tgc).getMaxDelayValue());
                 activity.addElement(tmlexecci);
 				listE.addCor(tmlexecci, tgc);
+            } else if (tgc instanceof TMLADDelay) {
+                tmldelay = new TMLDelay("d-delay", tgc);
+                tmldelay.setMinDelay(((TMLADDelay)tgc).getDelayValue());
+				tmldelay.setMaxDelay(((TMLADDelay)tgc).getDelayValue());
+				tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
+                activity.addElement(tmldelay);
+				listE.addCor(tmldelay, tgc);
+            } else if (tgc instanceof TMLADDelayInterval) {
+                tmldelay = new TMLDelay("nd-delay", tgc);
+                tmldelay.setMinDelay(((TMLADDelayInterval)tgc).getMinDelayValue());
+                tmldelay.setMaxDelay(((TMLADDelayInterval)tgc).getMaxDelayValue());
+				tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
+                activity.addElement(tmldelay);
+				listE.addCor(tmldelay, tgc);
             } else if (tgc instanceof TMLADForLoop) {
                 tmlforloop = new TMLForLoop("loop", tgc);
                 tmlforloop.setInit(((TMLADForLoop)tgc).getInit());
@@ -1326,6 +1343,8 @@ public class GTMLModeling  {
 	}
 	
 	private void makeArchitecture() {
+		archi.setMasterClockFrequency(tmlap.tmlap.getMasterClockFrequency());
+		
 		if (nodesToTakeIntoAccount == null) {
 			components = tmlap.tmlap.getComponentList();
 		} else {

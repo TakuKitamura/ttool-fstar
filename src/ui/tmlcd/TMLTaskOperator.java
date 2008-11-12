@@ -357,5 +357,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
     }
+	
+	
     
 }

@@ -64,7 +64,7 @@ public class TMLArchiTextSpecification {
 	private ArrayList<TMLTXTError> errors;
 	private ArrayList<TMLTXTError> warnings;
 	
-	private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY"};
+	private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY"};
 	private String nodetypes[] = {"CPU", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA"};
 	private String cpuparameters[] = {"byteDataSize", "pipelineSize", "goIdleTime", "taskSwitchingTime", "branchingPredictionPenalty", "schedulingPolicy", "execiTime"};
 	private String linkparameters[] = {"bus", "node", "priority"};
@@ -111,60 +111,6 @@ public class TMLArchiTextSpecification {
 		return warnings;
 	}
 	
-	/*public void indent() {
-		indent(4);
-	}
-	
-	public void indent(int _nbDec) {
-		int dec = 0;
-        int indexEnd;
-        String output = "";
-        String tmp;
-        int nbOpen = 0;
-        int nbClose = 0;
-		
-		while ( (indexEnd = spec.indexOf('\n')) > -1) {
-			tmp = spec.substring(0, indexEnd+1);
-			try {
-                spec = spec.substring(indexEnd+1, spec.length());
-            } catch (Exception e) {
-                spec = "";
-            }
-			nbOpen = nbOfOpen(tmp);
-            nbClose = nbOfClose(tmp);
-			dec -= nbClose * _nbDec;
-            tmp = Conversion.addHead(tmp.trim(), ' ', dec);
-            dec += nbOpen * _nbDec;
-			//System.out.println("dec=" + dec);
-            output += tmp + "\n";
-		}
-		spec = output;
-	}*/
-	
-	/*private int nbOfOpen(String tmp) {
-		return nbOf(tmp, beginArray);
-	}
-	
-	private int nbOfClose(String tmp) {
-		return nbOf(tmp, endArray);
-	}*/
-	
-	/*private int nbOf(String _tmp, String[] array) {
-		String tmp;
-		int size;
-		
-		for(int i=0; i<array.length; i++) {
-			if (_tmp.startsWith(array[i])) {
-				tmp = _tmp.substring(array[i].length(), _tmp.length());
-				//System.out.println("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
-				if ((tmp.length() == 0) || (tmp.charAt(0) == ' ') || (tmp.charAt(0) == '(') || (tmp.charAt(0) == '\n')) {
-						//System.out.println("Returning 1!!");
-						return 1;
-				}
-			}
-		}
-		return 0;
-	}*/
 	
 	public String toString() {
 		return spec;
@@ -172,7 +118,11 @@ public class TMLArchiTextSpecification {
 	
 	public String toTextFormat(TMLArchitecture _tmla) {
 		tmla = _tmla;
-		spec = makeNodes(tmla);
+		
+		spec = "// Master clock frequency - in MHz" + CR;
+		spec += "MASTERCLOCKFREQUENCY " + tmla.getMasterClockFrequency() + CR + CR;
+		
+		spec += makeNodes(tmla);
 		spec += makeLinks(tmla);
 		return spec;
 		//indent();
@@ -245,6 +195,8 @@ public class TMLArchiTextSpecification {
 				code += "NODE MEMORY " +  name + CR;
 				code += set + "byteDataSize " + memory.byteDataSize + CR;  
 			}
+			
+			code += CR;
 			
 		}
 		return code;
@@ -383,9 +335,43 @@ public class TMLArchiTextSpecification {
 		String error;
 		String params;
 		String id;
+		int value;
 		
+		
+		// Master clock frequency
+		if(isInstruction("MASTERCLOCKFREQUENCY", _split[0])) {
+			
+			if (_split.length != 2) {
+				error = "A master clock frequency must be declared with 1 parameter, and not " + (_split.length - 1) ;
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (!checkParameter("NODE", _split, 1, 1, _lineNb)) {
+				error = "A master clock frequency must be provided as a positive int number";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			try {
+				value = Integer.decode(_split[1]).intValue();
+			} catch (Exception e) {
+				error = "A master clock frequency must be provided as a positive int number";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (value < 0) {
+				error = "A master clock frequency must be provided as a positive int number";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			System.out.println("Master clock frequency = " + value);
+			tmla.setMasterClockFrequency(value);
+			
 		// NODE
-		if(isInstruction("NODE", _split[0])) {
+		} else if(isInstruction("NODE", _split[0])) {
 			
 			if (_split.length != 3) {
 				error = "A node must be declared with 3 parameters, and not " + (_split.length - 1) ;
@@ -604,8 +590,9 @@ public class TMLArchiTextSpecification {
 		} // SET
 		
 		// Other command
+		//System.out.println("ERROR hm hm");
 		if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
-			error = "Syntax error: unrecognized instruction.";
+			error = "Syntax error: unrecognized instruction: " + _split[0];
 			addError(0, _lineNb, 0, error);
 			return -1;
 			

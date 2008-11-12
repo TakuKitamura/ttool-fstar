@@ -51,6 +51,7 @@ import java.util.*;
 public class TMLArchitecture {
     private ArrayList<HwNode> hwnodes;
 	private ArrayList<HwLink> hwlinks; // Between buses and other component
+	private int masterClockFrequency = 200; // in MHz
  
     
     public TMLArchitecture() {
@@ -61,6 +62,14 @@ public class TMLArchitecture {
         hwnodes = new ArrayList<HwNode>();
 		hwlinks = new ArrayList<HwLink>();
     }
+	
+	public void setMasterClockFrequency(int value) {
+		masterClockFrequency = value;
+	}
+	
+	public int getMasterClockFrequency() {
+		return masterClockFrequency;
+	}
     
     public void addHwNode(HwNode _node) {
         hwnodes.add(_node);
@@ -107,13 +116,12 @@ public class TMLArchitecture {
 		return null;
 	}
 	
-	public HwLink getLinkByHwNode(HwNode node){
+	public ArrayList<HwLink> getLinkByHwNode(HwNode node){
+		ArrayList<HwLink> tempList=new ArrayList<HwLink>();
 		for(HwLink link: hwlinks) {
-			if (link.hwnode==node) {
-				return link;
-			}
+			if (link.hwnode==node) tempList.add(link);
 		}
-		return null;
+		return tempList;
 	}
 	
 	public HwLink getHwLinkByHwNode(HwNode node){

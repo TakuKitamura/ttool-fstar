@@ -107,7 +107,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         removable = true;
         userResizable = true;
         
-        name = "NodeName";
+        name = tdp.findNodeName("Bus");
 		value = "name";
         
         myImageIcon = IconManager.imgic700;

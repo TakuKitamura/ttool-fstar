@@ -1193,24 +1193,33 @@ public class Mapping2TIF {
 		
 	}
 	
-	private void makeTaskAttributes(TClass tcpu, ArrayList<TMLTask> tasks) {	
+	private void makeTaskAttributes(TClass tcpu, ArrayList<TMLTask> tasks) {
+		int i;
+		String init;
+		
 		for(TMLTask task: tasks) {
 			tcpu.addNewParamIfApplicable(task.getName() + "__state", "nat", "0");
 			tcpu.addNewParamIfApplicable(task.getName() + "__istate", "nat", "0");
 			//tcpu.addNewParamIfApplicable(task.getName() + "__blockedOn", "nat", "0");
 			
 			for(TMLAttribute attribute:task.getAttributes()) {
+				init = attribute.initialValue;
+				if ((init == null) || (init.length() == 0)) {
+					init = attribute.getDefaultInitialValue();
+				}
 				switch(attribute.type.getType()) {
 				case TMLType.NATURAL:
-					//System.out.println("Adding nat attribute:" + modifyString(tmla.name));
+					//System.out.println("Adding nat attribute:" + attribute.name+ " init=" + attribute.initialValue);
 					if (attribute.name.equals("i")) {
-						tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name + "_0", "nat", modifyString(attribute.initialValue, task));
+						tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name + "_0", "nat", modifyString(init, task));
 					} else {
-						tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "nat", modifyString(attribute.initialValue, task));
+						tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "nat", modifyString(init, task));
 					}
+					
 					break;
 				default:
-					tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "bool", modifyString(attribute.initialValue, task));
+					//System.out.println("Adding other attribute:" + attribute.name + " init=" + init);
+					tcpu.addNewParamIfApplicable(task.getName() + "__" + attribute.name, "bool", modifyString(init, task));
 				}
 			}
 		}
@@ -1282,7 +1291,7 @@ public class Mapping2TIF {
 			tcpu.addNewParamIfApplicable("n__" + request.getName() + "__tmp", "nat", "0");
 			for(int i=0; i<request.getNbOfParams(); i++) {
 				tcpu.addNewParamIfApplicable("fifo" + (i+1) + "__" + request.getName(), "Queue_nat", "nil");
-				tcpu.addNewParamIfApplicable(modifyString("arg" + (i+1) + "__" + request.getName(), request.getDestinationTask()), "nat", "0");
+				tcpu.addNewParamIfApplicable(modifyString("arg" + (i+1) + "__req", request.getDestinationTask()), "nat", "0");
 			}
 		}
 	}
@@ -3335,11 +3344,14 @@ public class Mapping2TIF {
 						if (i==index1) {
 							/* else guard */
 							guard0 = modifyString(tmlchoice.getValueOfElse(), task);
+							//System.out.println("modified else guard=" + guard0);
 						} else {
 							if (tmlchoice.isStochasticGuard(i)) {
 								guard0 = "[ ]";
 							} else {
+								//System.out.println("guard=" + tmlchoice.getGuard(i));
 								guard0 = modifyString(tmlchoice.getGuard(i), task);
+								//System.out.println("modified guard=" + guard0);
 							}
 						}
 						actionp1 = getStateIdActionState(tcpu, ad, task, stateId);
@@ -3505,7 +3517,7 @@ public class Mapping2TIF {
 	}
 	
 	private ADActionStateWithParam getReqFirstActionStateWithParam(TClass tcpu, ActivityDiagram ad, TMLTask task, TMLRequest req, int index) {
-		Param p = tcpu.getParamByName(modifyString("arg" + index + "__" + req.getName(), task));
+		Param p = tcpu.getParamByName(modifyString("arg" + index + "__req", task));
 		ADActionStateWithParam actionp = new ADActionStateWithParam(p);
 		actionp.setActionValue("First(fifo" + index + "__" + req.getName() + ")");
 		ad.add(actionp);

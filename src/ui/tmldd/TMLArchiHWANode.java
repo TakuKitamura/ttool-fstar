@@ -106,7 +106,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         removable = true;
         userResizable = true;
         
-        name = "NodeName";
+        name = tdp.findNodeName("HWA");
 		value = "name";
         
         myImageIcon = IconManager.imgic700;

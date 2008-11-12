@@ -537,6 +537,28 @@ public class TClass {
         }
        
     }
+	
+	public void printParamsValues() {
+        Param p;
+        
+        for(int i=0; i<paramList.size(); i++) {
+            p = (Param)(paramList.elementAt(i));
+            System.out.println("Param #" + i + "= |" + p.getName() + "=" + p.getValue() + "|");
+           
+        }
+       
+    }
+	
+	public void printGates() {
+        Gate g;
+        
+        for(int i=0; i<gateList.size(); i++) {
+            g = (Gate)(gateList.elementAt(i));
+            System.out.println("Gate #" + i + "= |" + g.getName() + "|");
+           
+        }
+       
+    }
     
     public void setPackageName(String _name) {
         packageName = _name;

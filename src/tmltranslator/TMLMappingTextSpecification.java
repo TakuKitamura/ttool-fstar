@@ -654,7 +654,7 @@ public class TMLMappingTextSpecification {
 		
 		// Other command
 		if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
-			error = "Syntax error: unrecognized instruction.";
+			error = "Syntax error in mapping information: unrecognized instruction: " + _split[0];
 			addError(0, _lineNb, 0, error, _line);
 			return -1;
 			
