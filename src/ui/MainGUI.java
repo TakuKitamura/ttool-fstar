@@ -89,6 +89,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public static boolean tpnOn;
     public static boolean osOn;
     public static boolean uppaalOn;
+	public static boolean ncOn;
 	
 	public final static int LOTOS = 0;
 	public final static int RT_LOTOS = 1;
@@ -237,14 +238,14 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     //private int selectedAction = -1;
     
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn) {
+    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn) {
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
         tpnOn = _tpnOn;
         osOn = _osOn;
         uppaalOn = _uppaalOn;
-        
+		ncOn = _ncOn;
     }
     
     
@@ -1181,6 +1182,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         addTURTLEOSDesignPanel("TURTLE-OS Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
+    }
+	
+	public void newNCDesign() {
+        System.out.println("NEW NC DESIGN");
+        //addTURTLEOSDesignPanel("TURTLE-OS Design", -1);
+        //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        //mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
     
     public void newProactiveDesign() {
@@ -5289,7 +5297,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, sort, clone;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone;
         
         public PopupListener(MainGUI _mgui) {
             mgui = _mgui;
@@ -5331,6 +5339,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
+			newNCDesign = createMenuItem("New Network Calculus Design");
             
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
             menu.add(moveLeft);
@@ -5375,6 +5384,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				 menu.add(newTMLComponentDesign);
 				menu.add(newTMLArchi);
             }
+			
+			if (ncOn) {
+				menu.addSeparator();
+                menu.add(newNCDesign);
+			}
             
         }
         
@@ -5452,6 +5466,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newProactiveDesign();
                 } else if (ac.equals("New TURTLE-OS Design")) {
                     mgui.newTURTLEOSDesign();
+                } else if (e.getSource() == newNCDesign) {
+                    mgui.newNCDesign();
                 }
             }
         };

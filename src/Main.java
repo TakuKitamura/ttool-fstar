@@ -64,7 +64,7 @@ public class Main implements ActionListener {
     public static boolean tpn = false;
     public static boolean os = false;
     public static boolean uppaal = false;
-    
+    public static boolean nc = false ; // Network calculus
     public static void main(String[] args) {
       
         System.out.println("\n*** Your TTool version is: " + DefaultText.getFullVersion() + " ***\n");
@@ -128,7 +128,12 @@ public class Main implements ActionListener {
                 tpn = true;
                 System.out.println("TPN features activated - these are beta features that are meant to be used only for research purpose");
             }
-            
+
+            if (args[i].compareTo("-nc") ==0 )  {
+				nc = true;
+                System.out.println("Network calculus features activated - these are beta features that are meant to be used only for research purpose");
+            }
+	    
             if (args[i].compareTo("-os") == 0) {
                 os = true;
                 System.out.println("TURTLE-OS features activated - these are beta features that are meant to be used only for research purpose");
@@ -165,7 +170,7 @@ public class Main implements ActionListener {
         
         // making main window
         splashFrame.setMessage("Creating main window");
-        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal);
+        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc);
         splashFrame.setMessage("Building graphical components");
         mainGUI.build();
         
