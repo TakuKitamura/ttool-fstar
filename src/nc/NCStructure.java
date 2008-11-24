@@ -62,6 +62,31 @@ public class NCStructure extends NCElement {
 		paths = new ArrayList<NCPath>();
 	}
 	
+	public NCLinkedElement getNCLinkedElementByName(String _name) {
+		for(NCEquipment eq: equipments) {
+			if (eq.getName().equals(_name)) {
+				return eq;
+			}
+		}
+		
+		for(NCSwitch sw: switches) {
+			if (sw.getName().equals(_name)) {
+				return sw;
+			}
+		}
+		
+		return null;
+	}
+	
+	public NCTraffic getTrafficByName(String name) {
+		for(NCTraffic tr: traffics) {
+			if (tr.getName().equals(name)) {
+				return tr;
+			}
+		}
+		return null;
+	}
+	
 	public String toXML() {
 		StringBuffer sb = new StringBuffer("");
 		sb.append(getXMLHeader());
@@ -70,6 +95,7 @@ public class NCStructure extends NCElement {
 		sb.append(getXMLSwitches());
 		sb.append(getXMLTraffics());
 		sb.append(getXMLLinks());	
+		sb.append(getXMLPaths());	
 		sb.append("</NCStructure>\n");
 		return sb.toString();
 	}
@@ -84,7 +110,7 @@ public class NCStructure extends NCElement {
 			tmp += "<Equipment ";
 			tmp += " name=\"";
 			tmp += eq.getName();
-			tmp += "\" />";
+			tmp += "\" />\n";
 		}
 		return tmp;
 	}
@@ -98,7 +124,7 @@ public class NCStructure extends NCElement {
 			tmp += sw.getName();
 			tmp += "\" schedulingPolicy=\"";
 			tmp += NCSwitch.getStringSchedulingPolicy(sw.getSchedulingPolicy());
-			tmp += "\" />";
+			tmp += "\" />\n";
 		}
 		return tmp;
 	}
@@ -109,8 +135,16 @@ public class NCStructure extends NCElement {
 			tmp += "<traffic ";
 			tmp += " name=\"";
 			tmp += tr.getName();
-			tmp += "\" periodicity=\"" + tr.getPeriodicity();
-			tmp += "\" />";
+			tmp += " Periodic=\"";
+			if (tr.getPeriodicType() == 0) {
+				tmp += "periodic";
+			} else {
+				tmp += "aperiodic";
+			}
+			tmp += "\" deadline=\"" + tr.getDeadline();
+			tmp += "\" maxPacketSize=\"" + tr.getMaxPacketSize();
+			tmp += "\" priority=\"" + tr.getPriority();
+			tmp += "\" />\n";
 		}
 		return tmp;
 	}
@@ -123,7 +157,11 @@ public class NCStructure extends NCElement {
 			tmp += lk.getName();
 			tmp += "\" capacity=\"";
 			tmp += lk.getCapacity();
-			tmp += "\" />";
+			tmp += "\" end1=\"";
+			tmp += lk.getLinkedElement1().getName();
+			tmp += "\" end2=\"";
+			tmp += lk.getLinkedElement2().getName();
+			tmp += "\" />\n";
 		}
 		return tmp;
 	}
@@ -134,21 +172,50 @@ public class NCStructure extends NCElement {
 			tmp += "<Path ";
 			tmp += " name=\"";
 			tmp += pa.getName();
+			tmp += "\" traffic=\"";
+			tmp += pa.traffic.getName();
 			tmp += "\" origin=\"";
 			tmp += pa.origin.getName();
 			tmp += "\" destination=\"";
 			tmp += pa.destination.getName();
-			tmp += "\" />";
+			tmp += "\" />\n";
 			for(NCSwitch sw: pa.switches) {
-				tmp += "<Path ";
+				tmp += "<PathIntermediateSwitch ";
 				tmp += " name=\"";
 				tmp += pa.getName();
 				tmp += "\" switch=\"";
 				tmp += sw.getName();
-				tmp += "\" />";
+				tmp += "\" />\n";
 			}
 		}
 		return tmp;
+	}
+	
+	public boolean hasSimilarLink(NCLink _lk) {
+		for(NCLink link: links) {
+			if ((link.getLinkedElement1() == _lk.getLinkedElement1()) && (link.getLinkedElement2() == _lk.getLinkedElement2())) {
+				return true;
+			}
+			if ((link.getLinkedElement2() == _lk.getLinkedElement1()) && (link.getLinkedElement1() == _lk.getLinkedElement2())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public NCLink hasLinkWith(String eqname, String linkname) {
+		for(NCLink link: links) {
+			if (link.getName().equals(linkname)) {
+				if (link.getLinkedElement1().getName().equals(eqname)) {
+					return link;
+				}
+				if (link.getLinkedElement2().getName().equals(eqname)) {
+					return link;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

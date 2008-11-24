@@ -188,6 +188,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_READ_CHANNEL = 146;
     public static final int TMLAD_FOR_LOOP = 147;
 	public static final int TMLAD_FOR_STATIC_LOOP = 226;
+	public static final int TMLAD_FOR_EVER_LOOP = 255;
     public static final int TMLAD_SEQUENCE = 156;
     public static final int TMLAD_SELECT_EVT = 206;
 	public static final int TMLAD_RANDOM = 245;
@@ -249,6 +250,16 @@ public class TGUIAction extends AbstractAction {
     public static final int TDD_LINK = 120;
     public static final int TDD_NODE = 121;
     public static final int TDD_ARTIFACT = 122;
+	
+	// NC
+	public static final int NCDD_EDIT = 250;
+    public static final int NCDD_LINK = 251;
+    public static final int NCDD_EQNODE = 252;
+	public static final int NCDD_SWITCHNODE = 254;
+    public static final int NCDD_TRAFFIC_ARTIFACT = 253;
+	public static final int NCDD_ROUTE_ARTIFACT = 256;
+	
+	// SysML Requirements
     
     public static final int TREQ_REQUIREMENT = 163;
     public static final int TREQ_OBSERVER = 166;
@@ -354,7 +365,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 250;
+    public static final int NB_ACTION = 257;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -580,6 +591,14 @@ public class TGUIAction extends AbstractAction {
         actions[TDD_NODE] = new TAction("add-tdd-node", "Add a node", IconManager.imgic700, IconManager.imgic700, "Node", "Add a node to the currently opened deployment diagram", 0);
         actions[TDD_ARTIFACT] = new TAction("add-tdd-artifact", "Add an artifact", IconManager.imgic702, IconManager.imgic702, "Artifact", "Add an artifact to the currently opened deployment diagram", 0);
         
+	    actions[NCDD_EDIT] = new TAction("edit-ncdd-diagram", "Edit network calculus diagram", IconManager.imgic100, IconManager.imgic101, "Edit network calculs diagram", "Make it possible to edit the currently opened network calculus diagram", 0);
+        actions[NCDD_LINK] = new TAction("add-ncdd-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened network calculus diagram", 0);
+        actions[NCDD_EQNODE] = new TAction("add-ncdd-eqnode", "Add an equipment node", IconManager.imgic700, IconManager.imgic700, "Add an equipment node", "Add an equipment node to the currently opened network calculus diagram", 0);
+        actions[NCDD_SWITCHNODE] = new TAction("add-ncdd-switchnode", "Add a switch node", IconManager.imgic700, IconManager.imgic700, "Add a switch node", "Add a switch node to the currently opened network calculus diagram", 0);
+        actions[NCDD_TRAFFIC_ARTIFACT] = new TAction("add-ncdd-traffic", "Add a traffic", IconManager.imgic702, IconManager.imgic702, "Traffic", "Add a traffic to the currently opened network calculus diagram", 0);
+		actions[NCDD_ROUTE_ARTIFACT] = new TAction("add-ncdd-route", "Add a route", IconManager.imgic702, IconManager.imgic702, "Route", "Add a route to the currently opened network calculus diagram", 0);
+   
+		
         actions[TMLTD_EDIT] = new TAction("edit-tmlcd-diagram", "Edit TML Task diagram", IconManager.imgic100, IconManager.imgic101, "Edit TML task diagram", "Make it possible to edit the currently opened TML task diagram", 0);
         actions[TMLTD_TASK] = new TAction("add-tmlcd-task", "Add a TML Task", IconManager.imgic806, IconManager.imgic806, "Add a TML task", "Add a TML task to the currently opened TML task diagram", 0);
         actions[TMLTD_CHANNEL] = new TAction("add-tmlcd-channel", "Add a channel operator", IconManager.imgic802, IconManager.imgic802, "Add a channel operator", "Add a channel operator to the currently opened TML task diagram", 0);
@@ -616,7 +635,8 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_NOTIFIED_EVENT] = new TAction("add-tmladd-notified-event", "Notified event", IconManager.imgic918, IconManager.imgic918, "Notified event", "Add a notified event operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_READ_CHANNEL] = new TAction("add-tmladd-read-channel", "Read in channel", IconManager.imgic906, IconManager.imgic906, "Read in channel", "Add a read to channel operator opened TML activity diagram", 0);
         actions[TMLAD_FOR_LOOP] = new TAction("add-tmlad-for-loop", "Loop (for)", IconManager.imgic912, IconManager.imgic912, "Loop (for)", "Add a for loop to the currently opened TML activity diagram", 0);
-        actions[TMLAD_FOR_STATIC_LOOP] = new TAction("add-tmlad-for-static-loop", "Static loop (for)", IconManager.imgic912, IconManager.imgic912, "static loop (for)", "Add a static for loop to the currently opened TML activity diagram", 0);
+        actions[TMLAD_FOR_STATIC_LOOP] = new TAction("add-tmlad-for-static-loop", "Static loop (for)", IconManager.imgic912, IconManager.imgic912, "Static loop (for)", "Add a static for loop to the currently opened TML activity diagram", 0);
+        actions[TMLAD_FOR_EVER_LOOP] = new TAction("add-tmlad-for-ever-loop", "Loop for ever", IconManager.imgic926, IconManager.imgic926, "Loop for ever", "Add a loop-for-ever operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_SEQUENCE] = new TAction("add-tmlad-sequence", "Sequence", IconManager.imgic226, IconManager.imgic226, "Sequence", "Add a sequence to the currently opened TML activity diagram", 0);
         actions[TMLAD_SELECT_EVT] = new TAction("add-tmlad-select-evt", "Add select event", IconManager.imgic916, IconManager.imgic916, "Select event", "Add a selection between events to the currently opened TML Task activity diagram", 0);
 		actions[TMLAD_RANDOM] = new TAction("add-tmlad-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened TML Task activity diagram", 0);

@@ -887,6 +887,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         System.out.println("TURTLE OS Design added index=" + index);
         return index;
     }
+	
+	private int addNCDesignPanel(String name, int index) {
+		
+        if (index == -1) {
+            index = tabs.size();
+        }
+        NCPanel ncp = new NCPanel(this);
+        tabs.add(index, ncp);
+        mainTabbedPane.add(ncp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open network calculus diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        ncp.init();
+        //System.out.println("TURTLE OS Design added index=" + index);
+        return index;
+    }
     
     private int addProActiveDesignPanel(String name, int index) {
         if (index == -1) {
@@ -966,6 +983,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
+	
+	 public int createNC(String name) {
+        int index = addNCDesignPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
     
     public int createRequirement(String name) {
         int index = addRequirementPanel(name, -1);
@@ -981,6 +1004,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void setDeploymentName(int deploymentIndex, String name) {
         DeploymentPanel dp = (DeploymentPanel)(tabs.elementAt(deploymentIndex));
         dp.tabbedPane.setTitleAt(0, name);
+    }
+	
+	public void setNCName(int ncIndex, String name) {
+        NCPanel ncp = (NCPanel)(tabs.elementAt(ncIndex));
+        ncp.tabbedPane.setTitleAt(0, name);
     }
     
     
@@ -1186,9 +1214,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void newNCDesign() {
         System.out.println("NEW NC DESIGN");
-        //addTURTLEOSDesignPanel("TURTLE-OS Design", -1);
-        //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
-        //mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        addNCDesignPanel("NC Design", -1);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
     
     public void newProactiveDesign() {
@@ -2254,6 +2282,30 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 						JOptionPane.INFORMATION_MESSAGE);
 				}
             }
+		
+			// NC
+		} else if (tp instanceof NCPanel) {
+            NCPanel ncp = (NCPanel) tp;
+            b = gtm.translateNC(ncp);
+            if (b) {
+                setMode(MainGUI.MODEL_OK);
+				ret = true;
+				if (!automatic) {
+					JOptionPane.showMessageDialog(frame,
+						"0 error, " + getCheckingWarnings().size() + " warning(s)",
+						"Syntax analysis successful on NC diagram",
+						JOptionPane.INFORMATION_MESSAGE);
+				}
+            } else {
+				if (!automatic) {
+					JOptionPane.showMessageDialog(frame,
+						"The NC diagram contains several errors",
+						"Syntax analysis failed",
+						JOptionPane.INFORMATION_MESSAGE);
+				}
+            }
+			
+			
         } else if (tp instanceof TMLDesignPanel) {
             TMLDesignPanel tmldp = (TMLDesignPanel)tp;
             JDialogSelectTMLTask.validated = tmldp.validated;
@@ -5109,6 +5161,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TDD_NODE);
         } else if (command.equals(actions[TGUIAction.TDD_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TDD_ARTIFACT);
+        } else if (command.equals(actions[TGUIAction.NCDD_LINK].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_NODE_NC);
+        } else if (command.equals(actions[TGUIAction.NCDD_EQNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.NCDD_EQNODE);
+        } else if (command.equals(actions[TGUIAction.NCDD_SWITCHNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.NCDD_SWITCHNODE);
+        } else if (command.equals(actions[TGUIAction.NCDD_TRAFFIC_ARTIFACT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.NCDD_TRAFFIC_ARTIFACT);
+        } else if (command.equals(actions[TGUIAction.NCDD_ROUTE_ARTIFACT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.NCDD_ROUTE_ARTIFACT);
         } else if (command.equals(actions[TGUIAction.TMLTD_TASK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLTD_TASK);
         } else if (command.equals(actions[TGUIAction.TMLAD_START].getActionCommand())) {
@@ -5163,6 +5225,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_FOR_LOOP);
         } else if (command.equals(actions[TGUIAction.TMLAD_FOR_STATIC_LOOP].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_FOR_STATIC_LOOP);
+        } else if (command.equals(actions[TGUIAction.TMLAD_FOR_EVER_LOOP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_FOR_EVER_LOOP);
         } else if (command.equals(actions[TGUIAction.TMLAD_SEQUENCE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SEQUENCE);
         } else if (command.equals(actions[TGUIAction.TMLAD_SELECT_EVT].getActionCommand())) {

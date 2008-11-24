@@ -48,6 +48,7 @@ package nc;
 import java.util.*;
 
 public class NCPath extends NCElement {
+	public NCTraffic traffic;
 	public NCEquipment origin;
 	public NCEquipment destination;
 	public ArrayList<NCSwitch> switches;

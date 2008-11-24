@@ -49,8 +49,7 @@ package nc;
 
 public class NCLink extends NCElement  {
 	protected int capacity;
-	protected NCLinkedElement origin;
-	protected NCLinkedElement destination;
+	protected NCLinkedElement le1, le2;
 	
 	public NCLink() {}
 	
@@ -61,4 +60,22 @@ public class NCLink extends NCElement  {
 	public int getCapacity() {
 		return capacity;
 	}
+	
+	public NCLinkedElement getLinkedElement1() {
+		return le1;
+	}
+	
+	public NCLinkedElement getLinkedElement2() {
+		return le2;
+	}
+	
+	public void setLinkedElement1(NCLinkedElement ncle) {
+		le1 = ncle;
+	}
+	
+	public void setLinkedElement2(NCLinkedElement ncle) {
+		le2 = ncle;
+	}
+	
+	
 }

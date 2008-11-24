@@ -36,7 +36,7 @@
 * knowledge of the CeCILL license and that you accept its terms.
 *
 * /**
-* Class NCLinkedElement
+* Class NCTraffic
 * Creation: 14/11/2008
 * @version 1.0 14/11/2008
 * @author Ludovic APVRILLE
@@ -48,16 +48,42 @@ package nc;
 
 
 public class NCTraffic extends NCElement  {
-	private int periodicity;
+	protected int periodicType = 0; // 0: periodic ; 1: aperiodic
+	protected int deadline = 10;
+	protected int maxPacketSize = 20;
+	protected int priority = 0; // 0 to 3
 	
 	public NCTraffic() {}
 	
-	public void setPeriodicity(int _periodicity) {
-		periodicity = _periodicity;
+	public void setPeriodicType(int _periodicType) {
+		periodicType = _periodicType;
 	}
 	
-	
-	public int getPeriodicity() {
-		return periodicity;
+	public void setDeadline(int _deadline) {
+		deadline = _deadline;
 	}
+	
+	public void setMaxPacketSize(int _maxPacketSize) {
+		maxPacketSize = _maxPacketSize;
+	}
+	
+	public void setPriority(int _priority) {
+		priority = _priority;
+	}
+	
+	 public int getPeriodicType() {
+        return periodicType;
+    }
+	
+	public int getDeadline() {
+        return deadline;
+    }
+	
+	public int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+	
+	public int getPriority() {
+        return priority;
+    }
 }

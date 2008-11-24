@@ -68,6 +68,8 @@ import ui.prosmd.*;
 import ui.oscd.*;
 import ui.osad.*;
 
+import ui.ncdd.*;
+
 public class TGComponentManager {
     
     public static final int NONE = -1;
@@ -117,6 +119,8 @@ public class TGComponentManager {
 	public static final int CONNECTOR_NODE_TMLARCHI = 125;
 	
 	public static final int CONNECTOR_PORT_TMLC = 126;
+	
+	public static final int CONNECTOR_NODE_NC = 127;
     
     public static final int TCD_TCLASS = 201;
     public static final int TCD_PARALLEL_OPERATOR = 202;
@@ -183,6 +187,7 @@ public class TGComponentManager {
 	public static final int TMLAD_RANDOM = 1024;
 	public static final int TMLAD_DELAY = 1026;
 	public static final int TMLAD_INTERVAL_DELAY = 1028;
+	public static final int TMLAD_FOR_EVER_LOOP = 1030;
 	
 	public static final int TMLARCHI_CPUNODE = 1100;
 	public static final int TMLARCHI_ARTIFACT = 1101;
@@ -236,6 +241,12 @@ public class TGComponentManager {
     public static final int TOSAD_JUNCTION = 3010;
     public static final int TOSAD_TIME_INTERVAL = 3011;
     public static final int TOSAD_INT_TIME_INTERVAL = 3012;
+	
+	// NC
+	public static final int NCDD_EQNODE = 4000;
+	public static final int NCDD_SWITCHNODE = 4001;
+    public static final int NCDD_TRAFFIC_ARTIFACT = 4002;
+	public static final int NCDD_ROUTE_ARTIFACT = 4003;
 
     
     public static final int EDIT = -1;
@@ -453,6 +464,9 @@ public class TGComponentManager {
 			case TMLAD_FOR_STATIC_LOOP:
                 tgc = new TMLADForStaticLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TMLAD_FOR_EVER_LOOP:
+                tgc = new TMLADForEverLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLAD_SEQUENCE:
                 tgc = new TMLADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -503,6 +517,18 @@ public class TGComponentManager {
                 break;
             case TREQ_OBSERVER:
                 tgc = new RequirementObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case NCDD_EQNODE:
+                tgc = new NCEqNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case NCDD_SWITCHNODE:
+                tgc = new NCSwitchNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case NCDD_TRAFFIC_ARTIFACT:
+                tgc = new NCTrafficArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case NCDD_ROUTE_ARTIFACT:
+                tgc = new NCRouteArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case PROSMD_START_STATE:
                 tgc = new ProSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -579,7 +605,7 @@ public class TGComponentManager {
                  break;
             case TOSAD_INT_TIME_INTERVAL:
                  tgc = new TOSADIntTimeInterval(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                 break;
+                 break;		 
             default:
                 break;
         }
@@ -703,7 +729,13 @@ public class TGComponentManager {
         } else if (tgc instanceof TDDNode) {
             return TDD_NODE;
         } else if (tgc instanceof TDDArtifact) {
-            return TDD_NODE;
+            return TDD_ARTIFACT;
+        } else if (tgc instanceof NCEqNode) {
+            return NCDD_EQNODE;
+        } else if (tgc instanceof NCTrafficArtifact) {
+            return NCDD_TRAFFIC_ARTIFACT;
+        } else if (tgc instanceof NCRouteArtifact) {
+            return NCDD_ROUTE_ARTIFACT;
         } else if (tgc instanceof TMLADStartState) {
             return TMLAD_START_STATE;
         } else if (tgc instanceof TMLADStopState) {
@@ -742,6 +774,8 @@ public class TGComponentManager {
             return TMLAD_FOR_LOOP;
         } else if (tgc instanceof TMLADForStaticLoop) {
             return TMLAD_FOR_STATIC_LOOP;
+        } else if (tgc instanceof TMLADForEverLoop) {
+            return TMLAD_FOR_EVER_LOOP;
         } else if (tgc instanceof TMLADSequence) {
             return TMLAD_SEQUENCE;
         } else if (tgc instanceof TMLADSelectEvt) {
@@ -826,6 +860,16 @@ public class TGComponentManager {
         } else if (tgc instanceof ProCSDDelegatePort) {
             return PROCSD_DELEGATE_PORT;
         */
+		
+		//NC
+		} else if (tgc instanceof NCEqNode) {
+            return NCDD_EQNODE;
+        } else if (tgc instanceof NCSwitchNode) {
+            return NCDD_SWITCHNODE;
+        } else if (tgc instanceof NCTrafficArtifact) {
+            return NCDD_TRAFFIC_ARTIFACT;
+        } else if (tgc instanceof NCConnectorNode) {
+            return CONNECTOR_NODE_NC;
             
         // TURTLE-OS
         } else if (tgc instanceof TOSClass) {
@@ -907,6 +951,9 @@ public class TGComponentManager {
             case CONNECTOR_NODE_DD:
                 tgc = new TGConnectorLinkNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
+			case CONNECTOR_NODE_NC:
+                tgc = new NCConnectorNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;	
             case CONNECTOR_COMMENT:
                 tgc = new TGConnectorComment(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;

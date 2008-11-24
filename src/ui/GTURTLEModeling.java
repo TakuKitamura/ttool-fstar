@@ -61,6 +61,7 @@ import translator.totpn.*;
 import translator.touppaal.*;
 import launcher.*;
 import myutil.*;
+import nc.*;
 import ui.ad.*;
 import ui.cd.*;
 import ui.dd.*;
@@ -87,6 +88,8 @@ import ui.osad.*;
 import ui.procsd.*;
 import ui.prosmd.*;
 
+import ui.ncdd.*;
+
 import ui.graph.*;
 
 import ddtranslator.*;
@@ -109,6 +112,7 @@ public class GTURTLEModeling {
 	private TMLModeling tmlm;
 	private TMLMapping tmap;
 	private RequirementModeling rm;
+	private NCStructure ncs;
 	private MainGUI mgui;
 	private CorrespondanceTGElement listE;
 	private String rtlotos;
@@ -2624,6 +2628,45 @@ public class GTURTLEModeling {
 						makePostLoading(tddp, beginIndex);
 					}
 				}
+			} else if (tdp instanceof NCDiagramPanel) {
+				nl = doc.getElementsByTagName("NCDiagramPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				NCDiagramPanel ncdp = (NCDiagramPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (ncdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						//System.out.println("Activity diagram : " + sdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ncdp);
+						//System.out.println("Activity diagram : " + sdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ncdp);
+						//System.out.println("Activity diagram : " + sdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ncdp);
+						//System.out.println("Activity diagram : " + sdp.getName() + " real points");
+						connectConnectorsToRealPoints(ncdp);
+						ncdp.structureChanged();
+						//System.out.println("Activity diagram : " + iodp.getName() + " post loading");
+						makePostLoading(ncdp, beginIndex);
+					}
+				}
 			} else if (tdp instanceof RequirementDiagramPanel) {
 				nl = doc.getElementsByTagName("TRequirementDiagramPanelCopy");
 
@@ -3217,8 +3260,10 @@ public class GTURTLEModeling {
 			loadDesign(node);
 		} else if (type.compareTo("Analysis") == 0) {
 			loadAnalysis(node);
-		}  else if (type.compareTo("Deployment") == 0) {
+		} else if (type.compareTo("Deployment") == 0) {
 			loadDeployment(node);
+		} else if (type.compareTo("NC diagram") == 0) {
+			loadNC(node);
 		} else if (type.compareTo("Requirement") == 0) {
 			loadRequirement(node);
 		} else if (type.compareTo("TML Design") == 0) {
@@ -3324,6 +3369,32 @@ public class GTURTLEModeling {
 				if (elt.getTagName().compareTo("TDeploymentDiagramPanel") == 0) {
 					// IOD
 					loadTDeploymentDiagram(elt, indexAnalysis);
+				}
+			}
+		}
+	}
+	
+	public void loadNC(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexAnalysis;
+
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexAnalysis = mgui.createNC(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//System.out.println("Deployment nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("NCDiagramPanel") == 0) {
+					// IOD
+					loadNCDiagram(elt, indexAnalysis);
 				}
 			}
 		}
@@ -3829,6 +3900,16 @@ public class GTURTLEModeling {
 		name = elt.getAttribute("name");
 		mgui.setDeploymentName(indexDeployment, name);
 		TDiagramPanel tdp = mgui.getMainTDiagramPanel(indexDeployment);
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadNCDiagram(Element elt, int indexNC) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.setNCName(indexNC, name);
+		TDiagramPanel tdp = mgui.getMainTDiagramPanel(indexNC);
 
 		loadDiagram(elt, tdp);
 	}
@@ -4613,6 +4694,7 @@ public class GTURTLEModeling {
 		tmd.draw(nbSuggestedDesign);
 		mgui.changeMade(null, -1);
 	}
+	
 
 	public boolean translateDeployment(DeploymentPanel dp) {
 		// Builds a TURTLE modeling from a deployment diagram
@@ -4715,6 +4797,36 @@ public class GTURTLEModeling {
 			mgui.setMode(MainGUI.GEN_DESIGN_OK);
 			return true;
 		}
+	}
+	
+	public boolean translateNC(NCPanel ncp) {
+		System.out.println("Translating NC");
+		checkingErrors = new Vector();
+		warnings = new Vector();
+		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
+		
+		GNCModeling gncm = new GNCModeling(ncp);
+		ncs = gncm.translateToNCStructure();
+		listE = gncm.getCorrespondanceTable();
+		
+		checkingErrors = gncm.getCheckingErrors();
+		warnings = gncm.getCheckingWarnings();
+		
+		System.out.println("errors:" + checkingErrors.size() + " warnings:" + warnings.size());
+		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			return false;
+		} else {
+			// Generate XML file
+			System.out.println("Saving in nc.xml file");
+			try {
+				FileUtils.saveFile("nc.xml", ncs.toXML());
+				System.out.println("Save done");
+			} catch (FileException fe) {
+				System.out.println("Could not save in file:" + fe.getMessage());
+			}
+			return true;
+		}
+		
 	}
 
 

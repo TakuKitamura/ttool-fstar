@@ -573,6 +573,25 @@ public class GCTMLModeling  {
 				listE.addCor(tmlforloop, tgc);
 				staticLoopIndex++;
 				
+			} else if (tgc instanceof TMLADForEverLoop) {
+				sl = "loop__" + staticLoopIndex;
+                tt = new TMLType(TMLType.NATURAL);
+				tmlt = new TMLAttribute(sl, tt);
+				tmlt.initialValue = "0";
+				tmltask.addAttribute(tmlt);
+                tmlforloop = new TMLForLoop(sl, tgc);
+                tmlforloop.setInit(sl + " = 0");
+                tmlforloop.setCondition(sl + "<1");
+				//System.out.println("Condition=" + tmlforloop.getCondition());
+                tmlforloop.setIncrement(sl + " = " + sl);
+                activity.addElement(tmlforloop);
+				listE.addCor(tmlforloop, tgc);
+				staticLoopIndex++;
+				
+				tmlstopstate = new TMLStopState("Stop after infinite loop", null);
+				activity.addElement(tmlstopstate);
+				tmlforloop.addNext(tmlstopstate);
+				
             } else if (tgc instanceof TMLADSequence) {
                 tmlsequence = new TMLSequence("seq", tgc);
                 activity.addElement(tmlsequence);

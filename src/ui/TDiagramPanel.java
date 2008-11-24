@@ -1,4 +1,4 @@
-/**Copyright or � or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
 ludovic.apvrille AT enst.fr
 
@@ -62,6 +62,7 @@ import ui.tree.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.req.*;
+import ui.ncdd.*;
 // Added by Solange
 import ui.procsd.*;
 
@@ -372,7 +373,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 					}
 					
 					/*if (internalCommentVisible) {
-						if (tgc.hasInternalComment()) {
+						ifi (tgc.hasInternalComment()) {
 							tgc.drawInternalComment(g);
 						}
 					}*/
@@ -2417,14 +2418,45 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		Iterator iterator;
         
         while(index >= 0) {
-            ok = true;
-            iterator = componentList.listIterator();
+            //ok = true;
+			ok = isNCNameUnique(name + index);
+            /*iterator = componentList.listIterator();
             while(iterator.hasNext()) {
                 tgc = (TGComponent)(iterator.next());
 				if (tgc.getName().equals(name + index)) {
                         ok = false;
                 }                
+            }*/
+            if (ok) {
+                return name + index;
             }
+            index ++;
+        }
+        return name;
+    }
+	
+	public String findInterfaceName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        TGComponent tgc;
+		Iterator iterator;
+        
+        while(index >= 0) {
+            ok = isNCNameUnique(name + index);
+            /*iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                tgc = (TGComponent)(iterator.next());
+				if (tgc instanceof NCConnectorNode) {
+					if (((NCConnectorNode)tgc).getInterfaceName().equals(name + index)) {
+							ok = false;
+					}                
+				} else {
+					if (tgc.getName().equals(name + index)) {
+							ok = false;
+					}   
+				}
+            }*/
             if (ok) {
                 return name + index;
             }
@@ -2486,6 +2518,56 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     return false;
                 }
             }
+        }   
+        return true;
+    }
+	
+	 public boolean isNCNameUnique(String s) {
+        Object o;
+		TGComponent tgc;
+		Vector v;
+		NCTrafficArtifact arti;
+		NCRouteArtifact artiroute;
+		int i;
+		NCConnectorNode link;
+        
+        Iterator iterator = componentList.listIterator();
+        
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if ((tgc instanceof NCEqNode) || (tgc instanceof NCSwitchNode)){
+                if (tgc.getName().equals(s)) {               
+                    return false;
+                }
+				
+				if (tgc instanceof NCEqNode) {
+					v = ((NCEqNode)tgc).getArtifactList();
+					for (i=0; i<v.size(); i++) {
+						arti = (NCTrafficArtifact)(v.get(i));
+						if (arti.getValue().equals(s)) {
+							return false;
+						}
+					}
+				}
+				
+				if (tgc instanceof NCSwitchNode) {
+					v = ((NCSwitchNode)tgc).getArtifactList();
+					for (i=0; i<v.size(); i++) {
+						artiroute = (NCRouteArtifact)(v.get(i));
+						if (artiroute.getValue().equals(s)) {
+							return false;
+						}
+					}
+				}
+            }
+			
+			if (tgc instanceof NCConnectorNode) {
+				link = (NCConnectorNode)tgc;
+				if (link.getInterfaceName().equals(s)) {
+					return false;
+				}
+			}
         }   
         return true;
     }

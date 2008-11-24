@@ -64,7 +64,7 @@ public class Main implements ActionListener {
     public static boolean tpn = false;
     public static boolean os = false;
     public static boolean uppaal = false;
-    public static boolean nc = false ; // Network calculus
+    public static boolean nc = true ; // Network calculus
     public static void main(String[] args) {
       
         System.out.println("\n*** Your TTool version is: " + DefaultText.getFullVersion() + " ***\n");
@@ -129,9 +129,9 @@ public class Main implements ActionListener {
                 System.out.println("TPN features activated - these are beta features that are meant to be used only for research purpose");
             }
 
-            if (args[i].compareTo("-nc") ==0 )  {
-				nc = true;
-                System.out.println("Network calculus features activated - these are beta features that are meant to be used only for research purpose");
+            if (args[i].compareTo("-nonc") ==0 )  {
+				nc = false;
+                System.out.println("Network calculus features unactivated - these are beta features that are meant to be used only for research purpose");
             }
 	    
             if (args[i].compareTo("-os") == 0) {
