@@ -237,6 +237,10 @@ public class GTURTLEModeling {
 			tm.mergeChoices(nonDeterministic);
 		}
 	}
+	
+	public NCStructure getNCS() {
+		return ncs;
+	}
 
 	public void generateRTLOTOS(File f) {
 		TURTLETranslator tt = new TURTLETranslator(tm);
@@ -4824,6 +4828,7 @@ public class GTURTLEModeling {
 			} catch (FileException fe) {
 				System.out.println("Could not save in file:" + fe.getMessage());
 			}
+			mgui.setMode(MainGUI.NC_OK);
 			return true;
 		}
 		

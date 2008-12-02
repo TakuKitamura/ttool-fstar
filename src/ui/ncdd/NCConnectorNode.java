@@ -63,7 +63,9 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
     protected int arrowLength = 10;
     protected int widthValue, heightValue, maxWidthValue, h;
 	
+	protected boolean hasCapacity = false;
 	protected int capacity = 10;
+	protected String capacityUnit = "Mbs";
 	protected String interfaceName;
 	
     
@@ -77,7 +79,11 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
     }
 	
 	public void makeValue() {
-		value = "{" + interfaceName + ", capacity = " + capacity + "}";
+		if (hasCapacity) {
+			value = "{" + interfaceName + ", capacity = " + capacity +  " " + capacityUnit + "}";
+		} else {
+			value = "{" + interfaceName + "}";
+		}
 	}
 	
 	public String getInterfaceName() {
@@ -113,7 +119,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		String tmp;
 		String interfaceNameTmp;
         
-        JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", capacity, interfaceName);
+        JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity, capacityUnit, interfaceName);
         jdlncn.setSize(250, 200);
         GraphicLib.centerOnParent(jdlncn);
         jdlncn.show(); // Blocked until dialog has been closed
@@ -155,9 +161,11 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
         
         if (!jdlncn.hasBeenCancelled()) {
 			interfaceName = interfaceNameTmp;
+			capacityUnit = jdlncn.getCapacityUnit();
+			hasCapacity = jdlncn.hasCapacity();
             makeValue();
         }
-        
+		
         return !jdlncn.hasBeenCancelled();
     }
     
@@ -178,7 +186,11 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info capacity=\"");
 		sb.append(capacity);
-        sb.append("\" interfaceName=\"");
+        sb.append("\" capacityUnit=\"");
+		sb.append(capacityUnit);
+		sb.append("\" hasCapacity=\"");
+		sb.append(hasCapacity);
+		sb.append("\" interfaceName=\"");
 		sb.append(interfaceName);
 		sb.append("\"/>\n");
         sb.append("</extraparam>\n");
@@ -194,6 +206,8 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
             Element elt;
             int t1id;
 			String prio;
+			String unit;
+			String has;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -214,6 +228,21 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 								if (elt != null) {
 									interfaceName = prio;
 								}
+								
+								unit = elt.getAttribute("capacityUnit");
+								if ((unit != null) && (unit.length() > 0)){
+									capacityUnit = unit;
+								}
+								
+								has =  elt.getAttribute("hasCapacity");
+								if ((has != null) && (has.length() > 0)){
+										if (has.equals("true")) {
+											hasCapacity = true;
+										} else {
+											hasCapacity = false;
+										}
+								}
+								
                             }
                         }
                     }
@@ -225,31 +254,25 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
         }
     }
 	
-    
-    /*public TMLArchiCPUNode getOriginNode() {
-        TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
-        if (tgc instanceof TMLArchiCPUNode) {
-            return (TMLArchiCPUNode)tgc;
-        } else {
-            return null;
-        }
-    }
-    
-    public TMLArchiCPUNode getDestinationNode() {
-        TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP2());
-        if (tgc instanceof TMLArchiCPUNode) {
-            return (TMLArchiCPUNode)tgc;
-        } else {
-            return null;
-        }
-    }*/
 	
 	public int getCapacity() {
 		return capacity;
 	}
+	
+	public boolean hasCapacity() {
+		return hasCapacity;
+	}
+	
+	public String getCapacityUnit() {
+		return capacityUnit;
+	}
     
 	public String getAttributes() {
-		return "Capacity = " + capacity;
+		if (hasCapacity) {
+			return "Capacity = " + capacity + " " + capacityUnit;
+		} else {
+			return "No capacity";
+		}
 	}
   
  

@@ -175,6 +175,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public final static byte VIEW_WAVE_OK = 40;
     public final static byte REQ_OK = 41;
 	public final static byte UPPAAL_OK = 42;
+	public final static byte NC_OK = 43;
     
     public final static int INCREMENT = 10;
     
@@ -701,6 +702,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		case VIEW_SUGG_DESIGN_KO:
 			actions[TGUIAction.ACT_VIEW_SUGGESTED_DESIGN].setEnabled(false);
 			break;
+		case NC_OK:
+			actions[TGUIAction.ACT_NC].setEnabled(true);
+			break;
 		default:
 			System.out.println("DEFAULT");
 			activeActions(false);
@@ -898,7 +902,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.add(ncp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open network calculus diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        mainTabbedPane.setIconAt(index, IconManager.imgic60);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         ncp.init();
         //System.out.println("TURTLE OS Design added index=" + index);
@@ -3039,6 +3043,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     	ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait");
     	t.go();
     }
+	
+	public void NC() {
+		System.out.println("NC");
+		JFrameNC jfnc = new JFrameNC("Network calculus", gtm.getNCS());
+        jfnc.setIconImage(IconManager.img8);
+        jfnc.setSize(600, 600);
+        GraphicLib.centerOnParent(jfnc);
+        jfnc.setVisible(true);
+		System.out.println("Done");
+		
+		/*JFrameStatistics jfs = new JFrameStatistics(title, data);
+        jfs.setIconImage(IconManager.img8);
+        jfs.setSize(600, 600);
+        GraphicLib.centerOnParent(jfs);
+        jfs.setVisible(true);*/
+	}
     
     public void statAUT() {
         showAUT("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
@@ -5024,6 +5044,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			toggleAttr();
         } else if (command.equals(actions[TGUIAction.ACT_ENHANCE].getActionCommand())) {
             enhanceDiagram();
+        } else if (command.equals(actions[TGUIAction.ACT_NC].getActionCommand())) {
+            NC();
         } else if (command.equals(actions[TGUIAction.EXTERNAL_ACTION_1].getActionCommand())) {
             executeUserCommand(ConfigurationTTool.ExternalCommand1Host, ConfigurationTTool.ExternalCommand1);
         } else if (command.equals(actions[TGUIAction.EXTERNAL_ACTION_2].getActionCommand())) {

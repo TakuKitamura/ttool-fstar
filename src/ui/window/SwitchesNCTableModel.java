@@ -36,22 +36,58 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class MalformedModelingException
- * Creation: 15/12/2003
- * version 1.0 15/12/2003
+ * Class SwitchesNCTableModel
+ * Main data of switches in NC structures
+ * Creation: 26/11/2008
+ * @version 1.0 26/11/2008
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
 
-package ui;
+package ui.window;
 
+import java.util.*;
+import javax.swing.table.*;
 
-public	class MalformedModelingException extends Exception {
+import myutil.*;
+import nc.*;
+
+public class SwitchesNCTableModel extends AbstractTableModel {
+	private NCStructure ncs;
 	
-	public MalformedModelingException() {
-		super("Modeling does not follows the TTool format");
+	//private String [] names;
+	public SwitchesNCTableModel(NCStructure _ncs) {
+		ncs = _ncs;
+		//computeData(_ncs);
 	}
-    
-} // Class 
 
-	
+	// From AbstractTableModel
+	public int getRowCount() {
+		return ncs.switches.size();
+	}
+
+	public int getColumnCount() {
+		return 3;
+	}
+
+	public Object getValueAt(int row, int column) {
+		if (column == 0) {
+			return ncs.switches.get(row).getName();
+		} else if (column == 1) {
+			return NCSwitch.getStringSchedulingPolicy(ncs.switches.get(row).getSchedulingPolicy());
+		} else {
+			return ncs.switches.get(row).getCapacity() + " " + ncs.switches.get(row).getCapacityUnit().getStringUnit();
+		}
+	}
+
+	public String getColumnName(int columnIndex) {
+		switch(columnIndex) {
+		case 0:
+			return "Switch";
+		case 1:
+			return "Scheduling policy";
+		}
+		return "Capacity";
+	}
+
+}

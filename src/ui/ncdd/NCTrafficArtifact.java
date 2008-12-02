@@ -70,7 +70,9 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 	
 	protected int periodicType = 0; // 0: periodic ; 1: aperiodic
 	protected int deadline = 10;
-	protected int maxPacketSize = 20;
+	protected String deadlineUnit = "ms"; // "us", "ms", "s";
+	protected int minPacketSize = 20;
+	protected int maxPacketSize = 40;
 	protected int priority = 0; // 0 to 3
     
     public NCTrafficArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -147,7 +149,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		boolean error = false;
 		String oldValue = value;
 		
-		JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, deadline, maxPacketSize, priority);
+		JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
 		dialog.setSize(300, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -187,7 +189,9 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		periodicType = dialog.getPeriodicType();
 		priority = dialog.getPriority();
 		deadline = dialog.getDeadline();
+		deadlineUnit = dialog.getDeadlineUnit();
 		maxPacketSize = dialog.getMaxPacketSize();
+		minPacketSize = dialog.getMinPacketSize();
 			
 		return !error;
       
@@ -210,6 +214,10 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         sb.append(periodicType);
 		sb.append("\" deadline=\"");
 		sb.append(deadline);
+		sb.append("\" deadlineUnit=\"");
+		sb.append(deadlineUnit);
+		sb.append("\" minPacketSize=\"");
+		sb.append(minPacketSize);
 		sb.append("\" maxPacketSize=\"");
 		sb.append(maxPacketSize);
 		sb.append("\" priority=\"");
@@ -227,7 +235,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
             Node n1, n2;
             Element elt;
             int t1id;
-            String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null;
+            String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -243,6 +251,8 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
                                 svalue = elt.getAttribute("value");
                                 s0 = elt.getAttribute("periodicType");
                                 s1 = elt.getAttribute("deadline");
+								s4 = elt.getAttribute("deadlineUnit");
+								s5 = elt.getAttribute("minPacketSize");
 								s2 = elt.getAttribute("maxPacketSize");
 								s3 = elt.getAttribute("priority");
                             }
@@ -262,6 +272,14 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
                             }
 							//System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
                            
+							if ((s4 != null) && (s4.length() > 0)) {
+								deadlineUnit = s4;
+							}
+							
+							if ((s5 != null) && (s5.length() > 0)) {
+								minPacketSize = Integer.decode(s5).intValue();
+                            }
+							
 							if (s2 != null){
 								maxPacketSize = Integer.decode(s2).intValue();
                             }
@@ -292,8 +310,16 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         return deadline;
     }
 	
+	public String getDeadlineUnit() {
+        return deadlineUnit;
+    }
+	
 	public int getMaxPacketSize() {
         return maxPacketSize;
+    }     
+	
+	public int getMinPacketSize() {
+        return minPacketSize;
     }
 	
 	public int getPriority() {
@@ -307,8 +333,9 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		} else {
 			ret += "Aperioridic\n";
 		}
-		ret += "Deadline = " + deadline + "\n";
-		ret += "Max packet size = " + maxPacketSize + "\n";
+		ret += "Deadline = " + deadline + " " + deadlineUnit + "\n";
+		ret += "Min packet size = " + minPacketSize + " B\n";
+		ret += "Max packet size = " + maxPacketSize + " B\n";
 		ret += "Priority = " + priority; 
 		
 		return ret;

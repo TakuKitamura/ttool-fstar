@@ -59,27 +59,29 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
     private JPanel panel1;
     private Frame frame;
     
-	protected String value;
-    protected int periodicType, deadline, maxPacketSize, priority;
+	protected String value, deadlineUnit;
+    protected int periodicType, deadline, minPacketSize, maxPacketSize, priority;
 	
 	private boolean data;
     
     // Panel1
-    private JTextField valueText, deadlineText, maxPacketSizeText;
-	private JComboBox periodicTypeBox, priorityBox;
+    private JTextField valueText, deadlineText, minPacketSizeText, maxPacketSizeText;
+	private JComboBox periodicTypeBox, priorityBox, deadlineUnitBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _deadline, int _maxPacketSize, int _priority) {
+    public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _deadline, String _deadlineUnit, int _minPacketSize, int _maxPacketSize, int _priority) {
         super(_f, _title, true);
         frame = _f;
         
 		value = _value;
         periodicType = _periodicType;
 		deadline = _deadline;
+		deadlineUnit = _deadlineUnit;
+		minPacketSize = _minPacketSize;
 		maxPacketSize = _maxPacketSize;
 		priority = _priority;
         
@@ -107,7 +109,7 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
-        panel1.setPreferredSize(new Dimension(350, 400));
+        panel1.setPreferredSize(new Dimension(400, 400));
         
         // first line panel1
         c1.gridwidth = 1;
@@ -143,9 +145,29 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Deadline:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        deadlineText = new JTextField(""+deadline);
+        deadlineText = new JTextField(""+deadline, 10);
         panel1.add(deadlineText, c1);
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		deadlineUnitBox = new JComboBox();
+		deadlineUnitBox.addItem("s");
+		deadlineUnitBox.addItem("ms");
+		deadlineUnitBox.addItem("us");
+		int cpt;
+		if (deadlineUnit.equals("s")) {
+			cpt = 0; 
+		}  else if (deadlineUnit.equals("ms")) {
+			cpt = 1;
+		} else {
+			cpt = 2;
+		}
+		deadlineUnitBox.setSelectedIndex(cpt);
+        panel1.add(deadlineUnitBox, c1);
+		
+		c1.gridwidth = 1;
+        panel1.add(new JLabel("Min packet size:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        minPacketSizeText = new JTextField(""+minPacketSize);
+        panel1.add(minPacketSizeText, c1);
 		
 		c1.gridwidth = 1;
         panel1.add(new JLabel("Max packet size:"), c1);
@@ -226,6 +248,18 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
 			return Integer.decode(deadlineText.getText()).intValue();
 		} catch (Exception e) {
 			return deadline;
+		}
+    }
+	
+	public String getDeadlineUnit() {
+		return deadlineUnitBox.getSelectedItem().toString();
+	}
+	
+	public int getMinPacketSize() {
+		try {
+			return Integer.decode(minPacketSizeText.getText()).intValue();
+		} catch (Exception e) {
+			return minPacketSize;
 		}
     }
 	

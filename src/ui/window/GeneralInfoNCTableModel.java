@@ -36,22 +36,66 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class MalformedModelingException
- * Creation: 15/12/2003
- * version 1.0 15/12/2003
+ * Class GeneralInfoNCTableModel
+ * Main data of NC structures
+ * Creation: 25/11/2008
+ * @version 1.0 25/11/2008
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
 
-package ui;
+package ui.window;
 
+import java.util.*;
+import javax.swing.table.*;
 
-public	class MalformedModelingException extends Exception {
+import myutil.*;
+import nc.*;
+
+public class GeneralInfoNCTableModel extends AbstractTableModel {
 	
-	public MalformedModelingException() {
-		super("Modeling does not follows the TTool format");
+	private String [] names = {"Equipments", "Switches", "Traffics", "Links", "Paths"};
+	private String [] sizes;
+
+	public GeneralInfoNCTableModel(NCStructure _ncs) {
+		//ncs = _ncs;
+		sizes = new String[5];
+		computeData(_ncs);
 	}
-    
-} // Class 
 
-	
+	// From AbstractTableModel
+	public int getRowCount() {
+		return 5;
+	}
+
+	public int getColumnCount() {
+		return 2;
+	}
+
+	public Object getValueAt(int row, int column) {
+		if (column == 0) {
+			return names[row];
+		} else {
+			return sizes[row];
+		}
+	}
+
+	public String getColumnName(int columnIndex) {
+		switch(columnIndex) {
+		case 0:
+			return "Element";
+		case 1:
+			return "#";
+		}
+		return "none";
+	}
+
+
+	private void computeData(NCStructure _ncs) {
+		sizes[0] = "" + _ncs.equipments.size();
+		sizes[1] = "" + _ncs.switches.size();
+		sizes[2] = "" + _ncs.traffics.size();
+		sizes[3] = "" + _ncs.links.size();
+		sizes[4] = "" + _ncs.paths.size();
+	}
+}

@@ -118,6 +118,10 @@ public class IconManager {
     // CSD diagram
     public static ImageIcon imgic2100, imgic2104, imgic2106,imgic2108,imgic2110;
       
+ 
+	// NC
+	public static ImageIcon imgic3000;
+	
        // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
     
@@ -397,10 +401,12 @@ public class IconManager {
     private static String icon2100 = "images/procsdcomponent.gif";
       //Delegate ports image removed, by Solange
     //private static String icon2102 = "images/adport.gif";
-    private static String icon2104 ="images/cdtclass.gif";
-    private static String icon2106 ="images/proCSDInPort.gif";
-    private static String icon2108 ="images/proCSDOutPort.gif";
-    private static String icon2110 ="images/ProCSDConector.gif";
+    private static String icon2104 = "images/cdtclass.gif";
+    private static String icon2106 = "images/proCSDInPort.gif";
+    private static String icon2108 = "images/proCSDOutPort.gif";
+    private static String icon2110 = "images/ProCSDConector.gif";
+	
+	private static String icon3000= "images/nc.gif";
 	
     public IconManager() {
         
@@ -659,6 +665,9 @@ public class IconManager {
         imgic2108 = getIcon(icon2108);
         imgic2110 = getIcon(icon2110);
         imgic2111 = getIcon(icon2111); //Icon created by Solange
+		
+		// NC
+		imgic3000 = getIcon(icon3000);
     }
     
 } // Class

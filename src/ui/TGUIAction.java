@@ -258,6 +258,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int NCDD_SWITCHNODE = 254;
     public static final int NCDD_TRAFFIC_ARTIFACT = 253;
 	public static final int NCDD_ROUTE_ARTIFACT = 256;
+	public static final int ACT_NC = 257;
 	
 	// SysML Requirements
     
@@ -365,7 +366,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 257;
+    public static final int NB_ACTION = 258;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -597,6 +598,8 @@ public class TGUIAction extends AbstractAction {
         actions[NCDD_SWITCHNODE] = new TAction("add-ncdd-switchnode", "Add a switch node", IconManager.imgic700, IconManager.imgic700, "Add a switch node", "Add a switch node to the currently opened network calculus diagram", 0);
         actions[NCDD_TRAFFIC_ARTIFACT] = new TAction("add-ncdd-traffic", "Add a traffic", IconManager.imgic702, IconManager.imgic702, "Traffic", "Add a traffic to the currently opened network calculus diagram", 0);
 		actions[NCDD_ROUTE_ARTIFACT] = new TAction("add-ncdd-route", "Add a route", IconManager.imgic702, IconManager.imgic702, "Route", "Add a route to the currently opened network calculus diagram", 0);
+		actions[ACT_NC] = new TAction("gen_nc-command", "Network calculus", IconManager.imgic3000, IconManager.imgic3000, "Network calculus",  "Perform network calculus from  UML diagrams", '0');
+     
    
 		
         actions[TMLTD_EDIT] = new TAction("edit-tmlcd-diagram", "Edit TML Task diagram", IconManager.imgic100, IconManager.imgic101, "Edit TML task diagram", "Make it possible to edit the currently opened TML task diagram", 0);

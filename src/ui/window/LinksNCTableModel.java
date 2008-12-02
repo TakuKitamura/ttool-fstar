@@ -36,22 +36,61 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class MalformedModelingException
- * Creation: 15/12/2003
- * version 1.0 15/12/2003
+ * Class TrafficsNCTableModel
+ * Main data of links in NC structures
+ * Creation: 27/11/2008
+ * @version 1.0 27/11/2008
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
 
-package ui;
+package ui.window;
 
+import java.util.*;
+import javax.swing.table.*;
 
-public	class MalformedModelingException extends Exception {
+import myutil.*;
+import nc.*;
+
+public class LinksNCTableModel extends AbstractTableModel {
+	private NCStructure ncs;
 	
-	public MalformedModelingException() {
-		super("Modeling does not follows the TTool format");
+	//private String [] names;
+	public LinksNCTableModel(NCStructure _ncs) {
+		ncs = _ncs;
+		//computeData(_ncs);
 	}
-    
-} // Class 
 
-	
+	// From AbstractTableModel
+	public int getRowCount() {
+		return ncs.links.size();
+	}
+
+	public int getColumnCount() {
+		return 3;
+	}
+
+	public Object getValueAt(int row, int column) {
+		if (column == 0) {
+			return ncs.links.get(row).getName();
+		} else if (column == 1) {
+			return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
+		} 
+		
+		return ncs.links.get(row).getLinkedElement1().getName() + " <-> " + ncs.links.get(row).getLinkedElement2().getName();
+		
+	}
+
+	public String getColumnName(int columnIndex) {
+		switch(columnIndex) {
+		case 0:
+			return "Link";
+		case 1:
+			return "Capacity";
+		case 2:
+			return "Link between...";
+		}
+		return "none";
+	}
+
+}

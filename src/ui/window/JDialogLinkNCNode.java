@@ -61,6 +61,8 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     
     private String interfaceName;
     private int capacity;
+	private String capacityUnit;
+	private boolean hasCapacity;
 	
 	private boolean data;
     
@@ -68,22 +70,27 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     
     // Panel1
     private JTextField interfaceNameText, capacityText;
+	private JCheckBox hasCapacityBox;
+	private JComboBox capacityUnitBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogLinkNCNode(Frame _f, String _title, int _capacity, String _interfaceName) {
+    public JDialogLinkNCNode(Frame _f, String _title, boolean _hasCapacity, int _capacity, String _capacityUnit, String _interfaceName) {
         super(_f, _title, true);
         frame = _f;
         
         interfaceName = _interfaceName;
+		hasCapacity = _hasCapacity;
         capacity = _capacity;
+		capacityUnit = _capacityUnit;
         
         myInitComponents();
         initComponents();
         pack();
+		updateComponents();
     }
     
     private void myInitComponents() {
@@ -126,14 +133,27 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         interfaceNameText = new JTextField(interfaceName);
         panel1.add(interfaceNameText, c1);
+		
+		hasCapacityBox = new JCheckBox("has its own caapcity", hasCapacity);
+		hasCapacityBox.addActionListener(this);
+		panel1.add(hasCapacityBox, c1);
         
         c1.gridwidth = 1;
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Capacity:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         capacityText = new JTextField(""+capacity);
         panel1.add(capacityText, c1);
-        
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		capacityUnitBox = new JComboBox();
+		capacityUnitBox.addItem("Mbs");
+		capacityUnitBox.addItem("kbs");
+		if (capacityUnit.equals("Mbs")) {
+			capacityUnitBox.setSelectedItem(0);
+		} else {
+			capacityUnitBox.setSelectedItem(1);
+		}
+		panel1.add(capacityUnitBox, c1);
         
         // main panel;
         c0.gridwidth = 1;
@@ -163,8 +183,16 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
             closeDialog();
 		} else if (command.equals("Cancel")) {
             cancelDialog();
+		} if (evt.getSource() == hasCapacityBox) {
+			updateComponents();
 		}
     }
+	
+	public void updateComponents() {
+		boolean b = hasCapacityBox.isSelected();
+		capacityText.setEnabled(b);
+		capacityUnitBox.setEnabled(b);
+	}
     
     
     public void closeDialog() {
@@ -191,6 +219,14 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     public String getCapacity() {
         return capacityText.getText();
     }
+	
+	public String getCapacityUnit() {
+		return capacityUnitBox.getSelectedItem().toString();
+	}
+	
+	public boolean hasCapacity() {
+		return hasCapacityBox.isSelected();
+	}
     
   
 }

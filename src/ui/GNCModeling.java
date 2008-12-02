@@ -124,6 +124,7 @@ public class GNCModeling  {
 		ListIterator iterator = ncdp.getListOfSwitchNode().listIterator();
 		NCSwitchNode node;
 		NCSwitch sw;
+		NCCapacityUnit unit = new NCCapacityUnit();
 		
 		while(iterator.hasNext()) {
 			node = (NCSwitchNode)(iterator.next());
@@ -131,6 +132,9 @@ public class GNCModeling  {
 			sw= new NCSwitch();
 			sw.setName(node.getNodeName());
 			sw.setSchedulingPolicy(node.getSchedulingPolicy());
+			sw.setCapacity(node.getCapacity());
+			unit.setUnit(node.getCapacityUnit());
+			sw.setCapacityUnit(unit);
 			ncs.switches.add(sw);
 		}
 	}
@@ -139,6 +143,7 @@ public class GNCModeling  {
 		ListIterator iterator = ncdp.getTrafficArtifacts().listIterator();
 		NCTrafficArtifact arti;
 		NCTraffic tr;
+		NCTimeUnit unit;
 		
 		while(iterator.hasNext()) {
 			arti = (NCTrafficArtifact)(iterator.next());
@@ -146,6 +151,10 @@ public class GNCModeling  {
 			tr.setName(arti.getValue());
 			tr.setPeriodicType(arti.getPeriodicType());
 			tr.setDeadline(arti.getDeadline());
+			unit = new NCTimeUnit();
+			unit.setUnit(arti.getDeadlineUnit());
+			tr.setDeadlineUnit(unit);
+			tr.setMinPacketSize(arti.getMinPacketSize());
 			tr.setMaxPacketSize(arti.getMaxPacketSize());
 			tr.setPriority(arti.getPriority());
 			ncs.traffics.add(tr);
@@ -161,6 +170,8 @@ public class GNCModeling  {
 		NCLinkedElement ncle;
 		String name;
 		CheckingError ce;
+		NCCapacityUnit nccu;
+		NCSwitchNode switch1, switch2;
 		
 		while(iterator.hasNext()) {
 			nccn = (NCConnectorNode)(iterator.next());
@@ -172,10 +183,11 @@ public class GNCModeling  {
 				checkingErrors.add(ce);
 				
 			} else {
+				switch1 = null;
+				switch2 = null;
 				
 				lk = new NCLink();
 				lk.setName(nccn.getInterfaceName());
-				lk.setCapacity(nccn.getCapacity());
 				
 				tp = nccn.getTGConnectingPointP1();
 				tgc = ncdp.getComponentToWhichBelongs(tp);
@@ -187,7 +199,8 @@ public class GNCModeling  {
 						if (tgc instanceof NCEqNode) {
 							name =  tgc.getName();
 						} else {
-							name = ((NCSwitchNode)tgc).getNodeName();
+							switch1 = ((NCSwitchNode)tgc);
+							name = switch1.getNodeName();
 						}
 						ncle = ncs.getNCLinkedElementByName(name);
 						if (ncle == null) {
@@ -210,7 +223,8 @@ public class GNCModeling  {
 						if (tgc instanceof NCEqNode) {
 							name =  tgc.getName();
 						} else {
-							name = ((NCSwitchNode)tgc).getNodeName();
+							switch2 = ((NCSwitchNode)tgc);
+							name = switch2.getNodeName();
 						}
 						ncle = ncs.getNCLinkedElementByName(name);
 						if (ncle == null) {
@@ -231,6 +245,47 @@ public class GNCModeling  {
 					checkingErrors.add(ce);
 				} else {
 					ncs.links.add(lk);
+				}
+				
+				if (!nccn.hasCapacity()) {
+					// In that case, must set the capacity of switches
+					if ((switch1 == null) && (switch2 == null)) {
+						lk.setCapacity(nccn.getCapacity());
+						nccu = new NCCapacityUnit();
+						nccu.setUnit(nccn.getCapacityUnit());
+						lk.setCapacityUnit(nccu);
+					} else {
+						if (switch1 == null) {
+							lk.setCapacity(switch2.getCapacity());
+							nccu = new NCCapacityUnit();
+							nccu.setUnit(switch2.getCapacityUnit());
+							lk.setCapacityUnit(nccu);
+						}
+						if (switch2 == null) {
+							lk.setCapacity(switch1.getCapacity());
+							nccu = new NCCapacityUnit();
+							nccu.setUnit(switch2.getCapacityUnit());
+							lk.setCapacityUnit(nccu);
+						}
+						if ((switch1 != null) && (switch2 != null)) {
+							if (switch1.getCapacity() != switch2.getCapacity()) {
+								ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Link with no capacity between two switches of different capacity: " + nccn.getInterfaceName());
+								ce.setTDiagramPanel(ncdp);
+								ce.setTGComponent(nccn);
+								checkingErrors.add(ce);
+							} else {
+								lk.setCapacity(switch1.getCapacity());
+								nccu = new NCCapacityUnit();
+								nccu.setUnit(switch2.getCapacityUnit());
+								lk.setCapacityUnit(nccu);
+							}
+						}
+					}
+				} else {
+					lk.setCapacity(nccn.getCapacity());
+					nccu = new NCCapacityUnit();
+					nccu.setUnit(nccn.getCapacityUnit());
+					lk.setCapacityUnit(nccu);
 				}
 			}
 		}
@@ -298,7 +353,7 @@ public class GNCModeling  {
 		CheckingError ce;
 		
 		if (tree.isLeaf()) {
-			System.out.println("Found path");
+			//System.out.println("Found path");
 			NCPath path = new NCPath();
 			path.traffic = traffic;
 			path.origin = origin;
@@ -324,7 +379,7 @@ public class GNCModeling  {
 					return;
 				}
 			}
-			System.out.println("Adding path");
+			//System.out.println("Adding path");
 			path.setName("path" + PATH_INDEX);
 			PATH_INDEX++;
 			ncs.paths.add(path);
@@ -333,13 +388,13 @@ public class GNCModeling  {
 		} else {
 			sw = (NCSwitchNode)(tree.getElement());
 			TreeCell next = new TreeCell();
-			System.out.println("Adding to path: " + sw.getName());
+			//System.out.println("Adding to path: " + sw.getName());
 			list.add(sw.getName());
 			for(int i=0; i<tree.getNbOfChildren(); i++) {
 				next = tree.getChildrenByIndex(i);
 				exploreTree(next, list, origin, traffic);
 			}
-			System.out.println("Removing from path: " + sw.getName());
+			//System.out.println("Removing from path: " + sw.getName());
 			list.remove(list.size()-1);
 		}
 	}
@@ -430,7 +485,7 @@ public class GNCModeling  {
 		// Get all routes concerning that traffic on that switch
 		ArrayList<NCRoute> routes = ncdp.getAllRoutesFor(sw, arti);
 		
-		System.out.println("toto0");
+		//System.out.println("toto0");
 		
 		// Get all next swithes, according to routes, and fill the tree
 		// Verify that there is at least one possibile route
@@ -471,7 +526,7 @@ public class GNCModeling  {
 			System.out.println("Considering route:" + route.toString()+  " vs input route=" + lkname);
 			if (route.inputInterface.equals(lkname)) {
 				// Must check that two routes don't have the same output interface
-				System.out.println("toto1");
+				//System.out.println("toto1");
 				error = false;
 				for(NCRoute route1: computed) {
 					if ((route1 != route) && (route1.outputInterface.equals(route.outputInterface))) {
@@ -484,7 +539,7 @@ public class GNCModeling  {
 				}
 				computed.add(route);
 				
-				System.out.println("toto2");
+				//System.out.println("toto2");
 				// Is it an existing output interface?
 				if (error == false) {
 					link = ncs.hasLinkWith(sw.getNodeName(), route.outputInterface);
@@ -494,7 +549,7 @@ public class GNCModeling  {
 						ce.setTGComponent(sw);
 						warnings.add(ce);	
 					} else {
-						System.out.println("toto3");
+						//System.out.println("toto3");
 						// Is the destination equipment a switch that is in the tree already?
 						// If so, there is a cycle -> ignoring route
 						if (link.getLinkedElement1().getName().equals(sw.getNodeName())) {
@@ -503,7 +558,7 @@ public class GNCModeling  {
 							ncle = link.getLinkedElement1();
 						}
 						
-						System.out.println("toto4");
+						//System.out.println("toto4");
 						// Is the next of the route an equipment?
 						if (ncle instanceof NCEquipment) {
 							ncen = ncdp.getEquipmentByName(ncle.getName());
@@ -514,7 +569,7 @@ public class GNCModeling  {
 								checkingErrors.add(ce);	
 							} else {
 								// Adding an equipment -> leaf of the tree
-								System.out.println("Adding a leaf: " + ncle.getName());
+								//System.out.println("Adding a leaf: " + ncle.getName());
 								cell = new TreeCell();
 								cell.setElement(ncen);
 								tree.addChildren(cell);
@@ -542,9 +597,9 @@ public class GNCModeling  {
 									checkingErrors.add(ce);	
 								} else {
 									// Recursive call
-									System.out.println("Adding a switch: " + ncsn.getNodeName());
+									//System.out.println("Adding a switch: " + ncsn.getNodeName());
 									buildTreeFromSwitch(root, cell, ncsn, nextArriving, arti);
-									System.out.println("Ending adding a switch: " + ncsn.getNodeName());
+									//System.out.println("Ending adding a switch: " + ncsn.getNodeName());
 								}
 							//}
 						}

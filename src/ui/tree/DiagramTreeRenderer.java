@@ -64,6 +64,8 @@ import ui.tmlcd.*;
 import ui.tmldd.*;
 import ui.tmlcompd.*;
 
+import ui.ncdd.*;
+
 import ui.oscd.*;
 import ui.osad.*;
 
@@ -102,6 +104,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof DeploymentPanel) {
             setIcon(IconManager.imgic60);
             setToolTipText("TURTLE Deployment");
+        } else if (value instanceof NCPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("Network Calculus");
         } else if (value instanceof RequirementPanel) {
             setIcon(IconManager.imgic1000);
             setToolTipText("TURTLE Requirement");
@@ -123,6 +128,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof TDeploymentDiagramPanel) {
             setIcon(IconManager.imgic60);
             setToolTipText("TURTLE Deployment Diagram");          
+        } else if (value instanceof NCDiagramPanel) {
+            setIcon(IconManager.imgic60);
+            setToolTipText("NC Diagram");          
         } else if (value instanceof RequirementDiagramPanel) {
             setIcon(IconManager.imgic1000);
             setToolTipText("TURTLE Requirement Diagram");          

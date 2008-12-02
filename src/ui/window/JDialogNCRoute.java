@@ -181,6 +181,10 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		for(String s0: inputInterfaces) {
 			inputInterfaceBox.addItem(s0);
 		}
+		if (inputInterfaces.size() < 2) {
+			inputInterfaceBox.setEnabled(false);
+		}
+		inputInterfaceBox.addActionListener(this);
         panel1.add(inputInterfaceBox, c1);
 		
 		panel1.add(new JLabel(" / "), c1);
@@ -199,6 +203,12 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
 		for(String s2: outputInterfaces) {
 			outputInterfaceBox.addItem(s2);
 		}
+		if (outputInterfaces.size() < 2) {
+			outputInterfaceBox.setEnabled(false);
+		} else {
+			outputInterfaceBox.setSelectedIndex(1);
+		}
+		outputInterfaceBox.addActionListener(this);
         panel1.add(outputInterfaceBox, c1);
         
         // third line panel1
@@ -294,8 +304,32 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
             downRoute();
         } else if (command.equals("Up")) {
             upRoute();
-        }
+        } else if (evt.getSource() == inputInterfaceBox) {
+			manageInputBox();
+		} else if (evt.getSource() == outputInterfaceBox) {
+			manageOutputBox();
+		}
     }
+	
+	public void manageInputBox() {
+		int index = inputInterfaceBox.getSelectedIndex();
+		int indexOther = outputInterfaceBox.getSelectedIndex();
+		
+		if (indexOther == index) {
+			indexOther = (indexOther + 1) % outputInterfaceBox.getItemCount();
+			outputInterfaceBox.setSelectedIndex(indexOther);
+		}
+	}
+	
+	public void manageOutputBox() {
+		int index = inputInterfaceBox.getSelectedIndex();
+		int indexOther = outputInterfaceBox.getSelectedIndex();
+		
+		if (indexOther == index) {
+			index = (index + 1) % inputInterfaceBox.getItemCount();
+			inputInterfaceBox.setSelectedIndex(index);
+		}
+	}
     
     
     public void addRoute() {

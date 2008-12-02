@@ -65,6 +65,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     private String stereotype = "Switch";
 	
 	protected int schedulingPolicy = 0; // 0: FCFS ; 1: SP
+	protected int capacity = 10;
+	protected String capacityUnit = "Mbs";
     
     public NCSwitchNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -171,13 +173,21 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 	public int getSchedulingPolicy() {
 		return schedulingPolicy;
 	}
+	
+	public int getCapacity() {
+		return capacity;
+	}
+	
+	public String getCapacityUnit() {
+		return capacityUnit;
+	}
     
    	public boolean editOndoubleClick(JFrame frame) {
         //System.out.println("Double click");
         String oldName = name;
 		String tmp;
         
-        JDialogNCSwitchNode jdncsn = new JDialogNCSwitchNode(frame, "Setting switch parameters", name, schedulingPolicy);
+        JDialogNCSwitchNode jdncsn = new JDialogNCSwitchNode(frame, "Setting switch parameters", name, schedulingPolicy, capacity, capacityUnit);
         jdncsn.setSize(350, 250);
         GraphicLib.centerOnParent(jdncsn);
         jdncsn.show(); // Blocked until dialog has been closed
@@ -213,7 +223,17 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		
 		name = tmp;
 		schedulingPolicy = jdncsn.getSchedulingPolicy();
-        
+		
+		try {
+			capacity = Integer.decode(jdncsn.getCapacity()).intValue();
+		} catch (Exception e) {
+			 JOptionPane.showMessageDialog(frame,
+					"Wrong capacity value",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+        capacityUnit = jdncsn.getCapacityUnit();
+		
         return true;
     }
     
@@ -288,6 +308,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info schedulingPolicy=\"" + schedulingPolicy);
+		sb.append("\" capacity=\"" + capacity);
+		sb.append("\" capacityUnit=\"" + capacityUnit);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -313,6 +335,10 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
                                 schedulingPolicy = Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
+								if (elt.getAttribute("capacity").length() > 0) {
+									capacityUnit = elt.getAttribute("capacityUnit");
+									capacity = Integer.decode(elt.getAttribute("capacity")).intValue();
+								}
 							}
                         }
                     }
@@ -336,7 +362,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		} else {
 			pol = "SP";
 		}
-		String attr = "Scheduling policy = " + pol;
+		String attr = "Scheduling policy = " + pol + "\n";
+		attr += "Capacity = " + capacity + " " + capacityUnit;
 		return attr;
 		
 	}

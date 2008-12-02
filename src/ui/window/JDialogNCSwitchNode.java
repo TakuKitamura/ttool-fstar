@@ -61,6 +61,8 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
     
     private String switchName;
     private int schedulingPolicy;
+	private int capacity;
+	private String capacityUnit;
 	
 	private boolean data;
     
@@ -68,18 +70,22 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
     // Panel1
     private JTextField switchNameText;
 	private JComboBox schedulingPolicyBox;
+	private JTextField capacityText;
+	private JComboBox capacityUnitBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogNCSwitchNode(Frame _f, String _title, String _switchName, int _schedulingPolicy) {
+    public JDialogNCSwitchNode(Frame _f, String _title, String _switchName, int _schedulingPolicy, int _capacity, String _capacityUnit) {
         super(_f, _title, true);
         frame = _f;
         
         switchName = _switchName;
         schedulingPolicy = _schedulingPolicy;
+		capacity = _capacity;
+		capacityUnit = _capacityUnit;
         
         myInitComponents();
         initComponents();
@@ -128,7 +134,6 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         panel1.add(switchNameText, c1);
         
         c1.gridwidth = 1;
-        c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("Scheduling policy:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         schedulingPolicyBox = new JComboBox();
@@ -136,6 +141,23 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
 		schedulingPolicyBox.addItem("Static Priority");
 		schedulingPolicyBox.setSelectedIndex(schedulingPolicy);
         panel1.add(schedulingPolicyBox, c1);
+		
+		c1.gridwidth = 1;
+        panel1.add(new JLabel("Capacity:"), c1);
+        //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        capacityText = new JTextField(""+capacity);
+        panel1.add(capacityText, c1);
+		c1.gridwidth = GridBagConstraints.REMAINDER; 
+		capacityUnitBox = new JComboBox();
+		capacityUnitBox.addItem("Mbs");
+		capacityUnitBox.addItem("Kbs");
+		if (capacityUnit.equals("Mbs")) {
+			capacityUnitBox.setSelectedItem(0);
+		} else {
+			capacityUnitBox.setSelectedItem(1);
+		}
+		panel1.add(capacityUnitBox, c1);
+		
         
         // main panel;
         c0.gridwidth = 1;
@@ -193,6 +215,14 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
     public int getSchedulingPolicy() {
         return schedulingPolicyBox.getSelectedIndex();
     }
+	
+	public String getCapacity() {
+		return capacityText.getText();
+	}
+	
+	public String getCapacityUnit() {
+		return capacityUnitBox.getSelectedItem().toString();
+	}
     
   
 }
