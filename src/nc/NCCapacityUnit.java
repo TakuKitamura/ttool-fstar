@@ -36,9 +36,9 @@
 * knowledge of the CeCILL license and that you accept its terms.
 *
 * /**
-* Class NCSwitch
-* Creation: 14/11/2008
-* @version 1.0 14/11/2008
+* Class NCCapacityUnit
+* Creation: 28/11/2008
+* @version 1.0 28/11/2008
 * @author Ludovic APVRILLE
 * @see
 */
@@ -46,60 +46,29 @@
 package nc;
 
 
-
-public class NCSwitch extends NCLinkedElement  {
+public class NCCapacityUnit {
+    
+	public static final String MBS = "Mbs";
+	public static final String KBS = "Kbs";
 	
-	public static String FCFS = "FCFS";
-	public static String STATIC = "Static priority";
-	public static String WFQ = "Weight Fair Queuing";
+	private String unit;
 	
-	public static String[] SchedulingPolicies = {FCFS, STATIC, WFQ};
-	
-	private int schedulingPolicy = 0;
-	private int capacity = 0;
-	private NCCapacityUnit unitCapacity = new NCCapacityUnit(); // Default value: Mbs 
-	
-	public NCSwitch() {
+	public NCCapacityUnit() {
+		unit = MBS;
 	}
 	
-	public void setSchedulingPolicy(int _sp) {
-		schedulingPolicy = _sp;
-	}
-	
-	public int getSchedulingPolicy() {
-		return schedulingPolicy;
-	}
-	
-	public static String getStringSchedulingPolicy(int sp) {
-			return SchedulingPolicies[sp];
-	}
-	
-	public static int getFromStringSchedulingPolicy(String _sp) {
-		for(int i=0; i<SchedulingPolicies.length; i++) {
-			if (SchedulingPolicies[i].compareTo(_sp) == 0) {
-				return i;
-			}
+	public void setUnit(String s) {
+		if (s.equals(MBS)) {
+			unit = MBS;
 		}
 		
-		return -1;
+		if (s.equals(KBS)) {
+			unit = KBS;
+		}
 	}
 	
-	public void setCapacity(int _capacity) {
-		capacity = _capacity;
+	public String getStringUnit() {
+		return unit;
 	}
 	
-	public int getCapacity() {
-		return capacity;
-	}
-	
-	public void setCapacityUnit(NCCapacityUnit _unit) {
-		unitCapacity = _unit;
-	}
-	
-	public NCCapacityUnit getCapacityUnit() {
-		return unitCapacity;
-	}
-	
-	
-
 }

@@ -124,6 +124,8 @@ public class NCStructure extends NCElement {
 			tmp += sw.getName();
 			tmp += "\" schedulingPolicy=\"";
 			tmp += NCSwitch.getStringSchedulingPolicy(sw.getSchedulingPolicy());
+			tmp += "\" capacity=\"" + sw.getCapacity();
+			tmp += "\" capacityUnit=\"" + sw.getCapacityUnit().getStringUnit();
 			tmp += "\" />\n";
 		}
 		return tmp;
@@ -132,16 +134,18 @@ public class NCStructure extends NCElement {
 	private String getXMLTraffics() {
 		String tmp = "";
 		for(NCTraffic tr: traffics) {
-			tmp += "<traffic ";
+			tmp += "<Traffic ";
 			tmp += " name=\"";
 			tmp += tr.getName();
-			tmp += " Periodic=\"";
+			tmp += "\" Periodic=\"";
 			if (tr.getPeriodicType() == 0) {
 				tmp += "periodic";
 			} else {
 				tmp += "aperiodic";
 			}
 			tmp += "\" deadline=\"" + tr.getDeadline();
+			tmp += "\" deadlineUnit=\"" + tr.getDeadlineUnit().getStringUnit();
+			tmp += "\" minPacketSize=\"" + tr.getMinPacketSize();
 			tmp += "\" maxPacketSize=\"" + tr.getMaxPacketSize();
 			tmp += "\" priority=\"" + tr.getPriority();
 			tmp += "\" />\n";
@@ -157,6 +161,8 @@ public class NCStructure extends NCElement {
 			tmp += lk.getName();
 			tmp += "\" capacity=\"";
 			tmp += lk.getCapacity();
+			tmp += "\" capacityUnit=\"";
+			tmp += lk.getCapacityUnit().getStringUnit();
 			tmp += "\" end1=\"";
 			tmp += lk.getLinkedElement1().getName();
 			tmp += "\" end2=\"";

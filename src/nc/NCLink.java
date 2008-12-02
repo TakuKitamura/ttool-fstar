@@ -49,6 +49,7 @@ package nc;
 
 public class NCLink extends NCElement  {
 	protected int capacity;
+	protected NCCapacityUnit capacityUnit = new NCCapacityUnit(); // Default value: Mbs 
 	protected NCLinkedElement le1, le2;
 	
 	public NCLink() {}
@@ -75,6 +76,14 @@ public class NCLink extends NCElement  {
 	
 	public void setLinkedElement2(NCLinkedElement ncle) {
 		le2 = ncle;
+	}
+	
+	public void setCapacityUnit(NCCapacityUnit _unit) {
+		capacityUnit = _unit;
+	}
+	
+	public NCCapacityUnit getCapacityUnit() {
+		return capacityUnit;
 	}
 	
 	
