@@ -1980,6 +1980,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	}
     
     public void valueChanged() {}
+	
+	
+	// Pos contains either 0 : printed at x
+	//                     1 : printed in the middle of the area
+	public void drawLimitedString(Graphics g, String value, int x, int y, int maxW, int pos) {
+		int w  =  g.getFontMetrics().stringWidth(value);
+		if (x+w >= x+maxW) {
+			value = "...";
+			w  =  g.getFontMetrics().stringWidth(value);
+			if (x+w >= x + maxW) {
+				return;
+			}
+		}
+		if (pos == 0) {
+			g.drawString(value, x, y);
+		} else {
+			g.drawString(value, x+(maxW-w)/2, y);
+		}
+	}
+	
     
     // saving
     

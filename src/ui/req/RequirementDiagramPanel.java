@@ -51,7 +51,7 @@ import java.util.*;
 
 import ui.*;
 
-public class RequirementDiagramPanel extends TDiagramPanel {
+public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
     public Vector validated, ignored;
     
     public  RequirementDiagramPanel(MainGUI mgui, TToolBar _ttb) {
@@ -92,7 +92,7 @@ public class RequirementDiagramPanel extends TDiagramPanel {
     }
     
     public String getXMLHead() {
-        return "<TRequirementDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<TRequirementDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
     public String getXMLTail() {
@@ -148,60 +148,6 @@ public class RequirementDiagramPanel extends TDiagramPanel {
        return b;
    }*/
     
-    public void enhance() {
-        //System.out.println("enhance");
-        /*Vector v = new Vector();
-        Object o;
-        Iterator iterator = componentList.listIterator();
-         
-        while(iterator.hasNext()) {
-            o = iterator.next();
-            if (o instanceof IODStartState){
-                enhance(v, (IODStartState)o);
-            }
-        }
-         
-        mgui.changeMade(this, MOVE_CONNECTOR);
-        repaint();*/
-    }
-    
-    public void enhance(Vector v, TGComponent tgc) {
-        /*TGComponent tgc1;
-        TGConnector tgcon;
-        int i;
-         
-        //System.out.println("Enhancing: " + tgc);
-         
-        if (tgc == null) {
-            return;
-        }
-         
-        if (v.contains(tgc)) {
-            return;
-        }
-         
-        v.add(tgc);
-         
-        //System.out.println("Nb of nexts: " + tgc.getNbNext());
-        if (!(tgc instanceof IODStartState)) {
-            for(i=0; i<tgc.getNbNext(); i++) {
-                tgc1 = getNextTGComponent(tgc, i);
-                tgcon = getNextTGConnector(tgc, i);
-                if (tgcon.getAutomaticDrawing()) {
-                    if ((tgc1 != null) && (tgcon != null)) {
-                        tgcon.alignOrMakeSquareTGComponents();
-                    }
-                }
-            }
-        }
-         
-        // Explore next elements
-        for(i=0; i<tgc.getNbNext(); i++) {
-            tgc1 = getNextTGComponent(tgc, i);
-            enhance(v, tgc1);
-        }*/
-    }
-    
     public int nbOfVerifyStartingAt(TGComponent tgc) {
         ListIterator iterator = getComponentList().listIterator();
         TGComponent tgc1, tgc2;
@@ -239,6 +185,10 @@ public class RequirementDiagramPanel extends TDiagramPanel {
         }
         
         return false;
+    }
+	
+	public void enhance() {
+		autoAdjust();
     }
     
 }

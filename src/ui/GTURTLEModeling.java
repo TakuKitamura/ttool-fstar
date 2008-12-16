@@ -3610,6 +3610,7 @@ public class GTURTLEModeling {
 			zoom = Double.parseDouble(elt.getAttribute("zoom"));
 			if (zoom != 0) {
 				tdp.setZoom(zoom);
+				mgui.updateZoomInfo();
 			}
 		} catch (Exception e) {
 			// Model was saved in an older version of TTool

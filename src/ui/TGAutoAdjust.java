@@ -36,64 +36,18 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TGConnectorVerify
- * Connector to be used in requirement diagrams. Connects an observer to a requirement
- * Creation: 30/05/2006
- * @version 1.0 30/05/2006
+ * Class TGAutoAdjust
+ * Components that have the capability to auto adjust their size
+ * Creation: 11/12/2008
+ * @version 1.0 11/12/2008
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.req;
 
-import java.awt.*;
-//import java.awt.geom.*;
-import java.util.*;
+package ui;
 
-import myutil.*;
-
-import ui.*;
-
-public  class TGConnectorVerify extends TGConnector {
-    int w, h;
-    
-    public TGConnectorVerify(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        value = "<<verify>>";
-    }
-    
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-		GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-        
-        Font f = g.getFont();
-		Font old = f;
-		if (f.getSize() != tdp.getFontSize()) {
-			f = f.deriveFont((float)tdp.getFontSize());
-			g.setFont(f);
-		}
-		
-        w  = g.getFontMetrics().stringWidth(value);
-        h = g.getFontMetrics().getHeight();
-        g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
-		g.setFont(old);
-    }
-    
-    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
-            return this;
-        }
-        return null;
-    }
-    
-     public int getType() {
-        return TGComponentManager.CONNECTOR_VERIFY_REQ;
-    }
-
+public interface TGAutoAdjust  {
+	// Auto adjust mode: 2 modes: 0: regular, 1: small
+    public void autoAdjust(int mode);
 }
-
-
-
-
-
-
-

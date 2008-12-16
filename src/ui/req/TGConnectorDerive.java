@@ -68,9 +68,18 @@ public  class TGConnectorDerive extends TGConnector {
         GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
         
         // Indicate semantics
+		
+		Font f = g.getFont();
+		Font old = f;
+		if (f.getSize() != tdp.getFontSize()) {
+			f = f.deriveFont((float)tdp.getFontSize());
+			g.setFont(f);
+		}
+		
         w  = g.getFontMetrics().stringWidth(value);
         h = g.getFontMetrics().getHeight();
         g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+		g.setFont(old);
     }
     
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {

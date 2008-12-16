@@ -176,6 +176,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	protected int internalCommentVisible = 0;
     protected boolean channelsVisible = true, eventsVisible = true, requestsVisible = true;
 	protected int attributesOn = 0;
+	
+	int adjustMode = 0;
     
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
@@ -212,6 +214,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public double getZoom() {
         return zoom;
     }
+	
+	/*public int getFontSize() {
+		return (int)(Math.round(7.5*zoom+4.5));
+	}*/
+	
+	public int getFontSize() {
+		return (int)(Math.round(12*zoom));
+	}
     
     public void setZoom(double _zoom) {
 		if (_zoom < zoom) {
@@ -2961,9 +2971,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void enhance() {
         
     }
-    
-    
-    // Zoom -> graphics management
+	
+	public void autoAdjust() {
+		TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof TGAutoAdjust) {
+				((TGAutoAdjust)tgc).autoAdjust(adjustMode);
+			}
+        }
+		adjustMode = (adjustMode + 1)% 2;
+		
+		repaint();
+	}
     
     
 }

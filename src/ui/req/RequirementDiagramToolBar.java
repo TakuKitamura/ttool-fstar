@@ -60,6 +60,12 @@ public class RequirementDiagramToolBar extends TToolBar {
     }
     
     protected void setActive(boolean b) {
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+		mgui.updateZoomInfo();
+		
         mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
@@ -67,8 +73,10 @@ public class RequirementDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TREQ_OBSERVER].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_VERIFY].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_DERIVE].setEnabled(b);
-        
-
+		
+		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
         
     }
     
@@ -100,6 +108,16 @@ public class RequirementDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.TREQ_VERIFY]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+         
+        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
         button.addMouseListener(mgui.mouseHandler);
         
     }

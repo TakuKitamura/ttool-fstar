@@ -2094,7 +2094,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	}
 	
 	public void updateZoomInfo() {
-		String s = "" + (int)(getCurrentTDiagramPanel().getZoom()*100) + "%";
+		String s = "";
+		int zoom = (int)(getCurrentTDiagramPanel().getZoom()*100);
+		if (zoom < 100) {
+			s = "0" + zoom + "%";
+		} else {
+			s += zoom + "%";
+		}
 		actions[TGUIAction.ACT_SHOW_ZOOM].setName(TGUIAction.ACT_SHOW_ZOOM, s);
 	}
     
@@ -4768,7 +4774,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	 public void toggleAttr() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null){
-            //System.out.println("Toggle attributes");
+            System.out.println("Toggle attributes");
             tdp.setAttributes((tdp.getAttributeState() +1 )% 3);
             tdp.checkAllMySize();
             tdp.repaint();
