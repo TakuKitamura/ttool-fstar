@@ -128,7 +128,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		String interfaceNameTmp;
         
         JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity, capacityUnit, hasParameter, parameter, interfaceName);
-        jdlncn.setSize(350, 250);
+        jdlncn.setSize(450, 350);
         GraphicLib.centerOnParent(jdlncn);
         jdlncn.show(); // Blocked until dialog has been closed
 		
