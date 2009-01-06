@@ -455,7 +455,6 @@ public class Conversion {
 			index ++;
 			
 			if(c == '\"') {
-				
 				if (isEscaped) {
 					isEscaped = false;
 				} else {
@@ -514,6 +513,8 @@ public class Conversion {
 					index = 0;
 					isSlashed = false;
 				}
+			} else {
+				isSlashed = false;
 			}
 			
 		}

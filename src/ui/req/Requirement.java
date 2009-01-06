@@ -568,6 +568,11 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 			return;
 		}
 		
+		Font f = graphics.getFont();
+		Font f0 = f.deriveFont((float)currentFontSize);
+		Font f1 = f0.deriveFont(Font.BOLD);
+		Font f2 = f.deriveFont((float)(currentFontSize - 2));
+		
 		// Must find for both modes which width is desirable
 		String s0, s1;
 		if (formal) {
@@ -578,12 +583,14 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 			s1 = "Text=";
 		}
 		
+		graphics.setFont(f2);
 		int w0 = graphics.getFontMetrics().stringWidth(s0);
+		graphics.setFont(f1);
 		int w1 = graphics.getFontMetrics().stringWidth(value);
 		int w2 = Math.max(w0, w1) + (2 * iconSize);
+		
+		graphics.setFont(f0);
 		int w3, w4 = w2;
-		
-		
 		int i;
 		
 		if(texts.length == 1) {

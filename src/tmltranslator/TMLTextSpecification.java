@@ -975,6 +975,8 @@ public class TMLTextSpecification {
 			random.setMinValue(_split[3]);
 			random.setMaxValue(_split[4]);
 			
+			System.out.println("RANDOM min=" + random.getMinValue() + " max=" + random.getMaxValue());
+			
 			task.getActivityDiagram().addElement(random);
 			tmlae.addNext(random);
 			tmlae = random;

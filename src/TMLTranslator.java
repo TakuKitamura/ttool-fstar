@@ -81,7 +81,7 @@ public class TMLTranslator  {
 		System.out.println("TMLTranslator is released under a CECILL License. See http://www.cecill.info/index.en.html");
 		System.out.println("For more information on TURTLE related technologies, please consult http://labsoc.comelec.enst.fr/turtle/");
 		
-		System.out.println("Enjoy!\n");
+		System.out.println("Enjoy!!!\n");
 	}
 	
 	public static void printUsage() {
@@ -180,7 +180,7 @@ public class TMLTranslator  {
 		//System.out.println("load");
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification(title);
 		ret = spec.makeTMLMapping(inputData, path);
-		//System.out.println("load ended");
+		System.out.println("load ended");
 		ArrayList<TMLError> warnings;
 		
 		if (!ret) {
@@ -192,7 +192,13 @@ public class TMLTranslator  {
 			tmap = spec.getTMLMapping(); 
 			tmlm = tmap.getTMLModeling();
 			
+			//System.out.println("\n\n*** TML Modeling *** \n");
+			//TMLTextSpecification textspec = new TMLTextSpecification("toto");
+			//String s = textspec.toTextFormat(tmlm);
+			//System.out.println(s);
+			
 			// Checking syntax
+			System.out.println("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
 			TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
 			ret = checkSyntax(syntax);
 			
@@ -334,6 +340,7 @@ public class TMLTranslator  {
 	}
 	
 	public static boolean convertToSystemC2() {
+		//System.out.println("Converting to SystemC2 ... yo!");
 		tmltranslator.tomappingsystemc2.TML2MappingSystemC map;
 		if (tmap == null) {
 			map = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(tmlm);
