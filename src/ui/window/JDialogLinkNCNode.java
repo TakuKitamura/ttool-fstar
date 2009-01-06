@@ -63,14 +63,16 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     private int capacity;
 	private String capacityUnit;
 	private boolean hasCapacity;
+	private int parameter;
+	private boolean hasParameter;
 	
 	private boolean data;
     
     
     
     // Panel1
-    private JTextField interfaceNameText, capacityText;
-	private JCheckBox hasCapacityBox;
+    private JTextField interfaceNameText, capacityText, parameterText;
+	private JCheckBox hasCapacityBox, hasParameterBox;
 	private JComboBox capacityUnitBox;
     
     // Main Panel
@@ -78,7 +80,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogLinkNCNode(Frame _f, String _title, boolean _hasCapacity, int _capacity, String _capacityUnit, String _interfaceName) {
+    public JDialogLinkNCNode(Frame _f, String _title, boolean _hasCapacity, int _capacity, String _capacityUnit, boolean _hasParameter, int _parameter, String _interfaceName) {
         super(_f, _title, true);
         frame = _f;
         
@@ -86,6 +88,8 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
 		hasCapacity = _hasCapacity;
         capacity = _capacity;
 		capacityUnit = _capacityUnit;
+		hasParameter = _hasParameter;
+        parameter = _parameter;
         
         myInitComponents();
         initComponents();
@@ -112,7 +116,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
-        panel1.setPreferredSize(new Dimension(200, 100));
+        panel1.setPreferredSize(new Dimension(250, 200));
         
         // first line panel1
         c1.gridwidth = 1;
@@ -134,7 +138,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         interfaceNameText = new JTextField(interfaceName);
         panel1.add(interfaceNameText, c1);
 		
-		hasCapacityBox = new JCheckBox("has its own caapcity", hasCapacity);
+		hasCapacityBox = new JCheckBox("has its own capacity", hasCapacity);
 		hasCapacityBox.addActionListener(this);
 		panel1.add(hasCapacityBox, c1);
         
@@ -154,6 +158,17 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
 			capacityUnitBox.setSelectedItem(1);
 		}
 		panel1.add(capacityUnitBox, c1);
+		
+		
+		hasParameterBox = new JCheckBox("has its own parameter", hasParameter);
+		hasParameterBox.addActionListener(this);
+		panel1.add(hasParameterBox, c1);
+        
+        c1.anchor = GridBagConstraints.CENTER;
+        panel1.add(new JLabel("Parameter:"), c1);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        parameterText = new JTextField(""+parameter);
+        panel1.add(parameterText, c1);
         
         // main panel;
         c0.gridwidth = 1;
@@ -220,12 +235,20 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         return capacityText.getText();
     }
 	
+	public String getParameter() {
+        return parameterText.getText();
+    }
+	
 	public String getCapacityUnit() {
 		return capacityUnitBox.getSelectedItem().toString();
 	}
 	
 	public boolean hasCapacity() {
 		return hasCapacityBox.isSelected();
+	}
+	
+	public boolean hasParameter() {
+		return hasParameterBox.isSelected();
 	}
     
   

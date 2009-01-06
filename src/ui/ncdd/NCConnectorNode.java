@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class NCConnectorNode
- * Connector used in NC diagrams
- * Creation: 18/11/2008
- * @version 1.0 18/11/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class NCConnectorNode
+* Connector used in NC diagrams
+* Creation: 18/11/2008
+* @version 1.0 18/11/2008
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.ncdd;
 
@@ -65,6 +65,10 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 	
 	protected boolean hasCapacity = false;
 	protected int capacity = 10;
+	
+	protected boolean hasParameter = false;
+	protected int parameter = 1;
+	
 	protected String capacityUnit = "Mbs";
 	protected String interfaceName;
 	
@@ -72,18 +76,21 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
     public NCConnectorNode(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
-
+		
         editable = true;
 		interfaceName = tdp.findNodeName("i");
 		makeValue();
     }
 	
 	public void makeValue() {
-		if (hasCapacity) {
-			value = "{" + interfaceName + ", capacity = " + capacity +  " " + capacityUnit + "}";
-		} else {
-			value = "{" + interfaceName + "}";
-		}
+		value =  "{" + interfaceName;
+			if (hasCapacity) {
+				value +=", capacity = " + capacity +  " " + capacityUnit;
+			} 
+			if (hasParameter) {
+				value += ", parameter = " + parameter;
+			}
+		value += "}";
 	}
 	
 	public String getInterfaceName() {
@@ -115,15 +122,16 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 	public boolean editOndoubleClick(JFrame frame) {
         //System.out.println("Double click");
         int oldCapacity = capacity;
+		int oldParameter = parameter;
         String oldInterfaceName = interfaceName;
 		String tmp;
 		String interfaceNameTmp;
         
-        JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity, capacityUnit, interfaceName);
-        jdlncn.setSize(250, 200);
+        JDialogLinkNCNode jdlncn = new JDialogLinkNCNode(frame, "Setting link parameters", hasCapacity, capacity, capacityUnit, hasParameter, parameter, interfaceName);
+        jdlncn.setSize(350, 250);
         GraphicLib.centerOnParent(jdlncn);
         jdlncn.show(); // Blocked until dialog has been closed
-       
+		
         interfaceNameTmp = jdlncn.getInterfaceName().trim();
 		tmp = jdlncn.getCapacity();
 		try {
@@ -131,13 +139,20 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		} catch (Exception e) {
 			capacity = oldCapacity;
 		}
+		
+		tmp = jdlncn.getParameter();
+		try {
+			parameter = Integer.decode(tmp).intValue();
+		} catch (Exception e) {
+			parameter = oldParameter;
+		}
         
         if ((interfaceNameTmp == null) || (jdlncn.hasBeenCancelled())) {
 			return !jdlncn.hasBeenCancelled();
         }
 		
-		 if ((interfaceNameTmp != null) && (interfaceNameTmp.length() > 0) && (!interfaceNameTmp.equals(oldInterfaceName))) {
-			 //boolean b;
+		if ((interfaceNameTmp != null) && (interfaceNameTmp.length() > 0) && (!interfaceNameTmp.equals(oldInterfaceName))) {
+			//boolean b;
             if (!TAttribute.isAValidId(interfaceNameTmp, false, false)) {
                 JOptionPane.showMessageDialog(frame,
 					"Could not change the name of the Equipment: the new name is not a valid name",
@@ -153,7 +168,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 					JOptionPane.INFORMATION_MESSAGE);
                 return false;
             }
-		 }
+		}
         
         if ((capacity < 0) || (jdlncn.hasBeenCancelled())){
             capacity = oldCapacity;
@@ -163,6 +178,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 			interfaceName = interfaceNameTmp;
 			capacityUnit = jdlncn.getCapacityUnit();
 			hasCapacity = jdlncn.hasCapacity();
+			hasParameter = jdlncn.hasParameter();
             makeValue();
         }
 		
@@ -190,6 +206,10 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		sb.append(capacityUnit);
 		sb.append("\" hasCapacity=\"");
 		sb.append(hasCapacity);
+		sb.append("\" parameter=\"");
+		sb.append(parameter);
+		sb.append("\" hasParameter=\"");
+		sb.append(hasParameter);
 		sb.append("\" interfaceName=\"");
 		sb.append(interfaceName);
 		sb.append("\"/>\n");
@@ -236,11 +256,29 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 								
 								has =  elt.getAttribute("hasCapacity");
 								if ((has != null) && (has.length() > 0)){
+									if (has.equals("true")) {
+										hasCapacity = true;
+									} else {
+										hasCapacity = false;
+									}
+								}
+								
+								// for backward compatiblity: exception catching
+								try {
+									prio = elt.getAttribute("parameter");
+									if (elt != null) {
+										parameter = Integer.decode(prio).intValue();
+									}
+									
+									has =  elt.getAttribute("hasParameter");
+									if ((has != null) && (has.length() > 0)){
 										if (has.equals("true")) {
-											hasCapacity = true;
+											hasParameter = true;
 										} else {
-											hasCapacity = false;
+											hasParameter = false;
 										}
+									}
+								} catch (Exception e) {
 								}
 								
                             }
@@ -250,6 +288,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
             }
             
         } catch (Exception e) {
+			System.out.println("Error in NCNodeLink");
             throw new MalformedModelingException();
         }
     }
@@ -263,18 +302,28 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		return hasCapacity;
 	}
 	
+	public int getParameter() {
+		return parameter;
+	}
+	
+	public boolean hasParameter() {
+		return hasParameter;
+	}
+	
 	public String getCapacityUnit() {
 		return capacityUnit;
 	}
     
 	public String getAttributes() {
+		String ret = "";
 		if (hasCapacity) {
-			return "Capacity = " + capacity + " " + capacityUnit;
-		} else {
-			return "No capacity";
+			ret += "Capacity = " + capacity + " " + capacityUnit + "\n";
 		}
+		if (hasParameter) {
+			ret +="Parameter = " + parameter + "\n";
+		}
+		return ret;
 	}
-  
- 
-    
+	
+	
 }
