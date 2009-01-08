@@ -69,7 +69,7 @@ public:
 	std::string getCommandStr();
 	std::string getCommentString(Comment* iCom);
 protected:
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 	TMLCommand* getNextCommand() const;
 	///Pointer to an array of pointers to channels conveying the desired signals
 	TMLEventChannel** _channel;

@@ -51,22 +51,17 @@ void TMLSendCommand::execute(){
 	_channel->write();
 	//std::cout << "Dependent Task: " << _channel->getBlockedReadTask()->toString() << std::endl;
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
-	//_currTransaction=0;
-	//if (_param!=0) _param->print(); else std::cout << "no param\n";
-#if defined BUS_ENABLED && defined EVENTS_MAPPED_ON_BUS
-	Bus* bus=_channel->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLSendCommand::prepareNextTransaction(){
-	//_currTransaction=new TMLTransaction(this, _progress,(*_pLength)-_progress, _task->getEndLastTransaction(), _channel);
-	_currTransaction=new TMLTransaction(this, _progress,_length-_progress, _task->getEndLastTransaction(), _channel);
+TMLCommand* TMLSendCommand::prepareNextTransaction(){
+	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	_channel->testWrite(_currTransaction);
-	return true;
+	return this;
 }
 
 TMLTask* TMLSendCommand::getDependentTask() const{

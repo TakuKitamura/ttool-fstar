@@ -52,18 +52,10 @@ public:
 	///Constructor
     	/**
       	\param iTask Pointer to the task the command belongs to
-	\param iLength Constant virtual length of the command
+	\param iLengthFunc Pointer to the function returning the length of the command
 	\param iChannel Pointer to the channel which is read
 	*/
-	//TMLReadCommand(TMLTask* iTask, const TMLLength& iLength,TMLChannel* iChannel);
 	TMLReadCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel);
-	/*///Constructor
-    	/**
-      	\param iTask Pointer to the task the command belongs to
-	\param iLength Virtual length of the command
-	\param iChannel Pointer to the channel which is read
-	*/
-	//TMLReadCommand(TMLTask* iTask, TMLLength& iLength,TMLChannel* iChannel);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
@@ -71,10 +63,11 @@ public:
 	std::string toShortString();
 	std::string getCommandStr();
 protected:
+	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;
 	///Channel which is read
 	TMLChannel* _channel;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

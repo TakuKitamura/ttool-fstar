@@ -41,27 +41,61 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef SchedulableDeviceH
 #define SchedulableDeviceH
 
+#include <definitions.h>
+#include <Serializable.h>
+class Master;
+
 class TMLTransaction;
 
 ///Base class for devices which perform a scheduling
-class SchedulableDevice{
+class SchedulableDevice: public Serializable{
 public:
+	SchedulableDevice():_endSchedule(0){}
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	virtual void addTransaction()=0;
+	virtual bool addTransaction()=0;
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
     	*/
-	virtual TMLTransaction* getNextTransaction() const=0;
+	virtual TMLTransaction* getNextTransaction()=0;
+	///Writes a HTML representation of the schedule to an output file
+	/**
+      	\param myfile Reference to the ofstream object representing the output file
+    	*/
+	///Add a transaction waiting for execution to the internal list
+	/**
+      	\param iTrans Pointer to the transaction to add
+	\param iSourceDevice Source device
+    	*/
+	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice)=0;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	virtual void schedule2HTML(std::ofstream& myfile)=0;
+	///Writes a plain text representation of the schedule to an output file
+	/**
+      	\param myfile Reference to the ofstream object representing the output file
+    	*/
+	virtual void schedule2TXT(std::ofstream& myfile)=0;
+	virtual std::string toString()=0;
 	///Destructor
 	virtual ~SchedulableDevice(){}
+	virtual std::istream& readObject(std::istream &is){
+		READ_STREAM(is,_endSchedule);
+		return is;
+	}
+	virtual std::ostream& writeObject(std::ostream &os){
+		WRITE_STREAM(os,_endSchedule);		
+		return os;
+	}
+protected:
+	///Class variable holding the simulation time
+	static TMLTime _simulatedTime;
+	///End time of the last scheduled transaction
+	TMLTime _endSchedule;
 };
 
 #endif

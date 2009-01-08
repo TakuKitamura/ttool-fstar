@@ -42,6 +42,9 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLChannelH
 
 #include <definitions.h>
+#include <SchedulableCommDevice.h>
+#include <Slave.h>
+#include <Serializable.h>
 
 class TMLTransaction;
 class TMLCommand;
@@ -49,14 +52,16 @@ class TMLTask;
 class Bus;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
-class TMLChannel{
+class TMLChannel: public Serializable{
 public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLChannel(std::string iName, Bus* iBus);
+	TMLChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
 	///Destructor
 	virtual ~TMLChannel();
 	///Prepares a write operation
@@ -73,8 +78,6 @@ public:
 	virtual void write()=0;
 	///Performs the read operation
 	virtual bool read()=0;
-	//Cancels a pending read opeartion 
-	//virtual void cancelReadTransaction()=0;
 	///Stores a pointer to the tasks which performs read operation on the channel
 	/**
 	\param iReadTask Pointer to the task
@@ -95,11 +98,27 @@ public:
 	\return Pointer to the task
 	*/
 	virtual TMLTask* getBlockedWriteTask()const=0;
-	///Returns a pointer to the Bus on which the channel is mapped
+	///Returns the next communication link on which the given transaction is conveyed
 	/**
-	\return Pointer to the bus
+	\param iTrans Transaction
+	\return Pointer to the communication link
 	*/
-	Bus* getBus() const;
+	SchedulableCommDevice* getNextBus(TMLTransaction* iTrans);
+	///Returns the first communication link on which the given transaction is conveyed
+	/**
+	\param iTrans Transaction
+	\return Pointer to the communication link
+	*/
+	SchedulableCommDevice* getFirstBus(TMLTransaction* iTrans);
+	///Returns the next slave component to which the given transaction is sent
+	/**
+	\param iTrans Transaction
+	\return Pointer to the slave
+	*/
+	Slave* getNextSlave(TMLTransaction* iTrans);
+	//Returns the number of buses on which the channel is mapped
+	//\return Number of buses
+	//unsigned int getNumberOfHops() const;
 	///Returns a string representation of the channel
 	/**
 	\return Detailed string representation
@@ -110,6 +129,8 @@ public:
 	\return Short string representation
 	*/
 	std::string toShortString();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 protected:
 	///Name of the channel
 	std::string _name;	
@@ -117,10 +138,20 @@ protected:
 	TMLTask* _readTask;
 	///Pointer to the tasks which performs write operation on the channel
 	TMLTask* _writeTask;
-	///Pointer to the bus on which the channel is mapped
-	Bus* _bus;
-	///Burst size of the associated bus (for performance reasons)
-	TMLLength _burstSize;
+	///Pointer to the transaction which attempts to write in the channel
+	TMLTransaction* _writeTrans;
+	///Pointer to the transaction which attempts to read the channel
+	TMLTransaction* _readTrans;
+	///Number of Buses/Slave devices on which the channel is mapped
+	unsigned int _numberOfHops;
+	///List of buses on which the channel is mapped
+	SchedulableCommDevice** _buses;
+	///List of slaves on which the channel is mapped
+	Slave** _slaves;
+	///Keeps track of the current Hop of a write Transaction
+	unsigned int _writeTransCurrHop;
+	///Keeps track of the current Hop of a read Transaction
+	unsigned int _readTransCurrHop;
 };
 
 #endif

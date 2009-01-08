@@ -53,15 +53,13 @@ import myutil.*;
 
 public class MappedSystemCTask {
 	//private TMLModeling tmlm;
-    private TMLTask task;
-    private String reference, cppcode, hcode, initCommand, functions, functionSig, chaining, firstCommand, commentText;
+	private TMLTask task;
+ 	private String reference, cppcode, hcode, initCommand, functions, functionSig, chaining, firstCommand, commentText;
 	private ArrayList<TMLChannel> channels;
 	private ArrayList<TMLEvent> events;
 	private ArrayList<TMLRequest> requests;
 	private int commentNum;
-	
-    
-    private boolean debug;
+	private boolean debug;
 	
 	private final static String DOTH = ".h";
 	private final static String DOTCPP = ".cpp";
@@ -74,8 +72,8 @@ public class MappedSystemCTask {
 	private final static String EF = "}";
 	
 	
-    public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests) {
-        task = _task;
+	public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests) {
+        	task = _task;
 		channels = _channels;
 		events = _events;
 		requests = _requests;
@@ -89,7 +87,7 @@ public class MappedSystemCTask {
 		functionSig="";
 		commentText="";
 		commentNum=0;
-    }
+    	}
 	
 	public void saveInFiles(String path) throws FileException {	
 		FileUtils.saveFile(path + reference + DOTH, getHCode());
@@ -100,18 +98,17 @@ public class MappedSystemCTask {
 		return task;
 	}
     
-    
-    public void generateSystemC(boolean _debug) {
-        debug = _debug;
+	public void generateSystemC(boolean _debug) {
+        	debug = _debug;
 		//basicHCode();
 		basicCPPCode();
 		makeClassCode();
-    }
-    
-    public void print() {
+    	}
+	
+	public void print() {
 		System.out.println("task: " + reference + DOTH + hcode);
 		System.out.println("task: " + reference + DOTCPP + cppcode);
-    }
+	}
 	
 	
 	public String getCPPCode() {
@@ -126,10 +123,8 @@ public class MappedSystemCTask {
 		return reference;
 	}
 	
-	
-	// H Code
-	//
-	public String basicHCode() {
+	// H-Code
+	private String basicHCode() {
 		String code="";
 		code += "#ifndef " + reference.toUpperCase() + "__H" + CR;
 		code += "#define " + reference.toUpperCase() + "__H" + CR2;
@@ -143,25 +138,22 @@ public class MappedSystemCTask {
 		return code;
 	}
 	
-
-	public void classHCode() {
+	private void classHCode() {
 	}
 	
-	
 	// CPP Code
-	//
-	public void basicCPPCode() {
+	private void basicCPPCode() {
 		cppcode += "#include <" + reference + DOTH + ">" + CR2;
 	}
 	
-	public void makeClassCode(){
+	private void makeClassCode(){
 		makeHeaderClassH();
 		makeEndClassH();
 		
 		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iPriority,iName,iCPU)"+ CR + makeAttributesCode();
-		cppcode+=initCommand + CR2 + "{" + CR + "_comment = new std::string[" + commentNum + "]" + SCCR + commentText;
-		
-		cppcode+="//set blocked read task/set blocked write task"+ CR;
+		cppcode+=initCommand + CR + "{" + CR; 
+		if (commentNum!=0) cppcode+= "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
+		cppcode+= "//set blocked read task/set blocked write task"+ CR;
 		for(TMLChannel ch: channels) {
 			if (ch.getOriginTask()==task)
 				cppcode+=ch.getExtendedName() + "->setBlockedWriteTask(this)"+SCCR;
@@ -179,14 +171,19 @@ public class MappedSystemCTask {
 			if (req.isAnOriginTask(task)) cppcode+=req.getExtendedName() + "->setBlockedWriteTask(this)" +SCCR;
 		}
 		cppcode+=CR + "//command chaining"+ CR;
-		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR + "_currCommand->prepare()"+SCCR+"}";
-		cppcode+=CR2+functions;
+		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR; 
+		if (!firstCommand.equals("0")) cppcode+= "_currCommand->prepare()"+SCCR;
+		cppcode+="}"+ CR2 + functions; // + makeDestructor();
 		hcode = Conversion.indentString(hcode, 4);
 		cppcode = Conversion.indentString(cppcode, 4);
-		//System.out.println(CR2+ "************HCODE************\n"+hcode);
-		//System.out.println(CR+ "************CPPCODE************\n" + cppcode);
 	}
 	
+	private String makeDestructor(){
+		String dest=reference + "::~" + reference + "(){" + CR;
+		if (commentNum!=0) dest+="delete[] _comment" + SCCR;
+		return dest+"}"+CR;
+	}
+
 	private String makeConstructorSignature(){
 		String constSig=reference+ "(unsigned int iPriority, std::string iName, CPU* iCPU"+CR;
 		for(TMLChannel ch: channels) {
@@ -204,7 +201,7 @@ public class MappedSystemCTask {
 		return constSig+")";
 	}
 
-	public void makeHeaderClassH() {
+	private void makeHeaderClassH() {
 		String hcodeBegin="";
 		// Common dec
 		hcodeBegin = "class " + reference + ": public TMLTask {" + CR;
@@ -238,49 +235,63 @@ public class MappedSystemCTask {
 		// public dec
 		hcode += CR + functionSig + CR + "public:" + CR;
 		// Simulation
-		hcode += makeConstructorSignature() + SCCR;
+		hcode += makeConstructorSignature() + SCCR; // + "~" + reference + "()" + SCCR;
+		makeSerializableFuncs();
 	}
 
-	public String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, strwrap nextCommandCont, strwrap functionCont, TMLActivityElement lastSequence){
+	private void makeSerializableFuncs(){
+		ListIterator iterator = task.getAttributes().listIterator();
+		TMLAttribute att;
+		hcode += "virtual std::istream& readObject(std::istream& s)" + SCCR;
+		hcode += "virtual std::ostream& writeObject(std::ostream& s)" + SCCR;
+		functions+= "std::istream& " + reference + "::" + "readObject(std::istream& s){\nTMLTask::readObject(s);\n";
+		while(iterator.hasNext()) {
+			att = (TMLAttribute)(iterator.next());
+			functions += "READ_STREAM(s," + att.name + ")" + SCCR;
+		}
+		functions+= "return s;\n}\n\n";
+		functions+= "std::ostream& " + reference + "::" + "writeObject(std::ostream& s){\nTMLTask::writeObject(s);\n";
+		iterator = task.getAttributes().listIterator();
+		while(iterator.hasNext()) {
+			att = (TMLAttribute)(iterator.next());
+			functions += "WRITE_STREAM(s," + att.name + ")" + SCCR;
+		}
+		functions+= "return s;\n}\n\n";
+	}
+
+	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, strwrap nextCommandCont, strwrap functionCont, TMLActivityElement lastSequence){
 		String nextCommand="",cmdName="";
-		//strwrap nextCommandCollection, functionCollection;
 
 		if (skip) return makeCommands(currElem.getNextElement(0), false,retElement,nextCommandCont,functionCont,lastSequence);
 
 		if (currElem==null){
-			System.out.println("Checking null\n");
-			//if (nextCommandCont!=null){
-				//nextCommandCont.str += ",(TMLCommand*)" + retElement;
-				//nextCommandCont.num++;
-			//}
-			//if (lastSequence!=null) return makeCommands(lastSequence, false,retElement,nextCommandCont,functionCont,null);
+			if (debug) System.out.println("Checking null\n");
 			return retElement;
 		}
 		
-		//System.out.println("Checking " + currElem.getName() + CR);
+		if (debug) System.out.println("Checking " + currElem.getName() + CR);
 
 		if (currElem instanceof TMLStartState) {
-			System.out.println("Checking Start\n");
+			if (debug) System.out.println("Checking Start\n");
 			return makeCommands(currElem.getNextElement(0), false,retElement,nextCommandCont,functionCont,lastSequence);
 		
 		} else if (currElem instanceof TMLStopState){
-			System.out.println("Checking Stop\n");
-			//if (lastSequence!=null) return makeCommands(lastSequence, false,retElement,nextCommandCont,functionCont,null);
+			if (debug) System.out.println("Checking Stop\n");
 			return retElement;
 		
 		} else if (currElem instanceof TMLActionState || currElem instanceof TMLRandom){
 			String action;
-			if (currElem instanceof TMLActionState){
+			if (currElem instanceof TMLActionState){				
+				if (debug) System.out.println("Checking Action\n");
 				action = ((TMLActionState)currElem).getAction();
-				System.out.println("Checking Action\n");
 			}else{
+				if (debug) System.out.println("Checking Random\n");
 				TMLRandom random = (TMLRandom)currElem;
 				action = random.getVariable() + "=myrand("+ random.getMinValue() + "," + random.getMaxValue() + ")";
-				System.out.println("Checking Random\n");
 			}
 			cmdName= "_action" + currElem.getID();
 			if (nextCommandCont==null){
-				System.out.println("nextCommandCont==null in ActionState "+ action +CR);
+				//System.out.println("nextCommandCont==null in ActionState "+ action +CR);
 				hcode+="TMLActionCommand " + cmdName + SCCR;
 				strwrap nextCommandCollection = new strwrap(""), functionCollection = new strwrap("");
 				//nextCommandCollection = new strwrap(""); functionCollection = new strwrap("");
@@ -296,7 +307,7 @@ public class MappedSystemCTask {
 				commentNum++;
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 			}else{
-				System.out.println("nextCommandCont!=null in ActionState "+ action +CR); 
+				//System.out.println("nextCommandCont!=null in ActionState "+ action +CR); 
 				functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
@@ -305,7 +316,7 @@ public class MappedSystemCTask {
 
 
 		} else if (currElem instanceof TMLExecI){
-			System.out.println("Checking Execi\n");
+			if (debug) System.out.println("Checking Execi\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",0,0)"+CR;
@@ -313,7 +324,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecC){
-			System.out.println("Checking ExecC\n");
+			if (debug) System.out.println("Checking ExecC\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",1)"+CR;
@@ -321,7 +332,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLExecIInterval){
-			System.out.println("Checking ExeciInterv\n");
+			if (debug) System.out.println("Checking ExeciInterv\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",0)"+CR;
@@ -329,7 +340,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecCInterval){
-			System.out.println("Checking ExecCInterv\n");
+			if (debug) System.out.println("Checking ExecCInterv\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",1)"+CR;
@@ -338,7 +349,7 @@ public class MappedSystemCTask {
 
 					
 		} else if (currElem instanceof TMLForLoop){
-			System.out.println("Checking Loop\n");
+			if (debug) System.out.println("Checking Loop\n");
 			TMLForLoop fl = (TMLForLoop)currElem;
 			cmdName="_choice" + currElem.getID();
 			hcode+="TMLChoiceCommand " + cmdName + SCCR;
@@ -352,7 +363,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(2,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,"&"+cmdName,null,null,null) + ",(TMLCommand*)" + makeCommands(currElem.getNextElement(1),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLReadChannel){
-			System.out.println("Checking Read\n");
+			if (debug) System.out.println("Checking Read\n");
 			cmdName= "_read" + currElem.getID();
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
@@ -362,7 +373,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
-			System.out.println("Checking Write\n");
+			if (debug) System.out.println("Checking Write\n");
 			cmdName= "_write" + currElem.getID();
 			hcode+="TMLWriteCommand " + cmdName + SCCR;
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
@@ -372,7 +383,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLSendEvent){
-			System.out.println("Checking Send\n");
+			if (debug) System.out.println("Checking Send\n");
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
 			if (((TMLSendEvent)currElem).getNbOfParams()==0){
@@ -396,7 +407,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 			
 		} else if (currElem instanceof TMLSendRequest){
-			System.out.println("Checking Request\n");
+			if (debug) System.out.println("Checking Request\n");
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
 			if (((TMLSendRequest)currElem).getNbOfParams()==0){
@@ -420,7 +431,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;	
 	
 		} else if (currElem instanceof TMLWaitEvent){
-			System.out.println("Checking Wait\n");
+			if (debug) System.out.println("Checking Wait\n");
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
 			if (((TMLWaitEvent)currElem).getNbOfParams()==0){
@@ -444,7 +455,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLNotifiedEvent){
-			System.out.println("Checking Notified\n");
+			if (debug) System.out.println("Checking Notified\n");
 			cmdName= "_notified" + currElem.getID();
 			hcode+="TMLNotifiedCommand " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "(this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",(TMLLength*)&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\")" + CR;
@@ -452,7 +463,7 @@ public class MappedSystemCTask {
 		
 		} else if (currElem instanceof TMLSequence){
 			TMLSequence tmlseq = (TMLSequence)currElem;
-			System.out.println("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
+			if (debug) System.out.println("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
 			if (tmlseq.getNbNext() == 0) {
 				//if (lastSequence!=null) return makeCommands(lastSequence, false,retElement,nextCommandCont,functionCont,null);
                 		return retElement;
@@ -462,10 +473,10 @@ public class MappedSystemCTask {
                 		} else {			
 					String nextBranch;
 					tmlseq.sortNexts();
-					System.out.println("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
+					if (debug) System.out.println("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
 					nextBranch= makeCommands(currElem.getNextElement(currElem.getNbNext() - 1),false,retElement,null,null,null);
 					for(int i=currElem.getNbNext() - 2; i>=0; i--) {
-						System.out.println("Checking Sequence branch "+ i);
+						if (debug) System.out.println("Checking Sequence branch "+ i);
 						nextBranch=makeCommands(currElem.getNextElement(i),false,nextBranch,null,null,null);
 					}
 					//nextBranch=makeCommands(currElem.getNextElement(0),false,nextBranch,nextCommandCont,functionCont,null);
@@ -481,7 +492,7 @@ public class MappedSystemCTask {
 			cmdName= "_choice" + currElem.getID();
 			TMLChoice choice = (TMLChoice)currElem;
 			String code = "", nextCommandTemp="", MCResult="";
-			System.out.println("Checking Choicet\n");
+			if (debug) System.out.println("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
 				
 				String guardS = "",code2;
@@ -521,40 +532,39 @@ public class MappedSystemCTask {
 						}
 						if (nextCommandCont==null){
 							strwrap nextCommandCollection = new strwrap("",returnIndex), functionCollection = new strwrap("");
-							//nextCommandCollection = new strwrap("",returnIndex); functionCollection = new strwrap("");
 							//System.out.println("Call makeCommands, task: "+reference);
-							if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
+							//if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,functionCollection,lastSequence);
 							if (functionCollection.str.isEmpty()){
-								System.out.println("NO content has been added to "+ code2);
+								//System.out.println("NO content has been added to "+ code2);
 								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
-								System.out.println("RETURN, aaINC NUM "+ returnIndex);
+								//System.out.println("RETURN, aaINC NUM "+ returnIndex);
 								returnIndex++;
 								nextCommandTemp+= ",(TMLCommand*)" + MCResult;
 							}else{
-								System.out.println("OLD RETURN INDEX "+ returnIndex);
+								//System.out.println("OLD RETURN INDEX "+ returnIndex);
 								returnIndex = nextCommandCollection.num;
 								//System.out.println("Returned index: "+ returnIndex);
-								System.out.println("Choice: Content has been added to "+ code2);
+								//System.out.println("Choice: Content has been added to "+ code2);
 								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + functionCollection.str + "return " + returnIndex + ";\n}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
 								//returnIndex = nextCommandCollection.num;
-								System.out.println("RETURN, bbINC NUM "+ returnIndex);
+								//System.out.println("RETURN, bbINC NUM "+ returnIndex);
 								returnIndex++;
 								nextCommandTemp+= nextCommandCollection.str+ ",(TMLCommand*)" + MCResult;
 							}
 						}else{
-							System.out.println("Choice: Next command!=0 "+ code2);
+							//System.out.println("Choice: Next command!=0 "+ code2);
 							int oldReturnIndex=nextCommandCont.num;
 							functionCont.str += code + "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n";
 							commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 							commentNum++;
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement, nextCommandCont,functionCont,lastSequence);
 							if (oldReturnIndex==nextCommandCont.num){
-								System.out.println("RETURN, ccINC NUM "+ nextCommandCont.num);
+								//System.out.println("RETURN, ccINC NUM "+ nextCommandCont.num);
 								functionCont.str+= "return " + nextCommandCont.num + SCCR;
 								nextCommandCont.num++;
 								nextCommandCont.str += ",(TMLCommand*)" + MCResult;
@@ -566,7 +576,7 @@ public class MappedSystemCTask {
 				}
 				// If there was no else, do a terminate
 				if (nextCommandCont==null){
-					System.out.println("Choice: finalization, add new command\n");
+					//System.out.println("Choice: finalization, add new command\n");
 					if (index1 == -1){
 						code += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
@@ -580,13 +590,13 @@ public class MappedSystemCTask {
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
-					System.out.println("Choice: finalization, No new command\n");
+					//System.out.println("Choice: finalization, No new command\n");
 					if (index1 == -1){
 						functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + nextCommandCont.num + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
 						commentNum++;
 						nextCommandCont.str += ",(TMLCommand*)0";
-						System.out.println("RETURN, ddINC NUM "+ nextCommandCont.num);
+						//System.out.println("RETURN, ddINC NUM "+ nextCommandCont.num);
 						nextCommandCont.num++;
 					}
 					cmdName=MCResult;
@@ -597,7 +607,7 @@ public class MappedSystemCTask {
 			TMLEvent evt;
 			Integer nbevt=0;
 			String evtList="",paramList="";
-			System.out.println("Checking SelectEvt\n");
+			if (debug) System.out.println("Checking SelectEvt\n");
 			cmdName= "_select" + currElem.getID();
 			for(int i=0; i<currElem.getNbNext(); i++) {
 				evt=((TMLSelectEvt)currElem).getEvent(i);
@@ -632,14 +642,14 @@ public class MappedSystemCTask {
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
 		} else {
-			System.out.println("Operator: " + currElem + " is not managed in SystemC" + "))" + SCCR);
+			System.out.println("Operator: " + currElem + " is not managed in the current version of this C++ code generator." + "))" + SCCR);
 		}
 		chaining+=nextCommand; 
 		return (cmdName.equals("0") || cmdName.charAt(0)=='&')? cmdName : "&"+cmdName;
 	}
 	
 	
-	public String makeCommandLenFunc(String cmdName, String lowerLimit, String upperLimit){
+	private String makeCommandLenFunc(String cmdName, String lowerLimit, String upperLimit){
 		if (upperLimit==null)
 			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nreturn (unsigned int)(" + lowerLimit + ");\n}" + CR2;
 		else
@@ -648,125 +658,54 @@ public class MappedSystemCTask {
 		return "(LengthFuncPointer)&" + reference + "::" + cmdName + "_func";
 	}
 
-	
-/*public String makeChoice(TMLActivityElement currElem){
-		TMLChoice choice = (TMLChoice)currElem;
-		//System.out.println("nb of guards = " + choice.getNbGuard() + " nb of nexts =" + choice.getNbNext());
-		String code = "";
-		if (choice.getNbGuard() !=0 ) {
-			String code1 = "",guardS = "",code2;
-			int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
-			int nb = choice.nbOfNonDeterministicGuard();
-			int nbS = choice.nbOfStochasticGuard();
-			if ((nb > 0) || (nbS > 0)){
-				code += "rnd__0 = myrand(0, 99)" + SCCR;
-			}
-			nb = 0;
-			for(int i=0; i<choice.getNbGuard(); i++) {
-				if (choice.isNonDeterministicGuard(i)) {
-					code2 = "(rnd__0 < " + Math.floor(100/choice.getNbGuard())*(nb+1) + ")";
-					nb ++;
-				} else if (choice.isStochasticGuard(i)) {
-					if (guardS.length() == 0) {
-						guardS = choice.getStochasticGuard(i);
-					} else {
-						guardS = "(" + guardS + ")+(" + choice.getStochasticGuard(i) + ")";
-					}
-					code2 = "(rnd__0 < (" + guardS + "))";
-							nbS ++;
-				} else {
-					code2 = choice.getGuard(i);
-					code2 = Conversion.replaceAllChar(code2, '[', "(");
-					code2 = Conversion.replaceAllChar(code2, ']', ")");
-				}
-				//System.out.println("guard = " + code1 + " i=" + i);
-				if (i != index2) {
-					if (i==0) {
-						code += "if " + code2;
-					} else {
-						code += " else ";
-						if (i != index1) {
-							code += "if " + code2;
-						}
-					}
-					code += "{\naddComment(new Comment(_endLastTransaction,\"Branch taken: " + code2 + "\"));\nreturn "+ i + SCCR +"}" + CR;
-				} 
-			}
-			// If there was no else, do a terminate
-			if (index1 == -1)  code += "addComment(new Comment(_endLastTransaction,\"Exit branch taken\"));\nreturn " + choice.getNbGuard() + SCCR;
-			code += code1;
-		}
-		return code;
-	}*/
-	
-	public void makeEndClassH() {
+	private void makeEndClassH() {
 		hcode += "};" + CR + "#endif" + CR;
 	}
 
 	
 	private String makeAttributesCode() {
-        String code = "";
-        TMLAttribute att;
-        int i;
-        
-        ListIterator iterator = task.getAttributes().listIterator();
-        
-        while(iterator.hasNext()) {
-            att = (TMLAttribute)(iterator.next());
-            if (att.hasInitialValue())
-                code += ","+ att.name + "(" + att.initialValue + ")"+CR;
-            else
-		code += ","+ att.name + "(0)"+CR;
-	}	
-        return code;
-    }
+		String code = "";
+		TMLAttribute att;
+		int i;
+		ListIterator iterator = task.getAttributes().listIterator();
+		while(iterator.hasNext()) {
+			att = (TMLAttribute)(iterator.next());
+			if (att.hasInitialValue())
+				code += ","+ att.name + "(" + att.initialValue + ")"+CR;
+			else
+				code += ","+ att.name + "(0)"+CR;
+		}	
+		return code;
+	}
 	
 	private String makeAttributesDeclaration() {
-        String code = "";
-        TMLAttribute att;
-        int i;
-        
-        ListIterator iterator = task.getAttributes().listIterator();
-        
-        while(iterator.hasNext()) {
-            att = (TMLAttribute)(iterator.next());
-            //code += TMLType.getStringType(att.type.getType()) + " " + att.name;
-		code += "int " + att.name;
-            code += ";\n";
-        }
-        
-	// Attributes for events
-	//code += "unsigned int arg__evt0" + SCCR;
-	//code += "unsigned int arg__evt1" + SCCR;
-	//code += "unsigned int arg__evt2" + SCCR;	
-		
-	//Adding request arguments
-        //if (task.isRequested()) {
-	//		code += "unsigned int arg1__req" + SCCR;
-	//		code += "unsigned int arg2__req" + SCCR;
-	//		code += "unsigned int arg3__req" + SCCR;	
-        //}
-		
-	code += "int rnd__0" + SCCR;
-	//if (commentNum!=0) code+= "std::string _comment[" + commentNum + "]" + SCCR;	
-        return code;
-    }
+		String code = "";
+		TMLAttribute att;
+		int i;
+		ListIterator iterator = task.getAttributes().listIterator();
+		while(iterator.hasNext()) {
+			att = (TMLAttribute)(iterator.next());
+			//code += TMLType.getStringType(att.type.getType()) + " " + att.name;
+			code += "int " + att.name;
+			code += ";\n";
+		}		
+		code += "int rnd__0" + SCCR;
+		return code;
+	}
 	
 
-    public String addSemicolonIfNecessary(String _input) {
-        String code1 = _input.trim();
-        if (!(code1.endsWith(";"))) {
-            code1 += ";";
-        }
-        return code1;
-    }
+	private String addSemicolonIfNecessary(String _input) {
+		String code1 = _input.trim();
+		if (!(code1.endsWith(";"))) {
+		code1 += ";";
+		}
+		return code1;
+	}
 
-    public String modifyString(String _input) {
-        //System.out.println("Modify string=" + _input);
-        _input = Conversion.changeBinaryOperatorWithUnary(_input, "div", "/");
-        _input = Conversion.changeBinaryOperatorWithUnary(_input, "mod", "%");
-        //System.out.println("Modified string=" + _input);
-        return _input;
-    }
-      
+	private String modifyString(String _input) {
+		_input = Conversion.changeBinaryOperatorWithUnary(_input, "div", "/");
+		_input = Conversion.changeBinaryOperatorWithUnary(_input, "mod", "%");
+        	return _input;
+	}
+
 }

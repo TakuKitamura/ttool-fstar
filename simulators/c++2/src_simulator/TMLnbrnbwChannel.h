@@ -47,26 +47,25 @@ Ludovic Apvrille, Renaud Pacalet
 class TMLCommand;
 class Bus;
 
-///This class models a non blocking read non blocking write channel (memory).
+///This class models a non blocking read non blocking write channel.
 class TMLnbrnbwChannel:public TMLChannel{
 public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLnbrnbwChannel(std::string iName,Bus* iBus);
+	TMLnbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();
 	bool read();
-	//void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString();
 protected:
-	////Determines the virtual length of read and write transactions based on the state of the channel
-	//void setTransactionLength();
 };
 
 #endif

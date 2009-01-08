@@ -54,21 +54,20 @@ public:
     	/**
       	\param iName Name of the CPU
 	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one execi unit
+	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
+	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
 	\param iPipelineSize Pipeline size
 	\param iTaskSwitchingCycles Task switching penalty in cycles
 	\param iBranchingMissrate Branching prediction miss rate in %
 	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
+	\param ibyteDataSize Machine word length
     	*/
 	CPUPB(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
 	~CPUPB();
-	
 	void schedule();
-	void registerTransaction(TMLTransaction* iTrans);
-	void addTransaction();
-
+	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
 protected:
 };
 

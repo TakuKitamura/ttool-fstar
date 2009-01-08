@@ -42,32 +42,22 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLCommandH
 
 #include <definitions.h>
+#include <Serializable.h>
 
 class TMLTransaction;
 class TMLTask;
 class TMLChannel;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
-class TMLCommand{
+class TMLCommand: public Serializable{
 public:
 	///Constructor
     	/**
       	\param iTask Pointer to the task the command belongs to
-	\param icLength Constant virtual length of the command
+	\param iLength Virtual length of the command
 	\param iParam Pointer to a parameter data structure
     	*/
-	//TMLCommand(TMLTask* iTask, TMLLength icLength, Parameter* iParam);
-	//TMLCommand(TMLTask* iTask, const TMLLength& icLength,Parameter<ParamType>* iParam);
 	TMLCommand(TMLTask* iTask, TMLLength iLength,Parameter<ParamType>* iParam);
-	
-	/*///Constructor
-    	/**
-      	\param iTask Pointer to the task the command belongs to
-	\param ipLength Pointer to the virtual length of the command
-	\param iParam Pointer to a parameter data structure
-    	*/
-	//TMLCommand(TMLTask* iTask, TMLLength* ipLength,Parameter* iParam);
-	//TMLCommand(TMLTask* iTask, TMLLength& ipLength,Parameter<ParamType>* iParam);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -75,7 +65,7 @@ public:
       	\return True if there was a transaction to prepare
 	\sa prepareNextTransaction()
 	*/
-	bool prepare();
+	TMLCommand* prepare();
 	///Updates the inner state of the command as well as the state of all dependent objects (channel, bus,...)
 	virtual void execute()=0;
 	///Assigns a value to the pointer referencing the array of next commands
@@ -106,7 +96,7 @@ public:
 	virtual TMLChannel* getChannel() const;
 	///Indicates if the channel can be determined
 	/**
-	\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a 	nullpointer returned by getChannel() indicates that the channel cannot be determined
+	\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a nullpointer returned by getChannel() indicates that the channel cannot be determined
 	\sa getChannel()
 	*/
 	virtual bool channelUnknown();
@@ -125,14 +115,21 @@ public:
 	\return Short string representation
 	*/
 	virtual std::string toShortString()=0;
+	///Returns a short string representation of the command type
+	/**
+	\return Short string representation of command type
+	*/
 	virtual std::string getCommandStr()=0;
+	///Translates a comment into a readable string
+	/**
+	\param iCom Pointer to comment
+	\return Sring representation of the comment
+	*/
 	virtual std::string getCommentString(Comment* iCom);
-	
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 protected:
-	///Pointer to the variable length of the command
-	//TMLLength* _pLength;
-	///Constant length of the command
-	//TMLLength _cLength;
+	///Length of the command
 	TMLLength _length;
 	///Progress of the command (in execution units)
 	TMLLength _progress;
@@ -154,7 +151,7 @@ protected:
 	\return True if there was a transaction to prepare
 	\sa prepare()
 	*/
-	virtual bool prepareNextTransaction()=0;
+	virtual TMLCommand* prepareNextTransaction()=0;
 };
 
 #endif

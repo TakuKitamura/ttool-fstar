@@ -157,6 +157,13 @@ public class TMLMapping {
 		 }
 		 return false;
 	}
+
+	/*public boolean isChannelMappedOn(TMLElement _channel, HwCommunicationNode _node) {
+		 for(int i=0; i<oncommnodes.size(); i++) {
+			 if (oncommnodes.get(i) == _node && mappedcommelts.get(i) == _channel) return true;
+		 }
+		 return false;
+	}*/
 	
 	public boolean oneTaskMappedOn(TMLRequest _request, HwNode _node) {
 		TMLTask task;
@@ -208,6 +215,16 @@ public class TMLMapping {
 		if (!optimized) {
 			optimized = true;
 			list.addAll(tmlm.optimize());
+		}
+		return list;
+	}
+
+	public LinkedList<HwCommunicationNode> findNodesForElement(TMLElement _elementToFind){
+		LinkedList<HwCommunicationNode> list = new LinkedList<HwCommunicationNode>();
+		int index=0;
+		for(TMLElement tmlelem: mappedcommelts) {
+			if (tmlelem == _elementToFind) list.add(oncommnodes.get(index));
+			index++;
 		}
 		return list;
 	}

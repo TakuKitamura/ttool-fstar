@@ -40,7 +40,19 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLStateChannel.h>
 
-TMLStateChannel::TMLStateChannel(std::string iName,Bus *iBus,TMLLength iContent):TMLChannel(iName,iBus),_content(iContent),_writeTrans(0),_readTrans(0),_nbToWrite(0),_nbToRead(0){
+TMLStateChannel::TMLStateChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0){
 }
 
 TMLStateChannel::~TMLStateChannel(){}
+
+std::ostream& TMLStateChannel::writeObject(std::ostream& s){
+	TMLChannel::writeObject(s);
+	WRITE_STREAM(s,_content);
+	return s;
+}
+
+std::istream& TMLStateChannel::readObject(std::istream& s){
+	TMLChannel::readObject(s);
+	READ_STREAM(s,_content);
+	return s;
+}

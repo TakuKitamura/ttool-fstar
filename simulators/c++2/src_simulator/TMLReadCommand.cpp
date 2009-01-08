@@ -46,37 +46,37 @@ Ludovic Apvrille, Renaud Pacalet
 
 TMLReadCommand::TMLReadCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iTask,1,0),_lengthFunc(iLengthFunc), _channel(iChannel){
 }
-//TMLReadCommand::TMLReadCommand(TMLTask* iTask, const TMLLength& iLength, TMLChannel* iChannel): TMLCommand(iTask,iLength,0), _channel(iChannel){
-//	std::cout << "const read called" << std::endl;
-//}
-
-//TMLReadCommand::TMLReadCommand(TMLTask* iTask, TMLLength& iLength, TMLChannel* iChannel): TMLCommand(iTask, iLength,0), _channel(iChannel){
-//	std::cout << "variable read called" << std::endl;
-//}
 
 void TMLReadCommand::execute(){
 	_channel->read();
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
-	//_currTransaction=0;
-#ifdef BUS_ENABLED
-	Bus* bus=_channel->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLReadCommand::prepareNextTransaction(){
+TMLCommand* TMLReadCommand::prepareNextTransaction(){
 	//std::cout << "ReadCommand prepare" << std::endl;
 	//std::cout << "length of read: "<< *_pLength << std::endl;
-	//_currTransaction=new TMLTransaction(this, _progress,(*_pLength)-_progress, _task->getEndLastTransaction(), _channel);
-	if (_progress==0) _length = (_task->*_lengthFunc)();
-	_currTransaction=new TMLTransaction(this, _progress, _length-_progress, _task->getEndLastTransaction(), _channel);
+	//if (_progress==0) _length = (_task->*_lengthFunc)();
+
+	//new test code
+	if (_progress==0){
+		 _length = (_task->*_lengthFunc)();
+		if (_length==0){
+			TMLCommand* aNextCommand=getNextCommand();
+			_task->setCurrCommand(aNextCommand);
+			if (aNextCommand!=0) return aNextCommand->prepare();
+		}
+	}
+
+	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test read" << std::endl;
 	_channel->testRead(_currTransaction);
 	//std::cout << "ReadCommand end prepare" << std::endl;
-	return true;
+	return this;
 }
 
 TMLTask* TMLReadCommand::getDependentTask() const{

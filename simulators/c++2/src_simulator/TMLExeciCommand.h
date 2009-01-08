@@ -45,57 +45,26 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 
 
-///This class models a delay due to calculating time within a TML tasks.
+///This class models the computational complexity of an algorithm
 class TMLExeciCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
       	\param iTask Pointer to the task the command belongs to
-	\param iLength Constant virtual length of the command
-	\param iMaxDelay Constant maximal delay for Execi Interval commands 
+	\param iLengthFunc Pointer to the function returning the length of the command
+	\param iType Exec Type (ExecI, ExecC,...) 
     	*/
-	//TMLExeciCommand(TMLTask* iTask, const TMLLength& iLength);
-	//TMLExeciCommand(TMLTask* iTask, const TMLLength& iMinLen, const TMLLength& iMaxLen, unsigned int iType);
 	TMLExeciCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType);
-	/*///Constructor
-    	/**
-      	\param iTask Pointer to the task the command belongs to
-	\param iLength Constant virtual length of the command
-	\param iMaxDelay Maximal delay for Execi Interval commands 
-    	*/
-	//TMLExeciCommand(TMLTask* iTask, const TMLLength& iMinLen, TMLLength& iMaxLen, unsigned int iType);
-	/*///Constructor
-    	/**
-      	\param iTask Pointer to the task the command belongs to
-	\param iLength Virtual length of the command
-	\param iMaxDelay Constant maximal delay for Execi Interval commands
-    	*/
-	//TMLExeciCommand(TMLTask* iTask, TMLLength& iLength);
-	//TMLExeciCommand(TMLTask* iTask, TMLLength& iMinLen, const TMLLength& iMaxLen, unsigned int iType);
-	/*///Constructor
-    	/**
-      	\param iTask Pointer to the task the command belongs to
-	\param iLength Virtual length of the command
-	\param iMaxDelay Maximal delay for Execi Interval commands
-    	*/
-	//TMLExeciCommand(TMLTask* iTask, TMLLength& iMinLen, TMLLength& iMaxLen, unsigned int iType);
 	void execute();
 	TMLTask* getDependentTask() const;
 	std::string toString();
 	std::string toShortString();
 	std::string getCommandStr();
 protected:
-	bool prepareNextTransaction();
-	///Pointer to the variable maximal length
-	//TMLLength* _pMaxLen;
-	///Constant value of the maximal length
-	//TMLLength _cMaxLen;
-	///Pointer to the variable maximal length
-	//TMLLength* _pMinLen;
-	///Constant value of the maximal length
-	//TMLLength _cMinLen;
-	///Type of exec command (execi, execc)
+	TMLCommand* prepareNextTransaction();
+	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;
+	///Type of command: EXECI, EXECC
 	unsigned int _type;
 };
 

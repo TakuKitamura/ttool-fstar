@@ -51,11 +51,11 @@ public:
 	///Constructor
     	/**
       	\param iCommand Pointer to the command the transaction belongs to
-	\param iVirtualStartTime Virtual start time of the transaction
 	\param iVirtualLength Virtual length of the transaction
 	\param iRunnableTime Time when the transaction became runnable
+	\param iChannel Channel on which data was conveyed
     	*/
-	TMLTransaction(TMLCommand* iCommand,TMLLength iVirtualStartTime, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel=0);
+	TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel=0);
 	///Returns the time when the transaction became runnable
 	/**
       	\return Runnable time
@@ -81,11 +81,6 @@ public:
       	\param iStartTime Start time
     	*/
 	void setStartTime(TMLTime iStartTime);
-	///Returns the virtual start time of the transaction (number of execution units already carried out by previous transactions)
-	/**
-      	\return Virtual start time
-    	*/
-	TMLLength getVirtualStartTime() const;
 	///Returns the length of the operational part of the transaction
 	/**
       	\return Length of the operational part
@@ -170,28 +165,24 @@ public:
 	\return Short string representation
 	*/
 	std::string toShortString();
+	///Set channel on which data was conveyed
+	/**
+	\param iChannel Pointer to a channel
+	*/
 	void setChannel(TMLChannel* iChannel);
+	///Get channel on which data was conveyed
+	/**
+	\return Pointer to channel
+	*/
 	TMLChannel* getChannel();
 	
-	static void * operator new(unsigned int size);//{
-		//return memPool.pmalloc(size);
-	//}
-
-	static void operator delete(void *p, unsigned int size);//{
-		//memPool.pfree(p, size);
-	//}
-	//union{
-	//	TMLChannel* _channel;		//TMLSelectCommand
-	//	TMLLength _channelContent	//TMLNotifiedCommand
-	//	unsigned int randomValue	//random command
-	//}
+	static void * operator new(unsigned int size);
+	static void operator delete(void *p, unsigned int size);
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;
 	///Start time of the transaction
 	TMLTime _startTime;
-	///Virtual start time of the transaction (number of execution units already carried out by previous transactions)
-	TMLLength _virtualStartTime;
 	///Length of the transaction
 	TMLTime _length;
 	///Virtual length of the transaction (number of execution units of the transaction)
@@ -206,8 +197,9 @@ protected:
 	unsigned int _branchingPenalty;
 	///Task terminated flag
 	bool _terminated;
-	//bool _runnableTimeSet;
+	///Channel on which data was conveyed
 	TMLChannel* _channel;
+	///Memory pool for transactions
 	static Pool<TMLTransaction> memPool;
 };
 

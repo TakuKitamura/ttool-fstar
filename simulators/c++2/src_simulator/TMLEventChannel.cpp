@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLEventChannel.h>
 
-TMLEventChannel::TMLEventChannel(std::string iName,Bus *iBus,TMLLength iContent):TMLStateChannel(iName,iBus,iContent){
+TMLEventChannel::TMLEventChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent){
 }
 
 TMLLength TMLEventChannel::getContent(){
@@ -51,4 +51,28 @@ bool TMLEventChannel::getRequestChannel(){
 	return false;
 }
 
+std::ostream& TMLEventChannel::writeObject(std::ostream& s){
+	ParamQueue::iterator i;
+	TMLStateChannel::writeObject(s);
+	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+		(*i)->writeObject(s, (unsigned int)_writeTask);
+	}
+	//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
+	return s;
+}
 
+std::istream& TMLEventChannel::readObject(std::istream& s){
+	TMLLength aParamNo;
+	ParamQueue::iterator i;
+	Parameter<ParamType>* aNewParam;
+	TMLStateChannel::readObject(s);
+	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+		delete (*i);
+	}
+	_paramQueue.clear();
+	for(aParamNo=0; aParamNo < _content; aParamNo++){
+		aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
+		_paramQueue.push_back(aNewParam);
+	}
+	return s;
+}

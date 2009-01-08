@@ -78,6 +78,16 @@ public class NCStructure extends NCElement {
 		return null;
 	}
 	
+	public NCLinkedElement getNCEquipmentByName(String _name) {
+		for(NCEquipment eq: equipments) {
+			if (eq.getName().equals(_name)) {
+				return eq;
+			}
+		}
+		
+		return null;
+	}
+	
 	public NCTraffic getTrafficByName(String name) {
 		for(NCTraffic tr: traffics) {
 			if (tr.getName().equals(name)) {
@@ -221,6 +231,16 @@ public class NCStructure extends NCElement {
 				}
 			}
 		}
+		return null;
+	}
+	
+	public NCLink getLinkWith(NCLinkedElement le) {
+		for(NCLink link: links) {
+			if ((link.le1 == le) || (link.le2 == le)) {
+				return link;
+			}
+		}
+		
 		return null;
 	}
 	

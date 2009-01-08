@@ -42,7 +42,34 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventBChannel::TMLEventBChannel(std::string iName, Bus *iBus, TMLLength iContent, bool iRequestChannel):TMLEventChannel(iName, iBus, iContent), _requestChannel(iRequestChannel){
+TMLEventBChannel::TMLEventBChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+	if (_sourceIsFile){
+		//std::cout << "new vv" << std::endl;
+		_eventFile = new std::ifstream(_name.c_str());
+		readNextEvents();
+	}
+}
+
+TMLEventBChannel::~TMLEventBChannel(){
+	if (_eventFile!=0){
+		if (_eventFile->is_open()) _eventFile->close();
+		delete _eventFile;
+	}
+}
+
+void TMLEventBChannel::readNextEvents(){
+	//std::cout << "vv" << std::endl;
+	if (_eventFile->is_open()){
+		int i=0;
+		Parameter<ParamType>* aNewParam;
+		while (++i<NO_EVENTS_TO_LOAD && !_eventFile->eof()){
+		//while (++i<2 && !_eventFile->eof()){
+			_content++;
+			aNewParam = new Parameter<ParamType>(0,0,0);
+			*_eventFile >> *aNewParam;
+			_paramQueue.push_back(aNewParam);
+		}
+	}
 }
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
@@ -56,12 +83,6 @@ void TMLEventBChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLEventBChannel::write(){
-	/*_content++;
-	_paramQueue.push_back(_writeTrans->getCommand()->getParam());
-	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
-		_readTrans->setRunnableTime(_writeTrans->getEndTime());
-		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
-	}*/
 	write(_writeTrans);	
 	_writeTrans=0;
 }
@@ -81,6 +102,7 @@ bool TMLEventBChannel::read(){
 		return false;
 	}else{
 		_content--;
+		if (_content==0 && _sourceIsFile) readNextEvents();
 		pRead=_readTrans->getCommand()->getParam();
 		pWrite=_paramQueue.front();
 		if (pRead!=0 && pWrite!=0) *pRead=*pWrite;

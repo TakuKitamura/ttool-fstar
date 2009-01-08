@@ -44,34 +44,34 @@ Ludovic Apvrille, Renaud Pacalet
 unsigned int TMLTask::_id=0;
 unsigned int Bus::_id=0;
 unsigned int CPU::_id=0;
+TMLTime SchedulableDevice::_simulatedTime=0;
 
-TMLTransaction* getTransLowestEndTime(CPUList& iCPUlist, CPU*& oCPU){
-	CPUList::iterator i;
+TMLTransaction* getTransLowestEndTime(SchedulingList& iSchedList, SchedulableDevice*& oResultDevice){
+	SchedulingList::iterator i;
 	TMLTransaction *aMarker=0, *aTempTrans;
 	TMLTime aLowestTime=-1;
-	CPU* tempCPU;
+	SchedulableDevice* aTempDevice;
 	//static unsigned int aTransitionNo=0;
-	for(i=iCPUlist.begin(); i != iCPUlist.end(); ++i){
-		tempCPU=*i;
-		aTempTrans=tempCPU->getNextTransaction();	
+#ifdef DEBUG_KERNEL
+	std::cout << "kernel:getTLET: before loop" << std::endl;
+#endif
+	for(i=iSchedList.begin(); i != iSchedList.end(); ++i){
+		aTempDevice=*i;
+		aTempTrans=aTempDevice->getNextTransaction();	
 		if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){	
-			//std::cout << tempCPU->toString() << " has trans\n";
+#ifdef DEBUG_KERNEL
+			std::cout << "kernel:getTLET: transaction found on " << aTempDevice->toString() << ": " << aTempTrans->toString() << std::endl;
+#endif
 			if (aTempTrans->getEndTime() < aLowestTime){		
 				aMarker=aTempTrans;
 				aLowestTime=aTempTrans->getEndTime();
-				oCPU=tempCPU;
+				oResultDevice=aTempDevice;
 			}
 		}
+#ifdef DEBUG_KERNEL
+		else std::cout << "kernel:getTLET: no transaction found on " << aTempDevice->toString() << std::endl;
+#endif
 	}
-	/*std::ostringstream outp;
-	if (aMarker!=0){
-		outp << "(" << aTransitionNo << ",\"i(" << oCPU->toString() << "__" << aMarker->getCommand()->getTask()->toString() << "__" << aMarker->getCommand()->getCommandStr();
-		if (aMarker->getChannel()!=0)
-			outp << "__" << aMarker->getChannel()->toShortString();
-		outp << ")\"," << ++aTransitionNo << ")";
-		//std::cout << "des (0, " << aTransitionNo << ", " << aTransitionNo+1 << ")" << std::endl << outp.str() << std::endl;
-		for (unsigned int i=0; i<aMarker->getVirtualLength(); i++) std::cout << outp.str() << std::endl;
-	}*/
 	return aMarker; 
 }
 
@@ -122,8 +122,27 @@ void schedule2Graph(CPUList& iCPUlist, int iLen, char** iArgs){
 
 }
 
-void schedule2HTML(CPUList& iCPUlist,BusList& iBusList, int iLen, char** iArgs){
-	CPUList::iterator i;
+void schedule2TXT(SchedulingList& iSchedList, int iLen, char** iArgs){
+	SchedulingList::iterator i;
+	struct timeval aBegin,aEnd;
+	gettimeofday(&aBegin,NULL);
+	std::string aFilename(getArgs(iLen, iArgs, "-otxt", "scheduling.txt"));
+	if (aFilename.empty()) return;
+	std::ofstream myfile (aFilename.c_str());
+	if (myfile.is_open()){
+		for(i=iSchedList.begin(); i != iSchedList.end(); ++i){
+			(*i)->schedule2TXT(myfile);
+		}
+		myfile.close();
+	}
+	else
+		std::cout << "Unable to open text output file" << std::endl;
+	gettimeofday(&aEnd,NULL);
+	std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << aFilename << std::endl;
+}
+
+void schedule2HTML(SchedulingList& iSchedList,BusList& iBusList, int iLen, char** iArgs){
+	SchedulingList::iterator i;
 	BusList::iterator j;
 	struct timeval aBegin,aEnd;
 	std::string helpNeeded(getArgs(iLen, iArgs, "-help", "help"));
@@ -134,8 +153,8 @@ void schedule2HTML(CPUList& iCPUlist,BusList& iBusList, int iLen, char** iArgs){
 	std::ofstream myfile (aFilename.c_str());
 	if (myfile.is_open()){
 		myfile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-		myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<title>Scheduling</title>\n</head>\n<body>\n";		
-		for(i=iCPUlist.begin(); i != iCPUlist.end(); ++i){
+		myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n<title>Scheduling</title>\n</head>\n<body>\n";		
+		for(i=iSchedList.begin(); i != iSchedList.end(); ++i){
 			(*i)->schedule2HTML(myfile);
 		}
 		for(j=iBusList.begin(); j != iBusList.end(); ++j){
@@ -173,6 +192,7 @@ void schedule2VCD(TraceableDeviceList& iVcdList, int iLen, char** iArgs){
 		myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniels TML simulator\n$end\n\n";
 		myfile << "$timescale\n1 ns\n$end\n\n$scope module Simulation $end\n";
 		for (i=iVcdList.begin(); i!= iVcdList.end(); ++i){
+			//std::cout << "device: " << (*i)->toString() << std::endl;
 			myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
 			aTime = (*i)->getNextSignalChange(true, aSigString, aNoMoreTrans);
 			aQueue.push(new SignalChangeData(aSigString, aTime, (aNoMoreTrans)?0:(*i)));
@@ -201,10 +221,12 @@ void schedule2VCD(TraceableDeviceList& iVcdList, int iLen, char** iArgs){
 			if (actDevice!=0) aQueue.push(new SignalChangeData(aSigString, aTime, (aNoMoreTrans)?0:actDevice));
     		}
 		myfile << "#" << aCurrTime+1 << "\n";
+		std::cout << "Simulated cycles: " << aCurrTime << std::endl;
 		for (i=iVcdList.begin(); i!= iVcdList.end(); ++i){
 			myfile << "r4 " << (*i)->toShortString() << "\n";
+			//std::cout << "Utilization of component " << (*i)->toString() << ": " << ((float)(*i)->getBusyCycles()) / ((float)aCurrTime) << std::endl;
 		}
-		std::cout << "Simulated cycles: " << aCurrTime << std::endl;
+
 		myfile.close();
 	}
 	else
@@ -214,65 +236,98 @@ void schedule2VCD(TraceableDeviceList& iVcdList, int iLen, char** iArgs){
 
 }
 
-inline void scheduleCPUBus(CPUList& iCPUlist,BusList& iBusList){
-	for_each(iCPUlist.begin(), iCPUlist.end(),std::mem_fun(&CPU::schedule));
-	for_each(iBusList.begin(), iBusList.end(),std::mem_fun(&Bus::schedule));
-}
+//inline void scheduleCPUBus(SchedulingList& iSchedList,BusList& iBusList){
+//	for_each(iSchedList.begin(), iSchedList.end(),std::mem_fun(&SchedulableDevice::schedule));
+//	for_each(iBusList.begin(), iBusList.end(),std::mem_fun(&SchedulableCommDevice::schedule));
+//}
 
-inline void scheduleCPUBus(CPU* iCPU,BusList& iBusList){
-	iCPU->schedule();
-	for_each(iBusList.begin(), iBusList.end(),std::mem_fun(&Bus::schedule));
-}
+//inline void scheduleCPUBus(SchedulableDevice* iDevice,BusList& iBusList){
+//	iDevice->schedule();
+//	for_each(iBusList.begin(), iBusList.end(),std::mem_fun(&SchedulableCommDevice::schedule));
+//}
 
-void simulate(CPUList& cpulist, BusList& buslist){
+void simulate(SchedulingList& iSchedList, BusList& buslist){
 	TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
 	TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
 	TMLTask* depTask;
-	CPU* cpuLET,*depCPU;
+	SchedulableDevice* cpuLET;
+	CPU* depCPU;
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-	scheduleCPUBus(cpulist,buslist);
-	transLET=getTransLowestEndTime(cpulist,cpuLET);
-	while (transLET!=0){	
+#ifdef DEBUG_KERNEL
+	std::cout << "kernel:simulate: first schedule" << std::endl;
+#endif
+	for_each(iSchedList.begin(), iSchedList.end(),std::mem_fun(&SchedulableDevice::schedule));
+	transLET=getTransLowestEndTime(iSchedList,cpuLET);
+	while (transLET!=0){
+#ifdef DEBUG_KERNEL
+		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
+#endif
 		commandLET=transLET->getCommand();
-		//std::cout << "Execute " << commandLET->toString() << " next Trans:" << commandLET->getCurrTransaction() << " commandLET:" << commandLET << std::endl;
-		commandLET->execute();
-		//std::cout << "Add" << std::endl;
-		cpuLET->addTransaction();
-		commandLET->getTask()->addTransaction(transLET);
-		//std::cout << "Schedule" << std::endl;
-		scheduleCPUBus(cpuLET,buslist);	
-		//std::cout << "huge IF" << std::endl;
-		depTask=commandLET->getDependentTask();
-		if (depTask!=0){
-		 depCPU=depTask->getCPU();			
-		 if (depCPU!=cpuLET){								//tasks running on different CPUs
-		  depCommand=depTask->getCurrCommand();
-		  if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || depCommand->channelUnknown())){ //commands accessing the same channel
-		   depTransaction=depCommand->getCurrTransaction();
-		   if (depTransaction!=0 && depTransaction->getVirtualLength()!=0){		//dependent task has a current transaction and is not blocked any more
-		    depCPUnextTrans=depCPU->getNextTransaction();
-		    if (depCPUnextTrans!=0){							//there is a transaction scheduled on depCPU
-		     depCPUnextCommand=depCPUnextTrans->getCommand();
-		     if (depCPUnextCommand->getTask()!=depTask){				//dependent task is not yet scheduled
-			//if (depCPUnextCommand->truncateTransactionAt(transLET->getEndTime())!=0){
+#ifdef DEBUG_KERNEL
+		std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
+#endif
+		if (cpuLET->addTransaction()){
+#ifdef DEBUG_KERNEL
+		 std::cout << "kernel:simulate: invoke on executing CPU" << std::endl;
+#endif
+		 cpuLET->schedule();
+		 depTask=commandLET->getDependentTask();
+		 if (depTask!=0){
+#ifdef DEBUG_KERNEL
+		  std::cout << "kernel:simulate: dependent Task found" << std::endl;
+#endif
+		  depCPU=depTask->getCPU();			
+		  if (depCPU!=cpuLET){
+#ifdef DEBUG_KERNEL
+		   std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
+#endif
+		   depCommand=depTask->getCurrCommand();
+		   if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || depCommand->channelUnknown())){
+#ifdef DEBUG_KERNEL
+		    std::cout << "kernel:simulate: commands are accessing the same channel" << std::endl;
+#endif
+		    depTransaction=depCommand->getCurrTransaction();
+		    if (depTransaction!=0 && depTransaction->getVirtualLength()!=0){
+#ifdef DEBUG_KERNEL
+		     std::cout << "kernel:simulate: dependent task has a current transaction and is not blocked any more" << std::endl;
+#endif
+		     depCPUnextTrans=depCPU->getNextTransaction();
+		      if (depCPUnextTrans!=0){
+#ifdef DEBUG_KERNEL
+		      std::cout << "kernel:simulate: transaction scheduled on dependent CPU" << std::endl;
+#endif
+		       depCPUnextCommand=depCPUnextTrans->getCommand();
+		       if (depCPUnextCommand->getTask()!=depTask){
+#ifdef DEBUG_KERNEL
+ 			std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
+#endif
 			if (depCPU->truncateNextTransAt(transLET->getEndTime())!=0){
-				depCPUnextCommand->execute();
+#ifdef DEBUG_KERNEL
+				std::cout << "kernel:simulate: dependent transaction truncated" << std::endl;
+#endif
 				depCPU->addTransaction();
-				depCPUnextCommand->getTask()->addTransaction(depCPUnextTrans);
 			}
-			//std::cout << "Schedule within big IF" << std::endl;
-			scheduleCPUBus(depCPU,buslist);
+#ifdef DEBUG_KERNEL
+			std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
+#endif
+			depCPU->schedule();
+		      }
+		     }else{
+#ifdef DEBUG_KERNEL
+			std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
+#endif
+			depCPU->schedule();
 		     }
-		    }else{
-			//std::cout << "Schedule within small if" << std::endl;
-		     scheduleCPUBus(depCPU,buslist);
 		    }
 		   }
 		  }
 		 }
 		}
-		transLET=getTransLowestEndTime(cpulist,cpuLET);
+#ifdef DEBUG_KERNEL
+		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
+#endif
+		transLET=getTransLowestEndTime(iSchedList,cpuLET);
 	}
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
@@ -283,7 +338,6 @@ const std::string getArgs(int iLen, char** iArgs, const std::string& iComp, cons
 	while (aPosition < iLen){
 		if (iComp.compare(iArgs[aPosition])==0){
 			if (aPosition+1 < iLen && iArgs[aPosition+1][0]!='-'){
-				//std::cout << "next argument: " << std::string(iArgs[aPosition+1]) << std::endl;
 				return std::string(iArgs[aPosition+1]);
 			}else
 				return iDefault;
@@ -295,4 +349,11 @@ const std::string getArgs(int iLen, char** iArgs, const std::string& iComp, cons
 
 void printHelp(){
 	std::cout << "*****\nCommand line usage: run.x -ohtml myfile.htm -ovcd myfile.vcd\nParameters can be omitted if output is not needed, if file name is omitted the following default values will be taken instead: scheduling.htm, scheduling.vcd.\n*****\n";
+}
+
+void streamBenchmarks(std::ostream& s, TraceableDeviceList& iVcdList){
+	TraceableDeviceList::iterator i;
+	for (i=iVcdList.begin(); i!= iVcdList.end(); ++i){
+		(*i)->streamBenchmarks(s);
+	}
 }

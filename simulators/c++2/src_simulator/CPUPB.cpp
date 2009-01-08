@@ -53,17 +53,16 @@ CPUPB::~CPUPB(){
 
 void CPUPB::schedule(){
 	TaskList::iterator i;
-	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
+	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans, *aOldTransaction;
 	unsigned int aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
 	TMLTask* aTempTask;
 	for(i=_taskList.begin(); i != _taskList.end(); ++i){
 		aTempTask=*i;	
-		//std::cout << "before getCurrTransaction " << std::endl;
+		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
 		if (aTempTask->getCurrCommand()!=0){
 			aTempTrans=aTempTask->getCurrCommand()->getCurrTransaction();
 			//std::cout << "after getCurrTransaction " << std::endl;
-			//if (aTempTrans!=0){ 
 			if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
 				aRunnableTime=aTempTrans->getRunnableTime();
 				//if (aRunnableTime<=_endSchedule && aTempTrans->getVirtualLength()!=0){
@@ -85,44 +84,21 @@ void CPUPB::schedule(){
 		}
 	}
 	//_nextTransaction=(aMarkerPast==0)?aMarkerFuture:aMarkerPast;
+	aOldTransaction=_nextTransaction;
 	if (aMarkerPast==0){
 		_nextTransaction=aMarkerFuture;
-		if (aMarkerFuture==0){
-			//std::cout << _name << " no transaction found" << std::endl;
+		/*if (aMarkerFuture==0){
+			std::cout << _name << " no transaction found" << std::endl;
 		}else{
-			//std::cout << _name << " transaction in the FUTURE found" << std::endl << _nextTransaction->toString() << std::endl;
-		}
+			std::cout << _name << " transaction in the FUTURE found" << std::endl << _nextTransaction->toString() << std::endl;
+		}*/
 	}else{
 		_nextTransaction=aMarkerPast;
 		//std::cout << std::endl << _name << " transaction in the PAST found" << std::endl << _nextTransaction->toString() << std::endl;
-		
-		
 	}
-
-	if (_nextTransaction!=0){
-	//std::cout << "Scheduling decision " << _name << _nextTransaction->toString() << std::endl;
-#ifdef BUS_ENABLED
-		TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel();
-		if(aChannel==0){
-			_busNextTransaction=0;
-		}else{
-			_busNextTransaction=aChannel->getBus();
-			if (_busNextTransaction!=0) _busNextTransaction->registerTransaction(this,_nextTransaction);
-		}
-#endif		
-		calcStartTimeLength();
-	}//else
-		//std::cout << "no trans found on CPU " << _name << std::endl;
+	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _busNextTransaction!=0) _busNextTransaction->registerTransaction(0,this);
+	if (_nextTransaction!=0) calcStartTimeLength();
 }
 
-void CPUPB::registerTransaction(TMLTransaction* iTrans){
-}
-
-void CPUPB::addTransaction(){
-	_endSchedule=_nextTransaction->getEndTime();
-	//std::cout << std::endl << "** ADD on " << _name << " ** " << std::endl << _nextTransaction->toString() <<std::endl << "***" << std::endl;
-	_transactList.push_back(_nextTransaction);
-	_lastTransaction=_nextTransaction;
-	_branchMissReminder=_branchMissTempReminder;
-	_nextTransaction=0;
+void CPUPB::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
 }

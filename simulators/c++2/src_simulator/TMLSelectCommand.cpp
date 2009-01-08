@@ -76,26 +76,21 @@ void TMLSelectCommand::execute(){
 	}
 	_currTransaction->setChannel(_channel[_indexNextCommand]);
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
 #ifdef ADD_COMMENTS
-	//_task->addComment(new Comment(_task->getEndLastTransaction(), "SelectEvent result: " + _channel[_indexNextCommand]->toShortString()));
 	_task->addComment(new Comment(_task->getEndLastTransaction(), this, _indexNextCommand));
 #endif
-	//_currTransaction=0;
 	_maxChannelIndex=0;
-#if defined BUS_ENABLED && defined EVENTS_MAPPED_ON_BUS
-	Bus* bus=_channel[_indexNextCommand]->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLSelectCommand::prepareNextTransaction(){
+TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 	unsigned int i;
 	//std::cout << "SC: New transaction."<< std::endl;
-	//_currTransaction=new TMLTransaction(this,_progress,(*_pLength)-_progress,_task->getEndLastTransaction());
-	_currTransaction=new TMLTransaction(this,_progress,_length-_progress,_task->getEndLastTransaction());
+	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "SC: loop."<< std::endl;
 	for (i=0;i<_numbChannels && _maxChannelIndex==0;i++){
 		//std::cout << "SC: inner."<< i<< std::endl;
@@ -104,7 +99,7 @@ bool TMLSelectCommand::prepareNextTransaction(){
 		if (_currTransaction->getVirtualLength()!=0) _maxChannelIndex=i+1;
 	}
 	//std::cout << "Max channel index:" << _maxChannelIndex << "  virtual length:" << _currTransaction->getVirtualLength()  << std::endl;
-	return true;
+	return this;
 }
 
 TMLTask* TMLSelectCommand::getDependentTask() const{
@@ -136,7 +131,9 @@ std::string TMLSelectCommand::toString(){
 }
 
 std::string TMLSelectCommand::toShortString(){
-	return "SelectEvent";
+	std::ostringstream outp;
+	outp << _task->toString() << ": SelectEvent";
+	return outp.str();
 }
 
 std::string TMLSelectCommand::getCommandStr(){

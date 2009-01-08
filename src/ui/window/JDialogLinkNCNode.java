@@ -93,7 +93,7 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         
         myInitComponents();
         initComponents();
-        pack();
+        //pack();
 		updateComponents();
     }
     
@@ -115,8 +115,8 @@ public class JDialogLinkNCNode extends javax.swing.JDialog implements ActionList
         
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
-        panel1.setBorder(new javax.swing.border.TitledBorder("Setting idenfier and capacity "));
-        panel1.setPreferredSize(new Dimension(350, 250));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Id, capacity, parameter"));
+        panel1.setPreferredSize(new Dimension(450, 450));
         
         // first line panel1
         c1.gridwidth = 1;

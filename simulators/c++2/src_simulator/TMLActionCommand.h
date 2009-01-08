@@ -63,7 +63,7 @@ public:
 protected:
 	///Member function pointer to the action function
 	ActionFuncPointer _actionFunc;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

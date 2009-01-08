@@ -66,7 +66,7 @@ protected:
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
 	TMLCommand* getNextCommand() const;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

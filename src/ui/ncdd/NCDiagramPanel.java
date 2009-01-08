@@ -210,6 +210,23 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
         return ll;
     }
 	
+	public NCEqNode getNCENodeByName(String _name) {
+		LinkedList ll = new LinkedList();
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof NCEqNode) {
+                if (((NCEqNode)tgc).getNodeName().equals(_name)) {
+					return ((NCEqNode)tgc);
+				}
+            }
+        }
+        
+        return null;
+	}
+	
 	public LinkedList getListOfSwitchNode() {
         LinkedList ll = new LinkedList();
         TGComponent tgc;

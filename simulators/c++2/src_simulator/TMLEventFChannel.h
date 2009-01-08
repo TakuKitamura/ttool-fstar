@@ -53,11 +53,13 @@ public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLEventFChannel(std::string iName,Bus *iBus,TMLLength iLength,TMLLength iContent);
+	TMLEventFChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();
@@ -67,8 +69,6 @@ public:
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString();
 protected:
-	//Determines the virtual length of read and write transactions based on the state of the channel
-	//void setTransactionLength();
 	///Length of the channel
 	TMLLength _length;
 };

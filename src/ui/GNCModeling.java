@@ -86,6 +86,7 @@ public class GNCModeling  {
 			addTraffics();
 			addLinks();
 			addPaths();
+			manageParameters();
 		}
 		
 		System.out.println("NC XML:\n" + ncs.toXML());
@@ -110,13 +111,48 @@ public class GNCModeling  {
 		ListIterator iterator = ncdp.getListOfEqNode().listIterator();
 		NCEqNode node;
 		NCEquipment eq;
+		NCConnectorNode con;
+		int cpt;
+		CheckingError ce;
+		
+		
 		
 		while(iterator.hasNext()) {
 			node = (NCEqNode)(iterator.next());
 			
-			eq = new NCEquipment();
-			eq.setName(node.getName());
-			ncs.equipments.add(eq);
+			// Find the only interface of that Equipment
+			// If more than one interface -> error
+			/*ArrayList<NCConnectorNode> cons = ncdp.getConnectorOfEq(node);
+			
+			if (cons.size() == 0) {
+				ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Equipment " + node.getName() + " has non interface ans so not traffic can be sent over the network");
+				ce.setTDiagramPanel(ncdp);
+				ce.setTGComponent(node);
+				warnings.add(ce);
+				return;
+			}
+			
+			if (cons.size() > 1) {
+				ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Equipment: " + node.getName() + " has more than one interface");
+				ce.setTDiagramPanel(ncdp);
+				ce.setTGComponent(node);
+				checkingErrors.add(ce);
+				return;
+			}
+			
+			con = cons.get(0);*/
+			
+			/*if ((con.hasParameter()) && (con.getParameter() >0)) {
+				for(int i=0; i<con.getParameter(); i++) {
+					eq = new NCEquipment();
+					eq.setName(node.getName()+ "__" +i);
+					ncs.equipments.add(eq);
+				}
+			} else {*/
+				eq = new NCEquipment();
+				eq.setName(node.getName());
+				ncs.equipments.add(eq);
+			/*}*/
 		}
 	}
 	
@@ -300,7 +336,7 @@ public class GNCModeling  {
 	}
 	
 	private void addPaths() {
-		 System.out.println("Adding paths");
+		System.out.println("Adding paths");
 		// Consider each traffic
 		// For each traffic, its builds a tree
 		// Then, its generates the corresponding paths
@@ -383,8 +419,8 @@ public class GNCModeling  {
 			path.setName("path" + PATH_INDEX);
 			PATH_INDEX++;
 			ncs.paths.add(path);
-		
-		// not a leaf
+			
+			// not a leaf
 		} else {
 			sw = (NCSwitchNode)(tree.getElement());
 			TreeCell next = new TreeCell();
@@ -463,9 +499,9 @@ public class GNCModeling  {
 				checkingErrors.add(ce);
 				return -1;
 			}
-	   }
-	   
-	   // Good tree!
+		}
+		
+		// Good tree!
 		return 1;
 	}
 	
@@ -601,7 +637,7 @@ public class GNCModeling  {
 									buildTreeFromSwitch(root, cell, ncsn, nextArriving, arti);
 									//System.out.println("Ending adding a switch: " + ncsn.getNodeName());
 								}
-							//}
+								//}
 						}
 					}
 				}
@@ -612,5 +648,115 @@ public class GNCModeling  {
 		
 		return 0;
 	}
-    
+	
+	public void manageParameters() {
+		ListIterator iterator;
+		NCEqNode node1, node2;
+		ArrayList<NCConnectorNode> cons1, cons2;
+		NCConnectorNode con1, con2;
+		int i;
+		int parameter1, parameter2;
+		NCEquipment nceq1, nceq2;
+		CheckingError ce;
+		NCTraffic tr1;
+		NCPath path1;
+		NCLink link1, link2, link11, link22;
+		
+		//ArrayList<NCEquipment> newEquipments = new ArrayList<NCEquipment>();
+		ArrayList<NCTraffic> newTraffics = new ArrayList<NCTraffic>();
+		ArrayList<NCLink> newLinks = new ArrayList<NCLink>();
+		ArrayList<NCPath> newPaths = new ArrayList<NCPath>();
+		
+		ArrayList<NCEquipment> oldEquipments = new ArrayList<NCEquipment>();
+		ArrayList<NCTraffic> oldTraffics = new ArrayList<NCTraffic>();
+		ArrayList<NCLink> oldLinks = new ArrayList<NCLink>();
+		ArrayList<NCPath> oldPaths = new ArrayList<NCPath>();
+		
+		// Are there any path to duplicate?
+		for(NCPath path: ncs.paths) {
+			node1 = ncdp.getNCENodeByName(path.origin.getName());
+			node2 = ncdp.getNCENodeByName(path.destination.getName());
+			if ((node1 != null) && (node2 != null)) {
+				cons1 = ncdp.getConnectorOfEq(node1);
+				cons2 = ncdp.getConnectorOfEq(node2);
+				if ((cons1.size() == 1) && (cons2.size() == 1)) {
+					con1 = cons1.get(0);
+					con2 = cons2.get(0);
+					
+					if (con1.hasParameter() != con1.hasParameter()) {
+						ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Network structure error: parameters of links starting from " + node1.getNodeName() + " and " + node2.getNodeName() + " are not compatible");
+						ce.setTDiagramPanel(ncdp);
+						ce.setTGComponent(node1);
+						checkingErrors.add(ce);	
+					} else {
+						parameter1 = con1.getParameter();
+						parameter2 = con2.getParameter();
+						if (con1.hasParameter()) {
+							if (parameter1 != parameter2) {
+								ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Network structure error: parameters of links starting from " + node1.getNodeName() + " and " + node2.getNodeName() + " are not compatible");
+								ce.setTDiagramPanel(ncdp);
+								ce.setTGComponent(node1);
+								checkingErrors.add(ce);	
+							} else {
+								if (parameter1 < 2) {
+									ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Network structure error: parameters of links starting from " + node1.getNodeName() + " and " + node2.getNodeName() + " are not correctly set -> ignoring");
+									ce.setTDiagramPanel(ncdp);
+									ce.setTGComponent(node1);
+									warnings.add(ce);	
+								} else {
+									if (!oldEquipments.contains(path.origin)) {
+										link1 = ncs.getLinkWith(path.origin);
+										for (i=0; i<parameter1; i++) {
+											nceq1 = new NCEquipment();
+											nceq1.setName(path.origin.getName() + "__" + i);
+											ncs.equipments.add(nceq1);
+											
+											link11 = (NCLink)(link1.clone());
+											if (link11.getLinkedElement1() == path.origin) {
+												link11.setLinkedElement1(nceq1);
+											} else {
+												link11.setLinkedElement2(nceq1);
+											}
+											ncs.links.add(link11);
+										}
+										oldEquipments.add(path.origin);
+										oldLinks.add(link1);
+									}
+									
+									if (!oldEquipments.contains(path.destination)) {
+										link2 = ncs.getLinkWith(path.destination);
+										for (i=0; i<con1.getParameter(); i++) {
+											nceq2 = new NCEquipment();
+											nceq2.setName(path.destination.getName() + "__" + i);
+											ncs.equipments.add(nceq2);
+											
+											link22 = (NCLink)(link2.clone());
+											if (link22.getLinkedElement1() == path.destination) {
+												link22.setLinkedElement1(nceq2);
+											} else {
+												link22.setLinkedElement2(nceq2);
+											}
+											ncs.links.add(link22);
+										}
+										oldEquipments.add(path.destination);
+										oldLinks.add(link2);
+									}
+									
+									// Paths and traffics are duplicated
+									oldPaths.add(path);
+									oldTraffics.add(path.traffic);
+									for(i=0; i<parameter1; i++) {
+										tr1 = (NCTraffic)(path.traffic.clone());
+										tr1.setName(path.traffic.getName() + "__" + i);
+										ncs.traffics.add(tr1);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 }

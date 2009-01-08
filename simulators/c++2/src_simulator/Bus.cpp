@@ -45,80 +45,116 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLChannel.h>
 
-Bus::Bus(std::string iName, TMLLength iBurstSize, TMLTime iTimePerSample): _name(iName), _burstSize(iBurstSize), _endSchedule(0), _nextTransaction(0), schedulingNeeded(true), _timePerSample(iTimePerSample){
+Bus::Bus(std::string iName, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): _name(iName), _burstSize(iBurstSize), _nextTransaction(_transactionHash.end()), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){
 	_myid=++_id;
 	_transactList.reserve(BLOCK_SIZE);
 }
 
 Bus::~Bus(){
-}
-
-void Bus::registerMasterDevice(CPU* iMasterDev){
-	_masterDevices.push_back(iMasterDev);
+	/*BusTransPrioTab::iterator i;
+	std::cout << "Remaining transactions in list of bus " << _name << ": " << _transactionQueue.size() << "\n";
+	for (i=_transactionQueue.begin(); i!= _transactionQueue.end(); ++i){
+		std::cout << i->second->toString() << "\n" ;
+	}
+	std::cout << "added: " << add << "  removed: " << remove << "  max size: " << _transactionHash.max_size() << std::endl;*/
 }
 
 void Bus::schedule(){
-	TMLTransaction* aTransToExecute=0,*aTempTrans=0,*aFutureTrans=0;
+	TMLTransaction *aTempTrans;
 	TMLTime aTransTimeFuture=-1;
-	CPU* aCPUforTrans=0;
-	MasterDeviceList::iterator i;
-	if (!schedulingNeeded) return;
-	for (i=_masterDevices.begin(); aTransToExecute==0 && i != _masterDevices.end(); ++i){
-		aTempTrans=_transactionHash[*i];
-		if (aTempTrans!=0){
-			if (aTempTrans->getStartTimeOperation()<=_endSchedule){
-				//demand in the past
-				aTransToExecute=aTempTrans;
-				aCPUforTrans=*i;
-			}else{
-				//demand in the future
-				if (aTempTrans->getStartTimeOperation()<aTransTimeFuture){
-					aTransTimeFuture=aTempTrans->getStartTimeOperation();
-					aCPUforTrans=*i;
-					aFutureTrans=aTempTrans;
-				}
+	BusTransHashTab::iterator i, aTransToExecute=_transactionHash.end(), aFutureTrans=_transactionHash.end();
+	unsigned int aTransPrio=-1,aTempPrio;
+	for (i=_transactionHash.begin(); i != _transactionHash.end(); ++i){
+		aTempTrans=i->second;
+		if (aTempTrans->getStartTimeOperation()<=_endSchedule){
+			//demand in the past
+			aTempPrio=i->first->getBusPriority(this);
+			if (aTempPrio<aTransPrio){
+				aTransToExecute=i;
+				aTransPrio=aTempPrio;
+			}
+		}else{
+			//demand in the future
+			if (aTempTrans->getStartTimeOperation()<aTransTimeFuture){
+				aTransTimeFuture=aTempTrans->getStartTimeOperation();
+				aFutureTrans=i;
 			}
 		}
 	}
-	if (aTransToExecute==0) aTransToExecute=aFutureTrans;
-	if (aTransToExecute!=0){
+	if (aTransToExecute==_transactionHash.end()) aTransToExecute=aFutureTrans;
+	if (aTransToExecute!=_transactionHash.end()){
 		_nextTransaction=aTransToExecute;
-		_nextTransOnCPU=aCPUforTrans;
 		calcStartTimeLength();
 	}
-	schedulingNeeded=false;
+	_schedulingNeeded=false;
+#ifdef DEBUG_BUS
+	if (_nextTransaction==_transactionHash.end())
+		 std::cout << "Bus:schedule: decision of BUS " << _name << ": no transaction" << std::endl;
+	else
+		std::cout << "Bus:schedule: decision of BUS " << _name << ": " << _nextTransaction->second->toString() << std::endl;
+#endif
 }
 
-void Bus::registerTransaction(CPU* iCPU, TMLTransaction* iTrans){
-	_transactionHash.erase(iCPU);
-	_transactionHash[iCPU]=iTrans;
-	schedulingNeeded=true;
+void Bus::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
+	//std::cout << "within Bus::registerTransaction " << std::endl;
+	if (iTrans==0){
+		_transactionHash.erase(iSourceDevice);
+	}else{
+		_transactionHash[iSourceDevice]=iTrans;
+	}
+	_schedulingNeeded=true;
+#ifdef DEBUG_BUS
+	std::cout << "Bus:registerTrans: registered at bus " << _name << ": " << iTrans->toString() << std::endl;
+#endif
+	/*std::cout << "Remaining transactions in list of bus " << _name << ": " << _transactionQueue.size() << "\n";
+	for (BusMasterPrioTab::iterator i=_transactionQueue.begin(); i!= _transactionQueue.end(); ++i){
+		std::cout << i->second->toString() << "\n";
+	}*/
 }
 
-void Bus::addTransaction(){
-	_endSchedule=_nextTransaction->getEndTime();
-	_transactList.push_back(_nextTransaction);
-	_nextTransaction=0;
-	_transactionHash.erase(_nextTransOnCPU);
-	schedulingNeeded=true;
+bool Bus::addTransaction(){
+	TMLTransaction* aNextTrans=_nextTransaction->second;
+	_endSchedule = aNextTrans->getEndTime();
+	_transactList.push_back(aNextTrans);
+	_busyCycles += aNextTrans->getOperationLength();
+#ifdef DEBUG_BUS
+	std::cout << "Bus::addTrans: add trans at bus " << _name << ": " << aNextTrans->toString() << std::endl;
+#endif
+	_transactionHash.erase(_nextTransaction);
+	_nextTransaction = _transactionHash.end();
+	/*std::cout << "   size: " << _transactionQueue.size() << std::endl;
+	std::cout << "Remaining transactions in list of bus " << _name << ": " << _transactionQueue.size() << "\n";
+	for (BusTransPrioTab::iterator i=_transactionQueue.begin(); i!= _transactionQueue.end(); ++i){
+		std::cout << i->second->toString() << "\n";
+	}*/
+	_schedulingNeeded=true;
+	return true;
 }
 
 void Bus::calcStartTimeLength(){
-	_nextTransaction->setStartTime(max(((int)_endSchedule)-((int)_nextTransaction->getPenalties()),(int)_nextTransaction->getStartTime()));
-	_nextTransaction->setLength(_nextTransaction->getVirtualLength()*_timePerSample);
+	TMLTransaction* aNextTrans=_nextTransaction->second;
+	aNextTrans->setStartTime(max(((int)_endSchedule)-((int)aNextTrans->getPenalties()),(int)aNextTrans->getStartTime()));
+	//TMLTime aLength = aNextTrans->getVirtualLength()*_timePerSample;
+	//aLength = (aLength%_busWidth == 0)? aLength/_busWidth : aLength/_busWidth+1;
+	TMLTime aLength = aNextTrans->getVirtualLength();
+	aLength = (aLength%_busWidth == 0)? (aLength/_busWidth)*_timePerSample : (aLength/_busWidth + 1)*_timePerSample;
+	aNextTrans->setLength(max(aLength, aNextTrans->getOperationLength()));
+	Slave* aSlave = aNextTrans->getChannel()->getNextSlave(aNextTrans);
+	if (aSlave!=0) aSlave->CalcTransactionLength(aNextTrans);
 	//_nextTransaction->setLength(max(_endSchedule,_nextTransaction->getStartTime())-_nextTransaction->getStartTime()+_nextTransaction->getVirtualLength());
 }
 
-TMLTransaction* Bus::getNextTransaction() const{
-	return _nextTransaction;
+TMLTransaction* Bus::getNextTransaction(){
+	if (_schedulingNeeded) schedule();
+	return (_nextTransaction==_transactionHash.end())?0:_nextTransaction->second;
 }
 
 TMLLength Bus::getBurstSize() const{
 	return _burstSize;
 }
 
-unsigned int Bus::getID(){
-	return _myid;
+void Bus::truncateToBurst(TMLTransaction* iTrans) const{
+	iTrans->setVirtualLength(min(iTrans->getVirtualLength(), _burstSize));
 }
 
 std::string Bus::toString(){
@@ -162,6 +198,9 @@ void Bus::schedule2HTML(std::ofstream& myfile){
 	myfile << "</tr>\n<tr>";
 	for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
 	myfile << "</tr>\n</table>\n";
+}
+
+void Bus::schedule2TXT(std::ofstream& myfile){
 }
 
 TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
@@ -233,4 +272,13 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 			break;
 		}
 	}
+}
+
+/*unsigned int Bus::getBusyCycles(){
+	return _busyCycles;
+}*/
+
+void Bus::streamBenchmarks(std::ostream& s){
+	s << "*** Bus " << _name << " ***\n";
+	if (_simulatedTime!=0) s << "Utilization: " << ((float)_busyCycles)/((float)_simulatedTime) << std::endl;
 }

@@ -40,16 +40,17 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLbrbwChannel.h>
 #include <TMLTransaction.h>
+#include <TMLCommand.h>
 
-TMLbrbwChannel::TMLbrbwChannel(std::string iName, Bus* iBus, TMLLength iLength,TMLLength iContent):TMLStateChannel(iName,iBus,iContent),_length(iLength){
-//,_content(iContent),_writeTrans(0),_readTrans(0),_nbToWrite(0),_nbToRead(0){
+TMLbrbwChannel::TMLbrbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength,TMLLength iContent):TMLStateChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
 }
 
 void TMLbrbwChannel::testWrite(TMLTransaction* iTrans){
 	_nbToWrite=iTrans->getVirtualLength();
 	_writeTrans=iTrans;
+	//std::cout << "testWrite called by " << _writeTrans->getCommand()->toShortString() << std::endl;
 	setTransactionLength();
-	//std::cout << "TestWrite " << iLength<< " writeTrans: " << _writeTrans<< " transLen: "<< _writeTrans->getVirtualLength()<< std::endl;
+	//std::cout << "TestWrite " << iLength<< " writeTrans: " << _writeTrans<< " transLen: "<< _writeTrans->getVirtualLength()<< std::endl; 
 }
 
 void TMLbrbwChannel::testRead(TMLTransaction* iTrans){
@@ -80,37 +81,34 @@ bool TMLbrbwChannel::read(){
 	}
 }
 
-//void TMLbrbwChannel::cancelReadTransaction(){
-//	_nbToRead=0;
-//	_readTrans=0;
-//	setTransactionLength();
-//}
-
 void TMLbrbwChannel::setTransactionLength(){
 	if (_writeTrans!=0){	
 		if (_nbToRead==0){
-			_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite,_burstSize));
+			_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite));
 		}else{
 			if (_nbToRead<=_content){
 				//read could be executed right away			
-				_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite,_burstSize));
+				_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite));
 			}else{
 				//read could wake up because of write
-				_writeTrans->setVirtualLength(min(_length-_content,_nbToRead-_content,_nbToWrite,_burstSize));
+				_writeTrans->setVirtualLength(min(_length-_content,_nbToRead-_content,_nbToWrite));
 			}
 		}
 	}
 	if (_readTrans!=0){
 		if (_nbToWrite==0){
-			_readTrans->setVirtualLength(min(_content,_nbToRead,_burstSize));
+			_readTrans->setVirtualLength(min(_content,_nbToRead));
+			//std::cout << _name << ": set read trans len, no write trans, len = " << _readTrans->getVirtualLength() << std::endl;
 		}else{
 			if (_nbToWrite<=_length-_content){
 				//write could be executed right away
-				_readTrans->setVirtualLength(min(_content,_nbToRead,_burstSize));
+				_readTrans->setVirtualLength(min(_content,_nbToRead));
 			}else{
 				//write could wakeup because of read
-				_readTrans->setVirtualLength(min(_content,_nbToWrite-(_length-_content),_nbToRead,_burstSize));
+				_readTrans->setVirtualLength(min(_content,_nbToWrite-(_length-_content),_nbToRead));
 			}
+			//std::cout << _name << ": set read trans len, with write trans, len = " << _readTrans->getVirtualLength() << std::endl;
+
 		}
 	}
 }

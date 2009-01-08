@@ -48,22 +48,22 @@ class TMLCommand;
 class Bus;
 
 ///This class models a blocking read blocking write channel (finite blocking FIFO).
-//class TMLbrbwChannel:public TMLChannel{
 class TMLbrbwChannel:public TMLStateChannel{
 public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLbrbwChannel(std::string iName,Bus* iBus,TMLLength iLength,TMLLength iContent);
+	TMLbrbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
 	bool read();
-	//void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString();
@@ -72,16 +72,6 @@ protected:
 	void setTransactionLength();
 	///Length of the channel
 	TMLLength _length;
-	///Content of the channel
-	//TMLLength _content;
-	///Pointer to the transaction which attempts to write in the channel
-	//TMLTransaction* _writeTrans;
-	///Pointer to the transaction which attempts to read the channel
-	//TMLTransaction* _readTrans;
-	///Number of samples the write transaction attempts to write
-	//TMLLength _nbToWrite;
-	///Number of samples the read transaction attempts to read
-	//TMLLength _nbToRead;
 };
 
 #endif

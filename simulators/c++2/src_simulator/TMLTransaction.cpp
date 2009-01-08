@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 Pool<TMLTransaction> TMLTransaction::memPool;
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualStartTime, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _virtualStartTime(iVirtualStartTime), _length(0), _virtualLength(iVirtualLength), _command(iCommand), _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0), _terminated(false), _channel(iChannel){
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand), _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0), _terminated(false), _channel(iChannel) {
 }
 
 TMLTime TMLTransaction::getRunnableTime() const{
@@ -58,7 +58,7 @@ void TMLTransaction::setRunnableTime(TMLTime iRunnableTime){
 	//	std::cout << "ERROR: runnable time set twice\n";
 	//}else{
 		//_runnableTimeSet=true;
-	_command->getTask()->getCPU()->registerTransaction(this);
+	_command->getTask()->getCPU()->registerTransaction(this,0);
 	//}
 }
 
@@ -72,10 +72,6 @@ TMLTime TMLTransaction::getStartTimeOperation() const{
 
 void TMLTransaction::setStartTime(TMLTime iStartTime){
 	_startTime=iStartTime;
-}
-
-TMLLength TMLTransaction::getVirtualStartTime() const{
-	return _virtualStartTime;
 }
 
 TMLTime TMLTransaction::getOperationLength() const{
@@ -146,13 +142,13 @@ void TMLTransaction::setTerminatedFlag(){
 
 std::string TMLTransaction::toString(){
 	std::ostringstream outp;	
-	outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength << " vStart:" << _virtualStartTime;
+	outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
 	return outp.str();
 }
 
 std::string TMLTransaction::toShortString(){
 	std::ostringstream outp;	
-	outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << " vs:" << _virtualStartTime << ")";
+	outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
 	return outp.str();
 }
 

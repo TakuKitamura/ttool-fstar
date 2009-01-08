@@ -41,26 +41,27 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLnbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-TMLnbrnbwChannel::TMLnbrnbwChannel(std::string iName,Bus *iBus):TMLChannel(iName,iBus){
+TMLnbrnbwChannel::TMLnbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves): TMLChannel(iName, iNumberOfHops, iBuses, iSlaves){
 }
 
 void TMLnbrnbwChannel::testWrite(TMLTransaction* iTrans){
-	iTrans->setVirtualLength(min(iTrans->getVirtualLength(),_burstSize));
+	_writeTrans=iTrans;
+	iTrans->setVirtualLength(iTrans->getVirtualLength());
 }
 
 void TMLnbrnbwChannel::testRead(TMLTransaction* iTrans){
-	iTrans->setVirtualLength(min(iTrans->getVirtualLength(),_burstSize));
+	_readTrans=iTrans;
+	iTrans->setVirtualLength(iTrans->getVirtualLength());
 }
 
 void TMLnbrnbwChannel::write(){
+	_writeTrans=0;
 }
 
 bool TMLnbrnbwChannel::read(){
+	_readTrans=0;
 	return true;
 }
-
-//void TMLnbrnbwChannel::cancelReadTransaction(){
-//}
 
 TMLTask* TMLnbrnbwChannel::getBlockedReadTask() const{
 	return 0;

@@ -53,31 +53,22 @@ public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLbrnbwChannel(std::string iName,Bus *iBus,TMLLength iContent);
+	TMLbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
 	bool read();
-	//void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString();
 protected:
 	///Determines the virtual length of read and write transactions based on the state of the channel
 	void setTransactionLength();
-	///Content of the channel
-	//TMLLength _content;
-	///Pointer to the transaction which attempts to write in the channel
-	//TMLTransaction* _writeTrans;
-	///Pointer to the transaction which attempts to read the channel
-	//TMLTransaction* _readTrans;
-	///Number of samples the write transaction attempts to write
-	//TMLLength _nbToWrite;
-	///Number of samples the read transaction attempts to read
-	//TMLLength _nbToRead;
 };
 
 #endif

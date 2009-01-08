@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0) {
+TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0) {
 	_myid=++_id;
 	_cpu->registerTask(this);
 	_commentList.reserve(BLOCK_SIZE);
@@ -63,10 +63,6 @@ unsigned int TMLTask::getPriority() const{
 
 TMLTime TMLTask::getEndLastTransaction() const{
 	return _endLastTransaction;
-}
-
-void TMLTask::setEndLastTransaction(TMLTime iEndLastTransaction){
-	_endLastTransaction=iEndLastTransaction;
 }
 
 TMLCommand* TMLTask::getCurrCommand() const{
@@ -114,19 +110,22 @@ std::string TMLTask::getNextComment(bool iInit, Comment*& oComment){
 }
 
 void TMLTask::addTransaction(TMLTransaction* iTrans){
-	//_endSchedule=_nextTransaction->getEndTime();
 	_transactList.push_back(iTrans);
+	_endLastTransaction=iTrans->getEndTime();
+	_busyCycles+=iTrans->getOperationLength();
 }
 
 TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
 	std::ostringstream outp;
 	if (iInit){
-		 _posTrasactList=_transactList.begin();
+		//std::cout << "Init" << std::endl; 
+		_posTrasactList=_transactList.begin();
+		//std::cout << "Init2" << std::endl; 
 		_previousTransEndTime=0;
 		_vcdOutputState=END_TRANS;
 	}
 	if (_posTrasactList == _transactList.end()){
-		if (_transactList.back()->getTerminatedFlag()){
+		if (iInit || _transactList.back()->getTerminatedFlag()){
 			outp << "r" << TERMINATED << " ta" << _myid;
 		}else{
 			outp << "r" << SUSPENDED << " ta" << _myid;
@@ -135,6 +134,7 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		oNoMoreTrans=true;
 		return _previousTransEndTime;
 	}else{
+		//std::cout << "VCD out trans: " << (*_posTrasactList)->toShortString() << std::endl;
 		TMLTransaction* aCurrTrans=*_posTrasactList;
 		oNoMoreTrans=false;
 		switch (_vcdOutputState){
@@ -172,3 +172,36 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		}
 	}
 }
+
+/*unsigned int TMLTask::getBusyCycles(){
+	return 0;
+}*/
+
+std::ostream& TMLTask::writeObject(std::ostream& s){
+	unsigned int aCurrCmd;
+	WRITE_STREAM(s,_endLastTransaction);
+	if (_currCommand==0){
+		aCurrCmd=0;
+		WRITE_STREAM(s,aCurrCmd);
+	}else{
+		aCurrCmd=(unsigned int)_currCommand-(unsigned int)this;
+		WRITE_STREAM(s,aCurrCmd);
+		_currCommand->writeObject(s);
+	}
+	return s;
+}
+
+std::istream& TMLTask::readObject(std::istream& s){
+	unsigned int aCurrCmd;
+	READ_STREAM(s, _endLastTransaction);
+	READ_STREAM(s, aCurrCmd);
+	_currCommand=(aCurrCmd==0)?0:(TMLCommand*)(aCurrCmd+((unsigned int)this));
+	if (_currCommand!=0) _currCommand->readObject(s);
+	return s;
+}
+
+void TMLTask::streamBenchmarks(std::ostream& s){
+	s << "*** Task " << _name << " ***\n"; 
+	s << "Execution time: " << _busyCycles << std::endl;
+}
+

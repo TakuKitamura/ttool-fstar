@@ -47,13 +47,6 @@ Ludovic Apvrille, Renaud Pacalet
 TMLCommand::TMLCommand(TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam){
 }
 
-//TMLCommand::TMLCommand(TMLTask* iTask, TMLLength& ipLength,Parameter<ParamType>* iParam):_pLength(&ipLength),_cLength(0),_progress(0),_currTransaction(0),_task(iTask),_nextCommand(0),_param(iParam){
-//}
-
-//TMLCommand::TMLCommand(TMLTask* iTask, const TMLLength& icLength,Parameter<ParamType>* iParam):_pLength(&_cLength),_cLength(icLength),_progress(0),_currTransaction(0),_task(iTask),_nextCommand(0),_param(iParam){
-//}
-
-
 TMLCommand::~TMLCommand(){
 	if (_currTransaction!=0) delete _currTransaction;
 	//if (_currTransaction!=0) std::cout << "transaction not yet deleted: " << getCommandStr() << std::endl;
@@ -61,45 +54,32 @@ TMLCommand::~TMLCommand(){
 	if (_param!=0) delete _param;
 }
 
-bool TMLCommand::prepare(void){
+TMLCommand* TMLCommand::prepare(void){
 	TMLCommand* aNextCommand;
 	//Do not set _currTransaction=0 as specialized commands access the variable in the scope of the execute method (set terminated flag) 
-	//std::cout << "Prepare command, try to delete" << std::endl;
-	//if (_currTransaction!=0) delete _currTransaction;
-	//std::cout << "Prepare command, check pointer" << std::endl;
-	//if(*_pLength==_progress){
 	if(_length==_progress){
 		//std::cout << "COMMAND FINISHED!!!!!!!!!!!!!!!!!!!\n";
 		_progress=0;
-		//_currTransaction=0;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
 		//std::cout << "Prepare command, to next command" << std::endl;
 		if (aNextCommand==0){
-			//aOldTrans->setTerminatedFlag();
-			return false;
-			//_currTransaction=0;
+			return 0;
 		}else{
-			//_currTransaction=0;
 			_task->setCurrCommand(aNextCommand);			
 			//std::cout << "Prepare command, prepare next command" << std::endl;
-			//if (!aNextCommand->prepare()){
-				 //aOldTrans->setTerminatedFlag();
-				//return false;
-			//}
 			return aNextCommand->prepare();
 		}
-		//_currTransaction=0;
 	}else{
 		//std::cout << "Prepare next transaction" << std::endl;
-		bool result = prepareNextTransaction();
+		TMLCommand* result = prepareNextTransaction();
+		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
-			_task->getCPU()->registerTransaction(_currTransaction);
+			_task->getCPU()->registerTransaction(_currTransaction,0);
 		}
 		return result;
 	}
-	return true;
-	//std::cout << "end Prepare command" << std::endl;
+	return 0;
 }
 
 TMLTask* TMLCommand::getTask() const{
@@ -138,4 +118,14 @@ Parameter<ParamType>* TMLCommand::getParam(){
 
 std::string TMLCommand::getCommentString(Comment* iCom){
 	return "no comment available";
+}
+
+std::ostream& TMLCommand::writeObject(std::ostream& s){
+	WRITE_STREAM(s,_progress);
+	return s;
+}
+
+std::istream& TMLCommand::readObject(std::istream& s){
+	READ_STREAM(s,_progress);
+	return s;
 }

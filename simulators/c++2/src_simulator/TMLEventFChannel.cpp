@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFChannel::TMLEventFChannel(std::string iName,Bus *iBus,TMLLength iLength,TMLLength iContent):TMLEventChannel(iName,iBus,iContent),_length(iLength){
+TMLEventFChannel::TMLEventFChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
 }
 
 void TMLEventFChannel::testWrite(TMLTransaction* iTrans){

@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <TMLTransaction.h>
 #include <TraceableDevice.h>
+#include <Serializable.h>
 
 class TMLCommand;
 class CPU;
@@ -55,7 +56,7 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice{
+class TMLTask: public TraceableDevice, public Serializable{
 public:	
 	///Constructor
     	/**
@@ -76,11 +77,6 @@ public:
       	\return End of transaction
     	*/
 	TMLTime getEndLastTransaction() const;
-	///Sets the end of the last scheduled transaction
-	/**
-      	\param iEndLastTransaction End of transaction
-    	*/
-	void setEndLastTransaction(TMLTime iEndLastTransaction);
 	///Returns a pointer to the current command of the task
 	/**
       	\return Pointer to the current command
@@ -119,12 +115,15 @@ public:
 	///Returns the next execution comment (pointed to by _posCommentList)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
-	\return Pointer to the comment
+	\param oComment This pointer to the comment object is returned to the callee
+	\return String representation of the comment
     	*/ 
 	std::string getNextComment(bool iInit, Comment*& oComment);
 	///Returns the next signal change (for vcd output)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
+	\param oSigChange This string representation of the signal change is returned to the callee
+	\param oNoMoreTrans This flag signals to the callee that no more signal changes are available
 	\return String representation of comment
     	*/ 
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
@@ -133,6 +132,9 @@ public:
       	\param iTrans Pointer to the transaction
     	*/ 
 	void addTransaction(TMLTransaction* iTrans);
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	virtual void streamBenchmarks(std::ostream& s);
 protected:
 	///Name of the task
 	std::string _name;
@@ -160,7 +162,10 @@ protected:
 	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdTaskVisState _vcdOutputState;
+	///Array of static comments concerning the control flow of the task
 	std::string* _comment;
+	///Busy cycles since simulation start
+	unsigned long _busyCycles;
 };
 
 #endif

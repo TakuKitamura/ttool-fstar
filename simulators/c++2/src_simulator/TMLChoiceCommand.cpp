@@ -52,14 +52,14 @@ TMLCommand* TMLChoiceCommand::getNextCommand() const{
 	return _nextCommand[_indexNextCommand];
 }
 
-bool TMLChoiceCommand::prepareNextTransaction(){
+TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 	TMLCommand* aNextCommand;
 	//std::cout << "Choice func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	_indexNextCommand=(_task->*_condFunc)();
 	aNextCommand=getNextCommand();
 	_task->setCurrCommand(aNextCommand);
 	if (aNextCommand!=0) return aNextCommand->prepare();
-	return false;
+	return 0;
 }
 
 TMLTask* TMLChoiceCommand::getDependentTask() const{

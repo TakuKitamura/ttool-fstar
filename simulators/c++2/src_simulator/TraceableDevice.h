@@ -51,7 +51,7 @@ public:
 	\return Detailed string representation
 	*/
 	virtual std::string toString()=0;
-	////Returns a short string representation of the device
+	///Returns a short string representation of the device
 	/**
 	\return Short string representation
 	*/
@@ -64,6 +64,12 @@ public:
 	\return Point in time when the signal changes
     	*/ 
 	virtual TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans)=0;
+	///Writes benchmarking data to a given stream
+	/**
+      	\param s Reference to an output stream
+	\param iSimulationTime Duration of the simulation in time units
+	*/
+	virtual void streamBenchmarks(std::ostream& s)=0;
 	///Destructor
 	virtual ~TraceableDevice(){}
 };

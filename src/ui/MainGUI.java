@@ -1630,6 +1630,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //jfc.setApproveButtonText("Open");
         int returnVal = jfc.showOpenDialog(frame);
         
+		if (returnVal == JFileChooser.CANCEL_OPTION) {
+			return;
+		}
+		
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfc.getSelectedFile();
         }

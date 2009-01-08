@@ -65,7 +65,7 @@ public:
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

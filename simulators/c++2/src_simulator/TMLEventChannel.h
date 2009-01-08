@@ -52,16 +52,25 @@ public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLEventChannel(std::string iName,Bus *iBus,TMLLength iContent);
+	TMLEventChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent);
 	///Cancels a pending read operation 
 	virtual void cancelReadTransaction()=0;
 	///Returns the content of the channel (for the notified command)
 	TMLLength getContent();
+	///Returns a flag indicating if the channel is used by a request
+    	/**
+      	\return True if channel is used by a request, false otherwise
+	*/
 	virtual bool getRequestChannel();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 protected:
+	///Queue for parameters
 	ParamQueue _paramQueue;
 };
 

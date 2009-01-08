@@ -36,12 +36,12 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLArchitecture
- * Creation: 05/09/2007
- * @version 1.1 19/05/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLArchitecture
+* Creation: 05/09/2007
+* @version 1.1 19/05/2008
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package tmltranslator;
 
@@ -51,13 +51,14 @@ import java.util.*;
 public class TMLArchitecture {
     private ArrayList<HwNode> hwnodes;
 	private ArrayList<HwLink> hwlinks; // Between buses and other component
+	
 	private int masterClockFrequency = 200; // in MHz
- 
+	
     
     public TMLArchitecture() {
         init();
     }
-
+	
     private void init() {
         hwnodes = new ArrayList<HwNode>();
 		hwlinks = new ArrayList<HwLink>();
@@ -70,6 +71,7 @@ public class TMLArchitecture {
 	public int getMasterClockFrequency() {
 		return masterClockFrequency;
 	}
+	
     
     public void addHwNode(HwNode _node) {
         hwnodes.add(_node);
@@ -133,5 +135,11 @@ public class TMLArchitecture {
 		return null;
 	}
 	
-  
+	public boolean isNodeConnectedToBus(HwNode node, HwBus bus){
+		for(HwLink link: hwlinks) {
+			if (node==link.hwnode && bus==link.bus) return true;
+		}
+		return false;
+	}
+	
 }

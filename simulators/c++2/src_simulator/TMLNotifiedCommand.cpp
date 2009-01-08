@@ -50,25 +50,19 @@ TMLNotifiedCommand::TMLNotifiedCommand(TMLTask* iTask,TMLEventChannel* iChannel,
 void TMLNotifiedCommand::execute(){
 	*_resultVar=_channel->getContent();
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
 #ifdef ADD_COMMENTS
-	//std::ostringstream comment;
-	//comment << "Notified " << _resultVarDescr << "=" << *_resultVar;
 	_task->addComment(new Comment(_task->getEndLastTransaction(), this, *_resultVar));
 #endif
-	//_currTransaction=0;
-#if defined BUS_ENABLED && defined EVENTS_MAPPED_ON_BUS
-	Bus* bus=_channel->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLNotifiedCommand::prepareNextTransaction(){
-	//_currTransaction=new TMLTransaction(this,_progress,(*_pLength)-_progress,_task->getEndLastTransaction());
-	_currTransaction=new TMLTransaction(this,_progress,_length-_progress,_task->getEndLastTransaction());
-	return true;
+TMLCommand* TMLNotifiedCommand::prepareNextTransaction(){
+	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
+	return this;
 }
 
 TMLTask* TMLNotifiedCommand::getDependentTask() const{

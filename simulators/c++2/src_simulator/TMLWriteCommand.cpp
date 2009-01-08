@@ -46,34 +46,37 @@ Ludovic Apvrille, Renaud Pacalet
 
 TMLWriteCommand::TMLWriteCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iTask,1,0), _lengthFunc(iLengthFunc), _channel(iChannel){
 }
-//TMLWriteCommand::TMLWriteCommand(TMLTask* iTask, const TMLLength& iLength, TMLChannel* iChannel):TMLCommand(iTask, iLength,0),_channel(iChannel){
-//}
-
-//TMLWriteCommand::TMLWriteCommand(TMLTask* iTask, TMLLength& iLength, TMLChannel* iChannel):TMLCommand(iTask, iLength,0),_channel(iChannel){
-//}
 
 void TMLWriteCommand::execute(){
 	_channel->write();
+	//std::cout << _currTransaction->getVirtualLength() << " samples written\n";
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
-	//_currTransaction=0;
-#ifdef BUS_ENABLED
-	Bus* bus=_channel->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLWriteCommand::prepareNextTransaction(){
+TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 	//std::cout << "WriteCommand prepare" << std::endl;
-	if (_progress==0) _length = (_task->*_lengthFunc)();
-	//_currTransaction=new TMLTransaction(this, _progress,(*_pLength)-_progress, _task->getEndLastTransaction(), _channel);
-	_currTransaction=new TMLTransaction(this, _progress,_length-_progress, _task->getEndLastTransaction(), _channel);
+	//if (_progress==0) _length = (_task->*_lengthFunc)();
+
+	//new test code
+	if (_progress==0){
+		 _length = (_task->*_lengthFunc)();
+		if (_length==0){
+			TMLCommand* aNextCommand=getNextCommand();
+			_task->setCurrCommand(aNextCommand);
+			if (aNextCommand!=0) return aNextCommand->prepare();
+		}
+	}
+
+	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test write" << std::endl;
 	_channel->testWrite(_currTransaction);
 	//std::cout << "WriteCommand end prepare" << std::endl;
-	return true;
+	return this;
 }
 
 TMLTask* TMLWriteCommand::getDependentTask() const{

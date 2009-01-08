@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLEventChannel;
 
-///This class models the waiting for an event within a TML task.
+///This class models a TML command which determines the number of events queued in a channel
 class TMLNotifiedCommand:public TMLCommand{
 public:
 	///Constructor
@@ -54,7 +54,7 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iResultVar Pointer to the variable which has to contain the result
-	\param iResultVarDescr String representation of the result variable, for debugging purposes
+	\param iResultVarDescr String representation of the result variable
 	*/
 	TMLNotifiedCommand(TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
 	void execute();
@@ -69,8 +69,9 @@ protected:
 	TMLEventChannel* _channel;
 	///Index of the statement to execute (this value is passed to TMLTask::executeStatement())
 	TMLLength* _resultVar;
+	///String representation of the result variable
 	std::string _resultVarDescr;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

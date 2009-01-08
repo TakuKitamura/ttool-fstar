@@ -66,24 +66,13 @@ void CPURR::schedule(){
 	}
 	
 	if (_nextTransaction!=0){
-#ifdef BUS_ENABLED
-		TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel();
-		if(aChannel==0){
-			_busNextTransaction=0;
-		}else{
-			_busNextTransaction=aChannel->getBus();
-			if (_busNextTransaction!=0) _busNextTransaction->registerTransaction(this,_nextTransaction);
-		}
-#endif		
 		calcStartTimeLength();
 		if (_taskChanged) _taskStartTime = _nextTransaction->getStartTime() +  _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
 		if (_busNextTransaction==0 && _nextTransaction->getEndTime() > _taskStartTime + _timeQuantum) truncateNextTransAt(_taskStartTime + _timeQuantum);
-		
 	}
-	//std::cout << "End Schedule RR..." << std::endl; 
 }
 
-void CPURR::registerTransaction(TMLTransaction* iTrans){
+void CPURR::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
 	//std::cout << "Register Transaction RR..." << std::endl; 
 	if (iTrans->getRunnableTime() > _endSchedule){
 		_futureTransQueue.push(iTrans);
@@ -92,30 +81,27 @@ void CPURR::registerTransaction(TMLTransaction* iTrans){
 	}
 }
 
-void CPURR::addTransaction(){
-	//std::cout << "Add Transaction RR..." << std::endl; 
-	TMLTransaction* aToPastTrans;
-	_endSchedule=_nextTransaction->getEndTime();
-	//std::cout << std::endl << "** ADD on " << _name << " ** " << std::endl << _nextTransaction->toString() <<std::endl << "***" << std::endl;
-	_transactList.push_back(_nextTransaction);
-	_lastTransaction=_nextTransaction;
-	_branchMissReminder=_branchMissTempReminder;
-	_nextTransaction=0;
-	if (_pastTransQueue.empty())
-		_futureTransQueue.pop(); 
-	else{
-		if (_taskChanged){
-			//_pastTransQueue.pop_front();
-			_pastTransQueue.erase(_pastTransQueue.begin());
-		}else{
-			_pastTransQueue.pop_back();
+bool CPURR::addTransaction(){
+	if (CPU::addTransaction()){
+		TMLTransaction* aToPastTrans;
+		if (_pastTransQueue.empty())
+			_futureTransQueue.pop(); 
+		else{
+			if (_taskChanged){
+				//_pastTransQueue.pop_front();
+				_pastTransQueue.erase(_pastTransQueue.begin());
+			}else{
+				_pastTransQueue.pop_back();
+			}
 		}
-	}
-	while (!_futureTransQueue.empty()){
-		aToPastTrans=_futureTransQueue.top();
-		if (aToPastTrans->getRunnableTime()>_endSchedule) break;
-		_pastTransQueue.push_back(aToPastTrans);
-		_futureTransQueue.pop();	
-	}
+		while (!_futureTransQueue.empty()){
+			aToPastTrans=_futureTransQueue.top();
+			if (aToPastTrans->getRunnableTime()>_endSchedule) break;
+			_pastTransQueue.push_back(aToPastTrans);
+			_futureTransQueue.pop();	
+		}
+		return true;
+	}else 
+		return false;
 }
 

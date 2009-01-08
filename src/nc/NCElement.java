@@ -46,7 +46,7 @@
 package nc;
 
 
-public class NCElement  {
+public class NCElement extends Object  {
     
 	protected String name;
 	

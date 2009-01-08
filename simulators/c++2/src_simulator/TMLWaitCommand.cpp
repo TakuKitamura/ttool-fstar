@@ -50,21 +50,18 @@ TMLWaitCommand::TMLWaitCommand(TMLTask* iTask, TMLEventChannel* iChannel, Parame
 void TMLWaitCommand::execute(){
 	_channel->read();
 	_progress+=_currTransaction->getVirtualLength();
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
-	//_currTransaction=0;
-#if defined BUS_ENABLED && defined EVENTS_MAPPED_ON_BUS
-	Bus* bus=_channel->getBus();
-	if (bus!=0) bus->addTransaction();
-#endif
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLWaitCommand::prepareNextTransaction(){
-	//_currTransaction=new TMLTransaction(this, _progress,(*_pLength)-_progress, _task->getEndLastTransaction(), _channel);
-	_currTransaction=new TMLTransaction(this, _progress,_length-_progress, _task->getEndLastTransaction(), _channel);
+TMLCommand* TMLWaitCommand::prepareNextTransaction(){
+	//std::cout << "wait command length: " << _length  << "  progress: " << _progress << std::endl; 
+	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	_channel->testRead(_currTransaction);
-	return true;
+	return this;
 }
 
 TMLTask* TMLWaitCommand::getDependentTask() const{

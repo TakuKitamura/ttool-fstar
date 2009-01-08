@@ -47,6 +47,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPUPBL.h>
 #include <CPURR.h>
 #include <Bus.h>
+#include <Bridge.h>
+#include <Memory.h>
 #include <TMLbrbwChannel.h>
 #include <TMLnbrnbwChannel.h>
 #include <TMLbrnbwChannel.h>
@@ -67,36 +69,67 @@ Ludovic Apvrille, Renaud Pacalet
 TMLTransaction* getTransLowestEndTime(CPUList& iCPUlist, CPU*& oCPU);
 ///Writes a HTML representation of the schedule of CPUs and buses to an output file
 /**
-\param iCPUlist CPU list
+\param iSchedList List containing components to schedule
 \param iBusList Bus list
+\param iLen Number of command line arguments
+\param iArgs Pointer to command line arguments
 */
-void schedule2HTML(CPUList& iCPUlist,BusList& iBusList, int iLen, char** iArgs);
-///Invokes the schedule() method of all CPUs and buses
-/**
-\param iCPUlist CPU list
-\param iBusList Bus list
-*/
-void scheduleCPUBus(CPUList& iCPUlist,BusList& iBusList);
-///Invokes the schedule() method of one CPU and all buses
-/**
-\param iCPU CPU
-\param iBusList Bus list
-*/
-void scheduleCPUBus(CPU* iCPU,BusList& iBusList);
+void schedule2HTML(SchedulingList& iSchedList,BusList& iBusList, int iLen, char** iArgs);
+/////Invokes the schedule() method of all CPUs and buses
+/////**
+//\param iCPUlist CPU list
+//\param iBusList Bus list
+//*/
+//void scheduleCPUBus(CPUList& iCPUlist,BusList& iBusList);
+/////Invokes the schedule() method of one CPU and all buses
+/////**
+//\param iCPU CPU
+//\param iBusList Bus list
+//*/
+//void scheduleCPUBus(CPU* iCPU,BusList& iBusList);
 ///Runs the simulation
 /**
-\param iCPUlist CPU list
+\param iSchedList List containing components to schedule
 \param iBusList Bus list
 */
-void simulate(CPUList& cpulist, BusList& buslist);
-
+void simulate(SchedulingList& iSchedList, BusList& buslist);
+///Writes simulation traces in VCD format to an output file
+/**
+\param iVcdList List of components whose traces are output
+\param iLen Number of command line arguments
+\param iArgs Pointer to command line arguments
+*/
 void schedule2VCD(TraceableDeviceList& iVcdList, int iLen, char** iArgs);
-
+///Writes the simulation graph to an output file
+/**
+\param iCPUlist CPU list
+\param iLen Number of command line arguments
+\param iArgs Pointer to command line arguments
+*/
 void schedule2Graph(CPUList& iCPUlist, int iLen, char** iArgs);
-
+///Writes a HTML representation of the schedule of CPUs and buses to an output file
+/**
+\param iLen Number of command line arguments
+\param iArgs Pointer to command line arguments
+\param iComp Flag to search for in within the argument list
+\param iDefault Default name of an output file
+\return Output file name
+*/
 const std::string getArgs(int iLen, char** iArgs, const std::string& iComp, const std::string& iDefault);
-
+///Shows a help text explaining the usage of the simulator
 void printHelp();
-
+///Writes a plain text representation of the schedule of CPUs to an output file
+/**
+\param iSchedList List containing components to schedule
+\param iLen Number of command line arguments
+\param iArgs Pointer to command line arguments
+*/
+void schedule2TXT(SchedulingList& iSchedList, int iLen, char** iArgs);
+///Calls streamBenchmarks of all traceable devices contained in iVcdList
+/**
+\param s Reference to output stream object
+\param iVcdList List of devices which are able to stream their benchmark data
+*/
+void streamBenchmarks(std::ostream& s, TraceableDeviceList& iVcdList);
 #endif
 

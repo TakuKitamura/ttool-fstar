@@ -41,8 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-//TMLbrnbwChannel::TMLbrnbwChannel(std::string iName,Bus *iBus,TMLLength iContent):TMLChannel(iName,iBus),_content(iContent),_writeTrans(0),_readTrans(0),_nbToWrite(0),_nbToRead(0){
-TMLbrnbwChannel::TMLbrnbwChannel(std::string iName,Bus *iBus,TMLLength iContent):TMLStateChannel(iName,iBus,iContent){
+TMLbrnbwChannel::TMLbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent):TMLStateChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent){
 }
 
 void TMLbrnbwChannel::testWrite(TMLTransaction* iTrans){
@@ -78,28 +77,26 @@ bool TMLbrnbwChannel::read(){
 	}
 }
 
-//void TMLbrnbwChannel::cancelReadTransaction(){
-//	_nbToRead=0;
-//	_readTrans=0;
-//	setTransactionLength();
-//}
-
 void TMLbrnbwChannel::setTransactionLength(){
 	if (_writeTrans!=0){	
 		if (_nbToRead==0){
-			_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
+			//_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
+			_writeTrans->setVirtualLength(_nbToWrite);
 		}else{
 			if (_nbToRead<=_content){
 				//read could be executed right away			
-				_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
+				//_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
+				_writeTrans->setVirtualLength(_nbToWrite);
 			}else{
 				//read could wake up because of write
-				_writeTrans->setVirtualLength(min(_nbToRead-_content,_nbToWrite,_burstSize));
+				//_writeTrans->setVirtualLength(min(_nbToRead-_content,_nbToWrite,_burstSize));
+				_writeTrans->setVirtualLength(min(_nbToRead-_content,_nbToWrite));
 			}
 		}
 	}
 	if (_readTrans!=0){
-		_readTrans->setVirtualLength(min(_content,_nbToRead,_burstSize));
+		//_readTrans->setVirtualLength(min(_content,_nbToRead,_burstSize));
+		_readTrans->setVirtualLength(min(_content,_nbToRead));
 	}
 }
 

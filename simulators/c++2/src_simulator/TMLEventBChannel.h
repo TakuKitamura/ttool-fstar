@@ -53,10 +53,15 @@ public:
 	///Constructor
     	/**
       	\param iName Name of the channel
-	\param iBus Pointer to the bus on which the channel is mapped
+	\param iNumberOfHops Number of buses on which the channel is mapped
+	\param iBuses Pointer to the buses on which the channel is mapped
+	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
+	\param iRequestChannel Flag indicating if channel is used by a request
+	\param iSourceIsFile Flag indicating if events are read from a file
     	*/
-	TMLEventBChannel(std::string iName, Bus *iBus,TMLLength iContent, bool iRequestChannel=false);
+	TMLEventBChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
+	~TMLEventBChannel();
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
@@ -68,7 +73,12 @@ public:
 	std::string toString();
 	bool getRequestChannel();
 protected:
+	void readNextEvents();
+	///Flag indicating if channel is used by a request
 	bool _requestChannel;
+	///Flag indicating if events are read from a file
+	bool _sourceIsFile;
+	std::ifstream* _eventFile;
 };
 
 #endif

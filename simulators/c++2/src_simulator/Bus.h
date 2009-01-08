@@ -42,58 +42,56 @@ Ludovic Apvrille, Renaud Pacalet
 #define BusH
 
 #include <definitions.h>
-#include <SchedulableDevice.h>
+#include <SchedulableCommDevice.h>
 #include <TraceableDevice.h>
 
 class CPU;
 class TMLTransaction;
 
-enum vcdBusVisState
+/*enum vcdBusVisState
     {
 	END_IDLE_BUS,
 	END_READ_BUS,
 	END_WRITE_BUS,
 	INIT_BUS
-};
+};*/
 
 ///Simulates the bahavior of a bus shared by several master devices
-class Bus: public SchedulableDevice, public TraceableDevice {
+class Bus: public SchedulableCommDevice, public TraceableDevice {
 public:
 	///Constructor
     	/**
       	\param iName Name of the bus
       	\param iBurstSize Size of an atomic bus transaction
     	*/
-	Bus(std::string iName, TMLLength iBurstSize, TMLTime iTimePerSample=1);
+	Bus(std::string iName, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
 	///Destructor
 	virtual ~Bus();
-	///Adds a new transaction to the internal queue and invalidates the scheduling decision
+	///Add a transaction waiting for execution to the internal list
 	/**
-      	\param iCPU Pointer to the calling CPU
-      	\param iTrans Pointer to the new transaction
+      	\param iTrans Pointer to the transaction to add
+	\param iSourceDevice Source device
     	*/
-	void registerTransaction(CPU* iCPU, TMLTransaction* iTrans);
-	///Adds a new master device to the internal device list
-	/**
-      	\param iMasterDev Pointer to the new device
-    	*/
-	void registerMasterDevice(CPU* iMasterDev);
+	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
 	///Determines the next bus transaction to be executed
 	void schedule();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	void addTransaction();
+	bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
     	*/
-	TMLTransaction* getNextTransaction() const;
+	TMLTransaction* getNextTransaction();
 	///Returns the size of an atomic bus transaction
-	TMLLength getBurstSize() const;
-	///Returns the unique ID of the Bus
 	/**
-      	\return Unique ID
-    	*/ 
-	unsigned int getID();
+	\return Burst size
+	*/
+	TMLLength getBurstSize() const;
+	///Truncates a transaction to the size of an atomic burst
+	/**
+	\param iTrans Pointer to the transaction
+	*/
+	void truncateToBurst(TMLTransaction* iTrans) const;
 	///Returns a string representation of the Bus
 	/**
 	\return Detailed string representation
@@ -109,6 +107,11 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2HTML(std::ofstream& myfile);
+	///Writes a plain text representation of the schedule to an output file
+	/**
+      	\param myfile Reference to the ofstream object representing the output file
+    	*/
+	void schedule2TXT(std::ofstream& myfile);
 	///Creates a string representation of the next signal change of the device (VCD format)
 	/**
       	\param iInit If init is true, the methods starts from the first transaction
@@ -117,6 +120,7 @@ public:
 	\return Time when the signal change occurred
     	*/
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	virtual void streamBenchmarks(std::ostream& s);
 	
 protected:
 	///Calculates the start time and the length of the next transaction
@@ -129,22 +133,25 @@ protected:
 	static unsigned int _id;
 	///Size of an atomic bus transaction
 	TMLLength _burstSize;
-	///End time of the last scheduled transaction
-	TMLTime _endSchedule;
+	/////End time of the last scheduled transaction
+	//TMLTime _endSchedule;
 	///Pointer to the next transaction to be executed
-	TMLTransaction* _nextTransaction;
+	BusTransHashTab::iterator _nextTransaction;
 	///Pointer to the CPU on which the next transaction will be executed
-	CPU* _nextTransOnCPU;
+	Master* _nextTransOnCPU;
 	///Dirty flag of the current scheduling decision
-	bool schedulingNeeded;
-	///List containing all master devices
-	MasterDeviceList _masterDevices;
-	///Transaction queue
+	bool _schedulingNeeded;
+	///List containing all queued transactions
+	//BusMasterPrioTab _masterQueue;
 	BusTransHashTab _transactionHash;
 	///List containing all already scheduled transactions
 	TransactionList _transactList;
 	///Inverse bus speed
 	TMLTime _timePerSample;
+	///Bus width in bytes
+	unsigned int _busWidth;
+	///Busy cycles since simulation start
+	unsigned long _busyCycles;
 
 	///Actual position within transaction list (used for vcd output)
 	TransactionList::iterator _posTrasactList;
@@ -152,6 +159,10 @@ protected:
 	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
+
+	//int add;
+	//int remove;
+	//bool _schedulingBlocked;
 };
 
 #endif

@@ -43,7 +43,9 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <SchedulableDevice.h>
+#include <SchedulableCommDevice.h>
 #include <TraceableDevice.h>
+#include <Master.h>
 
 class TMLTask;
 class TMLTransaction;
@@ -57,18 +59,20 @@ enum vcdCPUVisState
 };
 
 ///Simulates the bahavior of a CPU and an operating system
-class CPU: public SchedulableDevice, public TraceableDevice{
+class CPU: public SchedulableDevice, public TraceableDevice, public Master{
 public:
 	///Constructor
     	/**
       	\param iName Name of the CPU
 	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one execi unit
+	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
+	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
 	\param iPipelineSize Pipeline size
 	\param iTaskSwitchingCycles Task switching penalty in cycles
 	\param iBranchingMissrate Branching prediction miss rate in %
 	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
+	\param ibyteDataSize Machine word length
     	*/
 	CPU(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
@@ -83,15 +87,16 @@ public:
 	///Add a transaction waiting for execution to the internal list
 	/**
       	\param iTrans Pointer to the transaction to add
+	\param iSourceDevice Source device
     	*/
-	virtual void registerTransaction(TMLTransaction* iTrans)=0;
+	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice)=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	virtual void addTransaction()=0;
+	virtual bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
     	*/
-	TMLTransaction* getNextTransaction() const;
+	TMLTransaction* getNextTransaction();
 	///Truncates the next transaction at time iTime
 	/**
 	\param iTime Indicates at what time the transaction should be truncated
@@ -131,6 +136,12 @@ public:
 	\return Pointer to the next transaction
     	*/
 	TMLTransaction* getTransactions1By1(bool iInit);
+	///Writes a plain text representation of the schedule to an output file
+	/**
+      	\param myfile Reference to the ofstream object representing the output file
+    	*/
+	void schedule2TXT(std::ofstream& myfile);
+	virtual void streamBenchmarks(std::ostream& s);
 protected:
 	///Calculates the start time and the length of the next transaction
 	void calcStartTimeLength();
@@ -140,14 +151,14 @@ protected:
 	TaskList _taskList;
 	///List containing all already scheduled transactions
 	TransactionList _transactList;
-	///End time of the last scheduled transaction
-	TMLTime _endSchedule;
+	/////End time of the last scheduled transaction
+	//TMLTime _endSchedule;
 	///Pointer to the next transaction to be executed
 	TMLTransaction* _nextTransaction;
 	///Pointer to the last transaction which has been executed
 	TMLTransaction* _lastTransaction;
 	///Pointer to the bus which will be accessed by the next transaction
-	Bus* _busNextTransaction;
+	SchedulableCommDevice* _busNextTransaction;
 	
 	///Unique ID of the CPU
 	unsigned int _myid;
@@ -168,6 +179,12 @@ protected:
 	unsigned int _cyclesBeforeIdle;
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
+	///Busy cycles since simulation start
+	unsigned long _busyCycles;
+	///Contention delay of transactions (startTime-runnableTime)
+	unsigned long _contentionDelay;
+	///Number of executed transactions which have accessed a bus
+	unsigned int _noBusTransactions; 
 
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit

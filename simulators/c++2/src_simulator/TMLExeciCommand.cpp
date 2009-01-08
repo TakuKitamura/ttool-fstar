@@ -46,44 +46,35 @@ Ludovic Apvrille, Renaud Pacalet
 TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iTask,1,0), _lengthFunc(iLengthFunc), _type(iType){
 }
 
-//TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, const TMLLength& iMinLen, const TMLLength& iMaxLen, unsigned int iType):TMLCommand(iTask,1,0), _pMaxLen(&_cMaxLen), _cMaxLen(iMaxLen), _pMinLen(&_cMinLen), _cMinLen(iMinLen), _type(iType){
-//}
-
-//TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, const TMLLength& iMinLen, TMLLength& iMaxLen, unsigned int iType):TMLCommand(iTask,1,0),_pMaxLen(&iMaxLen),_cMaxLen(0), _pMinLen(&_cMinLen), _cMinLen(iMinLen), _type(iType){
-//}
-
-//TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, TMLLength& iMinLen, const TMLLength& iMaxLen, unsigned int iType):TMLCommand(iTask,1,0), _pMaxLen(&_cMaxLen), _cMaxLen(iMaxLen), _pMinLen(&iMinLen), _cMinLen(0), _type(iType){
-//}
-
-//TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, TMLLength& iMinLen, TMLLength& iMaxLen, unsigned int iType):TMLCommand(iTask,1,0),_pMaxLen(&iMaxLen),_cMaxLen(0), _pMinLen(&iMinLen), _cMinLen(0), _type(iType){
-//}
-
 void TMLExeciCommand::execute(){
-	//std::cout << "Execi execute get virt len " << _currTransaction;
 	//std::cout << _currTransaction->toShortString() << std::endl;
 	_progress+=_currTransaction->getVirtualLength();
 	//std::cout << "Execi execute set end" << std::endl;
-	_task->setEndLastTransaction(_currTransaction->getEndTime());
-	//_randLen=0;
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
 	//std::cout << "Execi execute prepare" << std::endl;
-	if (!prepare()) _currTransaction->setTerminatedFlag();
-	if (_progress==0) _currTransaction=0;
+	TMLCommand* aNextCommand = prepare();
+	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-bool TMLExeciCommand::prepareNextTransaction(){
+TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 	//std::cout << "ExeciCommand prepare " << toString() << std::endl;
-	//if (_randLen==0){
-	if (_progress==0) _length = (_task->*_lengthFunc)();
-		//_cLength=(*_pMaxLen==0)?*_pMinLen : (unsigned int) myrand((int)*_pMinLen,(int)*_pMaxLen);
-		//_pLength=&_cLength;
-		//std::cout << "Length is random ----------------!-!-!------------- "<< _cLength << "    "<< _progress << " "<< toString() << " " << this;
-		
-	//}
-	//std::cout << "length of execi: "<< *_pLength << std::endl;
-	//_currTransaction=new TMLTransaction(this,_progress,_cLength-_progress,_task->getEndLastTransaction());
-	_currTransaction=new TMLTransaction(this,_progress,_length-_progress,_task->getEndLastTransaction());
+	//if (_progress==0) _length = (_task->*_lengthFunc)();
+
+	//new test code
+	if (_progress==0){
+		 _length = (_task->*_lengthFunc)();
+		if (_length==0){
+			TMLCommand* aNextCommand=getNextCommand();
+			_task->setCurrCommand(aNextCommand);
+			if (aNextCommand!=0) return aNextCommand->prepare();
+		}
+	}
+
+	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
-	return true;
+	return this;
 }
 
 TMLTask* TMLExeciCommand::getDependentTask() const{

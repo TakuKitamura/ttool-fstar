@@ -47,13 +47,13 @@ TMLActionCommand::TMLActionCommand(TMLTask* iTask, ActionFuncPointer iActionFunc
 void TMLActionCommand::execute(){
 }
 
-bool TMLActionCommand::prepareNextTransaction(){
+TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	TMLCommand* aNextCommand=getNextCommand();
 	//std::cout << "Action func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	(_task->*_actionFunc)();
 	_task->setCurrCommand(aNextCommand);
 	if (aNextCommand!=0) return aNextCommand->prepare();
-	return false;
+	return 0;
 }
 
 TMLTask* TMLActionCommand::getDependentTask() const{

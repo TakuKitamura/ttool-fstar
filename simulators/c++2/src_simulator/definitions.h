@@ -56,18 +56,24 @@ Ludovic Apvrille, Renaud Pacalet
 #include <vector>
 #include <sys/time.h>
 
-#include <SchedulableDevice.h>
+#define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v))
+#define READ_STREAM(s,v) s.read((char*) &v,sizeof(v))
 
 using std::min;
 using std::max;
 
+#undef DEBUG_KERNEL
+#undef DEBUG_CPU
+#undef DEBUG_BUS
+
 #define BUS_ENABLED
-#define EVENTS_MAPPED_ON_BUS
+//#define EVENTS_MAPPED_ON_BUS
 #define WAIT_SEND_VLEN 1
 #define CPURRPB CPUPB
 #define CLOCK_INC 20
-#define BLOCK_SIZE 512
+#define BLOCK_SIZE 100000
 #define ADD_COMMENTS
+#define NO_EVENTS_TO_LOAD 10
 
 //Task VCD output
 #define TERMINATED 3
@@ -79,9 +85,19 @@ class TMLTask;
 class TMLTransaction;
 class TMLCommand;
 class CPU;
-class Bus;
+class SchedulableCommDevice;
+class SchedulableDevice;
 template <typename T> class Parameter;
 class TraceableDevice;
+class Master;
+
+enum vcdBusVisState
+    {
+	END_IDLE_BUS,
+	END_READ_BUS,
+	END_WRITE_BUS,
+	INIT_BUS
+};
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -93,12 +109,18 @@ typedef std::list<TMLTask*> TaskList;
 typedef std::vector<TMLTransaction*> TransactionList;
 ///Datatype holding pointer to CPUs, used by TMLMain and simulation kernel
 typedef std::list<CPU*> CPUList;
+///Datatype holding pointer to CPUs and Bridges, used by simulation kernel for scheduling
+typedef std::list<SchedulableDevice*> SchedulingList;
 ///Datatype holding references to buses, used by TMLMain and simulation kernel
-typedef std::list<Bus*> BusList;
-///Datatype used by the Bus to store pointers to all connected master devices
-typedef std::list<CPU*> MasterDeviceList;
+typedef std::list<SchedulableCommDevice*> BusList;
+/////Datatype used by the Bus to store pointers to all connected master devices
+//typedef std::list<Master*> MasterDeviceList;
 ///Datatype establishing an association between a CPU and a transaction, used by the bus
-typedef std::map<CPU*, TMLTransaction*> BusTransHashTab;
+typedef std::map<Master*, TMLTransaction*> BusTransHashTab;
+/////Datatype establishing an association between a transaction and its priority, used by buses
+//typedef std::multimap<unsigned int, Master*> BusMasterPrioTab;
+///Datatype establishing an association between a bus and a priority, used by Masters
+typedef std::map<SchedulableCommDevice*, unsigned int> MasterPriorityHashTab;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
@@ -106,7 +128,6 @@ typedef std::deque<Parameter<ParamType>*> ParamQueue;
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
-//typedef void (TMLTask::*ActionFuncPointer) ();
 typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
@@ -114,81 +135,110 @@ typedef unsigned int (TMLTask::*LengthFuncPointer) ();
 typedef std::list<TraceableDevice*> TraceableDeviceList;
 
 
+///Generic Memory pool class
 template <typename T>
 class Pool {
 public:
+	///Constructor
 	Pool():_headFreeList(0){}
 
-void* pmalloc(unsigned int n){
-	if (n != sizeof(T)){
-		std::cout << "FAEAEAELA!";
-		return ::operator new(n);
-	}
-	T* aHead = _headFreeList;
-        if (aHead){
-		_headFreeList = *(reinterpret_cast<T**>(aHead));
-		//_headFreeList = (T*)((void*)(*aHead));
-        }else{
-		T** aAdr;
-		T* newBlock = static_cast<T*>(::operator new(BLOCK_SIZE * sizeof(T)));
-		for (int i = 1; i < BLOCK_SIZE-1; ++i){
-			aAdr = reinterpret_cast<T**>(&newBlock[i]);
-			*aAdr = &newBlock[i+1];
-			//newBlock[i] = &newBlock[i+1];
+	///Allocation method
+	/**
+	\param n Size of memory chunk to be allocated
+	\return Pointer to the allocated chunk of memory
+	*/
+	void* pmalloc(unsigned int n){
+		if (n != sizeof(T)){
+			std::cout << "FAEAEAELA!";
+			return ::operator new(n);
 		}
-		aAdr = reinterpret_cast<T**>(&newBlock[BLOCK_SIZE-1]);
-		*aAdr = 0;
-		//newBlock[BLOCK_SIZE-1].next = 0;
-		aHead = newBlock;
-		_headFreeList = &newBlock[1];
-		//_chunkList.push_back(p);
-        }
-	return aHead;
-}
-
-void pfree(void *p, unsigned int n){
-	if (p == 0) return;
-	if (n != sizeof(T)){
-		::operator delete(p);
-		return;
+		T* aHead = _headFreeList;
+		if (aHead){
+			_headFreeList = *(reinterpret_cast<T**>(aHead));
+			//_headFreeList = (T*)((void*)(*aHead));
+		}else{
+			T** aAdr;
+			T* newBlock = static_cast<T*>(::operator new(BLOCK_SIZE * sizeof(T)));
+			for (int i = 1; i < BLOCK_SIZE-1; ++i){
+				aAdr = reinterpret_cast<T**>(&newBlock[i]);
+				*aAdr = &newBlock[i+1];
+				//newBlock[i] = &newBlock[i+1];
+			}
+			aAdr = reinterpret_cast<T**>(&newBlock[BLOCK_SIZE-1]);
+			*aAdr = 0;
+			//newBlock[BLOCK_SIZE-1].next = 0;
+			aHead = newBlock;
+			_headFreeList = &newBlock[1];
+			//_chunkList.push_back(p);
+		}
+		return aHead;
 	}
-	T* aDelObj = static_cast<T*>(p);
-	//delObj->next = _headFreeList;
-	T** aAdr = reinterpret_cast<T**>(aDelObj);
-	*aAdr = _headFreeList;
-	_headFreeList = aDelObj;
-}
 
+	///Deallocation method
+	/**
+	\param p Pointer to the memory chunk to be deallocated 
+	\return Size of memory chunk to be deallocated
+	*/
+	void pfree(void *p, unsigned int n){
+		if (p == 0) return;
+		if (n != sizeof(T)){
+			::operator delete(p);
+			return;
+		}
+		T* aDelObj = static_cast<T*>(p);
+		//delObj->next = _headFreeList;
+		T** aAdr = reinterpret_cast<T**>(aDelObj);
+		*aAdr = _headFreeList;
+		_headFreeList = aDelObj;
+	}
+
+///Destructor
 ~Pool(){
 	//std::list<T*>::iterator i;
 	//for(i=_chunkList.begin(); i != _chunkList.end(); ++i) ::operator delete [] *i;
 }
 private:
+	///Head pointer of the free list
 	T* _headFreeList;
 	//std::list<T*> _chunkList;
 };
 
-
+///Class which encapsulates a comment concerning the control flow or task execution
 class Comment{
 public:	
 	///Constructor
 	/**
 	\param iTime Time when the message occurred
+	\param iCommand Pointer to the command which created the comment, 0 if comment was created by a task
+	\param iActionCode Code specifying the comment message
 	*/
 	Comment(TMLTime iTime, TMLCommand* iCommand, unsigned int iActionCode):_time(iTime), _command(iCommand), _actionCode(iActionCode){}
 	
-	void * operator new(unsigned int size){
+	///New operator
+	/**
+	\param size Size of memory chunk to be allocated
+	\return Pointer to the allocated chunk of memory
+	*/
+	inline void * operator new(unsigned int size){
 		return memPool.pmalloc(size);
 	}
-	void operator delete(void *p, unsigned int size){
+	///Delete operator
+	/**
+	\param p Pointer to the memory chunk to be deallocated 
+	\param size Size of memory chunk to be deallocated
+	*/
+	inline void operator delete(void *p, unsigned int size){
 		memPool.pfree(p, size);
 	}
 
 	///Time when the massage occurred
 	TMLTime _time;
+	///Pointer to the command which created the comment, 0 if comment was created by a task
 	TMLCommand* _command;
+	///Code specifying the comment message
 	unsigned int _actionCode;
 private:
+	///Memory pool for comments
 	static Pool<Comment> memPool;
 };
 
@@ -252,30 +302,55 @@ public:
 	/**
 	\param in Constant reference to value
 	*/
-	RefValUnion(const T& in):isValue(true){
+	RefValUnion(const T& in):isValue(true), value(in){
 		//std::cout << "const constructor executed" << std::endl;
-		value=in;
+		//value=in;
 	}
 	///Constructor called for variables
 	/**
 	\param in Reference to variable
 	*/
-	RefValUnion(T& in):isValue(false){
+	RefValUnion(T& in):isValue(false), pointer(&in){
 		//std::cout << "varible constructor executed" << std::endl;
-		pointer=&in;
+		//pointer=&in;
+	}
+	RefValUnion(std::istream& s, unsigned int iAdr){
+		READ_STREAM(s, isValue);
+		if (isValue){
+			READ_STREAM(s, value);
+		}else{
+			unsigned int aAddrOffs;
+			READ_STREAM(s, aAddrOffs);
+			pointer = (T*)(iAdr + aAddrOffs);
+		}			
 	}
 	///The parenthesis operator returns a reference to the stored value
 	/**
 	\return Reference to value 
 	*/
-	T& operator() (){if (isValue) return value; else return *pointer;}
+	inline T& operator() (){if (isValue) return value; else return *pointer;}
 	///The parenthesis operator returns a reference to the stored value
 	/**
 	\return Constant reference to value 
 	*/
-	const T& operator() () const {if (isValue) return value; else return *pointer;}
+	inline const T& operator() () const {if (isValue) return value; else return *pointer;}
 	
 	T print() const {return value;}
+	friend std::istream& operator >> (std::istream &is,RefValUnion<T> &obj){
+		is >> obj.value;
+		obj.isValue=true;
+		return is;
+	}
+	std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
+		WRITE_STREAM(s,isValue);
+		if (isValue){
+			WRITE_STREAM(s,value);
+		}else{
+			unsigned int aAdr=((unsigned int)pointer)-iAdr;
+			WRITE_STREAM(s,aAdr);
+		}
+		return s;
+	}
 private:
 	///Indicates whether the class holds a value or a pointer to a value
 	bool isValue;
@@ -298,6 +373,7 @@ public:
 	\param ip3 Value 3
 	*/
 	Parameter(const RefValUnion<T>& ip1,const RefValUnion<T>& ip2,const RefValUnion<T>& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
+	Parameter(std::istream& s, unsigned int iAdr):_p1(s,iAdr), _p2(s,iAdr), _p3(s,iAdr){}
 	///Assignement operator, copies all parameters
 	const Parameter<T>& operator=(const Parameter<T>& rhs){
 		_p1()=rhs._p1();
@@ -308,6 +384,16 @@ public:
 	///Print function for testing purposes
 	void print(){
 		std::cout << "p1:" << _p1.print() << " p2:" << _p2.print() << " p3:" << _p3.print() << std::endl;
+	}
+	inline std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
+		_p1.writeObject(s,iAdr);
+		_p2.writeObject(s,iAdr);
+		_p3.writeObject(s,iAdr);
+		return s;
+	}
+	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
+		is >>obj._p1 >> obj._p2 >> obj._p3;
+ 		return is;
 	}
 private:
 	///Three parameters
@@ -365,6 +451,7 @@ typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, great
 typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterRunnableTime > FutureTransactionQueue;
 ///Priority queue holding Transactions for the graph output
 typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterStartTime > GraphTransactionQueue;
+//typedef std::map<SchedulableCommDevice*, FutureTransactionQueue*> BridgeTransactionListHash;
 
 ///Calculates random numbers between n1 and n2 (both inclusive)
 /**
@@ -382,4 +469,11 @@ int myrand(int n1, int n2);
 */
 long getTimeDiff(struct timeval& begin, struct timeval& end);
 
+///Replaces all occurrences of iSearch in ioHTML by iReplace
+/**
+	\param ioHTML String in which the replacements shall be made
+	\param iSearch String to search for
+	\param iReplace String which is filled in
+*/
+void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
 #endif

@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLEventBChannel;
 
-///This class models a send event operation within a TML task.
+///This class models a send request operation within a TML task.
 class TMLRequestCommand:public TMLCommand{
 public:
 	///Constructor
@@ -65,7 +65,7 @@ public:
 protected:
 	///Channel on which the event is conveyed
 	TMLEventBChannel* _channel;
-	bool prepareNextTransaction();
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif
