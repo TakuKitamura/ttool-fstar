@@ -1149,7 +1149,7 @@ public class GCTMLModeling  {
 							}
 							
 							// Search for the corresponding TMLTask
-							pcomp = tmldp.getPrimitiveComponentByName(artifact.getTaskName());
+							pcomp = tmlcdp.getPrimitiveComponentByName(artifact.getTaskName());
 							if (pcomp != null) {
 								tmp.add(pcomp);
 							} else {
