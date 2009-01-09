@@ -535,7 +535,7 @@ public class MappedSystemCTask {
 							//System.out.println("Call makeCommands, task: "+reference);
 							//if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,functionCollection,lastSequence);
-							if (functionCollection.str.isEmpty()){
+							if (functionCollection.str.length() == 0){
 								//System.out.println("NO content has been added to "+ code2);
 								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
