@@ -59,11 +59,11 @@ public class Main implements ActionListener {
     public boolean finish = false;
     public static Main main = new Main();
     public static boolean systemc = false;
-    public static boolean lotos = false;
+    public static boolean lotos = true;
     public static boolean proactive = false;
     public static boolean tpn = false;
     public static boolean os = false;
-    public static boolean uppaal = false;
+    public static boolean uppaal = true;
     public static boolean nc = true ; // Network calculus
     public static void main(String[] args) {
       
@@ -110,6 +110,10 @@ public class Main implements ActionListener {
                 lotos = true;
                 System.out.println("LOTOS features activated");
             }
+			if (args[i].compareTo("-nolotos") == 0) {
+                lotos = false;
+                System.out.println("LOTOS features activated");
+            }
              if (args[i].compareTo("-launcher") == 0) {
                 Thread t = new Thread(new RTLLauncher());
                 t.start();
@@ -141,6 +145,10 @@ public class Main implements ActionListener {
             
             if (args[i].compareTo("-uppaal") == 0) {
                 uppaal = true;
+                System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
+            }
+			 if (args[i].compareTo("-nouppaal") == 0) {
+                uppaal = false;
                 System.out.println("UPPAAL features activated - these are beta features that are meant to be used only for research purpose");
             }
             
