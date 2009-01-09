@@ -52,6 +52,7 @@ import java.util.*;
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmldd.*;
+import ui.tmlcompd.*;
 import tmltranslator.*;
 import myutil.*;
 
