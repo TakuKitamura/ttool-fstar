@@ -537,7 +537,7 @@ public class GNCModeling  {
 			ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "No possible route for traffic " + arti.getValue() + " on switch " + sw.getNodeName() + " (ignoring trafic)");
 			ce.setTDiagramPanel(ncdp);
 			ce.setTGComponent(sw);
-			checkingErrors.add(ce);
+			warnings.add(ce);
 			return -1;
 		}
 		
@@ -661,6 +661,7 @@ public class GNCModeling  {
 		NCTraffic tr1;
 		NCPath path1;
 		NCLink link1, link2, link11, link22;
+		//NCPath path1;
 		
 		//ArrayList<NCEquipment> newEquipments = new ArrayList<NCEquipment>();
 		ArrayList<NCTraffic> newTraffics = new ArrayList<NCTraffic>();
@@ -717,6 +718,7 @@ public class GNCModeling  {
 											} else {
 												link11.setLinkedElement2(nceq1);
 											}
+											link11.setName(link1.getName() + "__" + i);
 											ncs.links.add(link11);
 										}
 										oldEquipments.add(path.origin);
@@ -736,6 +738,7 @@ public class GNCModeling  {
 											} else {
 												link22.setLinkedElement2(nceq2);
 											}
+											link22.setName(link2.getName() + "__" + i);
 											ncs.links.add(link22);
 										}
 										oldEquipments.add(path.destination);
@@ -746,9 +749,29 @@ public class GNCModeling  {
 									oldPaths.add(path);
 									oldTraffics.add(path.traffic);
 									for(i=0; i<parameter1; i++) {
-										tr1 = (NCTraffic)(path.traffic.clone());
+										tr1 = path.traffic.cloneTraffic();
 										tr1.setName(path.traffic.getName() + "__" + i);
+										//System.out.println("Traffic " + tr1.getName() + " unit after=" + tr1.getDeadlineUnit().getStringUnit());
 										ncs.traffics.add(tr1);
+									}
+									
+									for(i=0; i<parameter1; i++) {
+										path1 = (NCPath)(path.clone());
+										path1.setName("path" + PATH_INDEX);
+										PATH_INDEX++;
+										tr1 = ncs.getTrafficByName(path.traffic.getName() + "__" + i);
+										if (tr1 != null) {
+											path1.traffic = tr1;
+											nceq1 = ncs.getNCEquipmentByName(path.origin.getName() + "__" + i);
+											nceq2 = ncs.getNCEquipmentByName(path.destination.getName() + "__" + i);
+											if ((nceq1 != null) && (nceq2 != null)) {
+												path1.origin = nceq1;
+												path1.destination = nceq2;
+												newPaths.add(path1);
+											} else {
+												System.out.println("null");
+											}
+										}
 									}
 								}
 							}
@@ -756,6 +779,35 @@ public class GNCModeling  {
 					}
 				}
 			}
+		}
+		
+		// Add new paths
+		for(NCPath path: newPaths) {
+			ncs.paths.add(path);
+		}
+		
+		// Remove all elements in oldTraffic , oldEquipments and oldLinks from ncs
+		for(NCTraffic tr: oldTraffics) {
+			ncs.traffics.remove(tr);
+		}
+		
+		for(NCEquipment eq: oldEquipments) {
+			ncs.equipments.remove(eq);
+		}
+		
+		for(NCPath pa: oldPaths) {
+			ncs.paths.remove(pa);
+		}  
+		
+		for(NCLink li: oldLinks) {
+			ncs.links.remove(li);
+		}
+		
+		// Rename paths
+		int cpt=0;
+		for(NCPath pa: ncs.paths) {
+			pa.setName("path" + cpt);
+			cpt ++;
 		}
 	}
 

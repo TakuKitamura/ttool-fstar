@@ -116,7 +116,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		if (!tdp.isScaled()) {
 			maxWidthValue = Math.max(maxWidthValue, widthValue);
 		}
-		g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - (h/2));
+		//g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - (h/2));
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {
@@ -315,12 +315,12 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 	}
     
 	public String getAttributes() {
-		String ret = "";
+		String ret = interfaceName;
 		if (hasCapacity) {
-			ret += "Capacity = " + capacity + " " + capacityUnit + "\n";
+			ret += "\nCapacity = " + capacity + " " + capacityUnit;
 		}
 		if (hasParameter) {
-			ret +="Parameter = " + parameter + "\n";
+			ret +="\nParameter = " + parameter;
 		}
 		return ret;
 	}

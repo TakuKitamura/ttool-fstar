@@ -149,7 +149,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		ArrayList<String> outputInterfaces = (ArrayList<String>)(inputInterfaces.clone());
 		
 		JDialogNCRoute dialog = new JDialogNCRoute(frame, "Setting route attributes", value, vroutes, inputInterfaces, traffics, outputInterfaces);
-		dialog.setSize(700, 400);
+		dialog.setSize(900, 500);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         

@@ -56,4 +56,15 @@ public class NCPath extends NCElement {
 	public NCPath() {
 		switches = new ArrayList<NCSwitch>();
 	}
+	
+	public Object clone() {
+		NCPath path = new NCPath();
+		path.origin = origin;
+		path.destination = destination;
+		path.traffic = traffic;
+		for(NCSwitch sw: switches) {
+			path.switches.add(sw);
+		}
+		return path;
+	}
 }

@@ -126,7 +126,7 @@ public class JDialogNCRoute extends javax.swing.JDialog implements ActionListene
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Adding a route"));
-        panel1.setPreferredSize(new Dimension(300, 250));
+        panel1.setPreferredSize(new Dimension(500, 350));
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);

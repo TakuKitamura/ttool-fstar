@@ -78,7 +78,7 @@ public class NCStructure extends NCElement {
 		return null;
 	}
 	
-	public NCLinkedElement getNCEquipmentByName(String _name) {
+	public NCEquipment getNCEquipmentByName(String _name) {
 		for(NCEquipment eq: equipments) {
 			if (eq.getName().equals(_name)) {
 				return eq;

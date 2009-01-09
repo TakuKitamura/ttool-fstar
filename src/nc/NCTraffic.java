@@ -114,16 +114,17 @@ public class NCTraffic extends NCElement  {
         return priority;
     }
 	
-	public Object clone() {
+	public NCTraffic cloneTraffic() {
 		NCTraffic traffic = new NCTraffic();
 		NCTimeUnit unit = new NCTimeUnit();
 		unit.setUnit(deadlineUnit.getStringUnit());
-		traffic.setDeadlineUnit(unit);
 		traffic.setPeriodicType(periodicType);
 		traffic.setDeadline(deadline);
 		traffic.setMinPacketSize(minPacketSize);
 		traffic.setMaxPacketSize(maxPacketSize);
 		traffic.setPriority(priority);
+		traffic.setDeadlineUnit(unit);
+		//System.out.println("Traffic unit=" + traffic.getDeadlineUnit().getStringUnit());
 		return traffic;
 	}
 }
