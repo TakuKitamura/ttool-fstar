@@ -481,6 +481,7 @@ public class GCTMLModeling  {
 		String sl = "";
 		TMLType tt;
 		TMLAttribute tmlt;
+		String tmp;
         
         iterator = list.listIterator();
         while(iterator.hasNext()) {
