@@ -555,7 +555,7 @@ public class GCTMLModeling  {
                 tmlforloop = new TMLForLoop("loop", tgc);
                 tmlforloop.setInit(((TMLADForLoop)tgc).getInit());
                 tmlforloop.setCondition(((TMLADForLoop)tgc).getCondition());
-                tmlforloop.setIncrement(modifyActionString((TMLADForLoop)tgc).getIncrement());
+                tmlforloop.setIncrement(modifyActionString(((TMLADForLoop)tgc).getIncrement()));
                 activity.addElement(tmlforloop);
 				listE.addCor(tmlforloop, tgc);
 				
