@@ -797,19 +797,25 @@ public class TURTLEModeling {
 				}
 				if (index2 == -1) {
 					index2 = index3;
+					
 				}
+				
 				index4 = Math.min(index1, index2);
 				index4 = Math.min(index4, index3);
 				
 				if (index4 > 0) {
 					paramName = s.substring(index+1, index4+index+1);
 					paramName = paramName.trim();
-					if (paramName.indexOf(':') == -1) {
-						p = t.getParamByName(paramName);
-						if (p != null) {
-							paramName = paramName + ":" + p.getType();
-						} else {
-							return null;
+					try {
+						int x = Integer.decode(paramName).intValue();
+					} catch (Exception e) {
+						if (paramName.indexOf(':') == -1) {
+							p = t.getParamByName(paramName);
+							if (p != null) {
+								paramName = paramName + ":" + p.getType();
+							} else {
+								return null;
+							}
 						}
 					}
 					ret = ret + c + paramName;

@@ -96,6 +96,12 @@ public class UPPAALTemplate {
 		parameter += _dec;
     }
 	
+	public void removeParameter() {
+		parameter = "";
+    }
+	
+	
+	
     public void setInitLocation(UPPAALLocation _loc) {
 		initLocation = _loc;
     }

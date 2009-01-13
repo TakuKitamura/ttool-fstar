@@ -530,7 +530,7 @@ public class TURTLE2UPPAAL {
 			template.addDeclaration(p.getName() + " = " + p.getValue() + ";\n");
 		}
 		
-		//template.addDeclaration("int waitgroupid__;\n");
+		template.addDeclaration("int waitgroupid__;\n");
 		template.addDeclaration("clock h__;\n");
 		
 		for(Gate g:gatesWithInternalSynchro) {
@@ -2252,6 +2252,7 @@ public class TURTLE2UPPAAL {
 		while(iterator.hasNext()) {
 			template = (UPPAALTemplate)(iterator.next());
 			t = tm.getTClassWithName(template.getName());
+			System.out.println("temp=" + template.getName());
 			if (t != null) {
 				if (templatesWithMultipleProcesses.contains(template)) {
 					table.setIds(template, id, id+nb-1);
@@ -2270,6 +2271,7 @@ public class TURTLE2UPPAAL {
 						table.setIds(template, id, id);
 						id += nb;
 					} else {
+						//System.out.println("temp=" + template.getName());
 						dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
 						system += template.getName() + "__" + id;
 						table.setIds(template, id, id);
@@ -2277,6 +2279,8 @@ public class TURTLE2UPPAAL {
 					}
 				}
 			} else {
+				System.out.println("temp=" + template.getName());
+				template.removeParameter();
 				dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
 				system += template.getName() + "__" + id;
 			}

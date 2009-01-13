@@ -143,6 +143,9 @@ public class ADParallel extends ADComponent implements NonBlockingADComponent, M
     }
     
     public int nbGate() {
+		if (synchroGate == null) {
+			return 0;
+		}
         return synchroGate.size();
     }
     

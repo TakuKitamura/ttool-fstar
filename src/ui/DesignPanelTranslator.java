@@ -359,11 +359,11 @@ public class DesignPanelTranslator {
 				g = t.getGateFromActionState(s);
 				p = t.getParamFromActionState(s);
 				if ((g != null) && (nbActions == 1)){
-					//System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
+					System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
 					adag = new ADActionStateWithGate(g);
 					ad.addElement(adag);
 					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("s1=" + s1);
+					System.out.println("s1=" + s1);
 					/*if (s1 == null) {
                         System.out.println("oh ho !");
                     }*/
@@ -380,7 +380,7 @@ public class DesignPanelTranslator {
 						return;
 					}
 					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done s1=" + s1);
+					System.out.println("Adding type done s1=" + s1);
 					adag.setActionValue(s1);
 					listE.addCor(adag, tgc);
 				} else if ((p != null) && (nbActions == 1)){
