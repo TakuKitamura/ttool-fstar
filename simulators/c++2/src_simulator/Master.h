@@ -42,6 +42,8 @@ Ludovic Apvrille, Renaud Pacalet
 #define MasterH
 
 #include <definitions.h>
+#include <SchedulableCommDevice.h>
+#include <BusMasterInfo.h>
 
 class TMLTransaction;
 class SchedulableCommDevice;
@@ -57,7 +59,8 @@ public:
 	\return Bus priority
 	*/
 	unsigned int getBusPriority(SchedulableCommDevice* iDevice){
-		return _masterPrioHashTab[iDevice];
+		//return _masterPrioHashTab[iDevice];
+		return _masterPrioHashTab[iDevice]->getPriority();
 	}
 	///Sets the priority of the master for a given bus
 	/**
@@ -65,17 +68,33 @@ public:
 	\param iPrio Priority
 	*/
 	void addBusPriority(SchedulableCommDevice* iDevice, unsigned int iPrio){
-		_masterPrioHashTab[iDevice]=iPrio;
+		//_masterPrioHashTab[iDevice]=iPrio;
+		_masterPrioHashTab[iDevice]= new BusMasterInfo(iPrio);
 	}
-	/////Returns the current transaction if it needs to access the given bus 
-	////**
-	//\param iBus Pointer to the bus
-	//\return Pointer to the transaction
-	//*/
-	//TMLTransaction* getNextBusTransaction(SchedulableCommDevice* iBus) const;
 	///Destructor
-	virtual ~Master(){}
+	virtual ~Master(){
+		for(MasterPriorityHashTab::iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
+			delete i->second;
+		}
+	}
 protected:
+	///Updates the bus contention statistics when a new bus transaction has been executed
+	/**
+	\param iDevice Pointer to the bus
+	\param iContentionDelay Contention delay of the transaction
+	*/
+	void addBusContention(SchedulableCommDevice* iDevice, unsigned long iContentionDelay){
+		_masterPrioHashTab[iDevice]->addContention(iContentionDelay);
+	}
+	///Writes benchmarking data to a given stream
+	/**
+      	\param s Reference to an output stream
+	*/
+	void streamBenchmarks(std::ostream& s){
+		for(MasterPriorityHashTab::iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
+			s << "Average contention delay for bus " << i->first->toString() << ": " << i->second->getContentionDelay() << std::endl;
+		}
+	}
 	///Map which associates the bus and the priority
 	MasterPriorityHashTab _masterPrioHashTab;
 };

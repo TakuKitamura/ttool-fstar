@@ -48,13 +48,13 @@ Ludovic Apvrille, Renaud Pacalet
 class CPU;
 class TMLTransaction;
 
-/*enum vcdBusVisState
+enum vcdBusVisState
     {
 	END_IDLE_BUS,
 	END_READ_BUS,
 	END_WRITE_BUS,
 	INIT_BUS
-};*/
+};
 
 ///Simulates the bahavior of a bus shared by several master devices
 class Bus: public SchedulableCommDevice, public TraceableDevice {
@@ -112,13 +112,6 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile);
-	///Creates a string representation of the next signal change of the device (VCD format)
-	/**
-      	\param iInit If init is true, the methods starts from the first transaction
-	\param oSigChange String representation of the signal change
-	\param oNoMoreTrans Is true if the last transaction is processed 
-	\return Time when the signal change occurred
-    	*/
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	virtual void streamBenchmarks(std::ostream& s);
 	
@@ -159,10 +152,6 @@ protected:
 	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
-
-	//int add;
-	//int remove;
-	//bool _schedulingBlocked;
 };
 
 #endif

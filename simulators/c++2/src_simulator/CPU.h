@@ -122,13 +122,6 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2HTML(std::ofstream& myfile);
-	///Creates a string representation of the next signal change of the device (VCD format)
-	/**
-      	\param iInit If init is true, the methods starts from the first transaction
-	\param oSigChange String representation of the signal change
-	\param oNoMoreTrans Is true if the last transaction is processed 
-	\return Time when the signal change occurred
-    	*/
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	///Returns the scheduled transaction one after another
 	/**
@@ -181,10 +174,10 @@ protected:
 	unsigned int _cyclesPerExeci;
 	///Busy cycles since simulation start
 	unsigned long _busyCycles;
-	///Contention delay of transactions (startTime-runnableTime)
-	unsigned long _contentionDelay;
-	///Number of executed transactions which have accessed a bus
-	unsigned int _noBusTransactions; 
+	/////Sum of contention delay of bus transactions
+	//unsigned long _busContentionDelay;
+	/////Number of executed transactions which have accessed a bus
+	//unsigned long _noBusTransactions; 
 
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit

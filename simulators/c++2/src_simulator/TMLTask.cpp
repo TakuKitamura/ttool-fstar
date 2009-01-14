@@ -42,18 +42,22 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0) {
+TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0) {
 	_myid=++_id;
 	_cpu->registerTask(this);
+#ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
+#endif
 	_transactList.reserve(BLOCK_SIZE);
 }
 
 TMLTask::~TMLTask(){
 	CommentList::iterator i;
+#ifdef ADD_COMMENTS
 	for(i=_commentList.begin(); i != _commentList.end(); ++i){
 		delete *i;
 	}
+#endif
 	if (_comment!=0) delete [] _comment;
 }
 
@@ -92,6 +96,7 @@ unsigned int TMLTask::getID(){
 	return _myid;
 }
 
+#ifdef ADD_COMMENTS
 void TMLTask::addComment(Comment* iComment){
 	_commentList.push_back(iComment);
 }
@@ -108,11 +113,16 @@ std::string TMLTask::getNextComment(bool iInit, Comment*& oComment){
 	_posCommentList++;
 	return ((oComment->_command==0)?_comment[oComment->_actionCode]:oComment->_command->getCommentString(oComment));
 }
+#endif
 
 void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
+	if(iTrans->getChannel()==0){
+		_noCPUTransactions++;
+		_CPUContentionDelay+=iTrans->getStartTime()-iTrans->getRunnableTime();
+	}
 }
 
 TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
@@ -203,5 +213,6 @@ std::istream& TMLTask::readObject(std::istream& s){
 void TMLTask::streamBenchmarks(std::ostream& s){
 	s << "*** Task " << _name << " ***\n"; 
 	s << "Execution time: " << _busyCycles << std::endl;
+	if (_noCPUTransactions!=0) s << "Average CPU contention delay: " << ((float)_CPUContentionDelay)/((float)_noCPUTransactions) << std::endl;
 }
 

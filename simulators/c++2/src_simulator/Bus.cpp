@@ -63,18 +63,26 @@ void Bus::schedule(){
 	TMLTransaction *aTempTrans;
 	TMLTime aTransTimeFuture=-1;
 	BusTransHashTab::iterator i, aTransToExecute=_transactionHash.end(), aFutureTrans=_transactionHash.end();
+#ifdef DEBUG_BUS	
+	std::cout << "Bus:schedule: start" << std::endl;
+#endif
 	unsigned int aTransPrio=-1,aTempPrio;
 	for (i=_transactionHash.begin(); i != _transactionHash.end(); ++i){
+		//std::cout << "0" << std::endl;
 		aTempTrans=i->second;
+		//std::cout << "1" << std::endl;
 		if (aTempTrans->getStartTimeOperation()<=_endSchedule){
 			//demand in the past
+			//std::cout << "2" << std::endl;
 			aTempPrio=i->first->getBusPriority(this);
+			//std::cout << "2a" << std::endl;
 			if (aTempPrio<aTransPrio){
 				aTransToExecute=i;
 				aTransPrio=aTempPrio;
 			}
 		}else{
 			//demand in the future
+			//std::cout << "3" << std::endl;
 			if (aTempTrans->getStartTimeOperation()<aTransTimeFuture){
 				aTransTimeFuture=aTempTrans->getStartTimeOperation();
 				aFutureTrans=i;

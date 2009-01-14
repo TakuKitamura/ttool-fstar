@@ -81,8 +81,6 @@ public:
     	*/
 	virtual void schedule2TXT(std::ofstream& myfile)=0;
 	virtual std::string toString()=0;
-	///Destructor
-	virtual ~SchedulableDevice(){}
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);
 		return is;
@@ -91,6 +89,9 @@ public:
 		WRITE_STREAM(os,_endSchedule);		
 		return os;
 	}
+	static TMLTime getSimulatedTime(){return _simulatedTime;}
+	///Destructor
+	virtual ~SchedulableDevice(){}
 protected:
 	///Class variable holding the simulation time
 	static TMLTime _simulatedTime;

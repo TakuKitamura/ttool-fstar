@@ -324,9 +324,9 @@ void simulate(SchedulingList& iSchedList, BusList& buslist){
 		  }
 		 }
 		}
-#ifdef DEBUG_KERNEL
-		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
-#endif
+//#ifdef DEBUG_KERNEL
+//		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
+//#endif
 		transLET=getTransLowestEndTime(iSchedList,cpuLET);
 	}
 	gettimeofday(&aEnd,NULL);

@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Slave.h>
 #include <TMLChannel.h>
 
-CPU::CPU(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize):_name(iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle), _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _contentionDelay(0), _noBusTransactions(0),  _timePerExeci(_cyclesPerExeci*_timePerCycle), _taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0){
+CPU::CPU(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize):_name(iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle), _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), /*_busContentionDelay(0), _noBusTransactions(0),*/  _timePerExeci(_cyclesPerExeci*_timePerCycle), _taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0){
 	_myid=++_id;
 	_transactList.reserve(BLOCK_SIZE);
 }
@@ -68,10 +68,25 @@ void CPU::registerTask(TMLTask* iTask){
 
 TMLTransaction* CPU::getNextTransaction(){
 #ifdef BUS_ENABLED
-	if (_busNextTransaction==0){
+	if (_busNextTransaction==0 || _nextTransaction==0){
 		return _nextTransaction;
 	}else{
-		return (_busNextTransaction->getNextTransaction()==_nextTransaction)?_nextTransaction:0;
+#ifdef DEBUG_CPU
+		std::cout << "CPU:getNT: " << _name << " has bus transacion on bus " << _busNextTransaction->toString() << std::endl;
+#endif
+		//std::cout << "0" << std::endl;
+		//if (_nextTransaction==0 || _nextTransaction->getChannel()==0) std::cout << "NULLINGER!!!!!!!!!!!!!!!!!!!!" << std::endl;
+		SchedulableCommDevice* aTempBus =_nextTransaction->getChannel()->getFirstBus(_nextTransaction);
+		//std::cout << "1" << std::endl;
+		bool aResult = aTempBus->getNextTransaction()==_nextTransaction;
+		//std::cout << "2" << std::endl;
+		while (aResult && aTempBus!=_busNextTransaction){
+			//std::cout << "3" << std::endl;	
+			aTempBus =_nextTransaction->getChannel()->getNextBus(_nextTransaction);
+			//std::cout << "4" << std::endl;
+			aResult = aTempBus->getNextTransaction()==_nextTransaction;
+		}
+		return (aResult)?_nextTransaction:0;
 	}
 #else
 	return _nextTransaction;
@@ -186,21 +201,22 @@ bool CPU::addTransaction(){
 		std::cout << _name << "CPU:addT: handling bus transaction" << std::endl;
 #endif
 		Slave* aLastSlave=_nextTransaction->getChannel()->getNextSlave(_nextTransaction);
-		_busNextTransaction=_nextTransaction->getChannel()->getNextBus(_nextTransaction);
-		if (_busNextTransaction==0){
+		SchedulableCommDevice* aFollowingBus =_nextTransaction->getChannel()->getNextBus(_nextTransaction);
+		if (aFollowingBus==0){
 			//std::cout << _name << " bus transaction finished" << std::endl;
 			aFinish=true;
 			//std::cout << _name << " before loop" << std::endl;
-			_contentionDelay+=_nextTransaction->getStartTime()-_nextTransaction->getRunnableTime();
-			_noBusTransactions++;
+			//_busContentionDelay+=_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime());
+			//_noBusTransactions++;
 			SchedulableCommDevice* aTempBus =_nextTransaction->getChannel()->getFirstBus(_nextTransaction);
+			addBusContention(aTempBus, _nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
 			while (aTempBus!=0){
 				aTempBus->addTransaction();
 				aTempBus =_nextTransaction->getChannel()->getNextBus(_nextTransaction);
 			}
-			//std::cout << _name << " after loop" << std::endl;
 		}else{
 			//std::cout << _name << " bus transaction next round" << std::endl;
+			_busNextTransaction=aFollowingBus;
 			_busNextTransaction->registerTransaction(_nextTransaction,aLastSlave->getConnectedMaster());
 			aFinish=false;
 		}
@@ -288,6 +304,7 @@ void CPU::schedule2HTML(std::ofstream& myfile){
 		myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
 	}
 	myfile << "</tr>";
+#ifdef ADD_COMMENTS
 	while(aMoreComments){
 		aMoreComments=false;
 		myfile << "<tr>";
@@ -305,6 +322,7 @@ void CPU::schedule2HTML(std::ofstream& myfile){
 		aInit=false;
 		myfile << "</tr>\n";
 	}
+#endif
 	myfile << "</table>\n";
 }
 
@@ -392,5 +410,7 @@ TMLTransaction* CPU::getTransactions1By1(bool iInit){
 void CPU::streamBenchmarks(std::ostream& s){
 	s << "*** CPU " << _name << " ***\n"; 
 	if (_simulatedTime!=0) s << "Utilization: " << ((float)_busyCycles)/((float)_simulatedTime) << std::endl;
-	if (_noBusTransactions!=0) s << "Average contention delay: " << ((float)_contentionDelay)/((float)_noBusTransactions) << std::endl;
+	Master::streamBenchmarks(s);
+	//if (_noBusTransactions!=0) s << "Average BUS contention delay: " << ((float)_busContentionDelay)/((float)_noBusTransactions) << std::endl;
+	
 }

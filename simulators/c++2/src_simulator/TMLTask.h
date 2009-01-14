@@ -107,6 +107,7 @@ public:
       	\return Unique ID
     	*/ 
 	unsigned int getID();
+#ifdef ADD_COMMENTS
 	///Adds a new execution comment to the internal list
 	/**
       	\param iComment Pointer to the comment
@@ -119,13 +120,7 @@ public:
 	\return String representation of the comment
     	*/ 
 	std::string getNextComment(bool iInit, Comment*& oComment);
-	///Returns the next signal change (for vcd output)
-	/**
-      	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
-	\param oSigChange This string representation of the signal change is returned to the callee
-	\param oNoMoreTrans This flag signals to the callee that no more signal changes are available
-	\return String representation of comment
-    	*/ 
+#endif
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	///Adds a given transaction to the internal transaction list
 	/**
@@ -150,10 +145,12 @@ protected:
 	unsigned int _myid;
 	///Class variable counting the number of task instances
 	static unsigned int _id;
+#ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;
 	///Actual position within comment list (used for HTML output)
 	CommentList::iterator _posCommentList;
+#endif
 	///List of scheduled transactions
 	TransactionList _transactList;
 	///Actual position within transaction list (used for vcd output)
@@ -166,6 +163,10 @@ protected:
 	std::string* _comment;
 	///Busy cycles since simulation start
 	unsigned long _busyCycles;
+	///Sum of contention delay of CPU transactions
+	unsigned long _CPUContentionDelay;
+	///Number of transactions which have been executed on a CPU
+	unsigned long _noCPUTransactions; 
 };
 
 #endif

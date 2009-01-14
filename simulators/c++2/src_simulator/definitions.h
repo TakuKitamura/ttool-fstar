@@ -67,12 +67,11 @@ using std::max;
 #undef DEBUG_BUS
 
 #define BUS_ENABLED
-//#define EVENTS_MAPPED_ON_BUS
 #define WAIT_SEND_VLEN 1
 #define CPURRPB CPUPB
 #define CLOCK_INC 20
-#define BLOCK_SIZE 100000
-#define ADD_COMMENTS
+#define BLOCK_SIZE 500000
+#undef ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
 
 //Task VCD output
@@ -90,14 +89,7 @@ class SchedulableDevice;
 template <typename T> class Parameter;
 class TraceableDevice;
 class Master;
-
-enum vcdBusVisState
-    {
-	END_IDLE_BUS,
-	END_READ_BUS,
-	END_WRITE_BUS,
-	INIT_BUS
-};
+class BusMasterInfo;
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -120,7 +112,7 @@ typedef std::map<Master*, TMLTransaction*> BusTransHashTab;
 /////Datatype establishing an association between a transaction and its priority, used by buses
 //typedef std::multimap<unsigned int, Master*> BusMasterPrioTab;
 ///Datatype establishing an association between a bus and a priority, used by Masters
-typedef std::map<SchedulableCommDevice*, unsigned int> MasterPriorityHashTab;
+typedef std::map<SchedulableCommDevice*, BusMasterInfo*> MasterPriorityHashTab;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events

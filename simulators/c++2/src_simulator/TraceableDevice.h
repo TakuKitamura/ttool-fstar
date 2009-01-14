@@ -67,7 +67,6 @@ public:
 	///Writes benchmarking data to a given stream
 	/**
       	\param s Reference to an output stream
-	\param iSimulationTime Duration of the simulation in time units
 	*/
 	virtual void streamBenchmarks(std::ostream& s)=0;
 	///Destructor
