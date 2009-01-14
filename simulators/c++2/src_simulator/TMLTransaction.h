@@ -176,8 +176,9 @@ public:
 	*/
 	TMLChannel* getChannel();
 	
-	static void * operator new(unsigned int size);
-	static void operator delete(void *p, unsigned int size);
+	//static void * operator new(unsigned int size);
+	static void * operator new(size_t size);
+	static void operator delete(void *p, size_t size);
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;

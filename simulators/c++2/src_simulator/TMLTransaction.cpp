@@ -160,9 +160,9 @@ TMLChannel* TMLTransaction::getChannel(){
 	return _channel;
 }
 
-void * TMLTransaction::operator new(unsigned int size){
+void * TMLTransaction::operator new(size_t size){
 	return memPool.pmalloc(size);
 }
-void TMLTransaction::operator delete(void *p, unsigned int size){
+void TMLTransaction::operator delete(void *p, size_t size){
 	memPool.pfree(p, size);
 }

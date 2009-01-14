@@ -211,7 +211,7 @@ public:
 	\param size Size of memory chunk to be allocated
 	\return Pointer to the allocated chunk of memory
 	*/
-	inline void * operator new(unsigned int size){
+	inline void * operator new(size_t size){
 		return memPool.pmalloc(size);
 	}
 	///Delete operator
@@ -219,7 +219,7 @@ public:
 	\param p Pointer to the memory chunk to be deallocated 
 	\param size Size of memory chunk to be deallocated
 	*/
-	inline void operator delete(void *p, unsigned int size){
+	inline void operator delete(void *p, size_t size){
 		memPool.pfree(p, size);
 	}
 
