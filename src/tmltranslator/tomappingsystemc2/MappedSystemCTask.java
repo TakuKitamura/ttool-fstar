@@ -302,13 +302,13 @@ public class MappedSystemCTask {
 				}else{	
 					nextCommand= cmdName + ".setNextCommand(array(" + nextCommandCollection.num + nextCommandCollection.str + "));\n";
 				}
-				functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + modifyString(addSemicolonIfNecessary(action)) + CR + functionCollection.str + "}" + CR2;
+				functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR + functionCollection.str + "}" + CR2;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 			}else{
 				//System.out.println("nextCommandCont!=null in ActionState "+ action +CR); 
-				functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
+				functionCont.str += "#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
 				return makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,functionCont,lastSequence);
@@ -354,7 +354,7 @@ public class MappedSystemCTask {
 			cmdName="_choice" + currElem.getID();
 			hcode+="TMLChoiceCommand " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "(this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
-			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nstatic bool firstTime=true;\nif(firstTime){\nfirstTime=false;\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getInit()) + "\n}else{\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getIncrement()) + "\n}\nif(" + ((TMLForLoop)currElem).getCondition() + "){\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn 0;\n}else{\naddComment(new Comment(_endLastTransaction,0," + (commentNum+1) + "));\nfirstTime=true;\nreturn 1;\n}\n}\n\n";
+			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nstatic bool firstTime=true;\nif(firstTime){\nfirstTime=false;\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getInit()) + "\n}else{\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getIncrement()) + "\n}\nif(" + ((TMLForLoop)currElem).getCondition() + "){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn 0;\n}else{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + (commentNum+1) + "));\n#endif\nfirstTime=true;\nreturn 1;\n}\n}\n\n";
 			commentText+="_comment[" + commentNum + "]=std::string(\"" + ((TMLForLoop)currElem).getCondition() + "=true\");\n";
 			commentNum++;
 			commentText+="_comment[" + commentNum + "]=std::string(\"Exit loop: " + ((TMLForLoop)currElem).getCondition() + "=false\");\n";
@@ -535,9 +535,9 @@ public class MappedSystemCTask {
 							//System.out.println("Call makeCommands, task: "+reference);
 							//if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,functionCollection,lastSequence);
-							if (functionCollection.str.length() == 0){
+							if (functionCollection.str.isEmpty()){
 								//System.out.println("NO content has been added to "+ code2);
-								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR +"}" + CR;
+								code += "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
 								//System.out.println("RETURN, aaINC NUM "+ returnIndex);
@@ -548,7 +548,7 @@ public class MappedSystemCTask {
 								returnIndex = nextCommandCollection.num;
 								//System.out.println("Returned index: "+ returnIndex);
 								//System.out.println("Choice: Content has been added to "+ code2);
-								code += "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n" + functionCollection.str + "return " + returnIndex + ";\n}" + CR;
+								code += "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + functionCollection.str + "return " + returnIndex + ";\n}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 								commentNum++;
 								//returnIndex = nextCommandCollection.num;
@@ -559,7 +559,7 @@ public class MappedSystemCTask {
 						}else{
 							//System.out.println("Choice: Next command!=0 "+ code2);
 							int oldReturnIndex=nextCommandCont.num;
-							functionCont.str += code + "{\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n";
+							functionCont.str += code + "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n";
 							commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
 							commentNum++;
 							MCResult = makeCommands(currElem.getNextElement(i), false, retElement, nextCommandCont,functionCont,lastSequence);
@@ -578,7 +578,7 @@ public class MappedSystemCTask {
 				if (nextCommandCont==null){
 					//System.out.println("Choice: finalization, add new command\n");
 					if (index1 == -1){
-						code += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + returnIndex + SCCR;
+						code += "#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + returnIndex + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
 						commentNum++;
 						nextCommand= cmdName + ".setNextCommand(array(" + (returnIndex+1) + nextCommandTemp + ",(TMLCommand*)0))" + SCCR;
@@ -592,7 +592,7 @@ public class MappedSystemCTask {
 				}else{
 					//System.out.println("Choice: finalization, No new command\n");
 					if (index1 == -1){
-						functionCont.str += "addComment(new Comment(_endLastTransaction,0," + commentNum + "));\nreturn " + nextCommandCont.num + SCCR;
+						functionCont.str += "#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + nextCommandCont.num + SCCR;
 						commentText+="_comment[" + commentNum + "]=std::string(\"Exit branch taken\");\n";
 						commentNum++;
 						nextCommandCont.str += ",(TMLCommand*)0";

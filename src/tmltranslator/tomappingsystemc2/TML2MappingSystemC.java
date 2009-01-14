@@ -302,7 +302,7 @@ public class TML2MappingSystemC {
 		}
 		declaration += CR;
 		
-		declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\nsimulate(cpulist,buslist);\nschedule2HTML(cpulist,buslist,len,args);\nschedule2VCD(vcdlist,len,args);\n//schedule2Graph(cpulist, len, args);\nschedule2TXT(cpulist, len, args);\nstreamBenchmarks(std::cout, vcdlist);\nreturn 0;\n}\n";
+		declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\nsimulate(cpulist,buslist);\nschedule2HTML(cpulist,buslist,len,args);\nschedule2VCD(vcdlist,len,args);\n//schedule2Graph(cpulist, len, args);\nschedule2TXT(cpulist, len, args);\nstreamBenchmarks(std::cout, vcdlist);\nstd::cout << \"Simulated time: \" << SchedulableDevice::getSimulatedTime() << \" time units.\\n\";\nreturn 0;\n}\n";
   	}
 
 	private int addRoutingInfoForChannel(TMLElement _tmle, TMLTask _task, strwrap buses, strwrap slaves, boolean dir){
