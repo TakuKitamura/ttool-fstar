@@ -108,7 +108,40 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
 					((TMLComponentTaskDiagramPanel)tdp).updateConnectors(this, oldp1, oldp2, p1, p2);
 				}
 			}*/
+			
+			TMLCPortConnectingPoint pt1 = (TMLCPortConnectingPoint)p1;
+			TMLCPortConnectingPoint pt2 = (TMLCPortConnectingPoint)p2;
+			
+			if (!pt1.positionned) {
+				pt1.positionned = true;
+				if (pt1.getFather() instanceof TMLCPrimitivePort) {
+					pt1.port = (TMLCPrimitivePort)(pt1.getFather());   
+				}
+			}
+			
+			if (!pt2.positionned) {
+				pt2.positionned = true;
+				if (pt2.getFather() instanceof TMLCPrimitivePort) {
+					pt2.port = (TMLCPrimitivePort)(pt2.getFather());   
+				}
+			}
+			
+			if ((pt1.port != null) && (pt2.port != null)) {
+				String name1 = pt1.port.getPortName();
+				String name2 = pt2.port.getPortName();
+				if (name1.equals(name2)) {
+					int w = g.getFontMetrics().stringWidth(name1);
+					Font fold = g.getFont();
+					Font f = fold.deriveFont(Font.ITALIC, (float)(tdp.getFontSize()));
+					g.setFont(f);
+					g.drawString(name1, (x1 + x2 - w)/2, (y1 + y2)/2);
+					g.setFont(fold);
+				}
+			}
+			
             g.drawLine(x1, y1, x2, y2);
+			
+			
         //} else {
         //    GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         //}

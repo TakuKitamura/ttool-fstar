@@ -112,11 +112,11 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
         }
         
 		
-		widthValue = g.getFontMetrics().stringWidth(value);
+		widthValue = g.getFontMetrics().stringWidth(interfaceName);
 		if (!tdp.isScaled()) {
 			maxWidthValue = Math.max(maxWidthValue, widthValue);
 		}
-		//g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - (h/2));
+		g.drawString(interfaceName, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - (h/2));
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {

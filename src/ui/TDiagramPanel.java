@@ -397,13 +397,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			
 			// Draw name of component selected
 			if (componentPointed != null) {
-				String name = componentPointed.getName();
+				String name1 = componentPointed.getName();
 				if (componentPointed.hasFather()) {
-					name = componentPointed.getTopLevelName() + ": " + name;
+					name1 = componentPointed.getTopLevelName() + ": " + name1;
 				}
 				//g.setColor(Color.black);
 				//g.drawString(name, 20, 20);
-				mgui.setStatusBarText(name);
+				mgui.setStatusBarText(name1);
 			}
 			
 			//Draw component being added

@@ -59,7 +59,7 @@ import ui.window.*;
 import tmltranslator.*;
 
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-	private int maxFontSize = 20;
+	private int maxFontSize = 14;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;

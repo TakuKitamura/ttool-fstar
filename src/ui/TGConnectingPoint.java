@@ -52,6 +52,8 @@ import myutil.*;
 
 public class TGConnectingPoint implements CDElement {
     
+	protected TGComponent father;
+	
     //private static int ID = 0;
     
     protected int x, y; // relative cd and center of the point
@@ -249,6 +251,18 @@ public class TGConnectingPoint implements CDElement {
     protected String saveInXML(int num) {
         return "<TGConnectingPoint num=\"" + num + "\" id=\"" + getId() + "\" />\n";
     }
+	
+	/*protected boolean hasFather() {
+		return (father != null);
+	}
+	
+	protected void setFather(TGComponent tgc) {
+		father = tgc;
+	}
+	
+	protected TGComponent getFather() {
+		return father;
+	}*/
 }
 
 
