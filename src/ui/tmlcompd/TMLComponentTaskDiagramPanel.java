@@ -370,12 +370,12 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
 	
 	public void addNonMappedTMLPritimiveComponentsNames(TMLCPrimitiveComponent tgc, ArrayList<String> list, String _topName, TMLArchiDiagramPanel _tadp, boolean ref, String _name) {
-		name = tgc.getValue();
-		if (ref && name.equals(_name)) {
-			list.add(_topName + "::" + name);
+		String name1 = tgc.getValue();
+		if (ref && name1.equals(_name)) {
+			list.add(_topName + "::" + name1);
 		} else {
-			if (!_tadp.isMapped(_topName,  name)) {
-				list.add(_topName + "::" + name);
+			if (!_tadp.isMapped(_topName,  name1)) {
+				list.add(_topName + "::" + name1);
 			}
 		}
 	}

@@ -63,7 +63,8 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     protected int textY = 22;
 	protected int lineHeight = 30;
 	private double dlineHeight = 0.0;
-    protected boolean formal = false;
+    protected int type = 0;
+	// 0: normal, 1: formal, 2: security
     //protected int startFontSize = 10;
     protected Graphics graphics;
     //protected int iconSize = 30;
@@ -76,6 +77,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     
     protected final static String REGULAR_REQ = "<<Requirement>>";
     protected final static String FORMAL_REQ = "<<Formal Requirement>>";
+	protected final static String SECURITY_REQ = "<<Security Requirement>>";
     
     public final static int HIGH = 0;
     public final static int MEDIUM = 1;
@@ -86,6 +88,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     protected String kind = "";
     protected String criticality = "";
     protected String violatedAction = "";
+	protected String attackTreeNode = "";
 	
 	
 	
@@ -148,8 +151,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         userResizable = true;
 		multieditable = true;
 		
-		
-        formal = false;
+        type = 0;
         
         // Name of the requirement
         name = "Requirement";
@@ -215,10 +217,14 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		if (displayText) {
 			size = currentFontSize - 2;
 			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-			if (formal) {
+			if (type == 1) {
 				drawLimitedString(g, FORMAL_REQ, x, y + size, width, 1);
 			} else {
-				drawLimitedString(g, REGULAR_REQ, x, y + size, width, 1);
+				if (type == 0) {
+					drawLimitedString(g, REGULAR_REQ, x, y + size, width, 1);
+				} else {
+					drawLimitedString(g, SECURITY_REQ, x, y + size, width, 1);
+				}
 			}			
 			size += currentFontSize;
 			g.setFont(myFontB);
@@ -229,7 +235,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		
 		g.setFont(myFont);
 		String texti;
-		if (formal) {
+		if (type == 1) {
 			texti = "TRDD";
 		} else {
 			texti = "Text";
@@ -254,10 +260,14 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         }
         // Type and risk
 		if (size < (height - 2)) {
-			drawLimitedString(g, "Type=\"" + kind + "\"", x + textX, y + size, width, 0);
+			drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
 			size += currentFontSize;
 			if (size < (height - 2)) {
 				drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
+				size += currentFontSize;
+				if ((size < (height - 2)) && (type == 2)) {
+					drawLimitedString(g, "Attack Tree Node=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+				}
 			}
 		}
 		
@@ -324,7 +334,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	
 	public boolean editAttributes() {
 		//String oldValue = value;
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), text, kind, criticality, violatedAction, isFormal());
+        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), text, kind, criticality, violatedAction, type, attackTreeNode);
         jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr);
         jdr.show();
@@ -337,6 +347,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         kind = jdr.getKind();
         criticality = jdr.getCriticality();
         violatedAction = jdr.getViolatedAction();
+		attackTreeNode = jdr.getAttackTreeNode();
         
         makeValue();
         return true;
@@ -365,11 +376,11 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     }
     
     public boolean isFormal() {
-        return formal;
+        return (type == 1);
     }
     
-    public void setFormal(boolean b) {
-        formal = b;
+    public void setType(int _type) {
+        type = _type;
     }
     
     public  int getType() {
@@ -382,18 +393,24 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
+		JMenuItem isRegular = null;
         JMenuItem isFormal = null;
-        if (formal) {
-            isFormal = new JMenuItem("Set a regular requirement");
-        } else {
-            isFormal = new JMenuItem("Set as formal requirement");
-        }
+		JMenuItem isSecurity = null;
+		
+		isRegular = new JMenuItem("Set as regular requirement");
+        isFormal = new JMenuItem("Set as formal requirement");
+		isSecurity = new JMenuItem("Set as security requirement");
+		
+		isRegular.addActionListener(menuAL);
 		isFormal.addActionListener(menuAL);
+		isSecurity.addActionListener(menuAL);
 		
 		JMenuItem editAttributes = new JMenuItem("Edit attributes");
 		editAttributes.addActionListener(menuAL);
         
-        componentMenu.add(isFormal);
+        componentMenu.add(isRegular);
+		componentMenu.add(isFormal);
+		componentMenu.add(isSecurity);
 		componentMenu.add(editAttributes);
     }
     
@@ -401,13 +418,18 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         String s = e.getActionCommand();
         if (s.indexOf("regular") > -1) {
             //System.out.println("Set to regular");
-            formal = false;
+            type = 0;
         } else {
 			if (s.indexOf("formal") > 1) {
 				//System.out.println("Set to formal");
-				formal = true;
+				type = 1;
 			} else {
-				return editAttributes();
+				if (s.indexOf("security") > 1) {
+				//System.out.println("Set to formal");
+				type = 2;
+				} else {
+					return editAttributes();
+				}
 			}
         }
         return true;
@@ -415,17 +437,25 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     
     public String toString() {
         String ret =  getValue();
-        if (formal) {
+        if (type == 1) {
             ret = ret + " " + FORMAL_REQ;
         }  else {
-            ret = ret + " " + REGULAR_REQ;
+			if (type == 0) {
+				ret = ret + " " + REGULAR_REQ;
+			} else {
+				ret = ret + " " + SECURITY_REQ;
+			}
         }
 		
 		ret += " " + text;
 		ret += " criticality=" + criticality;
 		
-		if (formal) {
+		if (type == 1) {
 			ret += " violatedAction=" + violatedAction;
+		}
+		
+		if (type == 2) {
+			ret += " attackTreeNode =" + attackTreeNode;
 		}
 		
         return ret;
@@ -433,12 +463,15 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Formal isFormal=\"");
+        /*sb.append("<Formal isFormal=\"");
         if (isFormal()) {
             sb.append("true\" />\n");
         } else {
             sb.append("false\" />\n");
-        }
+        }*/
+		sb.append("<type data=\"");
+		sb.append("" + type + "\" />\n");
+		
 		if (texts != null) {
             for(int i=0; i<texts.length; i++) {
                 //value = value + texts[i] + "\n";
@@ -455,6 +488,9 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         sb.append("\" />\n");
         sb.append("<violated data=\"");
         sb.append(violatedAction);
+		sb.append("\" />\n");
+		sb.append("<attackTreeNode data=\"");
+        sb.append(attackTreeNode);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -484,10 +520,17 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
                             if (elt.getTagName().equals("Formal")) {
                                 s = elt.getAttribute("isFormal");
                                 if (s.equals("true")) {
-                                    formal = true;
+                                    type = 1;
                                 } else {
-                                    formal = false;
+                                    type = 0;
                                 }
+                            } else if (elt.getTagName().equals("type")) {
+                                //System.out.println("Analyzing line0");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    type = 0;
+                                }
+								type = Integer.decode(s).intValue();
                             } else if (elt.getTagName().equals("textline")) {
                                 //System.out.println("Analyzing line0");
                                 s = elt.getAttribute("data");
@@ -533,6 +576,10 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     public String getViolatedAction() {
         return violatedAction;
     }
+	
+	public String getAttackTreeNode() {
+        return attackTreeNode;
+    }
     
     public String getText() {
         return text;
@@ -551,13 +598,16 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	
 	public String getAttributes() {
 		String attr = "";
-		if (formal) {
+		if (type == 1) {
 			attr += "TRDD= " + text + "\n";
 		} else {
 			attr += "Text= " + text + "\n";
 		}
-		attr += "Type= " + kind + "\n";
+		attr += "Kind= " + kind + "\n";
 		attr += "Risk= " + criticality + "\n";
+		if (type == 2) {
+			attr += "AttackTreeNode=" + attackTreeNode + "\n";
+		}
 		return attr;
 	}
 	
@@ -575,12 +625,17 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		
 		// Must find for both modes which width is desirable
 		String s0, s1;
-		if (formal) {
+		if (type == 1) {
 			s0 = FORMAL_REQ;
 			s1 = "TRDD=";
 		} else {
-			s0 = REGULAR_REQ;
-			s1 = "Text=";
+			if (type == 0) {
+				s0 = REGULAR_REQ;
+				s1 = "Text=";
+			} else {
+				s0 = SECURITY_REQ;
+				s1 = "Text=";
+			}
 		}
 		
 		graphics.setFont(f2);
@@ -609,7 +664,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 				w4 = Math.max(w4, w3+2);
 			}
 		}
-		w3 = graphics.getFontMetrics().stringWidth("Type=\"" + kind + "\"") + 2;
+		w3 = graphics.getFontMetrics().stringWidth("Kind=\"" + kind + "\"") + 2;
 		w4 = Math.max(w4, w3);
 		w3 = graphics.getFontMetrics().stringWidth("Risk=\"" + criticality + "\"") + 2;
 		w4 = Math.max(w4, w3);

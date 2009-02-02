@@ -61,11 +61,11 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     private JPanel panel1, panel2;
     private Frame frame;
-    private String kind, criticality, violatedAction;
+    private String kind, criticality, violatedAction, attackTreeNode;
     //private String actionbegin1, actionend1, actionbegin2, actionend2;
     //private String time1, time2;
     private String text;
-    private boolean formal;
+    private int type;
     
     // Panel1
     protected JTextArea jta;
@@ -74,21 +74,22 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     //Panel2
     private JComboBox kindBox, criticalityBox;
-    private JTextField violatedActionBox;
+    private JTextField violatedActionBox, attackTreeNodeBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogRequirement(Frame _frame, String _title, String _text, String _kind, String _criticality, String _violatedAction, boolean _formal) {
+    public JDialogRequirement(Frame _frame, String _title, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode) {
         super(_frame, _title, true);
         frame = _frame;
         text = _text;
         kind = _kind;
         criticality = _criticality;
         violatedAction = _violatedAction;
-        formal = _formal;
+        type = _type;
+		attackTreeNode = _attackTreeNode;
         
         initComponents();
         myInitComponents();
@@ -114,11 +115,13 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
-        if (formal) {
+        if (type == 1) {
             panel1.setBorder(new javax.swing.border.TitledBorder("Setting formal information on requirement "));
-        } else {
+        } else if (type == 0) {
             panel1.setBorder(new javax.swing.border.TitledBorder("Setting unformal text information on requirement "));
-        }
+        } else {
+			panel1.setBorder(new javax.swing.border.TitledBorder("Setting text information on security requirement "));
+		}
         panel1.setPreferredSize(new Dimension(350, 250));
         
         panel2 = new JPanel();
@@ -209,10 +212,24 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         violatedActionBox = new JTextField(violatedAction, 15);
-        if (!formal) {
+        if (type != 1) {
             violatedActionBox.setEnabled(false);
-        }
+        } else {
+			violatedActionBox.setEnabled(true);
+		}
         panel2.add(violatedActionBox, c2);
+		
+		c2.gridwidth = 1;
+        panel2.add(new JLabel("AttackTreeNode:"), c2);
+		
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        attackTreeNodeBox = new JTextField(attackTreeNode, 50);
+        if (type != 2) {
+            attackTreeNodeBox.setEnabled(false);
+        } else {
+			attackTreeNodeBox.setEnabled(true);
+		}
+        panel2.add(attackTreeNodeBox, c2);
         
         // main panel;
         c0.gridwidth = 1;
@@ -284,6 +301,10 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     public String getViolatedAction() {
         return violatedActionBox.getText();
+    }
+	
+	public String getAttackTreeNode() {
+        return attackTreeNodeBox.getText();
     }
     
 }

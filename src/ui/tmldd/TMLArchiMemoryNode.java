@@ -172,7 +172,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 		String tmpName;
         
 		JDialogMemoryNode dialog = new JDialogMemoryNode(frame, "Setting Memory attributes", this);
-		dialog.setSize(250, 350);
+		dialog.setSize(400, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         

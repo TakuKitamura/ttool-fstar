@@ -226,7 +226,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
     
     public boolean editOndoubleClick(JFrame frame) {
         //String oldValue = value;
-        JDialogRequirement jdr = new JDialogRequirement(frame, "Setting attributes of Requirement " + ((Requirement)(getTopFather())).getRequirementName(), text, kind, criticality, violatedAction, ((Requirement)(getTopFather())).isFormal());
+        /*JDialogRequirement jdr = new JDialogRequirement(frame, "Setting attributes of Requirement " + ((Requirement)(getTopFather())).getRequirementName(), text, kind, criticality, violatedAction, ((Requirement)(getTopFather())).isFormal());
         jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr);
         jdr.show();
@@ -241,7 +241,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         violatedAction = jdr.getViolatedAction();
         
         makeValue();
-        checkMySize();
+        checkMySize();*/
         return true;
     }
     

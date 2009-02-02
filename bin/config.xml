@@ -50,11 +50,11 @@
 <ExternalCommand2Host data="loupiac.eurecom.fr"/>
 <ExternalCommand2 data="/packages/uppaal/uppaal /homes/apvrille/TechTTool/UPPAAL/spec.xml"/>
 
-<LastOpenFile data="U:\TechTTool\TURTLEModeling\Chafic\CSmartCardProtocol_ludo_V01.xml"/>
+<LastOpenFile data="U:\TechTTool\TURTLEModeling\EVITA\evita_t2300_02.xml"/>
 
 
 
-<LastWindowAttributes x="112" y="60" width="1326" height="984" max="false" />
+<LastWindowAttributes x="28" y="29" width="1470" height="1087" max="false" />
 
 </TURTLECONFIGURATION>
 
