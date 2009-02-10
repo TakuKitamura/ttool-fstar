@@ -1,4 +1,4 @@
-/**Copyright or � or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -109,6 +109,8 @@ public class TGComponentManager {
     public static final int CONNECTOR_COMMENT = 118;
     
     public static final int CONNECTOR_DERIVE_REQ = 119;
+	public static final int CONNECTOR_COPY_REQ = 128;
+	public static final int CONNECTOR_COMPOSITION_REQ = 129;
     public static final int CONNECTOR_VERIFY_REQ = 120;
     
     public static final int CONNECTOR_PROSMD = 121;
@@ -820,6 +822,10 @@ public class TGComponentManager {
             return TREQ_OBSERVER;
         } else if (tgc instanceof TGConnectorDerive) {
             return CONNECTOR_DERIVE_REQ;
+        } else if (tgc instanceof TGConnectorCopy) {
+            return CONNECTOR_COPY_REQ;
+        } else if (tgc instanceof TGConnectorComposition) {
+            return CONNECTOR_COMPOSITION_REQ;
         } else if (tgc instanceof TGConnectorVerify) {
             return CONNECTOR_VERIFY_REQ;
         } else if (tgc instanceof ProSMDStartState) {
@@ -986,6 +992,12 @@ public class TGComponentManager {
                 break;
             case CONNECTOR_DERIVE_REQ:
                 tgc = new TGConnectorDerive(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case CONNECTOR_COPY_REQ:
+                tgc = new TGConnectorCopy(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case CONNECTOR_COMPOSITION_REQ:
+                tgc = new TGConnectorComposition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
             case CONNECTOR_VERIFY_REQ:
                 tgc = new TGConnectorVerify(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

@@ -108,32 +108,37 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		minWidth = 1;
         minHeight = lineHeight;
         
-        nbConnectingPoint = 24;
+        nbConnectingPoint = 28;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[1] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[3] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[4] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[5] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[6] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[7] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[8] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[9] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.25, 1.0);
-		connectingPoint[10] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0);
-		connectingPoint[11] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.75, 1.0);
-        connectingPoint[12] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.25);
-        connectingPoint[13] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[14] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.75);
-        connectingPoint[15] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.25);
-        connectingPoint[16] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[17] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.75);
-        connectingPoint[18] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.25, 0.0);
-        connectingPoint[19] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[20] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 0.0);
-        connectingPoint[21] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.25, 1.0);
-		connectingPoint[22] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.5, 1.0);
-		connectingPoint[23] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0);
+        connectingPoint[0] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.25, TGConnectingPoint.WEST);
+        connectingPoint[1] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.5, TGConnectingPoint.WEST);
+        connectingPoint[2] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.75, TGConnectingPoint.WEST);
+        connectingPoint[3] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.25, TGConnectingPoint.EAST);
+        connectingPoint[4] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.5, TGConnectingPoint.EAST);
+        connectingPoint[5] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.75, TGConnectingPoint.EAST);
+        connectingPoint[6] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.25, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[7] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[8] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.75, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[9] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[10] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[11] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
+        connectingPoint[12] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.25, TGConnectingPoint.WEST);
+        connectingPoint[13] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.5, TGConnectingPoint.WEST);
+        connectingPoint[14] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.75, TGConnectingPoint.WEST);
+        connectingPoint[15] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.25, TGConnectingPoint.EAST);
+        connectingPoint[16] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.5, TGConnectingPoint.EAST);
+        connectingPoint[17] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.75, TGConnectingPoint.EAST);
+        connectingPoint[18] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.25, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[19] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.5, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[20] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[21] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.25, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[22] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[23] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[24] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[25] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[26] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[27] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		
 		
         addTGConnectingPointsCommentTop();    
         
@@ -669,13 +674,24 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 		w3 = graphics.getFontMetrics().stringWidth("Risk=\"" + criticality + "\"") + 2;
 		w4 = Math.max(w4, w3);
 		
+		if (type == 2) {
+			w3 = graphics.getFontMetrics().stringWidth("Attack Tree Node=\"" + attackTreeNode + "\"") + 2;
+			w4 = Math.max(w4, w3);
+		}
+		
 		
 		if (mode == 1) {
 			resize(w4, lineHeight);
 			return;
 		}
 		
-		int h = ((texts.length + 3) * currentFontSize) + lineHeight;
+		int h;
+		if (mode == 2) {
+			h = ((texts.length + 3) * currentFontSize) + lineHeight;
+		} else {
+			h = ((texts.length + 4) * currentFontSize) + lineHeight;
+		}
+		
 		
 		resize(w4, h);
 		

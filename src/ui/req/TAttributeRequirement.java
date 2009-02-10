@@ -82,7 +82,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         
         nbConnectingPoint = 10;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, .5);
+        /*connectingPoint[0] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.0, .5);
         connectingPoint[1] = new TGConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.5);
         connectingPoint[2] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.25, 1.0);
         connectingPoint[3] = new TGConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0);
@@ -91,7 +91,7 @@ public class TAttributeRequirement extends TGCWithoutInternalComponent {
         connectingPoint[6] = new TGConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.5);
         connectingPoint[7] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.25, 1.0);
         connectingPoint[8] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.5, 1.0);
-        connectingPoint[9] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0);
+        connectingPoint[9] = new TGConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0);*/
         addTGConnectingPointsCommentDown();
         
         moveable = false;

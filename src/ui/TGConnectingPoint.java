@@ -80,6 +80,14 @@ public class TGConnectingPoint implements CDElement {
     protected static final Color OUT = Color.cyan;
     protected static final Color INOUT = Color.orange;
     protected static final Color NO = Color.white;
+	
+	protected int orientation;
+	
+	public static final int NORTH=0;
+	public static final int EAST=1;
+	public static final int SOUTH=2;
+	public static final int WEST=3;
+   
     
     public TGConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
         container = _container;
@@ -251,6 +259,10 @@ public class TGConnectingPoint implements CDElement {
     protected String saveInXML(int num) {
         return "<TGConnectingPoint num=\"" + num + "\" id=\"" + getId() + "\" />\n";
     }
+	
+	public int getOrientation() {
+		return orientation;
+	}
 	
 	/*protected boolean hasFather() {
 		return (father != null);

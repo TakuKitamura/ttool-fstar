@@ -36,44 +36,69 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class TGConnectingPointDerive
- * Definition of connecting points on which connectors between requirements may be connected
- * Creation: 30/05/2006
- * @version 1.0 30/05/2006
+ * Class TGConnectorCopy
+ * Connector to be used in requirement diagram. Connects two requirements
+ * Creation: 04/02/2009
+ * @version 1.0 04/02/2009
  * @author Ludovic APVRILLE
  * @see
  */
 
 package ui.req;
 
-//import java.awt.*;
+import java.awt.*;
+//import java.awt.geom.*;
+import java.util.*;
+
+import myutil.*;
 
 import ui.*;
 
-public class TGConnectingPointDerive extends  TGConnectingPointWidthHeight {
+public  class TGConnectorCopy extends TGConnector {
+    int w, h;
     
-    public TGConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
+    public TGConnectorCopy(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        value = "<<copy>>";
     }
     
-    public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
-        if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
+    
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+		 
+        //g.drawLine(x1, y1, x2, y2);
+        GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+        
+        // Indicate semantics
 		
-		if (type == TGComponentManager.CONNECTOR_COMPOSITION_REQ) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
+		Font f = g.getFont();
+		Font old = f;
+		if (f.getSize() != tdp.getFontSize()) {
+			f = f.deriveFont((float)tdp.getFontSize());
+			g.setFont(f);
+		}
 		
-		if (type == TGComponentManager.CONNECTOR_COPY_REQ) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-        //System.out.println("is compatible with:false");
-        return false;
+        w  = g.getFontMetrics().stringWidth(value);
+        h = g.getFontMetrics().getHeight();
+        g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+		g.setFont(old);
     }
+    
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
+            return this;
+        }
+        return null;
+    }
+    
+    public int getType() {
+        return TGComponentManager.CONNECTOR_COPY_REQ;
+    }
+    
 }
+
+
+
+
+
+
+

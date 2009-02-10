@@ -266,6 +266,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TREQ_OBSERVER = 166;
     public static final int TREQ_DERIVE = 164;
     public static final int TREQ_VERIFY = 165;
+	public static final int TREQ_COPY = 258;
+	public static final int TREQ_COMPOSITION = 259;
     
     
     public static final int ACT_MODEL_CHECKING = 25;
@@ -366,7 +368,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 258;
+    public static final int NB_ACTION = 260;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -688,9 +690,11 @@ public class TGUIAction extends AbstractAction {
         // Requirement diagrams
         actions[TREQ_REQUIREMENT] = new TAction("add-treq-requirement", "Add a requirement", IconManager.imgic1002, IconManager.imgic1002, "Requirement", "Add a requirement to the currently opened requirement diagram", 0);
         actions[TREQ_OBSERVER] = new TAction("add-treq-observer", "Add an observer", IconManager.imgic1004, IconManager.imgic1004, "Observer", "Add an observer to the currently opened requirement diagram", 0);
-        actions[TREQ_DERIVE] = new TAction("add-treq-derive", "Add a <<derive>> link", IconManager.imgic1008, IconManager.imgic1008, "Derive", "Add a <<derive>> link between two requirements of the currently opened requirement diagram", 0);
+        actions[TREQ_DERIVE] = new TAction("add-treq-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened requirement diagram", 0);
         actions[TREQ_VERIFY] = new TAction("add-treq-verify", "Add a <<verify>> link", IconManager.imgic1006, IconManager.imgic1006, "Verify", "Add a <<verify>> link between an observer and a requirement of the currently opened requirement diagram", 0);
-
+		actions[TREQ_COPY] = new TAction("add-treq-copy", "Add a <<copy>> link", IconManager.imgic1010, IconManager.imgic1010, "Copy", "Add a <<copy>> link between two requirements of the currently opened requirement diagram", 0);
+        actions[TREQ_COMPOSITION] = new TAction("add-treq-composition", "Add a <<derive>> link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a <<copy>> link between two requirements of the currently opened requirement diagram", 0);
+        
         // TURTLE-OS
         actions[TOS_TCLASS] = new TAction("add-tclass-os", "Add Tclass", IconManager.imgic104, IconManager.imgic104, "Tclass", "Add a TClass to the currently opened class diagram", 0);
         actions[TOS_ASSOCIATION] = new TAction("add-association-tos", "Add association", IconManager.imgic102, IconManager.imgic102, "Association", "Add an association between two tclasses of the currently opened TURTLE-OS class diagram", 0);

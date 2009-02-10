@@ -251,7 +251,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
     
     public String getXMLHead() {
-		System.out.println("Name=" + name);
+		//System.out.println("Name=" + name);
         return "<TMLComponentTaskDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + zoomParam() +" >";
     }
     

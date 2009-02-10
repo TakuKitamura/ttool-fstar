@@ -5333,6 +5333,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TREQ_OBSERVER);
         } else if (command.equals(actions[TGUIAction.TREQ_DERIVE].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_DERIVE_REQ);
+        } else if (command.equals(actions[TGUIAction.TREQ_COPY].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_COPY_REQ);
+        } else if (command.equals(actions[TGUIAction.TREQ_COMPOSITION].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_COMPOSITION_REQ);
         } else if (command.equals(actions[TGUIAction.TREQ_VERIFY].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_VERIFY_REQ);
         } else if (command.equals(actions[TGUIAction.PROSMD_START].getActionCommand())) {

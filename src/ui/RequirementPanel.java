@@ -83,7 +83,7 @@ public class RequirementPanel extends TURTLEPanel {
         
         //Class	diagram
         rdp = new RequirementDiagramPanel(mgui, toolBarReq);
-        rdp.setName("Requirement Diagram");
+        rdp.setName(s);
         rdp.tp = this;
         tdp = rdp;
         panels.add(rdp);
