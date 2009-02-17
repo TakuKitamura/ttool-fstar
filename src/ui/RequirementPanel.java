@@ -56,7 +56,13 @@ public class RequirementPanel extends TURTLEPanel {
     
     public RequirementPanel(MainGUI _mgui) {
         super(_mgui);
+		
         tabbedPane = new JTabbedPane();
+		UIManager.put("TabbedPane.tabAreaBackground", _mgui.BACK_COLOR);
+		UIManager.put("TabbedPane.selected", _mgui.BACK_COLOR);
+		SwingUtilities.updateComponentTreeUI(tabbedPane);
+		//tabbedPane.setOpaque(true);
+		
         cl = new ChangeListener() {
             public void stateChanged(ChangeEvent e){
                 mgui.paneRequirementAction(e);
@@ -64,6 +70,7 @@ public class RequirementPanel extends TURTLEPanel {
         };
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+		
     }
     
     public void init() {
@@ -79,7 +86,9 @@ public class RequirementPanel extends TURTLEPanel {
         toolbars.add(toolBarReq);
         
         toolBarPanel = new JPanel();
+		//toolBarPanel.setBackground(Color.red);
         toolBarPanel.setLayout(new BorderLayout());
+		//toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
         
         //Class	diagram
         rdp = new RequirementDiagramPanel(mgui, toolBarReq);
@@ -111,7 +120,7 @@ public class RequirementPanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return "TURTLE Requirement: " + mgui.getTitleAt(this);
+        return mgui.getTitleAt(this) + " (SysML Requirement Diagrams)";
     }
     
     public boolean removeEnabled(int index) {

@@ -178,6 +178,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public final static byte NC_OK = 43;
     
     public final static int INCREMENT = 10;
+	
+	public static Object BACK_COLOR;
+	//public static Object BACK_COLOR;
     
     public final static String REMOTE_RTL_LOTOS_FILE = "spec.lot";
 	public final static String REMOTE_UPPAAL_FILE = "spec.xml";
@@ -508,6 +511,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_DIAGRAM_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_DOC].setEnabled(true);
+			actions[TGUIAction.ACT_GEN_DOC_REQ].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_JAVA].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_BIRDEYES].setEnabled(true);
 			break;
@@ -1023,6 +1027,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //System.out.println("New TURTLE Panels");
         // tabbed pane
         mainTabbedPane = new JTabbedPane();
+		mainTabbedPane.setBackground(ColorManager.MainTabbedPane);
+		mainTabbedPane.setForeground(Color.black);
+		
+		BACK_COLOR = UIManager.get("TabbedPane.selected");
+		//UIManager.put("TabbedPane.tabAreaBackground", ColorManager.MainTabbedPaneBack);
+		UIManager.put("TabbedPane.selected", ColorManager.MainTabbedPaneSelect);
+		//UIManager.put("TabbedPane.darkShadow", Color.black);
+		UIManager.put("TabbedPane.focus", Color.blue);
+		/*UIManager.put("TabbedPane.highlight", Color.blue);
+		UIManager.put("TabbedPane.lightHighlight", Color.red);
+		UIManager.put("TabbedPane.shadow", Color.black);
+		UIManager.put("TabbedPane.darkShadow", Color.magenta);
+		UIManager.put("TabbedPane.focus", Color.green);*/
+		SwingUtilities.updateComponentTreeUI(mainTabbedPane);
+		mainTabbedPane.setOpaque(true);
+
+		
         ChangeListener cl = new	ChangeListener() {
             public void stateChanged(ChangeEvent e){
                 paneAction(e);
@@ -3476,6 +3497,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}*/
 		//System.out.println("Documentation=" + docgen.getDocumentation());
 	}
+	
+	public void generateDocumentationReq() {
+		System.out.println("Frame Req");
+		JFrameRequirementTable jfrt = new JFrameRequirementTable("Requirement table", tabs);
+        jfrt.setIconImage(IconManager.img8);
+        jfrt.setSize(600, 600);
+        GraphicLib.centerOnParent(jfrt);
+        jfrt.setVisible(true);
+		System.out.println("Done");
+	}
     
     public int getTypeButtonSelected() {
         return typeButtonSelected;
@@ -5034,6 +5065,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             selectedCapture();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_DOC].getActionCommand())) {
             generateDocumentation();
+        } else if (command.equals(actions[TGUIAction.ACT_GEN_DOC_REQ].getActionCommand())) {
+            generateDocumentationReq();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].getActionCommand())) {
             toggleAttributes();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {

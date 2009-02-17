@@ -131,7 +131,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		//value = tdp.findRequirementName("Requirement_");
         oldValue = value;
         
-        myImageIcon = IconManager.imgic104;
+        myImageIcon = IconManager.imgic1004;
 		
 		diagramText = "no diagram";
         

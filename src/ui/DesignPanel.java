@@ -152,7 +152,7 @@ public class DesignPanel extends TURTLEPanel implements TURTLEDesignPanelInterfa
     }
     
     public String toString() {
-        return "TURTLE Design: " + mgui.getTitleAt(this);
+        return mgui.getTitleAt(this) + "(TURTLE Design)";
     }
     
     public TCDTClass getTCDTClass(String name) {

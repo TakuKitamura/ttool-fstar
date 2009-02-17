@@ -344,6 +344,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_SELECTED_CAPTURE = 61;
 	
 	public static final int ACT_GEN_DOC = 247;
+	public static final int ACT_GEN_DOC_REQ = 260;
     
     public static final int ACT_TOGGLE_ATTRIBUTES = 123;
     public static final int ACT_TOGGLE_GATES = 124;
@@ -368,7 +369,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 260;
+    public static final int NB_ACTION = 261;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -508,6 +509,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagram capture", IconManager.imgic338, IconManager.imgic339, "All diagram capture",  "Capture the currenlty opened set of diagram (analysis, design, etc.)", 0);
         actions[ACT_SELECTED_CAPTURE] = new TAction("selected-capture", "Capture of selected components", IconManager.imgic338, IconManager.imgic339, "Capture of selected components",  "Capture the selected components of the currently opened diagram", 0);
         actions[ACT_GEN_DOC] = new TAction("gen-doc", "Documentation generation", IconManager.imgic28, IconManager.imgic28, "Documentation generation",  "Documentation may be automatically generated, in html format, from edited diagrams", 0);
+        actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
         
         actions[ACT_ABOUT] = new TAction("about-command", "About", IconManager.imgic30, IconManager.imgic31, "About", "TURTLE Toolkit information", 0);
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TURTLE's website", IconManager.imgic30, IconManager.imgic31, "TURTLE's website", "Various information on the TURTLE profile", 0);

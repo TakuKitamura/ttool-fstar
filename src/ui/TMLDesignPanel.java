@@ -140,7 +140,7 @@ public class TMLDesignPanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return "TML Design: " + mgui.getTitleAt(this);
+        return mgui.getTitleAt(this) + " (TML Functional View)";
     }
 	
 	public ArrayList<String> getAllTMLTaskNames(String _name) {

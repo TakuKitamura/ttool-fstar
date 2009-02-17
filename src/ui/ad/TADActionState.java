@@ -99,6 +99,7 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
 			//g.drawString("acc", x + width - 10, y+height-10);
 			g.drawLine(x+width-2, y+2, x+width-6, y+6);
 			g.drawLine(x+width-6, y+2, x+width-2, y+6);
+			//System.out.println("accessibility");
 		}
     }
     

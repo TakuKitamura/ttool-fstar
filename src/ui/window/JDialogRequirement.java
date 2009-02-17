@@ -65,6 +65,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     //private String actionbegin1, actionend1, actionbegin2, actionend2;
     //private String time1, time2;
     private String text;
+	private String id;
     private int type;
     
     // Panel1
@@ -74,16 +75,17 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     //Panel2
     private JComboBox kindBox, criticalityBox;
-    private JTextField violatedActionBox, attackTreeNodeBox;
+    private JTextField idBox, violatedActionBox, attackTreeNodeBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogRequirement(Frame _frame, String _title, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode) {
+    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode) {
         super(_frame, _title, true);
         frame = _frame;
+		id = _id;
         text = _text;
         kind = _kind;
         criticality = _criticality;
@@ -166,8 +168,16 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
+		
+		
+        panel2.add(new JLabel("ID: "), c2);
+		
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        idBox = new JTextField(id, 50);
+        panel2.add(idBox, c2);
+		
+		c2.gridwidth = 1;
         panel2.add(new JLabel("Type:"), c2);
-        
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         kindBox = new JComboBox();
         kindBox.addItem("Functional");
@@ -285,6 +295,10 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     public boolean isRegularClose() {
         return regularClose;
+    }
+	
+	public String getId() {
+        return idBox.getText();
     }
     
     public String getText() {

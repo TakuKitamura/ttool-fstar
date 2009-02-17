@@ -72,7 +72,8 @@ public class ColorManager {
     public static final Color ACTIVITY_BOX = new Color(255, 208, 255);
     public static final Color RESIZE_POINTED = new Color(26, 114, 244);
     
-    public static final Color REQ_ATTRIBUTE_BOX = new Color(179, 249, 179);    
+    public static final Color REQ_ATTRIBUTE_BOX = new Color(179, 249, 179);
+    //public static final Color REQ_ATTRIBUTE_BOX = new Color(190, 229, 158);
     public static final Color OBS_ATTRIBUTE_BOX = new Color(225, 247, 225);
     
 	public static final Color CPU_BOX_1 = new Color(198, 235, 249);
@@ -91,6 +92,11 @@ public class ColorManager {
     public static final Color UML_NOTE = Color.lightGray;
     
     public static final Color DIAGRAM_BACKGROUND = Color.white;
+	
+	public static final Color MainTabbedPane = new Color(231, 214, 176);
+	//public static final Color MainTabbedPaneBack = new Color(136, 94, 4);
+	public static final Color MainTabbedPaneBack = new Color(9, 7, 85);
+	public static final Color MainTabbedPaneSelect = new Color(231, 178, 60);
     
     public final static void setColor(Graphics g, int state, int type) {
         if (type == 0) {
