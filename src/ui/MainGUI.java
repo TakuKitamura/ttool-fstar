@@ -3502,7 +3502,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		System.out.println("Frame Req");
 		JFrameRequirementTable jfrt = new JFrameRequirementTable("Requirement table", tabs);
         jfrt.setIconImage(IconManager.img8);
-        jfrt.setSize(600, 600);
+        jfrt.setSize(1024, 768);
         GraphicLib.centerOnParent(jfrt);
         jfrt.setVisible(true);
 		System.out.println("Done");
