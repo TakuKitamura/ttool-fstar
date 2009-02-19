@@ -92,6 +92,16 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	protected String id = "";
 	
 	protected boolean satisfied = false;
+	protected boolean verified = false;
+	
+	private JMenuItem isRegular = null;
+    private JMenuItem isFormal = null;
+	private JMenuItem isSecurity = null;
+	private JMenuItem menuNonSatisfied = null;
+	private JMenuItem menuSatisfied = null;
+	private JMenuItem menuNonVerified = null;
+	private JMenuItem menuVerified = null;
+	JMenuItem editAttributes = null;
 	
 	
 	// Icon
@@ -242,23 +252,25 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 			
 		}
 		
-		if (satisfied) {
-			Color tmp = g.getColor();
-			GraphicLib.setMediumStroke(g);
-			g.setColor(Color.green);
-			g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
-			g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
-			g.setColor(tmp);
-			GraphicLib.setNormalStroke(g);
-		} else {
-			//g.drawString("acc", x + width - 10, y+height-10);
-			Color tmp = g.getColor();
-			GraphicLib.setMediumStroke(g);
-			g.setColor(Color.red);
-			g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
-			g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
-			g.setColor(tmp);
-			GraphicLib.setNormalStroke(g);
+		if (verified) {
+			if (satisfied) {
+				Color tmp = g.getColor();
+				GraphicLib.setMediumStroke(g);
+				g.setColor(Color.green);
+				g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
+				g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
+				g.setColor(tmp);
+				GraphicLib.setNormalStroke(g);
+			} else {
+				//g.drawString("acc", x + width - 10, y+height-10);
+				Color tmp = g.getColor();
+				GraphicLib.setMediumStroke(g);
+				g.setColor(Color.red);
+				g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
+				g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
+				g.setColor(tmp);
+				GraphicLib.setNormalStroke(g);
+			}
 		}
 		
 		g.setFont(myFont);
@@ -427,8 +439,10 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     public boolean isSatisfied() {
 	    return satisfied;
     }
-    
-    
+	
+	public boolean isVerified() {
+		return verified;
+	}
     
     public  int getType() {
         return TGComponentManager.TREQ_REQUIREMENT;
@@ -439,37 +453,43 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
     }
     
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
-		JMenuItem isRegular = null;
-        JMenuItem isFormal = null;
-		JMenuItem isSecurity = null;
-		JMenuItem menuNonSatisfied = null;
-		JMenuItem menuSatisfied = null;
 		
+		componentMenu.addSeparator();
 		
-		isRegular = new JMenuItem("Set as regular requirement");
-        isFormal = new JMenuItem("Set as formal requirement");
-		isSecurity = new JMenuItem("Set as security requirement");
-		menuNonSatisfied = new JMenuItem("Set as non satisfied");
-		menuSatisfied = new JMenuItem("Set as satisfied");
-		
-		isRegular.addActionListener(menuAL);
-		isFormal.addActionListener(menuAL);
-		isSecurity.addActionListener(menuAL);
-		menuNonSatisfied.addActionListener(menuAL);
-		menuSatisfied.addActionListener(menuAL);
+		if (isRegular == null) {
+			isRegular = new JMenuItem("Set as regular requirement");
+			isFormal = new JMenuItem("Set as formal requirement");
+			isSecurity = new JMenuItem("Set as security requirement");
+			menuNonSatisfied = new JMenuItem("Set as non satisfied");
+			menuSatisfied = new JMenuItem("Set as satisfied");
+			menuNonVerified = new JMenuItem("Set as non verified");
+			menuVerified = new JMenuItem("Set as verified");
+			
+			isRegular.addActionListener(menuAL);
+			isFormal.addActionListener(menuAL);
+			isSecurity.addActionListener(menuAL);
+			menuNonSatisfied.addActionListener(menuAL);
+			menuSatisfied.addActionListener(menuAL);
+			menuNonVerified.addActionListener(menuAL);
+			menuVerified.addActionListener(menuAL);
+			
+			editAttributes = new JMenuItem("Edit attributes");
+			editAttributes.addActionListener(menuAL);
+		}
 		
 		menuNonSatisfied.setEnabled(satisfied);
 		menuSatisfied.setEnabled(!satisfied);
-		
-		JMenuItem editAttributes = new JMenuItem("Edit attributes");
-		editAttributes.addActionListener(menuAL);
+			
+		menuNonVerified.setEnabled(verified);
+		menuVerified.setEnabled(!verified);
         
         componentMenu.add(isRegular);
 		componentMenu.add(isFormal);
 		componentMenu.add(isSecurity);
 		componentMenu.add(menuNonSatisfied);
 		componentMenu.add(menuSatisfied);
+		componentMenu.add(menuNonVerified);
+		componentMenu.add(menuVerified);
 		componentMenu.add(editAttributes);
     }
     
@@ -487,15 +507,18 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 				//System.out.println("Set to formal");
 				reqType = 2;
 				} else {
-					if (s.indexOf("non") > 1) {
+					if (e.getSource() == menuNonSatisfied) {
 						satisfied = false;
+					} else if (e.getSource() == menuSatisfied) {
+						satisfied = true;
+					} else if (e.getSource() == menuNonVerified) {
+						verified = false;
+					} else if (e.getSource() == menuVerified) {
+						verified = true;
 					} else {
-						if (s.indexOf("satisfied") > 1) {
-							satisfied = true;
-						} else {
-							return editAttributes();
-						}
+						return editAttributes();
 					}
+					
 				}
 			}
         }
@@ -567,6 +590,9 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
         sb.append("\" />\n");
 		sb.append("<satisfied data=\"");
         sb.append(satisfied);
+        sb.append("\" />\n");
+		sb.append("<verified data=\"");
+        sb.append(verified);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -660,7 +686,20 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 									}
 								}
 								//System.out.println("Analyzing line4");
+							} else if (elt.getTagName().equals("verified")) {
+                                //System.out.println("Analyzing line3");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    verified = false;
+                                } else {
+									if (s.equals("true")) {
+										verified = true;
+									} else {
+										verified = false;
+									}
+								}
 							}
+								//System.out.println("Analyzing line4");
                         }
                     }
                 }

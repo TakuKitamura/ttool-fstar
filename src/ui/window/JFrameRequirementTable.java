@@ -73,11 +73,18 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	//private JStatisticsPanel jstat;
 	
 	private LinkedList<JScrollPane> panes;
+	private JButton buttonGenerate;
 	
 	//private JTextField eq, sw, tr, li, pa;
 	
 	// tab pane
 	JTabbedPane mainTabbedPane;
+	
+	JTabbedPane main; // from MGUI
+	
+	Point [] pts; // storing column data, see JDialogRequirementTable
+	
+	
 	
 	//shortest paths
 	//JComboBox combo1, combo2, combo3, combo4;
@@ -86,9 +93,11 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	//JButton goPath, goPathL, savePath, savePathL;
 	
 	
-	public JFrameRequirementTable(String title, Vector _tabs) {
+	public JFrameRequirementTable(String title, Vector _tabs, JTabbedPane _main, Point [] _pts) {
 		super(title);
 		tabs = _tabs;
+		pts = _pts;
+		main = _main;
 		//makeRequirements();
 		makeComponents();
 	}
@@ -101,8 +110,11 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		
 		JButton button1 = new JButton("Close", IconManager.imgic27);
 		button1.addActionListener(this);
+		buttonGenerate = new JButton("Generate doc.", IconManager.imgic28);
+		buttonGenerate.addActionListener(this);
 		JPanel jp = new JPanel();
 		jp.add(button1);
+		jp.add(buttonGenerate);
 		
 		framePanel.add(jp, BorderLayout.SOUTH);
 		
@@ -144,9 +156,11 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		LinkedList<Requirement> all, list;
 		all = new LinkedList<Requirement>();
 		String title;
+		String maintitle;
 		
 		for(i=0; i<tabs.size(); i++) {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
+			maintitle = main.getTitleAt(i);
 			if (tp instanceof RequirementPanel) {
 				for(j=0; j<tp.panels.size(); j++) {
 					if (tp.panels.elementAt(j) instanceof RequirementDiagramPanel) {
@@ -154,7 +168,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 						list = rdp.getAllRequirements();
 						all.addAll(list);
 						
-						title = tp.tabbedPane.getTitleAt(j);
+						title = maintitle + " / " + tp.tabbedPane.getTitleAt(j);
 						
 						makeJScrollPane(list, mainTabbedPane, title);
 					}
@@ -172,21 +186,15 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	}
 	
 	private void makeJScrollPane(LinkedList<Requirement> list, JTabbedPane tab, String title) {
-		RequirementsTableModel rtm = new RequirementsTableModel(list);
+		RequirementsTableModel rtm = new RequirementsTableModel(list, pts);
 		TableSorter sorterRTM = new TableSorter(rtm);
 		JTable jtableRTM = new JTable(sorterRTM);
 		sorterRTM.setTableHeader(jtableRTM.getTableHeader());
 		
-		((jtableRTM.getColumnModel()).getColumn(0)).setPreferredWidth(50);
-		((jtableRTM.getColumnModel()).getColumn(1)).setPreferredWidth(150);
-		((jtableRTM.getColumnModel()).getColumn(2)).setPreferredWidth(120);
-		((jtableRTM.getColumnModel()).getColumn(3)).setPreferredWidth(300);
-		((jtableRTM.getColumnModel()).getColumn(4)).setPreferredWidth(100);
-		((jtableRTM.getColumnModel()).getColumn(5)).setPreferredWidth(100);
-		((jtableRTM.getColumnModel()).getColumn(6)).setPreferredWidth(100);
-		((jtableRTM.getColumnModel()).getColumn(7)).setPreferredWidth(100);
-		((jtableRTM.getColumnModel()).getColumn(8)).setPreferredWidth(75);
-		//jtableRTM.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		for(int i=0; i<pts.length; i++) {
+			((jtableRTM.getColumnModel()).getColumn(i)).setPreferredWidth((pts[i].y)*50);
+		}
+		jtableRTM.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane jspRTM = new JScrollPane(jtableRTM);
 		jspRTM.setWheelScrollingEnabled(true);
 		jspRTM.getVerticalScrollBar().setUnitIncrement(10);
@@ -201,110 +209,15 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		if (command.equals("Close")) {
 			dispose();
 			return;
-		} /*else if (evt.getSource() == goPath) {
-		compute(1);
-		} else if (evt.getSource() == goPathL) {
-		compute(2);
-		}*/
+		} else if (evt.getSource() == buttonGenerate) {
+			generateDoc();
+		} 
 	}
 	
 	
 	
-	private void compute(int idFunc) {
-		/*computingPath = true;
-		GraphAlgorithms.go = true;
-		String info;
-		if (idFunc == 1) {
-		info = "Calculating shortest path...";
-		} else {
-		info = "Calculating longest path...";
-		}
-		
-		int from;
-		int to;
-		JTextField text;
-		
-		if (idFunc == 1) {
-		text = text1;
-		try {
-		from = Integer.decode(combo1.getText()).intValue(); 
-		} catch (Exception e) {
-		text1.setText("Invalid value:" + combo1.getText());
-		return;
-		}
-		try {
-		to = Integer.decode(combo2.getText()).intValue(); 
-		} catch (Exception e) {
-		text1.setText("Invalid value:" + combo2.getText());
-		return;
-		}
-		
-		if(from<0) {
-		text.setText("Invalid value:" + combo1.getText() + ". Minimun value is 0");
-		return;
-		}
-		
-		if(to<0) {
-		text.setText("Invalid value:" + combo2.getText() + ". Minimun value is 0");
-		return;
-		}
-		
-		if(from>=graph.getNbState()) {
-		text1.setText("Invalid value:" + combo1.getText() + ". Maximum value is: " + (graph.getNbState()-1));
-		return;
-		}
-		
-		if(to>=graph.getNbState()) {
-		text1.setText("Invalid value:" + combo2.getText() + ". Maximum value is: " + (graph.getNbState()-1));
-		return;
-		}
-		
-		} else {
-		text = text2;
-		
-		try {
-		from = Integer.decode(combo3.getText()).intValue(); 
-		} catch (Exception e) {
-		text2.setText("Invalid value:" + combo3.getText());
-		return;
-		}
-		try {
-		to = Integer.decode(combo4.getText()).intValue(); 
-		} catch (Exception e) {
-		text2.setText("Invalid value:" + combo4.getText());
-		return;
-		}
-		
-		if(from<0) {
-		text2.setText("Invalid value:" + combo3.getText() + ". Minimun value is 0");
-		return;
-		}
-		
-		if(to<0) {
-		text2.setText("Invalid value:" + combo4.getText() + ". Minimun value is 0");
-		return;
-		}
-		
-		if(from>=graph.getNbState()) {
-		text1.setText("Invalid value:" + combo3.getText() + ". Maximum value is: " + (graph.getNbState()-1));
-		return;
-		}
-		
-		if(to>=graph.getNbState()) {
-		text2.setText("Invalid value:" + combo4.getText() + ". Maximum value is: " + (graph.getNbState()-1));
-		return;
-		}
-		
-		if (!cycleComputed) {
-		hasCycle = GraphAlgorithms.hasCycle(graph);
-		cycleComputed = true;
-		}
-		}
-		
-		ThreadGUIElement t = new ThreadGUIElement(this, idFunc, info, "Please wait", "");
-		t.setExternalCall((ExternalCall)this);
-		t.setStoppableGUIElement((StoppableGUIElement)this);
-		t.go();*/
+	private void generateDoc() {
+		System.out.println("Generate doc");
 	}
 	
 	

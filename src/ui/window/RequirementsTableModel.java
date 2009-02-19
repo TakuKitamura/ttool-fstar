@@ -47,6 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.window;
 
 import java.util.*;
+import java.awt.*;
 import javax.swing.table.*;
 
 import myutil.*;
@@ -54,10 +55,12 @@ import ui.req.*;
 
 public class RequirementsTableModel extends AbstractTableModel {
 	private LinkedList<Requirement> list;
+	private Point[] pts;
 	
 	//private String [] names;
-	public RequirementsTableModel(LinkedList<Requirement> _list) {
+	public RequirementsTableModel(LinkedList<Requirement> _list, Point [] _pts) {
 		list = _list;
+		pts = _pts;
 		//computeData(_ncs);
 	}
 
@@ -67,14 +70,17 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 9;
+		return pts.length;
 	}
 
 	public Object getValueAt(int row, int column) {
 		Requirement r = list.get(row);
+		int index;
 		int type;
 		
-		switch(column) {
+		index = pts[column].x-1;
+		
+		switch(index) {
 		case 0:
 			return r.getID();
 		case 1:
@@ -107,10 +113,14 @@ public class RequirementsTableModel extends AbstractTableModel {
 				return " - ";
 			}
 		case 8:
-			if (r.isSatisfied()) {
-				return "yes";
+			if (r.isVerified()) {
+				if (r.isSatisfied()) {
+					return "yes";
+				} else {
+					return "no";
+				}
 			} else {
-				return "no";
+				return "-";
 			}
 		}
 		
@@ -119,7 +129,11 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	public String getColumnName(int columnIndex) {
-		switch(columnIndex) {
+		int index = pts[columnIndex].x;
+		
+		return JDialogRequirementTable.items[index];
+		
+		/*switch(columnIndex) {
 		case 0:
 			return "ID";
 		case 1:
@@ -138,8 +152,8 @@ public class RequirementsTableModel extends AbstractTableModel {
 			return "Attack Tree Nodes";
 		case 8:
 			return "Satisfied";
-		}
-		return "none";
+		}*/
+		//return "none";
 	}
 
 }

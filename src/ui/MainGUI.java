@@ -3500,11 +3500,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void generateDocumentationReq() {
 		System.out.println("Frame Req");
-		JFrameRequirementTable jfrt = new JFrameRequirementTable("Requirement table", tabs);
-        jfrt.setIconImage(IconManager.img8);
-        jfrt.setSize(1024, 768);
-        GraphicLib.centerOnParent(jfrt);
-        jfrt.setVisible(true);
+		JDialogRequirementTable jdrt = new JDialogRequirementTable(frame, "Selecting table columns");
+		GraphicLib.centerOnParent(jdrt);
+		jdrt.setVisible(true); 
+		if (!jdrt.hasBeenCancelled()) {
+			Point [] pts = jdrt.getColumnsInfo();
+			if (pts != null) {
+				for(int i=0; i<pts.length; i++) {
+					System.out.println("" + i + ": (" + pts[i].x + ", " + pts[i].y + ")");
+				}
+				
+				JFrameRequirementTable jfrt = new JFrameRequirementTable("Requirement table", tabs, mainTabbedPane, pts);
+				jfrt.setIconImage(IconManager.img8);
+				jfrt.setSize(1024, 768);
+				GraphicLib.centerOnParent(jfrt);
+				jfrt.setVisible(true);
+			} else {
+				System.out.println("No column to print");
+			}
+		}
 		System.out.println("Done");
 	}
     
