@@ -487,6 +487,9 @@ public class AnalysisPanelTranslator {
                     }
                     
                     if (tgc instanceof TGConnectorMessageAsyncSD) {
+						if (!((TGConnectorMessageAsyncSD)(tgc)).isMessageWellFormed()) {
+							throw new AnalysisSyntaxException("Badly formatted synchronous exchange:" + ((TGConnectorMessageSyncSD)(tgc)).getMessage() +" in instance "+ sdi1.getInstanceName() + " in sequence diagram " + sdp.getName());
+						}
 						
                         evt1 = new Evt(Evt.SEND_MSG, ((TGConnectorMessageAsyncSD)(tgc)).getFirstPartMessage() + "__" + ins1.getName() + "_to_" + ins2.getName() + ((TGConnectorMessageAsyncSD)(tgc)).getSecondPartMessage(), ins1);
                         correspondance.addCor(evt1, tgc);

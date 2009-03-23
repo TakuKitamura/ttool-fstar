@@ -112,6 +112,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TCD_INVOCATION_OPERATOR = 48;
     public static final int TCD_ASSOCIATION_NAVIGATION = 24;
     public static final int AD_START = 43;
+	public static final int AD_ARRAY_GET = 261;
+	public static final int AD_ARRAY_SET = 262;
     
     public static final int IOD_EDIT = 77;
     public static final int IOD_CHOICE = 78;
@@ -369,7 +371,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 261;
+    public static final int NB_ACTION = 263;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -543,6 +545,9 @@ public class TGUIAction extends AbstractAction {
         actions[AD_DELAY_NON_DETERMINISTIC_DELAY] = new TAction("add-time-interval", "Add Time Interval", IconManager.imgic224, IconManager.imgic224, "Time interval", "Add a time interval to the currently opened activity diagram", 0);
         actions[AD_TIME_LIMITED_OFFER] = new TAction("add-time-limited-offer", "Add Time-Limited offer", IconManager.imgic218, IconManager.imgic218, "Time-Limited Offer", "Add a time-limited offer to the currently opened activity diagram", 0);
         actions[AD_TIME_LIMITED_OFFER_WITH_LATENCY] = new TAction("add-time-limited-offer-with-latency", "Add Time-Limited offer with a non-deterministic delay", IconManager.imgic220, IconManager.imgic220, "Time-Limited Offer with non-deterministic delay", "Adds a time-limited offer, beginning with a non-deterministic delay, to the currently opened activity diagram", 0);
+		actions[AD_ARRAY_GET] = new TAction("add-array-get", "Add array get element", IconManager.imgic230, IconManager.imgic230, "Array set element", "Add an array get element action to the currently opened activity diagram", 0);
+        actions[AD_ARRAY_SET] = new TAction("add-array-set", "Add array set element", IconManager.imgic232, IconManager.imgic232, "Array set element", "Add an array set element action to the currently opened activity diagram", 0);
+		
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);
         actions[TCD_SEQUENCE_OPERATOR] = new TAction("add-sequence-operator", "Add Sequence composition operator", IconManager.imgic114, IconManager.imgic114, "Sequence composition operator", "Add a Sequence composition operator to the currently opened class diagram", 0);

@@ -67,7 +67,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
     private Vector panels; // TURTLEPanels
 	private JTabbedPane mainTabbedPane;
 	private int firstHeadingNumber = 1;
-	private String title = "TTool project:";
+	private static String title = "TTool project:";
 	private String fileName = "doc.html";
 	private String path;
 	private String projectName;
@@ -107,7 +107,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 		title = _title;
 	}
 	
-	public String getTitle() {
+	public static String getTitle() {
 		return title;
 	}
 	
@@ -148,7 +148,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 		
 		doc = "";
 		doc += "<html>\n";
-		doc += getDocumentationHeader();
+		doc += getDocumentationHeader(projectName);
 		doc += "<body>\n";
 		
 		doc +="<center><h1>" + title + "</h1></center>\n";
@@ -241,7 +241,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 		return (int)((cpt*100) / total);
 	}
 	
-	public String getDocumentationHeader() {
+	public  String getDocumentationHeader(String _projectName) {
 		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
 		Date date = calendar.getTime();
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -253,7 +253,7 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
 		tmpdoc += " generation date: " + formattedDate;
 		tmpdoc += "---->\n";
 		tmpdoc += "\n<head>\n<title>";
-		tmpdoc += getTitle() + ": " +projectName;
+		tmpdoc += getTitle() + ": " +_projectName;
 		tmpdoc += "</title>\n</head>\n";
 		return tmpdoc;
 	}

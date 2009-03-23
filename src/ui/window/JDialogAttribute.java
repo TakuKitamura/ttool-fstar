@@ -321,10 +321,15 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
             if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getType(o2.toString());
+				
+				if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
+					value = "2";
+				}
                 
                 if ((i != -1) && (j!= -1)) {
                     
                     if ((value.length() < 1) || (initialValue.isEnabled() == false)){
+						
                         value = "";
                     } else {
                         if (!TAttribute.isAValidInitialValue(j, value)) {

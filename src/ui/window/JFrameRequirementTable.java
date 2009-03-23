@@ -67,6 +67,8 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	
 	private Vector tabs;
 	
+	private ArrayList<AbstractTableModel> atms;
+	private ArrayList<String> titles;
 	
 	//private StatisticsTableModel tm;
 	
@@ -99,6 +101,10 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		pts = _pts;
 		main = _main;
 		//makeRequirements();
+		
+		atms = new ArrayList<AbstractTableModel>();
+		titles = new ArrayList<String>();
+		
 		makeComponents();
 	}
 	
@@ -110,7 +116,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		
 		JButton button1 = new JButton("Close", IconManager.imgic27);
 		button1.addActionListener(this);
-		buttonGenerate = new JButton("Generate doc.", IconManager.imgic28);
+		buttonGenerate = new JButton("Generate doc.", IconManager.imgic29);
 		buttonGenerate.addActionListener(this);
 		JPanel jp = new JPanel();
 		jp.add(button1);
@@ -200,6 +206,9 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		jspRTM.getVerticalScrollBar().setUnitIncrement(10);
 		
 		tab.addTab(title, IconManager.imgic13, jspRTM, title);
+	
+		atms.add(rtm);
+		titles.add(title);
 	}
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -218,6 +227,27 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	
 	private void generateDoc() {
 		System.out.println("Generate doc");
+		HTMLCodeGeneratorForTables doc = new HTMLCodeGeneratorForTables();
+		String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
+		//System.out.println("HTML code:" + s); 
+		
+		String path;
+		if (ConfigurationTTool.IMGPath.length() > 0) {
+			path = ConfigurationTTool.IMGPath + "/";
+		} else {
+			path = "";
+		}
+		path += "tablereq.html";
+		
+		try {
+			FileUtils.saveFile(path, s);
+		} catch (FileException fe) {
+			System.out.println("HTML file could not be saved");
+			return ;
+		}
+		
+		System.out.println("File generated in " + path);
+		
 	}
 	
 	

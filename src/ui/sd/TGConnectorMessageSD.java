@@ -92,15 +92,44 @@ public  abstract class TGConnectorMessageSD extends TGConnector {
 	}
 	
 	public boolean isMessageWellFormed() {
+		//System.out.println("Analyzing message:" + value);
+		
 		int index0 = value.indexOf('(');
+		String name;
+		
+		if (index0 == -1) {
+			name = value;
+		} else {
+			name = value.substring(0, index0);
+		}
+		
+		if (!TAttribute.isAValidId(name, false, false)) {
+			return false;
+		}
+			
 		if (index0 == -1) {
 			return true;
 		}
+		
 		String tmp = value.trim();
-		if (tmp.endsWith(")")) {
-			return true;
+		if (!tmp.endsWith(")")) {
+			return false;
 		}
-		return false;
+		
+		// Check for individual parameters
+		index0 = tmp.indexOf('(');
+		tmp = tmp.substring(index0+1, tmp.length()-1);
+		
+		String[] params = tmp.split(",");
+		for(int i=0; i<params.length; i++) {
+			tmp = params[i].trim();
+			//System.out.println("First=" + tmp);
+			if (!TAttribute.isAValidId(tmp, false, false)) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	

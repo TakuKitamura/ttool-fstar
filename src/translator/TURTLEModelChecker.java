@@ -400,7 +400,7 @@ public class TURTLEModelChecker {
 				if ((action!= null) && (action.length() > 0)) {
 					parsing(t, ad1, "actiongate", action, errors);
 				} else {
-					System.out.println("null action on gate=" + ((ADActionStateWithGate)ad1).getGate().getName() + action);
+					//System.out.println("null action on gate=" + ((ADActionStateWithGate)ad1).getGate().getName() + action);
 				}
 				
 			} else if (ad1 instanceof ADActionStateWithParam) {

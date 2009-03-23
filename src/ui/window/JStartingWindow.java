@@ -124,12 +124,12 @@ public class JStartingWindow extends Window {
         g.drawRect(0, 0, imgWidth - 1, imgHeight - 1);
         
         if (message != null) {
-	     	g.drawString(message, 5,  imgHeight - 5);  
+	     	g.drawString(message, 15,  imgHeight - 5);  
         }
         
          if (messageMiddle != null) {
                 int w  = g.getFontMetrics().stringWidth(messageMiddle);
-	     	g.drawString(messageMiddle, (imgWidth - w) / 2,  imgHeight - 30);  
+	     	g.drawString(messageMiddle, (imgWidth - w) / 2,  imgHeight - 25);  
         }
         
         

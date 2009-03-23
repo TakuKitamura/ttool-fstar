@@ -741,7 +741,7 @@ public class JDialogProjection extends javax.swing.JDialog implements ActionList
                     data = processCmd(cmd1);
 
                     jta.append("Getting aut data\n");
-                    data = rshc.getFileData(fileName);
+                    autproj = rshc.getFileData(fileName);
                     
                     // Print info on minimized graph
                     p = FormatManager.nbStateTransitionRGAldebaran(autproj);

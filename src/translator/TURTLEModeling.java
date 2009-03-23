@@ -1250,6 +1250,9 @@ public class TURTLEModeling {
 			if (adc instanceof ADActionStateWithGate) {
 				adag = (ADActionStateWithGate)adc;
 				s = adag.getActionValue();
+				if (s == null) {
+					return 0;
+				}
 				s = Conversion.replaceAllChar(s, ' ', "");
 				s = removeReducedActionOps(s);
 				index = s.indexOf("?" + namebis);

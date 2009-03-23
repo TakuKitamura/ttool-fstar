@@ -80,6 +80,7 @@ public class TCDAttributeBox extends TGCAttributeBox {
         jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 		jda.addType(TAttribute.getStringType(TAttribute.QUEUE_NAT), true);
+		jda.addType(TAttribute.getStringType(TAttribute.ARRAY_NAT), true);
         
         //jda.enableInitialValue(true);
         jda.enableRTLOTOSKeyword(false);

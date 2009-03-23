@@ -86,6 +86,8 @@ public class TGComponentManager {
     public static final int TAD_DELAY_NON_DETERMINISTIC_DELAY = 20;
     public static final int TAD_CHOICE = 19;
     public static final int TAD_TIME_LIMITED_OFFER_WITH_LATENCY = 10;
+	public static final int TAD_ARRAY_GET = 25;
+	public static final int TAD_ARRAY_SET = 26;
     
     
     public static final int CONNECTOR_AD_DIAGRAM = 101;
@@ -279,6 +281,12 @@ public class TGComponentManager {
                 break;
             case TAD_ACTION_STATE:
                 tgc = new TADActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case TAD_ARRAY_GET:
+                tgc = new TADArrayGetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case TAD_ARRAY_SET:
+                tgc = new TADArraySetState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TAD_TIME_LIMITED_OFFER:
                 tgc = new TADTimeLimitedOffer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -626,6 +634,10 @@ public class TGComponentManager {
             return 	TAD_START_STATE;
         } else if (tgc instanceof TADActionState) {
             return 	TAD_ACTION_STATE;
+        } else if (tgc instanceof TADArrayGetState) {
+            return 	TAD_ARRAY_GET;
+        } else if (tgc instanceof TADArraySetState) {
+            return 	TAD_ARRAY_SET;
         } else if (tgc instanceof TADTimeLimitedOffer) {
             return 	TAD_TIME_LIMITED_OFFER;
         } else if (tgc instanceof TADJunction) {

@@ -154,7 +154,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return mgui.getTitleAt(this) +  "(TML Component Design)";
+        return mgui.getTitleAt(this) +  "(DIPLODOCUS Component Application diagram)";
     }
 	
 	public ArrayList<String> getAllNonMappedTMLPrimitiveComponentNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {

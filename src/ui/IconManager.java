@@ -83,6 +83,7 @@ public class IconManager {
     public static ImageIcon imgic200, imgic201, imgic202, imgic204, imgic206, imgic208;
     public static ImageIcon imgic210, imgic212, imgic214, imgic216, imgic218;
     public static ImageIcon imgic220, imgic222, imgic224, imgic226, imgic228;
+	public static ImageIcon imgic230, imgic232;
     
     //Common to all diagrams
     public static ImageIcon imgic302, imgic304, imgic306, imgic308;
@@ -267,6 +268,8 @@ public class IconManager {
     private static String icon224 = "images/adtimeinterval.gif";
     private static String icon226 = "images/adsequence.gif";
     private static String icon228 = "images/adpreemption.gif";
+	private static String icon230 = "images/arrayget.gif";
+	private static String icon232 = "images/arrayset.gif";
     
     private static String icon302 = "images/text1.gif";
     //private static String icon303 = "images/text1.gif";
@@ -545,6 +548,8 @@ public class IconManager {
         imgic224 = getIcon(icon224);
         imgic226 = getIcon(icon226);
         imgic228 = getIcon(icon228);
+		imgic230 = getIcon(icon230);
+		imgic232 = getIcon(icon232);
         
         imgic302 = getIcon(icon302);
         imgic304 = getIcon(icon304);

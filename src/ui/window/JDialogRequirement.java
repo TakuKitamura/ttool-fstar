@@ -57,6 +57,9 @@ import ui.*;
 
 public class JDialogRequirement extends javax.swing.JDialog implements ActionListener  {
     
+	public static String[] kinds = {"Functional", "Non-functional", "Performance", "Privacy", "Confidentiality", "Non-repudiation", "Controlled access (authorization)", "Availability", "Immunity", "Integrity", "Data origin authenticity", "Freshness", "Other"};
+    
+	
     private boolean regularClose;
     
     private JPanel panel1, panel2;
@@ -102,6 +105,8 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     }
     
     private void initComponents() {
+		int i;
+		
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -180,9 +185,15 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         panel2.add(new JLabel("Type:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         kindBox = new JComboBox();
-        kindBox.addItem("Functional");
+		
+		for(i=0; i<kinds.length; i++) {
+			kindBox.addItem(kinds[i]);
+		}
+        /*kindBox.addItem("Functional");
         kindBox.addItem("Non functional");
         kindBox.addItem("Performance");
+		kindBox.addItem("Privacy");
+		kindBox.addItem("Privacy");
         kindBox.addItem("Other");
         if (kind.compareTo("Functional") == 0) {
             kindBox.setSelectedIndex(0);
@@ -195,7 +206,14 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         }
         if (kind.compareTo("Other") == 0) {
             kindBox.setSelectedIndex(3);
-        }
+        }*/
+		
+		for(i=0; i<kinds.length; i++) {
+			if (kind.compareTo(kinds[i]) == 0) {
+				kindBox.setSelectedIndex(i);
+			}
+		}
+		
         panel2.add(kindBox, c2);
         
         c2.gridwidth = 1;

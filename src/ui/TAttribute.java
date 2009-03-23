@@ -67,6 +67,7 @@ public class TAttribute {
     public final static int BOOLEAN = 4;
     public final static int OTHER = 5;
 	public final static int QUEUE_NAT = 6;
+	public final static int ARRAY_NAT = 7;
     
     
     private int access;
@@ -167,6 +168,9 @@ public class TAttribute {
     }
     
     public static boolean isAValidInitialValue(int type, String value) {
+		boolean b;
+		int val;
+		
         switch(type) {
             case NATURAL:
                 return value.matches("\\d*");
@@ -181,6 +185,20 @@ public class TAttribute {
                 return ((value == null) ||(value.equals("")));
 			case QUEUE_NAT:
 				return  ((value == null) ||(value.equals("")) || (value.equals("nil")));
+			case ARRAY_NAT:
+				if (value == null) {
+					return false;
+				}
+				
+				try {
+					val = Integer.decode(value).intValue();
+				} catch (Exception e) {
+					return false;
+				}
+				if (val > 0) {
+					return true;
+				}
+				return false;
             default:
                 return false;
         }
@@ -227,6 +245,8 @@ public class TAttribute {
             return INGATE;
         } else if (s.equals("Queue_nat")) {
             return QUEUE_NAT;
+        } else if (s.equals("Array_nat")) {
+            return ARRAY_NAT;
         } else if (!s.equals("")) {
             return OTHER;
         }
@@ -265,6 +285,8 @@ public class TAttribute {
                 return "Other";
 			case QUEUE_NAT:
                 return "Queue_nat";
+			case ARRAY_NAT:
+                return "Array_nat";
             default:
                 return "";
         }
@@ -277,20 +299,29 @@ public class TAttribute {
         } else {
             myType = getStringType(type);
         }
+		
         if ((initialValue == null)  || (initialValue.equals(""))) {
             return getStringAccess(access) + " " + id + " : " + myType + ";";
         } else {
-            return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";            
+			if (type == ARRAY_NAT) {
+				return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
+			} else {
+				return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+			}
         }
     }
     
     public String toNameAndValue() {
-        if ((initialValue == null)  || (initialValue.equals(""))) {
-            return id + ";";
-        } else {
-            return id + " = " + getInitialValue() + ";";
-            
-        }
+		if (type == ARRAY_NAT) {
+			return id + "[" + getInitialValue() + "]";
+		} else {
+			if ((initialValue == null)  || (initialValue.equals(""))) {
+				return id + ";";
+			} else {
+				return id + " = " + getInitialValue() + ";";
+				
+			}
+		}
     }
     
     // comparison on id only
