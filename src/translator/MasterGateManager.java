@@ -63,6 +63,18 @@ public class MasterGateManager {
         initGates(tm, false);
         generateGates();
     }
+	
+	public MasterGateManager(TURTLEModeling tm, int reinit) {
+		if (reinit > 0) {
+			reinitNameRestriction();
+		}
+        topMaster.add(this);
+        groups = new Vector();
+        master = new Vector();
+        forbiddenNames = new Vector();
+        initGates(tm, false);
+        generateGates();
+    }
     
     // Observer
     public MasterGateManager() {

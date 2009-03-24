@@ -971,10 +971,10 @@ public class GTURTLEModeling {
 		String s;
 		String actionName, actionName1;
 		int index, index1, index2;
-		MasterGateManager mgm = new MasterGateManager(tm);
+		MasterGateManager mgm = new MasterGateManager(tm, 1);
 		Gate g;
 		GroupOfGates gog;
-		Hashtable hashtable = new Hashtable();
+		Hashtable <String, GroupOfGates> hashtable = new Hashtable<String, GroupOfGates>();
 
 		int cpt = 0;
 
@@ -985,17 +985,23 @@ public class GTURTLEModeling {
 		int j;
 		for(int i=0; i<gates.size(); i++) {
 			tag = (TClassAndGateDS)(gates.get(i));
-			actionName = tag.getGateName();
-			g = mgm.getGate(actionName);
-			if (g != null) {
-				gog = mgm.getGroupOfGatesByGate(g);
+			//System.out.println("TClass:" + tag.getTClassName() + " Gate:" + tag.getGateName());
+			//actionName = tag.getGateName();
+			//g = mgm.getGate(tag.getTClassName(), actionName);
+			//System.out.println("actionName = " + actionName + " gateName = " + g.getName()); 
+			//if (g != null) {
+				//gog = mgm.getGroupOfGatesByGate(g);
+				gog = mgm.groupOf(tag.getTClassName(), tag.getGateName());
 				if (gog != null) {
-					for(j=0;j<gog.size();j++) {
+					//System.out.println("Found a gog: >" + gog.getMasterGateName() + "<");
+					hashtable.put(gog.getMasterGateName().getName(), gog);
+					/*for(j=0;j<gog.size();j++) {
 						g = gog.getGateAt(j);
+						System.out.println("Putting: " + g.getName());
 						hashtable.put(g.getName(), g);
-					}
+					}*/
 				}
-			}
+			//}
 		}
 
 		try {
@@ -1034,11 +1040,14 @@ public class GTURTLEModeling {
             			  } else {
             				  actionName1 = actionName.substring(0, index);
             			  }
-            			  //System.out.println("Action = " + actionName1);
+            			  System.out.println("Action = >" + actionName1 + "<");
 
-            			  if (hashtable.get(actionName1) == null) {
+						  gog = hashtable.get(actionName1);
+            			  if (gog == null) {
+							  System.out.println("Not in hash");
             				  result.append(makeIAction(s) + "\n");
             			  } else {
+							  System.out.println("In hash");
             				  result.append(makeAction(s, actionName) + "\n");
             			  }
 
@@ -1088,7 +1097,7 @@ public class GTURTLEModeling {
 		Gate g;
 		String g0, g1, g2;
 		int cpt, transi=0;
-		MasterGateManager mgm = new MasterGateManager(tm);
+		MasterGateManager mgm = new MasterGateManager(tm, 1);
 		Hashtable ht = mgm.getGatesUpperCaseHashTable();
 		warnings = new Vector();
 
@@ -1160,7 +1169,7 @@ public class GTURTLEModeling {
                                     warnings.add(ce);
                                 }*/
 							} else {
-								System.out.println("actionName is not in hashtable: " + actionName + " length=" + actionName.length());
+								System.out.println("actionName is not in hashtable: ->" + actionName + "<- length=" + actionName.length());
 							}
 
 							// Store result

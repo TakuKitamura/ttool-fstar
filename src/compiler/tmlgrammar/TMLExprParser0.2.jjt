@@ -373,14 +373,15 @@ void BoolExtendedExpression() :
   LParen() BoolExtendedExpression() RParen() [BoolOperatorExtendedExpression()]
 |
   LOOKAHEAD(2000000)
+  BooleanLiteral() [BoolOperatorExtendedExpression()]
+|
   NatExtendedExpression() NatComparisonOperator() NatExtendedExpression() [BoolOperatorExtendedExpression()]
 |
   BoolFunction1() [BoolOperatorExtendedExpression()]
-|
-  BooleanLiteral() [BoolOperatorExtendedExpression()]
-|
-  Id() [BoolOperatorExtendedExpression()]
+/*|
+  Id() [BoolOperatorExtendedExpression()]*/
 }
+
 
 void BoolOperatorExtendedExpression() :
 {}
