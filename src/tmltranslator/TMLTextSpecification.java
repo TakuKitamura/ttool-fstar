@@ -86,6 +86,13 @@ public class TMLTextSpecification {
 	
 	public TMLTextSpecification(String _title) {
 		title = _title;
+    }   
+	
+	public TMLTextSpecification(String _title, boolean reset) {
+		title = _title;
+		if (reset) {
+			DIPLOElement.resetID();
+		}
     }
 	
 	public void saveFile(String path, String filename) throws FileException {

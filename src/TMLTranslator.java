@@ -225,7 +225,7 @@ public class TMLTranslator  {
 		boolean ret = false;
 		ArrayList<TMLError> warnings;
 		//System.out.println("load");
-		TMLTextSpecification spec = new TMLTextSpecification(title);
+		TMLTextSpecification spec = new TMLTextSpecification(title, true);
 		ret = spec.makeTMLModeling(inputData);
 		//System.out.println("load ended");
 		tmlm = spec.getTMLModeling(); 

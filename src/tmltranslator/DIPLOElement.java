@@ -37,8 +37,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 /**
  * Class TMLElement
- * Creation: 22/11/2005
- * @version 1.0 22/11/2005
+ * Creation: 24/03/2008
+ * @version 1.0 24/03/2008
  * @author Ludovic APVRILLE
  * @see
  */
@@ -47,32 +47,21 @@ package tmltranslator;
 
 
 
-public class TMLElement extends DIPLOElement {
-    protected Object referenceObject;
-    protected String name;
-    
-    public TMLElement(String _name, Object _referenceObject) {
-        name = _name;
-        referenceObject = _referenceObject;
-    }
-    
-    public String getName() {
-        return name;
-    }
+public class DIPLOElement {
 	
-	public String getExtendedName() {
-        return getNameExtension() + name;
+	protected static int ID=0;
+	
+    protected int myID;
+    
+    public DIPLOElement() {
+       myID=++ID;
     }
     
-    public Object getReferenceObject() {
-        return referenceObject;
+    public int getID(){
+		return myID;
     }
 	
-	public String getNameExtension() {
-		return "";
-	}
-	
-	public void prefixName(String _prefix) {
-		name = _prefix + name;
+	public static void resetID() {
+		ID = 0;
 	}
 }

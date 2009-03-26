@@ -64,6 +64,13 @@ public class TMLModeling {
     public TMLModeling() {
         init();
     }
+	
+	public TMLModeling(boolean reset) {
+        init();
+		if (reset) {
+			DIPLOElement.resetID();
+		}
+    }
 
     private void init() {
         /*tasks = new LinkedList();

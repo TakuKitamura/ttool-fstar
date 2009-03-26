@@ -48,7 +48,7 @@ package tmltranslator;
 import java.util.*;
 
 
-public abstract class HwNode  {
+public abstract class HwNode extends DIPLOElement  {
 	public static final int DEFAULT_CLOCK_RATIO = 1;
 	
     protected int maximumNbOfMappedElement;

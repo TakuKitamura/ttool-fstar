@@ -50,7 +50,7 @@ package tmltranslator;
 
 
 
-public class TMLAttribute {
+public class TMLAttribute extends DIPLOElement {
     
     public TMLType type;
     public String name;

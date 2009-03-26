@@ -75,6 +75,7 @@ public class TMLMappingTextSpecification {
 	
 	public TMLMappingTextSpecification(String _title) {
 		title = _title;
+		DIPLOElement.resetID();
     }
 	
 	public void saveFile(String path, String filename) throws FileException {

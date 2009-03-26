@@ -92,7 +92,7 @@ public class GTMLModeling  {
 	}
 	
     public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount) {
-        tmlm = new TMLModeling();
+        tmlm = new TMLModeling(true);
         checkingErrors = new Vector();
         warnings = new Vector();
 		listE = new CorrespondanceTGElement();
@@ -1344,7 +1344,7 @@ public class GTMLModeling  {
     }
 	
 	public TMLMapping translateToTMLMapping() {
-		tmlm = new TMLModeling();
+		tmlm = new TMLModeling(true);
 		archi = new TMLArchitecture();
 		map = new TMLMapping(tmlm, archi);
 		

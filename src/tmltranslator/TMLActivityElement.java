@@ -50,12 +50,9 @@ import java.util.*;
 
 public class TMLActivityElement extends TMLElement{
     protected Vector nexts;
-    protected static int ID=0;
-    protected int myID;
     
     public TMLActivityElement(String _name, Object _referenceObject) {
          super(_name, _referenceObject);
-		 myID=++ID;
          nexts = new Vector();
        
     }
@@ -102,9 +99,6 @@ public class TMLActivityElement extends TMLElement{
 		}
 	}
 
-    public int getID(){
-	return myID;
-    }
-    
+ 
  
 }
