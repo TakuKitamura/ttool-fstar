@@ -3,7 +3,7 @@ TARGET_ARCH = linux
 CC     = g++
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
-OPT    = -O1
+OPT    = -O1 -pg -pthread
 DEBUG  = -g
 OTHER  = -Wall
 TRY    = -Wno-deprecated
@@ -13,7 +13,7 @@ OBJDIR = lib
 
 MODULE = run
 include Makefile.src
-SRCS_base = TMLTask.cpp TMLCommand.cpp TMLTransaction.cpp TMLChannel.cpp CPU.cpp CPURR.cpp CPUPB.cpp CPUPBL.cpp TMLWriteCommand.cpp TMLStateChannel.cpp TMLbrbwChannel.cpp TMLnbrnbwChannel.cpp TMLbrnbwChannel.cpp TMLEventChannel.cpp TMLEventBChannel.cpp TMLEventFChannel.cpp TMLEventFBChannel.cpp TMLReadCommand.cpp TMLExeciCommand.cpp TMLActionCommand.cpp TMLChoiceCommand.cpp TMLWaitCommand.cpp TMLSendCommand.cpp TMLSelectCommand.cpp TMLRequestCommand.cpp TMLNotifiedCommand.cpp Bus.cpp definitions.cpp Bridge.cpp Memory.cpp
+SRCS_base = TMLTask.cpp TMLCommand.cpp TMLTransaction.cpp TMLChannel.cpp CPU.cpp CPURR.cpp CPUPB.cpp CPUPBL.cpp TMLWriteCommand.cpp TMLStateChannel.cpp TMLbrbwChannel.cpp TMLnbrnbwChannel.cpp TMLbrnbwChannel.cpp TMLEventChannel.cpp TMLEventBChannel.cpp TMLEventFChannel.cpp TMLEventFBChannel.cpp TMLReadCommand.cpp TMLExeciCommand.cpp TMLActionCommand.cpp TMLChoiceCommand.cpp TMLWaitCommand.cpp TMLSendCommand.cpp TMLSelectCommand.cpp TMLRequestCommand.cpp TMLNotifiedCommand.cpp Bus.cpp definitions.cpp Bridge.cpp Memory.cpp MemPool.cpp Comment.cpp Server.cpp Simulator.cpp SimComponents.cpp
 SRCS_base_DIR = src_simulator
 SRCS_generated = .
 
