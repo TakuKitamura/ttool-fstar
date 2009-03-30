@@ -51,16 +51,17 @@ class Memory: public Slave{
 public:
 	///Constructor
 	/**
+	\param iID ID of the Memory
 	\param iName Name of the Memory
 	\param iTimePerCycle 1/Memory frequency
 	\param iDataSize Width of a data word
 	*/
-	Memory(std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize);
+	Memory(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize);
 	///Accounts for the delay caused by the memory
 	/**
 	\param iTrans Pointer to the transaction to be processed
 	*/
-	void CalcTransactionLength(TMLTransaction* iTrans);
+	void CalcTransactionLength(TMLTransaction* iTrans) const;
 	///Returns a pointer to the connected master device if any
 	/**
 	\return Pointer to the master device 
@@ -70,8 +71,6 @@ public:
 	~Memory();
 
 protected:
-	///Name of the memory
-	std::string _name;
 	///1/Memory frequency
 	TMLTime _timePerCycle;
 	///Width of a data word

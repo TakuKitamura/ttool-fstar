@@ -51,17 +51,19 @@ class TMLStateChannel:public TMLChannel{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the channel
+      	\param iID ID of channel
+	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLStateChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves ,TMLLength iContent);
+	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves ,TMLLength iContent);
 	///Destructor
 	virtual ~TMLStateChannel();
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
+	virtual void reset();
 protected:
 	///Content of the channel
 	TMLLength _content;

@@ -42,9 +42,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <CPU.h>
+#include <CommandListener.h>
+#include <Parameter.h>
 
-
-TMLCommand::TMLCommand(TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam){
+TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam), _breakpoint(false){
+	_instanceList.push_back(this);
 }
 
 TMLCommand::~TMLCommand(){
@@ -52,28 +54,37 @@ TMLCommand::~TMLCommand(){
 	//if (_currTransaction!=0) std::cout << "transaction not yet deleted: " << getCommandStr() << std::endl;
 	if (_nextCommand!=0) delete[] _nextCommand;
 	if (_param!=0) delete _param;
+	_instanceList.remove(this);
 }
 
 TMLCommand* TMLCommand::prepare(void){
 	TMLCommand* aNextCommand;
 	//Do not set _currTransaction=0 as specialized commands access the variable in the scope of the execute method (set terminated flag) 
 	if(_length==_progress){
-		//std::cout << "COMMAND FINISHED!!!!!!!!!!!!!!!!!!!\n";
+		//std::cout << "COMMAND FINISHED!!n";
+		FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 		_progress=0;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
 		//std::cout << "Prepare command, to next command" << std::endl;
+		_task->setCurrCommand(aNextCommand);
 		if (aNextCommand==0){
+			//_task->setCurrCommand(0); //new, experimental
 			return 0;
 		}else{
-			_task->setCurrCommand(aNextCommand);			
+			//_task->setCurrCommand(aNextCommand);
 			//std::cout << "Prepare command, prepare next command" << std::endl;
 			return aNextCommand->prepare();
 		}
 	}else{
+		//std::cout << "Prepare next transaction beg" << std::endl;
+		if (_progress==0)
+			FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
+		else
+			FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
 		//std::cout << "Prepare next transaction" << std::endl;
 		TMLCommand* result = prepareNextTransaction();
-		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
+		if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
 			_task->getCPU()->registerTransaction(_currTransaction,0);
 		}
@@ -98,7 +109,7 @@ TMLTransaction* TMLCommand::getCurrTransaction() const{
 	return _currTransaction;
 }
 
-std::string TMLCommand::toString(){
+std::string TMLCommand::toString() const{
 	std::ostringstream outp;	
 	outp << _task->toString() << " len:" << _length << " progress:" << _progress;
 	return outp.str();
@@ -108,16 +119,27 @@ TMLChannel* TMLCommand::getChannel() const{
 	return 0;
 }
 
-bool TMLCommand::channelUnknown(){
+bool TMLCommand::channelUnknown() const{
 	return false;
 }
 
-Parameter<ParamType>* TMLCommand::getParam(){
+Parameter<ParamType>* TMLCommand::getParam() const{
 	return _param;
 }
 
-std::string TMLCommand::getCommentString(Comment* iCom){
+#ifdef ADD_COMMENTS
+std::string TMLCommand::getCommentString(Comment* iCom) const{
 	return "no comment available";
+}
+#endif
+
+bool TMLCommand::getBreakpoint() const{
+	return _breakpoint;
+}
+
+void TMLCommand::setBreakpoint(bool iBreakpoint){
+	_breakpoint=iBreakpoint;
+	
 }
 
 std::ostream& TMLCommand::writeObject(std::ostream& s){
@@ -128,4 +150,26 @@ std::ostream& TMLCommand::writeObject(std::ostream& s){
 std::istream& TMLCommand::readObject(std::istream& s){
 	READ_STREAM(s,_progress);
 	return s;
+}
+
+void TMLCommand::reset(){
+	_progress=0;
+	if (_currTransaction!=0) delete _currTransaction;
+	_currTransaction=0;
+}
+
+void TMLCommand::registerGlobalListener(CommandListener* iListener){
+	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		(*i)->registerListener(iListener);
+	}
+}
+
+void TMLCommand::removeGlobalListener(CommandListener* iListener){
+	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		(*i)->removeListener(iListener);
+	}
+}
+
+unsigned int TMLCommand::getID() const{
+	return _ID;
 }

@@ -44,8 +44,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLChannel.h>
 #include <Bus.h>
+#include <TransactionListener.h>
 
-CPUPB::CPUPB(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize){
+CPUPB::CPUPB(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize){
 }
 
 CPUPB::~CPUPB(){  
@@ -97,7 +98,10 @@ void CPUPB::schedule(){
 		//std::cout << std::endl << _name << " transaction in the PAST found" << std::endl << _nextTransaction->toString() << std::endl;
 	}
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _busNextTransaction!=0) _busNextTransaction->registerTransaction(0,this);
-	if (_nextTransaction!=0) calcStartTimeLength();
+	if (_nextTransaction!=0){
+		calcStartTimeLength();
+		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
+	}
 }
 
 void CPUPB::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){

@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLStateChannel.h>
 
-TMLStateChannel::TMLStateChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0){
+TMLStateChannel::TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iID, iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0){
 }
 
 TMLStateChannel::~TMLStateChannel(){}
@@ -55,4 +55,13 @@ std::istream& TMLStateChannel::readObject(std::istream& s){
 	TMLChannel::readObject(s);
 	READ_STREAM(s,_content);
 	return s;
+}
+
+void TMLStateChannel::reset(){
+	//std::cout << "StateChannel reset" << std::endl;
+	TMLChannel::reset();
+	_content=0;
+	_nbToWrite=0;
+	_nbToRead=0;
+	//std::cout << "StateChannel reset end" << std::endl;
 }

@@ -44,10 +44,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-Bridge::Bridge(std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize):_name(iName), _timePerCycle(iTimePerCycle), _bufferSize(iBufferSize){
+Bridge::Bridge(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize): Slave(iID, iName), _timePerCycle(iTimePerCycle), _bufferSize(iBufferSize){
 }
 
-void Bridge::CalcTransactionLength(TMLTransaction* iTrans){
+void Bridge::CalcTransactionLength(TMLTransaction* iTrans) const{
 }
 
 //TMLTransaction* Bridge::getNextBusTransaction(SchedulableCommDevice* iBus) const{
@@ -55,7 +55,7 @@ void Bridge::CalcTransactionLength(TMLTransaction* iTrans){
 //}
 
 Master* Bridge::getConnectedMaster(){
-	return (Master*)this;
+	return dynamic_cast<Master*>(this);
 }
 
 Bridge::~Bridge(){

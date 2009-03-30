@@ -53,16 +53,17 @@ class Bridge: public Slave, public Master{
 public:
 	///Constructor
 	/**
+	\param iID ID of the bridge
 	\param iName Name of the bridge
 	\param iTimePerCycle 1/Bridge frequency
 	\param iBufferSize Buffer size
 	*/
-	Bridge(std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize);
+	Bridge(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize);
 	///Accounts for the delay caused by the bridge
 	/**
 	\param iTrans Pointer to the transaction to be processed
 	*/
-	void CalcTransactionLength(TMLTransaction* iTrans);
+	void CalcTransactionLength(TMLTransaction* iTrans) const;
 	///Returns a pointer to the connected master device if any
 	/**
 	\return Pointer to the master device 
@@ -86,8 +87,6 @@ public:
 	///Destructor
 	~Bridge();
 protected:
-	///Name of the bridge
-	std::string _name;
 	///1/Bridge frequency
 	TMLTime _timePerCycle;
 	///Buffer size

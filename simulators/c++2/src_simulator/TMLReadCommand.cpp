@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLReadCommand::TMLReadCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iTask,1,0),_lengthFunc(iLengthFunc), _channel(iChannel){
+TMLReadCommand::TMLReadCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iID, iTask,1,0),_lengthFunc(iLengthFunc), _channel(iChannel){
 }
 
 void TMLReadCommand::execute(){
@@ -87,18 +87,18 @@ TMLChannel* TMLReadCommand::getChannel() const{
 	return _channel;
 }
 
-std::string TMLReadCommand::toString(){
+std::string TMLReadCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Read in " << TMLCommand::toString() << " " <<_channel->toString();
 	return outp.str();
 }
 
-std::string TMLReadCommand::toShortString(){
+std::string TMLReadCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Read " << _length << "," << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLReadCommand::getCommandStr(){
+std::string TMLReadCommand::getCommandStr() const{
 	return "rd";
 }

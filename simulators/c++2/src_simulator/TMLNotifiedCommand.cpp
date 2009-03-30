@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLNotifiedCommand::TMLNotifiedCommand(TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr):TMLCommand(iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
+TMLNotifiedCommand::TMLNotifiedCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr):TMLCommand(iID, iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
 }
 
 void TMLNotifiedCommand::execute(){
@@ -73,24 +73,26 @@ TMLChannel* TMLNotifiedCommand::getChannel() const{
 	return _channel;
 }
 
-std::string TMLNotifiedCommand::toString(){
+std::string TMLNotifiedCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Notified in " << TMLCommand::toString() << " " << _channel->toString();
 	return outp.str();
 }
 
-std::string TMLNotifiedCommand::toShortString(){
+std::string TMLNotifiedCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Notified " << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLNotifiedCommand::getCommandStr(){
+std::string TMLNotifiedCommand::getCommandStr() const{
 	return "notified";
 }
 
-std::string TMLNotifiedCommand::getCommentString(Comment* iCom){
+#ifdef ADD_COMMENTS
+std::string TMLNotifiedCommand::getCommentString(Comment* iCom) const{
 	std::ostringstream comment;
 	comment << "Notified " << _resultVarDescr << "=" << iCom->_actionCode;
 	return comment.str();
 }
+#endif

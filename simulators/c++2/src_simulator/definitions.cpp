@@ -42,8 +42,15 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>
+#include <Bus.h>
+#include <CPU.h>
+#include <SchedulableDevice.h>
 
-Pool<Comment> Comment::memPool;
+//unsigned int TMLTask::_id=0;
+//unsigned int Bus::_id=0;
+//unsigned int CPU::_id=0;
+TMLTime SchedulableDevice::_simulatedTime=0;
+std::list<TMLCommand*> TMLCommand::_instanceList;
 
 int myrand(int n1, int n2){
 	static bool firstTime = true;
@@ -83,4 +90,14 @@ void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace){
 	while (aPos< ioHTML.length() && (aPos= ioHTML.find(iSearch,aPos))!=std::string::npos){
 		ioHTML.replace(aPos++,iSearch.length(),iReplace);
 	}
-} 
+}
+
+std::string vcdValConvert(unsigned int iVal){
+	std::string iResult;
+	do{
+		if (iVal & 1) iResult="1" + iResult; else iResult="0" + iResult;
+		iVal >>= 1;
+	}while(iVal);
+	return iResult;
+}
+

@@ -45,6 +45,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableCommDevice.h>
 #include <Slave.h>
 #include <Serializable.h>
+#include <ListenerSubject.h>
+#include <TransactionListener.h>
 
 class TMLTransaction;
 class TMLCommand;
@@ -52,16 +54,17 @@ class TMLTask;
 class Bus;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
-class TMLChannel: public Serializable{
+class TMLChannel: public Serializable, public ListenerSubject<TransactionListener>{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the channel
+      	\param iID ID of channel
+	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
+	TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
 	///Destructor
 	virtual ~TMLChannel();
 	///Prepares a write operation
@@ -115,7 +118,7 @@ public:
 	\param iTrans Transaction
 	\return Pointer to the slave
 	*/
-	Slave* getNextSlave(TMLTransaction* iTrans);
+	Slave* getNextSlave(TMLTransaction* iTrans) const;
 	//Returns the number of buses on which the channel is mapped
 	//\return Number of buses
 	//unsigned int getNumberOfHops() const;
@@ -123,15 +126,18 @@ public:
 	/**
 	\return Detailed string representation
 	*/
-	virtual std::string toString()=0;
+	virtual std::string toString() const =0;
 	///Returns a short string representation of the channel
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString();
+	std::string toShortString() const;
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
+	virtual void reset();
 protected:
+	///ID of channel
+	unsigned int _ID;
 	///Name of the channel
 	std::string _name;	
 	///Pointer to the tasks which performs read operation on the channel

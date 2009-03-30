@@ -43,8 +43,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLChannel.h>
 #include <Bus.h>
+#include <TransactionListener.h>
 
-CPURR::CPURR(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize), _timeQuantum(100), _taskStartTime(0), _taskChanged(true) {
+CPURR::CPURR(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize), _timeQuantum(100), _taskStartTime(0), _taskChanged(true) {
 }
 
 CPURR::~CPURR(){  
@@ -69,6 +70,7 @@ void CPURR::schedule(){
 		calcStartTimeLength();
 		if (_taskChanged) _taskStartTime = _nextTransaction->getStartTime() +  _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
 		if (_busNextTransaction==0 && _nextTransaction->getEndTime() > _taskStartTime + _timeQuantum) truncateNextTransAt(_taskStartTime + _timeQuantum);
+		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
 	}
 }
 
@@ -105,3 +107,10 @@ bool CPURR::addTransaction(){
 		return false;
 }
 
+void CPURR::reset(){
+	CPU::reset();
+	_futureTransQueue= FutureTransactionQueue();
+	_pastTransQueue.clear();
+	_taskStartTime=0;
+	_taskChanged=true;
+}

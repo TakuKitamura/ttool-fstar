@@ -52,19 +52,20 @@ class TMLnbrnbwChannel:public TMLChannel{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the channel
+      	\param iID ID of channel
+	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLnbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
+	TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();
 	bool read();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
-	std::string toString();
+	std::string toString() const;
 protected:
 };
 

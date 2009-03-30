@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventBChannel::TMLEventBChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+TMLEventBChannel::TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 	if (_sourceIsFile){
 		//std::cout << "new vv" << std::endl;
 		_eventFile = new std::ifstream(_name.c_str());
@@ -74,6 +74,7 @@ void TMLEventBChannel::readNextEvents(){
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
+	_tmpParam=(iTrans->getCommand()->getParam()==0)? Parameter<ParamType>(0,0,0): *(iTrans->getCommand()->getParam());  //added!!!
 	_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 }
 
@@ -89,11 +90,13 @@ void TMLEventBChannel::write(){
 
 void TMLEventBChannel::write(TMLTransaction* iTrans){
 	_content++;
-	_paramQueue.push_back(iTrans->getCommand()->getParam());
+	//_paramQueue.push_back(iTrans->getCommand()->getParam());
+	_paramQueue.push_back(new Parameter<ParamType>(_tmpParam));   //modified!!!
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
 }
 
 bool TMLEventBChannel::read(){
@@ -105,8 +108,12 @@ bool TMLEventBChannel::read(){
 		if (_content==0 && _sourceIsFile) readNextEvents();
 		pRead=_readTrans->getCommand()->getParam();
 		pWrite=_paramQueue.front();
-		if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
+		if (pWrite!=0){				//modified!!!
+			if (pRead!=0) *pRead=*pWrite;
+			delete pWrite;
+		}
 		_paramQueue.pop_front();
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 		_readTrans=0;
 		return true;
 	}
@@ -124,12 +131,12 @@ TMLTask* TMLEventBChannel::getBlockedWriteTask() const{
 	return 0;
 }
 
-std::string TMLEventBChannel::toString(){
+std::string TMLEventBChannel::toString() const{
 	std::ostringstream outp;
 	outp << _name << "(evtB) content:" << _content;
 	return outp.str();
 }
 
-bool TMLEventBChannel::getRequestChannel(){
+bool TMLEventBChannel::getRequestChannel() const{
 	return _requestChannel;
 }

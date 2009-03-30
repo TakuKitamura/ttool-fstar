@@ -51,19 +51,22 @@ class TMLNotifiedCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+      	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iResultVar Pointer to the variable which has to contain the result
 	\param iResultVarDescr String representation of the result variable
 	*/
-	TMLNotifiedCommand(TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
+	TMLNotifiedCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
-	std::string getCommentString(Comment* iCom);
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
+#ifdef ADD_COMMENTS
+	std::string getCommentString(Comment* iCom)  const;
+#endif
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;

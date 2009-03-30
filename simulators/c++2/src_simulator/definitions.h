@@ -55,6 +55,12 @@ Ludovic Apvrille, Renaud Pacalet
 #include <queue>
 #include <vector>
 #include <sys/time.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <pthread.h>
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v))
 #define READ_STREAM(s,v) s.read((char*) &v,sizeof(v))
@@ -71,8 +77,13 @@ using std::max;
 #define CPURRPB CPUPB
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
-#undef ADD_COMMENTS
+#define PARAMETER_BLOCK_SIZE 1000
+#define ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
+#define PORT "3490"
+#define BACKLOG 10
+#define VCD_PREFIX "b"
+//#define SERVER_MODE
 
 //Task VCD output
 #define TERMINATED 3
@@ -90,6 +101,10 @@ template <typename T> class Parameter;
 class TraceableDevice;
 class Master;
 class BusMasterInfo;
+class Serializable;
+class TMLChannel;
+class Slave;
+class Comment;
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -99,18 +114,22 @@ typedef unsigned int TMLLength;
 typedef std::list<TMLTask*> TaskList;
 ///Datatype used by CPU and bus to store already scheduled transactions
 typedef std::vector<TMLTransaction*> TransactionList;
-///Datatype holding pointer to CPUs, used by TMLMain and simulation kernel
+///Datatype holding pointer to CPUs, used by SimComponents and simulation kernel
 typedef std::list<CPU*> CPUList;
 ///Datatype holding pointer to CPUs and Bridges, used by simulation kernel for scheduling
 typedef std::list<SchedulableDevice*> SchedulingList;
-///Datatype holding references to buses, used by TMLMain and simulation kernel
+///Datatype holding references to buses, used by SimComponents and simulation kernel
 typedef std::list<SchedulableCommDevice*> BusList;
-/////Datatype used by the Bus to store pointers to all connected master devices
-//typedef std::list<Master*> MasterDeviceList;
+///Datatype holding references to CPUs, buses, Tasks and channels, used by serialization functions
+typedef std::list<Serializable*> SerializableList;
+///Datatype used in SimComponents to store slave objects
+typedef std::list<Slave*> SlaveList;
+///Datatype used in SimComponents to store channel objects
+typedef std::list<TMLChannel*> ChannelList;
+///Datatype used in Tasks to store comments concerning the task execution
+typedef std::vector<Comment*> CommentList;
 ///Datatype establishing an association between a CPU and a transaction, used by the bus
 typedef std::map<Master*, TMLTransaction*> BusTransHashTab;
-/////Datatype establishing an association between a transaction and its priority, used by buses
-//typedef std::multimap<unsigned int, Master*> BusMasterPrioTab;
 ///Datatype establishing an association between a bus and a priority, used by Masters
 typedef std::map<SchedulableCommDevice*, BusMasterInfo*> MasterPriorityHashTab;
 ///Datatype for event parameters
@@ -125,117 +144,14 @@ typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
 ///Datatype holding references to TraceableDevices (for VCD output)
 typedef std::list<TraceableDevice*> TraceableDeviceList;
-
-
-///Generic Memory pool class
-template <typename T>
-class Pool {
-public:
-	///Constructor
-	Pool():_headFreeList(0){}
-
-	///Allocation method
-	/**
-	\param n Size of memory chunk to be allocated
-	\return Pointer to the allocated chunk of memory
-	*/
-	void* pmalloc(unsigned int n){
-		if (n != sizeof(T)){
-			std::cout << "FAEAEAELA!";
-			return ::operator new(n);
-		}
-		T* aHead = _headFreeList;
-		if (aHead){
-			_headFreeList = *(reinterpret_cast<T**>(aHead));
-			//_headFreeList = (T*)((void*)(*aHead));
-		}else{
-			T** aAdr;
-			T* newBlock = static_cast<T*>(::operator new(BLOCK_SIZE * sizeof(T)));
-			for (int i = 1; i < BLOCK_SIZE-1; ++i){
-				aAdr = reinterpret_cast<T**>(&newBlock[i]);
-				*aAdr = &newBlock[i+1];
-				//newBlock[i] = &newBlock[i+1];
-			}
-			aAdr = reinterpret_cast<T**>(&newBlock[BLOCK_SIZE-1]);
-			*aAdr = 0;
-			//newBlock[BLOCK_SIZE-1].next = 0;
-			aHead = newBlock;
-			_headFreeList = &newBlock[1];
-			//_chunkList.push_back(p);
-		}
-		return aHead;
+struct ltstr{
+	bool operator()(const char* s1, const char* s2) const{
+		return strcmp(s1, s2) < 0;
 	}
-
-	///Deallocation method
-	/**
-	\param p Pointer to the memory chunk to be deallocated 
-	\return Size of memory chunk to be deallocated
-	*/
-	void pfree(void *p, unsigned int n){
-		if (p == 0) return;
-		if (n != sizeof(T)){
-			::operator delete(p);
-			return;
-		}
-		T* aDelObj = static_cast<T*>(p);
-		//delObj->next = _headFreeList;
-		T** aAdr = reinterpret_cast<T**>(aDelObj);
-		*aAdr = _headFreeList;
-		_headFreeList = aDelObj;
-	}
-
-///Destructor
-~Pool(){
-	//std::list<T*>::iterator i;
-	//for(i=_chunkList.begin(); i != _chunkList.end(); ++i) ::operator delete [] *i;
-}
-private:
-	///Head pointer of the free list
-	T* _headFreeList;
-	//std::list<T*> _chunkList;
 };
+///Datatype which associates a variable name with the coresponding pointer to that variable, used for look-up table of tasks
+typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTable;
 
-///Class which encapsulates a comment concerning the control flow or task execution
-class Comment{
-public:	
-	///Constructor
-	/**
-	\param iTime Time when the message occurred
-	\param iCommand Pointer to the command which created the comment, 0 if comment was created by a task
-	\param iActionCode Code specifying the comment message
-	*/
-	Comment(TMLTime iTime, TMLCommand* iCommand, unsigned int iActionCode):_time(iTime), _command(iCommand), _actionCode(iActionCode){}
-	
-	///New operator
-	/**
-	\param size Size of memory chunk to be allocated
-	\return Pointer to the allocated chunk of memory
-	*/
-	inline void * operator new(size_t size){
-		return memPool.pmalloc(size);
-	}
-	///Delete operator
-	/**
-	\param p Pointer to the memory chunk to be deallocated 
-	\param size Size of memory chunk to be deallocated
-	*/
-	inline void operator delete(void *p, size_t size){
-		memPool.pfree(p, size);
-	}
-
-	///Time when the massage occurred
-	TMLTime _time;
-	///Pointer to the command which created the comment, 0 if comment was created by a task
-	TMLCommand* _command;
-	///Code specifying the comment message
-	unsigned int _actionCode;
-private:
-	///Memory pool for comments
-	static Pool<Comment> memPool;
-};
-
-///Datatype used in Tasks to store comments concerning the task execution
-typedef std::vector<Comment*> CommentList;
 
 ///Minimum of three values
 /**
@@ -286,111 +202,7 @@ T* array(unsigned int noArgs, T arg1 ...){
 	return newArray;
 }
 
-///This class encapsulates a pointer to a value or the value itself
-template <typename T>
-class RefValUnion{
-public:
-	///Constructor called for constants
-	/**
-	\param in Constant reference to value
-	*/
-	RefValUnion(const T& in):isValue(true), value(in){
-		//std::cout << "const constructor executed" << std::endl;
-		//value=in;
-	}
-	///Constructor called for variables
-	/**
-	\param in Reference to variable
-	*/
-	RefValUnion(T& in):isValue(false), pointer(&in){
-		//std::cout << "varible constructor executed" << std::endl;
-		//pointer=&in;
-	}
-	RefValUnion(std::istream& s, unsigned int iAdr){
-		READ_STREAM(s, isValue);
-		if (isValue){
-			READ_STREAM(s, value);
-		}else{
-			unsigned int aAddrOffs;
-			READ_STREAM(s, aAddrOffs);
-			pointer = (T*)(iAdr + aAddrOffs);
-		}			
-	}
-	///The parenthesis operator returns a reference to the stored value
-	/**
-	\return Reference to value 
-	*/
-	inline T& operator() (){if (isValue) return value; else return *pointer;}
-	///The parenthesis operator returns a reference to the stored value
-	/**
-	\return Constant reference to value 
-	*/
-	inline const T& operator() () const {if (isValue) return value; else return *pointer;}
-	
-	T print() const {return value;}
-	friend std::istream& operator >> (std::istream &is,RefValUnion<T> &obj){
-		is >> obj.value;
-		obj.isValue=true;
-		return is;
-	}
-	std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
-		WRITE_STREAM(s,isValue);
-		if (isValue){
-			WRITE_STREAM(s,value);
-		}else{
-			unsigned int aAdr=((unsigned int)pointer)-iAdr;
-			WRITE_STREAM(s,aAdr);
-		}
-		return s;
-	}
-private:
-	///Indicates whether the class holds a value or a pointer to a value
-	bool isValue;
-	union{
-		///Pointer
-		T* pointer;
-		///Value
-		T value;
-	};
-};
-
-///This class encapsulates three parameters
-template <typename T>
-class Parameter{
-public:
-	///Constructor
-	/**
-	\param ip1 Value 1
-	\param ip2 Value 2
-	\param ip3 Value 3
-	*/
-	Parameter(const RefValUnion<T>& ip1,const RefValUnion<T>& ip2,const RefValUnion<T>& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
-	Parameter(std::istream& s, unsigned int iAdr):_p1(s,iAdr), _p2(s,iAdr), _p3(s,iAdr){}
-	///Assignement operator, copies all parameters
-	const Parameter<T>& operator=(const Parameter<T>& rhs){
-		_p1()=rhs._p1();
-		_p2()=rhs._p2();
-		_p3()=rhs._p3();
-		return *this;
-	}
-	///Print function for testing purposes
-	void print(){
-		std::cout << "p1:" << _p1.print() << " p2:" << _p2.print() << " p3:" << _p3.print() << std::endl;
-	}
-	inline std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
-		_p1.writeObject(s,iAdr);
-		_p2.writeObject(s,iAdr);
-		_p3.writeObject(s,iAdr);
-		return s;
-	}
-	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
-		is >>obj._p1 >> obj._p2 >> obj._p3;
- 		return is;
-	}
-private:
-	///Three parameters
-	RefValUnion<T> _p1,_p2,_p3;
-};
+//template<class T> Pool<Parameter<T> > Parameter<T>::memPool;
 
 ///Datatype which encapsulates singnal changes, used for VCD output
 class SignalChangeData{
@@ -468,4 +280,5 @@ long getTimeDiff(struct timeval& begin, struct timeval& end);
 	\param iReplace String which is filled in
 */
 void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
+std::string vcdValConvert(unsigned int iVal);
 #endif

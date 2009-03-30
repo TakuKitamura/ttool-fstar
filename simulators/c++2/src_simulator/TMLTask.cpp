@@ -42,8 +42,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0) {
-	_myid=++_id;
+TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): _ID(iID), _name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0) {
+	//_myid=++_id;
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
@@ -52,9 +52,8 @@ TMLTask::TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU):_name(iNa
 }
 
 TMLTask::~TMLTask(){
-	CommentList::iterator i;
 #ifdef ADD_COMMENTS
-	for(i=_commentList.begin(); i != _commentList.end(); ++i){
+	for(CommentList::iterator i=_commentList.begin(); i != _commentList.end(); ++i){
 		delete *i;
 	}
 #endif
@@ -78,22 +77,22 @@ void TMLTask::setCurrCommand(TMLCommand* iCurrCommand){
 	_currCommand=iCurrCommand;
 }
 
-CPU* TMLTask::getCPU(){
+CPU* TMLTask::getCPU() const{
 	return _cpu;
 }
 
-std::string TMLTask::toString(){
+std::string TMLTask::toString() const{
 	return _name;
 }
 
-std::string TMLTask::toShortString(){
+std::string TMLTask::toShortString() const{
 	std::ostringstream outp;
-	outp << "ta" << _myid;
+	outp << "ta" << _ID;
 	return outp.str();
 }
 
-unsigned int TMLTask::getID(){
-	return _myid;
+unsigned int TMLTask::getID() const{
+	return _ID;
 }
 
 #ifdef ADD_COMMENTS
@@ -119,6 +118,7 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
 	if(iTrans->getChannel()==0){
 		_noCPUTransactions++;
 		_CPUContentionDelay+=iTrans->getStartTime()-iTrans->getRunnableTime();
@@ -136,9 +136,9 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 	}
 	if (_posTrasactList == _transactList.end()){
 		if (iInit || _transactList.back()->getTerminatedFlag()){
-			outp << "r" << TERMINATED << " ta" << _myid;
+			outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
 		}else{
-			outp << "r" << SUSPENDED << " ta" << _myid;
+			outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
 		}
 		oSigChange=outp.str();
 		oNoMoreTrans=true;
@@ -150,10 +150,10 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		switch (_vcdOutputState){
 			case END_TRANS:
 				if (aCurrTrans->getRunnableTime()==_previousTransEndTime){
-					outp << "r" << RUNNABLE << " ta" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << " ta" << _ID;
 					_vcdOutputState=START_TRANS;
 				}else{
-					outp << "r" << SUSPENDED << " ta" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
 					if (aCurrTrans->getRunnableTime()==aCurrTrans->getStartTimeOperation()){
 						_vcdOutputState=START_TRANS;
 					}else{
@@ -164,13 +164,13 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 				return _previousTransEndTime;
 			break;
 			case BETWEEN_TRANS:
-				outp << "r" << RUNNABLE << " ta" << _myid;
+				outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << " ta" << _ID;
 				oSigChange=outp.str();
 				_vcdOutputState=START_TRANS;
 				return aCurrTrans->getRunnableTime();
 			break;
 			case START_TRANS:
-				outp << "r" << RUNNING << " ta" << _myid;
+				outp << VCD_PREFIX << vcdValConvert(RUNNING) << " ta" << _ID;
 				oSigChange=outp.str();
 				do{
 					_previousTransEndTime=(*_posTrasactList)->getEndTime();
@@ -182,10 +182,6 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		}
 	}
 }
-
-/*unsigned int TMLTask::getBusyCycles(){
-	return 0;
-}*/
 
 std::ostream& TMLTask::writeObject(std::ostream& s){
 	unsigned int aCurrCmd;
@@ -203,16 +199,40 @@ std::ostream& TMLTask::writeObject(std::ostream& s){
 
 std::istream& TMLTask::readObject(std::istream& s){
 	unsigned int aCurrCmd;
+	//_previousTransEndTime=0; _busyCycles=0; _CPUContentionDelay=0; _noCPUTransactions=0;
 	READ_STREAM(s, _endLastTransaction);
 	READ_STREAM(s, aCurrCmd);
 	_currCommand=(aCurrCmd==0)?0:(TMLCommand*)(aCurrCmd+((unsigned int)this));
-	if (_currCommand!=0) _currCommand->readObject(s);
+	if (_currCommand!=0){
+		 _currCommand->readObject(s);
+		_currCommand->setBreakpoint(false);
+		//_currCommand->prepare();
+	}
 	return s;
 }
 
-void TMLTask::streamBenchmarks(std::ostream& s){
+void TMLTask::streamBenchmarks(std::ostream& s) const{
 	s << "*** Task " << _name << " ***\n"; 
 	s << "Execution time: " << _busyCycles << std::endl;
-	if (_noCPUTransactions!=0) s << "Average CPU contention delay: " << ((float)_CPUContentionDelay)/((float)_noCPUTransactions) << std::endl;
+	if (_noCPUTransactions!=0) s << "Average CPU contention delay: " << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << std::endl;
 }
 
+void TMLTask::reset(){
+	//std::cout << "task reset" << std::endl;
+	_endLastTransaction=0;
+	if (_currCommand!=0) _currCommand->reset();
+	_currCommand=_firstCommand;
+	if (_currCommand!=0) _currCommand->reset();
+#ifdef ADD_COMMENTS
+	_commentList.clear();
+#endif
+	_transactList.clear();
+	_busyCycles=0;
+	_CPUContentionDelay=0;
+	_noCPUTransactions=0; 
+}
+
+ParamType* TMLTask::getVariableByName(std::string& iVarName){
+	return _varLookUp[iVarName.c_str()];
+	//return (_varLookUp.find(iVarName.c_str()))->second;
+}

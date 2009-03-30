@@ -41,24 +41,39 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef SlaveH
 #define SlaveH
 
+#include <definitions.h>
+#include <ListenerSubject.h>
+#include <TransactionListener.h>
+
 class Master;
 class TMLTransaction;
 
 ///Base class for Bus slaves
-class Slave{
+class Slave: public ListenerSubject<TransactionListener> {
 public:
+	///Constructor
+	Slave(unsigned int iID, std::string iName):_name(iName), _ID(iID) {}
+	///Destructor
+	virtual ~Slave(){}
 	///Calculates the time it takes to process the transaction within the slave node
 	/**
       	\param iTrans Pointer to the transaction to process
     	*/
-	virtual void CalcTransactionLength(TMLTransaction* iTrans)=0;
+	virtual void CalcTransactionLength(TMLTransaction* iTrans) const =0;
 	///Returns a pointer to the connected master device if any
 	/**
 	\return Pointer to the master device 
 	*/
 	virtual Master* getConnectedMaster()=0;
-	///Destructor
-	virtual ~Slave(){}
+	std::string toString() {return _name;}
+	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
+	virtual void addTransaction(TMLTransaction* iTrans){
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+	}
+protected:
+	///Name of the slave
+	std::string _name;
+	unsigned int _ID;
 };
 
 #endif

@@ -63,7 +63,8 @@ class CPU: public SchedulableDevice, public TraceableDevice, public Master{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the CPU
+      	\param iID ID of the CPU
+	\param iName Name of the CPU
 	\param iTimePerCycle 1/Processor frequency
 	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
@@ -74,7 +75,7 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	CPU(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
 	virtual ~CPU();
 	///Determines the next CPU transaction to be executed
@@ -102,26 +103,21 @@ public:
 	\param iTime Indicates at what time the transaction should be truncated
 	*/
 	TMLTime truncateNextTransAt(TMLTime iTime);
-	///Returns the unique ID of the CPU
-	/**
-      	\return Unique ID
-    	*/ 
-	unsigned int getID();
 	///Returns a string representation of the CPU
 	/**
 	\return Detailed string representation
 	*/
-	std::string toString();
+	std::string toString() const;
 	///Returns a short string representation of the transaction
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString();
+	std::string toShortString() const;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	void schedule2HTML(std::ofstream& myfile);
+	void schedule2HTML(std::ofstream& myfile) const;
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	///Returns the scheduled transaction one after another
 	/**
@@ -133,13 +129,14 @@ public:
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	void schedule2TXT(std::ofstream& myfile);
-	virtual void streamBenchmarks(std::ostream& s);
+	void schedule2TXT(std::ofstream& myfile) const;
+	virtual void streamBenchmarks(std::ostream& s) const;
+	virtual void reset();
 protected:
 	///Calculates the start time and the length of the next transaction
 	void calcStartTimeLength();
-	///Name of the CPU
-	std::string _name;
+	/////Name of the CPU
+	//std::string _name;
 	///List of all tasks running on the CPU
 	TaskList _taskList;
 	///List containing all already scheduled transactions
@@ -153,10 +150,10 @@ protected:
 	///Pointer to the bus which will be accessed by the next transaction
 	SchedulableCommDevice* _busNextTransaction;
 	
-	///Unique ID of the CPU
-	unsigned int _myid;
-	///Class variable counting the number of CPU instances
-	static unsigned int _id;
+	/////Unique ID of the CPU
+	//unsigned int _myid;
+	/////Class variable counting the number of CPU instances
+	//static unsigned int _id;
 	
 	///1/Processor frequency
 	TMLTime _timePerCycle;
@@ -174,11 +171,7 @@ protected:
 	unsigned int _cyclesPerExeci;
 	///Busy cycles since simulation start
 	unsigned long _busyCycles;
-	/////Sum of contention delay of bus transactions
-	//unsigned long _busContentionDelay;
-	/////Number of executed transactions which have accessed a bus
-	//unsigned long _noBusTransactions; 
-
+	
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit
 	TMLTime _timePerExeci;

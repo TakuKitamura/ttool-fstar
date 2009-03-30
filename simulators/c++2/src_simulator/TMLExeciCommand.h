@@ -50,16 +50,17 @@ class TMLExeciCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iLengthFunc Pointer to the function returning the length of the command
 	\param iType Exec Type (ExecI, ExecC,...) 
     	*/
-	TMLExeciCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType);
+	TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType);
 	void execute();
 	TMLTask* getDependentTask() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
 protected:
 	TMLCommand* prepareNextTransaction();
 	///Pointer to the function returning the length of the command

@@ -52,7 +52,8 @@ class TMLEventBChannel:public TMLEventChannel{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the channel
+      	\param iID ID of channel
+	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
@@ -60,7 +61,7 @@ public:
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file
     	*/
-	TMLEventBChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
+	TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
 	~TMLEventBChannel();
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
@@ -70,8 +71,8 @@ public:
 	void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
-	std::string toString();
-	bool getRequestChannel();
+	std::string toString() const;
+	bool getRequestChannel() const;
 protected:
 	void readNextEvents();
 	///Flag indicating if channel is used by a request

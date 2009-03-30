@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWaitCommand::TMLWaitCommand(TMLTask* iTask, TMLEventChannel* iChannel, Parameter<ParamType>* iParam):TMLCommand(iTask, WAIT_SEND_VLEN, iParam),_channel(iChannel){
+TMLWaitCommand::TMLWaitCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, Parameter<ParamType>* iParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParam),_channel(iChannel){
 }
 
 void TMLWaitCommand::execute(){
@@ -72,18 +72,18 @@ TMLChannel* TMLWaitCommand::getChannel() const{
 	return _channel;
 }
 
-std::string TMLWaitCommand::toString(){
+std::string TMLWaitCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Wait in " << TMLCommand::toString() << " " << _channel->toString();
 	return outp.str();
 }
 
-std::string TMLWaitCommand::toShortString(){
+std::string TMLWaitCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Wait " << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLWaitCommand::getCommandStr(){
+std::string TMLWaitCommand::getCommandStr() const{
 	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
 }

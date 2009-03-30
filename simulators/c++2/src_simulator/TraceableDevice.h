@@ -50,12 +50,12 @@ public:
 	/**
 	\return Detailed string representation
 	*/
-	virtual std::string toString()=0;
+	virtual std::string toString() const =0;
 	///Returns a short string representation of the device
 	/**
 	\return Short string representation
 	*/
-	virtual std::string toShortString()=0;
+	virtual std::string toShortString() const =0;
 	///Returns the next signal change (for vcd output)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
@@ -68,7 +68,7 @@ public:
 	/**
       	\param s Reference to an output stream
 	*/
-	virtual void streamBenchmarks(std::ostream& s)=0;
+	virtual void streamBenchmarks(std::ostream& s) const =0;
 	///Destructor
 	virtual ~TraceableDevice(){}
 };

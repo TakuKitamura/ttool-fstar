@@ -51,17 +51,18 @@ class TMLWaitCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+      	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParam Pointer to the parameter data structure
 	*/
-	TMLWaitCommand(TMLTask* iTask,TMLEventChannel* iChannel,Parameter<ParamType>* iParam);
+	TMLWaitCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,Parameter<ParamType>* iParam);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;

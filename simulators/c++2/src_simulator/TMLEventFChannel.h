@@ -52,6 +52,7 @@ class TMLEventFChannel:public TMLEventChannel{
 public:
 	///Constructor
     	/**
+	\param iID ID of channel
       	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
@@ -59,7 +60,7 @@ public:
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLEventFChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
+	TMLEventFChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();
@@ -67,7 +68,7 @@ public:
 	void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
-	std::string toString();
+	std::string toString() const;
 protected:
 	///Length of the channel
 	TMLLength _length;

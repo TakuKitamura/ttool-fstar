@@ -45,9 +45,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 #include <Slave.h>
 #include <TMLChannel.h>
+#include <TransactionListener.h>
 
-CPU::CPU(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize):_name(iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle), _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), /*_busContentionDelay(0), _noBusTransactions(0),*/  _timePerExeci(_cyclesPerExeci*_timePerCycle), _taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0){
-	_myid=++_id;
+CPU::CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle), _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*_timePerCycle), _taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0){
+	//_myid=++_id;
 	_transactList.reserve(BLOCK_SIZE);
 }
 
@@ -209,10 +210,13 @@ bool CPU::addTransaction(){
 			//_busContentionDelay+=_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime());
 			//_noBusTransactions++;
 			SchedulableCommDevice* aTempBus =_nextTransaction->getChannel()->getFirstBus(_nextTransaction);
+			Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction); //NEW!!!
 			addBusContention(aTempBus, _nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
 			while (aTempBus!=0){
 				aTempBus->addTransaction();
+				aTempSlave->addTransaction(_nextTransaction); //NEW!!!
 				aTempBus =_nextTransaction->getChannel()->getNextBus(_nextTransaction);
+				aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);  //NEW!!!
 			}
 		}else{
 			//std::cout << _name << " bus transaction next round" << std::endl;
@@ -233,37 +237,39 @@ bool CPU::addTransaction(){
 		_branchMissReminder=_branchMissTempReminder;
 		_busyCycles+=_nextTransaction->getOverallLength();
 		//std::cout << "busyCycles: " <<  _busyCycles << std::endl;
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_nextTransaction);
 		_nextTransaction=0;
 		return true;
 	}else return false;
 }
 
-unsigned int CPU::getID(){
-	return _myid;
-}
+//unsigned int CPU::getID() const{
+//	return _myid;
+//}
 
-std::string CPU::toString(){
+std::string CPU::toString() const{
+	//std::cout << "CPU::toString() called" << std::endl;
 	return _name;
 }
 
-std::string CPU::toShortString(){
+std::string CPU::toShortString() const{
 	std::ostringstream outp;
-	outp << "cpu" << _myid;
+	outp << "cpu" << _ID;
 	return outp.str();
 }
 
-void CPU::schedule2HTML(std::ofstream& myfile){
-	TransactionList::iterator i;
-	TaskList::iterator j;
+void CPU::schedule2HTML(std::ofstream& myfile) const{
 	TMLTime aCurrTime=0;
 	TMLTransaction* aCurrTrans;
 	unsigned int aBlanks,aLength,aColor;
+#ifdef ADD_COMMENTS
 	Comment* aComment;
+#endif
 	std::string aCommentString;
 	bool aMoreComments=true, aInit=true;
 	//if (_transactList.empty()) return;
 	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
-	for(i=_transactList.begin(); i != _transactList.end(); ++i){
+	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		aCurrTrans=*i;
 		//if (aCurrTrans->getVirtualLength()==0) continue;
 		aBlanks=aCurrTrans->getStartTime()-aCurrTime;
@@ -299,7 +305,7 @@ void CPU::schedule2HTML(std::ofstream& myfile){
 	myfile << "</tr>\n<tr>";
 	for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
 	myfile << "</tr>\n</table>\n<table>\n<tr>";
-	for(j=_taskList.begin(); j != _taskList.end(); ++j){
+	for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
 		aColor=(*j)->getID() & 15;
 		myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
 	}
@@ -308,7 +314,7 @@ void CPU::schedule2HTML(std::ofstream& myfile){
 	while(aMoreComments){
 		aMoreComments=false;
 		myfile << "<tr>";
-		for(j=_taskList.begin(); j != _taskList.end(); ++j){
+		for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
 			aCommentString = (*j)->getNextComment(aInit, aComment);
 			if (aComment==0){
 				myfile << "<td></td><td></td><td class=\"space\"></td>";
@@ -326,10 +332,9 @@ void CPU::schedule2HTML(std::ofstream& myfile){
 	myfile << "</table>\n";
 }
 
-void CPU::schedule2TXT(std::ofstream& myfile){
-	TransactionList::iterator i;
+void CPU::schedule2TXT(std::ofstream& myfile) const{
 	myfile << "========================================\nScheduling for device: "<< _name << "\n========================================\n" ;
-	for(i=_transactList.begin(); i != _transactList.end(); ++i){
+	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;
 	}
 }
@@ -343,13 +348,13 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 		_vcdOutputState=END_IDLE_CPU;
 		//if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==0) _vcdOutputState=END_IDLE_CPU; else _vcdOutputState=END_TASK_CPU;
 		if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-				outp << "r" << END_IDLE_CPU << " cpu" << _myid;
+				outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
 				oSigChange=outp.str();
 				return 0;
 		} 
 	}
 	if (_posTrasactListVCD == _transactList.end()){
-		outp << "r" << END_IDLE_CPU << " cpu" << _myid;
+		outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
 		oSigChange=outp.str();
 		oNoMoreTrans=true;
 		return _previousTransEndTime;
@@ -363,10 +368,10 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 					_posTrasactListVCD++;
 				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
 				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
-					outp << "r" << END_PENALTY_CPU << " cpu" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << " cpu" << _ID;
 					_vcdOutputState=END_PENALTY_CPU;
 				}else{
-					outp << "r" << END_IDLE_CPU << " cpu" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
 					_vcdOutputState=END_IDLE_CPU;
 					if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;						
 				}
@@ -374,17 +379,17 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 				return _previousTransEndTime;
 			break;
 			case END_PENALTY_CPU:
-				outp << "r" << END_TASK_CPU << " cpu" << _myid;
+				outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << " cpu" << _ID;
 				oSigChange=outp.str();
 				_vcdOutputState=END_TASK_CPU;
 				return aCurrTrans->getStartTimeOperation();
 			break;
 			case END_IDLE_CPU:
 				if (aCurrTrans->getPenalties()==0){
-					outp << "r" << END_TASK_CPU << " cpu" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << " cpu" << _ID;
 					_vcdOutputState=END_TASK_CPU;
 				}else{
-					outp << "r" << END_PENALTY_CPU << " cpu" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << " cpu" << _ID;
 					_vcdOutputState=END_PENALTY_CPU;
 				}
 				oSigChange=outp.str();
@@ -403,13 +408,22 @@ TMLTransaction* CPU::getTransactions1By1(bool iInit){
 	
 }
 
-/*unsigned int CPU::getBusyCycles(){
-	return _busyCycles;
-}*/
+void CPU::reset(){
+	//std::cout << "CPU reset" << std::endl;
+	Master::reset();
+	SchedulableDevice::reset();
+	_transactList.clear();
+	_nextTransaction=0;
+	_lastTransaction=0;
+	_busNextTransaction=0;
+	_busyCycles=0;
+	_branchMissReminder=0;
+	_branchMissTempReminder=0;
+}
 
-void CPU::streamBenchmarks(std::ostream& s){
+void CPU::streamBenchmarks(std::ostream& s) const{
 	s << "*** CPU " << _name << " ***\n"; 
-	if (_simulatedTime!=0) s << "Utilization: " << ((float)_busyCycles)/((float)_simulatedTime) << std::endl;
+	if (_simulatedTime!=0) s << "Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << std::endl;
 	Master::streamBenchmarks(s);
 	//if (_noBusTransactions!=0) s << "Average BUS contention delay: " << ((float)_busContentionDelay)/((float)_noBusTransactions) << std::endl;
 	

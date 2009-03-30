@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 
 
-TMLExeciCommand::TMLExeciCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iTask,1,0), _lengthFunc(iLengthFunc), _type(iType){
+TMLExeciCommand::TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iID, iTask,1,0), _lengthFunc(iLengthFunc), _type(iType){
 }
 
 void TMLExeciCommand::execute(){
@@ -81,18 +81,18 @@ TMLTask* TMLExeciCommand::getDependentTask() const{
 	return 0;
 }
 
-std::string TMLExeciCommand::toString(){
+std::string TMLExeciCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Execi in " << TMLCommand::toString();
 	return outp.str();
 }
 
-std::string TMLExeciCommand::toShortString(){
+std::string TMLExeciCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Execi " << _length;
 	return outp.str();
 }
 
-std::string TMLExeciCommand::getCommandStr(){
+std::string TMLExeciCommand::getCommandStr() const{
 	return "EXECI";
 }

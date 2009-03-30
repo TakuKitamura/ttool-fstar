@@ -51,15 +51,16 @@ class TMLActionCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+      	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iActionFunc Member function pointer to the action function
     	*/
-	TMLActionCommand(TMLTask* iTask, ActionFuncPointer iActionFunc);
+	TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc);
 	void execute();
 	TMLTask* getDependentTask() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
 protected:
 	///Member function pointer to the action function
 	ActionFuncPointer _actionFunc;

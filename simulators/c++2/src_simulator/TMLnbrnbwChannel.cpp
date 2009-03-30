@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLnbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-TMLnbrnbwChannel::TMLnbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves): TMLChannel(iName, iNumberOfHops, iBuses, iSlaves){
+TMLnbrnbwChannel::TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves): TMLChannel(iID, iName, iNumberOfHops, iBuses, iSlaves){
 }
 
 void TMLnbrnbwChannel::testWrite(TMLTransaction* iTrans){
@@ -55,10 +55,12 @@ void TMLnbrnbwChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLnbrnbwChannel::write(){
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
 	_writeTrans=0;
 }
 
 bool TMLnbrnbwChannel::read(){
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 	_readTrans=0;
 	return true;
 }
@@ -71,7 +73,7 @@ TMLTask* TMLnbrnbwChannel::getBlockedWriteTask() const{
 	return 0;
 }
 
-std::string TMLnbrnbwChannel::toString(){
+std::string TMLnbrnbwChannel::toString() const{
 	std::ostringstream outp;
 	outp << _name << "(nbrnbw)";
 	return outp.str();

@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWriteCommand::TMLWriteCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iTask,1,0), _lengthFunc(iLengthFunc), _channel(iChannel){
+TMLWriteCommand::TMLWriteCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iID, iTask,1,0), _lengthFunc(iLengthFunc), _channel(iChannel){
 }
 
 void TMLWriteCommand::execute(){
@@ -87,18 +87,18 @@ TMLChannel* TMLWriteCommand::getChannel() const{
 	return _channel;
 }
 
-std::string TMLWriteCommand::toString(){
+std::string TMLWriteCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Write in " << TMLCommand::toString() << " " << _channel->toString();
 	return outp.str();
 }
 
-std::string TMLWriteCommand::toShortString(){
+std::string TMLWriteCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Write " << _length << "," << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLWriteCommand::getCommandStr(){
+std::string TMLWriteCommand::getCommandStr() const{
 	return "wr";
 }

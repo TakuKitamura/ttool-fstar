@@ -51,15 +51,16 @@ class TMLChoiceCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+      	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
     	*/
-	TMLChoiceCommand(TMLTask* iTask, CondFuncPointer iCondFunc);
+	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc);
 	void execute();
 	TMLTask* getDependentTask() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
 protected:
 	///Member function pointer to the condition function returning the index of the next command
 	CondFuncPointer _condFunc;

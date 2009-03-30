@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam ):TMLCommand(iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_params(iParam),_numbChannels(iNumbChannels),_indexNextCommand(0),_maxChannelIndex(0){
+TMLSelectCommand::TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam ):TMLCommand(iID, iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_params(iParam),_numbChannels(iNumbChannels),_indexNextCommand(0),_maxChannelIndex(0){
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
@@ -111,7 +111,7 @@ TMLChannel* TMLSelectCommand::getChannel() const{
 	return _channel[_indexNextCommand];
 }
 
-bool TMLSelectCommand::channelUnknown(){
+bool TMLSelectCommand::channelUnknown() const{
 	return true;
 }
 
@@ -120,26 +120,28 @@ TMLCommand* TMLSelectCommand::getNextCommand() const{
 }
 
 
-Parameter<ParamType>* TMLSelectCommand::getParam(){
+Parameter<ParamType>* TMLSelectCommand::getParam() const{
 	return (_params==0)?0:_params[_indexNextCommand];
 }
 
-std::string TMLSelectCommand::toString(){
+std::string TMLSelectCommand::toString() const{
 	std::ostringstream outp;
 	outp << "SelectEvent in " << TMLCommand::toString() << " " << _channel[_indexNextCommand]->toString();
 	return outp.str();
 }
 
-std::string TMLSelectCommand::toShortString(){
+std::string TMLSelectCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": SelectEvent";
 	return outp.str();
 }
 
-std::string TMLSelectCommand::getCommandStr(){
+std::string TMLSelectCommand::getCommandStr() const{
 	return "wait";
 }
 
-std::string TMLSelectCommand::getCommentString(Comment* iCom){
+#ifdef ADD_COMMENTS
+std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
 	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
 }
+#endif

@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLTransactionH
 
 #include <definitions.h>
+#include <MemPool.h>
 
 class TMLCommand;
 class TMLChannel;
@@ -159,12 +160,12 @@ public:
 	/**
 	\return Detailed string representation
 	*/
-	std::string toString();
+	std::string toString() const;
 	///Returns a short string representation of the transaction
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString();
+	std::string toShortString() const;
 	///Set channel on which data was conveyed
 	/**
 	\param iChannel Pointer to a channel
@@ -174,11 +175,10 @@ public:
 	/**
 	\return Pointer to channel
 	*/
-	TMLChannel* getChannel();
-	
-	//static void * operator new(unsigned int size);
+	TMLChannel* getChannel() const;
 	static void * operator new(size_t size);
 	static void operator delete(void *p, size_t size);
+	static void reset();
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;
@@ -201,7 +201,7 @@ protected:
 	///Channel on which data was conveyed
 	TMLChannel* _channel;
 	///Memory pool for transactions
-	static Pool<TMLTransaction> memPool;
+	static MemPool<TMLTransaction> memPool;
 };
 
 #endif

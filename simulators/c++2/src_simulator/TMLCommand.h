@@ -43,21 +43,25 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <Serializable.h>
+#include <ListenerSubject.h>
 
 class TMLTransaction;
 class TMLTask;
 class TMLChannel;
+class CommandListener;
+class Comment;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
-class TMLCommand: public Serializable{
+class TMLCommand: public Serializable, public ListenerSubject<CommandListener>{
 public:
 	///Constructor
     	/**
-      	\param iTask Pointer to the task the command belongs to
+      	\param iID ID of the command
+	\param iTask Pointer to the task the command belongs to
 	\param iLength Virtual length of the command
 	\param iParam Pointer to a parameter data structure
     	*/
-	TMLCommand(TMLTask* iTask, TMLLength iLength,Parameter<ParamType>* iParam);
+	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength,Parameter<ParamType>* iParam);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -99,36 +103,66 @@ public:
 	\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a nullpointer returned by getChannel() indicates that the channel cannot be determined
 	\sa getChannel()
 	*/
-	virtual bool channelUnknown();
+	virtual bool channelUnknown() const;
 	///Returns a pointer to the parameter data structure
 	/**
 	\return Pointer to parameter data structure
 	*/
-	virtual Parameter<ParamType>* getParam();
+	virtual Parameter<ParamType>* getParam() const;
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation
 	*/
-	virtual std::string toString();
+	virtual std::string toString() const;
 	///Returns a short string representation of the command
 	/**
 	\return Short string representation
 	*/
-	virtual std::string toShortString()=0;
+	virtual std::string toShortString() const =0;
 	///Returns a short string representation of the command type
 	/**
 	\return Short string representation of command type
 	*/
-	virtual std::string getCommandStr()=0;
+	virtual std::string getCommandStr() const=0;
+#ifdef ADD_COMMENTS	
 	///Translates a comment into a readable string
 	/**
 	\param iCom Pointer to comment
 	\return Sring representation of the comment
 	*/
-	virtual std::string getCommentString(Comment* iCom);
+	virtual std::string getCommentString(Comment* iCom) const;
+#endif
+	///Indicates if the breakpoint flag of the command is set
+	/**
+	\return State of breakpoint flag
+	*/
+	bool getBreakpoint() const;
+	///Sets the breakpoint flag
+	/**
+	\param  iBreakpoint New value of breakpoint flag
+	*/
+	void setBreakpoint(bool iBreakpoint);
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
+	void reset();
+	///Registers a listener at all TMLCommand instances
+	/**
+	\param  iListener Pointer to the listener
+	*/
+	static void registerGlobalListener(CommandListener* iListener);
+	///Removes a listener at all TMLCommand instances
+	/**
+	\param  iListener Pointer to the listener
+	*/
+	static void removeGlobalListener(CommandListener* iListener);
+	///Returns the unique ID of the command
+	/**
+      	\return Unique ID
+    	*/ 
+	unsigned int getID() const;
 protected:
+	///ID of the command
+	unsigned int _ID;
 	///Length of the command
 	TMLLength _length;
 	///Progress of the command (in execution units)
@@ -141,6 +175,8 @@ protected:
 	TMLCommand** _nextCommand;
 	///Pointer to the parameters of the command
 	Parameter<ParamType>* _param;
+	///Breakpoint flag	
+	bool _breakpoint;	
 	///Determines the next command based on the _nextCommand array
 	/**
 	\return Pointer to the next command
@@ -152,6 +188,8 @@ protected:
 	\sa prepare()
 	*/
 	virtual TMLCommand* prepareNextTransaction()=0;
+	///List of pointers to all TMLCommand instances
+	static std::list<TMLCommand*> _instanceList;
 };
 
 #endif

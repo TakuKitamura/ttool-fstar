@@ -52,6 +52,7 @@ class TMLbrbwChannel:public TMLStateChannel{
 public:
 	///Constructor
     	/**
+	\param iID ID of channel
       	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iBuses Pointer to the buses on which the channel is mapped
@@ -59,17 +60,17 @@ public:
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLbrbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
+	TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
 	bool read();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
-	std::string toString();
+	std::string toString() const;
 protected:
 	///Determines the virtual length of read and write transactions based on the state of the channel
-	void setTransactionLength();
+	void setTransactionLength() const;
 	///Length of the channel
 	TMLLength _length;
 };

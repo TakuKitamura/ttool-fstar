@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSendCommand::TMLSendCommand(TMLTask* iTask, TMLEventChannel* iChannel, Parameter<ParamType>* iParam): TMLCommand(iTask, WAIT_SEND_VLEN, iParam), _channel(iChannel){
+TMLSendCommand::TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, Parameter<ParamType>* iParam): TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParam), _channel(iChannel){
 }
 
 void TMLSendCommand::execute(){
@@ -72,19 +72,19 @@ TMLChannel* TMLSendCommand::getChannel() const{
 	return _channel;
 }
 
-std::string TMLSendCommand::toString(){
+std::string TMLSendCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Send in " << TMLCommand::toString() << " " << _channel->toString();
 	return outp.str();
 }
 
-std::string TMLSendCommand::toShortString(){
+std::string TMLSendCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Send " << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLSendCommand::getCommandStr(){
+std::string TMLSendCommand::getCommandStr() const{
 	return "notify";
 }
 

@@ -45,9 +45,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TraceableDevice.h>
 #include <Serializable.h>
+#include <Comment.h>
+#include <MemPool.h>
+#include <ListenerSubject.h>
+#include <TransactionListener.h>
 
 class TMLCommand;
 class CPU;
+class Comment;
 
 enum vcdTaskVisState
     {
@@ -56,15 +61,16 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice, public Serializable{
+class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject<TransactionListener>{
 public:	
 	///Constructor
     	/**
-      	\param iPriority Priority of the task
+      	\param iID ID of the Task
+	\param iPriority Priority of the task
 	\param iName Name of the task
 	\param iCPU pointer to the CPU which executes the task
     	*/
-	TMLTask(unsigned int iPriority, std::string iName, CPU* iCPU);
+	TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
@@ -91,22 +97,22 @@ public:
 	/**
       	\return Pointer to the CPU
     	*/
-	CPU* getCPU();
+	CPU* getCPU() const;
 	///Returns a string representation of the task
 	/**
 	\return Detailed string representation
 	*/
-	virtual std::string toString();
+	virtual std::string toString() const;
 	///Returns a short string representation of the Task
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString();
+	std::string toShortString() const;
 	///Returns the unique ID of the task
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID();
+	unsigned int getID() const;
 #ifdef ADD_COMMENTS
 	///Adds a new execution comment to the internal list
 	/**
@@ -129,8 +135,17 @@ public:
 	void addTransaction(TMLTransaction* iTrans);
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
-	virtual void streamBenchmarks(std::ostream& s);
+	virtual void streamBenchmarks(std::ostream& s) const;
+	void reset();
+	///Returns a pointer to the task variable specified by its name
+	/**
+	\param iVarName Name of the task variable
+	\return Pointer to the variable
+	*/
+	ParamType* getVariableByName(std::string& iVarName);
 protected:
+	///ID of the task
+	unsigned int _ID;
 	///Name of the task
 	std::string _name;
 	///Priority of the task
@@ -139,6 +154,8 @@ protected:
 	TMLTime _endLastTransaction;
 	///Pointer to the current command of the task
 	TMLCommand* _currCommand;
+	///Pointer to the first command of the task
+	TMLCommand* _firstCommand;
 	///Pointer to the CPU which executes the task
 	CPU* _cpu;
 	///Unique ID of the task
@@ -166,7 +183,9 @@ protected:
 	///Sum of contention delay of CPU transactions
 	unsigned long _CPUContentionDelay;
 	///Number of transactions which have been executed on a CPU
-	unsigned long _noCPUTransactions; 
+	unsigned long _noCPUTransactions;
+	///Look up table for task variables
+	VariableLookUpTable _varLookUp;
 };
 
 #endif

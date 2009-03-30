@@ -44,9 +44,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTask.h>
 #include <TMLChannel.h>
+#include <TransactionListener.h>
 
-Bus::Bus(std::string iName, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): _name(iName), _burstSize(iBurstSize), _nextTransaction(_transactionHash.end()), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){
-	_myid=++_id;
+Bus::Bus(unsigned int iID, std::string iName, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): SchedulableCommDevice(iID, iName), _burstSize(iBurstSize), _nextTransaction(_transactionHash.end()), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){
+	//_myid=++_id;
 	_transactList.reserve(BLOCK_SIZE);
 }
 
@@ -93,6 +94,7 @@ void Bus::schedule(){
 	if (aTransToExecute!=_transactionHash.end()){
 		_nextTransaction=aTransToExecute;
 		calcStartTimeLength();
+		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction->second);
 	}
 	_schedulingNeeded=false;
 #ifdef DEBUG_BUS
@@ -136,12 +138,14 @@ bool Bus::addTransaction(){
 		std::cout << i->second->toString() << "\n";
 	}*/
 	_schedulingNeeded=true;
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(aNextTrans);
 	return true;
 }
 
-void Bus::calcStartTimeLength(){
+void Bus::calcStartTimeLength() const{
 	TMLTransaction* aNextTrans=_nextTransaction->second;
-	aNextTrans->setStartTime(max(((int)_endSchedule)-((int)aNextTrans->getPenalties()),(int)aNextTrans->getStartTime()));
+	//aNextTrans->setStartTime(max(((int)_endSchedule)-((int)aNextTrans->getPenalties()),(int)aNextTrans->getStartTime()));
+	aNextTrans->setStartTime(max(static_cast<int>(_endSchedule)-static_cast<int>(aNextTrans->getPenalties()),static_cast<int>(aNextTrans->getStartTime())));
 	//TMLTime aLength = aNextTrans->getVirtualLength()*_timePerSample;
 	//aLength = (aLength%_busWidth == 0)? aLength/_busWidth : aLength/_busWidth+1;
 	TMLTime aLength = aNextTrans->getVirtualLength();
@@ -165,24 +169,23 @@ void Bus::truncateToBurst(TMLTransaction* iTrans) const{
 	iTrans->setVirtualLength(min(iTrans->getVirtualLength(), _burstSize));
 }
 
-std::string Bus::toString(){
+std::string Bus::toString() const{
 	return _name;
 }
 
-std::string Bus::toShortString(){
+std::string Bus::toShortString() const{
 	std::ostringstream outp;
-	outp << "bus" << _myid;
+	outp << "bus" << _ID;
 	return outp.str();
 }
 
-void Bus::schedule2HTML(std::ofstream& myfile){
-	TransactionList::iterator i;
+void Bus::schedule2HTML(std::ofstream& myfile) const{
 	TMLTime aCurrTime=0;
 	TMLTransaction* aCurrTrans;
 	unsigned int aBlanks,aLength,aColor;
 	if (_transactList.empty()) return;
 	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
-	for(i=_transactList.begin(); i != _transactList.end(); ++i){
+	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		aCurrTrans=*i;
 		//if (aCurrTrans->getVirtualLength()==0) continue;
 		aBlanks=aCurrTrans->getStartTimeOperation()-aCurrTime;
@@ -208,7 +211,7 @@ void Bus::schedule2HTML(std::ofstream& myfile){
 	myfile << "</tr>\n</table>\n";
 }
 
-void Bus::schedule2TXT(std::ofstream& myfile){
+void Bus::schedule2TXT(std::ofstream& myfile) const{
 }
 
 TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
@@ -220,7 +223,7 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 		 _vcdOutputState=INIT_BUS;
 	}
 	if (_posTrasactList == _transactList.end()){
-		outp << "r" << END_IDLE_BUS << " bus" << _myid;
+		outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 		oSigChange=outp.str();
 		oNoMoreTrans=true;
 		return _previousTransEndTime;
@@ -234,10 +237,10 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 					_posTrasactList++;
 				}while (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactList)->getCommand()->getTask()==(*_posTrasactList)->getCommand()->getChannel()->getBlockedReadTask());
 				if (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime){
-					outp << "r" << END_WRITE_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_WRITE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_WRITE_BUS;
 				}else{
-					outp << "r" << END_IDLE_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_IDLE_BUS;
 					if (_posTrasactList == _transactList.end()) oNoMoreTrans=true;						
 				}
@@ -250,10 +253,10 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 					_posTrasactList++;
 				}while (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactList)->getCommand()->getTask()==(*_posTrasactList)->getCommand()->getChannel()->getBlockedWriteTask());
 				if (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime){
-					outp << "r" << END_READ_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_READ_BUS) << " bus" << _ID;
 					_vcdOutputState=END_READ_BUS;
 				}else{
-					outp << "r" << END_IDLE_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_IDLE_BUS;
 					if (_posTrasactList == _transactList.end()) oNoMoreTrans=true;						
 				}
@@ -263,17 +266,17 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 			case INIT_BUS:
 				if (aCurrTrans->getStartTimeOperation()!=0){
 					_vcdOutputState=END_IDLE_BUS;
-					outp << "r" << END_IDLE_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 					oSigChange=outp.str();
 					return 0;
 				}
 			case END_IDLE_BUS:
 				if (aCurrTrans->getCommand()->getTask()==aCurrTrans->getCommand()->getChannel()->getBlockedReadTask()){
 					_vcdOutputState=END_READ_BUS;
-					outp << "r" << END_READ_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_READ_BUS) << " bus" << _ID;
 				}else{
 					_vcdOutputState=END_WRITE_BUS;
-					outp << "r" << END_WRITE_BUS << " bus" << _myid;
+					outp << VCD_PREFIX << vcdValConvert(END_WRITE_BUS) << " bus" << _ID;
 				}
 				oSigChange=outp.str();
 				return aCurrTrans->getStartTimeOperation();
@@ -282,11 +285,17 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 	}
 }
 
-/*unsigned int Bus::getBusyCycles(){
-	return _busyCycles;
-}*/
+void Bus::reset(){
+	//std::cout << "Bus reset" << std::endl;
+	SchedulableDevice::reset();
+	_nextTransaction=_transactionHash.end();
+	_schedulingNeeded=true;
+	_transactionHash.clear();
+	_transactList.clear();
+	_busyCycles=0;
+}
 
-void Bus::streamBenchmarks(std::ostream& s){
+void Bus::streamBenchmarks(std::ostream& s) const{
 	s << "*** Bus " << _name << " ***\n";
-	if (_simulatedTime!=0) s << "Utilization: " << ((float)_busyCycles)/((float)_simulatedTime) << std::endl;
+	if (_simulatedTime!=0) s << "Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << std::endl;
 }

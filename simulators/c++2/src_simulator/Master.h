@@ -58,9 +58,10 @@ public:
 	\param iDevice
 	\return Bus priority
 	*/
-	unsigned int getBusPriority(SchedulableCommDevice* iDevice){
+	unsigned int getBusPriority(SchedulableCommDevice* iDevice) const{
 		//return _masterPrioHashTab[iDevice];
-		return _masterPrioHashTab[iDevice]->getPriority();
+		//return _masterPrioHashTab[iDevice]->getPriority();
+		return _masterPrioHashTab.find(iDevice)->second->getPriority();
 	}
 	///Sets the priority of the master for a given bus
 	/**
@@ -77,21 +78,27 @@ public:
 			delete i->second;
 		}
 	}
+	void reset(){
+		for(MasterPriorityHashTab::iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
+			i->second->reset();
+		}
+	}
 protected:
 	///Updates the bus contention statistics when a new bus transaction has been executed
 	/**
 	\param iDevice Pointer to the bus
 	\param iContentionDelay Contention delay of the transaction
 	*/
-	void addBusContention(SchedulableCommDevice* iDevice, unsigned long iContentionDelay){
-		_masterPrioHashTab[iDevice]->addContention(iContentionDelay);
+	void addBusContention(SchedulableCommDevice* iDevice, unsigned long iContentionDelay) const{
+		//_masterPrioHashTab[iDevice]->addContention(iContentionDelay);
+		_masterPrioHashTab.find(iDevice)->second->addContention(iContentionDelay);
 	}
 	///Writes benchmarking data to a given stream
 	/**
       	\param s Reference to an output stream
 	*/
-	void streamBenchmarks(std::ostream& s){
-		for(MasterPriorityHashTab::iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
+	void streamBenchmarks(std::ostream& s) const{
+		for(MasterPriorityHashTab::const_iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
 			s << "Average contention delay for bus " << i->first->toString() << ": " << i->second->getContentionDelay() << std::endl;
 		}
 	}

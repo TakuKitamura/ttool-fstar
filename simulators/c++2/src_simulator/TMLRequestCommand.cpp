@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLRequestCommand::TMLRequestCommand(TMLTask* iTask,TMLEventBChannel* iChannel,Parameter<ParamType>* iParam):TMLCommand(iTask,WAIT_SEND_VLEN,iParam),_channel(iChannel){
+TMLRequestCommand::TMLRequestCommand(unsigned int iID, TMLTask* iTask,TMLEventBChannel* iChannel,Parameter<ParamType>* iParam):TMLCommand(iID, iTask,WAIT_SEND_VLEN,iParam),_channel(iChannel){
 }
 
 void TMLRequestCommand::execute(){
@@ -73,21 +73,21 @@ TMLTask* TMLRequestCommand::getDependentTask() const{
 
 TMLChannel* TMLRequestCommand::getChannel() const{
 	//std::cout << "getChannel " << std::endl;
-	return (TMLChannel*)_channel;
+	return dynamic_cast<TMLChannel*>(_channel);
 }
 
-std::string TMLRequestCommand::toString(){
+std::string TMLRequestCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Request in " << TMLCommand::toString() << " " << _channel->toString();
 	return outp.str();
 }
 
-std::string TMLRequestCommand::toShortString(){
+std::string TMLRequestCommand::toShortString() const{
 	std::ostringstream outp;
 	outp << _task->toString() << ": Request " << _channel->toShortString();
 	return outp.str();
 }
 
-std::string TMLRequestCommand::getCommandStr(){
+std::string TMLRequestCommand::getCommandStr() const{
 	return "sendReq";
 }

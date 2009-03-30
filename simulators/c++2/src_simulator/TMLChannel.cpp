@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves):_name(iName), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _buses(iBuses), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1){
+TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves): _ID(iID), _name(iName), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _buses(iBuses), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1){
 }
 
 TMLChannel::~TMLChannel(){
@@ -84,7 +84,7 @@ SchedulableCommDevice* TMLChannel::getFirstBus(TMLTransaction* iTrans){
 	}
 }
 	
-Slave* TMLChannel::getNextSlave(TMLTransaction* iTrans){
+Slave* TMLChannel::getNextSlave(TMLTransaction* iTrans) const{
 	//if (iTrans->getCommand()->getTask()==_writeTask){
 	if (iTrans==_writeTrans){
 		return _slaves[_writeTransCurrHop];
@@ -113,17 +113,28 @@ Slave* TMLChannel::getNextSlave(TMLTransaction* iTrans){
 //	return _numberOfHops;
 //}
 
-std::string TMLChannel::toShortString(){
+std::string TMLChannel::toShortString() const{
 	return _name;
 }
 
 std::ostream& TMLChannel::writeObject(std::ostream& s){
-	WRITE_STREAM(s,_writeTransCurrHop);
-	WRITE_STREAM(s,_readTransCurrHop);
+	//WRITE_STREAM(s,_writeTransCurrHop);
+	//WRITE_STREAM(s,_readTransCurrHop);
 	return s;
 }
 std::istream& TMLChannel::readObject(std::istream& s){
-	READ_STREAM(s,_writeTransCurrHop);
-	READ_STREAM(s,_readTransCurrHop);
+	//READ_STREAM(s,_writeTransCurrHop);
+	//READ_STREAM(s,_readTransCurrHop);
 	return s;
+}
+
+void TMLChannel::reset(){
+	//std::cout << "Channel reset" << std::endl;
+	_readTask=0;
+	_writeTask=0;
+	_writeTrans=0;
+	_readTrans=0;
+	_writeTransCurrHop=0;
+	_readTransCurrHop=_numberOfHops-1;
+	//std::cout << "Channel reset end" << std::endl;
 }

@@ -150,9 +150,16 @@ public class MappedSystemCTask {
 		makeHeaderClassH();
 		makeEndClassH();
 		
-		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iPriority,iName,iCPU)"+ CR + makeAttributesCode();
+		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iID, iPriority,iName,iCPU)"+ CR + makeAttributesCode();
 		cppcode+=initCommand + CR + "{" + CR; 
 		if (commentNum!=0) cppcode+= "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
+		cppcode+= "//generate task variable look-up table"+ CR;
+		for(TMLAttribute att: task.getAttributes()) {
+			//att = (TMLAttribute)(iterator.next());
+			//code += TMLType.getStringType(att.type.getType()) + " " + att.name;
+			cppcode += "_varLookUp[\"" + att.name + "\"]=&" + att.name +SCCR;
+		}		
+		cppcode += "_varLookUp[\"rnd__0\"]=&rnd__0" + SCCR + CR;
 		cppcode+= "//set blocked read task/set blocked write task"+ CR;
 		for(TMLChannel ch: channels) {
 			if (ch.getOriginTask()==task)
@@ -171,8 +178,8 @@ public class MappedSystemCTask {
 			if (req.isAnOriginTask(task)) cppcode+=req.getExtendedName() + "->setBlockedWriteTask(this)" +SCCR;
 		}
 		cppcode+=CR + "//command chaining"+ CR;
-		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR; 
-		if (!firstCommand.equals("0")) cppcode+= "_currCommand->prepare()"+SCCR;
+		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR + "_firstCommand=" + firstCommand +SCCR; 
+		//if (!firstCommand.equals("0")) cppcode+= "_currCommand->prepare()"+SCCR;
 		cppcode+="}"+ CR2 + functions; // + makeDestructor();
 		hcode = Conversion.indentString(hcode, 4);
 		cppcode = Conversion.indentString(cppcode, 4);
@@ -185,7 +192,7 @@ public class MappedSystemCTask {
 	}
 
 	private String makeConstructorSignature(){
-		String constSig=reference+ "(unsigned int iPriority, std::string iName, CPU* iCPU"+CR;
+		String constSig=reference+ "(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU"+CR;
 		for(TMLChannel ch: channels) {
 			constSig+=", TMLChannel* "+ ch.getExtendedName() + CR;
 		}
@@ -215,7 +222,7 @@ public class MappedSystemCTask {
 			int params = task.getRequest().getNbOfParams();
 			firstCommand="_waitOnRequest";
 			hcode+="TMLWaitCommand " + firstCommand + SCCR;
-			initCommand+= "," + firstCommand + "(this,requestChannel,"; 
+			initCommand+= "," + firstCommand + "(-1,this,requestChannel,"; 
 			if (params==0){
 				initCommand+= "0)" + CR;
 			}else{
@@ -279,15 +286,22 @@ public class MappedSystemCTask {
 			if (debug) System.out.println("Checking Stop\n");
 			return retElement;
 		
-		} else if (currElem instanceof TMLActionState || currElem instanceof TMLRandom){
+		} else if (currElem instanceof TMLActionState || currElem instanceof TMLRandom || currElem instanceof TMLDelay){
 			String action;
 			if (currElem instanceof TMLActionState){				
 				if (debug) System.out.println("Checking Action\n");
 				action = ((TMLActionState)currElem).getAction();
-			}else{
+			}else if(currElem instanceof TMLRandom){
 				if (debug) System.out.println("Checking Random\n");
 				TMLRandom random = (TMLRandom)currElem;
 				action = random.getVariable() + "=myrand("+ random.getMinValue() + "," + random.getMaxValue() + ")";
+			}else{
+				if (debug) System.out.println("Checking Delay\n");
+				TMLDelay delay=(TMLDelay)currElem;
+				if (delay.getMinDelay()==delay.getMaxDelay())
+					action = "_endLastTransaction+=" + delay.getMaxDelay();
+				else
+					action = "_endLastTransaction+=myrand(" + delay.getMinDelay() + "," + delay.getMaxDelay() + ")";
 			}
 			cmdName= "_action" + currElem.getID();
 			if (nextCommandCont==null){
@@ -295,7 +309,7 @@ public class MappedSystemCTask {
 				hcode+="TMLActionCommand " + cmdName + SCCR;
 				strwrap nextCommandCollection = new strwrap(""), functionCollection = new strwrap("");
 				//nextCommandCollection = new strwrap(""); functionCollection = new strwrap("");
-				initCommand+= "," + cmdName + "(this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
 				String MKResult = makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCollection,functionCollection,lastSequence);
 				if(nextCommandCollection.num==0){
 					nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + MKResult + "));\n";
@@ -313,14 +327,13 @@ public class MappedSystemCTask {
 				commentNum++;
 				return makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,functionCont,lastSequence);
 			}
-
-
+		
 		} else if (currElem instanceof TMLExecI){
 			if (debug) System.out.println("Checking Execi\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",0,0)"+CR;
-			initCommand+= "," + cmdName + "(this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0)" + CR;
+			initCommand+= "," + cmdName + "(" + currElem.getID() + ",this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0)" + CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecC){
@@ -328,7 +341,7 @@ public class MappedSystemCTask {
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",1)"+CR;
-			initCommand+= "," + cmdName + "(this,"+ makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",1)"+CR;
+			initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",1)"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLExecIInterval){
@@ -336,7 +349,7 @@ public class MappedSystemCTask {
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",0)"+CR;
-			initCommand+= "," + cmdName + "(this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0)"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecCInterval){
@@ -344,7 +357,7 @@ public class MappedSystemCTask {
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",1)"+CR;
-			initCommand+= "," + cmdName + "(this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",1)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",1)"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 
 					
@@ -353,7 +366,7 @@ public class MappedSystemCTask {
 			TMLForLoop fl = (TMLForLoop)currElem;
 			cmdName="_choice" + currElem.getID();
 			hcode+="TMLChoiceCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "(this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
 			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nstatic bool firstTime=true;\nif(firstTime){\nfirstTime=false;\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getInit()) + "\n}else{\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getIncrement()) + "\n}\nif(" + ((TMLForLoop)currElem).getCondition() + "){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn 0;\n}else{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + (commentNum+1) + "));\n#endif\nfirstTime=true;\nreturn 1;\n}\n}\n\n";
 			commentText+="_comment[" + commentNum + "]=std::string(\"" + ((TMLForLoop)currElem).getCondition() + "=true\");\n";
 			commentNum++;
@@ -368,7 +381,7 @@ public class MappedSystemCTask {
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
 			//initCommand+= "," + cmdName + "(this," + rCommand.getNbOfSamples() + "*" + rCommand.getChannel().getSize() + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
-			initCommand+= "," + cmdName + "(this," + makeCommandLenFunc(cmdName, rCommand.getChannel().getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel().getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
 			//initCommand+= "," + cmdName + "(this," + rCommand.getNbOfSamples() + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
@@ -378,7 +391,7 @@ public class MappedSystemCTask {
 			hcode+="TMLWriteCommand " + cmdName + SCCR;
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
 			//initCommand+= "," + cmdName + "(this," + wCommand.getNbOfSamples() + "*" + wCommand.getChannel().getSize() + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
-			initCommand+= "," + cmdName + "(this," + makeCommandLenFunc(cmdName, wCommand.getChannel().getSize() + "*(" + wCommand.getNbOfSamples() + ")", null) + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getChannel().getSize() + "*(" + wCommand.getNbOfSamples() + ")", null) + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
 			//initCommand+= "," + cmdName + "(this," + wCommand.getNbOfSamples() + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
@@ -387,9 +400,9 @@ public class MappedSystemCTask {
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
 			if (((TMLSendEvent)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "(this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "(this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
 				for(int i=0; i<3; i++) {
 					if (i!=0) initCommand += ",";
 					if (((TMLSendEvent)currElem).getParam(i) == null) {
@@ -411,9 +424,9 @@ public class MappedSystemCTask {
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
 			if (((TMLSendRequest)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "(this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",0)"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "(this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",new Parameter<ParamType>(";
 				for(int i=0; i<3; i++) {
 					if (i!=0) initCommand += ",";
 					if (((TMLSendRequest)currElem).getParam(i) == null) {
@@ -435,9 +448,9 @@ public class MappedSystemCTask {
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
 			if (((TMLWaitEvent)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "(this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "(this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
 				for(int i=0; i<3; i++) {
 					if (i!=0) initCommand += ",";
 					if (((TMLWaitEvent)currElem).getParam(i) == null) {
@@ -458,7 +471,7 @@ public class MappedSystemCTask {
 			if (debug) System.out.println("Checking Notified\n");
 			cmdName= "_notified" + currElem.getID();
 			hcode+="TMLNotifiedCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "(this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",(TMLLength*)&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\")" + CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",(TMLLength*)&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\")" + CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR; 
 		
 		} else if (currElem instanceof TMLSequence){
@@ -586,7 +599,7 @@ public class MappedSystemCTask {
 						nextCommand= cmdName + ".setNextCommand(array(" + returnIndex + nextCommandTemp + "))" + SCCR;
 					}
 					hcode+="TMLChoiceCommand " + cmdName + SCCR;
-					initCommand+= "," + cmdName + "(this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+					initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
@@ -638,7 +651,7 @@ public class MappedSystemCTask {
 			}
 			hcode+="TMLSelectCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,array("+ nbevt + evtList + "),"+ nbevt + ",0)"+CR;
-			initCommand+= "," + cmdName + "(this,array("+ nbevt + evtList + "),"+ nbevt + ",array("+ nbevt + paramList + "))"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,array("+ nbevt + evtList + "),"+ nbevt + ",array("+ nbevt + paramList + "))"+CR;
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
 		} else {

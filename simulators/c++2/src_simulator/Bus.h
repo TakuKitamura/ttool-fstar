@@ -61,10 +61,11 @@ class Bus: public SchedulableCommDevice, public TraceableDevice {
 public:
 	///Constructor
     	/**
+	\param iID ID of the bus
       	\param iName Name of the bus
       	\param iBurstSize Size of an atomic bus transaction
     	*/
-	Bus(std::string iName, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
+	Bus(unsigned int iID, std::string iName, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
 	///Destructor
 	virtual ~Bus();
 	///Add a transaction waiting for execution to the internal list
@@ -96,42 +97,38 @@ public:
 	/**
 	\return Detailed string representation
 	*/
-	std::string toString();
+	std::string toString() const;
 	///Returns a short string representation of the bus
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString();
+	std::string toShortString() const;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	void schedule2HTML(std::ofstream& myfile);
+	void schedule2HTML(std::ofstream& myfile) const;
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	void schedule2TXT(std::ofstream& myfile);
+	void schedule2TXT(std::ofstream& myfile) const;
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
-	virtual void streamBenchmarks(std::ostream& s);
-	
+	virtual void streamBenchmarks(std::ostream& s) const;
+	virtual void reset();
 protected:
 	///Calculates the start time and the length of the next transaction
-	void calcStartTimeLength();
-	///Name of the bus
-	std::string _name;
-	///Unique ID of the Bus
-	unsigned int _myid;
-	///Class variable counting the number of Bus instances
-	static unsigned int _id;
+	void calcStartTimeLength() const;
+	/////Class variable counting the number of Bus instances
+	//static unsigned int _id;
 	///Size of an atomic bus transaction
 	TMLLength _burstSize;
 	/////End time of the last scheduled transaction
 	//TMLTime _endSchedule;
 	///Pointer to the next transaction to be executed
 	BusTransHashTab::iterator _nextTransaction;
-	///Pointer to the CPU on which the next transaction will be executed
-	Master* _nextTransOnCPU;
+	/////Pointer to the CPU on which the next transaction will be executed
+	//Master* _nextTransOnCPU;
 	///Dirty flag of the current scheduling decision
 	bool _schedulingNeeded;
 	///List containing all queued transactions

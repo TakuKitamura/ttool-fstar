@@ -42,11 +42,12 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFBChannel::TMLEventFBChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
+TMLEventFBChannel::TMLEventFBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
 }
 
 void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
+	_tmpParam=(iTrans->getCommand()->getParam()==0)? Parameter<ParamType>(0,0,0): *(iTrans->getCommand()->getParam());  //added!!!
 	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
 }
 
@@ -57,11 +58,13 @@ void TMLEventFBChannel::testRead(TMLTransaction* iTrans){
 
 void TMLEventFBChannel::write(){
 	_content++;
-	_paramQueue.push_back(_writeTrans->getCommand()->getParam());
+	//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
+	_paramQueue.push_back(new Parameter<ParamType>(_tmpParam));   //modified!!!
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(_writeTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
-	}	
+	}
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
 	_writeTrans=0;
 }
 
@@ -73,12 +76,17 @@ bool TMLEventFBChannel::read(){
 		_content--;
 		pRead=_readTrans->getCommand()->getParam();
 		pWrite=_paramQueue.front();
-		if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
+		//if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
+		if (pWrite!=0){				//modified!!!
+			if (pRead!=0) *pRead=*pWrite;
+			delete pWrite;
+		}
 		_paramQueue.pop_front();
 		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
 			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
-		}	
+		}
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);	
 		_readTrans=0;
 		return true;
 	}
@@ -96,7 +104,7 @@ TMLTask* TMLEventFBChannel::getBlockedWriteTask() const{
 	return _writeTask;
 }
 
-std::string TMLEventFBChannel::toString(){
+std::string TMLEventFBChannel::toString() const{
 	std::ostringstream outp;
 	outp << _name << "(evtFB) len:" << _length << " content:" << _content;
 	return outp.str();

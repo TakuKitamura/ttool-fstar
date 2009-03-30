@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <TMLCommand.h>
 
-Pool<TMLTransaction> TMLTransaction::memPool;
+MemPool<TMLTransaction> TMLTransaction::memPool;
 
 TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand), _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0), _terminated(false), _channel(iChannel) {
 }
@@ -140,13 +140,13 @@ void TMLTransaction::setTerminatedFlag(){
 	//std::cout << "TERMINATED FLAG SET!!!!!!!!!!!!!!!!!!!!!  " << this << std::endl;
 }
 
-std::string TMLTransaction::toString(){
+std::string TMLTransaction::toString() const{
 	std::ostringstream outp;	
 	outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
 	return outp.str();
 }
 
-std::string TMLTransaction::toShortString(){
+std::string TMLTransaction::toShortString() const{
 	std::ostringstream outp;	
 	outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
 	return outp.str();
@@ -156,13 +156,18 @@ void TMLTransaction::setChannel(TMLChannel* iChannel){
 	_channel=iChannel;
 }
 
-TMLChannel* TMLTransaction::getChannel(){
+TMLChannel* TMLTransaction::getChannel() const{
 	return _channel;
 }
 
 void * TMLTransaction::operator new(size_t size){
 	return memPool.pmalloc(size);
 }
+
 void TMLTransaction::operator delete(void *p, size_t size){
 	memPool.pfree(p, size);
+}
+
+void TMLTransaction::reset(){
+	memPool.reset();
 }

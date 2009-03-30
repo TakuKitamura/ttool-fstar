@@ -42,11 +42,12 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFChannel::TMLEventFChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
+TMLEventFChannel::TMLEventFChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
 }
 
 void TMLEventFChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
+	_tmpParam=(iTrans->getCommand()->getParam()==0)? Parameter<ParamType>(0,0,0): *(iTrans->getCommand()->getParam());  //added!!!
 	_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 }
 
@@ -58,12 +59,14 @@ void TMLEventFChannel::testRead(TMLTransaction* iTrans){
 void TMLEventFChannel::write(){
 	if (_content<_length){
 		_content++;
-		_paramQueue.push_back(_writeTrans->getCommand()->getParam());
+		//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
+		_paramQueue.push_back(new Parameter<ParamType>(_tmpParam));   //modified!!!
 		if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 			_readTrans->setRunnableTime(_writeTrans->getEndTime());
 			_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
-	}	
+	}
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);	
 	_writeTrans=0;
 }
 
@@ -75,8 +78,13 @@ bool TMLEventFChannel::read(){
 		_content--;
 		pRead=_readTrans->getCommand()->getParam();
 		pWrite=_paramQueue.front();
-		if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
-		_paramQueue.pop_front();	
+		//if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
+		if (pWrite!=0){				//modified!!!
+			if (pRead!=0) *pRead=*pWrite;
+			delete pWrite;
+		}
+		_paramQueue.pop_front();
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);	
 		_readTrans=0;
 		return true;
 	}
@@ -94,7 +102,7 @@ TMLTask* TMLEventFChannel::getBlockedWriteTask() const{
 	return 0;
 }
 
-std::string TMLEventFChannel::toString(){
+std::string TMLEventFChannel::toString() const{
 	std::ostringstream outp;
 	outp << _name << "(evtF) len:" << _length << " content:" << _content;
 	return outp.str();

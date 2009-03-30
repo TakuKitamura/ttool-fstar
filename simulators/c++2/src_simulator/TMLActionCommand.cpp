@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLActionCommand.h>
 #include <TMLTask.h>
 
-TMLActionCommand::TMLActionCommand(TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iTask,1,0),_actionFunc(iActionFunc){
+TMLActionCommand::TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask,1,0),_actionFunc(iActionFunc){
 }
 
 void TMLActionCommand::execute(){
@@ -60,16 +60,16 @@ TMLTask* TMLActionCommand::getDependentTask() const{
 	return 0;
 }
 
-std::string TMLActionCommand::toString(){
+std::string TMLActionCommand::toString() const{
 	std::ostringstream outp;	
 	outp << "Action in " << TMLCommand::toString();
 	return outp.str();
 }
 
-std::string TMLActionCommand::toShortString(){
+std::string TMLActionCommand::toShortString() const{
 	return "Action";
 }
 
-std::string TMLActionCommand::getCommandStr(){
+std::string TMLActionCommand::getCommandStr() const{
 	return "action";
 }

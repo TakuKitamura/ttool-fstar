@@ -52,7 +52,8 @@ class CPUPB: public CPU{
 public:
 	///Constructor
     	/**
-      	\param iName Name of the CPU
+      	\param iID ID of the CPU
+	\param iName Name of the CPU
 	\param iTimePerCycle 1/Processor frequency
 	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
@@ -63,7 +64,7 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	CPUPB(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	CPUPB(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
 	~CPUPB();
 	void schedule();

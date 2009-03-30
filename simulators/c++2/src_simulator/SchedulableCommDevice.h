@@ -48,6 +48,12 @@ class TMLTransaction;
 ///Base class for communication devices which perform a scheduling
 class SchedulableCommDevice: public SchedulableDevice{
 public:
+	///Constructor
+	/**
+	\param iID ID of the device
+	\param iName Name of the device 
+	*/
+	SchedulableCommDevice(unsigned int iID, std::string _iName): SchedulableDevice(iID, _iName){}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Size of an atomic bus transaction

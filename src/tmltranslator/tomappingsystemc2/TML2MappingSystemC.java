@@ -131,7 +131,7 @@ public class TML2MappingSystemC {
 	
 	private void makeHeader() {
 		// System headers
-		header = "#include <simkern.h>" + CR;
+		header = "#include <Simulator.h>" + CR;
 		// Generate tasks header
 		for(MappedSystemCTask mst: tasks) {
 			header += "#include <" + mst.getReference() + ".h>" + CR;
@@ -140,7 +140,7 @@ public class TML2MappingSystemC {
 	}
 	
 	private void makeDeclarations() {
-		declaration = "//************************* MAIN NEW SIMULATOR*********************\n\nint main(int len, char ** args) {\nstruct timeval begin, end;\ngettimeofday(&begin,NULL);\nSchedulingList cpulist;\nBusList buslist;\nTraceableDeviceList vcdlist;\n\n";
+		declaration = "class CurrentComponents: public SimComponents{\npublic:\nCurrentComponents(){\n";
 		
 		// Declaration of HW nodes
 		declaration += "//Declaration of CPUs" + CR;
@@ -148,9 +148,8 @@ public class TML2MappingSystemC {
 			if (node instanceof HwCPU) {
 				if (tmlmapping.isAUsedHwNode(node)) {
 					HwCPU exNode = (HwCPU)node;
-					declaration += exNode.getType() + " " + exNode.getName() + "(\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
-					declaration += "cpulist.push_back(&"+ node.getName() + ")" + SCCR;
-					declaration += "vcdlist.push_back((TraceableDevice*)&"+ node.getName() + ")" + SCCR;
+					declaration += exNode.getType() + "* " + exNode.getName() + " = new " + exNode.getType() + "(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+					declaration += "addCPU("+ node.getName() +")"+ SCCR;
 				}
 			}
 		}
@@ -158,15 +157,13 @@ public class TML2MappingSystemC {
 		
 		// Declaration of Buses
 		declaration += "//Declaration of Buses" + CR;
-		declaration+="Bus defaultBus(\"defaultBus\",100,1,1)" + SCCR;
-		declaration += "buslist.push_back(&defaultBus)" + SCCR;
-		declaration += "vcdlist.push_back((TraceableDevice*)&defaultBus)" + SCCR;
+		declaration+="Bus* defaultBus = new Bus(-1,\"defaultBus\",100,1,1)" + SCCR;
+		declaration += "addBus(defaultBus)"+ SCCR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwBus) {
 				//if (tmlmapping.isAUsedHwNode(node)) {
-				declaration += "Bus " + node.getName() + "(\"" + node.getName() + "\",100,"+ ((HwBus)node).byteDataSize + "," + node.clockRatio + ")" + SCCR;
-				declaration += "buslist.push_back(&"+ node.getName() + ")" + SCCR;
-				declaration += "vcdlist.push_back((TraceableDevice*)&"+ node.getName() + ")" + SCCR;
+				declaration += "Bus* " + node.getName() + " = new Bus("+ node.getID() + ",\"" + node.getName() + "\",100,"+ ((HwBus)node).byteDataSize + "," + node.clockRatio + ")" + SCCR;
+				declaration += "addBus("+ node.getName() +")"+ SCCR;
 				//}
 			}
 		}
@@ -176,16 +173,19 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of Bridges" + CR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwBridge) {
-				declaration+= "Bridge " + node.getName() + "(\"" + node.getName() + "\", " + node.clockRatio + ", " + ((HwBridge)node).bufferByteSize + ")" +SCCR;
+				declaration+= "Bridge* " + node.getName() + " = new Bridge("+ node.getID() + ",\"" + node.getName() + "\", " + node.clockRatio + ", " + ((HwBridge)node).bufferByteSize + ")" +SCCR;
+				declaration += "addBridge("+ node.getName() +")"+ SCCR;
 			}
 		}
 		declaration += CR;
 
 		// Declaration of Memories
-		declaration += "//Declaration of Memories\nMemory defaultMemory(\"defaultMemory\",1,4)" + SCCR;
+		declaration += "//Declaration of Memories\nMemory* defaultMemory = new Memory(-1,\"defaultMemory\",1,4)" + SCCR;
+		declaration += "addMem(defaultMemory)"+ SCCR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwMemory) {
-				declaration+= "Memory " + node.getName() + "(\"" + node.getName() + "\", " + node.clockRatio + ", " + ((HwMemory)node).byteDataSize + ")" +SCCR;
+				declaration+= "Memory* " + node.getName() + " = new Memory("+ node.getID() + ",\"" + node.getName() + "\", " + node.clockRatio + ", " + ((HwMemory)node).byteDataSize + ")" +SCCR;
+				declaration += "addMem("+ node.getName() +")"+ SCCR;
 			}
 		}
 		declaration += CR;
@@ -199,19 +199,19 @@ public class TML2MappingSystemC {
 				channel = (TMLChannel)elem;
 				switch(channel.getType()) {
 				case TMLChannel.BRBW:
-					tmp = "TMLbrbwChannel ";
+					tmp = "TMLbrbwChannel";
 					param= "," + channel.getMax()*channel.getSize() + ",0";
 					break;
 				case TMLChannel.BRNBW:
-					tmp = "TMLbrnbwChannel ";
+					tmp = "TMLbrnbwChannel";
 					param= ",0";
 					break;
 				case TMLChannel.NBRNBW:
 				default:
-					tmp = "TMLnbrnbwChannel ";
+					tmp = "TMLnbrnbwChannel";
 					param= "";
 				}
-				declaration += tmp + " " + channel.getExtendedName() +"(\"" + channel.getName() + "\",";
+				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\",";
 				strwrap buses1=new strwrap(""), buses2=new strwrap(""), slaves1=new strwrap(""), slaves2=new strwrap("");
 				int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), buses1, slaves1, true);
 				if (hopNum==-1){
@@ -229,6 +229,7 @@ public class TML2MappingSystemC {
 					}	
 				}
 				declaration+= hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param +")"+ SCCR;
+				declaration += "addChannel("+ channel.getExtendedName() +")"+ SCCR;
 			}
 		}
 		declaration += CR;
@@ -237,26 +238,30 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of events" + CR;
 		for(TMLEvent evt: tmlmodeling.getEvents()) {		
 			if (evt.isInfinite()) {
-				tmp = "TMLEventBChannel ";
+				tmp = "TMLEventBChannel";
 				param= ",0";
 			} else {
 				if (evt.isBlocking()) {
-					tmp = "TMLEventFBChannel ";
+					tmp = "TMLEventFBChannel";
 					param= "," + evt.getMaxSize() + ",0";
 				} else {
-					tmp = "TMLEventFChannel ";
+					tmp = "TMLEventFChannel";
 					param= "," + evt.getMaxSize() + ",0";
 				}
 			}
 			
-			declaration += tmp + evt.getExtendedName() + "(\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;
+			declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;
+			declaration += "addEvent("+ evt.getExtendedName() +")"+ SCCR;
 		}
 		declaration += CR;
 		
 		// Declaration of requests
 		declaration += "//Declaration of requests" + CR;
 		for(TMLTask task: tmlmodeling.getTasks()) {
-			if (task.isRequested()) declaration += "TMLEventBChannel reqChannel_"+ task.getName() + "(\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+			if (task.isRequested()){
+				declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+				declaration += "addRequest(reqChannel_"+ task.getName() +")"+ SCCR;
+			}
 		}
 		declaration += CR;
 		
@@ -266,11 +271,10 @@ public class TML2MappingSystemC {
 			if (node instanceof HwExecutionNode || node instanceof HwBridge){
 				ArrayList<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
 				if (nodeLinks.isEmpty())
-					//declaration+= "defaultBus.registerMasterDevice(&" + node.getName() + ")" + SCCR;
-					declaration+= node.getName() + ".addBusPriority(&defaultBus,1)"+SCCR;
+					declaration+= node.getName() + "->addBusPriority(defaultBus,1)"+SCCR;
 				else{
 					for(HwLink link: nodeLinks){
-						declaration+= node.getName() + ".addBusPriority(&" + link.bus.getName() + "," + link.getPriority() + ")" + SCCR;
+						declaration+= node.getName() + "->addBusPriority(" + link.bus.getName() + "," + link.getPriority() + ")" + SCCR;
 					}
 				}
 			} 
@@ -285,24 +289,25 @@ public class TML2MappingSystemC {
 		//for(TMLTask task: tmlmodeling.getTasks()) {
 		for(TMLTask task: tmlmapping.getMappedTasks()){
 			node=(HwExecutionNode)iterator.next();
-			declaration += task.getName() + " task__" + task.getName() + "(" + task.getPriority() + ",\"" + task.getName() + "\",&" + node.getName() + CR; 
+			declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\"," + node.getName() + CR; 
 			for(TMLChannel channelb: tmlmodeling.getChannels(task)) {
-				declaration += ",&" + channelb.getExtendedName()+CR;
+				declaration += "," + channelb.getExtendedName()+CR;
 			}
 			for(TMLEvent evt: tmlmodeling.getEvents(task)) {		
-				declaration += ",&" + evt.getExtendedName()+CR;
+				declaration += "," + evt.getExtendedName()+CR;
 			}
 			//for(TMLRequest req: tmlmodeling.getRequests()) {
 			for(TMLRequest req: tmlmodeling.getRequests(task)) {
-				if (req.isAnOriginTask(task)) declaration+=",&reqChannel_" + req.getDestinationTask().getName()+CR;
+				if (req.isAnOriginTask(task)) declaration+=",reqChannel_" + req.getDestinationTask().getName()+CR;
 			}
-			if (task.isRequested()) declaration += ",&reqChannel_"+task.getName()+CR;
+			if (task.isRequested()) declaration += ",reqChannel_"+task.getName()+CR;
 			declaration += ")" + SCCR;
-			declaration += "vcdlist.push_back((TraceableDevice*)&task__"+ task.getName() + ");\n\n";
+			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
-		declaration += CR;
-		
-		declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\nsimulate(cpulist,buslist);\nschedule2HTML(cpulist,buslist,len,args);\nschedule2VCD(vcdlist,len,args);\n//schedule2Graph(cpulist, len, args);\nschedule2TXT(cpulist, len, args);\nstreamBenchmarks(std::cout, vcdlist);\nstd::cout << \"Simulated time: \" << SchedulableDevice::getSimulatedTime() << \" time units.\\n\";\nreturn 0;\n}\n";
+		declaration += "}\n};\n\n";
+		declaration +="#include <main.h>\n";
+		//declaration += "//********** MAIN NEW SIMULATOR **********\n\nint main(int len, char ** args) {\nstruct timeval begin, end;\ngettimeofday(&begin,NULL);\nCurrentComponents* myComponents = new CurrentComponents();\nSimulator mySim(myComponents,len,args);\n";
+		//declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\n#ifdef SERVER\nServer myServer(&mySim);\nmyServer.run();\n#else\nmySim.simulate();\nmySim.schedule2HTML();\nmySim.schedule2VCD();\n//mySim.schedule2Graph();\nmySim.schedule2TXT();\nmyComponents->streamBenchmarks(std::cout);\nstd::cout << \"Simulated time: \" << SchedulableDevice::getSimulatedTime() << \" time units.\\n\";\n#endif\ndelete myComponents;\nreturn 0;\n}\n\n";
   	}
 
 	private int addRoutingInfoForChannel(TMLElement _tmle, TMLTask _task, strwrap buses, strwrap slaves, boolean dir){
@@ -317,8 +322,8 @@ public class TML2MappingSystemC {
 		int taskIndex = tmlmapping.getMappedTasks().indexOf(_task);
 		if (debug) System.out.println("Starting from Task: " + _task.getName());
 		if (taskIndex==-1){
-			buses.str=",(SchedulableCommDevice*)&defaultBus";
-			slaves.str= ",(Slave*)&defaultMemory";
+			buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
+			slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
 			return -1;
 		}
 		//HwLink cpuLink = tmlmapping.getTMLArchitecture().getHwLinkByHwNode(tmlmapping.getNodes().get(taskIndex)); //cpu of task as parameter
@@ -330,11 +335,11 @@ public class TML2MappingSystemC {
 		//HwBus bus=cpuLink.bus;
 		HwBus bus= getBusConnectedToNode(commNodeList, tmlmapping.getNodes().get(taskIndex));
 		if (bus==null){
-			buses.str=",(SchedulableCommDevice*)&defaultBus";
-			slaves.str= ",(Slave*)&defaultMemory";
+			buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
+			slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
 			return -1;
 		}
-		buses.str+= " ,(SchedulableCommDevice*)&"+ bus.getName();
+		buses.str+= " ,dynamic_cast<SchedulableCommDevice*>(" + bus.getName() + ")";
 		if (debug) System.out.println("Chaining:\nFirst bus: " + bus.getName());
 		HwMemory mem = getMemConnectedToBus(commNodeList, bus);
 		commNodeList.remove(bus);
@@ -342,26 +347,26 @@ public class TML2MappingSystemC {
 		while(mem==null){
 			bridge = getBridgeConnectedToBus(commNodeList, bus);
 			if (bridge==null){
-				buses.str=",(SchedulableCommDevice*)&defaultBus";
-				slaves.str= ",(Slave*)&defaultMemory";
+				buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
+				slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
 				return -1;
 			}
 			if (debug) System.out.println("Bridge: " + bridge.getName());
 			commNodeList.remove(bridge);
-			if (dir) slaves.str+= " ,(Slave*)&"+ bridge.getName(); else slaves.str= " ,(Slave*)&"+ bridge.getName() + slaves.str;
+			if (dir) slaves.str+= " ,dynamic_cast<Slave*>("+ bridge.getName() + ")"; else slaves.str= " ,dynamic_cast<Slave*>("+ bridge.getName() + ")" + slaves.str;
 			bus = getBusConnectedToNode(commNodeList, bridge);
 			if (bus==null){
-				buses.str=",(SchedulableCommDevice*)&defaultBus";
-				slaves.str= ",(Slave*)&defaultMemory";
+				buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
+				slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
 				return -1;
 			}
 			if (debug) System.out.println("Bus: " + bus.getName());
 			commNodeList.remove(bus);
-			if (dir) buses.str+= " ,(SchedulableCommDevice*)&"+ bus.getName(); else buses.str= " ,(SchedulableCommDevice*)&"+ bus.getName() + buses.str;
+			if (dir) buses.str+= " ,dynamic_cast<SchedulableCommDevice*>("+ bus.getName() + ")"; else buses.str= " ,dynamic_cast<SchedulableCommDevice*>("+ bus.getName() + ")" + buses.str;
 			mem = getMemConnectedToBus(commNodeList, bus);
 			hopNumber++;
 		}
-		if (dir) slaves.str+= " ,(Slave*)&"+ mem.getName(); else slaves.str= " ,(Slave*)&"+ mem.getName() + slaves.str;
+		if (dir) slaves.str+= " ,dynamic_cast<Slave*>("+ mem.getName() + ")"; else slaves.str= " ,dynamic_cast<Slave*>("+ mem.getName() + ")" + slaves.str;
 		return hopNumber;
 	}
 

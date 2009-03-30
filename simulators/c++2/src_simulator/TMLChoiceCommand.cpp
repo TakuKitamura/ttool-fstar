@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 
-TMLChoiceCommand::TMLChoiceCommand(TMLTask* iTask, CondFuncPointer iCondFunc):TMLCommand(iTask,1,0),_condFunc(iCondFunc),_indexNextCommand(0){
+TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc):TMLCommand(iID, iTask,1,0),_condFunc(iCondFunc),_indexNextCommand(0){
 }
 
 void TMLChoiceCommand::execute(){
@@ -66,16 +66,16 @@ TMLTask* TMLChoiceCommand::getDependentTask() const{
 	return 0;
 }
 
-std::string TMLChoiceCommand::toString(){
+std::string TMLChoiceCommand::toString() const{
 	std::ostringstream outp;	
 	outp << "Choice in " << TMLCommand::toString() << " nextCommand:" << _indexNextCommand;
 	return outp.str();
 }
 
-std::string TMLChoiceCommand::toShortString(){
+std::string TMLChoiceCommand::toShortString() const{
 	return "Choice";
 }
 
-std::string TMLChoiceCommand::getCommandStr(){
+std::string TMLChoiceCommand::getCommandStr() const{
 	return "choice";
 }

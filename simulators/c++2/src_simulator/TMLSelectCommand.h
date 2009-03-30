@@ -51,23 +51,26 @@ class TMLSelectCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
+      	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to an array of pointers to channels conveying the desired signals
 	\param iNumbChannels Number of channels in the array
 	\param iParam Pointer to the parameter data structure
 	*/
-	TMLSelectCommand(TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam);
+	TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam);
 	///Destructor
 	~TMLSelectCommand();
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
-	bool channelUnknown();
-	Parameter<ParamType>* getParam();
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
-	std::string getCommentString(Comment* iCom);
+	bool channelUnknown() const;
+	Parameter<ParamType>* getParam() const;
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
+#ifdef ADD_COMMENTS
+	std::string getCommentString(Comment* iCom)  const;
+#endif
 protected:
 	TMLCommand* prepareNextTransaction();
 	TMLCommand* getNextCommand() const;

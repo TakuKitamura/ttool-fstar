@@ -43,8 +43,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLChannel.h>
 #include <Bus.h>
+#include <TransactionListener.h>
 
-CPUPBL::CPUPBL(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize){
+CPUPBL::CPUPBL(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize){
 }
 
 CPUPBL::~CPUPBL(){  
@@ -57,7 +58,10 @@ void CPUPBL::schedule(){
 	}else{
 		_nextTransaction=_pastTransQueue.top();
 	}
-	if (_nextTransaction!=0) calcStartTimeLength();
+	if (_nextTransaction!=0){
+		calcStartTimeLength();
+		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
+	}
 }
 
 void CPUPBL::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
@@ -83,3 +87,8 @@ bool CPUPBL::addTransaction(){
 		return false;
 }
 
+void CPUPBL::reset(){
+	CPU::reset();
+	_futureTransQueue=FutureTransactionQueue();
+	_pastTransQueue=PastTransactionQueue();
+}

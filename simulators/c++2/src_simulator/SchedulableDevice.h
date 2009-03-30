@@ -43,14 +43,22 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <Serializable.h>
-class Master;
+#include <ListenerSubject.h>
 
+class Master;
 class TMLTransaction;
+class TransactionListener;
+class TransactionListener;
 
 ///Base class for devices which perform a scheduling
-class SchedulableDevice: public Serializable{
+class SchedulableDevice: public Serializable, public ListenerSubject<TransactionListener>{
 public:
-	SchedulableDevice():_endSchedule(0){}
+	///Constructor
+	/**
+	\param iID ID of the device
+	\param iName Name of the device
+	*/
+	SchedulableDevice(unsigned int iID, std::string iName):_ID(iID), _name(iName), _endSchedule(0){}
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
@@ -74,13 +82,13 @@ public:
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	virtual void schedule2HTML(std::ofstream& myfile)=0;
+	virtual void schedule2HTML(std::ofstream& myfile) const =0;
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	virtual void schedule2TXT(std::ofstream& myfile)=0;
-	virtual std::string toString()=0;
+	virtual void schedule2TXT(std::ofstream& myfile) const =0;
+	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);
 		return is;
@@ -89,10 +97,27 @@ public:
 		WRITE_STREAM(os,_endSchedule);		
 		return os;
 	}
-	static TMLTime getSimulatedTime(){return _simulatedTime;}
+	virtual void reset(){
+		_endSchedule=0;
+		_simulatedTime=0;
+	}
+	///Returns the number of simulated clock cycles
+	/**
+	\return Number of simulated clock cycles
+	*/
+	static TMLTime getSimulatedTime() {return _simulatedTime;}
+	///Returns the unique ID of the device
+	/**
+      	\return Unique ID
+    	*/ 
+	unsigned int getID() const {return _ID;}
 	///Destructor
 	virtual ~SchedulableDevice(){}
 protected:
+	///Unique ID of the device
+	unsigned int _ID;
+	///Name of the device
+	std::string _name;
 	///Class variable holding the simulation time
 	static TMLTime _simulatedTime;
 	///End time of the last scheduled transaction

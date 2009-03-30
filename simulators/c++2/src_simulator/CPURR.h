@@ -52,6 +52,7 @@ class CPURR: public CPU{
 public:
 	///Constructor
     	/**
+	\param iID ID of the CPU
       	\param iName Name of the CPU
 	\param iTimePerCycle 1/Processor frequency
 	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
@@ -63,12 +64,13 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	CPURR(std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	CPURR(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
 	~CPURR();
 	void schedule();
 	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
 	bool addTransaction();
+	virtual void reset();
 protected:
 	///List of transaction in the future
 	FutureTransactionQueue _futureTransQueue;

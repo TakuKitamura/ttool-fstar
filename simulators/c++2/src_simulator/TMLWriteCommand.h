@@ -51,17 +51,18 @@ class TMLWriteCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
-      	\param iTask Pointer to the task the command belongs to
+      	\param iID ID of the command
+	\param iTask Pointer to the task the command belongs to
 	\param iLengthFunc Pointer to the function returning the length of the command
 	\param iChannel Pointer to the channel to which is written
 	*/
-	TMLWriteCommand(TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel);
+	TMLWriteCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
-	std::string toString();
-	std::string toShortString();
-	std::string getCommandStr();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
 protected:
 	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;

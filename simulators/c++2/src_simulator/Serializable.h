@@ -55,6 +55,8 @@ public:
 	\return A reference to the same input stream
 	*/
 	virtual std::istream& readObject(std::istream& s) = 0;
+	///Resets a simulation component to its initial state
+	virtual void reset()=0;
 	///Destructor
 	virtual ~Serializable(){}
 };

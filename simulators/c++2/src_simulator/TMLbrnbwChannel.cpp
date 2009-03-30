@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-TMLbrnbwChannel::TMLbrnbwChannel(std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent):TMLStateChannel(iName, iNumberOfHops, iBuses, iSlaves, iContent){
+TMLbrnbwChannel::TMLbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent):TMLStateChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent){
 }
 
 void TMLbrnbwChannel::testWrite(TMLTransaction* iTrans){
@@ -60,7 +60,8 @@ void TMLbrnbwChannel::testRead(TMLTransaction* iTrans){
 void TMLbrnbwChannel::write(){
 	_content+=_writeTrans->getVirtualLength();
 	_nbToWrite=0;
-	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());	
+	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());
+	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
 	_writeTrans=0;
 	setTransactionLength();
 }
@@ -70,14 +71,15 @@ bool TMLbrnbwChannel::read(){
 		return false;
 	}else{
 		_content-=_readTrans->getVirtualLength();
-		_nbToRead=0;	
+		_nbToRead=0;
+		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 		_readTrans=0;
 		setTransactionLength();
 		return true;
 	}
 }
 
-void TMLbrnbwChannel::setTransactionLength(){
+void TMLbrnbwChannel::setTransactionLength() const{
 	if (_writeTrans!=0){	
 		if (_nbToRead==0){
 			//_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
@@ -108,7 +110,7 @@ TMLTask* TMLbrnbwChannel::getBlockedWriteTask() const{
 	return 0;
 }
 
-std::string TMLbrnbwChannel::toString(){
+std::string TMLbrnbwChannel::toString() const{
 	std::ostringstream outp;
 	outp << _name << "(brnbw) content:" << _content << " nbToRead:" << _nbToRead << " nbToWrite:" << _nbToWrite;
 	return outp.str();
