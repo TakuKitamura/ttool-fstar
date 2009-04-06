@@ -87,7 +87,7 @@ public class TURTLE2UPPAAL {
     private int currentX, currentY;
     
     public final static int STEP_X = 0;
-    public final static int STEP_Y = 120;
+    public final static int STEP_Y = 80;
     public final static int STEP_LOOP_X = 150;
     public final static int NAME_X = 10;
     public final static int NAME_Y = 5;
@@ -943,12 +943,18 @@ public class TURTLE2UPPAAL {
 			
 			// Choice
 		} else if (elt instanceof ADChoice) {
-			//System.out.println("ADChoice");
+			System.out.println("ADChoice");
 			adch = (ADChoice)elt;
 			
 			if (adch.getNbGuard() == 1) {
 				if (adch.isGuarded(0)){
+					
+					loc = makeTimeInterval(template, previous, "0", ((ADLatency)(elt)).getValue());
+					//table.addADComponentLocation(elt, previous, loc);
+					previous = loc;
+					
 					loc = addLocation(template);
+					loc.setUrgent();
 					tr = addTransition(template, previous, loc);
 					action = convertGuard(adch.getGuard(0));
 					setGuard(tr, action);
@@ -976,14 +982,24 @@ public class TURTLE2UPPAAL {
 							gua = "";
 						}
 						
-						loc = addLocation(template);
-						tr = addTransition(template, previous, loc);
-						setGuard(tr, gua);
-					
-						table.addADComponentLocation(elt, previous, loc);
+						gua = gua.trim();
 						
-						makeElementBehavior(t, template, elt.getNext(i), loc, end, null);
-						currentX += 2 * STEP_LOOP_X;
+						if (gua.length() == 0) {
+							System.out.println("New choice system");
+							table.addADComponentLocation(elt, previous, previous);
+							makeElementBehavior(t, template, elt.getNext(i), previous, end, null);
+							currentX += 2 * STEP_LOOP_X;
+						} else {
+						
+							loc = addLocation(template);
+							tr = addTransition(template, previous, loc);
+							setGuard(tr, gua);
+						
+							table.addADComponentLocation(elt, previous, loc);
+							
+							makeElementBehavior(t, template, elt.getNext(i), loc, end, null);
+							currentX += 2 * STEP_LOOP_X;
+						}
 					}
 				} else {
 					/*if (adch.choiceFollowedWithADActionStateWithGates()) {
