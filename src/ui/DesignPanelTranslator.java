@@ -405,8 +405,9 @@ public class DesignPanelTranslator {
 						return;
 					}
 					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done s1=" + s1);
+					
 					adag.setActionValue(s1);
+					//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
 					listE.addCor(adag, tgc);
 				} else if ((p != null) && (nbActions == 1)){
 					//System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));

@@ -109,8 +109,19 @@ public class RelationTIFUPPAAL {
 	}
 	
 	public String getRQuery(TClass _t, ADComponent _adc) {
+		//System.out.println("get RQuery for " + _t.getName());
+		
 		ADComponentLocation adcl = getFirstADComponentLocation(_adc);
 		TClassTemplate tt = getFirstTClassTemplate(_t);
+		
+		if (tt == null) {
+			System.out.println("null tt");
+		}
+		
+		if (adcl == null) {
+			System.out.println("null adc1");
+		}
+		
 		if ((tt == null) || (adcl == null)) {
 			return null;
 		}

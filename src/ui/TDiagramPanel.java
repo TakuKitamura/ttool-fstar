@@ -505,18 +505,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (s == null) {
             return null;
         }
-        //Added by Solange
-        //StringBuffer s2 =SMDInXML(false);
         
         StringBuffer sb = new StringBuffer(getXMLHead());
         sb.append("\n");
         sb.append(s);
         sb.append("\n");
-        //Added by Solange
-        //sb.append(s2);
-        //sb.append("\n");
-        //
-        //System.out.println("Tail of " + toString());
         sb.append(getXMLTail());
         return sb;
     }

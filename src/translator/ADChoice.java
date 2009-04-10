@@ -183,9 +183,9 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 		ADComponent adc, adc1;
 		String value;
 		
-		if (isElseChoice()) {
+		/*if (isElseChoice()) {
 			return true;
-		}
+		}*/
 		
         
         for(int i=0; i<next.size(); i++) {
@@ -215,6 +215,21 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 					}
 				}
 			} else {
+				return false;
+			}
+        }
+        
+        return true;
+    }
+	
+	public boolean isSpecialChoiceAction() {
+		ADComponent adc, adc1;
+		String value;
+		
+        for(int i=0; i<next.size(); i++) {
+            adc = getNext(i);
+            
+            if (!(adc instanceof ADActionStateWithGate)) {
 				return false;
 			}
         }

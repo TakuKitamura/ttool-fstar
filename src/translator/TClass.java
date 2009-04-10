@@ -648,6 +648,22 @@ public class TClass {
       return ad.getNbOfJunctions();
     }
 	
+	public int getMaximumNbOfGuardsPerChoice() {
+		if (ad == null) {
+			return 0;
+		}
+		
+		return ad.getMaximumNbOfGuardsPerChoice();
+	}
+	
+	public int getMaximumNbOfGuardsPerSpecialChoice() {
+		if (ad == null) {
+			return 0;
+		}
+		
+		return ad.getMaximumNbOfGuardsPerSpecialChoice();
+	}
+	
     
     /*public void setIgnoredJava(boolean b) {
         ignoredJava = b;

@@ -315,12 +315,16 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 				result = mgui.gtm.generateUPPAALFromTML(pathCode, debug, size1, choices);
 			} else {
 				result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices);
+				jta.append("UPPAAL specification generated\n");
+				jta.append("Checking the regularity of the TIF specification\n");
+				System.out.println("Regularity?");
 				boolean b = mgui.gtm.isRegularTM();
 				if (b) {
 					jta.append("UPPAAL code was optimized since the TIF specification is regular\n");
 				} else {
 					jta.append("UPPAAL code was NOT optimized since the TIF specification is NOT regular\n");
 				}
+				System.out.println("Regularity done");
 			}
 			if (result) {
 				jta.append("UPPAAL code generated in " + pathCode);

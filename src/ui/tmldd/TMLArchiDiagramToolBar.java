@@ -72,6 +72,9 @@ public class TMLArchiDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
     }
     
     protected void setButtons() {

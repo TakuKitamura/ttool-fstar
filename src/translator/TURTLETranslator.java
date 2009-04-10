@@ -1280,9 +1280,9 @@ public class TURTLETranslator {
 				// End added May 2008
 			}
 			/*if (p.getName().indexOf("67") > -1)
-                System.out.println(p.getName() + " -> " + s);
+			System.out.println(p.getName() + " -> " + s);
             if (s == null) {
-               System.out.println("*** NULL S (PROCESS) ***");
+				System.out.println("*** NULL S (PROCESS) ***");
             }
             if (s.startsWith("null")) {
                 System.out.println("*** NULL S1 (PROCESS) ***");
@@ -1298,7 +1298,7 @@ public class TURTLETranslator {
 				params.add(ad.getParam());
 				actions.add(modifyAction(ad.getActionValue(), languageID));
 				return translateADActionStateWithParam((ADActionStateWithParam)(ad.getNext(0)));
-			// end added May 2008
+				// end added May 2008
 			} else {
 				System.out.println("*** NULL PROCESS ***");
 				return "";
@@ -1530,9 +1530,24 @@ public class TURTLETranslator {
 					adsnext = (ADActionStateWithParam)(adc.getNext(0));
 					par = ads.getParam();
 					if (adsnext.getParam() != par) {
-						// One must verify that the second does not use the Param declared in the first one
+						// One must verify that the second does not use the Param declared in the first one!
+						//System.out.println("Param " + par.getName()+  " in use in " + adsnext.getActionValue() + "?");
 						if (!paramIsUsedIn(par, adsnext.getActionValue())) {
 								makeProcess = false;
+								//System.out.println("no");
+						} else {
+							//System.out.println("yes");
+						}
+						
+						// Must check also in the next ones of the next.
+						if (makeProcess == false) {
+							while(adsnext.getNext(0) instanceof ADActionStateWithParam) {
+								adsnext = (ADActionStateWithParam)(adsnext.getNext(0));
+								//System.out.println("Param " + par.getName()+  " in use in " + adsnext.getActionValue() + "?");
+								if (paramIsUsedIn(par, adsnext.getActionValue())) {
+									makeProcess = true;
+								}
+							}
 						}
 					}
 				}

@@ -152,6 +152,17 @@ public class TURTLEModeling {
         }
         return null;
 	}
+	
+	public void addAllTClassesEndingWith(ArrayList<TClass> tclasses, String end) {
+		TClass tmp;
+        for(int i=0; i<tclass.size(); i++) {
+            tmp = (TClass)(tclass.elementAt(i));
+			if (tmp.getName().endsWith(end)) {
+				tclasses.add(tmp);
+				System.out.println("Adding tclass:" + tmp.getName());
+			}
+        }
+	}
     
     public int getIndexOf(TClass t) {
         return tclass.indexOf(t);

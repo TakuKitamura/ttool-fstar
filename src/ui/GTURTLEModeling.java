@@ -5,7 +5,7 @@
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
- * and at last to allow the analysis of formal validation traces
+ * and at last to almalow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
  *
@@ -336,15 +336,18 @@ public class GTURTLEModeling {
 		TURTLE2UPPAAL turtle2uppaal = new TURTLE2UPPAAL(tm);
 		turtle2uppaal.setChoiceDeterministic(choices);
 		uppaal = turtle2uppaal.generateUPPAAL(debug, nb);
+		System.out.println("Building relation table");
 		uppaalTIFTable = turtle2uppaal.getRelationTIFUPPAAL();
+		System.out.println("Building relation table done");
 		uppaalTMLTable = null;
 		
 		languageID = UPPAAL;
 		mgui.setMode(MainGUI.UPPAAL_OK);
 		
 		try {
+			System.out.println("Saving specification in " + path + "\n");
 			turtle2uppaal.saveInFile(path);
-			System.out.println("UPPAAL specification has been generated in " + path);
+			System.out.println("UPPAAL specification has been generated in " + path + "\n");
 			return true;
 		} catch (FileException fe) {
 			System.out.println("Exception: " + fe.getMessage());
@@ -375,12 +378,15 @@ public class GTURTLEModeling {
 		//System.out.println("Searching for queries");
 		TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
 		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		ArrayList<TClass> tclasses;
 		tp.getAllCheckableTGComponent(list);
 		
 		ArrayList<String> listQ = new ArrayList<String>();
 		
 		if (uppaalTIFTable != null) {
 			ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
+			
+			//System.out.println("List size:" + listAD.size());
 			
 			if (listAD == null) {
 				return null;
@@ -391,11 +397,19 @@ public class GTURTLEModeling {
 			for(ADComponent adc:listAD) {
 				if (adc != null) {
 					t = tm.findTClass(adc);
+					//System.out.println("Found class:" + t.getName());
 					if (t!= null) {
-						s = uppaalTIFTable.getRQuery(t, adc);
-						if (s != null) {
-							//System.out.println("Adding query:" + s);
-							listQ.add(s + "$" + adc);
+						tclasses = new ArrayList<TClass>();
+						tclasses.add(t);
+						// For handling tobjects
+						tm.addAllTClassesEndingWith(tclasses, "_" + t.getName());
+						for(TClass tc: tclasses) {
+							//System.out.println("Analyzing class:" + tc.getName());
+							s = uppaalTIFTable.getRQuery(tc, adc);
+							if (s != null) {
+								//System.out.println("Adding query:" + s);
+								listQ.add(s + "$" + adc);
+							}
 						}
 					}
 				}
@@ -2324,32 +2338,8 @@ public class GTURTLEModeling {
 		}
 	}
 
-	//Method added by Solange
-//	public int countPrimitives(TGComponent comp)
-//	{
-//	int cuenta=0, nb=0;
-//	if (comp.getType()==TGComponentManager.PROCSD_COMPONENT)
-//	{
-//	nb=comp.getNbInternalTGComponent();
-//	if(nb==0) // does not have ports, inner components, etc
-//	{
-//	cuenta++;
-//	}
-//	else
-//	{
-//	for (int j=0;j<nb;j++)
-//	{
-//	TGComponent tmp=comp.getInternalTGComponent(j);
-//	cuenta= cuenta + countPrimitives(tmp);
-//	}
-//	}
-//	}
-//	return(cuenta);
-//	}
-	//until here
-
 	public void copyModelingFromXML(TDiagramPanel tdp, String s, int X, int Y) throws MalformedModelingException {
-		//System.out.println("copyModelingFromXML");
+		System.out.println("copyModelingFromXML");
 		//System.out.println(s);
 		//System.out.println("copyModelingFromXML:");
 		//LinkedList ComponentsList=tdp.getComponentList();
@@ -2359,6 +2349,9 @@ public class GTURTLEModeling {
 		int cuenta=1;
 
 		s = decodeString(s);
+		
+		//System.out.println("copy=" + s);
+		
 		ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes());
 		if ((dbf == null) || (db == null)) {
 			throw new MalformedModelingException();
@@ -2396,6 +2389,8 @@ public class GTURTLEModeling {
 
 			// Managing diagrams
 			if (tdp instanceof TClassDiagramPanel) {
+				System.out.println("TClassDiagramPanel copy");
+				
 				nl = doc.getElementsByTagName("TClassDiagramPanelCopy");
 				docCopy = doc;
 
@@ -2444,6 +2439,7 @@ public class GTURTLEModeling {
 				docCopy = null;
 
 			} else if (tdp instanceof TActivityDiagramPanel) {
+				System.out.println("TActivityDiagramPanel copy");
 				nl = doc.getElementsByTagName("TActivityDiagramPanelCopy");
 
 				if (nl == null) {
@@ -3183,8 +3179,8 @@ public class GTURTLEModeling {
 		return sb.toString();
 	}
 
-	// Assumes a class diagram is already created
 	public void loadModelingFromXML(String s) throws MalformedModelingException {
+		
 		if (s == null) {
 			return;
 		}
@@ -3952,8 +3948,8 @@ public class GTURTLEModeling {
 		try {
 			NodeList activityDiagramNl = docCopy.getElementsByTagName("TActivityDiagramPanel");
 
-			//System.out.println("Loading activity diagram of " + newValue + "Before : " + oldValue);
-			//System.out.println(docCopy);
+			System.out.println("Loading activity diagram of " + newValue + "Before : " + oldValue);
+			System.out.println(docCopy);
 
 			if (activityDiagramNl == null) {
 				throw new MalformedModelingException();

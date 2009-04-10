@@ -325,7 +325,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 						}
 					}
 				} else {
-					jta.append("No component to analyze found on diagrams\n");
+					jta.append("No component to analyze accessibility found on diagrams\n");
 				}
 			}
 			
@@ -347,7 +347,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 						}
 					}
 				} else {
-					jta.append("No component found\n");
+					jta.append("No component to analyze liveness found on diagrams\n");
 				}
 			}
 			

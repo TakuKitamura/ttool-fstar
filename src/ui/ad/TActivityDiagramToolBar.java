@@ -81,6 +81,11 @@ public class TActivityDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.AD_ARRAY_SET].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
     }
     
     protected void setButtons() {

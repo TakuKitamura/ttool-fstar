@@ -74,6 +74,11 @@ public class InteractionOverviewDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.IOD_STOP].setEnabled(b);
         mgui.actions[TGUIAction.IOD_JUNCTION].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
         
     }
     

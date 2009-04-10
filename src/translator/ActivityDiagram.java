@@ -645,4 +645,34 @@ public class ActivityDiagram extends Vector{
       }
       return nb;
     }
+	
+	public int getMaximumNbOfGuardsPerChoice() {
+	  int nb = 0;
+      ADComponent adc;
+      for(int i=0; i<size(); i++) {
+        adc = (ADComponent)(elementAt(i));
+        if (adc instanceof ADChoice) {
+          nb = Math.max(nb, ((ADChoice)adc).getNbGuard());
+        }
+      }
+      return nb;
+		
+	}
+	
+	public int getMaximumNbOfGuardsPerSpecialChoice() {
+	  int nb = 0;
+      ADComponent adc;
+	  ADChoice adch;
+      for(int i=0; i<size(); i++) {
+        adc = (ADComponent)(elementAt(i));
+        if (adc instanceof ADChoice) {
+			adch = (ADChoice)adc;
+			if (adch.isSpecialChoice() && (!adch.isSpecialChoiceAction())) {
+				nb = Math.max(nb, ((ADChoice)adc).getNbGuard());
+			}
+        }
+      }
+      return nb;
+		
+	}
 }

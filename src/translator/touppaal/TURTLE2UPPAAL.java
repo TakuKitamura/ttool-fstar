@@ -190,7 +190,9 @@ public class TURTLE2UPPAAL {
         //makeParallel(nb);
         makeSystem(effectiveNb);
 		
+		System.out.println("Enhancing graphical representation ...");
 		spec.enhanceGraphics();
+		System.out.println("Enhancing graphical representation done");
 		
 		//System.out.println("relations:" + table.toString());
 		
@@ -218,7 +220,7 @@ public class TURTLE2UPPAAL {
 			spec.addGlobalDeclaration("int groups__[maxGroups__];\n");
 			spec.addGlobalDeclaration("urgent broadcast chan endGroup__;\n");
 			spec.addGlobalDeclaration("urgent broadcast chan goAllTasks__;\n");
-		
+			
 			// Has to manage
 			s = "\nint hasToManage(int tab[maxTasks__]) {\nint i;\nfor(i=0; i<maxTasks__; i++) {\n";
 			s += "if (tab[i] != -1) {\nreturn 1;\n}\n}\nreturn 0;\n}\n\n";
@@ -242,13 +244,13 @@ public class TURTLE2UPPAAL {
 			
 			// End task
 			s = "int endTask(int id) {\nint i, j;\nint taskid;\nint ids[maxTasks__];\nint tmpids[maxTasks__];\n";
-			s += "int cpt = 0;\nint currentid;\n\nif (tasks__[id][id] == -3) {\n// I have been preempted\n";
+				s += "int cpt = 0;\nint currentid;\n\nif (tasks__[id][id] == -3) {\n// I have been preempted\n";
 			s += "tasks__[id][id] = 0;\nreturn -1;\n} else {\n// Normal termination\npreempt(id);\n}\n";
 			s += "\nfor(i=0; i<maxTasks__; i++) {\nids[i] = -1;\n}\n";
 			s += "ids[0] = id;\n\nwhile(hasToManage(ids) == 1) {\ncpt = 0;\nfor(i=0; i<maxTasks__; i++) {\n";
-			s += "tmpids[i] = ids[i];\nids[i] = -1;\n}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\n";
-			s += "taskid = (tmpids[j] / totalTasks__)*totalTasks__;\ncurrentid = tmpids[j];\ntasks__[currentid][currentid] = 0;\n";
-			s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i != id) && (tasks__[i][currentid] == preempt__)) {\ntasks__[i][currentid] = 0;\n";
+				s += "tmpids[i] = ids[i];\nids[i] = -1;\n}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\n";
+					s += "taskid = (tmpids[j] / totalTasks__)*totalTasks__;\ncurrentid = tmpids[j];\ntasks__[currentid][currentid] = 0;\n";
+					s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i != id) && (tasks__[i][currentid] == preempt__)) {\ntasks__[i][currentid] = 0;\n";
 			s += "ids[cpt] = i;\ncpt ++;\n}\n}\n}\n}\n}\nreturn -1;\n}\n\n";
 			spec.addGlobalDeclaration(Conversion.indentString(s, 2));
 			
@@ -507,7 +509,7 @@ public class TURTLE2UPPAAL {
 	public UPPAALTemplate newTClassTemplate(TClass t, int id) {
 		UPPAALTemplate template = new UPPAALTemplate();
 		if (id != 0) {
-			template.setName(t.getName() + "__" + id);
+			template.setName(t.getName() + "___" + id);
 		} else {
 			template.setName(t.getName());
 		}
@@ -520,7 +522,9 @@ public class TURTLE2UPPAAL {
     public void makeAttributes(TClass t, UPPAALTemplate template) {
 		Param p;
 		Vector params = t.getParamList();
-		for(int i=0; i<params.size(); i++) {
+		int i;
+		
+		for(i=0; i<params.size(); i++) {
 			p = (Param)(params.get(i));
 			if (p.getType() == Param.NAT) {
 				template.addDeclaration("int ");
@@ -536,6 +540,12 @@ public class TURTLE2UPPAAL {
 		for(Gate g:gatesWithInternalSynchro) {
 			template.addDeclaration("int " + t.getName() + "__" + g.getName() + TURTLE2UPPAAL.SYNCID + " = 0;\n");
 		}
+		
+		int nbOfChoice = t.getMaximumNbOfGuardsPerSpecialChoice();
+		for(i=0; i<nbOfChoice; i++) {
+			template.addDeclaration("int choice__" + i + ";\n");
+		}
+		
     }
     
     public void makeAttributeChoice(TClass t, int id1, int id2) {
@@ -768,7 +778,7 @@ public class TURTLE2UPPAAL {
 					buildAssignment(tr, action);
 					
 					table.addADComponentLocation(elt, previous, loc);
-				
+					
 					makeElementBehavior(t, template, elt.getNext(0), loc, end, null);
 					
 				} else {
@@ -835,7 +845,7 @@ public class TURTLE2UPPAAL {
 				//setSynchronization(tr2, "timeLimitedOfferExpired!");
 				//addNotSync("timeLimitedOfferExpired");
 				
-
+				
 				
 				makeElementBehavior(t, template, elt.getNext(1), loc2, end, null);
 				currentX -= STEP_LOOP_X;
@@ -943,15 +953,17 @@ public class TURTLE2UPPAAL {
 			
 			// Choice
 		} else if (elt instanceof ADChoice) {
-			System.out.println("ADChoice");
+			//System.out.println("ADChoice");
 			adch = (ADChoice)elt;
 			
 			if (adch.getNbGuard() == 1) {
 				if (adch.isGuarded(0)){
 					
-					loc = makeTimeInterval(template, previous, "0", ((ADLatency)(elt)).getValue());
+					//loc = makeTimeInterval(template, previous, "0", ((ADLatency)(elt)).getValue());
 					//table.addADComponentLocation(elt, previous, loc);
-					previous = loc;
+					//previous = loc;
+					
+					previous.setUrgent();
 					
 					loc = addLocation(template);
 					loc.setUrgent();
@@ -967,12 +979,122 @@ public class TURTLE2UPPAAL {
 					makeElementBehavior(t, template, elt.getNext(0), previous, end, null);
 				}
 			} else {
-				//System.out.println("ADChoice: testing");
-				if (choicesDeterministic) {
+				if (adch.isSpecialChoiceDelay()) {
+					
+					// Must check whether some actions are delayed or not
+					if (adch.isSpecialChoiceAction()) {
+						
+						for(i=0; i<elt.getNbNext(); i++){
+							//System.out.println("Special choice action / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
+						
+							String gua = null;
+							if (adch.isGuarded(i)) {
+								gua = convertGuard(adch.getGuard(i));
+							}
+							table.addADComponentLocation(elt, previous, previous);
+							makeElementBehavior(t, template, elt.getNext(i), previous, end, gua);
+							currentX += 2 * STEP_LOOP_X;
+						}
+					} else {
+						//System.out.println("Special choice delay");
+						
+						int tmpX = currentX;
+						int next = 0;
+						ADComponent elt1;
+						boolean delayed;
+						String gua = null;
+						
+						// Initialization
+						String init = "h__ = 0";
+						for(i=0; i<elt.getNbNext(); i++){
+							//System.out.println("Special choice delay / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
+						
+							elt1 = elt.getNext(i);
+							
+							if (elt1 instanceof ADDelay) {
+								init = init + ", choice__" + i + " = max(0, " + ((ADDelay)(elt1)).getValue() + ")";
+							}
+							
+							if (elt1 instanceof ADLatency) {
+								init = init + ", choice__" + i + " = 0"; 
+							}
+							
+							if (elt1 instanceof ADTimeInterval) {
+								init = init + ", choice__" + i + " = max(0, " + ((ADTimeInterval)(elt1)).getMinValue() + ")";
+							}
+						}							
+						loc = addRLocation(template);
+						previous.setCommitted();
+						tr = addRTransition(template, previous, loc);
+						setAssignment(tr, init);
+						
+						
+						// Setting randomnly the value of non-deterministic time
+						for(i=0; i<elt.getNbNext(); i++){
+							elt1 = elt.getNext(i);
+							if (elt1 instanceof ADLatency) {
+								tr = addRTransition(template, loc, loc);
+								setGuard(tr, "choice__" + i + " <" + ((ADLatency)(elt1)).getValue());
+								setAssignment(tr, "choice__" + i + " = choice__" + i + " + 1");
+							}
+							
+							if (elt1 instanceof ADTimeInterval) {
+								tr = addRTransition(template, loc, loc);
+								setGuard(tr, "choice__" + i + " <" + ((ADTimeInterval)(elt1)).getMaxValue());
+								setAssignment(tr, "choice__" + i + " = choice__" + i + " + 1");
+							}
+						}
+						
+						loc1 = addRLocation(template);
+						loc.setCommitted();
+						tr = addRTransition(template, loc, loc1);
+						
+						table.addADComponentLocation(elt, previous, loc1);
+						
+						for(i=0; i<elt.getNbNext(); i++){
+							delayed = false;
+							elt1 = elt.getNext(i);
+							
+							gua = null;
+							// An action follows the guard #i
+							if (adch.isGuarded(i)) {
+								gua = convertGuard(adch.getGuard(i));
+							}
+							
+							if ((elt1 instanceof ADDelay) || (elt1 instanceof ADLatency) || (elt1 instanceof ADTimeInterval)){
+								delayed = true;
+							}
+							
+							if (!delayed) {
+								makeElementBehavior(t, template, elt.getNext(i), loc1, end, gua);
+								currentX += 2 * STEP_LOOP_X;
+							} else {
+								String guadelay = "(choice__" + i + " >0) && ( h__>= choice__" + i + ")";
+								if (gua != null) {
+									guadelay = "(" + gua + ") && (" + guadelay + ")";
+								}
+								tr = addRTransition(template, loc1, loc1);
+								setGuard(tr, guadelay);
+								setAssignment(tr, "choice__" + i + " = 0");
+								
+								guadelay = "choice__" + i + " == 0";
+								if (gua == null) {
+									gua = guadelay;
+								} else {
+									gua = "(" + gua + ") && (" + guadelay + ")";
+								}
+								makeElementBehavior(t, template, elt1.getNext(0), loc1, end, gua);
+								currentX += 2 * STEP_LOOP_X;
+							}
+						}
+					}
+					//System.out.println("ADChoice: testing");
+				} else if ((choicesDeterministic) || (adch.isElseChoice())) {
 					//System.out.println("Choice is deterministic");
 					int tmpX = currentX;
+					previous.setCommitted();
 					for(i=0; i<elt.getNbNext(); i++){
-						//System.out.println("Choice is deterministic i=" + i);
+						//System.out.println("Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
 						String gua = null;
 						if (adch.isGuarded(i)) {
 							gua = convertGuard(adch.getGuard(i));
@@ -985,16 +1107,23 @@ public class TURTLE2UPPAAL {
 						gua = gua.trim();
 						
 						if (gua.length() == 0) {
-							System.out.println("New choice system");
-							table.addADComponentLocation(elt, previous, previous);
-							makeElementBehavior(t, template, elt.getNext(i), previous, end, null);
-							currentX += 2 * STEP_LOOP_X;
+							//System.out.println("New choice system");
+							if (elt.getNext(i) instanceof ADChoice) {
+								makeElementBehavior(t, template, elt.getNext(i), previous, end, null);
+							} else {
+								loc = addLocation(template);
+								tr = addTransition(template, previous, loc);
+								
+								table.addADComponentLocation(elt, previous, previous);
+								makeElementBehavior(t, template, elt.getNext(i), loc, end, null);
+								currentX += 2 * STEP_LOOP_X;
+							}
 						} else {
-						
+							
 							loc = addLocation(template);
 							tr = addTransition(template, previous, loc);
 							setGuard(tr, gua);
-						
+							
 							table.addADComponentLocation(elt, previous, loc);
 							
 							makeElementBehavior(t, template, elt.getNext(i), loc, end, null);
@@ -1002,197 +1131,102 @@ public class TURTLE2UPPAAL {
 						}
 					}
 				} else {
-					/*if (adch.choiceFollowedWithADActionStateWithGates()) {
-						int tmpX = currentX;
-						for(i=0; i<elt.getNbNext(); i++){
-							String gua = null;
-							if (adch.isGuarded(i)) {
-								gua = convertGuard(adch.getGuard(i));
-							}
-							table.addADComponentLocation(elt, previous, previous);
-							makeElementBehavior(t, template, elt.getNext(i), previous, end, gua);
-							currentX += 2 * STEP_LOOP_X;
-						}*/
-					if (adch.isSpecialChoiceDelay()) {
-						int tmpX = currentX;
-						for(i=0; i<elt.getNbNext(); i++){
-							String gua = null;
-							String guadelay = null;
-							if (adch.isGuarded(i)) {
-								gua = convertGuard(adch.getGuard(i));
-							}
-							
-							if (elt.getNext(i) instanceof ADDelay) {
-								guadelay = ((ADDelay)(elt.getNext(i))).getValue();
-								guadelay = 	"(h__ >= (" + guadelay + "))";
-							}
-							
-							if (elt.getNext(i) instanceof ADLatency) {
-								guadelay = ((ADLatency)(elt.getNext(i))).getValue();
-								guadelay = 	"(h__ >= (" + guadelay + "))";
-							}
-							
-							if (elt.getNext(i) instanceof ADTimeInterval) {
-								guadelay = ((ADTimeInterval)(elt.getNext(i))).getMinValue();
-								guadelay = 	"(h__ >= (" + guadelay + "))";
-							}
-							
-							if (gua == null) {
-								gua = guadelay;
-							} else {
-								if (guadelay != null) {
-									gua = "((" + gua + " && " + guadelay + ")";
-								}
-							}
-							
-							table.addADComponentLocation(elt, previous, previous);
-							
-							makeElementBehavior(t, template, elt.getNext(i), previous, end, gua);
-							currentX += 2 * STEP_LOOP_X;
+					
+					System.out.println("Irregular choice");
+					setMultiProcess(template);
+					addParallel(t, template);
+					
+					//start other tasks
+					loc = previous;
+					
+					loc.setUrgent();
+					loc3 = addLocation(template);
+					loc3.setCommitted();
+					tr1 = addRTransition(template, loc, loc3);
+					setSynchronization(tr1, "lockmutextask__!");
+					//addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= firstGroupId(),\n waitgroupid__ = groupid__");
+					addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= mygroupid__");
+					loc = loc3;
+					
+					//System.out.println("Managing preempt");
+					index = currentX;
+					for(i=1; i<elt.getNbNext(); i++){
+						loc2 = makePreemptFromInit(t, template);
+						loc1 = addLocation(template);
+						loc1.setUrgent();
+						tr1 = addTransition(template, loc, loc1);
+						if (i!=0) {
+							setAssignment(tr1, "locid__ = " + loc2.int_id + ",\ntaskid__ = firstFree(myid__),\nmygroupid__ = groupid__");
+						} else {
+							setAssignment(tr1, "locid__ = " + loc2.int_id + ",\ntaskid__ = firstFree(myid__)");
 						}
-					} /*else if (adch.isElseChoice()) {
-						System.out.println("Else choice detected");
-						int tmpX = currentX;
-						previous.setUrgent();
-						for(i=0; i<elt.getNbNext(); i++){
-							loc = addLocation(template);
-							tr = addTransition(template, previous, loc);
-							action = convertGuard(adch.getGuard(i));
-							setGuard(tr, action);
-							
-							table.addADComponentLocation(elt, previous, loc);
-							
-							makeElementBehavior(t, template, elt.getNext(i), loc, end, null);
-							currentX += 2 * STEP_LOOP_X;
-						}
-						
-					}*/ else {
-						System.out.println("Irregular choice");
-						setMultiProcess(template);
-						addParallel(t, template);
-						
-						//start other tasks
-						loc = previous;
-						
-						loc.setUrgent();
 						loc3 = addLocation(template);
 						loc3.setCommitted();
-						tr1 = addRTransition(template, loc, loc3);
-						setSynchronization(tr1, "lockmutextask__!");
-						//addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= firstGroupId(),\n waitgroupid__ = groupid__");
-						addAssignment(tr1, "gotasks__ = 0, \nstartingid__ = myid__,\npreemptid__ = myid__,\ngroupid__= mygroupid__");
+						tr1 = addTransition(template, loc1, loc3);
+						setSynchronization(tr1, "begintask__!");
+						setAssignment(tr1, makeSetParam(t));
 						loc = loc3;
-						
-						//System.out.println("Managing preempt");
-						index = currentX;
-						for(i=1; i<elt.getNbNext(); i++){
-							loc2 = makePreemptFromInit(t, template);
-							loc1 = addLocation(template);
-							loc1.setUrgent();
-							tr1 = addTransition(template, loc, loc1);
-							if (i!=0) {
-								setAssignment(tr1, "locid__ = " + loc2.int_id + ",\ntaskid__ = firstFree(myid__),\nmygroupid__ = groupid__");
-							} else {
-								setAssignment(tr1, "locid__ = " + loc2.int_id + ",\ntaskid__ = firstFree(myid__)");
-							}
-							loc3 = addLocation(template);
-							loc3.setCommitted();
-							tr1 = addTransition(template, loc1, loc3);
-							setSynchronization(tr1, "begintask__!");
-							setAssignment(tr1, makeSetParam(t));
-							loc = loc3;
-							currentX += 2 * STEP_LOOP_X;
-							// Manage guard if applicable
-							//System.out.println("Guard #" + i);
-							if (adch.isGuarded(i)) {
-								loc4 = addRLocation(template);
-								tr1 = addTransition(template, loc2, loc4);
-								action = convertGuard(adch.getGuard(i));
-								//System.out.println("action=" + action);
-								setGuard(tr1, action);
-								loc2.setUrgent();
-								//System.out.println("guard set");
-								loc5 = addRLocation(template);
-								tr1 = addTransition(template, loc2, loc5);
-								action = convertGuard("!(" + adch.getGuard(i) + ")");
-								setGuard(tr1, action);
-								
-								
-								loc2 = loc4;
-							}
-							
-							table.addADComponentLocation(elt, previous, loc2);
-							
-							makeElementBehavior(t, template, elt.getNext(i), loc2, end, null);
-						}
-						
-						/*loc3 = addLocation(template);
-						tr1 = addTransition(template, loc, loc3);
-						setAssignment(tr1, "gotasks__ = " + (elt.getNbNext() - 1));
-						loc2 = addLocation(template);
-						tr1 = addTransition(template, loc3, loc2);
-						setSynchronization(tr1, "unlockmutextask__!");
-						setGuard(tr1, "gotasks__ == 0");
-						//setAssignment(tr1, "makeParallel(myid__, startingid__)");
-						
-						loc3 = addLocation(template);
-						tr1 = addTransition(template, loc2, loc3);
-						setSynchronization(tr1, "endGroup__[waitgroupid__]?");
-						
-						makeEnd(template, loc3);*/
-						
-						loc3 = addRLocation(template);
-						//loc3.setUrgent();
-						loc3.setCommitted();
-						tr1 = addTransition(template, loc, loc3);
-						//setAssignment(tr1, "gotasks__ = " + (elt.getNbNext() - 1));
-						setSynchronization(tr1, "goAllTasks__!");
-						
-						loc2 = addRLocation(template);
-						tr1 = addTransition(template, loc3, loc2);
-						setSynchronization(tr1, "unlockmutextask__!");
-						setGuard(tr1, "gotasks__ == 0");
-						setAssignment(tr1, "makeParallel(myid__, startingid__),\nmakePreempt(myid__, preemptid__, startingid__)");
-						
-						if (adch.isGuarded(0)) {
+						currentX += 2 * STEP_LOOP_X;
+						// Manage guard if applicable
+						//System.out.println("Guard #" + i);
+						if (adch.isGuarded(i)) {
 							loc4 = addRLocation(template);
 							tr1 = addTransition(template, loc2, loc4);
-							loc2.setUrgent();
-							action = convertGuard(adch.getGuard(0));
+							action = convertGuard(adch.getGuard(i));
+							//System.out.println("action=" + action);
 							setGuard(tr1, action);
-							
+							loc2.setUrgent();
+							//System.out.println("guard set");
 							loc5 = addRLocation(template);
 							tr1 = addTransition(template, loc2, loc5);
-							action = convertGuard("!(" + adch.getGuard(0) + ")");
+							action = convertGuard("!(" + adch.getGuard(i) + ")");
 							setGuard(tr1, action);
+							
+							
 							loc2 = loc4;
 						}
 						
-						loc = loc2;
-						currentX += 2 * STEP_LOOP_X;
+						table.addADComponentLocation(elt, previous, loc2);
 						
-						table.addADComponentLocation(elt, previous, loc);
-						
-						makeElementBehavior(t, template, elt.getNext(0), loc, end, null);
-						currentX = index;
+						makeElementBehavior(t, template, elt.getNext(i), loc2, end, null);
 					}
+					
+					loc3 = addRLocation(template);
+					//loc3.setUrgent();
+					loc3.setCommitted();
+					tr1 = addTransition(template, loc, loc3);
+					//setAssignment(tr1, "gotasks__ = " + (elt.getNbNext() - 1));
+					setSynchronization(tr1, "goAllTasks__!");
+					
+					loc2 = addRLocation(template);
+					tr1 = addTransition(template, loc3, loc2);
+					setSynchronization(tr1, "unlockmutextask__!");
+					setGuard(tr1, "gotasks__ == 0");
+					setAssignment(tr1, "makeParallel(myid__, startingid__),\nmakePreempt(myid__, preemptid__, startingid__)");
+					
+					if (adch.isGuarded(0)) {
+						loc4 = addRLocation(template);
+						tr1 = addTransition(template, loc2, loc4);
+						loc2.setUrgent();
+						action = convertGuard(adch.getGuard(0));
+						setGuard(tr1, action);
+						
+						loc5 = addRLocation(template);
+						tr1 = addTransition(template, loc2, loc5);
+						action = convertGuard("!(" + adch.getGuard(0) + ")");
+						setGuard(tr1, action);
+						loc2 = loc4;
+					}
+					
+					loc = loc2;
+					currentX += 2 * STEP_LOOP_X;
+					
+					table.addADComponentLocation(elt, previous, loc);
+					
+					makeElementBehavior(t, template, elt.getNext(0), loc, end, null);
+					currentX = index;
 				}
 			}
-			return;
-			// Start activities in parallel -> all of them may preempt the others
-			
-			
-			
-			// Quite complex -> use other functions to continue
-			/*if (adch.isSpecialChoice()) {
-				makeSpecialChoice(t, template, elt, previous, end, adch);
-				System.out.println("Special choice encountered");
-				return;
-			} else {
-				// Choice is considered as a "regular" choice and not a LOTOS choice
-				System.out.println("Warning: elt = " + elt + " is not a special choice");
-				makeChoice(t, template, elt, previous, end, adch);
-			}*/
 			
 			// Sequence
 		} else if (elt instanceof ADSequence) {
@@ -1378,7 +1412,7 @@ public class TURTLE2UPPAAL {
 			}
 			return;
 			
-        } else if (elt instanceof ADPreempt) {
+		} else if (elt instanceof ADPreempt) {
 			if (elt.getNbNext() == 0) {
 				table.addADComponentLocation(elt, previous, previous);
 				makeElementBehavior(t, template, elt.getNext(0), previous, end, null);
@@ -1486,7 +1520,7 @@ public class TURTLE2UPPAAL {
 		UPPAALLocation loc, loc1;
 		UPPAALTransition tr, tr1;
 		loc1 = addRLocation(template);
-		previous.setUrgent();
+		previous.setCommitted();
 		tr1 = addRTransition(template, previous, loc1);
 		setAssignment(tr1, "h__ = 0");
 		loc = addRLocation(template);
@@ -1599,7 +1633,7 @@ public class TURTLE2UPPAAL {
 		return loc2;
 	}
 	
-    // Assumes adch is a not special choice
+	// Assumes adch is a not special choice
 	public void makeChoice(TClass t, UPPAALTemplate template, ADComponent elt, UPPAALLocation previous, UPPAALLocation end, ADChoice adch) {
 		int nbG = adch.getNbGuard();
 		UPPAALLocation loc1, loc2;
@@ -2075,8 +2109,8 @@ public class TURTLE2UPPAAL {
 		}
 		
 	}
-    
-    public UPPAALLocation addLocation(UPPAALTemplate template) {
+	
+	public UPPAALLocation addLocation(UPPAALTemplate template) {
 		UPPAALLocation loc = new UPPAALLocation();
 		loc.idPoint.x = currentX;
 		loc.idPoint.y = currentY;
@@ -2086,9 +2120,9 @@ public class TURTLE2UPPAAL {
 		currentX += STEP_X;
 		currentY += STEP_Y;
 		return loc;
-    }
-    
-    public UPPAALLocation addRLocation(UPPAALTemplate template) {
+	}
+	
+	public UPPAALLocation addRLocation(UPPAALTemplate template) {
 		UPPAALLocation loc = new UPPAALLocation();
 		loc.idPoint.x = currentX;
 		loc.idPoint.y = currentY;
@@ -2104,7 +2138,7 @@ public class TURTLE2UPPAAL {
 		}
 		
 		return loc;
-    }
+	}
 	
 	public UPPAALLocation addRUnlockLocation(UPPAALTemplate template) {
 		UPPAALLocation loc = new UPPAALLocation();
@@ -2123,9 +2157,9 @@ public class TURTLE2UPPAAL {
 		}
 		
 		return loc;
-    }
-    
-    public UPPAALLocation addRUnlockTaskLocation(UPPAALTemplate template) {
+	}
+	
+	public UPPAALLocation addRUnlockTaskLocation(UPPAALTemplate template) {
 		UPPAALLocation loc = new UPPAALLocation();
 		loc.idPoint.x = currentX;
 		loc.idPoint.y = currentY;
@@ -2142,7 +2176,7 @@ public class TURTLE2UPPAAL {
 		}
 		
 		return loc;
-    }
+	}
 	
 	public void addRandomNailPoint(UPPAALTransition tr) {
 		int x = 0, y = 0;
@@ -2152,8 +2186,8 @@ public class TURTLE2UPPAAL {
 			tr.points.add(new Point(x, y));
 		}
 	}
-    
-    public UPPAALTransition addTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
+	
+	public UPPAALTransition addTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
 		UPPAALTransition tr = new UPPAALTransition();
 		tr.sourceLoc = loc1;
 		tr.destinationLoc = loc2;
@@ -2168,17 +2202,17 @@ public class TURTLE2UPPAAL {
 			tr.points.add(new Point(x, y));
 		}*/
 		return tr;
-    }
+	}
 	
-    public UPPAALTransition addEndTransition(UPPAALTemplate template, UPPAALLocation loc1) {
+	public UPPAALTransition addEndTransition(UPPAALTemplate template, UPPAALLocation loc1) {
 		UPPAALTransition tr = addTransition(template, loc1, template.getInitLocation());
 		//template.addTransition(tr);
 		setEndAssignment(tr);
 		addRandomNailPoint(tr);
 		return tr;
-    }
-    
-    public UPPAALTransition addRTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
+	}
+	
+	public UPPAALTransition addRTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
 		UPPAALTransition tr = new UPPAALTransition();
 		tr.sourceLoc = loc1;
 		tr.destinationLoc = loc2;
@@ -2191,24 +2225,24 @@ public class TURTLE2UPPAAL {
 		addRandomNailPoint(tr);
 		// Nails?
 		return tr;
-    }
-    
-    public UPPAALTransition addActionTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
+	}
+	
+	public UPPAALTransition addActionTransition(UPPAALTemplate template, UPPAALLocation loc1, UPPAALLocation loc2) {
 		UPPAALTransition tr = addRTransition(template, loc1, loc2);
 		if (!isRegularTClass) {
 			addAssignment(tr, "preempt(myid__),\nh__ = 0");
 		}
 		addRandomNailPoint(tr);
 		return tr;
-    }
-    
-    public void setSynchronization(UPPAALTransition tr, String s) {
+	}
+	
+	public void setSynchronization(UPPAALTransition tr, String s) {
 		tr.synchronization = modifyString(s);
 		tr.synchronizationPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + SYNCHRO_X;
 		tr.synchronizationPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + SYNCHRO_Y;
-    }
-    
-    public void addGuard(UPPAALTransition tr, String s) {
+	}
+	
+	public void addGuard(UPPAALTransition tr, String s) {
 		if ((tr.guard == null) || (tr.guard.length() < 2)){
 			tr.guard = modifyString(s);
 		} else {
@@ -2216,25 +2250,25 @@ public class TURTLE2UPPAAL {
 		}
 		tr.guardPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + GUARD_X;
 		tr.guardPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + GUARD_Y;
-    }
-    
-    public void setInvariant(UPPAALLocation loc, String s) {
-	    loc.setInvariant(modifyString(s));
-    }
-    
-    public void setGuard(UPPAALTransition tr, String s) {
+	}
+	
+	public void setInvariant(UPPAALLocation loc, String s) {
+		loc.setInvariant(modifyString(s));
+	}
+	
+	public void setGuard(UPPAALTransition tr, String s) {
 		tr.guard = modifyString(s);
 		tr.guardPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + GUARD_X;
 		tr.guardPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + GUARD_Y;
-    }
-    
-    public void setAssignment(UPPAALTransition tr, String s) {
+	}
+	
+	public void setAssignment(UPPAALTransition tr, String s) {
 		tr.assignment = modifyString(s);
 		tr.assignmentPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + ASSIGN_X;
 		tr.assignmentPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + ASSIGN_Y;
-    }
-    
-    public void addAssignment(UPPAALTransition tr, String s) {
+	}
+	
+	public void addAssignment(UPPAALTransition tr, String s) {
 		if (s.length() <1) {
 			return;
 		}
@@ -2246,17 +2280,17 @@ public class TURTLE2UPPAAL {
 		
 		tr.assignmentPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + ASSIGN_X;
 		tr.assignmentPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + ASSIGN_Y;
-    }
-    
-    public void setEndAssignment(UPPAALTransition tr) {
+	}
+	
+	public void setEndAssignment(UPPAALTransition tr) {
 		if (!isRegularTClass) {
 			tr.assignment = "endTask(myid__)";
 		}
 		tr.assignmentPoint.x = (tr.sourceLoc.idPoint.x + tr.destinationLoc.idPoint.x)/2 + ASSIGN_X;
 		tr.assignmentPoint.y = (tr.sourceLoc.idPoint.y + tr.destinationLoc.idPoint.y)/2 + ASSIGN_Y;
-    }
-    
-    public void makeSystem(int nb) {
+	}
+	
+	public void makeSystem(int nb) {
 		ListIterator iterator = spec.getTemplates().listIterator();
 		UPPAALTemplate template;
 		String system = "system ";
@@ -2308,7 +2342,7 @@ public class TURTLE2UPPAAL {
 		}
 		
 		spec.addInstanciation(dec+system);
-    }
+	}
 	
 	public void setMultiProcess(UPPAALTemplate t) {
 		System.out.println("Setting multiprocess: " + t.getName());
@@ -2317,24 +2351,24 @@ public class TURTLE2UPPAAL {
 		}
 		multiprocess = true;
 	}
-    
-    public String modifyString(String _input) {
-        try {
+	
+	public String modifyString(String _input) {
+		try {
 			//_input = Conversion.replaceAllString(_input, "&&", "&amp;&amp;");
 			//_input = Conversion.changeBinaryOperatorWithUnary(_input, "div", "/");
 			//_input = Conversion.changeBinaryOperatorWithUnary(_input, "mod", "%");
 			//_input = Conversion.replaceAllChar(_input, '<', "&lt;");
 			//_input = Conversion.replaceAllChar(_input, '>', "&gt;");
 			_input = Conversion.replaceAllStringNonAlphanumerical(_input, "mod", "%");
-        } catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Exception when changing binary operator in " + _input);
-        }
+		}
 		//System.out.println("Modified string=" + _input);
-        return _input;
-    }
-    
-    public String convertGuard(String g) {
+		return _input;
+	}
+	
+	public String convertGuard(String g) {
 		if (g == null) {
 			return "";
 		}
@@ -2345,7 +2379,7 @@ public class TURTLE2UPPAAL {
 		String action = Conversion.replaceAllChar(g, '[', "");
 		action = Conversion.replaceAllChar(action, ']', "");
 		return modifyString(action.trim());
-    }
+	}
 	
-    
+	
 }

@@ -77,6 +77,12 @@ public class ProactiveCSDToolBar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
         //Enable the new action created by Solange
         //mgui.actions[TGUIAction.PRUEBA_1].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
+		
             }
     
     protected void setButtons() {

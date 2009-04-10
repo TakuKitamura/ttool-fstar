@@ -71,12 +71,12 @@ public class UPPAALSpec {
 		UPPAALTemplate template;
 		
 		globalDeclaration = "<declaration>\n//Global declarations\n" + Conversion.transformToXMLString(globalDeclaration) + "</declaration>\n";
-		String templatesString = "";
+		StringBuffer templatesString = new StringBuffer("");
 		
 		while(iterator.hasNext()) {
 			//System.out.println("Template!");
 			template = (UPPAALTemplate)(iterator.next());
-			templatesString += template.makeTemplate();
+			templatesString.append(template.makeTemplate());
 		}
 		
 		instanciations = "<system>\n//Instanciation \n" + Conversion.transformToXMLString(instanciations) + "</system>\n";

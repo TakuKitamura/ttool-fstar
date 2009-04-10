@@ -69,6 +69,11 @@ public class TURTLEOSActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TOSAD_CHOICE].setEnabled(b);
         mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL].setEnabled(b);
         mgui.actions[TGUIAction.TOSAD_INT_TIME_INTERVAL].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
     }
     
     protected void setButtons() {

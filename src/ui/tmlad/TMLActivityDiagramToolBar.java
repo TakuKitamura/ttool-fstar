@@ -88,6 +88,11 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLAD_SEQUENCE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.updateZoomInfo();
     }
     
     protected void setButtons() {

@@ -119,35 +119,35 @@ public class UPPAALTemplate {
 		
     }
     
-    public String makeStringAutomata() {
-		if (initLocation == null) {
-			return "";
-		}
+    public StringBuffer makeStringAutomata() {
+		StringBuffer ret = new StringBuffer("");
 		
-		String ret = "";
+		if (initLocation == null) {
+			return ret;
+		}
 		
 		ListIterator iterator = locations.listIterator();
 		while(iterator.hasNext()) {
-			ret += ((UPPAALLocation)(iterator.next())).getXML();
+			ret.append(((UPPAALLocation)(iterator.next())).getXML());
 		}
 		
-		ret += "<init ref=\"" +initLocation.id + "\" />\n";
+		ret.append("<init ref=\"" +initLocation.id + "\" />\n");
 		
 		iterator = transitions.listIterator();
 		while(iterator.hasNext()) {
-			ret += ((UPPAALTransition)(iterator.next())).getXML();
+			ret.append(((UPPAALTransition)(iterator.next())).getXML());
 		}
 		return ret;
     }
 	
 	
-    public String makeTemplate() {
-		String fullString = "<template>\n";
-		fullString += "<name>" + name + "</name>\n";
-		fullString += "<parameter>" + Conversion.transformToXMLString(parameter)  + "</parameter>\n";
-		fullString += "<declaration>" + Conversion.transformToXMLString(declaration) + "</declaration>\n";
-		fullString += makeStringAutomata();
-		fullString += "</template>\n";
+    public StringBuffer makeTemplate() {
+		StringBuffer fullString = new StringBuffer("<template>\n");
+		fullString.append("<name>" + name + "</name>\n");
+		fullString.append("<parameter>" + Conversion.transformToXMLString(parameter)  + "</parameter>\n");
+		fullString.append("<declaration>" + Conversion.transformToXMLString(declaration) + "</declaration>\n");
+		fullString.append(makeStringAutomata());
+		fullString.append("</template>\n");
 		
 		return fullString;
     }

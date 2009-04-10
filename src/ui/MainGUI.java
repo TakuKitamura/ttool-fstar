@@ -2230,6 +2230,14 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         boolean b = false;
 		boolean ret = false;
 		
+		if (file == null) {
+						JOptionPane.showMessageDialog(frame,
+							"The project must be saved before any simulation or formal verification can be performed",
+							"Syntax analysis failed",
+							JOptionPane.INFORMATION_MESSAGE);
+			return false;
+		}
+		
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp instanceof AnalysisPanel) {
             try {

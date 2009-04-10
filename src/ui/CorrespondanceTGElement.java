@@ -189,15 +189,17 @@ public class CorrespondanceTGElement {
 		}
 		
 		ArrayList<ADComponent> listAD = new ArrayList<ADComponent>();
-		ADComponent adc;
+		ArrayList<ADComponent> listADs;
+		
 		for(TGComponent tgc:_list) {
-			adc = getADComponent(tgc);
-			if (adc != null) {
-				listAD.add(adc);
-				//System.out.println("Adding adc=" + adc + " from tgc=" + tgc);
+			listADs = getADComponents(tgc);
+			//System.out.println("List size:" + listADs.size());
+			if (listADs.size() > 0) {
+				listAD.addAll(listADs);
 			}
 		}
 		
+		//System.out.println("Final List size:" + listAD.size());
 		return listAD;
 	}
 	
@@ -229,6 +231,27 @@ public class CorrespondanceTGElement {
             }
         }
         return null;
+    }
+	
+	public ArrayList<ADComponent> getADComponents(TGComponent tgc) {
+		ArrayList<ADComponent>  list = new ArrayList<ADComponent>();
+		TGComponent tmptgc;
+		Object o;
+		
+        int index = tg.indexOf(tgc);
+		if (index == -1) {
+			return list;
+		}
+		
+		for(int i=0; i<tg.size(); i++) {
+			tmptgc = (TGComponent)(tg.elementAt(i));
+			if (tmptgc == tgc) {
+				o = data.elementAt(i);
+				list.add((ADComponent)o);
+			}
+		}
+       
+        return list;
     }
 	
 	public HwNode getHwNode(TGComponent tgc) {
