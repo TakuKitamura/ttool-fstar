@@ -50,11 +50,11 @@
 <ExternalCommand2Host data="loupiac.eurecom.fr"/>
 <ExternalCommand2 data="/packages/uppaal/uppaal /homes/apvrille/TechTTool/UPPAAL/spec.xml"/>
 
-<LastOpenFile data="U:\TechTTool\TURTLEModeling\EVITA\evita_t2300_02.xml"/>
+<LastOpenFile data="/export/home/ludo/TTool/modeling/Test/test01.xml"/>
 
 
 
-<LastWindowAttributes x="28" y="29" width="1470" height="1087" max="false" />
+<LastWindowAttributes x="83" y="38" width="1471" height="947" max="false" />
 
 </TURTLECONFIGURATION>
 

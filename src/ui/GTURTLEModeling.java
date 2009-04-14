@@ -3942,6 +3942,33 @@ public class GTURTLEModeling {
 
 		TGComponent.setGeneralId(id + 1);
 	}
+	
+	public void loadDiagramInformation(Element elt, TDiagramPanel tdp) throws  MalformedModelingException {
+		int x, y;
+		double zoom = 0;
+		try {
+			x = Integer.decode(elt.getAttribute("minX")).intValue();
+			tdp.setMinX(x);
+			x = Integer.decode(elt.getAttribute("maxX")).intValue();
+			tdp.setMaxX(x);
+			y = Integer.decode(elt.getAttribute("minY")).intValue();
+			tdp.setMinY(y);
+			y = Integer.decode(elt.getAttribute("maxY")).intValue();
+			tdp.setMaxY(y);
+			tdp.updateSize();
+			zoom = Double.parseDouble(elt.getAttribute("zoom"));
+			if (zoom != 0) {
+				tdp.setZoom(zoom);
+				mgui.updateZoomInfo();
+			}
+		} catch (Exception e) {
+			// Model was saved in an older version of TTool
+		}
+		
+		if (tdp instanceof TActivityDiagramPanel) {
+			((TActivityDiagramPanel)tdp).loadExtraParameters(elt);
+		}
+	}
 
 	public void loadActivityDiagram(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
 		//System.out.println("---> Load activity diagram");
@@ -3989,8 +4016,13 @@ public class GTURTLEModeling {
 						//System.out.println("Panel ok");
 
 						decX = 0; decY = 0; decId = 0;
+						
+						
 
 						tadp.removeAll();
+						
+						loadDiagramInformation(elt, tadp);
+						
 						//System.out.println("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tadp);
 						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
@@ -4065,6 +4097,9 @@ public class GTURTLEModeling {
 						decX = 0; decY = 0; decId = 0;
 
 						tmladp.removeAll();
+						
+						loadDiagramInformation(elt, tmladp);
+						
 						//System.out.println("Activity diagram : " + tmladp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmladp);
 						//System.out.println("Activity diagram : " + tmladp.getName() + " connectors");

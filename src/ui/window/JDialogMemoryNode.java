@@ -109,7 +109,7 @@ public class JDialogMemoryNode extends javax.swing.JDialog implements ActionList
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Memory attributes"));
-        panel2.setPreferredSize(new Dimension(400, 200));
+        panel2.setPreferredSize(new Dimension(300, 200));
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;

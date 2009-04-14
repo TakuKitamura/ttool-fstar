@@ -58,7 +58,7 @@ import ui.window.*;
 public class Main implements ActionListener {
     public boolean finish = false;
     public static Main main = new Main();
-    public static boolean systemc = false;
+    public static boolean systemc = true;
     public static boolean lotos = true;
     public static boolean proactive = false;
     public static boolean tpn = false;
