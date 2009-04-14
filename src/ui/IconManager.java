@@ -57,10 +57,10 @@ import javax.swing.ImageIcon;
  */
 public class IconManager {
     
-    public static ImageIcon imgic8;
+    public static ImageIcon imgic8, imgic9;
     //Added by Solange
     public static ImageIcon imgic0, imgic1;
-    public static Image img8;
+    public static Image img8, img9;
     //Added by Solange
     public static Image img0, img1;
     
@@ -131,6 +131,7 @@ public class IconManager {
     
     //private static String icon7 = "images/turtle_large.gif";
     private static String icon8 = "images/turtle_16.gif";
+	private static String icon9 = "images/diplodocus2_16.gif";
     //Added by Solange
     private static String icon0= "images/hideifce.gif";
     //Added by Solange, the component icon
@@ -441,11 +442,15 @@ public class IconManager {
     
     public void loadImg() {
         imgic8 = getIcon(icon8);
+		imgic9 = getIcon(icon9);
+		img8 = imgic8.getImage();
+		img9 = imgic9.getImage();
+		
         //Added by Solange
         imgic0 = getIcon(icon0);
         //Added by Solange, the component icon
         imgic1 = getIcon(icon1);
-        img8 = imgic8.getImage();
+        
         //Added by Solange
         img0 = imgic0.getImage();
         img1 = imgic1.getImage();

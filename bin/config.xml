@@ -50,11 +50,11 @@
 <ExternalCommand2Host data="loupiac.eurecom.fr"/>
 <ExternalCommand2 data="/packages/uppaal/uppaal /homes/apvrille/TechTTool/UPPAAL/spec.xml"/>
 
-<LastOpenFile data="/export/home/ludo/TTool/modeling/Test/test01.xml"/>
+<LastOpenFile data="/export/home/ludo/TTool/modeling/Mickael/PowerManagerBis002.xml"/>
 
 
 
-<LastWindowAttributes x="83" y="38" width="1471" height="947" max="false" />
+<LastWindowAttributes x="367" y="47" width="1094" height="924" max="false" />
 
 </TURTLECONFIGURATION>
 

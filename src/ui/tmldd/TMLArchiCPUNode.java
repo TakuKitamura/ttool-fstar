@@ -150,7 +150,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         g.drawString(name, x + (width - w)/2, y + textY2);
 		
 		// Icon
-		g.drawImage(IconManager.imgic1100.getImage(), x + width - 20, y + 4, null);
+		g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
     
     public TGComponent isOnOnlyMe(int x1, int y1) {

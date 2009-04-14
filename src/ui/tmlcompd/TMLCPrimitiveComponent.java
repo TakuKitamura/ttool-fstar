@@ -251,7 +251,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		// On the icon?
 		if (iconIsDrawn) {
-			if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize, y + 2, iconSize, iconSize)) {
+			if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
 				tdp.selectTab(getValue());
 				return true;
 			}

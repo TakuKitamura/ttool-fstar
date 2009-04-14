@@ -123,6 +123,10 @@ public class Main implements ActionListener {
                 lotos = true;
                 System.out.println("diplodocus features activated (SystemC, LOTOS) - these are beta features that are meant to be used only for research purpose");
             }
+			if (args[i].compareTo("-nodiplodocus") == 0) {
+                systemc = false;
+                System.out.println("diplodocus features deactivated (SystemC) - these are beta features that are meant to be used only for research purpose");
+            }
             if (args[i].compareTo("-proactive") == 0) {
                 proactive = true;
                 lotos = true;
