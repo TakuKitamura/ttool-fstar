@@ -132,12 +132,17 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
+		Font f = g.getFont();
+		g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(ster, x + (width - w)/2, y + textY1);
         w  = g.getFontMetrics().stringWidth(name);
+		g.setFont(f);
         g.drawString(name, x + (width - w)/2, y + textY2);
 		
 		// Icon
-		g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);
+		//g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);
+		g.drawImage(IconManager.imgic1108.getImage(), x + 4, y + 4, null);
+		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
     
     public TGComponent isOnOnlyMe(int x1, int y1) {

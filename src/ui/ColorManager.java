@@ -63,7 +63,9 @@ public class ColorManager {
     public static Color SELECTED_0 = Color.blue;
     public static final Color MOVING_0 = Color.magenta;
     public static final Color ADDING_0 = Color.lightGray;
+	
     public static final Color POINTED_0 = Color.orange;
+	//public static final Color POINTED_0 = new Color(231, 132, 19);
     
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
@@ -78,7 +80,8 @@ public class ColorManager {
     
 	public static final Color CPU_BOX_1 = new Color(198, 235, 249);
 	public static final Color CPU_BOX_2 = new Color(198, 227, 249);
-	public static final Color BUS_BOX = new Color(255, 207, 114);
+	//public static final Color BUS_BOX = new Color(255, 207, 114);
+	public static final Color BUS_BOX = new Color(215, 188, 128);
 	public static final Color BRIDGE_BOX = new Color(215, 166, 72);
 	public static final Color MEMORY_BOX = new Color(172, 234, 211);
 	public static final Color HWA_BOX = new Color(144, 201, 211);

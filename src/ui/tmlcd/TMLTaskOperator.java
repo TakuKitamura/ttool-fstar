@@ -63,7 +63,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
     protected int textX = 5;
     protected int textY = 18;
     protected Graphics graphics;
-    protected int iconSize = 30;
+    protected int iconSize = 16;
     protected boolean exit = false;
     protected int exitFontSize = 10;
     
@@ -154,7 +154,10 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         if (graphics == null) {
             return minWidth;
         }
-        int size = graphics.getFontMetrics().stringWidth(value) + iconSize + 5;
+		Font f = graphics.getFont();
+		graphics.setFont(f.deriveFont(Font.BOLD));
+        int size = graphics.getFontMetrics().stringWidth(value) + iconSize + 13;
+		graphics.setFont(f);
         minDesiredWidth = Math.max(size, minWidth);
         return minDesiredWidth;
     }

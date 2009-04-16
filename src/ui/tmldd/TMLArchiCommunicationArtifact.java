@@ -60,10 +60,10 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
-    protected int textY2 =  40;
+    protected int textY2 =  35;
     protected int space = 5;
-    protected int fileX = 15;
-    protected int fileY = 20;
+    protected int fileX = 20;
+    protected int fileY = 25;
     protected int cran = 5;
 	
     protected String oldValue = "";
@@ -75,7 +75,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 75;
-        height = 50;
+        height = 40;
         minWidth = 75;
         
         nbConnectingPoint = 0;
@@ -112,6 +112,8 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
         
+		g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+		
         g.drawString(value, x + textX , y + textY);
 		
 		Font f = g.getFont();

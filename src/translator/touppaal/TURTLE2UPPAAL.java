@@ -966,7 +966,7 @@ public class TURTLE2UPPAAL {
 					previous.setUrgent();
 					
 					loc = addLocation(template);
-					loc.setUrgent();
+					//loc.setUrgent();
 					tr = addTransition(template, previous, loc);
 					action = convertGuard(adch.getGuard(0));
 					setGuard(tr, action);
