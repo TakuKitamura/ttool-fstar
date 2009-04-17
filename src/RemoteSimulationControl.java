@@ -87,6 +87,7 @@ public class RemoteSimulationControl extends Thread  {
 		System.out.println("cmd <raw comand>: used to send a raw command to the simulator");
 		System.out.println("help: print that help");
 		System.out.println("help <command>: print the help on the given command <command>");
+		System.out.println("list: list all possible simulation commands");
 		System.out.println("quit: quit the remote interface to simulation");
 		System.out.println("-------------------------------------------------------------\n");
 	}
@@ -219,8 +220,9 @@ public class RemoteSimulationControl extends Thread  {
 						System.exit(-1);
 				} else if (cp.isHelpCommand(input)) {
 					printHelp(input);
-				} else if (cp.isPicoCommand(input)) {
-					System.out.println("Pico has big teeth");
+				} else if (cp.isListCommand(input)) {
+					System.out.println("Available commands:");
+					System.out.println(cp.getCommandList());
 				} else {
 					if (cp.isAValidCommand(input)) {
 						rc.send(cp.transformCommandFromUserToSimulator(input));

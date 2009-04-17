@@ -72,6 +72,27 @@ public class CommandParser {
 		return isCommand(cmd, "help");
 	}
 	
+	// Returns the command name for which help is required
+	public String getHelpWithCommand(String cmd) {
+		if (!isCommand(cmd, "help")) {
+			return null;
+		}
+		
+		String tmp = cmd.trim();
+		
+		if (!(tmp.startsWith("help "))) {
+			return null;
+		}
+		
+		tmp = tmp.substring(5, tmp.length()).trim();
+		
+		if (tmp.length() == 0) {
+			return null;
+		}
+		
+		return tmp; 
+	}
+	
 	public boolean isQuitCommand(String cmd) {
 		return isCommand(cmd, "quit");
 	}
@@ -80,12 +101,24 @@ public class CommandParser {
 		return isCommand(cmd, "pico");
 	}
 	
+	public boolean isListCommand(String cmd) {
+		return isCommand(cmd, "list");
+	}
+	
 	public boolean isAValidCommand(String cmd) {
 		return true;
 	}
 	
 	public String transformCommandFromUserToSimulator(String cmd) {
 		return cmd;
+	}
+	
+	public String getCommandList() {
+		StringBuffer sb = new StringBuffer("");
+		for(SimulationCommand sc: commandList) {
+			sb.append(sc.userCommand);
+		}
+		return sb.toString();
 	}
 	
 	
