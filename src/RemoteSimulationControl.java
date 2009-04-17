@@ -81,11 +81,29 @@ public class RemoteSimulationControl extends Thread  {
 		System.out.println("port: port on which the simulator accepts commands (default: 3490). Must be a positive integer value");
 	}
 	
-	public static void printHelp(CommandParser cp, String cmd) {
-		System.out.println("\nCommand " + cmd + ": ");
+	public static void printSeparator() {
 		System.out.println("-------------------------------------------------------------");
-		System.out.println(cp.getHelp(cmd));
+	}
+	
+	public static void printEndSeparator() {
 		System.out.println("-------------------------------------------------------------\n");
+	}
+	
+	public static void printHelp() {
+		System.out.println("\nHelp: ");
+		printSeparator();
+		System.out.println("help: prints that help");
+		System.out.println("help <string cmd>: prints the help on a given command");
+		System.out.println("list: lists all commands");
+		System.out.println("quit: quits this simulation remote controller");
+		printEndSeparator();
+	}
+	
+	public static void printHelp(CommandParser cp, String cmd) {
+		System.out.println("\nHelp on command " + cmd + ": ");
+		printSeparator();
+		System.out.println(cp.getHelp(cmd));
+		printEndSeparator();
 	}
 	
 	public static boolean analyseArgs(String [] args) {
@@ -173,7 +191,7 @@ public class RemoteSimulationControl extends Thread  {
 			try {
 				while(true) {
 					s = rc.readOneLine();
-					System.out.print("From server: " + s + "\n>");
+					System.out.print("\nFrom server: " + s + "\n>");
 					System.out.flush();
 				}
 			} catch (RemoteConnectionException rce) {
@@ -191,6 +209,7 @@ public class RemoteSimulationControl extends Thread  {
 	// Thread reading from keyboard
 	public void run() {
 		String tmp;
+		int ret;
 		
 		String input;
 		BufferedReader dataIn;
@@ -206,7 +225,8 @@ public class RemoteSimulationControl extends Thread  {
 				System.out.print(">");
 				System.out.flush();
 				input = dataIn.readLine();
-				if (cp.isQuitCommand(input)) {
+				if (input.trim().length() == 0) {
+				} else if (cp.isQuitCommand(input)) {
 						mygo = false;
 						try {
 							rc.disconnect();
@@ -217,17 +237,25 @@ public class RemoteSimulationControl extends Thread  {
 				} else if (cp.isHelpCommand(input)) {
 					tmp = cp.getHelpWithCommand(input);
 					if ((tmp != null) && (tmp.length() > 0)) {
+						printHelp(cp, tmp);
 					} else {
-						printHelp(cp, input);
+						printHelp();
 					}
 				} else if (cp.isListCommand(input)) {
-					System.out.println("Available commands:");
+					System.out.println("\nAvailable commands:");
+					printSeparator();
 					System.out.println(cp.getCommandList());
+					printEndSeparator();
 				} else {
-					if (cp.isAValidCommand(input)) {
+					ret = cp.isAValidCommand(input);
+					if (ret > -1) {
 						rc.send(cp.transformCommandFromUserToSimulator(input));
 					} else {
-						System.out.println("** Unknown command **");
+						if (ret == -1) {
+							System.out.println("** wrong command **");
+						} else {
+							System.out.println("** wrong number / type of arguments **");
+						}
 					}
 				}
 			}

@@ -96,12 +96,18 @@ public class CommandParser {
 	}
 	
 	public String getHelp(String cmd) {
+		//System.out.println("calculating help on cmd");
 		StringBuffer sb = new StringBuffer("");
 		boolean commandFound = false;
 		
 		for(SimulationCommand sc: commandList) {
-			if (sc.userCommand.equals(cmd)) {
-				sb.append(sc.getSynopsis() + "\n" + sc.help + "\n");
+			if (sc.userCommand.equals(cmd) || sc.alias.equals(cmd)) {
+				sb.append(sc.getSynopsis() + "\n" + sc.help);
+				if (sc.hasAlias()) {
+					sb.append("\nalias: " + sc.alias);
+				}
+				//System.out.println("Command found" + sc.help);
+				commandFound = true;
 			}
 		}
 		if (commandFound) {
@@ -123,32 +129,119 @@ public class CommandParser {
 		return isCommand(cmd, "list");
 	}
 	
-	public boolean isAValidCommand(String cmd) {
-		return true;
+	public int isAValidCommand(String cmd) {
+		int index = -1;
+		int cpt = 0;
+		
+		String cmds[] = cmd.split(" ");
+		//System.out.println("cmd " + cmd + " has " + cmds.length + " elements"); 
+		
+		for(SimulationCommand sc: commandList) {
+			// Same command name?
+			if (sc.userCommand.equals(cmds[0]) || sc.alias.equals(cmds[0])) {
+				// Compatible arguments?
+				if (sc.areParametersCompatible(cmds)) {
+					index = cpt;
+					break;
+				} else {
+					index = -2;
+				}
+			}
+			cpt ++;
+		}
+		
+		if (index < 0) {
+			return index;
+		}
+		
+		return index;
 	}
 	
 	public String transformCommandFromUserToSimulator(String cmd) {
-		return cmd;
+		int index = isAValidCommand(cmd);
+		if (index < 0) {
+			return "";
+		}
+		
+		SimulationCommand sc = commandList.get(index);
+		
+		return sc.translateCommand(cmd.split(" "));
 	}
 	
+	// Returns the list of all commands
 	public String getCommandList() {
+		int cpt = 0;
 		StringBuffer sb = new StringBuffer("");
 		for(SimulationCommand sc: commandList) {
-			sb.append(sc.userCommand);
+			if (cpt == 1) {
+				cpt = 0;
+				sb.append("\n");
+			}
+			if (sc.userCommand.equals(sc.alias)) {
+				sb.append(sc.userCommand + " ");
+			} else {
+				sb.append(sc.userCommand + "/" + sc.alias + " ");
+			}
+			cpt ++;
 		}
 		return sb.toString();
 	}
 	
 	
+	// Fill two arrays with information about commands
 	private void fillCommandList() {
 		SimulationCommand sc;
 		int[] params;
 		String[] paramNames;
+		int i;
 		
-		// kill-simulator
+		
+		// get-command-and-task
 		params = new int[0];
 		paramNames = new String[0];
-		sc = new SimulationCommand("kill-simulator", "0", params, paramNames, "Terminates the remote simulator");
+		sc = new SimulationCommand("get-command-and-task", "gcat", "14", params, paramNames, "Returns the current command and task");
+		commandList.add(sc);
+		
+		// get-simulation-time
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("get-simulation-time", "time", "13", params, paramNames, "Returns the current absolute time unit of the simulation");
+		commandList.add(sc);
+		
+		// kill
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("kill", "kill", "0", params, paramNames, "Terminates the remote simulator");
+		commandList.add(sc);
+		
+		// rawcmd
+		params = new int[5];
+		paramNames = new String[5];
+		for(i=0; i<5; i++) {
+			params[i] = 4;
+			paramNames[i] = "param #" + i;
+		}
+		sc = new SimulationCommand("raw-command", "rc", "", params, paramNames, "Sends a raw command to the remote simulator");
+		commandList.add(sc);
+		
+		// run-to-next-breakpoint
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("run-to-next-breakpoint", "rtnb", "1 0", params, paramNames, "Runs the simulation until a breakpoint is met");
+		commandList.add(sc);
+		
+		// run-x-time-units
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "nb of time units";
+		sc = new SimulationCommand("run-x-time-units", "rxtu", "1 6", params, paramNames, "Runs the simulation for x units of time");
+		commandList.add(sc);
+		
+		// stop
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("stop", "stop", "15", params, paramNames, "Stops the currently running simulation");
 		commandList.add(sc);
 	}
 	

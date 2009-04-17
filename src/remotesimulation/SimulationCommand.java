@@ -53,6 +53,7 @@ import javax.swing.*;
 
 public class SimulationCommand {
 	public String userCommand;
+	public String alias; 
 	public String simulatorCommand;
 	public int[] params;
 	public String[] paramNames;
@@ -62,12 +63,13 @@ public class SimulationCommand {
 	// 3: optional int
 	// 4: optional String
 	// 5: String to translate to id
-	
+	// WARNING: optional parameters must be put at the end of the list
 	public String help;
 	
     
-	public SimulationCommand(String _userCommand, String _simulatorCommand, int _params[], String _paramNames[], String _help) {
+	public SimulationCommand(String _userCommand, String _alias, String _simulatorCommand, int _params[], String _paramNames[], String _help) {
 		userCommand = _userCommand;
+		alias = _alias;
 		simulatorCommand = _simulatorCommand;
 		params = _params;
 		paramNames = _paramNames;
@@ -90,29 +92,90 @@ public class SimulationCommand {
 		}
 		
 		if (params[i] == 1) {
-			return "<int " + paramNames[i] + ">"; 
+			return " <int: " + paramNames[i] + ">"; 
 		}
 		
 		if (params[i] == 2) {
-			return "<string " + paramNames[i] + ">"; 
+			return " <string: " + paramNames[i] + ">"; 
 		}
 		
 		if (params[i] == 3) {
-			return "[int " + paramNames[i] + "]"; 
+			return " [int: " + paramNames[i] + "]"; 
 		}
 		
 		if (params[i] == 4) {
-			return "[string " + paramNames[i] + "]"; 
+			return " [string: " + paramNames[i] + "]"; 
 		}
 		
-		return "<unknow param>";
+		return " <unknow param>";
 	}
 	
+	public int getMaxNumberOfParameters() {
+		return params.length;
+	}
 	
+	public int getMinNumberOfParameters() {
+		int min = 0;
+		for(int i=0; i<params.length; i++) {
+			if ((params[i] >0) && (params[i] <3)) {
+				min ++;
+			}
+		}
+		return min;
+	}
 	
+	private boolean checkForInteger(String s) {
+		try {
+			int i = Integer.decode(s).intValue();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 	
+	public boolean areParametersCompatible(String[] splitCmd) {
+		if ((splitCmd.length - 1) < getMinNumberOfParameters()) {
+			return false;
+		}
+		
+		if ((splitCmd.length - 1) > getMaxNumberOfParameters()) {
+			return false;
+		}
+		
+		for(int i=0; i<params.length; i++) {
+			if (params[i] == 1) {
+				if (!checkForInteger(splitCmd[i+1])) {
+					return false;
+				}
+			}
+			
+			if (params[i] == 3) {
+				if (!checkForInteger(splitCmd[i+1])) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
+	public boolean hasAlias() {
+		if ((alias == null) || (alias.length() == 0)) {
+			return false;
+		}
+		
+		if (alias.equals(userCommand)) {
+			return false;
+		}
+		
+		return true;
+	}
 	
-	
+	public String translateCommand(String cmds[]) {
+		String ret = simulatorCommand;
+		for(int i=1; i<cmds.length; i++) {
+			ret += " " + cmds[i];
+		}
+		return ret;
+	}
     
 }
