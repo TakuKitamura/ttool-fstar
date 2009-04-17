@@ -81,14 +81,10 @@ public class RemoteSimulationControl extends Thread  {
 		System.out.println("port: port on which the simulator accepts commands (default: 3490). Must be a positive integer value");
 	}
 	
-	public static void printHelp(String cmd) {
-		System.out.println("\nCommands supported by the simulator:");
+	public static void printHelp(CommandParser cp, String cmd) {
+		System.out.println("\nCommand " + cmd + ": ");
 		System.out.println("-------------------------------------------------------------");
-		System.out.println("cmd <raw comand>: used to send a raw command to the simulator");
-		System.out.println("help: print that help");
-		System.out.println("help <command>: print the help on the given command <command>");
-		System.out.println("list: list all possible simulation commands");
-		System.out.println("quit: quit the remote interface to simulation");
+		System.out.println(cp.getHelp(cmd));
 		System.out.println("-------------------------------------------------------------\n");
 	}
 	
@@ -194,7 +190,7 @@ public class RemoteSimulationControl extends Thread  {
 	
 	// Thread reading from keyboard
 	public void run() {
-		
+		String tmp;
 		
 		String input;
 		BufferedReader dataIn;
@@ -219,7 +215,11 @@ public class RemoteSimulationControl extends Thread  {
 						System.out.println("bye-bye");
 						System.exit(-1);
 				} else if (cp.isHelpCommand(input)) {
-					printHelp(input);
+					tmp = cp.getHelpWithCommand(input);
+					if ((tmp != null) && (tmp.length() > 0)) {
+					} else {
+						printHelp(cp, input);
+					}
 				} else if (cp.isListCommand(input)) {
 					System.out.println("Available commands:");
 					System.out.println(cp.getCommandList());

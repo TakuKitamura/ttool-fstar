@@ -90,7 +90,25 @@ public class CommandParser {
 			return null;
 		}
 		
-		return tmp; 
+		return tmp;
+		
+		
+	}
+	
+	public String getHelp(String cmd) {
+		StringBuffer sb = new StringBuffer("");
+		boolean commandFound = false;
+		
+		for(SimulationCommand sc: commandList) {
+			if (sc.userCommand.equals(cmd)) {
+				sb.append(sc.getSynopsis() + "\n" + sc.help + "\n");
+			}
+		}
+		if (commandFound) {
+			return sb.toString();
+		} else {
+			return "Command not found";
+		}
 	}
 	
 	public boolean isQuitCommand(String cmd) {
@@ -124,9 +142,13 @@ public class CommandParser {
 	
 	private void fillCommandList() {
 		SimulationCommand sc;
+		int[] params;
+		String[] paramNames;
 		
 		// kill-simulator
-		sc = new SimulationCommand("kill-simulator", "0", 0, 0, 0, 0, "Terminates the remote simulator");
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("kill-simulator", "0", params, paramNames, "Terminates the remote simulator");
 		commandList.add(sc);
 	}
 	
