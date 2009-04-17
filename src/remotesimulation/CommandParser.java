@@ -214,6 +214,12 @@ public class CommandParser {
 		sc = new SimulationCommand("kill", "kill", "0", params, paramNames, "Terminates the remote simulator");
 		commandList.add(sc);
 		
+		// reset
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("reset", "reset", "2", params, paramNames, "Resets the remote simulator");
+		commandList.add(sc);
+		
 		// rawcmd
 		params = new int[5];
 		paramNames = new String[5];
@@ -236,6 +242,16 @@ public class CommandParser {
 		params[0] = 1;
 		paramNames[0] = "nb of time units";
 		sc = new SimulationCommand("run-x-time-units", "rxtu", "1 6", params, paramNames, "Runs the simulation for x units of time");
+		commandList.add(sc);
+		
+		// save-trace-in-file
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
+		params[1] = 2;
+		paramNames[1] = "File name";
+		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Save the current trace of the simulation in a VCD, HTML or TXT file");
 		commandList.add(sc);
 		
 		// stop
