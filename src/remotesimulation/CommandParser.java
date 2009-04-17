@@ -55,5 +55,38 @@ public class CommandParser {
     
 	public CommandParser() {
 	}
+	
+	public boolean isCommand(String cmd, String id) {
+		String s = cmd.trim();
+		if (cmd.equals(id)) {
+			return true;
+		}
+		return s.startsWith(id + " ");
+	}
+	
+	public boolean isHelpCommand(String cmd) {
+		return isCommand(cmd, "help");
+	}
+	
+	public boolean isQuitCommand(String cmd) {
+		return isCommand(cmd, "quit");
+	}
+	
+	public boolean isPicoCommand(String cmd) {
+		return isCommand(cmd, "pico");
+	}
+	
+	public boolean isAValidCommand(String cmd) {
+		return true;
+	}
+	
+	public String transformCommandFromUserToSimulator(String cmd) {
+		return cmd;
+	}
+	
+	
+	
+	
+	
     
 }

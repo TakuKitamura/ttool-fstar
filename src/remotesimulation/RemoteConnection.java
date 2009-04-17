@@ -109,9 +109,15 @@ public class RemoteConnection {
         } catch (Exception e) {
             throw new RemoteConnectionException(SERV_NOT_RESP+host);
         }
-		
-		
     }
+	
+	public void disconnect() throws RemoteConnectionException {
+		try {
+			clientSocket.close();
+		} catch (IOException io) {
+            throw new RemoteConnectionException(IO_ERROR + host);
+        }
+	}
 	
 	public void send(String s) throws RemoteConnectionException {
 		s = s .trim();

@@ -58,6 +58,8 @@ public class RemoteSimulationControl extends Thread  {
 	public static String host = "localhost";
 	public static RemoteConnection rc;
 	
+	public static boolean mygo = true;
+	
 	public boolean go = true;
 	
 	public RemoteSimulationControl() {
@@ -77,6 +79,16 @@ public class RemoteSimulationControl extends Thread  {
 		System.out.println("<options> are optional. There might be : -host, -port, or -help");
 		System.out.println("host: name on the host on which the simulator runs (default: localhost)");
 		System.out.println("port: port on which the simulator accepts commands (default: 3490). Must be a positive integer value");
+	}
+	
+	public static void printHelp(String cmd) {
+		System.out.println("\nCommands supported by the simulator:");
+		System.out.println("-------------------------------------------------------------");
+		System.out.println("cmd <raw comand>: used to send a raw command to the simulator");
+		System.out.println("help: print that help");
+		System.out.println("help <command>: print the help on the given command <command>");
+		System.out.println("quit: quit the remote interface to simulation");
+		System.out.println("-------------------------------------------------------------\n");
 	}
 	
 	public static boolean analyseArgs(String [] args) {
@@ -151,7 +163,9 @@ public class RemoteSimulationControl extends Thread  {
 		
 		rc = new RemoteConnection(host, port);
 		
-		while(true) {
+		mygo = true;
+		
+		while(mygo) {
 			tryToConnect(rc);
 			System.out.println("Connected on host: " + host + " on port: " + port);
 			
@@ -159,16 +173,16 @@ public class RemoteSimulationControl extends Thread  {
 			RemoteSimulationControl rsct = new RemoteSimulationControl();
 			rsct.start();
 			
-			System.out.println("Reading to get commands:");
-			
 			try {
 				while(true) {
 					s = rc.readOneLine();
 					System.out.println("From server: " + s);
 				}
 			} catch (RemoteConnectionException rce) {
-				System.out.println("Exception: " + rce.getMessage());
-				System.out.println("Could not read data from host: " + host + " on port: " + port + ". Aborting");
+				if (mygo) {
+					System.out.println("Exception: " + rce.getMessage());
+					System.out.println("Could not read data from host: " + host + " on port: " + port + ". Aborting");
+				}
 			}
 			
 			rsct.go = false;
@@ -176,17 +190,41 @@ public class RemoteSimulationControl extends Thread  {
 		
 	}
 	
+	// Thread reading from keyboard
 	public void run() {
 		
 		
 		String input;
 		BufferedReader dataIn;
 		
+		CommandParser cp = new CommandParser();
+		
+		System.out.println("Type \"help\" for more information on commands");
+		System.out.println("Ready to get commands:");
+		
 		try {
 			while(go) {
 				dataIn = new BufferedReader(new InputStreamReader(System.in));
 				input = dataIn.readLine();
-				rc.send(input);
+				if (cp.isQuitCommand(input)) {
+						mygo = false;
+						try {
+							rc.disconnect();
+						} catch (RemoteConnectionException rce) {
+						}
+						System.out.println("bye-bye");
+						System.exit(-1);
+				} else if (cp.isHelpCommand(input)) {
+					printHelp(input);
+				} else if (cp.isPicoCommand(input)) {
+					System.out.println("Pico has big teeth");
+				} else {
+					if (cp.isAValidCommand(input)) {
+						rc.send(cp.transformCommandFromUserToSimulator(input));
+					} else {
+						System.out.println("** Unknown command **");
+					}
+				}
 			}
 		} catch (IOException ioe) {
 			System.out.println("Exception: " + ioe.getMessage());
