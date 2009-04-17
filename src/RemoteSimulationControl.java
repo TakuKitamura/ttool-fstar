@@ -176,7 +176,8 @@ public class RemoteSimulationControl extends Thread  {
 			try {
 				while(true) {
 					s = rc.readOneLine();
-					System.out.println("From server: " + s);
+					System.out.print("From server: " + s + "\n>");
+					System.out.flush();
 				}
 			} catch (RemoteConnectionException rce) {
 				if (mygo) {
@@ -203,8 +204,10 @@ public class RemoteSimulationControl extends Thread  {
 		System.out.println("Ready to get commands:");
 		
 		try {
+			dataIn = new BufferedReader(new InputStreamReader(System.in));
 			while(go) {
-				dataIn = new BufferedReader(new InputStreamReader(System.in));
+				System.out.print(">");
+				System.out.flush();
 				input = dataIn.readLine();
 				if (cp.isQuitCommand(input)) {
 						mygo = false;

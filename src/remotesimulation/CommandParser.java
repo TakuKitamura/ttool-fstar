@@ -49,11 +49,15 @@ package remotesimulation;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+import java.util.*;
 
 
 public class CommandParser {
-    
+    ArrayList<SimulationCommand> commandList;
+	
 	public CommandParser() {
+		commandList = new ArrayList<SimulationCommand>();
+		fillCommandList();
 	}
 	
 	public boolean isCommand(String cmd, String id) {
@@ -82,6 +86,15 @@ public class CommandParser {
 	
 	public String transformCommandFromUserToSimulator(String cmd) {
 		return cmd;
+	}
+	
+	
+	private void fillCommandList() {
+		SimulationCommand sc;
+		
+		// kill-simulator
+		sc = new SimulationCommand("kill-simulator", "0", 0, 0, 0, 0, "Terminates the remote simulator");
+		commandList.add(sc);
 	}
 	
 	
