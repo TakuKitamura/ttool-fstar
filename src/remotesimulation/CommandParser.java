@@ -230,6 +230,14 @@ public class CommandParser {
 		sc = new SimulationCommand("raw-command", "rc", "", params, paramNames, "Sends a raw command to the remote simulator");
 		commandList.add(sc);
 		
+		// restore-simulation-state-from-file
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 2;
+		paramNames[0] = "File name";
+		sc = new SimulationCommandSaveState("restore-simulation-state-from-file", "rssff", "9", params, paramNames, "Restores the simulation state from a file");
+		commandList.add(sc);
+		
 		// run-to-next-breakpoint
 		params = new int[0];
 		paramNames = new String[0];
@@ -251,7 +259,15 @@ public class CommandParser {
 		paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
 		params[1] = 2;
 		paramNames[1] = "File name";
-		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Save the current trace of the simulation in a VCD, HTML or TXT file");
+		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+		commandList.add(sc);
+		
+		// save-simulation-state-in-file
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 2;
+		paramNames[0] = "File name";
+		sc = new SimulationCommandSaveState("save-simulation-state-in-file", "sssif", "8", params, paramNames, "Saves the current simulation state into a file");
 		commandList.add(sc);
 		
 		// stop
