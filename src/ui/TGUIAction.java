@@ -279,6 +279,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_GEN_JAVA = 112;
     public static final int ACT_SIMU_JAVA = 167;
     public static final int ACT_GEN_SYSTEMC = 148;
+	public static final int ACT_SIMU_SYSTEMC = 263;
 	public static final int ACT_GEN_TMLTXT = 215;
     public static final int ACT_GEN_AUT = 157;
     public static final int ACT_GEN_AUTS = 202;
@@ -371,7 +372,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 263;
+    public static final int NB_ACTION = 264;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -469,6 +470,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate SystemC", IconManager.imgic61, IconManager.imgic61, "Generate SystemC",  "Generates SystemC code from TML Design diagrams", 0);
+        actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation from DIPLODOCUS models", 0);
         actions[ACT_GEN_TMLTXT] = new TAction("gen_tmltxt-command", "Generate TML / TMAP in text format", IconManager.imgic66, IconManager.imgic66, "Generate TML / TMAP in text format",  "Generates TML / TMAP code in text format from TML Design diagrams", 0);
         actions[ACT_GEN_AUT] = new TAction("gen_aut-command", "Generate automata", IconManager.imgic64, IconManager.imgic64, "Generate automata",  "Generates automata from TML Design diagrams", 0);
         actions[ACT_GEN_AUTS] = new TAction("gen_auts-command", "Generate automata via LOTOS", IconManager.imgic64, IconManager.imgic64, "Generate automata via LOTOS",  "Generates automata from TML Design diagrams, using LOTOS", 0);

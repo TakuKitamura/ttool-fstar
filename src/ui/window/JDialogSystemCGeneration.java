@@ -66,7 +66,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private String textSysC1 = "Generate SystemC code in";
     private String textSysC2 = "Compile SystemC code in";
     //private String textSysC3 = "with";
-    private String textSysC4 = "Execute SystemC application:";
+    private String textSysC4 = "Run simulation to completion:";
+	private String textSysC5 = "Run interactive simulation:";
     
     private static String unitCycle = "1";
 	
@@ -76,6 +77,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected static String pathCode;
     protected static String pathCompiler;
     protected static String pathExecute;
+	protected static String pathInteractiveExecute;
+	
+	protected static boolean interactiveSimulationSelected = true;
     
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -89,8 +93,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected JButton stop;
     protected JButton close;
     
-    protected JLabel gen, comp, exe;
-    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3;
+	protected JRadioButton exe, exeint;
+	protected ButtonGroup exegroup;
+    protected JLabel gen, comp;
+    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode;
@@ -100,6 +106,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private boolean go = false;
     //private ProcessThread pt;
     private boolean hasError = false;
+	protected boolean startProcess = false;
     
     //private TURTLE2Java t2j;
     
@@ -109,7 +116,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     
     
     /** Creates new form  */
-    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute) {
+    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute) {
         super(f, title, true);
         
         mgui = _mgui;
@@ -123,6 +130,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         
         if (pathExecute == null)
             pathExecute = _pathExecute;
+		
+		if (pathInteractiveExecute == null)
+            pathInteractiveExecute = _pathInteractiveExecute;
         
         hostSystemC = _hostSystemC;
         
@@ -138,6 +148,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected void myInitComponents() {
         mode = NOT_STARTED;
         setButtons();
+		updateInteractiveSimulation();
     }
     
     protected void initComponents() {
@@ -252,12 +263,25 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         c03.gridwidth = GridBagConstraints.REMAINDER; //end row
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
-        exe = new JLabel(textSysC4);
+		
+		exegroup = new ButtonGroup();
+        exe = new JRadioButton(textSysC4, false);
+		exe.addActionListener(this);
+		exegroup.add(exe);
         //exeJava.addActionListener(this);
         jp03.add(exe, c03);
         
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c02);
+		
+		exeint = new JRadioButton(textSysC5, true);
+		exeint.addActionListener(this);
+		exegroup.add(exeint);
+        //exeJava.addActionListener(this);
+        jp03.add(exeint, c03);
+        
+        exe2int = new JTextField(pathInteractiveExecute, 100);
+        jp03.add(exe2int, c02);
         
         jp03.add(new JLabel(" "), c03);
         
@@ -296,13 +320,27 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         c.add(jp2, BorderLayout.SOUTH);
         
     }
+	
+	public void updateInteractiveSimulation() {
+		interactiveSimulationSelected = !(exe.isSelected());
+		if (!interactiveSimulationSelected) {
+			exe2.setEnabled(true);
+			exe2int.setEnabled(false);
+		} else {
+			exe2.setEnabled(false);
+			exe2int.setEnabled(true);
+		}
+	}
     
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         //System.out.println("Actions");
         
         // Compare the action command to the known actions.
-        if (command.equals("Start"))  {
+		updateInteractiveSimulation();
+        
+		
+		if (command.equals("Start"))  {
             startProcess();
         } else if (command.equals("Stop")) {
             stopProcess();
@@ -333,11 +371,17 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
     
     public void startProcess() {
-        t = new Thread(this);
-        mode = STARTED;
-        setButtons();
-        go = true;
-        t.start();
+		if ((interactiveSimulationSelected) && (jp1.getSelectedIndex() == 2)) {
+			startProcess = true;
+			dispose();
+		} else {
+			startProcess = false;
+			t = new Thread(this);
+			mode = STARTED;
+			setButtons();
+			go = true;
+			t.start();
+		}
     }
     
     private void testGo() throws InterruptedException {
@@ -579,4 +623,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     public void setError() {
         hasError = true;
     }
+	
+	public boolean isInteractiveSimulationSelected() {
+		return (startProcess && interactiveSimulationSelected);
+	}
+	
+	public String getPathInteractiveExecute() {
+		return pathInteractiveExecute;
+	}
 }

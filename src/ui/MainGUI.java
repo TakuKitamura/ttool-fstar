@@ -492,6 +492,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_VIEW_WAVE].setEnabled(true);
 			actions[TGUIAction.EXTERNAL_ACTION_1].setEnabled(true);
 			actions[TGUIAction.EXTERNAL_ACTION_2].setEnabled(true);
+			actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
 			break;
 		case OPENED:
 			actions[TGUIAction.ACT_MERGE].setEnabled(true);
@@ -2774,23 +2775,28 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void generateSystemC() {
         
-        JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "SystemC code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand);
+        JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "SystemC code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
         jgen.setSize(450, 600);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         dtree.toBeUpdated();
-        
-        
-        /*System.out.println("Generate SystemC");
-        gtm.generateSystemC();
-        JOptionPane.showMessageDialog(frame,
-			"SystemC code generated",
-			"SystemC generator",
-			JOptionPane.INFORMATION_MESSAGE);
-        dtree.toBeUpdated();*/
-        
-        
+		
+		if (jgen.isInteractiveSimulationSelected()) {
+			JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, jgen.getPathInteractiveExecute());
+			jfis.setIconImage(IconManager.img9);
+			jfis.setSize(800, 600);
+			GraphicLib.centerOnParent(jfis);
+			jfis.setVisible(true);
+		}
     }
+	
+	public void interactiveSimulationSystemC() {
+		JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
+		jfis.setIconImage(IconManager.img9);
+		jfis.setSize(800, 600);
+		GraphicLib.centerOnParent(jfis);
+		jfis.setVisible(true);
+	}
 	
 	public void generateTMLTxt() {
 		String path = ConfigurationTTool.FILEPath;
@@ -5011,6 +5017,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             simuJava();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_SYSTEMC].getActionCommand())) {
             generateSystemC();
+        } else if (command.equals(actions[TGUIAction.ACT_SIMU_SYSTEMC].getActionCommand())) {
+            interactiveSimulationSystemC();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_TMLTXT].getActionCommand())) {
             generateTMLTxt();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_DESIGN].getActionCommand())) {

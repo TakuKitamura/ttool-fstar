@@ -98,6 +98,7 @@ public class ConfigurationTTool {
 	public static String TMLCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
+	public static String SystemCCodeInteractiveExecuteCommand = "";
     public static String SystemCHost = "";
     public static String GTKWavePath = "";
     public static String UPPAALCodeDirectory = "";
@@ -278,6 +279,7 @@ public class ConfigurationTTool {
             System.out.println("SystemCHost: " + SystemCHost);
             System.out.println("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand);
             System.out.println("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand);
+			System.out.println("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand);
             System.out.println("GTKWavePath: " + GTKWavePath);
         }
 		
@@ -425,6 +427,9 @@ public class ConfigurationTTool {
 					nl = doc.getElementsByTagName("SystemCCodeExecuteCommand");
 					if (nl.getLength() > 0)
 						SystemCCodeExecuteCommand(nl);
+					nl = doc.getElementsByTagName("SystemCCodeInteractiveExecuteCommand");
+					if (nl.getLength() > 0)
+						SystemCCodeInteractiveExecuteCommand(nl);
 					nl = doc.getElementsByTagName("GTKWavePath");
 					if (nl.getLength() > 0)
 						GTKWavePath(nl);
@@ -801,6 +806,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             SystemCCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void SystemCCodeInteractiveExecuteCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            SystemCCodeInteractiveExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

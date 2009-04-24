@@ -190,6 +190,9 @@ public	class JToolBarMainTurtle extends JToolBar	{
         if (MainGUI.systemcOn) {
             button = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
             button.addMouseListener(mgui.mouseHandler);
+			
+			button = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
+            button.addMouseListener(mgui.mouseHandler);
             addSeparator();
 			
 			button = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
