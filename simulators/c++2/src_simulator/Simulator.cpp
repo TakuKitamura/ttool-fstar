@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 #include <Simulator.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo),  _simComp(iSyncInfo->_simComponents), _traceFileName("schedule"), _currCmdListener(0){}
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo),  _simComp(iSyncInfo->_simComponents), _traceFileName("schedule"), _currCmdListener(0), _busy(false) {}
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
@@ -243,10 +243,16 @@ void Simulator::simulate(){
 #ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 #endif
-	for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++)
+	for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
+		//std::cout << (*i)->toString() << " in loop" << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
+	}
+	//std::cout << "after loop" << std::endl;
 	for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&SchedulableDevice::schedule));
+	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
+	//std::cout << "after getTLET" << std::endl;
+	_simComp->setStopFlag(false);
 	while (transLET!=0 && !_simComp->getStopFlag()){
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
@@ -317,6 +323,7 @@ void Simulator::simulate(){
 //		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
 //#endif
 		transLET=getTransLowestEndTime(cpuLET);
+		//_syncInfo->_server->sendReply("Sleep once again\n");
 		//sleep(1);
 	}
 	gettimeofday(&aEnd,NULL);
@@ -355,7 +362,9 @@ void Simulator::run(){
 	while (!_syncInfo->_terminate){
 		pthread_mutex_lock (&_syncInfo->_mutexConsume);
 		//_syncInfo->_terminate = decodeCommand(_syncInfo->_command);
+		_busy=true;
 		decodeCommand(_syncInfo->_command);
+		_busy=false;
 		pthread_mutex_unlock (&_syncInfo->_mutexProduce);
 	}
 	std::cout << "Simulator loop terminated." << std::endl;
@@ -385,11 +394,11 @@ bool Simulator::run(int iLen, char ** iArgs){
 }
 
 void Simulator::decodeCommand(char* iCmd){
-	unsigned int aCmd, aParam1, aParam2;
+	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
 	std::istringstream aInpStream(iCmd);
+	std::ostringstream aMessage;
 	std::string aStrParam;
 	aInpStream >> aCmd;
-	//sscanf(iCmd,"%u %u %u", &aCmd, &aParam1, &aParam2);
 	if (_currCmdListener!=0){
 		//std::cout << "Before del listener.\n";
 		 delete _currCmdListener;
@@ -397,49 +406,61 @@ void Simulator::decodeCommand(char* iCmd){
 		//std::cout << "After del listener.\n";
 	}
 	_simComp->setStopFlag(false);
-	_syncInfo->_server->sendReply("Begin processing\n");
+	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << "busy" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+	_syncInfo->_server->sendReply(aMessage.str());
+	aMessage.str("");
+	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl;
 	switch (aCmd){
 		case 0: //Quit simulation
-			//_syncInfo->_terminate=true;
-			//std::cout << "I was here " << std::endl;
+			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
 			break;
 		case 1:
 			aInpStream >> aParam1;
 			switch (aParam1){
-				case 0:	//Run up to next breakpoint
+				case 0:	//Run to next breakpoint
+					aMessage << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
 					break;
 				case 1:	//Run up to trans x
+					aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+					anErrorCode=1;
 					break;
 				case 2:	//Run x transactions
 					aInpStream >> aParam2;
 					_currCmdListener=new RunXTransactions(_simComp,aParam2);
-					std::cout << "created listener run " << aParam2 << " transactions" << std::endl; 
+					aMessage << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl; 
 					break;
 				case 3:	//Run up to command x
+					aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+					anErrorCode=1;
 					break;
 				case 4:	//Run x commands
 					aInpStream >> aParam2;
 					_currCmdListener=new RunXCommands(_simComp,aParam2);
-					std::cout << "created listener run " << aParam2 << " commands" << std::endl; 
+					aMessage << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl; 
 					break;
 				case 5: //Run up to time x
 					aInpStream >> aParam2;
 					_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
-					std::cout << "created listener run to time " << aParam2 << std::endl; 
+					aMessage << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl; 
 					break;
 				case 6:	//Run for x time units
 					 aInpStream >> aParam2;
 					_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
-					std::cout << "created listener run " << aParam2 << " time units" << std::endl; 
+					aMessage << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl; 
 					break;
 				case 7: //Run up to next choice/select event
+					aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+					anErrorCode=1;
 					break;
 				case 8:{//Run up to next transfer on bus x
 					aInpStream >> aStrParam;
 					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getBusByName(aStrParam));
 					if (aSubject!=0){
 						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
-						std::cout << "created listener on Bus " << aStrParam << std::endl;
+						aMessage << TAG_MSGo << "Created listener on Bus " << aStrParam << TAG_MSGc << std::endl;
+					}else{
+						aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+						anErrorCode=2;
 					}
 				} 
 					break;
@@ -448,7 +469,10 @@ void Simulator::decodeCommand(char* iCmd){
 					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getCPUByName(aStrParam));
 					if (aSubject!=0){
 						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
-						std::cout << "created listener on CPU " << aStrParam << std::endl;
+						aMessage << TAG_MSGo << "Created listener on CPU " << aStrParam << TAG_MSGc << std::endl;
+					}else{
+						aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+						anErrorCode=2;
 					}
 					break;
 				} 
@@ -457,7 +481,10 @@ void Simulator::decodeCommand(char* iCmd){
 					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getTaskByName(aStrParam));
 					if (aSubject!=0){
 						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
-						std::cout << "created listener on Task " << aStrParam << std::endl;
+						aMessage << TAG_MSGo << "Created listener on Task " << aStrParam << TAG_MSGc << std::endl;
+					}else{
+						aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+						anErrorCode=2;
 					}
 					break;
 				} 
@@ -466,50 +493,61 @@ void Simulator::decodeCommand(char* iCmd){
 					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getSlaveByName(aStrParam));
 					if (aSubject!=0){
 						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
-						std::cout << "created listener on Slave " << aStrParam << std::endl;
+						aMessage << TAG_MSGo << "Created listener on Slave " << aStrParam << TAG_MSGc << std::endl;
+					}else{
+						aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+						anErrorCode=2;
 					}
 					break;
 				} 
-
 				case 12:{//Run until operation on channel x is performed
 					aInpStream >> aStrParam;
 					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
 					if (aSubject!=0){
 						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
-						std::cout << "created listener on Channel " << aStrParam << std::endl;
+						aMessage << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
+					}else{
+						aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+						anErrorCode=2;
 					}
 					break;
 				} 
 				default:
-					std::cout << "Command not found"<< std::endl;
+					aMessage << TAG_MSGo << "Command not found"<< TAG_MSGc << std::endl;
+					anErrorCode=3;
 			}
 			//std::cout << "Before sim\n";
-			simulate();
-			std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
+			if (anErrorCode==0){
+				simulate();
+				std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
+			}
 			break;
 		case 2:	//reset
 			_simComp->reset();
-			std::cout << "simulator reset" << std::endl;
+			aMessage << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
 			break;
 		case 3:{//Print variable x
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 			if (aTask!=0){
-				std::cout << "Task " << aStrParam << " exists" << std::endl;
+				//std::cout << "Task " << aStrParam << " exists" << std::endl;
 				aInpStream >> aStrParam;
-				std::cout << "Check if Var *" << aStrParam << "* exists" << std::endl;
-				std::cout << "Len: " << aStrParam.length() << std::endl;
+				//std::cout << "Check if Var *" << aStrParam << "* exists" << std::endl;
+				//std::cout << "Len: " << aStrParam.length() << std::endl;
 				ParamType* aParam=aTask->getVariableByName(aStrParam);
 				if (aParam!=0){
-					std::cout << "Variable " << aStrParam << " exists" << std::endl;
-					std::cout << "value of variable " << aStrParam << ": " << *aParam << std::endl;
+					aMessage << TAG_MSGo << "Variable " << aStrParam << " exists" << TAG_MSGo << std::endl;
+					aMessage << TAG_TASKo << " id=\"" << aTask-> getID() << "\">" << TAG_VARo << " name=\"" << aStrParam << "\">" << *aParam << TAG_VARc << TAG_TASKc << std::endl;
 				}else{
-					std::cout << "Var doesn't exist" << std::endl;
+					aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+					anErrorCode=2;
 				}
 			}
 			break;
 		}
 		case 4:	//Print information about simulation element x
+			aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+			anErrorCode=1;
 			break;
 		case 5:{//Set variable x to value y
 			aInpStream >> aStrParam;
@@ -519,28 +557,37 @@ void Simulator::decodeCommand(char* iCmd){
 				ParamType* aParam=aTask->getVariableByName(aStrParam);
 				if (aParam!=0){
 					aInpStream >> *aParam;
-					std::cout << "set variable " << aStrParam << " to " << *aParam << std::endl;
+					aMessage << TAG_MSGo << "Set variable " << aStrParam << " to " << *aParam << TAG_MSGc << std::endl;
+				}else{
+					aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+					anErrorCode=2;
 				}
 			}
 			break;
 		}
 		case 6: //Write x samples/events to channel y
+			aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+			anErrorCode=1;
 			break;
 		case 7: //Save trace in file x
 			aInpStream >> aParam1;
 			aInpStream >>_traceFileName;
 			switch (aParam1){
 				case 0: //VCD
+					aMessage << TAG_MSGo << "Schedule output in VCD format" << TAG_MSGc << std::endl;
 					schedule2VCD();
 					break;
 				case 1: //HTML
+					aMessage << TAG_MSGo << "Schedule output in HTML format" << TAG_MSGc << std::endl;
 					schedule2HTML();
 					break;
 				case 2: //TXT
+					aMessage << TAG_MSGo << "Schedule output in TXT format" << TAG_MSGc << std::endl;
 					schedule2TXT();
 					break;
 				default:
-					std::cout << "Command not found"<< std::endl;
+					aMessage << TAG_MSGo << "Command not found"<< TAG_MSGc << std::endl;
+					anErrorCode=3;
 			}
 			break;
 		case 8:{ //Save simulation state in file x
@@ -548,8 +595,10 @@ void Simulator::decodeCommand(char* iCmd){
 			std::ofstream aFile (aStrParam.c_str());
 			if (aFile.is_open()){
 				_simComp->writeObject(aFile);
+				aMessage << TAG_MSGo << "Simulation state saved in file " << aStrParam << TAG_MSGc << std::endl;
 			}else{
-				std::cout << "Error when opening file "<< aStrParam << std::endl;
+				aMessage << TAG_MSGo << "Cannot open file " << aStrParam << TAG_MSGc << std::endl;
+				anErrorCode=4;
 			}
 			break;
 		}
@@ -558,43 +607,84 @@ void Simulator::decodeCommand(char* iCmd){
 			std::ifstream aFile(aStrParam.c_str());
 			if (aFile.is_open()){
 				_simComp->readObject(aFile);
+				aMessage << TAG_MSGo << "Simulation state restored from file " << aStrParam << TAG_MSGc << std::endl;
 			}else{
-				std::cout << "Error when opening file "<< aStrParam << std::endl;
+				aMessage << TAG_MSGo << "Cannot open file " << aStrParam << TAG_MSGc << std::endl;
+				anErrorCode=4;
 			}
 			break;
 		}
 		case 10:{ //Save benchmarks in file x
-			 
 			aInpStream >> aParam1;
 			switch (aParam1){
 			case 0: _simComp->streamBenchmarks(std::cout);
+				aMessage << TAG_MSGo << "Benchmarks written to screen " << TAG_MSGc << std::endl;
 				break;
 			case 1:{
 				aInpStream >> aStrParam;
 				std::ofstream aFile (aStrParam.c_str());
 				if (aFile.is_open()){
 					_simComp->streamBenchmarks(aFile);
-					std::cout << "Benchmarks written to file "<< aStrParam << std::endl;
-
+					aMessage << TAG_MSGo << "Benchmarks written to file " << aStrParam << TAG_MSGc << std::endl;
 				}else{
-					std::cout << "Error when opening file "<< aStrParam << std::endl;
+					aMessage << TAG_MSGo << "Cannot open file " << aStrParam << TAG_MSGc << std::endl;
+					anErrorCode=4;
 				}
 				break;
 			}
 			default:
-				std::cout << "Command not found"<< std::endl;
+				aMessage << TAG_MSGo << "Command not found"<< TAG_MSGc << std::endl;
+				anErrorCode=3;
 			}
 			break;
 		}
-		case 11://Set breakpoint in task x, command y
-			
-			break;
+		case 11:{//Set breakpoint in task x, command y
+			aInpStream >> aStrParam;
+			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
+			if (aTask!=0){
+				aInpStream >> aParam2;
+				TMLCommand* aCommand=aTask->getCommandByID(aParam2);
+				if (aCommand!=0){
+					aCommand->setBreakpoint(new Breakpoint(_simComp));
+					aMessage << TAG_MSGo << "Breakpoint was created" << TAG_MSGc << std::endl;
+				}else{
+					aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+					anErrorCode=2;
+				}
+			}else{
+				aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}
+		}	break;
 		case 12://Choose branch
+			aMessage << TAG_MSGo << "Command not implemented" << TAG_MSGc << std::endl;
+			anErrorCode=1;
 			break;
+		case 16:{//Delete breakpoint in task x, command y
+			aInpStream >> aStrParam;
+			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
+			if (aTask!=0){
+				aInpStream >> aParam2;
+				TMLCommand* aCommand=aTask->getCommandByID(aParam2);
+				if (aCommand!=0){
+					aCommand->removeBreakpoint();
+					aMessage << TAG_MSGo << "Breakpoint was removed" << TAG_MSGc << std::endl;
+				}else{
+					aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+					anErrorCode=2;
+				}
+			}else{
+				aMessage << TAG_MSGo << "Component not found" << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}
+		}	break;
 		default:
-			std::cout << "Command not found"<< std::endl;
+			aMessage << TAG_MSGo << "Command not found"<< TAG_MSGc << std::endl;
+			anErrorCode=3;
+
 	}
-	_syncInfo->_server->sendReply("End processing\n");
+	aMessage << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << "ready" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+	_syncInfo->_server->sendReply(aMessage.str());
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
 
@@ -603,25 +693,52 @@ bool Simulator::execAsyncCmd(char* iCmd){
 	std::istringstream aInpStream(iCmd);
 	std::string aStrParam;
 	aInpStream >> aCmd;
+	std::ostringstream aMessage;
 	switch (aCmd){
 		case 0: //Quit simulation
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator terminated" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << "busy" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			_syncInfo->_server->sendReply(aMessage.str());
 			_simComp->setStopFlag(true);
 			_syncInfo->_terminate=true;
 			return false;
-		case 13:{//get current time
-			std::ostringstream atmpstr;
-			atmpstr << SchedulableDevice::getSimulatedTime() << std::endl;
-			_syncInfo->_server->sendReply(atmpstr.str());
+		case 13://get current time
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+			if (_busy) aMessage << "busy"; else aMessage << "ready";
+			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+			_syncInfo->_server->sendReply(aMessage.str());
+			break;
+		case 14:{//get actual command, thread safeness, be careful!
+			aInpStream >> aStrParam;
+			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
+			if (aTask!=0){			
+				//atmpstr << "current command: " << aTask->getCurrCommand()->getID() << std::endl;
+				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_TASKo << " id=\"" << aTask->getID() << "\">" << TAG_CURRCMDo;
+				if (aTask->getCurrCommand()==0) aMessage << 0; else aMessage << aTask->getCurrCommand()->getID();
+				aMessage << TAG_CURRCMDc << TAG_TASKc << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0;
+			}else{
+				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Component not found" << TAG_MSGc << TAG_ERRNOo << 2;
+			}
+			aMessage << TAG_ERRNOc << std::endl << TAG_STATUSo;
+			if (_busy) aMessage << "busy"; else aMessage << "ready";
+			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		}
-		case 14://get actual command
-			_syncInfo->_server->sendReply("act command goes here\n");
-			break;
 		case 15://pause simulation
 			_simComp->setStopFlag(true);
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulation stopped" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << "ready" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		default:
 			return false; 
 	}
 	return true;
+}
+
+void Simulator::sendStatus(){
+	std::ostringstream aMessage;
+	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+	if (_busy) aMessage << "busy"; else aMessage << "ready";
+	aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+	_syncInfo->_server->sendReply(aMessage.str());
 }

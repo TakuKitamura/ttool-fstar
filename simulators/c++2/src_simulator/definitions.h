@@ -128,6 +128,8 @@ typedef std::list<Slave*> SlaveList;
 typedef std::list<TMLChannel*> ChannelList;
 ///Datatype used in Tasks to store comments concerning the task execution
 typedef std::vector<Comment*> CommentList;
+///Datatype used in Tasks in order to associate a command with an ID 
+typedef std::map<unsigned int, TMLCommand*> CommandHashTab;
 ///Datatype establishing an association between a CPU and a transaction, used by the bus
 typedef std::map<Master*, TMLTransaction*> BusTransHashTab;
 ///Datatype establishing an association between a bus and a priority, used by Masters
@@ -178,6 +180,14 @@ template<typename T>
 inline const T& min(const T& a, const T& b, const T& c, const T& d){
 	const T& tmin=min(a,b,c);
 	return (tmin<d)?tmin:d;
+}
+
+template<typename T>
+inline T StringToNum(const std::string& iStr){
+	T aResult(0);
+	std::istringstream myStream(iStr);
+	myStream>>aResult;
+	return aResult;
 }
 
 ///The function writes its arguments to an array which has been allocated dynamically.

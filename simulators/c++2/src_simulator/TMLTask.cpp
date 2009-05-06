@@ -205,7 +205,6 @@ std::istream& TMLTask::readObject(std::istream& s){
 	_currCommand=(aCurrCmd==0)?0:(TMLCommand*)(aCurrCmd+((unsigned int)this));
 	if (_currCommand!=0){
 		 _currCommand->readObject(s);
-		_currCommand->setBreakpoint(false);
 		//_currCommand->prepare();
 	}
 	return s;
@@ -235,4 +234,12 @@ void TMLTask::reset(){
 ParamType* TMLTask::getVariableByName(std::string& iVarName){
 	return _varLookUp[iVarName.c_str()];
 	//return (_varLookUp.find(iVarName.c_str()))->second;
+}
+
+void TMLTask::addCommand(unsigned int iID, TMLCommand* iCmd){
+	_commandHash[iID]=iCmd;
+}
+
+TMLCommand* TMLTask::getCommandByID(unsigned int iID){
+	return _commandHash[iID];
 }

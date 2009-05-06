@@ -138,3 +138,7 @@ void TMLChannel::reset(){
 	_readTransCurrHop=_numberOfHops-1;
 	//std::cout << "Channel reset end" << std::endl;
 }
+
+unsigned int TMLChannel::getID() const {
+	return _ID;
+}

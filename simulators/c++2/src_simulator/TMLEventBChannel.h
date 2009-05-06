@@ -73,12 +73,16 @@ public:
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
 	bool getRequestChannel() const;
+	std::ostream& writeObject(std::ostream& s);
+	std::istream& readObject(std::istream& s);
+	void reset();
 protected:
 	void readNextEvents();
 	///Flag indicating if channel is used by a request
 	bool _requestChannel;
 	///Flag indicating if events are read from a file
 	bool _sourceIsFile;
+	///File where events are stored
 	std::ifstream* _eventFile;
 };
 

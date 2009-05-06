@@ -111,31 +111,61 @@ public:
 	\param iCPU Name of the CPU
 	\return Pointer to that CPU
 	*/
-	SchedulableDevice* getCPUByName(std::string iCPU) const;
+	SchedulableDevice* getCPUByName(const std::string& iCPU) const;
 	///Searches for a Task based on its name
 	/**
 	\param iTask Name of the Task
 	\return Pointer to that Task
 	*/
-	TMLTask* getTaskByName(std::string iTask) const;
+	TMLTask* getTaskByName(const std::string& iTask) const;
 	///Searches for a Bus based on its name
 	/**
 	\param iBus Name of the Bus
 	\return Pointer to that Bus
 	*/
-	SchedulableCommDevice* getBusByName(std::string iBus) const;
+	SchedulableCommDevice* getBusByName(const std::string& iBus) const;
 	///Searches for a Slave based on its name
 	/**
 	\param iSlave Name of the Slave
 	\return Pointer to that Slave
 	*/
-	Slave* getSlaveByName(std::string iSlave) const;
+	Slave* getSlaveByName(const std::string& iSlave) const;
 	///Searches for a Channel based on its name
 	/**
 	\param iChannel Name of the Channel
 	\return Pointer to that Channel
 	*/
-	TMLChannel* getChannelByName(std::string iChannel) const;
+	TMLChannel* getChannelByName(const std::string& iChannel) const;
+	///Searches for a CPU based on its name
+	/**
+	\param iID ID of the CPU
+	\return Pointer to that CPU
+	*/
+	SchedulableDevice* getCPUByID(unsigned int iID) const;
+	///Searches for a Task based on its name
+	/**
+	\param iID ID of the Task
+	\return Pointer to that Task
+	*/
+	TMLTask* getTaskByID(unsigned int iID) const;
+	///Searches for a Bus based on its name
+	/**
+	\param iID ID of the Bus
+	\return Pointer to that Bus
+	*/
+	SchedulableCommDevice* getBusByID(unsigned int iID) const;
+	///Searches for a Slave based on its name
+	/**
+	\param iID ID of the Slave
+	\return Pointer to that Slave
+	*/
+	Slave* getSlaveByID(unsigned int iID) const;
+	///Searches for a Channel based on its name
+	/**
+	\param iID ID of the Channel
+	\return Pointer to that Channel
+	*/
+	TMLChannel* getChannelByID(unsigned int iID) const;
 	///Returns a reference to the CPU list
 	/**
 	\return Reference to CPU list

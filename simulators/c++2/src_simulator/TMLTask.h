@@ -136,13 +136,24 @@ public:
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void streamBenchmarks(std::ostream& s) const;
-	void reset();
+	virtual void reset();
 	///Returns a pointer to the task variable specified by its name
 	/**
 	\param iVarName Name of the task variable
 	\return Pointer to the variable
 	*/
 	ParamType* getVariableByName(std::string& iVarName);
+	///Searches for a Command based on its ID
+	/**
+	\param iID ID of the Command
+	\return Pointer to the Commmand
+	*/
+	TMLCommand* getCommandByID(unsigned int iID);
+	///Adds a new command to the internal list
+	/**
+	\param iCmd Pointer to the command
+	*/
+	void addCommand(unsigned int iID, TMLCommand* iCmd);
 protected:
 	///ID of the task
 	unsigned int _ID;
@@ -158,10 +169,10 @@ protected:
 	TMLCommand* _firstCommand;
 	///Pointer to the CPU which executes the task
 	CPU* _cpu;
-	///Unique ID of the task
-	unsigned int _myid;
-	///Class variable counting the number of task instances
-	static unsigned int _id;
+	/////Unique ID of the task
+	//unsigned int _myid;
+	/////Class variable counting the number of task instances
+	//static unsigned int _id;
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;
@@ -186,6 +197,8 @@ protected:
 	unsigned long _noCPUTransactions;
 	///Look up table for task variables
 	VariableLookUpTable _varLookUp;
+	///Hash table containing commands
+	CommandHashTab _commandHash;
 };
 
 #endif

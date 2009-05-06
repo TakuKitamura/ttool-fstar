@@ -132,16 +132,6 @@ public:
 	*/
 	virtual std::string getCommentString(Comment* iCom) const;
 #endif
-	///Indicates if the breakpoint flag of the command is set
-	/**
-	\return State of breakpoint flag
-	*/
-	bool getBreakpoint() const;
-	///Sets the breakpoint flag
-	/**
-	\param  iBreakpoint New value of breakpoint flag
-	*/
-	void setBreakpoint(bool iBreakpoint);
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	void reset();
@@ -160,6 +150,13 @@ public:
       	\return Unique ID
     	*/ 
 	unsigned int getID() const;
+	///Sets a new breakpoint
+	/**
+      	\param iBreakp Pointer to breakpoint
+    	*/ 
+	void setBreakpoint(CommandListener* iBreakp);
+	///Removes the breakpoint
+	void removeBreakpoint();
 protected:
 	///ID of the command
 	unsigned int _ID;
@@ -175,8 +172,8 @@ protected:
 	TMLCommand** _nextCommand;
 	///Pointer to the parameters of the command
 	Parameter<ParamType>* _param;
-	///Breakpoint flag	
-	bool _breakpoint;	
+	///Breakpoint
+	CommandListener* _breakpoint;	
 	///Determines the next command based on the _nextCommand array
 	/**
 	\return Pointer to the next command

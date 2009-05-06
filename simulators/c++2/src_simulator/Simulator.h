@@ -64,6 +64,29 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimServSyncInfo.h>
 #include <ListenersSimCmd.h>
 
+#define TAG_HEADER "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>"
+#define TAG_STARTo "<siminfo>"
+#define TAG_STARTc "</siminfo>"
+#define TAG_ERRNOo "<error>"
+#define TAG_ERRNOc "</error>"
+#define TAG_MSGo "<msg>"
+#define TAG_MSGc "</msg>"
+#define TAG_TIMEo "<simtime>"
+#define TAG_TIMEc "</simtime>"
+#define TAG_CYCLESo "<simcycles>"
+#define TAG_CYCLESc "</simcycles>"
+#define TAG_TASKo "<task"
+#define TAG_TASKc "</task>"
+#define TAG_VARo "<var"
+#define TAG_VARc "</var>"
+#define TAG_STATUSo "<status>"
+#define TAG_STATUSc "</status>"
+#define TAG_GLOBALo "<global>"
+#define TAG_GLOBALc "</global>"
+#define TAG_CURRCMDo "<currcmd>"
+#define TAG_CURRCMDc "</currcmd>"
+
+
 class SimComponents;
 class SimServSyncInfo;
 
@@ -88,9 +111,9 @@ public:
 	bool run(int iLen, char** iArgs);
 	///Execute asynchronous command
 	bool execAsyncCmd(char* iCmd);
+	///Sends simulator status information to client
+	void sendStatus();
 protected:
-	/////Reset simulation environment
-	//void reset();
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML() const;
 	///Runs the simulation
@@ -130,7 +153,9 @@ protected:
 	SimComponents* _simComp;
 	///Name of output file for traces
 	std::string _traceFileName;
-	///listener for command currently being executed
+	///Listener for command currently being executed
 	TransactionListener* _currCmdListener;
+	///Simulator Busy flag
+	bool _busy;
 };
 #endif

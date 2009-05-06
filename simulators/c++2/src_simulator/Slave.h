@@ -70,6 +70,11 @@ public:
 	virtual void addTransaction(TMLTransaction* iTrans){
 		FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
 	}
+	///Returns the unique ID of the Slave
+	/**
+      	\return Unique ID
+    	*/ 
+	unsigned int getID() const {return _ID;}
 protected:
 	///Name of the slave
 	std::string _name;

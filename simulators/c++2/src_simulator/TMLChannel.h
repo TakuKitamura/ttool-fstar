@@ -135,6 +135,11 @@ public:
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
+	///Returns the unique ID of the device
+	/**
+      	\return Unique ID
+    	*/ 
+	unsigned int getID() const;
 protected:
 	///ID of channel
 	unsigned int _ID;

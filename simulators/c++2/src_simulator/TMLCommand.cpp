@@ -45,8 +45,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <Parameter.h>
 
-TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam), _breakpoint(false){
+TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam), _breakpoint(0){
 	_instanceList.push_back(this);
+	_task->addCommand(iID, this);
 }
 
 TMLCommand::~TMLCommand(){
@@ -55,6 +56,7 @@ TMLCommand::~TMLCommand(){
 	if (_nextCommand!=0) delete[] _nextCommand;
 	if (_param!=0) delete _param;
 	_instanceList.remove(this);
+	removeBreakpoint();
 }
 
 TMLCommand* TMLCommand::prepare(void){
@@ -69,15 +71,13 @@ TMLCommand* TMLCommand::prepare(void){
 		//std::cout << "Prepare command, to next command" << std::endl;
 		_task->setCurrCommand(aNextCommand);
 		if (aNextCommand==0){
-			//_task->setCurrCommand(0); //new, experimental
 			return 0;
 		}else{
-			//_task->setCurrCommand(aNextCommand);
 			//std::cout << "Prepare command, prepare next command" << std::endl;
 			return aNextCommand->prepare();
 		}
 	}else{
-		//std::cout << "Prepare next transaction beg" << std::endl;
+		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
 		if (_progress==0)
 			FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
 		else
@@ -133,13 +133,18 @@ std::string TMLCommand::getCommentString(Comment* iCom) const{
 }
 #endif
 
-bool TMLCommand::getBreakpoint() const{
-	return _breakpoint;
+void TMLCommand::setBreakpoint(CommandListener* iBreakp){
+	removeBreakpoint();
+	_breakpoint=iBreakp;
+	registerListener(iBreakp);
 }
 
-void TMLCommand::setBreakpoint(bool iBreakpoint){
-	_breakpoint=iBreakpoint;
-	
+void TMLCommand::removeBreakpoint(){	
+	if (_breakpoint!=0){
+		removeListener(_breakpoint);
+		delete _breakpoint;
+		_breakpoint=0;
+	}
 }
 
 std::ostream& TMLCommand::writeObject(std::ostream& s){
@@ -159,6 +164,7 @@ void TMLCommand::reset(){
 }
 
 void TMLCommand::registerGlobalListener(CommandListener* iListener){
+	std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->registerListener(iListener);
 	}

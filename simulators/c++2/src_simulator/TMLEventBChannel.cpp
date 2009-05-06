@@ -44,7 +44,8 @@ Ludovic Apvrille, Renaud Pacalet
 
 TMLEventBChannel::TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 	if (_sourceIsFile){
-		//std::cout << "new vv" << std::endl;
+		std::cout << "try to open Event file " << _name.c_str() << std::endl;
+		//_name="./"+_name;
 		_eventFile = new std::ifstream(_name.c_str());
 		readNextEvents();
 	}
@@ -69,7 +70,8 @@ void TMLEventBChannel::readNextEvents(){
 			*_eventFile >> *aNewParam;
 			_paramQueue.push_back(aNewParam);
 		}
-	}
+	}else
+		std::cout << "Event file failure" << std::endl;
 }
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
@@ -139,4 +141,34 @@ std::string TMLEventBChannel::toString() const{
 
 bool TMLEventBChannel::getRequestChannel() const{
 	return _requestChannel;
+}
+
+std::ostream& TMLEventBChannel::writeObject(std::ostream& s){
+	TMLEventChannel::writeObject(s);
+	if (_eventFile!=0) WRITE_STREAM(s,_eventFile->tellg());
+	return s;
+}
+
+std::istream& TMLEventBChannel::readObject(std::istream& s){
+	std::istream::streampos aPos;
+	TMLEventChannel::readObject(s);
+	if (_eventFile!=0){
+		READ_STREAM(s,aPos);
+		_eventFile->seekg(aPos);
+	}
+	return s;
+}
+
+void TMLEventBChannel::reset(){
+	Parameter<ParamType> param(0,0,0);
+	TMLEventChannel::reset();
+	if (_eventFile!=0){
+		_eventFile->clear();
+		_eventFile->seekg(0,std::ios::beg);
+		std::cout << "EventB reset " << _eventFile->eof() << std::endl;
+		*_eventFile >> param;
+		param.print();
+		readNextEvents();
+		std::cout << "no of events: " << _content << std::endl;
+	}
 }

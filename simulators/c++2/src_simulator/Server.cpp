@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<Server.h>
 #include<Simulator.h>
 
-Server::Server(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo){
+Server::Server(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _socketClient(-1){
 	pthread_mutex_init(&_replyMutex, NULL);
 }
 
@@ -87,59 +87,60 @@ int Server::run(){
 
 	if (p == NULL){
 		std::cerr << "server: failed to bind\n";
-		return 2;
- 	}
-
-	freeaddrinfo(aServerInfo);
-
-	//causes the socket to listen to incoming connections: listen(filedescriptor, number of connections)
-	if (listen(aSocketServer, BACKLOG) == -1) {
-		perror("listen");
 		exit(1);
 	}
-
-	std::cout << "server: waiting for connections...\n";
-	socklen_t aAddrInfoSize= sizeof(struct sockaddr_storage);
-	while((_socketClient = accept(aSocketServer, (struct sockaddr *)&aClientAddrInfo, &aAddrInfoSize))==-1) {  // main accept loop
-		//accept a connection: accept(filedescriptor, pointer to address information of caller, size of address information)
-		perror("accept");
-	}
-	char* aMsg="You are connected to the simulation server. Please enter a command:\0";
-	if (send(_socketClient, aMsg, strlen(aMsg), 0) == -1) perror("send");
-	int aNumberOfBytes;
-	char s[INET6_ADDRSTRLEN];
-	inet_ntop(aClientAddrInfo.ss_family, get_in_addr((struct sockaddr *)&aClientAddrInfo), s, sizeof s);
-	std::cout << "server: got connection from " << s << std::endl;
-	/*while(!_syncInfo->_terminate){
-		pthread_mutex_lock (&_syncInfo->_mutexProduce);
-		if (!_syncInfo->_terminate){
-			if ((aNumberOfBytes=recv(_socketClient, _syncInfo->_command, _syncInfo->_bufferSize, 0)) == -1)
-				perror("receive");
-			else{
-				_syncInfo->_command[aNumberOfBytes]='\0';
-				std::cout << "Command received: " << _syncInfo->_command << std::endl; 
-			}
-			pthread_mutex_unlock(&_syncInfo->_mutexConsume);
+	
+	freeaddrinfo(aServerInfo);
+	
+	do{
+		//causes the socket to listen to incoming connections: listen(filedescriptor, number of connections)
+		if (listen(aSocketServer, BACKLOG) == -1) {
+			perror("listen");
+			exit(1);
 		}
-    	}*/
-	char aTmpBuffer[BUFFER_SIZE];
-	while(!_syncInfo->_terminate){
-		if ((aNumberOfBytes=recv(_socketClient, aTmpBuffer, BUFFER_SIZE-1, 0)) == -1)
-				perror("receive");
-		else{
-			aTmpBuffer[aNumberOfBytes]='\0';
-			std::cout << "Command received: " << aTmpBuffer << std::endl;
-			if (!_syncInfo->_simulator->execAsyncCmd(aTmpBuffer)){
-				if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
-					//pthread_mutex_lock (&_syncInfo->_mutexProduce);
-					strcpy(_syncInfo->_command,aTmpBuffer);
-					pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
+	
+		std::cout << "server: waiting for connections...\n";
+		socklen_t aAddrInfoSize= sizeof(struct sockaddr_storage);
+		while((_socketClient = accept(aSocketServer, (struct sockaddr *)&aClientAddrInfo, &aAddrInfoSize))==-1) {  // main accept loop
+			//accept a connection: accept(filedescriptor, pointer to address information of caller, size of address information)
+			perror("accept");
+		}
+		char* aMsg="You are connected to the simulation server. Please enter a command:\0";
+		if (send(_socketClient, aMsg, strlen(aMsg), 0) == -1) perror("send");
+		int aNumberOfBytes=1;
+		char s[INET6_ADDRSTRLEN];
+		inet_ntop(aClientAddrInfo.ss_family, get_in_addr((struct sockaddr *)&aClientAddrInfo), s, sizeof s);
+		std::cout << "server: got connection from " << s << std::endl;
+		char aTmpBuffer[BUFFER_SIZE];
+		while(!_syncInfo->_terminate && aNumberOfBytes>0){
+			aNumberOfBytes=recv(_socketClient, aTmpBuffer, BUFFER_SIZE-1, 0);
+			if (aNumberOfBytes < 1){
+				std::cout << "Broken connection detected, error code: " << aNumberOfBytes << std::endl;
+				_socketClient=-1;
+				//perror("receive");
+			}else{
+				aTmpBuffer[aNumberOfBytes]='\0';
+				if (strlen(aTmpBuffer)>0){
+					std::cout << "Command received: " << aTmpBuffer << std::endl;
+					if (!_syncInfo->_simulator->execAsyncCmd(aTmpBuffer)){
+						if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
+							strcpy(_syncInfo->_command,aTmpBuffer);
+							pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
+						}else{
+							_syncInfo->_simulator->sendStatus();
+						}
+					}
 				}
-			}
-		}	
-    	}
+			}	
+		}
+	}while (!_syncInfo->_terminate);
 	std::cout << "Server loop terminated" << std::endl;
-	close(_socketClient);
+	//sendReply("Terminate simulator\n");
+	int aSocketClient=_socketClient;
+	pthread_mutex_lock(&_replyMutex);
+	_socketClient=-1;
+	pthread_mutex_unlock(&_replyMutex);
+	close(aSocketClient);
 	std::cout << "Socket client closed" << std::endl;
 	close(aSocketServer);
 	std::cout << "Socket server closed" << std::endl;
@@ -154,6 +155,8 @@ void* Server::get_in_addr(struct sockaddr *sa) const{
 
 void Server::sendReply(std::string iReplyStr){
 	pthread_mutex_lock(&_replyMutex);
-	if (send(_socketClient, iReplyStr.c_str(), iReplyStr.length(), 0) == -1) perror("send");
+	if (_socketClient!=-1){
+		if (send(_socketClient, iReplyStr.c_str(), iReplyStr.length(), 0) == -1) perror("send");
+	}
 	pthread_mutex_unlock(&_replyMutex);
 }

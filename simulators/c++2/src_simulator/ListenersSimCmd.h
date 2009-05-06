@@ -134,8 +134,4 @@ protected:
 	SimComponents* _simComp;
 	ListenerSubject<TransactionListener>* _subject;
 };
-/*Bus
-CPU
-Task
-Mem*/
 #endif
