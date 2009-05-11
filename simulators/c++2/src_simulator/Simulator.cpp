@@ -324,7 +324,7 @@ void Simulator::simulate(){
 //#endif
 		transLET=getTransLowestEndTime(cpuLET);
 		//_syncInfo->_server->sendReply("Sleep once again\n");
-		//sleep(1);
+		sleep(1);
 	}
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
@@ -683,7 +683,7 @@ void Simulator::decodeCommand(char* iCmd){
 			anErrorCode=3;
 
 	}
-	aMessage << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << "ready" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+	aMessage << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << "ready" << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
@@ -704,7 +704,7 @@ bool Simulator::execAsyncCmd(char* iCmd){
 		case 13://get current time
 			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
 			if (_busy) aMessage << "busy"; else aMessage << "ready";
-			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		case 14:{//get actual command, thread safeness, be careful!
@@ -720,7 +720,7 @@ bool Simulator::execAsyncCmd(char* iCmd){
 			}
 			aMessage << TAG_ERRNOc << std::endl << TAG_STATUSo;
 			if (_busy) aMessage << "busy"; else aMessage << "ready";
-			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc;
+			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		}
