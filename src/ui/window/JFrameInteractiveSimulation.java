@@ -62,8 +62,15 @@ import ui.file.*;
 import launcher.*;
 import remotesimulation.*;
 
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import javax.xml.parsers.*;
+
 
 public	class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+	
+	protected static final String SIMULATION_HEADER = "siminfo";
+	protected static final String SIMULATION_GLOBAL = "global";
 	
 	private static String buttonStartS = "Start simulator";
 	private static String buttonCloseS = "Close";
@@ -91,6 +98,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected RshClient rshc;
 	protected RemoteConnection rc;
 	protected CommandParser cp;
+	protected String ssxml;
 	
 	// Text commands
 	protected JTextField textCommand;
@@ -103,7 +111,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JPanel main, mainTop, commands, infos, outputs; // from MGUI
 	JTabbedPane commandTab, infoTab;
 	
+	// Status elements
+	JLabel status, time;
+	
 	private int mode = 0;
+	private boolean busyStatus = false;
+	private boolean threadStarted = false;
 	
 	//shortest paths
 	//JComboBox combo1, combo2, combo3, combo4;
@@ -130,8 +143,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void makeComponents() {
 		JPanel jp01;
 		//jp01.setPreferredSize(new Dimension(375, 400));
-        GridBagLayout gridbag01;
-        GridBagConstraints c01 ;
+		GridBagLayout gridbag01;
+		GridBagConstraints c01 ;
 		
 		cp = new CommandParser();
 		
@@ -155,33 +168,33 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		
 		GridBagLayout gridbag02 = new GridBagLayout();
-        GridBagConstraints c02 = new GridBagConstraints();
+		GridBagConstraints c02 = new GridBagConstraints();
 		mainTop = new JPanel(gridbag02);
 		mainTop.setPreferredSize(new Dimension(800, 475));
 		c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 1; 
-        c02.fill = GridBagConstraints.BOTH;
-        c02.gridheight = 1;
+		c02.weighty = 1.0;
+		c02.weightx = 1.0;
+		c02.gridwidth = 1; 
+		c02.fill = GridBagConstraints.BOTH;
+		c02.gridheight = 1;
 		
 		// Ouput textArea
 		jta = new ScrolledJTextArea();
 		jta.setMinimumSize(new Dimension(800, 200));
-        jta.setEditable(false);
-        jta.setMargin(new Insets(10, 10, 10, 10));
-        jta.setTabSize(3);
-        jta.append("Click on start to start the simulator and connect to it\n");
-        Font f = new Font("Courrier", Font.BOLD, 12);
-        jta.setFont(f);
-        jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
+		jta.setEditable(false);
+		jta.setMargin(new Insets(10, 10, 10, 10));
+		jta.setTabSize(3);
+		jta.append("Click on start to start the simulator and connect to it\n");
+		Font f = new Font("Courrier", Font.BOLD, 12);
+		jta.setFont(f);
+		jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, jsp);
-        framePanel.add(split, BorderLayout.CENTER);
+		framePanel.add(split, BorderLayout.CENTER);
 		
 		// Commands
 		commands = new JPanel();
-		//commands.setPreferredSize(new Dimension(400, 450));
+		commands.setMinimumSize(new Dimension(300, 250));
 		commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 		
 		
@@ -191,20 +204,20 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		// Control commands
 		jp01 = new JPanel();
-		//jp01.setPreferredSize(new Dimension(375, 400));
-        gridbag01 = new GridBagLayout();
-        c01 = new GridBagConstraints();
-        jp01.setLayout(gridbag01);
+		//jp01.setMinimumSize(new Dimension(375, 400));
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp01.setLayout(gridbag01);
 		
 		commandTab.addTab("Control", null, jp01, "Main control commands");
 		
 		
 		c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        //c01.gridwidth = 1;
-        c01.fill = GridBagConstraints.BOTH;
-        //c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		//c01.gridwidth = 1;
+		c01.fill = GridBagConstraints.BOTH;
+		//c01.gridheight = 1;
 		
 		c01.gridheight = 1;
 		jp01.add(new JLabel("  "), c01);
@@ -226,18 +239,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		// Text commands
 		jp01 = new JPanel();
 		//jp01.setPreferredSize(new Dimension(375, 400));
-        gridbag01 = new GridBagLayout();
-        c01 = new GridBagConstraints();
-        jp01.setLayout(gridbag01);
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp01.setLayout(gridbag01);
 		
 		commandTab.addTab("Text commands", null, jp01, "Sending text commands to simulator");
 		
 		c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c01.fill = GridBagConstraints.BOTH;
-        c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
 		
 		c01.gridheight = 2;
 		jp01.add(new JLabel("Enter a text command:"), c01);
@@ -267,22 +280,49 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		//Info
 		infos = new JPanel();
+		infos.setMinimumSize(new Dimension(300, 250));
 		//infos.setPreferredSize(new Dimension(400, 450));
 		infos.setBorder(new javax.swing.border.TitledBorder("Simulation results"));
 		c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 		mainTop.add(infos, c02);
 		
 		infoTab = new JTabbedPane();
+		infoTab.setMinimumSize(new Dimension(300, 250));
 		infos.add(infoTab);
 		
 		// Simulation time
 		jp01 = new JPanel();
+		//jp01.setMinimumSize(new Dimension(375, 400));
 		//jp01.setPreferredSize(new Dimension(375, 400));
-        gridbag01 = new GridBagLayout();
-        c01 = new GridBagConstraints();
-        jp01.setLayout(gridbag01);
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp01.setLayout(gridbag01);
 		
-		infoTab.addTab("Time", null, jp01, "Current time of the simulation");
+		infoTab.addTab("Status", null, jp01, "Current status of the simulation");
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp01.add(new JLabel(" "), c01);
+		
+		c01.gridwidth = 1;
+		jp01.add(new JLabel("Status:"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		status = new JLabel("Unknown");
+		status.setForeground(Color.red);
+		jp01.add(status, c01);
+		jp01.add(new JLabel(" "), c01);
+		c01.gridwidth = 1;
+		jp01.add(new JLabel("Time:"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		time = new JLabel("Unknown");
+		time.setForeground(Color.red);
+		jp01.add(time, c01);
+		
 		
 		
 		// Information
@@ -382,8 +422,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void close() {
-		if(mode == STARTING) {
+		if(mode != NOT_STARTED)  {
 			go = false;
+			if (rc != null) {
+				try {
+					rc.disconnect();
+				} catch (RemoteConnectionException rce) {
+				}
+				//System.out.println("Disconnected");
+				rc = null;
+			}
 		}
 		dispose();
 		setVisible(false);
@@ -400,6 +448,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					jta.append("Could not kill simulator\n");
 				}
 			}
+			rshc = null;
 		} else {
 			if (rshc != null) {
 				try {
@@ -414,27 +463,31 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void startSimulation() {
 		mode = STARTING;
 		setComponents();
-		
-		t = new Thread(this);
 		go = true;
-		threadMode = 0;
-		t.start();
+		
+		startThread(0);
+		//t = new Thread(this);
+		//go = true;
+		//threadMode = 0;
+		//t.start();
 	}
 	
 	private void testGo() throws InterruptedException {
-        if (go == false) {
-            throw new InterruptedException("Stopped by user");
-        }
-    }
+		if (go == false) {
+			throw new InterruptedException("Stopped by user");
+		}
+	}
 	
 	// Must first start the remote server
 	// Then, must start 
 	
 	public void run() {
 		String s;
+		System.out.println("mode=" + threadMode);
 		
 		try {
 			if (threadMode == 0) {
+				threadStarted();
 				testGo();
 				rc = new RemoteConnection(hostSystemC);
 				
@@ -474,19 +527,25 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				jta.append("Connected to simulation server ...\n");
 				mode = STARTED_AND_CONNECTED;
+				
+				startThread(2);
+				
 				setComponents();
 				
 				try {
 					while(true) {
 						testGo();
 						s = rc.readOneLine();
-						jta.append("\nFrom server: " + s + "\n");
+						//jta.append("\nFrom server: " + s + "\n");
+						analyzeServerAnswer(s);
 					}
 				} catch (RemoteConnectionException rce) {
 					jta.append("Exception: " + rce.getMessage());
 					jta.append("Could not read data from host: " + hostSystemC + ".... Aborting\n");
+					//System.out.println("rc left");
 				}
 			} else if (threadMode == 1) {
+				threadStarted();
 				try {
 					while(true) {
 						testGo();
@@ -496,10 +555,21 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				} catch (LauncherException le) {
 					jta.append("Exception: " + le.getMessage() + "\n");
 				}
+			} else if (threadMode == 2) {
+				threadStarted();
+				while(true) {
+					testGo();
+					Thread.currentThread().sleep(200);
+					if (busyStatus) {
+						sendCommand("time");
+					}
+				}
 			}
 		} catch (InterruptedException ie) {
 			jta.append("Interrupted\n");
 		}
+		
+		//System.out.println("rc left threadMode=" + threadMode);
 		
 	}
 	
@@ -513,20 +583,21 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	protected void processCmd(String cmd) throws LauncherException {
-        rshc.setCmd(cmd);
-        rshc.sendProcessRequest();
-		t = new Thread(this);
-		//go = true;
-		threadMode = 1;
-		t.start();
-    }
+		rshc.setCmd(cmd);
+		rshc.sendProcessRequest();
+		startThread(1);
+		//t = new Thread(this);
+		////go = true;
+		//threadMode = 1;
+		//t.start();
+	}
 	
 	public void mouseClicked(MouseEvent e) {}
-         
-    public void mouseEntered(MouseEvent e) {}
 	
-    public void mouseExited(MouseEvent e) {}
-         
+	public void mouseEntered(MouseEvent e) {}
+	
+	public void mouseExited(MouseEvent e) {}
+	
 	public void mousePressed(MouseEvent e){
 		if (e.getSource() == sendTextCommand) {
 			if (sendTextCommand.isEnabled()) {
@@ -582,7 +653,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		} catch (RemoteConnectionException rce) {
 			jta.append("** Sending command failed **\n");
 			return ;
-		}
+		} catch (Exception e) {}
 	}
 	
 	protected void append(String info, String list) {
@@ -594,10 +665,210 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		printSeparator();
 	}
 	
+	protected void analyzeServerAnswer(String s) {
+		int index0 = s.indexOf("<?xml");
+		
+		if (index0 != -1) {
+			ssxml = s.substring(index0, s.length()) + "\n";
+		} else {
+			ssxml = ssxml + s + "\n";
+		}
+		
+		index0 = ssxml.indexOf("</siminfo>");
+		
+		if (index0 != -1) {
+			ssxml = ssxml.substring(0, index0+10);
+			loadXMLInfoFromServer(ssxml);
+			ssxml = "";
+		}
+		
+	}
 	
-	// Mouse management
-        
-	public void mouseReleased(MouseEvent e) {}
+	protected boolean loadXMLInfoFromServer(String xmldata) {
+		//jta.append("XML from server:" + xmldata + "\n\n");
+		
+		DocumentBuilderFactory dbf;
+		DocumentBuilder db;
+		
+		try {
+			dbf = DocumentBuilderFactory.newInstance();
+			db = dbf.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			dbf = null;
+			db = null;
+		}
+		
+		if ((dbf == null) || (db == null)) {
+			return false;
+		}
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xmldata).getBytes());
+		int i;
+		
+		try {
+			// building nodes from xml String
+			Document doc = db.parse(bais);
+			NodeList nl;
+			Node node;
+			
+			nl = doc.getElementsByTagName(SIMULATION_HEADER);
+			
+			if (nl == null) {
+				return false;
+			}
+			
+			for(i=0; i<nl.getLength(); i++) {
+				node = nl.item(i);
+				//System.out.println("Node = " + dnd);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					// create design, and get an index for it
+					return loadConfiguration(node);
+				}
+			}
+			
+		} catch (IOException e) {
+			System.err.println("Error when parsing server info:" + e.getMessage());
+			return false;
+		} catch (SAXException saxe) {
+			System.err.println("Error when parsing server info:" + saxe.getMessage());
+			return false;
+		}
+		return true;
+		
+	}
 	
+	protected boolean loadConfiguration(Node node1) {
+		NodeList diagramNl = node1.getChildNodes();
+		Element elt;
+		Node node, node0;
+		NodeList nl;
+		
+		
+		String tmp;
+		int val;
+		
+		int[] colors;
+		String msg = null;
+		String error = null;
+		
+		try {
+			for(int j=0; j<diagramNl.getLength(); j++) {
+				//System.out.println("Ndes: " + j);
+				node = diagramNl.item(j);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element)node;
+					
+					// Status
+					if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
+						
+						nl = elt.getElementsByTagName("status");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							
+							makeStatus(node0.getTextContent());
+						}
+						
+						nl = elt.getElementsByTagName("simtime");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							time.setText(node0.getTextContent());
+						}
+						
+						nl = elt.getElementsByTagName("msg");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							msg = node0.getTextContent();
+						}
+						
+						nl = elt.getElementsByTagName("error");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							error = node0.getTextContent();
+						}
+						
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Exception " + e.getMessage());
+			return false;
+		}
+		
+		if ((msg != null) && (error != null)) {
+			if (error.trim().equals("0")) {
+				printFromServer(msg + ": command successful");
+				if (msg.indexOf("reset") != -1) {
+					time.setText("0");
+				}
+			} else {
+				printFromServer(msg + ": command failed (error=" + error + ")");
+			}
+		} else if (msg != null) {
+			printFromServer("Server: " + msg);
+		} else {
+			printFromServer("Server: error " + error);
+		}
+		
+		return true;
+	}
 	
+	public synchronized void startThread(int mode) {
+		threadMode = mode;
+		t = new Thread(this);
+		t.start();
+		threadStarted = false;
+		System.out.println("thread of mode:" + threadMode);
+		while(threadStarted == false) {
+			try {
+				wait();
+			} catch (InterruptedException ie) {}
+		}
+	}
+	
+	public synchronized void threadStarted() {
+		System.out.println("thread started");
+		threadStarted = true;
+		notify();
+	}
+	
+	public void makeStatus(String s) {
+		status.setText(s);
+		if (s.equals("busy")) {
+			runCommand.setEnabled(false);
+			resetCommand.setEnabled(false);
+			StopCommand.setEnabled(true);
+			busyStatus = true;
+		}
+		if (s.equals("ready")) {
+			runCommand.setEnabled(true);
+			resetCommand.setEnabled(true);
+			StopCommand.setEnabled(false);
+			busyStatus = false;
+		}
+	}
+	
+	public static String decodeString(String s)  {
+		if (s == null)
+			return s;
+		byte b[] = null;
+		try {
+			b = s.getBytes("ISO-8859-1");
+			return new String(b);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public void printFromServer(String s) {
+		jta.append("Server> " + s + "\n");
+	}
+
+
+// Mouse management
+
+public void mouseReleased(MouseEvent e) {}
+
+
 } // Class
