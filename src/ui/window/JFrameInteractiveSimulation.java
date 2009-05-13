@@ -117,6 +117,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private int mode = 0;
 	private boolean busyStatus = false;
 	private boolean threadStarted = false;
+	private boolean gotTimeAnswerFromServer = false; 
 	
 	//shortest paths
 	//JComboBox combo1, combo2, combo3, combo4;
@@ -560,7 +561,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				while(true) {
 					testGo();
 					Thread.currentThread().sleep(200);
-					if (busyStatus) {
+					if (busyStatus && gotTimeAnswerFromServer) {
+						gotTimeAnswerFromServer = false;
 						sendCommand("time");
 					}
 				}
@@ -771,6 +773,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						
 						nl = elt.getElementsByTagName("simtime");
 						if (nl.getLength() > 0) {
+							gotTimeAnswerFromServer = true;
 							node0 = nl.item(0);
 							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 							time.setText(node0.getTextContent());
