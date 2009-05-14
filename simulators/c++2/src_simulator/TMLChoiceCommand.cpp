@@ -42,14 +42,21 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 
-TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc):TMLCommand(iID, iTask,1,0),_condFunc(iCondFunc),_indexNextCommand(0){
+TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc):TMLCommand(iID, iTask,1,0),_condFunc(iCondFunc),_indexNextCommand(0), _preferredBranch(-1){
 }
 
 void TMLChoiceCommand::execute(){
 }
 
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
-	return _nextCommand[_indexNextCommand];
+	if (_preferredBranch==-1){
+		return _nextCommand[_indexNextCommand];
+	}else{
+		std::cout << "Command was enforced: " << _preferredBranch << std::endl;
+		unsigned int aPreferredBranch=_preferredBranch;
+		_preferredBranch=-1;
+		return _nextCommand[aPreferredBranch];
+	}
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
@@ -58,7 +65,7 @@ TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 	_indexNextCommand=(_task->*_condFunc)();
 	aNextCommand=getNextCommand();
 	_task->setCurrCommand(aNextCommand);
-	if (aNextCommand!=0) return aNextCommand->prepare();
+	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }
 
@@ -78,4 +85,8 @@ std::string TMLChoiceCommand::toShortString() const{
 
 std::string TMLChoiceCommand::getCommandStr() const{
 	return "choice";
+}
+
+void TMLChoiceCommand::setPreferredBranch(unsigned int iBranch){
+	_preferredBranch=iBranch;
 }

@@ -48,18 +48,21 @@ public:
 	///Gets called when a command is entered the first time
 	/**
 	\param  iComm Pointer to the command
+	\return true if simulation is stopped
 	*/
-	virtual void commandEntered(TMLCommand* iComm){};
+	virtual bool commandEntered(TMLCommand* iComm){return false;}
 	///Gets called when a transaction of the command is executed
 	/**
 	\param  iComm Pointer to the command
+	\return true if simulation is stopped
 	*/
-	virtual	void commandExecuted(TMLCommand* iComm){};
+	virtual	bool commandExecuted(TMLCommand* iComm){return false;}
 	///Gets called when a the last transaction of the command is executed
 	/**
 	\param  iComm Pointer to the command
+	\return true if simulation is stopped
 	*/
-	virtual void commandFinished(TMLCommand* iComm){};
+	virtual bool commandFinished(TMLCommand* iComm){return false;}
 	///Destructor
 	virtual ~CommandListener(){}
 protected:

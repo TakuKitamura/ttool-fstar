@@ -86,6 +86,12 @@ Ludovic Apvrille, Renaud Pacalet
 #define TAG_CURRCMDo "<currcmd>"
 #define TAG_CURRCMDc "</currcmd>"
 
+#define MSG_CMPNFOUND "Component not found"
+#define MSG_CMDNFOUND "Command not found"
+#define MSG_CMDNIMPL "Command currently not implemented"
+#define MSG_FILEERR "Cannot open file "
+#define SIM_READY "ready"
+#define SIM_BUSY "busy"
 
 class SimComponents;
 class SimServSyncInfo;

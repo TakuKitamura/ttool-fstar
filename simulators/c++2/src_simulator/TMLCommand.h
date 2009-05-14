@@ -69,7 +69,7 @@ public:
       	\return True if there was a transaction to prepare
 	\sa prepareNextTransaction()
 	*/
-	TMLCommand* prepare();
+	TMLCommand* prepare(bool iInit);
 	///Updates the inner state of the command as well as the state of all dependent objects (channel, bus,...)
 	virtual void execute()=0;
 	///Assigns a value to the pointer referencing the array of next commands

@@ -59,10 +59,10 @@ TMLCommand::~TMLCommand(){
 	removeBreakpoint();
 }
 
-TMLCommand* TMLCommand::prepare(void){
-	TMLCommand* aNextCommand;
+TMLCommand* TMLCommand::prepare(bool iInit){
 	//Do not set _currTransaction=0 as specialized commands access the variable in the scope of the execute method (set terminated flag) 
 	if(_length==_progress){
+		TMLCommand* aNextCommand;
 		//std::cout << "COMMAND FINISHED!!n";
 		FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 		_progress=0;
@@ -74,15 +74,25 @@ TMLCommand* TMLCommand::prepare(void){
 			return 0;
 		}else{
 			//std::cout << "Prepare command, prepare next command" << std::endl;
-			return aNextCommand->prepare();
+			return aNextCommand->prepare(false);
 		}
 	}else{
+		bool aSimStopped=false;
 		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
-		if (_progress==0)
-			FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
-		else
-			FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
-		//std::cout << "Prepare next transaction" << std::endl;
+		if (iInit){
+			if (_currTransaction!=0) delete _currTransaction;
+		}else{
+			if (_progress==0)
+				FOR_EACH_CMDLISTENER aSimStopped|= (*i)->commandEntered(this);
+			else
+				FOR_EACH_CMDLISTENER aSimStopped|= (*i)->commandExecuted(this);
+			//std::cout << "Prepare next transaction" << std::endl;
+			if (aSimStopped){
+				std::cout << "aSimStopped=true " << std::endl;
+				_task->setCurrCommand(this);
+				return this;  //for command which generates transactions this is returned anyway by prepareTransaction
+			}
+		}
 		TMLCommand* result = prepareNextTransaction();
 		if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){

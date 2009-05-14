@@ -52,7 +52,7 @@ TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	//std::cout << "Action func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	(_task->*_actionFunc)();
 	_task->setCurrCommand(aNextCommand);
-	if (aNextCommand!=0) return aNextCommand->prepare();
+	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }
 

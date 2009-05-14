@@ -53,9 +53,13 @@ public:
 		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 			(*i)->removeListener(this);
 	}
-	void transExecuted(TMLTransaction* iTrans){
+	bool transExecuted(TMLTransaction* iTrans){
 		_count++;
-		if (_count>=_transToExecute) _simComp->setStopFlag(true);
+		if (_count>=_transToExecute){
+			_simComp->setStopFlag(true);
+			return true;
+		}
+		return false;
 	}
 	void setTransToExecute(unsigned int iTransToExecute){
 		_transToExecute=iTransToExecute;
@@ -69,8 +73,9 @@ protected:
 class Breakpoint: public CommandListener, public TransactionListener{
 public:
 	Breakpoint(SimComponents* iSimComp):_simComp(iSimComp){}
-	void commandEntered(TMLCommand* iComm){
+	bool commandEntered(TMLCommand* iComm){
 		_simComp->setStopFlag(true);
+		return true;
 	}
 protected:
 	SimComponents* _simComp;
@@ -84,9 +89,13 @@ public:
 	virtual ~RunXCommands(){
 		TMLCommand::removeGlobalListener(this);
 	}
-	void commandFinished(TMLCommand* iComm){
+	bool commandFinished(TMLCommand* iComm){
 		_count++;
-		if (_count>=_commandsToExecute) _simComp->setStopFlag(true);
+		if (_count>=_commandsToExecute){
+			 _simComp->setStopFlag(true);
+			return true;
+		}
+		return false;
 	}
 	void setCmdsToExecute(unsigned int iCommandsToExecute){
 		_commandsToExecute=iCommandsToExecute;
@@ -107,8 +116,12 @@ public:
 		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 			(*i)->removeListener(this);
 	}
-	void transExecuted(TMLTransaction* iTrans){
-		if (SchedulableDevice::getSimulatedTime()>=_endTime) _simComp->setStopFlag(true);
+	bool transExecuted(TMLTransaction* iTrans){
+		if (SchedulableDevice::getSimulatedTime()>=_endTime){
+			_simComp->setStopFlag(true);
+			return true;
+		}
+		return false;
 	}
 	void setEndTime(TMLTime iEndTime){
 		_endTime=iEndTime;
@@ -127,8 +140,9 @@ public:
 	virtual ~RunTillTransOnDevice(){
 		_subject->removeListener(this);
 	}
-	void transExecuted(TMLTransaction* iTrans){
+	bool transExecuted(TMLTransaction* iTrans){
 		_simComp->setStopFlag(true);
+		return true;
 	}
 protected:
 	SimComponents* _simComp;

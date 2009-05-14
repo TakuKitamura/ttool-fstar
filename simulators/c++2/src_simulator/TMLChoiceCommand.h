@@ -61,11 +61,15 @@ public:
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
+	///Set preferred branch manually
+	void setPreferredBranch(unsigned int iBranch);
 protected:
 	///Member function pointer to the condition function returning the index of the next command
 	CondFuncPointer _condFunc;
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
+	///Index of the manually set branch
+	mutable unsigned int _preferredBranch;
 	TMLCommand* getNextCommand() const;
 	TMLCommand* prepareNextTransaction();
 };

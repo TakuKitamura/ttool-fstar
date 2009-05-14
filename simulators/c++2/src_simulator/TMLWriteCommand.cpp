@@ -53,7 +53,7 @@ void TMLWriteCommand::execute(){
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
-	TMLCommand* aNextCommand = prepare();
+	TMLCommand* aNextCommand = prepare(false);
 	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
@@ -68,10 +68,10 @@ TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 		if (_length==0){
 			TMLCommand* aNextCommand=getNextCommand();
 			_task->setCurrCommand(aNextCommand);
-			if (aNextCommand!=0) return aNextCommand->prepare();
+			if (aNextCommand!=0) return aNextCommand->prepare(false);
 		}
 	}
-
+	
 	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test write" << std::endl;
 	_channel->testWrite(_currTransaction);

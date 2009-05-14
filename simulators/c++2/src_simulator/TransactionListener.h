@@ -48,13 +48,15 @@ public:
 	///Gets called when a transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
+	\return true if simulation is stopped
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans){};
+	virtual bool transExecuted(TMLTransaction* iTrans){return false;};
 	///Gets called when a transaction is scheduled
 	/**
 	\param  iTrans Pointer to the transaction
+	\return true if simulation is stopped
 	*/
-	virtual	void transScheduled(TMLTransaction* iTrans){};
+	virtual	bool transScheduled(TMLTransaction* iTrans){return false;};
 	///Destructor
 	virtual ~TransactionListener(){}
 protected:

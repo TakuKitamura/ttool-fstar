@@ -82,7 +82,7 @@ void TMLSelectCommand::execute(){
 	_task->addComment(new Comment(_task->getEndLastTransaction(), this, _indexNextCommand));
 #endif
 	_maxChannelIndex=0;
-	TMLCommand* aNextCommand = prepare();
+	TMLCommand* aNextCommand = prepare(false);
 	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
