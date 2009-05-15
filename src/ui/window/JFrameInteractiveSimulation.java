@@ -324,64 +324,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		time.setForeground(Color.red);
 		jp01.add(time, c01);
 		
-		
-		
-		// Information
-		/*TURTLEPanel tp;
-		int i, j;
-		TDiagramPanel tdp;
-		RequirementDiagramPanel rdp;
-		LinkedList<Requirement> all, list;
-		all = new LinkedList<Requirement>();
-		String title;
-		String maintitle;
-		
-		for(i=0; i<tabs.size(); i++) {
-			tp = (TURTLEPanel)(tabs.elementAt(i));
-			maintitle = main.getTitleAt(i);
-			if (tp instanceof RequirementPanel) {
-				for(j=0; j<tp.panels.size(); j++) {
-					if (tp.panels.elementAt(j) instanceof RequirementDiagramPanel) {
-						rdp = (RequirementDiagramPanel)(tp.panels.elementAt(j));
-						list = rdp.getAllRequirements();
-						all.addAll(list);
-						
-						title = maintitle + " / " + tp.tabbedPane.getTitleAt(j);
-						
-						makeJScrollPane(list, mainTabbedPane, title);
-					}
-				}
-			}
-		}
-		
-		makeJScrollPane(all, mainTabbedPane, "All requirements");*/
-		
-		
-		
 		pack();
-		
-		//System.out.println("Requirements computed");
 	}
-	
-	/*private void makeJScrollPane(LinkedList<Requirement> list, JTabbedPane tab, String title) {
-		RequirementsTableModel rtm = new RequirementsTableModel(list, pts);
-		TableSorter sorterRTM = new TableSorter(rtm);
-		JTable jtableRTM = new JTable(sorterRTM);
-		sorterRTM.setTableHeader(jtableRTM.getTableHeader());
-		
-		for(int i=0; i<pts.length; i++) {
-			((jtableRTM.getColumnModel()).getColumn(i)).setPreferredWidth((pts[i].y)*50);
-		}
-		jtableRTM.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		JScrollPane jspRTM = new JScrollPane(jtableRTM);
-		jspRTM.setWheelScrollingEnabled(true);
-		jspRTM.getVerticalScrollBar().setUnitIncrement(10);
-		
-		tab.addTab(title, IconManager.imgic13, jspRTM, title);
-		
-		atms.add(rtm);
-		titles.add(title);
-	}*/
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
@@ -533,6 +477,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				setComponents();
 				
+				sendCommand("time");
+				
 				try {
 					while(true) {
 						testGo();
@@ -668,21 +614,26 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	protected void analyzeServerAnswer(String s) {
+		//System.out.println("From server:" + s);
 		int index0 = s.indexOf("<?xml");
 		
 		if (index0 != -1) {
+			//System.out.println("toto1");
 			ssxml = s.substring(index0, s.length()) + "\n";
 		} else {
+			//System.out.println("toto2");
 			ssxml = ssxml + s + "\n";
 		}
 		
 		index0 = ssxml.indexOf("</siminfo>");
 		
 		if (index0 != -1) {
+			//System.out.println("toto3");
 			ssxml = ssxml.substring(0, index0+10);
 			loadXMLInfoFromServer(ssxml);
 			ssxml = "";
 		}
+		//System.out.println("toto4");
 		
 	}
 	
@@ -848,6 +799,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			runCommand.setEnabled(true);
 			resetCommand.setEnabled(true);
 			StopCommand.setEnabled(false);
+			if (busyStatus) {
+				sendCommand("time");
+			}
 			busyStatus = false;
 		}
 	}
