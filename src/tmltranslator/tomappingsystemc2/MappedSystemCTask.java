@@ -226,11 +226,14 @@ public class MappedSystemCTask {
 			if (params==0){
 				initCommand+= "0)" + CR;
 			}else{
-				initCommand+= "new Parameter<ParamType>(arg1__req,";
-				if (params>1) initCommand+= "arg2__req,"; else  initCommand+= "0,";
-				if (params>2) initCommand+= "arg3__req))\n"; else  initCommand+= "0))\n";
+				initCommand+= "(ParamFuncPointer)&" + reference + "::" + "waitOnRequest_func)" + CR;
+				functionSig+="void waitOnRequest_func(Parameter<ParamType>& ioParam)" + SCCR;
+				functions+="void " + reference + "::waitOnRequest_func(Parameter<ParamType>& ioParam){" + CR;
+				functions+="arg1__req=ioParam.getP1()" + SCCR;
+				if (params>1) functions+= "arg2__req=ioParam.getP2()" + SCCR;
+				if (params>2) functions+= "arg3__req=ioParam.getP3()" + SCCR;
+				functions+="}\n\n"; 
 			}	
-			//"arg2__req,arg3__req))" + CR;	
 			String xx = firstCommand + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(task.getActivityDiagram().getFirst(),false,"&"+firstCommand,null,null,null) + "))"+ SCCR;
 			firstCommand="&"+firstCommand;
 			chaining+=xx;
@@ -249,21 +252,33 @@ public class MappedSystemCTask {
 	private void makeSerializableFuncs(){
 		ListIterator iterator = task.getAttributes().listIterator();
 		TMLAttribute att;
-		hcode += "virtual std::istream& readObject(std::istream& s)" + SCCR;
-		hcode += "virtual std::ostream& writeObject(std::ostream& s)" + SCCR;
-		functions+= "std::istream& " + reference + "::" + "readObject(std::istream& s){\nTMLTask::readObject(s);\n";
+		hcode += "virtual std::istream& readObject(std::istream& i_stream_var)" + SCCR;
+		hcode += "virtual std::ostream& writeObject(std::ostream& i_stream_var)" + SCCR;
+		functions+= "std::istream& " + reference + "::readObject(std::istream& i_stream_var){\nTMLTask::readObject(i_stream_var);\n";
 		while(iterator.hasNext()) {
 			att = (TMLAttribute)(iterator.next());
-			functions += "READ_STREAM(s," + att.name + ")" + SCCR;
+			functions += "READ_STREAM(i_stream_var," + att.name + ")" + SCCR;
 		}
-		functions+= "return s;\n}\n\n";
-		functions+= "std::ostream& " + reference + "::" + "writeObject(std::ostream& s){\nTMLTask::writeObject(s);\n";
+		functions+= "return i_stream_var;\n}\n\n";
+		functions+= "std::ostream& " + reference + "::writeObject(std::ostream& i_stream_var){\nTMLTask::writeObject(i_stream_var);\n";
 		iterator = task.getAttributes().listIterator();
 		while(iterator.hasNext()) {
 			att = (TMLAttribute)(iterator.next());
-			functions += "WRITE_STREAM(s," + att.name + ")" + SCCR;
+			functions += "WRITE_STREAM(i_stream_var," + att.name + ")" + SCCR;
 		}
-		functions+= "return s;\n}\n\n";
+		functions+= "return i_stream_var;\n}\n\n";
+		hcode += "void reset();" + SCCR;
+		functions+= "void "+reference + "::reset(){\nTMLTask::reset();\n";
+		iterator = task.getAttributes().listIterator();
+		while(iterator.hasNext()) {
+			att = (TMLAttribute)(iterator.next());
+			functions += att.name + "=";
+			if (att.hasInitialValue())
+				functions += att.initialValue + SCCR;
+			else
+				functions += "0" + SCCR;
+		}
+		functions+= "}\n\n";
 	}
 
 	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, strwrap nextCommandCont, strwrap functionCont, TMLActivityElement lastSequence){
@@ -402,20 +417,21 @@ public class MappedSystemCTask {
 			if (((TMLSendEvent)currElem).getNbOfParams()==0){
 				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
+				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
+				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
 				for(int i=0; i<3; i++) {
-					if (i!=0) initCommand += ",";
 					if (((TMLSendEvent)currElem).getParam(i) == null) {
-						initCommand += "0";
+						functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
 					} else {
 						if (((TMLSendEvent)currElem).getParam(i).length() > 0) {
-							initCommand += ((TMLSendEvent)currElem).getParam(i);
+							functions += "ioParam.setP" + (i+1) + "(" + ((TMLSendEvent)currElem).getParam(i) + ")" + SCCR;
 						} else {
-							initCommand += "0";
+							functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
 						}
 					}
             			}
-				initCommand+="))"+CR;
+				functions+="}\n\n"; 
 			}
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 			
@@ -426,20 +442,21 @@ public class MappedSystemCTask {
 			if (((TMLSendRequest)currElem).getNbOfParams()==0){
 				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
+				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
+				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
 				for(int i=0; i<3; i++) {
-					if (i!=0) initCommand += ",";
 					if (((TMLSendRequest)currElem).getParam(i) == null) {
-						initCommand += "0";
+						functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
 					} else {
 						if (((TMLSendRequest)currElem).getParam(i).length() > 0) {
-							initCommand += ((TMLSendRequest)currElem).getParam(i);
+							functions += "ioParam.setP" + (i+1) + "(" + ((TMLSendRequest)currElem).getParam(i) + ")" + SCCR;
 						} else {
-							initCommand += "0";
+							functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
 						}
 					}
 				}
-				initCommand+="))"+CR;
+				functions+="}\n\n"; 
 			}
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;	
 	
@@ -450,20 +467,17 @@ public class MappedSystemCTask {
 			if (((TMLWaitEvent)currElem).getNbOfParams()==0){
 				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
 			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",new Parameter<ParamType>(";
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
+				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
+				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
 				for(int i=0; i<3; i++) {
-					if (i!=0) initCommand += ",";
-					if (((TMLWaitEvent)currElem).getParam(i) == null) {
-						initCommand += "0";
-					} else {
+					if (((TMLWaitEvent)currElem).getParam(i) != null) {
 						if (((TMLWaitEvent)currElem).getParam(i).length() > 0) {
-							initCommand += ((TMLWaitEvent)currElem).getParam(i);
-						} else {
-							initCommand += "0";
+							functions += ((TMLWaitEvent)currElem).getParam(i) + "=ioParam.getP" + (i+1) +"()"+ SCCR;
 						}
 					}
 				}
-				initCommand+="))"+CR;
+				functions+="}\n\n"; 
 			}
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null,lastSequence) + "))"+ SCCR;
 		
@@ -627,24 +641,22 @@ public class MappedSystemCTask {
 				if (evt!=null){
 					nbevt++;	
 					evtList += ",(TMLEventChannel*)"+ evt.getExtendedName();
-					//paramList+=",0";
 					if (evt.getNbOfParams()==0) {
-						paramList+=",(Parameter<ParamType>*)0";
+						paramList+=",(ParamFuncPointer)0";
 					}else{
-						paramList+=",new Parameter<ParamType>(";
+
+						functionSig+="void " + cmdName + "_func" + i + "(Parameter<ParamType>& ioParam)" + SCCR;
+						functions+="void " + reference + "::" + cmdName +  "_func" + i + "(Parameter<ParamType>& ioParam){" + CR;
+						paramList+=",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
 						for(int j=0; j<3; j++) {
-							if (j!=0) paramList += ",";
-							if (((TMLSelectEvt)currElem).getParam(i,j) == null) {
-								paramList += "0";
-							} else {
+							if (((TMLSelectEvt)currElem).getParam(i,j) != null) {
 								if (((TMLSelectEvt)currElem).getParam(i,j).length() > 0) {
-									paramList += ((TMLSelectEvt)currElem).getParam(i,j);
-								} else {
-									paramList += "0";
+									//paramList += ((TMLSelectEvt)currElem).getParam(i,j);
+									functions += ((TMLSelectEvt)currElem).getParam(i,j) + "=ioParam.getP" + (j+1) +"()"+ SCCR;
 								}
 							}
 						}
-						paramList+=")";
+						functions+="}\n\n"; 
 					}
 					nextCommand+= ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement,null,null,lastSequence); 
 				}
