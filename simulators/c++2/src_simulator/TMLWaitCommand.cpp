@@ -44,11 +44,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWaitCommand::TMLWaitCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, Parameter<ParamType>* iParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParam),_channel(iChannel){
+TMLWaitCommand::TMLWaitCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParamFunc),_channel(iChannel){
 }
 
 void TMLWaitCommand::execute(){
+	//std::cout << "execute wait " << std::endl;
 	_channel->read();
+	//std::cout << "after ch->read " << std::endl;
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);

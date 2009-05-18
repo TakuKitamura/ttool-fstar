@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef ParameterH
 #define ParameterH
 
-#include <RefValUnion.h>
+#include <definitions.h>
 ///This class encapsulates three parameters
 template <typename T>
 class Parameter{
@@ -52,27 +52,33 @@ public:
 	\param ip2 Value 2
 	\param ip3 Value 3
 	*/
-	Parameter(const RefValUnion<T>& ip1,const RefValUnion<T>& ip2,const RefValUnion<T>& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
-	Parameter(std::istream& s, unsigned int iAdr):_p1(s,iAdr), _p2(s,iAdr), _p3(s,iAdr){}
-	///Assignement operator, copies all parameters
-	const Parameter<T>& operator=(const Parameter<T>& rhs){
-		_p1()=rhs._p1();
-		_p2()=rhs._p2();
-		_p3()=rhs._p3();
-		return *this;
+	Parameter(const T& ip1,const T& ip2,const T& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
+	Parameter():_p1(0),_p2(0),_p3(0){}
+	Parameter(std::istream& s){
+		READ_STREAM(s, _p1);
+		READ_STREAM(s, _p2);
+		READ_STREAM(s, _p3);
 	}
+	/////Assignement operator, copies all parameters
+	/*const Parameter<T>& operator=(const Parameter<T>& rhs){
+		_p1=rhs._p1;
+		_p2=rhs._p2;
+		_p3=rhs._p3;
+		return *this;
+	}*/
 	///Print function for testing purposes
 	void print() const{
-		std::cout << "p1:" << _p1.print() << " p2:" << _p2.print() << " p3:" << _p3.print() << std::endl;
+		//if (_p1!=0 || _p2!=0 || _p3!=0)
+			std::cout << "p1:" << _p1 << " p2:" << _p2 << " p3:" << _p3 << std::endl;
 	}
-	inline std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
-		_p1.writeObject(s,iAdr);
-		_p2.writeObject(s,iAdr);
-		_p3.writeObject(s,iAdr);
+	inline std::ostream& writeObject(std::ostream& s){
+		WRITE_STREAM(s, _p1);
+		WRITE_STREAM(s, _p2);
+		WRITE_STREAM(s, _p3);
 		return s;
 	}
 	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
-		is >>obj._p1 >> obj._p2 >> obj._p3;
+		is >> obj._p1 >> obj._p2 >> obj._p3;
  		return is;
 	}
 	//inline static void * operator new(size_t size){
@@ -81,9 +87,16 @@ public:
 	//inline static void operator delete(void *p, size_t size){
 	//	memPool.pfree(p, size);
 	//}
+	inline T getP1(){ return _p1;}
+	inline T getP2(){ return _p2;}
+	inline T getP3(){ return _p3;}
+	inline void setP1(T iP1){ _p1=iP1;}
+	inline void setP2(T iP2){ _p2=iP2;}
+	inline void setP3(T iP3){ _p3=iP3;}
 private:
+
 	///Three parameters
-	RefValUnion<T> _p1,_p2,_p3;
+	T _p1,_p2,_p3;
 	//static Pool<Parameter<T> > memPool;
 };
 #endif

@@ -44,14 +44,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam ):TMLCommand(iID, iTask,WAIT_SEND_VLEN,0),_channel(iChannel),_params(iParam),_numbChannels(iNumbChannels),_indexNextCommand(0),_maxChannelIndex(0){
+TMLSelectCommand::TMLSelectCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask,WAIT_SEND_VLEN,0), _channel(iChannel), _paramFuncs(iParamFuncs), _numbChannels(iNumbChannels), _indexNextCommand(0), _maxChannelIndex(0){
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
 	if (_channel!=0) delete[] _channel;
-	if (_params!=0){
-		for (unsigned int i=0;i<_numbChannels;i++) delete _params[i];
-		delete [] _params;
+	if (_paramFuncs!=0){
+		delete [] _paramFuncs;
 	}
 }
 
@@ -120,9 +119,13 @@ TMLCommand* TMLSelectCommand::getNextCommand() const{
 }
 
 
-Parameter<ParamType>* TMLSelectCommand::getParam() const{
-	return (_params==0)?0:_params[_indexNextCommand];
+ParamFuncPointer TMLSelectCommand::getParamFuncPointer() const{
+	return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];
 }
+
+//Parameter<ParamType>* TMLSelectCommand::getParam() const{
+//	return (_params==0)?0:_params[_indexNextCommand];
+//}
 
 std::string TMLSelectCommand::toString() const{
 	std::ostringstream outp;

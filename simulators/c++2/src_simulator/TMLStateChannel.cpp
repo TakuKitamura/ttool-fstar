@@ -53,6 +53,7 @@ std::ostream& TMLStateChannel::writeObject(std::ostream& s){
 
 std::istream& TMLStateChannel::readObject(std::istream& s){
 	TMLChannel::readObject(s);
+	std::cout << "Read Object TMLStateChannel " << _name << std::endl;
 	READ_STREAM(s,_content);
 	return s;
 }

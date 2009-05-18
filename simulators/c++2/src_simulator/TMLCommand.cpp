@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <Parameter.h>
 
-TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, Parameter<ParamType>* iParam): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _param(iParam), _breakpoint(0){
+TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _breakpoint(0){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 }
@@ -54,7 +54,7 @@ TMLCommand::~TMLCommand(){
 	if (_currTransaction!=0) delete _currTransaction;
 	//if (_currTransaction!=0) std::cout << "transaction not yet deleted: " << getCommandStr() << std::endl;
 	if (_nextCommand!=0) delete[] _nextCommand;
-	if (_param!=0) delete _param;
+	//if (_param!=0) delete _param;
 	_instanceList.remove(this);
 	removeBreakpoint();
 }
@@ -133,9 +133,13 @@ bool TMLCommand::channelUnknown() const{
 	return false;
 }
 
-Parameter<ParamType>* TMLCommand::getParam() const{
-	return _param;
+ParamFuncPointer TMLCommand::getParamFuncPointer() const{
+	return _paramFunc;
 }
+
+//Parameter<ParamType>* TMLCommand::getParam() const{
+//	return _param;
+//}
 
 #ifdef ADD_COMMENTS
 std::string TMLCommand::getCommentString(Comment* iCom) const{
@@ -163,7 +167,9 @@ std::ostream& TMLCommand::writeObject(std::ostream& s){
 }
 
 std::istream& TMLCommand::readObject(std::istream& s){
+	std::cout << "Read Object TMLCommand " << _ID << std::endl;
 	READ_STREAM(s,_progress);
+	std::cout << "End Read Object TMLCommand " << _ID << std::endl;
 	return s;
 }
 

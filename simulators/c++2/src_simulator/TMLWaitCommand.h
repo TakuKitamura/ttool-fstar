@@ -54,9 +54,9 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
-	\param iParam Pointer to the parameter data structure
+	\param iParam Pointer to a parameter function
 	*/
-	TMLWaitCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,Parameter<ParamType>* iParam);
+	TMLWaitCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

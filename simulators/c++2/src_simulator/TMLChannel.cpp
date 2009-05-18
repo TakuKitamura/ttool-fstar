@@ -130,8 +130,8 @@ std::istream& TMLChannel::readObject(std::istream& s){
 
 void TMLChannel::reset(){
 	//std::cout << "Channel reset" << std::endl;
-	_readTask=0;
-	_writeTask=0;
+	//_readTask=0;
+	//_writeTask=0;
 	_writeTrans=0;
 	_readTrans=0;
 	_writeTransCurrHop=0;

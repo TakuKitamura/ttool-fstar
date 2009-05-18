@@ -47,7 +47,7 @@ TMLEventFBChannel::TMLEventFBChannel(unsigned int iID, std::string iName, unsign
 
 void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	_tmpParam=(iTrans->getCommand()->getParam()==0)? Parameter<ParamType>(0,0,0): *(iTrans->getCommand()->getParam());  //added!!!
+	if (iTrans->getCommand()->getParamFuncPointer()!=0) (_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
 	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
 }
 
@@ -59,7 +59,7 @@ void TMLEventFBChannel::testRead(TMLTransaction* iTrans){
 void TMLEventFBChannel::write(){
 	_content++;
 	//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
-	_paramQueue.push_back(new Parameter<ParamType>(_tmpParam));   //modified!!!
+	_paramQueue.push_back(_tmpParam);   //NEW
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(_writeTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
@@ -69,19 +69,14 @@ void TMLEventFBChannel::write(){
 }
 
 bool TMLEventFBChannel::read(){
-	Parameter<ParamType> *pRead,*pWrite;
 	if (_content<1){
 		return false;
 	}else{
 		_content--;
-		pRead=_readTrans->getCommand()->getParam();
-		pWrite=_paramQueue.front();
-		//if (pRead!=0 && pWrite!=0) *pRead=*pWrite;
-		if (pWrite!=0){				//modified!!!
-			if (pRead!=0) *pRead=*pWrite;
-			delete pWrite;
-		}
-		_paramQueue.pop_front();
+		//if (_writeTrans->getCommand()->getParamFuncPointer()!=0){  //NEW
+			if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
+			_paramQueue.pop_front();  //NEW
+		//}
 		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
 			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);

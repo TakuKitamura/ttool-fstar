@@ -59,9 +59,9 @@ public:
       	\param iID ID of the command
 	\param iTask Pointer to the task the command belongs to
 	\param iLength Virtual length of the command
-	\param iParam Pointer to a parameter data structure
+	\param iParam Pointer to a parameter function
     	*/
-	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength,Parameter<ParamType>* iParam);
+	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -108,7 +108,7 @@ public:
 	/**
 	\return Pointer to parameter data structure
 	*/
-	virtual Parameter<ParamType>* getParam() const;
+	virtual ParamFuncPointer getParamFuncPointer() const;
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation
@@ -170,8 +170,8 @@ protected:
 	TMLTask* _task;
 	///Pointer to an array of pointers to the next commands
 	TMLCommand** _nextCommand;
-	///Pointer to the parameters of the command
-	Parameter<ParamType>* _param;
+	///Pointer to the parameter function of the command
+	ParamFuncPointer _paramFunc;
 	///Breakpoint
 	CommandListener* _breakpoint;	
 	///Determines the next command based on the _nextCommand array

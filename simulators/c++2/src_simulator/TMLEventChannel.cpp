@@ -44,10 +44,10 @@ TMLEventChannel::TMLEventChannel(unsigned int iID, std::string iName, unsigned i
 }
 
 TMLEventChannel::~TMLEventChannel(){
-	ParamQueue::iterator i;
+	/*ParamQueue::iterator i;
 	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
 		delete (*i);
-	}
+	}*/
 }
 
 TMLLength TMLEventChannel::getContent() const{
@@ -63,7 +63,7 @@ std::ostream& TMLEventChannel::writeObject(std::ostream& s){
 	std::cout << "write size of channel " << _name << " :" << _content << std::endl;
 	TMLStateChannel::writeObject(s);
 	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		(*i)->writeObject(s, (unsigned int)_writeTask);
+		i->writeObject(s);
 	}
 	//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
 	return s;
@@ -72,32 +72,33 @@ std::ostream& TMLEventChannel::writeObject(std::ostream& s){
 std::istream& TMLEventChannel::readObject(std::istream& s){
 	TMLLength aParamNo;
 	ParamQueue::iterator i;
-	Parameter<ParamType>* aNewParam;
+	//Parameter<ParamType>* aNewParam;
 	TMLStateChannel::readObject(s);
-	std::cout << "read new size of channel " << _name << " :" << _content << std::endl;
+	std::cout << "Read Object TMLEventChannel " << _name << std::endl;
+	//std::cout << "read new size of channel " << _name << " :" << _content << std::endl;
 	//for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
 	//	delete (*i);
 	//}
 	//_paramQueue.clear();
 	for(aParamNo=0; aParamNo < _content; aParamNo++){
-		aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
-		_paramQueue.push_back(aNewParam);
+		//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
+		_paramQueue.push_back(Parameter<ParamType>(s));
 	}
 	return s;
 }
 
 void TMLEventChannel::print() const{
 	for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		(*i)->print();
+		i->print();
 	}
 }
 
 void TMLEventChannel::reset(){
 	//std::cout << "EventChannel reset" << std::endl;
 	TMLStateChannel::reset();
-	for(ParamQueue::iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		delete (*i);
-	}
+	//for(ParamQueue::iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+	//	delete (*i);
+	//}
 	_paramQueue.clear();
 	//std::cout << "EventChannel reset end" << std::endl; 
 	//_tmpParam=Parameter<ParamType>(0,0,0);

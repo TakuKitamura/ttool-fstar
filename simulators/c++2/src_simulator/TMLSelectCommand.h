@@ -55,16 +55,17 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to an array of pointers to channels conveying the desired signals
 	\param iNumbChannels Number of channels in the array
-	\param iParam Pointer to the parameter data structure
+	\param iParam Pointer to an array of parameter functions pointers
 	*/
-	TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel,unsigned int iNumbChannels,Parameter<ParamType>** iParam);
+	TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFunc);
 	///Destructor
 	~TMLSelectCommand();
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
 	bool channelUnknown() const;
-	Parameter<ParamType>* getParam() const;
+	//Parameter<ParamType>* getParam() const;
+	ParamFuncPointer getParamFuncPointer() const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
@@ -76,8 +77,8 @@ protected:
 	TMLCommand* getNextCommand() const;
 	///Pointer to an array of pointers to channels conveying the desired signals
 	TMLEventChannel** _channel;
-	///Pointer to an array of parameters
-	Parameter<ParamType>** _params;
+	///Pointer to an array of parameter function pointers
+	ParamFuncPointer* _paramFuncs;
 	///Number of channels in the array
 	unsigned int _numbChannels;
 	///Index of the next command within the _nextCommand array

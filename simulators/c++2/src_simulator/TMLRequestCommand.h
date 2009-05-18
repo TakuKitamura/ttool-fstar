@@ -56,7 +56,7 @@ public:
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParam Pointer to the parameter data structure
 	*/
-	TMLRequestCommand(unsigned int iID, TMLTask* iTask,TMLEventBChannel* iChannel,Parameter<ParamType>* iParam);
+	TMLRequestCommand(unsigned int iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

@@ -62,8 +62,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <netinet/in.h>
 #include <pthread.h>
 
-#define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v))
-#define READ_STREAM(s,v) s.read((char*) &v,sizeof(v))
+#define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes written" << std::endl;
+#define READ_STREAM(s,v) s.read((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes read" << std::endl;
 
 using std::min;
 using std::max;
@@ -137,15 +137,18 @@ typedef std::map<SchedulableCommDevice*, BusMasterInfo*> MasterPriorityHashTab;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
-typedef std::deque<Parameter<ParamType>*> ParamQueue;
+typedef std::deque<Parameter<ParamType> > ParamQueue;
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
 typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
+///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
+typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
 ///Datatype holding references to TraceableDevices (for VCD output)
 typedef std::list<TraceableDevice*> TraceableDeviceList;
+
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{
 		return strcmp(s1, s2) < 0;

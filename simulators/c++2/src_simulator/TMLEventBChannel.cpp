@@ -62,12 +62,11 @@ void TMLEventBChannel::readNextEvents(){
 	//std::cout << "vv" << std::endl;
 	if (_eventFile->is_open()){
 		int i=0;
-		Parameter<ParamType>* aNewParam;
+		Parameter<ParamType> aNewParam; //NEW
 		while (++i<NO_EVENTS_TO_LOAD && !_eventFile->eof()){
-		//while (++i<2 && !_eventFile->eof()){
 			_content++;
-			aNewParam = new Parameter<ParamType>(0,0,0);
-			*_eventFile >> *aNewParam;
+			(*_eventFile) >> aNewParam;  //NEW
+			//aNewParam.readTxtStream(*_eventFile);
 			_paramQueue.push_back(aNewParam);
 		}
 	}else
@@ -76,7 +75,11 @@ void TMLEventBChannel::readNextEvents(){
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	_tmpParam=(iTrans->getCommand()->getParam()==0)? Parameter<ParamType>(0,0,0): *(iTrans->getCommand()->getParam());  //added!!!
+	if (iTrans->getCommand()->getParamFuncPointer()!=0){
+		(_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
+		//std::cout << "written: ";
+		//_tmpParam.print();
+	}
 	_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 }
 
@@ -92,8 +95,7 @@ void TMLEventBChannel::write(){
 
 void TMLEventBChannel::write(TMLTransaction* iTrans){
 	_content++;
-	//_paramQueue.push_back(iTrans->getCommand()->getParam());
-	_paramQueue.push_back(new Parameter<ParamType>(_tmpParam));   //modified!!!
+	_paramQueue.push_back(_tmpParam);   //NEW
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
@@ -102,19 +104,21 @@ void TMLEventBChannel::write(TMLTransaction* iTrans){
 }
 
 bool TMLEventBChannel::read(){
-	Parameter<ParamType> *pRead,*pWrite;
 	if (_content<1){
 		return false;
 	}else{
 		_content--;
 		if (_content==0 && _sourceIsFile) readNextEvents();
-		pRead=_readTrans->getCommand()->getParam();
-		pWrite=_paramQueue.front();
-		if (pWrite!=0){				//modified!!!
-			if (pRead!=0) *pRead=*pWrite;
-			delete pWrite;
-		}
-		_paramQueue.pop_front();
+		//std::cout << "read next" << std::endl;
+		//if (_writeTrans->getCommand()->getParamFuncPointer()!=0){  //NEW
+			//std::cout << "in if" << std::endl;
+		if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
+		//std::cout << "read: ";
+		//_paramQueue.front().print();
+		//std::cout << "after 2nd if" << std::endl;
+		_paramQueue.pop_front();  //NEW
+		//}
+		//std::cout << "after if" << std::endl;
 		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 		_readTrans=0;
 		return true;
@@ -152,6 +156,7 @@ std::ostream& TMLEventBChannel::writeObject(std::ostream& s){
 std::istream& TMLEventBChannel::readObject(std::istream& s){
 	std::istream::streampos aPos;
 	TMLEventChannel::readObject(s);
+	std::cout << "Read Object TMLEventBChannel " << _name << std::endl;
 	if (_eventFile!=0){
 		READ_STREAM(s,aPos);
 		_eventFile->seekg(aPos);
@@ -160,14 +165,14 @@ std::istream& TMLEventBChannel::readObject(std::istream& s){
 }
 
 void TMLEventBChannel::reset(){
-	Parameter<ParamType> param(0,0,0);
+	//Parameter<ParamType> param(0,0,0);
 	TMLEventChannel::reset();
 	if (_eventFile!=0){
 		_eventFile->clear();
 		_eventFile->seekg(0,std::ios::beg);
-		std::cout << "EventB reset " << _eventFile->eof() << std::endl;
-		*_eventFile >> param;
-		param.print();
+		//std::cout << "EventB reset " << _eventFile->eof() << std::endl;
+		//*_eventFile >> param;
+		//param.print();
 		readNextEvents();
 		std::cout << "no of events: " << _content << std::endl;
 	}

@@ -190,7 +190,12 @@ std::ostream& TMLTask::writeObject(std::ostream& s){
 		aCurrCmd=0;
 		WRITE_STREAM(s,aCurrCmd);
 	}else{
-		aCurrCmd=(unsigned int)_currCommand-(unsigned int)this;
+		//if (((unsigned int)_currCommand)<((unsigned int)this)){ std::cout<< "Schrrrrrrecklich!!!" << std::endl; exit(1);} 
+		//aCurrCmd=((unsigned int)_currCommand)-((unsigned int)this);
+		aCurrCmd=_currCommand->getID();
+		if (aCurrCmd>1000 && aCurrCmd!=((unsigned int)-1)){
+			std::cout << "BIIIIIIIIIIIIIIIIIIIIIIIG number: " << aCurrCmd << std::endl;
+		}
 		WRITE_STREAM(s,aCurrCmd);
 		_currCommand->writeObject(s);
 	}
@@ -200,13 +205,21 @@ std::ostream& TMLTask::writeObject(std::ostream& s){
 std::istream& TMLTask::readObject(std::istream& s){
 	unsigned int aCurrCmd;
 	//_previousTransEndTime=0; _busyCycles=0; _CPUContentionDelay=0; _noCPUTransactions=0;
+	std::cout << "Read Object TMLTask " << _name << std::endl;
 	READ_STREAM(s, _endLastTransaction);
 	READ_STREAM(s, aCurrCmd);
-	_currCommand=(aCurrCmd==0)?0:(TMLCommand*)(aCurrCmd+((unsigned int)this));
-	if (_currCommand!=0){
+	//_currCommand=(aCurrCmd==0)?0:(TMLCommand*)(aCurrCmd+((unsigned int)this));
+	//_currCommand=(aCurrCmd==0)? 0 : getCommandByID(aCurrCmd);
+	//std::cout << "after ? " << std::endl;
+	if (aCurrCmd!=0){
+		std::cout << "cmd ID: " << aCurrCmd << std::endl;
+		_currCommand=getCommandByID(aCurrCmd);
+		std::cout << "cmd adr: " << _currCommand << std::endl;
+		//std::cout << "before read cmd " << std::endl;
 		 _currCommand->readObject(s);
 		//_currCommand->prepare();
 	}
+	std::cout << "End Read Object TMLTask " << _name << std::endl;
 	return s;
 }
 

@@ -119,10 +119,13 @@ std::ostream& SimComponents::writeObject(std::ostream& s){
 }
 
 std::istream& SimComponents::readObject(std::istream& s){
+	std::cout << "Read Object SimComponents" << std::endl;
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
+		std::cout << "SimComponents --> next Device" << std::endl;
 		(*i)->readObject(s);
 	}
 	return s;
+	std::cout << "End Read Object SimComponents" << std::endl;
 }
 
 void SimComponents::reset(){
