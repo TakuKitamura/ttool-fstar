@@ -47,7 +47,15 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 #include <TransactionListener.h>
 
-CPU::CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle), _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*_timePerCycle), _taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0){
+CPU::CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),
+#ifdef PENALTIES_ENABLED
+_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle),
+#endif 
+_cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*_timePerCycle)
+#ifdef PENALTIES_ENABLED
+ ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0)
+#endif
+{
 	//_myid=++_id;
 	_transactList.reserve(BLOCK_SIZE);
 }
@@ -131,6 +139,7 @@ void CPU::calcStartTimeLength(){
 #else
 	_nextTransaction->setLength(_nextTransaction->getVirtualLength()*_timePerExeci);
 #endif
+#ifdef PENALTIES_ENABLED
 	if (_lastTransaction==0 || _lastTransaction->getCommand()->getTask()!=_nextTransaction->getCommand()->getTask()){
 		_nextTransaction->setTaskSwitchingPenalty(_taskSwitchingTime);
 	}
@@ -142,12 +151,14 @@ void CPU::calcStartTimeLength(){
 		_nextTransaction->setBranchingPenalty((_nextTransaction->getVirtualLength()+_branchMissReminder) * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
 		_branchMissTempReminder = (_nextTransaction->getVirtualLength()+_branchMissReminder) % (100/_brachingMissrate);
 	}
+#endif
 }
 
 TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
 	if (_busNextTransaction==0){
 		if (iTime < _nextTransaction->getStartTime()) return 0;
 		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
+#ifdef PENALTIES_ENABLED
 		TMLTime aStaticPenalty = _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
 		if (aNewDuration<=aStaticPenalty){
 			_nextTransaction->setLength(_timePerExeci);
@@ -182,6 +193,10 @@ TMLTime CPU::truncateNextTransAt(TMLTime iTime){
 			std::cout << "CPU:truncateNTA: truncate loop executed: " << test << " times.\n";
 //#endif
 		}
+#else
+		_nextTransaction->setVirtualLength(aNewDuration /_timePerExeci);
+		_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
+#endif
 #ifdef DEBUG_CPU
 		std::cout << "CPU:truncateNTA: ### cut transaction at " << _nextTransaction->getVirtualLength() << std::endl;
 #endif
@@ -234,7 +249,9 @@ bool CPU::addTransaction(){
 		_simulatedTime=max(_simulatedTime,_endSchedule);
 		_transactList.push_back(_nextTransaction);
 		_lastTransaction=_nextTransaction;
+#ifdef PENALTIES_ENABLED
 		_branchMissReminder=_branchMissTempReminder;
+#endif
 		_busyCycles+=_nextTransaction->getOverallLength();
 		//std::cout << "busyCycles: " <<  _busyCycles << std::endl;
 		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_nextTransaction);
@@ -417,8 +434,10 @@ void CPU::reset(){
 	_lastTransaction=0;
 	_busNextTransaction=0;
 	_busyCycles=0;
+#ifdef PENALTIES_ENABLED
 	_branchMissReminder=0;
 	_branchMissTempReminder=0;
+#endif
 }
 
 void CPU::streamBenchmarks(std::ostream& s) const{

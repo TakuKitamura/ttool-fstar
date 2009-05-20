@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define BUFFER_SIZE 100
 class CurrentComponents;
 class Simulator;
-class Server;
+class ServerIF;
 
 class SimServSyncInfo{
 public:
@@ -58,7 +58,7 @@ public:
 	pthread_mutex_t _mutexProduce;
 	pthread_mutex_t _mutexConsume;
 	Simulator* _simulator;
-	Server* _server;
+	ServerIF* _server;
 	SimComponents* _simComponents;
 	char _command[BUFFER_SIZE];
 	unsigned int _bufferSize;

@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<Server.h>
 #include<Simulator.h>
 
-Server::Server(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _socketClient(-1){
+Server::Server():_socketClient(-1){
 	pthread_mutex_init(&_replyMutex, NULL);
 }
 

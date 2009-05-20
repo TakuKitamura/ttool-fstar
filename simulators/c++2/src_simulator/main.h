@@ -48,7 +48,7 @@ void *SimThreadFunc( void *ptr ){
 }
 
 void *ServThreadFunc( void *ptr ){
-	Server* myServer = static_cast<Server*>(ptr);
+	ServerIF* myServer = static_cast<ServerIF*>(ptr);
 	myServer->run();
 	pthread_exit(NULL);
 }
@@ -63,18 +63,20 @@ int main(int len, char ** args) {
 	Simulator mySim(&mySync);
 	gettimeofday(&end,NULL);
 	std::cout << "The preparation took " << getTimeDiff(begin,end) << "usec.\n";
-
-	if (!mySim.run(len, args)){
-		Server myServer(&mySync);
+	ServerIF* myServer = mySim.run(len, args);
+	if (myServer!=0){
+		//Server myServer(&mySync);
+		myServer->setSimSyncInfo(&mySync);
 		mySync._simulator=&mySim;
-		mySync._server=&myServer;
+		mySync._server=myServer;
 		pthread_t aThreadSim, aThreadServ;
 		int  aRetVal;
 		aRetVal = pthread_create(&aThreadSim, NULL, SimThreadFunc, static_cast<void*>(&mySim));
-		aRetVal = pthread_create(&aThreadServ, NULL, ServThreadFunc, static_cast<void*>(&myServer));
+		aRetVal = pthread_create(&aThreadServ, NULL, ServThreadFunc, static_cast<void*>(myServer));
 		pthread_join(aThreadSim, NULL);
 		pthread_join(aThreadServ, NULL);
 		pthread_exit(NULL);
+		delete myServer;
 	}
 	delete mySync._simComponents;
 }

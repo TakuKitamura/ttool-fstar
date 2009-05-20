@@ -48,13 +48,14 @@ TMLStateChannel::~TMLStateChannel(){}
 std::ostream& TMLStateChannel::writeObject(std::ostream& s){
 	TMLChannel::writeObject(s);
 	WRITE_STREAM(s,_content);
+	std::cout << "Write: TMLStateChannel " << _name << " content: " << _content << std::endl;
 	return s;
 }
 
 std::istream& TMLStateChannel::readObject(std::istream& s){
 	TMLChannel::readObject(s);
-	std::cout << "Read Object TMLStateChannel " << _name << std::endl;
 	READ_STREAM(s,_content);
+	std::cout << "Read: TMLStateChannel " << _name << " content: " << _content << std::endl;
 	return s;
 }
 

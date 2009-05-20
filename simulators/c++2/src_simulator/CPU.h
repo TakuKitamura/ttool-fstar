@@ -135,14 +135,10 @@ public:
 protected:
 	///Calculates the start time and the length of the next transaction
 	void calcStartTimeLength();
-	/////Name of the CPU
-	//std::string _name;
 	///List of all tasks running on the CPU
 	TaskList _taskList;
 	///List containing all already scheduled transactions
 	TransactionList _transactList;
-	/////End time of the last scheduled transaction
-	//TMLTime _endSchedule;
 	///Pointer to the next transaction to be executed
 	TMLTransaction* _nextTransaction;
 	///Pointer to the last transaction which has been executed
@@ -150,23 +146,20 @@ protected:
 	///Pointer to the bus which will be accessed by the next transaction
 	SchedulableCommDevice* _busNextTransaction;
 	
-	/////Unique ID of the CPU
-	//unsigned int _myid;
-	/////Class variable counting the number of CPU instances
-	//static unsigned int _id;
-	
 	///1/Processor frequency
 	TMLTime _timePerCycle;
+#ifdef PENALTIES_ENABLED
 	///Pipeline size
 	unsigned int _pipelineSize;
 	///Task switching penalty in cycles
 	unsigned int _taskSwitchingCycles;
 	///Branching prediction miss rate
 	unsigned int _brachingMissrate;
-	///Cycles needed to switch into indle mode
+	///Cycles needed to switch to idle mode
 	unsigned int _changeIdleModeCycles;
 	///Idle cycles which elapse before entering idle mode
 	unsigned int _cyclesBeforeIdle;
+#endif
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
 	///Busy cycles since simulation start
@@ -175,6 +168,7 @@ protected:
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit
 	TMLTime _timePerExeci;
+#ifdef PENALTIES_ENABLED
 	///Task switching penalty in time units
 	TMLTime _taskSwitchingTime;
 	///Idle time which elapses before entering idle mode
@@ -185,12 +179,13 @@ protected:
 	TMLTime _pipelineSizeTimesExeci;
 	///_brachingMissrate * _pipelineSize
 	unsigned int _missrateTimesPipelinesize;
-	
+
 	//varibales for branch miss calculation
 	///Indicates the number of commands executed since the last branch miss
 	unsigned int _branchMissReminder;
 	///Potentially new value of _branchMissReminder
 	unsigned int _branchMissTempReminder;
+#endif
 
 	///Actual position within transaction list (used for vcd output)
 	TransactionList::iterator _posTrasactListVCD;

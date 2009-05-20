@@ -149,17 +149,22 @@ bool TMLEventBChannel::getRequestChannel() const{
 
 std::ostream& TMLEventBChannel::writeObject(std::ostream& s){
 	TMLEventChannel::writeObject(s);
-	if (_eventFile!=0) WRITE_STREAM(s,_eventFile->tellg());
+	if (_eventFile!=0){
+		WRITE_STREAM(s,_eventFile->tellg());
+		std::cout << "Write: TMLEventBChannel " << _name << " posInFile: " <<  _eventFile->tellg() << std::endl;
+	}
 	return s;
 }
 
 std::istream& TMLEventBChannel::readObject(std::istream& s){
 	std::istream::streampos aPos;
 	TMLEventChannel::readObject(s);
-	std::cout << "Read Object TMLEventBChannel " << _name << std::endl;
+	//std::cout << "Read Object TMLEventBChannel " << _name << std::endl;
 	if (_eventFile!=0){
 		READ_STREAM(s,aPos);
 		_eventFile->seekg(aPos);
+		std::cout << "Read: TMLEventBChannel " << _name << " posInFile: " <<  aPos << std::endl;
+		
 	}
 	return s;
 }

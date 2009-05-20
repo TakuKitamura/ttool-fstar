@@ -95,6 +95,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class SimComponents;
 class SimServSyncInfo;
+class ServerIF;
 
 ///Simulation engine and output capabilities
 class Simulator{
@@ -114,9 +115,9 @@ public:
 	\param iArgs Array withe arguments
 	\return Returns true if simulation could be executed
 	*/
-	bool run(int iLen, char** iArgs);
+	ServerIF* run(int iLen, char** iArgs);
 	///Execute asynchronous command
-	bool execAsyncCmd(char* iCmd);
+	bool execAsyncCmd(const char* iCmd);
 	///Sends simulator status information to client
 	void sendStatus();
 protected:

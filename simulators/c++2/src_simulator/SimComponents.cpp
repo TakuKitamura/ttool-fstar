@@ -112,20 +112,22 @@ void SimComponents::streamBenchmarks(std::ostream& s) const{
 }
 
 std::ostream& SimComponents::writeObject(std::ostream& s){
+	std::cout << "WRITE ----------------------------------------------------\n";
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
 		(*i)->writeObject(s);
 	}
+	std::cout << "----------------------------------------------------\n";
 	return s;
 }
 
 std::istream& SimComponents::readObject(std::istream& s){
-	std::cout << "Read Object SimComponents" << std::endl;
+	std::cout << "READ ----------------------------------------------------\n";
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
-		std::cout << "SimComponents --> next Device" << std::endl;
+		//std::cout << "SimComponents --> next Device" << std::endl;
 		(*i)->readObject(s);
 	}
 	return s;
-	std::cout << "End Read Object SimComponents" << std::endl;
+	std::cout << "----------------------------------------------------\n";
 }
 
 void SimComponents::reset(){

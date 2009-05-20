@@ -190,12 +190,14 @@ protected:
 	TMLLength _virtualLength;
 	///Pointer to the command the transaction belongs to
 	TMLCommand* _command;
+#ifdef PENALTIES_ENABLED
 	///Idle penalty
 	unsigned int _idlePenalty;
 	///Task switching penalty
 	unsigned int _taskSwitchingPenalty;
 	///Branching penalty
 	unsigned int _branchingPenalty;
+#endif
 	///Task terminated flag
 	bool _terminated;
 	///Channel on which data was conveyed

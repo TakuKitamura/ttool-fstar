@@ -44,10 +44,6 @@ TMLEventChannel::TMLEventChannel(unsigned int iID, std::string iName, unsigned i
 }
 
 TMLEventChannel::~TMLEventChannel(){
-	/*ParamQueue::iterator i;
-	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		delete (*i);
-	}*/
 }
 
 TMLLength TMLEventChannel::getContent() const{
@@ -60,7 +56,7 @@ bool TMLEventChannel::getRequestChannel() const{
 
 std::ostream& TMLEventChannel::writeObject(std::ostream& s){
 	ParamQueue::iterator i;
-	std::cout << "write size of channel " << _name << " :" << _content << std::endl;
+	//std::cout << "write size of channel " << _name << " :" << _content << std::endl;
 	TMLStateChannel::writeObject(s);
 	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
 		i->writeObject(s);
@@ -74,11 +70,7 @@ std::istream& TMLEventChannel::readObject(std::istream& s){
 	ParamQueue::iterator i;
 	//Parameter<ParamType>* aNewParam;
 	TMLStateChannel::readObject(s);
-	std::cout << "Read Object TMLEventChannel " << _name << std::endl;
-	//std::cout << "read new size of channel " << _name << " :" << _content << std::endl;
-	//for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-	//	delete (*i);
-	//}
+	//std::cout << "Read Object TMLEventChannel " << _name << std::endl;
 	//_paramQueue.clear();
 	for(aParamNo=0; aParamNo < _content; aParamNo++){
 		//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
@@ -96,10 +88,6 @@ void TMLEventChannel::print() const{
 void TMLEventChannel::reset(){
 	//std::cout << "EventChannel reset" << std::endl;
 	TMLStateChannel::reset();
-	//for(ParamQueue::iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-	//	delete (*i);
-	//}
 	_paramQueue.clear();
 	//std::cout << "EventChannel reset end" << std::endl; 
-	//_tmpParam=Parameter<ParamType>(0,0,0);
 }

@@ -90,12 +90,13 @@ public:
 	virtual void schedule2TXT(std::ofstream& myfile) const =0;
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
-		std::cout << "Read Object Schedulable Device " << _name << std::endl;
 		READ_STREAM(is,_endSchedule);
+		std::cout << "Read: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
 		return is;
 	}
 	virtual std::ostream& writeObject(std::ostream &os){
-		WRITE_STREAM(os,_endSchedule);		
+		WRITE_STREAM(os,_endSchedule);
+		std::cout << "Write: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
 		return os;
 	}
 	virtual void reset(){

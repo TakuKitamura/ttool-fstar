@@ -45,7 +45,11 @@ Ludovic Apvrille, Renaud Pacalet
 
 MemPool<TMLTransaction> TMLTransaction::memPool;
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand), _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0), _terminated(false), _channel(iChannel) {
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
+#ifdef PENALTIES_ENABLED
+ _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
+#endif
+ _terminated(false), _channel(iChannel) {
 }
 
 TMLTime TMLTransaction::getRunnableTime() const{
@@ -67,7 +71,11 @@ TMLTime TMLTransaction::getStartTime() const{
 }
 
 TMLTime TMLTransaction::getStartTimeOperation() const{
+#ifdef PENALTIES_ENABLED
 	return _startTime + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+#else
+	return _startTime;
+#endif
 }
 
 void TMLTransaction::setStartTime(TMLTime iStartTime){
@@ -83,11 +91,19 @@ void TMLTransaction::setLength(TMLTime iLength){
 }
 
 TMLTime TMLTransaction::getOverallLength() const{
+#ifdef PENALTIES_ENABLED
 	return _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+#else
+	return _length;
+#endif
 }
 
 TMLTime TMLTransaction::getPenalties() const{
+#ifdef PENALTIES_ENABLED
 	return _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+#else
+	return 0;
+#endif
 }
 
 TMLLength TMLTransaction::getVirtualLength() const{
@@ -103,32 +119,54 @@ TMLCommand* TMLTransaction::getCommand() const{
 }
 
 TMLTime TMLTransaction::getEndTime() const{
+#ifdef PENALTIES_ENABLED
 	return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+#else
+	return _startTime  + _length;
+#endif
 	//return _startTime  + _length;
 }
 
 unsigned int TMLTransaction::getIdlePenalty() const{
+#ifdef PENALTIES_ENABLED
 	return _idlePenalty;
+#else
+	return 0;
+#endif
 }
 
 void TMLTransaction::setIdlePenalty(unsigned int iIdlePenalty){
+#ifdef PENALTIES_ENABLED
 	_idlePenalty=iIdlePenalty;
+#endif
 }
 
 unsigned int TMLTransaction::getTaskSwitchingPenalty() const{
+#ifdef PENALTIES_ENABLED
 	return _taskSwitchingPenalty;
+#else
+	return 0;
+#endif
 }
 
 void TMLTransaction::setTaskSwitchingPenalty(unsigned int iTaskSwitchingPenalty){
-	_taskSwitchingPenalty=iTaskSwitchingPenalty;	
+#ifdef PENALTIES_ENABLED
+	_taskSwitchingPenalty=iTaskSwitchingPenalty;
+#endif	
 }
 
 unsigned int TMLTransaction::getBranchingPenalty() const{
+#ifdef PENALTIES_ENABLED
 	return _branchingPenalty;
+#else
+	return 0;
+#endif
 }
 
 void TMLTransaction::setBranchingPenalty(unsigned int iBranchingPenalty){
+#ifdef PENALTIES_ENABLED
 	_branchingPenalty=iBranchingPenalty;
+#endif
 }
 
 bool TMLTransaction::getTerminatedFlag() const{

@@ -58,6 +58,7 @@ public:
 		READ_STREAM(s, _p1);
 		READ_STREAM(s, _p2);
 		READ_STREAM(s, _p3);
+		print();
 	}
 	/////Assignement operator, copies all parameters
 	/*const Parameter<T>& operator=(const Parameter<T>& rhs){
@@ -75,6 +76,7 @@ public:
 		WRITE_STREAM(s, _p1);
 		WRITE_STREAM(s, _p2);
 		WRITE_STREAM(s, _p3);
+		print();
 		return s;
 	}
 	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
@@ -93,8 +95,7 @@ public:
 	inline void setP1(T iP1){ _p1=iP1;}
 	inline void setP2(T iP2){ _p2=iP2;}
 	inline void setP3(T iP3){ _p3=iP3;}
-private:
-
+protected:
 	///Three parameters
 	T _p1,_p2,_p3;
 	//static Pool<Parameter<T> > memPool;

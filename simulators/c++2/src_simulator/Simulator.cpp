@@ -39,6 +39,8 @@ Ludovic Apvrille, Renaud Pacalet
  */
 #include <Simulator.h>
 #include <TMLChoiceCommand.h>
+#include <Server.h>
+#include <ServerLocal.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo),  _simComp(iSyncInfo->_simComponents), _traceFileName("schedule"), _currCmdListener(0), _busy(false) {}
 
@@ -371,9 +373,11 @@ void Simulator::run(){
 	std::cout << "Simulator loop terminated." << std::endl;
 }
 
-bool Simulator::run(int iLen, char ** iArgs){
+ServerIF* Simulator::run(int iLen, char ** iArgs){
 	_traceFileName =getArgs("-server", "server", iLen, iArgs);
-	if (!_traceFileName.empty()) return false;
+	if (!_traceFileName.empty()) return new Server();
+	_traceFileName =getArgs("-file", "file", iLen, iArgs);
+	if (!_traceFileName.empty()) return new ServerLocal(_traceFileName);
 	std::cout << "Running in command line mode.\n";
 	_traceFileName =getArgs("-help", "help", iLen, iArgs);
 	if (_traceFileName.empty()){
@@ -391,7 +395,7 @@ bool Simulator::run(int iLen, char ** iArgs){
 	}
 	else
 		printHelp();
-	return true;
+	return 0;
 }
 
 void Simulator::decodeCommand(char* iCmd){
@@ -705,7 +709,7 @@ void Simulator::decodeCommand(char* iCmd){
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
 
-bool Simulator::execAsyncCmd(char* iCmd){
+bool Simulator::execAsyncCmd(const char* iCmd){
 	unsigned int aCmd;
 	std::istringstream aInpStream(iCmd);
 	std::string aStrParam;

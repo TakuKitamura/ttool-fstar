@@ -41,18 +41,19 @@ Ludovic Apvrille, Renaud Pacalet
 #define ServerH
 
 #include <definitions.h>
+#include <ServerIF.h>
 
 class Simulator;
 class SimServSyncInfo;
 
 ///Class encapsulating TCP server and command decoding capabilities
-class Server{
+class Server: public ServerIF{
 public:
 	///Constructor
 	/**
 	\param iSim Pointer to the associated simulator object
 	*/
-	Server(SimServSyncInfo* iSyncInfo);
+	Server();
 	///Run the server
 	int run();
 	///Send reply to client
@@ -64,7 +65,6 @@ protected:
 	///Determines the IP adress of the client
 	void* get_in_addr(struct sockaddr *sa) const;
 	///pointer to synchronization structure
-	SimServSyncInfo* _syncInfo;
 	int _socketClient;
 	pthread_mutex_t _replyMutex;
 };

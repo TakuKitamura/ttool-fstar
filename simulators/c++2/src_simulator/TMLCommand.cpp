@@ -163,13 +163,14 @@ void TMLCommand::removeBreakpoint(){
 
 std::ostream& TMLCommand::writeObject(std::ostream& s){
 	WRITE_STREAM(s,_progress);
+	std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 	return s;
 }
 
 std::istream& TMLCommand::readObject(std::istream& s){
-	std::cout << "Read Object TMLCommand " << _ID << std::endl;
 	READ_STREAM(s,_progress);
-	std::cout << "End Read Object TMLCommand " << _ID << std::endl;
+	std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+	//std::cout << "End Read Object TMLCommand " << _ID << std::endl;
 	return s;
 }
 
