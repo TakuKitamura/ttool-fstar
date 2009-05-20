@@ -38,31 +38,23 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef SimServSyncInfoH
-#define SimServSyncInfoH
+#ifndef ServerIFH
+#define ServerIFH
 
 #include <definitions.h>
 
-#define BUFFER_SIZE 100
-class CurrentComponents;
-class Simulator;
-class ServerIF;
-class SimComponents;
+class SimServSyncInfo;
 
-class SimServSyncInfo{
+///This class represents the basic Interface for Server subclasses
+class ServerIF{
 public:
-	SimServSyncInfo():_bufferSize(BUFFER_SIZE),_terminate(false){
-		pthread_mutex_init(&_mutexProduce, NULL);
-		pthread_mutex_init(&_mutexConsume, NULL);
-		pthread_mutex_lock(&_mutexConsume);
-	}
-	pthread_mutex_t _mutexProduce;
-	pthread_mutex_t _mutexConsume;
-	Simulator* _simulator;
-	ServerIF* _server;
-	SimComponents* _simComponents;
-	char _command[BUFFER_SIZE];
-	unsigned int _bufferSize;
-	bool _terminate;
+	virtual ~ServerIF(){}
+	virtual int run()=0;
+	virtual void sendReply(std::string iReplyStr)=0;
+	void setSimSyncInfo(SimServSyncInfo* iSyncInfo);
+protected:
+	///pointer to synchronization structure
+	SimServSyncInfo* _syncInfo;
+	void executeCmd(char* iCmd);
 };
 #endif

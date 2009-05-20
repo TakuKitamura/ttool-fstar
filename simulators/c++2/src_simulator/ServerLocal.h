@@ -37,32 +37,28 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-
-#ifndef SimServSyncInfoH
-#define SimServSyncInfoH
+#ifndef ServerLocalH
+#define ServerLocalH
 
 #include <definitions.h>
+#include <ServerIF.h>
 
-#define BUFFER_SIZE 100
-class CurrentComponents;
 class Simulator;
-class ServerIF;
-class SimComponents;
+class SimServSyncInfo;
 
-class SimServSyncInfo{
+///Class encapsulating TCP server and command decoding capabilities
+class ServerLocal: public ServerIF{
 public:
-	SimServSyncInfo():_bufferSize(BUFFER_SIZE),_terminate(false){
-		pthread_mutex_init(&_mutexProduce, NULL);
-		pthread_mutex_init(&_mutexConsume, NULL);
-		pthread_mutex_lock(&_mutexConsume);
-	}
-	pthread_mutex_t _mutexProduce;
-	pthread_mutex_t _mutexConsume;
-	Simulator* _simulator;
-	ServerIF* _server;
-	SimComponents* _simComponents;
-	char _command[BUFFER_SIZE];
-	unsigned int _bufferSize;
-	bool _terminate;
+	///Constructor
+	/**
+	\param iSim Pointer to the associated simulator object
+	*/
+	ServerLocal(std::string& iCmdFile);
+	int run();
+	void sendReply(std::string iReplyStr);
+protected:
+	void executeCmd(char* aCmd);
+	std::string _cmdFile;
+	//pthread_mutex_t _replyMutex;
 };
 #endif

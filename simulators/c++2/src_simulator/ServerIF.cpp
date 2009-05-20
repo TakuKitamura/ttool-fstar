@@ -38,31 +38,19 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef SimServSyncInfoH
-#define SimServSyncInfoH
+#include<ServerIF.h>
+#include<definitions.h>
+#include<Simulator.h>
 
-#include <definitions.h>
+void ServerIF::setSimSyncInfo(SimServSyncInfo* iSyncInfo){
+	 _syncInfo=iSyncInfo;
+}
 
-#define BUFFER_SIZE 100
-class CurrentComponents;
-class Simulator;
-class ServerIF;
-class SimComponents;
-
-class SimServSyncInfo{
-public:
-	SimServSyncInfo():_bufferSize(BUFFER_SIZE),_terminate(false){
-		pthread_mutex_init(&_mutexProduce, NULL);
-		pthread_mutex_init(&_mutexConsume, NULL);
-		pthread_mutex_lock(&_mutexConsume);
-	}
-	pthread_mutex_t _mutexProduce;
-	pthread_mutex_t _mutexConsume;
-	Simulator* _simulator;
-	ServerIF* _server;
-	SimComponents* _simComponents;
-	char _command[BUFFER_SIZE];
-	unsigned int _bufferSize;
-	bool _terminate;
-};
-#endif
+void ServerIF::executeCmd(char* iCmd){
+	std::cout << "Command received: " << iCmd << std::endl;
+	if (!_syncInfo->_simulator->execAsyncCmd(iCmd)){
+		pthread_mutex_lock(&_syncInfo->_mutexProduce);
+		strcpy(_syncInfo->_command,iCmd);
+		pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
+	}	
+}

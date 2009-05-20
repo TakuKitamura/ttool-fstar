@@ -37,77 +37,37 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#include<ServerLocal.h>
+#include<SimServSyncInfo.h>
 
-#ifndef RefValUnionH
-#define RefValUnionH
-#include <definitions.h>
+ServerLocal::ServerLocal(std::string& iCmdFile):_cmdFile(iCmdFile){
+	//pthread_mutex_init(&_replyMutex, NULL);
+}
 
-///This class encapsulates a pointer to a value or the value itself
-template <typename T>
-class RefValUnion{
-public:
-	///Constructor called for constants
-	/**
-	\param in Constant reference to value
-	*/
-	RefValUnion(const T& in):isValue(true), value(in){
-		//std::cout << "const constructor executed" << std::endl;
-		//value=in;
+int ServerLocal::run(){
+	std::ifstream aCmdFileH(_cmdFile.c_str());
+	char aCmd[BUFFER_SIZE];
+	int aNumberOfBytes;
+	if (aCmdFileH.is_open()){
+		std::cout << "Reading command file " << aCmdFileH << std::endl;
+		while(!(_syncInfo->_terminate || aCmdFileH.eof())) {
+			aCmdFileH.getline(aCmd,BUFFER_SIZE-1);
+			aNumberOfBytes=strlen(aCmd);
+			if (aNumberOfBytes>0){
+				aCmd[aNumberOfBytes]='\0';
+				executeCmd(aCmd);
+			}
+		}	
+		std::cout << "Server loop terminated" << std::endl;
+		aCmdFileH.close();
+		std::cout << "Command file closed" << std::endl;
+	}else{
+		char aEnd[]="0\0";
+		std::cout << "Command file could not be opened" << std::endl;
+		executeCmd(aEnd);
 	}
-	///Constructor called for variables
-	/**
-	\param in Reference to variable
-	*/
-	RefValUnion(T& in):isValue(false), pointer(&in){
-		//std::cout << "varible constructor executed" << std::endl;
-		//pointer=&in;
-	}
-	RefValUnion(std::istream& s, unsigned int iAdr){
-		READ_STREAM(s, isValue);
-		if (isValue){
-			READ_STREAM(s, value);
-		}else{
-			unsigned int aAddrOffs;
-			READ_STREAM(s, aAddrOffs);
-			pointer = (T*)(iAdr + aAddrOffs);
-		}			
-	}
-	///The parenthesis operator returns a reference to the stored value
-	/**
-	\return Reference to value 
-	*/
-	inline T& operator() (){if (isValue) return value; else return *pointer;}
-	///The parenthesis operator returns a reference to the stored value
-	/**
-	\return Constant reference to value 
-	*/
-	inline const T& operator() () const {if (isValue) return value; else return *pointer;}
-	
-	T print() const {return value;}
-	friend std::istream& operator >> (std::istream &is,RefValUnion<T> &obj){
-		is >> obj.value;
-		obj.isValue=true;
-		return is;
-	}
-	std::ostream& writeObject(std::ostream& s, unsigned int iAdr){
-		WRITE_STREAM(s,isValue);
-		if (isValue){
-			WRITE_STREAM(s,value);
-		}else{
-			unsigned int aAdr=((unsigned int)pointer)-iAdr;
-			WRITE_STREAM(s,aAdr);
-		}
-		return s;
-	}
-private:
-	///Indicates whether the class holds a value or a pointer to a value
-	bool isValue;
-	union{
-		///Pointer
-		T* pointer;
-		///Value
-		T value;
-	};
-};
-#endif
+}
 
+void ServerLocal::sendReply(std::string iReplyStr){
+	//std::cout << iReplyStr;
+}
