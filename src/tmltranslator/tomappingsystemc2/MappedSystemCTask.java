@@ -640,7 +640,7 @@ public class MappedSystemCTask {
 						nextCommand= cmdName + ".setNextCommand(array(" + returnIndex + nextCommandTemp + "))" + SCCR;
 					}
 					hcode+="TMLChoiceCommand " + cmdName + SCCR;
-					initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+					initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
