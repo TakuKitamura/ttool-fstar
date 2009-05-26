@@ -331,6 +331,8 @@ public class DesignPanelTranslator {
 			return;
 		}
 		
+		TADActionState tadas;
+		
 		ADStart ads;
 		//ADActionState ada;
 		ADActionStateWithGate adag;
@@ -370,6 +372,7 @@ public class DesignPanelTranslator {
 			}*/
 			
 			if (tgc instanceof TADActionState) {
+				tadas = (TADActionState)tgc;
 				s = ((TADActionState)tgc).getAction();
 				s = s.trim();
 				//remove ';' if last character
@@ -394,6 +397,7 @@ public class DesignPanelTranslator {
                     }*/
 					//System.out.println("Adding type");
 					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
+					tadas.setStateAction(TADActionState.GATE);
 					//System.out.println("hi");
 					if (s1 == null) {
 						//System.out.println("ho");
@@ -402,6 +406,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
+						tadas.setStateAction(TADActionState.UNKNOWN);
 						return;
 					}
 					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
@@ -417,11 +422,13 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);  
+						tadas.setStateAction(TADActionState.UNKNOWN);
 					}
 					adap = new ADActionStateWithParam(p);
 					ad.addElement(adap);
 					adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
 					listE.addCor(adap, tgc);
+					tadas.setStateAction(TADActionState.ATTRIBUTE);
 					
 				} else if ((p != null) && (nbActions > 1)){
 					//System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
@@ -435,6 +442,7 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
+							tadas.setStateAction(TADActionState.UNKNOWN);
 						}
 						
 						p = t.getParamFromActionState(sTmp);
@@ -444,9 +452,10 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
+							tadas.setStateAction(TADActionState.UNKNOWN);
 						}
 					}
-					
+					tadas.setStateAction(TADActionState.ATTRIBUTE);
 					adamp = new ADActionStateWithMultipleParam();
 					ad.addElement(adamp);
 					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
@@ -457,6 +466,7 @@ public class DesignPanelTranslator {
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
+					tadas.setStateAction(TADActionState.UNKNOWN);
 					//System.out.println("Bad action state found " + s);
 				}
 				

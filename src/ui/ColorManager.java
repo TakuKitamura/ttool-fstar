@@ -67,12 +67,17 @@ public class ColorManager {
     public static final Color POINTED_0 = Color.orange;
 	//public static final Color POINTED_0 = new Color(231, 132, 19);
     
+	public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
+	
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
+	public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105, 125);
+    public static final Color GATE_BOX_ACTION = new Color(215, 241, 247, 125);
     public static final Color GATE_BOX = new Color(215, 241, 247);
     public static final Color OPERATION_BOX = new Color(243, 207, 158);
     public static final Color ACTIVITY_BOX = new Color(255, 208, 255);
     public static final Color RESIZE_POINTED = new Color(26, 114, 244);
+	public static final Color UNKNOWN_BOX_ACTION = new Color(239, 44, 12, 125);
     
     public static final Color REQ_ATTRIBUTE_BOX = new Color(179, 249, 179);
     //public static final Color REQ_ATTRIBUTE_BOX = new Color(190, 229, 158);
@@ -86,11 +91,11 @@ public class ColorManager {
 	public static final Color MEMORY_BOX = new Color(172, 234, 211);
 	public static final Color HWA_BOX = new Color(144, 201, 211);
         
-	public static final Color TML_COMPOSITE_COMPONENT = new Color(239, 212, 176);
+	public static final Color TML_COMPOSITE_COMPONENT = new Color(239, 212, 176, 125);
 	
-	public static final Color TML_PORT_CHANNEL = new Color(104, 229, 255);
-	public static final Color TML_PORT_EVENT = new Color(216, 187, 249);
-	public static final Color TML_PORT_REQUEST = new Color(196, 166, 122);	
+	public static final Color TML_PORT_CHANNEL = new Color(104, 229, 255, 200);
+	public static final Color TML_PORT_EVENT = new Color(216, 187, 249, 200);
+	public static final Color TML_PORT_REQUEST = new Color(196, 166, 122, 200);	
     
     public static final Color UML_NOTE = Color.lightGray;
     

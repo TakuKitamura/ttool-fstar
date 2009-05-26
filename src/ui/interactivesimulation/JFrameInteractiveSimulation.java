@@ -43,7 +43,7 @@ knowledge of the CeCILL license and that you accept its terms.
 * @see
 */
 
-package ui.window;
+package ui.interactivesimulation;
 
 //import java.io.*;
 import javax.swing.*;
@@ -107,7 +107,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Control command
 	protected JButton resetCommand, runCommand, StopCommand;
-	protected JToolBar toolbarCommand;
+	protected MainCommandsToolBar mctb;
 	
 	
 	JPanel main, mainTop, commands, infos, outputs; // from MGUI
@@ -121,11 +121,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private boolean threadStarted = false;
 	private boolean gotTimeAnswerFromServer = false; 
 	
-	//shortest paths
-	//JComboBox combo1, combo2, combo3, combo4;
-	//JTextField combo1, combo2, combo3, combo4;
-	//JTextField text1, text2;
-	//JButton goPath, goPathL, savePath, savePathL;
+	// For managing actions
+	public	InteractiveSimulationActions [] actions;
+    public	MouseHandler mouseHandler;
+    public  KeyListener keyHandler;
 	
 	
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute) {
@@ -139,9 +138,21 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		mode = NOT_STARTED;
 		
+		
+		
+		setBackground(new Color(50, 40, 40, 200));
+		
+		
+		initActions();
 		makeComponents();
 		setComponents();
 	}
+	
+	private JLabel createStatusBar()  {
+        status = new JLabel("Ready...");
+        status.setBorder(BorderFactory.createEtchedBorder());
+        return status;
+    }
 	
 	public void makeComponents() {
 		JPanel jp01;
@@ -154,26 +165,41 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Container framePanel = getContentPane();
 		framePanel.setLayout(new BorderLayout());
+		//framePanel.setBackground(new Color(50, 40, 40, 200));
+		//framePanel.setForeground(new Color(255, 166, 38));		
 		
 		//System.out.println("Button start created");
-		buttonStart = new JButton(buttonStartS, IconManager.imgic53);
-		buttonStart.addActionListener(this);
-		buttonClose = new JButton(buttonCloseS, IconManager.imgic27);
-		buttonClose.addActionListener(this);
-		buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
-		buttonStopAndClose.addActionListener(this);
+		buttonStart = new JButton(actions[InteractiveSimulationActions.ACT_START_ALL]);
+		buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
+		buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
+		//buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
+
+		
+		
+		
+		
+		// statusBar
+        status = createStatusBar();
+		framePanel.add(status, BorderLayout.SOUTH);
+        
+        // Mouse handler
+        mouseHandler = new MouseHandler(status);
+		
+		JPanel mainpanel = new JPanel(new BorderLayout());
+		framePanel.add(mainpanel, BorderLayout.NORTH);
 		
 		JPanel jp = new JPanel();
+		//jp.setPreferredSize(new Dimension(800, 75));
 		jp.add(buttonStart);
 		jp.add(buttonStopAndClose);
 		jp.add(buttonClose);
-		framePanel.add(jp, BorderLayout.SOUTH);
+		mainpanel.add(jp, BorderLayout.SOUTH);
 		
 		
 		GridBagLayout gridbag02 = new GridBagLayout();
 		GridBagConstraints c02 = new GridBagConstraints();
 		mainTop = new JPanel(gridbag02);
-		mainTop.setPreferredSize(new Dimension(800, 475));
+		//mainTop.setPreferredSize(new Dimension(800, 375));
 		c02.gridheight = 1;
 		c02.weighty = 1.0;
 		c02.weightx = 1.0;
@@ -183,7 +209,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		// Ouput textArea
 		jta = new ScrolledJTextArea();
-		jta.setMinimumSize(new Dimension(800, 200));
+		jta.setMinimumSize(new Dimension(800, 400));
+		jta.setRows(15);
+		//jta.setMaximumSize(new Dimension(800, 500));
 		jta.setEditable(false);
 		jta.setMargin(new Insets(10, 10, 10, 10));
 		jta.setTabSize(3);
@@ -191,13 +219,19 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		Font f = new Font("Courrier", Font.BOLD, 12);
 		jta.setFont(f);
 		jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		
+		jsp.setViewportBorder(BorderFactory.createLineBorder(Color.red));
+
+        //jsp.setColumnHeaderView(100);
+        //jsp.setRowHeaderView(30);
+
+
+		jsp.setMaximumSize(new Dimension(800, 500));
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, jsp);
-		framePanel.add(split, BorderLayout.CENTER);
+		mainpanel.add(split, BorderLayout.CENTER);
 		
 		// Commands
 		commands = new JPanel();
-		commands.setMinimumSize(new Dimension(300, 250));
+		//commands.setMinimumSize(new Dimension(300, 250));
 		commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 		
 		
@@ -206,16 +240,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		commandTab = new JTabbedPane();
 		
 		// Control commands
-		jp01 = new JPanel();
+		jp01 = new JPanel(new BorderLayout());
 		//jp01.setMinimumSize(new Dimension(375, 400));
-		gridbag01 = new GridBagLayout();
-		c01 = new GridBagConstraints();
-		jp01.setLayout(gridbag01);
+		//gridbag01 = new GridBagLayout();
+		//c01 = new GridBagConstraints();
+		//jp01.setLayout(gridbag01);
 		
 		commandTab.addTab("Control", null, jp01, "Main control commands");
 		
 		
-		c01.gridheight = 1;
+		/*c01.gridheight = 1;
 		c01.weighty = 1.0;
 		c01.weightx = 1.0;
 		//c01.gridwidth = 1;
@@ -237,11 +271,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		runCommand.addMouseListener(this);
 		jp01.add(runCommand, c01);
 		c01.gridheight = 1;
-		jp01.add(new JLabel(" "), c01);
+		jp01.add(new JLabel(" "), c01);*/
 		
-		toolbarCommand = new JToolBar();
-		toolbarCommand.setOrientation(SwingConstants.HORIZONTAL);
-		toolbarCommand.setFloatable(false) ;
+		mctb = new MainCommandsToolBar(this);
+		jp01.add(mctb, BorderLayout.NORTH);
+		
 		
 		// Text commands
 		jp01 = new JPanel();
@@ -330,27 +364,21 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		time.setForeground(Color.red);
 		jp01.add(time, c01);
 		
+		
+		
 		pack();
 	}
 	
-	public void	actionPerformed(ActionEvent evt)  {
-		String command = evt.getActionCommand();
-		//System.out.println("Command:" + command);
-		
-		if (command.equals(buttonCloseS)) {
-			close();
-			return;
-		} else if (command.equals(buttonStartS)) {
-			setComponents();
-			startSimulation();
-			//System.out.println("Start simulation!");
-		} else if (command.equals(buttonStopAndCloseS)) {
-			killSimulator();
-			close();
-			return;
-			//System.out.println("Start simulation!");
-		}
-	}
+	private	void initActions() {
+        actions = new InteractiveSimulationActions[InteractiveSimulationActions.NB_ACTION];
+        for(int	i=0; i<InteractiveSimulationActions.NB_ACTION; i++) {
+            actions[i] = new InteractiveSimulationActions(i);
+            actions[i].addActionListener(this);
+            //actions[i].addKeyListener(this);
+        }
+    }
+	
+
 	
 	public void setComponents() {
 		if (mode == NOT_STARTED) {
@@ -367,9 +395,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		boolean b = (mode == STARTED_AND_CONNECTED);
 		sendTextCommand.setEnabled(b);
-		resetCommand.setEnabled(b);
-		runCommand.setEnabled(b);
-		StopCommand.setEnabled(b);
+		setAll(b);
+		//resetCommand.setEnabled(b);
+		//runCommand.setEnabled(b);
+		//StopCommand.setEnabled(b);
 	}
 	
 	public void close() {
@@ -561,13 +590,13 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			helpOnCommand();
 		} else if (e.getSource() == listTextCommands) {
 			listTextCommands();
-		} else if (e.getSource() == resetCommand) {
+		} /*else if (e.getSource() == resetCommand) {
 			sendCommand("reset");
 		} else if (e.getSource() == runCommand) {
 			sendCommand("run-to-next-breakpoint");
 		} else if (e.getSource() == StopCommand) {
 			sendCommand("stop");
-		}
+		}*/
 	}
 	
 	// Command management
@@ -796,20 +825,40 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void makeStatus(String s) {
 		status.setText(s);
 		if (s.equals("busy")) {
-			runCommand.setEnabled(false);
+			setBusyStatus(true);
+			/*actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
+			actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);*/
+			/*runCommand.setEnabled(false);
 			resetCommand.setEnabled(false);
-			StopCommand.setEnabled(true);
+			StopCommand.setEnabled(true);*/
 			busyStatus = true;
 		}
 		if (s.equals("ready")) {
-			runCommand.setEnabled(true);
+			/*runCommand.setEnabled(true);
 			resetCommand.setEnabled(true);
-			StopCommand.setEnabled(false);
+			StopCommand.setEnabled(false);*/
+			/*actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
+			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+			actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);*/
 			if (busyStatus) {
 				sendCommand("time");
 			}
-			busyStatus = false;
+			setBusyStatus(false);
 		}
+	}
+	
+	public void setBusyStatus(boolean b) {
+		actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(!b);
+		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(!b);
+		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
+		busyStatus = b;
+	}
+	
+	public void setAll(boolean b) {
+		actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
 	}
 	
 	public static String decodeString(String s)  {
@@ -827,11 +876,68 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void printFromServer(String s) {
 		jta.append("Server> " + s + "\n");
 	}
-
-
-// Mouse management
-
-public void mouseReleased(MouseEvent e) {}
-
-
+	
+	
+	// Mouse management
+	public void mouseReleased(MouseEvent e) {}
+	
+	
+	
+	/**
+	* This adapter is constructed to handle mouse over	component events.
+	*/
+    private class MouseHandler extends MouseAdapter  {
+        
+        private	JLabel label;
+        
+        /**
+		* ctor	for the	adapter.
+		* @param label	the JLabel which will recieve value of the
+		*		Action.LONG_DESCRIPTION	key.
+		*/
+        public MouseHandler(JLabel label)  {
+            setLabel(label);
+        }
+        
+        public void setLabel(JLabel label)  {
+            this.label = label;
+        }
+        
+        public void mouseEntered(MouseEvent evt)  {
+            if (evt.getSource()	instanceof AbstractButton)  {
+                AbstractButton button =	(AbstractButton)evt.getSource();
+                Action action =	button.getAction();
+                if (action != null)  {
+                    String message = (String)action.getValue(Action.LONG_DESCRIPTION);
+                    label.setText(message);
+                }
+            }
+        }
+    }
+	
+	public void	actionPerformed(ActionEvent evt)  {
+		String command = evt.getActionCommand();
+		//System.out.println("Command:" + command);
+		
+		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
+            close();
+        }  else if (command.equals(actions[InteractiveSimulationActions.ACT_START_ALL].getActionCommand()))  {
+			setComponents();
+			startSimulation();
+			//System.out.println("Start simulation!");
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
+			killSimulator();
+			close();
+			return;
+			//System.out.println("Start simulation!");
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
+            sendCommand("run-to-next-breakpoint");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
+            sendCommand("reset");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
+            sendCommand("stop");
+        }
+	}
+	
+	
 } // Class

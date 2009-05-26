@@ -94,6 +94,9 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         addTGConnectingPointsComment();
         
         nbInternalTGComponent = 0;
+		
+		maxWidth = 2000;
+		maxHeight = 2000;
         
         moveable = true;
         editable = true;
@@ -114,7 +117,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		//FontMetrics fm = g.getFontMetrics();
 		
 		if (myColor == null) {
-			myColor = new Color(251, 252, 200- (getMyDepth() * 10));
+			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
@@ -587,6 +590,21 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			}
 			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
 				((TMLCCompositeComponent)tgcomponent[i]).updateReferenceToTMLCCompositeComponent(tmlcc);
+			}
+		}
+	}
+	
+	public void delayedLoad() {
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
+				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
+				try {
+					((TMLCRemoteCompositeComponent)tgcomponent[i]).delayedLoad();
+				} catch (Exception e) {
+				}
+			}
+			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
+				((TMLCCompositeComponent)tgcomponent[i]).delayedLoad();
 			}
 		}
 	}

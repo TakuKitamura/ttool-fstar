@@ -97,23 +97,38 @@ public class TGCNote extends TGCWithoutInternalComponent {
         }
         
         int h  = g.getFontMetrics().getHeight();
-        
-        for (int i = 0; i<values.length; i++) {
-            g.drawString(values[i], x + textX, y + textY + i* h);
-        }
+        Color c = g.getColor();
+		
         
         g.drawLine(x, y, x+width, y);
         g.drawLine(x, y, x, y+height);
         g.drawLine(x, y+height, x+width-limit, y+height);
         g.drawLine(x+width, y, x+width, y+height - limit);
         
+		g.setColor(ColorManager.UML_NOTE_BG);
+		int [] px1 = {x, x+width, x + width, x + width-limit, x};
+        int [] py1 = {y, y, y+height-limit, y+height, y+height};
+		g.fillPolygon(px1, py1, 5);
+		g.setColor(c);
+		
         int [] px = {x+width, x + width - 4, x+width-10, x + width-limit};
         int [] py = {y+height-limit, y + height - limit + 3, y + height - limit + 2, y +height};
         g.drawPolygon(px, py, 4);
+		
         if (g.getColor() == ColorManager.NORMAL_0) {
             g.setColor(ColorManager.UML_NOTE);
         }
         g.fillPolygon(px, py, 4);
+		
+		g.setColor(Color.black);
+        for (int i = 0; i<values.length; i++) {
+            g.drawString(values[i], x + textX, y + textY + i* h);
+        }
+		g.setColor(c);
+		
+		
+		
+		
     }
     
     public void makeValue() {

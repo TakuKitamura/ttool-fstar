@@ -349,7 +349,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		int selected = tdp.getGUI().getTypeButtonSelected();
 
 		if ((selected == TGComponentManager.EDIT) && (e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)){
-			//System.out.println("Double clickkk");
+			//System.out.println("Double click");
 			tgc = tdp.componentPointed();
 			if (tgc != null) {
 				//System.out.println("Component pointed: " + tgc.getName());
@@ -396,7 +396,8 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		}
 
 		if ((selected == TGComponentManager.COMPONENT) &&(e.getButton() == MouseEvent.BUTTON1)){
-			tdp.addComponent(e.getX(), e.getY(), true);
+			TGComponent comp = tdp.addComponent(e.getX(), e.getY(), true);
+			tdp.autoConnect(comp);
 			tdp.getGUI().setEditMode();
 			//System.out.println("change1");
 			tdp.getGUI().changeMade(tdp, TDiagramPanel.NEW_COMPONENT);

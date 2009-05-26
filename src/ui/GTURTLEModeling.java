@@ -142,6 +142,8 @@ public class GTURTLEModeling {
 
 	private Vector checkingErrors;
 	private Vector warnings;
+	
+	ArrayList<TGConnectorInfo> pendingConnectors;
 
 	private Vector savedOperations;
 	private Vector savedPanels;
@@ -227,7 +229,7 @@ public class GTURTLEModeling {
 				generateDesign();
 			}
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("Exception on TIF: " + e.getMessage());
 		}
 		return ret;
 	}
@@ -1512,579 +1514,6 @@ public class GTURTLEModeling {
 		return warnings;
 	}
 
-	/*private void addTClasses(DesignPanel dp, Vector tclasses, String preName) {
-        TDiagramPanel tdp;
-        // search for class diagram panels
-        tdp = (TDiagramPanel)(dp.panels.elementAt(0));
-        if (tdp instanceof TClassDiagramPanel) {
-            addTClassesFromPanel((TClassDiagramPanel)tdp, tclasses, preName);
-        }
-    }
-
-    private void addTClassesFromPanel(TClassDiagramPanel tdp, Vector tclasses, String preName) {
-        LinkedList list = tdp.getComponentList();
-        Iterator iterator = list.listIterator();
-
-        // search for tclasses
-        TGComponent tgc;
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc instanceof TClassInterface) && (tclasses.contains(tgc))) {
-                addTClassFromTClassInterface((TClassInterface)tgc, tdp, preName);
-            }
-        }
-    }
-
-    private void addTClassFromTClassInterface(TClassInterface tgc, TClassDiagramPanel tdp, String preName) {
-        //System.out.println("Adding TClass: " + tgc.getClassName());
-        TClass t = new TClass(preName + tgc.getClassName(), tgc.isStart());
-
-        Vector v;
-        int i;
-        TAttribute a;
-        Param p;
-        Gate g; boolean internal; int type;
-
-        // Attributes
-        v = tgc.getAttributes();
-        for(i=0; i<v.size(); i++) {
-            a = (TAttribute)(v.elementAt(i));
-            if (a.getType() == TAttribute.NATURAL) {
-                p = new Param(a.getId(), Param.NAT, a.getInitialValue());
-                p.setAccess(a.getAccessString());
-                t.addParameter(p);
-            }
-            if (a.getType() == TAttribute.BOOLEAN) {
-                p = new Param(a.getId(), Param.BOOL, a.getInitialValue());
-                p.setAccess(a.getAccessString());
-                t.addParameter(p);
-            }
-
-            if (a.getType() == TAttribute.OTHER) {
-                addTDataAttributes(a, t, tdp);
-            }
-        }
-
-        // Gates
-        v = tgc.getGates();
-        for(i=0; i<v.size(); i++) {
-            a = (TAttribute)(v.elementAt(i));
-            internal = (a.getAccess() == TAttribute.PRIVATE);
-            switch(a.getType()) {
-                case TAttribute.GATE:
-                    type = Gate.GATE;
-                    break;
-                case TAttribute.OUTGATE:
-                    type = Gate.OUTGATE;
-                    break;
-                case
-                TAttribute.INGATE:
-                    type = Gate.INGATE;
-                    break;
-                default:
-                    type = -1;
-            }
-            if (type > -1) {
-                internal = false; // We consider all gates as public gates -> private is given for documentation purpose only
-                g = new Gate(a.getId(), type, internal);
-                t.addGate(g);
-            }
-        }
-
-
-        tm.addTClass(t);
-        listE.addCor(t, (TGComponent)tgc, preName);
-
-        // Activity Diagram
-        buildActivityDiagram(t);
-
-    }
-
-    private void addTDataAttributes(TAttribute a, TClass t, TClassDiagramPanel tdp) {
-        //System.out.println("Find data: " + a.getId() + " getTypeOther=" + a.getTypeOther());
-        TCDTData tdata  = tdp.findTData(a.getTypeOther());
-        if (tdata == null) {
-            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown type: " + a.getTypeOther());
-            ce.setTClass(t);
-            ce.setTDiagramPanel(tdp);
-            addCheckingError(ce);
-            return ;
-        }
-
-        Vector v = tdata.getAttributes();
-        TAttribute b; Param p;
-        for(int i=0; i<v.size(); i++) {
-            b = (TAttribute)(v.elementAt(i));
-            if (b.getType() == TAttribute.NATURAL) {
-                p = new Param(a.getId() + "__" + b.getId(), Param.NAT, b.getInitialValue());
-                p.setAccess(a.getAccessString());
-                t.addParameter(p);
-            }
-            if (b.getType() == TAttribute.BOOLEAN) {
-                p = new Param(a.getId() + "__" + b.getId(), Param.BOOL, b.getInitialValue());
-                p.setAccess(a.getAccessString());
-                t.addParameter(p);
-            }
-        }
-
-    }
-
-    private void buildActivityDiagram(TClass t) {
-        int i, j;
-        TActivityDiagramPanel tadp;
-        //t.printParams();
-
-        // find the panel of this TClass
-        TClassInterface tci = (TClassInterface)(listE.getTG(t));
-
-        String name = tci.getClassName();
-        int index_name = name.indexOf(':');
-        // instance
-        if (index_name != -1) {
-            name = name.substring(index_name+2, name.length());
-        }
-
-        tadp = tci.getActivityDiagramPanel();
-        if (tadp == null) {
-            return;
-        }
-
-        // search for start state
-        LinkedList list = tadp.getComponentList();
-        Iterator iterator = list.listIterator();
-        TGComponent tgc;
-        TADStartState tss = null;
-        int cptStart = 0;
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TADStartState) {
-                tss = (TADStartState) tgc;
-                cptStart ++;
-            }
-        }
-
-        if (tss == null) {
-            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No start state in the activity diagram of " + name);
-            ce.setTClass(t);
-            ce.setTDiagramPanel(tadp);
-            addCheckingError(ce);
-            return;
-        }
-
-        if (cptStart > 1) {
-            CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in the activity diagram of " + name);
-            ce.setTClass(t);
-            ce.setTDiagramPanel(tadp);
-            addCheckingError(ce);
-            return;
-        }
-
-        ADStart ads;
-        ADActionState ada;
-        ADActionStateWithGate adag;
-        ADActionStateWithParam adap;
-        ADActionStateWithMultipleParam adamp;
-        ADChoice adch;
-        ADDelay add;
-        ADJunction adj;
-        ADLatency adl;
-        ADParallel adp;
-        ADSequence adseq;
-        ADPreempt adpre;
-        ADStop adst;
-        ADTimeInterval adti;
-        ADTLO adtlo;
-        String s, s1;
-        Gate g;
-        Param p;
-
-        int nbActions;
-        String sTmp;
-
-        // Creation of the activity diagram
-        ads = new ADStart();
-        listE.addCor(ads, tss);
-        ActivityDiagram ad = new ActivityDiagram(ads);
-        t.setActivityDiagram(ad);
-        //System.out.println("Making activity diagram of " + t.getName());
-
-        // Creation of other elements
-        iterator = list.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TADActionState) {
-                s = ((TADActionState)tgc).getAction();
-                s = s.trim();
-                //remove ';' if last character
-                if (s.substring(s.length()-1, s.length()).compareTo(";") == 0) {
-                    s = s.substring(0, s.length()-1);
-                }
-                nbActions = Conversion.nbChar(s, ';') + 1;
-                //System.out.println("Nb Actions in state: " + nbActions);
-
-                s = TURTLEModeling.manageDataStructures(t, s);
-
-                g = t.getGateFromActionState(s);
-                p = t.getParamFromActionState(s);
-                if ((g != null) && (nbActions == 1)){
-                    //System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
-                    adag = new ADActionStateWithGate(g);
-                    ad.addElement(adag);
-                    s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("s1=" + s1);
-                    s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-                    //System.out.println("hi");
-                    if (s1 == null) {
-                        //System.out.println("ho");
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Invalid expression: " + t.getActionValueFromActionState(s));
-                        ce.setTClass(t);
-                        ce.setTGComponent(tgc);
-                        ce.setTDiagramPanel(tadp);
-                        addCheckingError(ce);
-                        return;
-                    }
-                    s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-                    //System.out.println("Adding type done");
-                    adag.setActionValue(s1);
-                    listE.addCor(adag, tgc);
-                } else if ((p != null) && (nbActions == 1)){
-                    //System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-                    adap = new ADActionStateWithParam(p);
-                    ad.addElement(adap);
-                    adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
-                    listE.addCor(adap, tgc);
-                } else if ((p != null) && (nbActions > 1)){
-                    //System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-                    // Checking params
-                    CheckingError ce;
-                    for(j=0; j<nbActions; j++) {
-                        sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
-                        if (sTmp == null) {
-                            ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (" + s + "): \"" + s + "\" is not a correct expression");
-                            ce.setTClass(t);
-                            ce.setTGComponent(tgc);
-                            ce.setTDiagramPanel(tadp);
-                            addCheckingError(ce);
-                        }
-
-                        p = t.getParamFromActionState(sTmp);
-                        if (p == null) {
-                            ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state(" + s + "): \"" + sTmp + "\" is not a correct expression");
-                            ce.setTClass(t);
-                            ce.setTGComponent(tgc);
-                            ce.setTDiagramPanel(tadp);
-                            addCheckingError(ce);
-                        }
-                    }
-
-                    adamp = new ADActionStateWithMultipleParam();
-                    ad.addElement(adamp);
-                    adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
-                    listE.addCor(adamp, tgc);
-                } else {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (" + s + "): \"" + s + "\" is not a correct expression");
-                    ce.setTClass(t);
-                    ce.setTGComponent(tgc);
-                    ce.setTDiagramPanel(tadp);
-                    addCheckingError(ce);
-                    //System.out.println("Bad action state found " + s);
-                }
-
-            } else if (tgc instanceof TADChoice) {
-                adch = new ADChoice();
-                ad.addElement(adch);
-                listE.addCor(adch, tgc);
-            } else if (tgc instanceof TADDeterministicDelay) {
-                add = new ADDelay();
-                ad.addElement(add);
-                add.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADDeterministicDelay)tgc).getDelayValue()));
-                listE.addCor(add, tgc);
-            } else if (tgc instanceof TADJunction) {
-                adj = new ADJunction();
-                ad.addElement(adj);
-                listE.addCor(adj, tgc);
-            } else if (tgc instanceof TADNonDeterministicDelay) {
-                adl = new ADLatency();
-                ad.addElement(adl);
-                adl.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADNonDeterministicDelay)tgc).getLatencyValue()));
-                listE.addCor(adl, tgc);
-            } else if (tgc instanceof TADParallel) {
-                adp = new ADParallel();
-                ad.addElement(adp);
-                adp.setValueGate(((TADParallel)tgc).getValueGate());
-                listE.addCor(adp, tgc);
-            } else if (tgc instanceof TADSequence) {
-                adseq = new ADSequence();
-                ad.addElement(adseq);
-                listE.addCor(adseq, tgc);
-            } else if (tgc instanceof TADPreemption) {
-                adpre = new ADPreempt();
-                ad.addElement(adpre);
-                listE.addCor(adpre, tgc);
-            } else if (tgc instanceof TADStopState) {
-                adst = new ADStop();
-                ad.addElement(adst);
-                listE.addCor(adst, tgc);
-            } else if (tgc instanceof TADTimeInterval) {
-                adti = new ADTimeInterval();
-                ad.addElement(adti);
-                adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMaxDelayValue()));
-                listE.addCor(adti, tgc);
-            } else if (tgc instanceof TADTimeLimitedOffer) {
-                s = ((TADTimeLimitedOffer)tgc).getAction();
-                g = t.getGateFromActionState(s);
-                if (g != null) {
-                    adtlo = new ADTLO(g);
-                    ad.addElement(adtlo);
-                    adtlo.setLatency("0");
-                    s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("Adding type");
-                    s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-                    s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-                    //System.out.println("Adding type done");
-                    adtlo.setAction(s1);
-                    adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
-                    listE.addCor(adtlo, tgc);
-                } else {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOffer)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-                    ce.setTClass(t);
-                    ce.setTGComponent(tgc);
-                    ce.setTDiagramPanel(tadp);
-                    addCheckingError(ce);
-                    //System.out.println("Bad time limited offer found " + s);
-                }
-            } else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
-                s = ((TADTimeLimitedOfferWithLatency)tgc).getAction();
-                g = t.getGateFromActionState(s);
-                if (g != null) {
-                    adtlo = new ADTLO(g);
-                    ad.addElement(adtlo);
-                    adtlo.setLatency(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getLatency()));
-                    s1 = t.getActionValueFromActionState(s);
-                    //System.out.println("Adding type");
-                    s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-                    s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-                    //System.out.println("Adding type done");
-                    adtlo.setAction(s1);
-                    adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
-                    listE.addCor(adtlo, tgc);
-                } else {
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getLatency() + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-                    ce.setTClass(t);
-                    ce.setTGComponent(tgc);
-                    ce.setTDiagramPanel(tadp);
-                    addCheckingError(ce);
-                    //System.out.println("Bad time limited offer found " + s);
-                }
-            }
-        }
-
-        TGConnectingPoint p1, p2;
-        TGConnectorFullArrow tgco;
-        TGComponent tgc1, tgc2, tgc3;
-        ADComponent ad1, ad2;
-
-        // Managing Java code
-        iterator = list.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof PreJavaCode) {
-                ad1 = listE.getADComponentByIndex(tgc, tadp.count);
-                if (ad1 != null) {
-                    ad1.setPreJavaCode(tgc.getPreJavaCode());
-                }
-            }
-            if (tgc instanceof PostJavaCode) {
-                ad1 = listE.getADComponentByIndex(tgc, tadp.count);
-                if (ad1 != null) {
-                    ad1.setPostJavaCode(tgc.getPostJavaCode());
-                }
-            }
-        }
-
-        // Connecting elements
-        iterator = list.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TGConnectorFullArrow) {
-                tgco = (TGConnectorFullArrow)tgc;
-                p1 = tgco.getTGConnectingPointP1();
-                p2 = tgco.getTGConnectingPointP2();
-
-                // identification of connected components
-                tgc1 = null; tgc2 = null;
-                for(j=0; j<list.size(); j++) {
-                    tgc3 = 	(TGComponent)(list.get(j));
-                    if (tgc3.belongsToMe(p1)) {
-                        tgc1 = tgc3;
-                    }
-                    if (tgc3.belongsToMe(p2)) {
-                        tgc2 = tgc3;
-                    }
-                }
-
-                // connecting turtle modeling components
-                if ((tgc1 != null) && (tgc2 != null)) {
-                    //ADComponent ad1, ad2;
-                    ad1 = listE.getADComponentByIndex(tgc1, tadp.count);
-                    ad2 = listE.getADComponentByIndex(tgc2, tadp.count);
-                    int index = 0;
-                    if ((ad1 != null ) && (ad2 != null)) {
-                        if ((tgc1 instanceof TADTimeLimitedOffer) || (tgc1 instanceof TADTimeLimitedOfferWithLatency)) {
-                            index = tgc1.indexOf(p1) - 1;
-                            ad1.addNextAtIndex(ad2, index);
-                        } else if (tgc1 instanceof TADChoice) {
-                            TADChoice tadch = (TADChoice)tgc1;
-                            index = tgc1.indexOf(p1) - 1;
-                            ((ADChoice)ad1).addGuard(TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index)));
-                            ad1.addNext(ad2);
-                        } else if ((tgc1 instanceof TADSequence) ||(tgc1 instanceof TADPreemption)){
-                            index = tgc1.indexOf(p1) - 1;
-                            ad1.addNextAtIndex(ad2, index);
-                        } else {
-                            ad1.addNextAtIndex(ad2, index);
-                            //System.out.println("Adding connector from " + ad1 + " to " + ad2);
-                        }
-                    }
-                }
-            }
-        }
-        // Increasing count of this panel
-        tadp.count ++;
-    }
-
-    private void addCheckingError(CheckingError ce) {
-        if (checkingErrors == null) {
-            checkingErrors = new Vector();
-        }
-        checkingErrors.addElement(ce);
-    }
-
-    private void addRelations(DesignPanel dp, String prename) {
-        addRelationFromPanel((TClassDiagramPanel)dp.tdp, prename);
-    }
-
-    private void addRelations(DesignPanel dp) {
-        addRelationFromPanel((TClassDiagramPanel)dp.tdp, "");
-    }
-
-    private void addRelationFromPanel(TClassDiagramPanel tdp, String prename) {
-        LinkedList list = tdp.getComponentList();
-        Iterator iterator = list.listIterator();
-        // search for Composition Operator
-        TGComponent tgc;
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDCompositionOperator) {
-                addRelationFromCompositionOperator((TCDCompositionOperator)tgc, tdp, prename);
-            }
-        }
-    }
-
-    private void addRelationFromCompositionOperator(TCDCompositionOperator tco, TClassDiagramPanel tdp, String prename) {
-        TClassInterface t1 = tdp.getTClass1ToWhichIamConnected(tco);
-        TClassInterface t2 = tdp.getTClass2ToWhichIamConnected(tco);
-
-        TGConnectorAssociation tgco = tdp.getTGConnectorAssociationOf(tco);
-
-        if ((t1 != null) && (t2 != null) && (tgco != null)) {
-            TClass tc1 = tm.getTClassWithName(prename + t1.getValue());
-            TClass tc2 = tm.getTClassWithName(prename + t2.getValue());
-
-            if ((tc1 != null) && (tc2 != null)) {
-                int type = typeOf(tco);
-                if (type == -1) {
-                    return;
-                }
-
-                Relation r;
-
-                if (tgco instanceof TGConnectorAssociationWithNavigation) {
-                    r = new Relation(type, tc1, tc2, true);
-                }	else {
-                    r = new Relation(type, tc1, tc2, false);
-                }
-
-                tm.addRelation(r);
-                //System.out.println("Adding " + Relation.translation(type) + " relation between " + tc1.getName() + " and " + tc2.getName());
-
-                // if tgco is a synchro operator -> synchronizations gates
-                if (tco instanceof TCDSynchroOperator) {
-                    Vector gates = ((TCDSynchroOperator)tco).getGates();
-                    setGatesOf(r, gates, tc1, tc2);
-                }
-
-                if (tco instanceof TCDInvocationOperator) {
-                    Vector gates = ((TCDInvocationOperator)tco).getGates();
-                    setGatesOf(r, gates, tc1, tc2);
-                }
-
-                // if tgco watcdog -> list of gates
-                if (tco instanceof TCDWatchdogOperator) {
-                    Vector gates = ((TCDWatchdogOperator)tco).getGates();
-                    setWatchdogGatesOf(r, gates, tc1, tc2);
-                }
-
-            }
-        }
-    }
-
-    private int typeOf(TCDCompositionOperator tco) {
-        if (tco instanceof TCDParallelOperator) {
-            return Relation.PAR;
-        } else if (tco instanceof TCDPreemptionOperator) {
-            return 	Relation.PRE;
-        } else if (tco instanceof TCDSequenceOperator) {
-            return 	Relation.SEQ;
-        } else if (tco instanceof TCDSynchroOperator) {
-            return 	Relation.SYN;
-        } else if (tco instanceof TCDInvocationOperator) {
-            return 	Relation.INV;
-        } else if (tco instanceof TCDWatchdogOperator) {
-            return 	Relation.WAT;
-        }
-        return -1;
-    }
-
-    private void setGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-        TTwoAttributes tt;
-        Gate g1, g2;
-
-        for(int i=0; i<gates.size(); i++) {
-            tt = (TTwoAttributes)(gates.elementAt(i));
-            g1 = tc1.getGateByName(tt.ta1.getId());
-            g2 = tc2.getGateByName(tt.ta2.getId());
-
-            if ((g1 != null) && (g2 != null)) {
-                r.addGates(g1, g2);
-                //System.out.println("Adding gates " + g1.getName() + " = " + g2.getName());
-            }
-        }
-    }
-
-    private void setWatchdogGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-        TTwoAttributes tt;
-        TAttribute t;
-        Gate g1, g2;
-
-        for(int i=0; i<gates.size(); i++) {
-            t = (TAttribute)(gates.elementAt(i));
-            g1 = tc1.getGateByName(t.getId());
-
-            if (g1 != null)  {
-                r.addGates(g1, g1);
-            }
-        }
-    }*/
-
-
-	/*public static String removeForbiddenCharactersFromInput(Stirng s) {
-        s = Conversion.replaceAllChar(s, '&', " ");
-        s = Conversion.replaceAllChar(s, '"', " ");
-        return s;
-    }*/
-
 
 	// SAVING AND LOADING IN XML
 
@@ -2773,6 +2202,7 @@ public class GTURTLEModeling {
 
 
 				TMLComponentTaskDiagramPanel tmlctdp = (TMLComponentTaskDiagramPanel)tdp;
+				//tmlctdp.updateReferences();
 
 
 				for(i=0; i<nl.getLength(); i++) {
@@ -3225,6 +2655,8 @@ public class GTURTLEModeling {
 			//designPanelNl = doc.getElementsByTagName("Design");
 			//analysisNl = doc.getElementsByTagName("Analysis");
 
+			pendingConnectors = new ArrayList<TGConnectorInfo>();
+			
 			//System.out.println("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
 			boolean error = false;
 			for(i=0; i<panelNl.getLength(); i++) {
@@ -3258,6 +2690,7 @@ public class GTURTLEModeling {
 			throw new MalformedModelingException();
 		}
 		//System.out.println("making IDs");
+		makeLastLoad();
 		makeLovelyIds();
 		//System.out.println("IDs done");
 	}
@@ -4405,7 +3838,7 @@ public class GTURTLEModeling {
 			for(i=0; i<tgcpList.size(); i++) {
 				p = (Point)(tgcpList.elementAt(i));
 				if (!tgc.setIdTGConnectingPoint(p.x, p.y)) {
-					System.out.println("Warning: a connecting point has been removed");
+					//System.out.println("Warning: a connecting point has been removed");
 					//throw new MalformedModelingException();
 				}
 			}
@@ -4421,7 +3854,7 @@ public class GTURTLEModeling {
             }*/
 
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			System.out.println("Exception XML Component " + e.getMessage());
 			throw new MalformedModelingException();
 		}
 		return tgc;
@@ -4474,6 +3907,7 @@ public class GTURTLEModeling {
 				if (tgco != null) {
 					tdp.addBuiltConnector(tgco);
 				} else {
+					System.out.println("Connector error");
 					throw new MalformedModelingException();
 				}
 			}
@@ -4488,6 +3922,9 @@ public class GTURTLEModeling {
 		TGComponent tgc;
 		//TGComponent tgctmp;
 		TGConnector tgco = null;
+		//boolean error = false;
+		TGConnectorInfo tgcoinfo;
+		
 
 		//connect connectors to their real connecting point
 		//System.out.println("Valid connectors ?");
@@ -4498,7 +3935,9 @@ public class GTURTLEModeling {
 				p1 = tgco.getTGConnectingPointP1();
 				p2 = tgco.getTGConnectingPointP2();
 				if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)){
+					//System.out.println("Searching for id " + p1.getId());
 					p3 = tdp.findConnectingPoint(p1.getId());
+					//System.out.println("Searching for id " + p2.getId());
 					p4 = tdp.findConnectingPoint(p2.getId());
 					if (((p3 ==null) || (p4 == null)) &&(decId != 0)) {
 						if (list.remove(tgc)) {
@@ -4508,7 +3947,17 @@ public class GTURTLEModeling {
 						}
 					} else {
 						if ((p3 == null) ||(p4 == null)) {
-							throw new MalformedModelingException();
+							//warning = true;
+							if (p3 == null) {
+								//System.out.println("Error on first id");
+							}
+							if (p4 == null) {
+								//System.out.println("Error on second id");
+							}
+							tgcoinfo = new TGConnectorInfo();
+							tgcoinfo.connector = tgco;
+							pendingConnectors.add(tgcoinfo);
+							System.out.println("One connector added to pending list");
 						} else {
 							tgco.setP1(p3);
 							p3.setFree(false);
@@ -4519,6 +3968,66 @@ public class GTURTLEModeling {
 				}
 			}
 		}
+		
+		/*for(TGConnector con: connectorsToRemove) {
+			list.remove(con);
+		}*/
+		
+		/*if (error) {
+			System.out.println("Connecting error: " + connectorsToRemove.size()  + " connectors have been removed");
+			throw new MalformedModelingException();
+		}*/
+	}
+	
+	public void makeLastLoad() {
+		// Update references on all diagrams
+		//System.out.println("Updating ports");
+		//mgui.updateAllPorts();
+		
+		// Update ports on all diagrams
+		System.out.println("Updating references / ports");
+		mgui.updateAllReferences();
+		
+		mgui.updateAllPorts();
+		
+		System.out.println("Pending connectors");
+		// Make use of pending connectors
+		TGConnectingPoint p1, p2, p3, p4;
+		TDiagramPanel tdp;
+		TGConnector tgco;
+		for(TGConnectorInfo info: pendingConnectors) {
+			tgco = info.connector;
+			if (tgco != null) {
+				tdp = tgco.getTDiagramPanel();
+				if (tdp != null) {
+					p1 = tgco.getTGConnectingPointP1();
+					p2 = tgco.getTGConnectingPointP2();
+					if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)){
+						System.out.println("Searching for id " + p1.getId());
+						p3 = tdp.findConnectingPoint(p1.getId());
+						System.out.println("Searching for id " + p2.getId());
+						p4 = tdp.findConnectingPoint(p2.getId());
+						if ((p3 == null) ||(p4 == null)) {
+							//warning = true;
+							if (p3 == null) {
+								System.out.println("Error on first id");
+							}
+							if (p4 == null) {
+								System.out.println("Error on second id");
+							}
+							System.out.println("One connector ignored");
+						} else {
+							tgco.setP1(p3);
+							p3.setFree(false);
+							tgco.setP2(p4);
+							p4.setFree(false);
+						}
+					}
+				}
+			}
+		}
+		pendingConnectors.clear();
+		System.out.println("Last load done");
 	}
 
 	public TGConnector makeXMLConnector(Node n, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
@@ -4657,7 +4166,7 @@ public class GTURTLEModeling {
 			//System.out.println("Connecting points done " + myType);
 
 		} catch (Exception e) {
-			System.out.println("Exception generale");
+			System.out.println("Exception generale connector");
 			throw new MalformedModelingException();
 		}
 		return tgco;

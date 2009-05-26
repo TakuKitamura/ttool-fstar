@@ -64,6 +64,7 @@ import myutil.*;
 import ui.ad.*;
 import ui.cd.*;
 import ui.file.*;
+import ui.interactivesimulation.*;
 import ui.iod.*;
 import ui.req.*;
 import ui.sd.*;
@@ -229,6 +230,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     private File tlsafile;
     private File tlsadotfile;
     private File rgautfile;
+	private File fc2file;
+	private File bcgfile;
     private File rgautdotfile;
     private File rgautprojfile;
     private File rgautprojdotfile;
@@ -830,6 +833,30 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return list;
 	}
 	
+	public void updateAllReferences() {
+		TURTLEPanel tp;
+		
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLComponentDesignPanel) {
+				((TMLComponentDesignPanel)tp).tmlctdp.delayedLoad();
+				//((TMLComponentDesignPanel)tp).tmlctdp.updatePorts();
+			}
+		}
+	}
+	
+	public void updateAllPorts() {
+		TURTLEPanel tp;
+		
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLComponentDesignPanel) {
+				//((TMLComponentDesignPanel)tp).tmlctdp.delayedLoad();
+				((TMLComponentDesignPanel)tp).tmlctdp.updatePorts();
+			}
+		}
+	}
+	
 	public Vector<String> getAllTMLCommunicationNames() {
 		TURTLEPanel tp;
 		Vector<String> list = new Vector<String>();
@@ -1302,6 +1329,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             rgdotfile = null;
             tlsadotfile = null;
             rgautfile = null;
+			fc2file = null;
+			bcgfile = null;
             rgautdotfile = null;
             rgautprojfile = null;
             rgautprojdotfile = null;
@@ -2020,6 +2049,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         tlsafile = new File(myFile + ".tlsa");
         tlsadotfile = new File(myFile + ".dot.tlsa");
         rgautfile = new File(myFile + ".aut");
+		fc2file = new File(myFile + ".fc2");
+		bcgfile = new File(myFile + ".bcg");
         rgautdotfile = new File(myFile + ".aut.dot");
         rgautprojfile = new File(myFile + "_proj.aut");
         rgautprojdotfile = new File(myFile + "_proj.aut.dot");
@@ -2784,7 +2815,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		if (jgen.isInteractiveSimulationSelected()) {
 			JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, jgen.getPathInteractiveExecute());
 			jfis.setIconImage(IconManager.img9);
-			jfis.setSize(800, 600);
+			jfis.setSize(800, 700);
 			GraphicLib.centerOnParent(jfis);
 			jfis.setVisible(true);
 		}
@@ -2793,7 +2824,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void interactiveSimulationSystemC() {
 		JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
 		jfis.setIconImage(IconManager.img9);
-		jfis.setSize(800, 600);
+		jfis.setSize(800, 700);
 		GraphicLib.centerOnParent(jfis);
 		jfis.setVisible(true);
 	}
@@ -2843,6 +2874,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         gtm.saveRGAut(rgautfile);
         return rgautfile.getAbsolutePath();
     }
+	
+	public String saveFC2(String data) {
+        gtm.saveInFile(fc2file, data);
+        return fc2file.getAbsolutePath();
+    }
+	
+	public String saveBCG(String data) {
+        gtm.saveInFile(bcgfile, data);
+        return bcgfile.getAbsolutePath();
+    }
     
     public void saveRGDOT() {
         gtm.saveRGDOT(rgdotfile);
@@ -2852,8 +2893,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         gtm.saveTLSADOT(tlsadotfile);
     }
     
-    public void saveRGAutDOT() {
+    public String saveRGAutDOT() {
         gtm.saveRGAutDOT(rgautdotfile);
+		return rgautdotfile.getAbsolutePath();
     }
     
     public void saveRGAutProj() {
@@ -4699,6 +4741,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public boolean selectTab(String s) {
         return selectTab(getCurrentTURTLEPanel(), s);
     }
+	
+	public boolean selectHighLevelTab(String s) {
+		TURTLEPanel tp = getTURTLEPanel(s);
+		if (s != null) {
+			selectTab(tp);
+			return true;
+		}
+		return false;
+	}
     
     public TDiagramPanel selectTab(Point p) {
         mainTabbedPane.setSelectedIndex(p.x);

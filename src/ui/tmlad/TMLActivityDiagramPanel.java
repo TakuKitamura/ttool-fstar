@@ -165,5 +165,9 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
             enhance(v, tgc1);
         }
     }
+	
+	public boolean hasAutoConnect() {
+		return true;
+	}
     
 }

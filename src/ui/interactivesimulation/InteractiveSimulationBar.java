@@ -36,91 +36,38 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLCReferencePortConnectingPoint
- * Definition of referenced connecting points on which connectors of TML Component Task diagrams can be connected
- * Creation: 30/06/2008
- * @version 1.0 30/06/2008
+ * Class InteractiveSimulationBar
+ * Abstract toolbar to be used by simulation window
+ * Creation: 26/05/2009
+ * @version 1.0 26/05/2009
  * @author Ludovic APVRILLE
- * @see
+ * @see TGComponent
  */
 
-package ui.tmlcompd;
+package ui.interactivesimulation;
+
+import javax.swing.*;
 
 
-import ui.*;
+public abstract class InteractiveSimulationBar extends JToolBar {
+    protected JFrameInteractiveSimulation jfis;
+    
+    public InteractiveSimulationBar(JFrameInteractiveSimulation _jfis) {
+        super();
+        jfis = _jfis;
+        setOrientation(SwingConstants.HORIZONTAL);
+        setFloatable(false) ;
+        setButtons();
+    }
+    
+    // asbtract operations
+    protected abstract void setButtons();
+    
+    protected abstract void setActive(boolean b);
+    
+} // Class
 
-public class TMLCReferencePortConnectingPoint extends TMLCPortConnectingPoint{
-    
-	private TMLCCompositePort port;
-	
-    public TMLCReferencePortConnectingPoint(TMLCCompositePort _port, CDElement _container, double _w, double _h) {
-        super(_container, 0, 0, true, true, _w, _h);
-		port = _port;
-    }
-	
-	public void setPort(TMLCCompositePort _port) {
-		port = _port;
-	}
-	
-	public TMLCCompositePort getPort() {
-		return port;
-	}
-	
-	public static double getDecX(TMLCCompositePort _port) {
-		if (_port != null) {
-			TGComponent tgc = _port.getFather();
-			if (tgc != null) {
-				int x1 = _port.getX() + _port.getWidth()/2;
-				int x2 = tgc.getX();
-				int w1 = tgc.getWidth();
-				return ((double)x1 - x2) / w1;
-			}
-		}
-		return 0;
-	}
-	
-	public double getDecX() {
-		if (port != null) {
-			return getDecX(port);
-		}
-		return 0;
-	}
-	
-	public static double getDecY(TMLCCompositePort _port) {
-		if (_port != null) {
-			TGComponent tgc = _port.getFather();
-			//System.out.println("getY");
-			if (tgc != null) {
-				int y1 = _port.getY() + _port.getHeight()/2;
-				int y2 = tgc.getY();
-				int h1 = tgc.getHeight();
-				return ((double)y1 - y2) / h1;
-			}
-		}
-		
-		return 0;
-	}
-	
-	public double getDecY() {
-		if (port != null) {
-			return getDecY(port);
-		}
-		return 0;
-		
-	}
-	
-	public int getX() {
-		if (container != null) {
-			return x + container.getX() + (int)(container.getWidth() * getDecX());
-		}
-		return x;
-    }
-    
-    public int getY() {
-		if (container != null) {
-			return y + container.getY() + (int)(container.getHeight() * getDecY());
-		}
-		return y;
-    }
-    
-}
+
+
+
+

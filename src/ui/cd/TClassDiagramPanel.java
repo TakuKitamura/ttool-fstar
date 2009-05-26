@@ -53,6 +53,7 @@ import org.w3c.dom.*;
 
 
 import ui.*;
+import translator.*;
 
 public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPanelInterface {
     
@@ -257,5 +258,46 @@ public class TClassDiagramPanel extends TDiagramPanel implements ClassDiagramPan
             setSynchroVisible(true);
         }
     }
+	
+	public void makeStateActionsOf(TClassInterface tgc) {
+		Vector tclasses = new Vector();
+		tclasses.add(tgc);
+		
+		DesignPanel dp = (DesignPanel)(mgui.getCurrentTURTLEPanel());
+		DesignPanelTranslator dpt = new DesignPanelTranslator(dp);
+		TURTLEModeling tm = dpt.generateTURTLEModeling(tclasses, "");
+		
+		/*String name = tgc.getClassName();
+		tdp = (TDiagramPanel)(tgc.getBehaviourDiagramPanel());
+		
+		LinkedList list = tdp.getComponentList();
+		Iterator iterator = list.listIterator();
+		
+		TADActionState action;
+		
+		TGComponent comp;
+		while(iterator.hasNext()) {
+			comp = (TGComponent)(iterator.next());
+			if (comp instanceof TADActionState) {
+				action = (TADActionState)comp;
+				makeStateActionOf(tgc, action);
+			}
+		}*/
+	}
+	
+	/*public void makeStateActionOf(TClassInterface tgc, TADActionState action) {
+		String tmp;
+		int index;
+		
+		String value = action.getAction();
+		index = value.indexOf("=")
+		if (index == -1) {
+			// Can be only a gate
+		} else {
+			// Can be only a parameter
+			tmp = value.substring(0, index).trim();
+			
+		}
+	}*/
     
 }

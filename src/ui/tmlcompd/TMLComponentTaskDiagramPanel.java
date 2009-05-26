@@ -113,6 +113,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
             //resetAllInstancesOf(tgcc);
             return true;
         }
+		
 		if (tgc instanceof TMLCPortConnector) {
 			 updatePorts();
 		}
@@ -120,9 +121,12 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 			 updatePorts();
 		}
 		if (tgc instanceof TMLCCompositePort) {
+			//System.out.println("tgc.getFather() = " + tgc.getFather());
 			 updatePorts();
-			 if (tgc.getFather() instanceof TMLCCompositeComponent) {
-				 getMGUI().updateReferenceToTMLCCompositeComponent((TMLCCompositeComponent)(tgc.getFather()));
+			 //System.out.println("fatherOfRemoved = " + fatherOfRemoved);
+			 if (fatherOfRemoved instanceof TMLCCompositeComponent) {
+				 getMGUI().updateReferenceToTMLCCompositeComponent((TMLCCompositeComponent)(fatherOfRemoved));
+				 //System.out.println("Shall do the update");
 			 }
 		}
 		
@@ -413,6 +417,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
 	
 	public void updateReferenceToTMLCCompositeComponent(TMLCCompositeComponent tmlcc) {
+		//System.out.println("Update from " + tmlcc.getValue());
 		Iterator iterator = componentList.listIterator();
 		TGComponent tgc;
 		
@@ -648,6 +653,28 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 			//System.out.println("Putting to back: " + tgc1);
 			componentList.remove(tgc1);
 			componentList.add(tgc1);
+		}
+	}
+	
+	public void delayedLoad() {
+		Iterator iterator;
+		TGComponent tgc;
+		
+		iterator = componentList.listIterator();
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof TMLCCompositeComponent) {
+				((TMLCCompositeComponent)(tgc)).delayedLoad();
+			}
+			
+			if (tgc instanceof TMLCRemoteCompositeComponent) {
+				try {
+					((TMLCRemoteCompositeComponent)(tgc)).delayedLoad();
+				} catch (Exception e) {
+				}
+			}
 		}
 	}
 	

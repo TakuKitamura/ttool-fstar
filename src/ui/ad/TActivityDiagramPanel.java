@@ -70,6 +70,7 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
     }
     
     public boolean actionOnAdd(TGComponent tgc) {
+		System.out.println("Adding " + tgc);
         return false;
     }
     public boolean actionOnValueChanged(TGComponent tgc) {
@@ -201,4 +202,8 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
             enhance(v, tgc1);
         }
     }
+	
+	public boolean hasAutoConnect() {
+		return true;
+	}
 }

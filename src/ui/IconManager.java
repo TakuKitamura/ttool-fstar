@@ -207,7 +207,7 @@ public class IconManager {
     private static String icon65 = "images/concomment.gif";
 	private static String icon66 = "images/gentmltxt.gif";
 	
-	private static String icon70 = "images/toolbarButtonGraphics/general/SendMai16.gif";
+	private static String icon70 = "images/toolbarButtonGraphics/general/SendMail16.gif";
 	private static String icon71 = "images/toolbarButtonGraphics/general/SendMail24.gif";
 	private static String icon72 = "images/toolbarButtonGraphics/general/Help16.gif";
 	private static String icon73 = "images/toolbarButtonGraphics/general/Help24.gif";

@@ -51,7 +51,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import myutil.*;
-//import tmltranslator.tosystemc.*;
+import ui.interactivesimulation.*;
 import tmltranslator.tomappingsystemc.*;
 import tmltranslator.tomappingsystemc2.*;
 import ui.*;

@@ -109,8 +109,10 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
 				}
 			}*/
 			
+			try {
 			TMLCPortConnectingPoint pt1 = (TMLCPortConnectingPoint)p1;
 			TMLCPortConnectingPoint pt2 = (TMLCPortConnectingPoint)p2;
+		
 			
 			if (!pt1.positionned) {
 				pt1.positionned = true;
@@ -140,6 +142,11 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
 			}
 			
             g.drawLine(x1, y1, x2, y2);
+			return;
+			} catch (Exception e) {
+				//System.out.println("Exception " + e.getMessage());
+			}
+			g.drawLine(x1, y1, x2, y2);
 			
 			
         //} else {

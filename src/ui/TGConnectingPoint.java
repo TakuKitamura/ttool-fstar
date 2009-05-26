@@ -179,11 +179,17 @@ public class TGConnectingPoint implements CDElement {
     }
     
     public int getX() {
-        return x + container.getX();
+		if (container != null) {
+			return x + container.getX();
+		}
+		return x;
     }
     
     public int getY() {
-        return y + container.getY();
+		if (container != null) {
+			return y + container.getY();
+		}
+		return y;
     }
     
     public int getId() {

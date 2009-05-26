@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLCRemoteCompositeComponent
- * Composite Component. To be used in TML component task diagrams
- * Creation: 12/06/2008
- * @version 1.0 12/06/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLCRemoteCompositeComponent
+* Composite Component. To be used in TML component task diagrams
+* Creation: 12/06/2008
+* @version 1.0 12/06/2008
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.tmlcompd;
 
@@ -66,7 +66,8 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	private int spacePt = 3;
 	private Color myColor;
 	private int iconSize = 17;
-
+	private boolean iconIsDrawn = false;
+	
 	private int textX = 15; // border for ports
 	private double dtextX = 0.0;	
 	
@@ -75,6 +76,8 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	
 	private TMLCCompositeComponent tmlcc;
 	private ArrayList<TMLCCompositePort> ports;
+	
+	private NodeList nl;
     
     public TMLCRemoteCompositeComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -93,7 +96,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         //connectingPoint = new TGConnectingPoint[0];
         //connectingPoint[0] = new TMLArchiConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
         
-        addTGConnectingPointsComment();
+        //addTGConnectingPointsComment();
         
         nbInternalTGComponent = 0;
         
@@ -101,6 +104,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         editable = true;
         removable = true;
         userResizable = true;
+		multieditable = true;
         
 		value = "No reference";
 		name = "Remote composite component";
@@ -157,7 +161,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		//FontMetrics fm = g.getFontMetrics();
 		
 		if (myColor == null) {
-			myColor = new Color(251, 252, 200- (getMyDepth() * 10));
+			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
@@ -251,6 +255,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		// Icon
 		if ((width>30) && (height > (iconSize + 2*textX))) {
 			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
+			iconIsDrawn = true;
+		} else {
+			iconIsDrawn = false;
 		}
     }
 	
@@ -272,9 +279,21 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         }
         return null;
     }
-
+	
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		
+		// On the icon?
+		if (iconIsDrawn && (tmlcc != null)) {
+			if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
+				boolean b = tdp.getMGUI().selectHighLevelTab(tmlcc.getValuePanel());
+				if (b) {
+					//System.out.println("got tab");
+					return false;
+				}
+			}
+		}
+		
 		JDialogTMLRemoteCompositeComponent dialog = new JDialogTMLRemoteCompositeComponent(frame, "Setting referenced component", this);
 		dialog.setSize(400, 350);
         GraphicLib.centerOnParent(dialog);
@@ -314,7 +333,15 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         return new String(sb);
     }
 	
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+	
+	public void loadExtraParam(NodeList _nl, int decX, int decY, int decId) throws MalformedModelingException{
+		nl = _nl;
+		//delayedLoad();
+	}
+	
+	public void delayedLoad() throws MalformedModelingException {
+		
+		
         //System.out.println("*** load extra synchro ***");
         try {
             
@@ -325,6 +352,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 			int j, k;
 			int index;
 			int cpt;
+			int cptk = 0;
+			TMLCReferencePortConnectingPoint point;
+			TGConnectingPoint[] old = null;
 			
 			ArrayList<TMLCCompositePort> tmp = null;
 			ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
@@ -344,43 +374,77 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 								tmlcc = getTDiagramPanel().getMGUI().getCompositeComponent(value);
 								//System.out.println("Updating references");
 								if (tmlcc != null ){
+									//System.out.println("Found tmlcc");
 									updateReference();
 									rescaled = true;
 									tmp = ports;
 									ports = new ArrayList<TMLCCompositePort>();
+									for (TMLCCompositePort port: tmp) {
+										ports.add(port);
+									}
 								}
 							}
 							
+							
 							if (elt.getTagName().equals("port")) {
+								if (old == null) {
+									old =  connectingPoint;
+									connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+								}
 								//System.out.println("Tag port");
 								try {
 									int portid = Integer.decode(elt.getAttribute("id")).intValue();
+									
 									for (TMLCCompositePort port: tmp) {
 										if (port.getId() == portid) {
-											ports.add(port);
+											//ports.add(port);
+											//System.out.println("Load: Adding port of id= " + portid);
 											index = tmp.indexOf(port);
+											
+											//System.out.println("Updating port of id=" + portid );
 											for (k=index*5; k<(index+1)*5; k++) {
-												points.add((TMLCReferencePortConnectingPoint)(connectingPoint[k]));
+												//points.add((TMLCReferencePortConnectingPoint)(connectingPoint[k]));
+												// Must update position of connecting point
+												connectingPoint[k] = old[cptk];
+												((TMLCReferencePortConnectingPoint)(connectingPoint[k])).setPort(port);
+												if (connectingPoint[k] == null) {
+													System.out.println("null cp");
+												}
+												//System.out.println("k =" + + k + " is set to the id of cptk=" + cptk);
+												cptk ++;
+												
+												//((TMLCReferencePortConnectingPoint)connectingPoint[k]).setPort(port);
+												//point = new TMLCReferencePortConnectingPoint(port, this, 0.5, 0.5);
+												//points.add(point);
+												//System.out.println("FormerId:" + connectingPoint[k].getId());
+												//point.forceId(connectingPoint[k].getId());
+												//System.out.println("Adding point of id: " +  point.getId());
 											}
 											// Connexion
 											//System.out.println("Adding port of id:" +  portid);
 											break;
 										}
 									}
-								 } catch (Exception e) {System.out.println("Exception: " + e.getMessage());}
+								} catch (Exception e) {//System.out.println("Exception TMLCRemote: " + e.getMessage());
+								}
 							}
 							
                         }
                     }
                 }
             }
-			nbConnectingPoint = points.size();
+			
+			/*nbConnectingPoint = points.size();
+			System.out.println("Size: " + points.size());
+			TGConnectingPoint[] old =  connectingPoint;
 			connectingPoint = new TGConnectingPoint[nbConnectingPoint];
 			cpt = 0;
 			for(TMLCPortConnectingPoint pt: points) {
 				connectingPoint[cpt] = pt;
 				cpt ++;
-			}
+				connectingPoint[cpt].forceId(old[cpt].getId());
+				System.out.println("Setting id: " + old[cpt].getId());
+			}*/
             
         } catch (Exception e) {
             throw new MalformedModelingException();
@@ -402,7 +466,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		setFather(null);
 		TDiagramPanel tdp = getTDiagramPanel();
 		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-			
+		
 	}
 	
     
@@ -489,7 +553,8 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	// Add to ports the new port and remove to ports the removed ports
 	// Update tgconnecting points accordingly. Those points should point to their original ones so as to be sure to be drawn at the right place
 	// to a list of those points, keep that list, and then, generate a array of those points.
-	public void updatePorts(){
+	public void updatePorts() {
+		//System.out.println("Update my ports");
 		ArrayList<TMLCCompositePort> list = tmlcc.getFirstLevelCompositePorts();
 		int cpt=0;
 		
@@ -508,7 +573,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		// Close attention to the list
 		boolean change = true;
 		if (list.size() != ports.size()) {
-			 change = true;
+			change = true;
 		} else {
 			for (TMLCCompositePort port: ports) {
 				if (!list.contains(port)) {
@@ -519,6 +584,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
 		
 		if (change) {
+			System.out.println("change on  ports!");
 			// Delete unused ports and 
 			ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
 			cpt=0;
@@ -530,9 +596,11 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 						points.add((TMLCReferencePortConnectingPoint)(connectingPoint[cpt]));
 					}
 				} else {
+					//System.out.println("Port to remove");
 					ports.remove(tmp);
 					for (j=cpt; j<cpt+5; j++) {
 						tdp.removeOneConnector(connectingPoint[cpt]);
+						// Shall we remove the connecting points?
 					}
 					i --;
 				}
@@ -543,6 +611,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 			for (TMLCCompositePort port1: list) {
 				if (!ports.contains(port1)) {
 					ports.add(port1);
+					//System.out.println("Adding port of id =" + port1.getId()); 
 					//Create new connecting points
 					/*x1 = port1.getX() + port1.getWidth()/2;
 					y1 = port1.getY() + port1.getHeight()/2;
@@ -554,28 +623,79 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 						//point = new TMLCReferencePortConnectingPoint(port1, this, 0, 0, true, true, ((double)x1 - x2) / w, ((double)y1 - y2) / h);
 						point = new TMLCReferencePortConnectingPoint(port1, this, 0.5, 0.5);
 						points.add(point);
+						//System.out.println("Adding point on update Ports of id: " +  point.getId());
 					}
 				}
 			}
 			
-			nbConnectingPoint = points.size();
-			connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-			cpt = 0;
-			for(TMLCPortConnectingPoint pt: points) {
-				connectingPoint[cpt] = pt;
-				cpt ++;
+			if (nbConnectingPoint == points.size()) {
+				cpt = 0;
+				/*for(TMLCReferencePortConnectingPoint pt: points) {
+					((TMLCReferencePortConnectingPoint)(connectingPoint[cpt])).setPort(pt.getPort());
+					cpt ++;
+				}*/
+			} else {
+				nbConnectingPoint = points.size();
+				if (connectingPoint != null) {
+					//System.out.println("Nb of TGconnecting point: " +  connectingPoint.length);
+				} else {
+					//System.out.println("No connectingPoint");
+				}
+				connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+				cpt = 0;
+				
+				for(TMLCPortConnectingPoint pt: points) {
+					connectingPoint[cpt] = pt;
+					cpt ++;
+				}
 			}
 		}
 		
 	}
 	
 	public TGComponent getPortOf(TGConnectingPoint tp) {
-		 for (int i=0; i<nbConnectingPoint; i++) {
-			 if (connectingPoint[i] == tp) {
-				 return ports.get((int)(i/5));
-			 }
+		for (int i=0; i<nbConnectingPoint; i++) {
+			if (connectingPoint[i] == tp) {
+				return ports.get((int)(i/5));
+			}
 		}
 		return null;
 	}
+	
+	public boolean setIdTGConnectingPoint(int num, int id) {
+		int i;
+        //System.out.println("name= " + name + " nbCP=" + nbConnectingPoint + " num=" + num +  "id=" + id);
+		try {
+			
+			if (connectingPoint == null) {
+				nbConnectingPoint = num + 1;
+				connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+				for(i=0; i<nbConnectingPoint; i++) {
+					connectingPoint[i] = new TMLCReferencePortConnectingPoint(null, this, 0.5, 0.5);
+				}
+			} else {
+				if (num >= nbConnectingPoint) {
+					nbConnectingPoint = num + 1;
+					TGConnectingPoint[] old = connectingPoint;
+					connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+					//System.out.println("old1");
+					for(i=0; i<old.length; i++) {
+						connectingPoint[i] = old[i];
+					}
+					//System.out.println("old2");
+					for(i=old.length; i<nbConnectingPoint; i++) {
+						connectingPoint[i] = new TMLCReferencePortConnectingPoint(null, this, 0.5, 0.5);
+					}
+					//System.out.println("old3");
+				}
+			}
+			
+			connectingPoint[num].forceId(id);
+			return true;
+		} catch (Exception e) {
+			System.out.println("Exception remote 1:" + e.getMessage());
+			return false;
+		}
+    }
     
 }

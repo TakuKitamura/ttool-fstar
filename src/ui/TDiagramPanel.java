@@ -91,6 +91,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected TGComponent componentPointed;
     protected TGComponent componentPopup;
     protected TToolBar ttb;
+	protected TGComponent fatherOfRemoved;
     
     // popupmenus
     protected ActionListener menuAL;
@@ -812,13 +813,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
     
     // Adding component
-    public void addComponent(int x, int y, boolean swallow) {
-        addComponent(x, y, mgui.getIdButtonSelected(), swallow);
+    public TGComponent addComponent(int x, int y, boolean swallow) {
+        return addComponent(x, y, mgui.getIdButtonSelected(), swallow);
     }
     
-	public void addComponent(int x, int y, int id, boolean swallow) {
+	public TGComponent addComponent(int x, int y, int id, boolean swallow) {
 		TGComponent tgc = TGComponentManager.addComponent(x, y, id, this);
 		addComponent(tgc, x, y, swallow, true);
+		return tgc;
 	}
 	
 	// return true if swallowed
@@ -1155,7 +1157,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return v;
 	}
-	 
+	
     // For Design panels (TURTLE, TURTLE-OS, etc.)
     public TClassSynchroInterface getTClass1ToWhichIamConnected(CompositionOperatorInterface coi) {
 		
@@ -1788,6 +1790,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TGComponent t;
         Iterator iterator = componentList.listIterator();
         
+		fatherOfRemoved = tgc.getFather();
+		
         while(iterator.hasNext()) {
             t = (TGComponent)(iterator.next());
             if (t == tgc) {
@@ -1802,7 +1806,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc.actionOnRemove();
                 return;
             } else {
+				//System.out.println("Testing remove internal component");
                 if (t.removeInternalComponent(tgc)) {
+					//System.out.println("Remove internal component");
                     removeConnectors(tgc);
                     return;
                 }
@@ -1842,6 +1848,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
     
     public void removeOneConnector(TGConnectingPoint cp) {
+		//System.out.println("Remove one connector");
         TGConnector tgcon;
         TGComponent t;
         int j, k;
@@ -2071,7 +2078,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 	
-	 public TGComponent getComponentToWhichBelongs(LinkedList components, TGConnectingPoint p) {
+	public TGComponent getComponentToWhichBelongs(LinkedList components, TGConnectingPoint p) {
         TGComponent tgc1, tgc2;
         Iterator iterator = components.listIterator();
         
@@ -2413,7 +2420,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return name;
     }
 	
-	 public String findNodeName(String name) {
+	public String findNodeName(String name) {
         boolean ok;
         int i;
         int index = 0;
@@ -2427,7 +2434,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             while(iterator.hasNext()) {
                 tgc = (TGComponent)(iterator.next());
 				if (tgc.getName().equals(name + index)) {
-                        ok = false;
+					ok = false;
                 }                
             }*/
             if (ok) {
@@ -2452,11 +2459,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc = (TGComponent)(iterator.next());
 				if (tgc instanceof NCConnectorNode) {
 					if (((NCConnectorNode)tgc).getInterfaceName().equals(name + index)) {
-							ok = false;
+						ok = false;
 					}                
 				} else {
 					if (tgc.getName().equals(name + index)) {
-							ok = false;
+						ok = false;
 					}   
 				}
             }*/
@@ -2525,7 +2532,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return true;
     }
 	
-	 public boolean isNCNameUnique(String s) {
+	public boolean isNCNameUnique(String s) {
         Object o;
 		TGComponent tgc;
 		Vector v;
@@ -2978,6 +2985,87 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		adjustMode = (adjustMode + 1)% 2;
 		
 		repaint();
+	}
+	
+	public boolean hasAutoConnect() {
+		return false;
+	}
+	
+	public void autoConnect(TGComponent added) {
+		
+		
+		boolean cond = hasAutoConnect();
+		
+		if (!cond) {
+			return;
+		}
+		
+		int i, j;
+		
+		//System.out.println("Autoconnect");
+		
+		Vector listPoint = new Vector();
+		
+		Vector v = new Vector();
+		
+		int distance = 100;
+		TGConnectingPoint found = null;
+		int distanceTmp;
+		
+		boolean cd1, cd2;
+		
+		TGConnectingPoint tgcp, tgcp1;
+		
+		TGConnector tgco;
+		
+		TGComponent tgc;
+        Iterator iterator;
+		
+        for(i=0; i<added.getNbConnectingPoint(); i++) {
+			
+			tgcp = added.getTGConnectingPointAtIndex(i);
+			if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
+				
+				// Try to connect that connecting point
+				found = null;
+				distance = 100;
+				
+				iterator = componentList.listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					if (tgc != added) {
+						for(j=0; j<tgc.getNbConnectingPoint(); j++) {
+							tgcp1 = tgc.getTGConnectingPointAtIndex(j);
+							if ((tgcp1 != null) && tgcp1.isFree()) {
+								if (tgcp1.isCompatibleWith(added.getDefaultConnector())) {
+									cd1 = tgcp1.isIn() && tgcp.isOut() && (tgcp1.getY() > tgcp.getY());
+									cd2 = tgcp.isIn() && tgcp1.isOut() && (tgcp1.getY() < tgcp.getY());
+									if (cd1 || cd2) {
+										distanceTmp = (int)(Math.sqrt(   Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+										if (distanceTmp < distance) {
+											distance = distanceTmp;
+											found = tgcp1;
+										}
+									}
+								}
+							}
+						}
+						
+					}
+				}
+				if (found != null) {
+					//System.out.println("Adding connector");
+					if (found.isIn()) {
+						tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(), added.getDefaultConnector(), this, tgcp, found, listPoint);
+					} else {
+						tgco = TGComponentManager.addConnector(found.getX(), found.getY(), added.getDefaultConnector(), this, found, tgcp, listPoint);
+					}
+					componentList.add(tgco);
+					//System.out.println("Connector added");
+				}
+			}
+		}
+		//System.out.println("End Autoconnect");
 	}
     
     

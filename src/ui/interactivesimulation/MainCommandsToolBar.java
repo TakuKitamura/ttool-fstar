@@ -36,91 +36,55 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLCReferencePortConnectingPoint
- * Definition of referenced connecting points on which connectors of TML Component Task diagrams can be connected
- * Creation: 30/06/2008
- * @version 1.0 30/06/2008
+ * Class MainCommandsToolBar
+ * Toolbar associated with interactive simulation (main commands)
+ * Creation: 26/05/2009
+ * @version 1.0 26/05/2009
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.tmlcompd;
+package ui.interactivesimulation;
 
+import javax.swing.*;
+//import java.awt.*;
+//import java.awt.event.*;
 
 import ui.*;
 
-public class TMLCReferencePortConnectingPoint extends TMLCPortConnectingPoint{
+public class MainCommandsToolBar extends InteractiveSimulationBar {
     
-	private TMLCCompositePort port;
-	
-    public TMLCReferencePortConnectingPoint(TMLCCompositePort _port, CDElement _container, double _w, double _h) {
-        super(_container, 0, 0, true, true, _w, _h);
-		port = _port;
+    
+    public MainCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+        super(_jfis);
     }
-	
-	public void setPort(TMLCCompositePort _port) {
-		port = _port;
-	}
-	
-	public TMLCCompositePort getPort() {
-		return port;
-	}
-	
-	public static double getDecX(TMLCCompositePort _port) {
-		if (_port != null) {
-			TGComponent tgc = _port.getFather();
-			if (tgc != null) {
-				int x1 = _port.getX() + _port.getWidth()/2;
-				int x2 = tgc.getX();
-				int w1 = tgc.getWidth();
-				return ((double)x1 - x2) / w1;
-			}
-		}
-		return 0;
-	}
-	
-	public double getDecX() {
-		if (port != null) {
-			return getDecX(port);
-		}
-		return 0;
-	}
-	
-	public static double getDecY(TMLCCompositePort _port) {
-		if (_port != null) {
-			TGComponent tgc = _port.getFather();
-			//System.out.println("getY");
-			if (tgc != null) {
-				int y1 = _port.getY() + _port.getHeight()/2;
-				int y2 = tgc.getY();
-				int h1 = tgc.getHeight();
-				return ((double)y1 - y2) / h1;
-			}
-		}
+    
+    protected void setActive(boolean b) {
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+    }
+    
+    protected void setButtons() {
+        JButton button;
+        
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
+        
+		this.addSeparator();
 		
-		return 0;
-	}
-	
-	public double getDecY() {
-		if (port != null) {
-			return getDecY(port);
-		}
-		return 0;
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
+        
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
+        
 		
-	}
-	
-	public int getX() {
-		if (container != null) {
-			return x + container.getX() + (int)(container.getWidth() * getDecX());
-		}
-		return x;
+       
     }
-    
-    public int getY() {
-		if (container != null) {
-			return y + container.getY() + (int)(container.getHeight() * getDecY());
-		}
-		return y;
-    }
-    
-}
+} // Class
+
+
+
+
+

@@ -120,7 +120,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		Font fold = f;
 		
 		if (myColor == null) {
-			myColor = new Color(201, 243, 188- (getMyDepth() * 10));
+			myColor = new Color(201, 243, 188- (getMyDepth() * 10), 200);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {

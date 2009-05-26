@@ -1,4 +1,4 @@
-/**Copyright or � or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -1873,8 +1873,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
         //TGComponent tgc;
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] == t) {
-                t.actionOnRemove();
-				tdp.actionOnRemove(t);
                 nbInternalTGComponent = nbInternalTGComponent - 1;
                 if (nbInternalTGComponent == 0) {
                     tgcomponent = null;
@@ -1890,6 +1888,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
                     }
                     tgcomponent = tgcomponentbis;
                 }
+				t.actionOnRemove();
+				tdp.actionOnRemove(t);
                 return true;
             } else {
                 if (tgcomponent[i].removeInternalComponent(t)) {

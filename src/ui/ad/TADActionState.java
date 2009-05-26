@@ -57,6 +57,12 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
+	
+	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
+	public static final int ATTRIBUTE = 1;
+	public static final int GATE = 2;   
+	public static final int UNKNOWN = 3;
+	
     
     public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -89,7 +95,25 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
             width = w1;
             //updateConnectingPoints();
         }
+		
+		
+		if (stateAction > 0)  {
+			Color c = g.getColor();
+			switch(stateAction) {
+			case 1:
+				g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+				break;
+			case 2:
+				g.setColor(ColorManager.GATE_BOX_ACTION);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			g.fillRoundRect(x, y, width, height, arc, arc);
+			g.setColor(c);
+		}
         g.drawRoundRect(x, y, width, height, arc, arc);
+		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
@@ -152,6 +176,12 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateAction = _stateAction;
+	}
+	
+
     
     
 }
