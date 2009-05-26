@@ -290,7 +290,7 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 	public void run() {
 		
 		String cmd1 = "";
-		String data, data1;
+		String data, data1, data2;
 		Point p;
 		int id = 0;
 		
@@ -365,14 +365,15 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 			
 			if (bcg.isSelected()) {
 				data = rshc.getFileData(fileName + ".bcg");
-				String loc;
+				/*String loc;
 				if ((ConfigurationTTool.TGraphPath != null) && (ConfigurationTTool.TGraphPath.length() > 0)) {
 					loc = ConfigurationTTool.TGraphPath + fileName + ".bcg";
 				} else {
 					loc = fileName + ".bcg";
-				}
-				mgui.gtm.saveInFile(new File(loc), data);
-				jta.append("Graph saved in bcg format at " + loc + "\n");
+				}*/
+				//mgui.gtm.saveInFile(new File(loc), data);
+				data2 = mgui.saveBCG(data);
+				jta.append("Graph saved in BCG format in file " + data2 + "\n");
 			}
 			
 			// AUT  dot
@@ -386,7 +387,7 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 				//jta.append("\ngot data ... Converting 5\n");
 				jta.append("\n" + p.x + " state(s), " + p.y + " transition(s)\n\n");
 				//jta.append("\nConverting 1\n");
-				jta.append("\nActions on graph are being modified to be human-readable");
+				jta.append("\n(Actions on graph are being modified to be human-readable)\n");
 				data1 = mgui.gtm.convertCADP_AUT_to_RTL_AUT(data, max);
 				//System.out.println("data1 = " + data1);
 				if (data1 == null) {
@@ -401,7 +402,8 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 					//System.out.println("graph AUT=" + data);
 					mgui.gtm.setRGAut(data);
 					//jta.append("\nConverting 3\n");
-					mgui.saveRGAut();
+					data2 = mgui.saveRGAut();
+					jta.append("Graph saved in AUT format in file " + data2 + "\n");
 					//jta.append("\nConverting 4\n");
 					
 					
@@ -414,11 +416,12 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 						data = processCmd(cmd1);
 						data = rshc.getFileData(fileName + ".aut.dot");
 						mgui.gtm.setRGAutDOT(data);
-						mgui.saveRGAutDOT();
+						data2 = mgui.saveRGAutDOT();
+						jta.append("Graph saved in DOT format in file " + data2 + "\n");
 					}
 					
 					if (fc2.isSelected()) {
-						String path = ConfigurationTTool.GGraphPath;
+						/*String path = ConfigurationTTool.GGraphPath;
 						if ((path == null) || (path.length() == 0)) {
 							path = new File("").getAbsolutePath();
 						} 
@@ -428,7 +431,22 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 						data = processCmd(cmd1);
 						data = rshc.getFileData(fileName + ".fc2");
 						//System.out.println("Got data!");
-						mgui.gtm.saveInFile(new File(path, fileName + ".fc2"), data);
+						mgui.gtm.saveInFile(new File(path, fileName + ".fc2"), data);*/
+						jta.append("\nConverting to fc2\n");
+						//rshc.sendFileData(fileName + ".aut", data);
+						//if (bcg.isSelected()) {
+						//	cmd1 = cmdBcgio + " -bcg " + fileName + ".bcg" + " -fc2 " + fileName + ".fc2";
+						/*} else {
+							cmd1 = cmdBcgio + " -aldebaran " + fileName + ".aut" + " -fc2 " + fileName + ".fc2";
+						}*/
+						
+						rshc.sendFileData(fileName + ".aut", data1);
+						cmd1 = cmdBcgio + " -aldebaran " + fileName + ".aut" + " -fc2 " + fileName + ".fc2";
+						data = processCmd(cmd1);
+						data = rshc.getFileData(fileName + ".fc2");
+						data2 = mgui.saveFC2(data);
+						jta.append("Graph saved in FC2 format in file " + data2 + "\n");
+
 					}
 				}
 			} else {
@@ -439,21 +457,19 @@ public class JDialogLOTOSValidation extends javax.swing.JDialog implements Actio
 					data = processCmd(cmd1);
 					data = rshc.getFileData(fileName + ".aut.dot");
 					mgui.gtm.setRGAutDOT(data);
-					mgui.saveRGAutDOT();
+					data2 = mgui.saveRGAutDOT();
+					jta.append("Graph saved in DOT format in file " + data2 + "\n");
 				}
 				
 				if (fc2.isSelected()) {
-					String path = ConfigurationTTool.GGraphPath;
-					if ((path == null) || (path.length() == 0)) {
-						path = new File("").getAbsolutePath();
-					} 
-					jta.append("\nConverting to fc2 format from bcg format and saving it in " + path + fileName + ".fc2\n");
+					//jta.append("\nConverting to dot format from bcg format and saving it in " + fileName + ".aut.dot\n");
 					//rshc.sendFileData(fileName + ".aut", data);
+					//cmd1 = cmdBcgio + " -aldebaran " + fileName + ".aut" + " -fc2 " + fileName + ".fc2";
 					cmd1 = cmdBcgio + " -bcg " + fileName + ".bcg" + " -fc2 " + fileName + ".fc2";
 					data = processCmd(cmd1);
 					data = rshc.getFileData(fileName + ".fc2");
-					//System.out.println("Got data!");
-					mgui.gtm.saveInFile(new File(path, fileName + ".fc2"), data);
+					data2 = mgui.saveFC2(data);
+					jta.append("Graph saved in FC2 format in file " + data2 + "\n");
 				}
 				
 			}

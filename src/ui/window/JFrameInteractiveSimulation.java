@@ -107,6 +107,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Control command
 	protected JButton resetCommand, runCommand, StopCommand;
+	protected JToolBar toolbarCommand;
+	
 	
 	JPanel main, mainTop, commands, infos, outputs; // from MGUI
 	JTabbedPane commandTab, infoTab;
@@ -236,6 +238,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(runCommand, c01);
 		c01.gridheight = 1;
 		jp01.add(new JLabel(" "), c01);
+		
+		toolbarCommand = new JToolBar();
+		toolbarCommand.setOrientation(SwingConstants.HORIZONTAL);
+		toolbarCommand.setFloatable(false) ;
 		
 		// Text commands
 		jp01 = new JPanel();
