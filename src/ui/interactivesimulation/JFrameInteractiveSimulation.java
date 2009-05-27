@@ -150,6 +150,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	private JLabel createStatusBar()  {
         status = new JLabel("Ready...");
+		status.setForeground(ColorManager.InteractiveSimulationText);
         status.setBorder(BorderFactory.createEtchedBorder());
         return status;
     }
@@ -165,7 +166,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Container framePanel = getContentPane();
 		framePanel.setLayout(new BorderLayout());
-		//framePanel.setBackground(new Color(50, 40, 40, 200));
+		//framePanel.setBackground(ColorManager.InteractiveSimulationBackground);
 		//framePanel.setForeground(new Color(255, 166, 38));		
 		
 		//System.out.println("Button start created");
@@ -186,9 +187,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mouseHandler = new MouseHandler(status);
 		
 		JPanel mainpanel = new JPanel(new BorderLayout());
+		//mainpanel.setBackground(ColorManager.InteractiveSimulationBackground);
 		framePanel.add(mainpanel, BorderLayout.NORTH);
 		
 		JPanel jp = new JPanel();
+		//jp.setBackground(ColorManager.InteractiveSimulationBackground);
 		//jp.setPreferredSize(new Dimension(800, 75));
 		jp.add(buttonStart);
 		jp.add(buttonStopAndClose);
@@ -227,6 +230,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
 		jsp.setMaximumSize(new Dimension(800, 500));
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, jsp);
+		//split.setBackground(ColorManager.InteractiveSimulationBackground);
 		mainpanel.add(split, BorderLayout.CENTER);
 		
 		// Commands
@@ -238,6 +242,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		mainTop.add(commands, c02);
 		
 		commandTab = new JTabbedPane();
+		//commandTab.setBackground(ColorManager.InteractiveSimulationBackground);
 		
 		// Control commands
 		jp01 = new JPanel(new BorderLayout());
