@@ -106,7 +106,9 @@ public class ColorManager {
 	public static final Color MainTabbedPaneBack = new Color(9, 7, 85);
 	public static final Color MainTabbedPaneSelect = new Color(231, 178, 60);
 	
-	public static final Color InteractiveSimulationBackground = new Color(5, 100, 7, 125);
+	public static final Color InteractiveSimulationJTABackground = new Color(50, 40, 40);
+	public static final Color InteractiveSimulationJTAForeground = new Color(255, 166, 38);
+	public static final Color InteractiveSimulationBackground = new Color(5, 100, 7);
 	public static final Color InteractiveSimulationText = new Color(5, 100, 7);
     
     public final static void setColor(Graphics g, int state, int type) {

@@ -212,17 +212,19 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		// Ouput textArea
 		jta = new ScrolledJTextArea();
+		jta.setBackground(ColorManager.InteractiveSimulationJTABackground);
+		jta.setForeground(ColorManager.InteractiveSimulationJTAForeground);
 		jta.setMinimumSize(new Dimension(800, 400));
 		jta.setRows(15);
 		//jta.setMaximumSize(new Dimension(800, 500));
 		jta.setEditable(false);
 		jta.setMargin(new Insets(10, 10, 10, 10));
 		jta.setTabSize(3);
-		jta.append("Click on start to start the simulator and connect to it\n");
+		jta.append("Click on \"Connect\" to start the remote simulator and connect to it\n");
 		Font f = new Font("Courrier", Font.BOLD, 12);
 		jta.setFont(f);
 		jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		jsp.setViewportBorder(BorderFactory.createLineBorder(Color.red));
+		jsp.setViewportBorder(BorderFactory.createLineBorder(ColorManager.InteractiveSimulationBackground));
 
         //jsp.setColumnHeaderView(100);
         //jsp.setRowHeaderView(30);
@@ -359,14 +361,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(new JLabel("Status:"), c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		status = new JLabel("Unknown");
-		status.setForeground(Color.red);
+		status.setForeground(ColorManager.InteractiveSimulationText);
 		jp01.add(status, c01);
 		jp01.add(new JLabel(" "), c01);
 		c01.gridwidth = 1;
 		jp01.add(new JLabel("Time:"), c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		time = new JLabel("Unknown");
-		time.setForeground(Color.red);
+		time.setForeground(ColorManager.InteractiveSimulationText);
 		jp01.add(time, c01);
 		
 		

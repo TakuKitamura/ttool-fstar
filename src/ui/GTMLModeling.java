@@ -654,6 +654,9 @@ public class GTMLModeling  {
         TMLTask tt1, tt2;
 		TType tt;
 		TMLType tmlt;
+		
+		TMLAttribute tmlattr;
+		TMLType tmltt;
         
 		System.out.println("*** Adding requests ***");
 		
@@ -732,6 +735,17 @@ public class GTMLModeling  {
 						tt1.setRequested(true);
 						tt1.setRequest(request);
 						request.setDestinationTask(tt1);
+						
+						// Request attributes
+						System.out.println("Requests attributes");
+						for(int j=0; j<request.getNbOfParams(); j++) {
+							tmltt = new TMLType(request.getType(j).getType());
+							tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
+							tmlattr.initialValue = tmlattr.getDefaultInitialValue();
+							System.out.println("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
+							tt1.addAttribute(tmlattr);
+						}
+						
 						for(int i=0; i<portstome.size(); i++) {
 							port2 = (TMLCPrimitivePort)(portstome.get(i));
 							tt2 = tmlm.getTMLTaskByName(port2.getFather().getValue());
