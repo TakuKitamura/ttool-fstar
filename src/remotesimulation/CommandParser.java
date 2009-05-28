@@ -252,6 +252,30 @@ public class CommandParser {
 		sc = new SimulationCommand("run-x-time-units", "rxtu", "1 6", params, paramNames, "Runs the simulation for x units of time");
 		commandList.add(sc);
 		
+		// run-to-time
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "x: time value";
+		sc = new SimulationCommand("run-to-time", "rtt", "1 5", params, paramNames, "Runs the simulation until time x is reached");
+		commandList.add(sc);
+		
+		// run-x-transactions
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "nb of transactions";
+		sc = new SimulationCommand("run-x-transactions", "rxtr", "1 2", params, paramNames, "Runs the simulation for x transactions");
+		commandList.add(sc);
+		
+		// run-x-commands
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "nb of commands";
+		sc = new SimulationCommand("run-x-commands", "rxcomm", "1 4", params, paramNames, "Runs the simulation for x commands");
+		commandList.add(sc);
+		
 		// save-trace-in-file
 		params = new int[2];
 		paramNames = new String[2];

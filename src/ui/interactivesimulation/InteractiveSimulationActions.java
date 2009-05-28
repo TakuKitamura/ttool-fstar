@@ -60,12 +60,23 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_RUN_SIMU = 0;
 	public static final int ACT_STOP_SIMU = 1;
 	public static final int ACT_RESET_SIMU = 2;
+	public static final int ACT_RUN_X_TIME_UNITS = 6;
+	public static final int ACT_RUN_TO_TIME = 7;
+	public static final int ACT_RUN_X_TRANSACTIONS = 8;
+	public static final int ACT_RUN_X_COMMANDS = 9;
+	
+	public static final int ACT_SAVE_VCD = 10;
+	public static final int ACT_SAVE_HTML = 11;
+	public static final int ACT_SAVE_TXT = 12;
+	
+	public static final int ACT_SAVE_STATE = 13;
+	public static final int ACT_RESTORE_STATE = 14;
 	
 	public static final int ACT_START_ALL = 3; 
 	public static final int ACT_STOP_ALL = 4;
 	public static final int ACT_STOP_AND_CLOSE_ALL = 5;
    
-    public static final int NB_ACTION = 6;
+    public static final int NB_ACTION = 15;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -105,10 +116,21 @@ public class InteractiveSimulationActions extends AbstractAction {
     }
     
     public void init() {
-        actions[ACT_RUN_SIMU] = new TAction("run-simu", "Run simulation", IconManager.imgic53, IconManager.imgic53, "Run simulation", "Run simulation. works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_SIMU] = new TAction("run-simu", "Run simulation", IconManager.imgic1302, IconManager.imgic1302, "Run simulation", "Run simulation until next breakpoint. works only if the simulator is \"ready\"", 'R');
         actions[ACT_STOP_SIMU] = new TAction("stop-simu", "Stop simulation", IconManager.imgic55, IconManager.imgic55, "Stop simulation", "Stop simulation. Works only if the simulator is \"busy\"", 'S');
 		actions[ACT_RESET_SIMU] = new TAction("reset-simu", "Reset simulation", IconManager.imgic45, IconManager.imgic45, "Reset simulation", "Reset simulation", 'T');
-		
+		actions[ACT_RUN_X_TIME_UNITS] = new TAction("run-x-time-units", "Run x time units", IconManager.imgic1300, IconManager.imgic1300, "Run x time units", "Run simulation for x units of time. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_TO_TIME] = new TAction("run-to-time", "Run to time x", IconManager.imgic1304, IconManager.imgic1304, "Run to time x", "Run simulation until time x is reached. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "Run x commands", IconManager.imgic1308, IconManager.imgic1308, "Run x commands", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
+        
+		actions[ACT_SAVE_VCD] = new TAction("save-vcd", "Save trace in VCD format", IconManager.imgic1310, IconManager.imgic1310, "Save trace in VCD format", "Save trace in VCD format", 'R');
+        actions[ACT_SAVE_HTML] = new TAction("save-html", "Save trace in HTML format", IconManager.imgic1312, IconManager.imgic1312, "Save trace in HTML format", "Save trace in HTML format", 'R');
+        actions[ACT_SAVE_TXT] = new TAction("save-txt", "Save trace in TXT format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in TXT format", "Save trace in TXT format", 'R');
+        
+		actions[ACT_SAVE_STATE] = new TAction("save-state", "Save simulation state in File", IconManager.imgic341, IconManager.imgic341, "Save simulation state in File", "Save simulation state in File", 'R');
+        actions[ACT_RESTORE_STATE] = new TAction("restore-state", "Restore simulation state from File", IconManager.imgic339, IconManager.imgic339, "Restore simulation state from File", "Restore simulation state from File", 'R');
+        
 		actions[ACT_START_ALL] = new TAction("start-all", "Connect to simulator", IconManager.imgic53, IconManager.imgic53, "Connect", "Start the server - if it is not yet running - and connect to it", 'C');
         actions[ACT_STOP_ALL] = new TAction("stop-all", "Quit simulation window", IconManager.imgic27, IconManager.imgic27, "Quit simulation window", "Quit the simulation window without terminating the simulation", 'Q');
         actions[ACT_STOP_AND_CLOSE_ALL] = new TAction("stop-and-close-all", "Terminate simulation and quit", IconManager.imgic27, IconManager.imgic27, "Terminate simulation and quit", "Terminate the simulation and quit the simulation window", 'T');

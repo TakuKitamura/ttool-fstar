@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class MainCommandsToolBar
- * Toolbar associated with interactive simulation (main commands)
- * Creation: 26/05/2009
- * @version 1.0 26/05/2009
+ * Class SaveCommandsToolBar
+ * Toolbar associated with interactive simulation (save commands)
+ * Creation: 28/05/2009
+ * @version 1.0 28/05/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -52,54 +52,35 @@ import javax.swing.*;
 
 import ui.*;
 
-public class MainCommandsToolBar extends InteractiveSimulationBar {
+public class SaveCommandsToolBar extends InteractiveSimulationBar {
     
     
-    public MainCommandsToolBar(JFrameInteractiveSimulation _jfis) {
+    public SaveCommandsToolBar(JFrameInteractiveSimulation _jfis) {
         super(_jfis);
     }
     
     protected void setActive(boolean b) {
-		jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
-        jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
-		jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
     }
     
     protected void setButtons() {
         JButton button;
         
-        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD]);
         button.addMouseListener(jfis.mouseHandler);
         
 		this.addSeparator();
 		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML]);
         button.addMouseListener(jfis.mouseHandler);
         
-        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_SIMU]);
-        button.addMouseListener(jfis.mouseHandler);
-		
 		this.addSeparator();
 		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_TIME]);
-        button.addMouseListener(jfis.mouseHandler);
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS]);
-        button.addMouseListener(jfis.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS]);
-        button.addMouseListener(jfis.mouseHandler);
-		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT]);
         button.addMouseListener(jfis.mouseHandler);
         
-		
        
     }
 } // Class

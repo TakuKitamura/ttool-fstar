@@ -113,7 +113,8 @@ public class IconManager {
     
 	// TML component task diagram
 	public static ImageIcon imgic1200, imgic1202, imgic1204, imgic1206, imgic1208;
-	
+	public static ImageIcon imgic1300, imgic1302, imgic1304, imgic1306, imgic1308;
+	public static ImageIcon imgic1310, imgic1312, imgic1314, imgic1316, imgic1318;
     // SMD diagram
     public static ImageIcon imgic2000, imgic2002, imgic2004,imgic2006,imgic2008,imgic2010, imgic2012;
     
@@ -399,7 +400,18 @@ public class IconManager {
 	private static String icon1204 = "images/tmlcompport.gif";
 	private static String icon1206 = "images/tmlprimport.gif";
 	private static String icon1208 = "images/tmlcompdiag.gif";
-    
+	
+	private static String icon1300 = "images/stepforwardxtimeunits24.gif";
+    private static String icon1302 = "images/stepforwardtobreakpoint24.gif";
+    private static String icon1304 = "images/stepforwardtotime24.gif";
+    private static String icon1306 = "images/stepforwardxtransactions24.gif";
+    private static String icon1308 = "images/stepforwardxcommands24.gif";
+	private static String icon1310 = "images/savevcd24.gif";
+	private static String icon1312 = "images/savehtml24.gif";
+	private static String icon1314 = "images/savetxt24.gif";
+	//private static String icon1316 = "images/savestate24.gif";
+	//private static String icon1318 = "images/restorestate24.gif";
+   
     // SMD diagrams
     private static String icon2000 = "images/prosmdsendmsg.gif";
     private static String icon2002 = "images/prosmdgetmsg.gif";
@@ -674,6 +686,17 @@ public class IconManager {
 		imgic1204 = getIcon(icon1204);
 		imgic1206 = getIcon(icon1206);
 		imgic1208 = getIcon(icon1208);
+		
+		imgic1300 = getIcon(icon1300);
+		imgic1302 = getIcon(icon1302);
+		imgic1304 = getIcon(icon1304);
+		imgic1306 = getIcon(icon1306);
+		imgic1308 = getIcon(icon1308); 
+		imgic1310 = getIcon(icon1310);
+		imgic1312 = getIcon(icon1312);
+		imgic1314 = getIcon(icon1314);
+		//imgic1316 = getIcon(icon1316);
+		//imgic1318 = getIcon(icon1318);
         
         imgic2000 = getIcon(icon2000);
         imgic2002 = getIcon(icon2002);

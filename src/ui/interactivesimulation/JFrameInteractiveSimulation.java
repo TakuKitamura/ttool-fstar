@@ -108,10 +108,15 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	// Control command
 	protected JButton resetCommand, runCommand, StopCommand;
 	protected MainCommandsToolBar mctb;
+	protected SaveCommandsToolBar sctb;
+	protected StateCommandsToolBar stctb;
 	
-	
-	JPanel main, mainTop, commands, infos, outputs; // from MGUI
-	JTabbedPane commandTab, infoTab;
+	JPanel main, mainTop, commands, save, state, infos, outputs; // from MGUI
+	JCheckBox debug;
+	JTabbedPane commandTab, infoTab, saveTab, stateTab;
+	protected JTextField paramMainCommand;
+	protected JTextField saveFileName;
+	protected JTextField stateFileName;
 	
 	// Status elements
 	JLabel status, time;
@@ -156,7 +161,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
     }
 	
 	public void makeComponents() {
-		JPanel jp01;
+		JPanel jp01, jp02;
 		//jp01.setPreferredSize(new Dimension(375, 400));
 		GridBagLayout gridbag01;
 		GridBagConstraints c01 ;
@@ -256,32 +261,27 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		commandTab.addTab("Control", null, jp01, "Main control commands");
 		
 		
-		/*c01.gridheight = 1;
-		c01.weighty = 1.0;
-		c01.weightx = 1.0;
-		//c01.gridwidth = 1;
-		c01.fill = GridBagConstraints.BOTH;
-		//c01.gridheight = 1;
-		
-		c01.gridheight = 1;
-		jp01.add(new JLabel("  "), c01);
-		c01.gridheight = 1;
-		resetCommand = new JButton(IconManager.imgic45);
-		//resetCommand.setPreferredSize(new Dimension(35, 35));
-		resetCommand.addMouseListener(this);
-		jp01.add(resetCommand, c01);
-		StopCommand = new JButton(IconManager.imgic55);
-		StopCommand.addMouseListener(this);
-		jp01.add(StopCommand, c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		runCommand = new JButton(IconManager.imgic53);
-		runCommand.addMouseListener(this);
-		jp01.add(runCommand, c01);
-		c01.gridheight = 1;
-		jp01.add(new JLabel(" "), c01);*/
-		
 		mctb = new MainCommandsToolBar(this);
 		jp01.add(mctb, BorderLayout.NORTH);
+		
+		jp02 = new JPanel();
+		//jp01.setPreferredSize(new Dimension(375, 400));
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp02.setLayout(gridbag01);
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp02.add(new JLabel("Command parameter:"), c01);
+		paramMainCommand = new JTextField(30);
+		jp02.add(paramMainCommand, c01);
+		
+		jp01.add(jp02, BorderLayout.CENTER);
 		
 		
 		// Text commands
@@ -324,6 +324,58 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(listTextCommands, c01);
 		
 		commands.add(commandTab);
+		
+		// Save commands
+		jp01 = new JPanel(new BorderLayout());
+		
+		commandTab.addTab("Save trace", null, jp01, "Save commands");
+		
+		sctb = new SaveCommandsToolBar(this);
+		jp01.add(sctb, BorderLayout.NORTH);
+
+		jp02 = new JPanel();
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp02.setLayout(gridbag01);
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp02.add(new JLabel("File name:"), c01);
+		saveFileName = new JTextField(30);
+		jp02.add(saveFileName, c01);
+		
+		jp01.add(jp02, BorderLayout.CENTER);
+		
+		// State commands
+		jp01 = new JPanel(new BorderLayout());
+		
+		commandTab.addTab("Save / restore state", null, jp01, "Save commands");
+		
+		stctb = new StateCommandsToolBar(this);
+		jp01.add(stctb, BorderLayout.NORTH);
+
+		jp02 = new JPanel();
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp02.setLayout(gridbag01);
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp02.add(new JLabel("File name:"), c01);
+		stateFileName = new JTextField(30);
+		jp02.add(stateFileName, c01);
+		
+		jp01.add(jp02, BorderLayout.CENTER);
 		
 		
 		//Info
@@ -370,7 +422,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		time = new JLabel("Unknown");
 		time.setForeground(ColorManager.InteractiveSimulationText);
 		jp01.add(time, c01);
-		
+		jp01.add(new JLabel(" "), c01);
+		debug = new JCheckBox("Print messages received from server");
+		jp01.add(debug, c01);
 		
 		
 		pack();
@@ -525,7 +579,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					while(true) {
 						testGo();
 						s = rc.readOneLine();
-						//jta.append("\nFrom server: " + s + "\n");
+						if (debug.isSelected()) {
+							jta.append("\nFrom server: " + s + "\n");
+						}
 						analyzeServerAnswer(s);
 					}
 				} catch (RemoteConnectionException rce) {
@@ -856,16 +912,25 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void setBusyStatus(boolean b) {
-		actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(!b);
-		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(!b);
+		setAll(!b);
 		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
 		busyStatus = b;
 	}
 	
 	public void setAll(boolean b) {
 		actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+		
 	}
 	
 	public static String decodeString(String s)  {
@@ -922,6 +987,44 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
         }
     }
 	
+	public void sendCommandWithPositiveInt(String command) {
+		String param = paramMainCommand.getText().trim();
+		if (isAPositiveInt(param)) {
+			sendCommand(command + " " + param);
+		} else {
+			error("Wrong parameter: must be a positive int"); 
+		}
+	}
+	
+	public void sendSaveTraceCommand(String format) {
+		String param = saveFileName.getText().trim();
+		if (param.length() >0) {
+			sendCommand("save-trace-in-file" + " " + format + " " + param);
+		} else {
+			error("Wrong parameter: must be a file name"); 
+		}
+	}
+	
+	public void sendSaveStateCommand() {
+		String param = stateFileName.getText().trim();
+		if (param.length() >0) {
+			sendCommand("save-simulation-state-in-file " + param);
+		} else {
+			error("Wrong parameter: must be a file name"); 
+		}
+	}
+	
+	public void sendRestoreStateCommand() {
+		String param = stateFileName.getText().trim();
+		if (param.length() >0) {
+			sendCommand("restore-simulation-state-from-file " + param);
+		} else {
+			error("Wrong parameter: must be a file name"); 
+		}
+	}
+	
+	
+	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
 		//System.out.println("Command:" + command);
@@ -939,11 +1042,46 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			//System.out.println("Start simulation!");
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
             sendCommand("run-to-next-breakpoint");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].getActionCommand()))  {
+            sendCommandWithPositiveInt("run-x-time-units");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].getActionCommand()))  {
+            sendCommandWithPositiveInt("run-to-time");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TRANSACTIONS].getActionCommand()))  {
+            sendCommandWithPositiveInt("run-x-transactions");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
+            sendCommandWithPositiveInt("run-x-commands");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_VCD].getActionCommand()))  {
+            sendSaveTraceCommand("0");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_HTML].getActionCommand()))  {
+            sendSaveTraceCommand("1");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
+            sendSaveTraceCommand("2");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_STATE].getActionCommand()))  {
+            sendSaveStateCommand();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
+            sendRestoreStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
             sendCommand("reset");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
         }
+	}
+	
+	public void error(String error) {
+		jta.append("error: " + error + "\n");
+	}
+	
+	public boolean isAPositiveInt(String s) {
+		int val;
+		try {
+			val = Integer.decode(s).intValue();
+		} catch (Exception e) {
+			return false;
+		}
+		if (val > -1) {
+			return true;
+		}
+		return false;
 	}
 	
 	
