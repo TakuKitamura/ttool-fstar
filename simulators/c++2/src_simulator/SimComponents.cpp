@@ -49,6 +49,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Slave.h>
 #include <Memory.h>
 #include <Bridge.h>
+#include <TMLChoiceCommand.h>
+#include <ListenersSimCmd.h>
 
 SimComponents::SimComponents():_stopFlag(false){
 }
@@ -217,3 +219,21 @@ TMLChannel* SimComponents::getChannelByID(unsigned int iID) const{
 	}
 	return NULL;
 }
+
+TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
+	TMLChoiceCommand* aResult;
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		aResult = dynamic_cast<TMLChoiceCommand*>((*i)->getCurrCommand());
+		if (aResult!=0) return aResult;
+	}
+	return 0;
+	
+}
+
+/*void SimComponents::setBreakpointOnChoiceCmds(){
+	TMLChoiceCommand* aResult;
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		aResult = dynamic_cast<TMLChoiceCommand*>((*i)->getCurrCommand());
+		if (aResult!=0) aResult->setBreakpoint(new Breakpoint(this));	
+	}
+}*/

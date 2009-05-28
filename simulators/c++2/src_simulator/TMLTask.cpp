@@ -210,7 +210,9 @@ std::istream& TMLTask::readObject(std::istream& s){
 	std::cout << "Read: TMLTask " << _name << " endLastTransaction: " << _endLastTransaction << std::endl;
 	READ_STREAM(s, aCurrCmd);
 	std::cout << "Read: TMLTask " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
-	if (aCurrCmd!=0){
+	if (aCurrCmd==0){
+		_currCommand=0;
+	}else{
 		//std::cout << "cmd ID: " << aCurrCmd << std::endl;
 		_currCommand=getCommandByID(aCurrCmd);
 		//std::cout << "cmd adr: " << _currCommand << std::endl;

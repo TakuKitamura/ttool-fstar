@@ -64,6 +64,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimServSyncInfo.h>
 #include <ListenersSimCmd.h>
 
+#define RECUR_DEPTH 20
+
 #define TAG_HEADER "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>"
 #define TAG_STARTo "<siminfo>"
 #define TAG_STARTc "</siminfo>"
@@ -85,6 +87,8 @@ Ludovic Apvrille, Renaud Pacalet
 #define TAG_GLOBALc "</global>"
 #define TAG_CURRCMDo "<currcmd>"
 #define TAG_CURRCMDc "</currcmd>"
+#define TAG_BRANCHESo "<branch>"
+#define TAG_BRANCHESc "</branch>"
 
 #define MSG_CMPNFOUND "Component not found"
 #define MSG_CMDNFOUND "Command not found"
@@ -117,20 +121,48 @@ public:
 	*/
 	ServerIF* run(int iLen, char** iArgs);
 	///Execute asynchronous command
+	/**
+	\param iCmd Command string
+	*/
 	bool execAsyncCmd(const char* iCmd);
 	///Sends simulator status information to client
 	void sendStatus();
-protected:
+
+	bool runToNextBreakpoint();
+	bool runXTransactions(unsigned int iTrans);
+	bool runXCommands(unsigned int iCmds);
+	bool runTillTimeX(unsigned int iTime);
+	bool runXTimeUnits(unsigned int iTime);
+	bool runToBusTrans(SchedulableCommDevice* iBus);
+	bool runToCPUTrans(SchedulableDevice* iCPU);
+	bool runToTaskTrans(TMLTask* iTask);
+	bool runToSlaveTrans(Slave* iSlave);
+	bool runToChannelTrans(TMLChannel* iChannel);
+	void exploreTree(unsigned int iDepth, unsigned int iPrevID);
+	
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
-	void schedule2HTML() const;
-	///Runs the simulation
-	void simulate();
+	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file
-	void schedule2VCD() const;
+	/**
+	\param iTraceFileName Name of the output trace file
+	*/
+	void schedule2VCD(std::string& iTraceFileName) const;
 	///Writes the simulation graph to an output file
+	/**
+	\param iTraceFileName Name of the output trace file
+	*/
 	void schedule2Graph() const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
-	void schedule2TXT() const;
+	/**
+	\param iTraceFileName Name of the output trace file
+	*/
+	void schedule2TXT(std::string& iTraceFileName) const;
+protected:
+	///Runs the simulation
+	/**
+	\return returns true if the simulation is completed, false otherwise
+	*/
+	bool simulate();
 	///Returns a pointer to the transaction with the lowest end time proposed by CPU schedulers
 	/**
 	\param oResultDevice Pointer to the CPU which is running the returned transaction
@@ -158,11 +190,15 @@ protected:
 	SimServSyncInfo* _syncInfo;
 	///Pointer to structure encapsulating architecture and application objects
 	SimComponents* _simComp;
-	///Name of output file for traces
-	std::string _traceFileName;
-	///Listener for command currently being executed
-	TransactionListener* _currCmdListener;
+	/////Name of output file for traces
+	//std::string _traceFileName;
+	/////Listener for command currently being executed
+	//TransactionListener* _currCmdListener;
 	///Simulator Busy flag
 	bool _busy;
+	//unsigned int leafsForLevel[RECUR_DEPTH];
+	unsigned int _leafsID;
+	/////Last simulated transaction
+	//TMLTransaction* _lastSimTrans;
 };
 #endif

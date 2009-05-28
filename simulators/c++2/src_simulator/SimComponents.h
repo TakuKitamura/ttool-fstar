@@ -49,6 +49,7 @@ class TMLEventBChannel;
 class Bridge;
 class Memory;
 class Simulator;
+class TMLChoiceCommand;
 
 ///Class encapsulating architecture and application objects
 class SimComponents: public Serializable{
@@ -196,6 +197,12 @@ public:
 	\param iStopFlag Stop flag
 	*/	
 	void setStopFlag(bool iStopFlag) {_stopFlag=iStopFlag;}
+	///If a task has a choice command as current command, a pointer to it is returned
+	/**
+	\return Pointer if choice command was found, null otherwise
+	*/
+	TMLChoiceCommand* getCurrentChoiceCmd();
+	//void setBreakpointOnChoiceCmds();
 protected:
 	///List holding schedulable devices
 	SchedulingList _cpuList;

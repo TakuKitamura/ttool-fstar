@@ -55,7 +55,7 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
     	*/
-	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc);
+	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches);
 	void execute();
 	TMLTask* getDependentTask() const;
 	std::string toString() const;
@@ -63,11 +63,18 @@ public:
 	std::string getCommandStr() const;
 	///Set preferred branch manually
 	void setPreferredBranch(unsigned int iBranch);
+	///Returns the number of branches
+	/**
+	\return Number of branches
+	*/
+	unsigned int getNumberOfBranches();
 protected:
 	///Member function pointer to the condition function returning the index of the next command
 	CondFuncPointer _condFunc;
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
+	///Number of branches
+	unsigned int _nbOfBranches;
 	///Index of the manually set branch
 	mutable unsigned int _preferredBranch;
 	TMLCommand* getNextCommand() const;

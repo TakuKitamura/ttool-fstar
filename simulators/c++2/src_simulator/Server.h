@@ -46,26 +46,20 @@ Ludovic Apvrille, Renaud Pacalet
 class Simulator;
 class SimServSyncInfo;
 
-///Class encapsulating TCP server and command decoding capabilities
+///Class encapsulating TCP server capabilities
 class Server: public ServerIF{
 public:
 	///Constructor
-	/**
-	\param iSim Pointer to the associated simulator object
-	*/
 	Server();
 	///Run the server
 	int run();
-	///Send reply to client
-	/**
-	\param iReplyStr String to send
-	*/
 	void sendReply(std::string iReplyStr);
 protected:
 	///Determines the IP adress of the client
 	void* get_in_addr(struct sockaddr *sa) const;
 	///pointer to synchronization structure
 	int _socketClient;
+	///Mutex protecting the reply function of the Server
 	pthread_mutex_t _replyMutex;
 };
 #endif

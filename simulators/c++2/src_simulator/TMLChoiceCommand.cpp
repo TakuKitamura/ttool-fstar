@@ -42,14 +42,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 
-TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc):TMLCommand(iID, iTask,1,0),_condFunc(iCondFunc),_indexNextCommand(0), _preferredBranch(-1){
+TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches):TMLCommand(iID, iTask,1,0), _condFunc(iCondFunc), _indexNextCommand(0), _nbOfBranches(iNbOfBranches), _preferredBranch(-1){
 }
 
 void TMLChoiceCommand::execute(){
 }
 
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
-	if (_preferredBranch==-1){
+	if (_preferredBranch==((unsigned int)-1)){
 		return _nextCommand[_indexNextCommand];
 	}else{
 		std::cout << "Command was enforced: " << _preferredBranch << std::endl;
@@ -89,4 +89,8 @@ std::string TMLChoiceCommand::getCommandStr() const{
 
 void TMLChoiceCommand::setPreferredBranch(unsigned int iBranch){
 	_preferredBranch=iBranch;
+}
+
+unsigned int TMLChoiceCommand::getNumberOfBranches(){
+	return _nbOfBranches;
 }

@@ -173,7 +173,9 @@ protected:
 	///Pointer to the parameter function of the command
 	ParamFuncPointer _paramFunc;
 	///Breakpoint
-	CommandListener* _breakpoint;	
+	CommandListener* _breakpoint;
+	///Indicates if the breakpoint of the command has stopped the simulation  
+	bool _simStopped;
 	///Determines the next command based on the _nextCommand array
 	/**
 	\return Pointer to the next command

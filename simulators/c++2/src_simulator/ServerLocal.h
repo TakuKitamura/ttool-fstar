@@ -46,19 +46,17 @@ Ludovic Apvrille, Renaud Pacalet
 class Simulator;
 class SimServSyncInfo;
 
-///Class encapsulating TCP server and command decoding capabilities
+///Server which reads in a command file and executes all contained commands
 class ServerLocal: public ServerIF{
 public:
 	///Constructor
 	/**
-	\param iSim Pointer to the associated simulator object
+	\param iCmdFile Reference to the file containing the simulation commands
 	*/
 	ServerLocal(std::string& iCmdFile);
 	int run();
 	void sendReply(std::string iReplyStr);
 protected:
-	void executeCmd(char* aCmd);
 	std::string _cmdFile;
-	//pthread_mutex_t _replyMutex;
 };
 #endif

@@ -48,13 +48,27 @@ class SimServSyncInfo;
 ///This class represents the basic Interface for Server subclasses
 class ServerIF{
 public:
+	///Destructor
 	virtual ~ServerIF(){}
+	///Run the server
 	virtual int run()=0;
+	///Send a reply to the client
+	/**
+	\param iReplyStr String to send
+	*/
 	virtual void sendReply(std::string iReplyStr)=0;
+	///Set pointer to synchronization information structure
+	/**
+	\param iSyncInfo Pointer to synchronization information structure
+	*/
 	void setSimSyncInfo(SimServSyncInfo* iSyncInfo);
 protected:
 	///pointer to synchronization structure
 	SimServSyncInfo* _syncInfo;
+	///Invokes the simulator to execute a command, method is blocking
+	/**
+	\param iCmd Pointer to a string containing a command
+	*/
 	void executeCmd(char* iCmd);
 };
 #endif

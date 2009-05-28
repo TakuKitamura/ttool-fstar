@@ -41,8 +41,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <Server.h>
 #include <ServerLocal.h>
+#include <ServerExplore.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo),  _simComp(iSyncInfo->_simComponents), _traceFileName("schedule"), _currCmdListener(0), _busy(false) {}
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _leafsID(0) {}
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
@@ -124,10 +125,10 @@ void Simulator::schedule2Graph() const{/*
 */
 }
 
-void Simulator::schedule2TXT() const{
+void Simulator::schedule2TXT(std::string& iTraceFileName) const{
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-	std::ofstream myfile (_traceFileName.c_str());
+	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
 		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
 			(*i)->schedule2TXT(myfile);
@@ -137,13 +138,13 @@ void Simulator::schedule2TXT() const{
 	else
 		std::cout << "Unable to open text output file." << std::endl;
 	gettimeofday(&aEnd,NULL);
-	std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << _traceFileName << std::endl;
+	std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
-void Simulator::schedule2HTML() const{
+void Simulator::schedule2HTML(std::string& iTraceFileName) const{
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-	std::ofstream myfile (_traceFileName.c_str());
+	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
 		myfile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
 		myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n<title>Scheduling</title>\n</head>\n<body>\n";		
@@ -160,17 +161,17 @@ void Simulator::schedule2HTML() const{
 	else
 		std::cout << "Unable to open HTML output file." << std::endl;
 	gettimeofday(&aEnd,NULL);
-	std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << _traceFileName << std::endl;
+	std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
-void Simulator::schedule2VCD() const{
+void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	time_t aRawtime;
   	struct tm * aTimeinfo;
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
   	time(&aRawtime);
   	aTimeinfo=localtime(&aRawtime);
-	std::ofstream myfile (_traceFileName.c_str());
+	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
 		std::cout << "File is open" << std::endl;
 		SignalChangeQueue aQueue;
@@ -231,11 +232,11 @@ void Simulator::schedule2VCD() const{
 	else
 		std::cout << "Unable to open VCD output file." << std::endl;
 	gettimeofday(&aEnd,NULL);
-	std::cout << "The VCD output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << _traceFileName << std::endl;
+	std::cout << "The VCD output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 
 }
 
-void Simulator::simulate(){
+bool Simulator::simulate(){
 	TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
 	TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
 	TMLTask* depTask;
@@ -331,6 +332,8 @@ void Simulator::simulate(){
 	}
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
+	//_lastSimTrans=transLET;
+	return (transLET==0);
 }
 
 const std::string Simulator::getArgs(const std::string& iComp, const std::string& iDefault, int iLen, char** iArgs){
@@ -351,15 +354,6 @@ void Simulator::printHelp(){
 	std::cout << "*****\nCommand line usage: run.x -ohtml myfile.htm -ovcd myfile.vcd -otxt myfile.txt\nParameters can be omitted if respective output is not needed; if file name is omitted default values will be applied.\nFor server mode: run.x -server\n*****\n";
 }
 
-/*void Simulator::setNumOfArgs(int iNumArgs){
-	_numArgs=iNumArgs;
-}
-
-void Simulator::reset(){
-	_simComp->reset();
-	std::cout << "simulator reset" << std::endl;
-}*/
-
 void Simulator::run(){
 	std::cout << "Running in server mode.\n";
 	while (!_syncInfo->_terminate){
@@ -374,20 +368,23 @@ void Simulator::run(){
 }
 
 ServerIF* Simulator::run(int iLen, char ** iArgs){
-	_traceFileName =getArgs("-server", "server", iLen, iArgs);
-	if (!_traceFileName.empty()) return new Server();
-	_traceFileName =getArgs("-file", "file", iLen, iArgs);
-	if (!_traceFileName.empty()) return new ServerLocal(_traceFileName);
+	std::string aTraceFileName;
+	aTraceFileName =getArgs("-server", "server", iLen, iArgs);
+	if (!aTraceFileName.empty()) return new Server();
+	aTraceFileName =getArgs("-file", "file", iLen, iArgs);
+	if (!aTraceFileName.empty()) return new ServerLocal(aTraceFileName);
+	//aTraceFileName =getArgs("-explore", "file", iLen, iArgs);
+	//if (!aTraceFileName.empty()) return new ServerExplore();
 	std::cout << "Running in command line mode.\n";
-	_traceFileName =getArgs("-help", "help", iLen, iArgs);
-	if (_traceFileName.empty()){
+	aTraceFileName =getArgs("-help", "help", iLen, iArgs);
+	if (aTraceFileName.empty()){
 		simulate();
-		_traceFileName=getArgs("-ohtml", "scheduling.html", iLen, iArgs);
-		if (!_traceFileName.empty()) schedule2HTML();
-		_traceFileName=getArgs("-otxt", "scheduling.txt", iLen, iArgs);
-		if (!_traceFileName.empty()) schedule2TXT();
-		_traceFileName=getArgs("-ovcd", "scheduling.vcd", iLen, iArgs);
-		if (!_traceFileName.empty()) schedule2VCD();
+		aTraceFileName=getArgs("-ohtml", "scheduling.html", iLen, iArgs);
+		if (!aTraceFileName.empty()) schedule2HTML(aTraceFileName);
+		aTraceFileName=getArgs("-otxt", "scheduling.txt", iLen, iArgs);
+		if (!aTraceFileName.empty()) schedule2TXT(aTraceFileName);
+		aTraceFileName=getArgs("-ovcd", "scheduling.vcd", iLen, iArgs);
+		if (!aTraceFileName.empty()) schedule2VCD(aTraceFileName);
 		//_traceFileName=getArgs("-ograph", "scheduling.vcd", iLen, iArgs);
 		//if (!aFilename.empty()) schedule2Graph();
 		_simComp->streamBenchmarks(std::cout);
@@ -404,12 +401,12 @@ void Simulator::decodeCommand(char* iCmd){
 	std::ostringstream aMessage;
 	std::string aStrParam;
 	aInpStream >> aCmd;
-	if (_currCmdListener!=0){
+	//if (_currCmdListener!=0){
 		//std::cout << "Before del listener.\n";
-		 delete _currCmdListener;
-		_currCmdListener=0;
+		 //delete _currCmdListener;
+		//_currCmdListener=0;
 		//std::cout << "After del listener.\n";
-	}
+	//}
 	_simComp->setStopFlag(false);
 	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
@@ -424,6 +421,7 @@ void Simulator::decodeCommand(char* iCmd){
 			switch (aParam1){
 				case 0:	//Run to next breakpoint
 					aMessage << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
+					runToNextBreakpoint();
 					break;
 				case 1:	//Run up to trans x
 					aMessage << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
@@ -431,8 +429,9 @@ void Simulator::decodeCommand(char* iCmd){
 					break;
 				case 2:	//Run x transactions
 					aInpStream >> aParam2;
-					_currCmdListener=new RunXTransactions(_simComp,aParam2);
-					aMessage << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl; 
+					//_currCmdListener=new RunXTransactions(_simComp,aParam2);
+					aMessage << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl;
+					runXTransactions(aParam2);
 					break;
 				case 3:	//Run up to command x
 					aMessage << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
@@ -440,29 +439,38 @@ void Simulator::decodeCommand(char* iCmd){
 					break;
 				case 4:	//Run x commands
 					aInpStream >> aParam2;
-					_currCmdListener=new RunXCommands(_simComp,aParam2);
+					//_currCmdListener=new RunXCommands(_simComp,aParam2);
+					runXCommands(aParam2);
 					aMessage << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl; 
 					break;
 				case 5: //Run up to time x
 					aInpStream >> aParam2;
-					_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
-					aMessage << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl; 
+					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
+					aMessage << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl;
+					runTillTimeX(aParam2);
 					break;
 				case 6:	//Run for x time units
 					 aInpStream >> aParam2;
-					_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
+					runXTimeUnits(aParam2);
+					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
 					aMessage << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl; 
 					break;
 				case 7: //Run up to next choice/select event
-					aMessage << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
-					anErrorCode=1;
+					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
+					_leafsID=0;
+					exploreTree(0,0);
+					aMessage << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
+					//aMessage << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
+					//anErrorCode=1;
 					break;
 				case 8:{//Run up to next transfer on bus x
 					aInpStream >> aStrParam;
-					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getBusByName(aStrParam));
-					if (aSubject!=0){
-						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getBusByName(aStrParam));
+					SchedulableCommDevice* aBus=_simComp->getBusByName(aStrParam);
+					if (aBus!=0){
+						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aMessage << TAG_MSGo << "Created listener on Bus " << aStrParam << TAG_MSGc << std::endl;
+						runToBusTrans(aBus);
 					}else{
 						aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -471,10 +479,12 @@ void Simulator::decodeCommand(char* iCmd){
 					break;
 				case 9:{//Run until CPU x executes
 					aInpStream >> aStrParam;
-					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getCPUByName(aStrParam));
-					if (aSubject!=0){
-						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getCPUByName(aStrParam));
+					SchedulableDevice* aCPU=_simComp->getCPUByName(aStrParam);
+					if (aCPU!=0){
+						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aMessage << TAG_MSGo << "Created listener on CPU " << aStrParam << TAG_MSGc << std::endl;
+						runToCPUTrans(aCPU);
 					}else{
 						aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -483,10 +493,13 @@ void Simulator::decodeCommand(char* iCmd){
 				} 
 				case 10:{//Run until Task x executes
 					aInpStream >> aStrParam;
-					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getTaskByName(aStrParam));
-					if (aSubject!=0){
-						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getTaskByName(aStrParam));
+					TMLTask* aTask=_simComp->getTaskByName(aStrParam);
+					if (aTask!=0){
 						aMessage << TAG_MSGo << "Created listener on Task " << aStrParam << TAG_MSGc << std::endl;
+						runToTaskTrans(aTask);
+						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+						
 					}else{
 						aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -495,10 +508,12 @@ void Simulator::decodeCommand(char* iCmd){
 				} 
 				case 11:{//Run until Mem x is accessed
 					aInpStream >> aStrParam;
-					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getSlaveByName(aStrParam));
-					if (aSubject!=0){
-						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getSlaveByName(aStrParam));
+					Slave* aSlave=_simComp->getSlaveByName(aStrParam);
+					if (aSlave!=0){
+						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aMessage << TAG_MSGo << "Created listener on Slave " << aStrParam << TAG_MSGc << std::endl;
+						runToSlaveTrans(aSlave);
 					}else{
 						aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -507,10 +522,12 @@ void Simulator::decodeCommand(char* iCmd){
 				} 
 				case 12:{//Run until operation on channel x is performed
 					aInpStream >> aStrParam;
-					ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
-					if (aSubject!=0){
-						_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
+					TMLChannel* aChannel=_simComp->getChannelByName(aStrParam);
+					if (aChannel!=0){
+						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aMessage << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
+						runToChannelTrans(aChannel);
 					}else{
 						aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -523,7 +540,7 @@ void Simulator::decodeCommand(char* iCmd){
 			}
 			//std::cout << "Before sim\n";
 			if (anErrorCode==0){
-				simulate();
+				//simulate();
 				std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 			}
 			break;
@@ -576,19 +593,19 @@ void Simulator::decodeCommand(char* iCmd){
 			break;
 		case 7: //Save trace in file x
 			aInpStream >> aParam1;
-			aInpStream >>_traceFileName;
+			aInpStream >>aStrParam;
 			switch (aParam1){
 				case 0: //VCD
 					aMessage << TAG_MSGo << "Schedule output in VCD format" << TAG_MSGc << std::endl;
-					schedule2VCD();
+					schedule2VCD(aStrParam);
 					break;
 				case 1: //HTML
 					aMessage << TAG_MSGo << "Schedule output in HTML format" << TAG_MSGc << std::endl;
-					schedule2HTML();
+					schedule2HTML(aStrParam);
 					break;
 				case 2: //TXT
 					aMessage << TAG_MSGo << "Schedule output in TXT format" << TAG_MSGc << std::endl;
-					schedule2TXT();
+					schedule2TXT(aStrParam);
 					break;
 				default:
 					aMessage << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
@@ -698,7 +715,22 @@ void Simulator::decodeCommand(char* iCmd){
 				aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 				anErrorCode=2;
 			}
-		}	break;
+			break;
+		}
+		case 17:{
+			TMLChoiceCommand* aCurrChCmd =_simComp->getCurrentChoiceCmd();
+			if (aCurrChCmd==0){
+					aMessage << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+					anErrorCode=2;
+			}else{
+					TMLTask* aTask=aCurrChCmd->getTask();
+					aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_TASKo << " id=\"" << aTask->getID() << "\">" << std::endl << TAG_CURRCMDo;
+					aMessage << aCurrChCmd->getID() << TAG_BRANCHESo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHESc << std::endl;
+					aMessage << TAG_CURRCMDc << TAG_TASKc << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Current choice command" << TAG_MSGc << TAG_ERRNOo << 0;
+					aMessage << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_READY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			}
+			break;
+		}
 		default:
 			aMessage << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 			anErrorCode=3;
@@ -707,6 +739,99 @@ void Simulator::decodeCommand(char* iCmd){
 	aMessage << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_READY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
+}
+
+bool Simulator::runToNextBreakpoint(){
+	return simulate();
+}
+
+bool Simulator::runXTransactions(unsigned int iTrans){
+	RunXTransactions aListener(_simComp, iTrans);
+	return simulate();
+}
+
+bool Simulator::runXCommands(unsigned int iCmds){
+	RunXCommands aListener(_simComp,iCmds);
+	return simulate();
+}
+
+bool Simulator::runTillTimeX(unsigned int iTime){
+	RunXTimeUnits aListener(_simComp,iTime);
+	return simulate();
+}
+
+bool Simulator::runXTimeUnits(unsigned int iTime){
+	RunXTimeUnits aListener(_simComp,iTime+SchedulableDevice::getSimulatedTime());
+	return simulate();
+}
+
+bool Simulator::runToBusTrans(SchedulableCommDevice* iBus){
+	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
+	RunTillTransOnDevice aListener(_simComp, aSubject);
+	return simulate();	
+}
+
+bool Simulator::runToCPUTrans(SchedulableDevice* iCPU){
+	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iCPU);
+	RunTillTransOnDevice aListener(_simComp, aSubject);
+	return simulate();
+}
+
+bool Simulator::runToTaskTrans(TMLTask* iTask){
+	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iTask);
+	RunTillTransOnDevice aListener(_simComp, aSubject);
+	return simulate();
+}
+
+bool Simulator::runToSlaveTrans(Slave* iSlave){
+	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iSlave);
+	RunTillTransOnDevice aListener(_simComp, aSubject);
+	return simulate();
+}
+
+bool Simulator::runToChannelTrans(TMLChannel* iChannel){
+	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iChannel);
+	RunTillTransOnDevice aListener(_simComp, aSubject);
+	return simulate();
+}
+
+void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
+	//std::ostringstream aFileName;
+	//aFileName << "canc" << iDepth << "." << leafsForLevel[iDepth]++;
+	//std::string aFileStr(aFileName.str());
+	//schedule2TXT(aFileStr);
+	if (iDepth<RECUR_DEPTH){
+		unsigned int aMyID= ++_leafsID;
+		bool aSimTerminated=false;
+		TMLChoiceCommand* aChoiceCmd;
+		do{
+			aSimTerminated=runToNextBreakpoint();
+			aChoiceCmd=_simComp->getCurrentChoiceCmd();
+		}while (!aSimTerminated && aChoiceCmd==0);
+		//std::ostringstream aFileName;
+		std::stringstream aStreamBuffer;
+		//aStreamBuffer << "sched" << iDepth << "." << leafsForLevel[iDepth]++;
+		aStreamBuffer << "edge_" << iPrevID << "_" << aMyID;
+		std::string aStringBuffer(aStreamBuffer.str());
+		schedule2TXT(aStringBuffer);
+		aStreamBuffer.str(""); 
+		//if (!aSimTerminated){
+		if(aChoiceCmd!=0){
+			std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aChoiceCmd->getNumberOfBranches() << std::endl;
+			_simComp->writeObject(aStreamBuffer);
+			aStringBuffer=aStreamBuffer.str();
+			for (unsigned int aBranch=0;aBranch<aChoiceCmd->getNumberOfBranches();aBranch++){
+				_simComp->reset();
+				aStreamBuffer.str(aStringBuffer);
+				_simComp->readObject(aStreamBuffer);
+				aChoiceCmd->setPreferredBranch(aBranch);
+				exploreTree(iDepth+1,aMyID);
+				//_simComp->reset();
+				//_simComp->readObject(aBuffer);
+			}
+		}else
+			std::cout << "Simulation " << iPrevID << "_" << aMyID << "terminated" << std::endl;
+	}
 }
 
 bool Simulator::execAsyncCmd(const char* iCmd){

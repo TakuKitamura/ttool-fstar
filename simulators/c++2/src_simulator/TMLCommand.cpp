@@ -77,17 +77,20 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			return aNextCommand->prepare(false);
 		}
 	}else{
-		bool aSimStopped=false;
 		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
+		 //&& _simStopped
+		_simStopped=false;
 		if (iInit){
+			//_simStopped=false;
 			if (_currTransaction!=0) delete _currTransaction;
 		}else{
+			//_simStopped=false;
 			if (_progress==0)
-				FOR_EACH_CMDLISTENER aSimStopped|= (*i)->commandEntered(this);
+				FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandEntered(this);
 			else
-				FOR_EACH_CMDLISTENER aSimStopped|= (*i)->commandExecuted(this);
+				FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandExecuted(this);
 			//std::cout << "Prepare next transaction" << std::endl;
-			if (aSimStopped){
+			if (_simStopped){
 				std::cout << "aSimStopped=true " << std::endl;
 				_task->setCurrCommand(this);
 				return this;  //for command which generates transactions this is returned anyway by prepareTransaction
