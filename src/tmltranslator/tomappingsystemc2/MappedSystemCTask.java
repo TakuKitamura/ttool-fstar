@@ -742,6 +742,9 @@ public class MappedSystemCTask {
 			code += ";\n";
 		}		
 		code += "int rnd__0" + SCCR;
+		//code += "int arg1__req" + SCCR;
+		//code += "int arg2__req" + SCCR;
+		//code += "int arg3__req" + SCCR;
 		return code;
 	}
 	
