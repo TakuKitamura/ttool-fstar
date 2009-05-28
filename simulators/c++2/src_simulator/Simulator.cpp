@@ -41,7 +41,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <Server.h>
 #include <ServerLocal.h>
-#include <ServerExplore.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _leafsID(0) {}
 
