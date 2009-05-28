@@ -148,7 +148,9 @@ public class TML2MappingSystemC {
 			if (node instanceof HwCPU) {
 				if (tmlmapping.isAUsedHwNode(node)) {
 					HwCPU exNode = (HwCPU)node;
-					declaration += exNode.getType() + "* " + exNode.getName() + " = new " + exNode.getType() + "(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+					//declaration += exNode.getType() + "* " + exNode.getName() + " = new " + exNode.getType() + "(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+					declaration += "CPUPB* " + exNode.getName() + " = new CPUPB(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+					
 					declaration += "addCPU("+ node.getName() +")"+ SCCR;
 				}
 			}
