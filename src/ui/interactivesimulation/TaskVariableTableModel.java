@@ -54,17 +54,16 @@ import tmltranslator.*;
 
 public class TaskVariableTableModel extends AbstractTableModel {
 	private TMLModeling tmlm;
-	private Hashtable<String, String> table;
+	private Hashtable <Integer, String> valueTable;
+	private Hashtable <Integer, Integer> rowTable;
 	
 	private int nbOfRows;
 	
 	//private String [] names;
-	public TaskVariableTableModel(TMLModeling _tmlm, Hashtable<String, String> _table) {
+	public TaskVariableTableModel(TMLModeling _tmlm, Hashtable<Integer, String> _valueTable, Hashtable <Integer, Integer> _rowTable) {
 		tmlm = _tmlm;
-		table = _table;
-		if (tmlm == null) {
-			System.out.println("No data");
-		}
+		valueTable = _valueTable;
+		rowTable = _rowTable;
 		computeData();
 	}
 
@@ -89,7 +88,7 @@ public class TaskVariableTableModel extends AbstractTableModel {
 		} else if (column == 2) {
 			return getVariableName(row);
 		} else if (column == 3) {
-			return getVariableID(row);
+			return getStringVariableID(row);
 		} else if (column == 4) {
 			return getVariableValue(row);
 		}
@@ -152,18 +151,26 @@ public class TaskVariableTableModel extends AbstractTableModel {
 		return "unknown name";
 	}
 	
-	private String getVariableID(int row) {
+	private String getStringVariableID(int row) {
+		int id = getVariableID(row);
+		if (id < 0) {
+			return "unknown id";
+		}
+		return "" + id;
+	}
+	
+	private int getVariableID(int row) {
 		int cpt = 0;
 		int size;
 		for(TMLTask task: tmlm.getTasks()) {
 			size = task.getAttributes().size();
 			cpt += size;
 			if (row < cpt) {
-				return "" + task.getAttributes().get(row+size-cpt).getID();
+				return task.getAttributes().get(row+size-cpt).getID();
 			}
 		}
 		
-		return "unknown ID";
+		return 0;
 	}
 	
 	private String getVariableInitialValue(int row) {
@@ -181,15 +188,16 @@ public class TaskVariableTableModel extends AbstractTableModel {
 	}
 	
 	private String getVariableValue(int row) {
-		String ID = getVariableID(row);
-		String s = table.get(ID);
+		int ID = getVariableID(row);
+		String s = valueTable.get(ID);
 		if (s != null) {
-			return s;
+			return s.toString();
 		}
 		
 		// Must set the ID;
 		String val = getVariableInitialValue(row);
-		table.put(ID, val);
+		valueTable.put(ID, val);
+		rowTable.put(ID, row);
 		return val;
 		
 	}

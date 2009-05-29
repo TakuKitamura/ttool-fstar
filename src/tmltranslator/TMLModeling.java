@@ -144,6 +144,11 @@ public class TMLModeling {
 	private void computeHashCode() {
 		TMLTextSpecification tmltxt = new TMLTextSpecification("spec.tml");
 		String s = tmltxt.toTextFormat(this);
+		
+		int index = s.indexOf("// Channels");
+		if (index != -1) {
+			s = s.substring(index, s.length());
+		}
 		hashCode = s.hashCode();
 		System.out.println("TML hashcode = " + hashCode); 
 	}

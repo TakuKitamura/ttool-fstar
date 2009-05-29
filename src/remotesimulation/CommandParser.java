@@ -202,20 +202,36 @@ public class CommandParser {
 		sc = new SimulationCommand("get-command-and-task", "gcat", "14", params, paramNames, "Returns the current command and task");
 		commandList.add(sc);
 		
+		// get-hash-code
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("get-hashcode", "gh", "19", params, paramNames, "Returns the hashcode of the tmap under simulation");
+		commandList.add(sc);
+		
+		// get-info-on-hw
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "0: CPU; 1:Bus; 2: Mem; 3: Bridge; 4: Channel";
+		params[1] = 1;
+		paramNames[1] = "id";
+		sc = new SimulationCommand("get-info-on-hw", "gioh", "4", params, paramNames, "Returns information on hardware nodes of the architecture");
+		commandList.add(sc);
+		
 		// get-simulation-time
 		params = new int[0];
 		paramNames = new String[0];
 		sc = new SimulationCommand("get-simulation-time", "time", "13", params, paramNames, "Returns the current absolute time unit of the simulation");
 		commandList.add(sc);
 		
-		// save-trace-in-file
+		// get-variable-of-task
 		params = new int[2];
 		paramNames = new String[2];
 		params[0] = 1;
 		paramNames[0] = "Task id";
 		params[1] = 1;
 		paramNames[1] = "Variable id";
-		sc = new SimulationCommand("get-variable-of-task", "gvof", "3", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+		sc = new SimulationCommand("get-variable-of-task", "gvof", "3", params, paramNames, "Returns the value of a variable a a task");
 		commandList.add(sc);
 		
 		// kill
@@ -254,28 +270,12 @@ public class CommandParser {
 		sc = new SimulationCommand("run-to-next-breakpoint", "rtnb", "1 0", params, paramNames, "Runs the simulation until a breakpoint is met");
 		commandList.add(sc);
 		
-		// run-x-time-units
-		params = new int[1];
-		paramNames = new String[1];
-		params[0] = 1;
-		paramNames[0] = "nb of time units";
-		sc = new SimulationCommand("run-x-time-units", "rxtu", "1 6", params, paramNames, "Runs the simulation for x units of time");
-		commandList.add(sc);
-		
 		// run-to-time
 		params = new int[1];
 		paramNames = new String[1];
 		params[0] = 1;
 		paramNames[0] = "x: time value";
 		sc = new SimulationCommand("run-to-time", "rtt", "1 5", params, paramNames, "Runs the simulation until time x is reached");
-		commandList.add(sc);
-		
-		// run-x-transactions
-		params = new int[1];
-		paramNames = new String[1];
-		params[0] = 1;
-		paramNames[0] = "nb of transactions";
-		sc = new SimulationCommand("run-x-transactions", "rxtr", "1 2", params, paramNames, "Runs the simulation for x transactions");
 		commandList.add(sc);
 		
 		// run-x-commands
@@ -286,14 +286,20 @@ public class CommandParser {
 		sc = new SimulationCommand("run-x-commands", "rxcomm", "1 4", params, paramNames, "Runs the simulation for x commands");
 		commandList.add(sc);
 		
-		// save-trace-in-file
-		params = new int[2];
-		paramNames = new String[2];
+		// run-x-time-units
+		params = new int[1];
+		paramNames = new String[1];
 		params[0] = 1;
-		paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
-		params[1] = 2;
-		paramNames[1] = "File name";
-		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+		paramNames[0] = "nb of time units";
+		sc = new SimulationCommand("run-x-time-units", "rxtu", "1 6", params, paramNames, "Runs the simulation for x units of time");
+		commandList.add(sc);
+		
+		// run-x-transactions
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "nb of transactions";
+		sc = new SimulationCommand("run-x-transactions", "rxtr", "1 2", params, paramNames, "Runs the simulation for x transactions");
 		commandList.add(sc);
 		
 		// save-simulation-state-in-file
@@ -302,6 +308,16 @@ public class CommandParser {
 		params[0] = 2;
 		paramNames[0] = "File name";
 		sc = new SimulationCommandSaveState("save-simulation-state-in-file", "sssif", "8", params, paramNames, "Saves the current simulation state into a file");
+		commandList.add(sc);
+		
+		// save-trace-in-file
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
+		params[1] = 2;
+		paramNames[1] = "File name";
+		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
 		commandList.add(sc);
 		
 		// stop

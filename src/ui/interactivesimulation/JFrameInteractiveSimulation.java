@@ -113,9 +113,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected SaveCommandsToolBar sctb;
 	protected StateCommandsToolBar stctb;
 	
-	JPanel main, mainTop, commands, save, state, infos, outputs; // from MGUI
+	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
 	JCheckBox debug;
-	JTabbedPane commandTab, infoTab, saveTab, stateTab;
+	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
@@ -124,8 +124,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JLabel status, time;
 	
 	// Task elements
+	TaskVariableTableModel tvtm;
 	JButton updateTaskVariableInformationButton;
 	private JScrollPane jspTaskVariableInfo;
+	
+	// CPU
+	CPUTableModel cputm;
+	JButton updateCPUInformationButton;
+	private JScrollPane jspCPUInfo;
 	
 	
 	private int mode = 0;
@@ -141,7 +147,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private TMLMapping tmap;
 	int hashCode;
 	
-	private Hashtable <String, String> mainTable;
+	private Hashtable <Integer, String> valueTable;
+	private Hashtable <Integer, Integer> rowTable;
 	
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap) {
 		super(_title);
@@ -161,7 +168,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		//System.out.println("Tmap=" + tmap);
 		
-		mainTable = new Hashtable<String, String>();
+		valueTable = new Hashtable<Integer, String>();
+		rowTable = new Hashtable<Integer, Integer>();
 		
 		setBackground(new Color(50, 40, 40, 200));
 		
@@ -446,21 +454,23 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
 		
-		jp01 = new JPanel();
-		jp01.setLayout(new BorderLayout());
-		infoTab.addTab("Tasks variables", null, jp01, "Current value of variables");
 		
+		TableSorter sorterPI;
+		JTable jtablePI;
 		
+		// Variables
+		variablePanel = new JPanel();
+		variablePanel.setLayout(new BorderLayout());
+		infoTab.addTab("Tasks variables", null, variablePanel, "Current value of variables");
 		TaskVariableTableModel tvtm;
 		if (tmap == null) {
-			tvtm = new TaskVariableTableModel(null, mainTable);
+			tvtm = new TaskVariableTableModel(null, valueTable, rowTable);
 		} else {
-			tvtm = new TaskVariableTableModel(tmap.getTMLModeling(), mainTable);
+			tvtm = new TaskVariableTableModel(tmap.getTMLModeling(), valueTable, rowTable);
 		}
-		TableSorter sorterPI = new TableSorter(tvtm);
-		JTable jtablePI = new JTable(sorterPI);
+		sorterPI = new TableSorter(tvtm);
+		jtablePI = new JTable(sorterPI);
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
-			
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
 		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
@@ -471,11 +481,29 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jspTaskVariableInfo.setWheelScrollingEnabled(true);
 		jspTaskVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
 		jspTaskVariableInfo.setPreferredSize(new Dimension(500, 300));
-		
-		jp01.add(jspTaskVariableInfo, BorderLayout.NORTH);
-		
+		variablePanel.add(jspTaskVariableInfo, BorderLayout.NORTH);
 		updateTaskVariableInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES]);
-		jp01.add(updateTaskVariableInformationButton, BorderLayout.SOUTH);
+		variablePanel.add(updateTaskVariableInformationButton, BorderLayout.SOUTH);
+		
+		// CPUs
+		cpuPanel = new JPanel();
+		cpuPanel.setLayout(new BorderLayout());
+		infoTab.addTab("CPUs", null, cpuPanel, "Current state of CPUs");
+		CPUTableModel cputm = new CPUTableModel(tmap, valueTable, rowTable);
+		sorterPI = new TableSorter(cputm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspCPUInfo = new JScrollPane(jtablePI);
+		jspCPUInfo.setWheelScrollingEnabled(true);
+		jspCPUInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspCPUInfo.setPreferredSize(new Dimension(500, 300));
+		cpuPanel.add(jspCPUInfo, BorderLayout.NORTH);
+		updateCPUInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS]);
+		cpuPanel.add(updateCPUInformationButton, BorderLayout.SOUTH);
 		
 		pack();
 	}
@@ -624,6 +652,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				setComponents();
 				
 				sendCommand("time");
+				if (tmap != null) {
+					sendCommand("get-hashcode");
+				}
 				
 				try {
 					while(true) {
@@ -851,6 +882,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		int[] colors;
 		String msg = null;
 		String error = null;
+		String hash = null;
 		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
@@ -890,6 +922,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							error = node0.getTextContent();
 						}
 						
+						nl = elt.getElementsByTagName("hashval");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							hash = node0.getTextContent();
+						}
+						
 					}
 				}
 			}
@@ -911,6 +949,21 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			printFromServer("Server: " + msg);
 		} else {
 			printFromServer("Server: error " + error);
+		}
+		
+		if ((hash != null) && (tmap != null)) {
+			try {
+				int thehash = Integer.decode(hash).intValue();
+				if (thehash != hashCode) {
+					jta.append("\n*** Simulated model is not the model currently loaded under TTool ***\n");
+					jta.append("*** Some features are therefore deactivated ***\n\n");
+					cpuPanel.setVisible(false);
+					variablePanel.setVisible(false);
+				} else {
+					jta.append("\n*** Simulated model is the one currently loaded under TTool ***\n");
+				}
+			} catch (Exception e) {
+			}
 		}
 		
 		return true;
@@ -1075,6 +1128,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateCPUs() {
+		if (tmap == null) {
+			return;
+		}
+		
+		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+			if (node instanceof HwCPU) {
+				sendCommand("get-info-on-hw 0 " + node.getID()); 
+			}
+		}
+	}
+	
 	
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -1118,6 +1183,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendCommand("stop");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES].getActionCommand())) {
             updateVariables();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS].getActionCommand())) {
+            updateCPUs();
         }
 	}
 	

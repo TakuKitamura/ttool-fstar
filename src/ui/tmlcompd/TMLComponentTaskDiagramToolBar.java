@@ -70,7 +70,7 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLCTD_PCOMPONENT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_COPORT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+		//mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
 		mgui.updateZoomInfo();
@@ -124,10 +124,10 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		this.addSeparator();
+		/*this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
         
     }
     
