@@ -48,6 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sstream>
 #include <fstream>
 #include <map>
+#include <set>
 #include <deque>
 #include <algorithm>
 #include <stdarg.h>
@@ -149,6 +150,8 @@ typedef unsigned int (TMLTask::*LengthFuncPointer) ();
 typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
 ///Datatype holding references to TraceableDevices (for VCD output)
 typedef std::list<TraceableDevice*> TraceableDeviceList;
+///Datatype used by the Simulator to keep track of all breakpoints
+typedef std::set<TMLCommand*> BreakpointSet;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

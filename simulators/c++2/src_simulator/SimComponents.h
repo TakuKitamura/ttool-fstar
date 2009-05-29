@@ -55,7 +55,7 @@ class TMLChoiceCommand;
 class SimComponents: public Serializable{
 public:
 	///Constructor
-	SimComponents();
+	SimComponents(int iHashValue);
 	///Destructor
 	virtual	~SimComponents();
 	///Add a task
@@ -203,6 +203,11 @@ public:
 	*/
 	TMLChoiceCommand* getCurrentChoiceCmd();
 	//void setBreakpointOnChoiceCmds();
+	///Returns a hash value for the current application and architecture
+	/**
+	\return Hash value
+	*/
+	int getHashValue();
 protected:
 	///List holding schedulable devices
 	SchedulingList _cpuList;
@@ -220,6 +225,8 @@ protected:
 	ChannelList _channelList;
 	///Flag indicating whether the simulation must be stopped
 	bool _stopFlag;
+	///Hash Value for application and architecture
+	int _hashValue;
 };
 #endif
 

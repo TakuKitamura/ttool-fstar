@@ -135,10 +135,15 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		_vcdOutputState=END_TRANS;
 	}
 	if (_posTrasactList == _transactList.end()){
-		if (iInit || _transactList.back()->getTerminatedFlag()){
-			outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
+		//if (iInit || _transactList.back()->getTerminatedFlag()){
+			//outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
+		//}else{
+			//outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
+		//}
+		if (iInit || (! _transactList.back()->getTerminatedFlag())){
+			outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;	
 		}else{
-			outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
+			outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
 		}
 		oSigChange=outp.str();
 		oNoMoreTrans=true;

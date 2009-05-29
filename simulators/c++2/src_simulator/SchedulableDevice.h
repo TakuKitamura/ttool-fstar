@@ -91,6 +91,7 @@ public:
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);
+		_simulatedTime=max(_simulatedTime,_endSchedule);
 		std::cout << "Read: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
 		return is;
 	}

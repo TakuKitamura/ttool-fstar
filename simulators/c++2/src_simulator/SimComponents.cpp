@@ -52,7 +52,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <ListenersSimCmd.h>
 
-SimComponents::SimComponents():_stopFlag(false){
+SimComponents::SimComponents(int iHashValue):_stopFlag(false), _hashValue(iHashValue){
 }
 
 SimComponents::~SimComponents(){
@@ -228,6 +228,10 @@ TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
 	}
 	return 0;
 	
+}
+
+int SimComponents::getHashValue(){
+	return _hashValue;
 }
 
 /*void SimComponents::setBreakpointOnChoiceCmds(){

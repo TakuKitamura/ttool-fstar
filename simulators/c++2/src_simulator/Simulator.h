@@ -85,10 +85,12 @@ Ludovic Apvrille, Renaud Pacalet
 #define TAG_STATUSc "</status>"
 #define TAG_GLOBALo "<global>"
 #define TAG_GLOBALc "</global>"
-#define TAG_CURRCMDo "<currcmd>"
+#define TAG_CURRCMDo "<currcmd"
 #define TAG_CURRCMDc "</currcmd>"
-#define TAG_BRANCHESo "<branch>"
-#define TAG_BRANCHESc "</branch>"
+#define TAG_BREAKo "<breakcmd>"
+#define TAG_BREAKc "</breakcmd>"
+#define TAG_HASHo "<hashval>"
+#define TAG_HASHc "</hashval>"
 
 #define MSG_CMPNFOUND "Component not found"
 #define MSG_CMDNFOUND "Command not found"
@@ -111,9 +113,9 @@ public:
 	Simulator(SimServSyncInfo* iSyncInfo);
 	///Destructor
 	~Simulator();
-	///Run the simulator in server mode
+	///Runs the simulator in server mode
 	void run();
-	///Run the simulator in command line mode
+	///Runs the simulator in command line mode
 	/**
 	\param iLen Number of arguments
 	\param iArgs Array withe arguments
@@ -127,17 +129,69 @@ public:
 	bool execAsyncCmd(const char* iCmd);
 	///Sends simulator status information to client
 	void sendStatus();
-
+	///Run simulation until a breakpoint is encountered
+	/**
+	\return Return value of simulate() function
+	*/
 	bool runToNextBreakpoint();
+	///Runs the simulation until iTrans transaction have been executed
+	/**
+	\param iTrans Number of transactions
+	\return Return value of simulate() function
+	*/
 	bool runXTransactions(unsigned int iTrans);
+	///Runs the simulation until iTrans commands have been executed
+	/**
+	\return Return value of simulate() function
+	*/
 	bool runXCommands(unsigned int iCmds);
+	///Runs the simulation until the simulation time is greater or equal than iTime
+	/**
+	\param iTime Simulation End Time
+	\return Return value of simulate() function
+	*/
 	bool runTillTimeX(unsigned int iTime);
+	///Runs the simulation for iTime time units
+	/**
+	\param iTime Number of time units
+	\return Return value of simulate() function
+	*/
 	bool runXTimeUnits(unsigned int iTime);
+	///Runs the simulation until a transaction on iBus is executed
+	/**
+	\param iBus Pointer to the bus
+	\return Return value of simulate() function
+	*/
 	bool runToBusTrans(SchedulableCommDevice* iBus);
+	///Runs the simulation until a transaction on iCPU is executed
+	/**
+	\param iCPU Pointer to the CPU
+	\return Return value of simulate() function
+	*/
 	bool runToCPUTrans(SchedulableDevice* iCPU);
+	///Runs the simulation until a transaction of iTask is executed
+	/**
+	\param iTask Pointer to the task
+	\return Return value of simulate() function
+	*/
 	bool runToTaskTrans(TMLTask* iTask);
+	///Runs the simulation until a transaction on Slave iSlave is executed
+	/**
+	\param iSlave Pointer to the Slave
+	\return Return value of simulate() function
+	*/
 	bool runToSlaveTrans(Slave* iSlave);
+	///Runs the simulation until a transaction on iChannel is executed
+	/**
+	\param iChannel Pointer to the Channel
+	\return Return value of simulate() function
+	*/
 	bool runToChannelTrans(TMLChannel* iChannel);
+	///Runs the automatic exploration of several branches of control flow. Choice commands to be explored must be marked with a breakpoint.
+	/**
+	\param iDepth Maximal recursion depth
+	\param iPrevID ID of the parent leaf
+	*/
 	void exploreTree(unsigned int iDepth, unsigned int iPrevID);
 	
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
@@ -190,15 +244,12 @@ protected:
 	SimServSyncInfo* _syncInfo;
 	///Pointer to structure encapsulating architecture and application objects
 	SimComponents* _simComp;
-	/////Name of output file for traces
-	//std::string _traceFileName;
-	/////Listener for command currently being executed
-	//TransactionListener* _currCmdListener;
 	///Simulator Busy flag
 	bool _busy;
 	//unsigned int leafsForLevel[RECUR_DEPTH];
+	///Counts the leafs of the tree made up by explored control flow branches
 	unsigned int _leafsID;
-	/////Last simulated transaction
-	//TMLTransaction* _lastSimTrans;
+	///Keeps track of all breakpoints set during the simulation 
+	BreakpointSet _breakpoints;
 };
 #endif
