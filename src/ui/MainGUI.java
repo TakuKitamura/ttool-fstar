@@ -1020,7 +1020,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return index;
     }
 	
-	 public int createNC(String name) {
+	public int createNC(String name) {
         int index = addNCDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
@@ -1070,7 +1070,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		UIManager.put("TabbedPane.focus", Color.green);*/
 		SwingUtilities.updateComponentTreeUI(mainTabbedPane);
 		mainTabbedPane.setOpaque(true);
-
+		
 		
         ChangeListener cl = new	ChangeListener() {
             public void stateChanged(ChangeEvent e){
@@ -1661,7 +1661,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             }
             dtree.forceUpdate();
 		}
-			
+		
 	}
     
     
@@ -1842,7 +1842,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				
 				if (s == null) {
 					throw new Exception("TIF specification is void");
-
+					
 				}
 				FileOutputStream fos = new FileOutputStream(file);
 				fos.write(s.getBytes());
@@ -1856,8 +1856,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 		return false;
 	}
-	 
-	 public boolean openTIF() {
+	
+	public boolean openTIF() {
 		//jfc.setApproveButtonText("Open");
         int returnVal = jfctif.showOpenDialog(frame);
         
@@ -1883,13 +1883,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		if (s == null) {
 			return false;
 		}
-		 System.out.println("Open TIF =" + s);
-		 if (gtm == null) {
-			 newTurtleModeling();
-		 }
-		 return gtm.openTIF(s);
-		 
-	 }
+		System.out.println("Open TIF =" + s);
+		if (gtm == null) {
+			newTurtleModeling();
+		}
+		return gtm.openTIF(s);
+		
+	}
     
     public boolean saveProject() {
         if (file == null) {
@@ -2019,7 +2019,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         saveRGAUT(gtm.getLastTextualRGAUTProj(), gtm.getLastGraphicalRGAUTProj());
     }
 	
-	 public void saveLastModifiedRG() {
+	public void saveLastModifiedRG() {
         saveRGAUT(modifiedaut, modifiedautdot);
     }
     
@@ -2263,10 +2263,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		boolean ret = false;
 		
 		if (file == null) {
-						JOptionPane.showMessageDialog(frame,
-							"The project must be saved before any simulation or formal verification can be performed",
-							"Syntax analysis failed",
-							JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(frame,
+				"The project must be saved before any simulation or formal verification can be performed",
+				"Syntax analysis failed",
+				JOptionPane.INFORMATION_MESSAGE);
 			return false;
 		}
 		
@@ -2357,7 +2357,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 						JOptionPane.INFORMATION_MESSAGE);
 				}
             }
-		
+			
 			// NC
 		} else if (tp instanceof NCPanel) {
             NCPanel ncp = (NCPanel) tp;
@@ -2813,18 +2813,35 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         dtree.toBeUpdated();
 		
 		if (jgen.isInteractiveSimulationSelected()) {
-			JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, jgen.getPathInteractiveExecute());
-			jfis.setIconImage(IconManager.img9);
-			jfis.setSize(800, 700);
-			GraphicLib.centerOnParent(jfis);
-			jfis.setVisible(true);
+			interactiveSimulationSystemC(jgen.getPathInteractiveExecute());
 		}
     }
 	
 	public void interactiveSimulationSystemC() {
-		JFrameInteractiveSimulation jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
+		interactiveSimulationSystemC(ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
+	}
+	
+	public void interactiveSimulationSystemC(String executePath) {
+		JFrameInteractiveSimulation jfis;
+		//System.out.println("toto0");
+		if (gtm == null) {
+			jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null);
+		} else {
+			//System.out.println("toto1");
+			if (gtm.getTMLMapping() != null) {
+				jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getTMLMapping());
+			} else {
+				//System.out.println("toto2");
+				if (gtm.getArtificialTMLMapping() != null) {
+					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getArtificialTMLMapping());
+				} else {
+					//System.out.println("toto3");
+					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null);
+				}
+			}
+		}
 		jfis.setIconImage(IconManager.img9);
-		jfis.setSize(800, 700);
+		jfis.setSize(1024, 800);
 		GraphicLib.centerOnParent(jfis);
 		jfis.setVisible(true);
 	}
@@ -2834,9 +2851,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		if (file != null) {
 			path = file.getAbsolutePath();
 		}
-	  //System.out.println("Generating TML code: "+file.getAbsolutePath());
-       gtm.generateTMLTxt(path);
-	   //System.out.println("Done");
+		//System.out.println("Generating TML code: "+file.getAbsolutePath());
+		gtm.generateTMLTxt(path);
+		//System.out.println("Done");
     }
     
     public void generateDesign() {
@@ -3046,20 +3063,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void modifyGraph() {
 		JDialogGraphModification jdgm;
 		if (gtm == null ){
-		 jdgm = new JDialogGraphModification(frame,
-			GTURTLEModeling.getHostAldebaran(),
-			GTURTLEModeling.getPathBcgio(),
-			"graph",
-			"Minimization using Aldebaran",
-			null, null);
+			jdgm = new JDialogGraphModification(frame,
+				GTURTLEModeling.getHostAldebaran(),
+				GTURTLEModeling.getPathBcgio(),
+				"graph",
+				"Minimization using Aldebaran",
+				null, null);
 		} else {
 			jdgm = new JDialogGraphModification(frame,
-			GTURTLEModeling.getHostAldebaran(),
-			gtm.getPathBcgio(),
-			"graph",
-			"Minimization using Aldebaran",
-			gtm.getLastRGAUT(),
-			gtm.getLastTextualRGAUTProj());
+				GTURTLEModeling.getHostAldebaran(),
+				gtm.getPathBcgio(),
+				"graph",
+				"Minimization using Aldebaran",
+				gtm.getLastRGAUT(),
+				gtm.getLastTextualRGAUTProj());
 		}
         jdgm.setSize(600, 500);
         GraphicLib.centerOnParent(jdgm);
@@ -3634,10 +3651,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String name) {
-		 TURTLEPanel tp;
-		 TMLActivityDiagramPanel tmladp;
-		 System.out.println("global search for: " + name);
-		 for(int i=0; i<tabs.size(); i++) {
+		TURTLEPanel tp;
+		TMLActivityDiagramPanel tmladp;
+		System.out.println("global search for: " + name);
+		for(int i=0; i<tabs.size(); i++) {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLComponentDesignPanel) {
 				tmladp = ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
@@ -3650,19 +3667,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		
 		System.out.println("Not found");
 		return null;
-	 }
-	 
-	 public LinkedList getAllTMLComponents() {
-		 TURTLEPanel tp;
-		 LinkedList ll = new LinkedList();
-		 for(int i=0; i<tabs.size(); i++) {
+	}
+	
+	public LinkedList getAllTMLComponents() {
+		TURTLEPanel tp;
+		LinkedList ll = new LinkedList();
+		for(int i=0; i<tabs.size(); i++) {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLComponentDesignPanel) {
 				ll.addAll(((TMLComponentDesignPanel)tp).tmlctdp.getComponentList());
 			}
-		 }
-		 return ll;
-	 }
+		}
+		return ll;
+	}
     
     public void removeTClass(TURTLEPanel tp, String s)	{
         if (!(tp instanceof DesignPanel)) {
@@ -3825,7 +3842,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         if (tp instanceof TMLDesignPanel) {
             return ((TMLDesignPanel)tp).getTMLActivityDiagramPanel(name);
         }
-		 if (tp instanceof TMLComponentDesignPanel) {
+		if (tp instanceof TMLComponentDesignPanel) {
             return ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
         }
         return null;
@@ -4075,7 +4092,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		//  ProactiveSMDPanel temp=((ProactiveDesignPanel)tp).getSMDPanel(s);
         //Added by Solange
 		//And removed by Emil 
-       
+		
         /*
         LinkedList cmps=gtm.gpdtemp.getProCSDComponentsList();
         for (int i=0;i<cmps.size();i++)
@@ -4707,7 +4724,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void renameMapping(String oldName, String newName) {
 		TURTLEPanel tp;
 		
-		 for(int i = 0; i<mainTabbedPane.getTabCount(); i++) {
+		for(int i = 0; i<mainTabbedPane.getTabCount(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLArchiPanel) {
 				((TMLArchiPanel)tp).renameMapping(oldName, newName);
@@ -4875,7 +4892,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
 	
-	 public void toggleInternalComment() {
+	public void toggleInternalComment() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
 			tdp.setInternalCommentVisible((tdp.getInternalCommentVisible() +1 )% 3);
@@ -4885,7 +4902,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
     }
 	
-	 public void toggleAttr() {
+	public void toggleAttr() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null){
             System.out.println("Toggle attributes");
@@ -5599,7 +5616,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             if (systemcOn) {
                 menu.addSeparator();
                 menu.add(newTMLDesign);
-				 menu.add(newTMLComponentDesign);
+				menu.add(newTMLComponentDesign);
 				menu.add(newTMLArchi);
             }
 			

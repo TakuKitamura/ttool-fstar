@@ -95,7 +95,7 @@ public class TMLMapping {
 	private void computeHashCode() {
 		hashCode = tmlm.getHashCode() + tmla.getHashCode();
 		TMLMappingTextSpecification tmaptxt = new TMLMappingTextSpecification("spec.tmap");
-		hashCode += tmaptxt.toString().hashCode();
+		hashCode += tmaptxt.toTextFormat(this).hashCode();
 		System.out.println("TMAP hashcode = " + hashCode); 
 	}
 	

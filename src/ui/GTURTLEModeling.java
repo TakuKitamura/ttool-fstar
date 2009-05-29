@@ -110,6 +110,7 @@ public class GTURTLEModeling {
 	private TURTLEModeling tm;
 	private int tmState; // 0:generated, 1: to be generated from mapping
 	private TMLModeling tmlm;
+	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
 	private RequirementModeling rm;
 	private NCStructure ncs;
@@ -934,6 +935,10 @@ public class GTURTLEModeling {
 
 	public TMLModeling getTMLModeling() {
 		return tmlm;
+	}
+	
+	public TMLMapping getArtificialTMLMapping() {
+		return artificialtmap;
 	}
 	
 	public TMLMapping getTMLMapping() {
@@ -4393,6 +4398,7 @@ public class GTURTLEModeling {
 		GTMLModeling gtmlm = new GTMLModeling(tmldp);
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling();
+		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
 		//System.out.println("TML Modeling translated");
@@ -4457,6 +4463,7 @@ public class GTURTLEModeling {
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling();
+		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();
 		//System.out.println("TML Modeling translated");

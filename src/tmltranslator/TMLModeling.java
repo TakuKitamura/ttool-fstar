@@ -74,6 +74,29 @@ public class TMLModeling {
 			DIPLOElement.resetID();
 		}
     }
+	
+	public TMLMapping getDefaultMapping() {
+		TMLMapping tmlmapping;
+		TMLArchitecture tmla = new TMLArchitecture();
+		TMLTask t;
+		
+		HwCPU cpu = new HwCPU("cpu0");
+		cpu.byteDataSize = 4;
+		cpu.pipelineSize = 1;
+		cpu.goIdleTime = 0;
+		cpu.taskSwitchingTime = 1;
+		cpu.branchingPredictionPenalty = 0;
+		cpu.execiTime = 1;
+		tmla.addHwNode(cpu);	
+		tmlmapping = new TMLMapping(this, tmla);
+		ListIterator iterator = getTasks().listIterator();
+        
+		while(iterator.hasNext()) {
+			t = (TMLTask)(iterator.next());
+			tmlmapping.addTaskToHwExecutionNode(t, cpu);
+		}
+		return tmlmapping;
+	}
 
     private void init() {
         /*tasks = new LinkedList();

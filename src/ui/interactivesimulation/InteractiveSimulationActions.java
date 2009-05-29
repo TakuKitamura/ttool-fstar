@@ -75,8 +75,10 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_START_ALL = 3; 
 	public static final int ACT_STOP_ALL = 4;
 	public static final int ACT_STOP_AND_CLOSE_ALL = 5;
+	
+	public static final int ACT_UPDATE_VARIABLES = 15;
    
-    public static final int NB_ACTION = 15;
+    public static final int NB_ACTION = 16;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -134,6 +136,8 @@ public class InteractiveSimulationActions extends AbstractAction {
 		actions[ACT_START_ALL] = new TAction("start-all", "Connect to simulator", IconManager.imgic53, IconManager.imgic53, "Connect", "Start the server - if it is not yet running - and connect to it", 'C');
         actions[ACT_STOP_ALL] = new TAction("stop-all", "Quit simulation window", IconManager.imgic27, IconManager.imgic27, "Quit simulation window", "Quit the simulation window without terminating the simulation", 'Q');
         actions[ACT_STOP_AND_CLOSE_ALL] = new TAction("stop-and-close-all", "Terminate simulation and quit", IconManager.imgic27, IconManager.imgic27, "Terminate simulation and quit", "Terminate the simulation and quit the simulation window", 'T');
+        
+		actions[ACT_UPDATE_VARIABLES] = new TAction("update-variables", "Update variables", IconManager.imgic75, IconManager.imgic75, "Update variables", "Update variables", 'R');
         
     }
     

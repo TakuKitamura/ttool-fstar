@@ -59,6 +59,8 @@ import myutil.*;
 import ui.*;
 import ui.file.*;
 
+import tmltranslator.*; 
+
 import launcher.*;
 import remotesimulation.*;
 
@@ -121,6 +123,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	// Status elements
 	JLabel status, time;
 	
+	// Task elements
+	JButton updateTaskVariableInformationButton;
+	private JScrollPane jspTaskVariableInfo;
+	
+	
 	private int mode = 0;
 	private boolean busyStatus = false;
 	private boolean threadStarted = false;
@@ -131,8 +138,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
     public	MouseHandler mouseHandler;
     public  KeyListener keyHandler;
 	
+	private TMLMapping tmap;
+	int hashCode;
 	
-	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute) {
+	private Hashtable <String, String> mainTable;
+	
+	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap) {
 		super(_title);
 		
 		f = _f;
@@ -143,10 +154,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		mode = NOT_STARTED;
 		
+		tmap = _tmap;
+		if (tmap != null) {
+			hashCode = tmap.getHashCode();
+		}
 		
+		//System.out.println("Tmap=" + tmap);
+		
+		mainTable = new Hashtable<String, String>();
 		
 		setBackground(new Color(50, 40, 40, 200));
-		
 		
 		initActions();
 		makeComponents();
@@ -398,6 +415,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01 = new GridBagConstraints();
 		jp01.setLayout(gridbag01);
 		
+		
+		// INFORMATION
+		
 		infoTab.addTab("Status", null, jp01, "Current status of the simulation");
 		
 		c01.gridheight = 1;
@@ -426,6 +446,36 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
 		
+		jp01 = new JPanel();
+		jp01.setLayout(new BorderLayout());
+		infoTab.addTab("Tasks variables", null, jp01, "Current value of variables");
+		
+		
+		TaskVariableTableModel tvtm;
+		if (tmap == null) {
+			tvtm = new TaskVariableTableModel(null, mainTable);
+		} else {
+			tvtm = new TaskVariableTableModel(tmap.getTMLModeling(), mainTable);
+		}
+		TableSorter sorterPI = new TableSorter(tvtm);
+		JTable jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+			
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspTaskVariableInfo = new JScrollPane(jtablePI);
+		jspTaskVariableInfo.setWheelScrollingEnabled(true);
+		jspTaskVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspTaskVariableInfo.setPreferredSize(new Dimension(500, 300));
+		
+		jp01.add(jspTaskVariableInfo, BorderLayout.NORTH);
+		
+		updateTaskVariableInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES]);
+		jp01.add(updateTaskVariableInformationButton, BorderLayout.SOUTH);
 		
 		pack();
 	}
@@ -736,7 +786,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	protected boolean loadXMLInfoFromServer(String xmldata) {
-		//jta.append("XML from server:" + xmldata + "\n\n");
+		jta.append("XML from server:" + xmldata + "\n\n");
 		
 		DocumentBuilderFactory dbf;
 		DocumentBuilder db;
@@ -886,25 +936,15 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void makeStatus(String s) {
+		System.out.println("busystatus="  + busyStatus);
 		status.setText(s);
 		if (s.equals("busy")) {
 			setBusyStatus(true);
-			/*actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
-			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
-			actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);*/
-			/*runCommand.setEnabled(false);
-			resetCommand.setEnabled(false);
-			StopCommand.setEnabled(true);*/
 			busyStatus = true;
 		}
 		if (s.equals("ready")) {
-			/*runCommand.setEnabled(true);
-			resetCommand.setEnabled(true);
-			StopCommand.setEnabled(false);*/
-			/*actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
-			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
-			actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);*/
 			if (busyStatus) {
+				System.out.println("Sending time command");
 				sendCommand("time");
 			}
 			setBusyStatus(false);
@@ -1023,6 +1063,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateVariables() {
+		if (tmap == null) {
+			return;
+		}
+		
+		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
+			for(TMLAttribute tmla: task.getAttributes()) {
+				sendCommand("get-variable-of-task " + task.getID() + " " + tmla.getID());
+			}
+		}
+	}
+	
 	
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -1064,6 +1116,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendCommand("reset");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES].getActionCommand())) {
+            updateVariables();
         }
 	}
 	

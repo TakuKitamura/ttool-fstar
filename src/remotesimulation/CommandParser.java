@@ -208,6 +208,16 @@ public class CommandParser {
 		sc = new SimulationCommand("get-simulation-time", "time", "13", params, paramNames, "Returns the current absolute time unit of the simulation");
 		commandList.add(sc);
 		
+		// save-trace-in-file
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "Task id";
+		params[1] = 1;
+		paramNames[1] = "Variable id";
+		sc = new SimulationCommand("get-variable-of-task", "gvof", "3", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+		commandList.add(sc);
+		
 		// kill
 		params = new int[0];
 		paramNames = new String[0];

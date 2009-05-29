@@ -72,8 +72,6 @@ public class TMLMappingTextSpecification {
 
 	private String taskparameters[] = {"PRIORITY"};		
 	
-	private int hashCode;
-	
 	
 	public TMLMappingTextSpecification(String _title) {
 		title = _title;

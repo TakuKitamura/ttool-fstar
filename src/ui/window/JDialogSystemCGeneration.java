@@ -464,7 +464,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 				if (selectedItem == 0) {
 					tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
 					if (mgui.gtm.getTMLMapping() == null) {
-						tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+						if (mgui.gtm.getArtificialTMLMapping() == null) {
+							tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+						} else {
+							System.out.println("Using artifical mapping");
+							tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
+						}
 					} else {
 						tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLMapping());
 					}
@@ -483,7 +488,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 				} else {
 					tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
 					if (mgui.gtm.getTMLMapping() == null) {
-						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+						if (mgui.gtm.getArtificialTMLMapping() == null) {
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+						} else {
+							System.out.println("Using artifical mapping");
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
+						}
 					} else {
 						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping());
 					}
