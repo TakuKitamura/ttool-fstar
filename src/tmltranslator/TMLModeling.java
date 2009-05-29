@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLTask
+ * Class TMLModeling
  * Creation: 21/11/2005
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
@@ -60,6 +60,9 @@ public class TMLModeling {
 	private boolean optimized = false;
 	
 	private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
+	
+	private int hashCode;
+	private boolean hashCodeComputed = false;
     
     public TMLModeling() {
         init();
@@ -113,6 +116,21 @@ public class TMLModeling {
             }
         }
         return null;
+	}
+	
+	private void computeHashCode() {
+		TMLTextSpecification tmltxt = new TMLTextSpecification("spec.tml");
+		String s = tmltxt.toTextFormat(this);
+		hashCode = s.hashCode();
+		System.out.println("TML hashcode = " + hashCode); 
+	}
+	
+	public int getHashCode() {
+		if (!hashCodeComputed) {
+			computeHashCode();
+			hashCodeComputed = true;
+		}
+		return hashCode;
 	}
     
     public String toString() {

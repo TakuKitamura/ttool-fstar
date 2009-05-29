@@ -58,6 +58,9 @@ public class TMLMapping {
 	private ArrayList<TMLElement> mappedcommelts;
 	
 	private boolean optimized = false;
+	
+	private int hashCode;
+	private boolean hashCodeComputed = false;
     
     public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla) {
         tmlm = _tmlm;
@@ -87,6 +90,21 @@ public class TMLMapping {
 	}
 	public TMLArchitecture getTMLArchitecture() {
 		return tmla;
+	}
+	
+	private void computeHashCode() {
+		hashCode = tmlm.getHashCode() + tmla.getHashCode();
+		TMLMappingTextSpecification tmaptxt = new TMLMappingTextSpecification("spec.tmap");
+		hashCode += tmaptxt.toString().hashCode();
+		System.out.println("TMAP hashcode = " + hashCode); 
+	}
+	
+	public int getHashCode() {
+		if (!hashCodeComputed) {
+			computeHashCode();
+			hashCodeComputed = true;
+		}
+		return hashCode;
 	}
 	
 	public ArrayList<HwExecutionNode> getNodes(){

@@ -54,6 +54,9 @@ public class TMLArchitecture {
 	
 	private int masterClockFrequency = 200; // in MHz
 	
+	private int hashCode;
+	private boolean hashCodeComputed = false;
+	
     
     public TMLArchitecture() {
         init();
@@ -63,6 +66,21 @@ public class TMLArchitecture {
         hwnodes = new ArrayList<HwNode>();
 		hwlinks = new ArrayList<HwLink>();
     }
+	
+	private void computeHashCode() {
+		TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
+		String s = architxt.toTextFormat(this);
+		hashCode = s.hashCode();
+		System.out.println("TARCHI hashcode = " + hashCode); 
+	}
+	
+	public int getHashCode() {
+		if (!hashCodeComputed) {
+			computeHashCode();
+			hashCodeComputed = true;
+		}
+		return hashCode;
+	}
 	
 	public void setMasterClockFrequency(int value) {
 		masterClockFrequency = value;

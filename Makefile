@@ -98,7 +98,7 @@ documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 
 release: jttooljar launcher tiftranslator tmltranslator remotesimulator ttooljar_std stdrelease 
-	echo release done
+	@echo release done
 
 ########## RELEASE
 stdrelease:
@@ -117,19 +117,21 @@ stdrelease:
 	cd $(TTOOL_MODELING); cp $(RELEASE_STD_FILES_LIB) $(TTOOL_TARGET)/lib
 	cp $(TTOOL_DOC)/README_lib $(TTOOL_TARGET)/lib
 # simulators
-	mkdir -p $(TTOOL_TARGET)/simulators/version1/src_simulator
-	mkdir -p $(TTOOL_TARGET)/simulators/version1/lib
-	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile $(TTOOL_TARGET)/simulators/version1
-	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile.defs $(TTOOL_TARGET)/simulators/version1
-	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/version1/src_simulator
-	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/version1/src_simulator
-	mkdir -p $(TTOOL_TARGET)/simulators/version2/src_simulator
-	mkdir -p $(TTOOL_TARGET)/simulators/version2/lib
-	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/version2
-	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/version2
-	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/version2
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/version2/src_simulator
-	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/version2/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/systemc1/lib
+	cp  $(TTOOL_SIMULATORS)/systemc1/lib/README $(TTOOL_TARGET)/simulators/systemc1/lib/
+	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile $(TTOOL_TARGET)/simulators/systemc1
+	cp  $(TTOOL_SIMULATORS)/systemc1/Makefile.defs $(TTOOL_TARGET)/simulators/systemc1
+	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/systemc1/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/lib
+	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_TARGET)/simulators/c++2/lib/
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/c++2
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator
 # Licenses
 	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
 # Main readme
