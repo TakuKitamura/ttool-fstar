@@ -3640,6 +3640,7 @@ public class GTURTLEModeling {
 			String pre = "", post = "";
 			String internalComment = "";
 			boolean accessibility = false;
+			boolean breakpoint = false;
 			boolean hidden = false;
 
 			for(i=0; i<nl.getLength(); i++) {
@@ -3681,6 +3682,8 @@ public class GTURTLEModeling {
 						internalComment += elt.getAttribute("value") + "\n";
 					} else if (elt.getTagName().equals("accessibility")) {
 						accessibility = true;
+					}else if (elt.getTagName().equals("breakpoint")) {
+						breakpoint = true;
 					}
 				}
 			}
@@ -3822,6 +3825,10 @@ public class GTURTLEModeling {
 			
 			if (accessibility) {
 				tgc.setCheckableAccessibility(accessibility);
+			}
+			
+			if (breakpoint) {
+				tgc.setBreakpoint(breakpoint);
 			}
 
 			//extra param
@@ -4401,6 +4408,10 @@ public class GTURTLEModeling {
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
+		
+		listE.useDIPLOIDs();
+		
+		
 		//System.out.println("TML Modeling translated");
 		//System.out.println("----- TML Modeling -----");
 		//System.out.println(tmlm.toString());
@@ -4466,6 +4477,7 @@ public class GTURTLEModeling {
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();
+		//listE.useDIPLOIDs();
 		//System.out.println("TML Modeling translated");
 		//System.out.println("----- TML Modeling -----");
 		//System.out.println(tmlm.toString());
@@ -4502,6 +4514,7 @@ public class GTURTLEModeling {
 					warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmlcdp.tmlctdp));
 
 					mgui.setMode(MainGUI.GEN_DESIGN_OK);
+					listE.useDIPLOIDs();
 					return true;
 				}
 			}

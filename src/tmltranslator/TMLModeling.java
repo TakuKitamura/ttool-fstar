@@ -88,7 +88,7 @@ public class TMLModeling {
 		cpu.branchingPredictionPenalty = 0;
 		cpu.execiTime = 1;
 		tmla.addHwNode(cpu);	
-		tmlmapping = new TMLMapping(this, tmla);
+		tmlmapping = new TMLMapping(this, tmla, false);
 		ListIterator iterator = getTasks().listIterator();
         
 		while(iterator.hasNext()) {

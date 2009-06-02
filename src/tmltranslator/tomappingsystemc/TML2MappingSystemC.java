@@ -86,7 +86,7 @@ public class TML2MappingSystemC {
 		cpu.execiTime = 1;
 		tmla.addHwNode(cpu);
 		
-		tmlmapping = new TMLMapping(tmlmodeling, tmla);
+		tmlmapping = new TMLMapping(tmlmodeling, tmla, false);
 		
 		ListIterator iterator = _tmlm.getTasks().listIterator();
         TMLTask t;

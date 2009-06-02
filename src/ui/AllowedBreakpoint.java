@@ -36,32 +36,18 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AllowedBreakpoint
+ * Components for which breakpoint may be added / removed
+ * Creation: 29/05/2009
+ * @version 1.0 29/05/2009
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
 
+package ui;
 
-
-public class DIPLOElement {
-	
-	protected static int ID=0;
-	
-    private int myID;
-    
-    public DIPLOElement() {
-       myID=++ID;
-    }
-    
-    public int getID(){
-		return myID;
-    }
-	
-	public static void resetID() {
-		ID = 0;
-	}
+public interface AllowedBreakpoint  {
+    public void setBreakpoint(boolean b); 
+	public boolean getBreakpoint();
 }

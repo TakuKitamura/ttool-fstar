@@ -75,7 +75,6 @@ public class TMLMappingTextSpecification {
 	
 	public TMLMappingTextSpecification(String _title) {
 		title = _title;
-		DIPLOElement.resetID();
     }
 	
 	public void saveFile(String path, String filename) throws FileException {
@@ -367,6 +366,8 @@ public class TMLMappingTextSpecification {
 	}*/
 	
 	public boolean makeTMLMapping(String _spec, String path) {
+		DIPLOElement.resetID();
+		
 		spec = _spec;
 		//tmlmap = new TMLMappingodeling();
 		errors = new ArrayList<TMLTXTError>();  
@@ -386,7 +387,7 @@ public class TMLMappingTextSpecification {
 			return false;
 		}
 		
-		tmlmap = new TMLMapping(tmlm, tarchi);
+		tmlmap = new TMLMapping(tmlm, tarchi, false);
 		
 		System.out.println("Compiling mapping...");
 		

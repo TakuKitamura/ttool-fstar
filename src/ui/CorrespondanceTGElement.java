@@ -397,5 +397,25 @@ public class CorrespondanceTGElement {
         }
         return null;
     }
+	
+	public void useDIPLOIDs() {
+		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		Object o0, o1;
+		DIPLOElement de;
+		TGComponent tgc;
+		for (int i=0; i<data.size(); i++) {
+			o0 = data.get(i);
+			if (o0 instanceof DIPLOElement) {
+				o1 = tg.get(i);
+				if ((o1 != null) && !(list.contains(o1))){
+					de = (DIPLOElement)(o0);
+					System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
+					tgc = (TGComponent)(o1);
+					tgc.setDIPLOID(de.getID());
+					list.add(tgc);
+				}
+			}
+		}
+	}
     
 }

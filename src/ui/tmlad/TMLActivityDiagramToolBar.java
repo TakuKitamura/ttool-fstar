@@ -88,6 +88,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLAD_SEQUENCE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
@@ -198,6 +199,11 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
        
     }

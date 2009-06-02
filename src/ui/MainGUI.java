@@ -4855,6 +4855,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             changeMade(tdcp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
         }
     }
+	
+	public void toggleDiploIDs() {
+        TDiagramPanel.DIPLO_ID_ON = !TDiagramPanel.DIPLO_ID_ON;
+		getCurrentTDiagramPanel().repaint();  
+	}
     
     public void toggleGates() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
@@ -5167,6 +5172,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             generateDocumentationReq();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].getActionCommand())) {
             toggleAttributes();
+        } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].getActionCommand())) {
+            toggleDiploIDs();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {
             toggleGates();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_SYNCHRO].getActionCommand())) {

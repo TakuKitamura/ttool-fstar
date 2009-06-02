@@ -57,6 +57,9 @@ import myutil.*;
 import ui.procsd.ProCSDPort;
 //Added by Solange
 import ui.procsd.ProCSDComponent;
+
+import ui.tmlad.*;
+import ui.tmlcompd.*;
 import ui.tree.*;
 
 
@@ -94,6 +97,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     private boolean moveWithFather = true;
     
     private int id;
+	
+	// DIPLODOCUS ID
+	private int DIPLOID = -1;
+	
     
     // Zone of drawing -> relative to father if applicable
     protected int minX;
@@ -141,6 +148,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	protected String internalComment = null;
 	
 	protected boolean accessibility;
+	
+	protected boolean breakpoint;
 
 	
 	// Zoom
@@ -266,6 +275,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	public boolean getCheckableAccessibility() {
 		return accessibility;
+	}
+	
+	public void setBreakpoint(boolean b) {
+		breakpoint = b;
+	}
+	
+	public boolean getBreakpoint() {
+		return breakpoint;
 	}
 	
 	public final TGComponent isOnMeHL(int _x, int _y) {
@@ -405,7 +422,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
             tgcomponent[i].setInternalLoaded(b);
         }
     }
-    
+	
+	public void drawDiploID(Graphics g) {
+		g.drawString(""+getDIPLOID(), x+width, y+height + 5);
+	}
+	
     public void draw(Graphics g) {
         ColorManager.setColor(g, state, 0);
         internalDrawing(g);
@@ -428,6 +449,29 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			g.drawLine(x+width-2, y+2, x+width-6, y+6);
 			g.drawLine(x+width-6, y+2, x+width-2, y+6);
 			GraphicLib.setNormalStroke(g);
+		}
+		
+		if (tdp.DIPLO_ID_ON) {
+			if (breakpoint) {
+				//System.out.println("breakpoint");
+				g.setColor(ColorManager.BREAKPOINT);
+				Font f = g.getFont();
+				g.setFont(f.deriveFont(Font.BOLD));
+				g.drawString("bk", x+width, y+3);
+				g.setFont(f);
+			}
+			g.setColor(ColorManager.DIPLOID);
+			if (! ((this instanceof TGConnector) || (this instanceof TGCNote))) {
+				if (tdp instanceof TMLActivityDiagramPanel) {
+					if (getFather() == null) {
+						drawDiploID(g);
+					}
+				} else if (tdp instanceof TMLComponentTaskDiagramPanel) {
+					if (this instanceof TMLCPrimitiveComponent) {
+						drawDiploID(g);
+					}
+				}
+			}
 		}
 		
 		if (this instanceof EmbeddedComment) {
@@ -2000,6 +2044,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	// DIPLO ID
+	public void setDIPLOID(int _ID) {
+		DIPLOID = _ID;
+	}
+	
+	public int getDIPLOID() {
+		return DIPLOID;
+	}
+	
     
     // saving
     
@@ -2027,6 +2080,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append(translateJavaCode());
 		sb.append(translateInternalComment());
 		sb.append(translateAccessibility());
+		sb.append(translateBreakpoint());
         sb.append(translateExtraParam());
         if (b) {
             sb.append(XML_TAIL);
@@ -2065,6 +2119,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		StringBuffer sb = new StringBuffer();
 		if (accessibility) {		
 			sb.append("<accessibility />\n");
+		}
+		return new String(sb);
+	}
+	
+	protected String translateBreakpoint() {
+		StringBuffer sb = new StringBuffer();
+		if (breakpoint) {		
+			sb.append("<breakpoint />\n");
 		}
 		return new String(sb);
 	}

@@ -875,6 +875,7 @@ public class GTMLModeling  {
         
         // Adding start state
         TMLStartState tmlss = new TMLStartState("start", tss);
+		listE.addCor(tmlss, tss);
         activity.setFirst(tmlss);
         
         // Creation of other elements
@@ -1360,7 +1361,7 @@ public class GTMLModeling  {
 	public TMLMapping translateToTMLMapping() {
 		tmlm = new TMLModeling(true);
 		archi = new TMLArchitecture();
-		map = new TMLMapping(tmlm, archi);
+		map = new TMLMapping(tmlm, archi, false);
 		
 		checkingErrors = new Vector();
 		warnings = new Vector();

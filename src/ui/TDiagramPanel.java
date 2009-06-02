@@ -101,6 +101,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected int popupX, popupY;
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide;
 	protected JMenuItem checkAccessibility;
+	protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
     
@@ -179,6 +180,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	protected int attributesOn = 0;
 	
 	int adjustMode = 0;
+	
+	// DIPLO ID -> for simulation purpose
+	public static boolean DIPLO_ID_ON;
     
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
@@ -383,6 +387,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 						}
 					}
 					
+					
+					
 					/*if (internalCommentVisible) {
 						ifi (tgc.hasInternalComment()) {
 							tgc.drawInternalComment(g);
@@ -457,7 +463,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 				}
 			}
 			
-			
 			if (b) {
 				mgui.drawBird();
 			}
@@ -481,6 +486,26 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
     }
+	
+	/*protected void drawDIPLOID(Graphics g) {
+		if (!(tdp instanceof TMLActivityDiagramPanel)) {
+			return;
+		}
+		
+		Color c = g.getColor();
+		g.setColor(ColorManager.DIPLOID);
+		
+		TGComponent tgc;
+		for(int i=componentList.size()-1; i>=0; i--) {
+			tgc = (TGComponent)(componentList.get(i));
+			if (!tgc.isHidden()) {
+				if (tgc.getDIPLOID
+				g.drawString(tgc.getDIPLOID(), x+width, y.height + 5);
+			}
+		}
+		
+		g.setColor(c);
+	}*/
     
     public void loadFromXML(String s) {
         componentList = new LinkedList();
@@ -1238,6 +1263,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		componentMenu.add(setInternalComment);
 		componentMenu.add(removeInternalComment);
 		componentMenu.add(checkAccessibility);
+		componentMenu.add(breakpoint);
         
         tgc.addActionToPopupMenu(componentMenu, menuAL, x, y);
     }
@@ -1323,6 +1349,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		
 		checkAccessibility = new JMenuItem("Check for accessibility / liveness with UPPAAL");
         checkAccessibility.addActionListener(menuAL);
+		
+		breakpoint = new JMenuItem("Add / remove breakpoint");
+        breakpoint.addActionListener(menuAL);
         
         // Diagram Menu
         
@@ -1479,6 +1508,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		if (e.getSource() == checkAccessibility) {
 			if (componentPopup instanceof CheckableAccessibility) {
 				componentPopup.setCheckableAccessibility(!componentPopup.getCheckableAccessibility());
+			}
+		}
+		
+		if (e.getSource() == breakpoint) {
+			if (componentPopup instanceof AllowedBreakpoint) {
+				componentPopup.setBreakpoint(!componentPopup.getBreakpoint());
 			}
 		}
         
@@ -1647,6 +1682,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             checkAccessibility.setEnabled(true);
         } else {
             checkAccessibility.setEnabled(false);
+        }
+		
+		if (componentPointed instanceof AllowedBreakpoint){
+            breakpoint.setEnabled(true);
+        } else {
+            breakpoint.setEnabled(false);
         }
         
         

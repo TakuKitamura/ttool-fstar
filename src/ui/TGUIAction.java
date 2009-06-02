@@ -360,6 +360,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_TOGGLE_JAVA = 126;
 	public static final int ACT_TOGGLE_ATTR = 220;
 	
+	public static final int ACT_TOGGLE_DIPLO_ID = 264;
+	
 	public static final int ACT_TOGGLE_INTERNAL_COMMENT = 227;
    
     public static final int CONNECTOR_COMMENT = 162;
@@ -372,7 +374,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 264;
+    public static final int NB_ACTION = 265;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -458,6 +460,8 @@ public class TGUIAction extends AbstractAction {
         
         actions[ACT_TOGGLE_JAVA] = new TAction("toggle-java-command", "Show / hide Java code", IconManager.imgic138, IconManager.imgic138, "Show / hide Java code", "Show / hide Java code", '0');
         actions[ACT_TOGGLE_ATTR] = new TAction("toggle-attr-command", "Show / hide attributes (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide element attributes (OFF -> Partial -> Full)", "Show / hide attributes (OFF -> Partial -> Full)", '0');
+        
+		actions[ACT_TOGGLE_DIPLO_ID] = new TAction("toggle-tml-id", "Show / hide DIPLODOCUS IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide DIPLODOCUS IDs", "Show / hide DIPLODOCUS IDs", '0');
         
 		actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');
         

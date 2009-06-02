@@ -62,10 +62,14 @@ public class TMLMapping {
 	private int hashCode;
 	private boolean hashCodeComputed = false;
     
-    public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla) {
+    public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
         tmlm = _tmlm;
 		tmla = _tmla;
 		init();
+		
+		if (reset) {
+			DIPLOElement.resetID();
+		}
     }
 	
 	private void init() {
