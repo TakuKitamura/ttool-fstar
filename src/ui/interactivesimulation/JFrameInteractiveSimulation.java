@@ -133,6 +133,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JButton updateCPUInformationButton;
 	private JScrollPane jspCPUInfo;
 	
+	// Memories
+	JPanel memPanel;
+	MemTableModel memtm;
+	JButton updateMemoryInformationButton;
+	private JScrollPane jspMemInfo;
+	
 	
 	private int mode = 0;
 	private boolean busyStatus = false;
@@ -407,7 +413,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		infos = new JPanel();
 		infos.setMinimumSize(new Dimension(300, 250));
 		//infos.setPreferredSize(new Dimension(400, 450));
-		infos.setBorder(new javax.swing.border.TitledBorder("Simulation results"));
+		infos.setBorder(new javax.swing.border.TitledBorder("Simulation information"));
 		c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 		mainTop.add(infos, c02);
 		
@@ -488,7 +494,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		// CPUs
 		cpuPanel = new JPanel();
 		cpuPanel.setLayout(new BorderLayout());
-		infoTab.addTab("CPUs", null, cpuPanel, "Current state of CPUs");
+		infoTab.addTab("CPUs", IconManager.imgic1100, cpuPanel, "Current state of CPUs");
 		CPUTableModel cputm = new CPUTableModel(tmap, valueTable, rowTable);
 		sorterPI = new TableSorter(cputm);
 		jtablePI = new JTable(sorterPI);
@@ -504,6 +510,26 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		cpuPanel.add(jspCPUInfo, BorderLayout.NORTH);
 		updateCPUInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS]);
 		cpuPanel.add(updateCPUInformationButton, BorderLayout.SOUTH);
+		
+		// Memories
+		memPanel = new JPanel();
+		memPanel.setLayout(new BorderLayout());
+		infoTab.addTab("Memories", IconManager.imgic1108, memPanel, "Current state of Memories");
+		MemTableModel memtm = new MemTableModel(tmap, valueTable, rowTable);
+		sorterPI = new TableSorter(memtm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspMemInfo = new JScrollPane(jtablePI);
+		jspMemInfo.setWheelScrollingEnabled(true);
+		jspMemInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspMemInfo.setPreferredSize(new Dimension(500, 300));
+		memPanel.add(jspMemInfo, BorderLayout.NORTH);
+		updateMemoryInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_MEMS]);
+		memPanel.add(updateMemoryInformationButton, BorderLayout.SOUTH);
 		
 		pack();
 	}
@@ -1121,6 +1147,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return;
 		}
 		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
 		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
 			for(TMLAttribute tmla: task.getAttributes()) {
 				sendCommand("get-variable-of-task " + task.getID() + " " + tmla.getID());
@@ -1133,9 +1163,29 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return;
 		}
 		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwCPU) {
 				sendCommand("get-info-on-hw 0 " + node.getID()); 
+			}
+		}
+	}
+	
+	private void updateMemories() {
+		if (tmap == null) {
+			return;
+		}
+		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
+		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+			if (node instanceof HwMemory) {
+				sendCommand("get-info-on-hw 2 " + node.getID()); 
 			}
 		}
 	}
@@ -1185,6 +1235,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateVariables();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS].getActionCommand())) {
             updateCPUs();
+        }else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_MEMS].getActionCommand())) {
+            updateMemories();
         }
 	}
 	

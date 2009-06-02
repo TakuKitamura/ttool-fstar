@@ -79,8 +79,11 @@ public class TMLModeling {
 		TMLMapping tmlmapping;
 		TMLArchitecture tmla = new TMLArchitecture();
 		TMLTask t;
+		TMLChannel ch;
 		
-		HwCPU cpu = new HwCPU("cpu0");
+		tmlmapping = new TMLMapping(this, tmla, false);
+		
+		HwCPU cpu = new HwCPU("defaultCPU");
 		cpu.byteDataSize = 4;
 		cpu.pipelineSize = 1;
 		cpu.goIdleTime = 0;
@@ -88,13 +91,40 @@ public class TMLModeling {
 		cpu.branchingPredictionPenalty = 0;
 		cpu.execiTime = 1;
 		tmla.addHwNode(cpu);	
-		tmlmapping = new TMLMapping(this, tmla, false);
-		ListIterator iterator = getTasks().listIterator();
+		
+		ListIterator iterator;
         
+		HwMemory mem = new HwMemory("defaultMemory");
+		tmla.addHwNode(mem);	
+		
+		HwBus bus = new HwBus("defaultBus");
+		tmla.addHwNode(bus);
+		
+		HwLink link0 = new HwLink("CPU_bus");
+		link0.bus = bus;
+		link0.hwnode = cpu;
+		tmla.addHwLink(link0);
+		
+		HwLink link1 = new HwLink("Mem_bus");
+		link1.bus = bus;
+		link1.hwnode = mem;
+		tmla.addHwLink(link1);
+		
+		// tasks
+		iterator = getTasks().listIterator();
 		while(iterator.hasNext()) {
 			t = (TMLTask)(iterator.next());
 			tmlmapping.addTaskToHwExecutionNode(t, cpu);
 		}
+		
+		// Channels
+		iterator = getChannels().listIterator();
+		while(iterator.hasNext()) {
+			ch = (TMLChannel)(iterator.next());
+			tmlmapping.addCommToHwCommNode(ch, bus);
+			tmlmapping.addCommToHwCommNode(ch, mem);
+		}
+		
 		return tmlmapping;
 	}
 
