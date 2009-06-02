@@ -128,6 +128,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JButton updateTaskVariableInformationButton;
 	private JScrollPane jspTaskVariableInfo;
 	
+	// Tasks
+	JPanel taskPanel;
+	TaskTableModel tasktm;
+	JButton updateTaskInformationButton;
+	private JScrollPane jspTaskInfo;
+	
 	// CPU
 	CPUTableModel cputm;
 	JButton updateCPUInformationButton;
@@ -469,6 +475,26 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		TableSorter sorterPI;
 		JTable jtablePI;
+		
+		// Tasks
+		taskPanel = new JPanel();
+		taskPanel.setLayout(new BorderLayout());
+		infoTab.addTab("Tasks", IconManager.imgic1202, taskPanel, "Current state of tasks");
+		TaskTableModel tasktm = new TaskTableModel(tmap.getTMLModeling(), valueTable, rowTable);
+		sorterPI = new TableSorter(tasktm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspTaskInfo = new JScrollPane(jtablePI);
+		jspTaskInfo.setWheelScrollingEnabled(true);
+		jspTaskInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspTaskInfo.setPreferredSize(new Dimension(500, 300));
+		taskPanel.add(jspTaskInfo, BorderLayout.NORTH);
+		updateTaskInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS]);
+		taskPanel.add(updateTaskInformationButton, BorderLayout.SOUTH);
 		
 		// Variables
 		variablePanel = new JPanel();
@@ -1232,6 +1258,20 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateTasks() {
+		if (tmap == null) {
+			return;
+		}
+		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
+		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
+			sendCommand("get-info-on-hw 5 " + task.getID()); 
+		}
+	}
+	
 	
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -1281,6 +1321,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateMemories();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_BUS].getActionCommand())) {
             updateBus();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS].getActionCommand())) {
+            updateTasks();
         }
 	}
 	
