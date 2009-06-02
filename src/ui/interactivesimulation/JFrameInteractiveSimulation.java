@@ -69,10 +69,11 @@ import org.xml.sax.*;
 import javax.xml.parsers.*;
 
 
-public	class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public	class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	
 	protected static final String SIMULATION_HEADER = "siminfo";
 	protected static final String SIMULATION_GLOBAL = "global";
+	protected static final String SIMULATION_TASK = "task";
 	
 	private static String buttonStartS = "Start simulator";
 	private static String buttonCloseS = "Close";
@@ -114,7 +115,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected StateCommandsToolBar stctb;
 	
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox debug;
+	JCheckBox debug, animate;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -168,6 +169,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private Hashtable <Integer, String> valueTable;
 	private Hashtable <Integer, Integer> rowTable;
 	
+	private Hashtable <Integer, Integer> runningTable;
+	
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap) {
 		super(_title);
 		
@@ -188,6 +191,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		valueTable = new Hashtable<Integer, String>();
 		rowTable = new Hashtable<Integer, Integer>();
+		runningTable = new Hashtable<Integer, Integer>();
+		
 		
 		setBackground(new Color(50, 40, 40, 200));
 		
@@ -471,6 +476,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(new JLabel(" "), c01);
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
+		animate = new JCheckBox("Animate UML diagrams");
+		jp01.add(animate, c01);
+		animate.addItemListener(this);
+		animate.setSelected(true);
 		
 		
 		TableSorter sorterPI;
@@ -480,7 +489,13 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		taskPanel = new JPanel();
 		taskPanel.setLayout(new BorderLayout());
 		infoTab.addTab("Tasks", IconManager.imgic1202, taskPanel, "Current state of tasks");
-		TaskTableModel tasktm = new TaskTableModel(tmap.getTMLModeling(), valueTable, rowTable);
+		TaskTableModel tasktm;
+		if (tmap == null) {
+			 tasktm = new TaskTableModel(null, valueTable, rowTable);
+		} else {
+			 tasktm = new TaskTableModel(tmap.getTMLModeling(), valueTable, rowTable);
+		}
+		
 		sorterPI = new TableSorter(tasktm);
 		jtablePI = new JTable(sorterPI);
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
@@ -729,7 +744,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				setComponents();
 				
-				sendCommand("time");
+				//sendCommand("time");
+				askForUpdate();
 				if (tmap != null) {
 					sendCommand("get-hashcode");
 				}
@@ -763,10 +779,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				threadStarted();
 				while(true) {
 					testGo();
-					Thread.currentThread().sleep(200);
+					Thread.currentThread().sleep(500);
 					if (busyStatus && gotTimeAnswerFromServer) {
 						gotTimeAnswerFromServer = false;
-						sendCommand("time");
+						askForUpdate();
+						
 					}
 				}
 			}
@@ -842,7 +859,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	protected void sendCommand() {
 		String text = textCommand.getText().trim();
-		sendCommand(text);
+		sendCommand(text + "\n");
 	}
 	
 	protected void sendCommand(String text) {
@@ -962,6 +979,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String error = null;
 		String hash = null;
 		
+		String id;
+		String name;
+		String command;
+		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
 				//System.out.println("Ndes: " + j);
@@ -1007,6 +1028,25 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						}
 						
 					}
+					
+					if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
+						id = null;
+						name = null;
+						command = null;
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						nl = elt.getElementsByTagName("currcmd");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							command = node0.getTextContent();
+						}
+						
+						System.out.println("Got info on task " + id + " command=" + command);
+						
+						if ((id != null) && (command != null)) {
+							updateRunningCommand(id, command);
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -1037,8 +1077,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					jta.append("*** Some features are therefore deactivated ***\n\n");
 					cpuPanel.setVisible(false);
 					variablePanel.setVisible(false);
+					animate.setSelected(false);
+					animate.setEnabled(false);
 				} else {
 					jta.append("\n*** Simulated model is the one currently loaded under TTool ***\n");
+					animate.setSelected(true);
+					animate.setEnabled(true);
 				}
 			} catch (Exception e) {
 			}
@@ -1076,7 +1120,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		if (s.equals("ready")) {
 			if (busyStatus) {
 				System.out.println("Sending time command");
-				sendCommand("time");
+				askForUpdate();
+				//sendCommand("time");
 			}
 			setBusyStatus(false);
 		}
@@ -1272,7 +1317,55 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateTaskCommands() {
+		if (tmap == null) {
+			return;
+		}
+		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
+		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
+			sendCommand("get-command-of-task " + task.getID()); 
+		}
+	}
 	
+	private void updateRunningCommand(String id, String command) {
+		Integer i = getInteger(id);
+		Integer c = getInteger(command);
+		
+		if ((i != null) && (c != null)) {
+			try {
+				System.out.println("Searching for old value");
+				Integer old = runningTable.get(i);
+				if(old != null) {
+					mgui.removeRunningId(old);
+					runningTable.remove(old);
+				}
+				
+				runningTable.put(i, c);
+				System.out.println("Adding running command");
+				mgui.addRunningID(c);
+			} catch (Exception e) {
+				System.out.println("Exception updateRunningCommand: " + e.getMessage());
+			}
+		}
+		
+	}
+	
+	public void askForUpdate() {
+		sendCommand("time");
+		if (animate.isSelected()) {
+			updateTaskCommands();
+		}
+	}
+	
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getSource() == animate) {
+			mgui.setDiploIDs(animate.isSelected());
+		}
+	}
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
@@ -1311,6 +1404,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendRestoreStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
             sendCommand("reset");
+			askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES].getActionCommand())) {
@@ -1341,6 +1435,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return true;
 		}
 		return false;
+	}
+	
+	public Integer getInteger(String s) {
+		try {
+			return Integer.decode(s);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	

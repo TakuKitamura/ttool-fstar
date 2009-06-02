@@ -100,6 +100,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	// DIPLODOCUS ID
 	private int DIPLOID = -1;
+	private boolean DIPLO_running = false;
 	
     
     // Zone of drawing -> relative to father if applicable
@@ -424,7 +425,45 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 	
 	public void drawDiploID(Graphics g) {
+		g.setColor(ColorManager.DIPLOID);
 		g.drawString(""+getDIPLOID(), x+width, y+height + 5);
+	}
+	
+	public void drawRunningDiploID(Graphics g) {
+		//System.out.println("Drawing running DIPLO");
+		int wb = 30;
+		int hb = 10;
+		int wh = 15;
+		int hh = 20;
+		int sep = 10;
+		
+		int[] xp = new int[7];
+		int[] yp = new int[7];
+		
+		xp[0] = x - sep - wb -wh;
+		yp[0] = y + ((height-hb) / 2);
+		
+		xp[1] = x - sep - wh;
+		yp[1] = y + ((height-hb) / 2);
+		
+		xp[2] = x - sep - wh;
+		yp[2] = y + ((height-hh) / 2);
+		
+		xp[3] = x - sep;
+		yp[3] = y + (height / 2);
+		
+		xp[4] = x - sep - wh;
+		yp[4] = y + ((height+hh) / 2);
+		
+		xp[5] = x - sep - wh;
+		yp[5] = y + ((height+hb) / 2);
+		
+		xp[6] = x - sep - wb -wh;
+		yp[6] = y + ((height+hb) / 2);
+		
+		g.setColor(ColorManager.BREAKPOINT);
+		g.fillPolygon(xp, yp, 7);
+		
 	}
 	
     public void draw(Graphics g) {
@@ -460,11 +499,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				g.drawString("bk", x+width, y+3);
 				g.setFont(f);
 			}
-			g.setColor(ColorManager.DIPLOID);
 			if (! ((this instanceof TGConnector) || (this instanceof TGCNote))) {
 				if (tdp instanceof TMLActivityDiagramPanel) {
 					if (getFather() == null) {
 						drawDiploID(g);
+						if (tdp.getMGUI().isRunningID(getDIPLOID())) {
+							drawRunningDiploID(g);
+						}
 					}
 				} else if (tdp instanceof TMLComponentTaskDiagramPanel) {
 					if (this instanceof TMLCPrimitiveComponent) {

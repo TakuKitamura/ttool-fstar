@@ -120,7 +120,7 @@ public class RemoteConnection {
 	}
 	
 	public void send(String s) throws RemoteConnectionException {
-		s = s .trim();
+		s = s .trim() + " \n";
 		if (s.length() == 0) {
 			return;
 		}

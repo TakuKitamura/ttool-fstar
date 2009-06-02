@@ -244,6 +244,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	private JFileChooser jfctif;
     
     //private int selectedAction = -1;
+	
+	// Interaction with simulators
+	ArrayList<Integer> runningIDs;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn) {
         systemcOn = _systemcOn;
@@ -4856,9 +4859,50 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
 	
+	
+	// For simulation purpose
 	public void toggleDiploIDs() {
-        TDiagramPanel.DIPLO_ID_ON = !TDiagramPanel.DIPLO_ID_ON;
-		getCurrentTDiagramPanel().repaint();  
+        setDiploIDs(!TDiagramPanel.DIPLO_ID_ON);
+	}
+	
+	public void setDiploIDs(boolean b) {
+		TDiagramPanel.DIPLO_ID_ON = b;
+		getCurrentTDiagramPanel().repaint(); 
+	}
+	
+	public synchronized boolean isRunningID(int id) {
+		if (runningIDs == null) {
+			return false;
+		}
+		
+		for(Integer i: runningIDs) {
+			if (i.intValue() == id) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public synchronized void addRunningID(Integer id) {
+		if (runningIDs == null) {
+			runningIDs = new ArrayList<Integer>();
+		}
+		
+		runningIDs.add(id);
+		//System.out.println("Running id " + id +  " added");
+		getCurrentTDiagramPanel().repaint(); 
+	}
+	
+	public synchronized void removeRunningId(Integer id) {
+		for(Integer i: runningIDs) {
+			if (i.intValue() == id.intValue()) {
+				runningIDs.remove(i);
+				//System.out.println("Running id " + i +  " removed");
+				return;
+			}
+		}
+		getCurrentTDiagramPanel().repaint(); 
 	}
     
     public void toggleGates() {

@@ -197,9 +197,11 @@ public class CommandParser {
 		
 		
 		// get-command-and-task
-		params = new int[0];
-		paramNames = new String[0];
-		sc = new SimulationCommand("get-command-and-task", "gcat", "14", params, paramNames, "Returns the current command and task");
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "Task id";
+		sc = new SimulationCommand("get-command-of-task", "gcot", "14", params, paramNames, "Returns the current command of the task provided as argument");
 		commandList.add(sc);
 		
 		// get-hash-code
