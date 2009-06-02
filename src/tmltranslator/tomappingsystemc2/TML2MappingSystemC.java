@@ -159,8 +159,8 @@ public class TML2MappingSystemC {
 		
 		// Declaration of Buses
 		declaration += "//Declaration of Buses" + CR;
-		declaration+="Bus* defaultBus = new Bus(-1,\"defaultBus\",100,1,1)" + SCCR;
-		declaration += "addBus(defaultBus)"+ SCCR;
+		//declaration+="Bus* defaultBus = new Bus(-1,\"defaultBus\",100,1,1)" + SCCR;
+		//declaration += "addBus(defaultBus)"+ SCCR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwBus) {
 				//if (tmlmapping.isAUsedHwNode(node)) {
@@ -182,8 +182,8 @@ public class TML2MappingSystemC {
 		declaration += CR;
 
 		// Declaration of Memories
-		declaration += "//Declaration of Memories\nMemory* defaultMemory = new Memory(-1,\"defaultMemory\",1,4)" + SCCR;
-		declaration += "addMem(defaultMemory)"+ SCCR;
+		//declaration += "//Declaration of Memories\nMemory* defaultMemory = new Memory(-1,\"defaultMemory\",1,4)" + SCCR;
+		//declaration += "addMem(defaultMemory)"+ SCCR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwMemory) {
 				declaration+= "Memory* " + node.getName() + " = new Memory("+ node.getID() + ",\"" + node.getName() + "\", " + node.clockRatio + ", " + ((HwMemory)node).byteDataSize + ")" +SCCR;
