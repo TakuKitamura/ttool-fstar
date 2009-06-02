@@ -157,9 +157,10 @@ public class MappedSystemCTask {
 		for(TMLAttribute att: task.getAttributes()) {
 			//att = (TMLAttribute)(iterator.next());
 			//code += TMLType.getStringType(att.type.getType()) + " " + att.name;
-			cppcode += "_varLookUp[\"" + att.name + "\"]=&" + att.name +SCCR;
+			cppcode += "_varLookUpName[\"" + att.name + "\"]=&" + att.name +SCCR;
+			cppcode += "_varLookUpID[" + att.getID() + "]=&" + att.name +SCCR;
 		}		
-		cppcode += "_varLookUp[\"rnd__0\"]=&rnd__0" + SCCR + CR;
+		cppcode += "_varLookUpName[\"rnd__0\"]=&rnd__0" + SCCR + CR;
 		cppcode+= "//set blocked read task/set blocked write task"+ CR;
 		for(TMLChannel ch: channels) {
 			if (ch.getOriginTask()==task)
