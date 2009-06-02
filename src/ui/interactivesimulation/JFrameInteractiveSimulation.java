@@ -139,6 +139,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JButton updateMemoryInformationButton;
 	private JScrollPane jspMemInfo;
 	
+	// Bus
+	JPanel busPanel;
+	BusTableModel bustm;
+	JButton updateBusInformationButton;
+	private JScrollPane jspBusInfo;
+	
 	
 	private int mode = 0;
 	private boolean busyStatus = false;
@@ -530,6 +536,26 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		memPanel.add(jspMemInfo, BorderLayout.NORTH);
 		updateMemoryInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_MEMS]);
 		memPanel.add(updateMemoryInformationButton, BorderLayout.SOUTH);
+		
+		// Busses
+		busPanel = new JPanel();
+		busPanel.setLayout(new BorderLayout());
+		infoTab.addTab("Bus", IconManager.imgic1102, busPanel, "Current state of busses");
+		BusTableModel bustm = new BusTableModel(tmap, valueTable, rowTable);
+		sorterPI = new TableSorter(bustm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspBusInfo = new JScrollPane(jtablePI);
+		jspBusInfo.setWheelScrollingEnabled(true);
+		jspBusInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspBusInfo.setPreferredSize(new Dimension(500, 300));
+		busPanel.add(jspBusInfo, BorderLayout.NORTH);
+		updateBusInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_BUS]);
+		busPanel.add(updateBusInformationButton, BorderLayout.SOUTH);
 		
 		pack();
 	}
@@ -1190,6 +1216,22 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateBus() {
+		if (tmap == null) {
+			return;
+		}
+		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
+		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+			if (node instanceof HwBus) {
+				sendCommand("get-info-on-hw 1 " + node.getID()); 
+			}
+		}
+	}
+	
 	
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -1235,8 +1277,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateVariables();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS].getActionCommand())) {
             updateCPUs();
-        }else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_MEMS].getActionCommand())) {
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_MEMS].getActionCommand())) {
             updateMemories();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_BUS].getActionCommand())) {
+            updateBus();
         }
 	}
 	

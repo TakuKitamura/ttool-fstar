@@ -79,8 +79,9 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_UPDATE_VARIABLES = 15;
 	public static final int ACT_UPDATE_CPUS = 16;
 	public static final int ACT_UPDATE_MEMS = 17;
+	public static final int ACT_UPDATE_BUS = 18;
    
-    public static final int NB_ACTION = 18;
+    public static final int NB_ACTION = 19;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -142,6 +143,7 @@ public class InteractiveSimulationActions extends AbstractAction {
 		actions[ACT_UPDATE_VARIABLES] = new TAction("update-variables", "Update variables", IconManager.imgic75, IconManager.imgic75, "Update variables", "Update variables", 'R');
         actions[ACT_UPDATE_CPUS] = new TAction("update-cpus", "Update CPU information", IconManager.imgic75, IconManager.imgic75, "Update CPU information", "Update information on CPUs", 'R');
         actions[ACT_UPDATE_MEMS] = new TAction("update-mems", "Update Memories information", IconManager.imgic75, IconManager.imgic75, "Update Memories information", "Update information on Memories", 'R');
+        actions[ACT_UPDATE_MEMS] = new TAction("update-bus", "Update bus information", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on busses", 'R');
         
     }
     
