@@ -93,6 +93,45 @@ using std::max;
 #define RUNNABLE 1
 #define SUSPENDED 0
 
+//XML Tags
+#define TAG_HEADER "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>"
+#define TAG_STARTo "<siminfo>"
+#define TAG_STARTc "</siminfo>"
+#define TAG_ERRNOo "<error>"
+#define TAG_ERRNOc "</error>"
+#define TAG_MSGo "<msg>"
+#define TAG_MSGc "</msg>"
+#define TAG_TIMEo "<simtime>"
+#define TAG_TIMEc "</simtime>"
+#define TAG_CYCLESo "<simcycles>"
+#define TAG_CYCLESc "</simcycles>"
+#define TAG_TASKo "<task"
+#define TAG_TASKc "</task>"
+#define TAG_VARo "<var"
+#define TAG_VARc "</var>"
+#define TAG_STATUSo "<status>"
+#define TAG_STATUSc "</status>"
+#define TAG_GLOBALo "<global>"
+#define TAG_GLOBALc "</global>"
+#define TAG_CURRCMDo "<currcmd"
+#define TAG_CURRCMDc "</currcmd>"
+#define TAG_BREAKo "<breakcmd>"
+#define TAG_BREAKc "</breakcmd>"
+#define TAG_HASHo "<hashval>"
+#define TAG_HASHc "</hashval>"
+
+#define TAG_EXTIMEo "<extime>"
+#define TAG_EXTIMEc "</extime>"
+#define TAG_CONTDELo "<contdel"
+#define TAG_CONTDELc "</contdel>"
+#define TAG_BUSo "<bus>"
+#define TAG_BUSc "</bus>"
+#define TAG_UTILo "<util>"
+#define TAG_UTILc "</util>"
+#define TAG_CPUo "<cpu"
+#define TAG_CPUc "</cpu>"
+
+
 class TMLTask;
 class TMLTransaction;
 class TMLCommand;
@@ -159,7 +198,8 @@ struct ltstr{
 	}
 };
 ///Datatype which associates a variable name with the coresponding pointer to that variable, used for look-up table of tasks
-typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTable;
+typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTableName;
+typedef std::map<unsigned int, ParamType*> VariableLookUpTableID;
 
 
 ///Minimum of three values

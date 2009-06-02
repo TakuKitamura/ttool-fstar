@@ -140,9 +140,10 @@ public:
 	///Returns a pointer to the task variable specified by its name
 	/**
 	\param iVarName Name of the task variable
+	\param oIsId Is set to true if an ID was passed to this function 
 	\return Pointer to the variable
 	*/
-	ParamType* getVariableByName(std::string& iVarName);
+	ParamType* getVariableByName(std::string& iVarName ,bool& oIsId);
 	///Searches for a Command based on its ID
 	/**
 	\param iID ID of the Command
@@ -154,6 +155,13 @@ public:
 	\param iCmd Pointer to the command
 	*/
 	void addCommand(unsigned int iID, TMLCommand* iCmd);
+	///Returns a pointer to the task variable specified by its ID
+	/**
+	\param iVarID ID of the task variable
+	\return Pointer to the variable
+	*/
+	ParamType* getVariableByID(unsigned int iVarID);
+	void streamStateXML(std::ostream& s) const;
 protected:
 	///ID of the task
 	unsigned int _ID;
@@ -195,8 +203,10 @@ protected:
 	unsigned long _CPUContentionDelay;
 	///Number of transactions which have been executed on a CPU
 	unsigned long _noCPUTransactions;
-	///Look up table for task variables
-	VariableLookUpTable _varLookUp;
+	///Look up table for task variables (by name)
+	VariableLookUpTableName _varLookUpName;
+	///Look up table for task variables (by ID)
+	VariableLookUpTableID _varLookUpID;
 	///Hash table containing commands
 	CommandHashTab _commandHash;
 };

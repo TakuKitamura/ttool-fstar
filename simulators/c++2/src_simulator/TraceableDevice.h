@@ -69,6 +69,11 @@ public:
       	\param s Reference to an output stream
 	*/
 	virtual void streamBenchmarks(std::ostream& s) const =0;
+	///Writes XML information about the component to a stream
+	/**
+      	\param s Reference to an output stream
+	*/
+	virtual void streamStateXML(std::ostream& s) const=0;
 	///Destructor
 	virtual ~TraceableDevice(){}
 };

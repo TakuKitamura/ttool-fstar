@@ -296,6 +296,11 @@ void Bus::reset(){
 }
 
 void Bus::streamBenchmarks(std::ostream& s) const{
-	s << "*** Bus " << _name << " ***\n";
-	if (_simulatedTime!=0) s << "Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << std::endl;
+	s << TAG_BUSo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl; 
+	if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
+	s << TAG_BUSc;
+}
+
+void Bus::streamStateXML(std::ostream& s) const{
+	streamBenchmarks(s);
 }

@@ -230,9 +230,10 @@ std::istream& TMLTask::readObject(std::istream& s){
 }
 
 void TMLTask::streamBenchmarks(std::ostream& s) const{
-	s << "*** Task " << _name << " ***\n"; 
-	s << "Execution time: " << _busyCycles << std::endl;
-	if (_noCPUTransactions!=0) s << "Average CPU contention delay: " << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << std::endl;
+	s << TAG_TASKo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
+	s << TAG_EXTIMEo << _busyCycles << TAG_EXTIMEc;
+	if (_noCPUTransactions!=0) s << TAG_CONTDELo << "<" << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << TAG_CONTDELc;
+	s << TAG_TASKc << std::endl; 
 }
 
 void TMLTask::reset(){
@@ -250,9 +251,17 @@ void TMLTask::reset(){
 	_noCPUTransactions=0; 
 }
 
-ParamType* TMLTask::getVariableByName(std::string& iVarName){
-	return _varLookUp[iVarName.c_str()];
-	//return (_varLookUp.find(iVarName.c_str()))->second;
+ParamType* TMLTask::getVariableByName(std::string& iVarName ,bool& oIsId){
+	if (iVarName[0]>='0' && iVarName[0]<='9'){
+		oIsId=true;
+		return getVariableByID(StringToNum<unsigned int>(iVarName));
+	}
+	oIsId=false;
+	return _varLookUpName[iVarName.c_str()];
+}
+
+ParamType* TMLTask::getVariableByID(unsigned int iVarID){
+	return _varLookUpID[iVarID];
 }
 
 void TMLTask::addCommand(unsigned int iID, TMLCommand* iCmd){
@@ -261,4 +270,8 @@ void TMLTask::addCommand(unsigned int iID, TMLCommand* iCmd){
 
 TMLCommand* TMLTask::getCommandByID(unsigned int iID){
 	return _commandHash[iID];
+}
+
+void TMLTask::streamStateXML(std::ostream& s) const{
+	streamBenchmarks(s);
 }

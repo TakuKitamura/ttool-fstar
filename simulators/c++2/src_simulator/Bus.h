@@ -116,6 +116,7 @@ public:
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
+	void streamStateXML(std::ostream& s) const;
 protected:
 	///Calculates the start time and the length of the next transaction
 	void calcStartTimeLength() const;

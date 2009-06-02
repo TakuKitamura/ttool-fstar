@@ -441,9 +441,14 @@ void CPU::reset(){
 }
 
 void CPU::streamBenchmarks(std::ostream& s) const{
-	s << "*** CPU " << _name << " ***\n"; 
-	if (_simulatedTime!=0) s << "Utilization: " << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << std::endl;
+	s << TAG_CPUo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl; 
+	if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
 	Master::streamBenchmarks(s);
+	s << TAG_CPUc; 
 	//if (_noBusTransactions!=0) s << "Average BUS contention delay: " << ((float)_busContentionDelay)/((float)_noBusTransactions) << std::endl;
 	
+}
+
+void CPU::streamStateXML(std::ostream& s) const{
+	streamBenchmarks(s);
 }

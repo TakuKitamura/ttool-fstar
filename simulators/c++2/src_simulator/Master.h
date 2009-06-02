@@ -45,6 +45,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableCommDevice.h>
 #include <BusMasterInfo.h>
 
+#define TAG_CONTDELo "<contdel"
+#define TAG_CONTDELc "</contdel>"
+
 class TMLTransaction;
 class SchedulableCommDevice;
 
@@ -99,7 +102,8 @@ protected:
 	*/
 	void streamBenchmarks(std::ostream& s) const{
 		for(MasterPriorityHashTab::const_iterator i=_masterPrioHashTab.begin(); i != _masterPrioHashTab.end(); ++i){
-			s << "Average contention delay for bus " << i->first->toString() << ": " << i->second->getContentionDelay() << std::endl;
+			//s << "Average contention delay for bus " << i->first->toString() << ": " << i->second->getContentionDelay() << std::endl;
+			s << TAG_CONTDELo << " busID=\"" << i->first->getID()<< "\" busName=\"" << i->first->toString() << "\">" << i->second->getContentionDelay() << TAG_CONTDELc << std::endl;
 		}
 	}
 	///Map which associates the bus and the priority
