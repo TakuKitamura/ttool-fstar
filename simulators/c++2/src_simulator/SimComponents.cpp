@@ -234,6 +234,10 @@ int SimComponents::getHashValue(){
 	return _hashValue;
 }
 
+TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
+	return (iEnd)? _taskList.end():_taskList.begin();
+}
+
 /*void SimComponents::setBreakpointOnChoiceCmds(){
 	TMLChoiceCommand* aResult;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){

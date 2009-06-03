@@ -157,6 +157,11 @@ public:
 	void setBreakpoint(CommandListener* iBreakp);
 	///Removes the breakpoint
 	void removeBreakpoint();
+	///Returns the progress of the command
+	/**
+	\return Progress of the command
+	*/
+	TMLLength getProgress() const;
 protected:
 	///ID of the command
 	unsigned int _ID;

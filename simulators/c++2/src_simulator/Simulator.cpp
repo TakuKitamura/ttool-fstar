@@ -548,22 +548,32 @@ void Simulator::decodeCommand(char* iCmd){
 			break;
 		case 3:{//Print variable x
 			aInpStream >> aStrParam;
-			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){
-				//std::cout << "Task " << aStrParam << " exists" << std::endl;
-				aInpStream >> aStrParam;
-				//std::cout << "Check if Var *" << aStrParam << "* exists" << std::endl;
-				//std::cout << "Len: " << aStrParam.length() << std::endl;
-				bool aIsId;
-				ParamType* aParam=aTask->getVariableByName(aStrParam, aIsId);
-				if (aParam!=0){
-					aGlobMsg << TAG_MSGo << "Variable " << aStrParam << " exists" << TAG_MSGc << std::endl;
-					aGlobMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_VARo; 
-					if (aIsId) aGlobMsg << " id=\""; else aGlobMsg << " name=\"";
-					aGlobMsg << aStrParam << "\">" << *aParam << TAG_VARc << TAG_TASKc << std::endl;
-				}else{
-					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
-					anErrorCode=2;
+			if (aStrParam=="all"){
+				for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
+					printVariablesOfTask(*i, anEntityMsg);
+				}
+			}else{
+				TMLTask* aTask = _simComp->getTaskByName(aStrParam);
+				if (aTask!=0){
+					//std::cout << "Task " << aStrParam << " exists" << std::endl;
+					aInpStream >> aStrParam;
+					if (aStrParam=="all"){
+						printVariablesOfTask(aTask, anEntityMsg);
+					}else{
+						//std::cout << "Check if Var *" << aStrParam << "* exists" << std::endl;
+						//std::cout << "Len: " << aStrParam.length() << std::endl;
+						bool aIsId;
+						ParamType* aParam=aTask->getVariableByName(aStrParam, aIsId);
+						if (aParam!=0){
+							aGlobMsg << TAG_MSGo << "Variable values" << TAG_MSGc << std::endl;
+							anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_VARo; 
+							if (aIsId) anEntityMsg << " id=\""; else anEntityMsg << " name=\"";
+							anEntityMsg << aStrParam << "\">" << *aParam << TAG_VARc << TAG_TASKc << std::endl;
+						}else{
+							aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+							anErrorCode=2;
+						}
+					}
 				}
 			}
 			break;
@@ -756,14 +766,14 @@ void Simulator::decodeCommand(char* iCmd){
 					anErrorCode=2;
 			}else{
 					TMLTask* aTask=aCurrChCmd->getTask();
-					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << " branch=\"" << aCurrChCmd->getNumberOfBranches() << "\">" << aCurrChCmd->getID() << TAG_CURRCMDc << TAG_TASKc << std::endl;
+					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CMDo << " id=\"" << aCurrChCmd->getID() << "\" current=\"yes\">" << TAG_BRANCHo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHc << "\">" << TAG_CMDc << TAG_TASKc << std::endl;
 					aGlobMsg << TAG_MSGo << "Current choice command" << TAG_MSGc << std::endl;
 			}
 			break;
 		}
 		case 18:{
 			for(BreakpointSet::iterator i=_breakpoints.begin(); i != _breakpoints.end(); ++i){
-				anEntityMsg << TAG_TASKo << " id=\"" << (*i)->getTask()->getID() << "\" name=\"" << (*i)->getTask()->toString() << "\">" << TAG_BREAKo << (*i)->getID() << TAG_BREAKc << TAG_TASKc << std::endl; 
+				anEntityMsg << TAG_TASKo << " id=\"" << (*i)->getTask()->getID() << "\" name=\"" << (*i)->getTask()->toString() << "\">" << TAG_CMDo << " id=\"" << (*i)->getID() << "\" break=\"yes\">" << TAG_CMDc << TAG_TASKc << std::endl; 
 			}
 			aGlobMsg << TAG_MSGo << "Breakpoint List" << TAG_MSGc << std::endl;
 			break;
@@ -779,6 +789,15 @@ void Simulator::decodeCommand(char* iCmd){
 	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_READY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aGlobMsg.str());
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
+}
+
+void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostringstream& ioMessage){
+	if (iTask->getVariableIterator(false)==iTask->getVariableIterator(true)) return;
+	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << std::endl; 
+	for(VariableLookUpTableID::const_iterator i=iTask->getVariableIterator(false); i !=iTask->getVariableIterator(true); ++i){
+		ioMessage << TAG_VARo << " id=\"" << i->first << "\">" << *(i->second) << TAG_VARc << std::endl; 
+	}
+	ioMessage << TAG_TASKc << std::endl;
 }
 
 bool Simulator::runToNextBreakpoint(){
@@ -894,17 +913,23 @@ bool Simulator::execAsyncCmd(const char* iCmd){
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		case 14:{//get actual command, thread safeness, be careful!
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl;
 			aInpStream >> aStrParam;
-			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){			
-				//atmpstr << "current command: " << aTask->getCurrCommand()->getID() << std::endl;
-				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << ">";
-				if (aTask->getCurrCommand()==0) aMessage << 0; else aMessage << aTask->getCurrCommand()->getID();
-				aMessage << TAG_CURRCMDc << TAG_TASKc << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0;
+			if (aStrParam=="all"){
+				for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
+					printCommandsOfTask(*i, aMessage);
+				}
+				aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
 			}else{
-				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << TAG_ERRNOo << 2;
+				TMLTask* aTask = _simComp->getTaskByName(aStrParam);
+				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl;
+				if (aTask!=0){			
+					printCommandsOfTask(aTask, aMessage);
+					aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+				}else{
+					aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << TAG_ERRNOo << 2;
+				}
 			}
-			aMessage << TAG_ERRNOc << std::endl << TAG_STATUSo;
 			if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
@@ -919,6 +944,15 @@ bool Simulator::execAsyncCmd(const char* iCmd){
 			return false; 
 	}
 	return true;
+}
+
+void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostringstream& ioMessage){
+	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << TAG_CMDo << " id=\"";
+	if (iTask->getCurrCommand()==0)
+		ioMessage << 0 << "\" current=\"yes\">"; 
+	else
+		ioMessage << iTask->getCurrCommand()->getID() << "\" current=\"yes\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
+		ioMessage << TAG_CMDc << TAG_TASKc << std::endl;
 }
 
 void Simulator::sendStatus(){

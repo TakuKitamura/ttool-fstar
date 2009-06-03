@@ -214,6 +214,8 @@ protected:
 	const std::string getArgs(const std::string& iComp, const std::string& iDefault, int iLen, char** iArgs);
 	///Print information about simulator command line usage
 	void printHelp();
+	void printCommandsOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
+	void printVariablesOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
 	///Pointer to synchronization structure
 	SimServSyncInfo* _syncInfo;
 	///Pointer to structure encapsulating architecture and application objects

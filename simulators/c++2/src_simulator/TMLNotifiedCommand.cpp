@@ -56,7 +56,7 @@ void TMLNotifiedCommand::execute(){
 	_task->addComment(new Comment(_task->getEndLastTransaction(), this, *_resultVar));
 #endif
 	TMLCommand* aNextCommand = prepare(false);
-	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 

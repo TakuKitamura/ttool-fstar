@@ -199,3 +199,8 @@ void TMLCommand::removeGlobalListener(CommandListener* iListener){
 unsigned int TMLCommand::getID() const{
 	return _ID;
 }
+
+TMLLength TMLCommand::getProgress() const{
+	return _progress;
+}
+

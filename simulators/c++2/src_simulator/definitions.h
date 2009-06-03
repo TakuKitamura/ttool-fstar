@@ -113,12 +113,12 @@ using std::max;
 #define TAG_STATUSc "</status>"
 #define TAG_GLOBALo "<global>"
 #define TAG_GLOBALc "</global>"
-#define TAG_CURRCMDo "<currcmd"
-#define TAG_CURRCMDc "</currcmd>"
-#define TAG_BREAKo "<breakcmd>"
-#define TAG_BREAKc "</breakcmd>"
+#define TAG_CMDo "<command"
+#define TAG_CMDc "</command>"
 #define TAG_HASHo "<hashval>"
 #define TAG_HASHc "</hashval>"
+#define TAG_BRANCHo "<branch>"
+#define TAG_BRANCHc "</branch>"
 
 #define TAG_EXTIMEo "<extime>"
 #define TAG_EXTIMEc "</extime>"
@@ -130,6 +130,8 @@ using std::max;
 #define TAG_UTILc "</util>"
 #define TAG_CPUo "<cpu"
 #define TAG_CPUc "</cpu>"
+#define TAG_PROGRESSo "<progr>"
+#define TAG_PROGRESSc "</progr>"
 
 
 class TMLTask;

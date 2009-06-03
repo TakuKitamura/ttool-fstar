@@ -152,10 +152,10 @@ public:
       	\param iBranchingPenalty Branching penalty
     	*/
 	void setBranchingPenalty(unsigned int iBranchingPenalty);
-	///Returns the terminated flag of the transaction
-	bool getTerminatedFlag() const;
-	///Sets the terminated flag of the transaction to true
-	void setTerminatedFlag();
+	/////Returns the terminated flag of the transaction
+	//bool getTerminatedFlag() const;
+	/////Sets the terminated flag of the transaction to true
+	//void setTerminatedFlag();
 	///Returns a string representation of the transaction
 	/**
 	\return Detailed string representation
@@ -198,8 +198,8 @@ protected:
 	///Branching penalty
 	unsigned int _branchingPenalty;
 #endif
-	///Task terminated flag
-	bool _terminated;
+	/////Task terminated flag
+	//bool _terminated;
 	///Channel on which data was conveyed
 	TMLChannel* _channel;
 	///Memory pool for transactions

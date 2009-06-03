@@ -38,56 +38,30 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <TMLRequestCommand.h>
-#include <TMLEventBChannel.h>
-#include <TMLTask.h>
-#include <TMLTransaction.h>
-#include <Bus.h>
+#ifndef TMLStopCommandH
+#define TMLStopCommandH
 
-TMLRequestCommand::TMLRequestCommand(unsigned int iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc): TMLCommand(iID,  iTask, WAIT_SEND_VLEN, iParamFunc), _channel(iChannel){
-}
+#include <definitions.h>
+#include <TMLCommand.h>
 
-void TMLRequestCommand::execute(){
-	_channel->write(_currTransaction);
-	//std::cout << "Dependent Task: " << _channel->getBlockedReadTask()->toString() << std::endl;
-	_progress+=_currTransaction->getVirtualLength();
-	//std::cout << "setEndLastTrans Virtual length " << std::endl;
-	//_task->setEndLastTransaction(_currTransaction->getEndTime());
-	_task->addTransaction(_currTransaction);
-	TMLCommand* aNextCommand = prepare(false);
-	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
-	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
-}
 
-TMLCommand* TMLRequestCommand::prepareNextTransaction(){
-	//std::cout << "prepare bext transaction testWrite prg:" << _progress << " to execute:" << (*_pLength)-_progress << std::endl;
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
-	_channel->testWrite(_currTransaction);
-	return this;
-}
+///This class executes a C++ statement (probably a variable assignment or modification) defined in the scope of a TML action state.
+/**The command itself is located in the corresponding TMLTask::executeStatement() method as it may access local task variables.*/
+class TMLStopCommand:public TMLCommand{
+public:
+	///Constructor
+    	/**
+      	\param iID ID of the command
+      	\param iTask Pointer to the task the command belongs to
+    	*/
+	TMLStopCommand(unsigned int iID, TMLTask* iTask);
+	void execute();
+	TMLTask* getDependentTask() const;
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
+protected:
+	TMLCommand* prepareNextTransaction();
+};
 
-TMLTask* TMLRequestCommand::getDependentTask() const{
-	//std::cout << "getDepTask " << std::endl;
-	return _channel->getBlockedReadTask();
-}
-
-TMLChannel* TMLRequestCommand::getChannel() const{
-	//std::cout << "getChannel " << std::endl;
-	return dynamic_cast<TMLChannel*>(_channel);
-}
-
-std::string TMLRequestCommand::toString() const{
-	std::ostringstream outp;
-	outp << "Request in " << TMLCommand::toString() << " " << _channel->toString();
-	return outp.str();
-}
-
-std::string TMLRequestCommand::toShortString() const{
-	std::ostringstream outp;
-	outp << _task->toString() << ": Request " << _channel->toShortString();
-	return outp.str();
-}
-
-std::string TMLRequestCommand::getCommandStr() const{
-	return "sendReq";
-}
+#endif

@@ -54,7 +54,7 @@ void TMLWriteCommand::execute(){
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
 	TMLCommand* aNextCommand = prepare(false);
-	if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 

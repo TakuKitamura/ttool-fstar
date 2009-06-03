@@ -162,6 +162,8 @@ public:
 	*/
 	ParamType* getVariableByID(unsigned int iVarID);
 	void streamStateXML(std::ostream& s) const;
+	VariableLookUpTableID::const_iterator getVariableIterator(bool iEnd) const;
+
 protected:
 	///ID of the task
 	unsigned int _ID;
@@ -177,10 +179,6 @@ protected:
 	TMLCommand* _firstCommand;
 	///Pointer to the CPU which executes the task
 	CPU* _cpu;
-	/////Unique ID of the task
-	//unsigned int _myid;
-	/////Class variable counting the number of task instances
-	//static unsigned int _id;
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;

@@ -49,7 +49,7 @@ TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, T
 #ifdef PENALTIES_ENABLED
  _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
 #endif
- _terminated(false), _channel(iChannel) {
+ /*_terminated(false),*/ _channel(iChannel) {
 }
 
 TMLTime TMLTransaction::getRunnableTime() const{
@@ -169,14 +169,14 @@ void TMLTransaction::setBranchingPenalty(unsigned int iBranchingPenalty){
 #endif
 }
 
-bool TMLTransaction::getTerminatedFlag() const{
+/*bool TMLTransaction::getTerminatedFlag() const{
 	return _terminated;
 }
 
 void TMLTransaction::setTerminatedFlag(){
 	_terminated=true;
 	//std::cout << "TERMINATED FLAG SET!!!!!!!!!!!!!!!!!!!!!  " << this << std::endl;
-}
+}*/
 
 std::string TMLTransaction::toString() const{
 	std::ostringstream outp;	

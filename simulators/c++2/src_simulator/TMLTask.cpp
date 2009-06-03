@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLTask.h>
 #include <TMLCommand.h>
+#include <TMLStopCommand.h>
 #include <CPU.h>
 
 TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): _ID(iID), _name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0) {
@@ -140,7 +141,8 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		//}else{
 			//outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
 		//}
-		if (iInit || (! _transactList.back()->getTerminatedFlag())){
+		//if (iInit || (! _transactList.back()->getTerminatedFlag())){
+		if (iInit || dynamic_cast<TMLStopCommand*>(_currCommand)==0){
 			outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;	
 		}else{
 			outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
@@ -274,4 +276,8 @@ TMLCommand* TMLTask::getCommandByID(unsigned int iID){
 
 void TMLTask::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
+}
+
+VariableLookUpTableID::const_iterator TMLTask::getVariableIterator(bool iEnd) const{
+	return (iEnd)?_varLookUpID.end():_varLookUpID.begin();
 }

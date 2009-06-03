@@ -208,6 +208,7 @@ public:
 	\return Hash value
 	*/
 	int getHashValue();
+	TaskList::const_iterator getTaskIterator(bool iEnd) const;
 protected:
 	///List holding schedulable devices
 	SchedulingList _cpuList;
