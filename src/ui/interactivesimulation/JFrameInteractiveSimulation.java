@@ -193,6 +193,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		rowTable = new Hashtable<Integer, Integer>();
 		runningTable = new Hashtable<Integer, Integer>();
 		
+		mgui.resetRunningID();
+		
 		
 		setBackground(new Color(50, 40, 40, 200));
 		

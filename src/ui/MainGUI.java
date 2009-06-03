@@ -4884,6 +4884,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return false;
 	}
 	
+	public synchronized void resetRunningID() {
+		runningIDs = null;
+	}
+	
 	public synchronized void addRunningID(Integer id) {
 		if (runningIDs == null) {
 			runningIDs = new ArrayList<Integer>();
