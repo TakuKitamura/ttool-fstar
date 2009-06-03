@@ -109,7 +109,7 @@ public class TML2MappingSystemC {
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
         
-        	generateSystemCTasks();
+        	//generateSystemCTasks();
 		generateMainFile();
 		generateMakefileSrc();
 	}
@@ -124,8 +124,9 @@ public class TML2MappingSystemC {
 	private void generateMakefileSrc() {
 		src = "";
 		src += "SRCS = ";
-		for(MappedSystemCTask mst: tasks) {
-			src += mst.getTMLTask().getName() + ".cpp ";
+		for(TMLTask mst: tmlmapping.getMappedTasks()) {
+			//src += mst.getTMLTask().getName() + ".cpp ";
+			src += mst.getName() + ".cpp ";
 		}
 	}
 	
@@ -133,8 +134,9 @@ public class TML2MappingSystemC {
 		// System headers
 		header = "#include <Simulator.h>" + CR;
 		// Generate tasks header
-		for(MappedSystemCTask mst: tasks) {
-			header += "#include <" + mst.getReference() + ".h>" + CR;
+		for(TMLTask mst: tmlmapping.getMappedTasks()) {
+			//header += "#include <" + mst.getReference() + ".h>" + CR;
+			header += "#include <" + mst.getName() + ".h>" + CR;
 		}
 		header += CR;
 	}
@@ -289,19 +291,35 @@ public class TML2MappingSystemC {
 		HwExecutionNode node;
 		iterator=tmlmapping.getNodes().listIterator();
 		//for(TMLTask task: tmlmodeling.getTasks()) {
+		ArrayList<TMLChannel> channels;
+		ArrayList<TMLEvent> events;
+		ArrayList<TMLRequest> requests;
 		for(TMLTask task: tmlmapping.getMappedTasks()){
 			node=(HwExecutionNode)iterator.next();
 			declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\"," + node.getName() + CR; 
-			for(TMLChannel channelb: tmlmodeling.getChannels(task)) {
+			
+			MappedSystemCTask mst;
+			channels = (ArrayList<TMLChannel>) tmlmodeling.getChannels(task).clone();
+			events = (ArrayList<TMLEvent>) tmlmodeling.getEvents(task).clone();
+			requests = (ArrayList<TMLRequest>) tmlmodeling.getRequests(task).clone();
+			mst = new MappedSystemCTask(task, channels, events, requests);
+			mst.generateSystemC(debug);
+			tasks.add(mst);
+
+			//for(TMLChannel channelb: tmlmodeling.getChannels(task)) {
+			for(TMLChannel channelb: channels) {
 				declaration += "," + channelb.getExtendedName()+CR;
 			}
-			for(TMLEvent evt: tmlmodeling.getEvents(task)) {		
+			//for(TMLEvent evt: tmlmodeling.getEvents(task)) {		
+			for(TMLEvent evt: events) {
 				declaration += "," + evt.getExtendedName()+CR;
 			}
 			//for(TMLRequest req: tmlmodeling.getRequests()) {
-			for(TMLRequest req: tmlmodeling.getRequests(task)) {
+			//for(TMLRequest req: tmlmodeling.getRequests(task)) {
+			for(TMLRequest req: requests) {
 				if (req.isAnOriginTask(task)) declaration+=",reqChannel_" + req.getDestinationTask().getName()+CR;
 			}
+			
 			if (task.isRequested()) declaration += ",reqChannel_"+task.getName()+CR;
 			declaration += ")" + SCCR;
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
@@ -417,7 +435,7 @@ public class TML2MappingSystemC {
 				requests = tmlmodeling.getRequests(t);
 				mst = new MappedSystemCTask(t, channels, events, requests);
 				mst.generateSystemC(debug);
-				tasks.add(mst);
+				//tasks.add(mst);
 			}
 		}
 	}
