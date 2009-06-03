@@ -72,6 +72,73 @@ public class TMLMapping {
 		}
     }
 	
+	public void makeMinimumMapping() {
+		HwCPU cpu;
+		HwMemory mem;
+		HwBus bus;
+		HwLink link0, link1;
+		TMLTask t;
+		TMLChannel ch;
+		ListIterator iterator;
+		int cpt;
+		
+		if (tmla == null) {
+			tmla = new TMLArchitecture();
+		}
+		
+		if (!tmla.hasCPU()) {
+			cpu = new HwCPU("defaultCPU");
+			cpu.byteDataSize = 4;
+			cpu.pipelineSize = 1;
+			cpu.goIdleTime = 0;
+			cpu.taskSwitchingTime = 1;
+			cpu.branchingPredictionPenalty = 0;
+			cpu.execiTime = 1;
+			tmla.addHwNode(cpu);
+			
+			// tasks
+			iterator = tmlm.getTasks().listIterator();
+			while(iterator.hasNext()) {
+				t = (TMLTask)(iterator.next());
+				addTaskToHwExecutionNode(t, cpu);
+			}
+		}
+		
+		// Is there a memory?
+		if (!tmla.hasMemory()) {
+			mem = new HwMemory("defaultMemory");
+			tmla.addHwNode(mem);
+			iterator = tmlm.getChannels().listIterator();
+			
+			while(iterator.hasNext()) {
+				ch = (TMLChannel)(iterator.next());
+				addCommToHwCommNode(ch, mem);
+			}
+		}
+		
+		if (!tmla.hasBus()) {
+			bus = new HwBus("defaultBus");
+			tmla.addHwNode(bus);
+			// Connect all possible nodes to that bus
+			cpt = 0;
+			for(HwNode node: tmla.getHwNodes()) {
+				link0 = new HwLink("to_bus_" + cpt);
+				cpt ++;
+				link0.bus = bus;
+				link0.hwnode = node;
+				tmla.addHwLink(link0);
+			}
+			
+			// Add all channels on that bus
+			iterator = tmlm.getChannels().listIterator();
+			// All channels non-mapped on a memory are added to that memory
+			while(iterator.hasNext()) {
+				ch = (TMLChannel)(iterator.next());
+				addCommToHwCommNode(ch, bus);
+			}
+		}
+	}
+	
 	private void init() {
 		mappedtasks = new ArrayList<TMLTask>();
 		onnodes = new ArrayList<HwExecutionNode>();

@@ -77,11 +77,15 @@ public class TMLModeling {
 	
 	public TMLMapping getDefaultMapping() {
 		TMLMapping tmlmapping;
-		TMLArchitecture tmla = new TMLArchitecture();
+		tmlmapping = new TMLMapping(this, new TMLArchitecture(), false);
+		tmlmapping.makeMinimumMapping();
+		return tmlmapping;
+		
+		/*TMLArchitecture tmla = new TMLArchitecture();
 		TMLTask t;
 		TMLChannel ch;
 		
-		tmlmapping = new TMLMapping(this, tmla, false);
+		
 		
 		HwCPU cpu = new HwCPU("defaultCPU");
 		cpu.byteDataSize = 4;
@@ -110,12 +114,7 @@ public class TMLModeling {
 		link1.hwnode = mem;
 		tmla.addHwLink(link1);
 		
-		// tasks
-		iterator = getTasks().listIterator();
-		while(iterator.hasNext()) {
-			t = (TMLTask)(iterator.next());
-			tmlmapping.addTaskToHwExecutionNode(t, cpu);
-		}
+		
 		
 		// Channels
 		iterator = getChannels().listIterator();
@@ -125,7 +124,7 @@ public class TMLModeling {
 			tmlmapping.addCommToHwCommNode(ch, mem);
 		}
 		
-		return tmlmapping;
+		return tmlmapping;*/
 	}
 
     private void init() {

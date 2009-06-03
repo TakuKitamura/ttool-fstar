@@ -56,7 +56,7 @@ public abstract class InteractiveSimulationBar extends JToolBar {
         super();
         jfis = _jfis;
         setOrientation(SwingConstants.HORIZONTAL);
-        setFloatable(false) ;
+        setFloatable(true) ;
         setButtons();
     }
     

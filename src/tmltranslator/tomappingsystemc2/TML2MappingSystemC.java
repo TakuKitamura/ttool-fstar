@@ -70,26 +70,12 @@ public class TML2MappingSystemC {
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
-		TMLArchitecture tmla = new TMLArchitecture();
-		HwCPU cpu = new HwCPU("cpu0");
-		cpu.byteDataSize = 4;
-		cpu.pipelineSize = 1;
-		cpu.goIdleTime = 0;
-		cpu.taskSwitchingTime = 1;
-		cpu.branchingPredictionPenalty = 0;
-		cpu.execiTime = 1;
-		tmla.addHwNode(cpu);	
-		tmlmapping = new TMLMapping(tmlmodeling, tmla, false);
-		ListIterator iterator = _tmlm.getTasks().listIterator();
-        	TMLTask t;
-		while(iterator.hasNext()) {
-			t = (TMLTask)(iterator.next());
-			tmlmapping.addTaskToHwExecutionNode(t, cpu);
-		}
+		tmlmapping = tmlmodeling.getDefaultMapping();
 	}
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping) {
-        	tmlmapping = _tmlmapping;
+        tmlmapping = _tmlmapping;
+		tmlmapping.makeMinimumMapping();
  	}
     
 	public void saveFile(String path, String filename) throws FileException {  

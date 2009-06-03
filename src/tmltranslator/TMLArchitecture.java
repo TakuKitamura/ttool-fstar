@@ -99,6 +99,42 @@ public class TMLArchitecture {
 		return hwnodes;
 	}
 	
+	public HwCPU getFirstCPU() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwCPU) {
+				return (HwCPU)node;
+			}
+		}
+		return null;
+	}
+	
+	public boolean hasCPU() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwCPU) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasBus() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwBus) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasMemory() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwMemory) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void addHwLink(HwLink _link) {
         hwlinks.add(_link);
     }

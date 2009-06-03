@@ -290,6 +290,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		// Commands
 		commands = new JPanel();
+		//commands.setFloatable(true);
 		//commands.setMinimumSize(new Dimension(300, 250));
 		commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 		
@@ -859,7 +860,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	protected void sendCommand() {
 		String text = textCommand.getText().trim();
-		sendCommand(text + "\n");
+		sendCommand(text);
 	}
 	
 	protected void sendCommand(String text) {
