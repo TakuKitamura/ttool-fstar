@@ -134,7 +134,7 @@ public class MappedSystemCTask {
 		code += "#include <TMLActionCommand.h>\n#include <TMLChoiceCommand.h>\n#include <TMLExeciCommand.h>\n";
 		code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n";
 		code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
-		code += "#include <TMLWriteCommand.h>\n\n";
+		code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n\n";
 		return code;
 	}
 	
@@ -223,7 +223,7 @@ public class MappedSystemCTask {
 			int params = task.getRequest().getNbOfParams();
 			firstCommand="_waitOnRequest";
 			hcode+="TMLWaitCommand " + firstCommand + SCCR;
-			initCommand+= "," + firstCommand + "(-1,this,requestChannel,"; 
+			initCommand+= "," + firstCommand + "(" + task.getActivityDiagram().getFirst().getID() + ",this,requestChannel,"; 
 			if (params==0){
 				initCommand+= "0)" + CR;
 			}else{
@@ -301,8 +301,14 @@ public class MappedSystemCTask {
 			return makeCommands(currElem.getNextElement(0), false,retElement,nextCommandCont,functionCont,null);
 		
 		} else if (currElem instanceof TMLStopState){
+			//add stop state if (retElement.equals("0"))
 			if (debug) System.out.println("Checking Stop\n");
-			return retElement;
+			if (retElement.equals("0")){
+				cmdName= "_stop" + currElem.getID();
+				hcode+="TMLStopCommand " + cmdName + SCCR;
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this)" + CR;
+			}else
+				return retElement;
 		
 		} else if (currElem instanceof TMLActionState || currElem instanceof TMLRandom || currElem instanceof TMLDelay){
 			String action;
@@ -390,16 +396,19 @@ public class MappedSystemCTask {
 			//cmdName= "_action" + initAction.getID();
 			TMLActionState incAction=new TMLActionState("lpIncAc",null);
 			incAction.setAction(fl.getIncrement());
-			TMLChoice lpChoice=new TMLChoice("lpChoice",null);
+			TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
 			lpChoice.addGuard("[ " + fl.getCondition() + " ]");
 			lpChoice.addGuard("[ else ]");
 			//incAction.addNext(lpChoice);
 			lpChoice.addNext(fl.getNextElement(0));  //inside loop
 			lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
 			//makeCommands(initAction, false, "&_choice" + lpChoice.getID(), nextCommandCont, functionCont, null);
-			makeCommands(incAction, false, "&_choice" + lpChoice.getID(), null, null, null);
+			//makeCommands(incAction, false, "&_choice" + lpChoice.getID(), null, null, null);
+			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, null, retElement);
+			makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null, null);
 			makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, null, retElement);
-			return makeCommands(initAction, false, "&_choice" + lpChoice.getID(), nextCommandCont, functionCont, null);
+			return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, functionCont, null);
+			
 			/*cmdName="_choice" + currElem.getID();
 			hcode+="TMLChoiceCommand " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
@@ -537,7 +546,16 @@ public class MappedSystemCTask {
 		
 		} else if (currElem instanceof TMLChoice){
 			int returnIndex=0;
-			cmdName= "_choice" + currElem.getID();
+			String elemName=currElem.getName(), idString;
+			if (elemName.charAt(0)=='#'){
+				int pos=elemName.indexOf('\\');
+				idString=elemName.substring(1,pos);
+				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				cmdName="_" + elemName.substring(pos+1) + idString;
+			}else{
+				cmdName= "_choice" + currElem.getID();
+				idString=String.valueOf(currElem.getID());
+			}
 			TMLChoice choice = (TMLChoice)currElem;
 			String code = "", nextCommandTemp="", MCResult="";
 			if (debug) System.out.println("Checking Choice\n");
@@ -641,7 +659,8 @@ public class MappedSystemCTask {
 						nextCommand= cmdName + ".setNextCommand(array(" + returnIndex + nextCommandTemp + "))" + SCCR;
 					}
 					hcode+="TMLChoiceCommand " + cmdName + SCCR;
-					initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
+					//initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
+					initCommand+= "," + cmdName + "("+ idString +",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
