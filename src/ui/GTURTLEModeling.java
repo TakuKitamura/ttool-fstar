@@ -4402,14 +4402,13 @@ public class GTURTLEModeling {
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 		//System.out.println("New TML Modeling");
-		GTMLModeling gtmlm = new GTMLModeling(tmldp);
+		GTMLModeling gtmlm = new GTMLModeling(tmldp, true);
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
 		
-		listE.useDIPLOIDs();
 		
 		
 		//System.out.println("TML Modeling translated");
@@ -4446,7 +4445,8 @@ public class GTURTLEModeling {
 					warnings = gtmlm.getCheckingWarnings();
 					warnings.addAll(tmc.getWarnings());
 					warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmldp.tmltdp));
-
+					mgui.resetAllDIPLOIDs();
+					listE.useDIPLOIDs();
 					mgui.setMode(MainGUI.GEN_DESIGN_OK);
 					return true;
 				}
@@ -4471,7 +4471,7 @@ public class GTURTLEModeling {
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 		//System.out.println("New TML Component Modeling");
-		GTMLModeling gctmlm = new GTMLModeling(tmlcdp);
+		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling();
 		artificialtmap = tmlm.getDefaultMapping();
@@ -4514,6 +4514,7 @@ public class GTURTLEModeling {
 					warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmlcdp.tmlctdp));
 
 					mgui.setMode(MainGUI.GEN_DESIGN_OK);
+					mgui.resetAllDIPLOIDs();
 					listE.useDIPLOIDs();
 					return true;
 				}
@@ -4526,12 +4527,15 @@ public class GTURTLEModeling {
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 		//System.out.println("New TML Mapping");
-		GTMLModeling gtmlm = new GTMLModeling(tmlap);
+		GTMLModeling gtmlm = new GTMLModeling(tmlap, true);
+		
 		gtmlm.setNodes(nodesToTakeIntoAccount);
 		tmlm = null;
 		tm = null;
 		tmState = 1;
 		tmap = gtmlm.translateToTMLMapping();
+		
+		listE = gtmlm.getCorrespondanceTable();
 		
 		checkingErrors = gtmlm.getCheckingErrors();
 		
@@ -4542,6 +4546,8 @@ public class GTURTLEModeling {
 				warningsOptimize = tmap.optimize();
 			}
 			warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmlap.tmlap));
+			mgui.resetAllDIPLOIDs();
+			listE.useDIPLOIDs();
 			mgui.setMode(MainGUI.GEN_DESIGN_OK);
 			return true;
 		}

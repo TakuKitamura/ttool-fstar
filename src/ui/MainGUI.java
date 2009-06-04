@@ -4861,6 +4861,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	
 	// For simulation purpose
+	public void resetAllDIPLOIDs() {
+		TURTLEPanel tp;
+		
+		for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            tp.resetAllDIPLOIDs();
+        }
+	}
+	
 	public void toggleDiploIDs() {
         setDiploIDs(!TDiagramPanel.DIPLO_ID_ON);
 	}

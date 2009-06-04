@@ -59,7 +59,9 @@ import ui.procsd.ProCSDPort;
 import ui.procsd.ProCSDComponent;
 
 import ui.tmlad.*;
+import ui.tmlcd.*;
 import ui.tmlcompd.*;
+import ui.tmldd.*;
 import ui.tree.*;
 
 
@@ -511,7 +513,42 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					if (this instanceof TMLCPrimitiveComponent) {
 						drawDiploID(g);
 					}
-				}
+				} else if (tdp instanceof TMLTaskDiagramPanel) {
+					if (getDIPLOID() != -1) {
+						drawDiploID(g);
+					}
+					/*if (this instanceof TMLTaskOperator) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLChannelOperator) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLEventOperator) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLRequestOperator) {
+						drawDiploID(g);
+					}*/
+				} else if (tdp instanceof TMLArchiDiagramPanel) {
+					if (getDIPLOID() != -1) {
+						drawDiploID(g);
+					}
+					/*if (this instanceof TMLArchiCPUNode) {
+						
+					}
+					if (this instanceof TMLArchiBUSNode) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLArchiBridgeNode) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLArchiHWANode) {
+						drawDiploID(g);
+					}
+					if (this instanceof TMLArchiMemoryNode) {
+						drawDiploID(g);
+					}*/
+				} 
 			}
 		}
 		

@@ -65,7 +65,7 @@ public class GTMLModeling  {
 	private LinkedList componentsToTakeIntoAccount;
     private LinkedList components;
     private LinkedList removedChannels, removedRequests, removedEvents;
-	private CorrespondanceTGElement listE;
+	private static CorrespondanceTGElement listE;
 	private Hashtable<String, String> table;
 	
 	private TMLArchiPanel tmlap;
@@ -74,17 +74,26 @@ public class GTMLModeling  {
 	TMLMapping map;
 	TMLArchitecture archi;
     
-    public GTMLModeling(TMLDesignPanel _tmldp) {
+    public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
         tmldp = _tmldp;
+		if (resetList) {
+			listE = new CorrespondanceTGElement();
+		}
     }
 	
-	public GTMLModeling(TMLComponentDesignPanel _tmlcdp) {
+	public GTMLModeling(TMLComponentDesignPanel _tmlcdp, boolean resetList) {
         tmlcdp = _tmlcdp;
 		table = new Hashtable<String, String>();
+		if (resetList) {
+			listE = new CorrespondanceTGElement();
+		}
     }
 	
-	public GTMLModeling(TMLArchiPanel _tmlap) {
+	public GTMLModeling(TMLArchiPanel _tmlap, boolean resetList) {
 		tmlap = _tmlap;
+		if (resetList) {
+			listE = new CorrespondanceTGElement();
+		}
 	}
     
 	public TMLModeling translateToTMLModeling() {
@@ -95,7 +104,7 @@ public class GTMLModeling  {
         tmlm = new TMLModeling(true);
         checkingErrors = new Vector();
         warnings = new Vector();
-		listE = new CorrespondanceTGElement();
+		
         //boolean b;
         
 		if (tmldp != null) {
@@ -1365,7 +1374,7 @@ public class GTMLModeling  {
 		
 		checkingErrors = new Vector();
 		warnings = new Vector();
-		listE = new CorrespondanceTGElement();
+		//listE = new CorrespondanceTGElement();
 		
 		makeArchitecture();
 		if (!makeTMLModeling()) {
@@ -1601,7 +1610,7 @@ public class GTMLModeling  {
 		String s;
 		index = 0;
 		for(TMLDesignPanel panel: panels) {
-			gtml =  new GTMLModeling(panel);
+			gtml =  new GTMLModeling(panel, false);
 			gtml.setTasks((Vector)(taskss.get(index)));
 			index ++;
 			tmpm = gtml.translateToTMLModeling();
@@ -1619,7 +1628,7 @@ public class GTMLModeling  {
 		
 		if (cpanels.size() > 0) {
 			TMLComponentDesignPanel panel = cpanels.get(cpanels.size()-1);
-			gtml =  new GTMLModeling(panel);
+			gtml =  new GTMLModeling(panel, false);
 			gtml.setComponents(allcomp);
 			tmpm = gtml.translateToTMLModeling(true);
 			warnings.addAll(gtml.getCheckingWarnings());

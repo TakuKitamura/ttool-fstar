@@ -251,6 +251,12 @@ public abstract class TURTLEPanel implements GenericTree {
 	public MainGUI getMainGUI() {
 		return mgui;
 	}
+	
+	public void resetAllDIPLOIDs() {
+		for(int i=0; i<panels.size(); i++) {
+			panelAt(i).resetAllDIPLOIDs();
+		}
+	}
     
 }
 

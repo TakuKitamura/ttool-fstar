@@ -3108,6 +3108,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		}
 		//System.out.println("End Autoconnect");
 	}
+	
+	public void resetAllDIPLOIDs() {
+		TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			tgc.setDIPLOID(-1);
+		}
+	}
     
     
 }

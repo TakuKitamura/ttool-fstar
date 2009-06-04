@@ -70,6 +70,7 @@ public class TMLTaskDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
@@ -123,6 +124,11 @@ public class TMLTaskDiagramToolBar extends TToolBar {
          
           button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS]);
          button.addMouseListener(mgui.mouseHandler);
+		 
+		 this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
+        button.addMouseListener(mgui.mouseHandler);
         
     }
     
