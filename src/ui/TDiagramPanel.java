@@ -1514,6 +1514,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		if (e.getSource() == breakpoint) {
 			if (componentPopup instanceof AllowedBreakpoint) {
 				componentPopup.setBreakpoint(!componentPopup.getBreakpoint());
+				if (componentPopup.getDIPLOID() != -1) {
+					if (componentPopup.getBreakpoint()) {
+						mgui.addBreakPoint(componentPopup.getDIPLOID());
+					} else {
+						mgui.removeBreakPoint(componentPopup.getDIPLOID());
+					}
+				}
 			}
 		}
         
@@ -3101,6 +3108,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 					} else {
 						tgco = TGComponentManager.addConnector(found.getX(), found.getY(), added.getDefaultConnector(), this, found, tgcp, listPoint);
 					}
+					found.setFree(false);
+					tgcp.setFree(false);
 					componentList.add(tgco);
 					//System.out.println("Connector added");
 				}
@@ -3117,6 +3126,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             tgc = (TGComponent)(iterator.next());
 			tgc.setDIPLOID(-1);
 		}
+	}
+	
+	public void getListOfBreakPoints(ArrayList<Point> points, int taskID) {
+		Point p;
+		TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
+				p = new Point(taskID, tgc.getDIPLOID());
+				points.add(p);
+			}
+		}
+		
 	}
     
     

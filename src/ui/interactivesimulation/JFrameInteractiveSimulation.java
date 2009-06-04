@@ -129,6 +129,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JButton updateTaskVariableInformationButton;
 	private JScrollPane jspTaskVariableInfo;
 	
+	// Breakpoints
+	JPanelBreakPoints jpbp;
+	
+	
 	// Tasks
 	JPanel taskPanel;
 	TaskTableModel tasktm;
@@ -171,7 +175,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	private Hashtable <Integer, Integer> runningTable;
 	
-	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap) {
+	private ArrayList<Point> points;
+	
+	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping _tmap, ArrayList<Point> _points) {
 		super(_title);
 		
 		f = _f;
@@ -187,11 +193,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			hashCode = tmap.getHashCode();
 		}
 		
+		points = _points;
+		
 		//System.out.println("Tmap=" + tmap);
 		
 		valueTable = new Hashtable<Integer, String>();
 		rowTable = new Hashtable<Integer, Integer>();
 		runningTable = new Hashtable<Integer, Integer>();
+		
 		
 		mgui.resetRunningID();
 		
@@ -488,6 +497,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		TableSorter sorterPI;
 		JTable jtablePI;
 		
+		// Breakpoints
+		jpbp = new JPanelBreakPoints(this, points);
+		infoTab.addTab("Breakpoints", null, jpbp, "List of active breakpoints");
+		
 		// Tasks
 		taskPanel = new JPanel();
 		taskPanel.setLayout(new BorderLayout());
@@ -752,6 +765,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				if (tmap != null) {
 					sendCommand("get-hashcode");
 				}
+				sendBreakPointList();
 				
 				try {
 					while(true) {
@@ -915,7 +929,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	protected boolean loadXMLInfoFromServer(String xmldata) {
-		jta.append("XML from server:" + xmldata + "\n\n");
+		//jta.append("XML from server:" + xmldata + "\n\n");
 		
 		DocumentBuilderFactory dbf;
 		DocumentBuilder db;
@@ -969,7 +983,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	protected boolean loadConfiguration(Node node1) {
 		NodeList diagramNl = node1.getChildNodes();
-		Element elt;
+		Element elt, elt0;
 		Node node, node0;
 		NodeList nl;
 		
@@ -1041,7 +1055,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						nl = elt.getElementsByTagName("currcmd");
 						if (nl.getLength() > 0) {
 							node0 = nl.item(0);
-							command = node0.getTextContent();
+							if (node0.getNodeType() == Node.ELEMENT_NODE) {
+								elt0 = (Element)node0;
+								command = elt0.getAttribute("id");
+							}
 						}
 						
 						System.out.println("Got info on task " + id + " command=" + command);
@@ -1408,6 +1425,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
             sendRestoreStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
+			mgui.resetRunningID();
             sendCommand("reset");
 			askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
@@ -1448,6 +1466,83 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public void addBreakPoint(int _commandID) {
+		System.out.println("Add breakpoint: " + _commandID);
+		// Check whether that breakpoint is already listed or not
+		for(Point p: points) {
+			if (p.y == _commandID) {
+				return;
+			}
+		}
+		
+		if (tmap != null) {
+			TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
+			//System.out.println("Got task: " + task);
+			if (task != null) {
+				//System.out.println("Adding bkp");
+				sendCommand("add-breakpoint " + task.getID() + " " + _commandID + "\n");
+				jpbp.addExternalBreakpoint(task.getID(), _commandID);
+			}
+		}
+	}
+	
+	public void removeBreakPoint(int _commandID) {
+		System.out.println("remove breakpoint");
+		int cpt = 0;
+		for(Point p: points) {
+			if (p.y == _commandID) {
+				sendCommand("rm-breakpoint " + p.x +  " " + p.y + "\n");
+				jpbp.removeExternalBreakpoint(cpt);
+				return;
+			}
+			cpt ++;
+		}
+	}
+	
+	public void sendBreakPointList() {
+		for(Point p: points) {
+			sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
+		}
+	}
+	
+	public void removeBreakpoint(Point p) {
+		if (mode == STARTED_AND_CONNECTED) {
+			sendCommand("rm-breakpoint " + p.x +  " " + p.y + "\n");
+		}
+		if (animate.isSelected()) {
+			mgui.removeBreakpoint(p);
+		}
+	}
+	
+	public void addBreakpoint(Point p) {
+		if (mode == STARTED_AND_CONNECTED) {
+			sendCommand("add-breakpoint " + p.x +  " " + p.y + "\n");
+		}
+		if (animate.isSelected()) {
+			mgui.addBreakpoint(p);
+		}
+	}
+	
+	public void printMessage(String msg) {
+		jta.append("*** " + msg + " ***\n");
+	}
+	
+	public String[] makeTasksIDs() {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.getTasksIDs();
+	}
+	
+	public String[] makeCommandIDs(int index) {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.makeCommandIDs(index);
 	}
 	
 	

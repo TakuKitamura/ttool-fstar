@@ -397,7 +397,7 @@ public class DesignPanelTranslator {
                     }*/
 					//System.out.println("Adding type");
 					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					tadas.setStateAction(TADActionState.GATE);
+					
 					//System.out.println("hi");
 					if (s1 == null) {
 						//System.out.println("ho");
@@ -407,13 +407,15 @@ public class DesignPanelTranslator {
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
 						tadas.setStateAction(TADActionState.UNKNOWN);
-						return;
+						//return;
+					} else {
+						tadas.setStateAction(TADActionState.GATE);
+						s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
+						
+						adag.setActionValue(s1);
+						//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
+						listE.addCor(adag, tgc);
 					}
-					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					
-					adag.setActionValue(s1);
-					//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
-					listE.addCor(adag, tgc);
 				} else if ((p != null) && (nbActions == 1)){
 					//System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
 					if (t.getExprValueFromActionState(s).trim().startsWith("=")) {
@@ -483,6 +485,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
+						ags.setStateAction(TADArrayGetState.UNKNOWN);
 					} else {
 						adap = new ADActionStateWithParam(p);
 						p = t.getParamByName(ags.getArray() + "__" + nbActions);
@@ -492,11 +495,13 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
+							ags.setStateAction(TADArrayGetState.UNKNOWN);
 						} else {
 							ad.addElement(adap);
 							adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + nbActions));
 							listE.addCor(adap, tgc);
 							listB.addCor(adap, tgc);
+							ags.setStateAction(TADArrayGetState.OK);
 						}
 					}
 				} catch (Exception e) {
@@ -524,6 +529,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
+						ags.setStateAction(TADArrayGetState.UNKNOWN);
 					} else {
 						int size = 2;
 						try {
@@ -539,6 +545,7 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
+							ags.setStateAction(TADArrayGetState.UNKNOWN);
 						} else {
 							for(int i=0; i<size; i++) {
 								//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
@@ -548,6 +555,7 @@ public class DesignPanelTranslator {
 								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + i));
 								choice1.addNext(adap);
 								adap.addNext(junc);
+								ags.setStateAction(TADArrayGetState.OK);
 							}
 							
 							choice1.addGuard("[" + basicGuard + "> (" + ags.getArray() + "__size - 1)]");
@@ -573,12 +581,14 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
+						ass.setStateAction(TADArraySetState.UNKNOWN);
 					} else {
 						adap = new ADActionStateWithParam(p);
 						ad.addElement(adap);
 						adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
 						listE.addCor(adap, tgc);
 						listB.addCor(adap, tgc);
+						ass.setStateAction(TADArraySetState.OK);
 					}
 					
 				} catch (Exception e) {
@@ -606,6 +616,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
+						ass.setStateAction(TADArraySetState.UNKNOWN);
 					} else {
 						int size = 2;
 						try {
@@ -622,6 +633,7 @@ public class DesignPanelTranslator {
 								ce.setTGComponent(tgc);
 								ce.setTDiagramPanel(tdp);
 								addCheckingError(ce);
+								ass.setStateAction(TADArraySetState.UNKNOWN);
 							} else {
 								choice1.addGuard("[" + basicGuard + " == " + i + "]");
 								adap = new ADActionStateWithParam(p);
@@ -629,6 +641,7 @@ public class DesignPanelTranslator {
 								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
 								choice1.addNext(adap);
 								adap.addNext(junc);
+								ass.setStateAction(TADArraySetState.OK);
 							}
 							
 							choice1.addGuard("[" + basicGuard + "> (" + ass.getArray() + "__size - 1)]");

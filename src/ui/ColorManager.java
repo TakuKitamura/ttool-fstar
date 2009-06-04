@@ -73,8 +73,9 @@ public class ColorManager {
 	
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
-	public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105, 125);
-    public static final Color GATE_BOX_ACTION = new Color(215, 241, 247, 125);
+	public static final Color ATTRIBUTE_BOX_ACTION = new Color(199, 243, 105);
+    public static final Color GATE_BOX_ACTION = new Color(215, 241, 247);
+    public static final Color ARRAY_BOX_ACTION = new Color(227, 215, 31);
     public static final Color GATE_BOX = new Color(215, 241, 247);
     public static final Color OPERATION_BOX = new Color(243, 207, 158);
     public static final Color ACTIVITY_BOX = new Color(255, 208, 255);

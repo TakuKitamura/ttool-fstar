@@ -362,6 +362,48 @@ public class TMLModeling {
         return null;
     }
 	
+	public String[] getTasksIDs() {
+		if (tasks == null) {
+			return null;
+		}
+		
+		String [] list = new String[tasks.size()];
+		TMLTask task;
+        ListIterator iterator = tasks.listIterator();
+		int cpt = 0;
+        while(iterator.hasNext()) {
+            task = (TMLTask)(iterator.next());
+            list[cpt] = task.getName() + " (" + task.getID() + ")";
+			cpt ++;
+        } 
+        return list;
+	}
+	
+	public String[] makeCommandIDs(int index) {
+		if (tasks == null) {
+			return null;
+		}
+		
+		TMLTask task = (TMLTask)(tasks.get(index));
+		if (task != null) {
+			return task.makeCommandIDs();
+		}
+		
+		return null;
+	}
+	
+	public TMLTask getTMLTaskByCommandID(int id) {
+		TMLTask task;
+        ListIterator iterator = tasks.listIterator();
+        while(iterator.hasNext()) {
+            task = (TMLTask)(iterator.next());
+            if (task.hasCommand(id)) {
+                return task;
+            }
+        } 
+        return null;
+	}
+	
 	public TMLElement getCommunicationElementByName(String _name) {
 		TMLChannel ch = getChannelByName(_name);
 		if (ch != null) {

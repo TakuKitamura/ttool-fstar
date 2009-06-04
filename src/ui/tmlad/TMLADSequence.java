@@ -52,7 +52,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class TMLADSequence extends TGCWithInternalComponent implements EmbeddedComment{
+public class TMLADSequence extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int lineLength = 0;
   private int textX, textY;
 

@@ -47,6 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
+import java.awt.*;
 import java.util.*;
 
 import translator.*;
@@ -413,6 +414,48 @@ public class CorrespondanceTGElement {
 					tgc = (TGComponent)(o1);
 					tgc.setDIPLOID(de.getID());
 					list.add(tgc);
+				}
+			}
+		}
+	}
+	
+	public void removeBreakpoint(Point p) {
+		Object o0, o1;
+		TGComponent tgc;
+		DIPLOElement de;
+		
+		for (int i=0; i<data.size(); i++) {
+			o0 = data.get(i);
+			if (o0 instanceof DIPLOElement) {
+				de = (DIPLOElement)o0;
+				if (de.getID() == p.y) {
+					o1 = tg.get(i);
+					if (o1 != null) {
+						tgc = (TGComponent)(o1);
+						tgc.setBreakpoint(false);
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	public void addBreakpoint(Point p) {
+		Object o0, o1;
+		TGComponent tgc;
+		DIPLOElement de;
+		
+		for (int i=0; i<data.size(); i++) {
+			o0 = data.get(i);
+			if (o0 instanceof DIPLOElement) {
+				de = (DIPLOElement)o0;
+				if (de.getID() == p.y) {
+					o1 = tg.get(i);
+					if (o1 != null) {
+						tgc = (TGComponent)(o1);
+						tgc.setBreakpoint(true);
+						return;
+					}
 				}
 			}
 		}

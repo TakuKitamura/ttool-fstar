@@ -95,6 +95,10 @@ public class TADStopState extends TGCWithoutInternalComponent{
 		return TGComponentManager.TAD_STOP_STATE;
 	}
 	
+	public int getDefaultConnector() {
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    }
+	
 }
 
 

@@ -158,5 +158,23 @@ public class TMLDesignPanel extends TURTLEPanel {
 	public TMLTaskOperator getTaskByName(String _name) {
 		return tmltdp.getTaskByName(_name);
 	}
+	
+	public void getListOfBreakPoints(ArrayList<Point> points) {
+		TGComponent tgc;
+		ListIterator iterator = tmltdp.getComponentList().listIterator();
+		TMLTaskOperator tmlto;
+		TMLActivityDiagramPanel tmladp;
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLTaskOperator) {
+                tmlto = (TMLTaskOperator)tgc;
+				if (tmlto.getDIPLOID() != -1) {
+					tmladp = getTMLActivityDiagramPanel(tmlto.getValue());
+					tmladp.getListOfBreakPoints(points, tmlto.getDIPLOID());
+				}
+			}
+		}
+	}
     
 }

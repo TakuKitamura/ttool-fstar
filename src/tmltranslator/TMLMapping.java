@@ -146,6 +146,30 @@ public class TMLMapping {
 		mappedcommelts = new ArrayList<TMLElement>();
 	}
 	
+	public TMLTask getTMLTaskByCommandID(int id) {
+		if (tmlm == null) {
+			return null;
+		}
+		
+		return tmlm.getTMLTaskByCommandID(id);
+	}
+	
+	public String[] getTasksIDs() {
+		if (tmlm == null) {
+			return null;
+		}
+		
+		return tmlm.getTasksIDs();
+	}
+	
+	public String[] makeCommandIDs(int index) {
+		if (tmlm == null) {
+			return null;
+		}
+		
+		return tmlm.makeCommandIDs(index);
+	}
+	
 	public void addTaskToHwExecutionNode(TMLTask _task, HwExecutionNode _hwnode) {
 		onnodes.add(_hwnode);
 		mappedtasks.add(_task);

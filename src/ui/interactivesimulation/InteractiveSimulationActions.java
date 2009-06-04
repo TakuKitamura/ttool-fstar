@@ -122,7 +122,7 @@ public class InteractiveSimulationActions extends AbstractAction {
     }
     
     public void init() {
-        actions[ACT_RUN_SIMU] = new TAction("run-simu", "Run simulation", IconManager.imgic1302, IconManager.imgic1302, "Run simulation", "Run simulation until next breakpoint. works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_SIMU] = new TAction("run-simu", "Run simulation", IconManager.imgic1302, IconManager.imgic1302, "Run simulation", "Run simulation until next breakpoint. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_STOP_SIMU] = new TAction("stop-simu", "Stop simulation", IconManager.imgic55, IconManager.imgic55, "Stop simulation", "Stop simulation. Works only if the simulator is \"busy\"", 'S');
 		actions[ACT_RESET_SIMU] = new TAction("reset-simu", "Reset simulation", IconManager.imgic45, IconManager.imgic45, "Reset simulation", "Reset simulation", 'T');
 		actions[ACT_RUN_X_TIME_UNITS] = new TAction("run-x-time-units", "Run x time units", IconManager.imgic1300, IconManager.imgic1300, "Run x time units", "Run simulation for x units of time. Works only if the simulator is \"ready\"", 'R');

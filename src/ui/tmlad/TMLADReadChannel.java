@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment {
+public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textX0 =  2;

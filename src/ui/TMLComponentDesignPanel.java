@@ -169,4 +169,22 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 		return tmlctdp.getAllCompositeComponent(_name);
 	}
 	
+	public void getListOfBreakPoints(ArrayList<Point> points) {
+		TGComponent tgc;
+		ListIterator iterator = tmlctdp.getPrimitiveComponentList().listIterator();
+		TMLCPrimitiveComponent tmlcpc;
+		TMLActivityDiagramPanel tmladp;
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLCPrimitiveComponent) {
+                tmlcpc = (TMLCPrimitiveComponent)tgc;
+				if (tmlcpc.getDIPLOID() != -1) {
+					tmladp = getTMLActivityDiagramPanel(tmlcpc.getValue());
+					tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
+				}
+			}
+		}
+	}
+	
 }

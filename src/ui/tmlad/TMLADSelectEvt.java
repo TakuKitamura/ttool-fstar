@@ -53,7 +53,7 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class TMLADSelectEvt extends TGCWithoutInternalComponent implements EmbeddedComment{
+public class TMLADSelectEvt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int lineLength = 10;
     private int lineOutLength = 25;
     //private int textX1, textY1, textX2, textY2, textX3, textY3;

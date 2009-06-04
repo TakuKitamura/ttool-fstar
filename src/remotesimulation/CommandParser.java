@@ -195,6 +195,21 @@ public class CommandParser {
 		String[] paramNames;
 		int i;
 		
+		// add-breakpoint
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "task ID";
+		params[1] = 0;
+		paramNames[1] = "comamnd ID";
+		sc = new SimulationCommand("add-breakpoint", "abp", "11", params, paramNames, "Set a breakpoint in task which id is the first parameter on the command provided as the second parameter");
+		commandList.add(sc);
+		
+		// get-breakpoint-list
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("get-breakpoint-list", "gbl", "18", params, paramNames, "Returns the list of breakpoints currently set");
+		commandList.add(sc);
 		
 		// get-command-and-task
 		params = new int[1];
@@ -240,6 +255,16 @@ public class CommandParser {
 		params = new int[0];
 		paramNames = new String[0];
 		sc = new SimulationCommand("kill", "kill", "0", params, paramNames, "Terminates the remote simulator");
+		commandList.add(sc);
+		
+		// rm-breakpoint
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "task ID";
+		params[1] = 0;
+		paramNames[1] = "comamnd ID";
+		sc = new SimulationCommand("rm-breakpoint", "abp", "16", params, paramNames, "Remove a breakpoint in task which id is the first parameter on the command provided as the second parameter");
 		commandList.add(sc);
 		
 		// reset

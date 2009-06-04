@@ -52,7 +52,7 @@ import java.awt.geom.*;
 import ui.*;
 import myutil.*;
 
-public class TMLADExecIInterval extends TGCWithInternalComponent implements EmbeddedComment {
+public class TMLADExecIInterval extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;

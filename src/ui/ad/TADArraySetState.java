@@ -66,6 +66,10 @@ public class TADArraySetState extends TGCWithoutInternalComponent {
 	protected String array = "tab";
 	protected String index = "i";
 	protected String expr = "x";
+	
+	protected int stateAction = 0; // 0: unchecked 1: ok; 2:unknown
+	public static final int OK = 1;
+	public static final int UNKNOWN = 2;
     
     public TADArraySetState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -100,6 +104,20 @@ public class TADArraySetState extends TGCWithoutInternalComponent {
             width = w1;
             //updateConnectingPoints();
         }
+		
+		if (stateAction > 0)  {
+			Color c = g.getColor();
+			switch(stateAction) {
+			case 1:
+				g.setColor(ColorManager.ARRAY_BOX_ACTION);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			g.fillRoundRect(x, y, width, height, arc, arc);
+			g.setColor(c);
+		}
+		
         g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -224,6 +242,10 @@ public class TADArraySetState extends TGCWithoutInternalComponent {
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateAction = _stateAction;
+	}
     
     
 }

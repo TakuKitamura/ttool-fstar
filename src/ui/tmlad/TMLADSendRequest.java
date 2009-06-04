@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADSendRequest extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment {
+public class TMLADSendRequest extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

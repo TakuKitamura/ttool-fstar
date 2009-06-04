@@ -4697,5 +4697,21 @@ public class GTURTLEModeling {
 	public RequirementModeling getRequirementModeling() {
 		return rm;
 	}
+	
+	public void removeBreakpoint(Point p) {
+		if (listE == null) {
+			return;
+		}
+		
+		listE.removeBreakpoint(p);
+	}
+	
+	public void addBreakpoint(Point p) {
+		if (listE == null) {
+			return;
+		}
+		
+		listE.addBreakpoint(p);
+	}
 
 }

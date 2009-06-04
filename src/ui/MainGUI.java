@@ -247,6 +247,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	// Interaction with simulators
 	ArrayList<Integer> runningIDs;
+	JFrameInteractiveSimulation jfis;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn) {
         systemcOn = _systemcOn;
@@ -2825,21 +2826,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	}
 	
 	public void interactiveSimulationSystemC(String executePath) {
-		JFrameInteractiveSimulation jfis;
 		//System.out.println("toto0");
+		ArrayList<Point> points = getListOfBreakPoints();
 		if (gtm == null) {
-			jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null);
+			jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
 		} else {
 			//System.out.println("toto1");
 			if (gtm.getTMLMapping() != null) {
-				jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getTMLMapping());
+				jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getTMLMapping(), points);
 			} else {
 				//System.out.println("toto2");
 				if (gtm.getArtificialTMLMapping() != null) {
-					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getArtificialTMLMapping());
+					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getArtificialTMLMapping(), points);
 				} else {
 					//System.out.println("toto3");
-					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null);
+					jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
 				}
 			}
 		}
@@ -2847,6 +2848,51 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		jfis.setSize(1024, 800);
 		GraphicLib.centerOnParent(jfis);
 		jfis.setVisible(true);
+		
+	}
+	
+	public void addBreakPoint(int commandId) {
+		if (jfis != null) {
+			jfis.addBreakPoint(commandId);
+		}
+	}
+	
+	public void removeBreakPoint(int commandId) {
+		if (jfis != null) {
+			jfis.removeBreakPoint(commandId);
+		}
+	}
+	
+	// Sent by simulation interface
+	public void removeBreakpoint(Point p) {
+		if (gtm != null) {
+			gtm.removeBreakpoint(p);
+			getCurrentTDiagramPanel().repaint();
+		}
+	}
+	
+	// Sent by simulation interface
+	public void addBreakpoint(Point p) {
+		if (gtm != null) {
+			gtm.addBreakpoint(p);
+			getCurrentTDiagramPanel().repaint();
+		}
+	}
+	
+	public ArrayList<Point> getListOfBreakPoints() {
+		ArrayList<Point> points = new ArrayList<Point>();
+		TURTLEPanel tp;
+		
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLDesignPanel) {
+				((TMLDesignPanel)tp).getListOfBreakPoints(points);
+			}
+			if (tp instanceof TMLComponentDesignPanel) {
+				((TMLComponentDesignPanel)tp).getListOfBreakPoints(points);
+			}
+		}
+		return points;
 	}
 	
 	public void generateTMLTxt() {
@@ -4894,7 +4940,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	}
 	
 	public synchronized void resetRunningID() {
+		if (runningIDs != null) {
+			runningIDs.clear();
+		}
 		runningIDs = null;
+		getCurrentTDiagramPanel().repaint(); 
 	}
 	
 	public synchronized void addRunningID(Integer id) {
@@ -4908,6 +4958,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	}
 	
 	public synchronized void removeRunningId(Integer id) {
+		if (runningIDs == null) {
+			return ;
+		}
+		
 		for(Integer i: runningIDs) {
 			if (i.intValue() == id.intValue()) {
 				runningIDs.remove(i);

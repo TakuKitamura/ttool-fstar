@@ -95,6 +95,27 @@ public class TMLTask extends TMLElement {
         return attributes;
     }
 	
+	public boolean hasCommand(int commandID) {
+		TMLActivityElement tmlae;
+		for(int i=0; i<activity.nElements(); i++) {
+			tmlae = activity.get(i);
+			if (tmlae.getID() == commandID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public String[] makeCommandIDs () {
+		String[] list = new String[activity.nElements()];
+		TMLActivityElement tmlae;
+		for(int i=0; i<activity.nElements(); i++) {
+			tmlae = activity.get(i);
+			list[i] = tmlae.getName() + " (" + tmlae.getID() + ")";
+		}
+		return list;
+	}
+	
 	public TMLAttribute getAttributeByName(String _name) {
 		for(TMLAttribute attribute:attributes) {
 			if (attribute.getName().compareTo(_name) == 0) {

@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADForLoop extends TGCWithoutInternalComponent implements EmbeddedComment {
+public class TMLADForLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

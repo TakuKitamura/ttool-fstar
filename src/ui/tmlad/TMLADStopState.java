@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class TMLADStopState extends TGCWithoutInternalComponent implements EmbeddedComment {
+public class TMLADStopState extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
     private int internalCircleSize = 16;
     private int lineLength = 5;
     
@@ -93,6 +93,10 @@ public class TMLADStopState extends TGCWithoutInternalComponent implements Embed
     
     public int getType() {
         return TGComponentManager.TMLAD_STOP_STATE;
+    }
+	
+	public int getDefaultConnector() {
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
     
 }
