@@ -55,6 +55,7 @@ public:
 	int run();
 	void sendReply(std::string iReplyStr);
 protected:
+	int getPositionOf(char* iBuffer, char searchCh, int iStart, int iLength);
 	///Determines the IP adress of the client
 	void* get_in_addr(struct sockaddr *sa) const;
 	///pointer to synchronization structure

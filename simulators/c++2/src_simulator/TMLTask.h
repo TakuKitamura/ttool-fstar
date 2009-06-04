@@ -162,6 +162,11 @@ public:
 	*/
 	ParamType* getVariableByID(unsigned int iVarID);
 	void streamStateXML(std::ostream& s) const;
+	///Returns an iterator for the internal variable ID hash table
+	/**
+	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
+	\return Const iterator for variable table
+	*/
 	VariableLookUpTableID::const_iterator getVariableIterator(bool iEnd) const;
 
 protected:

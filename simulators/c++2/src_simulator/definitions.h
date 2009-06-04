@@ -113,8 +113,6 @@ using std::max;
 #define TAG_STATUSc "</status>"
 #define TAG_GLOBALo "<global>"
 #define TAG_GLOBALc "</global>"
-//#define TAG_CMDo "<command"
-//#define TAG_CMDc "</command>"
 #define TAG_CURRCMDo "<currcmd"
 #define TAG_CURRCMDc "</currcmd>"
 #define TAG_BREAKCMDo "<breakcmd"
@@ -205,6 +203,7 @@ struct ltstr{
 };
 ///Datatype which associates a variable name with the coresponding pointer to that variable, used for look-up table of tasks
 typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTableName;
+///Datatype which associates a variable ID with the coresponding pointer to that variable, used for look-up table of tasks
 typedef std::map<unsigned int, ParamType*> VariableLookUpTableID;
 
 

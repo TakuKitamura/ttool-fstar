@@ -107,31 +107,52 @@ int Server::run(){
 		}
 		char* aMsg="You are connected to the simulation server. Please enter a command:\0";
 		if (send(_socketClient, aMsg, strlen(aMsg), 0) == -1) perror("send");
-		int aNumberOfBytes=1;
+		int aNumberOfBytes=0, aStringPos=0, aReturnPos;
 		char s[INET6_ADDRSTRLEN];
 		inet_ntop(aClientAddrInfo.ss_family, get_in_addr((struct sockaddr *)&aClientAddrInfo), s, sizeof s);
 		std::cout << "server: got connection from " << s << std::endl;
 		char aTmpBuffer[BUFFER_SIZE];
-		while(!_syncInfo->_terminate && aNumberOfBytes>0){
-			aNumberOfBytes=recv(_socketClient, aTmpBuffer, BUFFER_SIZE-1, 0);
-			if (aNumberOfBytes < 1){
-				std::cout << "Broken connection detected, error code: " << aNumberOfBytes << std::endl;
-				_socketClient=-1;
+		//aTmpBuffer[0]='\0';
+		while(!_syncInfo->_terminate){
+			aReturnPos=getPositionOf(aTmpBuffer, '\n', aStringPos, aNumberOfBytes);
+			if (aReturnPos==-1){
+				int unreadBytes=aNumberOfBytes-aStringPos;
+				if (unreadBytes>0) 
+					memmove(aTmpBuffer, &aTmpBuffer[aStringPos], unreadBytes);
+				else
+					aStringPos=aNumberOfBytes;
+				aNumberOfBytes=recv(_socketClient, &aTmpBuffer[aNumberOfBytes-aStringPos], BUFFER_SIZE-1-(aNumberOfBytes-aStringPos), 0);
+				if (aNumberOfBytes<1){
+					std::cout << "Broken connection detected, error code: " << aNumberOfBytes << std::endl;
+					_socketClient=-1;
+					break;
+				}
+				if (unreadBytes>0) aNumberOfBytes+=unreadBytes;
+				//aNumberOfBytes++;
+				aStringPos=0;
+				aReturnPos=getPositionOf(aTmpBuffer, '\n', aStringPos, aNumberOfBytes);
+				if (aReturnPos==-1){
+					aReturnPos=aNumberOfBytes-1;
+					aTmpBuffer[aNumberOfBytes]='\0';
+				}	
+			}
+			//if (aNumberOfBytes < 1){
+				
 				//perror("receive");
-			}else{
-				aTmpBuffer[aNumberOfBytes]='\0';
-				if (strlen(aTmpBuffer)>0){
-					std::cout << "Command received: " << aTmpBuffer << std::endl;
-					if (!_syncInfo->_simulator->execAsyncCmd(aTmpBuffer)){
+			//}else{
+				if (strlen(&aTmpBuffer[aStringPos])>0){
+					std::cout << "Command received: " << &aTmpBuffer[aStringPos] << std::endl;
+					if (!_syncInfo->_simulator->execAsyncCmd(&aTmpBuffer[aStringPos])){
 						if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
-							strcpy(_syncInfo->_command,aTmpBuffer);
+							memmove(_syncInfo->_command,&aTmpBuffer[aStringPos], aReturnPos-aStringPos+1);
 							pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
 						}else{
 							_syncInfo->_simulator->sendStatus();
 						}
 					}
 				}
-			}	
+			//}
+			aStringPos=aReturnPos+1;	
 		}
 	}while (!_syncInfo->_terminate);
 	std::cout << "Server loop terminated" << std::endl;
@@ -144,6 +165,16 @@ int Server::run(){
 	std::cout << "Socket client closed" << std::endl;
 	close(aSocketServer);
 	std::cout << "Socket server closed" << std::endl;
+}
+
+int Server::getPositionOf(char* iBuffer, char searchCh, int iStart, int iLength){
+	for (int i=iStart;i<iLength;i++){
+		if (iBuffer[i]==searchCh){
+			iBuffer[i]='\0';
+			return i;
+		}
+	}
+	return -1;
 }
 
 void* Server::get_in_addr(struct sockaddr *sa) const{

@@ -214,7 +214,17 @@ protected:
 	const std::string getArgs(const std::string& iComp, const std::string& iDefault, int iLen, char** iArgs);
 	///Print information about simulator command line usage
 	void printHelp();
+	///Writes information about the current command of a task to the given stream in XML format
+	/**
+	\param aTask Pointer to the task
+	\param ioMessage Output stream
+	*/
 	void printCommandsOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
+	///Writes information about task variables to the given stream in XML format
+	/**
+	\param aTask Pointer to the task
+	\param ioMessage Output stream
+	*/
 	void printVariablesOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
 	///Pointer to synchronization structure
 	SimServSyncInfo* _syncInfo;

@@ -399,12 +399,6 @@ void Simulator::decodeCommand(char* iCmd){
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
 	std::string aStrParam;
 	aInpStream >> aCmd;
-	//if (_currCmdListener!=0){
-		//std::cout << "Before del listener.\n";
-		 //delete _currCmdListener;
-		//_currCmdListener=0;
-		//std::cout << "After del listener.\n";
-	//}
 	_simComp->setStopFlag(false);
 	anEntityMsg.str("");
 	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl;

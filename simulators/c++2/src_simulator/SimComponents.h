@@ -208,6 +208,11 @@ public:
 	\return Hash value
 	*/
 	int getHashValue();
+	///Returns an iterator for the internal task list
+	/**
+	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
+	\return Const iterator for task list
+	*/
 	TaskList::const_iterator getTaskIterator(bool iEnd) const;
 protected:
 	///List holding schedulable devices
