@@ -766,14 +766,14 @@ void Simulator::decodeCommand(char* iCmd){
 					anErrorCode=2;
 			}else{
 					TMLTask* aTask=aCurrChCmd->getTask();
-					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CMDo << " id=\"" << aCurrChCmd->getID() << "\" current=\"yes\">" << TAG_BRANCHo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHc << "\">" << TAG_CMDc << TAG_TASKc << std::endl;
+					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << " id=\"" << aCurrChCmd->getID() << "\">" << TAG_BRANCHo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHc << "\">" << TAG_CURRCMDc << TAG_TASKc << std::endl;
 					aGlobMsg << TAG_MSGo << "Current choice command" << TAG_MSGc << std::endl;
 			}
 			break;
 		}
 		case 18:{
 			for(BreakpointSet::iterator i=_breakpoints.begin(); i != _breakpoints.end(); ++i){
-				anEntityMsg << TAG_TASKo << " id=\"" << (*i)->getTask()->getID() << "\" name=\"" << (*i)->getTask()->toString() << "\">" << TAG_CMDo << " id=\"" << (*i)->getID() << "\" break=\"yes\">" << TAG_CMDc << TAG_TASKc << std::endl; 
+				anEntityMsg << TAG_TASKo << " id=\"" << (*i)->getTask()->getID() << "\" name=\"" << (*i)->getTask()->toString() << "\">" << TAG_BREAKCMDo << " id=\"" << (*i)->getID() << "\">" << TAG_BREAKCMDc << TAG_TASKc << std::endl; 
 			}
 			aGlobMsg << TAG_MSGo << "Breakpoint List" << TAG_MSGc << std::endl;
 			break;
@@ -947,12 +947,12 @@ bool Simulator::execAsyncCmd(const char* iCmd){
 }
 
 void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostringstream& ioMessage){
-	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << TAG_CMDo << " id=\"";
+	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << TAG_CURRCMDo << " id=\"";
 	if (iTask->getCurrCommand()==0)
-		ioMessage << 0 << "\" current=\"yes\">"; 
+		ioMessage << 0 << "\">"; 
 	else
-		ioMessage << iTask->getCurrCommand()->getID() << "\" current=\"yes\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
-		ioMessage << TAG_CMDc << TAG_TASKc << std::endl;
+		ioMessage << iTask->getCurrCommand()->getID() << "\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
+		ioMessage << TAG_CURRCMDc << TAG_TASKc << std::endl;
 }
 
 void Simulator::sendStatus(){
