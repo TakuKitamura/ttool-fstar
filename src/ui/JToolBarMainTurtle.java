@@ -172,6 +172,21 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		}
         
         addSeparator();
+		
+		if (MainGUI.systemcOn) {
+            button = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
+            button.addMouseListener(mgui.mouseHandler);
+			
+			button = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
+            button.addMouseListener(mgui.mouseHandler);
+            addSeparator();
+			
+			button = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
+            button.addMouseListener(mgui.mouseHandler);
+            addSeparator();
+        }
+		
+		addSeparator();
         
         button = add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
         button.addMouseListener(mgui.mouseHandler);
@@ -186,19 +201,6 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		}
         
         addSeparator();
-		
-        if (MainGUI.systemcOn) {
-            button = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
-            button.addMouseListener(mgui.mouseHandler);
-			
-			button = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
-            button.addMouseListener(mgui.mouseHandler);
-            addSeparator();
-			
-			button = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
-            button.addMouseListener(mgui.mouseHandler);
-            addSeparator();
-        }
 		
         
         if ((ConfigurationTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {

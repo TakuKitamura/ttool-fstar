@@ -199,8 +199,8 @@ public class CommandParser {
 		// get-command-and-task
 		params = new int[1];
 		paramNames = new String[1];
-		params[0] = 1;
-		paramNames[0] = "Task id";
+		params[0] = 0;
+		paramNames[0] = "Task id (or \"all\")";
 		sc = new SimulationCommand("get-command-of-task", "gcot", "14", params, paramNames, "Returns the current command of the task provided as argument");
 		commandList.add(sc);
 		

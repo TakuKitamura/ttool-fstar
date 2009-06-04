@@ -1329,9 +1329,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return;
 		}
 		
-		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
+		sendCommand("get-command-of-task all"); 
+		
+		/*for(TMLTask task: tmap.getTMLModeling().getTasks()) {
 			sendCommand("get-command-of-task " + task.getID()); 
-		}
+		}*/
 	}
 	
 	private void updateRunningCommand(String id, String command) {
