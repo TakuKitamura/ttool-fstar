@@ -410,7 +410,7 @@ public class CorrespondanceTGElement {
 				o1 = tg.get(i);
 				if ((o1 != null) && !(list.contains(o1))){
 					de = (DIPLOElement)(o0);
-					System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
+					//System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
 					tgc = (TGComponent)(o1);
 					tgc.setDIPLOID(de.getID());
 					list.add(tgc);

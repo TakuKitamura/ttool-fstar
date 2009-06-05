@@ -74,6 +74,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected static final String SIMULATION_HEADER = "siminfo";
 	protected static final String SIMULATION_GLOBAL = "global";
 	protected static final String SIMULATION_TASK = "task";
+	protected static final String SIMULATION_CPU = "cpu";
+	protected static final String SIMULATION_BUS = "bus";
 	
 	private static String buttonStartS = "Start simulator";
 	private static String buttonCloseS = "Close";
@@ -115,7 +117,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected StateCommandsToolBar stctb;
 	
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox debug, animate;
+	JCheckBox debug, animate, update;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -439,7 +441,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		
 		//Info
-		infos = new JPanel();
+		infos = new JPanel(new BorderLayout());
 		infos.setMinimumSize(new Dimension(300, 250));
 		//infos.setPreferredSize(new Dimension(400, 450));
 		infos.setBorder(new javax.swing.border.TitledBorder("Simulation information"));
@@ -448,9 +450,22 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		infoTab = new JTabbedPane();
 		infoTab.setMinimumSize(new Dimension(300, 250));
-		infos.add(infoTab);
+		infos.add(infoTab, BorderLayout.NORTH);
 		
 		// Simulation time
+		jp02 = new JPanel();
+		infos.add(jp02, BorderLayout.SOUTH);
+		jp02.add(new JLabel("Status:"));
+		status = new JLabel("Unknown");
+		status.setForeground(ColorManager.InteractiveSimulationText);
+		jp02.add(status);
+		jp02.add(new JLabel(" "));
+		jp02.add(new JLabel("Time:"));
+		time = new JLabel("Unknown");
+		time.setForeground(ColorManager.InteractiveSimulationText);
+		jp02.add(time);
+		
+		// Options
 		jp01 = new JPanel();
 		//jp01.setMinimumSize(new Dimension(375, 400));
 		//jp01.setPreferredSize(new Dimension(375, 400));
@@ -461,7 +476,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		// INFORMATION
 		
-		infoTab.addTab("Status", null, jp01, "Current status of the simulation");
+		infoTab.addTab("Options", null, jp01, "Options on simulation");
 		
 		c01.gridheight = 1;
 		c01.weighty = 1.0;
@@ -469,22 +484,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
-		
-		jp01.add(new JLabel(" "), c01);
-		
-		c01.gridwidth = 1;
-		jp01.add(new JLabel("Status:"), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		status = new JLabel("Unknown");
-		status.setForeground(ColorManager.InteractiveSimulationText);
-		jp01.add(status, c01);
-		jp01.add(new JLabel(" "), c01);
-		c01.gridwidth = 1;
-		jp01.add(new JLabel("Time:"), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		time = new JLabel("Unknown");
-		time.setForeground(ColorManager.InteractiveSimulationText);
-		jp01.add(time, c01);
+
 		jp01.add(new JLabel(" "), c01);
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
@@ -492,6 +492,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(animate, c01);
 		animate.addItemListener(this);
 		animate.setSelected(true);
+		update = new JCheckBox("Automatically update information (task, CPU, etc.)");
+		jp01.add(update, c01);
+		update.addItemListener(this);
+		update.setSelected(true);
 		
 		
 		TableSorter sorterPI;
@@ -505,7 +509,6 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		taskPanel = new JPanel();
 		taskPanel.setLayout(new BorderLayout());
 		infoTab.addTab("Tasks", IconManager.imgic1202, taskPanel, "Current state of tasks");
-		TaskTableModel tasktm;
 		if (tmap == null) {
 			 tasktm = new TaskTableModel(null, valueTable, rowTable);
 		} else {
@@ -531,7 +534,6 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		variablePanel = new JPanel();
 		variablePanel.setLayout(new BorderLayout());
 		infoTab.addTab("Tasks variables", null, variablePanel, "Current value of variables");
-		TaskVariableTableModel tvtm;
 		if (tmap == null) {
 			tvtm = new TaskVariableTableModel(null, valueTable, rowTable);
 		} else {
@@ -558,7 +560,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		cpuPanel = new JPanel();
 		cpuPanel.setLayout(new BorderLayout());
 		infoTab.addTab("CPUs", IconManager.imgic1100, cpuPanel, "Current state of CPUs");
-		CPUTableModel cputm = new CPUTableModel(tmap, valueTable, rowTable);
+		cputm = new CPUTableModel(tmap, valueTable, rowTable);
 		sorterPI = new TableSorter(cputm);
 		jtablePI = new JTable(sorterPI);
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
@@ -598,7 +600,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		busPanel = new JPanel();
 		busPanel.setLayout(new BorderLayout());
 		infoTab.addTab("Bus", IconManager.imgic1102, busPanel, "Current state of busses");
-		BusTableModel bustm = new BusTableModel(tmap, valueTable, rowTable);
+		bustm = new BusTableModel(tmap, valueTable, rowTable);
 		sorterPI = new TableSorter(bustm);
 		jtablePI = new JTable(sorterPI);
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
@@ -996,9 +998,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String error = null;
 		String hash = null;
 		
-		String id;
+		String id, idvar;
 		String name;
 		String command;
+		String util = null;
+		String value;
+		String extime;
+		
+		int k;
 		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
@@ -1061,10 +1068,79 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							}
 						}
 						
-						System.out.println("Got info on task " + id + " command=" + command);
+						//System.out.println("Got info on task " + id + " command=" + command);
 						
 						if ((id != null) && (command != null)) {
 							updateRunningCommand(id, command);
+						}
+						
+						extime = null;
+						nl = elt.getElementsByTagName("extime");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							extime =  node0.getTextContent();
+						}
+						
+						if ((id != null) && (extime != null)) {
+							updateTaskState(id, extime);
+						}
+						
+						
+						
+						nl = elt.getElementsByTagName("var");
+						idvar = null;
+						value = null;
+						for(k=0; k<nl.getLength(); k++) {
+							node0 = nl.item(k);
+							value = node0.getTextContent();
+							if (node0.getNodeType() == Node.ELEMENT_NODE) {
+								elt0 = (Element)node0;
+								idvar = elt0.getAttribute("id");
+							}
+							if ((value != null) && (idvar != null)) {
+								updateVariableState(idvar, value);
+							}
+						}
+					}
+					
+					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
+						id = null;
+						name = null;
+						command = null;
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						nl = elt.getElementsByTagName("util");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							util = node0.getTextContent();
+						}
+						
+						//System.out.println("Got info on cpu " + id + " util=" + util);
+						
+						if ((id != null) && (util != null)) {
+							updateCPUState(id, util);
+						}
+					}
+					
+					if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
+						id = null;
+						name = null;
+						command = null;
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						nl = elt.getElementsByTagName("util");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							util = node0.getTextContent();
+						}
+						
+						//System.out.println("Got info on cpu " + id + " util=" + util);
+						
+						if ((id != null) && (util != null)) {
+							updateBusState(id, util);
 						}
 					}
 				}
@@ -1259,6 +1335,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+
+	
 	private void updateVariables() {
 		if (tmap == null) {
 			return;
@@ -1268,11 +1346,13 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return;
 		}
 		
-		for(TMLTask task: tmap.getTMLModeling().getTasks()) {
+		sendCommand("get-variable-of-task all all\n");
+		
+		/*for(TMLTask task: tmap.getTMLModeling().getTasks()) {
 			for(TMLAttribute tmla: task.getAttributes()) {
 				sendCommand("get-variable-of-task " + task.getID() + " " + tmla.getID());
 			}
-		}
+		}*/
 	}
 	
 	private void updateCPUs() {
@@ -1376,10 +1456,92 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
+	private void updateVariableState(String _idvar, String _value) {
+		Integer i = getInteger(_idvar);
+		int row;
+		
+		if (i != null) {
+			try {
+				valueTable.remove(i);
+				valueTable.put(i, _value);
+				//System.out.println("Searching for old row");
+				row = rowTable.get(i).intValue();
+				tvtm.fireTableCellUpdated(row, 4);
+			} catch (Exception e) {
+				System.out.println("Exception updateVariableState: " + e.getMessage() + "idvar=" + _idvar + " val=" + _value);
+			}
+		}
+		
+	}
+	
+	private void updateTaskState(String _id, String _extime) {
+		Integer i = getInteger(_id);
+		Integer ex = getInteger(_extime);
+		int row;
+		
+		if ((i != null) && (ex != null)) {
+			try {
+				valueTable.remove(i);
+				valueTable.put(i, "nbOfCycles: " + _extime);
+				//System.out.println("Searching for old row");
+				row = rowTable.get(i).intValue();
+				tasktm.fireTableCellUpdated(row, 2);
+			} catch (Exception e) {
+				System.out.println("Exception updateTaskState: " + e.getMessage());
+			}
+		}
+		
+	}
+	
+	private void updateCPUState(String _id, String _utilization) {
+		Integer i = getInteger(_id);
+		int row;
+		
+		if (i != null) {
+			try {
+				System.out.println("CPU 0");
+				valueTable.remove(i);
+				System.out.println("CPU 1");
+				valueTable.put(i, "Utilization: " + _utilization);
+				System.out.println("CPU 2");
+				//System.out.println("Searching for old row");
+				row = rowTable.get(i).intValue();
+				System.out.println("CPU 3");
+				cputm.fireTableCellUpdated(row, 2);
+				System.out.println("CPU 4");
+			} catch (Exception e) {
+				System.out.println("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
+			}
+		}
+	}
+	
+	private void updateBusState(String _id, String _utilization) {
+		Integer i = getInteger(_id);
+		int row;
+		
+		if (i != null) {
+			try {
+				valueTable.remove(i);
+				valueTable.put(i, "Utilization: " + _utilization);
+				//System.out.println("Searching for old row");
+				row = rowTable.get(i).intValue();
+				bustm.fireTableCellUpdated(row, 2);
+			} catch (Exception e) {
+				System.out.println("Exception updateBusState: " + e.getMessage());
+			}
+		}
+	}
+	
 	public void askForUpdate() {
 		sendCommand("time");
 		if (animate.isSelected()) {
 			updateTaskCommands();
+		}
+		if (update.isSelected()) {
+			updateTasks();
+			updateVariables();
+			updateCPUs();
+			updateBus();
 		}
 	}
 	

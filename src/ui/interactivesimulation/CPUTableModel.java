@@ -115,7 +115,7 @@ public class CPUTableModel extends AbstractTableModel {
 		
 	
 		valueTable.put(ID, "-");
-		rowTable.put(ID, row);
+		rowTable.put(ID, new Integer(row));
 		return "-";
 		
 	}

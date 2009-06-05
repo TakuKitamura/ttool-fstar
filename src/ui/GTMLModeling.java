@@ -96,12 +96,12 @@ public class GTMLModeling  {
 		}
 	}
     
-	public TMLModeling translateToTMLModeling() {
-		return translateToTMLModeling(false);
+	public TMLModeling translateToTMLModeling(boolean _resetID) {
+		return translateToTMLModeling(false, _resetID);
 	}
 	
-    public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount) {
-        tmlm = new TMLModeling(true);
+    public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
+        tmlm = new TMLModeling(_resetID);
         checkingErrors = new Vector();
         warnings = new Vector();
 		
@@ -1613,7 +1613,7 @@ public class GTMLModeling  {
 			gtml =  new GTMLModeling(panel, false);
 			gtml.setTasks((Vector)(taskss.get(index)));
 			index ++;
-			tmpm = gtml.translateToTMLModeling();
+			tmpm = gtml.translateToTMLModeling(false);
 			warnings.addAll(gtml.getCheckingWarnings());
 			if (gtml.getCheckingErrors().size() >0) {
 				checkingErrors.addAll(gtml.getCheckingErrors());
@@ -1630,7 +1630,7 @@ public class GTMLModeling  {
 			TMLComponentDesignPanel panel = cpanels.get(cpanels.size()-1);
 			gtml =  new GTMLModeling(panel, false);
 			gtml.setComponents(allcomp);
-			tmpm = gtml.translateToTMLModeling(true);
+			tmpm = gtml.translateToTMLModeling(true, false);
 			warnings.addAll(gtml.getCheckingWarnings());
 			if (gtml.getCheckingErrors().size() >0) {
 				checkingErrors.addAll(gtml.getCheckingErrors());

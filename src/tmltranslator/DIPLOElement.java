@@ -62,6 +62,7 @@ public class DIPLOElement {
     }
 	
 	public static void resetID() {
+		System.out.println("Reset DIPLOID");
 		ID = 0;
 	}
 }

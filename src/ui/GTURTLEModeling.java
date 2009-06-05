@@ -4404,7 +4404,7 @@ public class GTURTLEModeling {
 		//System.out.println("New TML Modeling");
 		GTMLModeling gtmlm = new GTMLModeling(tmldp, true);
 		gtmlm.setTasks(tasksToTakeIntoAccount);
-		tmlm = gtmlm.translateToTMLModeling();
+		tmlm = gtmlm.translateToTMLModeling(true);
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
@@ -4473,7 +4473,7 @@ public class GTURTLEModeling {
 		//System.out.println("New TML Component Modeling");
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
-		tmlm = gctmlm.translateToTMLModeling();
+		tmlm = gctmlm.translateToTMLModeling(true);
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();

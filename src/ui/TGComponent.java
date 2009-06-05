@@ -427,8 +427,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     }
 	
 	public void drawDiploID(Graphics g) {
-		g.setColor(ColorManager.DIPLOID);
-		g.drawString(""+getDIPLOID(), x+width, y+height + 5);
+		if (getDIPLOID() != -1) {
+			g.setColor(ColorManager.DIPLOID);
+			g.drawString(""+getDIPLOID(), x+width, y+height + 5);
+		}
 	}
 	
 	public void drawRunningDiploID(Graphics g) {

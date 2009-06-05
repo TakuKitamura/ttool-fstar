@@ -3132,12 +3132,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		Point p;
 		TGComponent tgc;
         Iterator iterator = componentList.listIterator();
+		int i;
+		boolean found;
         
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
 			if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
-				p = new Point(taskID, tgc.getDIPLOID());
-				points.add(p);
+				found = false;
+				for(i=0; i<points.size(); i++) {
+					if (points.get(i).y == tgc.getDIPLOID()) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					p = new Point(taskID, tgc.getDIPLOID());
+					points.add(p);
+				}
 			}
 		}
 		

@@ -710,12 +710,14 @@ public class DesignPanelTranslator {
 					adtlo.setAction(s1);
 					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
 					listE.addCor(adtlo, tgc);
+					((TADTimeLimitedOffer)tgc).setStateAction(TADTimeLimitedOffer.GATE);
 				} else {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOffer)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
+					((TADTimeLimitedOffer)tgc).setStateAction(TADTimeLimitedOffer.UNKNOWN);
 					//System.out.println("Bad time limited offer found " + s);
 				}
 			} else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
@@ -733,12 +735,14 @@ public class DesignPanelTranslator {
 					adtlo.setAction(s1);
 					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
 					listE.addCor(adtlo, tgc);
+					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(TADTimeLimitedOfferWithLatency.GATE);
 				} else {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getLatency() + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
+					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(TADTimeLimitedOfferWithLatency.UNKNOWN);
 					//System.out.println("Bad time limited offer found " + s);
 				}
 				

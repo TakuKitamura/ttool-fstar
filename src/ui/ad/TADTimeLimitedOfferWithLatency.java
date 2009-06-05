@@ -70,6 +70,10 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent {
     protected int arrowLength = 10;
     private int incrementY = 4;
     private int segment = 4;
+	
+	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
+	public static final int GATE = 1;
+	public static final int UNKNOWN = 2;
     
     //private boolean first;
     
@@ -126,6 +130,19 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent {
             //updateConnectingPoints();
             updateInternalComponents(width - w2, x - x1);
         }
+		
+		if (stateAction > 0)  {
+			Color c = g.getColor();
+			switch(stateAction) {
+			case 1:
+				g.setColor(ColorManager.GATE_BOX_ACTION);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			g.fillRoundRect(x, y, width, height, arc, arc);
+			g.setColor(c);
+		}
         // action state
         g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawString(value, x + (width - w) / 2 , y + textY);
@@ -253,5 +270,9 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent {
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateAction = _stateAction;
+	}
  
 }

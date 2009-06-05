@@ -71,27 +71,27 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
     
-   public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String name) {
+   public TMLActivityDiagramPanel getTMLActivityDiagramPanel(String _name) {
         TMLActivityDiagramPanel tmladp;
         for(int i=1; i<panels.size(); i++) {
             tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
-            if (tmladp.getName().compareTo(name) ==0) {
+            if (tmladp.getName().compareTo(_name) ==0) {
                 return tmladp;
             }
         }
         return null;
     }
 	
-	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String name) {
-		System.out.println("Searching for activity diagram of:" + name);
-        TMLActivityDiagramPanel tmladp = getTMLActivityDiagramPanel(name);
+	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String _name) {
+		//System.out.println("Searching for activity diagram of:" + _name);
+        TMLActivityDiagramPanel tmladp = getTMLActivityDiagramPanel(_name);
 		if (tmladp != null) {
-			System.out.println("Locally found");
+			//System.out.println("Locally found");
 			return tmladp;
 		}
         
 		// Search on other tabs
-		return mgui.getReferencedTMLActivityDiagramPanel(name);
+		return mgui.getReferencedTMLActivityDiagramPanel(_name);
     }
     
     public void addTMLActivityDiagram(String s) {
@@ -180,8 +180,13 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
             if (tgc instanceof TMLCPrimitiveComponent) {
                 tmlcpc = (TMLCPrimitiveComponent)tgc;
 				if (tmlcpc.getDIPLOID() != -1) {
-					tmladp = getTMLActivityDiagramPanel(tmlcpc.getValue());
-					tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
+					//System.out.println("Searching for ad of name: " + tmlcpc.getValue());
+					tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getValue());
+					if (tmladp != null) {
+						tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
+					} else {
+						System.out.println("Unknown panel:" + tmlcpc.getValue());
+					}
 				}
 			}
 		}

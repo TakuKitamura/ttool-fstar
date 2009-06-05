@@ -244,9 +244,9 @@ public class CommandParser {
 		// get-variable-of-task
 		params = new int[2];
 		paramNames = new String[2];
-		params[0] = 1;
+		params[0] = 0;
 		paramNames[0] = "Task id";
-		params[1] = 1;
+		params[1] = 0;
 		paramNames[1] = "Variable id";
 		sc = new SimulationCommand("get-variable-of-task", "gvof", "3", params, paramNames, "Returns the value of a variable a a task");
 		commandList.add(sc);

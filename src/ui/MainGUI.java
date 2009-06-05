@@ -2845,7 +2845,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			}
 		}
 		jfis.setIconImage(IconManager.img9);
-		jfis.setSize(1024, 800);
+		jfis.setSize(1024, 900);
 		GraphicLib.centerOnParent(jfis);
 		jfis.setVisible(true);
 		
@@ -2883,13 +2883,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		ArrayList<Point> points = new ArrayList<Point>();
 		TURTLEPanel tp;
 		
-		for(int i=0; i<tabs.size(); i++) {
-			tp = (TURTLEPanel)(tabs.elementAt(i));
-			if (tp instanceof TMLDesignPanel) {
-				((TMLDesignPanel)tp).getListOfBreakPoints(points);
-			}
-			if (tp instanceof TMLComponentDesignPanel) {
-				((TMLComponentDesignPanel)tp).getListOfBreakPoints(points);
+		if (tabs != null) {
+			for(int i=0; i<tabs.size(); i++) {
+				tp = (TURTLEPanel)(tabs.elementAt(i));
+				if (tp instanceof TMLDesignPanel) {
+					((TMLDesignPanel)tp).getListOfBreakPoints(points);
+				}
+				if (tp instanceof TMLComponentDesignPanel) {
+					((TMLComponentDesignPanel)tp).getListOfBreakPoints(points);
+				}
 			}
 		}
 		return points;
@@ -3702,13 +3704,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String name) {
 		TURTLEPanel tp;
 		TMLActivityDiagramPanel tmladp;
-		System.out.println("global search for: " + name);
+		//System.out.println("global search for: " + name);
 		for(int i=0; i<tabs.size(); i++) {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLComponentDesignPanel) {
 				tmladp = ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
 				if (tmladp != null) {
-					System.out.println("Found");
+					//System.out.println("Found");
 					return tmladp;
 				}
 			}
@@ -3717,6 +3719,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		System.out.println("Not found");
 		return null;
 	}
+	
+	
 	
 	public LinkedList getAllTMLComponents() {
 		TURTLEPanel tp;
