@@ -353,14 +353,17 @@ void Simulator::printHelp(){
 }
 
 void Simulator::run(){
+	std::string* aNewCmd;
 	std::cout << "Running in server mode.\n";
 	while (!_syncInfo->_terminate){
-		pthread_mutex_lock (&_syncInfo->_mutexConsume);
-		//_syncInfo->_terminate = decodeCommand(_syncInfo->_command);
+		//pthread_mutex_lock (&_syncInfo->_mutexConsume);
+		aNewCmd=_syncInfo->popCommand();
 		_busy=true;
-		decodeCommand(_syncInfo->_command);
+		//decodeCommand(_syncInfo->_command);
+		decodeCommand(*aNewCmd);
 		_busy=false;
-		pthread_mutex_unlock (&_syncInfo->_mutexProduce);
+		delete aNewCmd;
+		//pthread_mutex_unlock (&_syncInfo->_mutexProduce);
 	}
 	std::cout << "Simulator loop terminated." << std::endl;
 }
@@ -393,7 +396,8 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	return 0;
 }
 
-void Simulator::decodeCommand(char* iCmd){
+//void Simulator::decodeCommand(char* iCmd){
+void Simulator::decodeCommand(std::string& iCmd){
 	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
 	std::istringstream aInpStream(iCmd);
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;

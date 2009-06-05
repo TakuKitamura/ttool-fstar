@@ -143,12 +143,13 @@ int Server::run(){
 				if (strlen(&aTmpBuffer[aStringPos])>0){
 					std::cout << "Command received: " << &aTmpBuffer[aStringPos] << std::endl;
 					if (!_syncInfo->_simulator->execAsyncCmd(&aTmpBuffer[aStringPos])){
-						if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
-							memmove(_syncInfo->_command,&aTmpBuffer[aStringPos], aReturnPos-aStringPos+1);
-							pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
-						}else{
-							_syncInfo->_simulator->sendStatus();
-						}
+						_syncInfo->pushCommand(new std::string(&aTmpBuffer[aStringPos]));
+						//if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
+						//	memmove(_syncInfo->_command,&aTmpBuffer[aStringPos], aReturnPos-aStringPos+1);
+						//	pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
+						//}else{
+						_syncInfo->_simulator->sendStatus();
+						//}
 					}
 				}
 			//}

@@ -51,18 +51,43 @@ class SimComponents;
 
 class SimServSyncInfo{
 public:
-	SimServSyncInfo():_bufferSize(BUFFER_SIZE),_terminate(false){
-		pthread_mutex_init(&_mutexProduce, NULL);
-		pthread_mutex_init(&_mutexConsume, NULL);
-		pthread_mutex_lock(&_mutexConsume);
+	SimServSyncInfo():_simulator(0), _server(0), _simComponents(0), _terminate(false){
+		//pthread_mutex_init(&_mutexProduce, NULL);
+		//pthread_mutex_init(&_mutexConsume, NULL);
+		//pthread_mutex_lock(&_mutexConsume);
+		pthread_mutex_init(&_mutexCmdAvailable, NULL);
+		pthread_mutex_init(&_mutexListProtect, NULL);
+		pthread_mutex_lock(&_mutexCmdAvailable);
 	}
-	pthread_mutex_t _mutexProduce;
-	pthread_mutex_t _mutexConsume;
+
+	//pthread_mutex_t _mutexProduce;
+	//pthread_mutex_t _mutexConsume;
 	Simulator* _simulator;
 	ServerIF* _server;
 	SimComponents* _simComponents;
-	char _command[BUFFER_SIZE];
-	unsigned int _bufferSize;
+	//char _command[BUFFER_SIZE];
+	//unsigned int _bufferSize;
 	bool _terminate;
+
+	void pushCommand(std::string* iCmd){
+		pthread_mutex_lock(&_mutexListProtect);
+		bool aWasEmpty=_cmdQueue.empty();
+		_cmdQueue.push_back(iCmd);
+		pthread_mutex_unlock(&_mutexListProtect);
+		if (aWasEmpty) pthread_mutex_unlock(&_mutexCmdAvailable);
+	}
+
+	std::string* popCommand(){
+		if (_cmdQueue.empty()) pthread_mutex_lock(&_mutexCmdAvailable);
+		pthread_mutex_lock(&_mutexListProtect);
+		std::string* aCmdTmp=_cmdQueue.front();
+		_cmdQueue.pop_front();
+		pthread_mutex_unlock(&_mutexListProtect);
+		return aCmdTmp;
+	}
+protected:
+	pthread_mutex_t _mutexListProtect;
+	pthread_mutex_t _mutexCmdAvailable;
+	CommandQueue _cmdQueue;	
 };
 #endif

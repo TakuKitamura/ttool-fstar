@@ -126,7 +126,7 @@ using std::max;
 #define TAG_EXTIMEc "</extime>"
 #define TAG_CONTDELo "<contdel"
 #define TAG_CONTDELc "</contdel>"
-#define TAG_BUSo "<bus>"
+#define TAG_BUSo "<bus"
 #define TAG_BUSc "</bus>"
 #define TAG_UTILo "<util>"
 #define TAG_UTILc "</util>"
@@ -195,6 +195,8 @@ typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam
 typedef std::list<TraceableDevice*> TraceableDeviceList;
 ///Datatype used by the Simulator to keep track of all breakpoints
 typedef std::set<TMLCommand*> BreakpointSet;
+///Command queue used by server
+typedef std::deque<std::string*> CommandQueue;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{
