@@ -327,7 +327,7 @@ bool Simulator::simulate(){
 //#endif
 		transLET=getTransLowestEndTime(cpuLET);
 		//_syncInfo->_server->sendReply("Sleep once again\n");
-		//sleep(1);
+		sleep(1);
 	}
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";

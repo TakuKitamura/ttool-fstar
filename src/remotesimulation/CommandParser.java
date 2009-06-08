@@ -291,10 +291,24 @@ public class CommandParser {
 		sc = new SimulationCommandSaveState("restore-simulation-state-from-file", "rssff", "9", params, paramNames, "Restores the simulation state from a file");
 		commandList.add(sc);
 		
+		// run-exploration
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("run-exploration", "re", "1 7", params, paramNames, "Runs the simulation in exploration mode");
+		commandList.add(sc);
+		
 		// run-to-next-breakpoint
 		params = new int[0];
 		paramNames = new String[0];
 		sc = new SimulationCommand("run-to-next-breakpoint", "rtnb", "1 0", params, paramNames, "Runs the simulation until a breakpoint is met");
+		commandList.add(sc);
+		
+		// run-to-next-transfer-on-bus
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "bus id";
+		sc = new SimulationCommand("run-to-next-transfer-on-bus", "rtntob", "1 8", params, paramNames, "Runs to the next transfer on bus which id is provided as argument");
 		commandList.add(sc);
 		
 		// run-to-time
@@ -303,6 +317,38 @@ public class CommandParser {
 		params[0] = 1;
 		paramNames[0] = "x: time value";
 		sc = new SimulationCommand("run-to-time", "rtt", "1 5", params, paramNames, "Runs the simulation until time x is reached");
+		commandList.add(sc);
+		
+		// run-until-channel-access
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "Channel id";
+		sc = new SimulationCommand("run-until-channel-access", "ruca", "1 12", params, paramNames, "Run simulation until a operation is performed on the channel which ID is provided as parameter");
+		commandList.add(sc);
+		
+		// run-until-cpu-executes
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "CPU id";
+		sc = new SimulationCommand("run-until-cpu-executes", "ruce", "1 9", params, paramNames, "Run simulation until CPU which ID is provided as parameter executes");
+		commandList.add(sc);
+		
+		// run-until-memory-access
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "Memory id";
+		sc = new SimulationCommand("run-until-memory-access", "ruma", "1 11", params, paramNames, "Run simulation until the memory which ID is provided as parameter is accessed");
+		commandList.add(sc);
+		
+		// run-until-task-executes
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "Task id";
+		sc = new SimulationCommand("run-until-task-executes", "rute", "1 10", params, paramNames, "Run simulation until the task which ID is provided as parameter executes");
 		commandList.add(sc);
 		
 		// run-x-commands
@@ -345,6 +391,18 @@ public class CommandParser {
 		params[1] = 2;
 		paramNames[1] = "File name";
 		sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+		commandList.add(sc);
+		
+		// set-variable
+		params = new int[3];
+		paramNames = new String[3];
+		params[0] = 1;
+		paramNames[0] = "task ID";
+		params[1] = 0;
+		paramNames[1] = "variable ID";
+		params[2] = 0;
+		paramNames[2] = "variable value";
+		sc = new SimulationCommand("set-variable", "sv", "5", params, paramNames, "Set the value of a variable");
 		commandList.add(sc);
 		
 		// stop
