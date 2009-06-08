@@ -439,7 +439,7 @@ public class IconManager {
     }
     
     public ImageIcon getIcon(String s){
-        URL url = this.getClass().getResource("../" + s);
+        URL url = this.getClass().getResource(s);
         
         if (url != null)  {
             return new ImageIcon(url);
