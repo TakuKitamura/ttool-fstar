@@ -1,4 +1,4 @@
-/**Copyright or � or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
 ludovic.apvrille AT enst.fr
 
@@ -439,7 +439,7 @@ public class IconManager {
     }
     
     public ImageIcon getIcon(String s){
-        URL url = this.getClass().getResource(s);
+        URL url = this.getClass().getResource("../" + s);
         
         if (url != null)  {
             return new ImageIcon(url);
@@ -463,8 +463,12 @@ public class IconManager {
     public void loadImg() {
         imgic8 = getIcon(icon8);
 		imgic9 = getIcon(icon9);
-		img8 = imgic8.getImage();
-		img9 = imgic9.getImage();
+		if (imgic8 != null) {
+			img8 = imgic8.getImage();
+		}
+		if (img9 != null) {
+			img9 = imgic9.getImage();
+		}
 		
         //Added by Solange
         imgic0 = getIcon(icon0);
