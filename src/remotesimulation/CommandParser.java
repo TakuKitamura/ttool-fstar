@@ -219,6 +219,17 @@ public class CommandParser {
 		sc = new SimulationCommand("get-command-of-task", "gcot", "14", params, paramNames, "Returns the current command of the task provided as argument");
 		commandList.add(sc);
 		
+		// get-benchmark
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "0: show benchmark; 1:save in file";
+		params[1] = 0;
+		paramNames[1] = "Name of file";
+		sc = new SimulationCommand("get-benchmark", "gb", "10", params, paramNames, "Returns information on hardware nodes of the architecture");
+		commandList.add(sc);
+		
+		
 		// get-hash-code
 		params = new int[0];
 		paramNames = new String[0];
@@ -409,6 +420,16 @@ public class CommandParser {
 		params = new int[0];
 		paramNames = new String[0];
 		sc = new SimulationCommand("stop", "stop", "15", params, paramNames, "Stops the currently running simulation");
+		commandList.add(sc);
+		
+		// write-in-channel
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 1;
+		paramNames[0] = "Channel ID";
+		params[1] = 2;
+		paramNames[1] = "Nb of samples";
+		sc = new SimulationCommand("write-in-channel", "wic", "6", params, paramNames, "Writes y samples / events to channel / event x");
 		commandList.add(sc);
 	}
 	

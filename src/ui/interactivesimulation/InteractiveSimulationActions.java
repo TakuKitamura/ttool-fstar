@@ -65,6 +65,13 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_RUN_X_TRANSACTIONS = 8;
 	public static final int ACT_RUN_X_COMMANDS = 9;
 	
+	public static final int ACT_RUN_EXPLORATION = 20;
+	public static final int ACT_RUN_TO_NEXT_BUS_TRANSFER = 21;
+	public static final int ACT_RUN_UNTIL_CPU_EXECUTES = 22;
+	public static final int ACT_RUN_UNTIL_TASK_EXECUTES = 23;
+	public static final int ACT_RUN_UNTIL_MEMORY_ACCESS = 24;
+	public static final int ACT_RUN_UNTIL_CHANNEL_ACCESS = 25;
+	
 	public static final int ACT_SAVE_VCD = 10;
 	public static final int ACT_SAVE_HTML = 11;
 	public static final int ACT_SAVE_TXT = 12;
@@ -82,7 +89,7 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_UPDATE_BUS = 18;  
 	public static final int ACT_UPDATE_TASKS = 19;
    
-    public static final int NB_ACTION = 20;
+    public static final int NB_ACTION = 26;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -130,6 +137,13 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "Run x commands", IconManager.imgic1308, IconManager.imgic1308, "Run x commands", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
         
+		actions[ACT_RUN_X_EXPLORATION] = new TAction("run-exploration", "Run exploration", IconManager.imgic1308, IconManager.imgic1308, "Run exploration", "Explore branches of the simulation", 'R');
+        actions[ACT_RUN_TO_NEXT_BUS_TRANSFER] = new TAction("run-until-bus-transfer", "Run until bus transfer", IconManager.imgic1308, IconManager.imgic1308, "Run until transfer on bus", "Run until a transfer on the indicated bus is performed. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_UNTIL_CPU_EXECUTES] = new TAction("run-to-cpu", "Run until CPU executes", IconManager.imgic1308, IconManager.imgic1308, "Run until CPU executes", "Run until a CPU, given as parameter, executes. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_UNTIL_TASK_EXECUTES] = new TAction("run-to-task", "Run until a task executes", IconManager.imgic1308, IconManager.imgic1308, "Run until a task executes", "Run until a task executes. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_UNTIL_MEMORY_ACCESS] = new TAction("run-to-memory-accessd", "Run until a memory access is performed", IconManager.imgic1308, IconManager.imgic1308, "Run until a memory access is performed", "Run simulation until a memory access is performed on selected memory. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_RUN_UNTIL_CHANNEL_ACCESS] = new TAction("run--to-channel-access", "Run until a channel is accessed", IconManager.imgic1308, IconManager.imgic1308, "Run until a channel is accessed", "Run until a channel is accessed. Works only if the simulator is \"ready\"", 'R');
+		
 		actions[ACT_SAVE_VCD] = new TAction("save-vcd", "Save trace in VCD format", IconManager.imgic1310, IconManager.imgic1310, "Save trace in VCD format", "Save trace in VCD format", 'R');
         actions[ACT_SAVE_HTML] = new TAction("save-html", "Save trace in HTML format", IconManager.imgic1312, IconManager.imgic1312, "Save trace in HTML format", "Save trace in HTML format", 'R');
         actions[ACT_SAVE_TXT] = new TAction("save-txt", "Save trace in TXT format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in TXT format", "Save trace in TXT format", 'R');

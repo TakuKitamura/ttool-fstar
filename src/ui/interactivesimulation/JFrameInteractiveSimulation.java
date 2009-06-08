@@ -1243,6 +1243,13 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
 		
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
+		
 	}
 	
 	public static String decodeString(String s)  {
@@ -1576,6 +1583,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendCommandWithPositiveInt("run-x-transactions");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-commands");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].getActionCommand()))  {
+            sendCommand("run-exploration");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_VCD].getActionCommand()))  {
             sendSaveTraceCommand("0");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_HTML].getActionCommand()))  {
