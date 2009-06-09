@@ -1658,6 +1658,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendCommandWithPositiveInt("run-x-commands");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].getActionCommand()))  {
             sendCommand("run-exploration");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].getActionCommand()))  {
+            toNextBusTransfer();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].getActionCommand()))  {
+            runUntilCPUExecutes();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].getActionCommand()))  {
+            toNextMemoryTransfer();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].getActionCommand()))  {
+            runUntilTaskExecutes();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].getActionCommand()))  {
+            runUntilChannelAccess();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_VCD].getActionCommand()))  {
             sendSaveTraceCommand("0");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_HTML].getActionCommand()))  {
@@ -1711,6 +1721,63 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return null;
 		}
 	}
+	
+	public void toNextBusTransfer() {
+		int id = getIDFromString(busIDs[busses.getSelectedItem());
+		if (id != -1) {
+			sendCommand("run-to-next-transfer-on-bus " + id);
+		}
+	}
+	
+	public void runUntilCPUExecutes() {
+		int id = getIDFromString(cpuIDs[cpus.getSelectedItem());
+		if (id != -1) {
+			sendCommand("run-until-cpu-executes " + id);
+		}
+	}
+	
+	public void toNextMemoryTransfer() {
+		int id = getIDFromString(memIDs[mems.getSelectedItem());
+		if (id != -1) {
+			sendCommand("run-until-memory-access " + id);
+		}
+	}
+	
+	public void runUntilTaskExecutes() {
+		int id = getIDFromString(taskIDs[tasks.getSelectedItem());
+		if (id != -1) {
+			sendCommand("run-until-task-executes " + id);
+		}
+	}
+	
+	public void runUntilChannelAccess() {
+		int id = getIDFromString(chanIDs[chans.getSelectedItem());
+		if (id != -1) {
+			sendCommand("run-until-channel-access " + id);
+		}
+	}
+	
+	
+	
+	public int getIDFromString(String s) {
+		int index0 = s.indexOf("(");
+		int index1 = s.indexOf(")");
+		if ((index0 < 0) || (index1 <0) || (index1 < index0)) {
+			return -1;
+		}
+		
+		String in = s.substring(index0+1, index1);
+		
+		try {
+			return Integer.decode(in).intValue();
+		} catch (Exception e) {
+			System.out.println("Wrong string: "+ in);
+		}
+		
+		return -1;
+	}
+	
+	
 	
 	public void addBreakPoint(int _commandID) {
 		System.out.println("Add breakpoint: " + _commandID);
