@@ -4926,7 +4926,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void setDiploIDs(boolean b) {
 		TDiagramPanel.DIPLO_ID_ON = b;
-		getCurrentTDiagramPanel().repaint(); 
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
 	}
 	
 	public synchronized boolean isRunningID(int id) {
@@ -4948,7 +4951,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			runningIDs.clear();
 		}
 		runningIDs = null;
-		getCurrentTDiagramPanel().repaint(); 
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
 	}
 	
 	public synchronized void addRunningID(Integer id) {

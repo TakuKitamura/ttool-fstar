@@ -112,16 +112,18 @@ public class MainCommandsToolBar extends InteractiveSimulationBar {
 		
 		this.addSeparator();
 		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER]);
-        button.addMouseListener(jfis.mouseHandler);
-		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES]);
         button.addMouseListener(jfis.mouseHandler);
 		
-		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES]);
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER]);
         button.addMouseListener(jfis.mouseHandler);
 		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS]);
+        button.addMouseListener(jfis.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES]);
         button.addMouseListener(jfis.mouseHandler);
 		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS]);
