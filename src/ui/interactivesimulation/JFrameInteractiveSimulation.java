@@ -118,7 +118,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox debug, animate, update;
+	JCheckBox debug, animate, update, openDiagram;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -181,6 +181,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private Hashtable <Integer, Integer> rowTable;
 	
 	private Hashtable <Integer, Integer> runningTable;
+	private Hashtable <String, String> diagramTable;
 	
 	private ArrayList<Point> points;
 	
@@ -198,6 +199,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		tmap = _tmap;
 		if (tmap != null) {
 			hashCode = tmap.getHashCode();
+			tmap.makeMinimumMapping();
 		}
 		
 		points = _points;
@@ -207,10 +209,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		valueTable = new Hashtable<Integer, String>();
 		rowTable = new Hashtable<Integer, Integer>();
 		runningTable = new Hashtable<Integer, Integer>();
+		diagramTable = new Hashtable<String, String>();
 		
 		
 		mgui.resetRunningID();
-		
 		
 		setBackground(new Color(50, 40, 40, 200));
 		
@@ -346,7 +348,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		jp02.add(new JLabel("Command parameter: "), c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		paramMainCommand = new JTextField(30);
+		paramMainCommand = new JTextField("1", 30);
 		jp02.add(paramMainCommand, c01);
 		
 		c01.gridwidth = 1;
@@ -552,6 +554,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(update, c01);
 		update.addItemListener(this);
 		update.setSelected(true);
+		openDiagram = new JCheckBox("Automatically open active task diagram");
+		jp01.add(openDiagram, c01);
+		openDiagram.setSelected(true);
 		
 		
 		TableSorter sorterPI;
@@ -673,6 +678,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		busPanel.add(updateBusInformationButton, BorderLayout.SOUTH);
 		
 		pack();
+		
+		System.out.println("Row table:" + rowTable.toString());
+		System.out.println("Value table:" + valueTable.toString());
 	}
 	
 	private	void initActions() {
@@ -726,6 +734,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				rc = null;
 			}
 		}
+		mgui.resetRunningID();
 		dispose();
 		setVisible(false);
 		
@@ -1137,6 +1146,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							updateRunningCommand(id, command);
 						}
 						
+						if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
+							updateOpenDiagram(name, command);
+						}
+						
 						extime = null;
 						nl = elt.getElementsByTagName("extime");
 						if (nl.getLength() > 0) {
@@ -1200,7 +1213,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							util = node0.getTextContent();
 						}
 						
-						//System.out.println("Got info on cpu " + id + " util=" + util);
+						System.out.println("Got info on bus " + id + " util=" + util);
 						
 						if ((id != null) && (util != null)) {
 							updateBusState(id, util);
@@ -1237,6 +1250,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					cpuPanel.setVisible(false);
 					variablePanel.setVisible(false);
 					animate.setSelected(false);
+					openDiagram.setEnabled(false);
 					animate.setEnabled(false);
 					cpus.setEnabled(false);
 					busses.setEnabled(false);
@@ -1247,6 +1261,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					jta.append("\n*** Simulated model is the one currently loaded under TTool ***\n");
 					animate.setSelected(true);
 					animate.setEnabled(true);
+					openDiagram.setEnabled(true);
 					cpus.setEnabled(true);
 					busses.setEnabled(true);
 					mems.setEnabled(true);
@@ -1280,7 +1295,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void makeStatus(String s) {
-		System.out.println("busystatus="  + busyStatus);
+		//System.out.println("busystatus="  + busyStatus);
 		status.setText(s);
 		if (s.equals("busy")) {
 			setBusyStatus(true);
@@ -1288,9 +1303,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 		if (s.equals("ready")) {
 			if (busyStatus) {
-				System.out.println("Sending time command");
+				//System.out.println("Sending time command");
 				askForUpdate();
 				//sendCommand("time");
+			}
+			setBusyStatus(false);
+		}
+		
+		if (s.equals("term")) {
+			if (busyStatus) {
+				askForUpdate();
 			}
 			setBusyStatus(false);
 		}
@@ -1519,7 +1541,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		if ((i != null) && (c != null)) {
 			try {
-				System.out.println("Searching for old value");
+				//System.out.println("Searching for old value");
 				Integer old = runningTable.get(i);
 				if(old != null) {
 					mgui.removeRunningId(old);
@@ -1527,13 +1549,39 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				}
 				
 				runningTable.put(i, c);
-				System.out.println("Adding running command");
+				//System.out.println("Adding running command");
 				mgui.addRunningID(c);
 			} catch (Exception e) {
 				System.out.println("Exception updateRunningCommand: " + e.getMessage());
 			}
 		}
 		
+	}
+	
+	private void updateOpenDiagram(String name, String command) {
+		if (tmap == null) {
+			return;
+		}
+		
+		String cmd = diagramTable.get(name);
+		if (cmd == null) {
+			diagramTable.put(name, command);
+			return;
+		}
+		
+		if (!(cmd.equals(command))) {
+			diagramTable.remove(name);
+			diagramTable.put(name, command);
+			
+			String tab = name;
+			int index = tab.indexOf("__");
+			if (index != -1) {
+				tab = tab.substring(index+2, tab.length());
+			}
+			System.out.println("Opening diagram " + tab);
+
+			mgui.openTMLTaskActivityDiagram(tab);
+		}
 	}
 	
 	private void updateVariableState(String _idvar, String _value) {
@@ -1545,10 +1593,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				valueTable.remove(i);
 				valueTable.put(i, _value);
 				//System.out.println("Searching for old row");
-				row = rowTable.get(i).intValue();
+				row = (Integer)(rowTable.get(i)).intValue();
 				tvtm.fireTableCellUpdated(row, 4);
 			} catch (Exception e) {
-				System.out.println("Exception updateVariableState: " + e.getMessage() + "idvar=" + _idvar + " val=" + _value);
+				System.out.println("Exception updateVariableState: " + e.getMessage() + " idvar=" + _idvar + " val=" + _value);
 			}
 		}
 		
@@ -1579,16 +1627,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		if (i != null) {
 			try {
-				System.out.println("CPU 0");
 				valueTable.remove(i);
-				System.out.println("CPU 1");
 				valueTable.put(i, "Utilization: " + _utilization);
-				System.out.println("CPU 2");
 				//System.out.println("Searching for old row");
-				row = rowTable.get(i).intValue();
-				System.out.println("CPU 3");
+				row = (Integer)(rowTable.get(i)).intValue();
 				cputm.fireTableCellUpdated(row, 2);
-				System.out.println("CPU 4");
 			} catch (Exception e) {
 				System.out.println("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
 			}

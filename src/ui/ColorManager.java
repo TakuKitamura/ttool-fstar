@@ -61,6 +61,7 @@ public class ColorManager {
     public static final Color POINTER_ON_ME_0 = Color.red;
 	public static final Color ACCESSIBILITY = Color.red;
 	public static final Color BREAKPOINT = new Color(13, 248, 18);
+	public static final Color CURRENT_COMMAND = new Color(13, 248, 18, 200);
 	public static final Color DIPLOID = new Color(163, 5, 253);
     public static Color SELECTED_0 = Color.blue;
     public static final Color MOVING_0 = Color.magenta;

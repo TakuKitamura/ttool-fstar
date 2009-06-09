@@ -465,7 +465,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		xp[6] = x - sep - wb -wh;
 		yp[6] = y + ((height+hb) / 2);
 		
-		g.setColor(ColorManager.BREAKPOINT);
+		g.setColor(ColorManager.CURRENT_COMMAND);
 		g.fillPolygon(xp, yp, 7);
 		
 	}

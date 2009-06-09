@@ -114,8 +114,9 @@ public class CPUTableModel extends AbstractTableModel {
 		}
 		
 	
-		valueTable.put(ID, "-");
-		rowTable.put(ID, new Integer(row));
+		valueTable.put(new Integer(ID), "-");
+		//System.out.println("Putting " + ID + " in row:" + row);
+		rowTable.put(new Integer(ID), new Integer(row));
 		return "-";
 		
 	}
@@ -136,6 +137,10 @@ public class CPUTableModel extends AbstractTableModel {
 		}
 		
 		nbOfRows = cpus.size();
+		
+		for(int i=0; i<nbOfRows; i++) {
+			getCPUStatus(i);
+		}
 		return;
 	}
 

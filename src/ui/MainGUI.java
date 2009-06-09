@@ -4812,6 +4812,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return selectTab(getCurrentTURTLEPanel(), s);
     }
 	
+	public void openTMLTaskActivityDiagram(String s) {
+		selectTab(getCurrentTURTLEPanel(), s);
+	}
+	
 	public boolean selectHighLevelTab(String s) {
 		TURTLEPanel tp = getTURTLEPanel(s);
 		if (s != null) {
@@ -4964,7 +4968,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		
 		runningIDs.add(id);
 		//System.out.println("Running id " + id +  " added");
-		getCurrentTDiagramPanel().repaint(); 
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
 	}
 	
 	public synchronized void removeRunningId(Integer id) {

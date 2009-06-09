@@ -107,15 +107,15 @@ public class MemTableModel extends AbstractTableModel {
 	// Assumes tmlm != null
 	private String getMemStatus(int row) {
 		int ID = mems.get(row).getID();
-		String s = valueTable.get(ID);
+		String s = valueTable.get(new Integer(ID));
 		
 		if (s != null) {
 			return s;
 		}
 		
 	
-		valueTable.put(ID, "-");
-		rowTable.put(ID, row);
+		valueTable.put(new Integer(ID), "-");
+		rowTable.put(new Integer(ID), row);
 		return "-";
 		
 	}
@@ -136,6 +136,10 @@ public class MemTableModel extends AbstractTableModel {
 		}
 		
 		nbOfRows = mems.size();
+		
+		for(int i=0; i<nbOfRows; i++) {
+			getMemStatus(i);
+		}
 		return;
 	}
 

@@ -180,7 +180,12 @@ public class TaskVariableTableModel extends AbstractTableModel {
 			size = task.getAttributes().size();
 			cpt += size;
 			if (row < cpt) {
-				return "" + task.getAttributes().get(row+size-cpt).getInitialValue();
+				String val =  task.getAttributes().get(row+size-cpt).getInitialValue();
+				if ((val == null) | (val.length() == 0)) {
+					return " - ";
+				} else {
+					return val;
+				}
 			}
 		}
 		
@@ -189,15 +194,15 @@ public class TaskVariableTableModel extends AbstractTableModel {
 	
 	private String getVariableValue(int row) {
 		int ID = getVariableID(row);
-		String s = valueTable.get(ID);
+		String s = valueTable.get(new Integer(ID));
 		if (s != null) {
 			return s.toString();
 		}
 		
 		// Must set the ID;
 		String val = getVariableInitialValue(row);
-		valueTable.put(ID, val);
-		rowTable.put(ID, row);
+		valueTable.put(new Integer(ID), val);
+		rowTable.put(new Integer(ID), row);
 		return val;
 		
 	}
@@ -214,6 +219,10 @@ public class TaskVariableTableModel extends AbstractTableModel {
 		}
 		
 		nbOfRows = cpt;
+		
+		for(int i=0; i<nbOfRows; i++) {
+			getVariableValue(i);
+		}
 		return;
 	}
 
