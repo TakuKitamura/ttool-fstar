@@ -1723,35 +1723,35 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void toNextBusTransfer() {
-		int id = getIDFromString(busIDs[busses.getSelectedItem());
+		int id = getIDFromString(busIDs[busses.getSelectedIndex()]);
 		if (id != -1) {
 			sendCommand("run-to-next-transfer-on-bus " + id);
 		}
 	}
 	
 	public void runUntilCPUExecutes() {
-		int id = getIDFromString(cpuIDs[cpus.getSelectedItem());
+		int id = getIDFromString(cpuIDs[cpus.getSelectedIndex()]);
 		if (id != -1) {
 			sendCommand("run-until-cpu-executes " + id);
 		}
 	}
 	
 	public void toNextMemoryTransfer() {
-		int id = getIDFromString(memIDs[mems.getSelectedItem());
+		int id = getIDFromString(memIDs[mems.getSelectedIndex()]);
 		if (id != -1) {
 			sendCommand("run-until-memory-access " + id);
 		}
 	}
 	
 	public void runUntilTaskExecutes() {
-		int id = getIDFromString(taskIDs[tasks.getSelectedItem());
+		int id = getIDFromString(taskIDs[tasks.getSelectedIndex()]);
 		if (id != -1) {
 			sendCommand("run-until-task-executes " + id);
 		}
 	}
 	
 	public void runUntilChannelAccess() {
-		int id = getIDFromString(chanIDs[chans.getSelectedItem());
+		int id = getIDFromString(chanIDs[chans.getSelectedIndex()]);
 		if (id != -1) {
 			sendCommand("run-until-channel-access " + id);
 		}
