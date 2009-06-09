@@ -205,6 +205,19 @@ public class CommandParser {
 		sc = new SimulationCommand("add-breakpoint", "abp", "11", params, paramNames, "Set a breakpoint in task which id is the first parameter on the command provided as the second parameter");
 		commandList.add(sc);
 		
+		// choose-branh
+		params = new int[3];
+		paramNames = new String[3];
+		params[0] = 1;
+		paramNames[0] = "task ID";
+		params[1] = 0;
+		paramNames[1] = "command ID";
+		params[2] = 0;
+		paramNames[2] = "branch ID";
+		sc = new SimulationCommand("choose-branch", "cb", "12", params, paramNames, "Chooses the branch of the given command of a task");
+		commandList.add(sc);
+		
+		
 		// get-breakpoint-list
 		params = new int[0];
 		paramNames = new String[0];
@@ -244,6 +257,12 @@ public class CommandParser {
 		params[1] = 1;
 		paramNames[1] = "id";
 		sc = new SimulationCommand("get-info-on-hw", "gioh", "4", params, paramNames, "Returns information on hardware nodes of the architecture");
+		commandList.add(sc);
+		
+		// get-number-of-branches
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("get-numer-of-branches", "gnob", "17", params, paramNames, "Returns the number of branches the current command has");
 		commandList.add(sc);
 		
 		// get-simulation-time
