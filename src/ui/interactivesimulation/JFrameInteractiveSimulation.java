@@ -81,7 +81,6 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private static String buttonCloseS = "Close";
 	private static String buttonStopAndCloseS = "Stop simulator and close";
 	
-	
 	private static int NOT_STARTED = 0;
 	private static int STARTING = 1;
 	private static int STARTED_NOT_CONNECTED = 2;
@@ -116,12 +115,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected SaveCommandsToolBar sctb;
 	protected StateCommandsToolBar stctb;
 	
+	
+	// Commands
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
 	JCheckBox debug, animate, update;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
+	protected JComboBox cpus, busses, mems, tasks, chans;
+	
+	
+	private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	
 	// Status elements
 	JLabel status, time;
@@ -335,13 +340,64 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.gridheight = 1;
 		c01.weighty = 1.0;
 		c01.weightx = 1.0;
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.gridwidth = 1; 
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
 		
-		jp02.add(new JLabel("Command parameter:"), c01);
+		jp02.add(new JLabel("Command parameter: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		paramMainCommand = new JTextField(30);
 		jp02.add(paramMainCommand, c01);
+		
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("CPUs: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		if (cpuIDs == null) {
+			cpus = new JComboBox();
+		} else {
+			cpus = new JComboBox(cpuIDs);
+		}
+		jp02.add(cpus, c01);
+		
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("Busses: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		if (busIDs == null) {
+			busses = new JComboBox();
+		} else {
+			busses = new JComboBox(busIDs);
+		}
+		jp02.add(busses, c01);
+		
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("Memories: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		if (memIDs == null) {
+			mems = new JComboBox();
+		} else {
+			mems = new JComboBox(memIDs);
+		}
+		jp02.add(mems, c01);
+		
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("Tasks: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		if (taskIDs == null) {
+			tasks = new JComboBox();
+		} else {
+			tasks = new JComboBox(taskIDs);
+		}
+		jp02.add(tasks, c01);
+		
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("Channels: "), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		if (chanIDs == null) {
+			chans = new JComboBox();
+		} else {
+			chans = new JComboBox(chanIDs);
+		}
+		jp02.add(chans, c01);
 		
 		jp01.add(jp02, BorderLayout.CENTER);
 		
@@ -626,6 +682,13 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             actions[i].addActionListener(this);
             //actions[i].addKeyListener(this);
         }
+		
+		cpuIDs = makeCPUIDs();
+		busIDs = makeBusIDs();
+		memIDs = makeMemIDs();
+		taskIDs = makeTasksIDs();
+		chanIDs = makeChanIDs();
+		
     }
 	
 
@@ -1175,10 +1238,20 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					variablePanel.setVisible(false);
 					animate.setSelected(false);
 					animate.setEnabled(false);
+					cpus.setEnabled(false);
+					busses.setEnabled(false);
+					mems.setEnabled(false);
+					tasks.setEnabled(false);
+					chans.setEnabled(false);
 				} else {
 					jta.append("\n*** Simulated model is the one currently loaded under TTool ***\n");
 					animate.setSelected(true);
 					animate.setEnabled(true);
+					cpus.setEnabled(true);
+					busses.setEnabled(true);
+					mems.setEnabled(true);
+					tasks.setEnabled(true);
+					chans.setEnabled(true);
 				}
 			} catch (Exception e) {
 			}
@@ -1700,6 +1773,30 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jta.append("*** " + msg + " ***\n");
 	}
 	
+	public String[] makeCPUIDs() {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.getCPUIDs();
+	}
+	
+	public String[] makeBusIDs() {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.getBusIDs();
+	}
+	
+	public String[] makeMemIDs() {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.getMemIDs();
+	}
+	
 	public String[] makeTasksIDs() {
 		if (tmap == null) {
 			return null;
@@ -1707,6 +1804,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		return tmap.getTasksIDs();
 	}
+	
+	public String[] makeChanIDs() {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.getChanIDs();
+	}
+	
+	
+	
+	
 	
 	public String[] makeCommandIDs(int index) {
 		if (tmap == null) {

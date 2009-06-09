@@ -137,7 +137,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "Run x commands", IconManager.imgic1308, IconManager.imgic1308, "Run x commands", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
         
-		actions[ACT_RUN_EXPLORATION] = new TAction("run-exploration", "Run exploration", IconManager.imgic1308, IconManager.imgic1308, "Run exploration", "Explore branches of the simulation", 'R');
+		actions[ACT_RUN_EXPLORATION] = new TAction("run-exploration", "Run exploration", IconManager.imgic1326, IconManager.imgic1326, "Run exploration", "Explore branches of the simulation", 'R');
         actions[ACT_RUN_TO_NEXT_BUS_TRANSFER] = new TAction("run-until-bus-transfer", "Run until bus transfer", IconManager.imgic1316, IconManager.imgic1316, "Run until transfer on bus", "Run until a transfer on the indicated bus is performed. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_UNTIL_CPU_EXECUTES] = new TAction("run-to-cpu", "Run until CPU executes", IconManager.imgic1320, IconManager.imgic1320, "Run until CPU executes", "Run until a CPU, given as parameter, executes. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_UNTIL_TASK_EXECUTES] = new TAction("run-to-task", "Run until a task executes", IconManager.imgic1318, IconManager.imgic1318, "Run until a task executes", "Run until a task executes. Works only if the simulator is \"ready\"", 'R');

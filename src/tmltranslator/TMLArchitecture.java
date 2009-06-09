@@ -108,6 +108,8 @@ public class TMLArchitecture {
 		return null;
 	}
 	
+	
+	
 	public boolean hasCPU() {
 		for(HwNode node: hwnodes) {
 			if (node instanceof HwCPU) {
@@ -133,6 +135,77 @@ public class TMLArchitecture {
 			}
 		}
 		return false;
+	}
+	
+	public String[] getCPUIDs() {
+		String [] list = new String[getNbOfCPU()];
+		int cpt = 0;
+		
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwCPU) {
+				list[cpt] = node.getName() + " (" + node.getID() + ")"; 
+				cpt ++;
+			}
+		}
+        return list;
+	}
+	
+	public String[] getBusIDs() {
+		String [] list = new String[getNbOfBus()];
+		int cpt = 0;
+		
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwBus) {
+				list[cpt] = node.getName() + " (" + node.getID() + ")"; 
+				cpt ++;
+			}
+		}
+        return list;
+	}
+	
+	public String[] getMemIDs() {
+		String [] list = new String[getNbOfMem()];
+		int cpt = 0;
+		
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwMemory) {
+				list[cpt] = node.getName() + " (" + node.getID() + ")"; 
+				cpt ++;
+			}
+		}
+        return list;
+	}
+	
+	
+	
+	public int getNbOfCPU() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwCPU) {
+				cpt ++;
+			}
+		}
+		return cpt;
+	}
+	
+	public int getNbOfBus() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwBus) {
+				cpt ++;
+			}
+		}
+		return cpt;
+	}
+	
+	public int getNbOfMem() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwMemory) {
+				cpt ++;
+			}
+		}
+		return cpt;
 	}
 	
 	public void addHwLink(HwLink _link) {

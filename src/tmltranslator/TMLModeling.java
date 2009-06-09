@@ -379,6 +379,23 @@ public class TMLModeling {
         return list;
 	}
 	
+	public String[] getChanIDs() {
+		if (channels == null) {
+			return null;
+		}
+		
+		String [] list = new String[channels.size()];
+		TMLChannel ch;
+        ListIterator iterator = channels.listIterator();
+		int cpt = 0;
+        while(iterator.hasNext()) {
+            ch = (TMLChannel)(iterator.next());
+            list[cpt] = ch.getName() + " (" + ch.getID() + ")";
+			cpt ++;
+        } 
+        return list;
+	}
+	
 	public String[] makeCommandIDs(int index) {
 		if (tasks == null) {
 			return null;

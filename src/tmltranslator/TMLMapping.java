@@ -162,6 +162,38 @@ public class TMLMapping {
 		return tmlm.getTasksIDs();
 	}
 	
+	public String[] getChanIDs() {
+		if (tmlm == null) {
+			return null;
+		}
+		
+		return tmlm.getChanIDs();
+	}
+	
+	public String[] getCPUIDs() {
+		if (tmla == null) {
+			return null;
+		}
+		
+		return tmla.getCPUIDs();
+	}
+	
+	public String[] getBusIDs() {
+		if (tmla == null) {
+			return null;
+		}
+		
+		return tmla.getBusIDs();
+	}
+	
+	public String[] getMemIDs() {
+		if (tmla == null) {
+			return null;
+		}
+		
+		return tmla.getMemIDs();
+	}
+	
 	public String[] makeCommandIDs(int index) {
 		if (tmlm == null) {
 			return null;
@@ -169,6 +201,8 @@ public class TMLMapping {
 		
 		return tmlm.makeCommandIDs(index);
 	}
+	
+	
 	
 	public void addTaskToHwExecutionNode(TMLTask _task, HwExecutionNode _hwnode) {
 		onnodes.add(_hwnode);
