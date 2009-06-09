@@ -562,7 +562,6 @@ public class MappedSystemCTask {
 			String code = "", nextCommandTemp="", MCResult="";
 			if (debug) System.out.println("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
-				
 				String guardS = "",code2;
 				int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
 				int nb = choice.nbOfNonDeterministicGuard();
@@ -663,7 +662,8 @@ public class MappedSystemCTask {
 					}
 					hcode+="TMLChoiceCommand " + cmdName + SCCR;
 					//initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
-					initCommand+= "," + cmdName + "("+ idString +",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
+					initCommand+= "," + cmdName + "("+ idString +",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard();
+					if (choice.nbOfNonDeterministicGuard()==0) initCommand+=",false)"+CR; else initCommand+=",true)"+CR;
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{

@@ -136,7 +136,6 @@ public class TML2MappingSystemC {
 			if (node instanceof HwCPU) {
 				if (tmlmapping.isAUsedHwNode(node)) {
 					HwCPU exNode = (HwCPU)node;
-					//declaration += exNode.getType() + "* " + exNode.getName() + " = new " + exNode.getType() + "(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
 					declaration += "CPUPB* " + exNode.getName() + " = new CPUPB(" + exNode.getID() + ",\"" + exNode.getName() + "\", " + exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
 					
 					declaration += "addCPU("+ node.getName() +")"+ SCCR;
@@ -292,16 +291,14 @@ public class TML2MappingSystemC {
 			mst.generateSystemC(debug);
 			tasks.add(mst);
 
-			//for(TMLChannel channelb: tmlmodeling.getChannels(task)) {
 			for(TMLChannel channelb: channels) {
 				declaration += "," + channelb.getExtendedName()+CR;
 			}
-			//for(TMLEvent evt: tmlmodeling.getEvents(task)) {		
+
 			for(TMLEvent evt: events) {
 				declaration += "," + evt.getExtendedName()+CR;
 			}
-			//for(TMLRequest req: tmlmodeling.getRequests()) {
-			//for(TMLRequest req: tmlmodeling.getRequests(task)) {
+
 			for(TMLRequest req: requests) {
 				if (req.isAnOriginTask(task)) declaration+=",reqChannel_" + req.getDestinationTask().getName()+CR;
 			}
@@ -312,8 +309,6 @@ public class TML2MappingSystemC {
 		}
 		declaration += "}\n};\n\n";
 		declaration +="#include <main.h>\n";
-		//declaration += "//********** MAIN NEW SIMULATOR **********\n\nint main(int len, char ** args) {\nstruct timeval begin, end;\ngettimeofday(&begin,NULL);\nCurrentComponents* myComponents = new CurrentComponents();\nSimulator mySim(myComponents,len,args);\n";
-		//declaration+="gettimeofday(&end,NULL);\nstd::cout << \"The preparation took \" << getTimeDiff(begin,end) << \"usec.\\n\";\n#ifdef SERVER\nServer myServer(&mySim);\nmyServer.run();\n#else\nmySim.simulate();\nmySim.schedule2HTML();\nmySim.schedule2VCD();\n//mySim.schedule2Graph();\nmySim.schedule2TXT();\nmyComponents->streamBenchmarks(std::cout);\nstd::cout << \"Simulated time: \" << SchedulableDevice::getSimulatedTime() << \" time units.\\n\";\n#endif\ndelete myComponents;\nreturn 0;\n}\n\n";
   	}
 
 	private int addRoutingInfoForChannel(TMLElement _tmle, TMLTask _task, strwrap buses, strwrap slaves, boolean dir){
@@ -332,13 +327,6 @@ public class TML2MappingSystemC {
 			slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
 			return -1;
 		}
-		//HwLink cpuLink = tmlmapping.getTMLArchitecture().getHwLinkByHwNode(tmlmapping.getNodes().get(taskIndex)); //cpu of task as parameter
-		//if (cpuLink==null){
-		//	buses.str=",(SchedulableCommDevice*)&defaultBus";
-		//	slaves.str= ",(Slave*)&defaultMemory";
-		//	return -1;
-		//}
-		//HwBus bus=cpuLink.bus;
 		HwBus bus= getBusConnectedToNode(commNodeList, tmlmapping.getNodes().get(taskIndex));
 		if (bus==null){
 			buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
