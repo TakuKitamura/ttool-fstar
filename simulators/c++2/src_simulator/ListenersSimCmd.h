@@ -40,66 +40,43 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef ListenersSimCmdH
 #define ListenersSimCmdH
 
+#include <definitions.h>
 #include <TransactionListener.h>
 #include <CommandListener.h>
+#include <ListenerSubject.h>
+
+class SimComponents;
 
 class RunXTransactions: public TransactionListener{
 public:
-	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
-		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-			(*i)->registerListener(this);	
-	}
-	virtual ~RunXTransactions(){
-		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-			(*i)->removeListener(this);
-	}
-	bool transExecuted(TMLTransaction* iTrans){
-		_count++;
-		if (_count>=_transToExecute){
-			_simComp->setStopFlag(true);
-			return true;
-		}
-		return false;
-	}
-	void setTransToExecute(unsigned int iTransToExecute){
-		_transToExecute=iTransToExecute;
-	}
+	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
+	virtual ~RunXTransactions();
+	bool transExecuted(TMLTransaction* iTrans);
+	void setTransToExecute(unsigned int iTransToExecute);
 protected:
 	SimComponents* _simComp;
 	unsigned int _count, _transToExecute;
 
 };
 
+
 class Breakpoint: public CommandListener, public TransactionListener{
 public:
-	Breakpoint(SimComponents* iSimComp):_simComp(iSimComp){}
-	bool commandEntered(TMLCommand* iComm){
-		_simComp->setStopFlag(true);
-		return true;
-	}
+	Breakpoint(SimComponents* iSimComp);
+	bool commandEntered(TMLCommand* iComm);
+	static void setEnabled(bool iEnabled);
 protected:
 	SimComponents* _simComp;
+	static bool _enabled;
 };
+
 
 class RunXCommands: public CommandListener, public TransactionListener{
 public:
-	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute):_simComp(iSimComp), _count(0), _commandsToExecute(iCommandsToExecute){
-		TMLCommand::registerGlobalListener(this);
-	}
-	virtual ~RunXCommands(){
-		TMLCommand::removeGlobalListener(this);
-	}
-	bool commandFinished(TMLCommand* iComm){
-		_count++;
-		if (_count>=_commandsToExecute){
-			 _simComp->setStopFlag(true);
-			return true;
-		}
-		return false;
-	}
-	void setCmdsToExecute(unsigned int iCommandsToExecute){
-		_commandsToExecute=iCommandsToExecute;
-	}
+	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute);
+	virtual ~RunXCommands();
+	bool commandFinished(TMLCommand* iComm);
+	void setCmdsToExecute(unsigned int iCommandsToExecute);
 protected:
 	SimComponents* _simComp;
 	unsigned int _count, _commandsToExecute;
@@ -108,24 +85,10 @@ protected:
 
 class RunXTimeUnits: public TransactionListener{
 public:
-	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime):_simComp(iSimComp), _endTime(iEndTime){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-		(*i)->registerListener(this);	
-	}
-	virtual ~RunXTimeUnits(){
-		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-			(*i)->removeListener(this);
-	}
-	bool transExecuted(TMLTransaction* iTrans){
-		if (SchedulableDevice::getSimulatedTime()>=_endTime){
-			_simComp->setStopFlag(true);
-			return true;
-		}
-		return false;
-	}
-	void setEndTime(TMLTime iEndTime){
-		_endTime=iEndTime;
-	}
+	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
+	virtual ~RunXTimeUnits();
+	bool transExecuted(TMLTransaction* iTrans);
+	void setEndTime(TMLTime iEndTime);
 protected:
 	SimComponents* _simComp;
 	TMLTime _endTime;
@@ -134,16 +97,9 @@ protected:
 
 class RunTillTransOnDevice: public TransactionListener{
 public:
-	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
-		_subject->registerListener(this);
-	}
-	virtual ~RunTillTransOnDevice(){
-		_subject->removeListener(this);
-	}
-	bool transExecuted(TMLTransaction* iTrans){
-		_simComp->setStopFlag(true);
-		return true;
-	}
+	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
+	virtual ~RunTillTransOnDevice();
+	bool transExecuted(TMLTransaction* iTrans);
 protected:
 	SimComponents* _simComp;
 	ListenerSubject<TransactionListener>* _subject;

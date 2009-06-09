@@ -13,7 +13,7 @@ OBJDIR = lib
 
 MODULE = run
 include Makefile.src
-SRCS_base = TMLTask.cpp TMLCommand.cpp TMLTransaction.cpp TMLChannel.cpp CPU.cpp CPURR.cpp CPUPB.cpp CPUPBL.cpp TMLWriteCommand.cpp TMLStateChannel.cpp TMLbrbwChannel.cpp TMLnbrnbwChannel.cpp TMLbrnbwChannel.cpp TMLEventChannel.cpp TMLEventBChannel.cpp TMLEventFChannel.cpp TMLEventFBChannel.cpp TMLReadCommand.cpp TMLExeciCommand.cpp TMLActionCommand.cpp TMLChoiceCommand.cpp TMLWaitCommand.cpp TMLSendCommand.cpp TMLSelectCommand.cpp TMLRequestCommand.cpp TMLNotifiedCommand.cpp TMLStopCommand.cpp Bus.cpp definitions.cpp Bridge.cpp Memory.cpp MemPool.cpp Comment.cpp Server.cpp ServerLocal.cpp Simulator.cpp SimComponents.cpp ServerIF.cpp
+SRCS_base = TMLTask.cpp TMLCommand.cpp TMLTransaction.cpp TMLChannel.cpp CPU.cpp CPURR.cpp CPUPB.cpp CPUPBL.cpp TMLWriteCommand.cpp TMLStateChannel.cpp TMLbrbwChannel.cpp TMLnbrnbwChannel.cpp TMLbrnbwChannel.cpp TMLEventChannel.cpp TMLEventBChannel.cpp TMLEventFChannel.cpp TMLEventFBChannel.cpp TMLReadCommand.cpp TMLExeciCommand.cpp TMLActionCommand.cpp TMLChoiceCommand.cpp TMLWaitCommand.cpp TMLSendCommand.cpp TMLSelectCommand.cpp TMLRequestCommand.cpp TMLNotifiedCommand.cpp TMLStopCommand.cpp Bus.cpp definitions.cpp Bridge.cpp Memory.cpp MemPool.cpp Comment.cpp Server.cpp ServerLocal.cpp Simulator.cpp SimComponents.cpp ServerIF.cpp ListenersSimCmd.cpp
 SRCS_base_DIR = src_simulator
 SRCS_generated = .
 

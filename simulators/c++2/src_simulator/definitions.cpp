@@ -45,12 +45,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 #include <CPU.h>
 #include <SchedulableDevice.h>
+#include <ListenersSimCmd.h>
 
-//unsigned int TMLTask::_id=0;
-//unsigned int Bus::_id=0;
-//unsigned int CPU::_id=0;
 TMLTime SchedulableDevice::_simulatedTime=0;
 std::list<TMLCommand*> TMLCommand::_instanceList;
+bool Breakpoint::_enabled=true;
 
 int myrand(int n1, int n2){
 	static bool firstTime = true;

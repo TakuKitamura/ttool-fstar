@@ -59,7 +59,11 @@ public:
 		pthread_mutex_init(&_mutexListProtect, NULL);
 		pthread_mutex_lock(&_mutexCmdAvailable);
 	}
-
+	~SimServSyncInfo(){
+		for(CommandQueue::iterator i=_cmdQueue.begin(); i != _cmdQueue.end(); ++i){
+			delete (*i);
+		}
+	}
 	//pthread_mutex_t _mutexProduce;
 	//pthread_mutex_t _mutexConsume;
 	Simulator* _simulator;

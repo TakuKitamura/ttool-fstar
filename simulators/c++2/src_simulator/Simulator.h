@@ -72,6 +72,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define MSG_FILEERR "Cannot open file "
 #define SIM_READY "ready"
 #define SIM_BUSY "busy"
+#define SIM_TERM "term"
 
 class SimComponents;
 class SimServSyncInfo;
@@ -107,60 +108,60 @@ public:
 	/**
 	\return Return value of simulate() function
 	*/
-	bool runToNextBreakpoint();
+	bool runToNextBreakpoint(TMLTransaction*& oLastTrans);
 	///Runs the simulation until iTrans transaction have been executed
 	/**
 	\param iTrans Number of transactions
 	\return Return value of simulate() function
 	*/
-	bool runXTransactions(unsigned int iTrans);
+	bool runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTrans);
 	///Runs the simulation until iTrans commands have been executed
 	/**
 	\return Return value of simulate() function
 	*/
-	bool runXCommands(unsigned int iCmds);
+	bool runXCommands(unsigned int iCmds, TMLTransaction*& oLastTrans);
 	///Runs the simulation until the simulation time is greater or equal than iTime
 	/**
 	\param iTime Simulation End Time
 	\return Return value of simulate() function
 	*/
-	bool runTillTimeX(unsigned int iTime);
+	bool runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation for iTime time units
 	/**
 	\param iTime Number of time units
 	\return Return value of simulate() function
 	*/
-	bool runXTimeUnits(unsigned int iTime);
+	bool runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iBus is executed
 	/**
 	\param iBus Pointer to the bus
 	\return Return value of simulate() function
 	*/
-	bool runToBusTrans(SchedulableCommDevice* iBus);
+	bool runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iCPU is executed
 	/**
 	\param iCPU Pointer to the CPU
 	\return Return value of simulate() function
 	*/
-	bool runToCPUTrans(SchedulableDevice* iCPU);
+	bool runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction of iTask is executed
 	/**
 	\param iTask Pointer to the task
 	\return Return value of simulate() function
 	*/
-	bool runToTaskTrans(TMLTask* iTask);
+	bool runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on Slave iSlave is executed
 	/**
 	\param iSlave Pointer to the Slave
 	\return Return value of simulate() function
 	*/
-	bool runToSlaveTrans(Slave* iSlave);
+	bool runToSlaveTrans(Slave* iSlave, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iChannel is executed
 	/**
 	\param iChannel Pointer to the Channel
 	\return Return value of simulate() function
 	*/
-	bool runToChannelTrans(TMLChannel* iChannel);
+	bool runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans);
 	///Runs the automatic exploration of several branches of control flow. Choice commands to be explored must be marked with a breakpoint.
 	/**
 	\param iDepth Maximal recursion depth
@@ -190,7 +191,8 @@ protected:
 	/**
 	\return returns true if the simulation is completed, false otherwise
 	*/
-	bool simulate();
+	//bool simulate();
+	bool simulate(TMLTransaction*& oLastTrans);
 	///Returns a pointer to the transaction with the lowest end time proposed by CPU schedulers
 	/**
 	\param oResultDevice Pointer to the CPU which is running the returned transaction

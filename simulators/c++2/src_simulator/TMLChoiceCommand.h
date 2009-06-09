@@ -54,8 +54,9 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
+	\param iNonDeterm Flag is true for non deterministic commands
     	*/
-	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches);
+	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm);
 	void execute();
 	TMLTask* getDependentTask() const;
 	std::string toString() const;
@@ -77,6 +78,8 @@ protected:
 	unsigned int _nbOfBranches;
 	///Index of the manually set branch
 	mutable unsigned int _preferredBranch;
+	///Flag to label non determinsitic choice commands
+	bool _nonDeterm;
 	TMLCommand* getNextCommand() const;
 	TMLCommand* prepareNextTransaction();
 };

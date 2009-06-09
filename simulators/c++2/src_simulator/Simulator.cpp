@@ -235,7 +235,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 
 }
 
-bool Simulator::simulate(){
+bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
 	TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
 	TMLTask* depTask;
@@ -325,9 +325,10 @@ bool Simulator::simulate(){
 //#ifdef DEBUG_KERNEL
 //		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
 //#endif
+		oLastTrans=transLET;
 		transLET=getTransLowestEndTime(cpuLET);
 		//_syncInfo->_server->sendReply("Sleep once again\n");
-		sleep(1);
+		//sleep(1);
 	}
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
@@ -360,6 +361,7 @@ void Simulator::run(){
 		aNewCmd=_syncInfo->popCommand();
 		_busy=true;
 		//decodeCommand(_syncInfo->_command);
+		std::cout << "Let's crash.\n";
 		decodeCommand(*aNewCmd);
 		_busy=false;
 		delete aNewCmd;
@@ -379,7 +381,8 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	std::cout << "Running in command line mode.\n";
 	aTraceFileName =getArgs("-help", "help", iLen, iArgs);
 	if (aTraceFileName.empty()){
-		simulate();
+		TMLTransaction* oLastTrans;
+		simulate(oLastTrans);
 		aTraceFileName=getArgs("-ohtml", "scheduling.html", iLen, iArgs);
 		if (!aTraceFileName.empty()) schedule2HTML(aTraceFileName);
 		aTraceFileName=getArgs("-otxt", "scheduling.txt", iLen, iArgs);
@@ -398,10 +401,12 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 
 //void Simulator::decodeCommand(char* iCmd){
 void Simulator::decodeCommand(std::string& iCmd){
+	std::cout << "Not crashed.\n";
 	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
 	std::istringstream aInpStream(iCmd);
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
 	std::string aStrParam;
+	bool aSimTerminated=false;
 	aInpStream >> aCmd;
 	_simComp->setStopFlag(false);
 	anEntityMsg.str("");
@@ -410,14 +415,15 @@ void Simulator::decodeCommand(std::string& iCmd){
 		case 0: //Quit simulation
 			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
 			break;
-		case 1:
+		case 1:{
 			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(anAckMsg.str());
 			aInpStream >> aParam1;
+			TMLTransaction* oLastTrans;
 			switch (aParam1){
 				case 0:	//Run to next breakpoint
 					aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
-					runToNextBreakpoint();
+					aSimTerminated=runToNextBreakpoint(oLastTrans);
 					break;
 				case 1:	//Run up to trans x
 					aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
@@ -427,7 +433,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTransactions(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl;
-					runXTransactions(aParam2);
+					aSimTerminated=runXTransactions(aParam2, oLastTrans);
 					break;
 				case 3:	//Run up to command x
 					aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
@@ -436,26 +442,27 @@ void Simulator::decodeCommand(std::string& iCmd){
 				case 4:	//Run x commands
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXCommands(_simComp,aParam2);
-					runXCommands(aParam2);
-					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl; 
+					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl;
+					aSimTerminated=runXCommands(aParam2, oLastTrans); 
 					break;
 				case 5: //Run up to time x
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl;
-					runTillTimeX(aParam2);
+					aSimTerminated=runTillTimeX(aParam2, oLastTrans);
 					break;
 				case 6:	//Run for x time units
 					 aInpStream >> aParam2;
-					runXTimeUnits(aParam2);
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
-					aGlobMsg << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl; 
+					aGlobMsg << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl;
+					aSimTerminated=runXTimeUnits(aParam2, oLastTrans); 
 					break;
 				case 7: //Run up to next choice/select event
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					_leafsID=0;
 					exploreTree(0,0);
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
+					aSimTerminated=true;
 					//aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					//anErrorCode=1;
 					break;
@@ -466,7 +473,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					if (aBus!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Bus " << aStrParam << TAG_MSGc << std::endl;
-						runToBusTrans(aBus);
+						aSimTerminated=runToBusTrans(aBus, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -480,7 +487,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					if (aCPU!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on CPU " << aStrParam << TAG_MSGc << std::endl;
-						runToCPUTrans(aCPU);
+						aSimTerminated=runToCPUTrans(aCPU, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -493,7 +500,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					TMLTask* aTask=_simComp->getTaskByName(aStrParam);
 					if (aTask!=0){
 						aGlobMsg << TAG_MSGo << "Created listener on Task " << aStrParam << TAG_MSGc << std::endl;
-						runToTaskTrans(aTask);
+						aSimTerminated=runToTaskTrans(aTask, oLastTrans);
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						
 					}else{
@@ -509,7 +516,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					if (aSlave!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Slave " << aStrParam << TAG_MSGc << std::endl;
-						runToSlaveTrans(aSlave);
+						aSimTerminated=runToSlaveTrans(aSlave, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -523,7 +530,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 					if (aChannel!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
-						runToChannelTrans(aChannel);
+						aSimTerminated=runToChannelTrans(aChannel, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -536,10 +543,13 @@ void Simulator::decodeCommand(std::string& iCmd){
 			}
 			//std::cout << "Before sim\n";
 			if (anErrorCode==0){
+				aGlobMsg << TAG_CURRTASKo << oLastTrans->getCommand()->getTask()->getID() << TAG_CURRTASKc;
 				//simulate();
+				//aGlobMsg << 
 				std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 			}
 			break;
+		}
 		case 2:	//reset
 			_simComp->reset();
 			aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
@@ -784,7 +794,9 @@ void Simulator::decodeCommand(std::string& iCmd){
 			anErrorCode=3;
 
 	}
-	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_READY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
+	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo; 
+	if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY; 
+	aGlobMsg << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aGlobMsg.str());
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
@@ -798,58 +810,58 @@ void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostringstream& ioMessa
 	ioMessage << TAG_TASKc << std::endl;
 }
 
-bool Simulator::runToNextBreakpoint(){
-	return simulate();
+bool Simulator::runToNextBreakpoint(TMLTransaction*& oLastTrans){
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runXTransactions(unsigned int iTrans){
+bool Simulator::runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTrans){
 	RunXTransactions aListener(_simComp, iTrans);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runXCommands(unsigned int iCmds){
+bool Simulator::runXCommands(unsigned int iCmds, TMLTransaction*& oLastTrans){
 	RunXCommands aListener(_simComp,iCmds);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runTillTimeX(unsigned int iTime){
+bool Simulator::runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans){
 	RunXTimeUnits aListener(_simComp,iTime);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runXTimeUnits(unsigned int iTime){
+bool Simulator::runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans){
 	RunXTimeUnits aListener(_simComp,iTime+SchedulableDevice::getSimulatedTime());
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runToBusTrans(SchedulableCommDevice* iBus){
+bool Simulator::runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate();	
+	return simulate(oLastTrans);	
 }
 
-bool Simulator::runToCPUTrans(SchedulableDevice* iCPU){
+bool Simulator::runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iCPU);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runToTaskTrans(TMLTask* iTask){
+bool Simulator::runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iTask);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runToSlaveTrans(Slave* iSlave){
+bool Simulator::runToSlaveTrans(Slave* iSlave, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iSlave);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
-bool Simulator::runToChannelTrans(TMLChannel* iChannel){
+bool Simulator::runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iChannel);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate();
+	return simulate(oLastTrans);
 }
 
 void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
@@ -857,12 +869,13 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
 	//aFileName << "canc" << iDepth << "." << leafsForLevel[iDepth]++;
 	//std::string aFileStr(aFileName.str());
 	//schedule2TXT(aFileStr);
+	TMLTransaction* aLastTrans;
 	if (iDepth<RECUR_DEPTH){
 		unsigned int aMyID= ++_leafsID;
 		bool aSimTerminated=false;
 		TMLChoiceCommand* aChoiceCmd;
 		do{
-			aSimTerminated=runToNextBreakpoint();
+			aSimTerminated=runToNextBreakpoint(aLastTrans);
 			aChoiceCmd=_simComp->getCurrentChoiceCmd();
 		}while (!aSimTerminated && aChoiceCmd==0);
 		//std::ostringstream aFileName;

@@ -134,6 +134,8 @@ using std::max;
 #define TAG_CPUc "</cpu>"
 #define TAG_PROGRESSo "<progr>"
 #define TAG_PROGRESSc "</progr>"
+#define TAG_CURRTASKo "<currtask>"
+#define TAG_CURRTASKc "</currtask>"
 
 
 class TMLTask;
