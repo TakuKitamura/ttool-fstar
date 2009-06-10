@@ -360,12 +360,10 @@ void Simulator::run(){
 		//pthread_mutex_lock (&_syncInfo->_mutexConsume);
 		//std::cout << "Simulator Waiting for cmd\n";
 		aNewCmd=_syncInfo->popCommand();
-		_busy=true;
 		//decodeCommand(_syncInfo->_command);
 		//std::cout << "Let's crash.\n";
 		decodeCommand(*aNewCmd);
 		//std::cout << "Returned from decode.\n";
-		_busy=false;
 		//std::cout << "Before delete.\n";
 		delete aNewCmd;
 		//pthread_mutex_unlock (&_syncInfo->_mutexProduce);
@@ -422,6 +420,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
 			break;
 		case 1:{
+			_busy=true;
 			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(anAckMsg.str());
 			aInpStream >> aParam1;
@@ -580,6 +579,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 				//aGlobMsg << 
 				std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 			}
+			_busy=false;
 			break;
 		}
 		case 2:	//reset
@@ -850,6 +850,18 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "Get Hash Value." << std::endl;
 			aGlobMsg << TAG_HASHo << _simComp->getHashValue() << TAG_HASHc << TAG_MSGo << "Hash Value Notification" << TAG_MSGc << std::endl;
 			std::cout << "End Get Hash Value." << std::endl;
+			break;
+		case 20://Enable Breakpoints
+			std::cout << "Enable Breakpoints." << std::endl;
+			aInpStream >> aParam1;
+			if (aParam1==0){
+				aGlobMsg << TAG_MSGo << "Breakpoints are disabled." << TAG_MSGc << std::endl;
+				Breakpoint::setEnabled(false);
+			}else{
+				aGlobMsg << TAG_MSGo << "Breakpoints are enabled." << TAG_MSGc << std::endl;
+				Breakpoint::setEnabled(true);
+			}
+			std::cout << "End Enable Breakpoints.." << std::endl;
 			break;
 		default:
 			aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
