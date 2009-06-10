@@ -121,7 +121,8 @@ using std::max;
 #define TAG_HASHc "</hashval>"
 #define TAG_BRANCHo "<branch>"
 #define TAG_BRANCHc "</branch>"
-
+#define TAG_REPLYo "<replyto>"
+#define TAG_REPLYc "</replyto>"
 #define TAG_EXTIMEo "<extime>"
 #define TAG_EXTIMEc "</extime>"
 #define TAG_CONTDELo "<contdel"

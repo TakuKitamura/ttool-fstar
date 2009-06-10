@@ -414,14 +414,14 @@ void Simulator::decodeCommand(std::string& iCmd){
 	//std::cout << "Not crashed. III\n";
 	_simComp->setStopFlag(false);
 	anEntityMsg.str("");
-	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl;
+	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_REPLYo << iCmd << TAG_REPLYc << std::endl;
 	switch (aCmd){
 		case 0: //Quit simulation
 			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
 			break;
 		case 1:{
 			_busy=true;
-			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_REPLYo << iCmd << TAG_REPLYc << std::endl <<TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(anAckMsg.str());
 			aInpStream >> aParam1;
 			TMLTransaction* oLastTrans;
