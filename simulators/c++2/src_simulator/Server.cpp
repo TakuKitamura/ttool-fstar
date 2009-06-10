@@ -114,36 +114,61 @@ int Server::run(){
 		char aTmpBuffer[BUFFER_SIZE];
 		//aTmpBuffer[0]='\0';
 		while(!_syncInfo->_terminate){
+			//std::cout << "server critical I" << std::endl;
 			aReturnPos=getPositionOf(aTmpBuffer, '\n', aStringPos, aNumberOfBytes);
+			//std::cout << "server critical II" << std::endl;
 			if (aReturnPos==-1){
 				int unreadBytes=aNumberOfBytes-aStringPos;
-				if (unreadBytes>0) 
+				if (unreadBytes>0){
+					//std::cout << "server critical IIIa" << std::endl;
 					memmove(aTmpBuffer, &aTmpBuffer[aStringPos], unreadBytes);
-				else
+				}else{
+					//std::cout << "server critical IIIb" << std::endl;
 					aStringPos=aNumberOfBytes;
-				aNumberOfBytes=recv(_socketClient, &aTmpBuffer[aNumberOfBytes-aStringPos], BUFFER_SIZE-1-(aNumberOfBytes-aStringPos), 0);
+				}
+				//std::cout << "server critical IV  aNumberOfBytes:" << aNumberOfBytes << "   aStringPos" << aStringPos << std::endl;
+				//char testBuffer[BUFFER_SIZE];
+				aNumberOfBytes=recv(_socketClient, &aTmpBuffer[aNumberOfBytes-aStringPos], static_cast<size_t>(BUFFER_SIZE-1-(aNumberOfBytes-aStringPos)), 0);
+				//int startPos=aNumberOfBytes-aStringPos;
+				//size_t size= static_cast<size_t>(BUFFER_SIZE-1-startPos);
+				//aNumberOfBytes=recv(_socketClient, testBuffer, size, 0);
+				//std::cout << "VInter" << std::endl;
+				//memcpy(&aTmpBuffer[startPos], testBuffer, aNumberOfBytes);
+				//std::cout << "Va" << std::endl;
 				if (aNumberOfBytes<1){
 					std::cout << "Broken connection detected, error code: " << aNumberOfBytes << std::endl;
 					_socketClient=-1;
 					break;
 				}
+				//std::cout << "Vb" << std::endl;
 				if (unreadBytes>0) aNumberOfBytes+=unreadBytes;
 				//aNumberOfBytes++;
 				aStringPos=0;
 				aReturnPos=getPositionOf(aTmpBuffer, '\n', aStringPos, aNumberOfBytes);
+				//std::cout << "server critical VI" << std::endl;
 				if (aReturnPos==-1){
 					aReturnPos=aNumberOfBytes-1;
 					aTmpBuffer[aNumberOfBytes]='\0';
 				}	
 			}
+			//std::cout << "server critical VII" << std::endl;
 			//if (aNumberOfBytes < 1){
 				
 				//perror("receive");
 			//}else{
 				if (strlen(&aTmpBuffer[aStringPos])>0){
 					std::cout << "Command received: " << &aTmpBuffer[aStringPos] << std::endl;
-					if (!_syncInfo->_simulator->execAsyncCmd(&aTmpBuffer[aStringPos])){
-						_syncInfo->pushCommand(new std::string(&aTmpBuffer[aStringPos]));
+					std::string* aCmdString = new std::string(&aTmpBuffer[aStringPos]);
+					//std::cout << "Cmd as string: " << *aCmdString << std::endl;
+					//if (!_syncInfo->_simulator->execAsyncCmd(&aTmpBuffer[aStringPos])){
+					if (_syncInfo->_simulator->execAsyncCmd(*aCmdString)){
+						delete aCmdString;
+					}else{
+						//std::cout << "Before push:";
+						//std::cout  << *aCmdString << std::endl;
+						//_syncInfo->pushCommand(new std::string(&aTmpBuffer[aStringPos]));
+						_syncInfo->pushCommand(aCmdString);
+						//std::cout << "After push" << std::endl;
 						//if (pthread_mutex_trylock(&_syncInfo->_mutexProduce)==0){
 						//	memmove(_syncInfo->_command,&aTmpBuffer[aStringPos], aReturnPos-aStringPos+1);
 						//	pthread_mutex_unlock(&_syncInfo->_mutexConsume);		

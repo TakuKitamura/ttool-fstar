@@ -51,7 +51,7 @@ class SimComponents;
 
 class SimServSyncInfo{
 public:
-	SimServSyncInfo():_simulator(0), _server(0), _simComponents(0), _terminate(false){
+	SimServSyncInfo():_simulator(0), _server(0), _simComponents(0), _terminate(false), _popGotStuck(false){
 		//pthread_mutex_init(&_mutexProduce, NULL);
 		//pthread_mutex_init(&_mutexConsume, NULL);
 		//pthread_mutex_lock(&_mutexConsume);
@@ -74,24 +74,50 @@ public:
 	bool _terminate;
 
 	void pushCommand(std::string* iCmd){
+		//std::cout << "Value to write: " << *iCmd << std::endl;
 		pthread_mutex_lock(&_mutexListProtect);
-		bool aWasEmpty=_cmdQueue.empty();
+		//bool aWasEmpty=_cmdQueue.empty();
+		//std::cout << "Before push_back" << *iCmd << std::endl;
 		_cmdQueue.push_back(iCmd);
+		//_cmdsInList++;
+		//if (aWasEmpty) pthread_mutex_unlock(&_mutexCmdAvailable);
+		if (_popGotStuck){
+			_popGotStuck=false;
+			pthread_mutex_unlock(&_mutexCmdAvailable);
+		}
 		pthread_mutex_unlock(&_mutexListProtect);
-		if (aWasEmpty) pthread_mutex_unlock(&_mutexCmdAvailable);
+		//std::cout << "End write" << std::endl;
 	}
 
 	std::string* popCommand(){
-		if (_cmdQueue.empty()) pthread_mutex_lock(&_mutexCmdAvailable);
+		//pthread_mutex_lock(&_mutexListProtect);
+		//bool aWasEmpty=_cmdQueue.empty();
+		//pthread_mutex_unlock(&_mutexListProtect);
+		//std::cout << "Went to sleep " << std::endl;
 		pthread_mutex_lock(&_mutexListProtect);
+		if (_cmdQueue.empty()){
+			_popGotStuck=true;
+			pthread_mutex_unlock(&_mutexListProtect);
+			pthread_mutex_lock(&_mutexCmdAvailable);
+			pthread_mutex_lock(&_mutexListProtect);
+		}//else{
+		//	pthread_mutex_unlock(&_mutexListProtect);
+		//	pthread_mutex_lock(&_mutexListProtect);
+		//}
+		//std::cout << "Woken up " << std::endl;
+		//std::cout << "Before front items: " << _cmdQueue.size() << std::endl;
 		std::string* aCmdTmp=_cmdQueue.front();
+		//std::cout << "Read value: " << *aCmdTmp << std::endl;
 		_cmdQueue.pop_front();
+		//std::cout << "After pop" << std::endl;
 		pthread_mutex_unlock(&_mutexListProtect);
+		//std::cout << "End read" << std::endl;
 		return aCmdTmp;
 	}
 protected:
 	pthread_mutex_t _mutexListProtect;
 	pthread_mutex_t _mutexCmdAvailable;
-	CommandQueue _cmdQueue;	
+	CommandQueue _cmdQueue;
+	bool _popGotStuck;	
 };
 #endif

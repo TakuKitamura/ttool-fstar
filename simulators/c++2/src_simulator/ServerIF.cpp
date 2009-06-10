@@ -47,8 +47,9 @@ void ServerIF::setSimSyncInfo(SimServSyncInfo* iSyncInfo){
 }
 
 void ServerIF::executeCmd(char* iCmd){
+	std::string aCmdString(iCmd);
 	std::cout << "Command received: " << iCmd << std::endl;
-	if (!_syncInfo->_simulator->execAsyncCmd(iCmd)){
+	if (!_syncInfo->_simulator->execAsyncCmd(aCmdString)){
 		//pthread_mutex_lock(&_syncInfo->_mutexProduce);
 		//strcpy(_syncInfo->_command,iCmd);
 		//pthread_mutex_unlock(&_syncInfo->_mutexConsume);

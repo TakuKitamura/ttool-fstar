@@ -101,7 +101,8 @@ public:
 	/**
 	\param iCmd Command string
 	*/
-	bool execAsyncCmd(const char* iCmd);
+	//bool execAsyncCmd(const char* iCmd);
+	bool execAsyncCmd(const std::string& iCmd);
 	///Sends simulator status information to client
 	void sendStatus();
 	///Run simulation until a breakpoint is encountered

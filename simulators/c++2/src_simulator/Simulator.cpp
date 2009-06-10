@@ -243,9 +243,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	CPU* depCPU;
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-#ifdef DEBUG_KERNEL
+//#ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
-#endif
+//#endif
 	for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
 		//std::cout << (*i)->toString() << " in loop" << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
@@ -323,7 +323,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		 }
 		}
 //#ifdef DEBUG_KERNEL
-//		else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
+		//else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
 //#endif
 		oLastTrans=transLET;
 		transLET=getTransLowestEndTime(cpuLET);
@@ -358,12 +358,15 @@ void Simulator::run(){
 	std::cout << "Running in server mode.\n";
 	while (!_syncInfo->_terminate){
 		//pthread_mutex_lock (&_syncInfo->_mutexConsume);
+		//std::cout << "Simulator Waiting for cmd\n";
 		aNewCmd=_syncInfo->popCommand();
 		_busy=true;
 		//decodeCommand(_syncInfo->_command);
-		std::cout << "Let's crash.\n";
+		//std::cout << "Let's crash.\n";
 		decodeCommand(*aNewCmd);
+		//std::cout << "Returned from decode.\n";
 		_busy=false;
+		//std::cout << "Before delete.\n";
 		delete aNewCmd;
 		//pthread_mutex_unlock (&_syncInfo->_mutexProduce);
 	}
@@ -401,13 +404,16 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 
 //void Simulator::decodeCommand(char* iCmd){
 void Simulator::decodeCommand(std::string& iCmd){
-	std::cout << "Not crashed.\n";
+	//std::cout << "Not crashed. I: " << iCmd;
+	//std::cout << iCmd << std::endl;
 	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
 	std::istringstream aInpStream(iCmd);
+	//std::cout << "Not crashed. II\n";
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
 	std::string aStrParam;
 	bool aSimTerminated=false;
 	aInpStream >> aCmd;
+	//std::cout << "Not crashed. III\n";
 	_simComp->setStopFlag(false);
 	anEntityMsg.str("");
 	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl;
@@ -422,51 +428,68 @@ void Simulator::decodeCommand(std::string& iCmd){
 			TMLTransaction* oLastTrans;
 			switch (aParam1){
 				case 0:	//Run to next breakpoint
+					std::cout << "Run to next breakpoint." << std::endl;
 					aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
 					aSimTerminated=runToNextBreakpoint(oLastTrans);
+					std::cout << "End Run to next breakpoint." << std::endl;
 					break;
 				case 1:	//Run up to trans x
+					std::cout << "Run to transaction x." << std::endl;
 					aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					anErrorCode=1;
+					std::cout << "End Run to transaction x." << std::endl;
 					break;
 				case 2:	//Run x transactions
+					std::cout << "Run x transactions." << std::endl;
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTransactions(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl;
 					aSimTerminated=runXTransactions(aParam2, oLastTrans);
+					std::cout << "Run x transactions." << std::endl;
 					break;
 				case 3:	//Run up to command x
+					std::cout << "Run to command x." << std::endl;
 					aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					anErrorCode=1;
+					std::cout << "End Run to command x." << std::endl;
 					break;
 				case 4:	//Run x commands
+					std::cout << "Run x commands." << std::endl;
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXCommands(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl;
-					aSimTerminated=runXCommands(aParam2, oLastTrans); 
+					aSimTerminated=runXCommands(aParam2, oLastTrans);
+					std::cout << "End Run x commands." << std::endl; 
 					break;
 				case 5: //Run up to time x
+					std::cout << "Run to time x." << std::endl;
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl;
 					aSimTerminated=runTillTimeX(aParam2, oLastTrans);
+					std::cout << "End Run to time x." << std::endl;
 					break;
 				case 6:	//Run for x time units
+					std::cout << "Run for x time units." << std::endl;
 					 aInpStream >> aParam2;
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
 					aGlobMsg << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl;
-					aSimTerminated=runXTimeUnits(aParam2, oLastTrans); 
+					aSimTerminated=runXTimeUnits(aParam2, oLastTrans);
+					std::cout << "End Run for x time units." << std::endl; 
 					break;
-				case 7: //Run up to next choice/select event
+				case 7: //Explore Tree
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
+					std::cout << "Explore tree." << std::endl;
 					_leafsID=0;
 					exploreTree(0,0);
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
 					aSimTerminated=true;
 					//aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					//anErrorCode=1;
+					std::cout << "End Explore tree." << std::endl;
 					break;
-				case 8:{//Run up to next transfer on bus x
+				case 8:{//Run to next transfer on bus x
+					std::cout << "Run to next transfer on bus x." << std::endl;
 					aInpStream >> aStrParam;
 					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getBusByName(aStrParam));
 					SchedulableCommDevice* aBus=_simComp->getBusByName(aStrParam);
@@ -478,9 +501,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
 					}
+					std::cout << "End Run to next transfer on bus x." << std::endl;
 					break;
 				} 
 				case 9:{//Run until CPU x executes
+					std::cout << "Run until CPU x executes." << std::endl;
 					aInpStream >> aStrParam;
 					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getCPUByName(aStrParam));
 					SchedulableDevice* aCPU=_simComp->getCPUByName(aStrParam);
@@ -492,9 +517,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
 					}
+					std::cout << "End Run until CPU x executes." << std::endl;
 					break;
 				} 
 				case 10:{//Run until Task x executes
+					std::cout << "Run until Task x executes." << std::endl;
 					aInpStream >> aStrParam;
 					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getTaskByName(aStrParam));
 					TMLTask* aTask=_simComp->getTaskByName(aStrParam);
@@ -507,9 +534,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
 					}
+					std::cout << "End Run until Task x executes." << std::endl;
 					break;
 				} 
 				case 11:{//Run until Mem x is accessed
+					std::cout << "Run until Mem x is accessed." << std::endl;
 					aInpStream >> aStrParam;
 					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getSlaveByName(aStrParam));
 					Slave* aSlave=_simComp->getSlaveByName(aStrParam);
@@ -521,9 +550,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
 					}
+					std::cout << "End Run until Mem x is accessed." << std::endl;
 					break;
 				} 
 				case 12:{//Run until operation on channel x is performed
+					std::cout << "Run until operation on channel x is performed." << std::endl;
 					aInpStream >> aStrParam;
 					//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
 					TMLChannel* aChannel=_simComp->getChannelByName(aStrParam);
@@ -535,6 +566,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
 					}
+					std::cout << "End Run until operation on channel x is performed." << std::endl;
 					break;
 				} 
 				default:
@@ -543,7 +575,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 			}
 			//std::cout << "Before sim\n";
 			if (anErrorCode==0){
-				aGlobMsg << TAG_CURRTASKo << oLastTrans->getCommand()->getTask()->getID() << TAG_CURRTASKc;
+				//aGlobMsg << TAG_CURRTASKo << oLastTrans->getCommand()->getTask()->getID() << TAG_CURRTASKc;
 				//simulate();
 				//aGlobMsg << 
 				std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
@@ -551,10 +583,13 @@ void Simulator::decodeCommand(std::string& iCmd){
 			break;
 		}
 		case 2:	//reset
+			std::cout << "Simulator reset." << std::endl;
 			_simComp->reset();
 			aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
+			std::cout << "End Simulator reset." << std::endl;
 			break;
 		case 3:{//Print variable x
+			std::cout << "Print variable x." << std::endl;
 			aInpStream >> aStrParam;
 			if (aStrParam=="all"){
 				for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
@@ -584,9 +619,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 					}
 				}
 			}
+			std::cout << "End Print variable x." << std::endl;
 			break;
 		}
 		case 4:{	//Print information about simulation element x
+			std::cout << "Print information about simulation element x." << std::endl;
 			aInpStream >> aParam1;
 			aInpStream >> aStrParam;
 			TraceableDevice* aDevice;
@@ -615,9 +652,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << "Component information" << TAG_MSGc << std::endl;
 				aDevice->streamStateXML(anEntityMsg);
 			}
+			std::cout << "End Print information about simulation element x." << std::endl;
 			break;
 		}
 		case 5:{//Set variable x to value y
+			std::cout << "Set variable x to value y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 			if (aTask!=0){
@@ -632,13 +671,17 @@ void Simulator::decodeCommand(std::string& iCmd){
 					anErrorCode=2;
 				}
 			}
+			std::cout << "End Set variable x to value y." << std::endl;
 			break;
 		}
 		case 6: //Write x samples/events to channel y
+			std::cout << "Write x samples/events to channel y." << std::endl;
 			aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 			anErrorCode=1;
+			std::cout << "End Write x samples/events to channel y." << std::endl;
 			break;
 		case 7: //Save trace in file x
+			std::cout << "Save trace in file x." << std::endl;
 			aInpStream >> aParam1;
 			aInpStream >>aStrParam;
 			switch (aParam1){
@@ -658,8 +701,10 @@ void Simulator::decodeCommand(std::string& iCmd){
 					aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 					anErrorCode=3;
 			}
+			std::cout << "End Save trace in file x." << std::endl;
 			break;
 		case 8:{ //Save simulation state in file x
+			std::cout << "Save simulation state in file x." << std::endl;
 			aInpStream >> aStrParam;
 			std::ofstream aFile (aStrParam.c_str());
 			if (aFile.is_open()){
@@ -669,9 +714,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_FILEERR << aStrParam << TAG_MSGc << std::endl;
 				anErrorCode=4;
 			}
+			std::cout << "End Save simulation state in file x." << std::endl;
 			break;
 		}
 		case 9:{//Restore simulation state from file x
+			std::cout << "Restore simulation state from file x." << std::endl;
 			aInpStream >> aStrParam;
 			std::ifstream aFile(aStrParam.c_str());
 			if (aFile.is_open()){
@@ -682,9 +729,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_FILEERR << aStrParam << TAG_MSGc << std::endl;
 				anErrorCode=4;
 			}
+			std::cout << "End Restore simulation state from file x." << std::endl;
 			break;
 		}
 		case 10:{ //Save benchmarks in file x
+			std::cout << "Save benchmarks in file x." << std::endl;
 			aInpStream >> aParam1;
 			switch (aParam1){
 			case 0: _simComp->streamBenchmarks(std::cout);
@@ -706,9 +755,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 				anErrorCode=3;
 			}
+			std::cout << "End Save benchmarks in file x." << std::endl;
 			break;
 		}
 		case 11:{//Set breakpoint in task x, command y
+			std::cout << "Set breakpoint in task x, command y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 			if (aTask!=0){
@@ -726,8 +777,10 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 				anErrorCode=2;
 			}
+			std::cout << "End Set breakpoint in task x, command y." << std::endl;
 		}	break;
 		case 12:{//Choose branch
+			std::cout << "Choose branch." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 			if (aTask!=0){
@@ -745,9 +798,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 				anErrorCode=2;
 			}
+			std::cout << "End Choose branch." << std::endl;
 			break;
 		}
 		case 16:{//Delete breakpoint in task x, command y
+			std::cout << "Delete breakpoint in task x, command y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 			if (aTask!=0){
@@ -765,9 +820,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 				anErrorCode=2;
 			}
+			std::cout << "End Delete breakpoint in task x, command y." << std::endl;
 			break;
 		}
-		case 17:{
+		case 17:{//Get number of branches of current cmd
+			std::cout << "Get number of branches of current cmd." << std::endl;
 			TMLChoiceCommand* aCurrChCmd =_simComp->getCurrentChoiceCmd();
 			if (aCurrChCmd==0){
 					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
@@ -777,17 +834,22 @@ void Simulator::decodeCommand(std::string& iCmd){
 					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << " id=\"" << aCurrChCmd->getID() << "\">" << TAG_BRANCHo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHc << "\">" << TAG_CURRCMDc << TAG_TASKc << std::endl;
 					aGlobMsg << TAG_MSGo << "Current choice command" << TAG_MSGc << std::endl;
 			}
+			std::cout << "End Get number of branches of current cmd." << std::endl;
 			break;
 		}
-		case 18:{
+		case 18:{//Get breakpoint list
+			std::cout << "Get breakpoint list." << std::endl;
 			for(BreakpointSet::iterator i=_breakpoints.begin(); i != _breakpoints.end(); ++i){
 				anEntityMsg << TAG_TASKo << " id=\"" << (*i)->getTask()->getID() << "\" name=\"" << (*i)->getTask()->toString() << "\">" << TAG_BREAKCMDo << " id=\"" << (*i)->getID() << "\">" << TAG_BREAKCMDc << TAG_TASKc << std::endl; 
 			}
 			aGlobMsg << TAG_MSGo << "Breakpoint List" << TAG_MSGc << std::endl;
+			std::cout << "End Get breakpoint list." << std::endl;
 			break;
 		}
-		case 19:
+		case 19://Get Hash Value
+			std::cout << "Get Hash Value." << std::endl;
 			aGlobMsg << TAG_HASHo << _simComp->getHashValue() << TAG_HASHc << TAG_MSGo << "Hash Value Notification" << TAG_MSGc << std::endl;
+			std::cout << "End Get Hash Value." << std::endl;
 			break;
 		default:
 			aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
@@ -797,7 +859,9 @@ void Simulator::decodeCommand(std::string& iCmd){
 	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo; 
 	if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY; 
 	aGlobMsg << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
+	//std::cout << "Before reply." << std::endl;
 	_syncInfo->_server->sendReply(aGlobMsg.str());
+	//std::cout << "End of command decode procedure." << std::endl;
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
 
@@ -904,7 +968,8 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
 	}
 }
 
-bool Simulator::execAsyncCmd(const char* iCmd){
+//bool Simulator::execAsyncCmd(const char* iCmd){
+bool Simulator::execAsyncCmd(const std::string& iCmd){
 	unsigned int aCmd;
 	std::istringstream aInpStream(iCmd);
 	std::string aStrParam;
