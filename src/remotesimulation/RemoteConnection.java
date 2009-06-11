@@ -124,7 +124,7 @@ public class RemoteConnection {
 		if (s.length() == 0) {
 			return;
 		}
-        System.out.println("Sending: " + s);
+        //System.out.println("Sending: " + s);
         try {
             out.print(s);
             out.flush();

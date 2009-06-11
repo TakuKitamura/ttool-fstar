@@ -409,6 +409,19 @@ public class TMLModeling {
 		return null;
 	}
 	
+	public String[] makeVariableIDs(int index) {
+		if (tasks == null) {
+			return null;
+		}
+		
+		TMLTask task = (TMLTask)(tasks.get(index));
+		if (task != null) {
+			return task.makeVariableIDs();
+		}
+		
+		return null;
+	}
+	
 	public TMLTask getTMLTaskByCommandID(int id) {
 		TMLTask task;
         ListIterator iterator = tasks.listIterator();

@@ -99,12 +99,13 @@ public class CommandParser {
 		//System.out.println("calculating help on cmd");
 		StringBuffer sb = new StringBuffer("");
 		boolean commandFound = false;
+		int i;
 		
 		for(SimulationCommand sc: commandList) {
 			if (sc.userCommand.equals(cmd) || sc.alias.equals(cmd)) {
 				sb.append(sc.getSynopsis() + "\n" + sc.help);
 				if (sc.hasAlias()) {
-					sb.append("\nalias: " + sc.alias);
+					sb.append("\nalias: " + sc.alias + "\n");
 				}
 				//System.out.println("Command found" + sc.help);
 				commandFound = true;
@@ -194,6 +195,14 @@ public class CommandParser {
 		int[] params;
 		String[] paramNames;
 		int i;
+		
+		// active-breakpoints
+		params = new int[1];
+		paramNames = new String[1];
+		params[0] = 1;
+		paramNames[0] = "0/1 (unactive / active)";
+		sc = new SimulationCommand("active-breakpoints", "ab", "20", params, paramNames, "Active / unactive breakpoints");
+		commandList.add(sc);
 		
 		// add-breakpoint
 		params = new int[2];
@@ -428,9 +437,9 @@ public class CommandParser {
 		paramNames = new String[3];
 		params[0] = 1;
 		paramNames[0] = "task ID";
-		params[1] = 0;
+		params[1] = 1;
 		paramNames[1] = "variable ID";
-		params[2] = 0;
+		params[2] = 1;
 		paramNames[2] = "variable value";
 		sc = new SimulationCommand("set-variable", "sv", "5", params, paramNames, "Set the value of a variable");
 		commandList.add(sc);

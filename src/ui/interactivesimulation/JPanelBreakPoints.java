@@ -82,6 +82,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 	private JButton addButton;
 	private JComboBox tasks;
 	private JComboBox commands;
+	private JCheckBox activate;
 	
 	private String[] taskIDs, commandIDs;
 	
@@ -164,6 +165,10 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
         addButton.addActionListener(this);
         add(addButton, c2);
 		
+		activate = new JCheckBox("Breakpoints activated");
+        activate.addActionListener(this);
+        add(activate, c2);
+		activate.setSelected(true);
 		
         
 	}
@@ -190,6 +195,8 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 			for(int i=0; i<commandIDs.length; i++) {
 				commands.addItem(commandIDs[i]);
 			}
+		} else if (evt.getSource() == activate) {
+			jfis.activeBreakPoint(activate.isSelected());
 		}
     }
 	

@@ -202,6 +202,14 @@ public class TMLMapping {
 		return tmlm.makeCommandIDs(index);
 	}
 	
+	public String[] makeVariableIDs(int index) {
+		if (tmlm == null) {
+			return null;
+		}
+		
+		return tmlm.makeVariableIDs(index);
+	}
+	
 	
 	
 	public void addTaskToHwExecutionNode(TMLTask _task, HwExecutionNode _hwnode) {

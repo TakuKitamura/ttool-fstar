@@ -4812,8 +4812,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return selectTab(getCurrentTURTLEPanel(), s);
     }
 	
-	public void openTMLTaskActivityDiagram(String s) {
-		selectTab(getCurrentTURTLEPanel(), s);
+	public void openTMLTaskActivityDiagram(String panel, String tab) {
+		int index = mainTabbedPane.indexOfTab(panel);
+		if (index != -1) {
+			mainTabbedPane.setSelectedIndex(index);
+		}
+		openTMLTaskActivityDiagram(tab);
+	}
+	
+	public void openTMLTaskActivityDiagram(String tab) {
+		selectTab(getCurrentTURTLEPanel(), tab);
 	}
 	
 	public boolean selectHighLevelTab(String s) {

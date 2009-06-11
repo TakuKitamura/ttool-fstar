@@ -116,6 +116,17 @@ public class TMLTask extends TMLElement {
 		return list;
 	}
 	
+	public String[] makeVariableIDs () {
+		String[] list = new String[attributes.size()];
+		int cpt = 0;
+		
+		for(TMLAttribute att: attributes) {
+			list[cpt] = att.getName() + " (" + att.getID() + ")";
+			cpt ++;
+		}
+		return list;
+	}
+	
 	public TMLAttribute getAttributeByName(String _name) {
 		for(TMLAttribute attribute:attributes) {
 			if (attribute.getName().compareTo(_name) == 0) {

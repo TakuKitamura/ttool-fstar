@@ -139,6 +139,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	// Breakpoints
 	JPanelBreakPoints jpbp;
 	
+	// Set variables
+	JPanelSetVariables jpsv;
 	
 	// Tasks
 	JPanel taskPanel;
@@ -198,8 +200,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		tmap = _tmap;
 		if (tmap != null) {
-			hashCode = tmap.getHashCode();
 			tmap.makeMinimumMapping();
+			hashCode = tmap.getHashCode();
 		}
 		
 		points = _points;
@@ -444,6 +446,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(listTextCommands, c01);
 		
 		commands.add(commandTab);
+		
+		// Set variables
+		jpsv = new JPanelSetVariables(this, valueTable);
+		commandTab.addTab("Set variables", null, jpsv, "Set variables");
 		
 		// Save commands
 		jp01 = new JPanel(new BorderLayout());
@@ -1049,6 +1055,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return false;
 		} catch (SAXException saxe) {
 			System.err.println("Error when parsing server info:" + saxe.getMessage());
+			System.err.println("xml:" + xmldata);
 			return false;
 		}
 		return true;
@@ -1176,6 +1183,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							}
 							if ((value != null) && (idvar != null)) {
 								updateVariableState(idvar, value);
+								jpsv.updateOnVariableValue(idvar);
 							}
 						}
 					}
@@ -1213,7 +1221,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							util = node0.getTextContent();
 						}
 						
-						System.out.println("Got info on bus " + id + " util=" + util);
+						//System.out.println("Got info on bus " + id + " util=" + util);
 						
 						if ((id != null) && (util != null)) {
 							updateBusState(id, util);
@@ -1280,7 +1288,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		t = new Thread(this);
 		t.start();
 		threadStarted = false;
-		System.out.println("thread of mode:" + threadMode);
+		//System.out.println("thread of mode:" + threadMode);
 		while(threadStarted == false) {
 			try {
 				wait();
@@ -1573,14 +1581,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			diagramTable.remove(name);
 			diagramTable.put(name, command);
 			
+			String diag = "";
 			String tab = name;
 			int index = tab.indexOf("__");
 			if (index != -1) {
+				diag = tab.substring(0, index);
 				tab = tab.substring(index+2, tab.length());
 			}
-			System.out.println("Opening diagram " + tab);
+			//System.out.println("Opening diagram " + tab);
 
-			mgui.openTMLTaskActivityDiagram(tab);
+			mgui.openTMLTaskActivityDiagram(diag, tab);
 		}
 	}
 	
@@ -1650,7 +1660,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				row = rowTable.get(i).intValue();
 				bustm.fireTableCellUpdated(row, 2);
 			} catch (Exception e) {
-				System.out.println("Exception updateBusState: " + e.getMessage());
+				System.err.println("Exception updateBusState: " + e.getMessage());
 			}
 		}
 	}
@@ -1814,7 +1824,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		try {
 			return Integer.decode(in).intValue();
 		} catch (Exception e) {
-			System.out.println("Wrong string: "+ in);
+			System.err.println("Wrong string: "+ in);
 		}
 		
 		return -1;
@@ -1823,7 +1833,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	
 	public void addBreakPoint(int _commandID) {
-		System.out.println("Add breakpoint: " + _commandID);
+		//System.out.println("Add breakpoint: " + _commandID);
 		// Check whether that breakpoint is already listed or not
 		for(Point p: points) {
 			if (p.y == _commandID) {
@@ -1859,6 +1869,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		for(Point p: points) {
 			sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
 		}
+		sendCommand("active-breakpoints 1");
 	}
 	
 	public void removeBreakpoint(Point p) {
@@ -1923,16 +1934,35 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		return tmap.getChanIDs();
 	}
 	
-	
-	
-	
-	
 	public String[] makeCommandIDs(int index) {
 		if (tmap == null) {
 			return null;
 		}
 		
 		return tmap.makeCommandIDs(index);
+	}
+	
+	public String[] makeVariableIDs(int index) {
+		if (tmap == null) {
+			return null;
+		}
+		
+		return tmap.makeVariableIDs(index);
+	}
+	
+	public void activeBreakPoint(boolean active) {
+		if (mode == STARTED_AND_CONNECTED) {
+			if (active) {
+				sendCommand("active-breakpoints 1");
+			} else {
+				sendCommand("active-breakpoints 0");
+			}
+		}
+	}
+	
+	public void setVariables(int _idTask, int _idVariable, String _value) {
+		sendCommand("set-variable " + _idTask + " " + _idVariable + " " + _value);
+		sendCommand("get-variable-of-task " + _idTask + " " + _idVariable);
 	}
 	
 	
