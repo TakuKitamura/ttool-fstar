@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <SchedulableDevice.h>
 #include <TMLCommand.h>
+#include <TMLChoiceCommand.h>
 
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
 	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
@@ -78,6 +79,25 @@ bool Breakpoint::commandEntered(TMLCommand* iComm){
 }
 
 void Breakpoint::setEnabled(bool iEnabled){
+	_enabled=iEnabled;
+}
+
+
+
+RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simComp(iSimComp), _enabled(false){
+	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this);
+}
+
+bool RunTillNextRandomChoice::commandEntered(TMLCommand* iComm){
+	TMLChoiceCommand* aChoice=dynamic_cast<TMLChoiceCommand*>(iComm);
+	if (_enabled && aChoice!=0 && aChoice->isNonDeterministic()){
+		_simComp->setStopFlag(true);
+		return true;
+	}
+	return false;
+}
+
+void RunTillNextRandomChoice::setEnabled(bool iEnabled){
 	_enabled=iEnabled;
 }
 

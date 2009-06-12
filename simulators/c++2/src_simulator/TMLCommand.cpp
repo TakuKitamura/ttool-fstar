@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <CommandListener.h>
 #include <Parameter.h>
+#include <TMLChoiceCommand.h>
 
 TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _breakpoint(0){
 	_instanceList.push_back(this);
@@ -97,7 +98,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			}
 		}
 		TMLCommand* result = prepareNextTransaction();
-		if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
+		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
 			_task->getCPU()->registerTransaction(_currTransaction,0);
 		}
@@ -190,6 +191,14 @@ void TMLCommand::registerGlobalListener(CommandListener* iListener){
 	}
 }
 
+template<typename T>
+void TMLCommand::registerGlobalListenerForType(CommandListener* iListener){
+	//std::cout << "Global cmd listener created \n";
+	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		if (dynamic_cast<T*>(*i)!=0) (*i)->registerListener(iListener);
+	}
+}
+
 void TMLCommand::removeGlobalListener(CommandListener* iListener){
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->removeListener(iListener);
@@ -203,4 +212,6 @@ unsigned int TMLCommand::getID() const{
 TMLLength TMLCommand::getProgress() const{
 	return _progress;
 }
+
+template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener);
 

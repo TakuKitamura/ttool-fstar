@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Server.h>
 #include <ServerLocal.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _leafsID(0) {}
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
@@ -401,27 +401,28 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 }
 
 //void Simulator::decodeCommand(char* iCmd){
-void Simulator::decodeCommand(std::string& iCmd){
+void Simulator::decodeCommand(std::string iCmd){
 	//std::cout << "Not crashed. I: " << iCmd;
 	//std::cout << iCmd << std::endl;
 	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
+	//std::string anIssuedCmd(iCmd);
 	std::istringstream aInpStream(iCmd);
 	//std::cout << "Not crashed. II\n";
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
 	std::string aStrParam;
 	bool aSimTerminated=false;
-	aInpStream >> aCmd;
 	//std::cout << "Not crashed. III\n";
 	_simComp->setStopFlag(false);
-	anEntityMsg.str("");
-	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_REPLYo << iCmd << TAG_REPLYc << std::endl;
+	//anEntityMsg.str("");
+	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl /*<< TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl*/;
+	aInpStream >> aCmd;
 	switch (aCmd){
 		case 0: //Quit simulation
 			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
 			break;
 		case 1:{
 			_busy=true;
-			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_REPLYo << iCmd << TAG_REPLYc << std::endl <<TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << /*TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl<< */ TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(anAckMsg.str());
 			aInpStream >> aParam1;
 			TMLTransaction* oLastTrans;
@@ -567,7 +568,12 @@ void Simulator::decodeCommand(std::string& iCmd){
 					}
 					std::cout << "End Run until operation on channel x is performed." << std::endl;
 					break;
-				} 
+				}
+				case 13:{//Run to next random choice command
+					std::cout << "Run to next random choice command." << std::endl;
+					aSimTerminated=runToNextChoiceCommand(oLastTrans);
+					std::cout << "End Run to next random choice command." << std::endl;
+				}
 				default:
 					aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 					anErrorCode=3;
@@ -597,7 +603,10 @@ void Simulator::decodeCommand(std::string& iCmd){
 				}
 			}else{
 				TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-				if (aTask!=0){
+				if (aTask==0){
+					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+					anErrorCode=2;
+				}else{
 					//std::cout << "Task " << aStrParam << " exists" << std::endl;
 					aInpStream >> aStrParam;
 					if (aStrParam=="all"){
@@ -622,35 +631,55 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "End Print variable x." << std::endl;
 			break;
 		}
-		case 4:{	//Print information about simulation element x
+		case 4:{//Print information about simulation element x
+			bool aFailure=false;
 			std::cout << "Print information about simulation element x." << std::endl;
 			aInpStream >> aParam1;
 			aInpStream >> aStrParam;
-			TraceableDevice* aDevice;
+			anErrorCode=0;
 			switch (aParam1){
-				case 0: //CPU
-					aDevice = dynamic_cast<TraceableDevice*>(_simComp->getCPUByName(aStrParam));
+				case 0: {//CPU
+					TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getCPUByName(aStrParam));
+					if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
 					break;
-				case 1: //Bus
-					aDevice = dynamic_cast<TraceableDevice*>(_simComp->getBusByName(aStrParam));
+				}
+				case 1: {//Bus
+					TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getBusByName(aStrParam));
+					if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
 					break;
+				}
 				case 2: //Mem
 				case 3: //Bridge
-					aDevice = dynamic_cast<TraceableDevice*>(_simComp->getSlaveByName(aStrParam));
+					anErrorCode=1;
 					break;
-				case 4: //Channel
-					aDevice = dynamic_cast<TraceableDevice*>(_simComp->getChannelByName(aStrParam));
+				case 4:{ //Channel
+					TMLChannel* aDevice = _simComp->getChannelByName(aStrParam);
+					if (aDevice!=0){
+						std::cout << "get Channel info" << std::endl;
+						aDevice->streamStateXML(anEntityMsg); 
+					}else anErrorCode=2;
 					break;
-				case 5: //Task
-					aDevice = dynamic_cast<TraceableDevice*>(_simComp->getTaskByName(aStrParam));
+				}
+				case 5: {//Task
+					TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getCPUByName(aStrParam));
+					if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
 					break;
+				}
+				default:anErrorCode=3;
 			}
-			if (aDevice==0){
-				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
-				anErrorCode=2;
-			}else{
+			switch(anErrorCode){
+			case 0:
 				aGlobMsg << TAG_MSGo << "Component information" << TAG_MSGc << std::endl;
-				aDevice->streamStateXML(anEntityMsg);
+				break;
+			case 1:
+				aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
+				break;
+			case 2:
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				break;
+			default:
+				aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
+				break;
 			}
 			std::cout << "End Print information about simulation element x." << std::endl;
 			break;
@@ -659,7 +688,10 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "Set variable x to value y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){
+			if (aTask==0){
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}else{
 				aInpStream >> aStrParam;
 				bool aIsId;
 				ParamType* aParam=aTask->getVariableByName(aStrParam, aIsId);
@@ -674,12 +706,29 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "End Set variable x to value y." << std::endl;
 			break;
 		}
-		case 6: //Write x samples/events to channel y
+		case 6:{ //Write x samples/events to channel y
 			std::cout << "Write x samples/events to channel y." << std::endl;
-			aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
-			anErrorCode=1;
+			//aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
+			//anErrorCode=1;
+			aInpStream >> aStrParam;
+			TMLChannel* aChannel = _simComp->getChannelByName(aStrParam);
+			if (aChannel==0){
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}else{
+				aInpStream >> aParam1;
+				Parameter<ParamType> anInsertParam;
+				if (dynamic_cast<TMLEventChannel*>(aChannel)==0){
+					aChannel->insertSamples(aParam1, anInsertParam);
+				}else{
+					aInpStream >> anInsertParam;
+					aChannel->insertSamples(aParam1, anInsertParam);
+				}
+				aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;
+			}
 			std::cout << "End Write x samples/events to channel y." << std::endl;
 			break;
+		}
 		case 7: //Save trace in file x
 			std::cout << "Save trace in file x." << std::endl;
 			aInpStream >> aParam1;
@@ -762,7 +811,10 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "Set breakpoint in task x, command y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){
+			if (aTask==0){
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				anErrorCode=2;		
+			}else{
 				aInpStream >> aParam2;
 				TMLCommand* aCommand=aTask->getCommandByID(aParam2);
 				if (aCommand!=0){
@@ -773,17 +825,18 @@ void Simulator::decodeCommand(std::string& iCmd){
 					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 					anErrorCode=2;
 				}
-			}else{
-				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
-				anErrorCode=2;
 			}
 			std::cout << "End Set breakpoint in task x, command y." << std::endl;
-		}	break;
+			break;
+		}
 		case 12:{//Choose branch
 			std::cout << "Choose branch." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){
+			if (aTask==0){
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}else{
 				aInpStream >> aParam1;
 				TMLChoiceCommand* aChoiceCmd=dynamic_cast<TMLChoiceCommand*>(aTask->getCommandByID(aParam1));
 				if (aChoiceCmd!=0){
@@ -794,9 +847,6 @@ void Simulator::decodeCommand(std::string& iCmd){
 					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 					anErrorCode=2;
 				}
-			}else{
-				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
-				anErrorCode=2;
 			}
 			std::cout << "End Choose branch." << std::endl;
 			break;
@@ -805,7 +855,11 @@ void Simulator::decodeCommand(std::string& iCmd){
 			std::cout << "Delete breakpoint in task x, command y." << std::endl;
 			aInpStream >> aStrParam;
 			TMLTask* aTask = _simComp->getTaskByName(aStrParam);
-			if (aTask!=0){
+			if (aTask==0){
+				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+				anErrorCode=2;
+			}else{
+
 				aInpStream >> aParam2;
 				TMLCommand* aCommand=aTask->getCommandByID(aParam2);
 				if (aCommand!=0){
@@ -816,9 +870,6 @@ void Simulator::decodeCommand(std::string& iCmd){
 					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 					anErrorCode=2;
 				}
-			}else{
-				aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
-				anErrorCode=2;
 			}
 			std::cout << "End Delete breakpoint in task x, command y." << std::endl;
 			break;
@@ -861,7 +912,7 @@ void Simulator::decodeCommand(std::string& iCmd){
 				aGlobMsg << TAG_MSGo << "Breakpoints are enabled." << TAG_MSGc << std::endl;
 				Breakpoint::setEnabled(true);
 			}
-			std::cout << "End Enable Breakpoints.." << std::endl;
+			std::cout << "End Enable Breakpoints." << std::endl;
 			break;
 		default:
 			aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
@@ -938,6 +989,13 @@ bool Simulator::runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTr
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iChannel);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
+}
+
+bool Simulator::runToNextChoiceCommand(TMLTransaction*& oLastTrans){
+	_randChoiceBreak.setEnabled(true);
+	bool aSimTerminated=simulate(oLastTrans);
+	_randChoiceBreak.setEnabled(false);
+	return aSimTerminated;
 }
 
 void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
@@ -1049,4 +1107,8 @@ void Simulator::sendStatus(){
 	if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 	aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
+}
+
+bool Simulator::isBusy(){
+	return _busy;
 }

@@ -67,6 +67,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
+	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
 protected:
 	///Determines the virtual length of read and write transactions based on the state of the channel
 	void setTransactionLength() const;

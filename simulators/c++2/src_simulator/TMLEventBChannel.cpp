@@ -183,3 +183,18 @@ void TMLEventBChannel::reset(){
 		std::cout << "no of events: " << _content << std::endl;
 	}
 }
+
+unsigned int TMLEventBChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+	unsigned int aNbToInsert;
+	if (iNbOfSamples==0){
+		_content=0;
+		_paramQueue.clear();
+		aNbToInsert=0;
+	}else{
+		aNbToInsert=iNbOfSamples;
+		_content+=iNbOfSamples;
+		for (unsigned int i=0; i<iNbOfSamples; i++) _paramQueue.push_back(iParam);
+	} 
+	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	return aNbToInsert;
+}

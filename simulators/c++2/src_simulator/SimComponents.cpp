@@ -78,10 +78,12 @@ void SimComponents::addChannel(TMLChannel* iChan){
 
 void SimComponents::addEvent(TMLEventChannel* iEvt){
 	_serList.push_back(dynamic_cast<Serializable*>(iEvt));
+	_channelList.push_back(iEvt);
 }
 
 void SimComponents::addRequest(TMLEventBChannel* iReq){
 	_serList.push_back(dynamic_cast<Serializable*>(iReq));
+	_channelList.push_back(iReq);
 }
 
 void SimComponents::addCPU(CPU* iCPU){

@@ -70,6 +70,15 @@ protected:
 	static bool _enabled;
 };
 
+class RunTillNextRandomChoice: public CommandListener, public TransactionListener{
+public:
+	RunTillNextRandomChoice(SimComponents* iSimComp);
+	bool commandEntered(TMLCommand* iComm);
+	void setEnabled(bool iEnabled);
+protected:
+	SimComponents* _simComp;
+	bool _enabled;
+};
 
 class RunXCommands: public CommandListener, public TransactionListener{
 public:

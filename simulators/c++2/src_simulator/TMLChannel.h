@@ -140,6 +140,18 @@ public:
       	\return Unique ID
     	*/ 
 	unsigned int getID() const;
+	///Inserts samples into the channel
+	/**
+	\param iNbOfSamples Number of samples to insert
+	\param iParam Parameter to insert
+      	\return Returns true if successful
+    	*/ 
+	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
+	///Writes XML information about the component to a stream
+	/**
+      	\param s Reference to an output stream
+	*/
+	virtual void streamStateXML(std::ostream& s) const;
 protected:
 	///ID of channel
 	unsigned int _ID;

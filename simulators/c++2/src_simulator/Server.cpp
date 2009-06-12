@@ -173,7 +173,7 @@ int Server::run(){
 						//	memmove(_syncInfo->_command,&aTmpBuffer[aStringPos], aReturnPos-aStringPos+1);
 						//	pthread_mutex_unlock(&_syncInfo->_mutexConsume);		
 						//}else{
-						_syncInfo->_simulator->sendStatus();
+						if (_syncInfo->_simulator->isBusy()) _syncInfo->_simulator->sendStatus();
 						//}
 					}
 				}

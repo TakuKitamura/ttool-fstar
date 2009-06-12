@@ -93,22 +93,6 @@ Slave* TMLChannel::getNextSlave(TMLTransaction* iTrans) const{
 	}
 }
 
-//void TMLChannel::switchToNextBus(TMLTransaction* iTrans){
-	//if (iTrans->getCommand()->getTask()==_writeTask){
-//	if (iTrans==_writeTrans){
-		//_writeTransCurrHop++;
-//	}else{
-		//_readTransCurrHop--;
-//	}
-//}
-
-
-//SchedulableCommDevice* TMLChannel::getBus(unsigned int iIndex) const{
-//	if (_buses==0 || iIndex>=_numberOfHops) return 0;
-//	return _buses[iIndex];
-//}
-
-
 //unsigned int TMLChannel::getNumberOfHops() const{
 //	return _numberOfHops;
 //}
@@ -141,4 +125,12 @@ void TMLChannel::reset(){
 
 unsigned int TMLChannel::getID() const {
 	return _ID;
+}
+
+unsigned int TMLChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+	return iNbOfSamples;
+}
+
+void TMLChannel::streamStateXML(std::ostream& s) const{
+	//s << "Basic version TMLChannel";
 }

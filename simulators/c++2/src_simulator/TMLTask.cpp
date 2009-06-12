@@ -234,7 +234,7 @@ std::istream& TMLTask::readObject(std::istream& s){
 void TMLTask::streamBenchmarks(std::ostream& s) const{
 	s << TAG_TASKo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
 	s << TAG_EXTIMEo << _busyCycles << TAG_EXTIMEc;
-	if (_noCPUTransactions!=0) s << TAG_CONTDELo << "<" << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << TAG_CONTDELc;
+	if (_noCPUTransactions!=0) s << TAG_CONTDELo << ">" << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << TAG_CONTDELc;
 	s << TAG_TASKc << std::endl; 
 }
 

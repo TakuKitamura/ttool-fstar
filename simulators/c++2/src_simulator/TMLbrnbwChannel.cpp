@@ -115,3 +115,17 @@ std::string TMLbrnbwChannel::toString() const{
 	outp << _name << "(brnbw) content:" << _content << " nbToRead:" << _nbToRead << " nbToWrite:" << _nbToWrite;
 	return outp.str();
 }
+
+unsigned int TMLbrnbwChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+	unsigned int aNbToInsert;
+	if (iNbOfSamples==0){
+		_content=0;
+		aNbToInsert=0;
+	}else{
+		_content+=iNbOfSamples;
+		aNbToInsert=iNbOfSamples;
+	}
+	setTransactionLength();
+	return aNbToInsert;
+}
+

@@ -83,6 +83,9 @@ public:
 		is >> obj._p1 >> obj._p2 >> obj._p3;
  		return is;
 	}
+	void streamStateXML(std::ostream& s) const{
+		s << TAG_PARAMo << TAG_E1o << _p1 << TAG_E1c << TAG_E2o << _p2 << TAG_E2c << TAG_E3o << _p3 << TAG_E3c << TAG_PARAMc;
+	}
 	//inline static void * operator new(size_t size){
 	//	return memPool.pmalloc(size);
 	//}

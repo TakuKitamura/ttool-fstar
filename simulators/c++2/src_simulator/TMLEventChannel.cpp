@@ -91,3 +91,13 @@ void TMLEventChannel::reset(){
 	_paramQueue.clear();
 	//std::cout << "EventChannel reset end" << std::endl; 
 }
+
+void TMLEventChannel::streamStateXML(std::ostream& s) const{
+	s << TAG_CHANNELo << " name=\"" << _name << "\" id=\"" << _ID << "\">" << std::endl;
+	s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc << std::endl;
+	for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+		i->streamStateXML(s);
+		s <<std::endl;
+	}
+	s << TAG_CHANNELc << std::endl;
+}

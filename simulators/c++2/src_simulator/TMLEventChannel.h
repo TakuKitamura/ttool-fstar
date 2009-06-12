@@ -75,6 +75,7 @@ public:
 	virtual std::istream& readObject(std::istream& s);
 	void print()  const;
 	virtual void reset();
+	virtual void streamStateXML(std::ostream& s) const;
 protected:
 	///Queue for parameters
 	ParamQueue _paramQueue;

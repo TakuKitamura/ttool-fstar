@@ -69,6 +69,11 @@ public:
 	\return Number of branches
 	*/
 	unsigned int getNumberOfBranches();
+	///Returns the state of non non deterministic flag
+	/**
+	\return Non deterministic flag
+	*/
+	bool isNonDeterministic();
 protected:
 	///Member function pointer to the condition function returning the index of the next command
 	CondFuncPointer _condFunc;

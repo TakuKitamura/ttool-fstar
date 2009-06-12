@@ -129,4 +129,15 @@ std::string TMLbrbwChannel::toString() const{
 	return outp.str();
 }
 
-
+unsigned int TMLbrbwChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+	unsigned int aNbToInsert;
+	if (iNbOfSamples==0){
+		_content=0;
+		aNbToInsert=0;
+	}else{
+		aNbToInsert=min(iNbOfSamples, _length-_content);
+		iNbOfSamples+=aNbToInsert;
+	}
+	setTransactionLength();
+	return aNbToInsert;
+}

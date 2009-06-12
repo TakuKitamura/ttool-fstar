@@ -67,3 +67,9 @@ void TMLStateChannel::reset(){
 	_nbToRead=0;
 	//std::cout << "StateChannel reset end" << std::endl;
 }
+
+void TMLStateChannel::streamStateXML(std::ostream& s) const{
+	s << TAG_CHANNELo << " name=\"" << _name << "\" id=\"" << _ID << "\">" << std::endl;
+	s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc;
+	s << TAG_CHANNELc << std::endl;
+}

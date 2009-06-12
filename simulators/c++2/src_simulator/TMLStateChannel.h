@@ -64,6 +64,7 @@ public:
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
+	virtual void streamStateXML(std::ostream& s) const;
 protected:
 	///Content of the channel
 	TMLLength _content;

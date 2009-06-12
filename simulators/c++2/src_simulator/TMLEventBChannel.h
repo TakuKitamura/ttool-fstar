@@ -76,6 +76,7 @@ public:
 	std::ostream& writeObject(std::ostream& s);
 	std::istream& readObject(std::istream& s);
 	void reset();
+	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
 protected:
 	void readNextEvents();
 	///Flag indicating if channel is used by a request

@@ -45,9 +45,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableCommDevice.h>
 #include <BusMasterInfo.h>
 
-#define TAG_CONTDELo "<contdel"
-#define TAG_CONTDELc "</contdel>"
-
 class TMLTransaction;
 class SchedulableCommDevice;
 

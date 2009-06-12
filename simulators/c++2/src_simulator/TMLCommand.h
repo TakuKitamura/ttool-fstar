@@ -140,6 +140,7 @@ public:
 	\param  iListener Pointer to the listener
 	*/
 	static void registerGlobalListener(CommandListener* iListener);
+	template<typename T> static void registerGlobalListenerForType(CommandListener* iListener);
 	///Removes a listener at all TMLCommand instances
 	/**
 	\param  iListener Pointer to the listener

@@ -105,4 +105,18 @@ std::string TMLEventFBChannel::toString() const{
 	return outp.str();
 }
 
-
+unsigned int TMLEventFBChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+	unsigned int aNbToInsert;
+	if (iNbOfSamples==0){
+		_content=0;
+		_paramQueue.clear();
+		aNbToInsert=0;
+	}else{
+		aNbToInsert=min(iNbOfSamples, _length-_content);
+		_content+=aNbToInsert;
+		for (unsigned int i=0; i<aNbToInsert; i++) _paramQueue.push_back(iParam);
+	} 
+	if (_writeTrans!=0) _writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
+	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	return aNbToInsert;
+}

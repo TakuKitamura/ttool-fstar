@@ -94,3 +94,7 @@ void TMLChoiceCommand::setPreferredBranch(unsigned int iBranch){
 unsigned int TMLChoiceCommand::getNumberOfBranches(){
 	return _nbOfBranches;
 }
+
+bool TMLChoiceCommand::isNonDeterministic(){
+	return _nonDeterm;
+}

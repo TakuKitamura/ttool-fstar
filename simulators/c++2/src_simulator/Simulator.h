@@ -107,69 +107,85 @@ public:
 	void sendStatus();
 	///Run simulation until a breakpoint is encountered
 	/**
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToNextBreakpoint(TMLTransaction*& oLastTrans);
 	///Runs the simulation until iTrans transaction have been executed
 	/**
 	\param iTrans Number of transactions
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTrans);
 	///Runs the simulation until iTrans commands have been executed
 	/**
+	\param iCmds Number of commands
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runXCommands(unsigned int iCmds, TMLTransaction*& oLastTrans);
 	///Runs the simulation until the simulation time is greater or equal than iTime
 	/**
 	\param iTime Simulation End Time
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation for iTime time units
 	/**
 	\param iTime Number of time units
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iBus is executed
 	/**
 	\param iBus Pointer to the bus
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iCPU is executed
 	/**
 	\param iCPU Pointer to the CPU
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction of iTask is executed
 	/**
 	\param iTask Pointer to the task
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on Slave iSlave is executed
 	/**
 	\param iSlave Pointer to the Slave
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToSlaveTrans(Slave* iSlave, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iChannel is executed
 	/**
 	\param iChannel Pointer to the Channel
+	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
 	bool runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans);
+	///Runs the simulation until a random choice command is encountered
+	/**
+	\param oLastTrans Returns the last transaction executed during a simulation
+	\return Return value of simulate() function
+	*/
+	bool runToNextChoiceCommand(TMLTransaction*& oLastTrans);
 	///Runs the automatic exploration of several branches of control flow. Choice commands to be explored must be marked with a breakpoint.
 	/**
 	\param iDepth Maximal recursion depth
 	\param iPrevID ID of the parent leaf
 	*/
 	void exploreTree(unsigned int iDepth, unsigned int iPrevID);
-	
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file
@@ -187,6 +203,11 @@ public:
 	\param iTraceFileName Name of the output trace file
 	*/
 	void schedule2TXT(std::string& iTraceFileName) const;
+	///Is true if the simulator is busy
+	/**
+	\return Busy flag
+	*/
+	bool isBusy();
 protected:
 	///Runs the simulation
 	/**
@@ -206,7 +227,7 @@ protected:
 	\return Returns false if simulator should be terminated
 	*/
 	//void decodeCommand(char* iCmd);
-	void decodeCommand(std::string& iCmd);
+	void decodeCommand(std::string iCmd);
 	///Searches for switches in the command line string
 	/**
 	\param iComp Command line switch to search for 
@@ -236,10 +257,10 @@ protected:
 	SimComponents* _simComp;
 	///Simulator Busy flag
 	bool _busy;
-	//unsigned int leafsForLevel[RECUR_DEPTH];
 	///Counts the leafs of the tree made up by explored control flow branches
 	unsigned int _leafsID;
 	///Keeps track of all breakpoints set during the simulation 
 	BreakpointSet _breakpoints;
+	RunTillNextRandomChoice _randChoiceBreak;
 };
 #endif
