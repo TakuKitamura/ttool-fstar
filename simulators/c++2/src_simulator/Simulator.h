@@ -244,19 +244,26 @@ protected:
 	\param aTask Pointer to the task
 	\param ioMessage Output stream
 	*/
-	void printCommandsOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
+	void printCommandsOfTask(TMLTask* aTask, std::ostream& ioMessage);
 	///Writes information about task variables to the given stream in XML format
 	/**
 	\param aTask Pointer to the task
 	\param ioMessage Output stream
 	*/
-	void printVariablesOfTask(TMLTask* aTask, std::ostringstream& ioMessage);
+	void printVariablesOfTask(TMLTask* aTask, std::ostream& ioMessage);
+	///Writes the current simulator state to a stream
+	/**
+	\param ioMessage output stream
+	*/
+	void writeSimState(std::ostream& ioMessage);
 	///Pointer to synchronization structure
 	SimServSyncInfo* _syncInfo;
 	///Pointer to structure encapsulating architecture and application objects
 	SimComponents* _simComp;
 	///Simulator Busy flag
 	bool _busy;
+	///Simulation terminated flag
+	bool _simTerm;
 	///Counts the leafs of the tree made up by explored control flow branches
 	unsigned int _leafsID;
 	///Keeps track of all breakpoints set during the simulation 

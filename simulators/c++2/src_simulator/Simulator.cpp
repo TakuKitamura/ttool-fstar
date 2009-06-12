@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Server.h>
 #include <ServerLocal.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
@@ -410,7 +410,7 @@ void Simulator::decodeCommand(std::string iCmd){
 	//std::cout << "Not crashed. II\n";
 	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
 	std::string aStrParam;
-	bool aSimTerminated=false;
+	//bool aSimTerminated=false;
 	//std::cout << "Not crashed. III\n";
 	_simComp->setStopFlag(false);
 	//anEntityMsg.str("");
@@ -430,7 +430,7 @@ void Simulator::decodeCommand(std::string iCmd){
 				case 0:	//Run to next breakpoint
 					std::cout << "Run to next breakpoint." << std::endl;
 					aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
-					aSimTerminated=runToNextBreakpoint(oLastTrans);
+					_simTerm=runToNextBreakpoint(oLastTrans);
 					std::cout << "End Run to next breakpoint." << std::endl;
 					break;
 				case 1:	//Run up to trans x
@@ -444,7 +444,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTransactions(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl;
-					aSimTerminated=runXTransactions(aParam2, oLastTrans);
+					_simTerm=runXTransactions(aParam2, oLastTrans);
 					std::cout << "Run x transactions." << std::endl;
 					break;
 				case 3:	//Run up to command x
@@ -458,7 +458,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXCommands(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl;
-					aSimTerminated=runXCommands(aParam2, oLastTrans);
+					_simTerm=runXCommands(aParam2, oLastTrans);
 					std::cout << "End Run x commands." << std::endl; 
 					break;
 				case 5: //Run up to time x
@@ -466,7 +466,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					aInpStream >> aParam2;
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
 					aGlobMsg << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl;
-					aSimTerminated=runTillTimeX(aParam2, oLastTrans);
+					_simTerm=runTillTimeX(aParam2, oLastTrans);
 					std::cout << "End Run to time x." << std::endl;
 					break;
 				case 6:	//Run for x time units
@@ -474,7 +474,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					 aInpStream >> aParam2;
 					//_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
 					aGlobMsg << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl;
-					aSimTerminated=runXTimeUnits(aParam2, oLastTrans);
+					_simTerm=runXTimeUnits(aParam2, oLastTrans);
 					std::cout << "End Run for x time units." << std::endl; 
 					break;
 				case 7: //Explore Tree
@@ -483,7 +483,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					_leafsID=0;
 					exploreTree(0,0);
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
-					aSimTerminated=true;
+					_simTerm=true;
 					//aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					//anErrorCode=1;
 					std::cout << "End Explore tree." << std::endl;
@@ -496,7 +496,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					if (aBus!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Bus " << aStrParam << TAG_MSGc << std::endl;
-						aSimTerminated=runToBusTrans(aBus, oLastTrans);
+						_simTerm=runToBusTrans(aBus, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -512,7 +512,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					if (aCPU!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on CPU " << aStrParam << TAG_MSGc << std::endl;
-						aSimTerminated=runToCPUTrans(aCPU, oLastTrans);
+						_simTerm=runToCPUTrans(aCPU, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -527,7 +527,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					TMLTask* aTask=_simComp->getTaskByName(aStrParam);
 					if (aTask!=0){
 						aGlobMsg << TAG_MSGo << "Created listener on Task " << aStrParam << TAG_MSGc << std::endl;
-						aSimTerminated=runToTaskTrans(aTask, oLastTrans);
+						_simTerm=runToTaskTrans(aTask, oLastTrans);
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						
 					}else{
@@ -545,7 +545,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					if (aSlave!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Slave " << aStrParam << TAG_MSGc << std::endl;
-						aSimTerminated=runToSlaveTrans(aSlave, oLastTrans);
+						_simTerm=runToSlaveTrans(aSlave, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -561,7 +561,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					if (aChannel!=0){
 						//_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 						aGlobMsg << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
-						aSimTerminated=runToChannelTrans(aChannel, oLastTrans);
+						_simTerm=runToChannelTrans(aChannel, oLastTrans);
 					}else{
 						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 						anErrorCode=2;
@@ -571,7 +571,7 @@ void Simulator::decodeCommand(std::string iCmd){
 				}
 				case 13:{//Run to next random choice command
 					std::cout << "Run to next random choice command." << std::endl;
-					aSimTerminated=runToNextChoiceCommand(oLastTrans);
+					_simTerm=runToNextChoiceCommand(oLastTrans);
 					std::cout << "End Run to next random choice command." << std::endl;
 				}
 				default:
@@ -591,6 +591,7 @@ void Simulator::decodeCommand(std::string iCmd){
 		case 2:	//reset
 			std::cout << "Simulator reset." << std::endl;
 			_simComp->reset();
+			_simTerm=false;
 			aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
 			std::cout << "End Simulator reset." << std::endl;
 			break;
@@ -771,6 +772,7 @@ void Simulator::decodeCommand(std::string iCmd){
 			aInpStream >> aStrParam;
 			std::ifstream aFile(aStrParam.c_str());
 			if (aFile.is_open()){
+				_simTerm=false;
 				_simComp->reset();
 				_simComp->readObject(aFile);
 				aGlobMsg << TAG_MSGo << "Simulation state restored from file " << aStrParam << TAG_MSGc << std::endl;
@@ -920,7 +922,8 @@ void Simulator::decodeCommand(std::string iCmd){
 
 	}
 	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo; 
-	if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY; 
+	//if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY;
+	writeSimState(aGlobMsg);
 	aGlobMsg << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	//std::cout << "Before reply." << std::endl;
 	_syncInfo->_server->sendReply(aGlobMsg.str());
@@ -928,7 +931,7 @@ void Simulator::decodeCommand(std::string iCmd){
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
 
-void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostringstream& ioMessage){
+void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
 	if (iTask->getVariableIterator(false)==iTask->getVariableIterator(true)) return;
 	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << std::endl; 
 	for(VariableLookUpTableID::const_iterator i=iTask->getVariableIterator(false); i !=iTask->getVariableIterator(true); ++i){
@@ -1054,7 +1057,8 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 			return false;
 		case 13://get current time
 			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
-			if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+			//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+			writeSimState(aMessage);
 			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
@@ -1076,7 +1080,8 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 					aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << TAG_ERRNOo << 2;
 				}
 			}
-			if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+			//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+			writeSimState(aMessage);
 			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
@@ -1092,23 +1097,35 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 	return true;
 }
 
-void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostringstream& ioMessage){
+void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
 	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << TAG_CURRCMDo << " id=\"";
 	if (iTask->getCurrCommand()==0)
 		ioMessage << 0 << "\">"; 
 	else
 		ioMessage << iTask->getCurrCommand()->getID() << "\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
-		ioMessage << TAG_CURRCMDc << TAG_TASKc << std::endl;
+	ioMessage << TAG_CURRCMDc << TAG_TASKc << std::endl;
 }
 
 void Simulator::sendStatus(){
 	std::ostringstream aMessage;
 	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
-	if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+	//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+	writeSimState(aMessage);
 	aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
 }
 
 bool Simulator::isBusy(){
 	return _busy;
+}
+
+void Simulator::writeSimState(std::ostream& ioMessage){
+	if (_busy){
+		ioMessage << SIM_BUSY;
+	}else{
+		if (_simTerm)
+			ioMessage << SIM_TERM;
+		else
+			ioMessage << SIM_READY;
+	}
 }
