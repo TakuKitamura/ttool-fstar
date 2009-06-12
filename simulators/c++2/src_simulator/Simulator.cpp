@@ -661,7 +661,7 @@ void Simulator::decodeCommand(std::string iCmd){
 					break;
 				}
 				case 5: {//Task
-					TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getCPUByName(aStrParam));
+					TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getTaskByName(aStrParam));
 					if (aDevice!=0) aDevice->streamStateXML(anEntityMsg); else anErrorCode=2;
 					break;
 				}
