@@ -531,7 +531,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		jp02.add(new JLabel("File name:"), c01);
 		benchmarkFileName = new JTextField(30);
-		jp02.add(stateFileName, c01);
+		jp02.add(benchmarkFileName, c01);
 		
 		jp01.add(jp02, BorderLayout.CENTER);
 		
@@ -1610,9 +1610,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void sendSaveBenchmarkCommand() {
 		String param = benchmarkFileName.getText().trim();
 		if (param.length() >0) {
-			sendCommand("getbenchmark 0 " + param);
+			sendCommand("get-benchmark 1 " + param);
 		} else {
-			error("Wrong parameter: must be a file name"); 
+			error("Wrong benchmark parameter: must be a file name"); 
 		}
 	}
 	
