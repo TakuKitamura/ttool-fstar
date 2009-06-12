@@ -1411,18 +1411,15 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void makeStatus(String s) {
 		//System.out.println("busystatus="  + busyStatus);
-		if (s.equals("term")) {
-			status.setText("terminated");
-		} else {
-			status.setText(s);
-		}
 		
 		if (s.equals("busy")) {
+			status.setText("Busy");
 			setBusyStatus();
 			busyMode = 2;
 			//busyStatus = true;
 		}
 		if (s.equals("ready")) {
+			status.setText("Ready");
 			if (busyMode == 2) {
 				//System.out.println("Sending time command");
 				askForUpdate();
@@ -1433,6 +1430,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 		
 		if (s.equals("term")) {
+			status.setText("Terminated");
 			if (busyMode == 2) {
 				askForUpdate();
 			}
