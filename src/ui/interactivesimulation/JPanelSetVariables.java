@@ -234,6 +234,19 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		}
 	}
 	
+	protected void unsetElements() {
+		setButton.setEnabled(false);
+		newValue.setEditable(false);
+		variables.setEnabled(false);
+		variables.removeAllItems();
+		variables.removeActionListener(this);
+		tasks.setEnabled(false);
+		tasks.removeActionListener(this);
+		tasks.removeAllItems();
+		currentValue.setText(" ");
+		currentValue.setEnabled(false);
+	}
+	
 
 	
 	

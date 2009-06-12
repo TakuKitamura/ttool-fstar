@@ -277,6 +277,19 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 		listBreakpoints.setListData(breakpoints);
 	}
 	
+	public void unsetElements() {
+		Vector v = new Vector();
+		listBreakpoints.setListData(v);
+		removeButton.setEnabled(false);
+		addButton.setEnabled(false);
+		tasks.removeActionListener(this);
+		tasks.setEnabled(false);
+		tasks.removeAllItems();
+		tasks.setEnabled(false);
+		commands.setEnabled(false);
+		commands.removeAllItems();
+	}
+	
 	
 	
 	

@@ -114,6 +114,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected MainCommandsToolBar mctb;
 	protected SaveCommandsToolBar sctb;
 	protected StateCommandsToolBar stctb;
+	protected BenchmarkCommandsToolBar bctb;
 	
 	
 	// Commands
@@ -123,6 +124,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
+	protected JTextField benchmarkFileName;
 	protected JComboBox cpus, busses, mems, tasks, chans;
 	
 	
@@ -167,7 +169,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	
 	private int mode = 0;
-	private boolean busyStatus = false;
+	//private boolean busyStatus = false;
 	private int busyMode = 0; // 0: unknown; 1: ready; 2:busy; 3:term
 	private boolean threadStarted = false;
 	private boolean gotTimeAnswerFromServer = false; 
@@ -178,7 +180,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
     public  KeyListener keyHandler;
 	
 	private TMLMapping tmap;
-	int hashCode;
+	private int hashCode;
+	private boolean hashOK = true;
 	
 	private Hashtable <Integer, String> valueTable;
 	private Hashtable <Integer, Integer> rowTable;
@@ -203,6 +206,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		if (tmap != null) {
 			tmap.makeMinimumMapping();
 			hashCode = tmap.getHashCode();
+		} else {
+			hashOK = false;
 		}
 		
 		points = _points;
@@ -250,7 +255,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
 		buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
 		//buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
-
+		
 		
 		
 		
@@ -301,11 +306,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jta.setFont(f);
 		jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jsp.setViewportBorder(BorderFactory.createLineBorder(ColorManager.InteractiveSimulationBackground));
-
+		
         //jsp.setColumnHeaderView(100);
         //jsp.setRowHeaderView(30);
-
-
+		
+		
 		jsp.setMaximumSize(new Dimension(800, 500));
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, jsp);
 		//split.setBackground(ColorManager.InteractiveSimulationBackground);
@@ -459,7 +464,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		sctb = new SaveCommandsToolBar(this);
 		jp01.add(sctb, BorderLayout.NORTH);
-
+		
 		jp02 = new JPanel();
 		gridbag01 = new GridBagLayout();
 		c01 = new GridBagConstraints();
@@ -485,7 +490,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		stctb = new StateCommandsToolBar(this);
 		jp01.add(stctb, BorderLayout.NORTH);
-
+		
 		jp02 = new JPanel();
 		gridbag01 = new GridBagLayout();
 		c01 = new GridBagConstraints();
@@ -500,6 +505,32 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		jp02.add(new JLabel("File name:"), c01);
 		stateFileName = new JTextField(30);
+		jp02.add(stateFileName, c01);
+		
+		jp01.add(jp02, BorderLayout.CENTER);
+		
+		// Benchmark commands
+		jp01 = new JPanel(new BorderLayout());
+		
+		commandTab.addTab("Benchmarks", null, jp01, "Benchmarks");
+		
+		bctb = new BenchmarkCommandsToolBar(this);
+		jp01.add(bctb, BorderLayout.NORTH);
+		
+		jp02 = new JPanel();
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp02.setLayout(gridbag01);
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp02.add(new JLabel("File name:"), c01);
+		benchmarkFileName = new JTextField(30);
 		jp02.add(stateFileName, c01);
 		
 		jp01.add(jp02, BorderLayout.CENTER);
@@ -549,7 +580,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
-
+		
 		jp01.add(new JLabel(" "), c01);
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
@@ -578,9 +609,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		taskPanel.setLayout(new BorderLayout());
 		infoTab.addTab("Tasks", IconManager.imgic1202, taskPanel, "Current state of tasks");
 		if (tmap == null) {
-			 tasktm = new TaskTableModel(null, valueTable, rowTable);
+			tasktm = new TaskTableModel(null, valueTable, rowTable);
 		} else {
-			 tasktm = new TaskTableModel(tmap.getTMLModeling(), valueTable, rowTable);
+			tasktm = new TaskTableModel(tmap.getTMLModeling(), valueTable, rowTable);
 		}
 		
 		sorterPI = new TableSorter(tasktm);
@@ -684,10 +715,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		updateBusInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_BUS]);
 		busPanel.add(updateBusInformationButton, BorderLayout.SOUTH);
 		
+		
+		if (!hashOK) {
+			wrongHashCode();
+		}
 		pack();
 		
-		System.out.println("Row table:" + rowTable.toString());
-		System.out.println("Value table:" + valueTable.toString());
+		//System.out.println("Row table:" + rowTable.toString());
+		//System.out.println("Value table:" + valueTable.toString());
 	}
 	
 	private	void initActions() {
@@ -705,7 +740,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		chanIDs = makeChanIDs();
     }
 	
-
+	
 	
 	public void setComponents() {
 		if (mode == NOT_STARTED) {
@@ -722,7 +757,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		boolean b = (mode == STARTED_AND_CONNECTED);
 		sendTextCommand.setEnabled(b);
-		setAll(b);
+		setAll();
 		//resetCommand.setEnabled(b);
 		//runCommand.setEnabled(b);
 		//StopCommand.setEnabled(b);
@@ -840,12 +875,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				setComponents();
 				
-				//sendCommand("time");
-				askForUpdate();
 				if (tmap != null) {
 					sendCommand("get-hashcode");
+				} else {
+					sendCommand("time");
 				}
-				sendBreakPointList();
+				
 				
 				try {
 					while(true) {
@@ -879,7 +914,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				while(true) {
 					testGo();
 					Thread.currentThread().sleep(500);
-					if (busyStatus && gotTimeAnswerFromServer) {
+					if (busyMode == 2 && gotTimeAnswerFromServer) {
 						gotTimeAnswerFromServer = false;
 						askForUpdate();
 						
@@ -1137,124 +1172,126 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						
 					}
 					
-					if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
-						id = null;
-						name = null;
-						command = null;
-						id = elt.getAttribute("id");
-						name = elt.getAttribute("name");
-						nl = elt.getElementsByTagName("currcmd");
-						if (nl.getLength() > 0) {
-							node0 = nl.item(0);
-							if (node0.getNodeType() == Node.ELEMENT_NODE) {
+					if (hashOK) {
+						if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
+							id = null;
+							name = null;
+							command = null;
+							id = elt.getAttribute("id");
+							name = elt.getAttribute("name");
+							nl = elt.getElementsByTagName("currcmd");
+							if (nl.getLength() > 0) {
+								node0 = nl.item(0);
+								if (node0.getNodeType() == Node.ELEMENT_NODE) {
+									elt0 = (Element)node0;
+									command = elt0.getAttribute("id");
+								}
+							}
+							
+							//System.out.println("Got info on task " + id + " command=" + command);
+							
+							if ((id != null) && (command != null)) {
+								updateRunningCommand(id, command);
+							}
+							
+							if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
+								updateOpenDiagram(name, command);
+							}
+							
+							extime = null;
+							nl = elt.getElementsByTagName("extime");
+							if (nl.getLength() > 0) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								extime =  node0.getTextContent();
+							}
+							
+							if ((id != null) && (extime != null)) {
+								updateTaskState(id, extime);
+							}
+							
+							
+							
+							nl = elt.getElementsByTagName("var");
+							idvar = null;
+							value = null;
+							for(k=0; k<nl.getLength(); k++) {
+								node0 = nl.item(k);
+								value = node0.getTextContent();
+								if (node0.getNodeType() == Node.ELEMENT_NODE) {
+									elt0 = (Element)node0;
+									idvar = elt0.getAttribute("id");
+								}
+								if ((value != null) && (idvar != null)) {
+									updateVariableState(idvar, value);
+									jpsv.updateOnVariableValue(idvar);
+								}
+							}
+						}
+						
+						if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
+							id = null;
+							name = null;
+							command = null;
+							contdel = null;
+							busname = null;
+							busid = null;
+							
+							id = elt.getAttribute("id");
+							name = elt.getAttribute("name");
+							nl = elt.getElementsByTagName("util");
+							if (nl.getLength() > 0) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							//System.out.println("Got info on cpu " + id + " util=" + util);
+							
+							nl = elt.getElementsByTagName("util");
+							if (nl.getLength() > 0) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							
+							if (nl.getLength() > 0) {
+								nl = elt.getElementsByTagName("contdel");
+								node0 = nl.item(0);
 								elt0 = (Element)node0;
-								command = elt0.getAttribute("id");
+								busid = elt0.getAttribute("busID");
+								busname = elt0.getAttribute("busName");
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								contdel = node0.getTextContent();
+							}
+							
+							//System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
+							
+							
+							if ((id != null) && (util != null)) {
+								updateCPUState(id, util, contdel, busname, busid);
 							}
 						}
 						
-						//System.out.println("Got info on task " + id + " command=" + command);
-						
-						if ((id != null) && (command != null)) {
-							updateRunningCommand(id, command);
-						}
-						
-						if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
-							updateOpenDiagram(name, command);
-						}
-						
-						extime = null;
-						nl = elt.getElementsByTagName("extime");
-						if (nl.getLength() > 0) {
-							node0 = nl.item(0);
-							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-							extime =  node0.getTextContent();
-						}
-						
-						if ((id != null) && (extime != null)) {
-							updateTaskState(id, extime);
-						}
-						
-						
-						
-						nl = elt.getElementsByTagName("var");
-						idvar = null;
-						value = null;
-						for(k=0; k<nl.getLength(); k++) {
-							node0 = nl.item(k);
-							value = node0.getTextContent();
-							if (node0.getNodeType() == Node.ELEMENT_NODE) {
-								elt0 = (Element)node0;
-								idvar = elt0.getAttribute("id");
+						if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
+							id = null;
+							name = null;
+							command = null;
+							id = elt.getAttribute("id");
+							name = elt.getAttribute("name");
+							nl = elt.getElementsByTagName("util");
+							if (nl.getLength() > 0) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
 							}
-							if ((value != null) && (idvar != null)) {
-								updateVariableState(idvar, value);
-								jpsv.updateOnVariableValue(idvar);
+							
+							//System.out.println("Got info on bus " + id + " util=" + util);
+							
+							if ((id != null) && (util != null)) {
+								updateBusState(id, util);
 							}
-						}
-					}
-					
-					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
-						id = null;
-						name = null;
-						command = null;
-						contdel = null;
-						busname = null;
-						busid = null;
-						
-						id = elt.getAttribute("id");
-						name = elt.getAttribute("name");
-						nl = elt.getElementsByTagName("util");
-						if (nl.getLength() > 0) {
-							node0 = nl.item(0);
-							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-							util = node0.getTextContent();
-						}
-						
-						//System.out.println("Got info on cpu " + id + " util=" + util);
-						
-						nl = elt.getElementsByTagName("util");
-						if (nl.getLength() > 0) {
-							node0 = nl.item(0);
-							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-							util = node0.getTextContent();
-						}
-						
-						
-						if (nl.getLength() > 0) {
-							nl = elt.getElementsByTagName("contdel");
-							node0 = nl.item(0);
-							elt0 = (Element)node0;
-							busid = elt0.getAttribute("busID");
-							busname = elt0.getAttribute("busName");
-							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-							contdel = node0.getTextContent();
-						}
-						
-						//System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
-						
-						
-						if ((id != null) && (util != null)) {
-							updateCPUState(id, util, contdel, busname, busid);
-						}
-					}
-					
-					if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
-						id = null;
-						name = null;
-						command = null;
-						id = elt.getAttribute("id");
-						name = elt.getAttribute("name");
-						nl = elt.getElementsByTagName("util");
-						if (nl.getLength() > 0) {
-							node0 = nl.item(0);
-							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-							util = node0.getTextContent();
-						}
-						
-						//System.out.println("Got info on bus " + id + " util=" + util);
-						
-						if ((id != null) && (util != null)) {
-							updateBusState(id, util);
 						}
 					}
 				}
@@ -1282,21 +1319,17 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		if ((hash != null) && (tmap != null)) {
 			try {
 				int thehash = Integer.decode(hash).intValue();
+				
 				if (thehash != hashCode) {
 					jta.append("\n*** Simulated model is not the model currently loaded under TTool ***\n");
 					jta.append("*** Some features are therefore deactivated ***\n\n");
-					cpuPanel.setVisible(false);
-					variablePanel.setVisible(false);
-					animate.setSelected(false);
-					openDiagram.setEnabled(false);
-					animate.setEnabled(false);
-					cpus.setEnabled(false);
-					busses.setEnabled(false);
-					mems.setEnabled(false);
-					tasks.setEnabled(false);
-					chans.setEnabled(false);
+					hashOK = false;
+					wrongHashCode();
 				} else {
+					askForUpdate();
+					sendBreakPointList();
 					jta.append("\n*** Simulated model is the one currently loaded under TTool ***\n");
+					hashOK = true;
 					animate.setSelected(true);
 					animate.setEnabled(true);
 					openDiagram.setEnabled(true);
@@ -1311,6 +1344,50 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 		
 		return true;
+	}
+	
+	private void wrongHashCode() {
+		System.out.println("Wrong hash code");
+		
+		cpuPanel.setVisible(false);
+		variablePanel.setVisible(false);
+		openDiagram.setSelected(false);
+		openDiagram.setEnabled(false);
+		animate.setEnabled(false);
+		animate.setSelected(false);
+		update.setEnabled(false);
+		update.setSelected(false);
+		
+		cpus.setEnabled(false);
+		busses.setEnabled(false);
+		mems.setEnabled(false);
+		tasks.setEnabled(false);
+		chans.setEnabled(false);
+		cpus.removeAllItems();
+		busses.removeAllItems();
+		mems.removeAllItems();
+		tasks.removeAllItems();
+		chans.removeAllItems();
+		
+		jpsv.setEnabled(false);
+		jpsv.unsetElements();
+		
+		actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].setEnabled(false);
+		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].setEnabled(false);
+		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].setEnabled(false);
+		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(false);
+		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(false);
+		
+		// Set variable tab is removed
+		// 
+		commandTab.removeTabAt(2);
+		jpsv = null;
+		
+		while(infoTab.getTabCount() > 2) {
+			infoTab.removeTabAt(2);
+		}
+		jpbp.unsetElements();
+		
 	}
 	
 	public synchronized void startThread(int mode) {
@@ -1337,34 +1414,35 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		status.setText(s);
 		
 		if (s.equals("busy")) {
-			setBusyStatus(true);
+			setBusyStatus();
 			busyMode = 2;
-			busyStatus = true;
+			//busyStatus = true;
 		}
 		if (s.equals("ready")) {
-			if (busyStatus) {
+			if (busyMode == 2) {
 				//System.out.println("Sending time command");
 				askForUpdate();
 				//sendCommand("time");
 			}
 			busyMode = 1;
-			setBusyStatus(false);
+			setBusyStatus();
 		}
 		
 		if (s.equals("term")) {
-			if (busyStatus) {
+			if (busyMode == 2) {
 				askForUpdate();
 			}
 			busyMode = 3;
-			setBusyStatus(false);
+			setBusyStatus();
+			
+			System.out.println("**** TERM ****");
 		}
 		setLabelColors();
 	}
 	
-	public void setBusyStatus(boolean b) {
-		setAll(!b);
-		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
-		busyStatus = b;
+	public void setBusyStatus() {
+		setAll();
+		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(busyMode == 2);
 	}
 	
 	public void setLabelColors() {
@@ -1390,7 +1468,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
-	public void setAll(boolean b) {
+	public void setAll() {
+		boolean b = false;;
+		if (busyMode == 1) {
+			b = true;
+		}
 		actions[InteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_TO_TIME].setEnabled(b);
@@ -1398,19 +1480,35 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
-		actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
-		actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
-		actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
-		actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
-		actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
-		
 		actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+		
+		if(busyMode == 3) {
+			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+		}
+		
+		if (!hashOK) {
+			b = false;
+		}
+		
 		actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_TASK_EXECUTES].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_MEMORY_ACCESS].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
 		
+		if((busyMode == 0) || (busyMode == 2)) {
+			b = false;
+		} else {
+			b = true;
+		}
+		
+		actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
+		actions[InteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
 	}
 	
 	public static String decodeString(String s)  {
@@ -1503,7 +1601,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
-
+	public void sendSaveBenchmarkCommand() {
+		String param = benchmarkFileName.getText().trim();
+		if (param.length() >0) {
+			sendCommand("getbenchmark 0 " + param);
+		} else {
+			error("Wrong parameter: must be a file name"); 
+		}
+	}
+	
+	
 	
 	private void updateVariables() {
 		if (tmap == null) {
@@ -1647,7 +1754,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				tab = tab.substring(index+2, tab.length());
 			}
 			//System.out.println("Opening diagram " + tab);
-
+			
 			mgui.openTMLTaskActivityDiagram(diag, tab);
 		}
 	}
@@ -1730,14 +1837,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void askForUpdate() {
 		sendCommand("time");
-		if (animate.isSelected()) {
-			updateTaskCommands();
-		}
-		if (update.isSelected()) {
-			updateTasks();
-			updateVariables();
-			updateCPUs();
-			updateBus();
+		if (hashOK) {
+			if (animate.isSelected()) {
+				updateTaskCommands();
+			}
+			if (update.isSelected()) {
+				updateTasks();
+				updateVariables();
+				updateCPUs();
+				updateBus();
+			}
 		}
 	}
 	
@@ -1794,6 +1903,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendSaveStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
             sendRestoreStateCommand();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].getActionCommand()))  {
+            sendCommand("get-benchmark 0");
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].getActionCommand()))  {
+            sendSaveBenchmarkCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
 			mgui.resetRunningID();
             sendCommand("reset");
@@ -1877,20 +1990,20 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public int getIDFromString(String s) {
 		int index0 = s.indexOf("(");
-		int index1 = s.indexOf(")");
-		if ((index0 < 0) || (index1 <0) || (index1 < index0)) {
+			int index1 = s.indexOf(")");
+			if ((index0 < 0) || (index1 <0) || (index1 < index0)) {
+				return -1;
+			}
+			
+			String in = s.substring(index0+1, index1);
+			
+			try {
+				return Integer.decode(in).intValue();
+			} catch (Exception e) {
+				System.err.println("Wrong string: "+ in);
+			}
+			
 			return -1;
-		}
-		
-		String in = s.substring(index0+1, index1);
-		
-		try {
-			return Integer.decode(in).intValue();
-		} catch (Exception e) {
-			System.err.println("Wrong string: "+ in);
-		}
-		
-		return -1;
 	}
 	
 	

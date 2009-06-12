@@ -76,6 +76,9 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_SAVE_HTML = 11;
 	public static final int ACT_SAVE_TXT = 12;
 	
+	public static final int ACT_PRINT_BENCHMARK = 26;
+	public static final int ACT_SAVE_BENCHMARK = 27;
+	
 	public static final int ACT_SAVE_STATE = 13;
 	public static final int ACT_RESTORE_STATE = 14;
 	
@@ -89,7 +92,7 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_UPDATE_BUS = 18;  
 	public static final int ACT_UPDATE_TASKS = 19;
    
-    public static final int NB_ACTION = 26;
+    public static final int NB_ACTION = 28;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -160,6 +163,10 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_UPDATE_MEMS] = new TAction("update-mems", "Update Memories information", IconManager.imgic75, IconManager.imgic75, "Update Memories information", "Update information on Memories", 'R');
         actions[ACT_UPDATE_BUS] = new TAction("update-bus", "Update bus information", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on busses", 'R');
         actions[ACT_UPDATE_TASKS] = new TAction("update-tasks", "Update task information", IconManager.imgic75, IconManager.imgic75, "Update task information", "Update information on tasks", 'R');
+		
+		actions[ACT_PRINT_BENCHMARK] = new TAction("print-benchmark", "Print benchmark", IconManager.imgic29, IconManager.imgic29, "Print benchmark", "Print benchmark at simulator side", 'R');
+        actions[ACT_SAVE_BENCHMARK] = new TAction("save-benchmark", "Save benchmark", IconManager.imgic339, IconManager.imgic339, "Save benchmark", "Save benchmark at simulator side", 'R');
+        
         
     }
     
