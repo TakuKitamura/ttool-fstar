@@ -114,6 +114,8 @@ public class TMLMapping {
 				ch = (TMLChannel)(iterator.next());
 				addCommToHwCommNode(ch, mem);
 			}
+		} else {
+			mapAllChannelsOnMemory();
 		}
 		
 		if (!tmla.hasBus()) {
@@ -131,12 +133,85 @@ public class TMLMapping {
 			
 			// Add all channels on that bus
 			iterator = tmlm.getChannels().listIterator();
-			// All channels non-mapped on a memory are added to that memory
 			while(iterator.hasNext()) {
 				ch = (TMLChannel)(iterator.next());
 				addCommToHwCommNode(ch, bus);
 			}
+		} else {
+			mapAllChannelsOnBus();
 		}
+	}
+	
+	// If only one bus -> map all channels on it;
+	private void mapAllChannelsOnBus() {
+		// Check if only one bus
+		if (getNbOfBusses() != 1) {
+			return;
+		}
+		
+		HwBus bus = tmla.getFirstBus();
+		
+		int index;
+		boolean mapped;
+		for(TMLChannel cha: tmlm.getChannels()) {
+			index = 0;
+			mapped = false;
+			for(TMLElement el: mappedcommelts) {
+				if (el == cha) {
+					if (oncommnodes.get(index) instanceof HwBus) {
+						mapped = true;
+						break;
+					}
+				}
+				index ++;
+			}
+			if (!mapped) {
+				addCommToHwCommNode(cha, bus);
+			}
+		}
+	}
+	
+	// If only one memory -> map all channels on it;
+	private void mapAllChannelsOnMemory() {
+		// Check if only one bus
+		if (getNbOfMemories() != 1) {
+			return;
+		}
+		
+		HwMemory mem = tmla.getFirstMemory();
+		
+		int index;
+		boolean mapped;
+		for(TMLChannel cha: tmlm.getChannels()) {
+			index = 0;
+			mapped = false;
+			for(TMLElement el: mappedcommelts) {
+				if (el == cha) {
+					if (oncommnodes.get(index) instanceof HwMemory) {
+						mapped = true;
+						break;
+					}
+				}
+				index ++;
+			}
+			if (!mapped) {
+				addCommToHwCommNode(cha, mem);
+			}
+		}
+	}
+	
+	public int getNbOfBusses() {
+		if (tmla == null) {
+			return 0;
+		}
+		return tmla.getNbOfBusses();
+	}
+	
+	public int getNbOfMemories() {
+		if (tmla == null) {
+			return 0;
+		}
+		return tmla.getNbOfMemories();
 	}
 	
 	private void init() {

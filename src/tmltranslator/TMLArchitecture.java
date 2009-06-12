@@ -108,6 +108,24 @@ public class TMLArchitecture {
 		return null;
 	}
 	
+	public HwBus getFirstBus() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwBus) {
+				return (HwBus)node;
+			}
+		}
+		return null;
+	}
+	
+	public HwMemory getFirstMemory() {
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwMemory) {
+				return (HwMemory)node;
+			}
+		}
+		return null;
+	}
+	
 	
 	
 	public boolean hasCPU() {
@@ -128,6 +146,16 @@ public class TMLArchitecture {
 		return false;
 	}
 	
+	public int getNbOfBusses() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwBus) {
+				cpt ++;
+			}
+		}
+		return cpt;
+	}
+	
 	public boolean hasMemory() {
 		for(HwNode node: hwnodes) {
 			if (node instanceof HwMemory) {
@@ -135,6 +163,16 @@ public class TMLArchitecture {
 			}
 		}
 		return false;
+	}
+	
+	public int getNbOfMemories() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwMemory) {
+				cpt ++;
+			}
+		}
+		return cpt;
 	}
 	
 	public String[] getCPUIDs() {

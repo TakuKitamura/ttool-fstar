@@ -168,6 +168,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	private int mode = 0;
 	private boolean busyStatus = false;
+	private int busyMode = 0; // 0: unknown; 1: ready; 2:busy; 3:term
 	private boolean threadStarted = false;
 	private boolean gotTimeAnswerFromServer = false; 
 	
@@ -521,12 +522,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		infos.add(jp02, BorderLayout.SOUTH);
 		jp02.add(new JLabel("Status:"));
 		status = new JLabel("Unknown");
-		status.setForeground(ColorManager.InteractiveSimulationText);
+		status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(status);
 		jp02.add(new JLabel(" "));
 		jp02.add(new JLabel("Time:"));
 		time = new JLabel("Unknown");
-		time.setForeground(ColorManager.InteractiveSimulationText);
+		time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(time);
 		
 		// Options
@@ -610,10 +611,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jtablePI = new JTable(sorterPI);
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(60);
 		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
-		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(60);
+		((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspTaskVariableInfo = new JScrollPane(jtablePI);
 		jspTaskVariableInfo.setWheelScrollingEnabled(true);
@@ -702,7 +703,6 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		memIDs = makeMemIDs();
 		taskIDs = makeTasksIDs();
 		chanIDs = makeChanIDs();
-		
     }
 	
 
@@ -859,6 +859,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				} catch (RemoteConnectionException rce) {
 					jta.append("Exception: " + rce.getMessage());
 					jta.append("Could not read data from host: " + hostSystemC + ".... Aborting\n");
+					busyMode = 0;
+					setLabelColors();
 					//System.out.println("rc left");
 				}
 			} else if (threadMode == 1) {
@@ -1083,6 +1085,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String util = null;
 		String value;
 		String extime;
+		String contdel;
+		String busname;
+		String busid;
 		
 		int k;
 		
@@ -1192,6 +1197,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						id = null;
 						name = null;
 						command = null;
+						contdel = null;
+						busname = null;
+						busid = null;
+						
 						id = elt.getAttribute("id");
 						name = elt.getAttribute("name");
 						nl = elt.getElementsByTagName("util");
@@ -1203,8 +1212,29 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						
 						//System.out.println("Got info on cpu " + id + " util=" + util);
 						
+						nl = elt.getElementsByTagName("util");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							util = node0.getTextContent();
+						}
+						
+						
+						if (nl.getLength() > 0) {
+							nl = elt.getElementsByTagName("contdel");
+							node0 = nl.item(0);
+							elt0 = (Element)node0;
+							busid = elt0.getAttribute("busID");
+							busname = elt0.getAttribute("busName");
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							contdel = node0.getTextContent();
+						}
+						
+						//System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
+						
+						
 						if ((id != null) && (util != null)) {
-							updateCPUState(id, util);
+							updateCPUState(id, util, contdel, busname, busid);
 						}
 					}
 					
@@ -1305,8 +1335,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void makeStatus(String s) {
 		//System.out.println("busystatus="  + busyStatus);
 		status.setText(s);
+		
 		if (s.equals("busy")) {
 			setBusyStatus(true);
+			busyMode = 2;
 			busyStatus = true;
 		}
 		if (s.equals("ready")) {
@@ -1315,6 +1347,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				askForUpdate();
 				//sendCommand("time");
 			}
+			busyMode = 1;
 			setBusyStatus(false);
 		}
 		
@@ -1322,14 +1355,39 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			if (busyStatus) {
 				askForUpdate();
 			}
+			busyMode = 3;
 			setBusyStatus(false);
 		}
+		setLabelColors();
 	}
 	
 	public void setBusyStatus(boolean b) {
 		setAll(!b);
 		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
 		busyStatus = b;
+	}
+	
+	public void setLabelColors() {
+		switch(busyMode) {
+		case 0:
+			status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+			time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+			break;
+		case 1:
+			status.setForeground(ColorManager.InteractiveSimulationText_READY);
+			time.setForeground(ColorManager.InteractiveSimulationText_READY);
+			break;        
+		case 2:
+			status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+			time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+			break;
+		case 3:
+			status.setForeground(ColorManager.InteractiveSimulationText_TERM);
+			time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+			break;
+		}
+		
+		
 	}
 	
 	public void setAll(boolean b) {
@@ -1631,14 +1689,19 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
-	private void updateCPUState(String _id, String _utilization) {
+	private void updateCPUState(String _id, String _utilization, String contdel, String busName, String busID) {
 		Integer i = getInteger(_id);
 		int row;
+		String info;
 		
 		if (i != null) {
 			try {
 				valueTable.remove(i);
-				valueTable.put(i, "Utilization: " + _utilization);
+				info = "Utilization: " + _utilization;
+				if ((contdel != null) && (busName != null) && (busID != null)) {
+					info += "; Cont. delay on " + busName + " (" + busID + ") = " + contdel;
+				}
+				valueTable.put(i, info);
 				//System.out.println("Searching for old row");
 				row = (Integer)(rowTable.get(i)).intValue();
 				cputm.fireTableCellUpdated(row, 2);

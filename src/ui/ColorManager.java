@@ -115,6 +115,11 @@ public class ColorManager {
 	public static final Color InteractiveSimulationJTAForeground = new Color(255, 166, 38);
 	public static final Color InteractiveSimulationBackground = new Color(5, 100, 7);
 	public static final Color InteractiveSimulationText = new Color(5, 100, 7);
+	
+	public static final Color InteractiveSimulationText_READY = new Color(5, 100, 7);
+	public static final Color InteractiveSimulationText_BUSY = new Color(255, 166, 38);
+	public static final Color InteractiveSimulationText_TERM = new Color(241, 6, 6);
+	public static final Color InteractiveSimulationText_UNKNOWN = new Color(6, 6, 241);
     
     public final static void setColor(Graphics g, int state, int type) {
         if (type == 0) {
