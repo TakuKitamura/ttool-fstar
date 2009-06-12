@@ -247,6 +247,10 @@ public	class JPanelSetVariables extends JPanel implements ActionListener  {
 		currentValue.setEnabled(false);
 	}
 	
+	protected void setVariableButton(boolean b) {
+		setButton.setEnabled(b);
+	}
+	
 
 	
 	

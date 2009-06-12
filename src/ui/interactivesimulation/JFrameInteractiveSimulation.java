@@ -1435,7 +1435,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			busyMode = 3;
 			setBusyStatus();
 			
-			System.out.println("**** TERM ****");
+			//System.out.println("**** TERM ****");
 		}
 		setLabelColors();
 	}
@@ -1481,6 +1481,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
 		actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+		
+		if (jpsv != null) {
+			jpsv.setVariableButton(b);
+		}
 		
 		if(busyMode == 3) {
 			actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
