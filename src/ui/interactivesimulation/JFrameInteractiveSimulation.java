@@ -1411,7 +1411,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void makeStatus(String s) {
 		//System.out.println("busystatus="  + busyStatus);
-		status.setText(s);
+		if (s.equals("term")) {
+			status.setText("terminated");
+		} else {
+			status.setText(s);
+		}
 		
 		if (s.equals("busy")) {
 			setBusyStatus();
