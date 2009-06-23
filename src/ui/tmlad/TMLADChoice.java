@@ -117,8 +117,8 @@ public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedCom
 				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 			}
 			// Making the polygon
-			int [] px1 = {x+(width/2), x+width, x + (width/2), x};
-			int [] py1 = {y, y + height/2, y+height, y+height/2};
+			int [] px1 = {x+(width/2), x+width+2, x + (width/2), x};
+			int [] py1 = {y, y + height/2, y+height+2, y+height/2};
 			g.fillPolygon(px1, py1, 4);
 			g.setColor(c);
 		}
