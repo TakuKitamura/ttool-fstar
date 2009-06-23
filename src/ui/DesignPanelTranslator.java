@@ -60,7 +60,7 @@ import ui.osad.*;
 
 public class DesignPanelTranslator {
 	protected TURTLEDesignPanelInterface dp;
-	protected Vector checkingErrors;
+	protected Vector checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
 	protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
 	
@@ -71,6 +71,7 @@ public class DesignPanelTranslator {
 	
 	public void reinit() {
 		checkingErrors = new Vector();
+		warnings = new Vector();
 		listE = new CorrespondanceTGElement();
 		listB = new CorrespondanceTGElement();
 	}
@@ -80,7 +81,7 @@ public class DesignPanelTranslator {
 	}
 	
 	public Vector getWarnings() {
-		return null;
+		return warnings;
 	}
 	
 	public CorrespondanceTGElement getCorrespondanceTGElement() {
@@ -114,6 +115,13 @@ public class DesignPanelTranslator {
 			checkingErrors = new Vector();
 		}
 		checkingErrors.addElement(ce);
+	}
+	
+	private void addWarning(CheckingError ce) {
+		if (warnings == null) {
+			warnings = new Vector();
+		}
+		warnings.addElement(ce);
 	}
 	
 	
@@ -366,10 +374,6 @@ public class DesignPanelTranslator {
 		iterator = list.listIterator();
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
-			
-			/*if (tgc.getCheckableAccessibility()) {
-				
-			}*/
 			
 			if (tgc instanceof TADActionState) {
 				tadas = (TADActionState)tgc;
@@ -900,6 +904,20 @@ public class DesignPanelTranslator {
 		}
 		// Increasing count of this panel
 		tdp.count ++;
+		
+		// Remove all elements not reachable from start state
+		int sizeb = ad.size();
+		
+		ad.removeAllNonReferencedElts();
+		int sizea = ad.size();
+		if (sizeb > sizea) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Non reachable elements have been removed in " + t.getName());
+			ce.setTClass(t);
+			ce.setTGComponent(null);
+			ce.setTDiagramPanel(tdp);
+			addWarning(ce);
+			//System.out.println("Non reachable elements have been removed in " + t.getName());
+		}
 	}
 	
 	public void addRelations(TURTLEDesignPanelInterface dp, String prename, TURTLEModeling tm) {

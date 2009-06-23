@@ -344,7 +344,7 @@ public class ActivityDiagram extends Vector{
         return new StringBuffer(s + "\n");
     }
     
-    public void RemoveAllNonReferencedElts() {
+    public void removeAllNonReferencedElts() {
         ADComponent adc;
         while((adc = hasNonReferencedElts()) != null) {
             remove(adc);

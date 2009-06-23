@@ -1,4 +1,4 @@
-/**Copyright or � or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 *
 * ludovic.apvrille AT enst.fr
 *
@@ -1726,7 +1726,7 @@ public class TURTLEModeling {
             //modified = false; // for debug -> to be removed
             i++;
         }
-        ad.RemoveAllNonReferencedElts();
+        ad.removeAllNonReferencedElts();
     }
     
     public boolean unrollComponents(ActivityDiagram ad, boolean debug) {
@@ -1891,7 +1891,7 @@ public class TURTLEModeling {
         /*System.out.println("print");
         ad.print();*/
         // Remove all non referenced elements
-        ad.RemoveAllNonReferencedElts();
+        ad.removeAllNonReferencedElts();
         
         /*System.out.println("Last print:");
         ad.print();*/
@@ -2244,7 +2244,7 @@ public class TURTLEModeling {
             //modified = false; // for debug -> to be removed
             i++;
         }
-        ad.RemoveAllNonReferencedElts();
+        ad.removeAllNonReferencedElts();
     }
     
     public boolean analyseChoiceStop(ActivityDiagram ad) {

@@ -1476,7 +1476,7 @@ public class GTURTLEModeling {
 
 	public boolean checkTURTLEModeling(Vector tclasses, DesignPanel dp, boolean overideSyntaxChecking) {
 		// Builds a TURTLE modeling from diagrams
-		warnings = new Vector();
+		//warnings = new Vector();
 		//checkingErrors = null;
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 		//tm = new TURTLEModeling();
@@ -1489,6 +1489,7 @@ public class GTURTLEModeling {
 
 		listE = dpt.getCorrespondanceTGElement();
 		checkingErrors = dpt.getErrors();
+		warnings = dpt.getWarnings();
 		if ((checkingErrors != null) && (checkingErrors.size() >0)){
 			return false;
 		}
@@ -1499,7 +1500,7 @@ public class GTURTLEModeling {
 			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 	
 			checkingErrors = tmc.syntaxAnalysisChecking();
-			warnings = tmc.getWarnings();
+			warnings.addAll(tmc.getWarnings());
 	
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 				return false;
