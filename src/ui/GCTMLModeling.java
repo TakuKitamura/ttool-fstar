@@ -489,8 +489,11 @@ public class GCTMLModeling  {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);
-                tmlaction.setAction(modifyActionString(((TMLADActionState)(tgc)).getAction()));
+				tmp = ((TMLADActionState)(tgc)).getAction();
+				tmp = modifyActionString(tmp);
+                tmlaction.setAction(tmp);
                 activity.addElement(tmlaction);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlaction, tgc);
             } else if (tgc instanceof TMLADRandom) {
 				tmladrandom = (TMLADRandom)tgc;
@@ -506,37 +509,44 @@ public class GCTMLModeling  {
                 tmlrandom.setMaxValue(tmp);
 				tmlrandom.setFunctionId(tmladrandom.getFunctionId());
                 activity.addElement(tmlrandom);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlrandom, tgc);
 			} else if (tgc instanceof TMLADChoice) {
                 tmlchoice = new TMLChoice("choice", tgc);
                 // Guards are added at the same time as next activities
                 activity.addElement(tmlchoice);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlchoice, tgc);
             } else if (tgc instanceof TMLADSelectEvt) {
                 tmlselectevt = new TMLSelectEvt("select", tgc);
                 activity.addElement(tmlselectevt);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlselectevt, tgc);
             } else if (tgc instanceof TMLADExecI) {
                 tmlexeci = new TMLExecI("execi", tgc);
                 tmlexeci.setAction(((TMLADExecI)tgc).getDelayValue());
                 activity.addElement(tmlexeci);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexeci, tgc);
             } else if (tgc instanceof TMLADExecIInterval) {
                 tmlexecii = new TMLExecIInterval("execi", tgc);
                 tmlexecii.setMinDelay(((TMLADExecIInterval)tgc).getMinDelayValue());
                 tmlexecii.setMaxDelay(((TMLADExecIInterval)tgc).getMaxDelayValue());
                 activity.addElement(tmlexecii);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecii, tgc);
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
                 tmlexecc.setAction(((TMLADExecC)tgc).getDelayValue());
                 activity.addElement(tmlexecc);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecc, tgc);
-            } else if (tgc instanceof TMLADExecIInterval) {
-                tmlexecci = new TMLExecCInterval("execc", tgc);
+            } else if (tgc instanceof TMLADExecCInterval) {
+                tmlexecci = new TMLExecCInterval("execci", tgc);
                 tmlexecci.setMinDelay(((TMLADExecCInterval)tgc).getMinDelayValue());
                 tmlexecci.setMaxDelay(((TMLADExecCInterval)tgc).getMaxDelayValue());
                 activity.addElement(tmlexecci);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecci, tgc);
             } else if (tgc instanceof TMLADDelay) {
                 tmldelay = new TMLDelay("d-delay", tgc);
@@ -544,6 +554,7 @@ public class GCTMLModeling  {
 				tmldelay.setMaxDelay(((TMLADDelay)tgc).getDelayValue());
 				tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
                 activity.addElement(tmldelay);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmldelay, tgc);
             } else if (tgc instanceof TMLADDelayInterval) {
                 tmldelay = new TMLDelay("nd-delay", tgc);
@@ -551,6 +562,7 @@ public class GCTMLModeling  {
                 tmldelay.setMaxDelay(((TMLADDelayInterval)tgc).getMaxDelayValue());
 				tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
                 activity.addElement(tmldelay);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmldelay, tgc);
             } else if (tgc instanceof TMLADForLoop) {
                 tmlforloop = new TMLForLoop("loop", tgc);
@@ -558,6 +570,7 @@ public class GCTMLModeling  {
                 tmlforloop.setCondition(((TMLADForLoop)tgc).getCondition());
                 tmlforloop.setIncrement(modifyActionString(((TMLADForLoop)tgc).getIncrement()));
                 activity.addElement(tmlforloop);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlforloop, tgc);
 				
             } else if (tgc instanceof TMLADForStaticLoop) {
@@ -569,13 +582,14 @@ public class GCTMLModeling  {
                 tmlforloop = new TMLForLoop(sl, tgc);
                 tmlforloop.setInit(sl + " = 0");
                 tmlforloop.setCondition(sl + "<" + tgc.getValue());
-				System.out.println("Condition=" + tmlforloop.getCondition());
+				//System.out.println("Condition=" + tmlforloop.getCondition());
                 tmlforloop.setIncrement(sl + " = " + sl + " + 1");
                 activity.addElement(tmlforloop);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlforloop, tgc);
 				staticLoopIndex++;
 				
-			} else if (tgc instanceof TMLADForEverLoop) {
+            } else if (tgc instanceof TMLADForEverLoop) {
 				sl = "loop__" + staticLoopIndex;
                 tt = new TMLType(TMLType.NATURAL);
 				tmlt = new TMLAttribute(sl, tt);
@@ -587,6 +601,7 @@ public class GCTMLModeling  {
 				//System.out.println("Condition=" + tmlforloop.getCondition());
                 tmlforloop.setIncrement(sl + " = " + sl);
                 activity.addElement(tmlforloop);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlforloop, tgc);
 				staticLoopIndex++;
 				
@@ -601,7 +616,8 @@ public class GCTMLModeling  {
 				
             } else if (tgc instanceof TMLADReadChannel) {
                 // Get the channel
-                channel = tmlm.getChannelByName(((TMLADReadChannel)tgc).getChannelName());
+				channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel)tgc).getChannelName()));
+				
                 if (channel == null) {
                     if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel)tgc).getChannelName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADReadChannel)tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
@@ -609,12 +625,14 @@ public class GCTMLModeling  {
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         activity.addElement(new TMLJunction("void junction", tgc));
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADReadChannel)tgc).getChannelName() + " is an unknown channel");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
                     }
                 } else {
@@ -622,10 +640,11 @@ public class GCTMLModeling  {
                     tmlreadchannel.setNbOfSamples(((TMLADReadChannel)tgc).getSamplesValue());
                     tmlreadchannel.setChannel(channel);
                     activity.addElement(tmlreadchannel);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlreadchannel, tgc);
                 }
             } else if (tgc instanceof TMLADSendEvent) {
-                event = tmlm.getEventByName(((TMLADSendEvent)tgc).getEventName());
+                event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {
                     if (Conversion.containsStringInList(removedEvents, ((TMLADSendEvent)tgc).getEventName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
@@ -634,12 +653,14 @@ public class GCTMLModeling  {
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
                         activity.addElement(new TMLJunction("void junction", tgc));
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent)tgc).getEventName() + " is an unknown event");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
 					if (event.getNbOfParams() != ((TMLADSendEvent)tgc).realNbOfParams()) {
@@ -648,6 +669,7 @@ public class GCTMLModeling  {
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						tmlsendevent = new TMLSendEvent("send event", tgc);
 						tmlsendevent.setEvent(event);
@@ -656,10 +678,11 @@ public class GCTMLModeling  {
 						}
 						activity.addElement(tmlsendevent);
 						listE.addCor(tmlsendevent, tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
                 }
             } else if (tgc instanceof TMLADSendRequest) {
-                request = tmlm.getRequestByName(((TMLADSendRequest)tgc).getRequestName());
+                request = tmlm.getRequestByName(getFromTable(tmltask, ((TMLADSendRequest)tgc).getRequestName()));
                 if (request == null) {
                     if (Conversion.containsStringInList(removedRequests, ((TMLADSendRequest)tgc).getRequestName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADSendRequest)tgc).getRequestName() + " has been removed because the corresponding request is not taken into account");
@@ -668,12 +691,14 @@ public class GCTMLModeling  {
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
                         activity.addElement(new TMLJunction("void junction", tgc));
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + " is an unknown request");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
 					if (request.getNbOfParams() != ((TMLADSendRequest)tgc).realNbOfParams()) {
@@ -682,6 +707,7 @@ public class GCTMLModeling  {
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						tmlsendrequest = new TMLSendRequest("send request", tgc);
 						tmlsendrequest.setRequest(request);
@@ -690,6 +716,7 @@ public class GCTMLModeling  {
 						}
 						activity.addElement(tmlsendrequest);
 						listE.addCor(tmlsendrequest, tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
                 }
             } else if (tgc instanceof TMLADStopState) {
@@ -698,7 +725,7 @@ public class GCTMLModeling  {
 				listE.addCor(tmlstopstate, tgc);
 				
 			} else if (tgc instanceof TMLADNotifiedEvent) {
-                event = tmlm.getEventByName(((TMLADNotifiedEvent)tgc).getEventName());
+				event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADNotifiedEvent)tgc).getEventName()));
                 if (event == null) {
                     if (Conversion.containsStringInList(removedEvents, ((TMLADNotifiedEvent)tgc).getEventName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADNotifiedEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
@@ -707,12 +734,14 @@ public class GCTMLModeling  {
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
                         activity.addElement(new TMLJunction("void junction", tgc));
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
                     event.setNotified(true);
@@ -720,11 +749,12 @@ public class GCTMLModeling  {
                     tmlnotifiedevent.setEvent(event);
                     tmlnotifiedevent.setVariable(((TMLADNotifiedEvent)tgc).getVariable());
                     activity.addElement(tmlnotifiedevent);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlnotifiedevent, tgc);
                 }
 				
             } else if (tgc instanceof TMLADWaitEvent) {
-                event = tmlm.getEventByName(((TMLADWaitEvent)tgc).getEventName());
+				event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADWaitEvent)tgc).getEventName()));
                 if (event == null) {
                     if (Conversion.containsStringInList(removedEvents, ((TMLADWaitEvent)tgc).getEventName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWaitEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
@@ -732,12 +762,14 @@ public class GCTMLModeling  {
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         activity.addElement(new TMLJunction("void junction", tgc));
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
                     }
                 } else {
@@ -746,6 +778,7 @@ public class GCTMLModeling  {
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
 					} else {
 						tmlwaitevent = new TMLWaitEvent("wait event", tgc);
@@ -753,13 +786,14 @@ public class GCTMLModeling  {
 						for(int i=0; i<((TMLADWaitEvent)tgc).nbOfParams(); i++) {
 							tmlwaitevent.addParam(((TMLADWaitEvent)tgc).getParamValue(i));
 						}
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 						activity.addElement(tmlwaitevent);
 						listE.addCor(tmlwaitevent, tgc);
 					}
                 }
             } else if (tgc instanceof TMLADWriteChannel) {
                 // Get the channel
-                channel = tmlm.getChannelByName(((TMLADWriteChannel)tgc).getChannelName());
+                channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADWriteChannel)tgc).getChannelName()));
                 if (channel == null) {
                     if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel)tgc).getChannelName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWriteChannel)tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
@@ -767,12 +801,14 @@ public class GCTMLModeling  {
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
                         warnings.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         activity.addElement(new TMLJunction("void junction", tgc));
                     } else {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWriteChannel)tgc).getChannelName() + " is an unknown channel");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
                     }
                 } else {
@@ -780,6 +816,7 @@ public class GCTMLModeling  {
                     tmlwritechannel.setNbOfSamples(((TMLADWriteChannel)tgc).getSamplesValue());
                     tmlwritechannel.setChannel(channel);
                     activity.addElement(tmlwritechannel);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlwritechannel, tgc);
                 }
             }
