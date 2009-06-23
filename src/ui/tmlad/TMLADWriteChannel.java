@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint {
+public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -65,6 +65,8 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADWriteChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -97,6 +99,23 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
             //updateConnectingPoints();
         }
         //g.drawRoundRect(x, y, width, height, arc, arc);
+		
+				if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.TML_PORT_CHANNEL);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			// Making the polygon
+			int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
+			int [] py1 = {y, y, y+(height/2), y+height, y+height};
+			g.fillPolygon(px1, py1, 5);
+			g.setColor(c);
+		}
+		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 		
@@ -226,5 +245,9 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLAD;
     }  
+	
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
     
 }

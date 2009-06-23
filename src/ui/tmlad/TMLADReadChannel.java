@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint {
+public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textX0 =  2;
@@ -64,9 +64,10 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     protected int textY1 =  15;
     protected int linebreak = 10;
     
-    
     protected String channelName = "ch";
     protected String nbOfSamples= "1";
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADReadChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -98,6 +99,23 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
             width = w1;
             //updateConnectingPoints();
         }
+		
+		if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.TML_PORT_CHANNEL);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			// Making the polygon
+			int [] px1 = {x, x+width, x+width, x, x+linebreak};
+			int [] py1 = {y, y, y+height, y+height, y+(height/2)};
+			g.fillPolygon(px1, py1, 5);
+			g.setColor(c);
+		}
+		
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -228,6 +246,9 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLAD;
     }
-    
+	
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
     
 }

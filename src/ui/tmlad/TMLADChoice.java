@@ -53,12 +53,13 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
+public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 10;
     private int lineOutLength = 25;
     private int textX1, textY1, textX2, textY2, textX3, textY3;
     
-    
+    protected int stateOfError = 0; // Not yet checked
+	
     public TMLADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -106,6 +107,22 @@ public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedCom
     }
     
     public void internalDrawing(Graphics g) {
+		if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.CHOICE);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			// Making the polygon
+			int [] px1 = {x+(width/2), x+width, x + (width/2), x};
+			int [] py1 = {y, y + height/2, y+height, y+height/2};
+			g.fillPolygon(px1, py1, 4);
+			g.setColor(c);
+		}
+		
         g.drawLine(x+(width/2), y, x+width, y + height/2);
         g.drawLine(x, y + height / 2, x+width/2, y + height);
         g.drawLine(x + width/2, y, x, y + height/2);
@@ -161,5 +178,9 @@ public class TMLADChoice extends TGCWithInternalComponent implements EmbeddedCom
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLAD;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
     
 }

@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADSendRequest extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint {
+public class TMLADSendRequest extends TGCWithoutInternalComponent implements CheckableAccessibility, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -66,6 +66,8 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
     protected String requestName = "req";
     int nParam = 3;
     protected String [] params = new String[nParam];
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADSendRequest(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -103,6 +105,22 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
             //updateConnectingPoints();
         }
         //g.drawRoundRect(x, y, width, height, arc, arc);
+		
+		if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.TML_PORT_REQUEST);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			// Making the polygon
+			int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
+			int [] py1 = {y, y, y+(height/2), y+height, y+height};
+			g.fillPolygon(px1, py1, 5);
+			g.setColor(c);
+		}
 		
 		int x1 = x + 1;
 		int y1 = y + 1;
@@ -286,5 +304,9 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLAD;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
      
 }

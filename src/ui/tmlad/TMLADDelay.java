@@ -52,11 +52,12 @@ import java.awt.geom.*;
 import ui.*;
 import myutil.*;
 
-public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint {
-    private int lineLength = 5;
+public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {    private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;
     private int lineLength1 = 2;
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -93,6 +94,19 @@ public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComm
     }
     
     public void internalDrawing(Graphics g) {
+		if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.EXEC);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			g.fillRect(x, y, width, height);
+			g.setColor(c);
+		}
+		
         g.drawRect(x, y, width, height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -129,6 +143,10 @@ public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComm
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLAD;
     }
+	
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
     
 }
 

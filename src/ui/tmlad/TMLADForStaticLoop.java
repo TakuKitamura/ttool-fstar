@@ -56,12 +56,14 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
+public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
 	protected String valueLoop = "";
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADForStaticLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -102,6 +104,20 @@ public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements E
             width = w1;
             //updateConnectingPoints();
         }
+		
+		if (stateOfError > 0)  {
+			Color c = g.getColor();
+			switch(stateOfError) {
+			case ErrorHighlight.OK:
+				g.setColor(ColorManager.FOR);
+				break;
+			default:
+				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+			}
+			g.fillRoundRect(x, y, width, height, arc, arc);
+			g.setColor(c);
+		}
+		
         g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
@@ -158,5 +174,7 @@ public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements E
       return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
-    
+    public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
 }
