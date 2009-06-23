@@ -925,6 +925,7 @@ public class GTMLModeling  {
 				tmp = modifyActionString(tmp);
                 tmlaction.setAction(tmp);
                 activity.addElement(tmlaction);
+				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlaction, tgc);
             } else if (tgc instanceof TMLADRandom) {
 				tmladrandom = (TMLADRandom)tgc;

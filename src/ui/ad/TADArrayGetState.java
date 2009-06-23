@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TADArrayGetState extends TGCWithoutInternalComponent {
+public class TADArrayGetState extends TGCWithoutInternalComponent implements BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

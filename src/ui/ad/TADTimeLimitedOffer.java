@@ -54,7 +54,7 @@ import javax.swing.*;
 import myutil.*;
 import ui.*;
 
-public class TADTimeLimitedOffer extends TGCWithInternalComponent {
+public class TADTimeLimitedOffer extends TGCWithInternalComponent implements ActionStateErrorHighlight  {
 	protected int lineLength = 25;
 	protected int lineDistance = 10;
 	protected int textX =  5;
@@ -65,8 +65,6 @@ public class TADTimeLimitedOffer extends TGCWithInternalComponent {
 	protected int arrowLength = 10;
 	
 	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
-	public static final int GATE = 1;
-	public static final int UNKNOWN = 2;
 
 	public TADTimeLimitedOffer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -115,7 +113,7 @@ public class TADTimeLimitedOffer extends TGCWithInternalComponent {
 		if (stateAction > 0)  {
 			Color c = g.getColor();
 			switch(stateAction) {
-			case 1:
+			case ErrorHighlight.GATE:
 				g.setColor(ColorManager.GATE_BOX_ACTION);
 				break;
 			default:

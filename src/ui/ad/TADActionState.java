@@ -52,18 +52,15 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility {
+public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, ActionStateErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
 	
 	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
-	public static final int ATTRIBUTE = 1;
-	public static final int GATE = 2;   
-	public static final int UNKNOWN = 3;
+
 	
-    
     public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -100,10 +97,10 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
 		if (stateAction > 0)  {
 			Color c = g.getColor();
 			switch(stateAction) {
-			case 1:
+			case ErrorHighlight.ATTRIBUTE:
 				g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
 				break;
-			case 2:
+			case ErrorHighlight.GATE:
 				g.setColor(ColorManager.GATE_BOX_ACTION);
 				break;
 			default:

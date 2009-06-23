@@ -1497,12 +1497,13 @@ public class GTURTLEModeling {
 		// modeling is built
 		// Now check it !
 		if (!overideSyntaxChecking) {
-			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
+			TURTLEModelChecker tmc = new TURTLEModelChecker(tm, listE);
 	
 			checkingErrors = tmc.syntaxAnalysisChecking();
 			warnings.addAll(tmc.getWarnings());
 	
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+				analyzeErrors();
 				return false;
 			} else {
 				return true;
@@ -4419,6 +4420,7 @@ public class GTURTLEModeling {
 		checkingErrors = gtmlm.getCheckingErrors();
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			analyzeErrors();
 			return false;
 		} else {
 			if (optimize) {
@@ -4432,6 +4434,7 @@ public class GTURTLEModeling {
 			//tm.print();
 			checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+				analyzeErrors();
 				return false;
 			} else {
 				// Optimize
@@ -4441,6 +4444,7 @@ public class GTURTLEModeling {
 				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 				checkingErrors = tmc.syntaxAnalysisChecking();
 				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+					analyzeErrors();
 					return false;
 				} else {
 					warnings = gtmlm.getCheckingWarnings();
@@ -4486,6 +4490,7 @@ public class GTURTLEModeling {
 		checkingErrors = gctmlm.getCheckingErrors();
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			analyzeErrors();
 			return false;
 		} else {
 			if (optimize) {
@@ -4499,6 +4504,7 @@ public class GTURTLEModeling {
 			//tm.print();
 			checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+				analyzeErrors();
 				return false;
 			} else {
 				// Optimize
@@ -4508,6 +4514,7 @@ public class GTURTLEModeling {
 				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 				checkingErrors = tmc.syntaxAnalysisChecking();
 				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+					analyzeErrors();
 					return false;
 				} else {
 					warnings = gctmlm.getCheckingWarnings();
@@ -4541,6 +4548,7 @@ public class GTURTLEModeling {
 		checkingErrors = gtmlm.getCheckingErrors();
 		
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			analyzeErrors();
 			return false;
 		} else {
 			if (optimize) {
@@ -4713,6 +4721,29 @@ public class GTURTLEModeling {
 		}
 		
 		listE.addBreakpoint(p);
+	}
+	
+	private void analyzeErrors() {
+		CheckingError ce;
+		TGComponent tgc;
+		
+		for(int i=0; i<checkingErrors.size(); i++) {
+			ce = (CheckingError)(checkingErrors.get(i));
+			if (ce != null) {
+				tgc = ce.getTGComponent();
+				if (tgc != null) {
+					analyzeErrorOnComponent(tgc);
+				}
+			}
+		}
+	}
+	
+	private void analyzeErrorOnComponent(TGComponent _tgc) {
+		if (_tgc instanceof BasicErrorHighlight) {
+			((BasicErrorHighlight)_tgc).setStateAction(ErrorHighlight.UNKNOWN);
+		} else if (_tgc instanceof ActionStateErrorHighlight) {
+			((ActionStateErrorHighlight)_tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
+		}
 	}
 
 }

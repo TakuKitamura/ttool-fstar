@@ -91,10 +91,18 @@ public class TURTLEModelChecker {
 	private String ERROR_AD_009_4 = " unknown param";
 	private String ERROR_AD_009_5 = " null gate";
 	private String ERROR_AD_009_6 = " null param";
+	
+	private CorrespondanceTGElement listE;
     
     
-    public TURTLEModelChecker(TURTLEModeling _tm) {
+    public TURTLEModelChecker(TURTLEModeling _tm, CorrespondanceTGElement _listE) {
         tm = _tm;
+		listE = _listE;
+    }
+	
+	 public TURTLEModelChecker(TURTLEModeling _tm) {
+        tm = _tm;
+		listE = null;
     }
     
     public void setTURTLEModeling(TURTLEModeling _tm) {
@@ -503,12 +511,14 @@ public class TURTLEModelChecker {
 			System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_0 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
+			putCorrespondance(error, elt);
             errors.add(error);
 			return;
 		} catch (TokenMgrError tke) {
 			System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_0 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
+			putCorrespondance(error, elt);
             errors.add(error);
 			return;
 		}  
@@ -547,12 +557,14 @@ public class TURTLEModelChecker {
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_1 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
             errors.add(error);
+			putCorrespondance(error, elt);
 			return;
 		} catch (TokenMgrError tke ) {
 			System.out.println("\nParsing :" + parseCmd + " " + modif);
 			System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_1 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
+			putCorrespondance(error, elt);
             errors.add(error);
 			return;
 		}  
@@ -565,9 +577,20 @@ public class TURTLEModelChecker {
 				System.out.println("Variable not declared: " +s);
 				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + ": " + ERROR_AD_009_2 + " in expression " + action + " of tclass " + t.getName());
 				error.setTClass(t);
+				putCorrespondance(error, elt);
 				errors.add(error);
 			}
 		}
+		
+	}
+	
+	public void putCorrespondance(CheckingError _error, ADComponent _elt) {
+		if (listE == null) {
+			return;
+		}
+		
+		TGComponent tgc = listE.getTG(_elt);
+		_error.setTGComponent(tgc);
 		
 	}
 }

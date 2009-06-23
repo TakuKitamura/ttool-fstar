@@ -410,10 +410,10 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
-						tadas.setStateAction(TADActionState.UNKNOWN);
+						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 						//return;
 					} else {
-						tadas.setStateAction(TADActionState.GATE);
+						tadas.setStateAction(ErrorHighlight.GATE);
 						s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
 						
 						adag.setActionValue(s1);
@@ -428,13 +428,13 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);  
-						tadas.setStateAction(TADActionState.UNKNOWN);
+						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 					}
 					adap = new ADActionStateWithParam(p);
 					ad.addElement(adap);
 					adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
 					listE.addCor(adap, tgc);
-					tadas.setStateAction(TADActionState.ATTRIBUTE);
+					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 					
 				} else if ((p != null) && (nbActions > 1)){
 					//System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
@@ -448,7 +448,7 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
-							tadas.setStateAction(TADActionState.UNKNOWN);
+							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 						}
 						
 						p = t.getParamFromActionState(sTmp);
@@ -458,10 +458,10 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
-							tadas.setStateAction(TADActionState.UNKNOWN);
+							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 						}
 					}
-					tadas.setStateAction(TADActionState.ATTRIBUTE);
+					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 					adamp = new ADActionStateWithMultipleParam();
 					ad.addElement(adamp);
 					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
@@ -472,7 +472,7 @@ public class DesignPanelTranslator {
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
-					tadas.setStateAction(TADActionState.UNKNOWN);
+					tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 					//System.out.println("Bad action state found " + s);
 				}
 				
@@ -489,7 +489,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
-						ags.setStateAction(TADArrayGetState.UNKNOWN);
+						ags.setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						adap = new ADActionStateWithParam(p);
 						p = t.getParamByName(ags.getArray() + "__" + nbActions);
@@ -499,13 +499,13 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
-							ags.setStateAction(TADArrayGetState.UNKNOWN);
+							ags.setStateAction(ErrorHighlight.UNKNOWN);
 						} else {
 							ad.addElement(adap);
 							adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + nbActions));
 							listE.addCor(adap, tgc);
 							listB.addCor(adap, tgc);
-							ags.setStateAction(TADArrayGetState.OK);
+							ags.setStateAction(ErrorHighlight.OK);
 						}
 					}
 				} catch (Exception e) {
@@ -533,7 +533,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
-						ags.setStateAction(TADArrayGetState.UNKNOWN);
+						ags.setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						int size = 2;
 						try {
@@ -549,7 +549,7 @@ public class DesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							ce.setTDiagramPanel(tdp);
 							addCheckingError(ce);
-							ags.setStateAction(TADArrayGetState.UNKNOWN);
+							ags.setStateAction(ErrorHighlight.UNKNOWN);
 						} else {
 							for(int i=0; i<size; i++) {
 								//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
@@ -559,7 +559,7 @@ public class DesignPanelTranslator {
 								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + i));
 								choice1.addNext(adap);
 								adap.addNext(junc);
-								ags.setStateAction(TADArrayGetState.OK);
+								ags.setStateAction(ErrorHighlight.OK);
 							}
 							
 							choice1.addGuard("[" + basicGuard + "> (" + ags.getArray() + "__size - 1)]");
@@ -585,14 +585,14 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
-						ass.setStateAction(TADArraySetState.UNKNOWN);
+						ass.setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						adap = new ADActionStateWithParam(p);
 						ad.addElement(adap);
 						adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
 						listE.addCor(adap, tgc);
 						listB.addCor(adap, tgc);
-						ass.setStateAction(TADArraySetState.OK);
+						ass.setStateAction(ErrorHighlight.OK);
 					}
 					
 				} catch (Exception e) {
@@ -620,7 +620,7 @@ public class DesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						ce.setTDiagramPanel(tdp);
 						addCheckingError(ce);
-						ass.setStateAction(TADArraySetState.UNKNOWN);
+						ass.setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
 						int size = 2;
 						try {
@@ -638,7 +638,7 @@ public class DesignPanelTranslator {
 								ce.setTGComponent(tgc);
 								ce.setTDiagramPanel(tdp);
 								addCheckingError(ce);
-								ass.setStateAction(TADArraySetState.UNKNOWN);
+								ass.setStateAction(ErrorHighlight.UNKNOWN);
 							} else {
 								choice1.addGuard("[" + basicGuard + " == " + i + "]");
 								adap = new ADActionStateWithParam(p);
@@ -646,7 +646,7 @@ public class DesignPanelTranslator {
 								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
 								choice1.addNext(adap);
 								adap.addNext(junc);
-								ass.setStateAction(TADArraySetState.OK);
+								ass.setStateAction(ErrorHighlight.OK);
 							}
 							
 							choice1.addGuard("[" + basicGuard + "> (" + ass.getArray() + "__size - 1)]");
@@ -721,14 +721,14 @@ public class DesignPanelTranslator {
 					adtlo.setAction(s1);
 					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
 					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOffer)tgc).setStateAction(TADTimeLimitedOffer.GATE);
+					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.GATE);
 				} else {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOffer)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
-					((TADTimeLimitedOffer)tgc).setStateAction(TADTimeLimitedOffer.UNKNOWN);
+					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
 					//System.out.println("Bad time limited offer found " + s);
 				}
 			} else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
@@ -746,14 +746,14 @@ public class DesignPanelTranslator {
 					adtlo.setAction(s1);
 					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
 					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(TADTimeLimitedOfferWithLatency.GATE);
+					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.GATE);
 				} else {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getLatency() + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
 					ce.setTGComponent(tgc);
 					ce.setTDiagramPanel(tdp);
 					addCheckingError(ce);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(TADTimeLimitedOfferWithLatency.UNKNOWN);
+					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
 					//System.out.println("Bad time limited offer found " + s);
 				}
 				
