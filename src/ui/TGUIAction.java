@@ -490,7 +490,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_DEADLOCK_SEEKER_SAVED_AUT] = new TAction("deadlockseekersavedaut-command", "Search for Deadlocks on saved AUT graph", IconManager.imgic310, IconManager.imgic310, "Search for deadlocks (saved AUT graph)",  "Display all states with no exit transitions (potential deadlocks on previously saved AUT graph)", 0);
         actions[ACT_VIEW_STAT_AUT] = new TAction("viewstataut-command", "Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (last AUT graph)",  "Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_STAT_AUTPROJ] = new TAction("viewstatautproj-command", "Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (last minimized AUT graph)",  "Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
-        actions[ACT_VIEW_STAT_SAVED_AUT] = new TAction("viewstatsavedautproj-command", "Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (saved AUT graph)",  "Analysis on a graph saved in AUT (Ald�baran) format", 0);
+        actions[ACT_VIEW_STAT_SAVED_AUT] = new TAction("viewstatsavedautproj-command", "Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (saved AUT graph)",  "Analysis on a graph saved in AUT (Aldebaran) format", 0);
         
         
         actions[ACT_VIEW_JAVA] = new TAction("view-java", "Display Java code", IconManager.imgic38, IconManager.imgic39, "Display Java code",  "Display the java code of the pointed component", 0);

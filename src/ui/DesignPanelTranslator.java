@@ -597,7 +597,7 @@ public class DesignPanelTranslator {
 					
 				} catch (Exception e) {
 					// Index is not an absolute value
-					System.out.println("Set: Index is not an absolute value");
+					//System.out.println("Set: Index is not an absolute value");
 					Gate error = t.addNewGateIfApplicable("arrayOverflow");
 					
 					ADChoice choice1 = new ADChoice();
@@ -631,6 +631,7 @@ public class DesignPanelTranslator {
 						for(int i=0; i<size; i++) {
 							//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
 							p = t.getParamByName(ass.getArray() + "__" + i);
+							adap = null;
 							if (p == null) {
 								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
 								ce.setTClass(t);
@@ -653,6 +654,12 @@ public class DesignPanelTranslator {
 							adag1.addNext(stop1);
 							
 							listE.addCor(junc, tgc);
+							listE.addCor(choice1, tgc);
+							if (adap != null) {
+								listE.addCor(adap, tgc);
+							}
+							listE.addCor(stop1, tgc);
+							listE.addCor(adag1, tgc);
 							listB.addCor(choice1, tgc);
 							
 						}
