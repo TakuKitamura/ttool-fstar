@@ -1943,12 +1943,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
     
     // returns true if modification on component
     public final boolean doubleClick(JFrame frame, int _x, int _y) {
-		if (multieditable) {
-			return editOndoubleClick(frame, _x, _y);
-		} else if (editable) {
-            return editOndoubleClick(frame);
-        }
-        return false;
+	boolean b;
+	if (multieditable) {
+	    b = editOndoubleClick(frame, _x, _y);
+	} else if (editable) {
+	    b = editOndoubleClick(frame);
+	} else {
+	    return false;
+	}
+        
+	if (b && (this instanceof BasicErrorHighlight)) {
+	    BasicErrorHighlight beh = (BasicErrorHighlight)this;
+	    beh.setStateAction(0);
+	}
+
+	if (b && (this instanceof ActionStateErrorHighlight)) {
+	    ActionStateErrorHighlight aseh = (ActionStateErrorHighlight)this;
+	    aseh.setStateAction(0);
+	}
+
+	return b;
     }
     
     public final void actionOnRemove(){

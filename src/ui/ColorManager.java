@@ -85,12 +85,17 @@ public class ColorManager {
 	//public static final Color UNKNOWN_BOX_ACTION = new Color(239, 44, 12, 125);
 	public static final Color UNKNOWN_BOX_ACTION = new Color(255, 12, 27);
 	
-	public static final Color RANDOM = new Color(113, 170, 155);
-	public static final Color CHOICE = new Color(255, 255, 0);
-	public static final Color FOR = new Color(255, 167, 11);
-	public static final Color EXEC = new Color(143, 149, 255);
+    //public static final Color RANDOM = new Color(113, 170, 155);
+    //public static final Color CHOICE = new Color(255, 255, 0);
+    //public static final Color FOR = new Color(255, 167, 11);
+    //public static final Color EXEC = new Color(143, 149, 255);
     
-    
+    public static final Color RANDOM = new Color(199, 243, 105);
+    public static final Color CHOICE = new Color(199, 243, 105);
+    public static final Color FOR = new Color(199, 243, 105);
+    public static final Color EXEC = new Color(199, 243, 105);
+
+
     public static final Color REQ_ATTRIBUTE_BOX = new Color(179, 249, 179);
     //public static final Color REQ_ATTRIBUTE_BOX = new Color(190, 229, 158);
     public static final Color OBS_ATTRIBUTE_BOX = new Color(225, 247, 225);
