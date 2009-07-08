@@ -573,6 +573,29 @@ void Simulator::decodeCommand(std::string iCmd){
 					std::cout << "Run to next random choice command." << std::endl;
 					_simTerm=runToNextChoiceCommand(oLastTrans);
 					std::cout << "End Run to next random choice command." << std::endl;
+					break;
+				}
+				case 14:{//Run until condition is satisfied
+					std::cout << "Run until condition is satisfied." << std::endl;
+					aInpStream >> aStrParam;
+					TMLTask* aTask=_simComp->getTaskByName(aStrParam);
+					if (aTask!=0){
+						bool aSuccess, aTerminated;
+						aInpStream >> aStrParam;
+						aTerminated = runUntilCondition(aStrParam, aTask, oLastTrans, aSuccess);
+						if (aSuccess){
+							_simTerm=aTerminated;
+							aGlobMsg << TAG_MSGo << "Created listeners for condition " << aStrParam << TAG_MSGc << std::endl;
+						}else{
+							aGlobMsg << TAG_MSGo << MSG_CONDERR << TAG_MSGc << std::endl;
+							anErrorCode=5;
+						}
+					}else{
+						aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+						anErrorCode=2;
+					}
+					std::cout << "End Run until condition is satisfied." << std::endl;
+					break;
 				}
 				default:
 					aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
@@ -633,7 +656,7 @@ void Simulator::decodeCommand(std::string iCmd){
 			break;
 		}
 		case 4:{//Print information about simulation element x
-			bool aFailure=false;
+			//bool aFailure=false;
 			std::cout << "Print information about simulation element x." << std::endl;
 			aInpStream >> aParam1;
 			aInpStream >> aStrParam;
@@ -932,9 +955,9 @@ void Simulator::decodeCommand(std::string iCmd){
 }
 
 void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
-	if (iTask->getVariableIterator(false)==iTask->getVariableIterator(true)) return;
+	if (iTask->getVariableIteratorID(false)==iTask->getVariableIteratorID(true)) return;
 	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << std::endl; 
-	for(VariableLookUpTableID::const_iterator i=iTask->getVariableIterator(false); i !=iTask->getVariableIterator(true); ++i){
+	for(VariableLookUpTableID::const_iterator i=iTask->getVariableIteratorID(false); i !=iTask->getVariableIteratorID(true); ++i){
 		ioMessage << TAG_VARo << " id=\"" << i->first << "\">" << *(i->second) << TAG_VARc << std::endl; 
 	}
 	ioMessage << TAG_TASKc << std::endl;
@@ -967,7 +990,7 @@ bool Simulator::runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans){
 bool Simulator::runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans){
 	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
-	return simulate(oLastTrans);	
+	return simulate(oLastTrans);
 }
 
 bool Simulator::runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans){
@@ -999,6 +1022,14 @@ bool Simulator::runToNextChoiceCommand(TMLTransaction*& oLastTrans){
 	bool aSimTerminated=simulate(oLastTrans);
 	_randChoiceBreak.setEnabled(false);
 	return aSimTerminated;
+}
+
+bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransaction*& oLastTrans, bool& oSuccess){
+	CondBreakpoint aListener(_simComp, iCond, iTask);
+	oSuccess=aListener.conditionValid();
+	//return simulate(oLastTrans);
+	//aListener.commandEntered(0);
+	if (oSuccess) return simulate(oLastTrans); else return false;
 }
 
 void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){

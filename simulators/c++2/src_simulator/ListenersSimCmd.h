@@ -70,6 +70,25 @@ protected:
 	static bool _enabled;
 };
 
+
+class CondBreakpoint: public CommandListener, public TransactionListener{
+public:
+	CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask);
+	~CondBreakpoint();
+	bool commandEntered(TMLCommand* iComm);
+	static void setEnabled(bool iEnabled);
+	bool conditionValid();
+protected:
+	SimComponents* _simComp;
+	static bool _enabled;
+	BreakCondFunc _condFunc;
+	void * _dlHandle;
+	unsigned int _ID;
+	TMLTask* _task;
+	static unsigned int _freeID;
+};
+
+
 class RunTillNextRandomChoice: public CommandListener, public TransactionListener{
 public:
 	RunTillNextRandomChoice(SimComponents* iSimComp);
@@ -79,6 +98,7 @@ protected:
 	SimComponents* _simComp;
 	bool _enabled;
 };
+
 
 class RunXCommands: public CommandListener, public TransactionListener{
 public:
@@ -92,6 +112,7 @@ protected:
 
 };
 
+
 class RunXTimeUnits: public TransactionListener{
 public:
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
@@ -103,6 +124,7 @@ protected:
 	TMLTime _endTime;
 
 };
+
 
 class RunTillTransOnDevice: public TransactionListener{
 public:

@@ -43,6 +43,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableDevice.h>
 #include <TMLCommand.h>
 #include <TMLChoiceCommand.h>
+#include <TMLActionCommand.h>
+#include <TMLNotifiedCommand.h>
+#include <TMLWaitCommand.h>
+#include <TMLTask.h>
+
+unsigned int CondBreakpoint::_freeID=0;
+bool Breakpoint::_enabled=true;
+bool CondBreakpoint::_enabled=true;
 
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
 	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
@@ -83,9 +91,93 @@ void Breakpoint::setEnabled(bool iEnabled){
 }
 
 
+CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask):_simComp(iSimComp), _condFunc(0), _dlHandle(0),  _task(iTask){
+	_ID=_freeID++;
+	FILE* in;
+	std::ofstream myfile ("newlib.c");
+	char aExeName[256];
+	int len = getexename(aExeName, sizeof(aExeName));
+	if (len==-1) return;
+	aExeName[len-6]=0;
+	//strcat(aExeName, "/src_simulator");
+	std::cout << "ExeName: " << aExeName << std::endl;
+	if (myfile.is_open()){
+		std::ostringstream aCmd;
+		myfile << "#include <" << iTask->toString() << ".h>\n";
+		for(VariableLookUpTableName::const_iterator i=iTask->getVariableIteratorName(false); i !=iTask->getVariableIteratorName(true); ++i){ 
+			myfile << "#define " << *(i->first) << " _castTask_->" << *(i->first) << "\n";
+		}
+		myfile << "class TMLTask;\n\n";
+		myfile << "extern \"C\" bool condFunc(TMLTask* _ioTask_){\n";
+		myfile << "    " << iTask->toString() << "* _castTask_ = dynamic_cast<" << iTask->toString() << "*>(" << "_ioTask_" << ");\n";
+		myfile << "    return (" << iCond << ");\n";
+		myfile << "}\n";
+		myfile.close();
+		aCmd << "g++ -c -fPIC -Wall newlib.c -I" << aExeName << " -I" << aExeName << "/src_simulator"; 
+		//in = popen("g++ -c -fPIC -Wall newlib.c -I. -I./src_simulator", "r");
+		in = popen(aCmd.str().c_str(), "r");
+		if (pclose(in)!=0){
+			std::cout << "Compiler error!\n";
+       			return;
+		}
+		aCmd.str("");	
+		aCmd << "g++ -shared -Wl,-soname," << "lib" << _ID  << ".so.1" << " -o " << "lib" << _ID << ".so.1.0.1" << " newlib.o";
+		//in = popen("g++ -shared -Wl,-soname,l.so.1 -o l.so.1.0.1 newlib.o", "r");
+		in = popen(aCmd.str().c_str(), "r");
+		if (pclose(in)!=0){
+			std::cout << "Compiler error!\n";
+			return;
+		}
+	}else{
+		std::cout << "Error when creating C condition source file.\n";
+    		return;
+  	}
+	std::ostringstream aCmd;
+	aCmd << "lib" << _ID << ".so.1.0.1";
+	_dlHandle = dlopen(aCmd.str().c_str(), RTLD_LAZY);
+	if (!_dlHandle){
+		std::cout << "Error " << dlerror() << " occurred when opening shared library.\n";
+		return;
+	}
+	_condFunc = (BreakCondFunc) dlsym( _dlHandle, "condFunc");
+	if (dlerror() != NULL) {
+		std::cout << "Error when getting function handle\n";
+    		return;
+	}
+	//Take task into account, to register at every command
+	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this, iTask);
+	TMLCommand::registerGlobalListenerForType<TMLActionCommand>(this, iTask);
+	TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(this, iTask);
+	TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(this, iTask);
+}
+
+bool CondBreakpoint::commandEntered(TMLCommand* iComm){
+	if (_enabled && _condFunc!=0){
+		if ((*_condFunc)(_task)){
+			_simComp->setStopFlag(true);
+			std::cout << "Stop simulation due to condition\n";
+			return true;
+		}
+	}
+	return false;
+}
+
+void CondBreakpoint::setEnabled(bool iEnabled){
+	_enabled=iEnabled;
+}
+
+bool CondBreakpoint::conditionValid(){
+	return (_condFunc!=0);
+}
+
+CondBreakpoint::~CondBreakpoint(){
+	TMLCommand::removeGlobalListener(this);
+	if (_dlHandle!=0) dlclose(_dlHandle);
+}
+
 
 RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simComp(iSimComp), _enabled(false){
-	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this);
+	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this,0);
 }
 
 bool RunTillNextRandomChoice::commandEntered(TMLCommand* iComm){

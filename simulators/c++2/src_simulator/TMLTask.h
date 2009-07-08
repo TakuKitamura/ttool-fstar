@@ -167,7 +167,13 @@ public:
 	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
 	\return Const iterator for variable table
 	*/
-	VariableLookUpTableID::const_iterator getVariableIterator(bool iEnd) const;
+	VariableLookUpTableID::const_iterator getVariableIteratorID(bool iEnd) const;
+	///Returns an iterator for the internal variable Name hash table
+	/**
+	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
+	\return Const iterator for variable table
+	*/
+	VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
 
 protected:
 	///ID of the task

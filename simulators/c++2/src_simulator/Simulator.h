@@ -70,6 +70,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define MSG_CMDNFOUND "Command not found"
 #define MSG_CMDNIMPL "Command currently not implemented"
 #define MSG_FILEERR "Cannot open file "
+#define MSG_CONDERR "Condition cannot be compiled"
 #define SIM_READY "ready"
 #define SIM_BUSY "busy"
 #define SIM_TERM "term"
@@ -180,10 +181,19 @@ public:
 	\return Return value of simulate() function
 	*/
 	bool runToNextChoiceCommand(TMLTransaction*& oLastTrans);
+	///Runs the simulation until a given condition is satisfied
+	/**
+	\param iCond Condition expressed in terms of task variables of a given task
+	\param iTask Task
+	\param oLastTrans Returns the last transaction executed during a simulation
+	\return Return value of simulate() function
+	*/
+	bool runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransaction*& oLastTrans, bool& oSuccess);
 	///Runs the automatic exploration of several branches of control flow. Choice commands to be explored must be marked with a breakpoint.
 	/**
 	\param iDepth Maximal recursion depth
 	\param iPrevID ID of the parent leaf
+	\param oSuccess True is returned if the condition was compiled successfully
 	*/
 	void exploreTree(unsigned int iDepth, unsigned int iPrevID);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file

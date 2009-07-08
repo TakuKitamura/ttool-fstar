@@ -202,7 +202,6 @@ public:
 	\return Pointer if choice command was found, null otherwise
 	*/
 	TMLChoiceCommand* getCurrentChoiceCmd();
-	//void setBreakpointOnChoiceCmds();
 	///Returns a hash value for the current application and architecture
 	/**
 	\return Hash value

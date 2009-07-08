@@ -48,8 +48,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
-std::list<TMLCommand*> TMLCommand::_instanceList;
-bool Breakpoint::_enabled=true;
 
 int myrand(int n1, int n2){
 	static bool firstTime = true;
@@ -100,3 +98,13 @@ std::string vcdValConvert(unsigned int iVal){
 	return iResult;
 }
 
+int getexename(char* buf, size_t size){
+	char linkname[64]; /* /proc/<pid>/exe */
+	pid_t pid;
+	int ret;
+	pid = getpid();
+	if (snprintf(linkname, sizeof(linkname), "/proc/%i/exe", pid) < 0) return -1;
+	ret = readlink(linkname, buf, size);
+	if (ret == -1 || ret>=size) return -1;
+	buf[ret] = 0;
+}

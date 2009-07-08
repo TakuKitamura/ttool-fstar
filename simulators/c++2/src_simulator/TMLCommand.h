@@ -50,6 +50,7 @@ class TMLTask;
 class TMLChannel;
 class CommandListener;
 class Comment;
+class SimComponents;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
 class TMLCommand: public Serializable, public ListenerSubject<CommandListener>{
@@ -140,7 +141,12 @@ public:
 	\param  iListener Pointer to the listener
 	*/
 	static void registerGlobalListener(CommandListener* iListener);
-	template<typename T> static void registerGlobalListenerForType(CommandListener* iListener);
+	///Registers a listener at all TMLCommand instances of a specific type
+	/**
+	\param iListener Pointer to the listener
+	\param aTask Only commands of this task are taken into account, if set to 0 all tasks are considered
+	*/
+	template<typename T> static void registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask);
 	///Removes a listener at all TMLCommand instances
 	/**
 	\param  iListener Pointer to the listener
@@ -163,6 +169,11 @@ public:
 	\return Progress of the command
 	*/
 	TMLLength getProgress() const;
+	///Sets the internal pointer to the simulation components
+	/**
+      	\param iSimComp Pointer to simulation components
+    	*/ 
+	static void setSimComponents(SimComponents* iSimComp);
 protected:
 	///ID of the command
 	unsigned int _ID;
@@ -195,6 +206,8 @@ protected:
 	virtual TMLCommand* prepareNextTransaction()=0;
 	///List of pointers to all TMLCommand instances
 	static std::list<TMLCommand*> _instanceList;
+	///Pointer to simulation components
+	static SimComponents* _simComp;
 };
 
 #endif

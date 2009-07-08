@@ -45,6 +45,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <Parameter.h>
 #include <TMLChoiceCommand.h>
+#include <TMLActionCommand.h>
+#include <TMLNotifiedCommand.h>
+#include <TMLWaitCommand.h>
+#include <SimComponents.h>
+
+std::list<TMLCommand*> TMLCommand::_instanceList;
+SimComponents* TMLCommand::_simComp=0;
 
 TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _breakpoint(0){
 	_instanceList.push_back(this);
@@ -79,19 +86,21 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		}
 	}else{
 		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
-		 //&& _simStopped
-		_simStopped=false;
+		//_simStopped=false;
 		if (iInit){
 			//_simStopped=false;
 			if (_currTransaction!=0) delete _currTransaction;
 		}else{
 			//_simStopped=false;
 			if (_progress==0)
-				FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandEntered(this);
+				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandEntered(this);
+				FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
 			else
-				FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandExecuted(this);
+				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandExecuted(this);
+				FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
 			//std::cout << "Prepare next transaction" << std::endl;
-			if (_simStopped){
+			//if (_simStopped){
+			if (_simComp->getStopFlag()){
 				std::cout << "aSimStopped=true " << std::endl;
 				_task->setCurrCommand(this);
 				return this;  //for command which generates transactions this is returned anyway by prepareTransaction
@@ -192,10 +201,10 @@ void TMLCommand::registerGlobalListener(CommandListener* iListener){
 }
 
 template<typename T>
-void TMLCommand::registerGlobalListenerForType(CommandListener* iListener){
+void TMLCommand::registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask){
 	//std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
-		if (dynamic_cast<T*>(*i)!=0) (*i)->registerListener(iListener);
+		if (dynamic_cast<T*>(*i)!=0 && (aTask==0 || (*i)->getTask()==aTask)) (*i)->registerListener(iListener);
 	}
 }
 
@@ -213,5 +222,12 @@ TMLLength TMLCommand::getProgress() const{
 	return _progress;
 }
 
-template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener);
+void TMLCommand::setSimComponents(SimComponents* iSimComp){
+	_simComp=iSimComp;
+}
+
+template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLActionCommand>(CommandListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(CommandListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(CommandListener* iListener, TMLTask* aTask);
 

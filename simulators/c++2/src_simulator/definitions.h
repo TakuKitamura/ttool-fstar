@@ -62,6 +62,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
+#include <dlfcn.h>
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes written" << std::endl;
 #define READ_STREAM(s,v) s.read((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes read" << std::endl;
@@ -212,6 +213,8 @@ typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
 typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
+///Breakpoint condition function pointer (points to condition function in shared library)
+typedef bool (*BreakCondFunc)(TMLTask*);
 ///Datatype holding references to TraceableDevices (for VCD output)
 typedef std::list<TraceableDevice*> TraceableDeviceList;
 ///Datatype used by the Simulator to keep track of all breakpoints
@@ -366,4 +369,5 @@ long getTimeDiff(struct timeval& begin, struct timeval& end);
 */
 void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
 std::string vcdValConvert(unsigned int iVal);
+int getexename(char* buf, size_t size);
 #endif

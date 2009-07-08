@@ -278,6 +278,10 @@ void TMLTask::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
 }
 
-VariableLookUpTableID::const_iterator TMLTask::getVariableIterator(bool iEnd) const{
+VariableLookUpTableID::const_iterator TMLTask::getVariableIteratorID(bool iEnd) const{
 	return (iEnd)?_varLookUpID.end():_varLookUpID.begin();
+}
+
+VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iEnd) const{
+	return (iEnd)?_varLookUpName.end():_varLookUpName.begin();
 }
