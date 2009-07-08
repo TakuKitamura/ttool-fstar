@@ -136,6 +136,7 @@ public class MappedSystemCTask {
 		code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n";
 		code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
 		code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n\n";
+		code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
 		return code;
 	}
 	
@@ -247,6 +248,7 @@ public class MappedSystemCTask {
 		hcode = basicHCode() + hcodeBegin + makeAttributesDeclaration() + CR + hcode;
 		// public dec
 		hcode += CR + functionSig + CR + "public:" + CR;
+		hcode += "friend bool condFunc(TMLTask* _ioTask_);\n";
 		// Simulation
 		hcode += makeConstructorSignature() + SCCR; // + "~" + reference + "()" + SCCR;
 		makeSerializableFuncs();
