@@ -93,6 +93,11 @@ public class IODRefSD extends TGCOneLineText {
             width = w1;
             //updateConnectingPoints();
         }
+		
+		Color c = g.getColor();
+		g.setColor(ColorManager.SD_REFERENCE);
+		g.drawRect(x+1, y+1, width, height);
+		g.setColor(c);
         
         g.drawRect(x, y, width, height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);

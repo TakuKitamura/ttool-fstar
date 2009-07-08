@@ -273,6 +273,10 @@ public class InteractionOverviewDiagramPanel extends TDiagramPanel {
             enhance(v, tgc1);
         }
     }
+	
+	public boolean hasAutoConnect() {
+		return true;
+	}
    
 }
 

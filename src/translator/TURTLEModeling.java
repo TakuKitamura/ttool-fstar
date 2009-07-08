@@ -315,11 +315,13 @@ public class TURTLEModeling {
 				adchoice = (ADChoice)adc;
 				if (!choicesDeterministic) {
 					if (!adchoice.isSpecialChoiceDelay()) {
-						System.out.println("Choice is not regular");
-						for(int j=0; j<adchoice.getNbNext(); j++) {
-							System.out.println("guard[" + j + "]=" + adchoice.getGuard(j));
+						if (!adchoice.isElseChoice()) {
+							System.out.println("Choice is not regular");
+							for(int j=0; j<adchoice.getNbNext(); j++) {
+								System.out.println("guard[" + j + "]=" + adchoice.getGuard(j));
+							}
+							return false;
 						}
-						return false;
 					}
 				}
 			}
@@ -2744,27 +2746,26 @@ public class TURTLEModeling {
 		ADChoice adch1;
 		int index;
 		
-		while(changeMade) {
-			changeMade = false;
-			for(i=0; i<ad.size(); i++) {
-				adc1 = (ADComponent)(ad.get(i));
-				if (adc1 instanceof ADChoice) {
-					adch1 = (ADChoice) adc1;
-					if ((index = adch1.getNextChoice()) != -1) {
-						if ((nonDeterministic) && (!adch1.isGuarded())) {
+		for(i=0; i<ad.size(); i++) {
+			adc1 = (ADComponent)(ad.get(i));
+			if (adc1 instanceof ADChoice) {
+				adch1 = (ADChoice) adc1;
+				if ((index = adch1.getNextChoice()) != -1) {
+					if ((nonDeterministic) && (!adch1.isGuarded())) {
+						mergeChoices(ad, adch1, index);
+						mergeChoices(ad, nonDeterministic);
+						return;
+					} else {
+						if (!nonDeterministic) {
 							mergeChoices(ad, adch1, index);
-							changeMade = true;
-						} else {
-							if (!nonDeterministic) {
-								mergeChoices(ad, adch1, index);
-								changeMade = true;
-							}
+							mergeChoices(ad, nonDeterministic);
+							return;
 						}
 					}
 				}
 			}
 		}
-    }
+	}
 	
 	public void mergeChoices(ActivityDiagram ad, ADChoice adch1, int index) {
 		String g1, g2;
@@ -2799,7 +2800,7 @@ public class TURTLEModeling {
 		}
 		
 		adch1.removeNext(adch2);
-		ad.remove(adch1);
+		ad.remove(adch2);
 	}
 	
 	public void makeSequenceWithDataSave() {

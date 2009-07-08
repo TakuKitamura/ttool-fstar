@@ -116,6 +116,9 @@ public class ColorManager {
     
     public static final Color UML_NOTE = Color.lightGray;
     
+	public static final Color SD_REFERENCE = new Color(104, 229, 255);
+	public static final Color IOD_REFERENCE = new Color(216, 187, 249);
+	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	
 	public static final Color MainTabbedPane = new Color(231, 214, 176);

@@ -94,7 +94,14 @@ public class IODRefIOD extends TGCOneLineText {
             //updateConnectingPoints();
         }
         
+		Color c = g.getColor();
+		g.setColor(ColorManager.IOD_REFERENCE);
+		g.drawRect(x+1, y+1, width, height);
+		g.setColor(c);
+		
         g.drawRect(x, y, width, height);
+		
+		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
@@ -103,6 +110,8 @@ public class IODRefIOD extends TGCOneLineText {
         g.drawLine(x, y+15, x+15, y+15);
         g.drawLine(x+25, y, x+25, y+8);
         g.drawLine(x+15, y+15, x+25, y+8);
+		
+
     }
     
     public TGComponent isOnMe(int _x, int _y) {

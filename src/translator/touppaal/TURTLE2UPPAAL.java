@@ -53,30 +53,30 @@ import myutil.*;
 import translator.*;
 
 public class TURTLE2UPPAAL {
-    
-    private UPPAALSpec spec;
-    private TURTLEModeling tm;
+	
+	private UPPAALSpec spec;
+	private TURTLEModeling tm;
 	private boolean isRegular;
 	private boolean isRegularTClass;
 	private boolean choicesDeterministic = false;
 	private RelationTIFUPPAAL table;
 	
-    private Vector warnings;
-    private LinkedList tmpComponents;
-    private LinkedList tmpLocations;
+	private Vector warnings;
+	private LinkedList tmpComponents;
+	private LinkedList tmpLocations;
 	private ArrayList<UPPAALTemplate> templatesWithMultipleProcesses;
-    private LinkedList locations;
-    private LinkedList gates;
-    private LinkedList relations; // null: not synchronize, Relation : synchronized
-    private LinkedList parallels;
-    
-    private LinkedList gatesNotSynchronized; // String
+	private LinkedList locations;
+	private LinkedList gates;
+	private LinkedList relations; // null: not synchronize, Relation : synchronized
+	private LinkedList parallels;
+	
+	private LinkedList gatesNotSynchronized; // String
 	private ArrayList<Gate> gatesWithInternalSynchro;
-    private int maxSentInt; // Max nb of int put on non synchronized gates
-    private int maxSentBool;
-    private LinkedList gatesSynchronized;
-    private int idChoice;
-    private int idTemplate;
+	private int maxSentInt; // Max nb of int put on non synchronized gates
+	private int maxSentBool;
+	private LinkedList gatesSynchronized;
+	private int idChoice;
+	private int idTemplate;
 	private int idPar;
 	private int idParProcess;
 	private ArrayList<ADParallel> paras;
@@ -84,39 +84,39 @@ public class TURTLE2UPPAAL {
 	//private int idTemplate;
 	private boolean multiprocess;
 	
-    private int currentX, currentY;
-    
-    public final static int STEP_X = 0;
-    public final static int STEP_Y = 80;
-    public final static int STEP_LOOP_X = 150;
-    public final static int NAME_X = 10;
-    public final static int NAME_Y = 5;
-    public final static int SYNCHRO_X = 5;
-    public final static int SYNCHRO_Y = -10;
-    public final static int ASSIGN_X = 10;
-    public final static int ASSIGN_Y = 0;
-    public final static int GUARD_X = 0;
-    public final static int GUARD_Y = -20;
+	private int currentX, currentY;
+	
+	public final static int STEP_X = 0;
+	public final static int STEP_Y = 80;
+	public final static int STEP_LOOP_X = 150;
+	public final static int NAME_X = 10;
+	public final static int NAME_Y = 5;
+	public final static int SYNCHRO_X = 5;
+	public final static int SYNCHRO_Y = -10;
+	public final static int ASSIGN_X = 10;
+	public final static int ASSIGN_Y = 0;
+	public final static int GUARD_X = 0;
+	public final static int GUARD_Y = -20;
 	
 	public final static String SYNCID = "__sync__";
 	public final static String GSYNCID = "__gsync__";
 	
-    private UPPAALTemplate templateNotSynchronized;
-    
-    public TURTLE2UPPAAL(TURTLEModeling _tm) {
-        tm = _tm;
-    }
+	private UPPAALTemplate templateNotSynchronized;
+	
+	public TURTLE2UPPAAL(TURTLEModeling _tm) {
+		tm = _tm;
+	}
 	
 	
-    public void saveInFile(String path) throws FileException {
-        FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
-        //System.out.println("spec.xml generated:\n" + spec.getFullSpec());
-    }
+	public void saveInFile(String path) throws FileException {
+		FileUtils.saveFile(path + "spec.xml", spec.makeSpec());
+		//System.out.println("spec.xml generated:\n" + spec.getFullSpec());
+	}
 	
 	
-    public Vector getWarnings() {
-        return warnings;
-    }
+	public Vector getWarnings() {
+		return warnings;
+	}
 	
 	public RelationTIFUPPAAL getRelationTIFUPPAAL () {
 		return table;
@@ -130,37 +130,37 @@ public class TURTLE2UPPAAL {
 		choicesDeterministic = _b;
 		System.out.println("choices are assumed to be deterministic:" + choicesDeterministic);
 	}
-    
-    public UPPAALSpec generateUPPAAL(boolean _debug, int _nb) {
-        warnings = new Vector();
-        spec = new UPPAALSpec();
+	
+	public UPPAALSpec generateUPPAAL(boolean _debug, int _nb) {
+		warnings = new Vector();
+		spec = new UPPAALSpec();
 		table = new RelationTIFUPPAAL();
 		
-        tmpComponents = new LinkedList();
-        tmpLocations = new LinkedList();
-        locations = new LinkedList();
-        gatesNotSynchronized = new LinkedList();
+		tmpComponents = new LinkedList();
+		tmpLocations = new LinkedList();
+		locations = new LinkedList();
+		gatesNotSynchronized = new LinkedList();
 		gatesWithInternalSynchro = new ArrayList<Gate>();
-        gatesSynchronized = new LinkedList();
-        parallels = new LinkedList();
+		gatesSynchronized = new LinkedList();
+		parallels = new LinkedList();
 		templatesWithMultipleProcesses = new ArrayList<UPPAALTemplate>();
-        idChoice = 0;
-        idTemplate = 0;
-        
-        int nb = _nb;
+		idChoice = 0;
+		idTemplate = 0;
+		
+		int nb = _nb;
 		multiprocess = false;
-        
-        UPPAALLocation.reinitID();
 		
-        // Name initialization -> we reuse the names used by LOTOS specification
-        MasterGateManager.reinitNameRestriction();
-        tm.makeRTLOTOSName();
-        tm.makeLOTOSName();
+		UPPAALLocation.reinitID();
+		
+		// Name initialization -> we reuse the names used by LOTOS specification
+		MasterGateManager.reinitNameRestriction();
+		tm.makeRTLOTOSName();
+		tm.makeLOTOSName();
 		
 		
-        
-        // Work with tm modeling
-        // For example, compact latencies together, etc.
+		
+		// Work with tm modeling
+		// For example, compact latencies together, etc.
 		tm.mergeChoices(true);
 		tm.translateWatchdogs();
 		tm.translateInvocationIntoSynchronization();
@@ -170,14 +170,14 @@ public class TURTLE2UPPAAL {
 		isRegular = tm.isARegularTIFSpec(choicesDeterministic);
 		idPar = 0;
 		System.out.println("Regular spec:" + isRegular);
-        
-        // Deal with tclasses
-        translateTClasses();
-        
-        // Gate with and without synchronization
-        makeNotSynchronized();
-        makeSynchronized();
-        makeBoth();
+		
+		// Deal with tclasses
+		translateTClasses();
+		
+		// Gate with and without synchronization
+		makeNotSynchronized();
+		makeSynchronized();
+		makeBoth();
 		
 		int effectiveNb;
 		if (multiprocess) {
@@ -185,10 +185,10 @@ public class TURTLE2UPPAAL {
 		} else {
 			effectiveNb = 1;
 		}
-        // Generate system
-        makeGlobal(effectiveNb);
-        //makeParallel(nb);
-        makeSystem(effectiveNb);
+		// Generate system
+		makeGlobal(effectiveNb);
+		//makeParallel(nb);
+		makeSystem(effectiveNb);
 		
 		System.out.println("Enhancing graphical representation ...");
 		spec.enhanceGraphics();
@@ -196,14 +196,14 @@ public class TURTLE2UPPAAL {
 		
 		//System.out.println("relations:" + table.toString());
 		
-        return spec;
-    }
-    
-    public void initXY() {
-		currentX = 0; currentY = -220;
-    }
+		return spec;
+	}
 	
-    public void makeGlobal(int nb) {
+	public void initXY() {
+		currentX = 0; currentY = -220;
+	}
+	
+	public void makeGlobal(int nb) {
 		String s;
 		if (!isRegular) {
 			spec.addGlobalDeclaration("\n// Global management\nint locid__ = 0;\nint taskid__ = 0;\nint startingid__ = 0;\nint preemptid__ = 0;\nint groupid__ = 0;\n");
@@ -228,29 +228,29 @@ public class TURTLE2UPPAAL {
 			
 			// First free
 			s = "\nint firstFree(int id) {\nint i;\nint taskid = (id / totalTasks__)*totalTasks__;\n";
-				s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif (tasks__[i][i] == 0) {\n";
+			s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif (tasks__[i][i] == 0) {\n";
 			s +="return i;\n}\n}\nreturn -1;\n}\n\n";
 			spec.addGlobalDeclaration(Conversion.indentString(s, 2));
 			
 			// Preempt task
 			s = "int preempt(int id) {\nint i, j;\nint taskid;\nint ids[maxTasks__];\nint tmpids[maxTasks__];\n";
-				s += "int cpt = 0;\nint currentid;\n\nfor(i=1; i<maxTasks__; i++) {\nids[i] = -1;\n}\nids[0] = id;\n\n";
-				s += "while(hasToManage(ids) == 1) {\ncpt = 0;\nfor(i=0; i<maxTasks__; i++) {\ntmpids[i] = ids[i];\nids[i] = -1;\n";
-					s += "}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\ntaskid = (tmpids[j] / totalTasks__)*totalTasks__;\n";
-						s += "currentid = tmpids[j];\nfor(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i!= id) && (tasks__[currentid][i] == preempt__)) {\n";
-							s += "tasks__[currentid][i] = 0;\ntasks__[i][i] = -3;\nids[cpt] = i;\ncpt ++;\n}else if (tasks__[currentid][i] == preempt__) {\n";		
+			s += "int cpt = 0;\nint currentid;\n\nfor(i=1; i<maxTasks__; i++) {\nids[i] = -1;\n}\nids[0] = id;\n\n";
+			s += "while(hasToManage(ids) == 1) {\ncpt = 0;\nfor(i=0; i<maxTasks__; i++) {\ntmpids[i] = ids[i];\nids[i] = -1;\n";
+			s += "}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\ntaskid = (tmpids[j] / totalTasks__)*totalTasks__;\n";
+			s += "currentid = tmpids[j];\nfor(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i!= id) && (tasks__[currentid][i] == preempt__)) {\n";
+			s += "tasks__[currentid][i] = 0;\ntasks__[i][i] = -3;\nids[cpt] = i;\ncpt ++;\n}else if (tasks__[currentid][i] == preempt__) {\n";		
 			s+= "tasks__[currentid][i] = 0;\n}\n}\n}\n}\n}\nreturn -1;\n}\n\n";
 			spec.addGlobalDeclaration(Conversion.indentString(s, 2));
 			
 			// End task
 			s = "int endTask(int id) {\nint i, j;\nint taskid;\nint ids[maxTasks__];\nint tmpids[maxTasks__];\n";
-				s += "int cpt = 0;\nint currentid;\n\nif (tasks__[id][id] == -3) {\n// I have been preempted\n";
+			s += "int cpt = 0;\nint currentid;\n\nif (tasks__[id][id] == -3) {\n// I have been preempted\n";
 			s += "tasks__[id][id] = 0;\nreturn -1;\n} else {\n// Normal termination\npreempt(id);\n}\n";
 			s += "\nfor(i=0; i<maxTasks__; i++) {\nids[i] = -1;\n}\n";
 			s += "ids[0] = id;\n\nwhile(hasToManage(ids) == 1) {\ncpt = 0;\nfor(i=0; i<maxTasks__; i++) {\n";
-				s += "tmpids[i] = ids[i];\nids[i] = -1;\n}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\n";
-					s += "taskid = (tmpids[j] / totalTasks__)*totalTasks__;\ncurrentid = tmpids[j];\ntasks__[currentid][currentid] = 0;\n";
-					s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i != id) && (tasks__[i][currentid] == preempt__)) {\ntasks__[i][currentid] = 0;\n";
+			s += "tmpids[i] = ids[i];\nids[i] = -1;\n}\nfor(j=0; j<maxTasks__; j++) {\nif (tmpids[j] != -1) {\n";
+			s += "taskid = (tmpids[j] / totalTasks__)*totalTasks__;\ncurrentid = tmpids[j];\ntasks__[currentid][currentid] = 0;\n";
+			s += "for(i=taskid; i<(taskid + totalTasks__); i++) {\nif ((i != id) && (tasks__[i][currentid] == preempt__)) {\ntasks__[i][currentid] = 0;\n";
 			s += "ids[cpt] = i;\ncpt ++;\n}\n}\n}\n}\n}\nreturn -1;\n}\n\n";
 			spec.addGlobalDeclaration(Conversion.indentString(s, 2));
 			
@@ -264,8 +264,8 @@ public class TURTLE2UPPAAL {
 			
 			// Make parallel
 			s = "void makeParallel(int myid, int startingid) {\nint i;\n\nif (myid == startingid) {\nreturn;\n}\n\n";
-				s += "for(i=0; i<maxTasks__; i++){\nif ((tasks__[startingid][i] == preempt__) && (i != startingid)){\ntasks__[myid][i] = preempt__;\n";
-				s += "}\n}\n\nfor(i=0; i<maxTasks__; i++){\nif ((tasks__[i][startingid] == preempt__) && (i != myid)) {\n";
+			s += "for(i=0; i<maxTasks__; i++){\nif ((tasks__[startingid][i] == preempt__) && (i != startingid)){\ntasks__[myid][i] = preempt__;\n";
+			s += "}\n}\n\nfor(i=0; i<maxTasks__; i++){\nif ((tasks__[i][startingid] == preempt__) && (i != myid)) {\n";
 			s += "tasks__[i][myid] = preempt__;\n}\n}\n}\n\n";
 			spec.addGlobalDeclaration(Conversion.indentString(s, 2));
 			
@@ -298,9 +298,9 @@ public class TURTLE2UPPAAL {
 		s = "\nint min(int x, int y) {\nif(x<y) {\nreturn x;\n}\nreturn y;\n}\n\n";
 		s += "int max(int x, int y) {\nif(x<y) {\nreturn y;\n}\nreturn x;\n}\n";
 		spec.addGlobalDeclaration(Conversion.indentString(s, 2));
-    }
-    
-    public void makeTaskManager(int nb) {
+	}
+	
+	public void makeTaskManager(int nb) {
 		TClass t;
 		UPPAALLocation loc1, loc2, loc3;
 		UPPAALTransition tr;
@@ -316,6 +316,8 @@ public class TURTLE2UPPAAL {
 		loc1.setCommitted();
 		template.setInitLocation(loc1);
 		
+		currentX += 2 * STEP_LOOP_X;
+		
 		int cpt = 0;
 		
 		ListIterator iterator = spec.getTemplates().listIterator();
@@ -324,21 +326,25 @@ public class TURTLE2UPPAAL {
 			template1 = (UPPAALTemplate)(iterator.next());
 			t = tm.getTClassWithName(template1.getName());
 			if (t!= null) {
-				spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
-				
-				loc2 = addLocation(template);
-				//loc2.setUrgent();
-				loc2.setCommitted();
-				tr = addTransition(template, loc1, loc2);
-				setAssignment(tr, "locid__ =" + template1.getInitLocation().int_id + ",\ntaskid__ =" + cpt + ",\ngroupid__ = firstGroupId()");
-				loc3 = addLocation(template);
-				//loc3.setUrgent();
-				loc3.setCommitted();
-				tr = addTransition(template, loc2, loc3);
-				loc1 = loc3;
-				setSynchronization(tr, "begintask__!");
+				if(!(tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic))) {
+					spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
+					
+					loc2 = addLocation(template);
+					//loc2.setUrgent();
+					loc2.setCommitted();
+					tr = addTransition(template, loc1, loc2);
+					setAssignment(tr, "locid__ =" + template1.getInitLocation().int_id + ",\ntaskid__ =" + cpt + ",\ngroupid__ = firstGroupId()");
+					loc3 = addLocation(template);
+					//loc3.setUrgent();
+					loc3.setCommitted();
+					tr = addTransition(template, loc2, loc3);
+					loc1 = loc3;
+					setSynchronization(tr, "begintask__!");
+				}
 			}
-			cpt += nb;
+			if (!(templatesWithMultipleProcesses.contains(template))) {
+				cpt += nb;
+			}
 		}
 		
 		//loc1.unsetUrgent();
@@ -366,48 +372,48 @@ public class TURTLE2UPPAAL {
 		tr = addTransition(template, loc2, loc1);
 		setSynchronization(tr, "begintask__?");
 		setGuard(tr, "locid__ == -1");
-    }
-    
-    /*public void makeParallel() {
-		if (parallels.size() == 0) {
-			return;
-		}
-		
-		ListIterator iterator = parallels.listIterator();
-		TClass t;
-		UPPAALLocation loc1, loc2;
-		UPPAALTransition tr;
-		
-		initXY();
-		
-		UPPAALTemplate template = new UPPAALTemplate();
-		spec.addTemplate(template);
-		template.setName("ParallelManager");
-		spec.addGlobalDeclaration("\n// Parallel operators\nint paralocid = 0;\nchan begintask, endtask;\n");
-		loc1 = addLocation(template);
-		template.setInitLocation(loc1);
-		
-		while(iterator.hasNext()) {
-			t = (TClass)(iterator.next());
-			spec.addGlobalDeclaration("int para__" + t.getName() + " = 0;\n");
-			spec.addGlobalDeclaration("chan gopara__" + t.getName() + ";\n");
-			spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
-			loc2 = addLocation(template);
-			tr = addTransition(template, loc1, loc2);
-			loc1 = loc2;
-			setSynchronization(tr, "gopara__" + t.getName() + "!");
-			
-		}
-		
-		loc2 = addLocation(template);
-		tr = addTransition(template, loc1, loc2);
-		setSynchronization(tr, "begintask?");
-		tr = addTransition(template, loc2, loc1);
-		setSynchronization(tr, "endtask?");
-		
-    }*/
-    
-    public void addNotSync(String s) {
+	}
+	
+	/*public void makeParallel() {
+	if (parallels.size() == 0) {
+	return;
+	}
+	
+	ListIterator iterator = parallels.listIterator();
+	TClass t;
+	UPPAALLocation loc1, loc2;
+	UPPAALTransition tr;
+	
+	initXY();
+	
+	UPPAALTemplate template = new UPPAALTemplate();
+	spec.addTemplate(template);
+	template.setName("ParallelManager");
+	spec.addGlobalDeclaration("\n// Parallel operators\nint paralocid = 0;\nchan begintask, endtask;\n");
+	loc1 = addLocation(template);
+	template.setInitLocation(loc1);
+	
+	while(iterator.hasNext()) {
+	t = (TClass)(iterator.next());
+	spec.addGlobalDeclaration("int para__" + t.getName() + " = 0;\n");
+	spec.addGlobalDeclaration("chan gopara__" + t.getName() + ";\n");
+	spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
+	loc2 = addLocation(template);
+	tr = addTransition(template, loc1, loc2);
+	loc1 = loc2;
+	setSynchronization(tr, "gopara__" + t.getName() + "!");
+	
+	}
+	
+	loc2 = addLocation(template);
+	tr = addTransition(template, loc1, loc2);
+	setSynchronization(tr, "begintask?");
+	tr = addTransition(template, loc2, loc1);
+	setSynchronization(tr, "endtask?");
+	
+	}*/
+	
+	public void addNotSync(String s) {
 		ListIterator iterator = gatesNotSynchronized.listIterator();
 		String action;
 		while(iterator.hasNext()) {
@@ -417,9 +423,9 @@ public class TURTLE2UPPAAL {
 			}
 		}
 		gatesNotSynchronized.add(s);
-    }
+	}
 	
-    public void makeNotSynchronized() {
+	public void makeNotSynchronized() {
 		if (gatesNotSynchronized.size() == 0) {
 			return;
 		}
@@ -445,9 +451,9 @@ public class TURTLE2UPPAAL {
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
 			//spec.addGlobalDeclaration("int " + action + TURTLE2UPPAAL.SYNCID + " = 0;\n");
 		}
-    }
-    
-    public void makeSynchronized() {
+	}
+	
+	public void makeSynchronized() {
 		if (gatesSynchronized.size() == 0) {
 			return;
 		}
@@ -460,9 +466,9 @@ public class TURTLE2UPPAAL {
 			action = (String)(iterator.next());
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
 		}
-    }
-    
-    public void makeBoth() {
+	}
+	
+	public void makeBoth() {
 		int i;
 		spec.addGlobalDeclaration("\n//Declarations used for (non) synchronized gates\n");
 		
@@ -473,19 +479,19 @@ public class TURTLE2UPPAAL {
 		for(i=0; i<maxSentBool; i++) {
 			spec.addGlobalDeclaration("int action_bool__" + i + ";\n");
 		}
-    }
+	}
 	
-    public void translateTClasses() {
+	public void translateTClasses() {
 		TClass t;
-        for(int i=0; i<tm.classNb(); i++) {
+		for(int i=0; i<tm.classNb(); i++) {
 			t = tm.getTClassAtIndex(i);
 			if (t.isActive()) {
 				translateTClass(t);
 			}
-        }
-    }
-    
-    public void translateTClass(TClass t) {
+		}
+	}
+	
+	public void translateTClass(TClass t) {
 		isRegularTClass = tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic);
 		tmpComponents = new LinkedList();
 		tmpLocations = new LinkedList();
@@ -504,7 +510,7 @@ public class TURTLE2UPPAAL {
 			idTemplate = 0;
 		}
 		makeBehaviour(t, template, null);
-    }
+	}
 	
 	public UPPAALTemplate newTClassTemplate(TClass t, int id) {
 		UPPAALTemplate template = new UPPAALTemplate();
@@ -517,9 +523,9 @@ public class TURTLE2UPPAAL {
 		table.addTClassTemplate(t, template, id);
 		return template;
 	}
-    
 	
-    public void makeAttributes(TClass t, UPPAALTemplate template) {
+	
+	public void makeAttributes(TClass t, UPPAALTemplate template) {
 		Param p;
 		Vector params = t.getParamList();
 		int i;
@@ -546,9 +552,9 @@ public class TURTLE2UPPAAL {
 			template.addDeclaration("int choice__" + i + ";\n");
 		}
 		
-    }
-    
-    public void makeAttributeChoice(TClass t, int id1, int id2) {
+	}
+	
+	public void makeAttributeChoice(TClass t, int id1, int id2) {
 		Param p;
 		Vector params = t.getParamList();
 		for(int i=0; i<params.size(); i++) {
@@ -560,33 +566,33 @@ public class TURTLE2UPPAAL {
 			}
 			spec.addGlobalDeclaration(t.getName() + "__" + p.getName() + "__" + id1 + "__" + id2 + " = " + p.getValue() + ";\n");
 		}
-    }
-    
+	}
+	
 	public void makeGates(TClass t, UPPAALTemplate template) {
 		// Classify gates: basic synchro, complex synchro, and not synchronized
 		
 		/*Gate g;
 		Vector tgates = t.getGateList();
-        for(int i=0; i<tgates.size(); i++) {
-			g = (Gate)(tgates.get(i));
-			classifyGate(t, template ,g);
-        }*/
+		for(int i=0; i<tgates.size(); i++) {
+		g = (Gate)(tgates.get(i));
+		classifyGate(t, template ,g);
+		}*/
 		
 		fillInternalSynchros(t);
 	}
 	
 	public void classifyGate(TClass t, UPPAALTemplate template, Gate g) {
-        Relation r = tm.syncRelationWith(t, g);
-        //gates.add(g);
-        //relations.add(r);
-        if (r == null) {
+		Relation r = tm.syncRelationWith(t, g);
+		//gates.add(g);
+		//relations.add(r);
+		if (r == null) {
 			// Assume it is a "basic" synchro
 			// Look for internal synchros 
 			//fillInternalSynchros(t.getActivityDiagram());
-        } else {
+		} else {
 			// No synchro
 			
-        }
+		}
 	}
 	
 	private void fillInternalSynchros(TClass t) {
@@ -636,9 +642,9 @@ public class TURTLE2UPPAAL {
 		} else {
 			makeElementBehavior(t, template, adc, loc, null, null);
 		}
-    }
+	}
 	
-    public void makeElementBehavior(TClass t, UPPAALTemplate template, ADComponent elt, UPPAALLocation previous, UPPAALLocation end, String guard) {
+	public void makeElementBehavior(TClass t, UPPAALTemplate template, ADComponent elt, UPPAALLocation previous, UPPAALLocation end, String guard) {
 		UPPAALLocation loc, loc1, loc2, loc3, loc4, loc5;
 		UPPAALTransition tr, tr1, tr2, tr3;
 		int i, index;
@@ -986,7 +992,7 @@ public class TURTLE2UPPAAL {
 						
 						for(i=0; i<elt.getNbNext(); i++){
 							//System.out.println("Special choice action / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
-						
+							
 							String gua = null;
 							if (adch.isGuarded(i)) {
 								gua = convertGuard(adch.getGuard(i));
@@ -1008,7 +1014,7 @@ public class TURTLE2UPPAAL {
 						String init = "h__ = 0";
 						for(i=0; i<elt.getNbNext(); i++){
 							//System.out.println("Special choice delay / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
-						
+							
 							elt1 = elt.getNext(i);
 							
 							if (elt1 instanceof ADDelay) {
@@ -1532,7 +1538,7 @@ public class TURTLE2UPPAAL {
 	
 	public void addParallel(TClass t, UPPAALTemplate template) {
 		/*if (parallels.contains(t)) {
-			//Nothing to do!
+		//Nothing to do!
 		}
 		parallels.add(t);
 		UPPAALLocation loc1 = template.getInitLocation();
@@ -1561,7 +1567,7 @@ public class TURTLE2UPPAAL {
 			String s = "";
 			/*s = makeGetParam(t);
 			if (s.length() > 1) {
-				s +=",\n";
+			s +=",\n";
 			}*/
 			s += "startTask(myid__),\nmygroupid__ = groupid__";
 			setAssignment(tr, s);
@@ -1835,7 +1841,7 @@ public class TURTLE2UPPAAL {
 		for(int i=0; i<v.size(); i++) {
 			p = (Param)(v.get(i));
 			/*if (i!=0) {
-				s += ",\n";
+			s += ",\n";
 			}*/
 			if (p.getType() == Param.NAT) {
 				s += "int ";
@@ -1872,7 +1878,8 @@ public class TURTLE2UPPAAL {
 			if (i!=0) {
 				s += ",\n";
 			}
-			s += p.getName() + " = " + t.getName() + "__" + p.getName();
+			//s += p.getName() + " = " + t.getName() + "__" + p.getName();
+			s +=  p.getName() + " = action_int__" + i;
 		}
 		return s;
 	}
@@ -1887,7 +1894,8 @@ public class TURTLE2UPPAAL {
 			if (i!=0) {
 				s += ",\n";
 			}
-			s += t.getName() + "__" + p.getName()+ " = " + p.getName();
+			//s += t.getName() + "__" + p.getName()+ " = " + p.getName();
+			s += "action_int__" + i + " = "  + p.getName();
 		}
 		return s;
 	}
@@ -2197,9 +2205,9 @@ public class TURTLE2UPPAAL {
 		addRandomNailPoint(tr);
 		/*int x = 0, y = 0;
 		if (loc1 != loc2) {
-			x = ((loc1.idPoint.x + loc2.idPoint.x)/2) - 25 + (int)(50.0 * Math.random());
-			y = ((loc1.idPoint.y + loc2.idPoint.y)/2) - 25 + (int)(50.0 * Math.random());
-			tr.points.add(new Point(x, y));
+		x = ((loc1.idPoint.x + loc2.idPoint.x)/2) - 25 + (int)(50.0 * Math.random());
+		y = ((loc1.idPoint.y + loc2.idPoint.y)/2) - 25 + (int)(50.0 * Math.random());
+		tr.points.add(new Point(x, y));
 		}*/
 		return tr;
 	}
