@@ -71,7 +71,7 @@ public class ColorManager {
 	//public static final Color POINTED_0 = new Color(231, 132, 19);
     
 	//public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
-	public static final Color UML_NOTE_BG = new Color(173, 190, 234, 200);
+	public static final Color UML_NOTE_BG = new Color(173, 190, 234);
 	
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
