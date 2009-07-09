@@ -342,7 +342,7 @@ public class TURTLE2UPPAAL {
 					setSynchronization(tr, "begintask__!");
 				}
 			}
-			if (!(templatesWithMultipleProcesses.contains(template))) {
+			if (!(templatesWithMultipleProcesses.contains(template1))) {
 				cpt += nb;
 			}
 		}
