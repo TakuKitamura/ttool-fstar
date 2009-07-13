@@ -72,6 +72,9 @@ all:
 	svn commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
+basic:
+	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
+
 ttooljar_std:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)
 	cp $(TTOOL_SRC)/ui/images/$(STD_LOGO) $(TTOOL_SRC)/ui/images/$(LOGO) 

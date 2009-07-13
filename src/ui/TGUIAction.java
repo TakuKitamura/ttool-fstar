@@ -294,6 +294,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_DEADLOCK_SEEKER_AUT = 75;
     public static final int ACT_DEADLOCK_SEEKER_SAVED_AUT = 76;
 	
+	
 	public static final int ACT_ONECLICK_LOTOS_RG = 210;
 	public static final int ACT_ONECLICK_RTLOTOS_RG = 211;
     
@@ -325,6 +326,10 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_VIEW_BIRDEYES = 115;
     public static final int ACT_VIEW_BIRDEYES_EMB = 116;
     public static final int ACT_VIEW_WAVE = 153;
+	
+	public static final int ACT_VIEW_PM_AUT = 265;
+	public static final int ACT_VIEW_PM_AUTPROJ = 266;
+	public static final int ACT_VIEW_PM_SAVED_AUT = 267;
     
     public static final int UML_NOTE = 42;
     
@@ -374,7 +379,7 @@ public class TGUIAction extends AbstractAction {
     public static final int PRUEBA_1 = 205;
 
     
-    public static final int NB_ACTION = 265;
+    public static final int NB_ACTION = 268;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -491,7 +496,9 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_STAT_AUT] = new TAction("viewstataut-command", "Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (last AUT graph)",  "Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_STAT_AUTPROJ] = new TAction("viewstatautproj-command", "Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (last minimized AUT graph)",  "Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_STAT_SAVED_AUT] = new TAction("viewstatsavedautproj-command", "Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Analysis (saved AUT graph)",  "Analysis on a graph saved in AUT (Aldebaran) format", 0);
-        
+        actions[ACT_VIEW_PM_AUT] = new TAction("viewpmaut-command", "Power Management Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last AUT graph)",  "Power Management Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
+        actions[ACT_VIEW_PM_AUTPROJ] = new TAction("viewpmautproj-command", "Power Management Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last minimized AUT graph)",  "Power Management Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
+        actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
         
         actions[ACT_VIEW_JAVA] = new TAction("view-java", "Display Java code", IconManager.imgic38, IconManager.imgic39, "Display Java code",  "Display the java code of the pointed component", 0);
         actions[ACT_VIEW_RTLOTOS] = new TAction("view-rtlotos", "Show last formal specification", IconManager.imgic302, IconManager.imgic302, "Show formal specification",  "Display the lastest generated formal specification", 0);

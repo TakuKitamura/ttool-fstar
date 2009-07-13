@@ -608,7 +608,7 @@ public class MappedSystemCTask {
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElseElement,nextCommandCollection,null);
 							else
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,null);
-							if (nextCommandCollection.funcs.isEmpty()){
+							if (nextCommandCollection.funcs.length() == 0){
 								//System.out.println("NO content has been added to "+ code2);
 								code += "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";

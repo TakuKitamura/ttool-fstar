@@ -694,11 +694,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			break;
 		case RGAUTPROJDOT_OK:
 			actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ].setEnabled(true);
+			actions[TGUIAction.ACT_VIEW_PM_AUTPROJ].setEnabled(true);
 			actions[TGUIAction.ACT_SAVE_AUTPROJ].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_RGAUTPROJDOT].setEnabled(true);
 			break;
 		case RGAUTPROJDOT_KO:
 			actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ].setEnabled(false);
+			actions[TGUIAction.ACT_VIEW_PM_AUTPROJ].setEnabled(false);
 			actions[TGUIAction.ACT_SAVE_AUTPROJ].setEnabled(false);
 			actions[TGUIAction.ACT_VIEW_RGAUTPROJDOT].setEnabled(false);
 			break;
@@ -3199,6 +3201,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     	t.go();
     }
 	
+	 public void showPMAUT(String title, String data) {
+		 System.out.println("Power management analysis");
+		 /*JFrameStatistics jfs = new JFrameStatistics(title, data);
+        jfs.setIconImage(IconManager.img8);
+        jfs.setSize(600, 600);
+        GraphicLib.centerOnParent(jfs);
+        jfs.setVisible(true);*/
+    	//ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait");
+    	//t.go();
+    }
+	
 	public void NC() {
 		System.out.println("NC");
 		JFrameNC jfnc = new JFrameNC("Network calculus", gtm.getNCS());
@@ -3228,6 +3241,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         String graph[] = loadAUTGraph();
         if (graph != null) {
             showAUT("Analysis on " + graph[0], graph[1]);
+        }
+    }
+	
+	public void pmAUT() {
+        showPMAUT("Power Management Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
+    }
+    
+    public void pmAUTProj() {
+        showPMAUT("Power Management Analysis on the last minimized RG (AUT format)", gtm.getLastTextualRGAUTProj());
+    }
+    
+    public void pmSavedAUT() {
+        //System.out.println("toto");
+        String graph[] = loadAUTGraph();
+        if (graph != null) {
+            showPMAUT("Power Management Analysis on " + graph[0], graph[1]);
         }
     }
     
@@ -5260,7 +5289,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             statAUTProj();
         }  else if (command.equals(actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT].getActionCommand())) {
             statSavedAUT();
-        } else if (command.equals(actions[TGUIAction.ACT_VIEW_RTLOTOS].getActionCommand())) {
+        } else if (command.equals(actions[TGUIAction.ACT_VIEW_PM_AUT].getActionCommand())) {
+            pmAUT();
+		} else if (command.equals(actions[TGUIAction.ACT_VIEW_PM_AUTPROJ].getActionCommand())) {
+            pmAUTProj();
+		} else if (command.equals(actions[TGUIAction.ACT_VIEW_PM_SAVED_AUT].getActionCommand())) {
+            pmSavedAUT();
+		} else if (command.equals(actions[TGUIAction.ACT_VIEW_RTLOTOS].getActionCommand())) {
             showFormalSpecification();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_JAVA].getActionCommand())) {
             showJavaCode();
