@@ -100,6 +100,7 @@ public class ConfigurationTTool {
     public static String SystemCCodeExecuteCommand = "";
 	public static String SystemCCodeInteractiveExecuteCommand = "";
     public static String SystemCHost = "";
+	public static String VCDPath = "";
     public static String GTKWavePath = "";
     public static String UPPAALCodeDirectory = "";
 	public static String UPPAALVerifierPath = "";
@@ -286,6 +287,9 @@ public class ConfigurationTTool {
 		// TML
 		System.out.println("TMLCodeDirectory" + TMLCodeDirectory);
 		
+		// VCD
+		System.out.println("VCDPath: " + VCDPath);
+		
         System.out.println("UPPAAL: " + UPPAALCodeDirectory);
 		System.out.println("UPPAALVerifierPATH: " + UPPAALVerifierPath);
 		System.out.println("UPPAALVerifierHOST: " + UPPAALVerifierHost);
@@ -417,7 +421,7 @@ public class ConfigurationTTool {
                 SystemCCodeDirectory(nl);
 			
             
-				if (systemcOn) {
+			if (systemcOn) {
 					nl = doc.getElementsByTagName("SystemCHost");
 					if (nl.getLength() > 0)
 						SystemCHost(nl);
@@ -438,6 +442,10 @@ public class ConfigurationTTool {
 				nl = doc.getElementsByTagName("TMLCodeDirectory");
 				if (nl.getLength() > 0)
 					TMLCodeDirectory(nl);
+				
+				nl = doc.getElementsByTagName("VCDPath");
+				if (nl.getLength() > 0)
+					VCDPath(nl);
 				
 				nl = doc.getElementsByTagName("UPPAALCodeDirectory");
 				if (nl.getLength() > 0)
@@ -833,6 +841,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             TMLCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void VCDPath(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            VCDPath = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

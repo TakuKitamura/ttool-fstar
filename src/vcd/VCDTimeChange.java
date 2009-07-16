@@ -36,69 +36,63 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AUTState
- * Creation : 05/03/2008
- ** @version 1.0 05/03/2008
+ * Class VCDTimeChange
+ * Creation: 13/07/2009
+ * @version 1.0 13/07/2009
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
- 
-package ui.graph;
+
+package vcd;
 
 import java.util.*;
 
-public class AUTState  {
+public class VCDTimeChange  {
+    private String timeValue;
+	private ArrayList<VCDVariable> variables;
+	private ArrayList<String> values; // In binary format, without the "b"
+	
+	private static int IDShortcut;
     
-    public int id;
-    public ArrayList<AUTTransition> inTransitions; // Arriving to that state
-	public ArrayList<AUTTransition> outTransitions; // Departing from that state
-	public boolean met = false;
-    
-    public AUTState(int _id) {
-        id = _id;
-		inTransitions = new ArrayList<AUTTransition>();
-		outTransitions = new ArrayList<AUTTransition>();
+    public VCDTimeChange(String _timeValue) {
+      timeValue = _timeValue;
+	  variables = new ArrayList<VCDVariable>();
+	  values = new ArrayList<String>();
     }
 	
-	public void addInTransition(AUTTransition tr) {
-		inTransitions.add(tr);
+	public void addVariable(VCDVariable _variable, String _value) {
+		variables.add(_variable);
+		values.add(_value);
 	}
 	
-	public void addOutTransition(AUTTransition tr) {
-		outTransitions.add(tr);
-	}
-    
-	public int getNbInTransitions() {
-		return inTransitions.size();
+	public int getNbOfVariables() {
+		return variables.size();
 	}
 	
-	public int getNbOutTransitions() {
-		return outTransitions.size();
+	public VCDVariable getVariable(int _index) {
+		return variables.get(_index);
 	}
 	
-	public boolean hasTransitionTo(int destination) {
-		for(AUTTransition aut1 : outTransitions) {
-			if (aut1.destination == destination) {
+	public String getValue(int _index) {
+		return values.get(_index);
+	}
+	
+	public String toString() {
+		String s = "#" + timeValue + "\n";
+		for(int i=0; i<variables.size(); i++) {
+			s += "b" + values.get(i) + " " + variables.get(i).getLocalShortcut() + "\n";
+		}
+		return s;
+	}
+	
+	public boolean hasValueChangeOnVariable(VCDVariable _variable) {
+		for(VCDVariable var: variables) {
+			if (var == _variable) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public AUTTransition returnRandomTransition() {
-		int size = outTransitions.size();
-		if (size == 0) {
-			return null;
-		}
-		
-		if (size == 1) {
-			return outTransitions.get(0);
-		}
-		
-		Random generator = new Random();
-		int choice = generator.nextInt(size);
-		return outTransitions.get(choice);
-		
-	}
-
+  
 }

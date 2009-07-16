@@ -326,18 +326,28 @@ public class AUTGraph  implements myutil.Graph {
 	}
 	
 	public void computeStates() {
-		states = new ArrayList<AUTState>(nbState);
-		AUTState state;
-		for(int i=0; i<nbState; i++) {
-			state = new AUTState(i);
-			states.add(state);
+		if (!statesComputed) {
+			states = new ArrayList<AUTState>(nbState);
+			AUTState state;
+			for(int i=0; i<nbState; i++) {
+				state = new AUTState(i);
+				states.add(state);
+			}
+			
+			for(AUTTransition aut1 : transitions) {
+				states.get(aut1.origin).addOutTransition(aut1);
+				states.get(aut1.destination).addInTransition(aut1);
+			}	
+			statesComputed = true;
 		}
-		
-		for(AUTTransition aut1 : transitions) {
-            states.get(aut1.origin).addOutTransition(aut1);
-			states.get(aut1.destination).addInTransition(aut1);
-        }	
-		statesComputed = true;
+	}
+	
+	public AUTState getState(int _id) {
+		return states.get(_id);
+	}
+	
+	public boolean areStateComputed() {
+		return statesComputed;
 	}
 	
 	public void reinitMet() {

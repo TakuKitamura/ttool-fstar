@@ -36,69 +36,46 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AUTState
- * Creation : 05/03/2008
- ** @version 1.0 05/03/2008
- * @author Ludovic APVRILLE
- * @see 
- */
- 
+* Class CorePowerConsumption
+* Creation : 15/07/2009
+** @version 1.0 15/07/2009
+* @author Ludovic APVRILLE
+* @see
+*/
+
 package ui.graph;
 
 import java.util.*;
+import java.io.*;
 
-public class AUTState  {
+import myutil.*;
+import vcd.*;
+
+public class CorePowerConsumption  {
     
-    public int id;
-    public ArrayList<AUTTransition> inTransitions; // Arriving to that state
-	public ArrayList<AUTTransition> outTransitions; // Departing from that state
-	public boolean met = false;
+	private int nbOfModes;
+    private long ticks[];
+	private long powerConsumptionPerTick[];
     
-    public AUTState(int _id) {
-        id = _id;
-		inTransitions = new ArrayList<AUTTransition>();
-		outTransitions = new ArrayList<AUTTransition>();
+    public CorePowerConsumption(int _nbOfModes) {
+		nbOfModes = _nbOfModes;
+		ticks = new long[nbOfModes];
+		powerConsumptionPerTick = new long[nbOfModes];
     }
 	
-	public void addInTransition(AUTTransition tr) {
-		inTransitions.add(tr);
+	public void addPowerConsumption(int _mode, long _ticks) {
+		ticks[_mode] = ticks[_mode] + _ticks;
 	}
 	
-	public void addOutTransition(AUTTransition tr) {
-		outTransitions.add(tr);
+	public void setPowerConsumptionInMode(long _value, int _index) {
+		powerConsumptionPerTick[_index] = _value;
 	}
     
-	public int getNbInTransitions() {
-		return inTransitions.size();
-	}
-	
-	public int getNbOutTransitions() {
-		return outTransitions.size();
-	}
-	
-	public boolean hasTransitionTo(int destination) {
-		for(AUTTransition aut1 : outTransitions) {
-			if (aut1.destination == destination) {
-				return true;
-			}
+	public long computePowerConsumption() {
+		long pc = 0;
+		for (int i=0; i<nbOfModes; i++) {
+			pc += ticks[i]*powerConsumptionPerTick[i];
 		}
-		return false;
+		return pc;
 	}
-	
-	public AUTTransition returnRandomTransition() {
-		int size = outTransitions.size();
-		if (size == 0) {
-			return null;
-		}
-		
-		if (size == 1) {
-			return outTransitions.get(0);
-		}
-		
-		Random generator = new Random();
-		int choice = generator.nextInt(size);
-		return outTransitions.get(choice);
-		
-	}
-
 }

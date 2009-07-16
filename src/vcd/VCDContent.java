@@ -36,69 +36,107 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AUTState
- * Creation : 05/03/2008
- ** @version 1.0 05/03/2008
+ * Class VCDContent
+ * Creation: 13/07/2009
+ * @version 1.0 13/07/2009
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
- 
-package ui.graph;
+
+package vcd;
 
 import java.util.*;
+import java.text.*;
 
-public class AUTState  {
+import ui.*;
+
+public class VCDContent  {
+    private String timeScale = "1 ns";
+	private ArrayList<VCDVariable> variables;
+	private ArrayList<VCDTimeChange> changes;
     
-    public int id;
-    public ArrayList<AUTTransition> inTransitions; // Arriving to that state
-	public ArrayList<AUTTransition> outTransitions; // Departing from that state
-	public boolean met = false;
-    
-    public AUTState(int _id) {
-        id = _id;
-		inTransitions = new ArrayList<AUTTransition>();
-		outTransitions = new ArrayList<AUTTransition>();
+    public VCDContent() {
+       variables = new ArrayList<VCDVariable>();
+	   changes = new ArrayList<VCDTimeChange>();
+	   VCDVariable.reinitShortcut();
     }
 	
-	public void addInTransition(AUTTransition tr) {
-		inTransitions.add(tr);
+	public void addVariable(VCDVariable _variable) {
+		variables.add(_variable);
 	}
 	
-	public void addOutTransition(AUTTransition tr) {
-		outTransitions.add(tr);
-	}
-    
-	public int getNbInTransitions() {
-		return inTransitions.size();
+	public void addTimeChange(VCDTimeChange _change) {
+		changes.add(_change);
 	}
 	
-	public int getNbOutTransitions() {
-		return outTransitions.size();
-	}
-	
-	public boolean hasTransitionTo(int destination) {
-		for(AUTTransition aut1 : outTransitions) {
-			if (aut1.destination == destination) {
-				return true;
+	public VCDVariable getVariableByName(String _name) {
+		for(VCDVariable var: variables) {
+			if (var.getName().equals(_name)) {
+				return var;
 			}
 		}
-		return false;
+		return null;
 	}
 	
-	public AUTTransition returnRandomTransition() {
-		int size = outTransitions.size();
-		if (size == 0) {
-			return null;
-		}
+	public String toString() {
+		StringBuffer sb = new StringBuffer("");
 		
-		if (size == 1) {
-			return outTransitions.get(0);
-		}
-		
-		Random generator = new Random();
-		int choice = generator.nextInt(size);
-		return outTransitions.get(choice);
-		
-	}
+		// Header
+		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+		Date date = calendar.getTime();
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+		String formattedDate = formatter.format(date);
 
+		sb.append("$date " + formattedDate +  " $end\n");
+		sb.append("$version TTool VCD generator " + DefaultText.getFullVersion() + " $end\n");
+		sb.append("$timescale " + timeScale + "$end\n");
+		sb.append("$scope module Simulation $end\n");
+		
+		// Variables
+		for(VCDVariable v: variables) {
+			sb.append(v.decToString());
+		}
+		
+		// End definitions
+		sb.append("$upscope $end\n");
+		sb.append("$enddefinitions $end\n");
+		
+		// Time with value changes
+		for(VCDTimeChange tc: changes) {
+			sb.append(tc.toString());
+		}
+		
+		// All done
+		return sb.toString();
+	}
+	
+
+/*$var wire 8 # data $end
+$var wire 1 $ data_valid $end
+$var wire 1 % en $end
+$var wire 1 & rx_en $end
+$var wire 1 ' tx_en $end
+$var wire 1 ( empty $end
+$var wire 1 ) underrun $end
+$upscope $end
+$enddefinitions $end
+#0
+b10000001 #
+0$
+1%
+0&
+1'
+0(
+0)
+#2211
+0'
+#2296
+b0 #
+1$
+#2302
+0$
+#2303*/
+
+    
+  
 }

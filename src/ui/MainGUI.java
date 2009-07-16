@@ -492,6 +492,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_BISIMULATION_CADP].setEnabled(true);
 			actions[TGUIAction.ACT_GRAPH_MODIFICATION].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT].setEnabled(true);
+			actions[TGUIAction.ACT_VIEW_PM_SAVED_AUT].setEnabled(true);
 			actions[TGUIAction.ACT_SCREEN_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_TTOOL_WINDOW_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_DEADLOCK_SEEKER_SAVED_AUT].setEnabled(true);
@@ -674,21 +675,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			break;
 		case RGAUTDOT_OK:
 			actions[TGUIAction.ACT_VIEW_STAT_AUT].setEnabled(true);
+			actions[TGUIAction.ACT_VIEW_PM_AUT].setEnabled(true);
 			actions[TGUIAction.ACT_SAVE_AUT].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_RGAUTDOT].setEnabled(true);
 			break;
 		case RGAUTDOT_KO:
 			actions[TGUIAction.ACT_VIEW_STAT_AUT].setEnabled(false);
+			actions[TGUIAction.ACT_VIEW_PM_AUT].setEnabled(false);
 			actions[TGUIAction.ACT_SAVE_AUT].setEnabled(false);
 			actions[TGUIAction.ACT_VIEW_RGAUTDOT].setEnabled(false);
 			break;
 		case RGAUT_OK:
 			actions[TGUIAction.ACT_VIEW_STAT_AUT].setEnabled(true);
+			actions[TGUIAction.ACT_VIEW_PM_AUT].setEnabled(true);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(true);
 			actions[TGUIAction.ACT_DEADLOCK_SEEKER_AUT].setEnabled(true);
 			break;
 		case RGAUT_KO:
 			actions[TGUIAction.ACT_VIEW_STAT_AUT].setEnabled(false);
+			actions[TGUIAction.ACT_VIEW_PM_AUT].setEnabled(false);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
 			actions[TGUIAction.ACT_DEADLOCK_SEEKER_AUT].setEnabled(false);
 			break;
@@ -3201,15 +3206,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     	t.go();
     }
 	
-	 public void showPMAUT(String title, String data) {
-		 System.out.println("Power management analysis");
-		 /*JFrameStatistics jfs = new JFrameStatistics(title, data);
-        jfs.setIconImage(IconManager.img8);
-        jfs.setSize(600, 600);
-        GraphicLib.centerOnParent(jfs);
-        jfs.setVisible(true);*/
-    	//ThreadGUIElement t = new ThreadGUIElement(frame, 0, title, data, "Analyzing graph... Please wait");
-    	//t.go();
+	public void showPMAUT(String title, String data) {
+		System.out.println("Power management analysis");
+		JFramePowerManagementAnalysis jfpma = new JFramePowerManagementAnalysis(title, data);
+		jfpma.setIconImage(IconManager.img8);
+        jfpma.setSize(600, 600);
+        GraphicLib.centerOnParent(jfpma);
+        jfpma.setVisible(true);
     }
 	
 	public void NC() {

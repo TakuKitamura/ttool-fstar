@@ -66,5 +66,76 @@ public class AUTTransition  {
     public String toString() {
         return "(" + origin + " ," + transition + ", " + destination + ")";
     }
+	
+	public String getLabel() {
+		int index0 = transition.indexOf("(");
+		int index1 = transition.indexOf(")");
+		String s;
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			s = transition;
+		} else {
+			s = transition.substring(index0+1, index1);
+		}
+		
+		index0 = s.indexOf("<");
+		index1 = s.indexOf(">");
+		
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			//System.out.println("0 s=" + s);
+			return s;
+		}
+		//System.out.println("1 s=" + s);
+		return s.substring(0, index0);
+	}
+	
+	public int getNbOfIntParameters() {
+		int index0 = transition.indexOf("<");
+		int index1 = transition.indexOf(">");
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			return 0;
+		}
+		
+		String s = transition.substring(index0+1, index1);
+		String[] ss = s.split(",");
+		
+		int cpt = 0;
+		int a;
+		for(int i=0; i<ss.length; i++) {
+			//System.out.println("ss[" + i + "] =" + ss[i]);
+			try {
+				a = Integer.decode(ss[i].trim()).intValue();
+				//System.out.println(">" + ss[i] + "< This is an int!");
+				cpt ++;
+			} catch (Exception e) {
+			}
+		}
+		return cpt;
+	}
+	
+	public int getIntParameter(int _index) {
+		int index0 = transition.indexOf("<");
+		int index1 = transition.indexOf(">");
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			return -1;
+		}
+		
+		String s = transition.substring(index0+1, index1);
+		String[] ss = s.split(",");
+		
+		int cpt = 0;
+		int a;
+		for(int i=0; i<ss.length; i++) {
+			//System.out.println("gip ss[" + i + "] =" + ss[i]);
+			try {
+				a = Integer.decode(ss[i].trim()).intValue();
+				if (cpt == _index) {
+					return a;
+				}
+				cpt ++;
+			} catch (Exception e) {
+			}
+		}
+		return -1;
+	}
 
 }

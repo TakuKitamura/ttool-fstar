@@ -80,7 +80,7 @@ public class Main implements ActionListener {
         if (imageURL != null) {
             //System.out.println("hellu");
             img = (new ImageIcon(imageURL)).getImage();
-            splashFrame = JStartingWindow.splash(img, "Starting ttool");
+            splashFrame = JStartingWindow.splash(img, "Loading TTool's elements");
             //splashFrame.setLicenceMessage("An open-source toolkit from:");
             splashFrame.setMiddleMessage("version " + DefaultText.getVersion());
             //System.out.println("helly");

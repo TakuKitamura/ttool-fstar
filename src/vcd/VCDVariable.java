@@ -36,69 +36,55 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AUTState
- * Creation : 05/03/2008
- ** @version 1.0 05/03/2008
+ * Class VCDVariable
+ * Creation: 13/07/2009
+ * @version 1.0 13/07/2009
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
- 
-package ui.graph;
+
+package vcd;
 
 import java.util.*;
 
-public class AUTState  {
+public class VCDVariable  {
+    private String  name;
+	private int bitwidth;
+	private String type = "integer";
+	private char shortcut;
+	
+	private static int IDShortcut;
     
-    public int id;
-    public ArrayList<AUTTransition> inTransitions; // Arriving to that state
-	public ArrayList<AUTTransition> outTransitions; // Departing from that state
-	public boolean met = false;
-    
-    public AUTState(int _id) {
-        id = _id;
-		inTransitions = new ArrayList<AUTTransition>();
-		outTransitions = new ArrayList<AUTTransition>();
+    public VCDVariable(String _name) {
+       name = _name;
+	   shortcut = getShortcut();;
     }
 	
-	public void addInTransition(AUTTransition tr) {
-		inTransitions.add(tr);
+	public String getName() {
+		return name;
 	}
 	
-	public void addOutTransition(AUTTransition tr) {
-		outTransitions.add(tr);
-	}
-    
-	public int getNbInTransitions() {
-		return inTransitions.size();
+	public char getLocalShortcut() {
+		return shortcut;
 	}
 	
-	public int getNbOutTransitions() {
-		return outTransitions.size();
+	public void setBitwidth(int _bitwidth) {
+		bitwidth = _bitwidth;
 	}
 	
-	public boolean hasTransitionTo(int destination) {
-		for(AUTTransition aut1 : outTransitions) {
-			if (aut1.destination == destination) {
-				return true;
-			}
-		}
-		return false;
+	public String decToString() {
+		String s = "$var " + type + " "  + bitwidth + " " + shortcut + " " + name + " $end\n";
+		return s;
 	}
 	
-	public AUTTransition returnRandomTransition() {
-		int size = outTransitions.size();
-		if (size == 0) {
-			return null;
-		}
-		
-		if (size == 1) {
-			return outTransitions.get(0);
-		}
-		
-		Random generator = new Random();
-		int choice = generator.nextInt(size);
-		return outTransitions.get(choice);
-		
+	public static void  reinitShortcut() {
+		IDShortcut = 35;
 	}
-
+	
+	public static char getShortcut() {
+		int tmp = IDShortcut;
+		IDShortcut ++;
+		return (char)tmp;
+	}
+  
 }

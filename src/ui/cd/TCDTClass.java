@@ -62,7 +62,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
     public String oldValue;
     protected int textX = 5;
     protected int textY = 18;
-    protected boolean start = false;
+    protected boolean start = true;
     protected boolean observer = false;
     protected int startFontSize = 10;
     protected Graphics graphics;
@@ -115,7 +115,7 @@ public class TCDTClass extends TGCWithInternalComponent implements TClassInterfa
         editable = true;
         removable = true;
         
-        start = false;
+        start = true;
         
         // Name of the Tclass
         name = "Tclass";
