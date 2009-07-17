@@ -242,6 +242,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     private JFileChooser jfctgraph;
     private JFileChooser jfclot;
 	private JFileChooser jfctif;
+	private JFileChooser jfcmsc;
     
     //private int selectedAction = -1;
 	
@@ -290,6 +291,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         } else {
             jfctif = new JFileChooser();
         }
+		
+		if (ConfigurationTTool.FILEPath.length() > 0) {
+            jfcmsc = new JFileChooser(ConfigurationTTool.FILEPath);
+        } else {
+            jfcmsc = new JFileChooser();
+        }
         
         if (ConfigurationTTool.LIBPath.length() > 0) {
             jfclib = new JFileChooser(ConfigurationTTool.LIBPath);
@@ -327,6 +334,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		
 		TTIFFilter filtertif = new TTIFFilter();
         jfctif.setFileFilter(filtertif);
+		
+		MSCFilter filtermsc = new MSCFilter();
+        jfcmsc.setFileFilter(filtermsc);
         
         TLibFilter filterLib = new TLibFilter();
         jfclib.setFileFilter(filterLib);
@@ -1905,10 +1915,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public boolean openSD() {
 		//jfc.setApproveButtonText("Open");
-        int returnVal = jfctif.showOpenDialog(frame);
+        int returnVal = jfcmsc.showOpenDialog(frame);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            file = jfctif.getSelectedFile();
+            file = jfcmsc.getSelectedFile();
         }
         
         String s = null;
