@@ -41,6 +41,7 @@
 <SystemCCodeExecuteCommand data="/Users/ludovicapvrille/TTool/simulators/c++2/run.x -ovcd /Users/ludovicapvrille/TTool/simulators/c++2/vcddump.vcd" />
 <TMLCodeDirectory data="/Users/ludovicapvrille/TTool/tmlcode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
+<VCDPath data="/Users/ludovicapvrille/TTool/vcd" />
 <UPPAALCodeDirectory data="/Users/ludovicapvrille/TTool/uppaal/" />
 <UPPAALVerifierPath data="/Applications/uppaal-4.0.7-aca/verifyta" />
 <UPPAALVerifierHost data="localhost" />

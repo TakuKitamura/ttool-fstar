@@ -137,6 +137,7 @@ public class GTURTLEModeling {
 
 	private int nbRTLOTOS;
 	private int nbSuggestedDesign;
+	private int nbSuggestedAnalysis;
 	private int nbTPN;
 
 	private ValidationDataTree vdt;
@@ -231,6 +232,24 @@ public class GTURTLEModeling {
 			}
 		} catch (Exception e) {
 			System.out.println("Exception on TIF: " + e.getMessage());
+		}
+		return ret;
+	}
+	
+	public boolean openSD(String s) {
+		SDExchange sde = new SDExchange();
+		boolean ret = false;
+		
+		try {
+			ret = sde.loadFromXMLSD(s);
+			if (ret) {
+				//tm = tif.getTURTLEModeling();
+				//tmState = 0;
+				System.out.println("Got SD");
+				generateIOD(sde.getMSC());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception on SD: " + e.getMessage());
 		}
 		return ret;
 	}
@@ -4265,6 +4284,14 @@ public class GTURTLEModeling {
 		TURTLEModelingDrawer tmd = new TURTLEModelingDrawer(mgui);
 		tmd.setTURTLEModeling(tm);
 		tmd.draw(nbSuggestedDesign);
+		mgui.changeMade(null, -1);
+	}
+	
+	public void generateIOD(MSC _msc) {
+		MSCDrawer mscd = new MSCDrawer(mgui);
+		mscd.setMSC(_msc);
+		mscd.draw(nbSuggestedDesign);
+		nbSuggestedDesign ++;
 		mgui.changeMade(null, -1);
 	}
 	

@@ -53,6 +53,7 @@ TTOOL_MODELING = $(TTOOL_PATH)/modeling
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
 TTOOL_DOC = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
+TTOOL_VCD = $(TTOOL_PATH)/vcd
 TTOOL_WORD = $(TTOOL_PATH)/doc/word
 TTOOL_STD_RELEASE = $(TTOOL_PATH)/release/
 JTTOOL = $(TTOOL_PATH)/javacode
@@ -151,6 +152,9 @@ stdrelease:
 # Figure
 	mkdir -p $(TTOOL_TARGET)/figure
 	cp $(TTOOL_DOC)/README_figure $(TTOOL_TARGET)/figure
+# VCD
+	mkdir -p $(TTOOL_TARGET)/vcd
+	cp $(TTOOL_DOC)/README_vcd $(TTOOL_TARGET)/vcd
 # Basic doc
 	mkdir -p $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc

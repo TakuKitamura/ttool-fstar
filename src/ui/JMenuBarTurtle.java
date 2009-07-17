@@ -113,6 +113,11 @@ public	class JMenuBarTurtle extends JMenuBar	{
         menuItem.addMouseListener(mgui.mouseHandler);
 		
 		file.addSeparator();
+		
+		menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_SD]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+		
+		file.addSeparator();
         
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE_LOTOS]);
         menuItem.addMouseListener(mgui.mouseHandler);

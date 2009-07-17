@@ -480,6 +480,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_NEW].setEnabled(true);
 			actions[TGUIAction.ACT_OPEN].setEnabled(true);
 			actions[TGUIAction.ACT_OPEN_TIF].setEnabled(true);
+			actions[TGUIAction.ACT_OPEN_SD].setEnabled(true);
 			actions[TGUIAction.ACT_OPEN_LAST].setEnabled(true);
 			actions[TGUIAction.ACT_QUIT].setEnabled(true);
 			actions[TGUIAction.ACT_ABOUT].setEnabled(true);
@@ -1899,6 +1900,40 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			newTurtleModeling();
 		}
 		return gtm.openTIF(s);
+		
+	}
+	
+	public boolean openSD() {
+		//jfc.setApproveButtonText("Open");
+        int returnVal = jfctif.showOpenDialog(frame);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = jfctif.getSelectedFile();
+        }
+        
+        String s = null;
+        if(checkFileForOpen(file)) {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                int nb = fis.available();
+                
+                byte [] ba = new byte[nb];
+                fis.read(ba);
+                fis.close();
+                s = new String(ba);
+            } catch(Exception e) {
+                JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+		}
+		if (s == null) {
+			return false;
+		}
+		System.out.println("Open SD =" + s);
+		if (gtm == null) {
+			newTurtleModeling();
+		}
+		return gtm.openSD(s);
 		
 	}
     
@@ -5188,6 +5223,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             saveTIF();
         } else if (command.equals(actions[TGUIAction.ACT_OPEN_TIF].getActionCommand())) {
             openTIF();
+        } else if (command.equals(actions[TGUIAction.ACT_OPEN_SD].getActionCommand())) {
+            openSD();
         } else if (command.equals(actions[TGUIAction.ACT_SAVE_LOTOS].getActionCommand())) {
             saveLastLotos();
         } else if (command.equals(actions[TGUIAction.ACT_SAVE_DTA].getActionCommand())) {

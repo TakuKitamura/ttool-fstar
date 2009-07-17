@@ -68,6 +68,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_SAVE_AS = 31;
 	public static final int ACT_SAVE_TIF = 213;
 	public static final int ACT_OPEN_TIF = 214;
+	public static final int ACT_OPEN_SD = 268;
     public static final int ACT_QUIT = 3;
     
     public static final int ACT_SAVE_LOTOS = 64;
@@ -378,9 +379,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    
-    public static final int NB_ACTION = 268;
-
+    public static final int NB_ACTION = 269;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
