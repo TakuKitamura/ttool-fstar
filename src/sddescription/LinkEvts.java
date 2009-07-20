@@ -63,4 +63,30 @@ public class LinkEvts {
     public Evt getEvt2() {
         return evt2;
     }   
+	
+	public boolean areCompatible(Evt _evt1, Evt _evt2) {
+		int type1 = evt1.getType();
+		int type2 = evt2.getType();
+		
+		//System.out.println("Checking types: " + type1 + ", " + type2);
+		
+		boolean b = areCompatibleType(type1, type2);
+		if (b) {
+			return true;
+		}
+		
+		return areCompatibleType(type2, type1);
+	}
+
+	public boolean areCompatibleType(int type1, int type2) {
+		if ((type1 == Evt.SEND_SYNC) && (type2 == Evt.RECV_SYNC)) {
+			return true;
+		}
+		
+		if ((type1 == Evt.SEND_MSG) && (type2 == Evt.RECV_MSG)) {
+			return true;
+		}
+		
+		return false;
+	}
 }

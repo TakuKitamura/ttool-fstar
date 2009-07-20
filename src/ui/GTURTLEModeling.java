@@ -246,7 +246,7 @@ public class GTURTLEModeling {
 				//tm = tif.getTURTLEModeling();
 				//tmState = 0;
 				System.out.println("Got SD");
-				generateIOD(sde.getMSC());
+				generateIOD(sde.getHMSC(), sde.getMSC());
 			}
 		} catch (Exception e) {
 			System.out.println("Exception on SD: " + e.getMessage());
@@ -4287,10 +4287,11 @@ public class GTURTLEModeling {
 		mgui.changeMade(null, -1);
 	}
 	
-	public void generateIOD(MSC _msc) {
+	public void generateIOD(HMSC _hmsc, MSC _msc) {
 		MSCDrawer mscd = new MSCDrawer(mgui);
+		mscd.setHMSC(_hmsc);
 		mscd.setMSC(_msc);
-		mscd.draw(nbSuggestedDesign);
+		mscd.drawFromMSC(nbSuggestedDesign);
 		nbSuggestedDesign ++;
 		mgui.changeMade(null, -1);
 	}

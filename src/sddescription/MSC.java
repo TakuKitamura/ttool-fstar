@@ -96,6 +96,18 @@ public class MSC extends HMSCElement {
     public void addTimeConstraint(TimeConstraint tc) {
         timeconstraints.add(tc);
     }
+	
+	public Evt getEvtByID(int _id) {
+		Evt evt;
+		Iterator li = evts.listIterator();
+		while(li.hasNext()) {
+			evt = (Evt)(li.next());
+			if (evt.getID() == _id) {
+				return evt;
+			}
+		}
+		return null;
+	}
     
     public Evt hasExactlyOnePreviousEvt(Evt evt) {
         Evt evtret = null;

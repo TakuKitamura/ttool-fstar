@@ -55,12 +55,14 @@ import myutil.*;
 
 public class SDExchange {
 	private MSC msc;
+	private HMSC hmsc;
 	
 	private String XML_SD_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
 	private String XML_SD_TOP = "MSC";
 	private String XML_SD_INSTANCE = "INSTANCE";
 	private String XML_SD_EVENT = "EVENT";
-	private String XML_SD_EVENT_LINK = "EVENT_LINK";
+	private String XML_SD_EVENT_LINKS = "EVT_LINKS";
+	private String XML_SD_EVENT_LINK = "LINK";
 	private String XML_SD_NL = "\n";
 	
 	
@@ -72,22 +74,24 @@ public class SDExchange {
 		return msc;
 	}
 	
-	/*public String saveInXMLSD() {
-		if (tm == null) {
-			return "";
-		}
+	public HMSC getHMSC() {
+		return hmsc;
+	}
+	
+	
+	public void createHMSC(MSC _msc) {
+		HMSCNode startNode = new HMSCNode("start", HMSCNode.START);
+		hmsc = new HMSC("GeneratedHMSC", startNode);
+		startNode.addNextMSC(_msc);
+		HMSCNode stopNode = new HMSCNode("stop", HMSCNode.STOP);
+		_msc.setNextNode(stopNode);
 		
-		StringBuffer sb = new StringBuffer(XML_TIF_HEADER + XML_TIF_NL + XML_TIF_NL);
-		sb.append("<" + XML_TIF_TOP + ">" + XML_TIF_NL);
-		sb.append(saveClassesInXMLTIF());
-		sb.append(saveRelationsInXMLTIF());
-		sb.append("</" + XML_TIF_TOP + ">" + XML_TIF_NL);
-		return sb.toString();
-	}*/
+	}
 	
 	public boolean loadFromXMLSD(String xml) throws MalformedSDException{
 		DocumentBuilderFactory dbf;
 		DocumentBuilder db;
+		Element elt;
 		
 		try {
 			dbf = DocumentBuilderFactory.newInstance();
@@ -103,484 +107,256 @@ public class SDExchange {
 		
 		ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xml).getBytes());
 		int i;
-		msc = new MSC("msc");
+		String tmp;
+		msc = null;
 		
-		/*try {
+		try {
 			// building nodes from xml String
 			Document doc = db.parse(bais);
 			NodeList nl;
 			Node node;
 			
-			nl = doc.getElementsByTagName(XML_TIF_CLASS);
+			nl = doc.getElementsByTagName(XML_SD_TOP);
 			
 			if (nl == null) {
 				return false;
 			}
 			
+			elt = (Element)(nl.item(0));
+			tmp = elt.getAttribute("name");
+			if (tmp == null) {
+				msc = new MSC("msc");
+			} else {
+				System.out.println("Name of SD = " + tmp);
+				msc = new MSC(tmp);
+			}
+			
+			createHMSC(msc);
+			
 			for(i=0; i<nl.getLength(); i++) {
 				node = nl.item(i);
 				//System.out.println("Node = " + dnd);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					// create design, and get an index for it
-					loadTClass(node);
+					loadMSCNode(node, hmsc, msc);
 				}
 			}
 			
-			nl = doc.getElementsByTagName(XML_TIF_RELATION);
-			
-			for(i=0; i<nl.getLength(); i++) {
-				node = nl.item(i);
-				//System.out.println("Node = " + dnd);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					// create design, and get an index for it
-					loadRelation(node);
-				}
-			}
+			orderEvents(hmsc, msc);
+			linkEvents(hmsc, msc);
 			
 		} catch (IOException e) {
 			System.out.println("500 ");
-			throw new MalformedTIFException();
+			throw new MalformedSDException();
 		} catch (SAXException saxe) {
 			System.out.println("501 " + saxe.getMessage());
-			throw new MalformedTIFException();
-		}*/
+			throw new MalformedSDException();
+		}
+		return true;
+	}
+	
+	private boolean loadMSCNode(Node node1, HMSC _hmsc, MSC _msc) {
+		NodeList diagramNl = node1.getChildNodes();
+		Element elt;
+		Node node;
+		NodeList listData = null;
+		
+		String tmp;
+		int val;
+		int j;
+		int nbOfFaces = 1; // default value;
+		
+		int[] colors;
+		
+		Instance instance;
+		
+		try {
+			// Searching for instances
+			for(j=0; j<diagramNl.getLength(); j++) {
+				node = diagramNl.item(j);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element)node;
+					
+					// Data
+					if (elt.getTagName().compareTo(XML_SD_INSTANCE) == 0) {
+						tmp = elt.getAttribute("name");
+						if (tmp != null) {
+							instance = _hmsc.getInstance(tmp);
+							if (instance != null) {
+								System.out.println("Duplicate name for instance " + tmp + ": ignoring second instance");
+							} else {
+								instance = _hmsc.getCreateInstanceIfNecessary(tmp);
+								loadInstance(elt.getChildNodes(), _hmsc, _msc, instance);
+							}
+						} else {
+							System.out.println("Instance without a name: skipping");
+						}
+						//listData = elt.getElementsByTagName("WidgetData");
+					}
+					
+					if (elt.getTagName().compareTo(XML_SD_EVENT_LINKS) == 0) {
+						loadLinks(elt.getChildNodes(), _hmsc, _msc);
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Exception in SD " + e.getMessage());
+			return false;
+		}
+		
+		return true;
+		
+    }
+	
+	private boolean loadInstance(NodeList nl, HMSC _hmsc, MSC _msc, Instance _instance) {
+		try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String type, value, id;
+			Evt evt1;
+			boolean validType;
+			int stype = 0;
+			int sid;
+            
+            System.out.println("Loading instance " + _instance.getName());
+            //System.out.println(nl.toString());
+            
+            for(int i=0; i<nl.getLength(); i++) {
+                n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element) n1;
+					if (elt.getTagName().equals(XML_SD_EVENT)) {
+						System.out.println("Found one event in instance " + _instance.getName());
+						type = elt.getAttribute("type");
+						value = elt.getAttribute("value");
+						id = elt.getAttribute("id");
+						System.out.println("Evt type=" + type + " value=" + value + " id=" + id);
+						if ((type != null) && (value != null)) {
+							type = type.toUpperCase();
+							validType = false;
+							if (type.equals("SEND_SYNC")) {
+								validType = true;
+								stype = Evt.SEND_SYNC;
+							} else if (type.equals("RECV_SYNC")) {
+								validType = true;
+								stype = Evt.RECV_SYNC;
+							} else if (type.equals("VARIABLE_SET")) {
+								validType = true;
+								stype = Evt.VARIABLE_SET;
+							} 
+							if (validType) {
+								evt1 = new Evt(stype, value, _instance);
+								if (id != null) {
+									try {
+										sid = Integer.parseInt(id);
+										evt1.setID(sid);
+									} catch (NumberFormatException nfe) {
+									}
+								}
+								System.out.println("Adding evt type=" + type + " value=" + value + " id=" + id);
+								_msc.addEvt(evt1);
+							}
+						}
+					}
+				}
+			}
+    
+        } catch (Exception e) {
+            return false;
+        }
+		return true;
+	}
+	
+	private boolean loadLinks(NodeList nl, HMSC _hmsc, MSC _msc) {
+		try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            String id1, id2;
+			Evt evt1;
+			Evt evt2;
+			int sid1, sid2;
+			LinkEvts le;
+            
+            System.out.println("Loading links ");
+            //System.out.println(nl.toString());
+            
+            for(int i=0; i<nl.getLength(); i++) {
+                n1 = nl.item(i);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element) n1;
+					if (elt.getTagName().equals(XML_SD_EVENT_LINK)) {
+						id1 = elt.getAttribute("id1");
+						id2 = elt.getAttribute("id2");
+						System.out.println("Evt link id1=" + id1 + " id2=" + id2);
+						if ((id1 != null) && (id2 != null)) {
+							try {
+								sid1 = Integer.parseInt(id1);
+								sid2 = Integer.parseInt(id2);
+								evt1 = _msc.getEvtByID(sid1);
+								evt2 = _msc.getEvtByID(sid2);
+								if ((evt1 != null) && (evt2 != null)) {
+									le = new LinkEvts(evt1, evt2);
+									if (!le.areCompatible(evt1, evt2)) {
+										System.out.println("The two events are not compatible. Skipping");
+									} else {
+										_msc.addLinkEvts(le);
+										System.out.println("Adding linkEvts");
+									}
+								} else {
+									System.out.println("Error in xml specification: evts not found. Skipping");
+								}
+							} catch (Exception e) {
+							}
+							
+						}
+						
+					}
+				}
+			}
+    
+        } catch (Exception e) {
+            return false;
+        }
+		return true;
+	}
+	
+	public boolean orderEvents(HMSC _hmsc, MSC _msc) {
+		Evt previousEvt = null;
+		Evt evt;
+		Instance instance;
+		// For each instance, look for event sof that instance, and order them
+		ListIterator li2;
+		ListIterator li1 = _hmsc.getInstances().listIterator();
+		Order order;
+		
+		System.out.println("Ordering events");
+		while(li1.hasNext()) {
+			instance = (Instance)(li1.next());
+			if (instance != null) {
+				System.out.println("Ordering events of instance " + instance.getName());
+				previousEvt = null;
+				li2 = _msc.getEvts().listIterator();
+				while(li2.hasNext()) {
+					evt = (Evt)(li2.next());
+					if (evt.getInstance() == instance) {
+						if (previousEvt != null) {
+							order = new Order(previousEvt, evt);
+							_msc.addOrder(order);
+							System.out.println("New order between " + previousEvt.getID() + " and " + evt.getID());
+						}
+						previousEvt = evt;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean linkEvents(HMSC _hmsc, MSC _msc) {
 		return true;
 	}
 
-	/*public String saveClassesInXMLTIF() {
-		StringBuffer sb = new StringBuffer("");
-		for(int i=0; i<tm.classNb(); i++ ){
-			sb.append(saveClassInXMLTIF(tm.getTClassAtIndex(i)));
-		}
-		return sb.toString();
-	}
-	
-	public String saveClassInXMLTIF(TClass t) {
-		int i;
-		Param p;
-		Gate g;
-		StringBuffer sb = new StringBuffer("");
-		
-		sb.append("<" + XML_TIF_CLASS + ">" + XML_TIF_NL);
-		
-		sb.append("<name data=\"" + t.getName() + "\" />" + XML_TIF_NL);
-		sb.append("<active data=\"" + t.isActive() + "\" />" + XML_TIF_NL);
-		sb.append("<type data=\"" + t.getClass().getCanonicalName() + "\" />" + XML_TIF_NL);
-		
-		// Params
-		for(i=0; i<t.paramNb(); i++) {
-			p = (Param)(t.getParamList().get(i));
-			sb.append(saveParamInXMLTIF(p));
-		}
-		
-		// Gates
-		for(i=0; i<t.gateNb(); i++) {
-			g = (Gate)(t.getGateList().get(i));
-			sb.append(saveGateInXMLTIF(g));
-		}
-		
-		// Activity Diagram
-		sb.append(saveActivityDiagramInTIF(t.getActivityDiagram()));
-		
-		sb.append("</" + XML_TIF_CLASS + ">" + XML_TIF_NL);
-		return sb.toString();
-	}*/
-	
-	/*public void loadTClass(Node node1) throws MalformedTIFException{
-		NodeList diagramNl = node1.getChildNodes();
-		Element elt;
-		Node node;
-		
-		String name="", classname="";
-		String tmp;
-		boolean active = false;
-		String attname, attvalue, atttype, attaccess;
-		String gname, gtype, ginternal, gprotocoljava, glocalportjava, gdestportjava, gdesthostjava, glocalhostjava;
-		boolean gbinternal;
-		int gitype;
-		Param p;
-		Gate g;
-		
-		ArrayList<Param> params = new ArrayList<Param>();
-		ArrayList<Gate> gates = new ArrayList<Gate>();
-		
-		try {
-			// Gather all informations
-			for(int j=0; j<diagramNl.getLength(); j++) {
-				//System.out.println("Ndes: " + j);
-				node = diagramNl.item(j);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					elt = (Element)node;
-					if (elt.getTagName().compareTo("name") == 0) {
-						name = elt.getAttribute("data");
-					} else if (elt.getTagName().compareTo("active") == 0) { 
-						tmp = elt.getAttribute("data");
-						active = false;
-						if (tmp.compareTo("true") == 0) {
-							active = true;
-						} 
-					} else if (elt.getTagName().compareTo("type") == 0) { 
-						classname = elt.getAttribute("data");
-						
-					// Attributes	
-					} else if (elt.getTagName().compareTo("attribute") == 0) { 
-						attname = elt.getAttribute("name");
-						atttype = elt.getAttribute("type");
-						attvalue = elt.getAttribute("value");
-						attaccess = elt.getAttribute("access");
-						p = new Param(attname, atttype, attvalue);
-						p.setAccess(attaccess);
-						params.add(p);
-						
-					// Gates	
-					} else if (elt.getTagName().compareTo("gate") == 0) { 
-						gname = elt.getAttribute("name");
-						gtype = elt.getAttribute("type");
-						ginternal = elt.getAttribute("internal");
-						gprotocoljava = elt.getAttribute("protocoljava");
-						glocalportjava = elt.getAttribute("localportjava");
-						gdestportjava = elt.getAttribute("destportjava");
-						gdesthostjava = elt.getAttribute("desthostjava");
-						glocalhostjava = elt.getAttribute("localhostjava");
-						
-						if (ginternal.compareTo("true") == 0) {
-							gbinternal = true;
-						} else {
-							gbinternal = false;
-						}
-						
-						gitype = Integer.decode(gtype).intValue();
-						g = new Gate(gname, gitype, gbinternal);
-						g.setProtocolJava(Integer.decode(gprotocoljava).intValue());
-						g.setLocalPortJava(Integer.decode(glocalportjava).intValue());
-						g.setDestPortJava(Integer.decode(gdestportjava).intValue());
-						g.setDestHostJava(gdesthostjava);
-						g.setLocalHostJava(glocalhostjava);
-						gates.add(g);
-						
-					} 
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
-			throw new MalformedTIFException();
-		}
-		
-		// Create the tclass
-		//System.out.println("TClass name=" + name);
-		
-		// WARNING: must handle special TClasses
-		TClass t = new TClass(name, active);
-		ActivityDiagram ad = new ActivityDiagram();
-		t.setActivityDiagram(ad);
-		
-		for(Param pa: params) {
-			t.addParameter(pa);
-		}
-		for(Gate ga: gates) {
-			//System.out.println("adding gate:" + ga.getName());
-			t.addGate(ga);
-		}
-		
-		makeADComponents(t, node1);
-		
-		//t.printParams();
-		tm.addTClass(t);
-		
-	}*/
-	
-	/*public void makeADComponents(TClass t, Node node) throws MalformedTIFException {
-		NodeList diagramNl = node.getChildNodes();
-		Element elt;
-		
-		int i, j;
-		
-		ADComponent adc, tmp;
-		ADActionStateWithGate adag;
-		ADActionStateWithMultipleParam admp;
-		ADActionStateWithParam adpa;
-		ADChoice adch;
-		ADDelay addelay;
-		ADLatency adlatency;
-		ADParallel adp;
-		ADTimeInterval adti;
-		ADTLO adtlo;
-		
-		ArrayList<ADComponent> adcomponents = new ArrayList<ADComponent>();
-		ArrayList<String> ids = new ArrayList<String>();
-		
-		//System.out.println("Node1 = " + node);
-		ActivityDiagram ad = t.getActivityDiagram();
-		
-		try {
-			// Create all components
-			for(j=0; j<diagramNl.getLength(); j++) {
-				node = diagramNl.item(j);
-				//System.out.println("Node=" + node);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					elt = (Element)node;
-					if (elt.getTagName().compareTo("adcomponent") == 0) {
-						makeADComponent(t, adcomponents, ids, node);
-					}
-				}
-			}
-			
-			// Make links between components
-			//System.out.println("Making links");
-			for(i=0; i<ad.size(); i++) {
-				adc = ad.getADComponent(i);
-				//System.out.println("ADC=" + adc + " i=" + i + " size= " + ad.size());
-				for(j=0; j<adc.getNbNext(); j++) {
-					//System.out.println("nb next=" + adc.getNbNext() + " j=" + j);
-					tmp = findRealComponent(adc.getNext(j), adcomponents, ids);
-					if (tmp == null) {
-						throw new MalformedTIFException("NULL next: " + adc);
-					}
-					adc.setNextAtIndex(tmp, j);
-				}
-			}
-			
-		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
-			throw new MalformedTIFException();
-		}
-	}
-	
-	public ADComponent findRealComponent(ADComponent adc, ArrayList<ADComponent> adcomponents, ArrayList<String> ids) {
-		if (!(adc instanceof ADEmpty)) {
-			return null;
-		}
-		
-		ADEmpty ade = (ADEmpty)adc;
-		String id;
-		
-		for(int i=0; i<ids.size(); i++) {
-			id = ids.get(i);
-			if (id.equals(ade.id)) {
-				return adcomponents.get(i);
-			}
-		}
-		return null;
-	}
-	
-	public void makeADComponent(TClass t, ArrayList<ADComponent> adcomponents, ArrayList<String> ids, Node node) throws MalformedTIFException {
-		NodeList diagramNl = node.getChildNodes();
-		Element elt;
-		
-		ADComponent adc = null, tmp;
-		ADActionStateWithGate adag;
-		ADActionStateWithMultipleParam admp;
-		ADActionStateWithParam adpa;
-		ADChoice adch;
-		ADDelay addelay;
-		ADLatency adlatency;
-		ADParallel adp;
-		ADTimeInterval adti;
-		ADTLO adtlo;
-		ADEmpty ade;
-		
-		String type, id = null;
-		String nextid, gate, action, limit, param, guard, minvalue, maxvalue;
-		Gate g;
-		Param p;
-		
-		ActivityDiagram ad = t.getActivityDiagram();
-		
-		//System.out.println("Making adcomponents");
-		
-		try {
-			for(int j=0; j<diagramNl.getLength(); j++) {
-				node = diagramNl.item(j);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					elt = (Element)node;
-					if (elt.getTagName().compareTo("common") == 0) {
-						type = elt.getAttribute("type");
-						//System.out.println("Found a component type = " + type);
-						id = elt.getAttribute("id");
-						adc = newADComponent(type);
-						ad.add(adc);
-					} else if (elt.getTagName().compareTo("next") == 0) {
-						if (adc != null) {
-							ade = new ADEmpty();
-							ade.id = elt.getAttribute("id");
-							adc.addNext(ade);
-						} else {
-							throw new MalformedTIFException("NULL ADC");
-						}
-					} else if (elt.getTagName().compareTo("specific") == 0) {
-						if (adc == null) {
-							throw new MalformedTIFException("NULL ADC");
-						}
-						
-						if (adc instanceof ADActionStateWithGate) {
-							gate = elt.getAttribute("gate");
-							action = elt.getAttribute("actionvalue");
-							limit = elt.getAttribute("limitongate");
-							adag = (ADActionStateWithGate)adc;
-							adag.setActionValue(action);
-							adag.setLimitOnGate(limit);
-							g = t.getGateByName(gate);
-							if (g == null) {
-								throw new MalformedTIFException("NULL Gate: " + gate);
-							}
-							adag.setGate(g);
-							
-						} else if (adc instanceof ADActionStateWithMultipleParam) {
-							admp = (ADActionStateWithMultipleParam)adc;
-							action = elt.getAttribute("actionvalue");
-							admp.setActionValue(action);
-							
-						} else if (adc instanceof ADActionStateWithParam) {
-							action = elt.getAttribute("actionvalue");
-							param = elt.getAttribute("param");
-							adpa = (ADActionStateWithParam)adc;
-							p = t.getParamByName(param);
-							if (p == null) {
-								throw new MalformedTIFException("NULL Param: " + param);
-							}
-							adpa.setParam(p);
-							adpa.setActionValue(action);
-							
-						} else if (adc instanceof ADChoice) {
-							adch = (ADChoice)adc;
-							guard = elt.getAttribute("guard");
-							adch.addGuard(guard);
-							
-						} else if (adc instanceof ADDelay) {
-							addelay = (ADDelay)adc;
-							action = elt.getAttribute("actionvalue");
-							addelay.setValue(action);
-							
-						} else if (adc instanceof ADLatency) {
-							adlatency = (ADLatency)adc;
-							action = elt.getAttribute("actionvalue");
-							adlatency.setValue(action);
-							
-						} else if (adc instanceof ADParallel) {
-							adp = (ADParallel)adc;
-							action = elt.getAttribute("valuegate");
-							adp.setValueGate(action);
-							
-						} else if (adc instanceof ADStart) {
-							ad.setStartState((ADStart)adc);
-							
-						} else if (adc instanceof ADTimeInterval) {
-							adti = (ADTimeInterval)adc;
-							minvalue = elt.getAttribute("minvalue");
-							maxvalue = elt.getAttribute("maxvalue");
-							adti.setValue(minvalue, maxvalue);
-							
-						} else if (adc instanceof ADTLO) {
-							adtlo = (ADTLO)adc;
-							action = elt.getAttribute("action");
-							minvalue = elt.getAttribute("latency");
-							maxvalue = elt.getAttribute("delay");
-							gate = elt.getAttribute("gate");
-							
-							g = t.getGateByName(gate);
-							if (g == null) {
-								throw new MalformedTIFException("NULL Gate");
-							}
-							adtlo.setGate(g);
-							adtlo.setLatency(minvalue);
-							adtlo.setDelay(maxvalue);
-							adtlo.setAction(action);
-							
-						}
-					}
-					
-				}
-			}
-			
-		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
-			throw new MalformedTIFException();
-		}
-		
-		if ((adc != null) && (id != null)) {
-			adcomponents.add(adc);
-			ids.add(id);
-		}
-	}
-	
-	public ADComponent newADComponent(String type) {
-		//System.out.println("New ADComponent. Type= " + type);
-		try {
-			ClassLoader cl = ClassLoader.getSystemClassLoader();
-			//System.out.println("1");
-			Class c = cl.loadClass(type);
-			//System.out.println("2");
-			return (ADComponent)(c.newInstance());
-		} catch (Exception e) {
-			System.out.println("Could not create an instance if " + type + " because " + e.getMessage()); 
-		}
-		return null;
-	}
-	
-	
-	public void loadRelation(Node node1) throws MalformedTIFException {
-		NodeList diagramNl = node1.getChildNodes();
-		Element elt;
-		Node node;
-		
-		String t1name, t2name, navigation;
-		boolean nav;
-		int type;
-		String name1, name2;
-		Gate g1, g2;
-		TClass t1=null, t2=null;
-		Relation r=null;
-		
-		try {
-			// Gather all informations
-			for(int j=0; j<diagramNl.getLength(); j++) {
-				node = diagramNl.item(j);
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					elt = (Element)node;
-					if (elt.getTagName().compareTo("info") == 0) {
-						type = Integer.decode(elt.getAttribute("type")).intValue();
-						t1name = elt.getAttribute("t1name");  
-						t2name = elt.getAttribute("t2name");
-						navigation = elt.getAttribute("navigation");
-						
-						t1 = tm.getTClassWithName(t1name);
-						t2 = tm.getTClassWithName(t2name);
-						
-						if (t1 == null) {
-							throw new MalformedTIFException("NULL class: " + t1name);
-						}
-						
-						if (t2 == null) {
-							throw new MalformedTIFException("NULL class: " + t2name);
-						}
-						
-						nav = navigation.equals("true");
-						r = new Relation(type, t1, t2, nav);
-						tm.addRelation(r);
-						
-					} else if (elt.getTagName().compareTo("gates") == 0) {
-						name1 = elt.getAttribute("name1");  
-						name2 = elt.getAttribute("name2");
-						g1 = t1.getGateByName(name1);
-						g2 = t2.getGateByName(name2);
-						
-						if (g1 == null) {
-							throw new MalformedTIFException("NULL gate: " + name1);
-						}
-						
-						if (g2 == null) {
-							throw new MalformedTIFException("NULL gate: " + name2);
-						}
-						
-						r.addGates(g1, g2);
-					}
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
-			throw new MalformedTIFException();
-		}
-	}*/
 	
 	public static String transformString(String s) {
 		if (s != null) {

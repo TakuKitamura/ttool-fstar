@@ -53,12 +53,15 @@ import ui.sd.*;
 import ui.iod.*;
 
 public class MSCDrawer {
+	public final static int DEC = 50;
+	public final static int DEC_COMP = 50;
     private MainGUI mgui;
+	private HMSC hmsc;
     private MSC msc;
-    //private int indexDesign;
+    private int indexAnalysis;
     private AnalysisPanel ap;
-    //private Vector telements;
-    //private Vector gelements;
+    private Vector telements;
+    private Vector gelements;
     
     //private double radius;
     //private double centerX;
@@ -70,52 +73,149 @@ public class MSCDrawer {
     
     public void setMSC(MSC _msc) {
         msc = _msc;
-        //tm.simplify(true, false);
-        //tm.countJunctions();
+    }
+	
+	public void setHMSC(HMSC _hmsc) {
+        hmsc = _hmsc;
     }
     
-    public boolean draw(int analysisNb) {
-        /*telements = new Vector();
+    public boolean drawFromMSC(int _analysisNb) {
+        telements = new Vector();
         gelements = new Vector();
         try {
-            makeDrawable();
+            //makeDrawable();
             //System.out.println("design");
-            addDesign(designNb);
+            addAnalysis(_analysisNb);
             //System.out.println("classes");
-            drawTClasses();
+            drawBasicHMSC();
+			
+			makeMSC(hmsc, msc);
             //System.out.println("ad");
-            drawActivityDiagrams();
+            //drawActivityDiagrams();
             //System.out.println("relations");
-            drawRelations();
+            //drawRelations();
             //System.out.println("all done");
-        } catch (MalformedTURTLEModelingException mtm) {
-        	System.out.println(mtm.getMessage());
+        } catch (MalformedSDException msde) {
+        	System.out.println(msde.getMessage());
             return false;
-        }*/
+        }
         
         return true;
     }
     
-    /*private void addDesign(int designNb) throws MalformedTURTLEModelingException {
-        indexDesign = mgui.createDesign("Generated Design " + designNb);
+    private void addAnalysis(int _analysisNb) throws MalformedSDException {
+        indexAnalysis = mgui.createAnalysis("Analysis " + _analysisNb);
         //System.out.println("indexDesign=" + indexDesign);
-        if (indexDesign < 0) {
-            throw new MalformedTURTLEModelingException("bad index");
+        if (indexAnalysis < 0) {
+            throw new MalformedSDException("bad index");
         }
         try {
-            dp = (DesignPanel)(mgui.tabs.elementAt(indexDesign));
+            ap = (AnalysisPanel)(mgui.tabs.elementAt(indexAnalysis));
         } catch (Exception e) {
-            throw new MalformedTURTLEModelingException("design panel not found");
+            throw new MalformedSDException("Analysis panel not found");
         }
         
-        dp.tcdp.setMinX(10);
-        dp.tcdp.setMaxX(1900);
-        dp.tcdp.setMinY(10);
-        dp.tcdp.setMaxY(900);
-        //dp.tcdp.updateSize();
+        ap.iodp.setMinX(10);
+        ap.iodp.setMaxX(1900);
+        ap.iodp.setMinY(10);
+        ap.iodp.setMaxY(900);
     }
+	
+	private void drawBasicHMSC() throws MalformedSDException {
+		// Creating basicHMSC : one start node + reference to SD + stop node
+		// Creating tclass
+		int myX, myY;
+		
+		myX = 400;
+		myY = 100;
+        TGComponent tgc1 = TGComponentManager.addComponent(myX, myY, TGComponentManager.IOD_START_STATE, ap.iodp);
+		myY += DEC;
+        TGComponent tgc2 = TGComponentManager.addComponent(myX, myY, TGComponentManager.IOD_REF_SD, ap.iodp);
+		tgc2.setValue(msc.getName());
+		myY += DEC;
+		TGComponent tgc3 = TGComponentManager.addComponent(myX, myY, TGComponentManager.IOD_STOP_STATE, ap.iodp);
+		
+		ap.iodp.addBuiltComponent(tgc1);
+		ap.iodp.addBuiltComponent(tgc2);
+		ap.iodp.addBuiltComponent(tgc3);
+		
+		// Links between tgc1, tgc2, tgc3
+		connectHMSC(tgc1, tgc2, ap.iodp);
+		connectHMSC(tgc2, tgc3, ap.iodp);
+	}
+	
+	public TGConnector connectHMSC(TGComponent _tgc1, TGComponent _tgc2, InteractionOverviewDiagramPanel _iodp) throws MalformedSDException {
+		// Connect both points
+		TGConnectingPoint p1, p2;
+		
+		p1 = _tgc1.findFirstFreeTGConnectingPoint(true, false);
+		p2 = _tgc2.findFirstFreeTGConnectingPoint(false, true);
+		
+		if ((p1 == null) || (p2 == null)) {
+			throw new MalformedSDException("Could not find free connecting points");
+	    }
+        p1.setFree(false);
+        p2.setFree(false);
+        
+        TGConnector tgco = TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_INTERACTION, _iodp, p1, p2, new Vector());
+        ap.iodp.addBuiltComponent(tgco);
+        
+        return tgco;
+	}
+	
+	// Make the SD
+	public void makeMSC(HMSC _hmsc, MSC _msc) throws MalformedSDException {
+		SequenceDiagramPanel sdp;
+		ListIterator iterator;
+		Instance instance;
+		int myX = 50;
+		int myY = 40;
+		TGComponent tgc;
+		//SDInstance sdi;
+		
+		// Creates the panel
+		if (!ap.addSequenceDiagram(_msc.getName())) {
+			throw new MalformedSDException("Could not create the SD named " + _msc.getName());
+		}
+		
+		try {
+			sdp = (SequenceDiagramPanel)(ap.panelAt(1));
+		} catch (Exception e) {
+			throw new MalformedSDException("Could not get the SD named " + _msc.getName());
+		}
+		
+		// Put instances
+		iterator = _hmsc.getInstances().listIterator();
+		while(iterator.hasNext()) {
+			instance = (Instance)(iterator.next());
+			tgc = TGComponentManager.addComponent(myX, myY, TGComponentManager.SD_INSTANCE, sdp);
+			tgc.setValue(instance.getName());
+			sdp.addBuiltComponent(tgc);
+			telements.add(instance);
+			gelements.add(tgc);
+			myX += (4 * DEC);
+		}
+		
+		// Put events on instances -> sending, receving are ignored for the moment
+		ListIterator li2;
+		ListIterator li1 = _hmsc.getInstances().listIterator();
+		Order order;
+		
+		
+		/*while(li1.hasNext()) {
+			instance = (Instance)(li1.next());
+			if (instance != null) {
+				li2 = _msc.getOrders();
+				while(li2.hasNext()) {
+					order = (Order)(li2.next());
+					
+				}
+			}
+		}*/
+		
+	}
     
-    private void drawTClasses() throws MalformedTURTLEModelingException {
+    /*private void drawTClasses() throws MalformedSDException {
         TClass t;
         int total = tm.classNb();
         radius = 200 + 30 * total;

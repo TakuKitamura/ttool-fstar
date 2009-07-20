@@ -75,6 +75,7 @@ public class Evt {
     private String actionId;
     private Instance instance;
     public int y; /* used for graphical evts */
+	private int id; /* used for loading MSCs only */
 	private Evt relatedEvt;
     
     public Evt(int _type, String _actionId, Instance _instance) {
@@ -82,6 +83,14 @@ public class Evt {
         actionId = _actionId;
         instance = _instance;
     }
+	
+	public void setID(int _id) {
+		id = _id;
+	}
+	
+	public int getID() {
+		return id;
+	}
 	
 	public void setRelatedEvt(Evt _relatedEvt) {
 		relatedEvt = _relatedEvt;
