@@ -332,12 +332,23 @@ public class MappedSystemCTask {
 				else
 					action = "_endLastTransaction+=myrand(" + delay.getMinDelay() + "," + delay.getMaxDelay() + ")";
 			}
-			cmdName= "_action" + currElem.getID();
+			//cmdName= "_action" + currElem.getID();
+			String elemName=currElem.getName(), idString;
+			if (elemName.charAt(0)=='#'){
+				int pos=elemName.indexOf('\\');
+				idString=elemName.substring(1,pos);
+				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				cmdName="_" + elemName.substring(pos+1) + idString;
+			}else{
+				cmdName= "_action" + currElem.getID();
+				idString=String.valueOf(currElem.getID());
+			}
 			if (nextCommandCont==null){
 				//System.out.println("nextCommandCont==null in ActionState "+ action +CR);
 				hcode+="TMLActionCommand " + cmdName + SCCR;
 				MergedCmdStr nextCommandCollection = new MergedCmdStr("", cmdName);
-				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+				//initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+				initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
 				String MKResult = makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCollection,null);
 				if(nextCommandCollection.num==0){
 					nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + MKResult + "));\n";
@@ -350,7 +361,8 @@ public class MappedSystemCTask {
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 			}else{
 				//System.out.println("nextCommandCont!=null in ActionState "+ action +CR);
-				idsMergedCmds += "_commandHash[" + currElem.getID() + "]=&" + nextCommandCont.srcCmd + SCCR;
+				//idsMergedCmds += "_commandHash[" + currElem.getID() + "]=&" + nextCommandCont.srcCmd + SCCR;
+				idsMergedCmds += "_commandHash[" + idString + "]=&" + nextCommandCont.srcCmd + SCCR;
 				nextCommandCont.funcs += "#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
@@ -398,7 +410,8 @@ public class MappedSystemCTask {
 			//if (fl.getIncrement()==null) System.out.println("No action in loop inc!!!!\n"); else System.out.println(fl.getIncrement());
 			initAction.setAction(fl.getInit());
 			//cmdName= "_action" + initAction.getID();
-			TMLActionState incAction=new TMLActionState("lpIncAc",null);
+			//TMLActionState incAction=new TMLActionState("lpIncAc",null);
+			TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
 			incAction.setAction(fl.getIncrement());
 			TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
 			lpChoice.addGuard("[ " + fl.getCondition() + " ]");
@@ -410,7 +423,8 @@ public class MappedSystemCTask {
 			//makeCommands(incAction, false, "&_choice" + lpChoice.getID(), null, null, null);
 			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, null, retElement);
 			makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
-			makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, retElement);
+			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, retElement);
+			makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
 			return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);
 			
 			/*cmdName="_choice" + currElem.getID();
