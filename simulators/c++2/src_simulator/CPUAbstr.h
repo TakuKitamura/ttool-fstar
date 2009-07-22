@@ -37,35 +37,36 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef CPUAbstrH
+#define CPUAbstrH
+#include <CPU.h>
+class CPUAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+      	\param iTask Pointer to CPU object which shall be encapsulated
+    	*/
+	CPUAbstr(CPU* iCPU):_cpu(iCPU){
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
-protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	~CPUAbstr(){
+	}
+	///Returns the name of the CPU
+	/**
+	\return Name of the CPU
+	*/
+	inline std::string getName() const{
+		return _cpu->toString();
+	}
+	///Returns the unique ID of the CPU
+	/**
+      	\return Unique ID
+    	*/ 
+	inline unsigned int getID() const{
+		return _cpu->getID();
+	}
+private:
+	CPU* _cpu;
 };
 #endif
-

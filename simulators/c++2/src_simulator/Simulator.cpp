@@ -998,7 +998,7 @@ bool Simulator::runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans){
 }
 
 bool Simulator::runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans){
-	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
+	ListenerSubject <TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
@@ -1010,8 +1010,8 @@ bool Simulator::runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTra
 }
 
 bool Simulator::runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans){
-	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iTask);
-	RunTillTransOnDevice aListener(_simComp, aSubject);
+	ListenerSubject<TaskListener>* aSubject= static_cast<ListenerSubject<TaskListener>* > (iTask);
+	RunTillTransOnTask aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
@@ -1174,9 +1174,11 @@ void Simulator::writeSimState(std::ostream& ioMessage){
 	if (_busy){
 		ioMessage << SIM_BUSY << TAG_STATUSc;
 	}else{
-		if (_simTerm)
+		if (_simTerm){
 			ioMessage << SIM_TERM << TAG_STATUSc << TAG_REASONo << MSG_SIMENDED << TAG_REASONc;
-		else
-			ioMessage << SIM_READY << TAG_STATUSc << TAG_REASONo << _simComp->getStopReason() << TAG_REASONc;
+		}else{
+			ioMessage << SIM_READY << TAG_STATUSc;
+			if (_simComp->getStopReason()!="") ioMessage << TAG_REASONo << _simComp->getStopReason() << TAG_REASONc;
+		}
 	}
 }

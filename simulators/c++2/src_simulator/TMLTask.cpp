@@ -119,7 +119,8 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+	//FOR_EACH_TASKLISTENER (*i)->transExecuted(iTrans);
+	NOTIFY_TASK_TRANS_EXECUTED(iTrans);
 	if(iTrans->getChannel()==0){
 		_noCPUTransactions++;
 		_CPUContentionDelay+=iTrans->getStartTime()-iTrans->getRunnableTime();

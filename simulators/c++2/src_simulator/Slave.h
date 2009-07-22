@@ -49,7 +49,7 @@ class Master;
 class TMLTransaction;
 
 ///Base class for Bus slaves
-class Slave: public ListenerSubject<TransactionListener> {
+class Slave: public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
 	Slave(unsigned int iID, std::string iName):_name(iName), _ID(iID) {}
@@ -68,7 +68,8 @@ public:
 	std::string toString() {return _name;}
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual void addTransaction(TMLTransaction* iTrans){
-		FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+		//FOR_EACH_TRANSLISTENER (static_cast<TransactionListener*>(*i))->transExecuted(iTrans);
+		NOTIFY_TRANS_EXECUTED(iTrans);
 	}
 	///Returns the unique ID of the Slave
 	/**

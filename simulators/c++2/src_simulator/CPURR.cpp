@@ -70,7 +70,7 @@ void CPURR::schedule(){
 		calcStartTimeLength();
 		if (_taskChanged) _taskStartTime = _nextTransaction->getStartTime() +  _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
 		if (_busNextTransaction==0 && _nextTransaction->getEndTime() > _taskStartTime + _timeQuantum) truncateNextTransAt(_taskStartTime + _timeQuantum);
-		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
+		//FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
 	}
 }
 

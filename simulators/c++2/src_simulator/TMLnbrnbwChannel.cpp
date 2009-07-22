@@ -55,12 +55,14 @@ void TMLnbrnbwChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLnbrnbwChannel::write(){
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
 	_writeTrans=0;
 }
 
 bool TMLnbrnbwChannel::read(){
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+	NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 	_readTrans=0;
 	return true;
 }

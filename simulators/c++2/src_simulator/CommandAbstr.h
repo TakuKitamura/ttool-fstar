@@ -37,35 +37,52 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef CommandAbstrH
+#define CommandAbstrH
+#include <TMLCommand.h>
+
+class CommandAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+      	\param iCmd Pointer to Command object which shall be encapsulated
+    	*/
+	CommandAbstr(TMLCommand* iCmd):_cmd(iCmd){
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
+	~CommandAbstr(){
+	}
+	///Returns a short string representation of the command type
+	/**
+	\return Short string representation of command type
+	*/
+	inline std::string getCommandStr() const{
+		return _cmd->getCommandStr();
+	}
+	///Returns the unique ID of the command
+	/**
+      	\return Unique ID
+    	*/ 
+	inline unsigned int getID() const{
+		return _cmd->getID();
+	}
+	///Returns the progress of the command
+	/**
+	\return Progress of the command
+	*/
+	inline TMLLength getProgress() const{
+		return _cmd->getProgress();
+	}
+	///Returns the length of the command
+	/**
+	\return Length of the command
+	*/
+	inline TMLLength getLength() const{
+		//_cmd->getLength();
+		return 0;
+	}
 protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	TMLCommand* _cmd;
 };
 #endif
-

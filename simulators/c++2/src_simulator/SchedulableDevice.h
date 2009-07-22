@@ -51,7 +51,7 @@ class TransactionListener;
 class TransactionListener;
 
 ///Base class for devices which perform a scheduling
-class SchedulableDevice: public Serializable, public ListenerSubject<TransactionListener>{
+class SchedulableDevice: public Serializable, public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
 	/**

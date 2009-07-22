@@ -37,35 +37,59 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef ChnanelAbstrH
+#define ChnanelAbstrH
+#include <TMLChannel.h>
+
+class ChannelAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+      	\param iTask Pointer to CPU object which shall be encapsulated
+    	*/
+	ChannelAbstr(TMLChannel* iChannel):_channel(iChannel){
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
-protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	~ChannelAbstr(){
+	}
+	///Returns the name of the channel
+	/**
+	\return Name of the channel
+	*/
+	inline std::string getName() const{
+		return _channel->toString();
+	}
+	///Returns the unique ID of the device
+	/**
+      	\return Unique ID
+    	*/ 
+	inline unsigned int getID() const{
+		return _channel->getID();
+	}
+	///Returns a flag indicating if a channel overflow has been encoutered
+	/**
+	\return Channel overflow flag
+	*/
+	inline bool getOverflow(){
+		return _channel->getOverflow();	
+	}
+	///Returns a flag indicating if a channel underflow has been encoutered
+	/**
+	\return Channel underflow flag
+	*/
+	inline bool getUnderflow(){
+		return _channel->getUnderflow();
+	}
+	///Returns the number of samples stored in the channel
+	/**
+	\return Content of the channel
+	*/
+	inline TMLLength getContent(){
+		return _channel->getContent();
+	}
+private:
+	TMLChannel* _channel;
 };
 #endif
 

@@ -47,6 +47,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <TMLTask.h>
+#define COND_SOURCE_FILE_NAME "newlib.c"
+#define COND_OBJ_FILE_NAME "newlib.o"
 
 unsigned int CondBreakpoint::_freeID=0;
 bool Breakpoint::_enabled=true;
@@ -96,10 +98,10 @@ void Breakpoint::setEnabled(bool iEnabled){
 
 
 //************************************************************************
-CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask):_simComp(iSimComp), _condText(iCond), _condFunc(0), _dlHandle(0),  _task(iTask){
+CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask):_simComp(iSimComp), _condText(iCond), _condFunc(0), _dlHandle(0),  _task(iTask), _cSourceFileCreated(false), _objectFileCreated(false), _libFileCreated(false){
 	_ID=_freeID++;
 	FILE* in;
-	std::ofstream myfile ("newlib.c");
+	std::ofstream myfile (COND_SOURCE_FILE_NAME);
 	char aExeName[256];
 	int len = getexename(aExeName, sizeof(aExeName));
 	if (len==-1) return;
@@ -107,6 +109,7 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 	//strcat(aExeName, "/src_simulator");
 	std::cout << "ExeName: " << aExeName << std::endl;
 	if (myfile.is_open()){
+		_cSourceFileCreated=true;
 		std::ostringstream aCmd;
 		myfile << "#include <" << iTask->toString() << ".h>\n";
 		for(VariableLookUpTableName::const_iterator i=iTask->getVariableIteratorName(false); i !=iTask->getVariableIteratorName(true); ++i){ 
@@ -118,21 +121,23 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 		myfile << "    return (" << iCond << ");\n";
 		myfile << "}\n";
 		myfile.close();
-		aCmd << "g++ -c -fPIC -Wall newlib.c -I" << aExeName << " -I" << aExeName << "/src_simulator"; 
+		aCmd << "g++ -c -fPIC -Wall " << COND_SOURCE_FILE_NAME << " -I" << aExeName << " -I" << aExeName << "/src_simulator"; 
 		//in = popen("g++ -c -fPIC -Wall newlib.c -I. -I./src_simulator", "r");
 		in = popen(aCmd.str().c_str(), "r");
 		if (pclose(in)!=0){
 			std::cout << "Compiler error!\n";
        			return;
 		}
+		_objectFileCreated=true;
 		aCmd.str("");	
-		aCmd << "g++ -shared -Wl,-soname," << "lib" << _ID  << ".so.1" << " -o " << "lib" << _ID << ".so.1.0.1" << " newlib.o";
+		aCmd << "g++ -shared -Wl,-soname," << "lib" << _ID  << ".so.1" << " -o " << "lib" << _ID << ".so.1.0.1 " << COND_OBJ_FILE_NAME;
 		//in = popen("g++ -shared -Wl,-soname,l.so.1 -o l.so.1.0.1 newlib.o", "r");
 		in = popen(aCmd.str().c_str(), "r");
 		if (pclose(in)!=0){
 			std::cout << "Compiler error!\n";
 			return;
 		}
+		_libFileCreated=true;
 	}else{
 		std::cout << "Error when creating C condition source file.\n";
     		return;
@@ -181,6 +186,13 @@ bool CondBreakpoint::conditionValid() const{
 CondBreakpoint::~CondBreakpoint(){
 	TMLCommand::removeGlobalListener(this);
 	if (_dlHandle!=0) dlclose(_dlHandle);
+	if (_cSourceFileCreated) remove(COND_SOURCE_FILE_NAME);
+	if (_objectFileCreated) remove(COND_OBJ_FILE_NAME);
+	if (_libFileCreated){
+		std::ostringstream aFileName;
+		aFileName << "lib" << _ID << ".so.1.0.1";
+		remove(aFileName.str().c_str());
+	}
 }
 
 
@@ -256,7 +268,7 @@ void RunXTimeUnits::setEndTime(TMLTime iEndTime){
 
 
 //************************************************************************
-RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject <TransactionListener> * iSubject):_simComp(iSimComp), _subject(iSubject) {
 	_subject->registerListener(this);
 }
 RunTillTransOnDevice::~RunTillTransOnDevice(){
@@ -267,4 +279,36 @@ bool RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans){
 	//_simComp->setStopFlag(true);
 	_simComp->setStopFlag(true, MSG_TRANSONDEVICE);
 	return true;
+}
+
+
+//************************************************************************
+RunTillTransOnTask::RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+	_subject->registerListener(this);
+}
+
+RunTillTransOnTask::~RunTillTransOnTask(){
+	_subject->removeListener(this);
+}
+
+bool RunTillTransOnTask::transExecuted(TMLTransaction* iTrans){
+	//_simComp->setStopFlag(true);
+	_simComp->setStopFlag(true, MSG_TRANSONDEVICE);
+	return true;
+}
+
+
+//************************************************************************
+ConstraintBlock::ConstraintBlock(SimComponents* iSimComp):_simComp(iSimComp){
+}
+
+ConstraintBlock::~ConstraintBlock(){
+}
+	
+bool ConstraintBlock::transExecuted(TMLTransaction* iTrans){
+		if (constraintFunc(TransactionAbstr(iTrans), CommandAbstr(iTrans->getCommand()), TaskAbstr(iTrans->getCommand()->getTask()), CPUAbstr(iTrans->getCommand()->getTask()->getCPU()),  ChannelAbstr(iTrans->getChannel()))){
+			_simComp->setStopFlag(true, MSG_CONSTRAINTBLOCK);
+			return true;
+		}
+		return false;
 }

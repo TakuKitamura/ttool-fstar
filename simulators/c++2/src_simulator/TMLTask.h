@@ -48,7 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Comment.h>
 #include <MemPool.h>
 #include <ListenerSubject.h>
-#include <TransactionListener.h>
+#include <TaskListener.h>
 
 class TMLCommand;
 class CPU;
@@ -61,7 +61,7 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject<TransactionListener>{
+class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject <TaskListener>{
 public:	
 	///Constructor
     	/**

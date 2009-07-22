@@ -60,7 +60,7 @@ void CPUPBL::schedule(){
 	}
 	if (_nextTransaction!=0){
 		calcStartTimeLength();
-		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
+		//FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
 	}
 }
 

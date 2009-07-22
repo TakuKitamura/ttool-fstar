@@ -37,35 +37,47 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef TaskAbstrH
+#define TaskAbstrH
+#include <TMLTask.h>
+
+class TaskAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+      	\param iTask Pointer to Task object which shall be encapsulated
+    	*/
+	TaskAbstr(TMLTask* iTask):_task(iTask) {
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
-protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	~TaskAbstr(){
+	}
+	///Returns the priority of the task
+	/**
+      	\return Priority
+    	*/
+	inline unsigned int getPriority() const{
+		return _task->getPriority();
+	}
+
+	///Returns the name of the task
+	/**
+	\return Name of the task
+	*/
+	inline std::string getName() const{
+		return _task->toString();
+	}
+	///Returns the unique ID of the task
+	/**
+      	\return Unique ID
+    	*/ 
+	inline unsigned int getID() const{
+		return _task->getID();
+	}
+	//getExecTime()
+	//getAvContDelay()
+private:
+	TMLTask* _task;
 };
 #endif
-

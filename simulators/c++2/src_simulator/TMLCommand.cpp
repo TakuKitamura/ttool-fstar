@@ -72,7 +72,8 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 		//std::cout << "COMMAND FINISHED!!n";
-		FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+		//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+		NOTIFY_CMD_FINISHED(this);
 		_progress=0;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
@@ -94,10 +95,12 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			//_simStopped=false;
 			if (_progress==0)
 				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandEntered(this);
-				FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
+				//FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
+				NOTIFY_CMD_ENTERED(this);
 			else
 				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandExecuted(this);
-				FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
+				//FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
+				NOTIFY_CMD_EXECUTED(this);
 			//std::cout << "Prepare next transaction" << std::endl;
 			//if (_simStopped){
 			//if (_simComp->getStopFlag()){

@@ -51,7 +51,7 @@ void TMLActionCommand::execute(){
 
 TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	if (_simComp->getStopFlag()){
-		std::cout << "aSimStopped=true " << std::endl;
+		//std::cout << "aSimStopped=true " << std::endl;
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
@@ -59,7 +59,8 @@ TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	//std::cout << "Action func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	(_task->*_actionFunc)();
 	_task->setCurrCommand(aNextCommand);
-	FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+	//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+	NOTIFY_CMD_FINISHED(this);
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }

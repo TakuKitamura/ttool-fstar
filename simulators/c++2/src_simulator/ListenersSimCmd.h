@@ -44,6 +44,12 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 #include <CommandListener.h>
 #include <ListenerSubject.h>
+#include <TransactionAbstr.h>
+#include <CommandAbstr.h>
+#include <TaskAbstr.h>
+#include <CPUAbstr.h>
+#include <ChannelAbstr.h>
+
 #define MSG_RUNXTRANSACTIONS "Transactions executed"
 #define MSG_BREAKPOINT "Breakpoint reached"
 #define MSG_CONDBREAKPOINT "Conditional breakpoint reached"
@@ -51,6 +57,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define MSG_RUNXCOMMANDS "Commands executed"
 #define MSG_RUNXTIMEUNITS "Time units elapsed"
 #define MSG_TRANSONDEVICE "Transaction on device encountered"
+#define MSG_CONSTRAINTBLOCK "Constraint not fulfilled"
 
 
 class SimComponents;
@@ -84,7 +91,7 @@ protected:
 
 //************************************************************************
 ///Listener establishing a breakpoint
-class Breakpoint: public CommandListener, public TransactionListener{
+class Breakpoint: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -107,7 +114,7 @@ protected:
 
 //************************************************************************
 ///Breakpoint based on a condition
-class CondBreakpoint: public CommandListener, public TransactionListener{
+class CondBreakpoint: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -146,12 +153,18 @@ protected:
 	TMLTask* _task;
 	///Keeps track of the IDs already in use
 	static unsigned int _freeID;
+	///Flag indicating that the C source file has been created
+	bool _cSourceFileCreated;
+	///Flag indicating that the object file has been created
+	bool _objectFileCreated;
+	///Flag indicating that the library file has been created
+	bool _libFileCreated;
 };
 
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a random choice command is encountered
-class RunTillNextRandomChoice: public CommandListener, public TransactionListener{
+class RunTillNextRandomChoice: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -174,7 +187,7 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation after a given number of commands
-class RunXCommands: public CommandListener, public TransactionListener{
+class RunXCommands: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -245,6 +258,38 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Device to listen on
-	ListenerSubject<TransactionListener>* _subject;
+	ListenerSubject <TransactionListener> * _subject;
+};
+
+
+//************************************************************************
+///Listener which stops the simulation as soon as a given task executes a transaction
+class RunTillTransOnTask: public TaskListener{
+public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iSubject Task to listen on
+	*/
+	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
+	///Destructor
+	virtual ~RunTillTransOnTask();
+	bool transExecuted(TMLTransaction* iTrans);
+protected:
+	///Pointer to a SimComponents object
+	SimComponents* _simComp;
+	///Task to listen on
+	ListenerSubject <TaskListener> * _subject;
+};
+
+
+//************************************************************************
+class ConstraintBlock: public TransactionListener{
+	ConstraintBlock(SimComponents* iSimComp);
+	~ConstraintBlock();
+	bool transExecuted(TMLTransaction* iTrans);
+	virtual bool constraintFunc(TransactionAbstr iTrans, CommandAbstr iCmd, TaskAbstr iTask, CPUAbstr iCPU, ChannelAbstr iChan) =0;
+private:
+	SimComponents* _simComp;
 };
 #endif

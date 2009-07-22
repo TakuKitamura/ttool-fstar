@@ -94,7 +94,7 @@ void Bus::schedule(){
 	if (aTransToExecute!=_transactionHash.end()){
 		_nextTransaction=aTransToExecute;
 		calcStartTimeLength();
-		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction->second);
+		//FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction->second);
 	}
 	_schedulingNeeded=false;
 #ifdef DEBUG_BUS
@@ -138,7 +138,8 @@ bool Bus::addTransaction(){
 		std::cout << i->second->toString() << "\n";
 	}*/
 	_schedulingNeeded=true;
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(aNextTrans);
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(aNextTrans);
+	NOTIFY_TRANS_EXECUTED(aNextTrans);
 	return true;
 }
 

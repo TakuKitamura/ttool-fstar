@@ -53,7 +53,7 @@ class Comment;
 class SimComponents;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
-class TMLCommand: public Serializable, public ListenerSubject<CommandListener>{
+class TMLCommand: public Serializable, public ListenerSubject <CommandListener> {
 public:
 	///Constructor
     	/**

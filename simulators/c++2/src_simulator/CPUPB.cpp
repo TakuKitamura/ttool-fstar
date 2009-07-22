@@ -100,7 +100,7 @@ void CPUPB::schedule(){
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _busNextTransaction!=0) _busNextTransaction->registerTransaction(0,this);
 	if (_nextTransaction!=0){
 		calcStartTimeLength();
-		FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
+		//FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
 	}
 }
 

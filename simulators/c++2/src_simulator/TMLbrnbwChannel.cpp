@@ -62,7 +62,8 @@ void TMLbrnbwChannel::write(){
 	_content+=_writeTrans->getVirtualLength();
 	_nbToWrite=0;
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
 	_writeTrans=0;
 	setTransactionLength();
 }
@@ -73,7 +74,8 @@ bool TMLbrnbwChannel::read(){
 	}else{
 		_content-=_readTrans->getVirtualLength();
 		_nbToRead=0;
-		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 		_readTrans=0;
 		setTransactionLength();
 		return true;

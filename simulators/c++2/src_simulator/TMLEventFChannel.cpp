@@ -68,7 +68,8 @@ void TMLEventFChannel::write(){
 			_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
 	}
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);	
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
 	_writeTrans=0;
 }
 
@@ -81,7 +82,8 @@ bool TMLEventFChannel::read(){
 			if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
 			_paramQueue.pop_front();  //NEW
 		//}
-		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);	
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 		_readTrans=0;
 		return true;
 	}

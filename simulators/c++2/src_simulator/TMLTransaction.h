@@ -198,8 +198,6 @@ protected:
 	///Branching penalty
 	unsigned int _branchingPenalty;
 #endif
-	/////Task terminated flag
-	//bool _terminated;
 	///Channel on which data was conveyed
 	TMLChannel* _channel;
 	///Memory pool for transactions

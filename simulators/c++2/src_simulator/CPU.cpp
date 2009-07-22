@@ -254,7 +254,8 @@ bool CPU::addTransaction(){
 #endif
 		_busyCycles+=_nextTransaction->getOverallLength();
 		//std::cout << "busyCycles: " <<  _busyCycles << std::endl;
-		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_nextTransaction);
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_nextTransaction);
+		NOTIFY_TRANS_EXECUTED(_nextTransaction);
 		_nextTransaction=0;
 		return true;
 	}else return false;

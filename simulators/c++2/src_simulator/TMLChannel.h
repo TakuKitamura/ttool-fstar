@@ -54,7 +54,7 @@ class TMLTask;
 class Bus;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
-class TMLChannel: public Serializable, public ListenerSubject<TransactionListener>{
+class TMLChannel: public Serializable, public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
     	/**

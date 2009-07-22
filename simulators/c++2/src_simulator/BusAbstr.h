@@ -37,35 +37,44 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef BusAbstrH
+#define BusAbstrH
+#include <Bus.h>
+
+class BusAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+	\param iID ID of the bus
+      	*/
+	BusAbstr(Bus* iBus):_bus(iBus){
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
-protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	~BusAbstr(){
+	}
+	///Returns the size of an atomic bus transaction
+	/**
+	\return Burst size
+	*/
+	inline TMLLength getBurstSize() const{
+		return _bus->getBurstSize();
+	}
+	///Returns a string representation of the Bus
+	/**
+	\return Detailed string representation
+	*/
+	inline std::string getName() const{
+		return _bus->toString();
+	}
+	///Returns the unique ID of the bus
+	/**
+      	\return Unique ID
+    	*/ 
+	inline unsigned int getID() const{
+		return _bus->getID();
+	}
+private:
+	Bus* _bus;
 };
 #endif
-

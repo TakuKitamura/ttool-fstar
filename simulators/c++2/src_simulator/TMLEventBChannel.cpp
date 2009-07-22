@@ -102,7 +102,8 @@ void TMLEventBChannel::write(TMLTransaction* iTrans){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
-	FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+	NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
 }
 
 bool TMLEventBChannel::read(){
@@ -121,7 +122,8 @@ bool TMLEventBChannel::read(){
 		_paramQueue.pop_front();  //NEW
 		//}
 		//std::cout << "after if" << std::endl;
-		FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 		_readTrans=0;
 		return true;
 	}

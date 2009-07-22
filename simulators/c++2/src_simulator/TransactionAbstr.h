@@ -37,35 +37,52 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef ListenerSubjectH
-#define ListenerSubjectH
 
-///Base class for listener subjects 
-template <typename T>
-class ListenerSubject{
+#ifndef TransactionAbstrH
+#define TransactionAbstrH
+#include<TMLTransaction.h>
+
+class TransactionAbstr{
 public:
-	///Registers a new listener
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
-	}
-	///Removes a listener from the internal list
-	/**
-	\param  iListener Pointer to the listener
-	*/
-	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+	///Constructor
+    	/**
+      	\param iTrans Pointer to Transaction object which shall be encapsulated
+    	*/
+	TransactionAbstr(TMLTransaction* iTrans): _trans(iTrans){
 	}
 	///Destructor
-	virtual ~ListenerSubject(){}
-protected:
-	///List of listeners
-	std::list<T*> _listeners;
+	~TransactionAbstr(){
+	}
+	///Returns the time when the transaction became runnable
+	/**
+      	\return Runnable time
+    	*/
+	inline TMLTime getRunnableTime() const{
+		return _trans->getRunnableTime();
+	}
+	///Returns the start time of the transaction
+	/**
+      	\return Start time
+    	*/
+	inline TMLTime getStartTime() const{
+		return _trans->getStartTime();
+	}
+	///Returns the length of the operation and penalties
+	/**
+      	\return Overall transaction length
+    	*/
+	inline TMLTime getLength() const{
+		return _trans->getOverallLength();
+	}
+	///Returns the virtual length of the transaction (number of execution units already carried out by previous transactions)
+	/**
+      	\return Virtual length
+    	*/
+	inline TMLLength getVirtualLength() const{
+		return _trans->getVirtualLength();
+	}
+private:
+	TMLTransaction* _trans;
+
 };
 #endif
-
