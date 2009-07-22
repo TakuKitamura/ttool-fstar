@@ -46,9 +46,9 @@ TMLEventChannel::TMLEventChannel(unsigned int iID, std::string iName, unsigned i
 TMLEventChannel::~TMLEventChannel(){
 }
 
-TMLLength TMLEventChannel::getContent() const{
-	return _content;
-}
+//TMLLength TMLEventChannel::getContent() const{
+//	return _content;
+//}
 
 bool TMLEventChannel::getRequestChannel() const{
 	return false;

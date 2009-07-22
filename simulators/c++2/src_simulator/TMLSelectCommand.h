@@ -63,8 +63,7 @@ public:
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
-	bool channelUnknown() const;
-	//Parameter<ParamType>* getParam() const;
+	//bool channelUnknown() const;
 	ParamFuncPointer getParamFuncPointer() const;
 	std::string toString() const;
 	std::string toShortString() const;
@@ -79,8 +78,8 @@ protected:
 	TMLEventChannel** _channel;
 	///Pointer to an array of parameter function pointers
 	ParamFuncPointer* _paramFuncs;
-	///Number of channels in the array
-	unsigned int _numbChannels;
+	/////Number of channels in the array
+	//unsigned int _numbChannels;
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
 	///Highest index of the channels on which the TMLChannel::testRead() method has been performed.

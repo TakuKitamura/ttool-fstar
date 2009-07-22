@@ -134,3 +134,15 @@ unsigned int TMLChannel::insertSamples(unsigned int iNbOfSamples, Parameter<Para
 void TMLChannel::streamStateXML(std::ostream& s) const{
 	//s << "Basic version TMLChannel";
 }
+
+TMLLength TMLChannel::getContent() const{
+	return 0;
+}
+
+bool TMLChannel::getOverflow() const{
+	return false;
+}
+
+bool TMLChannel::getUnderflow() const{
+	return false;
+}

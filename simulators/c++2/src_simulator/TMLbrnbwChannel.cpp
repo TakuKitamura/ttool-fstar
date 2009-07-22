@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 
 TMLbrnbwChannel::TMLbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent):TMLStateChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent){
+	_overflow=false;
 }
 
 void TMLbrnbwChannel::testWrite(TMLTransaction* iTrans){
@@ -84,15 +85,18 @@ void TMLbrnbwChannel::setTransactionLength() const{
 		if (_nbToRead==0){
 			//_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
 			_writeTrans->setVirtualLength(_nbToWrite);
+			_underflow=false;
 		}else{
 			if (_nbToRead<=_content){
 				//read could be executed right away			
 				//_writeTrans->setVirtualLength(min(_nbToWrite,_burstSize));
 				_writeTrans->setVirtualLength(_nbToWrite);
+				_underflow=false;
 			}else{
 				//read could wake up because of write
 				//_writeTrans->setVirtualLength(min(_nbToRead-_content,_nbToWrite,_burstSize));
 				_writeTrans->setVirtualLength(min(_nbToRead-_content,_nbToWrite));
+				_underflow=true;
 			}
 		}
 	}

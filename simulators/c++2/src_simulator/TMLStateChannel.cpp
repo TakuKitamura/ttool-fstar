@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLStateChannel.h>
 
-TMLStateChannel::TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iID, iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0){
+TMLStateChannel::TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iID, iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false){
 }
 
 TMLStateChannel::~TMLStateChannel(){}
@@ -73,3 +73,16 @@ void TMLStateChannel::streamStateXML(std::ostream& s) const{
 	s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc;
 	s << TAG_CHANNELc << std::endl;
 }
+
+TMLLength TMLStateChannel::getContent()  const{
+	return _content;
+}
+
+bool TMLStateChannel::getOverflow() const{
+	return _overflow;
+}
+
+bool TMLStateChannel::getUnderflow() const{
+	return _underflow;
+}
+

@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 
 
-TMLExeciCommand::TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iID, iTask,1,0), _lengthFunc(iLengthFunc), _type(iType){
+TMLExeciCommand::TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iID, iTask, 1, 0, 1), _lengthFunc(iLengthFunc), _type(iType){
 }
 
 void TMLExeciCommand::execute(){

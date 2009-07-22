@@ -52,6 +52,8 @@ unsigned int CondBreakpoint::_freeID=0;
 bool Breakpoint::_enabled=true;
 bool CondBreakpoint::_enabled=true;
 
+
+//************************************************************************
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
 	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->registerListener(this);	
@@ -64,7 +66,9 @@ RunXTransactions::~RunXTransactions(){
 bool RunXTransactions::transExecuted(TMLTransaction* iTrans){
 	_count++;
 	if (_count>=_transToExecute){
-		_simComp->setStopFlag(true);
+		std::ostringstream aOut;
+		aOut << MSG_RUNXTRANSACTIONS << ": " << _transToExecute;
+		_simComp->setStopFlag(true, aOut.str());
 		return true;
 	}
 	return false;
@@ -74,13 +78,13 @@ void RunXTransactions::setTransToExecute(unsigned int iTransToExecute){
 }
 
 
-
+//************************************************************************
 Breakpoint::Breakpoint(SimComponents* iSimComp):_simComp(iSimComp){
 }
 
 bool Breakpoint::commandEntered(TMLCommand* iComm){
 	if (_enabled){
-		_simComp->setStopFlag(true);
+		_simComp->setStopFlag(true, MSG_BREAKPOINT);
 		return true;
 	}
 	return false;
@@ -91,7 +95,8 @@ void Breakpoint::setEnabled(bool iEnabled){
 }
 
 
-CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask):_simComp(iSimComp), _condFunc(0), _dlHandle(0),  _task(iTask){
+//************************************************************************
+CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask):_simComp(iSimComp), _condText(iCond), _condFunc(0), _dlHandle(0),  _task(iTask){
 	_ID=_freeID++;
 	FILE* in;
 	std::ofstream myfile ("newlib.c");
@@ -151,10 +156,13 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 	TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(this, iTask);
 }
 
-bool CondBreakpoint::commandEntered(TMLCommand* iComm){
+bool CondBreakpoint::commandFinished(TMLCommand* iComm){
 	if (_enabled && _condFunc!=0){
 		if ((*_condFunc)(_task)){
-			_simComp->setStopFlag(true);
+			//_simComp->setStopFlag(true);
+			std::ostringstream aOut;
+			aOut << MSG_CONDBREAKPOINT << ": " << _condText;
+			_simComp->setStopFlag(true, aOut.str());
 			std::cout << "Stop simulation due to condition\n";
 			return true;
 		}
@@ -166,7 +174,7 @@ void CondBreakpoint::setEnabled(bool iEnabled){
 	_enabled=iEnabled;
 }
 
-bool CondBreakpoint::conditionValid(){
+bool CondBreakpoint::conditionValid() const{
 	return (_condFunc!=0);
 }
 
@@ -176,6 +184,7 @@ CondBreakpoint::~CondBreakpoint(){
 }
 
 
+//************************************************************************
 RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simComp(iSimComp), _enabled(false){
 	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this,0);
 }
@@ -183,7 +192,8 @@ RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simCo
 bool RunTillNextRandomChoice::commandEntered(TMLCommand* iComm){
 	TMLChoiceCommand* aChoice=dynamic_cast<TMLChoiceCommand*>(iComm);
 	if (_enabled && aChoice!=0 && aChoice->isNonDeterministic()){
-		_simComp->setStopFlag(true);
+		//_simComp->setStopFlag(true);
+		_simComp->setStopFlag(true, MSG_RANDOMCHOICE);
 		return true;
 	}
 	return false;
@@ -194,7 +204,7 @@ void RunTillNextRandomChoice::setEnabled(bool iEnabled){
 }
 
 
-
+//************************************************************************
 RunXCommands::RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute):_simComp(iSimComp), _count(0), _commandsToExecute(iCommandsToExecute){
 	TMLCommand::registerGlobalListener(this);
 }
@@ -206,7 +216,10 @@ RunXCommands::~RunXCommands(){
 bool RunXCommands::commandFinished(TMLCommand* iComm){
 	_count++;
 	if (_count>=_commandsToExecute){
-		 _simComp->setStopFlag(true);
+		// _simComp->setStopFlag(true);
+		std::ostringstream aOut;
+		aOut << MSG_RUNXCOMMANDS << ": " << _commandsToExecute;
+		_simComp->setStopFlag(true, aOut.str());
 		return true;
 	}
 	return false;
@@ -217,7 +230,7 @@ void RunXCommands::setCmdsToExecute(unsigned int iCommandsToExecute){
 }
 
 
-
+//************************************************************************
 RunXTimeUnits::RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime):_simComp(iSimComp), _endTime(iEndTime){
 	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->registerListener(this);	
@@ -230,7 +243,8 @@ RunXTimeUnits::~RunXTimeUnits(){
 	
 bool RunXTimeUnits::transExecuted(TMLTransaction* iTrans){
 	if (SchedulableDevice::getSimulatedTime()>=_endTime){
-		_simComp->setStopFlag(true);
+		//_simComp->setStopFlag(true);
+		_simComp->setStopFlag(true, MSG_RUNXTIMEUNITS);
 		return true;
 	}
 	return false;
@@ -241,7 +255,7 @@ void RunXTimeUnits::setEndTime(TMLTime iEndTime){
 }
 
 
-
+//************************************************************************
 RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
 	_subject->registerListener(this);
 }
@@ -250,6 +264,7 @@ RunTillTransOnDevice::~RunTillTransOnDevice(){
 }
 
 bool RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans){
-	_simComp->setStopFlag(true);
+	//_simComp->setStopFlag(true);
+	_simComp->setStopFlag(true, MSG_TRANSONDEVICE);
 	return true;
 }

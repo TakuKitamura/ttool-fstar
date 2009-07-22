@@ -44,95 +44,207 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 #include <CommandListener.h>
 #include <ListenerSubject.h>
+#define MSG_RUNXTRANSACTIONS "Transactions executed"
+#define MSG_BREAKPOINT "Breakpoint reached"
+#define MSG_CONDBREAKPOINT "Conditional breakpoint reached"
+#define MSG_RANDOMCHOICE "Random choice operator reached"
+#define MSG_RUNXCOMMANDS "Commands executed"
+#define MSG_RUNXTIMEUNITS "Time units elapsed"
+#define MSG_TRANSONDEVICE "Transaction on device encountered"
+
 
 class SimComponents;
 
+//************************************************************************
+///Listener which stops the simulation after a given number of transactions
 class RunXTransactions: public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param  iTransToExecute Number of transactions to execute
+	*/
 	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
+	///Destructor
 	virtual ~RunXTransactions();
 	bool transExecuted(TMLTransaction* iTrans);
+	///Sets the number of transactions to execute
+	/**
+	\param  iTransToExecute Number of transactions to execute
+	*/
 	void setTransToExecute(unsigned int iTransToExecute);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///Number of transactions to execute
 	unsigned int _count, _transToExecute;
 
 };
 
 
+//************************************************************************
+///Listener establishing a breakpoint
 class Breakpoint: public CommandListener, public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	*/
 	Breakpoint(SimComponents* iSimComp);
 	bool commandEntered(TMLCommand* iComm);
+	///Enable/disable all breakpoints
+	/**
+	\param iEnabled true=enable, false=disable
+	*/
 	static void setEnabled(bool iEnabled);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///Breakpoints enabled flag
 	static bool _enabled;
 };
 
 
+//************************************************************************
+///Breakpoint based on a condition
 class CondBreakpoint: public CommandListener, public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iCond String containing the condition
+	\param iTask Task for which the condition is evaluated
+	*/
 	CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask);
+	///Destructor
 	~CondBreakpoint();
-	bool commandEntered(TMLCommand* iComm);
+	bool commandFinished(TMLCommand* iComm);
+	///Enable/disable all conditional breakpoints
+	/**
+	\param iEnabled true=enable, false=disable
+	*/
 	static void setEnabled(bool iEnabled);
-	bool conditionValid();
+	///Checks whether the condition could be compiled
+	/**
+	\return True if compilation was successful
+	*/
+	bool conditionValid() const;
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///Breakpoints enabled flag
 	static bool _enabled;
+	///Condition string
+	std::string _condText;
+	///Pointer to funtion in shared library which contains the breakpoint condition
 	BreakCondFunc _condFunc;
+	///Handle of shared library
 	void * _dlHandle;
+	///ID of the breakpoint
 	unsigned int _ID;
+	///Task for which the condition is evaluated
 	TMLTask* _task;
+	///Keeps track of the IDs already in use
 	static unsigned int _freeID;
 };
 
 
+//************************************************************************
+///Listener which stops the simulation as soon as a random choice command is encountered
 class RunTillNextRandomChoice: public CommandListener, public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	*/
 	RunTillNextRandomChoice(SimComponents* iSimComp);
 	bool commandEntered(TMLCommand* iComm);
+	///Enable/disable the Listener
+	/**
+	\param iEnabled true=enable, false=disable
+	*/
 	void setEnabled(bool iEnabled);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///Listener enabled flag
 	bool _enabled;
 };
 
 
+//************************************************************************
+///Listener which stops the simulation after a given number of commands
 class RunXCommands: public CommandListener, public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iCommandsToExecute Number of commands to execute
+	*/
 	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute);
+	///Destructor
 	virtual ~RunXCommands();
 	bool commandFinished(TMLCommand* iComm);
+	///Sets the number of commands to execute
+	/**
+	\param  iCommandsToExecute Number of commands to execute
+	*/
 	void setCmdsToExecute(unsigned int iCommandsToExecute);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
-	unsigned int _count, _commandsToExecute;
+	///Command counter
+	unsigned int _count;
+	///Number of commands to execute
+	unsigned int _commandsToExecute;
 
 };
 
 
+//************************************************************************
+///Listener which stops the simulation at a given time
 class RunXTimeUnits: public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iEndTime End time
+	*/
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
+	///Destructor
 	virtual ~RunXTimeUnits();
 	bool transExecuted(TMLTransaction* iTrans);
+	///Sets the end time of the simulation
+	/**
+	\param  iEndTime End time of the simulation
+	*/	
 	void setEndTime(TMLTime iEndTime);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///End time of the simulation
 	TMLTime _endTime;
 
 };
 
 
+//************************************************************************
+///Listener which stops the simulation as soon as a transaction is executed on a given device
 class RunTillTransOnDevice: public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iSubject Device to listen on
+	*/
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
+	///Destructor
 	virtual ~RunTillTransOnDevice();
 	bool transExecuted(TMLTransaction* iTrans);
 protected:
+	///Pointer to a SimComponents object
 	SimComponents* _simComp;
+	///Device to listen on
 	ListenerSubject<TransactionListener>* _subject;
 };
 #endif

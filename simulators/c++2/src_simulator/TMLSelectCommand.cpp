@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask,WAIT_SEND_VLEN,0), _channel(iChannel), _paramFuncs(iParamFuncs), _numbChannels(iNumbChannels), _indexNextCommand(0), _maxChannelIndex(0){
+TMLSelectCommand::TMLSelectCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 0, iNumbChannels), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0){
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
@@ -55,7 +55,7 @@ TMLSelectCommand::~TMLSelectCommand(){
 }
 
 void TMLSelectCommand::execute(){
-	unsigned int i,aLoopLimit=(_maxChannelIndex==0)?_numbChannels:_maxChannelIndex;
+	unsigned int i,aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
 	bool aReadDone=false;
 	//std::cout << "LoopLimit: " << aLoopLimit << std::endl;
 	for (i=0;i<aLoopLimit;i++){
@@ -91,7 +91,7 @@ TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 	//std::cout << "SC: New transaction."<< std::endl;
 	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "SC: loop."<< std::endl;
-	for (i=0;i<_numbChannels && _maxChannelIndex==0;i++){
+	for (i=0;i<_nbOfNextCmds && _maxChannelIndex==0;i++){
 		//std::cout << "SC: inner."<< i<< std::endl;
 		_currTransaction->setVirtualLength(_length-_progress);
 		_channel[i]->testRead(_currTransaction);
@@ -110,9 +110,9 @@ TMLChannel* TMLSelectCommand::getChannel() const{
 	return _channel[_indexNextCommand];
 }
 
-bool TMLSelectCommand::channelUnknown() const{
-	return true;
-}
+//bool TMLSelectCommand::channelUnknown() const{
+//	return true;
+//}
 
 TMLCommand* TMLSelectCommand::getNextCommand() const{
 	return _nextCommand[_indexNextCommand];
@@ -122,10 +122,6 @@ TMLCommand* TMLSelectCommand::getNextCommand() const{
 ParamFuncPointer TMLSelectCommand::getParamFuncPointer() const{
 	return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];
 }
-
-//Parameter<ParamType>* TMLSelectCommand::getParam() const{
-//	return (_params==0)?0:_params[_indexNextCommand];
-//}
 
 std::string TMLSelectCommand::toString() const{
 	std::ostringstream outp;

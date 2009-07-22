@@ -87,27 +87,33 @@ void TMLbrbwChannel::setTransactionLength() const{
 	if (_writeTrans!=0){	
 		if (_nbToRead==0){
 			_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite));
+			_underflow=false;
 		}else{
 			if (_nbToRead<=_content){
 				//read could be executed right away			
 				_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite));
+				_underflow=false;
 			}else{
 				//read could wake up because of write
 				_writeTrans->setVirtualLength(min(_length-_content,_nbToRead-_content,_nbToWrite));
+				_underflow=true;
 			}
 		}
 	}
 	if (_readTrans!=0){
 		if (_nbToWrite==0){
 			_readTrans->setVirtualLength(min(_content,_nbToRead));
+			_overflow=false;
 			//std::cout << _name << ": set read trans len, no write trans, len = " << _readTrans->getVirtualLength() << std::endl;
 		}else{
 			if (_nbToWrite<=_length-_content){
 				//write could be executed right away
 				_readTrans->setVirtualLength(min(_content,_nbToRead));
+				_overflow=false;
 			}else{
 				//write could wakeup because of read
 				_readTrans->setVirtualLength(min(_content,_nbToWrite-(_length-_content),_nbToRead));
+				_overflow=true;
 			}
 			//std::cout << _name << ": set read trans len, with write trans, len = " << _readTrans->getVirtualLength() << std::endl;
 

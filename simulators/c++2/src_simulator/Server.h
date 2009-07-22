@@ -55,6 +55,14 @@ public:
 	int run();
 	void sendReply(std::string iReplyStr);
 protected:
+	///Returns position of character in string and and replaces it with 0
+	/**
+	\param iBuffer Pointer to buffer
+	\param searchCh Character to search for
+	\param iStart Start Index
+	\param iLength String length
+	\return Index of character
+	*/
 	int getPositionOf(char* iBuffer, char searchCh, int iStart, int iLength);
 	///Determines the IP adress of the client
 	void* get_in_addr(struct sockaddr *sa) const;

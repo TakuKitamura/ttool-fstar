@@ -65,6 +65,9 @@ public:
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
 	virtual void streamStateXML(std::ostream& s) const;
+	virtual TMLLength getContent() const;
+	bool getOverflow() const;
+	bool getUnderflow() const;
 protected:
 	///Content of the channel
 	TMLLength _content;
@@ -72,6 +75,10 @@ protected:
 	TMLLength _nbToWrite;
 	///Number of samples the read transaction attempts to read
 	TMLLength _nbToRead;
+	///Buffer overflow flag
+	mutable bool _overflow;
+	///Buffer underflow flag
+	mutable bool _underflow;
 };
 
 #endif

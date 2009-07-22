@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLReadCommand::TMLReadCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iID, iTask,1,0),_lengthFunc(iLengthFunc), _channel(iChannel){
+TMLReadCommand::TMLReadCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel): TMLCommand(iID, iTask, 1, 0, 1),_lengthFunc(iLengthFunc), _channel(iChannel){
 }
 
 void TMLReadCommand::execute(){

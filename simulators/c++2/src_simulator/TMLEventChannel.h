@@ -64,8 +64,6 @@ public:
 	virtual ~TMLEventChannel();
 	///Cancels a pending read operation 
 	virtual void cancelReadTransaction()=0;
-	///Returns the content of the channel (for the notified command)
-	TMLLength getContent()  const;
 	///Returns a flag indicating if the channel is used by a request
     	/**
       	\return True if channel is used by a request, false otherwise

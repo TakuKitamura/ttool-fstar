@@ -43,6 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 
 TMLEventBChannel::TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+	_overflow = false; 
 	if (_sourceIsFile){
 		std::cout << "try to open Event file " << _name.c_str() << std::endl;
 		//_name="./"+_name;
@@ -86,6 +87,7 @@ void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
 void TMLEventBChannel::testRead(TMLTransaction* iTrans){
 	_readTrans=iTrans;
 	_readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	_underflow = (_content==0);
 }
 
 void TMLEventBChannel::write(){

@@ -152,6 +152,21 @@ public:
       	\param s Reference to an output stream
 	*/
 	virtual void streamStateXML(std::ostream& s) const;
+	///Returns the number of samples stored in the channel
+   	/**
+      	\return Content of the channel
+	*/
+	virtual TMLLength getContent()  const;
+	///Returns a flag indicating if a channel overflow has been encoutered
+	/**
+	\return Channel overflow flag
+	*/
+	virtual bool getOverflow() const;
+	///Returns a flag indicating if a channel underflow has been encoutered
+	/**
+	\return Channel underflow flag
+	*/
+	virtual bool getUnderflow() const;
 protected:
 	///ID of channel
 	unsigned int _ID;

@@ -40,18 +40,26 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLActionCommand.h>
 #include <TMLTask.h>
+#include <SimComponents.h>
+#include <CommandListener.h>
 
-TMLActionCommand::TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask,1,0),_actionFunc(iActionFunc){
+TMLActionCommand::TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask, 1, 0, 1),_actionFunc(iActionFunc){
 }
 
 void TMLActionCommand::execute(){
 }
 
 TMLCommand* TMLActionCommand::prepareNextTransaction(){
+	if (_simComp->getStopFlag()){
+		std::cout << "aSimStopped=true " << std::endl;
+		_task->setCurrCommand(this);
+		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
+	}
 	TMLCommand* aNextCommand=getNextCommand();
 	//std::cout << "Action func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	(_task->*_actionFunc)();
 	_task->setCurrCommand(aNextCommand);
+	FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }

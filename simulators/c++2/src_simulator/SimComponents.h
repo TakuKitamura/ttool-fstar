@@ -195,8 +195,9 @@ public:
 	///Sets the value of the stop flag
 	/**
 	\param iStopFlag Stop flag
+	\param iStopReason Reason why the simulation stopped
 	*/	
-	void setStopFlag(bool iStopFlag) {_stopFlag=iStopFlag;}
+	void setStopFlag(bool iStopFlag, const std::string& iStopReason) {_stopFlag=iStopFlag; if (iStopFlag) _stopReason+= " " + iStopReason; else _stopReason="";}
 	///If a task has a choice command as current command, a pointer to it is returned
 	/**
 	\return Pointer if choice command was found, null otherwise
@@ -213,6 +214,11 @@ public:
 	\return Const iterator for task list
 	*/
 	TaskList::const_iterator getTaskIterator(bool iEnd) const;
+	///Returns the reason why the simulation stopped
+	/**
+	\return Reason why the simulation stopped
+	*/
+	std::string getStopReason(){return _stopReason;}
 protected:
 	///List holding schedulable devices
 	SchedulingList _cpuList;
@@ -232,6 +238,8 @@ protected:
 	bool _stopFlag;
 	///Hash Value for application and architecture
 	int _hashValue;
+	///Reason why the simulation stopped
+	std::string _stopReason;
 };
 #endif
 

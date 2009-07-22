@@ -62,7 +62,7 @@ public:
 	\param iLength Virtual length of the command
 	\param iParam Pointer to a parameter function
     	*/
-	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc);
+	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -99,12 +99,12 @@ public:
 	\sa channelUnknown()
 	*/
 	virtual TMLChannel* getChannel() const;
-	///Indicates if the channel can be determined
-	/**
-	\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a nullpointer returned by getChannel() indicates that the channel cannot be determined
-	\sa getChannel()
-	*/
-	virtual bool channelUnknown() const;
+	/////Indicates if the channel can be determined
+	////**
+	//\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a nullpointer returned by getChannel() indicates that the channel cannot be determined
+	//\sa getChannel()
+	//*/
+	//virtual bool channelUnknown() const;
 	///Returns a pointer to the parameter data structure
 	/**
 	\return Pointer to parameter data structure
@@ -174,6 +174,12 @@ public:
       	\param iSimComp Pointer to simulation components
     	*/ 
 	static void setSimComponents(SimComponents* iSimComp);
+	///Returns a pointer to the next command array and the number of successors of this command
+	/**
+	\param oNbOfCmd Number of successors of this command
+	\return Pointer to next command array
+	*/
+	TMLCommand** getNextCommands(unsigned int& oNbOfCmd) const;
 protected:
 	///ID of the command
 	unsigned int _ID;
@@ -189,6 +195,8 @@ protected:
 	TMLCommand** _nextCommand;
 	///Pointer to the parameter function of the command
 	ParamFuncPointer _paramFunc;
+	///Number of successors of this command
+	unsigned int _nbOfNextCmds;
 	///Breakpoint
 	CommandListener* _breakpoint;
 	///Indicates if the breakpoint of the command has stopped the simulation  

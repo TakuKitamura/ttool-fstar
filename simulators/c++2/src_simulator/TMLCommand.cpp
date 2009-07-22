@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _breakpoint(0){
+TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 }
@@ -100,11 +100,11 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 				FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
 			//std::cout << "Prepare next transaction" << std::endl;
 			//if (_simStopped){
-			if (_simComp->getStopFlag()){
-				std::cout << "aSimStopped=true " << std::endl;
-				_task->setCurrCommand(this);
-				return this;  //for command which generates transactions this is returned anyway by prepareTransaction
-			}
+			//if (_simComp->getStopFlag()){
+			//	std::cout << "aSimStopped=true " << std::endl;
+			//	_task->setCurrCommand(this);
+			//	return this;  //for command which generates transactions this is returned anyway by prepareTransaction
+			//}
 		}
 		TMLCommand* result = prepareNextTransaction();
 		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
@@ -128,6 +128,11 @@ TMLCommand* TMLCommand::getNextCommand() const{
 	return (_nextCommand==0)?0:_nextCommand[0];
 }
 
+TMLCommand** TMLCommand::getNextCommands(unsigned int& oNbOfCmd) const{
+	oNbOfCmd=_nbOfNextCmds;
+	return _nextCommand;
+}
+
 TMLTransaction* TMLCommand::getCurrTransaction() const{
 	return _currTransaction;
 }
@@ -142,9 +147,9 @@ TMLChannel* TMLCommand::getChannel() const{
 	return 0;
 }
 
-bool TMLCommand::channelUnknown() const{
-	return false;
-}
+//bool TMLCommand::channelUnknown() const{
+//	return false;
+//}
 
 ParamFuncPointer TMLCommand::getParamFuncPointer() const{
 	return _paramFunc;

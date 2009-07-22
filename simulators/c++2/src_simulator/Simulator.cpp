@@ -41,6 +41,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <Server.h>
 #include <ServerLocal.h>
+#include <TMLSelectCommand.h>
+//#include <BusAbstr.h>
+//#include <CPUAbstr.h>
+//#include <ChannelAbstr.h>
+//#include <TaskAbstr.h>
+//#include <CommandAbstr.h>
+//#include <TransactionAbstr.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
 
@@ -255,7 +262,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
-	_simComp->setStopFlag(false);
+	_simComp->setStopFlag(false,"");
 	while (transLET!=0 && !_simComp->getStopFlag()){
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
@@ -281,7 +288,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
 		   depCommand=depTask->getCurrCommand();
-		   if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || depCommand->channelUnknown())){
+		   //if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || depCommand->channelUnknown())){
+	           if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || dynamic_cast<TMLSelectCommand*>(depCommand)!=0)){
 #ifdef DEBUG_KERNEL
 		    std::cout << "kernel:simulate: commands are accessing the same channel" << std::endl;
 #endif
@@ -412,7 +420,7 @@ void Simulator::decodeCommand(std::string iCmd){
 	std::string aStrParam;
 	//bool aSimTerminated=false;
 	//std::cout << "Not crashed. III\n";
-	_simComp->setStopFlag(false);
+	_simComp->setStopFlag(false,"");
 	//anEntityMsg.str("");
 	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl /*<< TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl*/;
 	aInpStream >> aCmd;
@@ -906,8 +914,10 @@ void Simulator::decodeCommand(std::string iCmd){
 					aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
 					anErrorCode=2;
 			}else{
+					unsigned int aNbNextCmds;
+					aCurrChCmd->getNextCommands(aNbNextCmds);
 					TMLTask* aTask=aCurrChCmd->getTask();
-					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << " id=\"" << aCurrChCmd->getID() << "\">" << TAG_BRANCHo << aCurrChCmd->getNumberOfBranches() << TAG_BRANCHc << "\">" << TAG_CURRCMDc << TAG_TASKc << std::endl;
+					anEntityMsg << TAG_TASKo << " id=\"" << aTask-> getID() << "\" name=\"" << aTask->toString() << "\">" << TAG_CURRCMDo << " id=\"" << aCurrChCmd->getID() << "\">" << TAG_BRANCHo << aNbNextCmds << TAG_BRANCHc << "\">" << TAG_CURRCMDc << TAG_TASKc << std::endl;
 					aGlobMsg << TAG_MSGo << "Current choice command" << TAG_MSGc << std::endl;
 			}
 			std::cout << "End Get number of branches of current cmd." << std::endl;
@@ -944,10 +954,10 @@ void Simulator::decodeCommand(std::string iCmd){
 			anErrorCode=3;
 
 	}
-	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl << TAG_STATUSo; 
+	aGlobMsg << TAG_ERRNOo << anErrorCode << TAG_ERRNOc << std::endl; 
 	//if (aSimTerminated) aGlobMsg << SIM_TERM; else aGlobMsg << SIM_READY;
 	writeSimState(aGlobMsg);
-	aGlobMsg << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
+	aGlobMsg << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	//std::cout << "Before reply." << std::endl;
 	_syncInfo->_server->sendReply(aGlobMsg.str());
 	//std::cout << "End of command decode procedure." << std::endl;
@@ -1055,10 +1065,12 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
 		aStreamBuffer.str(""); 
 		//if (!aSimTerminated){
 		if(aChoiceCmd!=0){
-			std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aChoiceCmd->getNumberOfBranches() << std::endl;
+			unsigned int aNbNextCmds;
+			aChoiceCmd->getNextCommands(aNbNextCmds);
+			std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
 			_simComp->writeObject(aStreamBuffer);
 			aStringBuffer=aStreamBuffer.str();
-			for (unsigned int aBranch=0;aBranch<aChoiceCmd->getNumberOfBranches();aBranch++){
+			for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
 				_simComp->reset();
 				aStreamBuffer.str(aStringBuffer);
 				_simComp->readObject(aStreamBuffer);
@@ -1083,14 +1095,14 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 		case 0: //Quit simulation
 			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator terminated" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
-			_simComp->setStopFlag(true);
+			_simComp->setStopFlag(true, MSG_SIMSTOPPED);
 			_syncInfo->_terminate=true;
 			return false;
 		case 13://get current time
-			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_TIMEo << SchedulableDevice::getSimulatedTime() << TAG_TIMEc << std::endl << TAG_MSGo << "Simulation time" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
 			//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 			writeSimState(aMessage);
-			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		case 14:{//get actual command, thread safeness, be careful!
@@ -1100,28 +1112,28 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 				for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
 					printCommandsOfTask(*i, aMessage);
 				}
-				aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+				aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
 			}else{
 				TMLTask* aTask = _simComp->getTaskByName(aStrParam);
 				aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl;
 				if (aTask!=0){			
 					printCommandsOfTask(aTask, aMessage);
-					aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+					aMessage << TAG_GLOBALo << std::endl << TAG_MSGo << "Current command" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
 				}else{
 					aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << TAG_ERRNOo << 2;
 				}
 			}
 			//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 			writeSimState(aMessage);
-			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		}
 		case 15://pause simulation
-			_simComp->setStopFlag(true);
-			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulation stopped" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+			_simComp->setStopFlag(true, MSG_SIMPAUSED);
+			aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulation stopped" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
 			writeSimState(aMessage);
-			aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		default:
@@ -1136,15 +1148,20 @@ void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
 		ioMessage << 0 << "\">"; 
 	else
 		ioMessage << iTask->getCurrCommand()->getID() << "\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
+	unsigned int aNbNextCmds;
+	TMLCommand** aNextCmds = iTask->getCurrCommand()->getNextCommands(aNbNextCmds);
+	for(unsigned int i=0; i<aNbNextCmds; i++){
+		ioMessage << TAG_NEXTCMDo << aNextCmds[i]->getID() << TAG_NEXTCMDc;
+	}
 	ioMessage << TAG_CURRCMDc << TAG_TASKc << std::endl;
 }
 
 void Simulator::sendStatus(){
 	std::ostringstream aMessage;
-	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo;
+	aMessage << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
 	//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 	writeSimState(aMessage);
-	aMessage << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+	aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 	_syncInfo->_server->sendReply(aMessage.str());
 }
 
@@ -1153,12 +1170,13 @@ bool Simulator::isBusy(){
 }
 
 void Simulator::writeSimState(std::ostream& ioMessage){
+	ioMessage << TAG_STATUSo; 
 	if (_busy){
-		ioMessage << SIM_BUSY;
+		ioMessage << SIM_BUSY << TAG_STATUSc;
 	}else{
 		if (_simTerm)
-			ioMessage << SIM_TERM;
+			ioMessage << SIM_TERM << TAG_STATUSc << TAG_REASONo << MSG_SIMENDED << TAG_REASONc;
 		else
-			ioMessage << SIM_READY;
+			ioMessage << SIM_READY << TAG_STATUSc << TAG_REASONo << _simComp->getStopReason() << TAG_REASONc;
 	}
 }

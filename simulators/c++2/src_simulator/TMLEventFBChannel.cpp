@@ -49,11 +49,13 @@ void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
 	if (iTrans->getCommand()->getParamFuncPointer()!=0) (_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
 	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
+	_overflow = (_content==_length);
 }
 
 void TMLEventFBChannel::testRead(TMLTransaction* iTrans){
 	_readTrans=iTrans;
 	_readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	_underflow = (_content==0);
 }
 
 void TMLEventFBChannel::write(){

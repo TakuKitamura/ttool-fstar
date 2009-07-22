@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <TMLTask.h>
 
-TMLStopCommand::TMLStopCommand(unsigned int iID, TMLTask* iTask): TMLCommand(iID, iTask,1,0){
+TMLStopCommand::TMLStopCommand(unsigned int iID, TMLTask* iTask): TMLCommand(iID, iTask, 1, 0, 0){
 }
 
 void TMLStopCommand::execute(){

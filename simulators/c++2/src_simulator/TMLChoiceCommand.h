@@ -64,11 +64,11 @@ public:
 	std::string getCommandStr() const;
 	///Set preferred branch manually
 	void setPreferredBranch(unsigned int iBranch);
-	///Returns the number of branches
-	/**
-	\return Number of branches
-	*/
-	unsigned int getNumberOfBranches();
+	/////Returns the number of branches
+	////**
+	//\return Number of branches
+	//*/
+	//unsigned int getNumberOfBranches();
 	///Returns the state of non non deterministic flag
 	/**
 	\return Non deterministic flag
@@ -79,8 +79,8 @@ protected:
 	CondFuncPointer _condFunc;
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
-	///Number of branches
-	unsigned int _nbOfBranches;
+	/////Number of branches
+	//unsigned int _nbOfBranches;
 	///Index of the manually set branch
 	mutable unsigned int _preferredBranch;
 	///Flag to label non determinsitic choice commands

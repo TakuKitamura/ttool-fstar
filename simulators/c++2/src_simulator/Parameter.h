@@ -53,7 +53,12 @@ public:
 	\param ip3 Value 3
 	*/
 	Parameter(const T& ip1,const T& ip2,const T& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
+	///Constructor
 	Parameter():_p1(0),_p2(0),_p3(0){}
+	///Constructor
+	/**
+	\param s Stream providing the three parameter values
+	*/
 	Parameter(std::istream& s){
 		READ_STREAM(s, _p1);
 		READ_STREAM(s, _p2);
@@ -70,7 +75,7 @@ public:
 	///Print function for testing purposes
 	void print() const{
 		//if (_p1!=0 || _p2!=0 || _p3!=0)
-			std::cout << "p1:" << _p1 << " p2:" << _p2 << " p3:" << _p3 << std::endl;
+		std::cout << "p1:" << _p1 << " p2:" << _p2 << " p3:" << _p3 << std::endl;
 	}
 	inline std::ostream& writeObject(std::ostream& s){
 		WRITE_STREAM(s, _p1);
@@ -79,10 +84,15 @@ public:
 		print();
 		return s;
 	}
+	///Stream operator >>
 	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
 		is >> obj._p1 >> obj._p2 >> obj._p3;
  		return is;
 	}
+	///Streams the parameter in XML format
+	/**
+	\param s Stream
+	*/
 	void streamStateXML(std::ostream& s) const{
 		s << TAG_PARAMo << TAG_E1o << _p1 << TAG_E1c << TAG_E2o << _p2 << TAG_E2c << TAG_E3o << _p3 << TAG_E3c << TAG_PARAMc;
 	}
@@ -92,15 +102,43 @@ public:
 	//inline static void operator delete(void *p, size_t size){
 	//	memPool.pfree(p, size);
 	//}
+	///Returns parameter no 1
+	/**
+	\return Parameter no 1
+	*/
 	inline T getP1(){ return _p1;}
+	///Returns parameter no 2
+	/**
+	\return Parameter no 2
+	*/
 	inline T getP2(){ return _p2;}
+	///Returns parameter no 3
+	/**
+	\return Parameter no 3
+	*/
 	inline T getP3(){ return _p3;}
+	///Sets parameter no 1
+	/**
+	\param iP1 Parameter no 1
+	*/
 	inline void setP1(T iP1){ _p1=iP1;}
+	///Sets parameter no 2
+	/**
+	\param iP2 Parameter no 2
+	*/
 	inline void setP2(T iP2){ _p2=iP2;}
+	///Sets parameter no 3
+	/**
+	\param iP3 Parameter no 3
+	*/
 	inline void setP3(T iP3){ _p3=iP3;}
 protected:
-	///Three parameters
-	T _p1,_p2,_p3;
+	///Parameter no 1
+	T _p1;
+	///Parameter no 2
+	T _p2;
+	///Parameter no 3
+	T _p3;
 	//static Pool<Parameter<T> > memPool;
 };
 #endif

@@ -41,8 +41,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
+#include <SimComponents.h>
+#include <CommandListener.h>
 
-TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm):TMLCommand(iID, iTask,1,0), _condFunc(iCondFunc), _indexNextCommand(0), _nbOfBranches(iNbOfBranches), _preferredBranch(-1), _nonDeterm(iNonDeterm){
+TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm):TMLCommand(iID, iTask, 1, 0, iNbOfBranches), _condFunc(iCondFunc), _indexNextCommand(0), /*_nbOfBranches(iNbOfBranches),*/ _preferredBranch(-1), _nonDeterm(iNonDeterm){
 }
 
 void TMLChoiceCommand::execute(){
@@ -60,11 +62,17 @@ TMLCommand* TMLChoiceCommand::getNextCommand() const{
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
-	TMLCommand* aNextCommand;
+	if (_simComp->getStopFlag()){
+		std::cout << "aSimStopped=true " << std::endl;
+		_task->setCurrCommand(this);
+		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
+	}
+	//TMLCommand* aNextCommand;
 	//std::cout << "Choice func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	_indexNextCommand=(_task->*_condFunc)();
-	aNextCommand=getNextCommand();
+	TMLCommand* aNextCommand=getNextCommand();
 	_task->setCurrCommand(aNextCommand);
+	FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }
@@ -91,9 +99,9 @@ void TMLChoiceCommand::setPreferredBranch(unsigned int iBranch){
 	_preferredBranch=iBranch;
 }
 
-unsigned int TMLChoiceCommand::getNumberOfBranches(){
-	return _nbOfBranches;
-}
+//unsigned int TMLChoiceCommand::getNumberOfBranches(){
+//	return _nbOfBranches;
+//}
 
 bool TMLChoiceCommand::isNonDeterministic(){
 	return _nonDeterm;

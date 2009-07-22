@@ -49,38 +49,41 @@ class Simulator;
 class ServerIF;
 class SimComponents;
 
+///Synchronizes server and simulator
 class SimServSyncInfo{
 public:
+	///Pointer to simulator
+	Simulator* _simulator;
+	///Pointer to server
+	ServerIF* _server;
+	///Pointe simulation components
+	SimComponents* _simComponents;
+	///Simulation terminate flag
+	bool _terminate;
+
+	///Constructor
 	SimServSyncInfo():_simulator(0), _server(0), _simComponents(0), _terminate(false), _popGotStuck(false){
-		//pthread_mutex_init(&_mutexProduce, NULL);
-		//pthread_mutex_init(&_mutexConsume, NULL);
-		//pthread_mutex_lock(&_mutexConsume);
 		pthread_mutex_init(&_mutexCmdAvailable, NULL);
 		pthread_mutex_init(&_mutexListProtect, NULL);
 		pthread_mutex_lock(&_mutexCmdAvailable);
 	}
+	
+	///Destructor
 	~SimServSyncInfo(){
 		for(CommandQueue::iterator i=_cmdQueue.begin(); i != _cmdQueue.end(); ++i){
 			delete (*i);
 		}
 	}
-	//pthread_mutex_t _mutexProduce;
-	//pthread_mutex_t _mutexConsume;
-	Simulator* _simulator;
-	ServerIF* _server;
-	SimComponents* _simComponents;
-	//char _command[BUFFER_SIZE];
-	//unsigned int _bufferSize;
-	bool _terminate;
 
+	///Push command on command queue
+	/**
+	\param iCmd Command
+	*/
 	void pushCommand(std::string* iCmd){
 		//std::cout << "Value to write: " << *iCmd << std::endl;
 		pthread_mutex_lock(&_mutexListProtect);
-		//bool aWasEmpty=_cmdQueue.empty();
 		//std::cout << "Before push_back" << *iCmd << std::endl;
 		_cmdQueue.push_back(iCmd);
-		//_cmdsInList++;
-		//if (aWasEmpty) pthread_mutex_unlock(&_mutexCmdAvailable);
 		if (_popGotStuck){
 			_popGotStuck=false;
 			pthread_mutex_unlock(&_mutexCmdAvailable);
@@ -89,23 +92,18 @@ public:
 		//std::cout << "End write" << std::endl;
 	}
 
+	///Pop command from command queue
+	/**
+	\return Command
+	*/
 	std::string* popCommand(){
-		//pthread_mutex_lock(&_mutexListProtect);
-		//bool aWasEmpty=_cmdQueue.empty();
-		//pthread_mutex_unlock(&_mutexListProtect);
-		//std::cout << "Went to sleep " << std::endl;
 		pthread_mutex_lock(&_mutexListProtect);
 		if (_cmdQueue.empty()){
 			_popGotStuck=true;
 			pthread_mutex_unlock(&_mutexListProtect);
 			pthread_mutex_lock(&_mutexCmdAvailable);
 			pthread_mutex_lock(&_mutexListProtect);
-		}//else{
-		//	pthread_mutex_unlock(&_mutexListProtect);
-		//	pthread_mutex_lock(&_mutexListProtect);
-		//}
-		//std::cout << "Woken up " << std::endl;
-		//std::cout << "Before front items: " << _cmdQueue.size() << std::endl;
+		}
 		std::string* aCmdTmp=_cmdQueue.front();
 		//std::cout << "Read value: " << *aCmdTmp << std::endl;
 		_cmdQueue.pop_front();
@@ -114,10 +112,15 @@ public:
 		//std::cout << "End read" << std::endl;
 		return aCmdTmp;
 	}
+
 protected:
+	///Mutex for mutual exclusion of list access
 	pthread_mutex_t _mutexListProtect;
+	///Mutex preventing read access to empty command queue
 	pthread_mutex_t _mutexCmdAvailable;
+	///Command queue
 	CommandQueue _cmdQueue;
+	///Flag indicating that the server is waiting for new commands
 	bool _popGotStuck;	
 };
 #endif

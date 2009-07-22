@@ -71,6 +71,9 @@ Ludovic Apvrille, Renaud Pacalet
 #define MSG_CMDNIMPL "Command currently not implemented"
 #define MSG_FILEERR "Cannot open file "
 #define MSG_CONDERR "Condition cannot be compiled"
+#define MSG_SIMSTOPPED "Simulation stopped"
+#define MSG_SIMPAUSED "Simulation paused"
+#define MSG_SIMENDED "Simulation completed"
 #define SIM_READY "ready"
 #define SIM_BUSY "busy"
 #define SIM_TERM "term"
@@ -278,6 +281,7 @@ protected:
 	unsigned int _leafsID;
 	///Keeps track of all breakpoints set during the simulation 
 	BreakpointSet _breakpoints;
+	///Random choice breakpoint
 	RunTillNextRandomChoice _randChoiceBreak;
 };
 #endif
