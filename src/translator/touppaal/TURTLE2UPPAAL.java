@@ -59,6 +59,7 @@ public class TURTLE2UPPAAL {
 	private boolean isRegular;
 	private boolean isRegularTClass;
 	private boolean choicesDeterministic = false;
+	private boolean variableAsActions = false;
 	private RelationTIFUPPAAL table;
 	
 	private Vector warnings;
@@ -131,6 +132,11 @@ public class TURTLE2UPPAAL {
 		System.out.println("choices are assumed to be deterministic:" + choicesDeterministic);
 	}
 	
+	public void setVariablesAsActions(boolean _b) {
+		variableAsActions = _b;
+		System.out.println("Branch of choices may be selected according to variable setting: " + variableAsActions);
+	}
+	
 	public UPPAALSpec generateUPPAAL(boolean _debug, int _nb) {
 		warnings = new Vector();
 		spec = new UPPAALSpec();
@@ -161,13 +167,13 @@ public class TURTLE2UPPAAL {
 		
 		// Work with tm modeling
 		// For example, compact latencies together, etc.
-		tm.mergeChoices(true);
+		tm.mergeChoices();
 		tm.translateWatchdogs();
 		tm.translateInvocationIntoSynchronization();
 		tm.translateActionStatesWithMultipleParams();
 		
 		// Analyze the tm spcification
-		isRegular = tm.isARegularTIFSpec(choicesDeterministic);
+		isRegular = tm.isARegularTIFSpec(choicesDeterministic, variableAsActions);
 		idPar = 0;
 		System.out.println("Regular spec:" + isRegular);
 		
@@ -326,7 +332,7 @@ public class TURTLE2UPPAAL {
 			template1 = (UPPAALTemplate)(iterator.next());
 			t = tm.getTClassWithName(template1.getName());
 			if (t!= null) {
-				if(!(tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic))) {
+				if(!(tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic, variableAsActions))) {
 					spec.addGlobalDeclaration(makeGlobalParamDeclaration(t));
 					
 					loc2 = addLocation(template);
@@ -492,7 +498,7 @@ public class TURTLE2UPPAAL {
 	}
 	
 	public void translateTClass(TClass t) {
-		isRegularTClass = tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic);
+		isRegularTClass = tm.isRegularTClass(t.getActivityDiagram(), choicesDeterministic, variableAsActions);
 		tmpComponents = new LinkedList();
 		tmpLocations = new LinkedList();
 		locations = new LinkedList();
@@ -547,7 +553,7 @@ public class TURTLE2UPPAAL {
 			template.addDeclaration("int " + t.getName() + "__" + g.getName() + TURTLE2UPPAAL.SYNCID + " = 0;\n");
 		}
 		
-		int nbOfChoice = t.getMaximumNbOfGuardsPerSpecialChoice();
+		int nbOfChoice = t.getMaximumNbOfGuardsPerSpecialChoice(variableAsActions);
 		for(i=0; i<nbOfChoice; i++) {
 			template.addDeclaration("int choice__" + i + ";\n");
 		}
@@ -985,13 +991,14 @@ public class TURTLE2UPPAAL {
 					makeElementBehavior(t, template, elt.getNext(0), previous, end, null);
 				}
 			} else {
-				if (adch.isSpecialChoiceDelay()) {
-					
+				if (adch.isSpecialChoiceDelay(variableAsActions)) {
+					System.out.println("Special choice found");
 					// Must check whether some actions are delayed or not
-					if (adch.isSpecialChoiceAction()) {
+					if (adch.isSpecialChoiceAction(variableAsActions)) {
 						
 						for(i=0; i<elt.getNbNext(); i++){
-							//System.out.println("Special choice action / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
+							System.out.println("Special choice action / Task " + t.getName() + ": guard i=" + i + " =" + adch.getGuard(i));
+							
 							
 							String gua = null;
 							if (adch.isGuarded(i)) {
@@ -1002,7 +1009,7 @@ public class TURTLE2UPPAAL {
 							currentX += 2 * STEP_LOOP_X;
 						}
 					} else {
-						//System.out.println("Special choice delay");
+						System.out.println("Special choice delay");
 						
 						int tmpX = currentX;
 						int next = 0;
@@ -1013,7 +1020,7 @@ public class TURTLE2UPPAAL {
 						// Initialization
 						String init = "h__ = 0";
 						for(i=0; i<elt.getNbNext(); i++){
-							//System.out.println("Special choice delay / Task " + t.getName() + ": Choice is deterministic i=" + i + " with guard =" + adch.getGuard(i));
+							System.out.println("Special choice delay / Task " + t.getName() + ": guard i=" + i + " =" + adch.getGuard(i));
 							
 							elt1 = elt.getNext(i);
 							

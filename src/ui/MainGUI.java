@@ -5481,6 +5481,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TAD_TIME_LIMITED_OFFER);
         } else if (command.equals(actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TAD_TIME_LIMITED_OFFER_WITH_LATENCY);
+        } else if (command.equals(actions[TGUIAction.AD_TIME_CAPTURE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TAD_TIME_CAPTURE);
         } else if (command.equals(actions[TGUIAction.IOD_EDIT].getActionCommand())) {
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.IOD_CONNECTOR].getActionCommand())) {

@@ -497,7 +497,7 @@ public class ActivityDiagram extends Vector{
         add(adag);
     }
     
-    public void makeSpecialChoices() {
+    public void makeSpecialChoices(boolean variableAsActions) {
       ADComponent adc;
       boolean changeMade = true;
       while(changeMade) {
@@ -505,8 +505,8 @@ public class ActivityDiagram extends Vector{
         for(int i=0; i<size(); i++) {
           adc = (ADComponent)(elementAt(i));
           if (adc instanceof ADChoice) {
-             if (!(((ADChoice)(adc)).isSpecialChoice())) {
-               if (makeSpecialChoice((ADChoice)(adc))) {
+             if (!(((ADChoice)(adc)).isSpecialChoice(variableAsActions))) {
+               if (makeSpecialChoice((ADChoice)(adc), variableAsActions)) {
                  changeMade = true;
                }
              }
@@ -515,7 +515,7 @@ public class ActivityDiagram extends Vector{
       }
     }
     
-    public boolean makeSpecialChoice(ADChoice adch) {
+    public boolean makeSpecialChoice(ADChoice adch, boolean variableAsActions) {
       ADComponent adc;
       ADChoice adch1;
       boolean go = true;
@@ -528,7 +528,7 @@ public class ActivityDiagram extends Vector{
 
       for(int i=0; i<adch.getNbGuard(); i++) {
         delay = 0;
-        if (!adch.isSpecialChoice(i)) {
+        if (!adch.isSpecialChoice(i, variableAsActions)) {
            // Go through the elements
            adc = adch.getNext(i);
            met = new LinkedList();
@@ -551,7 +551,7 @@ public class ActivityDiagram extends Vector{
            if ((adc instanceof ADChoice) && (delay <1) && (adc != adch)) {
              // Combine choices together
              adch1 = (ADChoice)adc;
-             if (adch1.isSpecialChoice()) {
+             if (adch1.isSpecialChoice(variableAsActions)) {
                //Good!
                //adch.removeGuard(i);
                //System.out.println("Working on it...");
@@ -579,7 +579,7 @@ public class ActivityDiagram extends Vector{
                  }
                  add(adag1);
                  add(adj);
-                 if (adch.isSpecialChoice()) {
+                 if (adch.isSpecialChoice(variableAsActions)) {
                     //System.out.println("Now, special choice!");
                  } else {
                    //System.out.println("Still not a special choice!");
@@ -611,7 +611,7 @@ public class ActivityDiagram extends Vector{
              add(adag1);
              add(adj);
 
-             if (adch.isSpecialChoice()) {
+             if (adch.isSpecialChoice(variableAsActions)) {
                 System.out.println("Now, special choice!");
              } else {
                System.out.println("Still not a special choice!");
@@ -659,7 +659,7 @@ public class ActivityDiagram extends Vector{
 		
 	}
 	
-	public int getMaximumNbOfGuardsPerSpecialChoice() {
+	public int getMaximumNbOfGuardsPerSpecialChoice(boolean variableAsActions) {
 	  int nb = 0;
       ADComponent adc;
 	  ADChoice adch;
@@ -667,7 +667,7 @@ public class ActivityDiagram extends Vector{
         adc = (ADComponent)(elementAt(i));
         if (adc instanceof ADChoice) {
 			adch = (ADChoice)adc;
-			if (adch.isSpecialChoice() && (!adch.isSpecialChoiceAction())) {
+			if (adch.isSpecialChoice(variableAsActions) && (!adch.isSpecialChoiceAction(variableAsActions))) {
 				nb = Math.max(nb, ((ADChoice)adc).getNbGuard());
 			}
         }

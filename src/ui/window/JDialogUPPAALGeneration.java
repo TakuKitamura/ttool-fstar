@@ -67,6 +67,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 	protected static String sizeInfiniteFIFO = "1024";
 	protected static boolean debugGen = false;
 	protected static boolean choicesDeterministicStatic = false;
+	protected static boolean variablesAsActionsStatic = true;
 	
     
     protected final static int NOT_STARTED = 1;
@@ -86,7 +87,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 	protected JTextField sizeOfInfiniteFIFO;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox debugmode, choicesDeterministic;
+    protected JCheckBox debugmode, choicesDeterministic, variablesAsActions;
     
     private Thread t;
     private boolean go = false;
@@ -174,7 +175,16 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 		choicesDeterministic = new JCheckBox("Assume all choices as deterministic");
         choicesDeterministic.setSelected(choicesDeterministicStatic);
         jp01.add(choicesDeterministic, c01);
+		
+		variablesAsActions = new JCheckBox("Assume variable setting as actions for branch selection");
+        variablesAsActions.setSelected(variablesAsActionsStatic);
+        jp01.add(variablesAsActions, c01);
         
+		TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
+		if (tp instanceof TMLDesignPanel) {
+			variablesAsActions.setEnabled(false);
+		}
+		
         jp01.add(new JLabel(" "), c01);
         jp1.add("Generate code", jp01);
         
@@ -264,7 +274,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         String cmd;
         String list;
 		
-		boolean debug, choices;
+		boolean debug, choices, variables;
 		int nb = 0;
 		int nb1;
 		
@@ -278,6 +288,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 			//Manage debug
 			debug = debugmode.isSelected();
 			choices = choicesDeterministic.isSelected();
+			variables = variablesAsActions.isSelected();
 			
 			// Manage nb of processes
 			try {
@@ -314,7 +325,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 			if (tp instanceof TMLDesignPanel) {
 				result = mgui.gtm.generateUPPAALFromTML(pathCode, debug, size1, choices);
 			} else {
-				result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices);
+				result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices, variables);
 				jta.append("UPPAAL specification generated\n");
 				jta.append("Checking the regularity of the TIF specification\n");
 				System.out.println("Regularity?");

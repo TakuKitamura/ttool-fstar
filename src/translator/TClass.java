@@ -656,12 +656,12 @@ public class TClass {
 		return ad.getMaximumNbOfGuardsPerChoice();
 	}
 	
-	public int getMaximumNbOfGuardsPerSpecialChoice() {
+	public int getMaximumNbOfGuardsPerSpecialChoice(boolean variableAsActions) {
 		if (ad == null) {
 			return 0;
 		}
 		
-		return ad.getMaximumNbOfGuardsPerSpecialChoice();
+		return ad.getMaximumNbOfGuardsPerSpecialChoice(variableAsActions);
 	}
 	
     

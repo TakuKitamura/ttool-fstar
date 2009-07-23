@@ -356,6 +356,7 @@ public class DesignPanelTranslator {
 		ADStop adst;
 		ADTimeInterval adti;
 		ADTLO adtlo;
+		ADTimeCapture adtc;
 		String s, s1;
 		Gate g;
 		Param p;
@@ -476,6 +477,23 @@ public class DesignPanelTranslator {
 					//System.out.println("Bad action state found " + s);
 				}
 				
+			} else if (tgc instanceof TADTimeCapture) {
+				p = t.getParamByName(tgc.getValue().trim());
+				if (p != null){
+					System.out.println("Time capture with param " + p.getName());
+					adtc = new ADTimeCapture(p);
+					ad.addElement(adtc);
+					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.ATTRIBUTE);
+				} else {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown variable: " + tgc.getValue());
+					ce.setTClass(t);
+					ce.setTGComponent(tgc);
+					ce.setTDiagramPanel(tdp);
+					addCheckingError(ce);
+					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
+				}
+				
+			// Get element from Array
 			} else if (tgc instanceof TADArrayGetState) {
 				TADArrayGetState ags = (TADArrayGetState)tgc;
 				sTmp = ags.getIndex();

@@ -258,15 +258,15 @@ public class TURTLEModeling {
 	// * No non regular choice (delay choice in fact)
 	// * No recursivity over parallel operator
 	public boolean isARegularTIFSpec() {
-		return isARegularTIFSpec(false);
+		return isARegularTIFSpec(false, false);
 	}
 	
-	public boolean isARegularTIFSpec(boolean choicesDeterministic) {
+	public boolean isARegularTIFSpec(boolean choicesDeterministic, boolean variableAsActions) {
 		if (!hasOnlyRegularRelations()) {
 			return false;
 		}
 		
-		if (!hasOnlyRegularTClasses(choicesDeterministic)) {
+		if (!hasOnlyRegularTClasses(choicesDeterministic, variableAsActions)) {
 			return false;
 		}
 		
@@ -285,18 +285,18 @@ public class TURTLEModeling {
         return true;
 	}
 	
-	public boolean hasOnlyRegularTClasses(boolean choicesDeterministic) {
+	public boolean hasOnlyRegularTClasses(boolean choicesDeterministic, boolean variableAsActions) {
 		TClass tmp;
         for(int i=0; i<tclass.size(); i++) {
             tmp = (TClass)(tclass.elementAt(i));
-            if (!isRegularTClass(tmp.getActivityDiagram(), choicesDeterministic)) {
+            if (!isRegularTClass(tmp.getActivityDiagram(), choicesDeterministic, variableAsActions)) {
                 return false;
             }
         }
         return true;
 	}
 	
-	public boolean isRegularTClass(ActivityDiagram ad, boolean choicesDeterministic) {
+	public boolean isRegularTClass(ActivityDiagram ad, boolean choicesDeterministic, boolean variableAsActions) {
 		ADComponent adc;
 		ADChoice adchoice;
 		
@@ -314,7 +314,7 @@ public class TURTLEModeling {
 			if (adc instanceof ADChoice) {
 				adchoice = (ADChoice)adc;
 				if (!choicesDeterministic) {
-					if (!adchoice.isSpecialChoiceDelay()) {
+					if (!adchoice.isSpecialChoiceDelay(variableAsActions)) {
 						if (!adchoice.isElseChoice()) {
 							System.out.println("Choice is not regular");
 							for(int j=0; j<adchoice.getNbNext(); j++) {
@@ -1040,7 +1040,7 @@ public class TURTLEModeling {
         
 		//System.out.println("Remove All useless components");
         if (specialChoices) {
-			ad.makeSpecialChoices();
+			ad.makeSpecialChoices(false);
         }
 		
         while(i<ad.size()) {
@@ -1249,6 +1249,7 @@ public class TURTLEModeling {
 		ADComponent adc;
 		ADActionStateWithGate adag;
 		ADActionStateWithParam adap;
+		ADTimeCapture adtc;
 		ADChoice adch;
 		ADTLO adtlo;
 		int i, j;
@@ -1281,6 +1282,7 @@ public class TURTLEModeling {
 						usage = analyzeString2WithParam(adag.getLimitOnGate(), name);
 					}
 				}
+				
 			} else if (adc instanceof ADActionStateWithParam) {
 				adap = (ADActionStateWithParam)adc;
 				if (adap.getParam() == p) {
@@ -1290,6 +1292,13 @@ public class TURTLEModeling {
 				if (usage == 0) {
 					usage = analyzeString2WithParam(adap.getActionValue(), name);
 				}
+				
+			} else if (adc instanceof ADTimeCapture) {
+				adtc = (ADTimeCapture)adc;
+				if (adtc.getParam() == p) {
+					return 2;
+				}
+				
 			}  else if (adc instanceof ADTLO) {
 				adtlo = (ADTLO)adc;
 				s = adtlo.getAction();
@@ -2724,22 +2733,22 @@ public class TURTLEModeling {
 	}
 	
 	public void mergeChoices() {
-		mergeChoices(false);
+		mergeAllChoices();
     }
 	
-	public void mergeChoices(boolean nonDeterministic) {
-		System.out.println("Merging choices: algorithm / not guarded only: " + nonDeterministic);
+	public void mergeAllChoices() {
+		System.out.println("Merging choices: algorithm");
 		TClass t;
         for(int i=0; i<tclass.size(); i++) {
 			t = (TClass)(tclass.elementAt(i));
-			mergeChoices(t.getActivityDiagram(), nonDeterministic);
+			mergeChoices(t.getActivityDiagram());
         }
 		System.out.println("End merging choices: algorithm");
     }
 	
 	
-    
-    public void mergeChoices(ActivityDiagram ad, boolean nonDeterministic) {
+    // We merge non-else choices
+    public void mergeChoices(ActivityDiagram ad) {
 		boolean changeMade = true;
 		int i;
 		ADComponent adc1;
@@ -2750,17 +2759,12 @@ public class TURTLEModeling {
 			adc1 = (ADComponent)(ad.get(i));
 			if (adc1 instanceof ADChoice) {
 				adch1 = (ADChoice) adc1;
-				if ((index = adch1.getNextChoice()) != -1) {
-					if ((nonDeterministic) && (!adch1.isGuarded())) {
+				if (!adch1.isElseChoice()) {
+					index = adch1.getNextChoice();
+					if (index != -1) {
 						mergeChoices(ad, adch1, index);
-						mergeChoices(ad, nonDeterministic);
+						mergeChoices(ad);
 						return;
-					} else {
-						if (!nonDeterministic) {
-							mergeChoices(ad, adch1, index);
-							mergeChoices(ad, nonDeterministic);
-							return;
-						}
 					}
 				}
 			}
@@ -2801,6 +2805,8 @@ public class TURTLEModeling {
 		
 		adch1.removeNext(adch2);
 		ad.remove(adch2);
+		
+		System.out.println("New choice:" + adch1.toString());
 	}
 	
 	public void makeSequenceWithDataSave() {

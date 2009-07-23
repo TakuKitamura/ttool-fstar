@@ -77,6 +77,7 @@ public class TActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY].setEnabled(b);
         mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER].setEnabled(b);
         mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY].setEnabled(b);
+		mgui.actions[TGUIAction.AD_TIME_CAPTURE].setEnabled(b);
 		mgui.actions[TGUIAction.AD_ARRAY_GET].setEnabled(b);
 		mgui.actions[TGUIAction.AD_ARRAY_SET].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].setEnabled(b);
@@ -151,6 +152,9 @@ public class TActivityDiagramToolBar extends TToolBar {
         
         button = this.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY]);
         button.addMouseListener(mgui.mouseHandler);
+		
+		/*button = this.add(mgui.actions[TGUIAction.AD_TIME_CAPTURE]);
+        button.addMouseListener(mgui.mouseHandler);*/
 		
         this.addSeparator();
          

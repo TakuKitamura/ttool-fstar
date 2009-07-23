@@ -254,11 +254,11 @@ public class GTURTLEModeling {
 		return ret;
 	}
 	
-	public void mergeChoices(boolean nonDeterministic) {
+	/*public void mergeChoices(boolean nonDeterministic) {
 		if (tm != null) {
 			tm.mergeChoices(nonDeterministic);
 		}
-	}
+	}*/
 	
 	public NCStructure getNCS() {
 		return ncs;
@@ -354,9 +354,10 @@ public class GTURTLEModeling {
 		uppaalTable = _uppaalTable;
 	}*/
 
-	public boolean generateUPPAALFromTIF(String path, boolean debug, int nb, boolean choices) {
+	public boolean generateUPPAALFromTIF(String path, boolean debug, int nb, boolean choices, boolean variables) {
 		TURTLE2UPPAAL turtle2uppaal = new TURTLE2UPPAAL(tm);
 		turtle2uppaal.setChoiceDeterministic(choices);
+		turtle2uppaal.setVariablesAsActions(variables);
 		uppaal = turtle2uppaal.generateUPPAAL(debug, nb);
 		System.out.println("Building relation table");
 		uppaalTIFTable = turtle2uppaal.getRelationTIFUPPAAL();

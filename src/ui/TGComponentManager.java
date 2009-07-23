@@ -86,6 +86,7 @@ public class TGComponentManager {
     public static final int TAD_DELAY_NON_DETERMINISTIC_DELAY = 20;
     public static final int TAD_CHOICE = 19;
     public static final int TAD_TIME_LIMITED_OFFER_WITH_LATENCY = 10;
+	public static final int TAD_TIME_CAPTURE = 27;
 	public static final int TAD_ARRAY_GET = 25;
 	public static final int TAD_ARRAY_SET = 26;
     
@@ -302,6 +303,9 @@ public class TGComponentManager {
                 break;
             case TAD_TIME_LIMITED_OFFER_WITH_LATENCY:
                 tgc = new TADTimeLimitedOfferWithLatency(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case TAD_TIME_CAPTURE:
+                tgc = new TADTimeCapture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TAD_CHOICE:
                 tgc = new TADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -648,6 +652,8 @@ public class TGComponentManager {
             return 	TAD_DELAY_NON_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
             return 	TAD_TIME_LIMITED_OFFER_WITH_LATENCY;
+        } else if (tgc instanceof TADTimeCapture) {
+            return 	TAD_TIME_CAPTURE;
         } else if (tgc instanceof TADChoice) {
             return 	TAD_CHOICE;
         } else if (tgc instanceof TCDTClass) {

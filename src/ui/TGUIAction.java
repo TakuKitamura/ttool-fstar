@@ -105,6 +105,7 @@ public class TGUIAction extends AbstractAction {
     public static final int AD_DELAY_NON_DETERMINISTIC_DELAY = 49;
     public static final int AD_TIME_LIMITED_OFFER = 17;
     public static final int AD_TIME_LIMITED_OFFER_WITH_LATENCY = 18;
+	public static final int AD_TIME_CAPTURE = 269;
     public static final int TCD_PARALLEL_OPERATOR = 19;
     public static final int TCD_CONNECTOR_ATTRIBUTE = 20;
     public static final int TCD_SEQUENCE_OPERATOR = 21;
@@ -379,7 +380,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 269;
+    public static final int NB_ACTION = 270;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -558,6 +559,7 @@ public class TGUIAction extends AbstractAction {
         actions[AD_DELAY_NON_DETERMINISTIC_DELAY] = new TAction("add-time-interval", "Add Time Interval", IconManager.imgic224, IconManager.imgic224, "Time interval", "Add a time interval to the currently opened activity diagram", 0);
         actions[AD_TIME_LIMITED_OFFER] = new TAction("add-time-limited-offer", "Add Time-Limited offer", IconManager.imgic218, IconManager.imgic218, "Time-Limited Offer", "Add a time-limited offer to the currently opened activity diagram", 0);
         actions[AD_TIME_LIMITED_OFFER_WITH_LATENCY] = new TAction("add-time-limited-offer-with-latency", "Add Time-Limited offer with a non-deterministic delay", IconManager.imgic220, IconManager.imgic220, "Time-Limited Offer with non-deterministic delay", "Adds a time-limited offer, beginning with a non-deterministic delay, to the currently opened activity diagram", 0);
+		actions[AD_TIME_CAPTURE] = new TAction("add-time-capture", "Time capture", IconManager.imgic204, IconManager.imgic204, "Action time capture", "Add a time capture operator to the currently opened activity diagram", 0);
 		actions[AD_ARRAY_GET] = new TAction("add-array-get", "Add array get element", IconManager.imgic230, IconManager.imgic230, "Array get element", "Add an array get element action to the currently opened activity diagram", 0);
         actions[AD_ARRAY_SET] = new TAction("add-array-set", "Add array set element", IconManager.imgic232, IconManager.imgic232, "Array set element", "Add an array set element action to the currently opened activity diagram", 0);
 		

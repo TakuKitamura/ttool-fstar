@@ -156,7 +156,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
         return s;
     }
     
-    public boolean isSpecialChoice() {
+    public boolean isSpecialChoice(boolean variableAsActions) {
         // All actions following the choice must either be a action on a gate or a delay - determinitic or not -  followed by an action on a gate
         
         ADComponent adc, adc1;
@@ -169,7 +169,13 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
             } else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) ||(adc instanceof ADTimeInterval)) {
                 adc1 = adc.getNext(0);
                 if (!(adc1 instanceof ADActionStateWithGate)) {
-                    return false;
+					if (variableAsActions) {
+						if (!(adc1 instanceof ADActionStateWithParam)) {
+							return false;
+						}
+					} else {
+						return false;
+					}
                 }
             } else {
                 return false;
@@ -179,12 +185,12 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
         return true;
     }
     
-    public boolean isSpecialChoiceDelay() {
+    public boolean isSpecialChoiceDelay(boolean variableAsActions) {
 		ADComponent adc, adc1;
 		String value;
 		
 		/*if (isElseChoice()) {
-			return true;
+		return true;
 		}*/
 		
         
@@ -196,14 +202,26 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 			} else if (adc instanceof ADDelay) {
 				adc1 = adc.getNext(0);
 				if (!(adc1 instanceof ADActionStateWithGate)) {
-					return false;
+					if (variableAsActions) {
+						if (!(adc1 instanceof ADActionStateWithParam)) {
+							return false;
+						}
+					} else {
+						return false;
+					}
 				}
 			} else if (adc instanceof ADLatency) {
 				value = ((ADLatency)adc).getValue().trim();
 				if (value.equals("0")) {
 					adc1 = adc.getNext(0);
 					if (!(adc1 instanceof ADActionStateWithGate)) {
-						return false;
+						if (variableAsActions) {
+							if (!(adc instanceof ADActionStateWithParam)) {
+								return false;
+							}
+						} else {
+							return false;
+						}
 					}
 				}
 			} else if (adc instanceof ADTimeInterval) {
@@ -211,7 +229,13 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 				if (adt.getMinValue().equals(adt.getMaxValue())) {
 					adc1 = adc.getNext(0);
 					if (!(adc1 instanceof ADActionStateWithGate)) {
-						return false;
+						if (variableAsActions) {
+							if (!(adc1 instanceof ADActionStateWithParam)) {
+								return false;
+							}
+						} else {
+							return false;
+						}
 					}
 				}
 			} else {
@@ -222,7 +246,7 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
         return true;
     }
 	
-	public boolean isSpecialChoiceAction() {
+	public boolean isSpecialChoiceAction(boolean variableAsActions) {
 		ADComponent adc, adc1;
 		String value;
 		
@@ -230,14 +254,22 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
             adc = getNext(i);
             
             if (!(adc instanceof ADActionStateWithGate)) {
-				return false;
+				if (variableAsActions) {
+					if (!(adc instanceof ADActionStateWithParam)) {
+						return false;
+					}
+				} else {
+					return false;
+				}
 			}
+			
+			
         }
         
         return true;
     }
 	
-	public boolean isSpecialChoice(int index) {
+	public boolean isSpecialChoice(int index, boolean variableAsActions) {
 		ADComponent adc, adc1;
 		adc = getNext(index);
 		
@@ -246,7 +278,13 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 		} else if ((adc instanceof ADDelay) || (adc instanceof ADLatency) ||(adc instanceof ADTimeInterval)) {
 			adc1 = adc.getNext(0);
 			if (!(adc1 instanceof ADActionStateWithGate)) {
-				return false;
+				if (variableAsActions) {
+					if (!(adc1 instanceof ADActionStateWithParam)) {
+						return false;
+					}
+				} else {
+					return false;
+				}
 			}
 		} else {
 			return false;
@@ -299,9 +337,9 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
 		g1 = Conversion.replaceAllChar(g1, ']', "").trim();
 		
 		if (g0.startsWith("not(")) {
-				g0 = g0.substring(4, g0.length()-1);
+			g0 = g0.substring(4, g0.length()-1);
 		} else if (g1.startsWith("not(")) {
-				g1 = g1.substring(4, g1.length()-1);
+			g1 = g1.substring(4, g1.length()-1);
 		} 
 		
 		if (g0.compareTo(g1) == 0) {

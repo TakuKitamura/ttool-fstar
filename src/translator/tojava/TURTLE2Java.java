@@ -912,7 +912,7 @@ public class TURTLE2Java {
         }
         
         
-        if (adch.isSpecialChoice()) {
+        if (adch.isSpecialChoice(false)) {
             /*indent(jo, dec);
             jo.addCode("__bchoice__name = new JGate[" + nbG + "];\n");
             indent(jo, dec);
