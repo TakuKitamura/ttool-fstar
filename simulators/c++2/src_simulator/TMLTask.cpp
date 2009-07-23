@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): _ID(iID), _name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0) {
+TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): _ID(iID), _name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
 	//_myid=++_id;
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
@@ -121,6 +121,10 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_busyCycles+=iTrans->getOperationLength();
 	//FOR_EACH_TASKLISTENER (*i)->transExecuted(iTrans);
 	NOTIFY_TASK_TRANS_EXECUTED(iTrans);
+	if (_justStarted){
+		NOTIFY_TASK_STARTED(iTrans);
+		_justStarted=false;	
+	}
 	if(iTrans->getChannel()==0){
 		_noCPUTransactions++;
 		_CPUContentionDelay+=iTrans->getStartTime()-iTrans->getRunnableTime();
@@ -229,6 +233,7 @@ std::istream& TMLTask::readObject(std::istream& s){
 		//_currCommand->prepare();
 	}
 	//std::cout << "End Read Object TMLTask " << _name << std::endl;
+	_justStarted=false;
 	return s;
 }
 
@@ -251,7 +256,8 @@ void TMLTask::reset(){
 	_transactList.clear();
 	_busyCycles=0;
 	_CPUContentionDelay=0;
-	_noCPUTransactions=0; 
+	_noCPUTransactions=0;
+	_justStarted=true;
 }
 
 ParamType* TMLTask::getVariableByName(std::string& iVarName ,bool& oIsId){
@@ -285,4 +291,9 @@ VariableLookUpTableID::const_iterator TMLTask::getVariableIteratorID(bool iEnd) 
 
 VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iEnd) const{
 	return (iEnd)?_varLookUpName.end():_varLookUpName.begin();
+}
+
+void TMLTask::finished(){
+	_justStarted=true;
+	if (!_transactList.empty()) NOTIFY_TASK_FINISHED(_transactList.front());
 }

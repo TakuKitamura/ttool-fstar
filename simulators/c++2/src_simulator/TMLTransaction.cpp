@@ -62,7 +62,9 @@ void TMLTransaction::setRunnableTime(TMLTime iRunnableTime){
 	//	std::cout << "ERROR: runnable time set twice\n";
 	//}else{
 		//_runnableTimeSet=true;
+#ifdef REGISTER_TRANS_AT_CPU 
 	_command->getTask()->getCPU()->registerTransaction(this,0);
+#endif
 	//}
 }
 

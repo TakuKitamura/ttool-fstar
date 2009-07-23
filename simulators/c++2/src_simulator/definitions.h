@@ -83,6 +83,7 @@ using std::max;
 #define PARAMETER_BLOCK_SIZE 1000
 #define ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
+#undef REGISTER_TRANS_AT_CPU 
 #define PORT "3490"
 #define BACKLOG 10
 #define VCD_PREFIX "b"

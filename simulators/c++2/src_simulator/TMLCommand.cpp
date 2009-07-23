@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0){
+TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), _paramFunc(iParamFunc), _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 }
@@ -72,8 +72,8 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 		//std::cout << "COMMAND FINISHED!!n";
-		//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 		NOTIFY_CMD_FINISHED(this);
+		if (_justStarted) NOTIFY_CMD_STARTED(this);
 		_progress=0;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
@@ -87,33 +87,29 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		}
 	}else{
 		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
-		//_simStopped=false;
 		if (iInit){
-			//_simStopped=false;
 			if (_currTransaction!=0) delete _currTransaction;
+			if (_progress==0) _justStarted=true;
 		}else{
-			//_simStopped=false;
-			if (_progress==0)
-				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandEntered(this);
-				//FOR_EACH_CMDLISTENER (*i)->commandEntered(this);
+			if (_progress==0){
 				NOTIFY_CMD_ENTERED(this);
-			else
-				//FOR_EACH_CMDLISTENER _simStopped|= (*i)->commandExecuted(this);
-				//FOR_EACH_CMDLISTENER (*i)->commandExecuted(this);
+				_justStarted=true;
+			}else{
 				NOTIFY_CMD_EXECUTED(this);
+				if (_justStarted){
+					NOTIFY_CMD_STARTED(this);
+					_justStarted=false;
+				}
+			}
 			//std::cout << "Prepare next transaction" << std::endl;
-			//if (_simStopped){
-			//if (_simComp->getStopFlag()){
-			//	std::cout << "aSimStopped=true " << std::endl;
-			//	_task->setCurrCommand(this);
-			//	return this;  //for command which generates transactions this is returned anyway by prepareTransaction
-			//}
 		}
 		TMLCommand* result = prepareNextTransaction();
 		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
+#ifdef REGISTER_TRANS_AT_CPU 
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
 			_task->getCPU()->registerTransaction(_currTransaction,0);
 		}
+#endif
 		return result;
 	}
 	return 0;

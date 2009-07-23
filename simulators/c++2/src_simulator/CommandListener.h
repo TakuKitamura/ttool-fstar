@@ -40,10 +40,11 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef CommandListenerH
 #define CommandListenerH
-//#define FOR_EACH_CMDLISTENER for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i)
 #define NOTIFY_CMD_ENTERED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm)
 #define NOTIFY_CMD_EXECUTED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm)
 #define NOTIFY_CMD_FINISHED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm)
+#define NOTIFY_CMD_STARTED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm)
+
 
 ///Encapsulates events associated with commands
 class CommandListener{
@@ -66,6 +67,12 @@ public:
 	\return true if simulation is stopped
 	*/
 	virtual bool commandFinished(TMLCommand* iComm){return false;}
+	///Gets called when a the first transaction of the command is executed
+	/**
+	\param  iComm Pointer to the command
+	\return true if simulation is stopped
+	*/
+	virtual bool commandStarted(TMLCommand* iComm){return false;}
 	///Destructor
 	virtual ~CommandListener(){}
 protected:

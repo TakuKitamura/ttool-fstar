@@ -38,34 +38,33 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <TMLStopCommand.h>
-#include <TMLTask.h>
+#ifndef ChannelListenerH
+#define ChannelListenerH
+#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->writeTrans(iTrans);}
+#define NOTIFY_READ_TRANS_EXECUTED(iTrans) for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->readTrans(iTrans);}
 
-TMLStopCommand::TMLStopCommand(unsigned int iID, TMLTask* iTask): TMLCommand(iID, iTask, 1, 0, 0){
-}
-
-void TMLStopCommand::execute(){
-}
-
-TMLCommand* TMLStopCommand::prepareNextTransaction(){
-	_task->finished();
-	return 0;
-}
-
-TMLTask* TMLStopCommand::getDependentTask() const{
-	return 0;
-}
-
-std::string TMLStopCommand::toString() const{
-	std::ostringstream outp;	
-	outp << "Stop in " << TMLCommand::toString();
-	return outp.str();
-}
-
-std::string TMLStopCommand::toShortString() const{
-	return "Stop";
-}
-
-std::string TMLStopCommand::getCommandStr() const{
-	return "stop";
-}
+///Encapsulates events associated with commands
+class ChannelListener{
+public:
+	///Gets called when a transaction is executed
+	/**
+	\param  iTrans Pointer to the transaction
+	\return true if simulation is stopped
+	*/
+	virtual bool transExecuted(TMLTransaction* iTrans){return false;}
+	///Gets called when a read transaction is executed
+	/**
+	\param  iTrans Pointer to the transaction
+	\return true if simulation is stopped
+	*/
+	virtual bool readTrans(TMLTransaction* iTrans){return false;}
+	///Gets called when a write transaction is executed
+	/**
+	\param  iTrans Pointer to the transaction
+	\return true if simulation is stopped
+	*/
+	virtual bool writeTrans(TMLTransaction* iTrans){return false;}
+	virtual ~ChannelListener(){}
+protected:
+};
+#endif

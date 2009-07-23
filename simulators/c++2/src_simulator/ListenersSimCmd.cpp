@@ -299,6 +299,54 @@ bool RunTillTransOnTask::transExecuted(TMLTransaction* iTrans){
 
 
 //************************************************************************
+RunTillTransOnChannel::RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+	_subject->registerListener(this);
+}
+
+RunTillTransOnChannel::~RunTillTransOnChannel(){
+	_subject->removeListener(this);
+}
+
+bool RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans){
+	//_simComp->setStopFlag(true);
+	_simComp->setStopFlag(true, MSG_TRANSONDEVICE);
+	return true;
+}
+
+
+//************************************************************************
+TestListener::TestListener(SimComponents* iSimComp):_simComp(iSimComp){
+}
+
+bool TestListener::taskStarted(TMLTransaction* iTrans){
+	std::cout << "Task started\n";
+}
+
+bool TestListener::taskFinished(TMLTransaction* iTrans){
+	std::cout << "Task finished\n";
+}
+
+bool TestListener::readTrans(TMLTransaction* iTrans){
+	std::cout << "readTrans\n";
+}
+
+bool TestListener::writeTrans(TMLTransaction* iTrans){
+	std::cout << "write Trans\n";
+}
+
+bool TestListener::commandFinished(TMLCommand* iComm){
+	std::cout << "command started\n";
+}
+
+bool TestListener::commandStarted(TMLCommand* iComm){
+	std::cout << "command finished\n";
+}
+
+TestListener::~TestListener(){
+}
+
+
+//************************************************************************
 ConstraintBlock::ConstraintBlock(SimComponents* iSimComp):_simComp(iSimComp){
 }
 

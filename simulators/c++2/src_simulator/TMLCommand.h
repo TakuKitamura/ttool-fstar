@@ -199,8 +199,10 @@ protected:
 	unsigned int _nbOfNextCmds;
 	///Breakpoint
 	CommandListener* _breakpoint;
-	///Indicates if the breakpoint of the command has stopped the simulation  
-	bool _simStopped;
+	/////Indicates if the breakpoint of the command has stopped the simulation  
+	//bool _simStopped;
+	///Is true until the first transaction of a task is executed
+	bool _justStarted;
 	///Determines the next command based on the _nextCommand array
 	/**
 	\return Pointer to the next command

@@ -61,6 +61,7 @@ void TMLWaitCommand::execute(){
 
 TMLCommand* TMLWaitCommand::prepareNextTransaction(){
 	//std::cout << "wait command length: " << _length  << "  progress: " << _progress << std::endl; 
+	if (_progress==0 && _channel->getRequestChannel()) _task->finished();
 	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	_channel->testRead(_currTransaction);
 	return this;

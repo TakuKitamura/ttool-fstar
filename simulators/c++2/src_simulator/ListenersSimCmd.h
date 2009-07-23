@@ -284,6 +284,50 @@ protected:
 
 
 //************************************************************************
+///Listener which stops the simulation as soon data is conveyed on a given channel
+class RunTillTransOnChannel: public ChannelListener{
+public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iSubject Channel to listen on
+	*/
+	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
+	///Destructor
+	virtual ~RunTillTransOnChannel();
+	bool transExecuted(TMLTransaction* iTrans);
+protected:
+	///Pointer to a SimComponents object
+	SimComponents* _simComp;
+	///Channel to listen on
+	ListenerSubject <ChannelListener> * _subject;
+};
+
+
+//************************************************************************
+class TestListener: public TaskListener, public ChannelListener, public CommandListener{
+public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	*/
+	TestListener(SimComponents* iSimComp);
+	bool taskStarted(TMLTransaction* iTrans);
+	bool taskFinished(TMLTransaction* iTrans);
+	bool readTrans(TMLTransaction* iTrans);
+	bool writeTrans(TMLTransaction* iTrans);
+	bool commandFinished(TMLCommand* iComm);
+	bool commandStarted(TMLCommand* iComm);
+	///Destructor
+	virtual ~TestListener();
+	
+protected:
+	///Pointer to a SimComponents object
+	SimComponents* _simComp;
+};
+
+
+//************************************************************************
 class ConstraintBlock: public TransactionListener{
 	ConstraintBlock(SimComponents* iSimComp);
 	~ConstraintBlock();

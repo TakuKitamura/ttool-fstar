@@ -174,7 +174,8 @@ public:
 	\return Const iterator for variable table
 	*/
 	VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
-
+	///Is called when a stop command is encountered
+	void finished();
 protected:
 	///ID of the task
 	unsigned int _ID;
@@ -218,6 +219,8 @@ protected:
 	VariableLookUpTableID _varLookUpID;
 	///Hash table containing commands
 	CommandHashTab _commandHash;
+	///Is true until the first transaction of a task is executed
+	bool _justStarted;
 };
 
 #endif

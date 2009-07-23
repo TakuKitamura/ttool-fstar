@@ -42,8 +42,6 @@ Ludovic Apvrille, Renaud Pacalet
 #define TransactionListenerH
 //#define FOR_EACH_TRANSLISTENER for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i)
 #define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
-#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
-#define NOTIFY_READ_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
 
 ///Encapsulates events associated with transactions
 class TransactionListener{

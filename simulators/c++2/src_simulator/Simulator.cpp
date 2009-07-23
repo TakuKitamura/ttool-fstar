@@ -42,12 +42,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Server.h>
 #include <ServerLocal.h>
 #include <TMLSelectCommand.h>
-//#include <BusAbstr.h>
-//#include <CPUAbstr.h>
-//#include <ChannelAbstr.h>
-//#include <TaskAbstr.h>
-//#include <CommandAbstr.h>
-//#include <TransactionAbstr.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
 
@@ -974,7 +968,16 @@ void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
 }
 
 bool Simulator::runToNextBreakpoint(TMLTransaction*& oLastTrans){
-	return simulate(oLastTrans);
+	//TestListener myListener(_simComp);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
+	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);
+	//bool erg=simulate(oLastTrans);
+	 return simulate(oLastTrans);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->removeListener(&myListener);
+	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->removeListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->removeListener(&myListener);
+	//return erg;
 }
 
 bool Simulator::runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTrans){
@@ -1022,8 +1025,8 @@ bool Simulator::runToSlaveTrans(Slave* iSlave, TMLTransaction*& oLastTrans){
 }
 
 bool Simulator::runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans){
-	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iChannel);
-	RunTillTransOnDevice aListener(_simComp, aSubject);
+	ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
+	RunTillTransOnChannel aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 

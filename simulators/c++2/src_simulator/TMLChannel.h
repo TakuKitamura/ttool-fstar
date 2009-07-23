@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Slave.h>
 #include <Serializable.h>
 #include <ListenerSubject.h>
-#include <TransactionListener.h>
+#include <ChannelListener.h>
 
 class TMLTransaction;
 class TMLCommand;
@@ -54,7 +54,7 @@ class TMLTask;
 class Bus;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
-class TMLChannel: public Serializable, public ListenerSubject <TransactionListener> {
+class TMLChannel: public Serializable, public ListenerSubject <ChannelListener> {
 public:
 	///Constructor
     	/**
