@@ -345,5 +345,36 @@ public class MSC extends HMSCElement {
 		return list;
 	}
 	
+	public int getOrderOfEvt(Evt _evt) {
+		// Computes the nb of evts that occur in the instance before
+		// the evt given as parameter
+		
+		ArrayList<Evt> metEvts = new ArrayList<Evt>();
+		
+		
+		computeAllEvtsBefore(metEvts, _evt);
+		
+		return (metEvts.size() - 1);
+	}
+	
+	private void computeAllEvtsBefore(ArrayList<Evt> _metEvts, Evt _evt) {
+		ListIterator iterator;
+		Order order;
+		
+		_metEvts.add(_evt);
+		
+		iterator = orders.listIterator();
+		while(iterator.hasNext()) {
+			order = (Order)(iterator.next());
+			if(order.evt2 == _evt) {
+				if (order.evt1.getInstance() == _evt.getInstance()) {
+					if (!_metEvts.contains(order.evt1)) {
+						computeAllEvtsBefore(_metEvts, order.evt1);
+					}
+				}
+			}
+		}
+	}
+	
 	
 }

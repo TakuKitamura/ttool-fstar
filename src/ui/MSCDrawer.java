@@ -54,7 +54,10 @@ import ui.iod.*;
 
 public class MSCDrawer {
 	public final static int DEC = 50;
-	public final static int DEC_COMP = 50;
+	public final static int DEC_COMP = 30;
+	public final static int INIT_X = 100;
+	public final static int INIT_Y = 40;
+	
     private MainGUI mgui;
 	private HMSC hmsc;
     private MSC msc;
@@ -168,9 +171,11 @@ public class MSCDrawer {
 		SequenceDiagramPanel sdp;
 		ListIterator iterator;
 		Instance instance;
-		int myX = 50;
-		int myY = 40;
+		int myX = INIT_X;
+		int myY = INIT_Y;
 		TGComponent tgc;
+		ArrayList<SDInstance> ginstances;
+		SDInstance sdi;
 		//SDInstance sdi;
 		
 		// Creates the panel
@@ -185,21 +190,92 @@ public class MSCDrawer {
 		}
 		
 		// Put instances
+		ginstances = new ArrayList<SDInstance>();
 		iterator = _hmsc.getInstances().listIterator();
 		while(iterator.hasNext()) {
 			instance = (Instance)(iterator.next());
 			tgc = TGComponentManager.addComponent(myX, myY, TGComponentManager.SD_INSTANCE, sdp);
 			tgc.setValue(instance.getName());
 			sdp.addBuiltComponent(tgc);
+			ginstances.add((SDInstance)tgc);
 			telements.add(instance);
 			gelements.add(tgc);
-			myX += (4 * DEC);
+			myX += (5 * DEC);
 		}
 		
 		// Put events on instances -> sending, receving are ignored for the moment
-		ListIterator li2;
-		ListIterator li1 = _hmsc.getInstances().listIterator();
-		Order order;
+		//ListIterator li2;
+		ListIterator li1 = msc.getEvts().listIterator();
+		Evt evt, evt1, evt2;
+		int indexInstance;
+		
+		while(li1.hasNext()) {
+			evt = (Evt)(li1.next());
+			indexInstance = hmsc.getInstances().indexOf(evt.getInstance());
+			sdi = ginstances.get(indexInstance);
+			myX = INIT_X + (5*DEC) * indexInstance;
+			myY = INIT_Y + DEC_COMP + msc.getOrderOfEvt(evt) * (DEC_COMP);
+			tgc = null;
+			
+			if (evt.getType() == Evt.VARIABLE_SET) {
+				tgc = TGComponentManager.addComponent(myX, myY, TGComponentManager.SD_ACTION_STATE, sdp);
+				tgc.setValue(evt.getActionId());
+			}
+			
+			if (tgc != null) {
+				// Check first the size of the instance as well as the size of the panel
+				if (myY > (sdi.getY() + sdi.getHeight() + 20)) {
+						// Increase size of all instances
+						sdp.increaseInstanceSize(250);
+				}
+				// Add the component to the instance
+				sdi.addSwallowedTGComponent(tgc, myX, myY);
+			}
+			
+		}
+		
+		// Sending, receiving events
+		// For them, we parse links between events
+		li1 = msc.getLinksEvts().listIterator();
+		LinkEvts le;
+		TGConnectingPoint p1, p2;
+		TGConnectorMessageSD msg;
+		
+		while(li1.hasNext()) {
+			le = (LinkEvts)(li1.next());
+			
+			evt1 = le.evt1;
+			evt2 = le.evt2;
+			
+			if (evt2.getType() == Evt.SEND_SYNC) {
+				evt = evt2;
+				evt2 = evt1;
+				evt1 = evt;
+			}
+			
+			if ((evt1.getType() == Evt.SEND_SYNC) && (evt2.getType() == Evt.RECV_SYNC)) {
+				indexInstance = hmsc.getInstances().indexOf(evt1.getInstance());
+				sdi = ginstances.get(indexInstance);
+				myX = INIT_X + (5*DEC) * indexInstance;
+				myY = INIT_Y + DEC_COMP + msc.getOrderOfEvt(evt1) * (DEC_COMP);
+				p1 = sdi.closerFreeTGConnectingPoint(myX, myY);
+				
+				indexInstance = hmsc.getInstances().indexOf(evt2.getInstance());
+				sdi = ginstances.get(indexInstance);
+				myX = INIT_X + (5*DEC) * indexInstance;
+				myY = INIT_Y + DEC_COMP + msc.getOrderOfEvt(evt2) * (DEC_COMP);
+				p2 = sdi.closerFreeTGConnectingPoint(myX, myY);
+				
+				if ((p1 != null) && (p2 != null)) {
+					msg = (TGConnectorMessageSD)(TGComponentManager.addConnector(p1.x, p1.y, TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD, sdp, p1, p2, new Vector()));
+					msg.setValue(evt1.getActionId());
+					sdp.addBuiltComponent(msg);
+					System.out.println("added a synchronous message");
+				}
+			} else {
+				System.out.println("Badly formed linkevt");
+			}
+		}
 		
 		
 		/*while(li1.hasNext()) {

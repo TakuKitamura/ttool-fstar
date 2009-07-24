@@ -305,4 +305,25 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         }
         return found;
     }
+	
+	public void increaseInstanceSize(int size) {
+		Iterator iterator = componentList.listIterator();
+        TGComponent tgc;
+		int maxYH = 0;
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof SDInstance) {
+				tgc.setUserResize(tgc.getX(), tgc.getY(), tgc.getWidth(), tgc.getHeight() + size);
+			}
+			
+			maxYH = Math.max(maxYH, tgc.getY() + tgc.getHeight());
+		}
+		
+		if (maxYH > getMaxY()) {
+			setMaxY(getMaxY() + increment);
+            updateSize();
+		}
+	}
 }

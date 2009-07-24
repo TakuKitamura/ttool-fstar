@@ -185,8 +185,8 @@ public class SDExchange {
 								System.out.println("Duplicate name for instance " + tmp + ": ignoring second instance");
 							} else {
 								instance = _hmsc.getCreateInstanceIfNecessary(tmp);
-								loadInstance(elt.getChildNodes(), _hmsc, _msc, instance);
 							}
+							loadInstance(elt.getChildNodes(), _hmsc, _msc, instance);
 						} else {
 							System.out.println("Instance without a name: skipping");
 						}
@@ -279,7 +279,7 @@ public class SDExchange {
 			LinkEvts le;
             
             System.out.println("Loading links ");
-            //System.out.println(nl.toString());
+            System.out.println(nl.toString());
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -307,6 +307,7 @@ public class SDExchange {
 									System.out.println("Error in xml specification: evts not found. Skipping");
 								}
 							} catch (Exception e) {
+								System.out.println("Exception in loadlinks: parsing ints");
 							}
 							
 						}
@@ -316,6 +317,7 @@ public class SDExchange {
 			}
     
         } catch (Exception e) {
+			System.out.println("Exception in loadlinks");
             return false;
         }
 		return true;

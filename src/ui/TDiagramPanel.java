@@ -120,7 +120,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     private final int minimumXSize = 900;
     private final int minimumYSize = 900;
-    private final int increment = 500;
+    protected final int increment = 500;
     
     private double zoom = 1.0;
 	private boolean zoomed = false;

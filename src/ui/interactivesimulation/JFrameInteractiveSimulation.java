@@ -131,7 +131,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	
 	// Status elements
-	JLabel status, time;
+	JLabel status, time, info;
 	
 	// Task elements
 	TaskVariableTableModel tvtm;
@@ -560,6 +560,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		time = new JLabel("Unknown");
 		time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(time);
+		jp02.add(new JLabel(" "));
+		jp02.add(new JLabel("Sim. interrupt reason:"));
+		info = new JLabel("Unknown");
+		info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+		jp02.add(info);
 		
 		// Options
 		jp01 = new JPanel();
@@ -1144,6 +1149,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							makeStatus(node0.getTextContent());
 						}
 						
+						nl = elt.getElementsByTagName("brkreason");
+						if (nl.getLength() > 0) {
+							node0 = nl.item(0);
+							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							
+							makeBrkReason(node0.getTextContent());
+						}
+						
 						nl = elt.getElementsByTagName("simtime");
 						if (nl.getLength() > 0) {
 							gotTimeAnswerFromServer = true;
@@ -1409,6 +1422,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		notify();
 	}
 	
+	public void makeBrkReason(String s) {
+		info.setText(s);
+	}
+	
 	public void makeStatus(String s) {
 		//System.out.println("busystatus="  + busyStatus);
 		
@@ -1452,18 +1469,22 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		case 0:
 			status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 			time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
+			info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 			break;
 		case 1:
 			status.setForeground(ColorManager.InteractiveSimulationText_READY);
 			time.setForeground(ColorManager.InteractiveSimulationText_READY);
+			info.setForeground(ColorManager.InteractiveSimulationText_READY);
 			break;        
 		case 2:
 			status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
 			time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
+			info.setForeground(ColorManager.InteractiveSimulationText_BUSY);
 			break;
 		case 3:
 			status.setForeground(ColorManager.InteractiveSimulationText_TERM);
 			time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+			info.setForeground(ColorManager.InteractiveSimulationText_TERM);
 			break;
 		}
 		
