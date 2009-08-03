@@ -257,6 +257,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
 	_simComp->setStopFlag(false,"");
+	NOTIFY_SIM_STARTED();
 	while (transLET!=0 && !_simComp->getStopFlag()){
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
@@ -323,6 +324,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   }
 		  }
 		 }
+                 NOTIFY_TIME_ADVANCES(transLET->getEndTime());
 		}
 //#ifdef DEBUG_KERNEL
 		//else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
@@ -332,6 +334,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		//_syncInfo->_server->sendReply("Sleep once again\n");
 		//sleep(1);
 	}
+	NOTIFY_SIM_STOPPED();
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
 	return (transLET==0);
@@ -968,16 +971,16 @@ void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
 }
 
 bool Simulator::runToNextBreakpoint(TMLTransaction*& oLastTrans){
-	//TestListener myListener(_simComp);
-	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
-	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
-	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);
-	//bool erg=simulate(oLastTrans);
-	 return simulate(oLastTrans);
-	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->removeListener(&myListener);
-	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->removeListener(&myListener);
-	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->removeListener(&myListener);
-	//return erg;
+	TestListener myListener(_simComp);
+	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
+	_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
+	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);
+	bool erg=simulate(oLastTrans);
+	//return simulate(oLastTrans);
+	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->removeListener(&myListener);
+	_simComp->getChannelByName("DIPLODOCUSDesign__evt")->removeListener(&myListener);
+	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->removeListener(&myListener);
+	return erg;
 }
 
 bool Simulator::runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTrans){

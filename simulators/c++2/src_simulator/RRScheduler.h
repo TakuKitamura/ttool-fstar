@@ -37,39 +37,27 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-
-#ifndef CPUPBH
-#define CPUPBH
-
-#include <definitions.h>
-#include <CPU.h>
-
+#ifndef RRSchedulerH
+#define RRSchedulerH
+#include <WorkloadSource.h>
 
 class TMLTransaction;
 
-///Simulates the bahavior of a CPU and an operating system
-class CPUPB: public CPU{
+class RRScheduler: public WorkloadSource{
 public:
-	///Constructor
-    	/**
-      	\param iID ID of the CPU
-	\param iName Name of the CPU
-	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
-	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
-	\param iPipelineSize Pipeline size
-	\param iTaskSwitchingCycles Task switching penalty in cycles
-	\param iBranchingMissrate Branching prediction miss rate in %
-	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
-	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
-	\param ibyteDataSize Machine word length
-    	*/
-	CPUPB(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
-	///Destructor
-	~CPUPB();
-	void schedule();
-	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
+	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
+	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	~RRScheduler();
+	void schedule(TMLTime iEndSchedule);
+	TMLTransaction* getNextTransaction() const;
+	void reset();
+	std::string toString() const;
 protected:
+	std::string _name;
+	TMLTransaction* _nextTransaction;
+	TMLTime _timeSlice;
+	TMLTime _minSliceSize;
+	TMLTime _elapsedTime;
+	WorkloadSource* _lastSource;
 };
-
 #endif

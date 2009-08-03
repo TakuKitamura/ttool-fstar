@@ -37,51 +37,38 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-
-#ifndef CPURRH
-#define CPURRH
-
+#ifndef WorkloadSourceH
+#define WorkloadSourceH
 #include <definitions.h>
-#include <CPU.h>
-
+//#include <TMLTask.h>
 
 class TMLTransaction;
+class Master;
+class TMLTask;
 
-///Simulates the bahavior of a CPU with a Round Robin scheduling policy
-class CPURR: public CPU{
+class WorkloadSource{
 public:
-	///Constructor
-    	/**
-	\param iID ID of the CPU
-      	\param iName Name of the CPU
-	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
-	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
-	\param iPipelineSize Pipeline size
-	\param iTaskSwitchingCycles Task switching penalty in cycles
-	\param iBranchingMissrate Branching prediction miss rate in %
-	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
-	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
-	\param ibyteDataSize Machine word length
-    	*/
-	CPURR(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
-	///Destructor
-	~CPURR();
-	void schedule();
-	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
-	bool addTransaction();
-	virtual void reset();
+	WorkloadSource(unsigned int iPriority): _priority(iPriority), _srcArraySpecified(false) {}
+	WorkloadSource(unsigned int iPriority, WorkloadSource** aSourceArray, unsigned int iNbOfSources): _priority(iPriority), _srcArraySpecified(true){
+		for (unsigned int i=0;i<iNbOfSources;i++){
+			addWorkloadSource(aSourceArray[i]);
+			std::cout << "Workload source added " << aSourceArray[i]->toString() << "\n";
+		}
+		delete[] aSourceArray;
+	}
+	virtual ~WorkloadSource();
+	virtual TMLTransaction* getNextTransaction() const=0;
+	inline unsigned int getPriority() const{return _priority;}
+	inline void addWorkloadSource(WorkloadSource* iSource){_workloadList.push_back(iSource);}
+	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->registerTransaction(iTrans, iSourceDevice);
+	}
+	virtual void schedule(TMLTime iEndSchedule){};
+	virtual void reset(){}
+	virtual std::string toString() const =0;
 protected:
-	///List of transaction in the future
-	FutureTransactionQueue _futureTransQueue;
-	///List of transaction in the past
-	TransactionList _pastTransQueue;
-	///Time qunatum for round robin policy
-	unsigned int _timeQuantum;
-	///Start time of the current execution round of the task
-	unsigned int _taskStartTime;
-	///Indicates if the scheduler has changed the task
-	bool _taskChanged;
+	WorkloadList _workloadList;
+	unsigned int _priority;
+	bool _srcArraySpecified;
 };
-
 #endif

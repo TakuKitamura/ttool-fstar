@@ -44,9 +44,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Parameter.h>
 #include <definitions.h>
 #include <CPU.h>
-#include <CPUPB.h>
-#include <CPUPBL.h>
-#include <CPURR.h>
+//#include <CPUPB.h>
+//#include <CPUPBL.h>
+//#include <CPURR.h>
+#include <RRScheduler.h>
+#include <PrioScheduler.h>
 #include <Bus.h>
 #include <Bridge.h>
 #include <Memory.h>
@@ -63,6 +65,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Server.h>
 #include <SimServSyncInfo.h>
 #include <ListenersSimCmd.h>
+#include <KernelListener.h>
 
 #define RECUR_DEPTH 20
 
@@ -83,7 +86,7 @@ class SimServSyncInfo;
 class ServerIF;
 
 ///Simulation engine and output capabilities
-class Simulator{
+class Simulator: public ListenerSubject<KernelListener> {
 public:
 	///Constructor
 	/**

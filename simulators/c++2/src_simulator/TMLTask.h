@@ -49,6 +49,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <MemPool.h>
 #include <ListenerSubject.h>
 #include <TaskListener.h>
+#include <WorkloadSource.h>
 
 class TMLCommand;
 class CPU;
@@ -61,7 +62,7 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject <TaskListener>{
+class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject <TaskListener>, public WorkloadSource{
 public:	
 	///Constructor
     	/**
@@ -176,13 +177,19 @@ public:
 	VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
 	///Is called when a stop command is encountered
 	void finished();
+	///Returns the current task state 
+	/**
+	\return Task state: UNKNOWN, SUSPENDED, READY, RUNNING, TERMINATED
+	*/
+	unsigned int getState();
+	TMLTransaction* getNextTransaction() const;
 protected:
 	///ID of the task
 	unsigned int _ID;
 	///Name of the task
 	std::string _name;
-	///Priority of the task
-	unsigned int _priority;
+	/////Priority of the task
+	//unsigned int _priority;
 	///End of the last scheduled transaction of the task
 	TMLTime _endLastTransaction;
 	///Pointer to the current command of the task

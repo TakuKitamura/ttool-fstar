@@ -57,6 +57,8 @@ Ludovic Apvrille, Renaud Pacalet
 #define MSG_RUNXCOMMANDS "Commands executed"
 #define MSG_RUNXTIMEUNITS "Time units elapsed"
 #define MSG_TRANSONDEVICE "Transaction on device encountered"
+#define MSG_TRANSONTASK "Transaction of task encountered"
+#define MSG_TRANSONCHANNEL "Transaction on channel encountered"
 #define MSG_CONSTRAINTBLOCK "Constraint not fulfilled"
 
 
@@ -74,7 +76,7 @@ public:
 	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
 	///Destructor
 	virtual ~RunXTransactions();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 	///Sets the number of transactions to execute
 	/**
 	\param  iTransToExecute Number of transactions to execute
@@ -98,7 +100,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	Breakpoint(SimComponents* iSimComp);
-	bool commandEntered(TMLCommand* iComm);
+	void commandEntered(TMLCommand* iComm);
 	///Enable/disable all breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -125,7 +127,7 @@ public:
 	CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask);
 	///Destructor
 	~CondBreakpoint();
-	bool commandFinished(TMLCommand* iComm);
+	void commandFinished(TMLCommand* iComm);
 	///Enable/disable all conditional breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -171,7 +173,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	RunTillNextRandomChoice(SimComponents* iSimComp);
-	bool commandEntered(TMLCommand* iComm);
+	void commandEntered(TMLCommand* iComm);
 	///Enable/disable the Listener
 	/**
 	\param iEnabled true=enable, false=disable
@@ -197,7 +199,7 @@ public:
 	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute);
 	///Destructor
 	virtual ~RunXCommands();
-	bool commandFinished(TMLCommand* iComm);
+	void commandFinished(TMLCommand* iComm);
 	///Sets the number of commands to execute
 	/**
 	\param  iCommandsToExecute Number of commands to execute
@@ -226,7 +228,7 @@ public:
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
 	///Destructor
 	virtual ~RunXTimeUnits();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 	///Sets the end time of the simulation
 	/**
 	\param  iEndTime End time of the simulation
@@ -253,7 +255,7 @@ public:
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -274,7 +276,7 @@ public:
 	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -295,7 +297,7 @@ public:
 	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -312,12 +314,12 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	TestListener(SimComponents* iSimComp);
-	bool taskStarted(TMLTransaction* iTrans);
-	bool taskFinished(TMLTransaction* iTrans);
-	bool readTrans(TMLTransaction* iTrans);
-	bool writeTrans(TMLTransaction* iTrans);
-	bool commandFinished(TMLCommand* iComm);
-	bool commandStarted(TMLCommand* iComm);
+	void taskStarted(TMLTransaction* iTrans);
+	void taskFinished(TMLTransaction* iTrans);
+	void readTrans(TMLTransaction* iTrans);
+	void writeTrans(TMLTransaction* iTrans);
+	void commandFinished(TMLCommand* iComm);
+	void commandStarted(TMLCommand* iComm);
 	///Destructor
 	virtual ~TestListener();
 	
@@ -331,7 +333,7 @@ protected:
 class ConstraintBlock: public TransactionListener{
 	ConstraintBlock(SimComponents* iSimComp);
 	~ConstraintBlock();
-	bool transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans);
 	virtual bool constraintFunc(TransactionAbstr iTrans, CommandAbstr iCmd, TaskAbstr iTask, CPUAbstr iCPU, ChannelAbstr iChan) =0;
 private:
 	SimComponents* _simComp;

@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): _ID(iID), _name(iName), _priority(iPriority), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
+TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), /*(_priority(iPriority),*/ _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
 	//_myid=++_id;
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
@@ -296,4 +296,28 @@ VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iE
 void TMLTask::finished(){
 	_justStarted=true;
 	if (!_transactList.empty()) NOTIFY_TASK_FINISHED(_transactList.front());
+}
+
+unsigned int TMLTask::getState(){
+	if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
+		return RUNNING;
+	}else{
+		if (_currCommand->getCurrTransaction()==0){
+			if (dynamic_cast<TMLStopCommand*>(_currCommand)==0)
+				return UNKNOWN;
+			else
+				return TERMINATED;
+		}else{
+				if (_currCommand->getCurrTransaction()->getRunnableTime()>=SchedulableDevice::getSimulatedTime())
+					return SUSPENDED;
+				else
+					return RUNNABLE;
+		
+		}
+	}	 
+}
+
+TMLTransaction* TMLTask::getNextTransaction() const{
+	//std::cout << "Task::getNextTransaction\n";
+	return (_currCommand==0)?0:_currCommand->getCurrTransaction();
 }

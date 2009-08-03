@@ -49,21 +49,18 @@ public:
 	///Gets called when a transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
-	\return true if simulation is stopped
 	*/
-	virtual bool transExecuted(TMLTransaction* iTrans){return false;}
+	virtual void transExecuted(TMLTransaction* iTrans){}
 	///Gets called when a read transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
-	\return true if simulation is stopped
 	*/
-	virtual bool readTrans(TMLTransaction* iTrans){return false;}
+	virtual void readTrans(TMLTransaction* iTrans){}
 	///Gets called when a write transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
-	\return true if simulation is stopped
 	*/
-	virtual bool writeTrans(TMLTransaction* iTrans){return false;}
+	virtual void writeTrans(TMLTransaction* iTrans){}
 	virtual ~ChannelListener(){}
 protected:
 };

@@ -37,45 +37,54 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#include<PrioScheduler.h>
+#include <TMLTransaction.h>
 
-#ifndef CPURRLH
-#define CPURRLH
+PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _lastSourceIndex(0){
+}
 
-#include <definitions.h>
-#include <CPU.h>
+PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSourceIndex(0){
+}
 
+void PrioScheduler::schedule(TMLTime iEndSchedule){
+	TaskList::iterator i;
+	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans, *anOldTrans;
+	unsigned int aHighestPrioPast=-1;
+	TMLTime aTransTimeFuture=-1,aRunnableTime;
+	_lastSourceIndex=0;
+	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i, _lastSourceIndex++){
+		(*i)->schedule(iEndSchedule);
+		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
+		aTempTrans=(*i)->getNextTransaction();
+		//std::cout << "after getCurrTransaction " << std::endl;
+		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
+			aRunnableTime=aTempTrans->getRunnableTime();	
+			if (aRunnableTime<=iEndSchedule){
+			//Past
+				if ((*i)->getPriority()<aHighestPrioPast){
+					aHighestPrioPast=(*i)->getPriority();
+					aMarkerPast=aTempTrans;
+				}
+			}else{
+			//Future
+				if(aRunnableTime<aTransTimeFuture){
+					aTransTimeFuture=aRunnableTime;
+					aMarkerFuture=aTempTrans;
+				}
+				
+			}
+		}
+	}
+	if (aMarkerPast==0)
+		_nextTransaction=aMarkerFuture;
+	else
+		_nextTransaction=aMarkerPast;
+}
 
-class TMLTransaction;
+TMLTransaction* PrioScheduler::getNextTransaction() const{
+	return _nextTransaction;
+}
 
-///Simulates the bahavior of a CPU with a Priority based scheduling policy (priority queue version)
-class CPUPBL: public CPU{
-public:
-	///Constructor
-    	/**
-	\param iID ID of the CPU
-      	\param iName Name of the CPU
-	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
-	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
-	\param iPipelineSize Pipeline size
-	\param iTaskSwitchingCycles Task switching penalty in cycles
-	\param iBranchingMissrate Branching prediction miss rate in %
-	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
-	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
-	\param ibyteDataSize Machine word length
-    	*/
-	CPUPBL(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
-	///Destructor
-	~CPUPBL();
-	void schedule();
-	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
-	bool addTransaction();
-	virtual void reset(); 
-protected:
-	///List of transaction in the future
-	FutureTransactionQueue _futureTransQueue;
-	///List of transaction in the past
-	PastTransactionQueue _pastTransQueue;
-};
-
-#endif
+std::string PrioScheduler::toString() const{
+	return _name;
+}

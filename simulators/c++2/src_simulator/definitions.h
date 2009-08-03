@@ -77,7 +77,7 @@ using std::max;
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
 #undef PENALTIES_ENABLED
-#define CPURRPB CPUPB
+//#define CPURRPB CPUPB
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
 #define PARAMETER_BLOCK_SIZE 1000
@@ -90,6 +90,7 @@ using std::max;
 //#define SERVER_MODE
 
 //Task VCD output
+#define UNKNOWN 4
 #define TERMINATED 3
 #define RUNNING 2
 #define RUNNABLE 1
@@ -177,6 +178,7 @@ class Serializable;
 class TMLChannel;
 class Slave;
 class Comment;
+class WorkloadSource;
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -226,6 +228,8 @@ typedef std::list<TraceableDevice*> TraceableDeviceList;
 typedef std::set<TMLCommand*> BreakpointSet;
 ///Command queue used by server
 typedef std::deque<std::string*> CommandQueue;
+///Workload list used by Workload sources
+typedef std::list<WorkloadSource*> WorkloadList;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

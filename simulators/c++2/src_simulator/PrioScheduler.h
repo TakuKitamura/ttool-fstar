@@ -37,58 +37,22 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#ifndef PrioSchedulerH
+#define PrioSchedulerH
+#include <WorkloadSource.h>
 
-#include <CPUPBL.h>
-#include <TMLTransaction.h>
-#include <TMLCommand.h>
-#include <TMLChannel.h>
-#include <Bus.h>
-#include <TransactionListener.h>
+class TMLTransaction;
 
-CPUPBL::CPUPBL(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iTimePerCycle, iCyclesPerExeci, iCyclesPerExecc, iPipelineSize, iTaskSwitchingCycles, iBranchingMissrate, iChangeIdleModeCycles, iCyclesBeforeIdle, ibyteDataSize){
-}
-
-CPUPBL::~CPUPBL(){  
-}
-
-void CPUPBL::schedule(){
-	_nextTransaction=0;
-	if (_pastTransQueue.empty()){
-		if (!_futureTransQueue.empty()) _nextTransaction=_futureTransQueue.top();
-	}else{
-		_nextTransaction=_pastTransQueue.top();
-	}
-	if (_nextTransaction!=0){
-		calcStartTimeLength();
-		//FOR_EACH_TRANSLISTENER (*i)->transScheduled(_nextTransaction);
-	}
-}
-
-void CPUPBL::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
-	if (iTrans->getRunnableTime()>_endSchedule){
-		_futureTransQueue.push(iTrans);
-	}else{
-		_pastTransQueue.push(iTrans);
-	}
-}
-
-bool CPUPBL::addTransaction(){
-	if (CPU::addTransaction()){
-		TMLTransaction* aToPastTrans;
-		if (_pastTransQueue.empty()) _futureTransQueue.pop(); else _pastTransQueue.pop();
-		while (!_futureTransQueue.empty()){
-			aToPastTrans=_futureTransQueue.top();
-			if (aToPastTrans->getRunnableTime()>_endSchedule) break;
-			_pastTransQueue.push(aToPastTrans);
-			_futureTransQueue.pop();	
-		}
-		return true;
-	}else
-		return false;
-}
-
-void CPUPBL::reset(){
-	CPU::reset();
-	_futureTransQueue=FutureTransactionQueue();
-	_pastTransQueue=PastTransactionQueue();
-}
+class PrioScheduler: public WorkloadSource{
+public:
+	PrioScheduler(const std::string& iName, unsigned int iPrio);
+	PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	void schedule(TMLTime iEndSchedule);
+	TMLTransaction* getNextTransaction() const;
+	std::string toString() const;
+protected:
+	std::string _name;
+	TMLTransaction* _nextTransaction;
+	unsigned int _lastSourceIndex;
+};
+#endif

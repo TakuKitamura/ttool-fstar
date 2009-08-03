@@ -38,33 +38,12 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TaskListenerH
-#define TaksListenerH
-#include <TransactionListener.h>
-#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
-#define NOTIFY_TASK_FINISHED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans)
-#define NOTIFY_TASK_STARTED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans)
+#include <WorkloadSource.h>
+#include <TMLTask.h>
 
-///Encapsulates events associated with transactions
-class TaskListener{
-public:
-	///Gets called when a task executes its first transaction
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void taskStarted(TMLTransaction* iTrans){}
-	///Gets called when a task executes its last transaction
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual	void taskFinished(TMLTransaction* iTrans){}
-	///Destructor
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	virtual ~TaskListener(){}
-protected:
-};
-#endif
+WorkloadSource::~WorkloadSource(){
+	if (_srcArraySpecified){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i)
+			if (dynamic_cast<TMLTask*>(*i)==0) delete (*i);
+	}
+}

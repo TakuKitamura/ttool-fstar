@@ -65,6 +65,7 @@ public:
     	/**
       	\param iID ID of the CPU
 	\param iName Name of the CPU
+	\param iScheduler Pointer to the scheduler object
 	\param iTimePerCycle 1/Processor frequency
 	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
@@ -75,22 +76,22 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	CPU(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
 	///Destructor
 	virtual ~CPU();
 	///Determines the next CPU transaction to be executed
-	virtual void schedule()=0;
+	virtual void schedule();
 	///Stores a new task in the internal task list
 	/**
       	\param iTask Pointer to the task to add
     	*/
-	void registerTask(TMLTask* iTask);
+	virtual void registerTask(TMLTask* iTask);
 	///Add a transaction waiting for execution to the internal list
 	/**
       	\param iTrans Pointer to the transaction to add
 	\param iSourceDevice Source device
     	*/
-	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice)=0;
+	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm
@@ -133,6 +134,11 @@ public:
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	void streamStateXML(std::ostream& s) const;
+	///Sets the scheduler object
+	/**
+	\param iScheduler Pointer to the scheduler object 
+	*/
+	void setScheduler(WorkloadSource* iScheduler);
 protected:
 	///Calculates the start time and the length of the next transaction
 	void calcStartTimeLength();
@@ -140,6 +146,8 @@ protected:
 	TaskList _taskList;
 	///List containing all already scheduled transactions
 	TransactionList _transactList;
+	///Scheduler
+	WorkloadSource* _scheduler;
 	///Pointer to the next transaction to be executed
 	TMLTransaction* _nextTransaction;
 	///Pointer to the last transaction which has been executed
@@ -182,10 +190,10 @@ protected:
 	unsigned int _missrateTimesPipelinesize;
 
 	//varibales for branch miss calculation
-	///Indicates the number of commands executed since the last branch miss
-	unsigned int _branchMissReminder;
-	///Potentially new value of _branchMissReminder
-	unsigned int _branchMissTempReminder;
+	////Indicates the number of commands executed since the last branch miss
+	//unsigned int _branchMissReminder;
+	////Potentially new value of _branchMissReminder
+	//unsigned int _branchMissTempReminder;
 #endif
 
 	///Actual position within transaction list (used for vcd output)

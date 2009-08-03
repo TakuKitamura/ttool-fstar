@@ -40,7 +40,6 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef TransactionListenerH
 #define TransactionListenerH
-//#define FOR_EACH_TRANSLISTENER for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i)
 #define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
 
 ///Encapsulates events associated with transactions
@@ -49,15 +48,13 @@ public:
 	///Gets called when a transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
-	\return true if simulation is stopped
 	*/
-	virtual bool transExecuted(TMLTransaction* iTrans){return false;}
+	virtual void transExecuted(TMLTransaction* iTrans){}
 	/////Gets called when a transaction is scheduled
 	////**
 	//\param  iTrans Pointer to the transaction
-	//\return true if simulation is stopped
 	//*/
-	//virtual	bool transScheduled(TMLTransaction* iTrans){return false;}
+	//virtual void transScheduled(TMLTransaction* iTrans){}
 	///Destructor
 	virtual ~TransactionListener(){}
 protected:

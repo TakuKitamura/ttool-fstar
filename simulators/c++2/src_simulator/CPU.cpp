@@ -47,13 +47,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 #include <TransactionListener.h>
 
-CPU::CPU(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),
+CPU::CPU(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _scheduler(iScheduler), _nextTransaction(0), _lastTransaction(0), _busNextTransaction(0), _timePerCycle(iTimePerCycle),
 #ifdef PENALTIES_ENABLED
 _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle),
 #endif 
 _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*_timePerCycle)
 #ifdef PENALTIES_ENABLED
- ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize), _branchMissReminder(0), _branchMissTempReminder(0)
+ ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize) /*,_branchMissReminder(0), _branchMissTempReminder(0)*/
 #endif
 {
 	//_myid=++_id;
@@ -64,6 +64,7 @@ CPU::~CPU(){
 	//unsigned int a=0;
 	TransactionList::iterator i;
 	std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
+	delete _scheduler;
 	/*for(i=_transactList.begin(); i != _transactList.end(); ++i){
 		//std::cout << a++ << ", ";
 		//delete (*i);
@@ -73,6 +74,7 @@ CPU::~CPU(){
 
 void CPU::registerTask(TMLTask* iTask){
 	_taskList.push_back(iTask);
+	if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 }
 
 TMLTransaction* CPU::getNextTransaction(){
@@ -102,7 +104,7 @@ TMLTransaction* CPU::getNextTransaction(){
 #endif
 }
 
-void CPU::calcStartTimeLength(){
+/*void CPU::calcStartTimeLength(){
 #ifdef DEBUG_CPU	
 	std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
@@ -152,9 +154,71 @@ void CPU::calcStartTimeLength(){
 		_branchMissTempReminder = (_nextTransaction->getVirtualLength()+_branchMissReminder) % (100/_brachingMissrate);
 	}
 #endif
+}*/
+
+void CPU::calcStartTimeLength(){
+#ifdef DEBUG_CPU	
+	std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+#endif
+#ifdef BUS_ENABLED
+	//std::cout << "get channel " << std::endl;
+	TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel();
+	//std::cout << "after get channel " << std::endl;
+	if(aChannel==0){
+		//std::cout << "no channel " << std::endl;
+		_busNextTransaction=0;
+	}else{
+		//std::cout << "get bus " << std::endl;
+		_busNextTransaction=aChannel->getFirstBus(_nextTransaction);
+		//std::cout << "after get first bus " << std::endl;
+		if (_busNextTransaction!=0){
+			//std::cout << "before register transaction at bus " << std::endl;
+			_busNextTransaction->registerTransaction(_nextTransaction,this);
+			//std::cout << "Transaction registered at bus " << std::endl;
+		}
+	}
+#endif		
+	//round to full cycles!!!
+	TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
+	TMLTime aReminder = aStartTime % _timePerCycle;
+	if (aReminder!=0) aStartTime+=_timePerCycle - aReminder; 
+	_nextTransaction->setStartTime(aStartTime);
+	
+#ifdef BUS_ENABLED
+	if (_busNextTransaction==0){
+#endif
+		//calculate length of transaction
+		if (_nextTransaction->getOperationLength()!=-1){
+#ifdef PENALTIES_ENABLED
+			_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), 100 * _nextTransaction->getOperationLength()/((_missrateTimesPipelinesize+100) * _timePerExeci)));
+#else
+			_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(),_nextTransaction->getOperationLength() /_timePerExeci));
+#endif
+		}
+		_nextTransaction->setLength(_nextTransaction->getVirtualLength()*_timePerExeci);
+			
+#ifdef BUS_ENABLED
+	}else{
+		_busNextTransaction->truncateToBurst(_nextTransaction);
+	}
+#endif
+#ifdef PENALTIES_ENABLED
+	if (_lastTransaction==0 || _lastTransaction->getCommand()->getTask()!=_nextTransaction->getCommand()->getTask()){
+		_nextTransaction->setTaskSwitchingPenalty(_taskSwitchingTime);
+	}
+	if ((_nextTransaction->getStartTime()-_endSchedule) >=_timeBeforeIdle){
+		_nextTransaction->setIdlePenalty(_changeIdleModeTime);
+	} 
+	
+	if (_brachingMissrate!=0){
+		//_nextTransaction->setBranchingPenalty((_nextTransaction->getVirtualLength()+_branchMissReminder) * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
+		_nextTransaction->setBranchingPenalty(_nextTransaction->getVirtualLength() * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
+		//_branchMissTempReminder = (_nextTransaction->getVirtualLength()+_branchMissReminder) % (100/_brachingMissrate);
+	}
+#endif
 }
 
-TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
+/*TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
 	if (_busNextTransaction==0){
 		if (iTime < _nextTransaction->getStartTime()) return 0;
 		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
@@ -192,6 +256,38 @@ TMLTime CPU::truncateNextTransAt(TMLTime iTime){
 //#ifdef DEBUG_CPU
 			std::cout << "CPU:truncateNTA: truncate loop executed: " << test << " times.\n";
 //#endif
+		}
+#else
+		_nextTransaction->setVirtualLength(aNewDuration /_timePerExeci);
+		_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
+#endif
+#ifdef DEBUG_CPU
+		std::cout << "CPU:truncateNTA: ### cut transaction at " << _nextTransaction->getVirtualLength() << std::endl;
+#endif
+	}
+	return _nextTransaction->getOverallLength();
+}*/
+
+TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
+	if (_busNextTransaction==0){
+		if (iTime < _nextTransaction->getStartTime()) return 0;
+		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
+#ifdef PENALTIES_ENABLED
+		TMLTime aStaticPenalty = _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
+		if (aNewDuration<=aStaticPenalty){
+			_nextTransaction->setLength(_timePerExeci);
+			_nextTransaction->setVirtualLength(1);
+//#ifdef DEBUG_CPU
+			std::cout << "CPU:truncateNTA: transaction truncated\n";
+//#endif
+		}else{
+			aNewDuration-=aStaticPenalty;
+			//std::cout << _name << " virtual length before cut: " << _nextTransaction->getVirtualLength() << std::endl;
+			_nextTransaction->setVirtualLength(100* aNewDuration /((_missrateTimesPipelinesize+100) * _timePerExeci));
+			_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
+		}
+		if (_brachingMissrate!=0){
+			_nextTransaction->setBranchingPenalty(_nextTransaction->getVirtualLength() * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
 		}
 #else
 		_nextTransaction->setVirtualLength(aNewDuration /_timePerExeci);
@@ -249,9 +345,9 @@ bool CPU::addTransaction(){
 		_simulatedTime=max(_simulatedTime,_endSchedule);
 		_transactList.push_back(_nextTransaction);
 		_lastTransaction=_nextTransaction;
-#ifdef PENALTIES_ENABLED
-		_branchMissReminder=_branchMissTempReminder;
-#endif
+//#ifdef PENALTIES_ENABLED
+//		_branchMissReminder=_branchMissTempReminder;
+//#endif
 		_busyCycles+=_nextTransaction->getOverallLength();
 		//std::cout << "busyCycles: " <<  _busyCycles << std::endl;
 		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_nextTransaction);
@@ -261,9 +357,17 @@ bool CPU::addTransaction(){
 	}else return false;
 }
 
-//unsigned int CPU::getID() const{
-//	return _myid;
-//}
+void CPU::schedule(){
+	_scheduler->schedule(_endSchedule);
+	TMLTransaction* aOldTransaction = _nextTransaction;
+	_nextTransaction=_scheduler->getNextTransaction();
+	//if (_nextTransaction!=0) std::cout << "next trans found!!!\n";
+	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _busNextTransaction!=0) _busNextTransaction->registerTransaction(0,this);
+	if (_nextTransaction!=0) calcStartTimeLength();
+}
+
+void CPU::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
+}
 
 std::string CPU::toString() const{
 	//std::cout << "CPU::toString() called" << std::endl;
@@ -435,10 +539,10 @@ void CPU::reset(){
 	_lastTransaction=0;
 	_busNextTransaction=0;
 	_busyCycles=0;
-#ifdef PENALTIES_ENABLED
-	_branchMissReminder=0;
-	_branchMissTempReminder=0;
-#endif
+//#ifdef PENALTIES_ENABLED
+//	_branchMissReminder=0;
+//	_branchMissTempReminder=0;
+//#endif
 }
 
 void CPU::streamBenchmarks(std::ostream& s) const{
@@ -452,4 +556,8 @@ void CPU::streamBenchmarks(std::ostream& s) const{
 
 void CPU::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
+}
+
+void CPU::setScheduler(WorkloadSource* iScheduler){
+	_scheduler=iScheduler;
 }
