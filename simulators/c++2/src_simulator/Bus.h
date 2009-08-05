@@ -63,9 +63,10 @@ public:
     	/**
 	\param iID ID of the bus
       	\param iName Name of the bus
+	\param iScheduler Pointer to the scheduler object
       	\param iBurstSize Size of an atomic bus transaction
     	*/
-	Bus(unsigned int iID, std::string iName, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
+	Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
 	///Destructor
 	virtual ~Bus();
 	///Add a transaction waiting for execution to the internal list
@@ -73,7 +74,7 @@ public:
       	\param iTrans Pointer to the transaction to add
 	\param iSourceDevice Source device
     	*/
-	void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
+	void registerTransaction();
 	///Determines the next bus transaction to be executed
 	void schedule();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
@@ -117,24 +118,27 @@ public:
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	void streamStateXML(std::ostream& s) const;
+	///Sets the scheduler object
+	/**
+	\param iScheduler Pointer to the scheduler object 
+	*/
+	void setScheduler(WorkloadSource* iScheduler);
+	std::istream& readObject(std::istream &is);
+	std::ostream& writeObject(std::ostream &os);
 protected:
 	///Calculates the start time and the length of the next transaction
-	void calcStartTimeLength() const;
-	/////Class variable counting the number of Bus instances
-	//static unsigned int _id;
+	/**
+	\param iTimeSlice Bus time slice granted by the scheduler
+	*/
+	void calcStartTimeLength(TMLTime iTimeSlice) const;
+	///Scheduler
+	WorkloadSource* _scheduler;
 	///Size of an atomic bus transaction
 	TMLLength _burstSize;
-	/////End time of the last scheduled transaction
-	//TMLTime _endSchedule;
 	///Pointer to the next transaction to be executed
-	BusTransHashTab::iterator _nextTransaction;
-	/////Pointer to the CPU on which the next transaction will be executed
-	//Master* _nextTransOnCPU;
+	TMLTransaction* _nextTransaction;
 	///Dirty flag of the current scheduling decision
 	bool _schedulingNeeded;
-	///List containing all queued transactions
-	//BusMasterPrioTab _masterQueue;
-	BusTransHashTab _transactionHash;
 	///List containing all already scheduled transactions
 	TransactionList _transactList;
 	///Inverse bus speed

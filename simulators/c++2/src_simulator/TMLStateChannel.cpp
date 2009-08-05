@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLStateChannel.h>
 
-TMLStateChannel::TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent): TMLChannel(iID, iName, iNumberOfHops, iBuses, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false){
+TMLStateChannel::TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLChannel(iID, iName, iNumberOfHops, iMasters, iSlaves), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false){
 }
 
 TMLStateChannel::~TMLStateChannel(){}

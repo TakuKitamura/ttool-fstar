@@ -212,6 +212,14 @@ std::ostream& TMLTask::writeObject(std::ostream& s){
 		std::cout << "Write: TMLTask " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
 		_currCommand->writeObject(s);
 	}
+#ifdef SAVE_BENCHMARK_VARS
+	WRITE_STREAM(s, _busyCycles);
+	std::cout << "Write: TMLTask " << _name << " busyCycles: " << _busyCycles << std::endl;
+	WRITE_STREAM(s, _CPUContentionDelay);
+	std::cout << "Write: TMLTask " << _name << " CPUContentionDelay: " << _CPUContentionDelay << std::endl;
+	WRITE_STREAM(s, _noCPUTransactions);
+	std::cout << "Write: TMLTask " << _name << " noCPUTransactions: " << _noCPUTransactions << std::endl;
+#endif
 	return s;
 }
 
@@ -233,6 +241,14 @@ std::istream& TMLTask::readObject(std::istream& s){
 		//_currCommand->prepare();
 	}
 	//std::cout << "End Read Object TMLTask " << _name << std::endl;
+#ifdef SAVE_BENCHMARK_VARS
+	READ_STREAM(s, _busyCycles);
+	std::cout << "Read: TMLTask " << _name << " busyCycles: " << _busyCycles << std::endl;
+	READ_STREAM(s, _CPUContentionDelay);
+	std::cout << "Read: TMLTask " << _name << " CPUContentionDelay: " << _CPUContentionDelay << std::endl;
+	READ_STREAM(s, _noCPUTransactions);
+	std::cout << "Read: TMLTask " << _name << " noCPUTransactions: " << _noCPUTransactions << std::endl;
+#endif
 	_justStarted=false;
 	return s;
 }

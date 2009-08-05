@@ -61,7 +61,7 @@ public:
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file
     	*/
-	TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
+	TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
 	~TMLEventBChannel();
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);

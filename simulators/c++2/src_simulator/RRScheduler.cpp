@@ -48,18 +48,19 @@ RRScheduler::RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime i
 RRScheduler::RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
 
-void RRScheduler::schedule(TMLTime iEndSchedule){
+TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	//std::cout << _name << ": Schedule called \n";
 	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans;
 	TMLTime aLowestRunnableTimeFuture=-1,aRunnableTime, aLowestRunnableTimePast=-1;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0, *aScheduledSource=0;
 	bool aSameTaskFound=false;
-	if (anOldTransaction!=0){
+	//if (anOldTransaction!=0){
+	if (_lastSource!=0){
 		aScheduledSource=_lastSource;
 		_lastSource->schedule(iEndSchedule);
 		if (_lastSource->getNextTransaction()!=0 && _lastSource->getNextTransaction()->getVirtualLength()!=0){
-			if (_lastSource->getNextTransaction()==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
+			if (anOldTransaction==0 || _lastSource->getNextTransaction()==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
 			}
@@ -102,7 +103,8 @@ void RRScheduler::schedule(TMLTime iEndSchedule){
 	}
 	if (aSameTaskFound){
 		//std::cout << _name << ": Same source found " << _lastSource->toString() << "\n";
-		if (_nextTransaction!=anOldTransaction){
+		//if (_nextTransaction!=anOldTransaction){
+		if (_nextTransaction!=anOldTransaction && anOldTransaction!=0){
 			//std::cout << _name << ": Elapsed time increased by " << anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() << "\n";
 			_elapsedTime +=  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength();
 		}
@@ -114,10 +116,11 @@ void RRScheduler::schedule(TMLTime iEndSchedule){
 			//std::cout << _name << ": New  source found " << _lastSource->toString() << "\n";
 		 _elapsedTime=0;
 	}
-	if (_nextTransaction!=0){
-		_nextTransaction->setLength(min(_nextTransaction->getOperationLength(), _timeSlice-_elapsedTime));
-	}
+	//if (_nextTransaction!=0){
+	//	_nextTransaction->setLength(min(_nextTransaction->getOperationLength(), _timeSlice-_elapsedTime));
+	//}
 	//std::cout << "End schedule\n" ;
+	return _timeSlice-_elapsedTime;
 }
 
 TMLTransaction* RRScheduler::getNextTransaction() const{
@@ -125,6 +128,7 @@ TMLTransaction* RRScheduler::getNextTransaction() const{
 }
 
 void RRScheduler::reset(){
+	WorkloadSource::reset();
 	_nextTransaction=0;
 	_elapsedTime=0;
 	_lastSource=0;
@@ -137,3 +141,42 @@ std::string RRScheduler::toString() const{
 RRScheduler::~RRScheduler(){
 	std::cout << _name << ": Scheduler deleted\n";
 }
+
+std::istream& RRScheduler::readObject(std::istream &is){
+	WorkloadSource::readObject(is);
+	READ_STREAM(is,_elapsedTime);
+	std::cout << "Read: RRScheduler " << _name << " elapsedTime: " << _elapsedTime << std::endl;
+	int aLastSourceIndex;
+	READ_STREAM(is, aLastSourceIndex);
+	std::cout << "Read: RRScheduler " << _name << " lastSourceIndex: " << aLastSourceIndex << std::endl;
+	if (aLastSourceIndex==-1){
+		_lastSource=0;
+	}else{
+		WorkloadList::iterator i=_workloadList.begin();
+		std::advance(i, aLastSourceIndex);
+		_lastSource=*i;
+	}
+	return is;
+}
+
+std::ostream& RRScheduler::writeObject(std::ostream &os){
+	WorkloadSource::writeObject(os);
+	WRITE_STREAM(os,_elapsedTime);
+	std::cout << "Write: RRScheduler " << _name << "  elapsedTime: " << _elapsedTime << std::endl;
+	int aLastSourceIndex;
+	if (_lastSource==0){
+		aLastSourceIndex=-1;
+	}else{
+		aLastSourceIndex=0;
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
+			if (*i==_lastSource)
+				break;
+			else
+				aLastSourceIndex++;
+		}
+	}
+	WRITE_STREAM(os, aLastSourceIndex);
+	std::cout << "Write: RRScheduler " << _name << " lastSourceIndex: " << aLastSourceIndex << std::endl;
+	return os;
+}
+

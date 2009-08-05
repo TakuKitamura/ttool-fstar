@@ -50,93 +50,15 @@ Bridge::Bridge(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsig
 void Bridge::CalcTransactionLength(TMLTransaction* iTrans) const{
 }
 
-//TMLTransaction* Bridge::getNextBusTransaction(SchedulableCommDevice* iBus) const{
-//	return 0;
+//Master* Bridge::getConnectedMaster(){
+//	return dynamic_cast<Master*>(this);
 //}
-
-Master* Bridge::getConnectedMaster(){
-	return dynamic_cast<Master*>(this);
-}
 
 Bridge::~Bridge(){
-	//BridgeTransactionListHash::iterator i;
-	//for(i=_transListHash.begin(); i != _transListHash.end(); ++i){
-	//	delete i->second;
-	//}
 }
 
-//void ForwardTransactionToMaster(TMLTransaction* iTrans){
-	//registerTransaction(aNewTrans);
-//}
-
-//Belongs to Master Interface 
-//TMLTransaction* Bridge::getNextBusTransaction(SchedulableCommDevice* iBus) const{
-	//use hash table to find all transactions for the bus which is polling
-	//return transaction which is runnable first
-	/*if (_schedulingNeeded) schedule();
-	FutureTransactionQueue* aTransQueue = _transListHash[iBus];
-	if (aTransQueue==0) return 0;
-	return aTransQueue->top();*/
-//}
-
-//void Bridge::schedule(){
-	//call getNextTransaction on all buses to which a transaction has been forwarded
-	//look up in transaction list of the given bus if returned transaction == transaction which finishes first
-	//select transaction which finishes first _nextTransaction
-	/*BridgeTransactionListHash::iterator i;
-	SchedulableCommDevice* aTempBus;
-	TMLTransaction* aTempTransaction;
-	TMLTime aRunnableTime=-1;
-	_nextBus=0;
-	for(i=_transListHash.begin(); i != _transListHash.end(); ++i){
-		aTempBus = i->first;
-		aTempTransaction = i->second->top();
-		if (aTempTransaction == aTempBus->getNextTransaction() && aTempTransaction->getRunnableTime() < aRunnableTime){
-			aRunnableTime = aTempTransaction->getRunnableTime();
-			_nextBus = aTempBus;
-		}
-	}
-	_schedulingNeeded=false;*/
-//}
-
-//void Bridge::addTransaction(){
-	//delete transaction from hash table
-	//FutureTransactionQueue* aTransQueue = _transListHash[_nextBus];
-	//if (aTransQueue!=0) aTransQueue->pop();
-//}
-
-//TMLTransaction* Bridge::getNextTransaction(){
-	//return next transaction
-	//if (_schedulingNeeded) schedule();
-	//FutureTransactionQueue* aTransQueue = _transListHash[_nextBus];
-	//if (aTransQueue==0) return 0;
-	//return aTransQueue->top();
-//}
-
-//void Bridge::registerTransaction(TMLTransaction* iTrans){
-//void Bridge::registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
-	/*SchedulableCommDevice* aNextBus;
-	TMLChannel* aChannel = iTrans->getChannel();
-	if (iTrans->getCommand()->getTask() == aChannel->getBlockedWriteTask()){
-		//write transaction
-		aNextBus = aChannel->getBus(iTrans->getHop());
-
-	}else{
-		//read transaction
-		aNextBus = aChannel->getBus(aChannel->getNumberOfHops()-iTrans->getHop()-1);
-	}
-	//  add Transaction to HashTable (based on destination bus)
-	FutureTransactionQueue* aTransQueue = _transListHash[aNextBus];
-	if (aTransQueue==0){
-		aTransQueue = new FutureTransactionQueue();
-		_transListHash[aNextBus] = aTransQueue;
-	}
-		
-	aTransQueue->push(aNewTrans);
-	aNextBus->registerTransaction(aNewTrans);
-	_schedulingNeeded=true;
-	}*/
-//}
+void Bridge::addBusMaster(BusMaster* iMaster){
+}
 
 //void Bridge::schedule2HTML(std::ofstream& myfile){
 //}

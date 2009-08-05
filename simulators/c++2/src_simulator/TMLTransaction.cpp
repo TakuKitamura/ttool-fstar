@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 MemPool<TMLTransaction> TMLTransaction::memPool;
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(-1), _virtualLength(iVirtualLength), _command(iCommand),
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
 #ifdef PENALTIES_ENABLED
  _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
 #endif

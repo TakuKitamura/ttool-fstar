@@ -77,7 +77,7 @@ public:
       	\param iTrans Pointer to the transaction to add
 	\param iSourceDevice Source device
     	*/
-	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice)=0;
+	virtual void registerTransaction()=0;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -91,7 +91,7 @@ public:
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);
-		_simulatedTime=max(_simulatedTime,_endSchedule);
+		//_simulatedTime=max(_simulatedTime,_endSchedule);   ????????????
 		std::cout << "Read: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
 		return is;
 	}
@@ -109,6 +109,11 @@ public:
 	\return Number of simulated clock cycles
 	*/
 	static TMLTime getSimulatedTime() {return _simulatedTime;}
+	///Sets the number of simulated clock cycles
+	/**
+	\param iSimulatedTime Number of simulated clock cycles
+	*/
+	static void setSimulatedTime(TMLTime iSimulatedTime) {_simulatedTime=iSimulatedTime;}
 	///Returns the unique ID of the device
 	/**
       	\return Unique ID

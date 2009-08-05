@@ -58,7 +58,7 @@ public:
 	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves ,TMLLength iContent);
+	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent);
 	///Destructor
 	virtual ~TMLStateChannel();
 	virtual std::ostream& writeObject(std::ostream& s);

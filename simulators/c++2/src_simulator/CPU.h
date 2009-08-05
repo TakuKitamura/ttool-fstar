@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableDevice.h>
 #include <SchedulableCommDevice.h>
 #include <TraceableDevice.h>
-#include <Master.h>
+#include <BusMaster.h>
 
 class TMLTask;
 class TMLTransaction;
@@ -59,7 +59,7 @@ enum vcdCPUVisState
 };
 
 ///Simulates the bahavior of a CPU and an operating system
-class CPU: public SchedulableDevice, public TraceableDevice, public Master{
+class CPU: public SchedulableDevice, public TraceableDevice{
 public:
 	///Constructor
     	/**
@@ -91,7 +91,7 @@ public:
       	\param iTrans Pointer to the transaction to add
 	\param iSourceDevice Source device
     	*/
-	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
+	void registerTransaction();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm
@@ -139,9 +139,19 @@ public:
 	\param iScheduler Pointer to the scheduler object 
 	*/
 	void setScheduler(WorkloadSource* iScheduler);
+	///Adds a new bus master to the internal list
+	/**
+	\param iMaster Pointer to bus master 
+	*/
+	void addBusMaster(BusMaster* iMaster);
+	std::istream& readObject(std::istream &is);
+	std::ostream& writeObject(std::ostream &os);
 protected:
 	///Calculates the start time and the length of the next transaction
-	void calcStartTimeLength();
+	/**
+	\param iTimeSlice CPU Time slice granted by the scheduler
+	*/
+	void calcStartTimeLength(TMLTime iTimeSlice);
 	///List of all tasks running on the CPU
 	TaskList _taskList;
 	///List containing all already scheduled transactions
@@ -153,10 +163,11 @@ protected:
 	///Pointer to the last transaction which has been executed
 	TMLTransaction* _lastTransaction;
 	///Pointer to the bus which will be accessed by the next transaction
-	SchedulableCommDevice* _busNextTransaction;
-	
+	BusMaster* _masterNextTransaction;
 	///1/Processor frequency
 	TMLTime _timePerCycle;
+	///List of bus masters
+	BusMasterList _busMasterList;
 #ifdef PENALTIES_ENABLED
 	///Pipeline size
 	unsigned int _pipelineSize;

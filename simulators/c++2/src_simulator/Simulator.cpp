@@ -972,14 +972,14 @@ void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
 
 bool Simulator::runToNextBreakpoint(TMLTransaction*& oLastTrans){
 	TestListener myListener(_simComp);
-	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
-	_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
-	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
+	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);
 	bool erg=simulate(oLastTrans);
 	//return simulate(oLastTrans);
-	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->removeListener(&myListener);
-	_simComp->getChannelByName("DIPLODOCUSDesign__evt")->removeListener(&myListener);
-	_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->removeListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->removeListener(&myListener);
+	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->removeListener(&myListener);
+	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->removeListener(&myListener);
 	return erg;
 }
 

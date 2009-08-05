@@ -40,19 +40,18 @@ Ludovic Apvrille, Renaud Pacalet
 #include<PrioScheduler.h>
 #include <TMLTransaction.h>
 
-PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _lastSourceIndex(0){
+PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0) /*,_lastSourceIndex(0)*/{
 }
 
-PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSourceIndex(0){
+PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0) /*._lastSourceIndex(0)*/ {
 }
 
-void PrioScheduler::schedule(TMLTime iEndSchedule){
+TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans, *anOldTrans;
 	unsigned int aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
-	_lastSourceIndex=0;
-	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i, _lastSourceIndex++){
+	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 		(*i)->schedule(iEndSchedule);
 		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
 		aTempTrans=(*i)->getNextTransaction();
@@ -79,6 +78,7 @@ void PrioScheduler::schedule(TMLTime iEndSchedule){
 		_nextTransaction=aMarkerFuture;
 	else
 		_nextTransaction=aMarkerPast;
+	return 0;
 }
 
 TMLTransaction* PrioScheduler::getNextTransaction() const{
@@ -87,4 +87,13 @@ TMLTransaction* PrioScheduler::getNextTransaction() const{
 
 std::string PrioScheduler::toString() const{
 	return _name;
+}
+
+PrioScheduler::~PrioScheduler(){
+	std::cout << _name << ": Scheduler deleted\n";
+}
+
+void PrioScheduler::reset(){
+	WorkloadSource::reset();
+	_nextTransaction=0;
 }

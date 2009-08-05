@@ -42,14 +42,13 @@ Ludovic Apvrille, Renaud Pacalet
 #define BridgeH
 
 #include <Slave.h>
-#include <Master.h>
 #include <SchedulableDevice.h>
 #include <definitions.h>
 
 class TMLTransaction;
 
 ///Bridge component
-class Bridge: public Slave, public Master{
+class Bridge: public Slave{
 public:
 	///Constructor
 	/**
@@ -64,26 +63,18 @@ public:
 	\param iTrans Pointer to the transaction to be processed
 	*/
 	void CalcTransactionLength(TMLTransaction* iTrans) const;
-	///Returns a pointer to the connected master device if any
-	/**
-	\return Pointer to the master device 
-	*/
-	Master* getConnectedMaster();
-	//void schedule();
-	//void addTransaction();
-	//TMLTransaction* getNextTransaction();
-	/////Returns the current transaction if it needs to access the given bus 
+	/////Returns a pointer to the connected master device if any
 	////**
-	//\param iBus Pointer to the bus
-	//\return Pointer to the transaction
+	//\return Pointer to the master device 
 	//*/
-	//TMLTransaction* getNextBusTransaction(SchedulableCommDevice* iBus) const;
-	//TMLTransaction* getScheduleResult() const;
-	//void registerTransaction(TMLTransaction* iTrans);
-	//void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice);
-	//void ForwardTransactionToMaster(TMLTransaction* iTrans);
+	//Master* getConnectedMaster();
 	//void schedule2HTML(std::ofstream& myfile);
 	//void schedule2TXT(std::ofstream& myfile);
+	///Adds a new bus master to the internal list
+	/**
+	\param iMaster Pointer to bus master 
+	*/
+	void addBusMaster(BusMaster* iMaster);
 	///Destructor
 	~Bridge();
 protected:
@@ -91,10 +82,6 @@ protected:
 	TMLTime _timePerCycle;
 	///Buffer size
 	unsigned int _bufferSize;
-	//mutable BridgeTransactionListHash _transListHash;
-	//SchedulableCommDevice* _nextBus;
-	////Dirty flag of the current scheduling decision
-	//bool schedulingNeeded;
 };
 
 #endif

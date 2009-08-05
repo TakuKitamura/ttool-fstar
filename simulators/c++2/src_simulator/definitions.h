@@ -76,18 +76,18 @@ using std::max;
 
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
-#undef PENALTIES_ENABLED
-//#define CPURRPB CPUPB
+#define PENALTIES_ENABLED
+
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
 #define PARAMETER_BLOCK_SIZE 1000
 #define ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
-#undef REGISTER_TRANS_AT_CPU 
+#undef REGISTER_TRANS_AT_CPU
+#define SAVE_BENCHMARK_VARS 
 #define PORT "3490"
 #define BACKLOG 10
 #define VCD_PREFIX "b"
-//#define SERVER_MODE
 
 //Task VCD output
 #define UNKNOWN 4
@@ -179,6 +179,7 @@ class TMLChannel;
 class Slave;
 class Comment;
 class WorkloadSource;
+class BusMaster;
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -204,10 +205,6 @@ typedef std::list<TMLChannel*> ChannelList;
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
 typedef std::map<unsigned int, TMLCommand*> CommandHashTab;
-///Datatype establishing an association between a CPU and a transaction, used by the bus
-typedef std::map<Master*, TMLTransaction*> BusTransHashTab;
-///Datatype establishing an association between a bus and a priority, used by Masters
-typedef std::map<SchedulableCommDevice*, BusMasterInfo*> MasterPriorityHashTab;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
@@ -230,6 +227,8 @@ typedef std::set<TMLCommand*> BreakpointSet;
 typedef std::deque<std::string*> CommandQueue;
 ///Workload list used by Workload sources
 typedef std::list<WorkloadSource*> WorkloadList;
+///List of bus masters used by CPUs
+typedef std::list<BusMaster*> BusMasterList;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

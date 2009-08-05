@@ -62,7 +62,7 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice, public Serializable, public ListenerSubject <TaskListener>, public WorkloadSource{
+class TMLTask: public TraceableDevice, public ListenerSubject <TaskListener>, public WorkloadSource{
 public:	
 	///Constructor
     	/**

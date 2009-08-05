@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLbrbwChannel::TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iLength,TMLLength iContent):TMLStateChannel(iID, iName, iNumberOfHops, iBuses, iSlaves, iContent),_length(iLength){
+TMLbrbwChannel::TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent):TMLStateChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
 }
 
 void TMLbrbwChannel::testWrite(TMLTransaction* iTrans){

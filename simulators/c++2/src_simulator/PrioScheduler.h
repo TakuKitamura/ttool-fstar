@@ -43,16 +43,32 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLTransaction;
 
+///Fixed priority based scheduler
 class PrioScheduler: public WorkloadSource{
 public:
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPriority Priority of the scheduler
+    	*/
 	PrioScheduler(const std::string& iName, unsigned int iPrio);
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPriority Priority of the scheduler
+	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
+	\param iNbOfSources Length of the array
+    	*/
 	PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
-	void schedule(TMLTime iEndSchedule);
+	~PrioScheduler();
+	TMLTime schedule(TMLTime iEndSchedule);
 	TMLTransaction* getNextTransaction() const;
 	std::string toString() const;
+	void reset();
 protected:
+	///Name of the scheduler
 	std::string _name;
+	///Next transaction to be executed
 	TMLTransaction* _nextTransaction;
-	unsigned int _lastSourceIndex;
 };
 #endif

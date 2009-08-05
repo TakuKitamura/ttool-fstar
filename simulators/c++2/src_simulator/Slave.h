@@ -60,11 +60,11 @@ public:
       	\param iTrans Pointer to the transaction to process
     	*/
 	virtual void CalcTransactionLength(TMLTransaction* iTrans) const =0;
-	///Returns a pointer to the connected master device if any
-	/**
-	\return Pointer to the master device 
-	*/
-	virtual Master* getConnectedMaster()=0;
+	/////Returns a pointer to the connected master device if any
+	////**
+	//\return Pointer to the master device 
+	////*/
+	//virtual Master* getConnectedMaster()=0;
 	std::string toString() {return _name;}
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual void addTransaction(TMLTransaction* iTrans){

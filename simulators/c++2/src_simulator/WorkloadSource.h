@@ -40,15 +40,26 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef WorkloadSourceH
 #define WorkloadSourceH
 #include <definitions.h>
-//#include <TMLTask.h>
+#include <Serializable.h>
 
 class TMLTransaction;
 class Master;
 class TMLTask;
 
-class WorkloadSource{
+///Base class for components providing workload like tasks and schedulers
+class WorkloadSource: public Serializable{
 public:
+	///Constructor
+	/**
+	\param iPriority Priority of the workload source
+	*/
 	WorkloadSource(unsigned int iPriority): _priority(iPriority), _srcArraySpecified(false) {}
+	///Constructor
+    	/**
+      	\param iPriority Priority of the scheduler
+	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
+	\param iNbOfSources Length of the array
+    	*/
 	WorkloadSource(unsigned int iPriority, WorkloadSource** aSourceArray, unsigned int iNbOfSources): _priority(iPriority), _srcArraySpecified(true){
 		for (unsigned int i=0;i<iNbOfSources;i++){
 			addWorkloadSource(aSourceArray[i]);
@@ -56,19 +67,45 @@ public:
 		}
 		delete[] aSourceArray;
 	}
+	///Destruktor
 	virtual ~WorkloadSource();
+	///Returns the next transaction to be executed by the ressource
+	/**
+	\return Pointer to the transaction to be executed
+	*/
 	virtual TMLTransaction* getNextTransaction() const=0;
+	///Returns the priority of the workload source
+	/**
+	\return Priority of the workload source
+	*/
 	inline unsigned int getPriority() const{return _priority;}
+	///Add a source which provides transactions to the scheduler
+	/**
+	\param iSource Pointer to workload source
+	*/
 	inline void addWorkloadSource(WorkloadSource* iSource){_workloadList.push_back(iSource);}
-	virtual void registerTransaction(TMLTransaction* iTrans, Master* iSourceDevice){
-		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->registerTransaction(iTrans, iSourceDevice);
+	///Perform scheduling
+	/**
+	\param iEndSchedule Current time of the ressource
+	\return Time slice granted by the scheduler
+	*/
+	virtual TMLTime schedule(TMLTime iEndSchedule){return 0;}
+	virtual void reset(){for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->reset();}
+	virtual std::istream& readObject(std::istream &is){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->readObject(is);
+		return is;
 	}
-	virtual void schedule(TMLTime iEndSchedule){};
-	virtual void reset(){}
+	virtual std::ostream& writeObject(std::ostream &os){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->writeObject(os);
+		return os;
+	}
 	virtual std::string toString() const =0;
 protected:
+	///List of sources which provide transactions to the scheduler
 	WorkloadList _workloadList;
+	///Priority of the workload source
 	unsigned int _priority;
+	///Indicates whether sources contained in workload list have to be deleted
 	bool _srcArraySpecified;
 };
 #endif

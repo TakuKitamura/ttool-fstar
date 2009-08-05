@@ -51,6 +51,7 @@ void TMLReadCommand::execute(){
 	_channel->read();
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	//std::cout << "ReadCommand progress: " << _progress << std::endl;
 	_task->addTransaction(_currTransaction);
 	TMLCommand* aNextCommand = prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();

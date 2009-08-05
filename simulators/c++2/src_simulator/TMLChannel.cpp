@@ -39,15 +39,15 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLChannel.h>
-#include <Bus.h>
+#include <BusMaster.h>
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves): _ID(iID), _name(iName), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _buses(iBuses), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1){
+TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves): _ID(iID), _name(iName), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1){
 }
 
 TMLChannel::~TMLChannel(){
-	if (_buses!=0) delete[] _buses;
+	if (_masters!=0) delete[] _masters;
 	if (_slaves!=0) delete[] _slaves;
 }
 
@@ -59,28 +59,28 @@ void TMLChannel::setBlockedWriteTask(TMLTask* iWriteTask){
 	_writeTask=iWriteTask;
 }
 
-SchedulableCommDevice* TMLChannel::getNextBus(TMLTransaction* iTrans){
+BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 	//if (iTrans->getCommand()->getTask()==_writeTask){
 	if (iTrans==_writeTrans){
 		_writeTransCurrHop++;
-		if (_writeTransCurrHop>0 && _buses[_writeTransCurrHop]==_buses[_writeTransCurrHop-1]) return 0;
-		return _buses[_writeTransCurrHop];
+		if (_writeTransCurrHop>0 && _masters[_writeTransCurrHop]->getBus()==_masters[_writeTransCurrHop-1]->getBus()) return 0;
+		return _masters[_writeTransCurrHop];
 	}else{
 		_readTransCurrHop--;
-		if (_readTransCurrHop<_numberOfHops-1 && _buses[_readTransCurrHop]==_buses[_readTransCurrHop+1]) return 0;
-		return _buses[_readTransCurrHop];
+		if (_readTransCurrHop<_numberOfHops-1 && _masters[_readTransCurrHop]->getBus()==_masters[_readTransCurrHop+1]->getBus()) return 0;
+		return _masters[_readTransCurrHop];
 	}
 }
 
-SchedulableCommDevice* TMLChannel::getFirstBus(TMLTransaction* iTrans){
+BusMaster* TMLChannel::getFirstMaster(TMLTransaction* iTrans){
 	//if (iTrans->getCommand()->getTask()==_writeTask){
-	if (_buses==0 || _slaves==0 || _numberOfHops==0) return 0;
+	if (_masters==0 || _slaves==0 || _numberOfHops==0) return 0;
 	if (iTrans==_writeTrans){
 		_writeTransCurrHop=0;
-		return _buses[_writeTransCurrHop];
+		return _masters[_writeTransCurrHop];
 	}else{
 		_readTransCurrHop=_numberOfHops-1;
-		return _buses[_readTransCurrHop];
+		return _masters[_readTransCurrHop];
 	}
 }
 	

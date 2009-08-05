@@ -59,7 +59,7 @@ public:
 	\param iSlaves Pointer to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves, TMLLength iContent);
+	TMLbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();

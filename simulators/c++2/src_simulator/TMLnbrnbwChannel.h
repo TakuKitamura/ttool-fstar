@@ -58,7 +58,7 @@ public:
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
+	TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();

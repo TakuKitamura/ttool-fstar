@@ -43,21 +43,47 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLTransaction;
 
+///Round Robin scheduler
 class RRScheduler: public WorkloadSource{
 public:
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPriority Priority of the scheduler
+	\param iTimeSlice Time slice which is granted to clients
+	\param iMinSliceSize Minimum size of a time slice
+    	*/
 	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPriority Priority of the scheduler
+	\param iTimeSlice Time slice which is granted to clients
+	\param iMinSliceSize Minimum size of a time slice
+	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
+	\param iNbOfSources Length of the array
+    	*/
 	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	///Destructor
 	~RRScheduler();
-	void schedule(TMLTime iEndSchedule);
+	TMLTime schedule(TMLTime iEndSchedule);
 	TMLTransaction* getNextTransaction() const;
 	void reset();
+	std::istream& readObject(std::istream &is);
+	std::ostream& writeObject(std::ostream &os);
 	std::string toString() const;
 protected:
+	///Name of the scheduler
 	std::string _name;
+	///Next transaction to be executed
 	TMLTransaction* _nextTransaction;
+	///Time slice which is granted to ressources
 	TMLTime _timeSlice;
+	///Minimum size of a time slice
 	TMLTime _minSliceSize;
+	///Consumed portion of a time slice
 	TMLTime _elapsedTime;
+	///Last workload source to which ressource access was granted
 	WorkloadSource* _lastSource;
 };
 #endif

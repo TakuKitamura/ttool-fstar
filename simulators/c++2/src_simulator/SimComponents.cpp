@@ -66,7 +66,7 @@ SimComponents::~SimComponents(){
 
 void SimComponents::addTask(TMLTask* iTask){
 	_vcdList.push_back(dynamic_cast<TraceableDevice*>(iTask));
-	_serList.push_back(dynamic_cast<Serializable*>(iTask));
+	//_serList.push_back(dynamic_cast<Serializable*>(iTask));
 	_taskList.push_back(iTask);
 	//std::cout << iTask->toString() << std::endl;
 }
@@ -120,6 +120,9 @@ std::ostream& SimComponents::writeObject(std::ostream& s){
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
 		(*i)->writeObject(s);
 	}
+	TMLTime aSimulatedTime = SchedulableDevice::getSimulatedTime();
+	WRITE_STREAM(s, aSimulatedTime);
+	std::cout << "Write: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
 	return s;
 }
@@ -130,8 +133,12 @@ std::istream& SimComponents::readObject(std::istream& s){
 		//std::cout << "SimComponents --> next Device" << std::endl;
 		(*i)->readObject(s);
 	}
-	return s;
+	TMLTime aSimulatedTime;
+	READ_STREAM(s, aSimulatedTime);
+	SchedulableDevice::setSimulatedTime(aSimulatedTime);
+	std::cout << "Read: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
+	return s;
 }
 
 void SimComponents::reset(){

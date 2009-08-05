@@ -51,7 +51,7 @@ Ludovic Apvrille, Renaud Pacalet
 class TMLTransaction;
 class TMLCommand;
 class TMLTask;
-class Bus;
+class BusMaster;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
 class TMLChannel: public Serializable, public ListenerSubject <ChannelListener> {
@@ -64,7 +64,7 @@ public:
 	\param iBuses Pointer to the buses on which the channel is mapped
 	\param iSlaves Pointer to the slaves on which the channel is mapped
     	*/
-	TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, SchedulableCommDevice** iBuses, Slave** iSlaves);
+	TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves);
 	///Destructor
 	virtual ~TMLChannel();
 	///Prepares a write operation
@@ -101,18 +101,18 @@ public:
 	\return Pointer to the task
 	*/
 	virtual TMLTask* getBlockedWriteTask()const=0;
-	///Returns the next communication link on which the given transaction is conveyed
+	///Returns the next communication master on which the given transaction is conveyed
 	/**
 	\param iTrans Transaction
-	\return Pointer to the communication link
+	\return Pointer to the communication master
 	*/
-	SchedulableCommDevice* getNextBus(TMLTransaction* iTrans);
-	///Returns the first communication link on which the given transaction is conveyed
+	BusMaster* getNextMaster(TMLTransaction* iTrans);
+	///Returns the first communication master on which the given transaction is conveyed
 	/**
 	\param iTrans Transaction
-	\return Pointer to the communication link
+	\return Pointer to the communication master
 	*/
-	SchedulableCommDevice* getFirstBus(TMLTransaction* iTrans);
+	BusMaster* getFirstMaster(TMLTransaction* iTrans);
 	///Returns the next slave component to which the given transaction is sent
 	/**
 	\param iTrans Transaction
@@ -183,7 +183,7 @@ protected:
 	///Number of Buses/Slave devices on which the channel is mapped
 	unsigned int _numberOfHops;
 	///List of buses on which the channel is mapped
-	SchedulableCommDevice** _buses;
+	BusMaster** _masters;
 	///List of slaves on which the channel is mapped
 	Slave** _slaves;
 	///Keeps track of the current Hop of a write Transaction
