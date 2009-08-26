@@ -459,6 +459,11 @@ public class TMLMapping {
 		return list;
 	}
 
-  
-  
+	public HwNode getHwNodeByTask(TMLTask cmpTask){
+		int i=0;
+		for(TMLTask task: mappedtasks) {
+			 if (task==cmpTask) break; else i++;
+		}
+		return onnodes.get(i);
+	}
 }
