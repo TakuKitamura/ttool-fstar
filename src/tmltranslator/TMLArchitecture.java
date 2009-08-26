@@ -306,5 +306,13 @@ public class TMLArchitecture {
 		}
 		return false;
 	}
+
+	public ArrayList<HwLink> getLinkByBus(HwBus bus){
+		ArrayList<HwLink> tempList=new ArrayList<HwLink>();
+		for(HwLink link: hwlinks) {
+			if (link.bus==bus) tempList.add(link);
+		}
+		return tempList;
+	}
 	
 }
