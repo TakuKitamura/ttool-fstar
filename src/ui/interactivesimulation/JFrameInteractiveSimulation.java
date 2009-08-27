@@ -1106,6 +1106,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	protected boolean loadConfiguration(Node node1) {
 		NodeList diagramNl = node1.getChildNodes();
+		if (diagramN == null) {
+			return false;
+		}
 		Element elt, elt0;
 		Node node, node0;
 		NodeList nl;
@@ -1135,6 +1138,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			for(int j=0; j<diagramNl.getLength(); j++) {
 				//System.out.println("Ndes: " + j);
 				node = diagramNl.item(j);
+				
+				if (node == null) {
+					return false;
+				}
+				
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					elt = (Element)node;
 					
@@ -1310,7 +1318,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("Exception " + e.getMessage());
+			System.err.println("Exception in xml parsing " + e.getMessage() + " node= " + node1);
 			return false;
 		}
 		

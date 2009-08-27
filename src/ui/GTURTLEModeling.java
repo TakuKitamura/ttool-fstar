@@ -1120,7 +1120,7 @@ public class GTURTLEModeling {
               }
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			System.out.println("Exception during projection" + e.getMessage());
 			return null;
 		}
 		return new String(result);
@@ -1231,7 +1231,7 @@ public class GTURTLEModeling {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			System.out.println("Exception convert0" + e.getMessage());
 			return null;
 		}
 		return new String(result);
@@ -1335,7 +1335,7 @@ public class GTURTLEModeling {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception " + e.getMessage());
+            System.out.println("Exception09545 " + e.getMessage());
             return null;
         }
         return new String(result);

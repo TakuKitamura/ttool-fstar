@@ -151,7 +151,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			System.out.println("Exception stm0" + e.getMessage());
 		}
 		Collections.sort(statisticData);
 	}
@@ -194,7 +194,7 @@ public class StatisticsTableModel extends AbstractTableModel implements SteppedA
 
 			}
 		} catch (Exception e) {
-			System.out.println("Exception " + e.getMessage());
+			System.out.println("Exception stm1" + e.getMessage());
 		}
 		Collections.sort(statisticData);
 	}
