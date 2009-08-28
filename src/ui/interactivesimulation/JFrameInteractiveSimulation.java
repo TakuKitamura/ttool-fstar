@@ -1106,7 +1106,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	protected boolean loadConfiguration(Node node1) {
 		NodeList diagramNl = node1.getChildNodes();
-		if (diagramN == null) {
+		if (diagramNl == null) {
 			return false;
 		}
 		Element elt, elt0;

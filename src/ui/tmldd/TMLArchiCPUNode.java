@@ -565,7 +565,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 		  }
 		  attr += "Task switching time (in cycle) = " + taskSwitchingTime + "\n";
 		  attr += "Go in idle mode (in cycle) = " + goIdleTime + "\n";
-		  attr += "Max consecutive idle cycles before going in idle mode (in cycle) = " + maxConsecutiveIdleCycles + "\n";
+		  attr += "Max idle cycles before going idle = " + maxConsecutiveIdleCycles + "\n";
 		  attr += "EXECI execution time (in cycle) = " + execiTime + "\n";
 		  attr += "EXECC execution time (in cycle) = " + execcTime + "\n";
 		  attr += "Branching prediction misrate (in %) = " + branchingPredictionPenalty + "\n";
