@@ -561,14 +561,14 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 		  attr += "Data size (in byte) = " + byteDataSize + "\n";
 		  attr += "Pipeline size = " + pipelineSize + "\n";
 		  if (schedulingPolicy == HwCPU.DEFAULT_SCHEDULING) {
-			  attr += "Scheduling policy = basic Round Robin\n";
+			  attr += "Sched. policy = basic Round Robin\n";
 		  }
-		  attr += "Task switching time (in cycle) = " + taskSwitchingTime + "\n";
+		  attr += "Switching penalty (in cycle) = " + taskSwitchingTime + "\n";
 		  attr += "Go in idle mode (in cycle) = " + goIdleTime + "\n";
-		  attr += "Max idle cycles before going idle = " + maxConsecutiveIdleCycles + "\n";
-		  attr += "EXECI execution time (in cycle) = " + execiTime + "\n";
-		  attr += "EXECC execution time (in cycle) = " + execcTime + "\n";
-		  attr += "Branching prediction misrate (in %) = " + branchingPredictionPenalty + "\n";
+		  attr += "Idle cycles to go idle = " + maxConsecutiveIdleCycles + "\n";
+		  attr += "EXECI exec. time (in cycle) = " + execiTime + "\n";
+		  attr += "EXECC exec. time (in cycle) = " + execcTime + "\n";
+		  attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
 		  attr += "Cache miss (in %) = " + cacheMiss + "\n";
 		   attr += "Clock ratio = " + clockRatio + "\n";
 		  return attr;

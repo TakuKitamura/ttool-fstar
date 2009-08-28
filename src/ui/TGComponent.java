@@ -337,7 +337,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	
 	public void drawAttributes(Graphics g, String attr) {
-        int s0=4, s1=9, s2=30, s3=10;
+        int s0=4, s1=9, s2=15, s3=7;
         
 		ColorManager.setColor(g, state, 0);
 		
