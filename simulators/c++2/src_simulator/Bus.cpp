@@ -58,7 +58,11 @@ Bus::~Bus(){
 void Bus::schedule(){
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
 	_nextTransaction=_scheduler->getNextTransaction();
-	if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);
+	if (_nextTransaction!=0){
+		_scheduler->transWasScheduled();
+		_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), _burstSize));
+		calcStartTimeLength(aTimeSlice);
+	}
 	_schedulingNeeded=false;
 #ifdef DEBUG_BUS
 	if (_nextTransaction==0)
@@ -80,7 +84,9 @@ bool Bus::addTransaction(){
 #ifdef DEBUG_BUS
 	std::cout << "Bus::addTrans: add trans at bus " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
+#ifdef LISTENERS_ENABLED
 	NOTIFY_TRANS_EXECUTED(_nextTransaction);
+#endif
 	_nextTransaction = 0;
 	_schedulingNeeded=true;
 	return true;
@@ -112,9 +118,9 @@ TMLLength Bus::getBurstSize() const{
 	return _burstSize;
 }
 
-void Bus::truncateToBurst(TMLTransaction* iTrans) const{
-	iTrans->setVirtualLength(min(iTrans->getVirtualLength(), _burstSize));
-}
+//void Bus::truncateToBurst(TMLTransaction* iTrans) const{
+//	iTrans->setVirtualLength(min(iTrans->getVirtualLength(), _burstSize));
+//}
 
 std::string Bus::toString() const{
 	return _name;

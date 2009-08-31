@@ -60,7 +60,9 @@ TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	(_task->*_actionFunc)();
 	_task->setCurrCommand(aNextCommand);
 	//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+#ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
+#endif
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }

@@ -121,6 +121,7 @@ public:
 	unsigned int getID() const {return _ID;}
 	///Destructor
 	virtual ~SchedulableDevice(){}
+	TMLTime getEndSchedule(){return _endSchedule;}
 protected:
 	///Unique ID of the device
 	unsigned int _ID;

@@ -103,7 +103,9 @@ void TMLEventBChannel::write(TMLTransaction* iTrans){
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+#ifdef LISTENERS_ENABLED
 	NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
+#endif
 }
 
 bool TMLEventBChannel::read(){
@@ -123,7 +125,9 @@ bool TMLEventBChannel::read(){
 		//}
 		//std::cout << "after if" << std::endl;
 		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+#ifdef LISTENERS_ENABLED
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
+#endif
 		_readTrans=0;
 		return true;
 	}

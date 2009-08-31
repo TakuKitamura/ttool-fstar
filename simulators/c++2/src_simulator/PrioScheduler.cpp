@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0) /*,_lastSourceIndex(0)*/{
 }
 
-PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0) /*._lastSourceIndex(0)*/ {
+PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSource(0) {
 }
 
 TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
@@ -51,6 +51,7 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans, *anOldTrans;
 	unsigned int aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
+	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
 	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 		(*i)->schedule(iEndSchedule);
 		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
@@ -63,21 +64,26 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 				if ((*i)->getPriority()<aHighestPrioPast){
 					aHighestPrioPast=(*i)->getPriority();
 					aMarkerPast=aTempTrans;
+					aSourcePast=*i; //NEW
 				}
 			}else{
 			//Future
 				if(aRunnableTime<aTransTimeFuture){
 					aTransTimeFuture=aRunnableTime;
 					aMarkerFuture=aTempTrans;
+					aSourceFuture=*i; //NEW
 				}
 				
 			}
 		}
 	}
-	if (aMarkerPast==0)
+	if (aMarkerPast==0){
 		_nextTransaction=aMarkerFuture;
-	else
+		_lastSource=aSourceFuture; //NEW
+	}else{
 		_nextTransaction=aMarkerPast;
+		_lastSource=aSourcePast; //NEW
+	}
 	return 0;
 }
 
@@ -96,4 +102,8 @@ PrioScheduler::~PrioScheduler(){
 void PrioScheduler::reset(){
 	WorkloadSource::reset();
 	_nextTransaction=0;
+}
+
+void PrioScheduler::transWasScheduled(){
+	if (_lastSource!=0) _lastSource->transWasScheduled();
 }

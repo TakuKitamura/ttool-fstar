@@ -180,3 +180,7 @@ std::ostream& RRScheduler::writeObject(std::ostream &os){
 	return os;
 }
 
+void RRScheduler::transWasScheduled(){
+	if (_lastSource!=0) _lastSource->transWasScheduled();
+}
+

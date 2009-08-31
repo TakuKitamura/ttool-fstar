@@ -120,9 +120,13 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
 	//FOR_EACH_TASKLISTENER (*i)->transExecuted(iTrans);
+#ifdef LISTENERS_ENABLED
 	NOTIFY_TASK_TRANS_EXECUTED(iTrans);
+#endif
 	if (_justStarted){
+#ifdef LISTENERS_ENABLED
 		NOTIFY_TASK_STARTED(iTrans);
+#endif
 		_justStarted=false;	
 	}
 	if(iTrans->getChannel()==0){
@@ -257,7 +261,25 @@ void TMLTask::streamBenchmarks(std::ostream& s) const{
 	s << TAG_TASKo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
 	s << TAG_EXTIMEo << _busyCycles << TAG_EXTIMEc;
 	if (_noCPUTransactions!=0) s << TAG_CONTDELo << ">" << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << TAG_CONTDELc;
-	s << TAG_TASKc << std::endl; 
+	s << TAG_TSKSTATEo;
+	//unsigned int aState=getState();
+	switch (getState()){
+		case RUNNING:
+			s << "running";
+			break;
+		case RUNNABLE:
+			s << "runnable";
+			break;
+		case SUSPENDED:
+			s << "suspended";
+			break;
+		case TERMINATED:
+			s << "terminated";
+			break;
+		case UNKNOWN:
+			s << "unknown";
+	}
+	s << TAG_TSKSTATEc << TAG_TASKc << std::endl; 
 }
 
 void TMLTask::reset(){
@@ -311,10 +333,12 @@ VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iE
 
 void TMLTask::finished(){
 	_justStarted=true;
+#ifdef LISTENERS_ENABLED
 	if (!_transactList.empty()) NOTIFY_TASK_FINISHED(_transactList.front());
+#endif
 }
 
-unsigned int TMLTask::getState(){
+unsigned int TMLTask::getState() const{
 	if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
 		return RUNNING;
 	}else{

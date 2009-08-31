@@ -100,6 +100,7 @@ public:
 		return os;
 	}
 	virtual std::string toString() const =0;
+	virtual void transWasScheduled() {}
 protected:
 	///List of sources which provide transactions to the scheduler
 	WorkloadList _workloadList;

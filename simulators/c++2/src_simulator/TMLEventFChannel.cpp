@@ -69,7 +69,9 @@ void TMLEventFChannel::write(){
 		}
 	}
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+#ifdef LISTENERS_ENABLED
 	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
+#endif
 	_writeTrans=0;
 }
 
@@ -83,7 +85,9 @@ bool TMLEventFChannel::read(){
 			_paramQueue.pop_front();  //NEW
 		//}
 		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+#ifdef LISTENERS_ENABLED
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
+#endif
 		_readTrans=0;
 		return true;
 	}

@@ -76,7 +76,8 @@ using std::max;
 
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
-#define PENALTIES_ENABLED
+#undef PENALTIES_ENABLED
+#define LISTENERS_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -110,6 +111,8 @@ using std::max;
 #define TAG_CYCLESc "</simcycles>"
 #define TAG_TASKo "<task"
 #define TAG_TASKc "</task>"
+#define TAG_TSKSTATEo "<tskstate>"
+#define TAG_TSKSTATEc "</tskstate>"
 #define TAG_VARo "<var"
 #define TAG_VARc "</var>"
 #define TAG_STATUSo "<status>"

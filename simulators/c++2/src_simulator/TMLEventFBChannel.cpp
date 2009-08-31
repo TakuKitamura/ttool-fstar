@@ -67,7 +67,9 @@ void TMLEventFBChannel::write(){
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+#ifdef LISTENERS_ENABLED
 	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
+#endif
 	_writeTrans=0;
 }
 
@@ -84,8 +86,10 @@ bool TMLEventFBChannel::read(){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
 			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
-		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);	
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
+#ifdef LISTENERS_ENABLED	
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
+#endif
 		_readTrans=0;
 		return true;
 	}

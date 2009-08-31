@@ -59,8 +59,8 @@ public:
 	\return Size of an atomic bus transaction
 	*/
 	virtual TMLLength getBurstSize() const=0;
-	///Truncates a transaction so that it does not exceed the burst size of the communication device
-	virtual void truncateToBurst(TMLTransaction* iTrans) const=0;
+	/////Truncates a transaction so that it does not exceed the burst size of the communication device
+	//virtual void truncateToBurst(TMLTransaction* iTrans) const=0;
 	///Destructor
 	virtual ~SchedulableCommDevice(){}
 };

@@ -46,6 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <SchedulableDevice.h>
 #include <ListenersSimCmd.h>
+#include <BusMaster.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
 

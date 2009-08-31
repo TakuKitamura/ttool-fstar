@@ -86,6 +86,7 @@ TMLTransaction* CPU::getNextTransaction(){
 			aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
 			//std::cout << "4" << std::endl;
 			aResult = aTempMaster->accessGranted();
+			//std::cout << "5" << std::endl;
 		}
 		return (aResult)?_nextTransaction:0;
 	}
@@ -228,7 +229,9 @@ bool CPU::addTransaction(){
 		_transactList.push_back(_nextTransaction);
 		_lastTransaction=_nextTransaction;
 		_busyCycles+=_nextTransaction->getOverallLength();
+#ifdef LISTENERS_ENABLED
 		NOTIFY_TRANS_EXECUTED(_nextTransaction);
+#endif
 		_nextTransaction=0;
 		return true;
 	}else return false;

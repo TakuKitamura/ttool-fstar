@@ -72,8 +72,10 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 		//std::cout << "COMMAND FINISHED!!n";
+#ifdef LISTENERS_ENABLED
 		NOTIFY_CMD_FINISHED(this);
 		if (_justStarted) NOTIFY_CMD_STARTED(this);
+#endif
 		_progress=0;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
@@ -92,12 +94,18 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			if (_progress==0) _justStarted=true;
 		}else{
 			if (_progress==0){
+#ifdef LISTENERS_ENABLED
 				NOTIFY_CMD_ENTERED(this);
+#endif
 				_justStarted=true;
 			}else{
+#ifdef LISTENERS_ENABLED
 				NOTIFY_CMD_EXECUTED(this);
+#endif
 				if (_justStarted){
+#ifdef LISTENERS_ENABLED
 					NOTIFY_CMD_STARTED(this);
+#endif
 					_justStarted=false;
 				}
 			}

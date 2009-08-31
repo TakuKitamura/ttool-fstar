@@ -181,7 +181,7 @@ public:
 	/**
 	\return Task state: UNKNOWN, SUSPENDED, READY, RUNNING, TERMINATED
 	*/
-	unsigned int getState();
+	unsigned int getState() const;
 	TMLTransaction* getNextTransaction() const;
 protected:
 	///ID of the task

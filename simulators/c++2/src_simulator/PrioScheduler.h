@@ -65,10 +65,13 @@ public:
 	TMLTransaction* getNextTransaction() const;
 	std::string toString() const;
 	void reset();
+	void transWasScheduled();
 protected:
 	///Name of the scheduler
 	std::string _name;
 	///Next transaction to be executed
 	TMLTransaction* _nextTransaction;
+	///Last workload source to which ressource access was granted
+	WorkloadSource* _lastSource;
 };
 #endif

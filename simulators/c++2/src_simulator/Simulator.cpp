@@ -257,7 +257,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
 	_simComp->setStopFlag(false,"");
+#ifdef LISTENERS_ENABLED
 	NOTIFY_SIM_STARTED();
+#endif
 	while (transLET!=0 && !_simComp->getStopFlag()){
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
@@ -324,7 +326,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   }
 		  }
 		 }
+#ifdef LISTENERS_ENABLED
                  NOTIFY_TIME_ADVANCES(transLET->getEndTime());
+#endif
 		}
 //#ifdef DEBUG_KERNEL
 		//else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
@@ -334,7 +338,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		//_syncInfo->_server->sendReply("Sleep once again\n");
 		//sleep(1);
 	}
+#ifdef LISTENERS_ENABLED
 	NOTIFY_SIM_STOPPED();
+#endif
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
 	return (transLET==0);

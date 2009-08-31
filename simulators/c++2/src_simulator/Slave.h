@@ -69,7 +69,9 @@ public:
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual void addTransaction(TMLTransaction* iTrans){
 		//FOR_EACH_TRANSLISTENER (static_cast<TransactionListener*>(*i))->transExecuted(iTrans);
+#ifdef LISTENERS_ENABLED
 		NOTIFY_TRANS_EXECUTED(iTrans);
+#endif
 	}
 	///Returns the unique ID of the Slave
 	/**

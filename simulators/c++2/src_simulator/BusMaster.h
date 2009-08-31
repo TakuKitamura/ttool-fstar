@@ -43,7 +43,8 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <WorkloadSource.h>
-
+#include <TMLTransaction.h>
+#include <SchedulableDevice.h>
 class TMLTransaction;
 class SchedulableCommDevice;
 
@@ -56,35 +57,51 @@ public:
       	\param iPriority Priority of the bus master
 	\param iBus Pointer to the bus the master is connected to
     	*/
-	BusMaster(const std::string& iName, unsigned int iPriority, SchedulableCommDevice* iBus): WorkloadSource(iPriority), _name(iName), _bus(iBus), _nextTransaction(0){
+	BusMaster(const std::string& iName, unsigned int iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), _lastSimTime(-1), _contentionDelay(0), _noTransactions(0){
+		_busSortArray=new SchedulableCommDevice*[_nbOfBuses];
+		for (unsigned int i=0; i <_nbOfBuses; i++) _busSortArray[i]=_busArray[i];
 	}
 	
 	///Destructor
 	~BusMaster(){
 		std::cout << _name << ": Bus Master deleted\n";
+		delete[] _busArray;
+		delete[] _busSortArray;
 	}
 	
 	void reset(){
 		_nextTransaction=0;
+		_lastSimTime=-1;
+		_nextBus=0;
 		_contentionDelay=0;
 		_noTransactions=0;
 	}
 
 	void registerTransaction(TMLTransaction* iTrans){
 		if (iTrans!=_nextTransaction){
-			_bus->truncateToBurst(iTrans);
-			_bus->registerTransaction();
+			//std::cout << _name << ": registerTransaction" << std::endl;
+			for (unsigned int i=0; i <_nbOfBuses; i++) _busArray[i]->registerTransaction();
 			_nextTransaction=iTrans;
 		}
 	}
 
 	TMLTransaction* getNextTransaction() const{
-		return _nextTransaction;
+		//return (_transWasScheduled)? 0:_nextTransaction;
+		if (SchedulableDevice::getSimulatedTime()==_lastSimTime){
+			//std::cout << _name << ":getNextTransaction returns 0 (_transWasScheduled)\n";
+			return 0;
+		}else{
+			//std::cout << _name << ":getNextTransaction returns _nextTransaction" << "\n";
+			return _nextTransaction;
+		}
 	}
 
 	void addTransaction(){
-		_bus->addTransaction();
+		//_addTransFlag++;
+		//std::cout << _name << ": trans added on Bus: " << _nextBus->toString() << std::endl;
+		_nextBus->addTransaction();
 		_nextTransaction=0;
+		//std::cout << _name << ": end add" << std::endl;
 	}
 
 	///Indicates whether bus access has been granted
@@ -92,7 +109,28 @@ public:
 	\return Returns true if access has been granted
 	*/ 
 	bool accessGranted(){
-		return  (_nextTransaction!=0 && _bus->getNextTransaction()==_nextTransaction);
+		//std::cout << _name << ":access granted " << "\n";
+		if (_nextTransaction==0){
+			//std::cout << _name << ":branch no trans" << "\n";
+			return false;
+		}
+		if (_nbOfBuses==1) {
+			//std::cout << _name << ": branch 1 bus\n";
+			//bool test = _nextTransaction==_busArray[0]->getNextTransaction();
+			return (_nextTransaction==_busArray[0]->getNextTransaction());
+			//return test;
+		}
+		sortBusList();
+		//_transWasScheduled=false;
+		for (unsigned int i=0; i <_nbOfBuses; i++){
+			if (_busSortArray[i]->getNextTransaction()==_nextTransaction){
+				_nextBus=_busSortArray[i];
+				//std::cout << _name << ":access granted end true, bus: "<< _nextBus->toString() << "\n";
+				return true;
+			}
+		}
+		//std::cout << _name << ":access granted end false" << "\n";
+		return false;
 	}
 
 	///Returns the pointer to the bus the master is connected to
@@ -100,7 +138,13 @@ public:
 	\return Pointer to bus
 	*/
 	SchedulableCommDevice* getBus(){
-		return _bus;
+		return _busArray[0];
+	}
+
+	void transWasScheduled(){
+		//_transWasScheduled=true;
+		//_addTransCheck=_addTransFlag;
+		_lastSimTime = SchedulableDevice::getSimulatedTime();
 	}
 
 	///Updates the bus contention statistics whenever a new bus transaction is executed
@@ -118,7 +162,7 @@ public:
 	*/
 	void streamBenchmarks(std::ostream& s) const{
 		if (_noTransactions!=0)
-			s << TAG_CONTDELo << " busID=\"" << _bus->getID()<< "\" busName=\"" << _bus->toString() << "\">" << (static_cast<float>(_contentionDelay)/static_cast<float>(_noTransactions)) << TAG_CONTDELc << std::endl;
+			s << TAG_CONTDELo << " busID=\"" << _busArray[0]->getID()<< "\" busName=\"" << _busArray[0]->toString() << "\">" << (static_cast<float>(_contentionDelay)/static_cast<float>(_noTransactions)) << TAG_CONTDELc << std::endl;
 	}
 
 	std::string toString() const{
@@ -147,13 +191,41 @@ public:
 	}
 
 protected:
+
+	void sortBusList(){
+		std::cout << _name << ": sort" << std::endl;
+		unsigned int aBound = _nbOfBuses;
+		bool aSwapped;
+		do{
+			aSwapped=false;
+			aBound--;
+			for(unsigned int i=0; i<aBound; i++){
+				if (_busSortArray[i]->getEndSchedule() > _busSortArray[i+1]->getEndSchedule()){
+					SchedulableCommDevice* aTmp = _busSortArray[i];
+					_busSortArray[i] = _busSortArray[i+1];
+					_busSortArray[i+1] = aTmp;
+					aSwapped= true;
+				}
+			}
+		}while (aSwapped);
+		std::cout << _name << ": end sort" << std::endl;
+	}
+
 	///Name
-	std::string _name;
+	std::string _name;	
+	///Number of connected channels
+	unsigned int _nbOfBuses;
 	///Pointer to the bus the master is connected to
-	SchedulableCommDevice* _bus;
+	SchedulableCommDevice** _busArray;
+	///Array containing a sorted array of bus pointers (criterion: schedule end time)
+	SchedulableCommDevice** _busSortArray;
 	///Transaction
 	TMLTransaction* _nextTransaction;
-	///Sum of the contention delay of all registered transactions	
+	///Next bus pointer
+	SchedulableCommDevice* _nextBus;
+	///Flag indicating at what simulation time _nextTransaction was scheduled
+	mutable TMLTime _lastSimTime;
+	///Sum of the contention delay of all registered transactions
 	unsigned long _contentionDelay;
 	///Number of registered transactions
 	unsigned long _noTransactions;

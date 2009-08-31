@@ -89,11 +89,11 @@ public:
 	\return Burst size
 	*/
 	TMLLength getBurstSize() const;
-	///Truncates a transaction to the size of an atomic burst
-	/**
-	\param iTrans Pointer to the transaction
-	*/
-	void truncateToBurst(TMLTransaction* iTrans) const;
+	/////Truncates a transaction to the size of an atomic burst
+	////**
+	//\param iTrans Pointer to the transaction
+	////*/
+	//void truncateToBurst(TMLTransaction* iTrans) const;
 	///Returns a string representation of the Bus
 	/**
 	\return Detailed string representation
