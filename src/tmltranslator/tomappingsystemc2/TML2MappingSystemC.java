@@ -206,8 +206,8 @@ public class TML2MappingSystemC {
 					//declaration+= "BusMaster* " + node.getName() + "2defaultBus = new BusMaster(\"" + node.getName() + "2defaultBus\", 0, defaultBus)" + SCCR;
 				//else{
 					for(HwLink link: nodeLinks){
-						//declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
-						declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.getName() + ")" + SCCR;
+						declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
+						//declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.getName() + ")" + SCCR;
 						declaration+= node.getName() + "->addBusMaster(" + node.getName() + "_" + link.bus.getName() + "_Master)" + SCCR;
 					}
 				}
