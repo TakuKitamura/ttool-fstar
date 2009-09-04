@@ -268,6 +268,7 @@ public class TGUIAction extends AbstractAction {
     
     public static final int TREQ_REQUIREMENT = 163;
     public static final int TREQ_OBSERVER = 166;
+	public static final int TREQ_EBRDD = 270;
     public static final int TREQ_DERIVE = 164;
     public static final int TREQ_VERIFY = 165;
 	public static final int TREQ_COPY = 258;
@@ -380,7 +381,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 270;
+    public static final int NB_ACTION = 271;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -712,6 +713,7 @@ public class TGUIAction extends AbstractAction {
         // Requirement diagrams
         actions[TREQ_REQUIREMENT] = new TAction("add-treq-requirement", "Add a requirement", IconManager.imgic1002, IconManager.imgic1002, "Requirement", "Add a requirement to the currently opened requirement diagram", 0);
         actions[TREQ_OBSERVER] = new TAction("add-treq-observer", "Add an observer", IconManager.imgic1004, IconManager.imgic1004, "Observer", "Add an observer to the currently opened requirement diagram", 0);
+        actions[TREQ_EBRDD] = new TAction("add-treq-ebrdd", "Add a reference to an EBRDD", IconManager.imgic1014, IconManager.imgic1014, "EBRDD", "Add an EBRDD-based observer to the currently opened requirement diagram", 0);
         actions[TREQ_DERIVE] = new TAction("add-treq-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened requirement diagram", 0);
         actions[TREQ_VERIFY] = new TAction("add-treq-verify", "Add a <<verify>> link", IconManager.imgic1006, IconManager.imgic1006, "Verify", "Add a <<verify>> link between an observer and a requirement of the currently opened requirement diagram", 0);
 		actions[TREQ_COPY] = new TAction("add-treq-copy", "Add a <<copy>> link", IconManager.imgic1010, IconManager.imgic1010, "Copy", "Add a <<copy>> link between two requirements of the currently opened requirement diagram", 0);

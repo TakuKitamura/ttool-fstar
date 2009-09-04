@@ -210,6 +210,7 @@ public class TGComponentManager {
     
     public static final int TREQ_REQUIREMENT = 900;
     public static final int TREQ_OBSERVER = 901;
+	public static final int TREQ_EBRDD = 902;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -532,6 +533,9 @@ public class TGComponentManager {
             case TREQ_OBSERVER:
                 tgc = new RequirementObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TREQ_EBRDD:
+                tgc = new EBRDDObserver(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 			case NCDD_EQNODE:
                 tgc = new NCEqNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -838,6 +842,8 @@ public class TGComponentManager {
             return TREQ_REQUIREMENT;
         } else if (tgc instanceof RequirementObserver) {
             return TREQ_OBSERVER;
+        } else if (tgc instanceof EBRDDObserver) {
+            return TREQ_EBRDD;
         } else if (tgc instanceof TGConnectorDerive) {
             return CONNECTOR_DERIVE_REQ;
         } else if (tgc instanceof TGConnectorCopy) {

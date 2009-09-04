@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class RequirementObserver
- * Turtle observer: to be used in requirement diagram
- * Creation: 02/05/2006
- * @version 1.0 02/05/2006
+ * Class EBRDDObserver
+ * EBRDD observer: to be used in requirement diagram
+ * Creation: 04/09/2009
+ * @version 1.0 04/09/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -57,7 +57,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class RequirementObserver extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
+public class EBRDDObserver extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -73,15 +73,15 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	
-    protected final static String TOBSERVER = "<<TObserver>>";
+    protected final static String TOBSERVER = "<<EBRDD>>";
 	
-	protected String diagramText;
-	protected String violatedAction = "noAction";
+	//protected String diagramText;
+	//protected String violatedAction = "noAction";
 	
 	private int iconSize = 18;
 	private boolean iconIsDrawn = false;
     
-    public RequirementObserver(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public EBRDDObserver(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         initScaling(200, 120);
@@ -126,14 +126,12 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		
         
         // Name of the observer
-        name = "RequirementObserver";
-        value = "RequirementObserver";
+        name = "diagram";
+        value = "diagram";
 		//value = tdp.findRequirementName("Requirement_");
         oldValue = value;
         
         myImageIcon = IconManager.imgic1004;
-		
-		diagramText = "no diagram";
         
         actionOnAdd();
     }
@@ -160,11 +158,6 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			}
 		}
 		
-		if(currentFontSize <minFontSize) {
-			displayText = false;
-		} else {
-			displayText = true;
-		}
 		
 		int h  = g.getFontMetrics().getHeight();
         
@@ -191,7 +184,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			
 		}
 		
-		g.setFont(myFont);
+		/*g.setFont(myFont);
 		
 		size = lineHeight + currentFontSize;
 		if (size < (height - 2)) {
@@ -201,81 +194,56 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			if (size < (height - 2)) {
 				drawLimitedString(g, "Violated_Action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
 			}
-		}
+		}*/
         g.setFont(f);
     }
     
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         oldValue = value;
         
-		if ((displayText) && (_y <= (y + lineHeight))) {
-			String texti = getName() + ": ";
-			if (hasFather()) {
-				texti = getTopLevelName() + " / " + diagramText;
+		String s = (String)JOptionPane.showInputDialog(frame, value,
+			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+			null,
+			getValue());
+		
+		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+			//boolean b;
+			if (!TAttribute.isAValidId(s, false, false)) {
+				JOptionPane.showMessageDialog(frame,
+					"Could not change the name of the observer: the new name is not a valid name",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				return false;
 			}
-			String s = (String)JOptionPane.showInputDialog(frame, texti,
-				"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-				null,
-				getValue());
 			
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				//boolean b;
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: the new name is not a valid name",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					return false;
-				}
-				
-				if (!tdp.isRequirementNameUnique(s)) {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: the new name is already in use",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					return false;
-				}
-				
-				
-				int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-				minDesiredWidth = Math.max(size, minWidth);
-				if (minDesiredWidth != width) {
-					newSizeForSon(null);
-				}
-				setValue(s);
-				
-				if (tdp.actionOnDoubleClick(this)) {
-					return true;
-				} else {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: this name is already in use",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					setValue(oldValue);
-				}
+			if (!tdp.isRequirementNameUnique(s)) {
+				JOptionPane.showMessageDialog(frame,
+					"Could not change the name of the observer: the new name is already in use",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				return false;
 			}
-			return false;
-		} else {
-			return editAttributes();
+			
+			
+			int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+			minDesiredWidth = Math.max(size, minWidth);
+			if (minDesiredWidth != width) {
+				newSizeForSon(null);
+			}
+			setValue(s);
+			
+			if (tdp.actionOnDoubleClick(this)) {
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(frame,
+					"Could not change the name of the Observer: this name is already in use",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				setValue(oldValue);
+			}
 		}
-        
+		return false;
     }
-	
-	public boolean editAttributes() {
-		JDialogObserver jdo = new JDialogObserver(tdp.getGUI().getFrame(), "Setting diagrams of Observer " + getRequirementObserverName(), diagramText, violatedAction);
-		jdo.setSize(750, 400);
-		GraphicLib.centerOnParent(jdo);
-		jdo.show();
-		
-		if (!jdo.isRegularClose()) {
-			return false;
-		}
-		
-		diagramText = jdo.getText();
-		violatedAction = jdo.getViolatedAction();
-		
-		return true;
-	}
 	
 	public void rescale(double scaleFactor){
 		dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
@@ -294,16 +262,16 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
         return null;
     }
     
-    public String getRequirementObserverName() {
+    public String getEBRDDName() {
         return value;
     }
     
     
     public  int getType() {
-        return TGComponentManager.TREQ_OBSERVER;
+        return TGComponentManager.TREQ_EBRDD;
     }
     
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+    /*public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
         JMenuItem generate = null;
         // Should verify first whether it is connected to a formal requirement with a verify relation, or not
@@ -325,14 +293,14 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 			return editAttributes();
 		}
         return true;
-    }
+    }*/
     
     public String toString() {
         String ret =  getValue() + TOBSERVER;
         return ret;
     }
 	
-	public String getViolatedAction() {
+	/*public String getViolatedAction() {
         return violatedAction;
     }
     
@@ -344,9 +312,9 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		 String texts[] = new String[1];
 		 texts[0] = diagramText;
 		 return texts;
-    }
+    }*/
     
-	protected String translateExtraParam() {
+	/*protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<diagramText data=\"");
         sb.append(diagramText);
@@ -356,9 +324,9 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
-    }
+    }*/
     
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    /*public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         try {
             NodeList nli;
             Node n1, n2;
@@ -410,7 +378,7 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		attr += "Diagram= " + diagramText + "\n";
 		attr += "Violated action = " + violatedAction + "\n";
 		return attr;
-	}
+	}*/
 	
 	public void autoAdjust(int mode) {
 		//System.out.println("Auto adjust in mode = " + mode);
@@ -435,12 +403,12 @@ public class RequirementObserver extends TGCScalableWithInternalComponent implem
 		int w1 = graphics.getFontMetrics().stringWidth(value);
 		int w2 = Math.max(w0, w1) + (2 * iconSize);
 		graphics.setFont(f0);
-		int w3 = graphics.getFontMetrics().stringWidth("Diagram=\"" + diagramText + "\"") + textX;
+		/*int w3 = graphics.getFontMetrics().stringWidth("Diagram=\"" + diagramText + "\"") + textX;
 		int w4 = graphics.getFontMetrics().stringWidth("Violated_Action=\"" + violatedAction + "\"") + textX;
 		graphics.setFont(f);
 		
 		w2 = Math.max(w2, w3);
-		w2 = Math.max(w2, w4);
+		w2 = Math.max(w2, w4);*/
 		
 		if (mode == 1) {
 			resize(w2, lineHeight);

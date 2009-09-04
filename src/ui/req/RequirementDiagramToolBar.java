@@ -71,6 +71,7 @@ public class RequirementDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_REQUIREMENT].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_OBSERVER].setEnabled(b);
+		mgui.actions[TGUIAction.TREQ_EBRDD].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_VERIFY].setEnabled(b);
         mgui.actions[TGUIAction.TREQ_DERIVE].setEnabled(b);
 		mgui.actions[TGUIAction.TREQ_COPY].setEnabled(b);
@@ -102,6 +103,9 @@ public class RequirementDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.TREQ_OBSERVER]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.TREQ_EBRDD]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();

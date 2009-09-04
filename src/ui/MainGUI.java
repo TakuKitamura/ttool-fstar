@@ -5696,6 +5696,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TREQ_REQUIREMENT);
         } else if (command.equals(actions[TGUIAction.TREQ_OBSERVER].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TREQ_OBSERVER);
+        } else if (command.equals(actions[TGUIAction.TREQ_EBRDD].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TREQ_EBRDD);
         } else if (command.equals(actions[TGUIAction.TREQ_DERIVE].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_DERIVE_REQ);
         } else if (command.equals(actions[TGUIAction.TREQ_COPY].getActionCommand())) {
@@ -5798,7 +5800,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newAnalysis = createMenuItem("New TURTLE Analysis");
             newDesign = createMenuItem("New TURTLE Design");
             newDeployment = createMenuItem("New TURTLE Deployment");
-            newRequirement = createMenuItem("New TURTLE Requirement");
+            newRequirement = createMenuItem("New SysML Requirement Diagram");
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
 			newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
 			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
@@ -5826,6 +5828,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             menu.addSeparator();
             
             menu.add(newRequirement);
+			
+			menu.addSeparator();
+			 
             menu.add(newAnalysis);
             menu.add(newDesign);
             menu.add(newDeployment);
@@ -5919,7 +5924,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newDesign();
                 } else if (ac.equals("New TURTLE Deployment")) {
                     mgui.newDeployment();
-                } else if (ac.equals("New TURTLE Requirement")) {
+                } else if (ac.equals("New SysML Requirement Diagram")) {
                     mgui.newRequirement();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
                     mgui.newTMLDesign();

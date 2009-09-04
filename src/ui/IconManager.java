@@ -98,7 +98,7 @@ public class IconManager {
     
     public static ImageIcon imgic500, imgic502, imgic504, imgic506, imgic508, imgic510;
     public static ImageIcon imgic512, imgic514, imgic516, imgic518, imgic520, imgic522, imgic524;
-    
+
     public static ImageIcon imgic600, imgic602, imgic604, imgic606, imgic608, imgic610, imgic612;
     
     public static ImageIcon imgic700, imgic702;
@@ -106,7 +106,7 @@ public class IconManager {
     public static ImageIcon imgic800, imgic802, imgic804, imgic806, imgic808, imgic810, imgic812;
     public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918, imgic920, imgic922, imgic924, imgic926;    
     // Requirement diagrams
-    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012;
+    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014;
 	
 	// TMLDD
 	public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
@@ -368,6 +368,7 @@ public class IconManager {
     private static String icon1008 = "images/reqder.gif";
 	private static String icon1010 = "images/reqcopy.gif";
 	private static String icon1012 = "images/reqcomp.gif";
+	private static String icon1014 = "images/ebrddobs.gif";
     
     // TML
     private static String icon800 = "images/tmlcdevt.gif";
@@ -687,6 +688,7 @@ public class IconManager {
         imgic1008 = getIcon(icon1008);
 		imgic1010 = getIcon(icon1010);
 		imgic1012 = getIcon(icon1012);
+		imgic1014 = getIcon(icon1014);
 		
 		imgic1100 = getIcon(icon1100);
 		imgic1102 = getIcon(icon1102);

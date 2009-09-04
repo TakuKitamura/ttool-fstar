@@ -348,8 +348,10 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 			jdc = new JDialogCancel(this, "Generating VCD trace", "Generating VCD", this);
 			GraphicLib.centerOnParent(jdc);
 			notifyJDCDone();
-			jdc.setSize(500, 200);
-			jdc.setVisible(true);
+			if (jdc != null) {
+				jdc.setSize(500, 200);
+				jdc.setVisible(true);
+			}
 		} else {
 			simulate();
 		}
