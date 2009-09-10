@@ -66,6 +66,7 @@ import ui.ad.*;
 import ui.cd.*;
 import ui.dd.*;
 import ui.iod.*;
+import ui.ebrdd.*;
 import ui.req.*;
 import ui.sd.*;
 import ui.ucd.*;
@@ -2171,6 +2172,40 @@ public class GTURTLEModeling {
 						makePostLoading(rdp, beginIndex);
 					}
 				}
+			} else if (tdp instanceof EBRDDPanel) {
+				nl = doc.getElementsByTagName("EBRDDPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				EBRDDPanel ebrddp = (EBRDDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (ebrddp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ebrddp);
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ebrddp);
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ebrddp);
+						connectConnectorsToRealPoints(ebrddp);
+						ebrddp.structureChanged();
+						makePostLoading(ebrddp, beginIndex);
+					}
+				}
 			} else if (tdp instanceof TMLTaskDiagramPanel) {
 				nl = doc.getElementsByTagName("TMLTaskDiagramPanelCopy");
 				docCopy = doc;
@@ -2896,6 +2931,9 @@ public class GTURTLEModeling {
 				if (elt.getTagName().compareTo("TRequirementDiagramPanel") == 0) {
 					loadRequirementDiagram(elt, indexReq, cpt_req);
 					cpt_req ++;
+				} else if (elt.getTagName().compareTo("EBRDDPanel") == 0) {
+					loadEBRDD(elt, indexReq, cpt_req);
+					cpt_req ++;
 				}
 			}
 		}
@@ -3129,6 +3167,11 @@ public class GTURTLEModeling {
 			//System.out.println("Connectors...");
 			((TMLComponentTaskDiagramPanel)tdp).setConnectorsToFront();
 		}
+		
+		if (tdp instanceof EBRDDPanel) {
+			//System.out.println("Connectors...");
+			((EBRDDPanel)tdp).setConnectorsToFront();
+		}
 	}
 
 
@@ -3324,6 +3367,23 @@ public class GTURTLEModeling {
 
 
 		TDiagramPanel tdp = mgui.getRequirementDiagramPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadEBRDD(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createEBRDD(indexAnalysis, name);
+
+
+		TDiagramPanel tdp = mgui.getEBRDDPanel(indexAnalysis, indexTab, name);
 
 		if (tdp == null) {
 			throw new MalformedModelingException();

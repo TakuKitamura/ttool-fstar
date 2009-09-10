@@ -39,7 +39,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class RequirementPanel
  * Managenemt of requirement panels
  * Creation: 15/05/2006
- * @version 1.0 15/05/2006
+ * @version 1.1 08/09/2009
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
@@ -50,9 +50,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import ui.req.*;
+import ui.ebrdd.*;
 
 public class RequirementPanel extends TURTLEPanel {
     public RequirementDiagramPanel rdp;
+	public EBRDDPanel ebrdd;
     
     public RequirementPanel(MainGUI _mgui) {
         super(_mgui);
@@ -109,6 +111,35 @@ public class RequirementPanel extends TURTLEPanel {
        
         return true;
     }
+	
+	public boolean addEBRDD(String s) {
+        EBRDDToolBar toolBarEBRDD = new EBRDDToolBar(mgui);
+        toolbars.add(toolBarEBRDD);
+        
+        toolBarPanel = new JPanel();
+		//toolBarPanel.setBackground(Color.red);
+        toolBarPanel.setLayout(new BorderLayout());
+		//toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
+        
+        //	diagram
+        ebrdd = new EBRDDPanel(mgui, toolBarEBRDD);
+        ebrdd.setName(s);
+        ebrdd.tp = this;
+        //tdp = rdp;
+        panels.add(ebrdd);
+        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(ebrdd);
+        ebrdd.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        toolBarPanel.add(toolBarEBRDD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic1000, toolBarPanel, "Opens EBRDD");
+        tabbedPane.setSelectedIndex(0); 
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+       
+        return true;
+    }
     
 
     public String saveHeaderInXml() {
@@ -137,6 +168,11 @@ public class RequirementPanel extends TURTLEPanel {
         if ((panels.elementAt(index) instanceof RequirementDiagramPanel)){
             return true;
         }
+		
+		if ((panels.elementAt(index) instanceof EBRDDPanel)){
+            return true;
+        }
+		
         return false;
     }
     

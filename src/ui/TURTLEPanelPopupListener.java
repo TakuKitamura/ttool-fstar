@@ -59,7 +59,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     private JPopupMenu menu;
     protected MainGUI mgui;
     
-    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, newprosmd;
+    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, newebrdd, newprosmd;
     
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
         tp = _tp;
@@ -93,6 +93,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         sort = createMenuItem("Sort");
         newucd = createMenuItem("New use case diagram");
         newreq = createMenuItem("New requirement diagram");
+		newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
         newprosmd = createMenuItem("New ProActive state machine diagram");
         
         menu = new JPopupMenu("TURTLE panel");
@@ -107,6 +108,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(newucd);
         menu.addSeparator();
         menu.add(newreq);
+		menu.add(newebrdd);
         menu.addSeparator();
         menu.add(newprosmd);
     }
@@ -145,6 +147,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         
         newucd.setEnabled(tp.isUCDEnabled());
         newreq.setEnabled(tp.isReqEnabled());
+		newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
         
     }
@@ -170,6 +173,9 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New requirement diagram")) {
                 mgui.createRequirementDiagram(tp, "Requirement diagram");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
+                mgui.createEBRDD(tp, "EBRDD");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New ProActive state machine diagram")) {
                 mgui.createProActiveSMD(tp, "ProActive SMD");

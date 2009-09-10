@@ -107,6 +107,7 @@ public class IconManager {
     public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918, imgic920, imgic922, imgic924, imgic926;    
     // Requirement diagrams
     public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014;
+	public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056;
 	
 	// TMLDD
 	public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
@@ -360,15 +361,7 @@ public class IconManager {
     private static String icon700 = "images/ddnode.gif";
     private static String icon702 = "images/ddartifact.gif";
     
-    // Requirement diagrams
-    private static String icon1000 = "images/reqdiag.gif";
-    private static String icon1002 = "images/reqreq.gif";
-    private static String icon1004 = "images/reqobs.gif";
-    private static String icon1006 = "images/reqver.gif";
-    private static String icon1008 = "images/reqder.gif";
-	private static String icon1010 = "images/reqcopy.gif";
-	private static String icon1012 = "images/reqcomp.gif";
-	private static String icon1014 = "images/ebrddobs.gif";
+
     
     // TML
     private static String icon800 = "images/tmlcdevt.gif";
@@ -394,6 +387,25 @@ public class IconManager {
 	private static String icon924 = "images/tmladrandom.gif";
 	private static String icon926 = "images/tmladforeverloop.gif";
 	
+	// Requirement diagrams
+    private static String icon1000 = "images/reqdiag.gif";
+    private static String icon1002 = "images/reqreq.gif";
+    private static String icon1004 = "images/reqobs.gif";
+    private static String icon1006 = "images/reqver.gif";
+    private static String icon1008 = "images/reqder.gif";
+	private static String icon1010 = "images/reqcopy.gif";
+	private static String icon1012 = "images/reqcomp.gif";
+	private static String icon1014 = "images/ebrddobs.gif";
+	
+	
+	// EBRDD
+	private static String icon1050 = "images/ebrdderc.gif";
+	private static String icon1052 = "images/ercconnector.gif";
+	private static String icon1054 = "images/ebrddeso.gif";
+	private static String icon1056 = "images/ebrdderb.gif";
+	
+	
+	// DIPLODOCUS architecture
 	private static String icon1100 = "images/tmlcpunode.gif";
 	private static String icon1102 = "images/tmlbusnode.gif";
 	private static String icon1104 = "images/tmlbridgenode.gif";
@@ -689,6 +701,11 @@ public class IconManager {
 		imgic1010 = getIcon(icon1010);
 		imgic1012 = getIcon(icon1012);
 		imgic1014 = getIcon(icon1014);
+		
+		imgic1050 = getIcon(icon1050);
+        imgic1052 = getIcon(icon1052);
+        imgic1054 = getIcon(icon1054);
+        imgic1056 = getIcon(icon1056);
 		
 		imgic1100 = getIcon(icon1100);
 		imgic1102 = getIcon(icon1102);

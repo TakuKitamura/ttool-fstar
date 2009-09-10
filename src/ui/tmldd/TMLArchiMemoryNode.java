@@ -73,7 +73,7 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
         width = 200;
         height = 200;
         minWidth = 100;
-        minHeight = 100;
+        minHeight = 50;
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];

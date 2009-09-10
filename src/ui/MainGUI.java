@@ -67,6 +67,7 @@ import ui.file.*;
 import ui.interactivesimulation.*;
 import ui.iod.*;
 import ui.req.*;
+import ui.ebrdd.*;
 import ui.sd.*;
 import ui.ucd.*;
 import ui.tree.*;
@@ -2551,7 +2552,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         } else if (tp instanceof RequirementPanel) {
             TDiagramPanel tdp = getCurrentTDiagramPanel();
             if (!(tdp instanceof RequirementDiagramPanel)) {
-                System.out.println("Internal error: Requirement panels");
+                System.out.println("No syntax checking for EBRDD: not yet implemented");
                 return ret;
             }
             RequirementDiagramPanel rdp= (RequirementDiagramPanel)tdp;
@@ -4269,6 +4270,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
         return true;
     }
+	
+	public boolean createEBRDD(int index, String s) {
+        return createEBRDD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createEBRDD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof RequirementPanel)) {
+            return false;
+        }
+        
+        ((RequirementPanel)tp).addEBRDD(s);
+        setPanelMode();
+        return true;
+    }
     
     public RequirementDiagramPanel getRequirementDiagramPanel(int index, String s) {
         //System.out.println("Searching for " + s);
@@ -4295,6 +4310,35 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public RequirementDiagramPanel getRequirementDiagramPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (RequirementDiagramPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+	
+	public EBRDDPanel getEBRDDPanel(int index, String s) {
+        //System.out.println("Searching for " + s);
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getEBRDDPanel(tp, s);
+    }
+    
+    public EBRDDPanel getEBRDDPanel(TURTLEPanel tp, String s) {
+        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                if (tp.panelAt(i) instanceof EBRDDPanel)
+                    return  (EBRDDPanel)(tp.panelAt(i));
+            }
+        }
+        return null;
+    }
+    
+    public EBRDDPanel getEBRDDPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getEBRDDPanel(tp, indexTab, s);
+    }
+    
+    
+    public EBRDDPanel getEBRDDPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (EBRDDPanel)(tp.panelAt(indexTab));
         }
         return null;
     }
@@ -5570,6 +5614,28 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.NCDD_ROUTE_ARTIFACT);
         } else if (command.equals(actions[TGUIAction.TMLTD_TASK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLTD_TASK);
+        } else if (command.equals(actions[TGUIAction.EBRDD_START].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_START_STATE);
+        } else if (command.equals(actions[TGUIAction.EBRDD_STOP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_STOP_STATE);
+        } else if (command.equals(actions[TGUIAction.EBRDD_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_EBRDD);
+        } else if (command.equals(actions[TGUIAction.EBRDD_CONNECTOR_ERC].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_EBRDD_ERC);
+        } else if (command.equals(actions[TGUIAction.EBRDD_CHOICE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_CHOICE);
+        } else if (command.equals(actions[TGUIAction.EBRDD_ERC].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_ERC);
+        } else if (command.equals(actions[TGUIAction.EBRDD_ESO].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_ESO);
+        } else if (command.equals(actions[TGUIAction.EBRDD_ERB].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_ERB);
+        } else if (command.equals(actions[TGUIAction.EBRDD_SEQUENCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_SEQUENCE);
+        } else if (command.equals(actions[TGUIAction.EBRDD_ACTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_ACTION);
+        } else if (command.equals(actions[TGUIAction.EBRDD_FOR_LOOP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.EBRDD_FOR_LOOP);
         } else if (command.equals(actions[TGUIAction.TMLAD_START].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_START_STATE);
         } else if (command.equals(actions[TGUIAction.TMLAD_STOP].getActionCommand())) {

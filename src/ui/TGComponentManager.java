@@ -55,7 +55,9 @@ import ui.dd.*;
 import ui.iod.*;
 import ui.sd.*;
 import ui.ucd.*;
+
 import ui.req.*;
+import ui.ebrdd.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -126,6 +128,9 @@ public class TGComponentManager {
 	public static final int CONNECTOR_PORT_TMLC = 126;
 	
 	public static final int CONNECTOR_NODE_NC = 127;
+	
+	public static final int CONNECTOR_EBRDD = 130;
+	public static final int CONNECTOR_EBRDD_ERC = 131;
     
     public static final int TCD_TCLASS = 201;
     public static final int TCD_PARALLEL_OPERATOR = 202;
@@ -207,6 +212,16 @@ public class TGComponentManager {
 	public static final int TMLCTD_PCOMPONENT = 1202;
 	public static final int TMLCTD_COPORT = 1203;
 	public static final int TMLCTD_CREMOTECOMPONENT = 1204;
+	
+	public static final int EBRDD_START_STATE = 1300;
+    public static final int EBRDD_STOP_STATE = 1301;
+	public static final int EBRDD_CHOICE = 1302;
+    public static final int EBRDD_ERC = 1303;
+	public static final int EBRDD_ACTION = 1304;
+	public static final int EBRDD_FOR_LOOP = 1305;
+	public static final int EBRDD_SEQUENCE = 1306;
+	public static final int EBRDD_ESO = 1307;
+	public static final int EBRDD_ERB = 1308;
     
     public static final int TREQ_REQUIREMENT = 900;
     public static final int TREQ_OBSERVER = 901;
@@ -412,6 +427,33 @@ public class TGComponentManager {
                 break;
             case TDD_ARTIFACT:
                 tgc = new TDDArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_START_STATE:
+                tgc = new EBRDDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case EBRDD_STOP_STATE:
+                tgc = new EBRDDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_CHOICE:
+                tgc = new EBRDDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_ERC:
+                tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_ACTION:
+                tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_FOR_LOOP:
+                tgc = new EBRDDForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_SEQUENCE:
+                tgc = new EBRDDSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_ESO:
+                tgc = new EBRDDESO(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_ERB:
+                tgc = new EBRDDERB(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_START_STATE:
                 tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -760,6 +802,24 @@ public class TGComponentManager {
             return NCDD_TRAFFIC_ARTIFACT;
         } else if (tgc instanceof NCRouteArtifact) {
             return NCDD_ROUTE_ARTIFACT;
+        } else if (tgc instanceof EBRDDStartState) {
+            return EBRDD_START_STATE;
+        } else if (tgc instanceof EBRDDStopState) {
+            return EBRDD_STOP_STATE;
+        } else if (tgc instanceof EBRDDChoice) {
+            return EBRDD_CHOICE;
+        } else if (tgc instanceof EBRDDERC) {
+            return EBRDD_ERC;
+        } else if (tgc instanceof EBRDDActionState) {
+            return EBRDD_ACTION;
+        } else if (tgc instanceof EBRDDForLoop) {
+            return EBRDD_FOR_LOOP;
+        } else if (tgc instanceof EBRDDSequence) {
+            return EBRDD_SEQUENCE;
+        } else if (tgc instanceof EBRDDESO) {
+            return EBRDD_ESO;
+        } else if (tgc instanceof EBRDDERB) {
+            return EBRDD_ERB;
         } else if (tgc instanceof TMLADStartState) {
             return TMLAD_START_STATE;
         } else if (tgc instanceof TMLADStopState) {
@@ -998,6 +1058,12 @@ public class TGComponentManager {
                 break;
             case TOSAD_CONNECTOR:
                 tgc = new TOSADConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case CONNECTOR_EBRDD:
+                tgc = new TGConnectorEBRDD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case CONNECTOR_EBRDD_ERC:
+                tgc = new TGConnectorEBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
             case CONNECTOR_TMLAD:
                 tgc = new TGConnectorTMLAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

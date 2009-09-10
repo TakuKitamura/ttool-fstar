@@ -207,6 +207,18 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLARCHI_MEMORYNODE = 224;
 	public static final int TMLARCHI_BRIDGENODE = 225;
 	
+	public static final int EBRDD_EDIT = 271;
+    public static final int EBRDD_CONNECTOR = 272;
+    public static final int EBRDD_START = 273;
+    public static final int EBRDD_STOP = 274;
+	public static final int EBRDD_CHOICE = 275;
+	public static final int EBRDD_ERC = 276;
+	public static final int EBRDD_ACTION = 277;
+	public static final int EBRDD_FOR_LOOP = 278;
+	public static final int EBRDD_SEQUENCE = 279;
+	public static final int EBRDD_ESO = 280;
+	public static final int EBRDD_ERB = 281;
+	public static final int EBRDD_CONNECTOR_ERC = 282;
 	
     // TURTLE-OS
     public static final int TOS_TCLASS = 189;
@@ -381,7 +393,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 271;
+    public static final int NB_ACTION = 283;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -668,6 +680,19 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_SEQUENCE] = new TAction("add-tmlad-sequence", "Sequence", IconManager.imgic226, IconManager.imgic226, "Sequence", "Add a sequence to the currently opened TML activity diagram", 0);
         actions[TMLAD_SELECT_EVT] = new TAction("add-tmlad-select-evt", "Add select event", IconManager.imgic916, IconManager.imgic916, "Select event", "Add a selection between events to the currently opened TML Task activity diagram", 0);
 		actions[TMLAD_RANDOM] = new TAction("add-tmlad-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened TML Task activity diagram", 0);
+		
+		actions[EBRDD_EDIT] = new TAction("edit-ebrdd-diagram", "Edit EBRDD", IconManager.imgic100, IconManager.imgic101, "Edit EBRDD", "Make it possible to edit the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_CONNECTOR] = new TAction("add-ebrdd-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_START] = new TAction("add-ebrdd-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_STOP] = new TAction("add-ebrdd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened  Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_CHOICE] = new TAction("add-ebrdd-choice", "Add Choice", IconManager.imgic222, IconManager.imgic222, "Choice", "Add a deterministic choice to the currently opened Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_ERC] = new TAction("add-ebrdd-erc", "Add ERC", IconManager.imgic1050, IconManager.imgic1050, "Event Reception Container", "Add an Event Reception Container to the currently opened Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_ACTION] = new TAction("add-ebrdd-action", "Add Action", IconManager.imgic204, IconManager.imgic204, "Action", "Add an Action to the currently opened Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_FOR_LOOP] = new TAction("add-ebrdd-for-loop", "Loop (for)", IconManager.imgic912, IconManager.imgic912, "Loop (for)", "Add a for loop to the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_SEQUENCE] = new TAction("add-ebrdd-sequence", "Sequence", IconManager.imgic226, IconManager.imgic226, "Sequence", "Add a sequence to the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_CONNECTOR_ERC] = new TAction("add-ebrdd-erc-connector", "Connect two ESO / ERB operators together", IconManager.imgic1052, IconManager.imgic1052, "Connect two ESO / ERB operators together", "Connect two ESO / ERB operators of the currently opened Event-Based Requirement Description Diagram", 0);
+        actions[EBRDD_ESO] = new TAction("add-ebrdd-eso", "Add ESO", IconManager.imgic1054, IconManager.imgic1054, "Event Sequencing Operator", "Add an Event Sequencing Operator to the currently opened Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_ERB] = new TAction("add-ebrdd-erb", "Add ERB", IconManager.imgic1056, IconManager.imgic1056, "Event Reaction Block", "Add an Event Reaction Block to the currently opened Event-Based Requirement Description Diagram", 0);
 		
 		actions[TMLARCHI_EDIT] = new TAction("edit-tmlarchi-diagram", "Edit DIPLODOCUS architecture diagram", IconManager.imgic100, IconManager.imgic101, "Edit DIPLODOCUS architecture diagram", "Make it possible to edit the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_LINK] = new TAction("add-tmlarchi-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened DIPLODOCUS architecture diagram", 0);

@@ -606,8 +606,20 @@ public abstract class TGConnector extends TGCWithInternalComponent {
         } else {
             automatic = new JMenuItem("Activate automatic drawing");
         }
+		
         automatic.addActionListener(menuAL);
         componentMenu.add(automatic);
+		
+		JMenuItem negation;
+		if (canBeNegated()) {
+			if (getNegation()) {
+				negation = new JMenuItem("Negation (to off)");
+			} else {
+				negation = new JMenuItem("Negation (to on)");
+			}
+			negation.addActionListener(menuAL);
+			componentMenu.add(negation);
+		}
     }
     
     public boolean eventOnPopup(ActionEvent e) {
@@ -621,7 +633,9 @@ public abstract class TGConnector extends TGCWithInternalComponent {
         } else if (e.getActionCommand().equals("Activate automatic drawing")) {
             automaticDrawing = true;
             return true;
-        }
+        } else if (e.getActionCommand().startsWith("Negation ")) {
+			reverseNegation();
+		}
         return false;
     }
     
@@ -665,5 +679,16 @@ public abstract class TGConnector extends TGCWithInternalComponent {
         GraphicLib.dashedRect(g, x1+s2+s3, y1+s3, w+15, h-12);
         
     }
+	
+	public void reverseNegation() {
+	}
+	
+	public boolean canBeNegated() {
+		return false;
+	}
+	
+	public boolean getNegation() {
+		return false;
+	}
     
 }
