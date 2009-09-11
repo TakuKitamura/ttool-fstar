@@ -107,7 +107,7 @@ public class IconManager {
     public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918, imgic920, imgic922, imgic924, imgic926;    
     // Requirement diagrams
     public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014;
-	public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056;
+	public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056, imgic1058;
 	
 	// TMLDD
 	public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
@@ -403,6 +403,8 @@ public class IconManager {
 	private static String icon1052 = "images/ercconnector.gif";
 	private static String icon1054 = "images/ebrddeso.gif";
 	private static String icon1056 = "images/ebrdderb.gif";
+	private static String icon1058 = "images/ebrdd.gif";
+	
 	
 	
 	// DIPLODOCUS architecture
@@ -706,6 +708,7 @@ public class IconManager {
         imgic1052 = getIcon(icon1052);
         imgic1054 = getIcon(icon1054);
         imgic1056 = getIcon(icon1056);
+		imgic1058 = getIcon(icon1058);
 		
 		imgic1100 = getIcon(icon1100);
 		imgic1102 = getIcon(icon1102);

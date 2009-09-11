@@ -133,7 +133,7 @@ public class RequirementPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarEBRDD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic1000, toolBarPanel, "Opens EBRDD");
+        tabbedPane.addTab(s, IconManager.imgic1058, toolBarPanel, "Opens EBRDD");
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());

@@ -84,11 +84,16 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
         editable = true;
         removable = true;
         
-        value = "action / condition";
         name = "Event Reaction Block";
+		
+		makeValue();
         
-        myImageIcon = IconManager.imgic204;
+        myImageIcon = IconManager.imgic1056;
     }
+	
+	public void makeValue() {
+		 setValue("evt:" + evt + " / cond:" + condition + " / action:" + action);
+	}
     
     public void internalDrawing(Graphics g) {
 		if (wid != width) {
@@ -192,6 +197,7 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
 		evt = dialog.getEvent().trim();
 		condition = dialog.getCondition().trim();
 		action = dialog.getAction().trim();
+		makeValue();
 		
 		return true;
 	}
@@ -272,6 +278,7 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+		makeValue();
     }
 	
 	public String getEvent() {

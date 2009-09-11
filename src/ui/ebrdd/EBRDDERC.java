@@ -94,7 +94,7 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
         name = tdp.findNodeName("ERC");
 		value = "name";
         
-        //myImageIcon = IconManager.imgic700;
+        myImageIcon = IconManager.imgic1050;
     }
     
     public void internalDrawing(Graphics g) {

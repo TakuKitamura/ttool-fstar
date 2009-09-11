@@ -94,11 +94,11 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
 		editable = true;
 		removable = true;
 		
-		setValue("Conjunction");
+		setValue(ESOS[id] + "(" + timeout + ", " + oncePerEvent + ", " + n + ", " + m + ")");
 		name = "ESO";
 		id = 0;
 		
-		myImageIcon = IconManager.imgic206;
+		myImageIcon = IconManager.imgic1054;
 	}
     
     public void internalDrawing(Graphics g) {
@@ -171,6 +171,8 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
 		n = _n;
 		m = _m;
 		
+		setValue(ESOS[id] + "(" + timeout + ", " + oncePerEvent + ", " + n + ", " + m + ")");
+		
 		return true;
 	}
 	
@@ -239,6 +241,8 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+		setValue(ESOS[id] + "(" + timeout + ", " + oncePerEvent + ", " + n + ", " + m + ")");
+		
     }
 	
 	public static boolean hasTimeout(int _id) {

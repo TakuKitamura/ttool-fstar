@@ -9,10 +9,11 @@ JAVAC  = javac
 JAR    = jar
 JAVADOC = javadoc
 TAR = tar
+GZIP = gzip -9 -f
 DEBUG  = -g
 CLASSPATH = -classpath
 CLASSPATH = -sourcepath
-PACKAGE = automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator translator tmltranslator tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/ad ui/cd ui/oscd ui/osad ui/dd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle tmltranslator/tosystemc tmatrix uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation
+PACKAGE = automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator translator tmltranslator tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle tmltranslator/tosystemc tmatrix uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation
 BUILDER = builder.jar
 BUILD_INFO = build.txt
 BUILD_TO_MODIFY = src/ui/DefaultText.java
@@ -165,14 +166,14 @@ stdrelease:
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 # Basic release
-	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfvz $(TTOOL_STD_RELEASE)/release.tgz *
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar *; $(GZIP) -9 $(TTOOL_STD_RELEASE)/release.tar; mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz
 # Advanced release
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_TARGET)/doc/srcdoc $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 	mkdir -p $(TTOOL_TARGET)/src
 	cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
 	find $(TTOOL_TARGET)/src -type f -not \( -name '*.java' -o -name '*.gif' -o -name '*.jjt' -o -name '*.txt' \) -a -exec rm -f {} \;
 	cp -R $(TTOOL_DOC)/README_src $(TTOOL_TARGET)/src
-	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfvz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz *
+	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar *; $(GZIP) $(TTOOL_STD_RELEASE)/releaseWithSrc.tar; mv $(TTOOL_STD_RELEASE)/releaseWithSrc.tar.gz $(TTOOL_STD_RELEASE)/releaseWithSrc.tgz
 
 
 jttooljar:

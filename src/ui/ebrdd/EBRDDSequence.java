@@ -91,7 +91,7 @@ public class EBRDDSequence extends TGCWithInternalComponent implements EmbeddedC
 		
 		name = "sequence";
 		
-		myImageIcon = IconManager.imgic206;
+		myImageIcon = IconManager.imgic226;
 	}
     
     public void internalDrawing(Graphics g) {

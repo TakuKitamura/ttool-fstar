@@ -55,6 +55,7 @@ import ui.*;
 import ui.ad.*;
 import ui.cd.*;
 import ui.iod.*;
+import ui.ebrdd.*;
 import ui.req.*;
 import ui.sd.*;
 import ui.dd.*;
@@ -134,6 +135,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof RequirementDiagramPanel) {
             setIcon(IconManager.imgic1000);
             setToolTipText("TURTLE Requirement Diagram");          
+        } else if (value instanceof EBRDDPanel) {
+            setIcon(IconManager.imgic1058);
+            setToolTipText("Event-Based Requirement Description Diagram");          
         } else if (value instanceof TActivityDiagramPanel) {
             setIcon(IconManager.imgic15);
             setToolTipText("TURTLE Activity Diagram of " + value.toString());
