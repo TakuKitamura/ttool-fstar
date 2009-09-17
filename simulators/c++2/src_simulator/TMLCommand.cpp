@@ -69,6 +69,7 @@ TMLCommand::~TMLCommand(){
 
 TMLCommand* TMLCommand::prepare(bool iInit){
 	//Do not set _currTransaction=0 as specialized commands access the variable in the scope of the execute method (set terminated flag) 
+	//std::cout << "Prepare command ID: " << _ID << "\n";
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 		//std::cout << "COMMAND FINISHED!!n";
@@ -77,6 +78,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		if (_justStarted) NOTIFY_CMD_STARTED(this);
 #endif
 		_progress=0;
+		_currTransaction=0;  //NEW!!!!!!!!!!!
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
 		//std::cout << "Prepare command, to next command" << std::endl;
@@ -89,9 +91,15 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		}
 	}else{
 		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
+		TMLCommand* result;
 		if (iInit){
-			if (_currTransaction!=0) delete _currTransaction;
+			//if (_currTransaction!=0) delete _currTransaction;   NEW!!!!!!!!!!!!!!!!!!
+			if (_currTransaction==0)
+				result = prepareNextTransaction();  //NEW!!!!!!!!!!!!!!!!!!!!!!!!
+			else
+				result = _currTransaction->getCommand();
 			if (_progress==0) _justStarted=true;
+			//result=0; ///////////NEW
 		}else{
 			if (_progress==0){
 #ifdef LISTENERS_ENABLED
@@ -110,8 +118,9 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 				}
 			}
 			//std::cout << "Prepare next transaction" << std::endl;
+			result = prepareNextTransaction(); //NEW!!!!!!!!!!!!!!!!!!!!!!!!
 		}
-		TMLCommand* result = prepareNextTransaction();
+		//TMLCommand* result = prepareNextTransaction();   NEW!!!!!!!!!!!!!!!!!
 		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
 #ifdef REGISTER_TRANS_AT_CPU 
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
@@ -136,6 +145,7 @@ TMLCommand* TMLCommand::getNextCommand() const{
 }
 
 TMLCommand** TMLCommand::getNextCommands(unsigned int& oNbOfCmd) const{
+	//returned number is not correct for composite choice/choice commands and composite action/choice commands !!!!
 	oNbOfCmd=_nbOfNextCmds;
 	return _nextCommand;
 }

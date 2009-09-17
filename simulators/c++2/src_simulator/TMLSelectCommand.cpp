@@ -83,7 +83,7 @@ void TMLSelectCommand::execute(){
 	_maxChannelIndex=0;
 	TMLCommand* aNextCommand = prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
-	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
+	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
 TMLCommand* TMLSelectCommand::prepareNextTransaction(){

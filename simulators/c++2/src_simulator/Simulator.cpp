@@ -247,6 +247,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 //#ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 //#endif
+	_simComp->setStopFlag(false,"");
 	for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
 		//std::cout << (*i)->toString() << " in loop" << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
@@ -256,7 +257,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
-	_simComp->setStopFlag(false,"");
 #ifdef LISTENERS_ENABLED
 	NOTIFY_SIM_STARTED();
 #endif
@@ -343,7 +343,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 	gettimeofday(&aEnd,NULL);
 	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
-	return (transLET==0);
+	return (transLET==0 && !_simComp->getStoppedOnAction());
 }
 
 const std::string Simulator::getArgs(const std::string& iComp, const std::string& iDefault, int iLen, char** iArgs){
@@ -996,7 +996,9 @@ bool Simulator::runXTransactions(unsigned int iTrans, TMLTransaction*& oLastTran
 
 bool Simulator::runXCommands(unsigned int iCmds, TMLTransaction*& oLastTrans){
 	RunXCommands aListener(_simComp,iCmds);
-	return simulate(oLastTrans);
+	bool test=simulate(oLastTrans);
+	if (test) std::cout << "Simulate returned end" << std::endl;
+	return test;
 }
 
 bool Simulator::runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans){

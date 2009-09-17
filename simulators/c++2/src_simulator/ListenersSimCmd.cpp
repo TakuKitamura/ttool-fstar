@@ -229,6 +229,7 @@ void RunXCommands::commandFinished(TMLCommand* iComm){
 		std::ostringstream aOut;
 		aOut << MSG_RUNXCOMMANDS << ": " << _commandsToExecute;
 		_simComp->setStopFlag(true, aOut.str());
+		std::cout << "x commands stopped sim\n";
 		//return true;
 	}
 	//return false;

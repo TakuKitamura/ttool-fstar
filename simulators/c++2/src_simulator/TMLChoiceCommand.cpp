@@ -64,6 +64,7 @@ TMLCommand* TMLChoiceCommand::getNextCommand() const{
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 	if (_simComp->getStopFlag()){
 		//std::cout << "aSimStopped=true " << std::endl;
+		_simComp->setStoppedOnAction();
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}

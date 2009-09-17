@@ -55,7 +55,7 @@ void TMLExeciCommand::execute(){
 	//std::cout << "Execi execute prepare" << std::endl;
 	TMLCommand* aNextCommand = prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
-	if (_progress==0 && aNextCommand!=this) _currTransaction=0;
+	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
 TMLCommand* TMLExeciCommand::prepareNextTransaction(){

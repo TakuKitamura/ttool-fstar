@@ -197,7 +197,9 @@ public:
 	\param iStopFlag Stop flag
 	\param iStopReason Reason why the simulation stopped
 	*/	
-	void setStopFlag(bool iStopFlag, const std::string& iStopReason) {_stopFlag=iStopFlag; if (iStopFlag) _stopReason+= " " + iStopReason; else _stopReason="";}
+	void setStopFlag(bool iStopFlag, const std::string& iStopReason);
+	bool getStoppedOnAction(){return _stoppedOnAction;}
+	void setStoppedOnAction(){_stoppedOnAction=true; std::cout << "_stoppedOnAction=true\n";}
 	///If a task has a choice command as current command, a pointer to it is returned
 	/**
 	\return Pointer if choice command was found, null otherwise
@@ -240,6 +242,8 @@ protected:
 	int _hashValue;
 	///Reason why the simulation stopped
 	std::string _stopReason;
+	///Flag indicating whether a task has an action command pending
+	bool _stoppedOnAction;
 };
 #endif
 

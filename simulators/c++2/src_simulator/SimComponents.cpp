@@ -52,7 +52,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <ListenersSimCmd.h>
 
-SimComponents::SimComponents(int iHashValue):_stopFlag(false), _hashValue(iHashValue){
+SimComponents::SimComponents(int iHashValue):_stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
 }
 
 SimComponents::~SimComponents(){
@@ -254,3 +254,14 @@ TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
 		if (aResult!=0) aResult->setBreakpoint(new Breakpoint(this));	
 	}
 }*/
+
+void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){ 
+	_stopFlag=iStopFlag;
+	if (iStopFlag){
+		_stopReason+= " " + iStopReason;
+	}else{
+		_stopReason="";
+		_stoppedOnAction=false;
+		std::cout << "_stoppedOnAction=false\n";
+	}
+}
