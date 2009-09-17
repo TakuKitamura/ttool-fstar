@@ -345,17 +345,22 @@ public class MappedSystemCTask {
 			}
 			if (nextCommandCont==null){
 				//System.out.println("nextCommandCont==null in ActionState "+ action +CR);
-				hcode+="TMLActionCommand " + cmdName + SCCR;
+				//hcode+="TMLActionCommand " + cmdName + SCCR;
+				hcode+="TMLChoiceCommand " + cmdName + SCCR;
 				MergedCmdStr nextCommandCollection = new MergedCmdStr("", cmdName);
 				//initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
-				initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+				//initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR; //last one
+				initCommand+= "," + cmdName + "("+ idString + ",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func, 1, false)"+CR;
 				String MKResult = makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCollection,null);
 				if(nextCommandCollection.num==0){
 					nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + MKResult + "));\n";
 				}else{	
 					nextCommand= cmdName + ".setNextCommand(array(" + nextCommandCollection.num + nextCommandCollection.nextCmd + "));\n";
 				}
-				functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR + nextCommandCollection.funcs + "}" + CR2;
+				//functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR + nextCommandCollection.funcs + "}" + CR2;
+				functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR + nextCommandCollection.funcs;
+				if (nextCommandCollection.num==0) functions+="return 0"+ SCCR;
+				functions+= "}" + CR2;
 				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
 				commentNum++;
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
