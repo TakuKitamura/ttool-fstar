@@ -201,22 +201,32 @@ bool CPU::addTransaction(){
 		//Slave* aLastSlave=_nextTransaction->getChannel()->getNextSlave(_nextTransaction);
 		BusMaster* aFollowingMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
 		if (aFollowingMaster==0){
+			//std::cout << "1\n";
 			aFinish=true;
 			BusMaster* aTempMaster =_nextTransaction->getChannel()->getFirstMaster(_nextTransaction);
+			//std::cout << "2\n";
 			Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
+			//std::cout << "3\n";
 			aTempMaster->addBusContention(_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
 			while (aTempMaster!=0){
+				//std::cout << "3a\n";
 				aTempMaster->addTransaction();
+				//std::cout << "3b\n";
 				aTempSlave->addTransaction(_nextTransaction);
+				//std::cout << "4\n";
 				aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
+				//std::cout << "5\n";
 				aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
 			}
+			//std::cout << "6\n";
 		}else{
 			//std::cout << _name << " bus transaction next round" << std::endl;
 			_masterNextTransaction=aFollowingMaster;
+			//std::cout << "7\n";
 			_masterNextTransaction->registerTransaction(_nextTransaction);
 			aFinish=false;
 		}
+		//std::cout << "8\n";
 	}
 	if (aFinish){
 #ifdef DEBUG_CPU

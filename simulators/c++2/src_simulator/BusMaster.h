@@ -72,7 +72,7 @@ public:
 	void reset(){
 		_nextTransaction=0;
 		_lastSimTime=-1;
-		_nextBus=0;
+		_nextBus=_busArray[0];
 		_contentionDelay=0;
 		_noTransactions=0;
 	}
@@ -98,6 +98,7 @@ public:
 
 	void addTransaction(){
 		//_addTransFlag++;
+		//std::cout << _name << ": add Trans\n";
 		//std::cout << _name << ": trans added on Bus: " << _nextBus->toString() << std::endl;
 		_nextBus->addTransaction();
 		_nextTransaction=0;
