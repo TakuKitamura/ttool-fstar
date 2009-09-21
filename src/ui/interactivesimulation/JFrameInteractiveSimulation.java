@@ -277,7 +277,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp.add(buttonStart);
 		jp.add(buttonStopAndClose);
 		jp.add(buttonClose);
-		mainpanel.add(jp, BorderLayout.SOUTH);
+		mainpanel.add(jp, BorderLayout.NORTH);
 		
 		
 		GridBagLayout gridbag02 = new GridBagLayout();

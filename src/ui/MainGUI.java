@@ -2552,42 +2552,59 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         } else if (tp instanceof RequirementPanel) {
             TDiagramPanel tdp = getCurrentTDiagramPanel();
             if (!(tdp instanceof RequirementDiagramPanel)) {
-                System.out.println("No syntax checking for EBRDD: not yet implemented");
-                return ret;
-            }
-            RequirementDiagramPanel rdp= (RequirementDiagramPanel)tdp;
-            JDialogSelectRequirements.validated = rdp.validated;
-            JDialogSelectRequirements.ignored = rdp.ignored;
-            Vector reqsToValidate = new Vector();
-            JDialogSelectRequirements jdsreq = new JDialogSelectRequirements(frame, reqsToValidate, rdp.getComponentList(), "Choosing requirements to verify");
-			if (!automatic) {
-				GraphicLib.centerOnParent(jdsreq);
-				jdsreq.setVisible(true); // Blocked until dialog has been closed
-			}
-            if (reqsToValidate.size() > 0) {
-                rdp.validated = JDialogSelectRequirements.validated;
-                rdp.ignored = JDialogSelectRequirements.ignored;
-                b = gtm.generateTMsForRequirementAnalysis(reqsToValidate, rdp);
-                if (b) {
-                    //setMode(MainGUI.GEN_SYSTEMC_OK);
-                    setMode(MainGUI.REQ_OK);
-					ret = true;
-					if (!automatic) {
+				if (tdp instanceof EBRDDPanel) {
+					
+					b = gtm.makeEBRDD((EBRDDPanel)tdp);
+					if (b) {
 						JOptionPane.showMessageDialog(frame,
-							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now verify requirements' satisfiability",
-							"Syntax analysis successful on requirements",
+							"0 error, " + getCheckingWarnings().size() + " warning(s).",
+							"Syntax analysis successful on EBRDD",
 							JOptionPane.INFORMATION_MESSAGE);
-					}
-                    
-                } else {
-					if (!automatic) {
+					} else {
 						JOptionPane.showMessageDialog(frame,
-							"The requirement diagram contains several errors",
+							"The EBRDD contains several errors",
 							"Syntax analysis failed",
 							JOptionPane.INFORMATION_MESSAGE);
 					}
-                }
-            }
+				} else {
+					return ret;
+				}
+                //System.out.println("No syntax checking for EBRDD: not yet implemented");
+            } else {
+				RequirementDiagramPanel rdp= (RequirementDiagramPanel)tdp;
+				JDialogSelectRequirements.validated = rdp.validated;
+				JDialogSelectRequirements.ignored = rdp.ignored;
+				Vector reqsToValidate = new Vector();
+				JDialogSelectRequirements jdsreq = new JDialogSelectRequirements(frame, reqsToValidate, rdp.getComponentList(), "Choosing requirements to verify");
+				if (!automatic) {
+					GraphicLib.centerOnParent(jdsreq);
+					jdsreq.setVisible(true); // Blocked until dialog has been closed
+				}
+				if (reqsToValidate.size() > 0) {
+					rdp.validated = JDialogSelectRequirements.validated;
+					rdp.ignored = JDialogSelectRequirements.ignored;
+					b = gtm.generateTMsForRequirementAnalysis(reqsToValidate, rdp);
+					if (b) {
+						//setMode(MainGUI.GEN_SYSTEMC_OK);
+						setMode(MainGUI.REQ_OK);
+						ret = true;
+						if (!automatic) {
+							JOptionPane.showMessageDialog(frame,
+								"0 error, " + getCheckingWarnings().size() + " warning(s). You can now verify requirements' satisfiability",
+								"Syntax analysis successful on requirements",
+								JOptionPane.INFORMATION_MESSAGE);
+						}
+						
+					} else {
+						if (!automatic) {
+							JOptionPane.showMessageDialog(frame,
+								"The requirement diagram contains several errors",
+								"Syntax analysis failed",
+								JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				}
+			}
         } else if (tp instanceof ProactiveDesignPanel) {
             // System.out.println("!!!!!!!!!!!!1");
 			//newTurtleModeling();

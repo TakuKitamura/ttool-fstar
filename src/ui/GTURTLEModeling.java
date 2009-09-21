@@ -99,6 +99,8 @@ import sdtranslator.*;
 
 import uppaaldesc.*;
 
+import req.ebrdd.*;
+
 public class GTURTLEModeling {
 
 	//Added by Solange
@@ -118,6 +120,8 @@ public class GTURTLEModeling {
 	private MainGUI mgui;
 	private CorrespondanceTGElement listE;
 	private String rtlotos;
+	
+	private EBRDD ebrdd;
 	
 	private UPPAALSpec uppaal;
 	private RelationTIFUPPAAL uppaalTIFTable;
@@ -4838,6 +4842,17 @@ public class GTURTLEModeling {
 		} else if (_tgc instanceof ActionStateErrorHighlight) {
 			((ActionStateErrorHighlight)_tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
 		}
+	}
+	
+	public boolean makeEBRDD(EBRDDPanel tdp) {
+		EBRDDTranslator ebrddt = new EBRDDTranslator();
+		ebrdd = ebrddt.generateEBRDD(tdp);
+		warnings = ebrddt.getWarnings();
+		checkingErrors = ebrddt.getErrors();
+		if (checkingErrors.size() > 0) {
+			return false;
+		}
+		return true;
 	}
 
 }
