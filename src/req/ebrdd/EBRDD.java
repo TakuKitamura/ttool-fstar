@@ -75,5 +75,45 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
 	public EBRDDComponent getEBRDDComponent(int index) {
 		return get(index);
 	}
+	
+	public void removeAllNonReferencedElts() {
+        EBRDDComponent adc;
+        while((adc = hasNonReferencedElts()) != null) {
+            remove(adc);
+        }
+    }
+    
+    public EBRDDComponent hasNonReferencedElts() {
+        EBRDDComponent adc;
+        EBRDDComponent adc1;
+        for(int i=0; i<size(); i++) {
+            adc = (EBRDDComponent)(get(i));
+            if (adc != ads) {
+                adc1 = getFirstComponentLeadingTo(adc);
+                if (adc1 == null) {
+                    // no component!
+                    return adc;
+                }
+            }
+        }
+        return null;
+    }
+	
+	public EBRDDComponent getFirstComponentLeadingTo(EBRDDComponent ad) {
+        EBRDDComponent ad1;
+        int i, j;
+        
+        for (i=0; i<size(); i++) {
+            ad1 = get(i);
+            for(j=0; j<ad1.getNbNext(); j++) {
+                if (ad1.getNext(j) == ad) {
+                    return ad1;
+                }
+            }
+        }
+        return null;
+    }
+    
+   
     
 }

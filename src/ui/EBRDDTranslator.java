@@ -129,725 +129,178 @@ public class EBRDDTranslator {
 		}
 		
 		
-		/*TADActionState tadas;
+		req.ebrdd.EBRDDActionState acst;
+		req.ebrdd.EBRDDChoice ch;
+		req.ebrdd.EBRDDERC erc;
+		req.ebrdd.EBRDDLoop loop;
+		req.ebrdd.EBRDDSequence seq;
+		req.ebrdd.EBRDDStart start;
+		req.ebrdd.EBRDDStop stop;
+		ESO eso;
+		ERB erb;
 		
-		ADStart ads;
-		//ADActionState ada;
-		ADActionStateWithGate adag;
-		ADActionStateWithParam adap;
-		ADActionStateWithMultipleParam adamp;
-		ADChoice adch;
-		ADDelay add;
-		ADJunction adj;
-		ADLatency adl;
-		ADParallel adp;
-		ADSequence adseq;
-		ADPreempt adpre;
-		ADStop adst;
-		ADTimeInterval adti;
-		ADTLO adtlo;
-		ADTimeCapture adtc;
-		String s, s1;
-		Gate g;
-		Param p;
-		
-		int nbActions;
-		String sTmp;
-		
-		// Creation of the activity diagram
-		ads = new ADStart();
-		listE.addCor(ads, tss);
-		ActivityDiagram ad = new ActivityDiagram(ads);
-		t.setActivityDiagram(ad);
-		//System.out.println("Making activity diagram of " + t.getName());
+		start = ebrdd.getStartState();
+		listE.addCor(start, tss);
 		
 		// Creation of other elements
 		iterator = list.listIterator();
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
 			
-			if (tgc instanceof TADActionState) {
-				tadas = (TADActionState)tgc;
-				s = ((TADActionState)tgc).getAction();
-				s = s.trim();
-				//remove ';' if last character
-				if (s.substring(s.length()-1, s.length()).compareTo(";") == 0) {
-					s = s.substring(0, s.length()-1);
-				}
-				nbActions = Conversion.nbChar(s, ';') + 1;
-				//System.out.println("Nb Actions in state: " + nbActions);
+			// Action
+			if (tgc instanceof ui.ebrdd.EBRDDActionState) {
+				acst = new req.ebrdd.EBRDDActionState();
+				acst.setAction(((ui.ebrdd.EBRDDActionState)tgc).getAction());
+				listE.addCor(acst, tgc);
+			
+			// Stop
+			} else if (tgc instanceof ui.ebrdd.EBRDDStopState) {
+				stop = new req.ebrdd.EBRDDStop();
+				listE.addCor(stop, tgc);
 				
-				s = TURTLEModeling.manageDataStructures(t, s);
+			// Choice	
+			} else if (tgc instanceof ui.ebrdd.EBRDDChoice) {
+				// guards are added later on
+				ch = new req.ebrdd.EBRDDChoice();
+				listE.addCor(ch, tgc);
 				
-				g = t.getGateFromActionState(s);
-				p = t.getParamFromActionState(s);
-				if ((g != null) && (nbActions == 1)){
-					//System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
-					adag = new ADActionStateWithGate(g);
-					ad.addElement(adag);
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("s1=" + s1);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					
-					//System.out.println("hi");
-					if (s1 == null) {
-						//System.out.println("ho");
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Invalid expression: " + t.getActionValueFromActionState(s));
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						//return;
-					} else {
-						tadas.setStateAction(ErrorHighlight.GATE);
-						s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-						
-						adag.setActionValue(s1);
-						//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
-						listE.addCor(adag, tgc);
-					}
-				} else if ((p != null) && (nbActions == 1)){
-					//System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-					if (t.getExprValueFromActionState(s).trim().startsWith("=")) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + " should not start with a '=='");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);  
-						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-					}
-					adap = new ADActionStateWithParam(p);
-					ad.addElement(adap);
-					adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
-					listE.addCor(adap, tgc);
-					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
-					
-				} else if ((p != null) && (nbActions > 1)){
-					//System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-					// Checking params
-					CheckingError ce;
-					for(j=0; j<nbActions; j++) {
-						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
-						if (sTmp == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (0) (" + s + "): \"" + s + "\" is not a correct expression");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						}
-						
-						p = t.getParamFromActionState(sTmp);
-						if (p == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (1) (" + s + "): \"" + sTmp + "\" is not a correct expression");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						}
-					}
-					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
-					adamp = new ADActionStateWithMultipleParam();
-					ad.addElement(adamp);
-					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
-					listE.addCor(adamp, tgc);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-					//System.out.println("Bad action state found " + s);
-				}
+			// Sequence
+			} else if (tgc instanceof ui.ebrdd.EBRDDSequence) {
+				// guards are added later on
+				seq = new req.ebrdd.EBRDDSequence();
+				listE.addCor(seq, tgc);
 				
-			} else if (tgc instanceof TADTimeCapture) {
-				p = t.getParamByName(tgc.getValue().trim());
-				if (p != null){
-					System.out.println("Time capture with param " + p.getName());
-					adtc = new ADTimeCapture(p);
-					ad.addElement(adtc);
-					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.ATTRIBUTE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown variable: " + tgc.getValue());
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-				}
-				
-			// Get element from Array
-			} else if (tgc instanceof TADArrayGetState) {
-				TADArrayGetState ags = (TADArrayGetState)tgc;
-				sTmp = ags.getIndex();
-				try {
-					nbActions = Integer.decode(sTmp).intValue();
-					
-					p = t.getParamByName(ags.getVariable());
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getVariable() + ": unknown variable");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ags.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						adap = new ADActionStateWithParam(p);
-						p = t.getParamByName(ags.getArray() + "__" + nbActions);
-						if (p == null) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getArray() + "[" + ags.getIndex() + "]: unknown array or wrong index");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							ags.setStateAction(ErrorHighlight.UNKNOWN);
-						} else {
-							ad.addElement(adap);
-							adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + nbActions));
-							listE.addCor(adap, tgc);
-							listB.addCor(adap, tgc);
-							ags.setStateAction(ErrorHighlight.OK);
-						}
-					}
-				} catch (Exception e) {
-					// Index is not an absolute value
-					System.out.println("Index is not an absolute value");
-					Gate error = t.addNewGateIfApplicable("arrayOverflow");
-					
-					ADChoice choice1 = new ADChoice();
-					ADJunction junc = new ADJunction();
-					ADStop stop1 = new ADStop();
-					ADActionStateWithGate adag1 = new ADActionStateWithGate(error);
-					
-					ad.addElement(choice1);
-					ad.addElement(junc);
-					ad.addElement(stop1);
-					ad.addElement(adag1);
-					
-					String basicGuard = "(" + ags.getIndex() + ")";
-					
-					p = t.getParamByName(ags.getArray() + "__size");
-					
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getArray() + "[" + ags.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ags.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						int size = 2;
-						try {
-							size = Integer.decode(p.getValue()).intValue();
-						} catch (Exception e0) {
-						}
-						
-						p = t.getParamByName(ags.getVariable());
-						
-						if (p == null) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getVariable() + ": unknown variable");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							ags.setStateAction(ErrorHighlight.UNKNOWN);
-						} else {
-							for(int i=0; i<size; i++) {
-								//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
-								choice1.addGuard("[" + basicGuard + " == " + i + "]");
-								adap = new ADActionStateWithParam(p);
-								ad.addElement(adap);
-								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + i));
-								choice1.addNext(adap);
-								adap.addNext(junc);
-								ags.setStateAction(ErrorHighlight.OK);
-							}
-							
-							choice1.addGuard("[" + basicGuard + "> (" + ags.getArray() + "__size - 1)]");
-							choice1.addNext(adag1);
-							adag1.addNext(stop1);
-							
-							listE.addCor(junc, tgc);
-							listB.addCor(choice1, tgc);
-							
-						}
-					}
-				}
-				
-			} else if (tgc instanceof TADArraySetState) {
-				TADArraySetState ass = (TADArraySetState)tgc;
-				sTmp = ass.getIndex();
-				try {
-					nbActions = Integer.decode(sTmp).intValue();
-					p = t.getParamByName(ass.getArray() + "__" + nbActions);
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ass.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						adap = new ADActionStateWithParam(p);
-						ad.addElement(adap);
-						adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
-						listE.addCor(adap, tgc);
-						listB.addCor(adap, tgc);
-						ass.setStateAction(ErrorHighlight.OK);
-					}
-					
-				} catch (Exception e) {
-					// Index is not an absolute value
-					//System.out.println("Set: Index is not an absolute value");
-					Gate error = t.addNewGateIfApplicable("arrayOverflow");
-					
-					ADChoice choice1 = new ADChoice();
-					ADJunction junc = new ADJunction();
-					ADStop stop1 = new ADStop();
-					ADActionStateWithGate adag1 = new ADActionStateWithGate(error);
-					
-					ad.addElement(choice1);
-					ad.addElement(junc);
-					ad.addElement(stop1);
-					ad.addElement(adag1);
-					
-					String basicGuard = "(" + ass.getIndex() + ")";
-					
-					p = t.getParamByName(ass.getArray() + "__size");
-					
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ass.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						int size = 2;
-						try {
-							size = Integer.decode(p.getValue()).intValue();
-						} catch (Exception e0) {
-						}
-						
-						for(int i=0; i<size; i++) {
-							//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
-							p = t.getParamByName(ass.getArray() + "__" + i);
-							adap = null;
-							if (p == null) {
-								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-								ce.setTClass(t);
-								ce.setTGComponent(tgc);
-								ce.setTDiagramPanel(tdp);
-								addCheckingError(ce);
-								ass.setStateAction(ErrorHighlight.UNKNOWN);
-							} else {
-								choice1.addGuard("[" + basicGuard + " == " + i + "]");
-								adap = new ADActionStateWithParam(p);
-								ad.addElement(adap);
-								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
-								choice1.addNext(adap);
-								adap.addNext(junc);
-								ass.setStateAction(ErrorHighlight.OK);
-							}
-							
-							choice1.addGuard("[" + basicGuard + "> (" + ass.getArray() + "__size - 1)]");
-							choice1.addNext(adag1);
-							adag1.addNext(stop1);
-							
-							listE.addCor(junc, tgc);
-							listE.addCor(choice1, tgc);
-							if (adap != null) {
-								listE.addCor(adap, tgc);
-							}
-							listE.addCor(stop1, tgc);
-							listE.addCor(adag1, tgc);
-							listB.addCor(choice1, tgc);
-							
-						}
-					}
-				}
-				
-			} else if (tgc instanceof TADChoice) {
-				adch = new ADChoice();
-				ad.addElement(adch);
-				listE.addCor(adch, tgc);
-			} else if (tgc instanceof TADDeterministicDelay) {
-				add = new ADDelay();
-				ad.addElement(add);
-				add.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADDeterministicDelay)tgc).getDelayValue()));
-				listE.addCor(add, tgc);
-			} else if (tgc instanceof TADJunction) {
-				adj = new ADJunction();
-				ad.addElement(adj);
-				listE.addCor(adj, tgc);
-			} else if (tgc instanceof TADNonDeterministicDelay) {
-				adl = new ADLatency();
-				ad.addElement(adl);
-				adl.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADNonDeterministicDelay)tgc).getLatencyValue()));
-				listE.addCor(adl, tgc);
-			} else if (tgc instanceof TADParallel) {
-				adp = new ADParallel();
-				ad.addElement(adp);
-				adp.setValueGate(((TADParallel)tgc).getValueGate());
-				listE.addCor(adp, tgc);
-			} else if (tgc instanceof TADSequence) {
-				adseq = new ADSequence();
-				ad.addElement(adseq);
-				listE.addCor(adseq, tgc);
-			} else if (tgc instanceof TADPreemption) {
-				adpre = new ADPreempt();
-				ad.addElement(adpre);
-				listE.addCor(adpre, tgc);
-			} else if (tgc instanceof TADStopState) {
-				adst = new ADStop();
-				ad.addElement(adst);
-				listE.addCor(adst, tgc);
-			} else if (tgc instanceof TADTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TADTimeLimitedOffer) {
-				s = ((TADTimeLimitedOffer)tgc).getAction();
-				g = t.getGateFromActionState(s);
-				if (g != null) {
-					adtlo = new ADTLO(g);
-					ad.addElement(adtlo);
-					adtlo.setLatency("0");
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done");
-					adtlo.setAction(s1);
-					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
-					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.GATE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOffer)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-					//System.out.println("Bad time limited offer found " + s);
-				}
-			} else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
-				s = ((TADTimeLimitedOfferWithLatency)tgc).getAction();
-				g = t.getGateFromActionState(s);
-				if (g != null) {
-					adtlo = new ADTLO(g);
-					ad.addElement(adtlo);
-					adtlo.setLatency(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getLatency()));
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done");
-					adtlo.setAction(s1);
-					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
-					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.GATE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getLatency() + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-					//System.out.println("Bad time limited offer found " + s);
-				}
-				
-				// TURTLE-OS AD
-			} else if (tgc instanceof TOSADTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TOSADTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TOSADTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TOSADIntTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TOSADIntTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TOSADIntTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TOSADStopState) {
-				adst = new ADStop();
-				ad.addElement(adst);
-				listE.addCor(adst, tgc);
-			} else if (tgc instanceof TOSADJunction) {
-				adj = new ADJunction();
-				ad.addElement(adj);
-				listE.addCor(adj, tgc);
-			} else if (tgc instanceof TOSADChoice) {
-				adch = new ADChoice();
-				ad.addElement(adch);
-				listE.addCor(adch, tgc);
-			} if (tgc instanceof TOSADActionState) {
-				s = ((TOSADActionState)tgc).getAction();
-				s = s.trim();
-				//remove ';' if last character
-				if (s.substring(s.length()-1, s.length()).compareTo(";") == 0) {
-					s = s.substring(0, s.length()-1);
-				}
-				nbActions = Conversion.nbChar(s, ';') + 1;
-				
-				if (nbActions>1) {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + " should not start with a '=='");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-				} else {
-					//s = TURTLEModeling.manageDataStructures(t, s);
-					g = t.getGateFromActionState(s);
-					p = t.getParamFromActionState(s);
-					
-					if (p != null) {
-						adap = new ADActionStateWithParam(p);
-						ad.addElement(adap);
-						adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
-						listE.addCor(adap, tgc);
-					} else {
-						adag = new ADActionStateWithGate(g);
-						ad.addElement(adag);
-						listE.addCor(adag, tgc);
-						adag.setActionValue(s);
-					}
-				}
-				//System.out.println("Nb Actions in state: " + nbActions);
+			// Loop
+			} else if (tgc instanceof ui.ebrdd.EBRDDForLoop) {
+				// guards are added later on
+				loop = new req.ebrdd.EBRDDLoop();
+				listE.addCor(loop, tgc);
+				loop.setInit(((ui.ebrdd.EBRDDForLoop)tgc).getInit());
+				loop.setCondition(((ui.ebrdd.EBRDDForLoop)tgc).getCondition());
+				loop.setIncrement(((ui.ebrdd.EBRDDForLoop)tgc).getIncrement());
+			
+			// ERC
+			} else if (tgc instanceof ui.ebrdd.EBRDDERC) {
+				// guards are added later on
+				erc = new req.ebrdd.EBRDDERC();
+				listE.addCor(erc, tgc);
 			}
 		}
 		
-		TGConnectingPoint p1, p2;
-		//TGConnectorFullArrow tgco;
-		TGComponent tgc1, tgc2, tgc3;
-		ADComponent ad1, ad2;
-		
-		// Managing Java code
-		iterator = list.listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof PreJavaCode) {
-				ad1 = listE.getADComponentByIndex(tgc, tdp.count);
-				if (ad1 != null) {
-					ad1.setPreJavaCode(tgc.getPreJavaCode());
-				}
-			}
-			if (tgc instanceof PostJavaCode) {
-				ad1 = listE.getADComponentByIndex(tgc, tdp.count);
-				if (ad1 != null) {
-					ad1.setPostJavaCode(tgc.getPostJavaCode());
-				}
+		Vector v = listE.getData();
+		Object o;
+		for(int i=0; i<v.size(); i++) {
+			o = v.get(i);
+			if (o instanceof EBRDDComponent) {
+				ebrdd.add((EBRDDComponent)o);
 			}
 		}
 		
-		// Connecting elements
-		TGConnectorBetweenElementsInterface tgcbei;
-		iterator = list.listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TGConnectorBetweenElementsInterface) {
-				tgcbei = (TGConnectorBetweenElementsInterface)tgc;
-				p1 = tgcbei.getTGConnectingPointP1();
-				p2 = tgcbei.getTGConnectingPointP2();
+		
+		// Interconnection between elements
+        TGConnectorEBRDD tgco;
+        TGConnectingPoint p1, p2;
+        EBRDDComponent eb1, eb2;
+        TGComponent tgc1, tgc2, tgc3;
+        int j, index;
+        
+        iterator = list.listIterator();
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TGConnectorEBRDD) {
+                tgco = (TGConnectorEBRDD)tgc;
+                p1 = tgco.getTGConnectingPointP1();
+                p2 = tgco.getTGConnectingPointP2();
+                
+                // Identification of connected components
+                tgc1 = null; tgc2 = null;
+                for(j=0; j<list.size(); j++) {
+                    tgc3 = 	(TGComponent)(list.get(j));
+                    if (tgc3.belongsToMe(p1)) {
+                        tgc1 = tgc3;
+                    }
+                    if (tgc3.belongsToMe(p2)) {
+                        tgc2 = tgc3;
+                    }
+                }
+                
+                // Connecting ebrdd modeling components
+                if ((tgc1 != null) && (tgc2 != null)) {
+                    //ADComponent ad1, ad2;
+                    eb1 = listE.getEBRDDComponent(tgc1);
+                    eb2 = listE.getEBRDDComponent(tgc2);
+                    
+                    if ((eb1 != null ) && (eb2 != null)) {
+                        //Special case if "for loop" or if "choice"
+                        
+                        if (eb1 instanceof req.ebrdd.EBRDDLoop) {
+                            index = tgc1.indexOf(p1) - 1;
+                            if (index == 0) {
+                                eb1.addNext(0, eb2);
+                            } else {
+                                eb1.addNext(eb2);
+                            }
+                        } else if (eb1 instanceof req.ebrdd.EBRDDChoice) {
+                            index = tgc1.indexOf(p1) - 1;
+							//System.out.println("Adding next:" + ae2);
+                            eb1.addNext(eb2);
+							//System.out.println("Adding guard:" + ((TMLADChoice)tgc1).getGuard(index));
+                            ((req.ebrdd.EBRDDChoice)eb1).addGuard(((ui.ebrdd.EBRDDChoice)tgc1).getGuard(index));
+                        } else if (eb1 instanceof req.ebrdd.EBRDDSequence) {
+                            index = tgc1.indexOf(p1) - 1;
+                            ((req.ebrdd.EBRDDSequence)eb1).addIndex(index);
+                            eb1.addNext(eb2);
+							//System.out.println("Adding " + ae2 + " at index " + index);
+                        } else {
+                            eb1.addNext(eb2);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Check that each "for" has two nexts
+        // Check that Choice have compatible guards
+        iterator = list.listIterator();
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof ui.ebrdd.EBRDDChoice) {
+                ch = (req.ebrdd.EBRDDChoice)(listE.getEBRDDComponent(tgc));
+                ch.orderGuards();
 				
-				// identification of connected components
-				tgc1 = null; tgc2 = null;
-				for(j=0; j<list.size(); j++) {
-					tgc3 = 	(TGComponent)(list.get(j));
-					if (tgc3.belongsToMe(p1)) {
-						tgc1 = tgc3;
-					}
-					if (tgc3.belongsToMe(p2)) {
-						tgc2 = tgc3;
-					}
-				}
-				
-				// connecting turtle modeling components
-				if ((tgc1 != null) && (tgc2 != null)) {
-					//ADComponent ad1, ad2;
-					
-					//System.out.println("tgc1 = " + tgc1.getValue() + " tgc2= "+ tgc2.getValue());
-					
-				
-						ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
-					//}
-					if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState)) {
-						ad2 = listB.getADComponent(tgc2);
-					} else {
-						ad2 = listE.getADComponentByIndex(tgc2, tdp.count);
-					}
-					
-					//System.out.println("ad1 = " + ad1 + " ad2= "+ ad2);
-					
-					if ((ad1 == null) || (ad2 == null)) {
-						//System.out.println("Correspondance issue");
-					}
-					int index = 0;
-					if ((ad1 != null ) && (ad2 != null)) {
-						if ((tgc1 instanceof TADTimeLimitedOffer) || (tgc1 instanceof TADTimeLimitedOfferWithLatency)) {
-							index = tgc1.indexOf(p1) - 1;
-							ad1.addNextAtIndex(ad2, index);
-						} else if (tgc1 instanceof TADChoice) {
-							TADChoice tadch = (TADChoice)tgc1;
-							index = tgc1.indexOf(p1) - 1;
-							((ADChoice)ad1).addGuard(TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index)));
-							ad1.addNext(ad2);
-						} else if ((tgc1 instanceof TADSequence) ||(tgc1 instanceof TADPreemption)){
-							index = tgc1.indexOf(p1) - 1;
-							ad1.addNextAtIndex(ad2, index);
-						} else if (tgc1 instanceof TOSADChoice) {
-							TOSADChoice tadch = (TOSADChoice)tgc1;
-							index = tgc1.indexOf(p1) - 1;
-							((ADChoice)ad1).addGuard(TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index)));
-							ad1.addNext(ad2);
-						} else {
-							ad1.addNextAtIndex(ad2, index);
-							//System.out.println("Adding connector from " + ad1 + " to " + ad2);
-						}
-					}
-				}
-			}
-		}
-		// Increasing count of this panel
-		tdp.count ++;
+                if (ch.hasMoreThanOneElse()) {
+                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Choice should have only one [else] guard");
+                    ce.setTDiagramPanel(ebrddp);
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
+                } 
+            }	
+        }
+		
+		// Sorting nexts elements of Sequence
+	   for(j=0; j<ebrdd.size(); j++) {
+		   eb1 = ebrdd.get(j);
+		   if (eb1 instanceof req.ebrdd.EBRDDSequence) {
+			   ((req.ebrdd.EBRDDSequence)eb1).sortNexts();
+		   }
+	   }
+		
 		
 		// Remove all elements not reachable from start state
-		int sizeb = ad.size();
-		
-		ad.removeAllNonReferencedElts();
-		int sizea = ad.size();
+		int sizeb = ebrdd.size();
+		ebrdd.removeAllNonReferencedElts();
+		int sizea = ebrdd.size();
 		if (sizeb > sizea) {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Non reachable elements have been removed in " + t.getName());
-			ce.setTClass(t);
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Non reachable elements have been removed in EBRDD");
 			ce.setTGComponent(null);
-			ce.setTDiagramPanel(tdp);
+			ce.setTDiagramPanel(ebrddp);
 			addWarning(ce);
 			//System.out.println("Non reachable elements have been removed in " + t.getName());
-		}*/
+		}
+		
+		System.out.println("EBRDD generated");
 		
 		return ebrdd;
 	}
-	
-	/*public void addRelations(TURTLEDesignPanelInterface dp, String prename, TURTLEModeling tm) {
-		addRelationFromPanel(dp.getStructurePanel(), prename, tm);
-	}
-	
-	public void addRelations(TURTLEDesignPanelInterface dp, TURTLEModeling tm) {
-		addRelationFromPanel(dp.getStructurePanel(), "", tm);
-	}
-	
-	private void addRelationFromPanel(ClassDiagramPanelInterface tdp, String prename, TURTLEModeling tm) {
-		LinkedList list = tdp.getComponentList();
-		Iterator iterator = list.listIterator();
-		// search for Composition Operator
-		TGComponent tgc;
-		
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof CompositionOperatorInterface) {
-				addRelationFromCompositionOperator((CompositionOperatorInterface)tgc, tdp, prename, tm);
-			}
-		}
-	}
-	
-	private void addRelationFromCompositionOperator(CompositionOperatorInterface tco, ClassDiagramPanelInterface tdp, String prename, TURTLEModeling tm) {
-		TClassInterface t1 = tdp.getTClass1ToWhichIamConnected(tco);
-		TClassInterface t2 = tdp.getTClass2ToWhichIamConnected(tco);
-		
-		TGConnector tgco = tdp.getTGConnectorAssociationOf(tco);
-		
-		if ((t1 != null) && (t2 != null) && (tgco != null)) {
-			TClass tc1 = tm.getTClassWithName(prename + t1.getValue());
-			TClass tc2 = tm.getTClassWithName(prename + t2.getValue());
-			
-			if ((tc1 != null) && (tc2 != null)) {
-				int type = typeOf(tco);
-				if (type == -1) {
-					return;
-				}
-				
-				Relation r;
-				
-				if (tgco instanceof TGConnectorAssociationWithNavigation) {
-					r = new Relation(type, tc1, tc2, true);
-				}	else {
-					r = new Relation(type, tc1, tc2, false);
-				}
-				
-				tm.addRelation(r);
-				//System.out.println("Adding " + Relation.translation(type) + " relation between " + tc1.getName() + " and " + tc2.getName());
-				
-				// if tgco is a synchro operator -> synchronizations gates
-				if (tco instanceof TCDSynchroOperator) {
-					Vector gates = ((TCDSynchroOperator)tco).getGates();
-					setGatesOf(r, gates, tc1, tc2);
-				}
-				
-				if (tco instanceof TCDInvocationOperator) {
-					Vector gates = ((TCDInvocationOperator)tco).getGates();
-					setGatesOf(r, gates, tc1, tc2);
-				}
-				
-				// if tgco watcdog -> list of gates
-				if (tco instanceof TCDWatchdogOperator) {
-					Vector gates = ((TCDWatchdogOperator)tco).getGates();
-					setWatchdogGatesOf(r, gates, tc1, tc2);
-				}
-				
-			}
-		}
-	}
-	
-	private int typeOf(CompositionOperatorInterface tco) {
-		if (tco instanceof TCDParallelOperator) {
-			return Relation.PAR;
-		} else if (tco instanceof TCDPreemptionOperator) {
-			return 	Relation.PRE;
-		} else if (tco instanceof TCDSequenceOperator) {
-			return 	Relation.SEQ;
-		} else if (tco instanceof TCDSynchroOperator) {
-			return 	Relation.SYN;
-		} else if (tco instanceof TCDInvocationOperator) {
-			return 	Relation.INV;
-		} else if (tco instanceof TCDWatchdogOperator) {
-			return 	Relation.WAT;
-		}
-		return -1;
-	}
-	
-	private void setGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-		TTwoAttributes tt;
-		Gate g1, g2;
-		
-		for(int i=0; i<gates.size(); i++) {
-			tt = (TTwoAttributes)(gates.elementAt(i));
-			g1 = tc1.getGateByName(tt.ta1.getId());
-			g2 = tc2.getGateByName(tt.ta2.getId());
-			
-			if ((g1 != null) && (g2 != null)) {
-				r.addGates(g1, g2);
-				//System.out.println("Adding gates " + g1.getName() + " = " + g2.getName());
-			}
-		}
-	}
-	
-	private void setWatchdogGatesOf(Relation r, Vector gates, TClass tc1, TClass tc2) {
-		//TTwoAttributes tt;
-		TAttribute t;
-		Gate g1;
-		
-		for(int i=0; i<gates.size(); i++) {
-			t = (TAttribute)(gates.elementAt(i));
-			g1 = tc1.getGateByName(t.getId());
-			
-			if (g1 != null)  {
-				r.addGates(g1, g1);
-			}
-		}
-	}*/
 	
 }

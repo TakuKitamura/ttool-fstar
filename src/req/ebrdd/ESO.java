@@ -36,9 +36,9 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class EBRDDComponent
- * Creation: 18/09/2009
- * @version 1.0 18/09/2009
+ * Class ESO
+ * Creation: 22/09/2009
+ * @version 1.0 22/09/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -47,17 +47,22 @@ package req.ebrdd;
 
 import java.util.*;
 
-public abstract class EBRDDComponent implements Cloneable {
-	protected int nbNext = 1; // -1 means more than 1
-    protected ArrayList<EBRDDComponent> nexts;
+public class ESO extends ERCElement {
+	//public final static String [] ESOS = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};
+	
+    protected ArrayList<ERCElement> nexts;
+	protected int id;
+	protected int timeout;
+	protected boolean oncePerEvent;
+	protected int n, m;
 
     
-    public EBRDDComponent() {
-        nexts = new ArrayList<EBRDDComponent>();
+    public ESO() {
+        nexts = new ArrayList<ERCElement>();
     }
     
     
-    public EBRDDComponent getNext(int index) {
+    public ERCElement getNext(int index) {
         if (index < nexts.size()) {
             return nexts.get(index);
         } else {
@@ -65,32 +70,52 @@ public abstract class EBRDDComponent implements Cloneable {
         }
     }
     
-    public int getRealNbOfNext() {
-        return  nexts.size();
-    }
-    
     public int getNbNext() {
-        return  nbNext;
+       return  nexts.size();
     }
     
-    public int realNbOfNext() {
-        return nexts.size();
-    }
-    
-    public ArrayList<EBRDDComponent> getAllNext() {
+    public ArrayList<ERCElement> getAllNext() {
         return nexts;
     }
 	
-	 public void addNext(EBRDDComponent _comp) {
-        nexts.add(_comp);
-    }
-    
-     public void addNext(int _index, EBRDDComponent _comp) {
-        nexts.add(_index, _comp);
-    }
+	public int getID() {
+		return id;
+	}
 	
-	public void removeNext(int index) {
-        nexts.remove(index);
-    }
+	public int getTimeout() {
+		return timeout;
+	}
+	
+	public boolean getOncePerEvent() {
+		return oncePerEvent;
+	}
+	
+	public int getN() {
+		return n;
+	}
+	
+	public int getM() {
+		return m;
+	}
+	
+	public void setID(int _id) {
+		id = _id;
+	}
+	
+	public void setTimeout(int _timeout) {
+		timeout = _timeout;
+	}
+	
+	public void setOncePerEvent(boolean _oncePerEvent) {
+		oncePerEvent = _oncePerEvent;
+	}
+	
+	public void setN(int _n) {
+		n = _n;
+	}
+	
+	public void setM(int _m) {
+		m = _m;
+	}
     
 }

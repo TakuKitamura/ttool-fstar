@@ -50,6 +50,7 @@ package ui;
 import java.awt.*;
 import java.util.*;
 
+import req.ebrdd.*;
 import translator.*;
 import tmltranslator.*;
 import sddescription.*;
@@ -229,6 +230,17 @@ public class CorrespondanceTGElement {
             Object o = data.elementAt(index);
             if (o instanceof ADComponent) {
                 return (ADComponent)o;
+            }
+        }
+        return null;
+    }
+	
+	public EBRDDComponent getEBRDDComponent(TGComponent tgc) {
+        int index = tg.indexOf(tgc);
+        if ((index != -1) && (data.size() > index)) {
+            Object o = data.elementAt(index);
+            if (o instanceof EBRDDComponent) {
+                return (EBRDDComponent)o;
             }
         }
         return null;

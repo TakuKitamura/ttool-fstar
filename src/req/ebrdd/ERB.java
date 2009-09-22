@@ -36,9 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class EBRDDComponent
- * Creation: 18/09/2009
- * @version 1.0 18/09/2009
+ * Class ERB
+ * Event Reaction Block
+ * Creation: 22/09/2009
+ * @version 1.0 22/09/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -47,50 +48,37 @@ package req.ebrdd;
 
 import java.util.*;
 
-public abstract class EBRDDComponent implements Cloneable {
-	protected int nbNext = 1; // -1 means more than 1
-    protected ArrayList<EBRDDComponent> nexts;
-
+public class ERB extends ERCElement  {
+	
+	protected String evt, condition, action; 
     
-    public EBRDDComponent() {
-        nexts = new ArrayList<EBRDDComponent>();
-    }
-    
-    
-    public EBRDDComponent getNext(int index) {
-        if (index < nexts.size()) {
-            return nexts.get(index);
-        } else {
-            return null;
-        }
-    }
-    
-    public int getRealNbOfNext() {
-        return  nexts.size();
-    }
-    
-    public int getNbNext() {
-        return  nbNext;
-    }
-    
-    public int realNbOfNext() {
-        return nexts.size();
-    }
-    
-    public ArrayList<EBRDDComponent> getAllNext() {
-        return nexts;
+    public ERB() {
     }
 	
-	 public void addNext(EBRDDComponent _comp) {
-        nexts.add(_comp);
-    }
-    
-     public void addNext(int _index, EBRDDComponent _comp) {
-        nexts.add(_index, _comp);
-    }
+	public void setEvent(String _evt) {
+		evt = _evt;
+	}
 	
-	public void removeNext(int index) {
-        nexts.remove(index);
-    }
+	public void setCondition(String _condition) {
+		condition = _condition;
+	}
+	
+	public void setAction(String _action) {
+		action = _action;
+	}
+    
+    public String getEvent() {
+		return evt;
+	}
+	
+	public String getCondition() {
+		return condition;
+	}
+	
+	public String getAction() {
+		return action;
+	}
+  
+	
     
 }
