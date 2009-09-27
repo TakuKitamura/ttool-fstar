@@ -76,4 +76,107 @@ public class EBRDDERC extends EBRDDComponent {
 	public void addTreeElement(ERCElement elt) {
 		treeElements.add(elt);
 	}
+	
+	//From its list of tree elements, it tries to find the root
+	// of the tree. If it returns false, no root could be found,
+	// either because the tree contains no element or because
+	// there are several roots. Otherwise, it returns true
+	// Additionally, there shall be no loop in the system
+	
+	public boolean makeRoot() {
+		if (treeElements.size() ==0) {
+			return false;
+		}
+		
+		boolean b;
+		int cpt;
+		ESO root = null;
+		
+		for (ERCElement elt: treeElements) {
+			if (elt instanceof ERB) {
+				cpt = nbOfESOLeadingTo((ERB)elt);
+				if (cpt != 1) {
+					// The ERB is the son of several ESOs or
+					// The ERB is not attached to an ESO
+					return false;
+				}
+			}
+			
+			if (elt instanceof ESO) {
+				// Must check that all ESO have at least one son
+				if (((ESO)elt).getNbOfSons() == 0) {
+					return false;
+				}
+				
+				
+				
+				// Check whether it is a root of a tree, or not
+				if (isRoot((ESO)elt)) {
+					if (root != null) {
+						// Second root!!
+						return false;
+					} else {
+						root = (ESO)elt;
+					}
+				}
+			}
+		}
+		
+		// no root found!
+		if (root == null) {
+			return false;
+		}
+		
+		// Must check that there is no cycle in the tree
+		ArrayList<ERCElement> mets = new ArrayList<ERCElement>();
+		if (!hasCycle(root, mets)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean hasCycle(ESO _eso, ArrayList<ERCElement> _mets) {
+		if (_mets.contains(_eso)) {
+			return true;
+		}
+		
+		_mets.add(_eso);
+		ArrayList<ERCElement> list = _eso.getAllSons();
+			
+		for(ERCElement elt: list) {
+			if (elt instanceof ESO) {
+				if  (hasCycle((ESO)elt, _mets)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	// Check whether this is a son, or not.
+	private boolean isRoot(ESO eso) {
+		for (ERCElement elt: treeElements) {
+			if (elt instanceof ESO) {
+				if (((ESO)elt).isOneOfMySon(eso)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	
+	private int nbOfESOLeadingTo(ERCElement son) {
+		int cpt = 0;
+		
+		for (ERCElement elt: treeElements) {
+			if (elt instanceof ESO) {
+				cpt += ((ESO)elt).nbOfSonsEqualTo(son);
+			}
+		}
+		
+		return cpt;
+	}
 }

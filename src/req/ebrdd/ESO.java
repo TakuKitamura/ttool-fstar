@@ -50,7 +50,7 @@ import java.util.*;
 public class ESO extends ERCElement {
 	//public final static String [] ESOS = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};
 	
-    protected ArrayList<ERCElement> nexts;
+    protected ArrayList<ERCElement> sons;
 	protected int id;
 	protected int timeout;
 	protected boolean oncePerEvent;
@@ -58,24 +58,24 @@ public class ESO extends ERCElement {
 
     
     public ESO() {
-        nexts = new ArrayList<ERCElement>();
+        sons = new ArrayList<ERCElement>();
     }
     
     
-    public ERCElement getNext(int index) {
-        if (index < nexts.size()) {
-            return nexts.get(index);
+    public ERCElement getSon(int index) {
+        if (index < sons.size()) {
+            return sons.get(index);
         } else {
             return null;
         }
     }
     
-    public int getNbNext() {
-       return  nexts.size();
+    public int getNbOfSons() {
+       return  sons.size();
     }
     
-    public ArrayList<ERCElement> getAllNext() {
-        return nexts;
+    public ArrayList<ERCElement> getAllSons() {
+        return sons;
     }
 	
 	public int getID() {
@@ -116,6 +116,22 @@ public class ESO extends ERCElement {
 	
 	public void setM(int _m) {
 		m = _m;
+	}
+	
+	public boolean isOneOfMySon(ERCElement son) {
+		return sons.contains(son);
+	}
+	
+	public int nbOfSonsEqualTo(ERCElement son) {
+		int cpt = 0;
+		
+		for(ERCElement elt: sons) {
+			if (elt == son) {
+				cpt ++;
+			}
+		}
+		
+		return cpt;
 	}
     
 }
