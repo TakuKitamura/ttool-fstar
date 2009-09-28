@@ -246,6 +246,17 @@ public class CorrespondanceTGElement {
         return null;
     }
 	
+	public EBRDDComponent getEBRDDComponent(TGComponent tgc) {
+        int index = tg.indexOf(tgc);
+        if ((index != -1) && (data.size() > index)) {
+            Object o = data.elementAt(index);
+            if (o instanceof EBRDDComponent) {
+                return (EBRDDComponent)o;
+            }
+        }
+        return null;
+    }
+	
 	public ArrayList<ADComponent> getADComponents(TGComponent tgc) {
 		ArrayList<ADComponent>  list = new ArrayList<ADComponent>();
 		TGComponent tmptgc;

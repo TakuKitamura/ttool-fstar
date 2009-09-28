@@ -48,7 +48,7 @@ package req.ebrdd;
 import java.util.*;
 
 public class ESO extends ERCElement {
-	//public final static String [] ESOS = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};
+	public final static String [] ESOSTR = {"Conjunction", "Disjunction", "Sequence", "Strict sequence", "Simultaneous", "At least/At most"};
 	
     protected ArrayList<ERCElement> sons;
 	protected int id;
@@ -179,6 +179,18 @@ public class ESO extends ERCElement {
 		}
 		
 		return cpt;
+	}
+	
+	public String toString() {
+		String s = "ESO " + super.toString() + " " + IDToString() + " timeOut=" + timeout + " oncePerEvent=" + oncePerEvent + " n=" + n + " m=" + m;
+		/*for(int i=0; i<sons.size(); i++) {
+			s += " son#" + i + ":" + sons.get(i).superString();
+		}*/
+		return s;
+	}
+	
+	public String IDToString() {
+		return ESOSTR[id];
 	}
     
 }

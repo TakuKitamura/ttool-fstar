@@ -113,6 +113,45 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
         }
         return null;
     }
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer("EBRDD=");
+		
+		if (ads != null) {
+			exploreString(ads, sb, 0);
+		}
+		
+		return sb.toString();
+	}
+	
+	public void exploreString(EBRDDComponent elt, StringBuffer sb, int tabLevel) {
+		int j;
+		for(j=0; j<tabLevel; j++) {
+			sb.append("\t");
+		}
+		sb.append(elt.toString() + "\n");
+		
+		if (elt instanceof EBRDDERC) {
+			((EBRDDERC)elt).exploreString(((EBRDDERC)elt).getRoot(), sb, tabLevel+1);
+		}
+		
+		if (elt.getRealNbOfNext() == 0) {
+			return;
+		}
+		if (elt.getRealNbOfNext() == 1) {
+			exploreString(elt.getNext(0), sb, tabLevel);
+			return;
+		}
+		
+		tabLevel ++;
+		for(int i=0; i<elt.getRealNbOfNext(); i++) {
+			for(j=0; j<tabLevel; j++) {
+				sb.append("\t");
+			}
+			sb.append("#" + i + ":\n");
+			exploreString(elt.getNext(i), sb, tabLevel+1);
+		}
+	}
     
    
     

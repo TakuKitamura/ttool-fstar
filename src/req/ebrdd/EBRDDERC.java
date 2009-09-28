@@ -85,6 +85,7 @@ public class EBRDDERC extends EBRDDComponent {
 	
 	public boolean makeRoot() {
 		if (treeElements.size() ==0) {
+			System.out.println("Empty tree");
 			return false;
 		}
 		
@@ -98,6 +99,7 @@ public class EBRDDERC extends EBRDDComponent {
 				if (cpt != 1) {
 					// The ERB is the son of several ESOs or
 					// The ERB is not attached to an ESO
+					System.out.println("Malformed ERB: " + cpt);
 					return false;
 				}
 			}
@@ -105,6 +107,7 @@ public class EBRDDERC extends EBRDDComponent {
 			if (elt instanceof ESO) {
 				// Must check that all ESO have at least one son
 				if (((ESO)elt).getNbOfSons() == 0) {
+					System.out.println("ESO with no son");
 					return false;
 				}
 				
@@ -114,6 +117,7 @@ public class EBRDDERC extends EBRDDComponent {
 				if (isRoot((ESO)elt)) {
 					if (root != null) {
 						// Second root!!
+						System.out.println("More than one root");
 						return false;
 					} else {
 						root = (ESO)elt;
@@ -124,12 +128,16 @@ public class EBRDDERC extends EBRDDComponent {
 		
 		// no root found!
 		if (root == null) {
+			System.out.println("no root found");
 			return false;
 		}
 		
+		setRoot(root);
+		
 		// Must check that there is no cycle in the tree
 		ArrayList<ERCElement> mets = new ArrayList<ERCElement>();
-		if (!hasCycle(root, mets)) {
+		if (hasCycle(root, mets)) {
+			System.out.println("hasCycle");
 			return false;
 		}
 		
@@ -186,5 +194,31 @@ public class EBRDDERC extends EBRDDComponent {
 				((ESO)elt).sortNexts();
 			}
 		}
+	}
+	
+	public void exploreString(ERCElement elt, StringBuffer sb, int tabLevel) {
+		if (elt == null) {
+			return;
+		}
+		
+		int j;
+		for(j=0; j<tabLevel; j++) {
+			sb.append("\t");
+		}
+		sb.append(elt.toString() + "\n");
+		
+		if (elt instanceof ESO) {
+			ESO eso = (ESO)elt;
+			tabLevel ++;
+			for(int i=0; i<eso.getNbOfSons(); i++) {
+				for(j=0; j<tabLevel; j++) {
+					sb.append("\t");
+				}
+				sb.append("#" + i + ":\n");
+				exploreString(eso.getSon(i), sb, tabLevel+1);
+			}
+		}
+		
+		
 	}
 }

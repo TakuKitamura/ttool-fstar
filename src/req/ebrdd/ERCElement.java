@@ -60,4 +60,8 @@ public abstract class ERCElement extends EBRDDGeneralComponent implements Clonea
 	public boolean isNegated() {
 		return negated;
 	}
+	
+	public String superString() {
+		return super.toString();
+	}
 }

@@ -78,6 +78,11 @@ public class ERB extends ERCElement  {
 	public String getAction() {
 		return action;
 	}
+	
+	public String toString() {
+		String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
+		return s;
+	}
   
 	
     

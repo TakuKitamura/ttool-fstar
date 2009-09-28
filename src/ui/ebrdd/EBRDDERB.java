@@ -174,16 +174,16 @@ public class EBRDDERB extends TGCOneLineText implements SwallowedTGComponent {
 		}
 		
 		val = dialog.getCondition().trim();
-		if (val.length() == 0) {
+		/*if (val.length() == 0) {
 			error = true;
 			errors += "condition ";
-		}
+		}*/
 		
 		val = dialog.getAction().trim();
-		if (val.length() == 0) {
+		/*if (val.length() == 0) {
 			error = true;
 			errors += "action ";
-		}
+		}*/
 		
 		
 		if (error) {

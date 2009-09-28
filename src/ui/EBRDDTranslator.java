@@ -102,7 +102,7 @@ public class EBRDDTranslator {
 		// Search for start state
 		LinkedList list = ebrddp.getComponentList();
 		Iterator iterator = list.listIterator();
-		TGComponent tgc, tgc1, tgc2, tgc3;
+		TGComponent tgc, tgc1, tgc2, tgc3, tgc1tmp, tgc2tmp;
 		TGComponent tss = null;
 		int cptStart = 0;
 		
@@ -221,6 +221,7 @@ public class EBRDDTranslator {
 							eso.setOncePerEvent(esotgc.getOncePerEvent());
 							eso.setN(esotgc.getN());
 							eso.setM(esotgc.getM());
+							erc.addTreeElement(eso);
 							
 						} else if (tgc1 instanceof ui.ebrdd.EBRDDERB) {
 							System.out.println("ERB found");
@@ -230,6 +231,7 @@ public class EBRDDTranslator {
 							erb.setEvent(erbtgc.getEvent());
 							erb.setAction(erbtgc.getAction());
 							erb.setCondition(erbtgc.getCondition());
+							erc.addTreeElement(erb);
 						}
 					}
 				}
@@ -238,7 +240,9 @@ public class EBRDDTranslator {
 		
 		
 		// Interconnection between elements
-        TGConnectorEBRDD tgco;
+        //TGConnectorEBRDD tgco;
+		//TGConnectorEBRDDERC tgcoerc;
+		TGConnector tgco;
         TGConnectingPoint p1, p2;
         EBRDDComponent eb1, eb2;
 		EBRDDGeneralComponent ebg1, ebg2;
@@ -247,8 +251,9 @@ public class EBRDDTranslator {
         iterator = list.listIterator();
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TGConnectorEBRDD) {
-                tgco = (TGConnectorEBRDD)tgc;
+            if (tgc instanceof TGConnector) {
+                //tgco = (TGConnectorEBRDD)tgc;
+				tgco = (TGConnector)tgc;
                 p1 = tgco.getTGConnectingPointP1();
                 p2 = tgco.getTGConnectingPointP2();
                 
@@ -256,12 +261,15 @@ public class EBRDDTranslator {
                 tgc1 = null; tgc2 = null;
                 for(j=0; j<list.size(); j++) {
                     tgc3 = 	(TGComponent)(list.get(j));
-                    if (tgc3.belongsToMe(p1)) {
-                        tgc1 = tgc3;
-                    }
-                    if (tgc3.belongsToMe(p2)) {
-                        tgc2 = tgc3;
-                    }
+                    tgc1tmp = tgc3.belongsToMeOrSon(p1);
+					tgc2tmp = tgc3.belongsToMeOrSon(p2);
+					if (tgc1tmp != null) {
+						tgc1 = tgc1tmp;
+					}
+					if (tgc2tmp != null) {
+						tgc2 = tgc2tmp;
+					}
+                     
                 }
                 
                 // Connecting ebrdd modeling components
@@ -270,7 +278,8 @@ public class EBRDDTranslator {
                     ebg1 = listE.getEBRDDGeneralComponent(tgc1);
                     ebg2 = listE.getEBRDDGeneralComponent(tgc2);
                     if ((ebg1 != null ) && (ebg2 != null)) {
-						if ((ebg1 instanceof EBRDDComponent) && (ebg2 instanceof EBRDDComponent)) { 
+						if ((ebg1 instanceof EBRDDComponent) && (ebg2 instanceof EBRDDComponent)) {
+							System.out.println("Adding link");
 							eb1 = (EBRDDComponent)ebg1;
 							eb2 = (EBRDDComponent)ebg2;
 							//Special case if "for loop" or if "choice"
@@ -297,6 +306,7 @@ public class EBRDDTranslator {
 								eb1.addNext(eb2);
 							}
 						} else if ((ebg1 instanceof ERCElement) && (ebg2 instanceof ERCElement)) {
+							//System.out.println("ERCElements!");
 							if (ebg1 instanceof req.ebrdd.ESO) {
 								index = tgc1.indexOf(p1) - 1;
 								((req.ebrdd.ESO)ebg1).addIndex(index);
@@ -306,8 +316,18 @@ public class EBRDDTranslator {
 						}
                     }
                 }
-            }
+            } 
         }
+		
+		// Sorting nexts elements of Sequence and ESOs
+		for(j=0; j<ebrdd.size(); j++) {
+			eb1 = ebrdd.get(j);
+			if (eb1 instanceof req.ebrdd.EBRDDSequence) {
+				((req.ebrdd.EBRDDSequence)eb1).sortNexts();
+			} else  if (eb1 instanceof req.ebrdd.EBRDDERC) {
+				((req.ebrdd.EBRDDERC)eb1).sortNexts();
+			}
+		}
         
         // Check that each "for" has two nexts
         // Check that Choice have compatible guards
@@ -333,18 +353,18 @@ public class EBRDDTranslator {
                     ce.setTGComponent(tgc);
                     checkingErrors.add(ce);
 				}
+			} else if (tgc instanceof ui.ebrdd.EBRDDERC) {
+				erc = (req.ebrdd.EBRDDERC)(listE.getEBRDDGeneralComponent(tgc));
+				if (!erc.makeRoot()) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed ERC");
+                    ce.setTDiagramPanel(ebrddp);
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
+				}
 			}
         }
 		
-		// Sorting nexts elements of Sequence and ESOs
-		for(j=0; j<ebrdd.size(); j++) {
-			eb1 = ebrdd.get(j);
-			if (eb1 instanceof req.ebrdd.EBRDDSequence) {
-				((req.ebrdd.EBRDDSequence)eb1).sortNexts();
-			} else  if (eb1 instanceof req.ebrdd.EBRDDERC) {
-				((req.ebrdd.EBRDDERC)eb1).sortNexts();
-			}
-		}
+		
 		
 		
 		// Remove all elements not reachable from start state

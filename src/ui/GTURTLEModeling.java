@@ -4852,6 +4852,7 @@ public class GTURTLEModeling {
 		if (checkingErrors.size() > 0) {
 			return false;
 		}
+		System.out.println("the EBRDD:\n" + ebrdd.toString());
 		return true;
 	}
 
