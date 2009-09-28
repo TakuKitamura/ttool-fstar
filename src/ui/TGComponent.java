@@ -859,7 +859,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     public void setSelectedInternalTGComponent(TGComponent tgc) {
         selectedInternalComponent = tgc;
     }
-    
+   
     public int getMyNum(TGComponent tgc) {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] == tgc) {

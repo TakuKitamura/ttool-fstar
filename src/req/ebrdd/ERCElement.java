@@ -47,7 +47,7 @@ package req.ebrdd;
 
 import java.util.*;
 
-public abstract class ERCElement implements Cloneable {
+public abstract class ERCElement extends EBRDDGeneralComponent implements Cloneable {
     protected boolean negated;
 	
     public ERCElement() {

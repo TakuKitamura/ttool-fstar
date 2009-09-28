@@ -235,12 +235,12 @@ public class CorrespondanceTGElement {
         return null;
     }
 	
-	public EBRDDComponent getEBRDDComponent(TGComponent tgc) {
+	public EBRDDGeneralComponent getEBRDDGeneralComponent(TGComponent tgc) {
         int index = tg.indexOf(tgc);
         if ((index != -1) && (data.size() > index)) {
             Object o = data.elementAt(index);
-            if (o instanceof EBRDDComponent) {
-                return (EBRDDComponent)o;
+            if (o instanceof EBRDDGeneralComponent) {
+                return (EBRDDGeneralComponent)o;
             }
         }
         return null;

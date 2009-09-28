@@ -36,12 +36,12 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ESO
- * Creation: 22/09/2009
- * @version 1.0 22/09/2009
- * @author Ludovic APVRILLE
- * @see
- */
+* Class ESO
+* Creation: 22/09/2009
+* @version 1.0 22/09/2009
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package req.ebrdd;
 
@@ -55,12 +55,59 @@ public class ESO extends ERCElement {
 	protected int timeout;
 	protected boolean oncePerEvent;
 	protected int n, m;
-
+	
+	private Vector indexes;
+	
     
     public ESO() {
         sons = new ArrayList<ERCElement>();
+		indexes = new Vector();
     }
+	
+	public void addSon(ERCElement ercelt) {
+		sons.add(ercelt);
+	}
     
+	public void addIndex(int index) {
+		indexes.add(new Integer(index));
+    }
+	
+	public void sortNexts() {
+		if (indexes.size() == 0) {
+			return;
+		}
+		
+		//System.out.println("Nb of indexes" + indexes.size());
+		//System.out.println("Nb of nexts" + nexts.size());
+		ArrayList<ERCElement> nextsbis = new ArrayList<ERCElement>();
+		
+		// Sort according to index stored in indexes
+		// The smaller is removed at each step
+		Integer i0;
+		int index;
+		int i;
+		
+		while(indexes.size() > 0) {
+			i0 = new Integer(1000);
+			index = -1;
+			for(i=0; i<indexes.size(); i++) {
+				if ((((Integer)indexes.elementAt(i)).compareTo(i0))<0) {
+					index = i;
+					i0 = ((Integer)indexes.elementAt(i));
+				}
+			}
+			nextsbis.add(sons.get(index));
+			sons.remove(index);
+			indexes.remove(index);
+		}
+		
+		sons = nextsbis;
+		
+		//for(i=0; i<nexts.size(); i++){
+		// System.out.println("sequence #" + i + " = " + nexts.elementAt(i));
+		//}
+		
+    }
     
     public ERCElement getSon(int index) {
         if (index < sons.size()) {
@@ -71,7 +118,7 @@ public class ESO extends ERCElement {
     }
     
     public int getNbOfSons() {
-       return  sons.size();
+		return  sons.size();
     }
     
     public ArrayList<ERCElement> getAllSons() {

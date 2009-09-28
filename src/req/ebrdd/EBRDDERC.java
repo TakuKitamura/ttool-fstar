@@ -179,4 +179,12 @@ public class EBRDDERC extends EBRDDComponent {
 		
 		return cpt;
 	}
+	
+	public void sortNexts() {
+		for (ERCElement elt: treeElements) {
+			if (elt instanceof ESO) {
+				((ESO)elt).sortNexts();
+			}
+		}
+	}
 }

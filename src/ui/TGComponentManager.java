@@ -441,7 +441,7 @@ public class TGComponentManager {
                 tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 			case EBRDD_ACTION:
-                tgc = new EBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                tgc = new EBRDDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 			case EBRDD_FOR_LOOP:
                 tgc = new EBRDDForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
