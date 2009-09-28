@@ -79,14 +79,18 @@ public class EBRDDESO extends TGCWithoutInternalComponent implements SwallowedTG
 		textX = width - 6;
 		textY = height + 2;
 		
-		nbConnectingPoint = 6;
-		connectingPoint = new TGConnectingPoint[6];
+		nbConnectingPoint = 10;
+		connectingPoint = new TGConnectingPoint[10];
 		connectingPoint[0] = new TGConnectingPointEBRDDERC(this, 0, -lineLength, true, false, 0.5, 0.0);
-		connectingPoint[1] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.167, 1.0);
-		connectingPoint[2] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.333, 1.0);
-		connectingPoint[3] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.5, 1.0);
-		connectingPoint[4] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.667, 1.0);
-		connectingPoint[5] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.833, 1.0);
+		connectingPoint[1] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.1, 1.0);
+		connectingPoint[2] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.2, 1.0);
+		connectingPoint[3] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.3, 1.0);
+		connectingPoint[4] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.4, 1.0);
+		connectingPoint[5] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.5, 1.0);
+		connectingPoint[6] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.6, 1.0);
+		connectingPoint[7] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.7, 1.0);
+		connectingPoint[8] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.8, 1.0);
+		connectingPoint[9] = new TGConnectingPointEBRDDERC(this, 0, lineLength, false, true, 0.9, 1.0);
 		
 		nbInternalTGComponent = 0;
 		
