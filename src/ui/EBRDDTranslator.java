@@ -307,10 +307,11 @@ public class EBRDDTranslator {
 							}
 						} else if ((ebg1 instanceof ERCElement) && (ebg2 instanceof ERCElement)) {
 							//System.out.println("ERCElements!");
-							if (ebg1 instanceof req.ebrdd.ESO) {
+							if ((ebg1 instanceof req.ebrdd.ESO) && (tgco instanceof TGConnectorEBRDDERC)) {
 								index = tgc1.indexOf(p1) - 1;
 								((req.ebrdd.ESO)ebg1).addIndex(index);
 								((req.ebrdd.ESO)ebg1).addSon((ERCElement)ebg2);
+								((ERCElement)ebg2).setNegated(((TGConnectorEBRDDERC)tgco).getNegation());
 								System.out.println("ESO: Adding son: " + ebg2);
 							}
 						}

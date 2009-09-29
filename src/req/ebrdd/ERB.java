@@ -81,6 +81,9 @@ public class ERB extends ERCElement  {
 	
 	public String toString() {
 		String s = "ERB(" + evt + ", " + condition + ", " + action + ")";
+		/*if (isNegated()) {
+			s += " [negated]";
+		}*/
 		return s;
 	}
   

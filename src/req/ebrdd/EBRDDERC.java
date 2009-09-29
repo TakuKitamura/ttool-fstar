@@ -214,7 +214,11 @@ public class EBRDDERC extends EBRDDComponent {
 				for(j=0; j<tabLevel; j++) {
 					sb.append("\t");
 				}
-				sb.append("#" + i + ":\n");
+				sb.append("#" + i);
+				if (eso.getSon(i).isNegated()) {
+					sb.append(" [negated] ");
+				}
+				sb.append(":\n");
 				exploreString(eso.getSon(i), sb, tabLevel+1);
 			}
 		}

@@ -183,6 +183,9 @@ public class ESO extends ERCElement {
 	
 	public String toString() {
 		String s = "ESO " + super.toString() + " " + IDToString() + " timeOut=" + timeout + " oncePerEvent=" + oncePerEvent + " n=" + n + " m=" + m;
+		/*if (isNegated()) {
+			s += " [negated]";
+		}*/
 		/*for(int i=0; i<sons.size(); i++) {
 			s += " son#" + i + ":" + sons.get(i).superString();
 		}*/
