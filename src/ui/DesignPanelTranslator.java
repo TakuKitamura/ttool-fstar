@@ -420,6 +420,7 @@ public class DesignPanelTranslator {
 						adag.setActionValue(s1);
 						//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
 						listE.addCor(adag, tgc);
+						listB.addCor(adag, tgc);
 					}
 				} else if ((p != null) && (nbActions == 1)){
 					//System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
@@ -435,12 +436,14 @@ public class DesignPanelTranslator {
 					ad.addElement(adap);
 					adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
 					listE.addCor(adap, tgc);
+					listB.addCor(adap, tgc);
 					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 					
 				} else if ((p != null) && (nbActions > 1)){
 					//System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
 					// Checking params
 					CheckingError ce;
+					Vector v;
 					for(j=0; j<nbActions; j++) {
 						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
 						if (sTmp == null) {
@@ -462,11 +465,29 @@ public class DesignPanelTranslator {
 							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
 						}
 					}
-					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
+					/*tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
 					adamp = new ADActionStateWithMultipleParam();
 					ad.addElement(adamp);
-					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));
-					listE.addCor(adamp, tgc);
+					adamp.setActionValue(TURTLEModeling.manageDataStructures(t, s));*/
+					
+					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
+					ADComponent adtmp = null;
+					for(j=0; j<nbActions; j++) {
+						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
+						p = t.getParamFromActionState(sTmp);
+						adap = new ADActionStateWithParam(p);
+						ad.addElement(adap);
+						if (adtmp != null) {
+							adtmp.addNext(adap);
+						} else {
+							listB.addCor(adap, tgc);
+						}
+						adtmp = adap;
+						adap.setActionValue(t.getExprValueFromActionState(sTmp));
+					}
+					
+					listE.addCor(adtmp, tgc);
+					
 				} else {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
 					ce.setTClass(t);
@@ -890,9 +911,9 @@ public class DesignPanelTranslator {
 					} else {*/
 						ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
 					//}
-					if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState)) {
+					if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState) || (tgc2 instanceof TADActionState)) {
 						ad2 = listB.getADComponent(tgc2);
-					} else {
+					}  else {
 						ad2 = listE.getADComponentByIndex(tgc2, tdp.count);
 					}
 					
@@ -934,6 +955,7 @@ public class DesignPanelTranslator {
 		int sizeb = ad.size();
 		
 		ad.removeAllNonReferencedElts();
+		
 		int sizea = ad.size();
 		if (sizeb > sizea) {
 			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Non reachable elements have been removed in " + t.getName());
@@ -943,6 +965,8 @@ public class DesignPanelTranslator {
 			addWarning(ce);
 			//System.out.println("Non reachable elements have been removed in " + t.getName());
 		}
+		
+		//ad.replaceAllADActionStatewithMultipleParam(listE);
 	}
 	
 	public void addRelations(TURTLEDesignPanelInterface dp, String prename, TURTLEModeling tm) {

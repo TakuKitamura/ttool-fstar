@@ -48,6 +48,7 @@ package translator;
 import java.util.*;
 
 import myutil.*;
+import ui.*;
 
 public class ActivityDiagram extends Vector{
     
@@ -675,4 +676,48 @@ public class ActivityDiagram extends Vector{
       return nb;
 		
 	}
+	
+	/*public void replaceAllADActionStatewithMultipleParam(CorrespondanceTGElement _listE) {
+		ADComponent adc;
+		for(int i=0; i<size(); i++) {
+			adc = (ADComponent)(elementAt(i));
+			if (adc instanceof ADActionStateWithMultipleParam) {
+				replaceADActionStatewithMultipleParam((ADActionStateWithMultipleParam)adc, _listE);
+			}
+      }
+	}
+	
+	private void replaceADActionStatewithMultipleParam(ADActionStateWithMultipleParam _multi, CorrespondanceTGElement _listE) {
+		ADComponent previous;
+		ADActionStateWithParam adwp = null;
+		String action;
+		
+		previous = getFirstComponentLeadingTo(_multi);
+		
+		if (previous == null) {
+			return;
+		}
+		
+		for(int i=0; i<_multi.nbOfActions(); i++) {
+			action = _multi.getAction(i).trim();
+			if (action.length() >0) {
+				
+				adwp = new ADActionStateWithParam();
+				adwp.setActionValue(action);
+				add(adwp);
+				previous.removeNext(0);
+				previous.addNext(adwp);
+				previous = adwp;
+			}
+		}
+		
+		if (adwp != null) {
+			adwp.addNext(_multi.getNext());
+		}
+		
+		remove(_multi);
+		
+		System.out.println("Multi removed");
+		
+	}*/
 }

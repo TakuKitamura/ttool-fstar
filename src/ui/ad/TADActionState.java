@@ -163,6 +163,12 @@ public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJ
         } catch (Exception e) {
             return value;
         }
+		
+		int index = ret.indexOf(';');
+		if (index > -1) {
+			ret = ret.substring(0, index);
+		}
+		
         return ret; 
     }
     

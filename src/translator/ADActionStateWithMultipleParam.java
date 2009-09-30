@@ -55,6 +55,19 @@ public class ADActionStateWithMultipleParam extends ADActionState {
     public String toString() {
         return "Action state (" + actionValue +  ")";
     }
+	
+	public int nbOfActions() {
+		int cpt = 0;
+		int index;
+		
+		for(int i=0; i<actionValue.length(); i++) {
+			if (actionValue.charAt(i) == ';') {
+				cpt ++;
+			}
+		}
+		
+		return cpt;
+	}
     
     public String getAction(int cpt) {
         if (cpt <0) {

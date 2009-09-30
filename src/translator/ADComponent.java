@@ -95,7 +95,9 @@ public abstract class ADComponent implements Cloneable {
     }
     
     public void removeNext(int i) {
+		if(i<next.size()) { 
            next.removeElementAt(i);
+		}
     }
 	
 	public void removeAllNextAfter(int index) {
