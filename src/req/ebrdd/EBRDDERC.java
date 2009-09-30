@@ -88,6 +88,22 @@ public class EBRDDERC extends EBRDDComponent {
 			System.out.println("Empty tree");
 			return false;
 		}
+
+		if (treeElements.size() == 1) {
+			ERCElement elt = treeElements.get(0);
+			if (elt instanceof ESO) {
+				System.out.println("ESO with no leaf");
+				return false;
+			}
+			
+			// Must add a new ESO
+			System.out.println("Default ESO added to ERC");
+			ESO eso = new ESO();
+			eso.addSon(elt);
+			addTreeElement(eso);
+			setRoot(eso);
+			return true;
+		}
 		
 		boolean b;
 		int cpt;
