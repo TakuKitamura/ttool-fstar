@@ -2881,7 +2881,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void generateSystemC() {
         
         JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "SystemC code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
-        jgen.setSize(450, 600);
+        jgen.setSize(500, 750);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         dtree.toBeUpdated();
@@ -3813,6 +3813,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		
 		System.out.println("Not found");
 		return null;
+	}
+	
+	public ArrayList<EBRDDPanel> getAllEBRDDPanels() {
+		TURTLEPanel tp;
+		ArrayList<EBRDDPanel> al = new ArrayList<EBRDDPanel>();
+		//System.out.println("global search for: " + name);
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof RequirementPanel) {
+				((RequirementPanel)tp).addAllEBRDDPanels(al);
+			}
+		}
+		
+		return al;
 	}
 	
 	

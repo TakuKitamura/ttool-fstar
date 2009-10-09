@@ -96,8 +96,9 @@ public class EBRDDTranslator {
 		return listE;
 	}
 	
-	public EBRDD generateEBRDD(EBRDDPanel ebrddp) {
-		ebrdd = new EBRDD();
+	public EBRDD generateEBRDD(EBRDDPanel ebrddp, String _name) {
+		System.out.println("Name=" + _name);
+		ebrdd = new EBRDD(_name);
 		
 		// Search for start state
 		LinkedList list = ebrddp.getComponentList();

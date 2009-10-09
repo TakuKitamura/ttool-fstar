@@ -50,18 +50,24 @@ import java.util.*;
 import myutil.*;
 
 public class EBRDD extends ArrayList<EBRDDComponent> {
-    
+    private String name;
     protected EBRDDStart ads;
     
-    public EBRDD(EBRDDStart _ads) {
+    public EBRDD(EBRDDStart _ads, String _name) {
+		name = _name;
         ads = _ads;
         add(ads);
     }
     
-    public EBRDD() {
+    public EBRDD(String _name) {
+		name = _name;
         ads = new EBRDDStart();
         add(ads);
     }
+	
+	public String getName() {
+		return name;
+	}
     
     public EBRDDStart getStartState() {
         return ads;

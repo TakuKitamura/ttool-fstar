@@ -1671,7 +1671,7 @@ public class TURTLETranslator {
 
 	public void buildBoolean() {
 		headerBool = new StringBuffer();
-		headerBool.append("type natural is \n\tsorts bool\n");
+		headerBool.append("type boolean is \n\tsorts bool\n");
 		headerBool.append("\topns\n\t\tnot\t:bool->bool\n");
 		headerBool.append("\t\tand\t:bool,bool->bool\n\t\tor\t:bool,bool->bool\n");
 		headerBool.append("endtype\n\n");

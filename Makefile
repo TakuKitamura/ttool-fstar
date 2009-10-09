@@ -130,6 +130,10 @@ stdrelease:
 	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/systemc1/src_simulator
 	cp  $(TTOOL_SIMULATORS)/systemc1/src_simulator/*.h $(TTOOL_TARGET)/simulators/systemc1/src_simulator
 	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/arch
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/evt
+	mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
 	mkdir -p $(TTOOL_TARGET)/simulators/c++2/lib
 	cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_TARGET)/simulators/c++2/lib/
 	cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/c++2
@@ -137,6 +141,14 @@ stdrelease:
 	cp  $(TTOOL_SIMULATORS)/c++2/schedstyle.css $(TTOOL_TARGET)/simulators/c++2
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/arch
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/evt
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
 # Licenses
 	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
 # Main readme

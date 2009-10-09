@@ -4846,7 +4846,7 @@ public class GTURTLEModeling {
 	
 	public boolean makeEBRDD(EBRDDPanel tdp) {
 		EBRDDTranslator ebrddt = new EBRDDTranslator();
-		ebrdd = ebrddt.generateEBRDD(tdp);
+		ebrdd = ebrddt.generateEBRDD(tdp, tdp.getName());
 		warnings = ebrddt.getWarnings();
 		checkingErrors = ebrddt.getErrors();
 		if (checkingErrors.size() > 0) {

@@ -52,6 +52,8 @@ import javax.swing.event.*;
 import ui.req.*;
 import ui.ebrdd.*;
 
+import java.util.*;
+
 public class RequirementPanel extends TURTLEPanel {
     public RequirementDiagramPanel rdp;
 	public EBRDDPanel ebrdd;
@@ -179,6 +181,14 @@ public class RequirementPanel extends TURTLEPanel {
      public boolean isReqEnabled() {
         return true;
     }
+	
+	public void addAllEBRDDPanels(ArrayList<EBRDDPanel> _al) {
+		for(int i=0; i<panels.size(); i++) {
+			if (panelAt(i) instanceof EBRDDPanel) {
+				_al.add(((EBRDDPanel)panelAt(i)));
+			}
+		}
+	}
     
 
 }

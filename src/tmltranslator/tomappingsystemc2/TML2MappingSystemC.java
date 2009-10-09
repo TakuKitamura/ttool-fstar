@@ -49,6 +49,7 @@ import java.util.*;
 
 import tmltranslator.*;
 import myutil.*;
+import req.ebrdd.*;
 
 
 public class TML2MappingSystemC {
@@ -67,6 +68,8 @@ public class TML2MappingSystemC {
 	private boolean debug;
 	private String header, declaration, mainFile, src;
 	private ArrayList<MappedSystemCTask> tasks;
+	
+	private ArrayList<EBRDD> ebrdds;
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
@@ -75,6 +78,18 @@ public class TML2MappingSystemC {
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping) {
         tmlmapping = _tmlmapping;
+		tmlmapping.makeMinimumMapping();
+ 	}
+	
+	public TML2MappingSystemC(TMLModeling _tmlm, ArrayList<EBRDD> _ebrdds) {
+		tmlmodeling = _tmlm;
+		ebrdds = _ebrdds;
+		tmlmapping = tmlmodeling.getDefaultMapping();
+	}
+	
+	public TML2MappingSystemC(TMLMapping _tmlmapping, ArrayList<EBRDD> _ebrdds) {
+        tmlmapping = _tmlmapping;
+		ebrdds = _ebrdds;
 		tmlmapping.makeMinimumMapping();
  	}
     

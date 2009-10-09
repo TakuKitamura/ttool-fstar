@@ -49,17 +49,21 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
+import java.util.*;
 
 import myutil.*;
 import ui.interactivesimulation.*;
 import tmltranslator.tomappingsystemc.*;
 import tmltranslator.tomappingsystemc2.*;
 import ui.*;
+import ui.ebrdd.*;
+import req.ebrdd.*;
 
 import launcher.*;
 
 
-public class JDialogSystemCGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+public class JDialogSystemCGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface, ListSelectionListener  {
     
     protected MainGUI mgui;
     
@@ -101,6 +105,17 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode;
 	protected JComboBox versionSimulator;
+	
+	//EBRDD
+	private static Vector validated, ignored;
+	private Vector val, ign;
+	private JList listIgnored;
+    private JList listValidated;
+    private JButton allValidated;
+    private JButton addOneValidated;
+    private JButton addOneIgnored;
+    private JButton allIgnored;
+	private JPanel panele1, panele2, panele3, panele4, panel5, panel6;
     
     private Thread t;
     private boolean go = false;
@@ -136,6 +151,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         
         hostSystemC = _hostSystemC;
         
+		makeLists();
+		
         initComponents();
         myInitComponents();
         pack();
@@ -143,11 +160,35 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
+	
+	protected void makeLists() {
+		if (validated == null) {
+			validated = new Vector();
+		}
+		
+		if (ignored == null) {
+			ignored = new Vector();
+		}
+		
+		val = new Vector();
+		ign = new Vector();
+		
+		ArrayList<EBRDDPanel> al = mgui.getAllEBRDDPanels();
+		
+		for(EBRDDPanel panel: al) {
+			if(ignored.contains(panel)) {
+				ign.add(panel);
+			} else {
+				val.add(panel);
+			}
+		}
+	}
     
     
     protected void myInitComponents() {
         mode = NOT_STARTED;
         setButtons();
+		setList();
 		updateInteractiveSimulation();
     }
     
@@ -229,8 +270,79 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         //jp01.add(devmode, c01);
         
         jp01.add(new JLabel(" "), c01);
-        jp1.add("Generate code", jp01);
         
+		//EBRDDs
+		panele1 = new JPanel();
+        panele1.setLayout(new BorderLayout());
+        panele1.setBorder(new javax.swing.border.TitledBorder("EBRDDs ignored"));
+        listIgnored = new JList(ign);
+        //listIgnored.setPreferredSize(new Dimension(200, 250));
+        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnored.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
+        panele1.add(scrollPane1, BorderLayout.CENTER);
+        panele1.setPreferredSize(new Dimension(200, 250));
+        
+        // validated list
+        panele2 = new JPanel();
+        panele2.setLayout(new BorderLayout());
+        panele2.setBorder(new javax.swing.border.TitledBorder("EBRDDs taken into account"));
+        listValidated = new JList(val);
+        //listValidated.setPreferredSize(new Dimension(200, 250));
+        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listValidated.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listValidated);
+        panele2.add(scrollPane2, BorderLayout.CENTER);
+        panele2.setPreferredSize(new Dimension(200, 250));
+ 
+        
+        // central buttons
+        panele3 = new JPanel();
+		GridBagLayout gridbage1 = new GridBagLayout();
+        GridBagConstraints ce1 = new GridBagConstraints();
+        panele3.setLayout(gridbage1);
+        
+        ce1.weighty = 1.0;
+        ce1.weightx = 1.0;
+        ce1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        ce1.fill = GridBagConstraints.HORIZONTAL;
+        ce1.gridheight = 1;
+        
+        allValidated = new JButton(IconManager.imgic50);
+        allValidated.setPreferredSize(new Dimension(50, 25));
+        allValidated.addActionListener(this);
+        allValidated.setActionCommand("allValidated");
+        panele3.add(allValidated, ce1);
+        
+        addOneValidated = new JButton(IconManager.imgic48);
+        addOneValidated.setPreferredSize(new Dimension(50, 25));
+        addOneValidated.addActionListener(this);
+        addOneValidated.setActionCommand("addOneValidated");
+        panele3.add(addOneValidated, ce1);
+        
+        panele3.add(new JLabel(" "), ce1);
+        
+        addOneIgnored = new JButton(IconManager.imgic46);
+        addOneIgnored.addActionListener(this);
+        addOneIgnored.setPreferredSize(new Dimension(50, 25));
+        addOneIgnored.setActionCommand("addOneIgnored");
+        panele3.add(addOneIgnored, ce1);
+        
+        allIgnored = new JButton(IconManager.imgic44);
+        allIgnored.addActionListener(this);
+        allIgnored.setPreferredSize(new Dimension(50, 25));
+        allIgnored.setActionCommand("allIgnored");
+        panele3.add(allIgnored, ce1);
+		
+		
+		panele4 = new JPanel();
+		panele4.setLayout(new BorderLayout());
+		panele4.add(panele1, BorderLayout.WEST);
+		panele4.add(panele2, BorderLayout.EAST);
+		panele4.add(panele3, BorderLayout.CENTER);
+		
+		jp01.add(panele4, c01);
+        jp1.add("Generate code", jp01);
         
         // Panel 02
         c02.gridheight = 1;
@@ -346,6 +458,14 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (command.equals("addOneIgnored")) {
+            addOneIgnored();
+        } else if (command.equals("addOneValidated")) {
+            addOneValidated();
+        } else if (command.equals("allValidated")) {
+            allValidated();
+        } else if (command.equals("allIgnored")) {
+            allIgnored();
         } else if (evt.getSource() == versionSimulator) {
 			selectedItem = versionSimulator.getSelectedIndex();
 		}
@@ -355,6 +475,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         if (mode == STARTED) {
             stopProcess();
         }
+		updateStaticList();
         dispose();
     }
     
@@ -487,15 +608,38 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					}
 				} else {
 					tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
+					
+					// Making EBRDDs
+					ArrayList<EBRDD> al = new ArrayList<EBRDD>();
+					EBRDDTranslator ebrddt;
+					EBRDDPanel ep;
+					EBRDD ebrdd;
+					
+					for(int k=0; k<val.size(); k++) {
+						testGo();
+						ebrddt = new EBRDDTranslator();
+						ep = (EBRDDPanel)(val.get(k));
+						jta.append("EBRDD: " + ep.getName() + "\n");
+						ebrdd = ebrddt.generateEBRDD(ep, ep.getName());
+						jta.append("Checking syntax\n");
+						if (ebrddt.getErrors().size() > 0) {
+							jta.append("Syntax error: ignoring EBRDD\n\n");
+						} else {
+							jta.append("No Syntax error: EBRDD taken into account\n\n");
+							al.add(ebrdd);
+						}
+					}
+					
+					// Generating code
 					if (mgui.gtm.getTMLMapping() == null) {
 						if (mgui.gtm.getArtificialTMLMapping() == null) {
-							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al);
 						} else {
 							System.out.println("Using artifical mapping");
-							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al);
 						}
 					} else {
-						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping());
+						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al);
 					}
 					tml2systc.generateSystemC(debugmode.isSelected());
 					testGo();
@@ -640,5 +784,103 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 	
 	public String getPathInteractiveExecute() {
 		return pathInteractiveExecute;
+	}
+	
+	// List selection listener
+	public void valueChanged(ListSelectionEvent e) {
+        setList();
+    }
+	
+	private void setList() {
+        int i1 = listIgnored.getSelectedIndex();
+        int i2 = listValidated.getSelectedIndex();
+        
+        if (i1 == -1) {
+            addOneValidated.setEnabled(false);
+        } else {
+            addOneValidated.setEnabled(true);
+            //listValidated.clearSelection();
+        }
+        
+        if (i2 == -1) {
+            addOneIgnored.setEnabled(false);
+        } else {
+            addOneIgnored.setEnabled(true);
+            //listIgnored.clearSelection();
+        }
+        
+        if (ign.size() ==0) {
+            allValidated.setEnabled(false);
+        } else {
+            allValidated.setEnabled(true);
+        }
+        
+        if (val.size() ==0) {
+            allIgnored.setEnabled(false);
+        } else {
+            allIgnored.setEnabled(true);
+        }
+    }
+	
+	private void addOneIgnored() {
+        int [] list = listValidated.getSelectedIndices();
+        Vector v = new Vector();
+        Object o;
+        for (int i=0; i<list.length; i++){
+            o = val.elementAt(list[i]);
+            ign.addElement(o);
+            v.addElement(o);
+        }
+        
+        val.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setList();
+    }
+    
+    private void addOneValidated() {
+        int [] list = listIgnored.getSelectedIndices();
+        Vector v = new Vector();
+        Object o;
+        for (int i=0; i<list.length; i++){
+            o = ign.elementAt(list[i]);
+            val.addElement(o);
+            v.addElement(o);
+        }
+        
+        ign.removeAll(v);
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setList();
+    }
+    
+    private void allValidated() {
+        val.addAll(ign);
+        ign.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setList();
+    }
+    
+    private void allIgnored() {
+        ign.addAll(val);
+        val.removeAllElements();
+        listIgnored.setListData(ign);
+        listValidated.setListData(val);
+        setList();
+    }
+	
+	private void updateStaticList() {
+		validated = new Vector();
+		ignored = new Vector();
+		int i;
+		
+		for(i=0; i<ign.size(); i++) {
+			ignored.add(ign.get(i));
+		}
+		
+		for(i=0;i<val.size(); i++) {
+			validated.add(val.get(i));
+		}
 	}
 }
