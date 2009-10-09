@@ -37,21 +37,25 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#ifndef ServerExploreH
+#define ServerExploreH
 
-#include<Comment.h>
+#include <definitions.h>
+#include <ServerIF.h>
+#define RECUR_DEPTH 20
 
-MemPool<Comment> Comment::memPool;
+class Simulator;
+class SimServSyncInfo;
 
-Comment::Comment(TMLTime iTime, TMLCommand* iCommand, unsigned int iActionCode):_time(iTime), _command(iCommand), _actionCode(iActionCode){}
-
-void * Comment::operator new(size_t size){
-	return memPool.pmalloc(size);
-}
-
-void Comment::operator delete(void *p, size_t size){
-	memPool.pfree(p, size);
-}
-	
-void Comment::reset(){
-	memPool.reset();
-}
+///Server which allows for exploring several branches of control flow 
+class ServerExplore: public ServerIF{
+public:
+	///Constructor
+	ServerExplore();
+	int run();
+	void sendReply(std::string iReplyStr);
+protected:
+	void exploreTree(unsigned int iDepth);
+	unsigned int leafsForLevel[RECUR_DEPTH];
+};
+#endif

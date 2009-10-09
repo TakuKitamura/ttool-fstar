@@ -13,7 +13,7 @@ OBJDIR = lib
 
 MODULE = run
 include Makefile.src
-SRCS_base = TMLTask.cpp TMLCommand.cpp TMLTransaction.cpp TMLChannel.cpp CPU.cpp TMLWriteCommand.cpp TMLStateChannel.cpp TMLbrbwChannel.cpp TMLnbrnbwChannel.cpp TMLbrnbwChannel.cpp TMLEventChannel.cpp TMLEventBChannel.cpp TMLEventFChannel.cpp TMLEventFBChannel.cpp TMLReadCommand.cpp TMLExeciCommand.cpp TMLActionCommand.cpp TMLChoiceCommand.cpp TMLWaitCommand.cpp TMLSendCommand.cpp TMLSelectCommand.cpp TMLRequestCommand.cpp TMLNotifiedCommand.cpp TMLStopCommand.cpp Bus.cpp definitions.cpp Bridge.cpp Memory.cpp MemPool.cpp Comment.cpp Server.cpp ServerLocal.cpp Simulator.cpp SimComponents.cpp ServerIF.cpp ListenersSimCmd.cpp PrioScheduler.cpp RRScheduler.cpp WorkloadSource.cpp
+SRCS_base = app/TMLTask.cpp app/TMLCommand.cpp TMLTransaction.cpp app/TMLChannel.cpp arch/CPU.cpp app/TMLWriteCommand.cpp app/TMLStateChannel.cpp app/TMLbrbwChannel.cpp app/TMLnbrnbwChannel.cpp app/TMLbrnbwChannel.cpp app/TMLEventChannel.cpp app/TMLEventBChannel.cpp app/TMLEventFChannel.cpp app/TMLEventFBChannel.cpp app/TMLReadCommand.cpp app/TMLExeciCommand.cpp app/TMLActionCommand.cpp app/TMLChoiceCommand.cpp app/TMLWaitCommand.cpp app/TMLSendCommand.cpp app/TMLSelectCommand.cpp app/TMLRequestCommand.cpp app/TMLNotifiedCommand.cpp app/TMLStopCommand.cpp arch/Bus.cpp definitions.cpp arch/Bridge.cpp arch/Memory.cpp MemPool.cpp Comment.cpp sim/Server.cpp sim/ServerLocal.cpp sim/Simulator.cpp sim/SimComponents.cpp sim/ServerIF.cpp evt/ListenersSimCmd.cpp arch/PrioScheduler.cpp arch/RRScheduler.cpp arch/WorkloadSource.cpp
 SRCS_base_DIR = src_simulator
 SRCS_generated = .
 

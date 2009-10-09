@@ -38,74 +38,53 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <definitions.h>
-#include <TMLTransaction.h>
-#include <TMLCommand.h>
+#include <TMLSendCommand.h>
+#include <TMLEventChannel.h>
 #include <TMLTask.h>
+#include <TMLTransaction.h>
 #include <Bus.h>
-#include <CPU.h>
-#include <SchedulableDevice.h>
-#include <ListenersSimCmd.h>
-#include <BusMaster.h>
 
-TMLTime SchedulableDevice::_simulatedTime=0;
-
-int myrand(int n1, int n2){
-	static bool firstTime = true;
-	if(firstTime){
-		srand(time(NULL));
-		firstTime = false;
-	}
-	n2++;
-	int r = (n1 + (int)(((float)(n2 - n1))*rand()/(RAND_MAX + 1.0)));
-	//std::cout << "random number: " << r << std::endl;
-	//return (n1 + (int)(((float)(n2 - n1))*rand()/(RAND_MAX + 1.0)));
-	return r;
-	//return n1 + rand()/(RAND_MAX/(n2-n1+1));
+TMLSendCommand::TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc): TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParamFunc, 1), _channel(iChannel){
 }
 
-long getTimeDiff(struct timeval& begin, struct timeval& end){
-	return end.tv_usec-begin.tv_usec+(end.tv_sec-begin.tv_sec)*1000000;
+void TMLSendCommand::execute(){
+	_channel->write();
+	//std::cout << "Dependent Task: " << _channel->getBlockedReadTask()->toString() << std::endl;
+	_progress+=_currTransaction->getVirtualLength();
+	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	_task->addTransaction(_currTransaction);
+	TMLCommand* aNextCommand = prepare(false);
+	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
+	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-
-bool greaterRunnableTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
-	//std::cout << "greaterRunnableTime\n";
-	return p1->getRunnableTime() > p2->getRunnableTime();
+TMLCommand* TMLSendCommand::prepareNextTransaction(){
+	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
+	_channel->testWrite(_currTransaction);
+	return this;
 }
 
-bool greaterPrio::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
-	//std::cout << "greaterPrio\n";
-	return p1->getCommand()->getTask()->getPriority() > p2->getCommand()->getTask()->getPriority();
+TMLTask* TMLSendCommand::getDependentTask() const{
+	return _channel->getBlockedReadTask();
 }
 
-bool greaterStartTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
-	return p1->getStartTime() > p2->getStartTime();
+TMLChannel* TMLSendCommand::getChannel() const{
+	return _channel;
 }
 
-void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace){
-	unsigned int aPos=0;
-	while (aPos< ioHTML.length() && (aPos= ioHTML.find(iSearch,aPos))!=std::string::npos){
-		ioHTML.replace(aPos++,iSearch.length(),iReplace);
-	}
+std::string TMLSendCommand::toString() const{
+	std::ostringstream outp;
+	outp << "Send in " << TMLCommand::toString() << " " << _channel->toString();
+	return outp.str();
 }
 
-std::string vcdValConvert(unsigned int iVal){
-	std::string iResult;
-	do{
-		if (iVal & 1) iResult="1" + iResult; else iResult="0" + iResult;
-		iVal >>= 1;
-	}while(iVal);
-	return iResult;
+std::string TMLSendCommand::toShortString() const{
+	std::ostringstream outp;
+	outp << _task->toString() << ": Send " << _channel->toShortString();
+	return outp.str();
 }
 
-int getexename(char* buf, size_t size){
-	char linkname[64]; /* /proc/<pid>/exe */
-	pid_t pid;
-	int ret;
-	pid = getpid();
-	if (snprintf(linkname, sizeof(linkname), "/proc/%i/exe", pid) < 0) return -1;
-	ret = readlink(linkname, buf, size);
-	if (ret == -1 || ret>=size) return -1;
-	buf[ret] = 0;
+std::string TMLSendCommand::getCommandStr() const{
+	return "notify";
 }
+

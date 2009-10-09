@@ -37,64 +37,51 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#include<ServerExplore.h>
+#include<SimServSyncInfo.h>
+#include<Simulator.h>
+#include<SimComponents.h>
+#include<TMLChoiceCommand.h>
 
-#include<MemPool.h>
-#include<TMLTransaction.h>
-#include<Comment.h>
+ServerExplore::ServerExplore(){
+	for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
+}
 
-///Generic Memory pool class
+int ServerExplore::run(){
+	_syncInfo->_simComponents->setBreakpointOnChoiceCmds();
+	exploreTree(0);
+}
 
-template <typename T>
-MemPool<T>::MemPool():_headFreeList(0){}
-
-template <typename T>
-void* MemPool<T>::pmalloc(unsigned int n){
-	if (n != sizeof(T)){
-		return ::operator new(n);
-	}
-	T* aHead = _headFreeList;
-	if (aHead){
-		_headFreeList = *(reinterpret_cast<T**>(aHead));
+void ServerExplore::exploreTree(unsigned int iDepth){
+	bool aSimTerminated=false;
+	TMLChoiceCommand* aChoiceCmd;
+	std::stringstream aBuffer;
+	if (iDepth==RECUR_DEPTH){
+		std::ostringstream aFileName;
+		aFileName << "canc" << iDepth << "." << leafsForLevel[iDepth]++;
+		std::string aFileStr(aFileName.str());
+		_syncInfo->_simulator->schedule2TXT(aFileStr);
 	}else{
-		T** aAdr;
-		T* newBlock = static_cast<T*>(::operator new(BLOCK_SIZE * sizeof(T)));
-		_chunkList.push_back(newBlock);
-		for (int i = 1; i < BLOCK_SIZE-1; ++i){
-			aAdr = reinterpret_cast<T**>(&newBlock[i]);
-			*aAdr = &newBlock[i+1];
+		do{
+			aSimTerminated=_syncInfo->_simulator->runToNextBreakpoint();
+			aChoiceCmd=_syncInfo->_simComponents->getCurrentChoiceCmd();
+		}while (!aSimTerminated && aChoiceCmd==0);
+		if (aSimTerminated){
+			std::ostringstream aFileName;
+			aFileName << "term" << iDepth << "." << leafsForLevel[iDepth]++;
+			std::string aFileStr(aFileName.str());
+			_syncInfo->_simulator->schedule2TXT(aFileStr);
+		}else{
+			_syncInfo->_simComponents->writeObject(aBuffer);
+			for (unsigned int aBranch=0;aBranch<aChoiceCmd->getNumberOfBranches();aBranch++){
+				aChoiceCmd->setPreferredBranch(aBranch);
+				exploreTree(iDepth+1);
+				_syncInfo->_simComponents->readObject(aBuffer);
+			}
 		}
-		aAdr = reinterpret_cast<T**>(&newBlock[BLOCK_SIZE-1]);
-		*aAdr = 0;
-		aHead = newBlock;
-		_headFreeList = &newBlock[1];
 	}
-	return aHead;
 }
 
-template <typename T>
-void MemPool<T>::pfree(void *p, unsigned int n){
-	if (p == 0) return;
-	if (n != sizeof(T)){
-		::operator delete(p);
-		return;
-	}
-	T* aDelObj = static_cast<T*>(p);
-	T** aAdr = reinterpret_cast<T**>(aDelObj);
-	*aAdr = _headFreeList;
-	_headFreeList = aDelObj;
+void ServerExplore::sendReply(std::string iReplyStr){
+	//std::cout << iReplyStr;
 }
-
-template <typename T>
-void MemPool<T>::reset(){
-	_headFreeList=0;
-	for(typename std::list<T*>::iterator i=_chunkList.begin(); i != _chunkList.end(); ++i) ::operator delete(*i);
-	_chunkList.clear();
-}
-
-template <typename T>
-MemPool<T>::~MemPool(){
-	reset();
-}
-
-template class MemPool<TMLTransaction>;
-template class MemPool<Comment>;  
