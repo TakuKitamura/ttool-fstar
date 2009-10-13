@@ -50,7 +50,8 @@ package req.ebrdd;
 public class EBRDDActionState extends EBRDDComponent {
     protected String action;
 	
-    public EBRDDActionState() {
+    public EBRDDActionState(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
     }
     
     public String toString() {

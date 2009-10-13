@@ -52,7 +52,8 @@ public class EBRDDERC extends EBRDDComponent {
 	protected ArrayList<ERCElement> treeElements;
 	protected ESO root;
 	
-    public EBRDDERC() {
+    public EBRDDERC(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
 		treeElements = new ArrayList<ERCElement>();
     }
     
@@ -98,7 +99,7 @@ public class EBRDDERC extends EBRDDComponent {
 			
 			// Must add a new ESO
 			System.out.println("Default ESO added to ERC");
-			ESO eso = new ESO();
+			ESO eso = new ESO("ESO", null);
 			eso.addSon(elt);
 			addTreeElement(eso);
 			setRoot(eso);

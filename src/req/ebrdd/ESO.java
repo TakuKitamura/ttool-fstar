@@ -59,7 +59,8 @@ public class ESO extends ERCElement {
 	private Vector indexes;
 	
     
-    public ESO() {
+    public ESO(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
         sons = new ArrayList<ERCElement>();
 		indexes = new Vector();
     }

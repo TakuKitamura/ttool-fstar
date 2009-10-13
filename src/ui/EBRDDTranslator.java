@@ -141,41 +141,44 @@ public class EBRDDTranslator {
 		ERB erb;
 		int i;
 		
+		int cpt=0;
+		
 		start = ebrdd.getStartState();
 		listE.addCor(start, tss);
 		
 		// Creation of other elements
 		iterator = list.listIterator();
 		while(iterator.hasNext()) {
+			cpt++;
 			tgc = (TGComponent)(iterator.next());
 			
 			// Action
 			if (tgc instanceof ui.ebrdd.EBRDDActionState) {
-				acst = new req.ebrdd.EBRDDActionState();
+				acst = new req.ebrdd.EBRDDActionState("Action state"+cpt, tgc);
 				acst.setAction(((ui.ebrdd.EBRDDActionState)tgc).getAction());
 				listE.addCor(acst, tgc);
 				
 				// Stop
 			} else if (tgc instanceof ui.ebrdd.EBRDDStopState) {
-				stop = new req.ebrdd.EBRDDStop();
+				stop = new req.ebrdd.EBRDDStop("Stop"+cpt, tgc);
 				listE.addCor(stop, tgc);
 				
 				// Choice	
 			} else if (tgc instanceof ui.ebrdd.EBRDDChoice) {
 				// guards are added later on
-				ch = new req.ebrdd.EBRDDChoice();
+				ch = new req.ebrdd.EBRDDChoice("Choice"+cpt, tgc);
 				listE.addCor(ch, tgc);
 				
 				// Sequence
 			} else if (tgc instanceof ui.ebrdd.EBRDDSequence) {
 				// guards are added later on
-				seq = new req.ebrdd.EBRDDSequence();
+				seq = new req.ebrdd.EBRDDSequence("Sequence"+cpt, tgc);
 				listE.addCor(seq, tgc);
 				
 				// Loop
 			} else if (tgc instanceof ui.ebrdd.EBRDDForLoop) {
 				// guards are added later on
-				loop = new req.ebrdd.EBRDDLoop();
+				loop = new req.ebrdd.EBRDDLoop("Loop"+cpt, tgc);
 				listE.addCor(loop, tgc);
 				loop.setInit(((ui.ebrdd.EBRDDForLoop)tgc).getInit());
 				loop.setCondition(((ui.ebrdd.EBRDDForLoop)tgc).getCondition());
@@ -184,7 +187,7 @@ public class EBRDDTranslator {
 				// ERC
 			} else if (tgc instanceof ui.ebrdd.EBRDDERC) {
 				// ERC's internal elements are built later on
-				erc = new req.ebrdd.EBRDDERC();
+				erc = new req.ebrdd.EBRDDERC("ERC"+cpt, tgc);
 				listE.addCor(erc, tgc);
 			}
 		}
@@ -215,7 +218,7 @@ public class EBRDDTranslator {
 						if (tgc1 instanceof ui.ebrdd.EBRDDESO) {
 							System.out.println("ESO found");
 							esotgc = (ui.ebrdd.EBRDDESO)tgc1;
-							eso = new req.ebrdd.ESO();
+							eso = new req.ebrdd.ESO("ESO"+cpt, esotgc);
 							listE.addCor(eso, esotgc);
 							eso.setID(esotgc.getID());
 							eso.setTimeout(esotgc.getTimeout());
@@ -227,7 +230,7 @@ public class EBRDDTranslator {
 						} else if (tgc1 instanceof ui.ebrdd.EBRDDERB) {
 							System.out.println("ERB found");
 							erbtgc = (ui.ebrdd.EBRDDERB)tgc1;
-							erb = new req.ebrdd.ERB();
+							erb = new req.ebrdd.ERB("ERB" + cpt, erbtgc);
 							listE.addCor(erb, erbtgc);
 							erb.setEvent(erbtgc.getEvent());
 							erb.setAction(erbtgc.getAction());
@@ -349,7 +352,7 @@ public class EBRDDTranslator {
                 } 
             } else if (tgc instanceof ui.ebrdd.EBRDDForLoop) {
 				loop = (req.ebrdd.EBRDDLoop)(listE.getEBRDDGeneralComponent(tgc));
-				if (loop.realNbOfNext() != 2) {
+				if (loop.getNbNext() != 2) {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Loop should have exactly two next elements");
                     ce.setTDiagramPanel(ebrddp);
                     ce.setTGComponent(tgc);

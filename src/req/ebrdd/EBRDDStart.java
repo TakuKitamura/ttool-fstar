@@ -49,7 +49,8 @@ package req.ebrdd;
 
 public class EBRDDStart extends EBRDDComponent {
     
-    public EBRDDStart() {
+    public EBRDDStart(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
         nbNext = 1;
     }
     

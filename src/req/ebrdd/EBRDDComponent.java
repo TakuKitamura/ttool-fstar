@@ -52,12 +52,13 @@ public abstract class EBRDDComponent extends EBRDDGeneralComponent implements Cl
     protected ArrayList<EBRDDComponent> nexts;
 
     
-    public EBRDDComponent() {
+    public EBRDDComponent(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
         nexts = new ArrayList<EBRDDComponent>();
     }
     
     
-    public EBRDDComponent getNext(int index) {
+    public EBRDDComponent getNextElement(int index) {
         if (index < nexts.size()) {
             return nexts.get(index);
         } else {
@@ -65,19 +66,15 @@ public abstract class EBRDDComponent extends EBRDDGeneralComponent implements Cl
         }
     }
     
-    public int getRealNbOfNext() {
+    public int getNbNext() {
         return  nexts.size();
     }
     
-    public int getNbNext() {
+    public int getNormalizedNbNext() {
         return  nbNext;
     }
     
-    public int realNbOfNext() {
-        return nexts.size();
-    }
-    
-    public ArrayList<EBRDDComponent> getAllNext() {
+    public ArrayList<EBRDDComponent> getNexts() {
         return nexts;
     }
 	

@@ -52,7 +52,8 @@ import myutil.*;
 public class EBRDDChoice extends EBRDDComponent {
     private ArrayList<String> guards;
     
-    public EBRDDChoice() {
+    public EBRDDChoice(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
         nbNext = -1;
         guards = new ArrayList<String>();
     }
@@ -147,7 +148,7 @@ public class EBRDDChoice extends EBRDDComponent {
         // Put else at the end
         index = getElseGuard();
         if ((index > -1) && (index != (getNbGuard() - 1))) {
-            next = getNext(index);
+            next = getNextElement(index);
             guard = getGuard(index);
             guards.remove(index);
 			removeNext(index);

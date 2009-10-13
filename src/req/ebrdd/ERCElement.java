@@ -50,7 +50,8 @@ import java.util.*;
 public abstract class ERCElement extends EBRDDGeneralComponent implements Cloneable {
     protected boolean negated;
 	
-    public ERCElement() {
+    public ERCElement(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
     }
     
 	public void setNegated(boolean _negated) {

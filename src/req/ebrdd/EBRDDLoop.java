@@ -52,7 +52,8 @@ public class EBRDDLoop extends EBRDDComponent {
     
     private String init, condition, increment;
     
-    public EBRDDLoop() {
+    public EBRDDLoop(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
 		nbNext = 2;
     }
     

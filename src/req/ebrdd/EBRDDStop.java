@@ -49,7 +49,8 @@ package req.ebrdd;
 
 public class EBRDDStop extends EBRDDComponent {
     
-    public EBRDDStop() {
+    public EBRDDStop(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
         nbNext = 0;
     }
     

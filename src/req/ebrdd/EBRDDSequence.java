@@ -51,7 +51,8 @@ import java.util.*;
 public class EBRDDSequence extends EBRDDComponent{
     private Vector indexes;
     
-    public EBRDDSequence() {
+    public EBRDDSequence(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
 		 nbNext = -1;
          indexes = new Vector();
     }

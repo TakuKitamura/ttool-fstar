@@ -61,7 +61,7 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
     
     public EBRDD(String _name) {
 		name = _name;
-        ads = new EBRDDStart();
+        ads = new EBRDDStart("Start", null);
         add(ads);
     }
 	
@@ -112,7 +112,7 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
         for (i=0; i<size(); i++) {
             ad1 = get(i);
             for(j=0; j<ad1.getNbNext(); j++) {
-                if (ad1.getNext(j) == ad) {
+                if (ad1.getNextElement(j) == ad) {
                     return ad1;
                 }
             }
@@ -141,21 +141,21 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
 			((EBRDDERC)elt).exploreString(((EBRDDERC)elt).getRoot(), sb, tabLevel+1);
 		}
 		
-		if (elt.getRealNbOfNext() == 0) {
+		if (elt.getNbNext() == 0) {
 			return;
 		}
-		if (elt.getRealNbOfNext() == 1) {
-			exploreString(elt.getNext(0), sb, tabLevel);
+		if (elt.getNbNext() == 1) {
+			exploreString(elt.getNextElement(0), sb, tabLevel);
 			return;
 		}
 		
 		tabLevel ++;
-		for(int i=0; i<elt.getRealNbOfNext(); i++) {
+		for(int i=0; i<elt.getNbNext(); i++) {
 			for(j=0; j<tabLevel; j++) {
 				sb.append("\t");
 			}
 			sb.append("#" + i + ":\n");
-			exploreString(elt.getNext(i), sb, tabLevel+1);
+			exploreString(elt.getNextElement(i), sb, tabLevel+1);
 		}
 	}
     

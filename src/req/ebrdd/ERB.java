@@ -52,7 +52,8 @@ public class ERB extends ERCElement  {
 	
 	protected String evt, condition, action; 
     
-    public ERB() {
+    public ERB(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
     }
 	
 	public void setEvent(String _evt) {
