@@ -39,7 +39,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TML2MappingSystemC
  * Creation: 03/09/2007
  * @version 1.0 03/09/2007
- * @author Ludovic APVRILLE
+ * @author Daniel Knorreck
  * @see
  */
 
@@ -70,6 +70,7 @@ public class TML2MappingSystemC {
 	private ArrayList<MappedSystemCTask> tasks;
 	
 	private ArrayList<EBRDD> ebrdds;
+	private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
@@ -80,7 +81,7 @@ public class TML2MappingSystemC {
         tmlmapping = _tmlmapping;
 		tmlmapping.makeMinimumMapping();
  	}
-	
+
 	public TML2MappingSystemC(TMLModeling _tmlm, ArrayList<EBRDD> _ebrdds) {
 		tmlmodeling = _tmlm;
 		ebrdds = _ebrdds;
@@ -103,14 +104,15 @@ public class TML2MappingSystemC {
 	public String getFullCode() {
 		return mainFile;
 	}
-    
+
     	public void generateSystemC(boolean _debug) {
         	debug = _debug;
-        
+ 
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
-        
+
         	//generateSystemCTasks();
+		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
 	}
@@ -123,11 +125,12 @@ public class TML2MappingSystemC {
 	}
 	
 	private void generateMakefileSrc() {
-		src = "";
-		src += "SRCS = ";
+		src = "SRCS = ";
 		for(TMLTask mst: tmlmapping.getMappedTasks()) {
-			//src += mst.getTMLTask().getName() + ".cpp ";
 			src += mst.getName() + ".cpp ";
+		}
+		for(EBRDD ebrdd: ebrdds){
+			src += ebrdd.getName() + ".cpp ";
 		}
 	}
 	
@@ -470,7 +473,7 @@ public class TML2MappingSystemC {
 
 
 // *************** Internal structure manipulation ******************************* /
-	public void generateSystemCTasks() {
+	/*private void generateSystemCTasks() {
 		ListIterator iterator = tmlmodeling.getTasks().listIterator();
 		TMLTask t;
 		MappedSystemCTask mst;
@@ -488,11 +491,22 @@ public class TML2MappingSystemC {
 				//tasks.add(mst);
 			}
 		}
+	}*/
+
+	private void generateEBRDDs(){
+		for(EBRDD ebrdd: ebrdds){
+			SystemCEBRDD newEbrdd = new SystemCEBRDD(ebrdd);
+			newEbrdd.generateSystemC(debug);
+			systemCebrdds.add(newEbrdd);
+		}
 	}
 	
-	public void generateTaskFiles(String path) throws FileException {
+	private void generateTaskFiles(String path) throws FileException {
 		for(MappedSystemCTask mst: tasks) {
 			mst.saveInFiles(path);
+		}
+		for(SystemCEBRDD ebrdd: systemCebrdds) {
+			ebrdd.saveInFiles(path);
 		}
 	}
 }

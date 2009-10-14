@@ -39,7 +39,7 @@
  * Class MappedSystemCTask
  * Creation: 24/11/2005
  * @version 1.0 24/11/2005
- * @author Ludovic APVRILLE
+ * @author Daniel Knorreck
  * @see
  */
 
@@ -274,7 +274,7 @@ public class MappedSystemCTask {
 			functions += "std::cout << \"Write: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
 		}
 		functions+= "return i_stream_var;\n}\n\n";
-		hcode += "void reset();" + SCCR;
+		hcode += "void reset()" + SCCR;
 		functions+= "void "+reference + "::reset(){\nTMLTask::reset();\n";
 		iterator = task.getAttributes().listIterator();
 		while(iterator.hasNext()) {
