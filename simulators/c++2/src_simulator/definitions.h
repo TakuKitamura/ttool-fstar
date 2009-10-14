@@ -176,13 +176,14 @@ class SchedulableDevice;
 template <typename T> class Parameter;
 class TraceableDevice;
 class Master;
-class BusMasterInfo;
 class Serializable;
 class TMLChannel;
 class Slave;
 class Comment;
 class WorkloadSource;
 class BusMaster;
+class EBRDD;
+class EBRDDCommand;
 
 ///Datatype used for time measurements
 typedef unsigned int TMLTime;
@@ -208,6 +209,8 @@ typedef std::list<TMLChannel*> ChannelList;
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
 typedef std::map<unsigned int, TMLCommand*> CommandHashTab;
+///Datatype used in EBRDD Tasks in order to associate a command with an ID 
+typedef std::map<unsigned int, EBRDDCommand*> CommandHashTabEBRDD;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
@@ -218,6 +221,8 @@ typedef unsigned int (TMLTask::*CondFuncPointer) ();
 typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
+///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
+typedef unsigned int (EBRDD::*EBRDDFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
 typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)

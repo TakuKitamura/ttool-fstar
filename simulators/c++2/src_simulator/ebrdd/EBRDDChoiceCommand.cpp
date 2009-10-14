@@ -38,26 +38,21 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <EBRDDChoiceCommand.h>
+#include <EBRDD.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+EBRDDChoiceCommand::EBRDDChoiceCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iCondFunc):EBRDDCommand(iID, iEBRDD), _condFunc(iCondFunc){
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+EBRDDCommand* EBRDDChoiceCommand::prepare(){
+	unsigned int aNextCmd;
+	aNextCmd=(_ebrdd->*_condFunc)();
+	if (_nextCommand[aNextCmd]!=0) return _nextCommand[aNextCmd]->prepare();
+	return 0;
+}
+
+std::string EBRDDChoiceCommand::toString() const{
+	std::ostringstream outp;	
+	outp << "Choice in " << EBRDDCommand::toString();
+	return outp.str();
+}

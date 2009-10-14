@@ -61,6 +61,7 @@ public:
 	\param iTask Pointer to the task the command belongs to
 	\param iLength Virtual length of the command
 	\param iParam Pointer to a parameter function
+	\param iNbOfNextCmds Number of next commands
     	*/
 	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
 	///Destructor

@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef ChannelListenerH
 #define ChannelListenerH
+
 #define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->writeTrans(iTrans);}
 #define NOTIFY_READ_TRANS_EXECUTED(iTrans) for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->readTrans(iTrans);}
 

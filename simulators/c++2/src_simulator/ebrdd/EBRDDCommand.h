@@ -38,29 +38,74 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TMLStopCommandH
-#define TMLStopCommandH
+#ifndef EBRDDCommandH
+#define EBRDDCommandH
 
 #include <definitions.h>
-#include <TMLCommand.h>
+#include <Serializable.h>
 
+class EBRDD;
 
-///This class represents a TML Stop command (denotes the end of a task)
-class TMLStopCommand:public TMLCommand{
+///This class defines the basic interfaces and functionalites of a EBRDD command. All specific EBRDD commands are derived from this base class. 
+class EBRDDCommand: public Serializable {
 public:
 	///Constructor
     	/**
       	\param iID ID of the command
-      	\param iTask Pointer to the task the command belongs to
+	\param iEBRDD Pointer to the EBRDD the command belongs to
     	*/
-	TMLStopCommand(unsigned int iID, TMLTask* iTask);
-	void execute();
-	TMLTask* getDependentTask() const;
-	std::string toString() const;
-	std::string toShortString() const;
-	std::string getCommandStr() const;
+	EBRDDCommand(unsigned int iID, EBRDD* iEBRDD);
+	///Destructor
+	virtual ~EBRDDCommand();
+	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
+	/**
+      	\return True if there was a transaction to prepare
+	*/
+	virtual EBRDDCommand* prepare()=0;
+	///Assigns a value to the pointer referencing the array of next commands
+	/**
+	\param iNextCommand Pointer to an array of pointers to the next commands
+	*/
+	void setNextCommand(EBRDDCommand** iNextCommand);
+	///Returns a pointer to the EBRDD the command belongs to
+	/**
+	\return Pointer to the EBRDD
+	*/
+	EBRDD* getEBRDD() const;
+	///Returns a string representation of the command
+	/**
+	\return Detailed string representation
+	*/
+	virtual std::string toString() const;
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	void reset();
+	///Returns the unique ID of the command
+	/**
+      	\return Unique ID
+    	*/ 
+	unsigned int getID() const;
+	////Sets the internal pointer to the simulation components
+	////**
+      	//\param iSimComp Pointer to simulation components
+    	//*/ 
+	//static void setSimComponents(SimComponents* iSimComp);
+	/////Returns a pointer to the next command array and the number of successors of this command
+	////**
+	//\param oNbOfCmd Number of successors of this command
+	//\return Pointer to next command array
+	//*/
+	//EBRDDCommand** getNextCommands(unsigned int& oNbOfCmd) const;
 protected:
-	TMLCommand* prepareNextTransaction();
+	///ID of the command
+	unsigned int _ID;
+	///Pointer to the task the command belongs to
+	EBRDD* _ebrdd;
+	///Pointer to an array of pointers to the next commands
+	EBRDDCommand** _nextCommand;
+	/////Number of successors of this command
+	//unsigned int _nbOfNextCmds;
 };
 
 #endif
+

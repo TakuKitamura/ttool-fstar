@@ -10,7 +10,7 @@
 #LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
 
 
-INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim
+INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim -I$(SRCS_base_DIR)/EBRDD
 LIBDIR = -L. -L.. 
 LIBS   =  -lm $(EXTRA_LIBS)
 

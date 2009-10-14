@@ -44,9 +44,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Parameter.h>
 #include <definitions.h>
 #include <CPU.h>
-//#include <CPUPB.h>
-//#include <CPUPBL.h>
-//#include <CPURR.h>
 #include <RRScheduler.h>
 #include <PrioScheduler.h>
 #include <Bus.h>
@@ -66,6 +63,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimServSyncInfo.h>
 #include <ListenersSimCmd.h>
 #include <KernelListener.h>
+#include <ERB.h>
 
 #define RECUR_DEPTH 20
 

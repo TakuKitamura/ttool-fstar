@@ -38,26 +38,21 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <EBRDDStopCommand.h>
+#include <EBRDD.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+EBRDDStopCommand::EBRDDStopCommand(unsigned int iID, EBRDD* iEBRDD): EBRDDCommand(iID, iEBRDD){
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+EBRDDCommand* EBRDDStopCommand::prepare(){
+	_ebrdd->finished();
+	return 0;
+}
+
+std::string EBRDDStopCommand::toString() const{
+	std::ostringstream outp;	
+	outp << "Stop in " << EBRDDCommand::toString();
+	return outp.str();
+}
+
+

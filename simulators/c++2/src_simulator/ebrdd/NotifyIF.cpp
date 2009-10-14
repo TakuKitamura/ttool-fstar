@@ -38,26 +38,30 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include<NotifyIF.h>
+#include<EventIF.h>
+#include<iostream>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+NotifyIF::NotifyIF(unsigned int iNbOfEvents):_nextID(0), _nbOfEvents(iNbOfEvents){
+	_eventArray = new EventIF*[iNbOfEvents];
+	for (unsigned int i=0; i<_nbOfEvents; i++)
+		_eventArray[i]=0;
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+void NotifyIF::reset(){
+	//if (_nextID!= _nbOfEvents) std::cout << "******** Somethings strange\n";
+	for (unsigned int i=0; i<_nbOfEvents; i++){
+		//std::cout << "reset " << i << "  "<< _eventArray[i] << std::endl;
+		_eventArray[i]->reset();
+		//std::cout << "after " << std::endl;
+	}
+}
+void NotifyIF::registerEvent(EventIF* iEvent){
+	_eventArray[_nextID]=iEvent;
+	iEvent->setEventID(_nextID);
+	++_nextID;
+}
+
+NotifyIF::~NotifyIF(){
+	delete[] _eventArray;
+}

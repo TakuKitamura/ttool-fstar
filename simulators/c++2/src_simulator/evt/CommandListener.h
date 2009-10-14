@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef CommandListenerH
 #define CommandListenerH
+
 #define NOTIFY_CMD_ENTERED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm)
 #define NOTIFY_CMD_EXECUTED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm)
 #define NOTIFY_CMD_FINISHED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm)

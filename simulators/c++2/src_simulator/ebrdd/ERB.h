@@ -38,26 +38,64 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#ifndef ERBH
+#define ERBH
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+#include <EventIF.h>
+#include <ChannelListener.h>
+#include <CommandListener.h>
+#include <KernelListener.h>
+#include <TaskListener.h>
+#include <TransactionListener.h>
 
-///Encapsulates events associated with transactions
-class TransactionListener{
+class SimComponents;
+
+class ERB: public EventIF, public ChannelListener, public CommandListener, public KernelListener, public TaskListener, public TransactionListener{
 public:
-	///Gets called when a transaction is executed
+	ERB(NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iSourceClass, unsigned int iSourceID, unsigned int iEvtID);
+	void timeTick(TMLTime iNewTime);
+	void activate();
+	void deactivate();
+	void transExecuted(TMLTransaction* iTrans);
+	void commandEntered(TMLCommand* iComm);
+	void commandStarted(TMLCommand* iComm);
+	void commandExecuted(TMLCommand* iComm);
+	void commandFinished(TMLCommand* iComm);
+	void taskStarted(TMLTransaction* iTrans);
+	void taskFinished(TMLTransaction* iTrans);
+	void readTrans(TMLTransaction* iTrans);
+	void writeTrans(TMLTransaction* iTrans);
+	void simulationStarted();
+	void simulationStopped();
+	///Sets the internal pointer to the simulation components
 	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
+      	\param iSimComp Pointer to simulation components
+    	*/ 
+	static void setSimComponents(SimComponents* iSimComp);
 protected:
+	/*void notify(){
+		if (conditionFunction) 
+			action;
+		else
+			abort;
+		NOTIFY_ANCESTOR;
+	}*/
+	
+	/*void abort(){
+		if (_active){
+			_aborted=true;
+			_ancestorNode->notifyAbort(_ID);
+		}
+	}*/
+
+	bool _active;
+	std::string _name;
+	unsigned int _sourceClass;
+	unsigned int _sourceID;
+	unsigned int _evtID;
+	///Pointer to simulation components
+	static SimComponents* _simComp;
+	//Function condition
+	//Function action
 };
 #endif

@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef KernelListenerH
 #define KernelListenerH
+
 #define NOTIFY_SIM_STARTED() for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStarted()
 #define NOTIFY_SIM_STOPPED() for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStopped()
 #define NOTIFY_TIME_ADVANCES(iTime) for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->timeAdvances(iTime)

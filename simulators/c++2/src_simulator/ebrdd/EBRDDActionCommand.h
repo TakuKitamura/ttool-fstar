@@ -38,26 +38,28 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#ifndef EBRDDActionCommandH
+#define EBRDDActionCommandH
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+#include <definitions.h>
+#include <EBRDDCommand.h>
 
-///Encapsulates events associated with transactions
-class TransactionListener{
+
+///This class executes a C++ statement (probably a variable assignment or modification) defined in the scope of a EBRDD action state.
+class EBRDDActionCommand: public EBRDDCommand{
 public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
+	///Constructor
+    	/**
+      	\param iID ID of the command
+      	\param iEBRDD Pointer to the EBRDD the command belongs to
+	\param iEBRDDFunc Member function pointer to the action function
+    	*/
+	EBRDDActionCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc);
+	EBRDDCommand* prepare();
+	std::string toString() const;
 protected:
+	///Member function pointer to the action function
+	EBRDDFuncPointer _ebrddFunc;
 };
+
 #endif

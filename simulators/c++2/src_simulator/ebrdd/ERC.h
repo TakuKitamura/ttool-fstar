@@ -38,26 +38,22 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#ifndef ERCH
+#define ERCH
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+#include <NotifyIF.h>
+#include <EBRDDCommand.h>
 
-///Encapsulates events associated with transactions
-class TransactionListener{
+class ERC: public NotifyIF, public EBRDDCommand{
 public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
+	ERC(unsigned int iID, EBRDD* iEBRDD);
+	void notifyEvent(unsigned int iID);
+	void notifyAbort(unsigned int iID);
+	//void timeTick(TMLTime iNewTime);
+	//void activate();
+	//void deactivate();
+	//void reset();
+	EBRDDCommand* prepare();
+	std::string toString() const;
 };
 #endif

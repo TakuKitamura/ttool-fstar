@@ -61,6 +61,7 @@ int main(int len, char ** args) {
 	gettimeofday(&begin,NULL);
 	mySync._simComponents = new CurrentComponents();
 	TMLCommand::setSimComponents(mySync._simComponents);
+	ERB::setSimComponents(mySync._simComponents);
 	Simulator mySim(&mySync);
 	gettimeofday(&end,NULL);
 	std::cout << "The preparation took " << getTimeDiff(begin,end) << "usec.\n";

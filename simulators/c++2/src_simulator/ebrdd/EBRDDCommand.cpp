@@ -38,26 +38,59 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <EBRDDCommand.h>
+#include <EBRDD.h>
+//#include <SimComponents.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+//SimComponents* TMLCommand::_simComp=0;
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+EBRDDCommand::EBRDDCommand(unsigned int iID, EBRDD* iEBRDD): _ID(iID), _ebrdd(iEBRDD), _nextCommand(0){
+	_ebrdd->addCommand(iID, this);
+}
+
+EBRDDCommand::~EBRDDCommand(){
+	if (_nextCommand!=0) delete[] _nextCommand;
+}
+
+EBRDD* EBRDDCommand::getEBRDD() const{
+	return _ebrdd;
+}
+
+void EBRDDCommand::setNextCommand(EBRDDCommand** iNextCommand){
+	_nextCommand=iNextCommand;
+}
+
+//EBRDDCommand* EBRDDCommand::getNextCommand() const{
+//	return (_nextCommand==0)?0:_nextCommand[0];
+//}
+
+//EBRDDCommand** EBRDDCommand::getNextCommands(unsigned int& oNbOfCmd) const{
+	//returned number is not correct for composite choice/choice commands and composite action/choice commands !!!!
+//	oNbOfCmd=_nbOfNextCmds;
+//	return _nextCommand;
+//}
+
+std::string EBRDDCommand::toString() const{
+	std::ostringstream outp;	
+	outp << _ebrdd->toString();
+	return outp.str();
+}
+
+std::ostream& EBRDDCommand::writeObject(std::ostream& s){
+	return s;
+}
+
+std::istream& EBRDDCommand::readObject(std::istream& s){
+	return s;
+}
+
+void EBRDDCommand::reset(){
+}
+
+unsigned int EBRDDCommand::getID() const{
+	return _ID;
+}
+
+//void TMLCommand::setSimComponents(SimComponents* iSimComp){
+//	_simComp=iSimComp;
+//}

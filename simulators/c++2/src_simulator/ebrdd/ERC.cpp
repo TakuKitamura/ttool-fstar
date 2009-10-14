@@ -38,26 +38,46 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <ERC.h>
+#include <EventIF.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD){
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+void ERC::notifyEvent(unsigned int iID){
+	std::cout << "***** Container notified *****\n";
+	_eventArray[0]->deactivate();
+	NotifyIF::reset();
+	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
+}
+void ERC::notifyAbort(unsigned int iID){
+	std::cout << "***** Container aborted *****\n";
+}
+
+//void ERC::timeTick(TMLTime iNewTime){
+//	_eventArray[0]->timeTick(iNewTime);
+//}
+
+//void ERC::activate(){
+//	_eventArray[0]->activate();
+//}
+
+//void ERC::deactivate(){
+//	_eventArray[0]->deactivate();
+//}
+
+//void ERC::reset(){
+//	deactivate();
+//	NotifyIF::reset();
+//}
+
+EBRDDCommand* ERC::prepare(){
+	_eventArray[0]->activate();
+	return this;
+}
+
+std::string ERC::toString() const{
+	std::ostringstream outp;	
+	outp << "ERC in " << EBRDDCommand::toString();
+	return outp.str();
+}

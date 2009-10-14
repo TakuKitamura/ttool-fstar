@@ -38,26 +38,24 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#ifndef NotifyIFH
+#define NotifyIFH
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+#include<definitions.h>
 
-///Encapsulates events associated with transactions
-class TransactionListener{
+class EventIF;
+
+class NotifyIF{
 public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
+	NotifyIF(unsigned int iNbOfEvents);
+	virtual void notifyEvent(unsigned int iID)=0;
+	virtual void notifyAbort(unsigned int iID)=0;
+	virtual void reset();
+	void registerEvent(EventIF* iEvent);
+	virtual ~NotifyIF();
 protected:
+	unsigned int _nextID;
+	unsigned int _nbOfEvents;
+	EventIF** _eventArray;
 };
 #endif

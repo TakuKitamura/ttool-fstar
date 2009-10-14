@@ -38,26 +38,43 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <EventIF.h>
+#include <NotifyIF.h>
+#include <ERB.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+EventIF::EventIF(NotifyIF* iAncestorNode, bool iNegated):_ancestorNode(iAncestorNode), _negated(iNegated), _nbOfNotific(0), _aborted(false){
+	iAncestorNode->registerEvent(this);
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+void EventIF::setEventID(unsigned int iID){
+	_ID=iID;
+	//std::cout << "setEventID: " << _ID << "\n";
+}
+
+bool EventIF::notified(){
+	//std::cout << _ID << " notified?: " << (_nbOfNotific!=0) << "\n";
+	return _nbOfNotific!=0;
+}
+
+unsigned int EventIF::getNbOfNotific(){
+	//std::cout << "Number of notifications: " << _nbOfNotific << "\n";
+	return _nbOfNotific;
+}
+
+bool EventIF::getNegated(){
+	return _negated;
+}
+
+void EventIF::reset(){
+	//std::cout << "Reset leaf\n";
+	_nbOfNotific=0;
+	_aborted=false;
+	//std::cout << "End Reset leaf\n";
+}
+
+bool EventIF::getAborted(){
+	return _aborted;
+}
+
+EventIF::~EventIF(){
+}

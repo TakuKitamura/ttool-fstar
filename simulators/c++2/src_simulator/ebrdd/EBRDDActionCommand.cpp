@@ -38,26 +38,21 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <EBRDDActionCommand.h>
+#include <EBRDD.h>
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+EBRDDActionCommand::EBRDDActionCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc): EBRDDCommand(iID, iEBRDD),_ebrddFunc(iEBRDDFunc){
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+EBRDDCommand* EBRDDActionCommand::prepare(){
+	(_ebrdd->*_ebrddFunc)();
+	if (_nextCommand[0]!=0) return _nextCommand[0]->prepare();
+	return 0;
+}
+
+
+std::string EBRDDActionCommand::toString() const{
+	std::ostringstream outp;	
+	outp << "EBRDDAction in " << EBRDDCommand::toString();
+	return outp.str();
+}

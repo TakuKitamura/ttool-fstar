@@ -38,26 +38,26 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#ifndef EBRDDStopCommandH
+#define EBRDDStopCommandH
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
+#include <definitions.h>
+#include <EBRDDCommand.h>
 
-///Encapsulates events associated with transactions
-class TransactionListener{
+
+///This class executes a C++ statement (probably a variable assignment or modification) defined in the scope of a TML action state.
+/**The command itself is located in the corresponding TMLTask::executeStatement() method as it may access local task variables.*/
+class EBRDDStopCommand:public EBRDDCommand{
 public:
-	///Gets called when a transaction is executed
-	/**
-	\param  iTrans Pointer to the transaction
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
+	///Constructor
+    	/**
+      	\param iID ID of the command
+      	\param iTask Pointer to the task the command belongs to
+    	*/
+	EBRDDStopCommand(unsigned int iID, EBRDD* iTask);
+	EBRDDCommand* prepare();
+	std::string toString() const;
 protected:
 };
+
 #endif

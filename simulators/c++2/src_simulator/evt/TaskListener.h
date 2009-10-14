@@ -37,10 +37,11 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-
 #ifndef TaskListenerH
-#define TaksListenerH
+#define TaskListenerH
+
 #include <TransactionListener.h>
+
 #define NOTIFY_TASK_TRANS_EXECUTED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans)
 #define NOTIFY_TASK_FINISHED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans)
 #define NOTIFY_TASK_STARTED(iTrans) for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans)
