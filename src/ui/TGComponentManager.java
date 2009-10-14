@@ -222,6 +222,7 @@ public class TGComponentManager {
 	public static final int EBRDD_SEQUENCE = 1306;
 	public static final int EBRDD_ESO = 1307;
 	public static final int EBRDD_ERB = 1308;
+	public static final int EBRDD_VARIABLE_DECLARATION = 1309;
     
     public static final int TREQ_REQUIREMENT = 900;
     public static final int TREQ_OBSERVER = 901;
@@ -445,6 +446,9 @@ public class TGComponentManager {
                 break;
 			case EBRDD_FOR_LOOP:
                 tgc = new EBRDDForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case EBRDD_VARIABLE_DECLARATION:
+                tgc = new EBRDDAttributeBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 			case EBRDD_SEQUENCE:
                 tgc = new EBRDDSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -814,6 +818,8 @@ public class TGComponentManager {
             return EBRDD_ACTION;
         } else if (tgc instanceof EBRDDForLoop) {
             return EBRDD_FOR_LOOP;
+        } else if (tgc instanceof EBRDDAttributeBox) {
+            return EBRDD_VARIABLE_DECLARATION;
         } else if (tgc instanceof EBRDDSequence) {
             return EBRDD_SEQUENCE;
         } else if (tgc instanceof EBRDDESO) {

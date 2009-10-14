@@ -219,6 +219,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int EBRDD_ESO = 280;
 	public static final int EBRDD_ERB = 281;
 	public static final int EBRDD_CONNECTOR_ERC = 282;
+	public static final int EBRDD_VARIABLE_DECLARATION = 283;
 	
     // TURTLE-OS
     public static final int TOS_TCLASS = 189;
@@ -393,7 +394,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 283;
+    public static final int NB_ACTION = 284;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -693,6 +694,7 @@ public class TGUIAction extends AbstractAction {
         actions[EBRDD_CONNECTOR_ERC] = new TAction("add-ebrdd-erc-connector", "Connect two ESO / ERB operators together", IconManager.imgic1052, IconManager.imgic1052, "Connect two ESO / ERB operators together", "Connect two ESO / ERB operators of the currently opened Event-Based Requirement Description Diagram", 0);
         actions[EBRDD_ESO] = new TAction("add-ebrdd-eso", "Add ESO", IconManager.imgic1054, IconManager.imgic1054, "Event Sequencing Operator", "Add an Event Sequencing Operator to the currently opened Event-Based Requirement Description Diagram", 0);
 		actions[EBRDD_ERB] = new TAction("add-ebrdd-erb", "Add ERB", IconManager.imgic1056, IconManager.imgic1056, "Event Reaction Block", "Add an Event Reaction Block to the currently opened Event-Based Requirement Description Diagram", 0);
+		actions[EBRDD_VARIABLE_DECLARATION] = new TAction("add-ebrdd-var-dec", "Add Variable Declaration", IconManager.imgic1060, IconManager.imgic1060, "Add Variable Declaration", "Add a variable declaration block to the currently opened Event-Based Requirement Description Diagram", 0);
 		
 		actions[TMLARCHI_EDIT] = new TAction("edit-tmlarchi-diagram", "Edit DIPLODOCUS architecture diagram", IconManager.imgic100, IconManager.imgic101, "Edit DIPLODOCUS architecture diagram", "Make it possible to edit the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_LINK] = new TAction("add-tmlarchi-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened DIPLODOCUS architecture diagram", 0);

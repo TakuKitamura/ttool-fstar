@@ -149,7 +149,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         c1.anchor = GridBagConstraints.CENTER;
         panel1.add(new JLabel("access"), c1);
         panel1.add(new JLabel("identifier"), c1);
-        if (attrib.equals("Attribute")) {
+        if (attrib.equals("Attribute") || attrib.equals("Variable")) {
             panel1.add(new JLabel(" "), c1);
             panel1.add(new JLabel("initial value"), c1);
         }
@@ -172,7 +172,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         initialValue.setColumns(5);
         initialValue.setEditable(true);
         
-        if (attrib.equals("Attribute")) {
+        if (attrib.equals("Attribute") || attrib.equals("Variable")) {
             panel1.add(new JLabel(" = "), c1);
             panel1.add(initialValue, c1);
         }

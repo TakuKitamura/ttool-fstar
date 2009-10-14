@@ -52,18 +52,45 @@ import myutil.*;
 public class EBRDD extends ArrayList<EBRDDComponent> {
     private String name;
     protected EBRDDStart ads;
+	protected ArrayList<EBRDDAttribute> variables;
     
     public EBRDD(EBRDDStart _ads, String _name) {
 		name = _name;
         ads = _ads;
+		variables = new ArrayList<EBRDDAttribute>();
         add(ads);
     }
     
     public EBRDD(String _name) {
 		name = _name;
         ads = new EBRDDStart("Start", null);
+		variables = new ArrayList<EBRDDAttribute>();
         add(ads);
     }
+	
+	// Returns false if another attribute with the same name has already been defined
+	// Returns true otherwise.
+	public boolean addAttribute(EBRDDAttribute _attr) {
+		for(EBRDDAttribute attr: variables) {
+			if (attr.getName().equals(_attr.getName())) {
+				return false;
+			}
+		}
+		variables.add(_attr);
+		return true;
+	}
+	
+	public int getNbOfAttributes() {
+		return variables.size();
+	}
+	
+	public EBRDDAttribute getAttributeByIndex(int _index) {
+		if ((_index < variables.size()) && (_index > -1)) {
+			return variables.get(_index);
+		}
+		
+		return null;
+	}
 	
 	public String getName() {
 		return name;
@@ -121,7 +148,11 @@ public class EBRDD extends ArrayList<EBRDDComponent> {
     }
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer("EBRDD=");
+		StringBuffer sb = new StringBuffer("EBRDD=\nvariables:\n");
+		for(EBRDDAttribute attr: variables) {
+			sb.append(attr.toString() + "\n");
+		}
+		sb.append("Activity diagram:\n");
 		
 		if (ads != null) {
 			exploreString(ads, sb, 0);

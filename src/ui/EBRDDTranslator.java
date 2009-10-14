@@ -51,6 +51,7 @@ import java.util.*;
 import myutil.*;
 import ui.ebrdd.*;
 import req.ebrdd.*;
+import tmltranslator.*;
 
 
 public class EBRDDTranslator {
@@ -137,8 +138,12 @@ public class EBRDDTranslator {
 		req.ebrdd.EBRDDSequence seq;
 		req.ebrdd.EBRDDStart start;
 		req.ebrdd.EBRDDStop stop;
+		req.ebrdd.EBRDDAttribute attr;
 		ESO eso;
 		ERB erb;
+		TAttribute ta;
+		Vector vv;
+		TMLType tt;
 		int i;
 		
 		int cpt=0;
@@ -152,8 +157,31 @@ public class EBRDDTranslator {
 			cpt++;
 			tgc = (TGComponent)(iterator.next());
 			
+			// Variables
+			if (tgc instanceof EBRDDAttributeBox) {
+				vv = ((EBRDDAttributeBox)tgc).getAttributeList();
+				for(int l=0; l<vv.size(); l++) {
+					ta = (TAttribute)(vv.get(l));
+					if (ta.getType() == TAttribute.NATURAL) {
+						tt = new TMLType(TMLType.NATURAL);
+					} else if (ta.getType() == TAttribute.BOOLEAN) {
+						tt = new TMLType(TMLType.BOOLEAN);
+					} else {
+						tt = new TMLType(TMLType.OTHER);
+					}
+					attr = new EBRDDAttribute(ta.getId(), ta.getInitialValue(), tt);
+					System.out.println("Adding attribute :" + ta.getId());
+					if (!ebrdd.addAttribute(attr)) {
+						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Duplicate declaration for variable " + ta.getId());
+						ce.setTDiagramPanel(ebrddp);
+						ce.setTGComponent(tgc);
+						checkingErrors.add(ce);
+					}
+				}
+				
+			
 			// Action
-			if (tgc instanceof ui.ebrdd.EBRDDActionState) {
+			} else if (tgc instanceof ui.ebrdd.EBRDDActionState) {
 				acst = new req.ebrdd.EBRDDActionState("Action state"+cpt, tgc);
 				acst.setAction(((ui.ebrdd.EBRDDActionState)tgc).getAction());
 				listE.addCor(acst, tgc);

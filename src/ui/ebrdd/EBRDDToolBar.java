@@ -73,6 +73,7 @@ public class EBRDDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.EBRDD_CONNECTOR_ERC].setEnabled(b);
 		mgui.actions[TGUIAction.EBRDD_ESO].setEnabled(b);
 		mgui.actions[TGUIAction.EBRDD_ERB].setEnabled(b);
+		mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
@@ -89,6 +90,11 @@ public class EBRDDToolBar extends TToolBar {
         this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.EBRDD_VARIABLE_DECLARATION]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();
