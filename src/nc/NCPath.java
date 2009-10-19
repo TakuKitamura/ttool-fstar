@@ -52,9 +52,11 @@ public class NCPath extends NCElement {
 	public NCEquipment origin;
 	public NCEquipment destination;
 	public ArrayList<NCSwitch> switches;
+	public ArrayList<NCLink> links;
 
 	public NCPath() {
 		switches = new ArrayList<NCSwitch>();
+		links = new ArrayList<NCLink>();
 	}
 	
 	public Object clone() {
@@ -65,6 +67,18 @@ public class NCPath extends NCElement {
 		for(NCSwitch sw: switches) {
 			path.switches.add(sw);
 		}
+		for(NCLink link: links) {
+			path.links.add(link);
+		}
 		return path;
+	}
+	
+	public String getLinksString() {
+		String tmp = "";
+		//System.out.println("switch size:" + switches.size() + " link: " + links.size());
+		for(NCLink link: links) {
+			tmp += link.getName() + " ";
+		}
+		return tmp;
 	}
 }

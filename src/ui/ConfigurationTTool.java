@@ -291,6 +291,10 @@ public class ConfigurationTTool {
 		// VCD
 		System.out.println("VCDPath: " + VCDPath);
 		
+		// NC
+		System.out.println("NCDirectory: " + NCDirectory);
+		
+		// UPPAAL
         System.out.println("UPPAAL: " + UPPAALCodeDirectory);
 		System.out.println("UPPAALVerifierPATH: " + UPPAALVerifierPath);
 		System.out.println("UPPAALVerifierHOST: " + UPPAALVerifierHost);
@@ -417,6 +421,9 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("JavaExecutePath");
             if (nl.getLength() > 0)
                 JavaExecutePath(nl);
+			nl = doc.getElementsByTagName("NCDirectory");
+            if (nl.getLength() > 0)
+                NCDirectory(nl);
             nl = doc.getElementsByTagName("SystemCCodeDirectory");
             if (nl.getLength() > 0)
                 SystemCCodeDirectory(nl);
@@ -779,6 +786,15 @@ public class ConfigurationTTool {
             if (JavaExecutePath.startsWith("[")) {
                 JavaExecutePath = "\"" + JavaExecutePath.substring(1, JavaExecutePath.length()) + "\"";
             }
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	 private static void NCDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            NCDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

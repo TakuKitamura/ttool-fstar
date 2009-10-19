@@ -88,11 +88,24 @@ public class NCLink extends NCElement  {
 	
 	public Object clone() {
 		NCLink link = new NCLink();
+		link.setName(getName());
 		NCCapacityUnit unit = new NCCapacityUnit();
 		unit.setUnit(getCapacityUnit().getStringUnit());
 		link.setCapacity(capacity);
 		link.setCapacityUnit(unit);
 		link.setLinkedElement1(le1);
+		link.setLinkedElement2(le2);
+		return link;
+	}
+	
+	public NCLink cloneReversed() {
+		NCLink link = new NCLink();
+		link.setName(getName() + "_r");
+		NCCapacityUnit unit = new NCCapacityUnit();
+		unit.setUnit(getCapacityUnit().getStringUnit());
+		link.setCapacity(capacity);
+		link.setCapacityUnit(unit);
+		link.setLinkedElement2(le1);
 		link.setLinkedElement1(le2);
 		return link;
 	}

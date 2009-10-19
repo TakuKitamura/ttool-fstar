@@ -94,6 +94,18 @@ public class NCTraffic extends NCElement  {
 		}
 	}
 	
+	public int getMaxLengthInBytes() {
+		return maxPacketSize;
+	}
+	
+	public static String getISAEStringPeriodicType(int periodicType) {
+		if (periodicType == 0) {
+			return "CC"; // periodic
+		} else {
+			return "AL"; // aperiodic
+		}
+	}
+	
 	public int getDeadline() {
         return deadline;
     }

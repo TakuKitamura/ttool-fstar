@@ -4483,9 +4483,19 @@ public class GTURTLEModeling {
 			return false;
 		} else {
 			// Generate XML file
-			System.out.println("Saving in nc.xml file");
 			try {
-				FileUtils.saveFile("nc.xml", ncs.toXML());
+				String fileName = "network.xml";
+				if (ConfigurationTTool.NCDirectory != null) {
+					fileName = ConfigurationTTool.NCDirectory + fileName;
+				}
+				System.out.println("Saving in network structure in file: " + fileName);
+				FileUtils.saveFile(fileName, ncs.toISAENetworkXML());
+				fileName = "traffics.xml";
+				if (ConfigurationTTool.NCDirectory != null) {
+					fileName = ConfigurationTTool.NCDirectory + fileName;
+				}
+				System.out.println("Saving in traffics in file: " + fileName);
+				FileUtils.saveFile(fileName, ncs.toISAETrafficsXML());
 				System.out.println("Save done");
 			} catch (FileException fe) {
 				System.out.println("Could not save in file:" + fe.getMessage());

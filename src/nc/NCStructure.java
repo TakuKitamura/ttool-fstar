@@ -110,6 +110,24 @@ public class NCStructure extends NCElement {
 		return sb.toString();
 	}
 	
+	public String toISAENetworkXML() {
+		StringBuffer sb = new StringBuffer("");
+		sb.append(getXMLHeader());
+		sb.append("<File Title=\"Network Definition\">\n");
+		sb.append(getISAEXMLSwitches());
+		sb.append("</File>\n");
+		return sb.toString();
+	}
+	
+	public String toISAETrafficsXML() {
+		StringBuffer sb = new StringBuffer("");
+		sb.append(getXMLHeader());
+		sb.append("<File Title=\"Traffic Definition\">\n");
+		sb.append(getISAEXMLTraffics());
+		sb.append("</File>\n");
+		return sb.toString();
+	}
+	
 	private String getXMLHeader() {
 		return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n";
 	}
@@ -141,6 +159,20 @@ public class NCStructure extends NCElement {
 		return tmp;
 	}
 	
+	private String getISAEXMLSwitches() {
+		String tmp = "";
+		for(NCSwitch sw: switches) {
+			tmp += "<Switch>\n";
+			tmp += "<Name> " + sw.getName() + " </Name>\n";
+			tmp += "<SWTechnique> " + NCSwitch.getStringSwitchingTechnique(sw.getSwitchingTechnique()) + "</SWTechnique>\n";
+			tmp += "<Policy> " + NCSwitch.getStringSchedulingPolicy(sw.getSchedulingPolicy()) + "</Policy>\n";
+			tmp += "<Capacity> " + sw.getCapacity() + " </Capacity>\n";
+			tmp += "<TechLatency> " + sw.getTechnicalLatency() + " </TechLatency>\n";
+			tmp += "</Switch>\n";
+		}
+		return tmp;
+	}
+	
 	private String getXMLTraffics() {
 		String tmp = "";
 		for(NCTraffic tr: traffics) {
@@ -159,6 +191,37 @@ public class NCStructure extends NCElement {
 			tmp += "\" maxPacketSize=\"" + tr.getMaxPacketSize();
 			tmp += "\" priority=\"" + tr.getPriority();
 			tmp += "\" />\n";
+		}
+		return tmp;
+	}
+	
+	private String getISAEXMLTraffics() {
+		String tmp = "";
+		String info0, info1;
+		for(NCTraffic tr: traffics) {
+			tmp += "<Message>\n";
+			tmp += "<Name> " + tr.getName() + " </Name>\n";
+			tmp += "<Type> " + NCTraffic.getISAEStringPeriodicType(tr.getPeriodicType()) + "</Type>\n";
+			tmp += "<Length> " + tr.getMaxLengthInBytes() + " </Length>\n";
+			if (tr.getPeriodicType() == 0) {
+				info0 = "" + tr.getDeadline();
+				info1 = "";
+			} else {
+				info0 = "";
+				info1 = "" + tr.getDeadline();
+			}
+			tmp += "<Period> " + info0 + " </Period>\n";
+			tmp += "<InterArrivals> " + info0 + " </InterArrivals>\n";
+			tmp += "<Deadline> " +  tr.getDeadline() + " </Deadline>\n";
+			tmp += "<Priority> " +  tr.getPriority() + " </Priority>\n";
+			tmp += "<Source> " +  getTrafficSource(tr).getName() + " </Source>\n";
+			tmp += "<Destination> " +  getTrafficDestinations(tr) + " </Destination>\n";
+			for(NCPath path: paths) {
+				if (path.traffic == tr) {
+					tmp += "<Path> " + path.getLinksString() + " </Path>\n";
+				}
+			}
+			tmp += "</Message>\n";
 		}
 		return tmp;
 	}
@@ -243,5 +306,36 @@ public class NCStructure extends NCElement {
 		
 		return null;
 	}
+	
+	public NCLink getLinkWith(NCLinkedElement _le1, NCLinkedElement _le2) {
+		for(NCLink link: links) {
+			if ((link.le1 == _le1) && (link.le2 == _le2)) {
+				return link;
+			}
+		}
+		
+		return null;
+	}
+	
+	public NCEquipment getTrafficSource(NCTraffic _traffic) {
+		for(NCPath path: paths) {
+			if (path.traffic == _traffic) {
+				return path.origin;
+			}
+		}
+		return null;
+	}
+	
+	public String getTrafficDestinations(NCTraffic _traffic) {
+		String tmp = "";
+		for(NCPath path: paths) {
+			if (path.traffic == _traffic) {
+				tmp += path.destination.getName() + " ";
+			}
+		}
+		return tmp;
+	}
+	
+	
 	
 }

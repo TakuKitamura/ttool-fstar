@@ -89,7 +89,7 @@ public class GNCModeling  {
 			manageParameters();
 		}
 		
-		System.out.println("NC XML:\n" + ncs.toXML());
+		//System.out.println("NC XML:\n" + ncs.toXML());
 		
         return ncs;
     }
@@ -281,6 +281,7 @@ public class GNCModeling  {
 					checkingErrors.add(ce);
 				} else {
 					ncs.links.add(lk);
+					ncs.links.add(lk.cloneReversed());
 				}
 				
 				if (!nccn.hasCapacity()) {
@@ -385,8 +386,10 @@ public class GNCModeling  {
 	
 	public void exploreTree(TreeCell tree, ArrayList<String> list, NCEquipment origin, NCTraffic traffic) {
 		NCSwitchNode sw;
+		NCSwitch ncsw;
 		NCLinkedElement ncle;
 		CheckingError ce;
+		NCLink ncl;
 		
 		if (tree.isLeaf()) {
 			//System.out.println("Found path");
@@ -402,11 +405,37 @@ public class GNCModeling  {
 				return;
 			}
 			path.destination = (NCEquipment)ncle;
-			
+			ncsw = null;
+			System.out.println("nb of switches:" + list.size());
 			for(String s: list) {
 				ncle = ncs.getNCLinkedElementByName(s);
 				if (ncle instanceof NCSwitch) {
-					path.switches.add((NCSwitch)ncle);
+					if (ncsw == null) {
+						ncl = ncs.getLinkWith(path.origin, (NCLinkedElement)ncle);
+						if (ncl != null) {
+						path.links.add(ncl);
+						} else {
+							ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown link on path origin and switch:" + ncle.getName());
+							ce.setTDiagramPanel(ncdp);
+							ce.setTGComponent(null);
+							checkingErrors.add(ce);
+							return;
+						}
+					} else {
+						ncl = ncs.getLinkWith((NCLinkedElement)ncsw, (NCLinkedElement)ncle);
+						if (ncl != null) {
+							path.links.add(ncl);
+						} else {
+							ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown link between switches " + ((NCLinkedElement)ncsw).getName() + " and " + ((NCLinkedElement)ncle).getName());
+							ce.setTDiagramPanel(ncdp);
+							ce.setTGComponent(null);
+							checkingErrors.add(ce);
+							return;
+						}
+					}
+					
+					ncsw = (NCSwitch)ncle;
+					path.switches.add(ncsw);
 				} else {
 					ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown switch named " + s + " needed to generate path");
 					ce.setTDiagramPanel(ncdp);
@@ -415,10 +444,22 @@ public class GNCModeling  {
 					return;
 				}
 			}
+			ncl = ncs.getLinkWith((NCLinkedElement)ncsw, path.destination);
+			if (ncl != null) {
+				path.links.add(ncl);
+			} else {
+					ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown link between last switch and destination");
+					ce.setTDiagramPanel(ncdp);
+					ce.setTGComponent(null);
+					checkingErrors.add(ce);
+					return;
+				}
 			//System.out.println("Adding path");
 			path.setName("path" + PATH_INDEX);
 			PATH_INDEX++;
 			ncs.paths.add(path);
+			System.out.println("nb of switches:" + path.switches.size());
+			System.out.println("nb of links:" + path.links.size());
 			
 			// not a leaf
 		} else {

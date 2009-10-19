@@ -49,14 +49,23 @@ package nc;
 
 public class NCSwitch extends NCLinkedElement  {
 	
-	public static String FCFS = "FCFS";
-	public static String STATIC = "Static priority";
-	public static String WFQ = "Weight Fair Queuing";
+	// Scheduling policies
+	public static String FCFS = "FCFS"; // FIFO
+	public static String SP = "SP"; // Static priority
+	public static String WFQ = "WFQ"; // Weight Fair Queuing
 	
-	public static String[] SchedulingPolicies = {FCFS, STATIC, WFQ};
+	public static String[] SchedulingPolicies = {FCFS, SP, WFQ};
+	
+	// Switching techniques
+	public static String SF = "SF"; // Store and Forward
+	public static String CT = "CT"; // Cut Through
+	
+	public static String[] SwitchingTechniques = {SF, CT};
 	
 	private int schedulingPolicy = 0;
+	private int switchingTechnique = 0;
 	private int capacity = 0;
+	private int technicalLatency = 0;
 	private NCCapacityUnit unitCapacity = new NCCapacityUnit(); // Default value: Mbs 
 	
 	public NCSwitch() {
@@ -84,12 +93,42 @@ public class NCSwitch extends NCLinkedElement  {
 		return -1;
 	}
 	
+	public void setSwitchingTechnique(int _st) {
+		switchingTechnique = _st;
+	}
+	
+	public int getSwitchingTechnique() {
+		return switchingTechnique;
+	}
+	
+	public static String getStringSwitchingTechnique(int _st) {
+			return SwitchingTechniques[_st];
+	}
+	
+	public static int getFromStringSwitchingTechnique(String _st) {
+		for(int i=0; i<SwitchingTechniques.length; i++) {
+			if (SwitchingTechniques[i].compareTo(_st) == 0) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
 	public void setCapacity(int _capacity) {
 		capacity = _capacity;
 	}
 	
 	public int getCapacity() {
 		return capacity;
+	}
+	
+	public void setTechnicalLatency(int _technicalLatency) {
+		technicalLatency = _technicalLatency;
+	}
+	
+	public int getTechnicalLatency() {
+		return technicalLatency;
 	}
 	
 	public void setCapacityUnit(NCCapacityUnit _unit) {
