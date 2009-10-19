@@ -156,6 +156,9 @@ stdrelease:
 # LOTOS
 	mkdir -p $(TTOOL_TARGET)/lotos
 	cp $(TTOOL_DOC)/README_lotos $(TTOOL_TARGET)/lotos
+#NC
+	mkdir -p $(TTOOL_TARGET)/nc
+	cp $(TTOOL_DOC)/README_nc $(TTOOL_TARGET)/nc
 #TML
 	mkdir -p $(TTOOL_TARGET)/tmlcode
 	cp $(TTOOL_DOC)/README_tml $(TTOOL_TARGET)/tmlcode

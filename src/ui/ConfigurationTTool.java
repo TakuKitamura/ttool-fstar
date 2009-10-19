@@ -93,7 +93,8 @@ public class ConfigurationTTool {
     public static String SimuJavaCodeDirectory = "";
     public static String TToolSimuClassPath = "";
     public static String JavaExecutePath = "";
-    public static String JavaHeader = "";	
+    public static String JavaHeader = "";
+    public static String NCDirectory = "";	
     public static String SystemCCodeDirectory = "";
 	public static String TMLCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
