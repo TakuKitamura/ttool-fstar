@@ -5,4 +5,7 @@ public class strwrap{
 	strwrap(String iStr){
 		str=iStr;
 	}
+	strwrap(){
+		str="";
+	}
 }

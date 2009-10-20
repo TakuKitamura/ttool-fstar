@@ -142,6 +142,9 @@ public class TML2MappingSystemC {
 			//header += "#include <" + mst.getReference() + ".h>" + CR;
 			header += "#include <" + mst.getName() + ".h>" + CR;
 		}
+		for(EBRDD ebrdd: ebrdds){
+			header += "#include <" + ebrdd.getName() + ".h>" + CR;
+		}
 		header += CR;
 	}
 	
@@ -255,7 +258,7 @@ public class TML2MappingSystemC {
 					param= "";
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\",";
-				strwrap buses1=new strwrap(""), buses2=new strwrap(""), slaves1=new strwrap(""), slaves2=new strwrap("");
+				strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
 				int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getOriginTask()).getName(), buses1, slaves1, true);
 				if (hopNum==-1){
 					buses2.str=buses1.str;
@@ -372,6 +375,16 @@ public class TML2MappingSystemC {
 			declaration += ")" + SCCR;
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
+		declaration += CR;
+
+		//Declaration of EBRDDs
+		declaration += "//Declaration of EBRDDs" + CR;
+		for(EBRDD ebrdd: ebrdds){
+			declaration += ebrdd.getName() + "* ebrdd__" + ebrdd.getName() + " = new " + ebrdd.getName() + "(0, \""+ ebrdd.getName() + "\");\n";
+			declaration += "addEBRDD(ebrdd__"+ ebrdd.getName() +")"+ SCCR;
+		}
+
+
 		declaration += "}\n};\n\n";
 		declaration +="#include <main.h>\n";
   	}
@@ -495,7 +508,7 @@ public class TML2MappingSystemC {
 
 	private void generateEBRDDs(){
 		for(EBRDD ebrdd: ebrdds){
-			SystemCEBRDD newEbrdd = new SystemCEBRDD(ebrdd);
+			SystemCEBRDD newEbrdd = new SystemCEBRDD(ebrdd, tmlmodeling, tmlmapping);
 			newEbrdd.generateSystemC(debug);
 			systemCebrdds.add(newEbrdd);
 		}

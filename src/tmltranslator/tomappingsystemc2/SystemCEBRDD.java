@@ -55,9 +55,13 @@ import req.ebrdd.*;
 public class SystemCEBRDD {
 	private EBRDD ebrdd;
  	private String reference, cppcode, hcode, initCommand, functions, functionSig, chaining, firstCommand, idsMergedCmds;
-	private String ETclasses, ETdeclare, ETInit;
+	private String ETclasses;
+	//, ETdeclare, ETInit;
 	private boolean debug;
+	TMLModeling tmlmodeling;
+	TMLMapping tmlmapping;
 	
+	private final static String [] events = {"transexecuted", "cmdentered", "cmdstarted", "cmdexecuted", "cmdfinished", "taskstarted", "taskfinished", "readtrans", "writetrans", "simstarted", "simfinished"};
 	private final static String DOTH = ".h";
 	private final static String DOTCPP = ".cpp";
 	private final static String CR = "\n";
@@ -68,7 +72,7 @@ public class SystemCEBRDD {
 	private final static String EF = "}";
 	
 	
-	public SystemCEBRDD(EBRDD _ebrdd) {
+	public SystemCEBRDD(EBRDD _ebrdd, TMLModeling _tmlmodeling, TMLMapping _tmlmapping) {
         	ebrdd = _ebrdd;
         	reference = ebrdd.getName();
 		cppcode = "";
@@ -80,8 +84,8 @@ public class SystemCEBRDD {
 		functionSig="";
 		idsMergedCmds="";
 		ETclasses="";
-		ETdeclare="";
-		ETInit="";
+		tmlmodeling=_tmlmodeling;
+		tmlmapping=_tmlmapping;
     	}
 	
 	public void saveInFiles(String path) throws FileException {	
@@ -305,15 +309,24 @@ public class SystemCEBRDD {
             		}
 		} else if(currElem instanceof EBRDDERC){
 			cmdName= "_erc" + currElem.getID();
-			ETdeclare="";
-			ETInit="";
+			strwrap ETDeclare=new strwrap(), ETInit=new strwrap();
+			LinkedList<String> erbFuncs = new LinkedList<String>();
 			hcode+= cmdName + "_class " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+ currElem.getID() + ",this)"+CR;
+			//ERC declaration!!!
+			buildET(((EBRDDERC)currElem).getRoot(), "this", 0, ETDeclare, ETInit, erbFuncs);
+			initCommand+= ", " + cmdName + "("+ currElem.getID() + ", this";
+			for (String erbFunc : erbFuncs){
+				initCommand+= ", (EBRDDFuncPointer)&" + reference + "::" + erbFunc;
+			}
+			initCommand+=")\n";
 			nextCommand= cmdName + ".setNextCommand(array(1,(EBRDDCommand*)" + makeCommands(currElem.getNextElement(0),retElement,null,null) + "))"+ SCCR;
-			buildET(((EBRDDERC)currElem).getRoot(), "this", 0);
-			ETclasses+="class " + cmdName + "_class: public ERC{\nprivate:\n" + ETdeclare;	
-			ETclasses+="public:\n" + cmdName + "_class(unsigned int iID, EBRDD* iEBRDD): ERC(iID, iEBRDD)\n";
-			ETclasses+=ETInit + "{}\n};\n\n";
+			ETclasses+="class " + cmdName + "_class: public ERC{\nprivate:\n" + ETDeclare.str;
+			ETclasses+="public:\n" + cmdName + "_class(unsigned int iID, EBRDD* iEBRDD";
+			for (String erbFunc : erbFuncs){
+			 	ETclasses+= ", EBRDDFuncPointer " + erbFunc;
+			} 
+			ETclasses+= "): ERC(iID, iEBRDD)\n";
+			ETclasses+=ETInit.str + "{}\n};\n\n";
 		
 		} else if (currElem instanceof EBRDDChoice){
 			int returnIndex=0;
@@ -421,7 +434,7 @@ public class SystemCEBRDD {
 		hcode += "};" + CR + "#endif" + CR;
 	}
 
-	private int buildET(ERCElement currElem, String ancestor, int newID){
+	private int buildET(ERCElement currElem, String ancestor, int newID, strwrap ETDeclare, strwrap ETInit, LinkedList<String> erbFuncs){
 		if (currElem==null) return newID;
 		String negated = (currElem.isNegated())? "true":"false";
 		newID++;
@@ -433,59 +446,131 @@ public class SystemCEBRDD {
 			case 0://Conjunction
 				//(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent)
 				esoName= "_esoConj" + newID;
-				ETdeclare+= "ESOConjunction " + esoName + ";\n";
-				ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ")\n";
+				ETDeclare.str+= "ESOConjunction " + esoName + ";\n";
+				ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ")\n";
 			break;
 			case 1: //Disjunction
 				//ESODisjunction(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut);
 				esoName= "_esoDisj" + newID;
-				ETdeclare+= "ESODisjunction " + esoName + ";\n";
-				ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
+				ETDeclare.str+= "ESODisjunction " + esoName + ";\n";
+				ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
 			break;
 			case 2: //Sequence
 				//ESOSequence(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut);
 				esoName= "_esoSeq" + newID;
-				ETdeclare+= "ESOSequence " + esoName + ";\n";
-				ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
+				ETDeclare.str+= "ESOSequence " + esoName + ";\n";
+				ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
 			break;
 			case 3: //Strict sequence
 			case 4: //Simultaneous
 				//ESOSSequence(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut);
 				esoName= "_esoSSeq" + newID;
-				ETdeclare+= "ESOSequence " + esoName + ";\n";
-				ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
+				ETDeclare.str+= "ESOSequence " + esoName + ";\n";
+				ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
 			break;
 			case 5: //At least/at most
 				if (currESO.getN()==0){
 					//ESOAtMost(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN);
 					esoName= "_esoAtMost" + newID;
-					ETdeclare+= "ESOAtMost " + esoName + ";\n";
-					ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ","+ currESO.getM() + ")\n";
+					ETDeclare.str+= "ESOAtMost " + esoName + ";\n";
+					ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ","+ currESO.getM() + ")\n";
 				}else{
 					//ESOAtLeast(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN);
 					esoName= "_esoAtLeast" + newID;
-					ETdeclare+= "ESOAtLeast " + esoName + ";\n";
-					ETInit+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ","+ currESO.getN() + ")\n";	
+					ETDeclare.str+= "ESOAtLeast " + esoName + ";\n";
+					ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + "," + oncePerEvent + ","+ currESO.getN() + ")\n";	
 				}
 				break;
 			default:
 				//can't handle element
 			}
 			for (int i=0; i<currESO.getNbOfSons(); i++){
-				newID = buildET(currESO.getSon(i), "&" + esoName, newID);
+				newID = buildET(currESO.getSon(i), "&" + esoName, newID, ETDeclare, ETInit, erbFuncs);
 			} 
 		}else if(currElem instanceof ERB){
 			//getEvent, getCondition, getAction
 			//ERB(NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iSourceClass, unsigned int iSourceID, unsigned int iEvtID);
-			String erbName= "_erb" + newID;
-			ETdeclare+= "ERB " + erbName + ";\n";
-			ETInit+= "," + erbName + "(" + ancestor + ","+ negated + ",\"" + erbName + "\"," + "0,0,0)\n";
+			//String message="myEvent(source1, source2, source3)";
+			ERB currERB = (ERB)currElem;
+			String[] tokens = currERB.getEvent().split("[ \\(\\),]+");
+			System.out.print("Tokens: ");
+			for (int i=0; i< tokens.length; i++){
+				System.out.print(tokens[i]+ ", ");
+			}
+			System.out.println("");
+			if (tokens.length>1){
+				//eventID, sourceClass, arrayOfSources, numberOfSources
+				String erbName= "_erb" + newID;
+				ETDeclare.str+= "ERB " + erbName + ";\n";
+				idtypewrap source = getIDType(tokens[1]);
+				ETInit.str+= ", " + erbName + "(this, " + ancestor + ", "+ negated + ", \"" + erbName + "\", ";
+				ETInit.str += getEventCode(tokens[0]) + ", " + source.type + ", array(" + (tokens.length-1) + ", (unsigned int)" + source.id;
+				int paramIndex=2;
+				while(paramIndex<tokens.length){
+					source = getIDType(tokens[paramIndex]);
+					ETInit.str+= ", (unsigned int)" + source.id;
+					paramIndex++;
+				}
+				ETInit.str += "), " + (tokens.length-1) + ", ";
+				if ((currERB.getCondition().isEmpty() || currERB.getCondition().toLowerCase().equals("true")) && currERB.getAction().isEmpty()){
+					ETInit.str += "0)\n";
+				}else{
+					if (ancestor.charAt(0)=='&') ancestor=ancestor.substring(1);
+					 ETInit.str += ancestor + erbName + "_func)\n";
+					//ERBFunc.str += ", EBRDDFuncPointer " + ancestor + erbName + "_func";
+					erbFuncs.add(ancestor + erbName + "_func");
+					functionSig += "int " + ancestor + erbName + "_func()" + SCCR;
+					functions+= "int " + reference + "::" + ancestor + erbName + "_func(){\nif(" + currERB.getCondition() + "){\n" + currERB.getAction();
+					functions+= "\nreturn true;\n}else{\nreturn false;\n}\n}\n\n";
+				}
+			} 
 		}else{
 			//can't handle element
 		}
 		return newID;
 	}
-	
+
+
+	private idtypewrap getIDType(String nodeName){
+		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+			if (node.getName().equals(nodeName)){
+				if (node instanceof HwCPU){
+					return new idtypewrap(0, node.getID());
+				}else if (node instanceof HwBus){
+					return new idtypewrap(1, node.getID());
+				}else if (node instanceof HwBridge){
+					return new idtypewrap(3, node.getID());
+				}else if (node instanceof HwMemory){
+					return new idtypewrap(2, node.getID());
+				}else if (node instanceof HwA){
+					return new idtypewrap(6, node.getID());
+				}
+			}
+		}
+		String nodeName2 = "DIPLODOCUSDesign__" + nodeName;
+		for(TMLElement elem: tmlmodeling.getChannels()){
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+		}
+		for(TMLElement elem: tmlmodeling.getEvents()){
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+		}
+		for(TMLElement elem: tmlmodeling.getRequests()){
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+		}
+		for(TMLElement elem: tmlmapping.getMappedTasks()){
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(5, elem.getID());
+		}
+		return new idtypewrap(-1,-1);
+	}
+
+	private int getEventCode(String eventText){
+		eventText = eventText.toLowerCase();
+		for (int i= 0; i < events.length; i++){
+			if (eventText.equals(events[i])) return i;
+		}
+		return -1;
+	}
+
 	private String makeAttributesCode() {
 		String code = "";
 		for(int i=0; i< ebrdd.getNbOfAttributes(); i++){
