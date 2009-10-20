@@ -56,7 +56,7 @@ void ESOConjunction::notifyEvent(unsigned int iID){
 	}else{	
 		//all non negated events received?
 		for (unsigned int i=0; i<_nbOfEvents; i++){
-			std::cout << i << "\n";
+			//std::cout << i << "\n";
 			if (!_eventArray[i]->notified() && !_eventArray[i]->getNegated()) return;
 		}
 		NOTIFY_EVENT;
@@ -238,7 +238,7 @@ int ESOSequence::searchForNextEvt(){
 	}
 	_lastEvtToWaitFor=_nextEvtToWaitFor;
 	_nextEvtToWaitFor=aNextPos;
-	std::cout << "next event to wait for: " << _nextEvtToWaitFor << "\n";
+	//std::cout << "next event to wait for: " << _nextEvtToWaitFor << "\n";
 	return 0;
 }
 
@@ -270,7 +270,7 @@ int ESOSSequence::searchForNextEvt(){
 	}
 	_lastEvtToWaitFor=_nextEvtToWaitFor;
 	_nextEvtToWaitFor=aNextPos;
-	std::cout << "next event to wait for: " << _nextEvtToWaitFor << "\n";
+	//std::cout << "next event to wait for: " << _nextEvtToWaitFor << "\n";
 	return 0;
 }	
 

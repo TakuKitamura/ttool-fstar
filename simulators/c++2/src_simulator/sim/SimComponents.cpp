@@ -51,6 +51,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bridge.h>
 #include <TMLChoiceCommand.h>
 #include <ListenersSimCmd.h>
+#include <EBRDD.h>
 
 SimComponents::SimComponents(int iHashValue):_stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
 }
@@ -107,6 +108,10 @@ void SimComponents::addBridge(Bridge* iBridge){
 
 void SimComponents::addMem(Memory* iMem){
 	_slList.push_back(dynamic_cast<Slave*>(iMem));
+}
+
+void SimComponents::addEBRDD(EBRDD* iEBRDD){
+	_ebrddList.push_back(iEBRDD);
 }
 
 void SimComponents::streamBenchmarks(std::ostream& s) const{
@@ -247,6 +252,21 @@ TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
 	return (iEnd)? _taskList.end():_taskList.begin();
 }
 
+BusList::const_iterator SimComponents::getBusIterator(bool iEnd) const{
+	return (iEnd)? _busList.end():_busList.begin();
+}
+
+TraceableDeviceList::const_iterator SimComponents::getVCDIterator(bool iEnd) const{
+	return (iEnd)? _vcdList.end():_vcdList.begin();
+}
+
+EBRDDList::const_iterator SimComponents::getEBRDDIterator(bool iEnd) const{
+	return (iEnd)? _ebrddList.end():_ebrddList.begin();
+}
+
+SchedulingList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
+	return (iEnd)? _cpuList.end():_cpuList.begin();
+}
 /*void SimComponents::setBreakpointOnChoiceCmds(){
 	TMLChoiceCommand* aResult;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){

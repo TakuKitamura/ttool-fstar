@@ -40,18 +40,24 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <ERC.h>
 #include <EventIF.h>
+#include <EBRDD.h>
 
-ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD){
+ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD){
 }
 
 void ERC::notifyEvent(unsigned int iID){
-	std::cout << "***** Container notified *****\n";
+	std::cout << "***** Container " << _ID << " notified *****\n";
 	_eventArray[0]->deactivate();
 	NotifyIF::reset();
 	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
+	//std::cout << "end notify event\n";
 }
 void ERC::notifyAbort(unsigned int iID){
-	std::cout << "***** Container aborted *****\n";
+	std::cout << "***** Container aborted " << _ID << " *****\n";
+}
+
+EBRDD* ERC::getEBRDD(){
+	return _ebrdd;
 }
 
 //void ERC::timeTick(TMLTime iNewTime){
@@ -72,7 +78,10 @@ void ERC::notifyAbort(unsigned int iID){
 //}
 
 EBRDDCommand* ERC::prepare(){
+	_ebrdd->setCurrCommand(this);
+	//std::cout << "In prepare ERC\n";
 	_eventArray[0]->activate();
+	//std::cout << "end prepare ERC\n";
 	return this;
 }
 

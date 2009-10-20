@@ -44,28 +44,59 @@ Ludovic Apvrille, Renaud Pacalet
 template <typename T>
 class ListenerSubject{
 public:
+	///Constructor
+	ListenerSubject():_locked(false){}
 	///Registers a new listener
 	/**
 	\param  iListener Pointer to the listener
 	*/
 	void registerListener(T* iListener){
-	//void registerListener(void* iListener){
-
-		_listeners.push_back(iListener);
+		if (_locked)
+			_adding.push_back(iListener);
+		else
+			_listeners.push_back(iListener);
 	}
 	///Removes a listener from the internal list
 	/**
 	\param  iListener Pointer to the listener
 	*/
 	void removeListener(T* iListener){
-	//void removeListener(void* iListener){
-		_listeners.remove(iListener);
+		if (_locked)
+			_deletion.push_back(iListener);
+		else	
+			_listeners.remove(iListener);
 	}
+
+	///Lock list of listeners
+	void listenersLock(){
+		_locked=true;
+	}
+	
+	///Unlock and update list of listeners
+	void listenersUnLock(){
+		_locked=false;
+		for(typename std::list<T*>::iterator i=_deletion.begin(); i != _deletion.end(); ++i){
+			_listeners.remove(*i);
+		}
+		for(typename std::list<T*>::iterator i=_adding.begin(); i != _adding.end(); ++i) {
+			_listeners.push_back(*i);
+		}
+		_deletion.clear();
+		_adding.clear();
+	}
+
 	///Destructor
 	virtual ~ListenerSubject(){}
 protected:
 	///List of listeners
 	std::list<T*> _listeners;
+private:
+	///Listeners locked flag
+	bool _locked;
+	///List of listeners scheduled for deletion
+	std::list<T*> _deletion;
+	///List of listeners scheduled for adding
+	std::list<T*> _adding;
 };
 #endif
 

@@ -21,6 +21,9 @@ EXE    = $(MODULE).x
 #$(EXE): $(OBJS) $(OBJS_simulator) $(SYSTEMC)/lib-$(TARGET_ARCH)/libsystemc.a 
 #	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
 
+
+
+
 $(EXE): $(OBJS) $(OBJS_simulator) 
 	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
 
@@ -29,6 +32,11 @@ $(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
 
 $(OBJDIR)/%.o: ./%.cpp
 	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+	#mkdir -p ./lib/app
+	#mkdir -p ./lib/arch
+	#mkdir -p ./lib/ebrdd
+	#mkdir -p ./lib/evt
+	#mkdir -p ./lib/sim	
 
 clean::
 	rm -f $(OBJS_simulator) $(OBJS) *~ $(EXE) core 

@@ -49,11 +49,14 @@ public:
 	ERC(unsigned int iID, EBRDD* iEBRDD);
 	void notifyEvent(unsigned int iID);
 	void notifyAbort(unsigned int iID);
+	EBRDD* getEBRDD();
 	//void timeTick(TMLTime iNewTime);
 	//void activate();
 	//void deactivate();
 	//void reset();
 	EBRDDCommand* prepare();
 	std::string toString() const;
+protected:
+	EBRDD* _ebrdd;
 };
 #endif

@@ -46,137 +46,192 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <NotifyIF.h>
 #include <TMLChannel.h>
+#include <ERC.h>
 
-#define NOTIFY_ANCESTOR {_nbOfNotific++; _ancestorNode->notifyEvent(_ID);}
+//#define NOTIFY_ANCESTOR {_nbOfNotific++; _ancestorNode->notifyEvent(_ID);}
+
 
 SimComponents* ERB::_simComp=0;
 
-ERB::ERB(NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iSourceClass, unsigned int iSourceID, unsigned int iEvtID): EventIF(iAncestorNode, iNegated), _active(false), _name(iName), _sourceClass(iSourceClass), _sourceID(iSourceID), _evtID(iEvtID){
+ERB::ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc): EventIF(iAncestorNode, iNegated), _container(iContainer), _active(false), _name(iName), _evtID(iEvtID), _sourceClass(iSourceClass), _arrayOfSources(iArrayOfSources), _nbOfSources(iNbOfSources), _ebrddFunc(iEbrddFunc){
+}
+
+ERB::~ERB(){
+	if (_arrayOfSources!=0) delete[] _arrayOfSources;
 }
 
 void ERB::timeTick(TMLTime iNewTime){
 }
 
+void ERB::notifyAncestor(){
+	std::cout << "*** event notified: " << _name << "\n";
+	_nbOfNotific++;
+	_ancestorNode->notifyEvent(_ID);
+	if (_ebrddFunc!=0 && !(_container->getEBRDD()->*_ebrddFunc)()){
+		//Alert!!!
+		std::cout << "ALERT!\n";
+	}
+	//std::cout << "end ERB event notified: " << _name << "\n";
+}
+
 void ERB::activate(){
 	_active=true;
-	std::cout << "activate event: " << _name << "\n";
+	//std::cout << "activate event: " << _name << "\n";
 	switch (_sourceClass){
 		//CPU
 		case 0:{
-			SchedulableDevice* aCPU = _simComp->getCPUByID(_sourceID);
-			if (aCPU!=0) aCPU->registerListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				SchedulableDevice* aCPU = _simComp->getCPUByID(_arrayOfSources[i]);
+				if (aCPU!=0) aCPU->registerListener(this);
+				else std::cout << "register listener FAILED!!!!: " << _name << "\n";
+			}
 			break;
 		}
 		//Bus
 		case 1:{
-			SchedulableCommDevice* aBus = _simComp->getBusByID(_sourceID);
-			if (aBus!=0) aBus->registerListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				SchedulableCommDevice* aBus = _simComp->getBusByID(_arrayOfSources[i]);
+				if (aBus!=0) aBus->registerListener(this);
+				else std::cout << "register listener FAILED!!!!: " << _name << "\n";
+			}
 			break;
 		}
 		//Mem:
 		case 2:
 		//Bridge
 		case 3:{
-			Slave* aSlave = _simComp->getSlaveByID(_sourceID);
-			if (aSlave!=0) aSlave->registerListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				Slave* aSlave = _simComp->getSlaveByID(_arrayOfSources[i]);
+				if (aSlave!=0) aSlave->registerListener(this);
+				else std::cout << "register listener FAILED!!!!: " << _name << "\n";
+			}
 			break;
 		}
 		//Channel
 		case 4:{
-			TMLChannel* aChannel = _simComp->getChannelByID(_sourceID);
-			if (aChannel!=0) aChannel->registerListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				TMLChannel* aChannel = _simComp->getChannelByID(_arrayOfSources[i]);
+				if (aChannel!=0) aChannel->registerListener(this);
+				else std::cout << "register listener FAILED!!!!: " << _name << "\n";
+			}
 			break;
 		}
 		//Task
 		case 5:{
-			TMLTask* aTask = _simComp->getTaskByID(_sourceID);
-			if (aTask!=0) aTask->registerListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				TMLTask* aTask = _simComp->getTaskByID(_arrayOfSources[i]);
+				if (aTask!=0) aTask->registerListener(this);
+				else std::cout << "register listener FAILED!!!!: " << _name << "\n";
+			}
 			break;
 		}
 	}
+	//std::cout << "end activate event: " << _name << "\n";
 }
 
 void ERB::deactivate(){
 	_active=false;
-	std::cout << "deactivate event: " << _name << "\n";
+	//std::cout << "deactivate event: " << _name << "\n";
 	switch (_sourceClass){
 		//CPU
 		case 0:{
-			SchedulableDevice* aCPU = _simComp->getCPUByID(_sourceID);
-			if (aCPU!=0) aCPU->removeListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				SchedulableDevice* aCPU = _simComp->getCPUByID(_arrayOfSources[i]);
+				if (aCPU!=0) aCPU->removeListener(this);
+			}
 			break;
 		}
 		//Bus
 		case 1:{
-			SchedulableCommDevice* aBus = _simComp->getBusByID(_sourceID);
-			if (aBus!=0) aBus->removeListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				SchedulableCommDevice* aBus = _simComp->getBusByID(_arrayOfSources[i]);
+				if (aBus!=0) aBus->removeListener(this);
+			}
 			break;
 		}
 		//Mem:
 		case 2:
 		//Bridge
 		case 3:{
-			Slave* aSlave = _simComp->getSlaveByID(_sourceID);
-			if (aSlave!=0) aSlave->removeListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				Slave* aSlave = _simComp->getSlaveByID(_arrayOfSources[i]);
+				if (aSlave!=0) aSlave->removeListener(this);
+			}
 			break;
 		}
 		//Channel
 		case 4:{
-			TMLChannel* aChannel = _simComp->getChannelByID(_sourceID);
-			if (aChannel!=0) aChannel->removeListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				TMLChannel* aChannel = _simComp->getChannelByID(_arrayOfSources[i]);
+				if (aChannel!=0) aChannel->removeListener(this);
+			}
 			break;
 		}
 		//Task
 		case 5:{
-			TMLTask* aTask = _simComp->getTaskByID(_sourceID);
-			if (aTask!=0) aTask->removeListener(this);
+			for (unsigned int i=0; i< _nbOfSources; i++){
+				TMLTask* aTask = _simComp->getTaskByID(_arrayOfSources[i]);
+				if (aTask!=0) aTask->removeListener(this);
+			}
 			break;
 		}
+		//std::cout << "end deactivate event: " << _name << "\n";
 	}
 }
 
 void ERB::transExecuted(TMLTransaction* iTrans){
-	if (_evtID==1 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "transExecuted notified: " << _name << "\n";
+	if (_evtID==0 && _active) notifyAncestor();
 }
 
 void ERB::commandEntered(TMLCommand* iComm){
-	if (_evtID==2 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "commandEntered notified: " << _name << "\n";
+	if (_evtID==1 && _active) notifyAncestor();
 }
 
 void ERB::commandStarted(TMLCommand* iComm){
-	if (_evtID==3 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "commandStarted notified: " << _name << "\n";
+	if (_evtID==2 && _active) notifyAncestor();
 }
 	
 void ERB::commandExecuted(TMLCommand* iComm){
-	if (_evtID==4 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "commandExecuted: " << _name << "\n";
+	if (_evtID==3 && _active) notifyAncestor();
 }
 
 void ERB::commandFinished(TMLCommand* iComm){
-	if (_evtID==5 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "commandFinished notified: " << _name << "\n";
+	if (_evtID==4 && _active) notifyAncestor();
 }
 
 void ERB::taskStarted(TMLTransaction* iTrans){
-	if (_evtID==6 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "taskStarted notified: " << _name << "\n";
+	if (_evtID==5 && _active) notifyAncestor();
 }
 
 void ERB::taskFinished(TMLTransaction* iTrans){
-	if (_evtID==7 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "taskFinished notified: " << _name << "\n";
+	if (_evtID==6 && _active) notifyAncestor();
 }
 
 void ERB::readTrans(TMLTransaction* iTrans){
-	if (_evtID==8 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "readTrans notified: " << _name << "\n";
+	if (_evtID==7 && _active) notifyAncestor();
 }
 
 void ERB::writeTrans(TMLTransaction* iTrans){
-	if (_evtID==9 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "writeTrans notified: " << _name << "\n";
+	if (_evtID==8 && _active) notifyAncestor();
 }
 
 void ERB::simulationStarted(){
-	if (_evtID==10 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "simStarted notified: " << _name << "\n";
+	if (_evtID==9 && _active) notifyAncestor();
 }
 
 void ERB::simulationStopped(){
-	if (_evtID==11 && _active) NOTIFY_ANCESTOR;
+	//std::cout << "simStopped notified: " << _name << "\n";
+	if (_evtID==10 && _active) notifyAncestor();
 }
 
 void ERB::setSimComponents(SimComponents* iSimComp){

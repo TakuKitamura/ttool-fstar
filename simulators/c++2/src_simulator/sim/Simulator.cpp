@@ -42,6 +42,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Server.h>
 #include <ServerLocal.h>
 #include <TMLSelectCommand.h>
+#include <EBRDD.h>
+#include <EBRDDCommand.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
 
@@ -58,7 +60,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 	std::cout << "kernel:getTLET: before loop" << std::endl;
 #endif
 	//for(SchedulingList::const_iterator i=_simComp->_cpuList.begin(); i != _simComp->_cpuList.end(); ++i){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 		aTempDevice=*i;
 		aTempTrans=aTempDevice->getNextTransaction();	
 		if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){	
@@ -130,7 +132,7 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
 	gettimeofday(&aBegin,NULL);
 	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
-		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2TXT(myfile);
 		}
 		myfile.close();
@@ -148,10 +150,10 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const{
 	if (myfile.is_open()){
 		myfile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
 		myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n<title>Scheduling</title>\n</head>\n<body>\n";		
-		for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2HTML(myfile);
 		}
-		for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+		for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
 			(*j)->schedule2HTML(myfile);
 		}
 		//for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
@@ -184,7 +186,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 		myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniels TML simulator\n$end\n\n";
 		myfile << "$timescale\n1 ns\n$end\n\n$scope module Simulation $end\n";
 		std::cout << "Before 1st loop" << std::endl;
-		for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+		for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
 			TraceableDevice* a=*i;
 //			a->streamBenchmarks(std::cout);
 //			a->toString();
@@ -222,7 +224,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     		}
 		myfile << "#" << aCurrTime+1 << "\n";
 		std::cout << "Simulated cycles: " << aCurrTime << std::endl;
-		for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+		for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
 			myfile << VCD_PREFIX << "100 " << (*i)->toShortString() << "\n";
 			//std::cout << "Utilization of component " << (*i)->toString() << ": " << ((float)(*i)->getBusyCycles()) / ((float)aCurrTime) << std::endl;
 		}
@@ -248,12 +250,15 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 //#endif
 	_simComp->setStopFlag(false,"");
-	for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
-		//std::cout << (*i)->toString() << " in loop" << std::endl;
+	//for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
+	for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i!=_simComp->getTaskIterator(true);i++){
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
 	}
+	for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
+		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
+	}
 	//std::cout << "after loop" << std::endl;
-	for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&SchedulableDevice::schedule));
+	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&SchedulableDevice::schedule));
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;

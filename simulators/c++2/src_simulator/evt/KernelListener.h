@@ -41,9 +41,9 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef KernelListenerH
 #define KernelListenerH
 
-#define NOTIFY_SIM_STARTED() for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStarted()
-#define NOTIFY_SIM_STOPPED() for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStopped()
-#define NOTIFY_TIME_ADVANCES(iTime) for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->timeAdvances(iTime)
+#define NOTIFY_SIM_STARTED() {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStarted(); listenersUnLock();}
+#define NOTIFY_SIM_STOPPED() {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStopped(); listenersUnLock();}
+#define NOTIFY_TIME_ADVANCES(iTime) {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->timeAdvances(iTime); listenersUnLock();}
 
 ///Encapsulates events associated with transactions
 class KernelListener{

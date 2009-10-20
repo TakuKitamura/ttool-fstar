@@ -49,10 +49,12 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 
 class SimComponents;
+class ERC;
 
 class ERB: public EventIF, public ChannelListener, public CommandListener, public KernelListener, public TaskListener, public TransactionListener{
 public:
-	ERB(NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iSourceClass, unsigned int iSourceID, unsigned int iEvtID);
+	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc);
+	virtual ~ERB();
 	void timeTick(TMLTime iNewTime);
 	void activate();
 	void deactivate();
@@ -73,29 +75,16 @@ public:
     	*/ 
 	static void setSimComponents(SimComponents* iSimComp);
 protected:
-	/*void notify(){
-		if (conditionFunction) 
-			action;
-		else
-			abort;
-		NOTIFY_ANCESTOR;
-	}*/
-	
-	/*void abort(){
-		if (_active){
-			_aborted=true;
-			_ancestorNode->notifyAbort(_ID);
-		}
-	}*/
-
+	ERC* _container;
 	bool _active;
 	std::string _name;
-	unsigned int _sourceClass;
-	unsigned int _sourceID;
 	unsigned int _evtID;
+	unsigned int _sourceClass;
+	unsigned int* _arrayOfSources;
+	unsigned int _nbOfSources;
 	///Pointer to simulation components
 	static SimComponents* _simComp;
-	//Function condition
-	//Function action
+	EBRDDFuncPointer _ebrddFunc;
+	void notifyAncestor();
 };
 #endif

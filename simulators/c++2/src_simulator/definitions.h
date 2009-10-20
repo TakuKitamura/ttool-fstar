@@ -205,6 +205,8 @@ typedef std::list<Serializable*> SerializableList;
 typedef std::list<Slave*> SlaveList;
 ///Datatype used in SimComponents to store channel objects
 typedef std::list<TMLChannel*> ChannelList;
+///Datatype used in SimComponents to store EBRDD objects
+typedef std::list<EBRDD*> EBRDDList;
 ///Datatype used in Tasks to store comments concerning the task execution
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
@@ -222,7 +224,7 @@ typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*LengthFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
-typedef unsigned int (EBRDD::*EBRDDFuncPointer) ();
+typedef int (EBRDD::*EBRDDFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
 typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)

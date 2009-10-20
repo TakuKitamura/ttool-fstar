@@ -57,12 +57,12 @@ bool CondBreakpoint::_enabled=true;
 
 //************************************************************************
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
+	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
 		(*i)->registerListener(this);	
 }
 
 RunXTransactions::~RunXTransactions(){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
+	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
 		(*i)->removeListener(this);
 }
 void RunXTransactions::transExecuted(TMLTransaction* iTrans){
@@ -242,12 +242,12 @@ void RunXCommands::setCmdsToExecute(unsigned int iCommandsToExecute){
 
 //************************************************************************
 RunXTimeUnits::RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime):_simComp(iSimComp), _endTime(iEndTime){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
+	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
 		(*i)->registerListener(this);	
 }
 
 RunXTimeUnits::~RunXTimeUnits(){
-	for(SchedulingList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
+	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
 		(*i)->removeListener(this);
 }
 	

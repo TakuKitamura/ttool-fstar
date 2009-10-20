@@ -46,8 +46,15 @@ EBRDDChoiceCommand::EBRDDChoiceCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFun
 
 EBRDDCommand* EBRDDChoiceCommand::prepare(){
 	unsigned int aNextCmd;
+	//std::cout << "choice prepare begin\n";
 	aNextCmd=(_ebrdd->*_condFunc)();
-	if (_nextCommand[aNextCmd]!=0) return _nextCommand[aNextCmd]->prepare();
+	//std::cout << "Next CmdIndex: " << aNextCmd << std::endl;
+	if (_nextCommand[aNextCmd]!=0){
+		EBRDDCommand* xx = _nextCommand[aNextCmd]->prepare();
+		//std::cout << "choice prepare end\n";
+		return xx;
+	}
+	//std::cout << "ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 	return 0;
 }
 

@@ -50,6 +50,7 @@ class Bridge;
 class Memory;
 class Simulator;
 class TMLChoiceCommand;
+class EBRDD;
 
 ///Class encapsulating architecture and application objects
 class SimComponents: public Serializable{
@@ -98,6 +99,11 @@ public:
 	\param iMem Pointer to memory
 	*/
 	void addMem(Memory* iMem);
+	///Add an EBRDD
+	/**
+	\param iEBRDD Pointer to EBRDD
+	*/
+	void addEBRDD(EBRDD* iEBRDD);
 	///Calls streamBenchmarks of all traceable devices contained in vcdList
 	/**
 	param s Reference to output stream object
@@ -167,26 +173,34 @@ public:
 	\return Pointer to that Channel
 	*/
 	TMLChannel* getChannelByID(unsigned int iID) const;
-	///Returns a reference to the CPU list
+	/////Returns a reference to the CPU list
+	////**
+	//\return Reference to CPU list
+	//*/	
+	//const SchedulingList& getCPUList() const {return _cpuList;}
+	///Returns an iterator for the internal CPU list
 	/**
-	\return Reference to CPU list
+	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
+	\return Const iterator for CPU list
 	*/	
-	const SchedulingList& getCPUList() const {return _cpuList;}
-	///Returns a reference to the Bus list
+	SchedulingList::const_iterator getCPUIterator(bool iEnd) const;
+	///Returns an iterator for the internal bus list
 	/**
-	\return Reference to Bus list
+	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
+	\return Const iterator for bus list
 	*/	
-	const BusList& getBusList() const {return _busList;}
-	///Returns a reference to the VCD list
+	BusList::const_iterator getBusIterator(bool iEnd) const;
+	///Returns an iterator for the internal VCD list
 	/**
-	\return Reference to VCD list
+	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
+	\return Const iterator for VCD list
 	*/	
-	const TraceableDeviceList& getVCDList() const {return _vcdList;}
-	///Returns a reference to the Task list
-	/**
-	\return Reference to Task list
-	*/	
-	const TaskList& getTaskList() const {return _taskList;}
+	TraceableDeviceList::const_iterator getVCDIterator(bool iEnd) const;
+	/////Returns a reference to the Task list
+	////**
+	//\return Reference to Task list
+	//*/	
+	//const TaskList& getTaskList() const {return _taskList;}
 	///Returns the state of the stop flag
 	/**
 	\return Stop flag
@@ -216,6 +230,12 @@ public:
 	\return Const iterator for task list
 	*/
 	TaskList::const_iterator getTaskIterator(bool iEnd) const;
+	///Returns an iterator for the internal EBRDD list
+	/**
+	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
+	\return Const iterator for EBRDD list
+	*/
+	EBRDDList::const_iterator getEBRDDIterator(bool iEnd) const;
 	///Returns the reason why the simulation stopped
 	/**
 	\return Reason why the simulation stopped
@@ -236,6 +256,8 @@ protected:
 	TaskList _taskList;
 	///List holding channels
 	ChannelList _channelList;
+	///List holding EBRDDs
+	EBRDDList _ebrddList;
 	///Flag indicating whether the simulation must be stopped
 	bool _stopFlag;
 	///Hash Value for application and architecture

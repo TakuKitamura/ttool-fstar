@@ -45,8 +45,10 @@ EBRDDActionCommand::EBRDDActionCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFun
 }
 
 EBRDDCommand* EBRDDActionCommand::prepare(){
+	//std::cout << "action prepare begin\n";
 	(_ebrdd->*_ebrddFunc)();
 	if (_nextCommand[0]!=0) return _nextCommand[0]->prepare();
+	//std::cout << "action prepare end\n";
 	return 0;
 }
 

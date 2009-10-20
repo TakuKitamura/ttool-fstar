@@ -41,10 +41,10 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef CommandListenerH
 #define CommandListenerH
 
-#define NOTIFY_CMD_ENTERED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm)
-#define NOTIFY_CMD_EXECUTED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm)
-#define NOTIFY_CMD_FINISHED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm)
-#define NOTIFY_CMD_STARTED(iComm) for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm)
+#define NOTIFY_CMD_ENTERED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm); listenersUnLock();}
+#define NOTIFY_CMD_EXECUTED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm); listenersUnLock();}
+#define NOTIFY_CMD_FINISHED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm); listenersUnLock();}
+#define NOTIFY_CMD_STARTED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm); listenersUnLock();}
 
 
 ///Encapsulates events associated with commands
