@@ -59,26 +59,28 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
     private JPanel panel1;
     private Frame frame;
     
-	protected String value, deadlineUnit;
-    protected int periodicType, deadline, minPacketSize, maxPacketSize, priority;
+	protected String value, periodUnit, deadlineUnit;
+    protected int periodicType, period, deadline, minPacketSize, maxPacketSize, priority;
 	
 	private boolean data;
     
     // Panel1
-    private JTextField valueText, deadlineText, minPacketSizeText, maxPacketSizeText;
-	private JComboBox periodicTypeBox, priorityBox, deadlineUnitBox;
+    private JTextField valueText, periodText, deadlineText, minPacketSizeText, maxPacketSizeText;
+	private JComboBox periodicTypeBox, priorityBox, periodUnitBox, deadlineUnitBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _deadline, String _deadlineUnit, int _minPacketSize, int _maxPacketSize, int _priority) {
+    public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _period, String _periodUnit, int _deadline, String _deadlineUnit, int _minPacketSize, int _maxPacketSize, int _priority) {
         super(_f, _title, true);
         frame = _f;
         
 		value = _value;
         periodicType = _periodicType;
+		period = _period;
+		periodUnit = _periodUnit;
 		deadline = _deadline;
 		deadlineUnit = _deadlineUnit;
 		minPacketSize = _minPacketSize;
@@ -144,21 +146,40 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
         panel1.add(periodicTypeBox, c1);
         
 		c1.gridwidth = 1;
+        panel1.add(new JLabel("Period:"), c1);
+        periodText = new JTextField(""+period, 10);
+        panel1.add(periodText, c1);
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		periodUnitBox = new JComboBox();
+		//deadlineUnitBox.addItem("s");
+		periodUnitBox.addItem("ms");
+		periodUnitBox.addItem("us");
+		int cpt;
+		/*if (deadlineUnit.equals("s")) {
+			cpt = 0; 
+		}  else*/ if (periodUnit.equals("ms")) {
+			cpt = 0;
+		} else {
+			cpt = 1;
+		}
+		periodUnitBox.setSelectedIndex(cpt);
+        panel1.add(periodUnitBox, c1);
+		
+		c1.gridwidth = 1;
         panel1.add(new JLabel("Deadline:"), c1);
         deadlineText = new JTextField(""+deadline, 10);
         panel1.add(deadlineText, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		deadlineUnitBox = new JComboBox();
-		deadlineUnitBox.addItem("s");
+		//deadlineUnitBox.addItem("s");
 		deadlineUnitBox.addItem("ms");
 		deadlineUnitBox.addItem("us");
-		int cpt;
-		if (deadlineUnit.equals("s")) {
+		/*if (deadlineUnit.equals("s")) {
 			cpt = 0; 
-		}  else if (deadlineUnit.equals("ms")) {
-			cpt = 1;
+		}  else*/ if (deadlineUnit.equals("ms")) {
+			cpt = 0;
 		} else {
-			cpt = 2;
+			cpt = 1;
 		}
 		deadlineUnitBox.setSelectedIndex(cpt);
         panel1.add(deadlineUnitBox, c1);
@@ -242,6 +263,18 @@ public class JDialogNCTraffic extends javax.swing.JDialog implements ActionListe
     public int getPeriodicType() {
         return periodicTypeBox.getSelectedIndex();
     }
+	
+	public int getPeriod() {
+		try {
+			return Integer.decode(periodText.getText()).intValue();
+		} catch (Exception e) {
+			return period;
+		}
+    }
+	
+	public String getPeriodUnit() {
+		return periodUnitBox.getSelectedItem().toString();
+	}
     
     public int getDeadline() {
 		try {

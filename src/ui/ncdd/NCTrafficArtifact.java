@@ -70,7 +70,9 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 	
 	protected int periodicType = 0; // 0: periodic ; 1: aperiodic
 	protected int deadline = 10;
-	protected String deadlineUnit = "ms"; // "us", "ms", "s";
+	protected int period = 10;
+	protected String periodUnit = "ms"; // "us", "ms";
+	protected String deadlineUnit = "ms"; // "us", "ms";
 	protected int minPacketSize = 20;
 	protected int maxPacketSize = 40;
 	protected int priority = 0; // 0 to 3
@@ -149,7 +151,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		boolean error = false;
 		String oldValue = value;
 		
-		JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
+		JDialogNCTraffic dialog = new JDialogNCTraffic(frame, "Setting traffic attributes", value, periodicType, period, periodUnit, deadline, deadlineUnit, minPacketSize, maxPacketSize, priority);
 		dialog.setSize(300, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -188,6 +190,8 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		
 		periodicType = dialog.getPeriodicType();
 		priority = dialog.getPriority();
+		period = dialog.getPeriod();
+		periodUnit = dialog.getPeriodUnit();
 		deadline = dialog.getDeadline();
 		deadlineUnit = dialog.getDeadlineUnit();
 		maxPacketSize = dialog.getMaxPacketSize();
@@ -212,6 +216,10 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" periodicType=\"");
         sb.append(periodicType);
+		sb.append("\" period=\"");
+		sb.append(period);
+		sb.append("\" periodUnit=\"");
+		sb.append(deadlineUnit);
 		sb.append("\" deadline=\"");
 		sb.append(deadline);
 		sb.append("\" deadlineUnit=\"");
@@ -235,7 +243,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
             Node n1, n2;
             Element elt;
             int t1id;
-            String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null;
+            String svalue = null, s0 = null, s1 = null, s2 = null, s3 = null, s4 = null, s5 = null, s6 = null, s7 = null;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -255,6 +263,8 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 								s5 = elt.getAttribute("minPacketSize");
 								s2 = elt.getAttribute("maxPacketSize");
 								s3 = elt.getAttribute("priority");
+								s6 = elt.getAttribute("period");
+								s7 = elt.getAttribute("periodUnit");
                             }
 							//System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
                             if (svalue != null) {
@@ -267,6 +277,15 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
                             }
 							//System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
                            
+							if (s6 != null){
+								period = Integer.decode(s6).intValue();
+                            }
+							//System.out.println("Decoding traffic s0=" + s0 + " s1=" + s1 + " s2=" + s2 + " s3=" + s3);
+                           
+							if ((s7 != null) && (s7.length() > 0)) {
+								periodUnit = s7;
+							}
+							
 							if (s1 != null){
 								deadline = Integer.decode(s1).intValue();
                             }
@@ -306,6 +325,14 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
         return periodicType;
     }
 	
+	public int getPeriod() {
+        return period;
+    }
+	
+	public String getPeriodUnit() {
+        return periodUnit;
+    }
+	
 	public int getDeadline() {
         return deadline;
     }
@@ -333,6 +360,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		} else {
 			ret += "Aperioridic\n";
 		}
+		ret += "Period = " + period + " " + periodUnit + "\n";
 		ret += "Deadline = " + deadline + " " + deadlineUnit + "\n";
 		ret += "Min packet size = " + minPacketSize + " B\n";
 		ret += "Max packet size = " + maxPacketSize + " B\n";

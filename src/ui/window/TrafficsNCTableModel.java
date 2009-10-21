@@ -67,7 +67,7 @@ public class TrafficsNCTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 6;
+		return 7;
 	}
 
 	public Object getValueAt(int row, int column) {
@@ -76,10 +76,12 @@ public class TrafficsNCTableModel extends AbstractTableModel {
 		} else if (column == 1) {
 			return NCTraffic.getStringPeriodicType(ncs.traffics.get(row).getPeriodicType());
 		} else if (column == 2) {
-			return ncs.traffics.get(row).getDeadline() +  " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
+			return ncs.traffics.get(row).getPeriod() +  " " + ncs.traffics.get(row).getPeriodUnit().getStringUnit();
 		} else if (column == 3) {
-			return ncs.traffics.get(row).getMinPacketSize();
+			return ncs.traffics.get(row).getDeadline() +  " " + ncs.traffics.get(row).getDeadlineUnit().getStringUnit();
 		} else if (column == 4) {
+			return ncs.traffics.get(row).getMinPacketSize();
+		} else if (column == 5) {
 			return ncs.traffics.get(row).getMaxPacketSize();
 		}
 		return ncs.traffics.get(row).getPriority();
@@ -92,12 +94,14 @@ public class TrafficsNCTableModel extends AbstractTableModel {
 		case 1:
 			return "Type";
 		case 2:
-			return "Deadline";
+			return "Period";
 		case 3:
-			return "Min packet size";
+			return "Deadline";
 		case 4:
-			return "Max packet size";
+			return "Min packet size";
 		case 5:
+			return "Max packet size";
+		case 6:
 			return "Priority";
 		}
 		return "none";

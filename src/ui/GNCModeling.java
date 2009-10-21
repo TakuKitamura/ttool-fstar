@@ -151,6 +151,9 @@ public class GNCModeling  {
 			} else {*/
 				eq = new NCEquipment();
 				eq.setName(node.getName());
+				eq.setSchedulingPolicy(node.getSchedulingPolicy());
+				System.out.println("type=" + node.getNodeType());
+				eq.setType(node.getNodeType());
 				ncs.equipments.add(eq);
 			/*}*/
 		}
@@ -168,9 +171,11 @@ public class GNCModeling  {
 			sw= new NCSwitch();
 			sw.setName(node.getNodeName());
 			sw.setSchedulingPolicy(node.getSchedulingPolicy());
+			sw.setSwitchingTechnique(node.getSwitchingTechnique());
 			sw.setCapacity(node.getCapacity());
 			unit.setUnit(node.getCapacityUnit());
 			sw.setCapacityUnit(unit);
+			sw.setTechnicalLatency(node.getTechnicalLatency());
 			ncs.switches.add(sw);
 		}
 	}
@@ -186,6 +191,10 @@ public class GNCModeling  {
 			tr = new NCTraffic();
 			tr.setName(arti.getValue());
 			tr.setPeriodicType(arti.getPeriodicType());
+			tr.setPeriod(arti.getPeriod());
+			unit = new NCTimeUnit();
+			unit.setUnit(arti.getPeriodUnit());
+			tr.setPeriodUnit(unit);
 			tr.setDeadline(arti.getDeadline());
 			unit = new NCTimeUnit();
 			unit.setUnit(arti.getDeadlineUnit());
@@ -200,7 +209,8 @@ public class GNCModeling  {
 	private void addLinks() {
 		ListIterator iterator = ncdp.getListOfLinks().listIterator();
 		NCConnectorNode nccn;
-		NCLink lk;
+		NCLink lk = null, lkr;
+		boolean added;
 		TGComponent tgc;
 		TGConnectingPoint tp;
 		NCLinkedElement ncle;
@@ -210,6 +220,7 @@ public class GNCModeling  {
 		NCSwitchNode switch1, switch2;
 		
 		while(iterator.hasNext()) {
+			added = false;
 			nccn = (NCConnectorNode)(iterator.next());
 			
 			if (ncdp.isALinkBetweenEquipment(nccn)) {
@@ -281,7 +292,7 @@ public class GNCModeling  {
 					checkingErrors.add(ce);
 				} else {
 					ncs.links.add(lk);
-					ncs.links.add(lk.cloneReversed());
+					added = true;
 				}
 				
 				if (!nccn.hasCapacity()) {
@@ -324,6 +335,9 @@ public class GNCModeling  {
 					nccu.setUnit(nccn.getCapacityUnit());
 					lk.setCapacityUnit(nccu);
 				}
+			}
+			if (added) {
+				ncs.links.add(lk.cloneReversed());
 			}
 		}
 	}

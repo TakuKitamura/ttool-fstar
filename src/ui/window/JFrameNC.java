@@ -292,8 +292,10 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 			
 
 		((jtableEI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtableEI.getColumnModel()).getColumn(1)).setPreferredWidth(150);
-		((jtableEI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
+		((jtableEI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtableEI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtableEI.getColumnModel()).getColumn(3)).setPreferredWidth(150);
+		((jtableEI.getColumnModel()).getColumn(4)).setPreferredWidth(150);
 		jtableEI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspEquipmentInfo = new JScrollPane(jtableEI);
 		jspEquipmentInfo.setWheelScrollingEnabled(true);
@@ -307,8 +309,10 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 			
 
 		((jtableSI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtableSI.getColumnModel()).getColumn(1)).setPreferredWidth(150);
+		((jtableSI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
 		((jtableSI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtableSI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		((jtableSI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
 		jtableSI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspSwitchInfo = new JScrollPane(jtableSI);
 		jspSwitchInfo.setWheelScrollingEnabled(true);
@@ -322,10 +326,12 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 			
 
 		((jtableTI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtableTI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
-		((jtableTI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
-		((jtableTI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		((jtableTI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtableTI.getColumnModel()).getColumn(2)).setPreferredWidth(75);
+		((jtableTI.getColumnModel()).getColumn(3)).setPreferredWidth(75);
 		((jtableTI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+		((jtableTI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+		((jtableTI.getColumnModel()).getColumn(6)).setPreferredWidth(75);
 		jtableTI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspTrafficInfo = new JScrollPane(jtableTI);
 		jspTrafficInfo.setWheelScrollingEnabled(true);
@@ -338,7 +344,7 @@ public	class JFrameNC extends JFrame implements ActionListener /*, StoppableGUIE
 		sorterLI.setTableHeader(jtableLI.getTableHeader());
 			
 
-		((jtableLI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtableLI.getColumnModel()).getColumn(0)).setPreferredWidth(150);
 		((jtableLI.getColumnModel()).getColumn(1)).setPreferredWidth(100);
 		((jtableLI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
 		jtableLI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

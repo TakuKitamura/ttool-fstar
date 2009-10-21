@@ -72,13 +72,17 @@ public class EquipmentsNCTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 3;
+		return 5;
 	}
 
 	public Object getValueAt(int row, int column) {
 		if (column == 0) {
 			return ncs.equipments.get(row).getName();
 		} else if (column == 1) {
+			return NCEquipment.getStringType(ncs.equipments.get(row).getType());
+		} else if (column == 2) {
+			return NCEquipment.getStringSchedulingPolicy(ncs.equipments.get(row).getSchedulingPolicy());
+		} else if (column == 3) {
 			return outputs[row];
 		}
 		return inputs[row];
@@ -89,6 +93,10 @@ public class EquipmentsNCTableModel extends AbstractTableModel {
 		case 0:
 			return "Equipment";
 		case 1:
+			return "Type";
+		case 2:
+			return "Scheduling Policy";
+		case 3:
 			return "Ouput traffic";
 		}
 		return "Input traffic";

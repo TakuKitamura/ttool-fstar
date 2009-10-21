@@ -62,6 +62,13 @@ public class NCLink extends NCElement  {
 		return capacity;
 	}
 	
+	public int getCapacityInMbs() {
+		if (capacityUnit.getStringUnit().equals(NCCapacityUnit.KBS)) {
+			return capacity * 1000;
+		}
+		return capacity;
+	}
+	
 	public NCLinkedElement getLinkedElement1() {
 		return le1;
 	}
@@ -104,6 +111,7 @@ public class NCLink extends NCElement  {
 		NCCapacityUnit unit = new NCCapacityUnit();
 		unit.setUnit(getCapacityUnit().getStringUnit());
 		link.setCapacity(capacity);
+		//System.out.println("capacity = " + capacity);
 		link.setCapacityUnit(unit);
 		link.setLinkedElement2(le1);
 		link.setLinkedElement1(le2);

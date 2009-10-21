@@ -50,6 +50,8 @@ package nc;
 public class NCTraffic extends NCElement  {
 	protected int periodicType = 0; // 0: periodic ; 1: aperiodic
 	protected int deadline = 10;
+	protected int period = 10;
+	protected NCTimeUnit periodUnit;
 	protected NCTimeUnit deadlineUnit;
 	protected int minPacketSize = 20;
 	protected int maxPacketSize = 40;
@@ -60,6 +62,14 @@ public class NCTraffic extends NCElement  {
 	public void setPeriodicType(int _periodicType) {
 		periodicType = _periodicType;
 		deadlineUnit = new NCTimeUnit();
+	}
+	
+	public void setPeriod(int _period) {
+		period = _period;
+	}
+	
+	public void setPeriodUnit(NCTimeUnit _periodUnit) {
+		periodUnit = _periodUnit;
 	}
 	
 	public void setDeadline(int _deadline) {
@@ -106,9 +116,31 @@ public class NCTraffic extends NCElement  {
 		}
 	}
 	
+	public int getPeriod() {
+        return period;
+    }
+	
+	public int getPeriodMs() {
+		if (periodUnit.getStringUnit().equals(NCTimeUnit.US)) {
+			return period*1000;
+		}
+        return period;
+    }
+	
 	public int getDeadline() {
         return deadline;
     }
+	
+	public int getDeadlineMs() {
+        if (deadlineUnit.getStringUnit().equals(NCTimeUnit.US)) {
+			return deadline*1000;
+		}
+        return deadline;
+    }
+	
+	public NCTimeUnit getPeriodUnit() {
+		return periodUnit;
+	}
 	
 	public NCTimeUnit getDeadlineUnit() {
 		return deadlineUnit;

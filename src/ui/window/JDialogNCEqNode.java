@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogNCSwitchNode
- * Dialog for managing NC switch properties
- * Creation: 19/11/2008
- * @version 1.0 19/11/2008
+ * Class JDialogNCEqNode
+ * Dialog for managing NC equipments properties
+ * Creation: 20/10/2009
+ * @version 1.0 20/10/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -54,44 +54,35 @@ import java.util.*;
 import ui.*;
 import ui.tmlcd.*;
 
-public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionListener {
+public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListener {
     
     private JPanel panel1;
     private Frame frame;
     
-    private String switchName;
+    private String eqName;
     private int schedulingPolicy;
-	private int switchingTechnique;
-	private int capacity;
-	private String capacityUnit;
-	private int technicalLatency;
+	private int type;
 	
 	private boolean data;
     
     
     // Panel1
-    private JTextField switchNameText;
+    private JTextField eqNameText;
 	private JComboBox schedulingPolicyBox;
-	private JComboBox switchingTechniqueBox;
-	private JTextField capacityText;
-	private JComboBox capacityUnitBox;
-	private JTextField technicalLatencyText;
+	private JComboBox typeBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogNCSwitchNode(Frame _f, String _title, String _switchName, int _schedulingPolicy, int _switchingTechnique, int _capacity, String _capacityUnit, int _technicalLatency) {
+    public JDialogNCEqNode(Frame _f, String _title, String _eqName, int _schedulingPolicy, int _type) {
         super(_f, _title, true);
         frame = _f;
         
-        switchName = _switchName;
+        eqName = _eqName;
         schedulingPolicy = _schedulingPolicy;
-		switchingTechnique = _switchingTechnique;
-		capacity = _capacity;
-		capacityUnit = _capacityUnit;
-		technicalLatency = _technicalLatency;
+		type = _type;
         
         myInitComponents();
         initComponents();
@@ -134,10 +125,10 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("Switch name:"), c1);
+        panel1.add(new JLabel("Equipment name:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        switchNameText = new JTextField(switchName);
-        panel1.add(switchNameText, c1);
+        eqNameText = new JTextField(eqName);
+        panel1.add(eqNameText, c1);
         
         c1.gridwidth = 1;
         panel1.add(new JLabel("Scheduling policy:"), c1);
@@ -149,35 +140,13 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         panel1.add(schedulingPolicyBox, c1);
 		
 		c1.gridwidth = 1;
-        panel1.add(new JLabel("Switching technique:"), c1);
+        panel1.add(new JLabel("Type:"), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        switchingTechniqueBox = new JComboBox();
-		switchingTechniqueBox.addItem("Store and Forward");
-		switchingTechniqueBox.addItem("Cut Through");
-		switchingTechniqueBox.setSelectedIndex(switchingTechnique);
-        panel1.add(switchingTechniqueBox, c1);
-		
-		c1.gridwidth = 1;
-        panel1.add(new JLabel("Capacity:"), c1);
-        //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        capacityText = new JTextField(""+capacity);
-        panel1.add(capacityText, c1);
-		c1.gridwidth = GridBagConstraints.REMAINDER; 
-		capacityUnitBox = new JComboBox();
-		capacityUnitBox.addItem("Mbs");
-		capacityUnitBox.addItem("Kbs");
-		if (capacityUnit.equals("Mbs")) {
-			capacityUnitBox.setSelectedItem(0);
-		} else {
-			capacityUnitBox.setSelectedItem(1);
-		}
-		panel1.add(capacityUnitBox, c1);
-		
-		c1.gridwidth = 1;
-        panel1.add(new JLabel("Technical latency:"), c1);
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        technicalLatencyText = new JTextField(""+technicalLatency);
-        panel1.add(technicalLatencyText, c1);
+        typeBox = new JComboBox();
+		typeBox.addItem("Standard");
+		typeBox.addItem("Client/server (not supported yet)");
+		typeBox.setSelectedIndex(type);
+        panel1.add(typeBox, c1);
         
         // main panel;
         c0.gridwidth = 1;
@@ -228,29 +197,17 @@ public class JDialogNCSwitchNode extends javax.swing.JDialog implements ActionLi
         return data;
     }
     
-    public String getSwitchName() {
-        return switchNameText.getText();
+    public String getEqName() {
+        return eqNameText.getText();
     }
     
     public int getSchedulingPolicy() {
         return schedulingPolicyBox.getSelectedIndex();
     }
 	
-	public int getSwitchingTechnique() {
-        return switchingTechniqueBox.getSelectedIndex();
+	public int getType() {
+        return typeBox.getSelectedIndex();
     }
-	
-	public String getCapacity() {
-		return capacityText.getText();
-	}
-	
-	public String getCapacityUnit() {
-		return capacityUnitBox.getSelectedItem().toString();
-	}
-	
-	public String getTechnicalLatency() {
-		return technicalLatencyText.getText();
-	}
     
   
 }

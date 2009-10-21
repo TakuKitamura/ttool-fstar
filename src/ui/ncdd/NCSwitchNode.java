@@ -64,8 +64,10 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     private int derivationy = 3;
     private String stereotype = "Switch";
 	
+	protected int switchingTechnique = 0; //0: SF (Store Forward) ; 1: CT (Cut Through)
 	protected int schedulingPolicy = 0; // 0: FCFS ; 1: SP
 	protected int capacity = 10;
+	protected int technicalLatency = 60; // in microseconds 
 	protected String capacityUnit = "Mbs";
     
     public NCSwitchNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -174,6 +176,10 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		return schedulingPolicy;
 	}
 	
+	public int getSwitchingTechnique() {
+		return switchingTechnique;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}
@@ -181,14 +187,18 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 	public String getCapacityUnit() {
 		return capacityUnit;
 	}
+	
+	public int getTechnicalLatency() {
+		return technicalLatency;
+	}
     
    	public boolean editOndoubleClick(JFrame frame) {
         //System.out.println("Double click");
         String oldName = name;
 		String tmp;
         
-        JDialogNCSwitchNode jdncsn = new JDialogNCSwitchNode(frame, "Setting switch parameters", name, schedulingPolicy, capacity, capacityUnit);
-        jdncsn.setSize(350, 250);
+        JDialogNCSwitchNode jdncsn = new JDialogNCSwitchNode(frame, "Setting switch parameters", name, schedulingPolicy, switchingTechnique, capacity, capacityUnit, technicalLatency);
+        jdncsn.setSize(350, 300);
         GraphicLib.centerOnParent(jdncsn);
         jdncsn.show(); // Blocked until dialog has been closed
        
@@ -223,6 +233,7 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 		
 		name = tmp;
 		schedulingPolicy = jdncsn.getSchedulingPolicy();
+		switchingTechnique = jdncsn.getSwitchingTechnique();
 		
 		try {
 			capacity = Integer.decode(jdncsn.getCapacity()).intValue();
@@ -233,6 +244,15 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 					JOptionPane.INFORMATION_MESSAGE);
 		}
         capacityUnit = jdncsn.getCapacityUnit();
+		
+		try {
+			technicalLatency = Integer.decode(jdncsn.getTechnicalLatency()).intValue();
+		} catch (Exception e) {
+			 JOptionPane.showMessageDialog(frame,
+					"Wrong technical latency value",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 		
         return true;
     }
@@ -308,6 +328,8 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info schedulingPolicy=\"" + schedulingPolicy);
+		sb.append("\" switchingTechnique=\"" + switchingTechnique);
+		sb.append("\" technicalLatency=\"" + technicalLatency);
 		sb.append("\" capacity=\"" + capacity);
 		sb.append("\" capacityUnit=\"" + capacityUnit);
         sb.append("\" />\n");
@@ -335,9 +357,16 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
                                 schedulingPolicy = Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
+								if (elt.getAttribute("switchingTechnique").length() > 0) {
+									switchingTechnique = Integer.decode(elt.getAttribute("switchingTechnique")).intValue();
+								}
+								
 								if (elt.getAttribute("capacity").length() > 0) {
 									capacityUnit = elt.getAttribute("capacityUnit");
 									capacity = Integer.decode(elt.getAttribute("capacity")).intValue();
+								}
+								if (elt.getAttribute("technicalLatency").length() > 0) {
+									technicalLatency = Integer.decode(elt.getAttribute("technicalLatency")).intValue();
 								}
 							}
                         }
@@ -363,7 +392,14 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
 			pol = "SP";
 		}
 		String attr = "Scheduling policy = " + pol + "\n";
-		attr += "Capacity = " + capacity + " " + capacityUnit;
+		if (switchingTechnique == 0) {
+			pol = "SF";
+		} else {
+			pol = "CT";
+		}
+		attr += "Switching tech. = " + pol + "\n";
+		attr += "Capacity = " + capacity + " " + capacityUnit + "\n";
+		attr += "Technical latency = " + technicalLatency;
 		return attr;
 		
 	}

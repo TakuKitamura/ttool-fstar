@@ -67,16 +67,20 @@ public class SwitchesNCTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 3;
+		return 5;
 	}
 
 	public Object getValueAt(int row, int column) {
 		if (column == 0) {
 			return ncs.switches.get(row).getName();
 		} else if (column == 1) {
+			return NCSwitch.getStringSwitchingTechnique(ncs.switches.get(row).getSwitchingTechnique());
+		} else if (column == 2) {
 			return NCSwitch.getStringSchedulingPolicy(ncs.switches.get(row).getSchedulingPolicy());
-		} else {
+		} else if (column == 3) {
 			return ncs.switches.get(row).getCapacity() + " " + ncs.switches.get(row).getCapacityUnit().getStringUnit();
+		} else {
+			return ncs.switches.get(row).getTechnicalLatency() + " us";
 		}
 	}
 
@@ -85,9 +89,13 @@ public class SwitchesNCTableModel extends AbstractTableModel {
 		case 0:
 			return "Switch";
 		case 1:
+			return "Switching tech.";
+		case 2:
 			return "Scheduling policy";
+		case 3:
+			return "Capacity";
 		}
-		return "Capacity";
+		return "Tech. latency";
 	}
 
 }

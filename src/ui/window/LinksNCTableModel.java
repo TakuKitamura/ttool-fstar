@@ -77,7 +77,7 @@ public class LinksNCTableModel extends AbstractTableModel {
 			return ncs.links.get(row).getCapacity() + " " + ncs.links.get(row).getCapacityUnit().getStringUnit();
 		} 
 		
-		return ncs.links.get(row).getLinkedElement1().getName() + " <-> " + ncs.links.get(row).getLinkedElement2().getName();
+		return ncs.links.get(row).getLinkedElement1().getName() + " -> " + ncs.links.get(row).getLinkedElement2().getName();
 		
 	}
 
@@ -88,7 +88,7 @@ public class LinksNCTableModel extends AbstractTableModel {
 		case 1:
 			return "Capacity";
 		case 2:
-			return "Link between...";
+			return "Link from -> to";
 		}
 		return "none";
 	}

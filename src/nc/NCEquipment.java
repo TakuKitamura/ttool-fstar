@@ -48,8 +48,65 @@ package nc;
 
 public class NCEquipment extends NCLinkedElement  {
 	
+	// Scheduling policies
+	public static String FCFS = "FCFS"; // FIFO
+	public static String SP = "SP"; // Static priority
+	public static String WFQ = "WFQ"; // Weight Fair Queuing
+	public static String[] SchedulingPolicies = {FCFS, SP, WFQ};
+	
+	// Types
+	public static String STANDARD = "Standard"; // FIFO
+	public static String[] Types = {STANDARD};
+	
+	private int schedulingPolicy = 0;
+	private int type = 0;
+	
 	public NCEquipment() {
+	}
+	
+	public void setSchedulingPolicy(int _sp) {
+		schedulingPolicy = _sp;
+	}
+	
+	public int getSchedulingPolicy() {
+		return schedulingPolicy;
+	}
+	
+	public static String getStringSchedulingPolicy(int sp) {
+			return SchedulingPolicies[sp];
+	}
+	
+	public static int getFromStringSchedulingPolicy(String _sp) {
+		for(int i=0; i<SchedulingPolicies.length; i++) {
+			if (SchedulingPolicies[i].compareTo(_sp) == 0) {
+				return i;
+			}
+		}
 		
+		return -1;
+	}
+	
+	public void setType(int _type) {
+		type = _type;
+	}
+	
+	public int getType() {
+		return type;
+	}
+	
+	public static String getStringType(int _type) {
+		//System.out.println("type=" + _type);
+		return Types[_type];
+	}
+	
+	public static int getFromStringType(String _type) {
+		for(int i=0; i<Types.length; i++) {
+			if (Types[i].compareTo(_type) == 0) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 	
 }

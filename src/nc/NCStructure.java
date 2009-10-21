@@ -115,6 +115,9 @@ public class NCStructure extends NCElement {
 		sb.append(getXMLHeader());
 		sb.append("<File Title=\"Network Definition\">\n");
 		sb.append(getISAEXMLSwitches());
+		sb.append(getISAEXMLEquipments());
+		sb.append(getISAEXMLLinks());
+		sb.append(getISAEXMLPorts());
 		sb.append("</File>\n");
 		return sb.toString();
 	}
@@ -173,6 +176,46 @@ public class NCStructure extends NCElement {
 		return tmp;
 	}
 	
+	private String getISAEXMLEquipments() {
+		String tmp = "";
+		for(NCEquipment eq: equipments) {
+			tmp += "<EndSystem>\n";
+			tmp += "<Name> " + eq.getName() + " </Name>\n";
+			tmp += "<Type> " + NCEquipment.getStringType(eq.getType()) + "</Type>\n";
+			tmp += "<Policy> " + NCEquipment.getStringSchedulingPolicy(eq.getSchedulingPolicy()) + "</Policy>\n";
+			tmp += "</EndSystem>\n";
+		}
+		return tmp;
+	}
+	
+	private String getISAEXMLLinks() {
+		String tmp = "";
+		for(NCLink lk: links) {
+			tmp += "<Link>\n";
+			tmp += "<Name> " + lk.getName() + " </Name>\n";
+			tmp += "<Capacity> " + lk.getCapacityInMbs() + "</Capacity>\n";
+			tmp += "<StartPoint> " + lk.getName() + "_sp" + "</StartPoint>\n";
+			tmp += "<ArrivalPoint> " + lk.getName() + "_sp"  + "</ArrivalPoint>\n";
+			tmp += "</Link>\n";
+		}
+		return tmp;
+	}
+	
+	private String getISAEXMLPorts() {
+		String tmp = "";
+		for(NCLink lk: links) {
+			tmp += "<Port>\n";
+			tmp += "<Name> " + lk.getName() + "_sp" + " </Name>\n";
+			tmp += "<Owner> " + lk.getLinkedElement1().getName() + "</Owner>\n";
+			tmp += "</Port>\n";
+			tmp += "<Port>\n";
+			tmp += "<Name> " + lk.getName() + "_ap" + " </Name>\n";
+			tmp += "<Owner> " + lk.getLinkedElement2().getName() + "</Owner>\n";
+			tmp += "</Port>\n";
+		}
+		return tmp;
+	}
+	
 	private String getXMLTraffics() {
 		String tmp = "";
 		for(NCTraffic tr: traffics) {
@@ -204,15 +247,15 @@ public class NCStructure extends NCElement {
 			tmp += "<Type> " + NCTraffic.getISAEStringPeriodicType(tr.getPeriodicType()) + "</Type>\n";
 			tmp += "<Length> " + tr.getMaxLengthInBytes() + " </Length>\n";
 			if (tr.getPeriodicType() == 0) {
-				info0 = "" + tr.getDeadline();
+				info0 = "" + tr.getPeriodMs();
 				info1 = "";
 			} else {
 				info0 = "";
-				info1 = "" + tr.getDeadline();
+				info1 = "" + tr.getPeriodMs();
 			}
 			tmp += "<Period> " + info0 + " </Period>\n";
-			tmp += "<InterArrivals> " + info0 + " </InterArrivals>\n";
-			tmp += "<Deadline> " +  tr.getDeadline() + " </Deadline>\n";
+			tmp += "<InterArrivals> " + info1 + " </InterArrivals>\n";
+			tmp += "<Deadline> " +  tr.getDeadlineMs() + " </Deadline>\n";
 			tmp += "<Priority> " +  tr.getPriority() + " </Priority>\n";
 			tmp += "<Source> " +  getTrafficSource(tr).getName() + " </Source>\n";
 			tmp += "<Destination> " +  getTrafficDestinations(tr) + " </Destination>\n";
