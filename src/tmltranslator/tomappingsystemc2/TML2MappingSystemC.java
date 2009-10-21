@@ -149,7 +149,7 @@ public class TML2MappingSystemC {
 	}
 	
 	private void makeDeclarations() {
-		declaration = "class CurrentComponents: public SimComponents{\npublic:\nCurrentComponents():SimComponents(" + tmlmapping.getHashCode() + "){\n";
+		declaration = "class CurrentComponents: public SimComponents{\npublic:\nCurrentComponents(Simulator* iSim):SimComponents(" + tmlmapping.getHashCode() + ", iSim){\n";
 		
 		// Declaration of HW nodes
 		declaration += "//Declaration of CPUs" + CR;

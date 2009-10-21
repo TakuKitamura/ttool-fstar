@@ -532,6 +532,7 @@ public class SystemCEBRDD {
 
 
 	private idtypewrap getIDType(String nodeName){
+		if (nodeName.toLowerCase().equals("kernel")) return new idtypewrap(7,0);
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
 			if (node.getName().equals(nodeName)){
 				if (node instanceof HwCPU){
