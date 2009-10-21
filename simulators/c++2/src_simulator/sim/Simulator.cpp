@@ -44,8 +44,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLSelectCommand.h>
 #include <EBRDD.h>
 #include <EBRDDCommand.h>
+#include <ERC.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(iSyncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(iSyncInfo->_simComponents) {}
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(0), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(0) {
+	ERC::setSimulator(this);
+}
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
@@ -245,23 +248,28 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	SchedulableDevice* cpuLET;
 	CPU* depCPU;
 	struct timeval aBegin,aEnd;
+	_simComp = _syncInfo->_simComponents;
+	_randChoiceBreak = _syncInfo->_simComponents;
 	gettimeofday(&aBegin,NULL);
 //#ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 //#endif
 	_simComp->setStopFlag(false,"");
+	std::cout << "before loop " << std::endl;
 	//for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
 	for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i!=_simComp->getTaskIterator(true);i++){
+		std::cout << "loop it " << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
 	}
+	std::cout << "after loop1" << std::endl;
 	for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
 	}
-	//std::cout << "after loop" << std::endl;
+	std::cout << "after loop2" << std::endl;
 	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&SchedulableDevice::schedule));
-	//std::cout << "after schedule" << std::endl;
+	std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
-	//std::cout << "after getTLET" << std::endl;
+	std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
 	NOTIFY_SIM_STARTED();
 #endif

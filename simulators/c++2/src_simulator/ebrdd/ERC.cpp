@@ -41,18 +41,23 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ERC.h>
 #include <EventIF.h>
 #include <EBRDD.h>
+#include <Simulator.h>
+
+Simulator* ERC::_simulator=0;
 
 ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD){
 }
 
 void ERC::notifyEvent(unsigned int iID){
 	std::cout << "***** Container " << _ID << " notified *****\n";
+	 _simulator->removeListener(this);
 	_eventArray[0]->deactivate();
 	NotifyIF::reset();
 	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
 	//std::cout << "end notify event\n";
 }
 void ERC::notifyAbort(unsigned int iID){
+ 	_simulator->removeListener(this);
 	std::cout << "***** Container aborted " << _ID << " *****\n";
 }
 
@@ -60,24 +65,13 @@ EBRDD* ERC::getEBRDD(){
 	return _ebrdd;
 }
 
-//void ERC::timeTick(TMLTime iNewTime){
-//	_eventArray[0]->timeTick(iNewTime);
-//}
-
-//void ERC::activate(){
-//	_eventArray[0]->activate();
-//}
-
-//void ERC::deactivate(){
-//	_eventArray[0]->deactivate();
-//}
-
-//void ERC::reset(){
-//	deactivate();
-//	NotifyIF::reset();
-//}
+void ERC::timeAdvances(TMLTime iCurrTime){
+	_eventArray[0]->timeTick(iCurrTime);
+}
 
 EBRDDCommand* ERC::prepare(){
+	std::cout << "***** Container " << _ID << " prepared *****\n";
+ 	_simulator->registerListener(this);
 	_ebrdd->setCurrCommand(this);
 	//std::cout << "In prepare ERC\n";
 	_eventArray[0]->activate();
@@ -89,4 +83,8 @@ std::string ERC::toString() const{
 	std::ostringstream outp;	
 	outp << "ERC in " << EBRDDCommand::toString();
 	return outp.str();
+}
+
+void ERC::setSimulator(Simulator* iSim){
+	_simulator=iSim;
 }

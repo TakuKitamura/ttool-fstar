@@ -43,20 +43,22 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <NotifyIF.h>
 #include <EBRDDCommand.h>
+#include <KernelListener.h>
 
-class ERC: public NotifyIF, public EBRDDCommand{
+class Simulator;
+
+class ERC: public NotifyIF, public EBRDDCommand, public KernelListener{
 public:
 	ERC(unsigned int iID, EBRDD* iEBRDD);
 	void notifyEvent(unsigned int iID);
 	void notifyAbort(unsigned int iID);
 	EBRDD* getEBRDD();
-	//void timeTick(TMLTime iNewTime);
-	//void activate();
-	//void deactivate();
-	//void reset();
+	void timeAdvances(TMLTime iCurrTime);
 	EBRDDCommand* prepare();
 	std::string toString() const;
+	static void setSimulator(Simulator* iSim);
 protected:
 	EBRDD* _ebrdd;
+	static Simulator* _simulator;
 };
 #endif

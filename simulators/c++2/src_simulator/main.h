@@ -59,10 +59,10 @@ int main(int len, char ** args) {
 	struct timeval begin, end;
 	SimServSyncInfo mySync;
 	gettimeofday(&begin,NULL);
-	mySync._simComponents = new CurrentComponents();
+	Simulator mySim(&mySync);
+	mySync._simComponents = new CurrentComponents(&mySim);
 	TMLCommand::setSimComponents(mySync._simComponents);
 	ERB::setSimComponents(mySync._simComponents);
-	Simulator mySim(&mySync);
 	gettimeofday(&end,NULL);
 	std::cout << "The preparation took " << getTimeDiff(begin,end) << "usec.\n";
 	ServerIF* myServer = mySim.run(len, args);

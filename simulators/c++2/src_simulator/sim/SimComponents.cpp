@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 #include <EBRDD.h>
 
-SimComponents::SimComponents(int iHashValue):_stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
+SimComponents::SimComponents(int iHashValue, Simulator* iSim): _simulator(iSim), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
 }
 
 SimComponents::~SimComponents(){

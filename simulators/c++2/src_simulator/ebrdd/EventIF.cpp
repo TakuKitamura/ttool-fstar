@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <NotifyIF.h>
 #include <ERB.h>
 
-EventIF::EventIF(NotifyIF* iAncestorNode, bool iNegated):_ancestorNode(iAncestorNode), _negated(iNegated), _nbOfNotific(0), _aborted(false){
+EventIF::EventIF(NotifyIF* iAncestorNode, bool iNegated):_ancestorNode(iAncestorNode), _negated(iNegated), _nbOfNotific(0), _aborted(false), _active(false){
 	iAncestorNode->registerEvent(this);
 }
 

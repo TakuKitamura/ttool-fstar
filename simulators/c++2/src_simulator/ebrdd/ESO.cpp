@@ -39,11 +39,12 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <ESO.h>
+#include <SchedulableDevice.h>
 
 #define NOTIFY_ABORT {_ancestorNode->notifyAbort(_ID); _aborted=true;}
 #define NOTIFY_EVENT {_nbOfNotific++; _ancestorNode->notifyEvent(_ID);}
 #define RETURN_IF_TERMINATED if (_nbOfNotific>0 || _aborted) return;
-
+#define RETURN_IF_NO_TIMEOUT if (_timeOut==0 || !_active) return;
 
 //************************************************************************
 ESOConjunction::ESOConjunction(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent): ESOIF(iAncestorNode, iNegated, iNbOfEvents, iTimeOut), _oncePerEvent(iOncePerEvent){
@@ -78,8 +79,9 @@ void ESOConjunction::notifyAbort(unsigned int iID){
 
 void ESOConjunction::timeTick(TMLTime iNewTime){
 	RETURN_IF_TERMINATED;
+	RETURN_IF_NO_TIMEOUT;
 	ESOIF::timeTick(iNewTime);
-	if (iNewTime>=_timeOut){
+	if (iNewTime>=_timeOut + _startTime){
 		//all events negated?
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 				if (!_eventArray[i]->getNegated()){
@@ -93,6 +95,8 @@ void ESOConjunction::timeTick(TMLTime iNewTime){
 }
 
 void ESOConjunction::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->activate();
@@ -100,6 +104,7 @@ void ESOConjunction::activate(){
 }
 
 void ESOConjunction::deactivate(){
+	_active=false;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->deactivate();
 	}
@@ -138,8 +143,9 @@ void ESODisjunction::notifyAbort(unsigned int iID){
 
 void ESODisjunction::timeTick(TMLTime iNewTime){
 	RETURN_IF_TERMINATED;
+	RETURN_IF_NO_TIMEOUT;
 	ESOIF::timeTick(iNewTime);
-	if (iNewTime>=_timeOut){
+	if (iNewTime>=_timeOut + _startTime){
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			//was negated event not received?
 			if (_eventArray[i]->getNegated() && !_eventArray[i]->notified()){
@@ -152,6 +158,8 @@ void ESODisjunction::timeTick(TMLTime iNewTime){
 }
 
 void ESODisjunction::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->activate();
@@ -159,6 +167,7 @@ void ESODisjunction::activate(){
 }
 
 void ESODisjunction::deactivate(){
+	_active=false;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->deactivate();
 	}
@@ -196,8 +205,9 @@ void ESOSequence::notifyAbort(unsigned int iID){
 
 void ESOSequence::timeTick(TMLTime iNewTime){
 	RETURN_IF_TERMINATED;
+	RETURN_IF_NO_TIMEOUT;
 	ESOIF::timeTick(iNewTime);
-	if (iNewTime>=_timeOut){
+	if (iNewTime>=_timeOut + _startTime){
 		if(_nextEvtToWaitFor==_nbOfEvents){
 			NOTIFY_EVENT;
 		}else{
@@ -207,6 +217,8 @@ void ESOSequence::timeTick(TMLTime iNewTime){
 }
 
 void ESOSequence::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	searchForNextEvt();
 }
@@ -218,6 +230,7 @@ void ESOSequence::reset(){
 }
 
 void ESOSequence::deactivate(){
+	_active=false;
 	if (_nextEvtToWaitFor!=-1){
 		for (unsigned int i=_lastEvtToWaitFor; i< std::min(_nextEvtToWaitFor+1, _nbOfEvents); i++){
 			_eventArray[i]->deactivate();
@@ -248,6 +261,8 @@ ESOSSequence::ESOSSequence(NotifyIF* iAncestorNode, bool iNegated, unsigned int 
 }
 
 void ESOSSequence::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->activate();
@@ -256,6 +271,7 @@ void ESOSSequence::activate(){
 }
 
 void ESOSSequence::deactivate(){
+	_active=false;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->deactivate();
 	}
@@ -294,8 +310,9 @@ void ESOAtMost::notifyAbort(unsigned int iID){
 
 void ESOAtMost::timeTick(TMLTime iNewTime){
 	RETURN_IF_TERMINATED;
+	RETURN_IF_NO_TIMEOUT;
 	ESOIF::timeTick(iNewTime);
-	if (iNewTime>=_timeOut){
+	if (iNewTime>=_timeOut + _startTime){
 		unsigned int aReceivedEvents=0;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			if ((_eventArray[i]->getNegated() && !_eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
@@ -310,6 +327,8 @@ void ESOAtMost::timeTick(TMLTime iNewTime){
 }
 
 void ESOAtMost::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->activate();
@@ -317,6 +336,7 @@ void ESOAtMost::activate(){
 }
 
 void ESOAtMost::deactivate(){
+	_active=false;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->deactivate();
 	}
@@ -361,8 +381,9 @@ void ESOAtLeast::notifyAbort(unsigned int iID){
 
 void ESOAtLeast::timeTick(TMLTime iNewTime){
 	RETURN_IF_TERMINATED;
+	RETURN_IF_NO_TIMEOUT;
 	ESOIF::timeTick(iNewTime);
-	if (iNewTime>=_timeOut){
+	if (iNewTime>=_timeOut + _startTime){
 		unsigned int aReceivedEvents=0;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			if ((_eventArray[i]->getNegated() && !_eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
@@ -377,6 +398,8 @@ void ESOAtLeast::timeTick(TMLTime iNewTime){
 }
 
 void ESOAtLeast::activate(){
+	_active=true;
+	_startTime = SchedulableDevice::getSimulatedTime();
 	reset();
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->activate();
@@ -384,6 +407,7 @@ void ESOAtLeast::activate(){
 }
 
 void ESOAtLeast::deactivate(){
+	_active=false;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		_eventArray[i]->deactivate();
 	}

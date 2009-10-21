@@ -47,13 +47,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <NotifyIF.h>
 #include <TMLChannel.h>
 #include <ERC.h>
+#include <Simulator.h>
 
 //#define NOTIFY_ANCESTOR {_nbOfNotific++; _ancestorNode->notifyEvent(_ID);}
 
 
 SimComponents* ERB::_simComp=0;
 
-ERB::ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc): EventIF(iAncestorNode, iNegated), _container(iContainer), _active(false), _name(iName), _evtID(iEvtID), _sourceClass(iSourceClass), _arrayOfSources(iArrayOfSources), _nbOfSources(iNbOfSources), _ebrddFunc(iEbrddFunc){
+ERB::ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc): EventIF(iAncestorNode, iNegated), _container(iContainer), _name(iName), _evtID(iEvtID), _sourceClass(iSourceClass), _arrayOfSources(iArrayOfSources), _nbOfSources(iNbOfSources), _ebrddFunc(iEbrddFunc){
 }
 
 ERB::~ERB(){
@@ -66,11 +67,11 @@ void ERB::timeTick(TMLTime iNewTime){
 void ERB::notifyAncestor(){
 	std::cout << "*** event notified: " << _name << "\n";
 	_nbOfNotific++;
-	_ancestorNode->notifyEvent(_ID);
 	if (_ebrddFunc!=0 && !(_container->getEBRDD()->*_ebrddFunc)()){
 		//Alert!!!
 		std::cout << "ALERT!\n";
 	}
+	_ancestorNode->notifyEvent(_ID);
 	//std::cout << "end ERB event notified: " << _name << "\n";
 }
 
@@ -125,6 +126,13 @@ void ERB::activate(){
 			}
 			break;
 		}
+		//HWA
+		case 6:
+			break;
+		//kernel
+		case 7:
+			 _simComp->getSimulator()->registerListener(this);
+			break;
 	}
 	//std::cout << "end activate event: " << _name << "\n";
 }
@@ -175,6 +183,13 @@ void ERB::deactivate(){
 			}
 			break;
 		}
+		//HWA
+		case 6:
+			break;
+		//kernel
+		case 7:
+			 _simComp->getSimulator()->removeListener(this);
+			break;
 		//std::cout << "end deactivate event: " << _name << "\n";
 	}
 }

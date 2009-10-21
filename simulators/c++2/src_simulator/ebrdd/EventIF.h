@@ -64,5 +64,6 @@ protected:
 	unsigned int _ID;
 	unsigned int _nbOfNotific;
 	bool _aborted;
+	bool _active;
 };
 #endif

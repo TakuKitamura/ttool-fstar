@@ -48,7 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 //************************************************************************
 class ESOIF: public EventIF, public NotifyIF{
 public:
-	ESOIF(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut): EventIF(iAncestorNode, iNegated), NotifyIF(iNbOfEvents), _timeOut(iTimeOut){}
+	ESOIF(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut): EventIF(iAncestorNode, iNegated), NotifyIF(iNbOfEvents), _timeOut(iTimeOut), _startTime(0){}
 	virtual void reset(){
 		EventIF::reset();
 		NotifyIF::reset();
@@ -60,6 +60,7 @@ public:
 	}
 protected:
 	TMLTime _timeOut;
+	TMLTime _startTime;
 };
 
 

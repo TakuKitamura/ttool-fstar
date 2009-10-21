@@ -76,7 +76,6 @@ public:
 	static void setSimComponents(SimComponents* iSimComp);
 protected:
 	ERC* _container;
-	bool _active;
 	std::string _name;
 	unsigned int _evtID;
 	unsigned int _sourceClass;

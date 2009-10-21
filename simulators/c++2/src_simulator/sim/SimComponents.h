@@ -56,7 +56,11 @@ class EBRDD;
 class SimComponents: public Serializable{
 public:
 	///Constructor
-	SimComponents(int iHashValue);
+	/**
+	\param iHashValue Hash Value for application and architecture
+	\param iSim Pointer to simulator
+	*/
+	SimComponents(int iHashValue, Simulator* iSim);
 	///Destructor
 	virtual	~SimComponents();
 	///Add a task
@@ -173,11 +177,6 @@ public:
 	\return Pointer to that Channel
 	*/
 	TMLChannel* getChannelByID(unsigned int iID) const;
-	/////Returns a reference to the CPU list
-	////**
-	//\return Reference to CPU list
-	//*/	
-	//const SchedulingList& getCPUList() const {return _cpuList;}
 	///Returns an iterator for the internal CPU list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
@@ -196,11 +195,6 @@ public:
 	\return Const iterator for VCD list
 	*/	
 	TraceableDeviceList::const_iterator getVCDIterator(bool iEnd) const;
-	/////Returns a reference to the Task list
-	////**
-	//\return Reference to Task list
-	//*/	
-	//const TaskList& getTaskList() const {return _taskList;}
 	///Returns the state of the stop flag
 	/**
 	\return Stop flag
@@ -241,7 +235,14 @@ public:
 	\return Reason why the simulation stopped
 	*/
 	std::string getStopReason(){return _stopReason;}
+	///Returns a pointer to the simulator
+	/**
+	\return Pointer to simulator
+	*/
+	Simulator* getSimulator(){return _simulator;}
 protected:
+	///Pointer to simulator
+	Simulator* _simulator;
 	///List holding schedulable devices
 	SchedulingList _cpuList;
 	///List holding schedulable communication devices
