@@ -47,7 +47,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ERC.h>
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(0), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(0) {
-	ERC::setSimulator(this);
 }
 
 Simulator::~Simulator(){
@@ -255,21 +254,20 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 //#endif
 	_simComp->setStopFlag(false,"");
-	std::cout << "before loop " << std::endl;
-	//for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
+	//std::cout << "before loop " << std::endl;
 	for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i!=_simComp->getTaskIterator(true);i++){
-		std::cout << "loop it " << std::endl;
+		//std::cout << "loop it " << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
 	}
-	std::cout << "after loop1" << std::endl;
+	//std::cout << "after loop1" << std::endl;
 	for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
 	}
-	std::cout << "after loop2" << std::endl;
+	//std::cout << "after loop2" << std::endl;
 	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&SchedulableDevice::schedule));
-	std::cout << "after schedule" << std::endl;
+	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
-	std::cout << "after getTLET" << std::endl;
+	//std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
 	NOTIFY_SIM_STARTED();
 #endif

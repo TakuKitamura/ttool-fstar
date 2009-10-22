@@ -45,7 +45,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDCommand.h>
 #include <KernelListener.h>
 
-class Simulator;
+#define MSG_EBRDDVIOLATED "EBRDD has been violated"
+
+class SimComponents;
 
 class ERC: public NotifyIF, public EBRDDCommand, public KernelListener{
 public:
@@ -56,9 +58,9 @@ public:
 	void timeAdvances(TMLTime iCurrTime);
 	EBRDDCommand* prepare();
 	std::string toString() const;
-	static void setSimulator(Simulator* iSim);
+	static void setSimComponents(SimComponents* iSimComp);
 protected:
 	EBRDD* _ebrdd;
-	static Simulator* _simulator;
+	static SimComponents* _simComp;
 };
 #endif
