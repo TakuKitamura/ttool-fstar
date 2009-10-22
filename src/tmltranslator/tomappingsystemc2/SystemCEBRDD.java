@@ -225,7 +225,6 @@ public class SystemCEBRDD {
 			return makeCommands(currElem.getNextElement(0), retElement,nextCommandCont,null);
 		
 		} else if (currElem instanceof EBRDDStop){
-			//add stop state if (retElement.equals("0"))
 			if (debug) System.out.println("Checking Stop\n");
 			if (retElement.equals("0")){
 				cmdName= "_stop" + currElem.getID();
@@ -271,18 +270,32 @@ public class SystemCEBRDD {
 		} else if (currElem instanceof EBRDDLoop){
 			if (debug) System.out.println("Checking Loop\n");
 			EBRDDLoop fl = (EBRDDLoop)currElem;
-			EBRDDActionState initAction=new EBRDDActionState("lpInitAc",null);
-			initAction.setAction(fl.getInit());
-			EBRDDActionState incAction=new EBRDDActionState("#"+ fl.getID() + "\\lpIncAc",null);
-			incAction.setAction(fl.getIncrement());
+			//EBRDDActionState initAction=new EBRDDActionState("lpInitAc",null);
+			//initAction.setAction(fl.getInit());
+			EBRDDActionState initAction=null;
+			if (!fl.getInit().isEmpty()){
+				initAction = new EBRDDActionState("lpInitAc",null);
+				initAction.setAction(fl.getInit());
+			}
+			//EBRDDActionState incAction=new EBRDDActionState("#"+ fl.getID() + "\\lpIncAc",null);
+			//incAction.setAction(fl.getIncrement());
+			EBRDDActionState incAction=null;
+			if (!fl.getIncrement().isEmpty()){
+				incAction=new EBRDDActionState("#"+ fl.getID() + "\\lpIncAc",null);
+				incAction.setAction(fl.getIncrement());
+			}
 			EBRDDChoice lpChoice=new EBRDDChoice("#"+ fl.getID() + "\\lpChoice",null);
 			lpChoice.addGuard("[ " + fl.getCondition() + " ]");
 			lpChoice.addGuard("[ else ]");
 			//incAction.addNext(lpChoice);
 			lpChoice.addNext(fl.getNextElement(0));  //inside loop
 			lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
-			makeCommands(incAction, "&_lpChoice" + fl.getID(), null, null);
-			makeCommands(lpChoice, "&_lpIncAc" + fl.getID(), null, retElement);
+			if (incAction==null){
+				makeCommands(lpChoice, "&_lpChoice" + fl.getID(), null, retElement);
+			}else{
+				makeCommands(incAction, "&_lpChoice" + fl.getID(), null, null);
+				makeCommands(lpChoice, "&_lpIncAc" + fl.getID(), null, retElement);
+			}
 			return makeCommands(initAction, "&_lpChoice" + fl.getID(), nextCommandCont, null);
 	
 
@@ -502,17 +515,20 @@ public class SystemCEBRDD {
 				//eventID, sourceClass, arrayOfSources, numberOfSources
 				String erbName= "_erb" + newID;
 				ETDeclare.str+= "ERB " + erbName + ";\n";
-				idtypewrap source = getIDType(tokens[1]);
+				idtypewrap source=null;
 				ETInit.str+= ", " + erbName + "(this, " + ancestor + ", "+ negated + ", \"" + erbName + "\", ";
-				ETInit.str += getEventCode(tokens[0]) + ", " + source.type + ", array(" + (tokens.length-1) + ", (unsigned int)" + source.id;
-				int paramIndex=2;
+				int paramIndex=1;
+				String sourceIDs="";
+				int nbOfIDs=0;
 				while(paramIndex<tokens.length){
 					source = getIDType(tokens[paramIndex]);
-					ETInit.str+= ", (unsigned int)" + source.id;
+					sourceIDs += source.id;
 					paramIndex++;
+					nbOfIDs+=source.nbOfIDs;
 				}
-				ETInit.str += "), " + (tokens.length-1) + ", ";
-				if ((currERB.getCondition().isEmpty() || currERB.getCondition().toLowerCase().equals("true")) && currERB.getAction().isEmpty()){
+				ETInit.str += getEventCode(tokens[0]) + ", " + source.type + ", array(" + nbOfIDs;
+				ETInit.str += sourceIDs + "), " + nbOfIDs + ", ";
+				if ((currERB.getCondition().isEmpty() || currERB.getCondition().trim().toLowerCase().equals("true")) && currERB.getAction().isEmpty()){
 					ETInit.str += "0)\n";
 				}else{
 					if (ancestor.charAt(0)=='&') ancestor=ancestor.substring(1);
@@ -520,8 +536,12 @@ public class SystemCEBRDD {
 					//ERBFunc.str += ", EBRDDFuncPointer " + ancestor + erbName + "_func";
 					erbFuncs.add(ancestor + erbName + "_func");
 					functionSig += "int " + ancestor + erbName + "_func()" + SCCR;
-					functions+= "int " + reference + "::" + ancestor + erbName + "_func(){\nif(" + currERB.getCondition() + "){\n" + currERB.getAction();
-					functions+= "\nreturn true;\n}else{\nreturn false;\n}\n}\n\n";
+					if (currERB.getCondition().trim().toLowerCase().equals("true")){
+						functions+= "int " + reference + "::" + ancestor + erbName + "_func(){\n" + currERB.getAction() + "\nreturn true;\n}\n\n";
+					}else{
+						functions+= "int " + reference + "::" + ancestor + erbName + "_func(){\nif(" + currERB.getCondition() + "){\n" + currERB.getAction();
+						functions+= "\nreturn true;\n}else{\nreturn false;\n}\n}\n\n";
+					}
 				}
 			} 
 		}else{
@@ -532,40 +552,125 @@ public class SystemCEBRDD {
 
 
 	private idtypewrap getIDType(String nodeName){
-		if (nodeName.toLowerCase().equals("kernel")) return new idtypewrap(7,0);
+		String lnodeName = nodeName.trim().toLowerCase();
+		if (lnodeName.equals("kernel")) return new idtypewrap(7, ", (unsigned int)0", 1);
+		idtypewrap idtype = new idtypewrap(1,"", 0);
+		if (lnodeName.equals("allcpus")){
+			idtype.type = 0;
+			for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+				if (node instanceof HwCPU){
+					idtype.id +=", (unsigned int)" + node.getID();
+					idtype.nbOfIDs++;
+				}
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allbuses")){
+			idtype.type = 1;
+			for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+				if (node instanceof HwBus){
+					idtype.id +=", (unsigned int)" + node.getID();
+					idtype.nbOfIDs++;
+				}
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allbridges")){
+			idtype.type = 3;
+			for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+				if (node instanceof HwBridge){
+					idtype.id +=", (unsigned int)" + node.getID();
+					idtype.nbOfIDs++;
+				}
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allmems")){
+			idtype.type = 2;
+			for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+				if (node instanceof HwMemory){
+					idtype.id +=", (unsigned int)" + node.getID();
+					idtype.nbOfIDs++;
+				}
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allhwa")){
+			idtype.type = 6;
+			for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+				if (node instanceof HwA){
+					idtype.id +=", (unsigned int)" + node.getID();
+					idtype.nbOfIDs++;
+				}
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allchannels")){
+			idtype.type = 4;
+			idtype.nbOfIDs = tmlmodeling.getChannels().size();
+			for(TMLElement elem: tmlmodeling.getChannels()){
+				idtype.id +=", (unsigned int)" + elem.getID();
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allevents")){
+			idtype.type = 4;
+			idtype.nbOfIDs = tmlmodeling.getEvents().size();
+			for(TMLElement elem: tmlmodeling.getEvents()){
+				idtype.id +=", (unsigned int)" + elem.getID();
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("allrequests")){
+			idtype.type = 4;
+			idtype.nbOfIDs = tmlmodeling.getRequests().size();
+			for(TMLElement elem: tmlmodeling.getRequests()){
+				idtype.id +=", (unsigned int)" + elem.getID();
+			}
+			return idtype;
+		}
+		if (lnodeName.equals("alltasks")){
+			idtype.type = 5;
+			idtype.nbOfIDs = tmlmapping.getMappedTasks().size();
+			for(TMLElement elem: tmlmapping.getMappedTasks()){
+				idtype.id +=", (unsigned int)" + elem.getID();
+			}
+			return idtype;
+		}
+		//allCPUs, allBuses, allBridges, allMemories, allHWAs, allChannels, allEvents, allRequests, allTasks
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
 			if (node.getName().equals(nodeName)){
 				if (node instanceof HwCPU){
-					return new idtypewrap(0, node.getID());
+					return new idtypewrap(0, ", (unsigned int)" + node.getID(), 1);
 				}else if (node instanceof HwBus){
-					return new idtypewrap(1, node.getID());
+					return new idtypewrap(1, ", (unsigned int)" + node.getID(), 1);
 				}else if (node instanceof HwBridge){
-					return new idtypewrap(3, node.getID());
+					return new idtypewrap(3, ", (unsigned int)" + node.getID(), 1);
 				}else if (node instanceof HwMemory){
-					return new idtypewrap(2, node.getID());
+					return new idtypewrap(2, ", (unsigned int)" + node.getID(), 1);
 				}else if (node instanceof HwA){
-					return new idtypewrap(6, node.getID());
+					return new idtypewrap(6, ", (unsigned int)" + node.getID(), 1);
 				}
 			}
 		}
 		String nodeName2 = "DIPLODOCUSDesign__" + nodeName;
 		for(TMLElement elem: tmlmodeling.getChannels()){
-			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
 		}
 		for(TMLElement elem: tmlmodeling.getEvents()){
-			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
 		}
 		for(TMLElement elem: tmlmodeling.getRequests()){
-			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, elem.getID());
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
 		}
 		for(TMLElement elem: tmlmapping.getMappedTasks()){
-			if (elem.getName().equals(nodeName2)) return new idtypewrap(5, elem.getID());
+			if (elem.getName().equals(nodeName2)) return new idtypewrap(5, ", (unsigned int)" + elem.getID(), 1);
 		}
-		return new idtypewrap(-1,-1);
+		return new idtypewrap(-1,", (unsigned int)1", 1);
 	}
 
 	private int getEventCode(String eventText){
-		eventText = eventText.toLowerCase();
+		eventText = eventText.trim().toLowerCase();
 		for (int i= 0; i < events.length; i++){
 			if (eventText.equals(events[i])) return i;
 		}
