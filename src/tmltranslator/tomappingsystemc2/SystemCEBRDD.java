@@ -529,10 +529,10 @@ public class SystemCEBRDD {
 				ETInit.str += getEventCode(tokens[0]) + ", " + source.type + ", array(" + nbOfIDs;
 				ETInit.str += sourceIDs + "), " + nbOfIDs + ", ";
 				if ((currERB.getCondition().isEmpty() || currERB.getCondition().trim().toLowerCase().equals("true")) && currERB.getAction().isEmpty()){
-					ETInit.str += "0)\n";
+					ETInit.str += "0, \"" + currERB.getCondition() + "\")\n";
 				}else{
 					if (ancestor.charAt(0)=='&') ancestor=ancestor.substring(1);
-					 ETInit.str += ancestor + erbName + "_func)\n";
+					 ETInit.str += ancestor + erbName + "_func, \"" + currERB.getCondition() + "\")\n";
 					//ERBFunc.str += ", EBRDDFuncPointer " + ancestor + erbName + "_func";
 					erbFuncs.add(ancestor + erbName + "_func");
 					functionSig += "int " + ancestor + erbName + "_func()" + SCCR;
