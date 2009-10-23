@@ -58,9 +58,8 @@ public:
 	///Constructor
 	/**
 	\param iHashValue Hash Value for application and architecture
-	\param iSim Pointer to simulator
 	*/
-	SimComponents(int iHashValue, Simulator* iSim);
+	SimComponents(int iHashValue);
 	///Destructor
 	virtual	~SimComponents();
 	///Add a task
@@ -240,6 +239,8 @@ public:
 	\return Pointer to simulator
 	*/
 	Simulator* getSimulator(){return _simulator;}
+	void setSimulator(Simulator* iSim){_simulator=iSim;}
+	std::string getCmpNameByID(unsigned int iID);
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;

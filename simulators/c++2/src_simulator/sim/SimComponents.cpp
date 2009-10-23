@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 #include <EBRDD.h>
 
-SimComponents::SimComponents(int iHashValue, Simulator* iSim): _simulator(iSim), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
+SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false){
 }
 
 SimComponents::~SimComponents(){
@@ -61,6 +61,9 @@ SimComponents::~SimComponents(){
 		delete (*i);
 	}
 	for(SlaveList::iterator i=_slList.begin(); i != _slList.end(); ++i){
+		delete (*i);
+	}
+	for(EBRDDList::iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		delete (*i);
 	}
 }
@@ -157,6 +160,9 @@ void SimComponents::reset(){
 #ifdef ADD_COMMENTS
 	Comment::reset();
 #endif
+	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
+		(*i)->reset();
+	}
 }
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
@@ -241,7 +247,20 @@ TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
 		if (aResult!=0) return aResult;
 	}
 	return 0;
-	
+}
+
+std::string SimComponents::getCmpNameByID(unsigned int iID){
+	SchedulableDevice* aSched = getCPUByID(iID);
+	if (aSched!=0) return aSched->toString();
+	TMLTask* aTask = getTaskByID(iID);
+	if (aTask!=0) return aTask->toString();
+	SchedulableCommDevice* aBus = getBusByID(iID);
+	if (aBus!=0) return aBus->toString();
+	Slave* aSlave = getSlaveByID(iID);
+	if (aSlave!=0) return aSlave->toString();
+	TMLChannel* aChan = getChannelByID(iID);
+	if (aChan!=0) return aChan->toString();
+	return std::string("unknown");
 }
 
 int SimComponents::getHashValue(){

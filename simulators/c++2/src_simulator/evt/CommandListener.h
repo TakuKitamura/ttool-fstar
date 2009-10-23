@@ -41,10 +41,10 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef CommandListenerH
 #define CommandListenerH
 
-#define NOTIFY_CMD_ENTERED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm); listenersUnLock();}
-#define NOTIFY_CMD_EXECUTED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm); listenersUnLock();}
-#define NOTIFY_CMD_FINISHED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm); listenersUnLock();}
-#define NOTIFY_CMD_STARTED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm); listenersUnLock();}
+#define NOTIFY_CMD_ENTERED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm,_ID); listenersUnLock();}
+#define NOTIFY_CMD_EXECUTED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm,_ID); listenersUnLock();}
+#define NOTIFY_CMD_FINISHED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm,_ID); listenersUnLock();}
+#define NOTIFY_CMD_STARTED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm,_ID); listenersUnLock();}
 
 
 ///Encapsulates events associated with commands
@@ -54,22 +54,22 @@ public:
 	/**
 	\param  iComm Pointer to the command
 	*/
-	virtual void commandEntered(TMLCommand* iComm){}
+	virtual void commandEntered(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a transaction of the command is executed
 	/**
 	\param  iComm Pointer to the command
 	*/
-	virtual	void commandExecuted(TMLCommand* iComm){}
+	virtual	void commandExecuted(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a the last transaction of the command is executed
 	/**
 	\param  iComm Pointer to the command
 	*/
-	virtual void commandFinished(TMLCommand* iComm){}
+	virtual void commandFinished(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a the first transaction of the command is executed
 	/**
 	\param  iComm Pointer to the command
 	*/
-	virtual void commandStarted(TMLCommand* iComm){}
+	virtual void commandStarted(TMLCommand* iComm, unsigned int iID){}
 	///Destructor
 	virtual ~CommandListener(){}
 protected:

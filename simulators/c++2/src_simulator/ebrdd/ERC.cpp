@@ -60,9 +60,11 @@ void ERC::notifyEvent(unsigned int iID){
 void ERC::notifyAbort(unsigned int iID){
  	_simComp->getSimulator()->removeListener(this);
 	std::cout << "***** Container aborted " << _ID << " *****\n";
+	//if (!_simComp->getStopFlag()){
 	std::ostringstream aOut;
-	aOut << MSG_EBRDDVIOLATED << ": " << _ebrdd->toString();
+	aOut << MSG_EBRDDSEQVIOLATED << ": " << _ebrdd->toString();
 	_simComp->setStopFlag(true, aOut.str());
+	//}
 }
 
 EBRDD* ERC::getEBRDD(){

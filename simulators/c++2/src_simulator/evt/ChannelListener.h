@@ -41,8 +41,8 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef ChannelListenerH
 #define ChannelListenerH
 
-#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->writeTrans(iTrans);} listenersUnLock();}
-#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans);(*i)->readTrans(iTrans);} listenersUnLock();}
+#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);(*i)->writeTrans(iTrans,_ID);} listenersUnLock();}
+#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<ChannelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);(*i)->readTrans(iTrans,_ID);} listenersUnLock();}
 
 ///Encapsulates events associated with commands
 class ChannelListener{
@@ -51,17 +51,17 @@ public:
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
+	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
 	///Gets called when a read transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual void readTrans(TMLTransaction* iTrans){}
+	virtual void readTrans(TMLTransaction* iTrans, unsigned int iID){}
 	///Gets called when a write transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual void writeTrans(TMLTransaction* iTrans){}
+	virtual void writeTrans(TMLTransaction* iTrans, unsigned int iID){}
 	virtual ~ChannelListener(){}
 protected:
 };

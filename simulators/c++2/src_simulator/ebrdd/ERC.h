@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDCommand.h>
 #include <KernelListener.h>
 
-#define MSG_EBRDDVIOLATED "EBRDD has been violated"
+#define MSG_EBRDDSEQVIOLATED "EBRDD sequence has been violated"
 
 class SimComponents;
 

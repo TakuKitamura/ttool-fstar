@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDCommand.h>
 #include <ERC.h>
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(0), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(0) {
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(_syncInfo->_simComponents) {
 }
 
 Simulator::~Simulator(){
@@ -247,17 +247,16 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	SchedulableDevice* cpuLET;
 	CPU* depCPU;
 	struct timeval aBegin,aEnd;
-	_simComp = _syncInfo->_simComponents;
-	_randChoiceBreak = _syncInfo->_simComponents;
 	gettimeofday(&aBegin,NULL);
 //#ifdef DEBUG_KERNEL
-	std::cout << "kernel:simulate: first schedule" << std::endl;
+	std::cout << "kernel:simulate: first schedule " << _simComp << std::endl;
 //#endif
 	_simComp->setStopFlag(false,"");
 	//std::cout << "before loop " << std::endl;
 	for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i!=_simComp->getTaskIterator(true);i++){
-		//std::cout << "loop it " << std::endl;
+		//std::cout << "loop it " << (*i)->toString() << std::endl;
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
+		//std::cout << "loop it end" << (*i)->toString() << std::endl;
 	}
 	//std::cout << "after loop1" << std::endl;
 	for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
@@ -395,6 +394,7 @@ void Simulator::run(){
 
 ServerIF* Simulator::run(int iLen, char ** iArgs){
 	std::string aTraceFileName;
+	std::cout << "Starting up...\n";
 	aTraceFileName =getArgs("-server", "server", iLen, iArgs);
 	if (!aTraceFileName.empty()) return new Server();
 	aTraceFileName =getArgs("-file", "file", iLen, iArgs);
@@ -988,7 +988,7 @@ void Simulator::printVariablesOfTask(TMLTask* iTask, std::ostream& ioMessage){
 }
 
 bool Simulator::runToNextBreakpoint(TMLTransaction*& oLastTrans){
-	TestListener myListener(_simComp);
+	//TestListener myListener(_simComp);
 	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->registerListener(&myListener);
 	//_simComp->getChannelByName("DIPLODOCUSDesign__evt")->registerListener(&myListener);
 	//_simComp->getTaskByName("DIPLODOCUSDesign__TMLTask_0")->getCommandByID(17)->registerListener(&myListener);

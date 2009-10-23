@@ -48,25 +48,28 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TaskListener.h>
 #include <TransactionListener.h>
 
+#define MSG_EBRDDCONVIOLATED "EBRDD condition has been violated"
+
 class SimComponents;
 class ERC;
 
 class ERB: public EventIF, public ChannelListener, public CommandListener, public KernelListener, public TaskListener, public TransactionListener{
 public:
-	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc);
+	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString);
 	virtual ~ERB();
 	void timeTick(TMLTime iNewTime);
 	void activate();
 	void deactivate();
-	void transExecuted(TMLTransaction* iTrans);
-	void commandEntered(TMLCommand* iComm);
-	void commandStarted(TMLCommand* iComm);
-	void commandExecuted(TMLCommand* iComm);
-	void commandFinished(TMLCommand* iComm);
-	void taskStarted(TMLTransaction* iTrans);
-	void taskFinished(TMLTransaction* iTrans);
-	void readTrans(TMLTransaction* iTrans);
-	void writeTrans(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void commandEntered(TMLCommand* iComm, unsigned int iID);
+	void commandStarted(TMLCommand* iComm, unsigned int iID);
+	void commandExecuted(TMLCommand* iComm, unsigned int iID);
+	void commandFinished(TMLCommand* iComm, unsigned int iID);
+	void taskStarted(TMLTransaction* iTrans, unsigned int iID);
+	void taskFinished(TMLTransaction* iTrans, unsigned int iID);
+	void readTrans(TMLTransaction* iTrans, unsigned int iID);
+	void writeTrans(TMLTransaction* iTrans, unsigned int iID);
 	void simulationStarted();
 	void simulationStopped();
 	///Sets the internal pointer to the simulation components
@@ -83,7 +86,9 @@ protected:
 	unsigned int _nbOfSources;
 	///Pointer to simulation components
 	static SimComponents* _simComp;
+	static char* _evtString[];
 	EBRDDFuncPointer _ebrddFunc;
-	void notifyAncestor();
+	std::string _condString;
+	void notifyAncestor(unsigned int iEvtSourceID);
 };
 #endif

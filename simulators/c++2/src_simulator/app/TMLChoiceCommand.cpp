@@ -62,21 +62,25 @@ TMLCommand* TMLChoiceCommand::getNextCommand() const{
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
+	//std::cout << "In TMLChoice::prepare next transaction\n";
 	if (_simComp->getStopFlag()){
-		//std::cout << "aSimStopped=true " << std::endl;
+		std::cout << "aSimStopped=true " << std::endl;
 		_simComp->setStoppedOnAction();
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
 	//TMLCommand* aNextCommand;
-	//std::cout << "Choice func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
+	//std::cout << "Choice func " << std::endl;
 	_indexNextCommand=(_task->*_condFunc)();
+	//std::cout << "after Choice func " << std::endl;
 	TMLCommand* aNextCommand=getNextCommand();
+	//std::cout << "get next cmd" << std::endl;
 	_task->setCurrCommand(aNextCommand);
-	//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+	//std::cout << " after get next cmd" << std::endl;
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
 #endif
+	//std::cout << "after notify listeners" << std::endl;
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }

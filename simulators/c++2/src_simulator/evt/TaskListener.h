@@ -42,9 +42,9 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TransactionListener.h>
 
-#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans); listenersUnLock();}
-#define NOTIFY_TASK_FINISHED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans); listenersUnLock();}
-#define NOTIFY_TASK_STARTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans); listenersUnLock();}
+#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
+#define NOTIFY_TASK_FINISHED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans,_ID); listenersUnLock();}
+#define NOTIFY_TASK_STARTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans,_ID); listenersUnLock();}
 
 ///Encapsulates events associated with transactions
 class TaskListener{
@@ -53,18 +53,18 @@ public:
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual void taskStarted(TMLTransaction* iTrans){}
+	virtual void taskStarted(TMLTransaction* iTrans, unsigned int iID){}
 	///Gets called when a task executes its last transaction
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual	void taskFinished(TMLTransaction* iTrans){}
+	virtual	void taskFinished(TMLTransaction* iTrans, unsigned int iID){}
 	///Destructor
 	///Gets called when a transaction is executed
 	/**
 	\param  iTrans Pointer to the transaction
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans){}
+	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
 	virtual ~TaskListener(){}
 protected:
 };

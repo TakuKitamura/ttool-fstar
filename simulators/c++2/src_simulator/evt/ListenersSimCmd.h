@@ -76,7 +76,8 @@ public:
 	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
 	///Destructor
 	virtual ~RunXTransactions();
-	void transExecuted(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 	///Sets the number of transactions to execute
 	/**
 	\param  iTransToExecute Number of transactions to execute
@@ -100,7 +101,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	Breakpoint(SimComponents* iSimComp);
-	void commandEntered(TMLCommand* iComm);
+	void commandEntered(TMLCommand* iComm, unsigned int iID);
 	///Enable/disable all breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -127,7 +128,7 @@ public:
 	CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask);
 	///Destructor
 	~CondBreakpoint();
-	void commandFinished(TMLCommand* iComm);
+	void commandFinished(TMLCommand* iComm, unsigned int iID);
 	///Enable/disable all conditional breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -173,7 +174,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	RunTillNextRandomChoice(SimComponents* iSimComp);
-	void commandEntered(TMLCommand* iComm);
+	void commandEntered(TMLCommand* iComm, unsigned int iID);
 	///Enable/disable the Listener
 	/**
 	\param iEnabled true=enable, false=disable
@@ -199,7 +200,7 @@ public:
 	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute);
 	///Destructor
 	virtual ~RunXCommands();
-	void commandFinished(TMLCommand* iComm);
+	void commandFinished(TMLCommand* iComm, unsigned int iID);
 	///Sets the number of commands to execute
 	/**
 	\param  iCommandsToExecute Number of commands to execute
@@ -228,7 +229,8 @@ public:
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
 	///Destructor
 	virtual ~RunXTimeUnits();
-	void transExecuted(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 	///Sets the end time of the simulation
 	/**
 	\param  iEndTime End time of the simulation
@@ -255,7 +257,8 @@ public:
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
-	void transExecuted(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -276,7 +279,8 @@ public:
 	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
-	void transExecuted(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -297,7 +301,8 @@ public:
 	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
-	void transExecuted(TMLTransaction* iTrans);
+	//void transExecuted(TMLTransaction* iTrans);
+	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -307,12 +312,12 @@ protected:
 
 
 //************************************************************************
-class TestListener: public TaskListener, public ChannelListener, public CommandListener{
+/*class TestListener: public TaskListener, public ChannelListener, public CommandListener{
 public:
-	///Constructor
-	/**
-	\param iSimComp Pointer to a SimComponents object
-	*/
+	/////Constructor
+	///**
+	//\param iSimComp Pointer to a SimComponents object
+	//
 	TestListener(SimComponents* iSimComp);
 	void taskStarted(TMLTransaction* iTrans);
 	void taskFinished(TMLTransaction* iTrans);
@@ -337,5 +342,5 @@ class ConstraintBlock: public TransactionListener{
 	virtual bool constraintFunc(TransactionAbstr iTrans, CommandAbstr iCmd, TaskAbstr iTask, CPUAbstr iCPU, ChannelAbstr iChan) =0;
 private:
 	SimComponents* _simComp;
-};
+};*/
 #endif

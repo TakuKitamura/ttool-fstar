@@ -90,14 +90,19 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			return aNextCommand->prepare(false);
 		}
 	}else{
-		//std::cout << "Prepare next transaction beg " << _listeners.size() << std::endl;
+		//std::cout << "Prepare next transaction TMLCmd " << _listeners.size() << std::endl;
 		TMLCommand* result;
 		if (iInit){
 			//if (_currTransaction!=0) delete _currTransaction;   NEW!!!!!!!!!!!!!!!!!!
-			if (_currTransaction==0)
+			if (_currTransaction==0){
+				//std::cout << "currTrans==0 " << std::endl;
 				result = prepareNextTransaction();  //NEW!!!!!!!!!!!!!!!!!!!!!!!!
-			else
+				//std::cout << "end prepare " << std::endl;
+			}else{
+				//std::cout << "currTrans!=0 " << std::endl;
 				result = _currTransaction->getCommand();
+				//std::cout << "end get cmd " << std::endl;
+			}
 			if (_progress==0) _justStarted=true;
 			//result=0; ///////////NEW
 		}else{

@@ -232,10 +232,11 @@ bool CPU::addTransaction(){
 #ifdef DEBUG_CPU
 		std::cout << "CPU:addt: " << _name << " finalizing transaction " << _nextTransaction->toString() << std::endl;
 #endif
-		_nextTransaction->getCommand()->execute();
+		//_nextTransaction->getCommand()->execute();  //NEW!!!!
 		_endSchedule=_nextTransaction->getEndTime();
 		//std::cout << "set end schedule CPU: " << _endSchedule << "\n";
 		_simulatedTime=max(_simulatedTime,_endSchedule);
+		_nextTransaction->getCommand()->execute();  //NEW!!!!
 		_transactList.push_back(_nextTransaction);
 		_lastTransaction=_nextTransaction;
 		_busyCycles+=_nextTransaction->getOverallLength();
