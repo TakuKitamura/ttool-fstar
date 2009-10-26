@@ -249,7 +249,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
 //#ifdef DEBUG_KERNEL
-	std::cout << "kernel:simulate: first schedule " << _simComp << std::endl;
+	std::cout << "kernel:simulate: first schedule" << std::endl;
 //#endif
 	_simComp->setStopFlag(false,"");
 	//std::cout << "before loop " << std::endl;

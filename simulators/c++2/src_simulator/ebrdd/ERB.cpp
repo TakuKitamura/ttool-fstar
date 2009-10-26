@@ -70,6 +70,7 @@ ERB::~ERB(){
 }
 
 void ERB::timeTick(TMLTime iNewTime){
+	//std::cout << "TimeTick ERB: " << iNewTime << std::endl;
 }
 
 void ERB::notifyAncestor(unsigned int iEvtSourceID){

@@ -54,6 +54,7 @@ public:
 		NotifyIF::reset();
 	}
 	virtual void timeTick(TMLTime iNewTime){
+		//std::cout << "TimeTick ESO: " << iNewTime << std::endl;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			_eventArray[i]->timeTick(iNewTime);
 		}

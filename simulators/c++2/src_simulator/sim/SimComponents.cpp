@@ -259,7 +259,7 @@ std::string SimComponents::getCmpNameByID(unsigned int iID){
 	Slave* aSlave = getSlaveByID(iID);
 	if (aSlave!=0) return aSlave->toString();
 	TMLChannel* aChan = getChannelByID(iID);
-	if (aChan!=0) return aChan->toString();
+	if (aChan!=0) return aChan->toShortString();
 	return std::string("unknown");
 }
 

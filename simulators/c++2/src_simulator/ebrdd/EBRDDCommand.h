@@ -79,7 +79,7 @@ public:
 	virtual std::string toString() const;
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
-	void reset();
+	virtual void reset();
 	///Returns the unique ID of the command
 	/**
       	\return Unique ID

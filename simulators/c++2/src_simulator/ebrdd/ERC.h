@@ -59,8 +59,10 @@ public:
 	EBRDDCommand* prepare();
 	std::string toString() const;
 	static void setSimComponents(SimComponents* iSimComp);
+	void reset();
 protected:
 	EBRDD* _ebrdd;
 	static SimComponents* _simComp;
+	bool _wasPrepared;
 };
 #endif

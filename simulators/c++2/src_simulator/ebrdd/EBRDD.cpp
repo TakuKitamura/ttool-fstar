@@ -104,7 +104,7 @@ void EBRDD::reset(){
 	//std::cout << "task reset" << std::endl;
 	if (_currCommand!=0) _currCommand->reset();
 	_currCommand=_firstCommand;
-	if (_currCommand!=0) _currCommand->reset();
+	//if (_currCommand!=0) _currCommand->reset();
 }
 
 /*ParamType* EBRDD::getVariableByName(std::string& iVarName ,bool& oIsId){
