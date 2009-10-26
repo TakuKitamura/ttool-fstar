@@ -478,7 +478,7 @@ public class SystemCEBRDD {
 			case 4: //Simultaneous
 				//ESOSSequence(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut);
 				esoName= "_esoSSeq" + newID;
-				ETDeclare.str+= "ESOSequence " + esoName + ";\n";
+				ETDeclare.str+= "ESOSSequence " + esoName + ";\n";
 				ETInit.str+= "," + esoName + "(" + ancestor + ","+ negated + "," + currESO.getNbOfSons() + "," + currESO.getTimeout() + ")\n";
 			break;
 			case 5: //At least/at most
