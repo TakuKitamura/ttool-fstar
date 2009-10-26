@@ -63,6 +63,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimServSyncInfo.h>
 #include <ListenersSimCmd.h>
 #include <KernelListener.h>
+#include <KernelListener.h>
+#include <ERC.h>
 #include <ERB.h>
 
 #define RECUR_DEPTH 20
