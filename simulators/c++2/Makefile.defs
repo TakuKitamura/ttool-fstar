@@ -1,5 +1,14 @@
 ## Variable that points to SystemC installation path
 
+#SYSTEMC = /packages/systemc_2.1.1
+#TLM_HOME = /homes/knorreck/diplarb/TLM-2007-11-29/include
+
+
+#INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SYSTEMC)/include -I$(TLM_HOME)
+#LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
+
+#LIBS   =  -lsystemc -lm $(EXTRA_LIBS)
+
 
 INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim -I$(SRCS_base_DIR)/ebrdd
 LIBDIR = -L. -L.. 
@@ -9,12 +18,15 @@ EXE    = $(MODULE).x
 
 .SUFFIXES: .cpp .o .x
 
+#$(EXE): makedir $(OBJS) $(OBJS_simulator) $(SYSTEMC)/lib-$(TARGET_ARCH)/libsystemc.a 
+#	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+
 
 $(EXE): makedir $(OBJS) $(OBJS_simulator) 
-	$(CC) $(LFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+	$(CC) $(CFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
 
 makedir:
-	echo Making directories
+	echo making directories
 	mkdir -p ./lib/app
 	mkdir -p ./lib/arch
 	mkdir -p ./lib/ebrdd
@@ -33,3 +45,7 @@ clean::
 ultraclean: clean
 	rm -f Makefile.deps
 
+Makefile.deps:
+#	$(CC) $(CFLAGS) $(INCDIR) -M $(SRCS) >> Makefile.deps
+
+#include Makefile.deps
