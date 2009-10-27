@@ -131,7 +131,7 @@ public:
 	void deactivate();
 protected:
 	bool _oncePerEvent;
-	unsigned int _N;
+	unsigned int _n;
 	void checkEvents();
 };
 
@@ -147,7 +147,7 @@ public:
 	void deactivate();
 protected:
 	bool _oncePerEvent;
-	unsigned int _N;
+	unsigned int _n;
 	void checkEvents();
 };
 

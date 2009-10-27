@@ -3,11 +3,17 @@ TARGET_ARCH = linux
 CC     = g++
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
-OPT    = -O1 -pthread -rdynamic -ldl
+OPT    = -O1 -pthread 
+# Solaris
+#LOPT   = -O1 -pthread -ldl -lnsl -lsocket
+#Linux
+LOPT   = -O1 -pthread -ldl
+
 DEBUG  = -g
 OTHER  = -Wall
 TRY    = -Wno-deprecated
 CFLAGS = $(OPT) $(OTHER) $(TRY)
+LFLAGS = $(LOPT) $(OTHER) $(TRY)
 # CFLAGS = $(DEBUG) $(OTHER)
 OBJDIR = lib
 

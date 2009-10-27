@@ -309,7 +309,7 @@ int ESOSSequence::searchForNextEvt(){
 
 
 //************************************************************************
-ESOAtMost::ESOAtMost(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN): ESOIF(iAncestorNode, iNegated, iNbOfEvents, iTimeOut), _oncePerEvent(iOncePerEvent), _N(iN){}
+ESOAtMost::ESOAtMost(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN): ESOIF(iAncestorNode, iNegated, iNbOfEvents, iTimeOut), _oncePerEvent(iOncePerEvent), _n(iN){}
 
 void ESOAtMost::notifyEvent(unsigned int iID){
 	RETURN_IF_TERMINATED;
@@ -333,7 +333,7 @@ void ESOAtMost::timeTick(TMLTime iNewTime){
 		unsigned int aReceivedEvents=0;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			if ((_eventArray[i]->getNegated() && !_eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
-			if (aReceivedEvents>_N){
+			if (aReceivedEvents>_n){
 				NOTIFY_ABORT;
 				return;
 			}
@@ -365,7 +365,7 @@ void ESOAtMost::checkEvents(){
 	unsigned int aReceivedEvents=0;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->getAborted()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
-		if (aReceivedEvents>_N){
+		if (aReceivedEvents>_n){
 			NOTIFY_ABORT;
 			return;
 		}
@@ -373,7 +373,7 @@ void ESOAtMost::checkEvents(){
 	unsigned int aPossibleEvents=_nbOfEvents;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->getAborted())) aPossibleEvents--;
-		if (aPossibleEvents <=_N){
+		if (aPossibleEvents <=_n){
 			NOTIFY_EVENT;
 			return;
 		}
@@ -382,7 +382,7 @@ void ESOAtMost::checkEvents(){
 
 
 //************************************************************************
-ESOAtLeast::ESOAtLeast(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN): ESOIF(iAncestorNode, iNegated, iNbOfEvents, iTimeOut), _oncePerEvent(iOncePerEvent), _N(iN){}
+ESOAtLeast::ESOAtLeast(NotifyIF* iAncestorNode, bool iNegated, unsigned int iNbOfEvents, TMLTime iTimeOut, bool iOncePerEvent, unsigned int iN): ESOIF(iAncestorNode, iNegated, iNbOfEvents, iTimeOut), _oncePerEvent(iOncePerEvent), _n(iN){}
 
 void ESOAtLeast::notifyEvent(unsigned int iID){
 	RETURN_IF_TERMINATED;
@@ -406,7 +406,7 @@ void ESOAtLeast::timeTick(TMLTime iNewTime){
 		unsigned int aReceivedEvents=0;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			if ((_eventArray[i]->getNegated() && !_eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
-			if (aReceivedEvents==_N){
+			if (aReceivedEvents==_n){
 				NOTIFY_EVENT;
 				return;
 			}
@@ -439,7 +439,7 @@ void ESOAtLeast::checkEvents(){
 	unsigned int aReceivedEvents=0;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->getAborted()) || (!_eventArray[i]->getNegated() && _eventArray[i]->notified())) aReceivedEvents++;
-		if (aReceivedEvents==_N){
+		if (aReceivedEvents==_n){
 			NOTIFY_EVENT;
 			return;
 		}
@@ -447,7 +447,7 @@ void ESOAtLeast::checkEvents(){
 	unsigned int aPossibleEvents=_nbOfEvents;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->getAborted())) aPossibleEvents--;
-		if (aPossibleEvents <_N){
+		if (aPossibleEvents <_n){
 			NOTIFY_ABORT;
 			return;
 		}
