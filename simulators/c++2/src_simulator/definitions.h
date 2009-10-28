@@ -86,7 +86,7 @@ using std::max;
 #define NO_EVENTS_TO_LOAD 10
 #undef REGISTER_TRANS_AT_CPU
 #define SAVE_BENCHMARK_VARS 
-#define PORT "3491"
+#define PORT "3490"
 #define BACKLOG 10
 #define VCD_PREFIX "b"
 
