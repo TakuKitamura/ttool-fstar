@@ -236,6 +236,7 @@ void ESOSequence::activate(){
 }
 
 void ESOSequence::reset(){
+	//std::cout << "Sequence reset\n";
 	ESOIF::reset();
 	_nextEvtToWaitFor=-1;
 	_lastEvtToWaitFor=0;

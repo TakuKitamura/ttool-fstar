@@ -69,6 +69,7 @@ void EventIF::reset(){
 	//std::cout << "Reset leaf\n";
 	_nbOfNotific=0;
 	_aborted=false;
+ 	_active=false;
 	//std::cout << "End Reset leaf\n";
 }
 

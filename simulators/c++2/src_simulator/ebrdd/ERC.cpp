@@ -71,8 +71,9 @@ void ERC::notifyAbort(unsigned int iID){
 
 void ERC::reset(){
 	//std::cout << "***** ERC reset " << _ID << " *****\n";
-	NotifyIF::reset();
 	_wasPrepared=false;
+	_eventArray[0]->deactivate();
+	NotifyIF::reset();
 }
 
 EBRDD* ERC::getEBRDD(){
