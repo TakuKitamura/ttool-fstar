@@ -653,7 +653,7 @@ public class SystemCEBRDD {
 				}
 			}
 		}
-		String nodeName2 = "DIPLODOCUSDesign__" + nodeName;
+		String nodeName2 = nodeName;
 		for(TMLElement elem: tmlmodeling.getChannels()){
 			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
 		}
