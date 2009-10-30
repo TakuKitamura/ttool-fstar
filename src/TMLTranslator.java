@@ -328,7 +328,7 @@ public class TMLTranslator  {
 		} else {
 			map = new tmltranslator.tomappingsystemc.TML2MappingSystemC(tmap);
 		}
-		map.generateSystemC(debug);
+		map.generateSystemC(debug, true);
 		try {
 			map.saveFile(outputFileName, "appmodel");
 		} catch (Exception e) {
@@ -347,7 +347,7 @@ public class TMLTranslator  {
 		} else {
 			map = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(tmap);
 		}
-		map.generateSystemC(debug);
+		map.generateSystemC(debug, true);
 		try {
 			map.saveFile(outputFileName, "appmodel");
 		} catch (Exception e) {

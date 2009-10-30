@@ -66,6 +66,7 @@ public class TML2MappingSystemC {
 	private TMLMapping tmlmapping;
 	
 	private boolean debug;
+	private boolean optimize;
 	private String header, declaration, mainFile, src;
 	private ArrayList<MappedSystemCTask> tasks;
 	
@@ -105,8 +106,9 @@ public class TML2MappingSystemC {
 		return mainFile;
 	}
 
-    	public void generateSystemC(boolean _debug) {
+    	public void generateSystemC(boolean _debug, boolean _optimize) {
         	debug = _debug;
+			optimize = _optimize;
  
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();

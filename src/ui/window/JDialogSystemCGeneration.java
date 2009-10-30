@@ -84,6 +84,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 	protected static String pathInteractiveExecute;
 	
 	protected static boolean interactiveSimulationSelected = true;
+	protected static boolean optimizeModeSelected = true;
     
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -103,7 +104,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCppFiles, removeXFiles, debugmode;
+    protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
 	protected JComboBox versionSimulator;
 	
 	//EBRDD
@@ -256,6 +257,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         debugmode = new JCheckBox("Put debug information in code");
         debugmode.setSelected(false);
         jp01.add(debugmode, c01);
+		
+		optimizemode = new JCheckBox("Optimize code");
+		optimizemode.setSelected(optimizeModeSelected);
+        jp01.add(optimizemode, c01);
 		
 		jp01.add(new JLabel("Simulator used:"), c01);
 		
@@ -476,6 +481,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             stopProcess();
         }
 		updateStaticList();
+		optimizeModeSelected = optimizemode.isSelected();
         dispose();
     }
     
@@ -594,7 +600,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					} else {
 						tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLMapping());
 					}
-					tml2systc.generateSystemC(debugmode.isSelected());
+					tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
 					testGo();
 					jta.append("SystemC code generation done\n");
 					//t2j.printJavaClasses();
@@ -641,7 +647,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					} else {
 						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al);
 					}
-					tml2systc.generateSystemC(debugmode.isSelected());
+					tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
 					testGo();
 					jta.append("SystemC code generation done\n");
 					//t2j.printJavaClasses();

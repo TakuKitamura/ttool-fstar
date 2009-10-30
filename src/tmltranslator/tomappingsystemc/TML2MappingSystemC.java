@@ -111,7 +111,7 @@ public class TML2MappingSystemC {
 		return mainFile;
 	}
     
-    public void generateSystemC(boolean _debug) {
+    public void generateSystemC(boolean _debug, boolean _optimize) {
         debug = _debug;
         
 		tmlmodeling = tmlmapping.getTMLModeling();
