@@ -60,6 +60,7 @@ public class MappedSystemCTask {
 	private ArrayList<TMLRequest> requests;
 	private int commentNum;
 	private boolean debug;
+	private boolean optimize;
 	
 	private final static String DOTH = ".h";
 	private final static String DOTCPP = ".cpp";
@@ -88,6 +89,7 @@ public class MappedSystemCTask {
 		commentText="";
 		idsMergedCmds="";
 		commentNum=0;
+		optimize=false;
     	}
 	
 	public void saveInFiles(String path) throws FileException {	
@@ -263,7 +265,9 @@ public class MappedSystemCTask {
 		while(iterator.hasNext()) {
 			att = (TMLAttribute)(iterator.next());
 			functions += "READ_STREAM(i_stream_var," + att.name + ")" + SCCR;
+			functions += "#ifdef DEBUG_SERIALIZE\n";
 			functions += "std::cout << \"Read: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
+			functions += "#endif\n";
 		}
 		functions+= "return i_stream_var;\n}\n\n";
 		functions+= "std::ostream& " + reference + "::writeObject(std::ostream& i_stream_var){\nTMLTask::writeObject(i_stream_var);\n";
@@ -271,7 +275,9 @@ public class MappedSystemCTask {
 		while(iterator.hasNext()) {
 			att = (TMLAttribute)(iterator.next());
 			functions += "WRITE_STREAM(i_stream_var," + att.name + ")" + SCCR;
+			functions += "#ifdef DEBUG_SERIALIZE\n";
 			functions += "std::cout << \"Write: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
+			functions += "#endif\n";
 		}
 		functions+= "return i_stream_var;\n}\n\n";
 		hcode += "void reset()" + SCCR;
@@ -351,7 +357,11 @@ public class MappedSystemCTask {
 				//initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
 				//initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR; //last one
 				initCommand+= "," + cmdName + "("+ idString + ",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func, 1, false)"+CR;
-				String MKResult = makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCollection,null);
+				String MKResult;
+				if (optimize)
+					MKResult = makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCollection,null);
+				else
+					MKResult = makeCommands(currElem.getNextElement(0),false,retElement,null,null);
 				if(nextCommandCollection.num==0){
 					nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + MKResult + "));\n";
 				}else{	
@@ -411,8 +421,6 @@ public class MappedSystemCTask {
 			if (debug) System.out.println("Checking Loop\n");
 			TMLForLoop fl = (TMLForLoop)currElem;
 			TMLActionState initAction=new TMLActionState("lpInitAc",null);
-			//if (fl.getInit()==null) System.out.println("No action in loop init!!!!\n"); else System.out.println(fl.getInit());
-			//if (fl.getIncrement()==null) System.out.println("No action in loop inc!!!!\n"); else System.out.println(fl.getIncrement());
 			initAction.setAction(fl.getInit());
 			//cmdName= "_action" + initAction.getID();
 			//TMLActionState incAction=new TMLActionState("lpIncAc",null);
@@ -431,17 +439,6 @@ public class MappedSystemCTask {
 			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, retElement);
 			makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
 			return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);
-			
-			/*cmdName="_choice" + currElem.getID();
-			hcode+="TMLChoiceCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
-			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nstatic bool firstTime=true;\nif(firstTime){\nfirstTime=false;\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getInit()) + "\n}else{\n" + addSemicolonIfNecessary(((TMLForLoop)currElem).getIncrement()) + "\n}\nif(" + ((TMLForLoop)currElem).getCondition() + "){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn 0;\n}else{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + (commentNum+1) + "));\n#endif\nfirstTime=true;\nreturn 1;\n}\n}\n\n";
-			commentText+="_comment[" + commentNum + "]=std::string(\"" + ((TMLForLoop)currElem).getCondition() + "=true\");\n";
-			commentNum++;
-			commentText+="_comment[" + commentNum + "]=std::string(\"Exit loop: " + ((TMLForLoop)currElem).getCondition() + "=false\");\n";
-			commentNum++;
-			functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
-			nextCommand= cmdName + ".setNextCommand(array(2,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,"&"+cmdName,null,null,null) + ",(TMLCommand*)" + makeCommands(currElem.getNextElement(1),false,retElement,null,null,lastSequence) + "))"+ SCCR;*/
 		
 		} else if (currElem instanceof TMLReadChannel){
 			if (debug) System.out.println("Checking Read\n");
@@ -619,7 +616,8 @@ public class MappedSystemCTask {
 							}
 						}
 						if (nextCommandCont==null){
-							MergedCmdStr nextCommandCollection = new MergedCmdStr("",cmdName, returnIndex);
+							MergedCmdStr nextCommandCollection=null;
+							if (optimize) nextCommandCollection = new MergedCmdStr("",cmdName, returnIndex);
 							//System.out.println("Call makeCommands, task: "+reference);
 							//if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
 							if (retElseElement!=null && i==index1)
@@ -627,7 +625,7 @@ public class MappedSystemCTask {
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElseElement,nextCommandCollection,null);
 							else
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,null);
-							if (nextCommandCollection.funcs.length() == 0){
+							if (!optimize || nextCommandCollection.funcs.length() == 0){
 								//System.out.println("NO content has been added to "+ code2);
 								code += "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
