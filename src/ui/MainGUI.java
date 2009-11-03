@@ -764,6 +764,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //System.out.println("Main analysis added");
         return index;
     }
+	
+	private int addAttackTreePanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AttackTreePanel atp = new AttackTreePanel(this);
+        tabs.add(index, atp); // should look for the first
+        mainTabbedPane.add(atp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open requirement diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic1000);
+        atp.init();
+        return index;
+    }
     
     private int addRequirementPanel(String name, int index) {
         if (index == -1) {
@@ -1302,6 +1316,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
         //frame.repaint();*/
+    }
+	
+	public void newAttackTree() {
+        //System.out.println("NEW ANALYSIS");
+        addAttackTreePanel("Attack Trees", 0);
+        //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
+        //paneAction(null);
+        //frame.repaint();
     }
     
     public void newRequirement() {
@@ -5863,7 +5886,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree;
         
         public PopupListener(MainGUI _mgui) {
             mgui = _mgui;
@@ -5899,6 +5922,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newAnalysis = createMenuItem("New TURTLE Analysis");
             newDesign = createMenuItem("New TURTLE Design");
             newDeployment = createMenuItem("New TURTLE Deployment");
+			newAttackTree = createMenuItem("New Attack Tree (SysML Parametric Diagram)");
             newRequirement = createMenuItem("New SysML Requirement Diagram");
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
 			newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
@@ -5926,6 +5950,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             
             menu.addSeparator();
             
+			menu.add(newAttackTree);
             menu.add(newRequirement);
 			
 			menu.addSeparator();
@@ -6023,6 +6048,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newDesign();
                 } else if (ac.equals("New TURTLE Deployment")) {
                     mgui.newDeployment();
+                } else if (ac.equals("New Attack Tree (SysML Parametric Diagram)")) {
+                    mgui.newAttackTree();
                 } else if (ac.equals("New SysML Requirement Diagram")) {
                     mgui.newRequirement();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
@@ -6066,7 +6093,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         public void mouseEntered(MouseEvent evt)  {
             if (evt.getSource()	instanceof AbstractButton)  {
                 AbstractButton button =	(AbstractButton)evt.getSource();
-                Action action =	button.getAction(); // getAction is new	in JDK 1.3
+                Action action =	button.getAction();
                 if (action != null)  {
                     String message = (String)action.getValue(Action.LONG_DESCRIPTION);
                     label.setText(message);

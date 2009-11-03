@@ -55,9 +55,9 @@ import java.util.*;
 
 import ui.*;
 
-public class AttackTreePanel extends TDiagramPanel {
+public class AttackTreeDiagramPanel extends TDiagramPanel {
     
-    public  AttackTreePanel(MainGUI mgui, TToolBar _ttb) {
+    public  AttackTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         //addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
         TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
