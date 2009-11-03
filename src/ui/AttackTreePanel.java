@@ -56,7 +56,7 @@ import java.util.*;
 public class AttackTreePanel extends TURTLEPanel {
     public AttackTreeDiagramPanel atdp;
     
-    public RequirementPanel(MainGUI _mgui) {
+    public AttackTreePanel(MainGUI _mgui) {
         super(_mgui);
 		
         tabbedPane = new JTabbedPane();
@@ -84,7 +84,7 @@ public class AttackTreePanel extends TURTLEPanel {
     }
     
     public boolean addAttackTreeDiagram(String s) {
-        AttackTreeDiagramToolBar toolBarAt = new AttackTreeDiagramToolBar(mgui);
+        AttackTreeDiagramToolbar toolBarAt = new AttackTreeDiagramToolbar(mgui);
         toolbars.add(toolBarAt);
         
         toolBarPanel = new JPanel();
@@ -93,7 +93,7 @@ public class AttackTreePanel extends TURTLEPanel {
 		//toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
         
         //The diagram
-        atdp = new AttackTreeDiagramPanel(mgui, toolBarReq);
+        atdp = new AttackTreeDiagramPanel(mgui, toolBarAt);
         atdp.setName(s);
         atdp.tp = this;
         tdp = atdp;

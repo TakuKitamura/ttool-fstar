@@ -52,9 +52,9 @@ import javax.swing.*;
 
 import ui.*;
 
-public class AttackTreeDiagramToolBar extends TToolBar {
+public class AttackTreeDiagramToolbar extends TToolBar {
     
-    public AttackTreeToolBar(MainGUI _mgui) {
+    public AttackTreeDiagramToolbar(MainGUI _mgui) {
         super(_mgui);
         
     }
