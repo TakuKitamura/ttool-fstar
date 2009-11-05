@@ -107,3 +107,14 @@ std::string ERC::toString() const{
 void ERC::setSimComponents(SimComponents* iSimComp){
 	_simComp=iSimComp;
 }
+
+std::ostream& ERC::writeObject(std::ostream& s){
+	_eventArray[0]->writeObject(s);
+	return s;
+}
+
+std::istream& ERC::readObject(std::istream& s){
+	_wasPrepared=true;
+	_eventArray[0]->readObject(s);
+	return s;
+}

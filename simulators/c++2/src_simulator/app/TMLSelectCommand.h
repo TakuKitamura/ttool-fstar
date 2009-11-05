@@ -55,7 +55,7 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to an array of pointers to channels conveying the desired signals
 	\param iNumbChannels Number of channels in the array
-	\param iParam Pointer to an array of parameter functions pointers
+	\param iParamFunc Pointer to an array of parameter functions pointers
 	*/
 	TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFunc);
 	///Destructor

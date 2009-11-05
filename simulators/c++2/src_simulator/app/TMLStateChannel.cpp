@@ -48,14 +48,18 @@ TMLStateChannel::~TMLStateChannel(){}
 std::ostream& TMLStateChannel::writeObject(std::ostream& s){
 	TMLChannel::writeObject(s);
 	WRITE_STREAM(s,_content);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLStateChannel " << _name << " content: " << _content << std::endl;
+#endif
 	return s;
 }
 
 std::istream& TMLStateChannel::readObject(std::istream& s){
 	TMLChannel::readObject(s);
 	READ_STREAM(s,_content);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLStateChannel " << _name << " content: " << _content << std::endl;
+#endif
 	return s;
 }
 

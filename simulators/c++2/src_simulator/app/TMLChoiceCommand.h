@@ -54,6 +54,7 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
+	\param iNbOfBranches Number of branches of the choice
 	\param iNonDeterm Flag is true for non deterministic commands
     	*/
 	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm);

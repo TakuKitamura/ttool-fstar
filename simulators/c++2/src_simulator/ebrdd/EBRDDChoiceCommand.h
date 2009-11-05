@@ -53,7 +53,6 @@ public:
       	\param iID ID of the command
       	\param iEBRDD Pointer to the EBRDD the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
-	\param iNbOfBranches Number of branches
     	*/
 	EBRDDChoiceCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iCondFunc);
 	EBRDDCommand* prepare();

@@ -49,20 +49,39 @@ Ludovic Apvrille, Renaud Pacalet
 
 class SimComponents;
 
+///EBRDD Command Event Reception Container
 class ERC: public NotifyIF, public EBRDDCommand, public KernelListener{
 public:
+	///Constructor
+	/**
+	\param iID ID of the ERC
+	\param iEBRDD Pointer to the subordinate EBRDD 
+	*/
 	ERC(unsigned int iID, EBRDD* iEBRDD);
 	void notifyEvent(unsigned int iID);
 	void notifyAbort(unsigned int iID);
+	///Returns a pointer to the subordinate EBRDD
+	/**
+	\return Pointer to EBRDD
+	*/
 	EBRDD* getEBRDD();
 	void timeAdvances(TMLTime iCurrTime);
 	EBRDDCommand* prepare();
 	std::string toString() const;
+	///Sets the class variable pointing to the simulation objects
+	/**
+	\param iSimComp Pointer to the simulation components
+	*/
 	static void setSimComponents(SimComponents* iSimComp);
-	void reset();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	virtual void reset();
 protected:
+	///Pointer to subordiate EBRDD
 	EBRDD* _ebrdd;
+	///Pointer to simulation components
 	static SimComponents* _simComp;
+	///Indicates whether the ERC has already been prepared
 	bool _wasPrepared;
 };
 #endif

@@ -57,12 +57,12 @@ public:
 	EBRDD(unsigned int iID, std::string iName);
 	///Destructor
 	virtual ~EBRDD();
-	///Returns a pointer to the current command of the task
+	///Returns a pointer to the current command of the EBRDD
 	/**
       	\return Pointer to the current command
     	*/
 	EBRDDCommand* getCurrCommand() const;
-	///Sets the pointer to the current command of the task
+	///Sets the pointer to the current command of the EBRDD
 	/**
       	\param iCurrCommand Pointer to the current command
     	*/
@@ -85,9 +85,9 @@ public:
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
-	/////Returns a pointer to the task variable specified by its name
+	/////Returns a pointer to the EBRDD variable specified by its name
 	////**
-	//\param iVarName Name of the task variable
+	//\param iVarName Name of the EBRDD variable
 	//\param oIsId Is set to true if an ID was passed to this function 
 	//\return Pointer to the variable
 	//*/
@@ -100,12 +100,13 @@ public:
 	EBRDDCommand* getCommandByID(unsigned int iID);
 	///Adds a new command to the internal list
 	/**
+	\param iID ID of the command
 	\param iCmd Pointer to the command
 	*/
 	void addCommand(unsigned int iID, EBRDDCommand* iCmd);
-	/////Returns a pointer to the task variable specified by its ID
+	/////Returns a pointer to the EBRDD variable specified by its ID
 	////**
-	//\param iVarID ID of the task variable
+	//\param iVarID ID of the EBRDD variable
 	//\return Pointer to the variable
 	//*/
 	//ParamType* getVariableByID(unsigned int iVarID);
@@ -123,19 +124,19 @@ public:
 	//VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
 	///Is called when a stop command is encountered
 	void finished();
-	TMLTransaction* getNextTransaction() const;
+	//TMLTransaction* getNextTransaction() const;
 protected:
-	///ID of the task
+	///ID of the EBRDD
 	unsigned int _ID;
-	///Name of the task
+	///Name of the EBRDD
 	std::string _name;
-	///Pointer to the current command of the task
+	///Pointer to the current command of the EBRDD
 	EBRDDCommand* _currCommand;
-	///Pointer to the first command of the task
+	///Pointer to the first command of the EBRDD
 	EBRDDCommand* _firstCommand;
-	///Look up table for task variables (by name)
+	///Look up table for EBRDD variables (by name)
 	VariableLookUpTableName _varLookUpName;
-	/////Look up table for task variables (by ID)
+	/////Look up table for EBRDD variables (by ID)
 	//VariableLookUpTableID _varLookUpID;
 	///Hash table containing commands
 	CommandHashTabEBRDD _commandHash;

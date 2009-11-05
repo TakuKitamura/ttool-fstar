@@ -145,10 +145,14 @@ RRScheduler::~RRScheduler(){
 std::istream& RRScheduler::readObject(std::istream &is){
 	WorkloadSource::readObject(is);
 	READ_STREAM(is,_elapsedTime);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: RRScheduler " << _name << " elapsedTime: " << _elapsedTime << std::endl;
+#endif
 	int aLastSourceIndex;
 	READ_STREAM(is, aLastSourceIndex);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: RRScheduler " << _name << " lastSourceIndex: " << aLastSourceIndex << std::endl;
+#endif
 	if (aLastSourceIndex==-1){
 		_lastSource=0;
 	}else{
@@ -162,7 +166,9 @@ std::istream& RRScheduler::readObject(std::istream &is){
 std::ostream& RRScheduler::writeObject(std::ostream &os){
 	WorkloadSource::writeObject(os);
 	WRITE_STREAM(os,_elapsedTime);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: RRScheduler " << _name << "  elapsedTime: " << _elapsedTime << std::endl;
+#endif
 	int aLastSourceIndex;
 	if (_lastSource==0){
 		aLastSourceIndex=-1;
@@ -176,7 +182,9 @@ std::ostream& RRScheduler::writeObject(std::ostream &os){
 		}
 	}
 	WRITE_STREAM(os, aLastSourceIndex);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: RRScheduler " << _name << " lastSourceIndex: " << aLastSourceIndex << std::endl;
+#endif
 	return os;
 }
 

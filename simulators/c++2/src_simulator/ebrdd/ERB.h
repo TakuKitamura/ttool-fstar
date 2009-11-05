@@ -53,14 +53,30 @@ Ludovic Apvrille, Renaud Pacalet
 class SimComponents;
 class ERC;
 
+///Event Reaction Blocks are leaf nodes of an Event Tree within an ERC
 class ERB: public EventIF, public ChannelListener, public CommandListener, public KernelListener, public TaskListener, public TransactionListener{
 public:
+	///Constructor
+	/**
+	\param iContainer Pointer to subordinate ERC
+	\param iAncestorNode Pointer to ancestor node within the event tree
+	\param iNegated Event negated flag
+	\param iName Name of the ERB
+	\param iEvtID ID of event to be received
+	\param iSourceClass Category of then event source (CPU, Bus, Slave, ...)
+	\param iArrayOfSources Array of event sources
+	\param iNbOfSources Number of event sources
+	\param iEbrddFunc Member function pointer to EBRDD function
+	\param iCondString ERB Condition in string format
+	*/
 	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString);
+	///Destructor
 	virtual ~ERB();
 	void timeTick(TMLTime iNewTime);
 	void activate();
 	void deactivate();
-	//void transExecuted(TMLTransaction* iTrans);
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 	void commandEntered(TMLCommand* iComm, unsigned int iID);
 	void commandStarted(TMLCommand* iComm, unsigned int iID);
@@ -72,23 +88,36 @@ public:
 	void writeTrans(TMLTransaction* iTrans, unsigned int iID);
 	void simulationStarted();
 	void simulationStopped();
-	///Sets the internal pointer to the simulation components
+	///Sets the class variable pointing to the simulation objects
 	/**
-      	\param iSimComp Pointer to simulation components
-    	*/ 
+	\param iSimComp Pointer to the simulation components
+	*/
 	static void setSimComponents(SimComponents* iSimComp);
 protected:
+	///Pointer to subordinate ERC
 	ERC* _container;
+	///Name of ERB
 	std::string _name;
+	///ID of event to be received
 	unsigned int _evtID;
+	///Category of then event source (CPU, Bus, Slave, ...)
 	unsigned int _sourceClass;
+	///Array of event sources
 	unsigned int* _arrayOfSources;
+	///Number of event sources
 	unsigned int _nbOfSources;
 	///Pointer to simulation components
 	static SimComponents* _simComp;
+	///Class variable holding strinf representations of events
 	static char* _evtString[];
+	///Member function pointer to EBRDD function
 	EBRDDFuncPointer _ebrddFunc;
+	///ERB Condition in string format
 	std::string _condString;
+	///Signals event to ancestor node
+	/**
+	\param iEvtSourceID  ID of event source
+	*/
 	void notifyAncestor(unsigned int iEvtSourceID);
 };
 #endif

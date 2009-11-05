@@ -42,11 +42,12 @@ Ludovic Apvrille, Renaud Pacalet
 #define ChnanelAbstrH
 #include <TMLChannel.h>
 
+///Abstraction of TML Channels
 class ChannelAbstr{
 public:
 	///Constructor
     	/**
-      	\param iTask Pointer to CPU object which shall be encapsulated
+      	\param iChannel Pointer to Channel object which shall be encapsulated
     	*/
 	ChannelAbstr(TMLChannel* iChannel):_channel(iChannel){
 	}

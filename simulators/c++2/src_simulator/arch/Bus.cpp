@@ -236,6 +236,7 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 			break;
 		}
 	}
+	return 0;
 }
 
 void Bus::reset(){
@@ -267,7 +268,9 @@ std::istream& Bus::readObject(std::istream &is){
 	_scheduler->readObject(is);
 #ifdef SAVE_BENCHMARK_VARS
 	READ_STREAM(is,_busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: Bus " << _name << " busyCycles: " << _busyCycles << std::endl;
+#endif
 #endif
 	return is;
 }
@@ -277,7 +280,9 @@ std::ostream& Bus::writeObject(std::ostream &os){
 	_scheduler->writeObject(os);
 #ifdef SAVE_BENCHMARK_VARS
 	WRITE_STREAM(os,_busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: Bus " << _name << " busyCycles: " << _busyCycles << std::endl;
+#endif
 #endif
 	return os;
 }

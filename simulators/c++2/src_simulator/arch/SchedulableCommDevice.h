@@ -53,7 +53,7 @@ public:
 	\param iID ID of the device
 	\param iName Name of the device 
 	*/
-	SchedulableCommDevice(unsigned int iID, std::string _iName): SchedulableDevice(iID, _iName){}
+	SchedulableCommDevice(unsigned int iID, std::string iName): SchedulableDevice(iID, iName){}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Size of an atomic bus transaction
@@ -61,6 +61,8 @@ public:
 	virtual TMLLength getBurstSize() const=0;
 	/////Truncates a transaction so that it does not exceed the burst size of the communication device
 	//virtual void truncateToBurst(TMLTransaction* iTrans) const=0;
+	///Signals the component that a new transaction has become available and thus rescheduling is needed
+	virtual void registerTransaction()=0;
 	///Destructor
 	virtual ~SchedulableCommDevice(){}
 };

@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define CommandAbstrH
 #include <TMLCommand.h>
 
+///Abstraction of TML commands
 class CommandAbstr{
 public:
 	///Constructor

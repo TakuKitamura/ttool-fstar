@@ -55,7 +55,8 @@ public:
     	/**
 	\param iName Name of the bus master
       	\param iPriority Priority of the bus master
-	\param iBus Pointer to the bus the master is connected to
+	\param iNbOfBuses Number of buses(bus channels) the master is connected to
+	\param iBusArray Pointer to the buses(bus channels) the master is connected to
     	*/
 	BusMaster(const std::string& iName, unsigned int iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), _lastSimTime(-1), _contentionDelay(0), _noTransactions(0){
 		_busSortArray=new SchedulableCommDevice*[_nbOfBuses];
@@ -174,9 +175,13 @@ public:
 		WorkloadSource::readObject(is);
 #ifdef SAVE_BENCHMARK_VARS
 		READ_STREAM(is,_contentionDelay);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Read: BusMaster " << _name << " contentionDelay: " << _contentionDelay << std::endl;
+#endif
 		READ_STREAM(is,_noTransactions);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Read: BusMaster " << _name << " noTransactions: " << _noTransactions << std::endl;
+#endif
 #endif
 		return is;
 	}
@@ -184,9 +189,13 @@ public:
 		WorkloadSource::writeObject(os);
 #ifdef SAVE_BENCHMARK_VARS
 		WRITE_STREAM(os,_contentionDelay);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: BusMaster " << _name << " contentionDelay: " << _contentionDelay << std::endl;
+#endif
 		WRITE_STREAM(os,_noTransactions);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: BusMaster " << _name << " noTransactions: " << _noTransactions << std::endl;
+#endif
 #endif
 		return os;
 	}

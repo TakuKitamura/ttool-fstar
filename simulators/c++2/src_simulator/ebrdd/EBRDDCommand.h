@@ -59,7 +59,7 @@ public:
 	virtual ~EBRDDCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
 	/**
-      	\return True if there was a transaction to prepare
+      	\return The EBRDD command which is currently active
 	*/
 	virtual EBRDDCommand* prepare()=0;
 	///Assigns a value to the pointer referencing the array of next commands
@@ -99,7 +99,7 @@ public:
 protected:
 	///ID of the command
 	unsigned int _ID;
-	///Pointer to the task the command belongs to
+	///Pointer to the EBRDD the command belongs to
 	EBRDD* _ebrdd;
 	///Pointer to an array of pointers to the next commands
 	EBRDDCommand** _nextCommand;

@@ -192,6 +192,7 @@ public:
 	\param iCond Condition expressed in terms of task variables of a given task
 	\param iTask Task
 	\param oLastTrans Returns the last transaction executed during a simulation
+	\param oSuccess Indicates whether the condition could be compiled and is valid
 	\return Return value of simulate() function
 	*/
 	bool runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransaction*& oLastTrans, bool& oSuccess);
@@ -199,9 +200,9 @@ public:
 	/**
 	\param iDepth Maximal recursion depth
 	\param iPrevID ID of the parent leaf
-	\param oSuccess True is returned if the condition was compiled successfully
+	\param iFile Reference to the output file
 	*/
-	void exploreTree(unsigned int iDepth, unsigned int iPrevID);
+	void exploreTree(unsigned int iDepth, unsigned int iPrevID, std::ofstream& iFile);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file
@@ -210,9 +211,6 @@ public:
 	*/
 	void schedule2VCD(std::string& iTraceFileName) const;
 	///Writes the simulation graph to an output file
-	/**
-	\param iTraceFileName Name of the output trace file
-	*/
 	void schedule2Graph() const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**

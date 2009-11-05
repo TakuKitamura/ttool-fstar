@@ -242,6 +242,32 @@ void ESOSequence::reset(){
 	_lastEvtToWaitFor=0;
 }
 
+std::ostream& ESOSequence::writeObject(std::ostream& s){
+	ESOIF::writeObject(s);
+	WRITE_STREAM(s, _nextEvtToWaitFor);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Write: ESOSequence nextEvtToWaitFor: " << _nextEvtToWaitFor << std::endl;
+#endif
+	WRITE_STREAM(s, _lastEvtToWaitFor);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Write: ESOSequence lastEvtToWaitFor: " << _lastEvtToWaitFor << std::endl;
+#endif
+	return s;
+}
+
+std::istream& ESOSequence::readObject(std::istream& s){
+	ESOIF::readObject(s);
+	READ_STREAM(s, _nextEvtToWaitFor);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Read: ESOSequence nextEvtToWaitFor: " << _nextEvtToWaitFor << std::endl;
+#endif
+	READ_STREAM(s, _lastEvtToWaitFor);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Read: ESOSequence lastEvtToWaitFor: " << _lastEvtToWaitFor << std::endl;
+#endif
+	return s;
+}
+
 void ESOSequence::deactivate(){
 	_active=false;
 	//reset();

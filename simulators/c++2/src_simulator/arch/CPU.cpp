@@ -342,7 +342,7 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 }
 
 void CPU::schedule2TXT(std::ofstream& myfile) const{
-	myfile << "========================================\nScheduling for device: "<< _name << "\n========================================\n" ;
+	myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;
 	}
@@ -406,6 +406,7 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 			break;
 		}
 	}
+	return 0;
 }
 
 TMLTransaction* CPU::getTransactions1By1(bool iInit){
@@ -442,8 +443,8 @@ void CPU::setScheduler(WorkloadSource* iScheduler){
 	_scheduler=iScheduler;
 }
 
-void CPU::registerTransaction(){
-}
+//void CPU::registerTransaction(){
+//}
 
 void CPU::addBusMaster(BusMaster* iMaster){
 	_busMasterList.push_back(iMaster);
@@ -454,7 +455,9 @@ std::istream& CPU::readObject(std::istream &is){
 	_scheduler->readObject(is);
 #ifdef SAVE_BENCHMARK_VARS
 	READ_STREAM(is,_busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: CPU " << _name << " busy cycles: " << _busyCycles << std::endl;
+#endif
 #endif
 	return is;
 }
@@ -463,7 +466,9 @@ std::ostream& CPU::writeObject(std::ostream &os){
 	_scheduler->writeObject(os);
 #ifdef SAVE_BENCHMARK_VARS
 	WRITE_STREAM(os,_busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: CPU " << _name << " busy cycles: " << _busyCycles << std::endl;
+#endif
 #endif
 	return os;
 }

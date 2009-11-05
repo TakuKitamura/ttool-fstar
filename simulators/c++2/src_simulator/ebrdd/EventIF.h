@@ -42,28 +42,70 @@ Ludovic Apvrille, Renaud Pacalet
 #define EventIFH
 
 #include <definitions.h>
+#include <Serializable.h>
 
 class NotifyIF; 
 
-class EventIF{
+///Interface class for top down node configuration within event trees of ERCs
+class EventIF: public Serializable{
 public:
+	///Constructor
+	/**
+	\param iAncestorNode 
+	\param iNegated
+	*/
 	EventIF(NotifyIF* iAncestorNode, bool iNegated);
+	///Set event ID of this event source
+	/**
+	\param iID ID of the node
+	*/
 	void setEventID(unsigned int iID);
+	///Returns whether the event source has already generated an event
+	/**
+	\return Returns true if event has already been notified
+	*/
 	bool notified();
+	///Returns the number of notifications of this event source
+	/**
+	\return Number of notifications
+	*/
 	unsigned int getNbOfNotific();
+	///Returns whether this event source is negated
+	/**
+	\return Returns true if this source is negated
+	*/
 	bool getNegated();
 	virtual void reset();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	///Called to notify an advancement of simulation time
+	/**
+	\param iNewTime New simulation time
+	*/
 	virtual void timeTick(TMLTime iNewTime)=0;
+	///Activates the node
 	virtual void activate()=0;
+	///Deactivates the node
 	virtual void deactivate()=0;
+	///Returns whether this event cannot be raised any more
+	/**
+	\return true if even was aborted
+	*/
 	bool getAborted();
+	///Destructor
 	virtual ~EventIF();
 protected:
+	///Ancestor node to notify upon event reception
 	NotifyIF* _ancestorNode;
+	///Negated flag
 	bool _negated;
+	///ID of the node
 	unsigned int _ID;
+	///Number of event notifications
 	unsigned int _nbOfNotific;
+	///Aborted flag
 	bool _aborted;
+	///Active flag
 	bool _active;
 };
 #endif

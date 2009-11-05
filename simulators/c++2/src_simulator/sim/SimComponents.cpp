@@ -124,28 +124,42 @@ void SimComponents::streamBenchmarks(std::ostream& s) const{
 }
 
 std::ostream& SimComponents::writeObject(std::ostream& s){
+#ifdef DEBUG_SERIALIZE
 	std::cout << "WRITE ----------------------------------------------------\n";
+#endif
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
+		(*i)->writeObject(s);
+	}
+	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		(*i)->writeObject(s);
 	}
 	TMLTime aSimulatedTime = SchedulableDevice::getSimulatedTime();
 	WRITE_STREAM(s, aSimulatedTime);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
+#endif
 	return s;
 }
 
 std::istream& SimComponents::readObject(std::istream& s){
+#ifdef DEBUG_SERIALIZE
 	std::cout << "READ ----------------------------------------------------\n";
+#endif
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
 		//std::cout << "SimComponents --> next Device" << std::endl;
+		(*i)->readObject(s);
+	}
+	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		(*i)->readObject(s);
 	}
 	TMLTime aSimulatedTime;
 	READ_STREAM(s, aSimulatedTime);
 	SchedulableDevice::setSimulatedTime(aSimulatedTime);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
+#endif
 	return s;
 }
 

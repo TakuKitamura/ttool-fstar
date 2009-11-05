@@ -90,7 +90,7 @@ void ERB::notifyAncestor(unsigned int iEvtSourceID){
 
 void ERB::activate(){
 	_active=true;
-	//std::cout << "activate event: " << _name << "\n";
+	std::cout << "activate event: " << _name << "\n";
 	switch (_sourceClass){
 		//CPU
 		case 0:{
@@ -266,17 +266,15 @@ void ERB::simulationStopped(){
 void ERB::setSimComponents(SimComponents* iSimComp){
 	_simComp=iSimComp;
 }
-/*void notify(){
-	if (conditionFunction) 
-		action;
-	else
-		abort;
-	NOTIFY_ANCESTOR;
-}*/
 
-/*void abort(){
-	if (_active){
-		_aborted=true;
-		_ancestorNode->notifyAbort(_ID);
-	}
-}*/
+std::ostream& ERB::writeObject(std::ostream& s){
+	EventIF::writeObject(s);
+	return s;
+}
+
+std::istream& ERB::readObject(std::istream& s){
+	EventIF::readObject(s);
+	std::cout << "readObject " << _name << ": " << _active << "\n";
+	if (_active) activate();
+	return s;
+}

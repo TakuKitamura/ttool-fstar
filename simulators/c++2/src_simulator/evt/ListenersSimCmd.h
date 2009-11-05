@@ -76,7 +76,6 @@ public:
 	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
 	///Destructor
 	virtual ~RunXTransactions();
-	//void transExecuted(TMLTransaction* iTrans);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 	///Sets the number of transactions to execute
 	/**
@@ -229,7 +228,6 @@ public:
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
 	///Destructor
 	virtual ~RunXTimeUnits();
-	//void transExecuted(TMLTransaction* iTrans);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 	///Sets the end time of the simulation
 	/**
@@ -257,7 +255,6 @@ public:
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
-	//void transExecuted(TMLTransaction* iTrans);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
@@ -279,7 +276,6 @@ public:
 	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
-	//void transExecuted(TMLTransaction* iTrans);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
@@ -301,7 +297,6 @@ public:
 	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
-	//void transExecuted(TMLTransaction* iTrans);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
 protected:
 	///Pointer to a SimComponents object
@@ -314,8 +309,7 @@ protected:
 //************************************************************************
 /*class TestListener: public TaskListener, public ChannelListener, public CommandListener{
 public:
-	/////Constructor
-	///**
+	//Constructor
 	//\param iSimComp Pointer to a SimComponents object
 	//
 	TestListener(SimComponents* iSimComp);
@@ -334,7 +328,7 @@ protected:
 };
 
 
-//************************************************************************
+************************************************************************
 class ConstraintBlock: public TransactionListener{
 	ConstraintBlock(SimComponents* iSimComp);
 	~ConstraintBlock();

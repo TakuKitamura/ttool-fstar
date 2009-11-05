@@ -182,7 +182,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 		std::string aSigString;
 		bool aNoMoreTrans;
 		TraceableDevice* actDevice;
-		TMLTime aTime, aCurrTime=-1;
+		TMLTime aTime=0, aCurrTime=-1;
 		SignalChangeData* aTopElement;
 		unsigned int aNextClockEvent=0;
 		myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniels TML simulator\n$end\n\n";
@@ -499,17 +499,22 @@ void Simulator::decodeCommand(std::string iCmd){
 					_simTerm=runXTimeUnits(aParam2, oLastTrans);
 					std::cout << "End Run for x time units." << std::endl; 
 					break;
-				case 7: //Explore Tree
+				case 7: {//Explore Tree
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
 					_leafsID=0;
-					exploreTree(0,0);
+					std::ofstream myfile ("tree");
+					if (myfile.is_open()){
+						exploreTree(0, 0, myfile);
+						myfile.close();
+					}
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
 					_simTerm=true;
 					//aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
 					//anErrorCode=1;
 					std::cout << "End Explore tree." << std::endl;
 					break;
+				}
 				case 8:{//Run to next transfer on bus x
 					std::cout << "Run to next transfer on bus x." << std::endl;
 					aInpStream >> aStrParam;
@@ -1067,11 +1072,13 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 	if (oSuccess) return simulate(oLastTrans); else return false;
 }
 
-void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
-	//std::ostringstream aFileName;
-	//aFileName << "canc" << iDepth << "." << leafsForLevel[iDepth]++;
-	//std::string aFileStr(aFileName.str());
-	//schedule2TXT(aFileStr);
+void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID, std::ofstream& iFile){
+/*std::ofstream myfile (iTraceFileName.c_str());
+	if (myfile.is_open()){
+		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+			(*i)->schedule2TXT(myfile);
+		}
+		myfile.close();*/
 	TMLTransaction* aLastTrans;
 	if (iDepth<RECUR_DEPTH){
 		unsigned int aMyID= ++_leafsID;
@@ -1081,16 +1088,21 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
 			aSimTerminated=runToNextBreakpoint(aLastTrans);
 			aChoiceCmd=_simComp->getCurrentChoiceCmd();
 		}while (!aSimTerminated && aChoiceCmd==0);
-		//std::ostringstream aFileName;
-		std::stringstream aStreamBuffer;
 		//aStreamBuffer << "sched" << iDepth << "." << leafsForLevel[iDepth]++;
-		aStreamBuffer << "edge_" << iPrevID << "_" << aMyID;
-		std::string aStringBuffer(aStreamBuffer.str());
-		schedule2TXT(aStringBuffer);
-		aStreamBuffer.str(""); 
+		//aStreamBuffer << "edge_" << iPrevID << "_" << aMyID;
+		//std::string aStringBuffer(aStreamBuffer.str());
+		//schedule2TXT(aStringBuffer);
+		iFile << "***** edge_" << iPrevID << "_" << aMyID << " *****\n";
+		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+			(*i)->schedule2TXT(iFile);
+		}
+		iFile << "\n";
+		//aStreamBuffer.str(""); 
 		//if (!aSimTerminated){
 		if(aChoiceCmd!=0){
 			unsigned int aNbNextCmds;
+			std::stringstream aStreamBuffer;
+			std::string aStringBuffer;
 			aChoiceCmd->getNextCommands(aNbNextCmds);
 			std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
 			_simComp->writeObject(aStreamBuffer);
@@ -1100,7 +1112,7 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID){
 				aStreamBuffer.str(aStringBuffer);
 				_simComp->readObject(aStreamBuffer);
 				aChoiceCmd->setPreferredBranch(aBranch);
-				exploreTree(iDepth+1,aMyID);
+				exploreTree(iDepth+1, aMyID, iFile);
 				//_simComp->reset();
 				//_simComp->readObject(aBuffer);
 			}

@@ -153,6 +153,7 @@ public:
 	TMLCommand* getCommandByID(unsigned int iID);
 	///Adds a new command to the internal list
 	/**
+	\param iID ID of the command
 	\param iCmd Pointer to the command
 	*/
 	void addCommand(unsigned int iID, TMLCommand* iCmd);

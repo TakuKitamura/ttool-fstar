@@ -126,12 +126,11 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			result = prepareNextTransaction(); //NEW!!!!!!!!!!!!!!!!!!!!!!!!
 		}
 		//TMLCommand* result = prepareNextTransaction();   NEW!!!!!!!!!!!!!!!!!
-		//if (_length==0) std::cout << "create trans with length 0: " << toString() << std::endl;
-#ifdef REGISTER_TRANS_AT_CPU 
+/*#ifdef REGISTER_TRANS_AT_CPU 
 		if (_currTransaction!=0 && _currTransaction->getVirtualLength()!=0){
 			_task->getCPU()->registerTransaction(_currTransaction,0);
 		}
-#endif
+#endif*/
 		return result;
 	}
 	return 0;
@@ -203,13 +202,17 @@ void TMLCommand::removeBreakpoint(){
 
 std::ostream& TMLCommand::writeObject(std::ostream& s){
 	WRITE_STREAM(s,_progress);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+#endif
 	return s;
 }
 
 std::istream& TMLCommand::readObject(std::istream& s){
 	READ_STREAM(s,_progress);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+#endif
 	//std::cout << "End Read Object TMLCommand " << _ID << std::endl;
 	return s;
 }

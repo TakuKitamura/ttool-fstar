@@ -42,20 +42,44 @@ Ludovic Apvrille, Renaud Pacalet
 #define NotifyIFH
 
 #include<definitions.h>
+#include<Serializable.h>
 
 class EventIF;
 
-class NotifyIF{
+///Interface class for bottom up event notification within event trees of ERCs
+class NotifyIF: public Serializable{
 public:
+	///Constructor
+	/**
+	\param iNbOfEvents Number of descendants in the event tree
+	*/
 	NotifyIF(unsigned int iNbOfEvents);
+	///Called by event source to signal an event
+	/**
+	\param iID ID of the event
+	*/
 	virtual void notifyEvent(unsigned int iID)=0;
+	///Called by event source to signal that an event cannot be received any more
+	/**
+	\param iID ID of the event
+	*/
 	virtual void notifyAbort(unsigned int iID)=0;
 	virtual void reset();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	///Registers a new event source (descendant in the event tree)
+	/**
+	\param iEvent Pointer to the event source
+	*/
 	void registerEvent(EventIF* iEvent);
+	///Destructor
 	virtual ~NotifyIF();
 protected:
+	///ID of the node
 	unsigned int _nextID;
+	///Number of descendants within the event tree
 	unsigned int _nbOfEvents;
+	///Array of descendants within the event tree
 	EventIF** _eventArray;
 };
 #endif

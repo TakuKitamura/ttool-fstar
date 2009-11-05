@@ -197,32 +197,42 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 			break;
 		}
 	}
+	return 0;
 }
 
 std::ostream& TMLTask::writeObject(std::ostream& s){
 	unsigned int aCurrCmd;
 	WRITE_STREAM(s,_endLastTransaction);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLTask " << _name << " endLastTransaction: " << _endLastTransaction << std::endl;
+#endif
 	if (_currCommand==0){
 		aCurrCmd=0;
 		WRITE_STREAM(s,aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: TMLTask " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 	}else{
 		aCurrCmd=_currCommand->getID();
-		//if (aCurrCmd>1000 && aCurrCmd!=((unsigned int)-1)){
-		//	std::cout << "BIIIIIIIIIIIIIIIIIIIIIIIG number: " << aCurrCmd << std::endl;
-		//}
 		WRITE_STREAM(s,aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: TMLTask " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 		_currCommand->writeObject(s);
 	}
 #ifdef SAVE_BENCHMARK_VARS
 	WRITE_STREAM(s, _busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLTask " << _name << " busyCycles: " << _busyCycles << std::endl;
+#endif
 	WRITE_STREAM(s, _CPUContentionDelay);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLTask " << _name << " CPUContentionDelay: " << _CPUContentionDelay << std::endl;
+#endif
 	WRITE_STREAM(s, _noCPUTransactions);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLTask " << _name << " noCPUTransactions: " << _noCPUTransactions << std::endl;
+#endif
 #endif
 	return s;
 }
@@ -231,9 +241,13 @@ std::istream& TMLTask::readObject(std::istream& s){
 	unsigned int aCurrCmd;
 	//_previousTransEndTime=0; _busyCycles=0; _CPUContentionDelay=0; _noCPUTransactions=0;
 	READ_STREAM(s, _endLastTransaction);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLTask " << _name << " endLastTransaction: " << _endLastTransaction << std::endl;
+#endif
 	READ_STREAM(s, aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLTask " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 	if (aCurrCmd==0){
 		_currCommand=0;
 	}else{
@@ -247,11 +261,17 @@ std::istream& TMLTask::readObject(std::istream& s){
 	//std::cout << "End Read Object TMLTask " << _name << std::endl;
 #ifdef SAVE_BENCHMARK_VARS
 	READ_STREAM(s, _busyCycles);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLTask " << _name << " busyCycles: " << _busyCycles << std::endl;
+#endif
 	READ_STREAM(s, _CPUContentionDelay);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLTask " << _name << " CPUContentionDelay: " << _CPUContentionDelay << std::endl;
+#endif
 	READ_STREAM(s, _noCPUTransactions);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLTask " << _name << " noCPUTransactions: " << _noCPUTransactions << std::endl;
+#endif
 #endif
 	_justStarted=false;
 	return s;

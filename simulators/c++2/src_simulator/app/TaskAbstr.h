@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define TaskAbstrH
 #include <TMLTask.h>
 
+///Abstraction of TML Tasks
 class TaskAbstr{
 public:
 	///Constructor

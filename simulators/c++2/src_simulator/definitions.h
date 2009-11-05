@@ -64,8 +64,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <pthread.h>
 #include <dlfcn.h>
 
-#define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes written" << std::endl;
-#define READ_STREAM(s,v) s.read((char*) &v,sizeof(v)); std::cout << sizeof(v) << " bytes read" << std::endl;
+#define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
+//std::cout << sizeof(v) << " bytes written" << std::endl;
+#define READ_STREAM(s,v) s.read((char*) &v,sizeof(v)); 
+//std::cout << sizeof(v) << " bytes read" << std::endl;
 
 using std::min;
 using std::max;
@@ -73,6 +75,7 @@ using std::max;
 #undef DEBUG_KERNEL
 #undef DEBUG_CPU
 #undef DEBUG_BUS
+#undef DEBUG_SERIALIZE
 
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
@@ -84,7 +87,7 @@ using std::max;
 #define PARAMETER_BLOCK_SIZE 1000
 #define ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
-#undef REGISTER_TRANS_AT_CPU
+//#undef REGISTER_TRANS_AT_CPU
 #define SAVE_BENCHMARK_VARS 
 #define PORT "3490"
 #define BACKLOG 10

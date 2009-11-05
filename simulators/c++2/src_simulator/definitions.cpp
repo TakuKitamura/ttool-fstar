@@ -108,4 +108,5 @@ int getexename(char* buf, size_t size){
 	ret = readlink(linkname, buf, size);
 	if (ret == -1 || ret>=size) return -1;
 	buf[ret] = 0;
+	return ret;
 }

@@ -54,7 +54,7 @@ void TMLWaitCommand::execute(){
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
-	TMLCommand* aNextCommand = prepare(false);
+	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }

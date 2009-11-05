@@ -63,7 +63,9 @@ public:
 		READ_STREAM(s, _p1);
 		READ_STREAM(s, _p2);
 		READ_STREAM(s, _p3);
+#ifdef DEBUG_SERIALIZE
 		print();
+#endif
 	}
 	/////Assignement operator, copies all parameters
 	/*const Parameter<T>& operator=(const Parameter<T>& rhs){
@@ -81,7 +83,9 @@ public:
 		WRITE_STREAM(s, _p1);
 		WRITE_STREAM(s, _p2);
 		WRITE_STREAM(s, _p3);
+#ifdef DEBUG_SERIALIZE
 		print();
+#endif
 		return s;
 	}
 	///Stream operator >>

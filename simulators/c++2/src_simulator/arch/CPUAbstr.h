@@ -41,11 +41,13 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef CPUAbstrH
 #define CPUAbstrH
 #include <CPU.h>
+
+///Abstraction of CPU component
 class CPUAbstr{
 public:
 	///Constructor
     	/**
-      	\param iTask Pointer to CPU object which shall be encapsulated
+      	\param iCPU Pointer to CPU object which shall be encapsulated
     	*/
 	CPUAbstr(CPU* iCPU):_cpu(iCPU){
 	}

@@ -48,7 +48,8 @@ class TransactionListener{
 public:
 	///Gets called when a transaction is executed
 	/**
-	\param  iTrans Pointer to the transaction
+	\param iTrans Pointer to the transaction
+	\param iID ID of the event source
 	*/
 	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
 	/////Gets called when a transaction is scheduled

@@ -73,6 +73,38 @@ void EventIF::reset(){
 	//std::cout << "End Reset leaf\n";
 }
 
+std::ostream& EventIF::writeObject(std::ostream& s){
+	WRITE_STREAM(s, _nbOfNotific);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Write: EventIF nbOfNotific: " << _nbOfNotific << std::endl;
+#endif
+	WRITE_STREAM(s, _aborted);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Write: EventIF aborted: " << _aborted << std::endl;
+#endif
+	WRITE_STREAM(s, _active);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Write: EventIF active: " << _active << std::endl;
+#endif
+	return s;
+}
+
+std::istream& EventIF::readObject(std::istream& s){
+	READ_STREAM(s, _nbOfNotific);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Read: EventIF nbOfNotific: " << _nbOfNotific << std::endl;
+#endif
+	READ_STREAM(s, _aborted);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Read: EventIF aborted: " << _aborted << std::endl;
+#endif
+	READ_STREAM(s, _active);
+#ifdef DEBUG_SERIALIZE
+	std::cout << "Read: EventIF active: " << _active << std::endl;
+#endif
+	return s;
+}
+
 bool EventIF::getAborted(){
 	return _aborted;
 }

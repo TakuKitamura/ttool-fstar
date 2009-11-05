@@ -86,12 +86,8 @@ public:
       	\param iTask Pointer to the task to add
     	*/
 	virtual void registerTask(TMLTask* iTask);
-	///Add a transaction waiting for execution to the internal list
-	/**
-      	\param iTrans Pointer to the transaction to add
-	\param iSourceDevice Source device
-    	*/
-	void registerTransaction();
+	/////Add a transaction waiting for execution to the internal list
+	//void registerTransaction();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm

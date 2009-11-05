@@ -55,8 +55,8 @@ public:
 	\param iID of channel
       	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
-	\param iBuses Pointer to the buses on which the channel is mapped
-	\param iSlaves Pointer to the slaves on which the channel is mapped
+	\param iMasters Pointers to the masters which the channel is connected to
+	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/

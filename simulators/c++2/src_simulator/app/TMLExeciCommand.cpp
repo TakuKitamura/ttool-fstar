@@ -53,7 +53,7 @@ void TMLExeciCommand::execute(){
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
 	//std::cout << "Execi execute prepare" << std::endl;
-	TMLCommand* aNextCommand = prepare(false);
+	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }

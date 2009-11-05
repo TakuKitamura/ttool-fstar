@@ -49,7 +49,7 @@ public:
 	///Constructor
     	/**
 	\param iName Name of the scheduler
-      	\param iPriority Priority of the scheduler
+      	\param iPrio Priority of the scheduler
 	\param iTimeSlice Time slice which is granted to clients
 	\param iMinSliceSize Minimum size of a time slice
     	*/
@@ -57,7 +57,7 @@ public:
 	///Constructor
     	/**
 	\param iName Name of the scheduler
-      	\param iPriority Priority of the scheduler
+      	\param iPrio Priority of the scheduler
 	\param iTimeSlice Time slice which is granted to clients
 	\param iMinSliceSize Minimum size of a time slice
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received

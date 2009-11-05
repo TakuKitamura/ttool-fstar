@@ -72,16 +72,6 @@ public:
 	/**
       	\param myfile Reference to the ofstream object representing the output file
     	*/
-	///Add a transaction waiting for execution to the internal list
-	/**
-      	\param iTrans Pointer to the transaction to add
-	\param iSourceDevice Source device
-    	*/
-	virtual void registerTransaction()=0;
-	///Writes a HTML representation of the schedule to an output file
-	/**
-      	\param myfile Reference to the ofstream object representing the output file
-    	*/
 	virtual void schedule2HTML(std::ofstream& myfile) const =0;
 	///Writes a plain text representation of the schedule to an output file
 	/**
@@ -92,12 +82,16 @@ public:
 	virtual std::istream& readObject(std::istream &is){
 		READ_STREAM(is,_endSchedule);
 		//_simulatedTime=max(_simulatedTime,_endSchedule);   ????????????
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Read: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
+#endif
 		return is;
 	}
 	virtual std::ostream& writeObject(std::ostream &os){
 		WRITE_STREAM(os,_endSchedule);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: Schedulable Device " << _name << ": " << _endSchedule << std::endl;
+#endif
 		return os;
 	}
 	virtual void reset(){

@@ -48,7 +48,7 @@ PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, Workl
 
 TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
-	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans, *anOldTrans;
+	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
 	unsigned int aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW

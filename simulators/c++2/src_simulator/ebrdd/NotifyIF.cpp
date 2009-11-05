@@ -56,6 +56,17 @@ void NotifyIF::reset(){
 		//std::cout << "after " << std::endl;
 	}
 }
+
+std::ostream& NotifyIF::writeObject(std::ostream& s){
+	for (unsigned int i=0; i<_nbOfEvents; i++) _eventArray[i]->writeObject(s);
+	return s;
+}
+
+std::istream& NotifyIF::readObject(std::istream& s){
+	for (unsigned int i=0; i<_nbOfEvents; i++) _eventArray[i]->readObject(s);
+	return s;
+}
+
 void NotifyIF::registerEvent(EventIF* iEvent){
 	_eventArray[_nextID]=iEvent;
 	iEvent->setEventID(_nextID);

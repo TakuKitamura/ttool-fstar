@@ -77,11 +77,15 @@ std::ostream& EBRDD::writeObject(std::ostream& s){
 	if (_currCommand==0){
 		aCurrCmd=0;
 		WRITE_STREAM(s,aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: EBRDD " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 	}else{
 		aCurrCmd=_currCommand->getID();
 		WRITE_STREAM(s,aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 		std::cout << "Write: EBRDD " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 		_currCommand->writeObject(s);
 	}
 	return s;
@@ -90,7 +94,9 @@ std::ostream& EBRDD::writeObject(std::ostream& s){
 std::istream& EBRDD::readObject(std::istream& s){
 	unsigned int aCurrCmd;
 	READ_STREAM(s, aCurrCmd);
+#ifdef DEBUG_SERIALIZE
 	std::cout << "Read: EBRDD " << _name << " aCurrCmd: " << aCurrCmd << std::endl;
+#endif
 	if (aCurrCmd==0){
 		_currCommand=0;
 	}else{

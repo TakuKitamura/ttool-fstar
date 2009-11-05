@@ -66,6 +66,7 @@ int ServerLocal::run(){
 		std::cout << "Command file could not be opened" << std::endl;
 		executeCmd(aEnd);
 	}
+	return 0;
 }
 
 void ServerLocal::sendReply(std::string iReplyStr){

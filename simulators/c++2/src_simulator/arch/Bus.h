@@ -65,15 +65,13 @@ public:
       	\param iName Name of the bus
 	\param iScheduler Pointer to the scheduler object
       	\param iBurstSize Size of an atomic bus transaction
+	\param ibusWidth Bus width
+	\param iTimePerSample Transfer time per sample
     	*/
 	Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth=1, TMLTime iTimePerSample=1);
 	///Destructor
 	virtual ~Bus();
 	///Add a transaction waiting for execution to the internal list
-	/**
-      	\param iTrans Pointer to the transaction to add
-	\param iSourceDevice Source device
-    	*/
 	void registerTransaction();
 	///Determines the next bus transaction to be executed
 	void schedule();

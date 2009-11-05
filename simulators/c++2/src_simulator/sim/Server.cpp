@@ -74,7 +74,7 @@ int Server::run(){
 			int yes=1;
 			if (setsockopt(aSocketServer, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
 				perror("setsockopt");
-				exit(1);
+				return 1;
 			}
 			//bind socket to a specific port of the server: bind(filedescriptor, address data structure, addresslen)
 			if (bind(aSocketServer, p->ai_addr, p->ai_addrlen) == -1) {
@@ -87,7 +87,7 @@ int Server::run(){
 
 	if (p == NULL){
 		std::cerr << "server: failed to bind\n";
-		exit(1);
+		return 1;
 	}
 	
 	freeaddrinfo(aServerInfo);
@@ -96,7 +96,7 @@ int Server::run(){
 		//causes the socket to listen to incoming connections: listen(filedescriptor, number of connections)
 		if (listen(aSocketServer, BACKLOG) == -1) {
 			perror("listen");
-			exit(1);
+			return 1;
 		}
 	
 		std::cout << "server: waiting for connections...\n";
@@ -191,6 +191,7 @@ int Server::run(){
 	std::cout << "Socket client closed" << std::endl;
 	close(aSocketServer);
 	std::cout << "Socket server closed" << std::endl;
+	return 0;
 }
 
 int Server::getPositionOf(char* iBuffer, char searchCh, int iStart, int iLength){

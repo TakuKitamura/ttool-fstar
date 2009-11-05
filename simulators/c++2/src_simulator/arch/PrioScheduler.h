@@ -49,13 +49,13 @@ public:
 	///Constructor
     	/**
 	\param iName Name of the scheduler
-      	\param iPriority Priority of the scheduler
+      	\param iPrio Priority of the scheduler
     	*/
 	PrioScheduler(const std::string& iName, unsigned int iPrio);
 	///Constructor
     	/**
 	\param iName Name of the scheduler
-      	\param iPriority Priority of the scheduler
+      	\param iPrio Priority of the scheduler
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/

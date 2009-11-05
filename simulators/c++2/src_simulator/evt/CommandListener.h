@@ -52,22 +52,26 @@ class CommandListener{
 public:
 	///Gets called when a command is entered the first time
 	/**
-	\param  iComm Pointer to the command
+	\param iComm Pointer to the command
+	\param iID ID of the event source
 	*/
 	virtual void commandEntered(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a transaction of the command is executed
 	/**
-	\param  iComm Pointer to the command
+	\param iComm Pointer to the command
+	\param iID ID of the event source
 	*/
 	virtual	void commandExecuted(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a the last transaction of the command is executed
 	/**
-	\param  iComm Pointer to the command
+	\param iComm Pointer to the command
+	\param iID ID of the event source
 	*/
 	virtual void commandFinished(TMLCommand* iComm, unsigned int iID){}
 	///Gets called when a the first transaction of the command is executed
 	/**
-	\param  iComm Pointer to the command
+	\param iComm Pointer to the command
+	\param iID ID of the event source
 	*/
 	virtual void commandStarted(TMLCommand* iComm, unsigned int iID){}
 	///Destructor

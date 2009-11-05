@@ -42,11 +42,12 @@ Ludovic Apvrille, Renaud Pacalet
 #define BusAbstrH
 #include <Bus.h>
 
+///Abstraction of Bus component
 class BusAbstr{
 public:
 	///Constructor
     	/**
-	\param iID ID of the bus
+	\param iBus pointer to the bus 
       	*/
 	BusAbstr(Bus* iBus):_bus(iBus){
 	}

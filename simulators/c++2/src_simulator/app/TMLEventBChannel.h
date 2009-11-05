@@ -55,8 +55,8 @@ public:
       	\param iID ID of channel
 	\param iName Name of the channel
 	\param iNumberOfHops Number of buses on which the channel is mapped
-	\param iBuses Pointer to the buses on which the channel is mapped
-	\param iSlaves Pointer to the slaves on which the channel is mapped
+	\param iMasters Pointers to the masters which the channel is connected to
+	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file

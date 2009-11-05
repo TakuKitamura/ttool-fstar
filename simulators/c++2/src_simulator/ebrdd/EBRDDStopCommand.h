@@ -45,8 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDCommand.h>
 
 
-///This class executes a C++ statement (probably a variable assignment or modification) defined in the scope of a TML action state.
-/**The command itself is located in the corresponding TMLTask::executeStatement() method as it may access local task variables.*/
+///This command denotes the end of an EBRDD
 class EBRDDStopCommand:public EBRDDCommand{
 public:
 	///Constructor

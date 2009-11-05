@@ -54,7 +54,7 @@ void TMLRequestCommand::execute(){
 	//std::cout << "setEndLastTrans Virtual length " << std::endl;
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
-	TMLCommand* aNextCommand = prepare(false);
+	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
