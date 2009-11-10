@@ -51,9 +51,10 @@ public:
 	///Constructor
 	/**
 	\param iID ID of the device
-	\param iName Name of the device 
+	\param iName Name of the device
+	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableCommDevice(unsigned int iID, std::string iName): SchedulableDevice(iID, iName){}
+	SchedulableCommDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler){}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Size of an atomic bus transaction

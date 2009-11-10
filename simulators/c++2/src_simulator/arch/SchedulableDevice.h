@@ -57,8 +57,11 @@ public:
 	/**
 	\param iID ID of the device
 	\param iName Name of the device
+	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableDevice(unsigned int iID, std::string iName):_ID(iID), _name(iName), _endSchedule(0){}
+	SchedulableDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0){
+		_transactList.reserve(BLOCK_SIZE);
+	}
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
@@ -115,7 +118,28 @@ public:
 	unsigned int getID() const {return _ID;}
 	///Destructor
 	virtual ~SchedulableDevice(){}
+	///Returns the end time of the last scheduled transaction of the device 
+	/**
+      	\return End time of the last scheduled transaction
+    	*/ 
 	TMLTime getEndSchedule(){return _endSchedule;}
+	///Sets the scheduler object
+	/**
+	\param iScheduler Pointer to the scheduler object 
+	*/
+	void setScheduler(WorkloadSource* iScheduler){ _scheduler=iScheduler;}
+	///Returns the scheduled transaction one after another
+	/**
+      	\param iInit If init is true, the methods starts from the first transaction 
+	\return Pointer to the next transaction
+    	*/
+	TMLTransaction* getTransactions1By1(bool iInit){
+		if (iInit) _posTrasactListGraph=_transactList.begin();
+		if (_posTrasactListGraph == _transactList.end()) return 0; 
+		TMLTransaction* aTrans = *_posTrasactListGraph;
+		_posTrasactListGraph++;
+		return aTrans;
+	}
 protected:
 	///Unique ID of the device
 	unsigned int _ID;
@@ -125,6 +149,14 @@ protected:
 	static TMLTime _simulatedTime;
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
+	///Scheduler
+	WorkloadSource* _scheduler;
+	///List containing all already scheduled transactions
+	TransactionList _transactList;
+	///Pointer to the next transaction to be executed
+	TMLTransaction* _nextTransaction;
+	///State variable for consecutive Transaction output
+	TransactionList::iterator _posTrasactListGraph;
 };
 
 #endif

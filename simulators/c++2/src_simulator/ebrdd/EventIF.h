@@ -87,6 +87,8 @@ public:
 	virtual void activate()=0;
 	///Deactivates the node
 	virtual void deactivate()=0;
+	///Prepares the node
+	virtual void prepare()=0;
 	///Returns whether this event cannot be raised any more
 	/**
 	\return true if even was aborted

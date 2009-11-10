@@ -89,8 +89,11 @@ void ERB::notifyAncestor(unsigned int iEvtSourceID){
 }
 
 void ERB::activate(){
-	_active=true;
 	std::cout << "activate event: " << _name << "\n";
+	_active=true;
+}
+
+void ERB::prepare(){
 	switch (_sourceClass){
 		//CPU
 		case 0:{
@@ -151,8 +154,12 @@ void ERB::activate(){
 }
 
 void ERB::deactivate(){
-	_active=false;
 	//std::cout << "deactivate event: " << _name << "\n";
+	_active=false;
+}
+
+void ERB::reset(){
+	EventIF::reset();	
 	switch (_sourceClass){
 		//CPU
 		case 0:{

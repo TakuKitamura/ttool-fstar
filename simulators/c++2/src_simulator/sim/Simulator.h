@@ -211,7 +211,10 @@ public:
 	*/
 	void schedule2VCD(std::string& iTraceFileName) const;
 	///Writes the simulation graph to an output file
-	void schedule2Graph() const;
+	/**
+	\param iTraceFileName Name of the output trace file
+	*/
+	void schedule2Graph(std::string& iTraceFileName) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**
 	\param iTraceFileName Name of the output trace file

@@ -73,7 +73,7 @@ public:
 #endif
 		NotifyIF::writeObject(s);
 		return s;
-}
+	}
 	virtual std::istream& readObject(std::istream& s){
 		EventIF::readObject(s);
 		READ_STREAM(s, _timeOut);
@@ -91,6 +91,11 @@ public:
 		//std::cout << "TimeTick ESO: " << iNewTime << std::endl;
 		for (unsigned int i=0; i<_nbOfEvents; i++){
 			_eventArray[i]->timeTick(iNewTime);
+		}
+	}
+	void prepare(){
+		for (unsigned int i=0; i<_nbOfEvents; i++){
+			_eventArray[i]->prepare();
 		}
 	}
 protected:

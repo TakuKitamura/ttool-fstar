@@ -53,7 +53,7 @@ void ERC::notifyEvent(unsigned int iID){
 	std::cout << "***** Container " << _ID << " notified *****\n";
 	_wasPrepared=false;
 	_simComp->getSimulator()->removeListener(this);
-	_eventArray[0]->deactivate();
+	//_eventArray[0]->deactivate();
 	NotifyIF::reset();
 	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
 	//std::cout << "end notify event\n";
@@ -92,6 +92,7 @@ EBRDDCommand* ERC::prepare(){
 		_simComp->getSimulator()->registerListener(this);
 		_ebrdd->setCurrCommand(this);
 		//std::cout << "In prepare ERC\n";
+		_eventArray[0]->prepare();
 		_eventArray[0]->activate();
 		//std::cout << "end prepare ERC\n";
 	}

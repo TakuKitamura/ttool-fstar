@@ -82,18 +82,16 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 	return aMarker; 
 }
 
-void Simulator::schedule2Graph() const{/*
+void Simulator::schedule2Graph(std::string& iTraceFileName) const{
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-	std::string aFilename(getArgs("-ogra", "scheduling.aut"));
-	if (aFilename.empty()) return;
-	std::ofstream myfile (aFilename.c_str());
+	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
  		CPUList::iterator i;
 		GraphTransactionQueue aQueue;
 		TMLTransaction* aTrans, *aTopElement;
 		unsigned int aTransitionNo=0;
-		for (i=_simComp->_cpuList.begin(); i!= _simComp->_cpuList.end(); ++i){
+		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			aTrans = (*i)->getTransactions1By1(true);
 			if (aTrans!=0) aQueue.push(aTrans);
 		}
@@ -125,8 +123,7 @@ void Simulator::schedule2Graph() const{/*
 	else
 		std::cout << "Unable to open Graph output file" << std::endl;
 	gettimeofday(&aEnd,NULL);
-	std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << aFilename << std::endl;
-*/
+	std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
 void Simulator::schedule2TXT(std::string& iTraceFileName) const{
@@ -412,8 +409,8 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 		if (!aTraceFileName.empty()) schedule2TXT(aTraceFileName);
 		aTraceFileName=getArgs("-ovcd", "scheduling.vcd", iLen, iArgs);
 		if (!aTraceFileName.empty()) schedule2VCD(aTraceFileName);
-		//_traceFileName=getArgs("-ograph", "scheduling.vcd", iLen, iArgs);
-		//if (!aFilename.empty()) schedule2Graph();
+		aTraceFileName=getArgs("-ograph", "scheduling.aut", iLen, iArgs);
+		if (!aTraceFileName.empty()) schedule2Graph(aTraceFileName);
 		_simComp->streamBenchmarks(std::cout);
 		std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 	}

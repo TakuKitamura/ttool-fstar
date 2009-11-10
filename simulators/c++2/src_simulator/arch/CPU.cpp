@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 #include <TransactionListener.h>
 
-CPU::CPU(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName), _scheduler(iScheduler), _nextTransaction(0), _lastTransaction(0), _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
+CPU::CPU(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0), _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
 #ifdef PENALTIES_ENABLED
 _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle),
 #endif 
@@ -56,7 +56,7 @@ _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*
  ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 #endif
 {
-	_transactList.reserve(BLOCK_SIZE);
+	//_transactList.reserve(BLOCK_SIZE);
 }
 
 CPU::~CPU(){  
@@ -409,15 +409,6 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 	return 0;
 }
 
-TMLTransaction* CPU::getTransactions1By1(bool iInit){
-	if (iInit) _posTrasactListGraph=_transactList.begin();
-	if (_posTrasactListGraph == _transactList.end()) return 0; 
-	TMLTransaction* aTrans = *_posTrasactListGraph;
-	_posTrasactListGraph++;
-	return aTrans;
-	
-}
-
 void CPU::reset(){
 	SchedulableDevice::reset();
 	_scheduler->reset();
@@ -438,13 +429,6 @@ void CPU::streamBenchmarks(std::ostream& s) const{
 void CPU::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
 }
-
-void CPU::setScheduler(WorkloadSource* iScheduler){
-	_scheduler=iScheduler;
-}
-
-//void CPU::registerTransaction(){
-//}
 
 void CPU::addBusMaster(BusMaster* iMaster){
 	_busMasterList.push_back(iMaster);

@@ -46,6 +46,7 @@ class TMLTransaction;
 ///Base class for devices which perform a scheduling
 class TraceableDevice{
 public:
+	TraceableDevice(): _previousTransEndTime(0) {}
 	///Returns a string representation of the task
 	/**
 	\return Detailed string representation
@@ -76,6 +77,11 @@ public:
 	virtual void streamStateXML(std::ostream& s) const=0;
 	///Destructor
 	virtual ~TraceableDevice(){}
+protected:
+	///Actual position within transaction list (used for vcd output)
+	TransactionList::iterator _posTrasactListVCD;
+	///EndTime of the transaction before _posTransactList (used for vcd output)
+	TMLTime _previousTransEndTime;
 };
 
 #endif

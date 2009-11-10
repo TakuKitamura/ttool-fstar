@@ -86,8 +86,6 @@ public:
       	\param iTask Pointer to the task to add
     	*/
 	virtual void registerTask(TMLTask* iTask);
-	/////Add a transaction waiting for execution to the internal list
-	//void registerTransaction();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction();
 	///Returns a pointer to the transaction determined by the scheduling algorithm
@@ -116,12 +114,6 @@ public:
     	*/
 	void schedule2HTML(std::ofstream& myfile) const;
 	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
-	///Returns the scheduled transaction one after another
-	/**
-      	\param iInit If init is true, the methods starts from the first transaction 
-	\return Pointer to the next transaction
-    	*/
-	TMLTransaction* getTransactions1By1(bool iInit);
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -130,11 +122,6 @@ public:
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	void streamStateXML(std::ostream& s) const;
-	///Sets the scheduler object
-	/**
-	\param iScheduler Pointer to the scheduler object 
-	*/
-	void setScheduler(WorkloadSource* iScheduler);
 	///Adds a new bus master to the internal list
 	/**
 	\param iMaster Pointer to bus master 
@@ -150,12 +137,6 @@ protected:
 	void calcStartTimeLength(TMLTime iTimeSlice);
 	///List of all tasks running on the CPU
 	TaskList _taskList;
-	///List containing all already scheduled transactions
-	TransactionList _transactList;
-	///Scheduler
-	WorkloadSource* _scheduler;
-	///Pointer to the next transaction to be executed
-	TMLTransaction* _nextTransaction;
 	///Pointer to the last transaction which has been executed
 	TMLTransaction* _lastTransaction;
 	///Pointer to the bus which will be accessed by the next transaction
@@ -195,22 +176,14 @@ protected:
 	TMLTime _pipelineSizeTimesExeci;
 	///_brachingMissrate * _pipelineSize
 	unsigned int _missrateTimesPipelinesize;
-
 	//varibales for branch miss calculation
 	////Indicates the number of commands executed since the last branch miss
 	//unsigned int _branchMissReminder;
 	////Potentially new value of _branchMissReminder
 	//unsigned int _branchMissTempReminder;
 #endif
-
-	///Actual position within transaction list (used for vcd output)
-	TransactionList::iterator _posTrasactListVCD;
-	///EndTime of the transaction before _posTransactList (used for vcd output)
-	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdCPUVisState _vcdOutputState;
-	///State variable for consecutive Transaction output
-	TransactionList::iterator _posTrasactListGraph;
 };
 
 #endif

@@ -189,8 +189,6 @@ protected:
 	unsigned int _ID;
 	///Name of the task
 	std::string _name;
-	/////Priority of the task
-	//unsigned int _priority;
 	///End of the last scheduled transaction of the task
 	TMLTime _endLastTransaction;
 	///Pointer to the current command of the task
@@ -207,10 +205,6 @@ protected:
 #endif
 	///List of scheduled transactions
 	TransactionList _transactList;
-	///Actual position within transaction list (used for vcd output)
-	TransactionList::iterator _posTrasactList;
-	///EndTime of the transaction before _posTransactList (used for vcd output)
-	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdTaskVisState _vcdOutputState;
 	///Array of static comments concerning the control flow of the task

@@ -43,8 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), /*(_priority(iPriority),*/ _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _previousTransEndTime(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
-	//_myid=++_id;
+TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
@@ -139,12 +138,12 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 	std::ostringstream outp;
 	if (iInit){
 		//std::cout << "Init" << std::endl; 
-		_posTrasactList=_transactList.begin();
+		_posTrasactListVCD=_transactList.begin();
 		//std::cout << "Init2" << std::endl; 
 		_previousTransEndTime=0;
 		_vcdOutputState=END_TRANS;
 	}
-	if (_posTrasactList == _transactList.end()){
+	if (_posTrasactListVCD == _transactList.end()){
 		//if (iInit || _transactList.back()->getTerminatedFlag()){
 			//outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
 		//}else{
@@ -160,8 +159,8 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 		oNoMoreTrans=true;
 		return _previousTransEndTime;
 	}else{
-		//std::cout << "VCD out trans: " << (*_posTrasactList)->toShortString() << std::endl;
-		TMLTransaction* aCurrTrans=*_posTrasactList;
+		//std::cout << "VCD out trans: " << (*_posTrasactListVCD)->toShortString() << std::endl;
+		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
 		oNoMoreTrans=false;
 		switch (_vcdOutputState){
 			case END_TRANS:
@@ -189,9 +188,9 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 				outp << VCD_PREFIX << vcdValConvert(RUNNING) << " ta" << _ID;
 				oSigChange=outp.str();
 				do{
-					_previousTransEndTime=(*_posTrasactList)->getEndTime();
-					_posTrasactList++;
-				}while (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime);
+					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+					_posTrasactListVCD++;
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
 				_vcdOutputState=END_TRANS;
 				return aCurrTrans->getStartTimeOperation();
 			break;

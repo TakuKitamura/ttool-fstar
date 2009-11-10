@@ -75,6 +75,8 @@ public:
 	void timeTick(TMLTime iNewTime);
 	void activate();
 	void deactivate();
+	void prepare();
+	void reset();
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	void transExecuted(TMLTransaction* iTrans, unsigned int iID);

@@ -47,9 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 #include <WorkloadSource.h>
 
-Bus::Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): SchedulableCommDevice(iID, iName), _scheduler(iScheduler), _burstSize(iBurstSize), _nextTransaction(0), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){
-	_transactList.reserve(BLOCK_SIZE);
-}
+Bus::Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): SchedulableCommDevice(iID, iName, iScheduler), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
 
 Bus::~Bus(){
 	delete _scheduler;
@@ -171,47 +169,47 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 	//end_idle  end_read  end_write
 	std::ostringstream outp;
 	if (iInit){
-		 _posTrasactList=_transactList.begin();
+		 _posTrasactListVCD=_transactList.begin();
 		_previousTransEndTime=0;
 		 _vcdOutputState=INIT_BUS;
 	}
-	if (_posTrasactList == _transactList.end()){
+	if (_posTrasactListVCD == _transactList.end()){
 		outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 		oSigChange=outp.str();
 		oNoMoreTrans=true;
 		return _previousTransEndTime;
 	}else{
-		TMLTransaction* aCurrTrans=*_posTrasactList;
+		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
 		oNoMoreTrans=false;
 		switch (_vcdOutputState){
 			case END_READ_BUS:
 				do{
-					_previousTransEndTime=(*_posTrasactList)->getEndTime();
-					_posTrasactList++;
-				}while (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactList)->getCommand()->getTask()==(*_posTrasactList)->getCommand()->getChannel()->getBlockedReadTask());
-				if (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime){
+					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+					_posTrasactListVCD++;
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getCommand()->getChannel()->getBlockedReadTask());
+				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime){
 					outp << VCD_PREFIX << vcdValConvert(END_WRITE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_WRITE_BUS;
 				}else{
 					outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_IDLE_BUS;
-					if (_posTrasactList == _transactList.end()) oNoMoreTrans=true;						
+					if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;						
 				}
 				oSigChange=outp.str();
 				return _previousTransEndTime;
 			break;
 			case END_WRITE_BUS:
 				do{
-					_previousTransEndTime=(*_posTrasactList)->getEndTime();
-					_posTrasactList++;
-				}while (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactList)->getCommand()->getTask()==(*_posTrasactList)->getCommand()->getChannel()->getBlockedWriteTask());
-				if (_posTrasactList != _transactList.end() && (*_posTrasactList)->getStartTimeOperation()==_previousTransEndTime){
+					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+					_posTrasactListVCD++;
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getCommand()->getChannel()->getBlockedWriteTask());
+				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime){
 					outp << VCD_PREFIX << vcdValConvert(END_READ_BUS) << " bus" << _ID;
 					_vcdOutputState=END_READ_BUS;
 				}else{
 					outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_IDLE_BUS;
-					if (_posTrasactList == _transactList.end()) oNoMoreTrans=true;						
+					if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;						
 				}
 				oSigChange=outp.str();
 				return _previousTransEndTime;
@@ -257,10 +255,6 @@ void Bus::streamBenchmarks(std::ostream& s) const{
 
 void Bus::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
-}
-
-void Bus::setScheduler(WorkloadSource* iScheduler){
-	_scheduler=iScheduler;
 }
 
 std::istream& Bus::readObject(std::istream &is){

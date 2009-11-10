@@ -87,11 +87,6 @@ public:
 	\return Burst size
 	*/
 	TMLLength getBurstSize() const;
-	/////Truncates a transaction to the size of an atomic burst
-	////**
-	//\param iTrans Pointer to the transaction
-	////*/
-	//void truncateToBurst(TMLTransaction* iTrans) const;
 	///Returns a string representation of the Bus
 	/**
 	\return Detailed string representation
@@ -116,11 +111,6 @@ public:
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	void streamStateXML(std::ostream& s) const;
-	///Sets the scheduler object
-	/**
-	\param iScheduler Pointer to the scheduler object 
-	*/
-	void setScheduler(WorkloadSource* iScheduler);
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
 protected:
@@ -129,27 +119,16 @@ protected:
 	\param iTimeSlice Bus time slice granted by the scheduler
 	*/
 	void calcStartTimeLength(TMLTime iTimeSlice) const;
-	///Scheduler
-	WorkloadSource* _scheduler;
 	///Size of an atomic bus transaction
 	TMLLength _burstSize;
-	///Pointer to the next transaction to be executed
-	TMLTransaction* _nextTransaction;
 	///Dirty flag of the current scheduling decision
 	bool _schedulingNeeded;
-	///List containing all already scheduled transactions
-	TransactionList _transactList;
 	///Inverse bus speed
 	TMLTime _timePerSample;
 	///Bus width in bytes
 	unsigned int _busWidth;
 	///Busy cycles since simulation start
 	unsigned long _busyCycles;
-
-	///Actual position within transaction list (used for vcd output)
-	TransactionList::iterator _posTrasactList;
-	///EndTime of the transaction before _posTransactList (used for vcd output)
-	TMLTime _previousTransEndTime;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
 };
