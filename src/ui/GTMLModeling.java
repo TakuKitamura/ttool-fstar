@@ -593,11 +593,11 @@ public class GTMLModeling  {
 					String []text2 = port2.getPortName().split(",");
 					
 					/*for (i=0; i<text1.length; i++) {
-						System.out.println("text1[" + i + "] = " + text1[i]);
+					System.out.println("text1[" + i + "] = " + text1[i]);
 					}
 					
 					for (i=0; i<text2.length; i++) {
-						System.out.println("text2[" + i + "] = " + text2[i]);
+					System.out.println("text2[" + i + "] = " + text2[i]);
 					}*/
 					
 					for (j=0; j<Math.min(text1.length, text2.length); j++) {
@@ -1349,10 +1349,10 @@ public class GTMLModeling  {
 				
 				if (tmlchoice.nbOfNonDeterministicGuard() > 0) {
 					/*if (!rndAdded) {
-						TMLAttribute tmlt = new TMLAttribute("rnd__0", new TMLType(TMLType.NATURAL));
-						tmlt.initialValue = "";
-						tmltask.addAttribute(tmlt);
-						rndAdded = true;
+					TMLAttribute tmlt = new TMLAttribute("rnd__0", new TMLType(TMLType.NATURAL));
+					tmlt.initialValue = "";
+					tmltask.addAttribute(tmlt);
+					rndAdded = true;
 					}*/
 				}
                 if (tmlchoice.hasMoreThanOneElse()) {
@@ -1393,12 +1393,12 @@ public class GTMLModeling  {
         }
 		
 		// Sorting nexts elements of Sequence
-	   for(j=0; j<activity.nElements(); j++) {
-		   ae1 = activity.get(j);
-		   if (ae1 instanceof TMLSequence) {
-			   ((TMLSequence)ae1).sortNexts();
-		   }
-	   }
+		for(j=0; j<activity.nElements(); j++) {
+			ae1 = activity.get(j);
+			if (ae1 instanceof TMLSequence) {
+				((TMLSequence)ae1).sortNexts();
+			}
+		}
     }
 	
 	public TMLMapping translateToTMLMapping() {
@@ -1417,6 +1417,15 @@ public class GTMLModeling  {
 		makeMapping();
 		
 		return map;
+	}
+	
+	private boolean nameInUse(ArrayList<String> _names, String _name) {
+		for(String s: _names) {
+			if (s.equals(_name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void makeArchitecture() {
@@ -1441,68 +1450,116 @@ public class GTMLModeling  {
 		HwBridge bridge;
 		HwMemory memory;
 		
+		ArrayList<String> names = new ArrayList<String>();
+		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof TMLArchiCPUNode) {
 				node = (TMLArchiCPUNode)tgc;
-				cpu = new HwCPU(node.getName());
-				cpu.byteDataSize = node.getByteDataSize();
-				cpu.pipelineSize = node.getPipelineSize();
-				cpu.goIdleTime = node.getGoIdleTime();
-				cpu.maxConsecutiveIdleCycles = node.getMaxConsecutiveIdleCycles();
-				cpu.taskSwitchingTime = node.getTaskSwitchingTime();
-				cpu.branchingPredictionPenalty = node.getBranchingPredictionPenalty();
-				cpu.cacheMiss = node.getCacheMiss();
-				cpu.schedulingPolicy = node.getSchedulingPolicy();  
-				cpu.execiTime = node.getExeciTime();
-				cpu.execcTime = node.getExeccTime();
-				cpu.clockRatio = node.getClockRatio();
-				listE.addCor(cpu, node);
-				archi.addHwNode(cpu);
-				System.out.println("CPU node added: " + cpu.getName());
+				if (nameInUse(names, node.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + node.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(node);
+					checkingErrors.add(ce);
+				} else {
+					names.add(node.getName());
+					cpu = new HwCPU(node.getName());
+					cpu.byteDataSize = node.getByteDataSize();
+					cpu.pipelineSize = node.getPipelineSize();
+					cpu.goIdleTime = node.getGoIdleTime();
+					cpu.maxConsecutiveIdleCycles = node.getMaxConsecutiveIdleCycles();
+					cpu.taskSwitchingTime = node.getTaskSwitchingTime();
+					cpu.branchingPredictionPenalty = node.getBranchingPredictionPenalty();
+					cpu.cacheMiss = node.getCacheMiss();
+					cpu.schedulingPolicy = node.getSchedulingPolicy();  
+					cpu.execiTime = node.getExeciTime();
+					cpu.execcTime = node.getExeccTime();
+					cpu.clockRatio = node.getClockRatio();
+					listE.addCor(cpu, node);
+					archi.addHwNode(cpu);
+					System.out.println("CPU node added: " + cpu.getName());
+				}
 			}
 			
 			if (tgc instanceof TMLArchiHWANode) {
 				hwanode = (TMLArchiHWANode)tgc;
-				hwa = new HwA(hwanode.getName());
-				hwa.byteDataSize = hwanode.getByteDataSize();
-				hwa.execiTime = hwanode.getExeciTime();
-				hwa.clockRatio = hwanode.getClockRatio();
-				listE.addCor(hwa, hwanode);
-				archi.addHwNode(hwa);
-				System.out.println("HWA node added: " + hwa.getName());
+				if (nameInUse(names, hwanode.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + hwanode.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(hwanode);
+					checkingErrors.add(ce);
+				} else {
+					names.add(hwanode.getName());
+					hwa = new HwA(hwanode.getName());
+					hwa.byteDataSize = hwanode.getByteDataSize();
+					hwa.execiTime = hwanode.getExeciTime();
+					hwa.clockRatio = hwanode.getClockRatio();
+					listE.addCor(hwa, hwanode);
+					archi.addHwNode(hwa);
+					System.out.println("HWA node added: " + hwa.getName());
+				}
 			}
 			
 			if (tgc instanceof TMLArchiBUSNode) {
 				busnode = (TMLArchiBUSNode)tgc;
-				bus = new HwBus(busnode.getName());
-				bus.byteDataSize = busnode.getByteDataSize();
-				bus.pipelineSize = busnode.getPipelineSize();
-				bus.arbitration = busnode.getArbitrationPolicy();
-				bus.clockRatio = busnode.getClockRatio();
-				listE.addCor(bus, busnode);
-				archi.addHwNode(bus);
-				System.out.println("BUS node added:" + bus.getName());
+				if (nameInUse(names, busnode.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + busnode.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(busnode);
+					checkingErrors.add(ce);
+				} else {
+					names.add(busnode.getName());
+					bus = new HwBus(busnode.getName());
+					bus.byteDataSize = busnode.getByteDataSize();
+					bus.pipelineSize = busnode.getPipelineSize();
+					bus.arbitration = busnode.getArbitrationPolicy();
+					bus.clockRatio = busnode.getClockRatio();
+					listE.addCor(bus, busnode);
+					archi.addHwNode(bus);
+					System.out.println("BUS node added:" + bus.getName());
+				}
 			}
 			
 			if (tgc instanceof TMLArchiBridgeNode) {
 				bridgenode = (TMLArchiBridgeNode)tgc;
-				bridge = new HwBridge(bridgenode.getName());
-				bridge.bufferByteSize = bridgenode.getBufferByteDataSize();
-				bridge.clockRatio = bridgenode.getClockRatio();
-				listE.addCor(bridge, bridgenode);
-				archi.addHwNode(bridge);
-				System.out.println("Bridge node added:" + bridge.getName());
+				if (nameInUse(names, bridgenode.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + bridgenode.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(bridgenode);
+					checkingErrors.add(ce);
+				} else {
+					names.add(bridgenode.getName());
+					
+					bridge = new HwBridge(bridgenode.getName());
+					bridge.bufferByteSize = bridgenode.getBufferByteDataSize();
+					bridge.clockRatio = bridgenode.getClockRatio();
+					listE.addCor(bridge, bridgenode);
+					archi.addHwNode(bridge);
+					System.out.println("Bridge node added:" + bridge.getName());
+				}
 			}
 			
 			if (tgc instanceof TMLArchiMemoryNode) {
 				memorynode = (TMLArchiMemoryNode)tgc;
-				memory = new HwMemory(memorynode.getName());
-				memory.byteDataSize = memorynode.getByteDataSize();
-				memory.clockRatio = memorynode.getClockRatio();
-				listE.addCor(memory, memorynode);
-				archi.addHwNode(memory);
-				System.out.println("Memory node added:" + memory.getName());
+				if (nameInUse(names, memorynode.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + memorynode.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(memorynode);
+					checkingErrors.add(ce);
+				} else {
+					names.add(memorynode.getName());
+					memory = new HwMemory(memorynode.getName());
+					memory.byteDataSize = memorynode.getByteDataSize();
+					memory.clockRatio = memorynode.getClockRatio();
+					listE.addCor(memory, memorynode);
+					archi.addHwNode(memory);
+					System.out.println("Memory node added:" + memory.getName());
+				}
 			}
 		}
 		
@@ -1678,20 +1735,20 @@ public class GTMLModeling  {
 		}
 		
 		/*for(TMLComponentDesignPanel panel: cpanels) {
-			gtml =  new GTMLModeling(panel);
-			gtml.setComponents((Vector)(taskss.get(index)));
-			index ++;
-			tmpm = gtml.translateToTMLModeling(true);
-			warnings.addAll(gtml.getCheckingWarnings());
-			if (gtml.getCheckingErrors().size() >0) {
-				checkingErrors.addAll(gtml.getCheckingErrors());
-				return false;
-			}
-			s = tmlap.getMainGUI().getTitleAt(panel);
-			s = s.replaceAll("\\s", "");
-			tmpm.prefixAllNamesWith(s + "__");
-			//System.out.println("Intermediate TMLModeling: " + tmpm);
-			tmlm.mergeWith(tmpm);
+		gtml =  new GTMLModeling(panel);
+		gtml.setComponents((Vector)(taskss.get(index)));
+		index ++;
+		tmpm = gtml.translateToTMLModeling(true);
+		warnings.addAll(gtml.getCheckingWarnings());
+		if (gtml.getCheckingErrors().size() >0) {
+		checkingErrors.addAll(gtml.getCheckingErrors());
+		return false;
+		}
+		s = tmlap.getMainGUI().getTitleAt(panel);
+		s = s.replaceAll("\\s", "");
+		tmpm.prefixAllNamesWith(s + "__");
+		//System.out.println("Intermediate TMLModeling: " + tmpm);
+		tmlm.mergeWith(tmpm);
 		}*/
 		
 		// Properties of artifacts

@@ -972,6 +972,7 @@ public class Mapping2TIF {
 		
 		for(HwNode node : executions) {
 			if (node instanceof HwCPU) {
+				System.out.println("CPU=" + node.getName() + " cpt=" + cpt);
 				prepareCPU((HwCPU)node, cpt);
 			}
 			cpt ++;
