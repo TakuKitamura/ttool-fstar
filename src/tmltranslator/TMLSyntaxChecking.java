@@ -259,6 +259,7 @@ public class TMLSyntaxChecking {
 				} else if (elt instanceof TMLWaitEvent) {
 					tmlwe = (TMLWaitEvent)elt;
 					evt = tmlwe.getEvent();
+					//System.out.println("Nb of params of wait event:" + tmlwe.getNbOfParams());
 					for(j=0; j<tmlwe.getNbOfParams(); j++) {
 						action = tmlwe.getParam(j).trim();
 						if ((action != null) && (action.length() > 0)) {
@@ -270,6 +271,10 @@ public class TMLSyntaxChecking {
 								if (attr == null ) {
 									addError(t, elt, UNDECLARED_VARIABLE + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
 								} else {
+									//System.out.println("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
+									if (tmlwe.getEvent().getType(j).getType() == 0) {
+										System.out.println("0");
+									}
 									if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
 										addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
 									}

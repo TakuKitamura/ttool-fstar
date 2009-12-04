@@ -1205,6 +1205,7 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
                     }
                 } else {
+					//System.out.println("Nb of param of event:" + event.getNbOfParams());
 					if (event.getNbOfParams() != ((TMLADWaitEvent)tgc).realNbOfParams()) {
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + ": wrong number of parameters");
                         ce.setTMLTask(tmltask);
@@ -1216,7 +1217,10 @@ public class GTMLModeling  {
 						tmlwaitevent = new TMLWaitEvent("wait event", tgc);
 						tmlwaitevent.setEvent(event);
 						for(int i=0; i<((TMLADWaitEvent)tgc).nbOfParams(); i++) {
-							tmlwaitevent.addParam(((TMLADWaitEvent)tgc).getParamValue(i));
+							String pv = ((TMLADWaitEvent)tgc).getParamValue(i);
+							if (pv.length() > 0) {
+								tmlwaitevent.addParam(pv);
+							}
 						}
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 						activity.addElement(tmlwaitevent);
