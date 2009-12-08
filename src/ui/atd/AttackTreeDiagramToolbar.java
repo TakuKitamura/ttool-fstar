@@ -69,17 +69,15 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.IOD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        //mgui.actions[TGUIAction.TREQ_REQUIREMENT].setEnabled(b);
-        //mgui.actions[TGUIAction.TREQ_OBSERVER].setEnabled(b);
-	//mgui.actions[TGUIAction.TREQ_EBRDD].setEnabled(b);
-        //mgui.actions[TGUIAction.TREQ_VERIFY].setEnabled(b);
-        //mgui.actions[TGUIAction.TREQ_DERIVE].setEnabled(b);
-	//mgui.actions[TGUIAction.TREQ_COPY].setEnabled(b);
-	//mgui.actions[TGUIAction.TREQ_COMPOSITION].setEnabled(b);
 		
-	//mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
-	
-	//mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
+        mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
+        mgui.actions[TGUIAction.ATD_CONNECTOR].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_OR_CONSTRAINT].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_AND_CONSTRAINT].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_SEQUENCE_CONSTRAINT].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_BEFORE_CONSTRAINT].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT].setEnabled(b);
         
     }
     
@@ -99,41 +97,42 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         
         this.addSeparator();
         
-        /*button = this.add(mgui.actions[TGUIAction.TREQ_REQUIREMENT]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        button = this.add(mgui.actions[TGUIAction.TREQ_OBSERVER]);
+        button = this.add(mgui.actions[TGUIAction.ATD_BLOCK]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		button = this.add(mgui.actions[TGUIAction.TREQ_EBRDD]);
+		
+        this.addSeparator();
+        
+        button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ATD_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();
-        
-		button = this.add(mgui.actions[TGUIAction.TREQ_COMPOSITION]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-        button = this.add(mgui.actions[TGUIAction.TREQ_DERIVE]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.TREQ_COPY]);
-        button.addMouseListener(mgui.mouseHandler);
-		
 		this.addSeparator();
         
-        button = this.add(mgui.actions[TGUIAction.TREQ_VERIFY]);
+        
+		button = this.add(mgui.actions[TGUIAction.ATD_OR_CONSTRAINT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ATD_AND_CONSTRAINT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ATD_SEQUENCE_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+        
+        button = this.add(mgui.actions[TGUIAction.ATD_BEFORE_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		this.addSeparator();
-         
-        button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
+		button = this.add(mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
-        */
+		
+		
     }
     
 } // Class

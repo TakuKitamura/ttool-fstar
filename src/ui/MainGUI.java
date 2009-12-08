@@ -4325,6 +4325,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return true;
     }
 	
+	public boolean createAttackTreeDiagram(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AttackTreePanel)) {
+            return false;
+        }
+        
+        ((AttackTreePanel)tp).addAttackTreeDiagram(s);
+        setPanelMode();
+        return true;
+    }
+	
 	public boolean createEBRDD(int index, String s) {
         return createEBRDD((TURTLEPanel)(tabs.elementAt(index)), s);
     }

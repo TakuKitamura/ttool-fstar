@@ -60,7 +60,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
     
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, newebrdd, newprosmd;
-    
+    private JMenuItem newatd;
+	
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
         tp = _tp;
         mgui = _mgui;
@@ -95,6 +96,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newreq = createMenuItem("New requirement diagram");
 		newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
         newprosmd = createMenuItem("New ProActive state machine diagram");
+		newatd = createMenuItem("New attack tree diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -109,6 +111,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.addSeparator();
         menu.add(newreq);
 		menu.add(newebrdd);
+		menu.add(newatd);
         menu.addSeparator();
         menu.add(newprosmd);
     }
@@ -173,6 +176,9 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New requirement diagram")) {
                 mgui.createRequirementDiagram(tp, "Requirement diagram");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New attack tree diagram")) {
+                mgui.createAttackTreeDiagram(tp, "Attack Tree");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
                 mgui.createEBRDD(tp, "EBRDD");
