@@ -227,6 +227,9 @@ public class TGComponentManager {
     public static final int TREQ_REQUIREMENT = 900;
     public static final int TREQ_OBSERVER = 901;
 	public static final int TREQ_EBRDD = 902;
+	
+	public static final int ATD_BLOCK = 1400;
+	public static final int ATD_ATTACK = 1401;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
