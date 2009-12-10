@@ -53,6 +53,7 @@ import javax.swing.tree.*;
 import translator.*;
 import ui.*;
 import ui.ad.*;
+import ui.atd.*;
 import ui.cd.*;
 import ui.iod.*;
 import ui.ebrdd.*;
@@ -111,6 +112,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof RequirementPanel) {
             setIcon(IconManager.imgic1000);
             setToolTipText("TURTLE Requirement");
+        } else if (value instanceof AttackTreePanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("TURTLE Requirement");
         } else if (value instanceof TClassDiagramPanel) {
             setIcon(IconManager.imgic14);
             setToolTipText("TURTLE Class diagram");
@@ -135,6 +139,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof RequirementDiagramPanel) {
             setIcon(IconManager.imgic1000);
             setToolTipText("TURTLE Requirement Diagram");          
+        } else if (value instanceof AttackTreeDiagramPanel) {
+            setIcon(IconManager.imgic1074);
+            setToolTipText("Attack Tree Diagram (SysML Parametric diagram)");          
         } else if (value instanceof EBRDDPanel) {
             setIcon(IconManager.imgic1058);
             setToolTipText("Event-Based Requirement Description Diagram");          

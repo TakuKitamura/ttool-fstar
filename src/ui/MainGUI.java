@@ -62,6 +62,7 @@ import translator.*;
 import myutil.*;
 
 import ui.ad.*;
+import ui.atd.*;
 import ui.cd.*;
 import ui.file.*;
 import ui.interactivesimulation.*;
@@ -772,9 +773,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         AttackTreePanel atp = new AttackTreePanel(this);
         tabs.add(index, atp); // should look for the first
         mainTabbedPane.add(atp.tabbedPane, index);
-        mainTabbedPane.setToolTipTextAt(index, "Open requirement diagrams");
+        mainTabbedPane.setToolTipTextAt(index, "Open attack tree diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic1000);
+        mainTabbedPane.setIconAt(index, IconManager.imgic1074);
         atp.init();
         return index;
     }
@@ -1065,6 +1066,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public int createRequirement(String name) {
         int index = addRequirementPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+	
+	 public int createAttackTree(String name) {
+        int index = addAttackTreePanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
@@ -4151,6 +4158,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
         return getSequenceDiagramPanel(tp, s);
     }
+	
+	public AttackTreeDiagramPanel getAttackTreeDiagramPanel(int index, String s) {
+        //System.out.println("Searching for " + s);
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAttackTreeDiagramPanel(tp, s);
+    }
+	
+	public AttackTreeDiagramPanel getAttackTreeDiagramPanel(TURTLEPanel tp, String s) {
+        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
+                    return  (AttackTreeDiagramPanel)(tp.panelAt(i));
+            }
+        }
+        return null;
+    }
     
     public InteractionOverviewDiagramPanel getIODiagramPanel(int index, String s) {
         //System.out.println("Searching for " + s);
@@ -4323,6 +4346,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         ((RequirementPanel)tp).addRequirementDiagram(s);
         setPanelMode();
         return true;
+    }
+	
+	public boolean createAttackTreeDiagram(int index, String s) {
+        return createAttackTreeDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
     }
 	
 	public boolean createAttackTreeDiagram(TURTLEPanel tp, String s) {
@@ -5231,7 +5258,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void toggleAttr() {
         TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null){
-            System.out.println("Toggle attributes");
+            //System.out.println("Toggle attributes");
             tdp.setAttributes((tdp.getAttributeState() +1 )% 3);
             tdp.checkAllMySize();
             tdp.repaint();
@@ -5793,6 +5820,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);       
 		} else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);       
+			
+		// Attack Tree Diagrams
+		} else if (command.equals(actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.ATD_ATTACK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_ATTACK);  
+		} else if (command.equals(actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COMPOSITION_CONNECTOR);
+        } else if (command.equals(actions[TGUIAction.ATD_ATTACK_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_ATTACK_CONNECTOR);
+        	
 			// TURTLE-OS
         } else if (command.equals(actions[TGUIAction.TOS_TCLASS].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TOSCD_TCLASS);

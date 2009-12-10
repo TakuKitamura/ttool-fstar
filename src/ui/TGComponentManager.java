@@ -59,6 +59,8 @@ import ui.ucd.*;
 import ui.req.*;
 import ui.ebrdd.*;
 
+import ui.atd.*;
+
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmldd.*;
@@ -131,6 +133,9 @@ public class TGComponentManager {
 	
 	public static final int CONNECTOR_EBRDD = 130;
 	public static final int CONNECTOR_EBRDD_ERC = 131;
+	
+	public static final int ATD_COMPOSITION_CONNECTOR = 132;
+	public static final int ATD_ATTACK_CONNECTOR = 133;
     
     public static final int TCD_TCLASS = 201;
     public static final int TCD_PARALLEL_OPERATOR = 202;
@@ -230,6 +235,7 @@ public class TGComponentManager {
 	
 	public static final int ATD_BLOCK = 1400;
 	public static final int ATD_ATTACK = 1401;
+	
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -272,6 +278,9 @@ public class TGComponentManager {
 	public static final int NCDD_SWITCHNODE = 4001;
     public static final int NCDD_TRAFFIC_ARTIFACT = 4002;
 	public static final int NCDD_ROUTE_ARTIFACT = 4003;
+	
+	
+
 
     
     public static final int EDIT = -1;
@@ -461,6 +470,12 @@ public class TGComponentManager {
                 break;
 			case EBRDD_ERB:
                 tgc = new EBRDDERB(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case ATD_BLOCK:
+                tgc = new ATDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case ATD_ATTACK:
+                tgc = new ATDAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_START_STATE:
                 tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -829,6 +844,14 @@ public class TGComponentManager {
             return EBRDD_ESO;
         } else if (tgc instanceof EBRDDERB) {
             return EBRDD_ERB;
+		} else if (tgc instanceof ATDBlock) {
+            return ATD_BLOCK;
+		} else if (tgc instanceof ATDAttack) {
+            return ATD_ATTACK;
+        } else if (tgc instanceof ATDCompositionConnector) {
+            return ATD_COMPOSITION_CONNECTOR;
+        } else if (tgc instanceof ATDAttackConnector) {
+            return ATD_ATTACK_CONNECTOR;
         } else if (tgc instanceof TMLADStartState) {
             return TMLAD_START_STATE;
         } else if (tgc instanceof TMLADStopState) {
@@ -1073,6 +1096,12 @@ public class TGComponentManager {
                 break;
 			case CONNECTOR_EBRDD_ERC:
                 tgc = new TGConnectorEBRDDERC(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case ATD_COMPOSITION_CONNECTOR:
+                tgc = new ATDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case ATD_ATTACK_CONNECTOR:
+                tgc = new ATDAttackConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
             case CONNECTOR_TMLAD:
                 tgc = new TGConnectorTMLAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

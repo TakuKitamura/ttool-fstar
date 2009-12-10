@@ -104,7 +104,7 @@ public class AttackTreePanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic1000, toolBarPanel, "Opens Attack Tree Diagram");
+        tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Opens Attack Tree Diagram");
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());

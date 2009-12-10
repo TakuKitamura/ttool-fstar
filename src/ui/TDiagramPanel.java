@@ -63,6 +63,9 @@ import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.req.*;
 import ui.ncdd.*;
+
+import ui.atd.*;
+
 // Added by Solange
 import ui.procsd.*;
 
@@ -1991,6 +1994,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	public void detach(TGComponent tgc) {
 		if ((tgc instanceof SwallowedTGComponent) && (tgc.getFather() != null)) {
 			((SwallowTGComponent)tgc.getFather()).removeSwallowedTGComponent(tgc);
+			tgc.setFather(null);
 			componentList.add(tgc);
 			tgc.wasUnswallowed();
 			bringToFront(tgc);
@@ -2408,6 +2412,34 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return name;
     }
+	
+	public String findBlockName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        ATDBlock t;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof ATDBlock) {
+                    t = (ATDBlock)o;
+                    if (t.getName().equals(name + index)) {
+                        ok = false;
+                    }
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
     
     public String findTObjectName(String name) {
         boolean ok;
@@ -2573,6 +2605,24 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if (o instanceof TMLTaskInterface) {
                 t = (TMLTaskInterface)o;
                 if (t.getTaskName().equals(s)) {               
+                    return false;
+                }
+            }
+        }   
+        return true;
+    }
+	
+	public boolean isBlockNameUnique(String s) {
+        Object o;
+        ATDBlock t;
+        Iterator iterator = componentList.listIterator();
+        
+        
+        while(iterator.hasNext()) {
+            o = (TGComponent)(iterator.next());
+            if (o instanceof ATDBlock) {
+                t = (ATDBlock)o;
+                if (t.getName().equals(s)) {               
                     return false;
                 }
             }

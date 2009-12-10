@@ -71,13 +71,19 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ATD_BLOCK].setEnabled(b);
+		mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].setEnabled(b);
+		
         mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
-        mgui.actions[TGUIAction.ATD_CONNECTOR].setEnabled(b);
-		mgui.actions[TGUIAction.ATD_OR_CONSTRAINT].setEnabled(b);
+		
+		 mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
+		 
+		 mgui.actions[TGUIAction.ATD_OR_CONSTRAINT].setEnabled(b);
 		mgui.actions[TGUIAction.ATD_AND_CONSTRAINT].setEnabled(b);
 		mgui.actions[TGUIAction.ATD_SEQUENCE_CONSTRAINT].setEnabled(b);
 		mgui.actions[TGUIAction.ATD_BEFORE_CONSTRAINT].setEnabled(b);
 		mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
         
     }
     
@@ -100,6 +106,8 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.ATD_BLOCK]);
         button.addMouseListener(mgui.mouseHandler);
 		
+		button = this.add(mgui.actions[TGUIAction.ATD_COMPOSITION_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
 		
         this.addSeparator();
         
@@ -108,7 +116,7 @@ public class AttackTreeDiagramToolbar extends TToolBar {
 		
 		this.addSeparator();
 		
-		button = this.add(mgui.actions[TGUIAction.ATD_CONNECTOR]);
+		button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();
@@ -130,6 +138,12 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		

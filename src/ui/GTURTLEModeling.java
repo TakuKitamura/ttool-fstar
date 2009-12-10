@@ -63,6 +63,7 @@ import launcher.*;
 import myutil.*;
 import nc.*;
 import ui.ad.*;
+import ui.atd.*;
 import ui.cd.*;
 import ui.dd.*;
 import ui.iod.*;
@@ -2210,6 +2211,40 @@ public class GTURTLEModeling {
 						makePostLoading(ebrddp, beginIndex);
 					}
 				}
+			} else if (tdp instanceof AttackTreeDiagramPanel) {
+				nl = doc.getElementsByTagName("AttackTreeDiagramPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				AttackTreeDiagramPanel atdp = (AttackTreeDiagramPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (atdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), atdp);
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), atdp);
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), atdp);
+						connectConnectorsToRealPoints(atdp);
+						atdp.structureChanged();
+						makePostLoading(atdp, beginIndex);
+					}
+				}
 			} else if (tdp instanceof TMLTaskDiagramPanel) {
 				nl = doc.getElementsByTagName("TMLTaskDiagramPanelCopy");
 				docCopy = doc;
@@ -2779,6 +2814,8 @@ public class GTURTLEModeling {
 			loadNC(node);
 		} else if (type.compareTo("Requirement") == 0) {
 			loadRequirement(node);
+		} else if (type.compareTo("AttackTree") == 0) {
+			loadAttackTree(node);
 		} else if (type.compareTo("TML Design") == 0) {
 			loadTMLDesign(node);
 		} else if (type.compareTo("TML Component Design") == 0) {
@@ -2938,6 +2975,30 @@ public class GTURTLEModeling {
 				} else if (elt.getTagName().compareTo("EBRDDPanel") == 0) {
 					loadEBRDD(elt, indexReq, cpt_req);
 					cpt_req ++;
+				}
+			}
+		}
+	}
+	
+	public void loadAttackTree(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexTree;
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexTree = mgui.createAttackTree(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//System.out.println("Deployment nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("AttackTreeDiagramPanel") == 0) {
+					loadAttackTreeDiagram(elt, indexTree);
 				}
 			}
 		}
@@ -3388,6 +3449,22 @@ public class GTURTLEModeling {
 
 
 		TDiagramPanel tdp = mgui.getEBRDDPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadAttackTreeDiagram(Element elt, int indexDiag) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createAttackTreeDiagram(indexDiag, name);
+		
+		TDiagramPanel tdp = mgui.getAttackTreeDiagramPanel(indexDiag, name);
 
 		if (tdp == null) {
 			throw new MalformedModelingException();

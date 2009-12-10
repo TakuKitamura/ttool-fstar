@@ -37,9 +37,9 @@ knowledge of the CeCILL license and that you accept its terms.
 
 /**
  * Class ATDBlock
- * SysML Block. To be used in attack tree diagrams
- * Creation: 08/12/2009
- * @version 1.0 08/12/2009
+ * Node. To be used in Attack Tree Diagrams
+ * Creation: 09/12/2009
+ * @version 1.1 09/12/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -57,205 +57,147 @@ import ui.*;
 import ui.window.*;
 
 
-public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, HiddenInternalComponents {
-	private int maxFontSize = 20;
-	private int minFontSize = 4;
-	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int spacePt = 3;
-	private Color myColor;
-	private int iconSize = 17;
-
-	private int textX = 15; // border for ports
-	private double dtextX = 0.0;	
+public class ATDBlock extends TGCWithInternalComponent implements SwallowTGComponent {
+    private int textY1 = 15;
+    private int textY2 = 30;
+    private String stereotype = "block";
 	
     
-    public TMLCCompositeComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ATDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(250, 200);
-		
-		oldScaleFactor = tdp.getZoom();
-		dtextX = textX * oldScaleFactor;
-		textX = (int)dtextX;
-		dtextX = dtextX - textX;
-		
-        minWidth = 1;
-        minHeight = 1;
+        width = 250;
+        height = 200;
+        minWidth = 150;
+        minHeight = 100;
         
-        nbConnectingPoint = 0;
-        //connectingPoint = new TGConnectingPoint[0];
-        //connectingPoint[0] = new TMLArchiConnectingPoint(this, 0, 0, false, true, 0.0, 0.0);
+        nbConnectingPoint = 16;
+        connectingPoint = new TGConnectingPoint[16];
+        
+        connectingPoint[0] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
+        connectingPoint[1] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[2] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
+        connectingPoint[3] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[4] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[5] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
+        connectingPoint[6] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[7] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
+        
+        connectingPoint[8] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[9] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[10] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[11] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[12] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[13] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[14] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[15] = new ATDCompositionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         
         addTGConnectingPointsComment();
         
         nbInternalTGComponent = 0;
-		
-		maxWidth = 2000;
-		maxHeight = 2000;
         
         moveable = true;
         editable = true;
         removable = true;
         userResizable = true;
         
-		value = "MyName";
-		name = "Composite component";
-		
-        myImageIcon = IconManager.imgic1200;
+        name = tdp.findBlockName("Block");
+		value = "name";
+        
+        myImageIcon = IconManager.imgic700;
     }
     
     public void internalDrawing(Graphics g) {
-		int w;
-		int c;
+		Color c = g.getColor();
+		g.draw3DRect(x, y, width, height, true);
+		
+		g.setColor(ColorManager.ATD_BLOCK);
+		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		g.setColor(c);
+        
+        // Strings
+        String ster = "<<" + stereotype + ">>";
+        int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
-		Font fold = f;
-		//FontMetrics fm = g.getFontMetrics();
-		
-		if (myColor == null) {
-			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
-		}
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
-			
-			//f = f.deriveFont((float)maxCurrentFontSize);
-			//g.setFont(f);
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-				w = g.getFontMetrics().stringWidth(value);
-				//w = fm.stringWidth(value);
-				c = width - iconSize - (2 * textX);
-				//System.out.println("Font size=" + maxCurrentFontSize + " w=" + w + " c=" + c + "value=" + value);
-				if (w < c) {
-					break;
-				}
-				maxCurrentFontSize --;
-				
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				//f = f.deriveFont((float)currentFontSize);
-				//g.setFont(f);
-			}
-			
-		}
-		
-		// Zoom is assumed to be computed
-		Color col = g.getColor();
-		g.drawRect(x, y, width, height);
-		if ((width > 2) && (height > 2)) {
-			g.setColor(myColor);
-			g.fillRect(x+1, y+1, width-1, height-1);
-			g.setColor(col);
-		}
-		
-        // Font size 
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f);
-			w = g.getFontMetrics().stringWidth(value);
-			//System.out.println("Display text: Font size=" + currentFontSize + " w=" + w + " value=" + value);
-			if (!(w < (width - 2 * (iconSize + textX)))) {
-				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-			} else {
-				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-			}
-		}
-		
-		g.setFont(fold);
+		g.setFont(f.deriveFont(Font.BOLD));
+        g.drawString(ster, x + (width - w)/2, y + textY1);
+		g.setFont(f);
+        w  = g.getFontMetrics().stringWidth(name);
+        g.drawString(name, x + (width - w)/2, y + textY2);
 		
 		// Icon
-		if ((width>30) && (height > (iconSize + 2*textX))) {
-			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
-		}
+		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
-	
-	public void rescale(double scaleFactor){
-		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-		textX = (int)(dtextX);
-		dtextX = dtextX - textX; 
-		
-		super.rescale(scaleFactor);
-	}
     
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
         return null;
     }
-
     
-    public boolean editOndoubleClick(JFrame frame) {
-        String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting block name",
-		JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+    public String getStereotype() {
+        return stereotype;
+        
+    }
+    
+    public String getNodeName() {
+        return name;
+    }
+    
+   public boolean editOndoubleClick(JFrame frame) {
+        String oldValue = value;
+        
+        //String text = getName() + ": ";
+        String s = (String)JOptionPane.showInputDialog(frame, "Block name",
+        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
         null,
         getValue());
-        if ((s != null) && (s.length() > 0)) {
-			if (!TAttribute.isAValidId(s, false, false)) {
-				JOptionPane.showMessageDialog(frame,
-					"Could not change the name of the block: the new name is not a valid name",
-					"Error",
-					JOptionPane.INFORMATION_MESSAGE);
-				return false;
-			}
-            setValueWithChange(s);
-            return true;
+        
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            //boolean b;
+            if (!TAttribute.isAValidId(s, false, false)) {
+                JOptionPane.showMessageDialog(frame,
+                "Could not change the name of the Block: the new name is not a valid name",
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            
+            if (!tdp.isBlockNameUnique(s)) {
+                JOptionPane.showMessageDialog(frame,
+                "Could not change the name of the Block: the new name is already in use",
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            
+            setValue(s);
+            recalculateSize();
+            
+            
+            
+            if (tdp.actionOnDoubleClick(this)) {
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(frame,
+                "Could not change the name of the Block: this name is already in use",
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                setValue(oldValue);
+            }
         }
         return false;
     }
-	
+    
     
     public int getType() {
         return TGComponentManager.ATD_BLOCK;
     }
-	
-	public void wasSwallowed() {
-		myColor = null;
-	}
-	
-	public void wasUnswallowed() {
-		myColor = null;
-		setFather(null);
-		TDiagramPanel tdp = getTDiagramPanel();
-		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-			
-	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		boolean swallowed = false;
-		
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SwallowTGComponent) {
-				if (tgcomponent[i].isOnMe(x, y) != null) {
-					swallowed = true;
-					((SwallowTGComponent)tgcomponent[i]).addSwallowedTGComponent(tgc, x, y);
-					break;
-				}
-			}
-        }
-		
-		if (swallowed) {
-			return;
-		}
-		
         //System.out.println("Add swallow component");
         // Choose its position
         
@@ -265,8 +207,12 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         tgc.setDrawingZone(true);
         
         //Set its coordinates
-        if (tgc instanceof ATDBlock) {
-            ((ATDBlock)tgc).resizeWithFather();
+        if (tgc instanceof ATDAttack) {
+            //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
+            //System.out.println("cdRect comp swallow");
+            ((ATDAttack)tgc).resizeWithFather();
+            //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+            //tgc.setCd(x, y);
         }
         
         // else unknown*/
@@ -276,328 +222,31 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {
-		//System.out.println("removeSwallowedTGComponent");
-		if (tgc instanceof TMLCCompositePort) {
-			portRemoved();
-		}
-        //removeInternalComponent(tgc);
-		 for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] == tgc) {
-				nbInternalTGComponent = nbInternalTGComponent - 1;
-                if (nbInternalTGComponent == 0) {
-                    tgcomponent = null;
-                } else {
-                    TGComponent [] tgcomponentbis = new TGComponent[nbInternalTGComponent];
-                    for(int j=0; j<nbInternalTGComponent; j++) {
-                        if (j<i) {
-                            tgcomponentbis[j] = tgcomponent[j];
-                        }
-                        if (j>=i) {
-                            tgcomponentbis[j] = tgcomponent[j+1];
-                        }
-                    }
-                    tgcomponent = tgcomponentbis;
-                }
-				break;
-			}
-		 }
+        removeInternalComponent(tgc);
     }
     
     
+    public Vector getAttackList() {
+        Vector v = new Vector();
+        for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof ATDAttack) {
+                v.add(tgcomponent[i]);
+            }
+        }
+        return v;
+    }
     
     public void hasBeenResized() {
-		rescaled = true;
         for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ATDBlock) {
-				((ATDBlock)tgcomponent[i]).resizeWithFather();
-			}
-			/*if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
-				((TMLCPrimitiveComponent)tgcomponent[i]).resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				((TMLCRemoteCompositeComponent)tgcomponent[i]).resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof TMLCCompositePort) {
-				((TMLCCompositePort)tgcomponent[i]).resizeWithFather();
-			}*/
+            if (tgcomponent[i] instanceof ATDAttack) {
+                ((ATDAttack)tgcomponent[i]).resizeWithFather();
+            }
         }
-		
-		if (getFather() != null) {
-			resizeWithFather();
-		}
-    }
-	
-	public void resizeWithFather() {
-        if ((father != null) && ((father instanceof ATDBlock))) {
-			// Too large to fit in the father? -> resize it!
-			resizeToFatherSize();
-			
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            setMoveCd(x, y);
-        }
-    }
-	
-	/*public ArrayList<TMLCPrimitiveComponent> getAllPrimitiveComponents() {
-		ArrayList<TMLCPrimitiveComponent> ll = new ArrayList<TMLCPrimitiveComponent>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				ll.addAll(((TMLCCompositeComponent)tgcomponent[i]).getAllPrimitiveComponents());
-			}
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				ll.addAll(((TMLCRemoteCompositeComponent)tgcomponent[i]).getAllPrimitiveComponents());
-			}
-			
-			if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
-				ll.add(((TMLCPrimitiveComponent)(tgcomponent[i])));
-			}
-		}
-		
-		return ll;
-	}
-	
-	public void getAllCompositeComponents(ArrayList<String> list, String _name) {
-		String s;
-		TMLCCompositeComponent tmlcc;
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				tmlcc = (TMLCCompositeComponent)tgcomponent[i];
-				s = _name + "::" + tmlcc.getValue();
-				list.add(s);
-				tmlcc.getAllCompositeComponents(list, _name);
-			}
-		}
-	}
-	
-	public ArrayList<TMLCCompositePort> getAllInternalCompositePorts() {
-		ArrayList<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				list.addAll(((TMLCCompositeComponent)tgcomponent[i]).getAllInternalCompositePorts());
-			}
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				list.addAll(((TMLCRemoteCompositeComponent)tgcomponent[i]).getAllInternalCompositePorts());
-			}
-			if (tgcomponent[i] instanceof TMLCCompositePort) {
-				list.add((TMLCCompositePort)(tgcomponent[i]));
-			}
-		}
-		
-		return list;
-	}
-	
-	public ArrayList<TMLCCompositePort> getAllReferencedCompositePorts() {
-		ArrayList<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				list.addAll(((TMLCCompositeComponent)tgcomponent[i]).getAllReferencedCompositePorts());
-			}
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				list.addAll(((TMLCRemoteCompositeComponent)tgcomponent[i]).getAllInternalCompositePorts());
-			}
-		}
-		
-		return list;
-	}
-	
-	public ArrayList<TMLCCompositePort> getFirstLevelCompositePorts() {
-		ArrayList<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositePort) {
-				list.add((TMLCCompositePort)(tgcomponent[i]));
-			}
-		}
-		
-		return list;
-	}
-	
-	public ArrayList<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
-		ArrayList<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				list.addAll(((TMLCCompositeComponent)tgcomponent[i]).getAllInternalPrimitivePorts());
-			}
-			
-			if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
-				list.addAll(((TMLCPrimitiveComponent)tgcomponent[i]).getAllInternalPrimitivePorts());
-			}
-		}
-		
-		return list;
-	}
-	
-	public TMLCPrimitiveComponent getPrimitiveComponentByName(String _name) {
-		TMLCPrimitiveComponent tgc;
-		ListIterator li = getAllPrimitiveComponents().listIterator();
-		
-		while(li.hasNext()) {
-			tgc = (TMLCPrimitiveComponent)(li.next());
-			if (tgc.getValue().equals(_name)) {
-				return tgc;
-			}
-		}
-		
-		return null;
-	}
-	
-	public TMLCCompositeComponent getCompositeComponentByName(String _name) {
-		TGComponent tgc;
-		TMLCCompositeComponent tmp;
         
-       for(int i=0; i<nbInternalTGComponent; i++) {
-            tgc = tgcomponent[i];
-            if (tgc instanceof TMLCCompositeComponent) {
-				tmp = (TMLCCompositeComponent)tgc;
-				if (tmp.getValue().equals(_name)) {
-					return tmp;
-				}
-				
-				if ((tmp = tmp.getCompositeComponentByName(name)) != null) {
-					return tmp;
-				}
-            }
-        }
-		
-		return null;
-	}
-	
-	public void setInternalsHidden(boolean hide) {
-		hiddeni = hide;
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (!(tgcomponent[i] instanceof TMLCCompositePort)) {
-				tgcomponent[i].setHidden(hide);
-			}
-		}
-		
-		if (tdp instanceof TMLComponentTaskDiagramPanel) {
-			((TMLComponentTaskDiagramPanel)tdp).hideConnectors();
-		}
-	}
-	
-	public boolean areInternalsHidden() {
-		return hiddeni;
-	}
-	
-	public void drawInternalComponentsWhenHidden(Graphics g) {
-		//System.out.println("Draw when hidden");
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositePort) {
-				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
-				tgcomponent[i].draw(g);
-			}
-		}
-	}*/
-    
-    /*protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info hiddeni=\"" + hiddeni + "\" "); 
-        sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
     }
     
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
-        try {
-            
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            int t1id;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //System.out.println(n1);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
-                        //System.out.println(n2);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-								if (elt.getAttribute("hiddeni").equals("true")) {
-									setInternalsHidden(true);
-								}
-							}
-							
-                        }
-                    }
-                }
-            }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }*/
-	
-	/*public void drawTGConnectingPoint(Graphics g, int type) {
-        //System.out.println("I am " + getName());
-        for (int i=0; i<nbConnectingPoint; i++) {
-            if (connectingPoint[i].isCompatibleWith(type)) {
-                connectingPoint[i].draw(g);
-            }
-        }
-		
-        for(int i=0; i<nbInternalTGComponent; i++) {
-			if (hiddeni) {
-				if (tgcomponent[i] instanceof TMLCCompositePort) {
-					tgcomponent[i].drawTGConnectingPoint(g, type);
-				}
-			} else {
-				tgcomponent[i].drawTGConnectingPoint(g, type);
-			}
-            
-        }
-    }*/
-	
-	/*public String getExtendedValue() {
-		return getValuePanel() + "::" + getValue();
-	}*/
-	
-	public void myActionWhenRemoved() {
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
-				tgcomponent[i].myActionWhenRemoved();
-			}
-		}
-		tdp = null;
-	}
-	
-	/*public void updateReferenceToTMLCCompositeComponent(TMLCCompositeComponent tmlcc) {
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
-				((TMLCRemoteCompositeComponent)tgcomponent[i]).updateReference(tmlcc);
-			}
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				((TMLCCompositeComponent)tgcomponent[i]).updateReferenceToTMLCCompositeComponent(tmlcc);
-			}
-		}
-	}
-	
-	public void delayedLoad() {
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
-				//ColorManager.setColor(g, tgcomponent[i].getState(), 0);
-				try {
-					((TMLCRemoteCompositeComponent)tgcomponent[i]).delayedLoad();
-				} catch (Exception e) {
-				}
-			}
-			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
-				((TMLCCompositeComponent)tgcomponent[i]).delayedLoad();
-			}
-		}
-	}
-	
-	public int getCompositePortNb() {
-		return compositePortNb;
-	}
-	
-	public void portRemoved() {
-		compositePortNb --;
-	}*/
+   	public int getDefaultConnector() {
+        return TGComponentManager.ATD_COMPOSITION_CONNECTOR;
+      }
     
 }

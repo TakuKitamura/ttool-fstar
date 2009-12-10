@@ -55,7 +55,7 @@ import java.util.*;
 
 import ui.*;
 
-public class AttackTreeDiagramPanel extends TDiagramPanel {
+public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttributes{
     
     public  AttackTreeDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
@@ -81,27 +81,27 @@ public class AttackTreeDiagramPanel extends TDiagramPanel {
     }
     
     public String getXMLHead() {
-        return "<AttckTreePanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<AttackTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
     }
     
     public String getXMLTail() {
-        return "</AttackTreePanel>";
+        return "</AttackTreeDiagramPanel>";
     }
     
     public String getXMLSelectedHead() {
-        return "<AttackTreePanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
+        return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
     public String getXMLSelectedTail() {
-        return "</AttackTreePanelCopy>";
+        return "</AttackTreeDiagramPanelCopy>";
     }
     
     public String getXMLCloneHead() {
-        return "<AttackTreePanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
+        return "<AttackTreeDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
     public String getXMLCloneTail() {
-        return "</AttackTreePanelCopy>";
+        return "</AttackTreeDiagramPanelCopy>";
     }
     
     public void makeGraphicalOptimizations() {
@@ -115,7 +115,7 @@ public class AttackTreeDiagramPanel extends TDiagramPanel {
     
 	
 	public boolean hasAutoConnect() {
-		return true;
+		return false;
 	}
 	
 	public void setConnectorsToFront() {

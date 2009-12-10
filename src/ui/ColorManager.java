@@ -110,6 +110,7 @@ public class ColorManager {
         
 	public static final Color TML_COMPOSITE_COMPONENT = new Color(239, 212, 176, 125);
 	
+	
 	public static final Color TML_PORT_CHANNEL = new Color(104, 229, 255);
 	public static final Color TML_PORT_EVENT = new Color(216, 187, 249);
 	public static final Color TML_PORT_REQUEST = new Color(196, 166, 122);	
@@ -118,6 +119,11 @@ public class ColorManager {
     
 	public static final Color SD_REFERENCE = new Color(104, 229, 255);
 	public static final Color IOD_REFERENCE = new Color(216, 187, 249);
+	
+	
+	public static final Color ATD_BLOCK = new Color(196, 232, 195);
+	public static final Color ATD_ATTACK = new Color(214, 187, 158);
+	public static final Color ATD_CONSTRAINT = new Color(191, 153, 161);
 	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	
