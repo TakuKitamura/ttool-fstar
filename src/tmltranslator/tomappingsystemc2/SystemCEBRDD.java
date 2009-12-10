@@ -654,8 +654,10 @@ public class SystemCEBRDD {
 			}
 		}
 		String nodeName2 = nodeName;
+		System.out.println("Name of Element: " + nodeName);
 		for(TMLElement elem: tmlmodeling.getChannels()){
 			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
+			System.out.println("Compare to: " + elem.getName());
 		}
 		for(TMLElement elem: tmlmodeling.getEvents()){
 			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);

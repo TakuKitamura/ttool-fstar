@@ -46,6 +46,7 @@
 package tmltranslator.tomappingsystemc2;
 
 import java.util.*;
+import java.util.regex.*;
 
 import tmltranslator.*;
 import myutil.*;
@@ -58,6 +59,8 @@ public class MappedSystemCTask {
 	private ArrayList<TMLChannel> channels;
 	private ArrayList<TMLEvent> events;
 	private ArrayList<TMLRequest> requests;
+	private HashMap<Integer,HashSet<Integer> > dependencies;
+	private final static Pattern varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
 	private int commentNum;
 	private boolean debug;
 	private boolean optimize;
@@ -101,11 +104,13 @@ public class MappedSystemCTask {
 		return task;
 	}
     
-	public void generateSystemC(boolean _debug) {
+	public void generateSystemC(boolean _debug, boolean _optimize, HashMap<Integer,HashSet<Integer> > _dependencies) {
         	debug = _debug;
-		//basicHCode();
+		optimize=_optimize;
 		basicCPPCode();
 		makeClassCode();
+		dependencies=_dependencies;
+		analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
     	}
 	
 	public void print() {
@@ -354,8 +359,6 @@ public class MappedSystemCTask {
 				//hcode+="TMLActionCommand " + cmdName + SCCR;
 				hcode+="TMLChoiceCommand " + cmdName + SCCR;
 				MergedCmdStr nextCommandCollection = new MergedCmdStr("", cmdName);
-				//initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
-				//initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR; //last one
 				initCommand+= "," + cmdName + "("+ idString + ",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func, 1, false)"+CR;
 				String MKResult;
 				if (optimize)
@@ -389,15 +392,21 @@ public class MappedSystemCTask {
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",0,0)"+CR;
-			initCommand+= "," + cmdName + "(" + currElem.getID() + ",this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0)" + CR;
+			if (isIntValue(((TMLExecI)currElem).getAction()))
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,0," + ((TMLExecI)currElem).getAction() + ")" + CR;
+			else
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0)" + CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecC){
 			if (debug) System.out.println("Checking ExecC\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
-			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",1)"+CR;
-			initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",1)"+CR;
+			if (isIntValue(((TMLExecI)currElem).getAction()))
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,1," + ((TMLExecI)currElem).getAction() + ")" + CR;
+			else
+				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",1)"+CR;
+				
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLExecIInterval){
@@ -422,21 +431,14 @@ public class MappedSystemCTask {
 			TMLForLoop fl = (TMLForLoop)currElem;
 			TMLActionState initAction=new TMLActionState("lpInitAc",null);
 			initAction.setAction(fl.getInit());
-			//cmdName= "_action" + initAction.getID();
-			//TMLActionState incAction=new TMLActionState("lpIncAc",null);
 			TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
 			incAction.setAction(fl.getIncrement());
 			TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
 			lpChoice.addGuard("[ " + fl.getCondition() + " ]");
 			lpChoice.addGuard("[ else ]");
-			//incAction.addNext(lpChoice);
 			lpChoice.addNext(fl.getNextElement(0));  //inside loop
 			lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
-			//makeCommands(initAction, false, "&_choice" + lpChoice.getID(), nextCommandCont, functionCont, null);
-			//makeCommands(incAction, false, "&_choice" + lpChoice.getID(), null, null, null);
-			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, null, retElement);
 			makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
-			//makeCommands(lpChoice, false, "&_action" + incAction.getID(), null, retElement);
 			makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
 			return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);
 		
@@ -445,9 +447,10 @@ public class MappedSystemCTask {
 			cmdName= "_read" + currElem.getID();
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
-			//initCommand+= "," + cmdName + "(this," + rCommand.getNbOfSamples() + "*" + rCommand.getChannel().getSize() + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel().getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
-			//initCommand+= "," + cmdName + "(this," + rCommand.getNbOfSamples() + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
+			if (isIntValue(rCommand.getNbOfSamples()))
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel().getExtendedName() + "," + rCommand.getChannel().getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
+			else
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel().getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
@@ -455,80 +458,34 @@ public class MappedSystemCTask {
 			cmdName= "_write" + currElem.getID();
 			hcode+="TMLWriteCommand " + cmdName + SCCR;
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
-			//initCommand+= "," + cmdName + "(this," + wCommand.getNbOfSamples() + "*" + wCommand.getChannel().getSize() + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getChannel().getSize() + "*(" + wCommand.getNbOfSamples() + ")", null) + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
-			//initCommand+= "," + cmdName + "(this," + wCommand.getNbOfSamples() + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
+			if (isIntValue(wCommand.getNbOfSamples()))
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + wCommand.getChannel().getExtendedName() + "," +  wCommand.getChannel().getSize() + "*" + wCommand.getNbOfSamples() + ")"+CR;
+			else
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getChannel().getSize() + "*(" + wCommand.getNbOfSamples() + ")", null) + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLSendEvent){
 			if (debug) System.out.println("Checking Send\n");
+			TMLSendEvent sendEvt=(TMLSendEvent)currElem;
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
-			if (((TMLSendEvent)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
-			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendEvent)currElem).getEvent().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
-				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
-				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
-				for(int i=0; i<3; i++) {
-					if (((TMLSendEvent)currElem).getParam(i) == null) {
-						functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
-					} else {
-						if (((TMLSendEvent)currElem).getParam(i).length() > 0) {
-							functions += "ioParam.setP" + (i+1) + "(" + ((TMLSendEvent)currElem).getParam(i) + ")" + SCCR;
-						} else {
-							functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
-						}
-					}
-            			}
-				functions+="}\n\n"; 
-			}
+			handleParameters(sendEvt.getNbOfParams(), new String[]{sendEvt.getParam(0), sendEvt.getParam(1), sendEvt.getParam(2)}, cmdName, currElem.getID(), sendEvt.getEvent().getExtendedName(),false);
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 			
 		} else if (currElem instanceof TMLSendRequest){
 			if (debug) System.out.println("Checking Request\n");
+			TMLSendRequest sendReq=(TMLSendRequest)currElem;
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
-			if (((TMLSendRequest)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",0)"+CR;
-			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLSendRequest)currElem).getRequest().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
-				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
-				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
-				for(int i=0; i<3; i++) {
-					if (((TMLSendRequest)currElem).getParam(i) == null) {
-						functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
-					} else {
-						if (((TMLSendRequest)currElem).getParam(i).length() > 0) {
-							functions += "ioParam.setP" + (i+1) + "(" + ((TMLSendRequest)currElem).getParam(i) + ")" + SCCR;
-						} else {
-							functions += "ioParam.setP" + (i+1) + "(0)" + SCCR;
-						}
-					}
-				}
-				functions+="}\n\n"; 
-			}
+			handleParameters(sendReq.getNbOfParams(), new String[]{sendReq.getParam(0), sendReq.getParam(1), sendReq.getParam(2)}, cmdName, currElem.getID(), sendReq.getRequest().getExtendedName(),false);
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;	
 	
 		} else if (currElem instanceof TMLWaitEvent){
 			if (debug) System.out.println("Checking Wait\n");
+			TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
-			if (((TMLWaitEvent)currElem).getNbOfParams()==0){
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",0)"+CR;
-			}else{ 
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLWaitEvent)currElem).getEvent().getExtendedName() + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
-				functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
-				functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
-				for(int i=0; i<3; i++) {
-					if (((TMLWaitEvent)currElem).getParam(i) != null) {
-						if (((TMLWaitEvent)currElem).getParam(i).length() > 0) {
-							functions += ((TMLWaitEvent)currElem).getParam(i) + "=ioParam.getP" + (i+1) +"()"+ SCCR;
-						}
-					}
-				}
-				functions+="}\n\n"; 
-			}
+			handleParameters(waitEvt.getNbOfParams(), new String[]{waitEvt.getParam(0), waitEvt.getParam(1), waitEvt.getParam(2)}, cmdName, currElem.getID(), waitEvt.getEvent().getExtendedName(),true);
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLNotifiedEvent){
@@ -556,11 +513,7 @@ public class MappedSystemCTask {
 						if (debug) System.out.println("Checking Sequence branch "+ i);
 						nextBranch=makeCommands(currElem.getNextElement(i),false,nextBranch,null,null);
 					}
-					//nextBranch=makeCommands(currElem.getNextElement(0),false,nextBranch,nextCommandCont,functionCont,null);
                     			return nextBranch;
-					//int index = tmlseq.getCurrIndex(lastSequence);
-					//if (index==tmlseq.getNbNext()-1) return makeCommands(currElem.getNextElement(index), false,retElement,nextCommandCont,functionCont,tmlseq.getLastSequence());
-					//return makeCommands(currElem.getNextElement(index), false,retElement,nextCommandCont,functionCont,currElem);
                 		}
             		}
 		
@@ -593,7 +546,7 @@ public class MappedSystemCTask {
 						code2 = "(rnd__0 < " + Math.floor(100/choice.getNbGuard())*(nb+1) + ")";
 						nb ++;
 					} else if (choice.isStochasticGuard(i)) {
-						if (guardS.length() == 0) {
+						if (guardS.isEmpty()) {
 							guardS = choice.getStochasticGuard(i);
 						} else {
 							guardS = "(" + guardS + ")+(" + choice.getStochasticGuard(i) + ")";
@@ -625,7 +578,7 @@ public class MappedSystemCTask {
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElseElement,nextCommandCollection,null);
 							else
 								MCResult = makeCommands(currElem.getNextElement(i), false, retElement,nextCommandCollection,null);
-							if (!optimize || nextCommandCollection.funcs.length() == 0){
+							if (!optimize || nextCommandCollection.funcs.isEmpty()){
 								//System.out.println("NO content has been added to "+ code2);
 								code += "{\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\nreturn " + returnIndex + SCCR +"}" + CR;
 								commentText+="_comment[" + commentNum + "]=std::string(\"Branch taken: " + code2 + "\");\n";
@@ -680,7 +633,6 @@ public class MappedSystemCTask {
 						nextCommand= cmdName + ".setNextCommand(array(" + returnIndex + nextCommandTemp + "))" + SCCR;
 					}
 					hcode+="TMLChoiceCommand " + cmdName + SCCR;
-					//initCommand+= "," + cmdName + "("+currElem.getID()+",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard() + ")"+CR;
 					initCommand+= "," + cmdName + "("+ idString +",this,(CondFuncPointer)&" + reference + "::" + cmdName + "_func," + choice.getNbGuard();
 					if (choice.nbOfNonDeterministicGuard()==0) initCommand+=",false)"+CR; else initCommand+=",true)"+CR;
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
@@ -701,7 +653,8 @@ public class MappedSystemCTask {
 					
 		} else if (currElem instanceof TMLSelectEvt){
 			TMLEvent evt;
-			Integer nbevt=0;
+			//Integer nbevt=0;
+			int nbevt=0;
 			String evtList="",paramList="";
 			if (debug) System.out.println("Checking SelectEvt\n");
 			cmdName= "_select" + currElem.getID();
@@ -717,21 +670,25 @@ public class MappedSystemCTask {
 						functionSig+="void " + cmdName + "_func" + i + "(Parameter<ParamType>& ioParam)" + SCCR;
 						functions+="void " + reference + "::" + cmdName +  "_func" + i + "(Parameter<ParamType>& ioParam){" + CR;
 						paramList+=",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
+						functions += "ioParam.getP(";
 						for(int j=0; j<3; j++) {
-							if (((TMLSelectEvt)currElem).getParam(i,j) != null) {
-								if (((TMLSelectEvt)currElem).getParam(i,j).length() > 0) {
+							if (j>0) functions += ",";
+							//if (((TMLSelectEvt)currElem).getParam(i,j) != null) {
+								//if (!((TMLSelectEvt)currElem).getParam(i,j).isEmpty()) {
 									//paramList += ((TMLSelectEvt)currElem).getParam(i,j);
-									functions += ((TMLSelectEvt)currElem).getParam(i,j) + "=ioParam.getP" + (j+1) +"()"+ SCCR;
-								}
-							}
+									//functions += ((TMLSelectEvt)currElem).getParam(i,j) + "=ioParam.getP" + (j+1) +"()"+ SCCR;
+								//}
+							if (((TMLSelectEvt)currElem).getParam(i,j)== null || ((TMLSelectEvt)currElem).getParam(i,j).isEmpty())
+								functions+="rnd__0";
+							else
+								functions+=((TMLSelectEvt)currElem).getParam(i,j);
 						}
-						functions+="}\n\n"; 
+						functions+=");\n}\n\n"; 
 					}
 					nextCommand+= ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement,null,null); 
 				}
 			}
 			hcode+="TMLSelectCommand " + cmdName + SCCR;
-			//initCommand+= "," + cmdName + "(this,array("+ nbevt + evtList + "),"+ nbevt + ",0)"+CR;
 			initCommand+= "," + cmdName + "("+currElem.getID()+",this,array("+ nbevt + evtList + "),"+ nbevt + ",array("+ nbevt + paramList + "))"+CR;
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
@@ -752,6 +709,41 @@ public class MappedSystemCTask {
 		return "(LengthFuncPointer)&" + reference + "::" + cmdName + "_func";
 	}
 
+	private boolean isIntValue(String input){  
+		try{  
+			Integer.parseInt(input); 
+			return true;  
+		}catch(Exception e){  
+			return false;
+		}  
+	}
+
+	private void handleParameters(int nbOfParams, String[] param, String cmdName, int ID, String channelName, boolean wait){
+		String params="";
+		boolean areStatic=true;
+		if (nbOfParams==0){
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0)"+CR;
+			return;
+		}
+		for(int i=0; i<3; i++){
+			if(areStatic && !isIntValue(param[i])) areStatic=false;
+			if (i>0) params+=",";
+			if (param[i]==null || param[i].isEmpty()) params+="rnd__0"; else params+=param[i];
+		}
+		if (areStatic){
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0,Parameter<ParamType>("+ params + "))"+CR;
+		}else{
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
+			functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
+			functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
+			if (wait)
+				functions += "ioParam.getP(" + params + ")" + SCCR;
+			else
+				functions += "ioParam.setP(" + params + ")" + SCCR;
+			functions+="}\n\n"; 
+		}
+	}
+
 	private void makeEndClassH() {
 		hcode += "};" + CR + "#endif" + CR;
 	}
@@ -759,11 +751,12 @@ public class MappedSystemCTask {
 	
 	private String makeAttributesCode() {
 		String code = "";
-		TMLAttribute att;
+		//TMLAttribute att;
 		int i;
-		ListIterator iterator = task.getAttributes().listIterator();
-		while(iterator.hasNext()) {
-			att = (TMLAttribute)(iterator.next());
+		//istIterator iterator = task.getAttributes().listIterator();
+		//while(iterator.hasNext()) {
+		for(TMLAttribute att: task.getAttributes()) {
+			//att = (TMLAttribute)(iterator.next());
 			if (att.hasInitialValue())
 				code += ","+ att.name + "(" + att.initialValue + ")"+CR;
 			else
@@ -774,11 +767,12 @@ public class MappedSystemCTask {
 	
 	private String makeAttributesDeclaration() {
 		String code = "";
-		TMLAttribute att;
+		//TMLAttribute att;
 		int i;
-		ListIterator iterator = task.getAttributes().listIterator();
-		while(iterator.hasNext()) {
-			att = (TMLAttribute)(iterator.next());
+		//ListIterator iterator = task.getAttributes().listIterator();
+		for(TMLAttribute att: task.getAttributes()) {
+		//while(iterator.hasNext()) {
+			//att = (TMLAttribute)(iterator.next());
 			//code += TMLType.getStringType(att.type.getType()) + " " + att.name;
 			code += "int " + att.name;
 			code += ";\n";
@@ -805,4 +799,245 @@ public class MappedSystemCTask {
         	return _input;
 	}
 
+	private void analyzeDependencies(TMLActivityElement currElem, boolean oneCmd, boolean skip, HashSet<Integer> depList){
+		boolean done;
+		do{
+			if (skip){
+				skip=false;
+			}else{
+				if (currElem instanceof TMLActionState) {
+					String[] tokens=((TMLActionState)currElem).getAction().split("=",2);
+					if (tokens.length==2){
+						ArrayList<Integer> leftVars = getVariablesInString(tokens[0]);
+						ArrayList<Integer> rightVars = getVariablesInString(tokens[1]);
+						if (!(rightVars.isEmpty() && depList.isEmpty())){
+							for (int lVar: leftVars){
+								HashSet<Integer> currSet = getHashSetForID(lVar);
+								for(int rVar: rightVars) currSet.add(rVar);
+								for (int objs: depList) currSet.add(objs);
+							}
+						}
+					}
+					
+				} else if (currElem instanceof TMLChoice){
+					TMLChoice choice= (TMLChoice) currElem;
+					if (choice.getNbGuard()>1){		
+						if (choice.isNonDeterministicGuard(0) || choice.isStochasticGuard(0)) {
+							//Random choice, add reference to choice command to nDepList
+							depList.add(-currElem.getID());
+						}else{
+							//Add all variables that appear in any condition to NDepList
+							for(int i=0; i<choice.getNbGuard(); i++) {
+								ArrayList<Integer> guardVars = getVariablesInString(choice.getGuard(i));
+								for (int gVar: guardVars) depList.add(gVar);
+							}
+						}
+						//HashSet<Integer> tmpDepList = new HashSet<Integer>(nesDepList);
+						for (int branch=0; branch<currElem.getNbNext(); branch++){
+							//if(branch!=0) nesDepList=new HashSet<Integer>(tmpDepList);
+							analyzeDependencies(currElem.getNextElement(branch),false,false,new HashSet<Integer>(depList));	
+						}
+					}
+				} else if (currElem instanceof TMLWriteChannel){
+					TMLWriteChannel write = (TMLWriteChannel) currElem;
+					if (write.getChannel().getType()!=TMLChannel.NBRNBW){
+						//Add to dependency list of event: NDepList + variable denoting the number of samples
+						ArrayList<Integer> cmdVars = getVariablesInString(write.getNbOfSamples());
+						if (!(depList.isEmpty() && cmdVars.isEmpty())){
+							HashSet<Integer> currSet = getHashSetForID(write.getChannel().getID());
+							for (int objs: depList) currSet.add(objs);
+							for (int objs: cmdVars) currSet.add(objs);
+						}
+					}
+	
+				} else if (currElem instanceof TMLSendEvent){
+					TMLSendEvent send = (TMLSendEvent) currElem;
+					//Add to dependency list of event: NDepList + variables appearing as parameters
+					if (!depList.isEmpty()){
+						HashSet<Integer> currSet = getHashSetForID(send.getEvent().getID());
+						for (int objs: depList) currSet.add(objs);
+					}
+					for (int param=0; param<send.getNbOfParams(); param++){
+						///?????????????????????
+						ArrayList<Integer> paramVars = getVariablesInString(send.getParam(param));
+						if (!paramVars.isEmpty()){
+							HashSet<Integer> paramSet = getHashSetForID(Integer.MAX_VALUE-3*send.getEvent().getID()-param);
+							for (int objs: paramVars) paramSet.add(objs);
+						}
+					}
+	
+				} else if (currElem instanceof TMLSendRequest){
+					//Add to dependency list of request: NDepList + variables appearing as parameters
+					TMLSendRequest request = (TMLSendRequest) currElem;
+					if (!depList.isEmpty()){
+						HashSet<Integer> currSet = getHashSetForID(request.getRequest().getID());
+						for (int objs: depList) currSet.add(objs);
+					}
+					for (int param=0; param<request.getNbOfParams(); param++){
+						///?????????????????????
+						ArrayList<Integer> paramVars = getVariablesInString(request.getParam(param));
+						if (!paramVars.isEmpty()){
+							HashSet<Integer> paramSet = getHashSetForID(Integer.MAX_VALUE-3*request.getRequest().getID()-param);
+							for (int objs: paramVars) paramSet.add(objs);
+						}
+					}
+	
+				} else if (currElem instanceof TMLReadChannel){
+					TMLReadChannel read = (TMLReadChannel) currElem;
+					if (read.getChannel().getType()!=TMLChannel.NBRNBW){
+						//Add to dependency list of channel: NDepList + variable denoting the number of samples
+						ArrayList<Integer> cmdVars = getVariablesInString(read.getNbOfSamples());
+						if (!(depList.isEmpty() && cmdVars.isEmpty())){
+							HashSet<Integer> currSet = getHashSetForID(read.getChannel().getID());
+							for (int objs: depList) currSet.add(objs);
+							for (int objs: cmdVars) currSet.add(objs);
+						}
+					}
+					
+				} else if (currElem instanceof TMLWaitEvent){
+					TMLWaitEvent wait= (TMLWaitEvent) currElem;
+					//Add content of NDepList to dependency list of event, add channel to dependency list of variables appearing as parameters
+					if (!depList.isEmpty()){
+						HashSet<Integer> currSet = getHashSetForID(wait.getEvent().getID());
+						for (int objs: depList) currSet.add(objs);
+					}
+					for (int param=0; param<wait.getNbOfParams(); param++){
+						///?????????????????????
+						ArrayList<Integer> paramVars = getVariablesInString(wait.getParam(param));
+						for (int pvar: paramVars){
+							HashSet<Integer> paramSet = getHashSetForID(pvar);
+							//currSet.add(wait.getEvent().getID());
+							paramSet.add(Integer.MAX_VALUE-3*wait.getEvent().getID()-param);
+						}
+					}
+	
+				} else if (currElem instanceof TMLNotifiedEvent){
+					//Add channel/event/request to dependency of variable
+					TMLNotifiedEvent notified = (TMLNotifiedEvent) currElem;
+					ArrayList<Integer> vars = getVariablesInString(notified.getVariable());
+					//int varID = getVarIDByName(notified.getVariable());
+					//if (varID!=-1){
+					for (int var: vars){
+						HashSet<Integer> currSet = getHashSetForID(var);
+						currSet.add(notified.getEvent().getID());
+						for (int objs: depList) currSet.add(objs);
+					}
+					
+				} else if (currElem instanceof TMLSelectEvt){
+					//Execute WaitEvent actions for all connected events
+					for (int i=0; i<3; i++){
+						TMLEvent evt = ((TMLSelectEvt)currElem).getEvent(i);
+						if (evt!=null) depList.add(evt.getID()); //for select event commands
+					}
+					for(int branch=0; branch<currElem.getNbNext(); branch++)
+						analyzeDependencies(currElem.getNextElement(branch),true,false,depList);
+					//HashSet<Integer> tmpDepList = new HashSet<Integer>(nesDepList);
+					for(int branch=0; branch<currElem.getNbNext(); branch++){
+						//if(branch!=0) nesDepList=new HashSet<Integer>(tmpDepList);
+						analyzeDependencies(currElem.getNextElement(branch),false,true,new HashSet<Integer>(depList));
+					}
+						
+				} else if (currElem instanceof TMLForLoop){
+					TMLForLoop loop = (TMLForLoop) currElem;
+					//Check_Branch(next_cmd outside loop)
+
+					//Add all variables to NDepList which appear in loop expressions
+
+					//Check_Branch(next_cmd within loop)
+					//HashSet<Integer> tmpDepList = new HashSet<Integer>(nesDepList);
+					analyzeDependencies(currElem.getNextElement(1),false,false,new HashSet<Integer>(depList));  //outside loop
+					//nesDepList=tmpDepList;
+					String[] cmds = new String[]{loop.getInit(), loop.getIncrement(), loop.getCondition()};
+					for (int i=0; i<3; i++){
+						ArrayList<Integer> cmdVars = getVariablesInString(cmds[i]);
+						for (int cmdvar: cmdVars) depList.add(cmdvar);
+					}
+					analyzeDependencies(currElem.getNextElement(0),false,false,depList);  //inside loop
+
+				} else if (currElem instanceof TMLSequence){
+					//pay attention to correct nesDepList
+					if (currElem.getNbNext()>1){
+						//HashSet<Integer> tmpDepList = new HashSet<Integer>(nesDepList);
+						for (int branch=0; branch<currElem.getNbNext(); branch++){
+							//if(branch!=0) nesDepList=new HashSet<Integer>(tmpDepList);
+							analyzeDependencies(currElem.getNextElement(branch),false,false,new HashSet<Integer>(depList));
+						}
+					}
+					
+				} else if (currElem instanceof TMLRandom){
+					//Add to dependency list of variable: random + NDepList
+					ArrayList<Integer> vars = getVariablesInString(((TMLRandom)currElem).getVariable());
+					//int varID = getVarIDByName(((TMLRandom)currElem).getVariable());
+					//if (varID!=-1){
+					for (int var: vars){
+						HashSet<Integer> currSet = getHashSetForID(var);
+						for (int objs: depList) currSet.add(objs);
+						currSet.add(-currElem.getID());
+					}
+				}
+			}
+			done = (oneCmd || currElem.getNbNext()!=1 || currElem instanceof TMLStopState);
+			if (!done) currElem = currElem.getNextElement(0);
+		}while (!done);
+	}
+
+	public String getIdentifierNameByID(int id){
+		//Channels, Events, Requests, Variables, Choice, Random
+		id=Math.abs(id);
+		for (TMLChannel channel: channels){
+			if (channel.getID()==id) return reference + ":" + channel.getName();
+		}
+		for (TMLEvent event: events){
+			if (event.getID()==id) return reference + ":" + event.getName();
+			int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
+			if (param>0 && param<4)  return reference + ":" + event.getName() + "_param " + param;
+		}
+		for (TMLRequest request: requests){
+			if (request.getID()==id) return reference + ":" + request.getName();
+			int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
+			if (param>0 && param<4)  return reference + ":" + request.getName() + "_param " + param;
+		}
+		for(TMLAttribute att: task.getAttributes()){
+			if (att.getID()==id) return reference + ":" + att.getName();
+		}
+		for(int i=0; i<task.getActivityDiagram().nElements();i++)
+			if (task.getActivityDiagram().get(i).getID()==id) return reference + ": Command " + id;
+		return null;
+	}
+
+	private ArrayList<Integer> getVariablesInString(String search){
+		ArrayList<Integer> variables = new ArrayList<Integer>();
+		if (search==null) return variables;
+		Matcher matcher = varPattern.matcher(search);
+		while (matcher.find()){
+			int varID = getVarIDByName(search.substring(matcher.start(), matcher.end()));
+			if (varID!=-1) variables.add(varID);
+		}
+		return variables;
+	}
+
+	private int getVarIDByName(String attName){
+		for(TMLAttribute att: task.getAttributes()) {
+			if (att.name.equals(attName)) return att.getID();
+		}
+		if (task.isRequested()) {
+			if (attName.equals("arg1__req")){
+				return Integer.MAX_VALUE - 3*task.getRequest().getID();
+			}else if (attName.equals("arg2__req")){
+				return Integer.MAX_VALUE - 3*task.getRequest().getID()-1;
+			}else if (attName.equals("arg3__req")){
+				return Integer.MAX_VALUE - 3*task.getRequest().getID()-2;
+			}
+		}
+		return -1;
+	}
+
+	private HashSet<Integer> getHashSetForID(int id){
+		HashSet<Integer> currSet = dependencies.get(id);
+		if (currSet==null){
+			currSet=new HashSet<Integer>();
+			dependencies.put(id,currSet);
+		}
+		return currSet;
+	}
 }

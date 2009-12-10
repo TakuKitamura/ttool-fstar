@@ -72,6 +72,8 @@ public class TML2MappingSystemC {
 	
 	private ArrayList<EBRDD> ebrdds;
 	private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
+	private HashMap<Integer,HashSet<Integer> > dependencies = new HashMap<Integer,HashSet<Integer> >();
+	private HashSet<Integer> visitedVars = new HashSet<Integer>();
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
@@ -108,15 +110,26 @@ public class TML2MappingSystemC {
 
     	public void generateSystemC(boolean _debug, boolean _optimize) {
         	debug = _debug;
-			optimize = _optimize;
- 
+		optimize = _optimize;
+		//visitedVars.clear();
+		dependencies.clear();
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
-
         	//generateSystemCTasks();
 		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
+		System.out.println("********** Before optimization **********");
+		printDependencies();
+		HashSet<Integer> keys = new HashSet<Integer>(dependencies.keySet());
+		for(int elemID: keys){
+			//HashSet<Integer> newSet = new HashSet<Integer>();
+			//if (!visitedVars.contains(elemID))
+			visitedVars.clear();
+			eliminateStateVars(elemID, null);
+		}
+		System.out.println("********** After optimization **********");
+		printDependencies();
 	}
 	
 	private void generateMainFile() {
@@ -354,11 +367,15 @@ public class TML2MappingSystemC {
 			declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\"," + node.getName() + CR; 
 			
 			MappedSystemCTask mst;
-			channels = (ArrayList<TMLChannel>) tmlmodeling.getChannels(task).clone();
-			events = (ArrayList<TMLEvent>) tmlmodeling.getEvents(task).clone();
-			requests = (ArrayList<TMLRequest>) tmlmodeling.getRequests(task).clone();
+			//channels = (ArrayList<TMLChannel>) tmlmodeling.getChannels(task).clone();
+			//events = (ArrayList<TMLEvent>) tmlmodeling.getEvents(task).clone();
+			//requests = (ArrayList<TMLRequest>) tmlmodeling.getRequests(task).clone();
+			channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
+			events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
+			requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
+
 			mst = new MappedSystemCTask(task, channels, events, requests);
-			mst.generateSystemC(debug);
+			mst.generateSystemC(debug, optimize, dependencies);
 			tasks.add(mst);
 
 			for(TMLChannel channelb: channels) {
@@ -507,6 +524,47 @@ public class TML2MappingSystemC {
 			}
 		}
 	}*/
+
+	private void eliminateStateVars(int id, HashSet<Integer>rndVars){
+		visitedVars.add(id);
+		HashSet<Integer> currSet = dependencies.get(id);
+		if (currSet==null) return;
+		HashSet<Integer> newSet = new HashSet<Integer>();
+		for (int currID: currSet){
+			if (!visitedVars.contains(currID)){
+				if(currID>0){
+					eliminateStateVars(currID, newSet);
+				}else{
+					newSet.add(currID);
+				}
+			}
+		}
+		dependencies.remove(id);
+		if (!newSet.isEmpty()){
+			dependencies.put(id, newSet);
+			if (rndVars!=null) for(int currID: newSet) rndVars.add(currID);
+		}
+	}
+
+	private String getIdentifierNameByID(int id){
+		
+		for(MappedSystemCTask task: tasks){
+			String tmp = task.getIdentifierNameByID(id);
+			if (tmp!=null) return tmp; 
+		}
+		return null;
+	}
+
+	private void printDependencies(){
+		for(int elemID:dependencies.keySet()){
+			System.out.println(getIdentifierNameByID(elemID) + " depends on:");
+			HashSet<Integer> deps = dependencies.get(elemID);
+			for (int dep: deps){
+				System.out.println("  " + getIdentifierNameByID(dep));
+			}
+		}
+		System.out.println("");
+	}
 
 	private void generateEBRDDs(){
 		for(EBRDD ebrdd: ebrdds){
