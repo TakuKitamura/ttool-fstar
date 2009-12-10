@@ -985,23 +985,23 @@ public class MappedSystemCTask {
 		//Channels, Events, Requests, Variables, Choice, Random
 		id=Math.abs(id);
 		for (TMLChannel channel: channels){
-			if (channel.getID()==id) return reference + ":" + channel.getName();
+			if (channel.getID()==id) return channel.getName();
 		}
 		for (TMLEvent event: events){
-			if (event.getID()==id) return reference + ":" + event.getName();
+			if (event.getID()==id) return event.getName();
 			int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
-			if (param>0 && param<4)  return reference + ":" + event.getName() + "_param " + param;
+			if (param>0 && param<4)  return event.getName() + "_param" + param;
 		}
 		for (TMLRequest request: requests){
-			if (request.getID()==id) return reference + ":" + request.getName();
+			if (request.getID()==id) return request.getName();
 			int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
-			if (param>0 && param<4)  return reference + ":" + request.getName() + "_param " + param;
+			if (param>0 && param<4)  return request.getName() + "_param!" + param;
 		}
 		for(TMLAttribute att: task.getAttributes()){
 			if (att.getID()==id) return reference + ":" + att.getName();
 		}
 		for(int i=0; i<task.getActivityDiagram().nElements();i++)
-			if (task.getActivityDiagram().get(i).getID()==id) return reference + ": Command " + id;
+			if (task.getActivityDiagram().get(i).getID()==id) return reference + ":Command " + id;
 		return null;
 	}
 
@@ -1017,9 +1017,6 @@ public class MappedSystemCTask {
 	}
 
 	private int getVarIDByName(String attName){
-		for(TMLAttribute att: task.getAttributes()) {
-			if (att.name.equals(attName)) return att.getID();
-		}
 		if (task.isRequested()) {
 			if (attName.equals("arg1__req")){
 				return Integer.MAX_VALUE - 3*task.getRequest().getID();
@@ -1028,6 +1025,9 @@ public class MappedSystemCTask {
 			}else if (attName.equals("arg3__req")){
 				return Integer.MAX_VALUE - 3*task.getRequest().getID()-2;
 			}
+		}
+		for(TMLAttribute att: task.getAttributes()) {
+			if (att.name.equals(attName)) return att.getID();
 		}
 		return -1;
 	}

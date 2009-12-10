@@ -111,7 +111,6 @@ public class TML2MappingSystemC {
     	public void generateSystemC(boolean _debug, boolean _optimize) {
         	debug = _debug;
 		optimize = _optimize;
-		//visitedVars.clear();
 		dependencies.clear();
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
@@ -119,17 +118,15 @@ public class TML2MappingSystemC {
 		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
-		System.out.println("********** Before optimization **********");
-		printDependencies();
+		System.out.println("********** All identified objects and their dependencies: **********");
+		printDependencies(false);
 		HashSet<Integer> keys = new HashSet<Integer>(dependencies.keySet());
 		for(int elemID: keys){
-			//HashSet<Integer> newSet = new HashSet<Integer>();
-			//if (!visitedVars.contains(elemID))
 			visitedVars.clear();
 			eliminateStateVars(elemID, null);
 		}
-		System.out.println("********** After optimization **********");
-		printDependencies();
+		System.out.println("********** System state variables and their dependency on indeterministic operators **********");
+		printDependencies(true);
 	}
 	
 	private void generateMainFile() {
@@ -555,12 +552,14 @@ public class TML2MappingSystemC {
 		return null;
 	}
 
-	private void printDependencies(){
+	private void printDependencies(boolean onlyState){	
 		for(int elemID:dependencies.keySet()){
-			System.out.println(getIdentifierNameByID(elemID) + " depends on:");
-			HashSet<Integer> deps = dependencies.get(elemID);
-			for (int dep: deps){
-				System.out.println("  " + getIdentifierNameByID(dep));
+			if (!onlyState || elemID < Integer.MAX_VALUE/2){
+				System.out.println(getIdentifierNameByID(elemID) + " depends on:");
+				HashSet<Integer> deps = dependencies.get(elemID);
+				for (int dep: deps){
+					System.out.println("  " + getIdentifierNameByID(dep));
+				}
 			}
 		}
 		System.out.println("");
