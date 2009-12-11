@@ -235,6 +235,7 @@ public class TGComponentManager {
 	
 	public static final int ATD_BLOCK = 1400;
 	public static final int ATD_ATTACK = 1401;
+	public static final int ATD_CONSTRAINT = 1402;
 	
     
     // SMD diagram
@@ -476,6 +477,9 @@ public class TGComponentManager {
                 break;
 			case ATD_ATTACK:
                 tgc = new ATDAttack(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;   
+			case ATD_CONSTRAINT:
+                tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_START_STATE:
                 tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -848,6 +852,8 @@ public class TGComponentManager {
             return ATD_BLOCK;
 		} else if (tgc instanceof ATDAttack) {
             return ATD_ATTACK;
+        } else if (tgc instanceof ATDConstraint) {
+            return ATD_CONSTRAINT;
         } else if (tgc instanceof ATDCompositionConnector) {
             return ATD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof ATDAttackConnector) {

@@ -102,7 +102,7 @@ public class ATDBlock extends TGCWithInternalComponent implements SwallowTGCompo
         userResizable = true;
         
         name = tdp.findBlockName("Block");
-		value = "name";
+		setValue(name);
         
         myImageIcon = IconManager.imgic700;
     }
@@ -122,8 +122,8 @@ public class ATDBlock extends TGCWithInternalComponent implements SwallowTGCompo
 		g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(ster, x + (width - w)/2, y + textY1);
 		g.setFont(f);
-        w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        w  = g.getFontMetrics().stringWidth(value);
+        g.drawString(value, x + (width - w)/2, y + textY2);
 		
 		// Icon
 		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);

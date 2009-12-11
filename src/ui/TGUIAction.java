@@ -290,12 +290,8 @@ public class TGUIAction extends AbstractAction {
 	public static final int ATD_BLOCK = 284;
     public static final int ATD_ATTACK = 285;
 	public static final int ATD_ATTACK_CONNECTOR = 286;
-	public static final int ATD_COMPOSITION_CONNECTOR = 292;
-	public static final int ATD_OR_CONSTRAINT = 287;
-	public static final int ATD_AND_CONSTRAINT = 288;
-	public static final int ATD_SEQUENCE_CONSTRAINT = 289;
-	public static final int ATD_AFTER_CONSTRAINT = 290;
-	public static final int ATD_BEFORE_CONSTRAINT = 291;
+	public static final int ATD_COMPOSITION_CONNECTOR = 288;
+	public static final int ATD_CONSTRAINT = 287;
 	
     
     public static final int ACT_MODEL_CHECKING = 25;
@@ -404,7 +400,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 293;
+    public static final int NB_ACTION = 289;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -760,14 +756,9 @@ public class TGUIAction extends AbstractAction {
 		// Attack Tree Diagrams
 		actions[ATD_BLOCK] = new TAction("atd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened attack tree diagram", 0);
         actions[ATD_ATTACK] = new TAction("atd-attack", "Add an attack", IconManager.imgic1072, IconManager.imgic1072, " Attack", "Add an attack (i.e. a SysML value type) to the currently opened attack tree diagram", 0);
-        actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1012, IconManager.imgic1012, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
-        actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1012, IconManager.imgic1012, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
-        actions[ATD_OR_CONSTRAINT] = new TAction("atd-or", "Add an <<or>>", IconManager.imgic1012, IconManager.imgic1012, "Or", "Add an <<or>> constraint to the currently opened attack tree diagram", 0);
-        actions[ATD_AND_CONSTRAINT] = new TAction("atd-and", "Add an <<and>>", IconManager.imgic1012, IconManager.imgic1012, "And", "Add an <<and>> constraint to the currently opened attack tree diagram", 0);
-        actions[ATD_SEQUENCE_CONSTRAINT] = new TAction("atd-sequence", "Add a <<sequence>>", IconManager.imgic1012, IconManager.imgic1012, "Sequence", "Add a <<sequence>> constraint to the currently opened attack tree diagram", 0);
-        actions[ATD_BEFORE_CONSTRAINT] = new TAction("atd-before", "Add a <<before>>", IconManager.imgic1012, IconManager.imgic1012, "Before", "Add a <<before>> constraint to the currently opened attack tree diagram", 0);
-        actions[ATD_AFTER_CONSTRAINT] = new TAction("atd-after", "Add an <<after>>", IconManager.imgic1012, IconManager.imgic1012, "After", "Add an <<after>> constraint to the currently opened attack tree diagram", 0);
-       
+        actions[ATD_ATTACK_CONNECTOR] = new TAction("atd-attack-connector", "Add a connector between attacks /constraints", IconManager.imgic1080, IconManager.imgic1080, "Connector", "Add a connector between attacks / constraints of the currently opened attack tree diagram", 0);
+        actions[ATD_COMPOSITION_CONNECTOR] = new TAction("atd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened attack tree diagram", 0);
+        actions[ATD_CONSTRAINT] = new TAction("atd-constraint", "Add an constraint", IconManager.imgic1078, IconManager.imgic1078, "Constraint", "Add a constraint to the currently opened attack tree diagram", 0);
 		
         // TURTLE-OS
         actions[TOS_TCLASS] = new TAction("add-tclass-os", "Add Tclass", IconManager.imgic104, IconManager.imgic104, "Tclass", "Add a TClass to the currently opened class diagram", 0);

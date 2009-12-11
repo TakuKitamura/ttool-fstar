@@ -3237,6 +3237,11 @@ public class GTURTLEModeling {
 			//System.out.println("Connectors...");
 			((EBRDDPanel)tdp).setConnectorsToFront();
 		}
+		
+		if (tdp instanceof AttackTreeDiagramPanel) {
+			//System.out.println("Connectors...");
+			((AttackTreeDiagramPanel)tdp).setConnectorsToFront();
+		}
 	}
 
 

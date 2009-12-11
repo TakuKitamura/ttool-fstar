@@ -61,8 +61,8 @@ import ui.cd.*;
 import ui.window.*;
 
 public  class ATDCompositionConnector extends TGConnector {
-    protected int d = 10;
-	protected int D = 13;
+    protected int d = 20;
+	protected int D = 26;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	
     
@@ -85,37 +85,29 @@ public  class ATDCompositionConnector extends TGConnector {
 		
 		if (x1 == x2) {
 			if (y1 > y2) {
-				p.addPoint(x2, y2+(2*D));
-				p.addPoint(x2+d, y2+D);
+				p.addPoint(x2, y2+D);
+				p.addPoint(x2+(d/2), y2+(D/2));
 				p.addPoint(x2, y2);
-				p.addPoint(x2-d, y2+D);
+				p.addPoint(x2-(d/2), y2+(D/2));
 			} else {
-				p.addPoint(x2, y2-(2*D));
-				p.addPoint(x2+d, y2-D);
+				p.addPoint(x2, y2-D);
+				p.addPoint(x2+(d/2), y2-(D/2));
 				p.addPoint(x2, y2);
-				p.addPoint(x2-d, y2-D);
+				p.addPoint(x2-(d/2), y2-(D/2));
 			}
 		} else {
 			double xd[] = new double[4];
 			double yd[] = new double[4];
-			double a = ((double)y1-y2)/(x1-x2);
+			/*double a = ((double)y1-y2)/(x1-x2);
 			
 			alpha = Math.atan(a);
-			x2 = (int)(x2 + (Math.cos(alpha)*D));
-			y2 = (int)(y2 + (Math.sin(alpha)*D));
-			
-			/*if (x1 > x2) {
+			if (x2 < x1) {
 				x2 = (int)(x2 + (Math.cos(alpha)*D));
-			} else {
-				x2 = (int)(x2 - (Math.cos(alpha)*D));
-			}
-			
-			if (y1 > y2) {
 				y2 = (int)(y2 + (Math.sin(alpha)*D));
 			} else {
+				x2 = (int)(x2 - (Math.cos(alpha)*D));
 				y2 = (int)(y2 - (Math.sin(alpha)*D));
-			}*/
-			
+			}
 			
 			int distance;
 			for(int i=0; i<4; i++){
@@ -128,7 +120,39 @@ public  class ATDCompositionConnector extends TGConnector {
 				yd[i] = y2 + (Math.sin(alpha)*distance);
 				p.addPoint((int)xd[i], (int)yd[i]);
 				alpha = alpha + (Math.PI/2);
+			}*/
+			
+			//P
+			xd[0] = x2;
+			yd[0] = y2;
+			
+			int x0 = x1 - x2;
+			int y0 = y1 - y2;
+			double k = 1/(Math.sqrt((x0*x0)+(y0*y0)));
+			double u = x0*k;
+			double v = y0*k;
+			
+			double Ex = D*u;
+			double Ey = D*v;
+			double Fx = d*v;
+			double Fy = -d*u;
+			
+			//Q
+			xd[1] = x2+((Ex+Fx)/2);
+			yd[1] = y2+((Ey+Fy)/2);
+			
+			//R
+			xd[2] = x2+Ex;
+			yd[2] = y2+Ey;
+			
+			//S
+			xd[3] = xd[1] - Fx;
+			yd[3] = yd[1] - Fy;
+			
+			for(int i=0; i<4; i++) {
+				p.addPoint((int)xd[i], (int)yd[i]);
 			}
+			
 		}
 		g.fillPolygon(p);
 		g.drawLine(x1, y1, x2, y2);

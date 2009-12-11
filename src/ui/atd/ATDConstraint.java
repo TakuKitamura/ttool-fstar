@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ATDAttack
- * Attack -> SysML value type
- * Creation: 09/12/2009
- * @version 1.0 09/12/2009
+ * Class ATDConstraint
+ * Constraint of SysML Parametric diagrams, adapted to attack trees
+ * Creation: 11/12/2009
+ * @version 1.0 11/12/2009
  * @author Ludovic APVRILLE
  * @see
  */
@@ -56,16 +56,15 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-    private int textY1 = 15;
-    private int textY2 = 30;
-	private int textX = 10;
+public class ATDConstraint extends TGCWithoutInternalComponent {
+    private int textY1 = 20;
+    //private int textY2 = 30;
+	
+	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"}; 
 	
     protected String oldValue = "";
-    protected String description = "";
-	 private String stereotype = "attack";
     
-    public ATDAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 125;
@@ -93,41 +92,32 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
         editable = true;
         removable = true;
         
-        value = "attack01";
-		description = "blah blah blah";
+        value = "<<OR>>";
         
-        myImageIcon = IconManager.imgic702;
+        myImageIcon = IconManager.imgic1078;
     }
     
     public void internalDrawing(Graphics g) {
         
-		if (value != oldValue) {
-			setValue(value, g);
-		}
-		
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.ATD_ATTACK);
+		g.setColor(ColorManager.ATD_CONSTRAINT);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
-        // Strings
-        String ster = "<<" + stereotype + ">>";
-        int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
 		g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        int w  = g.getFontMetrics().stringWidth(value);
+        g.drawString(value, x + (width - w)/2, y + textY1);
 		g.setFont(f);
-        w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY2);
         
     }
     
-   public void setValue(String val, Graphics g) {
+   /* public void setValue(String val, Graphics g) {
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max(minWidth, w + 2 * textX);
+		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
 		
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
         if (w1 != width) { 
@@ -135,23 +125,16 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
             resizeWithFather();
         }
         //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
-    }
+    }*/
     
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof ATDBlock)) {
-            //System.out.println("cdRect comp");
-            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
-            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
-            setMoveCd(x, y);
-        }
-    }
+
     
     
      public boolean editOndoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 		
-		JDialogAttack dialog = new JDialogAttack(frame, "Setting attack attributes", this);
+		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", this);
 		dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -160,32 +143,15 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
 			return false;
 		}
 		
-		if (dialog.getName() == null) {
+		if (dialog.getStereotype() == null) {
 			return false;
 		}
 		
-		if (dialog.getName().length() > 0) {
-			tmp = dialog.getName();
-			if (!TAttribute.isAValidId(tmp, false, false)) {
-				error = true;
-            } else {
-				value = tmp;
-			}
-		}
-		
-		
-		if (dialog.getDescription() != null) {
-			description = dialog.getDescription();
+		if (dialog.getStereotype().length() > 0) {
+			value = dialog.getStereotype();
 		}
 			
-		if (error) {
-			JOptionPane.showMessageDialog(frame,
-               "Name is non-valid",
-               "Error",
-               JOptionPane.INFORMATION_MESSAGE);
-		}
-			
-		return !error;
+		return true;
     }
     
     public TGComponent isOnMe(int _x, int _y) {
@@ -196,72 +162,8 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
     }
     
     public int getType() {
-        return TGComponentManager.ATD_ATTACK;
+        return TGComponentManager.ATD_CONSTRAINT;
     }
-    
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info description=\"" + description);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //System.out.println("*** load extra synchro ***");
-        try {
-            
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            int t1id;
-            String sdescription = null;
-			String prio;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //System.out.println(n1);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
-                        //System.out.println(n2);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-                                sdescription = elt.getAttribute("description");
-                            }
-                            if (sdescription != null) {
-                                description = sdescription;
-                            } 
-                        }
-                    }
-                }
-            }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
-    
-	
-	public String getDescription() {
-        return description;
-    }
-	
-	public void setDescription(String _description) {
-        description = _description;
-    }
-    
-    public String getAttackName() {
-        return value;
-    }
-	
-	public String getAttributes() {
-		return "Description = " + description;
-	}
-    
   
-    
     
 }

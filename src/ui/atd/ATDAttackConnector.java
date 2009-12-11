@@ -63,21 +63,64 @@ import ui.window.*;
 public  class ATDAttackConnector extends TGConnector {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
+	protected int c = 10; //square length 
 	
     
     public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
-        value = "{info}";
+        value = "";
         editable = true;
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+        /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
         } else {
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+        }*/
+		
+		//g.drawLine(x1, y1, x2, y2);
+		g.fillRect(x2-(c/2), y2-(c/2), c, c);
+		g.fillRect(p1.getX()-(c/2), p1.getY()-(c/2), c, c);
+		
+		Point p = GraphicLib.intersectionRectangleSegment(x2-(c/2), y2-(c/2), c, c, x1, y1, x2, y2);
+		if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, p.x, p.y);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
         }
+		
+		if (value.length() > 0) {
+			g.drawString(value, x2-(c/2), y2-(c/2)-2);
+		}
+	
+    }
+	
+	    public boolean editOndoubleClick(JFrame frame) {
+        String oldValue = value;
+        String text = getName() + ": ";
+        if (hasFather()) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String)JOptionPane.showInputDialog(frame, text,
+        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+        null,
+        getValue());
+        
+        if (s != null) {
+            s = Conversion.removeFirstSpaces(s);
+        }
+		
+		//System.out.println("emptytext=" + emptyText);
+        
+        if ((s != null) && ((s.length() > 0) && (!s.equals(oldValue)))) {
+            setValue(s);
+            //System.out.println("Value ok");
+            return true;
+        }
+         
+        return false;
     }
     
     

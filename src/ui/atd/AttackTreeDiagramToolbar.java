@@ -77,11 +77,7 @@ public class AttackTreeDiagramToolbar extends TToolBar {
 		
 		 mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
 		 
-		 mgui.actions[TGUIAction.ATD_OR_CONSTRAINT].setEnabled(b);
-		mgui.actions[TGUIAction.ATD_AND_CONSTRAINT].setEnabled(b);
-		mgui.actions[TGUIAction.ATD_SEQUENCE_CONSTRAINT].setEnabled(b);
-		mgui.actions[TGUIAction.ATD_BEFORE_CONSTRAINT].setEnabled(b);
-		mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT].setEnabled(b);
+		 mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
         
@@ -114,30 +110,14 @@ public class AttackTreeDiagramToolbar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.ATD_ATTACK]);
         button.addMouseListener(mgui.mouseHandler);
 		
+        this.addSeparator();
+        
+		button = this.add(mgui.actions[TGUIAction.ATD_CONSTRAINT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR]);
-        button.addMouseListener(mgui.mouseHandler);
-        
-        this.addSeparator();
-		this.addSeparator();
-        
-        
-		button = this.add(mgui.actions[TGUIAction.ATD_OR_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ATD_AND_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ATD_SEQUENCE_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-        
-        button = this.add(mgui.actions[TGUIAction.ATD_BEFORE_CONSTRAINT]);
-        button.addMouseListener(mgui.mouseHandler);
-		
-		button = this.add(mgui.actions[TGUIAction.ATD_AFTER_CONSTRAINT]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();

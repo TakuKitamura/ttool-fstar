@@ -5826,6 +5826,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
 		} else if (command.equals(actions[TGUIAction.ATD_ATTACK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_ATTACK);  
+		} else if (command.equals(actions[TGUIAction.ATD_CONSTRAINT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_CONSTRAINT);  
 		} else if (command.equals(actions[TGUIAction.ATD_COMPOSITION_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COMPOSITION_CONNECTOR);
         } else if (command.equals(actions[TGUIAction.ATD_ATTACK_CONNECTOR].getActionCommand())) {

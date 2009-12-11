@@ -66,7 +66,7 @@ public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttr
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        return false;
+        return true;
     }
     
     public boolean actionOnAdd(TGComponent tgc) {

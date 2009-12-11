@@ -110,7 +110,8 @@ public class IconManager {
 	public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056, imgic1058, imgic1060;
 	
 	// Attack Tree Diagrams
-	public static ImageIcon imgic1070, imgic1072, imgic1074;
+	public static ImageIcon imgic1070, imgic1072, imgic1074, imgic1076, imgic1078;
+	public static ImageIcon imgic1080;
 	
 	// TMLDD
 	public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
@@ -413,6 +414,9 @@ public class IconManager {
 	private static String icon1070 = "images/atdblock.gif";
 	private static String icon1072 = "images/atdattack.gif";
     private static String icon1074 = "images/atdiag.gif";
+	private static String icon1076 = "images/atdcomp.gif";
+	private static String icon1078 = "images/atdcons.gif";
+	private static String icon1080 = "images/atdlink.gif";
 	
 	// DIPLODOCUS architecture
 	private static String icon1100 = "images/tmlcpunode.gif";
@@ -721,6 +725,9 @@ public class IconManager {
 		imgic1070 = getIcon(icon1070);
         imgic1072 = getIcon(icon1072);
 		imgic1074 = getIcon(icon1074);
+		imgic1076 = getIcon(icon1076);
+		imgic1078 = getIcon(icon1078);
+		imgic1080 = getIcon(icon1080);
 		
 		imgic1100 = getIcon(icon1100);
 		imgic1102 = getIcon(icon1102);
