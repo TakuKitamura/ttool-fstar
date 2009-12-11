@@ -74,8 +74,7 @@ void ERB::timeTick(TMLTime iNewTime){
 }
 
 void ERB::notifyAncestor(unsigned int iEvtSourceID){
-	//std::cout << "*** event notified: " << _name << "\n";
-	std::cout << "* evt in " << _name << " t:" << SchedulableDevice::getSimulatedTime() << " n:" << _evtString[_evtID] << " src: " << _simComp->getCmpNameByID(iEvtSourceID) << "\n";
+	//std::cout << "* evt in " << _name << " t:" << SchedulableDevice::getSimulatedTime() << " n:" << _evtString[_evtID] << " src: " << _simComp->getCmpNameByID(iEvtSourceID) << "\n";
 	_nbOfNotific++;
 	if (_ebrddFunc!=0 && !(_container->getEBRDD()->*_ebrddFunc)()){
 		//Alert!!!
@@ -89,7 +88,7 @@ void ERB::notifyAncestor(unsigned int iEvtSourceID){
 }
 
 void ERB::activate(){
-	std::cout << "activate event: " << _name << "\n";
+	//std::cout << "activate event: " << _name << "\n";
 	_active=true;
 }
 
@@ -158,7 +157,7 @@ void ERB::deactivate(){
 	_active=false;
 }
 
-void ERB::reset(){
+/*void ERB::reset(){
 	EventIF::reset();	
 	switch (_sourceClass){
 		//CPU
@@ -212,7 +211,7 @@ void ERB::reset(){
 			break;
 		//std::cout << "end deactivate event: " << _name << "\n";
 	}
-}
+}*/
 
 //void ERB::transExecuted(TMLTransaction* iTrans){
 void ERB::transExecuted(TMLTransaction* iTrans, unsigned int iID){

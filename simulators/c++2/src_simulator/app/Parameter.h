@@ -136,6 +136,20 @@ public:
 	\param iP3 Parameter no 3
 	*/
 	inline void setP3(T iP3){ _p3=iP3;}
+	///Sets all parameters
+	/**
+	\param iP1 Parameter no 1
+	\param iP2 Parameter no 2
+	\param iP3 Parameter no 3
+	*/
+	inline void setP(T iP1, T iP2, T iP3){ _p1=iP1; _p2=iP2; _p3=iP3;}
+	///Gets all parameters
+	/**
+	\param oP1 Variable no 1
+	\param oP2 Variable no 2
+	\param oP3 Variable no 3
+	*/
+	inline void getP(T& oP1, T& oP2, T& oP3){ oP1=_p1; oP2=_p2; oP3=_p3;}
 protected:
 	///Parameter no 1
 	T _p1;

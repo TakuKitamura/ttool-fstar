@@ -83,5 +83,6 @@ protected:
 	static SimComponents* _simComp;
 	///Indicates whether the ERC has already been prepared
 	bool _wasPrepared;
+	bool _once;
 };
 #endif

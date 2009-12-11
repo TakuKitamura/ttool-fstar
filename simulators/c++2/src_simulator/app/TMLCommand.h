@@ -63,7 +63,8 @@ public:
 	\param iParamFunc Pointer to a parameter function
 	\param iNbOfNextCmds Number of next commands
     	*/
-	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
+	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
+	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -106,11 +107,12 @@ public:
 	//\sa getChannel()
 	//*/
 	//virtual bool channelUnknown() const;
-	///Returns a pointer to the parameter data structure
-	/**
-	\return Pointer to parameter data structure
-	*/
-	virtual ParamFuncPointer getParamFuncPointer() const;
+	/////Returns a pointer to the parameter data structure
+	////**
+	//\return Pointer to parameter data structure
+	//*/
+	//virtual ParamFuncPointer getParamFuncPointer() const;
+	virtual void setParams(Parameter<ParamType>& ioParam);
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation
@@ -194,8 +196,8 @@ protected:
 	TMLTask* _task;
 	///Pointer to an array of pointers to the next commands
 	TMLCommand** _nextCommand;
-	///Pointer to the parameter function of the command
-	ParamFuncPointer _paramFunc;
+	/////Pointer to the parameter function of the command
+	//ParamFuncPointer _paramFunc;
 	///Number of successors of this command
 	unsigned int _nbOfNextCmds;
 	///Breakpoint

@@ -41,8 +41,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ESO.h>
 #include <SchedulableDevice.h>
 
-#define NOTIFY_ABORT {_aborted=true; _ancestorNode->notifyAbort(_ID); std::cout << "Abort: " << _ID << "\n";}
-#define NOTIFY_EVENT {_nbOfNotific++; _ancestorNode->notifyEvent(_ID); std::cout << "Notify: " << _ID << "\n";}
+//std::cout << "Abort: " << _ID << "\n";
+#define NOTIFY_ABORT {_aborted=true; _ancestorNode->notifyAbort(_ID);}
+//std::cout << "Notify: " << _ID << "\n";
+#define NOTIFY_EVENT {_nbOfNotific++; _ancestorNode->notifyEvent(_ID);}
+//omit _nbOfNotific>0
 #define RETURN_IF_TERMINATED if (_nbOfNotific>0 || _aborted ) return;
 #define RETURN_IF_NO_TIMEOUT if (_timeOut==0 || !_active) return;
 #define RETURN_IF_ACTIVE if (_active) return;
@@ -55,7 +58,7 @@ void ESOConjunction::notifyEvent(unsigned int iID){
 	RETURN_IF_TERMINATED;
 	if (_eventArray[iID]->getNegated() || (_oncePerEvent && _eventArray[iID]->getNbOfNotific()>1)){
 		NOTIFY_ABORT;
-		std::cout << "Abort Conjuction (negated or too much): " << _ID << "\n";
+		//std::cout << "Abort Conjuction (negated or too much): " << _ID << "\n";
 	}else{	
 		//all non negated events received?
 		for (unsigned int i=0; i<_nbOfEvents; i++){
@@ -63,7 +66,7 @@ void ESOConjunction::notifyEvent(unsigned int iID){
 			if (!_eventArray[i]->notified() && !_eventArray[i]->getNegated()) return;
 		}
 		NOTIFY_EVENT;
-		std::cout << "Notify Conjuction: " << _ID << "\n";
+		//std::cout << "Notify Conjuction: " << _ID << "\n";
 	}
 }
 
@@ -75,10 +78,10 @@ void ESOConjunction::notifyAbort(unsigned int iID){
 			if (!_eventArray[i]->getNegated() || !_eventArray[i]->getAborted()) return;
 		}
 		NOTIFY_EVENT;
-		std::cout << "Notify Conjuction: " << _ID << "\n";
+		//std::cout << "Notify Conjuction: " << _ID << "\n";
 	}else{
 		NOTIFY_ABORT;
-		std::cout << "Abort Conjuction (abort received): " << _ID << "\n";
+		//std::cout << "Abort Conjuction (abort received): " << _ID << "\n";
 	}
 }
 
@@ -353,7 +356,7 @@ void ESOAtMost::notifyEvent(unsigned int iID){
 
 void ESOAtMost::notifyAbort(unsigned int iID){
 	RETURN_IF_TERMINATED;
-	std::cout << "At most received abort " << _ID << "\n";
+	//std::cout << "At most received abort " << _ID << "\n";
 	checkEvents();
 }
 
@@ -405,19 +408,19 @@ void ESOAtMost::checkEvents(){
 		// aReceivedEvents++;
 		if (aReceivedEvents>_n){
 			NOTIFY_ABORT;
-			std::cout << "Abort at most " << _ID << "\n";
+			//std::cout << "Abort at most " << _ID << "\n";
 			return;
 		}
 	}
 	unsigned int aPossibleEvents=_nbOfEvents;
 	for (unsigned int i=0; i<_nbOfEvents; i++){
 		if (!_oncePerEvent && !_eventArray[i]->getNegated() && !_eventArray[i]->getAborted()){
-			std::cout << "Return from notify at most " << _ID << "\n";
+			//std::cout << "Return from notify at most " << _ID << "\n";
 		 	return;  //NEW
 		}
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->getAborted())) aPossibleEvents--;
 		if (aPossibleEvents <=_n){
-			std::cout << "Notify at most " << _ID << "\n";
+			//std::cout << "Notify at most " << _ID << "\n";
 			NOTIFY_EVENT;
 			return;
 		}
@@ -499,7 +502,7 @@ void ESOAtLeast::checkEvents(){
 		if ((_eventArray[i]->getNegated() && _eventArray[i]->notified()) || (!_eventArray[i]->getNegated() && _eventArray[i]->getAborted())) aPossibleEvents--;
 		if (aPossibleEvents <_n){
 			NOTIFY_ABORT;
-			std::cout << "Abort at least " << _ID << "\n";
+			//std::cout << "Abort at least " << _ID << "\n";
 			return;
 		}
 	}

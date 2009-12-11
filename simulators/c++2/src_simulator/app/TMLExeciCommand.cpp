@@ -43,7 +43,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 
 
-TMLExeciCommand::TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType): TMLCommand(iID, iTask, 1, 0, 1), _lengthFunc(iLengthFunc), _type(iType){
+TMLExeciCommand::TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1), _lengthFunc(iLengthFunc), _type(iType){
+	_length=iStatLength;
 }
 
 void TMLExeciCommand::execute(){
@@ -61,11 +62,11 @@ void TMLExeciCommand::execute(){
 TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 	//std::cout << "ExeciCommand prepare " << toString() << std::endl;
 	//if (_progress==0) _length = (_task->*_lengthFunc)();
-
 	//new test code
 	if (_progress==0){
-		 _length = (_task->*_lengthFunc)();
+		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
 		if (_length==0){
+			//std::cout << "ExeciCommand len==0 " << std::endl;
 			TMLCommand* aNextCommand=getNextCommand();
 			_task->setCurrCommand(aNextCommand);
 			if (aNextCommand!=0) return aNextCommand->prepare(false);

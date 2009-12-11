@@ -76,11 +76,10 @@ void TMLEventBChannel::readNextEvents(){
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	if (iTrans->getCommand()->getParamFuncPointer()!=0){
-		(_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
-		//std::cout << "written: ";
-		//_tmpParam.print();
-	}
+	//if (iTrans->getCommand()->getParamFuncPointer()!=0){
+	//(_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
+	iTrans->getCommand()->setParams(_tmpParam);
+	//}
 	_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 }
 
@@ -115,16 +114,9 @@ bool TMLEventBChannel::read(){
 		_content--;
 		if (_content==0 && _sourceIsFile) readNextEvents();
 		//std::cout << "read next" << std::endl;
-		//if (_writeTrans->getCommand()->getParamFuncPointer()!=0){  //NEW
-			//std::cout << "in if" << std::endl;
-		if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
-		//std::cout << "read: ";
-		//_paramQueue.front().print();
-		//std::cout << "after 2nd if" << std::endl;
+		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
+		_readTrans->getCommand()->setParams(_paramQueue.front());
 		_paramQueue.pop_front();  //NEW
-		//}
-		//std::cout << "after if" << std::endl;
-		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 #ifdef LISTENERS_ENABLED
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 #endif

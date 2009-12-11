@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSendCommand::TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc): TMLCommand(iID, iTask, WAIT_SEND_VLEN, iParamFunc, 1), _channel(iChannel){
+TMLSendCommand::TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1), _channel(iChannel), _paramFunc(iParamFunc), _statParam(iStatParam){
 }
 
 void TMLSendCommand::execute(){
@@ -86,5 +86,16 @@ std::string TMLSendCommand::toShortString() const{
 
 std::string TMLSendCommand::getCommandStr() const{
 	return "notify";
+}
+
+/*ParamFuncPointer TMLSendCommand::getParamFuncPointer() const{
+	return _paramFunc;
+}*/
+
+void TMLSendCommand::setParams(Parameter<ParamType>& ioParam){
+	if (_paramFunc==0)
+		ioParam=_statParam;
+	else
+		(_task->*_paramFunc)(ioParam);
 }
 

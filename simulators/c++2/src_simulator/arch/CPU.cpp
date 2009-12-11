@@ -271,11 +271,7 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 	TMLTime aCurrTime=0;
 	TMLTransaction* aCurrTrans;
 	unsigned int aBlanks,aLength,aColor;
-#ifdef ADD_COMMENTS
-	Comment* aComment;
-#endif
 	std::string aCommentString;
-	bool aMoreComments=true, aInit=true;
 	//if (_transactList.empty()) return;
 	myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
@@ -320,6 +316,8 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 	}
 	myfile << "</tr>";
 #ifdef ADD_COMMENTS
+	bool aMoreComments=true, aInit=true;
+	Comment* aComment;
 	while(aMoreComments){
 		aMoreComments=false;
 		myfile << "<tr>";

@@ -46,13 +46,13 @@ Ludovic Apvrille, Renaud Pacalet
 
 SimComponents* ERC::_simComp=0;
 
-ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD), _wasPrepared(false) {
+ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD), _wasPrepared(false), _once(true) {
 }
 
 void ERC::notifyEvent(unsigned int iID){
-	std::cout << "***** Container " << _ID << " notified *****\n";
+	//std::cout << "***** Container " << _ID << " notified *****\n";
 	_wasPrepared=false;
-	_simComp->getSimulator()->removeListener(this);
+	//_simComp->getSimulator()->removeListener(this); ///////////////////NEW!!!!!!!!!!!!
 	//_eventArray[0]->deactivate();
 	NotifyIF::reset();
 	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
@@ -88,11 +88,14 @@ void ERC::timeAdvances(TMLTime iCurrTime){
 EBRDDCommand* ERC::prepare(){
 	if (!_wasPrepared){
 		_wasPrepared=true;
-		std::cout << "***** Container " << _ID << " prepared *****\n";
-		_simComp->getSimulator()->registerListener(this);
+		//std::cout << "***** Container " << _ID << " prepared *****\n";
+		//_simComp->getSimulator()->registerListener(this); ///////////////////NEW!!!!!!!!!!!!
 		_ebrdd->setCurrCommand(this);
 		//std::cout << "In prepare ERC\n";
-		_eventArray[0]->prepare();
+		if (_once){
+			_eventArray[0]->prepare();  //NEW!!!!!!!!!!!!!!!!!!!!!!!
+			_once=false;
+		}
 		_eventArray[0]->activate();
 		//std::cout << "end prepare ERC\n";
 	}

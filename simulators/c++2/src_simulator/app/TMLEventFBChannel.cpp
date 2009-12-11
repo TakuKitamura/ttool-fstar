@@ -47,7 +47,8 @@ TMLEventFBChannel::TMLEventFBChannel(unsigned int iID, std::string iName, unsign
 
 void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	if (iTrans->getCommand()->getParamFuncPointer()!=0) (_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
+	//if (iTrans->getCommand()->getParamFuncPointer()!=0) (_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
+	iTrans->getCommand()->setParams(_tmpParam);
 	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
 	_overflow = (_content==_length);
 }
@@ -78,15 +79,13 @@ bool TMLEventFBChannel::read(){
 		return false;
 	}else{
 		_content--;
-		//if (_writeTrans->getCommand()->getParamFuncPointer()!=0){  //NEW
-			if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
-			_paramQueue.pop_front();  //NEW
-		//}
+		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
+		_readTrans->getCommand()->setParams(_paramQueue.front());
+		_paramQueue.pop_front();  //NEW
 		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
 			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
-		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_readTrans);
 #ifdef LISTENERS_ENABLED	
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
 #endif

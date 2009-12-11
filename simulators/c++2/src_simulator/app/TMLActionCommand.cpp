@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <CommandListener.h>
 
-TMLActionCommand::TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask, 1, 0, 1),_actionFunc(iActionFunc){
+TMLActionCommand::TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask, 1, 1),_actionFunc(iActionFunc){
 }
 
 void TMLActionCommand::execute(){

@@ -43,6 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <TMLCommand.h>
+#include <Parameter.h>
 
 class TMLEventChannel;
 
@@ -55,17 +56,32 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParamFunc Pointer to a parameter function
+	\param statParam Static parameter if applicable 
 	*/
-	TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc);
+	TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam=Parameter<ParamType>(0,0,0));
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
+	/////Returns a pointer to the parameter data structure
+	////**
+	//\return Pointer to parameter data structure
+	//*/
+	//ParamFuncPointer getParamFuncPointer() const;
+	///Sets a parameter data structure according to the parameters of the command
+	/**
+	\param ioParam Parameter data structure
+	*/ 
+	void setParams(Parameter<ParamType>& ioParam);
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;
+	///Pointer to the parameter function of the command
+	ParamFuncPointer _paramFunc;
+	///Static parameter if applicable
+	Parameter<ParamType> _statParam;
 	TMLCommand* prepareNextTransaction();
 };
 
