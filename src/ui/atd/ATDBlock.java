@@ -57,10 +57,15 @@ import ui.*;
 import ui.window.*;
 
 
-public class ATDBlock extends TGCWithInternalComponent implements SwallowTGComponent {
-    private int textY1 = 15;
-    private int textY2 = 30;
+public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
+    private int textY1 = 3;
     private String stereotype = "block";
+	
+	private int maxFontSize = 12;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	private boolean displayText = true;
+	private int textX = 1;
 	
     
     public ATDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -68,8 +73,8 @@ public class ATDBlock extends TGCWithInternalComponent implements SwallowTGCompo
         
         width = 250;
         height = 200;
-        minWidth = 150;
-        minHeight = 100;
+        minWidth = 5;
+        minHeight = 2;
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -103,11 +108,62 @@ public class ATDBlock extends TGCWithInternalComponent implements SwallowTGCompo
         
         name = tdp.findBlockName("Block");
 		setValue(name);
+		
+		currentFontSize = maxFontSize;
+		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic700;
     }
     
     public void internalDrawing(Graphics g) {
+		String ster = "<<" + stereotype + ">>";
+		Font f = g.getFont();
+		Font fold = f;
+		
+		//System.out.println("width=" + width + " height=" + height);
+		
+		if ((rescaled) && (!tdp.isScaled())) {
+			
+			if (currentFontSize == -1) {
+				currentFontSize = f.getSize();
+			}
+			rescaled = false;
+			// Must set the font size ..
+			// Find the biggest font not greater than max_font size
+			// By Increment of 1
+			// Or decrement of 1
+			// If font is less than 4, no text is displayed
+			
+			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+			int w0, w1, w2;
+			f = f.deriveFont((float)maxCurrentFontSize);
+			g.setFont(f);
+			//System.out.println("max current font size:" + maxCurrentFontSize);
+			while(maxCurrentFontSize > (minFontSize-1)) {
+				w0 = g.getFontMetrics().stringWidth(value);
+				w1 = g.getFontMetrics().stringWidth(ster);
+				w2 = Math.min(w0, w1);
+				if (w2 < (width - (2*textX))) {
+					break;
+				}
+				maxCurrentFontSize --;
+				f = f.deriveFont((float)maxCurrentFontSize);
+				g.setFont(f);
+			}
+			currentFontSize = maxCurrentFontSize;
+			
+			if(currentFontSize <minFontSize) {
+				displayText = false;
+			} else {
+				displayText = true;
+				f = f.deriveFont((float)currentFontSize);
+				g.setFont(f);
+			}
+			
+		}
+		
+		//System.out.println("Current font size:" + currentFontSize);
+		
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
@@ -116,14 +172,33 @@ public class ATDBlock extends TGCWithInternalComponent implements SwallowTGCompo
 		g.setColor(c);
         
         // Strings
-        String ster = "<<" + stereotype + ">>";
-        int w  = g.getFontMetrics().stringWidth(ster);
+		int w;
+		if (displayText) {
+			f = f.deriveFont((float)currentFontSize);
+			Font f0 = g.getFont();
+			g.setFont(f.deriveFont(Font.BOLD));
+			
+			w = g.getFontMetrics().stringWidth(ster);
+			int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+			if ((w < (2*textX + width)) && (h < height)) {
+				g.drawString(ster, x + (width - w)/2, y +h);
+			}
+			g.setFont(f0);
+			w  = g.getFontMetrics().stringWidth(value);
+			h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom()));
+			if ((w < (2*textX + width)) && (h < height)) {
+				g.drawString(value, x + (width - w)/2, y + h);
+			}
+		}
+		
+		g.setFont(fold);
+        /*int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
 		g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(ster, x + (width - w)/2, y + textY1);
 		g.setFont(f);
         w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY2);
+        g.drawString(value, x + (width - w)/2, y + textY2);*/
 		
 		// Icon
 		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);

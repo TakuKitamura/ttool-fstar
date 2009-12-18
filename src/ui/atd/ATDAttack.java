@@ -56,20 +56,26 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-    private int textY1 = 15;
-    private int textY2 = 30;
-	private int textX = 10;
+public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+    private int textY1 = 3;
+    private int textY2 = 3;
+	//private int textX = 10;
 	
     protected String oldValue = "";
     protected String description = "";
-	 private String stereotype = "attack";
+	private String stereotype = "attack";
+	 
+	private int maxFontSize = 12;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	private boolean displayText = true;
+	private int textX = 2;
     
     public ATDAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 125;
-        height = 40;
+        height = (int)(40 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;
@@ -95,14 +101,60 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
         
         value = "attack01";
 		description = "blah blah blah";
+		
+		currentFontSize = maxFontSize;
+		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic702;
     }
     
     public void internalDrawing(Graphics g) {
-        
+        String ster = "<<" + stereotype + ">>";
+		Font f = g.getFont();
+		Font fold = f;
+		
 		if (value != oldValue) {
 			setValue(value, g);
+		}
+		
+		if ((rescaled) && (!tdp.isScaled())) {
+			
+			if (currentFontSize == -1) {
+				currentFontSize = f.getSize();
+			}
+			rescaled = false;
+			// Must set the font size ..
+			// Find the biggest font not greater than max_font size
+			// By Increment of 1
+			// Or decrement of 1
+			// If font is less than 4, no text is displayed
+			
+			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+			int w0, w1, w2;
+			f = f.deriveFont((float)maxCurrentFontSize);
+			g.setFont(f);
+			//System.out.println("max current font size:" + maxCurrentFontSize);
+			while(maxCurrentFontSize > (minFontSize-1)) {
+				w0 = g.getFontMetrics().stringWidth(value);
+				w1 = g.getFontMetrics().stringWidth(ster);
+				w2 = Math.min(w0, w1);
+				if (w2 < (width - (2*textX))) {
+					break;
+				}
+				maxCurrentFontSize --;
+				f = f.deriveFont((float)maxCurrentFontSize);
+				g.setFont(f);
+			}
+			currentFontSize = maxCurrentFontSize;
+			
+			if(currentFontSize <minFontSize) {
+				displayText = false;
+			} else {
+				displayText = true;
+				f = f.deriveFont((float)currentFontSize);
+				g.setFont(f);
+			}
+			
 		}
 		
         Color c = g.getColor();
@@ -113,21 +165,57 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
 		g.setColor(c);
         
         // Strings
-        String ster = "<<" + stereotype + ">>";
-        int w  = g.getFontMetrics().stringWidth(ster);
+		int w;
+		if (displayText) {
+			f = f.deriveFont((float)currentFontSize);
+			Font f0 = g.getFont();
+			
+			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
+			
+			if (cannotWriteAttack) {
+				w  = g.getFontMetrics().stringWidth(value);
+				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(value, x + (width - w)/2, y + h);
+				} else {
+					w  = g.getFontMetrics().stringWidth(ster);
+					if ((w < (2*textX + width)) && (h < height)) {
+						g.drawString(ster, x + (width - w)/2, y + h);
+					}
+				}
+			} else {
+				g.setFont(f.deriveFont(Font.BOLD));
+				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+				int cumulated = 0;
+				w = g.getFontMetrics().stringWidth(ster);
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(ster, x + (width - w)/2, y + h);
+					cumulated = h;
+				}
+				g.setFont(f0);
+				w  = g.getFontMetrics().stringWidth(value);
+				h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(value, x + (width - w)/2, y + h);
+				}
+			}
+		}
+		
+		g.setFont(fold);
+        /*int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
 		g.setFont(f.deriveFont(Font.BOLD));
         g.drawString(ster, x + (width - w)/2, y + textY1);
 		g.setFont(f);
         w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY2);
+        g.drawString(value, x + (width - w)/2, y + textY2);*/
         
     }
     
    public void setValue(String val, Graphics g) {
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max(minWidth, w + 2 * textX);
+		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 		
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
         if (w1 != width) { 
@@ -187,9 +275,10 @@ public class ATDAttack extends TGCWithoutInternalComponent implements SwallowedT
 			
 		return !error;
     }
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+	
+	public TGComponent isOnOnlyMe(int x1, int y1) {
+        
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
         return null;

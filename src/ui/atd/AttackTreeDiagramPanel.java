@@ -81,7 +81,7 @@ public class AttackTreeDiagramPanel extends TDiagramPanel implements TDPWithAttr
     }
     
     public String getXMLHead() {
-        return "<AttackTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<AttackTreeDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
     public String getXMLTail() {

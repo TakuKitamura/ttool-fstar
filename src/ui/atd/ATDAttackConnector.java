@@ -60,10 +60,12 @@ import ui.*;
 import ui.cd.*;
 import ui.window.*;
 
-public  class ATDAttackConnector extends TGConnector {
+public  class ATDAttackConnector extends TGConnector implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	protected int c = 10; //square length 
+	protected double oldScaleFactor;
+	protected int fontSize = 12;
 	
     
     public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -71,6 +73,7 @@ public  class ATDAttackConnector extends TGConnector {
         myImageIcon = IconManager.imgic202;
         value = "";
         editable = true;
+		oldScaleFactor = tdp.getZoom();
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
@@ -81,10 +84,11 @@ public  class ATDAttackConnector extends TGConnector {
         }*/
 		
 		//g.drawLine(x1, y1, x2, y2);
-		g.fillRect(x2-(c/2), y2-(c/2), c, c);
-		g.fillRect(p1.getX()-(c/2), p1.getY()-(c/2), c, c);
+		int cz = (int)(tdp.getZoom() * c);
+		g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
+		g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
 		
-		Point p = GraphicLib.intersectionRectangleSegment(x2-(c/2), y2-(c/2), c, c, x1, y1, x2, y2);
+		Point p = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
 		if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, p.x, p.y);
         } else {
@@ -92,19 +96,22 @@ public  class ATDAttackConnector extends TGConnector {
         }
 		
 		if (value.length() > 0) {
-			g.drawString(value, x2-(c/2), y2-(c/2)-2);
+			Font f = g.getFont();
+			if (tdp.getZoom() < 1) {
+				Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
+				g.setFont(f0);
+			}
+			g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
+			g.setFont(f);
 		}
 	
     }
 	
-	    public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
+        String text = getName() + "Connector";
         String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+        "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
         null,
         getValue());
         
@@ -114,9 +121,8 @@ public  class ATDAttackConnector extends TGConnector {
 		
 		//System.out.println("emptytext=" + emptyText);
         
-        if ((s != null) && ((s.length() > 0) && (!s.equals(oldValue)))) {
+        if ((s != null) && (!s.equals(oldValue))) {
             setValue(s);
-            //System.out.println("Value ok");
             return true;
         }
          
@@ -127,6 +133,29 @@ public  class ATDAttackConnector extends TGConnector {
     public int getType() {
         return TGComponentManager.ATD_ATTACK_CONNECTOR;
     }
+	
+	public void rescale(double scaleFactor){
+		//System.out.println("Rescale connector");
+		int xx, yy;
+		
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			xx = tgcomponent[i].getX();
+			yy = tgcomponent[i].getY();
+			//System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+			xx = (int)(tgcomponent[i].dx);
+			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+			yy = (int)(tgcomponent[i].dy);
+			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+			
+			tgcomponent[i].setCd(xx, yy);
+			
+			//System.out.println("Internal comp xx= " + xx + "  y==" + yy);
+        }
+		
+		oldScaleFactor = scaleFactor;
+	}
 	
 
     

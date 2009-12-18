@@ -56,19 +56,25 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDConstraint extends TGCWithoutInternalComponent {
-    private int textY1 = 20;
+public class ATDConstraint extends TGCScalableWithInternalComponent {
+    private int textY1 = 5;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"}; 
 	
     protected String oldValue = "";
+	
+	private int maxFontSize = 12;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	private boolean displayText = true;
+	private int textX = 1;
     
     public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 125;
-        height = 40;
+        width = (int)(125* tdp.getZoom());
+        height = (int)(40 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;
@@ -93,12 +99,56 @@ public class ATDConstraint extends TGCWithoutInternalComponent {
         removable = true;
         
         value = "<<OR>>";
+		
+		currentFontSize = maxFontSize;
+		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }
     
     public void internalDrawing(Graphics g) {
         
+		Font f = g.getFont();
+		Font fold = f;
+		
+		if ((rescaled) && (!tdp.isScaled())) {
+			
+			if (currentFontSize == -1) {
+				currentFontSize = f.getSize();
+			}
+			rescaled = false;
+			// Must set the font size ..
+			// Find the biggest font not greater than max_font size
+			// By Increment of 1
+			// Or decrement of 1
+			// If font is less than 4, no text is displayed
+			
+			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+			int w0;
+			f = f.deriveFont((float)maxCurrentFontSize);
+			g.setFont(f);
+			//System.out.println("max current font size:" + maxCurrentFontSize);
+			while(maxCurrentFontSize > (minFontSize-1)) {
+				w0 = g.getFontMetrics().stringWidth(value);
+				if (w0 < (width - (2*textX))) {
+					break;
+				}
+				maxCurrentFontSize --;
+				f = f.deriveFont((float)maxCurrentFontSize);
+				g.setFont(f);
+			}
+			currentFontSize = maxCurrentFontSize;
+			
+			if(currentFontSize <minFontSize) {
+				displayText = false;
+			} else {
+				displayText = true;
+				f = f.deriveFont((float)currentFontSize);
+				g.setFont(f);
+			}
+			
+		}
+		
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
@@ -106,11 +156,14 @@ public class ATDConstraint extends TGCWithoutInternalComponent {
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
-		Font f = g.getFont();
-		g.setFont(f.deriveFont(Font.BOLD));
-        int w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY1);
-		g.setFont(f);
+		Font f0 = g.getFont();
+		if (displayText) {
+			f = f.deriveFont((float)currentFontSize);
+			g.setFont(f.deriveFont(Font.BOLD));
+			int w  = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
+			g.setFont(f0);
+		}
         
     }
     
@@ -151,11 +204,14 @@ public class ATDConstraint extends TGCWithoutInternalComponent {
 			value = dialog.getStereotype();
 		}
 			
+		rescaled = true;
+		
 		return true;
     }
     
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
         return null;

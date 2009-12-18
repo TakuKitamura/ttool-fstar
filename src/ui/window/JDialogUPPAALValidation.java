@@ -315,9 +315,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 						if ((index != -1) && (mode != NOT_STARTED)) {
 							name = s.substring(index+1, s.length());
 							query = s.substring(0, index);
-							jta.append("\n\n--------------------------------------------\n");
-							jta.append("Studying component reachability\n");
-							jta.append("Component:" + name + "\n");
+							//jta.append("\n\n--------------------------------------------\n");
+							jta.append("\nReachability of: " + name + "\n");
 							workQuery("E<> " + query, fn, trace_id, rshc);
 							trace_id++;
 						} else {
@@ -337,9 +336,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 						if ((index != -1) && (mode != NOT_STARTED)) {
 							name = s.substring(index+1, s.length());
 							query = s.substring(0, index);
-							jta.append("\n\n--------------------------------------------\n");
-							jta.append("Studying component liveness\n");
-							jta.append("Component:" + name + "\n");
+							//jta.append("\n--------------------------------------------\n");
+							jta.append("\nLiveness of: " + name + "\n");
 							workQuery("A<> " + query, fn, trace_id, rshc);
 							trace_id++;
 						} else {
@@ -394,7 +392,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	
 	private void workQuery(String query, String fn, int trace_id, RshClient rshc) throws LauncherException {
 		String cmd1, data;
-		jta.append("-> " + query + "\n");
+		if(showDetails.isSelected()) {
+			jta.append("-> " + query + "\n");
+		}
 		rshc.sendFileData(fn+".q", query);
 		
 		cmd1 = cmdVerifyta + " -u ";
@@ -402,16 +402,16 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			cmd1 += "-t1 -f " + fn +  " ";
 		}
 		cmd1 += fn + ".xml " + fn + ".q";
-		jta.append("--------------------------------------------\n");
+		//jta.append("--------------------------------------------\n");
 		data = processCmd(cmd1);
 		if(showDetails.isSelected()) {
 			jta.append(data);
 		} else {
 			if (mode != NOT_STARTED) {
 				if (data.indexOf("NOT") > -1) {
-					jta.append("** property is NOT satisfied **\n");
+					jta.append("-> property is NOT satisfied\n");
 				} else {
-					jta.append("** property is satisfied **\n");			
+					jta.append("-> property is satisfied\n");			
 				}
 			} else {
 				jta.append("** verification stopped **\n");
