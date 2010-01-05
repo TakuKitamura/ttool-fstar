@@ -84,3 +84,7 @@ std::string TMLnbrnbwChannel::toString() const{
 	outp << _name << "(nbrnbw)";
 	return outp.str();
 }
+
+unsigned long TMLnbrnbwChannel::getStateHash() const{
+	return 0;
+}

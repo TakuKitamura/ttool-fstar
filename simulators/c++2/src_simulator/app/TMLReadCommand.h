@@ -57,7 +57,7 @@ public:
 	\param iChannel Pointer to the channel which is read
 	\param iStatLength Static length of command if applicable
 	*/
-	TMLReadCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, TMLLength iStatLength);
+	TMLReadCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, TMLLength iStatLength=1);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

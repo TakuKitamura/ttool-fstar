@@ -167,6 +167,11 @@ public:
 	\return Channel underflow flag
 	*/
 	virtual bool getUnderflow() const;
+	///Returns the hash value for the current task state
+	/**
+	\return Hash Value
+	*/
+	virtual unsigned long getStateHash() const =0;
 protected:
 	///ID of channel
 	unsigned int _ID;

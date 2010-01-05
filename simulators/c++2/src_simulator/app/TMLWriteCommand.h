@@ -57,7 +57,7 @@ public:
 	\param iChannel Pointer to the channel to which is written
 	\param iStatLength Static length of command if applicable
 	*/
-	TMLWriteCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, TMLLength iStatLength);
+	TMLWriteCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, TMLLength iStatLength=1);
 	void execute();
 	TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

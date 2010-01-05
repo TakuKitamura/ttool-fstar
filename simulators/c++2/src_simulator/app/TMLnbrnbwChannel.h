@@ -66,6 +66,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
+	unsigned long getStateHash() const;
 protected:
 };
 

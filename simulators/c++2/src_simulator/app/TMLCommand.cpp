@@ -72,6 +72,17 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	//std::cout << "Prepare command ID: " << _ID << "\n";
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
+		//if (_simComp!=0){
+			//std::cout << "Let's crash\n";
+#ifdef STATE_HASH_ENABLED
+			unsigned long aStateHash=_simComp->getStateHash();
+			//std::cout << "Not crashed\n";
+			if (_stateHashes.find(aStateHash)==_stateHashes.end())
+				_stateHashes.insert(aStateHash);
+			else
+				std::cout << "State has been recognized, cmd ID: " << _ID << "\n";
+#endif
+		//}
 		//std::cout << "COMMAND FINISHED!!n";
 #ifdef LISTENERS_ENABLED
 		NOTIFY_CMD_FINISHED(this);
@@ -253,6 +264,10 @@ TMLLength TMLCommand::getProgress() const{
 
 void TMLCommand::setSimComponents(SimComponents* iSimComp){
 	_simComp=iSimComp;
+}
+
+unsigned long TMLCommand::getStateHash() const{
+	return _ID + _progress;
 }
 
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);

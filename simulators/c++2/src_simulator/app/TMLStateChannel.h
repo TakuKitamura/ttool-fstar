@@ -68,6 +68,7 @@ public:
 	virtual TMLLength getContent() const;
 	bool getOverflow() const;
 	bool getUnderflow() const;
+	virtual unsigned long getStateHash() const;
 protected:
 	///Content of the channel
 	TMLLength _content;

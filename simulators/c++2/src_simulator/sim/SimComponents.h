@@ -241,6 +241,11 @@ public:
 	Simulator* getSimulator(){return _simulator;}
 	void setSimulator(Simulator* iSim){_simulator=iSim;}
 	std::string getCmpNameByID(unsigned int iID);
+	///Returns the hash value for the current task state
+	/**
+	\return Hash Value
+	*/
+	unsigned long getStateHash() const;
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;

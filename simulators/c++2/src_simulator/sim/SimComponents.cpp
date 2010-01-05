@@ -318,3 +318,16 @@ void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){
 		std::cout << "_stoppedOnAction=false\n";
 	}
 }
+
+unsigned long SimComponents::getStateHash() const{
+	unsigned long aHash=0;
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		//std::cout << (*i)->toString() << "\n";
+		aHash+=(*i)->getStateHash();
+	}
+	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
+		//std::cout << (*i)->toString() << "\n";
+		aHash+=(*i)->getStateHash();
+	}
+	return aHash;
+}

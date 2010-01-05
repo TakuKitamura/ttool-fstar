@@ -90,3 +90,7 @@ bool TMLStateChannel::getUnderflow() const{
 	return _underflow;
 }
 
+unsigned long TMLStateChannel::getStateHash() const{
+	return _content;
+}
+

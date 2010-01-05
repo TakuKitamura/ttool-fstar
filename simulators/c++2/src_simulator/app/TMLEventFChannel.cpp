@@ -64,6 +64,7 @@ void TMLEventFChannel::write(){
 		_content++;
 		//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
 		_paramQueue.push_back(_tmpParam);   //NEW
+		_stateHash+=_tmpParam.getStateHash();
 		if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 			_readTrans->setRunnableTime(_writeTrans->getEndTime());
 			_readTrans->setVirtualLength(WAIT_SEND_VLEN);
@@ -83,6 +84,7 @@ bool TMLEventFChannel::read(){
 		_content--;
 		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
 		_readTrans->getCommand()->setParams(_paramQueue.front());
+		_stateHash-=_paramQueue.front().getStateHash();
 		_paramQueue.pop_front();  //NEW
 #ifdef LISTENERS_ENABLED
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);

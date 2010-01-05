@@ -81,6 +81,7 @@ using std::max;
 #define WAIT_SEND_VLEN 1
 #undef PENALTIES_ENABLED
 #define LISTENERS_ENABLED
+#undef STATE_HASH_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -242,6 +243,8 @@ typedef std::deque<std::string*> CommandQueue;
 typedef std::list<WorkloadSource*> WorkloadList;
 ///List of bus masters used by CPUs
 typedef std::list<BusMaster*> BusMasterList;
+///Set used by Commands to store encountered state hash values
+typedef std::set<unsigned long> StateHashSet;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

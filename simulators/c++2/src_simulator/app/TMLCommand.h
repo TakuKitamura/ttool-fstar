@@ -183,6 +183,11 @@ public:
 	\return Pointer to next command array
 	*/
 	TMLCommand** getNextCommands(unsigned int& oNbOfCmd) const;
+	///Returns the hash value for the current task state
+	/**
+	\return Hash Value
+	*/
+	unsigned long getStateHash() const;
 protected:
 	///ID of the command
 	unsigned int _ID;
@@ -196,14 +201,10 @@ protected:
 	TMLTask* _task;
 	///Pointer to an array of pointers to the next commands
 	TMLCommand** _nextCommand;
-	/////Pointer to the parameter function of the command
-	//ParamFuncPointer _paramFunc;
 	///Number of successors of this command
 	unsigned int _nbOfNextCmds;
 	///Breakpoint
 	CommandListener* _breakpoint;
-	/////Indicates if the breakpoint of the command has stopped the simulation  
-	//bool _simStopped;
 	///Is true until the first transaction of a task is executed
 	bool _justStarted;
 	///Determines the next command based on the _nextCommand array
@@ -221,6 +222,7 @@ protected:
 	static std::list<TMLCommand*> _instanceList;
 	///Pointer to simulation components
 	static SimComponents* _simComp;
+	StateHashSet _stateHashes;
 };
 
 #endif

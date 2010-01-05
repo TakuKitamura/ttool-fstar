@@ -74,11 +74,13 @@ public:
 	void print()  const;
 	virtual void reset();
 	virtual void streamStateXML(std::ostream& s) const;
+	unsigned long getStateHash() const;
 protected:
 	///Queue for parameters
 	ParamQueue _paramQueue;
 	///Temporary buffer for the parameters of the registered write transaction 
 	Parameter<ParamType> _tmpParam;
+	unsigned long _stateHash;
 };
 
 #endif

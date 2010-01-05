@@ -68,6 +68,7 @@ void TMLEventBChannel::readNextEvents(){
 			_content++;
 			(*_eventFile) >> aNewParam;  //NEW
 			//aNewParam.readTxtStream(*_eventFile);
+			_stateHash+=aNewParam.getStateHash();
 			_paramQueue.push_back(aNewParam);
 		}
 	}else
@@ -97,6 +98,7 @@ void TMLEventBChannel::write(){
 void TMLEventBChannel::write(TMLTransaction* iTrans){
 	_content++;
 	_paramQueue.push_back(_tmpParam);   //NEW
+	_stateHash+=_tmpParam.getStateHash();
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
@@ -116,6 +118,7 @@ bool TMLEventBChannel::read(){
 		//std::cout << "read next" << std::endl;
 		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
 		_readTrans->getCommand()->setParams(_paramQueue.front());
+		_stateHash-=_paramQueue.front().getStateHash();
 		_paramQueue.pop_front();  //NEW
 #ifdef LISTENERS_ENABLED
 		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
@@ -202,3 +205,4 @@ unsigned int TMLEventBChannel::insertSamples(unsigned int iNbOfSamples, Paramete
 	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
 	return aNbToInsert;
 }
+

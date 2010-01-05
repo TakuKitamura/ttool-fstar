@@ -184,6 +184,11 @@ public:
 	*/
 	unsigned int getState() const;
 	TMLTransaction* getNextTransaction() const;
+	///Returns the hash value for the current task state
+	/**
+	\return Hash Value
+	*/
+	virtual unsigned long getStateHash() const=0;
 protected:
 	///ID of the task
 	unsigned int _ID;

@@ -150,6 +150,7 @@ public:
 	\param oP3 Variable no 3
 	*/
 	inline void getP(T& oP1, T& oP2, T& oP3){ oP1=_p1; oP2=_p2; oP3=_p3;}
+	inline unsigned long getStateHash(){return _p1+_p2+_p3;}
 protected:
 	///Parameter no 1
 	T _p1;
