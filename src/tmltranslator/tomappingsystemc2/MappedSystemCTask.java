@@ -110,7 +110,7 @@ public class MappedSystemCTask {
 		basicCPPCode();
 		makeClassCode();
 		dependencies=_dependencies;
-		analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
+		//analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
     	}
 	
 	public void print() {
@@ -262,13 +262,15 @@ public class MappedSystemCTask {
 	}
 
 	private void makeSerializableFuncs(){
-		ListIterator iterator = task.getAttributes().listIterator();
-		TMLAttribute att;
-		hcode += "virtual std::istream& readObject(std::istream& i_stream_var)" + SCCR;
-		hcode += "virtual std::ostream& writeObject(std::ostream& i_stream_var)" + SCCR;
+		//ListIterator iterator = task.getAttributes().listIterator();
+		//TMLAttribute att;
+		hcode += "std::istream& readObject(std::istream& i_stream_var)" + SCCR;
+		hcode += "std::ostream& writeObject(std::ostream& i_stream_var)" + SCCR;
+		hcode += "unsigned long getStateHash() const" + SCCR;
 		functions+= "std::istream& " + reference + "::readObject(std::istream& i_stream_var){\nTMLTask::readObject(i_stream_var);\n";
-		while(iterator.hasNext()) {
-			att = (TMLAttribute)(iterator.next());
+		//while(iterator.hasNext()) {
+		for (TMLAttribute att:task.getAttributes()){
+			//att = (TMLAttribute)(iterator.next());
 			functions += "READ_STREAM(i_stream_var," + att.name + ")" + SCCR;
 			functions += "#ifdef DEBUG_SERIALIZE\n";
 			functions += "std::cout << \"Read: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
@@ -276,9 +278,10 @@ public class MappedSystemCTask {
 		}
 		functions+= "return i_stream_var;\n}\n\n";
 		functions+= "std::ostream& " + reference + "::writeObject(std::ostream& i_stream_var){\nTMLTask::writeObject(i_stream_var);\n";
-		iterator = task.getAttributes().listIterator();
-		while(iterator.hasNext()) {
-			att = (TMLAttribute)(iterator.next());
+		//iterator = task.getAttributes().listIterator();
+		for (TMLAttribute att:task.getAttributes()){
+		//while(iterator.hasNext()) {
+			//att = (TMLAttribute)(iterator.next());
 			functions += "WRITE_STREAM(i_stream_var," + att.name + ")" + SCCR;
 			functions += "#ifdef DEBUG_SERIALIZE\n";
 			functions += "std::cout << \"Write: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
@@ -287,9 +290,10 @@ public class MappedSystemCTask {
 		functions+= "return i_stream_var;\n}\n\n";
 		hcode += "void reset()" + SCCR;
 		functions+= "void "+reference + "::reset(){\nTMLTask::reset();\n";
-		iterator = task.getAttributes().listIterator();
-		while(iterator.hasNext()) {
-			att = (TMLAttribute)(iterator.next());
+		//iterator = task.getAttributes().listIterator();
+		//while(iterator.hasNext()) {
+		//	att = (TMLAttribute)(iterator.next());
+		for (TMLAttribute att:task.getAttributes()){
 			functions += att.name + "=";
 			if (att.hasInitialValue())
 				functions += att.initialValue + SCCR;
@@ -297,6 +301,24 @@ public class MappedSystemCTask {
 				functions += "0" + SCCR;
 		}
 		functions+= "}\n\n";
+		functions+= "unsigned long " + reference + "::getStateHash() const{\nunsigned long aHash=0;\n";
+		for (TMLAttribute att:task.getAttributes()){
+			if (!(att.name.startsWith("arg") && att.name.endsWith("__req"))) functions += "aHash+=" + att.name + ";\n";
+		}
+		/*for(TMLChannel ch: channels) {
+			if (ch.getType()!=TMLChannel.NBRNBW &&  ch.getOriginTask()==task)
+				functions+="aHash+=" + ch.getExtendedName() + "->getStateHash()"+SCCR;
+		}
+		for(TMLEvent evt: events) {
+			if (evt.getOriginTask()==task)
+				functions+="aHash+=" + evt.getExtendedName() + "->getStateHash()"+SCCR;
+		}
+		for(TMLRequest req: requests) {
+			if (req.isAnOriginTask(task))
+				functions+="aHash+=" +  req.getExtendedName() + "->getStateHash()"+SCCR;
+		}*/
+		
+		functions+= "if (_currCommand!=0) aHash+= _currCommand->getStateHash();\nreturn aHash;\n}\n\n";
 	}
 
 	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement){
@@ -543,7 +565,10 @@ public class MappedSystemCTask {
 				nb = 0;
 				for(int i=0; i<choice.getNbGuard(); i++) {
 					if (choice.isNonDeterministicGuard(i)) {
-						code2 = "(rnd__0 < " + Math.floor(100/choice.getNbGuard())*(nb+1) + ")";
+						if (i==choice.getNbGuard()-1)
+							code2 = "(true)";
+						else
+							code2 = "(rnd__0 < " + Math.floor(100/choice.getNbGuard())*(nb+1) + ")";
 						nb ++;
 					} else if (choice.isStochasticGuard(i)) {
 						if (guardS.isEmpty()) {

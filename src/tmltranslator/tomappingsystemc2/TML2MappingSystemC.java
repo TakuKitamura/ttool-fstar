@@ -118,7 +118,7 @@ public class TML2MappingSystemC {
 		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
-		System.out.println("********** All identified objects and their dependencies: **********");
+		/*System.out.println("********** All identified objects and their dependencies: **********");
 		printDependencies(false);
 		HashSet<Integer> keys = new HashSet<Integer>(dependencies.keySet());
 		for(int elemID: keys){
@@ -126,7 +126,7 @@ public class TML2MappingSystemC {
 			eliminateStateVars(elemID, null);
 		}
 		System.out.println("********** System state variables and their dependency on indeterministic operators **********");
-		printDependencies(true);
+		printDependencies(true);*/
 	}
 	
 	private void generateMainFile() {
@@ -351,10 +351,9 @@ public class TML2MappingSystemC {
 		
 	
 		//Declaration of Tasks
-		ListIterator iterator;
+		ListIterator iterator = tmlmapping.getNodes().listIterator();
 		declaration += "//Declaration of tasks" + CR;
 		HwExecutionNode node;
-		iterator=tmlmapping.getNodes().listIterator();
 		//for(TMLTask task: tmlmodeling.getTasks()) {
 		ArrayList<TMLChannel> channels;
 		ArrayList<TMLEvent> events;
