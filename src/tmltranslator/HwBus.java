@@ -52,6 +52,7 @@ public class HwBus extends HwCommunicationNode  {
 	
 	public static final int BASIC_ROUND_ROBIN = 0;
 	public static final int PRIORITY_BASED = 1;
+	public static final int CAN = 2;
 	
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 	public static final int DEFAULT_PIPELINE_SIZE = 1;

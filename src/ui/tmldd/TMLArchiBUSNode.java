@@ -208,6 +208,10 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 			stereotype = "BUS-PB";
 		}
 		
+		if (arbitrationPolicy == HwBus.CAN) {
+			stereotype = "BUS-CAN";
+		}
+		
 		if (dialog.getByteDataSize().length() != 0) {	
 			try {
 				tmp = byteDataSize;
