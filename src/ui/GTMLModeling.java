@@ -889,6 +889,7 @@ public class GTMLModeling  {
         
         // Creation of other elements
         TMLChannel channel;
+		String [] channels;
         TMLEvent event;
         TMLRequest request;
         
@@ -1070,7 +1071,7 @@ public class GTMLModeling  {
                 } else {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
                     tmlreadchannel.setNbOfSamples(((TMLADReadChannel)tgc).getSamplesValue());
-                    tmlreadchannel.setChannel(channel);
+                    tmlreadchannel.addChannel(channel);
                     activity.addElement(tmlreadchannel);
 					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlreadchannel, tgc);
@@ -1228,33 +1229,42 @@ public class GTMLModeling  {
 					}
                 }
             } else if (tgc instanceof TMLADWriteChannel) {
-                // Get the channel
-                channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADWriteChannel)tgc).getChannelName()));
-                if (channel == null) {
-                    if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel)tgc).getChannelName())) {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWriteChannel)tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
-                        ce.setTMLTask(tmltask);
-                        ce.setTDiagramPanel(tadp);
-                        ce.setTGComponent(tgc);
-                        warnings.add(ce);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-                        activity.addElement(new TMLJunction("void junction", tgc));
-                    } else {
-                        CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWriteChannel)tgc).getChannelName() + " is an unknown channel");
-                        ce.setTMLTask(tmltask);
-                        ce.setTDiagramPanel(tadp);
-                        ce.setTGComponent(tgc);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-                        checkingErrors.add(ce);
-                    }
-                } else {
-                    tmlwritechannel = new TMLWriteChannel("write channel", tgc);
-                    tmlwritechannel.setNbOfSamples(((TMLADWriteChannel)tgc).getSamplesValue());
-                    tmlwritechannel.setChannel(channel);
-                    activity.addElement(tmlwritechannel);
+                // Get channels
+				channels = ((TMLADWriteChannel)tgc).getChannelsByName();
+				boolean error = false;
+				for(int i=0; i<channels.length; i++) {
+					channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
+					if (channel == null) {
+						if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel)tgc).getChannelName(i))) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWriteChannel)tgc).getChannelName(i) + " has been removed because the corresponding channel is not taken into account");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							warnings.add(ce);
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+							activity.addElement(new TMLJunction("void junction", tgc));
+						} else {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWriteChannel)tgc).getChannelName(i) + " is an unknown channel");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+							checkingErrors.add(ce);
+						}
+						error = true;
+					}
+				}
+				if (!error) {
+					tmlwritechannel = new TMLWriteChannel("write channel", tgc);
+					tmlwritechannel.setNbOfSamples(((TMLADWriteChannel)tgc).getSamplesValue());
+					for(int i=0; i<channels.length; i++) {
+						channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
+						tmlwritechannel.addChannel(channel);
+					}
+					activity.addElement(tmlwritechannel);
 					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlwritechannel, tgc);
-                }
+				}
             }
         }
         

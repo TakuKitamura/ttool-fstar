@@ -506,7 +506,7 @@ public class MappedSystemCTask {
 			
 			code += makeTowardsNextFunction() + EFCR2;
 			code += makeNewFunction();
-			code1 = ((TMLReadChannel)_tmlae).getChannel().getName();
+			code1 = ((TMLReadChannel)_tmlae).getChannel(0).getName();
 			code += "return READ(" + code1 + ", ";
 			code += ((TMLReadChannel)_tmlae).getNbOfSamples() + ", &rd__" + code1;
 			code += ", " + nbOfFunc + ")" + SCCR + EFCR2;
@@ -518,7 +518,8 @@ public class MappedSystemCTask {
 			
 			code += makeTowardsNextFunction() + EFCR2;
 			code += makeNewFunction();
-			code1 = ((TMLWriteChannel)_tmlae).getChannel().getName();
+			// NO support for multichannel write
+			code1 = ((TMLWriteChannel)_tmlae).getChannel(0).getName();
 			code += "return WRITE(" + code1 + ", ";
 			code += ((TMLWriteChannel)_tmlae).getNbOfSamples() + ", &wr__" + code1;
 			code += ", " + nbOfFunc + ")" + SCCR + EFCR;

@@ -179,7 +179,7 @@ public class SystemCTask {
             code += "}\n";
             code += calculateCode(_tmlae.getNextElement(1));
         } else if (_tmlae instanceof TMLReadChannel) {
-            code = reference + ".RD(" + ((TMLReadChannel)_tmlae).getNbOfSamples() + ", " + ((TMLReadChannel)_tmlae).getChannel().getName()+ ");\n";
+            code = reference + ".RD(" + ((TMLReadChannel)_tmlae).getNbOfSamples() + ", " + ((TMLReadChannel)_tmlae).getChannel(0).getName()+ ");\n";
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLSendEvent) {
             code = reference + ".NOTIFY(" + ((TMLSendEvent)_tmlae).getEvent().getName()+ ");\n";
@@ -199,7 +199,7 @@ public class SystemCTask {
             //parameters ?
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLWriteChannel) {
-            code = reference + ".WR(" + ((TMLWriteChannel)_tmlae).getNbOfSamples() + ", " + ((TMLWriteChannel)_tmlae).getChannel().getName()+ ");\n";
+            code = reference + ".WR(" + ((TMLWriteChannel)_tmlae).getNbOfSamples() + ", " + ((TMLWriteChannel)_tmlae).getChannel(0).getName()+ ");\n";
             code += calculateCode(_tmlae.getNextElement(0));
         } else if (_tmlae instanceof TMLChoice) {
             TMLChoice choice = (TMLChoice)_tmlae;

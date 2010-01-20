@@ -53,7 +53,7 @@ public class TMLReadChannel extends TMLActivityElementChannel {
     }
 	
 	public String toString() {
-		return "Read " + nbOfSamples + " samples in channel: " + channel.getName();
+		return "Read " + nbOfSamples + " samples in channel: " + getChannel(0).getName();
 	}
 
 }

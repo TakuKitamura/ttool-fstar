@@ -138,16 +138,18 @@ public class TMLSyntaxChecking {
 				//System.out.println("Task= " + t.getName() + " element=" + elt);
 				
 				if (elt instanceof TMLWriteChannel) {
-					ch = ((TMLWriteChannel)elt).getChannel();
-					//System.out.println("Write channel");
-					if (ch.getOriginTask() != t) {
-						addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
+					for(int j=0; j<((TMLWriteChannel)elt).getNbOfChannels(); j++) {
+						ch = ((TMLWriteChannel)elt).getChannel(j);
+						//System.out.println("Write channel");
+						if (ch.getOriginTask() != t) {
+							addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
+						}
 					}
 				}
 				
 				if (elt instanceof TMLReadChannel) {
-					ch = ((TMLReadChannel)elt).getChannel();
-					//System.out.println("Write channel");
+					ch = ((TMLReadChannel)elt).getChannel(0);
+					//System.out.println("Read channel");
 					if (ch.getDestinationTask() != t) {
 						addError(t, elt, ch.getName() + ": " + WRONG_DESTINATION_CHANNEL, TMLError.ERROR_BEHAVIOR);
 					}
@@ -155,7 +157,6 @@ public class TMLSyntaxChecking {
 				
 				if (elt instanceof TMLSendEvent) {
 					evt = ((TMLSendEvent)elt).getEvent();
-					//System.out.println("Write channel");
 					if (evt.getOriginTask() != t) {
 						addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
 					}
@@ -163,7 +164,6 @@ public class TMLSyntaxChecking {
 				
 				if (elt instanceof TMLWaitEvent) {
 					evt = ((TMLWaitEvent)elt).getEvent();
-					//System.out.println("Write channel");
 					if (evt.getDestinationTask() != t) {
 						addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
 					}

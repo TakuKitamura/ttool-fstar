@@ -53,7 +53,14 @@ public class TMLWriteChannel extends TMLActivityElementChannel {
     }
 	
 	public String toString() {
-		return "Write " + nbOfSamples + " sample(s) in channel: " + channel.getName();
+		String tmp = "Write " + nbOfSamples + " sample(s) in channel(s): ";
+		for(int k=0; k<getNbOfChannels(); k++) {
+			if (k!=0) {
+				tmp += " ,";
+			}
+			tmp += getChannel(k).getName();
+		}
+		return  tmp;
 	}
 	
 }

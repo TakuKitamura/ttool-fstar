@@ -335,7 +335,7 @@ public class TML2UPPAAL {
         
         tr1 = addTransition(template, loc, loc);
         setGuard(tr1, "nb__rd>0");
-        setSynchronization(tr1, "rd__" +rc.getChannel().getName() + "!");
+        setSynchronization(tr1, "rd__" +rc.getChannel(0).getName() + "!");
         setAssignment(tr1, "nb__rd = nb__rd - 1");
 
         loc1 = addLocation(template);
@@ -353,9 +353,10 @@ public class TML2UPPAAL {
         tr = addTransition(template, previous, loc);
         setAssignment(tr, "nb__wr = " + wc.getNbOfSamples());
         
+		// no support for multiwrite
         tr1 = addTransition(template, loc, loc);
         setGuard(tr1, "nb__wr>0");
-        setSynchronization(tr1, "wr__" +wc.getChannel().getName() + "!");
+        setSynchronization(tr1, "wr__" +wc.getChannel(0).getName() + "!");
         setAssignment(tr1, "nb__wr = nb__wr - 1");
 
         loc1 = addLocation(template);

@@ -159,9 +159,20 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
         value = channelName + "(" + nbOfSamples + ")";
     }
     
-    public String getChannelName() {
+    /*public String getChannelName() {
         return channelName;
-    }
+    }*/
+	
+	public String[] getChannelsByName() {
+		//int nbOfChannels = Conversion.nbChar(channelName, ',') + 1;
+		String tmp = Conversion.replaceAllChar(channelName, ' ', "");
+		String[] channels = tmp.split(",");
+		return channels;
+	}
+	
+	public String getChannelName(int _index) {
+		return  getChannelsByName()[_index];
+	}
     
     public String getSamplesValue() {
         return nbOfSamples;
@@ -193,7 +204,7 @@ public class TMLADWriteChannel extends TGCWithoutInternalComponent implements Ch
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data channelName=\"");
-        sb.append(getChannelName());
+        sb.append(channelName);
         sb.append("\" nbOfSamples=\"");
         sb.append(getSamplesValue());
         sb.append("\" />\n");

@@ -225,7 +225,7 @@ public class TML2AUT {
         } else if (elt instanceof TMLReadChannel) {
             ch = (TMLActivityElementChannel)elt;
             s = aut.newState();
-            t = new Transition(ch.getChannel().getName() + ".get(" + ch.getNbOfSamples() + ")", s);
+            t = new Transition(ch.getChannel(0).getName() + ".get(" + ch.getNbOfSamples() + ")", s);
             currentState.addTransition(t);
             generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
             
@@ -233,7 +233,7 @@ public class TML2AUT {
         } else if (elt instanceof TMLWriteChannel) {
             ch = (TMLActivityElementChannel)elt;
             s = aut.newState();
-            t = new Transition(ch.getChannel().getName() + ".put(" + ch.getNbOfSamples() + ")", s);
+            t = new Transition(ch.getChannel(0).getName() + ".put(" + ch.getNbOfSamples() + ")", s);
             currentState.addTransition(t);
             generateAUTTMLTask(aut, task, elt.getNextElement(0), s, endState);
             

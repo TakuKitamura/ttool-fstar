@@ -2133,7 +2133,8 @@ public class Mapping2TIF {
 			// Write Channel
 		}  else if (element instanceof TMLWriteChannel) {
 			tmlwc = (TMLWriteChannel)(element);
-			ch = tmlwc.getChannel();
+			// Multiwrite channels are not yet supported
+			ch = tmlwc.getChannel(0);
 			name = ch.getName();
 			
 			param1 = tcpu.getParamByName("toWrite__" + name);
@@ -2335,7 +2336,7 @@ public class Mapping2TIF {
 			// Read Channel
 		}  else if (element instanceof TMLReadChannel) {
 			tmlrc = (TMLReadChannel)(element);
-			ch = tmlrc.getChannel();
+			ch = tmlrc.getChannel(0);
 			name = ch.getName();
 			
 			param1 = tcpu.getParamByName("toRead__" + name);

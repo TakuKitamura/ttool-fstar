@@ -314,7 +314,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 				drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
 				size += currentFontSize;
 				if ((size < (height - 2)) && (reqType == 2)) {
-					drawLimitedString(g, "Attack Tree Nodes=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+					drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
 				}
 			}
 		}

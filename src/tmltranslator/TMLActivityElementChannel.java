@@ -45,22 +45,39 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
+import java.util.*;
 
 
 public class TMLActivityElementChannel extends TMLActivityElement {
-    protected TMLChannel channel;
+    protected ArrayList<TMLChannel> channels;
     protected String nbOfSamples;
     
     public TMLActivityElementChannel(String _name, Object _referenceObject) {
          super(_name, _referenceObject);
+		 channels = new ArrayList<TMLChannel>();
     }
     
-    public void setChannel(TMLChannel _channel) {
-        channel = _channel;
+    public void addChannel(TMLChannel _channel) {
+		channels.add(_channel);
     }
+	
+	/* To remove once TTool has been tested */
+	public void setChannel(TMLChannel _channel) {
+		channels.add(_channel);
+    }
+	
+	public TMLChannel getChannel() {
+        return channels.get(0);
+    }
+	/* Remove before */
+	
+	public int getNbOfChannels() {
+		return channels.size();
+	}
+
     
-    public TMLChannel getChannel() {
-        return channel;
+    public TMLChannel getChannel(int _index) {
+        return channels.get(_index);
     }
     
     public void setNbOfSamples(String _nbOfSamples) {

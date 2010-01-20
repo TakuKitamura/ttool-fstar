@@ -334,12 +334,16 @@ public class TMLTextSpecification {
 			
 		} else if (elt instanceof TMLWriteChannel) {
 			tmlch = (TMLActivityElementChannel)elt;
-			code = "WRITE " + tmlch.getChannel().getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+			code = "WRITE ";
+			for(int k=0; k<tmlch.getNbOfChannels(); k++) {
+				code = code + tmlch.getChannel(k).getName() + SP;
+			}
+			code = code + modifyString(tmlch.getNbOfSamples()) + CR;
 			return code + makeBehavior(task, elt.getNextElement(0));
 			
 		} else if (elt instanceof TMLReadChannel) {
 			tmlch = (TMLActivityElementChannel)elt;
-			code = "READ " + tmlch.getChannel().getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+			code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
 			return code + makeBehavior(task, elt.getNextElement(0));
 			
 		} else if (elt instanceof TMLSendEvent) {
@@ -1032,7 +1036,7 @@ public class TMLTextSpecification {
 			
 			
 			TMLReadChannel tmlrch = new TMLReadChannel(_split[1], null);
-			tmlrch.setChannel(ch);
+			tmlrch.addChannel(ch);
 			tmlrch.setNbOfSamples(_split[2]);
 			task.getActivityDiagram().addElement(tmlrch);
 			tmlae.addNext(tmlrch);
@@ -1054,8 +1058,8 @@ public class TMLTextSpecification {
 			inTaskDec = false;
 			inTaskBehavior = true;
 			
-			if (_split.length != 3) {
-				error = "A WRITE operation must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+			if (_split.length < 3) {
+				error = "A WRITE operation must be declared with at most 3 parameters, and not " + (_split.length - 1) ;
 				addError(0, _lineNb, 0, error);
 				return -1;
 			}
@@ -1064,25 +1068,23 @@ public class TMLTextSpecification {
 				return -1;
 			}
 			
-			/*if (!checkParameter("WRITE", _split, 2, 7, _lineNb)) {
-				return -1;
-			}*/
-			
-			ch = tmlm.getChannelByName(_split[1]);
-			if (ch == null ){
-				error = "Undeclared channel: " +  _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			if (ch.getOriginTask() != task ){
-				error = "READ operations must be done only in origin task. Should be in task: " + ch.getOriginTask().getName();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
 			TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
-			tmlwch.setChannel(ch);
+			for(int k=0; k<_split.length-2; k++) {
+				ch = tmlm.getChannelByName(_split[1+k]);
+				if (ch == null ){
+					error = "Undeclared channel: " +  _split[1+k];
+					addError(0, _lineNb, 0, error);
+					return -1;
+				}
+				if (ch.getOriginTask() != task ){
+					error = "WRITE operations must be done only in origin task. Should be in task: " + ch.getOriginTask().getName();
+					addError(0, _lineNb, 0, error);
+					return -1;
+				}
+				
+				tmlwch.addChannel(ch);
+			}
+			
 			tmlwch.setNbOfSamples(_split[2]);
 			task.getActivityDiagram().addElement(tmlwch);
 			tmlae.addNext(tmlwch);

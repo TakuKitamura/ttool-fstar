@@ -347,7 +347,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     }
 	
 	public String getAttributes() {
-		return "Description = " + description;
+		String s = "Description = " + description + "\n";
+		s += "Id=" + getId();
+		return s;
 	}
     
   
