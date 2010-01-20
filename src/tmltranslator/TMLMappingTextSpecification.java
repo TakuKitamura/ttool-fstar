@@ -219,6 +219,9 @@ public class TMLMappingTextSpecification {
 			
 			if ((node != null) && (elt != null)) {
 				tmp += "MAP " + prepareString(node.getName()) + " " + prepareString(elt.getName()) + CR;
+				if (elt instanceof TMLChannel) {
+					tmp += "SET " + prepareString(elt.getName()) +  " priority " + ((TMLChannel)(elt)).getPriority() + CR;
+				}
 				//tmp += "SET " + prepareString(task.getName()) +  " priority " + task.getPriority() + CR;
 			}
 		}
@@ -569,6 +572,7 @@ public class TMLMappingTextSpecification {
 		
 		HwExecutionNode hwnode;
 		TMLTask task;
+		TMLChannel  channel;
 		HwCommunicationNode hwcommnode;
 		TMLElement elt;
 		
@@ -640,16 +644,25 @@ public class TMLMappingTextSpecification {
 				return -1;
 			}
 			
-			task = tmlmap.getTaskByName(_split[1]);
+			task = null;
+			channel = null;
 			
-			if (task == null) {
-				error = "Unknown task: " + _split[1] ;
+			task = tmlmap.getTaskByName(_split[1]);
+			channel = tmlmap.getChannelByName(_split[1]);
+			if ((task == null) && (channel == null)) {
+				error = "Unknown task / channel: " + _split[1] ;
 				addError(0, _lineNb, 0, error, _line);
 				return -1;
 			}
 			
 			if (_split[2].toUpperCase().equals("PRIORITY")) {
-				task.setPriority(Integer.decode(_split[3]).intValue());
+				if (task != null) {
+					task.setPriority(Integer.decode(_split[3]).intValue());
+				} else {
+					if (channel != null) {
+						channel.setPriority(Integer.decode(_split[3]).intValue());
+					}
+				}
 			}
 			
 		} // SET

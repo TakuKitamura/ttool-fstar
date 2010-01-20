@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent {
+public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -70,6 +70,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
     protected String referenceCommunicationName = "TMLCommunication";
 	protected String communicationName = "name";
 	protected String typeName = "channel";
+	protected int priority = 0; // Between 0 and 10
     
     public TMLArchiCommunicationArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -93,6 +94,10 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         
         myImageIcon = IconManager.imgic702;
     }
+	
+	public int getPriority() {
+		return priority;
+	}
 	
     
     public void internalDrawing(Graphics g) {
@@ -182,6 +187,8 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 		if (dialog.getTypeName().length() != 0) {
 			typeName = dialog.getTypeName();
 		}
+		
+		priority = dialog.getPriority();
 			
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
@@ -215,6 +222,8 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" communicationName=\"" + communicationName + "\" referenceCommunicationName=\"");
         sb.append(referenceCommunicationName);
+		sb.append("\" priority=\"");
+		sb.append(priority);
 		sb.append("\" typeName=\"" + typeName);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
@@ -230,7 +239,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
             Element elt;
             int t1id;
             String svalue = null, sname = null, sreferenceCommunication = null, stype = null;
-			String prio;
+			String prio = null;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -247,6 +256,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
                                 sname = elt.getAttribute("communicationName");
                                 sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
 								stype = elt.getAttribute("typeName");
+								prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
                                 value = svalue;
@@ -260,12 +270,17 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 							if (stype != null){
                                 typeName = stype;
                             }
+							
+							if ((prio != null) && (prio.trim().length() > 0)) {
+								priority = Integer.decode(prio).intValue();
+							}
                         }
                     }
                 }
             }
             
         } catch (Exception e) {
+			System.out.println("Channel artifact");
             throw new MalformedModelingException();
         }
         makeFullValue();
@@ -291,6 +306,10 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 	public String getTypeName() {
         return typeName;
     }
+	
+	public String getAttributes() {
+		return "Priority = " + priority;
+	}
 	
 
     

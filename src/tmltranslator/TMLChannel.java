@@ -58,6 +58,8 @@ public class TMLChannel extends TMLCommunicationElement {
     private int max;
   
     protected TMLTask origin, destination;
+	
+	private int priority;
 
 
     public TMLChannel(String name, Object reference) {
@@ -76,6 +78,14 @@ public class TMLChannel extends TMLCommunicationElement {
     public TMLTask getDestinationTask() {
       return destination;
     }
+	
+	public void setPriority(int _priority) {
+		priority = _priority;
+	}
+	
+	public int getPriority() {
+		return priority;
+	}
     
     public void setSize(int _size) {
         size = _size;

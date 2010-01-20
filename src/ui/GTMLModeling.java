@@ -1841,6 +1841,12 @@ public class GTMLModeling  {
 						s = s.replaceAll("\\s", "");
 						s = s + "__" + artifact.getCommunicationName();
 						elt = tmlm.getCommunicationElementByName(s);
+						
+						if (elt instanceof TMLChannel) {
+							//System.out.println("Setting priority");
+							((TMLChannel)(elt)).setPriority(artifact.getPriority());
+						}
+						
 						if (elt != null) {
 							map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
 						} else {

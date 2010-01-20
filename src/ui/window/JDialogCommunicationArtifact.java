@@ -66,7 +66,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
     private Frame frame;
     private TMLArchiCommunicationArtifact artifact;
     
-	protected JComboBox referenceCommunicationName;
+	protected JComboBox referenceCommunicationName, priority;
 	
     // Main Panel
     private JButton closeButton;
@@ -126,6 +126,14 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
+		
+		list = new Vector<String>();
+		for(int i=0; i<11; i++) {
+			list.add(""+i);
+		}
+		priority = new JComboBox(list);
+		priority.setSelectedIndex(artifact.getPriority());
+		panel2.add(priority, c1);
 		
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -238,6 +246,10 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 			i++;
 		}
 		return 0;
+	}
+	
+	public int getPriority() {
+		return priority.getSelectedIndex();
 	}
     
 }

@@ -340,6 +340,14 @@ public class TMLMapping {
 		return tmlm.getTMLTaskByName(_name);
 	}
 	
+	public TMLChannel getChannelByName(String _name) {
+		TMLElement tmle = tmlm.getCommunicationElementByName(_name);
+		if (tmle instanceof TMLChannel) {
+			return (TMLChannel)tmle;
+		}
+		return null;
+	}
+	
 	public HwExecutionNode getHwExecutionNodeByName(String _name) {
 		HwNode node = tmla.getHwNodeByName(_name);
 		if (node instanceof HwExecutionNode) {
