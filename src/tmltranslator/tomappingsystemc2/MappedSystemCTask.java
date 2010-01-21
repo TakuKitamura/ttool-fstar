@@ -110,7 +110,7 @@ public class MappedSystemCTask {
 		basicCPPCode();
 		makeClassCode();
 		dependencies=_dependencies;
-		//analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
+		analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
     	}
 	
 	public void print() {
@@ -142,7 +142,7 @@ public class MappedSystemCTask {
 		code += "#include <TMLActionCommand.h>\n#include <TMLChoiceCommand.h>\n#include <TMLExeciCommand.h>\n";
 		code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n";
 		code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
-		code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n\n";
+		code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n#include<TMLWriteMultCommand.h>\n\n";
 		code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
 		return code;
 	}
@@ -470,20 +470,32 @@ public class MappedSystemCTask {
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
 			if (isIntValue(rCommand.getNbOfSamples()))
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel().getExtendedName() + "," + rCommand.getChannel().getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," + rCommand.getChannel(0).getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
 			else
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel().getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel().getExtendedName() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel(0).getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
 			if (debug) System.out.println("Checking Write\n");
-			cmdName= "_write" + currElem.getID();
-			hcode+="TMLWriteCommand " + cmdName + SCCR;
+			String channels;
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
+			if (wCommand.getNbOfChannels()>1){
+				cmdName= "_mwrite" + currElem.getID();
+				hcode+="TMLWriteMultCommand " + cmdName + SCCR;
+				channels="array("+wCommand.getNbOfChannels();
+				for(int i=0; i<wCommand.getNbOfChannels(); i++){
+					channels+="," + wCommand.getChannel(i).getExtendedName();
+				}
+				channels+=")," + wCommand.getNbOfChannels();
+			}else{
+				cmdName= "_write" + currElem.getID();
+				hcode+="TMLWriteCommand " + cmdName + SCCR;
+				channels=wCommand.getChannel(0).getExtendedName();
+			}
 			if (isIntValue(wCommand.getNbOfSamples()))
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + wCommand.getChannel().getExtendedName() + "," +  wCommand.getChannel().getSize() + "*" + wCommand.getNbOfSamples() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + channels + "," +  wCommand.getNbOfSamples() + ")"+CR;
 			else
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getChannel().getSize() + "*(" + wCommand.getNbOfSamples() + ")", null) + "," + wCommand.getChannel().getExtendedName() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getNbOfSamples(), null) + "," + channels + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLSendEvent){
@@ -865,13 +877,15 @@ public class MappedSystemCTask {
 					}
 				} else if (currElem instanceof TMLWriteChannel){
 					TMLWriteChannel write = (TMLWriteChannel) currElem;
-					if (write.getChannel().getType()!=TMLChannel.NBRNBW){
-						//Add to dependency list of event: NDepList + variable denoting the number of samples
-						ArrayList<Integer> cmdVars = getVariablesInString(write.getNbOfSamples());
-						if (!(depList.isEmpty() && cmdVars.isEmpty())){
-							HashSet<Integer> currSet = getHashSetForID(write.getChannel().getID());
-							for (int objs: depList) currSet.add(objs);
-							for (int objs: cmdVars) currSet.add(objs);
+					for (int i=0; i< write.getNbOfChannels(); i++){
+						if (write.getChannel(i).getType()!=TMLChannel.NBRNBW){
+							//Add to dependency list of event: NDepList + variable denoting the number of samples
+							ArrayList<Integer> cmdVars = getVariablesInString(write.getNbOfSamples());
+							if (!(depList.isEmpty() && cmdVars.isEmpty())){
+								HashSet<Integer> currSet = getHashSetForID(write.getChannel(i).getID());
+								for (int objs: depList) currSet.add(objs);
+								for (int objs: cmdVars) currSet.add(objs);
+							}
 						}
 					}
 	
@@ -885,8 +899,10 @@ public class MappedSystemCTask {
 					for (int param=0; param<send.getNbOfParams(); param++){
 						///?????????????????????
 						ArrayList<Integer> paramVars = getVariablesInString(send.getParam(param));
+						HashSet<Integer> paramSet = getHashSetForID(Integer.MAX_VALUE-3*send.getEvent().getID()-param); //NEW
+						for (int objs: depList) paramSet.add(objs);  //NEW
 						if (!paramVars.isEmpty()){
-							HashSet<Integer> paramSet = getHashSetForID(Integer.MAX_VALUE-3*send.getEvent().getID()-param);
+							//HashSet<Integer> paramSet = getHashSetForID(Integer.MAX_VALUE-3*send.getEvent().getID()-param); //NEW
 							for (int objs: paramVars) paramSet.add(objs);
 						}
 					}
@@ -909,11 +925,11 @@ public class MappedSystemCTask {
 	
 				} else if (currElem instanceof TMLReadChannel){
 					TMLReadChannel read = (TMLReadChannel) currElem;
-					if (read.getChannel().getType()!=TMLChannel.NBRNBW){
+					if (read.getChannel(0).getType()!=TMLChannel.NBRNBW){
 						//Add to dependency list of channel: NDepList + variable denoting the number of samples
 						ArrayList<Integer> cmdVars = getVariablesInString(read.getNbOfSamples());
 						if (!(depList.isEmpty() && cmdVars.isEmpty())){
-							HashSet<Integer> currSet = getHashSetForID(read.getChannel().getID());
+							HashSet<Integer> currSet = getHashSetForID(read.getChannel(0).getID());
 							for (int objs: depList) currSet.add(objs);
 							for (int objs: cmdVars) currSet.add(objs);
 						}

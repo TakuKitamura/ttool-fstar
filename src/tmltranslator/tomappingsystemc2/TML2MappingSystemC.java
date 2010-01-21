@@ -118,7 +118,7 @@ public class TML2MappingSystemC {
 		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
-		/*System.out.println("********** All identified objects and their dependencies: **********");
+		System.out.println("********** All identified objects and their dependencies: **********");
 		printDependencies(false);
 		HashSet<Integer> keys = new HashSet<Integer>(dependencies.keySet());
 		for(int elemID: keys){
@@ -126,7 +126,7 @@ public class TML2MappingSystemC {
 			eliminateStateVars(elemID, null);
 		}
 		System.out.println("********** System state variables and their dependency on indeterministic operators **********");
-		printDependencies(true);*/
+		printDependencies(true);
 	}
 	
 	private void generateMainFile() {
@@ -189,8 +189,9 @@ public class TML2MappingSystemC {
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwBus) {
 				//if (tmlmapping.isAUsedHwNode(node)) {
-				declaration += "Bus* " + node.getName() + " = new Bus("+ node.getID() + ",\"" + node.getName() + "\",0, 100, "+ ((HwBus)node).byteDataSize + ", " + node.clockRatio + ")" + SCCR;
-				declaration += "addBus("+ node.getName() +")"+ SCCR;
+				declaration += "Bus* " + node.getName() + " = new Bus("+ node.getID() + ",\"" + node.getName() + "\",0, 100, "+ ((HwBus)node).byteDataSize + ", " + node.clockRatio + ",";
+				if(((HwBus)node).arbitration==HwBus.CAN) declaration +="true"; else declaration +="false"; 
+				declaration += ");\naddBus("+ node.getName() +")"+ SCCR;
 				//}
 			}
 		}
@@ -258,7 +259,7 @@ public class TML2MappingSystemC {
 				switch(channel.getType()) {
 				case TMLChannel.BRBW:
 					tmp = "TMLbrbwChannel";
-					param= "," + channel.getMax()*channel.getSize() + ",0";
+					param= "," + channel.getMax() + ",0";
 					break;
 				case TMLChannel.BRNBW:
 					tmp = "TMLbrnbwChannel";
@@ -269,7 +270,7 @@ public class TML2MappingSystemC {
 					tmp = "TMLnbrnbwChannel";
 					param= "";
 				}
-				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\",";
+				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
 				strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
 				int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getOriginTask()).getName(), buses1, slaves1, true);
 				if (hopNum==-1){
@@ -286,7 +287,7 @@ public class TML2MappingSystemC {
 						hopNum+=tempHop;
 					}	
 				}
-				declaration+= hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param +")"+ SCCR;
+				declaration+= hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param + "," + channel.getPriority() + ")"+ SCCR;
 				declaration += "addChannel("+ channel.getExtendedName() +")"+ SCCR;
 			}
 		}
@@ -338,7 +339,7 @@ public class TML2MappingSystemC {
 						}
 					}
 					declaration += node.getName() + "->setScheduler((WorkloadSource*) new ";
-					if (((HwBus)node).arbitration==0)
+					if (((HwBus)node).arbitration==HwBus.BASIC_ROUND_ROBIN)
 						declaration+="RRScheduler(\"" + node.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)node.clockRatio)/((float)((HwBus)node).byteDataSize)) + ", array(";
 					else
 						declaration+="PrioScheduler(\"" + node.getName() + "_PrioSched\", 0, array(";
@@ -416,19 +417,20 @@ public class TML2MappingSystemC {
 		int taskIndex = tmlmapping.getMappedTasks().indexOf(_task);
 		if (debug) System.out.println("Starting from Task: " + _task.getName());
 		if (taskIndex==-1){
-			//buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
-			buses.str="," + CPUName + "_defaultBus_Master";
-			slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+			//buses.str="," + CPUName + "_defaultBus_Master";
+			//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+			//buses.str=",0";
+			//slaves.str= ",0";
 			return -1;
 		}
 		HwBus bus= getBusConnectedToNode(commNodeList, tmlmapping.getNodes().get(taskIndex));
 		if (bus==null){
-			//buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
-			buses.str="," + CPUName + "_defaultBus_Master";
-			slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+			//buses.str="," + CPUName + "_defaultBus_Master";
+			//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+			buses.str=",static_cast<BusMaster*>(0)";
+			slaves.str= ",static_cast<Slave*>(0)";
 			return -1;
 		}
-		//buses.str+= " ,dynamic_cast<SchedulableCommDevice*>(" + bus.getName() + ")";
 		buses.str+= " ," + CPUName + "_" + bus.getName() + "_Master";
 		if (debug) System.out.println("Chaining:\nFirst bus: " + bus.getName());
 		HwMemory mem = getMemConnectedToBus(commNodeList, bus);
@@ -437,10 +439,15 @@ public class TML2MappingSystemC {
 		while(mem==null){
 			bridge = getBridgeConnectedToBus(commNodeList, bus);
 			if (bridge==null){
-				//buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
-				buses.str="," + CPUName + "_defaultBus_Master";
-				slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-				return -1;
+				//buses.str="," + CPUName + "_defaultBus_Master";
+				//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+				//buses.str+= " ," + CPUName + "_" + bus.getName() + "_Master";
+				if (dir)
+					slaves.str+= ",static_cast<Slave*>(0)";
+				else
+					
+					slaves.str = ",static_cast<Slave*>(0)" + slaves.str;
+				return hopNumber;
 			}
 			CPUName=bridge.getName();
 			if (debug) System.out.println("Bridge: " + bridge.getName());
@@ -451,18 +458,17 @@ public class TML2MappingSystemC {
 				slaves.str= " ,dynamic_cast<Slave*>("+ bridge.getName() + ")" + slaves.str;
 			bus = getBusConnectedToNode(commNodeList, bridge);
 			if (bus==null){
-				//buses.str=",dynamic_cast<SchedulableCommDevice*>(defaultBus)";
-				buses.str="," + CPUName + "_defaultBus_Master";
-				slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-				return -1;
+				//buses.str="," + CPUName + "_defaultBus_Master";
+				//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
+				//buses.str=",0";
+				//slaves.str= ",0";
+				return hopNumber;
 			}
 			if (debug) System.out.println("Bus: " + bus.getName());
 			commNodeList.remove(bus);
 			if (dir) 
-				//buses.str+= " ,dynamic_cast<SchedulableCommDevice*>("+ bus.getName() + ")";
 				buses.str+= "," + CPUName + "_" + bus.getName() + "_Master";
 			else
-				//buses.str= " ,dynamic_cast<SchedulableCommDevice*>("+ bus.getName() + ")" + buses.str;
 				buses.str= "," + CPUName + "_" + bus.getName() +"_Master" + buses.str;
 			mem = getMemConnectedToBus(commNodeList, bus);
 			hopNumber++;
