@@ -49,11 +49,11 @@ TMLWriteMultCommand::TMLWriteMultCommand(unsigned int iID, TMLTask* iTask, Lengt
 }
 
 void TMLWriteMultCommand::execute(){
-	std::cout << "--begin-- TMLWriteMultCommand::execute\n"; 
+	//std::cout << "--begin-- TMLWriteMultCommand::execute\n"; 
 	for (int i=0; i< _nbOfChannels; i++){
 		_channels[i]->write();
 	}
-	std::cout << "--end-- TMLWriteMultCommand::execute\n"; 
+	//std::cout << "--end-- TMLWriteMultCommand::execute\n"; 
 	_progress+=_currTransaction->getVirtualLength();
 	_task->addTransaction(_currTransaction);
 	prepare(false);
@@ -73,13 +73,13 @@ TMLCommand* TMLWriteMultCommand::prepareNextTransaction(){
 	_currTransaction=new TMLTransaction(this, unitsLeft, _task->getEndLastTransaction(), _channels[0]);
 	//_channels[0]->testWrite(_currTransaction);
 	//minLength=_currTransaction->getVirtualLength();
-	std::cout << "--begin-- TMLWriteMultCommand::prepareNextTransaction\n"; 
+	//std::cout << "--begin-- TMLWriteMultCommand::prepareNextTransaction\n"; 
 	for (int i=0; i< _nbOfChannels; i++){
 		//_currTransaction->setVirtualLength(unitsLeft);
 		_channels[i]->testWrite(_currTransaction);
 		//minLength=min(minLength,_currTransaction->getVirtualLength());
 	}
-	std::cout << "--end-- TMLWriteMultCommand::prepareNextTransaction\n";
+	//std::cout << "--end-- TMLWriteMultCommand::prepareNextTransaction\n";
 	//_currTransaction->setVirtualLength(minLength);
 	return this;
 }
