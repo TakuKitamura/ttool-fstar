@@ -60,8 +60,9 @@ public:
 	*/
 	TMLSendCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam=Parameter<ParamType>(0,0,0));
 	void execute();
-	TMLTask* getDependentTask() const;
-	TMLChannel* getChannel() const;
+	TMLChannel* getChannel(unsigned int iIndex) const;
+	unsigned int getNbOfChannels() const;
+	TMLTask* getDependentTask(unsigned int iIndex)const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;

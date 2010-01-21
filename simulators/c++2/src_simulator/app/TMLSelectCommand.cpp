@@ -101,18 +101,18 @@ TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLTask* TMLSelectCommand::getDependentTask() const{
-	return _channel[_indexNextCommand]->getBlockedWriteTask();
-}
 
-TMLChannel* TMLSelectCommand::getChannel() const{
-	//cannot be determined because there are several channels
+TMLChannel* TMLSelectCommand::getChannel(unsigned int iIndex) const{
 	return _channel[_indexNextCommand];
 }
 
-//bool TMLSelectCommand::channelUnknown() const{
-//	return true;
-//}
+unsigned int TMLSelectCommand::getNbOfChannels() const{
+	return 1;
+}
+
+TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
+	return _channel[_indexNextCommand]->getBlockedWriteTask();
+}
 
 TMLCommand* TMLSelectCommand::getNextCommand() const{
 	return _nextCommand[_indexNextCommand];

@@ -24,6 +24,9 @@ makedir:
 $(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 
+#$(OBJDIR)/evt/ListenersSimCmd.o: $(SRCS_base_DIR)/evt/ListenersSimCmd.cpp
+#	$(CC) $(CFLAGS) $(INCDIR) -o - ldl $@ -c $<
+
 $(OBJDIR)/%.o: ./%.cpp
 	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 

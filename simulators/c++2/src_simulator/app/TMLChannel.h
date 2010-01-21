@@ -60,11 +60,13 @@ public:
     	/**
       	\param iID ID of channel
 	\param iName Name of the channel
+	\param iWidth Channel width
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
+	\param iPrio Priority of the channel
     	*/
-	TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves);
+	TMLChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority);
 	///Destructor
 	virtual ~TMLChannel();
 	///Prepares a write operation
@@ -172,11 +174,23 @@ public:
 	\return Hash Value
 	*/
 	virtual unsigned long getStateHash() const =0;
+	///Returns the priority of the channel
+	/**
+	\return Hash Value
+	*/
+	unsigned int getPriority();
+	///Returns the width of the channel
+	/**
+	\return Channel width
+	*/
+	unsigned int getWidth();
 protected:
 	///ID of channel
 	unsigned int _ID;
 	///Name of the channel
-	std::string _name;	
+	std::string _name;
+	///Channel size
+	unsigned int _width;	
 	///Pointer to the tasks which performs read operation on the channel
 	TMLTask* _readTask;
 	///Pointer to the tasks which performs write operation on the channel
@@ -195,6 +209,8 @@ protected:
 	unsigned int _writeTransCurrHop;
 	///Keeps track of the current Hop of a read Transaction
 	unsigned int _readTransCurrHop;
+	///channel priority
+	unsigned int _priority;
 };
 
 #endif

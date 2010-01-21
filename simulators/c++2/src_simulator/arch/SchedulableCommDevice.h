@@ -54,7 +54,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableCommDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler){}
+	SchedulableCommDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler,bool iChannelBasedPrio): SchedulableDevice(iID, iName, iScheduler), _channelBasedPrio(iChannelBasedPrio){}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Size of an atomic bus transaction
@@ -64,8 +64,12 @@ public:
 	//virtual void truncateToBurst(TMLTransaction* iTrans) const=0;
 	///Signals the component that a new transaction has become available and thus rescheduling is needed
 	virtual void registerTransaction()=0;
+	bool ChannelBasedPrio(){return _channelBasedPrio;}
 	///Destructor
 	virtual ~SchedulableCommDevice(){}
+protected:
+	///Flag indicating whether bus master based or channel based priorities are used to arbitrate the bus
+	bool _channelBasedPrio;
 };
 
 #endif

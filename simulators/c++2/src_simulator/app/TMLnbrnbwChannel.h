@@ -54,11 +54,13 @@ public:
     	/**
       	\param iID ID of channel
 	\param iName Name of the channel
+	\param iWidth Channel width
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
+	\param iPriority Priority of the channel
     	*/
-	TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves);
+	TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority);
 	void testWrite(TMLTransaction* iCommand);
 	void testRead(TMLTransaction* iCommand);
 	void write();

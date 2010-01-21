@@ -85,9 +85,9 @@ TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 	return 0;
 }
 
-TMLTask* TMLChoiceCommand::getDependentTask() const{
+/*TMLTask* TMLChoiceCommand::getDependentTask() const{
 	return 0;
-}
+}*/
 
 std::string TMLChoiceCommand::toString() const{
 	std::ostringstream outp;	

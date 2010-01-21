@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 
 TMLWriteCommand::TMLWriteCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1), _lengthFunc(iLengthFunc), _channel(iChannel){
-	_length=iStatLength;
+	_length = iStatLength * _channel->getWidth();
 }
 
 void TMLWriteCommand::execute(){
@@ -65,7 +65,7 @@ TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 
 	//new test code
 	if (_progress==0){
-		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
+		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)() * _channel->getWidth();
 		if (_length==0){
 			TMLCommand* aNextCommand=getNextCommand();
 			_task->setCurrCommand(aNextCommand);
@@ -75,17 +75,23 @@ TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 	
 	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test write" << std::endl;
+	std::cout << "--begin-- TMLWriteCommand::prepareNextTransaction\n"; 
 	_channel->testWrite(_currTransaction);
+	std::cout << "--end-- TMLWriteCommand::prepareNextTransaction\n"; 
 	//std::cout << "WriteCommand end prepare" << std::endl;
 	return this;
 }
 
-TMLTask* TMLWriteCommand::getDependentTask() const{
-	return _channel->getBlockedReadTask();
+TMLChannel* TMLWriteCommand::getChannel(unsigned int iIndex) const{
+	return _channel;
 }
 
-TMLChannel* TMLWriteCommand::getChannel() const{
-	return _channel;
+unsigned int TMLWriteCommand::getNbOfChannels() const{
+	return 1;
+}
+
+TMLTask* TMLWriteCommand::getDependentTask(unsigned int iIndex)const{
+	return _channel->getBlockedReadTask();
 }
 
 std::string TMLWriteCommand::toString() const{

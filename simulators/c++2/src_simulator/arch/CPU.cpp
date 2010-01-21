@@ -101,7 +101,7 @@ void CPU::calcStartTimeLength(TMLTime iTimeSlice){
 #endif
 #ifdef BUS_ENABLED
 	//std::cout << "get channel " << std::endl;
-	TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel();
+	TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
 	//std::cout << "after get channel " << std::endl;
 	if(aChannel==0){
 		//std::cout << "no channel " << std::endl;
@@ -212,7 +212,7 @@ bool CPU::addTransaction(){
 				//std::cout << "3a\n";
 				aTempMaster->addTransaction();
 				//std::cout << "3b\n";
-				aTempSlave->addTransaction(_nextTransaction);
+				if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);
 				//std::cout << "4\n";
 				aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
 				//std::cout << "5\n";

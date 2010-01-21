@@ -38,68 +38,76 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <TMLWaitCommand.h>
-#include <TMLEventChannel.h>
+#include <TMLWriteMultCommand.h>
+#include <TMLChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWaitCommand::TMLWaitCommand(unsigned int iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1),_channel(iChannel), _paramFunc(iParamFunc){
+TMLWriteMultCommand::TMLWriteMultCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
+	_length=iStatLength * _channels[0]->getWidth();
 }
 
-void TMLWaitCommand::execute(){
-	//std::cout << "execute wait " << std::endl;
-	_channel->read();
-	//std::cout << "after ch->read " << std::endl;
+void TMLWriteMultCommand::execute(){
+	std::cout << "--begin-- TMLWriteMultCommand::execute\n"; 
+	for (int i=0; i< _nbOfChannels; i++){
+		_channels[i]->write();
+	}
+	std::cout << "--end-- TMLWriteMultCommand::execute\n"; 
 	_progress+=_currTransaction->getVirtualLength();
-	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
 	prepare(false);
-	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
-	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
 }
 
-TMLCommand* TMLWaitCommand::prepareNextTransaction(){
-	//std::cout << "wait command length: " << _length  << "  progress: " << _progress << std::endl; 
-	if (_progress==0 && _channel->getRequestChannel()) _task->finished();
-	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
-	_channel->testRead(_currTransaction);
+TMLCommand* TMLWriteMultCommand::prepareNextTransaction(){
+	if (_progress==0){
+		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)() * _channels[0]->getWidth();
+		if (_length==0){
+			TMLCommand* aNextCommand=getNextCommand();
+			_task->setCurrCommand(aNextCommand);
+			if (aNextCommand!=0) return aNextCommand->prepare(false);
+		}
+	}
+	TMLLength unitsLeft =_length-_progress;
+	//TMLLength minLength;
+	_currTransaction=new TMLTransaction(this, unitsLeft, _task->getEndLastTransaction(), _channels[0]);
+	//_channels[0]->testWrite(_currTransaction);
+	//minLength=_currTransaction->getVirtualLength();
+	std::cout << "--begin-- TMLWriteMultCommand::prepareNextTransaction\n"; 
+	for (int i=0; i< _nbOfChannels; i++){
+		//_currTransaction->setVirtualLength(unitsLeft);
+		_channels[i]->testWrite(_currTransaction);
+		//minLength=min(minLength,_currTransaction->getVirtualLength());
+	}
+	std::cout << "--end-- TMLWriteMultCommand::prepareNextTransaction\n";
+	//_currTransaction->setVirtualLength(minLength);
 	return this;
 }
 
-TMLChannel* TMLWaitCommand::getChannel(unsigned int iIndex) const{
-	return _channel;
+TMLChannel* TMLWriteMultCommand::getChannel(unsigned int iIndex) const{
+	return _channels[iIndex];
 }
 
-unsigned int TMLWaitCommand::getNbOfChannels() const{
-	//return (_channel->getBlockedWriteTask()==0)?0:1;
-	return 1;
+unsigned int TMLWriteMultCommand::getNbOfChannels() const{
+	return _nbOfChannels;
 }
 
-TMLTask* TMLWaitCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel->getBlockedWriteTask();
+TMLTask* TMLWriteMultCommand::getDependentTask(unsigned int iIndex)const{
+	return _channels[iIndex]->getBlockedReadTask();
 }
 
-std::string TMLWaitCommand::toString() const{
+std::string TMLWriteMultCommand::toString() const{
 	std::ostringstream outp;
-	outp << "Wait in " << TMLCommand::toString() << " " << _channel->toString();
+	outp << "WriteMult in " << TMLCommand::toString() << " " << _channels[0]->toString();
 	return outp.str();
 }
 
-std::string TMLWaitCommand::toShortString() const{
+std::string TMLWriteMultCommand::toShortString() const{
 	std::ostringstream outp;
-	outp << _task->toString() << ": Wait " << _channel->toShortString();
+	outp << _task->toString() << ": WriteMult" << _length << "," << _channels[0]->toShortString();
 	return outp.str();
 }
 
-std::string TMLWaitCommand::getCommandStr() const{
-	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
-}
-
-/*ParamFuncPointer TMLWaitCommand::getParamFuncPointer() const{
-	return _paramFunc;
-}*/
-
-void TMLWaitCommand::setParams(Parameter<ParamType>& ioParam){
-	if (_paramFunc!=0) (_task->*_paramFunc)(ioParam);
+std::string TMLWriteMultCommand::getCommandStr() const{
+	return "wrm";
 }

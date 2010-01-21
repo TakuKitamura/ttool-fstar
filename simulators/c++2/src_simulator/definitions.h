@@ -80,8 +80,8 @@ using std::max;
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
 #undef PENALTIES_ENABLED
-#define LISTENERS_ENABLED
 #undef STATE_HASH_ENABLED
+#undef LISTENERS_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000

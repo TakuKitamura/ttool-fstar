@@ -273,6 +273,13 @@ protected:
 	\param ioMessage output stream
 	*/
 	void writeSimState(std::ostream& ioMessage);
+	///Checks if command may be impacted by a anction on a channel
+	/**
+	\param iCh Channel
+	\param iCmd Command
+	\return  Flag indicating if the command may be impacted
+	*/
+	bool channelImpactsCommand(TMLChannel* iCh, TMLCommand* iCmd);
 	///Pointer to synchronization structure
 	SimServSyncInfo* _syncInfo;
 	///Pointer to structure encapsulating architecture and application objects

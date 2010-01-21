@@ -78,9 +78,9 @@ TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLTask* TMLExeciCommand::getDependentTask() const{
+/*TMLTask* TMLExeciCommand::getDependentTask() const{
 	return 0;
-}
+}*/
 
 std::string TMLExeciCommand::toString() const{
 	std::ostringstream outp;

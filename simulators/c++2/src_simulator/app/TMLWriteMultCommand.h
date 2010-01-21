@@ -38,36 +38,42 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TMLExeciCommandH
-#define TMLExeciCommandH
+#ifndef TMLWriteMultCommandH
+#define TMLWriteMultCommandH
 
 #include <definitions.h>
 #include <TMLCommand.h>
 
+class TMLChannel;
 
-///This class models the computational complexity of an algorithm
-class TMLExeciCommand:public TMLCommand{
+///This class models write operations on several TML channels at a time.
+class TMLWriteMultCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
-	\param iID ID of the command
-      	\param iTask Pointer to the task the command belongs to
+      	\param iID ID of the command
+	\param iTask Pointer to the task the command belongs to
 	\param iLengthFunc Pointer to the function returning the length of the command
-	\param iType Exec Type (ExecI, ExecC,...) 
+	\param iChannel Pointer to an array of pointers to channels to which is written
+	\param iNbOfChannels Number of channels
 	\param iStatLength Static length of command if applicable
-    	*/
-	TMLExeciCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength=1);
+	*/
+	TMLWriteMultCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength=1);
 	void execute();
-	//TMLTask* getDependentTask() const;
+	TMLChannel* getChannel(unsigned int iIndex) const;
+	unsigned int getNbOfChannels() const;
+	TMLTask* getDependentTask(unsigned int iIndex)const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
 protected:
-	TMLCommand* prepareNextTransaction();
 	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;
-	///Type of command: EXECI, EXECC
-	unsigned int _type;
+	///Array of channels to which is written
+	TMLChannel** _channels;
+	///Number of channels
+	unsigned int _nbOfChannels;
+	TMLCommand* prepareNextTransaction();
 };
 
 #endif

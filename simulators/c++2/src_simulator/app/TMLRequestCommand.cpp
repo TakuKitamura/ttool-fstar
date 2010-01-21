@@ -66,14 +66,16 @@ TMLCommand* TMLRequestCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLTask* TMLRequestCommand::getDependentTask() const{
-	//std::cout << "getDepTask " << std::endl;
-	return _channel->getBlockedReadTask();
+TMLChannel* TMLRequestCommand::getChannel(unsigned int iIndex) const{
+	return dynamic_cast<TMLChannel*>(_channel);
 }
 
-TMLChannel* TMLRequestCommand::getChannel() const{
-	//std::cout << "getChannel " << std::endl;
-	return dynamic_cast<TMLChannel*>(_channel);
+unsigned int TMLRequestCommand::getNbOfChannels() const{
+	return 1;
+}
+
+TMLTask* TMLRequestCommand::getDependentTask(unsigned int iIndex)const{
+	return _channel->getBlockedReadTask();
 }
 
 std::string TMLRequestCommand::toString() const{

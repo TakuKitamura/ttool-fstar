@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLbrbwChannel::TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent):TMLStateChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
+TMLbrbwChannel::TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent, unsigned int iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority),_length(iLength){
 }
 
 void TMLbrbwChannel::testWrite(TMLTransaction* iTrans){
@@ -94,6 +94,7 @@ void TMLbrbwChannel::setTransactionLength() const{
 		if (_nbToRead==0){
 			_writeTrans->setVirtualLength(min(_length-_content,_nbToWrite));
 			_underflow=false;
+			std::cout << _name << ": set write trans len, no read trans, len = " << _writeTrans->getVirtualLength() << std::endl;
 		}else{
 			if (_nbToRead<=_content){
 				//read could be executed right away			
@@ -104,13 +105,14 @@ void TMLbrbwChannel::setTransactionLength() const{
 				_writeTrans->setVirtualLength(min(_length-_content,_nbToRead-_content,_nbToWrite));
 				_underflow=true;
 			}
+			std::cout << _name << ": set write trans len, with read trans, len = " << _writeTrans->getVirtualLength() << std::endl;
 		}
 	}
 	if (_readTrans!=0){
 		if (_nbToWrite==0){
 			_readTrans->setVirtualLength(min(_content,_nbToRead));
 			_overflow=false;
-			//std::cout << _name << ": set read trans len, no write trans, len = " << _readTrans->getVirtualLength() << std::endl;
+			std::cout << _name << ": set read trans len, no write trans, len = " << _readTrans->getVirtualLength() << std::endl;
 		}else{
 			if (_nbToWrite<=_length-_content){
 				//write could be executed right away
@@ -121,7 +123,7 @@ void TMLbrbwChannel::setTransactionLength() const{
 				_readTrans->setVirtualLength(min(_content,_nbToWrite-(_length-_content),_nbToRead));
 				_overflow=true;
 			}
-			//std::cout << _name << ": set read trans len, with write trans, len = " << _readTrans->getVirtualLength() << std::endl;
+			std::cout << _name << ": set read trans len, with write trans, len = " << _readTrans->getVirtualLength() << std::endl;
 
 		}
 	}

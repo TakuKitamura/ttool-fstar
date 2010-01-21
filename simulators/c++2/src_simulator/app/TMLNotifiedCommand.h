@@ -59,7 +59,7 @@ public:
 	*/
 	TMLNotifiedCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
 	void execute();
-	TMLTask* getDependentTask() const;
+	//TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
 	std::string toString() const;
 	std::string toShortString() const;

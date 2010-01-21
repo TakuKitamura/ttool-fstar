@@ -92,26 +92,25 @@ public:
 	TMLTransaction* getCurrTransaction() const;
 	///Returns a pointer to the task which could be unblocked by the command
 	/**
+	\param iIndex Index of the task
 	\return Pointer to the dependent task
 	*/
-	virtual TMLTask* getDependentTask()const =0;
+	virtual TMLTask* getDependentTask(unsigned int iIndex)const;
 	///Returns a pointer to the channel on which the command performs operations
 	/**
+	\param iIndex Index of the channel
 	\return Pointer to the channel
-	\sa channelUnknown()
 	*/
-	virtual TMLChannel* getChannel() const;
-	/////Indicates if the channel can be determined
-	////**
-	//\return False if a nullpointer returned by getChannel() means the that command does not depend on any channel, true if a nullpointer returned by getChannel() indicates that the channel cannot be determined
-	//\sa getChannel()
-	//*/
-	//virtual bool channelUnknown() const;
-	/////Returns a pointer to the parameter data structure
-	////**
-	//\return Pointer to parameter data structure
-	//*/
-	//virtual ParamFuncPointer getParamFuncPointer() const;
+	virtual TMLChannel* getChannel(unsigned int iIndex) const;
+	///Returns the number of channels impacted by the command
+	/**
+	\return Number of channels
+	*/
+	virtual unsigned int getNbOfChannels() const;
+	///Initializes a parameter structure to the values specified by the command
+	/**
+	\param ioParam Parameter data structure
+	*/
 	virtual void setParams(Parameter<ParamType>& ioParam);
 	///Returns a string representation of the command
 	/**

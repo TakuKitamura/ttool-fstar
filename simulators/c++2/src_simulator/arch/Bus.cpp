@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 #include <WorkloadSource.h>
 
-Bus::Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample): SchedulableCommDevice(iID, iName, iScheduler), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
+Bus::Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
 
 Bus::~Bus(){
 	delete _scheduler;
@@ -186,7 +186,7 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 				do{
 					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 					_posTrasactListVCD++;
-				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getCommand()->getChannel()->getBlockedReadTask());
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getChannel()->getBlockedReadTask());
 				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime){
 					outp << VCD_PREFIX << vcdValConvert(END_WRITE_BUS) << " bus" << _ID;
 					_vcdOutputState=END_WRITE_BUS;
@@ -202,7 +202,7 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 				do{
 					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 					_posTrasactListVCD++;
-				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getCommand()->getChannel()->getBlockedWriteTask());
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime && (*_posTrasactListVCD)->getCommand()->getTask()==(*_posTrasactListVCD)->getChannel()->getBlockedWriteTask());
 				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime){
 					outp << VCD_PREFIX << vcdValConvert(END_READ_BUS) << " bus" << _ID;
 					_vcdOutputState=END_READ_BUS;
@@ -222,7 +222,7 @@ TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 					return 0;
 				}
 			case END_IDLE_BUS:
-				if (aCurrTrans->getCommand()->getTask()==aCurrTrans->getCommand()->getChannel()->getBlockedReadTask()){
+				if (aCurrTrans->getCommand()->getTask()==aCurrTrans->getChannel()->getBlockedReadTask()){
 					_vcdOutputState=END_READ_BUS;
 					outp << VCD_PREFIX << vcdValConvert(END_READ_BUS) << " bus" << _ID;
 				}else{

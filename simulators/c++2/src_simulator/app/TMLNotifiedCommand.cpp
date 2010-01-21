@@ -65,9 +65,9 @@ TMLCommand* TMLNotifiedCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLTask* TMLNotifiedCommand::getDependentTask() const{
+/*TMLTask* TMLNotifiedCommand::getDependentTask() const{
 	return 0;
-}
+}*/
 
 TMLChannel* TMLNotifiedCommand::getChannel() const{
 	return _channel;

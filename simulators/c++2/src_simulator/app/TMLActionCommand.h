@@ -57,7 +57,7 @@ public:
     	*/
 	TMLActionCommand(unsigned int iID, TMLTask* iTask, ActionFuncPointer iActionFunc);
 	void execute();
-	TMLTask* getDependentTask() const;
+	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;

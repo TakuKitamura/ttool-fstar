@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves): _ID(iID), _name(iName), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1){
+TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority){
 }
 
 TMLChannel::~TMLChannel(){
@@ -63,10 +63,12 @@ BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 	//if (iTrans->getCommand()->getTask()==_writeTask){
 	if (iTrans==_writeTrans){
 		_writeTransCurrHop++;
-		if (_writeTransCurrHop>0 && _masters[_writeTransCurrHop]->getBus()==_masters[_writeTransCurrHop-1]->getBus()) return 0;
+		//if (_writeTransCurrHop>0 && _masters[_writeTransCurrHop]->getBus()==_masters[_writeTransCurrHop-1]->getBus()) return 0;
+		if (_writeTransCurrHop>0 && (_masters[_writeTransCurrHop]->getBus()==_masters[_writeTransCurrHop-1]->getBus() || _slaves[_writeTransCurrHop-1]==0)) return 0; //NEW!!!
 		return _masters[_writeTransCurrHop];
 	}else{
 		_readTransCurrHop--;
+		//if (_readTransCurrHop<_numberOfHops-1 && _masters[_readTransCurrHop]->getBus()==_masters[_readTransCurrHop+1]->getBus()) return 0;
 		if (_readTransCurrHop<_numberOfHops-1 && _masters[_readTransCurrHop]->getBus()==_masters[_readTransCurrHop+1]->getBus()) return 0;
 		return _masters[_readTransCurrHop];
 	}
@@ -79,6 +81,7 @@ BusMaster* TMLChannel::getFirstMaster(TMLTransaction* iTrans){
 		_writeTransCurrHop=0;
 		return _masters[_writeTransCurrHop];
 	}else{
+		if (_slaves[(_numberOfHops/2)]==0) return 0;	//NEW!!!
 		_readTransCurrHop=_numberOfHops-1;
 		return _masters[_readTransCurrHop];
 	}
@@ -145,4 +148,12 @@ bool TMLChannel::getOverflow() const{
 
 bool TMLChannel::getUnderflow() const{
 	return false;
+}
+
+unsigned int TMLChannel::getPriority(){
+	return _priority;
+}
+
+unsigned int TMLChannel::getWidth(){
+	return _width;
 }

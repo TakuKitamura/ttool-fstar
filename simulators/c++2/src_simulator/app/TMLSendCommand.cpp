@@ -64,12 +64,17 @@ TMLCommand* TMLSendCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLTask* TMLSendCommand::getDependentTask() const{
-	return _channel->getBlockedReadTask();
+TMLChannel* TMLSendCommand::getChannel(unsigned int iIndex) const{
+	return _channel;
 }
 
-TMLChannel* TMLSendCommand::getChannel() const{
-	return _channel;
+unsigned int TMLSendCommand::getNbOfChannels() const{
+	//return (_channel->getBlockedReadTask()==0)?0:1;
+	return 1;
+}
+
+TMLTask* TMLSendCommand::getDependentTask(unsigned int iIndex)const{
+	return _channel->getBlockedReadTask();
 }
 
 std::string TMLSendCommand::toString() const{

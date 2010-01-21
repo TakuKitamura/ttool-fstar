@@ -46,19 +46,21 @@ Ludovic Apvrille, Renaud Pacalet
 
 class Bus;
 
-///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
+///This class defines the basic interfaces and functionalites of a TML stateful channel.
 class TMLStateChannel:public TMLChannel{
 public:
 	///Constructor
     	/**
       	\param iID ID of channel
 	\param iName Name of the channel
+	\param iWidth Channel width
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
+	\param iPriority Priority of the channel
     	*/
-	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent);
+	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority);
 	///Destructor
 	virtual ~TMLStateChannel();
 	virtual std::ostream& writeObject(std::ostream& s);

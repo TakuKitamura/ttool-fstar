@@ -61,9 +61,9 @@ public:
 	///Destructor
 	~TMLSelectCommand();
 	void execute();
-	TMLTask* getDependentTask() const;
-	TMLChannel* getChannel() const;
-	//bool channelUnknown() const;
+	TMLChannel* getChannel(unsigned int iIndex) const;
+	unsigned int getNbOfChannels() const;
+	TMLTask* getDependentTask(unsigned int iIndex)const;
 	ParamFuncPointer getParamFuncPointer() const;
 	std::string toString() const;
 	std::string toShortString() const;

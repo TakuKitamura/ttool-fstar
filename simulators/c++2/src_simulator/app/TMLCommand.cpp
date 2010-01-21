@@ -175,17 +175,17 @@ std::string TMLCommand::toString() const{
 	return outp.str();
 }
 
-TMLChannel* TMLCommand::getChannel() const{
+TMLChannel* TMLCommand::getChannel(unsigned int iIndex) const{
 	return 0;
 }
 
-//bool TMLCommand::channelUnknown() const{
-//	return false;
-//}
+unsigned int TMLCommand::getNbOfChannels() const{
+	return 0;
+}
 
-//ParamFuncPointer TMLCommand::getParamFuncPointer() const{
-//	return 0;
-//}
+TMLTask* TMLCommand::getDependentTask(unsigned int iIndex)const{
+	return 0;
+}
 
 void TMLCommand::setParams(Parameter<ParamType>& ioParam){
 }

@@ -78,7 +78,7 @@ public:
 	/**
 	\return Priority of the workload source
 	*/
-	inline unsigned int getPriority() const{return _priority;}
+	virtual inline unsigned int getPriority() const{return _priority;}
 	///Add a source which provides transactions to the scheduler
 	/**
 	\param iSource Pointer to workload source

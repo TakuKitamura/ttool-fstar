@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLnbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-TMLnbrnbwChannel::TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves): TMLChannel(iID, iName, iNumberOfHops, iMasters, iSlaves){
+TMLnbrnbwChannel::TMLnbrnbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority): TMLChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iPriority){
 }
 
 void TMLnbrnbwChannel::testWrite(TMLTransaction* iTrans){

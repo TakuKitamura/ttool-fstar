@@ -52,9 +52,9 @@ TMLCommand* TMLStopCommand::prepareNextTransaction(){
 	return 0;
 }
 
-TMLTask* TMLStopCommand::getDependentTask() const{
+/*TMLTask* TMLStopCommand::getDependentTask() const{
 	return 0;
-}
+}*/
 
 std::string TMLStopCommand::toString() const{
 	std::ostringstream outp;	

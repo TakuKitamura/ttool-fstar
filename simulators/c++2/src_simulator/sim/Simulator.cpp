@@ -237,6 +237,13 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 
 }
 
+bool Simulator::channelImpactsCommand(TMLChannel* iCh, TMLCommand* iCmd){
+	unsigned int nbOfChannels = iCmd->getNbOfChannels();
+	for (unsigned int i=0; i<nbOfChannels; i++)
+		if (iCh==iCmd->getChannel(i)) return true;
+	return false;
+}
+
 bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
 	TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
@@ -281,19 +288,22 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		 std::cout << "kernel:simulate: invoke schedule on executing CPU" << std::endl;
 #endif
 		 cpuLET->schedule();
-		 depTask=commandLET->getDependentTask();
-		 if (depTask!=0){
+		 unsigned int nbOfChannels = commandLET->getNbOfChannels();
+		 for (int i=0;i<nbOfChannels; i++){
+		 if ((depTask=commandLET->getDependentTask(i))==0) continue;
+		 //if (depTask!=0){
 #ifdef DEBUG_KERNEL
 		  std::cout << "kernel:simulate: dependent Task found" << std::endl;
 #endif
-		  depCPU=depTask->getCPU();			
+		  depCPU=depTask->getCPU();
+			//std::cout << "kernel:simulate: after gert CPU" << std::endl;	
 		  if (depCPU!=cpuLET){
 #ifdef DEBUG_KERNEL
 		   std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
 		   depCommand=depTask->getCurrCommand();
-		   //if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || depCommand->channelUnknown())){
-	           if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel() || dynamic_cast<TMLSelectCommand*>(depCommand)!=0)){
+	           //if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel(i) || dynamic_cast<TMLSelectCommand*>(depCommand)!=0)){
+		   if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
 #ifdef DEBUG_KERNEL
 		    std::cout << "kernel:simulate: commands are accessing the same channel" << std::endl;
 #endif
@@ -341,6 +351,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		//else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
 //#endif
 		oLastTrans=transLET;
+		//std::cout << "kernel:simulate: getTransLowestEndTime" << std::endl;
 		transLET=getTransLowestEndTime(cpuLET);
 		//_syncInfo->_server->sendReply("Sleep once again\n");
 		//sleep(1);
