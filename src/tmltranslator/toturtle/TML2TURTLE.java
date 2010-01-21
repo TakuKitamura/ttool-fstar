@@ -860,7 +860,62 @@ public class TML2TURTLE {
                     return adag;
                 } else {
                     parameter = tclass.addNewParamIfApplicable("cpt__0", "nat", "0");
-                    adacparam = new ADActionStateWithParam(parameter);
+					adchoice = null;
+					adacparam2 = null;
+					
+					for(int k=0; k<acch.getNbOfChannels(); k++) {
+						
+						adacparam = new ADActionStateWithParam(parameter);
+						adacparam.setActionValue(acch.getNbOfSamples());
+						tclass.getActivityDiagram().add(adacparam);
+						
+						if (k ==0) {
+							newElements.add(adacparam);
+							baseElements.add(tmle);
+							adacparam2 = adacparam;
+						} else {
+							adchoice.addNext(adacparam);
+						}
+						
+						adj = new ADJunction();
+						tclass.getActivityDiagram().add(adj);
+						adacparam.addNext(adj);
+                    
+						adchoice = new ADChoice();
+						tclass.getActivityDiagram().add(adchoice);
+						adj.addNext(adchoice);
+						
+						adacparam1 = new ADActionStateWithParam(parameter);
+						adacparam1.setActionValue("cpt__0 - 1");
+						tclass.getActivityDiagram().add(adacparam1);
+						adacparam1.addNext(adj);
+						
+						g = addGateChannel("wr", acch, k, tclass);
+						TClass tcl = tm.getTClassWithName(getChannelString(acch.getChannel(k)));
+						g1 = tcl.getGateByName("wr__"+acch.getChannel(k).getName());
+						tm.addSynchroRelation(tclass, g, tcl, g1);
+						
+						adag = new ADActionStateWithGate(g);
+						adag.setActionValue("");
+						tclass.getActivityDiagram().add(adag);
+						adchoice.addNext(adag);
+						adchoice.addGuard("[cpt__0 > 0]");
+						
+						adag.addNext(adacparam1);
+						
+						if (k == (acch.getNbOfChannels()-1)) {
+							adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adjunc);
+							adchoice.addNext(adc1);
+						}
+						
+						adchoice.addGuard("[cpt__0 == 0]");
+					}
+					
+                    return adacparam2;
+					
+					
+					
+                    /*adacparam = new ADActionStateWithParam(parameter);
                     adacparam.setActionValue(acch.getNbOfSamples());
                     tclass.getActivityDiagram().add(adacparam);
                     
@@ -904,7 +959,7 @@ public class TML2TURTLE {
                     adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam, adjunc);
                     adchoice.addNext(adc1);
                     adchoice.addGuard("[cpt__0 == 0]");
-                    return adacparam;
+                    return adacparam;*/
                 }
             }
 		} catch (Exception e) {

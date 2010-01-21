@@ -349,6 +349,7 @@ public class TML2UPPAAL {
         // Write channel
       } else if (elt instanceof TMLWriteChannel) {
         wc = (TMLWriteChannel)elt;
+		
         loc = addLocation(template);
         tr = addTransition(template, previous, loc);
         setAssignment(tr, "nb__wr = " + wc.getNbOfSamples());
@@ -359,31 +360,37 @@ public class TML2UPPAAL {
 			setGuard(tr1, "nb__wr>0");
 			setSynchronization(tr1, "wr__" +wc.getChannel(0).getName() + "!");
 			setAssignment(tr1, "nb__wr = nb__wr - 1");
+			
+			loc1 = addLocation(template);
+			tr2 = addTransition(template, loc, loc1);
+			setGuard(tr2, "nb__wr==0");
+			rtu.addTMLActivityElementLocation(elt, previous, loc1);
+			
 		} else {
 			loc2 = loc;
 			loc1 = null;
 			for(int k=0; k<wc.getNbOfChannels(); k++) {
-				if (k == (wc.getNbOfChannels()-1)) {
-					tr1 = addTransition(template, loc2, loc);
-					setAssignment(tr1, "nb__wr = nb__wr - 1");
-				} else {
-					loc1 = addLocation(template);
-					tr1 = addTransition(template, loc2, loc1);
-				}
-				if (loc2 == loc) {
-					setGuard(tr1, "nb__wr>0");
-				}
-				loc2 = loc1;
+				tr1 = addTransition(template, loc, loc);
 				setGuard(tr1, "nb__wr>0");
 				setSynchronization(tr1, "wr__" +wc.getChannel(k).getName() + "!");
+				setAssignment(tr1, "nb__wr = nb__wr - 1");
+				
+				if (k == (wc.getNbOfChannels()-1)) {
+					loc1 = addLocation(template);
+					tr2 = addTransition(template, loc, loc1);
+					setGuard(tr2, "nb__wr==0");
+					rtu.addTMLActivityElementLocation(elt, previous, loc1);
+				} else {
+					loc1 = addLocation(template);
+					tr2 = addTransition(template, loc, loc1);
+					setGuard(tr2, "nb__wr == 0");
+					setAssignment(tr2, "nb__wr = " + wc.getNbOfSamples());
+					loc = loc1;
+				}
 			}
 		}
-
-        loc1 = addLocation(template);
-        tr2 = addTransition(template, loc, loc1);
-        setGuard(tr2, "nb__wr==0");
-		rtu.addTMLActivityElementLocation(elt, previous, loc1);
-        makeElementBehavior(task, template, elt.getNextElement(0), loc1, end);
+		
+		makeElementBehavior(task, template, elt.getNextElement(0), loc1, end);
 
         // Send Request
       } else if (elt instanceof TMLSendRequest) {
