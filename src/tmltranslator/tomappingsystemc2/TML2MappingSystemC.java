@@ -371,7 +371,7 @@ public class TML2MappingSystemC {
 			events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
 			requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
-			mst = new MappedSystemCTask(task, channels, events, requests);
+			mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping);
 			mst.generateSystemC(debug, optimize, dependencies);
 			tasks.add(mst);
 

@@ -61,6 +61,7 @@ public class MappedSystemCTask {
 	private ArrayList<TMLRequest> requests;
 	private HashMap<Integer,HashSet<Integer> > dependencies;
 	private final static Pattern varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
+	private TMLMapping tmlmapping;
 	private int commentNum;
 	private boolean debug;
 	private boolean optimize;
@@ -76,11 +77,12 @@ public class MappedSystemCTask {
 	private final static String EF = "}";
 	
 	
-	public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests) {
+	public MappedSystemCTask(TMLTask _task, ArrayList<TMLChannel> _channels, ArrayList<TMLEvent> _events, ArrayList<TMLRequest> _requests, TMLMapping _tmlmapping) {
         	task = _task;
 		channels = _channels;
 		events = _events;
 		requests = _requests;
+		tmlmapping=_tmlmapping;
         	reference = task.getName();
 		cppcode = "";
 		hcode = "";
@@ -476,17 +478,32 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
-			if (debug) System.out.println("Checking Write\n");
 			String channels;
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
 			if (wCommand.getNbOfChannels()>1){
-				cmdName= "_mwrite" + currElem.getID();
-				hcode+="TMLWriteMultCommand " + cmdName + SCCR;
-				channels="array("+wCommand.getNbOfChannels();
-				for(int i=0; i<wCommand.getNbOfChannels(); i++){
-					channels+="," + wCommand.getChannel(i).getExtendedName();
+				if (ChannelMappedOnSameHW(wCommand)){
+					if (debug) System.out.println("Checking WriteMult with multicast\n");
+					cmdName= "_mwrite" + currElem.getID();
+					hcode+="TMLWriteMultCommand " + cmdName + SCCR;
+					channels="array("+wCommand.getNbOfChannels();
+					for(int i=0; i<wCommand.getNbOfChannels(); i++){
+						channels+="," + wCommand.getChannel(i).getExtendedName();
+					}
+					channels+=")," + wCommand.getNbOfChannels();
+				}else{
+					if (debug) System.out.println("Checking WriteMult with unicast\n");
+					TMLWriteChannel prevWrite = null, firstWrite=null;
+					for(int i=0; i<wCommand.getNbOfChannels(); i++){
+						TMLWriteChannel newWrite =  new TMLWriteChannel("WriteMult",null);
+						if(i==0) firstWrite=newWrite;
+						newWrite.addChannel(wCommand.getChannel(i));
+						newWrite.setNbOfSamples(wCommand.getNbOfSamples());
+						if (prevWrite!=null) prevWrite.addNext(newWrite);
+						prevWrite=newWrite;
+					}
+					prevWrite.addNext(wCommand.getNextElement(0));
+					return makeCommands(firstWrite, false, retElement, null, null);
 				}
-				channels+=")," + wCommand.getNbOfChannels();
 			}else{
 				cmdName= "_write" + currElem.getID();
 				hcode+="TMLWriteCommand " + cmdName + SCCR;
@@ -734,6 +751,19 @@ public class MappedSystemCTask {
 		}
 		chaining+=nextCommand; 
 		return (cmdName.equals("0") || cmdName.charAt(0)=='&')? cmdName : "&"+cmdName;
+	}
+
+	private boolean ChannelMappedOnSameHW(TMLWriteChannel writeCmd){
+		LinkedList<HwCommunicationNode> commNodeRefList = tmlmapping.findNodesForElement(writeCmd.getChannel(0));
+		for(int i=1; i<writeCmd.getNbOfChannels(); i++){
+			LinkedList<HwCommunicationNode> commNodeCmpList = tmlmapping.findNodesForElement(writeCmd.getChannel(i));
+			if (commNodeCmpList.size()!=commNodeRefList.size()) return false;
+			Iterator it = commNodeCmpList.iterator(); 
+			for(HwCommunicationNode cmnode: commNodeRefList) {
+				if (it.next()!=cmnode) return false;
+			}			
+		}
+		return true;
 	}
 	
 	
