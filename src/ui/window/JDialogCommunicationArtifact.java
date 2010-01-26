@@ -86,6 +86,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
     }
     
     private void myInitComponents() {
+		selectPriority();
     }
     
     private void initComponents() {
@@ -196,8 +197,9 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 	
 	
 	public void selectPriority() {
-		int index = ((TMLArchiDiagramPanel)archi.getTDiagramPanel()).getMaxPriority();
-		priority.setSelected(index);
+		//System.out.println("Select priority");
+		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
+		priority.setSelectedIndex(index);
 	}
     
     public void closeDialog() {

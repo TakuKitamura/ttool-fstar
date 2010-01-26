@@ -329,14 +329,14 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		
 	}
 	
-	public int getMaxPriority(String _name, TMLArchiCommunicationArtifact _arti) {
+	public int getMaxPriority(String _name) {
 	ListIterator iterator = getListOfNodes().listIterator();
 		TMLArchiNode node;
 		Vector v;
 		TMLArchiArtifact artifact;
 		ArrayList<TMLArchiCommunicationArtifact> list;
 		int i;
-		int prio = _arti.getPriority();
+		int prio = 0;
 		
 		while(iterator.hasNext()) {
 			node = (TMLArchiNode)(iterator.next());
@@ -348,15 +348,13 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 				
 				for(TMLArchiCommunicationArtifact arti: list) {
 					if (arti.getFullValue().compareTo(_name) == 0) {
-						if (arti != _arti) {
-							priority = Math.max(priority, arti.getPriority);
-						}
+						prio = Math.max(prio, arti.getPriority());
 					}
 				}
 			}
 		}	
 		
-		return priority;
+		return prio;
 	}
     
 
