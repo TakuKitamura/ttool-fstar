@@ -302,6 +302,62 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 			}
 		}
 	}
+	
+	public void setPriority(String _name, int _priority) {
+		ListIterator iterator = getListOfNodes().listIterator();
+		TMLArchiNode node;
+		Vector v;
+		TMLArchiArtifact artifact;
+		ArrayList<TMLArchiCommunicationArtifact> list;
+		int i;
+		
+		while(iterator.hasNext()) {
+			node = (TMLArchiNode)(iterator.next());
+			
+			
+			// Channel, event, request mapping
+			if (node instanceof TMLArchiCommunicationNode) {
+				list = ((TMLArchiCommunicationNode)node).getArtifactList();
+				
+				for(TMLArchiCommunicationArtifact arti: list) {
+					if (arti.getFullValue().compareTo(_name) == 0) {
+						arti.setPriority(_priority);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	public int getMaxPriority(String _name, TMLArchiCommunicationArtifact _arti) {
+	ListIterator iterator = getListOfNodes().listIterator();
+		TMLArchiNode node;
+		Vector v;
+		TMLArchiArtifact artifact;
+		ArrayList<TMLArchiCommunicationArtifact> list;
+		int i;
+		int prio = _arti.getPriority();
+		
+		while(iterator.hasNext()) {
+			node = (TMLArchiNode)(iterator.next());
+			
+			
+			// Channel, event, request mapping
+			if (node instanceof TMLArchiCommunicationNode) {
+				list = ((TMLArchiCommunicationNode)node).getArtifactList();
+				
+				for(TMLArchiCommunicationArtifact arti: list) {
+					if (arti.getFullValue().compareTo(_name) == 0) {
+						if (arti != _arti) {
+							priority = Math.max(priority, arti.getPriority);
+						}
+					}
+				}
+			}
+		}	
+		
+		return priority;
+	}
     
 
 }

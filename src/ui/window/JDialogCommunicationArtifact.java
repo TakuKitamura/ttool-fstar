@@ -77,6 +77,8 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
+		
+		//System.out.println("New window");
         
         initComponents();
         myInitComponents();
@@ -119,10 +121,13 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 			list.add("No communication to map");
 			emptyList = true;
 		} else {
-			index = indexOf(list, artifact.getValue());
+			
+			index = indexOf(list, artifact.getFullValue());
+			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
 		}
         referenceCommunicationName = new JComboBox(list);
 		referenceCommunicationName.setSelectedIndex(index);
+		referenceCommunicationName.addActionListener(this);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
@@ -173,6 +178,10 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
             initialValue.setEnabled(b);
             return;
         }*/
+		
+		if (evt.getSource() == referenceCommunicationName) {
+			selectPriority();
+		}
         
         
         String command = evt.getActionCommand();
@@ -184,6 +193,12 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
             cancelDialog();
         }
     }
+	
+	
+	public void selectPriority() {
+		int index = ((TMLArchiDiagramPanel)archi.getTDiagramPanel()).getMaxPriority();
+		priority.setSelected(index);
+	}
     
     public void closeDialog() {
         regularClose = true;

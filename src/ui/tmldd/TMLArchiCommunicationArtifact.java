@@ -91,12 +91,18 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 		referenceCommunicationName = "TMLCommunication";
         
         makeFullValue();
+		
+		//setPriority(((TMLArchiDiagramPanel)tdp).getPriority(getFullValue(), priority);
         
         myImageIcon = IconManager.imgic702;
     }
 	
 	public int getPriority() {
 		return priority;
+	}
+	
+	public void setPriority(int _priority) {
+		priority = _priority;
 	}
 	
     
@@ -189,6 +195,9 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 		}
 		
 		priority = dialog.getPriority();
+		
+		((TMLArchiDiagramPanel)tdp).setPriority(getFullValue(), priority);
+		
 			
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
@@ -302,6 +311,13 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
     public String getCommunicationName() {
         return communicationName;
     }
+	
+	
+	public String getFullValue() {
+		String tmp = getValue();
+		tmp += " (" + getTypeName() + ")";
+		return tmp;
+	}
 	
 	public String getTypeName() {
         return typeName;
