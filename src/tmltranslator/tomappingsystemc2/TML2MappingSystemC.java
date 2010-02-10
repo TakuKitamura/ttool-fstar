@@ -167,7 +167,7 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of CPUs" + CR;
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwCPU) {
-				if (tmlmapping.isAUsedHwNode(node)) {
+				//if (tmlmapping.isAUsedHwNode(node)) {
 					HwCPU exNode = (HwCPU)node;
 					declaration += "CPU* " + exNode.getName() + " = new CPU(" + exNode.getID() + ", \"" + exNode.getName() + "\", ";
 					if (exNode.getType().equals("CPURRPB"))
@@ -177,7 +177,7 @@ public class TML2MappingSystemC {
 					declaration  += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", "  + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
 					
 					declaration += "addCPU("+ node.getName() +")"+ SCCR;
-				}
+				//}
 			}
 		}
 		declaration += CR;
@@ -272,13 +272,14 @@ public class TML2MappingSystemC {
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
 				strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
-				int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getOriginTask()).getName(), buses1, slaves1, true);
+				//int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getOriginTask()).getName(), buses1, slaves1, true);
+				int hopNum = addRoutingInfoForChannel(elem, channel.getOriginTask(), tmlmapping.getHwNodeByTask(channel.getOriginTask()).getName(), buses1, slaves1, true);
 				if (hopNum==-1){
 					buses2.str=buses1.str;
 					slaves2.str=slaves1.str;
 					hopNum=2;
 				}else{
-					int tempHop= addRoutingInfoForChannel(elem, ((TMLChannel)elem).getDestinationTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getDestinationTask()).getName(), buses2, slaves2, false);
+					int tempHop= addRoutingInfoForChannel(elem, channel.getDestinationTask(), tmlmapping.getHwNodeByTask(channel.getDestinationTask()).getName(), buses2, slaves2, false);
 					if (tempHop==-1){
 						buses1.str=buses2.str;
 						slaves1.str=slaves2.str;
@@ -308,8 +309,24 @@ public class TML2MappingSystemC {
 					param= "," + evt.getMaxSize() + ",0";
 				}
 			}
-			
-			declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;
+			strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
+			int hopNum = addRoutingInfoForChannel(evt, evt.getOriginTask(), tmlmapping.getHwNodeByTask(evt.getOriginTask()).getName(), buses1, slaves1, true);
+			boolean mapped=false;
+			if(hopNum!=-1){
+				int tempHop= addRoutingInfoForChannel(evt, evt.getDestinationTask(), tmlmapping.getHwNodeByTask(evt.getDestinationTask()).getName(), buses2, slaves2, false);
+				if (tempHop!=-1){
+					hopNum+=tempHop;
+					mapped=true;
+				}
+				
+			}
+			if (mapped){
+				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param +")" + SCCR;
+				
+			}else{
+				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;   ///old command
+			}
+
 			declaration += "addEvent("+ evt.getExtendedName() +")"+ SCCR;
 		}
 		declaration += CR;

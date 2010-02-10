@@ -472,9 +472,12 @@ public class MappedSystemCTask {
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
 			if (isIntValue(rCommand.getNbOfSamples()))
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," + rCommand.getChannel(0).getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
+				//initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," + rCommand.getChannel(0).getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," +  rCommand.getNbOfSamples() + ")"+CR;
+
 			else
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel(0).getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
+				//initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel(0).getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getNbOfSamples(),null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
@@ -747,7 +750,7 @@ public class MappedSystemCTask {
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
 		} else {
-			System.out.println("Operator: " + currElem + " is not managed in the current version of this C++ code generator." + "))" + SCCR);
+			System.out.println("Operator: " + currElem + " of class " + currElem.getClass().getName() +  " is not managed in the current version of this C++ code generator.");
 		}
 		chaining+=nextCommand; 
 		return (cmdName.equals("0") || cmdName.charAt(0)=='&')? cmdName : "&"+cmdName;

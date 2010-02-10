@@ -61,7 +61,7 @@ public class TMLActivityElementChannel extends TMLActivityElement {
 		channels.add(_channel);
     }
 	
-	/* To remove once TTool has been tested */
+	/* To remove once TTool has been tested
 	public void setChannel(TMLChannel _channel) {
 		channels.add(_channel);
     }
@@ -69,7 +69,7 @@ public class TMLActivityElementChannel extends TMLActivityElement {
 	public TMLChannel getChannel() {
         return channels.get(0);
     }
-	/* Remove before */
+	Remove before */
 	
 	public int getNbOfChannels() {
 		return channels.size();
