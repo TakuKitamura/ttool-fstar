@@ -299,6 +299,7 @@ void TMLTask::streamBenchmarks(std::ostream& s) const{
 			s << "unknown";
 	}
 	s << TAG_TSKSTATEc << TAG_TASKc << std::endl; 
+	//std::cout << "Stream benchmarks task finished\n";
 }
 
 void TMLTask::reset(){
@@ -361,6 +362,7 @@ unsigned int TMLTask::getState() const{
 	if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
 		return RUNNING;
 	}else{
+		if (_currCommand==0) return TERMINATED;
 		if (_currCommand->getCurrTransaction()==0){
 			if (dynamic_cast<TMLStopCommand*>(_currCommand)==0)
 				return UNKNOWN;
