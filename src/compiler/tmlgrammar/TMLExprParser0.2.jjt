@@ -369,14 +369,14 @@ void GetQueueNatFunction() #QUEUE_NAT_FUNC :
 void BoolExtendedExpression() :
 {Token t;}
 {
+  LOOKAHEAD(200000)
+  NatExtendedExpression() NatComparisonOperator() NatExtendedExpression() [BoolOperatorExtendedExpression()]
+|
   LOOKAHEAD(2000000)
   LParen() BoolExtendedExpression() RParen() [BoolOperatorExtendedExpression()]
 |
   LOOKAHEAD(2000000)
   BooleanLiteral() [BoolOperatorExtendedExpression()]
-|
-  LOOKAHEAD(200000)
-  NatExtendedExpression() NatComparisonOperator() NatExtendedExpression() [BoolOperatorExtendedExpression()]
 |
   LOOKAHEAD(2000000)
   Id()
