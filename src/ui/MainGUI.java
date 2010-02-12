@@ -2408,6 +2408,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 if (b) {
 					ret = true;
                     setMode(MainGUI.MODEL_OK);
+					setMode(MainGUI.GEN_DESIGN_OK);
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
 							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a corresponding formal (RT-LOTOS) specification or executable code (Java)",

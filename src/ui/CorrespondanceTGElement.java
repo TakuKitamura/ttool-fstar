@@ -383,6 +383,7 @@ public class CorrespondanceTGElement {
         }
         return null;
     }
+	
     
     
     public ADComponent getADComponentByIndex(TGComponent tgc, int indexFound) {

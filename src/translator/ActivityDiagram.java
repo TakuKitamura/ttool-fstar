@@ -73,6 +73,10 @@ public class ActivityDiagram extends Vector{
 		ads = _ads;
 	}
 	
+	public void setRawStartState(ADStart _ads) {
+		ads = _ads;
+	}
+	
 	public ADComponent getADComponent(int index) {
 		return (ADComponent)(get(index));
 	}
@@ -349,6 +353,7 @@ public class ActivityDiagram extends Vector{
         ADComponent adc;
         while((adc = hasNonReferencedElts()) != null) {
             remove(adc);
+			System.out.println("removed: " + adc);
         }
     }
     
@@ -674,6 +679,98 @@ public class ActivityDiagram extends Vector{
         }
       }
       return nb;
+		
+	}
+	
+	public ActivityDiagram duplicate(TClass t) {
+		int i, j;
+		int index;
+		ADComponent ad1, ad2, ad3, ad4;
+		Gate g;
+		Param p;
+		
+		ActivityDiagram ad = new ActivityDiagram();
+		ad.remove(0);
+		for(i=0; i<size(); i++) {
+			ad.add(((ADComponent)get(i)).makeSame());
+			if (get(i) instanceof ADStart) {
+				ad.setRawStartState((ADStart)(ad.get(i)));
+			}
+			//System.out.println("i=" + i + " component=" + ad.get(i));
+		}
+		
+		// Must link components
+		for(i=0; i<ad.size(); i++) {
+			ad1 = (ADComponent)(ad.get(i));
+			//System.out.println("Nb opf next of " + ad1 + " = " + ad1.getNbNext());
+			ad2 = (ADComponent)(get(i));
+			
+			for(j=0; j<ad2.getNbNext(); j++) {
+				ad3 = ad2.getNext(j);
+				index = indexOf(ad3);
+				if (index > -1) {
+					//System.out.println("Linking i,j" + i + "," + j);
+					ad4 = (ADComponent)(ad.get(index));
+					ad1.addNext(ad4);
+					//System.out.println("Next of " + ad1 + " = " + ad4);
+				} else {
+					//System.out.println("Wrong index");
+				}
+			}
+		}
+		
+		// Must modify gates, guards of choice, params
+		for(i=0; i<ad.size(); i++) {
+			ad1 = (ADComponent)(ad.get(i));
+			
+			if (ad1 instanceof ADActionStateWithGate) {
+				g = ((ADActionStateWithGate)(ad1)).getGate();
+				g = t.getGateByName(g.getName());
+				((ADActionStateWithGate)(ad1)).setGate(g);
+			}
+			
+			if (ad1 instanceof ADTLO) {
+				g = ((ADTLO)(ad1)).getGate();
+				g = t.getGateByName(g.getName());
+				((ADTLO)(ad1)).setGate(g);
+			}
+			
+			if (ad1 instanceof ADActionStateWithParam) {
+				p = ((ADActionStateWithParam)(ad1)).getParam();
+				p = t.getParamByName(p.getName());
+				((ADActionStateWithParam)(ad1)).setParam(p);
+			}
+			
+			if (ad1 instanceof ADTimeCapture) {
+				p = ((ADTimeCapture)(ad1)).getParam();
+				p = t.getParamByName(p.getName());
+				((ADTimeCapture)(ad1)).setParam(p);
+			}
+			
+			if (ad1 instanceof ADChoice) {
+				ADChoice adch = (ADChoice)ad1;
+				ADChoice adch1 = (ADChoice)(get(i));
+				for(j=0; j<adch1.getNbGuard(); j++) {
+					adch.addGuard(adch1.getGuard(j));
+				}
+			}
+			
+			if (ad1 instanceof ADParallel) {
+				ADParallel adpar = (ADParallel)ad1;
+				ADParallel adpar1 = (ADParallel)(get(i));
+				
+				g = adpar1.getSpecialGate();
+				g = t.getGateByName(g.getName());
+				adpar.setSpecialGate(g);
+				
+				/*for(j=0; j<adch1.getNbGuard(); j++) {
+					adch.addGuard(adch1.getGuard(j));
+				}*/
+			}
+		}
+		
+		return ad;
+		
 		
 	}
 	

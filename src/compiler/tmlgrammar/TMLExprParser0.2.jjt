@@ -375,11 +375,13 @@ void BoolExtendedExpression() :
   LOOKAHEAD(2000000)
   BooleanLiteral() [BoolOperatorExtendedExpression()]
 |
+  LOOKAHEAD(200000)
   NatExtendedExpression() NatComparisonOperator() NatExtendedExpression() [BoolOperatorExtendedExpression()]
 |
+  LOOKAHEAD(2000000)
+  Id()
+|
   BoolFunction1() [BoolOperatorExtendedExpression()]
-/*|
-  Id() [BoolOperatorExtendedExpression()]*/
 }
 
 
@@ -396,6 +398,9 @@ void BoolOperatorExtendedExpression() :
 /*void BoolExtendedExpression() :
 {}
 {
+  LOOKAHEAD(20000)
+  Id() [BoolExtendedExpressionAfterID()]
+|
   LOOKAHEAD(firstBoolParen())
   firstBoolParen()
 |
@@ -406,8 +411,6 @@ void BoolOperatorExtendedExpression() :
   BooleanLiteral() [BoolOperator() BoolExtendedExpression()]
 |
   NaturalLiteral() InNatBoolExtendedExpression1() [BoolOperator() BoolExtendedExpression()]
-|
-  Id() [BoolExtendedExpressionAfterID()]
 }
 
 

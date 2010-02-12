@@ -63,6 +63,8 @@ public class DesignPanelTranslator {
 	protected Vector checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
 	protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
+	protected LinkedList <TDiagramPanel> panels;
+	protected LinkedList <ActivityDiagram> activities;
 	
 	public DesignPanelTranslator(TURTLEDesignPanelInterface _dp) {
 		dp = _dp;
@@ -74,6 +76,8 @@ public class DesignPanelTranslator {
 		warnings = new Vector();
 		listE = new CorrespondanceTGElement();
 		listB = new CorrespondanceTGElement();
+		panels = new LinkedList <TDiagramPanel>();
+		activities = new LinkedList <ActivityDiagram>();
 	}
 	
 	public Vector getErrors() {
@@ -306,6 +310,31 @@ public class DesignPanelTranslator {
 		
 		tdp = (TDiagramPanel)adpi;
 		
+		int indexTdp = panels.indexOf(tdp);
+		if (indexTdp > -1) {
+			System.out.println("Found similar activity diagram for " + t.getName());
+			t.setActivityDiagram(activities.get(indexTdp).duplicate(t));
+			
+			//System.out.println("AD of " + t.getName() + "=");
+			//t.getActivityDiagram().print();
+			
+			// Must fill correspondances!
+			
+			ADComponent ad0, ad1;
+			TGComponent tgcad;
+			for(int adi=0; adi<t.getActivityDiagram().size(); adi++) {
+				ad0 = (ADComponent)(t.getActivityDiagram().get(adi));
+				ad1 = (ADComponent)(activities.get(indexTdp).get(adi));
+				tgcad = listE.getTG(ad1);
+				if (tgcad != null ){
+					//System.out.println("Adding correspondance for " + ad0);
+					listE.addCor(ad0, tgcad);
+				}
+			}
+			
+			return;
+		}
+		
 		// search for start state
 		LinkedList list = adpi.getComponentList();
 		Iterator iterator = list.listIterator();
@@ -364,11 +393,18 @@ public class DesignPanelTranslator {
 		int nbActions;
 		String sTmp;
 		
+		int startIndex = listE.getSize();
+		
 		// Creation of the activity diagram
 		ads = new ADStart();
 		listE.addCor(ads, tss);
 		ActivityDiagram ad = new ActivityDiagram(ads);
 		t.setActivityDiagram(ad);
+		
+		panels.add(tdp);
+		activities.add(ad);
+		
+		
 		//System.out.println("Making activity diagram of " + t.getName());
 		
 		// Creation of other elements
@@ -489,12 +525,71 @@ public class DesignPanelTranslator {
 					listE.addCor(adtmp, tgc);
 					
 				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
+					// Is it of kind: tdata = tdata'?
+					int index = s.indexOf("=");
+					if (index > -1) {
+						String name0 = s.substring(0,index).trim();
+						String name1 = s.substring(index+1,s.length()).trim();
+						Vector attributes = tci.getAttributes();
+						int index0 = -1;
+						int index1 = -1;
+						TAttribute ta, ta0 = null, ta1 = null;
+						
+						for(j=0; j<attributes.size(); j++) {
+							ta = (TAttribute)(attributes.get(j));
+							if (ta.getId().compareTo(name0) == 0) {
+								index0 = j;
+								ta0 = ta;
+							}
+							if (ta.getId().compareTo(name1) == 0) {
+								index1 = j;
+								ta1 = ta;
+							}
+						}
+						
+						if (((index0 != -1) && (index1 != -1)) && (ta0.getTypeOther().compareTo(ta1.getTypeOther()) == 0)) {
+							// Expand the equality!
+							tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
+							
+							String nameTmp;
+							Vector v0 = t.getParamStartingWith(ta0.getId()+ "__");
+							ADComponent adtmp = null;
+							
+							for(j=0; j<v0.size(); j++) {
+								p = (Param)(v0.get(j));
+								adap = new ADActionStateWithParam(p);
+								ad.addElement(adap);
+								if (adtmp != null) {
+									adtmp.addNext(adap);
+								} else {
+									listB.addCor(adap, tgc);
+								}
+								adtmp = adap;
+								nameTmp = p.getName();
+								nameTmp = nameTmp.substring(nameTmp.indexOf("__"), nameTmp.length());
+								adap.setActionValue(name1 + nameTmp);
+							}
+							
+							listE.addCor(adtmp, tgc);
+						} else {
+							//System.out.println("Unknown param 0 or 1");
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
+							ce.setTClass(t);
+							ce.setTGComponent(tgc);
+							ce.setTDiagramPanel(tdp);
+							addCheckingError(ce);
+							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
+						}
+						
+					} else {
+						//System.out.println("Unknown param");
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
+						ce.setTClass(t);
+						ce.setTGComponent(tgc);
+						ce.setTDiagramPanel(tdp);
+						addCheckingError(ce);
+						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
+					}
 					//System.out.println("Bad action state found " + s);
 				}
 				
@@ -906,11 +1001,7 @@ public class DesignPanelTranslator {
 					
 					//System.out.println("tgc1 = " + tgc1.getValue() + " tgc2= "+ tgc2.getValue());
 					
-					/*if ((tgc1 instanceof TADArrayGetState) || (tgc1 instanceof TADArraySetState)) {
-						ad1 = listE.getADComponent(tgc1); 
-					} else {*/
-						ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
-					//}
+					ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
 					if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState) || (tgc2 instanceof TADActionState)) {
 						ad2 = listB.getADComponent(tgc2);
 					}  else {
@@ -930,7 +1021,44 @@ public class DesignPanelTranslator {
 						} else if (tgc1 instanceof TADChoice) {
 							TADChoice tadch = (TADChoice)tgc1;
 							index = tgc1.indexOf(p1) - 1;
-							((ADChoice)ad1).addGuard(TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index)));
+							String myguard = TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index));
+							String tmp = Conversion.replaceAllChar(myguard, '[', "");
+							tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
+							if (tmp.compareTo("else") == 0) {
+								// Must calculate guard
+								String realGuard = "";
+								int cpt = 0;
+								for(int k=0; k<tadch.getNbInternalTGComponent(); k++) {
+									if (k != index) {
+										if (cpt == 0) {
+											tmp = TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(k));
+											tmp = Conversion.replaceAllChar(tmp, '[', "");
+											tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
+											if (tmp.length() > 0) {
+												realGuard = tmp;
+												cpt ++;
+											}
+										} else {
+											tmp =  TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(k));
+											tmp = Conversion.replaceAllChar(tmp, '[', "");
+											tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
+											if (tmp.length() > 0) {
+												realGuard = "(" + realGuard + ") and (" + tmp + ")";
+												cpt ++;
+											}
+										}
+									}
+									//System.out.println("Real guard=" + realGuard + "k=" + k + " index=" + index);
+								}
+								
+								if (realGuard.length() == 0) {
+									myguard = "[ ]";
+								} else {
+									myguard = "[not(" + realGuard + ")]";
+								}
+								System.out.println("My guard=" + myguard);
+							}
+							((ADChoice)ad1).addGuard(myguard);
 							ad1.addNext(ad2);
 						} else if ((tgc1 instanceof TADSequence) ||(tgc1 instanceof TADPreemption)){
 							index = tgc1.indexOf(p1) - 1;
@@ -954,6 +1082,7 @@ public class DesignPanelTranslator {
 		// Remove all elements not reachable from start state
 		int sizeb = ad.size();
 		
+		System.out.println("Removing non reachable elements in t:" + t.getName());
 		ad.removeAllNonReferencedElts();
 		
 		int sizea = ad.size();
