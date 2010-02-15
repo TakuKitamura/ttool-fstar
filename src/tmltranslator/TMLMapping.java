@@ -396,12 +396,12 @@ public class TMLMapping {
 		 return false;
 	}
 
-	/*public boolean isChannelMappedOn(TMLElement _channel, HwCommunicationNode _node) {
+	public boolean isCommNodeMappedOn(TMLElement _channel, HwCommunicationNode _node) {
 		 for(int i=0; i<oncommnodes.size(); i++) {
-			 if (oncommnodes.get(i) == _node && mappedcommelts.get(i) == _channel) return true;
+			 if ((_node==null || oncommnodes.get(i) == _node) && mappedcommelts.get(i) == _channel) return true;
 		 }
 		 return false;
-	}*/
+	}
 	
 	public boolean oneTaskMappedOn(TMLRequest _request, HwNode _node) {
 		TMLTask task;

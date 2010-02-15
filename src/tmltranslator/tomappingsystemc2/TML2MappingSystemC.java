@@ -221,18 +221,6 @@ public class TML2MappingSystemC {
 
 		//Declaration of Bus masters
 		declaration += "//Declaration of Bus masters" + CR;
-		/*for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
-			if (node instanceof HwExecutionNode || node instanceof HwBridge){
-				ArrayList<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
-				if (nodeLinks.isEmpty())
-					declaration+= node.getName() + "->addBusPriority(defaultBus,1)"+SCCR;
-				else{
-					for(HwLink link: nodeLinks){
-						declaration+= node.getName() + "->addBusPriority(" + link.bus.getName() + "," + link.getPriority() + ")" + SCCR;
-					}
-				}
-			} 
-		}*/
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
 			if (node instanceof HwExecutionNode || node instanceof HwBridge){
 				ArrayList<HwLink> nodeLinks= tmlmapping.getTMLArchitecture().getLinkByHwNode(node);
@@ -271,24 +259,7 @@ public class TML2MappingSystemC {
 					param= "";
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
-				strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
-				//int hopNum = addRoutingInfoForChannel(elem, ((TMLChannel)elem).getOriginTask(), tmlmapping.getHwNodeByTask(((TMLChannel)elem).getOriginTask()).getName(), buses1, slaves1, true);
-				int hopNum = addRoutingInfoForChannel(elem, channel.getOriginTask(), tmlmapping.getHwNodeByTask(channel.getOriginTask()).getName(), buses1, slaves1, true);
-				if (hopNum==-1){
-					buses2.str=buses1.str;
-					slaves2.str=slaves1.str;
-					hopNum=2;
-				}else{
-					int tempHop= addRoutingInfoForChannel(elem, channel.getDestinationTask(), tmlmapping.getHwNodeByTask(channel.getDestinationTask()).getName(), buses2, slaves2, false);
-					if (tempHop==-1){
-						buses1.str=buses2.str;
-						slaves1.str=slaves2.str;
-						hopNum=2;
-					}else{
-						hopNum+=tempHop;
-					}	
-				}
-				declaration+= hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param + "," + channel.getPriority() + ")"+ SCCR;
+				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority() + ")"+ SCCR;
 				declaration += "addChannel("+ channel.getExtendedName() +")"+ SCCR;
 			}
 		}
@@ -309,19 +280,8 @@ public class TML2MappingSystemC {
 					param= "," + evt.getMaxSize() + ",0";
 				}
 			}
-			strwrap buses1=new strwrap(), buses2=new strwrap(), slaves1=new strwrap(), slaves2=new strwrap();
-			int hopNum = addRoutingInfoForChannel(evt, evt.getOriginTask(), tmlmapping.getHwNodeByTask(evt.getOriginTask()).getName(), buses1, slaves1, true);
-			boolean mapped=false;
-			if(hopNum!=-1){
-				int tempHop= addRoutingInfoForChannel(evt, evt.getDestinationTask(), tmlmapping.getHwNodeByTask(evt.getDestinationTask()).getName(), buses2, slaves2, false);
-				if (tempHop!=-1){
-					hopNum+=tempHop;
-					mapped=true;
-				}
-				
-			}
-			if (mapped){
-				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + hopNum + ",array(" + hopNum + buses1.str + buses2.str + "),array(" + hopNum + slaves1.str + slaves2.str + ")" + param +")" + SCCR;
+			if (tmlmapping.isCommNodeMappedOn(evt,null)){
+				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param +")" + SCCR;
 				
 			}else{
 				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;   ///old command
@@ -422,127 +382,164 @@ public class TML2MappingSystemC {
 		declaration +="#include <main.h>\n";
   	}
 
-	private int addRoutingInfoForChannel(TMLElement _tmle, TMLTask _task, String CPUName, strwrap buses, strwrap slaves, boolean dir){
-		LinkedList<HwCommunicationNode> commNodeList = tmlmapping.findNodesForElement(_tmle);
-		if (debug){
-			System.out.println("CommNodes for "+ _tmle.getName());
-			for(HwCommunicationNode commNode: commNodeList) {
-				System.out.println(commNode.getName());
+
+	private int extractPath(LinkedList<HwCommunicationNode> path, strwrap masters, strwrap slaves, HwNode startNode, HwNode destNode, boolean reverseIn){
+		String firstPart="", lastBus="";
+		int masterCount=0;
+		boolean reverse=reverseIn;
+		if (reverseIn)
+			slaves.str+=",static_cast<Slave*>(0)";
+		else
+			firstPart=startNode.getName();
+		for(HwCommunicationNode commElem:path){
+			if (commElem instanceof HwMemory){
+				reverse=true;
+				slaves.str+= ",static_cast<Slave*>(" + commElem.getName() + "),static_cast<Slave*>(" + commElem.getName() + ")";
+				firstPart=lastBus;
+			}else{
+				if (reverse){
+					if (firstPart.length()==0){
+						firstPart=commElem.getName();
+					}else{
+						masters.str+= "," + commElem.getName() + "_" + firstPart + "_Master";
+						masterCount++;
+						slaves.str+= ",static_cast<Slave*>(" + commElem.getName() + ")";
+						firstPart="";
+					}
+				}else{
+					if (firstPart.length()==0){
+						firstPart=commElem.getName();
+						slaves.str+= ",static_cast<Slave*>(" + firstPart + ")";
+					}else{
+						lastBus=commElem.getName();
+						masters.str+= "," + firstPart + "_" + lastBus + "_Master";
+						masterCount++;
+						firstPart="";
+					}
+				}
 			}
 		}
-		int hopNumber=1;
-		int taskIndex = tmlmapping.getMappedTasks().indexOf(_task);
-		if (debug) System.out.println("Starting from Task: " + _task.getName());
-		if (taskIndex==-1){
-			//buses.str="," + CPUName + "_defaultBus_Master";
-			//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-			//buses.str=",0";
-			//slaves.str= ",0";
-			return -1;
+		if (reverse){
+			masters.str+= "," + destNode.getName() + "_" + firstPart + "_Master";
+			return masterCount+1;
+		}else{
+			slaves.str+=",static_cast<Slave*>(0)";
+			return -masterCount;
 		}
-		HwBus bus= getBusConnectedToNode(commNodeList, tmlmapping.getNodes().get(taskIndex));
-		if (bus==null){
-			//buses.str="," + CPUName + "_defaultBus_Master";
-			//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-			buses.str=",static_cast<BusMaster*>(0)";
-			slaves.str= ",static_cast<Slave*>(0)";
-			return -1;
-		}
-		buses.str+= " ," + CPUName + "_" + bus.getName() + "_Master";
-		if (debug) System.out.println("Chaining:\nFirst bus: " + bus.getName());
-		HwMemory mem = getMemConnectedToBus(commNodeList, bus);
-		commNodeList.remove(bus);
-		HwBridge bridge;
-		while(mem==null){
-			bridge = getBridgeConnectedToBus(commNodeList, bus);
-			if (bridge==null){
-				//buses.str="," + CPUName + "_defaultBus_Master";
-				//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-				//buses.str+= " ," + CPUName + "_" + bus.getName() + "_Master";
-				if (dir)
-					slaves.str+= ",static_cast<Slave*>(0)";
-				else
-					
-					slaves.str = ",static_cast<Slave*>(0)" + slaves.str;
-				return hopNumber;
-			}
-			CPUName=bridge.getName();
-			if (debug) System.out.println("Bridge: " + bridge.getName());
-			commNodeList.remove(bridge);
-			if (dir)
-				slaves.str+= " ,dynamic_cast<Slave*>("+ bridge.getName() + ")";
-			else
-				slaves.str= " ,dynamic_cast<Slave*>("+ bridge.getName() + ")" + slaves.str;
-			bus = getBusConnectedToNode(commNodeList, bridge);
-			if (bus==null){
-				//buses.str="," + CPUName + "_defaultBus_Master";
-				//slaves.str= ",dynamic_cast<Slave*>(defaultMemory)";
-				//buses.str=",0";
-				//slaves.str= ",0";
-				return hopNumber;
-			}
-			if (debug) System.out.println("Bus: " + bus.getName());
-			commNodeList.remove(bus);
-			if (dir) 
-				buses.str+= "," + CPUName + "_" + bus.getName() + "_Master";
-			else
-				buses.str= "," + CPUName + "_" + bus.getName() +"_Master" + buses.str;
-			mem = getMemConnectedToBus(commNodeList, bus);
-			hopNumber++;
-		}
-		if (dir) slaves.str+= " ,dynamic_cast<Slave*>("+ mem.getName() + ")"; else slaves.str= " ,dynamic_cast<Slave*>("+ mem.getName() + ")" + slaves.str;
-		return hopNumber;
 	}
 
-	private HwMemory getMemConnectedToBus(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus){
+	private String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
+		strwrap masters=new strwrap(), slaves=new strwrap();
+		LinkedList<HwCommunicationNode> path = new LinkedList<HwCommunicationNode>();
+		LinkedList<HwCommunicationNode> commNodes = new LinkedList<HwCommunicationNode>();
+		for (HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
+			if (node instanceof HwCommunicationNode) commNodes.add((HwCommunicationNode) node);
+		}
+		exploreBuses(0, commNodes, path, startNode, destNode, commElemToRoute);
+		int hopNum;
+		if ( (hopNum=extractPath(path, masters, slaves, startNode, destNode, false))<0){
+			hopNum=extractPath(path, masters, slaves, destNode, destNode, true)-hopNum;
+		}
+		System.out.println(commElemToRoute.getName() + " is mapped on:");
+		for(HwCommunicationNode commElem:path){
+			System.out.println(commElem.getName());
+		}
+		System.out.println("number of elements: " + hopNum);
+		System.out.println("masters: " + masters.str);
+		System.out.println("slaves: " + slaves.str);
+		return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
+	}
+
+	private boolean exploreBuses(int depth, LinkedList<HwCommunicationNode> commNodes, LinkedList<HwCommunicationNode> path, HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
+		//first called with Maping:getCommunicationNodes
+		LinkedList<HwCommunicationNode> nodesToExplore;
+		//System.out.println("No of comm nodes " + commNodes.size());
+		boolean busExploreMode = ((depth & 1) == 0);
+		//if (depth % 2 == 0){
+		if(busExploreMode){
+			//System.out.println("search for buses connected to " + startNode.getName());
+			nodesToExplore=getBusesConnectedToNode(commNodes, startNode);
+		}else{
+			//System.out.println("search for bridges connected to: " + startNode.getName());
+			nodesToExplore=getBridgesConnectedToBus(commNodes, (HwBus)startNode);
+		}
+		HwMemory memory = null;
+		//System.out.println("no of elements found: " + nodesToExplore.size());
+		for(HwCommunicationNode currNode:nodesToExplore){
+			memory = null;
+			if (busExploreMode){
+				memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute);
+				if(isBusConnectedToNode(currNode, destNode)){
+					//System.out.println(currNode.getName() + " is last node");
+					path.add(currNode);
+					if (memory!=null) path.add(memory);
+					commNodes.remove(currNode);
+					return true;
+				}
+			}
+			if(tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)){
+				//System.out.println(currNode.getName() + " mapping found for " + commElemToRoute.getName());
+				path.add(currNode);
+				if (memory!=null) path.add(memory);
+				commNodes.remove(currNode);
+				if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
+				path.remove(currNode);
+				if (memory!=null) path.remove(memory);
+				commNodes.add(currNode);
+			}
+		}
+		for(HwCommunicationNode currNode:nodesToExplore){
+			if (busExploreMode) memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute); else memory=null;
+			path.add(currNode);
+			if (memory!=null) path.add(memory);
+			commNodes.remove(currNode);
+			//for (int i=0; i<path.size(); i++) System.out.print("  ");
+			//System.out.println(currNode.getName());
+			if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
+			path.remove(currNode);
+			if (memory!=null) path.remove(memory);
+			commNodes.add(currNode);	
+		}
+		return false;
+	}
+
+	private HwMemory getMemConnectedToBusChannelMapped(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel){
 		for(HwCommunicationNode commNode: _commNodes){
 			if (commNode instanceof HwMemory){
-				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) return (HwMemory)commNode;
+				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus) && tmlmapping.isCommNodeMappedOn(_channel,commNode)) return (HwMemory)commNode;
 			}
 		}
 		return null;
 	}
-	
-	private HwBridge getBridgeConnectedToBus(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus){
-		for(HwCommunicationNode commNode: _commNodes){
-			if (commNode instanceof HwBridge){
-				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) return (HwBridge)commNode;
-			}
-		}
-		return null;
-	}
-	
-	private HwBus getBusConnectedToNode(LinkedList<HwCommunicationNode> _commNodes, HwNode _node){
+
+	private LinkedList<HwCommunicationNode> getBusesConnectedToNode(LinkedList<HwCommunicationNode> _commNodes, HwNode _node){
+		LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
 		for(HwCommunicationNode commNode: _commNodes){
 			if (commNode instanceof HwBus){
-				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) return (HwBus)commNode;
+				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(_node, (HwBus)commNode)) resultList.add((HwBus)commNode);
 			}
 		}
-		return null;
+		return resultList;
+	}
+
+	private LinkedList<HwCommunicationNode> getBridgesConnectedToBus(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus){
+		LinkedList<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
+		for(HwCommunicationNode commNode: _commNodes){
+			if (commNode instanceof HwBridge){
+				if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add((HwBridge)commNode);
+			}
+		}
+		return resultList;
+	}
+	
+	private boolean isBusConnectedToNode(HwCommunicationNode commNode, HwNode node){
+		for(HwLink link: tmlmapping.getTMLArchitecture().getHwLinks()) {
+			if(link.bus==commNode &&  link.hwnode==node) return true;
+		}
+		return false;
 	}
 
 
-
-// *************** Internal structure manipulation ******************************* /
-	/*private void generateSystemCTasks() {
-		ListIterator iterator = tmlmodeling.getTasks().listIterator();
-		TMLTask t;
-		MappedSystemCTask mst;
-		ArrayList<TMLChannel> channels;
-		ArrayList<TMLEvent> events;
-		ArrayList<TMLRequest> requests;
-		while(iterator.hasNext()) {
-			t = (TMLTask)(iterator.next());
-			if (tmlmapping.isTaskMapped(t)) {
-				channels = tmlmodeling.getChannels(t);
-				events = tmlmodeling.getEvents(t);
-				requests = tmlmodeling.getRequests(t);
-				mst = new MappedSystemCTask(t, channels, events, requests);
-				mst.generateSystemC(debug);
-				//tasks.add(mst);
-			}
-		}
-	}*/
 
 	private void eliminateStateVars(int id, HashSet<Integer>rndVars){
 		visitedVars.add(id);
