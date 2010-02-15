@@ -77,7 +77,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         minDesiredWidth = 150;
         minDesiredHeight = 30;
         
-        nbConnectingPoint = 10;
+        nbConnectingPoint = 20;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, .5);
         connectingPoint[1] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
@@ -89,6 +89,16 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         connectingPoint[7] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.25, 0.0);
         connectingPoint[8] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.5, 0.0);
         connectingPoint[9] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[10] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, .5);
+        connectingPoint[11] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[12] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[13] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[14] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[15] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.0, .5);
+        connectingPoint[16] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[17] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[18] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[19] = new TGConnectingPointTMLTask(this, 0, 0, true, true, 0.75, 0.0);
         
         
         nbInternalTGComponent = 3;
