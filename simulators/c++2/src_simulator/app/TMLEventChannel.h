@@ -59,7 +59,7 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLEventChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent);
+	TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent);
 	///Destructor
 	virtual ~TMLEventChannel();
 	///Cancels a pending read operation 

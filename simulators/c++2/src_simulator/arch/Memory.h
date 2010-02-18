@@ -56,7 +56,7 @@ public:
 	\param iTimePerCycle 1/Memory frequency
 	\param iDataSize Width of a data word
 	*/
-	Memory(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize);
+	Memory(ID iID, std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize);
 	///Accounts for the delay caused by the memory
 	/**
 	\param iTrans Pointer to the transaction to be processed

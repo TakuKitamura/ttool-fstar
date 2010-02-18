@@ -59,7 +59,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0){
+	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0){
 		_transactList.reserve(BLOCK_SIZE);
 	}
 	///Determines the next transaction to be executed
@@ -110,12 +110,15 @@ public:
 	/**
 	\param iSimulatedTime Number of simulated clock cycles
 	*/
-	static void setSimulatedTime(TMLTime iSimulatedTime) {_simulatedTime=iSimulatedTime;}
+	static void setSimulatedTime(TMLTime iSimulatedTime) {
+		//if (iSimulatedTime<_simulatedTime) std::cout << "FAILURE SIMULATION TIME!!!!!!!!!!\n";
+		_simulatedTime=iSimulatedTime;
+	}
 	///Returns the unique ID of the device
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const {return _ID;}
+	ID getID() const {return _ID;}
 	///Destructor
 	virtual ~SchedulableDevice(){}
 	///Returns the end time of the last scheduled transaction of the device 
@@ -142,7 +145,7 @@ public:
 	}
 protected:
 	///Unique ID of the device
-	unsigned int _ID;
+	ID _ID;
 	///Name of the device
 	std::string _name;
 	///Class variable holding the simulation time

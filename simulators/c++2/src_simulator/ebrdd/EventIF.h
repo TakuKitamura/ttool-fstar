@@ -59,7 +59,7 @@ public:
 	/**
 	\param iID ID of the node
 	*/
-	void setEventID(unsigned int iID);
+	void setEventID(ID iID);
 	///Returns whether the event source has already generated an event
 	/**
 	\return Returns true if event has already been notified
@@ -102,7 +102,7 @@ protected:
 	///Negated flag
 	bool _negated;
 	///ID of the node
-	unsigned int _ID;
+	ID _ID;
 	///Number of event notifications
 	unsigned int _nbOfNotific;
 	///Aborted flag

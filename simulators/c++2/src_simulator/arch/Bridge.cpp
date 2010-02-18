@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-Bridge::Bridge(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize): Slave(iID, iName), _timePerCycle(iTimePerCycle), _bufferSize(iBufferSize){
+Bridge::Bridge(ID iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize): Slave(iID, iName), _timePerCycle(iTimePerCycle), _bufferSize(iBufferSize){
 }
 
 void Bridge::CalcTransactionLength(TMLTransaction* iTrans) const{

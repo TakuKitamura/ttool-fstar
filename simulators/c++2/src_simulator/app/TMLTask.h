@@ -71,14 +71,14 @@ public:
 	\param iName Name of the task
 	\param iCPU pointer to the CPU which executes the task
     	*/
-	TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU);
+	TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
 	/**
       	\return Priority
     	*/
-	unsigned int getPriority() const;
+	Priority getPriority() const;
 	///Returns the end of the last scheduled transaction of the task
 	/**
       	\return End of transaction
@@ -113,7 +113,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const;
+	ID getID() const;
 #ifdef ADD_COMMENTS
 	///Adds a new execution comment to the internal list
 	/**
@@ -150,19 +150,19 @@ public:
 	\param iID ID of the Command
 	\return Pointer to the Commmand
 	*/
-	TMLCommand* getCommandByID(unsigned int iID);
+	TMLCommand* getCommandByID(ID iID);
 	///Adds a new command to the internal list
 	/**
 	\param iID ID of the command
 	\param iCmd Pointer to the command
 	*/
-	void addCommand(unsigned int iID, TMLCommand* iCmd);
+	void addCommand(ID iID, TMLCommand* iCmd);
 	///Returns a pointer to the task variable specified by its ID
 	/**
 	\param iVarID ID of the task variable
 	\return Pointer to the variable
 	*/
-	ParamType* getVariableByID(unsigned int iVarID);
+	ParamType* getVariableByID(ID iVarID);
 	void streamStateXML(std::ostream& s) const;
 	///Returns an iterator for the internal variable ID hash table
 	/**
@@ -191,7 +191,7 @@ public:
 	virtual unsigned long getStateHash() const=0;
 protected:
 	///ID of the task
-	unsigned int _ID;
+	ID _ID;
 	///Name of the task
 	std::string _name;
 	///End of the last scheduled transaction of the task

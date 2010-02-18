@@ -62,7 +62,7 @@ public:
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
     	*/
-	TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, unsigned int iPriority);
+	TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, Priority iPriority);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
@@ -70,7 +70,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
-	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam);
 protected:
 	///Determines the virtual length of read and write transactions based on the state of the channel
 	void setTransactionLength() const;

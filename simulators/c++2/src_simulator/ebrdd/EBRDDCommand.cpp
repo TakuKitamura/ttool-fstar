@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 //SimComponents* TMLCommand::_simComp=0;
 
-EBRDDCommand::EBRDDCommand(unsigned int iID, EBRDD* iEBRDD): _ID(iID), _ebrdd(iEBRDD), _nextCommand(0){
+EBRDDCommand::EBRDDCommand(ID iID, EBRDD* iEBRDD): _ID(iID), _ebrdd(iEBRDD), _nextCommand(0){
 	_ebrdd->addCommand(iID, this);
 }
 
@@ -87,7 +87,7 @@ std::istream& EBRDDCommand::readObject(std::istream& s){
 void EBRDDCommand::reset(){
 }
 
-unsigned int EBRDDCommand::getID() const{
+ID EBRDDCommand::getID() const{
 	return _ID;
 }
 

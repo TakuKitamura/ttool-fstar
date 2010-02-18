@@ -69,7 +69,7 @@ public:
 	\param iEbrddFunc Member function pointer to EBRDD function
 	\param iCondString ERB Condition in string format
 	*/
-	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString);
+	ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, ID iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString);
 	///Destructor
 	virtual ~ERB();
 	void timeTick(TMLTime iNewTime);
@@ -79,15 +79,15 @@ public:
 	//void reset();
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
-	void commandEntered(TMLCommand* iComm, unsigned int iID);
-	void commandStarted(TMLCommand* iComm, unsigned int iID);
-	void commandExecuted(TMLCommand* iComm, unsigned int iID);
-	void commandFinished(TMLCommand* iComm, unsigned int iID);
-	void taskStarted(TMLTransaction* iTrans, unsigned int iID);
-	void taskFinished(TMLTransaction* iTrans, unsigned int iID);
-	void readTrans(TMLTransaction* iTrans, unsigned int iID);
-	void writeTrans(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
+	void commandEntered(TMLCommand* iComm, ID iID);
+	void commandStarted(TMLCommand* iComm, ID iID);
+	void commandExecuted(TMLCommand* iComm, ID iID);
+	void commandFinished(TMLCommand* iComm, ID iID);
+	void taskStarted(TMLTransaction* iTrans, ID iID);
+	void taskFinished(TMLTransaction* iTrans, ID iID);
+	void readTrans(TMLTransaction* iTrans, ID iID);
+	void writeTrans(TMLTransaction* iTrans, ID iID);
 	void simulationStarted();
 	void simulationStopped();
 	///Sets the class variable pointing to the simulation objects
@@ -101,7 +101,7 @@ protected:
 	///Name of ERB
 	std::string _name;
 	///ID of event to be received
-	unsigned int _evtID;
+	ID _evtID;
 	///Category of then event source (CPU, Bus, Slave, ...)
 	unsigned int _sourceClass;
 	///Array of event sources
@@ -120,6 +120,6 @@ protected:
 	/**
 	\param iEvtSourceID  ID of event source
 	*/
-	void notifyAncestor(unsigned int iEvtSourceID);
+	void notifyAncestor(ID iEvtSourceID);
 };
 #endif

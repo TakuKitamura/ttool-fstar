@@ -180,7 +180,7 @@ void SimComponents::reset(){
 }
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
-	if (iCPU[0]>='0' && iCPU[0]<='9') return getCPUByID(StringToNum<unsigned int>(iCPU));
+	if (iCPU[0]>='0' && iCPU[0]<='9') return getCPUByID(StringToNum<ID>(iCPU));
 	for(SchedulingList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
 		if ((*i)->toString()==iCPU) return (*i);
 	}
@@ -188,7 +188,7 @@ SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
 }
 
 TMLTask* SimComponents::getTaskByName(const std::string& iTask) const{
-	if (iTask[0]>='0' && iTask[0]<='9') return getTaskByID(StringToNum<unsigned int>(iTask));
+	if (iTask[0]>='0' && iTask[0]<='9') return getTaskByID(StringToNum<ID>(iTask));
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		if ((*i)->toString()==iTask) return (*i);
 	}
@@ -196,7 +196,7 @@ TMLTask* SimComponents::getTaskByName(const std::string& iTask) const{
 }
 
 SchedulableCommDevice* SimComponents::getBusByName(const std::string& iBus) const{
-	if (iBus[0]>='0' && iBus[0]<='9') return getBusByID(StringToNum<unsigned int>(iBus));
+	if (iBus[0]>='0' && iBus[0]<='9') return getBusByID(StringToNum<ID>(iBus));
 	for(BusList::const_iterator i=_busList.begin(); i != _busList.end(); ++i){
 		if ((*i)->toString()==iBus) return (*i);
 	}
@@ -204,7 +204,7 @@ SchedulableCommDevice* SimComponents::getBusByName(const std::string& iBus) cons
 }
 
 Slave* SimComponents::getSlaveByName(const std::string& iSlave) const{
-	if (iSlave[0]>='0' && iSlave[0]<='9') return getSlaveByID(StringToNum<unsigned int>(iSlave));
+	if (iSlave[0]>='0' && iSlave[0]<='9') return getSlaveByID(StringToNum<ID>(iSlave));
 	for(SlaveList::const_iterator i=_slList.begin(); i != _slList.end(); ++i){
 		if ((*i)->toString()==iSlave) return (*i);
 	}
@@ -212,42 +212,42 @@ Slave* SimComponents::getSlaveByName(const std::string& iSlave) const{
 }
 
 TMLChannel* SimComponents::getChannelByName(const std::string& iChannel) const{
-	if (iChannel[0]>='0' && iChannel[0]<='9') return getChannelByID(StringToNum<unsigned int>(iChannel));
+	if (iChannel[0]>='0' && iChannel[0]<='9') return getChannelByID(StringToNum<ID>(iChannel));
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
 		if ((*i)->toShortString()==iChannel) return (*i);
 	}
 	return NULL;
 }
 
-SchedulableDevice* SimComponents::getCPUByID(unsigned int iID) const{
+SchedulableDevice* SimComponents::getCPUByID(ID iID) const{
 	for(SchedulingList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
 	return NULL;
 }
 
-TMLTask* SimComponents::getTaskByID(unsigned int iID) const{
+TMLTask* SimComponents::getTaskByID(ID iID) const{
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
 	return NULL;
 }
 
-SchedulableCommDevice* SimComponents::getBusByID(unsigned int iID) const{
+SchedulableCommDevice* SimComponents::getBusByID(ID iID) const{
 	for(BusList::const_iterator i=_busList.begin(); i != _busList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
 	return NULL;
 }
 
-Slave* SimComponents::getSlaveByID(unsigned int iID) const{
+Slave* SimComponents::getSlaveByID(ID iID) const{
 	for(SlaveList::const_iterator i=_slList.begin(); i != _slList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
 	return NULL;
 }
 
-TMLChannel* SimComponents::getChannelByID(unsigned int iID) const{
+TMLChannel* SimComponents::getChannelByID(ID iID) const{
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
@@ -263,7 +263,7 @@ TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
 	return 0;
 }
 
-std::string SimComponents::getCmpNameByID(unsigned int iID){
+std::string SimComponents::getCmpNameByID(ID iID){
 	SchedulableDevice* aSched = getCPUByID(iID);
 	if (aSched!=0) return aSched->toString();
 	TMLTask* aTask = getTaskByID(iID);

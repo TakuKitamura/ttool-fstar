@@ -65,7 +65,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	inline unsigned int getID() const{
+	inline ID getID() const{
 		return _channel->getID();
 	}
 	///Returns a flag indicating if a channel overflow has been encoutered

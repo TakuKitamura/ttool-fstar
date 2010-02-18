@@ -190,9 +190,15 @@ class EBRDD;
 class EBRDDCommand;
 
 ///Datatype used for time measurements
+//typedef unsigned long long TMLTime;
 typedef unsigned int TMLTime;
 ///Datatype used to indicate the virtual length of commands (execution units, data units)
+//typedef unsigned long long TMLLength;
 typedef unsigned int TMLLength;
+///Priorities
+typedef unsigned int Priority;
+///IDs
+typedef unsigned int ID;
 ///Datatype used by the CPU to store pointers to associated tasks
 typedef std::list<TMLTask*> TaskList;
 ///Datatype used by CPU and bus to store already scheduled transactions
@@ -214,9 +220,9 @@ typedef std::list<EBRDD*> EBRDDList;
 ///Datatype used in Tasks to store comments concerning the task execution
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
-typedef std::map<unsigned int, TMLCommand*> CommandHashTab;
+typedef std::map<ID, TMLCommand*> CommandHashTab;
 ///Datatype used in EBRDD Tasks in order to associate a command with an ID 
-typedef std::map<unsigned int, EBRDDCommand*> CommandHashTabEBRDD;
+typedef std::map<ID, EBRDDCommand*> CommandHashTabEBRDD;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
@@ -226,7 +232,7 @@ typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
 typedef unsigned int (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
-typedef unsigned int (TMLTask::*LengthFuncPointer) ();
+typedef TMLTime (TMLTask::*LengthFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef int (EBRDD::*EBRDDFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
@@ -254,7 +260,7 @@ struct ltstr{
 ///Datatype which associates a variable name with the coresponding pointer to that variable, used for look-up table of tasks
 typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTableName;
 ///Datatype which associates a variable ID with the coresponding pointer to that variable, used for look-up table of tasks
-typedef std::map<unsigned int, ParamType*> VariableLookUpTableID;
+typedef std::map<ID, ParamType*> VariableLookUpTableID;
 
 
 ///Minimum of three values
@@ -325,7 +331,7 @@ public:
 	\param iTime Time when the change occurred 
 	\param iDevice Pointer to the device the signal belongs to
 	*/
-	SignalChangeData( std::string& iSigChange, unsigned int iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
+	SignalChangeData( std::string& iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
 	}
 	///String representation of the signal change in VCD format
 	std::string _sigChange;

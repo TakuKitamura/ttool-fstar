@@ -62,7 +62,7 @@ char* ERB::_evtString[] ={
       "simulationStopped"
 };
 
-ERB::ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, unsigned int iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString): EventIF(iAncestorNode, iNegated), _container(iContainer), _name(iName), _evtID(iEvtID), _sourceClass(iSourceClass), _arrayOfSources(iArrayOfSources), _nbOfSources(iNbOfSources), _ebrddFunc(iEbrddFunc), _condString(iCondString){
+ERB::ERB(ERC* iContainer, NotifyIF* iAncestorNode, bool iNegated, const std::string& iName, ID iEvtID, unsigned int iSourceClass, unsigned int* iArrayOfSources, unsigned int iNbOfSources, EBRDDFuncPointer iEbrddFunc, const std::string& iCondString): EventIF(iAncestorNode, iNegated), _container(iContainer), _name(iName), _evtID(iEvtID), _sourceClass(iSourceClass), _arrayOfSources(iArrayOfSources), _nbOfSources(iNbOfSources), _ebrddFunc(iEbrddFunc), _condString(iCondString){
 }
 
 ERB::~ERB(){
@@ -73,7 +73,7 @@ void ERB::timeTick(TMLTime iNewTime){
 	//std::cout << "TimeTick ERB: " << iNewTime << std::endl;
 }
 
-void ERB::notifyAncestor(unsigned int iEvtSourceID){
+void ERB::notifyAncestor(ID iEvtSourceID){
 	//std::cout << "* evt in " << _name << " t:" << SchedulableDevice::getSimulatedTime() << " n:" << _evtString[_evtID] << " src: " << _simComp->getCmpNameByID(iEvtSourceID) << "\n";
 	_nbOfNotific++;
 	if (_ebrddFunc!=0 && !(_container->getEBRDD()->*_ebrddFunc)()){
@@ -214,47 +214,47 @@ void ERB::deactivate(){
 }*/
 
 //void ERB::transExecuted(TMLTransaction* iTrans){
-void ERB::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void ERB::transExecuted(TMLTransaction* iTrans, ID iID){
 	//std::cout << "transExecuted notified: " << _name << "\n";
 	if (_evtID==0 && _active) notifyAncestor(iID);
 }
 
-void ERB::commandEntered(TMLCommand* iComm, unsigned int iID){
+void ERB::commandEntered(TMLCommand* iComm, ID iID){
 	//std::cout << "commandEntered notified: " << _name << "\n";
 	if (_evtID==1 && _active) notifyAncestor(iID);
 }
 
-void ERB::commandStarted(TMLCommand* iComm, unsigned int iID){
+void ERB::commandStarted(TMLCommand* iComm, ID iID){
 	//std::cout << "commandStarted notified: " << _name << "\n";
 	if (_evtID==2 && _active) notifyAncestor(iID);
 }
 	
-void ERB::commandExecuted(TMLCommand* iComm, unsigned int iID){
+void ERB::commandExecuted(TMLCommand* iComm,ID iID){
 	//std::cout << "commandExecuted: " << _name << "\n";
 	if (_evtID==3 && _active) notifyAncestor(iID);
 }
 
-void ERB::commandFinished(TMLCommand* iComm, unsigned int iID){
+void ERB::commandFinished(TMLCommand* iComm, ID iID){
 	//std::cout << "commandFinished notified: " << _name << "\n";
 	if (_evtID==4 && _active) notifyAncestor(iID);
 }
 
-void ERB::taskStarted(TMLTransaction* iTrans, unsigned int iID){
+void ERB::taskStarted(TMLTransaction* iTrans,ID iID){
 	//std::cout << "taskStarted notified: " << _name << "\n";
 	if (_evtID==5 && _active) notifyAncestor(iID);
 }
 
-void ERB::taskFinished(TMLTransaction* iTrans, unsigned int iID){
+void ERB::taskFinished(TMLTransaction* iTrans, ID iID){
 	//std::cout << "taskFinished notified: " << _name << "\n";
 	if (_evtID==6 && _active) notifyAncestor(iID);
 }
 
-void ERB::readTrans(TMLTransaction* iTrans, unsigned int iID){
+void ERB::readTrans(TMLTransaction* iTrans, ID iID){
 	//std::cout << "readTrans notified: " << _name << "\n";
 	if (_evtID==7 && _active) notifyAncestor(iID);
 }
 
-void ERB::writeTrans(TMLTransaction* iTrans, unsigned int iID){
+void ERB::writeTrans(TMLTransaction* iTrans, ID iID){
 	//std::cout << "writeTrans notified: " << _name << "\n";
 	if (_evtID==8 && _active) notifyAncestor(iID);
 }

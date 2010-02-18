@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 }
@@ -254,7 +254,7 @@ void TMLCommand::removeGlobalListener(CommandListener* iListener){
 	}
 }
 
-unsigned int TMLCommand::getID() const{
+ID TMLCommand::getID() const{
 	return _ID;
 }
 

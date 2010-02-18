@@ -44,13 +44,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWriteMultCommand::TMLWriteMultCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
+TMLWriteMultCommand::TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
 	_length=iStatLength * _channels[0]->getWidth();
 }
 
 void TMLWriteMultCommand::execute(){
 	//std::cout << "--begin-- TMLWriteMultCommand::execute\n"; 
-	for (int i=0; i< _nbOfChannels; i++){
+	for (unsigned int i=0; i< _nbOfChannels; i++){
 		_channels[i]->write();
 	}
 	//std::cout << "--end-- TMLWriteMultCommand::execute\n"; 
@@ -74,7 +74,7 @@ TMLCommand* TMLWriteMultCommand::prepareNextTransaction(){
 	//_channels[0]->testWrite(_currTransaction);
 	//minLength=_currTransaction->getVirtualLength();
 	//std::cout << "--begin-- TMLWriteMultCommand::prepareNextTransaction\n"; 
-	for (int i=0; i< _nbOfChannels; i++){
+	for (unsigned int i=0; i< _nbOfChannels; i++){
 		//_currTransaction->setVirtualLength(unitsLeft);
 		_channels[i]->testWrite(_currTransaction);
 		//minLength=min(minLength,_currTransaction->getVirtualLength());

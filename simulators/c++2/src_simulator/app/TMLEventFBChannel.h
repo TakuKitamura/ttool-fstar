@@ -60,7 +60,7 @@ public:
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLEventFBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
+	TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();
@@ -69,7 +69,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
-	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam);
 protected:
 	///Length of the channel
 	TMLLength _length;

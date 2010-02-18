@@ -57,7 +57,7 @@ public:
 	\param iTimePerCycle 1/Bridge frequency
 	\param iBufferSize Buffer size
 	*/
-	Bridge(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize);
+	Bridge(ID iID, std::string iName, TMLTime iTimePerCycle, unsigned int iBufferSize);
 	///Accounts for the delay caused by the bridge
 	/**
 	\param iTrans Pointer to the transaction to be processed

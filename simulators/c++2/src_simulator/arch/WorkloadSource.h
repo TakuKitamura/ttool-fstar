@@ -53,14 +53,14 @@ public:
 	/**
 	\param iPriority Priority of the workload source
 	*/
-	WorkloadSource(unsigned int iPriority): _priority(iPriority), _srcArraySpecified(false) {}
+	WorkloadSource(Priority iPriority): _priority(iPriority), _srcArraySpecified(false) {}
 	///Constructor
     	/**
       	\param iPriority Priority of the scheduler
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/
-	WorkloadSource(unsigned int iPriority, WorkloadSource** aSourceArray, unsigned int iNbOfSources): _priority(iPriority), _srcArraySpecified(true){
+	WorkloadSource(Priority iPriority, WorkloadSource** aSourceArray, unsigned int iNbOfSources): _priority(iPriority), _srcArraySpecified(true){
 		for (unsigned int i=0;i<iNbOfSources;i++){
 			addWorkloadSource(aSourceArray[i]);
 			std::cout << "Workload source added " << aSourceArray[i]->toString() << "\n";
@@ -78,7 +78,7 @@ public:
 	/**
 	\return Priority of the workload source
 	*/
-	virtual inline unsigned int getPriority() const{return _priority;}
+	virtual inline Priority getPriority() const{return _priority;}
 	///Add a source which provides transactions to the scheduler
 	/**
 	\param iSource Pointer to workload source
@@ -105,7 +105,7 @@ protected:
 	///List of sources which provide transactions to the scheduler
 	WorkloadList _workloadList;
 	///Priority of the workload source
-	unsigned int _priority;
+	Priority _priority;
 	///Indicates whether sources contained in workload list have to be deleted
 	bool _srcArraySpecified;
 };

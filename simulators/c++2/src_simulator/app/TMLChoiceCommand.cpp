@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <CommandListener.h>
 
-TMLChoiceCommand::TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm):TMLCommand(iID, iTask, 1, iNbOfBranches), _condFunc(iCondFunc), _indexNextCommand(0), /*_nbOfBranches(iNbOfBranches),*/ _preferredBranch(-1), _nonDeterm(iNonDeterm){
+TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm):TMLCommand(iID, iTask, 1, iNbOfBranches), _condFunc(iCondFunc), _indexNextCommand(0), /*_nbOfBranches(iNbOfBranches),*/ _preferredBranch(-1), _nonDeterm(iNonDeterm){
 }
 
 void TMLChoiceCommand::execute(){

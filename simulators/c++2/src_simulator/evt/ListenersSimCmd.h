@@ -76,7 +76,7 @@ public:
 	RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute);
 	///Destructor
 	virtual ~RunXTransactions();
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
 	///Sets the number of transactions to execute
 	/**
 	\param  iTransToExecute Number of transactions to execute
@@ -100,7 +100,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	Breakpoint(SimComponents* iSimComp);
-	void commandEntered(TMLCommand* iComm, unsigned int iID);
+	void commandEntered(TMLCommand* iComm, ID iID);
 	///Enable/disable all breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -127,7 +127,7 @@ public:
 	CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTask* iTask);
 	///Destructor
 	~CondBreakpoint();
-	void commandFinished(TMLCommand* iComm, unsigned int iID);
+	void commandFinished(TMLCommand* iComm, ID iID);
 	///Enable/disable all conditional breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -150,11 +150,11 @@ protected:
 	///Handle of shared library
 	void * _dlHandle;
 	///ID of the breakpoint
-	unsigned int _ID;
+	ID _ID;
 	///Task for which the condition is evaluated
 	TMLTask* _task;
 	///Keeps track of the IDs already in use
-	static unsigned int _freeID;
+	static ID _freeID;
 	///Flag indicating that the C source file has been created
 	bool _cSourceFileCreated;
 	///Flag indicating that the object file has been created
@@ -173,7 +173,7 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	*/
 	RunTillNextRandomChoice(SimComponents* iSimComp);
-	void commandEntered(TMLCommand* iComm, unsigned int iID);
+	void commandEntered(TMLCommand* iComm, ID iID);
 	///Enable/disable the Listener
 	/**
 	\param iEnabled true=enable, false=disable
@@ -199,7 +199,7 @@ public:
 	RunXCommands(SimComponents* iSimComp, unsigned int iCommandsToExecute);
 	///Destructor
 	virtual ~RunXCommands();
-	void commandFinished(TMLCommand* iComm, unsigned int iID);
+	void commandFinished(TMLCommand* iComm, ID iID);
 	///Sets the number of commands to execute
 	/**
 	\param  iCommandsToExecute Number of commands to execute
@@ -228,7 +228,7 @@ public:
 	RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime);
 	///Destructor
 	virtual ~RunXTimeUnits();
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
 	///Sets the end time of the simulation
 	/**
 	\param  iEndTime End time of the simulation
@@ -255,7 +255,7 @@ public:
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -276,7 +276,7 @@ public:
 	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
@@ -297,7 +297,7 @@ public:
 	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
-	void transExecuted(TMLTransaction* iTrans, unsigned int iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
 protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;

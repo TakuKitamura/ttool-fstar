@@ -68,7 +68,7 @@ public:
 	\param ibusWidth Bus width
 	\param iTimePerSample Transfer time per sample
     	*/
-	Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio);
+	Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio);
 	///Destructor
 	virtual ~Bus();
 	///Add a transaction waiting for execution to the internal list

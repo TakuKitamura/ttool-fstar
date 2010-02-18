@@ -54,7 +54,7 @@ public:
       	\param iEBRDD Pointer to the EBRDD the command belongs to
 	\param iEBRDDFunc Member function pointer to the action function
     	*/
-	EBRDDActionCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc);
+	EBRDDActionCommand(ID iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc);
 	EBRDDCommand* prepare();
 	std::string toString() const;
 protected:

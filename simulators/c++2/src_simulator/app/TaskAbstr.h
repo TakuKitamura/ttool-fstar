@@ -58,7 +58,7 @@ public:
 	/**
       	\return Priority
     	*/
-	inline unsigned int getPriority() const{
+	inline Priority getPriority() const{
 		return _task->getPriority();
 	}
 
@@ -73,7 +73,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	inline unsigned int getID() const{
+	inline ID getID() const{
 		return _task->getID();
 	}
 	//getExecTime()

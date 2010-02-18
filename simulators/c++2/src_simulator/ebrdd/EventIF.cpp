@@ -46,7 +46,7 @@ EventIF::EventIF(NotifyIF* iAncestorNode, bool iNegated):_ancestorNode(iAncestor
 	iAncestorNode->registerEvent(this);
 }
 
-void EventIF::setEventID(unsigned int iID){
+void EventIF::setEventID(ID iID){
 	_ID=iID;
 	//std::cout << "setEventID: " << _ID << "\n";
 }

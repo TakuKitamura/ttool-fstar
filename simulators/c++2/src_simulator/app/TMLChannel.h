@@ -66,7 +66,7 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iPrio Priority of the channel
     	*/
-	TMLChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority);
+	TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority);
 	///Destructor
 	virtual ~TMLChannel();
 	///Prepares a write operation
@@ -141,14 +141,14 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const;
+	ID getID() const;
 	///Inserts samples into the channel
 	/**
 	\param iNbOfSamples Number of samples to insert
 	\param iParam Parameter to insert
       	\return Returns true if successful
     	*/ 
-	virtual unsigned int insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam);
 	///Writes XML information about the component to a stream
 	/**
       	\param s Reference to an output stream
@@ -178,7 +178,7 @@ public:
 	/**
 	\return Hash Value
 	*/
-	unsigned int getPriority();
+	Priority getPriority();
 	///Returns the width of the channel
 	/**
 	\return Channel width
@@ -186,7 +186,7 @@ public:
 	unsigned int getWidth();
 protected:
 	///ID of channel
-	unsigned int _ID;
+	ID _ID;
 	///Name of the channel
 	std::string _name;
 	///Channel size
@@ -210,7 +210,7 @@ protected:
 	///Keeps track of the current Hop of a read Transaction
 	unsigned int _readTransCurrHop;
 	///channel priority
-	unsigned int _priority;
+	Priority _priority;
 };
 
 #endif

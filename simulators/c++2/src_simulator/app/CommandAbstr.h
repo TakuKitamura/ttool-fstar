@@ -65,7 +65,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	inline unsigned int getID() const{
+	inline ID getID() const{
 		return _cmd->getID();
 	}
 	///Returns the progress of the command

@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TransactionListener.h>
 #include <WorkloadSource.h>
 
-Bus::Bus(unsigned int iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
+Bus::Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
 
 Bus::~Bus(){
 	delete _scheduler;
@@ -91,7 +91,7 @@ bool Bus::addTransaction(){
 }
 
 void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
-	_nextTransaction->setStartTime(max(static_cast<int>(_endSchedule)-static_cast<int>(_nextTransaction->getPenalties()),static_cast<int>(_nextTransaction->getStartTime())));
+	_nextTransaction->setStartTime(max(static_cast<TMLTime>(_endSchedule)-static_cast<TMLTime>(_nextTransaction->getPenalties()),static_cast<TMLTime>(_nextTransaction->getStartTime())));
 	
 	//if (_nextTransaction->getOperationLength()!=-1){
 	if (iTimeSlice!=0){

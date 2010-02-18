@@ -53,7 +53,7 @@ public:
 	\param iTimeSlice Time slice which is granted to clients
 	\param iMinSliceSize Minimum size of a time slice
     	*/
-	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
+	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
 	///Constructor
     	/**
 	\param iName Name of the scheduler
@@ -63,7 +63,7 @@ public:
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/
-	RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	///Destructor
 	~RRScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);

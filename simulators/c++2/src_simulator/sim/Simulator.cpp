@@ -101,7 +101,7 @@ void Simulator::schedule2Graph(std::string& iTraceFileName) const{
 			CPU* aCPU;
 			aTopElement = aQueue.top();
 			aCPU = aTopElement->getCommand()->getTask()->getCPU();
-			for (unsigned int a=0; a < aTopElement->getVirtualLength(); a++){
+			for (TMLLength a=0; a < aTopElement->getVirtualLength(); a++){
 				aOutp << "(" << aTransitionNo << ",\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
 				if (aTopElement->getChannel()!=0){
 					aOutp << "__" << aTopElement->getChannel()->toShortString();
@@ -181,7 +181,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 		TraceableDevice* actDevice;
 		TMLTime aTime=0, aCurrTime=-1;
 		SignalChangeData* aTopElement;
-		unsigned int aNextClockEvent=0;
+		TMLTime aNextClockEvent=0;
 		myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniels TML simulator\n$end\n\n";
 		myfile << "$timescale\n1 ns\n$end\n\n$scope module Simulation $end\n";
 		std::cout << "Before 1st loop" << std::endl;
@@ -289,7 +289,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 		 cpuLET->schedule();
 		 unsigned int nbOfChannels = commandLET->getNbOfChannels();
-		 for (int i=0;i<nbOfChannels; i++){
+		 for (unsigned int i=0;i<nbOfChannels; i++){
 		 if ((depTask=commandLET->getDependentTask(i))==0) continue;
 		 //if (depTask!=0){
 #ifdef DEBUG_KERNEL
@@ -1025,12 +1025,12 @@ bool Simulator::runXCommands(unsigned int iCmds, TMLTransaction*& oLastTrans){
 	return test;
 }
 
-bool Simulator::runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans){
+bool Simulator::runTillTimeX(TMLTime iTime, TMLTransaction*& oLastTrans){
 	RunXTimeUnits aListener(_simComp,iTime);
 	return simulate(oLastTrans);
 }
 
-bool Simulator::runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans){
+bool Simulator::runXTimeUnits(TMLTime iTime, TMLTransaction*& oLastTrans){
 	RunXTimeUnits aListener(_simComp,iTime+SchedulableDevice::getSimulatedTime());
 	return simulate(oLastTrans);
 }
@@ -1080,7 +1080,7 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 	if (oSuccess) return simulate(oLastTrans); else return false;
 }
 
-void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID, std::ofstream& iFile){
+void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile){
 /*std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
 		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
@@ -1089,7 +1089,7 @@ void Simulator::exploreTree(unsigned int iDepth, unsigned int iPrevID, std::ofst
 		myfile.close();*/
 	TMLTransaction* aLastTrans;
 	if (iDepth<RECUR_DEPTH){
-		unsigned int aMyID= ++_leafsID;
+		ID aMyID= ++_leafsID;
 		bool aSimTerminated=false;
 		TMLChoiceCommand* aChoiceCmd;
 		do{

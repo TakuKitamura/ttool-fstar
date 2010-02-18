@@ -58,7 +58,7 @@ public:
 	\param iParamFunc Pointer to a parameter function
 	\param statParam Static parameter if applicable 
 	*/
-	TMLWaitCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam = Parameter<ParamType>(0,0,0));
+	TMLWaitCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam = Parameter<ParamType>(0,0,0));
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;

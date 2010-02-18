@@ -57,7 +57,7 @@ public:
 	\param iNbOfBranches Number of branches of the choice
 	\param iNonDeterm Flag is true for non deterministic commands
     	*/
-	TMLChoiceCommand(unsigned int iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm);
+	TMLChoiceCommand(ID iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;

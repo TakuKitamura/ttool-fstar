@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventBChannel::TMLEventBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+TMLEventBChannel::TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 	_overflow = false; 
 	if (_sourceIsFile){
 		std::cout << "try to open Event file " << _name.c_str() << std::endl;
@@ -62,7 +62,7 @@ TMLEventBChannel::~TMLEventBChannel(){
 void TMLEventBChannel::readNextEvents(){
 	//std::cout << "vv" << std::endl;
 	if (_eventFile->is_open()){
-		int i=0;
+		unsigned int i=0;
 		Parameter<ParamType> aNewParam; //NEW
 		while (++i<NO_EVENTS_TO_LOAD && !_eventFile->eof()){
 			_content++;
@@ -191,8 +191,8 @@ void TMLEventBChannel::reset(){
 	}
 }
 
-unsigned int TMLEventBChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
-	unsigned int aNbToInsert;
+TMLLength TMLEventBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;
 		_paramQueue.clear();
@@ -200,7 +200,7 @@ unsigned int TMLEventBChannel::insertSamples(unsigned int iNbOfSamples, Paramete
 	}else{
 		aNbToInsert=iNbOfSamples;
 		_content+=iNbOfSamples;
-		for (unsigned int i=0; i<iNbOfSamples; i++) _paramQueue.push_back(iParam);
+		for (TMLLength i=0; i<iNbOfSamples; i++) _paramQueue.push_back(iParam);
 	} 
 	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
 	return aNbToInsert;

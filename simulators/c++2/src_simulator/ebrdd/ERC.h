@@ -57,9 +57,9 @@ public:
 	\param iID ID of the ERC
 	\param iEBRDD Pointer to the subordinate EBRDD 
 	*/
-	ERC(unsigned int iID, EBRDD* iEBRDD);
-	void notifyEvent(unsigned int iID);
-	void notifyAbort(unsigned int iID);
+	ERC(ID iID, EBRDD* iEBRDD);
+	void notifyEvent(ID iID);
+	void notifyAbort(ID iID);
 	///Returns a pointer to the subordinate EBRDD
 	/**
 	\return Pointer to EBRDD

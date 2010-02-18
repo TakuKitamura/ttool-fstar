@@ -50,7 +50,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define COND_SOURCE_FILE_NAME "newlib.c"
 #define COND_OBJ_FILE_NAME "newlib.o"
 
-unsigned int CondBreakpoint::_freeID=0;
+ID CondBreakpoint::_freeID=0;
 bool Breakpoint::_enabled=true;
 bool CondBreakpoint::_enabled=true;
 
@@ -67,7 +67,7 @@ RunXTransactions::~RunXTransactions(){
 }
 
 //void RunXTransactions::transExecuted(TMLTransaction* iTrans){
-void RunXTransactions::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void RunXTransactions::transExecuted(TMLTransaction* iTrans, ID iID){
 	_count++;
 	if (_count>=_transToExecute){
 		std::ostringstream aOut;
@@ -86,7 +86,7 @@ void RunXTransactions::setTransToExecute(unsigned int iTransToExecute){
 Breakpoint::Breakpoint(SimComponents* iSimComp):_simComp(iSimComp){
 }
 
-void Breakpoint::commandEntered(TMLCommand* iComm, unsigned int iID){
+void Breakpoint::commandEntered(TMLCommand* iComm, ID iID){
 	if (_enabled){
 		_simComp->setStopFlag(true, MSG_BREAKPOINT);
 		//return true;
@@ -163,7 +163,7 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 	TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(this, iTask);
 }
 
-void CondBreakpoint::commandFinished(TMLCommand* iComm, unsigned int iID){
+void CondBreakpoint::commandFinished(TMLCommand* iComm, ID iID){
 	if (_enabled && _condFunc!=0){
 		if ((*_condFunc)(_task)){
 			std::ostringstream aOut;
@@ -202,7 +202,7 @@ RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simCo
 	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this,0);
 }
 
-void RunTillNextRandomChoice::commandEntered(TMLCommand* iComm, unsigned int iID){
+void RunTillNextRandomChoice::commandEntered(TMLCommand* iComm, ID iID){
 	TMLChoiceCommand* aChoice=dynamic_cast<TMLChoiceCommand*>(iComm);
 	if (_enabled && aChoice!=0 && aChoice->isNonDeterministic()){
 		_simComp->setStopFlag(true, MSG_RANDOMCHOICE);
@@ -225,7 +225,7 @@ RunXCommands::~RunXCommands(){
 	TMLCommand::removeGlobalListener(this);
 }
 
-void RunXCommands::commandFinished(TMLCommand* iComm, unsigned int iID){
+void RunXCommands::commandFinished(TMLCommand* iComm, ID iID){
 	_count++;
 	if (_count>=_commandsToExecute){
 		std::ostringstream aOut;
@@ -254,7 +254,7 @@ RunXTimeUnits::~RunXTimeUnits(){
 }
 
 //void RunXTimeUnits::transExecuted(TMLTransaction* iTrans){
-void RunXTimeUnits::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void RunXTimeUnits::transExecuted(TMLTransaction* iTrans, ID iID){
 	if (SchedulableDevice::getSimulatedTime()>=_endTime){
 		_simComp->setStopFlag(true, MSG_RUNXTIMEUNITS);
 		//return true;
@@ -276,7 +276,7 @@ RunTillTransOnDevice::~RunTillTransOnDevice(){
 }
 
 //void RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans){
-void RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans, ID iID){
 	_simComp->setStopFlag(true, MSG_TRANSONDEVICE);
 	//return true;
 }
@@ -292,7 +292,7 @@ RunTillTransOnTask::~RunTillTransOnTask(){
 }
 
 //void RunTillTransOnTask::transExecuted(TMLTransaction* iTrans){
-void RunTillTransOnTask::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void RunTillTransOnTask::transExecuted(TMLTransaction* iTrans, ID iID){
 	_simComp->setStopFlag(true, MSG_TRANSONTASK);
 	//return true;
 }
@@ -308,7 +308,7 @@ RunTillTransOnChannel::~RunTillTransOnChannel(){
 }
 
 //void RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans){
-void RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans, unsigned int iID){
+void RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans, ID iID){
 	_simComp->setStopFlag(true, MSG_TRANSONCHANNEL);
 	//return true;
 }

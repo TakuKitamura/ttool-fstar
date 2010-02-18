@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLbrbwChannel::TMLbrbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent, unsigned int iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority),_length(iLength){
+TMLbrbwChannel::TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent, Priority iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority),_length(iLength){
 }
 
 void TMLbrbwChannel::testWrite(TMLTransaction* iTrans){
@@ -143,8 +143,8 @@ std::string TMLbrbwChannel::toString() const{
 	return outp.str();
 }
 
-unsigned int TMLbrbwChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
-	unsigned int aNbToInsert;
+TMLLength TMLbrbwChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;
 		aNbToInsert=0;

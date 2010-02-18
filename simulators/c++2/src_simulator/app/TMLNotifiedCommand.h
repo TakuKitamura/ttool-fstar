@@ -57,7 +57,7 @@ public:
 	\param iResultVar Pointer to the variable which has to contain the result
 	\param iResultVarDescr String representation of the result variable
 	*/
-	TMLNotifiedCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
+	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

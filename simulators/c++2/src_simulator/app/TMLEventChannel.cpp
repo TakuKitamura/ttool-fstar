@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLEventChannel.h>
 
-TMLEventChannel::TMLEventChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0,0,0), _stateHash(0){
+TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0,0,0), _stateHash(0){
 }
 
 TMLEventChannel::~TMLEventChannel(){

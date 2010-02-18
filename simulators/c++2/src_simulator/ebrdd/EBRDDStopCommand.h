@@ -53,7 +53,7 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
     	*/
-	EBRDDStopCommand(unsigned int iID, EBRDD* iTask);
+	EBRDDStopCommand(ID iID, EBRDD* iTask);
 	EBRDDCommand* prepare();
 	std::string toString() const;
 protected:

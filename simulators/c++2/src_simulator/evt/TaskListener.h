@@ -54,20 +54,20 @@ public:
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void taskStarted(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void taskStarted(TMLTransaction* iTrans, ID iID){}
 	///Gets called when a task executes its last transaction
 	/**
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual	void taskFinished(TMLTransaction* iTrans, unsigned int iID){}
+	virtual	void taskFinished(TMLTransaction* iTrans, ID iID){}
 	///Destructor
 	///Gets called when a transaction is executed
 	/**
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void transExecuted(TMLTransaction* iTrans, ID iID){}
 	virtual ~TaskListener(){}
 protected:
 };

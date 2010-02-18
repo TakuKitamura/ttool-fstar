@@ -59,7 +59,7 @@ public:
 	\param iNbOfBuses Number of buses(bus channels) the master is connected to
 	\param iBusArray Pointer to the buses(bus channels) the master is connected to
     	*/
-	BusMaster(const std::string& iName, unsigned int iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), _lastSimTime(-1), _contentionDelay(0), _noTransactions(0), _channelBasedPrioEnabled(false), _channelBasedPrio(0){
+	BusMaster(const std::string& iName, Priority iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), _lastSimTime(-1), _contentionDelay(0), _noTransactions(0), _channelBasedPrioEnabled(false), _channelBasedPrio(0){
 		_busSortArray=new SchedulableCommDevice*[_nbOfBuses];
 		for (unsigned int i=0; i <_nbOfBuses; i++) _busSortArray[i]=_busArray[i];
 		_channelBasedPrioEnabled = _busArray[0]->ChannelBasedPrio();
@@ -176,7 +176,7 @@ public:
 		return _name;
 	}
 
-	unsigned int getPriority() const{
+	Priority getPriority() const{
 		return (_channelBasedPrioEnabled)?_channelBasedPrio: _priority;
 	}
 
@@ -250,7 +250,7 @@ protected:
 	unsigned long _noTransactions;
 	//
 	bool _channelBasedPrioEnabled;
-	unsigned int _channelBasedPrio;
+	Priority _channelBasedPrio;
 };
 
 #endif

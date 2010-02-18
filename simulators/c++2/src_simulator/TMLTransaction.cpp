@@ -129,7 +129,7 @@ TMLTime TMLTransaction::getEndTime() const{
 	//return _startTime  + _length;
 }
 
-unsigned int TMLTransaction::getIdlePenalty() const{
+TMLTime TMLTransaction::getIdlePenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _idlePenalty;
 #else
@@ -137,13 +137,13 @@ unsigned int TMLTransaction::getIdlePenalty() const{
 #endif
 }
 
-void TMLTransaction::setIdlePenalty(unsigned int iIdlePenalty){
+void TMLTransaction::setIdlePenalty(TMLTime iIdlePenalty){
 #ifdef PENALTIES_ENABLED
 	_idlePenalty=iIdlePenalty;
 #endif
 }
 
-unsigned int TMLTransaction::getTaskSwitchingPenalty() const{
+TMLTime TMLTransaction::getTaskSwitchingPenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _taskSwitchingPenalty;
 #else
@@ -151,13 +151,13 @@ unsigned int TMLTransaction::getTaskSwitchingPenalty() const{
 #endif
 }
 
-void TMLTransaction::setTaskSwitchingPenalty(unsigned int iTaskSwitchingPenalty){
+void TMLTransaction::setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty){
 #ifdef PENALTIES_ENABLED
 	_taskSwitchingPenalty=iTaskSwitchingPenalty;
 #endif	
 }
 
-unsigned int TMLTransaction::getBranchingPenalty() const{
+TMLTime TMLTransaction::getBranchingPenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _branchingPenalty;
 #else
@@ -165,7 +165,7 @@ unsigned int TMLTransaction::getBranchingPenalty() const{
 #endif
 }
 
-void TMLTransaction::setBranchingPenalty(unsigned int iBranchingPenalty){
+void TMLTransaction::setBranchingPenalty(TMLTime iBranchingPenalty){
 #ifdef PENALTIES_ENABLED
 	_branchingPenalty=iBranchingPenalty;
 #endif

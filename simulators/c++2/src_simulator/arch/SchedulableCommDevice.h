@@ -54,7 +54,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableCommDevice(unsigned int iID, std::string iName, WorkloadSource* iScheduler,bool iChannelBasedPrio): SchedulableDevice(iID, iName, iScheduler), _channelBasedPrio(iChannelBasedPrio){}
+	SchedulableCommDevice(ID iID, std::string iName, WorkloadSource* iScheduler,bool iChannelBasedPrio): SchedulableDevice(iID, iName, iScheduler), _channelBasedPrio(iChannelBasedPrio){}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Size of an atomic bus transaction

@@ -58,12 +58,12 @@ public:
 	/**
 	\param iID ID of the event
 	*/
-	virtual void notifyEvent(unsigned int iID)=0;
+	virtual void notifyEvent(ID iID)=0;
 	///Called by event source to signal that an event cannot be received any more
 	/**
 	\param iID ID of the event
 	*/
-	virtual void notifyAbort(unsigned int iID)=0;
+	virtual void notifyAbort(ID iID)=0;
 	virtual void reset();
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
@@ -76,7 +76,7 @@ public:
 	virtual ~NotifyIF();
 protected:
 	///ID of the node
-	unsigned int _nextID;
+	ID _nextID;
 	///Number of descendants within the event tree
 	unsigned int _nbOfEvents;
 	///Array of descendants within the event tree

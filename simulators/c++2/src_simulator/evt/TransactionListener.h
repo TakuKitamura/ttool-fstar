@@ -51,7 +51,7 @@ public:
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void transExecuted(TMLTransaction* iTrans, ID iID){}
 	/////Gets called when a transaction is scheduled
 	////**
 	//\param  iTrans Pointer to the transaction

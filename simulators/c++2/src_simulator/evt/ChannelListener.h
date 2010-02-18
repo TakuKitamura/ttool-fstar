@@ -52,19 +52,19 @@ public:
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void transExecuted(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void transExecuted(TMLTransaction* iTrans, ID iID){}
 	///Gets called when a read transaction is executed
 	/**
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void readTrans(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void readTrans(TMLTransaction* iTrans, ID iID){}
 	///Gets called when a write transaction is executed
 	/**
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
-	virtual void writeTrans(TMLTransaction* iTrans, unsigned int iID){}
+	virtual void writeTrans(TMLTransaction* iTrans, ID iID){}
 	virtual ~ChannelListener(){}
 protected:
 };

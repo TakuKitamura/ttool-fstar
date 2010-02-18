@@ -42,10 +42,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTask.h>
 
-RRScheduler::RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
+RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
 
-RRScheduler::RRScheduler(const std::string& iName, unsigned int iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
+RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
 
 TMLTime RRScheduler::schedule(TMLTime iEndSchedule){

@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDActionCommand.h>
 #include <EBRDD.h>
 
-EBRDDActionCommand::EBRDDActionCommand(unsigned int iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc): EBRDDCommand(iID, iEBRDD),_ebrddFunc(iEBRDDFunc){
+EBRDDActionCommand::EBRDDActionCommand(ID iID, EBRDD* iEBRDD, EBRDDFuncPointer iEBRDDFunc): EBRDDCommand(iID, iEBRDD),_ebrddFunc(iEBRDDFunc){
 }
 
 EBRDDCommand* EBRDDActionCommand::prepare(){

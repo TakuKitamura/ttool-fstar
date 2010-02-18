@@ -126,32 +126,32 @@ public:
 	/**
       	\return Idle panalty
     	*/
-	unsigned int getIdlePenalty() const;
+	TMLTime getIdlePenalty() const;
 	///Sets the idle panalty of the transaction
 	/**
       	\param iIdlePenalty Idle penalty
     	*/
-	void setIdlePenalty(unsigned int iIdlePenalty);
+	void setIdlePenalty(TMLTime iIdlePenalty);
 	///Returns the task switching panalty of the transaction
 	/**
       	\return Task switching penalty
     	*/	
-	unsigned int getTaskSwitchingPenalty() const;
+	TMLTime getTaskSwitchingPenalty() const;
 	///Sets the task switching panalty of the transaction
 	/**
       	\param iTaskSwitchingPenalty Task switching penalty
     	*/	
-	void setTaskSwitchingPenalty(unsigned int iTaskSwitchingPenalty);
+	void setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty);
 	///Returns the branching panalty of the transaction
 	/**
       	\return Branching penalty
     	*/	
-	unsigned int getBranchingPenalty() const;
+	TMLTime getBranchingPenalty() const;
 	///Sets the branching panalty of the transaction
 	/**
       	\param iBranchingPenalty Branching penalty
     	*/
-	void setBranchingPenalty(unsigned int iBranchingPenalty);
+	void setBranchingPenalty(TMLTime iBranchingPenalty);
 	/////Returns the terminated flag of the transaction
 	//bool getTerminatedFlag() const;
 	/////Sets the terminated flag of the transaction to true
@@ -192,11 +192,11 @@ protected:
 	TMLCommand* _command;
 #ifdef PENALTIES_ENABLED
 	///Idle penalty
-	unsigned int _idlePenalty;
+	TMLTime _idlePenalty;
 	///Task switching penalty
-	unsigned int _taskSwitchingPenalty;
+	TMLTime _taskSwitchingPenalty;
 	///Branching penalty
-	unsigned int _branchingPenalty;
+	TMLTime _branchingPenalty;
 #endif
 	///Channel on which data was conveyed
 	TMLChannel* _channel;

@@ -58,7 +58,7 @@ public:
 	\param iNbOfChannels Number of channels
 	\param iStatLength Static length of command if applicable
 	*/
-	TMLWriteMultCommand(unsigned int iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength=1);
+	TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, TMLLength iStatLength=1);
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;

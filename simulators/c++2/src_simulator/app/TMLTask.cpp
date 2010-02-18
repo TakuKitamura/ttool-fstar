@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
@@ -60,7 +60,7 @@ TMLTask::~TMLTask(){
 	if (_comment!=0) delete [] _comment;
 }
 
-unsigned int TMLTask::getPriority() const{
+Priority TMLTask::getPriority() const{
 	return _priority;
 }
 
@@ -91,7 +91,7 @@ std::string TMLTask::toShortString() const{
 	return outp.str();
 }
 
-unsigned int TMLTask::getID() const{
+ID TMLTask::getID() const{
 	return _ID;
 }
 
@@ -200,7 +200,7 @@ TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& 
 }
 
 std::ostream& TMLTask::writeObject(std::ostream& s){
-	unsigned int aCurrCmd;
+	ID aCurrCmd;
 	WRITE_STREAM(s,_endLastTransaction);
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLTask " << _name << " endLastTransaction: " << _endLastTransaction << std::endl;
@@ -237,7 +237,7 @@ std::ostream& TMLTask::writeObject(std::ostream& s){
 }
 
 std::istream& TMLTask::readObject(std::istream& s){
-	unsigned int aCurrCmd;
+	ID aCurrCmd;
 	//_previousTransEndTime=0; _busyCycles=0; _CPUContentionDelay=0; _noCPUTransactions=0;
 	READ_STREAM(s, _endLastTransaction);
 #ifdef DEBUG_SERIALIZE
@@ -321,21 +321,21 @@ void TMLTask::reset(){
 ParamType* TMLTask::getVariableByName(std::string& iVarName ,bool& oIsId){
 	if (iVarName[0]>='0' && iVarName[0]<='9'){
 		oIsId=true;
-		return getVariableByID(StringToNum<unsigned int>(iVarName));
+		return getVariableByID(StringToNum<ID>(iVarName));
 	}
 	oIsId=false;
 	return _varLookUpName[iVarName.c_str()];
 }
 
-ParamType* TMLTask::getVariableByID(unsigned int iVarID){
+ParamType* TMLTask::getVariableByID(ID iVarID){
 	return _varLookUpID[iVarID];
 }
 
-void TMLTask::addCommand(unsigned int iID, TMLCommand* iCmd){
+void TMLTask::addCommand(ID iID, TMLCommand* iCmd){
 	_commandHash[iID]=iCmd;
 }
 
-TMLCommand* TMLTask::getCommandByID(unsigned int iID){
+TMLCommand* TMLTask::getCommandByID(ID iID){
 	return _commandHash[iID];
 }
 

@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <Memory.h>
 
-Memory::Memory(unsigned int iID, std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize): Slave(iID, iName), _timePerCycle(iTimePerCycle), _dataSize(iDataSize){
+Memory::Memory(ID iID, std::string iName, TMLTime iTimePerCycle, unsigned int iDataSize): Slave(iID, iName), _timePerCycle(iTimePerCycle), _dataSize(iDataSize){
 }
 
 void Memory::CalcTransactionLength(TMLTransaction* iTrans) const{

@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDDStopCommand.h>
 #include <EBRDD.h>
 
-EBRDDStopCommand::EBRDDStopCommand(unsigned int iID, EBRDD* iEBRDD): EBRDDCommand(iID, iEBRDD){
+EBRDDStopCommand::EBRDDStopCommand(ID iID, EBRDD* iEBRDD): EBRDDCommand(iID, iEBRDD){
 }
 
 EBRDDCommand* EBRDDStopCommand::prepare(){

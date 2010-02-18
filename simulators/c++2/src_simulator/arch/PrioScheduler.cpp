@@ -40,16 +40,16 @@ Ludovic Apvrille, Renaud Pacalet
 #include<PrioScheduler.h>
 #include <TMLTransaction.h>
 
-PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0) /*,_lastSourceIndex(0)*/{
+PrioScheduler::PrioScheduler(const std::string& iName, Priority iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0) /*,_lastSourceIndex(0)*/{
 }
 
-PrioScheduler::PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSource(0) {
+PrioScheduler::PrioScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSource(0) {
 }
 
 TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
-	unsigned int aHighestPrioPast=-1;
+	Priority aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
 	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){

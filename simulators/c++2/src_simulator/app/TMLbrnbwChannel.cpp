@@ -41,7 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLbrnbwChannel.h>
 #include <TMLTransaction.h>
 
-TMLbrnbwChannel::TMLbrnbwChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority){
+TMLbrnbwChannel::TMLbrnbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, Priority iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority){
 	_overflow=false;
 }
 
@@ -126,8 +126,8 @@ std::string TMLbrnbwChannel::toString() const{
 	return outp.str();
 }
 
-unsigned int TMLbrnbwChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
-	unsigned int aNbToInsert;
+TMLLength TMLbrnbwChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;
 		aNbToInsert=0;

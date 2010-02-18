@@ -51,7 +51,7 @@ public:
 	\param iName Name of the scheduler
       	\param iPrio Priority of the scheduler
     	*/
-	PrioScheduler(const std::string& iName, unsigned int iPrio);
+	PrioScheduler(const std::string& iName, Priority iPrio);
 	///Constructor
     	/**
 	\param iName Name of the scheduler
@@ -59,7 +59,7 @@ public:
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/
-	PrioScheduler(const std::string& iName, unsigned int iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	PrioScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	~PrioScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
 	TMLTransaction* getNextTransaction() const;

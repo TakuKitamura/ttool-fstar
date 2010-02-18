@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFBChannel::TMLEventFBChannel(unsigned int iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
+TMLEventFBChannel::TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
 }
 
 void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
@@ -114,8 +114,8 @@ std::string TMLEventFBChannel::toString() const{
 	return outp.str();
 }
 
-unsigned int TMLEventFBChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
-	unsigned int aNbToInsert;
+TMLLength TMLEventFBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;
 		_paramQueue.clear();
@@ -123,7 +123,7 @@ unsigned int TMLEventFBChannel::insertSamples(unsigned int iNbOfSamples, Paramet
 	}else{
 		aNbToInsert=min(iNbOfSamples, _length-_content);
 		_content+=aNbToInsert;
-		for (unsigned int i=0; i<aNbToInsert; i++) _paramQueue.push_back(iParam);
+		for (TMLLength i=0; i<aNbToInsert; i++) _paramQueue.push_back(iParam);
 	} 
 	if (_writeTrans!=0) _writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
 	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);

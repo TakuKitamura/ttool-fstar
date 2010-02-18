@@ -53,7 +53,7 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
     	*/
-	TMLStopCommand(unsigned int iID, TMLTask* iTask);
+	TMLStopCommand(ID iID, TMLTask* iTask);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;

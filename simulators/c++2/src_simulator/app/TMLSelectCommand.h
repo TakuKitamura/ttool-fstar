@@ -57,7 +57,7 @@ public:
 	\param iNumbChannels Number of channels in the array
 	\param iParamFunc Pointer to an array of parameter functions pointers
 	*/
-	TMLSelectCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFunc);
+	TMLSelectCommand(ID iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFunc);
 	///Destructor
 	~TMLSelectCommand();
 	void execute();

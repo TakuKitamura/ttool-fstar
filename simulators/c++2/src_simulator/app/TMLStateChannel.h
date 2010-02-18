@@ -60,7 +60,7 @@ public:
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
     	*/
-	TMLStateChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority);
+	TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority);
 	///Destructor
 	virtual ~TMLStateChannel();
 	virtual std::ostream& writeObject(std::ostream& s);

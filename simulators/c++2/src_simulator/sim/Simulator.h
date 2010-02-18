@@ -138,14 +138,14 @@ public:
 	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
-	bool runTillTimeX(unsigned int iTime, TMLTransaction*& oLastTrans);
+	bool runTillTimeX(TMLTime iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation for iTime time units
 	/**
 	\param iTime Number of time units
 	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
-	bool runXTimeUnits(unsigned int iTime, TMLTransaction*& oLastTrans);
+	bool runXTimeUnits(TMLTime iTime, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction on iBus is executed
 	/**
 	\param iBus Pointer to the bus
@@ -202,7 +202,7 @@ public:
 	\param iPrevID ID of the parent leaf
 	\param iFile Reference to the output file
 	*/
-	void exploreTree(unsigned int iDepth, unsigned int iPrevID, std::ofstream& iFile);
+	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file

@@ -54,7 +54,7 @@ public:
       	\param iID ID of the command
 	\param iEBRDD Pointer to the EBRDD the command belongs to
     	*/
-	EBRDDCommand(unsigned int iID, EBRDD* iEBRDD);
+	EBRDDCommand(ID iID, EBRDD* iEBRDD);
 	///Destructor
 	virtual ~EBRDDCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -84,7 +84,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const;
+	ID getID() const;
 	////Sets the internal pointer to the simulation components
 	////**
       	//\param iSimComp Pointer to simulation components
@@ -98,7 +98,7 @@ public:
 	//EBRDDCommand** getNextCommands(unsigned int& oNbOfCmd) const;
 protected:
 	///ID of the command
-	unsigned int _ID;
+	ID _ID;
 	///Pointer to the EBRDD the command belongs to
 	EBRDD* _ebrdd;
 	///Pointer to an array of pointers to the next commands

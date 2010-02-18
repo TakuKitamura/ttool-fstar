@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLRequestCommand::TMLRequestCommand(unsigned int iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam): TMLCommand(iID,  iTask, WAIT_SEND_VLEN, 1), _channel(iChannel), _statParam(iStatParam){
+TMLRequestCommand::TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam): TMLCommand(iID,  iTask, WAIT_SEND_VLEN, 1), _channel(iChannel), _statParam(iStatParam){
 }
 
 void TMLRequestCommand::execute(){

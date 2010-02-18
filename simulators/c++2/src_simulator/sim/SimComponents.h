@@ -151,31 +151,31 @@ public:
 	\param iID ID of the CPU
 	\return Pointer to that CPU
 	*/
-	SchedulableDevice* getCPUByID(unsigned int iID) const;
+	SchedulableDevice* getCPUByID(ID iID) const;
 	///Searches for a Task based on its name
 	/**
 	\param iID ID of the Task
 	\return Pointer to that Task
 	*/
-	TMLTask* getTaskByID(unsigned int iID) const;
+	TMLTask* getTaskByID(ID iID) const;
 	///Searches for a Bus based on its name
 	/**
 	\param iID ID of the Bus
 	\return Pointer to that Bus
 	*/
-	SchedulableCommDevice* getBusByID(unsigned int iID) const;
+	SchedulableCommDevice* getBusByID(ID iID) const;
 	///Searches for a Slave based on its name
 	/**
 	\param iID ID of the Slave
 	\return Pointer to that Slave
 	*/
-	Slave* getSlaveByID(unsigned int iID) const;
+	Slave* getSlaveByID(ID iID) const;
 	///Searches for a Channel based on its name
 	/**
 	\param iID ID of the Channel
 	\return Pointer to that Channel
 	*/
-	TMLChannel* getChannelByID(unsigned int iID) const;
+	TMLChannel* getChannelByID(ID iID) const;
 	///Returns an iterator for the internal CPU list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
@@ -240,7 +240,7 @@ public:
 	*/
 	Simulator* getSimulator(){return _simulator;}
 	void setSimulator(Simulator* iSim){_simulator=iSim;}
-	std::string getCmpNameByID(unsigned int iID);
+	std::string getCmpNameByID(ID iID);
 	///Returns the hash value for the current task state
 	/**
 	\return Hash Value

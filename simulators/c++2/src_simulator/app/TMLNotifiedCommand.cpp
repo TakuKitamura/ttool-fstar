@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLNotifiedCommand::TMLNotifiedCommand(unsigned int iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
+TMLNotifiedCommand::TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
 }
 
 void TMLNotifiedCommand::execute(){

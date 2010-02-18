@@ -52,7 +52,7 @@ class TMLTransaction;
 class Slave: public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
-	Slave(unsigned int iID, std::string iName):_name(iName), _ID(iID) {}
+	Slave(ID iID, std::string iName):_name(iName), _ID(iID) {}
 	///Destructor
 	virtual ~Slave(){}
 	///Calculates the time it takes to process the transaction within the slave node
@@ -77,11 +77,11 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const {return _ID;}
+	ID getID() const {return _ID;}
 protected:
 	///Name of the slave
 	std::string _name;
-	unsigned int _ID;
+	ID _ID;
 };
 
 #endif

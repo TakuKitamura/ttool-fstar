@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(unsigned int iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, unsigned int iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority){
+TMLChannel::TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority){
 }
 
 TMLChannel::~TMLChannel(){
@@ -126,11 +126,11 @@ void TMLChannel::reset(){
 	//std::cout << "Channel reset end" << std::endl;
 }
 
-unsigned int TMLChannel::getID() const {
+ID TMLChannel::getID() const {
 	return _ID;
 }
 
-unsigned int TMLChannel::insertSamples(unsigned int iNbOfSamples, Parameter<ParamType>& iParam){
+TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
 	return iNbOfSamples;
 }
 
@@ -150,7 +150,7 @@ bool TMLChannel::getUnderflow() const{
 	return false;
 }
 
-unsigned int TMLChannel::getPriority(){
+Priority TMLChannel::getPriority(){
 	return _priority;
 }
 

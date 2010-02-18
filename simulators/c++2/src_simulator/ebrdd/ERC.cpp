@@ -46,10 +46,10 @@ Ludovic Apvrille, Renaud Pacalet
 
 SimComponents* ERC::_simComp=0;
 
-ERC::ERC(unsigned int iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD), _wasPrepared(false), _once(true) {
+ERC::ERC(ID iID, EBRDD* iEBRDD): NotifyIF(1), EBRDDCommand(iID, iEBRDD), _ebrdd(iEBRDD), _wasPrepared(false), _once(true) {
 }
 
-void ERC::notifyEvent(unsigned int iID){
+void ERC::notifyEvent(ID iID){
 	//std::cout << "***** Container " << _ID << " notified *****\n";
 	_wasPrepared=false;
 	//_simComp->getSimulator()->removeListener(this); ///////////////////NEW!!!!!!!!!!!!
@@ -58,7 +58,7 @@ void ERC::notifyEvent(unsigned int iID){
 	if (_nextCommand[0]!=0) _nextCommand[0]->prepare(); 
 	//std::cout << "end notify event\n";
 }
-void ERC::notifyAbort(unsigned int iID){
+void ERC::notifyAbort(ID iID){
 	_wasPrepared=false;
  	_simComp->getSimulator()->removeListener(this);
 	std::cout << "***** Container aborted " << _ID << " *****\n";

@@ -64,7 +64,7 @@ public:
 	\param iNbOfNextCmds Number of next commands
     	*/
 	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
-	TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds);
+	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -158,7 +158,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	unsigned int getID() const;
+	ID getID() const;
 	///Sets a new breakpoint
 	/**
       	\param iBreakp Pointer to breakpoint
@@ -189,7 +189,7 @@ public:
 	unsigned long getStateHash() const;
 protected:
 	///ID of the command
-	unsigned int _ID;
+	ID _ID;
 	///Length of the command
 	TMLLength _length;
 	///Progress of the command (in execution units)
