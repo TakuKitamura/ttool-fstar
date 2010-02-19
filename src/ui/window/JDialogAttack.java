@@ -66,6 +66,7 @@ public class JDialogAttack extends javax.swing.JDialog implements ActionListener
     
     //protected JTextField taskName;
 	protected JTextField name, description;
+	protected JCheckBox isRootAttack;
 	
     // Main Panel
     private JButton closeButton;
@@ -111,6 +112,12 @@ public class JDialogAttack extends javax.swing.JDialog implements ActionListener
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		isRootAttack = new JCheckBox("root attack");
+		isRootAttack.setSelected(attack.isRootAttack());
+		panel2.add(isRootAttack, c1);
+		
+		c1.gridwidth = 1;
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Name:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -175,6 +182,10 @@ public class JDialogAttack extends javax.swing.JDialog implements ActionListener
     public String getName() {
        return name.getText();
     }
+	
+	public boolean isRootAttack() {
+		return isRootAttack.isSelected();
+	}
 	
 
     

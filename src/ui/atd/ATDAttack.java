@@ -64,6 +64,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     protected String oldValue = "";
     protected String description = "";
 	private String stereotype = "attack";
+	private String rootStereotype = "root attack";
+	private boolean isRootAttack = false;
 	 
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
@@ -109,7 +111,12 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     }
     
     public void internalDrawing(Graphics g) {
-        String ster = "<<" + stereotype + ">>";
+		String ster;
+		if (isRootAttack) {
+			ster = "<<" + rootStereotype + ">>";
+		} else {
+			ster = "<<" + stereotype + ">>";
+		}
 		Font f = g.getFont();
 		Font fold = f;
 		
@@ -160,7 +167,11 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.ATD_ATTACK);
+		if (isRootAttack) {
+			g.setColor(ColorManager.ATD_ROOT_ATTACK);
+		} else {
+			g.setColor(ColorManager.ATD_ATTACK);
+		}
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
@@ -265,6 +276,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		if (dialog.getDescription() != null) {
 			description = dialog.getDescription();
 		}
+		
+		isRootAttack = dialog.isRootAttack();
 			
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
@@ -291,6 +304,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
+		sb.append("\" root=\"" +isRootAttack);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -306,6 +320,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             int t1id;
             String sdescription = null;
 			String prio;
+			String isRoot = null;
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -319,9 +334,17 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                             elt = (Element) n2;
                             if (elt.getTagName().equals("info")) {
                                 sdescription = elt.getAttribute("description");
+								isRoot = elt.getAttribute("root");
                             }
                             if (sdescription != null) {
                                 description = sdescription;
+                            } 
+							if (isRoot != null) {
+                                if (isRoot.toUpperCase().compareTo("TRUE") == 0) {
+									isRootAttack = true;
+								} else {
+									isRootAttack = false;
+								}
                             } 
                         }
                     }
@@ -350,6 +373,10 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		String s = "Description = " + description + "\n";
 		s += "Id=" + getId();
 		return s;
+	}
+	
+	public boolean isRootAttack() {
+		return isRootAttack;
 	}
     
   

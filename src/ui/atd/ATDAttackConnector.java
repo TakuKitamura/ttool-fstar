@@ -89,11 +89,19 @@ public  class ATDAttackConnector extends TGConnector implements ScalableTGCompon
 		g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
 		
 		Point p = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
+		if (p == null) {
+			//System.out.println("null point");
+		} else {
 		if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, p.x, p.y);
+			//System.out.println("p.x=" + p.x + " x1=" + x1 + "p.y=" + p.y + " y1=" + y1);
+			if ((p.x != x1) || (p.y != y1)) {
+				g.drawLine(x1, y1, p.x, p.y);
+				//System.out.println("drawn");
+			}
         } else {
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
         }
+		}
 		
 		if (value.length() > 0) {
 			Font f = g.getFont();

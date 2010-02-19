@@ -46,7 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package translator;
 
 public class RTLOTOSKeyword {
-    private final static String [] words = {"specification", "endspec", "process", "endproc", "exit", "noexit", "behaviour", "where", "hide", "in", "stop", "delay", "latency", "type", "is", "endtype", "library", "endlib", "sorts", "opns", "eqns", "let", "i", "inf", "min", "max", "true", "false", "div", "mod", "divs", "nat", "natural", "boolean", "not", "and", "or", "Clock", "clock"};
+    private final static String [] words = {"specification", "endspec", "process", "endproc", "exit", "noexit", "behaviour", "where", "hide", "in", "stop", "delay", "latency", "type", "is", "endtype", "library", "endlib", "sorts", "opns", "eqns", "let", "i", "inf", "min", "max", "true", "false", "div", "mod", "divs", "nat", "natural", "boolean", "not", "and", "or", "Clock", "clock", "time", "Time"};
     
     public static boolean isAKeyword(String s) {
         for(int i=0; i<words.length; i++) {

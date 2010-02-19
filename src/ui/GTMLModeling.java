@@ -227,6 +227,16 @@ public class GTMLModeling  {
                     checkingErrors.add(ce);
                     throw new MalformedTMLDesignException(tmlto.getValue() + " msg");
                 }
+				
+				if (tmlm.getTMLTaskByName(tmlto.getValue()) != null) {
+					String msg = "Two tasks have the same name: " + tmlto.getValue() + " (mapping problem?)";
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                    ce.setTDiagramPanel(tmldp.tmltdp);
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
+                    throw new MalformedTMLDesignException(tmlto.getValue() + " msg");
+				}
+				
                 tmlt = new TMLTask(tmlto.getValue(), tmlto, tmladp);
 				listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
@@ -256,8 +266,16 @@ public class GTMLModeling  {
                     checkingErrors.add(ce);
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
+				if (tmlm.getTMLTaskByName(tmlcpc.getValue()) != null) {
+					String msg = "Two components have the same name: " + tmlcpc.getValue() + " (mapping problem?)";
+                    CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+                    ce.setTDiagramPanel(tmlcdp.tmlctdp);
+                    ce.setTGComponent(tgc);
+                    checkingErrors.add(ce);
+                    throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
+				}
                 tmlt = new TMLTask(tmlcpc.getValue(), tmlcpc, tmladp);
-				System.out.println("Task added:" + tmlcpc.getValue());
+				//System.out.println("Task added:" + tmlcpc.getValue());
 				listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
 				tmlt.setExit(false);

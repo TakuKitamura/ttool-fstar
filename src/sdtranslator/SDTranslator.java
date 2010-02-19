@@ -842,8 +842,8 @@ public class SDTranslator {
                     }
                 }
                 if (!expIsUsed) {
-                    //bt.removeExp();
-                    throw new SDTranslationException("Error on timers (error #3)");
+                   // bt.removeExp();
+                    //throw new SDTranslationException("Error on timers: expiration is never used (error #3)");
                 }
                 if (!resetIsUsed) {
                     //System.out.println("\n\n\nReset is not used\n\n\n");

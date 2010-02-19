@@ -140,8 +140,12 @@ public class TMLSyntaxChecking {
 				if (elt instanceof TMLWriteChannel) {
 					for(int j=0; j<((TMLWriteChannel)elt).getNbOfChannels(); j++) {
 						ch = ((TMLWriteChannel)elt).getChannel(j);
-						//System.out.println("Write channel");
+						//System.out.println("Write in channel" + ch.getName());
 						if (ch.getOriginTask() != t) {
+							//System.out.println("Origin task=" + ch.getOriginTask().getName() + " / task = " + t.getName() + "tch=" + ch.getOriginTask() + " t=" + t);
+							//System.out.println("tml:" + tmlm.toString());
+							TMLTextSpecification  tmlt = new TMLTextSpecification("toto");
+							//System.out.println("tml:" + tmlt.toTextFormat(tmlm));
 							addError(t, elt, ch.getName() + ": " + WRONG_ORIGIN_CHANNEL, TMLError.ERROR_BEHAVIOR);
 						}
 					}
