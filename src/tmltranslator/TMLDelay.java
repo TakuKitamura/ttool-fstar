@@ -76,5 +76,18 @@ public class TMLDelay extends TMLActivityElementWithIntervalAction {
 		
 		return false;
 	}
+
+	public String getMasterClockFactor(){
+		if (timeUnit.equals("ns")) {
+			return "/1000";
+		} else if (timeUnit.equals("us")) {
+			return "";
+		} else if (timeUnit.equals("ms")) {
+			return "*1000";
+		} else if (timeUnit.equals("s")) {
+			return "*1000000";
+		}
+		return "";
+	}
     
 }
