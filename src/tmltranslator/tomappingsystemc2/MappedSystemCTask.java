@@ -205,7 +205,7 @@ public class MappedSystemCTask {
 	}
 
 	private String makeConstructorSignature(){
-		String constSig=reference+ "(unsigned int iID, unsigned int iPriority, std::string iName, CPU* iCPU"+CR;
+		String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU* iCPU"+CR;
 		for(TMLChannel ch: channels) {
 			constSig+=", TMLChannel* "+ ch.getExtendedName() + CR;
 		}
@@ -350,22 +350,30 @@ public class MappedSystemCTask {
 				return retElement;
 		
 		} else if (currElem instanceof TMLActionState || currElem instanceof TMLRandom || currElem instanceof TMLDelay){
-			String action;
+			String action,comment;
 			if (currElem instanceof TMLActionState){				
 				if (debug) System.out.println("Checking Action\n");
 				action = ((TMLActionState)currElem).getAction();
+				comment=action;
 				//if (action==null) System.out.println("No action!!!!\n");
 			}else if(currElem instanceof TMLRandom){
 				if (debug) System.out.println("Checking Random\n");
 				TMLRandom random = (TMLRandom)currElem;
 				action = random.getVariable() + "=myrand("+ random.getMinValue() + "," + random.getMaxValue() + ")";
+				comment=action;	
 			}else{
 				if (debug) System.out.println("Checking Delay\n");
+				int masterClockFreq = tmlmapping.getTMLArchitecture().getMasterClockFrequency();
 				TMLDelay delay=(TMLDelay)currElem;
-				if (delay.getMinDelay()==delay.getMaxDelay())
-					action = "_endLastTransaction+=" + delay.getMaxDelay();
-				else
-					action = "_endLastTransaction+=myrand(" + delay.getMinDelay() + "," + delay.getMaxDelay() + ")";
+				action = "TMLTime tmpDelayxy = " + delay.getMaxDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";";
+				comment=action;
+				action+= "\nif (tmpDelayxy==0) tmpDelayxy=1;\n";
+				if (delay.getMinDelay().equals(delay.getMaxDelay())){
+					action += "_endLastTransaction+=tmpDelayxy";
+				}else{
+					action += "TMLTime tmpDelayxx = " + delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";\nif (tmpDelayxx==0) tmpDelayxx=1;\n";
+					action += "_endLastTransaction+=myrand(mpDelayxx,mpDelayxy)";
+				}
 			}
 			//cmdName= "_action" + currElem.getID();
 			String elemName=currElem.getName(), idString;
@@ -398,7 +406,8 @@ public class MappedSystemCTask {
 				functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR + nextCommandCollection.funcs;
 				if (nextCommandCollection.num==0) functions+="return 0"+ SCCR;
 				functions+= "}" + CR2;
-				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
+				//commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
+				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
 				commentNum++;
 				functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 			}else{
@@ -406,7 +415,7 @@ public class MappedSystemCTask {
 				//idsMergedCmds += "_commandHash[" + currElem.getID() + "]=&" + nextCommandCont.srcCmd + SCCR;
 				idsMergedCmds += "_commandHash[" + idString + "]=&" + nextCommandCont.srcCmd + SCCR;
 				nextCommandCont.funcs += "#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
-				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + action + "\");\n";
+				commentText+="_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
 				commentNum++;
 				return makeCommands(currElem.getNextElement(0),false,retElement,nextCommandCont,null);
 			}
@@ -724,8 +733,8 @@ public class MappedSystemCTask {
 						paramList+=",(ParamFuncPointer)0";
 					}else{
 
-						functionSig+="void " + cmdName + "_func" + i + "(Parameter<ParamType>& ioParam)" + SCCR;
-						functions+="void " + reference + "::" + cmdName +  "_func" + i + "(Parameter<ParamType>& ioParam){" + CR;
+						functionSig+="void " + cmdName + "_func_" + i + "(Parameter<ParamType>& ioParam)" + SCCR;
+						functions+="void " + reference + "::" + cmdName +  "_func_" + i + "(Parameter<ParamType>& ioParam){" + CR;
 						paramList+=",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
 						functions += "ioParam.getP(";
 						for(int j=0; j<3; j++) {
@@ -772,10 +781,10 @@ public class MappedSystemCTask {
 	
 	private String makeCommandLenFunc(String cmdName, String lowerLimit, String upperLimit){
 		if (upperLimit==null)
-			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nreturn (unsigned int)(" + lowerLimit + ");\n}" + CR2;
+			functions+="TMLLength "+ reference + "::" + cmdName + "_func(){\nreturn (TMLLength)(" + lowerLimit + ");\n}" + CR2;
 		else
-			functions+="unsigned int "+ reference + "::" + cmdName + "_func(){\nreturn (unsigned int)myrand(" + lowerLimit + "," + upperLimit + ");\n}" + CR2;
-		functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
+			functions+="TMLLength "+ reference + "::" + cmdName + "_func(){\nreturn (TMLLength)myrand(" + lowerLimit + "," + upperLimit + ");\n}" + CR2;
+		functionSig+="TMLLength " + cmdName + "_func()" + SCCR;
 		return "(LengthFuncPointer)&" + reference + "::" + cmdName + "_func";
 	}
 
@@ -844,10 +853,10 @@ public class MappedSystemCTask {
 		//while(iterator.hasNext()) {
 			//att = (TMLAttribute)(iterator.next());
 			//code += TMLType.getStringType(att.type.getType()) + " " + att.name;
-			code += "int " + att.name;
+			code += "ParamType " + att.name;
 			code += ";\n";
 		}		
-		code += "int rnd__0" + SCCR;
+		code += "ParamType rnd__0" + SCCR;
 		//code += "int arg1__req" + SCCR;
 		//code += "int arg2__req" + SCCR;
 		//code += "int arg3__req" + SCCR;
