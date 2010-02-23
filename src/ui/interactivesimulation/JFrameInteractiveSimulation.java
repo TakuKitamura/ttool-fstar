@@ -152,13 +152,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// CPU
 	CPUTableModel cputm;
-	JButton updateCPUInformationButton;
+	JButton updateCPUInformationButton, printCPUInfo;
 	private JScrollPane jspCPUInfo;
+	private JPanel panelCPU;
 	
 	// Memories
 	JPanel memPanel;
 	MemTableModel memtm;
-	JButton updateMemoryInformationButton;
+	JButton updateMemoryInformationButton, printBusInfo;
 	private JScrollPane jspMemInfo;
 	
 	// Bus
@@ -166,6 +167,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	BusTableModel bustm;
 	JButton updateBusInformationButton;
 	private JScrollPane jspBusInfo;
+	private JPanel panelBus;
 	
 	
 	private int mode = 0;
@@ -677,8 +679,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jspCPUInfo.getVerticalScrollBar().setUnitIncrement(10);
 		jspCPUInfo.setPreferredSize(new Dimension(500, 300));
 		cpuPanel.add(jspCPUInfo, BorderLayout.NORTH);
+		panelCPU = new JPanel(new FlowLayout());
 		updateCPUInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS]);
-		cpuPanel.add(updateCPUInformationButton, BorderLayout.SOUTH);
+		panelCPU.add(updateCPUInformationButton);
+		printCPUInfo = new JButton(actions[InteractiveSimulationActions.ACT_PRINT_CPUS]);
+		panelCPU.add(printCPUInfo);
+		cpuPanel.add(panelCPU, BorderLayout.SOUTH);
 		
 		// Memories
 		memPanel = new JPanel();
@@ -717,8 +723,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jspBusInfo.getVerticalScrollBar().setUnitIncrement(10);
 		jspBusInfo.setPreferredSize(new Dimension(500, 300));
 		busPanel.add(jspBusInfo, BorderLayout.NORTH);
+		panelBus = new JPanel(new FlowLayout());
 		updateBusInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_BUS]);
-		busPanel.add(updateBusInformationButton, BorderLayout.SOUTH);
+		panelBus.add(updateBusInformationButton);
+		printBusInfo = new JButton(actions[InteractiveSimulationActions.ACT_PRINT_BUS]);
+		panelBus.add(printBusInfo);
+		busPanel.add(panelBus, BorderLayout.SOUTH);
 		
 		
 		if (!hashOK) {
@@ -1794,6 +1804,37 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void printCPUs() {
+		String name;
+		String tmp;
+		int index;
+		jta.append("\nCPUs:\n");
+		for(int i=0; i<cputm.getRowCount(); i++) {
+			name = (String)(cputm.getValueAt(i, 0));
+			tmp = (String)(cputm.getValueAt(i, 2));
+			jta.append("* " + name + "\n");
+			index = tmp.indexOf(';');
+			if (index == -1) {
+				jta.append("\t - \n");
+			} else {
+				jta.append("\t" + tmp.substring(0, index) + "\n");
+				jta.append("\t" + tmp.substring(index+1, tmp.length()) + "\n");
+			}
+		}
+	}
+	
+	private void printBuses() {
+		String name;
+		String tmp;
+		jta.append("\nBuses:\n");
+		for(int i=0; i<bustm.getRowCount(); i++) {
+			name = (String)(bustm.getValueAt(i, 0));
+			tmp = (String)(bustm.getValueAt(i, 2));
+			jta.append("* " + name + "\n");
+			jta.append("\t" + tmp + "\n");
+		}
+	}
+	
 	private void updateVariableState(String _idvar, String _value) {
 		Integer i = getInteger(_idvar);
 		int row;
@@ -1958,7 +1999,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             updateBus();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS].getActionCommand())) {
             updateTasks();
-        }
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_CPUS].getActionCommand())) {
+            printCPUs();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_BUS].getActionCommand())) {
+            printBuses();
+        } 
 	}
 	
 	public void error(String error) {

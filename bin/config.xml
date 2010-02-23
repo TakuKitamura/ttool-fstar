@@ -39,6 +39,7 @@
 <SystemCHost data="localhost"/>
 <SystemCCodeCompileCommand data="make -C /Users/ludovicapvrille/TTool/simulators/c++2/" />
 <SystemCCodeExecuteCommand data="/Users/ludovicapvrille/TTool/simulators/c++2/run.x -ovcd /Users/ludovicapvrille/TTool/simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="/homes/apvrille/TechTTool/SystemCCode/generated/run.x -server" />
 <TMLCodeDirectory data="/Users/ludovicapvrille/TTool/tmlcode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
 <VCDPath data="/Users/ludovicapvrille/TTool/vcd" />

@@ -91,8 +91,11 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_UPDATE_MEMS = 17;
 	public static final int ACT_UPDATE_BUS = 18;  
 	public static final int ACT_UPDATE_TASKS = 19;
+	
+	public static final int ACT_PRINT_CPUS = 28;
+	public static final int ACT_PRINT_BUS = 29;
    
-    public static final int NB_ACTION = 28;
+    public static final int NB_ACTION = 30;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -159,10 +162,13 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_STOP_AND_CLOSE_ALL] = new TAction("stop-and-close-all", "Terminate simulation and quit", IconManager.imgic27, IconManager.imgic27, "Terminate simulation and quit", "Terminate the simulation and quit the simulation window", 'T');
         
 		actions[ACT_UPDATE_VARIABLES] = new TAction("update-variables", "Update variables", IconManager.imgic75, IconManager.imgic75, "Update variables", "Update variables", 'R');
-        actions[ACT_UPDATE_CPUS] = new TAction("update-cpus", "Update CPU information", IconManager.imgic75, IconManager.imgic75, "Update CPU information", "Update information on CPUs", 'R');
+        actions[ACT_UPDATE_CPUS] = new TAction("update-cpus", "Update CPU info", IconManager.imgic75, IconManager.imgic75, "Update CPU information", "Update information on CPUs", 'R');
         actions[ACT_UPDATE_MEMS] = new TAction("update-mems", "Update Memories information", IconManager.imgic75, IconManager.imgic75, "Update Memories information", "Update information on Memories", 'R');
-        actions[ACT_UPDATE_BUS] = new TAction("update-bus", "Update bus information", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on busses", 'R');
+        actions[ACT_UPDATE_BUS] = new TAction("update-bus", "Update bus info", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on busses", 'R');
         actions[ACT_UPDATE_TASKS] = new TAction("update-tasks", "Update task information", IconManager.imgic75, IconManager.imgic75, "Update task information", "Update information on tasks", 'R');
+		
+		actions[ACT_PRINT_CPUS] = new TAction("print-cpus", "Print CPU info", IconManager.imgic75, IconManager.imgic75, "Print CPU information", "Print information on CPUs", 'R');
+		actions[ACT_PRINT_BUS] = new TAction("print-bus", "Print Bus info", IconManager.imgic75, IconManager.imgic75, "Print Bus information", "Print information on Busses", 'R');
 		
 		actions[ACT_PRINT_BENCHMARK] = new TAction("print-benchmark", "Print benchmark", IconManager.imgic29, IconManager.imgic29, "Print benchmark", "Print benchmark at simulator side", 'R');
         actions[ACT_SAVE_BENCHMARK] = new TAction("save-benchmark", "Save benchmark", IconManager.imgic25, IconManager.imgic25, "Save benchmark", "Save benchmark at simulator side", 'R');
