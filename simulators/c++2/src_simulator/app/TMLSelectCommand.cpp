@@ -55,24 +55,31 @@ TMLSelectCommand::~TMLSelectCommand(){
 }
 
 void TMLSelectCommand::execute(){
-	unsigned int i,aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
+	unsigned int aFinalIndex=0, aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
+	//i
 	bool aReadDone=false;
 	//std::cout << "LoopLimit: " << aLoopLimit << std::endl;
-	for (i=0;i<aLoopLimit;i++){
+	//for (i=0;i<aLoopLimit;i++){
+	for (_indexNextCommand=0;_indexNextCommand<aLoopLimit;_indexNextCommand++){
 		if (aReadDone){
-			_channel[i]->cancelReadTransaction();
+			//_channel[i]->cancelReadTransaction();
+			_channel[_indexNextCommand]->cancelReadTransaction();
 			//std::cout << "Channel " << _channel[i]->toString() << " cancelled read transaction.\n";
 		}else{
-			if (_channel[i]->read()){
+			//if (_channel[i]->read()){
+			if (_channel[_indexNextCommand]->read()){
 				aReadDone=true;
-				_indexNextCommand=i;
+				aFinalIndex=_indexNextCommand;
+				//_indexNextCommand=i;
 				//std::cout << "Read executed in channel " << _channel[i]->toString() << "\n";
 			}else{
-				_channel[i]->cancelReadTransaction();
+				//_channel[i]->cancelReadTransaction();
+				_channel[_indexNextCommand]->cancelReadTransaction();
 				//std::cout << "Channel " << _channel[i]->toString() << " cancelled read transaction.\n";
 			}
 		}
 	}
+	_indexNextCommand = aFinalIndex;
 	_currTransaction->setChannel(_channel[_indexNextCommand]);
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
@@ -144,3 +151,7 @@ std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
 	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
 }
 #endif
+
+void TMLSelectCommand::setParams(Parameter<ParamType>& ioParam){
+	if (_paramFuncs[_indexNextCommand]!=0) (_task->*_paramFuncs[_indexNextCommand])(ioParam);
+}

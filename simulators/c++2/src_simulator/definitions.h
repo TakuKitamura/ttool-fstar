@@ -191,10 +191,10 @@ class EBRDDCommand;
 
 ///Datatype used for time measurements
 //typedef unsigned long long TMLTime;
-typedef unsigned int TMLTime;
+typedef unsigned long long TMLTime;
 ///Datatype used to indicate the virtual length of commands (execution units, data units)
 //typedef unsigned long long TMLLength;
-typedef unsigned int TMLLength;
+typedef unsigned long long TMLLength;
 ///Priorities
 typedef unsigned int Priority;
 ///IDs
