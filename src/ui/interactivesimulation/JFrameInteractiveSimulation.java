@@ -119,7 +119,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox debug, animate, update, openDiagram;
+	JCheckBox latex, debug, animate, update, openDiagram;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -589,6 +589,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.gridheight = 1;
 		
 		jp01.add(new JLabel(" "), c01);
+		latex = new JCheckBox("Generate info in Latex format");
+		jp01.add(latex, c01);
 		debug = new JCheckBox("Print messages received from server");
 		jp01.add(debug, c01);
 		animate = new JCheckBox("Animate UML diagrams");
@@ -979,11 +981,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		} else if (e.getSource() == listTextCommands) {
 			listTextCommands();
 		} /*else if (e.getSource() == resetCommand) {
-			sendCommand("reset");
+		sendCommand("reset");
 		} else if (e.getSource() == runCommand) {
-			sendCommand("run-to-next-breakpoint");
+		sendCommand("run-to-next-breakpoint");
 		} else if (e.getSource() == StopCommand) {
-			sendCommand("stop");
+		sendCommand("stop");
 		}*/
 	}
 	
@@ -1669,9 +1671,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sendCommand("get-variable-of-task all all\n");
 		
 		/*for(TMLTask task: tmap.getTMLModeling().getTasks()) {
-			for(TMLAttribute tmla: task.getAttributes()) {
-				sendCommand("get-variable-of-task " + task.getID() + " " + tmla.getID());
-			}
+		for(TMLAttribute tmla: task.getAttributes()) {
+		sendCommand("get-variable-of-task " + task.getID() + " " + tmla.getID());
+		}
 		}*/
 	}
 	
@@ -1749,7 +1751,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sendCommand("get-command-of-task all"); 
 		
 		/*for(TMLTask task: tmap.getTMLModeling().getTasks()) {
-			sendCommand("get-command-of-task " + task.getID()); 
+		sendCommand("get-command-of-task " + task.getID()); 
 		}*/
 	}
 	
@@ -1804,34 +1806,94 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	
+	
 	private void printCPUs() {
-		String name;
-		String tmp;
-		int index;
-		jta.append("\nCPUs:\n");
-		for(int i=0; i<cputm.getRowCount(); i++) {
-			name = (String)(cputm.getValueAt(i, 0));
-			tmp = (String)(cputm.getValueAt(i, 2));
-			jta.append("* " + name + "\n");
-			index = tmp.indexOf(';');
-			if (index == -1) {
-				jta.append("\t - \n");
-			} else {
-				jta.append("\t" + tmp.substring(0, index) + "\n");
-				jta.append("\t" + tmp.substring(index+1, tmp.length()) + "\n");
+		if (latex.isSelected()) {
+			String name;
+			String tmp, tmp1;
+			int index, index1;
+			jta.append("\\begin{tabular}{|l|c|c|}\n");
+			jta.append("\\hline\n");
+			jta.append("\\texbf{CPU} & \\textbf{Load} & \\textbf{Contention delay}\n");
+			jta.append("\\hline\n");
+			for(int i=0; i<cputm.getRowCount(); i++) {
+				name = (String)(cputm.getValueAt(i, 0));
+				tmp = (String)(cputm.getValueAt(i, 2));
+				jta.append(Conversion.toLatex(name) + " &");
+				index = tmp.indexOf(';');
+				if (index == -1) {
+					jta.append(" - & - \\\\\n");
+				} else {
+					
+					
+					tmp1 = tmp.substring(0, index);
+					index1 = tmp1.indexOf(':');
+					if (index1 != -1) {
+						tmp1 = tmp1.substring(index1 + 2, tmp1.length());
+					}
+					jta.append("" + tmp1 + " &");
+					tmp1 = tmp.substring(index+1, tmp.length());
+					index1 = tmp1.indexOf(':');
+					if (index1 != -1) {
+						tmp1 = tmp1.substring(index1 + 2, tmp1.length());
+					}
+					jta.append("" + tmp1 + "\\\\\n");
+				}
 			}
-		}
+			jta.append("\\hline\n");
+		} else {
+			String name;
+			String tmp, tmp1;
+			int index, index1;
+			jta.append("\nCPUs:\n");
+			for(int i=0; i<cputm.getRowCount(); i++) {
+				name = (String)(cputm.getValueAt(i, 0));
+				tmp = (String)(cputm.getValueAt(i, 2));
+				jta.append("* " + name + "\n");
+				index = tmp.indexOf(';');
+				if (index == -1) {
+					jta.append("\t - \n");
+				} else {
+					jta.append("\t" + tmp.substring(0, index) + "\n");
+					jta.append("\t" + tmp.substring(index+1, tmp.length()) + "\n");
+				}
+			}
+		} 
 	}
 	
 	private void printBuses() {
-		String name;
-		String tmp;
-		jta.append("\nBuses:\n");
-		for(int i=0; i<bustm.getRowCount(); i++) {
-			name = (String)(bustm.getValueAt(i, 0));
-			tmp = (String)(bustm.getValueAt(i, 2));
-			jta.append("* " + name + "\n");
-			jta.append("\t" + tmp + "\n");
+		if (latex.isSelected()) {
+			String name;
+			String tmp, tmp1;
+			int index, index1;
+			jta.append("\\begin{tabular}{|l|c|c|}\n");
+			jta.append("\\hline\n");
+			jta.append("\\texbf{CPU} & \\textbf{Load} & \\textbf{Contention delay}\n");
+			jta.append("\\hline\n");
+			for(int i=0; i<bustm.getRowCount(); i++) {
+				name = (String)(bustm.getValueAt(i, 0));
+				tmp = (String)(bustm.getValueAt(i, 2));
+				jta.append(Conversion.toLatex(name) + " &");
+				index = tmp.indexOf(':');
+				if (index == -1) {
+					jta.append(" - \\\\\n");
+				} else {
+					tmp1 = tmp.substring(index+2, tmp.length());
+					jta.append("" + tmp1 + "\\\\\n");
+				}
+			}
+			jta.append("\\hline\n");
+		} else {
+			String name;
+			String tmp;
+			jta.append("\nBuses:\n");
+			for(int i=0; i<bustm.getRowCount(); i++) {
+				name = (String)(bustm.getValueAt(i, 0));
+				tmp = (String)(bustm.getValueAt(i, 2));
+				jta.append("* " + name + "\n");
+				jta.append("\t" + tmp + "\n");
+			}
 		}
 	}
 	
@@ -1882,7 +1944,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				valueTable.remove(i);
 				info = "Utilization: " + _utilization;
 				if ((contdel != null) && (busName != null) && (busID != null)) {
-					info += "; Cont. delay on " + busName + " (" + busID + ") = " + contdel;
+					info += "; Cont. delay on " + busName + " (" + busID + "): " + contdel;
 				}
 				valueTable.put(i, info);
 				//System.out.println("Searching for old row");
@@ -2070,20 +2132,20 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public int getIDFromString(String s) {
 		int index0 = s.indexOf("(");
-			int index1 = s.indexOf(")");
-			if ((index0 < 0) || (index1 <0) || (index1 < index0)) {
-				return -1;
-			}
-			
-			String in = s.substring(index0+1, index1);
-			
-			try {
-				return Integer.decode(in).intValue();
-			} catch (Exception e) {
-				System.err.println("Wrong string: "+ in);
-			}
-			
+		int index1 = s.indexOf(")");
+		if ((index0 < 0) || (index1 <0) || (index1 < index0)) {
 			return -1;
+		}
+		
+		String in = s.substring(index0+1, index1);
+		
+		try {
+			return Integer.decode(in).intValue();
+		} catch (Exception e) {
+			System.err.println("Wrong string: "+ in);
+		}
+		
+		return -1;
 	}
 	
 	

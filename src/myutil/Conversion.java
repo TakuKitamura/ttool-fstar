@@ -599,6 +599,11 @@ public class Conversion {
 		return (b1 && b2);
 	}
 	
+	public static String toLatex(String _s) {
+		_s = replaceAllChar(_s, '_', "!");
+		return replaceAllChar(_s, '!', "\\_");
+	}
+	
 	
 	/*public static String removeComments(String _s) {
 		// Two types of comments: the one used in C++
