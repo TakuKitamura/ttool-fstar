@@ -66,7 +66,7 @@ TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 	if (_progress==0){
 		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
 		if (_length==0){
-			std::cout << "ExeciCommand len==0 " << std::endl;
+			//std::cout << "ExeciCommand len==0 " << std::endl;
 			TMLCommand* aNextCommand=getNextCommand();
 			_task->setCurrCommand(aNextCommand);
 			if (aNextCommand!=0) return aNextCommand->prepare(false);
