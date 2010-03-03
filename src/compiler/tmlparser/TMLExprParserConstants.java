@@ -214,7 +214,6 @@ public interface TMLExprParserConstants {
     "\"]\"",
     "\"{\"",
     "\"}\"",
-    "\"=<\"",
   };
 
 }

@@ -542,7 +542,7 @@ void StrictBoolOperator() #BOOL_OP:
 void NatComparisonOperator() #NAT_COMP:
 {Token t;}
 {
-  (t = "<" | t = ">" | t = "==" | t = "=<" | t = ">=") {jjtThis.setInfo(""+t.kind,t.image);}
+  (t = "<" | t = ">" | t = "==" | t = "<=" | t = ">=") {jjtThis.setInfo(""+t.kind,t.image);}
 }
 
 

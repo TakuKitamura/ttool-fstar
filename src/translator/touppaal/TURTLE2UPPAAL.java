@@ -1011,11 +1011,16 @@ public class TURTLE2UPPAAL {
 					} else {
 						System.out.println("Special choice delay");
 						
+						/* Current limitation: at most two delays */
+						
 						int tmpX = currentX;
 						int next = 0;
 						ADComponent elt1;
 						boolean delayed;
 						String gua = null;
+						int nbOfDelays = 0;
+						String inv = "";
+						String tmp;
 						
 						// Initialization
 						String init = "h__ = 0";
@@ -1026,16 +1031,21 @@ public class TURTLE2UPPAAL {
 							
 							if (elt1 instanceof ADDelay) {
 								init = init + ", choice__" + i + " = max(0, " + ((ADDelay)(elt1)).getValue() + ")";
+								nbOfDelays ++;
 							}
 							
 							if (elt1 instanceof ADLatency) {
 								init = init + ", choice__" + i + " = 0"; 
+								nbOfDelays ++;
 							}
 							
 							if (elt1 instanceof ADTimeInterval) {
 								init = init + ", choice__" + i + " = max(0, " + ((ADTimeInterval)(elt1)).getMinValue() + ")";
+								nbOfDelays ++;
 							}
-						}							
+						}
+						
+						
 						loc = addRLocation(template);
 						previous.setCommitted();
 						tr = addRTransition(template, previous, loc);
@@ -1043,6 +1053,7 @@ public class TURTLE2UPPAAL {
 						
 						
 						// Setting randomnly the value of non-deterministic time
+						nbOfDelays = 0;
 						for(i=0; i<elt.getNbNext(); i++){
 							elt1 = elt.getNext(i);
 							if (elt1 instanceof ADLatency) {
@@ -1086,6 +1097,14 @@ public class TURTLE2UPPAAL {
 								if (gua != null) {
 									guadelay = "(" + gua + ") && (" + guadelay + ")";
 								}
+								
+								tmp = "((choice__" + i + " >0) && ( h__<= choice__" + i + ")) || (choice__" + i + "==0)";
+								if (inv.length() ==0) {
+									inv = tmp;
+								} else {
+									inv = "(" + inv + ") && (" + tmp + ")";
+								}
+								
 								tr = addRTransition(template, loc1, loc1);
 								setGuard(tr, guadelay);
 								setAssignment(tr, "choice__" + i + " = 0");
@@ -1100,6 +1119,10 @@ public class TURTLE2UPPAAL {
 								currentX += 2 * STEP_LOOP_X;
 							}
 						}
+						
+						// Making the invariant of loc1
+						loc1.setInvariant(inv);
+						
 					}
 					//System.out.println("ADChoice: testing");
 				} else if ((choicesDeterministic) || (adch.isElseChoice())) {
