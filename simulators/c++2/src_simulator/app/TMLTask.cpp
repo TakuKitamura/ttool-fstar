@@ -43,12 +43,15 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true) {
+unsigned int TMLTask::_instanceCount=1;
+
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount) {
 	_cpu->registerTask(this);
 #ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
 #endif
 	_transactList.reserve(BLOCK_SIZE);
+	_instanceCount++;
 }
 
 TMLTask::~TMLTask(){
@@ -381,4 +384,8 @@ unsigned int TMLTask::getState() const{
 TMLTransaction* TMLTask::getNextTransaction() const{
 	//std::cout << "Task::getNextTransaction\n";
 	return (_currCommand==0)?0:_currCommand->getCurrTransaction();
+}
+
+unsigned int TMLTask::getInstanceNo(){
+	return _myInstance;
 }

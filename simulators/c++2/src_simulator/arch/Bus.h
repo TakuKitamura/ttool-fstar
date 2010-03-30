@@ -128,7 +128,7 @@ protected:
 	///Bus width in bytes
 	unsigned int _busWidth;
 	///Busy cycles since simulation start
-	unsigned long _busyCycles;
+	TMLTime _busyCycles;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
 };

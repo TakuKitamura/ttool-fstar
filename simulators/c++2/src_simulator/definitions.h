@@ -86,7 +86,7 @@ using std::max;
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
 #define PARAMETER_BLOCK_SIZE 1000
-#undef ADD_COMMENTS
+#define ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
 //#undef REGISTER_TRANS_AT_CPU
 #define SAVE_BENCHMARK_VARS 
@@ -127,6 +127,10 @@ using std::max;
 #define TAG_GLOBALc "</global>"
 #define TAG_CURRCMDo "<currcmd"
 #define TAG_CURRCMDc "</currcmd>"
+#define TAG_STARTTIMEo "<starttime>"
+#define TAG_STARTTIMEc "</starttime>"
+#define TAG_FINISHTIMEo "<finishtime>"
+#define TAG_FINISHTIMEc "</finishtime>"
 #define TAG_BREAKCMDo "<breakcmd"
 #define TAG_BREAKCMDc "</breakcmd>"
 #define TAG_NEXTCMDo "<nextcmd>"

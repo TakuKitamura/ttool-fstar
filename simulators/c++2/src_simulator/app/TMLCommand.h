@@ -171,6 +171,11 @@ public:
 	\return Progress of the command
 	*/
 	TMLLength getProgress() const;
+	///Returns the progress of the command in percent
+	/**
+	\return Progress of the command in percent
+	*/
+	unsigned int getProgressInPercent() const;
 	///Sets the internal pointer to the simulation components
 	/**
       	\param iSimComp Pointer to simulation components

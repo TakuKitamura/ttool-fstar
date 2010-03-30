@@ -148,7 +148,7 @@ void Bus::schedule2HTML(std::ofstream& myfile) const{
 		}
 		aLength=aCurrTrans->getOperationLength();
 		//aColor=(((unsigned int)(aCurrTrans->getCommand()->getTask())) & 15)+1;
-		aColor=aCurrTrans->getCommand()->getTask()->getID() & 15;
+		aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
 		if (aLength==1)
 			myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
 		else

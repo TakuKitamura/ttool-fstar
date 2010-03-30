@@ -160,7 +160,7 @@ protected:
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
 	///Busy cycles since simulation start
-	unsigned long _busyCycles;
+	TMLTime _busyCycles;
 	
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit

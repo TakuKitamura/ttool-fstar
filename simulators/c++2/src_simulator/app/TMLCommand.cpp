@@ -262,6 +262,10 @@ TMLLength TMLCommand::getProgress() const{
 	return _progress;
 }
 
+unsigned int TMLCommand::getProgressInPercent() const{
+	return (_length==0)? 0:_progress*100/_length;
+}
+
 void TMLCommand::setSimComponents(SimComponents* iSimComp){
 	_simComp=iSimComp;
 }

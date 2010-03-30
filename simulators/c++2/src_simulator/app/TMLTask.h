@@ -189,6 +189,11 @@ public:
 	\return Hash Value
 	*/
 	virtual unsigned long getStateHash() const=0;
+	///Returns the instance number of this task
+	/**
+	\return Instance number 
+	*/
+	unsigned int getInstanceNo();
 protected:
 	///ID of the task
 	ID _ID;
@@ -215,7 +220,7 @@ protected:
 	///Array of static comments concerning the control flow of the task
 	std::string* _comment;
 	///Busy cycles since simulation start
-	unsigned long _busyCycles;
+	TMLTime _busyCycles;
 	///Sum of contention delay of CPU transactions
 	unsigned long _CPUContentionDelay;
 	///Number of transactions which have been executed on a CPU
@@ -228,6 +233,9 @@ protected:
 	CommandHashTab _commandHash;
 	///Is true until the first transaction of a task is executed
 	bool _justStarted;
+	///Instace counter
+	static unsigned int _instanceCount;
+	unsigned int _myInstance;
 };
 
 #endif

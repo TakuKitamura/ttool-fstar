@@ -157,9 +157,9 @@ void CPU::calcStartTimeLength(TMLTime iTimeSlice){
 
 TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
 	if (_masterNextTransaction==0){
+#ifdef PENALTIES_ENABLED
 		if (iTime < _nextTransaction->getStartTime()) return 0;
 		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
-#ifdef PENALTIES_ENABLED
 		TMLTime aStaticPenalty = _nextTransaction->getIdlePenalty() + _nextTransaction->getTaskSwitchingPenalty();
 		if (aNewDuration<=aStaticPenalty){
 			_nextTransaction->setLength(_timePerExeci);
@@ -177,10 +177,13 @@ TMLTime CPU::truncateNextTransAt(TMLTime iTime){
 			_nextTransaction->setBranchingPenalty(_nextTransaction->getVirtualLength() * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
 		}
 #else
+		if (iTime <= _nextTransaction->getStartTime()) return 0;
+		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
 		_nextTransaction->setVirtualLength(aNewDuration /_timePerExeci);
 		_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
 #endif
 #ifdef DEBUG_CPU
+		std::cout << "aNewDuration: " << aNewDuration << std::endl;
 		std::cout << "CPU:truncateNTA: ### cut transaction at " << _nextTransaction->getVirtualLength() << std::endl;
 #endif
 	}
@@ -294,7 +297,7 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 			}
 		}
 		aLength=aCurrTrans->getOperationLength();
-		aColor=aCurrTrans->getCommand()->getTask()->getID() & 15;
+		aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
 		if (aLength==1)
 			myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
 		else
@@ -311,7 +314,7 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 	for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
 	myfile << "</tr>\n</table>\n<table>\n<tr>";
 	for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-		aColor=(*j)->getID() & 15;
+		aColor=(*j)->getInstanceNo() & 15;
 		myfile << "<td class=\"t"<< aColor <<"\"></td><td>"<< (*j)->toString() << "</td><td class=\"space\"></td>\n";
 	}
 	myfile << "</tr>";

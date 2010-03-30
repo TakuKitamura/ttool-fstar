@@ -54,6 +54,7 @@ Simulator::~Simulator(){
 }
 
 TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevice) const{
+	//int tmp=0;
 	TMLTransaction *aMarker=0, *aTempTrans;
 	TMLTime aLowestTime=-1;
 	SchedulableDevice* aTempDevice;
@@ -69,6 +70,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 #ifdef DEBUG_KERNEL
 			std::cout << "kernel:getTLET: transaction found on " << aTempDevice->toString() << ": " << aTempTrans->toString() << std::endl;
 #endif
+			//tmp++;
 			if (aTempTrans->getEndTime() < aLowestTime){		
 				aMarker=aTempTrans;
 				aLowestTime=aTempTrans->getEndTime();
@@ -79,6 +81,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 		else std::cout << "kernel:getTLET: no transaction found on " << aTempDevice->toString() << std::endl;
 #endif
 	}
+	//if (tmp==1) std::cout << "trans only on one CPU " << oResultDevice->toString() << "\n";
 	return aMarker; 
 }
 
@@ -1171,6 +1174,7 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 			//if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
 			writeSimState(aMessage);
 			aMessage << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+			std::cout << aMessage.str();
 			_syncInfo->_server->sendReply(aMessage.str());
 			break;
 		}
@@ -1189,14 +1193,21 @@ bool Simulator::execAsyncCmd(const std::string& iCmd){
 
 void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
 	ioMessage << TAG_TASKo << " id=\"" << iTask-> getID() << "\" name=\"" << iTask->toString() << "\">" << TAG_CURRCMDo << " id=\"";
-	if (iTask->getCurrCommand()==0)
+	TMLCommand* currCommand=iTask->getCurrCommand();
+	//if (iTask->getCurrCommand()==0)
+	if (currCommand==0){
 		ioMessage << 0 << "\">"; 
-	else
-		ioMessage << iTask->getCurrCommand()->getID() << "\">" << TAG_PROGRESSo << iTask->getCurrCommand()->getProgress() << TAG_PROGRESSc;
-	unsigned int aNbNextCmds;
-	TMLCommand** aNextCmds = iTask->getCurrCommand()->getNextCommands(aNbNextCmds);
-	for(unsigned int i=0; i<aNbNextCmds; i++){
-		ioMessage << TAG_NEXTCMDo << aNextCmds[i]->getID() << TAG_NEXTCMDc;
+	}else{
+		ioMessage << currCommand->getID() << "\">" << TAG_PROGRESSo << currCommand->getProgressInPercent() << TAG_PROGRESSc;
+		if (currCommand->getCurrTransaction()!=0){
+			ioMessage << TAG_STARTTIMEo << currCommand->getCurrTransaction()->getStartTime() << TAG_STARTTIMEc;
+			ioMessage << TAG_FINISHTIMEo << currCommand->getCurrTransaction()->getEndTime() << TAG_FINISHTIMEc;
+		}
+		unsigned int aNbNextCmds;
+		TMLCommand** aNextCmds = currCommand->getNextCommands(aNbNextCmds);
+		for(unsigned int i=0; i<aNbNextCmds; i++){
+			ioMessage << TAG_NEXTCMDo << aNextCmds[i]->getID() << TAG_NEXTCMDc;
+		}
 	}
 	ioMessage << TAG_CURRCMDc << TAG_TASKc << std::endl;
 }
