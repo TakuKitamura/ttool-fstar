@@ -490,7 +490,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 		// Transaction
 		if (ri.transStartTime != null) {
-			g.setColor(Color.black);
+			g.setColor(ColorManager.DIPLOID);
 			s1 = ri.transStartTime;
 			if (s1.compareTo("-1") == 0) {
 				s1 = "?/?";
@@ -506,7 +506,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					}
 				}
 			}
-			g.drawString(s1, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
+			g.drawString(s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
 			
 		}
 		
