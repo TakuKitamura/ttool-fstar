@@ -1199,17 +1199,19 @@ void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
 		ioMessage << 0 << "\">"; 
 	}else{
 		ioMessage << currCommand->getID() << "\">" << TAG_PROGRESSo << currCommand->getProgressInPercent() << TAG_PROGRESSc;
+		ioMessage << TAG_STARTTIMEo << currCommand->getCommandStartTime() << TAG_STARTTIMEc;
 		TMLTransaction* currTrans = currCommand->getCurrTransaction();
-		if (currTrans!=0){
-			if (currTrans->getStartTime()==0)
-				ioMessage << TAG_STARTTIMEo << currTrans->getRunnableTime() << TAG_STARTTIMEc;
-			else
-				ioMessage << TAG_STARTTIMEo << currTrans->getStartTime() << TAG_STARTTIMEc;
-			if (currTrans->getEndTime()==0)
-				ioMessage << TAG_FINISHTIMEo << "-1" << TAG_FINISHTIMEc;
-			else
-				ioMessage << TAG_FINISHTIMEo << currTrans->getEndTime() << TAG_FINISHTIMEc;
-			
+		if (currTrans==0 || currTrans->getOverallLength()==0 || currTrans->getVirtualLength()==0){
+			ioMessage << TAG_FINISHTIMEo << "-1" << TAG_FINISHTIMEc;
+			ioMessage << TAG_FINISHTIMETRANSo << "-1" << TAG_FINISHTIMETRANSc;
+			ioMessage << TAG_STARTTIMETRANSo << "-1" << TAG_STARTTIMETRANSc;
+		}else{
+			ioMessage << TAG_FINISHTIMEo << (currTrans->getEndTime() + currTrans->getOverallLength()*(currCommand->getLength()-currCommand->getProgress()-currTrans->getVirtualLength())/currTrans->getVirtualLength()) << TAG_FINISHTIMEc;
+			//if (currCommand->getLength()==currCommand->getProgress())
+				//ioMessage << TAG_STARTTIMETRANSo << "99" << TAG_STARTTIMETRANSc;
+			//else
+			ioMessage << TAG_STARTTIMETRANSo << currTrans->getStartTime() << TAG_STARTTIMETRANSc;
+			ioMessage << TAG_FINISHTIMETRANSo << currTrans->getEndTime() << TAG_FINISHTIMETRANSc;	
 		}
 		unsigned int aNbNextCmds;
 		TMLCommand** aNextCmds = currCommand->getNextCommands(aNbNextCmds);

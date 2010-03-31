@@ -192,6 +192,16 @@ public:
 	\return Hash Value
 	*/
 	unsigned long getStateHash() const;
+	///Returns the simulation time when the command is prepared for its first transaction
+	/**
+	\return Command start time
+	*/
+	TMLTime getCommandStartTime() const;
+	///Returns the virtual length of the command
+	/**
+	\return Command length
+	*/
+	TMLLength getLength() const;
 protected:
 	///ID of the command
 	ID _ID;
@@ -227,6 +237,7 @@ protected:
 	///Pointer to simulation components
 	static SimComponents* _simComp;
 	StateHashSet _stateHashes;
+	TMLTime _commandStartTime;
 };
 
 #endif

@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 }
@@ -90,6 +90,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 #endif
 		_progress=0;
 		_currTransaction=0;  //NEW!!!!!!!!!!!
+		_commandStartTime=-1; //NEW
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
 		//std::cout << "Prepare command, to next command" << std::endl;
@@ -101,6 +102,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			return aNextCommand->prepare(false);
 		}
 	}else{
+		if (_commandStartTime==-1) _commandStartTime = SchedulableDevice::getSimulatedTime();
 		//std::cout << "Prepare next transaction TMLCmd " << _listeners.size() << std::endl;
 		TMLCommand* result;
 		if (iInit){
@@ -272,6 +274,14 @@ void TMLCommand::setSimComponents(SimComponents* iSimComp){
 
 unsigned long TMLCommand::getStateHash() const{
 	return _ID + _progress;
+}
+
+TMLTime TMLCommand::getCommandStartTime() const{
+	return (_commandStartTime==-1)? 0: _commandStartTime;
+}
+
+TMLLength TMLCommand::getLength() const{
+	return _length;
 }
 
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);
