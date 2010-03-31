@@ -1199,9 +1199,17 @@ void Simulator::printCommandsOfTask(TMLTask* iTask, std::ostream& ioMessage){
 		ioMessage << 0 << "\">"; 
 	}else{
 		ioMessage << currCommand->getID() << "\">" << TAG_PROGRESSo << currCommand->getProgressInPercent() << TAG_PROGRESSc;
-		if (currCommand->getCurrTransaction()!=0){
-			ioMessage << TAG_STARTTIMEo << currCommand->getCurrTransaction()->getStartTime() << TAG_STARTTIMEc;
-			ioMessage << TAG_FINISHTIMEo << currCommand->getCurrTransaction()->getEndTime() << TAG_FINISHTIMEc;
+		TMLTransaction* currTrans = currCommand->getCurrTransaction();
+		if (currTrans!=0){
+			if (currTrans->getStartTime()==0)
+				ioMessage << TAG_STARTTIMEo << currTrans->getRunnableTime() << TAG_STARTTIMEc;
+			else
+				ioMessage << TAG_STARTTIMEo << currTrans->getStartTime() << TAG_STARTTIMEc;
+			if (currTrans->getEndTime()==0)
+				ioMessage << TAG_FINISHTIMEo << "-1" << TAG_FINISHTIMEc;
+			else
+				ioMessage << TAG_FINISHTIMEo << currTrans->getEndTime() << TAG_FINISHTIMEc;
+			
 		}
 		unsigned int aNbNextCmds;
 		TMLCommand** aNextCmds = currCommand->getNextCommands(aNbNextCmds);
