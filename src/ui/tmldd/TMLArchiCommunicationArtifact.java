@@ -70,7 +70,7 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
     protected String referenceCommunicationName = "TMLCommunication";
 	protected String communicationName = "name";
 	protected String typeName = "channel";
-	protected int priority = 0; // Between 0 and 10
+	protected int priority = 5; // Between 0 and 10
     
     public TMLArchiCommunicationArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);

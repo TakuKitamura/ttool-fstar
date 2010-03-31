@@ -5182,7 +5182,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
-	public synchronized void addRunningID(int _id, int _nextCommand, String _progression, String _startTime, String _finishTime) {
+	public synchronized void addRunningID(int _id, int _nextCommand, String _progression, String _startTime, String _finishTime, String _transStartTime, String _transFinishTime) {
 		if (runningIDs == null) {
 			runningIDs = new ArrayList<RunningInfo>();
 		}
@@ -5192,6 +5192,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		ri.progression = _progression;
 		ri.startTime = _startTime;
 		ri.finishTime = _finishTime;
+		ri.transStartTime = _transStartTime;
+		ri.transFinishTime = _transFinishTime;
 		runningIDs.add(ri);
 		//System.out.println("Running id " + id +  " added");
 		TDiagramPanel tdp = getCurrentTDiagramPanel();

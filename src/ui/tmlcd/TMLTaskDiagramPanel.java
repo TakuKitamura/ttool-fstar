@@ -83,7 +83,13 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
             //System.out.println(" *** add tclass *** name=" + tmlt.getTaskName());
             mgui.addTMLTask(tp, tmlt.getTaskName());
             return true;
-        }
+        } else if (tgc instanceof TMLChannelOperator) {
+			setChannelsVisible(true);
+		} else if (tgc instanceof TMLEventOperator) {
+			setEventsVisible(true);
+		} else if (tgc instanceof TMLRequestOperator) {
+			setRequestsVisible(true);
+		}
         return false;
     }
     

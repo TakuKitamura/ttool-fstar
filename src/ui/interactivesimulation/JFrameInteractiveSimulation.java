@@ -1139,6 +1139,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String command;
 		String startTime="", finishTime="";
 		String progression="", nextCommand="";
+		String transStartTime="", transFinishTime="";
 		String util = null;
 		String value;
 		String extime;
@@ -1218,6 +1219,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							nextCommand = null;
 							progression = null;
 							startTime = null; finishTime = null;
+							transStartTime = null; transFinishTime = null;
 							id = elt.getAttribute("id");
 							name = elt.getAttribute("name");
 							nl = elt.getElementsByTagName("currcmd");
@@ -1245,6 +1247,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 									finishTime = node0.getTextContent();
 									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								}
+								nl = elt.getElementsByTagName("transstarttime");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									transStartTime = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
+								nl = elt.getElementsByTagName("transfinishtime");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									transFinishTime = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
 								nl = elt.getElementsByTagName("nextcmd");
 								if ((nl != null) && (nl.getLength() > 0)) {
 									node0 = nl.item(0);
@@ -1260,11 +1274,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								if (nextCommand ==null) {
 									nextCommand = "-1";
 								}
-								updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand);
+								updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime);
 							}
 							
 							if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
-								updateOpenDiagram(name, command);
+								updateOpenDiagram(name, command, progression, startTime, finishTime, transStartTime, transFinishTime);
 							}
 							
 							extime = null;
@@ -1789,7 +1803,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}*/
 	}
 	
-	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand) {
+	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand, String transStartTime, String transFinishTime) {
 		Integer i = getInteger(id);
 		Integer c = getInteger(command);
 		Integer nc = getInteger(nextCommand);
@@ -1805,7 +1819,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				runningTable.put(i, c);
 				//System.out.println("Adding running command: " +c);
-				mgui.addRunningID(c, nc, progression, startTime, finishTime);
+				mgui.addRunningID(c, nc, progression, startTime, finishTime, transStartTime, transFinishTime);
 			} catch (Exception e) {
 				System.out.println("Exception updateRunningCommand: " + e.getMessage());
 			}
@@ -1813,10 +1827,27 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
-	private void updateOpenDiagram(String name, String command) {
+	private void updateOpenDiagram(String name, String _command, String _progression, String _startTime, String _finishTime, String _transStartTime, String _transFinishTime) {
 		//System.out.println("UpdateOpenDiagram name=" + name + " for command:" + command);
 		if (tmap == null) {
 			return;
+		}
+		
+		String command = _command;
+		if (_progression != null) {
+			command += _progression;
+		}
+		if (_startTime != null) {
+			command += _startTime;
+		}
+		if (_finishTime != null) {
+			command += _finishTime;
+		}
+		if (_transStartTime != null) {
+			command += _transStartTime;
+		}
+		if (_transFinishTime != null) {
+			command += _transFinishTime;
 		}
 		
 		String cmd = diagramTable.get(name);

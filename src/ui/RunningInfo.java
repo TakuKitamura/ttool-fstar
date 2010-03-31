@@ -57,6 +57,8 @@ public class RunningInfo {
 	public String progression;
 	public String startTime;
 	public String finishTime;
+	public String transStartTime;
+	public String transFinishTime;
     
     public RunningInfo() {
     }

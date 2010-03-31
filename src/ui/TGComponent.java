@@ -468,7 +468,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		g.setColor(ColorManager.CURRENT_COMMAND);
 		g.fillPolygon(xp, yp, 7);
 		
-		String s;
+		String s, s1, s2;
 		if (ri.progression != null) {
 			s = ri.progression + "%";
 		} else {
@@ -481,7 +481,33 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 		g.drawString(s, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
 		if (ri.finishTime != null) {
-			g.drawString(ri.finishTime, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
+			s = ri.finishTime;
+			if (s.compareTo("-1") == 0) {
+				s = "?";
+			}
+			g.drawString(s, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
+		}
+		
+		// Transaction
+		if (ri.transStartTime != null) {
+			g.setColor(Color.black);
+			s1 = ri.transStartTime;
+			if (s1.compareTo("-1") == 0) {
+				s1 = "?/?";
+			} else {
+				s2 = ri.transFinishTime;
+				if (s2 == null) {
+					s1 = s1 + "/?";
+				} else {
+					if (s1.compareTo("-1") == 0) {
+						s1 = s1 + "/?";
+					} else {
+						s1 = s1 + "/" + s2;
+					}
+				}
+			}
+			g.drawString(s1, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
+			
 		}
 		
 	}
