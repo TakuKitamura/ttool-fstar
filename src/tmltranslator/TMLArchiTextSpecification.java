@@ -208,9 +208,9 @@ public class TMLArchiTextSpecification {
 		String set;
 		ArrayList<HwLink> hwlinks = tmla.getHwLinks();
 		
-		System.out.println("Making links");
+		//System.out.println("Making links");
 		for(HwLink link: hwlinks) {
-			System.out.println("Link");
+			//System.out.println("Link");
 			if (link instanceof HwLink) {
 				if ((link.hwnode != null) && (link.bus != null)) {
 					name = prepareString(link.getName());
@@ -222,7 +222,7 @@ public class TMLArchiTextSpecification {
 				}
 			}
 		}
-		System.out.println("Links:done");
+		//System.out.println("Links:done");
 		
 		return code;
 	}

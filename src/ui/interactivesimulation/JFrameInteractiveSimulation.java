@@ -1137,6 +1137,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String id, idvar;
 		String name;
 		String command;
+		String startTime="", finishTime="";
+		String progression="", nextCommand="";
 		String util = null;
 		String value;
 		String extime;
@@ -1146,12 +1148,15 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		int k;
 		
+		//System.out.println("toto0");
+		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
 				//System.out.println("Ndes: " + j);
 				node = diagramNl.item(j);
 				
 				if (node == null) {
+					System.out.println("null node");
 					return false;
 				}
 				
@@ -1162,7 +1167,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					if (elt.getTagName().compareTo(SIMULATION_GLOBAL) == 0) {
 						
 						nl = elt.getElementsByTagName("status");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 							
@@ -1170,7 +1175,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						}
 						
 						nl = elt.getElementsByTagName("brkreason");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 							
@@ -1178,7 +1183,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						}
 						
 						nl = elt.getElementsByTagName("simtime");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							gotTimeAnswerFromServer = true;
 							node0 = nl.item(0);
 							//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
@@ -1186,19 +1191,19 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						}
 						
 						nl = elt.getElementsByTagName("msg");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							msg = node0.getTextContent();
 						}
 						
 						nl = elt.getElementsByTagName("error");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							error = node0.getTextContent();
 						}
 						
 						nl = elt.getElementsByTagName("hashval");
-						if (nl.getLength() > 0) {
+						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							hash = node0.getTextContent();
 						}
@@ -1210,21 +1215,52 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							id = null;
 							name = null;
 							command = null;
+							nextCommand = null;
+							progression = null;
+							startTime = null; finishTime = null;
 							id = elt.getAttribute("id");
 							name = elt.getAttribute("name");
 							nl = elt.getElementsByTagName("currcmd");
-							if (nl.getLength() > 0) {
+							if ((nl != null) && (nl.getLength() > 0)) {
 								node0 = nl.item(0);
 								if (node0.getNodeType() == Node.ELEMENT_NODE) {
 									elt0 = (Element)node0;
 									command = elt0.getAttribute("id");
 								}
+								nl = elt.getElementsByTagName("progr");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									progression = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
+								nl = elt.getElementsByTagName("starttime");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									startTime = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
+								nl = elt.getElementsByTagName("finishtime");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									finishTime = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
+								nl = elt.getElementsByTagName("nextcmd");
+								if ((nl != null) && (nl.getLength() > 0)) {
+									node0 = nl.item(0);
+									nextCommand = node0.getTextContent();
+									//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								}
+								
 							}
 							
 							//System.out.println("Got info on task " + id + " command=" + command);
 							
 							if ((id != null) && (command != null)) {
-								updateRunningCommand(id, command);
+								if (nextCommand ==null) {
+									nextCommand = "-1";
+								}
+								updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand);
 							}
 							
 							if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
@@ -1233,7 +1269,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							
 							extime = null;
 							nl = elt.getElementsByTagName("extime");
-							if (nl.getLength() > 0) {
+							if ((nl != null) && (nl.getLength() > 0)) {
 								node0 = nl.item(0);
 								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								extime =  node0.getTextContent();
@@ -1246,21 +1282,25 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							
 							
 							nl = elt.getElementsByTagName("var");
-							idvar = null;
-							value = null;
-							for(k=0; k<nl.getLength(); k++) {
-								node0 = nl.item(k);
-								value = node0.getTextContent();
-								if (node0.getNodeType() == Node.ELEMENT_NODE) {
-									elt0 = (Element)node0;
-									idvar = elt0.getAttribute("id");
-								}
-								if ((value != null) && (idvar != null)) {
-									updateVariableState(idvar, value);
-									jpsv.updateOnVariableValue(idvar);
+							if ((nl != null) && (nl.getLength() > 0)) {
+								idvar = null;
+								value = null;
+								for(k=0; k<nl.getLength(); k++) {
+									node0 = nl.item(k);
+									value = node0.getTextContent();
+									if (node0.getNodeType() == Node.ELEMENT_NODE) {
+										elt0 = (Element)node0;
+										idvar = elt0.getAttribute("id");
+									}
+									if ((value != null) && (idvar != null)) {
+										updateVariableState(idvar, value);
+										jpsv.updateOnVariableValue(idvar);
+									}
 								}
 							}
 						}
+						
+						//System.out.println("toto1");
 						
 						if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
 							id = null;
@@ -1273,23 +1313,15 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							id = elt.getAttribute("id");
 							name = elt.getAttribute("name");
 							nl = elt.getElementsByTagName("util");
-							if (nl.getLength() > 0) {
+							if ((nl != null) && (nl.getLength() > 0)) {
 								node0 = nl.item(0);
 								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								util = node0.getTextContent();
 							}
 							
-							//System.out.println("Got info on cpu " + id + " util=" + util);
-							
-							nl = elt.getElementsByTagName("util");
-							if (nl.getLength() > 0) {
-								node0 = nl.item(0);
-								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-								util = node0.getTextContent();
-							}
-							
-							
-							if (nl.getLength() > 0) {
+							//System.out.println("toto12");
+							nl = elt.getElementsByTagName("contdel");
+							if ((nl != null) && (nl.getLength() > 0)) {
 								nl = elt.getElementsByTagName("contdel");
 								node0 = nl.item(0);
 								elt0 = (Element)node0;
@@ -1307,6 +1339,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							}
 						}
 						
+						//System.out.println("toto2");
+						
 						if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
 							id = null;
 							name = null;
@@ -1314,7 +1348,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							id = elt.getAttribute("id");
 							name = elt.getAttribute("name");
 							nl = elt.getElementsByTagName("util");
-							if (nl.getLength() > 0) {
+							if ((nl != null) && (nl.getLength() > 0)) {
 								node0 = nl.item(0);
 								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								util = node0.getTextContent();
@@ -1755,9 +1789,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}*/
 	}
 	
-	private void updateRunningCommand(String id, String command) {
+	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand) {
 		Integer i = getInteger(id);
 		Integer c = getInteger(command);
+		Integer nc = getInteger(nextCommand);
 		
 		if ((i != null) && (c != null)) {
 			try {
@@ -1769,8 +1804,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				}
 				
 				runningTable.put(i, c);
-				//System.out.println("Adding running command");
-				mgui.addRunningID(c);
+				//System.out.println("Adding running command: " +c);
+				mgui.addRunningID(c, nc, progression, startTime, finishTime);
 			} catch (Exception e) {
 				System.out.println("Exception updateRunningCommand: " + e.getMessage());
 			}
@@ -1779,6 +1814,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	private void updateOpenDiagram(String name, String command) {
+		//System.out.println("UpdateOpenDiagram name=" + name + " for command:" + command);
 		if (tmap == null) {
 			return;
 		}
@@ -1786,10 +1822,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String cmd = diagramTable.get(name);
 		if (cmd == null) {
 			diagramTable.put(name, command);
-			return;
+			//return;
 		}
 		
-		if (!(cmd.equals(command))) {
+		if ((cmd == null) || (!(cmd.equals(command)))) {
 			diagramTable.remove(name);
 			diagramTable.put(name, command);
 			
@@ -1800,7 +1836,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				diag = tab.substring(0, index);
 				tab = tab.substring(index+2, tab.length());
 			}
-			//System.out.println("Opening diagram " + tab);
+			//System.out.println("Opening diagram " + tab + " for command:" + command);
 			
 			mgui.openTMLTaskActivityDiagram(diag, tab);
 		}

@@ -433,7 +433,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
-	public void drawRunningDiploID(Graphics g) {
+	public void drawRunningDiploID(Graphics g, RunningInfo ri) {
 		//System.out.println("Drawing running DIPLO");
 		int wb = 30;
 		int hb = 10;
@@ -468,9 +468,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		g.setColor(ColorManager.CURRENT_COMMAND);
 		g.fillPolygon(xp, yp, 7);
 		
+		String s;
+		if (ri.progression != null) {
+			s = ri.progression + "%";
+		} else {
+			s = "";
+		}
+		int ww = g.getFontMetrics().stringWidth(s);
+		
+		if (ri.startTime != null) {
+			g.drawString(ri.startTime, x - sep - wb -wh, y + ((height-hb) / 2) - 1);
+		}
+		g.drawString(s, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
+		if (ri.finishTime != null) {
+			g.drawString(ri.finishTime, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
+		}
+		
 	}
 	
     public void draw(Graphics g) {
+		RunningInfo ri;
         ColorManager.setColor(g, state, 0);
         internalDrawing(g);
         repaint = false;
@@ -507,8 +524,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				if (tdp instanceof TMLActivityDiagramPanel) {
 					if (getFather() == null) {
 						drawDiploID(g);
-						if (tdp.getMGUI().isRunningID(getDIPLOID())) {
-							drawRunningDiploID(g);
+						ri = tdp.getMGUI().isRunningID(getDIPLOID());
+						if (ri != null) {
+							drawRunningDiploID(g, ri);
 						}
 					}
 				} else if (tdp instanceof TMLComponentTaskDiagramPanel) {

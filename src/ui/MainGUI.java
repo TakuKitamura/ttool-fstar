@@ -249,7 +249,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     //private int selectedAction = -1;
 	
 	// Interaction with simulators
-	ArrayList<Integer> runningIDs;
+	ArrayList<RunningInfo> runningIDs;
 	JFrameInteractiveSimulation jfis;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn) {
@@ -5157,18 +5157,18 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
-	public synchronized boolean isRunningID(int id) {
+	public synchronized RunningInfo isRunningID(int id) {
 		if (runningIDs == null) {
-			return false;
+			return null;
 		}
 		
-		for(Integer i: runningIDs) {
-			if (i.intValue() == id) {
-				return true;
+		for(RunningInfo ri: runningIDs) {
+			if (ri.id == id) {
+				return ri;
 			}
 		}
 		
-		return false;
+		return null;
 	}
 	
 	public synchronized void resetRunningID() {
@@ -5182,12 +5182,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
-	public synchronized void addRunningID(Integer id) {
+	public synchronized void addRunningID(int _id, int _nextCommand, String _progression, String _startTime, String _finishTime) {
 		if (runningIDs == null) {
-			runningIDs = new ArrayList<Integer>();
+			runningIDs = new ArrayList<RunningInfo>();
 		}
-		
-		runningIDs.add(id);
+		RunningInfo ri = new RunningInfo();
+		ri.id = _id;
+		ri.nextCommand = _nextCommand;
+		ri.progression = _progression;
+		ri.startTime = _startTime;
+		ri.finishTime = _finishTime;
+		runningIDs.add(ri);
 		//System.out.println("Running id " + id +  " added");
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
@@ -5200,9 +5205,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			return ;
 		}
 		
-		for(Integer i: runningIDs) {
-			if (i.intValue() == id.intValue()) {
-				runningIDs.remove(i);
+		for(RunningInfo ri: runningIDs) {
+			if (ri.id == id.intValue()) {
+				runningIDs.remove(ri);
 				//System.out.println("Running id " + i +  " removed");
 				return;
 			}
