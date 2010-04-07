@@ -74,6 +74,10 @@ import ui.ucd.*;
 import ui.tree.*;
 import ui.window.*;
 
+// AVATAR
+import ui.avatarbd.*;
+import ui.avatarsmd.*;
+
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
@@ -1499,7 +1503,6 @@ public class GTURTLEModeling {
 
 
 	// BUILDING A TURTLE MODELING AND CHECKING IT
-
 	public boolean checkTURTLEModeling(Vector tclasses, DesignPanel dp, boolean overideSyntaxChecking) {
 		// Builds a TURTLE modeling from diagrams
 		//warnings = new Vector();
@@ -1549,7 +1552,6 @@ public class GTURTLEModeling {
 
 
 	// SAVING AND LOADING IN XML
-
 	public static String transformString(String s) {
 		if (s != null) {
 			s = Conversion.replaceAllChar(s, '&', "&amp;");
@@ -1611,6 +1613,17 @@ public class GTURTLEModeling {
 		String str;
 
 		s = tdp.saveComponentInXML(tgc);
+		
+		if (tgc instanceof AvatarBDBlock) {
+			AvatarSMDPanel asmdp = mgui.getAvatarSMDPanel(mgui.getCurrentSelectedIndex(), tgc.getValue());
+			s.append(asmdp.saveInXML());
+			LinkedList<AvatarBDBlock> list = ((AvatarBDBlock)tgc).getFullBlockList();
+			for(AvatarBDBlock b:list) {
+				asmdp = mgui.getAvatarSMDPanel(mgui.getCurrentSelectedIndex(), b.getValue());
+				s.append(asmdp.saveInXML());
+			}
+			
+		}
 
 		if (tgc instanceof TCDTClass) {
 			TActivityDiagramPanel tadp = mgui.getActivityDiagramPanel(mgui.getCurrentSelectedIndex(), tgc.getValue());
@@ -1727,6 +1740,19 @@ public class GTURTLEModeling {
 			}
 		}
 		
+		v = tdp.selectedAvatarBDBlocks();
+		if ((v != null) && (v.size() > 0)) {
+			//System.out.println("Saving TML activity diagram Panel...");
+			AvatarBDBlock abdb;
+			AvatarSMDPanel asmdp;
+			for(int i=0; i<v.size(); i++) {
+				abdb = (AvatarBDBlock)(v.elementAt(i));
+				asmdp = mgui.getAvatarSMDPanel(mgui.getCurrentSelectedIndex(), abdb.getBlockName());
+				s.append(asmdp.saveInXML());
+				
+			}
+		}
+		
 		v = tdp.selectedCPrimitiveComponent();
 		if ((v != null) && (v.size() > 0)) {
 			//System.out.println("Saving TML activity diagram Panel...");
@@ -1749,7 +1775,7 @@ public class GTURTLEModeling {
 		str = new String(sb);
 		str = encodeString(str);
 
-		//System.out.println("Copy done");
+		System.out.println("Copy done");
 		//System.out.println(str);
 
 		return str;
@@ -2527,8 +2553,7 @@ public class GTURTLEModeling {
 						makePostLoading(tosadp, beginIndex);
 					}
 				}
-			} else if (tdp instanceof ProactiveCSDPanel)
-			{
+			} else if (tdp instanceof ProactiveCSDPanel) {
 				//cuenta=beginIndex+1;
 				cuenta=mgui.tabs.size()-1;
 				nl = doc.getElementsByTagName("ProactiveCSDPanelCopy");
@@ -2669,7 +2694,102 @@ public class GTURTLEModeling {
 						makePostLoading(psmdp, beginIndex);
 					}
 				}
+				
+			// AVATAR
+			} else if (tdp instanceof AvatarBDPanel) {
+				nl = doc.getElementsByTagName("AVATARBlockDiagramPanelCopy");
+				docCopy = doc;
+
+				if (nl == null) {
+					return;
+				}
+
+				//System.out.println("Toto 1");
+
+
+				AvatarBDPanel abdp = (AvatarBDPanel)tdp;
+
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (abdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						abdp.loadExtraParameters(elt);
+
+						//System.out.println("Toto 2");
+
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), abdp);
+						//System.out.println("Toto 3");
+						makePostProcessing(abdp);
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), abdp);
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), abdp);
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						connectConnectorsToRealPoints(abdp);
+						abdp.structureChanged();
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						makePostLoading(abdp, beginIndex);
+						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+					}
+				}
+			} else if (tdp instanceof AvatarSMDPanel) {
+				nl = doc.getElementsByTagName("AVATARStateMachineDiagramPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				AvatarSMDPanel asmdp = (AvatarSMDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (asmdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						//tmladp.loadExtraParameters(elt);
+
+						//System.out.println("Activity diagram : " + tmladp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), asmdp);
+						//System.out.println("Activity diagram : " + tmladp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), asmdp);
+						//System.out.println("Activity diagram : " + tmladp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), asmdp);
+						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						connectConnectorsToRealPoints(asmdp);
+						asmdp.structureChanged();
+						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						makePostLoading(asmdp, beginIndex);
+					}
+				}
 			}
+			
 		} catch (IOException e) {
 			System.out.println("500 ");
 			throw new MalformedModelingException();
@@ -2804,7 +2924,11 @@ public class GTURTLEModeling {
 	public void loadModeling(Node node) throws  MalformedModelingException, SAXException {
 		Element elt = (Element) node;
 		String type = elt.getAttribute("type");
-		if (type.compareTo("Design") == 0) {
+		// AVATAR
+		if (type.compareTo("AVATAR Design") == 0) {
+			loadAvatarDesign(node);
+		// TURTLE 
+		} else if (type.compareTo("Design") == 0) {
 			loadDesign(node);
 		} else if (type.compareTo("Analysis") == 0) {
 			loadAnalysis(node);
@@ -2828,6 +2952,37 @@ public class GTURTLEModeling {
 			loadProActiveDesign(node);
 		} else {
 			throw new MalformedModelingException();
+		}
+	}
+	
+	public void loadAvatarDesign(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexDesign;
+
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexDesign = mgui.createAvatarDesign(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//System.out.println("Design nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("AVATARBlockDiagramPanel") == 0) {
+					// Class diagram
+					loadAvatarBD(elt, indexDesign);
+				} else { // Managing activity diagrams
+					if (elt.getTagName().compareTo("AVATARStateMachineDiagramPanel") == 0) {
+						// Managing activity diagrams
+						loadAvatarSMD(elt, indexDesign);
+					}
+				}
+			}
 		}
 	}
 
@@ -3244,7 +3399,37 @@ public class GTURTLEModeling {
 		}
 	}
 
+	// AVATAR
+	public void loadAvatarBD(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
 
+		String name;
+		TDiagramPanel tdp;
+
+		// class diagram name
+		name = elt.getAttribute("name");
+		mgui.setAvatarBDName(indexDesign, name);
+		tdp = mgui.getMainTDiagramPanel(indexDesign);
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadAvatarSMD(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		TraceManager.addDev("Loading SMD of:" + name);
+		AvatarSMDPanel asmdp = mgui.getAvatarSMDPanel(indexDesign, name);
+
+		if (asmdp == null) {
+			throw new MalformedModelingException();
+		}
+
+		asmdp.removeAll();
+
+		loadDiagram(elt, asmdp);
+	}
+
+	// TURTLE Design
 	public void loadTClassDiagram(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
 
 		String name;
@@ -3656,6 +3841,82 @@ public class GTURTLEModeling {
 			throw new MalformedModelingException();
 		}
 	}
+	
+	public void loadAvatarSMD(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
+		System.out.println("---> Load activity diagram of old=" + oldValue + " new=" + newValue);
+		try {
+			NodeList smdNl = docCopy.getElementsByTagName("AVATARStateMachineDiagramPanel");
+
+			//System.out.println("Loading state machine diagram of " + newValue + " Before : " + oldValue);
+			//System.out.println("smdNL: " + smdNl);
+
+			if (smdNl == null) {
+				System.out.println("AVATAR: null doc");
+				throw new MalformedModelingException();
+			}
+
+			Node adn;
+			Element elt;
+			AvatarSMDPanel asmdp;
+			String name;
+			int decXTmp = decX;
+			int decYTmp = decY;
+			int decIdTmp = decId;
+
+			for(int i=0; i<smdNl.getLength(); i++) {
+				adn = smdNl.item(i);
+				if (adn.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element) adn;
+					// class diagram name
+					name = elt.getAttribute("name");
+					System.out.println("Name of activity diagram=" + name);
+
+					if (name.equals(oldValue)) {
+						int indexDesign = mgui.getMajorIndexOf(tdp);
+
+						if (indexDesign < 0) {
+							throw new MalformedModelingException();
+						}
+
+						asmdp = mgui.getAvatarSMDPanel(indexDesign, newValue);
+
+						System.out.println("Searching panel: " + newValue);
+
+						if (asmdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						System.out.println("Panel ok");
+
+						decX = 0; decY = 0; decId = 0;
+						
+						
+						asmdp.removeAll();
+						
+						loadDiagramInformation(elt, asmdp);
+						
+						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), asmdp);
+						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), asmdp);
+						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), asmdp);
+						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						connectConnectorsToRealPoints(asmdp);
+						asmdp.structureChanged();
+						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						makePostLoading(asmdp, 0);
+					}
+				}
+			}
+			decX = decXTmp;
+			decY = decYTmp;
+			decId = decIdTmp;
+		} catch (SAXException saxe) {
+			System.out.println("501 " + saxe.getMessage());
+			throw new MalformedModelingException();
+		}
+	}
 
 	public void loadTMLActivityDiagram(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
 		//System.out.println("---> Load TML activity diagram");
@@ -3885,11 +4146,12 @@ public class GTURTLEModeling {
 				tgc = father.getInternalTGComponent(fatherNum);
 
 				if (tgc == null) {
-					// to be added to its father -> swallow component
+					// To be added to its father -> swallow component
 					if (father instanceof SwallowTGComponent) {
 						tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 						if (tgc instanceof SwallowedTGComponent) {
 							((SwallowTGComponent)father).addSwallowedTGComponent(tgc, myX, myY);
+							TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
 						} else {
 							throw new MalformedModelingException();
 						}
@@ -3946,6 +4208,12 @@ public class GTURTLEModeling {
 					}
 				}
 				
+				if ((tgc instanceof AvatarBDBlock) && (decId >0)){
+					if (tdp.isAlreadyAnAvatarBDBlockName(myValue)) {
+						myValue = tdp.findAvatarBDBlockName(myValue+"_");
+					}
+				}
+				
 				if ((tgc instanceof TMLCPrimitiveComponent) && (decId >0)){
 					if (tdp.isAlreadyATMLPrimitiveComponentName(myValue)) {
 						myValue = tdp.findTMLPrimitiveComponentName(myValue+"_");
@@ -3964,6 +4232,11 @@ public class GTURTLEModeling {
 					loadActivityDiagram(tdp, oldClassName, myValue);
 				}
 
+				if ((tgc instanceof AvatarBDBlock) && (decId >0)){
+					//System.out.println("Going to load ad of task " + oldClassName + " myValue=" + myValue);
+					loadAvatarSMD(tdp, oldClassName, myValue);
+				}
+				
 				if ((tgc instanceof TMLTaskOperator) && (decId >0)){
 					//System.out.println("Going to load ad of task " + oldClassName + " myValue=" + myValue);
 					loadTMLActivityDiagram(tdp, oldClassName, myValue);

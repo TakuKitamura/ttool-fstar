@@ -126,6 +126,8 @@ public class ColorManager {
 	public static final Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
 	public static final Color ATD_CONSTRAINT = new Color(191, 153, 161);
 	
+	public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
+	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	
 	public static final Color MainTabbedPane = new Color(231, 214, 176);

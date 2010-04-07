@@ -74,6 +74,10 @@ import ui.osad.*;
 
 import ui.ncdd.*;
 
+
+import ui.avatarbd.*;
+import ui.avatarsmd.*;
+
 public class TGComponentManager {
     
     public static final int NONE = -1;
@@ -280,9 +284,16 @@ public class TGComponentManager {
     public static final int NCDD_TRAFFIC_ARTIFACT = 4002;
 	public static final int NCDD_ROUTE_ARTIFACT = 4003;
 	
+	// AVATAR BD -> starts at 5000
+	public static final int AVATARBD_BLOCK = 5000;
+	public static final int AVATARBD_COMPOSITION_CONNECTOR = 5001;
+	public static final int AVATARBD_PORT_CONNECTOR = 5002;
 	
-
-
+	// AVATAR SMD -> starts at 5100
+	public static final int AVATARSMD_START_STATE = 5100;
+    public static final int AVATARSMD_STOP_STATE = 5101;
+	public static final int AVATARSMD_CONNECTOR = 5102;
+	
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -292,6 +303,18 @@ public class TGComponentManager {
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
         TGComponent tgc = null;
         switch (id) {
+			// AVATAR
+			case AVATARBD_BLOCK:
+                tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_START_STATE:
+                tgc = new AvatarSMDStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_STOP_STATE:
+                tgc = new AvatarSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+				
+			// Others
             case TAD_DETERMINISTIC_DELAY:
                 tgc = new TADDeterministicDelay(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -700,7 +723,25 @@ public class TGComponentManager {
 
 
     public final static int getType(TGComponent tgc) {
-        if (tgc instanceof 	TADDeterministicDelay) {
+		// AVATAR
+		// AVATAR BD
+		if (tgc instanceof AvatarBDBlock) {
+			return AVATARBD_BLOCK;
+		} else if (tgc instanceof AvatarBDCompositionConnector) {
+			return AVATARBD_COMPOSITION_CONNECTOR;	
+		} else if (tgc instanceof AvatarBDPortConnector) {
+			return AVATARBD_PORT_CONNECTOR;
+			
+		// AVATAR SMD
+		} else if (tgc instanceof AvatarSMDStartState) {
+			return AVATARSMD_START_STATE;
+		} else if (tgc instanceof AvatarSMDStopState) {
+			return AVATARSMD_STOP_STATE;
+		} else if (tgc instanceof AvatarSMDConnector) {
+			return AVATARSMD_CONNECTOR;
+			
+		// Others
+		} else if (tgc instanceof 	TADDeterministicDelay) {
             return 	TAD_DETERMINISTIC_DELAY;
         } else if (tgc instanceof TADParallel) {
             return TAD_PARALLEL;
@@ -1036,6 +1077,21 @@ public class TGComponentManager {
     public final static TGConnector addConnector(int x, int y, int id, TDiagramPanel tdp, TGConnectingPoint p1, TGConnectingPoint p2, Vector listPoint) {
         TGConnector tgc = null;
         switch(id) {
+			// AVATAR
+			// AVATAR BD
+			case AVATARBD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarBDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case AVATARBD_PORT_CONNECTOR:
+                tgc = new AvatarBDPortConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+				
+			// AVATAR SMD
+			case AVATARSMD_CONNECTOR:
+                tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			
+			// Others
             case CONNECTOR_AD_DIAGRAM:
                 tgc = new TGConnectorFullArrow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;

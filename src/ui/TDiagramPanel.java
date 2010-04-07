@@ -66,6 +66,10 @@ import ui.ncdd.*;
 
 import ui.atd.*;
 
+
+// AVATAR
+import ui.avatarbd.*;
+
 // Added by Solange
 import ui.procsd.*;
 
@@ -1159,6 +1163,26 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return v;
     }
 	
+	public Vector selectedAvatarBDBlocks() {
+        TGComponent tgc;
+        //AvatarBDBlock b;
+        Vector v = null;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if ((tgc.isSelected()) && (tgc instanceof AvatarBDBlock)) {
+                if (v == null) {
+                    v = new Vector();
+                }
+                v.addElement(tgc);
+				LinkedList<AvatarBDBlock> list = ((AvatarBDBlock)tgc).getFullBlockList();
+				v.addAll(list);
+            }
+        }
+        return v;
+    }
+	
 	public Vector selectedCPrimitiveComponent() {
         TGComponent tgc;
         TMLCPrimitiveComponent tcomp;
@@ -1934,7 +1958,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             mgui.gtm.copyModelingFromXML(this, clone, _tgc.getX() + 50, _tgc.getY() + 25);
         } catch (MalformedModelingException mme) {
             System.out.println("Clone Exception: " + mme.getMessage());
-            JOptionPane.showMessageDialog(mgui.getFrame(), "Exception", "Clone creation failed", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
         }
         bringToBack(_tgc);
         mgui.changeMade(this, NEW_COMPONENT);
@@ -2209,6 +2233,31 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return false;
     }
 	
+	public boolean isAlreadyAnAvatarBDBlockName(String name) {
+        AvatarBDBlock b;
+        Object o;
+        int i;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            o = (TGComponent)(iterator.next());
+            if (o instanceof AvatarBDBlock) {
+                b = (AvatarBDBlock)o;
+                if (b.getBlockName().equals(name)) {
+                    return true;
+                }
+				LinkedList<AvatarBDBlock> list = b.getFullBlockList();
+				for(AvatarBDBlock ab: list) {
+					 if (ab.getBlockName().equals(name)) {
+						 return true;
+					 }
+				}
+				
+            }
+        }
+        return false;
+    }
+	
 	public boolean isAlreadyATMLPrimitiveComponentName(String name) {
         TMLCPrimitiveComponent pc;
         Object o;
@@ -2431,6 +2480,37 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     if (t.getName().equals(name + index)) {
                         ok = false;
                     }
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+	
+	public String findAvatarBDBlockName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        AvatarBDBlock t;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof AvatarBDBlock) {
+                    t = (AvatarBDBlock)o;
+                    if (t.getValue().equals(name + index)) {
+                        ok = false;
+                    }
+					if (t.hasInternalBlockWithName(name+index)) {
+						ok = false;
+					}
                 }
             }
             if (ok) {

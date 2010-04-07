@@ -293,6 +293,16 @@ public class TGUIAction extends AbstractAction {
 	public static final int ATD_COMPOSITION_CONNECTOR = 288;
 	public static final int ATD_CONSTRAINT = 287;
 	
+	// AVATAR Block Diagram
+	public static final int ABD_BLOCK = 289;
+	public static final int ABD_COMPOSITION_CONNECTOR = 290;
+	public static final int ABD_PORT_CONNECTOR = 295;
+	
+	// AVATAR State Machine
+	public static final int ASMD_EDIT = 291;
+	public static final int ASMD_CONNECTOR = 292;
+	public static final int ASMD_START = 293;
+	public static final int ASMD_STOP = 294;
     
     public static final int ACT_MODEL_CHECKING = 25;
     public static final int ACT_GEN_RTLOTOS = 27;
@@ -400,7 +410,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 289;
+    public static final int NB_ACTION = 296;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -778,8 +788,18 @@ public class TGUIAction extends AbstractAction {
 
         actions[EXTERNAL_ACTION_1] = new TAction("user-command-1", "User command 1", IconManager.imgic338, IconManager.imgic338, "User command 1", "Execute the user command #1", '0');
         actions[EXTERNAL_ACTION_2] = new TAction("user-command-2", "User command 2", IconManager.imgic338, IconManager.imgic338, "User command 2", "Execute the user command #2", '0');
-
-
+		
+		// AVATAR Block Diagrams
+		actions[ABD_BLOCK] = new TAction("abd-block", "Add a block", IconManager.imgic1070, IconManager.imgic1070, "Block", "Add a SysML Block to the currently opened AVATAR Block Diagram", 0);
+        actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
+		actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic1076, IconManager.imgic1076, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);
+		
+		// AVATAR State Machine diagrams
+		actions[ASMD_EDIT] = new TAction("edit-asmd-diagram", "Edit AVATAR state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR state machine diagram", "Make it possible to edit the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_CONNECTOR] = new TAction("add-asmd-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_START] = new TAction("add-asmd-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_STOP] = new TAction("add-asmd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened AVATAR state machine diagram", 0);
+        
     }
     
     

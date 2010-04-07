@@ -142,5 +142,9 @@ public class AttackTreePanel extends TURTLEPanel {
 		
         return false;
     }
+	
+	public boolean isATDEnabled() {
+        return true;
+    }
     
 }

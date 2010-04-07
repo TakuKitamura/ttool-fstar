@@ -84,6 +84,10 @@ import ui.tmldd.*;
 import ui.procsd.*;
 import ui.prosmd.*;
 
+// AVATAR
+import ui.avatarbd.*;
+import ui.avatarsmd.*;
+
 public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public static boolean systemcOn;
@@ -93,6 +97,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public static boolean osOn;
     public static boolean uppaalOn;
 	public static boolean ncOn;
+	public static boolean avatarOn;
 	
 	public final static int LOTOS = 0;
 	public final static int RT_LOTOS = 1;
@@ -252,7 +257,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	ArrayList<RunningInfo> runningIDs;
 	JFrameInteractiveSimulation jfis;
     
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn) {
+    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn) {
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
@@ -260,6 +265,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         osOn = _osOn;
         uppaalOn = _uppaalOn;
 		ncOn = _ncOn;
+		avatarOn = _avatarOn;
     }
     
     
@@ -273,7 +279,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         } catch	(Exception e) {	ErrorGUI.exit(ErrorGUI.GUI);}
         
         // Creating main container
-        frame =	new JFrame("TURTLE Toolkit");
+        frame =	new JFrame("TTool");
         frame.addWindowListener(this);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
         frame.setIconImage(IconManager.img8);
@@ -793,6 +799,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         rp.init();
         return index;
     }
+	
+	private int addAvatarDesignPanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarDesignPanel adp = new AvatarDesignPanel(this);
+        tabs.add(index, adp);
+        mainTabbedPane.add(adp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR design diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        adp.init();
+        //ystem.out.println("Design added");
+        return index;
+    }
     
     private int addDesignPanel(String name, int index) {
         if (index == -1) {
@@ -978,6 +1000,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //System.out.println("TURTLE OS Design added index=" + index);
         return index;
     }
+	
+	private int addAVATARDesignPanel(String name, int index) {
+		
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarDesignPanel avdp = new AvatarDesignPanel(this);
+        tabs.add(index, avdp);
+        mainTabbedPane.add(avdp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR Design");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        avdp.init();
+        //System.out.println("TURTLE OS Design added index=" + index);
+        return index;
+    }
     
     private int addProActiveDesignPanel(String name, int index) {
         if (index == -1) {
@@ -1010,7 +1049,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return index;
     }
     
-    public int createDesign(String name) {
+    public int createAvatarDesign(String name) {
+        int index = addAvatarDesignPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+	
+	public int createDesign(String name) {
         int index = addDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
@@ -1310,8 +1355,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public void newNCDesign() {
-        System.out.println("NEW NC DESIGN");
+        //System.out.println("NEW NC DESIGN");
         addNCDesignPanel("NC Design", -1);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+    }    
+	
+	public void newAVATARBD() {
+        System.out.println("NEW AVATAR BD");
+        addAVATARDesignPanel("AVATAR Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }
@@ -3788,6 +3840,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public int getIdButtonSelected() {
         return idButtonSelected;
     }
+	
+	public void addAvatarBlock(TURTLEPanel tp, String s)	{
+        //System.out.println("ADD TML Task=" + s);
+        if (!(tp instanceof AvatarDesignPanel)) {
+            return;
+        }
+        
+        ((AvatarDesignPanel)tp).addAvatarStateMachineDiagramPanel(s);
+        setPanelMode();
+    }
     
     public void addTClass(TURTLEPanel tp, String s)	{
         if (!(tp instanceof DesignPanel)) {
@@ -3920,6 +3982,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
 	
+	public void removeAvatarBlock(TURTLEPanel tp, String s)	{
+        if (!(tp instanceof AvatarDesignPanel)) {
+            return;
+        }
+        
+        for(int i = 0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                tp.tabbedPane.removeTabAt(i);
+                tp.panels.removeElementAt(i);
+                setPanelMode();
+                return;
+            }
+        }
+    }
+	
 	public void removeTMLCPrimitiveComponent(TURTLEPanel tp, String s)	{
 		//System.out.println("Removing panel 0:" + s);
         if (!(tp instanceof TMLComponentDesignPanel)) {
@@ -4004,6 +4081,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return ((TMLComponentDesignPanel)(tp)).tmlctdp.getCompositeComponentByName(componentName);
 	}
     
+	public AvatarSMDPanel getAvatarSMDPanel(int indexDesign, String name) {
+		
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        if (tp == null) {
+			System.out.println("null TP");
+            return null;
+        }
+        if (tp instanceof AvatarDesignPanel) {
+            return ((AvatarDesignPanel)tp).getAvatarSMDPanel(name);
+        }
+		System.out.println("null ADP :" + name);
+        return null;
+    }
     
     public TActivityDiagramPanel getActivityDiagramPanel(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
@@ -4065,7 +4155,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return cpt;
     }
     
-    public void setClassDiagramName(int indexDesign, String name) {
+    public void setAvatarBDName(int indexDesign, String name) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        tp.tabbedPane.setTitleAt(0, name);
+    }
+	
+	 public void setClassDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
         tp.tabbedPane.setTitleAt(0, name);
     }
@@ -4851,6 +4946,40 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return false;
     }
 	
+	public boolean newAvatarBDBlockName(TURTLEPanel tp, String old, String niou) {
+		//System.out.println("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
+        JTabbedPane jtp = tp.tabbedPane;
+        for(int i = 0; i<jtp.getTabCount(); i++) {
+			//System.out.println("jtp  = " + jtp.getTitleAt(i));
+            if (jtp.getTitleAt(i).equals(niou)) {
+                return false;
+            }
+        }
+        //System.out.println("old " + old + " niou " + niou);
+        for(int i = 0; i<jtp.getTabCount(); i++) {
+            //System.out.println("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
+			//System.out.println("jtp  = " + jtp.getTitleAt(i));
+            if (jtp.getTitleAt(i).equals(old)) {
+                jtp.setTitleAt(i, niou);
+                jtp.setToolTipTextAt(i, "Opens the state machine of " + niou);
+                TDiagramPanel tdp;
+                //change panel name
+                for(int j=0; j<tp.panels.size(); j++) {
+                    tdp = (TDiagramPanel)(tp.panels.elementAt(j));
+                    if (tdp.getName().equals(old)) {
+                        tdp.setName(niou);
+						//System.out.println("Renamed to " + niou);
+                    }
+                }
+                
+                return true;
+            }
+        }
+        // internal error
+        ErrorGUI.exit(ErrorGUI.ERROR_TAB);
+        return false;
+    }
+	
 	public boolean nameComponentInUse(TURTLEPanel tp, String old, String niou) {
         JTabbedPane jtp = tp.tabbedPane;
         for(int i = 0; i<jtp.getTabCount(); i++) {
@@ -5568,6 +5697,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.UML_NOTE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UML_NOTE);
+			
+		// AVATAR BD
+		} else if (command.equals(actions[TGUIAction.ABD_BLOCK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR);	
+		} else if (command.equals(actions[TGUIAction.ABD_PORT_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARBD_PORT_CONNECTOR);
+			
+		// AVATAR SMD
+		} else if (command.equals(actions[TGUIAction.ASMD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.ASMD_START].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_START_STATE);
+		} else if (command.equals(actions[TGUIAction.ASMD_STOP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STOP_STATE);
+		} else if (command.equals(actions[TGUIAction.ASMD_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARSMD_CONNECTOR);
+			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);
         } else if (command.equals(actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].getActionCommand())) {
@@ -5944,7 +6092,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD;
         
         public PopupListener(MainGUI _mgui) {
             mgui = _mgui;
@@ -5988,6 +6136,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
+			newAVATARBD = createMenuItem("New AVATAR Block Diagram");
             
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
             menu.add(moveLeft);
@@ -6040,6 +6189,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			if (ncOn) {
 				menu.addSeparator();
                 menu.add(newNCDesign);
+			}
+			
+			if (avatarOn) {
+				menu.addSeparator();
+                menu.add(newAVATARBD);
 			}
             
         }
@@ -6122,6 +6276,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newTURTLEOSDesign();
                 } else if (e.getSource() == newNCDesign) {
                     mgui.newNCDesign();
+                } else if (e.getSource() == newAVATARBD) {
+                    mgui.newAVATARBD();
                 }
             }
         };

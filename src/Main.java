@@ -65,6 +65,8 @@ public class Main implements ActionListener {
     public static boolean os = false;
     public static boolean uppaal = true;
     public static boolean nc = true ; // Network calculus
+	public static boolean avatar = false ; // avatar profile
+	
     public static void main(String[] args) {
       
         System.out.println("\n*** Your TTool version is: " + DefaultText.getFullVersion() + " ***\n");
@@ -121,11 +123,11 @@ public class Main implements ActionListener {
             if (args[i].compareTo("-diplodocus") == 0) {
                 systemc = true;
                 lotos = true;
-                System.out.println("diplodocus features activated (SystemC, LOTOS) - these are beta features that are meant to be used only for research purpose");
+                System.out.println("Diplodocus features activated");
             }
 			if (args[i].compareTo("-nodiplodocus") == 0) {
                 systemc = false;
-                System.out.println("diplodocus features deactivated (SystemC) - these are beta features that are meant to be used only for research purpose");
+                System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-proactive") == 0) {
                 proactive = true;
@@ -140,6 +142,16 @@ public class Main implements ActionListener {
             if (args[i].compareTo("-nonc") ==0 )  {
 				nc = false;
                 System.out.println("Network calculus features unactivated - these are beta features that are meant to be used only for research purpose");
+            }
+			
+			if (args[i].compareTo("-avatar") ==0 )  {
+				avatar = true;
+                System.out.println("AVATAR activated - these are beta features that are meant to be used only for research purpose");
+            }
+			
+			if (args[i].compareTo("-noavatar") ==0 )  {
+				avatar = false;
+                System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
             }
 	    
             if (args[i].compareTo("-os") == 0) {
@@ -182,7 +194,7 @@ public class Main implements ActionListener {
         
         // making main window
         splashFrame.setMessage("Creating main window");
-        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc);
+        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar);
         splashFrame.setMessage("Building graphical components");
         mainGUI.build();
         

@@ -152,7 +152,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newreq.setEnabled(tp.isReqEnabled());
 		newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
-        
+        newatd.setEnabled(tp.isATDEnabled());
     }
     
     private Action listener = new AbstractAction() {
