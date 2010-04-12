@@ -68,6 +68,7 @@ public class TAttribute {
     public final static int OTHER = 5;
 	public final static int QUEUE_NAT = 6;
 	public final static int ARRAY_NAT = 7;
+	public final static int INTEGER = 8;
     
     
     private int access;
@@ -247,6 +248,8 @@ public class TAttribute {
             return QUEUE_NAT;
         } else if (s.equals("Array_nat")) {
             return ARRAY_NAT;
+        } else if (s.equals("int")) {
+            return ARRAY_NAT;
         } else if (!s.equals("")) {
             return OTHER;
         }
@@ -287,6 +290,8 @@ public class TAttribute {
                 return "Queue_nat";
 			case ARRAY_NAT:
                 return "Array_nat";
+			case INTEGER:
+                return "int";
             default:
                 return "";
         }

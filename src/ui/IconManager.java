@@ -56,8 +56,8 @@ import javax.swing.ImageIcon;
  * @see
  */
 public class IconManager {
-    
-    public static ImageIcon imgic8, imgic9;
+	
+	public static ImageIcon imgic8, imgic9;
     //Added by Solange
     public static ImageIcon imgic0, imgic1;
     public static Image img8, img9;
@@ -133,11 +133,16 @@ public class IconManager {
 	// NC
 	public static ImageIcon imgic3000;
 	
+	// AVATAR
+	public static ImageIcon imgic5000, imgic5002, imgic5004, imgic5006, imgic5008;
+	
+	
        // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
     
        // Image of the help button for the ports (Solange)
     public static ImageIcon imgic2111; //New icon created by Solange
+	
     
     //private static String icon7 = "images/turtle_large.gif";
     private static String icon8 = "images/turtle_16.gif";
@@ -467,6 +472,10 @@ public class IconManager {
 	
 	private static String icon3000= "images/nc.gif";
 	
+	private static String icon5000 = "images/avatarblock.gif";
+	private static String icon5002 = "images/avatarbdcomp.gif";
+	private static String icon5004 = "images/avatarbdlink.gif";
+	
     public IconManager() {
         
     }
@@ -775,6 +784,12 @@ public class IconManager {
 		
 		// NC
 		imgic3000 = getIcon(icon3000);
+		
+		// AVATAR
+		//imgic3000 = getIcon(icon3000);
+		imgic5000 = getIcon(icon5000);
+		imgic5002 = getIcon(icon5002);
+		imgic5004 = getIcon(icon5004);
     }
     
 } // Class

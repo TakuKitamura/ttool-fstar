@@ -49,6 +49,7 @@ package ui.avatarsmd;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
+import javax.swing.*;
 
 import myutil.*;
 import ui.*;
@@ -58,7 +59,50 @@ public  class AvatarSMDConnector extends TGConnector {
     
     public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+		
+		nbInternalTGComponent = 1;
+        tgcomponent = new TGComponent[nbInternalTGComponent];
+        AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
+        tgc.setValue("");
+        tgc.setName("List of all parameters of an Avatar SMD transition");
+        tgc.setMoveWithFather(false);
+        tgcomponent[0] = tgc;
+		
+		 editable = true;
+		
         myImageIcon = IconManager.imgic202;
+    }
+	
+	 public void internalDrawing(Graphics g) {
+        
+        TGComponent p3, p4;
+		int previousx = 0, previousy = 0;
+        
+        if (nbInternalTGComponent>0) {
+            p3 = tgcomponent[0];
+            p4 = tgcomponent[0];
+            //System.out.println("p3.x " + p3.getX() + " p3.y " + p3.getY());
+			if (!(tgcomponent[0] instanceof AvatarSMDTransitionInfo)) {
+				drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
+			}  else {
+				previousx = p1.getX();
+				previousy = p1.getY();
+			}
+            
+            for(int i=0; i<nbInternalTGComponent-1; i++) {
+				
+				if (p4 instanceof AvatarSMDTransitionInfo) {
+				} else {
+					p4 = tgcomponent[i+1];
+					drawMiddleSegment(g, previousx, previousy, p4.getX(), p4.getY());
+					previousx = p4.getX();
+					previousy = p4.getY();
+				}
+            }
+            drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
+        } else {
+            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        }
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
@@ -68,6 +112,10 @@ public  class AvatarSMDConnector extends TGConnector {
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }
     }
+	
+	public boolean editOndoubleClick(JFrame frame) {
+		return ((AvatarSMDTransitionInfo)(tgcomponent[0])).editOndoubleClick(frame);
+	}
     
     public int getType() {
         return TGComponentManager.AVATARSMD_CONNECTOR;

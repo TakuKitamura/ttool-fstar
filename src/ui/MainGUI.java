@@ -1278,7 +1278,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             
             dtree.reinit();
             dtree.forceUpdate();
-            frame.setTitle("TURTLE Toolkit");
+            frame.setTitle("TTool");
             frame.repaint();
         }
     }
@@ -1403,7 +1403,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newTurtleModeling();
             //gtm.saveOperation(tcdp);
             file = null;
-            frame.setTitle("TURTLE Toolkit: unsaved project");
+            frame.setTitle("TTool: unsaved project");
         } else {
             // 	check if previous modeling is saved
             boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
@@ -1440,7 +1440,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             rgautprojfile = null;
             rgautprojdotfile = null;
             
-            frame.setTitle("TURTLE Toolkit: unsaved project");
+            frame.setTitle("TTool: unsaved project");
         }
     }
     
@@ -1758,7 +1758,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				//System.out.println("Merging");
                 gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
                 //gtm.saveOperation(tcdp);
-                frame.setTitle("TURTLE Toolkit: " + file.getAbsolutePath());
+                frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
                 
             } catch (MalformedModelingException mme) {
@@ -1823,12 +1823,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             try {
                 gtm.loadModelingFromXML(s);
                 //gtm.saveOperation(tcdp);
-                frame.setTitle("TURTLE Toolkit: " + file.getAbsolutePath());
+                frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
                 
             } catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                frame.setTitle("TURTLE Toolkit: unamed project");
+                frame.setTitle("TToolt: unamed project");
             }
             dtree.forceUpdate();
         }
@@ -1872,12 +1872,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             try {
                 gtm.loadModelingFromXML(s);
                 //gtm.saveOperation(tcdp);
-                frame.setTitle("TURTLE Toolkit: " + file.getAbsolutePath());
+                frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
                 
             } catch (MalformedModelingException mme) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-                frame.setTitle("TURTLE Toolkit: unamed project");
+                frame.setTitle("TTool: unamed project");
             }
             dtree.forceUpdate();
             
@@ -2054,7 +2054,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 fos.close();
                 updateLastOpenFile(file);
                 setMode(MODEL_SAVED);
-                String title = "TURTLE Toolkit: " + file.getAbsolutePath();
+                String title = "TTool: " + file.getAbsolutePath();
                 if (!frame.getTitle().equals(title)) {
                     frame.setTitle(title);
                 }
@@ -2739,6 +2739,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         dtree.forceUpdate();
 		return ret;
     }
+	
+	public Vector getAllSignals() {
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp == null) {
+			return null;
+		}
+		
+		if (!(tp instanceof AvatarDesignPanel)) {
+			return null;
+		}
+		AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+		
+		String name =  getCurrentTDiagramPanel().getName();
+		
+		return adp.getAllSignals(name);
+	}
     
     public Vector getCheckingErrors() {
         return gtm.getCheckingErrors();
@@ -4947,19 +4963,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public boolean newAvatarBDBlockName(TURTLEPanel tp, String old, String niou) {
-		//System.out.println("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
+		TraceManager.addDev("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
         JTabbedPane jtp = tp.tabbedPane;
-        for(int i = 0; i<jtp.getTabCount(); i++) {
-			//System.out.println("jtp  = " + jtp.getTitleAt(i));
+		int i;
+        for(i = 0; i<jtp.getTabCount(); i++) {
+			TraceManager.addDev("jtp  = " + jtp.getTitleAt(i));
             if (jtp.getTitleAt(i).equals(niou)) {
                 return false;
             }
         }
-        //System.out.println("old " + old + " niou " + niou);
-        for(int i = 0; i<jtp.getTabCount(); i++) {
-            //System.out.println("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
-			//System.out.println("jtp  = " + jtp.getTitleAt(i));
-            if (jtp.getTitleAt(i).equals(old)) {
+       TraceManager.addDev("old " + old + " niou " + niou);
+	   TraceManager.addDev("nb Of panels:"+ jtp.getTabCount());
+        for(i = 0; i<jtp.getTabCount(); i++) {
+            //TraceManager.addDev("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
+			TraceManager.addDev("jtp  = >" + jtp.getTitleAt(i) + "<");
+			TraceManager.addDev("old  = >" + old + "<");
+            if (jtp.getTitleAt(i).compareTo(old) == 0) {
                 jtp.setTitleAt(i, niou);
                 jtp.setToolTipTextAt(i, "Opens the state machine of " + niou);
                 TDiagramPanel tdp;
@@ -4968,7 +4987,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     tdp = (TDiagramPanel)(tp.panels.elementAt(j));
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
-						//System.out.println("Renamed to " + niou);
+						TraceManager.addDev("Renamed to " + niou);
                     }
                 }
                 
@@ -5027,7 +5046,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             changeMade(null, -1);
         } catch (MalformedModelingException mme) {
             JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            frame.setTitle("TURTLE Toolkit: unamed project");
+            frame.setTitle("TTool: unamed project");
         }
         
     }
@@ -5715,6 +5734,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STOP_STATE);
 		} else if (command.equals(actions[TGUIAction.ASMD_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARSMD_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ASMD_SEND_SIGNAL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SEND_SIGNAL);
+		} else if (command.equals(actions[TGUIAction.ASMD_RECEIVE_SIGNAL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_SIGNAL);
 			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

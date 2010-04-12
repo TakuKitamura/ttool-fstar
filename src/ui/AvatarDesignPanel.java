@@ -129,6 +129,10 @@ public class AvatarDesignPanel extends TURTLEPanel {
         //jsp.setVisible(true);
  
     }
+	
+	public Vector getAllSignals(String _name) {
+		return abdp.getAllSignalsOfBlock(_name);
+	}
     
     public String saveHeaderInXml() {
         return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n"; 

@@ -62,6 +62,7 @@ public class TraceManager {
 		switch(devPolicy) {
 		case TO_CONSOLE:
 			System.out.println(_s);
+			break;
 		default:
 			System.out.println(_s);
 		}
@@ -71,6 +72,7 @@ public class TraceManager {
 		switch(userPolicy) {
 		case TO_CONSOLE:
 			System.out.println(_s);
+			break;
 		default:
 			System.out.println(_s);
 		}
@@ -80,6 +82,7 @@ public class TraceManager {
 		switch(errPolicy) {
 		case TO_CONSOLE:
 			System.err.println(_s);
+			break;
 		default:
 			System.err.println(_s);
 		}

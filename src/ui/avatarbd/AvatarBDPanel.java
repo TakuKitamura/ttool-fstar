@@ -99,15 +99,20 @@ public class AvatarBDPanel extends TDiagramPanel {
 				mgui.removeAvatarBlock(tp, b.getBlockName());
 			}
             return true;
-        } 
+        }
         return false;
     }
     
     public boolean actionOnValueChanged(TGComponent tgc) {
         if (tgc instanceof AvatarBDBlock) {
+			//updateAllSignalsOnConnectors();
             return actionOnDoubleClick(tgc);
         }
         return false;
+    }
+	
+	 public boolean areAttributesVisible() {
+        return attributesVisible;
     }
     
     public String getXMLHead() {
@@ -133,6 +138,30 @@ public class AvatarBDPanel extends TDiagramPanel {
     public String getXMLCloneTail() {
         return "</AVATARBlockDiagramPanelCopy>";
     }
+	
+	public void setConnectorsToFront() {
+		TGComponent tgc;
+		
+		//System.out.println("list size=" + componentList.size());
+		
+        Iterator iterator = componentList.listIterator();
+        
+		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (!(tgc instanceof TGConnector)) {
+				list.add(tgc);
+			}
+		}
+		
+		//System.out.println("Putting to back ...");
+		for(TGComponent tgc1: list) {
+			//System.out.println("Putting to back: " + tgc1);
+			componentList.remove(tgc1);
+			componentList.add(tgc1);
+		}
+	}
     
 
     
@@ -450,5 +479,94 @@ public class AvatarBDPanel extends TDiagramPanel {
 		
 		return null;
 	}*/
+	
+	public void updateAllSignalsOnConnectors() {
+		TGComponent tgc;
+		AvatarBDPortConnector port;
+		Iterator iterator = componentList.listIterator();
+		while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnector) {
+				port = (AvatarBDPortConnector)tgc;
+				port.updateAllSignals();
+			}
+		}
+	}
+	
+	public Vector getListOfAvailableSignals(AvatarBDBlock _block) {
+		int i;
+		TGComponent tgc;
+		LinkedList<String> ll;
+		AvatarBDPortConnector port;
+        Iterator iterator = componentList.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		Vector v = new Vector();
+		Vector listOfBlock = _block.getSignalList();
+		
+		if (listOfBlock.size() == 0) {
+			return v;
+		}
+		
+		v.addAll(listOfBlock);
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnector) {
+				port = (AvatarBDPortConnector)tgc;
+				if (port.getAvatarBDBlock1() == _block) {
+					ll = port.getListOfSignalsOrigin();
+					removeSignals(v, ll);
+				}
+				if (port.getAvatarBDBlock2() == _block) {
+					ll = port.getListOfSignalsDestination();
+					removeSignals(v, ll);
+				}
+			}
+		}
+		
+		return v;
+	}
+	
+	// Remove AvatarSignals of v which name is provided in list
+	private void removeSignals(Vector v, LinkedList<String> list) {
+		int i;
+		AvatarSignal as;
+		for(String s: list) {
+			for(i=0; i<v.size(); i++) {
+				as = (AvatarSignal)(v.get(i));
+				if (as.toString().compareTo(s) == 0) {
+					v.removeElementAt(i);
+					break;
+				}
+			}
+		}
+	}
+	
+	public LinkedList<AvatarBDBlock> getFullBlockList() {
+		TGComponent tgc;
+		AvatarBDBlock block;
+		LinkedList<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
+		Iterator iterator = componentList.listIterator();
+		
+		 while(iterator.hasNext()) {
+           tgc = (TGComponent)(iterator.next());
+		   if (tgc instanceof AvatarBDBlock) {
+			   block = (AvatarBDBlock)tgc;
+			   list.add(block);
+			   list.addAll(block.getFullBlockList());
+		   }
+		 }
+		 return list;
+	}
+	
+	public Vector getAllSignalsOfBlock(String _name) {
+		LinkedList<AvatarBDBlock> list = getFullBlockList();
+		for(AvatarBDBlock block: list) {
+			if (block.getBlockName().compareTo(_name) ==0) {
+				return block.getSignalList();
+			}
+		}
+		return null;
+	}
     
 }

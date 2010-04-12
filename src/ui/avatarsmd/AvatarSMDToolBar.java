@@ -65,6 +65,8 @@ public class AvatarSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ASMD_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_START].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
+		mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
@@ -94,6 +96,14 @@ public class AvatarSMDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.ASMD_STOP]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+        
+        button = this.add(mgui.actions[TGUIAction.ASMD_SEND_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL]);
         button.addMouseListener(mgui.mouseHandler);
         
         

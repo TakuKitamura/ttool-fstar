@@ -73,18 +73,15 @@ public  class AvatarBDCompositionConnector extends TGConnector implements Scalab
     public AvatarBDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
+		
+
         value = "{info}";
         editable = true;
 		oldScaleFactor = tdp.getZoom();
 		rescaled = true;
     }
     
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-		g.drawLine(x1, y1, x2, y2);
-        } else {
-		GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-        }*/
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
 		if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)){
 			p = new Polygon();
 			xp1 = x1;

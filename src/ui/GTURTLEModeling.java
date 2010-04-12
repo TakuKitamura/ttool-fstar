@@ -5,7 +5,7 @@
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
- * and at last to almalow the analysis of formal validation traces
+ * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
  *
@@ -3375,9 +3375,9 @@ public class GTURTLEModeling {
 		makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tdp);
 		//System.out.println("Subcomponents");
 		makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tdp);
-		//System.out.println("RealPoints");
+		TraceManager.addDev("RealPoints");
 		connectConnectorsToRealPoints(tdp);
-		//System.out.println("Structure changed");
+		TraceManager.addDev("Structure changed");
 		tdp.structureChanged();
 		//System.out.println("Post loading");
 		makePostLoading(tdp, 0);
@@ -3396,6 +3396,11 @@ public class GTURTLEModeling {
 		if (tdp instanceof AttackTreeDiagramPanel) {
 			//System.out.println("Connectors...");
 			((AttackTreeDiagramPanel)tdp).setConnectorsToFront();
+		}
+		
+		if (tdp instanceof AvatarBDPanel) {
+			//System.out.println("Connectors...");
+			((AvatarBDPanel)tdp).setConnectorsToFront();
 		}
 	}
 
@@ -4126,7 +4131,7 @@ public class GTURTLEModeling {
 				throw new MalformedModelingException();
 			}
 
-			//System.out.println("Making TGComponent of type " + myType + " and of name " + myName);
+			TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
 			//TGComponent is ready to be built
 			if(fatherId != -1) {
 				fatherId += decId;
@@ -4168,7 +4173,7 @@ public class GTURTLEModeling {
 			} else {
 				tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 			}
-			//System.out.println("TGComponent built " + myType);
+			TraceManager.addDev("TGComponent built " + myType);
 
 			if (tgc == null) {
 				throw new MalformedModelingException();
@@ -4233,7 +4238,7 @@ public class GTURTLEModeling {
 				}
 
 				if ((tgc instanceof AvatarBDBlock) && (decId >0)){
-					//System.out.println("Going to load ad of task " + oldClassName + " myValue=" + myValue);
+					TraceManager.addDev("Going to load ad of task " + oldClassName + " myValue=" + myValue);
 					loadAvatarSMD(tdp, oldClassName, myValue);
 				}
 				
@@ -4312,7 +4317,7 @@ public class GTURTLEModeling {
             }*/
 
 		} catch (Exception e) {
-			System.out.println("Exception XML Component " + e.getMessage());
+			System.out.println("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
 			throw new MalformedModelingException();
 		}
 		return tgc;

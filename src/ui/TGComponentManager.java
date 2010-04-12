@@ -293,6 +293,8 @@ public class TGComponentManager {
 	public static final int AVATARSMD_START_STATE = 5100;
     public static final int AVATARSMD_STOP_STATE = 5101;
 	public static final int AVATARSMD_CONNECTOR = 5102;
+	public static final int AVATARSMD_SEND_SIGNAL = 5103;
+	public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
 	
     
     public static final int EDIT = -1;
@@ -312,6 +314,12 @@ public class TGComponentManager {
                 break;
 			case AVATARSMD_STOP_STATE:
                 tgc = new AvatarSMDStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_SEND_SIGNAL:
+                tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_RECEIVE_SIGNAL:
+                tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -739,6 +747,10 @@ public class TGComponentManager {
 			return AVATARSMD_STOP_STATE;
 		} else if (tgc instanceof AvatarSMDConnector) {
 			return AVATARSMD_CONNECTOR;
+		} else if (tgc instanceof AvatarSMDSendSignal) {
+			return AVATARSMD_SEND_SIGNAL;
+		} else if (tgc instanceof AvatarSMDReceiveSignal) {
+			return AVATARSMD_RECEIVE_SIGNAL;
 			
 		// Others
 		} else if (tgc instanceof 	TADDeterministicDelay) {

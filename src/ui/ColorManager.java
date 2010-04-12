@@ -126,7 +126,11 @@ public class ColorManager {
 	public static final Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
 	public static final Color ATD_CONSTRAINT = new Color(191, 153, 161);
 	
-	public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
+	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
+	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
+	public static final Color AVATAR_BLOCK = new Color(149, 193, 200);
+	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
+	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
 	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	
