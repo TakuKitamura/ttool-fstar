@@ -781,6 +781,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
 	}
 	
+	public Vector getAttributeList() {
+		return myAttributes;
+	}
+	
+	public Vector getMethodList() {
+		return myMethods;
+	}
+	
 	public Vector getSignalList() {
 		return mySignals;
 	}

@@ -3402,6 +3402,11 @@ public class GTURTLEModeling {
 			//System.out.println("Connectors...");
 			((AvatarBDPanel)tdp).setConnectorsToFront();
 		}
+		
+		if (tdp instanceof AvatarSMDPanel) {
+			//System.out.println("Connectors...");
+			((AvatarSMDPanel)tdp).setConnectorsToFront();
+		}
 	}
 
 	// AVATAR

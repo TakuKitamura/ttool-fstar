@@ -57,6 +57,8 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     
     private Vector<String> actions;
 	private String guard, afterMin, afterMax, computeMin, computeMax; 
+	private Vector myAttributes, myMethods;
+	private Vector<String> allElements, insertElements;
     
     private boolean cancelled = false;
     
@@ -65,6 +67,8 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     // Panel1
 	private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT;
 	private JTextArea actionsT;
+	private JComboBox elements;
+	private JButton insertElement;
     
     // Main Panel
     private JButton closeButton;
@@ -73,7 +77,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions) {
+    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, Vector _myAttributes, Vector _myMethods) {
         
         super(_f, _title, true);
        
@@ -84,10 +88,36 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 		computeMax = _computeMax;
 		actions = _actions;
 		
+		myAttributes = _myAttributes;
+		myMethods = _myMethods;
+		
+		makeElements();
+		
         initComponents();
         myInitComponents();
         pack();
     }
+	
+	private void makeElements() {
+		int i;
+		TAttribute ta;
+		AvatarMethod am;
+		
+		allElements = new Vector<String>();
+		insertElements = new Vector<String>();
+		
+		for(i=0; i<myAttributes.size(); i++) {
+			ta = (TAttribute)(myAttributes.get(i));
+			allElements.add(ta.toString());
+			insertElements.add(ta.getId());
+		}
+		
+		for(i=0; i<myMethods.size(); i++) {
+			am = (AvatarMethod)(myMethods.get(i));
+			allElements.add(am.toString());
+			insertElements.add(am.getUseDescription());
+		}
+	}
     
     
     private void myInitComponents() {
@@ -108,9 +138,9 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
            
-        panel1.setBorder(new javax.swing.border.TitledBorder("Signals"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Transition parameters"));
     
-        panel1.setPreferredSize(new Dimension(300, 150));
+        //panel1.setPreferredSize(new Dimension(350, 350));
         
         // guard
         c1.weighty = 1.0;
@@ -125,10 +155,10 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         panel1.add(guardT, c1);
         
         // After
-        c1.gridwidth = 1;
-        c1.gridheight = 1;
-        c1.weighty = 1.0;
-        c1.weightx = 1.0;
+        c1.gridwidth = 5;
+        c1.gridheight = 5;
+        c1.weighty = 5.0;
+        c1.weightx = 5.0;
         panel1.add(new JLabel("after ("), c1);
 		afterMinT = new JTextField(afterMin);
         panel1.add(afterMinT, c1);
@@ -154,14 +184,26 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 		
         
         // actions
-		 c1.gridheight = 10;
+		
+		elements = new JComboBox(allElements);
+		panel1.add(elements, c1);
+		
+		insertElement = new JButton("Insert");
+		insertElement.setEnabled(allElements.size() > 0);
+		insertElement.addActionListener(this);
+		panel1.add(insertElement, c1);
+		
+		c1.gridheight = 5;
+		c1.weighty = 5.0;
+        c1.weightx = 5.0;
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c1.fill = GridBagConstraints.BOTH;
 		actionsT = new JTextArea();
         actionsT.setEditable(true);
         actionsT.setMargin(new Insets(10, 10, 10, 10));
         actionsT.setTabSize(3);
         actionsT.setFont(new Font("times", Font.PLAIN, 12));
-        actionsT.setPreferredSize(new Dimension(300, 300));
+        actionsT.setPreferredSize(new Dimension(300, 250));
         JScrollPane jsp = new JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		for(int i=0; i<actions.size(); i++) {
 			actionsT.append(actions.get(i) + "\n");
@@ -198,8 +240,15 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
             closeDialog();
         } else if (evt.getSource() == cancelButton)  {
             cancelDialog();
+        } else if (evt.getSource() == insertElement)  {
+            insertElements();
         } 
     }
+	
+	public void insertElements() {
+		int index = elements.getSelectedIndex();
+		actionsT.append(insertElements.get(index));
+	}
     
     public void closeDialog() {
 		actions.removeAllElements();

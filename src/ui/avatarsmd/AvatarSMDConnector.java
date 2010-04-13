@@ -56,24 +56,25 @@ import ui.*;
 
 public  class AvatarSMDConnector extends TGConnector {
     protected int arrowLength = 10;
+	protected AvatarSMDTransitionInfo myTransitionInfo;
     
     public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 		
-		nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
+		//nbInternalTGComponent = 1;
+        //tgcomponent = new TGComponent[nbInternalTGComponent];
         AvatarSMDTransitionInfo tgc = new AvatarSMDTransitionInfo(x, y+40, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, this, _tdp);
         tgc.setValue("");
         tgc.setName("List of all parameters of an Avatar SMD transition");
         tgc.setMoveWithFather(false);
-        tgcomponent[0] = tgc;
+        addInternalComponent(tgc, getNbInternalTGComponent());
 		
-		 editable = true;
+		editable = true;
 		
         myImageIcon = IconManager.imgic202;
     }
 	
-	 public void internalDrawing(Graphics g) {
+	/* public void internalDrawing(Graphics g) {
         
         TGComponent p3, p4;
 		int previousx = 0, previousy = 0;
@@ -99,11 +100,11 @@ public  class AvatarSMDConnector extends TGConnector {
 					previousy = p4.getY();
 				}
             }
-            drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
+            drawLastSegment(g, previousx, previousy, p2.getX(), p2.getY());
         } else {
             drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }
-    }
+    }*/
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
@@ -114,7 +115,7 @@ public  class AvatarSMDConnector extends TGConnector {
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {
-		return ((AvatarSMDTransitionInfo)(tgcomponent[0])).editOndoubleClick(frame);
+		return ((AvatarSMDTransitionInfo)(tgcomponent[getFirstIndexOfOtherInternalComponents()])).editOndoubleClick(frame);
 	}
     
     public int getType() {

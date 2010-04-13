@@ -166,8 +166,32 @@ public class AvatarSMDPanel extends TDiagramPanel {
         }
     }*/
 	
+	public void setConnectorsToFront() {
+		TGComponent tgc;
+		
+		//System.out.println("list size=" + componentList.size());
+		
+        Iterator iterator = componentList.listIterator();
+        
+		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (!(tgc instanceof TGConnector)) {
+				list.add(tgc);
+			}
+		}
+		
+		//System.out.println("Putting to back ...");
+		for(TGComponent tgc1: list) {
+			//System.out.println("Putting to back: " + tgc1);
+			componentList.remove(tgc1);
+			componentList.add(tgc1);
+		}
+	}
+	
 	public boolean hasAutoConnect() {
-		return true;
+		return false;
 	}
     
 }

@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarSMDStopState
- * Used to terminate a new state machine of an AVATAR block
- * Creation: 06/04/2010
- * @version 1.0 06/04/2010
+ * Class AvatarSMDBasicComponent
+ * Used to common functionalities of Avatar SMD Components
+ * Creation: 13/04/2010
+ * @version 1.0 13/04/2010
  * @author Ludovic APVRILLE
  * @see
  */
@@ -47,59 +47,30 @@
 package ui.avatarsmd;
 
 import java.awt.*;
+import java.awt.geom.*;
 
 import myutil.*;
 import ui.*;
 
-public class AvatarSMDStopState extends AvatarSMDBasicComponent implements EmbeddedComment, AllowedBreakpoint {
-    private int internalCircleSize = 16;
+public abstract class AvatarSMDBasicComponent extends TGCWithoutInternalComponent implements SwallowedTGComponent {
     private int lineLength = 5;
     
-    public AvatarSMDStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarSMDBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 20;
-        height = 20;
-        
-        nbConnectingPoint = 1;
-        connectingPoint = new TGConnectingPoint[1];
-        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, - lineLength, true, false, 0.5, 0.0);
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "stop state";
-        
-        myImageIcon = IconManager.imgic210;
     }
     
-    public void internalDrawing(Graphics g) {
-        ColorManager.setColor(g, state, 0);
-        g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
-        g.drawOval(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+    public int getDefaultConnector() {
+      return TGComponentManager.AVATARSMD_CONNECTOR;
     }
-    
-    
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
+	
+	public void resizeWithFather() {
+        if ((father != null) && (father instanceof AvatarSMDState)) {
+			// Too large to fit in the father? -> resize it!
+			resizeToFatherSize();
+			
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            setMoveCd(x, y);
         }
-        return null;
-    }
-    
-    public int getType() {
-        return TGComponentManager.AVATARSMD_STOP_STATE;
     }
     
 }
-
-
-
-
-
-
-

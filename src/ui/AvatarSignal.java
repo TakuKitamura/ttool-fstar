@@ -135,18 +135,7 @@ public class AvatarSignal extends AvatarMethod {
 		return signal;
     }
 	
-	
-	public String getUseDescription() {
-		String s = getId() + "(";
-		for(int i=0; i<typeIds.length; i++) {
-			s += typeIds[i];
-			if (i < (typeIds.length - 1)) {
-				s += ", ";
-			}
-		}
-		s += ")";
-		return s;
-	}
+
     
     // Comparison on id only
     public boolean equals(Object o) {

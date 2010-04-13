@@ -131,6 +131,10 @@ public class ColorManager {
 	public static final Color AVATAR_BLOCK = new Color(149, 193, 200);
 	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
+	public static final Color AVATAR_GUARD = new Color(128, 180, 205);
+	public static final Color AVATAR_TIME = new Color(196, 166, 122);	
+	public static final Color AVATAR_ACTION = new Color(128, 92, 168);
+	public static final Color AVATAR_STATE = new Color(149, 193, 200);
 	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	

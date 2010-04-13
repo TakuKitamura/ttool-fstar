@@ -559,6 +559,26 @@ public class AvatarBDPanel extends TDiagramPanel {
 		 return list;
 	}
 	
+	public Vector getAllAttributesOfBlock(String _name) {
+		LinkedList<AvatarBDBlock> list = getFullBlockList();
+		for(AvatarBDBlock block: list) {
+			if (block.getBlockName().compareTo(_name) ==0) {
+				return block.getAttributeList();
+			}
+		}
+		return null;
+	}
+	
+	public Vector getAllMethodsOfBlock(String _name) {
+		LinkedList<AvatarBDBlock> list = getFullBlockList();
+		for(AvatarBDBlock block: list) {
+			if (block.getBlockName().compareTo(_name) ==0) {
+				return block.getMethodList();
+			}
+		}
+		return null;
+	}
+	
 	public Vector getAllSignalsOfBlock(String _name) {
 		LinkedList<AvatarBDBlock> list = getFullBlockList();
 		for(AvatarBDBlock block: list) {

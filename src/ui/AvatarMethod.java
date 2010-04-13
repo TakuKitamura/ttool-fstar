@@ -309,6 +309,19 @@ public class AvatarMethod {
         return false;
         
     }
+	
+		
+	public String getUseDescription() {
+		String s = getId() + "(";
+		for(int i=0; i<typeIds.length; i++) {
+			s += typeIds[i];
+			if (i < (typeIds.length - 1)) {
+				s += ", ";
+			}
+		}
+		s += ")";
+		return s;
+	}
     
     // Comparison on all fields
     /*public int compareTo(Object o){

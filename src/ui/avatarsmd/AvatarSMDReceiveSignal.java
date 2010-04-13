@@ -57,7 +57,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarSMDReceiveSignal extends TGCWithoutInternalComponent implements CheckableAccessibility, BasicErrorHighlight {
+public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

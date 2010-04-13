@@ -130,6 +130,14 @@ public class AvatarDesignPanel extends TURTLEPanel {
  
     }
 	
+	public Vector getAllAttributes(String _name) {
+		return abdp.getAllAttributesOfBlock(_name);
+	}
+	
+	public Vector getAllMethods(String _name) {
+		return abdp.getAllMethodsOfBlock(_name);
+	}
+	
 	public Vector getAllSignals(String _name) {
 		return abdp.getAllSignalsOfBlock(_name);
 	}

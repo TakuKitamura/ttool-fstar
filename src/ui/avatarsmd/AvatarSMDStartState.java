@@ -52,7 +52,7 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarSMDStartState extends TGCWithoutInternalComponent implements EmbeddedComment{
+public class AvatarSMDStartState extends AvatarSMDBasicComponent implements EmbeddedComment{
     private int lineLength = 5;
     
     public AvatarSMDStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {

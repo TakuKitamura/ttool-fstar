@@ -2740,6 +2740,38 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return ret;
     }
 	
+	public Vector getAllAttributes() {
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp == null) {
+			return null;
+		}
+		
+		if (!(tp instanceof AvatarDesignPanel)) {
+			return null;
+		}
+		AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+		
+		String name =  getCurrentTDiagramPanel().getName();
+		
+		return adp.getAllAttributes(name);
+	}
+	
+	public Vector getAllMethods() {
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp == null) {
+			return null;
+		}
+		
+		if (!(tp instanceof AvatarDesignPanel)) {
+			return null;
+		}
+		AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+		
+		String name =  getCurrentTDiagramPanel().getName();
+		
+		return adp.getAllMethods(name);
+	}
+	
 	public Vector getAllSignals() {
 		TURTLEPanel tp = getCurrentTURTLEPanel();
 		if (tp == null) {
@@ -5738,6 +5770,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SEND_SIGNAL);
 		} else if (command.equals(actions[TGUIAction.ASMD_RECEIVE_SIGNAL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_SIGNAL);
+		} else if (command.equals(actions[TGUIAction.ASMD_PARALLEL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_PARALLEL);
+		} else if (command.equals(actions[TGUIAction.ASMD_STATE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STATE);
 			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

@@ -103,6 +103,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
         ColorManager.setColor(g, getState(), 0);
 		int inc = h;
 		
+		g.setColor(ColorManager.AVATAR_GUARD);
+		
 		if (guard.length() > 0) {
 			if (guard.compareTo("[ ]") != 0) {
 				g.drawString(guard, x, y + step);
@@ -113,6 +115,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 				step += inc;
 			}
 		}
+		
+		g.setColor(ColorManager.AVATAR_TIME);
 		
 		if (afterMin.length() > 0) {
 			if (afterMax.length() > 0) {
@@ -154,6 +158,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			}
 		}
 		
+		g.setColor(ColorManager.AVATAR_ACTION);
+		
 		for(int i=0; i<listOfActions.size(); i++) {
 			s = listOfActions.get(i);
 			if (s.length() > 0) {
@@ -169,6 +175,13 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		if (!tdp.isScaled()) {
 			height = step;
 		}
+		
+		ColorManager.setColor(g, state, 0);
+		if ((getState() == TGState.POINTER_ON_ME) ||  (getState() == TGState.POINTED)||  (getState() == TGState.MOVING)){
+			g.drawRoundRect(x-1, y-h+2, width+2, height+2, 5, 5);
+		}
+		
+		
 	}
 	
 	public TGComponent isOnMe(int _x, int _y) {
@@ -180,51 +193,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	
 	public boolean isInRectangle(int x1, int y1, int width, int height) {
 		if ((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height))) {
-			//System.out.println("Not in my rectangle " + this);
+			//TraceManager.addDev("Not in my rectangle " + this);
 			return false;
 		} else {
 			return true;
 		}
 	}
 	
-	/*public int getMycurrentMinY() {
-	return Math.min(y, y - h + 2);
-	}
-	
-	public int getMycurrentMaxY() {
-	return Math.min(y, y - h + 2 + height);
-	}*/
-	
-	/*public void valueChanged() {
-	
-	}*/
-	
-	/*public void setTClass(TClassSynchroInterface _t1, TClassSynchroInterface _t2) {
-	t1 = _t1;
-	t2 = _t2;
-	if ((t1 != oldt1) || (t2 != oldt2)) {
-	gates = new Vector();
-	//System.out.println("New gates");
-	makeValue();
-	}
-	oldt1 = t1;
-	oldt2 = t2;
-	}
-	
-	public void makeValue() {
-	value = "";
-	for(int i=0; i<gates.size(); i++) {
-	if (i != 0) {
-	value += "\n";
-	}
-	value += (gates.elementAt(i)).toString();
-	}
-	}*/
-	
 	public boolean editOndoubleClick(JFrame frame) {
-		
-		JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions);
-		jdat.setSize(750, 400);
+		Vector attributes = tdp.getMGUI().getAllAttributes();
+		Vector methods = tdp.getMGUI().getAllMethods();
+		JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods);
+		jdat.setSize(400, 500);
 		GraphicLib.centerOnParent(jdat);
 		jdat.show(); // blocked until dialog has been closed
 		
@@ -245,7 +225,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		computeMin = jdat.getComputeMin().trim();
 		computeMax = jdat.getComputeMax().trim();
 		
-		return false;
+		return true;
 	}
 	
 	protected String translateExtraParam() {
@@ -329,7 +309,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 									computeMax = s;
 								}
 							}
-							if (elt.getTagName().equals("action")) {
+							if (elt.getTagName().equals("actions")) {
 								s = elt.getAttribute("value");
 								if (s != null) {
 									listOfActions.add(s);

@@ -305,6 +305,8 @@ public class TGUIAction extends AbstractAction {
 	public static final int ASMD_STOP = 294;
 	public static final int ASMD_SEND_SIGNAL = 296;
 	public static final int ASMD_RECEIVE_SIGNAL = 297;
+	public static final int ASMD_PARALLEL = 298;
+	public static final int ASMD_STATE = 299;
     
     public static final int ACT_MODEL_CHECKING = 25;
     public static final int ACT_GEN_RTLOTOS = 27;
@@ -412,7 +414,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 298;
+    public static final int NB_ACTION = 300;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -803,6 +805,8 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_STOP] = new TAction("add-asmd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic904, IconManager.imgic904, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic908, IconManager.imgic908, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic204, IconManager.imgic204, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
         
     }
     
