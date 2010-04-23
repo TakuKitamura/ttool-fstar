@@ -59,7 +59,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     private JPopupMenu menu;
     protected MainGUI mgui;
     
-    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, newebrdd, newprosmd;
+    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, 
+	newebrdd, newprosmd, newavatarrd, newavatarpd;
     private JMenuItem newatd;
 	
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -97,6 +98,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
         newprosmd = createMenuItem("New ProActive state machine diagram");
 		newatd = createMenuItem("New attack tree diagram");
+		newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
+		newavatarpd = createMenuItem("New AVATAR Parametric Diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -114,6 +117,11 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		menu.add(newatd);
         menu.addSeparator();
         menu.add(newprosmd);
+		if (mgui.isAvatarOn()) {
+			menu.addSeparator();
+			menu.add(newavatarrd);
+			menu.add(newavatarpd);
+		}
     }
     
     private JMenuItem createMenuItem(String s) {
@@ -153,6 +161,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
         newatd.setEnabled(tp.isATDEnabled());
+		newavatarrd.setEnabled(tp.isAvatarRDEnabled());
     }
     
     private Action listener = new AbstractAction() {
@@ -186,7 +195,13 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             } else if (ac.equals("New ProActive state machine diagram")) {
                 mgui.createProActiveSMD(tp, "ProActive SMD");
                 mgui.changeMade(null, -1);
-            }
+            } else if (e.getSource() == newavatarrd) {
+				mgui.createAvatarRD(tp, "AVATAR RD");
+                mgui.changeMade(null, -1);
+			} else if (e.getSource() == newavatarpd) {
+				mgui.createAvatarPD(tp, "AVATAR PD");
+                mgui.changeMade(null, -1);
+			}
         }
     };
 }

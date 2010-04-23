@@ -61,6 +61,7 @@ public class IconManager {
     //Added by Solange
     public static ImageIcon imgic0, imgic1;
     public static Image img8, img9;
+	public static Image img5100, img5102;
     //Added by Solange
     public static Image img0, img1;
     
@@ -135,7 +136,11 @@ public class IconManager {
 	
 	// AVATAR
 	public static ImageIcon imgic5000, imgic5002, imgic5004, imgic5006, imgic5008;
+	public static ImageIcon imgic5010, imgic5012, imgic5014, imgic5016, imgic5018;
+	public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
+	public static ImageIcon imgic5030, imgic5032;
 	
+	public static ImageIcon imgic5100, imgic5102, imgic5104;
 	
        // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -472,9 +477,29 @@ public class IconManager {
 	
 	private static String icon3000= "images/nc.gif";
 	
+	
+	// AVATAR
 	private static String icon5000 = "images/avatarblock.gif";
 	private static String icon5002 = "images/avatarbdcomp.gif";
 	private static String icon5004 = "images/avatarbdlink.gif";
+	private static String icon5006 = "images/avatarrdreq.gif";
+    private static String icon5008 = "images/avatarrdprop.gif";
+	private static String icon5010 = "images/avatarpdattribute.gif";
+	private static String icon5012 = "images/avatarpdsetting.gif";
+	private static String icon5014 = "images/avatarpdbooleq.gif";
+	private static String icon5016 = "images/avatarpdattributeconnector.gif";
+	private static String icon5018 = "images/avatarpdsignalconnector.gif";
+	private static String icon5020 = "images/avatarpdpropertyconnector.gif";
+	private static String icon5022 = "images/avatarpdsignal.gif";
+	private static String icon5024 = "images/avatarpdpropertyrelation.gif";
+	private static String icon5026 = "images/avatarpdproperty.gif";
+	private static String icon5028 = "images/avatarpdlogicalconstraint.gif";
+	private static String icon5030 = "images/avatarpdtemporalconstraint.gif";
+	private static String icon5032 = "images/avatarpdalias.gif";
+	
+	private static String icon5100 = "images/avatarhead16.gif";
+	private static String icon5102 = "images/avatarhead32.gif";
+	
 	
     public IconManager() {
         
@@ -790,6 +815,29 @@ public class IconManager {
 		imgic5000 = getIcon(icon5000);
 		imgic5002 = getIcon(icon5002);
 		imgic5004 = getIcon(icon5004);
+		imgic5006 = getIcon(icon5006);
+		imgic5008 = getIcon(icon5008);
+		imgic5010 = getIcon(icon5010);
+		imgic5012 = getIcon(icon5012);
+		imgic5014 = getIcon(icon5014);
+		imgic5016 = getIcon(icon5016);
+		imgic5018 = getIcon(icon5018);
+		imgic5020 = getIcon(icon5020);
+		imgic5022 = getIcon(icon5022);
+		imgic5024 = getIcon(icon5024);
+		imgic5026 = getIcon(icon5026);
+		imgic5028 = getIcon(icon5028);
+		imgic5030 = getIcon(icon5030);
+		imgic5032 = getIcon(icon5032);
+		
+		imgic5100 = getIcon(icon5100);
+		imgic5102 = getIcon(icon5102);
+		if (imgic5100 != null) {
+			img5100 = imgic5100.getImage();
+		}
+		if (imgic5102 != null) {
+			img5102 = imgic5102.getImage();
+		}
     }
     
 } // Class

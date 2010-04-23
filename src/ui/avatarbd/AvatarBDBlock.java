@@ -188,7 +188,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.AVATAR_BLOCK);
+		//g.setColor(ColorManager.AVATAR_BLOCK);
+		Color avat = ColorManager.AVATAR_BLOCK;
+		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
@@ -226,7 +228,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		// Icon
 		if ((width>30) && (height > (iconSize + 2*textX))) {
 			iconIsDrawn = true;
-			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
+			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
 		} else {
 			iconIsDrawn = false;
 		}

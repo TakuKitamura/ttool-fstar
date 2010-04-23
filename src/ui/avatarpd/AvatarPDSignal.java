@@ -36,15 +36,15 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ATDConstraint
- * Constraint of SysML Parametric diagrams, adapted to attack trees
- * Creation: 11/12/2009
- * @version 1.0 11/12/2009
+ * Class AvatarPDSignal
+ * Signal -> SysML value type
+ * Creation: 23/04/2010
+ * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.atd;
+package ui.avatarpd;
 
 import java.awt.*;
 import java.util.*;
@@ -56,60 +56,68 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
-    //private int textY2 = 30;
-	
-	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"}; 
+public class AvatarPDSignal extends TGCScalableWithInternalComponent implements SwallowedTGComponent  {
+    private int textY1 = 3;
+    private int textY2 = 3;
+	//private int textX = 10;
 	
     protected String oldValue = "";
-	
+    protected String description = "";
+	private String stereotype = "signal";
+	private boolean isRootAttack = false;
+	 
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int textX = 1;
+	private int textX = 2;
     
-    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarPDSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
+        width = 125;
         height = (int)(40 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
         
-        connectingPoint[0] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[1] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+        connectingPoint[4] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[5] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[6] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[7] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[8] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[9] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[10] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+        connectingPoint[11] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
         
         moveable = true;
         editable = true;
         removable = true;
         
-        value = "<<OR>>";
+        value = "sig01";
+		description = "blah blah blah";
 		
 		currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
         
-        myImageIcon = IconManager.imgic1078;
+        myImageIcon = IconManager.imgic702;
     }
     
     public void internalDrawing(Graphics g) {
-        
+		String ster;
+		ster = "<<" + stereotype + ">>";
 		Font f = g.getFont();
 		Font fold = f;
+		
+		if (value != oldValue) {
+			setValue(value, g);
+		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
 			
@@ -124,13 +132,15 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 			// If font is less than 4, no text is displayed
 			
 			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0;
+			int w0, w1, w2;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
 			//System.out.println("max current font size:" + maxCurrentFontSize);
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
-				if (w0 < (width - (2*textX))) {
+				w1 = g.getFontMetrics().stringWidth(ster);
+				w2 = Math.min(w0, w1);
+				if (w2 < (width - (2*textX))) {
 					break;
 				}
 				maxCurrentFontSize --;
@@ -152,25 +162,57 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.ATD_CONSTRAINT);
+	
+		g.setColor(ColorManager.AVATARPD_SIGNAL);
+		
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
-		Font f0 = g.getFont();
+        // Strings
+		int w;
 		if (displayText) {
 			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f.deriveFont(Font.BOLD));
-			int w  = g.getFontMetrics().stringWidth(value);
-			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
-			g.setFont(f0);
+			Font f0 = g.getFont();
+			
+			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
+			
+			if (cannotWriteAttack) {
+				w  = g.getFontMetrics().stringWidth(value);
+				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(value, x + (width - w)/2, y + h);
+				} else {
+					w  = g.getFontMetrics().stringWidth(ster);
+					if ((w < (2*textX + width)) && (h < height)) {
+						g.drawString(ster, x + (width - w)/2, y + h);
+					}
+				}
+			} else {
+				g.setFont(f.deriveFont(Font.BOLD));
+				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+				int cumulated = 0;
+				w = g.getFontMetrics().stringWidth(ster);
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(ster, x + (width - w)/2, y + h);
+					cumulated = h;
+				}
+				g.setFont(f0);
+				w  = g.getFontMetrics().stringWidth(value);
+				h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(value, x + (width - w)/2, y + h);
+				}
+			}
 		}
+		
+		g.setFont(fold);
         
     }
     
-   /* public void setValue(String val, Graphics g) {
+   public void setValue(String val, Graphics g) {
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 		
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
         if (w1 != width) { 
@@ -178,38 +220,43 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
             resizeWithFather();
         }
         //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
-    }*/
+    }
     
-
+    public void resizeWithFather() {
+        if ((father != null) && (father instanceof AvatarPDBlock)) {
+            //System.out.println("cdRect comp");
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
+            setMoveCd(x, y);
+        }
+    }
     
     
      public boolean editOndoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 		
-		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", (ConstraintListInterface)this);
-		dialog.setSize(450, 350);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
-        
-		if (!dialog.isRegularClose()) {
-			return false;
-		}
+		//String text = getName() + ": ";
+		String s = (String)JOptionPane.showInputDialog(frame, "Signal name",
+			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+			null,
+			getValue());
 		
-		if (dialog.getStereotype() == null) {
-			return false;
+		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+			//boolean b;
+			if (!TAttribute.isAValidId(s, false, false)) {
+				JOptionPane.showMessageDialog(frame,
+					"Could not change the name of the Signal: the new name is not a valid name",
+					"Error",
+					JOptionPane.INFORMATION_MESSAGE);
+				return false;
+			}
 		}
-		
-		if (dialog.getStereotype().length() > 0) {
-			value = dialog.getStereotype();
-		}
-			
-		rescaled = true;
-		
 		return true;
+		
     }
-    
-    public TGComponent isOnOnlyMe(int x1, int y1) {
+	
+	public TGComponent isOnOnlyMe(int x1, int y1) {
         
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -218,16 +265,17 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
     }
     
     public int getType() {
-        return TGComponentManager.ATD_CONSTRAINT;
+        return TGComponentManager.APD_SIGNAL;
     }
 	
-	public String[] getConstraintList() {
-		return STEREOTYPES;
+	public int getDefaultConnector() {
+        return TGComponentManager.APD_SIGNAL_CONNECTOR;
 	}
+ 
+   
+    public String getAttributeName() {
+        return value;
+    }
 	
-	public String getCurrentConstraint() {
-		return value;
-	}
-  
     
 }

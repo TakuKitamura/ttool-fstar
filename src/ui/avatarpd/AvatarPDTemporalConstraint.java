@@ -36,15 +36,15 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ATDConstraint
- * Constraint of SysML Parametric diagrams, adapted to attack trees
- * Creation: 11/12/2009
- * @version 1.0 11/12/2009
+ * Class AvatarPDTemporalConstraint
+ * Temporal constraint of SysML Parametric diagrams, adapted to properties and signals
+ * Creation: 23/04/2010
+ * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.atd;
+package ui.avatarpd;
 
 import java.awt.*;
 import java.util.*;
@@ -56,11 +56,11 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
+public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
     private int textY1 = 5;
     //private int textY2 = 30;
 	
-	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"}; 
+	public static final String[] STEREOTYPES = {"<<TC>>"}; 
 	
     protected String oldValue = "";
 	
@@ -70,35 +70,29 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 	private boolean displayText = true;
 	private int textX = 1;
     
-    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarPDTemporalConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
-        minWidth = 100;
+        width = (int)(60* tdp.getZoom());
+        height = (int)(100 * tdp.getZoom());
+        minWidth = 50;
         
-        nbConnectingPoint = 12;
-        connectingPoint = new TGConnectingPoint[12];
+        nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPoint[4];
         
-        connectingPoint[0] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
+        connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+		
+        connectingPoint[2] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
+        connectingPoint[3] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, false, 0.0, 0.75);
+        
         //addTGConnectingPointsComment();
         
         moveable = true;
         editable = true;
         removable = true;
         
-        value = "<<OR>>";
+        value = "=0";
 		
 		currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
@@ -106,7 +100,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
         myImageIcon = IconManager.imgic1078;
     }
     
-    public void internalDrawing(Graphics g) {
+ public void internalDrawing(Graphics g) {
         
 		Font f = g.getFont();
 		Font fold = f;
@@ -130,6 +124,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 			//System.out.println("max current font size:" + maxCurrentFontSize);
 			while(maxCurrentFontSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
+				w0 = Math.max(w0, g.getFontMetrics().stringWidth(STEREOTYPES[0]));
 				if (w0 < (width - (2*textX))) {
 					break;
 				}
@@ -152,7 +147,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.ATD_CONSTRAINT);
+		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
@@ -160,8 +155,11 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 		if (displayText) {
 			f = f.deriveFont((float)currentFontSize);
 			g.setFont(f.deriveFont(Font.BOLD));
-			int w  = g.getFontMetrics().stringWidth(value);
-			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
+			int w  = g.getFontMetrics().stringWidth(STEREOTYPES[0]);
+			g.drawString(STEREOTYPES[0], x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
+			g.setFont(f.deriveFont(Font.ITALIC));
+			w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
 			g.setFont(f0);
 		}
         
@@ -184,7 +182,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
     
     
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
+		/*String tmp;
 		boolean error = false;
 		
 		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", (ConstraintListInterface)this);
@@ -202,11 +200,28 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 		
 		if (dialog.getStereotype().length() > 0) {
 			value = dialog.getStereotype();
-		}
+		}*/
+		
+		oldValue = value;
+		
+		//String text = getName() + ": ";
+		String s = (String)JOptionPane.showInputDialog(frame, "example of values: >0  [1,2], [2, inf]",
+			"Time constraint", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+			null,
+			getValue());
+		
+		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+			//boolean b;
+			
+			
+		setValue(s);
 			
 		rescaled = true;
 		
 		return true;
+		}
+		
+		return false;
     }
     
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -218,7 +233,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
     }
     
     public int getType() {
-        return TGComponentManager.ATD_CONSTRAINT;
+        return TGComponentManager.APD_TEMPORAL_CONSTRAINT;
     }
 	
 	public String[] getConstraintList() {

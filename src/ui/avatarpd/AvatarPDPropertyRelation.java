@@ -36,15 +36,15 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ATDConstraint
- * Constraint of SysML Parametric diagrams, adapted to attack trees
- * Creation: 11/12/2009
- * @version 1.0 11/12/2009
+ * Class AvatarPDPropertyRelation
+ * Constraint of SysML Parametric diagrams, adapted to properties
+ * Creation: 23/04/2010
+ * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.atd;
+package ui.avatarpd;
 
 import java.awt.*;
 import java.util.*;
@@ -56,11 +56,11 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
+public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent implements ConstraintListInterface {
     private int textY1 = 5;
     //private int textY2 = 30;
 	
-	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>", "<<SEQUENCE>>", "<<BEFORE>>", "<<AFTER>>"}; 
+	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>"}; 
 	
     protected String oldValue = "";
 	
@@ -70,28 +70,28 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 	private boolean displayText = true;
 	private int textX = 1;
     
-    public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarPDPropertyRelation(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
+        width = (int)(80* tdp.getZoom());
         height = (int)(40 * tdp.getZoom());
-        minWidth = 100;
+        minWidth = 75;
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
         
-        connectingPoint[0] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
-        connectingPoint[1] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
-        connectingPoint[2] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[3] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[4] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
-        connectingPoint[5] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
-        connectingPoint[6] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
-        connectingPoint[7] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[8] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[9] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[10] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new ATDAttackConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[2] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[3] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[4] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[5] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[6] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[7] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[8] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[9] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[10] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[11] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
         
         moveable = true;
@@ -152,7 +152,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
-		g.setColor(ColorManager.ATD_CONSTRAINT);
+		g.setColor(ColorManager.AVATARPD_PROPERTY_RELATION);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         
@@ -218,7 +218,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
     }
     
     public int getType() {
-        return TGComponentManager.ATD_CONSTRAINT;
+        return TGComponentManager.APD_PROPERTY_RELATION;
     }
 	
 	public String[] getConstraintList() {

@@ -235,29 +235,33 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         }
         panel2.add(criticalityBox, c2);
         
-        c2.gridwidth = 1;
-        panel2.add(new JLabel("Violated action:"), c2);
-        
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        violatedActionBox = new JTextField(violatedAction, 15);
-        if (type != 1) {
-            violatedActionBox.setEnabled(false);
-        } else {
-			violatedActionBox.setEnabled(true);
+		if (violatedAction != null) {
+			c2.gridwidth = 1;
+			panel2.add(new JLabel("Violated action:"), c2);
+			
+			c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+			violatedActionBox = new JTextField(violatedAction, 15);
+			if (type != 1) {
+				violatedActionBox.setEnabled(false);
+			} else {
+				violatedActionBox.setEnabled(true);
+			}
+			panel2.add(violatedActionBox, c2);
 		}
-        panel2.add(violatedActionBox, c2);
 		
-		c2.gridwidth = 1;
-        panel2.add(new JLabel("AttackTreeNode:"), c2);
-		
-		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        attackTreeNodeBox = new JTextField(attackTreeNode, 50);
-        if (type != 2) {
-            attackTreeNodeBox.setEnabled(false);
-        } else {
-			attackTreeNodeBox.setEnabled(true);
+		if (attackTreeNode != null) {
+			c2.gridwidth = 1;
+			panel2.add(new JLabel("AttackTreeNode:"), c2);
+			
+			c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+			attackTreeNodeBox = new JTextField(attackTreeNode, 50);
+			if (type != 2) {
+				attackTreeNodeBox.setEnabled(false);
+			} else {
+				attackTreeNodeBox.setEnabled(true);
+			}
+			panel2.add(attackTreeNodeBox, c2);
 		}
-        panel2.add(attackTreeNodeBox, c2);
         
         // main panel;
         c0.gridwidth = 1;

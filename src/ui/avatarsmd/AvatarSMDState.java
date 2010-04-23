@@ -167,7 +167,9 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		//System.out.println("Current font size:" + currentFontSize);
 		
 		Color c = g.getColor();
-		g.setColor(ColorManager.AVATAR_STATE);
+		//g.setColor(ColorManager.AVATAR_STATE);
+		Color avat = ColorManager.AVATAR_STATE;
+		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
 		g.fillRoundRect(x, y, width, height, 5, 5);
 		g.setColor(c);
 		g.drawRoundRect(x, y, width, height, 5, 5);

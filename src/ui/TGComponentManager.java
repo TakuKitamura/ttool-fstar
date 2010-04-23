@@ -77,6 +77,8 @@ import ui.ncdd.*;
 
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
+import ui.avatarrd.*;
+import ui.avatarpd.*;
 
 public class TGComponentManager {
     
@@ -298,6 +300,29 @@ public class TGComponentManager {
 	public static final int AVATARSMD_PARALLEL = 5105;
 	public static final int AVATARSMD_STATE = 5106;
 	
+	// AVATAR RD -> starts at 5200
+	public static final int AVATARRD_REQUIREMENT = 5200;
+    public static final int AVATARRD_PROPERTY = 5201;
+	public static final int AVATARRD_DERIVE_CONNECTOR = 5202;  
+	public static final int AVATARRD_VERIFY_CONNECTOR = 5203;
+	public static final int AVATARRD_COPY_CONNECTOR = 5204;
+	public static final int AVATARRD_COMPOSITION_CONNECTOR = 5205;
+	
+	// AVATAR PD -> starts at 5300
+	public static final int APD_BLOCK = 5300;
+    public static final int APD_LOGICAL_CONSTRAINT = 5301;
+	public static final int APD_TEMPORAL_CONSTRAINT = 5302;  
+	public static final int APD_ATTRIBUTE = 5303;
+	public static final int APD_SIGNAL = 5304;
+	public static final int APD_ALIAS = 5305;
+	public static final int APD_BOOLEQ = 5306;
+    public static final int APD_ATTRIBUTE_SETTING = 5307;
+	public static final int APD_PROPERTY = 5308;  
+	public static final int APD_PROPERTY_RELATION = 5309;
+	public static final int APD_ATTRIBUTE_CONNECTOR = 5310;
+	public static final int APD_SIGNAL_CONNECTOR = 5311;
+	public static final int APD_PROPERTY_CONNECTOR = 5312;
+	public static final int APD_COMPOSITION_CONNECTOR = 5313;
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -328,6 +353,44 @@ public class TGComponentManager {
                 break;
 			case AVATARSMD_STATE:
                 tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARRD_REQUIREMENT:
+                tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARRD_PROPERTY:
+                tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+				
+			// AVATAR PD
+			case APD_BLOCK:
+                tgc = new AvatarPDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_LOGICAL_CONSTRAINT:
+                tgc = new AvatarPDLogicalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_TEMPORAL_CONSTRAINT:
+                tgc = new AvatarPDTemporalConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_ATTRIBUTE:
+                tgc = new AvatarPDAttribute(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_SIGNAL:
+                tgc = new AvatarPDSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_ALIAS:
+                tgc = new AvatarPDAlias(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_BOOLEQ:
+                tgc = new AvatarPDBoolEq(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_ATTRIBUTE_SETTING:
+                tgc = new AvatarPDAttributeSetting(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_PROPERTY:
+                tgc = new AvatarPDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case APD_PROPERTY_RELATION:
+                tgc = new AvatarPDPropertyRelation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -764,6 +827,50 @@ public class TGComponentManager {
 		} else if (tgc instanceof AvatarSMDState) {
 			return AVATARSMD_STATE;		
 			
+		// AVATAR RD
+		} else if (tgc instanceof AvatarRDRequirement) {
+			return AVATARRD_REQUIREMENT;
+		} else if (tgc instanceof AvatarRDProperty) {
+			return AVATARRD_PROPERTY;
+		} else if (tgc instanceof AvatarRDDeriveConnector) {
+			return AVATARRD_DERIVE_CONNECTOR;
+		} else if (tgc instanceof AvatarRDVerifyConnector) {
+			return AVATARRD_VERIFY_CONNECTOR;
+		} else if (tgc instanceof AvatarRDCopyConnector) {
+			return AVATARRD_COPY_CONNECTOR;
+		} else if (tgc instanceof AvatarRDCompositionConnector) {
+			return AVATARRD_COMPOSITION_CONNECTOR;
+			
+		// AVATAR PD
+		} else if (tgc instanceof AvatarPDBlock) {
+			return APD_BLOCK;
+		} else if (tgc instanceof AvatarPDLogicalConstraint) {
+			return APD_LOGICAL_CONSTRAINT;
+		} else if (tgc instanceof AvatarPDTemporalConstraint) {
+			return APD_TEMPORAL_CONSTRAINT;
+		} else if (tgc instanceof AvatarPDAttribute) {
+			return APD_ATTRIBUTE;
+		} else if (tgc instanceof AvatarPDSignal) {
+			return APD_SIGNAL;
+		} else if (tgc instanceof AvatarPDAlias) {
+			return APD_ALIAS;
+		} else if (tgc instanceof AvatarPDBoolEq) {
+			return APD_BOOLEQ;
+		} else if (tgc instanceof AvatarPDAttributeSetting) {
+			return APD_ATTRIBUTE_SETTING;
+		} else if (tgc instanceof AvatarPDProperty) {
+			return APD_PROPERTY;
+		} else if (tgc instanceof AvatarPDPropertyRelation) {
+			return APD_PROPERTY_RELATION;
+		} else if (tgc instanceof AvatarPDAttributeConnector) {
+			return APD_ATTRIBUTE_CONNECTOR;
+		} else if (tgc instanceof AvatarPDSignalConnector) {
+			return APD_SIGNAL_CONNECTOR;
+		} else if (tgc instanceof AvatarPDPropertyConnector) {
+			return APD_PROPERTY_CONNECTOR;
+		} else if (tgc instanceof AvatarPDCompositionConnector) {
+			return APD_COMPOSITION_CONNECTOR;
+			                      
 		// Others
 		} else if (tgc instanceof 	TADDeterministicDelay) {
             return 	TAD_DETERMINISTIC_DELAY;
@@ -1113,7 +1220,35 @@ public class TGComponentManager {
 			// AVATAR SMD
 			case AVATARSMD_CONNECTOR:
                 tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;     
+				
+			// AVATAR RD
+			case AVATARRD_DERIVE_CONNECTOR:
+                tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
+			case AVATARRD_VERIFY_CONNECTOR:
+                tgc = new AvatarRDVerifyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case AVATARRD_COPY_CONNECTOR:
+                tgc = new AvatarRDCopyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case AVATARRD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarRDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+				
+			// AVATAR PD
+			case APD_ATTRIBUTE_CONNECTOR:
+                tgc = new AvatarPDAttributeConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case APD_SIGNAL_CONNECTOR:
+                tgc = new AvatarPDSignalConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case APD_PROPERTY_CONNECTOR:
+                tgc = new AvatarPDPropertyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case APD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarPDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;				
 			
 			// Others
             case CONNECTOR_AD_DIAGRAM:

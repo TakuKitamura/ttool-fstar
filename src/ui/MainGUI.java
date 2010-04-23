@@ -87,6 +87,8 @@ import ui.prosmd.*;
 // AVATAR
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
+import ui.avatarrd.*;
+import ui.avatarpd.*;
 
 public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
@@ -267,6 +269,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		ncOn = _ncOn;
 		avatarOn = _avatarOn;
     }
+	
+	public boolean isAvatarOn() {
+		return avatarOn;
+	}
     
     
     public void build() {
@@ -815,6 +821,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //ystem.out.println("Design added");
         return index;
     }
+	
+	private int addAvatarRequirementPanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarRequirementPanel arp = new AvatarRequirementPanel(this);
+        tabs.add(index, arp);
+        mainTabbedPane.add(arp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR requirement diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        arp.init();
+        //ystem.out.println("Design added");
+        return index;
+    }
     
     private int addDesignPanel(String name, int index) {
         if (index == -1) {
@@ -1001,7 +1023,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return index;
     }
 	
-	private int addAVATARDesignPanel(String name, int index) {
+	/*private int addAvatarDesignPanel(String name, int index) {
 		
         if (index == -1) {
             index = tabs.size();
@@ -1016,7 +1038,24 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         avdp.init();
         //System.out.println("TURTLE OS Design added index=" + index);
         return index;
-    }
+    }*/
+	
+	/*private int addAvatarRequirementPanel(String name, int index) {
+		
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarRequirementPanel arp = new AvatarRequirementPanel(this);
+        tabs.add(index, arp);
+        mainTabbedPane.add(arp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR Requirement");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        arp.init();
+        //System.out.println("TURTLE OS Design added index=" + index);
+        return index;
+    }*/
     
     private int addProActiveDesignPanel(String name, int index) {
         if (index == -1) {
@@ -1051,6 +1090,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public int createAvatarDesign(String name) {
         int index = addAvatarDesignPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+	
+	public int createAvatarRequirement(String name) {
+        int index = addAvatarRequirementPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
@@ -1361,11 +1406,18 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
     }    
 	
-	public void newAVATARBD() {
-        System.out.println("NEW AVATAR BD");
-        addAVATARDesignPanel("AVATAR Design", -1);
+	public void newAvatarBD() {
+        TraceManager.addDev("NEW AVATAR BD");
+        addAvatarDesignPanel("AVATAR Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
+    }
+	
+	public void newAvatarRequirement() {
+        TraceManager.addDev("NEW AVATAR Requirement");
+        addAvatarRequirementPanel("AVATAR Requirements", 0);
+        //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
     }
     
     public void newProactiveDesign() {
@@ -4465,6 +4517,34 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
         return(s); //Changes by Solange from return true
     }
+	
+	public boolean createAvatarRD(int index, String s) {
+        return createAvatarRD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createAvatarRD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AvatarRequirementPanel)) {
+            return false;
+        }
+        
+        ((AvatarRequirementPanel)tp).addAvatarRD(s);
+        setPanelMode();
+        return true;
+    }
+	
+	public boolean createAvatarPD(int index, String s) {
+        return createAvatarPD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createAvatarPD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AvatarRequirementPanel)) {
+            return false;
+        }
+        
+        ((AvatarRequirementPanel)tp).addAvatarPD(s);
+        setPanelMode();
+        return true;
+    }
     
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
@@ -4518,6 +4598,32 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         ((RequirementPanel)tp).addEBRDD(s);
         setPanelMode();
         return true;
+    }
+	
+	public AvatarRDPanel getAvatarRDPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarRDPanel(tp, indexTab, s);
+    }
+    
+    
+    public AvatarRDPanel getAvatarRDPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AvatarRDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+	
+	public AvatarPDPanel getAvatarPDPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarPDPanel(tp, indexTab, s);
+    }
+    
+    
+    public AvatarPDPanel getAvatarPDPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AvatarPDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
     }
     
     public RequirementDiagramPanel getRequirementDiagramPanel(int index, String s) {
@@ -5775,6 +5881,56 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		} else if (command.equals(actions[TGUIAction.ASMD_STATE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STATE);
 			
+		// AVATAR RD
+		} else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.ARD_REQUIREMENT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_REQUIREMENT);
+		} else if (command.equals(actions[TGUIAction.ARD_PROPERTY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_PROPERTY);
+		} else if (command.equals(actions[TGUIAction.ARD_DERIVE_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_DERIVE_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ARD_VERIFY_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_VERIFY_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ARD_COPY_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COPY_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ARD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR);
+			
+			// AVATAR PD
+		} else if (command.equals(actions[TGUIAction.APD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.APD_BLOCK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.APD_LOGICAL_CONSTRAINT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_LOGICAL_CONSTRAINT);
+		} else if (command.equals(actions[TGUIAction.APD_TEMPORAL_CONSTRAINT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_TEMPORAL_CONSTRAINT);
+		} else if (command.equals(actions[TGUIAction.APD_ATTRIBUTE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_ATTRIBUTE);
+		} else if (command.equals(actions[TGUIAction.APD_SIGNAL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_SIGNAL);
+		} else if (command.equals(actions[TGUIAction.APD_ALIAS].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_ALIAS);
+		} else if (command.equals(actions[TGUIAction.APD_BOOLEQ].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_BOOLEQ);
+		} else if (command.equals(actions[TGUIAction.APD_ATTRIBUTE_SETTING].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_ATTRIBUTE_SETTING);
+		} else if (command.equals(actions[TGUIAction.APD_PROPERTY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_PROPERTY);
+		} else if (command.equals(actions[TGUIAction.APD_PROPERTY_RELATION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.APD_PROPERTY_RELATION);
+		} 
+		
+		else if (command.equals(actions[TGUIAction.APD_ATTRIBUTE_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_ATTRIBUTE_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.APD_SIGNAL_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_SIGNAL_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.APD_PROPERTY_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_PROPERTY_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.APD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_COMPOSITION_CONNECTOR);
+			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);
         } else if (command.equals(actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE].getActionCommand())) {
@@ -6151,7 +6307,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement;
         
         public PopupListener(MainGUI _mgui) {
             mgui = _mgui;
@@ -6195,6 +6351,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
+			newAVATARRequirement = createMenuItem("New AVATAR Requirement Diagrams");
 			newAVATARBD = createMenuItem("New AVATAR Block Diagram");
             
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
@@ -6252,6 +6409,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			
 			if (avatarOn) {
 				menu.addSeparator();
+				menu.add(newAVATARRequirement);
                 menu.add(newAVATARBD);
 			}
             
@@ -6336,8 +6494,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 } else if (e.getSource() == newNCDesign) {
                     mgui.newNCDesign();
                 } else if (e.getSource() == newAVATARBD) {
-                    mgui.newAVATARBD();
-                }
+                    mgui.newAvatarBD();
+                } else if (e.getSource() == newAVATARRequirement) {
+					mgui.newAvatarRequirement();
+				}
             }
         };
     }

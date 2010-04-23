@@ -77,6 +77,8 @@ import ui.window.*;
 // AVATAR
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
+import ui.avatarrd.*;
+import ui.avatarpd.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -2788,6 +2790,74 @@ public class GTURTLEModeling {
 						makePostLoading(asmdp, beginIndex);
 					}
 				}
+			} else if (tdp instanceof AvatarRDPanel) {
+				nl = doc.getElementsByTagName("AvatarRDPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				AvatarRDPanel ardp = (AvatarRDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (ardp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ardp);
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ardp);
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ardp);
+						connectConnectorsToRealPoints(ardp);
+						ardp.structureChanged();
+						makePostLoading(ardp, beginIndex);
+					}
+				}
+			} else if (tdp instanceof AvatarPDPanel) {
+				nl = doc.getElementsByTagName("AvatarPDPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				AvatarPDPanel apdp = (AvatarPDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (apdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), apdp);
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), apdp);
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), apdp);
+						connectConnectorsToRealPoints(apdp);
+						apdp.structureChanged();
+						makePostLoading(apdp, beginIndex);
+					}
+				}
 			}
 			
 		} catch (IOException e) {
@@ -2927,6 +2997,10 @@ public class GTURTLEModeling {
 		// AVATAR
 		if (type.compareTo("AVATAR Design") == 0) {
 			loadAvatarDesign(node);
+		} else if (type.compareTo("Avatar Requirement") == 0) {
+			loadAvatarRequirement(node);
+			
+			
 		// TURTLE 
 		} else if (type.compareTo("Design") == 0) {
 			loadDesign(node);
@@ -2981,6 +3055,36 @@ public class GTURTLEModeling {
 						// Managing activity diagrams
 						loadAvatarSMD(elt, indexDesign);
 					}
+				}
+			}
+		}
+	}
+	
+	public void loadAvatarRequirement(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexReq;
+		int cpt_req = 0;
+
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexReq = mgui.createAvatarRequirement(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//System.out.println("Deployment nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("AvatarRDPanel") == 0) {
+					loadAvatarRD(elt, indexReq, cpt_req);
+					cpt_req ++;
+				} else if (elt.getTagName().compareTo("AvatarPDPanel") == 0) {
+					loadAvatarPD(elt, indexReq, cpt_req);
+					cpt_req ++;
 				}
 			}
 		}
@@ -3407,6 +3511,11 @@ public class GTURTLEModeling {
 			//System.out.println("Connectors...");
 			((AvatarSMDPanel)tdp).setConnectorsToFront();
 		}
+		
+		if (tdp instanceof AvatarPDPanel) {
+			//System.out.println("Connectors...");
+			((AvatarPDPanel)tdp).setConnectorsToFront();
+		}
 	}
 
 	// AVATAR
@@ -3437,6 +3546,39 @@ public class GTURTLEModeling {
 		asmdp.removeAll();
 
 		loadDiagram(elt, asmdp);
+	}
+	
+	public void loadAvatarRD(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createAvatarRD(indexAnalysis, name);
+
+
+		TDiagramPanel tdp = mgui.getAvatarRDPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadAvatarPD(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createAvatarPD(indexAnalysis, name);
+
+		TDiagramPanel tdp = mgui.getAvatarPDPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
 	}
 
 	// TURTLE Design

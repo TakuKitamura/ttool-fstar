@@ -71,10 +71,10 @@ public class JDialogConstraint extends javax.swing.JDialog implements ActionList
     private JButton closeButton;
     private JButton cancelButton;
 	
-	private ATDConstraint constraint;
+	private ConstraintListInterface constraint;
     
     /** Creates new form  */
-    public JDialogConstraint(Frame _frame, String _title, ATDConstraint _constraint) {
+    public JDialogConstraint(Frame _frame, String _title, ConstraintListInterface _constraint) {
         super(_frame, _title, true);
         frame = _frame;
         constraint = _constraint;
@@ -113,9 +113,9 @@ public class JDialogConstraint extends javax.swing.JDialog implements ActionList
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		stereotype = new JComboBox(ATDConstraint.STEREOTYPES);
-		for(int i = 0; i<ATDConstraint.STEREOTYPES.length; i++) {
-			if (constraint.getValue().compareTo(ATDConstraint.STEREOTYPES[i]) == 0) {
+		stereotype = new JComboBox(constraint.getConstraintList());
+		for(int i = 0; i<constraint.getConstraintList().length; i++) {
+			if (constraint.getCurrentConstraint().compareTo(constraint.getConstraintList()[i]) == 0) {
 				stereotype.setSelectedIndex(i);
 				break;
 			}

@@ -128,13 +128,27 @@ public class ColorManager {
 	
 	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
 	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
-	public static final Color AVATAR_BLOCK = new Color(149, 193, 200);
+	public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
 	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_GUARD = new Color(128, 180, 205);
-	public static final Color AVATAR_TIME = new Color(196, 166, 122);	
+	public static final Color AVATAR_TIME = new Color(108, 92, 67);	
 	public static final Color AVATAR_ACTION = new Color(128, 92, 168);
-	public static final Color AVATAR_STATE = new Color(149, 193, 200);
+	public static final Color AVATAR_STATE = new Color(149, 193, 210);
+	
+	public static final Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
+	public static final Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
+	
+	public static final Color AVATARPD_ATTRIBUTE = new Color(143, 182, 110);
+	public static final Color AVATARPD_SIGNAL = new Color(205, 196, 109);
+	public static final Color AVATARPD_PROPERTY = new Color(228, 241, 242);
+	public static final Color AVATARPD_PROPERTY_RELATION = AVATARPD_PROPERTY;
+	public static final Color AVATARPD_LOGICAL_CONSTRAINT = AVATARPD_SIGNAL;
+	public static final Color AVATARPD_TEMPORAL_CONSTRAINT = AVATARPD_SIGNAL;
+	public static final Color AVATARPD_ALIAS = AVATARPD_SIGNAL;
+	public static final Color AVATARPD_ATTRIBUTE_SETTING = AVATARPD_ATTRIBUTE;
+	public static final Color AVATARPD_BOOLEQ = AVATARPD_ATTRIBUTE;
+	
 	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
 	

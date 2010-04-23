@@ -307,7 +307,34 @@ public class TGUIAction extends AbstractAction {
 	public static final int ASMD_RECEIVE_SIGNAL = 297;
 	public static final int ASMD_PARALLEL = 298;
 	public static final int ASMD_STATE = 299;
+	
+	// AVATAR Requirement
+	public static final int ARD_EDIT = 300;
+	public static final int ARD_REQUIREMENT = 301;
+	public static final int ARD_PROPERTY = 302;
+	public static final int ARD_VERIFY_CONNECTOR = 303;
+	public static final int ARD_DERIVE_CONNECTOR = 304;
+	public static final int ARD_COPY_CONNECTOR = 305;
+	public static final int ARD_COMPOSITION_CONNECTOR = 306;
     
+	// AVATAR Parametric Diagrams
+	public static final int APD_EDIT = 307;
+	public static final int APD_BLOCK = 308;
+	public static final int APD_LOGICAL_CONSTRAINT = 309;
+	public static final int APD_TEMPORAL_CONSTRAINT = 310;
+	public static final int APD_ATTRIBUTE = 311;
+	public static final int APD_SIGNAL = 312;
+	public static final int APD_ALIAS = 313; 
+	public static final int APD_BOOLEQ = 314;   
+	public static final int APD_ATTRIBUTE_SETTING = 315;
+	public static final int APD_PROPERTY = 316;
+	public static final int APD_PROPERTY_RELATION = 317;
+	public static final int APD_ATTRIBUTE_CONNECTOR = 318;
+	public static final int APD_SIGNAL_CONNECTOR = 319;
+	public static final int APD_PROPERTY_CONNECTOR = 320;
+	public static final int APD_COMPOSITION_CONNECTOR = 321;
+	
+	
     public static final int ACT_MODEL_CHECKING = 25;
     public static final int ACT_GEN_RTLOTOS = 27;
     public static final int ACT_GEN_LOTOS = 155;
@@ -414,7 +441,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 300;
+    public static final int NB_ACTION = 322;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -798,7 +825,7 @@ public class TGUIAction extends AbstractAction {
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
 		actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);
 		
-		// AVATAR State Machine diagrams
+		// AVATAR State Machine Diagrams
 		actions[ASMD_EDIT] = new TAction("edit-asmd-diagram", "Edit AVATAR state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR state machine diagram", "Make it possible to edit the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CONNECTOR] = new TAction("add-asmd-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_START] = new TAction("add-asmd-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened AVATAR state machine diagram", 0);
@@ -808,6 +835,32 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic204, IconManager.imgic204, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
         
+		// AVATAR Requirement Diagrams
+		actions[ARD_EDIT] = new TAction("edit-ard-diagram", "Edit AVATAR Requirement Diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Requirement Diagram", "Make it possible to edit the currently opened AVATAR requirement diagram", 0);
+        actions[ARD_REQUIREMENT] = new TAction("add-ard-requirement", "Add a requirement", IconManager.imgic5006, IconManager.imgic5006, "Requirement", "Add a requirement to the currently opened avatar requirement diagram", 0);
+        actions[ARD_PROPERTY] = new TAction("add-ard-property", "Add a property", IconManager.imgic5008, IconManager.imgic5008, "Property", "Add a reference to a property of the currently opened avatar requirement diagram", 0);
+        actions[ARD_DERIVE_CONNECTOR] = new TAction("add-ard-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened avatar requirement diagram", 0);
+        actions[ARD_VERIFY_CONNECTOR] = new TAction("add-ard-verify", "Add a <<verify>> link", IconManager.imgic1006, IconManager.imgic1006, "Verify", "Add a <<verify>> link between an observer and a requirement of the currently opened avatar requirement diagram", 0);
+		actions[ARD_COPY_CONNECTOR] = new TAction("add-ard-copy", "Add a <<copy>> link", IconManager.imgic1010, IconManager.imgic1010, "Copy", "Add a <<copy>> link between two requirements of the currently opened avatar requirement diagram", 0);
+        actions[ARD_COMPOSITION_CONNECTOR] = new TAction("add-ard-composition", "Add a <<derive>> link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a <<copy>> link between two requirements of the currently opened avatar requirement diagram", 0);
+        
+		// AVATAR Parametric Diagrams
+		actions[APD_EDIT] = new TAction("edit-apd-diagram", "Edit AVATAR Parametric Diagrams", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Parametric Diagram", "Make it possible to edit the currently opened AVATAR Parametric Diagram", 0);
+        actions[APD_BLOCK] = new TAction("apd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Parametric Diagram", 0);
+        actions[APD_LOGICAL_CONSTRAINT] = new TAction("apd-logical-constraint", "Add a Logical Constraint", IconManager.imgic5028, IconManager.imgic5028, "Logical Constraint", "Add a Logical Constraint to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_TEMPORAL_CONSTRAINT] = new TAction("apd-temporal-constraint", "Add a Temporal Constraint", IconManager.imgic5030, IconManager.imgic5030, "Temporal Constraint", "Add a Temporal Constraint to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_ATTRIBUTE] = new TAction("apd-attribute", "Add a attribute", IconManager.imgic5010, IconManager.imgic5010, "Attribute", "Add an attribute to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_SIGNAL] = new TAction("apd-signal", "Add a signal", IconManager.imgic5022, IconManager.imgic5022, "Signal", "Add an signal to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_ALIAS] = new TAction("apd-alias", "Add a alias", IconManager.imgic5032, IconManager.imgic5032, "Alias", "Add an alias to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_BOOLEQ] = new TAction("apd-booleq", "Add a boolean equation", IconManager.imgic5014, IconManager.imgic5014, "boolean equation", "Add a boolean equation to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_ATTRIBUTE_SETTING] = new TAction("apd-attribute-setting", "Setting attributes", IconManager.imgic5012, IconManager.imgic5012, "Setting attributes", "Add an attribute affectation to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_PROPERTY] = new TAction("apd-property", "Add a property", IconManager.imgic5026, IconManager.imgic5026, "Property", "Add a property to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_PROPERTY_RELATION] = new TAction("apd-property-relation", "Add a property relation", IconManager.imgic5024, IconManager.imgic5024, "Property relation", "Add a property relation to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_ATTRIBUTE_CONNECTOR] = new TAction("apd-attribute-connector", "Add a connector between attribute elements", IconManager.imgic5016, IconManager.imgic5016, "Connector between attributes", "Add a connector between attributes to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_SIGNAL_CONNECTOR] = new TAction("apd-signal-connector", "Add a connector between signal elements", IconManager.imgic5018, IconManager.imgic5018, "Connector between signals", "Add a connector between signals to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_PROPERTY_CONNECTOR] = new TAction("apd-property-connector", "Add a connector between property elements", IconManager.imgic5020, IconManager.imgic5020, "Connector between properties", "Add a connector between properties to the currently opened AVATAR Parametric Diagram", 0);
+		actions[APD_COMPOSITION_CONNECTOR] = new TAction("apd-composition-connector", "Add a composition between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition between blocks", "Add a composition between blocks to the currently opened AVATAR Parametric Diagram", 0);
+		
     }
     
     
