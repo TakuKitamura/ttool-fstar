@@ -66,6 +66,8 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 	protected int c = 10; //square length 
 	protected double oldScaleFactor;
 	protected int fontSize = 12;
+	protected boolean negated = false;
+	protected int l = 4; // cross length;
 	
     
     public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -111,6 +113,10 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		g.setColor(c);
 		g.drawOval(x1-(cz/2), y1 - (cz/2), cz, cz);
 		
+		if (negated) {
+			g.drawLine(x2-l, y2-l, x2+l, y2+l);
+			g.drawLine(x2-l, y2+l, x2+l, y2-l);
+		}
 		
 		
 		if (value.length() > 0) {
@@ -125,10 +131,9 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 	
     }
 	
-	/*public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
-        String text = getName() + "Connector";
-        String s = (String)JOptionPane.showInputDialog(frame, text,
+        String s = (String)JOptionPane.showInputDialog(frame, "reg, not",
         "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
         null,
         getValue());
@@ -140,12 +145,12 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		//System.out.println("emptytext=" + emptyText);
         
         if ((s != null) && (!s.equals(oldValue))) {
-            setValue(s);
+            
             return true;
         }
          
         return false;
-    }*/
+    }
     
     
     public int getType() {

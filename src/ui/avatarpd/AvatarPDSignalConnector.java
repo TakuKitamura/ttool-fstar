@@ -104,8 +104,8 @@ public  class AvatarPDSignalConnector extends TGConnector implements ScalableTGC
         }
 		
 		if (p2 instanceof AvatarPDForbiddenSignalConnectingPoint) {
-			g.drawLine(x1-l, y1-l, x1+l, y1+l);
-			g.drawLine(x1-l, y1+l, x1+l, y1-l);
+			g.drawLine(x2-l, y2-l, x2+l, y2+l);
+			g.drawLine(x2-l, y2+l, x2+l, y2-l);
 		}
 		//}
 		

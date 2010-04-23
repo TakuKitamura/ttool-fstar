@@ -60,7 +60,7 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
     private int textY1 = 5;
     //private int textY2 = 30;
 	
-	public static final String[] STEREOTYPES = {"<<Alias>>"}; 
+	public static final String[] STEREOTYPES = {"<<alias>>"}; 
 	
     protected String oldValue = "";
 	
