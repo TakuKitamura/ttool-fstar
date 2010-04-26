@@ -64,26 +64,29 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     protected String oldValue = "";
     protected String description = "";
 	private String stereotype = "property";
-	private boolean isRootAttack = false;
+	private boolean liveness = true;
 	 
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	private int textX = 2;
+	private int sizeBetweenNameAndLiveness = 6;
     
     public AvatarPDProperty(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 125;
-        height = (int)(40 * tdp.getZoom());
+        height = (int)(55 * tdp.getZoom());
         minWidth = 100;
         
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
+        nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPoint[4];
         
         connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
         connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+		connectingPoint[2] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[3] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
         
         moveable = true;
@@ -192,6 +195,21 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 				if ((w < (2*textX + width)) && (h < height)) {
 					g.drawString(value, x + (width - w)/2, y + h);
 				}
+				
+				// Liveness
+				h+= currentFontSize + sizeBetweenNameAndLiveness;
+				String state;
+				if (liveness) {
+					state = "liveness";
+				} else {
+					state = "reachability";
+				}
+				g.setFont(f.deriveFont(Font.ITALIC));
+				w  = g.getFontMetrics().stringWidth(state);
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.drawString(state, x + (width - w)/2, y + h);
+				}
+				
 			}
 		}
 		
@@ -213,14 +231,18 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     }
     
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+		String oldValue = value;
+		JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, liveness);
+		jdap.setSize(300, 230);
+        GraphicLib.centerOnParent(jdap);
+        jdap.setVisible(true); // blocked until dialog has been closed
 		
-		//String text = getName() + ": ";
-		String s = (String)JOptionPane.showInputDialog(frame, "Property name",
-			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-			null,
-			getValue());
+		if (jdap.hasBeenCancelled()) {
+			return false;
+		}
+        
+        liveness = jdap.isLivenessSelected();
+		String s = jdap.getName();
 		
 		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 			//boolean b;
@@ -233,10 +255,59 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 			}
 			setValue(s);
 			rescaled = true;
-			return true;
 		}
-		return false;
 		
+		return true;
+    }
+	
+	    protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<liveness data=\"");
+        sb.append(liveness);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+	
+    
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+			String s;
+            
+            //System.out.println("Loading tclass " + getValue());
+            //System.out.println(nl.toString());
+            
+            for(int i=0; i<nl.getLength(); i++) {
+                n1 = nl.item(i);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for(int j=0; j<nli.getLength(); j++) {
+                        n2 = nli.item(j);
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("liveness")) {
+                                //System.out.println("Analyzing line1");
+                                s = elt.getAttribute("data");
+                                if (s.equals("true")) {
+                                    liveness = true;
+                                } else {
+									liveness = false;
+								}
+							}
+								//System.out.println("Analyzing line4");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+			TraceManager.addError("Failed when loading AVATAR properties");
+            throw new MalformedModelingException();
+        }
+		
+		//makeValue();
     }
 	
 	public TGComponent isOnOnlyMe(int x1, int y1) {

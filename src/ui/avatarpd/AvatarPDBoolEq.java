@@ -77,8 +77,8 @@ public class AvatarPDBoolEq extends TGCScalableWithInternalComponent implements 
         height = (int)(40 * tdp.getZoom());
         minWidth = 100;
         
-        nbConnectingPoint = 8;
-        connectingPoint = new TGConnectingPoint[8];
+        nbConnectingPoint = 10;
+        connectingPoint = new TGConnectingPoint[10];
         
         connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
 		
@@ -89,6 +89,9 @@ public class AvatarPDBoolEq extends TGCScalableWithInternalComponent implements 
         connectingPoint[5] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
         connectingPoint[6] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
         connectingPoint[7] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, false, 1.0, 0.25);
+		
+		connectingPoint[8] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[9] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 		
         //addTGConnectingPointsComment();
         

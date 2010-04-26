@@ -252,6 +252,8 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
 				return false;
 			}
 		}
+		
+		setValue(s);
 		return true;
 		
     }

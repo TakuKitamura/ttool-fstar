@@ -159,11 +159,11 @@ public class AvatarPDToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		this.addSeparator();
+		/*this.addSeparator();
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
 		
 		
     }

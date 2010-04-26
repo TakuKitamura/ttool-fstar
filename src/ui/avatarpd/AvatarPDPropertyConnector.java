@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarPDPropertyConnector
- * Connector for Properties 
- * Creation: 22/04/2010
- * @version 1.0 22/04/2010
- * @author Ludovic APVRILLE
- * @see
- */
+* Class AvatarPDPropertyConnector
+* Connector for Properties 
+* Creation: 22/04/2010
+* @version 1.0 22/04/2010
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.avatarpd;
 
@@ -66,23 +66,24 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 	protected int c = 10; //square length 
 	protected double oldScaleFactor;
 	protected int fontSize = 12;
-	protected boolean negated = false;
 	protected int l = 4; // cross length;
 	
+	// value is set to "not" when the property is negated. 
+	// Otherwise, it is set to "reg"
     
     public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
-        value = "";
+        value = "reg";
         editable = true;
 		oldScaleFactor = tdp.getZoom();
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-            g.drawLine(x1, y1, x2, y2);
+		g.drawLine(x1, y1, x2, y2);
         } else {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+		GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }*/
 		
 		//g.drawLine(x1, y1, x2, y2);
@@ -97,14 +98,32 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		
 		//Point p = p2;//GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
 		
+		cz = cz + 1;
+		
+		Point p = new Point();
+		
+		int x0 = x1 - x2;
+		int y0 = y1 - y2;
+		double k = 1/(Math.sqrt((x0*x0)+(y0*y0)));
+		double u = x0*k;
+		double v = y0*k;
+		
+		double Ex = cz/2*u;
+		double Ey = cz/2*v;
+		//double Fx = cz/2*v;
+		//double Fy = -cz/2*u;
+		
+		p.x = (int)(x2+Ex);
+		p.y = (int)(y2+Ey);
+		
 		if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
 			//System.out.println("p.x=" + p.x + " x1=" + x1 + "p.y=" + p.y + " y1=" + y1);
 			if ((x2 != x1) || (y2 != y1)) {
-				g.drawLine(x1, y1, x2, y2);
+				g.drawLine(x1, y1, p.x, p.y);
 				//System.out.println("drawn");
 			}
         } else {
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
         }
 		
 		c = g.getColor();
@@ -113,43 +132,42 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		g.setColor(c);
 		g.drawOval(x1-(cz/2), y1 - (cz/2), cz, cz);
 		
-		if (negated) {
+		if (getValue().compareTo("not") == 0) {
 			g.drawLine(x2-l, y2-l, x2+l, y2+l);
 			g.drawLine(x2-l, y2+l, x2+l, y2-l);
 		}
 		
 		
-		if (value.length() > 0) {
-			Font f = g.getFont();
-			if (tdp.getZoom() < 1) {
-				Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
-				g.setFont(f0);
-			}
-			g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
-			g.setFont(f);
+		/*if (value.length() > 0) {
+		Font f = g.getFont();
+		if (tdp.getZoom() < 1) {
+		Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
+		g.setFont(f0);
 		}
-	
+		g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
+		g.setFont(f);
+		}*/
+		
     }
 	
 	public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
-        String s = (String)JOptionPane.showInputDialog(frame, "reg, not",
-        "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getValue());
-        
-        if (s != null) {
-            s = Conversion.removeFirstSpaces(s);
-        }
+		JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame, getValue().compareTo("not") == 0);
+		jdapc.setSize(300, 200);
+        GraphicLib.centerOnParent(jdapc);
+        jdapc.setVisible(true); // blocked until dialog has been closed
 		
-		//System.out.println("emptytext=" + emptyText);
+		if (jdapc.hasBeenCancelled()) {
+			return false;
+		}
         
-        if ((s != null) && (!s.equals(oldValue))) {
-            
-            return true;
-        }
-         
-        return false;
+        if (jdapc.isNegated()) {
+			value = "not";
+		} else {
+			value = "reg";
+		}
+		
+		return true;
     }
     
     
@@ -180,6 +198,6 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		oldScaleFactor = scaleFactor;
 	}
 	
-
+	
     
 }

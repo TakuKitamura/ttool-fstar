@@ -77,8 +77,8 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
         height = (int)(100 * tdp.getZoom());
         minWidth = 50;
         
-        nbConnectingPoint = 12;
-        connectingPoint = new TGConnectingPoint[12];
+        nbConnectingPoint = 14;
+        connectingPoint = new TGConnectingPoint[14];
         
         connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
         connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
@@ -94,6 +94,9 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
         connectingPoint[9] = new AvatarPDForbiddenSignalConnectingPoint(this, 0, 0, true, false, 0.2, 0.0);
         connectingPoint[10] = new AvatarPDForbiddenSignalConnectingPoint(this, 0, 0, true, false, 0.3, 0.0);
         connectingPoint[11] = new AvatarPDForbiddenSignalConnectingPoint(this, 0, 0, true, false, 0.4, 0.0);
+		
+        connectingPoint[12] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[13] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
         
         moveable = true;

@@ -77,14 +77,17 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         height = (int)(100 * tdp.getZoom());
         minWidth = 50;
         
-        nbConnectingPoint = 4;
-        connectingPoint = new TGConnectingPoint[4];
+        nbConnectingPoint = 6;
+        connectingPoint = new TGConnectingPoint[6];
         
         connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
         connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
 		
         connectingPoint[2] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
         connectingPoint[3] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, false, 0.0, 0.75);
+		
+		connectingPoint[4] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[5] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
         
         //addTGConnectingPointsComment();
         
