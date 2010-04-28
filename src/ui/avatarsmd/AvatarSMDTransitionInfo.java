@@ -231,28 +231,28 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<guard value=\"");
-		sb.append(guard);
+		sb.append(GTURTLEModeling.transformString(guard));
 		sb.append("\" />\n");
 		
 		sb.append("<afterMin value=\"");
-		sb.append(afterMin);
+		sb.append(GTURTLEModeling.transformString(afterMin));
 		sb.append("\" />\n");  
 		
 		sb.append("<afterMax value=\"");
-		sb.append(afterMax);
+		sb.append(GTURTLEModeling.transformString(afterMax));
 		sb.append("\" />\n");
 		
 		sb.append("<computeMin value=\"");
-		sb.append(computeMin);
+		sb.append(GTURTLEModeling.transformString(computeMin));
 		sb.append("\" />\n");  
 		
 		sb.append("<computeMax value=\"");
-		sb.append(computeMax);
+		sb.append(GTURTLEModeling.transformString(computeMax));
 		sb.append("\" />\n");
 		
 		for(int i=0; i<listOfActions.size(); i++) {
 			sb.append("<actions value=\"");
-			sb.append(listOfActions.get(i));
+			sb.append(GTURTLEModeling.transformString(listOfActions.get(i)));
 			sb.append("\" />\n");
 		}
 		sb.append("</extraparam>\n");
