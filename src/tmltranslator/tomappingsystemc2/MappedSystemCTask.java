@@ -435,10 +435,10 @@ public class MappedSystemCTask {
 			if (debug) System.out.println("Checking ExecC\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
-			if (isIntValue(((TMLExecI)currElem).getAction()))
-				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,1," + ((TMLExecI)currElem).getAction() + ")" + CR;
+			if (isIntValue(((TMLExecC)currElem).getAction()))
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,1," + ((TMLExecC)currElem).getAction() + ")" + CR;
 			else
-				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",1)"+CR;
+				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecC)currElem).getAction(), null) + ",1)"+CR;
 				
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
@@ -455,7 +455,7 @@ public class MappedSystemCTask {
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",1)"+CR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",1)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecCInterval)currElem).getMinDelay(), ((TMLExecCInterval)currElem).getMaxDelay()) + ",1)"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 
 					
