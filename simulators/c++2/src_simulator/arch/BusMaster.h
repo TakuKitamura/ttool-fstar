@@ -59,7 +59,7 @@ public:
 	\param iNbOfBuses Number of buses(bus channels) the master is connected to
 	\param iBusArray Pointer to the buses(bus channels) the master is connected to
     	*/
-	BusMaster(const std::string& iName, Priority iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), _lastSimTime(-1), _contentionDelay(0), _noTransactions(0), _channelBasedPrioEnabled(false), _channelBasedPrio(0){
+	BusMaster(const std::string& iName, Priority iPriority, unsigned int iNbOfBuses, SchedulableCommDevice** iBusArray): WorkloadSource(iPriority), _name(iName), _nbOfBuses(iNbOfBuses), _busArray(iBusArray), _busSortArray(0), _nextTransaction(0), _nextBus(iBusArray[0]), /*_lastSimTime(-1),*/ _contentionDelay(0), _noTransactions(0), _channelBasedPrioEnabled(false), _channelBasedPrio(0){
 		_busSortArray=new SchedulableCommDevice*[_nbOfBuses];
 		for (unsigned int i=0; i <_nbOfBuses; i++) _busSortArray[i]=_busArray[i];
 		_channelBasedPrioEnabled = _busArray[0]->ChannelBasedPrio();
@@ -74,7 +74,7 @@ public:
 	
 	void reset(){
 		_nextTransaction=0;
-		_lastSimTime=-1;
+		//_lastSimTime=-1;
 		_nextBus=_busArray[0];
 		_contentionDelay=0;
 		_noTransactions=0;
@@ -91,19 +91,18 @@ public:
 		}
 	}
 
-	TMLTransaction* getNextTransaction() const{
-		//return (_transWasScheduled)? 0:_nextTransaction;
-		if (SchedulableDevice::getSimulatedTime()==_lastSimTime){
-			//std::cout << _name << ":getNextTransaction returns 0 (_transWasScheduled)\n";
-			return 0;
-		}else{
-			//std::cout << _name << ":getNextTransaction returns _nextTransaction" << "\n";
-			return _nextTransaction;
+	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const{
+		if (_nextTransaction==0) return 0;
+		for (unsigned int i=0; i <_nbOfBuses; i++){
+			if ((*(_busArray[i])).SchedulableDevice::getNextTransaction()==_nextTransaction){
+				//std::cout << _name << "trans already scheduled by: " << _busArray[i]->toString() << "\n";
+				return 0;
+			}
 		}
+		return _nextTransaction;
 	}
 
 	void addTransaction(){
-		//_addTransFlag++;
 		//std::cout << _name << ": add Trans\n";
 		//std::cout << _name << ": trans added on Bus: " << _nextBus->toString() << std::endl;
 		_nextBus->addTransaction();
@@ -129,6 +128,7 @@ public:
 		}
 		sortBusList();
 		//_transWasScheduled=false;
+		//std::cout << "Bus scheduling initiated by: " << _name << "\n";
 		for (unsigned int i=0; i <_nbOfBuses; i++){
 			if (_busSortArray[i]->getNextTransaction()==_nextTransaction){
 				_nextBus=_busSortArray[i];
@@ -148,11 +148,11 @@ public:
 		return _busArray[0];
 	}
 
-	void transWasScheduled(){
-		//_transWasScheduled=true;
-		//_addTransCheck=_addTransFlag;
+	/*void transWasScheduled(){
+		_transWasScheduled=true;
+		_addTransCheck=_addTransFlag;
 		_lastSimTime = SchedulableDevice::getSimulatedTime();
-	}
+	}*/
 
 	///Updates the bus contention statistics whenever a new bus transaction is executed
 	/**
@@ -212,7 +212,7 @@ public:
 protected:
 
 	void sortBusList(){
-		std::cout << _name << ": sort" << std::endl;
+		//std::cout << _name << ": sort result: ";
 		unsigned int aBound = _nbOfBuses;
 		bool aSwapped;
 		do{
@@ -227,7 +227,10 @@ protected:
 				}
 			}
 		}while (aSwapped);
-		std::cout << _name << ": end sort" << std::endl;
+		/*for(unsigned int i=0; i<_nbOfBuses; i++){
+			std::cout << ", " << _busSortArray[i]->toString();
+		}
+		std::cout << "     " << _name << ": end sort" << std::endl;*/
 	}
 
 	///Name
@@ -242,14 +245,15 @@ protected:
 	TMLTransaction* _nextTransaction;
 	///Next bus pointer
 	SchedulableCommDevice* _nextBus;
-	///Flag indicating at what simulation time _nextTransaction was scheduled
-	mutable TMLTime _lastSimTime;
+	////Flag indicating at what simulation time _nextTransaction was scheduled
+	//mutable TMLTime _lastSimTime;
 	///Sum of the contention delay of all registered transactions
 	unsigned long _contentionDelay;
 	///Number of registered transactions
 	unsigned long _noTransactions;
-	//
+	///Flag indicating whether channel based priorities apply
 	bool _channelBasedPrioEnabled;
+	///Channel based priority if applicable
 	Priority _channelBasedPrio;
 };
 

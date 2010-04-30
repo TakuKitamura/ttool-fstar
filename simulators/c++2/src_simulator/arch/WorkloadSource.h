@@ -73,7 +73,7 @@ public:
 	/**
 	\return Pointer to the transaction to be executed
 	*/
-	virtual TMLTransaction* getNextTransaction() const=0;
+	virtual TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const=0;
 	///Returns the priority of the workload source
 	/**
 	\return Priority of the workload source

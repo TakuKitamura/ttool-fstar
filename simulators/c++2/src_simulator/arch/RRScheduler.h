@@ -67,12 +67,12 @@ public:
 	///Destructor
 	~RRScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	TMLTransaction* getNextTransaction() const;
+	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
 	void reset();
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
 	std::string toString() const;
-	void transWasScheduled();
+	//void transWasScheduled();
 protected:
 	///Name of the scheduler
 	std::string _name;

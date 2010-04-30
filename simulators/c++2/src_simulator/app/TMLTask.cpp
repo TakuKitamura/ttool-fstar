@@ -381,7 +381,7 @@ unsigned int TMLTask::getState() const{
 	}	 
 }
 
-TMLTransaction* TMLTask::getNextTransaction() const{
+TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
 	//std::cout << "Task::getNextTransaction\n";
 	return (_currCommand==0)?0:_currCommand->getCurrTransaction();
 }

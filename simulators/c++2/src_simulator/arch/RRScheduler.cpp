@@ -59,8 +59,8 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	if (_lastSource!=0){
 		aScheduledSource=_lastSource;
 		_lastSource->schedule(iEndSchedule);
-		if (_lastSource->getNextTransaction()!=0 && _lastSource->getNextTransaction()->getVirtualLength()!=0){
-			if (anOldTransaction==0 || _lastSource->getNextTransaction()==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
+		if (_lastSource->getNextTransaction(iEndSchedule)!=0 && _lastSource->getNextTransaction(iEndSchedule)->getVirtualLength()!=0){
+			if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
 			}
@@ -73,7 +73,7 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 			//if (*i!=aScheduledSource)
 			 (*i)->schedule(iEndSchedule);
 			//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
-			aTempTrans=(*i)->getNextTransaction();
+			aTempTrans=(*i)->getNextTransaction(iEndSchedule);
 			//std::cout << "after getCurrTransaction " << std::endl;
 			if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
 				aRunnableTime=aTempTrans->getRunnableTime();	
@@ -95,10 +95,10 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 		}
 	}
 	if (aSourcePast==0){
-		_nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction();
+		_nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);
 		_lastSource=aSourceFuture;
 	}else{
-		_nextTransaction=aSourcePast->getNextTransaction();
+		_nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);
 		_lastSource=aSourcePast;
 	}
 	if (aSameTaskFound){
@@ -123,7 +123,7 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	return _timeSlice-_elapsedTime;
 }
 
-TMLTransaction* RRScheduler::getNextTransaction() const{
+TMLTransaction* RRScheduler::getNextTransaction(TMLTime iEndSchedule) const{
 	return _nextTransaction;
 }
 
@@ -188,7 +188,7 @@ std::ostream& RRScheduler::writeObject(std::ostream &os){
 	return os;
 }
 
-void RRScheduler::transWasScheduled(){
+/*void RRScheduler::transWasScheduled(){
 	if (_lastSource!=0) _lastSource->transWasScheduled();
-}
+}*/
 

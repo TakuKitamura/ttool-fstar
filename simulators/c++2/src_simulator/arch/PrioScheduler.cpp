@@ -55,7 +55,7 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 		(*i)->schedule(iEndSchedule);
 		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
-		aTempTrans=(*i)->getNextTransaction();
+		aTempTrans=(*i)->getNextTransaction(iEndSchedule);
 		//std::cout << "after getCurrTransaction " << std::endl;
 		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
 			aRunnableTime=aTempTrans->getRunnableTime();	
@@ -87,7 +87,7 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	return 0;
 }
 
-TMLTransaction* PrioScheduler::getNextTransaction() const{
+TMLTransaction* PrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
 	return _nextTransaction;
 }
 
@@ -104,6 +104,6 @@ void PrioScheduler::reset(){
 	_nextTransaction=0;
 }
 
-void PrioScheduler::transWasScheduled(){
+/*void PrioScheduler::transWasScheduled(){
 	if (_lastSource!=0) _lastSource->transWasScheduled();
-}
+}*/

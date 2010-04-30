@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <Serializable.h>
 #include <ListenerSubject.h>
+#include <WorkloadSource.h>
 
 class Master;
 class TMLTransaction;
@@ -59,7 +60,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0){
+	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0), _deleteScheduler(true) {
 		_transactList.reserve(BLOCK_SIZE);
 	}
 	///Determines the next transaction to be executed
@@ -70,7 +71,10 @@ public:
     	/**
       	\return Pointer to transaction
     	*/
-	virtual TMLTransaction* getNextTransaction()=0;
+	virtual TMLTransaction* getNextTransaction(){
+		//std::cout << "Raw version of getNextTransaction\n";
+		return _nextTransaction;
+	}
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -120,7 +124,9 @@ public:
     	*/ 
 	ID getID() const {return _ID;}
 	///Destructor
-	virtual ~SchedulableDevice(){}
+	virtual ~SchedulableDevice(){
+		if (_scheduler!=0 && _deleteScheduler) delete _scheduler; 
+	}
 	///Returns the end time of the last scheduled transaction of the device 
 	/**
       	\return End time of the last scheduled transaction
@@ -130,7 +136,12 @@ public:
 	/**
 	\param iScheduler Pointer to the scheduler object 
 	*/
-	void setScheduler(WorkloadSource* iScheduler){ _scheduler=iScheduler;}
+	void setScheduler(WorkloadSource* iScheduler, bool iDelScheduler=true){ _scheduler=iScheduler; _deleteScheduler=iDelScheduler;}
+	///Returns a pointer to the scheduler object
+	/**
+	\return Pointer to the scheduler object 
+	*/
+	WorkloadSource* getScheduler(){ return _scheduler;}
 	///Returns the scheduled transaction one after another
 	/**
       	\param iInit If init is true, the methods starts from the first transaction 
@@ -160,6 +171,8 @@ protected:
 	TMLTransaction* _nextTransaction;
 	///State variable for consecutive Transaction output
 	TransactionList::iterator _posTrasactListGraph;
+	///Flag indicating whether the scheduler has to be deleted when the device is deleted
+	bool _deleteScheduler;
 };
 
 #endif

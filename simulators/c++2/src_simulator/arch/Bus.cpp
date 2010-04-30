@@ -50,14 +50,15 @@ Ludovic Apvrille, Renaud Pacalet
 Bus::Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth), _busyCycles(0){}
 
 Bus::~Bus(){
-	delete _scheduler;
+	//delete _scheduler;
 }
 
 void Bus::schedule(){
+	_nextTransaction=0;
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
-	_nextTransaction=_scheduler->getNextTransaction();
+	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
 	if (_nextTransaction!=0){
-		_scheduler->transWasScheduled();
+		//_scheduler->transWasScheduled();
 		_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), _burstSize));
 		calcStartTimeLength(aTimeSlice);
 	}
@@ -72,6 +73,7 @@ void Bus::schedule(){
 
 void Bus::registerTransaction(){
 	_schedulingNeeded=true;
+	_nextTransaction=0;
 }
 
 bool Bus::addTransaction(){
@@ -109,6 +111,7 @@ void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
 
 TMLTransaction* Bus::getNextTransaction(){
 	if (_schedulingNeeded) schedule();
+	//else std::cout << _name << ": skip schedule\n";
 	return _nextTransaction;
 }
 

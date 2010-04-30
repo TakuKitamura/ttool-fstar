@@ -183,7 +183,7 @@ public:
 	\return Task state: UNKNOWN, SUSPENDED, READY, RUNNING, TERMINATED
 	*/
 	unsigned int getState() const;
-	TMLTransaction* getNextTransaction() const;
+	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
 	///Returns the hash value for the current task state
 	/**
 	\return Hash Value

@@ -61,7 +61,7 @@ _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*
 
 CPU::~CPU(){  
 	std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
-	delete _scheduler;
+	//delete _scheduler;
 }
 
 void CPU::registerTask(TMLTask* iTask){
@@ -252,11 +252,13 @@ bool CPU::addTransaction(){
 }
 
 void CPU::schedule(){
+	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
 	TMLTransaction* aOldTransaction = _nextTransaction;
-	_nextTransaction=_scheduler->getNextTransaction();
+	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
 	if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);
+	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
 std::string CPU::toString() const{

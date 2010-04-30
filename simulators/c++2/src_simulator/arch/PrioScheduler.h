@@ -62,10 +62,10 @@ public:
 	PrioScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	~PrioScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	TMLTransaction* getNextTransaction() const;
+	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
 	std::string toString() const;
 	void reset();
-	void transWasScheduled();
+	//void transWasScheduled();
 protected:
 	///Name of the scheduler
 	std::string _name;
