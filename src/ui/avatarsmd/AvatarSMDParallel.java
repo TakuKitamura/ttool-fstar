@@ -53,7 +53,7 @@ import myutil.*;
 
 import ui.*;
 
-public class AvatarSMDParallel extends TGCWithoutInternalComponent{
+public class AvatarSMDParallel extends AvatarSMDBasicComponent{
     private int lineLength = 0;
     private int textX, textY;
     

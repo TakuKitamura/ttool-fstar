@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarPDAttribute
- * Attribute -> SysML value type
- * Creation: 22/04/2010
- * @version 1.0 22/04/2010
- * @author Ludovic APVRILLE
- * @see
- */
+* Class AvatarPDAttribute
+* Attribute -> SysML value type
+* Creation: 22/04/2010
+* @version 1.0 22/04/2010
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.avatarpd;
 
@@ -56,35 +56,28 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarPDAttribute extends TGCScalableWithInternalComponent implements SwallowedTGComponent {
+public class AvatarPDAttribute extends AvatarPDToggle implements SwallowedTGComponent {
     private int textY1 = 3;
-    private int textY2 = 3;
+    //private int textY2 = 3;
 	//private int textX = 10;
 	
-    protected String oldValue = "";
-    protected String description = "";
+  
 	private String stereotype = "attribute";
-	private boolean isRootAttack = false;
-	 
+	
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int textX = 2;
 	
-	private String toggle;
-	private final String TOGGLE = "toggle";
-	private int toggleHeight = 35;
-	private int toggleDecY = 2;
 	
 	
     
     public AvatarPDAttribute(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 125;
+        width = (int)(125* tdp.getZoom());
         height = (int)(50 * tdp.getZoom());
-        minWidth = 150;
+        minWidth = 100;
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
@@ -97,8 +90,8 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
         connectingPoint[5] = new AvatarPDAttributeConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
         connectingPoint[6] = new AvatarPDAttributeConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
         connectingPoint[7] = new AvatarPDAttributeConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-        connectingPoint[8] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-        connectingPoint[9] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[8] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.0, 0.80);
+        connectingPoint[9] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 1.0, 0.80);
         connectingPoint[10] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
         connectingPoint[11] = new AvatarPDSignalConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
@@ -109,7 +102,6 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
         
         value = "attr01";
 		toggle = "";
-		description = "blah blah blah";
 		
 		currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
@@ -123,8 +115,8 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
 		Font f = g.getFont();
 		Font fold = f;
 		
-		if (value != oldValue) {
-			setValue(value, g);
+		if (valueChanged) {
+			setValueWidth(g);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
@@ -169,8 +161,6 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
 		
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
-		
-	
 		g.setColor(ColorManager.AVATARPD_ATTRIBUTE);
 		g.fill3DRect(x+1, y+1, width-1, toggleHeight-1, true);
 		g.setColor(ColorManager.AVATARPD_SIGNAL);		
@@ -211,10 +201,7 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
 				if ((w < (2*textX + width)) && (h < height)) {
 					g.drawString(value, x + (width - w)/2, y + h);
 				}
-				String s = TOGGLE;
-				if (toggle.length() > 0) {
-					s += " to " + toggle;
-				}
+				String s = getFullToggle();
 				w  = g.getFontMetrics().stringWidth(s);
 				h = height-toggleDecY;
 				if ((w < (2*textX + width)) && (h < height)) {
@@ -228,19 +215,8 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
 		g.setFont(fold);
         
     }
-    
-   public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
-		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
-        if (w1 != width) { 
-            width = w1;
-            resizeWithFather();
-        }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
-    }
+	
+
     
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarPDBlock)) {
@@ -252,27 +228,30 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
     }
     
     
-     public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		
 		//String text = getName() + ": ";
-		String s = (String)JOptionPane.showInputDialog(frame, "Attribute name",
-			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-			null,
-			getValue());
-		
-		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-			//boolean b;
-			if (!TAttribute.isAValidId(s, false, false)) {
-				JOptionPane.showMessageDialog(frame,
-					"Could not change the name of the attribute: the new name is not a valid name",
-					"Error",
-					JOptionPane.INFORMATION_MESSAGE);
-				return false;
+		if (_y < y + toggleHeight) {
+			String s = (String)JOptionPane.showInputDialog(frame, "Attribute name",
+				"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+				null,
+				getValue());
+			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+				//boolean b;
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+						"Could not change the name of the attribute: the new name is not a valid name",
+						"Error",
+						JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				setValue(s);
+				valueChanged = true;
 			}
-			setValue(s);
+		} else {
+			return editToggle(frame);
 		}
+		
 		return true;
 		
     }
@@ -292,8 +271,8 @@ public class AvatarPDAttribute extends TGCScalableWithInternalComponent implemen
 	public int getDefaultConnector() {
         return TGComponentManager.APD_ATTRIBUTE_CONNECTOR;
 	}
- 
-   
+	
+	
     public String getAttributeName() {
         return value;
     }

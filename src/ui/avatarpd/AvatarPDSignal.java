@@ -251,10 +251,12 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
 					JOptionPane.INFORMATION_MESSAGE);
 				return false;
 			}
+			setValue(s);
+			return true;
 		}
 		
-		setValue(s);
-		return true;
+		return false;
+		
 		
     }
 	

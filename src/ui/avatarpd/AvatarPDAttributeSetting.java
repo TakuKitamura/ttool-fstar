@@ -56,8 +56,8 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
+public class AvatarPDAttributeSetting extends AvatarPDToggle implements ConstraintListInterface {
+    private int textY1 = 3;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"<<setting>>"}; 
@@ -74,7 +74,7 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = (int)(125* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        height = (int)(50 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 16;
@@ -85,18 +85,18 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
         connectingPoint[2] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 1.0, 0.0);
         connectingPoint[3] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
         connectingPoint[4] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
-        connectingPoint[5] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
-        connectingPoint[6] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-        connectingPoint[7] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
+        connectingPoint[5] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 0.0, 1.0);
+        connectingPoint[6] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[7] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 1.0, 1.0);
         
         connectingPoint[8] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
         connectingPoint[9] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
         connectingPoint[10] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
         connectingPoint[11] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
-        connectingPoint[12] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
-        connectingPoint[13] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
-        connectingPoint[14] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[15] = new AvatarPDAttributeConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[12] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 0.0, 0.80);
+        connectingPoint[13] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 1.0, 0.80);
+        connectingPoint[14] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+        connectingPoint[15] = new AvatarPDSignalConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
         //addTGConnectingPointsComment();
         
         moveable = true;
@@ -117,8 +117,8 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
 		Font f = g.getFont();
 		Font fold = f;
 		
-		if (value != oldValue) {
-			setValue(value, g);
+		if (valueChanged) {
+			setValueWidth(g);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
@@ -163,11 +163,10 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
 		
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
-		
-	
-		g.setColor(ColorManager.AVATARPD_ATTRIBUTE_SETTING);
-		
-		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		g.setColor(ColorManager.AVATARPD_ATTRIBUTE);
+		g.fill3DRect(x+1, y+1, width-1, toggleHeight-1, true);
+		g.setColor(ColorManager.AVATARPD_SIGNAL);		
+		g.fill3DRect(x+1, y+toggleHeight, width-1, height-toggleHeight, true);
 		g.setColor(c);
         
         // Strings
@@ -204,6 +203,13 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
 				if ((w < (2*textX + width)) && (h < height)) {
 					g.drawString(value, x + (width - w)/2, y + h);
 				}
+				String s = getFullToggle();
+				w  = g.getFontMetrics().stringWidth(s);
+				h = height-toggleDecY;
+				if ((w < (2*textX + width)) && (h < height)) {
+					g.setFont(f.deriveFont(Font.ITALIC));
+					g.drawString(s, x + (width - w)/2, y + h);
+				}
 			}
 		}
 		
@@ -211,24 +217,13 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
         
     }
     
-   public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
-		
-        //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);
-        if (w1 != width) { 
-            width = w1;
-            resizeWithFather();
-        }
-        //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
-    }
     
-     public boolean editOndoubleClick(JFrame frame) {
+     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		String tmp;
 		boolean error = false;
 		
 		//String text = getName() + ": ";
+		if (_y < y + toggleHeight) {
 		String s = (String)JOptionPane.showInputDialog(frame, "Attribute name:",
 			"Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
 			null,
@@ -238,9 +233,13 @@ public class AvatarPDAttributeSetting extends TGCScalableWithInternalComponent i
 			//boolean b;
 			setValue(s);
 			rescaled = true;
+			valueChanged = true;
 			return true;
 		}
 		return false;
+		} else {
+			return editToggle(frame);
+		}
 		
     }
     
