@@ -678,7 +678,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(300);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspCPUInfo = new JScrollPane(jtablePI);
 		jspCPUInfo.setWheelScrollingEnabled(true);
@@ -702,7 +702,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(300);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspMemInfo = new JScrollPane(jtablePI);
 		jspMemInfo.setWheelScrollingEnabled(true);
@@ -722,7 +722,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(300);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspBusInfo = new JScrollPane(jtablePI);
 		jspBusInfo.setWheelScrollingEnabled(true);
