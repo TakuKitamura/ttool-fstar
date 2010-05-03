@@ -119,7 +119,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox latex, debug, animate, update, openDiagram;
+	JCheckBox latex, debug, animate, update, openDiagram, animateWithInfo;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -597,6 +597,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(animate, c01);
 		animate.addItemListener(this);
 		animate.setSelected(true);
+		animateWithInfo = new JCheckBox("Show transaction progression on UML diagrams");
+		jp01.add(animateWithInfo, c01);
+		animateWithInfo.addItemListener(this);
+		animateWithInfo.setSelected(true);
 		update = new JCheckBox("Automatically update information (task, CPU, etc.)");
 		jp01.add(update, c01);
 		update.addItemListener(this);
@@ -1413,6 +1417,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					hashOK = true;
 					animate.setSelected(true);
 					animate.setEnabled(true);
+					animateWithInfo.setSelected(true);
+					animateWithInfo.setEnabled(true);
 					openDiagram.setEnabled(true);
 					cpus.setEnabled(true);
 					busses.setEnabled(true);
@@ -1436,6 +1442,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		openDiagram.setEnabled(false);
 		animate.setEnabled(false);
 		animate.setSelected(false);
+		animateWithInfo.setSelected(false);
+		animateWithInfo.setEnabled(false);
 		update.setEnabled(false);
 		update.setSelected(false);
 		
@@ -2058,6 +2066,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == animate) {
 			mgui.setDiploIDs(animate.isSelected());
+		} else if (e.getSource() == animateWithInfo) {
+			mgui.setTransationProgression(animateWithInfo.isSelected());
 		}
 	}
 	

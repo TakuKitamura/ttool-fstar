@@ -191,6 +191,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	
 	// DIPLO ID -> for simulation purpose
 	public static boolean DIPLO_ID_ON;
+	public static boolean DIPLO_TRANSACTION_PROGRESSION_ON;
     
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {

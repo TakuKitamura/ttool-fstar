@@ -5443,6 +5443,14 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
+	public void setTransationProgression(boolean b) {
+		TDiagramPanel.DIPLO_TRANSACTION_PROGRESSION_ON = b;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
 	public synchronized RunningInfo isRunningID(int id) {
 		if (runningIDs == null) {
 			return null;

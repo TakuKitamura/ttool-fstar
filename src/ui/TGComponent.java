@@ -469,45 +469,48 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		g.fillPolygon(xp, yp, 7);
 		
 		String s, s1, s2;
-		if (ri.progression != null) {
-			s = ri.progression + "%";
-		} else {
-			s = "";
-		}
-		int ww = g.getFontMetrics().stringWidth(s);
 		
-		if (ri.startTime != null) {
-			g.drawString(ri.startTime, x - sep - wb -wh, y + ((height-hb) / 2) - 1);
-		}
-		g.drawString(s, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
-		if (ri.finishTime != null) {
-			s = ri.finishTime;
-			if (s.compareTo("-1") == 0) {
-				s = "?";
-			}
-			g.drawString(s, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
-		}
-		
-		// Transaction
-		if (ri.transStartTime != null) {
-			g.setColor(ColorManager.DIPLOID);
-			s1 = ri.transStartTime;
-			if (s1.compareTo("-1") == 0) {
-				s1 = "?/?";
+		if (TDiagramPanel.DIPLO_TRANSACTION_PROGRESSION_ON) {
+			if (ri.progression != null) {
+				s = ri.progression + "%";
 			} else {
-				s2 = ri.transFinishTime;
-				if (s2 == null) {
-					s1 = s1 + "/?";
+				s = "";
+			}
+			int ww = g.getFontMetrics().stringWidth(s);
+			
+			if (ri.startTime != null) {
+				g.drawString(ri.startTime, x - sep - wb -wh, y + ((height-hb) / 2) - 1);
+			}
+			g.drawString(s, x - sep - wb -wh -ww, y + 4 + ((height) / 2));
+			if (ri.finishTime != null) {
+				s = ri.finishTime;
+				if (s.compareTo("-1") == 0) {
+					s = "?";
+				}
+				g.drawString(s, x - sep - wb -wh, y + ((height+hb) / 2) + 10);
+			}
+			
+			// Transaction
+			if (ri.transStartTime != null) {
+				g.setColor(ColorManager.DIPLOID);
+				s1 = ri.transStartTime;
+				if (s1.compareTo("-1") == 0) {
+					s1 = "?/?";
 				} else {
-					if (s1.compareTo("-1") == 0) {
+					s2 = ri.transFinishTime;
+					if (s2 == null) {
 						s1 = s1 + "/?";
 					} else {
-						s1 = s1 + "/" + s2;
+						if (s1.compareTo("-1") == 0) {
+							s1 = s1 + "/?";
+						} else {
+							s1 = s1 + "/" + s2;
+						}
 					}
 				}
+				g.drawString(s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
+				
 			}
-			g.drawString(s1, x - sep - wb -wh + 2, y + 4 + ((height) / 2));
-			
 		}
 		
 	}
