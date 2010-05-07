@@ -70,7 +70,7 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
     protected JTextField nodeName;
 	
 	// Panel2
-    protected JTextField byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
+    protected JTextField nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime;
 	protected JComboBox schedulingPolicy;
 	
     
@@ -138,6 +138,12 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
         panel2.add(schedulingPolicy, c2);
         
+		c2.gridwidth = 1;
+        panel2.add(new JLabel("Nb of cores:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
+        panel2.add(nbOfCores, c2);
+		
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -251,6 +257,10 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 	
 	public String getNodeName() {
         return nodeName.getText();
+    }
+	
+	public String getNbOfCores() {
+        return nbOfCores.getText();
     }
     
     public String getByteDataSize() {

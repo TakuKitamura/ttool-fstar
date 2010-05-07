@@ -1497,6 +1497,7 @@ public class GTMLModeling  {
 				} else {
 					names.add(node.getName());
 					cpu = new HwCPU(node.getName());
+					cpu.nbOfCores = node.getNbOfCores();
 					cpu.byteDataSize = node.getByteDataSize();
 					cpu.pipelineSize = node.getPipelineSize();
 					cpu.goIdleTime = node.getGoIdleTime();

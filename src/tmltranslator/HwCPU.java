@@ -53,6 +53,7 @@ public class HwCPU extends HwExecutionNode  {
 	public static final int BASIC_ROUND_ROBIN = 0;
 	public static final int ROUND_ROBIN_PRIORITY_BASED = 1;
 	
+	public static final int DEFAULT_NB_OF_CORES = 1;
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 	public static final int DEFAULT_PIPELINE_SIZE = 5;
 	public static final int DEFAULT_GO_IDLE_TIME = 10;
@@ -62,6 +63,7 @@ public class HwCPU extends HwExecutionNode  {
 	public static final int DEFAULT_CACHE_MISS = 5;
 	public static final int DEFAULT_SCHEDULING = BASIC_ROUND_ROBIN;
 	
+	public int nbOfCores = DEFAULT_NB_OF_CORES; // Should be equal or greater than 1
 	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
 	public int pipelineSize = DEFAULT_PIPELINE_SIZE; // Should be greater than 0
 	public int goIdleTime = DEFAULT_GO_IDLE_TIME; // Should be greater or equal to 0

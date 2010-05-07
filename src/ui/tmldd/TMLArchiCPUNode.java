@@ -65,6 +65,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     private int derivationy = 3;
     private String stereotype = "CPU";
 	
+	private int nbOfCores = HwCPU.DEFAULT_NB_OF_CORES;
 	private int byteDataSize = HwCPU.DEFAULT_BYTE_DATA_SIZE;
 	private int pipelineSize = HwCPU.DEFAULT_PIPELINE_SIZE;
 	private int goIdleTime = HwCPU.DEFAULT_GO_IDLE_TIME;
@@ -212,6 +213,21 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 		
 		if (schedulingPolicy == HwCPU.ROUND_ROBIN_PRIORITY_BASED) {
 			stereotype = "CPURRPB";
+		}
+		
+		if (dialog.getNbOfCores().length() != 0) {	
+			try {
+				tmp = nbOfCores;
+				nbOfCores = Integer.decode(dialog.getNbOfCores()).intValue();
+				if (nbOfCores <= 0) {
+					nbOfCores = tmp;
+					error = true;
+					errors += "Data size  ";
+				}
+			} catch (Exception e) {
+				error = true;
+				errors += "Data size  ";
+			}
 		}
 		
 		if (dialog.getByteDataSize().length() != 0) {	
@@ -432,7 +448,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
-		sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
+		sb.append("<attributes nbOfCores=\"" + nbOfCores + "\" byteDataSize=\"" + byteDataSize + "\" ");
 		sb.append(" schedulingPolicy=\"" + schedulingPolicy + "\" ");
 		sb.append(" goIdleTime=\"" + goIdleTime + "\" ");
 		sb.append(" maxConsecutiveIdleCycles=\"" + maxConsecutiveIdleCycles + "\" ");
@@ -480,6 +496,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                             }
 							
 							if (elt.getTagName().equals("attributes")) {
+								try {
+									// the "try" statement is for retro compatibility
+									nbOfCores = Integer.decode(elt.getAttribute("nbOfCores")).intValue();
+								} catch (Exception e) {
+								}
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 schedulingPolicy =Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
 								goIdleTime = Integer.decode(elt.getAttribute("goIdleTime")).intValue();
@@ -515,6 +536,10 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
    	public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
       }
+	  
+	  public int getNbOfCores(){
+		  return nbOfCores;
+	  }
 	  
 	  public int getByteDataSize(){
 		  return byteDataSize;
@@ -558,6 +583,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 	  
 	  public String getAttributes() {
 		  String attr = "";
+		  attr += "Nb of cores = " + nbOfCores + "\n";
 		  attr += "Data size (in byte) = " + byteDataSize + "\n";
 		  attr += "Pipeline size = " + pipelineSize + "\n";
 		  if (schedulingPolicy == HwCPU.DEFAULT_SCHEDULING) {

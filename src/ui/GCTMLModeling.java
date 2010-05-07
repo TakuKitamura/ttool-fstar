@@ -1014,6 +1014,7 @@ public class GCTMLModeling  {
 			if (tgc instanceof TMLArchiCPUNode) {
 				node = (TMLArchiCPUNode)tgc;
 				cpu = new HwCPU(node.getName());
+				cpu.nbOfCores = node.getnbOfCores();
 				cpu.byteDataSize = node.getByteDataSize();
 				cpu.pipelineSize = node.getPipelineSize();
 				cpu.goIdleTime = node.getGoIdleTime();
