@@ -86,6 +86,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLAD_FOR_STATIC_LOOP].setEnabled(b);
 		mgui.actions[TGUIAction.TMLAD_FOR_EVER_LOOP].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_SEQUENCE].setEnabled(b);
+		mgui.actions[TGUIAction.TMLAD_UNORDERED_SEQUENCE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
@@ -163,6 +164,9 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.TMLAD_SEQUENCE]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.TMLAD_UNORDERED_SEQUENCE]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();

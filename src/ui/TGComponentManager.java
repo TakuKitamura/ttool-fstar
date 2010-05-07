@@ -201,6 +201,7 @@ public class TGComponentManager {
     public static final int TMLAD_FOR_LOOP = 1014;
     public static final int TMLAD_EXECI_INTERVAL = 1015;
     public static final int TMLAD_SEQUENCE = 1016;
+	public static final int TMLAD_UNORDERED_SEQUENCE = 1032;
     public static final int TMLAD_SELECT_EVT = 1018;
 	public static final int TMLAD_FOR_STATIC_LOOP = 1020;
 	public static final int TMLAD_EXECC = 1021;
@@ -655,6 +656,9 @@ public class TGComponentManager {
             case TMLAD_SEQUENCE:
                 tgc = new TMLADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TMLAD_UNORDERED_SEQUENCE:
+                tgc = new TMLADUnorderedSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLAD_SELECT_EVT:
                 tgc = new TMLADSelectEvt(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1072,6 +1076,8 @@ public class TGComponentManager {
             return TMLAD_FOR_EVER_LOOP;
         } else if (tgc instanceof TMLADSequence) {
             return TMLAD_SEQUENCE;
+        } else if (tgc instanceof TMLADUnorderedSequence) {
+            return TMLAD_UNORDERED_SEQUENCE;
         } else if (tgc instanceof TMLADSelectEvt) {
             return TMLAD_SELECT_EVT;
         } else if (tgc instanceof TMLADRandom) {
