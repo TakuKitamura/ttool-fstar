@@ -48,8 +48,8 @@ package ui;
 
 
 public class DefaultText  {
-    public static String BUILD = "4974";
-	public static String DATE = "2010/05/10 12:53:00 CET";
+    public static String BUILD = "4975";
+	public static String DATE = "2010/05/10 12:54:03 CET";
 
 
     public static StringBuffer sbAbout = makeAbout();
@@ -71,7 +71,7 @@ public class DefaultText  {
         sb.append("TTool version " + getFullVersion() + "\n\n");
         sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck - Telecom ParisTech - contact email: ludovic.apvrille@telecom-paristech.fr\n");
         sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - TELECOM ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n");
+        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n");
 		sb.append("*TURTLE*:\n");
         sb.append("The following people have been the main contributors to the definition of the TURTLE profile:\n");
         sb.append("\tLudovic Apvrille, Telecom ParisTech, ludovic.apvrille@telecom-paristech.fr\n");
