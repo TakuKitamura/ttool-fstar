@@ -184,7 +184,7 @@ public class TaskVariableTableModel extends AbstractTableModel {
 				try {
 				 val =  task.getAttributes().get(row+size-cpt).getInitialValue();
 				} catch (Exception e) {} 
-				if ((val == null) | (val.length() == 0)) {
+				if ((val == null) || (val.length() == 0)) {
 					return " - ";
 				} else {
 					return val;
