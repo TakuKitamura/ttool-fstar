@@ -69,7 +69,7 @@ public class Main implements ActionListener {
 	
     public static void main(String[] args) {
       
-        System.out.println("\n*** Your TTool version is: " + DefaultText.getFullVersion() + " ***\n");
+        System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
 		
         // Read the image data and display the splash screen
         // -------------------------------------------------

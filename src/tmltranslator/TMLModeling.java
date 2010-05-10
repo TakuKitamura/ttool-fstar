@@ -1178,6 +1178,12 @@ public class TMLModeling {
 		 }
 	 }
 	 
+	 public void removeAllRandomSequences() {
+		 for (TMLTask task: tasks) {
+			 task.removeAllRandomSequences();
+		 }
+	 }
+	 
 	
 	 public void setNewNexts(TMLActivity activity, TMLActivityElement elt0, TMLActivityElement elt1) {
 		 if (elt0 == elt1) {

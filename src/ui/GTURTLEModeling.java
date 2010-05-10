@@ -5018,10 +5018,13 @@ public class GTURTLEModeling {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
-		//System.out.println("New TML Modeling");
+		
 		GTMLModeling gtmlm = new GTMLModeling(tmldp, true);
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling(true);
+		tmlm.removeAllRandomSequences();
+		TraceManager.addDev("New TML Modeling:" + tmlm.toString());
+		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
@@ -5045,7 +5048,7 @@ public class GTURTLEModeling {
 			TML2TURTLE tt = new TML2TURTLE(tmlm);
 			tm = tt.generateTURTLEModeling();
 			tmState = 0;
-			System.out.println("tm generated:");
+			//TraceManager.addDev("tm generated:");
 			//tm.print();
 			checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5094,6 +5097,7 @@ public class GTURTLEModeling {
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
+		tmlm.removeAllRandomSequences();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();

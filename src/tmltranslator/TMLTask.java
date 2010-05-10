@@ -182,5 +182,9 @@ public class TMLTask extends TMLElement {
 		}
 		return false;
 	}
+	
+	public void removeAllRandomSequences() {
+		activity.removeAllRandomSequences(this);
+	}
  
 }

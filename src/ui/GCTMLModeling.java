@@ -477,6 +477,7 @@ public class GCTMLModeling  {
         TMLNotifiedEvent tmlnotifiedevent;
         TMLWriteChannel tmlwritechannel;
         TMLSequence tmlsequence;
+		TMLRandomSequence tmlrsequence;
         TMLSelectEvt tmlselectevt;
 		int staticLoopIndex = 0;
 		String sl = "";
@@ -613,6 +614,11 @@ public class GCTMLModeling  {
                 tmlsequence = new TMLSequence("seq", tgc);
                 activity.addElement(tmlsequence);
 				listE.addCor(tmlsequence, tgc);
+				
+            } else if (tgc instanceof TMLADUnorderedSequence) {
+                tmlrsequence = new TMLRandomSequence("rseq", tgc);
+                activity.addElement(tmlrsequence);
+				listE.addCor(tmlrsequence, tgc);
 				
             } else if (tgc instanceof TMLADReadChannel) {
                 // Get the channel
@@ -875,6 +881,10 @@ public class GCTMLModeling  {
                             index = tgc1.indexOf(p1) - 1;
                             ((TMLSequence)ae1).addIndex(index);
                             ae1.addNext(ae2);
+                        } else if (ae1 instanceof TMLRandomSequence) {
+                            index = tgc1.indexOf(p1) - 1;
+                            ((TMLRandomSequence)ae1).addIndex(index);
+                            ae1.addNext(ae2);
                         } else {
                             ae1.addNext(ae2);
                         }
@@ -964,6 +974,9 @@ public class GCTMLModeling  {
 			ae1 = activity.get(j);
 			if (ae1 instanceof TMLSequence) {
 				((TMLSequence)ae1).sortNexts();
+			}
+			if (ae1 instanceof TMLRandomSequence) {
+				((TMLRandomSequence)ae1).sortNexts();
 			}
 		}
 		

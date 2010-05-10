@@ -118,6 +118,108 @@ public class TMLActivity extends TMLElement {
         }
         return found;
 	}
+	
+	private void replaceAllNext(TMLActivityElement _oldE, TMLActivityElement _newE) {
+		TMLActivityElement tmlae;
+		for(int i=0; i<elements.size(); i++) {
+			tmlae = (TMLActivityElement)(elements.elementAt(i));
+			tmlae.setNewNext(_oldE, _newE);	
+		}
+	}
+	
+	private TMLRandomSequence findTMLRandomSequence() {
+		TMLActivityElement tmlae;
+		for(int i=0; i<elements.size(); i++) {
+			tmlae = (TMLActivityElement)(elements.elementAt(i));
+			if (tmlae instanceof TMLRandomSequence) {
+				return (TMLRandomSequence)tmlae;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void removeAllRandomSequences(TMLTask _task) {
+		int idRandomSequence = 0;
+		TMLRandomSequence tmlrs = findTMLRandomSequence();
+		
+		while(tmlrs != null) {
+			replaceRandomSequence(_task, tmlrs, idRandomSequence);
+			idRandomSequence ++;
+			tmlrs = findTMLRandomSequence();
+		}
+	}
+	
+	private void replaceRandomSequence(TMLTask _task, TMLRandomSequence _tmlrs, int _idRandomSequence) {
+		int nnext = _tmlrs.getNbNext();
+		int i;
+		
+		if (nnext == 0) {
+			TMLStopState adstop = new TMLStopState("stop", _tmlrs.getReferenceObject());
+			addElement(adstop);
+			removeElement(_tmlrs);
+			replaceAllNext(_tmlrs, adstop);
+			return;
+		} 
+		
+		// At least one next!
+		if (nnext == 1) {
+			TMLActivityElement tmlae = _tmlrs.getNextElement(0);
+			removeElement(_tmlrs);
+			replaceAllNext(_tmlrs, tmlae);
+			return;
+		}
+		
+		// At least two nexts -> use of a loop combined with a choice
+		String name;
+		TMLChoice choice = new TMLChoice("choice for random sequence", _tmlrs.getReferenceObject());
+		elements.addElement(choice);
+		
+		TMLForLoop loop = new TMLForLoop("loop for random sequence", _tmlrs.getReferenceObject());
+		elements.addElement(loop);
+		name = "looprd__" + _idRandomSequence;
+		TMLAttribute loopAttribute = new TMLAttribute(name, new TMLType(TMLType.NATURAL));
+		_task.addAttribute(loopAttribute);
+		loop.setInit(name + "=0");
+		loop.setCondition(name + " < " + nnext);
+		loop.setIncrement(name + " = " + name + " + 1");
+		
+		TMLStopState tmlstop = new TMLStopState("stop", _tmlrs.getReferenceObject());
+		addElement(tmlstop);
+		
+		TMLActionState [] tmlactions = new TMLActionState[nnext];
+		TMLActionState tmlaction;
+		TMLAttribute[] attributes = new TMLAttribute[nnext];
+		
+		
+		for(i=0; i<nnext; i++) {
+			name = "rd__" + _idRandomSequence + "__" + i;
+			attributes[i] = new TMLAttribute(name, new TMLType(TMLType.BOOLEAN));
+			_task.addAttribute(attributes[i]);
+			
+			tmlactions[i] = new TMLActionState("Setting random sequence", _tmlrs.getReferenceObject());
+			elements.add(tmlactions[i]);
+			tmlactions[i].setAction(name + " = false");
+			
+			tmlaction = new TMLActionState("Setting random sequence", _tmlrs.getReferenceObject());
+			elements.add(tmlaction);
+			tmlaction.setAction(name + " = true");
+			tmlaction.addNext(_tmlrs.getNextElement(i));
+			
+			choice.addNext(tmlaction);
+			choice.addGuard("[not(" + name + ")]");
+			
+			if (i!=0) {
+				tmlactions[i-1].addNext(tmlactions[i]);
+			}
+		}
+		
+		replaceAllNext(_tmlrs, tmlactions[0]);
+		tmlactions[nnext-1].addNext(loop);
+		loop.addNext(choice);
+		loop.addNext(tmlstop);
+		removeElement(_tmlrs);
+	}
     
  
 }

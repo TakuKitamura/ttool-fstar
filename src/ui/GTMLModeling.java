@@ -928,6 +928,7 @@ public class GTMLModeling  {
         TMLNotifiedEvent tmlnotifiedevent;
         TMLWriteChannel tmlwritechannel;
         TMLSequence tmlsequence;
+		TMLRandomSequence tmlrsequence;
         TMLSelectEvt tmlselectevt;
 		TMLDelay tmldelay;
 		int staticLoopIndex = 0;
@@ -1064,6 +1065,11 @@ public class GTMLModeling  {
                 tmlsequence = new TMLSequence("seq", tgc);
                 activity.addElement(tmlsequence);
 				listE.addCor(tmlsequence, tgc);
+				
+            } else if (tgc instanceof TMLADUnorderedSequence) {
+                tmlrsequence = new TMLRandomSequence("rseq", tgc);
+                activity.addElement(tmlrsequence);
+				listE.addCor(tmlrsequence, tgc);
 				
             } else if (tgc instanceof TMLADReadChannel) {
                 // Get the channel
@@ -1340,6 +1346,11 @@ public class GTMLModeling  {
                             ((TMLSequence)ae1).addIndex(index);
                             ae1.addNext(ae2);
 							//System.out.println("Adding " + ae2 + " at index " + index);
+                        } else if (ae1 instanceof TMLRandomSequence) {
+                            index = tgc1.indexOf(p1) - 1;
+                            ((TMLRandomSequence)ae1).addIndex(index);
+                            ae1.addNext(ae2);
+							//System.out.println("Adding " + ae2 + " at index " + index);
                         } else {
                             ae1.addNext(ae2);
                         }
@@ -1429,6 +1440,9 @@ public class GTMLModeling  {
 			ae1 = activity.get(j);
 			if (ae1 instanceof TMLSequence) {
 				((TMLSequence)ae1).sortNexts();
+			}
+			if (ae1 instanceof TMLRandomSequence) {
+				((TMLRandomSequence)ae1).sortNexts();
 			}
 		}
     }

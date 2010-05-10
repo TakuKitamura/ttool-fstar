@@ -727,7 +727,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_FOR_STATIC_LOOP] = new TAction("add-tmlad-for-static-loop", "Static loop (for)", IconManager.imgic912, IconManager.imgic912, "Static loop (for)", "Add a static for loop to the currently opened TML activity diagram", 0);
         actions[TMLAD_FOR_EVER_LOOP] = new TAction("add-tmlad-for-ever-loop", "Loop for ever", IconManager.imgic926, IconManager.imgic926, "Loop for ever", "Add a loop-for-ever operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_SEQUENCE] = new TAction("add-tmlad-sequence", "Sequence", IconManager.imgic226, IconManager.imgic226, "Sequence", "Add a sequence to the currently opened TML activity diagram", 0);
-        actions[TMLAD_UNORDERED_SEQUENCE] = new TAction("add-tmlad-unordered-sequence", "Unordered sequence", IconManager.imgic928, IconManager.imgic928, "Unordered sequence", "Add an unordered sequence to the currently opened TML activity diagram", 0);
+        actions[TMLAD_UNORDERED_SEQUENCE] = new TAction("add-tmlad-unordered-sequence", "Random sequence", IconManager.imgic928, IconManager.imgic928, "Random sequence", "Add a random sequence to the currently opened TML activity diagram", 0);
         actions[TMLAD_SELECT_EVT] = new TAction("add-tmlad-select-evt", "Add select event", IconManager.imgic916, IconManager.imgic916, "Select event", "Add a selection between events to the currently opened TML Task activity diagram", 0);
 		actions[TMLAD_RANDOM] = new TAction("add-tmlad-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened TML Task activity diagram", 0);
 		

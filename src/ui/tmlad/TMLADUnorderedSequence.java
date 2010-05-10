@@ -80,7 +80,7 @@ public class TMLADUnorderedSequence extends TGCWithInternalComponent implements 
 
 		TGCOneLineText tgc = new TGCOneLineText(x+textX + 10, y+textY, textX +10 , textX + 10 , textY, textY, true, this, _tdp);
 		tgc.setValue("<>");
-		tgc.setName("Unordered sequence");
+		tgc.setName("Random sequence");
 		tgc.setEditable(false);
                 
 		tgcomponent[0] = tgc;
@@ -89,7 +89,7 @@ public class TMLADUnorderedSequence extends TGCWithInternalComponent implements 
 		editable = false;
 		removable = true;
 
-		name = "unordered sequence";
+		name = "random sequence";
 		
 		myImageIcon = IconManager.imgic206;
 	}
