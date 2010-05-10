@@ -5156,11 +5156,13 @@ public class GTURTLEModeling {
 		//System.out.println("New TML Mapping");
 		GTMLModeling gtmlm = new GTMLModeling(tmlap, true);
 		
+		
 		gtmlm.setNodes(nodesToTakeIntoAccount);
 		tmlm = null;
 		tm = null;
 		tmState = 1;
 		tmap = gtmlm.translateToTMLMapping();
+		tmap.removeAllRandomSequences();
 		
 		listE = gtmlm.getCorrespondanceTable();
 		

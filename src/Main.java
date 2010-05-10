@@ -52,6 +52,7 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.*;
 
+import myutil.*;
 import ui.*;
 import ui.window.*;
 
@@ -68,6 +69,8 @@ public class Main implements ActionListener {
 	public static boolean avatar = false ; // avatar profile
 	
     public static void main(String[] args) {
+		
+		TraceManager.devPolicy = TraceManager.TO_DEVNULL;
       
         System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
 		
@@ -171,6 +174,11 @@ public class Main implements ActionListener {
             if (args[i].compareTo("-config") == 0) {
                 config = args[Math.min(args.length-1, i+1)];
             }
+			
+			if (args[i].compareTo("-debug") == 0) {
+                TraceManager.devPolicy = TraceManager.TO_CONSOLE;
+            }
+			
         }
         
         // Icons

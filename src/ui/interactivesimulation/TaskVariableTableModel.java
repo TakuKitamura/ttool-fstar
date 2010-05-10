@@ -180,7 +180,10 @@ public class TaskVariableTableModel extends AbstractTableModel {
 			size = task.getAttributes().size();
 			cpt += size;
 			if (row < cpt) {
-				String val =  task.getAttributes().get(row+size-cpt).getInitialValue();
+				String val = null ;
+				try {
+				 val =  task.getAttributes().get(row+size-cpt).getInitialValue();
+				} catch (Exception e) {} 
 				if ((val == null) | (val.length() == 0)) {
 					return " - ";
 				} else {

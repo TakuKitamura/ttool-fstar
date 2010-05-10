@@ -72,6 +72,8 @@ public class TMLMapping {
 		}
     }
 	
+
+	
 	public void makeMinimumMapping() {
 		HwCPU cpu;
 		HwMemory mem;
@@ -473,5 +475,11 @@ public class TMLMapping {
 			 if (task==cmpTask) break; else i++;
 		}
 		return onnodes.get(i);
+	}
+	
+	public void removeAllRandomSequences() {
+		if (tmlm != null) {
+			tmlm.removeAllRandomSequences();
+		}
 	}
 }
