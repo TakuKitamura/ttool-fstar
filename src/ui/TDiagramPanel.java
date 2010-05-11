@@ -190,6 +190,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	int adjustMode = 0;
 	
 	// DIPLO ID -> for simulation purpose
+	public static boolean DIPLO_ANIMATE_ON;
 	public static boolean DIPLO_ID_ON;
 	public static boolean DIPLO_TRANSACTION_PROGRESSION_ON;
     

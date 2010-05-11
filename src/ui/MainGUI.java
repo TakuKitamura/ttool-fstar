@@ -256,8 +256,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     //private int selectedAction = -1;
 	
 	// Interaction with simulators
-	ArrayList<RunningInfo> runningIDs;
-	JFrameInteractiveSimulation jfis;
+	private ArrayList<RunningInfo> runningIDs;
+	private ArrayList<LoadInfo> loadIDs;
+	private JFrameInteractiveSimulation jfis;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn) {
         systemcOn = _systemcOn;
@@ -5435,6 +5436,18 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setDiploIDs(!TDiagramPanel.DIPLO_ID_ON);
 	}
 	
+	public void toggleDiploAnimate() {
+		setDiploAnimate(!TDiagramPanel.DIPLO_ANIMATE_ON);
+	}
+	
+	public void setDiploAnimate(boolean b) {
+		TDiagramPanel.DIPLO_ANIMATE_ON = b;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
 	public void setDiploIDs(boolean b) {
 		TDiagramPanel.DIPLO_ID_ON = b;
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
@@ -5465,11 +5478,36 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return null;
 	}
 	
+	public synchronized LoadInfo isLoadID(int id) {
+		if (loadIDs == null) {
+			return null;
+		}
+		
+		for(LoadInfo li: loadIDs) {
+			if (li.id == id) {
+				return li;
+			}
+		}
+		
+		return null;
+	}
+	
 	public synchronized void resetRunningID() {
 		if (runningIDs != null) {
 			runningIDs.clear();
 		}
 		runningIDs = null;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
+	public synchronized void resetLoadID() {
+		if (loadIDs != null) {
+			loadIDs.clear();
+		}
+		loadIDs = null;
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
 			tdp.repaint();
@@ -5496,6 +5534,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
+	public synchronized void addLoadInfo(int _id, double _load) {
+		if (loadIDs == null) {
+			loadIDs = new ArrayList<LoadInfo>();
+		}
+		
+		removeLoadId(_id);
+		LoadInfo li = new LoadInfo();
+		li.id = _id;
+		li.load = _load;
+		loadIDs.add(li);
+		//System.out.println("Running id " + id +  " added");
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
 	public synchronized void removeRunningId(Integer id) {
 		if (runningIDs == null) {
 			return ;
@@ -5504,6 +5559,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		for(RunningInfo ri: runningIDs) {
 			if (ri.id == id.intValue()) {
 				runningIDs.remove(ri);
+				//System.out.println("Running id " + i +  " removed");
+				return;
+			}
+		}
+		getCurrentTDiagramPanel().repaint(); 
+	}
+	
+	public synchronized void removeLoadId(int _id) {
+		if (loadIDs == null) {
+			return ;
+		}
+		
+		for(LoadInfo li: loadIDs) {
+			if (li.id == _id) {
+				loadIDs.remove(li);
 				//System.out.println("Running id " + i +  " removed");
 				return;
 			}

@@ -119,7 +119,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
-	JCheckBox latex, debug, animate, update, openDiagram, animateWithInfo;
+	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -223,6 +223,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		
 		mgui.resetRunningID();
+		mgui.resetLoadID();
 		
 		setBackground(new Color(50, 40, 40, 200));
 		
@@ -595,19 +596,24 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp01.add(debug, c01);
 		animate = new JCheckBox("Animate UML diagrams");
 		jp01.add(animate, c01);
-		animate.addItemListener(this);
-		animate.setSelected(true);
+		diploids = new JCheckBox("Show DIPLO IDs on UML diagrams");
+		jp01.add(diploids, c01);
+		diploids.addItemListener(this);
+		diploids.setSelected(false);
 		animateWithInfo = new JCheckBox("Show transaction progression on UML diagrams");
 		jp01.add(animateWithInfo, c01);
 		animateWithInfo.addItemListener(this);
 		animateWithInfo.setSelected(true);
+		openDiagram = new JCheckBox("Automatically open active task diagram");
+		jp01.add(openDiagram, c01);
+		openDiagram.setSelected(true);
 		update = new JCheckBox("Automatically update information (task, CPU, etc.)");
 		jp01.add(update, c01);
 		update.addItemListener(this);
 		update.setSelected(true);
-		openDiagram = new JCheckBox("Automatically open active task diagram");
-		jp01.add(openDiagram, c01);
-		openDiagram.setSelected(true);
+		
+		animate.addItemListener(this);
+		animate.setSelected(true);
 		
 		
 		TableSorter sorterPI;
@@ -678,7 +684,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(300);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(700);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspCPUInfo = new JScrollPane(jtablePI);
 		jspCPUInfo.setWheelScrollingEnabled(true);
@@ -797,6 +803,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			}
 		}
 		mgui.resetRunningID();
+		mgui.resetLoadID();
+		mgui.setDiploAnimate(false);
 		dispose();
 		setVisible(false);
 		
@@ -847,7 +855,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void run() {
 		String s;
-		System.out.println("mode=" + threadMode);
+		TraceManager.addDev("mode=" + threadMode);
 		
 		try {
 			if (threadMode == 0) {
@@ -1109,11 +1117,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			}
 			
 		} catch (IOException e) {
-			System.err.println("Error when parsing server info:" + e.getMessage());
+			TraceManager.addError("Error when parsing server info:" + e.getMessage());
 			return false;
 		} catch (SAXException saxe) {
-			System.err.println("Error when parsing server info:" + saxe.getMessage());
-			System.err.println("xml:" + xmldata);
+			TraceManager.addError("Error when parsing server info:" + saxe.getMessage());
+			TraceManager.addError("xml:" + xmldata);
 			return false;
 		}
 		return true;
@@ -1161,7 +1169,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				node = diagramNl.item(j);
 				
 				if (node == null) {
-					System.out.println("null node");
+					TraceManager.addDev("null node");
 					return false;
 				}
 				
@@ -1382,7 +1390,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("Exception in xml parsing " + e.getMessage() + " node= " + node1);
+			TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
 			return false;
 		}
 		
@@ -1417,6 +1425,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					hashOK = true;
 					animate.setSelected(true);
 					animate.setEnabled(true);
+					diploids.setEnabled(true);
 					animateWithInfo.setSelected(true);
 					animateWithInfo.setEnabled(true);
 					openDiagram.setEnabled(true);
@@ -1434,14 +1443,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	private void wrongHashCode() {
-		System.out.println("Wrong hash code");
+		TraceManager.addDev("Wrong hash code");
 		
 		cpuPanel.setVisible(false);
 		variablePanel.setVisible(false);
 		openDiagram.setSelected(false);
 		openDiagram.setEnabled(false);
 		animate.setEnabled(false);
+		diploids.setEnabled(false);
 		animate.setSelected(false);
+		diploids.setSelected(false);
 		animateWithInfo.setSelected(false);
 		animateWithInfo.setEnabled(false);
 		update.setEnabled(false);
@@ -1493,7 +1504,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public synchronized void threadStarted() {
-		System.out.println("thread started");
+		TraceManager.addDev("thread started");
 		threadStarted = true;
 		notify();
 	}
@@ -1829,7 +1840,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				//System.out.println("Adding running command: " +c);
 				mgui.addRunningID(c, nc, progression, startTime, finishTime, transStartTime, transFinishTime);
 			} catch (Exception e) {
-				System.out.println("Exception updateRunningCommand: " + e.getMessage());
+				TraceManager.addDev("Exception updateRunningCommand: " + e.getMessage());
 			}
 		}
 		
@@ -1984,7 +1995,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				row = (Integer)(rowTable.get(i)).intValue();
 				tvtm.fireTableCellUpdated(row, 4);
 			} catch (Exception e) {
-				System.out.println("Exception updateVariableState: " + e.getMessage() + " idvar=" + _idvar + " val=" + _value);
+				TraceManager.addDev("Exception updateVariableState: " + e.getMessage() + " idvar=" + _idvar + " val=" + _value);
 			}
 		}
 		
@@ -2003,7 +2014,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				row = rowTable.get(i).intValue();
 				tasktm.fireTableCellUpdated(row, 2);
 			} catch (Exception e) {
-				System.out.println("Exception updateTaskState: " + e.getMessage());
+				TraceManager.addDev("Exception updateTaskState: " + e.getMessage());
 			}
 		}
 		
@@ -2025,8 +2036,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				//System.out.println("Searching for old row");
 				row = (Integer)(rowTable.get(i)).intValue();
 				cputm.fireTableCellUpdated(row, 2);
+				mgui.addLoadInfo(i, getDouble(_utilization).doubleValue());
 			} catch (Exception e) {
-				System.out.println("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
+				TraceManager.addDev("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
 			}
 		}
 	}
@@ -2039,9 +2051,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			try {
 				valueTable.remove(i);
 				valueTable.put(i, "Utilization: " + _utilization);
-				//System.out.println("Searching for old row");
+				//TraceManager.addDev("Searching for old row");
 				row = rowTable.get(i).intValue();
 				bustm.fireTableCellUpdated(row, 2);
+				mgui.addLoadInfo(i, getDouble(_utilization).doubleValue());
 			} catch (Exception e) {
 				System.err.println("Exception updateBusState: " + e.getMessage());
 			}
@@ -2065,27 +2078,32 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == animate) {
-			mgui.setDiploIDs(animate.isSelected());
-		} else if (e.getSource() == animateWithInfo) {
+			mgui.setDiploAnimate(animate.isSelected());
+			diploids.setEnabled(animate.isSelected());
+			animateWithInfo.setEnabled(animate.isSelected());
+			openDiagram.setEnabled(animate.isSelected());
+		} else if (e.getSource() == diploids) {
+			mgui.setDiploIDs(diploids.isSelected());
+		}else if (e.getSource() == animateWithInfo) {
 			mgui.setTransationProgression(animateWithInfo.isSelected());
 		}
 	}
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
-		//System.out.println("Command:" + command);
+		//TraceManager.addDev("Command:" + command);
 		
 		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
             close();
         }  else if (command.equals(actions[InteractiveSimulationActions.ACT_START_ALL].getActionCommand()))  {
 			setComponents();
 			startSimulation();
-			//System.out.println("Start simulation!");
+			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
 			killSimulator();
 			close();
 			return;
-			//System.out.println("Start simulation!");
+			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_SIMU].getActionCommand()))  {
             sendCommand("run-to-next-breakpoint");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_TIME_UNITS].getActionCommand()))  {
@@ -2124,6 +2142,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             sendSaveBenchmarkCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
 			mgui.resetRunningID();
+			mgui.resetLoadID();
             sendCommand("reset");
 			askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
@@ -2165,6 +2184,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public Integer getInteger(String s) {
 		try {
 			return Integer.decode(s);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public Double getDouble(String s) {
+		try {
+			return new Double(s);
 		} catch (Exception e) {
 			return null;
 		}
@@ -2228,7 +2255,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	
 	public void addBreakPoint(int _commandID) {
-		//System.out.println("Add breakpoint: " + _commandID);
+		//TraceManager.addDev("Add breakpoint: " + _commandID);
 		// Check whether that breakpoint is already listed or not
 		for(Point p: points) {
 			if (p.y == _commandID) {
@@ -2238,9 +2265,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 		if (tmap != null) {
 			TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
-			//System.out.println("Got task: " + task);
+			//TraceManager.addDev("Got task: " + task);
 			if (task != null) {
-				//System.out.println("Adding bkp");
+				//TraceManager.addDev("Adding bkp");
 				sendCommand("add-breakpoint " + task.getID() + " " + _commandID + "\n");
 				jpbp.addExternalBreakpoint(task.getID(), _commandID);
 			}
@@ -2248,7 +2275,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 	
 	public void removeBreakPoint(int _commandID) {
-		System.out.println("remove breakpoint");
+		TraceManager.addDev("remove breakpoint");
 		int cpt = 0;
 		for(Point p: points) {
 			if (p.y == _commandID) {

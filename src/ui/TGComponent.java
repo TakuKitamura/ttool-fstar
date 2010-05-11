@@ -515,8 +515,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 	}
 	
+	public void drawLoadDiploID(Graphics g, LoadInfo li) {
+		//TraceManager.addDev("Drawing diplo ID id=" + li.id);
+		int sizeRect = 6;
+		int sizeOval = 8;
+		Color c = g.getColor();
+		Color myCol = new Color(135, Math.min(255, Math.max(0, (int)(255-(li.load*255)))), 0);
+		g.setColor(myCol);
+		g.fillRect(x, y, width, sizeRect);
+		g.fillRect(x, y, sizeRect, height);
+		g.fillRect(x+width-sizeRect, y, sizeRect, height);
+		g.fillRect(x, y + height-sizeRect, width, sizeRect);
+		
+		g.fillOval(x+width, y+((sizeRect-sizeOval)/2), sizeOval, sizeOval);
+		g.drawLine(x+width+sizeOval, y+(sizeRect/2), x+width+sizeOval+(sizeOval), y+(sizeRect/2));
+		g.drawString("" + (int)(li.load*100) + "%", x+width+sizeOval+(sizeOval) + 1, y+(sizeOval/2));
+	}
+	
     public void draw(Graphics g) {
 		RunningInfo ri;
+		LoadInfo li;
         ColorManager.setColor(g, state, 0);
         internalDrawing(g);
         repaint = false;
@@ -540,7 +558,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			GraphicLib.setNormalStroke(g);
 		}
 		
-		if (tdp.DIPLO_ID_ON) {
+		if (tdp.DIPLO_ANIMATE_ON) {
 			if (breakpoint) {
 				//System.out.println("breakpoint");
 				g.setColor(ColorManager.BREAKPOINT);
@@ -552,7 +570,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			if (! ((this instanceof TGConnector) || (this instanceof TGCNote))) {
 				if (tdp instanceof TMLActivityDiagramPanel) {
 					if (getFather() == null) {
-						drawDiploID(g);
+						if (tdp.DIPLO_ID_ON) {
+							drawDiploID(g);
+						}
 						ri = tdp.getMGUI().isRunningID(getDIPLOID());
 						if (ri != null) {
 							drawRunningDiploID(g, ri);
@@ -560,11 +580,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					}
 				} else if (tdp instanceof TMLComponentTaskDiagramPanel) {
 					if (this instanceof TMLCPrimitiveComponent) {
-						drawDiploID(g);
+						if (tdp.DIPLO_ID_ON) {
+							drawDiploID(g);
+						}
 					}
 				} else if (tdp instanceof TMLTaskDiagramPanel) {
 					if (getDIPLOID() != -1) {
-						drawDiploID(g);
+						if (tdp.DIPLO_ID_ON) {
+							drawDiploID(g);
+						}
 					}
 					/*if (this instanceof TMLTaskOperator) {
 						drawDiploID(g);
@@ -580,7 +604,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					}*/
 				} else if (tdp instanceof TMLArchiDiagramPanel) {
 					if (getDIPLOID() != -1) {
-						drawDiploID(g);
+						if (tdp.DIPLO_ID_ON) {
+							drawDiploID(g);
+						}
+						li = tdp.getMGUI().isLoadID(getDIPLOID());
+						if (li != null) {
+							drawLoadDiploID(g, li);
+						}
 					}
 					/*if (this instanceof TMLArchiCPUNode) {
 						

@@ -65,9 +65,15 @@ public class BrowserControl {
         else
             return false;
     }
-
+	
     public static void startBrowerToURL(String url) {
-        Process p;
+		try {
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+		} catch(Exception e) {
+            TraceManager.addError("Error: couldn't start browser because: " + e.getMessage());
+        }
+		
+        /*Process p;
         boolean underWindows = underWindows();
     
         String cmd = null;
@@ -91,7 +97,7 @@ public class BrowserControl {
                     }
             }
         } catch(Exception e) {
-            System.err.println("Error: couldn't start browser with command=" + cmd + "with Exception=" + e.getMessage());
-        }
+            TraceManager.addError("Error: couldn't start browser because: " + e.getMessage());
+        } */
     }
 }
