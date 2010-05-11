@@ -57,6 +57,8 @@ import ui.*;
 
 public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes{
     
+	public static int ARC = 20;
+	
     public  AvatarPDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         //addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);

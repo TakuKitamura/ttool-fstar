@@ -149,12 +149,15 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
 			
 		}
 		
-        Color c = g.getColor();
+        /*Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
 		g.setColor(ColorManager.AVATARPD_PROPERTY_RELATION);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		g.setColor(c);
+		g.setColor(c);*/
+		
+		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_PROPERTY_RELATION, g.getColor());
+		
         
 		Font f0 = g.getFont();
 		if (displayText) {

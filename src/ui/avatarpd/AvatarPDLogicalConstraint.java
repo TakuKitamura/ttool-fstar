@@ -154,12 +154,14 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
 			
 		}
 		
-        Color c = g.getColor();
+		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_LOGICAL_CONSTRAINT, g.getColor());
+		
+        /*Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
 		g.setColor(ColorManager.AVATARPD_TEMPORAL_CONSTRAINT);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		g.setColor(c);
+		g.setColor(c);*/
         
 		Font f0 = g.getFont();
 		if (displayText) {

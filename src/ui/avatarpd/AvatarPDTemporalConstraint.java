@@ -49,6 +49,7 @@ package ui.avatarpd;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import java.awt.geom.*;
 
 import org.w3c.dom.*;
 
@@ -147,12 +148,26 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
 			
 		}
 		
-        Color c = g.getColor();
-		g.draw3DRect(x, y, width, height, true);
+        /*Color c = g.getColor();
 		
 		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT);
-		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		//g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		//Graphics2D graphics2 = (Graphics2D) g;
+        //RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(x, y, width, height, arc, arc);
+        //graphics2.draw(roundedRectangle);
+		//g.fillRoundRect(x, y, width, height, arc, arc);
+		//g.fill3DRect(x+arc, y+1, width-(2*arc), height-1, true);
+		//g.fill3DRect(x+1, y+arc, width-1, height-(2*arc), true);
+		g.fillRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);
+		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.brighter());
+		g.drawLine(x+1, y+, x+1, y+height-(AvatarPDPanel.ARC/2));
+		g.drawLine(x+(AvatarPDPanel.ARC/2), y+(AvatarPDPanel.ARC/2), x+1, y+height-(AvatarPDPanel.ARC/2));
+		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.darker());
+		g.drawLine(x+width-1, y+(AvatarPDPanel.ARC/2), x+width-1, y+height-(AvatarPDPanel.ARC/2));
 		g.setColor(c);
+		g.drawRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);*/
+		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_TEMPORAL_CONSTRAINT, g.getColor());
+		
         
 		Font f0 = g.getFont();
 		if (displayText) {

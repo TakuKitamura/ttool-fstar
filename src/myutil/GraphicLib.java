@@ -580,7 +580,31 @@ public final class GraphicLib {
         v.removeElementAt(src);
         v.insertElementAt(o, dst);
     }
-  
+	
+	public static void draw3DRoundRectangle(Graphics g, int x, int y, int width, int height, int arc, Color fillColor, Color borderColor) {
+		Color c = g.getColor();
+		
+		g.setColor(fillColor);
+		g.fillRoundRect(x, y, width, height, arc, arc);
+		g.setColor(fillColor.brighter());
+		g.drawLine(x+1, y+(arc/2), x+1, y+height-(arc/2));
+		g.drawLine(x+(arc/2), y+1, x+width-(arc/2), y+1);
+		g.drawArc(x+1, y+1, arc, arc, -180, -90);
+		g.drawArc(x+1, y+height-arc-1, arc, arc, 180, 45);
+		g.drawArc(x+width-1-arc, y+1, arc, arc, 90, -45);
+		g.setColor(fillColor.darker());
+		g.drawLine(x+width-1, y+(arc/2), x+width-1, y+height-(arc/2));
+		g.drawLine(x+(arc/2), y+height-1, x+width-(arc/2), y+height-1);
+		g.drawArc(x+width-1-arc, y+height-1-arc, arc, arc, -90, 90);
+		g.drawArc(x+1, y+height-arc-1, arc, arc, -135, 45);
+		g.drawArc(x+width-1-arc, y+1, arc, arc, 45, -45);
+		g.setColor(borderColor);
+		g.drawRoundRect(x, y, width, height, arc, arc);
+		
+		
+		
+		g.setColor(c);
+	}
 }
 
 

@@ -65,6 +65,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     protected String description = "";
 	private String stereotype = "property";
 	private boolean liveness = true;
+	private boolean not = false;
 	 
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
@@ -152,15 +153,16 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 			
 		}
 		
-        Color c = g.getColor();
+        /*Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
 	
 		g.setColor(ColorManager.AVATARPD_PROPERTY);
 		
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		g.setColor(c);
-        
+		g.setColor(c);*/
+        GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_PROPERTY, g.getColor());
+		
         // Strings
 		int w;
 		if (displayText) {
@@ -204,6 +206,9 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 				} else {
 					state = "reachability";
 				}
+				if (not) {
+					state = "not " + state;
+				}
 				g.setFont(f.deriveFont(Font.ITALIC));
 				w  = g.getFontMetrics().stringWidth(state);
 				if ((w < (2*textX + width)) && (h < height)) {
@@ -232,7 +237,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     
      public boolean editOndoubleClick(JFrame frame) {
 		String oldValue = value;
-		JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, liveness);
+		JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, liveness, not);
 		jdap.setSize(300, 230);
         GraphicLib.centerOnParent(jdap);
         jdap.setVisible(true); // blocked until dialog has been closed
@@ -241,7 +246,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 			return false;
 		}
         
-        liveness = jdap.isLivenessSelected();
+        liveness = jdap.isLivenessSelected() || jdap.isNotLivenessSelected();
+		not = jdap.isNotLivenessSelected() || jdap.isNotReachabilitySelected();
 		String s = jdap.getName();
 		
 		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
@@ -264,6 +270,9 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<liveness data=\"");
         sb.append(liveness);
+        sb.append("\" />\n");
+		sb.append("<not data=\"");
+        sb.append(not);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -295,6 +304,15 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
                                     liveness = true;
                                 } else {
 									liveness = false;
+								}
+							}
+							if (elt.getTagName().equals("not")) {
+                                //System.out.println("Analyzing line1");
+                                s = elt.getAttribute("data");
+                                if (s.equals("true")) {
+                                    not = true;
+                                } else {
+									not = false;
 								}
 							}
 								//System.out.println("Analyzing line4");

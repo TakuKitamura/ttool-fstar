@@ -162,15 +162,18 @@ public class AvatarPDBoolEq extends AvatarPDToggle implements ConstraintListInte
 			
 		}
 		
-        Color c = g.getColor();
+        /*Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		g.setColor(ColorManager.AVATARPD_ATTRIBUTE);
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		//g.fill3DRect(x+1, y+1, width-1, toggleHeight-1, true);
 		g.setColor(ColorManager.AVATARPD_SIGNAL);		
 		g.fill3DRect(x+(int)(decXToggle*width)+1, y+toggleHeight, width-1-(int)(decXToggle*width), height-toggleHeight, true);
-		g.setColor(c);
-        
+		g.setColor(c);*/
+        GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_ATTRIBUTE, g.getColor());
+		GraphicLib.draw3DRoundRectangle(g, x+(int)(decXToggle*width), y+toggleHeight, width-1-(int)(decXToggle*width), height-toggleHeight, AvatarPDPanel.ARC, ColorManager.AVATARPD_SIGNAL, g.getColor());
+		
+		
         // Strings
 		int w;
 		if (displayText) {

@@ -56,10 +56,10 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     private JPanel panel1;
     
 	private String name;
-	private boolean livenessSelected;
+	private boolean livenessSelected, notSelected;
 	private boolean hasBeenCancelled = false;
 	private JTextField myName;
-	private JRadioButton reachability, liveness;
+	private JRadioButton reachability, liveness, notReachability, notLiveness;
     
     // Main Panel
     private JButton closeButton;
@@ -68,12 +68,13 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     //private String id1, id2;
     
     /** Creates new form  */
-    public JDialogAvatarProperty(Frame f, String _name, boolean _livenessSelected) {
+    public JDialogAvatarProperty(Frame f, String _name, boolean _livenessSelected, boolean _notSelected) {
         
         super(f, "Setting property attributes", true);
        
 		name = _name;
         livenessSelected = _livenessSelected;
+		notSelected = _notSelected;
 
         initComponents();
         myInitComponents();
@@ -101,7 +102,7 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
            
         panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
     
-        panel1.setPreferredSize(new Dimension(200, 100));
+        panel1.setPreferredSize(new Dimension(200, 150));
         
         // first line panel1
         c1.weighty = 1.0;
@@ -118,18 +119,30 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
         panel1.add(myName, c1);
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        reachability = new JRadioButton("Reachability");
-		reachability.setSelected(!livenessSelected);
+        reachability = new JRadioButton("Reachable");
+		reachability.setSelected(!livenessSelected && !notSelected);
         panel1.add(reachability, c1);
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        notReachability = new JRadioButton("Not reachable");
+		notReachability.setSelected(!livenessSelected && notSelected);
+        panel1.add(notReachability, c1);
+		
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         liveness = new JRadioButton("Liveness");
-		liveness.setSelected(livenessSelected);
+		liveness.setSelected(livenessSelected && !notSelected);
         panel1.add(liveness, c1);
+		
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        notLiveness = new JRadioButton("Not Liveness");
+		notLiveness.setSelected(livenessSelected && notSelected);
+        panel1.add(notLiveness, c1);
 		
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(reachability);
 		bg.add(liveness);
+		bg.add(notReachability);
+		bg.add(notLiveness);
         
         // main panel;
         c0.gridwidth = 1;
@@ -172,9 +185,21 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     public void closeDialog() {
         dispose();
     }
+	
+	public boolean isReachabilitySelected() {
+        return reachability.isSelected();
+    }
+	
+	public boolean isNotReachabilitySelected() {
+        return notReachability.isSelected();
+    }
     
     public boolean isLivenessSelected() {
         return liveness.isSelected();
+    }
+	
+	public boolean isNotLivenessSelected() {
+        return notLiveness.isSelected();
     }
 	
 	public String getName() {
