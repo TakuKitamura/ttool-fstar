@@ -509,6 +509,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_OPEN_LAST].setEnabled(true);
 			actions[TGUIAction.ACT_QUIT].setEnabled(true);
 			actions[TGUIAction.ACT_ABOUT].setEnabled(true);
+			actions[TGUIAction.ACT_TTOOL_CONFIGURATION].setEnabled(true);
 			actions[TGUIAction.ACT_TURTLE_WEBSITE].setEnabled(true);
 			actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].setEnabled(true);
 			actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION].setEnabled(true);
@@ -2396,6 +2397,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			"About Ttool",
 			JOptionPane.INFORMATION_MESSAGE);*/
         JFrameBasicText jft = new JFrameBasicText("About TTool ...", DefaultText.getAboutText(), IconManager.imgic324);
+        jft.setIconImage(IconManager.img8);
+        jft.setSize(700, 800);
+        GraphicLib.centerOnParent(jft);
+        jft.setVisible(true);
+        
+    }
+	
+	public void showTToolConfiguration() {
+		/*JOptionPane.showMessageDialog(frame,
+			"TTool version 0.2 - Ludovic Apvrille",
+			"About Ttool",
+			JOptionPane.INFORMATION_MESSAGE);*/
+        JFrameBasicText jft = new JFrameBasicText("Your configuration of TTool ...", ConfigurationTTool.getConfiguration(systemcOn), IconManager.imgic76);
         jft.setIconImage(IconManager.img8);
         jft.setSize(700, 800);
         GraphicLib.centerOnParent(jft);
@@ -5788,6 +5802,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             lastDiag();
         } else if (command.equals(actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             aboutVersion();
+        } else if (command.equals(actions[TGUIAction.ACT_TTOOL_CONFIGURATION].getActionCommand())) {
+            showTToolConfiguration();
         } else if (command.equals(actions[TGUIAction.ACT_TURTLE_WEBSITE].getActionCommand())) {
             aboutTURTLE();
         } else if (command.equals(actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].getActionCommand())) {

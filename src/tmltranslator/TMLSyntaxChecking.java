@@ -317,9 +317,13 @@ public class TMLSyntaxChecking {
 					
 				} else if (elt instanceof TMLForLoop) {
 					loop = (TMLForLoop)elt;
-					parsing(t, elt, "assnat", loop.getInit());
+					if (loop.getInit().trim().length() > 0) {
+						parsing(t, elt, "assnat", loop.getInit());
+					}
 					parsing(t, elt, "actionbool", loop.getCondition());
-					parsing(t, elt, "assnat", loop.getIncrement());
+					if (loop.getIncrement().trim().length() > 0) {
+						parsing(t, elt, "assnat", loop.getIncrement());
+					}
 					
 				} else if (elt instanceof TMLRandom) {
 					random = (TMLRandom)elt;

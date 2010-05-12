@@ -157,7 +157,7 @@ public class ConfigurationTTool {
         
         index0 = data.indexOf("LastOpenFile");
         
-        //System.out.println("data = " + data + " ConfigurationTTool.LastOpenFile=" + ConfigurationTTool.LastOpenFile);
+        //sb.append("data = " + data + " ConfigurationTTool.LastOpenFile=" + ConfigurationTTool.LastOpenFile);
         
         if (index0 > -1) {
             index1 = data.indexOf('"', index0);
@@ -166,7 +166,7 @@ public class ConfigurationTTool {
                 if (index2 > -1) {
 					tmp = data.substring(index2, data.length());
 					data = data.substring(0, index1+1) + ConfigurationTTool.LastOpenFile+ tmp;	
-					//System.out.println("data = " + data);
+					//sb.append("data = " + data);
 					write = true;
 					/*try {
 						FileOutputStream fos = new FileOutputStream(f);
@@ -208,7 +208,7 @@ public class ConfigurationTTool {
 		}
 		
 		if (write) {
-			//System.out.println("Writing data=" + data); 
+			//sb.append("Writing data=" + data); 
 			try {
 				FileOutputStream fos = new FileOutputStream(f);
 				fos.write(data.getBytes());
@@ -217,7 +217,7 @@ public class ConfigurationTTool {
 				throw new  MalformedConfigurationException("Saving file failed");
 			}
 		} else {
-			System.out.println("Configuration could not be saved");
+			TraceManager.addError("Configuration could not be saved");
 		}
 		
     }
@@ -241,76 +241,97 @@ public class ConfigurationTTool {
 		
 		return true;
 	}
+	
+	public static void printConfiguration(boolean systemcOn) {
+		System.out.println(getConfiguration(systemcOn));
+	}
     
-    public static void printConfiguration(boolean systemcOn) {
-        System.out.println("RTLHost: " + RTLHost);
-        System.out.println("RTLPath: " + RTLPath);
-        System.out.println("DTA2DOTPath: " + DTA2DOTPath);
-        System.out.println("RG2TLSAPath: " + RG2TLSAPath);
-        System.out.println("RGSTRAPPath: " + RGSTRAPPath);
-        System.out.println("AldebaranHost: " + AldebaranHost);
-        System.out.println("AldebaranPath: " + AldebaranPath);
-        System.out.println("BcgioPath: " + BcgioPath);
-        System.out.println("BcgminPath: " + BcgminPath);
-		System.out.println("BisimulatorPath: " + BisimulatorPath);
-        System.out.println("BcgmergePath: " + BcgmergePath);
-        System.out.println("CaesarPath: " + CaesarPath);
-        System.out.println("CaesarOpenPath: " + CaesarOpenPath);
-        System.out.println("DOTTYHost: " + DOTTYHost);
-        System.out.println("DOTTYPath: " + DOTTYPath);
-        System.out.println("FILEPath: " + FILEPath);
-        System.out.println("LOTOSPath: " + LOTOSPath);
-        System.out.println("LIBPath: " + LIBPath);
-        System.out.println("IMGPath: " + IMGPath);
-        System.out.println("GGraphPath: " + GGraphPath);
-        System.out.println("TGraphPath: " + TGraphPath);
-        System.out.println("TToolUpdateURL: " + TToolUpdateURL);
-        System.out.println("TToolUpdateProxy: " + TToolUpdateProxy);
-        System.out.println("TToolUpdateProxyPort: " + TToolUpdateProxyPort);
-        System.out.println("TToolUpdateProxyHost: " + TToolUpdateProxyHost);
-        System.out.println("JavaCodeDirectory: " + JavaCodeDirectory);
-		System.out.println("JavaHeader: " + JavaHeader);
-        System.out.println("JavaCompilerPath: " + JavaCompilerPath);
-        System.out.println("TToolClassPath: " + TToolClassPath);
-        System.out.println("JavaExecutePath: " + JavaExecutePath);
-        System.out.println("SimuJavaCodeDirectory: " + SimuJavaCodeDirectory);
-        System.out.println("TToolSimuClassPath: " + TToolSimuClassPath);
+    public static String getConfiguration(boolean systemcOn) {
+		StringBuffer sb = new StringBuffer("");
+		// Formal verification
+		sb.append("RTL:\n");
+        sb.append("RTLHost: " + RTLHost + "\n");
+        sb.append("RTLPath: " + RTLPath + "\n");
+        sb.append("DTA2DOTPath: " + DTA2DOTPath + "\n");
+        sb.append("RG2TLSAPath: " + RG2TLSAPath + "\n");
+        sb.append("RGSTRAPPath: " + RGSTRAPPath + "\n");
+		sb.append("\nCADP:\n");
+        sb.append("AldebaranHost: " + AldebaranHost + "\n");
+        sb.append("AldebaranPath: " + AldebaranPath + "\n");
+        sb.append("BcgioPath: " + BcgioPath + "\n" );
+        sb.append("BcgminPath: " + BcgminPath + "\n" );
+		sb.append("BisimulatorPath: " + BisimulatorPath + "\n" );
+        sb.append("BcgmergePath: " + BcgmergePath + "\n");
+        sb.append("CaesarPath: " + CaesarPath + "\n");
+        sb.append("CaesarOpenPath: " + CaesarOpenPath + "\n");
+		sb.append("\nDotty:\n");
+        sb.append("DOTTYHost: " + DOTTYHost + "\n");
+        sb.append("DOTTYPath: " + DOTTYPath + "\n");
+		// UPPAAL
+		sb.append("\nUPPAAL:\n");
+        sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
+		sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
+		sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+		
+		sb.append("\nYour files (modeling, librairies, etc.):\n");
+        sb.append("FILEPath: " + FILEPath + "\n");
+        sb.append("LOTOSPath: " + LOTOSPath + "\n");
+        sb.append("LIBPath: " + LIBPath + "\n");
+        sb.append("IMGPath: " + IMGPath + "\n");
+        sb.append("GGraphPath: " + GGraphPath + "\n");
+        sb.append("TGraphPath: " + TGraphPath + "\n");
+		sb.append("\nTTool update:\n");
+        sb.append("TToolUpdateURL: " + TToolUpdateURL + "\n");
+        sb.append("TToolUpdateProxy: " + TToolUpdateProxy + "\n");
+        sb.append("TToolUpdateProxyPort: " + TToolUpdateProxyPort + "\n");
+        sb.append("TToolUpdateProxyHost: " + TToolUpdateProxyHost + "\n");
+		sb.append("\nJava prototyping:\n");
+        sb.append("JavaCodeDirectory: " + JavaCodeDirectory + "\n");
+		sb.append("JavaHeader: " + JavaHeader + "\n");
+        sb.append("JavaCompilerPath: " + JavaCompilerPath + "\n");
+        sb.append("TToolClassPath: " + TToolClassPath + "\n");
+        sb.append("JavaExecutePath: " + JavaExecutePath + "\n");
+        sb.append("SimuJavaCodeDirectory: " + SimuJavaCodeDirectory + "\n");
+        sb.append("TToolSimuClassPath: " + TToolSimuClassPath + "\n");
         
+		sb.append("\nDIPLODOCUS:\n");
         if (systemcOn) {
-            System.out.println("SystemCCodeDirectory: " + SystemCCodeDirectory);
-            System.out.println("SystemCHost: " + SystemCHost);
-            System.out.println("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand);
-            System.out.println("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand);
-			System.out.println("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand);
-            System.out.println("GTKWavePath: " + GTKWavePath);
+            sb.append("SystemCCodeDirectory: " + SystemCCodeDirectory + "\n");
+            sb.append("SystemCHost: " + SystemCHost + "\n");
+            sb.append("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand + "\n");
+            sb.append("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand + "\n");
+			sb.append("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand + "\n");
+            sb.append("GTKWavePath: " + GTKWavePath + "\n");
         }
 		
 		// TML
-		System.out.println("TMLCodeDirectory" + TMLCodeDirectory);
+		
+		sb.append("TMLCodeDirectory" + TMLCodeDirectory + "\n");
 		
 		// VCD
-		System.out.println("VCDPath: " + VCDPath);
+		sb.append("VCDPath: " + VCDPath + "\n");
 		
 		// NC
-		System.out.println("NCDirectory: " + NCDirectory);
+		sb.append("\nNetwork calculus:\n");
+		sb.append("NCDirectory: " + NCDirectory + "\n");
 		
-		// UPPAAL
-        System.out.println("UPPAAL: " + UPPAALCodeDirectory);
-		System.out.println("UPPAALVerifierPATH: " + UPPAALVerifierPath);
-		System.out.println("UPPAALVerifierHOST: " + UPPAALVerifierHost);
-		System.out.println("ExternalCommand1Host: " + ExternalCommand1Host);
-		System.out.println("ExternalCommand1: " + ExternalCommand1);
-		System.out.println("ExternalCommand2Host: " + ExternalCommand2Host);
-		System.out.println("ExternalCommand2: " + ExternalCommand2);
 		
-        
-        System.out.println("LastOpenFile: " + LastOpenFile);
 		
-		System.out.println("LastWindowAttributesX: " + LastWindowAttributesX);
-		System.out.println("LastWindowAttributesY: " + LastWindowAttributesY);
-		System.out.println("LastWindowAttributesWidth: " + LastWindowAttributesWidth);
-		System.out.println("LastWindowAttributesHeight: " + LastWindowAttributesHeight);
-		System.out.println("LastWindowAttributesMax: " + LastWindowAttributesMax);
+		sb.append("\nCustom external commands:\n");
+		sb.append("ExternalCommand1Host: " + ExternalCommand1Host + "\n");
+		sb.append("ExternalCommand1: " + ExternalCommand1 + "\n");
+		sb.append("ExternalCommand2Host: " + ExternalCommand2Host + "\n");
+		sb.append("ExternalCommand2: " + ExternalCommand2 + "\n");
+		
+        sb.append("\nInformation saved by TTool:\n");
+        sb.append("LastOpenFile: " + LastOpenFile + "\n");
+		sb.append("LastWindowAttributesX: " + LastWindowAttributesX + "\n");
+		sb.append("LastWindowAttributesY: " + LastWindowAttributesY + "\n");
+		sb.append("LastWindowAttributesWidth: " + LastWindowAttributesWidth + "\n");
+		sb.append("LastWindowAttributesHeight: " + LastWindowAttributesHeight + "\n");
+		sb.append("LastWindowAttributesMax: " + LastWindowAttributesMax + "\n");
+		
+		return sb.toString();
         
     }
     

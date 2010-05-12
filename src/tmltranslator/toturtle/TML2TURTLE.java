@@ -519,17 +519,25 @@ public class TML2TURTLE {
                 action = modifyString(tmlforloop.getInit());
                 //System.out.println("FOR action = " + action);
                 parameter = null;
-                if ((parameter = paramAnalyzer(action, tclass)) != null) {
+                if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
                     //System.out.println("parameter1 ok");
-                    adacparam1 = new ADActionStateWithParam(parameter);
-                    adacparam1.setActionValue(getActionValueParam(action, tclass));
+					if (action.length() != 0) {
+						adacparam1 = new ADActionStateWithParam(parameter);
+						adacparam1.setActionValue(getActionValueParam(action, tclass));
+					} else {
+						adacparam1 = null;
+					}
                     
                     action = modifyString(tmlforloop.getIncrement());
                     parameter = null;
-                    if ((parameter = paramAnalyzer(action, tclass)) != null) {
+                    if ((action.length() == 0) || ((parameter = paramAnalyzer(action, tclass)) != null)) {
                         //System.out.println("New loop");
-                        adacparam2 = new ADActionStateWithParam(parameter);
-                        adacparam2.setActionValue(getActionValueParam(action, tclass));
+						if (action.length() != 0) {
+							adacparam2 = new ADActionStateWithParam(parameter);
+							adacparam2.setActionValue(getActionValueParam(action, tclass));
+						} else {
+							adacparam2 = null;
+						}
                         
                         adchoice = new ADChoice();
                         adj1 = new ADJunction();
@@ -538,35 +546,59 @@ public class TML2TURTLE {
                         newElements.add(adacparam1);
                         baseElements.add(tmle);
                         
-                        tclass.getActivityDiagram().add(adacparam1);
-                        tclass.getActivityDiagram().add(adacparam2);
+						if (adacparam1 != null) {
+							tclass.getActivityDiagram().add(adacparam1);
+							newElements.add(adacparam1);
+						} else {
+							newElements.add(adj1);
+						}
+						if (adacparam2 != null) {
+							tclass.getActivityDiagram().add(adacparam2);
+						}
                         tclass.getActivityDiagram().add(adchoice);
                         tclass.getActivityDiagram().add(adj1);
                         tclass.getActivityDiagram().add(adj2);
                         
-                        
-                        adacparam1.addNext(adj1);
+                        if (adacparam1 != null) {
+							adacparam1.addNext(adj1);
+						}
                         adj1.addNext(adchoice);
-                        adacparam2.addNext(adj1);
-                        adj2.addNext(adacparam2);
+						if (adacparam2 != null) {
+							adacparam2.addNext(adj1);
+							adj2.addNext(adacparam2);
+						} else {
+							adj2.addNext(adj1);
+						}
                         
                         adchoice.addGuard("[" + modifyString(tmlforloop.getCondition()) + "]");
-                        adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adj2);
+						if (adacparam1 != null) {
+							adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adj2);
+						} else {
+							adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adj1, adj2);
+						}
                         adchoice.addNext(adc1);
                         
                         action = (modifyString(tmlforloop.getCondition()));
                         action = Conversion.replaceAllChar(action, '[', "(");
                         action = Conversion.replaceAllChar(action, ']', ")");
                         adchoice.addGuard("[not(" + action + ")]");
-                        adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adacparam1, adjunc);
+						if (adacparam1 != null) {
+							adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adacparam1, adjunc);
+						} else {
+							adc2 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(1), adj1, adjunc);
+						}
                         adchoice.addNext(adc2);
                         
-                        return adacparam1;
+						if (adacparam1 != null) {
+							return adacparam1;
+						} else {
+							return adj1;
+						}
                     }
                 }
                 // Error! -> bad parameter
                 //return  translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), previous, adjunc);
-                CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in " + action);
+                CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in For operator:" + action);
                 error.setTClass(tclass);
                 checkingErrors.add(error);
                 

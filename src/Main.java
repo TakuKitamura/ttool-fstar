@@ -195,9 +195,9 @@ public class Main implements ActionListener {
         } catch (Exception e) {
             System.out.println("Couldn't load configuration properly : " + e.toString());
         }
-        System.out.println("\nConfiguration:\n--------------");
-        ConfigurationTTool.printConfiguration(systemc);
-        System.out.println("\nDebugging trace:\n----------------");
+        TraceManager.addDev("\nConfiguration:\n--------------");
+        TraceManager.addDev(ConfigurationTTool.getConfiguration(systemc));
+        TraceManager.addDev("\nDebugging trace:\n----------------");
         
         
         // making main window

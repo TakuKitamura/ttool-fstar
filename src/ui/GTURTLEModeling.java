@@ -219,14 +219,14 @@ public class GTURTLEModeling {
 	
 	public String saveTIF() {
 		if (tm == null) {
-			System.out.println("NO TIF to save");
+			TraceManager.addDev("NO TIF to save");
 			return null;
 		}
 		
 		TIFExchange tif = new TIFExchange();
 		tif.setTURTLEModeling(tm);
 		String ret = tif.saveInXMLTIF();
-		System.out.println("TIF=\n" +  ret);
+		TraceManager.addDev("TIF=\n" +  ret);
 		return ret;
 	}
 	
@@ -239,11 +239,11 @@ public class GTURTLEModeling {
 			if (ret) {
 				tm = tif.getTURTLEModeling();
 				tmState = 0;
-				System.out.println("Got TIF");
+				TraceManager.addDev("Got TIF");
 				generateDesign();
 			}
 		} catch (Exception e) {
-			System.out.println("Exception on TIF: " + e.getMessage());
+			TraceManager.addDev("Exception on TIF: " + e.getMessage());
 		}
 		return ret;
 	}
@@ -257,11 +257,11 @@ public class GTURTLEModeling {
 			if (ret) {
 				//tm = tif.getTURTLEModeling();
 				//tmState = 0;
-				System.out.println("Got SD");
+				TraceManager.addDev("Got SD");
 				generateIOD(sde.getHMSC(), sde.getMSC());
 			}
 		} catch (Exception e) {
-			System.out.println("Exception on SD: " + e.getMessage());
+			TraceManager.addDev("Exception on SD: " + e.getMessage());
 		}
 		return ret;
 	}
@@ -294,7 +294,7 @@ public class GTURTLEModeling {
         reinitRG();
         reinitRGAUT();
         reinitRGAUTPROJDOT();
-		//System.out.println("generate LOTOS");
+		//TraceManager.addDev("generate LOTOS");
         generateLOTOS(f);
 	}
 
@@ -320,13 +320,13 @@ public class GTURTLEModeling {
 
 		nbTPN ++;
 		if (f != null) {
-			System.out.println("Saving in file: " + f);
+			TraceManager.addDev("Saving in file: " + f);
 			saveInFile(f, tpn);
 		}
 		languageID = TPN;
 
 		// For debug purpose
-		//System.out.println(tpn);
+		//TraceManager.addDev(tpn);
 
 		mgui.setMode(MainGUI.RTLOTOS_OK);
 	}
@@ -348,7 +348,7 @@ public class GTURTLEModeling {
 			try {
 				spec.saveFile(ConfigurationTTool.TMLCodeDirectory, "spec.tml");
 			} catch (Exception e) {
-				System.out.println("File could not be saved: " + e.getMessage());
+				TraceManager.addError("File could not be saved: " + e.getMessage());
 			}
 		} else {
 			TMLMappingTextSpecification spec = new TMLMappingTextSpecification(_title);
@@ -356,7 +356,7 @@ public class GTURTLEModeling {
 			try {
 				spec.saveFile(ConfigurationTTool.TMLCodeDirectory, "spec");
 			} catch (Exception e) {
-				System.out.println("Files could not be saved: " + e.getMessage());
+				TraceManager.addError("Files could not be saved: " + e.getMessage());
 			}
 		}
 	}
@@ -371,21 +371,21 @@ public class GTURTLEModeling {
 		turtle2uppaal.setChoiceDeterministic(choices);
 		turtle2uppaal.setVariablesAsActions(variables);
 		uppaal = turtle2uppaal.generateUPPAAL(debug, nb);
-		System.out.println("Building relation table");
+		TraceManager.addDev("Building relation table");
 		uppaalTIFTable = turtle2uppaal.getRelationTIFUPPAAL();
-		System.out.println("Building relation table done");
+		TraceManager.addDev("Building relation table done");
 		uppaalTMLTable = null;
 		
 		languageID = UPPAAL;
 		mgui.setMode(MainGUI.UPPAAL_OK);
 		
 		try {
-			System.out.println("Saving specification in " + path + "\n");
+			TraceManager.addDev("Saving specification in " + path + "\n");
 			turtle2uppaal.saveInFile(path);
-			System.out.println("UPPAAL specification has been generated in " + path + "\n");
+			TraceManager.addDev("UPPAAL specification has been generated in " + path + "\n");
 			return true;
 		} catch (FileException fe) {
-			System.out.println("Exception: " + fe.getMessage());
+			TraceManager.addError("Exception: " + fe.getMessage());
 			return false;
 		}
 	}
@@ -404,13 +404,13 @@ public class GTURTLEModeling {
 			tml2uppaal.saveInFile(_path);
 			return true;
 		} catch (FileException fe) {
-			System.out.println("Exception: " + fe.getMessage());
+			TraceManager.addError("Exception: " + fe.getMessage());
 			return false;
 		}
 	}
 	
 	public ArrayList<String> getUPPAALQueries() {
-		//System.out.println("Searching for queries");
+		//TraceManager.addDev("Searching for queries");
 		TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
 		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
 		ArrayList<TClass> tclasses;
@@ -421,7 +421,7 @@ public class GTURTLEModeling {
 		if (uppaalTIFTable != null) {
 			ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
 			
-			//System.out.println("List size:" + listAD.size());
+			//TraceManager.addDev("List size:" + listAD.size());
 			
 			if (listAD == null) {
 				return null;
@@ -432,17 +432,17 @@ public class GTURTLEModeling {
 			for(ADComponent adc:listAD) {
 				if (adc != null) {
 					t = tm.findTClass(adc);
-					//System.out.println("Found class:" + t.getName());
+					//TraceManager.addDev("Found class:" + t.getName());
 					if (t!= null) {
 						tclasses = new ArrayList<TClass>();
 						tclasses.add(t);
 						// For handling tobjects
 						tm.addAllTClassesEndingWith(tclasses, "_" + t.getName());
 						for(TClass tc: tclasses) {
-							//System.out.println("Analyzing class:" + tc.getName());
+							//TraceManager.addDev("Analyzing class:" + tc.getName());
 							s = uppaalTIFTable.getRQuery(tc, adc);
 							if (s != null) {
-								//System.out.println("Adding query:" + s);
+								//TraceManager.addDev("Adding query:" + s);
 								listQ.add(s + "$" + adc);
 							}
 						}
@@ -450,7 +450,7 @@ public class GTURTLEModeling {
 				}
 			}
 		} else if (uppaalTMLTable != null) {
-			//System.out.println("uppaalTMLTable");
+			//TraceManager.addDev("uppaalTMLTable");
 			ArrayList<TMLActivityElement> listAE = listE.getTMLActivityElementCorrespondance(list);
 			
 			if (listAE == null) {
@@ -465,7 +465,7 @@ public class GTURTLEModeling {
 					if (task!= null) {
 						s = uppaalTMLTable.getRQuery(task, elt);
 						if (s != null) {
-							//System.out.println("Adding query:" + s);
+							//TraceManager.addDev("Adding query:" + s);
 							listQ.add(s + "$" + elt);
 						}
 					}
@@ -492,17 +492,17 @@ public class GTURTLEModeling {
 		String path = ConfigurationTTool.SystemCCodeDirectory;
 		String list = FileUtils.deleteFiles(path, ".cpp");
 		if (list.length() == 0) {
-			System.out.println("No cpp files were deleted\n");
+			TraceManager.addDev("No cpp files were deleted\n");
 		} else {
-			System.out.println("Files deleted:\n" + list + "\n");
+			TraceManager.addDev("Files deleted:\n" + list + "\n");
 		}
 
 		list = FileUtils.deleteFiles(path, ".x");
 
 		if (list.length() == 0) {
-			System.out.println("No x files were deleted\n");
+			TraceManager.addDev("No x files were deleted\n");
 		} else {
-			System.out.println("Files deleted:\n" + list + "\n");
+			TraceManager.addDev("Files deleted:\n" + list + "\n");
 		}
 
 		TML2SystemC tml2systc = new TML2SystemC(tmlm);
@@ -511,7 +511,7 @@ public class GTURTLEModeling {
 		try {
 			tml2systc.saveFile(path, "appmodel");
 		} catch (FileException fe) {
-			System.out.println("File could not be saved");
+			TraceManager.addError("File could not be saved (SystemC)");
 		}
 
 	}
@@ -585,20 +585,20 @@ public class GTURTLEModeling {
 	
 	public void modifyMinimizedGraph() {
 		/*AUTMappingGraph graph = new AUTMappingGraph();
-		System.out.println("Building graph");
+		TraceManager.addDev("Building graph");
 		graph.buildGraph(rgautproj);
-		System.out.println("Renaming transitions");
+		TraceManager.addDev("Renaming transitions");
 		graph.renameTransitions();
-		System.out.println("Merging transitions 23/4=" + (23/4) + "23%4="  + (23%4));
+		TraceManager.addDev("Merging transitions 23/4=" + (23/4) + "23%4="  + (23%4));
 		graph.mergeWriteTransitions();
 		graph.mergeReadTransitions();
 		graph.removeInternalTransitions();
-		System.out.println("Printing graph:\n" + graph.toAUTStringFormat());
-		System.out.println("Splitting transitions");
+		TraceManager.addDev("Printing graph:\n" + graph.toAUTStringFormat());
+		TraceManager.addDev("Splitting transitions");
 		graph.splitTransitions();
 		modifiedaut = graph.toAUTStringFormat();
-		System.out.println("Printing graph:\n" + modifiedaut);
-		System.out.println("Translation in DOT format");
+		TraceManager.addDev("Printing graph:\n" + modifiedaut);
+		TraceManager.addDev("Translation in DOT format");
 		
 		// AUT  2 dot
 		String fileName = "graph";
@@ -612,9 +612,9 @@ public class GTURTLEModeling {
 			data = processCmd(rshc, cmd1);
 			data = rshc.getFileData(fileName + ".dot");
 			modifiedautdot = data;
-			System.out.println("All done");
+			TraceManager.addDev("All done");
 		} catch (LauncherException le) {
-			System.out.println("Error: conversion failed");
+			TraceManager.addDev("Error: conversion failed");
 		}*/
 	}
 	
@@ -703,8 +703,8 @@ public class GTURTLEModeling {
 
 
 	public void saveInFile(File file, String s) {
-		System.out.println("Saving in file " + file.getAbsolutePath() + " size of file=" + s.length());
-		//System.out.println("Length of s=" + s.length());
+		TraceManager.addDev("Saving in file " + file.getAbsolutePath() + " size of file=" + s.length());
+		//TraceManager.addDev("Length of s=" + s.length());
 
 		int index1 = 0, index2;
 		int step = 1048576;
@@ -721,7 +721,7 @@ public class GTURTLEModeling {
 			fos.close();
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
-			System.out.println("Specification could not be saved " + e.getMessage());
+			TraceManager.addError("Specification could not be saved " + e.getMessage());
 		}
 
 		/*try {
@@ -730,7 +730,7 @@ public class GTURTLEModeling {
             fos.close();
         } catch(Exception e) {
             JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("Specification could not be saved " + e.getMessage());
+            TraceManager.addDev("Specification could not be saved " + e.getMessage());
         }*/
 	}
 
@@ -1031,26 +1031,26 @@ public class GTURTLEModeling {
 
 		int cpt = 0;
 
-		//System.out.println("input data=" + inputData);
+		//TraceManager.addDev("input data=" + inputData);
 
 		// Fill Hashtable
 		TClassAndGateDS tag;
 		int j;
 		for(int i=0; i<gates.size(); i++) {
 			tag = (TClassAndGateDS)(gates.get(i));
-			//System.out.println("TClass:" + tag.getTClassName() + " Gate:" + tag.getGateName());
+			//TraceManager.addDev("TClass:" + tag.getTClassName() + " Gate:" + tag.getGateName());
 			//actionName = tag.getGateName();
 			//g = mgm.getGate(tag.getTClassName(), actionName);
-			//System.out.println("actionName = " + actionName + " gateName = " + g.getName()); 
+			//TraceManager.addDev("actionName = " + actionName + " gateName = " + g.getName()); 
 			//if (g != null) {
 				//gog = mgm.getGroupOfGatesByGate(g);
 				gog = mgm.groupOf(tag.getTClassName(), tag.getGateName());
 				if (gog != null) {
-					//System.out.println("Found a gog: >" + gog.getMasterGateName() + "<");
+					//TraceManager.addDev("Found a gog: >" + gog.getMasterGateName() + "<");
 					hashtable.put(gog.getMasterGateName().getName(), gog);
 					/*for(j=0;j<gog.size();j++) {
 						g = gog.getGateAt(j);
-						System.out.println("Putting: " + g.getName());
+						TraceManager.addDev("Putting: " + g.getName());
 						hashtable.put(g.getName(), g);
 					}*/
 				}
@@ -1060,7 +1060,7 @@ public class GTURTLEModeling {
 		try {
 			while((s = br.readLine()) != null) {
 				/*if (cpt % 10000 == 0) {
-                 System.out.println("cpt=" + cpt);
+                 TraceManager.addDev("cpt=" + cpt);
               }*/
               cpt ++;
 
@@ -1093,35 +1093,35 @@ public class GTURTLEModeling {
             			  } else {
             				  actionName1 = actionName.substring(0, index);
             			  }
-            			  System.out.println("Action = >" + actionName1 + "<");
+            			  TraceManager.addDev("Action = >" + actionName1 + "<");
 
 						  gog = hashtable.get(actionName1);
             			  if (gog == null) {
-							  System.out.println("Not in hash");
+							  TraceManager.addDev("Not in hash");
             				  result.append(makeIAction(s) + "\n");
             			  } else {
-							  System.out.println("In hash");
+							  TraceManager.addDev("In hash");
             				  result.append(makeAction(s, actionName) + "\n");
             			  }
 
             			  // action to ignored or to project ?
             			  /*g = mgm.getGate(actionName1);
                             if (g == null) {
-                                //System.out.println("null1");
+                                //TraceManager.addDev("null1");
                                 result.append(makeIAction(s) + "\n");
                             } else {
                                 gog = mgm.getGroupOfGatesByGate(g);
                                 if (gog == null) {
-                                    //System.out.println("null2");
+                                    //TraceManager.addDev("null2");
                                     result.append(makeIAction(s) + "\n");
                                 } else {
                                     if (!belongTo(gog, gates)) {
                                         // Check if directly a master Gate!
                                         // A completer ...
-                                        //System.out.println("null3");
+                                        //TraceManager.addDev("null3");
                                         result.append(makeIAction(s) + "\n");
                                     } else {
-                                        //System.out.println("action added: " + actionName);
+                                        //TraceManager.addDev("action added: " + actionName);
                                         result.append(makeAction(s, actionName) + "\n");
                                     }
                                 }
@@ -1132,7 +1132,7 @@ public class GTURTLEModeling {
               }
 			}
 		} catch (Exception e) {
-			System.out.println("Exception during projection" + e.getMessage());
+			TraceManager.addError("Exception during projection" + e.getMessage());
 			return null;
 		}
 		return new String(result);
@@ -1154,7 +1154,7 @@ public class GTURTLEModeling {
 		Hashtable ht = mgm.getGatesUpperCaseHashTable();
 		warnings = new Vector();
 
-		//System.out.println("input data=" + inputData);
+		//TraceManager.addDev("input data=" + inputData);
 
 		int cpt1 = 0;
 
@@ -1162,7 +1162,7 @@ public class GTURTLEModeling {
 			while((s = br.readLine()) != null) {
 				cpt1 ++;
 				//if (cpt1 % 100000 == 0) {
-				//System.out.println("=" + cpt1 + " / " + transi);
+				//TraceManager.addDev("=" + cpt1 + " / " + transi);
 				//}
 				if (s.charAt(0) == '(') {
 					index1 = s.indexOf(",");
@@ -1170,7 +1170,7 @@ public class GTURTLEModeling {
 						g1 = s.substring(0, index1 + 1);
 						s = s.substring(index1+1, s.length());
 
-						//System.out.println("g1=" + g1 + " s=" + s);
+						//TraceManager.addDev("g1=" + g1 + " s=" + s);
 
 						index2 = s.indexOf(",");
 						if ((index2 > -1) && ((index2+1) < s.length())) {
@@ -1178,7 +1178,7 @@ public class GTURTLEModeling {
 							s = s.substring(0, index2);
 							s = s.trim();
 
-							//System.out.println("g2=" + g2 + " s=" + s);
+							//TraceManager.addDev("g2=" + g2 + " s=" + s);
 
 							// Get action id
 							// Most common case: no data
@@ -1216,13 +1216,13 @@ public class GTURTLEModeling {
 							if (g != null) {
 								//actionName1 = actionName;
 								actionName = g.getName();
-								//System.out.println("actionName = " + g.getName());
+								//TraceManager.addDev("actionName = " + g.getName());
 								/*if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
                                     CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
                                     warnings.add(ce);
                                 }*/
 							} else {
-								System.out.println("actionName is not in hashtable: ->" + actionName + "<- length=" + actionName.length());
+								TraceManager.addDev("actionName is not in hashtable: ->" + actionName + "<- length=" + actionName.length());
 							}
 
 							// Store result
@@ -1234,7 +1234,7 @@ public class GTURTLEModeling {
 					s1 = s.substring(index1+1, s.length());
 					index1 = s1.indexOf(",");
 					s1 = s1.substring(0, index1).trim();
-					//System.out.println("nb of transitions=" + s);
+					//TraceManager.addDev("nb of transitions=" + s);
 					transi = Integer.decode(s1).intValue();
 					if (transi > max) {
 						return null;
@@ -1243,7 +1243,7 @@ public class GTURTLEModeling {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Exception convert0" + e.getMessage());
+			TraceManager.addError("Exception convert0" + e.getMessage());
 			return null;
 		}
 		return new String(result);
@@ -1262,7 +1262,7 @@ public class GTURTLEModeling {
         MasterGateManager mgm = new MasterGateManager(tm);
         warnings = new Vector();
 
-        //System.out.println("input data=" + inputData);
+        //TraceManager.addDev("input data=" + inputData);
 
         int cpt1 = 0;
 
@@ -1270,7 +1270,7 @@ public class GTURTLEModeling {
             while((s = br.readLine()) != null) {
               cpt1 ++;
               if (cpt1 % 100000 == 0) {
-                System.out.println("=" + cpt1 + " / " + transi);
+                TraceManager.addDev("=" + cpt1 + " / " + transi);
               }
                 if (s.charAt(0) == '(') {
                     index1 = s.indexOf(",");
@@ -1278,7 +1278,7 @@ public class GTURTLEModeling {
                         g1 = s.substring(0, index1 + 1);
                         s = s.substring(index1+1, s.length());
 
-                        //System.out.println("g1=" + g1 + " s=" + s);
+                        //TraceManager.addDev("g1=" + g1 + " s=" + s);
 
                         index2 = s.indexOf(",");
                         if ((index2 > -1) && ((index2+1) < s.length())) {
@@ -1286,7 +1286,7 @@ public class GTURTLEModeling {
                             s = s.substring(0, index2);
                             s = s.trim();
 
-                            //System.out.println("g2=" + g2 + " s=" + s);
+                            //TraceManager.addDev("g2=" + g2 + " s=" + s);
 
                             // Get action id
                             // Most common case: no data
@@ -1338,7 +1338,7 @@ public class GTURTLEModeling {
                   s = s.substring(index1+1, s.length());
                   index1 = s.indexOf(",");
                   s = s.substring(0, index1).trim();
-                  //System.out.println("nb of transitions=" + s);
+                  //TraceManager.addDev("nb of transitions=" + s);
                   transi = Integer.decode(s).intValue();
                   if (transi > max) {
                     return null;
@@ -1347,7 +1347,7 @@ public class GTURTLEModeling {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Exception09545 " + e.getMessage());
+            TraceManager.addError("Exception09545 " + e.getMessage());
             return null;
         }
         return new String(result);
@@ -1363,7 +1363,7 @@ public class GTURTLEModeling {
 			for(j=0; j<gates.size(); j++) {
 				tcg = (TClassAndGateDS)(gates.elementAt(j));
 				if ((tcg.getTClassName().compareTo(nameTClass) == 0) && (tcg.getGateName().compareTo(nameGate) == 0)) {
-					//System.out.println("Projected gate");
+					//TraceManager.addDev("Projected gate");
 					return true;
 				}
 			}
@@ -1440,7 +1440,7 @@ public class GTURTLEModeling {
 			pointerOperation --;
 			loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
 		} catch (Exception e) {
-			System.out.println("****** Exception ******");
+			TraceManager.addError("Exception in backward: " + e.getMessage());
 		}
 
 		Point p = (Point)(savedPanels.elementAt(pointerOperation));
@@ -1489,7 +1489,7 @@ public class GTURTLEModeling {
 			pointerOperation ++;
 			loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
 		} catch (Exception e) {
-			System.out.println("****** Exception ******");
+			TraceManager.addError("Exception in forward: " + e.getMessage());
 		}
 
 		Point p = (Point)(savedPanels.elementAt(pointerOperation));
@@ -1672,7 +1672,7 @@ public class GTURTLEModeling {
 
 	public String makeXMLFromSelectedComponentOfADiagram(TDiagramPanel tdp, int copyMaxId, int _decX, int _decY) {
 		StringBuffer sb = new StringBuffer();
-		//System.out.println("Making copy");
+		//TraceManager.addDev("Making copy");
 
 		//sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
 		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGSELECTEDCOMPONENTS ");
@@ -1720,7 +1720,7 @@ public class GTURTLEModeling {
 
 		v = tdp.selectedTURTLEOSClasses();
 		if ((v != null) && (v.size() > 0)) {
-			//System.out.println("Saving TURTLEOS activity diagram Panel...");
+			//TraceManager.addDev("Saving TURTLEOS activity diagram Panel...");
 			TOSClass t;
 			TURTLEOSActivityDiagramPanel tosadp;
 			for(int i=0; i<v.size(); i++) {
@@ -1732,7 +1732,7 @@ public class GTURTLEModeling {
 
 		v = tdp.selectedTMLTasks();
 		if ((v != null) && (v.size() > 0)) {
-			//System.out.println("Saving TML activity diagram Panel...");
+			//TraceManager.addDev("Saving TML activity diagram Panel...");
 			TMLTaskOperator t;
 			TMLActivityDiagramPanel tmladp;
 			for(int i=0; i<v.size(); i++) {
@@ -1744,7 +1744,7 @@ public class GTURTLEModeling {
 		
 		v = tdp.selectedAvatarBDBlocks();
 		if ((v != null) && (v.size() > 0)) {
-			//System.out.println("Saving TML activity diagram Panel...");
+			//TraceManager.addDev("Saving TML activity diagram Panel...");
 			AvatarBDBlock abdb;
 			AvatarSMDPanel asmdp;
 			for(int i=0; i<v.size(); i++) {
@@ -1757,7 +1757,7 @@ public class GTURTLEModeling {
 		
 		v = tdp.selectedCPrimitiveComponent();
 		if ((v != null) && (v.size() > 0)) {
-			//System.out.println("Saving TML activity diagram Panel...");
+			//TraceManager.addDev("Saving TML activity diagram Panel...");
 			TMLCPrimitiveComponent ct;
 			TMLActivityDiagramPanel tmladp;
 			for(int i=0; i<v.size(); i++) {
@@ -1777,8 +1777,8 @@ public class GTURTLEModeling {
 		str = new String(sb);
 		str = encodeString(str);
 
-		System.out.println("Copy done");
-		//System.out.println(str);
+		TraceManager.addDev("Copy done");
+		//TraceManager.addDev(str);
 
 		return str;
 	}
@@ -1829,11 +1829,11 @@ public class GTURTLEModeling {
 	}
 
 	public void copyModelingFromXML(TDiagramPanel tdp, String s, int X, int Y) throws MalformedModelingException {
-		//System.out.println("copyModelingFromXML: " + s);
-		//System.out.println("tdp: " + tdp);
+		//TraceManager.addDev("copyModelingFromXML: " + s);
+		//TraceManager.addDev("tdp: " + tdp);
 		
-		//System.out.println(s);
-		//System.out.println("copyModelingFromXML:");
+		//TraceManager.addDev(s);
+		//TraceManager.addDev("copyModelingFromXML:");
 		//LinkedList ComponentsList=tdp.getComponentList();
 		int beginIndex = tdp.getComponentList().size();
 
@@ -1842,7 +1842,7 @@ public class GTURTLEModeling {
 
 		s = decodeString(s);
 		
-		//System.out.println("copy=" + s);
+		//TraceManager.addDev("copy=" + s);
 		
 		ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes());
 		if ((dbf == null) || (db == null)) {
@@ -1881,7 +1881,7 @@ public class GTURTLEModeling {
 
 			// Managing diagrams
 			if (tdp instanceof TClassDiagramPanel) {
-				System.out.println("TClassDiagramPanel copy");
+				TraceManager.addDev("TClassDiagramPanel copy");
 				
 				nl = doc.getElementsByTagName("TClassDiagramPanelCopy");
 				docCopy = doc;
@@ -1913,25 +1913,25 @@ public class GTURTLEModeling {
 
 						tcdp.loadExtraParameters(elt);
 
-						//System.out.println("Class diagram : " + tcdp.getName() + " components");
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tcdp);
 						makePostProcessing(tcdp);
-						//System.out.println("Class diagram : " + tcdp.getName() + " connectors");
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tcdp);
-						//System.out.println("Class diagram : " + tcdp.getName() + " subcomponents");
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tcdp);
-						//System.out.println("Class diagram : " + tcdp.getName() + " real points");
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " real points");
 						connectConnectorsToRealPoints(tcdp);
 						tcdp.structureChanged();
-						//System.out.println("Class diagram : " + tcdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " post loading " + beginIndex);
 						makePostLoading(tcdp, beginIndex);
-						//System.out.println("Class diagram : " + tcdp.getName() + " post loading done");
+						//TraceManager.addDev("Class diagram : " + tcdp.getName() + " post loading done");
 					}
 				}
 				docCopy = null;
 
 			} else if (tdp instanceof TActivityDiagramPanel) {
-				System.out.println("TActivityDiagramPanel copy");
+				TraceManager.addDev("TActivityDiagramPanel copy");
 				nl = doc.getElementsByTagName("TActivityDiagramPanelCopy");
 
 				if (nl == null) {
@@ -1959,16 +1959,16 @@ public class GTURTLEModeling {
 
 						tadp.loadExtraParameters(elt);
 
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(tadp);
 						tadp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(tadp, beginIndex);
 					}
 				}
@@ -1999,21 +1999,21 @@ public class GTURTLEModeling {
 						decX = _decX;
 						decY = _decY;
 
-						//System.out.println("Activity diagram : " + iodp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), iodp);
-						//System.out.println("Activity diagram : " + iodp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), iodp);
-						//System.out.println("Activity diagram : " + iodp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), iodp);
-						//System.out.println("Activity diagram : " + iodp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " real points");
 						connectConnectorsToRealPoints(iodp);
 						iodp.structureChanged();
-						//System.out.println("Activity diagram : " + iodp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " post loading");
 						makePostLoading(iodp, beginIndex);
 					}
 				}
 			} else if (tdp instanceof SequenceDiagramPanel) {
-				//System.out.println("Sequence diagram!");
+				//TraceManager.addDev("Sequence diagram!");
 				nl = doc.getElementsByTagName("SequenceDiagramPanelCopy");
 
 				if (nl == null) {
@@ -2022,7 +2022,7 @@ public class GTURTLEModeling {
 
 				SequenceDiagramPanel sdp = (SequenceDiagramPanel)tdp;
 				
-				//System.out.println("Sequence diagram!");
+				//TraceManager.addDev("Sequence diagram!");
 
 				for(i=0; i<nl.getLength(); i++) {
 					adn = nl.item(i);
@@ -2041,16 +2041,16 @@ public class GTURTLEModeling {
 						decX = _decX;
 						decY = _decY;
 
-						//System.out.println("Sequence diagram: " + sdp.getName() + " components");
+						//TraceManager.addDev("Sequence diagram: " + sdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), sdp);
-						//System.out.println("Sequence diagram: " + sdp.getName() + " connectors");
+						//TraceManager.addDev("Sequence diagram: " + sdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), sdp);
-						//System.out.println("Sequence diagram: " + sdp.getName() + " subcomponents");
+						//TraceManager.addDev("Sequence diagram: " + sdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), sdp);
-						//System.out.println("Sequence diagram: " + sdp.getName() + " real points");
+						//TraceManager.addDev("Sequence diagram: " + sdp.getName() + " real points");
 						connectConnectorsToRealPoints(sdp);
 						sdp.structureChanged();
-						//System.out.println("Sequence diagram: " + sdp.getName() + " post loading");
+						//TraceManager.addDev("Sequence diagram: " + sdp.getName() + " post loading");
 						makePostLoading(sdp, beginIndex);
 					}
 				}
@@ -2080,16 +2080,16 @@ public class GTURTLEModeling {
 						decX = _decX;
 						decY = _decY;
 
-						//System.out.println("Activity diagram : " + sdp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ucdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ucdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ucdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " real points");
 						connectConnectorsToRealPoints(ucdp);
 						ucdp.structureChanged();
-						//System.out.println("Activity diagram : " + iodp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " post loading");
 						makePostLoading(ucdp, beginIndex);
 					}
 				}
@@ -2119,16 +2119,16 @@ public class GTURTLEModeling {
 						decX = _decX;
 						decY = _decY;
 
-						//System.out.println("Activity diagram : " + sdp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tddp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tddp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tddp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " real points");
 						connectConnectorsToRealPoints(tddp);
 						tddp.structureChanged();
-						//System.out.println("Activity diagram : " + iodp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " post loading");
 						makePostLoading(tddp, beginIndex);
 					}
 				}
@@ -2158,16 +2158,16 @@ public class GTURTLEModeling {
 						decX = _decX;
 						decY = _decY;
 
-						//System.out.println("Activity diagram : " + sdp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), ncdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), ncdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), ncdp);
-						//System.out.println("Activity diagram : " + sdp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + sdp.getName() + " real points");
 						connectConnectorsToRealPoints(ncdp);
 						ncdp.structureChanged();
-						//System.out.println("Activity diagram : " + iodp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + iodp.getName() + " post loading");
 						makePostLoading(ncdp, beginIndex);
 					}
 				}
@@ -2281,7 +2281,7 @@ public class GTURTLEModeling {
 					return;
 				}
 
-				//System.out.println("Toto 1");
+				//TraceManager.addDev("Toto 1");
 
 
 				TMLTaskDiagramPanel tmltdp = (TMLTaskDiagramPanel)tdp;
@@ -2306,22 +2306,22 @@ public class GTURTLEModeling {
 
 						tmltdp.loadExtraParameters(elt);
 
-						//System.out.println("Toto 2");
+						//TraceManager.addDev("Toto 2");
 
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmltdp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(tmltdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmltdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmltdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
 						connectConnectorsToRealPoints(tmltdp);
 						tmltdp.structureChanged();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
 						makePostLoading(tmltdp, beginIndex);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
 			} else if (tdp instanceof TMLComponentTaskDiagramPanel) {
@@ -2332,7 +2332,7 @@ public class GTURTLEModeling {
 					return;
 				}
 
-				//System.out.println("Toto 1");
+				//TraceManager.addDev("Toto 1");
 
 
 				TMLComponentTaskDiagramPanel tmlctdp = (TMLComponentTaskDiagramPanel)tdp;
@@ -2358,24 +2358,24 @@ public class GTURTLEModeling {
 
 						tmlctdp.loadExtraParameters(elt);
 
-						//System.out.println("Toto 2");
+						//TraceManager.addDev("Toto 2");
 
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmlctdp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(tmlctdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmlctdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmlctdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
 						connectConnectorsToRealPoints(tmlctdp);
 						tmlctdp.structureChanged();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
 						makePostLoading(tmlctdp, beginIndex);
 						tmlctdp.hideConnectors();
 						tmlctdp.updatePorts();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
 				tmlctdp.updatePorts();
@@ -2407,16 +2407,16 @@ public class GTURTLEModeling {
 
 						//tmladp.loadExtraParameters(elt);
 
-						//System.out.println("Activity diagram : " + tmladp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmladp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmladp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmladp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(tmladp);
 						tmladp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(tmladp, beginIndex);
 					}
 				}
@@ -2428,7 +2428,7 @@ public class GTURTLEModeling {
 					return;
 				}
 
-				//System.out.println("Toto 1");
+				//TraceManager.addDev("Toto 1");
 
 				TMLArchiDiagramPanel tmadp = (TMLArchiDiagramPanel)tdp;
 
@@ -2451,22 +2451,22 @@ public class GTURTLEModeling {
 
 						tmadp.loadExtraParameters(elt);
 
-						//System.out.println("Toto 2");
+						//TraceManager.addDev("Toto 2");
 
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmadp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(tmadp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmadp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmadp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
 						connectConnectorsToRealPoints(tmadp);
 						tmadp.structureChanged();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
 						makePostLoading(tmadp, beginIndex);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
 			} else if (tdp instanceof TURTLEOSClassDiagramPanel) {
@@ -2497,21 +2497,21 @@ public class GTURTLEModeling {
 						decY = _decY;
 
 						//toscdp.loadExtraParameters(elt);
-						//System.out.println("Toto 2");
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " components");
+						//TraceManager.addDev("Toto 2");
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), toscdp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(toscdp);
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " connectors");
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), toscdp);
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " subcomponents");
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), toscdp);
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " real points");
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " real points");
 						connectConnectorsToRealPoints(toscdp);
 						toscdp.structureChanged();
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " post loading " + beginIndex);
 						makePostLoading(toscdp, beginIndex);
-						//System.out.println("TURTLEOS task diagram : " + toscdp.getName() + " post loading done");
+						//TraceManager.addDev("TURTLEOS task diagram : " + toscdp.getName() + " post loading done");
 					}
 				}
 			} else if (tdp instanceof TURTLEOSActivityDiagramPanel) {
@@ -2542,16 +2542,16 @@ public class GTURTLEModeling {
 
 						//tmladp.loadExtraParameters(elt);
 
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tosadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tosadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tosadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(tosadp);
 						tosadp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(tosadp, beginIndex);
 					}
 				}
@@ -2590,21 +2590,21 @@ public class GTURTLEModeling {
 						decY = _decY;
 
 						//pcsdp.loadExtraParameters(elt);
-						//System.out.println("Toto 2");
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						//TraceManager.addDev("Toto 2");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), pcsdp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(pcsdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), pcsdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), pcsdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
 						connectConnectorsToRealPoints(pcsdp);
 						pcsdp.structureChanged();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
 						makePostLoading(pcsdp, beginIndex);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
 				// Added by Solange
@@ -2639,16 +2639,16 @@ public class GTURTLEModeling {
 						decY = _decY;
 
 						//tmladp.loadExtraParameters(elt);
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(psmdp);
 						psmdp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(psmdp, beginIndex);
 						//until here
 					}
@@ -2683,16 +2683,16 @@ public class GTURTLEModeling {
 
 						//tmladp.loadExtraParameters(elt);
 
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), psmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(psmdp);
 						psmdp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(psmdp, beginIndex);
 					}
 				}
@@ -2706,7 +2706,7 @@ public class GTURTLEModeling {
 					return;
 				}
 
-				//System.out.println("Toto 1");
+				//TraceManager.addDev("Toto 1");
 
 
 				AvatarBDPanel abdp = (AvatarBDPanel)tdp;
@@ -2731,22 +2731,22 @@ public class GTURTLEModeling {
 
 						abdp.loadExtraParameters(elt);
 
-						//System.out.println("Toto 2");
+						//TraceManager.addDev("Toto 2");
 
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " components");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), abdp);
-						//System.out.println("Toto 3");
+						//TraceManager.addDev("Toto 3");
 						makePostProcessing(abdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " connectors");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), abdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), abdp);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " real points");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
 						connectConnectorsToRealPoints(abdp);
 						abdp.structureChanged();
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
 						makePostLoading(abdp, beginIndex);
-						//System.out.println("TML task diagram : " + tmltdp.getName() + " post loading done");
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
 			} else if (tdp instanceof AvatarSMDPanel) {
@@ -2777,16 +2777,16 @@ public class GTURTLEModeling {
 
 						//tmladp.loadExtraParameters(elt);
 
-						//System.out.println("Activity diagram : " + tmladp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), asmdp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), asmdp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), asmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(asmdp);
 						asmdp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(asmdp, beginIndex);
 					}
 				}
@@ -2861,10 +2861,10 @@ public class GTURTLEModeling {
 			}
 			
 		} catch (IOException e) {
-			System.out.println("500 ");
+			TraceManager.addError("Loading 500: " + e.getMessage());
 			throw new MalformedModelingException();
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			TraceManager.addError("Loading 501 " + saxe.getMessage());
 			throw new MalformedModelingException();
 		}
 	}
@@ -2900,7 +2900,7 @@ public class GTURTLEModeling {
 
 		sb.append(s.substring(index3, s.length()));
 
-		//System.out.println("Got:" + sb);
+		//TraceManager.addDev("Got:" + sb);
 
 		return sb.toString();
 	}
@@ -2953,11 +2953,11 @@ public class GTURTLEModeling {
 
 			pendingConnectors = new ArrayList<TGConnectorInfo>();
 			
-			//System.out.println("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
+			//TraceManager.addDev("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
 			boolean error = false;
 			for(i=0; i<panelNl.getLength(); i++) {
 				node = panelNl.item(i);
-				//System.out.println("Node = " + dnd);
+				//TraceManager.addDev("Node = " + dnd);
 				
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					// create design, and get an index for it
@@ -2966,7 +2966,7 @@ public class GTURTLEModeling {
 					} catch (MalformedModelingException mme) {
 						Element elt = (Element) node;
 						String type = elt.getAttribute("type");
-						System.out.println("Error when loading diagram:" + type);
+						TraceManager.addDev("Error when loading diagram:" + type);
 						error = true;
 					}
 				}
@@ -2976,19 +2976,19 @@ public class GTURTLEModeling {
 			}
 
 		} catch (NumberFormatException nfe) {
-			System.out.println("400 ");
+			TraceManager.addError("Loading 400 " + nfe.getMessage());
 			throw new MalformedModelingException();
 		} catch (IOException e) {
-			System.out.println("500 ");
+			TraceManager.addError("Loading 600 " + e.getMessage());
 			throw new MalformedModelingException();
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			TraceManager.addError("Loading 601 " + saxe.getMessage());
 			throw new MalformedModelingException();
 		}
-		//System.out.println("making IDs");
+		//TraceManager.addDev("making IDs");
 		makeLastLoad();
 		makeLovelyIds();
-		//System.out.println("IDs done");
+		//TraceManager.addDev("IDs done");
 	}
 
 	public void loadModeling(Node node) throws  MalformedModelingException, SAXException {
@@ -3043,7 +3043,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3075,7 +3075,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Deployment nodes: " + j);
+			//TraceManager.addDev("Deployment nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3104,7 +3104,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3135,7 +3135,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3171,7 +3171,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Deployment nodes: " + j);
+			//TraceManager.addDev("Deployment nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3197,7 +3197,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Deployment nodes: " + j);
+			//TraceManager.addDev("Deployment nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3224,7 +3224,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Deployment nodes: " + j);
+			//TraceManager.addDev("Deployment nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3252,7 +3252,7 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Deployment nodes: " + j);
+			//TraceManager.addDev("Deployment nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
@@ -3277,19 +3277,19 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("TMLTaskDiagramPanel") == 0) {
 					// Class diagram
-					//System.out.println("Loading TML CD");
+					//TraceManager.addDev("Loading TML CD");
 					loadTMLTaskDiagram(elt, indexDesign);
-					//System.out.println("End loading TML CD");
+					//TraceManager.addDev("End loading TML CD");
 				} else { // Managing activity diagrams
 					if (elt.getTagName().compareTo("TMLActivityDiagramPanel") == 0) {
 						// Managing activity diagrams
-						//System.out.println("Loading TML AD");
+						//TraceManager.addDev("Loading TML AD");
 						loadTMLActivityDiagram(elt, indexDesign);
 					}
 				}
@@ -3311,19 +3311,19 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("TMLComponentTaskDiagramPanel") == 0) {
 					// Component diagram
-					//System.out.println("Loading TML Component diagram");
+					//TraceManager.addDev("Loading TML Component diagram");
 					loadTMLComponentTaskDiagram(elt, indexDesign);
-					//System.out.println("End loading TML CD");
+					//TraceManager.addDev("End loading TML CD");
 				} else { // Managing activity diagrams
 					if (elt.getTagName().compareTo("TMLActivityDiagramPanel") == 0) {
 						// Managing activity diagrams
-						//System.out.println("Loading TML AD");
+						//TraceManager.addDev("Loading TML AD");
 						loadTMLActivityDiagram(elt, indexDesign);
 					}
 				}
@@ -3345,14 +3345,14 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("TML Architecture nodes: " + j);
+			//TraceManager.addDev("TML Architecture nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("TMLArchiDiagramPanel") == 0) {
-					//System.out.println("Loading TML DD");
+					//TraceManager.addDev("Loading TML DD");
 					loadTMLArchitectureDiagram(elt, indexDesign);
-					//System.out.println("End loading TML DD");
+					//TraceManager.addDev("End loading TML DD");
 				}
 			}
 		}
@@ -3371,19 +3371,19 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("TURTLEOSClassDiagramPanel") == 0) {
 					// Class diagram
-					//System.out.println("Loading TURTLEOS CD");
+					//TraceManager.addDev("Loading TURTLEOS CD");
 					loadTURTLEOSClassDiagram(elt, indexDesign);
-					//System.out.println("End loading TML CD");
+					//TraceManager.addDev("End loading TML CD");
 				} else { // Managing activity diagrams
 					if (elt.getTagName().compareTo("TURTLEOSActivityDiagramPanel") == 0) {
 						// Managing activity diagrams
-						//System.out.println("Loading TURTLEOS AD");
+						//TraceManager.addDev("Loading TURTLEOS AD");
 						loadTURTLEOSActivityDiagram(elt, indexDesign);
 					}
 				}
@@ -3406,19 +3406,19 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//System.out.println("Design nodes: " + j);
+			//TraceManager.addDev("Design nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("ProactiveCSDPanel") == 0) {
 					// Class diagram
-					//System.out.println("Loading TML CD");
+					//TraceManager.addDev("Loading TML CD");
 					loadProactiveCSD(elt, indexDesign);
-					//System.out.println("End loading TML CD");
+					//TraceManager.addDev("End loading TML CD");
 				} else { // Managing activity diagrams
 					if (elt.getTagName().compareTo("ProactiveSMDPanel") == 0) {
 						// Managing activity diagrams
-						//System.out.println("Loading TML AD");
+						//TraceManager.addDev("Loading TML AD");
 						loadProactiveSMD(elt, indexDesign);
 					}
 				}
@@ -3469,51 +3469,51 @@ public class GTURTLEModeling {
 			((TMLArchiDiagramPanel)tdp).loadExtraParameters(elt);
 		}
 
-		//System.out.println("Element" + elt.toString());
+		//TraceManager.addDev("Element" + elt.toString());
 		// Loads components of the class diagram
-		//System.out.println("Components");
+		//TraceManager.addDev("Components");
 		makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tdp);
-		//System.out.println("Post processing");
+		//TraceManager.addDev("Post processing");
 		makePostProcessing(tdp);
-		//System.out.println("Connectors");
+		//TraceManager.addDev("Connectors");
 		makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tdp);
-		//System.out.println("Subcomponents");
+		//TraceManager.addDev("Subcomponents");
 		makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tdp);
 		TraceManager.addDev("RealPoints");
 		connectConnectorsToRealPoints(tdp);
 		TraceManager.addDev("Structure changed");
 		tdp.structureChanged();
-		//System.out.println("Post loading");
+		//TraceManager.addDev("Post loading");
 		makePostLoading(tdp, 0);
 		
-		//System.out.println("Test connectors");
+		//TraceManager.addDev("Test connectors");
 		if (tdp instanceof TMLComponentTaskDiagramPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((TMLComponentTaskDiagramPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof EBRDDPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((EBRDDPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof AttackTreeDiagramPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((AttackTreeDiagramPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof AvatarBDPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((AvatarBDPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof AvatarSMDPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((AvatarSMDPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof AvatarPDPanel) {
-			//System.out.println("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((AvatarPDPanel)tdp).setConnectorsToFront();
 		}
 	}
@@ -3620,7 +3620,7 @@ public class GTURTLEModeling {
 		mgui.setTMLTaskDiagramName(indexDesign, name);
 		tdp = mgui.getMainTDiagramPanel(indexDesign);
 
-		//System.out.println("tdp=" + tdp.getName());
+		//TraceManager.addDev("tdp=" + tdp.getName());
 
 		loadDiagram(elt, tdp);
 	}
@@ -3635,7 +3635,7 @@ public class GTURTLEModeling {
 		mgui.setTMLComponentTaskDiagramName(indexDesign, name);
 		tdp = mgui.getMainTDiagramPanel(indexDesign);
 
-		//System.out.println("tdp=" + tdp.getName());
+		//TraceManager.addDev("tdp=" + tdp.getName());
 
 		loadDiagram(elt, tdp);
 		
@@ -3653,7 +3653,7 @@ public class GTURTLEModeling {
 		mgui.setTMLArchitectureDiagramName(indexDesign, name);
 		tdp = mgui.getMainTDiagramPanel(indexDesign);
 
-		//System.out.println("tdp=" + tdp.getName());
+		//TraceManager.addDev("tdp=" + tdp.getName());
 
 		loadDiagram(elt, tdp);
 	}
@@ -3663,13 +3663,13 @@ public class GTURTLEModeling {
 
 		name = elt.getAttribute("name");
 		
-		//System.out.println("getting tmladp: " + name);
+		//TraceManager.addDev("getting tmladp: " + name);
 		TMLActivityDiagramPanel tmladp = mgui.getTMLActivityDiagramPanel(indexDesign, name);
-		//System.out.println("Got tmladp");
+		//TraceManager.addDev("Got tmladp");
 		
 		
 		if (tmladp == null) {
-			//System.out.println("null tmladp");
+			//TraceManager.addDev("null tmladp");
 			throw new MalformedModelingException();
 		}
 
@@ -3723,7 +3723,7 @@ public class GTURTLEModeling {
 			tdp=pdp.addProActiveCompSpecificationPanel(name);
 		}
 
-		//System.out.println("tdp=" + tdp.getName());
+		//TraceManager.addDev("tdp=" + tdp.getName());
 
 		loadDiagram(elt, tdp);
 
@@ -3884,7 +3884,7 @@ public class GTURTLEModeling {
 			for(j=0; j<tp.panels.size(); j++) {
 				tdp = (TDiagramPanel)(tp.panels.elementAt(j));
 				id = tdp.makeLovelyIds(id);
-				//System.out.println("Lovely id =" + id);
+				//TraceManager.addDev("Lovely id =" + id);
 			}
 		}
 
@@ -3919,12 +3919,12 @@ public class GTURTLEModeling {
 	}
 
 	public void loadActivityDiagram(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
-		//System.out.println("---> Load activity diagram");
+		//TraceManager.addDev("---> Load activity diagram");
 		try {
 			NodeList activityDiagramNl = docCopy.getElementsByTagName("TActivityDiagramPanel");
 
-			System.out.println("Loading activity diagram of " + newValue + "Before : " + oldValue);
-			System.out.println(docCopy);
+			TraceManager.addDev("Loading activity diagram of " + newValue + "Before : " + oldValue);
+			TraceManager.addDev(""+docCopy);
 
 			if (activityDiagramNl == null) {
 				throw new MalformedModelingException();
@@ -3944,7 +3944,7 @@ public class GTURTLEModeling {
 					elt = (Element) adn;
 					// class diagram name
 					name = elt.getAttribute("name");
-					//System.out.println("Name of activity diagram=" + name);
+					//TraceManager.addDev("Name of activity diagram=" + name);
 
 					if (name.equals(oldValue)) {
 						int indexDesign = mgui.getMajorIndexOf(tdp);
@@ -3955,13 +3955,13 @@ public class GTURTLEModeling {
 
 						tadp = mgui.getActivityDiagramPanel(indexDesign, newValue);
 
-						//System.out.println("Searching panel");
+						//TraceManager.addDev("Searching panel");
 
 						if (tadp == null) {
 							throw new MalformedModelingException();
 						}
 
-						//System.out.println("Panel ok");
+						//TraceManager.addDev("Panel ok");
 
 						decX = 0; decY = 0; decId = 0;
 						
@@ -3971,16 +3971,16 @@ public class GTURTLEModeling {
 						
 						loadDiagramInformation(elt, tadp);
 						
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tadp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(tadp);
 						tadp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(tadp, 0);
 					}
 				}
@@ -3989,21 +3989,21 @@ public class GTURTLEModeling {
 			decY = decYTmp;
 			decId = decIdTmp;
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			TraceManager.addError("Loading 701 " + saxe.getMessage());
 			throw new MalformedModelingException();
 		}
 	}
 	
 	public void loadAvatarSMD(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
-		System.out.println("---> Load activity diagram of old=" + oldValue + " new=" + newValue);
+		TraceManager.addDev("---> Load activity diagram of old=" + oldValue + " new=" + newValue);
 		try {
 			NodeList smdNl = docCopy.getElementsByTagName("AVATARStateMachineDiagramPanel");
 
-			//System.out.println("Loading state machine diagram of " + newValue + " Before : " + oldValue);
-			//System.out.println("smdNL: " + smdNl);
+			//TraceManager.addDev("Loading state machine diagram of " + newValue + " Before : " + oldValue);
+			//TraceManager.addDev("smdNL: " + smdNl);
 
 			if (smdNl == null) {
-				System.out.println("AVATAR: null doc");
+				TraceManager.addDev("AVATAR: null doc");
 				throw new MalformedModelingException();
 			}
 
@@ -4021,7 +4021,7 @@ public class GTURTLEModeling {
 					elt = (Element) adn;
 					// class diagram name
 					name = elt.getAttribute("name");
-					System.out.println("Name of activity diagram=" + name);
+					TraceManager.addDev("Name of activity diagram=" + name);
 
 					if (name.equals(oldValue)) {
 						int indexDesign = mgui.getMajorIndexOf(tdp);
@@ -4032,13 +4032,13 @@ public class GTURTLEModeling {
 
 						asmdp = mgui.getAvatarSMDPanel(indexDesign, newValue);
 
-						System.out.println("Searching panel: " + newValue);
+						TraceManager.addDev("Searching panel: " + newValue);
 
 						if (asmdp == null) {
 							throw new MalformedModelingException();
 						}
 
-						System.out.println("Panel ok");
+						TraceManager.addDev("Panel ok");
 
 						decX = 0; decY = 0; decId = 0;
 						
@@ -4047,16 +4047,16 @@ public class GTURTLEModeling {
 						
 						loadDiagramInformation(elt, asmdp);
 						
-						//System.out.println("Activity diagram : " + tadp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), asmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), asmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), asmdp);
-						//System.out.println("Activity diagram : " + tadp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " real points");
 						connectConnectorsToRealPoints(asmdp);
 						asmdp.structureChanged();
-						//System.out.println("Activity diagram : " + tadp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tadp.getName() + " post loading");
 						makePostLoading(asmdp, 0);
 					}
 				}
@@ -4065,23 +4065,23 @@ public class GTURTLEModeling {
 			decY = decYTmp;
 			decId = decIdTmp;
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			TraceManager.addError("Loading 801 " + saxe.getMessage());
 			throw new MalformedModelingException();
 		}
 	}
 
 	public void loadTMLActivityDiagram(TDiagramPanel tdp, String oldValue, String newValue) throws MalformedModelingException {
-		//System.out.println("---> Load TML activity diagram");
+		//TraceManager.addDev("---> Load TML activity diagram");
 		try {
 			if (docCopy == null) {
-				System.out.println("Null doc copy");
+				TraceManager.addDev("Null doc copy");
 			}
 			NodeList activityDiagramNl = docCopy.getElementsByTagName("TMLActivityDiagramPanel");
 
-			//System.out.println("Loading activity diagram of " + newValue + "Before : " + oldValue);
+			//TraceManager.addDev("Loading activity diagram of " + newValue + "Before : " + oldValue);
 
 			if (activityDiagramNl == null) {
-				//System.out.println("Null");
+				//TraceManager.addDev("Null");
 				throw new MalformedModelingException();
 			}
 
@@ -4099,7 +4099,7 @@ public class GTURTLEModeling {
 					elt = (Element) adn;
 					// class diagram name
 					name = elt.getAttribute("name");
-					//System.out.println("Name of activity diagram=" + name);
+					//TraceManager.addDev("Name of activity diagram=" + name);
 
 					if (name.equals(oldValue)) {
 						int indexDesign = mgui.getMajorIndexOf(tdp);
@@ -4110,13 +4110,13 @@ public class GTURTLEModeling {
 
 						tmladp = mgui.getTMLActivityDiagramPanel(indexDesign, newValue);
 
-						//System.out.println("Searching panel");
+						//TraceManager.addDev("Searching panel");
 
 						if (tmladp == null) {
 							throw new MalformedModelingException();
 						}
 
-						//System.out.println("Panel ok");
+						//TraceManager.addDev("Panel ok");
 
 						decX = 0; decY = 0; decId = 0;
 
@@ -4124,16 +4124,16 @@ public class GTURTLEModeling {
 						
 						loadDiagramInformation(elt, tmladp);
 						
-						//System.out.println("Activity diagram : " + tmladp.getName() + " components");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " components");
 						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmladp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " connectors");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " connectors");
 						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmladp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " subcomponents");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " subcomponents");
 						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmladp);
-						//System.out.println("Activity diagram : " + tmladp.getName() + " real points");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " real points");
 						connectConnectorsToRealPoints(tmladp);
 						tmladp.structureChanged();
-						//System.out.println("Activity diagram : " + tmladp.getName() + " post loading");
+						//TraceManager.addDev("Activity diagram : " + tmladp.getName() + " post loading");
 						makePostLoading(tmladp, 0);
 					}
 				}
@@ -4142,7 +4142,7 @@ public class GTURTLEModeling {
 			decY = decYTmp;
 			decId = decIdTmp;
 		} catch (SAXException saxe) {
-			System.out.println("501 " + saxe.getMessage());
+			TraceManager.addError("Loading 901 " + saxe.getMessage());
 			throw new MalformedModelingException();
 		}
 	}
@@ -4150,18 +4150,18 @@ public class GTURTLEModeling {
 	public void makePostLoading(TDiagramPanel tdp, int beginIndex) throws MalformedModelingException{
 		TGComponent tgc;
 
-		//System.out.println("Post loading of diagram " + tdp.toString());
+		//TraceManager.addDev("Post loading of diagram " + tdp.toString());
 
 		LinkedList list = tdp.getComponentList();
 
 		for(int i=0; i<list.size()-beginIndex; i++) {
 			tgc = (TGComponent)(list.get(i));
-			//System.out.println(tgc.getName());
-			//System.out.println(tgc.getValue());
+			//TraceManager.addDev(tgc.getName());
+			//TraceManager.addDev(tgc.getValue());
 			tgc.makePostLoading(decId);
 		}
 
-		//System.out.println("Post loading of diagram " + tdp.toString() + " achieved");
+		//TraceManager.addDev("Post loading of diagram " + tdp.toString() + " achieved");
 	}
 
 	public void makeXMLComponents(NodeList nl, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
@@ -4180,10 +4180,10 @@ public class GTURTLEModeling {
 				try {
 					tgc = makeXMLComponent(n, tdp);
 					if ((tgc != null) && (tgc.getFather() == null)) {
-						//System.out.println("Component added to diagram tgc=" + tgc);
+						//TraceManager.addDev("Component added to diagram tgc=" + tgc);
 						tdp.addBuiltComponent(tgc);
 					} else {
-						//System.out.println("Component not added to diagram");
+						//TraceManager.addDev("Component not added to diagram");
 					}
 				} catch (MalformedModelingException mme) {
 					error = true;
@@ -4200,7 +4200,7 @@ public class GTURTLEModeling {
 	public TGComponent makeXMLComponent(Node n, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
 		Element elt;
 		Element elt1;
-		//System.out.println(n.toString());
+		//TraceManager.addDev(n.toString());
 		TGComponent tgc = null;
 		TGComponent father;
 
@@ -4210,7 +4210,7 @@ public class GTURTLEModeling {
 			NodeList nl = n.getChildNodes();
 			elt = (Element)n;
 			elt1 = elt;
-			//System.out.println("elt=" + elt);
+			//TraceManager.addDev("elt=" + elt);
 
 			int myType = Integer.decode(elt.getAttribute("type")).intValue();
 			int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
@@ -4283,18 +4283,18 @@ public class GTURTLEModeling {
 			if(fatherId != -1) {
 				fatherId += decId;
 				// internal component
-				//System.out.println("I am " + myName);
-				//System.out.println("Searching for component with id " + fatherId);
+				//TraceManager.addDev("I am " + myName);
+				//TraceManager.addDev("Searching for component with id " + fatherId);
 				father = tdp.findComponentWithId(fatherId);
 				if (father == null) {
 					throw new MalformedModelingException();
 				}
 
-				//System.out.println("Done");
-				//System.out.println("My value is " + father.getValue());
-				//System.out.println("My class is " + father.getClass());
+				//TraceManager.addDev("Done");
+				//TraceManager.addDev("My value is " + father.getValue());
+				//TraceManager.addDev("My class is " + father.getClass());
 
-				//System.out.println("Searching for component " + fatherNum + " at " + tgc.getName());
+				//TraceManager.addDev("Searching for component " + fatherNum + " at " + tgc.getName());
 				tgc = father.getInternalTGComponent(fatherNum);
 
 				if (tgc == null) {
@@ -4315,7 +4315,7 @@ public class GTURTLEModeling {
 				if (tgc != null) {
 					tgc.setCdRectangle(myMinX, myMaxX, myMinY, myMaxY);
 					tgc.setCd(myX, myY);
-					//System.out.println("set cd of " + tgc.getName());
+					//TraceManager.addDev("set cd of " + tgc.getName());
 				}
 			} else {
 				tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
@@ -4333,11 +4333,11 @@ public class GTURTLEModeling {
 			tgc.setHidden(hidden);
 
 			/*if (tgc instanceof TCDTObject) {
-                System.out.println("Loading " + myValue);
+                TraceManager.addDev("Loading " + myValue);
             }*/
 
 			String oldClassName = myValue;
-			//System.out.println("Old class name=" + oldClassName);
+			//TraceManager.addDev("Old class name=" + oldClassName);
 			//Added by Solange
 			if ((myValue != null) && (!myValue.equals(null))){
 				if (tgc instanceof ProCSDComponent)
@@ -4346,7 +4346,7 @@ public class GTURTLEModeling {
 					//And removed by emil 
 					//myValue=generateNameIfInUse(myValue); 
 					//  tgc.setValueWithChange(myValue);
-					//System.out.println("myValue=" + myValue);
+					//TraceManager.addDev("myValue=" + myValue);
 				}
 				//until here            	           	           		
 				if ((tgc instanceof TCDTClass) && (decId >0)){
@@ -4370,16 +4370,16 @@ public class GTURTLEModeling {
 					if (tdp.isAlreadyATMLPrimitiveComponentName(myValue)) {
 						myValue = tdp.findTMLPrimitiveComponentName(myValue+"_");
 					}
-					//System.out.println("MyValue=" + myValue);
+					//TraceManager.addDev("MyValue=" + myValue);
 				}
 				if ((tgc instanceof TOSClass) && (decId >0)){
 					if (tdp.isAlreadyATOSClassName(myValue)) {
 						myValue = tdp.findTOSClassName(myValue+"_");
 					}
 				}
-				//System.out.println("myValue=" + myValue);
+				//TraceManager.addDev("myValue=" + myValue);
 				tgc.setValueWithChange(myValue);
-				//System.out.println("value done");
+				//TraceManager.addDev("value done");
 				if ((tgc instanceof TCDTClass) && (decId >0)){
 					loadActivityDiagram(tdp, oldClassName, myValue);
 				}
@@ -4390,12 +4390,12 @@ public class GTURTLEModeling {
 				}
 				
 				if ((tgc instanceof TMLTaskOperator) && (decId >0)){
-					//System.out.println("Going to load ad of task " + oldClassName + " myValue=" + myValue);
+					//TraceManager.addDev("Going to load ad of task " + oldClassName + " myValue=" + myValue);
 					loadTMLActivityDiagram(tdp, oldClassName, myValue);
 				}
 				
 				if ((tgc instanceof TMLCPrimitiveComponent) && (decId >0)){
-					//System.out.println("Going to load ad of component " + oldClassName + " myValue=" + myValue);
+					//TraceManager.addDev("Going to load ad of component " + oldClassName + " myValue=" + myValue);
 					loadTMLActivityDiagram(tdp, oldClassName, myValue);
 				}
 			}
@@ -4408,7 +4408,7 @@ public class GTURTLEModeling {
 			tgc.resize(myWidth, myHeight);
 			tgc.hasBeenResized();
 			
-			//System.out.println("Options set");
+			//TraceManager.addDev("Options set");
 
 			if (pre.compareTo("") != 0) {
 				tgc.setPreJavaCode(pre);
@@ -4430,41 +4430,41 @@ public class GTURTLEModeling {
 			}
 
 			//extra param
-			//System.out.println("Extra params");
-			//System.out.println("My value = " + tgc.getValue());
+			//TraceManager.addDev("Extra params");
+			//TraceManager.addDev("My value = " + tgc.getValue());
 			tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-			//System.out.println("Extra param ok");
+			//TraceManager.addDev("Extra param ok");
 
 			if ((tgc instanceof TCDTObject) && (decId > 0)) {
 				TCDTObject to = (TCDTObject)tgc;
-				//System.out.println("Setting TObject name to: " + to.getObjectName());
-				//System.out.println("Setting TObject name to: " + tdp.findTObjectName(to.getObjectName()));
+				//TraceManager.addDev("Setting TObject name to: " + to.getObjectName());
+				//TraceManager.addDev("Setting TObject name to: " + tdp.findTObjectName(to.getObjectName()));
 				to.setObjectName(tdp.findTObjectName(to.getObjectName()));
 			}
 
-			//System.out.println(tgc.toString());
+			//TraceManager.addDev(tgc.toString());
 
-			//System.out.println("Making connecting points " + tgcpList.size());
+			//TraceManager.addDev("Making connecting points " + tgcpList.size());
 			for(i=0; i<tgcpList.size(); i++) {
 				p = (Point)(tgcpList.elementAt(i));
 				if (!tgc.setIdTGConnectingPoint(p.x, p.y)) {
-					//System.out.println("Warning: a connecting point has been removed");
+					//TraceManager.addDev("Warning: a connecting point has been removed");
 					//throw new MalformedModelingException();
 				}
 			}
 
-			//System.out.println("Not yet except!");
+			//TraceManager.addDev("Not yet except!");
 			if (decId >0) {
 				tdp.bringToFront(tgc);
 			}
-			//System.out.println("Connecting points done " + myType);
+			//TraceManager.addDev("Connecting points done " + myType);
 
 			/*if (tgc instanceof TCDTObject) {
-                System.out.println("getValue " + tgc.getValue());
+                TraceManager.addDev("getValue " + tgc.getValue());
             }*/
 
 		} catch (Exception e) {
-			System.out.println("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
+			TraceManager.addError("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
 			throw new MalformedModelingException();
 		}
 		return tgc;
@@ -4493,11 +4493,11 @@ public class GTURTLEModeling {
 	//until here 	
 
 	public void makePostProcessing(TDiagramPanel tdp) throws MalformedModelingException{
-		//System.out.println("Make post processing!");
+		//TraceManager.addDev("Make post processing!");
 		if (tdp instanceof TClassDiagramPanel) {
 			((TClassDiagramPanel)tdp).makePostLoadingProcessing();
 		}
-		//System.out.println("Post processing is over");
+		//TraceManager.addDev("Post processing is over");
 	}
 
 	public void makeXMLConnectors(NodeList nl, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
@@ -4517,7 +4517,7 @@ public class GTURTLEModeling {
 				if (tgco != null) {
 					tdp.addBuiltConnector(tgco);
 				} else {
-					System.out.println("Connector error");
+					TraceManager.addDev("Connector error");
 					throw new MalformedModelingException();
 				}
 			}
@@ -4537,7 +4537,7 @@ public class GTURTLEModeling {
 		
 
 		//connect connectors to their real connecting point
-		//System.out.println("Valid connectors ?");
+		//TraceManager.addDev("Valid connectors ?");
 		for(i=0; i<list.size(); i++) {
 			tgc = (TGComponent)(list.get(i));
 			if (tgc instanceof TGConnector) {
@@ -4545,9 +4545,9 @@ public class GTURTLEModeling {
 				p1 = tgco.getTGConnectingPointP1();
 				p2 = tgco.getTGConnectingPointP2();
 				if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)){
-					//System.out.println("Searching for id " + p1.getId());
+					//TraceManager.addDev("Searching for id " + p1.getId());
 					p3 = tdp.findConnectingPoint(p1.getId());
-					//System.out.println("Searching for id " + p2.getId());
+					//TraceManager.addDev("Searching for id " + p2.getId());
 					p4 = tdp.findConnectingPoint(p2.getId());
 					if (((p3 ==null) || (p4 == null)) &&(decId != 0)) {
 						if (list.remove(tgc)) {
@@ -4559,15 +4559,15 @@ public class GTURTLEModeling {
 						if ((p3 == null) ||(p4 == null)) {
 							//warning = true;
 							if (p3 == null) {
-								//System.out.println("Error on first id");
+								//TraceManager.addDev("Error on first id");
 							}
 							if (p4 == null) {
-								//System.out.println("Error on second id");
+								//TraceManager.addDev("Error on second id");
 							}
 							tgcoinfo = new TGConnectorInfo();
 							tgcoinfo.connector = tgco;
 							pendingConnectors.add(tgcoinfo);
-							System.out.println("One connector added to pending list");
+							TraceManager.addDev("One connector added to pending list");
 						} else {
 							tgco.setP1(p3);
 							p3.setFree(false);
@@ -4584,23 +4584,23 @@ public class GTURTLEModeling {
 		}*/
 		
 		/*if (error) {
-			System.out.println("Connecting error: " + connectorsToRemove.size()  + " connectors have been removed");
+			TraceManager.addDev("Connecting error: " + connectorsToRemove.size()  + " connectors have been removed");
 			throw new MalformedModelingException();
 		}*/
 	}
 	
 	public void makeLastLoad() {
 		// Update references on all diagrams
-		//System.out.println("Updating ports");
+		//TraceManager.addDev("Updating ports");
 		//mgui.updateAllPorts();
 		
 		// Update ports on all diagrams
-		System.out.println("Updating references / ports");
+		TraceManager.addDev("Updating references / ports");
 		mgui.updateAllReferences();
 		
 		mgui.updateAllPorts();
 		
-		System.out.println("Pending connectors");
+		TraceManager.addDev("Pending connectors");
 		// Make use of pending connectors
 		TGConnectingPoint p1, p2, p3, p4;
 		TDiagramPanel tdp;
@@ -4613,19 +4613,19 @@ public class GTURTLEModeling {
 					p1 = tgco.getTGConnectingPointP1();
 					p2 = tgco.getTGConnectingPointP2();
 					if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)){
-						System.out.println("Searching for id " + p1.getId());
+						TraceManager.addDev("Searching for id " + p1.getId());
 						p3 = tdp.findConnectingPoint(p1.getId());
-						System.out.println("Searching for id " + p2.getId());
+						TraceManager.addDev("Searching for id " + p2.getId());
 						p4 = tdp.findConnectingPoint(p2.getId());
 						if ((p3 == null) ||(p4 == null)) {
 							//warning = true;
 							if (p3 == null) {
-								System.out.println("Error on first id");
+								TraceManager.addDev("Error on first id");
 							}
 							if (p4 == null) {
-								System.out.println("Error on second id");
+								TraceManager.addDev("Error on second id");
 							}
-							System.out.println("One connector ignored");
+							TraceManager.addDev("One connector ignored");
 						} else {
 							tgco.setP1(p3);
 							p3.setFree(false);
@@ -4637,7 +4637,7 @@ public class GTURTLEModeling {
 			}
 		}
 		pendingConnectors.clear();
-		System.out.println("Last load done");
+		TraceManager.addDev("Last load done");
 	}
 
 	public TGConnector makeXMLConnector(Node n, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
@@ -4645,7 +4645,7 @@ public class GTURTLEModeling {
 		TGConnector tgco = null;
 		//TGComponent tgc = null;
 
-		//System.out.println(n.toString());
+		//TraceManager.addDev(n.toString());
 
 		try {
 
@@ -4683,7 +4683,7 @@ public class GTURTLEModeling {
 						myMinWidth = Integer.decode(elt.getAttribute("minWidth")).intValue();
 						myMinHeight = Integer.decode(elt.getAttribute("minHeight")).intValue();
 						if ((elt.getAttribute("maxWidth") != null) && (elt.getAttribute("maxWidth").length() > 0)) { // Test is made for compatibility with old versions
-							//System.out.println("maxWidth = " +  elt.getAttribute("maxWidth"));
+							//TraceManager.addDev("maxWidth = " +  elt.getAttribute("maxWidth"));
 							myMaxWidth = Integer.decode(elt.getAttribute("maxWidth")).intValue();
 							myMaxHeight = Integer.decode(elt.getAttribute("maxHeight")).intValue();
 						}
@@ -4698,14 +4698,14 @@ public class GTURTLEModeling {
 						tmpid = Integer.decode(elt.getAttribute("id")).intValue() + decId;
 						TGComponent tgc1 = TGComponentManager.addComponent(tmpx, tmpy, TGComponentManager.TAD_START_STATE, tdp);
 						p1 = new TGConnectingPointTmp(tgc1, tmpx, tmpy, tmpid);
-						//System.out.println("P1id = " + tmpid);
+						//TraceManager.addDev("P1id = " + tmpid);
 					} else if (elt.getTagName().equals("P2")) {
 						tmpx = Integer.decode(elt.getAttribute("x")).intValue() + decX;
 						tmpy = Integer.decode(elt.getAttribute("y")).intValue() + decY;
 						tmpid = Integer.decode(elt.getAttribute("id")).intValue() + decId;
 						TGComponent tgc2 = TGComponentManager.addComponent(tmpx, tmpy, TGComponentManager.TAD_START_STATE, tdp);
 						p2 = new TGConnectingPointTmp(tgc2, tmpx, tmpy, tmpid);
-						//System.out.println("P2id = " + tmpid);
+						//TraceManager.addDev("P2id = " + tmpid);
 					} else if (elt.getTagName().equals("Point")) {
 						tmpx = Integer.decode(elt.getAttribute("x")).intValue() + decX;
 						tmpy = Integer.decode(elt.getAttribute("y")).intValue() + decY;
@@ -4714,12 +4714,12 @@ public class GTURTLEModeling {
 						x = Integer.decode(elt.getAttribute("num")).intValue();
 						y = Integer.decode(elt.getAttribute("id")).intValue() + decId;
 						tgcpList.add(new Point(x, y));
-						//System.out.println(" adding Connecting point !");
+						//TraceManager.addDev(" adding Connecting point !");
 					} else if (elt.getTagName().equals("AutomaticDrawing")) {
-						//System.out.println("AutomaticDrawing=" + elt.getAttribute("data"));
+						//TraceManager.addDev("AutomaticDrawing=" + elt.getAttribute("data"));
 						if (elt.getAttribute("data").compareTo("true") == 0) {
 							automaticDrawing = true;
-							//System.out.println("set to true");
+							//TraceManager.addDev("set to true");
 						} else {
 							automaticDrawing = false;
 						}
@@ -4733,9 +4733,9 @@ public class GTURTLEModeling {
 			}
 
 			//TGConnector is ready to be built
-			//System.out.println("Making TGConnector of type " + myType);
+			//TraceManager.addDev("Making TGConnector of type " + myType);
 			tgco = TGComponentManager.addConnector(myX, myY, myType, tdp, p1, p2, pointList);
-			//System.out.println("TGConnector built " + myType);
+			//TraceManager.addDev("TGConnector built " + myType);
 
 			if (tgco == null) {
 				throw new MalformedModelingException();
@@ -4761,7 +4761,7 @@ public class GTURTLEModeling {
 
 			tgco.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
 
-			//System.out.println("Making connecting points " + myType);
+			//TraceManager.addDev("Making connecting points " + myType);
 			for(i=0; i<tgcpList.size(); i++) {
 				p = (Point)(tgcpList.elementAt(i));
 				if (!tgco.setIdTGConnectingPoint(p.x, p.y)) {
@@ -4773,10 +4773,10 @@ public class GTURTLEModeling {
 				tdp.bringToFront(tgco);
 			}
 
-			//System.out.println("Connecting points done " + myType);
+			//TraceManager.addDev("Connecting points done " + myType);
 
 		} catch (Exception e) {
-			System.out.println("Exception generale connector");
+			TraceManager.addError("Exception on connectors");
 			throw new MalformedModelingException();
 		}
 		return tgco;
@@ -4808,11 +4808,11 @@ public class GTURTLEModeling {
 		SDTranslator sd = new SDTranslator(h);
 		checkingErrors = null;
 		warnings = new Vector();
-		//System.out.println("Step 02");
+		//TraceManager.addDev("Step 02");
 
 		mgui.setMode(mgui.VIEW_SUGG_DESIGN_KO);
 
-		//System.out.println("Step 1");
+		//TraceManager.addDev("Step 1");
 		try {
 			tm = sd.toTURTLEModeling();
 			tmState = 0;
@@ -4824,7 +4824,7 @@ public class GTURTLEModeling {
 			throw new AnalysisSyntaxException("Problem during translation to a design TURTLE modeling");
 		}
 
-		//System.out.println("Step 2");
+		//TraceManager.addDev("Step 2");
 
 		if (checkingErrors != null) {
 			return false;
@@ -4832,10 +4832,10 @@ public class GTURTLEModeling {
 
 		// modeling is built
 		// Now check it !
-		//System.out.println("Step 3");
+		//TraceManager.addDev("Step 3");
 		TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 		checkingErrors = tmc.syntaxAnalysisChecking();
-		//System.out.println("Step 4");
+		//TraceManager.addDev("Step 4");
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -4871,7 +4871,7 @@ public class GTURTLEModeling {
 
 	public boolean translateDeployment(DeploymentPanel dp) {
 		// Builds a TURTLE modeling from a deployment diagram
-		System.out.println("deployement");
+		TraceManager.addDev("deployement");
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -4914,7 +4914,7 @@ public class GTURTLEModeling {
 				while(iterator2.hasNext()) {
 					tgc = (TGComponent)(iterator2.next());
 					if (tgc instanceof TClassInterface) {
-						System.out.println("Found tclass: " + tgc.getValue());
+						TraceManager.addDev("Found tclass: " + tgc.getValue());
 						tclasses.add(tgc);
 					}
 				}
@@ -4932,7 +4932,7 @@ public class GTURTLEModeling {
 						tgc = (TGComponent)(tclasses.elementAt(j));
 						t = listE.getTClass(tgc);
 						if (t != null) {
-							System.out.println("Setting package name of " + t.getName() + " to " + node.getNodeName());
+							TraceManager.addDev("Setting package name of " + t.getName() + " to " + node.getNodeName());
 							t.setPackageName(node.getNodeName()+"_"+art.getValue());
 						}
 					}
@@ -4945,11 +4945,11 @@ public class GTURTLEModeling {
 		DDTranslator ddt = new DDTranslator(dp, tm, listE);
 
 		try {
-			System.out.println("Dealing with links!");
+			TraceManager.addDev("Dealing with links!");
 			ddt.translateLinks();
 		} catch (DDSyntaxException e) {
 			//throw new AnalysisSyntaxException("Problem during translation to a design TURTLE modeling");
-			System.out.println("Error during translation: " + e.getMessage());
+			TraceManager.addDev("Error during translation: " + e.getMessage());
 			return false;
 		}
 
@@ -4973,7 +4973,7 @@ public class GTURTLEModeling {
 	}
 	
 	public boolean translateNC(NCPanel ncp) {
-		System.out.println("Translating NC");
+		TraceManager.addDev("Translating NC");
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
@@ -4985,7 +4985,7 @@ public class GTURTLEModeling {
 		checkingErrors = gncm.getCheckingErrors();
 		warnings = gncm.getCheckingWarnings();
 		
-		System.out.println("errors:" + checkingErrors.size() + " warnings:" + warnings.size());
+		TraceManager.addDev("errors:" + checkingErrors.size() + " warnings:" + warnings.size());
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			return false;
 		} else {
@@ -4995,17 +4995,17 @@ public class GTURTLEModeling {
 				if (ConfigurationTTool.NCDirectory != null) {
 					fileName = ConfigurationTTool.NCDirectory + fileName;
 				}
-				System.out.println("Saving in network structure in file: " + fileName);
+				TraceManager.addDev("Saving in network structure in file: " + fileName);
 				FileUtils.saveFile(fileName, ncs.toISAENetworkXML());
 				fileName = "traffics.xml";
 				if (ConfigurationTTool.NCDirectory != null) {
 					fileName = ConfigurationTTool.NCDirectory + fileName;
 				}
-				System.out.println("Saving in traffics in file: " + fileName);
+				TraceManager.addDev("Saving in traffics in file: " + fileName);
 				FileUtils.saveFile(fileName, ncs.toISAETrafficsXML());
-				System.out.println("Save done");
+				TraceManager.addDev("Save done");
 			} catch (FileException fe) {
-				System.out.println("Could not save in file:" + fe.getMessage());
+				TraceManager.addError("Could not save NC in file:" + fe.getMessage());
 			}
 			mgui.setMode(MainGUI.NC_OK);
 			return true;
@@ -5031,10 +5031,10 @@ public class GTURTLEModeling {
 		
 		
 		
-		//System.out.println("TML Modeling translated");
-		//System.out.println("----- TML Modeling -----");
-		//System.out.println(tmlm.toString());
-		//System.out.println("------------------------");
+		//TraceManager.addDev("TML Modeling translated");
+		//TraceManager.addDev("----- TML Modeling -----");
+		//TraceManager.addDev(tmlm.toString());
+		//TraceManager.addDev("------------------------");
 		checkingErrors = gtmlm.getCheckingErrors();
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5056,9 +5056,9 @@ public class GTURTLEModeling {
 				return false;
 			} else {
 				// Optimize
-				//System.out.println("Optimize");
+				//TraceManager.addDev("Optimize");
 				tm.optimize();
-				//System.out.println("Optimize done");
+				//TraceManager.addDev("Optimize done");
 				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 				checkingErrors = tmc.syntaxAnalysisChecking();
 				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5093,7 +5093,7 @@ public class GTURTLEModeling {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
-		//System.out.println("New TML Component Modeling");
+		//TraceManager.addDev("New TML Component Modeling");
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
@@ -5102,10 +5102,10 @@ public class GTURTLEModeling {
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();
 		//listE.useDIPLOIDs();
-		//System.out.println("TML Modeling translated");
-		//System.out.println("----- TML Modeling -----");
-		//System.out.println(tmlm.toString());
-		//System.out.println("------------------------");
+		//TraceManager.addDev("TML Modeling translated");
+		//TraceManager.addDev("----- TML Modeling -----");
+		//TraceManager.addDev(tmlm.toString());
+		//TraceManager.addDev("------------------------");
 		checkingErrors = gctmlm.getCheckingErrors();
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5119,7 +5119,7 @@ public class GTURTLEModeling {
 			TML2TURTLE tt = new TML2TURTLE(tmlm);
 			tm = tt.generateTURTLEModeling();
 			tmState = 0;
-			System.out.println("tm generated:");
+			TraceManager.addDev("tm generated:");
 			//tm.print();
 			checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5127,9 +5127,9 @@ public class GTURTLEModeling {
 				return false;
 			} else {
 				// Optimize
-				//System.out.println("Optimize");
+				//TraceManager.addDev("Optimize");
 				tm.optimize();
-				//System.out.println("Optimize done");
+				//TraceManager.addDev("Optimize done");
 				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 				checkingErrors = tmc.syntaxAnalysisChecking();
 				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5153,7 +5153,7 @@ public class GTURTLEModeling {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
-		//System.out.println("New TML Mapping");
+		//TraceManager.addDev("New TML Mapping");
 		GTMLModeling gtmlm = new GTMLModeling(tmlap, true);
 		
 		
@@ -5184,7 +5184,7 @@ public class GTURTLEModeling {
 	}
 	
 	public boolean translateTMLMapping(boolean _sample, boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {
-		//System.out.println("TML=" + tmap.toString());
+		//TraceManager.addDev("TML=" + tmap.toString());
 		Mapping2TIF m2tif = new Mapping2TIF(tmap);
 		m2tif.setShowSampleChannels(_sample);
 		m2tif.setShowChannels(_channel);
@@ -5209,31 +5209,31 @@ public class GTURTLEModeling {
 		m2tif.setRandomTasks(_randomTask);
 		tm = m2tif.generateTURTLEModeling();
 		//StringBuffer sb = tm.printToStringBuffer();
-		//System.out.println("tm=" + sb);
+		//TraceManager.addDev("tm=" + sb);
 		
 		
 		
 		return true;
 		/*tmState = 1;
-		System.out.println("tm generated from TMAP");
+		TraceManager.addDev("tm generated from TMAP");
 		checkingErrors = m2tif.getCheckingErrors();
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			return false;
 		} else {
 			// Optimize
-			System.out.println("Optimize TIF");
+			TraceManager.addDev("Optimize TIF");
 			return true;
 			/*tm.optimize();
-			//System.out.println("Optimize done");
+			//TraceManager.addDev("Optimize done");
 			//tm.print();
 			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 			checkingErrors = tmc.syntaxAnalysisChecking();
 			if ((checkingErrors != null) && (checkingErrors.size() == 0)){
 				mgui.setMode(MainGUI.GEN_DESIGN_OK);
-				//System.out.println("true");
+				//TraceManager.addDev("true");
 				return true;				
 			} else {
-				System.out.println("false");
+				TraceManager.addDev("false");
 				return false;
 			}
 		}*/
@@ -5248,14 +5248,14 @@ public class GTURTLEModeling {
 	public boolean translateTURTLEOSDesign(TURTLEOSDesignPanel tosdp) {
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
-		//System.out.println("New TML Modeling");
+		//TraceManager.addDev("New TML Modeling");
 		GTURTLEOSModeling gosm = new GTURTLEOSModeling(tosdp);
 		//gtmlm.setTasks(tasksToTakeIntoAccount);
 		//tmlm = gosm.translateToTMLModeling();
-		//System.out.println("TML Modeling translated");
-		//System.out.println("----- TML Modeling -----");
-		//System.out.println(tmlm.toString());
-		//System.out.println("------------------------");
+		//TraceManager.addDev("TML Modeling translated");
+		//TraceManager.addDev("----- TML Modeling -----");
+		//TraceManager.addDev(tmlm.toString());
+		//TraceManager.addDev("------------------------");
 		tm = gosm.generateTURTLEModeling();
 		tmState = 0;
 		checkingErrors = gosm.getCheckingErrors();
@@ -5264,9 +5264,9 @@ public class GTURTLEModeling {
 			return false;
 		} else {
 
-			//System.out.println("Optimize");
+			//TraceManager.addDev("Optimize");
 			tm.optimize();
-			//System.out.println("Optimize done");
+			//TraceManager.addDev("Optimize done");
 			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
 			checkingErrors = tmc.syntaxAnalysisChecking();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5289,7 +5289,7 @@ public class GTURTLEModeling {
 		tmState = 0;
 
 		if (gpd.checkSyntax() == false) {
-			System.out.println("Errors found");
+			TraceManager.addDev("Errors found");
 			warnings = gpd.getCheckingWarnings();
 			checkingErrors = gpd.getCheckingErrors();
 			return false;
@@ -5375,7 +5375,7 @@ public class GTURTLEModeling {
 		if (checkingErrors.size() > 0) {
 			return false;
 		}
-		System.out.println("the EBRDD:\n" + ebrdd.toString());
+		TraceManager.addDev("the EBRDD:\n" + ebrdd.toString());
 		return true;
 	}
 

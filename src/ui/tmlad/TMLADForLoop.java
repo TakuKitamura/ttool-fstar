@@ -125,7 +125,7 @@ public class TMLADForLoop extends TGCWithoutInternalComponent implements Embedde
     public boolean editOndoubleClick(JFrame frame) {
         String [] labels = new String[3];
         String [] values = new String[3];
-        labels[0] = "Initialisation of variables";
+        labels[0] = "Initialisation of variable";
         values[0] = init;
         labels[1] = "Condition to stay in loop";
         values[1] = condition;

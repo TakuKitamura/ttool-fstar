@@ -84,6 +84,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int ACT_DIPLODOCUS_DOCUMENTATION = 242;
     public static final int ACT_ABOUT = 4;
     public static final int ACT_ENHANCE = 160;
+	public static final int ACT_TTOOL_CONFIGURATION = 323;
     
     
     public static final int TCD_EDIT = 5;
@@ -442,7 +443,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 323;
+    public static final int NB_ACTION = 324;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -593,6 +594,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TURTLE's website", IconManager.imgic30, IconManager.imgic31, "TURTLE's website", "Various information on the TURTLE profile", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "TURTLE online help", IconManager.imgic30, IconManager.imgic31, "TURTLE online help", "TURTLE online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
+        actions[ACT_TTOOL_CONFIGURATION] = new TAction("configuration-command", "Configuration", IconManager.imgic76, IconManager.imgic77, "Configuration", "Configuration loaded at startup", 0);
         
         actions[ACT_ENHANCE] = new TAction("enhance-command", "Enhance", IconManager.imgic28, IconManager.imgic29, "Enhance", "Automatically enhance diagram", 0);
         
