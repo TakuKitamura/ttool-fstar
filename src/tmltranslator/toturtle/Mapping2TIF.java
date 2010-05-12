@@ -149,7 +149,6 @@ public class Mapping2TIF {
 	
 	public void setShowTerminateCPUs(boolean _b) {
 		showTerminateCPUs = _b;
-		//System.out.println("CPUs termination is shown");
 	}
 	
 	public void setShowTaskState(boolean _b) {
@@ -3221,28 +3220,49 @@ public class Mapping2TIF {
 			action2 = modifyString(tmlforloop.getCondition(), task);
 			action3 = modifyString(tmlforloop.getIncrement(), task);
 			
-			if ((param1 = paramAnalyzer(action1, tcpu)) == null) {
-				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in " + action1);
+			if (action2.length() == 0) {
+				action2 = "true";
+			}
+			
+			if ((action1.length() == 0) || (action3.length() == 0)) {
+				system.addNewParamIfApplicable("loop__", "nat", "0");
+			}
+			
+			if (action1.length() == 0) {
+				action1 = "loop__ = 0";
+			}
+			
+			if (action3.length() == 0) {
+				action3 = "loop__ = 0";
+			}
+			
+			
+			if (((param1 = paramAnalyzer(action1, tcpu)) == null)) {
+				TraceManager.addDev("Param Error");
+				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop " + action1);
 				error.setTClass(tcpu);
+				error.setTGComponent((TGComponent)(element.getReferenceObject()));
 				checkingErrors.add(error);
 				return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
 			}
 			
-			if ((param3 = paramAnalyzer(action3, tcpu)) == null) {
-				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in " + action3);
+			if (((param3 = paramAnalyzer(action3, tcpu)) == null)) {
+				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Parameter undeclared in loop" + action3);
 				error.setTClass(tcpu);
+				error.setTGComponent((TGComponent)(element.getReferenceObject()));
 				checkingErrors.add(error);
 				return makeCPUADTaskBehaviorComponent(tcpu, cpu, ad, stateChoice, endJunction, task, cpt, tasks, stateId, branchStateId, element.getNextElement(0));
 			}
 			
 			
 			// Init
-			actionp1 = getActionStateWithParam(tcpu, ad, param1.getName(), getActionValueParam(action1, tcpu));
-			stateIdGuard(stateChoice, actionp1, stateId, task);
-			actionp2 = getStateIdActionState(tcpu, ad, task, stateId+3);
-			actionp1.addNext(actionp2);
-			actionp2.addNext(endJunction);
-			stateId ++;
+				actionp1 = getActionStateWithParam(tcpu, ad, param1.getName(), getActionValueParam(action1, tcpu));
+				stateIdGuard(stateChoice, actionp1, stateId, task);
+				actionp2 = getStateIdActionState(tcpu, ad, task, stateId+3);
+				actionp1.addNext(actionp2);
+				actionp2.addNext(endJunction);
+				stateId ++;
+			
 			// We keep a state for the end of the loop
 			index = stateId;
 			stateId ++;
@@ -3253,6 +3273,7 @@ public class Mapping2TIF {
 			actionp5.addNext(actionp6);
 			actionp6.addNext(endJunction);
 			stateId ++;
+		
 			
 			// Test condition of the loop
 			choice0 = new ADChoice();

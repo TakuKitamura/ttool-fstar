@@ -570,7 +570,11 @@ public class TML2TURTLE {
 							adj2.addNext(adj1);
 						}
                         
-                        adchoice.addGuard("[" + modifyString(tmlforloop.getCondition()) + "]");
+						action = (modifyString(tmlforloop.getCondition()));
+						if (action.length() == 0) {
+							action = "true";
+						}
+                        adchoice.addGuard("[" + action + "]");
 						if (adacparam1 != null) {
 							adc1 = translateAD(newElements, baseElements, tclass, task, tmle.getNextElement(0), adacparam1, adj2);
 						} else {
@@ -578,7 +582,6 @@ public class TML2TURTLE {
 						}
                         adchoice.addNext(adc1);
                         
-                        action = (modifyString(tmlforloop.getCondition()));
                         action = Conversion.replaceAllChar(action, '[', "(");
                         action = Conversion.replaceAllChar(action, ']', ")");
                         adchoice.addGuard("[not(" + action + ")]");

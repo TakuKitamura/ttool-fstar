@@ -536,6 +536,7 @@ public class TML2UPPAAL {
 
       // Loop
       } else if (elt instanceof TMLForLoop) {
+		String tmpc;
         tmlloop = ((TMLForLoop)elt);
         loc = addLocation(template);
         tr = addTransition(template, previous, loc);
@@ -548,14 +549,19 @@ public class TML2UPPAAL {
         tr2 = addTransition(template, loc4, loc);
         setAssignment(tr2, tmlloop.getIncrement());
         currentX += STEP_LOOP_X;
-        setGuard(tr1, tmlloop.getCondition());
+		
+		tmpc =  tmlloop.getCondition();
+		if (tmpc.length() ==0) {
+			tmpc = "true";
+		}
+        setGuard(tr1, tmpc);
         makeElementBehavior(task, template, elt.getNextElement(0), loc1, loc4);
         currentX -= STEP_LOOP_X;
         currentX -= STEP_LOOP_X;
         
         loc2 = addLocation(template);
         tr3 = addTransition(template, loc, loc2);
-        setGuard(tr3, "!(" + tmlloop.getCondition() + ")");
+        setGuard(tr3, "!(" + tmpc + ")");
 		rtu.addTMLActivityElementLocation(elt, previous, loc2);
         makeElementBehavior(task, template, elt.getNextElement(1), loc2, end);
         

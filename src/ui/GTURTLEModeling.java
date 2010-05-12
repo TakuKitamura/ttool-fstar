@@ -5162,7 +5162,6 @@ public class GTURTLEModeling {
 		tm = null;
 		tmState = 1;
 		tmap = gtmlm.translateToTMLMapping();
-		tmap.removeAllRandomSequences();
 		
 		listE = gtmlm.getCorrespondanceTable();
 		
@@ -5172,6 +5171,7 @@ public class GTURTLEModeling {
 			analyzeErrors();
 			return false;
 		} else {
+			tmap.removeAllRandomSequences();
 			if (optimize) {
 				warningsOptimize = tmap.optimize();
 			}
@@ -5211,32 +5211,13 @@ public class GTURTLEModeling {
 		//StringBuffer sb = tm.printToStringBuffer();
 		//TraceManager.addDev("tm=" + sb);
 		
-		
-		
-		return true;
-		/*tmState = 1;
 		TraceManager.addDev("tm generated from TMAP");
 		checkingErrors = m2tif.getCheckingErrors();
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			return false;
-		} else {
-			// Optimize
-			TraceManager.addDev("Optimize TIF");
-			return true;
-			/*tm.optimize();
-			//TraceManager.addDev("Optimize done");
-			//tm.print();
-			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
-			checkingErrors = tmc.syntaxAnalysisChecking();
-			if ((checkingErrors != null) && (checkingErrors.size() == 0)){
-				mgui.setMode(MainGUI.GEN_DESIGN_OK);
-				//TraceManager.addDev("true");
-				return true;				
-			} else {
-				TraceManager.addDev("false");
-				return false;
-			}
-		}*/
+		}
+		mgui.setMode(MainGUI.GEN_DESIGN_OK);
+		return true;
 	}
 
 	//Added by Solange

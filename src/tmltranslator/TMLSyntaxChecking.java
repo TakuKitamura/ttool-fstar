@@ -320,7 +320,9 @@ public class TMLSyntaxChecking {
 					if (loop.getInit().trim().length() > 0) {
 						parsing(t, elt, "assnat", loop.getInit());
 					}
-					parsing(t, elt, "actionbool", loop.getCondition());
+					if (loop.getCondition().trim().length() > 0) {
+						parsing(t, elt, "actionbool", loop.getCondition());
+					}
 					if (loop.getIncrement().trim().length() > 0) {
 						parsing(t, elt, "assnat", loop.getIncrement());
 					}
