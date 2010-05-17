@@ -2432,12 +2432,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void oneClickLOTOSRG() {
 		boolean ret;
 		if (!checkModelingSyntax(true)) {
-			System.out.println("Syntax error");
+			TraceManager.addDev("Syntax error");
 			return;
 		}
 		
 		if (!generateLOTOS(true)) {
-			System.out.println("Generate LOTOS: error");
+			TraceManager.addDev("Generate LOTOS: error");
 			return;
 		}
 		
@@ -2447,12 +2447,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void oneClickRTLOTOSRG() {
 		boolean ret;
 		if (!checkModelingSyntax(true)) {
-			System.out.println("Syntax error");
+			TraceManager.addDev("Syntax error");
 			return;
 		}
 		
 		if (!generateRTLOTOS(true)) {
-			System.out.println("Generate RT-LOTOS: error");
+			TraceManager.addDev("Generate RT-LOTOS: error");
 			return;
 		}
 		
@@ -2897,7 +2897,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	
     public boolean generateLOTOS(boolean automatic) {
-		if (gtm.getTURTLEModelingState() == 1) {
+		if (gtm.getTURTLEModelingState() > 0) {
 			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, LOTOS)) {
 				dtree.toBeUpdated();
 				return false;
@@ -2929,6 +2929,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public boolean generateTURTLEModelingFromState(int state, boolean automatic, int generator) {
 		if (state == 1) {
 			return generateTIFFromMapping(automatic, generator);
+		}
+		if (state == 2) {
+			return generateTIFFromTMLModeling(automatic, generator);
 		}
 		return false;
 	}
@@ -2978,6 +2981,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 		
 		return false;
+	}
+	
+	public boolean generateTIFFromTMLModeling(boolean automatic, int generator) {
+		return gtm.translateTMLModeling();
 	}
     
     public void generateAUT() {

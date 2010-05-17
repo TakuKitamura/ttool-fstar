@@ -1614,12 +1614,12 @@ public class TMLTextSpecification {
 			}
 			
 			if (parses.size() == 0) {
-				error = "SEQ: corresponding SELECTEVT not found";
+				error = "SEQ: corresponding RANDOMSEQ not found";
 				addError(0, _lineNb, 0, error);
 				return -1;
 			} else {
 				parseElt = parses.get(0);
-				if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
+				if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
 				error = "SEQ: corresponding RANDOMSEQ not found";
 					addError(0, _lineNb, 0, error);
 					return -1;
@@ -1631,7 +1631,7 @@ public class TMLTextSpecification {
 			inTaskDec = false;
 			inTaskBehavior = true;
 			
-			if(_split.length >0 ) {
+			if(_split.length >1 ) {
 				error = "A SEQ has no parameter";
 				addError(0, _lineNb, 0, error);
 				return -1;

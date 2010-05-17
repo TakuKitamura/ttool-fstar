@@ -118,7 +118,7 @@ public class GTURTLEModeling {
 	//
 	private Vector panels; /* analysis, design, deployment, tml design */
 	private TURTLEModeling tm;
-	private int tmState; // 0:generated, 1: to be generated from mapping
+	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
@@ -5045,12 +5045,15 @@ public class GTURTLEModeling {
 				warningsOptimize = tmlm.optimize();
 			}
 			
-			TML2TURTLE tt = new TML2TURTLE(tmlm);
-			tm = tt.generateTURTLEModeling();
-			tmState = 0;
+			//TML2TURTLE tt = new TML2TURTLE(tmlm);
+			//tm = tt.generateTURTLEModeling();
+			tmState = 2;
+			mgui.resetAllDIPLOIDs();
+			listE.useDIPLOIDs();
+			return true;
 			//TraceManager.addDev("tm generated:");
 			//tm.print();
-			checkingErrors = tt.getCheckingErrors();
+			/*checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 				analyzeErrors();
 				return false;
@@ -5073,7 +5076,7 @@ public class GTURTLEModeling {
 					mgui.setMode(MainGUI.GEN_DESIGN_OK);
 					return true;
 				}
-			}
+			}*/
 		}
 	}
 	
@@ -5116,12 +5119,15 @@ public class GTURTLEModeling {
 				warningsOptimize = tmlm.optimize();
 			}
 			
-			TML2TURTLE tt = new TML2TURTLE(tmlm);
-			tm = tt.generateTURTLEModeling();
-			tmState = 0;
+			//TML2TURTLE tt = new TML2TURTLE(tmlm);
+			//tm = tt.generateTURTLEModeling();
+			tmState = 2;
 			TraceManager.addDev("tm generated:");
+			mgui.resetAllDIPLOIDs();
+			listE.useDIPLOIDs();
+			return true;
 			//tm.print();
-			checkingErrors = tt.getCheckingErrors();
+			/*checkingErrors = tt.getCheckingErrors();
 			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 				analyzeErrors();
 				return false;
@@ -5145,6 +5151,29 @@ public class GTURTLEModeling {
 					listE.useDIPLOIDs();
 					return true;
 				}
+			}*/
+		}
+	}
+	
+	public boolean translateTMLModeling() {
+		TML2TURTLE tt = new TML2TURTLE(tmlm);
+		tm = tt.generateTURTLEModeling();
+		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			analyzeErrors();
+			return false;
+		} else {
+			// Optimize
+			//TraceManager.addDev("Optimize");
+			tm.optimize();
+			//TraceManager.addDev("Optimize done");
+			TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
+			checkingErrors = tmc.syntaxAnalysisChecking();
+			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+				analyzeErrors();
+				return false;
+			} else {
+				mgui.setMode(MainGUI.GEN_DESIGN_OK);
+				return true;
 			}
 		}
 	}
