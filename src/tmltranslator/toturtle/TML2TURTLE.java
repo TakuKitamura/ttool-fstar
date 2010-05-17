@@ -83,6 +83,8 @@ public class TML2TURTLE {
     
     public TURTLEModeling generateTURTLEModeling() {
 		//System.out.println("generate TM");
+		tmlmodeling.removeAllRandomSequences();
+		
         tm = new TURTLEModeling();
         checkingErrors = new Vector();
         

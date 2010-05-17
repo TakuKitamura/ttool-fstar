@@ -120,6 +120,8 @@ public class TML2UPPAAL {
 	}
     
     public UPPAALSpec generateUPPAAL(boolean _debug) {
+		tmlmodeling.removeAllRandomSequences();
+		
         debug = _debug;
         spec = new UPPAALSpec();
 		rtu = new RelationTMLUPPAAL();

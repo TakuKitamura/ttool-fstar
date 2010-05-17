@@ -58,7 +58,9 @@ public class TMLParserSaveElt {
 	public final static int CASE = 3;
 	public final static int RAND = 4;
 	public final static int CASERAND = 5;
-	public final static String[] instructions = {"FOR", "SELECTEVT", "IF", "CASE", "RAND", "CASERAND"};
+	public final static int RANDOMSEQ = 6;
+	public final static int SEQ = 7;
+	public final static String[] instructions = {"FOR", "SELECTEVT", "IF", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
     
     public int type; // FOR, etc.
 	public TMLActivityElement tmlae; //

@@ -75,14 +75,15 @@ public class TMLTextSpecification {
 	private ArrayList<TMLParserSaveElt> parses;
 	
 	private String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "BRBW", "NBRNBW", 
-		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ELSEIF", "ENDIF", "FOR", "ENDFOR",
-	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM"};
+		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
+	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
+	"RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
 	
 	private String channeltypes[] = {"BRBW", "NBRNBW", "BRNBW"};
 	private String eventtypes[] = {"INF", "NIB", "NINB"};
 	
-	private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ELSEIF", "SELECTEVT", "CASE", "RAND", "CASERAND"};
-	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ELSEIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND"};	
+	private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ORIF", "SELECTEVT", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
+	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};	
 	
 	public TMLTextSpecification(String _title) {
 		title = _title;
@@ -96,7 +97,7 @@ public class TMLTextSpecification {
     }
 	
 	public void saveFile(String path, String filename) throws FileException {
-		System.out.println("Saving TML spec file in " + path + filename);
+		TraceManager.addUser("Saving TML spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }
 	
@@ -138,7 +139,7 @@ public class TMLTextSpecification {
 			dec -= nbClose * _nbDec;
             tmp = Conversion.addHead(tmp.trim(), ' ', dec);
             dec += nbOpen * _nbDec;
-			//System.out.println("dec=" + dec);
+			//TraceManager.addDev("dec=" + dec);
             output += tmp + "\n";
 		}
 		spec = output;
@@ -159,9 +160,9 @@ public class TMLTextSpecification {
 		for(int i=0; i<array.length; i++) {
 			if (_tmp.startsWith(array[i])) {
 				tmp = _tmp.substring(array[i].length(), _tmp.length());
-				//System.out.println("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
+				//TraceManager.addDev("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
 				if ((tmp.length() == 0) || (tmp.charAt(0) == ' ') || (tmp.charAt(0) == '(') || (tmp.charAt(0) == '\n')) {
-						//System.out.println("Returning 1!!");
+						//TraceManager.addDev("Returning 1!!");
 						return 1;
 				}
 			}
@@ -399,7 +400,7 @@ public class TMLTextSpecification {
 							code2 = Conversion.replaceAllChar(code2, '[', "(");
 							code2 = Conversion.replaceAllChar(code2, ']', ")");
 						}
-						//System.out.println("guard = " + code1 + " i=" + i);
+						//TraceManager.addDev("guard = " + code1 + " i=" + i);
 						if (nb != 0) {
 							/*if (choice.isNonDeterministicGuard(i)) {
 								code = "CASERAND 50";
@@ -418,7 +419,7 @@ public class TMLTextSpecification {
 								code += "IF " + code2;
 							} else {
 								if (i != index1) {
-									code += "ELSEIF " + code2;
+									code += "ORIF " + code2;
 								} else {
 									code += "ELSE";
 								}
@@ -451,11 +452,21 @@ public class TMLTextSpecification {
 			code += "ENDSELECTEVT" + CR;
 			return code;
 			
+		} else if (elt instanceof TMLRandomSequence) {
+			code = "RANDOMSEQ" + CR;
+			for(i=0; i<elt.getNbNext(); i++) {
+				code += "SEQ" + CR;
+				code += makeBehavior(task, elt.getNextElement(i));
+				code += "ENDSEQ" + CR;
+			}
+			code += "ENDRANDOMSEQ" + CR;
+			return code;
+			
 		} else {
 			if (elt == null) {
 				return "";
 			}
-			System.out.println("Unrecognized element: " + elt);
+			TraceManager.addDev("Unrecognized element: " + elt);
 			return makeBehavior(task, elt.getNextElement(0));
 		}
 	}
@@ -467,7 +478,7 @@ public class TMLTextSpecification {
 		warnings = new ArrayList<TMLTXTError>();
 		
 		spec = Conversion.removeComments(spec);
-		//System.out.println(spec);
+		//TraceManager.addDev(spec);
 		browseCode();
 		
 		return (errors.size() == 0);
@@ -536,17 +547,17 @@ public class TMLTextSpecification {
             while((s = br.readLine()) != null) {
 				if (s != null) {
 					s = s.trim();
-					//System.out.println("s=" + s);
+					//TraceManager.addDev("s=" + s);
 					s = removeUndesiredWhiteSpaces(s, lineNb);
 					s1 = Conversion.replaceAllString(s, "\t", " ");
 					s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
-					//System.out.println("s1=" + s1);
+					//TraceManager.addDev("s1=" + s1);
 					if (s1 != null) {
 						split = s1.split("\\s");
 						if (split.length > 0) {
-							//System.out.println("analyse");
+							//TraceManager.addDev("analyse");
 							analyseInstruction(s, lineNb, split);
-							//System.out.println("end analyse");
+							//TraceManager.addDev("end analyse");
 						}
 					}
 					
@@ -554,7 +565,7 @@ public class TMLTextSpecification {
 				}
             }
         } catch (Exception e) {
-            System.out.println("Exception when reading specification: " + e.getMessage());
+            TraceManager.addError("Exception when reading specification: " + e.getMessage());
 			addError(0, lineNb, 0, "Exception when reading specification");
         }
 	}
@@ -584,7 +595,7 @@ public class TMLTextSpecification {
 		boolean blocking;
 		TMLParserSaveElt parseElt;
 		
-		//System.out.println("Analyzing instruction:" + _line);
+		//TraceManager.addDev("Analyzing instruction:" + _line);
 		
 		if (parses.size() > 0) {
 			parseElt = parses.get(0);
@@ -668,20 +679,20 @@ public class TMLTextSpecification {
 					try {
 						tmp = Integer.decode(_split[4]).intValue();
 					} catch (Exception e) {tmp = 8;}
-					//System.out.println("Setting max to" + tmp);
+					//TraceManager.addDev("Setting max to" + tmp);
 					ch.setMax(tmp);
 				}
 				
 				t1 = tmlm.getTMLTaskByName(_split[4+dec]);
 				if (t1 == null) {
 					t1 = new TMLTask(_split[4+dec], null, null);
-					//System.out.println("New task:" + _split[4+dec]);
+					//TraceManager.addDev("New task:" + _split[4+dec]);
 					tmlm.addTask(t1);
 				}
 				t2 = tmlm.getTMLTaskByName(_split[5+dec]);
 				if (t2 == null) {
 					t2 = new TMLTask(_split[5+dec], null, null);
-					//System.out.println("New task:" + _split[5+dec]);
+					//TraceManager.addDev("New task:" + _split[5+dec]);
 					tmlm.addTask(t2);
 				}
 				ch.setTasks(t1, t2);
@@ -711,7 +722,7 @@ public class TMLTextSpecification {
 			id = getEvtId(_split[1]);
 			params = getParams(_split[1]);
 			
-			//System.out.println("Evt id=" + id +  "params=" + params);
+			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
 			
 			if (!checkParameter("EVENT", _split, 1, 4, _lineNb)) {
 				return -1;
@@ -765,13 +776,13 @@ public class TMLTextSpecification {
 			t1 = tmlm.getTMLTaskByName(_split[3+dec]);
 			if (t1 == null) {
 				t1 = new TMLTask(_split[3+dec], null, null);
-				//System.out.println("New task:" + _split[3+dec]);
+				//TraceManager.addDev("New task:" + _split[3+dec]);
 				tmlm.addTask(t1);
 			}
 			t2 = tmlm.getTMLTaskByName(_split[4+dec]);
 			if (t2 == null) {
 				t2 = new TMLTask(_split[4+dec], null, null);
-				//System.out.println("New task:" + _split[4+dec]);
+				//TraceManager.addDev("New task:" + _split[4+dec]);
 				tmlm.addTask(t2);
 			}
 			evt.setTasks(t1, t2);
@@ -798,7 +809,7 @@ public class TMLTextSpecification {
 			id = getEvtId(_split[1]);
 			params = getParams(_split[1]);
 			
-			//System.out.println("Evt id=" + id +  "params=" + params);
+			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
 			
 			if (!checkParameter("REQUEST", _split, 1, 4, _lineNb)) {
 				return -1;
@@ -823,7 +834,7 @@ public class TMLTextSpecification {
 				t1 = tmlm.getTMLTaskByName(_split[i]);
 				if (t1 == null) {
 					t1 = new TMLTask(_split[i], null, null);
-					//System.out.println("New task:" + _split[i]);
+					//TraceManager.addDev("New task:" + _split[i]);
 					tmlm.addTask(t1);
 				}
 				if ((i+1) == _split.length) {
@@ -842,7 +853,7 @@ public class TMLTextSpecification {
 		// TASK
 		if((isInstruction("TASK", _split[0]))) {
 			
-			//System.out.println("In task");
+			//TraceManager.addDev("In task");
 			if (inTask) {
 				error = "A task may not be declared in the body of another task";
 				addError(0, _lineNb, 0, error);
@@ -864,7 +875,7 @@ public class TMLTextSpecification {
 				return -1;
 			}
 			
-			//System.out.println("In task: 12");
+			//TraceManager.addDev("In task: 12");
 			task = tmlm.getTMLTaskByName(_split[1]);
 			if ((task != null)  && (task.getActivityDiagram() != null)) {
 				if (task.getActivityDiagram().getFirst() != null) {
@@ -873,11 +884,11 @@ public class TMLTextSpecification {
 					return -1;
 				}
 			}
-			//System.out.println("In task: 13");
+			//TraceManager.addDev("In task: 13");
 			if (task == null) {
 				task = new TMLTask(_split[1], null, null);
 				tmlm.addTask(task);
-				//System.out.println("New task:" + _split[1]);
+				//TraceManager.addDev("New task:" + _split[1]);
 			}
 			
 			TMLStartState start = new TMLStartState("start", null);
@@ -937,7 +948,7 @@ public class TMLTextSpecification {
 				}
 			}
 			
-			//System.out.println("Adding attribute " + _split[0] + " " + _split[1]);
+			//TraceManager.addDev("Adding attribute " + _split[0] + " " + _split[1]);
 			
 			TMLAttribute ta = new TMLAttribute(_split[1], new TMLType(TMLType.getType(_split[0])));
 			if (_split.length > 2) {
@@ -986,7 +997,7 @@ public class TMLTextSpecification {
 			random.setMinValue(_split[3]);
 			random.setMaxValue(_split[4]);
 			
-			System.out.println("RANDOM min=" + random.getMinValue() + " max=" + random.getMaxValue());
+			TraceManager.addDev("RANDOM min=" + random.getMinValue() + " max=" + random.getMaxValue());
 			
 			task.getActivityDiagram().addElement(random);
 			tmlae.addNext(random);
@@ -1290,7 +1301,7 @@ public class TMLTextSpecification {
 		
 		// FOR
 		if((isInstruction("FOR", _split[0])) && (inTask)) {
-			//System.out.println("FOR encountered");
+			//TraceManager.addDev("FOR encountered");
 			if (_split.length < 2) {
 				error = "FOR operation: missing parameters";
 				addError(0, _lineNb, 0, error);
@@ -1530,6 +1541,155 @@ public class TMLTextSpecification {
 			tmlae = parseElt.top;
 		} // ENDCASE
 		
+		// RANDOMSEQ
+		if((isInstruction("RANDOMSEQ", _split[0]))) {
+			if (!inTask) {
+				error = "RANDOMSEQ: must be used in a Task body";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if(_split.length > 1) {
+				error = "A RANDOMSEQ cannot have any parameters";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			inDec = false;
+			inTask = true;
+			inTaskDec = false;
+			inTaskBehavior = true;
+			
+			parseElt = new TMLParserSaveElt();
+			parseElt.type = TMLParserSaveElt.RANDOMSEQ;
+			parses.add(0, parseElt);
+			TMLSequence seq = new TMLSequence("sequence", null);
+			parseElt.top = seq;
+			tmlae.addNext(seq);
+			TMLRandomSequence rseq = new TMLRandomSequence("random sequence", null);
+			parseElt.tmlae = rseq;
+			seq.addNext(rseq);
+			task.getActivityDiagram().addElement(seq);
+			task.getActivityDiagram().addElement(rseq);
+			tmlae = rseq;
+		} // RANDOMSEQ 
+		
+		// ENDRANDOMSEQ
+		if((isInstruction("ENDRANDOMSEQ", _split[0]))) {
+			if (!inTask) {
+				error = "ENDRANDOMSEQ: must be used in a Task body";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			inDec = false;
+			inTask = true;
+			inTaskDec = false;
+			inTaskBehavior = true;
+			
+			// Extract the first element of the stack
+			if (parses.size() == 0) {
+				error = "ENDRANDOMSEQ: badly placed instruction.";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			parseElt = parses.get(0);
+			if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
+				error = "ENDRANDOMSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			parses.remove(0);
+			tmlae = parseElt.top;
+		} // ENDRANDOMSEQ
+		
+		
+		// SEQ
+		if((isInstruction("SEQ", _split[0]))) {
+			if (!inTask) {
+			error = "SEQ: must be used in a Task body";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (parses.size() == 0) {
+				error = "SEQ: corresponding SELECTEVT not found";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			} else {
+				parseElt = parses.get(0);
+				if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
+				error = "SEQ: corresponding RANDOMSEQ not found";
+					addError(0, _lineNb, 0, error);
+					return -1;
+				}
+			}
+			
+			inDec = false;
+			inTask = true;
+			inTaskDec = false;
+			inTaskBehavior = true;
+			
+			if(_split.length >0 ) {
+				error = "A SEQ has no parameter";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (!(parseElt.tmlae instanceof TMLRandomSequence)) {
+				error = "Malformed specification: unexpected SEQ";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			TMLRandomSequence rseq = (TMLRandomSequence)parseElt.tmlae;
+			TMLSequence seq = new TMLSequence("sequence", null);
+			rseq.addNext(seq);
+			
+			task.getActivityDiagram().addElement(seq);
+			
+			parseElt = new TMLParserSaveElt();
+			parseElt.type = TMLParserSaveElt.SEQ;
+			parseElt.tmlae = seq;
+			parseElt.top = rseq;
+			parses.add(0, parseElt);
+			
+			tmlae = seq;
+		} // SEQ
+		
+		// ENDSEQ
+		if((isInstruction("ENDSEQ", _split[0]))) {
+			if (!inTask) {
+			error = "ENDSEQ: must be used in a Task body";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			inDec = false;
+			inTask = true;
+			inTaskDec = false;
+			inTaskBehavior = true;
+			
+			// Extract the first element of the stack
+			if (parses.size() == 0) {
+			error = "ENDSEQ: badly placed instruction.";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			parseElt = parses.get(0);
+			if (parseElt.type != TMLParserSaveElt.SEQ) {
+			error = "ENDSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			parses.remove(0);
+			stop = new TMLStopState("stop case", null);
+			task.getActivityDiagram().addElement(stop);
+			tmlae.addNext(stop);
+			tmlae = parseElt.top;
+		} // ENDSEQ
+		
 		// RAND
 		if((isInstruction("RAND", _split[0]))) {
 			if (!inTask) {
@@ -1555,7 +1715,7 @@ public class TMLTextSpecification {
 			TMLSequence seq = new TMLSequence("sequence", null);
 			parseElt.top = seq;
 			tmlae.addNext(seq);
-			TMLChoice choice = new TMLChoice("select evt", null);
+			TMLChoice choice = new TMLChoice("choice evt", null);
 			parseElt.tmlae = choice;
 			seq.addNext(choice);
 			task.getActivityDiagram().addElement(seq);
@@ -1730,16 +1890,16 @@ public class TMLTextSpecification {
 				tmlae = seq;
 		} // IF
 		
-		// ELSEIF
-		if((isInstruction("ELSEIF", _split[0]))) {
+		// ORIF
+		if((isInstruction("ORIF", _split[0]))) {
 			if (!inTask) {
-				error = "ELSEIF: must be used in a Task body";
+				error = "ORIF: must be used in a Task body";
 				addError(0, _lineNb, 0, error);
 				return -1;
 			}
 			
 			if(_split.length != 2) {
-				error = "ELSEIF should be followed by one condition";
+				error = "ORIF should be followed by one condition";
 				addError(0, _lineNb, 0, error);
 				return -1;
 			}
@@ -1751,31 +1911,31 @@ public class TMLTextSpecification {
 			
 			
 			String cond = _split[1].trim();
-			//System.out.println("cond1=" + cond);
+			//TraceManager.addDev("cond1=" + cond);
 			tmp0 = cond.indexOf('(');
 				tmp1 = cond.lastIndexOf(')');
 				if ((tmp0 == -1) || (tmp1 == -1)) {
-					error = "ELSEIF operation: badly formed condition";
+					error = "ORIF operation: badly formed condition";
 					addError(0, _lineNb, 0, error);
 					return -1;
 				}
 				cond = cond.substring(tmp0+1, tmp1);
-				//System.out.println("cond2=" + cond);
+				//TraceManager.addDev("cond2=" + cond);
 				
 				if (parses.size() == 0) {
-					error = "ELSEIF: badly placed instruction.";
+					error = "ORIF: badly placed instruction.";
 					addError(0, _lineNb, 0, error);
 					return -1;
 				}
 				parseElt = parses.get(0);
 				if (parseElt.type != TMLParserSaveElt.IF) {
-					error = "ELSEIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+					error = "ORIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
 					addError(0, _lineNb, 0, error);
 					return -1;
 				}
 				
 				if (parseElt.nbElse > 0) {
-					error = "ELSEIF: should not followed a else instruction";
+					error = "ORIF: should not followed a else instruction";
 					addError(0, _lineNb, 0, error);
 					return -1;
 				}
@@ -1792,7 +1952,7 @@ public class TMLTextSpecification {
 				choice.addGuard("[" + cond + "]");
 				
 				tmlae = seq;
-		} // ELSEIF
+		} // ORIF
 		
 		// ELSE
 		if((isInstruction("ELSE", _split[0]))) {
@@ -2063,15 +2223,15 @@ public class TMLTextSpecification {
 			case 4:
 				if (!isAValidId(getEvtId(_split[_parameter]))) {
 					err = true;
-					//System.out.println("Unvalid id");
+					//TraceManager.addDev("Unvalid id");
 				} else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-					//System.out.println("Unvalid param");
+					//TraceManager.addDev("Unvalid param");
 					err = true;
 				}
 				break;
 			case 5:
 				if (!(_split[_parameter].equals("="))) {
-					System.out.println("Error of =");
+					TraceManager.addDev("Error of =");
 					err = true;
 				}
 				break;
@@ -2213,14 +2373,14 @@ public class TMLTextSpecification {
 				return "IF (" + tmp;
 		}
 		
-		if (_input.startsWith("ELSEIF(")) {
-				_input = "ELSEIF (" + _input.substring(7, _input.length());
+		if (_input.startsWith("ORIF(")) {
+				_input = "ORIF (" + _input.substring(7, _input.length());
 		}
 		
-		if (_input.startsWith("ELSEIF (")) {
+		if (_input.startsWith("ORIF (")) {
 				tmp = _input.substring(8, _input.length());
 				tmp = Conversion.replaceAllString(tmp, " ", "");
-				return "ELSEIF (" + tmp;
+				return "ORIF (" + tmp;
 		}	
 		
 		return _input;
@@ -2235,7 +2395,7 @@ public class TMLTextSpecification {
 	}
 	
 	private String getParams(String _input) {
-		//System.out.println("input=" + _input);
+		//TraceManager.addDev("input=" + _input);
 		int index0 = _input.indexOf('(');
 			int index1 = _input.indexOf(')');
 			if ((index0 == -1) || (index1 == -1)) {

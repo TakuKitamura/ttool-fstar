@@ -104,6 +104,8 @@ public class TML2AUT {
     
     public void generateAutomatas(boolean _debug) {
         debug = _debug;
+		tmlmodeling.removeAllRandomSequences();
+		
         automatas = new LinkedList();
         
         // Generate one automata per TMLTask

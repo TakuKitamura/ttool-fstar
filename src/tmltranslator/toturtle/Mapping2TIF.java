@@ -199,6 +199,7 @@ public class Mapping2TIF {
     public TURTLEModeling generateTURTLEModeling() {
 		// Optimize TML modeling
 		//tmlmodeling.optimize();
+		tmlmapping.removeAllRandomSequences();
 		
 		//System.out.println("generate TM");
         tm = new TURTLEModeling();

@@ -5022,7 +5022,7 @@ public class GTURTLEModeling {
 		GTMLModeling gtmlm = new GTMLModeling(tmldp, true);
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling(true);
-		tmlm.removeAllRandomSequences();
+		//tmlm.removeAllRandomSequences();
 		TraceManager.addDev("New TML Modeling:" + tmlm.toString());
 		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
@@ -5097,7 +5097,7 @@ public class GTURTLEModeling {
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
-		tmlm.removeAllRandomSequences();
+		//tmlm.removeAllRandomSequences();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();
@@ -5171,7 +5171,7 @@ public class GTURTLEModeling {
 			analyzeErrors();
 			return false;
 		} else {
-			tmap.removeAllRandomSequences();
+			//tmap.removeAllRandomSequences();
 			if (optimize) {
 				warningsOptimize = tmap.optimize();
 			}
