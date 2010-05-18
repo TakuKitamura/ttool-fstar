@@ -161,7 +161,7 @@ public class MappedSystemCTask {
 		makeHeaderClassH();
 		makeEndClassH();
 		
-		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iID, iPriority,iName,iCPU)"+ CR + makeAttributesCode();
+		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iID, iPriority,iName,iCPUs)"+ CR + makeAttributesCode();
 		cppcode+=initCommand + CR + "{" + CR; 
 		if (commentNum!=0) cppcode+= "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
 		cppcode+= "//generate task variable look-up table"+ CR;
@@ -205,7 +205,7 @@ public class MappedSystemCTask {
 	}
 
 	private String makeConstructorSignature(){
-		String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU* iCPU"+CR;
+		String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU* iCPUs"+CR;
 		for(TMLChannel ch: channels) {
 			constSig+=", TMLChannel* "+ ch.getExtendedName() + CR;
 		}
@@ -460,20 +460,64 @@ public class MappedSystemCTask {
 
 					
 		} else if (currElem instanceof TMLForLoop){
+			//makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement)
 			if (debug) System.out.println("Checking Loop\n");
 			TMLForLoop fl = (TMLForLoop)currElem;
-			TMLActionState initAction=new TMLActionState("lpInitAc",null);
-			initAction.setAction(fl.getInit());
-			TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
-			incAction.setAction(fl.getIncrement());
-			TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
-			lpChoice.addGuard("[ " + fl.getCondition() + " ]");
-			lpChoice.addGuard("[ else ]");
-			lpChoice.addNext(fl.getNextElement(0));  //inside loop
-			lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
-			makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
-			makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
-			return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);
+			if (fl.getCondition().isEmpty() || fl.getCondition().trim().toUpperCase().equals("TRUE")){
+				//initAction.addNext(fl.getNextElement(0)); //inside loop
+				TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
+				incAction.setAction(fl.getIncrement());
+				String firstCmdInLoop= makeCommands(fl.getNextElement(0), false, "&_lpIncAc" + fl.getID(), null, null);
+				makeCommands(incAction, false, firstCmdInLoop, null, null);
+				if (fl.getInit().isEmpty()){
+					return firstCmdInLoop;
+				}else{
+					TMLActionState initAction=new TMLActionState("lpInitAc",null);
+					initAction.setAction(fl.getInit());
+					return makeCommands(initAction, false, firstCmdInLoop, nextCommandCont, null);
+				}
+				
+			}else{
+				/*TMLActionState initAction=new TMLActionState("lpInitAc",null);
+				initAction.setAction(fl.getInit());
+				TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
+				incAction.setAction(fl.getIncrement());
+				TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
+				if (fl.getCondition().isEmpty())
+					lpChoice.addGuard("[ true ]");
+				else
+					lpChoice.addGuard("[ " + fl.getCondition() + " ]");
+				lpChoice.addGuard("[ else ]");
+				lpChoice.addNext(fl.getNextElement(0));  //inside loop
+				lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
+				makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
+				makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
+				return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);*/
+				
+				TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
+				//if (fl.getCondition().isEmpty())
+				//	lpChoice.addGuard("[ true ]");
+				//else
+				lpChoice.addGuard("[ " + fl.getCondition() + " ]");
+				lpChoice.addGuard("[ else ]");
+				lpChoice.addNext(fl.getNextElement(0));  //inside loop
+				lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
+				if (fl.getIncrement().isEmpty()){
+					makeCommands(lpChoice, false, "&_lpChoice" + fl.getID(), null, retElement);
+				}else{
+					TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
+					incAction.setAction(fl.getIncrement());
+					makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
+					makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
+				}
+				if (fl.getInit().isEmpty()){
+					return "&_lpChoice" + fl.getID();
+				}else{
+					TMLActionState initAction=new TMLActionState("lpInitAc",null);
+					initAction.setAction(fl.getInit());
+					return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);
+				}
+			}
 		
 		} else if (currElem instanceof TMLReadChannel){
 			if (debug) System.out.println("Checking Read\n");
@@ -594,6 +638,7 @@ public class MappedSystemCTask {
 			}
 			TMLChoice choice = (TMLChoice)currElem;
 			String code = "", nextCommandTemp="", MCResult="";
+			boolean moreThanTwoGuards=false; 
 			if (debug) System.out.println("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
 				String guardS = "",code2;
@@ -602,6 +647,17 @@ public class MappedSystemCTask {
 				int nbS = choice.nbOfStochasticGuard();
 				if ((nb > 0) || (nbS > 0)){
 					code += "rnd__0 = myrand(0, 99)" + SCCR;
+				}else{
+					if (choice.getNbGuard()>1 && !(choice.getNbGuard()==2 && choice.getElseGuard()!=-1)){
+						moreThanTwoGuards=true;
+						code+="rnd__0 = 0" + SCCR;
+						for(int i=0; i<choice.getNbGuard(); i++) {
+							if (i!=index1 && i!=index2)
+								code+="if (" + choice.getGuard(i) + ") rnd__0++" + SCCR;
+						}
+						code = Conversion.replaceAllChar(code, '[', "(");
+						code = Conversion.replaceAllChar(code, ']', ")");
+					}
 				}
 				nb = 0;
 				for(int i=0; i<choice.getNbGuard(); i++) {
@@ -621,6 +677,10 @@ public class MappedSystemCTask {
 								nbS ++;
 					} else {
 						code2 = choice.getGuard(i);
+						if (!moreThanTwoGuards || i+1==choice.getNbGuard() || i==index1)
+							code2 = choice.getGuard(i);
+						else						
+							code2 = "(" + choice.getGuard(i) + "&& myrand(1,rnd__0)==1)";
 						code2 = Conversion.replaceAllChar(code2, '[', "(");
 						code2 = Conversion.replaceAllChar(code2, ']', ")");
 					}

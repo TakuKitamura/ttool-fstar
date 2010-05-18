@@ -111,6 +111,7 @@ public class TML2MappingSystemC {
     	public void generateSystemC(boolean _debug, boolean _optimize) {
         	debug = _debug;
 		optimize = _optimize;
+		tmlmapping.removeAllRandomSequences();
 		dependencies.clear();
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
@@ -169,7 +170,7 @@ public class TML2MappingSystemC {
 			if (node instanceof HwCPU) {
 				//if (tmlmapping.isAUsedHwNode(node)) {
 					HwCPU exNode = (HwCPU)node;
-					declaration += "CPU* " + exNode.getName() + " = new CPU(" + exNode.getID() + ", \"" + exNode.getName() + "\", ";
+					declaration += "CPU* " + exNode.getName() + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "\", ";
 					if (exNode.getType().equals("CPURRPB"))
 						declaration += "new PrioScheduler(\"" + exNode.getName() + "_PrioSched\",0), ";
 					else
@@ -189,9 +190,12 @@ public class TML2MappingSystemC {
 		for(HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()) {
 			if (node instanceof HwBus) {
 				//if (tmlmapping.isAUsedHwNode(node)) {
-				declaration += "Bus* " + node.getName() + " = new Bus("+ node.getID() + ",\"" + node.getName() + "\",0, 100, "+ ((HwBus)node).byteDataSize + ", " + node.clockRatio + ",";
-				if(((HwBus)node).arbitration==HwBus.CAN) declaration +="true"; else declaration +="false"; 
-				declaration += ");\naddBus("+ node.getName() +")"+ SCCR;
+				HwBus thisBus = (HwBus)node;
+				for(int i=0; i< thisBus.pipelineSize; i++){
+					declaration += "Bus* " + node.getName() + "_" + i + " = new Bus("+ node.getID() + ",\"" + node.getName() + "_" + i + "\",0, 100, "+ thisBus.byteDataSize + ", " + node.clockRatio + ",";
+					if(thisBus.arbitration==HwBus.CAN) declaration +="true"; else declaration +="false"; 
+					declaration += ");\naddBus("+ node.getName() + "_" + i + ")"+ SCCR;
+				}
 				//}
 			}
 		}
@@ -228,8 +232,11 @@ public class TML2MappingSystemC {
 					//declaration+= "BusMaster* " + node.getName() + "2defaultBus = new BusMaster(\"" + node.getName() + "2defaultBus\", 0, defaultBus)" + SCCR;
 				//else{
 					for(HwLink link: nodeLinks){
-						declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
-						//declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.getName() + ")" + SCCR;
+						//declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
+						declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
+						for(int i=0; i< link.bus.pipelineSize; i++)
+							declaration+= ", (SchedulableCommDevice*)" +  link.bus.getName() + "_" + i; 
+						declaration+= "))" + SCCR;
 						declaration+= node.getName() + "->addBusMaster(" + node.getName() + "_" + link.bus.getName() + "_Master)" + SCCR;
 					}
 				}
@@ -295,7 +302,11 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of requests" + CR;
 		for(TMLTask task: tmlmodeling.getTasks()) {
 			if (task.isRequested()){
-				declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+				if (tmlmapping.isCommNodeMappedOn(task.getRequest(),null)){
+					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +  task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0,true)" + SCCR;
+				}else{
+					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+				}
 				declaration += "addRequest(reqChannel_"+ task.getName() +")"+ SCCR;
 			}
 		}
@@ -315,14 +326,15 @@ public class TML2MappingSystemC {
 							numDevices++;
 						}
 					}
-					declaration += node.getName() + "->setScheduler((WorkloadSource*) new ";
+					declaration += node.getName() + "_0->setScheduler((WorkloadSource*) new ";
 					if (((HwBus)node).arbitration==HwBus.BASIC_ROUND_ROBIN)
 						declaration+="RRScheduler(\"" + node.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)node.clockRatio)/((float)((HwBus)node).byteDataSize)) + ", array(";
 					else
 						declaration+="PrioScheduler(\"" + node.getName() + "_PrioSched\", 0, array(";
 					declaration+= numDevices + devices + "), " + numDevices + "))" + SCCR;
 				}
-				
+				for(int i=1; i< ((HwBus)node).pipelineSize; i++)
+					declaration+=node.getName() + "_" + i + "->setScheduler(" + node.getName() + "_0->getScheduler(),false)" +SCCR;
 			}
 		}
 		declaration += CR;
@@ -391,7 +403,13 @@ public class TML2MappingSystemC {
 			slaves.str+=",static_cast<Slave*>(0)";
 		else
 			firstPart=startNode.getName();
+		System.out.println("------------------------------------------------------");
 		for(HwCommunicationNode commElem:path){
+			System.out.println("CommELem to process: " + commElem.getName());
+		}
+		System.out.println("------------------------------------------------------");
+		for(HwCommunicationNode commElem:path){
+			System.out.println("CommELem to process: " + commElem.getName());
 			if (commElem instanceof HwMemory){
 				reverse=true;
 				slaves.str+= ",static_cast<Slave*>(" + commElem.getName() + "),static_cast<Slave*>(" + commElem.getName() + ")";
