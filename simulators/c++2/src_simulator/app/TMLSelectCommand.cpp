@@ -54,7 +54,7 @@ TMLSelectCommand::~TMLSelectCommand(){
 	}
 }
 
-void TMLSelectCommand::execute(){
+/*void TMLSelectCommand::execute(){
 	unsigned int aFinalIndex=0, aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
 	//i
 	bool aReadDone=false;
@@ -91,6 +91,30 @@ void TMLSelectCommand::execute(){
 	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;
+}*/
+
+void TMLSelectCommand::execute(){
+	unsigned int aFinalIndex=0, aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
+	TMLChannel* aReadChannel=_currTransaction->getChannel();
+	//bool check=false;
+	for (_indexNextCommand=0;_indexNextCommand<aLoopLimit;_indexNextCommand++){
+		if(_channel[_indexNextCommand]==aReadChannel){
+			if (!_channel[_indexNextCommand]->read()) std::cout <<"Fehler read!!!!\n" ;
+			aFinalIndex=_indexNextCommand;
+			//check=true;
+		}else{
+		 	_channel[_indexNextCommand]->cancelReadTransaction();
+		}
+	}
+	//if (!check ) std::cout << "Fehler no read at all!!!!!!!!!!!!\n";
+	_indexNextCommand = aFinalIndex;
+	_progress+=_currTransaction->getVirtualLength();
+	_task->addTransaction(_currTransaction);
+#ifdef ADD_COMMENTS
+	_task->addComment(new Comment(_task->getEndLastTransaction(), this, _indexNextCommand));
+#endif
+	_maxChannelIndex=0;
+	prepare(false);
 }
 
 TMLCommand* TMLSelectCommand::prepareNextTransaction(){
@@ -110,7 +134,13 @@ TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 
 
 TMLChannel* TMLSelectCommand::getChannel(unsigned int iIndex) const{
-	return _channel[_indexNextCommand];
+	if (_currTransaction==0) 
+		return _channel[_indexNextCommand];
+	else
+		return _currTransaction->getChannel();
+		
+	//return _channel[_indexNextCommand]; TO INCLUDE
+	//return _currTransaction->getChannel();
 }
 
 unsigned int TMLSelectCommand::getNbOfChannels() const{
@@ -118,7 +148,12 @@ unsigned int TMLSelectCommand::getNbOfChannels() const{
 }
 
 TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel[_indexNextCommand]->getBlockedWriteTask();
+	if (_currTransaction==0) 
+		return _channel[_indexNextCommand]->getBlockedWriteTask();
+	else
+		return _currTransaction->getChannel()->getBlockedWriteTask();
+	//return _channel[_indexNextCommand]->getBlockedWriteTask();	TO INCLUDE
+	//return _currTransaction->getChannel()->getBlockedWriteTask();
 }
 
 TMLCommand* TMLSelectCommand::getNextCommand() const{

@@ -105,6 +105,7 @@ void TMLEventBChannel::write(TMLTransaction* iTrans){
 #endif
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
+		_readTrans->setChannel(this);
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);

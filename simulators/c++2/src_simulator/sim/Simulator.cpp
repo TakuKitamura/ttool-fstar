@@ -305,8 +305,11 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
 		   depCommand=depTask->getCurrCommand();
-	           //if (depCommand!=0 && (depCommand->getChannel()==commandLET->getChannel(i) || dynamic_cast<TMLSelectCommand*>(depCommand)!=0)){
-		   if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
+		     //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
+		   if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) {
+
+		   //if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) {
+		   //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
 #ifdef DEBUG_KERNEL
 		    std::cout << "kernel:simulate: commands are accessing the same channel" << std::endl;
 #endif
@@ -325,16 +328,17 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
  			std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
 #endif
-			if (depCPU->truncateNextTransAt(transLET->getEndTime())!=0){
+			//if (depCPU->truncateAndAddNextTransAt(transLET->getEndTime())!=0){
 #ifdef DEBUG_KERNEL
+				depCPU->truncateAndAddNextTransAt(transLET->getEndTime());
 				std::cout << "kernel:simulate: dependent transaction truncated" << std::endl;
 #endif
-				depCPU->addTransaction();
-			}
+				//depCPU->addTransaction();
+			//}
 #ifdef DEBUG_KERNEL
 			std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
 #endif
-			depCPU->schedule();
+			//depCPU->schedule();
 		      }
 		     }else{
 #ifdef DEBUG_KERNEL

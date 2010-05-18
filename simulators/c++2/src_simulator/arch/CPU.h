@@ -46,6 +46,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SchedulableCommDevice.h>
 #include <TraceableDevice.h>
 #include <BusMaster.h>
+#include <WorkloadSource.h>
+#include <TMLTask.h>
 
 class TMLTask;
 class TMLTransaction;
@@ -58,132 +60,62 @@ enum vcdCPUVisState
 	END_TASK_CPU
 };
 
-///Simulates the bahavior of a CPU and an operating system
+///Represents the base class for CPUs
 class CPU: public SchedulableDevice, public TraceableDevice{
 public:
 	///Constructor
-    	/**
-      	\param iID ID of the CPU
-	\param iName Name of the CPU
+	/**
+	\param iID ID of the device
+	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
-	\param iTimePerCycle 1/Processor frequency
-	\param iCyclesPerExeci Cycles needed to execute one EXECI unit
-	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
-	\param iPipelineSize Pipeline size
-	\param iTaskSwitchingCycles Task switching penalty in cycles
-	\param iBranchingMissrate Branching prediction miss rate in %
-	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
-	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
-	\param ibyteDataSize Machine word length
-    	*/
-	CPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	*/
+	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0){
+	}
 	///Destructor
-	virtual ~CPU();
-	///Determines the next CPU transaction to be executed
-	virtual void schedule();
+	virtual ~CPU(){
+	}
 	///Stores a new task in the internal task list
 	/**
       	\param iTask Pointer to the task to add
     	*/
-	virtual void registerTask(TMLTask* iTask);
-	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	virtual bool addTransaction();
-	///Returns a pointer to the transaction determined by the scheduling algorithm
-    	/**
-      	\return Pointer to transaction
-    	*/
-	TMLTransaction* getNextTransaction();
+	virtual void registerTask(TMLTask* iTask){
+		_taskList.push_back(iTask);
+		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
+	}
 	///Truncates the next transaction at time iTime
 	/**
 	\param iTime Indicates at what time the transaction should be truncated
+	\return Returns true if scheduling of device has been performed
 	*/
-	TMLTime truncateNextTransAt(TMLTime iTime);
-	///Returns a string representation of the CPU
-	/**
-	\return Detailed string representation
-	*/
-	std::string toString() const;
-	///Returns a short string representation of the transaction
-	/**
-	\return Short string representation
-	*/
-	std::string toShortString() const;
-	///Writes a HTML representation of the schedule to an output file
-	/**
-      	\param myfile Reference to the ofstream object representing the output file
-    	*/
-	void schedule2HTML(std::ofstream& myfile) const;
-	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
-	///Writes a plain text representation of the schedule to an output file
-	/**
-      	\param myfile Reference to the ofstream object representing the output file
-    	*/
-	void schedule2TXT(std::ofstream& myfile) const;
-	virtual void streamBenchmarks(std::ostream& s) const;
-	virtual void reset();
-	void streamStateXML(std::ostream& s) const;
+	virtual bool truncateAndAddNextTransAt(TMLTime iTime)=0;
+	//virtual TMLTime truncateNextTransAt(TMLTime iTime)=0;
 	///Adds a new bus master to the internal list
 	/**
 	\param iMaster Pointer to bus master 
 	*/
-	void addBusMaster(BusMaster* iMaster);
-	std::istream& readObject(std::istream &is);
-	std::ostream& writeObject(std::ostream &os);
+	virtual void addBusMaster(BusMaster* iMaster){
+		_busMasterList.push_back(iMaster);
+	}
+	virtual void reset(){
+		SchedulableDevice::reset();
+		_lastTransaction=0;
+	}
+	virtual std::string toString() const =0;
+	virtual std::istream& readObject(std::istream &is){
+		SchedulableDevice::readObject(is);
+		return is;
+	}
+	virtual std::ostream& writeObject(std::ostream &os){
+		SchedulableDevice::writeObject(os);
+		return os;
+	}
 protected:
-	///Calculates the start time and the length of the next transaction
-	/**
-	\param iTimeSlice CPU Time slice granted by the scheduler
-	*/
-	void calcStartTimeLength(TMLTime iTimeSlice);
 	///List of all tasks running on the CPU
 	TaskList _taskList;
 	///Pointer to the last transaction which has been executed
 	TMLTransaction* _lastTransaction;
-	///Pointer to the bus which will be accessed by the next transaction
-	BusMaster* _masterNextTransaction;
-	///1/Processor frequency
-	TMLTime _timePerCycle;
 	///List of bus masters
 	BusMasterList _busMasterList;
-#ifdef PENALTIES_ENABLED
-	///Pipeline size
-	unsigned int _pipelineSize;
-	///Task switching penalty in cycles
-	unsigned int _taskSwitchingCycles;
-	///Branching prediction miss rate
-	unsigned int _brachingMissrate;
-	///Cycles needed to switch to idle mode
-	unsigned int _changeIdleModeCycles;
-	///Idle cycles which elapse before entering idle mode
-	unsigned int _cyclesBeforeIdle;
-#endif
-	///Cycles needed to execute one execi unit
-	unsigned int _cyclesPerExeci;
-	///Busy cycles since simulation start
-	TMLTime _busyCycles;
-	
-	//values deduced from CPU parameters 
-	///Time needed to execute one execi unit
-	TMLTime _timePerExeci;
-#ifdef PENALTIES_ENABLED
-	///Task switching penalty in time units
-	TMLTime _taskSwitchingTime;
-	///Idle time which elapses before entering idle mode
-	TMLTime _timeBeforeIdle;
-	///Time needed to switch into idle mode
-	TMLTime _changeIdleModeTime;
-	///_pipelineSize * _timePerExeci
-	TMLTime _pipelineSizeTimesExeci;
-	///_brachingMissrate * _pipelineSize
-	unsigned int _missrateTimesPipelinesize;
-	//varibales for branch miss calculation
-	////Indicates the number of commands executed since the last branch miss
-	//unsigned int _branchMissReminder;
-	////Potentially new value of _branchMissReminder
-	//unsigned int _branchMissTempReminder;
-#endif
-	///State variable for the VCD output
-	vcdCPUVisState _vcdOutputState;
 };
 
 #endif

@@ -69,6 +69,7 @@ void TMLEventFChannel::write(){
 #endif
 		if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 			_readTrans->setRunnableTime(_writeTrans->getEndTime());
+			_readTrans->setChannel(this);
 			_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
 	}

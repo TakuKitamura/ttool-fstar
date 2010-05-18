@@ -77,6 +77,7 @@ TMLTransaction* CPU::getNextTransaction(){
 #ifdef DEBUG_CPU
 		std::cout << "CPU:getNT: " << _name << " has bus transacion on master " << _masterNextTransaction->toString() << std::endl;
 #endif
+		//std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
 		BusMaster* aTempMaster =_nextTransaction->getChannel()->getFirstMaster(_nextTransaction);
 		//std::cout << "1" << std::endl;
 		bool aResult = aTempMaster->accessGranted();
@@ -153,6 +154,19 @@ void CPU::calcStartTimeLength(TMLTime iTimeSlice){
 		_nextTransaction->setIdlePenalty(_changeIdleModeTime);
 	} 
 #endif
+}
+
+void CPU::truncateAndAddNextTransAt(TMLTime iTime){
+	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
+	TMLTime aTimeSlice = _scheduler->schedule(iTime);
+	TMLTransaction* aNewTransaction =_scheduler->getNextTransaction(iTime);
+	if (aNewTransaction!=_nextTransaction){
+		if (truncateNextTransAt(iTime)!=0) addTransaction();
+		if (_nextTransaction!=0 && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
+		_nextTransaction = aNewTransaction;
+		if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);	
+	}
+	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
 TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
@@ -257,7 +271,8 @@ void CPU::schedule(){
 	TMLTransaction* aOldTransaction = _nextTransaction;
 	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
-	if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);
+	//if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);
+	if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 

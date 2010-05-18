@@ -68,6 +68,7 @@ void TMLEventFBChannel::write(){
 #endif
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(_writeTrans->getEndTime());
+		_readTrans->setChannel(this);
 		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
@@ -90,6 +91,7 @@ bool TMLEventFBChannel::read(){
 		_paramQueue.pop_front();  //NEW
 		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
+			_writeTrans->setChannel(this);
 			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
 #ifdef LISTENERS_ENABLED	

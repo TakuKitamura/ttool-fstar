@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Parameter.h>
 #include <definitions.h>
 #include <CPU.h>
+#include <SingleCoreCPU.h>
 #include <RRScheduler.h>
 #include <PrioScheduler.h>
 #include <Bus.h>
