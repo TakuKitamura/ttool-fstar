@@ -38,7 +38,7 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <CPU.h>
+#include <SingleCoreCPU.h>
 #include <TMLTask.h>
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 #include <TransactionListener.h>
 
-CPU::CPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0), _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
+SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
 #ifdef PENALTIES_ENABLED
 _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle),
 #endif 
@@ -59,17 +59,17 @@ _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*
 	//_transactList.reserve(BLOCK_SIZE);
 }
 
-CPU::~CPU(){  
+SingleCoreCPU::~SingleCoreCPU(){  
 	std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
 	//delete _scheduler;
 }
 
-void CPU::registerTask(TMLTask* iTask){
+/*void SingleCoreCPU::registerTask(TMLTask* iTask){
 	_taskList.push_back(iTask);
 	if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
-}
+}*/
 
-TMLTransaction* CPU::getNextTransaction(){
+TMLTransaction* SingleCoreCPU::getNextTransaction(){
 #ifdef BUS_ENABLED
 	if (_masterNextTransaction==0 || _nextTransaction==0){
 		return _nextTransaction;
@@ -96,7 +96,7 @@ TMLTransaction* CPU::getNextTransaction(){
 #endif
 }
 
-void CPU::calcStartTimeLength(TMLTime iTimeSlice){
+void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 #ifdef DEBUG_CPU	
 	std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
@@ -156,8 +156,9 @@ void CPU::calcStartTimeLength(TMLTime iTimeSlice){
 #endif
 }
 
-void CPU::truncateAndAddNextTransAt(TMLTime iTime){
+bool SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
+	//return truncateNextTransAt(iTime);
 	TMLTime aTimeSlice = _scheduler->schedule(iTime);
 	TMLTransaction* aNewTransaction =_scheduler->getNextTransaction(iTime);
 	if (aNewTransaction!=_nextTransaction){
@@ -169,7 +170,7 @@ void CPU::truncateAndAddNextTransAt(TMLTime iTime){
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
-TMLTime CPU::truncateNextTransAt(TMLTime iTime){	
+TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){	
 	if (_masterNextTransaction==0){
 #ifdef PENALTIES_ENABLED
 		if (iTime < _nextTransaction->getStartTime()) return 0;
@@ -204,7 +205,7 @@ TMLTime CPU::truncateNextTransAt(TMLTime iTime){
 	return _nextTransaction->getOverallLength();
 }
 
-bool CPU::addTransaction(){
+bool SingleCoreCPU::addTransaction(){
 	bool aFinish;
 	if (_masterNextTransaction==0){
 		aFinish=true;
@@ -265,7 +266,7 @@ bool CPU::addTransaction(){
 	}else return false;
 }
 
-void CPU::schedule(){
+void SingleCoreCPU::schedule(){
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
 	TMLTransaction* aOldTransaction = _nextTransaction;
@@ -276,18 +277,18 @@ void CPU::schedule(){
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
-std::string CPU::toString() const{
-	//std::cout << "CPU::toString() called" << std::endl;
+std::string SingleCoreCPU::toString() const{
+	//std::cout << "SingleCoreCPU::toString() called" << std::endl;
 	return _name;
 }
 
-std::string CPU::toShortString() const{
+std::string SingleCoreCPU::toShortString() const{
 	std::ostringstream outp;
 	outp << "cpu" << _ID;
 	return outp.str();
 }
 
-void CPU::schedule2HTML(std::ofstream& myfile) const{
+void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
 	TMLTime aCurrTime=0;
 	TMLTransaction* aCurrTrans;
 	unsigned int aBlanks,aLength,aColor;
@@ -359,14 +360,14 @@ void CPU::schedule2HTML(std::ofstream& myfile) const{
 	myfile << "</table>\n";
 }
 
-void CPU::schedule2TXT(std::ofstream& myfile) const{
+void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
 	myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;
 	}
 }
 
-TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
+TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
 	std::ostringstream outp;
 	oNoMoreTrans=false;
 	if (iInit){
@@ -427,8 +428,8 @@ TMLTime CPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoM
 	return 0;
 }
 
-void CPU::reset(){
-	SchedulableDevice::reset();
+void SingleCoreCPU::reset(){
+	CPU::reset();
 	_scheduler->reset();
 	_transactList.clear();
 	_nextTransaction=0;
@@ -437,23 +438,23 @@ void CPU::reset(){
 	_busyCycles=0;
 }
 
-void CPU::streamBenchmarks(std::ostream& s) const{
+void SingleCoreCPU::streamBenchmarks(std::ostream& s) const{
 	s << TAG_CPUo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl; 
 	if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
 	for(BusMasterList::const_iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i) (*i)->streamBenchmarks(s);
 	s << TAG_CPUc; 
 }
 
-void CPU::streamStateXML(std::ostream& s) const{
+void SingleCoreCPU::streamStateXML(std::ostream& s) const{
 	streamBenchmarks(s);
 }
 
-void CPU::addBusMaster(BusMaster* iMaster){
+/*void SingleCoreCPU::addBusMaster(BusMaster* iMaster){
 	_busMasterList.push_back(iMaster);
-}
+}*/
 
-std::istream& CPU::readObject(std::istream &is){
-	SchedulableDevice::readObject(is);
+std::istream& SingleCoreCPU::readObject(std::istream &is){
+	CPU::readObject(is);
 	_scheduler->readObject(is);
 #ifdef SAVE_BENCHMARK_VARS
 	READ_STREAM(is,_busyCycles);
@@ -463,8 +464,8 @@ std::istream& CPU::readObject(std::istream &is){
 #endif
 	return is;
 }
-std::ostream& CPU::writeObject(std::ostream &os){
-	SchedulableDevice::writeObject(os);
+std::ostream& SingleCoreCPU::writeObject(std::ostream &os){
+	CPU::writeObject(os);
 	_scheduler->writeObject(os);
 #ifdef SAVE_BENCHMARK_VARS
 	WRITE_STREAM(os,_busyCycles);
