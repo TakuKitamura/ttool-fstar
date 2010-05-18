@@ -2565,8 +2565,48 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				}
             }
 			
-			// NC
-		} else if (tp instanceof NCPanel) {
+			// AVATAR
+		} else if (tp instanceof AvatarDesignPanel) {
+            //Design
+            AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+            JDialogModelChecking.validated = adp.validated;
+            JDialogModelChecking.ignored = adp.ignored;
+            tclassesToValidate = new Vector();
+            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, tclassesToValidate, adp.getAvatarBDPanel().getFullBlockList(), "Choosing blocks to validate");
+			if (!automatic) {
+				GraphicLib.centerOnParent(jdmc);
+				jdmc.setVisible(true); // blocked until dialog has been closed
+			} else {
+				jdmc.closeDialog();
+			}
+			boolean optimize = jdmc.getOptimize();
+            if (tclassesToValidate.size() > 0) {
+                adp.validated = JDialogModelChecking.validated;
+                adp.ignored = JDialogModelChecking.ignored;
+                b = gtm.checkAvatarDesign(tclassesToValidate, adp, optimize);
+                if (b) {
+					ret = true;
+                    setMode(MainGUI.MODEL_OK);
+					setMode(MainGUI.GEN_DESIGN_OK);
+					if (!automatic) {
+						JOptionPane.showMessageDialog(frame,
+							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a corresponding formal (UPPAAL) specification",
+							"Syntax analysis successful on avatar design diagrams",
+							JOptionPane.INFORMATION_MESSAGE);
+					}
+                } else {
+					if (!automatic) {
+						JOptionPane.showMessageDialog(frame,
+							"The Avatar modeling contains several errors",
+							"Syntax analysis failed",
+							JOptionPane.INFORMATION_MESSAGE);
+					}
+                }
+            } 
+        
+			
+		// NC
+        } else if (tp instanceof NCPanel) {
             NCPanel ncp = (NCPanel) tp;
             b = gtm.translateNC(ncp);
             if (b) {
@@ -2869,7 +2909,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     
     public boolean generateRTLOTOS(boolean automatic) {
-		if (gtm.getTURTLEModelingState() == 1) {
+		if (gtm.getTURTLEModelingState() > 0) {
 			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, RT_LOTOS)) {
 				return false;
 			}
@@ -2900,11 +2940,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		if (gtm.getTURTLEModelingState() > 0) {
 			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, LOTOS)) {
 				dtree.toBeUpdated();
+				TraceManager.addDev("Generate from state failed");
 				return false;
 			}
-			if (!automatic) {
+			/*if (!automatic && (gtm.getTURTLEModelingState() == 1)) {
 				return true;
-			}
+			}*/
 		}
 		
 		//System.out.println("generate LOTOS");
@@ -2931,6 +2972,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			return generateTIFFromMapping(automatic, generator);
 		}
 		if (state == 2) {
+			TraceManager.addDev("Generating from state 2");
 			return generateTIFFromTMLModeling(automatic, generator);
 		}
 		return false;
@@ -3029,7 +3071,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void generateUPPAAL() {
 		//System.out.println("Generate UPPAAL!");
 		//gtm.mergeChoices(true);
-		if (gtm.getTURTLEModelingState() == 1) {
+		if (gtm.getTURTLEModelingState() > 0) {
 			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL)) {
 				return;
 			}

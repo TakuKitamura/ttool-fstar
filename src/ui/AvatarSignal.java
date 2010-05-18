@@ -190,4 +190,19 @@ public class AvatarSignal extends AvatarMethod {
 		
 		return true;
 	}
+	
+	public static String getSignalNameFromFullSignalString(String _signal) {
+		String signal = _signal.trim();
+		int index0 = signal.indexOf(" ");
+		if (index0 != -1) {
+			signal = signal.substring(index0+1, signal.length()).trim();
+		}
+		
+		index0 = signal.indexOf("(");
+		if (index0 != -1) {
+			signal = signal.substring(0, index0).trim();
+		}
+		
+		return signal;
+	}
 }

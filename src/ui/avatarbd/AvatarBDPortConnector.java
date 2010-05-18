@@ -352,14 +352,14 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		oldScaleFactor = scaleFactor;
 	}
 	
-	public LinkedList getListOfSignalsOrigin() {
+	public LinkedList<String> getListOfSignalsOrigin() {
 		LinkedList<String> list = new LinkedList<String>();
 		list.addAll(inSignalsAtOrigin);
 		list.addAll(outSignalsAtOrigin);
 		return list;
 	}
 	
-	public LinkedList getListOfSignalsDestination() {
+	public LinkedList<String> getListOfSignalsDestination() {
 		LinkedList<String> list = new LinkedList<String>();
 		list.addAll(inSignalsAtDestination);
 		list.addAll(outSignalsAtDestination);

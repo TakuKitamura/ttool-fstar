@@ -412,5 +412,28 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return TGComponentManager.AVATARSMD_CONNECTOR;
 	}
 	
+	public AvatarSMDState checkForStartStateOfCompositeStates() {
+		AvatarSMDState tgc;
+		LinkedList<AvatarSMDState> list  = getFullStateList();
+		for(AvatarSMDState s: list) {
+			tgc = s.checkForStartStateOfCompositeStates();
+			if (tgc != null) {
+				return tgc;
+			}
+		}
+		
+		int cpt = 0;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarSMDStartState) {
+				cpt ++;
+			}
+		}
+		
+		if (cpt > 1) {
+			return this;
+		}
+		return null;
+	}
+	
     
 }

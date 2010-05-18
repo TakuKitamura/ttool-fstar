@@ -55,6 +55,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
+import ui.avatarsmd.*;
 
 
 public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
@@ -840,6 +841,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		}
 		return null;
 	}
+	
+	public AvatarSMDPanel getAvatarSMDPanel() {
+        return ((AvatarDesignPanel)(tdp.tp)).getAvatarSMDPanel(getBlockName());
+    }
 	
 
     

@@ -1543,6 +1543,46 @@ public class GTURTLEModeling {
 		
 		return true;
 	}
+	
+	// BUILDING An AVATAR Design AND CHECKING IT
+	public boolean checkAvatarDesign(Vector blocks, AvatarDesignPanel adp, boolean overideSyntaxChecking) {
+		// Builds a TURTLE modeling from diagrams
+		//warnings = new Vector();
+		//checkingErrors = null;
+		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
+		//tm = new TURTLEModeling();
+		//listE = new CorrespondanceTGElement();
+		mgui.reinitCountOfPanels();
+
+		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
+		tm = adpt.generateTURTLEModeling(blocks, "");
+		tmState = 0;
+
+		listE = adpt.getCorrespondanceTGElement();
+		checkingErrors = adpt.getErrors();
+		warnings = adpt.getWarnings();
+		if ((checkingErrors != null) && (checkingErrors.size() >0)){
+			return false;
+		}
+
+		// Modeling is built
+		// Now check it !
+		if (!overideSyntaxChecking) {
+			TURTLEModelChecker tmc = new TURTLEModelChecker(tm, listE);
+	
+			checkingErrors = tmc.syntaxAnalysisChecking();
+			warnings.addAll(tmc.getWarnings());
+	
+			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+				analyzeErrors();
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		return true;
+	}
 
 	public Vector getCheckingErrors() {
 		return checkingErrors;

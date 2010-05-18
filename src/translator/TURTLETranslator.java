@@ -589,6 +589,9 @@ public class TURTLETranslator {
 				if (k != 0) {
 					sb.append(", ");
 				}
+				if (g.getLotosName() == null) {
+					g.setLotosName(g.getName());
+				}
 				sb.append(g.getLotosName());
 			}
 			sb.append("]| ");

@@ -68,6 +68,10 @@ public class AvatarDesignPanel extends TURTLEPanel {
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
     }
+	
+   public AvatarBDPanel getAvatarBDPanel() {
+	   return abdp;
+   }
     
    public AvatarSMDPanel getAvatarSMDPanel(String name) {
         AvatarSMDPanel asmdp;

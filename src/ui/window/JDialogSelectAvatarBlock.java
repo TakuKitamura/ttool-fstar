@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class JDialogModelChecking
- * Dialog for managing Tclasses to be validated
- * Creation: 13/12/2003
- * @version 1.0 13/12/2003
+ * Class JDialogSelectAvatarBlock
+ * Dialog for managing blocks to be validated
+ * Creation: 18/05/2010
+ * @version 1.0 18/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
@@ -53,11 +53,12 @@ import javax.swing.event.*;
 import java.util.*;
 
 import ui.*;
+import ui.avatarbd.*;
 
 
-public class JDialogModelChecking extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     public static Vector validated, ignored;
-	private static boolean overideSyntaxChecking = false;
+	private static boolean optimized = true;
     
     private Vector val, ign, back;
     
@@ -69,28 +70,27 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
     private JButton addOneValidated;
     private JButton addOneIgnored;
     private JButton allIgnored;
-	protected JCheckBox syntax;
+	protected JCheckBox optimize;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogModelChecking(Frame f, Vector _back, LinkedList componentList, String title) {
+    public JDialogSelectAvatarBlock(Frame f, Vector _back, LinkedList componentList, String title) {
         super(f, title, true);
         
         back = _back;
         
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
-            //System.out.println("Val size: " + val.size() + "component list:" + componentList.size());
             ign = new Vector();
         } else {
             val = validated;
             ign = ignored;
-            checkTClasses(val, componentList);
-            checkTClasses(ign, componentList);
-            addNewTclasses(val, componentList, ign);
+            checkTask(val, componentList);
+            checkTask(ign, componentList);
+            addNewTask(val, componentList, ign);
         }
         
         initComponents();
@@ -105,18 +105,18 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         for(int i=0; i<list.size(); i++) {
             tgc = (TGComponent)(list.get(i));
             //System.out.println(tgc);
-            if (tgc instanceof TClassInterface) {
+            if (tgc instanceof AvatarBDBlock) {
                 v.addElement(tgc);
             }
         }
         return v;
     }
     
-    private void checkTClasses(Vector tobeChecked, LinkedList source) {
-        TClassInterface t;
+    private void checkTask(Vector tobeChecked, LinkedList source) {
+        AvatarBDBlock t;
         
         for(int i=0; i<tobeChecked.size(); i++) {
-            t = (TClassInterface)(tobeChecked.elementAt(i));
+            t = (AvatarBDBlock)(tobeChecked.elementAt(i));
             if (!source.contains(t)) {
                 tobeChecked.removeElementAt(i);
                 i--;
@@ -124,12 +124,12 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         }
     }
     
-    public void addNewTclasses(Vector added, LinkedList source, Vector notSource) {
+    public void addNewTask(Vector added, LinkedList source, Vector notSource) {
         TGComponent tgc;
         
         for(int i=0; i<source.size(); i++) {
             tgc = (TGComponent)(source.get(i));
-            if ((tgc instanceof TClassInterface) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
+            if ((tgc instanceof AvatarBDBlock) && (!added.contains(tgc)) && (!notSource.contains(tgc))){
                 added.addElement(tgc);
                 //System.out.println("New element");
             }
@@ -151,7 +151,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         // ignored list
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
-        panel1.setBorder(new javax.swing.border.TitledBorder("Ignored"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Blocks ignored"));
         listIgnored = new JList(ign);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
@@ -164,7 +164,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         // validated list
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
-        panel2.setBorder(new javax.swing.border.TitledBorder("Taken into account"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Blocks taken into account"));
         listValidated = new JList(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
@@ -213,15 +213,15 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         c.add(panel3, BorderLayout.CENTER);
         
         // main panel;
-        panel6 = new JPanel();
+		panel6 = new JPanel();
         panel6.setLayout(new BorderLayout());
 		
 		panel5 = new JPanel();
         panel5.setLayout(new FlowLayout());
 		
-		syntax = new JCheckBox("Overide TIF syntax checking");
-		syntax.setSelected(overideSyntaxChecking);
-		panel5.add(syntax);
+		optimize = new JCheckBox("Optimize specification");
+		optimize.setSelected(optimized);
+		panel5.add(optimize);
 		
         panel4 = new JPanel();
         panel4.setLayout(new FlowLayout());
@@ -320,7 +320,7 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
         }
         validated = val;
         ignored = ign;
-		overideSyntaxChecking = syntax.isSelected();
+		optimized = optimize.isSelected();
         dispose();
     }
     
@@ -357,32 +357,16 @@ public class JDialogModelChecking extends javax.swing.JDialog implements ActionL
             closeButton.setEnabled(false);
         } else {
             allIgnored.setEnabled(true);
-            if (nbStart() > 0) {
-                closeButton.setEnabled(true);
-            } else {
-                closeButton.setEnabled(false);
-            }
+            closeButton.setEnabled(true);
         }
     }
     
-    public int nbStart() {
-        int cpt = 0;
-        TClassInterface t;
-        for(int	i=0; i<val.size(); i++) {
-            t = (TClassInterface)(val.elementAt(i));
-            if (t.isStart()) {
-                cpt ++;
-            }
-        }
-        return cpt;
-    }
     
     public void valueChanged(ListSelectionEvent e) {
         setButtons();
     }
 	
-	public boolean getOverideSyntaxChecking() {
-		return overideSyntaxChecking;
+	public boolean getOptimize() {
+		return optimized;
 	}
-    
 }
