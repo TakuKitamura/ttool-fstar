@@ -921,6 +921,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public LinkedList getComponentList() {
         return componentList;
     }
+	
+	public LinkedList getAllComponentList() {
+		TGComponent tgc;
+		
+		LinkedList ll = new LinkedList();
+		ll.addAll(componentList);
+		
+		ListIterator iterator = componentList.listIterator();
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			ll.addAll(tgc.getRecursiveAllInternalComponent());
+		}
+		
+        return ll;
+    }
     
     // Adding connector
     

@@ -190,6 +190,8 @@ public class AvatarDesignPanelTranslator {
 		String name = block.getBlockName();
 		TDiagramPanel tdp;
 		
+		int size = checkingErrors.size();
+		
 		if (asmdp == null) {
 			return;
 		}
@@ -224,12 +226,12 @@ public class AvatarDesignPanelTranslator {
 		LinkedList list = asmdp.getComponentList();
 		Iterator iterator = list.listIterator();
 		TGComponent tgc;
-		TGComponent tss = null;
+		AvatarSMDStartState tss = null;
 		int cptStart = 0;
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof AvatarSMDStartState){
-				tss = tgc;
+				tss = (AvatarSMDStartState)tgc;
 				cptStart ++;
 			}
 		}
@@ -275,8 +277,317 @@ public class AvatarDesignPanelTranslator {
 		
 		t.setActivityDiagram(ad);
 		
+		// First pass: creating TIF components, but no interconnection between them
+		ADParallel adpar;
+		iterator = asmdp.getAllComponentList().listIterator();
+		ADActionStateWithGate adag;
+		Gate g;
+		ADJunction adj;
+		ADChoice adch;
+		
+		AvatarSMDReceiveSignal asmdrs;
+		AvatarSMDSendSignal asmdss;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			
+			// Parallel
+			if (tgc instanceof AvatarSMDParallel) {
+				adpar = new ADParallel();
+				listE.addCor(adpar, tgc);
+				ad.add(adpar);
+				
+			// Receive signal
+			} else if (tgc instanceof AvatarSMDReceiveSignal) {
+				asmdrs = (AvatarSMDReceiveSignal)tgc;
+				g = t.getGateByName(asmdrs.getSignalName());
+				if (g == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdrs.getSignalName());
+					ce.setTClass(t);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					adag = new ADActionStateWithGate(g);
+					adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
+					listE.addCor(adag, tgc);
+					ad.add(adag);
+				}
+			
+			// Send signal
+			} else if (tgc instanceof AvatarSMDSendSignal) {
+				asmdss = (AvatarSMDSendSignal)tgc;
+				g = t.getGateByName(asmdss.getSignalName());
+				if (g == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
+					ce.setTClass(t);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					adag = new ADActionStateWithGate(g);
+					adag.setActionValue(makeTIFAction(asmdss.getValue(), "!"));
+					listE.addCor(adag, tgc);
+					ad.add(adag);
+				}
+				
+			// State
+			} else if (tgc instanceof AvatarSMDState) {
+				// First case: no internal
+				// One junction followed by one choice
+				// The junction remains the reference
+				adj = new ADJunction();
+				listE.addCor(adj, tgc);
+				ad.add(adj);
+				adch = new ADChoice();
+				ad.add(adch);
+				adj.addNext(adch);
+			
+			// Start state
+			} else if (tgc instanceof AvatarSMDStartState) {
+				// they are ignored
+				/*if (tgc != tss) {
+					adj = new ADJunction();
+					listE.addCor(adj, tgc);
+					ad.add(adj);
+				}*/
+				
+			// Stop state
+			} else if (tgc instanceof AvatarSMDStopState) {
+				adstop = new ADStop();
+				listE.addCor(adstop, tgc);
+				ad.add(adstop);
+			}
+		}
+		
+		if (checkingErrors.size() != size) {
+			return;
+		}
+		
+		// Second pass: connectors between components
+		iterator = asmdp.getAllComponentList().listIterator();
+		AvatarSMDConnector asmdco;
+		TGComponent tgc1, tgc2;
+		Object o;
+		boolean first;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDConnector) {
+				asmdco = (AvatarSMDConnector)tgc;
+				tgc1 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP1());
+				tgc2 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP2());
+				if ((tgc1 == null) || (tgc2 == null)) {
+					TraceManager.addDev("tgcs null in Avatar translation");
+				} else {
+					// First case: not quiting a composite state
+					first = true;
+					if (tgc1 instanceof AvatarSMDState) {
+						if (((AvatarSMDState)tgc1).isACompositeState()) {
+							first = false;
+						}
+					}
+					if (first) {
+						connect(asmdco, tgc1, tgc2, tss, ad, t, tdp);
+					} else {
+						// Second case: not yet implemented...
+					}
+				}
+			}
+		}
+		
 		panels.add(tdp);
 		activities.add(ad);
+	}
+	
+	private void connect(AvatarSMDConnector _asmdco, TGComponent _tgc1, TGComponent _tgc2, AvatarSMDStartState _tss, ActivityDiagram _ad, TClass _t, TDiagramPanel _tdp) {
+		ADComponent adc1, adc2;
+		ADComponent adc;
+		String s1, s2;
+		ADChoice adch;
+		ADTimeInterval adti;
+		ADDelay addelay;
+		boolean hasChoice = false;
+		Vector<String> v;
+		Gate g;
+		Param p;
+		ADActionStateWithGate adag;
+		ADActionStateWithParam adap;
+		
+		// Search for the two elements to connect
+		if (_tgc1 instanceof AvatarSMDStartState) {
+			if (_tgc1 != _tss) {
+				_tgc1 = _tgc1.getFather(); // Shall be a state!
+			}
+		}
+		
+		// Search for the two related TIF Components
+		adc1 = listE.getADComponent(_tgc1);
+		adc2 = listE.getADComponent(_tgc2);
+		
+		
+		
+		if ((adc1 == null) || (adc2 == null)) {
+			TraceManager.addDev("adcs null in Avatar translation");
+		} else {
+			adc = adc1;
+			
+			if (_tgc1 instanceof AvatarSMDState) {
+				adc1 = adc1.getNext(0); // shall be a choice!
+			}
+			
+			// Guard
+			if (adc1 instanceof ADChoice) {
+				adch = (ADChoice)adc1;
+				s1 = _asmdco.getGuard();
+				if (s1 == null) {
+					s1 = "[ ]";
+				}
+				adch.addGuard(s1);
+				hasChoice = true;
+			}
+			
+			// Delay
+			s1 = _asmdco.getTotalMinDelay();
+			s2 = _asmdco.getTotalMaxDelay();
+			if (s1.length() > 0) {
+				if (s2.length() > 0) {
+					adti = new ADTimeInterval();
+					adti.setValue(s1, s2);
+					_ad.add(adti);
+					listE.addCor(adti, _asmdco);
+					adc.addNext(adti);
+					adc = adti;
+				} else {
+					addelay = new ADDelay();
+					addelay.setValue(s1);
+					_ad.add(addelay);
+					listE.addCor(addelay, _asmdco);
+					adc.addNext(addelay);
+					adc = addelay;
+				}
+			}
+			
+			// Actions
+			v = _asmdco.getActions();
+			if (v.size() == 0) {
+				if (hasChoice) {
+					// Must make an action to make the choice deterministic, except if the next component is an action!
+					if (!((_tgc2 instanceof AvatarSMDReceiveSignal) || (_tgc2 instanceof AvatarSMDSendSignal))) {
+						adc = makeChoiceAction(_ad, _t, adc, _asmdco);
+						TraceManager.addDev("Adding artifical action for choice to be deterministic");
+					}
+				}
+			} else {
+				// has actions!
+				if (!isActionOnGate(_t, v.get(0))) {
+					if (hasChoice) {
+					// Must make an action to make the choice deterministic, except if the next component is an action!
+						if (!((_tgc2 instanceof AvatarSMDReceiveSignal) || (_tgc2 instanceof AvatarSMDSendSignal))) {
+							adc = makeChoiceAction(_ad, _t, adc, _asmdco);
+							TraceManager.addDev("Adding artifical action for choice to be deterministic");
+						}
+					}	
+				}
+				
+				for (String action: v) {
+					g = getGateFromActionState(_t, action);
+					p = getParamFromActionState(_t, action);
+					if (g != null) {
+						adag = new ADActionStateWithGate(g);
+						_ad.addElement(adag);
+						adag.setActionValue(makeTIFAction(action, "!"));
+						listE.addCor(adag, _asmdco);
+						adc.addNext(adag);
+						adc = adag;
+					} else if (p != null) {
+						adap = new ADActionStateWithParam(p);
+						_ad.addElement(adap);
+						adap.setActionValue(makeTIFActionOnParam(action));
+						listE.addCor(adap, _asmdco);
+						adc.addNext(adap);
+						adc = adap;
+					} else {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed action: " + action);
+						ce.setTClass(_t);
+						ce.setTDiagramPanel(_tdp);
+						ce.setTGComponent(_asmdco);
+						addCheckingError(ce);
+						return;
+					}
+				}
+			}
+			
+			adc.addNext(adc2);
+		}
+		
+	}
+	
+	private boolean isActionOnGate(TClass _t, String _s) {
+		Gate g = getGateFromActionState(_t, _s);
+		return (g != null);
+	}
+	
+	private Gate getGateFromActionState(TClass _t, String _action) {
+		String action = _action;
+		int index0 = action.indexOf("(");
+		if (index0 != -1) {
+			action = _action.substring(0, index0);
+		}
+		
+		return _t.getGateByName(action);
+	}
+	
+	private Param getParamFromActionState(TClass _t, String _action) {
+		String action = _action;
+		int index0 = action.indexOf("(");
+		if (index0 != -1) {
+			action = _action.substring(0, index0);
+		}
+		
+		return _t.getParamByName(action);
+	}
+	
+	private ADComponent makeChoiceAction(ActivityDiagram _ad, TClass _t, ADComponent _adc, TGComponent _asmdco) {
+		Gate g = _t.addNewGateIfApplicable("choice__", true);
+		ADActionStateWithGate adag = new ADActionStateWithGate(g);
+		adag.setActionValue("");
+		_ad.add(adag);
+		_adc.addNext(adag);
+		listE.addCor(adag, _asmdco);
+		return adag;
+	}
+	
+	private String makeTIFActionOnParam(String _s) {
+		String ret = _s.trim();
+		int index0 = ret.indexOf("=");
+		if (index0 == -1) {
+			return ret;
+		}
+		
+		return ret.substring(index0+1, ret.length()).trim();
+		
+	}
+	
+	private String makeTIFAction(String _s, String _replace) {
+		String ret = _s.trim();
+		int index0 = ret.indexOf("(");
+		if (index0 == -1) {
+			return "";
+		}
+		
+		int index1 = ret.indexOf(")");
+		if (index1 == -1) {
+			return "";
+		}
+		
+		ret = ret.substring(index0, index1); 
+		
+		ret = Conversion.replaceAllString(ret, "(", _replace);
+		ret = Conversion.replaceAllString(ret, ",", _replace);
+		ret = Conversion.replaceAllString(ret, " ", "");
+		
+		return ret;
 	}
 	
 	// Checks whether all states with internal state machines have at most one start state
@@ -294,851 +605,6 @@ public class AvatarDesignPanelTranslator {
 		}
 		return null;
 	}
-	
-	
-	
-	/*private void addTDataAttributes(TAttribute a, TClass t, ClassDiagramPanelInterface tdp, TURTLEModeling tm) {
-		//System.out.println("Find data: " + a.getId() + " getTypeOther=" + a.getTypeOther());
-		if (tdp instanceof TClassDiagramPanel) {
-			TCDTData tdata  = ((TClassDiagramPanel)tdp).findTData(a.getTypeOther());
-			if (tdata == null) {
-				CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown type: " + a.getTypeOther());
-				ce.setTClass(t);
-				ce.setTDiagramPanel((TDiagramPanel)tdp);
-				addCheckingError(ce);
-				return ;
-			}
-			
-			Vector v = tdata.getAttributes();
-			TAttribute b; Param p;
-			for(int i=0; i<v.size(); i++) {
-				b = (TAttribute)(v.elementAt(i));
-				if (b.getType() == TAttribute.NATURAL) {
-					p = new Param(a.getId() + "__" + b.getId(), Param.NAT, b.getInitialValue());
-					p.setAccess(a.getAccessString());
-					t.addParameter(p);
-				}
-				if (b.getType() == TAttribute.BOOLEAN) {
-					p = new Param(a.getId() + "__" + b.getId(), Param.BOOL, b.getInitialValue());
-					p.setAccess(a.getAccessString());
-					t.addParameter(p);
-				}
-				
-				if (b.getType() == TAttribute.QUEUE_NAT) {
-					p = new Param(a.getId() + "__" + b.getId(), Param.QUEUE_NAT, b.getInitialValue());
-					p.setAccess(a.getAccessString());
-					t.addParameter(p);
-				}
-			}
-		}
-		
-	}
-	
-	private void buildActivityDiagram(TClass t) {
-		int j;
-		//TActivityDiagramPanel tadp;
-		ActivityDiagramPanelInterface adpi;
-		TDiagramPanel tdp;
-		//t.printParams();
-		
-		// find the panel of this TClass
-		TClassInterface tci = (TClassInterface)(listE.getTG(t));
-		
-		String name = tci.getClassName();
-		int index_name = name.indexOf(':');
-		// instance
-		if (index_name != -1) {
-			name = name.substring(index_name+2, name.length());
-		}
-		
-		adpi = tci.getBehaviourDiagramPanel();
-		if (adpi == null) {
-			return;
-		}
-		
-		tdp = (TDiagramPanel)adpi;
-		
-		int indexTdp = panels.indexOf(tdp);
-		if (indexTdp > -1) {
-			System.out.println("Found similar activity diagram for " + t.getName());
-			t.setActivityDiagram(activities.get(indexTdp).duplicate(t));
-			
-			//System.out.println("AD of " + t.getName() + "=");
-			//t.getActivityDiagram().print();
-			
-			// Must fill correspondances!
-			
-			ADComponent ad0, ad1;
-			TGComponent tgcad;
-			for(int adi=0; adi<t.getActivityDiagram().size(); adi++) {
-				ad0 = (ADComponent)(t.getActivityDiagram().get(adi));
-				ad1 = (ADComponent)(activities.get(indexTdp).get(adi));
-				tgcad = listE.getTG(ad1);
-				if (tgcad != null ){
-					//System.out.println("Adding correspondance for " + ad0);
-					listE.addCor(ad0, tgcad);
-				}
-			}
-			
-			return;
-		}
-		
-		// search for start state
-		LinkedList list = adpi.getComponentList();
-		Iterator iterator = list.listIterator();
-		TGComponent tgc;
-		TGComponent tss = null;
-		int cptStart = 0;
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TADStartState){
-				tss = tgc;
-				cptStart ++;
-			} else if (tgc instanceof TOSADStartState) {
-				tss = tgc;
-				cptStart ++;
-			}
-		}
-		
-		if (tss == null) {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No start state in the activity diagram of " + name);
-			ce.setTClass(t);
-			ce.setTDiagramPanel(tdp);
-			addCheckingError(ce);
-			return;
-		}
-		
-		if (cptStart > 1) {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in the activity diagram of " + name);
-			ce.setTClass(t);
-			ce.setTDiagramPanel(tdp);
-			addCheckingError(ce);
-			return;
-		}
-		
-		TADActionState tadas;
-		
-		ADStart ads;
-		//ADActionState ada;
-		ADActionStateWithGate adag;
-		ADActionStateWithParam adap;
-		ADActionStateWithMultipleParam adamp;
-		ADChoice adch;
-		ADDelay add;
-		ADJunction adj;
-		ADLatency adl;
-		ADParallel adp;
-		ADSequence adseq;
-		ADPreempt adpre;
-		ADStop adst;
-		ADTimeInterval adti;
-		ADTLO adtlo;
-		ADTimeCapture adtc;
-		String s, s1;
-		Gate g;
-		Param p;
-		
-		int nbActions;
-		String sTmp;
-		
-		int startIndex = listE.getSize();
-		
-		// Creation of the activity diagram
-		ads = new ADStart();
-		listE.addCor(ads, tss);
-		ActivityDiagram ad = new ActivityDiagram(ads);
-		t.setActivityDiagram(ad);
-		
-		panels.add(tdp);
-		activities.add(ad);
-		
-		
-		//System.out.println("Making activity diagram of " + t.getName());
-		
-		// Creation of other elements
-		iterator = list.listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			
-			if (tgc instanceof TADActionState) {
-				tadas = (TADActionState)tgc;
-				s = ((TADActionState)tgc).getAction();
-				s = s.trim();
-				//remove ';' if last character
-				if (s.substring(s.length()-1, s.length()).compareTo(";") == 0) {
-					s = s.substring(0, s.length()-1);
-				}
-				nbActions = Conversion.nbChar(s, ';') + 1;
-				//System.out.println("Nb Actions in state: " + nbActions);
-				
-				s = TURTLEModeling.manageDataStructures(t, s);
-				
-				g = t.getGateFromActionState(s);
-				p = t.getParamFromActionState(s);
-				if ((g != null) && (nbActions == 1)){
-					//System.out.println("Action state with gate found " + g.getName() + " value:" + t.getActionValueFromActionState(s));
-					adag = new ADActionStateWithGate(g);
-					ad.addElement(adag);
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("s1=" + s1);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					
-					//System.out.println("hi");
-					if (s1 == null) {
-						//System.out.println("ho");
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Invalid expression: " + t.getActionValueFromActionState(s));
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						//return;
-					} else {
-						tadas.setStateAction(ErrorHighlight.GATE);
-						s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-						
-						adag.setActionValue(s1);
-						//System.out.println("Adding correspondance tgc=" + tgc +  "adag=" + adag);
-						listE.addCor(adag, tgc);
-						listB.addCor(adag, tgc);
-					}
-				} else if ((p != null) && (nbActions == 1)){
-					//System.out.println("Action state with param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-					if (t.getExprValueFromActionState(s).trim().startsWith("=")) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + " should not start with a '=='");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);  
-						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-					}
-					adap = new ADActionStateWithParam(p);
-					ad.addElement(adap);
-					adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
-					listE.addCor(adap, tgc);
-					listB.addCor(adap, tgc);
-					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
-					
-				} else if ((p != null) && (nbActions > 1)){
-					//System.out.println("Action state with multi param found " + p.getName() + " value:" + t.getExprValueFromActionState(s));
-					// Checking params
-					CheckingError ce;
-					Vector v;
-					for(j=0; j<nbActions; j++) {
-						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
-						if (sTmp == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (0) (" + s + "): \"" + s + "\" is not a correct expression");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						}
-						
-						p = t.getParamFromActionState(sTmp);
-						if (p == null) {
-							ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (1) (" + s + "): \"" + sTmp + "\" is not a correct expression");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						}
-					}
-				
-					
-					tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
-					ADComponent adtmp = null;
-					for(j=0; j<nbActions; j++) {
-						sTmp = TURTLEModeling.manageDataStructures(t,((TADActionState)(tgc)).getAction(j));
-						p = t.getParamFromActionState(sTmp);
-						adap = new ADActionStateWithParam(p);
-						ad.addElement(adap);
-						if (adtmp != null) {
-							adtmp.addNext(adap);
-						} else {
-							listB.addCor(adap, tgc);
-						}
-						adtmp = adap;
-						adap.setActionValue(t.getExprValueFromActionState(sTmp));
-					}
-					
-					listE.addCor(adtmp, tgc);
-					
-				} else {
-					// Is it of kind: tdata = tdata'?
-					int index = s.indexOf("=");
-					if (index > -1) {
-						String name0 = s.substring(0,index).trim();
-						String name1 = s.substring(index+1,s.length()).trim();
-						Vector attributes = tci.getAttributes();
-						int index0 = -1;
-						int index1 = -1;
-						TAttribute ta, ta0 = null, ta1 = null;
-						
-						for(j=0; j<attributes.size(); j++) {
-							ta = (TAttribute)(attributes.get(j));
-							if (ta.getId().compareTo(name0) == 0) {
-								index0 = j;
-								ta0 = ta;
-							}
-							if (ta.getId().compareTo(name1) == 0) {
-								index1 = j;
-								ta1 = ta;
-							}
-						}
-						
-						if (((index0 != -1) && (index1 != -1)) && (ta0.getTypeOther().compareTo(ta1.getTypeOther()) == 0)) {
-							// Expand the equality!
-							tadas.setStateAction(ErrorHighlight.ATTRIBUTE);
-							
-							String nameTmp;
-							Vector v0 = t.getParamStartingWith(ta0.getId()+ "__");
-							ADComponent adtmp = null;
-							
-							for(j=0; j<v0.size(); j++) {
-								p = (Param)(v0.get(j));
-								adap = new ADActionStateWithParam(p);
-								ad.addElement(adap);
-								if (adtmp != null) {
-									adtmp.addNext(adap);
-								} else {
-									listB.addCor(adap, tgc);
-								}
-								adtmp = adap;
-								nameTmp = p.getName();
-								nameTmp = nameTmp.substring(nameTmp.indexOf("__"), nameTmp.length());
-								adap.setActionValue(name1 + nameTmp);
-							}
-							
-							listE.addCor(adtmp, tgc);
-						} else {
-							//System.out.println("Unknown param 0 or 1");
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-						}
-						
-					} else {
-						//System.out.println("Unknown param");
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action state (2) (" + s + "): \"" + s + "\" is not a correct expression");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						tadas.setStateAction(ErrorHighlight.UNKNOWN_AS);
-					}
-					//System.out.println("Bad action state found " + s);
-				}
-				
-			} else if (tgc instanceof TADTimeCapture) {
-				p = t.getParamByName(tgc.getValue().trim());
-				if (p != null){
-					System.out.println("Time capture with param " + p.getName());
-					adtc = new ADTimeCapture(p);
-					ad.addElement(adtc);
-					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.ATTRIBUTE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown variable: " + tgc.getValue());
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeCapture)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-				}
-				
-			// Get element from Array
-			} else if (tgc instanceof TADArrayGetState) {
-				TADArrayGetState ags = (TADArrayGetState)tgc;
-				sTmp = ags.getIndex();
-				try {
-					nbActions = Integer.decode(sTmp).intValue();
-					
-					p = t.getParamByName(ags.getVariable());
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getVariable() + ": unknown variable");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ags.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						adap = new ADActionStateWithParam(p);
-						p = t.getParamByName(ags.getArray() + "__" + nbActions);
-						if (p == null) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getArray() + "[" + ags.getIndex() + "]: unknown array or wrong index");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							ags.setStateAction(ErrorHighlight.UNKNOWN);
-						} else {
-							ad.addElement(adap);
-							adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + nbActions));
-							listE.addCor(adap, tgc);
-							listB.addCor(adap, tgc);
-							ags.setStateAction(ErrorHighlight.OK);
-						}
-					}
-				} catch (Exception e) {
-					// Index is not an absolute value
-					System.out.println("Index is not an absolute value");
-					Gate error = t.addNewGateIfApplicable("arrayOverflow");
-					
-					ADChoice choice1 = new ADChoice();
-					ADJunction junc = new ADJunction();
-					ADStop stop1 = new ADStop();
-					ADActionStateWithGate adag1 = new ADActionStateWithGate(error);
-					
-					ad.addElement(choice1);
-					ad.addElement(junc);
-					ad.addElement(stop1);
-					ad.addElement(adag1);
-					
-					String basicGuard = "(" + ags.getIndex() + ")";
-					
-					p = t.getParamByName(ags.getArray() + "__size");
-					
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getArray() + "[" + ags.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ags.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						int size = 2;
-						try {
-							size = Integer.decode(p.getValue()).intValue();
-						} catch (Exception e0) {
-						}
-						
-						p = t.getParamByName(ags.getVariable());
-						
-						if (p == null) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ags.getVariable() + ": unknown variable");
-							ce.setTClass(t);
-							ce.setTGComponent(tgc);
-							ce.setTDiagramPanel(tdp);
-							addCheckingError(ce);
-							ags.setStateAction(ErrorHighlight.UNKNOWN);
-						} else {
-							for(int i=0; i<size; i++) {
-								//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
-								choice1.addGuard("[" + basicGuard + " == " + i + "]");
-								adap = new ADActionStateWithParam(p);
-								ad.addElement(adap);
-								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ags.getArray() + "__" + i));
-								choice1.addNext(adap);
-								adap.addNext(junc);
-								ags.setStateAction(ErrorHighlight.OK);
-							}
-							
-							choice1.addGuard("[" + basicGuard + "> (" + ags.getArray() + "__size - 1)]");
-							choice1.addNext(adag1);
-							adag1.addNext(stop1);
-							
-							listE.addCor(junc, tgc);
-							listB.addCor(choice1, tgc);
-							
-						}
-					}
-				}
-				
-			} else if (tgc instanceof TADArraySetState) {
-				TADArraySetState ass = (TADArraySetState)tgc;
-				sTmp = ass.getIndex();
-				try {
-					nbActions = Integer.decode(sTmp).intValue();
-					p = t.getParamByName(ass.getArray() + "__" + nbActions);
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ass.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						adap = new ADActionStateWithParam(p);
-						ad.addElement(adap);
-						adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
-						listE.addCor(adap, tgc);
-						listB.addCor(adap, tgc);
-						ass.setStateAction(ErrorHighlight.OK);
-					}
-					
-				} catch (Exception e) {
-					// Index is not an absolute value
-					//System.out.println("Set: Index is not an absolute value");
-					Gate error = t.addNewGateIfApplicable("arrayOverflow");
-					
-					ADChoice choice1 = new ADChoice();
-					ADJunction junc = new ADJunction();
-					ADStop stop1 = new ADStop();
-					ADActionStateWithGate adag1 = new ADActionStateWithGate(error);
-					
-					ad.addElement(choice1);
-					ad.addElement(junc);
-					ad.addElement(stop1);
-					ad.addElement(adag1);
-					
-					String basicGuard = "(" + ass.getIndex() + ")";
-					
-					p = t.getParamByName(ass.getArray() + "__size");
-					
-					if (p == null) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-						ce.setTClass(t);
-						ce.setTGComponent(tgc);
-						ce.setTDiagramPanel(tdp);
-						addCheckingError(ce);
-						ass.setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						int size = 2;
-						try {
-							size = Integer.decode(p.getValue()).intValue();
-						} catch (Exception e0) {
-						}
-						
-						for(int i=0; i<size; i++) {
-							//System.out.println("Adding guard: [" + basicGuard + "== " + i + "]");
-							p = t.getParamByName(ass.getArray() + "__" + i);
-							adap = null;
-							if (p == null) {
-								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Array setting: " + ass.getArray() + "[" + ass.getIndex() + "]: unknown array or wrong index");
-								ce.setTClass(t);
-								ce.setTGComponent(tgc);
-								ce.setTDiagramPanel(tdp);
-								addCheckingError(ce);
-								ass.setStateAction(ErrorHighlight.UNKNOWN);
-							} else {
-								choice1.addGuard("[" + basicGuard + " == " + i + "]");
-								adap = new ADActionStateWithParam(p);
-								ad.addElement(adap);
-								adap.setActionValue(TURTLEModeling.manageDataStructures(t, ass.getExpr()));
-								choice1.addNext(adap);
-								adap.addNext(junc);
-								ass.setStateAction(ErrorHighlight.OK);
-							}
-							
-							choice1.addGuard("[" + basicGuard + "> (" + ass.getArray() + "__size - 1)]");
-							choice1.addNext(adag1);
-							adag1.addNext(stop1);
-							
-							listE.addCor(junc, tgc);
-							listE.addCor(choice1, tgc);
-							if (adap != null) {
-								listE.addCor(adap, tgc);
-							}
-							listE.addCor(stop1, tgc);
-							listE.addCor(adag1, tgc);
-							listB.addCor(choice1, tgc);
-							
-						}
-					}
-				}
-				
-			} else if (tgc instanceof TADChoice) {
-				adch = new ADChoice();
-				ad.addElement(adch);
-				listE.addCor(adch, tgc);
-			} else if (tgc instanceof TADDeterministicDelay) {
-				add = new ADDelay();
-				ad.addElement(add);
-				add.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADDeterministicDelay)tgc).getDelayValue()));
-				listE.addCor(add, tgc);
-			} else if (tgc instanceof TADJunction) {
-				adj = new ADJunction();
-				ad.addElement(adj);
-				listE.addCor(adj, tgc);
-			} else if (tgc instanceof TADNonDeterministicDelay) {
-				adl = new ADLatency();
-				ad.addElement(adl);
-				adl.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADNonDeterministicDelay)tgc).getLatencyValue()));
-				listE.addCor(adl, tgc);
-			} else if (tgc instanceof TADParallel) {
-				adp = new ADParallel();
-				ad.addElement(adp);
-				adp.setValueGate(((TADParallel)tgc).getValueGate());
-				listE.addCor(adp, tgc);
-			} else if (tgc instanceof TADSequence) {
-				adseq = new ADSequence();
-				ad.addElement(adseq);
-				listE.addCor(adseq, tgc);
-			} else if (tgc instanceof TADPreemption) {
-				adpre = new ADPreempt();
-				ad.addElement(adpre);
-				listE.addCor(adpre, tgc);
-			} else if (tgc instanceof TADStopState) {
-				adst = new ADStop();
-				ad.addElement(adst);
-				listE.addCor(adst, tgc);
-			} else if (tgc instanceof TADTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TADTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TADTimeLimitedOffer) {
-				s = ((TADTimeLimitedOffer)tgc).getAction();
-				g = t.getGateFromActionState(s);
-				if (g != null) {
-					adtlo = new ADTLO(g);
-					ad.addElement(adtlo);
-					adtlo.setLatency("0");
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done");
-					adtlo.setAction(s1);
-					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOffer)tgc).getDelay()));
-					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.GATE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOffer)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeLimitedOffer)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-					//System.out.println("Bad time limited offer found " + s);
-				}
-			} else if (tgc instanceof TADTimeLimitedOfferWithLatency) {
-				s = ((TADTimeLimitedOfferWithLatency)tgc).getAction();
-				g = t.getGateFromActionState(s);
-				if (g != null) {
-					adtlo = new ADTLO(g);
-					ad.addElement(adtlo);
-					adtlo.setLatency(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getLatency()));
-					s1 = t.getActionValueFromActionState(s);
-					//System.out.println("Adding type");
-					s1 = TURTLEModeling.manageGateDataStructures(t, s1);
-					s1 = TURTLEModeling.addTypeToDataReceiving(t, s1);
-					//System.out.println("Adding type done");
-					adtlo.setAction(s1);
-					adtlo.setDelay(TURTLEModeling.manageGateDataStructures(t, ((TADTimeLimitedOfferWithLatency)tgc).getDelay()));
-					listE.addCor(adtlo, tgc);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.GATE);
-				} else {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Time-limited offer (" + s + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getLatency() + ", " + ((TADTimeLimitedOfferWithLatency)tgc).getDelay() + "): \"" + s + "\" is not a correct expression");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-					((TADTimeLimitedOfferWithLatency)tgc).setStateAction(ErrorHighlight.UNKNOWN_AS);
-					//System.out.println("Bad time limited offer found " + s);
-				}
-				
-				// TURTLE-OS AD
-			} else if (tgc instanceof TOSADTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TOSADTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TOSADTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TOSADIntTimeInterval) {
-				adti = new ADTimeInterval();
-				ad.addElement(adti);
-				adti.setValue(TURTLEModeling.manageGateDataStructures(t, ((TOSADIntTimeInterval)tgc).getMinDelayValue()), TURTLEModeling.manageGateDataStructures(t, ((TOSADIntTimeInterval)tgc).getMaxDelayValue()));
-				listE.addCor(adti, tgc);
-			} else if (tgc instanceof TOSADStopState) {
-				adst = new ADStop();
-				ad.addElement(adst);
-				listE.addCor(adst, tgc);
-			} else if (tgc instanceof TOSADJunction) {
-				adj = new ADJunction();
-				ad.addElement(adj);
-				listE.addCor(adj, tgc);
-			} else if (tgc instanceof TOSADChoice) {
-				adch = new ADChoice();
-				ad.addElement(adch);
-				listE.addCor(adch, tgc);
-			} if (tgc instanceof TOSADActionState) {
-				s = ((TOSADActionState)tgc).getAction();
-				s = s.trim();
-				//remove ';' if last character
-				if (s.substring(s.length()-1, s.length()).compareTo(";") == 0) {
-					s = s.substring(0, s.length()-1);
-				}
-				nbActions = Conversion.nbChar(s, ';') + 1;
-				
-				if (nbActions>1) {
-					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + " should not start with a '=='");
-					ce.setTClass(t);
-					ce.setTGComponent(tgc);
-					ce.setTDiagramPanel(tdp);
-					addCheckingError(ce);
-				} else {
-					//s = TURTLEModeling.manageDataStructures(t, s);
-					g = t.getGateFromActionState(s);
-					p = t.getParamFromActionState(s);
-					
-					if (p != null) {
-						adap = new ADActionStateWithParam(p);
-						ad.addElement(adap);
-						adap.setActionValue(TURTLEModeling.manageDataStructures(t, t.getExprValueFromActionState(s)));
-						listE.addCor(adap, tgc);
-					} else {
-						adag = new ADActionStateWithGate(g);
-						ad.addElement(adag);
-						listE.addCor(adag, tgc);
-						adag.setActionValue(s);
-					}
-				}
-				//System.out.println("Nb Actions in state: " + nbActions);
-			}
-		}
-		
-		TGConnectingPoint p1, p2;
-		//TGConnectorFullArrow tgco;
-		TGComponent tgc1, tgc2, tgc3;
-		ADComponent ad1, ad2;
-		
-		// Managing Java code
-		iterator = list.listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof PreJavaCode) {
-				ad1 = listE.getADComponentByIndex(tgc, tdp.count);
-				if (ad1 != null) {
-					ad1.setPreJavaCode(tgc.getPreJavaCode());
-				}
-			}
-			if (tgc instanceof PostJavaCode) {
-				ad1 = listE.getADComponentByIndex(tgc, tdp.count);
-				if (ad1 != null) {
-					ad1.setPostJavaCode(tgc.getPostJavaCode());
-				}
-			}
-		}
-		
-		// Connecting elements
-		TGConnectorBetweenElementsInterface tgcbei;
-		iterator = list.listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TGConnectorBetweenElementsInterface) {
-				tgcbei = (TGConnectorBetweenElementsInterface)tgc;
-				p1 = tgcbei.getTGConnectingPointP1();
-				p2 = tgcbei.getTGConnectingPointP2();
-				
-				// identification of connected components
-				tgc1 = null; tgc2 = null;
-				for(j=0; j<list.size(); j++) {
-					tgc3 = 	(TGComponent)(list.get(j));
-					if (tgc3.belongsToMe(p1)) {
-						tgc1 = tgc3;
-					}
-					if (tgc3.belongsToMe(p2)) {
-						tgc2 = tgc3;
-					}
-				}
-				
-				// connecting turtle modeling components
-				if ((tgc1 != null) && (tgc2 != null)) {
-					//ADComponent ad1, ad2;
-					
-					//System.out.println("tgc1 = " + tgc1.getValue() + " tgc2= "+ tgc2.getValue());
-					
-					ad1 = listE.getADComponentByIndex(tgc1, tdp.count);
-					if ((tgc2 instanceof TADArrayGetState) || (tgc2 instanceof TADArraySetState) || (tgc2 instanceof TADActionState)) {
-						ad2 = listB.getADComponent(tgc2);
-					}  else {
-						ad2 = listE.getADComponentByIndex(tgc2, tdp.count);
-					}
-					
-					//System.out.println("ad1 = " + ad1 + " ad2= "+ ad2);
-					
-					if ((ad1 == null) || (ad2 == null)) {
-						//System.out.println("Correspondance issue");
-					}
-					int index = 0;
-					if ((ad1 != null ) && (ad2 != null)) {
-						if ((tgc1 instanceof TADTimeLimitedOffer) || (tgc1 instanceof TADTimeLimitedOfferWithLatency)) {
-							index = tgc1.indexOf(p1) - 1;
-							ad1.addNextAtIndex(ad2, index);
-						} else if (tgc1 instanceof TADChoice) {
-							TADChoice tadch = (TADChoice)tgc1;
-							index = tgc1.indexOf(p1) - 1;
-							String myguard = TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index));
-							String tmp = Conversion.replaceAllChar(myguard, '[', "");
-							tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
-							if (tmp.compareTo("else") == 0) {
-								// Must calculate guard
-								String realGuard = "";
-								int cpt = 0;
-								for(int k=0; k<tadch.getNbInternalTGComponent(); k++) {
-									if (k != index) {
-										if (cpt == 0) {
-											tmp = TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(k));
-											tmp = Conversion.replaceAllChar(tmp, '[', "");
-											tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
-											if (tmp.length() > 0) {
-												realGuard = tmp;
-												cpt ++;
-											}
-										} else {
-											tmp =  TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(k));
-											tmp = Conversion.replaceAllChar(tmp, '[', "");
-											tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
-											if (tmp.length() > 0) {
-												realGuard = "(" + realGuard + ") and (" + tmp + ")";
-												cpt ++;
-											}
-										}
-									}
-									//System.out.println("Real guard=" + realGuard + "k=" + k + " index=" + index);
-								}
-								
-								if (realGuard.length() == 0) {
-									myguard = "[ ]";
-								} else {
-									myguard = "[not(" + realGuard + ")]";
-								}
-								System.out.println("My guard=" + myguard);
-							}
-							((ADChoice)ad1).addGuard(myguard);
-							ad1.addNext(ad2);
-						} else if ((tgc1 instanceof TADSequence) ||(tgc1 instanceof TADPreemption)){
-							index = tgc1.indexOf(p1) - 1;
-							ad1.addNextAtIndex(ad2, index);
-						} else if (tgc1 instanceof TOSADChoice) {
-							TOSADChoice tadch = (TOSADChoice)tgc1;
-							index = tgc1.indexOf(p1) - 1;
-							((ADChoice)ad1).addGuard(TURTLEModeling.manageGateDataStructures(t, tadch.getGuard(index)));
-							ad1.addNext(ad2);
-						} else {
-							ad1.addNextAtIndex(ad2, index);
-							//System.out.println("Adding connector from " + ad1 + " to " + ad2);
-						}
-					}
-				}
-			}
-		}
-		// Increasing count of this panel
-		tdp.count ++;
-		
-		// Remove all elements not reachable from start state
-		int sizeb = ad.size();
-		
-		System.out.println("Removing non reachable elements in t:" + t.getName());
-		ad.removeAllNonReferencedElts();
-		
-		int sizea = ad.size();
-		if (sizeb > sizea) {
-			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Non reachable elements have been removed in " + t.getName());
-			ce.setTClass(t);
-			ce.setTGComponent(null);
-			ce.setTDiagramPanel(tdp);
-			addWarning(ce);
-			//System.out.println("Non reachable elements have been removed in " + t.getName());
-		}
-		
-		//ad.replaceAllADActionStatewithMultipleParam(listE);
-	}*/
 	
 	
 	public void createRelationsBetweenTClasses(TURTLEModeling tm, LinkedList<AvatarBDBlock> blocks, String preName) {

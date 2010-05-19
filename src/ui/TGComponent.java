@@ -51,6 +51,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 
+import java.util.*;
+
 import org.w3c.dom.*;
 
 import myutil.*;
@@ -953,6 +955,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
         
         return tgcomponent[index];
     }
+	
+	public LinkedList getRecursiveAllInternalComponent() {
+		LinkedList ll = new LinkedList();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            ll.add(tgcomponent[i]);
+			ll.addAll(tgcomponent[i].getRecursiveAllInternalComponent());
+        }
+		return ll;
+	}
     
     
     public TGComponent getIfId(int checkId) {

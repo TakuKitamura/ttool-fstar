@@ -497,6 +497,5 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		return _s.substring(0, index).trim();
 	}
 	
-	
     
 }

@@ -435,5 +435,9 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		return null;
 	}
 	
+	public boolean isACompositeState() {
+		return (nbInternalTGComponent > 0);
+	}
+	
     
 }

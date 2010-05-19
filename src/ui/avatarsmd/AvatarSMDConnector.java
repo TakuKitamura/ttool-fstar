@@ -56,7 +56,7 @@ import ui.*;
 
 public  class AvatarSMDConnector extends TGConnector {
     protected int arrowLength = 10;
-	protected AvatarSMDTransitionInfo myTransitionInfo;
+	//protected AvatarSMDTransitionInfo myTransitionInfo;
     
     public AvatarSMDConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -121,6 +121,38 @@ public  class AvatarSMDConnector extends TGConnector {
     public int getType() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
+	
+	public String getGuard() {
+		return ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getGuard();
+	}
+	
+	public String getTotalMinDelay() {
+		String s1 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getAfterMinDelay();
+		String s2 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getComputeMinDelay();
+		return addedDelays(s1, s2);
+	}          
+	
+	public String getTotalMaxDelay() {
+		String s1 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getAfterMaxDelay();
+		String s2 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getComputeMaxDelay();
+		return addedDelays(s1, s2);
+	}
+	
+	public String addedDelays(String s1, String s2) {
+		if (s1.trim().length() == 0) {
+			return s2.trim();
+		} else {
+			if (s2.trim().length() == 0) {
+				return s1;
+			} else {
+				return "(" + s1 + ") + (" + s2 + ")";
+			}
+		}
+	}
+	
+	public Vector<String> getActions() {
+		return ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getActions();
+	}
 }
 
 

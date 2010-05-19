@@ -324,4 +324,28 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			throw new MalformedModelingException();
 		}
 	}
+	
+	public String getGuard() {
+		return guard;
+	}
+	
+	public String getAfterMinDelay() {
+		return afterMin;
+	}
+	
+	public String getAfterMaxDelay() {
+		return afterMax;
+	}
+	
+	public String getComputeMinDelay() {
+		return computeMin;
+	}
+	
+	public String getComputeMaxDelay() {
+		return computeMax;
+	}
+	
+	public Vector<String> getActions() {
+		return listOfActions;
+	}
 }

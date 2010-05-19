@@ -96,11 +96,15 @@ public class TClass {
 	}
     
     public Gate addNewGateIfApplicable(String name) {
+		return addNewGateIfApplicable(name, false);
+	}
+	
+	 public Gate addNewGateIfApplicable(String name, boolean _internal) {
         Gate g = getGateByName(name);
         if (g != null) {
             return g;
         }
-        g = new Gate(name, Gate.GATE, false);
+        g = new Gate(name, Gate.GATE, _internal);
         addGate(g);
         return g;
     }
