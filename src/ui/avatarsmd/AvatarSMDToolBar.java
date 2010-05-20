@@ -105,10 +105,10 @@ public class AvatarSMDToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.ASMD_STATE]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		this.addSeparator();
+		/*this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ASMD_PARALLEL]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
 		
 		this.addSeparator();
         

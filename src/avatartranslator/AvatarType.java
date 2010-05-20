@@ -36,33 +36,49 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AvatarType
+ * Avatar type
+ * Creation: 20/05/2010
+ * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+
+package avatartranslator;
+
+import java.util.*;
 
 import myutil.*;
 
-public class DIPLOElement {
-	
-	protected static int ID=0;
-	
-    private int myID;
+public class AvatarType {
     
-    public DIPLOElement() {
-       myID=++ID;
+    // Types of parameters
+    public final static int NATURAL = 0;
+    public final static int BOOLEAN = 1;
+	public final static int INTEGER = 2;
+	
+    
+    public static int getType(String s) {
+        if (s.equals("nat")) {
+            return 	NATURAL;
+        } else if (s.equals("bool")) {
+            return 	BOOLEAN;
+        } else if (s.equals("int")) {
+            return 	INTEGER;
+        }
+        return -1;
     }
     
-    public int getID(){
-		return myID;
+    public static String getStringType(int type) {
+        switch(type) {
+            case NATURAL:
+                return "nat";
+            case BOOLEAN:
+                return "bool";
+			case INTEGER:
+                return "int";
+        }
+		return "";
     }
-	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
-	}
 }

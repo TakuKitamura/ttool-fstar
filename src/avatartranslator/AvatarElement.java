@@ -36,33 +36,45 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AvatarElement
+ * Creation: 20/05/2010
+ * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+package avatartranslator;
 
 import myutil.*;
 
-public class DIPLOElement {
+public class AvatarElement {
 	
 	protected static int ID=0;
 	
+	protected String name;
+	protected Object referenceObject;
     private int myID;
     
-    public DIPLOElement() {
+    public AvatarElement(String _name, Object _referenceObject) {
        myID=++ID;
+	   name = _name;
+	   referenceObject = _referenceObject;
     }
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Object getReferenceObject() {
+		return referenceObject;
+	}
     
     public int getID(){
 		return myID;
     }
 	
 	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
+		TraceManager.addDev("Reset AvatarID");
 		ID = 0;
 	}
 }

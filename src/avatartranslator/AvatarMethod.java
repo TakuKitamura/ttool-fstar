@@ -36,33 +36,42 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AvatarMethod
+ * Method in Avatar ...
+ * Creation: 08/04/2010
+ * @version 1.0 08/04/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+
+package avatartranslator;
+
+import java.util.*;
 
 import myutil.*;
 
-public class DIPLOElement {
-	
-	protected static int ID=0;
-	
-    private int myID;
+public class AvatarMethod extends AvatarElement{
     
-    public DIPLOElement() {
-       myID=++ID;
-    }
+	protected LinkedList<AvatarAttribute> parameters;
     
-    public int getID(){
-		return myID;
+	
+    public AvatarMethod(String _name, Object _referenceObject) {
+		super(_name, _referenceObject);
+        parameters = new LinkedList<AvatarAttribute>();
     }
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
+	public void addAttribute(AvatarAttribute _attribute) {
+		parameters.add(_attribute);
 	}
+	
+	public LinkedList<AvatarAttribute> getListOfAttributes() {
+		return parameters;
+	}
+	
+	public static boolean isAValidMethod(String _method) {
+		return AvatarAttribute.isAValidAttributeName(_method);
+	}
+    
+
 }

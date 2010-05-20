@@ -80,6 +80,8 @@ import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
 
+import avatartranslator.*;
+
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
@@ -118,6 +120,7 @@ public class GTURTLEModeling {
 	//
 	private Vector panels; /* analysis, design, deployment, tml design */
 	private TURTLEModeling tm;
+	private AvatarSpecification avatarspec;
 	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
@@ -1553,6 +1556,8 @@ public class GTURTLEModeling {
 		//tm = new TURTLEModeling();
 		//listE = new CorrespondanceTGElement();
 		mgui.reinitCountOfPanels();
+		
+		avatarspec = new AvatarSpecification("avatarspecification", adp);
 
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		tm = adpt.generateTURTLEModeling(blocks, "");

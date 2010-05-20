@@ -36,33 +36,52 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AvatarSignal
+ * Signals in Avatar ...
+ * Creation: 20/05/2010
+ * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+
+package avatartranslator;
+
+import java.util.*;
 
 import myutil.*;
 
-public class DIPLOElement {
-	
-	protected static int ID=0;
-	
-    private int myID;
+public class AvatarSignal extends AvatarMethod {
     
-    public DIPLOElement() {
-       myID=++ID;
-    }
+    // Signa type 
+    public final static int IN = 0;
+    public final static int OUT = 1;
     
-    public int getID(){
-		return myID;
+    private int inout;
+  
+	
+    public AvatarSignal(String _name, int _inout, Object _referenceObject) {
+        super(_name, _referenceObject);
+		inout = _inout;
     }
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
+	public int getInOut() {
+		return inout;
+	}
+	
+	public void setInOut(int _inout) {
+		inout = _inout;
+	}
+	
+	public boolean isOut() {
+		return (inout == OUT);
+	}
+	
+	public boolean isIn() {
+		return (inout == IN);
+	}
+	
+	public static boolean isAValidSignal(String _signal) {
+		return AvatarAttribute.isAValidAttributeName(_signal);
 	}
 }

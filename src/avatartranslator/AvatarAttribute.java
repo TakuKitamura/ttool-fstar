@@ -36,33 +36,58 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
+ * Class AvatarAttribute
+ * Avatar attributes, either of blocks, or manipulated by signals / methods
+ * Creation: 20/05/2010
+ * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tmltranslator;
+
+package avatartranslator;
+
+import java.util.*;
 
 import myutil.*;
+import translator.*;
+import translator.tojava.*;
 
-public class DIPLOElement {
-	
-	protected static int ID=0;
-	
-    private int myID;
+public class AvatarAttribute extends AvatarElement{
     
-    public DIPLOElement() {
-       myID=++ID;
-    }
-    
-    public int getID(){
-		return myID;
-    }
+    // Types of parameters
+    private AvatarType type;
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
+    
+	public AvatarAttribute(String _name, AvatarType _type, Object _referenceObject) {
+		super(_name, _referenceObject);
+		type = _type;
+	}
+	
+	public AvatarType getType() {
+		return type;
+	}
+	
+	public static boolean isAValidAttributeName(String id) {
+		if ((id == null) || (id.length() < 1)) {
+            return false;
+        }
+        
+        String lowerid = id.toLowerCase();
+        boolean b1, b2, b3, b4, b5;
+        b1 = (id.substring(0,1)).matches("[a-zA-Z]");
+        b2 = id.matches("\\w*");
+        b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+        b5 = !JKeyword.isAKeyword(lowerid);
+        
+	
+		if ((lowerid.equals(AvatarType.getStringType(0).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(1).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(2).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(3).toLowerCase())) || (lowerid.equals(AvatarType.getStringType(4).toLowerCase()))) {
+			b4 = false;
+		} else {
+			b4 = true;
+		}
+		
+        
+        return (b1 && b2 && b3 && b4 && b5);
 	}
 }
