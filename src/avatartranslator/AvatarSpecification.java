@@ -66,4 +66,36 @@ public class AvatarSpecification extends AvatarElement {
 	public LinkedList<AvatarBlock> getListOfBlocks() {
 		return blocks;
 	}
+	
+	public void addBlock(AvatarBlock _block) {
+		blocks.add(_block);
+	}
+	
+	public void addRelation(AvatarRelation _relation) {
+		relations.add(_relation);
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Blocks:\n");
+		for(AvatarBlock block: blocks) {
+			sb.append(block.toString());
+		}
+		sb.append("\nRelations:\n");
+		for(AvatarRelation relation: relations) {
+			sb.append("Relation:" + relation.toString() + "\n");
+		}
+		
+		return sb.toString();
+		
+	}
+	
+	public AvatarBlock getBlockWithName(String _name) {
+		for(AvatarBlock block: blocks) {
+			if (block.getName().compareTo(_name)== 0) {
+				return block;
+			}
+		}
+		
+		return null;
+	}
 }

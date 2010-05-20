@@ -52,7 +52,8 @@ import myutil.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 
-import translator.*;
+import avatartranslator.*;
+//import translator.*;
 import ui.window.*;
 
 
@@ -60,9 +61,8 @@ public class AvatarDesignPanelTranslator {
 	protected AvatarDesignPanel adp;
 	protected Vector checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
-	protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
+	//protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
 	protected LinkedList <TDiagramPanel> panels;
-	protected LinkedList <ActivityDiagram> activities;
 	
 	public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
 		adp = _adp;
@@ -73,9 +73,7 @@ public class AvatarDesignPanelTranslator {
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		listE = new CorrespondanceTGElement();
-		listB = new CorrespondanceTGElement();
 		panels = new LinkedList <TDiagramPanel>();
-		activities = new LinkedList <ActivityDiagram>();
 	}
 	
 	public Vector getErrors() {
@@ -90,7 +88,150 @@ public class AvatarDesignPanelTranslator {
 		return listE;
 	}
 	
-	public TURTLEModeling generateTURTLEModeling() {
+	public AvatarSpecification generateAvatarSpecification(Vector _blocks) {
+		LinkedList<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
+		blocks.addAll(_blocks);
+		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
+		createBlocks(as, blocks);
+		createRelationsBetweenBlocks(as, blocks);
+		return as;
+	}
+	
+	public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
+		AvatarBlock ab;
+		Vector v;
+		TAttribute a;
+		int i;
+		AvatarAttribute aa;
+		ui.AvatarMethod uiam;
+		ui.AvatarSignal uias;
+		avatartranslator.AvatarMethod atam;
+		avatartranslator.AvatarSignal atas;
+		
+		for(AvatarBDBlock block: _blocks) {
+			ab = new AvatarBlock(block.getBlockName(), block);
+			_as.addBlock(ab);
+			listE.addCor(ab, block);
+			
+			// Create attributes
+			v = block.getAttributeList();
+			for(i=0; i<v.size(); i++) {
+				a = (TAttribute)(v.elementAt(i));
+				if (a.getType() == TAttribute.INTEGER){
+					aa = new AvatarAttribute(a.getId(), AvatarType.INTEGER, a);
+					aa.setInitialValue(a.getInitialValue());
+					ab.addAttribute(aa);
+				}
+				if (a.getType() == TAttribute.NATURAL){
+					aa = new AvatarAttribute(a.getId(), AvatarType.NATURAL, a);
+					aa.setInitialValue(a.getInitialValue());
+					ab.addAttribute(aa);
+				}
+				if (a.getType() == TAttribute.BOOLEAN) {
+					aa = new AvatarAttribute(a.getId(), AvatarType.BOOLEAN, a);
+					aa.setInitialValue(a.getInitialValue());
+					ab.addAttribute(aa);
+				}
+			}
+			
+			// Create methods
+			v = block.getMethodList();
+			for(i=0; i<v.size(); i++) {
+				uiam = (AvatarMethod)(v.get(i));
+				atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
+				ab.addMethod(atam);
+				makeParameters(atam, uiam);
+			}
+			// Create signals
+			v = block.getSignalList();
+			for(i=0; i<v.size(); i++) {
+				uias = (AvatarSignal)(v.get(i));
+				
+				if (uias.getInOut() == uias.IN) {
+					atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
+				} else {
+					atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
+				}
+				ab.addSignal(atas);
+				makeParameters(atas, uias);
+			}
+			
+		}
+		
+		
+	}
+	
+	public void makeParameters(avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
+		String typeIds[] = _uiam.getTypeIds();
+		String types[] = _uiam.getTypes();
+		AvatarAttribute aa;
+		
+		for(int i=0; i<types.length; i++) {
+			aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _uiam);
+			_atam.addParameter(aa);
+		}
+	}
+	
+	public void createRelationsBetweenBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
+		adp.getAvatarBDPanel().updateAllSignalsOnConnectors();
+		Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
+		
+		TGComponent tgc;
+		AvatarBDPortConnector port;
+		AvatarBDBlock block1, block2;
+		LinkedList<String> l1, l2;
+		int i;
+		String name1, name2;
+		AvatarRelation r;
+		AvatarBlock b1, b2;
+		avatartranslator.AvatarSignal atas1, atas2;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarBDPortConnector) {
+				port = (AvatarBDPortConnector)tgc;
+				block1 = port.getAvatarBDBlock1();
+				block2 = port.getAvatarBDBlock2();
+				
+				b1 = _as.getBlockWithName(block1.getBlockName());
+				b2 = _as.getBlockWithName(block2.getBlockName());
+				
+				r = new AvatarRelation("relation", b1, b2, tgc);
+				// Signals of l1
+				l1 = port.getListOfSignalsOrigin();
+				l2 = port.getListOfSignalsDestination();
+				
+				for(i=0; i<l1.size(); i++) {
+					name1 = AvatarSignal.getSignalNameFromFullSignalString(l1.get(i));
+					name2 = AvatarSignal.getSignalNameFromFullSignalString(l2.get(i));
+					atas1 = b1.getAvatarSignalWithName(name1);
+					atas2 = b2.getAvatarSignalWithName(name2);
+					if ((atas1 != null) && (atas2 != null)) {
+						r.addSignals(atas1, atas2);
+					} else {
+						TraceManager.addDev("null gates in AVATAR relation: " + name1 + " " + name2);
+					}
+				}
+				_as.addRelation(r);
+			}
+		}
+	}
+	
+	private void addCheckingError(CheckingError ce) {
+		if (checkingErrors == null) {
+			checkingErrors = new Vector();
+		}
+		checkingErrors.addElement(ce);
+	}
+	
+	private void addWarning(CheckingError ce) {
+		if (warnings == null) {
+			warnings = new Vector();
+		}
+		warnings.addElement(ce);
+	}
+	
+	/*public TURTLEModeling generateTURTLEModeling() {
 		LinkedList<AvatarBDBlock> blocks = adp.getAvatarBDPanel().getFullBlockList();
 		return generateTURTLEModeling(blocks, "");
 	}
@@ -345,12 +486,7 @@ public class AvatarDesignPanelTranslator {
 			
 			// Start state
 			} else if (tgc instanceof AvatarSMDStartState) {
-				// they are ignored
-				/*if (tgc != tss) {
-					adj = new ADJunction();
-					listE.addCor(adj, tgc);
-					ad.add(adj);
-				}*/
+				
 				
 			// Stop state
 			} else if (tgc instanceof AvatarSMDStopState) {
@@ -649,7 +785,7 @@ public class AvatarDesignPanelTranslator {
 				tm.addRelation(r);
 			}
 		}
-	}
+	}*/
 	
 	
 }

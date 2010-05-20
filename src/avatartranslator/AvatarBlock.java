@@ -78,6 +78,43 @@ public class AvatarBlock extends AvatarElement {
 		return asm;
 	}
 	
+	public void addAttribute(AvatarAttribute _attribute) {
+		attributes.add(_attribute);
+	}
+	
+	public void addMethod(AvatarMethod _method) {
+		methods.add(_method);
+	}
+	
+	public void addSignal(AvatarSignal _signal) {
+		signals.add(_signal);
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer("block:" + getName() + "\n");
+		for(AvatarAttribute attribute: attributes) {
+			sb.append("  attribute: " + attribute.toString() + "\n"); 
+		}
+		for(AvatarMethod method: methods) {
+			sb.append("  method: " + method.toString() + "\n"); 
+		}
+		for(AvatarSignal signal: signals) {
+			sb.append("  signal: " + signal.toString() + "\n"); 
+		}
+		
+		return sb.toString();
+	}
+	
+	public AvatarSignal getAvatarSignalWithName(String _name) {
+		for(AvatarSignal signal: signals) {
+			if (signal.getName().compareTo(_name)== 0) {
+				return signal;
+			}
+		}
+		
+		return null;
+	}
+	
 	
     
 }

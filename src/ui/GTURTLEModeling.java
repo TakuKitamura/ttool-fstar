@@ -1557,10 +1557,11 @@ public class GTURTLEModeling {
 		//listE = new CorrespondanceTGElement();
 		mgui.reinitCountOfPanels();
 		
-		avatarspec = new AvatarSpecification("avatarspecification", adp);
+		//avatarspec = new AvatarSpecification("avatarspecification", adp);
 
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
-		tm = adpt.generateTURTLEModeling(blocks, "");
+		avatarspec = adpt.generateAvatarSpecification(blocks);
+		TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
 		tmState = 0;
 
 		listE = adpt.getCorrespondanceTGElement();
@@ -1569,10 +1570,11 @@ public class GTURTLEModeling {
 		if ((checkingErrors != null) && (checkingErrors.size() >0)){
 			return false;
 		}
+		return true;
 
 		// Modeling is built
 		// Now check it !
-		if (!overideSyntaxChecking) {
+		/*if (!overideSyntaxChecking) {
 			TURTLEModelChecker tmc = new TURTLEModelChecker(tm, listE);
 	
 			checkingErrors = tmc.syntaxAnalysisChecking();
@@ -1586,7 +1588,7 @@ public class GTURTLEModeling {
 			}
 		}
 		
-		return true;
+		return true;*/
 	}
 
 	public Vector getCheckingErrors() {

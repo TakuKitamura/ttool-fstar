@@ -61,7 +61,7 @@ public class AvatarMethod extends AvatarElement{
         parameters = new LinkedList<AvatarAttribute>();
     }
 	
-	public void addAttribute(AvatarAttribute _attribute) {
+	public void addParameter(AvatarAttribute _attribute) {
 		parameters.add(_attribute);
 	}
 	
@@ -71,6 +71,22 @@ public class AvatarMethod extends AvatarElement{
 	
 	public static boolean isAValidMethodName(String _method) {
 		return AvatarAttribute.isAValidAttributeName(_method);
+	}
+	
+	public String toString() {
+		int cpt = 0;
+		String ret = getName() + "(";
+		
+		for(AvatarAttribute attribute: parameters) {
+			if (cpt != 0) {
+				ret += ",";
+			}
+			cpt ++;
+			ret += attribute.toString();
+		}
+		
+		ret += ")";
+		return ret;
 	}
     
 

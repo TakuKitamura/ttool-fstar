@@ -56,15 +56,24 @@ import translator.tojava.*;
 public class AvatarAttribute extends AvatarElement{
     
     // Types of parameters
-    private AvatarType type;
+    private int type;
+	private String initialValue;
 	
     
-	public AvatarAttribute(String _name, AvatarType _type, Object _referenceObject) {
+	public AvatarAttribute(String _name, int _type, Object _referenceObject) {
 		super(_name, _referenceObject);
 		type = _type;
 	}
 	
-	public AvatarType getType() {
+	public void setInitialValue(String _initialValue) {
+		initialValue = _initialValue;
+	}
+	
+	public String getInitialValue() {
+		return initialValue;
+	}
+	
+	public int getType() {
 		return type;
 	}
 	
@@ -89,5 +98,14 @@ public class AvatarAttribute extends AvatarElement{
 		
         
         return (b1 && b2 && b3 && b4 && b5);
+	}
+	
+	public String toString() {
+		String ret = AvatarType.getStringType(type) + " " + getName();
+		if (initialValue  == null) {
+			return ret;
+		}
+		
+		return ret + " = " + initialValue;
 	}
 }

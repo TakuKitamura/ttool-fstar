@@ -84,4 +84,12 @@ public class AvatarSignal extends AvatarMethod {
 	public static boolean isAValidSignal(String _signal) {
 		return AvatarAttribute.isAValidAttributeName(_signal);
 	}
+	
+	public String toString() {
+		String ret = super.toString();
+		if (isOut()) {
+			return "out " + ret;
+		}
+		return "in " + ret;
+	}
 }

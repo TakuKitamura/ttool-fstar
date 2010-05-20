@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarBlock
+ * Class AvatarState
  * Creation: 20/05/2010
  * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
@@ -48,13 +48,13 @@ package avatartranslator;
 import java.util.*;
 
 
-public class AvatarBlock extends AvatarStateMachineElement {
+public class AvatarState extends AvatarStateMachineElement {
 	
 	private AvatarStateMachine asm;
 	
 	
 	
-    public AvatarBlock(String _name, Object _referenceObject) {
+    public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		
     }

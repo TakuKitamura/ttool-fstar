@@ -58,10 +58,12 @@ public class AvatarRelation extends AvatarElement {
 	private LinkedList<AvatarSignal> signals1, signals2;
   
 	
-    public AvatarRelation(String _name, int _inout, Object _referenceObject) {
+    public AvatarRelation(String _name, AvatarBlock _block1, AvatarBlock _block2, Object _referenceObject) {
         super(_name, _referenceObject);
 		signals1 = new LinkedList<AvatarSignal>();
 		signals2 = new LinkedList<AvatarSignal>();
+		block1 = _block1;
+		block2 = _block2;
     }
 	
 
@@ -81,6 +83,17 @@ public class AvatarRelation extends AvatarElement {
 	
 	public AvatarSignal getSignal2(int _index) {
 		return signals2.get(_index);
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for(int i=0; i<signals1.size(); i++) {
+			if (i>0) {
+				sb.append(" ; ");
+			}
+			sb.append(block1.getName() + "." + signals1.get(i).getName() + "=" + block2.getName() + "." + signals2.get(i).getName()); 
+		}
+		return sb.toString();
 	}
 	
 
