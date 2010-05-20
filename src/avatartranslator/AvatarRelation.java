@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarMethod
- * Method in Avatar ...
- * Creation: 08/04/2010
- * @version 1.0 08/04/2010
+ * Class AvatarRelation
+ * synchronizatio in Avatar ...
+ * Creation: 20/05/2010
+ * @version 1.0 20/05/2010
  * @author Ludovic APVRILLE
  * @see
  */
@@ -51,27 +51,37 @@ import java.util.*;
 
 import myutil.*;
 
-public class AvatarMethod extends AvatarElement{
+public class AvatarRelation extends AvatarElement {
     
-	protected LinkedList<AvatarAttribute> parameters;
     
+    public AvatarBlock block1, block2;
+	private LinkedList<AvatarSignal> signals1, signals2;
+  
 	
-    public AvatarMethod(String _name, Object _referenceObject) {
-		super(_name, _referenceObject);
-        parameters = new LinkedList<AvatarAttribute>();
+    public AvatarRelation(String _name, int _inout, Object _referenceObject) {
+        super(_name, _referenceObject);
+		signals1 = new LinkedList<AvatarSignal>();
+		signals2 = new LinkedList<AvatarSignal>();
     }
 	
-	public void addAttribute(AvatarAttribute _attribute) {
-		parameters.add(_attribute);
+
+	
+	public void addSignals(AvatarSignal _sig1, AvatarSignal _sig2)   {
+		signals1.add(_sig1);
+		signals2.add(_sig2);
 	}
 	
-	public LinkedList<AvatarAttribute> getListOfAttributes() {
-		return parameters;
+	public int nbOfSignals() {
+		return signals1.size();
 	}
 	
-	public static boolean isAValidMethodName(String _method) {
-		return AvatarAttribute.isAValidAttributeName(_method);
+	public AvatarSignal getSignal1(int _index) {
+		return signals1.get(_index);
 	}
-    
+	
+	public AvatarSignal getSignal2(int _index) {
+		return signals2.get(_index);
+	}
+	
 
 }

@@ -54,6 +54,7 @@ public class AvatarBlock extends AvatarElement {
 	private LinkedList<AvatarAttribute> attributes;
 	private LinkedList<AvatarMethod> methods;
 	private LinkedList<AvatarSignal> signals;
+	private AvatarStateMachine asm;
 	
 	
 	
@@ -62,6 +63,7 @@ public class AvatarBlock extends AvatarElement {
 		attributes = new LinkedList<AvatarAttribute>();
 		methods = new LinkedList<AvatarMethod>();
 		signals = new LinkedList<AvatarSignal>();
+		asm = new AvatarStateMachine("statemachineofblock__" + _name, _referenceObject);
     }
 	
 	public void setFather(AvatarBlock _father) {
@@ -70,6 +72,10 @@ public class AvatarBlock extends AvatarElement {
 	
 	public AvatarBlock getFather() {
 		return father;
+	}
+	
+	public AvatarStateMachine getStateMachine() {
+		return asm;
 	}
 	
 	

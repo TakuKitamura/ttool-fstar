@@ -54,12 +54,13 @@ import myutil.*;
 public class AvatarSpecification extends AvatarElement {
     
    private LinkedList<AvatarBlock> blocks;
-   //private LinkedList<AvatarRelation> relations;
+   private LinkedList<AvatarRelation> relations;
   
 	
     public AvatarSpecification(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		blocks = new LinkedList<AvatarBlock>();
+		relations = new LinkedList<AvatarRelation>();
     }
 	
 	public LinkedList<AvatarBlock> getListOfBlocks() {
