@@ -207,6 +207,16 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         return nParam;
     }*/
 	
+	// Return -1 in case of error
+	public int getNbOfValues() {
+		return AvatarSignal.getNbOfValues(value);
+	}
+	
+	// Return null in case of error
+	public String getValue(int _index) {
+		return AvatarSignal.getValue(value, _index);
+	}
+	
     
     public boolean editOndoubleClick(JFrame frame) {
 		Vector signals = tdp.getMGUI().getAllSignals();

@@ -51,6 +51,7 @@ import java.util.*;
 public class AvatarStateMachineElement extends AvatarElement {
 	
 	private LinkedList<AvatarStateMachineElement> nexts;
+	private AvatarState myState;
 	
     public AvatarStateMachineElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -59,6 +60,47 @@ public class AvatarStateMachineElement extends AvatarElement {
 	
 	public void addNext(AvatarStateMachineElement _element) {
 		nexts.add(_element);
+	}
+	
+	public void setState(AvatarState _as) {
+		myState = _as; 
+	}
+	
+	public AvatarState getState() {
+		return myState;
+	}
+	
+	public boolean hasInUpperState(AvatarState _as) {
+		if (getState() == _as) {
+			return true;
+		}
+		
+		if (getState() != null) {
+			return getState().hasInUpperState(_as);
+		}
+		
+		return false;
+	}
+	
+	public String toString() {
+		String ret = getName() + " ID=" + getID();
+		if (myState == null) {
+			ret += " / top level operator\n";
+		} else {
+			ret += " / in state " + myState.getName() + " ID=" + myState.getID() + "\n"; 
+		}
+		
+		ret += "nexts= ";
+		int cpt=0;
+		for(AvatarStateMachineElement element: nexts) {
+			ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
+			cpt ++;
+		}
+		return ret;
+	}
+	
+	public boolean hasNext(AvatarStateMachineElement _elt) {
+		return nexts.contains(_elt);
 	}
 	
     

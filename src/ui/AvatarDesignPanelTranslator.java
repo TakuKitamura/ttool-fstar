@@ -107,6 +107,7 @@ public class AvatarDesignPanelTranslator {
 		ui.AvatarSignal uias;
 		avatartranslator.AvatarMethod atam;
 		avatartranslator.AvatarSignal atas;
+		TGComponent tgc1, tgc2;
 		
 		for(AvatarBDBlock block: _blocks) {
 			ab = new AvatarBlock(block.getBlockName(), block);
@@ -158,6 +159,22 @@ public class AvatarDesignPanelTranslator {
 			
 		}
 		
+		// Make block hierarchy
+		for(AvatarBlock block: _as.getListOfBlocks()) {
+			tgc1 = listE.getTG(block);
+			if ((tgc1 != null) && (tgc1.getFather() != null)) {
+				tgc2 = tgc1.getFather();
+				ab = listE.getAvatarBlock(tgc2);
+				if (ab != null) {
+					block.setFather(ab);
+				}
+			}
+		}
+		
+		// Make state machine of blocks
+		for(AvatarBlock block: _as.getListOfBlocks()) {
+			makeStateMachine(_as, block);
+		}
 		
 	}
 	
@@ -171,6 +188,379 @@ public class AvatarDesignPanelTranslator {
 			_atam.addParameter(aa);
 		}
 	}
+	
+	public void makeStateMachine(AvatarSpecification _as, AvatarBlock _ab) {
+		AvatarBDBlock block = (AvatarBDBlock)(listE.getTG(_ab));
+		if (block == null) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No corresponding graphical block for  " + _ab.getName());
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(adp.getAvatarBDPanel());
+			addCheckingError(ce);
+			return;
+		}
+		
+		AvatarSMDPanel asmdp = block.getAvatarSMDPanel();
+		String name = block.getBlockName();
+		TDiagramPanel tdp;
+		
+		int size = checkingErrors.size();
+		
+		if (asmdp == null) {
+			return;
+		}
+		
+		tdp = (TDiagramPanel)asmdp;
+
+		// search for start state
+		LinkedList list = asmdp.getComponentList();
+		Iterator iterator = list.listIterator();
+		TGComponent tgc;
+		AvatarSMDStartState tss = null;
+		int cptStart = 0;
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDStartState){
+				tss = (AvatarSMDStartState)tgc;
+				cptStart ++;
+			}
+		}
+		
+		if (tss == null) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "No start state in the state machine diagram of " + name);
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(tdp);
+			addCheckingError(ce);
+			return;
+		}
+		
+		if (cptStart > 1) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in the state machine diagram of " + name);
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(tdp);
+			addCheckingError(ce);
+			return;
+		}
+		
+		// This shall also be true for all composite state: at most one start state!
+		tgc = checkForStartStateOfCompositeStates(asmdp);
+		if (tgc != null) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "More than one start state in composite state");
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(tdp);
+			ce.setTGComponent(tgc);
+			addCheckingError(ce);
+			return;
+		}
+		
+		// First pass: creating TIF components, but no interconnection between them
+		iterator = asmdp.getAllComponentList().listIterator();
+		AvatarSMDReceiveSignal asmdrs;
+		AvatarSMDSendSignal asmdss;
+		
+		AvatarStateMachine asm = _ab.getStateMachine();
+		avatartranslator.AvatarSignal atas;
+		AvatarActionOnSignal aaos;
+		AvatarAttribute aa;
+		AvatarStopState astop;
+		AvatarStartState astart;
+		AvatarState astate;
+		int i;
+		String tmp;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+				
+			// Receive signal
+			if (tgc instanceof AvatarSMDReceiveSignal) {
+				asmdrs = (AvatarSMDReceiveSignal)tgc;
+				atas = _ab.getAvatarSignalWithName(asmdrs.getSignalName());
+				if (atas == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdrs.getSignalName());
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
+					if (aaos.isSending()) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "a sending signal is used for receiving: " + asmdrs.getValue());
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					}
+					if (asmdrs.getNbOfValues() == -1) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdrs.getValue());
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} else {
+						for(i=0; i<asmdrs.getNbOfValues(); i++) {
+							tmp = asmdrs.getValue(i);
+							if (tmp.length() == 0) {
+								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdrs.getValue());
+								ce.setAvatarBlock(_ab);
+								ce.setTDiagramPanel(tdp);
+								ce.setTGComponent(tgc);
+								addCheckingError(ce);
+							} else {
+								// Check that tmp is the identifier of an attribute
+								aa = _ab.getAvatarAttributeWithName(tmp);
+								if (aa == null) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdrs.getValue());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								} else {
+									aaos.addValue(tmp);
+								}
+							}
+						}
+						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
+						listE.addCor(aaos, tgc);
+						asm.addElement(aaos);
+					}
+				}
+			} else if (tgc instanceof AvatarSMDSendSignal) {
+				asmdss = (AvatarSMDSendSignal)tgc;
+				atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
+				if (atas == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
+					if (aaos.isReceiving()) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdss.getValue());
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					}
+					if (asmdss.getNbOfValues() == -1) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdss.getValue());
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} else {
+						for(i=0; i<asmdss.getNbOfValues(); i++) {
+							tmp = asmdss.getValue(i);
+							if (tmp.length() == 0) {
+								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
+								ce.setAvatarBlock(_ab);
+								ce.setTDiagramPanel(tdp);
+								ce.setTGComponent(tgc);
+								addCheckingError(ce);
+							} else {
+								// Check that tmp is the identifier of an attribute
+								aa = _ab.getAvatarAttributeWithName(tmp);
+								if (aa == null) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								} else {
+									aaos.addValue(tmp);
+								}
+							}
+						}
+						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
+						listE.addCor(aaos, tgc);
+						asm.addElement(aaos);
+					}
+				}
+				
+			// State
+			} else if (tgc instanceof AvatarSMDState) {
+				astate = asm.getStateWithName(tgc.getValue());
+				if (astate == null) {
+					astate = new AvatarState(tgc.getValue(), tgc);
+					asm.addElement(astate);
+				}
+				listE.addCor(astate, tgc);
+			
+			// Start state
+			} else if (tgc instanceof AvatarSMDStartState) {
+				astart = new AvatarStartState("start", tgc);
+				listE.addCor(astart, tgc);
+				asm.addElement(astart);
+				if (tgc.getFather() == null) {
+					asm.setStartState(astart);
+				}
+				
+			// Stop state
+			} else if (tgc instanceof AvatarSMDStopState) {
+				astop = new AvatarStopState("stop", tgc);
+				listE.addCor(astop, tgc);
+				asm.addElement(astop);
+			}
+		}
+		
+		if (checkingErrors.size() != size) {
+			return;
+		}
+		
+		// Make hierachy between states and elements
+		iterator = asmdp.getAllComponentList().listIterator();
+		AvatarStateMachineElement element1, element2;
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if ((tgc != null) && (tgc.getFather() != null)) {
+				element1 = (AvatarStateMachineElement)(listE.getObject(tgc));
+				element2 = (AvatarStateMachineElement)(listE.getObject(tgc.getFather()));
+				if ((element1 != null) && (element2 != null) && (element2 instanceof AvatarState)) {
+					element1.setState((AvatarState)element2);
+				}
+			}
+		}
+		
+		// Make next: handle transitions
+		iterator = asmdp.getAllComponentList().listIterator();
+		AvatarSMDConnector asmdco;
+		AvatarTransition at;
+		TGComponent tgc1, tgc2;
+		int error;
+		String tmp1, tmp2;
+		Vector <String> vs;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDConnector) {
+				asmdco = (AvatarSMDConnector)tgc;
+				tgc1 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP1());
+				tgc2 = tdp.getComponentToWhichBelongs(asmdco.getTGConnectingPointP2());
+				if ((tgc1 == null) || (tgc2 == null)) {
+					TraceManager.addDev("Tgcs null in Avatar translation");
+				} else {
+					element1 = (AvatarStateMachineElement)(listE.getObject(tgc1));
+					element2 = (AvatarStateMachineElement)(listE.getObject(tgc2));
+					if ((element1 != null) && (element2 != null)) {
+						at = new AvatarTransition("avatar transition", tgc);
+						
+						// Guard
+						tmp = asmdco.getGuard();
+						error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "transition guard", tmp); 
+						} else {
+							at.setGuard(tmp);
+						}
+						
+						// Delays
+						tmp1 = asmdco.getAfterMinDelay();
+						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "after min delay", tmp1);
+							tmp1 = null;
+						} 
+						tmp2 = asmdco.getAfterMaxDelay();
+						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "after max delay", tmp2);
+							tmp2 = null;
+						} 
+						
+						if ((tmp1 != null) && (tmp2 != null)) {
+							at.setDelays(tmp1, tmp2);
+						}
+						
+						// Compute min and max
+						tmp1 = asmdco.getComputeMinDelay();
+						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "compute min ", tmp1);
+							tmp1 = null;
+						} 
+						tmp2 = asmdco.getComputeMaxDelay();
+						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "compute max ", tmp2);
+							tmp2 = null;
+						} 
+						
+						if ((tmp1 != null) && (tmp2 != null)) {
+							at.setComputes(tmp1, tmp2);
+						}
+						
+						// Actions
+						vs = asmdco.getActions();
+						for(String s: vs) {
+							if (s.trim().length() > 0) {
+								s = s.trim();
+								// Variable assignation or method call?
+								error = s.indexOf("=");
+								if (error == -1) {
+									// Method call
+									if(!_ab.isAValidMethodCall(s)) {
+										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + s);
+										ce.setAvatarBlock(_ab);
+										ce.setTDiagramPanel(tdp);
+										ce.setTGComponent(tgc);
+										addCheckingError(ce);
+									} else {
+										at.addAction(s);
+									}
+								} else {
+									// Variable assignation
+									error = AvatarSyntaxChecker.isAValidVariableExpr(_as, _ab, s);
+									if (error < 0) {
+										makeError(error, tdp, _ab, tgc, "transition action", s);
+									} else {
+										at.addAction(s);
+									}
+								}
+							}
+						}
+						
+						element1.addNext(at);
+						at.addNext(element2);
+						listE.addCor(at, tgc);
+						asm.addElement(at);
+					}
+				}
+			}
+		}
+	
+	}
+	
+	private void makeError(int _error, TDiagramPanel _tdp, AvatarBlock _ab, TGComponent _tgc, String _info, String _element) {
+		if (_error == -3) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Undeclared variable in " + _info + ": " + _element);
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(_tdp);
+			ce.setTGComponent(_tgc);
+			addCheckingError(ce);
+		} else {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted " + _info + ": " + _element);
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(_tdp);
+			ce.setTGComponent(_tgc);
+			addCheckingError(ce);
+		}
+	}
+	
+	// Checks whether all states with internal state machines have at most one start state
+	private TGComponent checkForStartStateOfCompositeStates(AvatarSMDPanel _panel) {
+		TGComponent tgc;
+		ListIterator iterator = _panel.getComponentList().listIterator();
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDState) {
+				tgc = (((AvatarSMDState)(tgc)).checkForStartStateOfCompositeStates());
+				if (tgc != null) {
+					return tgc;
+				}
+			}
+		}
+		return null;
+	}
+	
 	
 	public void createRelationsBetweenBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
 		adp.getAvatarBDPanel().updateAllSignalsOnConnectors();

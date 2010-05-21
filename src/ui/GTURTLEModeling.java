@@ -81,6 +81,7 @@ import ui.avatarrd.*;
 import ui.avatarpd.*;
 
 import avatartranslator.*;
+import avatartranslator.toturtle.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -1562,7 +1563,7 @@ public class GTURTLEModeling {
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		avatarspec = adpt.generateAvatarSpecification(blocks);
 		TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
-		tmState = 0;
+		tmState = 3;
 
 		listE = adpt.getCorrespondanceTGElement();
 		checkingErrors = adpt.getErrors();
@@ -1589,6 +1590,25 @@ public class GTURTLEModeling {
 		}
 		
 		return true;*/
+	}
+	
+	// From AVATAR to TURTLEModeling
+	public boolean translateAvatarSpecificationToTIF() {
+		AVATAR2TURTLE att = new AVATAR2TURTLE(avatarspec);
+		tm = att.generateTURTLEModeling();
+		
+		TURTLEModelChecker tmc = new TURTLEModelChecker(tm, listE);
+		
+		checkingErrors = tmc.syntaxAnalysisChecking();
+		warnings.addAll(tmc.getWarnings());
+		
+		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
+			analyzeErrors();
+			return false;
+		} else {
+			return true;
+		}
+		
 	}
 
 	public Vector getCheckingErrors() {

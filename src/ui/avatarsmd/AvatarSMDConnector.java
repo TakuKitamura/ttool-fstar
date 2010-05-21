@@ -122,19 +122,28 @@ public  class AvatarSMDConnector extends TGConnector {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+	public AvatarSMDTransitionInfo getAvatarSMDTransitionInfo() {
+		for(int i=0; i<tgcomponent.length; i++) {
+			if (tgcomponent[i] instanceof AvatarSMDTransitionInfo) {
+				return (AvatarSMDTransitionInfo)(tgcomponent[i]);
+			}
+		}
+		return null;
+	}
+	
 	public String getGuard() {
-		return ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getGuard();
+		return getAvatarSMDTransitionInfo().getGuard();
 	}
 	
 	public String getTotalMinDelay() {
-		String s1 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getAfterMinDelay();
-		String s2 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getComputeMinDelay();
+		String s1 = getAvatarSMDTransitionInfo().getAfterMinDelay();
+		String s2 = getAvatarSMDTransitionInfo().getComputeMinDelay();
 		return addedDelays(s1, s2);
 	}          
 	
 	public String getTotalMaxDelay() {
-		String s1 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getAfterMaxDelay();
-		String s2 = ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getComputeMaxDelay();
+		String s1 = getAvatarSMDTransitionInfo().getAfterMaxDelay();
+		String s2 = getAvatarSMDTransitionInfo().getComputeMaxDelay();
 		return addedDelays(s1, s2);
 	}
 	
@@ -151,7 +160,23 @@ public  class AvatarSMDConnector extends TGConnector {
 	}
 	
 	public Vector<String> getActions() {
-		return ((AvatarSMDTransitionInfo)getInternalTGComponent(0)).getActions();
+		return getAvatarSMDTransitionInfo().getActions();
+	}
+	
+	public String getAfterMinDelay() {
+		return getAvatarSMDTransitionInfo().getAfterMinDelay();
+	}
+	
+	public String getAfterMaxDelay() {
+		return getAvatarSMDTransitionInfo().getAfterMaxDelay();
+	}
+	
+	public String getComputeMinDelay() {
+		return getAvatarSMDTransitionInfo().getComputeMinDelay();
+	}
+	
+	public String getComputeMaxDelay() {
+		return getAvatarSMDTransitionInfo().getComputeMaxDelay();
 	}
 }
 

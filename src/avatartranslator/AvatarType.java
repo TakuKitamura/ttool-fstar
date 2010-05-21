@@ -70,8 +70,8 @@ public class AvatarType {
         return -1;
     }
     
-    public static String getStringType(int type) {
-        switch(type) {
+    public static String getStringType(int _type) {
+        switch(_type) {
             case NATURAL:
                 return "nat";
             case BOOLEAN:
@@ -81,4 +81,16 @@ public class AvatarType {
         }
 		return "";
     }
+	
+	public static String getDefaultInitialValue(int _type) {
+		switch(_type) {
+            case NATURAL:
+                return "0";
+            case BOOLEAN:
+                return "false";
+			case INTEGER:
+                return "0";
+        }
+		return "";
+	}
 }

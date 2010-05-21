@@ -50,25 +50,8 @@ import java.util.*;
 
 public class AvatarState extends AvatarStateMachineElement {
 	
-	private AvatarStateMachine asm;
-	
-	
-	
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		
     }
-	
-	public void setStateMachine(AvatarStateMAchine _asm) {
-		asm = _asm;
-	}
-	
-	public boolean isACompositeState() {
-		return (asm != null);
-	}
-	
-	public AvatarStateMachine getStateMachine() {
-		return asm;
-	}
-	
 }

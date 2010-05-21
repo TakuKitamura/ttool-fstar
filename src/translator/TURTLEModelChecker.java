@@ -385,6 +385,10 @@ public class TURTLEModelChecker {
 		int j;
 		ADChoice choice;
 		
+		if (ad == null) {
+			return;
+		}
+		
 		for(int i=0; i<ad.size(); i++) {
             ad1 = (ADComponent)(ad.elementAt(i));
 			

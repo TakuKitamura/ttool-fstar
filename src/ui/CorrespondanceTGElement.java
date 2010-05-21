@@ -50,6 +50,7 @@ package ui;
 import java.awt.*;
 import java.util.*;
 
+import avatartranslator.*;
 import req.ebrdd.*;
 import translator.*;
 import tmltranslator.*;
@@ -98,6 +99,14 @@ public class CorrespondanceTGElement {
         int index = data.indexOf(o);
         if ((index != -1) && (tg.size() > index)) {
             return	(TGComponent)(tg.elementAt(index));
+        }
+        return null;
+    }
+	
+	public Object getObject(TGComponent tgc) {
+        int index = tg.indexOf(tgc);
+        if ((index != -1) && (tg.size() > index)) {
+            return	data.elementAt(index);
         }
         return null;
     }
@@ -154,6 +163,14 @@ public class CorrespondanceTGElement {
         }
         return null;
     }
+	
+	 public TGComponent getTGFromObject(Object o) {
+        int index = tg.indexOf(o);
+        if ((index != -1) && (data.size() > index)) {
+            return	(TGComponent)(data.elementAt(index));
+        }
+        return null;
+    }
     
      public TGComponent getTGAt(int index) {
         if ((index != -1) && (tg.size() > index)) {
@@ -168,6 +185,18 @@ public class CorrespondanceTGElement {
              Object o = data.elementAt(index);
              if (o instanceof TClass) {
                 return (TClass)o;
+             }
+            return null;
+        }
+        return null;
+    }
+	
+	public AvatarBlock getAvatarBlock(TGComponent _tgc) {
+        int index = tg.indexOf(_tgc);
+         if ((index != -1) && (tg.size() > index)) {
+             Object o = data.elementAt(index);
+             if (o instanceof AvatarBlock) {
+                return (AvatarBlock)o;
              }
             return null;
         }

@@ -47,6 +47,8 @@ package avatartranslator;
 
 import java.util.*;
 
+import myutil.*;
+
 
 public class AvatarBlock extends AvatarElement {
 	
@@ -91,18 +93,60 @@ public class AvatarBlock extends AvatarElement {
 	}
 	
 	public String toString() {
-		StringBuffer sb = new StringBuffer("block:" + getName() + "\n");
+		StringBuffer sb = new StringBuffer("block:" + getName() + " ID=" + getID() + " \n");
+		if (getFather() != null) {
+			sb.append("  subblock of: " + getFather().getName() + " ID=" + getFather().getID()+ "\n"); 
+		} else {
+			sb.append("  top level block\n");
+		}
 		for(AvatarAttribute attribute: attributes) {
-			sb.append("  attribute: " + attribute.toString() + "\n"); 
+			sb.append("  attribute: " + attribute.toString() + " ID=" + attribute.getID() + "\n"); 
 		}
 		for(AvatarMethod method: methods) {
-			sb.append("  method: " + method.toString() + "\n"); 
+			sb.append("  method: " + method.toString() + " ID=" + method.getID() + "\n"); 
 		}
 		for(AvatarSignal signal: signals) {
-			sb.append("  signal: " + signal.toString() + "\n"); 
+			sb.append("  signal: " + signal.toString() + " ID=" + signal.getID() + "\n"); 
+		}
+		if (asm != null) {
+			sb.append(asm.toString());
+		} else {
+			sb.append("No state machine");
 		}
 		
 		return sb.toString();
+	}
+	
+	public int attributeNb() {
+		return attributes.size();
+	}
+	
+	public AvatarAttribute getAttribute(int _index) {
+		return attributes.get(_index);
+	}
+	
+	
+	public AvatarAttribute getAvatarAttributeWithName(String _name) {
+		for(AvatarAttribute attribute: attributes) {
+			if (attribute.getName().compareTo(_name)== 0) {
+				return attribute;
+			}
+		}
+		return null;
+	}
+	
+	public AvatarMethod getAvatarMethodWithName(String _name) {
+		for(AvatarMethod method: methods) {
+			if (method.getName().compareTo(_name)== 0) {
+				return method;
+			}
+		}
+		
+		if (getFather() != null) {
+			return getFather().getAvatarMethodWithName(_name);
+		}
+		
+		return null;
 	}
 	
 	public AvatarSignal getAvatarSignalWithName(String _name) {
@@ -112,7 +156,53 @@ public class AvatarBlock extends AvatarElement {
 			}
 		}
 		
+		if (getFather() != null) {
+			return getFather().getAvatarSignalWithName(_name);
+		}
+		
 		return null;
+	}
+	
+	public boolean isAValidMethodCall(String _s) {
+		int index0 = _s.indexOf("(");
+		int index1 = _s.indexOf(")");
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			return false;
+		}
+		
+		String method = _s.substring(0, index0);
+		TraceManager.addDev("method=" + method);
+		AvatarMethod am = getAvatarMethodWithName(method);
+		if (am == null) {
+			return false;
+		}
+		
+		String params = _s.substring(index0+1, index1).trim();
+		TraceManager.addDev("params=" + params);
+		if (params.length() == 0) {
+			if (am.getListOfAttributes().size() == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		TraceManager.addDev("params=" + params);
+		String [] actions = params.split(",");
+		if (am.getListOfAttributes().size() != actions.length) {
+			return false;
+		}
+		
+		AvatarAttribute aa;
+		for(int i=0; i<actions.length; i++) {
+			TraceManager.addDev("params=" + params +  "actions=" + actions[i]);
+			aa = getAvatarAttributeWithName(actions[i]);
+			if (aa == null) {
+				return false;
+			}
+		}
+		
+		return true;
+		
 	}
 	
 	

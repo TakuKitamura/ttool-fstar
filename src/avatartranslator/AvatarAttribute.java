@@ -73,8 +73,24 @@ public class AvatarAttribute extends AvatarElement{
 		return initialValue;
 	}
 	
+	public String getDefaultInitialValue() {
+		return AvatarType.getDefaultInitialValue(type);
+	}
+	
 	public int getType() {
 		return type;
+	}
+	
+	public boolean isInt() {
+		return (type == AvatarType.INTEGER);
+	}
+	
+	public boolean isNat() {
+		return (type == AvatarType.NATURAL);
+	}
+	
+	public boolean isBool() {
+		return (type == AvatarType.BOOLEAN);
 	}
 	
 	public static boolean isAValidAttributeName(String id) {

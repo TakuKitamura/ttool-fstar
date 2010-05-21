@@ -205,4 +205,45 @@ public class AvatarSignal extends AvatarMethod {
 		
 		return signal;
 	}
+	
+	public static int getNbOfValues(String _value) {
+		int index = _value.indexOf('(');
+		if (index == -1) {
+			return -1;
+		}
+		
+		int index0 = _value.indexOf(')');
+		if (index0 == -1) {
+			return -1;
+		}
+	
+		String val = _value.substring(index+1, index0).trim();
+		
+		if (val.length() == 0) {
+			return 0;
+		}
+		
+		int nbChar = Conversion.nbChar(_value, ',');
+		return nbChar+1;
+	}
+	
+	public static String getValue(String _value, int _index) {
+		int nbOfValues = getNbOfValues(_value);
+		if (nbOfValues < 1) {
+			return null;
+		}
+		
+		if (_index >= nbOfValues) {
+			return null;
+		}
+		
+		int index0 = _value.indexOf('(');
+		int index1 = _value.indexOf(')');
+		
+		String val = _value.substring(index0+1, index1).trim();
+		
+		String [] vals = val.split(",");
+		return vals[_index].trim();
+		
+	}
 }

@@ -2975,6 +2975,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			TraceManager.addDev("Generating from state 2");
 			return generateTIFFromTMLModeling(automatic, generator);
 		}
+		if (state == 3) {
+			TraceManager.addDev("Generating from state 3 (Avatar)");
+			return generateTIFFromAvatarSpecification(automatic, generator);
+		}
+		return false;
+	}
+	
+	public boolean generateTIFFromAvatarSpecification(boolean automatic, int generator) {
+		boolean b = gtm.translateAvatarSpecificationToTIF();
+		if (b) {
+			setMode(MainGUI.MODEL_OK);
+			return true;
+		}
 		return false;
 	}
 	

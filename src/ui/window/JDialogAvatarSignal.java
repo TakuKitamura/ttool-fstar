@@ -75,7 +75,6 @@ public class JDialogAvatarSignal extends javax.swing.JDialog implements ActionLi
     
     
     /** Creates new form  */
-    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, Vector _signals, boolean _isOut) {
         
         super(_f, _title, true);

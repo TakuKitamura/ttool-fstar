@@ -52,6 +52,7 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarSpecification extends AvatarElement {
+   private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};
     
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;
@@ -78,7 +79,7 @@ public class AvatarSpecification extends AvatarElement {
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Blocks:\n");
 		for(AvatarBlock block: blocks) {
-			sb.append(block.toString());
+			sb.append("*** " + block.toString()+"\n");
 		}
 		sb.append("\nRelations:\n");
 		for(AvatarRelation relation: relations) {
@@ -97,5 +98,16 @@ public class AvatarSpecification extends AvatarElement {
 		}
 		
 		return null;
+	}
+	
+	public String putAttributeValueInString(String _source, AvatarAttribute _at) {
+		return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
+	}
+	
+	
+	public void removeCompositeStates() {
+		for(AvatarBlock block: blocks) {
+			block.getStateMachine().removeCompositeStates();
+		}
 	}
 }

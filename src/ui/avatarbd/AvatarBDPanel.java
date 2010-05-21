@@ -573,7 +573,7 @@ public class AvatarBDPanel extends TDiagramPanel {
 		LinkedList<AvatarBDBlock> list = getFullBlockList();
 		for(AvatarBDBlock block: list) {
 			if (block.getBlockName().compareTo(_name) ==0) {
-				return block.getMethodList();
+				return block.getAllMethodList();
 			}
 		}
 		return null;
@@ -583,7 +583,7 @@ public class AvatarBDPanel extends TDiagramPanel {
 		LinkedList<AvatarBDBlock> list = getFullBlockList();
 		for(AvatarBDBlock block: list) {
 			if (block.getBlockName().compareTo(_name) ==0) {
-				return block.getSignalList();
+				return block.getAllSignalList();
 			}
 		}
 		return null;

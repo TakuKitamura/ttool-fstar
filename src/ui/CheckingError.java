@@ -45,6 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui;
 
+import avatartranslator.*;
+
 import translator.*;
 import tmltranslator.*;
 
@@ -62,6 +64,7 @@ public class CheckingError {
     private TMLTask tmlt;
     private TDiagramPanel tdp; 
     private TGComponent tgc;
+	private AvatarBlock ab;
     
     public CheckingError(int _type, String _message) {
         type = _type;
@@ -78,6 +81,10 @@ public class CheckingError {
     
     public void setTClass(TClass _t) {
         t = _t;
+    }
+	
+	public void setAvatarBlock(AvatarBlock _ab) {
+        ab = _ab;
     }
     
     public void setTMLTask(TMLTask _tmlt) {
@@ -102,6 +109,10 @@ public class CheckingError {
     
     public TClass getTClass() {
         return t;
+    }
+	
+	public AvatarBlock getAvatarBlock() {
+        return ab;
     }
     
      public TMLTask getTMLTask() {

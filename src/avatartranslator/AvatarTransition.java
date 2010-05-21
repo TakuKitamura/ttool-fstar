@@ -55,7 +55,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	
 	private LinkedList<String> actions; // actions on variable, or method call
 	
-    public AvatarTransition(String _name, AvatarSignal _signal, Object _referenceObject) {
+    public AvatarTransition(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		actions = new LinkedList<String>();
     }
@@ -73,7 +73,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	}
 	
 	public String getAction(int _index) {
-		return value.get(_index);
+		return actions.get(_index);
+	}
+	
+	public void addAction(String _action) {
+		actions.add(_action);
 	}
 	
 	public void setDelays(String _minDelay, String _maxDelay) {
@@ -101,5 +105,20 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	public String getMaxCompute() {
 		return maxCompute;
 	}
+	
+	public AvatarTransition cloneMe() {
+		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
+		at.setGuard(getGuard());
+		at.setDelays(getMinDelay(), getMaxDelay());
+		at.setComputes(getMinCompute(), getMaxCompute());
+		
+		for(int i=0; i<getNbOfAction(); i++) {
+			at.addAction(getAction(i));
+		}
+		
+		return at;
+	}
+	
+	
     
 }

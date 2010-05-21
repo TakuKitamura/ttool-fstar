@@ -306,7 +306,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					break;
 				}
 				am = (AvatarMethod)(myMethods.get(index));
-				method = "- " + am.toString();
+				method = "# " + am.toString();
 				w = g.getFontMetrics().stringWidth(method);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(method, x + textX, y + cpt);
@@ -356,7 +356,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					break;
 				}
 				as = (AvatarSignal)(mySignals.get(index));
-				signal = as.toString();
+				signal = "# " + as.toString();
 				w = g.getFontMetrics().stringWidth(signal);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(signal, x + textX, y + cpt);
@@ -794,6 +794,28 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
 	public Vector getSignalList() {
 		return mySignals;
+	}
+	
+	public Vector getAllMethodList() {
+		if (getFather() == null) {
+			return myMethods;
+		}
+		
+		Vector v = new Vector();
+		v.addAll(myMethods);
+		v.addAll(((AvatarBDBlock)getFather()).getAllMethodList());
+		return v;
+	}
+	
+	public Vector getAllSignalList() {
+		if (getFather() == null) {
+			return mySignals;
+		}
+		
+		Vector v = new Vector();
+		v.addAll(mySignals);
+		v.addAll(((AvatarBDBlock)getFather()).getAllSignalList());
+		return v;
 	}
 	
 	public AvatarSignal getAvatarSignalFromName(String _name) {

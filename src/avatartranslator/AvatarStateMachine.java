@@ -73,6 +73,105 @@ public class AvatarStateMachine extends AvatarElement {
 	public LinkedList<AvatarStateMachineElement> getListOfElements() {
 		return elements;
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer("State machine Id=" + getID() + "\n");
+		
+		for(AvatarStateMachineElement element: elements) {
+			sb.append(element.toString() + "\n");
+		}
+		
+		return sb.toString();
+	}
+	
+	public void removeCompositeStates() {
+		AvatarTransition at;
+		
+		at = getCompositeTransition();
+		if (at != null) {
+			TraceManager.addDev("*** Found composite transition: " + at.toString());
+		}
+		
+		/*while((at = getCompositeTransition()) != null) {
+			removeCompositeTransition(at);
+		}*/
+	}
+	
+	private AvatarTransition getCompositeTransition() {
+		for(AvatarStateMachineElement element: elements) {
+			if (element instanceof AvatarTransition) {
+				if ((isACompositeTransition((AvatarTransition)element))) {
+					return (AvatarTransition)element;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	// Checks whether the previous element is a state with an internal state machine
+	private boolean isACompositeTransition(AvatarTransition _at) {
+		AvatarStateMachineElement element = getPreviousElementOf(_at);
+		if (element == null) {
+			return false;
+		}
+		
+		if (!(element instanceof AvatarState)) {
+			return false;
+		}
+		
+		AvatarState state = (AvatarState)element;
+		return hasInternalComponents(state);
+	}
+	
+	private boolean hasInternalComponents(AvatarState _state) {
+		for(AvatarStateMachineElement element: elements) {
+			if (element.getState() == _state) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private void removeCompositeTransition(AvatarTransition _at) {
+		AvatarState state = (AvatarState)(getPreviousElementOf(_at));
+		for(AvatarStateMachineElement element: elements) {
+			if (element.hasInUpperState(state) == true) {
+				// We found a candidate!
+			}
+		}
+		// For each element elt in the composite state at the origin of at:
+		// make a new transition from elt to the destinaton of _at
+		// Si elt un peu special, need to add also intermediate states
+		// add this transition
+		
+		// Remove the old transition
+		
+		// Shall work!
+		
+	}
+	
+	private AvatarStateMachineElement getPreviousElementOf(AvatarStateMachineElement _elt) {
+		for(AvatarStateMachineElement element: elements) {
+			if (element.hasNext(_elt)) {
+				return element;
+			}
+		}
+		
+		return null;
+	}
+	
+	public AvatarState getStateWithName(String _name) {
+		for(AvatarStateMachineElement element: elements) {
+			if (element instanceof AvatarState) {
+				if (element.getName().compareTo(_name) == 0) {
+					return (AvatarState)element;
+				}
+			}
+		}
+		return null;
+	}
     
 
 }

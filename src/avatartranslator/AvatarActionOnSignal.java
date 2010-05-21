@@ -71,7 +71,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	}
 	
 	public String getValue(int _index) {
-		return value.get(_index);
+		return values.get(_index);
 	}
 	
 	public boolean isSending() {
