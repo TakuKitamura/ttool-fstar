@@ -3085,8 +3085,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		//System.out.println("Generate UPPAAL!");
 		//gtm.mergeChoices(true);
 		if (gtm.getTURTLEModelingState() > 0) {
-			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL)) {
+			if (gtm.getTURTLEModelingState() == 3) {
+				//AVATAR
+				boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
+				if (result) {
+				JOptionPane.showMessageDialog(frame,
+						"0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
+						"Successful translation from the TML mapping to a formal specification",
+						JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(frame,
+						"" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
+						"ERROR during translation from AVATAR to UPPAAL",
+						JOptionPane.INFORMATION_MESSAGE);
+				}
 				return;
+			} else {
+				if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL)) {
+					return;
+				}
 			}
 		}
 		

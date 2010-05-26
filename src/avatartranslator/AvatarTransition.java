@@ -47,6 +47,8 @@ package avatartranslator;
 
 import java.util.*;
 
+import myutil.*;
+
 
 public class AvatarTransition extends AvatarStateMachineElement {
 	private String guard = "[ ]";
@@ -106,6 +108,32 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		return maxCompute;
 	}
 	
+	public String getTotalMinDelay() {
+		if (minDelay.trim().length() ==0) {
+			return minCompute;
+		}
+		if (minCompute.trim().length() ==0) {
+			return minDelay;
+		}
+		return "(" + minDelay + ")+(" + minCompute + ")";
+	}
+	
+	public String getTotalMaxDelay() {
+		if (maxDelay.trim().length() ==0) {
+			if (maxCompute.trim().length() ==0) {
+				return getTotalMinDelay();
+			} 
+			return maxCompute;
+		}
+		if (maxCompute.trim().length() ==0) {
+			if (maxDelay.trim().length() ==0) {
+				return getTotalMinDelay();
+			} 
+			return maxDelay;
+		}
+		return "(" + maxDelay + ")+(" + maxCompute + ")";
+	}
+	
 	public AvatarTransition cloneMe() {
 		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
 		at.setGuard(getGuard());
@@ -118,6 +146,63 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		
 		return at;
 	}
+	
+	public AvatarTransition basicCloneMe() {
+		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
+		
+		for(int i=0; i<getNbOfAction(); i++) {
+			at.addAction(getAction(i));
+		}
+		
+		return at;
+	}
+	
+	public void removeAllActionsButTheFirstOne() {
+		if (actions.size() < 2) {
+			return;
+		}
+		String action = actions.get(0);
+		actions.clear();
+		actions.add(action);
+	}
+	
+	public void removeFirstAction() {
+		actions.remove(0);
+	}
+	
+	// No actions
+	//public boolean isAGuardTransition() {
+	//}
+	
+	public boolean isGuarded() {
+		if (guard == null) {
+			return false;
+		}
+		 
+		String s = Conversion.replaceAllString(guard, " ", "").trim();
+		if (s.compareTo("[]") == 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean hasDelay() {
+		if ((minDelay.trim().length() == 0) && (minCompute.trim().length() ==0)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean hasActions() {
+		return (actions.size() > 0);
+	}
+	
+	
+	
+	
+	
 	
 	
     

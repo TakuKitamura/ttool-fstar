@@ -92,6 +92,17 @@ public class AvatarBlock extends AvatarElement {
 		signals.add(_signal);
 	}
 	
+	public LinkedList<AvatarMethod> getMethods() {
+		return methods;
+	}
+	
+	public void addIntAttributeIfApplicable(String _name) {
+		if (getAvatarAttributeWithName(_name) == null) {
+			AvatarAttribute aa = new AvatarAttribute(_name, AvatarType.INTEGER, null);
+			addAttribute(aa);
+		}
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer("block:" + getName() + " ID=" + getID() + " \n");
 		if (getFather() != null) {
@@ -144,6 +155,20 @@ public class AvatarBlock extends AvatarElement {
 		
 		if (getFather() != null) {
 			return getFather().getAvatarMethodWithName(_name);
+		}
+		
+		return null;
+	}
+	
+	public AvatarBlock getBlockOfMethodWithName(String _name) {
+		for(AvatarMethod method: methods) {
+			if (method.getName().compareTo(_name)== 0) {
+				return this;
+			}
+		}
+		
+		if (getFather() != null) {
+			return getFather().getBlockOfMethodWithName(_name);
 		}
 		
 		return null;

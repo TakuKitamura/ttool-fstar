@@ -79,9 +79,9 @@ public class Conversion {
         if (index > -1) {
             return s.substring(0, index) + snew + s.substring(index + 1);
         }
-        return s;
+		return s;
     }
-    
+	
     public static String replaceAllChar(String s, char c, String snew) {
         int index;
         String output = "";

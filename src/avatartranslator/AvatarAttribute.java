@@ -69,6 +69,13 @@ public class AvatarAttribute extends AvatarElement{
 		initialValue = _initialValue;
 	}
 	
+	public boolean hasInitialValue() {
+		if (getInitialValue() == null) {
+			return false;
+		}
+		return (!(getInitialValue().trim().length() == 0));
+	}
+	
 	public String getInitialValue() {
 		return initialValue;
 	}

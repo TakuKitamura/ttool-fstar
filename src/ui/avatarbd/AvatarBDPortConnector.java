@@ -145,19 +145,6 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		}
 		// Signals at destination
 		h = - decY;
-		if (inSignalsAtDestination.size() > 0) {
-			//g.drawString("in:", p2.getX() + decX, p2.getY() + h);
-			for(String isd: inSignalsAtDestination) {
-				h += step;
-				s = getShortName(isd);
-				if (p1.getX() > p2.getX()) {
-					g.drawString(s, p2.getX() + decX, p2.getY() + h);
-				} else {
-					w = g.getFontMetrics().stringWidth(s);
-					g.drawString(s, p2.getX() - decX - w, p2.getY() + h);
-				}
-			}
-		}
 		if (outSignalsAtDestination.size() > 0) {
 			//h += step;
 			//g.drawString("out:", p2.getX() + decX, p2.getY() + h);
@@ -172,6 +159,20 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 				}
 			}
 		}
+		if (inSignalsAtDestination.size() > 0) {
+			//g.drawString("in:", p2.getX() + decX, p2.getY() + h);
+			for(String isd: inSignalsAtDestination) {
+				h += step;
+				s = getShortName(isd);
+				if (p1.getX() > p2.getX()) {
+					g.drawString(s, p2.getX() + decX, p2.getY() + h);
+				} else {
+					w = g.getFontMetrics().stringWidth(s);
+					g.drawString(s, p2.getX() - decX - w, p2.getY() + h);
+				}
+			}
+		}
+		
 		g.setFont(fold);
 		
 		/*if (value.length() > 0) {
@@ -361,8 +362,8 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 	
 	public LinkedList<String> getListOfSignalsDestination() {
 		LinkedList<String> list = new LinkedList<String>();
-		list.addAll(inSignalsAtDestination);
 		list.addAll(outSignalsAtDestination);
+		list.addAll(inSignalsAtDestination);
 		return list;
 	}
 	

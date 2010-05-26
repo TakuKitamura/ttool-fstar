@@ -68,6 +68,10 @@ public class AvatarSpecification extends AvatarElement {
 		return blocks;
 	}
 	
+	public LinkedList<AvatarRelation> getRelations() {
+		return relations;
+	}
+	
 	public void addBlock(AvatarBlock _block) {
 		blocks.add(_block);
 	}
@@ -109,5 +113,69 @@ public class AvatarSpecification extends AvatarElement {
 		for(AvatarBlock block: blocks) {
 			block.getStateMachine().removeCompositeStates();
 		}
+	}
+	
+	public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {
+		for(AvatarRelation ar: relations) {
+			if (ar.hasSignal(_as) > -1) {
+				return ar;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean isAVariableSettingString(String _action) {
+		int index = _action.indexOf('=');
+		return (index > -1);
+	}
+	
+	public static String getMethodCallFromAction(String _action) {
+		int index = _action.indexOf('(');
+		if (index == -1) {
+			return _action;
+		}
+		return _action.substring(0, index);
+	}
+	
+	public static int getNbOfParametersInAction(String _action) {
+		int index = _action.indexOf('(');
+		if (index == -1) {
+			return 0;
+		}
+		
+		String actions  = _action.substring(index+1, _action.length()).trim();
+		
+		index = actions.indexOf(')');
+		if (index == -1) {
+			return 0;
+		}
+		
+		actions = actions.substring(0, index).trim();
+		
+		if (actions.length() == 0) {
+			return 0;
+		}
+		
+		int cpt = 1;
+		while ((index = actions.indexOf(',')) != -1) {
+			cpt ++;
+			actions = actions.substring(index+1, actions.length()).trim();
+		}
+		
+		return cpt;
+	}
+	
+	public static String getParameterInAction(String _action, int _index) {
+		int nb = getNbOfParametersInAction(_action);
+		if (!(_index < nb) || (_index < 0)) {
+			return null;
+		}
+		
+		int index1 = _action.indexOf('(');
+		int index2 = _action.indexOf(')');
+		String actions = _action.substring(index1+1, index2).trim();
+		String actionss[] = actions.split(",");
+		return actionss[_index].trim();
+		
 	}
 }

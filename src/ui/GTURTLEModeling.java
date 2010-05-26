@@ -82,6 +82,7 @@ import ui.avatarpd.*;
 
 import avatartranslator.*;
 import avatartranslator.toturtle.*;
+import avatartranslator.touppaal.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -406,6 +407,25 @@ public class GTURTLEModeling {
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 		try {
 			tml2uppaal.saveInFile(_path);
+			return true;
+		} catch (FileException fe) {
+			TraceManager.addError("Exception: " + fe.getMessage());
+			return false;
+		}
+	}
+	
+	public boolean generateUPPAALFromAVATAR(String _path) {
+		AVATAR2UPPAAL avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
+		//tml2uppaal.setChoiceDeterministic(choices);
+		//tml2uppaal.setSizeInfiniteFIFO(_size);
+		uppaal = avatar2uppaal.generateUPPAAL(true);
+		uppaalTMLTable = null;
+		uppaalTIFTable = null;
+		languageID = UPPAAL;
+		mgui.setMode(MainGUI.UPPAAL_OK);
+		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+		try {
+			avatar2uppaal.saveInFile(_path);
 			return true;
 		} catch (FileException fe) {
 			TraceManager.addError("Exception: " + fe.getMessage());

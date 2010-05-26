@@ -50,7 +50,7 @@ import java.util.*;
 
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	private AvatarSignal signal;
-	private LinkedList<String> values;
+	private LinkedList<String> values; // Attribute name
 	
     public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
         super(_name, _referenceObject);

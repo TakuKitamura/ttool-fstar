@@ -406,6 +406,9 @@ public class AvatarDesignPanelTranslator {
 			return;
 		}
 		
+		// Remove all internal start states
+		asm.removeAllInternalStartStates();
+		
 		// Make hierachy between states and elements
 		iterator = asmdp.getAllComponentList().listIterator();
 		AvatarStateMachineElement element1, element2;

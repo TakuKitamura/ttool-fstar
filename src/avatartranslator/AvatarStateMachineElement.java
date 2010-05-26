@@ -62,6 +62,10 @@ public class AvatarStateMachineElement extends AvatarElement {
 		nexts.add(_element);
 	}
 	
+	public AvatarStateMachineElement getNext(int _index) {
+		return nexts.get(_index);
+	}
+	
 	public void setState(AvatarState _as) {
 		myState = _as; 
 	}
@@ -99,8 +103,29 @@ public class AvatarStateMachineElement extends AvatarElement {
 		return ret;
 	}
 	
+	public int nbOfNexts() {
+		return nexts.size();
+	}
+	
 	public boolean hasNext(AvatarStateMachineElement _elt) {
 		return nexts.contains(_elt);
+	}
+	
+	public void removeNext(AvatarStateMachineElement _elt) {
+		nexts.remove(_elt);
+	}
+	
+	public void removeAllNexts() {
+		nexts.clear();
+	}
+	
+	public boolean followedWithAnActionOnASignal() {
+		AvatarStateMachineElement element = getNext(0);
+		if (element == null) {
+			return false;
+		}
+		
+		return (element instanceof AvatarActionOnSignal);
 	}
 	
     

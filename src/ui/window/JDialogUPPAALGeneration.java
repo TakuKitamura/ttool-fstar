@@ -328,7 +328,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 				result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices, variables);
 				jta.append("UPPAAL specification generated\n");
 				jta.append("Checking the regularity of the TIF specification\n");
-				System.out.println("Regularity?");
+				TraceManager.addDev("Regularity?");
 				boolean b = mgui.gtm.isRegularTM();
 				if (b) {
 					jta.append("UPPAAL code was optimized since the TIF specification is regular\n");

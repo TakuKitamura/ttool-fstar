@@ -96,5 +96,12 @@ public class AvatarRelation extends AvatarElement {
 		return sb.toString();
 	}
 	
+	// Return index of signal. If not found, return -1
+	public int hasSignal(AvatarSignal sig) {
+		int index1 = signals1.indexOf(sig);
+		int index2 = signals2.indexOf(sig);
+		return Math.max(index1, index2);
+	}
+	
 
 }
