@@ -372,7 +372,7 @@ public class MappedSystemCTask {
 					action += "_endLastTransaction+=tmpDelayxy";
 				}else{
 					action += "TMLTime tmpDelayxx = " + delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";\nif (tmpDelayxx==0) tmpDelayxx=1;\n";
-					action += "_endLastTransaction+=myrand(mpDelayxx,mpDelayxy)";
+					action += "_endLastTransaction+=myrand(tmpDelayxx,tmpDelayxy)";
 				}
 			}
 			//cmdName= "_action" + currElem.getID();
