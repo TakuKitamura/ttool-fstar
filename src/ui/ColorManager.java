@@ -61,7 +61,11 @@ public class ColorManager {
     public static final Color POINTER_ON_ME_0 = Color.red;
 	public static final Color ACCESSIBILITY = Color.red;
 	public static final Color BREAKPOINT = new Color(13, 248, 18);
-	public static final Color CURRENT_COMMAND = new Color(13, 248, 18, 200);
+	public static final Color CURRENT_COMMAND_RUNNING = new Color(13, 248, 18, 200);
+	public static final Color CURRENT_COMMAND_RUNNABLE = new Color(162, 178, 22, 200);
+	public static final Color CURRENT_COMMAND_SUSPENDED = new Color(255, 184, 13, 200);
+	public static final Color CURRENT_COMMAND_TERMINATED = new Color(255, 42, 50, 200);
+	public static final Color CURRENT_COMMAND_UNKNOWN = new Color(107, 97, 97, 200);
 	public static final Color DIPLOID = new Color(163, 5, 253);
     public static Color SELECTED_0 = Color.blue;
     public static final Color MOVING_0 = Color.magenta;

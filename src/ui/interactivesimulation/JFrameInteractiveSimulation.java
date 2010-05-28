@@ -638,7 +638,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(80);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(300);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspTaskInfo = new JScrollPane(jtablePI);
 		jspTaskInfo.setWheelScrollingEnabled(true);
@@ -1158,6 +1159,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String contdel;
 		String busname;
 		String busid;
+		String state;
 		
 		int k;
 		
@@ -1281,18 +1283,6 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							}
 							
 							//System.out.println("Got info on task " + id + " command=" + command);
-							
-							if ((id != null) && (command != null)) {
-								if (nextCommand ==null) {
-									nextCommand = "-1";
-								}
-								updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime);
-							}
-							
-							if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
-								updateOpenDiagram(name, command, progression, startTime, finishTime, transStartTime, transFinishTime);
-							}
-							
 							extime = null;
 							nl = elt.getElementsByTagName("extime");
 							if ((nl != null) && (nl.getLength() > 0)) {
@@ -1301,9 +1291,31 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								extime =  node0.getTextContent();
 							}
 							
-							if ((id != null) && (extime != null)) {
-								updateTaskState(id, extime);
+							state = null;
+							nl = elt.getElementsByTagName("tskstate");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								state =  node0.getTextContent();
+								//TraceManager.addDev("TASK STATE: " + state);
 							}
+							
+							if ((id != null) && ((extime != null) || (state != null))) {
+								updateTaskCyclesAndState(id, extime, state);
+							}
+							
+							
+							if ((id != null) && (command != null)) {
+								if (nextCommand ==null) {
+									nextCommand = "-1";
+								}
+								updateRunningCommand(id, command, progression, startTime, finishTime, nextCommand, transStartTime, transFinishTime, state);
+							}
+							
+							if (openDiagram.isEnabled() && openDiagram.isSelected() && (name != null) && (command != null)) {
+								updateOpenDiagram(name, command, progression, startTime, finishTime, transStartTime, transFinishTime);
+							}
+							
 							
 							
 							
@@ -1822,10 +1834,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}*/
 	}
 	
-	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand, String transStartTime, String transFinishTime) {
+
+	
+	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand, String transStartTime, String transFinishTime, String _state) {
 		Integer i = getInteger(id);
 		Integer c = getInteger(command);
 		Integer nc = getInteger(nextCommand);
+		
+		if (_state == null) {
+			_state = tasktm.getState(valueTable.get(new Integer(id)));
+		}
+		
+		TraceManager.addDev("state:" + _state);
 		
 		if ((i != null) && (c != null)) {
 			try {
@@ -1838,7 +1858,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				
 				runningTable.put(i, c);
 				//System.out.println("Adding running command: " +c);
-				mgui.addRunningID(c, nc, progression, startTime, finishTime, transStartTime, transFinishTime);
+				mgui.addRunningID(c, nc, progression, startTime, finishTime, transStartTime, transFinishTime, _state);
 			} catch (Exception e) {
 				TraceManager.addDev("Exception updateRunningCommand: " + e.getMessage());
 			}
@@ -2001,20 +2021,41 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
-	private void updateTaskState(String _id, String _extime) {
+	private void updateTaskCyclesAndState(String _id, String _extime, String _state) {
 		Integer i = getInteger(_id);
 		Integer ex = getInteger(_extime);
 		int row;
 		
+		String s = "";
+		if (_state != null) {
+			s += _state;
+		}
+		s += ";";
+		if (_extime != null) {
+			s+= _extime;
+		}
+		
+		
+		
 		if ((i != null) && (ex != null)) {
 			try {
 				valueTable.remove(i);
-				valueTable.put(i, "nbOfCycles: " + _extime);
+				valueTable.put(i, s);
 				//System.out.println("Searching for old row");
 				row = rowTable.get(i).intValue();
-				tasktm.fireTableCellUpdated(row, 2);
+				if (_state != null) {
+					tasktm.fireTableCellUpdated(row, 2);
+				}
+				if (_extime != null) {
+					tasktm.fireTableCellUpdated(row, 3);
+				}
+				
+				Integer c = runningTable.get(i);
+				if (c != null) {
+					mgui.addRunningIDTaskState(c, _state);
+				}
 			} catch (Exception e) {
-				TraceManager.addDev("Exception updateTaskState: " + e.getMessage());
+				TraceManager.addDev("Exception updateTaskCyclesAndStates: " + e.getMessage());
 			}
 		}
 		

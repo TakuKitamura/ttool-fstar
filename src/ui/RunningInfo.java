@@ -59,6 +59,7 @@ public class RunningInfo {
 	public String finishTime;
 	public String transStartTime;
 	public String transFinishTime;
+	public String state;
     
     public RunningInfo() {
     }

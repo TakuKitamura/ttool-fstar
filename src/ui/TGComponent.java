@@ -467,7 +467,19 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		xp[6] = x - sep - wb -wh;
 		yp[6] = y + ((height+hb) / 2);
 		
-		g.setColor(ColorManager.CURRENT_COMMAND);
+		
+		if (ri.state.compareTo("running") == 0) {
+			g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		} else if (ri.state.compareTo("runnable") == 0) {
+			g.setColor(ColorManager.CURRENT_COMMAND_RUNNABLE);
+		} else if (ri.state.compareTo("suspended") == 0) {
+			g.setColor(ColorManager.CURRENT_COMMAND_SUSPENDED);
+		} else if (ri.state.compareTo("terminated") == 0) {
+			g.setColor(ColorManager.CURRENT_COMMAND_TERMINATED);
+		} else {
+			g.setColor(ColorManager.CURRENT_COMMAND_UNKNOWN);
+		}
+		
 		g.fillPolygon(xp, yp, 7);
 		
 		String s, s1, s2;

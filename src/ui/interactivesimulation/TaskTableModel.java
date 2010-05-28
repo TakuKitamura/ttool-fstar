@@ -73,7 +73,7 @@ public class TaskTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		return 3;
+		return 4;
 	}
 
 	public Object getValueAt(int row, int column) {
@@ -87,6 +87,8 @@ public class TaskTableModel extends AbstractTableModel {
 			return getTaskID(row);
 		} else if (column == 2) {
 			return getTaskStatus(row);
+		} else if (column == 3) {
+			return getTaskCycles(row);
 		}
 		return "";
 	}
@@ -99,6 +101,8 @@ public class TaskTableModel extends AbstractTableModel {
 			return "Task ID";
 		case 2:
 			return "State";
+		case 3:
+			return "Executed cycles";
 		}
 		return "unknown";
 	}
@@ -127,11 +131,49 @@ public class TaskTableModel extends AbstractTableModel {
 		return "unknown name";
 	}
 	
-	private String getTaskStatus(int row) {
+	public String getCycles(String _s) {
+		if (_s == null) {
+			return null;
+		}
+		int index = _s.indexOf(';');
+		if (index == -1) {
+			return _s;
+		}
+		return _s.substring(index+1, _s.length());
+	}
+	
+	public String getState(String _s) {
+		if (_s == null) {
+			return null;
+		}
+		int index = _s.indexOf(';');
+		if (index == -1) {
+			return _s;
+		}
+		return _s.substring(0, index);
+	}
+	
+	
+	
+	private String getTaskCycles(int row) {
 		int ID = tmlm.getTasks().get(row).getID();
-		String s = valueTable.get(new Integer(ID));
+		String s = getCycles(valueTable.get(new Integer(ID)));
 		
-		if (s != null) {
+		if ((s != null) && (s.length() > 0)) {
+			return s;
+		}
+		
+	
+		valueTable.put(new Integer(ID), "-");
+		rowTable.put(new Integer(ID), row);
+		return "-";
+	}
+	
+	public String getTaskStatus(int row) {
+		int ID = tmlm.getTasks().get(row).getID();
+		String s = getState(valueTable.get(new Integer(ID)));
+		
+		if ((s != null) && (s.length() > 0)) {
 			return s;
 		}
 		

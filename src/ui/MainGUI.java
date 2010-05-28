@@ -5607,11 +5607,37 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
-	public synchronized void addRunningID(int _id, int _nextCommand, String _progression, String _startTime, String _finishTime, String _transStartTime, String _transFinishTime) {
+	public synchronized void addRunningIDTaskState(int _id, String _state) {
+		if (runningIDs == null) {
+			return;
+		}
+		
+		if (_state == null) {
+			_state = "unknown";
+		}
+		
+		for(RunningInfo ri: runningIDs) {
+			if (ri.id == _id) {
+				ri.state = _state.toLowerCase();
+				//TraceManager.addDev("Updated state on UML diagram");
+				TDiagramPanel tdp = getCurrentTDiagramPanel();
+				if (tdp != null) {
+					tdp.repaint();
+				}
+				return;
+			}
+		}
+		
+	}
+	
+	public synchronized void addRunningID(int _id, int _nextCommand, String _progression, String _startTime, String _finishTime, String _transStartTime, String _transFinishTime, String _state) {
 		if (runningIDs == null) {
 			runningIDs = new ArrayList<RunningInfo>();
 		}
 		RunningInfo ri = new RunningInfo();
+		if (_state == null) {
+			_state = "unknown";
+		}
 		ri.id = _id;
 		ri.nextCommand = _nextCommand;
 		ri.progression = _progression;
@@ -5619,6 +5645,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		ri.finishTime = _finishTime;
 		ri.transStartTime = _transStartTime;
 		ri.transFinishTime = _transFinishTime;
+		ri.state = _state.toLowerCase();
 		runningIDs.add(ri);
 		//System.out.println("Running id " + id +  " added");
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
