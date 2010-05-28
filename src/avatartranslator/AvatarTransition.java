@@ -144,6 +144,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 			at.addAction(getAction(i));
 		}
 		
+		for(int i=0; i<nbOfNexts(); i++) {
+			at.addNext(getNext(i));
+		}
+		
 		return at;
 	}
 	

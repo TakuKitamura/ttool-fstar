@@ -148,6 +148,8 @@ public class AVATAR2UPPAAL {
 		
 		avspec.removeCompositeStates();
 		
+		TraceManager.addDev("Spec:" + avspec.toString());
+		
 		UPPAALLocation.reinitID();
 		gatesNotSynchronized = new LinkedList();
 		gatesNotSynchronized.add("makeChoice");

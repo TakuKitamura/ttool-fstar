@@ -93,6 +93,8 @@ public class AvatarStateMachine extends AvatarElement {
 	}
 	
 	public void removeCompositeStates() {
+		removeAllInternalStartStates();
+		
 		AvatarTransition at;
 		
 		at = getCompositeTransition();
@@ -218,7 +220,7 @@ public class AvatarStateMachine extends AvatarElement {
 					as.addNext(at);
 				} else {
 					// Badly formed machine!
-					TraceManager.addError("Badly formed sm (removing composite trasnition)");
+					TraceManager.addError("Badly formed sm (removing composite transition)");
 				}
 			}
 			
@@ -275,26 +277,35 @@ public class AvatarStateMachine extends AvatarElement {
 		LinkedList<AvatarStartState> ll = new LinkedList<AvatarStartState>();
 		for(AvatarStateMachineElement element: elements) {
 			if ((element instanceof AvatarStartState) && (element.getState() != null)) {
-				TraceManager.addDev("found a internal state state");
+				TraceManager.addDev("-> -> found an internal state state");
 				ll.add((AvatarStartState)element);
 			}
 		}
 		
-		
+		AvatarState as0;
 		LinkedList<AvatarStateMachineElement> le;
 		for(AvatarStartState as: ll) {
 			AvatarState astate = as.getState();
 			if (as != null) {
 				le = getPreviousElementsOf(astate);
-				if (astate.nbOfNexts() > 0) {
-					for(AvatarStateMachineElement element: elements) {
+				if (le.size() > 0) {
+					as0 = new AvatarState(astate.getName() + "__external", astate.getReferenceObject());
+					as0.addNext(as.getNext(0));
+					for(AvatarStateMachineElement element: le) {
 						if (element instanceof AvatarTransition) {
 							element.removeAllNexts();
-							element.addNext(astate.getNext(0));
+							element.addNext(as0);
+							as0.setState(element.getState());
 						} else {
 							TraceManager.addDev("Badly formed state machine");
 						}
 					}
+					// Remove the start state and its next transition
+					removeElement(as);
+					addElement(as0);
+					TraceManager.addDev("-> -> removed an internal state state!");
+				} else {
+					TraceManager.addDev("Badly formed state machine");
 				}
 			}
 		}
