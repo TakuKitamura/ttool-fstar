@@ -1,3 +1,4 @@
+
 # TTool Makefile
 # Tested under Linux *only*
 # Meant to work with svn
@@ -13,7 +14,7 @@ GZIP = gzip -9 -f
 DEBUG  = -g
 CLASSPATH = -classpath
 CLASSPATH = -sourcepath
-PACKAGE = avatartranslator avatartranslator/toturtle automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator translator tmltranslator tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/avatarbd ui/avatarsmd ui/avatarrd ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle req/ebrdd tmltranslator/tosystemc tmatrix uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation
+PACKAGE = avatartranslator avatartranslator/touppaal avatartranslator/toturtle automata compiler/tmlparser vcd nc ddtranslator launcher myutil tpndescription sddescription sdtranslator translator tmltranslator tmltranslator/toautomata tmltranslator/tosystemc  tmltranslator/tomappingsystemc tmltranslator/tomappingsystemc2 tmltranslator/touppaal tmltranslator/toturtle translator/tojava translator/tosimujava translator/totpn translator/touppaal  ui ui/avatarbd ui/avatarsmd ui/avatarrd ui/ad ui/cd ui/oscd ui/osad ui/dd ui/ebrdd ui/file ui/graph ui/iod ui/ncdd ui/procsd ui/prosmdui/prosmd/util ui/tmlad ui/tmlcd ui/tmldd ui/tmlcomp ui/req ui/sd ui/tree ui/ucd ui/window tmltranslator tmltranslator/toturtle req/ebrdd tmltranslator/tosystemc tmatrix uppaaldesc fr/inria/oasis/vercors/cttool/model remotesimulation
 BUILDER = builder.jar
 BUILD_INFO = build.txt
 BUILD_TO_MODIFY = src/ui/DefaultText.java
