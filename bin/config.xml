@@ -42,7 +42,11 @@
 <SystemCCodeInteractiveExecuteCommand data="/homes/apvrille/TechTTool/SystemCCode/generated/run.x -server" />
 <TMLCodeDirectory data="/Users/ludovicapvrille/TTool/tmlcode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
+<<<<<<< .mine
+<VCDPath data="/Users/ludovicapvrille/TTool/vcd/" />
+=======
 <VCDPath data="/Users/ludovicapvrille/TTool/vcd" />
+>>>>>>> .r2431
 <UPPAALCodeDirectory data="/Users/ludovicapvrille/TTool/uppaal/" />
 <UPPAALVerifierPath data="/Applications/uppaal-4.0.7-aca/verifyta" />
 <UPPAALVerifierHost data="localhost" />
