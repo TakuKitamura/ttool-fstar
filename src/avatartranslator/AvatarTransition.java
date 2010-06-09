@@ -182,6 +182,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		if (guard == null) {
 			return false;
 		}
+		
+		if (guard.trim().length() == 0) {
+			return false;
+		}
 		 
 		String s = Conversion.replaceAllString(guard, " ", "").trim();
 		if (s.compareTo("[]") == 0) {
@@ -200,7 +204,17 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	}
 	
 	public boolean hasActions() {
-		return (actions.size() > 0);
+		if (actions.size() == 0) {
+			return false;
+		}
+		
+		for(String s: actions) {
+			if (s.trim().length() > 0) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	

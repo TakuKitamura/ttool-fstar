@@ -141,7 +141,7 @@ public class AVATAR2UPPAAL {
 		return table;
 	}*/
 	
-	public UPPAALSpec generateUPPAAL(boolean _debug) {
+	public UPPAALSpec generateUPPAAL(boolean _debug, boolean _optimize) {
 		warnings = new Vector();
 		hash = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
 		spec = new UPPAALSpec();
@@ -172,6 +172,10 @@ public class AVATAR2UPPAAL {
 		
 		
 		makeSystem();
+		
+		if (_optimize) {
+			spec.optimize();
+		}
 		
 		TraceManager.addDev("Enhancing graphical representation ...");
 		spec.enhanceGraphics();
@@ -412,6 +416,11 @@ public class AVATAR2UPPAAL {
 				}
 			}
 			
+			if (j == 0) {
+				tmps = "";
+			}
+			
+			
 			loc = addLocation(_template);  
 			loc.setCommitted();
 			hash.put(_elt, loc);
@@ -472,6 +481,7 @@ public class AVATAR2UPPAAL {
 						tmps = "";
 					}
 				}
+				
 				if (at.hasActions()) {
 					tmps0 = at.getAction(0);
 					if (AvatarSpecification.isAVariableSettingString(tmps0)) {
@@ -483,31 +493,37 @@ public class AVATAR2UPPAAL {
 						makeElementBehavior(_block, _template, _elt.getNext(i), loc, _end, null, true);
 					} else {
 						// We make the translation in the next transition
-						makeElementBehavior(_block, _template, _elt.getNext(i), loc, _end, tmps, true);
+						makeElementBehavior(_block, _template, _elt.getNext(i), loc1, _end, tmps, true);
 					}
 				} else {
 					// Must consider whether the transition leads to an action on a signal
 					if (at.followedWithAnActionOnASignal()) {
 						makeElementBehavior(_block, _template, at.getNext(0), loc1, _end, tmps, true);
 					} else {
+						// If this is not the only transition
 						// We must introduce a fake action
-						loc = addLocation(_template); 
-						tr = addTransition(_template, loc1, loc);
-						setGuard(tr, tmps);
-						setSynchronization(tr, CHOICE_ACTION + "!");
-						// Useless to translate the next transition, we directly jump to after the transition
-						makeElementBehavior(_block, _template, at.getNext(0), loc, _end, null, true);
+						if (state.nbOfNexts() > 1) {
+							loc = addLocation(_template); 
+							tr = addTransition(_template, loc1, loc);
+							setGuard(tr, tmps);
+							setSynchronization(tr, CHOICE_ACTION + "!");
+							// Useless to translate the next transition, we directly jump to after the transition
+							makeElementBehavior(_block, _template, at.getNext(0), loc, _end, null, true);
+						} else {
+							// Only one transition
+							if (tmps.length() > 0) {
+								loc = addLocation(_template); 
+								tr = addTransition(_template, loc1, loc);
+								setGuard(tr, tmps);
+								makeElementBehavior(_block, _template, at.getNext(0), loc, _end, null, true);
+							} else {
+								makeElementBehavior(_block, _template, at.getNext(0), loc1, _end, null, true);
+							}
+						}
 					}
 				}
 			}
 			
-			/*loc = addLocation(_template);
-			hash.put(_elt, loc);
-			tr = addTransition(_template, _previous, loc);
-			_previous.setCommitted();
-			for(i=0; i<_elt.nbOfNexts(); i++) {
-				makeElementBehavior(_block, _template, _elt.getNext(i), loc, _end, null);
-			}*/
 			
 			// Avatar Transition not following a state -> only the next one one transitions: 
 			// So, translated at it is

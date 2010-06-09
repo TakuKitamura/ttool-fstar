@@ -95,6 +95,10 @@ public class UPPAALLocation {
     public void setInvariant(String _invariant) {
 	    invariant = _invariant;
     }
+	
+	public boolean hasInvariant() {
+		return ((invariant != null) && (invariant.length() > 0));
+	}
     
     public String getXML() {
            String ret = "<location id=\"" + id + "\" x=\"" + idPoint.x + "\" y=\"" +  idPoint.y + "\">\n";

@@ -123,6 +123,7 @@ public class GTURTLEModeling {
 	private Vector panels; /* analysis, design, deployment, tml design */
 	private TURTLEModeling tm;
 	private AvatarSpecification avatarspec;
+	private boolean optimizeAvatar;
 	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
@@ -418,7 +419,7 @@ public class GTURTLEModeling {
 		AVATAR2UPPAAL avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
 		//tml2uppaal.setChoiceDeterministic(choices);
 		//tml2uppaal.setSizeInfiniteFIFO(_size);
-		uppaal = avatar2uppaal.generateUPPAAL(true);
+		uppaal = avatar2uppaal.generateUPPAAL(true, optimizeAvatar);
 		uppaalTMLTable = null;
 		uppaalTIFTable = null;
 		languageID = UPPAAL;
@@ -1569,7 +1570,7 @@ public class GTURTLEModeling {
 	}
 	
 	// BUILDING An AVATAR Design AND CHECKING IT
-	public boolean checkAvatarDesign(Vector blocks, AvatarDesignPanel adp, boolean overideSyntaxChecking) {
+	public boolean checkAvatarDesign(Vector blocks, AvatarDesignPanel adp, boolean _optimize) {
 		// Builds a TURTLE modeling from diagrams
 		//warnings = new Vector();
 		//checkingErrors = null;
@@ -1582,6 +1583,7 @@ public class GTURTLEModeling {
 
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		avatarspec = adpt.generateAvatarSpecification(blocks);
+		optimizeAvatar = _optimize;
 		TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
 		tmState = 3;
 

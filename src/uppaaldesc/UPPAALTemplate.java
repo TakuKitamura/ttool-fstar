@@ -178,4 +178,60 @@ public class UPPAALTemplate {
 		return ret;
 		
 	}
+	
+	public int nbOfTransitionsExitingFrom(UPPAALLocation _loc) {
+		int cpt = 0;
+		
+		ListIterator iterator = transitions.listIterator();
+		UPPAALTransition tr;
+		while(iterator.hasNext()) {
+			tr = ((UPPAALTransition)(iterator.next()));
+			if (tr.sourceLoc == _loc) {
+				cpt ++;
+			}
+		}
+		
+		return cpt;
+		
+	}
+	
+	public void optimize() {
+		// Only one exiting empty transition from a location + empty transition
+		// In that case, the location and the empty transition are removed, and the
+		// automata is updated
+		LinkedList<UPPAALTransition> ll = new LinkedList<UPPAALTransition>();
+		
+		// First step: finding all concernened locs and transitions
+		ListIterator iterator = transitions.listIterator();
+		UPPAALTransition tr;
+		while(iterator.hasNext()) {
+			tr = ((UPPAALTransition)(iterator.next()));
+			if (tr.isAnEmptyTransition()) {
+				if (nbOfTransitionsExitingFrom(tr.sourceLoc) == 1) {
+					if (!(tr.sourceLoc.hasInvariant())) {
+						ll.add(tr);
+					}
+				}
+			}
+		}
+		
+		// Removing those transitions
+		for(UPPAALTransition ut: ll) {
+			iterator = transitions.listIterator();
+			while(iterator.hasNext()) {
+				tr = ((UPPAALTransition)(iterator.next()));
+				if (tr.destinationLoc == ut.sourceLoc) {
+					tr.destinationLoc = ut.destinationLoc;
+				}
+				TraceManager.addDev("Removed transition: " + ut + " and location:" + ut.sourceLoc);
+			}
+			locations.remove(ut.sourceLoc);
+			transitions.remove(ut);
+			
+			if (initLocation == ut.sourceLoc) {
+				setInitLocation(ut.destinationLoc);
+			}
+		}
+		
+	}
 }

@@ -129,4 +129,16 @@ public class UPPAALSpec {
 			template.enhanceGraphics();
 		}
 	}
+	
+	public void optimize() {
+		ListIterator iterator = templates.listIterator();
+		UPPAALTemplate template;
+		
+		
+		while(iterator.hasNext()) {
+			//System.out.println("Template!");
+			template = (UPPAALTemplate)(iterator.next());
+			template.optimize();
+		}
+	}
 }

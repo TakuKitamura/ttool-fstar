@@ -186,6 +186,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public final static byte REQ_OK = 41;
 	public final static byte UPPAAL_OK = 42;
 	public final static byte NC_OK = 43;
+	public final static byte MODEL_UPPAAL_OK = 44;
     
     public final static int INCREMENT = 10;
 	
@@ -560,6 +561,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
+			break;
+		case MODEL_UPPAAL_OK:
+			//actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
+			//actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
+			//actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
+			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+			//actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
+			//actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
+			//actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
+			//actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
 			break;
 		case GEN_DESIGN_OK:
 			actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(true);
@@ -2586,8 +2597,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 b = gtm.checkAvatarDesign(tclassesToValidate, adp, optimize);
                 if (b) {
 					ret = true;
-                    setMode(MainGUI.MODEL_OK);
-					setMode(MainGUI.GEN_DESIGN_OK);
+                    setMode(MainGUI.MODEL_UPPAAL_OK);
+					//setMode(MainGUI.GEN_DESIGN_OK);
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
 							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a corresponding formal (UPPAAL) specification",

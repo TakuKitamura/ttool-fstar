@@ -97,4 +97,21 @@ public class UPPAALTransition {
 		
     }
 	
+	public boolean isAnEmptyTransition() {
+		
+		if (guard.length() > 0) {
+			return false;
+		}
+		
+		if (synchronization.length() > 0) {
+			return false;
+		}
+		
+		if (assignment.length() > 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 }
