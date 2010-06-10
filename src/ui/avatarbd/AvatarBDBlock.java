@@ -306,7 +306,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					break;
 				}
 				am = (AvatarMethod)(myMethods.get(index));
-				method = "# " + am.toString();
+				method = "~ " + am.toString();
 				w = g.getFontMetrics().stringWidth(method);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(method, x + textX, y + cpt);
@@ -356,7 +356,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					break;
 				}
 				as = (AvatarSignal)(mySignals.get(index));
-				signal = "# " + as.toString();
+				signal = "~ " + as.toString();
 				w = g.getFontMetrics().stringWidth(signal);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(signal, x + textX, y + cpt);
