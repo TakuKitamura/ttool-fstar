@@ -346,6 +346,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
         
+		//TraceManager.addDev("Nb of components: " + componentList.size());
+		
 		/*if (!zoomed) {
 			zoomed = true;*/
 			//Graphics2D g2 = (Graphics2D)g;
@@ -886,7 +888,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			((SpecificActionAfterAdd)tgc).specificActionAfterAdd();
 		}
 		
-		return false;
+		return ret;
     }
     
 	public SwallowTGComponent findSwallowTGComponent(int x, int y) {
