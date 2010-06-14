@@ -161,7 +161,7 @@ public class MappedSystemCTask {
 		makeHeaderClassH();
 		makeEndClassH();
 		
-		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iID, iPriority,iName,iCPUs)"+ CR + makeAttributesCode();
+		cppcode+=reference+ "::" + makeConstructorSignature()+":TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs)"+ CR + makeAttributesCode();
 		cppcode+=initCommand + CR + "{" + CR; 
 		if (commentNum!=0) cppcode+= "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
 		cppcode+= "//generate task variable look-up table"+ CR;
@@ -205,7 +205,7 @@ public class MappedSystemCTask {
 	}
 
 	private String makeConstructorSignature(){
-		String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU* iCPUs"+CR;
+		String constSig=reference+ "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs"+CR;
 		for(TMLChannel ch: channels) {
 			constSig+=", TMLChannel* "+ ch.getExtendedName() + CR;
 		}
