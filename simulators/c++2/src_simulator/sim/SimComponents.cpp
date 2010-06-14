@@ -94,7 +94,8 @@ void SimComponents::addCPU(CPU* iCPU){
 	//TraceableDevice* a = dynamic_cast<TraceableDevice*> (iCPU);
 	//std::cout << "CPU added: " << iCPU << "    " << iCPU->toString() << "   " << iCPU->toShortString() << std::endl;
 	//std::cout << "TraceableDevice added: " << a << "    " << a->toString() << "   " << a->toShortString() << std::endl;
-	_cpuList.push_back(dynamic_cast<SchedulableDevice*>(iCPU));
+	//_cpuList.push_back(dynamic_cast<SchedulableDevice*>(iCPU));
+	_cpuList.push_back(iCPU);
 	_vcdList.push_back(dynamic_cast<TraceableDevice*>(iCPU));
 	_serList.push_back(dynamic_cast<Serializable*>(iCPU));
 }
@@ -181,7 +182,7 @@ void SimComponents::reset(){
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
 	if (iCPU[0]>='0' && iCPU[0]<='9') return getCPUByID(StringToNum<ID>(iCPU));
-	for(SchedulingList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
+	for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
 		if ((*i)->toString()==iCPU) return (*i);
 	}
 	return NULL;
@@ -220,7 +221,7 @@ TMLChannel* SimComponents::getChannelByName(const std::string& iChannel) const{
 }
 
 SchedulableDevice* SimComponents::getCPUByID(ID iID) const{
-	for(SchedulingList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
+	for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
 	return NULL;
@@ -297,7 +298,7 @@ EBRDDList::const_iterator SimComponents::getEBRDDIterator(bool iEnd) const{
 	return (iEnd)? _ebrddList.end():_ebrddList.begin();
 }
 
-SchedulingList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
+CPUList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
 	return (iEnd)? _cpuList.end():_cpuList.begin();
 }
 /*void SimComponents::setBreakpointOnChoiceCmds(){

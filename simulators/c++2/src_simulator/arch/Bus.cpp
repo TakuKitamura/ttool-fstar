@@ -77,6 +77,7 @@ void Bus::registerTransaction(){
 }
 
 bool Bus::addTransaction(){
+	//std::cout << "Bus add trans " << _nextTransaction << "\n";
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
 	_transactList.push_back(_nextTransaction);
@@ -89,6 +90,7 @@ bool Bus::addTransaction(){
 #endif
 	_nextTransaction = 0;
 	_schedulingNeeded=true;
+	//std::cout << "End Bus add trans\n";
 	return true;
 }
 

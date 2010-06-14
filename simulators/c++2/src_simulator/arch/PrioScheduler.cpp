@@ -104,6 +104,6 @@ void PrioScheduler::reset(){
 	_nextTransaction=0;
 }
 
-/*void PrioScheduler::transWasScheduled(){
-	if (_lastSource!=0) _lastSource->transWasScheduled();
-}*/
+void PrioScheduler::transWasScheduled(SchedulableDevice* iDevice){
+	if (_lastSource!=0) _lastSource->transWasScheduled(iDevice);
+}

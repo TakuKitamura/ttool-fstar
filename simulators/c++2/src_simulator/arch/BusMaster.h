@@ -94,6 +94,7 @@ public:
 	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const{
 		if (_nextTransaction==0) return 0;
 		for (unsigned int i=0; i <_nbOfBuses; i++){
+			//std::cout << "Raw version allowed\n";
 			if ((*(_busArray[i])).SchedulableDevice::getNextTransaction()==_nextTransaction){
 				//std::cout << _name << "trans already scheduled by: " << _busArray[i]->toString() << "\n";
 				return 0;

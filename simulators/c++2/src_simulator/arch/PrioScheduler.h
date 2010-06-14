@@ -65,7 +65,7 @@ public:
 	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
 	std::string toString() const;
 	void reset();
-	//void transWasScheduled();
+	void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler
 	std::string _name;

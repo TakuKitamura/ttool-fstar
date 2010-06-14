@@ -49,7 +49,9 @@ TMLWriteCommand::TMLWriteCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLeng
 }
 
 void TMLWriteCommand::execute(){
+	//std::cout << "in write " << _channel << "\n";
 	_channel->write();
+	//std::cout << "channel not zero\n";
 	//std::cout << _currTransaction->getVirtualLength() << " samples written\n";
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());

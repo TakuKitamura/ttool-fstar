@@ -118,6 +118,7 @@ public:
 	void schedule2TXT(std::ofstream& myfile) const;
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
+	//void truncateAndRescheduleIfNecessary(TMLTime iTime);
 	void streamStateXML(std::ostream& s) const;
 	/////Adds a new bus master to the internal list
 	//**
@@ -137,6 +138,7 @@ protected:
 	\param iTimeSlice CPU Time slice granted by the scheduler
 	*/
 	void calcStartTimeLength(TMLTime iTimeSlice);
+	BusMaster* getMasterForBus(BusMaster* iDummy);
 	/////List of all tasks running on the CPU
 	//TaskList _taskList;
 	/////Pointer to the last transaction which has been executed

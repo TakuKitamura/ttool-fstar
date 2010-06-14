@@ -43,15 +43,21 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
+//#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;std::cout << "Scheduling for Task " << _name << " reset "<< _currentCPU << "\n";}
+
+#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;}
+
 unsigned int TMLTask::_instanceCount=1;
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _cpu(iCPU), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount) {
-	_cpu->registerTask(this);
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), _isScheduled(false) {
+	for (unsigned int i=0; i< _noOfCPUs; i++)
+		_cpus[i]->registerTask(this);
 #ifdef ADD_COMMENTS
 	_commentList.reserve(BLOCK_SIZE);
 #endif
 	_transactList.reserve(BLOCK_SIZE);
 	_instanceCount++;
+	if (_noOfCPUs==1) _currentCPU = _cpus[0];
 }
 
 TMLTask::~TMLTask(){
@@ -81,7 +87,7 @@ void TMLTask::setCurrCommand(TMLCommand* iCurrCommand){
 }
 
 CPU* TMLTask::getCPU() const{
-	return _cpu;
+	return _currentCPU;
 }
 
 std::string TMLTask::toString() const{
@@ -121,6 +127,9 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
+	//_isScheduled=false;
+	//if (_noOfCPUs>1) _currentCPU=0;
+	RESET_SCHEDULING;
 	//FOR_EACH_TASKLISTENER (*i)->transExecuted(iTrans);
 #ifdef LISTENERS_ENABLED
 	NOTIFY_TASK_TRANS_EXECUTED(iTrans);
@@ -319,6 +328,9 @@ void TMLTask::reset(){
 	_CPUContentionDelay=0;
 	_noCPUTransactions=0;
 	_justStarted=true;
+	//_isScheduled=false;
+	//if (_noOfCPUs>1) _currentCPU=0;
+	RESET_SCHEDULING;
 }
 
 ParamType* TMLTask::getVariableByName(std::string& iVarName ,bool& oIsId){
@@ -383,9 +395,40 @@ unsigned int TMLTask::getState() const{
 
 TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
 	//std::cout << "Task::getNextTransaction\n";
-	return (_currCommand==0)?0:_currCommand->getCurrTransaction();
+	//return (_currCommand==0)?0:_currCommand->getCurrTransaction();
+	return (_currCommand==0 || _isScheduled)?0:_currCommand->getCurrTransaction();
 }
 
 unsigned int TMLTask::getInstanceNo(){
 	return _myInstance;
 }
+
+void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
+	_isScheduled=true;
+	if (_noOfCPUs>1) _currentCPU = dynamic_cast<CPU*>(iCPU);
+	//if (_noOfCPUs>1) _currentCPU = iCPU;
+	//std::cout << "Scheduling for Task " << _name << " set\n";
+	//std::cout << _name << " CANNOT be scheduled any more by CPUs\n";
+}
+
+void TMLTask::resetScheduledFlag(){
+	//std::cout << "TMLTask::resetScheduledFlag\n";
+	//_isScheduled=false;
+	//std::cout << _name << " CAN be scheduled by CPUs\n";
+	//if (_noOfCPUs>1) _currentCPU=0;
+	RESET_SCHEDULING;
+}
+
+void TMLTask::setRescheduleFlagForCores(){
+	//_isScheduled=false;
+	//std::cout << _name << " CAN be scheduled by CPUs\n";
+	//_currentCPU=0;
+	RESET_SCHEDULING;
+	for (unsigned int i=0; i< _noOfCPUs; i++){
+		_cpus[i]->setRescheduleFlag();
+	}
+}
+
+/*unsigned int TMLTask::getNoOfCPUs(){
+	return _noOfCPUs;
+}*/

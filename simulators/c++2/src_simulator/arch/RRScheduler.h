@@ -72,7 +72,7 @@ public:
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
 	std::string toString() const;
-	//void transWasScheduled();
+	void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler
 	std::string _name;

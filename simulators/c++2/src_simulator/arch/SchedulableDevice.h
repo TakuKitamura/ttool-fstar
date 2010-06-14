@@ -71,6 +71,7 @@ public:
     	/**
       	\return Pointer to transaction
     	*/
+	//virtual TMLTransaction* getNextTransaction()=0;
 	virtual TMLTransaction* getNextTransaction(){
 		//std::cout << "Raw version of getNextTransaction\n";
 		return _nextTransaction;

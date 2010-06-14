@@ -69,7 +69,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0){
+	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0), _schedulingNeeded(false){
 	}
 	///Destructor
 	virtual ~CPU(){
@@ -99,6 +99,7 @@ public:
 	virtual void reset(){
 		SchedulableDevice::reset();
 		_lastTransaction=0;
+		_schedulingNeeded=false;
 	}
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
@@ -109,6 +110,46 @@ public:
 		SchedulableDevice::writeObject(os);
 		return os;
 	}
+	void setRescheduleFlag(){
+		_schedulingNeeded=true;
+		_scheduler->resetScheduledFlag();
+	}
+
+	void truncateIfNecessary(TMLTime iTime){
+		if(_schedulingNeeded && getNextTransaction()!=0){
+			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
+			_schedulingNeeded=false;
+			truncateAndAddNextTransAt(iTime);
+			//std::cout << "truncateIfNecessary end\n";
+		}
+	}
+
+	void rescheduleIfNecessary(){
+		if(_schedulingNeeded){
+			//std::cout << "rescheduleIfNecessary for CPU " << _name << "\n";
+			_schedulingNeeded=false;
+			schedule();
+			//std::cout << "rescheduleIfNecessary end\n";
+		}
+	}
+	
+	/*void truncateAndRescheduleIfNecessary(TMLTime iTime){
+		std::cout << "truncateAndRescheduleIfNecessary for CPU " << _name << " started\n";
+		if(_schedulingNeeded){
+			_schedulingNeeded=false;
+			//if(_nextTransaction==0)
+			//std::cout << "shouldn't be raw >\n";
+			if(getNextTransaction()==0){
+				//std::cout << "shouldn't be raw <\n";		
+				schedule();
+			}else
+				
+			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " scheduled\n";
+		}else
+			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " no scheduling needed\n";
+		std::cout << "Current Trans " << _name << ": ";
+		if (_nextTransaction==0) std::cout << "0\n"; else std::cout << _nextTransaction->toString() << "\n";  
+	}*/
 protected:
 	///List of all tasks running on the CPU
 	TaskList _taskList;
@@ -116,6 +157,8 @@ protected:
 	TMLTransaction* _lastTransaction;
 	///List of bus masters
 	BusMasterList _busMasterList;
+	///Dirty flag of the current scheduling decision
+	bool _schedulingNeeded;
 };
 
 #endif

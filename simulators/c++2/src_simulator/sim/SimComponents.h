@@ -181,7 +181,7 @@ public:
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for CPU list
 	*/	
-	SchedulingList::const_iterator getCPUIterator(bool iEnd) const;
+	CPUList::const_iterator getCPUIterator(bool iEnd) const;
 	///Returns an iterator for the internal bus list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
@@ -249,8 +249,8 @@ public:
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;
-	///List holding schedulable devices
-	SchedulingList _cpuList;
+	///List holding CPUs
+	CPUList _cpuList;
 	///List holding schedulable communication devices
 	BusList _busList;
 	///List holding traceable devices

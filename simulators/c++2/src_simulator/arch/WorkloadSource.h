@@ -45,6 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 class TMLTransaction;
 class Master;
 class TMLTask;
+class SchedulableDevice;
 
 ///Base class for components providing workload like tasks and schedulers
 class WorkloadSource: public Serializable{
@@ -100,7 +101,10 @@ public:
 		return os;
 	}
 	virtual std::string toString() const =0;
-	virtual void transWasScheduled() {}
+	virtual void transWasScheduled(SchedulableDevice* iDevice) {}
+	virtual void resetScheduledFlag(){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->resetScheduledFlag();
+	}
 protected:
 	///List of sources which provide transactions to the scheduler
 	WorkloadList _workloadList;

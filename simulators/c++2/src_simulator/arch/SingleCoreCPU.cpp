@@ -78,7 +78,7 @@ TMLTransaction* SingleCoreCPU::getNextTransaction(){
 		std::cout << "CPU:getNT: " << _name << " has bus transacion on master " << _masterNextTransaction->toString() << std::endl;
 #endif
 		//std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
-		BusMaster* aTempMaster =_nextTransaction->getChannel()->getFirstMaster(_nextTransaction);
+		BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
 		//std::cout << "1" << std::endl;
 		bool aResult = aTempMaster->accessGranted();
 		//std::cout << "2" << std::endl;
@@ -109,7 +109,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 		_masterNextTransaction=0;
 	}else{
 		//std::cout << "get bus " << std::endl;
-		_masterNextTransaction=aChannel->getFirstMaster(_nextTransaction);
+		_masterNextTransaction= getMasterForBus(aChannel->getFirstMaster(_nextTransaction));
 		//std::cout << "after get first bus " << std::endl;
 		if (_masterNextTransaction!=0){
 			//std::cout << "before register transaction at bus " << std::endl;
@@ -159,10 +159,16 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 bool SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	//return truncateNextTransAt(iTime);
+	//not a problem if scheduling does not take place at time when transaction is actually truncated, tested
+	//std::cout << "CPU:truncateAndAddNextTransAt " << _name << "time: +++++++++++++++++++++" << iTime << "\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(iTime);
 	TMLTransaction* aNewTransaction =_scheduler->getNextTransaction(iTime);
+	//std::cout << "before if\n"; 
+	_scheduler->transWasScheduled(this); //NEW  was in if before
 	if (aNewTransaction!=_nextTransaction){
+		//std::cout << "in if\n";
 		if (truncateNextTransAt(iTime)!=0) addTransaction();
+		//if (_nextTransaction!=0 && truncateNextTransAt(iTime)!=0) addTransaction(); //NEW!!!!
 		if (_nextTransaction!=0 && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
 		_nextTransaction = aNewTransaction;
 		if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);	
@@ -179,9 +185,9 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 		if (aNewDuration<=aStaticPenalty){
 			_nextTransaction->setLength(_timePerExeci);
 			_nextTransaction->setVirtualLength(1);
-//#ifdef DEBUG_CPU
+#ifdef DEBUG_CPU
 			std::cout << "CPU:truncateNTA: transaction truncated\n";
-//#endif
+#endif
 		}else{
 			aNewDuration-=aStaticPenalty;
 			//std::cout << _name << " virtual length before cut: " << _nextTransaction->getVirtualLength() << std::endl;
@@ -221,7 +227,7 @@ bool SingleCoreCPU::addTransaction(){
 		if (aFollowingMaster==0){
 			//std::cout << "1\n";
 			aFinish=true;
-			BusMaster* aTempMaster =_nextTransaction->getChannel()->getFirstMaster(_nextTransaction);
+			BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
 			//std::cout << "2\n";
 			Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
 			//std::cout << "3\n";
@@ -254,7 +260,9 @@ bool SingleCoreCPU::addTransaction(){
 		_endSchedule=_nextTransaction->getEndTime();
 		//std::cout << "set end schedule CPU: " << _endSchedule << "\n";
 		_simulatedTime=max(_simulatedTime,_endSchedule);
+		//std::cout << "lets crash execute\n";
 		_nextTransaction->getCommand()->execute();  //NEW!!!!
+		//std::cout << "not crashed\n";
 		_transactList.push_back(_nextTransaction);
 		_lastTransaction=_nextTransaction;
 		_busyCycles+=_nextTransaction->getOverallLength();
@@ -262,6 +270,7 @@ bool SingleCoreCPU::addTransaction(){
 		NOTIFY_TRANS_EXECUTED(_nextTransaction);
 #endif
 		_nextTransaction=0;
+		//std::cout << "this is not the reason\n";
 		return true;
 	}else return false;
 }
@@ -271,8 +280,12 @@ void SingleCoreCPU::schedule(){
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
 	TMLTransaction* aOldTransaction = _nextTransaction;
 	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
-	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
-	//if (_nextTransaction!=0) calcStartTimeLength(aTimeSlice);
+	_scheduler->transWasScheduled(this); //NEW
+	//if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
+	if (aOldTransaction!=0){ //NEW
+		aOldTransaction->getCommand()->getTask()->resetScheduledFlag();
+		if (aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
+	}
 	if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
@@ -452,6 +465,18 @@ void SingleCoreCPU::streamStateXML(std::ostream& s) const{
 /*void SingleCoreCPU::addBusMaster(BusMaster* iMaster){
 	_busMasterList.push_back(iMaster);
 }*/
+
+BusMaster* SingleCoreCPU::getMasterForBus(BusMaster* iDummy){
+	if (iDummy!=0){
+		SchedulableCommDevice* aBus = iDummy->getBus();
+		for(BusMasterList::iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i){
+			if ((*i)->getBus()==aBus) return *i;
+		}
+		std::cout << "cry!!!!!!!!!!!!! no bus master found\n";
+		exit(1);
+	}
+	return 0;
+}
 
 std::istream& SingleCoreCPU::readObject(std::istream &is){
 	CPU::readObject(is);

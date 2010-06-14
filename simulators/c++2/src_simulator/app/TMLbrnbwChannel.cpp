@@ -59,6 +59,7 @@ void TMLbrnbwChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLbrnbwChannel::write(){
+	//std::cout << "Write in channel " << _writeTrans << "\n";
 	_content+=_writeTrans->getVirtualLength();
 	_nbToWrite=0;
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());

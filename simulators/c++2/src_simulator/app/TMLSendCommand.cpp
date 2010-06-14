@@ -48,11 +48,15 @@ TMLSendCommand::TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel
 }
 
 void TMLSendCommand::execute(){
+	//std::cout << "TMLSendCommand::execute()\n";
 	_channel->write();
+	//std::cout << "TMLSendCommand::execute() after write: " << _currTransaction << "\n";
 	//std::cout << "Dependent Task: " << _channel->getBlockedReadTask()->toString() << std::endl;
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
+	//std::cout << "TMLSendCommand::execute() before add\n";
 	_task->addTransaction(_currTransaction);
+	//std::cout << "TMLSendCommand::execute() after add\n";
 	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;

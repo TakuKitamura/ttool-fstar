@@ -96,6 +96,7 @@ TMLSelectCommand::~TMLSelectCommand(){
 void TMLSelectCommand::execute(){
 	unsigned int aFinalIndex=0, aLoopLimit=(_maxChannelIndex==0)?_nbOfNextCmds:_maxChannelIndex;
 	TMLChannel* aReadChannel=_currTransaction->getChannel();
+	//std::cout << "Select is executing\n";
 	//bool check=false;
 	for (_indexNextCommand=0;_indexNextCommand<aLoopLimit;_indexNextCommand++){
 		if(_channel[_indexNextCommand]==aReadChannel){

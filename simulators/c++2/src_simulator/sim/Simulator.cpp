@@ -63,7 +63,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 	std::cout << "kernel:getTLET: before loop" << std::endl;
 #endif
 	//for(SchedulingList::const_iterator i=_simComp->_cpuList.begin(); i != _simComp->_cpuList.end(); ++i){
-	for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 		aTempDevice=*i;
 		aTempTrans=aTempDevice->getNextTransaction();	
 		if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){	
@@ -94,7 +94,7 @@ void Simulator::schedule2Graph(std::string& iTraceFileName) const{
 		GraphTransactionQueue aQueue;
 		TMLTransaction* aTrans, *aTopElement;
 		unsigned int aTransitionNo=0;
-		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			aTrans = (*i)->getTransactions1By1(true);
 			if (aTrans!=0) aQueue.push(aTrans);
 		}
@@ -134,7 +134,7 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
 	gettimeofday(&aBegin,NULL);
 	std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
-		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2TXT(myfile);
 		}
 		myfile.close();
@@ -152,7 +152,7 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const{
 	if (myfile.is_open()){
 		myfile << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
 		myfile << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"schedstyle.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" />\n<title>Scheduling</title>\n</head>\n<body>\n";		
-		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2HTML(myfile);
 		}
 		for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
@@ -270,7 +270,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
 	}
 	//std::cout << "after loop2" << std::endl;
-	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&SchedulableDevice::schedule));
+	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
@@ -287,11 +287,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
 #endif
 		if (cpuLET->addTransaction()){
-#ifdef DEBUG_KERNEL
-		 std::cout << "kernel:simulate: invoke schedule on executing CPU" << std::endl;
-#endif
-		 cpuLET->schedule();
+		 //cpuLET->schedule();
+		 //if (commandLET->getTask()->getNoOfCPUs()==1) cpuLET->schedule();
 		 unsigned int nbOfChannels = commandLET->getNbOfChannels();
+		 bool aRescheduleCoresFlag=false;
 		 for (unsigned int i=0;i<nbOfChannels; i++){
 		 if ((depTask=commandLET->getDependentTask(i))==0) continue;
 		 //if (depTask!=0){
@@ -299,14 +298,15 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		  std::cout << "kernel:simulate: dependent Task found" << std::endl;
 #endif
 		  depCPU=depTask->getCPU();
-			//std::cout << "kernel:simulate: after gert CPU" << std::endl;	
+		  //std::cout << "CPU this task : " << cpuLET->toString();
+		  //if (depCPU==0) std::cout << "  CPU dep task " << depTask->toString() << ": 0\n"; else std::cout << "  CPU dep task: "<< depTask->toString() << " " << depCPU->toString() << std::endl;
 		  if (depCPU!=cpuLET){
 #ifdef DEBUG_KERNEL
 		   std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
 		   depCommand=depTask->getCurrCommand();
 		     //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
-		   if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) {
+		   if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) { //RIGHT one
 
 		   //if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) {
 		   //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
@@ -318,8 +318,18 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
 		     std::cout << "kernel:simulate: dependent task has a current transaction and is not blocked any more" << std::endl;
 #endif
+		     if (depCPU==0){
+			aRescheduleCoresFlag=true;
+#ifdef DEBUG_KERNEL
+			std::cout << "Multi Core scheduling procedure\n";
+#endif 
+			depTask->setRescheduleFlagForCores();
+			continue;
+		     }
+		     //std::cout << "Let's crash!!!!!!!!\n";
 		     depCPUnextTrans=depCPU->getNextTransaction();
-		      if (depCPUnextTrans!=0){
+		     //std::cout << "Not crahed!!!!!!!!\n";
+		     if (depCPUnextTrans!=0){
 #ifdef DEBUG_KERNEL
 		      std::cout << "kernel:simulate: transaction scheduled on dependent CPU" << std::endl;
 #endif
@@ -350,6 +360,23 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   }
 		  }
 		 }
+		 //reschedule CPUs if necessary
+		//std::cout << "new reschedule position\n";
+#ifdef DEBUG_KERNEL
+		 std::cout << "kernel:simulate: invoke schedule on executing CPU" << std::endl;
+#endif
+		//if (aRescheduleCoresFlag) for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true), bind2nd(std::mem_fun(&CPU::truncateAndRescheduleIfNecessary), transLET->getEndTime()));
+		if (aRescheduleCoresFlag){
+			//std::cout << "new reschedule loop\n";
+			for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+				if (*i!=cpuLET) (*i)->truncateIfNecessary(transLET->getEndTime());
+			}
+			for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+				if (*i!=cpuLET) (*i)->rescheduleIfNecessary();
+			}
+			//std::cout << "end new reschedule loop\n";
+		}
+		cpuLET->schedule();
 #ifdef LISTENERS_ENABLED
                  NOTIFY_TIME_ADVANCES(transLET->getEndTime());
 #endif
@@ -1090,7 +1117,7 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile){
 /*std::ofstream myfile (iTraceFileName.c_str());
 	if (myfile.is_open()){
-		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2TXT(myfile);
 		}
 		myfile.close();*/
@@ -1108,7 +1135,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		//std::string aStringBuffer(aStreamBuffer.str());
 		//schedule2TXT(aStringBuffer);
 		iFile << "***** edge_" << iPrevID << "_" << aMyID << " *****\n";
-		for(SchedulingList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2TXT(iFile);
 		}
 		iFile << "\n";

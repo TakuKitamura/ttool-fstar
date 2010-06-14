@@ -71,7 +71,7 @@ public:
 	\param iName Name of the task
 	\param iCPU pointer to the CPU which executes the task
     	*/
-	TMLTask(ID iID, Priority iPriority, std::string iName, CPU* iCPU);
+	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
@@ -194,6 +194,15 @@ public:
 	\return Instance number 
 	*/
 	unsigned int getInstanceNo();
+	///Notifies the Task of being scheduled by a CPU
+	/**
+	\param iCPU CPU that has scheduled the Task
+	*/
+	void transWasScheduled(SchedulableDevice* iCPU);
+	///Resets the flag indicating that the Task has been scheduled
+	void resetScheduledFlag();
+	///Invalidates the schedule of all cores the task is mapped onto 
+	void setRescheduleFlagForCores();
 protected:
 	///ID of the task
 	ID _ID;
@@ -205,8 +214,12 @@ protected:
 	TMLCommand* _currCommand;
 	///Pointer to the first command of the task
 	TMLCommand* _firstCommand;
-	///Pointer to the CPU which executes the task
-	CPU* _cpu;
+	///Pointer to the CPU which currently executes the task, can be zero in case the Task is mapped onto a multicore CPU
+	CPU* _currentCPU;
+	///Array containing all the cores the task is mapped onto
+	CPU** _cpus;
+	///Number of cores assigned to the task
+	unsigned int _noOfCPUs;
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;
@@ -235,7 +248,10 @@ protected:
 	bool _justStarted;
 	///Instace counter
 	static unsigned int _instanceCount;
+	///Consecutive number of this task instance
 	unsigned int _myInstance;
+	///Indicates whether this task has already been scheduled
+	bool _isScheduled;
 };
 
 #endif
