@@ -369,7 +369,9 @@ public class AVATAR2UPPAAL {
 		// Start state
 		if (_elt instanceof AvatarStartState) {
 			hash.put(_elt, _previous);
-			makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false);
+			//if (_elt.getNext(0) != null) {
+				makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false);
+			//}
 			return;
 		
 		// Stop state

@@ -63,7 +63,10 @@ public class AvatarStateMachineElement extends AvatarElement {
 	}
 	
 	public AvatarStateMachineElement getNext(int _index) {
-		return nexts.get(_index);
+		if (_index < nexts.size()) {
+			return nexts.get(_index);
+		}
+		return null;
 	}
 	
 	public void setState(AvatarState _as) {
