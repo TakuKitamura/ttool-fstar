@@ -643,6 +643,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 					}*/
 				} 
 			}
+		} else if (tdp.DIPLO_ID_ON) {
+			drawDiploID(g);
 		}
 		
 		if (this instanceof EmbeddedComment) {
