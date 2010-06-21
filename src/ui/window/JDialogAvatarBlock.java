@@ -81,6 +81,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton removeButton;
 	
 	// Method
+	private boolean hasMethods = true;
 	private JPanel panel3, panel4;
 	private JTextField methodText;
 	private JButton addMethodButton;
@@ -90,6 +91,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton removeMethodButton;
 	
 	// Signals
+	private boolean hasSignals = true;
 	private JPanel panel5, panel6;
 	private JComboBox signalInOutBox;
 	private JTextField signalText;
@@ -110,6 +112,18 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         attributesPar = _attributes;
 		methodsPar = _methods;
 		signalsPar = _signals;
+		
+		
+		if (methodsPar == null) {
+			methodsPar = new Vector();
+			hasMethods = false;
+		}
+		
+		if (signalsPar == null) {
+			signalsPar = new Vector();
+			hasSignals = false;
+		}
+		
         forbidden = _forbidden;
         initValues = new Vector();
         this.attrib = attrib;
@@ -457,13 +471,17 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		panelAttr.add(panel2, BorderLayout.EAST);
 		tabbedPane.addTab("Attributes", panelAttr);
 		
-		panelMethod.add(panel3, BorderLayout.WEST);
-		panelMethod.add(panel4, BorderLayout.EAST);
-		tabbedPane.addTab("Methods", panelMethod);
+		if (hasMethods) {
+			panelMethod.add(panel3, BorderLayout.WEST);
+			panelMethod.add(panel4, BorderLayout.EAST);
+			tabbedPane.addTab("Methods", panelMethod);
+		}
 		
-		panelSignal.add(panel5, BorderLayout.WEST);
-		panelSignal.add(panel6, BorderLayout.EAST);
-		tabbedPane.addTab("Signals", panelSignal);
+		if (hasSignals) {
+			panelSignal.add(panel5, BorderLayout.WEST);
+			panelSignal.add(panel6, BorderLayout.EAST);
+			tabbedPane.addTab("Signals", panelSignal);
+		}
 		
 		tabbedPane.setSelectedIndex(tab);
 

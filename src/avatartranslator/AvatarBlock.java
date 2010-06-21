@@ -189,6 +189,8 @@ public class AvatarBlock extends AvatarElement {
 	}
 	
 	public boolean isAValidMethodCall(String _s) {
+		TraceManager.addDev("****** method=" + _s);
+		
 		int index0 = _s.indexOf("(");
 		int index1 = _s.indexOf(")");
 		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
@@ -196,7 +198,7 @@ public class AvatarBlock extends AvatarElement {
 		}
 		
 		String method = _s.substring(0, index0);
-		TraceManager.addDev("method=" + method);
+		
 		AvatarMethod am = getAvatarMethodWithName(method);
 		if (am == null) {
 			return false;
@@ -219,12 +221,15 @@ public class AvatarBlock extends AvatarElement {
 		
 		AvatarAttribute aa;
 		for(int i=0; i<actions.length; i++) {
-			TraceManager.addDev("params=" + params +  "actions=" + actions[i]);
-			aa = getAvatarAttributeWithName(actions[i]);
+			TraceManager.addDev("params=" + params +  " actions=" + actions[i]);
+			aa = getAvatarAttributeWithName(actions[i].trim());
 			if (aa == null) {
+				TraceManager.addDev("Failed for attribute " + actions[i]);
 				return false;
 			}
 		}
+		
+		TraceManager.addDev("Ok for method " + _s);
 		
 		return true;
 		

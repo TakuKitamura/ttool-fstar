@@ -2761,6 +2761,30 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return true;
     }
 	
+	public boolean isAvatarBlockNameUnique(String s) {
+        Object o;
+        AvatarBDBlock block;
+		AvatarBDDataType type; 
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            o = (TGComponent)(iterator.next());
+            if (o instanceof AvatarBDBlock) {
+                block = (AvatarBDBlock)o;
+                if (block.getBlockName().equals(s)) {               
+                    return false;
+                }
+            }
+			if (o instanceof AvatarBDDataType) {
+                type = (AvatarBDDataType)o;
+                if (type.getDataTypeName().equals(s)) {               
+                    return false;
+                }
+            }
+        }   
+        return true;
+    }
+	
 	public boolean isNCNameUnique(String s) {
         Object o;
 		TGComponent tgc;
@@ -2891,6 +2915,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         
         return v;
     }
+	
+	public Vector<String> getAllDataTypes() {
+		Vector<String> v = new Vector<String>();
+		TGComponent tgc;
+		Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof AvatarBDDataType) {
+				v.add(((AvatarBDDataType)(tgc)).getDataTypeName());
+			}
+		}
+		
+		return v;
+	}
     
     public void removeSynchronizedGates(Vector v, TClassInterface t, TCDSynchroGateList tcdsgl ) {
         TGComponent tgc;

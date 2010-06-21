@@ -434,7 +434,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					return false;
 				}
 				
-				if (!tdp.isBlockNameUnique(s)) {
+				if (!tdp.isAvatarBlockNameUnique(s)) {
 					JOptionPane.showMessageDialog(frame,
 						"Could not change the name of the Block: the new name is already in use",
 						"Error",
@@ -501,6 +501,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         _jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         _jdab.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 		_jdab.addType(TAttribute.getStringType(TAttribute.INTEGER), true);
+		
+		for(String s: tdp.getAllDataTypes()) {
+			_jdab.addType(s, false);
+		}
+		
+		
 		_jdab.enableInitialValue(true);
         _jdab.enableRTLOTOSKeyword(false);
         _jdab.enableJavaKeyword(false);
@@ -840,16 +846,16 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			_id = _id.substring(0, index0);
 		}
 		_id = _id.trim();
-		TraceManager.addDev("Searching for signal with id=" + _id);
+		//TraceManager.addDev("Searching for signal with id=" + _id);
 		AvatarSignal as;
 		for(int i=0; i<mySignals.size(); i++) {
 			as = (AvatarSignal)(mySignals.get(i));
 			if (as.getId().compareTo(_id) == 0) {
-				TraceManager.addDev("found");
+				//TraceManager.addDev("found");
 				return as;
 			}
 		}
-		TraceManager.addDev("Not found");
+		//TraceManager.addDev("Not found");
 		return null;
 	}        
 	

@@ -613,6 +613,9 @@ public class AVATAR2UPPAAL {
 			TraceManager.addDev("Attribute #j: " + tmps);
 			aa = _block.getAvatarAttributeWithName(tmps);
 			if (aa != null) {
+				if ((nbOfInt > 0) || (nbOfBool > 0)) {
+					result = result + ",\n";
+				}
 				if (aa.isInt() || aa.isNat()) {
 					result = result + ACTION_INT + nbOfInt + " =" + aa.getName();
 					nbOfInt ++;

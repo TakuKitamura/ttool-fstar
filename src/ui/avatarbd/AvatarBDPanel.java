@@ -53,6 +53,8 @@ import ui.*;
 import ui.tmldd.*;
 import java.util.*;
 
+import myutil.*;
+
 public class AvatarBDPanel extends TDiagramPanel {
     
     public  AvatarBDPanel(MainGUI mgui, TToolBar _ttb) {
@@ -68,10 +70,9 @@ public class AvatarBDPanel extends TDiagramPanel {
             AvatarBDBlock b = (AvatarBDBlock)tgc;
 			//System.out.println("oldValue:" + b.oldValue);
             return mgui.newAvatarBDBlockName(tp, b.oldValue, b.getValue());
-        } /*else if (tgc instanceof TMLActivityDiagramBox) {
-            if (tgc.getFather() instanceof TMLTaskOperator) {
-                mgui.selectTab(tp, tgc.getFather().getValue());
-            }*/
+        } else if (tgc instanceof AvatarBDDataType) {
+            return true;
+		}
             //return false; // because no change made on any diagram
         //}
         return false;
@@ -586,6 +587,41 @@ public class AvatarBDPanel extends TDiagramPanel {
 				return block.getAllSignalList();
 			}
 		}
+		return null;
+	}
+	
+	public Vector getAttributesOfDataType(String _name) {
+		TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+		AvatarBDDataType adt;
+		
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarBDDataType) {
+				adt = (AvatarBDDataType)tgc;
+				if (adt.getDataTypeName().compareTo(_name) == 0) {
+					return adt.getAttributeList();
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public TAttribute getAttribute(String _name, String _nameOfBlock) {
+		
+		//TraceManager.addDev("Searching for attribute: " + _name  + " of block " + _nameOfBlock);
+	
+		TAttribute ta;
+		Vector v = getAllAttributesOfBlock(_nameOfBlock);
+		
+		for(int i=0; i<v.size(); i++) {
+			ta = (TAttribute)(v.get(i));
+			if (ta.getId().compareTo(_name) ==0) {
+				return ta;
+			}
+		}
+
 		return null;
 	}
     

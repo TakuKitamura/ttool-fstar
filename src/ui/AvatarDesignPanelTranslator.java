@@ -97,6 +97,20 @@ public class AvatarDesignPanelTranslator {
 		return as;
 	}
 	
+	public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
+		int type = 0;
+		if (_a.getType() == TAttribute.INTEGER){
+			type = AvatarType.INTEGER;
+		} else if (_a.getType() == TAttribute.NATURAL){
+			type = AvatarType.NATURAL;
+		} else if (_a.getType() == TAttribute.BOOLEAN) {
+			type = AvatarType.BOOLEAN;
+		}
+		AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _a);
+		aa.setInitialValue(_a.getInitialValue());
+		_ab.addAttribute(aa);
+	}
+	
 	public void createBlocks(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
 		AvatarBlock ab;
 		Vector v;
@@ -108,6 +122,7 @@ public class AvatarDesignPanelTranslator {
 		avatartranslator.AvatarMethod atam;
 		avatartranslator.AvatarSignal atas;
 		TGComponent tgc1, tgc2;
+		Vector types;
 		
 		for(AvatarBDBlock block: _blocks) {
 			ab = new AvatarBlock(block.getBlockName(), block);
@@ -119,19 +134,27 @@ public class AvatarDesignPanelTranslator {
 			for(i=0; i<v.size(); i++) {
 				a = (TAttribute)(v.elementAt(i));
 				if (a.getType() == TAttribute.INTEGER){
-					aa = new AvatarAttribute(a.getId(), AvatarType.INTEGER, a);
-					aa.setInitialValue(a.getInitialValue());
-					ab.addAttribute(aa);
-				}
-				if (a.getType() == TAttribute.NATURAL){
-					aa = new AvatarAttribute(a.getId(), AvatarType.NATURAL, a);
-					aa.setInitialValue(a.getInitialValue());
-					ab.addAttribute(aa);
-				}
-				if (a.getType() == TAttribute.BOOLEAN) {
-					aa = new AvatarAttribute(a.getId(), AvatarType.BOOLEAN, a);
-					aa.setInitialValue(a.getInitialValue());
-					ab.addAttribute(aa);
+					addRegularAttribute(ab, a, "");
+				} else if (a.getType() == TAttribute.NATURAL){
+					addRegularAttribute(ab, a, "");
+				} else if (a.getType() == TAttribute.BOOLEAN) {
+					addRegularAttribute(ab, a, "");
+				} else {
+					// other
+					//TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+					types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
+					if (types == null) {
+						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ab.getName());
+						ce.setAvatarBlock(ab);
+						ce.setTDiagramPanel(adp.getAvatarBDPanel());
+						addCheckingError(ce);
+						return;
+					} else {
+						for(int j=0; j<types.size(); j++) {
+							addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
+						}
+					}
+					
 				}
 			}
 			
@@ -182,11 +205,75 @@ public class AvatarDesignPanelTranslator {
 		String typeIds[] = _uiam.getTypeIds();
 		String types[] = _uiam.getTypes();
 		AvatarAttribute aa;
+		TAttribute ta;
+		Vector v;
+		int type = 0;
 		
 		for(int i=0; i<types.length; i++) {
-			aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _uiam);
-			_atam.addParameter(aa);
+			v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
+			if (v == null) {
+				aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _uiam);
+				_atam.addParameter(aa);
+			} else {
+				for(int j=0; j<v.size(); j++) {
+					ta = (TAttribute)(v.get(j));
+					if (ta.getType() == TAttribute.INTEGER){
+						type = AvatarType.INTEGER;
+					} else if (ta.getType() == TAttribute.NATURAL){
+						type = AvatarType.NATURAL;
+					} else if (ta.getType() == TAttribute.BOOLEAN) {
+						type = AvatarType.BOOLEAN;
+					}
+					aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _uiam);
+					_atam.addParameter(aa);
+				}
+			}
 		}
+	}
+	
+	public void manageAttribute(String _name, AvatarBlock _ab, AvatarActionOnSignal _aaos, TDiagramPanel _tdp, TGComponent _tgc, String _idOperator) {
+		TAttribute ta =  adp.getAvatarBDPanel().getAttribute(_name, _ab.getName());
+		if (ta == null) {
+			CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
+			ce.setAvatarBlock(_ab);
+			ce.setTDiagramPanel(_tdp);
+			ce.setTGComponent(_tgc);
+			addCheckingError(ce);
+			TraceManager.addDev("not found");
+			return ;
+		}
+		
+		TraceManager.addDev("Found: " + ta.getId());
+		
+		AvatarAttribute aa;
+		Vector v = new Vector();
+		int i;
+		TAttribute tatmp;
+		
+		if (ta.getType() == TAttribute.OTHER) {
+			Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+			for(i=0; i<v0.size(); i++) {
+				tatmp = (TAttribute)(v0.get(i));
+				v.add(_name + "__" + tatmp.getId());
+			}
+		} else {
+			v.add(_name);
+		}
+		for(i=0; i<v.size(); i++) {
+			aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
+			if (aa == null) {
+				CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + _name + " in signal expression: " + _idOperator);
+				ce.setAvatarBlock(_ab);
+				ce.setTDiagramPanel(_tdp);
+				ce.setTGComponent(_tgc);
+				addCheckingError(ce);
+				return ;
+			} else {
+				_aaos.addValue(_name);
+			}
+		}
+		
+		
 	}
 	
 	public void makeStateMachine(AvatarSpecification _as, AvatarBlock _ab) {
@@ -266,6 +353,7 @@ public class AvatarDesignPanelTranslator {
 		AvatarState astate;
 		int i;
 		String tmp;
+		TAttribute ta;
 		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
@@ -280,6 +368,7 @@ public class AvatarDesignPanelTranslator {
 					ce.setTDiagramPanel(tdp);
 					ce.setTGComponent(tgc);
 					addCheckingError(ce);
+					
 				} else {
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
 					if (aaos.isSending()) {
@@ -305,7 +394,11 @@ public class AvatarDesignPanelTranslator {
 								ce.setTGComponent(tgc);
 								addCheckingError(ce);
 							} else {
+								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdrs.getValue());
 								// Check that tmp is the identifier of an attribute
+								// Find the TAttribute
+								/*ta = getTAttribute(tmp);
+								
 								aa = _ab.getAvatarAttributeWithName(tmp);
 								if (aa == null) {
 									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdrs.getValue());
@@ -315,7 +408,7 @@ public class AvatarDesignPanelTranslator {
 									addCheckingError(ce);
 								} else {
 									aaos.addValue(tmp);
-								}
+								}*/
 							}
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
@@ -323,6 +416,8 @@ public class AvatarDesignPanelTranslator {
 						asm.addElement(aaos);
 					}
 				}
+				
+			// Send signals
 			} else if (tgc instanceof AvatarSMDSendSignal) {
 				asmdss = (AvatarSMDSendSignal)tgc;
 				atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
@@ -357,8 +452,9 @@ public class AvatarDesignPanelTranslator {
 								ce.setTGComponent(tgc);
 								addCheckingError(ce);
 							} else {
+								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
 								// Check that tmp is the identifier of an attribute
-								aa = _ab.getAvatarAttributeWithName(tmp);
+								/*aa = _ab.getAvatarAttributeWithName(tmp);
 								if (aa == null) {
 									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
 									ce.setAvatarBlock(_ab);
@@ -367,7 +463,7 @@ public class AvatarDesignPanelTranslator {
 									addCheckingError(ce);
 								} else {
 									aaos.addValue(tmp);
-								}
+								}*/
 							}
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
@@ -447,7 +543,7 @@ public class AvatarDesignPanelTranslator {
 						at = new AvatarTransition("avatar transition", tgc);
 						
 						// Guard
-						tmp = asmdco.getGuard();
+						tmp = modifyString(asmdco.getGuard());
 						error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
 						if (error < 0) {
 							makeError(error, tdp, _ab, tgc, "transition guard", tmp); 
@@ -456,13 +552,13 @@ public class AvatarDesignPanelTranslator {
 						}
 						
 						// Delays
-						tmp1 = asmdco.getAfterMinDelay();
+						tmp1 = modifyString(asmdco.getAfterMinDelay());
 						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
 						if (error < 0) {
 							makeError(error, tdp, _ab, tgc, "after min delay", tmp1);
 							tmp1 = null;
 						} 
-						tmp2 = asmdco.getAfterMaxDelay();
+						tmp2 = modifyString(asmdco.getAfterMaxDelay());
 						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
 						if (error < 0) {
 							makeError(error, tdp, _ab, tgc, "after max delay", tmp2);
@@ -474,13 +570,13 @@ public class AvatarDesignPanelTranslator {
 						}
 						
 						// Compute min and max
-						tmp1 = asmdco.getComputeMinDelay();
+						tmp1 = modifyString(asmdco.getComputeMinDelay());
 						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
 						if (error < 0) {
 							makeError(error, tdp, _ab, tgc, "compute min ", tmp1);
 							tmp1 = null;
 						} 
-						tmp2 = asmdco.getComputeMaxDelay();
+						tmp2 = modifyString(asmdco.getComputeMaxDelay());
 						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp2);
 						if (error < 0) {
 							makeError(error, tdp, _ab, tgc, "compute max ", tmp2);
@@ -495,11 +591,12 @@ public class AvatarDesignPanelTranslator {
 						vs = asmdco.getActions();
 						for(String s: vs) {
 							if (s.trim().length() > 0) {
-								s = s.trim();
+								s = modifyString(s.trim());
 								// Variable assignation or method call?
 								error = s.indexOf("=");
 								if (error == -1) {
 									// Method call
+									s = modifyStringMethodCall(s, _ab.getName());
 									if(!_ab.isAValidMethodCall(s)) {
 										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed transition method call: " + s);
 										ce.setAvatarBlock(_ab);
@@ -622,6 +719,60 @@ public class AvatarDesignPanelTranslator {
 			warnings = new Vector();
 		}
 		warnings.addElement(ce);
+	}
+	
+	private String modifyString(String _input) {
+		return Conversion.replaceAllChar(_input, '.', "__");
+	}
+	
+	private String modifyStringMethodCall(String _input, String _blockName) {
+		int index0 = _input.indexOf('(');
+		int index1 = _input.indexOf(')');
+		
+		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			return _input;
+		}
+		
+		String s = _input.substring(index0+1, index1).trim();
+		String output = "";
+		
+		if (s.length() == 0) {
+			return _input;
+		}
+		
+		//TraceManager.addDev("Analyzing method call " + s);
+		TAttribute ta, tatmp; 
+		
+		String [] actions = s.split(",");
+		s = "";
+		for(int i=0; i<actions.length; i++) {
+			ta = adp.getAvatarBDPanel().getAttribute(actions[i].trim(), _blockName);
+			if (ta == null) {
+				s = s + actions[i].trim();
+			} else {
+				if (ta.getType() == TAttribute.OTHER) {
+					Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+					for(int j=0; j<v0.size(); j++) {
+						tatmp = (TAttribute)(v0.get(j));
+						s += actions[i].trim() + "__" + tatmp.getId();
+						if (j != v0.size()-1) {
+							s = s + ", ";
+						}
+					}
+				} else {
+					s = s + actions[i].trim();
+				}
+			}
+			if (i != actions.length-1) {
+					s = s + ", ";
+			}
+		}
+		
+		s  = _input.substring(0, index0) + "(" + s + ")";
+		
+		//TraceManager.addDev("Returning method call " + s);
+		
+		return s;
 	}
 	
 	/*public TURTLEModeling generateTURTLEModeling() {

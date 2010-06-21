@@ -4508,22 +4508,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return getUseCaseDiagramPanel(tp, indexTab, s);
     }
     
-    /*public UseCaseDiagramPanel getUseCaseDiagramPanel(int index, int indexTab, String s) {
-        System.out.println("Searching for " + s + " at index =" + indexTab);
-        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
-        return getUseCaseDiagramPanel(tp, indexTab, s);
-    }*/
-    
     public UseCaseDiagramPanel getUseCaseDiagramPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (UseCaseDiagramPanel)(tp.panelAt(indexTab));
         }
-        /*for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
-            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
-                if (tp.panelAt(i) instanceof UseCaseDiagramPanel)
-                    return  (UseCaseDiagramPanel)(tp.panelAt(i));
-            }
-        }*/
         return null;
     }
     
@@ -5206,21 +5194,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
 	
 	public boolean newAvatarBDBlockName(TURTLEPanel tp, String old, String niou) {
-		TraceManager.addDev("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
+		//TraceManager.addDev("Panel=" + tp + " Old  task name = " + old + " New task name=" + niou);
         JTabbedPane jtp = tp.tabbedPane;
 		int i;
         for(i = 0; i<jtp.getTabCount(); i++) {
-			TraceManager.addDev("jtp  = " + jtp.getTitleAt(i));
+			//TraceManager.addDev("jtp  = " + jtp.getTitleAt(i));
             if (jtp.getTitleAt(i).equals(niou)) {
                 return false;
             }
         }
-       TraceManager.addDev("old " + old + " niou " + niou);
-	   TraceManager.addDev("nb Of panels:"+ jtp.getTabCount());
+       //TraceManager.addDev("old " + old + " niou " + niou);
+	   //TraceManager.addDev("nb Of panels:"+ jtp.getTabCount());
         for(i = 0; i<jtp.getTabCount(); i++) {
             //TraceManager.addDev("Tab " + i + " = " + mainTabbedPane.getTitleAt(i));
-			TraceManager.addDev("jtp  = >" + jtp.getTitleAt(i) + "<");
-			TraceManager.addDev("old  = >" + old + "<");
+			//TraceManager.addDev("jtp  = >" + jtp.getTitleAt(i) + "<");
+			//TraceManager.addDev("old  = >" + old + "<");
             if (jtp.getTitleAt(i).compareTo(old) == 0) {
                 jtp.setTitleAt(i, niou);
                 jtp.setToolTipTextAt(i, "Opens the state machine of " + niou);
@@ -5230,7 +5218,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     tdp = (TDiagramPanel)(tp.panels.elementAt(j));
                     if (tdp.getName().equals(old)) {
                         tdp.setName(niou);
-						TraceManager.addDev("Renamed to " + niou);
+						//TraceManager.addDev("Renamed to " + niou);
                     }
                 }
                 
@@ -6069,6 +6057,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		// AVATAR BD
 		} else if (command.equals(actions[TGUIAction.ABD_BLOCK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.ABD_DATATYPE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_DATATYPE);
 		} else if (command.equals(actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR);	
 		} else if (command.equals(actions[TGUIAction.ABD_PORT_CONNECTOR].getActionCommand())) {

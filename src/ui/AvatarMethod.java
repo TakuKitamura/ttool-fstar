@@ -59,6 +59,7 @@ public class AvatarMethod {
     public final static int NATURAL = 0;
     public final static int BOOLEAN = 1;
 	public final static int INTEGER = 2;
+	public final static int OTHER = 3;
 	
     protected String id;
 	protected String typeIds[];
@@ -267,7 +268,7 @@ public class AvatarMethod {
         } else if (s.equals("int")) {
             return 	INTEGER;
         }
-        return -1;
+        return OTHER;
     }
     
     public static String getStringType(int type) {

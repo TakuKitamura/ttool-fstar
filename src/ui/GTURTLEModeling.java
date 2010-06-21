@@ -4367,7 +4367,7 @@ public class GTURTLEModeling {
 				throw new MalformedModelingException();
 			}
 
-			TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
+			//TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
 			//TGComponent is ready to be built
 			if(fatherId != -1) {
 				fatherId += decId;
@@ -4409,7 +4409,7 @@ public class GTURTLEModeling {
 			} else {
 				tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 			}
-			TraceManager.addDev("TGComponent built " + myType);
+			//TraceManager.addDev("TGComponent built " + myType);
 
 			if (tgc == null) {
 				throw new MalformedModelingException();

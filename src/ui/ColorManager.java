@@ -133,6 +133,7 @@ public class ColorManager {
 	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
 	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
 	public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
+	public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
 	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_GUARD = new Color(128, 180, 205);
