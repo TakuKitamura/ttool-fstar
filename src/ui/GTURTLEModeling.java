@@ -123,6 +123,7 @@ public class GTURTLEModeling {
 	private Vector panels; /* analysis, design, deployment, tml design */
 	private TURTLEModeling tm;
 	private AvatarSpecification avatarspec;
+	AVATAR2UPPAAL avatar2uppaal;
 	private boolean optimizeAvatar;
 	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 	private TMLModeling tmlm;
@@ -416,7 +417,7 @@ public class GTURTLEModeling {
 	}
 	
 	public boolean generateUPPAALFromAVATAR(String _path) {
-		AVATAR2UPPAAL avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
+		avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
 		//tml2uppaal.setChoiceDeterministic(choices);
 		//tml2uppaal.setSizeInfiniteFIFO(_size);
 		uppaal = avatar2uppaal.generateUPPAAL(true, optimizeAvatar);
@@ -497,6 +498,16 @@ public class GTURTLEModeling {
 				}
 			}
 			
+		} else if ((avatar2uppaal != null) && (tp instanceof AvatarDesignPanel)) {
+			TraceManager.addDev("Making UPPAAL queries");
+			for(TGComponent tgc: list) {
+				TraceManager.addDev("Making UPPAAL query for " + tgc);
+				String s = avatar2uppaal.getUPPAALIdentification(tgc);
+				TraceManager.addDev("Query: " + s);
+				if (s.length() > 0) {
+					listQ.add(s + "$" + tgc);
+				} 
+			}
 		}
 		
 		return listQ;

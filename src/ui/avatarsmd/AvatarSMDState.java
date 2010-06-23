@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, SwallowTGComponent, SwallowedTGComponent {
     private int textY1 = 3;
 	
 	private int maxFontSize = 12;

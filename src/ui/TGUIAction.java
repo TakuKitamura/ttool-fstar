@@ -827,7 +827,7 @@ public class TGUIAction extends AbstractAction {
 		
 		// AVATAR Block Diagrams
 		actions[ABD_BLOCK] = new TAction("abd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Block Diagram", 0);
-        actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5000, IconManager.imgic5000, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
+        actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5034, IconManager.imgic5034, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
 		actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);
 		

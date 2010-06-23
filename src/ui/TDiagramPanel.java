@@ -2189,14 +2189,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 	
 	public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
+		//TraceManager.addDev("Checking for components on=" + this);
 		Iterator iterator = componentList.listIterator();
 		TGComponent tgc;
+		LinkedList list;
+		
         
         while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
-			if (tgc.getCheckableAccessibility()) {
-				_list.add(tgc);
-				//System.out.println("Adding tgc component=" + tgc);
+			if (tgc.hasCheckableAccessibility()) {
+				list = tgc.getAllCheckableAccessibility();
+				_list.addAll(list);
 			}
 		}
 	}

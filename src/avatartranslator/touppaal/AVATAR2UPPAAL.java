@@ -851,5 +851,35 @@ public class AVATAR2UPPAAL {
 		return modifyString(action.trim());
 	}
 	
+	public String getUPPAALIdentification(Object _o) {
+		if (avspec == null) {
+			return null;
+		}
+		
+		String ret = "";
+		
+		AvatarBlock block = avspec.getBlockFromReferenceObject(_o);
+		
+		if (block != null) {
+			UPPAALTemplate temp = spec.getTemplateByName(block.getName());
+			int index = spec.getIndexOfTemplate(temp);
+			if (temp != null) { 
+				ret += block.getName() + "__" + index;
+				
+				AvatarStateMachineElement asme = avspec.getStateMachineElementFromReferenceObject(_o);
+				if (asme != null) {
+					UPPAALLocation loc = hash.get(asme);
+					if (loc != null) {
+						ret += "." + loc.name;
+					}
+				}
+			}
+		}
+		
+		return ret;
+		
+		
+	}
+	
 	
 }

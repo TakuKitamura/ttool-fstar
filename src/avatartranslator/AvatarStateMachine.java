@@ -317,6 +317,15 @@ public class AvatarStateMachine extends AvatarElement {
 			element.setState(null);
 		}
 	}
+	
+	public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
+		for(AvatarStateMachineElement element: elements) {
+			if(element.getReferenceObject() == _o) {
+				return element;
+			}
+		}
+		return null;
+	}
     
 
 }

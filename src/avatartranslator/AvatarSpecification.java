@@ -178,4 +178,25 @@ public class AvatarSpecification extends AvatarElement {
 		return actionss[_index].trim();
 		
 	}
+	
+	public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
+		AvatarStateMachineElement asme;
+		for(AvatarBlock block: blocks) {
+			asme = block.getStateMachineElementFromReferenceObject(_o);
+			if (asme != null) {
+				return asme;
+			}
+		}
+		return null;
+	}
+	
+	public AvatarBlock getBlockFromReferenceObject(Object _o) {
+		for(AvatarBlock block: blocks) {
+			if (block.containsStateMachineElementWithReferenceObject(_o)) {
+				return block;
+			}
+		}
+		return null;
+	}
+	
 }

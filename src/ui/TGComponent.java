@@ -282,6 +282,40 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		return accessibility;
 	}
 	
+	public boolean hasCheckableAccessibility() {
+		if (accessibility == true) {
+			return true;
+		}
+		
+		if (nbInternalTGComponent >0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				if (tgcomponent[i].hasCheckableAccessibility()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public LinkedList getAllCheckableAccessibility() {
+		LinkedList list = new LinkedList();
+		getAllCheckableAccessibility(list);
+		return list;
+	}
+	
+	public void getAllCheckableAccessibility(LinkedList _list) {
+		if (accessibility) {
+			_list.add(this);
+		}
+		
+		if (nbInternalTGComponent > 0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				tgcomponent[i].getAllCheckableAccessibility(_list);
+			}
+		}
+	}
+	
 	public void setBreakpoint(boolean b) {
 		breakpoint = b;
 	}

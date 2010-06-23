@@ -235,6 +235,15 @@ public class AvatarBlock extends AvatarElement {
 		
 	}
 	
+	public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
+		return asm.getStateMachineElementFromReferenceObject(_o);
+	}
+	
+	public boolean containsStateMachineElementWithReferenceObject(Object _o) {
+		AvatarStateMachineElement asme = asm.getStateMachineElementFromReferenceObject(_o);
+		return (asme != null);
+	}
+	
 	
     
 }

@@ -88,6 +88,11 @@ public class UPPAALSpec {
     public LinkedList getTemplates() {
 		return templates;
     }
+	
+	
+	public int getIndexOfTemplate(UPPAALTemplate _template) {
+		return templates.indexOf(_template);
+	}
     
     public UPPAALTemplate getTemplateByName(String name) {
 		UPPAALTemplate template;
