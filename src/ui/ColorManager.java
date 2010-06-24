@@ -132,14 +132,20 @@ public class ColorManager {
 	
 	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
 	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
-	public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
-	public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
+	//public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
+	public static final Color AVATAR_BLOCK = new Color(193, 218, 241);
+	//public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
+	public static final Color AVATAR_DATATYPE = new Color(156, 220, 162);
 	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
 	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
-	public static final Color AVATAR_GUARD = new Color(128, 180, 205);
-	public static final Color AVATAR_TIME = new Color(108, 92, 67);	
-	public static final Color AVATAR_ACTION = new Color(128, 92, 168);
-	public static final Color AVATAR_STATE = new Color(149, 193, 210);
+	//public static final Color AVATAR_GUARD = new Color(128, 180, 205);
+	public static final Color AVATAR_GUARD = new Color(0, 89, 26);
+	//public static final Color AVATAR_TIME = new Color(108, 92, 67);
+	public static final Color AVATAR_TIME = new Color(105, 75, 11);	
+	//public static final Color AVATAR_ACTION = new Color(128, 92, 168);
+	public static final Color AVATAR_ACTION = new Color(119, 16, 243);
+	//public static final Color AVATAR_STATE = new Color(149, 193, 210);
+	public static final Color AVATAR_STATE = new Color(193, 218, 241);
 	
 	public static final Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
 	public static final Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
