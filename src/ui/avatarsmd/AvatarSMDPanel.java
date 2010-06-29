@@ -112,7 +112,7 @@ public class AvatarSMDPanel extends TDiagramPanel {
         // Position correctly guards of choice
     }
     
-    /*public void enhance() {
+    public void enhance() {
         //System.out.println("enhance");
         Vector v = new Vector();
         Object o;
@@ -120,8 +120,8 @@ public class AvatarSMDPanel extends TDiagramPanel {
         
         while(iterator.hasNext()) {
             o = iterator.next();
-            if (o instanceof TMLADStartState){
-                enhance(v, (TMLADStartState)o);
+            if (o instanceof AvatarSMDStartState){
+                enhance(v, (AvatarSMDStartState)o);
             }
         }
         
@@ -147,7 +147,7 @@ public class AvatarSMDPanel extends TDiagramPanel {
         v.add(tgc);
         
         //System.out.println("Nb of nexts: " + tgc.getNbNext());
-        if (!(tgc instanceof TMLADStartState)) {
+        if (!(tgc instanceof AvatarSMDStartState)) {
             for(i=0; i<tgc.getNbNext(); i++) {
                 tgc1 = getNextTGComponent(tgc, i);
                 tgcon = getNextTGConnector(tgc, i);
@@ -164,7 +164,7 @@ public class AvatarSMDPanel extends TDiagramPanel {
             tgc1 = getNextTGComponent(tgc, i);
             enhance(v, tgc1);
         }
-    }*/
+    }
 	
 	public void setConnectorsToFront() {
 		TGComponent tgc;

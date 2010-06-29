@@ -62,6 +62,7 @@ import myutil.*;
 */
 public class ConfigurationTTool {
     
+	public static String LauncherPort = "";
     public static String RTLHost = "";
     public static String RTLPath = "";
     public static String DTA2DOTPath = "";
@@ -248,6 +249,9 @@ public class ConfigurationTTool {
     
     public static String getConfiguration(boolean systemcOn) {
 		StringBuffer sb = new StringBuffer("");
+		
+		sb.append("Launcher:\n");
+		sb.append("LauncherPort: " + LauncherPort + "\n");
 		// Formal verification
 		sb.append("RTL:\n");
         sb.append("RTLHost: " + RTLHost + "\n");
@@ -346,6 +350,9 @@ public class ConfigurationTTool {
             Document doc = db.parse(bais);
             NodeList nl;
             
+			nl = doc.getElementsByTagName("LauncherPort");
+            if (nl.getLength() > 0)
+                LauncherPort(nl);
             nl = doc.getElementsByTagName("RTLHost");
             if (nl.getLength() > 0)
                 RTLHOST(nl);
@@ -513,6 +520,15 @@ public class ConfigurationTTool {
 					LastWindowAttributes(nl);
 				
 				
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void LauncherPort(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            LauncherPort = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

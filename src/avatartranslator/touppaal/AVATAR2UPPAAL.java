@@ -454,7 +454,7 @@ public class AVATAR2UPPAAL {
 					tr = addTransition(_template, loc1, loc1);
 					tmps = CHOICE_VAR + j + " = 0";
 					setAssignment(tr, tmps);
-					tmps = "(" + CHOICE_VAR + j + " < 0) && (h__ >" + CHOICE_VAR + j  + ")";
+					tmps = "(" + CHOICE_VAR + j + " > 0) && (h__ >" + CHOICE_VAR + j  + ")";
 					setGuard(tr, tmps);
 					j ++;
 				}
@@ -809,15 +809,17 @@ public class AVATAR2UPPAAL {
 		
 		while(iterator.hasNext()) {
 			template = (UPPAALTemplate)(iterator.next());
-			dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
-			system += template.getName() + "__" + id;
-			if (iterator.hasNext()) {
-				system += ",";
-			} else {
-				system += ";";
+			if (template.getNbOfTransitions() > 0) {
+				dec += template.getName() + "__" + id + " = " + template.getName() + "();\n";
+				if (id > 0) {
+					system += ",";
+				}
+				system += template.getName() + "__" + id;
 			}
 			id++;
 		}
+		
+		system += ";";
 		
 		spec.addInstanciation(dec+system);
 	}

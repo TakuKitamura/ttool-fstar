@@ -52,7 +52,9 @@ import java.net.*;
 import java.util.*;
 
 public class RshServer {
-    private int port = 8375;
+	public static int PORT_NUMBER = 8375;
+	
+    private int port = PORT_NUMBER;
     private ServerSocket server = null;
     private int id = 0;
     private Vector processes;
@@ -62,6 +64,7 @@ public class RshServer {
     private boolean []sessions = new boolean[10]; // 0 is never used.
 
     public RshServer() {
+		System.out.println("Using port: " + port);
         processes = new Vector();
         try {
             server = new ServerSocket(port);

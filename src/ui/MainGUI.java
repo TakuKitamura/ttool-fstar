@@ -6081,6 +6081,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_PARALLEL);
 		} else if (command.equals(actions[TGUIAction.ASMD_STATE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STATE);
+		} else if (command.equals(actions[TGUIAction.ASMD_CHOICE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_CHOICE);
 			
 		// AVATAR RD
 		} else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {

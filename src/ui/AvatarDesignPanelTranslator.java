@@ -355,6 +355,8 @@ public class AvatarDesignPanelTranslator {
 		String tmp;
 		TAttribute ta;
 		
+		int choiceID = 0;
+		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
 				
@@ -479,6 +481,14 @@ public class AvatarDesignPanelTranslator {
 					astate = new AvatarState(tgc.getValue(), tgc);
 					asm.addElement(astate);
 				}
+				listE.addCor(astate, tgc);
+			
+				
+			// Choice
+			} else if (tgc instanceof AvatarSMDChoice) {
+				astate = new AvatarState("choice__" + choiceID, tgc);
+				choiceID ++;
+				asm.addElement(astate);
 				listE.addCor(astate, tgc);
 			
 			// Start state

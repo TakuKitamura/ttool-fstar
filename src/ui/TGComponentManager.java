@@ -301,6 +301,7 @@ public class TGComponentManager {
 	public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
 	public static final int AVATARSMD_PARALLEL = 5105;
 	public static final int AVATARSMD_STATE = 5106;
+	public static final int AVATARSMD_CHOICE = 5107;
 	
 	// AVATAR RD -> starts at 5200
 	public static final int AVATARRD_REQUIREMENT = 5200;
@@ -358,6 +359,9 @@ public class TGComponentManager {
                 break;
 			case AVATARSMD_STATE:
                 tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_CHOICE:
+                tgc = new AvatarSMDChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 			case AVATARRD_REQUIREMENT:
                 tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -835,7 +839,9 @@ public class TGComponentManager {
 		} else if (tgc instanceof AvatarSMDParallel) {
 			return AVATARSMD_PARALLEL;		
 		} else if (tgc instanceof AvatarSMDState) {
-			return AVATARSMD_STATE;		
+			return AVATARSMD_STATE;	
+		} else if (tgc instanceof AvatarSMDChoice) {
+			return AVATARSMD_CHOICE;	
 			
 		// AVATAR RD
 		} else if (tgc instanceof AvatarRDRequirement) {

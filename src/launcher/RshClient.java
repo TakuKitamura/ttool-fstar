@@ -63,10 +63,11 @@ public class RshClient {
     private static String ID_FAILED = "Wrong id";
     
     private static int BUFSIZE = 511;
+	public static int PORT_NUMBER = 8375;
     
     private String host;
     private String cmd;
-    private static int port = 8375;
+    private int port = PORT_NUMBER;
     private int portString = -1;
     private int portString2 = -1;
     private Socket clientSocket = null;
@@ -78,14 +79,20 @@ public class RshClient {
     private boolean go;
     
     public RshClient(String _cmd, String _host) {
+		//System.out.println("Using port: " + port);
         cmd = _cmd;
         host = _host;
     }
     
     public RshClient(String _host) {
+		//System.out.println("Using port: " + port);
         host = _host;
     }
     
+	public void setPort(int _port) {
+		port = _port;
+	}
+	
     public void setCmd(String _cmd) {
         cmd = _cmd;
     }

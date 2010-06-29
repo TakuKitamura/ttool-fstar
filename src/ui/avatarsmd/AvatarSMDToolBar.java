@@ -62,6 +62,8 @@ public class AvatarSMDToolBar extends TToolBar {
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.ASMD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+		mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
+		
         mgui.actions[TGUIAction.ASMD_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_START].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
@@ -69,6 +71,9 @@ public class AvatarSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
+		mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
@@ -86,11 +91,16 @@ public class AvatarSMDToolBar extends TToolBar {
         
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
+        button.addMouseListener(mgui.mouseHandler);
+        
         
         this.addSeparator();
         
 		button = this.add(mgui.actions[TGUIAction.ASMD_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
+		
         
         this.addSeparator();
         
@@ -103,6 +113,11 @@ public class AvatarSMDToolBar extends TToolBar {
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ASMD_STATE]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ASMD_CHOICE]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		/*this.addSeparator();
@@ -119,12 +134,12 @@ public class AvatarSMDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         
-        /*this.addSeparator();
+        this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
         button.addMouseListener(mgui.mouseHandler);
 		
-		this.addSeparator();
+		/*this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT]);
         button.addMouseListener(mgui.mouseHandler);

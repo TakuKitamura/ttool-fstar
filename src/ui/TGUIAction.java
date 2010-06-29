@@ -310,6 +310,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int ASMD_RECEIVE_SIGNAL = 297;
 	public static final int ASMD_PARALLEL = 298;
 	public static final int ASMD_STATE = 299;
+	public static final int ASMD_CHOICE = 325;
 	
 	// AVATAR Requirement
 	public static final int ARD_EDIT = 300;
@@ -444,7 +445,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 325;
+    public static final int NB_ACTION = 326;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -839,7 +840,8 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic904, IconManager.imgic904, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic908, IconManager.imgic908, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
-        actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic204, IconManager.imgic204, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);
         
 		// AVATAR Requirement Diagrams
 		actions[ARD_EDIT] = new TAction("edit-ard-diagram", "Edit AVATAR Requirement Diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Requirement Diagram", "Make it possible to edit the currently opened AVATAR requirement diagram", 0);

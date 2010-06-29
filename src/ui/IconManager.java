@@ -139,7 +139,7 @@ public class IconManager {
 	public static ImageIcon imgic5000, imgic5002, imgic5004, imgic5006, imgic5008;
 	public static ImageIcon imgic5010, imgic5012, imgic5014, imgic5016, imgic5018;
 	public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
-	public static ImageIcon imgic5030, imgic5032, imgic5034;
+	public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036;
 	
 	public static ImageIcon imgic5100, imgic5102, imgic5104;
 	
@@ -501,6 +501,7 @@ public class IconManager {
 	private static String icon5030 = "images/avatarpdtemporalconstraint.gif";
 	private static String icon5032 = "images/avatarpdalias.gif";
 	private static String icon5034 = "images/avatardatatype.gif";
+	private static String icon5036 = "images/avatarstate.gif";
 	
 	private static String icon5100 = "images/avatarhead16.gif";
 	private static String icon5102 = "images/avatarhead32.gif";
@@ -838,6 +839,7 @@ public class IconManager {
 		imgic5030 = getIcon(icon5030);
 		imgic5032 = getIcon(icon5032);
 		imgic5034 = getIcon(icon5034);
+		imgic5036 = getIcon(icon5036);
 		
 		imgic5100 = getIcon(icon5100);
 		imgic5102 = getIcon(icon5102);

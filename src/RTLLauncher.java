@@ -51,6 +51,22 @@ import launcher.*;
 public class RTLLauncher implements Runnable {
     
     public static void main(String[] args) {
+		for(int i=0; i<args.length; i++) {
+			if (args[i].compareTo("-port") == 0) {
+				if (i != (args.length -1)) {
+					try {
+						int port = Integer.decode(args[i+1]).intValue();
+						RshServer.PORT_NUMBER = port;
+						System.out.println("Port number set to " + port);
+					} catch (Exception e) {
+						System.out.println("Wrong port number");
+					}
+					System.out.println("SystemC features activated - these are beta features that are meant to be used only for research purpose");
+				} else {
+					System.out.println("Missing port number");
+				}
+            }
+		}
         System.out.println("Server side of the launcher\nVersion: " + RshServer.VERSION);
         (new RshServer()).startServer();
     }

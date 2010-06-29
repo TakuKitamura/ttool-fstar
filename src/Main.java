@@ -103,6 +103,8 @@ public class Main implements ActionListener {
         // setting default language
         splashFrame.setMessage("Setting language");
         Locale.setDefault(new Locale("en"));
+		
+		boolean startLauncher = false;
         
         // Analyzing arguments
         String config = "config.xml";
@@ -120,8 +122,8 @@ public class Main implements ActionListener {
                 System.out.println("LOTOS features activated");
             }
              if (args[i].compareTo("-launcher") == 0) {
-                Thread t = new Thread(new RTLLauncher());
-                t.start();
+				startLauncher = true;
+               
             }
             if (args[i].compareTo("-diplodocus") == 0) {
                 systemc = true;
@@ -199,6 +201,21 @@ public class Main implements ActionListener {
         TraceManager.addDev(ConfigurationTTool.getConfiguration(systemc));
         TraceManager.addDev("\nDebugging trace:\n----------------");
         
+		if (ConfigurationTTool.LauncherPort.length() > 0) {
+			try {
+				int port = Integer.decode(ConfigurationTTool.LauncherPort).intValue();
+				launcher.RshClient.PORT_NUMBER = port;
+				launcher.RshServer.PORT_NUMBER = port;
+				TraceManager.addDev("Port number set to: " + port);
+			} catch (Exception e) {
+				TraceManager.addError("Wrong port number:" + ConfigurationTTool.LauncherPort);
+			}
+		}
+		
+		if (startLauncher) {
+			Thread t = new Thread(new RTLLauncher());
+			t.start();
+		}
         
         // making main window
         splashFrame.setMessage("Creating main window");

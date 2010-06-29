@@ -80,6 +80,8 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
         
+		addTGConnectingPointsComment();
+		
         moveable = true;
         editable = true;
         removable = true;

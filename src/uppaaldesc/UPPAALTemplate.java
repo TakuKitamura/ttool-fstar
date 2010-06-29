@@ -64,6 +64,14 @@ public class UPPAALTemplate {
 		transitions = new LinkedList();
     }
 	
+	public int getNbOfLocations() {
+		return locations.size();
+	}
+	
+	public int getNbOfTransitions() {
+		return transitions.size();
+	}
+	
 	public void setIdInstanciation(int _idInstanciation) {
 		idInstanciation = _idInstanciation;
 	}
