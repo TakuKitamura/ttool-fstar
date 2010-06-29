@@ -270,6 +270,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
 	}
 	//std::cout << "after loop2" << std::endl;
+	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
 	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);

@@ -67,6 +67,7 @@ public:
       	\param iBurstSize Size of an atomic bus transaction
 	\param ibusWidth Bus width
 	\param iTimePerSample Transfer time per sample
+	\param iChannelBasedPrio Flag indicating whether bus master based or channel based priorities are used to arbitrate the bus
     	*/
 	Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio);
 	///Destructor

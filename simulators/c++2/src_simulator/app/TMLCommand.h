@@ -60,7 +60,6 @@ public:
       	\param iID ID of the command
 	\param iTask Pointer to the task the command belongs to
 	\param iLength Virtual length of the command
-	\param iParamFunc Pointer to a parameter function
 	\param iNbOfNextCmds Number of next commands
     	*/
 	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);

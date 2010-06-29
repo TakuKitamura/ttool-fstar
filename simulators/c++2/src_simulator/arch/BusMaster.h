@@ -211,7 +211,7 @@ public:
 	}
 
 protected:
-
+	///Sorts the bus list by ascending finish times of the last scheduled transaction
 	void sortBusList(){
 		//std::cout << _name << ": sort result: ";
 		unsigned int aBound = _nbOfBuses;

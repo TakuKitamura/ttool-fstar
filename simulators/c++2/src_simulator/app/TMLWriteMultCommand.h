@@ -54,7 +54,7 @@ public:
       	\param iID ID of the command
 	\param iTask Pointer to the task the command belongs to
 	\param iLengthFunc Pointer to the function returning the length of the command
-	\param iChannel Pointer to an array of pointers to channels to which is written
+	\param iChannels Pointer to an array of pointers to channels which may be written
 	\param iNbOfChannels Number of channels
 	\param iStatLength Static length of command if applicable
 	*/

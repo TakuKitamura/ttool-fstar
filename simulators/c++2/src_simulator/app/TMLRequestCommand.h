@@ -56,7 +56,7 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParamFunc Pointer to a parameter function
-	\param statParam Static parameter if applicable 
+	\param iStatParam Static parameter if applicable 
 	*/
 	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam = Parameter<ParamType>(0,0,0));
 	void execute();

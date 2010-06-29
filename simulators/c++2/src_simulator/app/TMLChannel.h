@@ -64,7 +64,7 @@ public:
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
-	\param iPrio Priority of the channel
+	\param iPriority Priority of the channel
     	*/
 	TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority);
 	///Destructor

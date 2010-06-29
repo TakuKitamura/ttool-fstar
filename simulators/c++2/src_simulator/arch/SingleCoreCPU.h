@@ -138,6 +138,10 @@ protected:
 	\param iTimeSlice CPU Time slice granted by the scheduler
 	*/
 	void calcStartTimeLength(TMLTime iTimeSlice);
+	///Determines the correct bus master of this CPU connected to the same bus as bus master iDummy
+	/**
+	\param iDummy Dummy Bus Master
+	*/
 	BusMaster* getMasterForBus(BusMaster* iDummy);
 	/////List of all tasks running on the CPU
 	//TaskList _taskList;

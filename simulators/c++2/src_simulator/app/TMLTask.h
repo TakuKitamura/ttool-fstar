@@ -69,7 +69,8 @@ public:
       	\param iID ID of the Task
 	\param iPriority Priority of the task
 	\param iName Name of the task
-	\param iCPU pointer to the CPU which executes the task
+	\param iCPU Pointer to the CPUs the task is mapped onto
+	\param iNoOfCPUs Number of CPUs
     	*/
 	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
 	///Destructor

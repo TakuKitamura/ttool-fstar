@@ -101,7 +101,12 @@ public:
 		return os;
 	}
 	virtual std::string toString() const =0;
+	///Signals that the last scheduled transaction has been selected by the given device
+	/**
+	\param iDevice Pointer to the device
+	*/
 	virtual void transWasScheduled(SchedulableDevice* iDevice) {}
+	///Signals that the last scheduled transaction is not selected by the device any more
 	virtual void resetScheduledFlag(){
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->resetScheduledFlag();
 	}

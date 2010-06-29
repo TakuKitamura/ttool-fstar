@@ -110,11 +110,16 @@ public:
 		SchedulableDevice::writeObject(os);
 		return os;
 	}
+	///Invalidate schedule of CPU
 	void setRescheduleFlag(){
 		_schedulingNeeded=true;
 		_scheduler->resetScheduledFlag();
 	}
 
+	///Truncates current transaction if schedule is invalid
+	/**
+	\param iTime Truncation time
+	*/
 	void truncateIfNecessary(TMLTime iTime){
 		if(_schedulingNeeded && getNextTransaction()!=0){
 			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
@@ -124,6 +129,7 @@ public:
 		}
 	}
 
+	///Reschedules CPU if schedule is invalid
 	void rescheduleIfNecessary(){
 		if(_schedulingNeeded){
 			//std::cout << "rescheduleIfNecessary for CPU " << _name << "\n";

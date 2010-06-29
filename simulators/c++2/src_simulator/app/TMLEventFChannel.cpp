@@ -56,6 +56,7 @@ void TMLEventFChannel::testWrite(TMLTransaction* iTrans){
 void TMLEventFChannel::testRead(TMLTransaction* iTrans){
 	_readTrans=iTrans;
 	_readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	_readTrans->setChannel(this);	//NEW!!!!
 	_underflow = (_content==0);
 }
 

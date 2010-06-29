@@ -136,6 +136,7 @@ public:
 	///Sets the scheduler object
 	/**
 	\param iScheduler Pointer to the scheduler object 
+	\param iDelScheduler Determines whether the scheduler is destroyed upon destruction of the device
 	*/
 	void setScheduler(WorkloadSource* iScheduler, bool iDelScheduler=true){ _scheduler=iScheduler; _deleteScheduler=iDelScheduler;}
 	///Returns a pointer to the scheduler object
