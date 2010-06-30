@@ -443,11 +443,15 @@ public class TMLTextSpecification {
 		} else if (elt instanceof TMLSelectEvt) {
 			code = "SELECTEVT" + CR;
 			for(i=0; i<elt.getNbNext(); i++) {
-				code += "CASE ";
+				try {
 				tmlevt = (TMLActivityElementEvent)(elt.getNextElement(i));
+				code += "CASE ";
 				code += tmlevt.getEvent().getName() + " " + tmlevt.getAllParams(" ") + CR;
 				code += makeBehavior(task, elt.getNextElement(i).getNextElement(0));
 				code += "ENDCASE" + CR;
+				} catch (Exception e) {
+					TraceManager.addError("Non-event receiving following a select event operator");
+				}
 			}
 			code += "ENDSELECTEVT" + CR;
 			return code;
