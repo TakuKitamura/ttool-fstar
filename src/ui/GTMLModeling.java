@@ -178,6 +178,31 @@ public class GTMLModeling  {
 			} catch (MalformedTMLDesignException mtmlde) {
 				System.out.println("Modeling error:" + mtmlde.getMessage());
 			}
+			
+			TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmlm);
+			syntax.checkSyntax();
+			
+			CheckingError ce;
+			int type;
+			TGComponent tgc;
+			
+			if (syntax.hasErrors() >0) {
+				for(TMLError error: syntax.getErrors()) {
+					//System.out.println("Adding checking error");
+					if (error.type == TMLError.ERROR_STRUCTURE) {
+						type = CheckingError.STRUCTURE_ERROR;
+					} else {
+						type = CheckingError.BEHAVIOR_ERROR;
+					}
+					ce = new CheckingError(type, error.message);
+					tgc = listE.getTG(error.element);
+					ce.setTDiagramPanel(tgc.getTDiagramPanel());
+					ce.setTGComponent(tgc);
+					ce.setTMLTask(error.task);
+					checkingErrors.add(ce);
+					
+				}
+			}
 		}
 		
         return tmlm;
