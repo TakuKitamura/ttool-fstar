@@ -56,6 +56,8 @@ public class AvatarRelation extends AvatarElement {
     
     public AvatarBlock block1, block2;
 	private LinkedList<AvatarSignal> signals1, signals2;
+	private boolean blocking, asynchronous;
+	private int sizeOfFIFO;
   
 	
     public AvatarRelation(String _name, AvatarBlock _block1, AvatarBlock _block2, Object _referenceObject) {
@@ -64,7 +66,27 @@ public class AvatarRelation extends AvatarElement {
 		signals2 = new LinkedList<AvatarSignal>();
 		block1 = _block1;
 		block2 = _block2;
+		blocking = false;
+		sizeOfFIFO = 1024;
+		asynchronous = false;
+		
     }
+	
+	public void setAsynchronous(boolean _b) {
+		asynchronous = _b;
+	}
+	
+	public void setBlocking(boolean _b) {
+		blocking = _b;
+	}
+	
+	public void setSizeOfFIFO(int _sizeOfFIFO) {
+		sizeOfFIFO = _sizeOfFIFO;
+	}
+	
+	public boolean isAsynchronous() {
+		return asynchronous;
+	}
 	
 
 	

@@ -73,6 +73,10 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 	protected LinkedList<String> inSignalsAtDestination;
 	protected LinkedList<String> outSignalsAtOrigin;
 	
+	protected boolean asynchronous;
+	protected int sizeOfFIFO;
+	protected boolean blockingFIFO;
+	
 	
     
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -80,6 +84,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
         myImageIcon = IconManager.imgic202;
         value = "";
         editable = true;
+		
 		oldScaleFactor = tdp.getZoom();
 		inSignalsAtOrigin = new LinkedList<String>();
 		inSignalsAtDestination = new LinkedList<String>();
@@ -95,16 +100,37 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
         }*/
 		
 		//g.drawLine(x1, y1, x2, y2);
+		Color col = g.getColor();
 		int cz = (int)(tdp.getZoom() * c);
+		if (isAsynchronous()) {
+			g.setColor(Color.WHITE);
+		}
 		g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
 		g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
-		
-		Point p = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
-		if (p == null) {
-			//System.out.println("null point");
-		} else {
-			g.drawLine(x1, y1, p.x, p.y);
+		g.setColor(col);
+		if (isAsynchronous()) {
+			g.drawRect(x2-(cz/2), y2-(cz/2), cz, cz);
+			g.drawRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
+			if (isBlocking()) {
+				g.drawLine(x2-(cz/2), y2-(cz/2), x2-(cz/2)+cz, y2-(cz/2)+cz);
+				g.drawLine(x2-(cz/2), y2-(cz/2)+cz, x2-(cz/2)+cz, y2-(cz/2));
+				g.drawLine(p1.getX()-(cz/2), p1.getY()+(cz/2), p1.getX()+(cz/2), p1.getY()-(cz/2));
+				g.drawLine(p1.getX()-(cz/2), p1.getY()-(cz/2), p1.getX()+(cz/2), p1.getY()+(cz/2));
+			}
 		}
+		
+		Point p11 = GraphicLib.intersectionRectangleSegment(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz, x1, y1, x2, y2);
+		if (p11 == null) {
+			p11 = new Point(p1.getX(), p1.getY());
+			//System.out.println("null point");
+		} 
+		Point p22 = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
+		if (p22 == null) {
+			p22 = new Point(p2.getX(), p2.getY());
+			//System.out.println("null point");
+		}
+		
+		g.drawLine(p11.x, p11.y, p22.x, p22.y);
 		
 		Font f = g.getFont();
 		Font fold = f;
@@ -205,7 +231,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		Vector v = getAssociationSignals();
 		
 		JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
-        jdas.setSize(750, 400);
+        jdas.setSize(750, 500);
         GraphicLib.centerOnParent(jdas);
         jdas.show(); // blocked until dialog has been closed
 		
@@ -237,6 +263,21 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 				}
 			}
 		}
+		
+		asynchronous = jdas.isAsynchronous();
+		blockingFIFO = jdas.isBlocking();
+		
+		try {
+			sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
+			sizeOfFIFO = Math.max(1, sizeOfFIFO);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(frame,
+                "Unvalid FIFO size: " + jdas.getSizeOfFIFO(),
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                return false;
+		}
+		
 		return true;
     }
 	
@@ -262,6 +303,11 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
             sb.append(oso);
             sb.append("\" />\n");
 		}
+		sb.append("<FIFOType asynchronous=\"");
+		sb.append(asynchronous);
+		sb.append("\" size=\"" + sizeOfFIFO);
+		sb.append("\" blocking=\"" + blockingFIFO);
+		sb.append("\" />\n");
 		
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -272,7 +318,11 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
             NodeList nli;
             Node n1, n2;
             Element elt;
-			String val;
+			String val, val1, val2;
+			sizeOfFIFO = 1024;
+			blockingFIFO = false;
+			asynchronous = false;
+			
             
             //System.out.println("Loading attributes");
             //System.out.println(nl.toString());
@@ -313,6 +363,38 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
                                 
                                 if ((val != null) && (!(val.equals("null")))) {
                                     outSignalsAtOrigin.add(val);
+                                }
+							}
+							if (elt.getTagName().equals("FIFOType")) {
+								val = elt.getAttribute("asynchronous");
+								val1 = elt.getAttribute("size");
+								val2 = elt.getAttribute("blocking");
+                                
+                                if ((val != null) && (!(val.equals("null")))) {
+									if (val.trim().toLowerCase().compareTo("true") == 0) {
+										asynchronous = true;
+									} else {
+										asynchronous = false;
+									}
+                                    
+                                }
+								
+								if ((val1 != null) && (!(val1.equals("null")))) {
+									try {
+										sizeOfFIFO = Integer.decode(val1).intValue();
+									} catch(Exception e) {
+										sizeOfFIFO = 1024;
+									}
+								}
+								
+								
+                                if ((val2 != null) && (!(val2.equals("null")))) {
+									if (val2.trim().toLowerCase().compareTo("true") == 0) {
+										blockingFIFO = true;
+									} else {
+										blockingFIFO = false;
+									}
+                                    
                                 }
 							}
                         }
@@ -496,6 +578,18 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		}
 		
 		return _s.substring(0, index).trim();
+	}
+	
+	public boolean isAsynchronous() {
+		return asynchronous;
+	}
+	
+	public int getSizeOfFIFO() {
+		return sizeOfFIFO;
+	}
+	
+	public boolean isBlocking() {
+		return blockingFIFO;
 	}
 	
     

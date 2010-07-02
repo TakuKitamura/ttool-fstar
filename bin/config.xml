@@ -42,18 +42,14 @@
 <SystemCCodeInteractiveExecuteCommand data="/homes/apvrille/TechTTool/SystemCCode/generated/run.x -server" />
 <TMLCodeDirectory data="/Users/ludovicapvrille/TTool/tmlcode" />
 <GTKWavePath data="/opt/local/bin/gtkwave" />
-<<<<<<< .mine
 <VCDPath data="/Users/ludovicapvrille/TTool/vcd/" />
-=======
-<VCDPath data="/Users/ludovicapvrille/TTool/vcd" />
->>>>>>> .r2431
 <UPPAALCodeDirectory data="/Users/ludovicapvrille/TTool/uppaal/" />
-<UPPAALVerifierPath data="/Applications/uppaal-4.0.7-aca/verifyta" />
+<UPPAALVerifierPath data="/Applications/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="/opt/local/bin/gtkwave /Users/ludovicapvrille/simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/Applications/uppaal-4.0.7-aca/uppaal /Users/ludovicapvrille/TTool/uppaal/spec.xml"/>
+<ExternalCommand2 data="open /Applications/uppaal-4.0.11/UPPAAL.app /Users/ludovicapvrille/TTool/uppaal/spec.xml"/>
 
 <LastWindowAttributes x="367" y="47" width="1094" height="924" max="false" />
 

@@ -712,6 +712,12 @@ public class AvatarDesignPanelTranslator {
 						TraceManager.addDev("null gates in AVATAR relation: " + name1 + " " + name2);
 					}
 				}
+				
+				// Attribute of the relation
+				r.setBlocking(port.isBlocking());
+				r.setAsynchronous(port.isAsynchronous());
+				r.setSizeOfFIFO(port.getSizeOfFIFO());
+				
 				_as.addRelation(r);
 			}
 		}

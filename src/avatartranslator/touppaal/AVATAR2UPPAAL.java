@@ -68,6 +68,8 @@ public class AVATAR2UPPAAL {
 	
 	private LinkedList gatesNotSynchronized; // String
 	private LinkedList gatesSynchronized;
+	private LinkedList gatesAsynchronized;
+	
 	private int nbOfIntParameters, nbOfBooleanParameters;
 	
 	private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash; 
@@ -154,6 +156,7 @@ public class AVATAR2UPPAAL {
 		gatesNotSynchronized = new LinkedList();
 		gatesNotSynchronized.add("makeChoice");
 		gatesSynchronized = new LinkedList();
+		gatesAsynchronized = new LinkedList();
 		
 		// Deal with blocks
 		translateBlocks();
@@ -234,14 +237,44 @@ public class AVATAR2UPPAAL {
 	public void translationRelations() {
 		AvatarSignal si1, sig2;
 		for(AvatarRelation ar: avspec.getRelations()) {
-			for(int i=0; i<ar.nbOfSignals(); i++) {
-				gatesSynchronized.add(relationToString(ar, i));
+			if (ar.isAsynchronous()) {
+				for(int i=0; i<ar.nbOfSignals(); i++) {
+					gatesAsynchronized.add(relationToString(ar, i, 0));
+					gatesAsynchronized.add(relationToString(ar, i, 1));
+				}
+			} else {
+				for(int i=0; i<ar.nbOfSignals(); i++) {
+					gatesSynchronized.add(relationToString(ar, i));
+				}
 			}
 		}
 	}
 	
+	
+	// For synchronous relations
 	public String relationToString(AvatarRelation _ar, int _index) {
 		return _ar.block1.getName() + "_" + _ar.getSignal1(_index).getName() + "__" + _ar.block2.getName() + "_" + _ar.getSignal2(_index).getName();
+	}
+	
+	// For asynchronous relations
+	public String relationToString(AvatarRelation _ar, int _index, int _indexOfBlock) {
+		String signalName;
+		AvatarSignal sig;
+		if (_indexOfBlock == 0) {
+			sig = _ar.getSignal1(_index);
+			signalName = _ar.block1.getName() + "_" + sig.getName() + "__";
+		} else {
+			sig = _ar.getSignal2(_index);
+			signalName = _ar.block2.getName() + "_" + sig.getName() + "__";
+		}
+		
+		if (sig.isIn()) {
+			signalName += "rd";
+		} else {
+			signalName += "wr";
+		}
+		
+		return signalName;
 	}
 	
 	public String signalToUPPAALString(AvatarSignal _as) {
@@ -319,6 +352,8 @@ public class AVATAR2UPPAAL {
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
 			//spec.addGlobalDeclaration("int " + action + TURTLE2UPPAAL.SYNCID + " = 0;\n");
 		}
+		
+		
 	}
 	
 	public void makeSynchronized() {
@@ -326,10 +361,17 @@ public class AVATAR2UPPAAL {
 			return;
 		}
 		
-		spec.addGlobalDeclaration("\n//Declarations used for synchronized gates\n");
+		spec.addGlobalDeclaration("\n//Declarations for synchronous channels\n");
 		
 		String action;
 		ListIterator iterator = gatesSynchronized.listIterator();
+		while(iterator.hasNext()) {
+			action = (String)(iterator.next());
+			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
+		}
+		
+		spec.addGlobalDeclaration("\n//Declarations for asynchronous channels\n");
+		iterator = gatesAsynchronized.listIterator();
 		while(iterator.hasNext()) {
 			action = (String)(iterator.next());
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");

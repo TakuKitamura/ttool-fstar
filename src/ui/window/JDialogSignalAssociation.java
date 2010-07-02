@@ -63,7 +63,11 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	private Vector available1, available2;
 	private AvatarBDPortConnector connector;
     
-    private JPanel panel1, panel2;
+	private JRadioButton synchronous, asynchronous;
+	private JLabel labelFIFO;
+	private JTextField sizeOfFIFO;
+	private JCheckBox blocking;
+    private JPanel panel1, panel2, panel3;
 	
 	private boolean cancelled = false;
     
@@ -112,9 +116,11 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
+		GridBagLayout gridbag3 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
+		GridBagConstraints c3 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -130,6 +136,11 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing Signals"));
         panel2.setPreferredSize(new Dimension(300, 250));
+		
+		panel3 = new JPanel();
+        panel3.setLayout(gridbag3);
+        panel3.setBorder(new javax.swing.border.TitledBorder("Connector type"));
+        panel3.setPreferredSize(new Dimension(600, 100));
         
         // first line panel1
         c1.weighty = 1.0;
@@ -206,7 +217,39 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         removeButton = new JButton("Remove signals");
         removeButton.addActionListener(this);
         panel2.add(removeButton, c2);
-        
+		
+		// panel3
+		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c3.fill = GridBagConstraints.BOTH;
+        c3.gridheight = 1;
+        c3.weighty = 1;
+        c3.weightx = 10.0;
+		synchronous = new JRadioButton("synchronous");
+		synchronous.addActionListener(this);
+        panel3.add(synchronous, c3);
+		asynchronous = new JRadioButton("asynchronous");
+		asynchronous.addActionListener(this);
+        panel3.add(asynchronous, c3);
+		ButtonGroup bt = new ButtonGroup();
+		bt.add(synchronous);
+		bt.add(asynchronous);
+		asynchronous.setSelected(connector.isAsynchronous());
+		synchronous.setSelected(!connector.isAsynchronous());
+		
+		c3.gridwidth = 3;
+		labelFIFO = new JLabel("Size of FIFO:");
+		panel3.add(labelFIFO, c3);
+		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+		sizeOfFIFO = new JTextField(""+connector.getSizeOfFIFO());
+		panel3.add(sizeOfFIFO, c3);
+		
+		blocking = new JCheckBox("Blocking on write when FIFO is full");
+		blocking.setSelected(connector.isBlocking());
+		panel3.add(blocking, c3);
+		
+		updateSynchronousElements();
+		
+		
         // main panel;
         c0.gridwidth = 1;
         c0.gridheight = 10;
@@ -216,6 +259,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
+		c.add(panel3, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -250,8 +294,19 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
             updateAddButton();
         } else if (evt.getSource() == signalsBlock2) {
             updateAddButton();
-        }
+        } else if (evt.getSource() == synchronous) {
+			updateSynchronousElements();
+		} else if (evt.getSource() == asynchronous) {
+			updateSynchronousElements();
+		}
     }
+	
+	private void updateSynchronousElements() {
+		boolean b = asynchronous.isSelected();
+		labelFIFO.setEnabled(b);
+		sizeOfFIFO.setEnabled(b);
+		blocking.setEnabled(b);
+	}
 	
 	private void updateAddButton() {
 		TraceManager.addDev("updateAddButton");
@@ -382,5 +437,17 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
             }
         }
     }
+	
+	public boolean isAsynchronous() {
+		return asynchronous.isSelected();
+	}
+	
+	public String getSizeOfFIFO() {
+		return sizeOfFIFO.getText();
+	}
+	
+	public boolean isBlocking() {
+		return blocking.isSelected();
+	}
     
 }
