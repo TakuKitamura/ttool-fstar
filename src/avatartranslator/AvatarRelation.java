@@ -72,6 +72,10 @@ public class AvatarRelation extends AvatarElement {
 		
     }
 	
+	public boolean hasSignal() {
+		return (signals1.constains(as) || signals2.contains(as));
+	}
+	
 	public void setAsynchronous(boolean _b) {
 		asynchronous = _b;
 	}

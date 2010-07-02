@@ -701,6 +701,17 @@ public class AVATAR2UPPAAL {
 	}
 	
 	public String [] manageSynchro(AvatarBlock _block, AvatarActionOnSignal _aaos) {
+		AvatarSignal as = _aaos.getSignal();
+		
+		if (spec.isASynchronousSignal(as)) {
+			return manageSynchroSynchronous(_block, _aaos);
+		} else {
+			return  manageSynchroSynchronous(_block, _aaos);
+		}
+	}
+	
+	
+	public String [] manageSynchroSynchronous(AvatarBlock _block, AvatarActionOnSignal _aaos) {
 		String []result = new String[2];
 		String val;
 		

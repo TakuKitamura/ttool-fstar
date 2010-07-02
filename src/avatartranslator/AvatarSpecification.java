@@ -72,6 +72,17 @@ public class AvatarSpecification extends AvatarElement {
 		return relations;
 	}
 	
+	public void isASynchronousSignal(AvatarSignal as) {
+		for(AvatarRelation ar: relations) {
+			if (ar.hasSignal(as)) {
+				return !(as.isAsynchronous());
+			}
+		}
+		
+		return false;
+		
+	}
+	
 	public void addBlock(AvatarBlock _block) {
 		blocks.add(_block);
 	}
