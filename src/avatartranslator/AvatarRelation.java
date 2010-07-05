@@ -92,6 +92,14 @@ public class AvatarRelation extends AvatarElement {
 		return asynchronous;
 	}
 	
+	public int getSizeOfFIFO() {
+		return sizeOfFIFO;
+	}
+	
+	public boolean isBlocking() {
+		return blocking;
+	}
+	
 
 	
 	public void addSignals(AvatarSignal _sig1, AvatarSignal _sig2)   {
@@ -109,6 +117,42 @@ public class AvatarRelation extends AvatarElement {
 	
 	public AvatarSignal getSignal2(int _index) {
 		return signals2.get(_index);
+	}
+	
+	public AvatarSignal getInSignal(int _index) {
+		AvatarSignal sig1 = signals1.get(_index);
+		if (sig1.isIn()) {
+			return sig1;
+		}
+		
+		return getSignal2(_index);
+	}
+	
+	public AvatarBlock getInBlock(int _index) {
+		AvatarSignal sig1 = signals1.get(_index);
+		if (sig1.isIn()) {
+			return block1;
+		}
+		
+		return block2;
+	}
+	
+	public AvatarSignal getOutSignal(int _index) {
+		AvatarSignal sig1 = signals1.get(_index);
+		if (sig1.isOut()) {
+			return sig1;
+		}
+		
+		return getSignal2(_index);
+	}
+	
+	public AvatarBlock getOutBlock(int _index) {
+		AvatarSignal sig1 = signals1.get(_index);
+		if (sig1.isOut()) {
+			return block1;
+		}
+		
+		return block2;
 	}
 	
 	public String toString() {

@@ -1595,7 +1595,7 @@ public class GTURTLEModeling {
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		avatarspec = adpt.generateAvatarSpecification(blocks);
 		optimizeAvatar = _optimize;
-		TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
+		//TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
 		tmState = 3;
 
 		listE = adpt.getCorrespondanceTGElement();

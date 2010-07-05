@@ -231,7 +231,7 @@ public class UPPAALTemplate {
 				if (tr.destinationLoc == ut.sourceLoc) {
 					tr.destinationLoc = ut.destinationLoc;
 				}
-				TraceManager.addDev("Removed transition: " + ut + " and location:" + ut.sourceLoc);
+				//TraceManager.addDev("Removed transition: " + ut + " and location:" + ut.sourceLoc);
 			}
 			locations.remove(ut.sourceLoc);
 			transitions.remove(ut);

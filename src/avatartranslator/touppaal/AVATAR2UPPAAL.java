@@ -123,6 +123,7 @@ public class AVATAR2UPPAAL {
 	public final static String GSYNCID = "__gsync__";*/
 	
 	private UPPAALTemplate templateNotSynchronized;
+	private UPPAALTemplate templateAsynchronous;
 	
 	public AVATAR2UPPAAL(AvatarSpecification _avspec) {
 		avspec = _avspec;
@@ -150,7 +151,7 @@ public class AVATAR2UPPAAL {
 		
 		avspec.removeCompositeStates();
 		
-		TraceManager.addDev("Spec:" + avspec.toString());
+		//TraceManager.addDev("Spec:" + avspec.toString());
 		
 		UPPAALLocation.reinitID();
 		gatesNotSynchronized = new LinkedList();
@@ -164,6 +165,7 @@ public class AVATAR2UPPAAL {
 		translationRelations();
 		
 		makeNotSynchronized();
+		makeAsynchronous();
 		makeSynchronized();
 		
 		makeGlobal();
@@ -239,8 +241,8 @@ public class AVATAR2UPPAAL {
 		for(AvatarRelation ar: avspec.getRelations()) {
 			if (ar.isAsynchronous()) {
 				for(int i=0; i<ar.nbOfSignals(); i++) {
-					gatesAsynchronized.add(relationToString(ar, i, 0));
-					gatesAsynchronized.add(relationToString(ar, i, 1));
+					gatesAsynchronized.add(relationToString(ar, i, false));
+					gatesAsynchronized.add(relationToString(ar, i, true));
 				}
 			} else {
 				for(int i=0; i<ar.nbOfSignals(); i++) {
@@ -257,16 +259,20 @@ public class AVATAR2UPPAAL {
 	}
 	
 	// For asynchronous relations
-	public String relationToString(AvatarRelation _ar, int _index, int _indexOfBlock) {
+	public String relationToString(AvatarRelation _ar, int _index, boolean inSignal) {
 		String signalName;
 		AvatarSignal sig;
-		if (_indexOfBlock == 0) {
-			sig = _ar.getSignal1(_index);
-			signalName = _ar.block1.getName() + "_" + sig.getName() + "__";
+		AvatarBlock block;
+		
+		if (inSignal) {
+			sig = _ar.getInSignal(_index);
+			block = _ar.getInBlock(_index);
 		} else {
-			sig = _ar.getSignal2(_index);
-			signalName = _ar.block2.getName() + "_" + sig.getName() + "__";
+			sig = _ar.getOutSignal(_index);
+			block = _ar.getOutBlock(_index);
 		}
+		
+		signalName = block.getName() + "_" + sig.getName() + "__";
 		
 		if (sig.isIn()) {
 			signalName += "rd";
@@ -282,7 +288,16 @@ public class AVATAR2UPPAAL {
 		if (ar == null) {
 			return null;
 		}
-		return relationToString(ar, ar.hasSignal(_as));
+		
+		if (ar.isAsynchronous()) {
+			if (_as.isIn()) {
+				return relationToString(ar, ar.hasSignal(_as), true);
+			} else {
+				return relationToString(ar, ar.hasSignal(_as), false);
+			}
+		} else {
+			return relationToString(ar, ar.hasSignal(_as));
+		}
 	}
 	
 	public UPPAALTemplate newBlockTemplate(AvatarBlock _block, int id) {
@@ -334,7 +349,7 @@ public class AVATAR2UPPAAL {
 		initXY();
 		
 		templateNotSynchronized = new UPPAALTemplate();
-		templateNotSynchronized.setName("Actions__not__synchronized");
+		templateNotSynchronized.setName("Nonsync__actions");
 		spec.addTemplate(templateNotSynchronized);
 		UPPAALLocation loc = addLocation(templateNotSynchronized);
 		templateNotSynchronized.setInitLocation(loc);
@@ -356,6 +371,94 @@ public class AVATAR2UPPAAL {
 		
 	}
 	
+	public void makeAsynchronous() {
+		if (gatesAsynchronized.size() == 0) {
+			return;
+		}
+		
+		initXY();
+		
+		templateAsynchronous = new UPPAALTemplate();
+		templateAsynchronous.setName("Async__channels");
+		spec.addTemplate(templateAsynchronous);
+		UPPAALLocation loc = addLocation(templateAsynchronous);
+		templateAsynchronous.setInitLocation(loc);
+		UPPAALTransition tr;
+		
+		spec.addGlobalDeclaration("\n//Declarations for asynchronous channels\n");
+		String action;
+		ListIterator iterator = gatesAsynchronized.listIterator();
+		while(iterator.hasNext()) {
+			action = (String)(iterator.next());
+			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
+		}
+		
+		
+		for(AvatarRelation ar: avspec.getRelations()) {
+			if (ar.isAsynchronous() && (ar.nbOfSignals() > 0)) {
+				for(int i=0; i<ar.nbOfSignals(); i++) { 
+					AvatarSignal sig1 = ar.getOutSignal(i);
+					AvatarSignal sig2 = ar.getInSignal(i);
+					AvatarBlock block = ar.getOutBlock(i);
+					String name0 = block.getName() + "__" + sig1.getName();
+					String enqueue, dequeue;
+					
+					enqueue = "\nvoid enqueue__" + name0 + "(){\n";
+					dequeue = "\nvoid dequeue__" + name0 + "(){\n";
+					
+					// Lists
+					templateAsynchronous.addDeclaration("\n// Asynchronous relations:" + ar.block1.getName() + "/" + sig1.getName() + " -> " + ar.block2.getName() + "/" + sig2.getName() + "\n");
+					templateAsynchronous.addDeclaration("\nint size__" + name0 + " = 0;\n");
+					templateAsynchronous.addDeclaration("int head__" + name0 + " = 0;\n");
+					templateAsynchronous.addDeclaration("int tail__" + name0 + " = 0;\n");
+					
+					int cpt = 0;
+					String listName;
+					
+					for(AvatarAttribute aa: sig1.getListOfAttributes()) {
+						listName = "list__" + name0 + "_" + cpt;
+						
+						if (aa.isInt() || aa.isNat()) {
+							templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
+							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt + ";\n";
+							dequeue += "  " + ACTION_INT + cpt + " = " + listName +  "[tail__" + name0 + "] " + ";\n";
+						} else {
+							templateAsynchronous.addDeclaration("bool " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
+							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt + ";\n";
+							dequeue += "  " + ACTION_BOOL + cpt + " = " + listName +  "[tail__" + name0 + "] " + ";\n";
+						}
+						cpt ++;
+					}
+					enqueue += "  tail__" + name0 + " = (tail__" + name0 + "+1) %" + ar.getSizeOfFIFO() + ";\n";
+					enqueue += "  size__" + name0 + "++;\n";
+					enqueue += "}\n";
+					dequeue += "  head__" + name0 + " = (head__" + name0 + "+1) %" + ar.getSizeOfFIFO() + ";\n";
+					dequeue += "  size__" + name0 + "--;\n";
+					dequeue += "}\n";
+					templateAsynchronous.addDeclaration(enqueue);
+					templateAsynchronous.addDeclaration(dequeue);
+					
+					tr = addTransition(templateAsynchronous, loc, loc);
+					setSynchronization(tr, signalToUPPAALString(sig1)+"?");
+					setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
+					setAssignment(tr, "enqueue__" + name0 + "()"); 
+					
+					tr = addTransition(templateAsynchronous, loc, loc);
+					setSynchronization(tr, signalToUPPAALString(sig2)+"!");
+					setAssignment(tr, "dequeue__" + name0 + "()"); 
+					setGuard(tr, "size__" + name0 + "> 0");
+					
+					if (!ar.isBlocking()) {
+						tr = addTransition(templateAsynchronous, loc, loc);
+						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
+						setGuard(tr, "size__" + name0 + " ==" +  ar.getSizeOfFIFO());
+						setAssignment(tr, "dequeue__" + name0 + "()\n enqueue__" + name0 + "()"); 
+					}
+				}
+			}
+		}
+	}
+	
 	public void makeSynchronized() {
 		if (gatesSynchronized.size() == 0) {
 			return;
@@ -370,12 +473,7 @@ public class AVATAR2UPPAAL {
 			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
 		}
 		
-		spec.addGlobalDeclaration("\n//Declarations for asynchronous channels\n");
-		iterator = gatesAsynchronized.listIterator();
-		while(iterator.hasNext()) {
-			action = (String)(iterator.next());
-			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
-		}
+		
 	}
 	
 	public void makeBehaviour(AvatarBlock _block, UPPAALTemplate _template) {
@@ -702,16 +800,79 @@ public class AVATAR2UPPAAL {
 	
 	public String [] manageSynchro(AvatarBlock _block, AvatarActionOnSignal _aaos) {
 		AvatarSignal as = _aaos.getSignal();
+		return manageSynchroSynchronous(_block, _aaos);
 		
-		if (avspec.isASynchronousSignal(as)) {
-			return manageSynchroSynchronous(_block, _aaos);
+		
+		/*if (avspec.isASynchronousSignal(as)) {
+			
 		} else {
-			return  manageSynchroSynchronous(_block, _aaos);
-		}
+			return  manageSynchroAsynchronous(_block, _aaos);
+		}*/
 	}
 	
 	
 	public String [] manageSynchroSynchronous(AvatarBlock _block, AvatarActionOnSignal _aaos) {
+		String []result = new String[2];
+		String val;
+		
+		int nbOfInt = 0;
+		int nbOfBool = 0;
+		
+		AvatarAttribute aa;
+		
+		result[0] = "";
+		result[1] = "";
+		
+		String signal = signalToUPPAALString(_aaos.getSignal());
+		
+		if (signal == null) {
+			return result;
+		}
+		
+		if (_aaos.isSending()) {
+			signal += "!";
+		} else {
+			signal += "?";
+		}
+		
+		result[0] = signal;
+		
+		TraceManager.addDev("Nb of params on signal " + signal + ":" + _aaos.getNbOfValues());
+		
+		for(int i=0; i<_aaos.getNbOfValues(); i++) {
+			val = _aaos.getValue(i);
+			aa = _block.getAvatarAttributeWithName(val);
+			if (aa != null) {
+				if (aa.isInt() || aa.isNat()) {
+					if (_aaos.isSending()) {
+						result[1] = result[1] + ACTION_INT + nbOfInt + " = " + aa.getName();
+					} else {
+						result[1] = result[1] + aa.getName() + " = " + ACTION_INT + nbOfInt;
+					}
+					nbOfInt ++;
+				} else {
+					if (_aaos.isSending()) {
+						result[1] = result[1] + ACTION_INT + nbOfBool + " = " + aa.getName();
+					} else {
+						result[1] = result[1] + aa.getName() + " = " + ACTION_INT + nbOfBool;
+					}
+					nbOfBool ++;
+				}
+				if (i != (_aaos.getNbOfValues() -1)) {
+					result[1] += ", ";
+				}
+			} else {
+				TraceManager.addDev("Null param:" + _aaos.getValue(i));
+			}
+		}
+			
+		nbOfIntParameters = Math.max(nbOfIntParameters, nbOfInt);
+		nbOfBooleanParameters = Math.max(nbOfBooleanParameters, nbOfBool);
+		
+		return result;
+	}
+	
+	public String [] manageSynchroAsynchronous(AvatarBlock _block, AvatarActionOnSignal _aaos) {
 		String []result = new String[2];
 		String val;
 		

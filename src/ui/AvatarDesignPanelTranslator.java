@@ -255,10 +255,12 @@ public class AvatarDesignPanelTranslator {
 			for(i=0; i<v0.size(); i++) {
 				tatmp = (TAttribute)(v0.get(i));
 				v.add(_name + "__" + tatmp.getId());
-			}
+				}
 		} else {
 			v.add(_name);
 		}
+		
+		TraceManager.addDev("Size of vector:" + v.size());
 		for(i=0; i<v.size(); i++) {
 			aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
 			if (aa == null) {
@@ -269,7 +271,8 @@ public class AvatarDesignPanelTranslator {
 				addCheckingError(ce);
 				return ;
 			} else {
-				_aaos.addValue(_name);
+				//TraceManager.addDev("-> Adding attr in action on signal in block " + _ab.getName() + ":" + _name + "__" + tatmp.getId());
+				_aaos.addValue((String)(v.get(i)));
 			}
 		}
 		

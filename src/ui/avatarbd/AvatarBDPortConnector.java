@@ -319,7 +319,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
             Node n1, n2;
             Element elt;
 			String val, val1, val2;
-			sizeOfFIFO = 1024;
+			sizeOfFIFO = 4;
 			blockingFIFO = false;
 			asynchronous = false;
 			
