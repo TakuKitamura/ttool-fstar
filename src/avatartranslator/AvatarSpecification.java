@@ -122,7 +122,7 @@ public class AvatarSpecification extends AvatarElement {
 	
 	public void removeCompositeStates() {
 		for(AvatarBlock block: blocks) {
-			block.getStateMachine().removeCompositeStates();
+			block.getStateMachine().removeCompositeStates(block);
 		}
 	}
 	

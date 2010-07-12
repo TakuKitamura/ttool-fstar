@@ -70,6 +70,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		guard = _guard;
 	}
 	
+	public void addGuard(String _g) {
+		guard = "(" + guard + ") and (" + _g + ")";
+	}
+	
 	public int getNbOfAction() {
 		return actions.size();
 	}
@@ -97,6 +101,9 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	}
 	
 	public String getMaxDelay() {
+		if (maxDelay.trim().length() ==0) {
+				return getMinDelay();
+		}
 		return maxDelay;
 	}
 	
@@ -105,34 +112,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	}
 	
 	public String getMaxCompute() {
+		if (maxCompute.trim().length() ==0) {
+				return getMinCompute();
+		}
 		return maxCompute;
 	}
-	
-	public String getTotalMinDelay() {
-		if (minDelay.trim().length() ==0) {
-			return minCompute;
-		}
-		if (minCompute.trim().length() ==0) {
-			return minDelay;
-		}
-		return "(" + minDelay + ")+(" + minCompute + ")";
-	}
-	
-	public String getTotalMaxDelay() {
-		if (maxDelay.trim().length() ==0) {
-			if (maxCompute.trim().length() ==0) {
-				return getTotalMinDelay();
-			} 
-			return maxCompute;
-		}
-		if (maxCompute.trim().length() ==0) {
-			if (maxDelay.trim().length() ==0) {
-				return getTotalMinDelay();
-			} 
-			return maxDelay;
-		}
-		return "(" + maxDelay + ")+(" + maxCompute + ")";
-	}
+
 	
 	public AvatarTransition cloneMe() {
 		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
@@ -174,6 +159,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		actions.remove(0);
 	}
 	
+	public void removeAllActions() {
+		actions.clear();
+	}
+	
 	// No actions
 	//public boolean isAGuardTransition() {
 	//}
@@ -196,10 +185,17 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	}
 	
 	public boolean hasDelay() {
-		if ((minDelay.trim().length() == 0) && (minCompute.trim().length() ==0)) {
+		if (minDelay.trim().length() == 0) {
 			return false;
 		}
 		
+		return true;
+	}
+	
+	public boolean hasCompute() {
+		if (minCompute.trim().length() ==0) {
+			return false;
+		}
 		return true;
 	}
 	

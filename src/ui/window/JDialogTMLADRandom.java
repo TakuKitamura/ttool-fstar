@@ -63,11 +63,12 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
     
     private JPanel panel2;
     private Frame frame;
-    private TMLADRandom random;
+	private String variable, minValue, maxValue;
+	private int functionId;
     
 	
 	// Panel2
-    protected JTextField variable, minValue, maxValue;
+    protected JTextField jvariable, jminValue, jmaxValue;
 	protected JComboBox randomFunction;
 	
     // Main Panel
@@ -75,10 +76,13 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogTMLADRandom(Frame _frame, String _title, TMLADRandom _random) {
+    public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue, int _functionId) {
         super(_frame, _title, true);
         frame = _frame;
-        random = _random;
+        variable = _variable;
+		minValue = _minValue;
+		maxValue = _maxValue;
+		functionId = _functionId;
         
         initComponents();
         myInitComponents();
@@ -115,33 +119,33 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Variable name:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        variable = new JTextField(random.getVariable(), 30);
-        variable.setEditable(true);
-        variable.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(variable, c2);
+        jvariable = new JTextField(variable, 30);
+        jvariable.setEditable(true);
+        jvariable.setFont(new Font("times", Font.PLAIN, 12));
+		panel2.add(jvariable, c2);
  
         c2.gridwidth = 1;
         panel2.add(new JLabel("Minimum value:"), c2);
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        minValue = new JTextField(random.getMinValue(), 30);
-        minValue.setEditable(true);
-        minValue.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(minValue, c2);
+        jminValue = new JTextField(minValue, 30);
+        jminValue.setEditable(true);
+        jminValue.setFont(new Font("times", Font.PLAIN, 12));
+		panel2.add(jminValue, c2);
 		
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Maximum value:"), c2);
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxValue = new JTextField(random.getMaxValue(), 30);
-        maxValue.setEditable(true);
-        maxValue.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(maxValue, c2);
+        jmaxValue = new JTextField(maxValue, 30);
+        jmaxValue.setEditable(true);
+        jmaxValue.setFont(new Font("times", Font.PLAIN, 12));
+		panel2.add(jmaxValue, c2);
         
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Probability function:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         randomFunction = new JComboBox();
         randomFunction.addItem("Uniform");
-		randomFunction.setSelectedIndex(random.getFunctionId());
+		randomFunction.setSelectedIndex(functionId);
         panel2.add(randomFunction, c2);
         
         // main panel;
@@ -196,15 +200,15 @@ public class JDialogTMLADRandom extends javax.swing.JDialog implements ActionLis
     }
 	
 	public String getVariable() {
-        return variable.getText();
+        return jvariable.getText();
     }
     
     public String getMinValue() {
-        return minValue.getText();
+        return jminValue.getText();
     }
 	
 	public String getMaxValue() {
-        return maxValue.getText();
+        return jmaxValue.getText();
     }
     
     public int getFunctionId() {

@@ -72,6 +72,7 @@ public class AvatarSMDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
+		mgui.actions[TGUIAction.ASMD_RANDOM].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 		
@@ -118,6 +119,11 @@ public class AvatarSMDToolBar extends TToolBar {
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ASMD_CHOICE]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ASMD_RANDOM]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		/*this.addSeparator();

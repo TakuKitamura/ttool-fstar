@@ -99,6 +99,10 @@ public class UPPAALTransition {
 	
 	public boolean isAnEmptyTransition() {
 		
+		if (guard == null) {
+			return true;
+		}
+		
 		if (guard.length() > 0) {
 			return false;
 		}

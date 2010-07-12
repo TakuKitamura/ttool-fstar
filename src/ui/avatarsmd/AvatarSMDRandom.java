@@ -36,15 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class TMLADRandom
- * Random operator of a TML activity diagram
- * Creation: 10/06/2008
- * @version 1.0 10/06/2008
+ * Class AvatarSMDRandom
+ * Random operator of an AVATAR State Machine diagram
+ * Creation: 12/07/2010
+ * @version 1.0 12/07/2010
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.tmlad;
+package ui.avatarsmd;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class TMLADRandom extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -69,7 +69,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
 	
 	protected int stateOfError = 0; // Not yet checked
     
-    public TMLADRandom(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarSMDRandom(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 30;
@@ -78,8 +78,8 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+        connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
         
         moveable = true;
         editable = true;
@@ -94,7 +94,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
     }
 	
 	public void makeValue() {
-		valueRandom = variable + " = RANDOM" + functionId + "(" + minValue + ", " + maxValue + ")";
+		valueRandom = variable + " = RANDOM" + functionId + "[" + minValue + ", " + maxValue + "]";
 	}
     
     public void internalDrawing(Graphics g) {
@@ -283,11 +283,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
     
     
     public int getType() {
-        return TGComponentManager.TMLAD_RANDOM;
-    }
-    
-    public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLAD;
+        return TGComponentManager.AVATARSMD_RANDOM;
     }
 	
 	public void setStateAction(int _stateAction) {

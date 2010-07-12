@@ -346,6 +346,7 @@ public class AvatarDesignPanelTranslator {
 		iterator = asmdp.getAllComponentList().listIterator();
 		AvatarSMDReceiveSignal asmdrs;
 		AvatarSMDSendSignal asmdss;
+		AvatarSMDRandom asmdrand;
 		
 		AvatarStateMachine asm = _ab.getStateMachine();
 		avatartranslator.AvatarSignal atas;
@@ -354,11 +355,14 @@ public class AvatarDesignPanelTranslator {
 		AvatarStopState astop;
 		AvatarStartState astart;
 		AvatarState astate;
+		AvatarRandom arandom;
 		int i;
 		String tmp;
 		TAttribute ta;
 		
 		int choiceID = 0;
+		int error;
+		String tmp1, tmp2;
 		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
@@ -493,6 +497,34 @@ public class AvatarDesignPanelTranslator {
 				choiceID ++;
 				asm.addElement(astate);
 				listE.addCor(astate, tgc);
+				
+			// Random
+			} else if (tgc instanceof AvatarSMDRandom) {
+				asmdrand = (AvatarSMDRandom)tgc;
+				arandom = new AvatarRandom("random", tgc);
+				tmp1 = modifyString(asmdrand.getMinValue());
+				error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+				if (error < 0) {
+					makeError(error, tdp, _ab, tgc, "min value of random", tmp1);
+				} 
+				tmp2 = modifyString(asmdrand.getMaxValue());
+				error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp1);
+				if (error < 0) {
+					makeError(error, tdp, _ab, tgc, "max value of random", tmp2);
+				} 
+				arandom.setValues(tmp1, tmp2);
+				arandom.setFunctionId(asmdrand.getFunctionId());
+				
+				tmp1 = modifyString(asmdrand.getVariable());
+				aa = _ab.getAvatarAttributeWithName(tmp1);
+				
+				if (aa == null) {
+					makeError(error, tdp, _ab, tgc, "variable of random", tmp2);
+				}
+				arandom.setVariable(tmp1);
+				
+				asm.addElement(arandom);
+				listE.addCor(arandom, tgc);	
 			
 			// Start state
 			} else if (tgc instanceof AvatarSMDStartState) {
@@ -537,8 +569,6 @@ public class AvatarDesignPanelTranslator {
 		AvatarSMDConnector asmdco;
 		AvatarTransition at;
 		TGComponent tgc1, tgc2;
-		int error;
-		String tmp1, tmp2;
 		Vector <String> vs;
 		
 		while(iterator.hasNext()) {

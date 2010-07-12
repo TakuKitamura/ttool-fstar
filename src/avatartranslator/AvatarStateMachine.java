@@ -92,8 +92,12 @@ public class AvatarStateMachine extends AvatarElement {
 		return sb.toString();
 	}
 	
-	public void removeCompositeStates() {
-		removeAllInternalStartStates();
+	public void removeCompositeStates(AvatarBlock _block) {
+		// Contains in odd index: composite state
+		// even index: new state replacing the start state
+		
+		LinkedList <AvatarState> lists = removeAllInternalStartStates();
+		
 		
 		AvatarTransition at;
 		
@@ -109,11 +113,7 @@ public class AvatarStateMachine extends AvatarElement {
 		removeAllSuperStates();
 	}
 	
-	private void removeallSuperStates() {
-		for(AvatarStateMachineElement element: elements) {
-			element.setState(null);
-		}
-	}
+
 	
 	private AvatarTransition getCompositeTransition() {
 		for(AvatarStateMachineElement element: elements) {
@@ -174,7 +174,7 @@ public class AvatarStateMachine extends AvatarElement {
 		}
 		
 		for(AvatarStateMachineElement element: v) {
-			adaptCompositeTransition(_at, element);
+			adaptCompositeTransition(_at, element, 0);
 		}
 		
 		removeElement(_at);
@@ -182,6 +182,22 @@ public class AvatarStateMachine extends AvatarElement {
 	}
 	
 	private void splitAvatarTransition(AvatarTransition _at) {
+		/*if (_at.hasCompute()) {
+			AvatarState as0 = new AvatarState("splitstate0", null);
+			AvatarState as1 = new AvatarState("splitstate1", null);
+			
+			
+			
+			AvatarTransition at = _at.basicCloneMe();
+			_at.removeAllActions();
+			_at.removeAllNexts();
+			_at.addNext(as);
+			as.addNext(at);
+			addElement(as);
+			addElement(at);
+			splitAvatarTransition(at);
+		}*/
+		
 		if (_at.getNbOfAction() > 1) {
 			AvatarState as = new AvatarState("splitstate", null);
 			AvatarTransition at = _at.basicCloneMe();
@@ -197,7 +213,7 @@ public class AvatarStateMachine extends AvatarElement {
 		}
 	}
 	
-	private void adaptCompositeTransition(AvatarTransition _at, AvatarStateMachineElement _element) {
+	private void adaptCompositeTransition(AvatarTransition _at, AvatarStateMachineElement _element, int _transitionID) {
 		AvatarState as;
 		AvatarTransition at;
 		LinkedList<AvatarStateMachineElement> ll;
@@ -215,9 +231,11 @@ public class AvatarStateMachine extends AvatarElement {
 					at.addNext(_element);
 					as.addNext(at);
 					addElement(as);
+					
 					at = _at.cloneMe();
 					addElement(at);
 					as.addNext(at);
+					
 				} else {
 					// Badly formed machine!
 					TraceManager.addError("Badly formed sm (removing composite transition)");
@@ -272,9 +290,12 @@ public class AvatarStateMachine extends AvatarElement {
 	
 	// All transitions reaching a state that has an internal start state
 	// shall in fact go directly to the nexts of the start state
-	public void removeAllInternalStartStates() {
+	public LinkedList<AvatarState> removeAllInternalStartStates() {
 		// identify allstart state
 		LinkedList<AvatarStartState> ll = new LinkedList<AvatarStartState>();
+		
+		LinkedList<AvatarState> removedinfos = new LinkedList<AvatarState>();
+		
 		for(AvatarStateMachineElement element: elements) {
 			if ((element instanceof AvatarStartState) && (element.getState() != null)) {
 				TraceManager.addDev("-> -> found an internal state state");
@@ -300,15 +321,22 @@ public class AvatarStateMachine extends AvatarElement {
 							TraceManager.addDev("Badly formed state machine");
 						}
 					}
+					
+					removedinfos.add(as.getState());
+					removedinfos.add(as0);
+					
 					// Remove the start state and its next transition
 					removeElement(as);
 					addElement(as0);
+					
 					TraceManager.addDev("-> -> removed an internal state state!");
 				} else {
 					TraceManager.addDev("Badly formed state machine");
 				}
 			}
 		}
+		
+		return removedinfos;
 		
 	}
 	
