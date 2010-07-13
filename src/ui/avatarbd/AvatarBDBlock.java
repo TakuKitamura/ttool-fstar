@@ -498,9 +498,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	protected void setJDialogOptions(JDialogAvatarBlock _jdab) {
         //jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
         _jdab.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        _jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
+        //_jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         _jdab.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 		_jdab.addType(TAttribute.getStringType(TAttribute.INTEGER), true);
+		_jdab.addType(TAttribute.getStringType(TAttribute.TIMER), false);
 		
 		for(String s: tdp.getAllDataTypes()) {
 			_jdab.addType(s, false);
@@ -683,7 +684,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                     valueAtt = "";
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+                                    System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.addElement(ta);
                                 }

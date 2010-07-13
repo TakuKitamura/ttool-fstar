@@ -69,6 +69,7 @@ public class TAttribute {
 	public final static int QUEUE_NAT = 6;
 	public final static int ARRAY_NAT = 7;
 	public final static int INTEGER = 8;
+	public final static int TIMER = 9;
     
     
     private int access;
@@ -200,6 +201,10 @@ public class TAttribute {
 					return true;
 				}
 				return false;
+			case INTEGER:
+				return value.matches("\\d*");
+			case TIMER:
+				return ((value == null) ||(value.equals("")));
             default:
                 return false;
         }
@@ -248,8 +253,10 @@ public class TAttribute {
             return QUEUE_NAT;
         } else if (s.equals("Array_nat")) {
             return ARRAY_NAT;
-        } else if (s.equals("int")) {
-            return ARRAY_NAT;
+        } else if (s.equals("Integer")) {
+            return INTEGER;
+        } else if (s.equals("Timer")) {
+            return TIMER;
         } else if (!s.equals("")) {
             return OTHER;
         }
@@ -291,7 +298,9 @@ public class TAttribute {
 			case ARRAY_NAT:
                 return "Array_nat";
 			case INTEGER:
-                return "int";
+                return "Integer";
+			case TIMER:
+                return "Timer";
             default:
                 return "";
         }

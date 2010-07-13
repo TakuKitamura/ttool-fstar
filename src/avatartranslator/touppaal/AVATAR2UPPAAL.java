@@ -318,7 +318,7 @@ public class AVATAR2UPPAAL {
 		
 		for(i=0; i<_block.attributeNb(); i++) {
 			aa = _block.getAttribute(i);
-			if (aa.isInt() || aa.isNat()) {
+			if (aa.isInt()) {
 				_template.addDeclaration("int ");
 			} else {
 				_template.addDeclaration("bool ");
@@ -418,7 +418,7 @@ public class AVATAR2UPPAAL {
 					for(AvatarAttribute aa: sig1.getListOfAttributes()) {
 						listName = "list__" + name0 + "_" + cpt;
 						
-						if (aa.isInt() || aa.isNat()) {
+						if (aa.isInt()) {
 							templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
 							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt + ";\n";
 							dequeue += "  " + ACTION_INT + cpt + " = " + listName +  "[tail__" + name0 + "] " + ";\n";
@@ -843,7 +843,7 @@ public class AVATAR2UPPAAL {
 				if ((nbOfInt > 0) || (nbOfBool > 0)) {
 					result = result + ",\n";
 				}
-				if (aa.isInt() || aa.isNat()) {
+				if (aa.isInt()) {
 					result = result + ACTION_INT + nbOfInt + " =" + aa.getName();
 					nbOfInt ++;
 				} else {
@@ -930,7 +930,7 @@ public class AVATAR2UPPAAL {
 			val = _aaos.getValue(i);
 			aa = _block.getAvatarAttributeWithName(val);
 			if (aa != null) {
-				if (aa.isInt() || aa.isNat()) {
+				if (aa.isInt()) {
 					if (_aaos.isSending()) {
 						result[1] = result[1] + ACTION_INT + nbOfInt + " = " + aa.getName();
 					} else {
@@ -989,7 +989,7 @@ public class AVATAR2UPPAAL {
 			val = _aaos.getValue(i);
 			aa = _block.getAvatarAttributeWithName(val);
 			if (aa != null) {
-				if (aa.isInt() || aa.isNat()) {
+				if (aa.isInt()) {
 					if (_aaos.isSending()) {
 						result[1] = result[1] + ACTION_INT + nbOfInt + " = " + aa.getName();
 					} else {

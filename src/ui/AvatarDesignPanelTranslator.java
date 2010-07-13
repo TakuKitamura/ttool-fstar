@@ -102,9 +102,11 @@ public class AvatarDesignPanelTranslator {
 		if (_a.getType() == TAttribute.INTEGER){
 			type = AvatarType.INTEGER;
 		} else if (_a.getType() == TAttribute.NATURAL){
-			type = AvatarType.NATURAL;
+			type = AvatarType.INTEGER;
 		} else if (_a.getType() == TAttribute.BOOLEAN) {
 			type = AvatarType.BOOLEAN;
+		} else if (_a.getType() == TAttribute.TIMER) {
+			type = AvatarType.TIMER;
 		}
 		AvatarAttribute aa = new AvatarAttribute(_preName + _a.getId(), type, _a);
 		aa.setInitialValue(_a.getInitialValue());
@@ -138,6 +140,8 @@ public class AvatarDesignPanelTranslator {
 				} else if (a.getType() == TAttribute.NATURAL){
 					addRegularAttribute(ab, a, "");
 				} else if (a.getType() == TAttribute.BOOLEAN) {
+					addRegularAttribute(ab, a, "");
+				} else if (a.getType() == TAttribute.TIMER) {
 					addRegularAttribute(ab, a, "");
 				} else {
 					// other
@@ -220,9 +224,11 @@ public class AvatarDesignPanelTranslator {
 					if (ta.getType() == TAttribute.INTEGER){
 						type = AvatarType.INTEGER;
 					} else if (ta.getType() == TAttribute.NATURAL){
-						type = AvatarType.NATURAL;
+						type = AvatarType.INTEGER;
 					} else if (ta.getType() == TAttribute.BOOLEAN) {
 						type = AvatarType.BOOLEAN;
+					} else if (ta.getType() == TAttribute.TIMER) {
+						type = AvatarType.TIMER;
 					}
 					aa = new AvatarAttribute(typeIds[i] + "__" + ta.getId(), type, _uiam);
 					_atam.addParameter(aa);
@@ -726,32 +732,39 @@ public class AvatarDesignPanelTranslator {
 				block1 = port.getAvatarBDBlock1();
 				block2 = port.getAvatarBDBlock2();
 				
+				TraceManager.addDev("Searching block with name " + block1.getBlockName());
 				b1 = _as.getBlockWithName(block1.getBlockName());
 				b2 = _as.getBlockWithName(block2.getBlockName());
 				
-				r = new AvatarRelation("relation", b1, b2, tgc);
-				// Signals of l1
-				l1 = port.getListOfSignalsOrigin();
-				l2 = port.getListOfSignalsDestination();
+				if ((b1 != null) && (b2 != null)) {
 				
-				for(i=0; i<l1.size(); i++) {
-					name1 = AvatarSignal.getSignalNameFromFullSignalString(l1.get(i));
-					name2 = AvatarSignal.getSignalNameFromFullSignalString(l2.get(i));
-					atas1 = b1.getAvatarSignalWithName(name1);
-					atas2 = b2.getAvatarSignalWithName(name2);
-					if ((atas1 != null) && (atas2 != null)) {
-						r.addSignals(atas1, atas2);
-					} else {
-						TraceManager.addDev("null gates in AVATAR relation: " + name1 + " " + name2);
+					r = new AvatarRelation("relation", b1, b2, tgc);
+					// Signals of l1
+					l1 = port.getListOfSignalsOrigin();
+					l2 = port.getListOfSignalsDestination();
+					
+					for(i=0; i<l1.size(); i++) {
+						name1 = AvatarSignal.getSignalNameFromFullSignalString(l1.get(i));
+						name2 = AvatarSignal.getSignalNameFromFullSignalString(l2.get(i));
+						TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
+						atas1 = b1.getAvatarSignalWithName(name1);
+						atas2 = b2.getAvatarSignalWithName(name2);
+						if ((atas1 != null) && (atas2 != null)) {
+							r.addSignals(atas1, atas2);
+						} else {
+							TraceManager.addDev("null gates in AVATAR relation: " + name1 + " " + name2);
+						}
 					}
+					
+					// Attribute of the relation
+					r.setBlocking(port.isBlocking());
+					r.setAsynchronous(port.isAsynchronous());
+					r.setSizeOfFIFO(port.getSizeOfFIFO());
+					
+					_as.addRelation(r);
+				} else {
+					TraceManager.addDev("Null block b1=" + b1 + " b2=" + b2);
 				}
-				
-				// Attribute of the relation
-				r.setBlocking(port.isBlocking());
-				r.setAsynchronous(port.isAsynchronous());
-				r.setSizeOfFIFO(port.getSizeOfFIFO());
-				
-				_as.addRelation(r);
 			}
 		}
 	}

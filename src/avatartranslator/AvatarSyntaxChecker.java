@@ -87,7 +87,7 @@ public class AvatarSyntaxChecker  {
 		
 		String action = _expr.substring(index0 + 1,  _expr.length()).trim();
 		
-		if (aa.isInt() || aa.isNat()) {
+		if (aa.isInt()) {
 			return parse(_as, _ab, "actionnat", action);
 		} else if (aa.isBool()) {
 			return parse(_as, _ab, "actionbool", action);

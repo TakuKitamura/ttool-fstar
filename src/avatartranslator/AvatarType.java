@@ -54,41 +54,42 @@ import myutil.*;
 public class AvatarType {
     
     // Types of parameters
-    public final static int NATURAL = 0;
+    //public final static int NATURAL = 0;
     public final static int BOOLEAN = 1;
 	public final static int INTEGER = 2;
+	public final static int TIMER = 3;
 	
     
     public static int getType(String s) {
-        if (s.equals("nat")) {
-            return 	NATURAL;
-        } else if (s.equals("bool")) {
+        if (s.equals("bool")) {
             return 	BOOLEAN;
         } else if (s.equals("int")) {
             return 	INTEGER;
+        } else if (s.equals("Timer")) {
+            return 	TIMER;
         }
         return -1;
     }
     
     public static String getStringType(int _type) {
         switch(_type) {
-            case NATURAL:
-                return "nat";
             case BOOLEAN:
                 return "bool";
 			case INTEGER:
                 return "int";
+			case TIMER:
+                return "timer";
         }
 		return "";
     }
 	
 	public static String getDefaultInitialValue(int _type) {
 		switch(_type) {
-            case NATURAL:
-                return "0";
             case BOOLEAN:
                 return "false";
 			case INTEGER:
+                return "0";
+			case TIMER:
                 return "0";
         }
 		return "";

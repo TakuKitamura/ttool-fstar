@@ -1098,7 +1098,8 @@ public class TURTLE2UPPAAL {
 									guadelay = "(" + gua + ") && (" + guadelay + ")";
 								}
 								
-								tmp = "((choice__" + i + " >0) && ( h__<= choice__" + i + ")) || (choice__" + i + "==0)";
+								//tmp = "((choice__" + i + " >0) && ( h__<= choice__" + i + ")) || (choice__" + i + "==0)";
+								tmp = "((choice__" + i + " >0) && ( h__<= choice__" + i + "))";
 								if (inv.length() ==0) {
 									inv = tmp;
 								} else {

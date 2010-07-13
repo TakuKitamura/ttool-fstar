@@ -92,10 +92,6 @@ public class AvatarAttribute extends AvatarElement{
 		return (type == AvatarType.INTEGER);
 	}
 	
-	public boolean isNat() {
-		return (type == AvatarType.NATURAL);
-	}
-	
 	public boolean isBool() {
 		return (type == AvatarType.BOOLEAN);
 	}
