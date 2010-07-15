@@ -73,8 +73,8 @@ Ludovic Apvrille, Renaud Pacalet
 using std::min;
 using std::max;
 
-#define DEBUG_KERNEL
-#define DEBUG_CPU
+#undef DEBUG_KERNEL
+#undef DEBUG_CPU
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
