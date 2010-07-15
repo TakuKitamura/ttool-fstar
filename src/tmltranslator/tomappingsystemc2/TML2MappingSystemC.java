@@ -488,7 +488,9 @@ public class TML2MappingSystemC {
 			exploreBuses(0, commNodes, path, startNode, destNode, commElemToRoute);
 		}else{
 			LinkedList<HwCommunicationNode> commNodes2 = new LinkedList<HwCommunicationNode>(commNodes);
-			exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute);
+			//exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute);
+			if (!exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute))
+				System.out.println("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			path.add(memory);
 			exploreBuses(0, commNodes2, path, memory, destNode, commElemToRoute);
 

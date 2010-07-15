@@ -60,6 +60,7 @@ public class MappedSystemCTask {
 	private ArrayList<TMLEvent> events;
 	private ArrayList<TMLRequest> requests;
 	private HashMap<Integer,HashSet<Integer> > dependencies;
+	private ArrayList<LiveVariableNode> liveNodes;
 	private final static Pattern varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
 	private TMLMapping tmlmapping;
 	private int commentNum;
@@ -112,7 +113,8 @@ public class MappedSystemCTask {
 		basicCPPCode();
 		makeClassCode();
 		dependencies=_dependencies;
-		analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
+		//analyzeDependencies(task.getActivityDiagram().getFirst(),false,false,new HashSet<Integer>());
+		liveVariableAnalysis();
     	}
 	
 	public void print() {
@@ -268,7 +270,7 @@ public class MappedSystemCTask {
 		//TMLAttribute att;
 		hcode += "std::istream& readObject(std::istream& i_stream_var)" + SCCR;
 		hcode += "std::ostream& writeObject(std::ostream& i_stream_var)" + SCCR;
-		hcode += "unsigned long getStateHash() const" + SCCR;
+		//hcode += "unsigned long getStateHash() const" + SCCR;
 		functions+= "std::istream& " + reference + "::readObject(std::istream& i_stream_var){\nTMLTask::readObject(i_stream_var);\n";
 		//while(iterator.hasNext()) {
 		for (TMLAttribute att:task.getAttributes()){
@@ -303,10 +305,11 @@ public class MappedSystemCTask {
 				functions += "0" + SCCR;
 		}
 		functions+= "}\n\n";
-		functions+= "unsigned long " + reference + "::getStateHash() const{\nunsigned long aHash=0;\n";
-		for (TMLAttribute att:task.getAttributes()){
-			if (!(att.name.startsWith("arg") && att.name.endsWith("__req"))) functions += "aHash+=" + att.name + ";\n";
-		}
+		//functions+= "unsigned long " + reference + "::getStateHash() const{\nunsigned long aHash=0;\n";
+		//for (TMLAttribute att:task.getAttributes()){
+			//if (!(att.name.startsWith("arg") && att.name.endsWith("__req"))) functions += "aHash+=" + att.name + ";\n";
+		//}
+		functions+=makeStateSavingRoutineLocal();
 		/*for(TMLChannel ch: channels) {
 			if (ch.getType()!=TMLChannel.NBRNBW &&  ch.getOriginTask()==task)
 				functions+="aHash+=" + ch.getExtendedName() + "->getStateHash()"+SCCR;
@@ -318,9 +321,8 @@ public class MappedSystemCTask {
 		for(TMLRequest req: requests) {
 			if (req.isAnOriginTask(task))
 				functions+="aHash+=" +  req.getExtendedName() + "->getStateHash()"+SCCR;
-		}*/
-		
-		functions+= "if (_currCommand!=0) aHash+= _currCommand->getStateHash();\nreturn aHash;\n}\n\n";
+		}
+		functions+= "if (_currCommand!=0) aHash+= _currCommand->getStateHash();\nreturn aHash;\n}\n\n";*/
 	}
 
 	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement){
@@ -938,7 +940,7 @@ public class MappedSystemCTask {
         	return _input;
 	}
 
-	private void analyzeDependencies(TMLActivityElement currElem, boolean oneCmd, boolean skip, HashSet<Integer> depList){
+	/*private void analyzeDependencies(TMLActivityElement currElem, boolean oneCmd, boolean skip, HashSet<Integer> depList){
 		boolean done;
 		do{
 			if (skip){
@@ -1124,29 +1126,6 @@ public class MappedSystemCTask {
 		}while (!done);
 	}
 
-	public String getIdentifierNameByID(int id){
-		//Channels, Events, Requests, Variables, Choice, Random
-		id=Math.abs(id);
-		for (TMLChannel channel: channels){
-			if (channel.getID()==id) return channel.getName();
-		}
-		for (TMLEvent event: events){
-			if (event.getID()==id) return event.getName();
-			int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
-			if (param>0 && param<4)  return event.getName() + "_param" + param;
-		}
-		for (TMLRequest request: requests){
-			if (request.getID()==id) return request.getName();
-			int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
-			if (param>0 && param<4)  return request.getName() + "_param!" + param;
-		}
-		for(TMLAttribute att: task.getAttributes()){
-			if (att.getID()==id) return reference + ":" + att.getName();
-		}
-		for(int i=0; i<task.getActivityDiagram().nElements();i++)
-			if (task.getActivityDiagram().get(i).getID()==id) return reference + ":Command " + id;
-		return null;
-	}
 
 	private ArrayList<Integer> getVariablesInString(String search){
 		ArrayList<Integer> variables = new ArrayList<Integer>();
@@ -1182,5 +1161,372 @@ public class MappedSystemCTask {
 			dependencies.put(id,currSet);
 		}
 		return currSet;
+	}*/
+	
+	public String getIdentifierNameByID(int id){
+		//Channels, Events, Requests, Variables, Choice, Random
+		id=Math.abs(id);
+		for (TMLChannel channel: channels){
+			if (channel.getID()==id) return channel.getName();
+		}
+		for (TMLEvent event: events){
+			if (event.getID()==id) return event.getName();
+			int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
+			if (param>0 && param<4)  return event.getName() + "_param" + param;
+		}
+		for (TMLRequest request: requests){
+			if (request.getID()==id) return request.getName();
+			int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
+			if (param>0 && param<4)  return request.getName() + "_param!" + param;
+		}
+		for(TMLAttribute att: task.getAttributes()){
+			if (att.getID()==id) return reference + ":" + att.getName();
+		}
+		for(int i=0; i<task.getActivityDiagram().nElements();i++)
+			if (task.getActivityDiagram().get(i).getID()==id) return reference + ":Command " + id;
+		return null;
+	}
+	
+	public String makeStateSavingRoutineLocal(){
+		String aFunc="";
+		//std::ostream& TMLTask_0::writeObject(std::ostream& i_stream_var){
+		//TMLTask::writeObject(i_stream_var);
+		//WRITE_STREAM(i_stream_var,a);
+		//#ifdef DEBUG_SERIALIZE
+    		/*int aSeqNo=0;
+		aFunc += "std::ostream& " + reference + "::streamState(std::ostream& i_stream_var, int* iliveVars){\n";
+		for(TMLAttribute att: task.getAttributes()) {
+			aFunc += "if ((iLiveVars[" +  (aSeqNo >>> 5) + "]& (1<<" + (aSeqNo & 0x1F) + "))!=0) WRITE_STREAM(i_stream_var," + att.getName() + ");\n";
+			aSeqNo++;
+		}
+		aFunc += "return }";*/
+		return aFunc;
+	}
+
+	private LiveVariableNode getLiveVarNodeByCommand(TMLActivityElement iCmd){
+		for(LiveVariableNode aLiveNode: liveNodes)
+			if (aLiveNode.getLinkedElement()==iCmd) return aLiveNode;
+		return null;
+	}
+
+	private int getVarSeqNoByName(String attName){
+		int aSeq=0;
+		for(TMLAttribute att: task.getAttributes()) {
+			if (att.name.equals(attName)) return aSeq;
+			aSeq++;
+		}
+		return -1;
+	}
+
+	private void liveVariableAnalysis(){
+		System.out.println("*** Live Variable Analysis for task " + task.getName());
+		int aNbOfLiveElements = task.getAttributes().size() + channels.size() + events.size();
+		int aNumberOfBytes=0;
+		LiveVariableNode.reset();
+		liveNodes = new ArrayList<LiveVariableNode>();
+		if (task.isRequested()) aNbOfLiveElements++;		
+		aNumberOfBytes = aNbOfLiveElements >>> 5;
+		if ((aNbOfLiveElements & 0x1F)!=0) aNumberOfBytes++;
+		LiveVariableNode aStartNode=null, aLastNode=null;
+		for(TMLAttribute att: task.getAttributes()) {
+			if (att.hasInitialValue())
+				aStartNode = new LiveVariableNode(new int[aNumberOfBytes], parseExprToVariableMap(att.name, aNumberOfBytes, null), null, null,
+			false, att.name, att.initialValue);			
+			else
+				aStartNode = new LiveVariableNode(new int[aNumberOfBytes], parseExprToVariableMap(att.name, aNumberOfBytes, null), null, null,
+			false, att.name, "0");
+			liveNodes.add(aStartNode);			
+			if (aLastNode!=null) aLastNode.setSuccessor(aStartNode);
+			aLastNode=aStartNode;
+		}
+		if (task.isRequested()){
+			int[] aReqVars = parseExprToVariableMap("arg1__req", aNumberOfBytes, null);
+			parseExprToVariableMap("arg2__req", aNumberOfBytes, aReqVars);
+			parseExprToVariableMap("arg3__req", aNumberOfBytes, aReqVars);
+			int[] aReqChannelVar = new int[aNumberOfBytes];
+			aReqChannelVar[aNumberOfBytes-1] = 1 << ((aNbOfLiveElements-1) & 0x1F);
+			//LiveVariableNode aWaitReqNode = new LiveVariableNode(aReqChannelVar, aReqVars, null);
+			aStartNode = new LiveVariableNode(aReqChannelVar, aReqVars, null, null, true);
+			aStartNode.setInfected(true);
+			//liveNodes.add(aWaitReqNode);
+			liveNodes.add(aStartNode);
+			//aWaitReqNode.setSuccessor(buildLiveAnalysisTree(task.getActivityDiagram().getFirst(), aWaitReqNode, aNumberOfBytes));
+			aStartNode.setSuccessor(buildLiveAnalysisTree(task.getActivityDiagram().getFirst(), aStartNode, null, aNumberOfBytes));
+		}else{
+			aStartNode = buildLiveAnalysisTree(task.getActivityDiagram().getFirst(), null, null, aNumberOfBytes);
+		}
+		if (aLastNode!=null) aLastNode.setSuccessor(aStartNode);
+		for(LiveVariableNode aLiveNode: liveNodes){
+			aLiveNode.prepareReachingDefinitions();
+		}
+		boolean aChange;
+		do{
+			aChange=false;
+			for(LiveVariableNode aLiveNode: liveNodes)
+				aChange |= aLiveNode.determineKilledSets();
+		}while(aChange);
+		for(LiveVariableNode aLiveNode: liveNodes){
+			//aLiveNode.printKillEntries();
+			aLiveNode.reachingDefinitionsInit();
+		}
+		do{
+			aChange=false;
+			for(LiveVariableNode aLiveNode: liveNodes)
+				aChange |= aLiveNode.reachingDefinitionAnalysis();
+		}while(aChange);
+		do{
+			aChange=false;
+			for(LiveVariableNode aLiveNode: liveNodes)
+				aChange |= aLiveNode.determineIfConstant();
+		}while(aChange);
+		do{
+			aChange=false;
+			for(LiveVariableNode aLiveNode: liveNodes)
+				aChange |= aLiveNode.infectionAnalysis();
+		}while(aChange);
+		do{
+			aChange=false;
+			for(LiveVariableNode aLiveNode: liveNodes)
+				aChange |= aLiveNode.liveVariableAnalysis();
+		}while(aChange);
+		for(LiveVariableNode aLiveNode: liveNodes){
+			aLiveNode.printReachingEntries();
+			printLiveVarNode(aLiveNode);
+		}
+		System.out.println("*** End of Live Variable Analysis for task " + task.getName());
+		
+	}
+
+	private int[] parseExprToVariableMap(String iExpr, int iBytesWidth, int[] iMap){
+		//byte[] aResMap;
+		int[] aResMap;
+		if(iMap==null)
+			//aResMap=new byte[iBytesWidth];
+			aResMap=new int[iBytesWidth];
+		else
+			aResMap=iMap;
+		if(!(iExpr==null || iExpr.isEmpty())){
+			//System.out.println("Examine expression: " + iExpr);
+			Matcher matcher = varPattern.matcher(iExpr);
+			//System.out.print("Found tokens: ");
+			while (matcher.find()){
+				String token = iExpr.substring(matcher.start(), matcher.end());
+				System.out.print(token + ", ");
+				int aVarSeqNo = getVarSeqNoByName(token);
+				if (aVarSeqNo>=0) aResMap[aVarSeqNo >>> 5] |= 1 << (aVarSeqNo & 0x1F);
+			}
+			//System.out.println();
+			//System.out.println("Byte sequence: ");
+		}
+		/*for(int i=0; i<iBytesWidth; i++)
+			System.out.print(((int)aResMap[i]) + ", ");
+		System.out.println();*/
+		return aResMap;		
+	}
+
+	private int[] parseChannelToVariableMap(TMLChannel iChannel, int iBytesWidth, int[] iMap){
+		int[] aResMap;
+		if(iMap==null)
+			aResMap=new int[iBytesWidth];
+		else
+			aResMap=iMap;
+		int anIndex = task.getAttributes().size() + channels.indexOf(iChannel);
+		aResMap[anIndex >>> 5] |= 1 << (anIndex & 0x1F);
+		return aResMap;	
+	}
+
+	private int[] parseEventToVariableMap(TMLEvent iEvent, int iBytesWidth){
+		int[] aResMap = new int[iBytesWidth];
+		int anIndex = task.getAttributes().size() + channels.size() + events.indexOf(iEvent);
+		aResMap[anIndex >>> 5] |= 1 << (anIndex & 0x1F);
+		return aResMap;
+	}
+
+	private void printLiveVarNode(LiveVariableNode iNode){
+		int aSeq=0;
+		//if (iNode.getLinkedElement()==null)
+			//System.out.print("Cmd type: waitRequest id: none");
+		//else
+			//System.out.print("Cmd type:" + iNode.getLinkedElement().getName() + "  id: " + iNode.getLinkedElement().getID());
+		//System.out.print(iNode.getStatementDescr());
+		//if (iNode.canBeRemoved()) System.out.println(" to be removed"); else  System.out.println();
+		for(TMLAttribute att: task.getAttributes()) {
+			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+				System.out.println(att.getName() + ": significant");
+			aSeq++;
+		}
+		for(TMLChannel ch: channels) {
+			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+				System.out.println(ch.getName() + ": significant");
+			aSeq++;
+		}
+		for(TMLEvent evt: events) {
+			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+				System.out.println(evt.getName() + ": significant");
+			aSeq++;
+		}
+		if (task.isRequested() && (iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
+			System.out.println("reqChannel: significant");
+	}
+
+	private LiveVariableNode buildLiveAnalysisTree(TMLActivityElement iCurrElem, LiveVariableNode iReturnNode, LiveVariableNode iSuperiorNode, int iBytesWidth){
+		LiveVariableNode aResNode=null;
+		
+		if (iCurrElem instanceof TMLStartState) {
+			iCurrElem.getNextElement(0);
+		}
+
+		if (iCurrElem==null || iCurrElem instanceof TMLStopState){
+			return iReturnNode;
+
+		} else if (iCurrElem instanceof TMLActionState){
+			String[] aTokens=((TMLActionState)iCurrElem).getAction().split("=",2);
+			if (aTokens.length<2) aTokens=new String[2];
+			aResNode = new LiveVariableNode(parseExprToVariableMap(aTokens[1], iBytesWidth, null), parseExprToVariableMap(aTokens[0], iBytesWidth, null), iCurrElem, iSuperiorNode, 
+			false, aTokens[0], aTokens[1]);	
+
+ 		} else if (iCurrElem instanceof TMLRandom){
+			TMLRandom aRndCmd=(TMLRandom)iCurrElem;
+			int[] aRandomVars = parseExprToVariableMap(aRndCmd.getMinValue(), iBytesWidth ,null);
+			parseExprToVariableMap(aRndCmd.getMaxValue(), iBytesWidth ,aRandomVars);
+			aResNode = new LiveVariableNode(aRandomVars, parseExprToVariableMap(aRndCmd.getVariable(), iBytesWidth, null), iCurrElem, iSuperiorNode, true);
+			aResNode.setInfected(true);
+
+		} else if (iCurrElem instanceof TMLDelay){
+			int[] aDelayVars = parseExprToVariableMap(((TMLDelay)iCurrElem).getMinDelay(), iBytesWidth, null);
+			parseExprToVariableMap(((TMLDelay)iCurrElem).getMaxDelay(), iBytesWidth, aDelayVars);
+			//aResNode = new LiveVariableNode(aDelayVars, new byte[iBytesWidth],iCurrElem);
+			aResNode = new LiveVariableNode(aDelayVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLExecI){
+			aResNode = new LiveVariableNode(parseExprToVariableMap(((TMLExecI)iCurrElem).getAction(), iBytesWidth, null), new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLExecC){
+			aResNode = new LiveVariableNode(parseExprToVariableMap(((TMLExecC)iCurrElem).getAction(), iBytesWidth, null), new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLExecIInterval){
+			int[] aExecVars = parseExprToVariableMap(((TMLExecIInterval)iCurrElem).getMinDelay(), iBytesWidth, null);
+			parseExprToVariableMap(((TMLExecIInterval)iCurrElem).getMaxDelay(), iBytesWidth, aExecVars);
+			aResNode = new LiveVariableNode(aExecVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLExecCInterval){
+			int[] aExecVars = parseExprToVariableMap(((TMLExecCInterval)iCurrElem).getMinDelay(), iBytesWidth, null);
+			parseExprToVariableMap(((TMLExecCInterval)iCurrElem).getMaxDelay(), iBytesWidth, aExecVars);
+			aResNode = new LiveVariableNode(aExecVars, new int[iBytesWidth],iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLForLoop){
+			TMLForLoop aLoop = (TMLForLoop) iCurrElem;
+			String[] aTokens=aLoop.getInit().split("=",2);
+			if (aTokens.length<2) aTokens=new String[2];
+			//LiveVariableNode aInit = new LiveVariableNode(parseExprToVariableMap(aTokens[1], iBytesWidth, null,), parseExprToVariableMap(aTokens[0], iBytesWidth, null),iCurrElem);
+			LiveVariableNode aInit = new LiveVariableNode(parseExprToVariableMap(aTokens[1], iBytesWidth, null), parseExprToVariableMap(aTokens[0], iBytesWidth,
+			null), iCurrElem, iSuperiorNode, false, aTokens[0], aTokens[1]);
+			//LiveVariableNode aCondition = new LiveVariableNode(parseExprToVariableMap(aLoop.getCondition(), iBytesWidth, null), new int[iBytesWidth], iCurrElem);
+			LiveVariableNode aCondition = new LiveVariableNode(parseExprToVariableMap(aLoop.getCondition(), iBytesWidth, null), new int[iBytesWidth], iCurrElem, iSuperiorNode);
+			aTokens=aLoop.getIncrement().split("=",2);
+			if (aTokens.length<2) aTokens=new String[2];
+			//LiveVariableNode anIncrement = new LiveVariableNode(parseExprToVariableMap(aTokens[1], iBytesWidth, null), parseExprToVariableMap(aTokens[0], iBytesWidth, null),iCurrElem);
+			LiveVariableNode anIncrement = new LiveVariableNode(parseExprToVariableMap(aTokens[1], iBytesWidth, null), parseExprToVariableMap(aTokens[0],
+			iBytesWidth, null), iCurrElem, aCondition, false, aTokens[0], aTokens[1]);
+			aInit.setSuccessor(aCondition);
+			anIncrement.setSuccessor(aCondition);
+			aCondition.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(0), anIncrement, aCondition, iBytesWidth));   //in loop
+			aCondition.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(1), iReturnNode, aCondition, iBytesWidth));   //outside loop
+			liveNodes.add(aInit);
+			liveNodes.add(aCondition);
+			liveNodes.add(anIncrement);
+			return aInit;
+
+		} else if (iCurrElem instanceof TMLReadChannel){
+			TMLReadChannel aReadCmd = (TMLReadChannel)iCurrElem;
+			int[] aReadVars=null;
+			if (aReadCmd.getChannel(0).getType()==TMLChannel.BRBW || aReadCmd.getChannel(0).getType()==TMLChannel.BRNBW)
+				aReadVars = parseChannelToVariableMap(aReadCmd.getChannel(0), iBytesWidth, null);
+			else
+				aReadVars = new int[iBytesWidth];
+			parseExprToVariableMap(aReadCmd.getNbOfSamples(), iBytesWidth, aReadVars);
+			aResNode = new LiveVariableNode(aReadVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLWriteChannel){
+			TMLWriteChannel aWriteCmd=(TMLWriteChannel)iCurrElem;
+			int[] aWriteVars = new int[iBytesWidth];
+			for(int i=0; i< aWriteCmd.getNbOfChannels(); i++){
+				if (aWriteCmd.getChannel(i).getType()==TMLChannel.BRBW) parseChannelToVariableMap(aWriteCmd.getChannel(i), iBytesWidth, aWriteVars);
+			}
+			parseExprToVariableMap(aWriteCmd.getNbOfSamples(), iBytesWidth, aWriteVars);
+			aResNode = new LiveVariableNode(aWriteVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+			
+		} else if (iCurrElem instanceof TMLSendEvent){
+			TMLSendEvent aSendCmd=(TMLSendEvent)iCurrElem;
+			int[] aSendVars=null;
+			if (aSendCmd.getEvent().isBlocking())
+				aSendVars = parseEventToVariableMap(aSendCmd.getEvent(), iBytesWidth);
+			else
+				aSendVars = new int[iBytesWidth];
+			parseExprToVariableMap(aSendCmd.getParam(0), iBytesWidth, aSendVars);
+			parseExprToVariableMap(aSendCmd.getParam(1), iBytesWidth, aSendVars);
+			parseExprToVariableMap(aSendCmd.getParam(2), iBytesWidth, aSendVars);
+			aResNode = new LiveVariableNode(aSendVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+		
+		} else if (iCurrElem instanceof TMLSendRequest){
+			TMLSendRequest aSendReqCmd=(TMLSendRequest)iCurrElem;
+			int[] aSendReqVars = parseExprToVariableMap(aSendReqCmd.getParam(0), iBytesWidth, null);
+			parseExprToVariableMap(aSendReqCmd.getParam(1), iBytesWidth, aSendReqVars);
+			parseExprToVariableMap(aSendReqCmd.getParam(2), iBytesWidth, aSendReqVars);
+			aResNode = new LiveVariableNode(aSendReqVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+
+		} else if (iCurrElem instanceof TMLWaitEvent){
+			TMLWaitEvent aWaitCmd=(TMLWaitEvent)iCurrElem;
+			int[] aWaitVars = parseExprToVariableMap(aWaitCmd.getParam(0), iBytesWidth, null);
+			parseExprToVariableMap(aWaitCmd.getParam(1), iBytesWidth, aWaitVars);
+			parseExprToVariableMap(aWaitCmd.getParam(2), iBytesWidth, aWaitVars);
+			aResNode = new LiveVariableNode(parseEventToVariableMap(aWaitCmd.getEvent(), iBytesWidth), aWaitVars, iCurrElem, iSuperiorNode, true);
+			aResNode.setInfected(true);
+			
+		} else if (iCurrElem instanceof TMLNotifiedEvent){
+			aResNode = new LiveVariableNode(parseEventToVariableMap(((TMLNotifiedEvent)iCurrElem).getEvent(), iBytesWidth), parseExprToVariableMap(((TMLNotifiedEvent)iCurrElem).getVariable(), iBytesWidth,
+			null), iCurrElem, iSuperiorNode, true);
+			aResNode.setInfected(true);
+
+		} else if (iCurrElem instanceof TMLSequence){
+			((TMLSequence)iCurrElem).sortNexts();
+			for(int i=((TMLSequence)iCurrElem).getNbNext()-1; i>=0; i--){
+				iReturnNode = buildLiveAnalysisTree(iCurrElem.getNextElement(i), iReturnNode, iSuperiorNode, iBytesWidth);
+			}
+			return iReturnNode;
+			 
+		} else if (iCurrElem instanceof TMLChoice){
+			int[] aChoiceVars = new int[iBytesWidth];
+			TMLChoice aChoiceCmd = (TMLChoice)iCurrElem;
+			for(int i=0; i<aChoiceCmd.getNbGuard(); i++)
+				if (!(aChoiceCmd.isNonDeterministicGuard(i) || aChoiceCmd.isStochasticGuard(i) || aChoiceCmd.getElseGuard()==i)) parseExprToVariableMap(aChoiceCmd.getGuard(i), iBytesWidth, aChoiceVars);
+			aResNode = new LiveVariableNode(aChoiceVars, new int[iBytesWidth], iCurrElem, iSuperiorNode);
+			aResNode.setInfected(aChoiceCmd.nbOfNonDeterministicGuard()>0 || aChoiceCmd.nbOfStochasticGuard()>0);
+			System.out.println("checl:  " + aChoiceCmd.nbOfNonDeterministicGuard() + " ** "+ aChoiceCmd.nbOfStochasticGuard());
+			for(int i=0; i<aChoiceCmd.getNbNext(); i++)
+				aResNode.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(i), iReturnNode, aResNode, iBytesWidth));
+			liveNodes.add(aResNode);
+			return aResNode;
+		
+		} else if (iCurrElem instanceof TMLSelectEvt){
+			aResNode = new LiveVariableNode(new int[iBytesWidth], new int[iBytesWidth], iCurrElem, iSuperiorNode);
+			aResNode.setInfected(true);
+			for(int i=0; i<((TMLSelectEvt)iCurrElem).getNbNext(); i++){
+				aResNode.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(i), iReturnNode, aResNode, iBytesWidth));
+			}
+			liveNodes.add(aResNode);
+			return aResNode;
+		}
+
+		LiveVariableNode aSucc = buildLiveAnalysisTree(iCurrElem.getNextElement(0), iReturnNode, iSuperiorNode, iBytesWidth);
+		if (aResNode==null || aResNode.isEmptyNode()){
+			aResNode=aSucc;
+		}else{
+			liveNodes.add(aResNode);
+			aResNode.setSuccessor(aSucc);
+		}
+		return aResNode;
 	}
 }
+
+
