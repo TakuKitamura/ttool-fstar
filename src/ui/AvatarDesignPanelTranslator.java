@@ -362,6 +362,9 @@ public class AvatarDesignPanelTranslator {
 		AvatarStartState astart;
 		AvatarState astate;
 		AvatarRandom arandom;
+		AvatarSetTimer asettimer;
+		AvatarResetTimer aresettimer;
+		AvatarExpireTimer aexpiretimer;
 		int i;
 		String tmp;
 		TAttribute ta;
@@ -531,6 +534,87 @@ public class AvatarDesignPanelTranslator {
 				
 				asm.addElement(arandom);
 				listE.addCor(arandom, tgc);	
+				
+			// Set timer
+			} else if (tgc instanceof AvatarSMDSetTimer) {
+				tmp = ((AvatarSMDSetTimer)tgc).getTimerName();
+				aa = _ab.getAvatarAttributeWithName(tmp);
+				if (aa == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer setting");
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					if (aa.getType() != AvatarType.TIMER) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer setting: shall be a parameter of type \"Timer\"");
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} else {
+						tmp = modifyString(((AvatarSMDSetTimer)tgc).getTimerValue());
+						error = AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, tmp);
+						if (error < 0) {
+							makeError(error, tdp, _ab, tgc, "value of the timer setting", tmp);
+						}
+						asettimer = new AvatarSetTimer("settimer__" + aa.getName(), tgc);
+						asettimer.setTimer(aa);
+						asettimer.setTimerValue(tmp);
+						asm.addElement(asettimer);
+						listE.addCor(asettimer, tgc);	
+					}
+				}
+				
+			// Reset timer
+			} else if (tgc instanceof AvatarSMDResetTimer) {
+				tmp = ((AvatarSMDResetTimer)tgc).getTimerName();
+				aa = _ab.getAvatarAttributeWithName(tmp);
+				if (aa == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer reset");
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					if (aa.getType() != AvatarType.TIMER) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer reset: shall be a parameter of type \"Timer\"");
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} else {
+						aresettimer = new AvatarResetTimer("resettimer__" + aa.getName(), tgc);
+						aresettimer.setTimer(aa);
+						asm.addElement(aresettimer);
+						listE.addCor(aresettimer, tgc);	
+					}
+				}
+				
+			// Expire timer
+			} else if (tgc instanceof AvatarSMDExpireTimer) {
+				tmp = ((AvatarSMDExpireTimer)tgc).getTimerName();
+				aa = _ab.getAvatarAttributeWithName(tmp);
+				if (aa == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed timer parameter: " + tmp + " in timer expiration");
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent(tgc);
+					addCheckingError(ce);
+				} else {
+					if (aa.getType() != AvatarType.TIMER) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in timer expiration: shall be a parameter of type \"Timer\"");
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} else {
+						aexpiretimer = new AvatarExpireTimer("expiretimer__" + aa.getName(), tgc);
+						aexpiretimer.setTimer(aa);
+						asm.addElement(aexpiretimer);
+						listE.addCor(aexpiretimer, tgc);	
+					}
+				}
 			
 			// Start state
 			} else if (tgc instanceof AvatarSMDStartState) {

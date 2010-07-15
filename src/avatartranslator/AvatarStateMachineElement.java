@@ -118,6 +118,20 @@ public class AvatarStateMachineElement extends AvatarElement {
 		nexts.remove(_elt);
 	}
 	
+	public void replaceAllNext(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
+		if (nexts.contains(oldone)) {
+			LinkedList<AvatarStateMachineElement> oldnexts = nexts;
+			nexts = new LinkedList<AvatarStateMachineElement>();
+			for(AvatarStateMachineElement elt: oldnexts) {
+				if (elt == oldone) {
+					nexts.add(newone);
+				} else {
+					nexts.add(oldone);
+				}
+			}
+		}
+	}
+	
 	public void removeAllNexts() {
 		nexts.clear();
 	}

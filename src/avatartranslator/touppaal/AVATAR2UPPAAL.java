@@ -150,8 +150,9 @@ public class AVATAR2UPPAAL {
 		spec = new UPPAALSpec();
 		
 		avspec.removeCompositeStates();
+		avspec.removeTimers();
 		
-		//TraceManager.addDev("Spec:" + avspec.toString());
+		//TraceManager.addDev("->   Spec:" + avspec.toString());
 		
 		UPPAALLocation.reinitID();
 		gatesNotSynchronized = new LinkedList();
@@ -503,6 +504,9 @@ public class AVATAR2UPPAAL {
 		
 		loc = hash.get(_elt);
 		if (loc != null) {
+			if (_previous == null) {
+				TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
+			}
 			tr = addTransition(_template, _previous, loc);
 			return;
 		}
@@ -533,7 +537,6 @@ public class AVATAR2UPPAAL {
 			setGuard(tr, arand.getVariable() + "<" + arand.getMaxValue());
 			_previous.setCommitted();
 			loc.setCommitted();
-			hash.put(_elt, loc);
 			hash.put(_elt, _previous);
 			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
 			return;
@@ -551,6 +554,7 @@ public class AVATAR2UPPAAL {
 			}
 			
 			state = (AvatarState)_elt;
+			hash.put(_elt, _previous);
 			
 			// We translate at the same time the state and its next transitions (guard and time + first method call)
 			// We assume all nexts are transitions
@@ -575,7 +579,6 @@ public class AVATAR2UPPAAL {
 				// Reset the clock
 				tmps = "h__ = 0";
 				loc = addLocation(_template);  
-				hash.put(_elt, loc);
 				tr = addTransition(_template, _previous, loc);
 				setAssignment(tr, tmps);
 				_previous.setCommitted();

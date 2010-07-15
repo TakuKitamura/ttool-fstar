@@ -303,6 +303,9 @@ public class TGComponentManager {
 	public static final int AVATARSMD_STATE = 5106;
 	public static final int AVATARSMD_CHOICE = 5107;
 	public static final int AVATARSMD_RANDOM = 5108;
+	public static final int AVATARSMD_SET_TIMER = 5109;
+	public static final int AVATARSMD_RESET_TIMER = 5110;
+	public static final int AVATARSMD_EXPIRE_TIMER = 5111;
 	
 	// AVATAR RD -> starts at 5200
 	public static final int AVATARRD_REQUIREMENT = 5200;
@@ -367,6 +370,16 @@ public class TGComponentManager {
 			case AVATARSMD_RANDOM:
                 tgc = new AvatarSMDRandom(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case AVATARSMD_SET_TIMER:
+                tgc = new AvatarSMDSetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_RESET_TIMER:
+                tgc = new AvatarSMDResetTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARSMD_EXPIRE_TIMER:
+                tgc = new AvatarSMDExpireTimer(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+				
 			case AVATARRD_REQUIREMENT:
                 tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -847,7 +860,14 @@ public class TGComponentManager {
 		} else if (tgc instanceof AvatarSMDChoice) {
 			return AVATARSMD_CHOICE;
 		} else if (tgc instanceof AvatarSMDRandom) {
-			return AVATARSMD_RANDOM;	
+			return AVATARSMD_RANDOM;
+		} else if (tgc instanceof AvatarSMDSetTimer) {
+			return AVATARSMD_SET_TIMER;
+		} else if (tgc instanceof AvatarSMDResetTimer) {
+			return AVATARSMD_RESET_TIMER;
+		} else if (tgc instanceof AvatarSMDExpireTimer) {
+			return AVATARSMD_EXPIRE_TIMER;
+			
 			
 		// AVATAR RD
 		} else if (tgc instanceof AvatarRDRequirement) {

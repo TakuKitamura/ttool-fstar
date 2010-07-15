@@ -173,6 +173,11 @@ public class UPPAALTemplate {
 		int dec = initLocation.idPoint.y - initLocation.namePoint.y;
 		initLocation.idPoint.y = y / 2;
 		initLocation.namePoint.y = initLocation.idPoint.y - dec;
+		
+		ListIterator iterator = transitions.listIterator();
+		while(iterator.hasNext()) {
+			((UPPAALTransition)(iterator.next())).enhanceGraphics();
+		}
 	}
 	
 	public int getMaxYLocations() {

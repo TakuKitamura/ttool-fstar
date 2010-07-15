@@ -2905,6 +2905,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		
 		return adp.getAllSignals(name);
 	}
+	
+	public Vector getAllTimers() {
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp == null) {
+			return null;
+		}
+		
+		if (!(tp instanceof AvatarDesignPanel)) {
+			return null;
+		}
+		AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+		
+		String name =  getCurrentTDiagramPanel().getName();
+		
+		return adp.getAllTimers(name);
+	}
     
     public Vector getCheckingErrors() {
         return gtm.getCheckingErrors();
@@ -6085,6 +6101,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_CHOICE);
 		} else if (command.equals(actions[TGUIAction.ASMD_RANDOM].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RANDOM);
+		} else if (command.equals(actions[TGUIAction.ASMD_SET_TIMER].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SET_TIMER);
+		} else if (command.equals(actions[TGUIAction.ASMD_RESET_TIMER].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RESET_TIMER);
+		} else if (command.equals(actions[TGUIAction.ASMD_EXPIRE_TIMER].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_EXPIRE_TIMER);
 			
 		// AVATAR RD
 		} else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {
@@ -6559,7 +6581,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
 			newAVATARRequirement = createMenuItem("New AVATAR Requirement Diagrams");
-			newAVATARBD = createMenuItem("New AVATAR Block Diagram");
+			newAVATARBD = createMenuItem("New AVATAR Design");
             
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
             menu.add(moveLeft);

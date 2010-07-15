@@ -825,6 +825,19 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		return v;
 	}
 	
+	public Vector getAllTimerList() {
+		Vector v = new Vector();
+		TAttribute a;
+		
+		for(int i=0; i<myAttributes.size(); i++) {
+			 a = (TAttribute)(myAttributes.elementAt(i));
+			 if (a.getType() == TAttribute.TIMER) {
+				 v.add(a.getId());
+			 }
+		}
+		return v;
+	}
+	
 	public AvatarSignal getAvatarSignalFromName(String _name) {
 		AvatarSignal as;
 		for(int i=0; i<mySignals.size(); i++) {

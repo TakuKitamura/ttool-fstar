@@ -97,6 +97,18 @@ public class UPPAALTransition {
 		
     }
 	
+	public void enhanceGraphics() {
+		if ((points.size() == 0) && (destinationLoc == sourceLoc)) {
+			points.add(new Point(sourceLoc.idPoint.x - 50, sourceLoc.idPoint.y - 50));
+		}
+		
+		
+		if ((points.size() == 1) && (destinationLoc == sourceLoc)) {
+			Point p = (Point)(points.get(0));
+			points.add(new Point(p.x+10, p.y+35));
+		}
+	}
+	
 	public boolean isAnEmptyTransition() {
 		
 		if (guard == null) {

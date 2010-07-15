@@ -590,6 +590,16 @@ public class AvatarBDPanel extends TDiagramPanel {
 		return null;
 	}
 	
+	public Vector getAllTimersOfBlock(String _name) {
+		LinkedList<AvatarBDBlock> list = getFullBlockList();
+		for(AvatarBDBlock block: list) {
+			if (block.getBlockName().compareTo(_name) ==0) {
+				return block.getAllTimerList();
+			}
+		}
+		return null;
+	}
+	
 	public Vector getAttributesOfDataType(String _name) {
 		TGComponent tgc;
         Iterator iterator = componentList.listIterator();

@@ -126,6 +126,17 @@ public class AvatarSpecification extends AvatarElement {
 		}
 	}
 	
+	public void removeTimers() {
+		LinkedList<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
+		for(AvatarBlock block: blocks) {
+			block.removeTimers(this, addedBlocks);
+		}
+		
+		for(int i=0; i<addedBlocks.size(); i++) {
+			addBlock(addedBlocks.get(i));
+		}
+	}
+	
 	public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {
 		for(AvatarRelation ar: relations) {
 			if (ar.hasSignal(_as) > -1) {

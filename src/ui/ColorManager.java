@@ -147,6 +147,11 @@ public class ColorManager {
 	//public static final Color AVATAR_STATE = new Color(149, 193, 210);
 	public static final Color AVATAR_STATE = new Color(193, 218, 241);
 	
+	public static final Color AVATAR_SET_TIMER = new Color(255, 180, 105);
+	public static final Color AVATAR_RESET_TIMER = new Color(255, 180, 105);
+	public static final Color AVATAR_EXPIRE_TIMER = new Color(255, 180, 105);
+	
+	
 	public static final Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
 	public static final Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
 	

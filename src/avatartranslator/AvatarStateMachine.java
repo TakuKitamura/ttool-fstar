@@ -354,6 +354,68 @@ public class AvatarStateMachine extends AvatarElement {
 		}
 		return null;
 	}
+	
+	public void removeTimers(AvatarBlock _block) {
+		AvatarSetTimer ast;
+		AvatarTimerOperator ato;
+		
+		LinkedList<AvatarStateMachineElement> olds = new LinkedList<AvatarStateMachineElement>();
+		LinkedList<AvatarStateMachineElement> news = new LinkedList<AvatarStateMachineElement>();
+		
+		
+		for(AvatarStateMachineElement elt: elements) {
+			// Set timer...
+			if (elt instanceof AvatarSetTimer) {
+				ast = (AvatarSetTimer)elt;
+				AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("set__" + ast.getTimer().getName()), elt.getReferenceObject());
+				aaos.addValue(ast.getTimerValue());
+				olds.add(elt);
+				news.add(aaos);
+				
+			// Reset timer
+			} else if (elt instanceof AvatarResetTimer) {
+				ato = (AvatarTimerOperator)elt;
+				AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("reset__" + ato.getTimer().getName()), elt.getReferenceObject());
+				olds.add(elt);
+				news.add(aaos);
+			
+			// Expire timer
+			} else if (elt instanceof AvatarExpireTimer) {
+				ato = (AvatarTimerOperator)elt;
+				AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("expire__" + ato.getTimer().getName()), elt.getReferenceObject());
+				olds.add(elt);
+				news.add(aaos);
+			}
+		}
+		
+		// Replacing old elements with new ones
+		AvatarStateMachineElement oldelt, newelt;
+		for(int i = 0; i<olds.size(); i++) {
+			oldelt = olds.get(i);
+			newelt = news.get(i);
+			replace(oldelt, newelt);
+		}
+	}
+	
+	public void replace(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
+		
+		TraceManager.addDev("Replacing " + oldone + " with " + newone);
+		
+		addElement(oldone);
+		removeElement(newone);
+		
+		// Previous elements
+		LinkedList<AvatarStateMachineElement> previous = getPreviousElementsOf(oldone);
+		for(AvatarStateMachineElement elt: previous) {
+			elt.replaceAllNext(oldone, newone);
+		}
+		
+		// Next elements
+		for(int i=0; i<oldone.nbOfNexts(); i++) {
+			AvatarStateMachineElement elt = oldone.getNext(i);
+			newone.addNext(elt);
+		}
+	}
     
 
 }

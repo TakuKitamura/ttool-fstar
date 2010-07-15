@@ -312,6 +312,9 @@ public class TGUIAction extends AbstractAction {
 	public static final int ASMD_STATE = 299;
 	public static final int ASMD_CHOICE = 325;
 	public static final int ASMD_RANDOM = 326;
+	public static final int ASMD_SET_TIMER = 327;
+	public static final int ASMD_RESET_TIMER = 328;
+	public static final int ASMD_EXPIRE_TIMER = 329;
 	
 	// AVATAR Requirement
 	public static final int ARD_EDIT = 300;
@@ -446,7 +449,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 327;
+    public static final int NB_ACTION = 330;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -844,6 +847,9 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);
 		actions[ASMD_RANDOM] = new TAction("add-asmd-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened AVATAR State Machine diagram", 0);
+		actions[ASMD_SET_TIMER] = new TAction("add-asmd-setrimer", "Set timer", IconManager.imgic924, IconManager.imgic924, "Set timer", "Add a set timer operator to the currently opened AVATAR State Machine diagram", 0);
+		actions[ASMD_RESET_TIMER] = new TAction("add-asmd-resettimer", "Reset timer", IconManager.imgic924, IconManager.imgic924, "Reset timer", "Add a reset timer operator to the currently opened AVATAR State Machine diagram", 0);
+		actions[ASMD_EXPIRE_TIMER] = new TAction("add-asmd-expiretimer", "Timer expiration", IconManager.imgic924, IconManager.imgic924, "Wait for timer expiration", "Add a timer expiration operator to the currently opened AVATAR State Machine diagram", 0);
 		
         
 		// AVATAR Requirement Diagrams
