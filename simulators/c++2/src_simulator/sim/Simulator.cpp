@@ -346,14 +346,14 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 				//depCPU->addTransaction();
 			//}
-#ifdef DEBUG_KERNEL
-			std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
-#endif
+//#ifdef DEBUG_KERNEL
+			//std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
+//#endif
 			//depCPU->schedule();
 		      }
 		     }else{
 #ifdef DEBUG_KERNEL
-			std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
+			std::cout << "kernel:simulate: schedule dependent CPU  " << depCPU->toString() << std::endl;
 #endif
 			depCPU->schedule();
 		     }

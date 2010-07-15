@@ -76,12 +76,18 @@ BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 
 BusMaster* TMLChannel::getFirstMaster(TMLTransaction* iTrans){
 	//if (iTrans->getCommand()->getTask()==_writeTask){
+	//std::cout << "fima 1\n";
 	if (_masters==0 || _slaves==0 || _numberOfHops==0) return 0;
+	//std::cout << "fima 2\n";
 	if (iTrans==_writeTrans){
+	//if (iTrans->getCommand()->getTask()==_writeTask){
+		//std::cout << "fima 3\n";
 		_writeTransCurrHop=0;
 		return _masters[_writeTransCurrHop];
 	}else{
+		//std::cout << "fima 4\n";
 		if (_slaves[(_numberOfHops/2)]==0) return 0;	//NEW!!!
+		//std::cout << "fima 5\n";
 		_readTransCurrHop=_numberOfHops-1;
 		return _masters[_readTransCurrHop];
 	}

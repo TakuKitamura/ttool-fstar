@@ -48,6 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <BusMaster.h>
 #include <WorkloadSource.h>
 #include <TMLTask.h>
+#include <TMLCommand.h>
 
 class TMLTask;
 class TMLTransaction;
@@ -113,6 +114,7 @@ public:
 	///Invalidate schedule of CPU
 	void setRescheduleFlag(){
 		_schedulingNeeded=true;
+		std::cout <<" CPU " << _name << " forwards to scheduler\n";
 		_scheduler->resetScheduledFlag();
 	}
 
@@ -121,11 +123,18 @@ public:
 	\param iTime Truncation time
 	*/
 	void truncateIfNecessary(TMLTime iTime){
+		/*if(_schedulingNeeded){
+			
+			if(getNextTransaction()==0){
+				TMLTransaction* aTrans = SchedulableDevice::getNextTransaction();
+				if (aTrans!=0) aTrans->getCommand()->getTask()->transWasScheduled(this);
+			}else{*/
 		if(_schedulingNeeded && getNextTransaction()!=0){
 			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
-			_schedulingNeeded=false;
+			_schedulingNeeded=false;	
 			truncateAndAddNextTransAt(iTime);
 			//std::cout << "truncateIfNecessary end\n";
+			//}
 		}
 	}
 

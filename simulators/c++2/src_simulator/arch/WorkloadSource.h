@@ -84,7 +84,11 @@ public:
 	/**
 	\param iSource Pointer to workload source
 	*/
-	inline void addWorkloadSource(WorkloadSource* iSource){_workloadList.push_back(iSource);}
+	inline void addWorkloadSource(WorkloadSource* iSource){
+		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i)
+			if (*i==iSource) return;
+		_workloadList.push_back(iSource);
+	}
 	///Perform scheduling
 	/**
 	\param iEndSchedule Current time of the ressource

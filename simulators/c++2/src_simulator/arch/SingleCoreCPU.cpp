@@ -75,11 +75,11 @@ TMLTransaction* SingleCoreCPU::getNextTransaction(){
 		return _nextTransaction;
 	}else{
 #ifdef DEBUG_CPU
-		std::cout << "CPU:getNT: " << _name << " has bus transacion on master " << _masterNextTransaction->toString() << std::endl;
+		std::cout << "CPU:getNT: " << _name << " has bus transaction on master " << _masterNextTransaction->toString() << std::endl;
 #endif
 		//std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
 		BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
-		//std::cout << "1" << std::endl;
+		//std::cout << "1  aTempMaster: " << aTempMaster << std::endl;
 		bool aResult = aTempMaster->accessGranted();
 		//std::cout << "2" << std::endl;
 		while (aResult && aTempMaster!=_masterNextTransaction){
@@ -277,18 +277,24 @@ bool SingleCoreCPU::addTransaction(){
 }
 
 void SingleCoreCPU::schedule(){
+	//std::cout <<"Hello\n";
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
 	_schedulingNeeded=false;
+	//std::cout << "1\n";
 	TMLTransaction* aOldTransaction = _nextTransaction;
 	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
+	//std::cout << "2\n";
 	_scheduler->transWasScheduled(this); //NEW
 	//if (aOldTransaction!=0){
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW
-		aOldTransaction->getCommand()->getTask()->resetScheduledFlag();
+		//std::cout << "3\n";
+		//aOldTransaction->getCommand()->getTask()->resetScheduledFlag();  TO BE OMITTED????????????????????????????????
+		//std::cout << "4\n";
 		//if (aOldTransaction!=_nextTransaction && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
 		if (_masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
 	}
+	//std::cout << "5\n";
 	if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }

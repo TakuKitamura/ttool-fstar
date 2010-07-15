@@ -189,7 +189,7 @@ public:
 	/**
 	\return Hash Value
 	*/
-	virtual unsigned long getStateHash() const=0;
+	virtual unsigned long getStateHash() const {};
 	///Returns the instance number of this task
 	/**
 	\return Instance number 

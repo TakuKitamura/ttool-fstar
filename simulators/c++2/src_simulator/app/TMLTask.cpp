@@ -416,6 +416,7 @@ void TMLTask::resetScheduledFlag(){
 	//_isScheduled=false;
 	//std::cout << _name << " CAN be scheduled by CPUs\n";
 	//if (_noOfCPUs>1) _currentCPU=0;
+	std::cout << " ---------- RESET scheduled flag end in task " << _name << "\n";
 	RESET_SCHEDULING;
 }
 
@@ -425,6 +426,7 @@ void TMLTask::setRescheduleFlagForCores(){
 	//_currentCPU=0;
 	RESET_SCHEDULING;
 	for (unsigned int i=0; i< _noOfCPUs; i++){
+		std::cout << "in Task " << _name << " next CPU\n";
 		_cpus[i]->setRescheduleFlag();
 	}
 }

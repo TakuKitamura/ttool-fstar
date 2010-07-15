@@ -85,7 +85,7 @@ public:
 			//std::cout << _name << ": registerTransaction" << std::endl;
 			for (unsigned int i=0; i <_nbOfBuses; i++) _busArray[i]->registerTransaction();
 			_nextTransaction=iTrans;
-			if (_channelBasedPrioEnabled){
+			if (_channelBasedPrioEnabled && iTrans!=0){
 				_channelBasedPrio=iTrans->getChannel()->getPriority();
 			}
 		}

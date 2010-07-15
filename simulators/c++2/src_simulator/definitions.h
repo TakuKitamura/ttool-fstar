@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <list>
 #include <vector>
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -72,8 +73,8 @@ Ludovic Apvrille, Renaud Pacalet
 using std::min;
 using std::max;
 
-#undef DEBUG_KERNEL
-#undef DEBUG_CPU
+#define DEBUG_KERNEL
+#define DEBUG_CPU
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
