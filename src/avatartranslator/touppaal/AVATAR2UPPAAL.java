@@ -927,7 +927,7 @@ public class AVATAR2UPPAAL {
 		
 		result[0] = signal;
 		
-		TraceManager.addDev("Nb of params on signal " + signal + ":" + _aaos.getNbOfValues());
+		//TraceManager.addDev("Nb of params on signal " + signal + ":" + _aaos.getNbOfValues());
 		
 		for(int i=0; i<_aaos.getNbOfValues(); i++) {
 			val = _aaos.getValue(i);

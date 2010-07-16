@@ -97,8 +97,24 @@ public class AvatarStateMachineElement extends AvatarElement {
 		return false;
 	}
 	
-	public boolean inAnUpperStateThan(AvatarState _state) {
-		return true;
+	public boolean inAnUpperStateOf(AvatarState _state) {
+		if (_state == null) {
+			return false;
+		}
+		
+		AvatarState as = getState();
+		if (as == null) {
+			return true;
+		}
+		
+		while((_state = _state.getState()) != null) {
+			if (_state == as) {
+				return true;
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	public String toString() {

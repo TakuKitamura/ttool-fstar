@@ -78,6 +78,7 @@ public class UPPAALLocation {
     
     public void setUrgent() {
 	    urgent = true;
+		committed = false;
     }
 	
 	public void unsetUrgent() {
@@ -86,6 +87,7 @@ public class UPPAALLocation {
 	
 	public void setCommitted() {
 	    committed = true;
+		urgent = false;
     }
 	
 	public void unsetCommitted() {

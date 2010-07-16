@@ -302,6 +302,23 @@ public class AvatarBlock extends AvatarElement {
 		return aa;
 	}
 	
+	public AvatarAttribute addIntegerAttribute(String _name) {
+		AvatarAttribute aa;
+		int cpt;
+		
+		for(cpt=0; cpt<50000; cpt++) {
+			aa = getAvatarAttributeWithName(_name + cpt);
+			if (aa == null) {
+				break;
+			}
+		}
+		
+		aa = new AvatarAttribute(_name+cpt, AvatarType.INTEGER, getReferenceObject());
+		addAttribute(aa);
+		
+		return aa;
+	}
+	
 	
     
 }
