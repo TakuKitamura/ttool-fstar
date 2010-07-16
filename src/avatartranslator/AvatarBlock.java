@@ -284,6 +284,24 @@ public class AvatarBlock extends AvatarElement {
 		}
 	}
 	
+	public AvatarAttribute addTimerAttribute(String _name) {
+		// Find a suitable name;
+		AvatarAttribute aa;
+		int cpt;
+		
+		for(cpt=0; cpt<50000; cpt++) {
+			aa = getAvatarAttributeWithName(_name + cpt);
+			if (aa == null) {
+				break;
+			}
+		}
+		
+		aa = new AvatarAttribute(_name+cpt, AvatarType.TIMER, getReferenceObject());
+		addAttribute(aa);
+		
+		return aa;
+	}
+	
 	
     
 }

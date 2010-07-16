@@ -77,6 +77,14 @@ public class AvatarStateMachineElement extends AvatarElement {
 		return myState;
 	}
 	
+	public boolean hasInStrictUpperState(AvatarState _as) {
+		if (getState() != null) {
+			return getState().hasInUpperState(_as);
+		}
+		
+		return false;
+	}
+	
 	public boolean hasInUpperState(AvatarState _as) {
 		if (getState() == _as) {
 			return true;
@@ -87,6 +95,10 @@ public class AvatarStateMachineElement extends AvatarElement {
 		}
 		
 		return false;
+	}
+	
+	public boolean inAnUpperStateThan(AvatarState _state) {
+		return true;
 	}
 	
 	public String toString() {

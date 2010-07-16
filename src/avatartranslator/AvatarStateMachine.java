@@ -107,7 +107,7 @@ public class AvatarStateMachine extends AvatarElement {
 		}
 		
 		while((at = getCompositeTransition()) != null) {
-			removeCompositeTransition(at);
+			removeCompositeTransition(at, _block);
 		}
 		
 		removeAllSuperStates();
@@ -152,7 +152,7 @@ public class AvatarStateMachine extends AvatarElement {
 		return false;
 	}
 	
-	private void removeCompositeTransition(AvatarTransition _at) {
+	private void removeCompositeTransition(AvatarTransition _at, AvatarBlock _block) {
 		AvatarState state = (AvatarState)(getPreviousElementOf(_at));
 		
 		Vector <AvatarStateMachineElement> v = new Vector<AvatarStateMachineElement>();
@@ -163,6 +163,13 @@ public class AvatarStateMachine extends AvatarElement {
 				if (element != _at) {
 					v.add(element);
 				}
+			}
+		}
+		
+		// Remove "after" and replace them with timers
+		for(AvatarStateMachineElement element: v) {
+			if (element instanceof AvatarTransition) {
+				removeAfter((AvatarTransition)element, _block);
 			}
 		}
 		
@@ -416,6 +423,34 @@ public class AvatarStateMachine extends AvatarElement {
 			newone.addNext(elt);
 		}
 	}
-    
+
+	public void removeAfter(AvatarTransition at, AvatarBlock _block) {
+		String delay = at.getMinDelay();
+		if ((delay == null) || (delay.trim().length() == 0)) {
+			return;
+		}
+		
+		// We have to use a timer for this transition
+		AvatarAttribute aa = _block.addTimerAttribute("timer__");
+		
+		// Timer is set at the entrance in the composite state
+		LinkedList<AvatarTransition> ll = findEntranceTransitionElements(at.getState());
+		
+		
+		
+	}
+	
+	public LinkedList<AvatarTransition> findEntranceTransitionElements(AvatarState _state) {
+		LinkedList<AvatarTransition> ll = new LinkedList<AvatarTransition>();
+		
+		for(AvatarStateMachineElement elt: elements) {
+			if (elt instanceof AvatarTransition) {
+				if (elt.inAnUpperStateThan(_state)) {
+				}
+			}
+		}
+		
+		return ll;
+	}
 
 }

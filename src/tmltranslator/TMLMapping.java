@@ -106,19 +106,7 @@ public class TMLMapping {
 			}
 		}
 		
-		// Is there a memory?
-		if (!tmla.hasMemory()) {
-			mem = new HwMemory("defaultMemory");
-			tmla.addHwNode(mem);
-			iterator = tmlm.getChannels().listIterator();
-			
-			while(iterator.hasNext()) {
-				ch = (TMLChannel)(iterator.next());
-				addCommToHwCommNode(ch, mem);
-			}
-		} else {
-			mapAllChannelsOnMemory();
-		}
+
 		
 		if (!tmla.hasBus()) {
 			bus = new HwBus("defaultBus");
@@ -142,6 +130,24 @@ public class TMLMapping {
 		} else {
 			mapAllChannelsOnBus();
 		}
+		
+		// Is there a memory?
+		/*if (!tmla.hasMemory()) {
+			mem = new HwMemory("defaultMemory");
+			tmla.addHwNode(mem);
+			
+			// Connect this memory to al buses
+			
+			
+			iterator = tmlm.getChannels().listIterator();
+			
+			while(iterator.hasNext()) {
+				ch = (TMLChannel)(iterator.next());
+				addCommToHwCommNode(ch, mem);
+			}
+		} else {
+			mapAllChannelsOnMemory();
+		}*/
 	}
 	
 	// If only one bus -> map all channels on it;
