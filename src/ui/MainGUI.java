@@ -960,6 +960,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLDesignPanel) {
 				list.addAll(((TMLDesignPanel)tp).getAllTMLCommunicationNames(mainTabbedPane.getTitleAt(i)));
+			} else if (tp instanceof TMLComponentDesignPanel) {
+				list.addAll(((TMLComponentDesignPanel)tp).getAllTMLCommunicationNames(mainTabbedPane.getTitleAt(i)));
 			}
 		}
 		return list;

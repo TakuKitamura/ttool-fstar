@@ -165,6 +165,10 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 		return tmlctdp.getPrimitiveComponentByName(_name);
 	}
 	
+	public ArrayList<String> getAllTMLCommunicationNames(String _name) {
+		return tmlctdp.getAllTMLCommunicationNames(_name);
+	}
+	
 	public ArrayList<String> getAllCompositeComponent(String _name) {
 		return tmlctdp.getAllCompositeComponent(_name);
 	}
