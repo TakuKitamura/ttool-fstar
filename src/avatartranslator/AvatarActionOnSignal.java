@@ -81,5 +81,14 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	public boolean isReceiving() {
 		return signal.isIn();
 	}
+	
+	public AvatarActionOnSignal basicCloneMe() {
+		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "_clone", getSignal(), getReferenceObject());
+		for(int i=0; i<getNbOfValues(); i++) {
+			aaos.addValue(getValue(i));
+		}
+		
+		return aaos;
+	}
     
 }

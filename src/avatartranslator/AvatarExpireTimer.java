@@ -54,4 +54,10 @@ public class AvatarExpireTimer extends AvatarTimerOperator {
         super(_name, _referenceObject);
     }
 	
+	public AvatarStateMachineElement basicCloneMe() {
+		AvatarExpireTimer aet = new AvatarExpireTimer(getName(), getReferenceObject());
+		aet.setTimer(getTimer());
+		return aet;
+	}
+	
 }

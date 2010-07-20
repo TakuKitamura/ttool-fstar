@@ -136,12 +136,14 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		return at;
 	}
 	
-	public AvatarTransition basicCloneMe() {
-		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
+	public AvatarStateMachineElement basicCloneMe() {
+		AvatarTransition at = new AvatarTransition(getName() + "_clone", getReferenceObject());
 		
 		for(int i=0; i<getNbOfAction(); i++) {
 			at.addAction(getAction(i));
 		}
+		
+		at.setComputes(getMinCompute(), getMaxCompute());
 		
 		return at;
 	}
@@ -213,7 +215,28 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		return false;
 	}
 	
-	
+	public String specificToString() {
+		String ret = "";
+		if (hasDelay()) {
+			ret += "minDelay=" + getMinDelay() + " maxDelay=" + getMaxDelay() + "\n"; 
+		}
+		
+		if (hasCompute()) {
+			ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";  
+		}
+		
+		for(String s: actions) {
+			if (s.trim().length() > 0) {
+				ret += s.trim() + " / ";
+			}
+		}
+		
+		if (ret.length() > 0) {
+			ret = "\n" + ret;
+		}
+		
+		return ret;
+	}
 	
 	
 	

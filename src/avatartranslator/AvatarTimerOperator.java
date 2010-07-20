@@ -48,7 +48,7 @@ package avatartranslator;
 import java.util.*;
 
 
-public class AvatarTimerOperator extends AvatarStateMachineElement {
+public abstract class AvatarTimerOperator extends AvatarStateMachineElement {
 	protected AvatarAttribute timer;
 	
     public AvatarTimerOperator(String _name, Object _referenceObject) {
@@ -61,6 +61,14 @@ public class AvatarTimerOperator extends AvatarStateMachineElement {
 	
 	public AvatarAttribute getTimer() {
 		return timer;
+	}
+	
+	public String specificToString() {
+		if (timer != null) {
+			return "\n  timer: " + timer.getName();
+		}
+		
+		return "";
 	}
 	
 }

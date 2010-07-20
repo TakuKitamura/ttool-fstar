@@ -52,6 +52,10 @@ public class AvatarState extends AvatarStateMachineElement {
 	
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-		
     }
+	
+	public AvatarStateMachineElement basicCloneMe() {
+		AvatarState as = new AvatarState(getName(), getReferenceObject());
+		return as;
+	}
 }

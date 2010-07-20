@@ -48,7 +48,7 @@ package avatartranslator;
 import java.util.*;
 
 
-public class AvatarStateMachineElement extends AvatarElement {
+public abstract class AvatarStateMachineElement extends AvatarElement {
 	
 	private LinkedList<AvatarStateMachineElement> nexts;
 	private AvatarState myState;
@@ -131,7 +131,14 @@ public class AvatarStateMachineElement extends AvatarElement {
 			ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
 			cpt ++;
 		}
+		
+		ret += specificToString();
+		
 		return ret;
+	}
+	
+	public String specificToString() {
+		return "";
 	}
 	
 	public int nbOfNexts() {
@@ -172,6 +179,8 @@ public class AvatarStateMachineElement extends AvatarElement {
 		
 		return (element instanceof AvatarActionOnSignal);
 	}
+	
+	public abstract AvatarStateMachineElement basicCloneMe();
 	
     
 }

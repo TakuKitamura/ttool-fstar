@@ -87,4 +87,9 @@ public class AvatarRandom extends AvatarStateMachineElement {
 		functionId = _functionId;
 	}
 	
+	public AvatarStateMachineElement basicCloneMe() {
+		AvatarRandom ar = new AvatarRandom(getName(), getReferenceObject());
+		return ar;
+	}
+	
 }
