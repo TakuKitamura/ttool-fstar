@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLCPrimitiveComponent
- * Primitive Component. To be used in TML component task diagrams
- * Creation: 12/03/2008
- * @version 1.0 12/03/2008
+ * Class TMLCRecordComponent
+ * Record Component. To be used in TML component task diagrams
+ * Creation: 20/07/2010
+ * @version 1.0 20/07/2010
  * @author Ludovic APVRILLE
  * @see
  */
@@ -58,7 +58,7 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class TMLCRecordComponent extends TGCScalableWithInternalComponent implements SwallowedTGComponent {
 	private int maxFontSize = 14;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
@@ -78,7 +78,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 	
 	public String oldValue;
     
-    public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TMLCRecordComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
 		initScaling(200, 150);
@@ -103,9 +103,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         removable = true;
         userResizable = true;
         
-		value = tdp.findTMLPrimitiveComponentName("TMLComp_");
+		value = tdp.findTMLRecordComponentName("Record_");
 		oldValue = value;
-		setName("Primitive component");
+		setName("Record component");
 		
         myImageIcon = IconManager.imgic1202;
 		
@@ -120,7 +120,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		Font fold = f;
 		
 		if (myColor == null) {
-			myColor = new Color(201, 243, 188- (getMyDepth() * 10), 200);
+			myColor = new Color(193, 218, 241- (getMyDepth() * 10), 200);
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {
@@ -249,17 +249,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-		// On the icon?
-		if (iconIsDrawn) {
-			if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
-				tdp.selectTab(getValue());
-				return true;
-			}
-		}
 		
 		// On the name ?
 		if ((displayText) && (_y <= (y + currentFontSize + textX))) {
-			//TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
+			//System.out.println("Edit on double click x=" + _x + " y=" + _y);
 			oldValue = value;
 			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 			JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
@@ -276,17 +269,17 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 					return false;
 				}
 				
-				if (((TMLComponentTaskDiagramPanel)(tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+				if (((TMLComponentTaskDiagramPanel)(tdp)).nameRecordComponentInUse(oldValue, s)) {
 					JOptionPane.showMessageDialog(frame,
 						"Error: the name is already in use",
 						"Name modification",
 						JOptionPane.ERROR_MESSAGE);
 					return false;
 				} else {
-					//TraceManager.addDev("Set value with change");
+					//System.out.println("Set value with change");
 					setValueWithChange(s);
 					rescaled = true;
-					//TraceManager.addDev("return true");
+					//System.out.println("return true");
 					return true;
 				}
 			}
@@ -294,7 +287,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		}
 		
 		// And so -> attributes!
-		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute");
+		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting fields of " + value, "Field");
         setJDialogOptions(jda);
         jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda);
@@ -313,27 +306,13 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
         jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-		
-		Vector<String> records = ((TMLComponentTaskDiagramPanel)(tdp)).getAllRecords(this);
-		for(String s: records) {
-			jda.addType(s, false);
-		}
-		
 		jda.enableInitialValue(true);
         jda.enableRTLOTOSKeyword(true);
         jda.enableJavaKeyword(false);
     }
-	
-	public Vector<String> getAllRecords() {
-		return ((TMLComponentTaskDiagramPanel)(tdp)).getAllRecords(this);
-	}
-	
-	public TMLCRecordComponent getRecordNamed(String _nameOfRecord) {
-		return ((TMLComponentTaskDiagramPanel)(tdp)).getRecordNamed(this, _nameOfRecord);
-	}
     
     public int getType() {
-        return TGComponentManager.TMLCTD_PCOMPONENT;
+        return TGComponentManager.TMLCTD_RCOMPONENT;
     }
 	
 	public void wasSwallowed() {
@@ -348,47 +327,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 			
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		//boolean swallowed = false;
-		
-        //TraceManager.addDev("Add swallow component");
-        // Choose its position    
-        // Make it an internal component
-        // It's one of my son
-        //Set its coordinates
-		
-		 if (tgc instanceof TMLCPrimitivePort) {
-			 tgc.setFather(this);
-			 tgc.setDrawingZone(true);
-			 ((TMLCPrimitivePort)tgc).resizeWithFather();
-			 addInternalComponent(tgc, 0);
-		 }
-        
-        
-    }
-    
-    public void removeSwallowedTGComponent(TGComponent tgc) {
-        removeInternalComponent(tgc);
-    }
-    
-    
-    /*public Vector getArtifactList() {
-        Vector v = new Vector();
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                v.add(tgcomponent[i]);
-            }
-        }
-        return v;
-    }*/
-    
     public void hasBeenResized() {
 		rescaled = true;
-        for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-				((TMLCPrimitivePort)tgcomponent[i]).resizeWithFather();
-			}
-        }
 		
 		if (getFather() != null) {
 			resizeWithFather();
@@ -406,18 +346,14 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 	
 	public int getChildCount() {
-        return myAttributes.size() + nbInternalTGComponent + 1;
+        return myAttributes.size();
     }
     
     public Object getChild(int index) {
 		if (index == 0) {
 			return value;
 		} else {
-			if (index <= myAttributes.size()) {
-				return myAttributes.elementAt(index-1);
-			} else {
-				return tgcomponent[index-1-myAttributes.size()];
-			}
+			return myAttributes.elementAt(index-1);
 		}
     }
     
@@ -426,28 +362,19 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 			return 0;
 		} else {
 			Object o;
-			if (myAttributes.indexOf(child) > -1) {
-				return myAttributes.indexOf(child) + 1;
-			} else {
-				for(int i=0; i<nbInternalTGComponent; i++) {
-					if (tgcomponent[i] == child) {
-						return myAttributes.size() + 1 + i;
-					}
-				}
-			}
+			return myAttributes.indexOf(child) + 1;
 		}
-		return -1;
     }
     
     protected String translateExtraParam() {
         TAttribute a;
-		//TraceManager.addDev("Loading extra params of " + value);
+		//System.out.println("Loading extra params of " + value);
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for(int i=0; i<myAttributes.size(); i++) {
-            //TraceManager.addDev("Attribute:" + i);
+            //System.out.println("Attribute:" + i);
             a = (TAttribute)(myAttributes.elementAt(i));
-            //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
+            //System.out.println("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -474,21 +401,21 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             String typeOther;
             String id, valueAtt;
             
-            //TraceManager.addDev("Loading attributes");
-            //TraceManager.addDev(nl.toString());
+            //System.out.println("Loading attributes");
+            //System.out.println(nl.toString());
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
-                //TraceManager.addDev(n1);
+                //System.out.println(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
                     for(int j=0; j<nli.getLength(); j++) {
                         n2 = nli.item(j);
-                        //TraceManager.addDev(n2);
+                        //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Attribute")) {
-                                //TraceManager.addDev("Analyzing attribute");
+                                //System.out.println("Analyzing attribute");
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
                                 type = Integer.decode(elt.getAttribute("type")).intValue();
                                 try {
@@ -503,7 +430,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                     valueAtt = "";
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
+                                    //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.addElement(ta);
                                 }
@@ -525,74 +452,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 	public Vector getAttributes() {
 		return myAttributes;
 	}
-	
-	public LinkedList getAllChannelsOriginPorts() {
-		return getAllPorts(0, true);
-	}
-	
-	public LinkedList getAllEventsOriginPorts() {
-		return getAllPorts(1, true);
-	}
-	
-	public LinkedList getAllRequestsDestinationPorts() {
-		return getAllPorts(2, false);
-	}
-	
-	public LinkedList getAllPorts(int _type, boolean _isOrigin) {
-		LinkedList ret = new LinkedList();
-		TMLCPrimitivePort port;
-		
-		//TraceManager.addDev("Type = " + _type + " isOrigin=" + _isOrigin);
-		
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-				port = (TMLCPrimitivePort)tgcomponent[i];
-				//TraceManager.addDev("Found one port:" + port.getPortName() + " type=" + port.getPortType() + " origin=" + port.isOrigin());
-				if ((port.getPortType() == _type) && (port.isOrigin() == _isOrigin)) {
-					ret.add(port);
-					//TraceManager.addDev("Adding port:" + port.getPortName());
-				}
-			}
-		}
-		
-		return ret;
-	}
-	
-	public ArrayList<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
-		ArrayList<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-				list.add((TMLCPrimitivePort)(tgcomponent[i]));
-			}
-		}
-		
-		return list;
-	}
-	
-    
-   	/*public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
-      }*/
-	  
-	 
-	  
-	  /*public String getAttributes() {
-		  String attr = "";
-		  attr += "Data size (in byte) = " + byteDataSize + "\n";
-		  attr += "Pipeline size = " + pipelineSize + "\n";
-		  if (schedulingPolicy == HwCPU.DEFAULT_SCHEDULING) {
-			  attr += "Scheduling policy = basic Round Robin\n";
-		  }
-		  attr += "Task switching time (in cycle) = " + taskSwitchingTime + "\n";
-		  attr += "Go in idle mode (in cycle) = " + goIdleTime + "\n";
-		  attr += "Max consecutive idle cycles before going in idle mode (in cycle) = " + maxConsecutiveIdleCycles + "\n";
-		  attr += "Execi execution time (in cycle) = " + execiTime + "\n";
-		  attr += "Branching prediction misrate (in %) = " + branchingPredictionPenalty + "\n";
-		  attr += "Cache miss (in %) = " + cacheMiss + "\n";
-		  return attr;
-		  
-		  
-	  }*/
 	  
     
 }

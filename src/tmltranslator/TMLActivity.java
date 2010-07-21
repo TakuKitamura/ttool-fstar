@@ -47,6 +47,8 @@ package tmltranslator;
 
 import java.util.*;
 
+import myutil.*;
+
 
 public class TMLActivity extends TMLElement {
     private TMLActivityElement first;
@@ -219,6 +221,100 @@ public class TMLActivity extends TMLElement {
 		loop.addNext(choice);
 		loop.addNext(tmlstop);
 		removeElement(_tmlrs);
+	}
+	
+	public void splitActionStatesWithUnderscoreVariables(TMLTask _task) {
+		//TraceManager.addDev("Splitting actions in task " + _task.getName());
+		
+		TMLActivityElement ae;
+		Vector<TMLActionState> states = new Vector<TMLActionState>();
+        for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+            if (ae instanceof TMLActionState) {
+				states.add((TMLActionState)ae);
+            }
+        }
+		
+		for(TMLActionState as: states) {
+			 splitActionStatesWithUnderscoreVariables(as, _task);
+		}
+		
+	}
+	
+	private void splitActionStatesWithUnderscoreVariables(TMLActionState _ae, TMLTask _task) {
+		// Is ae if the form name0 = name1 with variables in the task of type name0__ and name1__ ?
+		String s = _ae.getAction();
+		
+		if (s == null) {
+			return;
+		}
+		
+		//TraceManager.addDev("Analyzing action to split : " + s);
+		
+		s = s.trim();
+		
+		if (s.length() == 0) {
+			return;
+		}
+		
+		int index0 = s.indexOf('=');
+		if (index0 == -1) {
+			return;
+		}
+		
+		String name0 = s.substring(0, index0).trim();
+		String name1 = s.substring(index0+1, s.length()).trim();
+		
+		//TraceManager.addDev("name0=" + name0 + " name1=" + name1);
+		
+		if (!TMLTextSpecification.isAValidId(name0)) {
+			return;
+		}
+		
+		if (!TMLTextSpecification.isAValidId(name1)) {
+			return;
+		}
+		
+		Vector<TMLAttribute> v0 = _task.getAllTMLAttributesStartingWith(name0 + "__");
+		Vector<TMLAttribute> v1 = _task.getAllTMLAttributesStartingWith(name1 + "__");
+		
+		//TraceManager.addDev("size");
+		
+		if ((v0.size() == 0) || (v0.size() != v1.size())) {
+			return;
+		}
+		
+		//TraceManager.addDev("Analyzing types");
+		for(int i=0; i<v0.size(); i++) {
+			if (v0.get(i).getType() == v1.get(i).getType()) {
+				return;
+			}
+		}
+		
+		//TraceManager.addDev("Found action to split : " + s);
+		
+		TMLActionState previous, tmlas;
+		TMLActivityElement tmlae = _ae.getNextElement(0);
+		
+		_ae.setAction(v0.get(0).getName() + " = " + v1.get(0).getName());
+		
+		if (v0.size() == 1) {
+			return;
+		}
+		
+		_ae.clearNexts();
+		previous = _ae;
+		
+		for(int i=1; i<v0.size(); i++) {
+			tmlas = new TMLActionState(previous.getName(), previous.getReferenceObject());
+			tmlas.setAction(v0.get(i).getName() + " = " + v1.get(i).getName());
+			elements.add(tmlas);
+			previous.addNext(tmlas);
+			previous = tmlas;
+		}
+		
+		previous.addNext(tmlae);
+		
 	}
     
  

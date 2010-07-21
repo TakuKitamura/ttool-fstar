@@ -59,7 +59,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private Frame frame;
     
     private String name;
-    private int type1, type2, type3;
+    private int type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
 
@@ -69,22 +69,25 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     
     // Panel1
     private JTextField nameText, maxText, widthText;
-    private JComboBox typePort, typeList1, typeList2, typeList3;
+    private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
     private JComboBox origin, finite, blocking;
 	private int portIndex;
-    private Vector origins, finites, blockings, portTypes, types1, types2, types3;
+    private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
+	private Vector<String> types;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, int _type1, int _type2, int _type3, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, Frame f, String title) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, int _type1, int _type2, int _type3, int _type4, int _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, Frame f, String title, Vector<String> _types) {
         super(f, title, true);
         frame = f;
         
         name = _name;
 		portIndex = _portIndex;
-        type1 = _type1; type2 = _type2; type3 = _type3;
+        type1 = _type1; type2 = _type2; type3 = _type3; type4 = _type4; type5 = _type5;
+		
+		types = _types;
         
         data = false;
         
@@ -107,16 +110,32 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		portTypes.add("Event");
 		portTypes.add("Request");
 		
-        types1 = new Vector(); types2 = new Vector(); types3 = new Vector();
+        types1 = new Vector(); types2 = new Vector(); types3 = new Vector(); types4 = new Vector(); types5 = new Vector(); 
         types1.add(TType.getStringType(0));
         types1.add(TType.getStringType(1));
         types1.add(TType.getStringType(2));
+		
         types2.add(TType.getStringType(0));
         types2.add(TType.getStringType(1));
         types2.add(TType.getStringType(2));
+		
         types3.add(TType.getStringType(0));
         types3.add(TType.getStringType(1));
         types3.add(TType.getStringType(2));
+		
+		types4.add(TType.getStringType(0));
+        types4.add(TType.getStringType(1));
+        types4.add(TType.getStringType(2));
+		
+		types5.add(TType.getStringType(0));
+        types5.add(TType.getStringType(1));
+        types5.add(TType.getStringType(2));
+		
+		addTypes(types1, types);
+		addTypes(types2, types);
+		addTypes(types3, types);
+		addTypes(types4, types);
+		addTypes(types5, types);
 		
 		origins = new Vector();
 		origins.add("Origin");
@@ -129,8 +148,13 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		blockings = new Vector();
 		blockings.add("Blocking");
 		blockings.add("Non-blocking FIFO");
-		
     }
+	
+	private void addTypes(Vector v, Vector<String> types) {
+		for(int i=0; i<types.size(); i++) {
+			v.add(types.get(i));
+		}
+	}
     
     private void initComponents() {
         Container c = getContentPane();
@@ -237,6 +261,25 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         typeList3 = new JComboBox(types3);
         typeList3.setSelectedIndex(type3);
         panel2.add(typeList3, c2);
+		
+		c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
+        panel2.add(new JLabel("Type: #4"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList4 = new JComboBox(types4);
+        typeList4.setSelectedIndex(type4);
+        panel2.add(typeList4, c2);
+		
+		
+		c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
+        panel2.add(new JLabel("Type: #5"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        typeList5 = new JComboBox(types5);
+        typeList5.setSelectedIndex(type5);
+        panel2.add(typeList5, c2);
         
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
@@ -434,9 +477,22 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
                 return typeList2.getSelectedIndex();
             case 2:
                 return typeList3.getSelectedIndex();
-            default:
+			case 3:
+				return typeList4.getSelectedIndex();
+			case 4:
+				return typeList5.getSelectedIndex();
+			default:
                 return typeList1.getSelectedIndex();
         }
         
     }
+	
+	public String getStringType(int i) {
+		int index = getType(i);
+		if (index < 3) {
+			return TType.getStringType(index);
+		}
+		
+		return types.get(index-3);
+	}
 }

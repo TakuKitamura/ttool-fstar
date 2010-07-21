@@ -186,5 +186,25 @@ public class TMLTask extends TMLElement {
 	public void removeAllRandomSequences() {
 		activity.removeAllRandomSequences(this);
 	}
+	
+	public Vector<String> getAllAttributesStartingWith(String _name) {
+		Vector<String> v = new Vector<String>();
+		for(TMLAttribute attribute:attributes) {
+			if (attribute.getName().startsWith(_name)) {
+				v.add(attribute.getName());
+			}
+		}
+		return v;
+	}
+	
+	public Vector<TMLAttribute> getAllTMLAttributesStartingWith(String _name) {
+		Vector<TMLAttribute> v = new Vector<TMLAttribute>();
+		for(TMLAttribute attribute:attributes) {
+			if (attribute.getName().startsWith(_name)) {
+				v.add(attribute);
+			}
+		}
+		return v;
+	}
  
 }

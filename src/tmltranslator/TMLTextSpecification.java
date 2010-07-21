@@ -74,7 +74,7 @@ public class TMLTextSpecification {
 	private TMLActivityElement tmlae;
 	private ArrayList<TMLParserSaveElt> parses;
 	
-	private String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "BRBW", "NBRNBW", 
+	private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "BRBW", "NBRNBW", 
 		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
 	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
 	"RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
@@ -2281,7 +2281,7 @@ public class TMLTextSpecification {
 		return (!checkKeywords(instcode));
 	}
 	
-	public boolean isAValidId(String _id) {
+	public static boolean isAValidId(String _id) {
 		if ((_id == null) || (_id.length() == 0)) {
 			return false;
 		}
@@ -2311,7 +2311,7 @@ public class TMLTextSpecification {
 		return false;
 	}
 	
-	public boolean checkKeywords(String _id) {
+	public static boolean checkKeywords(String _id) {
 		String id = _id.toUpperCase();
 		for(int i=0; i<keywords.length; i++) {
 			if (id.compareTo(keywords[i]) == 0) {

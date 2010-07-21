@@ -280,6 +280,7 @@ public class TMLSyntaxChecking {
 										System.out.println("0");
 									}
 									if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
+										TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());
 										addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
 									}
 								}

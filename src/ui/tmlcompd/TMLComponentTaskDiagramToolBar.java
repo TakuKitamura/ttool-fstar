@@ -70,6 +70,7 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLCTD_PCOMPONENT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_COPORT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_PORT_CONNECTOR].setEnabled(b);
+		mgui.actions[TGUIAction.TMLCTD_RCOMPONENT].setEnabled(b);
 		//mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
@@ -123,6 +124,11 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.TMLCTD_RCOMPONENT]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();

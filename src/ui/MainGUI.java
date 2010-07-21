@@ -2664,7 +2664,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 					ret = true;
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
-							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, RT-LOTOS) specification or executable code (systemC)",
+							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, UPPAAL) specification or executable code (C++ / SystemC)",
 							"Syntax analysis successful on TML designs",
 							JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -2700,7 +2700,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 					ret = true;
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
-							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, RT-LOTOS) specification or executable code (systemC)",
+							"0 error, " + getCheckingWarnings().size() + " warning(s). You can now generate a formal (LOTOS, UPPAAL) specification or executable code (C++ / SystemC)",
 							"Syntax analysis successful on TML designs",
 							JOptionPane.INFORMATION_MESSAGE);
                     }
@@ -6397,6 +6397,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_CREMOTECOMPONENT);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_PCOMPONENT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_PCOMPONENT);
+		} else if (command.equals(actions[TGUIAction.TMLCTD_RCOMPONENT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_RCOMPONENT);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_CPORT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_CPORT);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_COPORT].getActionCommand())) {

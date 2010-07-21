@@ -64,7 +64,7 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
     protected int textX1 = 2;
     
     protected String eventName = "evt";
-    int nParam = 3;
+    int nParam = 5;
     protected String [] params = new String[nParam];
 	
 	protected int stateOfError = 0; // Not yet checked
@@ -191,6 +191,19 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
         return nParam;
     }
 	
+	 public String getRealParamValue(int index) {
+		int cpt = 0;
+		for(int i=0; i<nParam; i++) {
+			if (params[i].length() > 0) {
+				if (cpt == index) {
+					return params[i];
+				}
+				cpt ++;
+            }
+		}
+        return "";
+    }
+	
 	public int realNbOfParams() {
         int cpt = 0;
 		for(int i=0; i<nParam; i++) {
@@ -279,7 +292,7 @@ public class TMLADWaitEvent extends TGCWithoutInternalComponent implements Check
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 eventName = elt.getAttribute("eventName");
-                                nParam = Integer.decode(elt.getAttribute("nbOfParams")).intValue();
+                                nParam = Math.max(nParam, Integer.decode(elt.getAttribute("nbOfParams")).intValue());
                             }   
                              if (elt.getTagName().equals("Param")) {
                                 s = elt.getAttribute("value");

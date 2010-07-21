@@ -64,7 +64,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
     protected int linebreak = 10;
     
     protected String requestName = "req";
-    int nParam = 3;
+    int nParam = 5;
     protected String [] params = new String[nParam];
 	
 	protected int stateOfError = 0; // Not yet checked
@@ -190,6 +190,19 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         return nParam;
     }
 	
+	 public String getRealParamValue(int index) {
+		int cpt = 0;
+		for(int i=0; i<nParam; i++) {
+			if (params[i].length() > 0) {
+				if (cpt == index) {
+					return params[i];
+				}
+				cpt ++;
+            }
+		}
+        return "";
+    }
+	
 	public int realNbOfParams() {
         int cpt = 0;
 		for(int i=0; i<nParam; i++) {
@@ -278,7 +291,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 requestName = elt.getAttribute("requestName");
-                                nParam = Integer.decode(elt.getAttribute("nbOfParams")).intValue();
+                                nParam = Math.max(nParam, Integer.decode(elt.getAttribute("nbOfParams")).intValue());
                             }   
                              if (elt.getTagName().equals("Param")) {
                                 s = elt.getAttribute("value");

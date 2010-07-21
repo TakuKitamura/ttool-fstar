@@ -1220,5 +1220,14 @@ public class TMLModeling {
 			return "(" + action0 + ")+(" + action1 + ")";
 		}
 	}
+	
+	public void splitActionStatesWithUnderscoreVariables() {
+		for (TMLTask task: tasks) {
+			TMLActivity activity = task.getActivityDiagram();
+			if (activity != null) {
+				activity.splitActionStatesWithUnderscoreVariables(task);
+			}
+		 }
+	}
   
 }

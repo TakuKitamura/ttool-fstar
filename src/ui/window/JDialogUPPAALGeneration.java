@@ -322,7 +322,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 			
 			TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
 			boolean result;
-			if (tp instanceof TMLDesignPanel) {
+			if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
 				result = mgui.gtm.generateUPPAALFromTML(pathCode, debug, size1, choices);
 			} else {
 				result = mgui.gtm.generateUPPAALFromTIF(pathCode, debug, nb1, choices, variables);

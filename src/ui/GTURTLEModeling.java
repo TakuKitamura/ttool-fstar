@@ -444,7 +444,7 @@ public class GTURTLEModeling {
 		
 		ArrayList<String> listQ = new ArrayList<String>();
 		
-		if (uppaalTIFTable != null) {
+		if (tp instanceof DesignPanel) {
 			ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
 			
 			//TraceManager.addDev("List size:" + listAD.size());
@@ -475,7 +475,7 @@ public class GTURTLEModeling {
 					}
 				}
 			}
-		} else if (uppaalTMLTable != null) {
+		} else if ((tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLDesignPanel)) {
 			//TraceManager.addDev("uppaalTMLTable");
 			ArrayList<TMLActivityElement> listAE = listE.getTMLActivityElementCorrespondance(list);
 			
@@ -5123,14 +5123,12 @@ public class GTURTLEModeling {
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling(true);
 		//tmlm.removeAllRandomSequences();
-		TraceManager.addDev("New TML Modeling:" + tmlm.toString());
+		//TraceManager.addDev("New TML Modeling:" + tmlm.toString());
 		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gtmlm.getCorrespondanceTable();
-		
-		
-		
+
 		//TraceManager.addDev("TML Modeling translated");
 		//TraceManager.addDev("----- TML Modeling -----");
 		//TraceManager.addDev(tmlm.toString());
@@ -5145,38 +5143,12 @@ public class GTURTLEModeling {
 				warningsOptimize = tmlm.optimize();
 			}
 			
-			//TML2TURTLE tt = new TML2TURTLE(tmlm);
-			//tm = tt.generateTURTLEModeling();
 			tmState = 2;
 			mgui.resetAllDIPLOIDs();
 			listE.useDIPLOIDs();
 			return true;
 			//TraceManager.addDev("tm generated:");
 			//tm.print();
-			/*checkingErrors = tt.getCheckingErrors();
-			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
-				analyzeErrors();
-				return false;
-			} else {
-				// Optimize
-				//TraceManager.addDev("Optimize");
-				tm.optimize();
-				//TraceManager.addDev("Optimize done");
-				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
-				checkingErrors = tmc.syntaxAnalysisChecking();
-				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
-					analyzeErrors();
-					return false;
-				} else {
-					warnings = gtmlm.getCheckingWarnings();
-					warnings.addAll(tmc.getWarnings());
-					warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmldp.tmltdp));
-					mgui.resetAllDIPLOIDs();
-					listE.useDIPLOIDs();
-					mgui.setMode(MainGUI.GEN_DESIGN_OK);
-					return true;
-				}
-			}*/
 		}
 	}
 	
@@ -5196,19 +5168,21 @@ public class GTURTLEModeling {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();
 		warnings = new Vector();
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
-		//TraceManager.addDev("New TML Component Modeling");
+		
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
-		//tmlm.removeAllRandomSequences();
+		
+		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
 		listE = gctmlm.getCorrespondanceTable();
-		//listE.useDIPLOIDs();
+		
 		//TraceManager.addDev("TML Modeling translated");
 		//TraceManager.addDev("----- TML Modeling -----");
 		//TraceManager.addDev(tmlm.toString());
 		//TraceManager.addDev("------------------------");
+		//mgui.generateTMLTxt();
 		checkingErrors = gctmlm.getCheckingErrors();
 
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
@@ -5218,40 +5192,13 @@ public class GTURTLEModeling {
 			if (optimize) {
 				warningsOptimize = tmlm.optimize();
 			}
-			
-			//TML2TURTLE tt = new TML2TURTLE(tmlm);
-			//tm = tt.generateTURTLEModeling();
+
 			tmState = 2;
-			TraceManager.addDev("tm generated:");
+			//TraceManager.addDev("tm generated:");
 			mgui.resetAllDIPLOIDs();
 			listE.useDIPLOIDs();
 			return true;
 			//tm.print();
-			/*checkingErrors = tt.getCheckingErrors();
-			if ((checkingErrors != null) && (checkingErrors.size() > 0)){
-				analyzeErrors();
-				return false;
-			} else {
-				// Optimize
-				//TraceManager.addDev("Optimize");
-				tm.optimize();
-				//TraceManager.addDev("Optimize done");
-				TURTLEModelChecker tmc = new TURTLEModelChecker(tm);
-				checkingErrors = tmc.syntaxAnalysisChecking();
-				if ((checkingErrors != null) && (checkingErrors.size() > 0)){
-					analyzeErrors();
-					return false;
-				} else {
-					warnings = gctmlm.getCheckingWarnings();
-					warnings.addAll(tmc.getWarnings());
-					warnings.addAll(convertToCheckingErrorTMLErrors(warningsOptimize, tmlcdp.tmlctdp));
-
-					mgui.setMode(MainGUI.GEN_DESIGN_OK);
-					mgui.resetAllDIPLOIDs();
-					listE.useDIPLOIDs();
-					return true;
-				}
-			}*/
 		}
 	}
 	

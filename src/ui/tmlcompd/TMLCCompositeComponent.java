@@ -273,6 +273,10 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
             ((TMLCCompositeComponent)tgc).resizeWithFather();
         }
 		
+		if (tgc instanceof TMLCRecordComponent) {
+            ((TMLCRecordComponent)tgc).resizeWithFather();
+        }
+		
 		if (tgc instanceof TMLCPrimitiveComponent) {
             ((TMLCPrimitiveComponent)tgc).resizeWithFather();
         }
@@ -331,6 +335,9 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
 				((TMLCPrimitiveComponent)tgcomponent[i]).resizeWithFather();
 			}
+			if (tgcomponent[i] instanceof TMLCRecordComponent) {
+				((TMLCRecordComponent)tgcomponent[i]).resizeWithFather();
+			}
 			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
 				((TMLCRemoteCompositeComponent)tgcomponent[i]).resizeWithFather();
 			}
@@ -366,6 +373,24 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			
 			if (tgcomponent[i] instanceof TMLCPrimitiveComponent) {
 				ll.add(((TMLCPrimitiveComponent)(tgcomponent[i])));
+			}
+		}
+		
+		return ll;
+	}
+	
+	public ArrayList<TMLCRecordComponent> getAllRecordComponents() {
+		ArrayList<TMLCRecordComponent> ll = new ArrayList<TMLCRecordComponent>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
+				ll.addAll(((TMLCCompositeComponent)tgcomponent[i]).getAllRecordComponents());
+			}
+			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
+				ll.addAll(((TMLCRemoteCompositeComponent)tgcomponent[i]).getAllRecordComponents());
+			}
+			
+			if (tgcomponent[i] instanceof TMLCRecordComponent) {
+				ll.add(((TMLCRecordComponent)(tgcomponent[i])));
 			}
 		}
 		

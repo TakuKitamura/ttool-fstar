@@ -224,6 +224,7 @@ public class TGComponentManager {
 	public static final int TMLCTD_PCOMPONENT = 1202;
 	public static final int TMLCTD_COPORT = 1203;
 	public static final int TMLCTD_CREMOTECOMPONENT = 1204;
+	public static final int TMLCTD_RCOMPONENT = 1205;
 	
 	public static final int EBRDD_START_STATE = 1300;
     public static final int EBRDD_STOP_STATE = 1301;
@@ -702,6 +703,9 @@ public class TGComponentManager {
 			case TMLCTD_PCOMPONENT:
                 tgc = new TMLCPrimitiveComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TMLCTD_RCOMPONENT:
+                tgc = new TMLCRecordComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 			case TMLCTD_COPORT:
                 tgc = new TMLCChannelOutPort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1120,14 +1124,23 @@ public class TGComponentManager {
             return TMLAD_SELECT_EVT;
         } else if (tgc instanceof TMLADRandom) {
             return TMLAD_RANDOM;
+			
         } else if (tgc instanceof TMLCCompositeComponent) {
             return TMLCTD_CCOMPONENT;
+		} else if (tgc instanceof TMLCPrimitiveComponent) {
+            return TMLCTD_PCOMPONENT;
+		} else if (tgc instanceof TMLCRecordComponent) {
+            return TMLCTD_RCOMPONENT;
 		} else if (tgc instanceof TMLCRemoteCompositeComponent) {
             return TMLCTD_CREMOTECOMPONENT;
-		} else if (tgc instanceof TMLCCompositeComponent) {
+		} else if (tgc instanceof TMLCCompositePort) {
             return TMLCTD_CPORT;
+		} else if (tgc instanceof TMLCPrimitivePort) {
+            return TMLCTD_COPORT;
+			
 		} else if (tgc instanceof TMLCPortConnector) {
             return CONNECTOR_PORT_TMLC;
+			
 		} else if (tgc instanceof TGConnectorTMLAD) {
             return CONNECTOR_TMLAD;
         } else if (tgc instanceof TGConnectorTMLAssociationNav) {

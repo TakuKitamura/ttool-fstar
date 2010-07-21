@@ -376,6 +376,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			} catch (LauncherException le1) {}
 			return;
 		} catch (Exception e) {
+			TraceManager.addError("Exception: " + e.getMessage());
 			mode = 	NOT_STARTED;
 			setButtons();
 			try{

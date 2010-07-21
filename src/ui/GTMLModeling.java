@@ -122,6 +122,7 @@ public class GTMLModeling  {
 				addTMLEvents();
 				addTMLRequests();
 				generateTasksActivityDiagrams();
+				removeActionsWithRecords();
 			} catch (MalformedTMLDesignException mtmlde) {
 				TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
 			}
@@ -175,6 +176,7 @@ public class GTMLModeling  {
 				addTMLCEvents();
 				addTMLCRequests();
 				generateTasksActivityDiagrams();
+				removeActionsWithRecords();
 			} catch (MalformedTMLDesignException mtmlde) {
 				TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
 			}
@@ -462,7 +464,7 @@ public class GTMLModeling  {
                     task.setRequest(request);
 					
 					// Request attributes
-					TraceManager.addDev("Requests attributes");
+					//TraceManager.addDev("Requests attributes");
 					for(int j=0; j<request.getNbOfParams(); j++) {
 						tmltt = new TMLType(request.getType(j).getType());
 						tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
@@ -498,20 +500,20 @@ public class GTMLModeling  {
         TMLChannel channel;
         TMLTask tt1, tt2;
         
-		TraceManager.addDev("*** Adding channels ***");
+		//TraceManager.addDev("*** Adding channels ***");
 		
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof TMLCPrimitiveComponent) {
 				tmlc = (TMLCPrimitiveComponent)tgc;
-				TraceManager.addDev("Component:" + tmlc.getValue());
+				//TraceManager.addDev("Component:" + tmlc.getValue());
 				ports = tmlc.getAllChannelsOriginPorts();
-				TraceManager.addDev("Ports size:" + ports.size());
+				//TraceManager.addDev("Ports size:" + ports.size());
 				li = ports.listIterator();
 				while(li.hasNext()) {
 					port1 = (TMLCPrimitivePort)(li.next());
 					portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
-					TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
 					while(ite.hasNext()) {
@@ -601,26 +603,28 @@ public class GTMLModeling  {
         TMLTask tt1, tt2;
 		TType tt;
 		TMLType tmlt;
+		TMLCRecordComponent record;
+		TAttribute ta;
         
-		TraceManager.addDev("*** Adding Events ***");
+		//TraceManager.addDev("*** Adding Events ***");
 		
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof TMLCPrimitiveComponent) {
 				tmlc = (TMLCPrimitiveComponent)tgc;
-				TraceManager.addDev("Component:" + tmlc.getValue());
+				//TraceManager.addDev("Component:" + tmlc.getValue());
 				ports = tmlc.getAllEventsOriginPorts();
-				TraceManager.addDev("Ports size:" + ports.size());
+				//TraceManager.addDev("Ports size:" + ports.size());
 				li = ports.listIterator();
 				while(li.hasNext()) {
 					port1 = (TMLCPrimitivePort)(li.next());
 					portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
-					TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
-					while(ite.hasNext()) {
-						TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-					}
+					//while(ite.hasNext()) {
+						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+					//}
 					
 					if (portstome.size() != 1) {
 						String msg = "port " + port1.getPortName() + " is not correctly connected";
@@ -636,11 +640,11 @@ public class GTMLModeling  {
 					String []text2 = port2.getPortName().split(",");
 					
 					/*for (i=0; i<text1.length; i++) {
-					TraceManager.addDev("text1[" + i + "] = " + text1[i]);
+						TraceManager.addDev("text1[" + i + "] = " + text1[i]);
 					}
 					
 					for (i=0; i<text2.length; i++) {
-					TraceManager.addDev("text2[" + i + "] = " + text2[i]);
+						TraceManager.addDev("text2[" + i + "] = " + text2[i]);
 					}*/
 					
 					for (j=0; j<Math.min(text1.length, text2.length); j++) {
@@ -663,8 +667,34 @@ public class GTMLModeling  {
 						for(i=0; i<port1.getNbMaxAttribute(); i++) {
 							tt = port1.getParamAt(i);
 							if ((tt != null) && (tt.getType() != TType.NONE)) {
-								tmlt = new TMLType(tt.getType());
-								event.addParam(tmlt);
+								if (tt.getType() == TType.OTHER) {
+									// Record
+									// Search for the record
+									record = tmlc.getRecordNamed(tt.getTypeOther());
+									if (record == null) {
+										String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+										CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+										ce.setTDiagramPanel(tmlcdp.tmlctdp);
+										ce.setTGComponent(tgc);
+										checkingErrors.add(ce);
+										throw new MalformedTMLDesignException(msg);
+									} else {
+										for(int k=0; k<record.getAttributes().size(); k++) {
+											ta = (TAttribute)(record.getAttributes().get(k));
+											if (ta.getType() == TAttribute.NATURAL) {
+												tmlt = new TMLType(TMLType.NATURAL);
+											} else if (ta.getType() == TAttribute.BOOLEAN) {
+												tmlt = new TMLType(TMLType.BOOLEAN);
+											} else {
+												tmlt = new TMLType(TMLType.OTHER);
+											}
+											event.addParam(tmlt);
+										}
+									}
+								} else {
+									tmlt = new TMLType(tt.getType());
+									event.addParam(tmlt);
+								}
 								//TraceManager.addDev("Event " + event.getName() + " add param");
 							}
 						}
@@ -684,7 +714,7 @@ public class GTMLModeling  {
 							event.setTasks(tt1, tt2);
 							tmlm.addEvent(event);
 							listE.addCor(event, tgc);
-							TraceManager.addDev("Adding event " + event.getName());
+							//TraceManager.addDev("Adding event " + event.getName());
 						}
 					}
 				}
@@ -709,6 +739,10 @@ public class GTMLModeling  {
 		
 		TMLAttribute tmlattr;
 		TMLType tmltt;
+		
+		TMLCRecordComponent record;
+		TAttribute ta;
+		int i;
         
 		TraceManager.addDev("*** Adding requests ***");
 		
@@ -716,19 +750,19 @@ public class GTMLModeling  {
             tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof TMLCPrimitiveComponent) {
 				tmlc = (TMLCPrimitiveComponent)tgc;
-				TraceManager.addDev("Component:" + tmlc.getValue());
+				//TraceManager.addDev("Component:" + tmlc.getValue());
 				ports = tmlc.getAllRequestsDestinationPorts();
-				TraceManager.addDev("Ports size:" + ports.size());
+				//TraceManager.addDev("Ports size:" + ports.size());
 				li = ports.listIterator();
 				while(li.hasNext()) {
 					port1 = (TMLCPrimitivePort)(li.next());
 					portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
-					TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
-					while(ite.hasNext()) {
-						TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-					}
+					//while(ite.hasNext()) {
+						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+					//}
 					
 					if (portstome.size() == 0) {
 						String msg = "port " + port1.getPortName() + " is not correctly connected";
@@ -739,7 +773,7 @@ public class GTMLModeling  {
 						throw new MalformedTMLDesignException(msg);
 					}
 					
-					for(int i=0; i<portstome.size(); i++) {
+					for(i=0; i<portstome.size(); i++) {
 						port3 = (TMLCPrimitivePort)(portstome.get(i));
 						if (!port3.isOrigin()) {
 							String msg = "port " + port1.getPortName() + " is not correctly connected to port " + port3.getName();
@@ -755,7 +789,7 @@ public class GTMLModeling  {
 					
 					addToTable(port1.getFather().getValue() + "/" + port1.getPortName(), name);
 					
-					for(int i=0; i<portstome.size(); i++) {
+					for(i=0; i<portstome.size(); i++) {
 						port2 = (TMLCPrimitivePort)(portstome.get(i));
 						addToTable(port2.getFather().getValue() + "/" + port2.getPortName(), name);
 					}
@@ -763,14 +797,34 @@ public class GTMLModeling  {
 					
 					request = new TMLRequest(name, port1);
 					
-                    for(int i=0; i<port1.getNbMaxAttribute(); i++) {
-                        tt = port1.getParamAt(i);
-                        if ((tt != null) && (tt.getType() != TType.NONE)) {
-                            tmlt = new TMLType(tt.getType());
-                            request.addParam(tmlt);
-							//TraceManager.addDev("Event " + event.getName() + " add param");
-                        }
-                    }
+                    for(i=0; i<port1.getNbMaxAttribute(); i++) {
+							tt = port1.getParamAt(i);
+							if ((tt != null) && (tt.getType() != TType.NONE)) {
+								if (tt.getType() == TType.OTHER) {
+									// Record
+									// Search for the record
+									record = tmlc.getRecordNamed(tt.getTypeOther());
+									if (record == null) {
+										String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+										CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+										ce.setTDiagramPanel(tmlcdp.tmlctdp);
+										ce.setTGComponent(tgc);
+										checkingErrors.add(ce);
+										throw new MalformedTMLDesignException(msg);
+									} else {
+										for(int k=0; k<record.getAttributes().size(); k++) {
+											ta = (TAttribute)(record.getAttributes().get(k));
+											tmlt = new TMLType(ta.getType());
+											request.addParam(tmlt);
+										}
+									}
+								} else {
+									tmlt = new TMLType(tt.getType());
+									request.addParam(tmlt);
+								}
+								//TraceManager.addDev("Event " + event.getName() + " add param");
+							}
+						}
 					
 					
 					if (tmlm.hasSameRequestName(request)) {
@@ -789,7 +843,7 @@ public class GTMLModeling  {
 						request.setDestinationTask(tt1);
 						
 						// Request attributes
-						TraceManager.addDev("Requests attributes");
+						//TraceManager.addDev("Requests attributes");
 						for(int j=0; j<request.getNbOfParams(); j++) {
 							tmltt = new TMLType(request.getType(j).getType());
 							tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
@@ -798,14 +852,14 @@ public class GTMLModeling  {
 							tt1.addAttribute(tmlattr);
 						}
 						
-						for(int i=0; i<portstome.size(); i++) {
+						for(i=0; i<portstome.size(); i++) {
 							port2 = (TMLCPrimitivePort)(portstome.get(i));
 							tt2 = tmlm.getTMLTaskByName(port2.getFather().getValue());
 							request.addOriginTask(tt2);
 						}
 						tmlm.addRequest(request);
 						listE.addCor(request, tgc);
-                        TraceManager.addDev("Adding request " + request.getName());
+                        //TraceManager.addDev("Adding request " + request.getName());
                     }
 				}
 			}
@@ -814,36 +868,82 @@ public class GTMLModeling  {
     
     private void addAttributesTo(TMLTask tmltask, TMLTaskOperator tmlto) {
         Vector attributes = tmlto.getAttributes();
-        addAttributesTo(tmltask, attributes);
+        addAttributesTo(tmlto, tmltask, attributes);
 	}
 	
 	private void addAttributesTo(TMLTask tmltask, TMLCPrimitiveComponent tmlcpc) {
         Vector attributes = tmlcpc.getAttributes();
-        addAttributesTo(tmltask, attributes);
+        addAttributesTo(tmlcpc, tmltask, attributes);
 	}
 	
-	private void addAttributesTo(TMLTask tmltask, Vector attributes) {
+	private void addAttributesTo(TGComponent tgc, TMLTask tmltask, Vector attributes) {
         TAttribute ta;
         TMLType tt;
         String name;
         TMLAttribute tmlt;
 		TMLRequest req;
+		TMLCRecordComponent rc;
         
         for(int i=0; i<attributes.size(); i++) {
+			rc = null; tt = null;
             ta = (TAttribute)(attributes.elementAt(i));
             if (ta.getType() == TAttribute.NATURAL) {
                 tt = new TMLType(TMLType.NATURAL);
             } else if (ta.getType() == TAttribute.BOOLEAN) {
                 tt = new TMLType(TMLType.BOOLEAN);
             } else {
-                tt = new TMLType(TMLType.OTHER);
+				// Must be a record
+				if (tgc instanceof TMLCPrimitiveComponent) {
+					TraceManager.addDev("Searching for record named: " + ta.getTypeOther());
+					rc = ((TMLCPrimitiveComponent)tgc).getRecordNamed(ta.getTypeOther());
+					if (rc == null) {
+						tt = new TMLType(TMLType.OTHER);
+						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown record: " + ta.getType() + " used in task " + tmltask.getName());
+						ce.setTDiagramPanel(tmlcdp.tmlctdp);
+						ce.setTMLTask(tmltask);
+						ce.setTGComponent(tgc);
+						checkingErrors.add(ce);
+					}
+				} else {
+					// Classical TML design
+					// Error!
+					tt = new TMLType(TMLType.OTHER);
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown type in variable " + ta.getId() + " of task " + tmltask.getName());
+					ce.setTDiagramPanel(tmldp.tmltdp);
+					ce.setTMLTask(tmltask);
+					ce.setTGComponent(tgc);
+					checkingErrors.add(ce);
+				}
+                
             }
-            tmlt = new TMLAttribute(ta.getId(), tt);
-            tmlt.initialValue = ta.getInitialValue();
-			//TraceManager.addDev("ta =" + ta.getId() + " value=" + ta.getInitialValue());
-            tmltask.addAttribute(tmlt);
-        }
-		
+			if (rc == null) {
+				tmlt = new TMLAttribute(ta.getId(), tt);
+				tmlt.initialValue = ta.getInitialValue();
+				//TraceManager.addDev("ta =" + ta.getId() + " value=" + ta.getInitialValue());
+				tmltask.addAttribute(tmlt);
+				
+			} else {
+				// Adding all elements of record
+				TraceManager.addDev("Found a record named: " + rc.getValue());
+				TAttribute tat;
+				Vector attr = rc.getAttributes();
+				for(int j=0; j<attr.size(); j++) {
+					tat = (TAttribute)(attr.elementAt(j));
+					if (tat.getType() == TAttribute.NATURAL) {
+						tt = new TMLType(TMLType.NATURAL);
+					} else if (tat.getType() == TAttribute.BOOLEAN) {
+						tt = new TMLType(TMLType.BOOLEAN);
+					} else {
+						tt = new TMLType(TMLType.OTHER);
+					}
+					tmlt = new TMLAttribute(ta.getId() + "__" + tat.getId(), tt);
+					tmlt.initialValue = tat.getInitialValue();
+					TraceManager.addDev("record variable ta =" + tmlt.getName() + " value=" + tmlt.getInitialValue());
+					tmltask.addAttribute(tmlt);
+						
+				}
+			}
+		}
     }
     
     private void generateTasksActivityDiagrams() throws MalformedTMLDesignException {
@@ -886,12 +986,20 @@ public class GTMLModeling  {
 			}
 		}
 		
-		return _input;
+		return modifyString(_input);
 	}
+	
+	private String modifyString(String _input) {
+		return Conversion.replaceAllChar(_input, '.', "__");
+	}
+
+	
     
     private void generateTaskActivityDiagrams(TMLTask tmltask) throws MalformedTMLDesignException {
         TMLActivity activity = tmltask.getActivityDiagram();
         TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
+		
+		TraceManager.addDev("Generating activity diagram of:" + tmltask.getName());
 		
         // search for start state
         LinkedList list = tadp.getComponentList();
@@ -964,6 +1072,7 @@ public class GTMLModeling  {
         iterator = list.listIterator();
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
+			
             if (tgc instanceof TMLADActionState) {
                 tmlaction = new TMLActionState("action", tgc);
 				tmp = ((TMLADActionState)(tgc)).getAction();
@@ -972,6 +1081,7 @@ public class GTMLModeling  {
                 activity.addElement(tmlaction);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlaction, tgc);
+				
             } else if (tgc instanceof TMLADRandom) {
 				tmladrandom = (TMLADRandom)tgc;
                 tmlrandom = new TMLRandom("random" + tmladrandom.getValue(), tgc);
@@ -988,67 +1098,76 @@ public class GTMLModeling  {
                 activity.addElement(tmlrandom);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlrandom, tgc);
+				
 			} else if (tgc instanceof TMLADChoice) {
                 tmlchoice = new TMLChoice("choice", tgc);
                 // Guards are added at the same time as next activities
                 activity.addElement(tmlchoice);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlchoice, tgc);
+				
             } else if (tgc instanceof TMLADSelectEvt) {
                 tmlselectevt = new TMLSelectEvt("select", tgc);
                 activity.addElement(tmlselectevt);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlselectevt, tgc);
+				
             } else if (tgc instanceof TMLADExecI) {
                 tmlexeci = new TMLExecI("execi", tgc);
-                tmlexeci.setAction(((TMLADExecI)tgc).getDelayValue());
+                tmlexeci.setAction(modifyString(((TMLADExecI)tgc).getDelayValue()));
                 activity.addElement(tmlexeci);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexeci, tgc);
+				
             } else if (tgc instanceof TMLADExecIInterval) {
                 tmlexecii = new TMLExecIInterval("execi", tgc);
-                tmlexecii.setMinDelay(((TMLADExecIInterval)tgc).getMinDelayValue());
-                tmlexecii.setMaxDelay(((TMLADExecIInterval)tgc).getMaxDelayValue());
+                tmlexecii.setMinDelay(modifyString(((TMLADExecIInterval)tgc).getMinDelayValue()));
+                tmlexecii.setMaxDelay(modifyString(((TMLADExecIInterval)tgc).getMaxDelayValue()));
                 activity.addElement(tmlexecii);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecii, tgc);
+				
             } else if (tgc instanceof TMLADExecC) {
                 tmlexecc = new TMLExecC("execc", tgc);
-                tmlexecc.setAction(((TMLADExecC)tgc).getDelayValue());
+                tmlexecc.setAction(modifyString(((TMLADExecC)tgc).getDelayValue()));
                 activity.addElement(tmlexecc);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecc, tgc);
+				
             } else if (tgc instanceof TMLADExecCInterval) {
                 tmlexecci = new TMLExecCInterval("execci", tgc);
-                tmlexecci.setMinDelay(((TMLADExecCInterval)tgc).getMinDelayValue());
-                tmlexecci.setMaxDelay(((TMLADExecCInterval)tgc).getMaxDelayValue());
+                tmlexecci.setMinDelay(modifyString(((TMLADExecCInterval)tgc).getMinDelayValue()));
+                tmlexecci.setMaxDelay(modifyString(((TMLADExecCInterval)tgc).getMaxDelayValue()));
                 activity.addElement(tmlexecci);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmlexecci, tgc);
+				
             } else if (tgc instanceof TMLADDelay) {
                 tmldelay = new TMLDelay("d-delay", tgc);
-                tmldelay.setMinDelay(((TMLADDelay)tgc).getDelayValue());
-				tmldelay.setMaxDelay(((TMLADDelay)tgc).getDelayValue());
+                tmldelay.setMinDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
+				tmldelay.setMaxDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
 				tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
                 activity.addElement(tmldelay);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmldelay, tgc);
+				
             } else if (tgc instanceof TMLADDelayInterval) {
                 tmldelay = new TMLDelay("nd-delay", tgc);
-                tmldelay.setMinDelay(((TMLADDelayInterval)tgc).getMinDelayValue());
-                tmldelay.setMaxDelay(((TMLADDelayInterval)tgc).getMaxDelayValue());
+                tmldelay.setMinDelay(modifyString(((TMLADDelayInterval)tgc).getMinDelayValue()));
+                tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval)tgc).getMaxDelayValue()));
 				tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
                 activity.addElement(tmldelay);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 				listE.addCor(tmldelay, tgc);
+				
             } else if (tgc instanceof TMLADForLoop) {
                 tmlforloop = new TMLForLoop("loop", tgc);
-                tmlforloop.setInit(((TMLADForLoop)tgc).getInit());
+                tmlforloop.setInit(modifyString(((TMLADForLoop)tgc).getInit()));
 				tmp = ((TMLADForLoop)tgc).getCondition();
 				/*if (tmp.trim().length() == 0) {
 					tmp = "true";
 				}*/
-                tmlforloop.setCondition(tmp);
+                tmlforloop.setCondition(modifyString(tmp));
                 tmlforloop.setIncrement(modifyActionString(((TMLADForLoop)tgc).getIncrement()));
 				
                 activity.addElement(tmlforloop);
@@ -1063,7 +1182,7 @@ public class GTMLModeling  {
 				tmltask.addAttribute(tmlt);
                 tmlforloop = new TMLForLoop(sl, tgc);
                 tmlforloop.setInit(sl + " = 0");
-                tmlforloop.setCondition(sl + "<" + tgc.getValue());
+                tmlforloop.setCondition(sl + "<" + modifyString(tgc.getValue()));
                 tmlforloop.setIncrement(sl + " = " + sl + " + 1");
                 activity.addElement(tmlforloop);
 				((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
@@ -1102,7 +1221,6 @@ public class GTMLModeling  {
             } else if (tgc instanceof TMLADReadChannel) {
                 // Get the channel
 				channel = tmlm.getChannelByName(getFromTable(tmltask, ((TMLADReadChannel)tgc).getChannelName()));
-				
                 if (channel == null) {
                     if (Conversion.containsStringInList(removedChannels, ((TMLADReadChannel)tgc).getChannelName())) {
                         CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADReadChannel)tgc).getChannelName() + " has been removed because the corresponding channel is not taken into account");
@@ -1122,12 +1240,13 @@ public class GTMLModeling  {
                     }
                 } else {
                     tmlreadchannel = new TMLReadChannel("read channel", tgc);
-                    tmlreadchannel.setNbOfSamples(((TMLADReadChannel)tgc).getSamplesValue());
+                    tmlreadchannel.setNbOfSamples(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
                     tmlreadchannel.addChannel(channel);
                     activity.addElement(tmlreadchannel);
 					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlreadchannel, tgc);
                 }
+				
             } else if (tgc instanceof TMLADSendEvent) {
                 event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADSendEvent)tgc).getEventName()));
                 if (event == null) {
@@ -1148,7 +1267,23 @@ public class GTMLModeling  {
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
-					if (event.getNbOfParams() != ((TMLADSendEvent)tgc).realNbOfParams()) {
+					tmlsendevent = new TMLSendEvent("send event", tgc);
+					tmlsendevent.setEvent(event);
+					for(int i=0; i<((TMLADSendEvent)tgc).realNbOfParams(); i++) {
+						tmp = modifyString(((TMLADSendEvent)tgc).getRealParamValue(i));
+						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
+						if (allVariables.size() > 0) {
+							for(int k=0; k<allVariables.size(); k++) {
+								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								tmlsendevent.addParam(allVariables.get(k));
+							}
+						} else {
+							TraceManager.addDev("Adding param: " + tmp);
+							tmlsendevent.addParam(tmp);
+						}
+					}
+					if (event.getNbOfParams() != tmlsendevent.getNbOfParams()) {
+						TraceManager.addDev("ERROR : event#:" + event.getNbOfParams() + " sendevent#:" + tmlsendevent.getNbOfParams());
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendEvent)tgc).getEventName() + ": wrong number of parameters");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
@@ -1156,16 +1291,12 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
-						tmlsendevent = new TMLSendEvent("send event", tgc);
-						tmlsendevent.setEvent(event);
-						for(int i=0; i<((TMLADSendEvent)tgc).nbOfParams(); i++) {
-							tmlsendevent.addParam(((TMLADSendEvent)tgc).getParamValue(i));
-						}
 						activity.addElement(tmlsendevent);
 						listE.addCor(tmlsendevent, tgc);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
                 }
+				
             } else if (tgc instanceof TMLADSendRequest) {
                 request = tmlm.getRequestByName(getFromTable(tmltask, ((TMLADSendRequest)tgc).getRequestName()));
                 if (request == null) {
@@ -1186,7 +1317,23 @@ public class GTMLModeling  {
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                     }
                 } else {
-					if (request.getNbOfParams() != ((TMLADSendRequest)tgc).realNbOfParams()) {
+					tmlsendrequest = new TMLSendRequest("send request", tgc);
+					tmlsendrequest.setRequest(request);
+					for(int i=0; i<((TMLADSendRequest)tgc).realNbOfParams(); i++) {
+						tmp = modifyString(((TMLADSendRequest)tgc).getRealParamValue(i));
+						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
+						if (allVariables.size() > 0) {
+							for(int k=0; k<allVariables.size(); k++) {
+								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								tmlsendrequest.addParam(allVariables.get(k));
+							}
+						} else {
+							TraceManager.addDev("Adding param: " + tmp);
+							tmlsendrequest.addParam(tmp);
+						}
+					}
+					if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {
+						TraceManager.addDev("ERROR : event#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + ": wrong number of parameters");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
@@ -1194,16 +1341,12 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
-						tmlsendrequest = new TMLSendRequest("send request", tgc);
-						tmlsendrequest.setRequest(request);
-						for(int i=0; i<((TMLADSendRequest)tgc).nbOfParams(); i++) {
-							tmlsendrequest.addParam(((TMLADSendRequest)tgc).getParamValue(i));
-						}
 						activity.addElement(tmlsendrequest);
 						listE.addCor(tmlsendrequest, tgc);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
                 }
+				
             } else if (tgc instanceof TMLADStopState) {
                 tmlstopstate = new TMLStopState("stop state", tgc);
                 activity.addElement(tmlstopstate);
@@ -1232,7 +1375,7 @@ public class GTMLModeling  {
                     event.setNotified(true);
                     tmlnotifiedevent = new TMLNotifiedEvent("notified event", tgc);
                     tmlnotifiedevent.setEvent(event);
-                    tmlnotifiedevent.setVariable(((TMLADNotifiedEvent)tgc).getVariable());
+                    tmlnotifiedevent.setVariable(modifyString(((TMLADNotifiedEvent)tgc).getVariable()));
                     activity.addElement(tmlnotifiedevent);
 					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					listE.addCor(tmlnotifiedevent, tgc);
@@ -1259,27 +1402,37 @@ public class GTMLModeling  {
                     }
                 } else {
 					//TraceManager.addDev("Nb of param of event:" + event.getNbOfParams());
-					if (event.getNbOfParams() != ((TMLADWaitEvent)tgc).realNbOfParams()) {
+					tmlwaitevent = new TMLWaitEvent("wait event", tgc);
+					tmlwaitevent.setEvent(event);
+					for(int i=0; i<((TMLADWaitEvent)tgc).realNbOfParams(); i++) {
+						tmp = modifyString(((TMLADWaitEvent)tgc).getRealParamValue(i));
+						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
+						if (allVariables.size() > 0) {
+							for(int k=0; k<allVariables.size(); k++) {
+								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								tmlwaitevent.addParam(allVariables.get(k));
+							}
+						} else {
+							TraceManager.addDev("Adding param: " + tmp);
+							tmlwaitevent.addParam(tmp);
+						}
+					}
+					if (event.getNbOfParams() != tmlwaitevent.getNbOfParams()) {
+						TraceManager.addDev("ERROR : event#:" + event.getNbOfParams() + " waitevent#:" + tmlwaitevent.getNbOfParams());
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + ": wrong number of parameters");
                         ce.setTMLTask(tmltask);
                         ce.setTDiagramPanel(tadp);
                         ce.setTGComponent(tgc);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
                         checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
-						tmlwaitevent = new TMLWaitEvent("wait event", tgc);
-						tmlwaitevent.setEvent(event);
-						for(int i=0; i<((TMLADWaitEvent)tgc).nbOfParams(); i++) {
-							String pv = ((TMLADWaitEvent)tgc).getParamValue(i);
-							if (pv.length() > 0) {
-								tmlwaitevent.addParam(pv);
-							}
-						}
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 						activity.addElement(tmlwaitevent);
 						listE.addCor(tmlwaitevent, tgc);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
+					
                 }
+				
             } else if (tgc instanceof TMLADWriteChannel) {
                 // Get channels
 				channels = ((TMLADWriteChannel)tgc).getChannelsByName();
@@ -1308,7 +1461,7 @@ public class GTMLModeling  {
 				}
 				if (!error) {
 					tmlwritechannel = new TMLWriteChannel("write channel", tgc);
-					tmlwritechannel.setNbOfSamples(((TMLADWriteChannel)tgc).getSamplesValue());
+					tmlwritechannel.setNbOfSamples(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
 					for(int i=0; i<channels.length; i++) {
 						channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
 						tmlwritechannel.addChannel(channel);
@@ -1363,22 +1516,26 @@ public class GTMLModeling  {
                             } else {
                                 ae1.addNext(ae2);
                             }
+							
                         } else if (ae1 instanceof TMLChoice) {
                             index = tgc1.indexOf(p1) - 1;
 							//TraceManager.addDev("Adding next:" + ae2);
                             ae1.addNext(ae2);
 							//TraceManager.addDev("Adding guard:" + ((TMLADChoice)tgc1).getGuard(index));
-                            ((TMLChoice)ae1).addGuard(((TMLADChoice)tgc1).getGuard(index));
+                            ((TMLChoice)ae1).addGuard(modifyString(((TMLADChoice)tgc1).getGuard(index)));
+							
                         } else if (ae1 instanceof TMLSequence) {
                             index = tgc1.indexOf(p1) - 1;
                             ((TMLSequence)ae1).addIndex(index);
                             ae1.addNext(ae2);
 							//TraceManager.addDev("Adding " + ae2 + " at index " + index);
+							
                         } else if (ae1 instanceof TMLRandomSequence) {
                             index = tgc1.indexOf(p1) - 1;
                             ((TMLRandomSequence)ae1).addIndex(index);
                             ae1.addNext(ae2);
 							//TraceManager.addDev("Adding " + ae2 + " at index " + index);
+							
                         } else {
                             ae1.addNext(ae2);
                         }
@@ -1489,6 +1646,8 @@ public class GTMLModeling  {
 			return null;
 		}
 		makeMapping();
+		
+		removeActionsWithRecords();
 		
 		return map;
 	}
@@ -1921,7 +2080,7 @@ public class GTMLModeling  {
 	}
 	
 	public void addToTable(String s1, String s2) {
-		TraceManager.addDev("Adding to Table s1= "+ s1 + " s2=" + s2);
+		//TraceManager.addDev("Adding to Table s1= "+ s1 + " s2=" + s2);
 		table.put(s1, s2);
 	}
 	
@@ -1940,6 +2099,11 @@ public class GTMLModeling  {
 		}
 		
 		return ret;
+	}
+	
+	public void removeActionsWithRecords() {
+		TraceManager.addDev("Reworking actions with records");
+		tmlm.splitActionStatesWithUnderscoreVariables();
 	}
     
 }

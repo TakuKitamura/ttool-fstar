@@ -87,10 +87,19 @@ public class TType {
     
     public void setType(int _type) { type = _type;};
     
-    
+    public void setType(String _type) {
+		type = getType(_type);
+		if (type == OTHER) {
+			typeOther = _type;
+		} else {
+			typeOther = "";
+		}
+	}
     
     public static int getType(String s) {
-        if (s.equals("Natural")) {
+		if (s.equals("<unset>")) {
+			return NONE;
+        } else if (s.equals("Natural")) {
             return 	NATURAL;
         } else if (s.equals("Boolean")) {
             return 	BOOLEAN;

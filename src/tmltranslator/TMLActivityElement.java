@@ -89,6 +89,10 @@ public class TMLActivityElement extends TMLElement{
 		nexts = _nexts;
 	}
 	
+	public void clearNexts() {
+		nexts.clear();
+	}
+	
 	public void setNewNext(TMLActivityElement oldE, TMLActivityElement newE) {
 		TMLActivityElement elt;
 		for(int i=0; i<getNbNext(); i++) {

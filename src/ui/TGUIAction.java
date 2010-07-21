@@ -170,6 +170,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLCTD_PORT_CONNECTOR = 238;
 	public static final int TMLCTD_PCOMPONENT = 239;
 	public static final int TMLCTD_COPORT = 240;
+	public static final int TMLCTD_RCOMPONENT = 330;
 	
     
     public static final int TMLAD_EDIT = 134;
@@ -449,7 +450,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 330;
+    public static final int NB_ACTION = 331;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -711,6 +712,7 @@ public class TGUIAction extends AbstractAction {
 		actions[TMLCTD_CPORT] = new TAction("add-tmlccd-cport", "Add a composite port", IconManager.imgic1204, IconManager.imgic1204, "Add a composite port", "Add a composite port to the currently opened TML component Task diagram", 0);
 		actions[TMLCTD_COPORT] = new TAction("add-tmlccd-coport", "Add a primitive port", IconManager.imgic1206, IconManager.imgic1206, "Add a primitive port", "Add a primitive port to the currently opened TML component Task diagram", 0);
 		actions[TMLCTD_PORT_CONNECTOR] = new TAction("add-tmlccd-port-connector", "Add a connector between two ports", IconManager.imgic202, IconManager.imgic202, "Add a connector between two ports", "Add a connector between two ports of the currently opened TML component Task diagram", 0);
+		actions[TMLCTD_RCOMPONENT] = new TAction("add-tmlccd-rcomponent", "Add a record component", IconManager.imgic1202, IconManager.imgic1202, "Add a record component", "Add a record component to the currently opened TML component Task diagram", 0);
 		
         actions[TMLAD_EDIT] = new TAction("edit-tmlad-diagram", "Edit TML Task activity diagram", IconManager.imgic100, IconManager.imgic101, "Edit TML task activity diagram", "Make it possible to edit the currently opened TML task activity diagram", 0);
         actions[TMLAD_CONNECTOR] = new TAction("add-tmlad-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened TML task activity diagram", 0);

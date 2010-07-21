@@ -2442,14 +2442,68 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return name;
     }
 	
+	public String findTMLRecordComponentName(String name) {
+		boolean ok;
+        int i;
+        int index = 0;
+        TGComponent o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+				if (findTMLRecordComponentNameTgc(name, o, index)) {
+					ok = false;
+					break;
+				}
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+	
 	public boolean findTMLPrimitiveComponentNameTgc(String name, TGComponent tgc, int index) {
 		if (tgc instanceof TMLCPrimitiveComponent) {
 			if (tgc.getValue().equals(name+index)) {
 				return true;
 			}
 		}
+		
+		if (tgc instanceof TMLCRecordComponent) {
+			if (tgc.getValue().equals(name+index)) {
+				return true;
+			}
+		}
+		
 		for(int i=0; i<tgc.getNbInternalTGComponent(); i++) {
 			if (findTMLPrimitiveComponentNameTgc(name, tgc.getInternalTGComponent(i), index)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean findTMLRecordComponentNameTgc(String name, TGComponent tgc, int index) {
+		if (tgc instanceof TMLCPrimitiveComponent) {
+			if (tgc.getValue().equals(name+index)) {
+				return true;
+			}
+		}
+		
+		if (tgc instanceof TMLCRecordComponent) {
+			if (tgc.getValue().equals(name+index)) {
+				return true;
+			}
+		}
+		
+		for(int i=0; i<tgc.getNbInternalTGComponent(); i++) {
+			if (findTMLRecordComponentNameTgc(name, tgc.getInternalTGComponent(i), index)) {
 				return true;
 			}
 		}

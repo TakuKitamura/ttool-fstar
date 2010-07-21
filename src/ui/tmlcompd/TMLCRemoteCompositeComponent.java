@@ -506,6 +506,13 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		return tmlcc.getAllPrimitiveComponents();
 	}
 	
+	public ArrayList<TMLCRecordComponent> getAllRecordComponents() {
+		if (tmlcc == null) {
+			return new ArrayList<TMLCRecordComponent>();
+		}
+		return tmlcc.getAllRecordComponents();
+	}
+	
 	public ArrayList<TMLCCompositePort> getAllInternalCompositePorts() {
 		ArrayList<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
 		if (tmlcc == null) {

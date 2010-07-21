@@ -154,9 +154,63 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
 	
 	public boolean namePrimitiveComponentInUse(String oldValue, String newValue) {
-		return mgui.nameComponentInUse(tp, oldValue, newValue);
+		boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
+		if (ko == true) {
+			return ko;
+		}
+		
+		return nameAllRecordComponentInUse(oldValue, newValue);
 	}
 	
+	public boolean nameRecordComponentInUse(String oldValue, String newValue) {
+		boolean ko = mgui.nameComponentInUse(tp, oldValue, newValue);
+		if (ko == true) {
+			return ko;
+		}
+		
+		return nameAllRecordComponentInUse(oldValue, newValue);
+	}
+	
+	public boolean nameAllRecordComponentInUse(String oldValue, String newValue) {
+		LinkedList ll = getRecordComponentList();
+		ListIterator iterator = ll.listIterator();
+		TMLCRecordComponent record;
+		
+		while(iterator.hasNext()) {
+			record = (TMLCRecordComponent)(iterator.next());
+			if (record.getName().compareTo(newValue) == 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	
+	public LinkedList getRecordComponentList() {
+		LinkedList ll = new LinkedList();
+		TGComponent tgc;
+		
+		Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof TMLCRecordComponent) {
+				ll.add(tgc);
+			}
+			
+			if (tgc instanceof TMLCCompositeComponent) {
+				ll.addAll(((TMLCCompositeComponent)tgc).getAllRecordComponents());
+			}
+			
+			if (tgc instanceof TMLCRemoteCompositeComponent) {
+				ll.addAll(((TMLCRemoteCompositeComponent)tgc).getAllRecordComponents());
+			}
+		}
+		
+		return ll;
+	}
 	
 	
 	public LinkedList getPrimitiveComponentList() {
@@ -234,24 +288,24 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         //TMLChannel channel;
         //TMLTask tt1, tt2;
         
-		TraceManager.addDev("*** Adding channels ***");
+		//TraceManager.addDev("*** Adding channels ***");
 		
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
 			if (tgc instanceof TMLCPrimitiveComponent) {
 				tmlc = (TMLCPrimitiveComponent)tgc;
-				TraceManager.addDev("Component:" + tmlc.getValue());
+				//TraceManager.addDev("Component:" + tmlc.getValue());
 				ports = tmlc.getAllChannelsOriginPorts();
-				TraceManager.addDev("Ports size:" + ports.size());
+				//TraceManager.addDev("Ports size:" + ports.size());
 				li = ports.listIterator();
 				while(li.hasNext()) {
 					port1 = (TMLCPrimitivePort)(li.next());
 					portstome = getPortsConnectedTo(port1, components);
-					TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
 					while(ite.hasNext()) {
-						TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
 					}
 					
 					if (portstome.size() == 1) {
@@ -1028,5 +1082,66 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		
 		return null;
 	}*/
-    
+	
+	public Vector<String> getAllRecords(TMLCPrimitiveComponent tgc) {
+		Vector<String> list = new Vector<String>();
+		getAllRecords((TMLCCompositeComponent)(tgc.getFather()), list);
+		return list;
+	}
+	
+	public  void getAllRecords(TMLCCompositeComponent comp,  Vector<String> list) {
+		TGComponent tgc;
+		if (comp == null) {
+			Iterator iterator = componentList.listIterator();
+		
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if (tgc instanceof TMLCRecordComponent) {
+					list.add(tgc.getValue());
+				}
+			}
+			return;
+		}
+		
+		for(int i=0; i<comp.getNbInternalTGComponent(); i++) {
+			tgc = comp.getInternalTGComponent(i);
+			if (tgc instanceof TMLCRecordComponent) {
+					list.add(tgc.getValue());
+			}
+		}
+		
+		getAllRecords((TMLCCompositeComponent)(comp.getFather()), list);
+    }
+	
+	public TMLCRecordComponent getRecordNamed(TMLCPrimitiveComponent tgc, String _nameOfRecord) {
+		return getRecordNamed((TMLCCompositeComponent)(tgc.getFather()), _nameOfRecord);
+	}
+	
+	public TMLCRecordComponent getRecordNamed(TMLCCompositeComponent comp,  String _nameOfRecord) {
+		TGComponent tgc;
+		if (comp == null) {
+			Iterator iterator = componentList.listIterator();
+			
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if (tgc instanceof TMLCRecordComponent) {
+					if (tgc.getValue().compareTo(_nameOfRecord) == 0) {
+						return (TMLCRecordComponent)tgc;
+					}
+				}
+			}
+			return null;
+		}
+		
+		for(int i=0; i<comp.getNbInternalTGComponent(); i++) {
+			tgc = comp.getInternalTGComponent(i);
+			if (tgc instanceof TMLCRecordComponent) {
+				if (tgc.getValue().compareTo(_nameOfRecord) == 0) {
+					return (TMLCRecordComponent)tgc;
+				}
+			}
+		}
+		
+		return getRecordNamed((TMLCCompositeComponent)(comp.getFather()), _nameOfRecord);
+	}
 }
