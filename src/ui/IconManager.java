@@ -74,6 +74,7 @@ public class IconManager {
     public static ImageIcon imgic50, imgic51, imgic52, imgic53, imgic54, imgic55, imgic56, imgic57, imgic58, imgic59;
     public static ImageIcon imgic60, imgic61, imgic62, imgic63, imgic64, imgic65, imgic66;
     public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77;
+	public static ImageIcon imgic80, imgic82, imgic84;
 	
     // Class diagram
     public static ImageIcon imgic100, imgic101, imgic102, imgic104, imgic106, imgic108;
@@ -139,7 +140,8 @@ public class IconManager {
 	public static ImageIcon imgic5000, imgic5002, imgic5004, imgic5006, imgic5008;
 	public static ImageIcon imgic5010, imgic5012, imgic5014, imgic5016, imgic5018;
 	public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
-	public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036;
+	public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036, imgic5038;
+	public static ImageIcon imgic5040, imgic5042;
 	
 	public static ImageIcon imgic5100, imgic5102, imgic5104;
 	
@@ -236,6 +238,10 @@ public class IconManager {
 	private static String icon77 = "images/toolbarButtonGraphics/general/Preferences24.gif";
 	
     
+	private static String icon80 = "images/avatarbd.gif";
+	private static String icon82 = "images/avatarpd.gif";
+	private static String icon84 = "images/avatarrd.gif";
+	
     private static String icon100 = "images/toolbarButtonGraphics/general/Properties16.gif";
     private static String icon101 = "images/toolbarButtonGraphics/general/Properties24.gif";
     private static String icon102 = "images/cdassociation.gif";
@@ -502,6 +508,9 @@ public class IconManager {
 	private static String icon5032 = "images/avatarpdalias.gif";
 	private static String icon5034 = "images/avatardatatype.gif";
 	private static String icon5036 = "images/avatarstate.gif";
+	private static String icon5038 = "images/avatarsettimer.gif";
+	private static String icon5040 = "images/avatarresettimer.gif";
+	private static String icon5042 = "images/avatarexpiretimer.gif";
 	
 	private static String icon5100 = "images/avatarhead16.gif";
 	private static String icon5102 = "images/avatarhead32.gif";
@@ -619,6 +628,10 @@ public class IconManager {
 		imgic75 = getIcon(icon75);
 		imgic76 = getIcon(icon76);
 		imgic77 = getIcon(icon77);
+		
+		imgic80 = getIcon(icon80);
+		imgic82 = getIcon(icon82);
+		imgic84 = getIcon(icon84);
         
         imgic100 = getIcon(icon100);
         imgic101 = getIcon(icon101);
@@ -840,6 +853,9 @@ public class IconManager {
 		imgic5032 = getIcon(icon5032);
 		imgic5034 = getIcon(icon5034);
 		imgic5036 = getIcon(icon5036);
+		imgic5038 = getIcon(icon5038);
+		imgic5040 = getIcon(icon5040);
+		imgic5042 = getIcon(icon5042);
 		
 		imgic5100 = getIcon(icon5100);
 		imgic5102 = getIcon(icon5102);

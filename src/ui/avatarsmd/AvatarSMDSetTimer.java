@@ -148,10 +148,18 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements Checka
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 		
 		// hourglass
+		g.setColor(ColorManager.AVATAR_SET_TIMER);
+		g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
+		g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
+		g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
+		g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
+		g.setColor(c);
 		g.drawLine(x+width+hourglassSpace, y, x+width+hourglassSpace + hourglassWidth, y);
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y+height);
 		g.drawLine(x+width+hourglassSpace, y, x+width+hourglassSpace + hourglassWidth, y+height);
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y);
+		
+		
 		
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);

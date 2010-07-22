@@ -71,6 +71,12 @@ import ui.ncdd.*;
 import ui.oscd.*;
 import ui.osad.*;
 
+import ui.avatarbd.*;
+import ui.avatarsmd.*;
+import ui.avatarrd.*;
+import ui.avatarpd.*;
+
+
 public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
     
     public DiagramTreeRenderer() {
@@ -90,8 +96,25 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         tree, value, sel,
         expanded, leaf, row,
         hasFocus);
-        
-        if (value instanceof GTURTLEModeling) {
+        if (value instanceof AvatarDesignPanel) {
+			setIcon(IconManager.imgic80);
+            setToolTipText("Avatar Design");
+		} else if (value instanceof AvatarBDPanel) {
+            setIcon(IconManager.imgic80);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarSMDPanel) {
+            setIcon(IconManager.imgic63);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarRequirementPanel) {
+            setIcon(IconManager.imgic82);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarPDPanel) {
+            setIcon(IconManager.imgic82);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarRDPanel) {
+            setIcon(IconManager.imgic84);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof GTURTLEModeling) {
             setIcon(IconManager.imgic8);
             setToolTipText("TURTLE modeling");
         } else if (value instanceof DesignPanel) {

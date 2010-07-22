@@ -828,7 +828,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.add(adp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open AVATAR design diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        mainTabbedPane.setIconAt(index, IconManager.imgic80);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         adp.init();
         //ystem.out.println("Design added");
@@ -844,7 +844,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         mainTabbedPane.add(arp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open AVATAR requirement diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic14);
+        mainTabbedPane.setIconAt(index, IconManager.imgic82);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         arp.init();
         //ystem.out.println("Design added");

@@ -152,6 +152,12 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Che
         g.drawLine(x, y+height, x+linebreak, y+height/2);
 		
 		// hourglass
+		g.setColor(ColorManager.AVATAR_SET_TIMER);
+		g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
+		g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
+		g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
+		g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
+		g.setColor(c);
 		g.drawLine(x+width+hourglassSpace, y, x+width+hourglassSpace + hourglassWidth, y);
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y+height);
 		g.drawLine(x+width+hourglassSpace, y, x+width+hourglassSpace + hourglassWidth, y+height);

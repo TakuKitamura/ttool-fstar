@@ -127,7 +127,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarAvatarBD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("AVATAR Design", IconManager.imgic62, toolBarPanel, "Opens the AVATAR Design");
+        tabbedPane.addTab("AVATAR Design", IconManager.imgic80, toolBarPanel, "Opens the AVATAR Design");
         tabbedPane.setSelectedIndex(0);
         
         //jsp.setVisible(true);
