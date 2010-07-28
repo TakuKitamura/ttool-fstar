@@ -50,6 +50,7 @@ import compiler.tmlparser.*;
 
 import java.util.*;
 import java.io.*;
+import myutil.*;
 
 
 public class TURTLEModelChecker {
@@ -114,7 +115,7 @@ public class TURTLEModelChecker {
     }
     
     public Vector syntaxAnalysisChecking() {
-        //System.out.println("modelChecking");
+        //TraceManager.addDev("modelChecking");
         Vector errors = new Vector();
         warnings = new Vector();
         syntaxAnalysisCheckingCD(errors, warnings);
@@ -134,7 +135,7 @@ public class TURTLEModelChecker {
     }
     
     public void syntaxAnalysisCheckingAD(TClass t, Vector errors, Vector warnings) {
-        //System.out.println("Checking activity diagram of " + t.getName());
+        //TraceManager.addDev("Checking activity diagram of " + t.getName());
         checkRuleAD000(t, errors, warnings);
         checkRuleAD001(t, errors, warnings);
         checkRuleAD004(t, errors, warnings);
@@ -323,7 +324,7 @@ public class TURTLEModelChecker {
                 boolean b = adp.isAValidMotif(t);
                 if (b) {
                    for(j=0; j<adp.nbGate(); j++) {
-                     //System.out.println("Getting gate #" + j + " of t " + t.getName());
+                     //TraceManager.addDev("Getting gate #" + j + " of t " + t.getName());
                      g = adp.getGate(j);
                      if (tm.syncRelationWith(t, g) != null) {
                         CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, t.getName() + "/Parallel operator: " + g.getName() + ERROR_AD_007);
@@ -359,7 +360,7 @@ public class TURTLEModelChecker {
                 boolean b = adp.isAValidMotif(t);
                 if (b) {
                    for(j=0; j<adp.nbGate(); j++) {
-                     //System.out.println("Getting gate #" + j + " of t " + t.getName());
+                     //TraceManager.addDev("Getting gate #" + j + " of t " + t.getName());
                      g = adp.getGate(j);
                      if (tm.canReachSynchroOn(adp, g)) {
                         CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, t.getName() + "/Parallel operator: " + g.getName() + ERROR_AD_008);
@@ -412,7 +413,7 @@ public class TURTLEModelChecker {
 				if ((action!= null) && (action.length() > 0)) {
 					parsing(t, ad1, "actiongate", action, errors);
 				} else {
-					//System.out.println("null action on gate=" + ((ADActionStateWithGate)ad1).getGate().getName() + action);
+					//TraceManager.addDev("null action on gate=" + ((ADActionStateWithGate)ad1).getGate().getName() + action);
 				}
 				
 			} else if (ad1 instanceof ADActionStateWithParam) {
@@ -506,20 +507,20 @@ public class TURTLEModelChecker {
 		// First parsing
 		parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
 		try {
-			//System.out.println("\nParsing :" + parseCmd + " " + action);
+			//TraceManager.addDev("\nParsing :" + parseCmd + " " + action);
 			root = parser.CompilationUnit();
 			//root.dump("pref=");
-			//System.out.println("Parse ok");
+			//TraceManager.addDev("Parse ok");
 		} catch (ParseException e) {
-			System.out.println("\nParsing :" + parseCmd + " " + action);
-			System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
+			TraceManager.addDev("\nParsing :" + parseCmd + " " + action);
+			TraceManager.addDev("ParseException --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_0 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
 			putCorrespondance(error, elt);
             errors.add(error);
 			return;
 		} catch (TokenMgrError tke) {
-			System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+			TraceManager.addDev("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_0 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
 			putCorrespondance(error, elt);
@@ -550,22 +551,22 @@ public class TURTLEModelChecker {
 		
 		parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));
 		try {
-			//System.out.println("\nParsing :" + parseCmd + " " + modif);
+			//TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
 			root = parser.CompilationUnit();
 			//root.dump("pref=");
-			//System.out.println("Parse ok");
+			//TraceManager.addDev("Parse ok");
 		} catch (ParseException e) {
-			System.out.println("\nParsing :" + parseCmd + " " + modif);
-			System.out.println("\n(Original parsing :" + parseCmd + " " + action);
-			System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
+			TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
+			TraceManager.addDev("\n(Original parsing :" + parseCmd + " " + action);
+			TraceManager.addDev("ParseException --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_1 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
             errors.add(error);
 			putCorrespondance(error, elt);
 			return;
 		} catch (TokenMgrError tke ) {
-			System.out.println("\nParsing :" + parseCmd + " " + modif);
-			System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+			TraceManager.addDev("\nParsing :" + parseCmd + " " + modif);
+			TraceManager.addDev("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
 			CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, ERROR_AD_009_1 + " in expression " + action + " of tclass " + t.getName());
             error.setTClass(t);
 			putCorrespondance(error, elt);
@@ -578,7 +579,8 @@ public class TURTLEModelChecker {
 		for(String s: vars) {
 			// is that string a variable?
 			if ((s.compareTo("true") != 0) && (s.compareTo("false") != 0) && (s.compareTo("nil") != 0)) {
-				System.out.println("Variable not declared: " +s);
+				TraceManager.addDev("\nParsing :" + parseCmd + " " + modif + " tclass" + t.getName());
+				TraceManager.addDev("Variable not declared: " +s);
 				CheckingError error = new CheckingError(CheckingError.BEHAVIOR_ERROR, s + ": " + ERROR_AD_009_2 + " in expression " + action + " of tclass " + t.getName());
 				error.setTClass(t);
 				putCorrespondance(error, elt);

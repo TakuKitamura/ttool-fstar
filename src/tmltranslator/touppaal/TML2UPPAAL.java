@@ -120,6 +120,7 @@ public class TML2UPPAAL {
 	}
     
     public UPPAALSpec generateUPPAAL(boolean _debug) {
+		TraceManager.addDev("Generating UPPAAL Specification");
 		tmlmodeling.removeAllRandomSequences();
 		
         debug = _debug;

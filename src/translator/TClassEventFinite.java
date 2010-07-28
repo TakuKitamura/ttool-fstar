@@ -172,15 +172,30 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
            ad.getStartState().addNext(adstop);
            return;
         }
+		
+		Param [] params_a = new Param[nbPara];
+		Param [] params_b = new Param[nbPara];
 
-        p1 = new Param("p0", Param.NAT, "0");
+        /*p1 = new Param("p0", Param.NAT, "0");
         p2 = new Param("p1", Param.NAT, "0");
         p3 = new Param("p2", Param.NAT, "0");
+		p4 = new Param("p3", Param.NAT, "0");
+		p5 = new Param("p4", Param.NAT, "0");
         p10 = new Param("p00", Param.NAT, "0");
         p20 = new Param("p10", Param.NAT, "0");
         p30 = new Param("p20", Param.NAT, "0");
+		p40 = new Param("p30", Param.NAT, "0");
+		p50 = new Param("p40", Param.NAT, "0");*/
+		
+		for(i=0; i<nbPara; i++) {
+			params_a[i] = new Param("pa" + i, Param.NAT, "0");
+			params_b[i] = new Param("pb" + i, Param.NAT, "0");
+			addParameter(params_a[i]);
+			addParameter(params_b[i]);
+		}
+		
 
-        if (nbPara > 0) {
+        /*if (nbPara > 0) {
             addParameter(p1);
             addParameter(p10);
         }
@@ -191,7 +206,8 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
         if (nbPara > 2) {
             addParameter(p3);
             addParameter(p30);
-        }
+        }*/
+		
         
         nb = new Param("nb", Param.NAT, "0");
         addParameter(nb);
@@ -223,7 +239,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "?p" + i + "0:nat";
+          action += "?pb" + i + ":nat";
         }
         action += "?index:nat";
         adag.setActionValue(action);
@@ -238,7 +254,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "!p" + i + "0";
+          action += "!pb" + i + "";
         }
         action += "!index";
         adag.setActionValue(action);
@@ -304,7 +320,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "?p" + i + "0:nat";
+            action += "?pb" + i + ":nat";
           }
           adag.setActionValue(action);
           adch3.addNext(adag);
@@ -316,7 +332,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-            action += "!p" + i + "0";
+            action += "!pb" + i + "";
         }
         action+="!index";
         adag.setActionValue(action);
@@ -344,7 +360,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-            action += "?p" + i + ":nat";
+            action += "?pa" + i + ":nat";
         }
         action += "!index_r";
         adag.setActionValue(action);
@@ -382,7 +398,7 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "!p" + i + "";
+            action += "!pa" + i + "";
           }
           adag.setActionValue(action);
           adch3.addNext(adag);
