@@ -3133,12 +3133,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL)) {
 					return;
 				}
+				JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
+				jgen.setSize(450, 500);
+				GraphicLib.centerOnParent(jgen);
+				jgen.setVisible(true);
+				return;
 			}
 		}
 		
 		//System.out.println("After UPPAAL");
-		
-		JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory);
+		JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
         jgen.setSize(450, 600);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);

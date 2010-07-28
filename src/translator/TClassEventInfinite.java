@@ -159,25 +159,15 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
            return;
         }
 
-        p1 = new Param("p0", Param.NAT, "0");
-        p2 = new Param("p1", Param.NAT, "0");
-        p3 = new Param("p2", Param.NAT, "0");
-        p10 = new Param("p00", Param.NAT, "0");
-        p20 = new Param("p10", Param.NAT, "0");
-        p30 = new Param("p20", Param.NAT, "0");
-
-        if (nbPara > 0) {
-            addParameter(p1);
-            addParameter(p10);
-        }
-         if (nbPara > 1) {
-            addParameter(p2);
-            addParameter(p20);
-        }
-        if (nbPara > 2) {
-            addParameter(p3);
-            addParameter(p30);
-        }
+        Param [] params_a = new Param[nbPara];
+		Param [] params_b = new Param[nbPara];
+		
+		for(i=0; i<nbPara; i++) {
+			params_a[i] = new Param("pa" + i, Param.NAT, "0");
+			params_b[i] = new Param("pb" + i, Param.NAT, "0");
+			addParameter(params_a[i]);
+			addParameter(params_b[i]);
+		}
         
         nb = new Param("nb", Param.NAT, "0");
         addParameter(nb);
@@ -209,7 +199,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "?p" + i + "0:nat";
+          action += "?pb" + i + ":nat";
         }
         action += "?index:nat";
         adag.setActionValue(action);
@@ -224,7 +214,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "!p" + i + "0";
+          action += "!pb" + i + "";
         }
         action += "!index";
         adag.setActionValue(action);
@@ -290,7 +280,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "?p" + i + "0:nat";
+            action += "?pb" + i + ":nat";
           }
           adag.setActionValue(action);
           adch3.addNext(adag);
@@ -302,7 +292,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-            action += "!p" + i + "0";
+            action += "!pb" + i + "";
         }
         action+="!index";
         adag.setActionValue(action);
@@ -326,7 +316,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adag);
         action = "";
         for(i=0; i<nbPara; i++) {
-            action += "?p" + i + ":nat";
+            action += "?pa" + i + ":nat";
         }
         action += "!index_r";
         adag.setActionValue(action);
@@ -363,7 +353,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "!p" + i + "";
+            action += "!pa" + i + "";
           }
           adag.setActionValue(action);
           adch3.addNext(adag);

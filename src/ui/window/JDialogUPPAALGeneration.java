@@ -60,11 +60,16 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
     protected MainGUI mgui;
     
     private String textJava1 = "Generate UPPAAL code in";
+	
+	public final static int TURTLE_MODE = 0;
+	public final static int DIPLODOCUS_MODE = 1;
+	
+	private int editionMode;
     
     
     protected static String pathCode;
 	protected static String nbProcesses = "10";
-	protected static String sizeInfiniteFIFO = "1024";
+	protected static String sizeInfiniteFIFO = "8";
 	protected static boolean debugGen = false;
 	protected static boolean choicesDeterministicStatic = false;
 	protected static boolean variablesAsActionsStatic = true;
@@ -96,7 +101,7 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
     
     
     /** Creates new form  */
-    public JDialogUPPAALGeneration(Frame f, MainGUI _mgui, String title, String _pathCode) {
+    public JDialogUPPAALGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, int _mode) {
         super(f, title, true);
         
         mgui = _mgui;
@@ -104,6 +109,8 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         if (pathCode == null) {
             pathCode = _pathCode;
         }
+		
+		editionMode = _mode;
         
         initComponents();
         myInitComponents();
@@ -118,10 +125,11 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         mode = NOT_STARTED;
         setButtons();
 		
-		if (mgui.getCurrentTURTLEPanel() instanceof TMLDesignPanel) {
-			nbOfProcesses.setEnabled(false);
-		} else {
+		
+		if (editionMode == TURTLE_MODE) {
 			sizeOfInfiniteFIFO.setEnabled(false);
+		} else if (editionMode == DIPLODOCUS_MODE) {
+			nbOfProcesses.setEnabled(false);
 		}
     }
     
@@ -151,22 +159,22 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
         c01.fill = GridBagConstraints.BOTH;
         c01.gridheight = 1;
 		
-		c01.gridwidth = 1;
-        
-        jp01.add(new JLabel("Nb of processes = "), c01);
 		
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
         nbOfProcesses = new JTextField(nbProcesses, 10);
-        jp01.add(nbOfProcesses, c01);
+		if (editionMode == TURTLE_MODE) {
+			c01.gridwidth = 1;
+			jp01.add(new JLabel("Nb of processes = "), c01);
+			c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+			jp01.add(nbOfProcesses, c01);
+		}
 		
-		c01.gridwidth = 1;
-		jp01.add(new JLabel("Size of infinite FIFO = "), c01);
-		
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		
-		sizeOfInfiniteFIFO = new JTextField(sizeInfiniteFIFO, 10);        
-		jp01.add(sizeOfInfiniteFIFO, c01);
+		sizeOfInfiniteFIFO = new JTextField(sizeInfiniteFIFO, 10);
+		if (editionMode == DIPLODOCUS_MODE) {
+			c01.gridwidth = 1;
+			jp01.add(new JLabel("Size of infinite FIFO = "), c01);
+			c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+			jp01.add(sizeOfInfiniteFIFO, c01);
+		}
         
         debugmode = new JCheckBox("Print debug information");
         debugmode.setSelected(debugGen);
@@ -174,11 +182,15 @@ public class JDialogUPPAALGeneration extends javax.swing.JDialog implements Acti
 		
 		choicesDeterministic = new JCheckBox("Assume all choices as deterministic");
         choicesDeterministic.setSelected(choicesDeterministicStatic);
-        jp01.add(choicesDeterministic, c01);
+		if (editionMode == TURTLE_MODE) {
+			jp01.add(choicesDeterministic, c01);
+		}
 		
 		variablesAsActions = new JCheckBox("Assume variable setting as actions for branch selection");
         variablesAsActions.setSelected(variablesAsActionsStatic);
-        jp01.add(variablesAsActions, c01);
+		if (editionMode == TURTLE_MODE) {
+			jp01.add(variablesAsActions, c01);
+		}
         
 		TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
 		if (tp instanceof TMLDesignPanel) {

@@ -175,17 +175,6 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
 		
 		Param [] params_a = new Param[nbPara];
 		Param [] params_b = new Param[nbPara];
-
-        /*p1 = new Param("p0", Param.NAT, "0");
-        p2 = new Param("p1", Param.NAT, "0");
-        p3 = new Param("p2", Param.NAT, "0");
-		p4 = new Param("p3", Param.NAT, "0");
-		p5 = new Param("p4", Param.NAT, "0");
-        p10 = new Param("p00", Param.NAT, "0");
-        p20 = new Param("p10", Param.NAT, "0");
-        p30 = new Param("p20", Param.NAT, "0");
-		p40 = new Param("p30", Param.NAT, "0");
-		p50 = new Param("p40", Param.NAT, "0");*/
 		
 		for(i=0; i<nbPara; i++) {
 			params_a[i] = new Param("pa" + i, Param.NAT, "0");
@@ -193,21 +182,6 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
 			addParameter(params_a[i]);
 			addParameter(params_b[i]);
 		}
-		
-
-        /*if (nbPara > 0) {
-            addParameter(p1);
-            addParameter(p10);
-        }
-         if (nbPara > 1) {
-            addParameter(p2);
-            addParameter(p20);
-        }
-        if (nbPara > 2) {
-            addParameter(p3);
-            addParameter(p30);
-        }*/
-		
         
         nb = new Param("nb", Param.NAT, "0");
         addParameter(nb);

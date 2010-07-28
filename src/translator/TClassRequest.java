@@ -156,19 +156,12 @@ public class TClassRequest extends TClass implements FIFOTClass{
            return;
         }
 
-        p1 = new Param("p0", Param.NAT, "0");
-        p2 = new Param("p1", Param.NAT, "0");
-        p3 = new Param("p2", Param.NAT, "0");
-
-        if (nbPara > 0) {
-            addParameter(p1);
-        }
-         if (nbPara > 1) {
-            addParameter(p2);
-        }
-        if (nbPara > 2) {
-            addParameter(p3);
-        }
+        Param [] params_a = new Param[nbPara];
+		
+		for(i=0; i<nbPara; i++) {
+			params_a[i] = new Param("pa" + i, Param.NAT, "0");
+			addParameter(params_a[i]);
+		}
         
         n = new Param("n", Param.NAT, "0");
         addParameter(n);
@@ -199,7 +192,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "?p" + i + ":nat";
+            action += "?pa" + i + ":nat";
           }
           adag.setActionValue(action);
           adch1.addNext(adag);
@@ -221,7 +214,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
         ad.add(adag1);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "!p" + i;
+          action += "!pa" + i;
         }
         action += "!n";
         adag1.setActionValue(action);
@@ -240,7 +233,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
         ad.add(adag2);
         action = "";
         for(i=0; i<nbPara; i++) {
-          action += "?p" + i + ":nat";
+          action += "?pa" + i + ":nat";
         }
         action += "!n";
         adag2.setActionValue(action);
@@ -262,7 +255,7 @@ public class TClassRequest extends TClass implements FIFOTClass{
           ad.add(adag);
           action = "";
           for(i=0; i<nbPara; i++) {
-            action += "!p" + i;
+            action += "!pa" + i;
           }
           adag.setActionValue(action);
           adch2.addNext(adag);
