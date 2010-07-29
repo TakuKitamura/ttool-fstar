@@ -6,6 +6,8 @@
 #include <stdio.h>
 
 #include "transactions.h"
+#include "syncchannel.h"
+#include "timers.h"
 #include "myerrors.h"
 #include "debug.h"
 
@@ -112,9 +114,116 @@ void removeRequest(synccell *cell) {
 }
 
 
+int RequestsDone(synccell *cells[], int nbOfRequests) {
+  int i;
 
-void makeRequests(synccell cells[]) {
+  for(i=0; i<nbOfRequests; i++) {
+    if (cells[i] != NULL) {
+      if (cells[i]->transactionDone  == DONE)  {
+	return i;
+      }
+    }
+  }
+  
+  return -1;
 }
+
+
+// Sending, receiving, timer_expiration
+int WaitAndStoreRequests(synccell *cells[], int nbOfRequests) {
+  int i;
+  synccell *newcells[nbOfRequests];
+  int index;
+
+  for(i=0; i<nbOfRequests; i++) {
+    if ((cells[i]->type == SENDING) || (cells[i]->type == RECEIVING)) {
+      newcells[i] = addSyncRequest(cells[i]->ID, cells[i]->params, cells[i]->nParams, cells[i]->type);
+    } else if (cells[i]->type == TIMER_EXPIRATION){
+      newcells[i] = getTimerCell(cells[i]->ID);
+    } else {
+      newcells[i] = NULL;
+    }
+  }
+
+  
+  while((index = RequestsDone(newcells, nbOfRequests)) == -1) {
+    pthread_cond_wait(&multiType, &syncmutex);
+  }
+
+  return index;
+}
+
+
+// Returns the completed request
+int makeRequests(synccell *cells[], int nbOfRequests) {
+  int i;
+  int completed = -1;
+  synccell *cell = NULL;
+  int random_integer = rand() % nbOfRequests;
+  int index;
+
+  pthread_mutex_lock(&syncmutex);
+
+  // See whether a request can be immediatly completed
+  for(i=0; i<nbOfRequests; i++) {
+    index = (i + random_integer) % nbOfRequests;
+    
+    if (cells[index]->type == SENDING) {
+      cell = getPending(cells[index]->ID, RECEIVING);
+      if (cell != NULL) {
+	completed = index;
+	break;
+      }
+    } 
+
+    if (cells[index]->type == RECEIVING) {
+       cell = getPending(cells[index]->ID, RECEIVING);
+      if (cell != NULL) {
+	completed = index;
+	break;
+      }
+    }
+
+    if (cells[index]->type == TIMER) {
+      if (cells[index]->timerValue < MIN_TIMER_VALUE) {
+	completed = index;
+	break;
+      } else {
+	// Can set the timer
+	setTimer(cells[index]->ID, cells[index]->timerValue);
+      }
+    }
+
+    if (cells[index]->type == TIMER_EXPIRATION) {
+      cell = getTimerCell(cells[index]->ID);
+      
+      if (cell == NULL) {
+	criticalErrorInt("Unknown Timer", cells[index]->ID);
+      }
+      
+      if (cell->transactionDone == DONE) {
+	completed = index;
+	break;
+      }
+      
+    }
+
+    if (cells[index]->type == TIMER_RESET) {
+      resetTimer(cells[index]->ID);
+      completed = index;
+      break;
+    }
+  }
+
+  if (completed == -1) {
+    // Requests must be stored, and we wait for a request to be served
+    completed = WaitAndStoreRequests(cells, nbOfRequests);
+  }  
+
+  pthread_mutex_unlock(&syncmutex);
+  
+  return completed;
+  }
 
 
 

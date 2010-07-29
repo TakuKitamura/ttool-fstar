@@ -66,6 +66,7 @@ synccell *makeTimerCell(int timer_id, long long value) {
   synccell *cell = getTimerCell(timer_id);
 
   if (cell == NULL) {
+    debugMsg("*** Making a new timer cell");
     cell = (synccell *)(malloc(sizeof(synccell)));
 
     if (cell == NULL) {
@@ -80,6 +81,7 @@ synccell *makeTimerCell(int timer_id, long long value) {
 
     addCell(cell);
   } else {
+    debugMsg("*** Reusing a timer cell");
     // If timer is expired
     cell->transactionDone = DEFINED;
     // If timer is set but not yet expired -> must stop the timer!
@@ -207,7 +209,7 @@ void waitForTimerExpiration(int timer_id) {
   cell = getTimerCell(timer_id);
 
   if (cell == NULL) {
-    criticalError("Unknown Timer");
+    criticalErrorInt("Unknown Timer", timer_id);
   }
 
   while (cell->transactionDone != DONE) {
@@ -226,7 +228,7 @@ void resetTimer(int timer_id) {
   cell = getTimerCell(timer_id);
 
   if (cell == NULL) {
-    criticalError("Unknown Timer");
+    criticalErrorInt("Unknown Timer", timer_id);
   }
 
   cell->transactionDone = CANCELLED;

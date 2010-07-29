@@ -11,6 +11,8 @@
 #define RECEIVING 1
 #define SENDING 0
 #define TIMER 2
+#define TIMER_EXPIRATION 3
+#define TIMER_RESET 4
 
 // For transaction done
 #define DEFINED 0
@@ -18,13 +20,16 @@
 #define DONE 2
 #define CANCELLED 3
 
+#define MIN_TIMER_VALUE 1000 // in nanoseconds
+
 struct synccell{
   struct synccell* next;
   int ID;
+  int taskID;
   int type; /* RECEIVING, SENDING, TIMER */
   char transactionDone;
-  long long timerValue;
-  hrtime_t startTime;
+  long long timerValue; // in nanoseconds
+  hrtime_t completionTime;
   timer_t timer;
   int nParams;
   int *params[];
@@ -45,10 +50,7 @@ synccell * getRandomCell();
 synccell * getPending(int channel_id, int type);
 void removeRequest(synccell *cell);
 
-
-
-void makeRequests(synccell cells[]);
-
+int makeRequests(synccell *cells[], int nbOfRequests);
 
 #endif
 
