@@ -10,6 +10,7 @@
 #include "timers.h"
 #include "myerrors.h"
 #include "debug.h"
+#include "storeevents.h"
 
 
 /* Mutex management */
@@ -137,7 +138,7 @@ int WaitAndStoreRequests(synccell *cells[], int nbOfRequests) {
 
   for(i=0; i<nbOfRequests; i++) {
     if ((cells[i]->type == SENDING) || (cells[i]->type == RECEIVING)) {
-      newcells[i] = addSyncRequest(cells[i]->ID, cells[i]->params, cells[i]->nParams, cells[i]->type);
+      newcells[i] = addSyncRequest(cells[i]->taskID, cells[i]->ID, cells[i]->params, cells[i]->nParams, cells[i]->type);
     } else if (cells[i]->type == TIMER_EXPIRATION){
       newcells[i] = getTimerCell(cells[i]->ID);
     } else {
@@ -149,6 +150,8 @@ int WaitAndStoreRequests(synccell *cells[], int nbOfRequests) {
   while((index = RequestsDone(newcells, nbOfRequests)) == -1) {
     pthread_cond_wait(&multiType, &syncmutex);
   }
+
+  addEvent(newcells[index]);
 
   return index;
 }
@@ -172,6 +175,8 @@ int makeRequests(synccell *cells[], int nbOfRequests) {
       cell = getPending(cells[index]->ID, RECEIVING);
       if (cell != NULL) {
 	completed = index;
+	makeSenderSynchronization(cells[index]->taskID, cells[index]->ID, cells[index]->params, cells[index]->nParams, cell);
+
 	break;
       }
     } 
@@ -179,6 +184,7 @@ int makeRequests(synccell *cells[], int nbOfRequests) {
     if (cells[index]->type == RECEIVING) {
        cell = getPending(cells[index]->ID, RECEIVING);
       if (cell != NULL) {
+	makeReceiverSynchronization(cells[index]->taskID, cells[index]->ID, cells[index]->params, cells[index]->nParams, cell);
 	completed = index;
 	break;
       }
@@ -187,10 +193,11 @@ int makeRequests(synccell *cells[], int nbOfRequests) {
     if (cells[index]->type == TIMER) {
       if (cells[index]->timerValue < MIN_TIMER_VALUE) {
 	completed = index;
+	addEvent(cells[index]);
 	break;
       } else {
 	// Can set the timer
-	setTimer(cells[index]->ID, cells[index]->timerValue);
+	setTimer(cells[index]->taskID, cells[index]->ID, cells[index]->timerValue);
       }
     }
 
@@ -203,13 +210,14 @@ int makeRequests(synccell *cells[], int nbOfRequests) {
       
       if (cell->transactionDone == DONE) {
 	completed = index;
+	addEvent(cells[index]);
 	break;
       }
       
     }
 
     if (cells[index]->type == TIMER_RESET) {
-      resetTimer(cells[index]->ID);
+      resetTimer(cells[index]->taskID, cells[index]->ID);
       completed = index;
       break;
     }

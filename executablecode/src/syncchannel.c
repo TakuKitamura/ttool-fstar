@@ -6,6 +6,7 @@
 #include "transactions.h"
 #include "myerrors.h"
 #include "debug.h"
+#include "storeevents.h"
 
 
 
@@ -15,7 +16,7 @@
 
 // Private
 
-synccell * addSyncRequest(int channel_id, int *params[], int nParams, int type) {
+synccell * addSyncRequest(int myid, int channel_id, int *params[], int nParams, int type) {
   int i;
   synccell *cell = (synccell *)(malloc(sizeof(synccell) + nParams*sizeof(int *)));
 
@@ -28,6 +29,7 @@ synccell * addSyncRequest(int channel_id, int *params[], int nParams, int type) 
   cell->transactionDone = RUNNING;
   cell->nParams = nParams;
   cell->timer = -1;
+  cell->taskID = myid;
   for(i=0; i<nParams; i++) {
     cell->params[i] = params[i];
   }
@@ -37,40 +39,47 @@ synccell * addSyncRequest(int channel_id, int *params[], int nParams, int type) 
 
   nbOfCells ++;
 
+  addEvent(cell);
+
   debugInt("Nb Of elements", nbOfCells);
 
   return cell;
 }
 
 
-void waitForSendingCompletion(int channel_id, int *params[], int nParams) {
+void waitForSendingCompletion(int myid, int channel_id, int *params[], int nParams) {
   synccell * cell;
 
-  cell = addSyncRequest(channel_id, params, nParams, SENDING);
+  cell = addSyncRequest(myid, channel_id, params, nParams, SENDING);
 
   while(cell->transactionDone != DONE) {
     pthread_cond_wait(&waitingForSending, &syncmutex);
   }
 
+  addEvent(cell);
+
   removeRequest(cell);
 }
 
-void waitForReceivingCompletion(int channel_id, int *params[], int nParams) {
+void waitForReceivingCompletion(int myid, int channel_id, int *params[], int nParams) {
   synccell * cell;
 
-  cell = addSyncRequest(channel_id, params, nParams, RECEIVING);
+  cell = addSyncRequest(myid, channel_id, params, nParams, RECEIVING);
 
   while(cell->transactionDone != DONE) {
     pthread_cond_wait(&waitingForReceiving, &syncmutex);
   }
 
+  addEvent(cell);
+
   removeRequest(cell);
 }
 
 
 
-void makeSenderSynchronization(int channel_id, int *params[], int nParams, synccell *receiver) {
+void makeSenderSynchronization(int myid, int channel_id, int *params[], int nParams, synccell *receiver) {
   int i;
+  synccell cell;
 
   receiver->transactionDone = DONE;
   
@@ -78,18 +87,33 @@ void makeSenderSynchronization(int channel_id, int *params[], int nParams, syncc
     *(receiver->params[i])=*params[i];
   }
 
+  cell.ID = channel_id;
+  cell.taskID = myid;
+  cell.type = SENDING;
+  cell.transactionDone = DONE;
+
+  addEvent(&cell);
+
   pthread_cond_broadcast(&waitingForReceiving);
   pthread_cond_broadcast(&multiType);
 }
 
-void makeReceiverSynchronization(int channel_id, int *params[], int nParams, synccell *sender) {
+void makeReceiverSynchronization(int myid, int channel_id, int *params[], int nParams, synccell *sender) {
   int i;
+  synccell cell;
 
   sender->transactionDone = DONE;
   
   for(i=0; i<nParams; i++) {
     *params[i] = *(sender->params[i]);
   }
+
+  cell.ID = channel_id;
+  cell.taskID = myid;
+  cell.type = RECEIVING;
+  cell.transactionDone = DONE;
+
+  addEvent(&cell);
 
   pthread_cond_broadcast(&waitingForSending);
   pthread_cond_broadcast(&multiType);
@@ -99,11 +123,11 @@ void makeReceiverSynchronization(int channel_id, int *params[], int nParams, syn
 // public elements
 
 
-void sendSync(int channel_id) {
-  sendSyncParams(channel_id, NULL, 0);
+void sendSync(int myid, int channel_id) {
+  sendSyncParams(myid, channel_id, NULL, 0);
 }
 
-void sendSyncParams(int channel_id, int *params[], int nParams) {
+void sendSyncParams(int myid, int channel_id, int *params[], int nParams) {
   
   synccell *cell;
    pthread_mutex_lock(&syncmutex);  
@@ -111,21 +135,21 @@ void sendSyncParams(int channel_id, int *params[], int nParams) {
    // See whether a receiving is pending
    cell = getPending(channel_id, RECEIVING);
    if (cell != NULL) {
-     makeSenderSynchronization(channel_id, params, nParams, cell);
+     makeSenderSynchronization(myid, channel_id, params, nParams, cell);
    } else {
      // Otherwise: add the request, and wait;
-     waitForSendingCompletion(channel_id, params, nParams);
+     waitForSendingCompletion(myid, channel_id, params, nParams);
    } 
    pthread_mutex_unlock(&syncmutex); 
 }
 
 
-void receiveSync(int channel_id) {
-  receiveSyncParams(channel_id, NULL, 0);
+void receiveSync(int myid, int channel_id) {
+  receiveSyncParams(myid, channel_id, NULL, 0);
 }
 
 
-void receiveSyncParams(int channel_id, int *params[], int nParams) {
+void receiveSyncParams(int myid, int channel_id, int *params[], int nParams) {
   
   synccell *cell;
    pthread_mutex_lock(&syncmutex);  
@@ -133,10 +157,10 @@ void receiveSyncParams(int channel_id, int *params[], int nParams) {
    // See whether a sending is pending
    cell = getPending(channel_id, SENDING);
    if (cell != NULL) {
-     makeReceiverSynchronization(channel_id, params, nParams, cell);
+     makeReceiverSynchronization(myid, channel_id, params, nParams, cell);
    } else {
      // Otherwise: add the request, and wait;
-     waitForReceivingCompletion(channel_id, params, nParams);
+     waitForReceivingCompletion(myid, channel_id, params, nParams);
    } 
    pthread_mutex_unlock(&syncmutex); 
 }

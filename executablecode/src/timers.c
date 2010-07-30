@@ -9,6 +9,7 @@
 #include "transactions.h"
 #include "myerrors.h"
 #include "debug.h"
+#include "storeevents.h"
 
 
 
@@ -62,7 +63,7 @@ void timerTransactionDone(long *timer_id) {
 }
 
 
-synccell *makeTimerCell(int timer_id, long long value) {
+synccell *makeTimerCell(int myid, int timer_id, long long value) {
   synccell *cell = getTimerCell(timer_id);
 
   if (cell == NULL) {
@@ -88,6 +89,7 @@ synccell *makeTimerCell(int timer_id, long long value) {
     timer_delete(cell->timer);
   }
   cell->timerValue = value;
+  cell->taskID = myid;
   
   return cell;
 }
@@ -180,14 +182,16 @@ if (sigaction(SIG, &sa, NULL) == -1) {
 
 }
 
-void setTimer(int timer_id, long long value) {
+void setTimer(int myid, int timer_id, long long value) {
   pthread_mutex_lock(&syncmutex); 
 
   debugInt("make timer cell", timer_id);
-  synccell *cell = makeTimerCell(timer_id, value);
+  synccell *cell = makeTimerCell(myid, timer_id, value);
   debugInt("start timer cell", timer_id);
   startTimer(cell);
   debugInt("start timer cell done", timer_id);
+
+  addEvent(cell);
 
   pthread_mutex_unlock(&syncmutex); 
 }
@@ -197,11 +201,11 @@ void setTimer(int timer_id, long long value) {
 
 
 
-void setTimerMs(int timer_id, long long value) {
-  setTimer(timer_id, value * 1000000);
+void setTimerMs(int myid, int timer_id, long long value) {
+  setTimer(myid, timer_id, value * 1000000);
 }
 
-void waitForTimerExpiration(int timer_id) {
+void waitForTimerExpiration(int myid, int timer_id) {
   synccell *cell;
   
   pthread_mutex_lock(&syncmutex); 
@@ -216,11 +220,14 @@ void waitForTimerExpiration(int timer_id) {
     // Must wait for the transaction to complete
     pthread_cond_wait(&waitingForTimer, &syncmutex);
   }
+
+  cell->taskID = myid;
+  addEvent(cell);
   
   pthread_mutex_unlock(&syncmutex); 
 }
 
-void resetTimer(int timer_id) {
+void resetTimer(int myid, int timer_id) {
   synccell *cell;
 
   pthread_mutex_lock(&syncmutex); 
@@ -231,7 +238,11 @@ void resetTimer(int timer_id) {
     criticalErrorInt("Unknown Timer", timer_id);
   }
 
+  cell->taskID = myid;
   cell->transactionDone = CANCELLED;
+
+  addEvent(cell);
+
   timer_delete(cell->timer);
   
   pthread_mutex_unlock(&syncmutex); 
