@@ -56,13 +56,5 @@ public abstract class TMLCommunicationElement extends TMLElement {
     
     public abstract boolean isBlockingAtOrigin();
 	public abstract boolean isBlockingAtDestination();
-
-      public void setInfected(boolean iInfected){
-	    infected=iInfected;
-	}
-
-	public boolean getInfected(){
-	    return infected;
-	}
 	
 }

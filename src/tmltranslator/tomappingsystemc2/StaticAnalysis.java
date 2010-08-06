@@ -3,6 +3,7 @@ package tmltranslator.tomappingsystemc2;
 import java.util.*;
 import tmltranslator.*;
 import java.util.regex.*;
+//import java.util.HashSet;
 
 public class StaticAnalysis{
 	private ArrayList<LiveVariableNode> liveNodes;
@@ -17,6 +18,7 @@ public class StaticAnalysis{
 	private int _bytesForDefs;
 	private int _bytesForVars;
 	private LiveVariableNode[] _defLookup=null;
+	private Set<Integer> _depChannels = new HashSet<Integer>(); 
 
 	public StaticAnalysis(TMLTask iTask, ArrayList<TMLChannel>iChannels, ArrayList<TMLEvent> iEvents, ArrayList<TMLRequest> iRequests){
 		_task = iTask;
@@ -43,6 +45,14 @@ public class StaticAnalysis{
 	
 	public LiveVariableNode[] getDefLookUp(){
 		return _defLookup;
+	}
+
+	public void addDepChannel(int iID){
+		_depChannels.add(iID);
+	}
+
+	public boolean isChannelDep(int iID){
+		return _depChannels.contains(iID);
 	}
 
 	private int getVarSeqNoByName(String attName){
@@ -151,6 +161,7 @@ public class StaticAnalysis{
 		_bytesForVars = aNbOfLiveElements >>> 5;
 		if ((aNbOfLiveElements & 0x1F)!=0) _bytesForVars++;
 		LiveVariableNode aStartNode=null, aLastNode=null;
+		_depChannels.clear();
 		for(TMLAttribute att: _task.getAttributes()) {
 			if (att.hasInitialValue())
 				aStartNode = new LiveVariableNode(this, new int[_bytesForVars], parseExprToVariableMap(att.name, null), null, null,
@@ -158,7 +169,8 @@ public class StaticAnalysis{
 			else
 				aStartNode = new LiveVariableNode(this, new int[_bytesForVars], parseExprToVariableMap(att.name, null), null, null,
 			false, att.name, "0");
-			liveNodes.add(aStartNode);			
+			liveNodes.add(aStartNode);
+			aStartNode.setNodeInfo("init " + att.getName());
 			if (aLastNode!=null) aLastNode.setSuccessor(aStartNode);
 			aLastNode=aStartNode;
 		}
@@ -172,6 +184,7 @@ public class StaticAnalysis{
 			for(TMLRequest aReq: _requests)
 				if (aReq.getNbOfParams()>0){ aStartNode.setVarDepSource(true); break;}
 			liveNodes.add(aStartNode);
+			aStartNode.setNodeInfo("rec req");
 			aStartNode.setSuccessor(buildLiveAnalysisTree(_task.getActivityDiagram().getFirst(), aStartNode, null));
 		}else{
 			aStartNode = buildLiveAnalysisTree(_task.getActivityDiagram().getFirst(), null, null);
@@ -322,11 +335,13 @@ public class StaticAnalysis{
 			String[] aTokens=aLoop.getInit().split("=",2);
 			if (aTokens.length<2) aTokens=new String[2];
 			LiveVariableNode aInit = new LiveVariableNode(this, parseExprToVariableMap(aTokens[1], null), parseExprToVariableMap(aTokens[0], null), iCurrElem, iSuperiorNode, false, aTokens[0], aTokens[1]);
+			aInit.setNodeInfo("init");
 			LiveVariableNode aCondition = new LiveVariableNode(this, parseExprToVariableMap(aLoop.getCondition(), null), new int[_bytesForVars], iCurrElem, iSuperiorNode);
+			aCondition.setNodeInfo("cond");
 			aTokens=aLoop.getIncrement().split("=",2);
 			if (aTokens.length<2) aTokens=new String[2];
-			LiveVariableNode anIncrement = new LiveVariableNode(this, parseExprToVariableMap(aTokens[1], null), parseExprToVariableMap(aTokens[0],
-			null), iCurrElem, aCondition, false, aTokens[0], aTokens[1]);
+			LiveVariableNode anIncrement = new LiveVariableNode(this, parseExprToVariableMap(aTokens[1], null), parseExprToVariableMap(aTokens[0],null), iCurrElem, aCondition, false, aTokens[0], aTokens[1]);
+			anIncrement.setNodeInfo("inc");
 			aInit.setSuccessor(aCondition);
 			anIncrement.setSuccessor(aCondition);
 			aCondition.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(0), anIncrement, aCondition));   //in loop

@@ -34,6 +34,7 @@ public class LiveVariableNode{
 	private String _rhs = "";
 	private String _unrolledExpr = "";
 	private boolean _varDepSource = false;
+	private String _nodeInfo="";
 	
 
 	LiveVariableNode(StaticAnalysis iAnalysis, int[] iUseVars, int[] iDefVars, TMLActivityElement iLinkedElem, LiveVariableNode iSuperiorNode, boolean iConstantStuckToFalse, String iLhs, String iRhs){
@@ -123,12 +124,15 @@ public class LiveVariableNode{
 			for (int i=0; i<((TMLActivityElementChannel)_linkedElem).getNbOfChannels(); i++){
 				TMLChannel aChannel = ((TMLActivityElementChannel)_linkedElem).getChannel(i);
 				//System.out.println("get Infected for channel " + aChannel.getName() + "=" + aChannel.getInfected());
-				if (aChannel.getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+				//if (aChannel.getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+				if (_analysis.isChannelDep(aChannel.getID())) aReasonCode = CheckpointInfo.CHANNEL_DEP;
 			}
 		}else if(_linkedElem instanceof TMLSendEvent || _linkedElem instanceof TMLWaitEvent){
-			if (((TMLActivityElementEvent)_linkedElem).getEvent().getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+			//if (((TMLActivityElementEvent)_linkedElem).getEvent().getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+			if (_analysis.isChannelDep(((TMLActivityElementEvent)_linkedElem).getEvent().getID())) aReasonCode = CheckpointInfo.CHANNEL_DEP;
 		}else if (_linkedElem instanceof TMLSendRequest){
-			if (((TMLSendRequest)_linkedElem).getRequest().getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+			//if (((TMLSendRequest)_linkedElem).getRequest().getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
+			if (_analysis.isChannelDep(((TMLSendRequest)_linkedElem).getRequest().getID())) aReasonCode = CheckpointInfo.CHANNEL_DEP;
 		}
 		//consider receive event
 		if (_predList.size()>1){
@@ -248,7 +252,8 @@ public class LiveVariableNode{
 				for (int bits=0; bits<32;bits++){
 					if ((iList[bytes] & (1 << bits))!=0){
 						TMLActivityElement anElem = _analysis.getDefLookUp()[(bytes << 5)|bits]._linkedElem;
-						if (anElem!=null) aResult+=anElem.getID() + ","; else aResult+="?,";
+						aResult += _analysis.getDefLookUp()[(bytes << 5)|bits].getNodeInfo();
+						if (anElem!=null) aResult += "(" + anElem.getID() + "),"; else aResult += ",";
 					}
 				}
 			}
@@ -366,6 +371,14 @@ public class LiveVariableNode{
 	public void setVarDepSource(boolean iVarDepSource){
 		_infected = iVarDepSource;
 		_varDepSource = iVarDepSource;
+	}
+	
+	public String getNodeInfo(){
+		return _nodeInfo;
+	}
+	
+	public void setNodeInfo(String iInfo){
+		_nodeInfo=iInfo;
 	}
 
 	public boolean determineKilledSets(){
@@ -603,12 +616,15 @@ public class LiveVariableNode{
 					//System.out.println("in loop");
 					TMLChannel aChannel = ((TMLActivityElementChannel)_linkedElem).getChannel(i);
 					//System.out.println("Set Infected for channel " + aChannel.getName());
-					if (aChannel.getType()!=TMLChannel.NBRNBW) aChannel.setInfected(true);
+					//if (aChannel.getType()!=TMLChannel.NBRNBW) aChannel.setInfected(true);
+					if (aChannel.getType()!=TMLChannel.NBRNBW) _analysis.addDepChannel(aChannel.getID());
 				}
 			}else if(_linkedElem instanceof TMLSendEvent || _linkedElem instanceof TMLWaitEvent){
-				((TMLActivityElementEvent)_linkedElem).getEvent().setInfected(true);
+				//((TMLActivityElementEvent)_linkedElem).getEvent().setInfected(true);
+				_analysis.addDepChannel(((TMLActivityElementEvent)_linkedElem).getEvent().getID());
 			}else if (_linkedElem instanceof TMLSendRequest){
-				((TMLSendRequest)_linkedElem).getRequest().setInfected(true);
+				//((TMLSendRequest)_linkedElem).getRequest().setInfected(true);
+				_analysis.addDepChannel(((TMLSendRequest)_linkedElem).getRequest().getID());
 			}
 		}
 		return _infected;
