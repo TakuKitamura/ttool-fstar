@@ -48,7 +48,7 @@ package tmltranslator;
 
 
 public abstract class TMLCommunicationElement extends TMLElement {
-   
+   private boolean infected;
     
     public TMLCommunicationElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -56,5 +56,13 @@ public abstract class TMLCommunicationElement extends TMLElement {
     
     public abstract boolean isBlockingAtOrigin();
 	public abstract boolean isBlockingAtDestination();
+
+      public void setInfected(boolean iInfected){
+	    infected=iInfected;
+	}
+
+	public boolean getInfected(){
+	    return infected;
+	}
 	
 }

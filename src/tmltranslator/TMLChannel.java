@@ -167,5 +167,4 @@ public class TMLChannel extends TMLCommunicationElement {
 			}
 		return false;
 	}
-	
 }

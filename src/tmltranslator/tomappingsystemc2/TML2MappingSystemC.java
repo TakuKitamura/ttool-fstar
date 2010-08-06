@@ -72,8 +72,6 @@ public class TML2MappingSystemC {
 	
 	private ArrayList<EBRDD> ebrdds;
 	private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
-	private HashMap<Integer,HashSet<Integer> > dependencies = new HashMap<Integer,HashSet<Integer> >();
-	private HashSet<Integer> visitedVars = new HashSet<Integer>();
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
@@ -112,22 +110,12 @@ public class TML2MappingSystemC {
         	debug = _debug;
 		optimize = _optimize;
 		tmlmapping.removeAllRandomSequences();
-		dependencies.clear();
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
         	//generateSystemCTasks();
 		generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
-		System.out.println("********** All identified objects and their dependencies: **********");
-		printDependencies(false);
-		HashSet<Integer> keys = new HashSet<Integer>(dependencies.keySet());
-		for(int elemID: keys){
-			visitedVars.clear();
-			eliminateStateVars(elemID, null);
-		}
-		System.out.println("********** System state variables and their dependency on indeterministic operators **********");
-		printDependencies(true);
 	}
 	
 	private void generateMainFile() {
@@ -377,33 +365,28 @@ public class TML2MappingSystemC {
 			 	declaration += "1," + node.getName() + "),1" + CR; 
 			}
 			MappedSystemCTask mst;
-			//channels = (ArrayList<TMLChannel>) tmlmodeling.getChannels(task).clone();
-			//events = (ArrayList<TMLEvent>) tmlmodeling.getEvents(task).clone();
-			//requests = (ArrayList<TMLRequest>) tmlmodeling.getRequests(task).clone();
 			channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
 			events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
 			requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
 			mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping);
-			mst.generateSystemC(debug, optimize, dependencies);
+			//mst.generateSystemC(debug, optimize, dependencies);
+			mst.generateSystemC(debug, optimize);
 			tasks.add(mst);
-
-			for(TMLChannel channelb: channels) {
+			for(TMLChannel channelb: channels)
 				declaration += "," + channelb.getExtendedName()+CR;
-			}
 
-			for(TMLEvent evt: events) {
+			for(TMLEvent evt: events)
 				declaration += "," + evt.getExtendedName()+CR;
-			}
 
-			for(TMLRequest req: requests) {
+			for(TMLRequest req: requests)
 				if (req.isAnOriginTask(task)) declaration+=",reqChannel_" + req.getDestinationTask().getName()+CR;
-			}
 			
 			if (task.isRequested()) declaration += ",reqChannel_"+task.getName()+CR;
 			declaration += ")" + SCCR;
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
+		for(MappedSystemCTask task: tasks) task.determineCheckpoints();
 		declaration += CR;
 
 		//Declaration of EBRDDs
@@ -427,13 +410,13 @@ public class TML2MappingSystemC {
 			slaves.str+=",static_cast<Slave*>(0)";
 		else
 			firstPart=startNode.getName() + "0";
-		System.out.println("------------------------------------------------------");
+		/*System.out.println("------------------------------------------------------");
 		for(HwCommunicationNode commElem:path){
 			System.out.println("CommELem to process: " + commElem.getName());
 		}
-		System.out.println("------------------------------------------------------");
+		System.out.println("------------------------------------------------------");*/
 		for(HwCommunicationNode commElem:path){
-			System.out.println("CommELem to process: " + commElem.getName());
+			//System.out.println("CommELem to process: " + commElem.getName());
 			//String commElemName = commElem.getName();
 			//if (commElem instanceof HwCPU) commElemName += "0"; 
 			if (commElem instanceof HwMemory){
@@ -499,13 +482,13 @@ public class TML2MappingSystemC {
 		if ( (hopNum=extractPath(path, masters, slaves, startNode, destNode, false))<0){
 			hopNum=extractPath(path, masters, slaves, destNode, destNode, true)-hopNum;
 		}
-		System.out.println(commElemToRoute.getName() + " is mapped on:");
+		/*System.out.println(commElemToRoute.getName() + " is mapped on:");
 		for(HwCommunicationNode commElem:path){
 			System.out.println(commElem.getName());
 		}
 		System.out.println("number of elements: " + hopNum);
 		System.out.println("masters: " + masters.str);
-		System.out.println("slaves: " + slaves.str);
+		System.out.println("slaves: " + slaves.str);*/
 		return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
 	}
 
@@ -598,29 +581,6 @@ public class TML2MappingSystemC {
 		return false;
 	}
 
-
-
-	private void eliminateStateVars(int id, HashSet<Integer>rndVars){
-		visitedVars.add(id);
-		HashSet<Integer> currSet = dependencies.get(id);
-		if (currSet==null) return;
-		HashSet<Integer> newSet = new HashSet<Integer>();
-		for (int currID: currSet){
-			if (!visitedVars.contains(currID)){
-				if(currID>0){
-					eliminateStateVars(currID, newSet);
-				}else{
-					newSet.add(currID);
-				}
-			}
-		}
-		dependencies.remove(id);
-		if (!newSet.isEmpty()){
-			dependencies.put(id, newSet);
-			if (rndVars!=null) for(int currID: newSet) rndVars.add(currID);
-		}
-	}
-
 	private String getIdentifierNameByID(int id){
 		
 		for(MappedSystemCTask task: tasks){
@@ -628,19 +588,6 @@ public class TML2MappingSystemC {
 			if (tmp!=null) return tmp; 
 		}
 		return null;
-	}
-
-	private void printDependencies(boolean onlyState){	
-		for(int elemID:dependencies.keySet()){
-			if (!onlyState || elemID < Integer.MAX_VALUE/2){
-				System.out.println(getIdentifierNameByID(elemID) + " depends on:");
-				HashSet<Integer> deps = dependencies.get(elemID);
-				for (int dep: deps){
-					System.out.println("  " + getIdentifierNameByID(dep));
-				}
-			}
-		}
-		System.out.println("");
 	}
 
 	private void generateEBRDDs(){
