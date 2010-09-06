@@ -348,6 +348,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_GEN_RTLOTOS = 27;
     public static final int ACT_GEN_LOTOS = 155;
     public static final int ACT_GEN_UPPAAL = 204;
+	public static final int ACT_GEN_PROVERIF = 331;
     public static final int ACT_GEN_JAVA = 112;
     public static final int ACT_SIMU_JAVA = 167;
     public static final int ACT_GEN_SYSTEMC = 148;
@@ -450,7 +451,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 331;
+    public static final int NB_ACTION = 332;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -547,7 +548,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "Generate LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate LOTOS-based RG ",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic34, IconManager.imgic35, "Generate UPPAAL specification",  "Generates a UPPAAL specification from DIPLODOCUS diagrams", '0');
-        actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
+        actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
+		actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate SystemC", IconManager.imgic61, IconManager.imgic61, "Generate SystemC",  "Generates SystemC code from TML Design diagrams", 0);
         actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation from DIPLODOCUS models", 0);

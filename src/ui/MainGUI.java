@@ -100,6 +100,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public static boolean uppaalOn;
 	public static boolean ncOn;
 	public static boolean avatarOn;
+	public static boolean proverifOn;
 	
 	public final static int LOTOS = 0;
 	public final static int RT_LOTOS = 1;
@@ -187,6 +188,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public final static byte UPPAAL_OK = 42;
 	public final static byte NC_OK = 43;
 	public final static byte MODEL_UPPAAL_OK = 44;
+	public final static byte MODEL_PROVERIF_OK = 45;
     
     public final static int INCREMENT = 10;
 	
@@ -261,7 +263,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	private ArrayList<LoadInfo> loadIDs;
 	private JFrameInteractiveSimulation jfis;
     
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn) {
+    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn) {
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
@@ -270,6 +272,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         uppaalOn = _uppaalOn;
 		ncOn = _ncOn;
 		avatarOn = _avatarOn;
+		proverifOn = _proverifOn;
     }
 	
 	public boolean isAvatarOn() {
@@ -571,6 +574,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			//actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
 			//actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
 			//actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
+			break;
+		case MODEL_PROVERIF_OK:
+			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
 			break;
 		case GEN_DESIGN_OK:
 			actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(true);
@@ -2600,6 +2606,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 if (b) {
 					ret = true;
                     setMode(MainGUI.MODEL_UPPAAL_OK);
+					setMode(MainGUI.MODEL_PROVERIF_OK);
 					//setMode(MainGUI.GEN_DESIGN_OK);
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
@@ -3147,6 +3154,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         //dtree.toBeUpdated();
+    }
+	
+	public void generateProVerif() {
+		TraceManager.addDev("Generate ProVerif!");
+		// Generate from AVATAR
+		if (gtm.getTURTLEModelingState() == 3) {
+			boolean result = gtm.generateProVerifFromAVATAR(ConfigurationTTool.ProVerifCodeDirectory);
+			if (result) {
+				JOptionPane.showMessageDialog(frame,
+					"0 error, " + getCheckingWarnings().size() + " warning(s). ProVerif specification generated",
+					"Successful translation from the Avatar to a ProVerif specification",
+					JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(frame,
+					"" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). ProVerif specification could NOT be generated",
+					"ERROR during translation from AVATAR to UPPAAL",
+					JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
     }
     
     public LinkedList generateAllAUT(String path) {
@@ -5949,6 +5975,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             generateAUTS();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_UPPAAL].getActionCommand())) {
             generateUPPAAL();
+        } else if (command.equals(actions[TGUIAction.ACT_GEN_PROVERIF].getActionCommand())) {
+            generateProVerif();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {
             generateJava();
         } else if (command.equals(actions[TGUIAction.ACT_SIMU_JAVA].getActionCommand())) {

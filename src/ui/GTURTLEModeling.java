@@ -83,6 +83,7 @@ import ui.avatarpd.*;
 import avatartranslator.*;
 import avatartranslator.toturtle.*;
 import avatartranslator.touppaal.*;
+import avatartranslator.toproverif.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -110,6 +111,8 @@ import sdtranslator.*;
 
 import uppaaldesc.*;
 
+import proverifspec.*;
+
 import req.ebrdd.*;
 
 public class GTURTLEModeling {
@@ -123,7 +126,8 @@ public class GTURTLEModeling {
 	private Vector panels; /* analysis, design, deployment, tml design */
 	private TURTLEModeling tm;
 	private AvatarSpecification avatarspec;
-	AVATAR2UPPAAL avatar2uppaal;
+	private AVATAR2UPPAAL avatar2uppaal;
+	private AVATAR2ProVerif avatar2proverif;
 	private boolean optimizeAvatar;
 	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
 	private TMLModeling tmlm;
@@ -140,6 +144,8 @@ public class GTURTLEModeling {
 	private UPPAALSpec uppaal;
 	private RelationTIFUPPAAL uppaalTIFTable;
 	private RelationTMLUPPAAL uppaalTMLTable;
+	
+	private ProVerifSpec proverif;
 	
 	private String tpn;
 	private String sim;
@@ -186,6 +192,7 @@ public class GTURTLEModeling {
 	public final static int TPN = 3;
 	public final static int MATRIX = 4;
 	public final static int UPPAAL = 5;
+	public final static int PROVERIF = 6;
 
 
 	//private Charset chset1, chset2;
@@ -428,6 +435,24 @@ public class GTURTLEModeling {
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 		try {
 			avatar2uppaal.saveInFile(_path);
+			return true;
+		} catch (FileException fe) {
+			TraceManager.addError("Exception: " + fe.getMessage());
+			return false;
+		}
+	}
+	
+	public boolean generateProVerifFromAVATAR(String _path) {
+		avatar2proverif = new AVATAR2ProVerif(avatarspec);
+		//tml2uppaal.setChoiceDeterministic(choices);
+		//tml2uppaal.setSizeInfiniteFIFO(_size);
+		proverif = avatar2proverif.generateProVerif(true, true);
+		languageID = PROVERIF;
+		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
+		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+		try {
+			avatar2proverif.saveInFile(_path);
+			TraceManager.addDev("Specification generated in " + _path);
 			return true;
 		} catch (FileException fe) {
 			TraceManager.addError("Exception: " + fe.getMessage());
@@ -1595,7 +1620,7 @@ public class GTURTLEModeling {
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		avatarspec = adpt.generateAvatarSpecification(blocks);
 		optimizeAvatar = _optimize;
-		//TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
+		TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
 		tmState = 3;
 
 		listE = adpt.getCorrespondanceTGElement();

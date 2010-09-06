@@ -92,6 +92,10 @@ public class AvatarBlock extends AvatarElement {
 		signals.add(_signal);
 	}
 	
+	public LinkedList<AvatarAttribute> getAttributes() {
+		return attributes;
+	}
+	
 	public LinkedList<AvatarMethod> getMethods() {
 		return methods;
 	}

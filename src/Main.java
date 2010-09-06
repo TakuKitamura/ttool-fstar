@@ -67,6 +67,7 @@ public class Main implements ActionListener {
     public static boolean uppaal = true;
     public static boolean nc = true ; // Network calculus
 	public static boolean avatar = false ; // avatar profile
+	public static boolean proverif = false;
 	
     public static void main(String[] args) {
 		
@@ -158,6 +159,16 @@ public class Main implements ActionListener {
 				avatar = false;
                 System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
             }
+			
+			if (args[i].compareTo("-proverif") ==0 )  {
+				proverif = true;
+                System.out.println("ProVerif activated - these are beta features that are meant to be used only for research purpose");
+            }
+			
+			if (args[i].compareTo("-noproverif") ==0 )  {
+				proverif = false;
+                System.out.println("ProVerif unactivated - these are beta features that are meant to be used only for research purpose");
+            }
 	    
             if (args[i].compareTo("-os") == 0) {
                 os = true;
@@ -219,7 +230,7 @@ public class Main implements ActionListener {
         
         // making main window
         splashFrame.setMessage("Creating main window");
-        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar);
+        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif);
         splashFrame.setMessage("Building graphical components");
         mainGUI.build();
         

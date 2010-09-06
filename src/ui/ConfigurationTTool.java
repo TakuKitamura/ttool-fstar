@@ -107,6 +107,9 @@ public class ConfigurationTTool {
     public static String UPPAALCodeDirectory = "";
 	public static String UPPAALVerifierPath = "";
 	public static String UPPAALVerifierHost = "";
+	public static String ProVerifCodeDirectory = "";
+	public static String ProVerifVerifierPath = "";
+	public static String ProVerifVerifierHost = "";
 	public static String ExternalCommand1Host = "";
 	public static String ExternalCommand2Host = "";
 	public static String ExternalCommand1 = "";
@@ -276,6 +279,11 @@ public class ConfigurationTTool {
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
 		sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
 		sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+		
+		sb.append("\nProVerif:\n");
+        sb.append("ProVerifCodeDirectory: " + ProVerifCodeDirectory + "\n");
+		sb.append("ProVerifVerifierPATH: " + ProVerifVerifierPath + "\n");
+		sb.append("ProVerifVerifierHOST: " + ProVerifVerifierHost + "\n");
 		
 		sb.append("\nYour files (modeling, librairies, etc.):\n");
         sb.append("FILEPath: " + FILEPath + "\n");
@@ -494,6 +502,18 @@ public class ConfigurationTTool {
 				nl = doc.getElementsByTagName("UPPAALVerifierHost");
 				if (nl.getLength() > 0)
 					UPPAALVerifierHost(nl);
+				
+				nl = doc.getElementsByTagName("ProVerifCodeDirectory");
+				if (nl.getLength() > 0)
+					ProVerifCodeDirectory(nl);
+				
+				nl = doc.getElementsByTagName("ProVerifVerifierPath");
+				if (nl.getLength() > 0)
+					ProVerifVerifierPath(nl);
+				
+				nl = doc.getElementsByTagName("ProVerifVerifierHost");
+				if (nl.getLength() > 0)
+					ProVerifVerifierHost(nl);
 				
 				nl = doc.getElementsByTagName("ExternalCommand1Host");
 				if (nl.getLength() > 0)
@@ -931,6 +951,33 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             UPPAALVerifierHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	 private static void ProVerifCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            ProVerifCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void ProVerifVerifierPath(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            ProVerifVerifierPath = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void ProVerifVerifierHost(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            ProVerifVerifierHost = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

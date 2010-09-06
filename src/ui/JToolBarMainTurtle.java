@@ -152,6 +152,11 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			button = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
 			button.addMouseListener(mgui.mouseHandler);
         }
+		
+		if (MainGUI.proverifOn) {
+			button = add(mgui.actions[TGUIAction.ACT_GEN_PROVERIF]);
+			button.addMouseListener(mgui.mouseHandler);
+        }
         
         addSeparator();
         
