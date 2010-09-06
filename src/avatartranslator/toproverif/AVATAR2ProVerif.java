@@ -174,17 +174,128 @@ public class AVATAR2ProVerif {
 	}
 	
 	public void makeBlock(AvatarBlock ab) {
-		LinkedList<ProVerifProcess> tmprocesses = new LinkedList<ProVerifProcess>();
-		LinkedList<AvatarState> state = new LinkedList<AvatarState>();
+		LinkedList<ProVerifProcess> tmpprocesses = new LinkedList<ProVerifProcess>();
+		LinkedList<AvatarState> states = new LinkedList<AvatarState>();
 		
 		// First process : variable declaration
 		ProVerifProcess p = new ProVerifProcess(ab.getName() + "__0");
+		spec.addProcess(p);
 		
 		for(AvatarAttribute aa: ab.getAttributes()) {
-			p.processLines.add("new " + aa.getName() + ";");
+			addLine(p, "new " + aa.getName());
 		}
 		
+		AvatarStateMachine asm = ab.getStateMachine();
+		AvatarStartState ass = asm.getStartState();
 		
+		makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states);
+	}
+	
+	public void makeBlockProcesses(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, ProVerifProcess _p, LinkedList<ProVerifProcess> _processes, LinkedList<AvatarState> _states) {
+		AvatarSignal as;
+		AvatarActionOnSignal aaos;
+		ProVerifProcess p;
+		String tmp;
+		int i;
+		
+		// Null element
+		if (_asme == null) {
+			terminateProcess(_p);
+			return;
+		}
+		
+		// Stop state
+		if (_asme instanceof AvatarStopState) {
+			terminateProcess(_p);
+			return;
+			
+			
+		} else if (_asme instanceof AvatarActionOnSignal){
+			aaos = (AvatarActionOnSignal)_asme;
+			as = aaos.getSignal();
+			if (as.isOut()) {
+				tmp ="out";
+			} else {
+				tmp = "in";
+			}
+			
+			tmp+="(";
+			
+			for(i=0; i<aaos.getNbOfValues(); i++) {
+				if (i>0) {
+					tmp += ", ";
+				}
+				tmp += aaos.getValue(i);
+			}
+			tmp += ")";
+			addLine(_p, tmp);
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states);
+			
+			
+		// State
+		} else if (_asme instanceof AvatarState){
+			i = _states.indexOf(_asme);
+			if (i != -1) {
+				// State has already been met
+				// Must branch to the corresponding process
+				p = _processes.get(i);
+				addLine(_p, p.processName + "()");
+				return;
+				
+			} else {
+				// New state
+				// We create a new process for each state
+				p = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+				spec.addProcess(p);
+				_processes.add(p);
+				_states.add((AvatarState)_asme);
+				addLine(p, "Event enteringState__" + _asme.getName() + "()");
+				
+				// Calling the new process from the old one
+				addLine(_p, p.processName + "()");
+				terminateProcess(_p);
+				
+				// Making the new process (the old one is finished);
+				if (_asme.nbOfNexts() ==0) {
+					terminateProcess(p);
+					return;
+				}
+				
+				if (_asme.nbOfNexts() ==1) {
+					makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states);
+				}
+				
+				// Must handle the choice between several transitions
+				// To be done
+				makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states);
+			}
+			
+		// Ignored elements
+		} else {
+			// Go to the next element
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states);
+		}
+	}
+	
+	public void terminateProcess(ProVerifProcess _p) {
+		if ((_p == null) || (_p.processLines == null)) {
+			return;
+		}
+		
+		if (_p.processLines.size() == 0) {
+			return;
+		}
+		
+		String s = _p.processLines.get(_p.processLines.size() - 1);
+		s = s .trim();
+		s = s.substring(0, s.length()-1) + ".";
+		_p.processLines.remove(_p.processLines.size() - 1);
+		_p.processLines.add(s);
+	}
+	
+	
+	public void addLine(ProVerifProcess _p, String _line) {
+		_p.processLines.add(_line + ";\n");
 	}
 	
 
