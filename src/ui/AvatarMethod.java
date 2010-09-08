@@ -64,18 +64,35 @@ public class AvatarMethod {
     protected String id;
 	protected String typeIds[];
     protected String types[];
+	
+	protected String returnType;
     
 	
     public AvatarMethod(String _id, String _types[], String _typeIds[]) {
         id = _id;
 		types = _types;
 		typeIds = _typeIds;
+		returnType = "";
     }
 	
-	// An operation must be of the form: "id(type id0, type id1, ...)
+	public AvatarMethod(String _id, String _types[], String _typeIds[], String _returnType) {
+        id = _id;
+		types = _types;
+		typeIds = _typeIds;
+		returnType = _returnType;
+    }
+	
+	
+	
+	// An operation must be of the form: "id(type id0, type id1, ...)"
+	// Or 'returntype id(type id0, type id1, ...)'
 	// Returns null in case the method is not valid
 	public static AvatarMethod isAValidMethod(String _method) {
+		
+		TraceManager.addDev("Is a valid method? " + _method);
+		
 		String method, tmp, id;
+		String rt = ""; 
 		
 		if (_method == null) {
 			return null;
@@ -87,8 +104,27 @@ public class AvatarMethod {
 			return null;
 		}
 		
-		int index0 = _method.indexOf('(');
-		int index1 = _method.indexOf(')');
+		// Check whether there is a return type or not
+		int index2 = method.indexOf(' ');
+		if (index2 != -1) {
+			tmp = method.substring(0, index2);
+			// No parenthesis?
+			if ((tmp.indexOf('(') == -1) && (tmp.indexOf(')') == -1)) {
+				// So, there is a return type!
+				rt = tmp.trim();
+				method = method.substring(index2+1, method.length()).trim();
+				if (!isAValidId(rt, false, false, false)) {
+					TraceManager.addDev("Unvalid type: " + rt);
+					return null;
+				} 
+				TraceManager.addDev("Found a return type: " + rt);
+				TraceManager.addDev("Now working with method: " + method);
+			}
+		}
+		
+		int index0 = method.indexOf('(');
+		int index1 = method.indexOf(')');
+		
 		
 		// Only one of the two parenthesis
 		if ((index0 == -1) && (index1 > -1)) {
@@ -99,10 +135,12 @@ public class AvatarMethod {
 			return null;
 		}
 		
+		
+		
 		// No parenthesis at all
 		if ((index0 == -1) && (index1 == -1)) {
 			if (isAValidId(method, true, true, true)) {
-				return new AvatarMethod(method, new String [0], new String[0]); 
+				return new AvatarMethod(method, new String [0], new String[0], rt); 
 			} else {
 				return null;
 			}
@@ -125,6 +163,8 @@ public class AvatarMethod {
 		
 		// And so: parenthesis are in the right order, and are used only one for each
 		
+		
+		//TraceManager.addDev("Checking for an id before parenthesis");
 		// Before parenthesis -> id
 		tmp = method.substring(0, index0).trim();
 		if (!isAValidId(tmp, true, true, true)) {
@@ -138,7 +178,7 @@ public class AvatarMethod {
 		
 		// no parameter?
 		if (tmp.length() == 0) {
-			return new AvatarMethod(id, new String [0], new String[0]); 
+			return new AvatarMethod(id, new String [0], new String[0], rt); 
 		}
 		
 		// Has parameters...
@@ -157,9 +197,10 @@ public class AvatarMethod {
 		boolean b0, b1;
 		int i;
 		
-		/*for(i=0; i<splitted.length; i++) {
-			TraceManager.addDev("splitted[" + i + "]: " + splitted[i]);
-		}*/
+		//TraceManager.addDev("splitted");
+		//for(i=0; i<splitted.length; i++) {
+		//	TraceManager.addDev("splitted[" + i + "]: " + splitted[i]);
+		//}
 		
 		try {
 			for(i=0; i<splitted.length; i = i + 2){
@@ -170,14 +211,14 @@ public class AvatarMethod {
 					return null;
 				}
 				if (!isAValidId(splitted[i], false, false, false)) {
-					//TraceManager.addDev("Unvalid type: " + splitted[i]);
+					TraceManager.addDev("Unvalid type: " + splitted[i]);
 					return null;
 				} 
 				if (!isAValidId(splitted[i+1], true, true, true)) {
-					//TraceManager.addDev("Unvalid id of parameter " + splitted[i+1]);
+					TraceManager.addDev("Unvalid id of parameter " + splitted[i+1]);
 					return null;
 				} 
-				//TraceManager.addDev("Adding parameter: " + splitted[i] + " " + splitted[i+1]);
+				TraceManager.addDev("Adding parameter: " + splitted[i] + " " + splitted[i+1]);
 				types[i/2] = splitted[i];
 				typeIds[i/2] = splitted[i+1];
 			}
@@ -186,12 +227,15 @@ public class AvatarMethod {
 			return null;
 		}
 		
-		return new AvatarMethod(id, types, typeIds);
+		TraceManager.addDev("Returning method");
+		
+		return new AvatarMethod(id, types, typeIds, rt);
 	}
     
     public String getId() { return id;}
 	public String[] getTypes(){ return types;}
 	public String[] getTypeIds(){ return typeIds;}
+	public String getReturnType() { return returnType;}
 	
     public String getType(int _index) { 
 		if ((_index <0) || (_index>=types.length)) {
@@ -286,7 +330,12 @@ public class AvatarMethod {
     public String toString() {
 		int cpt = 0;
 		
-        String method = id + "(";
+		String method = "";
+		if (returnType.length() > 0) {
+			method += returnType + " ";
+		}
+		
+        method += id + "(";
 		for (int i=0; i<types.length; i++) {
 			method += types[i] + " " + typeIds[i];
 			if (i<(types.length - 1)) {

@@ -209,7 +209,7 @@ public class AVATAR2ProVerif {
 			terminateProcess(_p);
 			return;
 			
-			
+		// Action on signal
 		} else if (_asme instanceof AvatarActionOnSignal){
 			aaos = (AvatarActionOnSignal)_asme;
 			as = aaos.getSignal();

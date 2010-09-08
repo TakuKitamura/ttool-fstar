@@ -54,15 +54,21 @@ import myutil.*;
 public class AvatarMethod extends AvatarElement{
     
 	protected LinkedList<AvatarAttribute> parameters;
+	protected LinkedList<AvatarAttribute> returnParameters;
     
 	
     public AvatarMethod(String _name, Object _referenceObject) {
 		super(_name, _referenceObject);
         parameters = new LinkedList<AvatarAttribute>();
+		returnParameters = new LinkedList<AvatarAttribute>();
     }
 	
 	public void addParameter(AvatarAttribute _attribute) {
 		parameters.add(_attribute);
+	}
+	
+	public void addReturnParameter(AvatarAttribute _attribute) {
+		returnParameters.add(_attribute);
 	}
 	
 	public LinkedList<AvatarAttribute> getListOfAttributes() {
@@ -75,7 +81,27 @@ public class AvatarMethod extends AvatarElement{
 	
 	public String toString() {
 		int cpt = 0;
-		String ret = getName() + "(";
+		String ret = "";
+		
+		if (returnParameters.size() != 0) {
+			if (returnParameters.size() == 1) {
+				ret += AvatarType.getStringType(returnParameters.get(0).getType()) + " ";
+			} else {
+				int index = 0;
+				for(AvatarAttribute aa: returnParameters) {
+					if (index == 0) {
+						index ++;
+					} else {
+						ret = ret + ",";
+					}
+					ret += AvatarType.getStringType(aa.getType());
+				}
+				ret = "(" + ret + ") ";
+			}
+			
+		}
+		
+		ret += getName() + "(";
 		
 		for(AvatarAttribute attribute: parameters) {
 			if (cpt != 0) {

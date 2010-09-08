@@ -169,6 +169,7 @@ public class AvatarDesignPanelTranslator {
 				atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
 				ab.addMethod(atam);
 				makeParameters(atam, uiam);
+				makeReturnParameters(ab, block, atam, uiam);
 			}
 			// Create signals
 			v = block.getSignalList();
@@ -201,6 +202,48 @@ public class AvatarDesignPanelTranslator {
 		// Make state machine of blocks
 		for(AvatarBlock block: _as.getListOfBlocks()) {
 			makeStateMachine(_as, block);
+		}
+		
+	}
+	
+	public void makeReturnParameters(AvatarBlock _ab, AvatarBDBlock _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
+		String rt = _uiam.getReturnType().trim();
+		AvatarAttribute aa;
+		Vector types;
+		TAttribute ta;
+		int type;
+		
+		if (rt.length() == 0) {
+			return;
+		}
+		
+		if ((rt.compareTo("int") == 0) || (rt.compareTo("bool") == 0)) {
+				aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _block); 
+				_atam.addReturnParameter(aa);
+		} else {
+			types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
+			if (types == null) {
+				CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + rt + " declared as a return parameter of a method of " + _block.getName());
+				ce.setAvatarBlock(_ab);
+				ce.setTDiagramPanel(adp.getAvatarBDPanel());
+				addCheckingError(ce);
+				return;
+			} else {
+				for(int j=0; j<types.size(); j++) {
+					ta = (TAttribute)(types.elementAt(j));
+					if (ta.getType() == TAttribute.INTEGER){
+						type = AvatarType.INTEGER;
+					} else if (ta.getType() == TAttribute.NATURAL){
+						type = AvatarType.INTEGER;
+					} else if (ta.getType() == TAttribute.BOOLEAN) {
+						type = AvatarType.BOOLEAN;
+					} else {
+						type = AvatarType.INTEGER;
+					}
+					aa = new AvatarAttribute("return__" + j, type, _block); 
+					_atam.addReturnParameter(aa);
+				}
+			}
 		}
 		
 	}
@@ -726,8 +769,10 @@ public class AvatarDesignPanelTranslator {
 							if (s.trim().length() > 0) {
 								s = modifyString(s.trim());
 								// Variable assignation or method call?
-								error = s.indexOf("=");
-								if (error == -1) {
+								
+								TraceManager.addDev("IsAVariable Assignation: " + s + " -> " + isAVariableAssignation(s));
+								
+								if (!isAVariableAssignation(s)) {
 									// Method call
 									s = modifyStringMethodCall(s, _ab.getName());
 									if(!_ab.isAValidMethodCall(s)) {
@@ -872,6 +917,7 @@ public class AvatarDesignPanelTranslator {
 	}
 	
 	private String modifyStringMethodCall(String _input, String _blockName) {
+		
 		int index0 = _input.indexOf('(');
 		int index1 = _input.indexOf(')');
 		
@@ -886,7 +932,7 @@ public class AvatarDesignPanelTranslator {
 			return _input;
 		}
 		
-		//TraceManager.addDev("Analyzing method call " + s);
+		TraceManager.addDev("-> -> Analyzing method call " + s);
 		TAttribute ta, tatmp; 
 		
 		String [] actions = s.split(",");
@@ -916,9 +962,42 @@ public class AvatarDesignPanelTranslator {
 		
 		s  = _input.substring(0, index0) + "(" + s + ")";
 		
-		//TraceManager.addDev("Returning method call " + s);
+		// Managing output parameters
+		index0 = s.indexOf("=");
+		if (index0 != -1) {
+			String param = s.substring(0, index0);
+		}
+		
+		TraceManager.addDev("-> -> Returning method call " + s);
 		
 		return s;
+	}
+	
+	public boolean isAVariableAssignation (String _input) {
+		int index = _input.indexOf('=');
+		if (index == -1) {
+			return false;
+		}
+		
+		// Must check whether what follows the '=' is a function or not.
+		String tmp = _input.substring(index+1, _input.length()).trim();
+		
+		index = tmp.indexOf('(');
+		if (index == -1) {
+			return true;
+		}
+		
+		tmp = tmp.substring(0, index);
+		
+		TraceManager.addDev("rest= >" + tmp + "<");
+		int length = tmp.length();
+		tmp = tmp.trim();
+		if (tmp.length() != length) {
+			TraceManager.addDev("pb of length");
+			return true;
+		}
+		
+		return !(TAttribute.isAValidId(tmp, false, false)); 
 	}
 	
 	/*public TURTLEModeling generateTURTLEModeling() {
