@@ -87,6 +87,10 @@ public class TGCNote extends TGCWithoutInternalComponent {
         
         myImageIcon = IconManager.imgic320;
     }
+	
+	public String[] getValues() {
+		return values;
+	}
     
     
     public void internalDrawing(Graphics g) {

@@ -56,12 +56,15 @@ public class AvatarSpecification extends AvatarElement {
     
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;
+   
+   private LinkedList<String> pragmas;
   
 	
     public AvatarSpecification(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		blocks = new LinkedList<AvatarBlock>();
 		relations = new LinkedList<AvatarRelation>();
+		pragmas = new LinkedList<String>();
     }
 	
 	public LinkedList<AvatarBlock> getListOfBlocks() {
@@ -70,6 +73,10 @@ public class AvatarSpecification extends AvatarElement {
 	
 	public LinkedList<AvatarRelation> getRelations() {
 		return relations;
+	}
+	
+	public LinkedList<String> getPragmas() {
+		return pragmas;
 	}
 	
 	public boolean isASynchronousSignal(AvatarSignal _as) {
@@ -91,6 +98,10 @@ public class AvatarSpecification extends AvatarElement {
 		relations.add(_relation);
 	}
 	
+	public void addPragma(String _pragma) {
+		pragmas.add(_pragma);
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Blocks:\n");
 		for(AvatarBlock block: blocks) {
@@ -99,6 +110,10 @@ public class AvatarSpecification extends AvatarElement {
 		sb.append("\nRelations:\n");
 		for(AvatarRelation relation: relations) {
 			sb.append("Relation:" + relation.toString() + "\n");
+		}
+		sb.append("\nPragmas:\n");
+		for(String pragma: pragmas) {
+			sb.append("Pagma:" + pragma.toString() + "\n");
 		}
 		
 		return sb.toString();

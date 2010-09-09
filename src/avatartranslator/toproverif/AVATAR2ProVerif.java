@@ -140,12 +140,17 @@ public class AVATAR2ProVerif {
 		LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
 		for(AvatarBlock block: blocks) {
 			for(AvatarAttribute attribute: block.getAttributes()) {
-				if (attribute.getName().startsWith("secret")) {
+				// Attribute is preinitialized if it is in a secret pragma
+				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName()) {
 					spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
 					spec.addToGlobalSpecification("query attacker:" + attribute.getName() + ".\n\n");
 				}
 			}
 		}
+	}
+	
+	public boolean hasSecretPragmaWithAttribute(String _blockName, String attributeName) {
+		
 	}
 	
 	public void makeStartingProcess() {

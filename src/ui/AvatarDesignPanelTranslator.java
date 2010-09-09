@@ -94,7 +94,33 @@ public class AvatarDesignPanelTranslator {
 		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
 		createBlocks(as, blocks);
 		createRelationsBetweenBlocks(as, blocks);
+		createPragmas(as);
 		return as;
+	}
+	
+	
+	public void createPragmas(AvatarSpecification _as) {
+		Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
+		TGComponent tgc;
+		TGCNote tgcn;
+		String values [];
+		String tmp;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof TGCNote) {
+				tgcn = (TGCNote)tgc;
+				values = tgcn.getValues();
+				for(int i=0; i<values.length; i++) {
+					tmp = values[i].trim();
+					if ((tmp.startsWith("#") && (tmp.length() > 1))) {
+							tmp = tmp.substring(1, tmp.length());
+							_as.addPragma(tmp);
+							TraceManager.addDev("Adding pragma:" + tmp); 
+					}
+				}
+			}
+		}
 	}
 	
 	public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
