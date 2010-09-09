@@ -965,7 +965,24 @@ public class AvatarDesignPanelTranslator {
 		// Managing output parameters
 		index0 = s.indexOf("=");
 		if (index0 != -1) {
-			String param = s.substring(0, index0);
+			String param = s.substring(0, index0).trim();
+			ta = adp.getAvatarBDPanel().getAttribute(param, _blockName);
+			if (ta.getType() == TAttribute.OTHER) {
+				String newparams = "";
+				Vector v0 = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+				for(int j=0; j<v0.size(); j++) {
+					tatmp = (TAttribute)(v0.get(j));
+					newparams += param + "__" + tatmp.getId();
+					if (j != v0.size()-1) {
+						newparams = newparams + ", ";
+					}
+				}
+				if (v0.size() > 1) {
+					newparams = "(" + newparams + ")";
+				}
+				s = newparams + s.substring(index0, s.length());
+			}
+			
 		}
 		
 		TraceManager.addDev("-> -> Returning method call " + s);

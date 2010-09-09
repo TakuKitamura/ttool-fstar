@@ -148,11 +148,35 @@ public class AvatarSpecification extends AvatarElement {
 	
 	public static boolean isAVariableSettingString(String _action) {
 		int index = _action.indexOf('=');
-		return (index > -1);
+		
+		if (index == -1) {
+			return false;
+		}
+		
+		String tmp = _action.substring(index+1, _action.length()).trim();
+		
+		index = tmp.indexOf('(');
+		
+		if (index == -1) {
+			return true;
+		}
+		
+		tmp = tmp.substring(0, index);
+		
+		if (AvatarAttribute.isAValidAttributeName(tmp)) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public static String getMethodCallFromAction(String _action) {
-		int index = _action.indexOf('(');
+		int index = _action.indexOf('=');
+		if (index > -1) {
+			_action = _action.substring(index+1, _action.length()).trim();
+		}
+		
+		index = _action.indexOf('(');
 		if (index == -1) {
 			return _action;
 		}
@@ -160,7 +184,48 @@ public class AvatarSpecification extends AvatarElement {
 	}
 	
 	public static int getNbOfParametersInAction(String _action) {
-		int index = _action.indexOf('(');
+		int index = _action.indexOf('=');
+		if (index > -1) {
+			_action = _action.substring(index+1, _action.length()).trim();
+		}
+		
+		index = _action.indexOf('(');
+		if (index == -1) {
+			return 0;
+		}
+		
+		String actions  = _action.substring(index+1, _action.length()).trim();
+		
+		index = actions.indexOf(')');
+		if (index == -1) {
+			return 0;
+		}
+		
+		actions = actions.substring(0, index).trim();
+		
+		if (actions.length() == 0) {
+			return 0;
+		}
+		
+		int cpt = 1;
+		while ((index = actions.indexOf(',')) != -1) {
+			cpt ++;
+			actions = actions.substring(index+1, actions.length()).trim();
+		}
+		
+		return cpt;
+	}
+	
+	public static int getNbOfReturnParametersInAction(String _action) {
+		int index = _action.indexOf('=');
+		if (index == -1) {
+			return 0;
+			
+		}
+		
+		_action = _action.substring(0, index).trim();
+		
+		index = _action.indexOf('(');
 		if (index == -1) {
 			return 0;
 		}
@@ -191,6 +256,11 @@ public class AvatarSpecification extends AvatarElement {
 		int nb = getNbOfParametersInAction(_action);
 		if (!(_index < nb) || (_index < 0)) {
 			return null;
+		}
+		
+		int index = _action.indexOf('=');
+		if (index > -1) {
+			_action = _action.substring(index+1, _action.length()).trim();
 		}
 		
 		int index1 = _action.indexOf('(');

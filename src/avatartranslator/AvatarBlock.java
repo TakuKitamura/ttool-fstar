@@ -193,11 +193,22 @@ public class AvatarBlock extends AvatarElement {
 	}
 	
 	public boolean isAValidMethodCall(String _s) {
+		int i;
+		
 		TraceManager.addDev("****** method=" + _s);
+		String all = _s;
+		
+		int indexeq = _s.indexOf('=');
+		
+		if (indexeq != -1) {
+			_s = _s.substring(indexeq + 1, _s.length()).trim();
+			TraceManager.addDev("****** cut method: " + _s);
+		}
 		
 		int index0 = _s.indexOf("(");
 		int index1 = _s.indexOf(")");
 		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
+			TraceManager.addDev("No parenthesis");
 			return false;
 		}
 		
@@ -205,6 +216,7 @@ public class AvatarBlock extends AvatarElement {
 		
 		AvatarMethod am = getAvatarMethodWithName(method);
 		if (am == null) {
+			TraceManager.addDev("Method not found");
 			return false;
 		}
 		
@@ -224,7 +236,7 @@ public class AvatarBlock extends AvatarElement {
 		}
 		
 		AvatarAttribute aa;
-		for(int i=0; i<actions.length; i++) {
+		for(i=0; i<actions.length; i++) {
 			TraceManager.addDev("params=" + params +  " actions=" + actions[i]);
 			aa = getAvatarAttributeWithName(actions[i].trim());
 			if (aa == null) {
@@ -233,6 +245,48 @@ public class AvatarBlock extends AvatarElement {
 			}
 		}
 		
+		// Checking for return attributes
+		if (indexeq != -1) {
+			TraceManager.addDev("Checking for return params");
+			String retparams = all.substring(0, indexeq).trim();
+			
+			// multiple params
+			if (retparams.charAt(0) == '(') {
+				if (retparams.charAt(retparams.length()-1) != ')') {
+					TraceManager.addDev("Bad format for return params: " + retparams);
+					return false;
+				}
+				
+				retparams = retparams.substring(1, retparams.length()-1).trim();
+				actions = retparams.split(",");
+				if (am.getListOfReturnAttributes().size() != actions.length) {
+					return false;
+				}
+				
+				for(i=0; i<actions.length; i++) {
+					TraceManager.addDev("params=" + retparams +  " actions=" + actions[i]);
+					aa = getAvatarAttributeWithName(actions[i].trim());
+					if (aa == null) {
+						TraceManager.addDev("Failed for attribute " + actions[i]);
+						return false;
+					}
+				}
+				
+			} else {
+				// Only one param.
+				aa = getAvatarAttributeWithName(retparams);
+				if (aa == null) {
+					TraceManager.addDev("Failed for return attribute " + retparams);
+					return false;
+				}
+				
+				if (am.getListOfReturnAttributes().size() != 1) {
+					TraceManager.addDev("Wrong number of return parameters in :" + retparams);
+					return false;
+				}
+			}
+			
+		}
 		TraceManager.addDev("Ok for method " + _s);
 		
 		return true;

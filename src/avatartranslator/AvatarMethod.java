@@ -75,6 +75,10 @@ public class AvatarMethod extends AvatarElement{
 		return parameters;
 	}
 	
+	public LinkedList<AvatarAttribute> getListOfReturnAttributes() {
+		return returnParameters;
+	}
+	
 	public static boolean isAValidMethodName(String _method) {
 		return AvatarAttribute.isAValidAttributeName(_method);
 	}
