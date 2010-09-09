@@ -141,7 +141,9 @@ public class AVATAR2ProVerif {
 		for(AvatarBlock block: blocks) {
 			for(AvatarAttribute attribute: block.getAttributes()) {
 				// Attribute is preinitialized if it is in a secret pragma
-				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName()) {
+				TraceManager.addDev("Testing secret of " + block.getName() + "." + attribute.getName() + " ?");
+				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName())) {
+					TraceManager.addDev("Secret!");
 					spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
 					spec.addToGlobalSpecification("query attacker:" + attribute.getName() + ".\n\n");
 				}
@@ -150,7 +152,48 @@ public class AVATAR2ProVerif {
 	}
 	
 	public boolean hasSecretPragmaWithAttribute(String _blockName, String attributeName) {
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
 		
+		for(String pragma: pragmas) {
+			if (isSecretPragma(pragma)) {
+				tmp = pragma.substring(7, pragma.length()).trim();
+				
+				TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return false;
+				}
+				
+				tmps = tmp.split(" ");
+				for(int i=0; i<tmps.length; i++) {
+					tmp = tmps[i];
+					if (tmp.length() > 0) {
+						index = tmp.indexOf('.');
+						if (index != -1) {
+							try {
+								if (tmp.substring(0, index).compareTo(_blockName) == 0) {
+									if (tmp.substring(index+1, tmp.length()).compareTo(attributeName) == 0) {
+										return true;
+									}
+								}
+							} catch (Exception e) {
+								TraceManager.addDev("Error on testing pragma");
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isSecretPragma(String _pragma) {
+		return _pragma.startsWith("Secret ");
 	}
 	
 	public void makeStartingProcess() {

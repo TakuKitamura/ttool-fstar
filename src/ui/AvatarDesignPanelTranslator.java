@@ -58,6 +58,9 @@ import ui.window.*;
 
 
 public class AvatarDesignPanelTranslator {
+	
+	private final String[] PRAGMAS = {"Secret", "InitialCommonKnowledge"};
+	
 	protected AvatarDesignPanel adp;
 	protected Vector checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
@@ -94,12 +97,12 @@ public class AvatarDesignPanelTranslator {
 		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
 		createBlocks(as, blocks);
 		createRelationsBetweenBlocks(as, blocks);
-		createPragmas(as);
+		createPragmas(as, blocks);
 		return as;
 	}
 	
 	
-	public void createPragmas(AvatarSpecification _as) {
+	public void createPragmas(AvatarSpecification _as, LinkedList<AvatarBDBlock> _blocks) {
 		Iterator iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
 		TGComponent tgc;
 		TGCNote tgcn;
@@ -114,13 +117,110 @@ public class AvatarDesignPanelTranslator {
 				for(int i=0; i<values.length; i++) {
 					tmp = values[i].trim();
 					if ((tmp.startsWith("#") && (tmp.length() > 1))) {
-							tmp = tmp.substring(1, tmp.length());
-							_as.addPragma(tmp);
-							TraceManager.addDev("Adding pragma:" + tmp); 
+							tmp = tmp.substring(1, tmp.length()).trim();
+							tmp = reworkPragma(tmp, _blocks);
+							
+							if (tmp == null) {
+								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
+								ce.setTGComponent(tgc);
+								ce.setTDiagramPanel(adp.getAvatarBDPanel());
+								addWarning(ce);
+							} else {
+								_as.addPragma(tmp);
+								TraceManager.addDev("Adding pragma:" + tmp);
+							}
 					}
 				}
 			}
 		}
+	}
+	
+	public String reworkPragma(String _pragma, LinkedList<AvatarBDBlock> _blocks) {
+		String ret = "";
+		int i;
+		
+		// Identify first keyword
+		_pragma = _pragma.trim();
+		
+		int index = _pragma.indexOf(" ");
+		
+		if (index == -1) {
+			return null;
+		}
+		
+		String header = _pragma.substring(0, index).trim();
+		
+		for(i=0; i<PRAGMAS.length; i++) {
+			if (header.compareTo(PRAGMAS[i]) == 0) {
+					break;
+			}
+		}
+		
+		// Invalid header?
+		if (i == PRAGMAS.length) {
+			return null;
+		}
+		
+		ret = header + " ";
+		
+		// Checking for arguments
+		String arguments [] = _pragma.substring(index+1, _pragma.length()).trim().split(" ");
+		String tmp;
+		String blockName, paramName;
+		boolean found = false;
+		Vector types;
+		AvatarBDBlock block;
+		TAttribute ta;
+		
+		for(i=0; i<arguments.length; i++) {
+			tmp = arguments[i];
+			index = tmp.indexOf(".");
+			if (index == -1) {
+				return null;
+			}
+			blockName = tmp.substring(0, index);
+			paramName = tmp.substring(index+1, tmp.length());
+			
+			// Search for the block
+			for(Object o: _blocks) {
+				block = (AvatarBDBlock)o;
+				if (block.getBlockName().compareTo(blockName) == 0) {
+					for(Object oo: block.getAttributeList()) {
+						ta = (TAttribute)oo;
+						if (ta.getId().compareTo(paramName) == 0) {
+							found = true;
+							
+							if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+								ret = ret + blockName + "." + paramName + " ";
+							} else if (ta.getType() == TAttribute.OTHER) {
+								// Must find all subsequent types
+								types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+								if (types == null) {
+									return null;
+								} else {
+									for(int j=0; j<types.size(); j++) {
+										ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+									}
+								}
+								
+							} else {
+								return null;
+							}
+							
+							break;
+						}
+					}
+				}
+			}
+			
+			if (!found) {
+				return null;
+			}
+			
+		}
+		
+		return ret.trim();
+		
 	}
 	
 	public void addRegularAttribute(AvatarBlock _ab, TAttribute _a, String _preName) {
