@@ -82,16 +82,16 @@ public class ProVerifSpec {
 		// Processes
 		for(ProVerifProcess p: processes) {
 			if (p != startingProcess) {
-				fullSpec += "\nlet " + p.processName + " = \n";
+				fullSpec += "\n\nlet " + p.processName + " = \n";
 				for(String s:p.processLines) {
-					fullSpec += DEC + s + "\n";
+					fullSpec += DEC + s;
 				}
 			}
 		}
 		
 		// Starting process
 		if (startingProcess != null) {
-			fullSpec += "\nprocess\n";
+			fullSpec += "\n\nprocess\n";
 			for(String s:startingProcess.processLines) {
 				fullSpec += DEC + s + "\n";
 			}

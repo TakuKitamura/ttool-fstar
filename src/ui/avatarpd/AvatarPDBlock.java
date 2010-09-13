@@ -517,6 +517,8 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 	
 	public boolean removeMyInternalComponent(TGComponent tgc, boolean actionOnRemove) {
         //TGComponent tgc;
+		//TraceManager.addDev("Remove my internal component: " + tgc + ". I have " + nbInternalTGComponent + " internal components");
+		
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] == tgc) {
                 nbInternalTGComponent = nbInternalTGComponent - 1;
@@ -540,9 +542,11 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 				}
                 return true;
             } else {
-                if (((AvatarPDBlock)tgcomponent[i]).removeMyInternalComponent(tgc, false)) {
-                    return true;
-                }
+				if (tgcomponent[i] instanceof AvatarPDBlock) {
+					if (((AvatarPDBlock)tgcomponent[i]).removeMyInternalComponent(tgc, false)) {
+						return true;
+					}
+				}
             }
         }
         return false;

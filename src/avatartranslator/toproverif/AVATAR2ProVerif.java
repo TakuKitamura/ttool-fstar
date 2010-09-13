@@ -55,7 +55,7 @@ import avatartranslator.*;
 public class AVATAR2ProVerif {
 	
 	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encrypt/2.\nreduc decrypt(encrypt(x,pk(y)),y) = x.\n";
-	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc decrypt(encrypt(x,k),k) = x.\n";
+	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
 	
 	private ProVerifSpec spec;
 	private AvatarSpecification avspec;
@@ -63,7 +63,6 @@ public class AVATAR2ProVerif {
 	private Vector warnings;
 	
 
-	
 	public AVATAR2ProVerif(AvatarSpecification _avspec) {
 		avspec = _avspec;
 	}
@@ -141,9 +140,9 @@ public class AVATAR2ProVerif {
 		for(AvatarBlock block: blocks) {
 			for(AvatarAttribute attribute: block.getAttributes()) {
 				// Attribute is preinitialized if it is in a secret pragma
-				TraceManager.addDev("Testing secret of " + block.getName() + "." + attribute.getName() + " ?");
+				//TraceManager.addDev("Testing secret of " + block.getName() + "." + attribute.getName() + " ?");
 				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName())) {
-					TraceManager.addDev("Secret!");
+					//TraceManager.addDev("Secret!");
 					spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
 					spec.addToGlobalSpecification("query attacker:" + attribute.getName() + ".\n\n");
 				}
@@ -161,7 +160,7 @@ public class AVATAR2ProVerif {
 			if (isSecretPragma(pragma)) {
 				tmp = pragma.substring(7, pragma.length()).trim();
 				
-				TraceManager.addDev("Testing prama: " + tmp);
+				//TraceManager.addDev("Testing prama: " + tmp);
 				
 				if (tmp.length() == 0) {
 					return false;
@@ -170,6 +169,7 @@ public class AVATAR2ProVerif {
 				tmps = tmp.split(" ");
 				for(int i=0; i<tmps.length; i++) {
 					tmp = tmps[i];
+					//TraceManager.addDev("Testing with: " + tmp);
 					if (tmp.length() > 0) {
 						index = tmp.indexOf('.');
 						if (index != -1) {
@@ -200,9 +200,9 @@ public class AVATAR2ProVerif {
 		
 		for(String pragma: pragmas) {
 			if (isInitialCommonKnowledgePragma(pragma)) {
-				tmp = pragma.substring(7, pragma.length()).trim();
+				tmp = pragma.substring(23, pragma.length()).trim();
 				
-				TraceManager.addDev("Testing pragma: " + tmp);
+				//TraceManager.addDev("Testing pragma: " + tmp);
 				
 				if (tmp.length() == 0) {
 					return false;
@@ -211,6 +211,7 @@ public class AVATAR2ProVerif {
 				tmps = tmp.split(" ");
 				for(int i=0; i<tmps.length; i++) {
 					tmp = tmps[i];
+					//TraceManager.addDev("Testing with: " + tmp);
 					if (tmp.length() > 0) {
 						index = tmp.indexOf('.');
 						if (index != -1) {
@@ -241,19 +242,76 @@ public class AVATAR2ProVerif {
 		return _pragma.startsWith("InitialCommonKnowledge ");
 	}
 	
+	public String[] getListOfBlockParams(String _pragma) {
+		String s = _pragma;
+		
+		if (isSecretPragma(s)) {
+			s = s.substring(7, s.length()).trim();
+		} else if (isInitialCommonKnowledgePragma(s)) {
+			s = s.substring(23, s.length()).trim();
+		} else {
+			return null;
+		}
+		
+		return s.split(" ");
+	}
+	
 	public void makeStartingProcess() {
 		String action = "";
+		String tmp;
+		int index;
+		boolean found;
 		
 		ProVerifProcess p = new ProVerifProcess();
 		p.processName = "starting__";
 		LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+		
+		LinkedList<String> createdVariables = new LinkedList<String>();
+		String[] list;
+		String blockName, paramName;
+		
+		for(String pragma: avspec.getPragmas()) {
+			if (isInitialCommonKnowledgePragma(pragma)) {
+				// Identify each blockName / paramName
+				list = getListOfBlockParams(pragma);
+				
+				for(int i=0; i<list.length; i++) {
+					tmp = list[i];
+					index = tmp.indexOf('.');
+					if (index != -1) {
+						blockName = tmp.substring(0, index).trim();
+						paramName = tmp.substring(index+1, tmp.length());
+						
+						// Verify whether they are secret or not
+						if (!hasSecretPragmaWithAttribute(blockName, paramName)) {
+							found = false;
+							// If not, add them if not already added
+							for(String st: createdVariables) {
+								if (st.compareTo(paramName) == 0) {
+									found = true;
+									break;
+								}
+							}
+							if (!found) {
+								action += "new " + paramName + ";\n";
+								createdVariables.add(paramName);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		action += "(";
+		index = 0;
 		for(AvatarBlock block: blocks) {
-			if (action.length() != 0) {
+			if (index != 0) {
 				action += " | ";
 			} 
+			index ++;
 			action += "(!" + block.getName() + "__0)";
 		}
-		action = "(" + action + ")";
+		action += ")";
 		p.processLines.add(action);
 		spec.addProcess(p);
 		spec.setStartingProcess(p);
@@ -275,21 +333,26 @@ public class AVATAR2ProVerif {
 		spec.addProcess(p);
 		
 		for(AvatarAttribute aa: ab.getAttributes()) {
-			addLine(p, "new " + aa.getName());
+			//TraceManager.addDev("Testing: " + ab.getName() + "." + aa.getName());
+			if ((!hasInitialCommonKnowledgePragmaWithAttribute(ab.getName(), aa.getName())) && (!(hasSecretPragmaWithAttribute(ab.getName(), aa.getName())))) {
+					TraceManager.addDev("  Adding: " + aa.getName());
+					addLine(p, "new " + aa.getName());
+			}
 		}
 		
 		AvatarStateMachine asm = ab.getStateMachine();
 		AvatarStartState ass = asm.getStartState();
 		
-		makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states);
+		makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states, null);
 	}
 	
-	public void makeBlockProcesses(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, ProVerifProcess _p, LinkedList<ProVerifProcess> _processes, LinkedList<AvatarState> _states) {
+	public void makeBlockProcesses(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, ProVerifProcess _p, LinkedList<ProVerifProcess> _processes, LinkedList<AvatarState> _states, String _choiceInfo) {
 		AvatarSignal as;
 		AvatarActionOnSignal aaos;
+		AvatarTransition at;
 		ProVerifProcess p;
 		String tmp;
-		int i;
+		int i, j;
 		
 		// Null element
 		if (_asme == null) {
@@ -312,7 +375,7 @@ public class AVATAR2ProVerif {
 				tmp = "in";
 			}
 			
-			tmp+="(";
+			tmp+="(ch, ";
 			
 			for(i=0; i<aaos.getNbOfValues(); i++) {
 				if (i>0) {
@@ -322,7 +385,7 @@ public class AVATAR2ProVerif {
 			}
 			tmp += ")";
 			addLine(_p, tmp);
-			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states);
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
 			
 			
 		// State
@@ -342,10 +405,10 @@ public class AVATAR2ProVerif {
 				spec.addProcess(p);
 				_processes.add(p);
 				_states.add((AvatarState)_asme);
-				addLine(p, "Event enteringState__" + _asme.getName() + "()");
+				addLine(p, "event enteringState__" + _asme.getName() + "()");
 				
 				// Calling the new process from the old one
-				addLine(_p, p.processName + "()");
+				addLine(_p, p.processName);
 				terminateProcess(_p);
 				
 				// Making the new process (the old one is finished);
@@ -355,19 +418,133 @@ public class AVATAR2ProVerif {
 				}
 				
 				if (_asme.nbOfNexts() ==1) {
-					makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states);
-				}
+					makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states, null);
+					return ;
+				} 
 				
 				// Must handle the choice between several transitions
-				// To be done
-				makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states);
+				// Must select the first transition to analyse non-deterministically
+				// Make a process for all new following
+				addLine(p, "new choice__" + _asme.getName());
+				addLine(p, "out(ch, choice__" + _asme.getName() + ")");
+				
+				
+				ProVerifProcess pvp[] = new ProVerifProcess[_asme.nbOfNexts()];
+				tmp = "(";
+				for(i=0; i<_asme.nbOfNexts(); i++) {
+					if (i>0) {
+						tmp += " | ";
+					}
+					// Creating a new process
+					pvp[i] = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+					spec.addProcess(pvp[i]);
+					_processes.add(pvp[i]);
+					_states.add((AvatarState)_asme);
+					tmp += "(" + _block.getName() + "__" + (_processes.size()) + ")";
+				}
+				tmp += ")";
+				addLine(p, tmp);
+				for(i=0; i<_asme.nbOfNexts(); i++) {
+					makeBlockProcesses(_block, _asm, _asme.getNext(i), pvp[i], _processes, _states, _asme.getName());
+				}
+				terminateProcess(p);
 			}
+			
+		// State
+		} else if (_asme instanceof AvatarTransition) {
+			at = (AvatarTransition)_asme;
+			// Guard
+			if (at.isGuarded()) {
+				tmp = modifyGuard(at.getGuard());
+				if (tmp != null) {
+					TraceManager.addDev("   Adding guard: " + tmp);
+					addLineNoEnd(_p, "if " + tmp + " then");
+				}
+			}
+			
+			
+			// Transition from a state -> this transition must be the one selected
+			if (_choiceInfo != null) {
+				addLine(_p, "in(ch, m__)");
+				tmp = "if choice__" + _choiceInfo + " = m__ then";
+				addLineNoEnd(_p, tmp);
+			} 
+				
+			// Time and variable assignations are ignored
+			// Only functions are taken into account
+			for(i=0; i<at.getNbOfAction(); i++) {
+				tmp = at.getAction(i);
+				TraceManager.addDev("Found action: " + tmp);
+				if (!AvatarSpecification.isAVariableSettingString(tmp)) {
+					TraceManager.addDev("Found function: " + tmp);
+					addLineNoEnd(_p, "let " + tmp + " in ");
+				}
+			}
+			
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
 			
 		// Ignored elements
 		} else {
 			// Go to the next element
-			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states);
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
 		}
+	}
+	
+
+	// Supported guards: a == b, not(a == b)
+	// -> transformed into a = b, a <> b
+	// Returns nulls otherwise
+	public String modifyGuard(String _guard) {
+		String[] ab;
+		
+		TraceManager.addDev(" -> Analyzing guard: " + _guard);
+		
+		String s = Conversion.replaceAllString(_guard, "[", "");
+		s = Conversion.replaceAllString(s, "]", "").trim();
+		s = Conversion.replaceAllString(s, " ", "");
+		
+		if (s.startsWith("not(")) {
+			if (s.endsWith(")")) {
+					s = s.substring(4, s.length()-1);
+					// Should have a "a == b";
+					ab = getEqualGuard(s);
+					if (ab == null) {
+						return null;
+					}
+					return ab[0] + " <> " + ab[1];
+			}
+			return null;
+		} else {
+			ab = getEqualGuard(s);
+			if (ab == null) {
+				return null;
+			}
+			return ab[0] + " = " + ab[1];
+		}
+	}
+	
+	// Input string must be of the form "a==b"
+	// With a and b ids.
+	// Returns a and b
+	// Otherwise, returns null;
+	public String[] getEqualGuard(String _guard) {
+		TraceManager.addDev(" -> Analyzing equal guard: " + _guard);
+		int index = _guard.indexOf("==");
+		if (index == -1) {
+			return null;
+		}
+		
+		String a = _guard.substring(0, index).trim();
+		String b = _guard.substring(index+2, _guard.length()).trim();
+		
+		if (AvatarAttribute.isAValidAttributeName(a) && AvatarAttribute.isAValidAttributeName(b)) {
+			String[] ab = new String[2];
+			ab[0] = a;
+			ab[1] = b;
+			return ab;
+		}
+		
+		return null;
 	}
 	
 	public void terminateProcess(ProVerifProcess _p) {
@@ -389,6 +566,10 @@ public class AVATAR2ProVerif {
 	
 	public void addLine(ProVerifProcess _p, String _line) {
 		_p.processLines.add(_line + ";\n");
+	}
+	
+	public void addLineNoEnd(ProVerifProcess _p, String _line) {
+		_p.processLines.add(_line + "\n");
 	}
 	
 

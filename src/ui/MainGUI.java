@@ -618,6 +618,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
 			actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
 			actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
 			actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -635,6 +636,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
 			actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
@@ -3158,8 +3160,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void generateProVerif() {
 		TraceManager.addDev("Generate ProVerif!");
+        
+        JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        jgen.setSize(500, 750);
+        GraphicLib.centerOnParent(jgen);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+		
 		// Generate from AVATAR
-		if (gtm.getTURTLEModelingState() == 3) {
+		/*if (gtm.getTURTLEModelingState() == 3) {
 			boolean result = gtm.generateProVerifFromAVATAR(ConfigurationTTool.ProVerifCodeDirectory);
 			if (result) {
 				JOptionPane.showMessageDialog(frame,
@@ -3172,7 +3181,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 					"ERROR during translation from AVATAR to UPPAAL",
 					JOptionPane.INFORMATION_MESSAGE);
 			}
-		}
+		}*/
     }
     
     public LinkedList generateAllAUT(String path) {
