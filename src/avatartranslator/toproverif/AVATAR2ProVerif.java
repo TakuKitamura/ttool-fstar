@@ -83,14 +83,14 @@ public class AVATAR2ProVerif {
 	
 
 	
-	public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize) {
+	public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability) {
 		warnings = new Vector();
 		spec = new ProVerifSpec();
 		
 		avspec.removeCompositeStates();
 		avspec.removeTimers();
 		
-		makeHeader();
+		makeHeader(_stateReachability);
 		
 		makeBlocks();
 		
@@ -122,7 +122,7 @@ public class AVATAR2ProVerif {
 		return spec;
 	}
 	
-	public void makeHeader() {
+	public void makeHeader(boolean _stateReachability) {
 		spec.addToGlobalSpecification(DATA_HEADER + "\n");
 		
 		spec.addToGlobalSpecification(PK_HEADER + "\n");
@@ -155,7 +155,17 @@ public class AVATAR2ProVerif {
 					spec.addToGlobalSpecification("query attacker:" + attribute.getName() + ".\n\n");
 				}
 			}
+			// Queries for states
+			if (_stateReachability) {
+				for(AvatarStateMachineElement asme: block.getStateMachine().getListOfElements()) {
+					if (asme instanceof AvatarState) {
+						spec.addToGlobalSpecification("query ev:" + "enteringState__" + block.getName() + "__" + asme.getName() + "().\n");
+					}
+				}
+			}
 		}
+		
+
 	}
 	
 	public boolean hasSecretPragmaWithAttribute(String _blockName, String attributeName) {
@@ -413,7 +423,7 @@ public class AVATAR2ProVerif {
 				spec.addProcess(p);
 				_processes.add(p);
 				_states.add((AvatarState)_asme);
-				addLine(p, "event enteringState__" + _asme.getName() + "()");
+				addLine(p, "event enteringState__" + _block.getName() + "__" + _asme.getName() + "()");
 				
 				// Calling the new process from the old one
 				addLine(_p, p.processName);

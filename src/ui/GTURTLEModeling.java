@@ -442,11 +442,11 @@ public class GTURTLEModeling {
 		}
 	}
 	
-	public boolean generateProVerifFromAVATAR(String _path) {
+	public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability) {
 		avatar2proverif = new AVATAR2ProVerif(avatarspec);
 		//tml2uppaal.setChoiceDeterministic(choices);
 		//tml2uppaal.setSizeInfiniteFIFO(_size);
-		proverif = avatar2proverif.generateProVerif(true, true);
+		proverif = avatar2proverif.generateProVerif(true, true, _stateReachability);
 		languageID = PROVERIF;
 		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);

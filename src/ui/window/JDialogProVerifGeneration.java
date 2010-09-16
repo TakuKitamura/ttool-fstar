@@ -56,6 +56,7 @@ import java.util.*;
 import myutil.*;
 import avatartranslator.toproverif.*;
 import avatartranslator.*;
+import proverifspec.*;
 import ui.*;
 
 import launcher.*;
@@ -90,7 +91,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
+    protected JCheckBox stateReachability, outputOfProVerif;
 	protected JComboBox versionSimulator;
     
     private Thread t;
@@ -171,11 +172,14 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         jp01.add(new JLabel(" "), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         
-        /*debugmode = new JCheckBox("Put debug information in code");
-        debugmode.setSelected(false);
-        jp01.add(debugmode, c01);
+        stateReachability = new JCheckBox("Compute state reachability");
+        stateReachability.setSelected(true);
+        jp01.add(stateReachability, c01);
 		
-		optimizemode = new JCheckBox("Optimize code");
+		
+
+		
+		/*optimizemode = new JCheckBox("Optimize code");
 		optimizemode.setSelected(optimizeModeSelected);
         jp01.add(optimizemode, c01);
 		
@@ -215,11 +219,17 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         jp03.add(exe2, c03);
         
         jp03.add(new JLabel(" "), c03);
+		
+		outputOfProVerif = new JCheckBox("Show output of ProVerif");
+        outputOfProVerif.setSelected(false);
+        jp03.add(outputOfProVerif, c03);
+        
         
         jp1.add("Execute", jp03);
         
         c.add(jp1, BorderLayout.NORTH);
-        
+		
+	
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
@@ -314,7 +324,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                
                 testGo();
 				
-				if (mgui.gtm.generateProVerifFromAVATAR(pathCode)) {
+				if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected())) {
 					jta.append("ProVerif code generation done\n");
 				} else {
 					jta.append("Could not generate SystemC file\n");
@@ -336,8 +346,34 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                     // Command
                     
                     data = processCmd(cmd);
-                    jta.append(data);
-                    jta.append("Execution done\n");
+					if (outputOfProVerif.isSelected()) {
+						jta.append(data);
+					}
+					
+					ProVerifOutputAnalyzer pvoa = new ProVerifOutputAnalyzer();
+					pvoa.analyzeOutput(data);
+					
+					jta.append("\nReachable states:\n----------------\n");
+					for(String re: pvoa.getReachableEvents()) {
+						jta.append(re+"\n");
+					}
+					
+					jta.append("\nNon reachable states:\n----------------\n");
+					for(String re: pvoa.getNonReachableEvents()) {
+						jta.append(re+"\n");
+					}
+					
+					jta.append("\nConfidential data:\n----------------\n");
+					for(String re: pvoa.getSecretTerms()) {
+						jta.append(re+"\n");
+					}
+					
+					jta.append("\nNon confidential data:\n----------------\n");
+					for(String re: pvoa.getNonSecretTerms()) {
+						jta.append(re+"\n");
+					}
+					
+                    jta.append("\nAll done\n");
                 } catch (LauncherException le) {
                     jta.append("Error: " + le.getMessage() + "\n");
                     mode = 	STOPPED;
