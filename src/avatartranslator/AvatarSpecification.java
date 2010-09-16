@@ -185,6 +185,27 @@ public class AvatarSpecification extends AvatarElement {
 		return true;
 	}
 	
+	public static boolean isABasicVariableSettingString(String _action) {
+		int index = _action.indexOf('=');
+		
+		if (index == -1) {
+			return false;
+		}
+		
+		String name0 = _action.substring(index+1, _action.length()).trim();
+		String name1 = _action.substring(0, index).trim();
+		
+		if (!AvatarAttribute.isAValidAttributeName(name0)) {
+			return false;
+		}
+		
+		if (!AvatarAttribute.isAValidAttributeName(name1)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public static String getMethodCallFromAction(String _action) {
 		int index = _action.indexOf('=');
 		if (index > -1) {

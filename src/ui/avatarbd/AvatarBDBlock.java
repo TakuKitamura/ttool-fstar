@@ -888,6 +888,83 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return ((AvatarDesignPanel)(tdp.tp)).getAvatarSMDPanel(getBlockName());
     }
 	
+	public void addCryptoElements() {
+		// Adding function
+		String method = "Message encrypt(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "Message decrypt(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message sencrypt(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "Message sdecrypt(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message MAC(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "bool verifyMAC(Message msg, Key k, Message macmsg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message concat(Message msg1, Message msg2, Message msg3, Message msg4, Message msg5)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message get1(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message get2(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message get3(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message get4(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		method = "Message get5(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
+		// Adding channels chin chout
+		String signal = "in chin(Message msg)";
+		addSignalIfApplicable(mySignals, signal);
+		signal = "out chout(Message msg)";
+		addSignalIfApplicable(mySignals, signal);
+		
+	}
+	
+	private void addMethodIfApplicable(Vector _v, String _s) {
+		AvatarMethod am;
+		for(Object o: _v) {
+			if (o instanceof AvatarMethod) {
+				am = (AvatarMethod)o;
+				if (am.toString().compareTo(_s) == 0) {
+					return;
+				}
+			}
+		}
+		
+		am = AvatarMethod.isAValidMethod(_s);
+		if (am != null) {
+			_v.add(am);
+		}
+	}
+	
+	private void addSignalIfApplicable(Vector _v, String _s) {
+		AvatarSignal as;
+		for(Object o: _v) {
+			if (o instanceof AvatarSignal) {
+				as = (AvatarSignal)o;
+				if (as.toString().compareTo(_s) == 0) {
+					return;
+				}
+			}
+		}
+		
+		as = AvatarSignal.isAValidSignal(_s);
+		if (as != null) {
+			_v.add(as);
+		}
+	}
+	
 
     
 }

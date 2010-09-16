@@ -298,6 +298,7 @@ public class TGUIAction extends AbstractAction {
 	
 	// AVATAR Block Diagram
 	public static final int ABD_BLOCK = 289;
+	public static final int ABD_CRYPTOBLOCK = 332;
 	public static final int ABD_DATATYPE = 324;
 	public static final int ABD_COMPOSITION_CONNECTOR = 290;
 	public static final int ABD_PORT_CONNECTOR = 295;
@@ -451,7 +452,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 332;
+    public static final int NB_ACTION = 333;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -836,6 +837,7 @@ public class TGUIAction extends AbstractAction {
 		
 		// AVATAR Block Diagrams
 		actions[ABD_BLOCK] = new TAction("abd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Block Diagram", 0);
+        actions[ABD_CRYPTOBLOCK] = new TAction("abd-cryptoblock", "Add a crypto block", IconManager.imgic5000, IconManager.imgic5000, "Crypto block", "Add a SysML Crypto Block to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5034, IconManager.imgic5034, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
 		actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);

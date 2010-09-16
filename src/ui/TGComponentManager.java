@@ -290,6 +290,7 @@ public class TGComponentManager {
 	
 	// AVATAR BD -> starts at 5000
 	public static final int AVATARBD_BLOCK = 5000;
+	public static final int AVATARBD_CRYPTOBLOCK = 5004;
 	public static final int AVATARBD_COMPOSITION_CONNECTOR = 5001;
 	public static final int AVATARBD_PORT_CONNECTOR = 5002;
 	public static final int AVATARBD_DATATYPE = 5003;
@@ -343,6 +344,10 @@ public class TGComponentManager {
 			// AVATAR
 			case AVATARBD_BLOCK:
                 tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AVATARBD_CRYPTOBLOCK:
+                tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+				((AvatarBDBlock)tgc).addCryptoElements();
                 break;
 			case AVATARBD_DATATYPE:
                 tgc = new AvatarBDDataType(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);

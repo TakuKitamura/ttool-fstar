@@ -5890,7 +5890,6 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         System.out.println("KEY RELEASED: ");
     }
     
-    
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         //System.out.println("Command:" + command);
@@ -6116,6 +6115,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		// AVATAR BD
 		} else if (command.equals(actions[TGUIAction.ABD_BLOCK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.ABD_CRYPTOBLOCK].getActionCommand())) {
+			actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOBLOCK);
 		} else if (command.equals(actions[TGUIAction.ABD_DATATYPE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_DATATYPE);
 		} else if (command.equals(actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].getActionCommand())) {

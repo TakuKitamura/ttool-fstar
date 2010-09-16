@@ -128,9 +128,9 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		
 		c = g.getColor();
 		g.setColor(Color.white);
-		g.fillOval(x1-(cz/2), y1 - (cz/2), cz, cz); 
+		g.fillOval(p1.getX()-(cz/2), p1.getY() - (cz/2), cz, cz); 
 		g.setColor(c);
-		g.drawOval(x1-(cz/2), y1 - (cz/2), cz, cz);
+		g.drawOval(p1.getX()-(cz/2), p1.getY() - (cz/2), cz, cz);
 		
 		if (getValue().compareTo("not") == 0) {
 			g.drawLine(x2-l, y2-l, x2+l, y2+l);
