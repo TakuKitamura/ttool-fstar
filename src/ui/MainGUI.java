@@ -189,6 +189,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public final static byte NC_OK = 43;
 	public final static byte MODEL_UPPAAL_OK = 44;
 	public final static byte MODEL_PROVERIF_OK = 45;
+	public final static byte EDIT_PROVERIF_OK = 46;
     
     public final static int INCREMENT = 10;
 	
@@ -577,6 +578,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			break;
 		case MODEL_PROVERIF_OK:
 			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
+			break;
+		case EDIT_PROVERIF_OK:
+			actions[TGUIAction.ACT_VIEW_RTLOTOS].setEnabled(true);
 			break;
 		case GEN_DESIGN_OK:
 			actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(true);
@@ -3676,6 +3680,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             showFormalSpecification("RT-LOTOS Specification #" + gtm.getNbRTLOTOS(), gtm.getLastRTLOTOSSpecification());
         } else if (gtm.getLanguageID() == GTURTLEModeling.LOTOS) {
             showFormalSpecification("LOTOS Specification #" + gtm.getNbRTLOTOS(), gtm.getLastRTLOTOSSpecification());
+        } else if (gtm.getLanguageID() == GTURTLEModeling.PROVERIF) {
+            showFormalSpecification("Last ProVerif Specification", gtm.getLastProVerifSpecification());
         }
     }
     

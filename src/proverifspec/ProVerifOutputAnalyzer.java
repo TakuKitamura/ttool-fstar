@@ -58,6 +58,7 @@ public class ProVerifOutputAnalyzer {
 	private LinkedList<String> nonReachableEvents;
 	private LinkedList<String> secretTerms;
 	private LinkedList<String> nonSecretTerms;
+	private LinkedList<String> errors;
 	
 	
 	
@@ -66,10 +67,12 @@ public class ProVerifOutputAnalyzer {
 		nonReachableEvents = new LinkedList<String>();
 		secretTerms = new LinkedList<String>();
 		nonSecretTerms = new LinkedList<String>();
+		
+		errors = new LinkedList<String>();
     }
 	
 	public void analyzeOutput(String _s) {
-		String str;
+		String str, previous="";
 		int index0, index1;
         
 		BufferedReader reader = new BufferedReader(new StringReader(_s));
@@ -97,6 +100,12 @@ public class ProVerifOutputAnalyzer {
 					nonSecretTerms.add(str.substring(index0+20, index1));
 				}
 				
+				index0 = str.indexOf("Error:");
+				if (index0 != -1) {
+					errors.add(str + ": " + previous);
+				}
+				
+				previous = str;
 			}
 			
 		} catch(IOException e) {
@@ -119,6 +128,10 @@ public class ProVerifOutputAnalyzer {
 	
 	public LinkedList<String> getNonSecretTerms() {
 		return nonSecretTerms;
+	}
+	
+	public LinkedList<String> getErrors() {
+		return errors;
 	}
 	
 }

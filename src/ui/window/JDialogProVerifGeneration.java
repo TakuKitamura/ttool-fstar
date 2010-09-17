@@ -353,24 +353,33 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 					ProVerifOutputAnalyzer pvoa = new ProVerifOutputAnalyzer();
 					pvoa.analyzeOutput(data);
 					
-					jta.append("\nReachable states:\n----------------\n");
-					for(String re: pvoa.getReachableEvents()) {
-						jta.append(re+"\n");
-					}
-					
-					jta.append("\nNon reachable states:\n----------------\n");
-					for(String re: pvoa.getNonReachableEvents()) {
-						jta.append(re+"\n");
-					}
-					
-					jta.append("\nConfidential data:\n----------------\n");
-					for(String re: pvoa.getSecretTerms()) {
-						jta.append(re+"\n");
-					}
-					
-					jta.append("\nNon confidential data:\n----------------\n");
-					for(String re: pvoa.getNonSecretTerms()) {
-						jta.append(re+"\n");
+					if (pvoa.getErrors().size() != 0) {
+						jta.append("\nErrors found in the generated code:\n----------------\n");
+						for(String error: pvoa.getErrors()) {
+							jta.append(error+"\n");
+						}
+						
+					} else {
+						
+						jta.append("\nReachable states:\n----------------\n");
+						for(String re: pvoa.getReachableEvents()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nNon reachable states:\n----------------\n");
+						for(String re: pvoa.getNonReachableEvents()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nConfidential data:\n----------------\n");
+						for(String re: pvoa.getSecretTerms()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nNon confidential data:\n----------------\n");
+						for(String re: pvoa.getNonSecretTerms()) {
+							jta.append(re+"\n");
+						}
 					}
 					
                     jta.append("\nAll done\n");

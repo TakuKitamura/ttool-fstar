@@ -448,6 +448,7 @@ public class GTURTLEModeling {
 		//tml2uppaal.setSizeInfiniteFIFO(_size);
 		proverif = avatar2proverif.generateProVerif(true, true, _stateReachability);
 		languageID = PROVERIF;
+		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
 		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
 		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
 		try {
@@ -837,6 +838,14 @@ public class GTURTLEModeling {
 
 	public String getLastGraphicalRGAUTProj() {
 		return rgautprojdot;
+	}
+	
+	public String getLastProVerifSpecification() {
+		if (proverif == null) {
+			return "";
+		}
+		
+		return proverif.getStringSpec();
 	}
 
 	public int getNbRTLOTOS() {

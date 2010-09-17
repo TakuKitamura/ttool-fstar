@@ -53,8 +53,12 @@ import myutil.*;
 import avatartranslator.*;
 
 public class AVATAR2ProVerif {
+
+	private final static String UNKNOWN = "UNKNOWN";
+
 	
-	private final static String DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
+	private final static String BOOLEAN_DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
+	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
 	
 	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encrypt/2.\nreduc decrypt(encrypt(x,pk(y)),y) = x.\n";
 	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
@@ -123,7 +127,8 @@ public class AVATAR2ProVerif {
 	}
 	
 	public void makeHeader(boolean _stateReachability) {
-		spec.addToGlobalSpecification(DATA_HEADER + "\n");
+		spec.addToGlobalSpecification(BOOLEAN_DATA_HEADER + "\n");
+		spec.addToGlobalSpecification(FUNC_DATA_HEADER + "\n");
 		
 		spec.addToGlobalSpecification(PK_HEADER + "\n");
 		spec.addToGlobalSpecification(SK_HEADER + "\n");
@@ -131,6 +136,7 @@ public class AVATAR2ProVerif {
 		spec.addToGlobalSpecification(CONCAT_HEADER + "\n");
 		
 		spec.addToGlobalSpecification("\n(* Channel *)\nfree ch.\n");
+		spec.addToGlobalSpecification("\n(* Channel *)\nprivate free chprivate.\n");
 		
 		/* Parse all attributes declared by blocks and declare them as "private free" */
 		/*LinkedList<AvatarBlock> blocks = avatarspec.getListOfBlocks();
@@ -368,9 +374,12 @@ public class AVATAR2ProVerif {
 		AvatarSignal as;
 		AvatarActionOnSignal aaos;
 		AvatarTransition at;
-		ProVerifProcess p;
-		String tmp;
+		ProVerifProcess p, ptmp, ptmp1, ptmp2;
+		String tmp, name, value, term;
 		int i, j;
+		int index0, index1;
+		AvatarMethod am;
+		boolean found;
 		
 		// Null element
 		if (_asme == null) {
@@ -439,36 +448,62 @@ public class AVATAR2ProVerif {
 					makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states, null);
 					return ;
 				} 
+							
 				
-				// Must handle the choice between several transitions
-				// Must select the first transition to analyse non-deterministically
-				// Make a process for all new following
-				addLine(p, "new choice__" + _asme.getName());
-				addLine(p, "out(ch, choice__" + _asme.getName() + ")");
-				
-				
-				ProVerifProcess pvp[] = new ProVerifProcess[_asme.nbOfNexts()];
-				tmp = "(";
-				for(i=0; i<_asme.nbOfNexts(); i++) {
-					if (i>0) {
-						tmp += " | ";
+				if (_asme.hasElseChoiceType1()) {
+					TraceManager.addDev("Found a else choice");
+					ProVerifProcess pvp[] = new ProVerifProcess[_asme.nbOfNexts()];
+					tmp = "(";
+					for(i=0; i<_asme.nbOfNexts(); i++) {
+						if (i>0) {
+							tmp += " | ";
+						}
+						// Creating a new process
+						pvp[i] = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+						spec.addProcess(pvp[i]);
+						_processes.add(pvp[i]);
+						_states.add((AvatarState)_asme);
+						tmp += "(" + _block.getName() + "__" + (_processes.size()) + ")";
 					}
-					// Creating a new process
-					pvp[i] = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
-					spec.addProcess(pvp[i]);
-					_processes.add(pvp[i]);
-					_states.add((AvatarState)_asme);
-					tmp += "(" + _block.getName() + "__" + (_processes.size()) + ")";
+					tmp += ")";
+					addLine(p, tmp);
+					for(i=0; i<_asme.nbOfNexts(); i++) {
+						makeBlockProcesses(_block, _asm, _asme.getNext(i), pvp[i], _processes, _states, null);
+					}
+					terminateProcess(p);
+					
+				} else {
+					
+					// Must handle the choice between several transitions
+					// Must select the first transition to analyse non-deterministically
+					// Make a process for all new following
+					addLine(p, "new choice__" + _asme.getName());
+					addLine(p, "out(chprivate, choice__" + _asme.getName() + ")");
+					
+					
+					ProVerifProcess pvp[] = new ProVerifProcess[_asme.nbOfNexts()];
+					tmp = "(";
+					for(i=0; i<_asme.nbOfNexts(); i++) {
+						if (i>0) {
+							tmp += " | ";
+						}
+						// Creating a new process
+						pvp[i] = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+						spec.addProcess(pvp[i]);
+						_processes.add(pvp[i]);
+						_states.add((AvatarState)_asme);
+						tmp += "(" + _block.getName() + "__" + (_processes.size()) + ")";
+					}
+					tmp += ")";
+					addLine(p, tmp);
+					for(i=0; i<_asme.nbOfNexts(); i++) {
+						makeBlockProcesses(_block, _asm, _asme.getNext(i), pvp[i], _processes, _states, _asme.getName());
+					}
+					terminateProcess(p);
 				}
-				tmp += ")";
-				addLine(p, tmp);
-				for(i=0; i<_asme.nbOfNexts(); i++) {
-					makeBlockProcesses(_block, _asm, _asme.getNext(i), pvp[i], _processes, _states, _asme.getName());
-				}
-				terminateProcess(p);
 			}
 			
-		// State
+		// Transition
 		} else if (_asme instanceof AvatarTransition) {
 			at = (AvatarTransition)_asme;
 			// Guard
@@ -483,26 +518,105 @@ public class AVATAR2ProVerif {
 			
 			// Transition from a state -> this transition must be the one selected
 			if (_choiceInfo != null) {
-				addLine(_p, "in(ch, m__)");
+				addLine(_p, "in(chprivate, m__)");
 				tmp = "if choice__" + _choiceInfo + " = m__ then";
 				addLineNoEnd(_p, tmp);
 			} 
 				
 			// Temporal operators are ignored
 			// Only functions are taken into account
+			p = _p;
 			for(i=0; i<at.getNbOfAction(); i++) {
 				tmp = at.getAction(i);
 				TraceManager.addDev("Found action: " + tmp);
 				if (!AvatarSpecification.isAVariableSettingString(tmp)) {
 					TraceManager.addDev("Found function: " + tmp);
-					addLineNoEnd(_p, "let " + tmp + " in ");
+					index0 = tmp.indexOf('=');
+					index1 = tmp.indexOf('(');
+					term = tmp.substring(0, index0).trim();
+					if ((index0 == -1) || (index1 == -1) || (index0 > index1) || (term.length() == 0)) {
+						addLineNoEnd(p, "let " + tmp + " in ");
+					} else {
+						found = false;
+						name = tmp.substring(index0+1, index1).trim();
+						am = _block.getAvatarMethodWithName(name);
+						if (am != null) {
+							LinkedList<AvatarAttribute> list = am.getListOfReturnAttributes();
+							if (list.size() == 1) {
+								if (list.get(0).getType() == AvatarType.BOOLEAN) {
+									found = true;
+								}
+							}
+						}
+						
+						
+						if ((found) && (name.compareTo("verifyMAC") == 0)){
+							// Verify MAC!
+							index0 = tmp.indexOf(')');
+							if (index0 == -1) {
+								index0 = tmp.length();
+							}
+							value = tmp.substring(index1+1, index0).trim();
+							String[] values = value.split(",");
+							if (values.length < 3) {
+								addLineNoEnd(p, "let " + tmp + " in");
+							} else {
+								addLineNoEnd(p, "let MAC__tmp = MAC(" + values[0].trim() + " , " + values[1].trim() + ") in");
+								//addLine(p, "new choice__mac");
+								//addLine(p, "out(chprivate, choice__mac)");
+								
+								ptmp1 = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+								spec.addProcess(ptmp1);
+								_processes.add(ptmp1);
+								_states.add(null);
+								
+								ptmp2 = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+								spec.addProcess(ptmp2);
+								_processes.add(ptmp2);
+								_states.add(null);
+								
+								addLineNoEnd(p, "((" + ptmp1.processName + ")|(" + ptmp2.processName + "))."); 
+								
+								ptmp = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+								spec.addProcess(ptmp);
+								_processes.add(ptmp);
+								_states.add(null);
+								
+								addLineNoEnd(ptmp1, "if MAC__tmp = " + values[2].trim() + " then");
+								//addLine(ptmp1, "in(chprivate, m__)");
+								//addLineNoEnd(ptmp1, "if m__ = choice__mac then");
+								addLineNoEnd(ptmp1, "let " + term + "= true in");
+								addLineNoEnd(ptmp1, ptmp.processName + ".");
+								
+								addLineNoEnd(ptmp2, "if MAC__tmp <> " + values[2].trim() + " then");
+								//addLine(ptmp2, "in(chprivate, m__)");
+								//addLineNoEnd(ptmp2, "if m__ = choice__mac then");
+								addLineNoEnd(ptmp2, "let " + term + "= false in");
+								addLineNoEnd(ptmp2, ptmp.processName + ".");
+								
+								/*addLineNoEnd(p, "let MAC__tmp = MAC(" + values[0].trim() + " , " + values[1].trim() + ") in");
+								addLineNoEnd(p, "if MAC__tmp =  " + values[2].trim() + " then");
+								addLineNoEnd(p, "let " + term + "= true in");
+								addLineNoEnd(p, ptmp.processName);
+								addLineNoEnd(p, "else");
+								addLineNoEnd(p, "let " + term + "= false in");
+								addLineNoEnd(p, ptmp.processName + ".");*/
+								p = ptmp;
+							}
+						} else {
+							addLineNoEnd(p, "let " + tmp + " in");
+						}
+						
+						
+					}
+					
 				} else if (AvatarSpecification.isABasicVariableSettingString(tmp)) {
 					TraceManager.addDev("Found function: " + tmp);
-					addLineNoEnd(_p, "let " + tmp + " in ");
+					addLineNoEnd(p, "let " + tmp + " in ");
 				}
 			}
 			
-			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
+			makeBlockProcesses(_block, _asm, _asme.getNext(0), p, _processes, _states, null);
 			
 		// Ignored elements
 		} else {

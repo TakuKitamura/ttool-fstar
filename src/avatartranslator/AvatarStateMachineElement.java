@@ -47,6 +47,8 @@ package avatartranslator;
 
 import java.util.*;
 
+import myutil.*;
+
 
 public abstract class AvatarStateMachineElement extends AvatarElement {
 	
@@ -181,6 +183,65 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 	}
 	
 	public abstract AvatarStateMachineElement basicCloneMe();
+	
+	
+	// Guard with an id and not(id)
+	public boolean hasElseChoiceType1() {
+		if (nexts.size() != 2) {
+			return false;
+		}
+		
+		AvatarStateMachineElement elt1, elt2;
+		
+		elt1 = getNext(0);
+		elt2 = getNext(1);
+		
+		if ( (!(elt1 instanceof AvatarTransition)) || (!(elt2 instanceof AvatarTransition))) {
+			return false;
+		}
+		
+		AvatarTransition at1, at2;
+		
+		at1 = (AvatarTransition)elt1;
+		at2 = (AvatarTransition)elt2;
+		
+		if ((!(at1.isGuarded())) || (!(at2.isGuarded()))) {
+			return false;
+		}
+		
+		String g1, g2;
+		g1 = at1.getGuard();
+		g2 = at2.getGuard();
+		
+		g1 = Conversion.replaceAllString(g1, "[", "");
+		g1 = Conversion.replaceAllString(g1, "]", "").trim();
+		g1 = Conversion.replaceAllString(g1, " ", "");
+		
+		g2 = Conversion.replaceAllString(g2, "[", "");
+		g2 = Conversion.replaceAllString(g2, "]", "").trim();
+		g2 = Conversion.replaceAllString(g2, " ", "");
+		
+		String g, n;
+		
+		if (g1.startsWith("not(")) {
+			n = g1;
+			g = g2;
+		} else {
+			g = g1;
+			n = g2;
+		}
+		
+		if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
+			return false;
+		}
+		
+		if (n.substring(4, n.length()-1).compareTo(g) != 0) {
+			return false;
+		}
+		
+		
+		return true;
+	}
 	
     
 }
