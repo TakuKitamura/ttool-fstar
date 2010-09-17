@@ -231,9 +231,9 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 			n = g2;
 		}
 		
-		if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
+		/*if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
 			return false;
-		}
+		}*/
 		
 		if (n.substring(4, n.length()-1).compareTo(g) != 0) {
 			return false;

@@ -70,6 +70,8 @@ public class AVATAR2ProVerif {
 	
 	private Vector warnings;
 	
+	private boolean advancedTranslation;
+	
 
 	public AVATAR2ProVerif(AvatarSpecification _avspec) {
 		avspec = _avspec;
@@ -87,7 +89,9 @@ public class AVATAR2ProVerif {
 	
 
 	
-	public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability) {
+	public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _advancedTranslation) {
+		advancedTranslation = _advancedTranslation;
+		
 		warnings = new Vector();
 		spec = new ProVerifSpec();
 		
@@ -422,7 +426,7 @@ public class AVATAR2ProVerif {
 				// State has already been met
 				// Must branch to the corresponding process
 				p = _processes.get(i);
-				addLine(_p, p.processName + "()");
+				addLineNoEnd(_p, p.processName + ".");
 				return;
 				
 			} else {
@@ -550,7 +554,7 @@ public class AVATAR2ProVerif {
 						}
 						
 						
-						if ((found) && (name.compareTo("verifyMAC") == 0)){
+						if ((found) && (name.compareTo("verifyMAC") == 0) && (advancedTranslation)){
 							// Verify MAC!
 							index0 = tmp.indexOf(')');
 							if (index0 == -1) {

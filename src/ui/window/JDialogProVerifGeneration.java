@@ -91,7 +91,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox stateReachability, outputOfProVerif;
+    protected JCheckBox stateReachability, translationOfBooleanFunction, outputOfProVerif;
 	protected JComboBox versionSimulator;
     
     private Thread t;
@@ -176,7 +176,9 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         stateReachability.setSelected(true);
         jp01.add(stateReachability, c01);
 		
-		
+		translationOfBooleanFunction = new JCheckBox("Advanced translation of boolean functions");
+        translationOfBooleanFunction.setSelected(false);
+        jp01.add(translationOfBooleanFunction, c01);
 
 		
 		/*optimizemode = new JCheckBox("Optimize code");
@@ -324,7 +326,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
                
                 testGo();
 				
-				if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected())) {
+				if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected(), translationOfBooleanFunction.isSelected())) {
 					jta.append("ProVerif code generation done\n");
 				} else {
 					jta.append("Could not generate SystemC file\n");
@@ -378,6 +380,11 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 						
 						jta.append("\nNon confidential data:\n----------------\n");
 						for(String re: pvoa.getNonSecretTerms()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nNon proved queries:\n----------------\n");
+						for(String re: pvoa.getNotProved()) {
 							jta.append(re+"\n");
 						}
 					}

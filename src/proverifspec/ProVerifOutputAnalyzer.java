@@ -59,6 +59,7 @@ public class ProVerifOutputAnalyzer {
 	private LinkedList<String> secretTerms;
 	private LinkedList<String> nonSecretTerms;
 	private LinkedList<String> errors;
+	private LinkedList<String> notproved;
 	
 	
 	
@@ -69,6 +70,7 @@ public class ProVerifOutputAnalyzer {
 		nonSecretTerms = new LinkedList<String>();
 		
 		errors = new LinkedList<String>();
+		notproved = new LinkedList<String>();
     }
 	
 	public void analyzeOutput(String _s) {
@@ -105,6 +107,11 @@ public class ProVerifOutputAnalyzer {
 					errors.add(str + ": " + previous);
 				}
 				
+				index0 = str.indexOf("cannot be proved");
+				if (index0 != -1) {
+					notproved.add(str);
+				}
+				
 				previous = str;
 			}
 			
@@ -132,6 +139,10 @@ public class ProVerifOutputAnalyzer {
 	
 	public LinkedList<String> getErrors() {
 		return errors;
+	}
+	
+	public LinkedList<String> getNotProved() {
+		return notproved;
 	}
 	
 }
