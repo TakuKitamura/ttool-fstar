@@ -406,7 +406,12 @@ public class AVATAR2ProVerif {
 				tmp = "in";
 			}
 			
-			tmp+="(ch, ";
+			
+			if (as.getName().indexOf("private") == -1) {
+				tmp+="(ch, ";
+			} else {
+				tmp +="(chprivate, ";
+			}
 			
 			for(i=0; i<aaos.getNbOfValues(); i++) {
 				if (i>0) {
