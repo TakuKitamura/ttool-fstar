@@ -905,22 +905,23 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		method = "bool verifyMAC(Message msg, Key k, Message macmsg)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message concat(Message msg1, Message msg2, Message msg3, Message msg4, Message msg5)";
+		method = "Message concat2(Message msg1, Message msg2)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message get1(Message msg)";
+		method = "Message concat3(Message msg1, Message msg2, Message msg3)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message get2(Message msg)";
+		method = "Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message get3(Message msg)";
+		
+		method = "get2(Message msg, Message msg1, Message msg2)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message get4(Message msg)";
+		method = "get3(Message msg, Message msg1, Message msg2, Message msg3)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message get5(Message msg)";
+		method = "get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)";
 		addMethodIfApplicable(myMethods, method);
 		
 		// Adding channels chin chout

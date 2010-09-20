@@ -537,9 +537,26 @@ public class AVATAR2ProVerif {
 					TraceManager.addDev("Found function: " + tmp);
 					index0 = tmp.indexOf('=');
 					index1 = tmp.indexOf('(');
-					term = tmp.substring(0, index0).trim();
+					term = "";
+					if (index0 != -1) {
+						term = tmp.substring(0, index0).trim();
+					}
 					if ((index0 == -1) || (index1 == -1) || (index0 > index1) || (term.length() == 0)) {
-						addLineNoEnd(p, "let " + tmp + " in ");
+						name = tmp.substring(0, index1).trim();
+						index0 = tmp.indexOf(')');
+						
+						// get functions
+						if ((name.compareTo("get2") == 0) || (name.compareTo("get3") == 0)  || (name.compareTo("get4") == 0)) {
+							int index2 = tmp.indexOf(',');
+								if ((index2 != -1) && (index2 > index1)) {
+								addLineNoEnd(p, "let (" + tmp.substring(index2+1, index0+1).trim() + " = " + tmp.substring(index1+1, index2).trim() + " in");
+							} else {
+									addLineNoEnd(p, "let " + tmp + " in");
+							}
+						} else {
+							addLineNoEnd(p, "let " + tmp + " in");
+						}
+						
 					} else {
 						found = false;
 						name = tmp.substring(index0+1, index1).trim();
@@ -553,10 +570,9 @@ public class AVATAR2ProVerif {
 							}
 						}
 						
-						
+						index0 = tmp.indexOf(')');
 						if ((found) && (name.compareTo("verifyMAC") == 0) && (advancedTranslation)){
 							// Verify MAC!
-							index0 = tmp.indexOf(')');
 							if (index0 == -1) {
 								index0 = tmp.length();
 							}
@@ -607,7 +623,16 @@ public class AVATAR2ProVerif {
 								addLineNoEnd(p, ptmp.processName + ".");*/
 								p = ptmp;
 							}
+						} else if ((name.compareTo("concat2") == 0) || (name.compareTo("concat3") == 0) || (name.compareTo("concat4") == 0)){
+							addLineNoEnd(p, "let " + term + " = " + tmp.substring(index1, tmp.length()) + " in");
+						} else if ((name.compareTo("get2") == 0) || (name.compareTo("get3") == 0)  || (name.compareTo("get4") == 0)) {
+							int index2 = tmp.indexOf(',');
+							if ((index2 != -1) && (index2 > index1)) {
+							addLineNoEnd(p, "let (" + tmp.substring(index2+1, index0) + " = " + tmp.substring(index1, index2) + " in");
 						} else {
+								addLineNoEnd(p, "let " + tmp + " in");
+							}
+						} else	{
 							addLineNoEnd(p, "let " + tmp + " in");
 						}
 						

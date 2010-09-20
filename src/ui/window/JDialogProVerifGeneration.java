@@ -177,7 +177,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
         jp01.add(stateReachability, c01);
 		
 		translationOfBooleanFunction = new JCheckBox("Advanced translation of boolean functions");
-        translationOfBooleanFunction.setSelected(false);
+        translationOfBooleanFunction.setSelected(true);
         jp01.add(translationOfBooleanFunction, c01);
 
 		
