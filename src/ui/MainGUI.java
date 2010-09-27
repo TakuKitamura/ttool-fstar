@@ -3166,7 +3166,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		TraceManager.addDev("Generate ProVerif!");
         
         JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
-        jgen.setSize(500, 750);
+        jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
         dtree.toBeUpdated();
