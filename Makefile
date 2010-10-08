@@ -75,7 +75,7 @@ all:
 	svn commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
-myrelease: basic ttooljar_std
+myrelease: basic launcher ttooljar_std
 
 basic:
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
