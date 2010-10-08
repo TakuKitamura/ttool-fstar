@@ -1,5 +1,5 @@
-For users of TTool
------------------- 
+For users of TTool: (e.g., for users having a read-only access to the svn)
+------------------- 
 
 * Getting the latest version
 svn update
@@ -11,7 +11,7 @@ make myrelease
 ./ttool.exe
 
 
-For developers:
+For developers: (rw access to the svn)
 ---------------
 
 * Compiling the latest version
