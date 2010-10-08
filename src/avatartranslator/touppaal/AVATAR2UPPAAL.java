@@ -422,11 +422,11 @@ public class AVATAR2UPPAAL {
 						if (aa.isInt()) {
 							templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
 							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt + ";\n";
-							dequeue += "  " + ACTION_INT + cpt + " = " + listName +  "[tail__" + name0 + "] " + ";\n";
+							dequeue += "  " + ACTION_INT + cpt + " = " + listName +  "[head__" + name0 + "] " + ";\n";
 						} else {
 							templateAsynchronous.addDeclaration("bool " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
 							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt + ";\n";
-							dequeue += "  " + ACTION_BOOL + cpt + " = " + listName +  "[tail__" + name0 + "] " + ";\n";
+							dequeue += "  " + ACTION_BOOL + cpt + " = " + listName +  "[head__" + name0 + "] " + ";\n";
 						}
 						cpt ++;
 					}
