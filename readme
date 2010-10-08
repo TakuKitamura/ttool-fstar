@@ -1,0 +1,26 @@
+For users of TTool
+------------------ 
+
+* Getting the latest version
+svn update
+
+* Compiling locally TTool:
+make myrelease
+
+* Starting TTool
+./ttool.exe
+
+
+For developers:
+---------------
+
+* Compiling the latest version
+make
+
+note: the compilation generated a new build version.
+
+* Generating a jar archive in the bin subdirectory:
+make ttooljar_std
+
+* Generating a release
+make release
