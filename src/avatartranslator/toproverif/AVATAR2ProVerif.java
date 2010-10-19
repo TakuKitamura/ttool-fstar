@@ -198,7 +198,7 @@ public class AVATAR2ProVerif {
 				
 				tmps = tmp.split(" ");
 				if (tmps.length > 1) {
-					spec.addToGlobalSpecification("query evinj:authenticity__" + tmps[1] + "__out() ==> evinj:authenticity__" + tmps[0] + "__in()\n");
+					spec.addToGlobalSpecification("query evinj:authenticity__" + tmps[1] + "__out() ==> evinj:authenticity__" + tmps[0] + "__in().\n");
 				}
 			}
 		}
