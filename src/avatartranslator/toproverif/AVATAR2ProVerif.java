@@ -184,25 +184,53 @@ public class AVATAR2ProVerif {
 		LinkedList<String> pragmas = avspec.getPragmas();
 		String tmp;
 		String tmps [];
+		String name1;
+		String name0;
+		String p0, p1;
+		int cpt = -1;
+		int index;
 		
 		for(String pragma: pragmas) {
+			cpt ++;
 			if (isAuthenticityPragma(pragma)) {
 				tmp = pragma.substring(13, pragma.length()).trim();
-				tmp = Conversion.replaceAllChar(tmp, '.', "__");
+				//tmp = Conversion.replaceAllChar(tmp, '.', "__");
 				
 				//TraceManager.addDev("Testing pragma: " + tmp);
 				
-				if (tmp.length() == 0) {
-					return;
-				}
-				
-				tmps = tmp.split(" ");
-				if (tmps.length > 1) {
-					spec.addToGlobalSpecification("query evinj:authenticity__" + tmps[1] + "__in() ==> evinj:authenticity__" + tmps[0] + "__out().\n");
+				if (tmp.length() != 0) {
+					tmps = tmp.split(" ");
+					if (tmps.length > 1) {
+						TraceManager.addDev("0");
+						index = tmps[0].indexOf(".");
+						name0 = tmps[0].substring(index+1, tmps[0].length());
+						index = name0.indexOf(".");
+						name0 = name0.substring(index+1, name0.length());
+						
+						TraceManager.addDev("1");
+						
+						index = tmps[1].indexOf(".");
+						name1 = tmps[1].substring(index+1, tmps[1].length());
+						index = name1.indexOf(".");
+						name1 = name1.substring(index+1, name1.length());
+						
+						TraceManager.addDev("2");
+						p1 = Conversion.replaceAllChar(tmps[1], '.', "__");
+						TraceManager.addDev("3");
+						p0 = Conversion.replaceAllChar(tmps[0], '.', "__");
+						TraceManager.addDev("name0" + tmps[0]);
+						TraceManager.addDev("name1" + tmps[1]);
+						
+						try {
+							spec.addToGlobalSpecification("query evinj:authenticity__" + p1 + "__" + cpt + "(" + name1 + ") ==> evinj:authenticity__" + p0 + "__" + cpt + "(" + name0 + ").\n");
+						} catch (Exception e) {
+							TraceManager.addDev("\n\n*** Error on pragma:" + pragma + ": " + e.getMessage()); 
+						}
+					}
 				}
 			}
 		}
-
+		
 	}
 	
 	public boolean hasAuthenticityPragma(boolean isOut, String _blockName, String attributeName) {
@@ -263,6 +291,79 @@ public class AVATAR2ProVerif {
 		TraceManager.addDev("Authenticity failed");
 		
 		return false;
+	}
+	
+	public LinkedList<String> getAuthenticityPragmas(String _blockName, String _stateName) {
+		TraceManager.addDev("************* Searching for authenticity pragma for " +  _blockName + "." + _stateName);
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
+		String name;
+		int cpt = -1;
+		LinkedList<String> ret = new LinkedList<String>();
+		
+		for(String pragma: pragmas) {
+			cpt ++;
+			if (isAuthenticityPragma(pragma)) {
+				tmp = pragma.substring(13, pragma.length()).trim();
+				
+				TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return ret;
+				}
+				
+				tmps = tmp.split(" ");
+				
+				if (tmps.length >1) {
+					for(int i=0; i<2; i++) {
+					if (i == 0) {
+						tmp = tmps[0];
+					} else {
+						tmp = tmps[1];
+					}
+					//TraceManager.addDev("Testing with: " + tmp);
+					if (tmp.length() > 0) {
+						index = tmp.indexOf('.');
+						if (index != -1) {
+							try {
+								TraceManager.addDev("Testing with: " + _blockName + "." + _stateName);
+								if (tmp.substring(0, index).compareTo(_blockName) == 0) {
+									tmp = tmp.substring(index+1, tmp.length());
+									index = tmp.indexOf('.');
+									if (index != -1) {
+										if (tmp.substring(0, index).compareTo(_stateName) == 0) {
+											ret.add(new String("authenticity__" + _blockName + "__" + _stateName + "__" + tmp.substring(index+1, tmp.length()) + "__" + cpt + "(" + tmp.substring(index+1, tmp.length()) + ")"));
+											TraceManager.addDev("Pragma added:" + ret.get(ret.size()-1));
+										}
+									}
+									
+									//name = attributeName;
+									/*index = name.indexOf("__");
+									if (index != -1) {
+										name = name.substring(0, index);
+									}*/
+									/*if (tmp.substring(index+1, tmp.length()).compareTo(name) == 0) {
+										TraceManager.addDev("Found authenticity");
+										return true;
+										
+									}*/
+								}
+							} catch (Exception e) {
+								TraceManager.addDev("Error on testing pragma");
+							}
+						}
+					}
+					}
+				}
+				
+			}
+		}
+		
+		TraceManager.addDev("Authenticity done found:" + ret.size());
+		
+		return ret;
 	}
 	
 	public boolean hasSecretPragmaWithAttribute(String _blockName, String attributeName) {
@@ -475,6 +576,7 @@ public class AVATAR2ProVerif {
 		int index0, index1;
 		AvatarMethod am;
 		boolean found;
+		LinkedList<String> pos;
 		
 		// Null element
 		if (_asme == null) {
@@ -509,22 +611,22 @@ public class AVATAR2ProVerif {
 					tmp += ", ";
 				}
 				// Work on authenticity
-				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
+				/*if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
 					if (as.isOut()) {
 						addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
 					}
-				}
+				}*/
 				tmp += aaos.getValue(i);
 			}
 			tmp += ")";
 			addLine(_p, tmp);
-			for(i=0; i<aaos.getNbOfValues(); i++) {
+			/*for(i=0; i<aaos.getNbOfValues(); i++) {
 				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
 					if (!as.isOut()) {
 						addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__in()");
 					}
 				}
-			}
+			}*/
 			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
 			
 			
@@ -546,6 +648,13 @@ public class AVATAR2ProVerif {
 				_processes.add(p);
 				_states.add((AvatarState)_asme);
 				addLine(p, "event enteringState__" + _block.getName() + "__" + _asme.getName() + "()");
+				
+				// Adding an event if authenticity is concerned with that state
+				pos = getAuthenticityPragmas( _block.getName(), _asme.getName());
+				for(String sp: pos) {
+					addLine(p, "event " + sp);
+				}
+				
 				
 				// Calling the new process from the old one
 				addLine(_p, p.processName);
@@ -858,6 +967,6 @@ public class AVATAR2ProVerif {
 	
 	public void addLineNoEnd(ProVerifProcess _p, String _line) {
 		_p.processLines.add(_line + "\n");
-	}
+	} 
 	
 }

@@ -119,7 +119,12 @@ public class AvatarDesignPanelTranslator {
 					tmp = values[i].trim();
 					if ((tmp.startsWith("#") && (tmp.length() > 1))) {
 							tmp = tmp.substring(1, tmp.length()).trim();
+							
+							TraceManager.addDev("Reworking pragma =" + tmp);
+							
 							tmp = reworkPragma(tmp, _blocks);
+							
+							TraceManager.addDev("Reworked pragma =" + tmp);
 							
 							if (tmp == null) {
 								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
@@ -167,9 +172,11 @@ public class AvatarDesignPanelTranslator {
 		ret = PRAGMAS_TRANSLATION[i] + " ";
 		
 		// Checking for arguments
+		
+		boolean b = ret.startsWith("Authenticity ");
 		String arguments [] = _pragma.substring(index+1, _pragma.length()).trim().split(" ");
 		String tmp;
-		String blockName, paramName;
+		String blockName, stateName, paramName;
 		boolean found = false;
 		Vector types;
 		AvatarBDBlock block;
@@ -182,35 +189,76 @@ public class AvatarDesignPanelTranslator {
 				return null;
 			}
 			blockName = tmp.substring(0, index);
-			paramName = tmp.substring(index+1, tmp.length());
 			
+			TraceManager.addDev("blockName=" + blockName);
 			// Search for the block
 			for(Object o: _blocks) {
 				block = (AvatarBDBlock)o;
 				if (block.getBlockName().compareTo(blockName) == 0) {
-					for(Object oo: block.getAttributeList()) {
-						ta = (TAttribute)oo;
-						if (ta.getId().compareTo(paramName) == 0) {
-							found = true;
-							
-							if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
-								ret = ret + blockName + "." + paramName + " ";
-							} else if (ta.getType() == TAttribute.OTHER) {
-								// Must find all subsequent types
-								types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-								if (types == null) {
-									return null;
-								} else {
-									for(int j=0; j<types.size(); j++) {
-										ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+					if (b) {
+						// authenticity
+						stateName = tmp.substring(index+1, tmp.length());
+						TraceManager.addDev("stateName=" + stateName);
+						index = stateName.indexOf(".");
+						if (index == -1) {
+							return null;
+						}
+						paramName = stateName.substring(index+1, stateName.length());
+						stateName = stateName.substring(0, index);
+						
+						for(Object oo: block.getAttributeList()) {
+							ta = (TAttribute)oo;
+							if (ta.getId().compareTo(paramName) == 0) {
+								found = true;
+								
+								if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+									ret = ret + blockName + "." + paramName + " ";
+								} else if (ta.getType() == TAttribute.OTHER) {
+									// Must find all subsequent types
+									types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+									if (types == null) {
+										return null;
+									} else {
+										for(int j=0; j<types.size(); j++) {
+											ret = ret + blockName + "." + stateName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+										}
 									}
+									
+								} else {
+									return null;
 								}
 								
-							} else {
-								return null;
+								break;
 							}
-							
-							break;
+						}
+						
+					} else {
+						// Other: confidentiality, initial common knowledge
+						paramName = tmp.substring(index+1, tmp.length());
+						for(Object oo: block.getAttributeList()) {
+							ta = (TAttribute)oo;
+							if (ta.getId().compareTo(paramName) == 0) {
+								found = true;
+								
+								if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+									ret = ret + blockName + "." + paramName + " ";
+								} else if (ta.getType() == TAttribute.OTHER) {
+									// Must find all subsequent types
+									types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+									if (types == null) {
+										return null;
+									} else {
+										for(int j=0; j<types.size(); j++) {
+											ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+										}
+									}
+									
+								} else {
+									return null;
+								}
+								
+								break;
+							}
 						}
 					}
 				}
