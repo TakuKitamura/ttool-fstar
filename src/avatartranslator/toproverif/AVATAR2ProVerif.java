@@ -511,7 +511,7 @@ public class AVATAR2ProVerif {
 				// Work on authenticity
 				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
 					if (as.isOut()) {
-						addLine(_p, "Event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
+						addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
 					}
 				}
 				tmp += aaos.getValue(i);
@@ -521,7 +521,7 @@ public class AVATAR2ProVerif {
 			for(i=0; i<aaos.getNbOfValues(); i++) {
 				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
 					if (!as.isOut()) {
-						addLine(_p, "Event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__in()");
+						addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__in()");
 					}
 				}
 			}
