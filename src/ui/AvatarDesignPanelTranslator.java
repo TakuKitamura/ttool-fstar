@@ -59,7 +59,8 @@ import ui.window.*;
 
 public class AvatarDesignPanelTranslator {
 	
-	private final String[] PRAGMAS = {"Secret", "InitialCommonKnowledge"};
+	private final String[] PRAGMAS = {"Confidentiality", "Secret", "InitialCommonKnowledge", "Authenticity"};
+	private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "InitialCommonKnowledge", "Authenticity"};
 	
 	protected AvatarDesignPanel adp;
 	protected Vector checkingErrors, warnings;
@@ -161,7 +162,9 @@ public class AvatarDesignPanelTranslator {
 			return null;
 		}
 		
-		ret = header + " ";
+		
+		
+		ret = PRAGMAS_TRANSLATION[i] + " ";
 		
 		// Checking for arguments
 		String arguments [] = _pragma.substring(index+1, _pragma.length()).trim().split(" ");

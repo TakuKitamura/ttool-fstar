@@ -175,7 +175,94 @@ public class AVATAR2ProVerif {
 			}
 		}
 		
+		/* Autenticity */
+		makeAuthenticityPragmas();
+	}
+	
+	public void makeAuthenticityPragmas() {
+		spec.addToGlobalSpecification("\n(* Authenticity *)\n");
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		
+		for(String pragma: pragmas) {
+			if (isAuthenticityPragma(pragma)) {
+				tmp = pragma.substring(13, pragma.length()).trim();
+				tmp = Conversion.replaceAllChar(tmp, '.', "__");
+				
+				//TraceManager.addDev("Testing pragma: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return;
+				}
+				
+				tmps = tmp.split(" ");
+				if (tmps.length > 1) {
+					spec.addToGlobalSpecification("query evinj:authenticity__" + tmps[1] + "__out() ==> evinj:authenticity__" + tmps[0] + "__in()\n");
+				}
+			}
+		}
 
+	}
+	
+	public boolean hasAuthenticityPragma(boolean isOut, String _blockName, String attributeName) {
+		TraceManager.addDev("************* Searching for authenticity pragma for " +  _blockName + "." + attributeName + " " + isOut);
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
+		String name;
+		
+		for(String pragma: pragmas) {
+			if (isAuthenticityPragma(pragma)) {
+				tmp = pragma.substring(13, pragma.length()).trim();
+				
+				TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return false;
+				}
+				
+				tmps = tmp.split(" ");
+				
+				if (tmps.length >1) {
+					if (isOut) {
+						tmp = tmps[0];
+					} else {
+						tmp = tmps[1];
+					}
+					//TraceManager.addDev("Testing with: " + tmp);
+					if (tmp.length() > 0) {
+						index = tmp.indexOf('.');
+						if (index != -1) {
+							try {
+								if (tmp.substring(0, index).compareTo(_blockName) == 0) {
+									
+									TraceManager.addDev("Testing with: " + _blockName + "." + attributeName);
+									name = attributeName;
+									/*index = name.indexOf("__");
+									if (index != -1) {
+										name = name.substring(0, index);
+									}*/
+									if (tmp.substring(index+1, tmp.length()).compareTo(name) == 0) {
+										TraceManager.addDev("Found authenticity");
+										return true;
+										
+									}
+								}
+							} catch (Exception e) {
+								TraceManager.addDev("Error on testing pragma");
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		TraceManager.addDev("Authenticity failed");
+		
+		return false;
 	}
 	
 	public boolean hasSecretPragmaWithAttribute(String _blockName, String attributeName) {
@@ -264,6 +351,10 @@ public class AVATAR2ProVerif {
 	
 	public boolean isSecretPragma(String _pragma) {
 		return _pragma.startsWith("Secret ");
+	}
+	
+	public boolean isAuthenticityPragma(String _pragma) {
+		return _pragma.startsWith("Authenticity ");
 	}
 	
 	public boolean isInitialCommonKnowledgePragma(String _pragma) {
@@ -417,10 +508,23 @@ public class AVATAR2ProVerif {
 				if (i>0) {
 					tmp += ", ";
 				}
+				// Work on authenticity
+				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
+					if (as.isOut()) {
+						addLine(_p, "Event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
+					}
+				}
 				tmp += aaos.getValue(i);
 			}
 			tmp += ")";
 			addLine(_p, tmp);
+			for(i=0; i<aaos.getNbOfValues(); i++) {
+				if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
+					if (!as.isOut()) {
+						addLine(_p, "Event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__in()");
+					}
+				}
+			}
 			makeBlockProcesses(_block, _asm, _asme.getNext(0), _p, _processes, _states, null);
 			
 			
