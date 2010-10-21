@@ -1119,8 +1119,8 @@ public class AVATAR2UPPAAL {
 					system += ",";
 				}
 				system += template.getName() + "__" + id;
+				id++;
 			}
-			id++;
 		}
 		
 		system += ";";
