@@ -659,6 +659,7 @@
 <Attribute access="0" id="timerexpire" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="settimer" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="msg8" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msgauth" value="" type="5" typeOther="Message" />
 <Method value="Message encrypt(Message msg, Key k)" />
 <Method value="Message decrypt(Message msg, Key k)" />
 <Method value="Message sencrypt(Message msg, Key k)" />
@@ -794,13 +795,13 @@
 
 <COMPONENT type="301" id="338" >
 <cdparam x="33" y="10" />
-<sizeparam width="410" height="155" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="427" height="155" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="#Confidentiality ECU1.SesK
 #Confidentiality ECU1.confData
 
-#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msg6
+#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth
 
 #InitialCommonKnowledge ECU1.PSK1 KM.PSK1
 #InitialCommonKnowledge ECUN.PSKN KM.PSKN
@@ -819,7 +820,7 @@
 <Line value="#Confidentiality ECU1.SesK" />
 <Line value="#Confidentiality ECU1.confData" />
 <Line value="" />
-<Line value="#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msg6" />
+<Line value="#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth" />
 <Line value="" />
 <Line value="#InitialCommonKnowledge ECU1.PSK1 KM.PSK1" />
 <Line value="#InitialCommonKnowledge ECUN.PSKN KM.PSKN" />
@@ -1721,7 +1722,7 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="get3(msg1, msg5, msg2, msg3)" />
-<actions value="msg6 = sdecrypt(msg5, PSK1)" />
+<actions value="msgauth= sdecrypt(msg5, PSK1)" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1886,7 +1887,7 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<actions value="msg7 = sencrypt(msg6, PSKN)" />
+<actions value="msg7 = sencrypt(msgauth, PSKN)" />
 <actions value="msg3.data = timestamp1" />
 <actions value="msg1 = concat4(msg7, msg2, msg3, msg3)" />
 <actions value="msg4 = MAC(msg1, PSKN)" />
