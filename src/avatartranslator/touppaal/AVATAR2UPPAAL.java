@@ -453,7 +453,7 @@ public class AVATAR2UPPAAL {
 						tr = addTransition(templateAsynchronous, loc, loc);
 						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
 						setGuard(tr, "size__" + name0 + " ==" +  ar.getSizeOfFIFO());
-						setAssignment(tr, "dequeue__" + name0 + "()\n enqueue__" + name0 + "()"); 
+						setAssignment(tr, "dequeue__" + name0 + "(),\n enqueue__" + name0 + "()"); 
 					}
 				}
 			}
@@ -622,6 +622,9 @@ public class AVATAR2UPPAAL {
 		}
 		setSynchronization(tr, ss[0]);
 		addAssignment(tr, ss[1]);
+		
+		TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
+		
 		return loc;
 	}
 	
@@ -1186,133 +1189,5 @@ public class AVATAR2UPPAAL {
 		
 		
 	}
-	
-	
-				// At first, we set variables choice__i to the min delay 
-			/*tmps = "h__ = 0";
-			j = 0;
-			for(i=0; i<state.nbOfNexts(); i++) {
-			at = (AvatarTransition)(state.getNext(i));
-			if (at.hasDelay()) {
-			tmps += ", " + CHOICE_VAR + j + " = max(0 , " + at.getMinDelay() + ")";
-			_block.addIntAttributeIfApplicable(CHOICE_VAR + j);
-			j ++;
-			}
-			}
-			
-			if (j == 0) {
-			tmps = "";
-			}
-			
-			
-			loc = addLocation(_template);  
-			loc.setCommitted();
-			hash.put(_elt, loc);
-			tr = addTransition(_template, _previous, loc);
-			setAssignment(tr, tmps);
-			_previous.setCommitted();
-			
-			// Then, random value between min and max delays 
-			j = 0;
-			for(i=0; i<state.nbOfNexts(); i++) {
-			at = (AvatarTransition)(state.getNext(i));
-			if (at.hasDelay()) {
-			tr = addTransition(_template, loc, loc);
-			tmps = CHOICE_VAR + j + " = " + CHOICE_VAR + j + " + 1";
-			setAssignment(tr, tmps);
-			tmps = CHOICE_VAR + j + " < (" + at.getMaxDelay() + ")";
-			setGuard(tr, tmps);
-			j++;
-			}
-			}
-			
-			// Then, wait for delays to elapse ... 
-			loc1 = addLocation(_template); 
-			tr = addTransition(_template, loc, loc1);
-			j = 0;
-			for(i=0; i<state.nbOfNexts(); i++) {
-			at = (AvatarTransition)(state.getNext(i));
-			if (at.hasDelay()) {
-			tr = addTransition(_template, loc1, loc1);
-			tmps = CHOICE_VAR + j + " = 0";
-			setAssignment(tr, tmps);
-			tmps = "(" + CHOICE_VAR + j + " > 0) && (h__ >" + CHOICE_VAR + j  + ")";
-			setGuard(tr, tmps);
-			j ++;
-			}
-			}
-			
-			// Choice between transitions
-			// If the first action is a method call, or not action but the next one is an action on a signal:
-			// Usual translation way i.e. use the action as the UPPAAL transition trigger
-			// Otherwise introduce a fake choice action
-			j = 0;
-			for(i=0; i<state.nbOfNexts(); i++) {
-			at = (AvatarTransition)(state.getNext(i));
-			
-			// Computing guard
-			if (at.isGuarded()) {
-			tmps = convertGuard(at.getGuard());
-			if (at.hasDelay()) {
-			tmps = "("  + tmps + ") && (" + CHOICE_VAR + j + " == 0)";
-			j ++;
-			} 
-			} else {
-			if (at.hasDelay()) {
-			tmps = CHOICE_VAR + j + " == 0";
-			j ++;
-			} else {
-			tmps = "";
-			}
-			}
-			
-			if (at.hasCompute()) {
-			loc = addLocation(_template); 
-			tr = addTransition(_template, loc1, loc);
-			setSynchronization(tr, CHOICE_ACTION + "!");
-			makeElementBehavior(_block, _template, _elt.getNext(i), loc, _end, null, true);
-			} else if (at.hasActions()) {
-			tmps0 = at.getAction(0);
-			if (AvatarSpecification.isAVariableSettingString(tmps0)) {
-			// We must introduce a fake action
-			loc = addLocation(_template); 
-			tr = addTransition(_template, loc1, loc);
-			if (tmps != null) {
-			setGuard(tr, tmps);
-			}
-			setSynchronization(tr, CHOICE_ACTION + "!");
-			makeElementBehavior(_block, _template, _elt.getNext(i), loc, _end, null, true);
-			} else {
-			// We make the translation in the next transition
-			makeElementBehavior(_block, _template, _elt.getNext(i), loc1, _end, tmps, true);
-			}
-			} else {
-			// Must consider whether the transition leads to an action on a signal
-			if (at.followedWithAnActionOnASignal()) {
-			makeElementBehavior(_block, _template, at.getNext(0), loc1, _end, tmps, true);
-			} else {
-			// If this is not the only transition
-			// We must introduce a fake action
-			if (state.nbOfNexts() > 1) {
-			loc = addLocation(_template); 
-			tr = addTransition(_template, loc1, loc);
-			setGuard(tr, tmps);
-			setSynchronization(tr, CHOICE_ACTION + "!");
-			// Useless to translate the next transition, we directly jump to after the transition
-			makeElementBehavior(_block, _template, at.getNext(0), loc, _end, null, true);
-			} else {
-			// Only one transition
-			if (tmps.length() > 0) {
-			loc = addLocation(_template); 
-			tr = addTransition(_template, loc1, loc);
-			setGuard(tr, tmps);
-			makeElementBehavior(_block, _template, at.getNext(0), loc, _end, null, true);
-			} else {
-			makeElementBehavior(_block, _template, at.getNext(0), loc1, _end, null, true);
-			}
-			}
-			}
-			}
-			}*/
 	
 }
