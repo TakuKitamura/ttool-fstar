@@ -602,8 +602,12 @@ public class AVATAR2UPPAAL {
 			
 		} else if (_elt instanceof AvatarTransition) {
 			at = (AvatarTransition) _elt;
-			loc = translateAvatarTransition(at, _block, _template, _previous, _guard, _previousState);
-			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
+			if ((at.getNext(0) instanceof AvatarActionOnSignal) && (at.isGuarded()) && !(at.hasActions())) {
+				makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false);
+			} else {
+				loc = translateAvatarTransition(at, _block, _template, _previous, _guard, _previousState);
+				makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
+			}
 			
 		} else {
 			TraceManager.addDev("Reached end of elseif in block behaviour...");
@@ -636,12 +640,13 @@ public class AVATAR2UPPAAL {
 		int i;
 		
 		if (!_previousState) {
+			
 			if (_at.isGuarded()) {
-				loc1 = addLocation(_template);
-				tr = addTransition(_template, _previous, loc1);
-				tmps = convertGuard(_at.getGuard());
-				setGuard(tr, tmps);
-				loc = loc1;
+					loc1 = addLocation(_template);
+					tr = addTransition(_template, _previous, loc1);
+					tmps = convertGuard(_at.getGuard());
+					setGuard(tr, tmps);
+					loc = loc1;
 			}
 			
 			if (_at.hasDelay()) {

@@ -82,7 +82,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         //System.out.println("Action on add!");
         if (tgc instanceof AvatarBDBlock) {
             AvatarBDBlock abdb = (AvatarBDBlock)(tgc);
-            System.out.println(" *** add Avatar block *** name=" + abdb.getBlockName());
+            TraceManager.addDev(" *** add Avatar block *** name=" + abdb.getBlockName());
             mgui.addAvatarBlock(tp, abdb.getBlockName());
             return true;
         } 

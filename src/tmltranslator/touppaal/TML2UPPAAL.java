@@ -159,13 +159,13 @@ public class TML2UPPAAL {
     
     public void makeChannel(TMLChannel ch) {
       if (ch.getType() == TMLChannel.BRBW) {
-        spec.addGlobalDeclaration("chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
+        spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
         spec.addTemplate(new UPPAALFiniteFIFOTemplate("channel__" + ch.getName(), ch.getName(), ch.getMax()));
       } else if (ch.getType() == TMLChannel.BRNBW) {
-        spec.addGlobalDeclaration("chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
+        spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
         spec.addTemplate(new UPPAALInfiniteFIFOTemplate("channel__" + ch.getName(), ch.getName()));
       } else if (ch.getType() == TMLChannel.NBRNBW) {
-        spec.addGlobalDeclaration("chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
+        spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
         spec.addTemplate(new UPPAALMemoryTemplate("channel__" + ch.getName(), ch.getName()));
       }
     }
@@ -182,7 +182,7 @@ public class TML2UPPAAL {
         spec.addGlobalDeclaration(request.getType(i).toString() + " head" + i + "__" + request.getName()+ ";\n");
         spec.addGlobalDeclaration(request.getType(i).toString() + " tail" + i + "__" + request.getName()+ ";\n");
       }
-      spec.addGlobalDeclaration("chan request__" + request.getName() + ", wait__" + request.getName() + ";\n");
+      spec.addGlobalDeclaration("urgent chan request__" + request.getName() + ", wait__" + request.getName() + ";\n");
       spec.addTemplate(new UPPAALRequestTemplate("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE"));
     }
     
@@ -198,7 +198,7 @@ public class TML2UPPAAL {
         spec.addGlobalDeclaration(event.getType(i).toString() + " eventHead" + i + "__" + event.getName()+ ";\n");
         spec.addGlobalDeclaration(event.getType(i).toString() + " eventTail" + i + "__" + event.getName()+ ";\n");
       }
-      spec.addGlobalDeclaration("chan eventSend__" + event.getName() + ", eventNotify__" + event.getName() + ", eventNotified__" + event.getName()+ ";\n");
+      spec.addGlobalDeclaration("urgent chan eventSend__" + event.getName() + ", eventNotify__" + event.getName() + ", eventNotified__" + event.getName()+ ";\n");
       spec.addGlobalDeclaration("int notified__" + event.getName() + ";\n");
       spec.addTemplate(new UPPAALEventTemplate("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE"));
     }
@@ -325,6 +325,7 @@ public class TML2UPPAAL {
 			rtu.addTMLActivityElementLocation(elt, previous, previous);
            return;
         }
+		previous.setCommitted();
         tr = addTransition(template, previous, end);
 		rtu.addTMLActivityElementLocation(elt, previous, end);
         return;
@@ -334,6 +335,8 @@ public class TML2UPPAAL {
         rc = (TMLReadChannel)elt;
         loc = addLocation(template);
         tr = addTransition(template, previous, loc);
+		previous.setCommitted();
+		loc.setUrgent();
         setAssignment(tr, "nb__rd = " + rc.getNbOfSamples());
         
         tr1 = addTransition(template, loc, loc);
@@ -356,6 +359,8 @@ public class TML2UPPAAL {
         loc = addLocation(template);
         tr = addTransition(template, previous, loc);
         setAssignment(tr, "nb__wr = " + wc.getNbOfSamples());
+		previous.setCommitted();
+		loc.setUrgent();
         
 		// no support for multiwrite
 		if (wc.getNbOfChannels() == 1) {
@@ -484,8 +489,10 @@ public class TML2UPPAAL {
 
 		// Random
       } else if (elt instanceof TMLRandom) {
-		  random = (TMLRandom)elt;
+		random = (TMLRandom)elt;
 		loc = addLocation(template);
+		previous.setCommitted();
+		loc.setCommitted();
         tr = addTransition(template, previous, loc);
 		setAssignment(tr, "min__random =" + random.getMinValue() + ", max__random = " + random.getMaxValue());
 		
@@ -542,6 +549,8 @@ public class TML2UPPAAL {
 		String tmpc;
         tmlloop = ((TMLForLoop)elt);
         loc = addLocation(template);
+		previous.setCommitted();
+		loc.setCommitted();
         tr = addTransition(template, previous, loc);
         setAssignment(tr, tmlloop.getInit());
         
@@ -549,6 +558,7 @@ public class TML2UPPAAL {
         loc1 = addLocation(template);
         tr1 = addTransition(template, loc, loc1);
         loc4 = addLocation(template);
+		loc4.setCommitted();
         tr2 = addTransition(template, loc4, loc);
         setAssignment(tr2, tmlloop.getIncrement());
         currentX += STEP_LOOP_X;
