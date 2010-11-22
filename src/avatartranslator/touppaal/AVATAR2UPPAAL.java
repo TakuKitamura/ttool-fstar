@@ -622,7 +622,8 @@ public class AVATAR2UPPAAL {
 		hash.put(_aaos, loc);
 		UPPAALTransition tr = addTransition(_template, _previous, loc);
 		if (_guard != null) {
-			addGuard(tr, _guard);
+		    String tmpg = convertGuard(_guard);
+			addGuard(tr, tmpg);
 		}
 		setSynchronization(tr, ss[0]);
 		addAssignment(tr, ss[1]);
