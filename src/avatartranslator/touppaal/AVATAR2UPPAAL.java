@@ -480,11 +480,15 @@ public class AVATAR2UPPAAL {
 	public void makeBehaviour(AvatarBlock _block, UPPAALTemplate _template) {
 		initXY();
 		UPPAALLocation loc = makeBlockInit(_block, _template);
+		TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations());
 		AvatarStartState ass = _block.getStateMachine().getStartState();
 		
 		TraceManager.addDev("Making behaviour of " + _block.getName());
 		
 		makeElementBehavior(_block, _template, ass, loc, null, null, false);
+		
+		TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations()); 
+		
 	}
 	
 	public void makeElementBehavior(AvatarBlock _block, UPPAALTemplate _template, AvatarStateMachineElement _elt, UPPAALLocation _previous, UPPAALLocation _end, String _guard, boolean _previousState) {
@@ -961,7 +965,26 @@ public class AVATAR2UPPAAL {
 					result[1] += ", ";
 				}
 			} else {
-				TraceManager.addDev("Null param:" + _aaos.getValue(i));
+				// Try to see whether this is a numerical value and in a sending element
+				if (_aaos.isSending()) {
+					if (val.toLowerCase().compareTo("true") == 0) {
+						result[1] = result[1] + ACTION_BOOL + nbOfBool + " = " + val;
+						nbOfBool++;
+					} else if (val.toLowerCase().compareTo("false") == 0) {
+						result[1] = result[1] + ACTION_BOOL + nbOfBool + " = " + val;
+						nbOfBool++;
+					} else {
+						try {
+							int myint = Integer.decode(val);
+							result[1] = result[1] + ACTION_INT + nbOfInt + " = " + val;
+							nbOfInt++;
+						} catch (Exception e) {
+							TraceManager.addDev("Null param:" + _aaos.getValue(i));
+						}
+					}
+				} else {
+					TraceManager.addDev("Null param:" + _aaos.getValue(i));
+				}
 			}
 		}
 		

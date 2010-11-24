@@ -238,6 +238,7 @@ public class UPPAALTemplate {
 				}
 				//TraceManager.addDev("Removed transition: " + ut + " and location:" + ut.sourceLoc);
 			}
+			// Don't remove the first transition!
 			locations.remove(ut.sourceLoc);
 			transitions.remove(ut);
 			
