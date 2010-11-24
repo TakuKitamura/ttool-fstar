@@ -51,6 +51,7 @@ import java.util.*;
 import uppaaldesc.*;
 import myutil.*;
 import avatartranslator.*;
+import ui.CheckingError;
 
 public class AVATAR2UPPAAL {
 	
@@ -929,6 +930,13 @@ public class AVATAR2UPPAAL {
 		String signal = signalToUPPAALString(_aaos.getSignal());
 		
 		if (signal == null) {
+			if (_aaos.isSending()) {
+				CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal " + _aaos.getSignal().getName() + " is used in block " + _block.getName() + ", but not connected to any channel. Ignoring the ssending of this signal");
+				warnings.add(ce);
+			} else {
+				CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal " + _aaos.getSignal().getName() + " is used in block " + _block.getName() + ", but not connected to any channel. Ignoring the receiving of this signal");
+				warnings.add(ce);
+			}
 			return result;
 		}
 		

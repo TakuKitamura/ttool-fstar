@@ -3133,12 +3133,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				if (result) {
 				JOptionPane.showMessageDialog(frame,
 						"0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
-						"Successful translation from the TML mapping to a formal specification",
+						"Successful translation to UPPAAL",
 						JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(frame,
 						"" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
-						"ERROR during translation from AVATAR to UPPAAL",
+						"Translation to UPPAAL failed",
 						JOptionPane.INFORMATION_MESSAGE);
 				}
 				return;

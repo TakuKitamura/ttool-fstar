@@ -428,6 +428,7 @@ public class GTURTLEModeling {
 		//tml2uppaal.setChoiceDeterministic(choices);
 		//tml2uppaal.setSizeInfiniteFIFO(_size);
 		uppaal = avatar2uppaal.generateUPPAAL(true, optimizeAvatar);
+		warnings = avatar2uppaal.getWarnings();
 		uppaalTMLTable = null;
 		uppaalTIFTable = null;
 		languageID = UPPAAL;
