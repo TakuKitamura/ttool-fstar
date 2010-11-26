@@ -409,10 +409,14 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			jta.append(data);
 		} else {
 			if (mode != NOT_STARTED) {
-				if (data.indexOf("NOT") > -1) {
-					jta.append("-> property is NOT satisfied\n");
+				if (data.indexOf("[error]") > -1) {
+					jta.append("ERROR -> property could not be studied\n");
 				} else {
-					jta.append("-> property is satisfied\n");			
+					if (data.indexOf("NOT") > -1) {
+						jta.append("-> property is NOT satisfied\n");
+					} else {
+						jta.append("-> property is satisfied\n");			
+					}
 				}
 			} else {
 				jta.append("** verification stopped **\n");

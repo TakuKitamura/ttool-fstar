@@ -1158,7 +1158,7 @@ public class AVATAR2UPPAAL {
 				if (id > 0) {
 					system += ",";
 				}
-				system += template.getName() + "__" + id;
+				system += template.getName() + "__" + id;	
 				id++;
 			}
 		}
@@ -1208,7 +1208,7 @@ public class AVATAR2UPPAAL {
 		
 		if (block != null) {
 			UPPAALTemplate temp = spec.getTemplateByName(block.getName());
-			int index = spec.getIndexOfTemplate(temp);
+			int index = getIndexOfTranslatedTemplate(temp);
 			if (temp != null) { 
 				ret += block.getName() + "__" + index;
 				
@@ -1225,6 +1225,27 @@ public class AVATAR2UPPAAL {
 		return ret;
 		
 		
+	}
+	
+	public int getIndexOfTranslatedTemplate(UPPAALTemplate _temp) {
+		ListIterator iterator = spec.getTemplates().listIterator();
+		UPPAALTemplate template;
+		String system = "system ";
+		String dec = "";
+		int id = 0;
+		int i;
+		
+		while(iterator.hasNext()) {
+			template = (UPPAALTemplate)(iterator.next());
+			if (template == _temp) {
+				return id;
+			}
+			if (template.getNbOfTransitions() > 0) {
+				id++;
+			}
+		}
+		
+		return -1;
 	}
 	
 }
