@@ -102,7 +102,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 
 		//System.out.println("mode = " + tdp.mode + " selected=" + selected);
 
-		if ((tdp.mode == TDiagramPanel.SELECTED_COMPONENTS) && (tdp.isInSelectedRectangle(e.getX(), e.getY()))){
+		if ((tdp.mode == TDiagramPanel.SELECTED_COMPONENTS) && (e.getButton() == MouseEvent.BUTTON1) && (tdp.isInSelectedRectangle(e.getX(), e.getY()))){
 			tdp.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 			tdp.mode = TDiagramPanel.MOVING_SELECTED_COMPONENTS;
 			tdp.setMovingSelectedComponents();
@@ -115,7 +115,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		}
 
 
-		if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)) {
+		if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)& (e.getButton() == MouseEvent.BUTTON1)) {
 			//search if an element is pointed
 			boolean actionMade = false;
 			tgc = tdp.componentPointed();
@@ -236,7 +236,7 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 		}
 
 
-		if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.CONNECTOR)) {
+		if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.CONNECTOR) & (e.getButton() == MouseEvent.BUTTON1)) {
 			// connector adding
 			// search for an selected connecting point
 			TGConnectingPoint p1;

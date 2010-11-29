@@ -486,13 +486,13 @@ public class AVATAR2UPPAAL {
 		
 		TraceManager.addDev("Making behaviour of " + _block.getName());
 		
-		makeElementBehavior(_block, _template, ass, loc, null, null, false);
+		makeElementBehavior(_block, _template, ass, loc, null, null, false, false);
 		
 		TraceManager.addDev("Nb of locations=" + _template.getNbOfLocations()); 
 		
 	}
 	
-	public void makeElementBehavior(AvatarBlock _block, UPPAALTemplate _template, AvatarStateMachineElement _elt, UPPAALLocation _previous, UPPAALLocation _end, String _guard, boolean _previousState) {
+	public void makeElementBehavior(AvatarBlock _block, UPPAALTemplate _template, AvatarStateMachineElement _elt, UPPAALLocation _previous, UPPAALLocation _end, String _guard, boolean _previousState, boolean _severalTransitions) {
 		AvatarActionOnSignal aaos;
 		UPPAALLocation loc, loc1;
 		UPPAALTransition tr;
@@ -520,7 +520,7 @@ public class AVATAR2UPPAAL {
 		if (_elt instanceof AvatarStartState) {
 			hash.put(_elt, _previous);
 			//if (_elt.getNext(0) != null) {
-			makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false);
+			makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false, false);
 			//}
 			return;
 			
@@ -543,14 +543,14 @@ public class AVATAR2UPPAAL {
 			_previous.setCommitted();
 			loc.setCommitted();
 			hash.put(_elt, _previous);
-			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
+			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			return;
 			
 			
 			// Avatar Action on Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
 			loc = translateAvatarActionOnSignal((AvatarActionOnSignal)_elt, _block, _template, _previous, _guard);
-			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
+			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			
 			// Avatar State
 		} else if (_elt instanceof AvatarState) {
@@ -577,7 +577,7 @@ public class AVATAR2UPPAAL {
 				// No transition with a delay
 				for(i=0; i<state.nbOfNexts(); i++) {
 					at = (AvatarTransition)(state.getNext(i));
-					makeElementBehavior(_block, _template, at, _previous, _end, null, false);
+					makeElementBehavior(_block, _template, at, _previous, _end, null, false, (state.nbOfNexts() > 1));
 				}
 			} else {
 				// At least one transition with a delay
@@ -600,18 +600,22 @@ public class AVATAR2UPPAAL {
 				makeStateTransitions(state, locs, transitions, loc, _end, _block, _template, builtlocs, elements);
 				
 				for(int k=0; k<builtlocs.size(); k++) {
-					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, false);
+					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, false, (state.nbOfNexts() > 1));
 				}
 			}
 			
 			
 		} else if (_elt instanceof AvatarTransition) {
 			at = (AvatarTransition) _elt;
-			if ((at.getNext(0) instanceof AvatarActionOnSignal) && (at.isGuarded()) && !(at.hasActions())) {
-				makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false);
+			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions())) {
+				if (at.isGuarded()) {
+					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false, false);
+				}  else {
+					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, null, false, false);
+				}
 			} else {
-				loc = translateAvatarTransition(at, _block, _template, _previous, _guard, _previousState);
-				makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false);
+				loc = translateAvatarTransition(at, _block, _template, _previous, _guard, _previousState, _severalTransitions);
+				makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			}
 			
 		} else {
@@ -638,21 +642,32 @@ public class AVATAR2UPPAAL {
 		return loc;
 	}
 	
-	public UPPAALLocation translateAvatarTransition(AvatarTransition _at, AvatarBlock _block, UPPAALTemplate _template, UPPAALLocation _previous, String _guard, boolean _previousState) {
+	public UPPAALLocation translateAvatarTransition(AvatarTransition _at, AvatarBlock _block, UPPAALTemplate _template, UPPAALLocation _previous, String _guard, boolean _previousState, boolean _severalTransitions) {
 		UPPAALLocation loc = _previous;
 		UPPAALLocation loc1;
 		UPPAALTransition tr;
 		String tmps;
 		int i;
 		
+		if (_at.isGuarded()) {
+			TraceManager.addDev("Guard=" + _at.getGuard());
+		}
+		
+		if (_severalTransitions) {
+			TraceManager.addDev("SEVERAL TRANSITIONS");
+		} else {
+			TraceManager.addDev("ONE TRANSITION");
+		}
+		
 		if (!_previousState) {
-			
 			if (_at.isGuarded()) {
+					_previous.setCommitted();
 					loc1 = addLocation(_template);
 					tr = addTransition(_template, _previous, loc1);
 					tmps = convertGuard(_at.getGuard());
 					setGuard(tr, tmps);
 					loc = loc1;
+					
 			}
 			
 			if (_at.hasDelay()) {
@@ -692,6 +707,20 @@ public class AVATAR2UPPAAL {
 					loc = loc1;
 				}
 			}
+		} else {
+			/*// make choice!
+			
+			if (_severalTransitions) {
+				loc.setUrgent();
+				TraceManager.addDev("Really Making choice!");
+				loc1 = addLocation(_template);
+				tr = addTransition(_template, loc, loc1);
+				setSynchronization(tr, "makeChoice!");
+				loc = loc1;
+			} else {
+				TraceManager.addDev("Make committed");
+				loc.setCommitted();
+			}*/
 		}
 		hash.put(_at, loc);
 		return loc;
@@ -748,7 +777,7 @@ public class AVATAR2UPPAAL {
 					setGuard(tr, tmps);
 					setSynchronization(tr, CHOICE_ACTION + "!");
 					if (_template.nbOfTransitionsExitingFrom(locend) == 0) {
-						loc1 = translateAvatarTransition(at, _block, _template, locend, "", true);
+						loc1 = translateAvatarTransition(at, _block, _template, locend, "", true, (_state.nbOfNexts() > 1));
 						_builtlocs.add(loc1);
 						_elements.add(at.getNext(0));
 					}
@@ -763,14 +792,14 @@ public class AVATAR2UPPAAL {
 						}
 						setSynchronization(tr, CHOICE_ACTION + "!");
 						if (_template.nbOfTransitionsExitingFrom(locend) == 0) {
-							loc1 = translateAvatarTransition(at, _block, _template, locend, "", true);
+							loc1 = translateAvatarTransition(at, _block, _template, locend, "", true, (_state.nbOfNexts() > 1));
 							_builtlocs.add(loc1);
 							_elements.add(at.getNext(0));
 						}
 						
 					} else {
 						// We make the translation in the next transition
-						loc1 = translateAvatarTransition(at, _block, _template, _loc, "", true);
+						loc1 = translateAvatarTransition(at, _block, _template, _loc, "", true, (_state.nbOfNexts() > 1));
 						tr = addTransition(_template, loc1, locend);
 						loc1.setCommitted();
 						if (!(_elements.contains(at.getNext(0)))) {
