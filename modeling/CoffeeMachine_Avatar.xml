@@ -5,7 +5,7 @@
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <COMPONENT type="5201" id="16" >
-<cdparam x="442" y="384" />
+<cdparam x="517" y="405" />
 <sizeparam width="215" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="190" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -28,7 +28,7 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="32" >
-<cdparam x="452" y="303" />
+<cdparam x="522" y="274" />
 <sizeparam width="171" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="158" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -51,8 +51,8 @@
 </COMPONENT>
 
 <COMPONENT type="5200" id="64" >
-<cdparam x="81" y="279" />
-<sizeparam width="253" height="135" minWidth="1" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
+<cdparam x="77" y="289" />
+<sizeparam width="357" height="135" minWidth="1" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Requirement" value="req2" />
@@ -88,11 +88,11 @@
 <TGConnectingPoint num="29" id="62" />
 <TGConnectingPoint num="30" id="63" />
 <extraparam>
-<textline data="If the wallet contains at least 2 coins," />
-<textline data="then a beverage may be delivered. On the " />
-<textline data="contrary, if the wallet contains less than 2" />
-<textline data="coins, no beverage can be delivered by the" />
-<textline data="machine" />
+<textline data="When the application starts, if the wallet contains " />
+<textline data="at least 2 coins, then a beverage may be delivered. " />
+<textline data="On the contrary, if the wallet contains less than 2" />
+<textline data="coins, no beverage will be delivered by the" />
+<textline data="machine." />
 <kind data="Functional" />
 <criticality data="Low" />
 <id data="0" />
@@ -247,16 +247,16 @@
 <cdparam x="580" y="654" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="442" y="399" id="2" />
-<P2  x="334" y="380" id="50" />
+<P1  x="517" y="420" id="2" />
+<P2  x="434" y="390" id="50" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="162" >
 <cdparam x="538" y="537" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="452" y="318" id="18" />
-<P2  x="334" y="346" id="49" />
+<P1  x="522" y="289" id="18" />
+<P2  x="434" y="356" id="49" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="163" >
@@ -1469,7 +1469,7 @@
 <cdparam x="481" y="501" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Send signal to stop state" value="null" />
-<P1  x="430" y="519" id="933" />
+<P1  x="436" y="519" id="933" />
 <P2  x="336" y="681" id="891" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="769" >
@@ -1493,8 +1493,8 @@
 <cdparam x="555" y="559" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from state0 to Send signal" value="null" />
-<P1  x="293" y="459" id="960" />
-<P2  x="430" y="489" id="932" />
+<P1  x="299" y="459" id="960" />
+<P2  x="436" y="489" id="932" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="771" >
 <father id="772" num="0" />
@@ -1516,7 +1516,7 @@
 <cdparam x="355" y="545" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Send signal to stop state" value="null" />
-<P1  x="287" y="552" id="982" />
+<P1  x="293" y="552" id="982" />
 <P2  x="302" y="681" id="883" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="773" >
@@ -1541,8 +1541,8 @@
 <cdparam x="295" y="465" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from state0 to Send signal" value="null" />
-<P1  x="260" y="479" id="971" />
-<P2  x="287" y="522" id="981" />
+<P1  x="266" y="479" id="971" />
+<P2  x="293" y="522" id="981" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="775" >
 <father id="776" num="0" />
@@ -1564,7 +1564,7 @@
 <cdparam x="148" y="549" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Send signal to stop state" value="null" />
-<P1  x="113" y="563" id="944" />
+<P1  x="119" y="563" id="944" />
 <P2  x="268" y="681" id="890" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="777" >
@@ -1589,8 +1589,8 @@
 <cdparam x="229" y="465" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from state0 to Send signal" value="null" />
-<P1  x="194" y="479" id="970" />
-<P2  x="113" y="533" id="943" />
+<P1  x="200" y="479" id="970" />
+<P2  x="119" y="533" id="943" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="779" >
 <father id="780" num="0" />
@@ -1612,8 +1612,8 @@
 <cdparam x="280" y="420" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to state0" value="null" />
-<P1  x="227" y="430" id="954" />
-<P2  x="227" y="439" id="957" />
+<P1  x="233" y="430" id="954" />
+<P2  x="233" y="439" id="957" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="781" >
 <father id="782" num="0" />
@@ -1683,7 +1683,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Send signal to state0" value="null" />
 <P1  x="287" y="325" id="809" />
-<P2  x="303" y="370" id="993" />
+<P2  x="306" y="370" id="993" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="787" >
 <father id="788" num="0" />
@@ -1986,8 +1986,8 @@
 </COMPONENT>
 
 <COMPONENT type="5106" id="1016" >
-<cdparam x="12" y="370" />
-<sizeparam width="583" height="261" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="18" y="370" />
+<sizeparam width="577" height="261" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="state0" value="Beverage" />
@@ -2018,10 +2018,10 @@
 </COMPONENT>
 <SUBCOMPONENT type="5103" id="942" >
 <father id="1016" num="0" />
-<cdparam x="365" y="494" />
+<cdparam x="371" y="494" />
 <sizeparam width="130" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="454" minY="0" maxY="241" />
+<cdrectangleparam minX="0" maxX="447" minY="0" maxY="241" />
 <infoparam name="Send signal" value="ejectCoin(nbOfCoins)" />
 <TGConnectingPoint num="0" id="932" />
 <TGConnectingPoint num="1" id="933" />
@@ -2036,10 +2036,10 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5104" id="953" >
 <father id="1016" num="1" />
-<cdparam x="50" y="538" />
+<cdparam x="56" y="538" />
 <sizeparam width="127" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="459" minY="0" maxY="241" />
+<cdrectangleparam minX="0" maxX="450" minY="0" maxY="241" />
 <infoparam name="Send signal" value="pushCoffeeButton()" />
 <TGConnectingPoint num="0" id="943" />
 <TGConnectingPoint num="1" id="944" />
@@ -2054,19 +2054,19 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5100" id="955" >
 <father id="1016" num="2" />
-<cdparam x="220" y="410" />
+<cdparam x="226" y="410" />
 <sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="568" minY="0" maxY="246" />
+<cdrectangleparam minX="0" maxX="562" minY="0" maxY="246" />
 <infoparam name="start state" value="null" />
 <TGConnectingPoint num="0" id="954" />
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5106" id="980" >
 <father id="1016" num="3" />
-<cdparam x="161" y="439" />
+<cdparam x="167" y="439" />
 <sizeparam width="132" height="40" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="451" minY="0" maxY="221" />
+<cdrectangleparam minX="0" maxX="445" minY="0" maxY="221" />
 <infoparam name="state0" value="WaitingForSelection" />
 <TGConnectingPoint num="0" id="956" />
 <TGConnectingPoint num="1" id="957" />
@@ -2095,10 +2095,10 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5104" id="991" >
 <father id="1016" num="4" />
-<cdparam x="231" y="527" />
+<cdparam x="237" y="527" />
 <sizeparam width="112" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="474" minY="0" maxY="241" />
+<cdrectangleparam minX="0" maxX="465" minY="0" maxY="241" />
 <infoparam name="Send signal" value="pushTeaButton()" />
 <TGConnectingPoint num="0" id="981" />
 <TGConnectingPoint num="1" id="982" />
