@@ -59,6 +59,9 @@ public class UPPAALLocation {
   public boolean urgent = false;
   public boolean committed = false;
   
+  // For optimization of UPPAAL templates
+  public boolean optimizable = true;
+  
   private static int currentId = 0;
   private static int invariantX = 5;
   private static int invariantY = 15;
@@ -93,6 +96,14 @@ public class UPPAALLocation {
 	public void unsetCommitted() {
 	    committed = false;
     }
+	
+	public void unsetOptimizable() {
+		optimizable = false;
+	}
+	
+	public boolean isOptimizable() {
+		return optimizable;
+	}
     
     public void setInvariant(String _invariant) {
 	    invariant = _invariant;

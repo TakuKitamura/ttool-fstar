@@ -568,7 +568,7 @@ public class AvatarDesignPanelTranslator {
 			return;
 		}
 		
-		// First pass: creating TIF components, but no interconnection between them
+		// First pass: creating AVATAR components, but no interconnection between them
 		iterator = asmdp.getAllComponentList().listIterator();
 		AvatarSMDReceiveSignal asmdrs;
 		AvatarSMDSendSignal asmdss;
@@ -609,6 +609,9 @@ public class AvatarDesignPanelTranslator {
 					
 				} else {
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
+					if (asmdrs.hasCheckableAccessibility()) {
+						aaos.setCheckable();
+					}
 					if (aaos.isSending()) {
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "a sending signal is used for receiving: " + asmdrs.getValue());
 						ce.setAvatarBlock(_ab);
@@ -667,6 +670,9 @@ public class AvatarDesignPanelTranslator {
 					addCheckingError(ce);
 				} else {
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
+					if (asmdss.hasCheckableAccessibility()) {
+						aaos.setCheckable();
+					}
 					if (aaos.isReceiving()) {
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdss.getValue());
 						ce.setAvatarBlock(_ab);
@@ -716,6 +722,9 @@ public class AvatarDesignPanelTranslator {
 				if (astate == null) {
 					astate = new AvatarState(tgc.getValue(), tgc);
 					asm.addElement(astate);
+				}
+				if (tgc.hasCheckableAccessibility()) {
+					astate.setCheckable();
 				}
 				listE.addCor(astate, tgc);
 			

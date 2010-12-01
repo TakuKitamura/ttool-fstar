@@ -55,10 +55,20 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 	private LinkedList<AvatarStateMachineElement> nexts;
 	private AvatarState myState;
 	
+	private boolean isCheckable;
+	
     public AvatarStateMachineElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		nexts = new LinkedList<AvatarStateMachineElement>();
     }
+	
+	public void setCheckable() {
+		isCheckable = true;
+	}
+	
+	public boolean isCheckable() {
+		return isCheckable;
+	}
 	
 	public void addNext(AvatarStateMachineElement _element) {
 		nexts.add(_element);

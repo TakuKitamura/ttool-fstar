@@ -225,8 +225,10 @@ public class UPPAALTemplate {
 				tr = ((UPPAALTransition)(iterator.next()));
 				if (tr.isAnEmptyTransition()) {
 					if (nbOfTransitionsExitingFrom(tr.sourceLoc) == 1) {
-						if (!(tr.sourceLoc.hasInvariant())) {
-							found = true;
+						if ((tr.sourceLoc.isOptimizable()) && (tr.destinationLoc.isOptimizable())) {
+							if (!(tr.sourceLoc.hasInvariant())) {
+								found = true;
+							}
 						}
 					}
 				}
@@ -246,15 +248,17 @@ public class UPPAALTemplate {
 				iterator = transitions.listIterator();
 				while(iterator.hasNext()) {
 					trtmp = ((UPPAALTransition)(iterator.next()));
-					if (trtmp.destinationLoc == tr.sourceLoc) {
-						trtmp.destinationLoc = tr.destinationLoc;
+					if (trtmp != tr) {
+						if (trtmp.destinationLoc == tr.sourceLoc) {
+							trtmp.destinationLoc = tr.destinationLoc;
+						}
 					}
 				}
-				locations.remove(tr.sourceLoc);
-				transitions.remove(tr);
 				if (initLocation == tr.sourceLoc) {
 					setInitLocation(tr.destinationLoc);
 				}
+				locations.remove(tr.sourceLoc);
+				transitions.remove(tr);
 			}
 		}
 		

@@ -86,7 +86,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         editable = true;
         removable = true;
         
-        name = "Send signal";
+        name = "Receive signal";
 		value = "sig()";
         //makeValue();
         

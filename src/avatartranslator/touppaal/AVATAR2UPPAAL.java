@@ -74,6 +74,7 @@ public class AVATAR2UPPAAL {
 	private int nbOfIntParameters, nbOfBooleanParameters;
 	
 	private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash; 
+	private Hashtable <AvatarStateMachineElement, UPPAALLocation> hashChecking;
 	
 	public final static int STEP_X = 5;
 	public final static int STEP_Y = 70;
@@ -148,6 +149,7 @@ public class AVATAR2UPPAAL {
 	public UPPAALSpec generateUPPAAL(boolean _debug, boolean _optimize) {
 		warnings = new Vector();
 		hash = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
+		hashChecking = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
 		spec = new UPPAALSpec();
 		
 		avspec.removeCompositeStates();
@@ -513,6 +515,7 @@ public class AVATAR2UPPAAL {
 				TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
 			}
 			tr = addTransition(_template, _previous, loc);
+			_previous.setCommitted();
 			return;
 		}
 		
@@ -550,10 +553,30 @@ public class AVATAR2UPPAAL {
 			// Avatar Action on Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
 			loc = translateAvatarActionOnSignal((AvatarActionOnSignal)_elt, _block, _template, _previous, _guard);
+			if (_elt.isCheckable()) {
+				loc1 = addLocation(_template);  
+				tr = addTransition(_template, loc, loc1);
+				TraceManager.addDev("action on signal " + _elt + " is selected for checking");
+				hashChecking.put(_elt, loc);
+				loc.unsetOptimizable();
+				loc.setCommitted();
+				loc = loc1;
+			}
 			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			
 			// Avatar State
 		} else if (_elt instanceof AvatarState) {
+			if (_elt.isCheckable()) {
+				TraceManager.addDev("State " + _elt + " is selected for checking");
+				hashChecking.put(_elt, _previous);
+				_previous.unsetOptimizable();
+				_previous.setCommitted();
+				loc = addLocation(_template);  
+				tr = addTransition(_template, _previous, loc);
+				_previous = loc;
+				
+			}
+			
 			if (_elt.nbOfNexts() == 0) {
 				return;
 			}
@@ -577,7 +600,7 @@ public class AVATAR2UPPAAL {
 				// No transition with a delay
 				for(i=0; i<state.nbOfNexts(); i++) {
 					at = (AvatarTransition)(state.getNext(i));
-					makeElementBehavior(_block, _template, at, _previous, _end, null, false, (state.nbOfNexts() > 1));
+					makeElementBehavior(_block, _template, at, _previous, _end, null, true, (state.nbOfNexts() > 1));
 				}
 			} else {
 				// At least one transition with a delay
@@ -600,14 +623,15 @@ public class AVATAR2UPPAAL {
 				makeStateTransitions(state, locs, transitions, loc, _end, _block, _template, builtlocs, elements);
 				
 				for(int k=0; k<builtlocs.size(); k++) {
-					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, false, (state.nbOfNexts() > 1));
+					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, true, (state.nbOfNexts() > 1));
 				}
 			}
 			
 			
 		} else if (_elt instanceof AvatarTransition) {
 			at = (AvatarTransition) _elt;
-			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions())) {
+			TraceManager.addDev("Transition with guard = " + at.getGuard() + " previous=" + _previousState);
+			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions()) && _previousState) {
 				if (at.isGuarded()) {
 					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false, false);
 				}  else {
@@ -649,30 +673,33 @@ public class AVATAR2UPPAAL {
 		String tmps;
 		int i;
 		
-		if (_at.isGuarded()) {
-			TraceManager.addDev("Guard=" + _at.getGuard());
-		}
+		boolean madeTheChoice = false;
 		
-		if (_severalTransitions) {
+		/*if (_at.isGuarded()) {
+			TraceManager.addDev("Guard=" + _at.getGuard());
+		}*/
+		
+		/*if (_severalTransitions) {
 			TraceManager.addDev("SEVERAL TRANSITIONS");
 		} else {
 			TraceManager.addDev("ONE TRANSITION");
+		}*/
+	
+		if (_at.isGuarded()) {
+				//_previous.setCommitted();
+				loc1 = addLocation(_template);
+				tr = addTransition(_template, _previous, loc1);
+				tmps = convertGuard(_at.getGuard());
+				setGuard(tr, tmps);
+				setSynchronization(tr, "makeChoice!");
+				madeTheChoice = true;
+				loc = loc1;
 		}
 		
-		if (!_previousState) {
-			if (_at.isGuarded()) {
-					_previous.setCommitted();
-					loc1 = addLocation(_template);
-					tr = addTransition(_template, _previous, loc1);
-					tmps = convertGuard(_at.getGuard());
-					setGuard(tr, tmps);
-					loc = loc1;
-					
-			}
 			
-			if (_at.hasDelay()) {
-				loc = makeTimeInterval(_template, loc, _at.getMinDelay(), _at.getMaxDelay());
-			}
+		if (_at.hasDelay() && !_previousState) {
+				//TraceManager.addDev("Making time interval min=" + _at.getMinDelay());
+			loc = makeTimeInterval(_template, loc, _at.getMinDelay(), _at.getMaxDelay());
 		}
 		
 		if (_at.hasCompute()) {
@@ -687,13 +714,19 @@ public class AVATAR2UPPAAL {
 				// Setting a variable
 				if (AvatarSpecification.isAVariableSettingString(tmps)) {
 					loc1 = addLocation(_template);
-					loc.setCommitted();
+					//loc.setCommitted();
 					tr = addTransition(_template, loc, loc1);
 					setAssignment(tr, tmps);
+					if ((_severalTransitions) && (!madeTheChoice)) {
+						setSynchronization(tr, "makeChoice!");
+					} else {
+						loc.setCommitted();
+					}
+					madeTheChoice = true;
 					loc = loc1;
 					// Method call
 				} else {
-					TraceManager.addDev("Found method call:" + tmps);
+					//TraceManager.addDev("Found method call:" + tmps);
 					loc1 = addLocation(_template);
 					tr = addTransition(_template, loc, loc1);
 					
@@ -703,23 +736,18 @@ public class AVATAR2UPPAAL {
 						loc.setUrgent();
 					}
 					setSynchronization(tr, AvatarSpecification.getMethodCallFromAction(tmps) + "!");
+					madeTheChoice = true;
 					makeMethodCall(_block, tr, tmps);
 					loc = loc1;
 				}
 			}
 		} else {
-			/*// make choice!
-			
-			if (_severalTransitions) {
-				loc.setUrgent();
-				TraceManager.addDev("Really Making choice!");
+			// make choice!
+			/*if (!madeTheChoice) {
 				loc1 = addLocation(_template);
 				tr = addTransition(_template, loc, loc1);
 				setSynchronization(tr, "makeChoice!");
 				loc = loc1;
-			} else {
-				TraceManager.addDev("Make committed");
-				loc.setCommitted();
 			}*/
 		}
 		hash.put(_at, loc);
@@ -1226,6 +1254,10 @@ public class AVATAR2UPPAAL {
 		return modifyString(action.trim());
 	}
 	
+	public AvatarBlock getBlockFromReferenceObject(Object _o) {
+		return avspec.getBlockFromReferenceObject(_o);
+	}
+	
 	public String getUPPAALIdentification(Object _o) {
 		if (avspec == null) {
 			return null;
@@ -1243,7 +1275,7 @@ public class AVATAR2UPPAAL {
 				
 				AvatarStateMachineElement asme = avspec.getStateMachineElementFromReferenceObject(_o);
 				if (asme != null) {
-					UPPAALLocation loc = hash.get(asme);
+					UPPAALLocation loc = hashChecking.get(asme);
 					if (loc != null) {
 						ret += "." + loc.name;
 					}

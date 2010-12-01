@@ -532,7 +532,8 @@ public class GTURTLEModeling {
 				String s = avatar2uppaal.getUPPAALIdentification(tgc);
 				TraceManager.addDev("Query: " + s);
 				if (s.length() > 0) {
-					listQ.add(s + "$" + tgc);
+					AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
+					listQ.add(s + "$" + block.getName() + "." + tgc);
 				} 
 			}
 		}
