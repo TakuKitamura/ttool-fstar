@@ -3,10 +3,10 @@
 <TURTLEGMODELING version="0.92-beta7">
 
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
-<AvatarRDPanel name="AVATAR RD" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.5625" >
+<AvatarRDPanel name="AVATAR RD" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
 <COMPONENT type="5201" id="16" >
-<cdparam x="807" y="632" />
-<sizeparam width="335" height="46" minWidth="10" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="190" minDesiredHeight="0" />
+<cdparam x="517" y="405" />
+<sizeparam width="215" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="190" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AvatarProperty" value="BeverageNeverDeliverProperty" />
@@ -28,8 +28,8 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="32" >
-<cdparam x="815" y="428" />
-<sizeparam width="267" height="46" minWidth="10" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="158" minDesiredHeight="0" />
+<cdparam x="522" y="274" />
+<sizeparam width="171" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="158" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AvatarProperty" value="BeverageDeliverProperty" />
@@ -51,8 +51,8 @@
 </COMPONENT>
 
 <COMPONENT type="5200" id="64" >
-<cdparam x="120" y="451" />
-<sizeparam width="557" height="210" minWidth="1" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
+<cdparam x="77" y="289" />
+<sizeparam width="357" height="135" minWidth="1" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Requirement" value="req2" />
@@ -102,8 +102,8 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="80" >
-<cdparam x="739" y="257" />
-<sizeparam width="234" height="46" minWidth="10" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="128" minDesiredHeight="0" />
+<cdparam x="473" y="165" />
+<sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="128" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AvatarProperty" value="WalletCoinProperty" />
@@ -125,8 +125,8 @@
 </COMPONENT>
 
 <COMPONENT type="5200" id="112" >
-<cdparam x="126" y="246" />
-<sizeparam width="423" height="162" minWidth="1" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
+<cdparam x="81" y="158" />
+<sizeparam width="271" height="104" minWidth="1" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Requirement" value="req1" />
@@ -173,8 +173,8 @@
 </COMPONENT>
 
 <COMPONENT type="5201" id="128" >
-<cdparam x="765" y="87" />
-<sizeparam width="234" height="46" minWidth="10" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="117" minDesiredHeight="0" />
+<cdparam x="490" y="56" />
+<sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="117" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AvatarProperty" value="OneCoinProperty" />
@@ -196,8 +196,8 @@
 </COMPONENT>
 
 <COMPONENT type="5200" id="160" >
-<cdparam x="129" y="51" />
-<sizeparam width="475" height="171" minWidth="1" minHeight="46" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
+<cdparam x="83" y="33" />
+<sizeparam width="304" height="110" minWidth="1" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Requirement" value="req0" />
@@ -247,32 +247,32 @@
 <cdparam x="580" y="654" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="807" y="655" id="2" />
-<P2  x="677" y="608" id="50" />
+<P1  x="517" y="420" id="2" />
+<P2  x="434" y="390" id="50" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="162" >
 <cdparam x="538" y="537" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="815" y="451" id="18" />
-<P2  x="677" y="556" id="49" />
+<P1  x="522" y="289" id="18" />
+<P2  x="434" y="356" id="49" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="163" >
 <cdparam x="545" y="329" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="739" y="280" id="66" />
-<P2  x="549" y="327" id="97" />
+<P1  x="473" y="180" id="66" />
+<P2  x="352" y="210" id="97" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="5203" id="164" >
 <cdparam x="563" y="148" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from AvatarProperty to Requirement" value="&lt;&lt;verify&gt;&gt;" />
-<P1  x="765" y="110" id="114" />
-<P2  x="604" y="179" id="146" />
+<P1  x="490" y="71" id="114" />
+<P2  x="387" y="115" id="146" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
