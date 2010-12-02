@@ -510,6 +510,7 @@ public class AVATAR2UPPAAL {
 		}
 		
 		loc = hash.get(_elt);
+		
 		if (loc != null) {
 			if (_previous == null) {
 				TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
@@ -568,21 +569,21 @@ public class AVATAR2UPPAAL {
 		} else if (_elt instanceof AvatarState) {
 			if (_elt.isCheckable()) {
 				TraceManager.addDev("State " + _elt + " is selected for checking");
-				hashChecking.put(_elt, _previous);
 				_previous.unsetOptimizable();
 				_previous.setCommitted();
 				loc = addLocation(_template);  
 				tr = addTransition(_template, _previous, loc);
+				hashChecking.put(_elt, loc);
 				_previous = loc;
 				
 			}
 			
+			state = (AvatarState)_elt;
+			hash.put(_elt, _previous);
+			
 			if (_elt.nbOfNexts() == 0) {
 				return;
 			}
-			
-			state = (AvatarState)_elt;
-			hash.put(_elt, _previous);
 			
 			// We translate at the same time the state and its next transitions (guard and time + first method call)
 			// We assume all nexts are transitions
