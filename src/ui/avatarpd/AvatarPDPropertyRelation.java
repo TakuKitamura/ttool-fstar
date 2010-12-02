@@ -60,7 +60,7 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
     private int textY1 = 5;
     //private int textY2 = 30;
 	
-	public static final String[] STEREOTYPES = {"<<OR>>", "<<AND>>"}; 
+	public static final String[] STEREOTYPES = {"OR", "AND", "=>", "<=>"}; 
 	
     protected String oldValue = "";
 	
@@ -98,7 +98,7 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
         editable = true;
         removable = true;
         
-        value = "<<OR>>";
+        value = "OR";
 		
 		currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();

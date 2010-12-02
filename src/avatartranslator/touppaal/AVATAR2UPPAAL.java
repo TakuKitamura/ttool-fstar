@@ -700,11 +700,13 @@ public class AVATAR2UPPAAL {
 		if (_at.hasDelay() && !_previousState) {
 				//TraceManager.addDev("Making time interval min=" + _at.getMinDelay());
 			loc = makeTimeInterval(_template, loc, _at.getMinDelay(), _at.getMaxDelay());
+			madeTheChoice = true;
 		}
 		
 		if (_at.hasCompute()) {
 			loc = makeTimeInterval(_template, loc, _at.getMinCompute(), _at.getMaxCompute());
 			_previousState = false;
+			madeTheChoice = true;
 		}
 		
 		if (_at.hasActions()) {
@@ -743,12 +745,12 @@ public class AVATAR2UPPAAL {
 			}
 		} else {
 			// make choice!
-			/*if (!madeTheChoice) {
+			if ((!madeTheChoice) && (_severalTransitions)) {
 				loc1 = addLocation(_template);
 				tr = addTransition(_template, loc, loc1);
 				setSynchronization(tr, "makeChoice!");
 				loc = loc1;
-			}*/
+			}
 		}
 		hash.put(_at, loc);
 		return loc;
