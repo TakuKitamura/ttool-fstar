@@ -1281,7 +1281,11 @@ public class AVATAR2UPPAAL {
 					UPPAALLocation loc = hashChecking.get(asme);
 					if (loc != null) {
 						ret += "." + loc.name;
+					} else {
+						return null;
 					}
+				} else {
+					return null;
 				}
 			}
 		}

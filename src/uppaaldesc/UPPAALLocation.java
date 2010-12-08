@@ -53,7 +53,7 @@ public class UPPAALLocation {
   public int int_id;
   public String id; // Internal id to identify locations -> not shown on diagram
   public Point idPoint;
-  public String name; // Name shown on graph
+  public String name = "default"; // Name shown on graph
   public Point namePoint;
   public String invariant;
   public boolean urgent = false;

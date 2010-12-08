@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.92-beta7">
+<TURTLEGMODELING version="0.92">
 
 <Modeling type="AVATAR Design" nameTab="KeyMasterProtocol" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
@@ -2739,8 +2739,8 @@
 <Modeling type="AVATAR Design" nameTab="Example" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
 <COMPONENT type="301" id="1179" >
-<cdparam x="268" y="10" />
-<sizeparam width="394" height="100" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="203" y="52" />
+<sizeparam width="411" height="95" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="UML Note" value="#InitialCommonKnowledge Alice.sk Bob.sk
@@ -2767,8 +2767,8 @@
 </COMPONENT>
 
 <COMPONENT type="5000" id="1204" >
-<cdparam x="771" y="193" />
-<sizeparam width="376" height="231" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="413" y="178" />
+<sizeparam width="353" height="231" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Block0" value="Bob" />
@@ -2819,8 +2819,8 @@
 </COMPONENT>
 
 <COMPONENT type="5000" id="1229" >
-<cdparam x="368" y="192" />
-<sizeparam width="360" height="234" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="50" y="177" />
+<sizeparam width="355" height="234" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Block0" value="Alice" />
@@ -2871,7 +2871,7 @@
 </COMPONENT>
 
 <COMPONENT type="5003" id="1238" >
-<cdparam x="837" y="478" />
+<cdparam x="451" y="463" />
 <sizeparam width="192" height="137" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -2890,7 +2890,7 @@
 </COMPONENT>
 
 <COMPONENT type="5003" id="1247" >
-<cdparam x="464" y="484" />
+<cdparam x="152" y="460" />
 <sizeparam width="189" height="142" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -2922,7 +2922,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1248" >
 <father id="1249" num="0" />
 <cdparam x="431" y="403" />
-<sizeparam width="143" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="143" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2946,7 +2946,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1250" >
 <father id="1251" num="0" />
 <cdparam x="419" y="312" />
-<sizeparam width="207" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="207" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3126,8 +3126,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1343" >
-<cdparam x="373" y="176" />
-<sizeparam width="66" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="372" y="176" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="chin(m2)" />
@@ -3244,7 +3244,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="1375" >
 <father id="1376" num="0" />
 <cdparam x="415" y="162" />
-<sizeparam width="185" height="32" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="185" height="30" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -3283,8 +3283,8 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="1389" >
-<cdparam x="374" y="285" />
-<sizeparam width="66" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="373" y="285" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="chout(m1)" />

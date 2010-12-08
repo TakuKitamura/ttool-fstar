@@ -54,8 +54,12 @@ public class AvatarState extends AvatarStateMachineElement {
         super(_name, _referenceObject);
     }
 	
+	public AvatarState(String _name, Object _referenceObject, boolean _isCheckable) {
+        super(_name, _referenceObject, _isCheckable);
+    }
+	
 	public AvatarStateMachineElement basicCloneMe() {
-		AvatarState as = new AvatarState(getName(), getReferenceObject());
+		AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
 		return as;
 	}
 }

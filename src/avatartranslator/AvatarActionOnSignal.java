@@ -58,6 +58,12 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 		values = new LinkedList<String>();
     }
 	
+	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable) {
+        super(_name, _referenceObject, _isCheckable);
+		signal = _signal;
+		values = new LinkedList<String>();
+    }
+	
 	public AvatarSignal getSignal() {
 		return signal;
 	}
@@ -83,7 +89,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	}
 	
 	public AvatarActionOnSignal basicCloneMe() {
-		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "_clone", getSignal(), getReferenceObject());
+		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "_clone", getSignal(), getReferenceObject(), isCheckable());
 		for(int i=0; i<getNbOfValues(); i++) {
 			aaos.addValue(getValue(i));
 		}

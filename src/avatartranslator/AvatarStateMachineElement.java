@@ -62,6 +62,12 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 		nexts = new LinkedList<AvatarStateMachineElement>();
     }
 	
+	public AvatarStateMachineElement(String _name, Object _referenceObject, boolean _isCheckable) {
+        super(_name, _referenceObject);
+		nexts = new LinkedList<AvatarStateMachineElement>();
+		isCheckable = _isCheckable;
+    }
+	
 	public void setCheckable() {
 		isCheckable = true;
 	}
