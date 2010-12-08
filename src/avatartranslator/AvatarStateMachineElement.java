@@ -136,7 +136,7 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 	}
 	
 	public String toString() {
-		String ret = getName() + " ID=" + getID();
+		String ret = getExtendedName() + " ID=" + getID();
 		if (myState == null) {
 			ret += " / top level operator\n";
 		} else {
@@ -153,6 +153,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 		ret += specificToString();
 		
 		return ret;
+	}
+	
+	public String getExtendedName() {
+		return getName();
 	}
 	
 	public String specificToString() {

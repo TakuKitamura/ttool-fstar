@@ -47,6 +47,8 @@ package avatartranslator;
 
 import java.util.*;
 
+import myutil.*;
+
 
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	private AvatarSignal signal;
@@ -89,12 +91,17 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	}
 	
 	public AvatarActionOnSignal basicCloneMe() {
-		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "_clone", getSignal(), getReferenceObject(), isCheckable());
+		TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", getSignal(), getReferenceObject(), isCheckable());
 		for(int i=0; i<getNbOfValues(); i++) {
 			aaos.addValue(getValue(i));
 		}
 		
 		return aaos;
+	}
+	
+	public String getExtendedName() {
+		return getName() + ":" + getSignal().getName();
 	}
     
 }

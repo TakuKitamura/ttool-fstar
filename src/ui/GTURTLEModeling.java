@@ -531,10 +531,12 @@ public class GTURTLEModeling {
 				TraceManager.addDev("Making UPPAAL query for " + tgc);
 				String s = avatar2uppaal.getUPPAALIdentification(tgc);
 				TraceManager.addDev("Query: " + s);
-				if (s.length() > 0) {
+				if ((s!= null) && (s.length() > 0)) {
 					AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
 					listQ.add(s + "$" + block.getName() + "." + tgc);
-				} 
+				} else {
+					TraceManager.addDev("Could not make query for " + tgc);
+				}
 			}
 		}
 		

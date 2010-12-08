@@ -66,7 +66,7 @@ public class Main implements ActionListener {
     public static boolean os = false;
     public static boolean uppaal = true;
     public static boolean nc = true ; // Network calculus
-	public static boolean avatar = false ; // avatar profile
+	public static boolean avatar = true ; // avatar profile
 	public static boolean proverif = false;
 	
     public static void main(String[] args) {

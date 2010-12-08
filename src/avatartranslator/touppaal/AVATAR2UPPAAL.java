@@ -554,7 +554,7 @@ public class AVATAR2UPPAAL {
 			// Avatar Action on Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
 			loc = translateAvatarActionOnSignal((AvatarActionOnSignal)_elt, _block, _template, _previous, _guard);
-			if (_elt.isCheckable()) {
+			/*if (_elt.isCheckable()) {
 				loc1 = addLocation(_template);  
 				tr = addTransition(_template, loc, loc1);
 				TraceManager.addDev("action on signal " + _elt + " is selected for checking");
@@ -562,8 +562,10 @@ public class AVATAR2UPPAAL {
 				loc.unsetOptimizable();
 				loc.setCommitted();
 				loc = loc1;
+			}*/
+			if (loc != null) {
+				makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			}
-			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
 			
 			// Avatar State
 		} else if (_elt instanceof AvatarState) {
@@ -624,13 +626,14 @@ public class AVATAR2UPPAAL {
 				makeStateTransitions(state, locs, transitions, loc, _end, _block, _template, builtlocs, elements);
 				
 				for(int k=0; k<builtlocs.size(); k++) {
-					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, true, (state.nbOfNexts() > 1));
+					makeElementBehavior(_block, _template, elements.get(k), builtlocs.get(k), _end, null, true, false);
 				}
 			}
 			
 			
 		} else if (_elt instanceof AvatarTransition) {
 			at = (AvatarTransition) _elt;
+			hash.put(_elt, _previous);
 			TraceManager.addDev("Transition with guard = " + at.getGuard() + " previous=" + _previousState);
 			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions()) && _previousState) {
 				if (at.isGuarded()) {
@@ -651,9 +654,10 @@ public class AVATAR2UPPAAL {
 	
 	
 	public UPPAALLocation translateAvatarActionOnSignal(AvatarActionOnSignal _aaos, AvatarBlock _block, UPPAALTemplate _template, UPPAALLocation _previous, String _guard) {
+		UPPAALLocation loc1;
+		
 		String [] ss = manageSynchro(_block, _aaos);
 		UPPAALLocation loc = addLocation(_template);
-		hash.put(_aaos, loc);
 		UPPAALTransition tr = addTransition(_template, _previous, loc);
 		if (_guard != null) {
 		    String tmpg = convertGuard(_guard);
@@ -662,7 +666,27 @@ public class AVATAR2UPPAAL {
 		setSynchronization(tr, ss[0]);
 		addAssignment(tr, ss[1]);
 		
+		
 		TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
+		
+		/*loc1 = hash.get(_aaos);
+		if (loc1 == null) {
+			hash.put(_aaos, loc);
+			/*if (_aaos.isCheckable()) {
+				loc1 = addLocation(_template);  
+				tr = addTransition(_template, loc, loc1);
+				TraceManager.addDev("---> Action on signal " + _aaos + " is selected for checking");
+				hashChecking.put(_aaos, loc);
+				loc.unsetOptimizable();
+				loc.setCommitted();
+			}
+		} else {
+			// Must link to the other location
+			tr = addTransition(_template, loc, loc1);
+			loc.setCommitted();
+			TraceManager.addDev("<--- Action on signal " + _aaos + " is linked to a previous translation of it");
+			return loc1;
+		}*/
 		
 		return loc;
 	}
@@ -692,6 +716,7 @@ public class AVATAR2UPPAAL {
 				tr = addTransition(_template, _previous, loc1);
 				tmps = convertGuard(_at.getGuard());
 				setGuard(tr, tmps);
+				TraceManager.addDev("MAKE CHOICefrom guard");
 				setSynchronization(tr, "makeChoice!");
 				madeTheChoice = true;
 				loc = loc1;
@@ -721,6 +746,7 @@ public class AVATAR2UPPAAL {
 					tr = addTransition(_template, loc, loc1);
 					setAssignment(tr, tmps);
 					if ((_severalTransitions) && (!madeTheChoice)) {
+						TraceManager.addDev("MAKE CHOICE from var");
 						setSynchronization(tr, "makeChoice!");
 					} else {
 						loc.setCommitted();
@@ -749,6 +775,7 @@ public class AVATAR2UPPAAL {
 			if ((!madeTheChoice) && (_severalTransitions)) {
 				loc1 = addLocation(_template);
 				tr = addTransition(_template, loc, loc1);
+				TraceManager.addDev("MAKE CHOICE from end");
 				setSynchronization(tr, "makeChoice!");
 				loc = loc1;
 			}
@@ -765,11 +792,12 @@ public class AVATAR2UPPAAL {
 		String inv = "";
 		int cpt = 0;
 		int i;
-		UPPAALLocation loc1;
+		UPPAALLocation loc1, loc2;
 		String tmps, tmps0;
 		AvatarTransition at;
 		UPPAALLocation loc;
-		UPPAALTransition tr;
+		UPPAALTransition tr, tr1;
+		AvatarActionOnSignal aaos;
 		
 		
 		for(AvatarTransition att: _transitions) {
@@ -841,13 +869,29 @@ public class AVATAR2UPPAAL {
 				} else {
 					// Must consider whether the transition leads to an action on a signal
 					if (at.followedWithAnActionOnASignal()) {
-						loc1 = translateAvatarActionOnSignal((AvatarActionOnSignal)(at.getNext(0)), _block, _template, _loc, "");
+						aaos = (AvatarActionOnSignal)(at.getNext(0));
+						loc1 = translateAvatarActionOnSignal(aaos, _block, _template, _loc, "");
+						
+						loc2 = hash.get(aaos);
+						if (loc2 == null) {
+							hash.put(aaos, loc1);
+						}
+						
 						tr = addTransition(_template, loc1, locend);
 						loc1.setCommitted();
 						if (!(_elements.contains(at.getNext(0).getNext(0)))) {
-						  _builtlocs.add(locend);
-						  _elements.add(at.getNext(0).getNext(0));
+							 _builtlocs.add(locend);
+							 _elements.add(at.getNext(0).getNext(0));
 						}
+						
+						if (aaos.isCheckable()) {
+							if (hashChecking.get(at.getNext(0)) == null) {
+								hashChecking.put(aaos, locend);
+								locend.unsetOptimizable();
+							}
+						}
+						
+						
 					} else {
 						// If this is not the only transition
 						// We must introduce a fake action
