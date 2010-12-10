@@ -443,6 +443,10 @@ public class GTURTLEModeling {
 		}
 	}
 	
+	public AvatarSpecification getAvatarSpecification() {
+		return avatarspec;
+	}
+	
 	public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation) {
 		avatar2proverif = new AVATAR2ProVerif(avatarspec);
 		//tml2uppaal.setChoiceDeterministic(choices);

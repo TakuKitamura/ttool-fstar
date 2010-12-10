@@ -190,6 +190,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public final static byte MODEL_UPPAAL_OK = 44;
 	public final static byte MODEL_PROVERIF_OK = 45;
 	public final static byte EDIT_PROVERIF_OK = 46;
+	public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
     
     public final static int INCREMENT = 10;
 	
@@ -591,6 +592,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_AUT].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_AUTS].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+			break;
+		case AVATAR_SYNTAXCHECKING_OK:
+			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+			actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(true); 
+			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(true);
 			break;
 		case REQ_OK:
 			//actions[TGUIAction.ACT_VIEW_MATRIX].setEnabled(true);
@@ -2611,8 +2617,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 b = gtm.checkAvatarDesign(tclassesToValidate, adp, optimize);
                 if (b) {
 					ret = true;
-                    setMode(MainGUI.MODEL_UPPAAL_OK);
-					setMode(MainGUI.MODEL_PROVERIF_OK);
+                    setMode(MainGUI.AVATAR_SYNTAXCHECKING_OK);
+					//setMode(MainGUI.MODEL_PROVERIF_OK);
 					//setMode(MainGUI.GEN_DESIGN_OK);
 					if (!automatic) {
 						JOptionPane.showMessageDialog(frame,
@@ -3228,15 +3234,24 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
     
     public void generateSystemC() {
-        
-        JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "SystemC code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
-        jgen.setSize(500, 750);
-        GraphicLib.centerOnParent(jgen);
-        jgen.setVisible(true);
-        dtree.toBeUpdated();
-		
-		if (jgen.isInteractiveSimulationSelected()) {
-			interactiveSimulationSystemC(jgen.getPathInteractiveExecute());
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp instanceof AvatarDesignPanel) {
+			TraceManager.addDev("AVATAR Simulation");
+			JDialogAvatarSimulationGeneration jgen = new JDialogAvatarSimulationGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.AVATARSimulationHost, ConfigurationTTool.AVATARCPPSIMCodeDirectory, ConfigurationTTool.AVATARCPPSIMCompileCommand, ConfigurationTTool.AVATARCPPSIMCodeExecuteCommand, ConfigurationTTool.AVATARCPPSIMInteractiveExecuteCommand);
+			jgen.setSize(500, 750);
+			GraphicLib.centerOnParent(jgen);
+			jgen.setVisible(true);
+			dtree.toBeUpdated();
+		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
+			JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
+			jgen.setSize(500, 750);
+			GraphicLib.centerOnParent(jgen);
+			jgen.setVisible(true);
+			dtree.toBeUpdated();
+			
+			if (jgen.isInteractiveSimulationSelected()) {
+				interactiveSimulationSystemC(jgen.getPathInteractiveExecute());
+			}
 		}
     }
 	

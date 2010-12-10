@@ -114,6 +114,14 @@ public class ConfigurationTTool {
 	public static String ExternalCommand2Host = "";
 	public static String ExternalCommand1 = "";
 	public static String ExternalCommand2 = "";
+	
+	// AVATAR Simulation
+	public static String AVATARSimulationHost = "";
+	public static String AVATARCPPSIMCodeDirectory = "";
+	public static String AVATARCPPSIMCompileCommand = "";
+	public static String AVATARCPPSIMCodeExecuteCommand = "";
+	public static String AVATARCPPSIMInteractiveExecuteCommand = "";
+	
     
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
@@ -278,6 +286,14 @@ public class ConfigurationTTool {
 		sb.append("\nUPPAAL:\n");
         sb.append("UPPAALCodeDirectory: " + UPPAALCodeDirectory + "\n");
 		sb.append("UPPAALVerifierPATH: " + UPPAALVerifierPath + "\n");
+		sb.append("AVATARCPPSIMCompileCommand: " + AVATARCPPSIMCompileCommand + "\n");
+		sb.append("AVATARCPPSIMCodeExecuteCommand: " + AVATARCPPSIMCodeExecuteCommand + "\n");
+		sb.append("AVATARCPPSIMInteractiveExecuteCommand: " + AVATARCPPSIMInteractiveExecuteCommand + "\n");
+		
+		// AVATAR: simulation
+		sb.append("\nAVATAR (simulation):\n");
+        sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
+		sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
 		sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
 		
 		sb.append("\nProVerif:\n");
@@ -464,6 +480,22 @@ public class ConfigurationTTool {
             if (nl.getLength() > 0)
                 SystemCCodeDirectory(nl);
 			
+			// AVATAR Simulation
+			nl = doc.getElementsByTagName("AVATARSimulationHost");
+            if (nl.getLength() > 0)
+                AVATARSimulationHost(nl);
+			nl = doc.getElementsByTagName("AVATARCPPSIMCodeDirectory");
+            if (nl.getLength() > 0)
+                AVATARCPPSIMCodeDirectory(nl);
+			nl = doc.getElementsByTagName("AVATARCPPSIMCompileCommand");
+            if (nl.getLength() > 0)
+                AVATARCPPSIMCompileCommand(nl);
+			nl = doc.getElementsByTagName("AVATARCPPSIMCodeExecuteCommand");
+            if (nl.getLength() > 0)
+                AVATARCPPSIMCodeExecuteCommand(nl);
+			nl = doc.getElementsByTagName("AVATARCPPSIMInteractiveExecuteCommand");
+            if (nl.getLength() > 0)
+                AVATARCPPSIMInteractiveExecuteCommand(nl);
             
 			if (systemcOn) {
 					nl = doc.getElementsByTagName("SystemCHost");
@@ -951,6 +983,51 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             UPPAALVerifierHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARSimulationHost(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARSimulationHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARCPPSIMCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARCPPSIMCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARCPPSIMCompileCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARCPPSIMCompileCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARCPPSIMCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARCPPSIMCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARCPPSIMInteractiveExecuteCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARCPPSIMInteractiveExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
