@@ -81,7 +81,8 @@ public class LiveVariableNode{
 			for (int bytes=0; bytes < _outVars.length; bytes++){
 				for (int bits=0; bits<32;bits++){
 					//System.out.println("bytes: " + bytes + " stat index: " + (bytes << 5 |bits));
-					if((_outVars[bytes] & (1 << bits))!=0)
+					//if((_outVars[bytes] & (1 << bits))!=0)
+					if((_outVars[bytes] & (1 << bits))!=0 || (_useVars[bytes] & (1 << bits))!=0)
 					      ioStatistics[bytes << 5 |bits]++;
 				}
 			}
@@ -703,12 +704,17 @@ public class LiveVariableNode{
 	}
 
 	private String intArrayToHexString(int[] iArray){
-		String aResult = "array(" + iArray.length; 	
-		for (int bytes=0; bytes<iArray.length; bytes++){
+		String aResult = "\"";
+		//\\x" + Integer.toHexString(iArray.length); 	
+		for (int aPos=0; aPos<iArray.length; aPos++){
+			int anItem = iArray[aPos];
+			for (int bytes=0; bytes<4; bytes++){
 			//for (int bits=0; bits<32; bits+=8)
-				aResult+= ", 0x" + Integer.toHexString(iArray[bytes]);
+				aResult+= "\\x" + Integer.toHexString(anItem & 0xF);
+				anItem >>>= 8;
+			}
 		}
-		aResult+=")";
+		aResult+="\"";
 		return aResult;
 	}
 }

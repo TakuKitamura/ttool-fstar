@@ -386,7 +386,12 @@ public class TML2MappingSystemC {
 			declaration += ")" + SCCR;
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
-		for(MappedSystemCTask task: tasks) task.determineCheckpoints();
+		int[] aStatistics = new int[8];
+		for(MappedSystemCTask task: tasks) task.determineCheckpoints(aStatistics);
+		if (aStatistics[0]!=0) System.out.println("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
+		if (aStatistics[2]!=0) System.out.println("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
+		if (aStatistics[4]!=0) System.out.println("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
+		if (aStatistics[6]!=0) System.out.println("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
 		declaration += CR;
 
 		//Declaration of EBRDDs

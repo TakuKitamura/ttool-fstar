@@ -107,6 +107,28 @@ public class StaticAnalysis{
 		aResMap[anIndex >>> 5] |= 1 << (anIndex & 0x1F);
 		return aResMap;
 	}
+	
+	/*public String makeLiveVarEvalFunc(){
+		String anEvalFunc="";
+		//= "unsigned long getStateHash(const char* iLiveVarList) const{\n";
+		int aSeq=0;
+		for(TMLAttribute att: _task.getAttributes()) {
+			anEvalFunc += "if (iLiveVarList[" + (aSeq >>> 3) + "] && " + (1 << (aSeq & 0x7)) + "!=0) iHash->addValue(" + att.getName() + ");\n";
+			aSeq++;
+		}
+		for(TMLChannel ch: _channels) {
+			anEvalFunc += "if (iLiveVarList[" + (aSeq >>> 3) + "] && " + (1 << (aSeq & 0x7)) + "!=0) " + ch.getExtendedName() + "->getStateHash(iHash);\n";
+			aSeq++;
+		}
+		for(TMLEvent evt: _events) {
+			anEvalFunc += "if (iLiveVarList[" + (aSeq >>> 3) + "] && " + (1 << (aSeq & 0x7)) + "!=0) " + evt.getExtendedName() + "->getStateHash(iHash);\n";
+			aSeq++;
+		}
+		if (_task.isRequested())
+			anEvalFunc += "if (iLiveVarList[" + (aSeq >>> 3) + "] && " + (1 << (aSeq & 0x7)) + "!=0) requestChannel->getStateHash(iHash);\n"; 
+		//anEvalFunc += "}\n\n";
+		return anEvalFunc;
+	}*/
 
 	private void printLiveVarNode(LiveVariableNode iNode){
 		int aSeq=0;
@@ -245,7 +267,7 @@ public class StaticAnalysis{
 		}while(aChange);
 	}
 
-	public void determineCheckpoints(){
+	public void determineCheckpoints(int[] iStatistics){
 		System.out.println("*** Static Analysis for task " + _task.getName());
 		for(LiveVariableNode aLiveNode: liveNodes)
 			aLiveNode.determineCheckpoints(new CheckpointInfo());
@@ -269,18 +291,35 @@ public class StaticAnalysis{
 			for(int i=0; i<_task.getAttributes().size(); i++)
 				nbOfVars += aStatistics[i];
 			System.out.println("Variables Checks: " + nbOfVars + "  Candidates: " + (_task.getAttributes().size() * aNbOfCandidates));
-			if (!_task.getAttributes().isEmpty()) System.out.println("Variables Gain: " + (100 * (_task.getAttributes().size() * aNbOfCandidates - nbOfVars) / (_task.getAttributes().size() * aNbOfCandidates)));
+			if (!_task.getAttributes().isEmpty()){
+				iStatistics[0] += _task.getAttributes().size() * aNbOfCandidates;
+				int aVarGain = (100 * (_task.getAttributes().size() * aNbOfCandidates - nbOfVars) / (_task.getAttributes().size() * aNbOfCandidates));
+				iStatistics[1] += _task.getAttributes().size() * aNbOfCandidates - nbOfVars;
+				System.out.println("Variables Gain: " + aVarGain);
+			}
 			for(int i=0; i<_channels.size(); i++)
 				nbOfChannels += aStatistics[i + _task.getAttributes().size()];
 			System.out.println("Channel Checks: " + nbOfChannels + "  Candidates: " + (_channels.size() * aNbOfCandidates));
-			if (!_channels.isEmpty()) System.out.println("Channels Gain: " + (100 * (_channels.size() * aNbOfCandidates - nbOfChannels) / (_channels.size() * aNbOfCandidates)));
+			if (!_channels.isEmpty()){
+				iStatistics[2] += _channels.size() * aNbOfCandidates;
+				int aChGain = (100 * (_channels.size() * aNbOfCandidates - nbOfChannels) / (_channels.size() * aNbOfCandidates));
+				iStatistics[3] += _channels.size() * aNbOfCandidates - nbOfChannels;
+				System.out.println("Channels Gain: " + aChGain);
+			}
 			for(int i=0; i<_events.size(); i++)
 				nbOfEvents += aStatistics[i + _task.getAttributes().size() + _channels.size()];
 			System.out.println("Event Checks: " + nbOfEvents + "  Candidates: " + (_events.size() * aNbOfCandidates));
-			if (!_events.isEmpty()) System.out.println("Events Gain: " + (100 * (_events.size() * aNbOfCandidates - nbOfEvents) / (_events.size() * aNbOfCandidates)));
+			if (!_events.isEmpty()){
+				iStatistics[4] += _events.size() * aNbOfCandidates;
+				int aEvtGain = (100 * (_events.size() * aNbOfCandidates - nbOfEvents) / (_events.size() * aNbOfCandidates));
+				iStatistics[5] += _events.size() * aNbOfCandidates - nbOfEvents;
+				System.out.println("Events Gain: " + aEvtGain);
+			}
 			System.out.println("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
 			if (_task.isRequested()) System.out.println("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
 			System.out.println("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
+			iStatistics[6] += aNbOfCandidates;
+			iStatistics[7] += aNbOfCandidates - aNbOfCheckPoints;
 			System.out.println("Checkpoint Gain: " + (100 * (aNbOfCandidates - aNbOfCheckPoints) / aNbOfCandidates));
 		}	
 		System.out.println("*** End of Static Analysis for task " + _task.getName());
@@ -441,9 +480,9 @@ public class StaticAnalysis{
 		return aResNode;
 	}
 
-	/*public LiveVariableNode getLiveVarNodeByCommand(TMLActivityElement iCmd){
+	public LiveVariableNode getLiveVarNodeByCommand(TMLActivityElement iCmd){
 		for(LiveVariableNode aLiveNode: liveNodes)
 			if (aLiveNode.getLinkedElement()==iCmd) return aLiveNode;
 		return null;
-	}*/
+	}
 }

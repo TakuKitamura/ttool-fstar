@@ -105,11 +105,11 @@ public class MappedSystemCTask {
 	}
     
 	public void generateSystemC(boolean _debug, boolean _optimize) {
+		_analysis.startAnalysis();
         	debug = _debug;
 		optimize=_optimize;
 		basicCPPCode();
 		makeClassCode();
-		_analysis.startAnalysis();
     	}
 	
 	public void print() {
@@ -190,6 +190,19 @@ public class MappedSystemCTask {
 		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR + "_firstCommand=" + firstCommand +SCCR + CR; 
 		//if (!firstCommand.equals("0")) cppcode+= "_currCommand->prepare()"+SCCR;
 		cppcode+="//IDs of merged commands\n" + idsMergedCmds + CR;
+		int aSeq=0;
+		for(TMLChannel ch: channels) {
+			cppcode+= "_channels[" + aSeq + "] = " + ch.getExtendedName() + SCCR;
+			 aSeq++;
+		}
+		for(TMLEvent evt: events) {
+			cppcode+= "_channels[" + aSeq + "] = " + evt.getExtendedName() + SCCR;
+			aSeq++;
+		}
+		if (task.isRequested()){
+			cppcode+= "_channels[" + aSeq + "] = requestChannel" + SCCR;
+		}
+		
 		cppcode+="}"+ CR2 + functions; // + makeDestructor();
 		hcode = Conversion.indentString(hcode, 4);
 		cppcode = Conversion.indentString(cppcode, 4);
@@ -220,13 +233,10 @@ public class MappedSystemCTask {
 
 	private void makeHeaderClassH() {
 		String hcodeBegin="";
-		// Common dec
 		hcodeBegin = "class " + reference + ": public TMLTask {" + CR;
 		hcodeBegin += "private:" + CR;
 		
-		// Attributes
 		hcodeBegin += "// Attributes" + CR;
-		//hcodeBegin += makeAttributesDeclaration() + CR;
 		
 		if (task.isRequested()) {
 			int params = task.getRequest().getNbOfParams();
@@ -234,9 +244,9 @@ public class MappedSystemCTask {
 			hcode+="TMLWaitCommand " + firstCommand + SCCR;
 			initCommand+= "," + firstCommand + "(" + task.getActivityDiagram().getFirst().getID() + ",this,requestChannel,"; 
 			if (params==0){
-				initCommand+= "0)" + CR;
+				initCommand+= "0,\"\")" + CR;
 			}else{
-				initCommand+= "(ParamFuncPointer)&" + reference + "::" + "waitOnRequest_func)" + CR;
+				initCommand+= "(ParamFuncPointer)&" + reference + "::" + "waitOnRequest_func,\"\")" + CR;
 				functionSig+="void waitOnRequest_func(Parameter<ParamType>& ioParam)" + SCCR;
 				functions+="void " + reference + "::waitOnRequest_func(Parameter<ParamType>& ioParam){" + CR;
 				functions+="arg1__req=ioParam.getP1()" + SCCR;
@@ -247,6 +257,8 @@ public class MappedSystemCTask {
 			String xx = firstCommand + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(task.getActivityDiagram().getFirst(),false,"&"+firstCommand,null,null) + "))"+ SCCR;
 			firstCommand="&"+firstCommand;
 			chaining+=xx;
+			/*chaining+= firstCommand + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(task.getActivityDiagram().getFirst(),false,"&"+firstCommand,null,null) + "))"+ SCCR;
+			firstCommand = "&" + firstCommand;*/
 		}else{
 			firstCommand=makeCommands(task.getActivityDiagram().getFirst(),false,"0",null,null);
 		}
@@ -261,13 +273,10 @@ public class MappedSystemCTask {
 	}
 
 	private void makeSerializableFuncs(){
-		//ListIterator iterator = task.getAttributes().listIterator();
-		//TMLAttribute att;
 		hcode += "std::istream& readObject(std::istream& i_stream_var)" + SCCR;
 		hcode += "std::ostream& writeObject(std::ostream& i_stream_var)" + SCCR;
 		//hcode += "unsigned long getStateHash() const" + SCCR;
 		functions+= "std::istream& " + reference + "::readObject(std::istream& i_stream_var){\nTMLTask::readObject(i_stream_var);\n";
-		//while(iterator.hasNext()) {
 		for (TMLAttribute att:task.getAttributes()){
 			//att = (TMLAttribute)(iterator.next());
 			functions += "READ_STREAM(i_stream_var," + att.name + ")" + SCCR;
@@ -277,10 +286,7 @@ public class MappedSystemCTask {
 		}
 		functions+= "return i_stream_var;\n}\n\n";
 		functions+= "std::ostream& " + reference + "::writeObject(std::ostream& i_stream_var){\nTMLTask::writeObject(i_stream_var);\n";
-		//iterator = task.getAttributes().listIterator();
 		for (TMLAttribute att:task.getAttributes()){
-		//while(iterator.hasNext()) {
-			//att = (TMLAttribute)(iterator.next());
 			functions += "WRITE_STREAM(i_stream_var," + att.name + ")" + SCCR;
 			functions += "#ifdef DEBUG_SERIALIZE\n";
 			functions += "std::cout << \"Write: Variable " + att.name + " \" << " + att.name +  " << std::endl" + SCCR;
@@ -289,9 +295,6 @@ public class MappedSystemCTask {
 		functions+= "return i_stream_var;\n}\n\n";
 		hcode += "void reset()" + SCCR;
 		functions+= "void "+reference + "::reset(){\nTMLTask::reset();\n";
-		//iterator = task.getAttributes().listIterator();
-		//while(iterator.hasNext()) {
-		//	att = (TMLAttribute)(iterator.next());
 		for (TMLAttribute att:task.getAttributes()){
 			functions += att.name + "=";
 			if (att.hasInitialValue())
@@ -300,24 +303,47 @@ public class MappedSystemCTask {
 				functions += "0" + SCCR;
 		}
 		functions+= "}\n\n";
-		//functions+= "unsigned long " + reference + "::getStateHash() const{\nunsigned long aHash=0;\n";
-		//for (TMLAttribute att:task.getAttributes()){
-			//if (!(att.name.startsWith("arg") && att.name.endsWith("__req"))) functions += "aHash+=" + att.name + ";\n";
-		//}
-		functions+=makeStateSavingRoutineLocal();
-		/*for(TMLChannel ch: channels) {
-			if (ch.getType()!=TMLChannel.NBRNBW &&  ch.getOriginTask()==task)
-				functions+="aHash+=" + ch.getExtendedName() + "->getStateHash()"+SCCR;
+		hcode += "void refreshStateHash(const char* iLiveVarList);\n";
+		functions+= "void " + reference + "::refreshStateHash(const char* iLiveVarList){\n";
+		int aSeq=0;
+		functions += "_stateHash.init((uint32_t)_currCommand,30);\n";
+		for(TMLAttribute att: task.getAttributes()) {
+			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _stateHash.addValue(" + att.getName() + ");\n";
+			aSeq++;
+		}
+		int i=0;
+		//for channels: include hash only if performed action is blocking
+		//for events: include filling level for senders (notified possible), include parameters for readers (if parameters set)
+		for(TMLChannel ch: channels) {
+			//if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
+			if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "_channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			aSeq++; i++;
 		}
 		for(TMLEvent evt: events) {
-			if (evt.getOriginTask()==task)
-				functions+="aHash+=" + evt.getExtendedName() + "->getStateHash()"+SCCR;
+			//if (evt.isBlocking() || evt.getDestinationTask()==task) functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
+			if (evt.isBlocking() || evt.getDestinationTask()==task) functions += " _channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			aSeq++; i++;
 		}
-		for(TMLRequest req: requests) {
-			if (req.isAnOriginTask(task))
-				functions+="aHash+=" +  req.getExtendedName() + "->getStateHash()"+SCCR;
+		if (task.isRequested()){
+			//functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
+			functions += " _channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
 		}
-		functions+= "if (_currCommand!=0) aHash+= _currCommand->getStateHash();\nreturn aHash;\n}\n\n";*/
+		/*for(i=0; i< channels.size() + events.size() + (task.isRequested()? 1:0) ; i++){
+			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(iHash);\n";
+			aSeq++;
+		}*/
+		//functions += "_lastStateHash = iHash->getHash();\n";
+		//functions += "_commonExecution = false;\n";
+		functions += "}\n\n";
+		//return anEvalFunc;
+		//functions+=_analysis.makeLiveVarEvalFunc()+ "}\n\n";
+	}
+
+	private String getFormattedLiveVarStr(TMLActivityElement currElem){
+		if (_analysis.getLiveVarNodeByCommand(currElem)==null)
+			return "0";
+		else
+			return _analysis.getLiveVarNodeByCommand(currElem).getLiveVariableString();
 	}
 
 	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement){
@@ -523,11 +549,11 @@ public class MappedSystemCTask {
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
 			if (isIntValue(rCommand.getNbOfSamples()))
 				//initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," + rCommand.getChannel(0).getSize() + "*" + rCommand.getNbOfSamples() + ")"+CR;
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," +  rCommand.getNbOfSamples() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + rCommand.getChannel(0).getExtendedName() + "," + getFormattedLiveVarStr(currElem) + "," +  rCommand.getNbOfSamples() + ")"+CR;
 
 			else
 				//initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getChannel(0).getSize() + "*(" + rCommand.getNbOfSamples()+")",null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getNbOfSamples(),null) + "," + rCommand.getChannel(0).getExtendedName() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, rCommand.getNbOfSamples(),null) + "," + rCommand.getChannel(0).getExtendedName() + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLWriteChannel){
@@ -563,9 +589,9 @@ public class MappedSystemCTask {
 				channels=wCommand.getChannel(0).getExtendedName();
 			}
 			if (isIntValue(wCommand.getNbOfSamples()))
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + channels + "," +  wCommand.getNbOfSamples() + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this,0," + channels + "," +  getFormattedLiveVarStr(currElem) + "," + wCommand.getNbOfSamples() + ")" +CR;
 			else
-				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getNbOfSamples(), null) + "," + channels + ")"+CR;
+				initCommand+= "," + cmdName + "("+currElem.getID()+",this," + makeCommandLenFunc(cmdName, wCommand.getNbOfSamples(), null) + "," + channels + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLSendEvent){
@@ -573,7 +599,7 @@ public class MappedSystemCTask {
 			TMLSendEvent sendEvt=(TMLSendEvent)currElem;
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
-			handleParameters(sendEvt.getNbOfParams(), new String[]{sendEvt.getParam(0), sendEvt.getParam(1), sendEvt.getParam(2)}, cmdName, currElem.getID(), sendEvt.getEvent().getExtendedName(),false);
+			handleParameters(sendEvt.getNbOfParams(), new String[]{sendEvt.getParam(0), sendEvt.getParam(1), sendEvt.getParam(2)}, cmdName, currElem.getID(), sendEvt.getEvent().getExtendedName(), false,getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 			
 		} else if (currElem instanceof TMLSendRequest){
@@ -581,7 +607,7 @@ public class MappedSystemCTask {
 			TMLSendRequest sendReq=(TMLSendRequest)currElem;
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
-			handleParameters(sendReq.getNbOfParams(), new String[]{sendReq.getParam(0), sendReq.getParam(1), sendReq.getParam(2)}, cmdName, currElem.getID(), sendReq.getRequest().getExtendedName(),false);
+			handleParameters(sendReq.getNbOfParams(), new String[]{sendReq.getParam(0), sendReq.getParam(1), sendReq.getParam(2)}, cmdName, currElem.getID(), sendReq.getRequest().getExtendedName(),false, getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;	
 	
 		} else if (currElem instanceof TMLWaitEvent){
@@ -589,7 +615,7 @@ public class MappedSystemCTask {
 			TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
-			handleParameters(waitEvt.getNbOfParams(), new String[]{waitEvt.getParam(0), waitEvt.getParam(1), waitEvt.getParam(2)}, cmdName, currElem.getID(), waitEvt.getEvent().getExtendedName(),true);
+			handleParameters(waitEvt.getNbOfParams(), new String[]{waitEvt.getParam(0), waitEvt.getParam(1), waitEvt.getParam(2)}, cmdName, currElem.getID(), waitEvt.getEvent().getExtendedName(),true, getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLNotifiedEvent){
@@ -812,7 +838,7 @@ public class MappedSystemCTask {
 				}
 			}
 			hcode+="TMLSelectCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this,array("+ nbevt + evtList + "),"+ nbevt + ",array("+ nbevt + paramList + "))"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,array("+ nbevt + evtList + "),"+ nbevt + "," + getFormattedLiveVarStr(currElem) + ",array("+ nbevt + paramList + "))"+CR;
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
 		} else {
@@ -854,22 +880,23 @@ public class MappedSystemCTask {
 		}  
 	}
 
-	private void handleParameters(int nbOfParams, String[] param, String cmdName, int ID, String channelName, boolean wait){
+	private void handleParameters(int nbOfParams, String[] param, String cmdName, int ID, String channelName, boolean wait, String liveVarString){
 		String params="";
 		boolean areStatic=true;
 		if (nbOfParams==0){
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0)"+CR;
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0," + liveVarString +")"+CR;
 			return;
 		}
 		for(int i=0; i<3; i++){
 			if(areStatic && !isIntValue(param[i])) areStatic=false;
 			if (i>0) params+=",";
-			if (param[i]==null || param[i].isEmpty()) params+="rnd__0"; else params+=param[i];
+			//if (param[i]==null || param[i].isEmpty()) params+="rnd__0"; else params+=param[i];
+			if (param[i]==null || param[i].isEmpty()) params+="0"; else params+=param[i];
 		}
 		if (areStatic){
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0,Parameter<ParamType>("+ params + "))"+CR;
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0," + liveVarString + ",Parameter<ParamType>("+ params + "))"+CR;
 		}else{
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func)" + CR;
+			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func,"+ liveVarString + ")" + CR;
 			functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
 			functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
 			if (wait)
@@ -914,6 +941,7 @@ public class MappedSystemCTask {
 			code += ";\n";
 		}		
 		code += "ParamType rnd__0" + SCCR;
+		code += "TMLChannel* _channels[" + (channels.size() + events.size() + (task.isRequested()? 1:0)) + "]" + SCCR;
 		//code += "int arg1__req" + SCCR;
 		//code += "int arg2__req" + SCCR;
 		//code += "int arg3__req" + SCCR;
@@ -943,13 +971,13 @@ public class MappedSystemCTask {
 		}
 		for (TMLEvent event: events){
 			if (event.getID()==id) return event.getName();
-			int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
-			if (param>0 && param<4)  return event.getName() + "_param" + param;
+			/*int param = Integer.MAX_VALUE - 3 * event.getID() - id + 1;
+			if (param>0 && param<4)  return event.getName() + "_param" + param;*/
 		}
 		for (TMLRequest request: requests){
 			if (request.getID()==id) return request.getName();
-			int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
-			if (param>0 && param<4)  return request.getName() + "_param!" + param;
+			/*int param = Integer.MAX_VALUE - 3 * request.getID() - id +1;
+			if (param>0 && param<4)  return request.getName() + "_param!" + param;*/
 		}
 		for(TMLAttribute att: task.getAttributes()){
 			if (att.getID()==id) return reference + ":" + att.getName();
@@ -959,23 +987,7 @@ public class MappedSystemCTask {
 		return null;
 	}
 	
-	public String makeStateSavingRoutineLocal(){
-		String aFunc="";
-		//std::ostream& TMLTask_0::writeObject(std::ostream& i_stream_var){
-		//TMLTask::writeObject(i_stream_var);
-		//WRITE_STREAM(i_stream_var,a);
-		//#ifdef DEBUG_SERIALIZE
-    		/*int aSeqNo=0;
-		aFunc += "std::ostream& " + reference + "::streamState(std::ostream& i_stream_var, int* iliveVars){\n";
-		for(TMLAttribute att: task.getAttributes()) {
-			aFunc += "if ((iLiveVars[" +  (aSeqNo >>> 5) + "]& (1<<" + (aSeqNo & 0x1F) + "))!=0) WRITE_STREAM(i_stream_var," + att.getName() + ");\n";
-			aSeqNo++;
-		}
-		aFunc += "return }";*/
-		return aFunc;
-	}
-
-	public void determineCheckpoints(){
-		_analysis.determineCheckpoints();
+	public void determineCheckpoints(int[] aStatistics){
+		_analysis.determineCheckpoints(aStatistics);
 	}
 }
