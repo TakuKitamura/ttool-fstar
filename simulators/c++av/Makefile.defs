@@ -1,0 +1,36 @@
+## Variable that points to SystemC installation path
+
+
+INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim
+LIBDIR = -L. -L.. 
+LIBS   =  -lm $(EXTRA_LIBS)
+
+EXE    = $(MODULE).x
+
+.SUFFIXES: .cpp .o .x
+
+
+$(EXE): makedir $(OBJS) $(OBJS_simulator) 
+	$(CC) $(LFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+
+makedir:
+	echo Making directories
+	mkdir -p ./lib/app
+	mkdir -p ./lib/evt
+	mkdir -p ./lib/sim
+
+$(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+#$(OBJDIR)/evt/ListenersSimCmd.o: $(SRCS_base_DIR)/evt/ListenersSimCmd.cpp
+#	$(CC) $(CFLAGS) $(INCDIR) -o - ldl $@ -c $<
+
+$(OBJDIR)/%.o: ./%.cpp
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
+
+clean::
+	rm -f $(OBJS_simulator) $(OBJS) *~ $(EXE) core 
+
+ultraclean: clean
+	rm -f Makefile.deps
+
