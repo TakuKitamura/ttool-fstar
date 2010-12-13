@@ -76,7 +76,7 @@ public class Main implements ActionListener {
         System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
 		
 		/*IntExpressionEvaluator iee = new  IntExpressionEvaluator();
-		int result = (int)(iee.getResultOf("(4+3)*7"));
+		int result = (int)(iee.getResultOf("(11+3)*7"));
 		System.out.println("Result=" + result);
 		if(iee.hasError()) {
 			System.out.println("Error in parsing:" + iee.getError());
