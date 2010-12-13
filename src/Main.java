@@ -82,6 +82,34 @@ public class Main implements ActionListener {
 			System.out.println("Error in parsing:" + iee.getError());
 		}
 		
+		BoolExpressionEvaluator bee = new  BoolExpressionEvaluator();
+		boolean b = bee.getResultOf("true == true");
+		System.out.println("Bool result=" + b);
+		if(bee.hasError()) {
+			System.out.println("Error in parsing:" + bee.getError());
+		}
+		b = bee.getResultOf("true == (1 == 3)");
+		System.out.println("Bool result=" + b);
+		if(bee.hasError()) {
+			System.out.println("Error in parsing:" + bee.getError());
+		}
+		b = bee.getResultOf("true == (3 == 3)");
+		System.out.println("Bool result=" + b);
+		if(bee.hasError()) {
+			System.out.println("Error in parsing:" + bee.getError());
+		}
+		b = bee.getResultOf("(1 + 5) == (2 + 4)");
+		System.out.println("Bool result=" + b);
+		if(bee.hasError()) {
+			System.out.println("Error in parsing:" + bee.getError());
+		}
+		b = bee.getResultOf("((1 + 5) == (2 + 4)) == true");
+		System.out.println("Bool result=" + b);
+		if(bee.hasError()) {
+			System.out.println("Error in parsing:" + bee.getError());
+		}
+		
+		
 		System.exit(-1);*/
 		
 		
