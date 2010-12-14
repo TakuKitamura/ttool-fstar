@@ -137,8 +137,10 @@ public class AvatarBlockCppSim {
 		cppcode+=initCommand + CR + "{" + CR; 
 		cppcode+= "//generate task variable look-up table"+ CR;
 		for(AvatarAttribute att: block.getAttributes()) {
-			cppcode += "_varLookUpName[\"" + att.getName() + "\"]=&" + att.getName() +SCCR;
-			cppcode += "_varLookUpID[" + att.getID() + "]=&" + att.getName() +SCCR;
+			if (att.getType()!=AvatarType.TIMER){
+				cppcode += "_varLookUpName[\"" + att.getName() + "\"]=&" + att.getName() +SCCR;
+				cppcode += "_varLookUpID[" + att.getID() + "]=&" + att.getName() +SCCR;
+			}
 		}		
 		cppcode += "_varLookUpName[\"rnd__0\"]=&rnd__0" + SCCR + CR;
 		cppcode+=CR + "//command chaining"+ CR;
@@ -217,17 +219,17 @@ public class AvatarBlockCppSim {
 			String action;
 			if (currElem instanceof AvatarSetTimer){				
 				if (debug) System.out.println("Checking SetTimer\n");
-				action = ((AvatarSetTimer)currElem).getTimer().getName() + ".set(" + ((AvatarSetTimer)currElem).getTimerValue() + ")" + SCCR;
+				action = ((AvatarSetTimer)currElem).getTimer().getName() + ".set(" + ((AvatarSetTimer)currElem).getTimerValue() + ");";
 				cmdName= "_tmset" + currElem.getID();
 				//if (action==null) System.out.println("No action!!!!\n");
 			}else if(currElem instanceof AvatarRandom){
 				if (debug) System.out.println("Checking Random\n");
 				AvatarRandom random = (AvatarRandom)currElem;
-				action = random.getVariable() + "=myrand("+ random.getMinValue() + "," + random.getMaxValue() + ")" + SCCR;
+				action = random.getVariable() + "=myrand("+ random.getMinValue() + "," + random.getMaxValue() + ");";
 				cmdName= "_random" + currElem.getID();
 			}else{
 				if (debug) System.out.println("Checking AvatarResetTimer\n");
-				action = ((AvatarResetTimer)currElem).getTimer().getName() + ".reset()" + SCCR;
+				action = ((AvatarResetTimer)currElem).getTimer().getName() + ".reset();";
 				cmdName= "_tmrset" + currElem.getID();
 			}
 			//cmdName= "_action" + currElem.getID();
@@ -235,7 +237,7 @@ public class AvatarBlockCppSim {
 			hcode+="AvActionCmd " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "("+ currElem.getID() + ", this, (ActionFuncPointer)&" + reference + "::" + cmdName + "_func, \"" + action + "\")"+CR;
 			nextCommand= cmdName + ".setOutgoingTrans(array(1,(AvTransition*)" + makeCommands(currElem.getNext(0)) + "));\n";
-			functions+="void "+ reference + "::" + cmdName + "_func(){\n" + action + CR + "}" + CR2;
+			functions+="void "+ reference + "::" + cmdName + "_func(){\n" + action + "\n}" + CR2;
 			functionSig+="void " + cmdName + "_func()" + SCCR;				
 				
 		} else if (currElem instanceof AvatarActionOnSignal){
@@ -312,7 +314,7 @@ public class AvatarBlockCppSim {
 			cmdName= "_exp" + currElem.getID();
 			visitedCmds.put(currElem.getID(), cmdName);
 			hcode+="AvTimerExpCmd " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "(" + currElem.getID() + ", this, " + ((AvatarExpireTimer)currElem).getTimer().getName() +  ")" + CR;
+			initCommand+= "," + cmdName + "(" + currElem.getID() + ", this, &" + ((AvatarExpireTimer)currElem).getTimer().getName() +  ")" + CR;
 			nextCommand= cmdName + ".setOutgoingTrans(array(1,(AvTransition*)" + makeCommands(currElem.getNext(0)) + "));\n";
 			
 		} else {
@@ -340,10 +342,14 @@ public class AvatarBlockCppSim {
 	private String makeAttributesCode() {
 		String code = "";
 		for(AvatarAttribute att: block.getAttributes()) {
-			if (att.hasInitialValue())
-				code += ","+ att.getName() + "(" + att.getInitialValue() + ")"+CR;
-			else
-				code += ","+ att.getName() + "(0)"+CR;
+			if (att.getType()==AvatarType.TIMER){
+				code += ","+ att.getName() + "(" + att.getID() + ", \""+ att.getName() + "\")"+CR;
+			}else{
+				if (att.hasInitialValue())
+					code += ","+ att.getName() + "(" + att.getInitialValue() + ")"+CR;
+				else
+					code += ","+ att.getName() + "(0)"+CR;
+			}
 		}	
 		return code;
 	}
@@ -351,7 +357,10 @@ public class AvatarBlockCppSim {
 	private String makeAttributesDeclaration() {
 		String code = "";
 		for(AvatarAttribute att: block.getAttributes()) {
-			code += "ParamType " + att.getName() + ";\n";
+			if (att.getType()==AvatarType.TIMER)
+				code += "AvTimer " + att.getName() + ";\n";
+			else
+				code += "ParamType " + att.getName() + ";\n";
 		}		
 		code += "ParamType rnd__0" + SCCR;
 		return code;
