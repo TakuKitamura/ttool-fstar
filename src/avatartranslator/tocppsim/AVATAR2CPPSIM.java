@@ -57,22 +57,33 @@ public class AVATAR2CPPSIM{
 	private AvatarSpecification avspec;
 	private Vector warnings;
 	private boolean debug, optimize;
+	private String header, declaration, mainFile, src;
+	private ArrayList<AvatarBlockCppSim> transBlocks = new ArrayList<AvatarBlockCppSim>();
+	
+	private final static String DOTH = ".h";
+	private final static String DOTCPP = ".cpp";
+	private final static String SYSTEM_INCLUDE = "#include \"systemc.h\"";
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
+	private final static String SCCR = ";\n";
+	private final static String EFCR = "}\n";
+	private final static String EFCR2 = "}\n\n";
+	private final static String EF = "}";
+	private final static String MAINFILE = "appmodel.cpp";
 
 	public AVATAR2CPPSIM(AvatarSpecification _avspec) {
 		avspec = _avspec;
 	}
 	
 	public void saveFile(String path, String filename) throws FileException {  
-		/*generateTaskFiles(path);
-        	FileUtils.saveFile(path + filename + ".cpp", getFullCode());
-		src += filename + ".cpp";
-		FileUtils.saveFile(path + "Makefile.src", src);*/
+		generateTaskFiles(path);
+        	//FileUtils.saveFile(path + filename + ".cpp", mainFile);
+        	FileUtils.saveFile(path + MAINFILE, mainFile);
+		//src += filename + ".cpp";
+		src += MAINFILE;
+		FileUtils.saveFile(path + "Makefile.src", src);
 	}
 	
-	/*public String getFullCode() {
-		//return mainFile;
-	}*/
-
 	public Vector getWarnings() {
 		return warnings;
 	}
@@ -82,25 +93,98 @@ public class AVATAR2CPPSIM{
 		optimize = _optimize;
 		warnings = new Vector();
 		avspec.removeCompositeStates();
-		TraceManager.addDev("->   Spec:" + avspec.toString());
-		// Deal with blocks
-		translateBlocks();		
-		if (_optimize) {
-		}
-		TraceManager.addDev("Enhancing graphical representation ...");
+		transBlocks.clear();
+		//REMOVE ALL RANDOM SEQUENCES? removeAllRandomSequences();
+		//TraceManager.addDev("->   Spec:" + avspec.toString());
+		//TraceManager.addDev("Enhancing graphical representation ...");
+		generateMainFile();
+		generateMakefileSrc();
 	}
 	
-
-	private void translateBlocks() {
+	private void generateMainFile() {
+		makeHeader();
+		makeDeclarations();
+		mainFile = header + declaration;
+		mainFile = Conversion.indentString(mainFile, 4);
+	}
+	
+	private void generateMakefileSrc() {
+		src = "SRCS = ";
 		for(AvatarBlock block: avspec.getListOfBlocks()) {
-			translateBlock(block);
+			src += block.getName() + ".cpp ";
 		}
 	}
 	
-	private void translateBlock(AvatarBlock _block) {
-		
+	private void makeHeader() {
+		// System headers
+		header = "#include <Simulator.h>" + CR;
+		// Generate tasks header
+		for(AvatarBlock block: avspec.getListOfBlocks()) {
+			//header += "#include <" + mst.getReference() + ".h>" + CR;
+			header += "#include <" + block.getName() + ".h>" + CR;
+		}
+		header += CR;
 	}
+	
+	private void makeDeclarations() {
+		declaration = "class ThisDesign: public Simulator{\npublic:\nThisDesign():Simulator(){\n";
+		// Declaration of events
+		String channelType="", size="";
+		declaration += "//Declaration of signals" + CR;
+		for(AvatarRelation relation: avspec.getRelations()) {		
+			if(relation.isAsynchronous()){
+				if(relation.isBlocking()){
+					channelType = "AvAsyncSignalB";
+				}else{
+					channelType = "AvAsyncSignal";
+					//AvAsyncSignal(ID iID, std::string iName, unsigned int iSize);
+				}
+				size = ", " + relation.getSizeOfFIFO();
+			}else{
+				size="";
+				channelType = "AvSyncSignal";
+			}
+			for(int i=0; i<relation.nbOfSignals(); i++){
+				String name = relation.getSignal1(i).getName() + "2" + relation.getSignal2(i).getName();
+				declaration+= channelType + "* " + name + " = new " + channelType + "(" + relation.getID() + ", \"" + name + "\"" + size + ");\n";
+			}
+		}
 		
+		declaration += CR;
+		
+
+		//Declaration of Tasks
+		declaration += "//Declaration of blocks" + CR;
+		for(AvatarBlock block: avspec.getListOfBlocks()) {
+			//AvBlock(ID iID, std::string iName);
+			AvatarBlockCppSim transblock = new AvatarBlockCppSim(block, avspec.getRelations());
+			//mst.generateSystemC(debug, optimize, dependencies);
+			transblock.generateCPPSIM(debug, optimize);
+			transBlocks.add(transblock);
+			//String signals="";
+			//int nbOfSignals=0;
+			declaration += block.getName() + "* block__" + block.getName() + " = new " + block.getName() + "("+ block.getID() +", \""+ block.getName() + "\"\n";
+			for(AvatarRelation relation: avspec.getRelations()) {
+				for(int i=0; i<relation.nbOfSignals(); i++){
+					//if (relation.block1==block || relation.block2==block){
+					if (AvatarBlockCppSim.isBlockHierarchyReferredToInRel(relation,block)!=0){
+						declaration += ", (AvSignal*)" + relation.getSignal1(i).getName() + "2" + relation.getSignal2(i).getName() + CR;
+						//nbOfSignals++;
+					}
+				}
+			}
+			declaration += ");\naddBlock(block__"+ block.getName() +")"+ SCCR;
+		}
+		declaration += "\n}\n};\n\n#include <main.h>\n";
+  	}
+
+	private void generateTaskFiles(String path) throws FileException {
+		for(AvatarBlockCppSim block: transBlocks) {
+			block.saveInFiles(path);
+		}
+	}
+
+
 	/*private void makeElementBehavior(AvatarBlock _block, AvatarStateMachineElement _elt) {
 		AvatarAttribute aa;
 		AvatarState state;
