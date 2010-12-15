@@ -68,8 +68,9 @@ Ludovic Apvrille, Renaud Pacalet
 
 #define xx__VARS(a1, a2, a3, a4, a5, a6, a7, a8, ...) (void*)&(a1), sizeof(a1), (void*)&(a2), sizeof(a2), (void*)&(a3), sizeof(a3), (void*)&(a4), sizeof(a4), (void*)&(a5), sizeof(a5), (void*)&(a6), sizeof(a6), (void*)&(a7), sizeof(a7), (void*)&(a8), sizeof(a8)
 #define xx__SIZE(a1, a2, a3, a4, a5, a6, a7, a8, ...) sizeof(a1)+sizeof(a2)+sizeof(a3)+sizeof(a4)+sizeof(a5)+sizeof(a6)+sizeof(a7)+sizeof(a8)
-#define PARAM_CPY(nb, a1, ...) nb, xx__VARS(a1, __VA_ARGS__, a1, a1, a1, a1, a1, a1, a1, a1)
+#define PARAM_CPY(nb, a1, ...) nb, xx__VARS(a1, ##__VA_ARGS__, a1, a1, a1, a1, a1, a1, a1, a1)
 #define PARAM_INIT(nb, ...) xx__SIZE(__VA_ARGS__, int[0], int[0], int[0], int[0], int[0], int[0], int[0], int[0]), PARAM_CPY(nb, __VA_ARGS__)
+#define COMMENTS
 
 class AvBlock;
 class TMLTask;
@@ -85,8 +86,8 @@ typedef unsigned int EventID;
 typedef unsigned int ID;
 typedef unsigned int AVTTime;
 typedef unsigned int (AvBlock::*CondFuncPointer) ();
-typedef unsigned int (AvBlock::*ActionFuncPointer) ();
-typedef unsigned int (AvBlock::*ParamSetFuncPointer) (Parameter*);
+typedef void (AvBlock::*ActionFuncPointer) ();
+typedef void (AvBlock::*ParamSetFuncPointer) (Parameter*);
 typedef Parameter* (AvBlock::*ParamGetFuncPointer) ();
 typedef std::vector<SystemTransition> EnabledTransList;
 ///keep track of reading/writing transitions in channels
@@ -94,6 +95,17 @@ typedef std::set<AvTransition*> AvTransSet;
 typedef std::queue<Parameter*> ParamQueue;
 typedef std::priority_queue< EvtQueueNode, std::vector<EvtQueueNode>, std::greater<EvtQueueNode> > PrioEventQueue;
 typedef std::list<AvBlock*> BlockList;
+struct ltstr{
+	bool operator()(const char* s1, const char* s2) const{
+		return strcmp(s1, s2) < 0;
+	}
+};
+
+///Datatype which associates a variable name with the coresponding pointer to that variable, used for look-up table of tasks
+typedef std::map<const char*, ParamType*, ltstr> VariableLookUpTableName;
+///Datatype which associates a variable ID with the coresponding pointer to that variable, used for look-up table of tasks
+typedef std::map<ID, ParamType*> VariableLookUpTableID;
+
 
 class SystemTransition{
 public:

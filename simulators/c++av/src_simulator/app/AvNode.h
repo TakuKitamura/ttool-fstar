@@ -49,12 +49,13 @@ public:
 	AvNode(ID iID, std::string iName, AvBlock* iBlock);
 	virtual ~AvNode();
 	ID getID() const;
-	std::string toString() const;
+	virtual std::string toString() const;
 	AvBlock* getBlock() const;
 	virtual AvNode* prepare(bool iControlTransfer)=0;
 	virtual AvNode* execute(const SystemTransition& iTrans)=0;
 	virtual bool isEnabled(EnabledTransList& iEnaTransList, AvTransition* iIncomingTrans)=0;
 	virtual AvNode* cancel()=0;
+	virtual bool directExecution(){return false;}
 	//virtual AvTransition* getIncomingTrans();
 	//virtual void setParams(Parameter<ParamType>& ioParam);
 protected:

@@ -38,6 +38,7 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */ 
 #include<AvNode.h>
+#include<AvBlock.h>
 
 AvNode::AvNode(ID iID, std::string iName, AvBlock* iBlock): _ID(iID), _name(iName), _block(iBlock){
 }
@@ -51,7 +52,7 @@ ID AvNode::getID() const{
 
 std::string AvNode::toString() const{
 	std::ostringstream aTransText;
-	aTransText << _name << "_" << _ID;
+	aTransText << _block->toString() << "." << _name << "(" << _ID << ")";
 	return aTransText.str();
 }
 

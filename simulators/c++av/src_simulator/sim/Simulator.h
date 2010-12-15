@@ -54,6 +54,8 @@ public:
 	AVTTime getSimulationTime();
 	void addBlock(AvBlock* iBlock);
 protected:
+	bool advanceSimulationTime(EnabledTransList& iTransList);
+	void displaySystemState();
 	AVTTime _simTime;
 	PrioEventQueue _evtQueue;
 	BlockList _blockList;

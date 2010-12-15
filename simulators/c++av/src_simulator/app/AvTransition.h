@@ -45,14 +45,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <AvCheckpoint.h>
 #include <EventQueueCallback.h>
 
-enum state_enum{DISABLED, WAIT4AFTER, WAIT4COMP, WAIT4CMD};
+enum state_enum{DISABLED, WAIT4AFTER, PREPCOMP, WAIT4COMP, WAIT4CMD};
 typedef enum state_enum TransitionState;
 
 class AvCmd;
 
 class AvTransition: public AvNode, public AvCheckpoint, public EventQueueCallback{
 public:
-	AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, AVTTime iAfterMin, AVTTime iAfterMax, AVTTime iComputeMin, AVTTime iComputeMax, ActionFuncPointer iActionFunc);
+	AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, ParamType iAfterMin, ParamType iAfterMax, ParamType iComputeMin, ParamType iComputeMax, ActionFuncPointer iActionFunc);
 	~AvTransition();
 	AvNode* prepare(bool iControlTransfer);
 	AvNode* execute(const SystemTransition& iSyncCmd);
@@ -61,10 +61,12 @@ public:
 	void eventQCallback();
 	void setOutgoingCmd(AvCmd* iCmd);
 	AvCmd* getOutgoingCmd();
+	std::string toString() const;
+	bool directExecution();
 protected:
 	AvCmd* _outgoingCmd;
 	CondFuncPointer _condFunc;
-	AVTTime _afterMin, _afterMax, _computeMin, _computeMax;
+	ParamType _afterMin, _afterMax, _computeMin, _computeMax, _computeFor;
 	ActionFuncPointer _actionFunc;
 	TransitionState _state;
 	bool _lastControlTransfer;

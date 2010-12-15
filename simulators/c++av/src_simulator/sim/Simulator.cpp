@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<Simulator.h>
 #include<AvBlock.h>
 #include<EventQueueCallback.h>
+#include<AvCheckpoint.h>
 
 Simulator::Simulator(): _simTime(0){
 }
@@ -51,6 +52,7 @@ Simulator::~Simulator(){
 //}
 
 void Simulator::registerEvent(const EvtQueueNode &iNode){
+	std::cout << "evt queue register event for time: " << iNode.time << "\n";
 	_evtQueue.push(iNode);
 }
 
@@ -58,40 +60,52 @@ void Simulator::registerEvent(const EvtQueueNode &iNode){
 //}
 
 void Simulator::run(){
-	EnabledTransList aTransList(100);
-	unsigned int aUserChoice;
-	for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
-		(*i)->isEnabled(aTransList);
-	}
-	while(!aTransList.empty()){
+	EnabledTransList aTransList;
+	unsigned int aUserChoice=1;
+	while(aUserChoice>0 && advanceSimulationTime(aTransList)){
+		displaySystemState();
 		std::cout << "*** Enabled System Transitions ***\n";
 		for (unsigned int i=0; i< aTransList.size(); ++i){
-			std::cout << "(" << i+1 << ") " << aTransList[i].text << "\n";
+			std::cout << "(" << i+1 << ") in Block " << aTransList[i].block->toString() << " " << aTransList[i].text << "\n";
 		}
+		std::cout << "(0) Quit simulation\n";
 		aUserChoice=0;
-		while(aUserChoice<1 || aUserChoice>aTransList.size()){
+		do{
 			std::cout << "Please enter a transition no: ";
 			std::cin >> aUserChoice;
 			std::cout << "\n";
+		}while(aUserChoice>aTransList.size());
+		if (aUserChoice!=0){
+			aTransList[aUserChoice-1].block->execute(aTransList[aUserChoice-1]);
+			aTransList.clear();
+			//std::cout << "run: is enabled\n";
 		}
-		aUserChoice--;
-		aTransList[aUserChoice].block->execute(aTransList[aUserChoice]);
-		aTransList.clear();
-		for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
-			(*i)->isEnabled(aTransList);
-		}
-		while(aTransList.empty() && !_evtQueue.empty()){
-			_simTime = _evtQueue.top().time;
-			while(!_evtQueue.empty() && _simTime == _evtQueue.top().time){
-				_evtQueue.top().callBack->notifyEvent(_evtQueue.top().evtID);
-				_evtQueue.pop();
-			}
-			for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
-				(*i)->isEnabled(aTransList);
-			}
-		}
-		
 	}
+	displaySystemState();
+}
+
+void Simulator::displaySystemState(){
+	std::cout << "*** Current System State at time "<< _simTime << " ***\n";
+	for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
+		std::cout << "Block " << (*i)->toString() << ": " << (*i)->getCurrCommand()->toString() << "\n";
+	}
+}
+
+bool Simulator::advanceSimulationTime(EnabledTransList& iTransList){
+	for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
+		(*i)->isEnabled(iTransList);
+	}
+	while(iTransList.empty() && !_evtQueue.empty()){
+		_simTime = _evtQueue.top().time;
+		while(!_evtQueue.empty() && _simTime == _evtQueue.top().time){
+			_evtQueue.top().callBack->notifyEvent(_evtQueue.top().evtID);
+			_evtQueue.pop();
+		}
+		for (BlockList::const_iterator i=_blockList.begin(); i!= _blockList.end(); ++i){
+			(*i)->isEnabled(iTransList);
+		}
+	}
+	return !(iTransList.empty());
 }
 
 AVTTime Simulator::getSimulationTime(){

@@ -84,5 +84,6 @@ AvCmd* AvBlock::getCommandByID(ID iID){
 }
 
 void AvBlock::setCurrCommand(AvCheckpoint* iCmd){
+	//std::cout << toString() << ".setCurrCmd: " << iCmd->toString() << "\n";
 	_currCommand = iCmd;
 }

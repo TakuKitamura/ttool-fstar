@@ -50,12 +50,20 @@ AvState::~AvState(){
 
 AvNode* AvState::prepare(bool iControlTransfer){
 	//if _lastControlTransfer==true set actual cmd in block to this one and call execute
+	std::cout<< "prepare " << _name << "\n";
 	_lastControlTransfer=iControlTransfer;
 	if(_lastControlTransfer){
+		AvTransition* directAccessTrans = determineDirectAccessTrans();
+		if (directAccessTrans!=0){
+			std::cout<< _name << " go on to next\n";
+			return directAccessTrans->prepare(true);
+		}
+		std::cout<< "prepare transitions " << _name << "\n";
 		_block->setCurrCommand(this);
 		for (unsigned int i=0; i<_nbOfOutgoingTrans; i++)
 			_outgoingTrans[i]->prepare(false);
 	}
+	std::cout<< "end prepare " << _name << "\n";
 	return this;
 }
 
@@ -92,10 +100,30 @@ AvNode* AvState::cancel(){
 	return this;
 }
 
+void AvState::setIncomingTrans(AvTransition* iTrans){
+}
+
+std::string AvState::toString() const{
+	return AvNode::toString();
+}
+
+bool AvState::directExecution(){
+	return true;
+}
+
+AvTransition* AvState::determineDirectAccessTrans(){
+	AvTransition* aResTrans=0;
+	for (unsigned int i=0; i<_nbOfOutgoingTrans; i++){
+		if (_outgoingTrans[i]->directExecution()){
+			if (aResTrans!=0) return 0;
+			aResTrans=_outgoingTrans[i];
+		}else{
+			return 0;
+		}
+	}
+	return aResTrans;
+}
+
 //void AvState::setOutgoingTrans(AvTransition** iTrans){
 //	_outgoingTrans=iTrans;
-//}
-
-//void AvState::setIncomingTrans(AvTransition* iTrans){
-	//empty
 //}

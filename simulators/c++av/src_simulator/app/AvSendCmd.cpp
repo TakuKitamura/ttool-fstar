@@ -58,9 +58,13 @@ AvNode* AvSendCmd::prepare(bool iControlTransfer){
 
 AvNode* AvSendCmd::execute(const SystemTransition& iTrans){
 	Parameter* aParamData;
+	//std::cout << "execute send 1\n";
 	aParamData = (_paramGetFunc==0)? 0: (_block->*_paramGetFunc)();
+	//std::cout << "execute send 2\n";
 	_signal->write(_incomingTrans, iTrans.syncTrans, aParamData);
+	//std::cout << "execute send 3\n";
 	_outgoingTrans[0]->prepare(true);
+	//std::cout << "execute send 4\n";
 	return this;
 }
 

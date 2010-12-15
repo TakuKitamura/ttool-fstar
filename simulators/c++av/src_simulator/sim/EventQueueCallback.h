@@ -62,7 +62,9 @@ protected:
 	}
 	
 	void registerEventIn(AVTTime iTime){
+		std::cout << "register event in " << _simulator << "\n";
 		_simulator->registerEvent(EvtQueueNode(this, iTime + _simulator->getSimulationTime(), _evtID));
+		std::cout << "register event in end\n";
 	}
 	
 	void cancelEvent(){

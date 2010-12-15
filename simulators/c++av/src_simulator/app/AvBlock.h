@@ -70,5 +70,9 @@ protected:
 	AvCheckpoint* _currCommand;
 	///Pointer to the first command of the task
 	AvCmd* _firstCommand;
+	///Look up table for task variables (by name)
+	VariableLookUpTableName _varLookUpName;
+	///Look up table for task variables (by ID)
+	VariableLookUpTableID _varLookUpID;
 };
 #endif

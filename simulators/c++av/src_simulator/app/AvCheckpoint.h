@@ -48,6 +48,8 @@ public:
 	AvCheckpoint(){}
 	virtual AvNode* execute(const SystemTransition& iTrans)=0;
 	virtual bool isEnabled(EnabledTransList& iEnaTransList, AvTransition* iIncomingTrans)=0;
+	//virtual AvNode* prepare(bool iControlTransfer)=0;
+	virtual std::string toString() const=0;
 	virtual ~AvCheckpoint() {}
 protected:
 };

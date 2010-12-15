@@ -57,12 +57,17 @@ AvNode* AvReceiveCmd::prepare(bool iControlTransfer){
 }
 
 AvNode* AvReceiveCmd::execute(const SystemTransition& iTrans){
+	//std::cout << "execute receive 1\n";
 	Parameter* aParamData = _signal->read(_incomingTrans);
+	//std::cout << "execute receive 2\n";
 	if (aParamData!=0){
+		//std::cout << "execute receive 3\n";
 		if(_paramSetFunc!=0) (_block->*_paramSetFunc)(aParamData);
 		delete aParamData;
 	}
+	//std::cout << "execute receive 4\n";
 	_outgoingTrans[0]->prepare(true);
+	//std::cout << "execute receive 5\n";
 	return this;
 }
 

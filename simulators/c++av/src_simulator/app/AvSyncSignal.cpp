@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <AvSyncSignal.h>
 #include <AvTransition.h>
 #include <AvCmd.h>
+#include<AvBlock.h>
 
 AvSyncSignal::AvSyncSignal(ID iID, std::string iName): AvSignal(iID, iName), _paramData(0){
 }
@@ -70,17 +71,18 @@ Parameter* AvSyncSignal::read(AvTransition* iReader){
 }
 
 void AvSyncSignal::write(AvTransition* iWriter, AvTransition* iReader, Parameter* iParamData){
-	SystemTransition aDummy;
+	//(AvBlock* iBlock, AvTransition* iFiringTrans, AvTransition* iSyncTrans, std::string iText
+	SystemTransition aSysTrans(iReader->getBlock(), iReader, 0, "");
 	_paramData = iParamData;
-	iReader->execute(aDummy);
-	//cancelWriter(iWriter);
+	//iReader->execute(aDummy);
+	aSysTrans.block->execute(aSysTrans);
 	_writers.erase(iWriter);
 }
 
 bool AvSyncSignal::getSyncTransitionsWriter(AvBlock* iBlock, AvTransition* iWriter, EnabledTransList& iTransList){
 	for(AvTransSet::iterator i=_readers.begin(); i != _readers.end(); ++i){
 		std::ostringstream aTransText;
-		aTransText << iWriter->getOutgoingCmd()->toString() << " synchronizes with " << (*i)->getOutgoingCmd()->toString();
+		aTransText << iWriter->getOutgoingCmd()->toString() << " synchronizes with " << (*i)->getOutgoingCmd()->toString() << " via signal " << toString();
 		iTransList.push_back(SystemTransition(iBlock, iWriter, *i, aTransText.str()));
 		return true;
 	}

@@ -40,14 +40,16 @@ Ludovic Apvrille, Renaud Pacalet
 #include<AvActionCmd.h>
 #include<AvTransition.h>
 
-AvActionCmd::AvActionCmd(ID iID, AvBlock* iBlock, ActionFuncPointer iActionFunc, std::string iActionDescr, bool iDirectExec=false): AvSingleTransCmd(iID, "Action", iBlock,1), _actionFunc(iActionFunc), _actionDescr(iActionDescr), _directExec(iDirectExec){
+AvActionCmd::AvActionCmd(ID iID, AvBlock* iBlock, ActionFuncPointer iActionFunc, std::string iActionDescr, bool iDirectExec): AvSingleTransCmd(iID, "Action", iBlock,1), _actionFunc(iActionFunc), _actionDescr(iActionDescr), _directExec(iDirectExec){
 }
 
 AvActionCmd::~AvActionCmd(){
 }
 
 AvNode* AvActionCmd::prepare(bool iControlTransfer){
+	//std::cout << "action prepare";
 	if (iControlTransfer && _directExec){
+		//std::cout << "go on\n";
 		(_block->*_actionFunc)();
 		return _outgoingTrans[0]->prepare(true);
 	}
@@ -55,8 +57,11 @@ AvNode* AvActionCmd::prepare(bool iControlTransfer){
 }
 
 AvNode* AvActionCmd::execute(const SystemTransition& iTrans){
+	//std::cout << "action execute\n";
 	(_block->*_actionFunc)();
+	//std::cout << "action exec after func\n";
 	_outgoingTrans[0]->prepare(true);
+	//std::cout << "end action execute\n";
 	return this;
 }
 
@@ -69,4 +74,8 @@ bool AvActionCmd::isEnabled(EnabledTransList& iEnaTransList, AvTransition* iInco
 	
 AvNode* AvActionCmd::cancel(){
 	return this;
+}
+
+bool AvActionCmd::directExecution(){
+	return _directExec;
 }

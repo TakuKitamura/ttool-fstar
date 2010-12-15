@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<AvTimer.h>
 #include<AvTransition.h>
 
-AvTimerExpCmd::AvTimerExpCmd(ID iID, AvBlock* iBlock, AvTimer* iTimer): AvSingleTransCmd(iID, "TimerExp", iBlock, 1){
+AvTimerExpCmd::AvTimerExpCmd(ID iID, AvBlock* iBlock, AvTimer* iTimer): AvSingleTransCmd(iID, "TimerExp", iBlock, 1), _timer(iTimer){
 }
 
 AvTimerExpCmd::~AvTimerExpCmd(){

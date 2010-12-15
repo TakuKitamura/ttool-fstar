@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<AvCmd.h>
 #include<AvBlock.h>
 
-AvTransition::AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, AVTTime iAfterMin, AVTTime iAfterMax, AVTTime iComputeMin, AVTTime iComputeMax, ActionFuncPointer iActionFunc): AvNode(iID, "Transition", iBlock), AvCheckpoint(), _outgoingCmd(0), _condFunc(iCondFunc), _afterMin(iAfterMin), _afterMax(iAfterMax), _computeMin(iComputeMin), _computeMax(iComputeMax), _actionFunc(iActionFunc), _state(DISABLED), _lastControlTransfer(true){
+AvTransition::AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, ParamType iAfterMin, ParamType iAfterMax, ParamType iComputeMin, ParamType iComputeMax, ActionFuncPointer iActionFunc): AvNode(iID, "Transition", iBlock), AvCheckpoint(), _outgoingCmd(0), _condFunc(iCondFunc), _afterMin(iAfterMin), _afterMax(iAfterMax), _computeMin(iComputeMin), _computeMax(iComputeMax), _computeFor(0), _actionFunc(iActionFunc), _state(DISABLED), _lastControlTransfer(true){
 }
 
 AvTransition::~AvTransition(){
@@ -50,38 +50,62 @@ AvTransition::~AvTransition(){
 
 AvNode* AvTransition::prepare(bool iControlTransfer){
 	_lastControlTransfer=iControlTransfer;
+	std::cout << "trans prepare 1\n";
 	if (_lastControlTransfer){
+		std::cout << "trans prepare 2\n";
 		_block->setCurrCommand(this);
 		if (_actionFunc!=0) (_block->*_actionFunc)();
 	}
+	std::cout << "trans prepare 3\n";
 	if(_condFunc!=0 && (_block->*_condFunc)()==0){
 		_state=DISABLED;
 	}else{
+		std::cout << "trans prepare 4\n";
 		AVTTime aTime2Wait = myrand(_afterMin, _afterMax);
 		if (aTime2Wait==0){
-			aTime2Wait = myrand(_computeMin, _computeMax);
-			if(aTime2Wait==0){
+			std::cout << "trans prepare 5\n";
+			_computeFor = myrand(_computeMin, _computeMax);
+			if(_computeFor==0){
+				std::cout << "trans prepare 5a\n";
 				_state = WAIT4CMD;
 				return _outgoingCmd->prepare(_lastControlTransfer);
 			}else{
-				registerEventIn(aTime2Wait);
-				_state = WAIT4COMP;
+				std::cout << "trans prepare 5b\n";
+				//registerEventIn(_computeFor);
+				_state = PREPCOMP;
 			}
 		}else{
+			std::cout << "trans prepare 6\n";
 			registerEventIn(aTime2Wait);
 			_state = WAIT4AFTER;
 		}
 			
 	}
+	//std::cout << "trans prepare 7\n";
 	return this;
 }
 
 AvNode* AvTransition::execute(const SystemTransition& iSyncCmd){
-	if (!_lastControlTransfer && _actionFunc!=0) (_block->*_actionFunc)();
-	return _outgoingCmd->execute(iSyncCmd);
+	if (_state==PREPCOMP){
+		registerEventIn(_computeFor);
+		_block->setCurrCommand(this);
+		_state=WAIT4COMP;
+		return this;
+	}
+	if (_state==WAIT4CMD){
+		if (!_lastControlTransfer && _actionFunc!=0) (_block->*_actionFunc)();
+		return _outgoingCmd->execute(iSyncCmd);
+	}
+	return this;
 }
 
 bool AvTransition::isEnabled(EnabledTransList& iEnaTransList, AvTransition* iIncomingTrans){
+	if (_state==PREPCOMP){
+		std::ostringstream aTransText;
+		aTransText << "compute for " << _computeFor << " in " << toString();
+		iEnaTransList.push_back(SystemTransition(_block, this, 0, aTransText.str()));
+		return true;
+	}
 	if (_state==WAIT4CMD) return _outgoingCmd->isEnabled(iEnaTransList,this);
 	return false;
 }
@@ -90,7 +114,6 @@ AvNode* AvTransition::cancel(){
 	AvNode* aResult=0;
 	switch(_state){
 	case WAIT4AFTER:
-	case WAIT4COMP:
 		cancelEvent();
 		break;
 	case WAIT4CMD:
@@ -102,10 +125,9 @@ AvNode* AvTransition::cancel(){
 }
 
 void AvTransition::eventQCallback(){
-	AVTTime aTime2Wait;
-	if(_state==WAIT4AFTER && (aTime2Wait = myrand(_computeMin, _computeMax))!=0){
-		registerEventIn(aTime2Wait);
-		_state = WAIT4COMP;
+	if(_state==WAIT4AFTER && (_computeFor = myrand(_computeMin, _computeMax))!=0){
+		//registerEventIn(_computeFor);
+		_state = PREPCOMP;
 	}else{
 		_state = WAIT4CMD;
 		_outgoingCmd->prepare(_lastControlTransfer);
@@ -115,8 +137,20 @@ void AvTransition::eventQCallback(){
 
 void AvTransition::setOutgoingCmd(AvCmd* iCmd){
 	_outgoingCmd = iCmd;
+	_outgoingCmd->setIncomingTrans(this);
 }
 
 AvCmd* AvTransition::getOutgoingCmd(){
 	return _outgoingCmd;
+}
+
+std::string AvTransition::toString() const{
+	return AvNode::toString();
+}
+
+bool AvTransition::directExecution(){
+	std::cout << "let's crash\n";
+	bool anErg = !(_afterMin!=0 || _afterMax!=0 || (_actionFunc==0 && _computeMin==0 && _computeMax==0 && !_outgoingCmd->directExecution()) || (_condFunc!=0 && (_block->*_condFunc)()==0));
+	std::cout << "not crashed\n";
+	return anErg;
 }

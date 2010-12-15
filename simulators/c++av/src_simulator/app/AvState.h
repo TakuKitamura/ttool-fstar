@@ -54,8 +54,12 @@ public:
 	AvNode* execute(const SystemTransition& iTrans);
 	bool isEnabled(EnabledTransList& iEnaTransList, AvTransition* iIncomingTrans);
 	AvNode* cancel();
+	void setIncomingTrans(AvTransition* iTrans);
+	std::string toString() const;
+	bool directExecution();
 	//void setOutgoingTrans(AvTransition** iTrans);
 protected:
 	bool _lastControlTransfer;
+	AvTransition* determineDirectAccessTrans();
 };
 #endif

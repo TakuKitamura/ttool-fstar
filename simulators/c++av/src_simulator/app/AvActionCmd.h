@@ -47,12 +47,13 @@ class AvBlock;
 
 class AvActionCmd: public AvSingleTransCmd{
 public:
-	AvActionCmd(ID iID, AvBlock* iBlock, ActionFuncPointer iActionFunc, std::string iActionDescr, bool iDirectExec);
+	AvActionCmd(ID iID, AvBlock* iBlock, ActionFuncPointer iActionFunc, std::string iActionDescr, bool iDirectExec=true);
 	~AvActionCmd();
 	AvNode* prepare(bool iControlTransfer);
 	AvNode* execute(const SystemTransition& iTrans);
 	bool isEnabled(EnabledTransList& iEnaTransList, AvTransition* iIncomingTrans);
 	AvNode* cancel();
+	bool directExecution();
 protected:
 	ActionFuncPointer _actionFunc;
 	std::string _actionDescr;

@@ -51,11 +51,14 @@ public:
 	}
 	
 	void set(AVTTime iSetTime){
+		std::cout << "set timer\n";
 		_expired=false;
 		registerEventIn(iSetTime);
+		std::cout << "end set timer\n";
 	}
 	
 	void reset(){
+		std::cout << "reset timer\n";
 		cancelEvent();
 	}
 	
@@ -64,6 +67,7 @@ public:
 	}
 	
 	void eventQCallback(){
+		std::cout << "timer expired\n";
 		_expired=true;
 	}
 	
