@@ -52,7 +52,7 @@ Simulator::~Simulator(){
 //}
 
 void Simulator::registerEvent(const EvtQueueNode &iNode){
-	std::cout << "evt queue register event for time: " << iNode.time << "\n";
+	//std::cout << "evt queue register event for time: " << iNode.time << "\n";
 	_evtQueue.push(iNode);
 }
 

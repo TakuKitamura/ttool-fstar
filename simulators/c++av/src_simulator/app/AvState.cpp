@@ -49,21 +49,20 @@ AvState::~AvState(){
 }
 
 AvNode* AvState::prepare(bool iControlTransfer){
-	//if _lastControlTransfer==true set actual cmd in block to this one and call execute
-	std::cout<< "prepare " << _name << "\n";
+	//std::cout<< "prepare " << _name << "\n";
 	_lastControlTransfer=iControlTransfer;
 	if(_lastControlTransfer){
 		AvTransition* directAccessTrans = determineDirectAccessTrans();
 		if (directAccessTrans!=0){
-			std::cout<< _name << " go on to next\n";
+			//std::cout<< _name << " go on to next\n";
 			return directAccessTrans->prepare(true);
 		}
-		std::cout<< "prepare transitions " << _name << "\n";
+		//std::cout<< "prepare transitions " << _name << "\n";
 		_block->setCurrCommand(this);
 		for (unsigned int i=0; i<_nbOfOutgoingTrans; i++)
 			_outgoingTrans[i]->prepare(false);
 	}
-	std::cout<< "end prepare " << _name << "\n";
+	//std::cout<< "end prepare " << _name << "\n";
 	return this;
 }
 

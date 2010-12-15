@@ -50,32 +50,32 @@ AvTransition::~AvTransition(){
 
 AvNode* AvTransition::prepare(bool iControlTransfer){
 	_lastControlTransfer=iControlTransfer;
-	std::cout << "trans prepare 1\n";
+	//std::cout << "trans prepare 1\n";
 	if (_lastControlTransfer){
-		std::cout << "trans prepare 2\n";
+		//std::cout << "trans prepare 2\n";
 		_block->setCurrCommand(this);
 		if (_actionFunc!=0) (_block->*_actionFunc)();
 	}
-	std::cout << "trans prepare 3\n";
+	//std::cout << "trans prepare 3\n";
 	if(_condFunc!=0 && (_block->*_condFunc)()==0){
 		_state=DISABLED;
 	}else{
-		std::cout << "trans prepare 4\n";
+		//std::cout << "trans prepare 4\n";
 		AVTTime aTime2Wait = myrand(_afterMin, _afterMax);
 		if (aTime2Wait==0){
-			std::cout << "trans prepare 5\n";
+			//std::cout << "trans prepare 5\n";
 			_computeFor = myrand(_computeMin, _computeMax);
 			if(_computeFor==0){
-				std::cout << "trans prepare 5a\n";
+				//std::cout << "trans prepare 5a\n";
 				_state = WAIT4CMD;
 				return _outgoingCmd->prepare(_lastControlTransfer);
 			}else{
-				std::cout << "trans prepare 5b\n";
+				//std::cout << "trans prepare 5b\n";
 				//registerEventIn(_computeFor);
 				_state = PREPCOMP;
 			}
 		}else{
-			std::cout << "trans prepare 6\n";
+			//std::cout << "trans prepare 6\n";
 			registerEventIn(aTime2Wait);
 			_state = WAIT4AFTER;
 		}
@@ -149,8 +149,8 @@ std::string AvTransition::toString() const{
 }
 
 bool AvTransition::directExecution(){
-	std::cout << "let's crash\n";
+	//std::cout << "let's crash\n";
 	bool anErg = !(_afterMin!=0 || _afterMax!=0 || (_actionFunc==0 && _computeMin==0 && _computeMax==0 && !_outgoingCmd->directExecution()) || (_condFunc!=0 && (_block->*_condFunc)()==0));
-	std::cout << "not crashed\n";
+	//std::cout << "not crashed\n";
 	return anErg;
 }
