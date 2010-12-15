@@ -145,7 +145,7 @@ public class AvatarBlockCppSim {
 		cppcode += "_varLookUpName[\"rnd__0\"]=&rnd__0" + SCCR + CR;
 		cppcode+=CR + "//command chaining"+ CR;
 		cppcode+= chaining + "_currCommand=" + firstCommand + SCCR + "_firstCommand=" + firstCommand +SCCR + CR; 
-		cppcode+= "_currCommand->prepare(true)"+SCCR;
+		cppcode+= "_firstCommand->prepare(true)"+SCCR;
 		cppcode+="}"+ CR2 + functions; // + makeDestructor();
 		hcode = Conversion.indentString(hcode, 4);
 		cppcode = Conversion.indentString(cppcode, 4);
@@ -237,7 +237,7 @@ public class AvatarBlockCppSim {
 			hcode+="AvActionCmd " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "("+ currElem.getID() + ", this, (ActionFuncPointer)&" + reference + "::" + cmdName + "_func, \"" + action + "\")"+CR;
 			nextCommand= cmdName + ".setOutgoingTrans(array(1,(AvTransition*)" + makeCommands(currElem.getNext(0)) + "));\n";
-			functions+="void "+ reference + "::" + cmdName + "_func(){\n" + action + "\n}" + CR2;
+			functions+="void "+ reference + "::" + cmdName + "_func(){\n#ifdef COMMENTS\nstd::cout << \"execute action: " + action  + "\\n\";\n#endif\n" + action + "\n}" + CR2;
 			functionSig+="void " + cmdName + "_func()" + SCCR;				
 				
 		} else if (currElem instanceof AvatarActionOnSignal){
@@ -301,7 +301,7 @@ public class AvatarBlockCppSim {
 			}
 			if(trans.isGuarded()){
 				condFunc="(CondFuncPointer)&" + reference + "::" + cmdName + "_cfunc";
-				functions+="unsigned int "+ reference + "::" + cmdName + "_cfunc(){\nreturn (" + Conversion.replaceAllChar(Conversion.replaceAllChar(trans.getGuard(), '[', "("),']',")") + ")? 1:0;\n";
+				functions+="unsigned int "+ reference + "::" + cmdName + "_cfunc(){\n#ifdef COMMENTS\nstd::cout << \"check condition: " + trans.getGuard()  + "\\n\";\n#endif\nreturn (" + Conversion.replaceAllChar(Conversion.replaceAllChar(trans.getGuard(), '[', "("),']',")") + ")? 1:0;\n";
 				functions+= "}" + CR2;
 				functionSig+="unsigned int " + cmdName + "_cfunc()" + SCCR;
 			}else{
@@ -391,10 +391,12 @@ public class AvatarBlockCppSim {
 		while (matcher.find()){
 			String token = iAction.substring(matcher.start(), matcher.end());
 			System.out.print(token + ", ");
-			if (!isAttribute(token)) return "//" + iAction;
+			//if (!isAttribute(token)) return "//" + iAction;
+			if (!isAttribute(token)) return "#ifdef COMMENTS\nstd::cout << \"execute action: " + iAction  + "\\n\";\n#endif\n";
+			
 		}
 		System.out.println();
-		return iAction;
+		return iAction + "\n#ifdef COMMENTS\nstd::cout << \"execute action: " + iAction  + "\\n\";\n#endif\n";
 	}
 	
 	private boolean isAttribute(String iAttr){

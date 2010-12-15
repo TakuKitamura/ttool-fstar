@@ -130,6 +130,7 @@ public class AVATAR2CPPSIM{
 		declaration = "class ThisDesign: public Simulator{\npublic:\nThisDesign():Simulator(){\n";
 		// Declaration of events
 		String channelType="", size="";
+		declaration += "EventQueueCallback::setSimulator(this);\n";
 		declaration += "//Declaration of signals" + CR;
 		for(AvatarRelation relation: avspec.getRelations()) {		
 			if(relation.isAsynchronous()){
