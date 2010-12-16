@@ -117,7 +117,7 @@ public class AvatarBlockCppSim {
 		code += "#define " + reference.toUpperCase() + "__H" + CR2;
 		code += "#include <AvBlock.h>\n#include <definitions.h>\n\n";
 		code += "#include <AvSyncSignal.h>\n#include <AvAsyncSignal.h>\n#include <AvAsyncSignalB.h>\n\n";
-		code += "#include <AvActionCmd.h>\n#include <AvChoiceCmd.h>\n#include <AvReceiveCmd.h>\n";
+		code += "#include <AvActionCmd.h>\n#include <AvReceiveCmd.h>\n";
 		code += "#include <AvSendCmd.h>\n#include <AvState.h>\n#include <AvTimerExpCmd.h>\n";
 		code += "#include <AvTimer.h>\n#include <AvTransition.h>\n#include <AvSignal.h>\n";
 		return code;
