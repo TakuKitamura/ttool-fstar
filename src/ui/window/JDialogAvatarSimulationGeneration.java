@@ -1,48 +1,48 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
- * ludovic.apvrille AT enst.fr
- *
- * This software is a computer program whose purpose is to allow the
- * edition of TURTLE analysis, design and deployment diagrams, to
- * allow the generation of RT-LOTOS or Java code from this diagram,
- * and at last to allow the analysis of formal validation traces
- * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
- * from INRIA Rhone-Alpes.
- *
- * This software is governed by the CeCILL  license under French law and
- * abiding by the rules of distribution of free software.  You can  use,
- * modify and/ or redistribute the software under the terms of the CeCILL
- * license as circulated by CEA, CNRS and INRIA at the following URL
- * "http://www.cecill.info".
- *
- * As a counterpart to the access to the source code and  rights to copy,
- * modify and redistribute granted by the license, users are provided only
- * with a limited warranty  and the software's author,  the holder of the
- * economic rights,  and the successive licensors  have only  limited
- * liability.
- *
- * In this respect, the user's attention is drawn to the risks associated
- * with loading,  using,  modifying and/or developing or reproducing the
- * software by the user in light of its specific status of free software,
- * that may mean  that it is complicated to manipulate,  and  that  also
- * therefore means  that it is reserved for developers  and  experienced
- * professionals having in-depth computer knowledge. Users are therefore
- * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
- * data to be ensured and,  more generally, to use and operate it in the
- * same conditions as regards security.
- *
- * The fact that you are presently reading this means that you have had
- * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogAvatarSimulationGeneration
- * Dialog for managing the generation and compilation of AVATAR simulation code
- * Creation: 10/12/2010
- * @version 1.1 10/12/2010
- * @author Ludovic APVRILLE
- * @see
- */
+*
+* ludovic.apvrille AT enst.fr
+*
+* This software is a computer program whose purpose is to allow the
+* edition of TURTLE analysis, design and deployment diagrams, to
+* allow the generation of RT-LOTOS or Java code from this diagram,
+* and at last to allow the analysis of formal validation traces
+* obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+* from INRIA Rhone-Alpes.
+*
+* This software is governed by the CeCILL  license under French law and
+* abiding by the rules of distribution of free software.  You can  use,
+* modify and/ or redistribute the software under the terms of the CeCILL
+* license as circulated by CEA, CNRS and INRIA at the following URL
+* "http://www.cecill.info".
+*
+* As a counterpart to the access to the source code and  rights to copy,
+* modify and redistribute granted by the license, users are provided only
+* with a limited warranty  and the software's author,  the holder of the
+* economic rights,  and the successive licensors  have only  limited
+* liability.
+*
+* In this respect, the user's attention is drawn to the risks associated
+* with loading,  using,  modifying and/or developing or reproducing the
+* software by the user in light of its specific status of free software,
+* that may mean  that it is complicated to manipulate,  and  that  also
+* therefore means  that it is reserved for developers  and  experienced
+* professionals having in-depth computer knowledge. Users are therefore
+* encouraged to load and test the software's suitability as regards their
+* requirements in conditions enabling the security of their systems and/or
+* data to be ensured and,  more generally, to use and operate it in the
+* same conditions as regards security.
+*
+* The fact that you are presently reading this means that you have had
+* knowledge of the CeCILL license and that you accept its terms.
+*
+* /**
+* Class JDialogAvatarSimulationGeneration
+* Dialog for managing the generation and compilation of AVATAR simulation code
+* Creation: 10/12/2010
+* @version 1.1 10/12/2010
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.window;
 
@@ -59,6 +59,7 @@ import ui.*;
 
 import avatartranslator.*;
 import avatartranslator.tocppsim.*;
+import avatartranslator.directsimulation.*;
 import launcher.*;
 
 
@@ -74,7 +75,7 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
     
     private static String unitCycle = "1";
 	
-	private static String[] simus = {"AVATAR Simulator - c++ version"};
+	private static String[] simus = {"AVATAR Simulator - c++ version", "AVATAR Simulation - internal version"};
 	private static int selectedItem = 0;
     
     protected static String pathCode;
@@ -402,127 +403,133 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
         hasError = false;
         
         try {
-            
-            // Code generation
-            if (jp1.getSelectedIndex() == 0) {
-                jta.append("Generating Simulation code (c++, LabSoC version)\n");
-                
-                if (removeCppFiles.isSelected()) {
-					jta.append("Removing all  .h files\n");
-                    list = FileUtils.deleteFiles(code1.getText(), ".h");
-                    if (list.length() == 0) {
-                        jta.append("No files were deleted\n");
-                    } else {
-                        jta.append("Files deleted:\n" + list + "\n");
-                    }
-                    jta.append("Removing all  .cpp files\n");
-                    list = FileUtils.deleteFiles(code1.getText(), ".cpp");
-                    if (list.length() == 0) {
-                        jta.append("No files were deleted\n");
-                    } else {
-                        jta.append("Files deleted:\n" + list + "\n");
-                    }
-                }
-                
-                if (removeXFiles.isSelected()) {
-                    jta.append("Removing all .x files\n");
-                    list = FileUtils.deleteFiles(code1.getText(), ".x");
-                    if (list.length() == 0) {
-                        jta.append("No files were deleted\n");
-                    } else {
-                        jta.append("Files deleted:\n" + list + "\n");
-                    }
-                }
-                
-                testGo();
-				
-				selectedItem = versionSimulator.getSelectedIndex();
-				//System.out.println("Selected item=" + selectedItem);
-				if (selectedItem == 0) {
-					AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+            if (versionSimulator.getSelectedIndex() == 0) {
+				// Code generation
+				if (jp1.getSelectedIndex() == 0) {
+					jta.append("Generating Simulation code (c++, LabSoC version)\n");
 					
-					// Generating code
-					if (avspec == null) {
-						jta.append("Error: No AVATAR specification\n");
-					} else {
-						AVATAR2CPPSIM avatartocppsim = new AVATAR2CPPSIM(avspec);
-						avatartocppsim.generateCPPSIM(debugmode.isSelected(), optimizemode.isSelected());
-						//tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
-						testGo();
-						jta.append("Generation of Simulation code in c++: done\n");
-						//t2j.printJavaClasses();
-						try {
-							jta.append("Saving code in files\n");
-							pathCode = code1.getText();
-							avatartocppsim.saveFile(pathCode, "");
-							//tml2systc.saveFile(pathCode, "appmodel");
-							jta.append("Code saved\n");
-						} catch (Exception e) {
-							jta.append("Could not generate files\n");
+					if (removeCppFiles.isSelected()) {
+						jta.append("Removing all  .h files\n");
+						list = FileUtils.deleteFiles(code1.getText(), ".h");
+						if (list.length() == 0) {
+							jta.append("No files were deleted\n");
+						} else {
+							jta.append("Files deleted:\n" + list + "\n");
+						}
+						jta.append("Removing all  .cpp files\n");
+						list = FileUtils.deleteFiles(code1.getText(), ".cpp");
+						if (list.length() == 0) {
+							jta.append("No files were deleted\n");
+						} else {
+							jta.append("Files deleted:\n" + list + "\n");
 						}
 					}
+					
+					if (removeXFiles.isSelected()) {
+						jta.append("Removing all .x files\n");
+						list = FileUtils.deleteFiles(code1.getText(), ".x");
+						if (list.length() == 0) {
+							jta.append("No files were deleted\n");
+						} else {
+							jta.append("Files deleted:\n" + list + "\n");
+						}
+					}
+					
+					testGo();
+					
+					selectedItem = versionSimulator.getSelectedIndex();
+					//System.out.println("Selected item=" + selectedItem);
+					if (selectedItem == 0) {
+						AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+						
+						// Generating code
+						if (avspec == null) {
+							jta.append("Error: No AVATAR specification\n");
+						} else {
+							AVATAR2CPPSIM avatartocppsim = new AVATAR2CPPSIM(avspec);
+							avatartocppsim.generateCPPSIM(debugmode.isSelected(), optimizemode.isSelected());
+							//tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+							testGo();
+							jta.append("Generation of Simulation code in c++: done\n");
+							//t2j.printJavaClasses();
+							try {
+								jta.append("Saving code in files\n");
+								pathCode = code1.getText();
+								avatartocppsim.saveFile(pathCode, "");
+								//tml2systc.saveFile(pathCode, "appmodel");
+								jta.append("Code saved\n");
+							} catch (Exception e) {
+								jta.append("Could not generate files\n");
+							}
+						}
+					}
+					
+					
 				}
-                
-                
-            }
-            
-            testGo();
-            
-            
-            // Compilation
-            if (jp1.getSelectedIndex() == 1) {
-                
-                cmd = compiler1.getText();
-                
-                jta.append("Compiling simulation code with command: \n" + cmd + "\n");
-                
-                rshc = new RshClient(hostSimu);
-                // Assuma data are on the remote host
-                // Command
-                try {
-                    data = processCmd(cmd);
-                    jta.append(data);
-                    jta.append("Compilation done\n");
-                } catch (LauncherException le) {
-                    jta.append("Error: " + le.getMessage() + "\n");
-                    mode = 	STOPPED;
-                    setButtons();
-                    return;
-                } catch (Exception e) {
-                    mode = 	STOPPED;
-                    setButtons();
-                    return;
-                }
-            }
-            
-            if (jp1.getSelectedIndex() == 2) {
-                try {
-                    cmd = exe2.getText();
-                    
-                    jta.append("Executing simulation with command: \n" + cmd + "\n");
-                    
-                    rshc = new RshClient(hostSimu);
-                    // Assuma data are on the remote host
-                    // Command
-                    
-                    data = processCmd(cmd);
-                    jta.append(data);
-                    jta.append("Execution done\n");
-                } catch (LauncherException le) {
-                    jta.append("Error: " + le.getMessage() + "\n");
-                    mode = 	STOPPED;
-                    setButtons();
-                    return;
-                } catch (Exception e) {
-                    mode = 	STOPPED;
-                    setButtons();
-                    return;
-                }
-            }
-            
-            if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
-                jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-            }
+				
+				testGo();
+				
+				
+				// Compilation
+				if (jp1.getSelectedIndex() == 1) {
+					
+					cmd = compiler1.getText();
+					
+					jta.append("Compiling simulation code with command: \n" + cmd + "\n");
+					
+					rshc = new RshClient(hostSimu);
+					// Assuma data are on the remote host
+					// Command
+					try {
+						data = processCmd(cmd);
+						jta.append(data);
+						jta.append("Compilation done\n");
+					} catch (LauncherException le) {
+						jta.append("Error: " + le.getMessage() + "\n");
+						mode = 	STOPPED;
+						setButtons();
+						return;
+					} catch (Exception e) {
+						mode = 	STOPPED;
+						setButtons();
+						return;
+					}
+				}
+				
+				if (jp1.getSelectedIndex() == 2) {
+					try {
+						cmd = exe2.getText();
+						
+						jta.append("Executing simulation with command: \n" + cmd + "\n");
+						
+						rshc = new RshClient(hostSimu);
+						// Assuma data are on the remote host
+						// Command
+						
+						data = processCmd(cmd);
+						jta.append(data);
+						jta.append("Execution done\n");
+					} catch (LauncherException le) {
+						jta.append("Error: " + le.getMessage() + "\n");
+						mode = 	STOPPED;
+						setButtons();
+						return;
+					} catch (Exception e) {
+						mode = 	STOPPED;
+						setButtons();
+						return;
+					}
+				}
+				
+				if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
+					jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
+				}
+			} else {
+				AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+				AvatarSpecificationSimulation ass = new AvatarSpecificationSimulation(avspec);
+				ass.initialize();
+				ass.runSimulation();
+			}
             
         } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
@@ -550,27 +557,27 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
     
     protected void setButtons() {
         switch(mode) {
-            case NOT_STARTED:
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
+		case NOT_STARTED:
+			start.setEnabled(true);
+			stop.setEnabled(false);
+			close.setEnabled(true);
+			//setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			getGlassPane().setVisible(false);
+			break;
+		case STARTED:
+			start.setEnabled(false);
+			stop.setEnabled(true);
+			close.setEnabled(false);
+			getGlassPane().setVisible(true);
+			//setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			break;
+		case STOPPED:
+		default:
+			start.setEnabled(false);
+			stop.setEnabled(false);
+			close.setEnabled(true);
+			getGlassPane().setVisible(false);
+			break;
         }
     }
     
@@ -594,5 +601,5 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
 		return pathInteractiveExecute;
 	}
 	
-
+	
 }

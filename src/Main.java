@@ -148,6 +148,7 @@ public class Main implements ActionListener {
         
         // Analyzing arguments
         String config = "config.xml";
+		startLauncher = true;
         for(int i=0; i<args.length; i++) {
             if (args[i].compareTo("-systemc") == 0) {
                 systemc = true;
@@ -163,7 +164,9 @@ public class Main implements ActionListener {
             }
              if (args[i].compareTo("-launcher") == 0) {
 				startLauncher = true;
-               
+            }
+			if (args[i].compareTo("-nolauncher") == 0) {
+				startLauncher = false;
             }
             if (args[i].compareTo("-diplodocus") == 0) {
                 systemc = true;

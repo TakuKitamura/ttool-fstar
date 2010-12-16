@@ -373,13 +373,23 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 							jta.append(re+"\n");
 						}
 						
-						jta.append("\nConfidential data:\n----------------\n");
+						jta.append("\nConfidential Data:\n----------------\n");
 						for(String re: pvoa.getSecretTerms()) {
 							jta.append(re+"\n");
 						}
 						
-						jta.append("\nNon confidential data:\n----------------\n");
+						jta.append("\nNon Confidential Data:\n----------------\n");
 						for(String re: pvoa.getNonSecretTerms()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nSatisfied Authenticity:\n----------------\n");
+						for(String re: pvoa.getSatisfiedAuthenticity()) {
+							jta.append(re+"\n");
+						}
+						
+						jta.append("\nNon Satisfied Authenticity:\n----------------\n");
+						for(String re: pvoa.getNonSatisfiedAuthenticity()) {
 							jta.append(re+"\n");
 						}
 						

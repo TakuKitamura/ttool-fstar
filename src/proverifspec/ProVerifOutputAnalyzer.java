@@ -58,6 +58,8 @@ public class ProVerifOutputAnalyzer {
 	private LinkedList<String> nonReachableEvents;
 	private LinkedList<String> secretTerms;
 	private LinkedList<String> nonSecretTerms;
+	private LinkedList<String> satisfiedAuthenticity;
+	private LinkedList<String> nonSatisfiedAuthenticity;
 	private LinkedList<String> errors;
 	private LinkedList<String> notproved;
 	
@@ -68,6 +70,8 @@ public class ProVerifOutputAnalyzer {
 		nonReachableEvents = new LinkedList<String>();
 		secretTerms = new LinkedList<String>();
 		nonSecretTerms = new LinkedList<String>();
+		satisfiedAuthenticity = new LinkedList<String>();
+		nonSatisfiedAuthenticity = new LinkedList<String>();
 		
 		errors = new LinkedList<String>();
 		notproved = new LinkedList<String>();
@@ -100,6 +104,27 @@ public class ProVerifOutputAnalyzer {
 				index1 = str.indexOf("[] is false");
 				if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
 					nonSecretTerms.add(str.substring(index0+20, index1));
+				}
+				
+				index0 = str.indexOf("RESULT evinj:");
+				index1 = str.indexOf("is true");
+				if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
+					String tmp = str.substring(index0+27, index1);
+					int index2 = tmp.indexOf('(');
+					if (index2 != -1) {
+						tmp = tmp.substring(0, index2);
+					}
+					index2 = tmp.lastIndexOf("__");
+					if (index2 != -1) {
+						tmp = tmp.substring(0, index2);
+					}
+					satisfiedAuthenticity.add(tmp);
+				}
+				
+				index0 = str.indexOf("RESULT evinj:");
+				index1 = str.indexOf("is false");
+				if ((index0 < index1) && (index0 != -1) && (index1 != -1)) {
+					nonSatisfiedAuthenticity.add(str.substring(index0+27, index1));
 				}
 				
 				index0 = str.indexOf("Error:");
@@ -135,6 +160,14 @@ public class ProVerifOutputAnalyzer {
 	
 	public LinkedList<String> getNonSecretTerms() {
 		return nonSecretTerms;
+	}
+	
+	public LinkedList<String> getSatisfiedAuthenticity() {
+		return satisfiedAuthenticity;
+	}
+	
+	public LinkedList<String> getNonSatisfiedAuthenticity() {
+		return nonSatisfiedAuthenticity;
 	}
 	
 	public LinkedList<String> getErrors() {

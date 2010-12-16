@@ -49,29 +49,104 @@ package avatartranslator.directsimulation;
 
 import java.util.*;
 
+import avatartranslator.*;
 import myutil.*;
 
+
 public class AvatarSpecificationSimulation  {
+	
+	private static int MAX_TRANSACTION_IN_A_ROW = 1000; 
   
-  private AvatarSpecification avspc;
+    private AvatarSpecification avspec;
+	private long clockValue;
+	private LinkedList<AvatarSimulationBlock> blocks;
+	private LinkedList<AvatarActionOnSignal> asynchronousMessages;
+	private LinkedList<AvatarSimulationTransaction> pendingTransactions;
+	private LinkedList<AvatarSimulationTransaction> allTransactions;
 	
     public AvatarSpecificationSimulation(AvatarSpecification _avspec) {
-        avspec = _avpec;
+        avspec = _avspec;
     }
 	
 	public void initialize() {
-		// Remove internal states
+		// Remove composite states
+		avspec.removeCompositeStates();
 		
-		//
+		// Remove timers
+		avspec.removeTimers();
 		
+		// Reinit clock
+		clockValue = 0;
+		
+		// Reinit simulation 
+		AvatarSimulationTransaction.reinit();
+		
+		// Create all simulation blocks
+		blocks = new LinkedList<AvatarSimulationBlock>();
+		for(AvatarBlock block: avspec.getListOfBlocks()) {
+			AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
+			blocks.add(asb);
+		}
+		
+		// Create all simulation asynchronous channels
+		asynchronousMessages = new LinkedList<AvatarActionOnSignal>();
+		
+		// Create the structure for pending and executed transactions
+		pendingTransactions = new LinkedList<AvatarSimulationTransaction>();
+		allTransactions = new LinkedList<AvatarSimulationTransaction>();
 	}
 	
 	public boolean isInDeadlock() {
 		return true;
 	}
 	
-	public void goOneStep() {
+	public void runSimulation() {
+		int index[];
+		LinkedList<AvatarSimulationTransaction> selectedTransactions;
+		
+		TraceManager.addDev("Simulation started at time: " + clockValue);
+		boolean go = true;
+		while(go == true) {
+			gatherPendingTransactions();
+			
+			if (pendingTransactions.size() == 0) {
+				go = false;
+				TraceManager.addDev("No more pending transactions");
+			} else {
+				selectedTransactions = selectTransactions(pendingTransactions);
+				
+				if (selectedTransactions.size() == 0) {
+					go = false;
+					TraceManager.addDev("Deadlock: no transaction can be selected");
+				} else {
+					TraceManager.addDev("Nb of selected transactions: " + selectedTransactions.size());
+				}
+				
+			}
+		}
+		
+		TraceManager.addDev("Simulation finished at time: " + clockValue);
+		
+		printExecutedTransactions();
 	}
 	
+	public void gatherPendingTransactions() {
+		pendingTransactions.clear();
+		// Gather all pending transactions from blocks
+		for(AvatarSimulationBlock asb: blocks) {
+			pendingTransactions.addAll(asb.getPendingTransactions(allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW));
+		}
+	}
+	
+	public LinkedList<AvatarSimulationTransaction> selectTransactions(LinkedList<AvatarSimulationTransaction> _pendingTransactions) {
+		LinkedList<AvatarSimulationTransaction> ll = new LinkedList<AvatarSimulationTransaction>();
+		return ll;
+	}
+	
+	public void printExecutedTransactions() {
+		for(AvatarSimulationTransaction ast: allTransactions) {
+			TraceManager.addDev(ast.toString() + "\n");
+		}
+	}
 
 }
