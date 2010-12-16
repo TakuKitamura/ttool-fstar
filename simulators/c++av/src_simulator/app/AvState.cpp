@@ -113,11 +113,13 @@ bool AvState::directExecution(){
 AvTransition* AvState::determineDirectAccessTrans(){
 	AvTransition* aResTrans=0;
 	for (unsigned int i=0; i<_nbOfOutgoingTrans; i++){
-		if (_outgoingTrans[i]->directExecution()){
-			if (aResTrans!=0) return 0;
-			aResTrans=_outgoingTrans[i];
-		}else{
-			return 0;
+		if(_outgoingTrans[i]->evaluateGuard()){
+			if (_outgoingTrans[i]->directExecution()){
+				if (aResTrans!=0) return 0;
+				aResTrans=_outgoingTrans[i];
+			}else{
+				return 0;
+			}
 		}
 	}
 	return aResTrans;

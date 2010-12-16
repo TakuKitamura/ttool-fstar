@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<AvCmd.h>
 #include<AvBlock.h>
 
-AvTransition::AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, ParamType iAfterMin, ParamType iAfterMax, ParamType iComputeMin, ParamType iComputeMax, ActionFuncPointer iActionFunc): AvNode(iID, "Transition", iBlock), AvCheckpoint(), _outgoingCmd(0), _condFunc(iCondFunc), _afterMin(iAfterMin), _afterMax(iAfterMax), _computeMin(iComputeMin), _computeMax(iComputeMax), _computeFor(0), _actionFunc(iActionFunc), _state(DISABLED), _lastControlTransfer(true){
+AvTransition::AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, PtrValue<ParamType> iAfterMin, PtrValue<ParamType> iAfterMax, PtrValue<ParamType> iComputeMin, PtrValue<ParamType> iComputeMax, ActionFuncPointer iActionFunc): AvNode(iID, "Transition", iBlock), AvCheckpoint(), _outgoingCmd(0), _condFunc(iCondFunc), _afterMin(iAfterMin), _afterMax(iAfterMax), _computeMin(iComputeMin), _computeMax(iComputeMax), _computeFor(0), _actionFunc(iActionFunc), _state(DISABLED), _lastControlTransfer(true){
 }
 
 AvTransition::~AvTransition(){
@@ -150,7 +150,10 @@ std::string AvTransition::toString() const{
 
 bool AvTransition::directExecution(){
 	//std::cout << "let's crash\n";
-	bool anErg = !(_afterMin!=0 || _afterMax!=0 || (_actionFunc==0 && _computeMin==0 && _computeMax==0 && !_outgoingCmd->directExecution()) || (_condFunc!=0 && (_block->*_condFunc)()==0));
 	//std::cout << "not crashed\n";
-	return anErg;
+	return !(_afterMin!=0 || _afterMax!=0 || (_actionFunc==0 && _computeMin==0 && _computeMax==0 && !_outgoingCmd->directExecution()));
+}
+
+bool AvTransition::evaluateGuard(){
+	return (_condFunc==0 || (_block->*_condFunc)()!=0);
 }

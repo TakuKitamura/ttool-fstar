@@ -51,7 +51,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <fstream>
 #include <map>
 #include <set>
-//#include <deque>
 #include <algorithm>
 #include <stdarg.h>
 #include <functional>
@@ -90,11 +89,11 @@ typedef void (AvBlock::*ActionFuncPointer) ();
 typedef void (AvBlock::*ParamSetFuncPointer) (Parameter*);
 typedef Parameter* (AvBlock::*ParamGetFuncPointer) ();
 typedef std::vector<SystemTransition> EnabledTransList;
-///keep track of reading/writing transitions in channels
 typedef std::set<AvTransition*> AvTransSet;
 typedef std::queue<Parameter*> ParamQueue;
 typedef std::priority_queue< EvtQueueNode, std::vector<EvtQueueNode>, std::greater<EvtQueueNode> > PrioEventQueue;
 typedef std::list<AvBlock*> BlockList;
+
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{
 		return strcmp(s1, s2) < 0;
@@ -126,7 +125,6 @@ public:
 	bool operator>( const EvtQueueNode &rhs ) const {
 		return (time > rhs.time);
 	}
-//protected:
 	EventQueueCallback* callBack;
 	AVTTime time;
 	EventID evtID;
@@ -194,6 +192,21 @@ protected:
 	void* _mem;
 private:
 	Parameter(const Parameter& p) {}
+};
+
+template <typename T>
+class PtrValue{
+public:
+	operator T() { return (_mode)? *_pointer: _value;}
+	PtrValue(const T& iP): _value(iP), _mode(false){
+	}
+	PtrValue(T& iP): _pointer(&iP), _mode(true){}
+private:
+	union{
+		T _value;
+		T* _pointer;
+	};
+	bool _mode;
 };
 
 int myrand(int n1, int n2);

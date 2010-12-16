@@ -1,0 +1,1 @@
+SRCS = Wallet.cpp CoffeeMachine.cpp CoffeeButton.cpp TeaButton.cpp appmodel.cpp

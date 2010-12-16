@@ -52,7 +52,7 @@ class AvCmd;
 
 class AvTransition: public AvNode, public AvCheckpoint, public EventQueueCallback{
 public:
-	AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, ParamType iAfterMin, ParamType iAfterMax, ParamType iComputeMin, ParamType iComputeMax, ActionFuncPointer iActionFunc);
+	AvTransition(ID iID, AvBlock* iBlock, CondFuncPointer iCondFunc, PtrValue<ParamType> iAfterMin, PtrValue<ParamType> iAfterMax, PtrValue<ParamType> iComputeMin, PtrValue<ParamType> iComputeMax, ActionFuncPointer iActionFunc);
 	~AvTransition();
 	AvNode* prepare(bool iControlTransfer);
 	AvNode* execute(const SystemTransition& iSyncCmd);
@@ -63,10 +63,11 @@ public:
 	AvCmd* getOutgoingCmd();
 	std::string toString() const;
 	bool directExecution();
+	bool evaluateGuard();
 protected:
 	AvCmd* _outgoingCmd;
 	CondFuncPointer _condFunc;
-	ParamType _afterMin, _afterMax, _computeMin, _computeMax, _computeFor;
+	PtrValue<ParamType> _afterMin, _afterMax, _computeMin, _computeMax, _computeFor;
 	ActionFuncPointer _actionFunc;
 	TransitionState _state;
 	bool _lastControlTransfer;

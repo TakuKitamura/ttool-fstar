@@ -19,7 +19,7 @@ OBJDIR = lib
 
 MODULE = run
 include Makefile.src
-SRCS_base = app/AvActionCmd.cpp app/AvAsyncSignal.cpp app/AvAsyncSignalB.cpp app/AvChoiceCmd.cpp app/AvReceiveCmd.cpp app/AvSendCmd.cpp app/AvState.cpp app/AvSyncSignal.cpp app/AvTimerExpCmd.cpp app/AvTransition.cpp app/AvBlock.cpp app/AvNode.cpp ./definitions.cpp sim/Simulator.cpp sim/Server.cpp sim/SimComponents.cpp
+SRCS_base = app/AvActionCmd.cpp app/AvAsyncSignal.cpp app/AvAsyncSignalB.cpp app/AvReceiveCmd.cpp app/AvSendCmd.cpp app/AvState.cpp app/AvSyncSignal.cpp app/AvTimerExpCmd.cpp app/AvTransition.cpp app/AvBlock.cpp app/AvNode.cpp ./definitions.cpp sim/Simulator.cpp sim/Server.cpp sim/SimComponents.cpp
 SRCS_base_DIR = src_simulator
 SRCS_generated = .
 
