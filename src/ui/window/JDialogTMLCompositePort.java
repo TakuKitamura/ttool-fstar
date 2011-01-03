@@ -49,9 +49,10 @@ package ui.window;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import ui.*;
 import java.util.*;
 
-import ui.*;
+import myutil.*;
 
 public class JDialogTMLCompositePort extends javax.swing.JDialog implements ActionListener {
 	
@@ -59,7 +60,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private Frame frame;
     
     private String name;
-    private int type1, type2, type3, type4, type5;
+    private TType type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
 
@@ -79,7 +80,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, int _type1, int _type2, int _type3, int _type4, int _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, Frame f, String title, Vector<String> _types) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, Frame f, String title, Vector<String> _types) {
         super(f, title, true);
         frame = f;
         
@@ -157,6 +158,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 	}
     
     private void initComponents() {
+		int i;
+		
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -241,7 +244,19 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add(new JLabel("Type #1"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeList1 = new JComboBox(types1);
-        typeList1.setSelectedIndex(type1);
+		//TraceManager.addDev("type1= " + type1);
+		if (type1.getType() < TType.OTHER) {
+			typeList1.setSelectedIndex(type1.getType());
+		} else {
+			for(i=TType.OTHER; i<types1.size(); i++) {
+				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+				//TraceManager.addDev("Current type:"  +  types1.get(i));
+				if (((String)(types1.get(i))).compareTo(type1.getTypeOther()) == 0) {
+					typeList1.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
         panel2.add(typeList1, c2);
         
         c2.gridwidth = 1;
@@ -250,7 +265,18 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add(new JLabel("Type #2"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeList2 = new JComboBox(types2);
-        typeList2.setSelectedIndex(type2);
+        if (type2.getType() < TType.OTHER) {
+			typeList2.setSelectedIndex(type2.getType());
+		} else {
+			for(i=TType.OTHER; i<types2.size(); i++) {
+				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+				//TraceManager.addDev("Current type:"  +  types1.get(i));
+				if (((String)(types2.get(i))).compareTo(type2.getTypeOther()) == 0) {
+					typeList2.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
         panel2.add(typeList2, c2);
         
         c2.gridwidth = 1;
@@ -259,7 +285,18 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add(new JLabel("Type: #3"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeList3 = new JComboBox(types3);
-        typeList3.setSelectedIndex(type3);
+        if (type3.getType() < TType.OTHER) {
+			typeList3.setSelectedIndex(type3.getType());
+		} else {
+			for(i=TType.OTHER; i<types3.size(); i++) {
+				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+				//TraceManager.addDev("Current type:"  +  types1.get(i));
+				if (((String)(types3.get(i))).compareTo(type3.getTypeOther()) == 0) {
+					typeList3.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
         panel2.add(typeList3, c2);
 		
 		c2.gridwidth = 1;
@@ -268,7 +305,18 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add(new JLabel("Type: #4"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeList4 = new JComboBox(types4);
-        typeList4.setSelectedIndex(type4);
+        if (type4.getType() < TType.OTHER) {
+			typeList4.setSelectedIndex(type4.getType());
+		} else {
+			for(i=TType.OTHER; i<types4.size(); i++) {
+				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+				//TraceManager.addDev("Current type:"  +  types1.get(i));
+				if (((String)(types4.get(i))).compareTo(type4.getTypeOther()) == 0) {
+					typeList4.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
         panel2.add(typeList4, c2);
 		
 		
@@ -278,7 +326,18 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel2.add(new JLabel("Type: #5"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeList5 = new JComboBox(types5);
-        typeList5.setSelectedIndex(type5);
+        if (type5.getType() < TType.OTHER) {
+			typeList5.setSelectedIndex(type5.getType());
+		} else {
+			for(i=TType.OTHER; i<types5.size(); i++) {
+				//TraceManager.addDev("Looking for:"  + type1.getTypeOther());
+				//TraceManager.addDev("Current type:"  +  types1.get(i));
+				if (((String)(types5.get(i))).compareTo(type5.getTypeOther()) == 0) {
+					typeList5.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
         panel2.add(typeList5, c2);
         
         c2.gridwidth = 1;

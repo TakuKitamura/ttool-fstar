@@ -402,7 +402,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 			otherTypes = tgc.getAllRecords();
 		}
 		
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0].getType(), list[1].getType(), list[2].getType(), list[3].getType(), list[4].getType(), isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, frame, "Port properties", otherTypes);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, frame, "Port properties", otherTypes);
         jda.setSize(350, 550);
         GraphicLib.centerOnParent(jda);
         jda.show(); // blocked until dialog has been closed
@@ -423,7 +423,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 				oldTypep = typep;
 				typep = jda.getPortType();
 				for(int i=0; i<nbMaxAttribute; i++) {
+					//TraceManager.addDev("Getting string type: " + jda.getStringType(i));
 					list[i].setType(jda.getStringType(i));
+					//TraceManager.addDev("Recorded type: " + list[i].getTypeOther());
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(frame, "Non valid value: " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
