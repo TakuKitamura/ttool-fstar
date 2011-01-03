@@ -51,6 +51,7 @@ class TMLChannel;
 class CommandListener;
 class Comment;
 class SimComponents;
+class HashAlgo;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
 class TMLCommand: public Serializable, public ListenerSubject <CommandListener> {
@@ -61,9 +62,10 @@ public:
 	\param iTask Pointer to the task the command belongs to
 	\param iLength Virtual length of the command
 	\param iNbOfNextCmds Number of next commands
+	\param iLiveVarList Bitmap of live variables
     	*/
 	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
-	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds);
+	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -235,8 +237,14 @@ protected:
 	static std::list<TMLCommand*> _instanceList;
 	///Pointer to simulation components
 	static SimComponents* _simComp;
+	///State Hash Map
 	StateHashSet _stateHashes;
+	///Command Start Time
 	TMLTime _commandStartTime;
+	///Bitmap of live variables
+	const char* _liveVarList;
+	/////Hash Algorithm object
+	//HashAlgo* _hash;
 };
 
 #endif

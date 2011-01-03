@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority){
+TMLChannel::TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority), _significance(0) {
 }
 
 TMLChannel::~TMLChannel(){
@@ -113,11 +113,13 @@ std::string TMLChannel::toShortString() const{
 std::ostream& TMLChannel::writeObject(std::ostream& s){
 	//WRITE_STREAM(s,_writeTransCurrHop);
 	//WRITE_STREAM(s,_readTransCurrHop);
+	WRITE_STREAM(s, _significance);
 	return s;
 }
 std::istream& TMLChannel::readObject(std::istream& s){
 	//READ_STREAM(s,_writeTransCurrHop);
 	//READ_STREAM(s,_readTransCurrHop);
+	READ_STREAM(s, _significance);
 	return s;
 }
 
@@ -129,6 +131,7 @@ void TMLChannel::reset(){
 	_readTrans=0;
 	_writeTransCurrHop=0;
 	_readTransCurrHop=_numberOfHops-1;
+	_significance=0;
 	//std::cout << "Channel reset end" << std::endl;
 }
 
@@ -163,3 +166,15 @@ Priority TMLChannel::getPriority(){
 unsigned int TMLChannel::getWidth(){
 	return _width;
 }
+
+void TMLChannel::setSignificance(TMLTask* iTask, bool iSignificance){
+	int aInput = (iTask==_writeTask)?1:2;
+	if (iSignificance)
+		_significance |= aInput;
+	else
+		_significance &= (~aInput);	
+}
+
+//bool TMLChannel::getSignificance(){
+//	return (_significance != 0);
+//}

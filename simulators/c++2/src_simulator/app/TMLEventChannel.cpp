@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLEventChannel.h>
 
-TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0,0,0), _stateHash(0){
+TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0,0,0), _stateHash((HashValueType)this, 30), _hashValid(true) {
 }
 
 TMLEventChannel::~TMLEventChannel(){
@@ -76,6 +76,7 @@ std::istream& TMLEventChannel::readObject(std::istream& s){
 		//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
 		_paramQueue.push_back(Parameter<ParamType>(s));
 	}
+	_hashValid = false;
 	return s;
 }
 
@@ -89,6 +90,8 @@ void TMLEventChannel::reset(){
 	//std::cout << "EventChannel reset" << std::endl;
 	TMLStateChannel::reset();
 	_paramQueue.clear();
+	_stateHash.init((HashValueType)this, 30);
+	_hashValid=true;
 	//std::cout << "EventChannel reset end" << std::endl; 
 }
 
@@ -102,6 +105,18 @@ void TMLEventChannel::streamStateXML(std::ostream& s) const{
 	s << TAG_CHANNELc << std::endl;
 }
 
-unsigned long TMLEventChannel::getStateHash() const{
-	return _stateHash + TMLStateChannel::getStateHash();
+void TMLEventChannel::getStateHash(HashAlgo* iHash) const{
+	//TMLStateChannel::getStateHash(iHash);
+	//iHash->addValue(_stateHash.getHash());
+	if (_significance!=0){
+		if (!_hashValid){
+			_stateHash.init((HashValueType)this, 30);
+			for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+				i->getStateHash(&_stateHash);
+			}
+			_hashValid = true;
+		}
+		iHash->addValue(_stateHash.getHash());
+		iHash->addValue(_content);
+	}
 }

@@ -50,6 +50,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenerSubject.h>
 #include <TaskListener.h>
 #include <WorkloadSource.h>
+#include <HashAlgo.h>
 
 class TMLCommand;
 class CPU;
@@ -185,11 +186,12 @@ public:
 	*/
 	unsigned int getState() const;
 	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
-	///Returns the hash value for the current task state
-	/**
-	\return Hash Value
-	*/
-	virtual unsigned long getStateHash() const { return 0;}
+	/////Returns the hash value for the current task state
+	////**
+	//\param iLiveVarList Bitmap of live variables
+	//\param iHash Hash Algorithm Object
+	//*/
+	//virtual void getStateHash(const char* iLiveVarList, HashAlgo* iHash) const =0;
 	///Returns the instance number of this task
 	/**
 	\return Instance number 
@@ -204,6 +206,24 @@ public:
 	void resetScheduledFlag();
 	///Invalidates the schedule of all cores the task is mapped onto 
 	void setRescheduleFlagForCores();
+	///Returns the current state hash
+	/**
+	\return Current state hash
+	*/
+	HashValueType getStateHash();
+	/////Returns whether the current task state has been encountered before
+	////**
+	//\return Common execution flag
+	//*/
+	//bool getCommonExecution() const;
+	/////Sets the common execution flag
+	////**
+	//\param iCommonExecution Common execution flag
+	//*/
+	//void setCommonExecution(bool iCommonExecution);
+	virtual void refreshStateHash(const char* iLiveVarList)=0;
+	void addRawTransaction(TMLTransaction* iTrans);
+	void schedule2TXT(std::ofstream& myfile) const;
 protected:
 	///ID of the task
 	ID _ID;
@@ -253,6 +273,11 @@ protected:
 	unsigned int _myInstance;
 	///Indicates whether this task has already been scheduled
 	bool _isScheduled;
+	/////Last established state Hash
+	//HashValueType _lastStateHash;
+	/////Flag indicating whether the task state has been encoutered before
+	//bool _commonExecution;
+	HashAlgo _stateHash;
 };
 
 #endif

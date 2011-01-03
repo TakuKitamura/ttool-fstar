@@ -187,8 +187,13 @@ std::string TMLTransaction::toString() const{
 }
 
 std::string TMLTransaction::toShortString() const{
-	std::ostringstream outp;	
-	outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
+	std::ostringstream outp;
+	if (_command==0)
+		outp << "Sytem State ID: " <<  _virtualLength;
+	else{
+		outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
+		if (_channel!=0) outp << " Ch: " << _channel->toShortString();
+	}	
 	return outp.str();
 }
 

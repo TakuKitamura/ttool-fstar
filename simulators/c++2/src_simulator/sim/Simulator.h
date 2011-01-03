@@ -56,6 +56,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLEventBChannel.h>
 #include <TMLEventFChannel.h>
 #include <TMLEventFBChannel.h>
+#include <RdvChannel.h>
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>

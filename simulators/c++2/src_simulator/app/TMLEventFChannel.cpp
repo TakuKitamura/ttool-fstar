@@ -66,7 +66,8 @@ void TMLEventFChannel::write(){
 		//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
 		_paramQueue.push_back(_tmpParam);   //NEW
 #ifdef STATE_HASH_ENABLED
-		_stateHash+=_tmpParam.getStateHash();
+		//_stateHash+=_tmpParam.getStateHash();
+		_tmpParam.getStateHash(&_stateHash);
 #endif
 		if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 			_readTrans->setRunnableTime(_writeTrans->getEndTime());
@@ -89,7 +90,9 @@ bool TMLEventFChannel::read(){
 		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
 		_readTrans->getCommand()->setParams(_paramQueue.front());
 #ifdef STATE_HASH_ENABLED
-		_stateHash-=_paramQueue.front().getStateHash();
+		//_stateHash-=_paramQueue.front().getStateHash();
+		//_paramQueue.front().removeStateHash(&_stateHash);
+		_hashValid = false;
 #endif
 		_paramQueue.pop_front();  //NEW
 #ifdef LISTENERS_ENABLED

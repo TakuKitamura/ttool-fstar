@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <CommandListener.h>
 
-TMLActionCommand::TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask, 1, 1),_actionFunc(iActionFunc){
+TMLActionCommand::TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc):TMLCommand(iID, iTask, 1, 1, 0),_actionFunc(iActionFunc){
 }
 
 void TMLActionCommand::execute(){
@@ -83,5 +83,5 @@ std::string TMLActionCommand::toShortString() const{
 }
 
 std::string TMLActionCommand::getCommandStr() const{
-	return "action";
+	return "act";
 }

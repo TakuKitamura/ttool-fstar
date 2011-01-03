@@ -46,6 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLCommand;
 class Bus;
+class HashAlgo;
 
 ///This class models a non blocking read non blocking write channel.
 class TMLnbrnbwChannel:public TMLChannel{
@@ -68,7 +69,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
-	unsigned long getStateHash() const;
+	void getStateHash(HashAlgo* iHash) const;
 protected:
 };
 

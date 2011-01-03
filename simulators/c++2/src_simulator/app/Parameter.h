@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define ParameterH
 
 #include <definitions.h>
+#include <HashAlgo.h>
 ///This class encapsulates three parameters
 template <typename T>
 class Parameter{
@@ -110,17 +111,17 @@ public:
 	/**
 	\return Parameter no 1
 	*/
-	inline T getP1(){ return _p1;}
+	inline T getP1() const { return _p1;}
 	///Returns parameter no 2
 	/**
 	\return Parameter no 2
 	*/
-	inline T getP2(){ return _p2;}
+	inline T getP2() const { return _p2;}
 	///Returns parameter no 3
 	/**
 	\return Parameter no 3
 	*/
-	inline T getP3(){ return _p3;}
+	inline T getP3()const { return _p3;}
 	///Sets parameter no 1
 	/**
 	\param iP1 Parameter no 1
@@ -149,8 +150,23 @@ public:
 	\param oP2 Variable no 2
 	\param oP3 Variable no 3
 	*/
-	inline void getP(T& oP1, T& oP2, T& oP3){ oP1=_p1; oP2=_p2; oP3=_p3;}
-	inline unsigned long getStateHash(){return _p1+_p2+_p3;}
+	inline void getP(T& oP1, T& oP2, T& oP3) const { oP1=_p1; oP2=_p2; oP3=_p3;}
+	inline void getP(T& oP1, T& oP2, const T& oP3) const { oP1=_p1; oP2=_p2;}
+	inline void getP(T& oP1, const T& oP2, const T& oP3) const { oP1=_p1;}
+	
+	inline void getStateHash(HashAlgo* iHash) const{
+		std::cout << "add param vals:\n";
+		iHash->addValue((HashValueType)_p1);
+		iHash->addValue((HashValueType)_p2);
+		iHash->addValue((HashValueType)_p3);
+	}
+		
+	/*inline void removeStateHash(HashAlgo* iHash) const{
+		iHash->removeValue((HashValueType)_p1);
+		iHash->removeValue((HashValueType)_p2);
+		iHash->removeValue((HashValueType)_p3);
+	}*/
+	
 protected:
 	///Parameter no 1
 	T _p1;

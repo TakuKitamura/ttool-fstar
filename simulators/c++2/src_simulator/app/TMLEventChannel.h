@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <TMLStateChannel.h>
 #include <Parameter.h>
+#include <HashAlgo.h>
 
 class Bus;
 
@@ -74,13 +75,16 @@ public:
 	void print()  const;
 	virtual void reset();
 	virtual void streamStateXML(std::ostream& s) const;
-	unsigned long getStateHash() const;
+	void getStateHash(HashAlgo* iHash) const;
 protected:
 	///Queue for parameters
 	ParamQueue _paramQueue;
 	///Temporary buffer for the parameters of the registered write transaction 
 	Parameter<ParamType> _tmpParam;
-	unsigned long _stateHash;
+	///Channel State Hash
+	mutable HashAlgo _stateHash;
+	///Flag indicating whether the current hash is up to date
+	mutable bool _hashValid;
 };
 
 #endif

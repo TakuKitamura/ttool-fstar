@@ -85,6 +85,5 @@ std::string TMLnbrnbwChannel::toString() const{
 	return outp.str();
 }
 
-unsigned long TMLnbrnbwChannel::getStateHash() const{
-	return 0;
+void TMLnbrnbwChannel::getStateHash(HashAlgo* iHash) const{
 }

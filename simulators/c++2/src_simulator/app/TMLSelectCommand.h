@@ -55,9 +55,10 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to an array of pointers to channels conveying the desired signals
 	\param iNumbChannels Number of channels in the array
+	\param iLiveVarList Bitmap of live variables
 	\param iParamFunc Pointer to an array of parameter functions pointers
 	*/
-	TMLSelectCommand(ID iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFunc);
+	TMLSelectCommand(ID iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, ParamFuncPointer* iParamFunc);
 	///Destructor
 	~TMLSelectCommand();
 	void execute();
@@ -85,6 +86,8 @@ protected:
 	unsigned int _indexNextCommand;
 	///Highest index of the channels on which the TMLChannel::testRead() method has been performed.
 	unsigned int _maxChannelIndex;
+	/////Bitmap of live variables
+	//const char* _liveVarList;
 };
 
 #endif

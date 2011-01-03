@@ -39,6 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLStateChannel.h>
+#include <HashAlgo.h>
 
 TMLStateChannel::TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iPriority): TMLChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iPriority), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false){
 }
@@ -90,7 +91,10 @@ bool TMLStateChannel::getUnderflow() const{
 	return _underflow;
 }
 
-unsigned long TMLStateChannel::getStateHash() const{
-	return _content;
+void TMLStateChannel::getStateHash(HashAlgo* iHash) const{
+	if (_significance!=0){
+		std::cout << "add channel content:\n";
+		iHash->addValue(_content);
+	}
 }
 

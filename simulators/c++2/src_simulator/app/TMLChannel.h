@@ -52,6 +52,7 @@ class TMLTransaction;
 class TMLCommand;
 class TMLTask;
 class BusMaster;
+class HashAlgo;
 
 ///This class defines the basic interfaces and functionalites of a TML channel. All specific channels are derived from this base class. A channel is able to convey data and events. 
 class TMLChannel: public Serializable, public ListenerSubject <ChannelListener> {
@@ -171,9 +172,9 @@ public:
 	virtual bool getUnderflow() const;
 	///Returns the hash value for the current task state
 	/**
-	\return Hash Value
+	\param iHash Hash algorithm object
 	*/
-	virtual unsigned long getStateHash() const =0;
+	virtual void getStateHash(HashAlgo* iHash) const =0;
 	///Returns the priority of the channel
 	/**
 	\return Hash Value
@@ -184,6 +185,12 @@ public:
 	\return Channel width
 	*/
 	unsigned int getWidth();
+	///Returns the width of the channel
+	/**
+	\param iTask Reference to reading or writing task
+	\param iSignificance Flag indicating if operations performed by this task are still reachable
+	*/
+	void setSignificance(TMLTask* iTask, bool iSignificance);
 protected:
 	///ID of channel
 	ID _ID;
@@ -211,6 +218,8 @@ protected:
 	unsigned int _readTransCurrHop;
 	///channel priority
 	Priority _priority;
+	///Flag indicating if read or write commands for that channel are still reachable
+	unsigned char _significance;
 };
 
 #endif

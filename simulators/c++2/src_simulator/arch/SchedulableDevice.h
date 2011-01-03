@@ -156,6 +156,11 @@ public:
 		_posTrasactListGraph++;
 		return aTrans;
 	}
+	
+	void addRawTransaction(TMLTransaction* iTrans){
+		_transactList.push_back(iTrans);
+	}
+	
 protected:
 	///Unique ID of the device
 	ID _ID;

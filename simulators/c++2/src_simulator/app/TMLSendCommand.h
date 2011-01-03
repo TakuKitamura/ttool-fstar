@@ -56,9 +56,10 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParamFunc Pointer to a parameter function
+	\param iLiveVarList Bitmap of live variables
 	\param iStatParam Static parameter if applicable 
 	*/
-	TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam=Parameter<ParamType>(0,0,0));
+	TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, Parameter<ParamType> iStatParam=Parameter<ParamType>(0,0,0));
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;
@@ -83,6 +84,8 @@ protected:
 	ParamFuncPointer _paramFunc;
 	///Static parameter if applicable
 	Parameter<ParamType> _statParam;
+	////Bitmap of live variables
+	//const char* _liveVarList;
 	TMLCommand* prepareNextTransaction();
 };
 

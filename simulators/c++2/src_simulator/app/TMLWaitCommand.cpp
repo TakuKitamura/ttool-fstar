@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWaitCommand::TMLWaitCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, Parameter<ParamType> iStatParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1),_channel(iChannel), _paramFunc(iParamFunc){
+TMLWaitCommand::TMLWaitCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, Parameter<ParamType> iStatParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList),_channel(iChannel), _paramFunc(iParamFunc){
 }
 
 void TMLWaitCommand::execute(){
@@ -93,7 +93,7 @@ std::string TMLWaitCommand::toShortString() const{
 }
 
 std::string TMLWaitCommand::getCommandStr() const{
-	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
+	if (_channel->getRequestChannel()) return "wre"; else return "wai";
 }
 
 /*ParamFuncPointer TMLWaitCommand::getParamFuncPointer() const{

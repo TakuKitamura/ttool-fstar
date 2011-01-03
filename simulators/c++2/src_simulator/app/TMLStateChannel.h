@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <TMLChannel.h>
 
+class HashAlgo;
 class Bus;
 
 ///This class defines the basic interfaces and functionalites of a TML stateful channel.
@@ -70,7 +71,7 @@ public:
 	virtual TMLLength getContent() const;
 	bool getOverflow() const;
 	bool getUnderflow() const;
-	virtual unsigned long getStateHash() const;
+	virtual void getStateHash(HashAlgo* iHash) const;
 protected:
 	///Content of the channel
 	TMLLength _content;

@@ -684,6 +684,7 @@ void Simulator::decodeCommand(std::string iCmd){
 		case 2:	//reset
 			std::cout << "Simulator reset." << std::endl;
 			_simComp->reset();
+			_simComp->resetStateHash();
 			_simTerm=false;
 			aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
 			std::cout << "End Simulator reset." << std::endl;
@@ -1130,37 +1131,46 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		do{
 			aSimTerminated=runToNextBreakpoint(aLastTrans);
 			aChoiceCmd=_simComp->getCurrentChoiceCmd();
+		//}while (!aSimTerminated && aChoiceCmd==0 && !_simComp->getStopFlag());
 		}while (!aSimTerminated && aChoiceCmd==0);
 		//aStreamBuffer << "sched" << iDepth << "." << leafsForLevel[iDepth]++;
 		//aStreamBuffer << "edge_" << iPrevID << "_" << aMyID;
 		//std::string aStringBuffer(aStreamBuffer.str());
 		//schedule2TXT(aStringBuffer);
 		iFile << "***** edge_" << iPrevID << "_" << aMyID << " *****\n";
-		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		/*for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+			(*i)->schedule2TXT(iFile);
+		}*/
+		for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
 			(*i)->schedule2TXT(iFile);
 		}
 		iFile << "\n";
-		//aStreamBuffer.str(""); 
-		//if (!aSimTerminated){
-		if(aChoiceCmd!=0){
-			unsigned int aNbNextCmds;
-			std::stringstream aStreamBuffer;
-			std::string aStringBuffer;
-			aChoiceCmd->getNextCommands(aNbNextCmds);
-			std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
-			_simComp->writeObject(aStreamBuffer);
-			aStringBuffer=aStreamBuffer.str();
-			for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
-				_simComp->reset();
-				aStreamBuffer.str(aStringBuffer);
-				_simComp->readObject(aStreamBuffer);
-				aChoiceCmd->setPreferredBranch(aBranch);
-				exploreTree(iDepth+1, aMyID, iFile);
-				//_simComp->reset();
-				//_simComp->readObject(aBuffer);
+		HashValueType aCurrState;
+		if (_simComp->wasKnownStateReached(&aCurrState)){
+				iFile << "Simulation " << iPrevID << "_" << aMyID << " encountered known state " << aCurrState << std::endl;
+		}else{
+			if(aChoiceCmd==0){
+				iFile << "Simulation " << iPrevID << "_" << aMyID << " terminated" << std::endl;
+			}else{
+				unsigned int aNbNextCmds;
+				std::stringstream aStreamBuffer;
+				std::string aStringBuffer;
+				aChoiceCmd->getNextCommands(aNbNextCmds);
+				std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
+				_simComp->writeObject(aStreamBuffer);
+				aStringBuffer=aStreamBuffer.str();
+				//for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_simComp->getStopFlag(); aBranch++){
+				for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
+					_simComp->reset();
+					aStreamBuffer.str(aStringBuffer);
+					_simComp->readObject(aStreamBuffer);
+					aChoiceCmd->setPreferredBranch(aBranch);
+					exploreTree(iDepth+1, aMyID, iFile);
+					//_simComp->reset();
+					//_simComp->readObject(aBuffer);
+				}
 			}
-		}else
-			std::cout << "Simulation " << iPrevID << "_" << aMyID << "terminated" << std::endl;
+		}	
 	}
 }
 

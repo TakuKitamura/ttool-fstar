@@ -43,6 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <Serializable.h>
+#include <HashAlgo.h>
 
 class TMLEventChannel;
 class TMLEventBChannel;
@@ -205,8 +206,13 @@ public:
 	\param iStopReason Reason why the simulation stopped
 	*/	
 	void setStopFlag(bool iStopFlag, const std::string& iStopReason);
+	///Returns whether the simulation stopped on an Action command
+	/**
+	\return Flag indicating if the simulation stopped on an Action command
+	*/
 	bool getStoppedOnAction(){return _stoppedOnAction;}
-	void setStoppedOnAction(){_stoppedOnAction=true; std::cout << "_stoppedOnAction=true\n";}
+	///Sets the flag indicating that the simulation stopped on an Action command
+	void setStoppedOnAction(){_stoppedOnAction=true; /*std::cout << "_stoppedOnAction=true\n";*/}
 	///If a task has a choice command as current command, a pointer to it is returned
 	/**
 	\return Pointer if choice command was found, null otherwise
@@ -239,13 +245,26 @@ public:
 	\return Pointer to simulator
 	*/
 	Simulator* getSimulator(){return _simulator;}
-	void setSimulator(Simulator* iSim){_simulator=iSim;}
-	std::string getCmpNameByID(ID iID);
-	///Returns the hash value for the current task state
+	///Sets a reference to the simulator
 	/**
-	\return Hash Value
+	\param iSim Pointer to simulator
 	*/
-	unsigned long getStateHash() const;
+	void setSimulator(Simulator* iSim){_simulator=iSim;}
+	///Returns the name of the component with the indicated ID
+	/**
+	\param iID Component ID
+	*/
+	std::string getCmpNameByID(ID iID);
+	///Halts the simulation if the current system state has been encountered before
+	void checkForRecurringSystemState();
+	///Checks if a known system state was reached
+	/**
+	\param oSystemHash Current system hash
+	\return Flag indicating whether a known state has been encountered
+	*/
+	bool wasKnownStateReached(HashValueType* oSystemHash) const;
+	///Resets the global system hash
+	void resetStateHash();
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;
@@ -273,6 +292,12 @@ protected:
 	std::string _stopReason;
 	///Flag indicating whether a task has an action command pending
 	bool _stoppedOnAction;
+	///System wide state hash
+	StateHashSet _systemHashTable;
+	///System Hash
+	HashAlgo _systemHash;
+	///Flag indicating whether a known state has been encountered
+	bool _knownStateReached;
 };
 #endif
 

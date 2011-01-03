@@ -53,9 +53,10 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
+	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
 }
 
 TMLCommand::~TMLCommand(){
@@ -65,6 +66,7 @@ TMLCommand::~TMLCommand(){
 	//if (_param!=0) delete _param;
 	_instanceList.remove(this);
 	removeBreakpoint();
+	//if (_liveVarList!=0) delete _hash;
 }
 
 TMLCommand* TMLCommand::prepare(bool iInit){
@@ -72,17 +74,26 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	//std::cout << "Prepare command ID: " << _ID << "\n";
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
-		//if (_simComp!=0){
-			//std::cout << "Let's crash\n";
 #ifdef STATE_HASH_ENABLED
-			unsigned long aStateHash=_simComp->getStateHash();
-			//std::cout << "Not crashed\n";
-			if (_stateHashes.find(aStateHash)==_stateHashes.end())
+		if(_liveVarList!=0){
+			//_hash->init(static_cast<HashValueType>(this), 70);
+			_task->refreshStateHash(_liveVarList);
+			//HashValueType aStateHash =_hash->getHash();
+			_simComp->checkForRecurringSystemState();
+			/*if (_stateHashes.empty()){
 				_stateHashes.insert(aStateHash);
-			else
-				std::cout << "State has been recognized, cmd ID: " << _ID << "\n";
+				_task->setCommonExecution(true);
+			}else{
+				if (_stateHashes.find(aStateHash)==_stateHashes.end()){
+					_stateHashes.insert(aStateHash);
+				}else{
+					std::cout << "State has been recognized, cmd ID: " << _ID << "\n";
+					_task->setCommonExecution(true);
+					_simComp->checkForRecurringSystemState();
+				}
+			}*/
+		}
 #endif
-		//}
 		//std::cout << "COMMAND FINISHED!!n";
 #ifdef LISTENERS_ENABLED
 		NOTIFY_CMD_FINISHED(this);
@@ -233,6 +244,7 @@ void TMLCommand::reset(){
 	_progress=0;
 	if (_currTransaction!=0) delete _currTransaction;
 	_currTransaction=0;
+	_stateHashes.clear();
 }
 
 void TMLCommand::registerGlobalListener(CommandListener* iListener){

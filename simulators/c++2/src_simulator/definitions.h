@@ -81,7 +81,7 @@ using std::max;
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
 #undef PENALTIES_ENABLED
-#undef STATE_HASH_ENABLED
+#define STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
 
 #define CLOCK_INC 20
@@ -89,7 +89,6 @@ using std::max;
 #define PARAMETER_BLOCK_SIZE 1000
 #undef ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
-//#undef REGISTER_TRANS_AT_CPU
 #define SAVE_BENCHMARK_VARS 
 #define PORT "3490"
 #define BACKLOG 10
@@ -258,8 +257,10 @@ typedef std::deque<std::string*> CommandQueue;
 typedef std::list<WorkloadSource*> WorkloadList;
 ///List of bus masters used by CPUs
 typedef std::list<BusMaster*> BusMasterList;
+///Type used for hash values of system states
+typedef uint32_t HashValueType;
 ///Set used by Commands to store encountered state hash values
-typedef std::set<unsigned long> StateHashSet;
+typedef std::set<HashValueType> StateHashSet;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

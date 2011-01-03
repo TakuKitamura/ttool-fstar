@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0){
+TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels, iLiveVarList), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0) {
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
@@ -179,7 +179,7 @@ std::string TMLSelectCommand::toShortString() const{
 }
 
 std::string TMLSelectCommand::getCommandStr() const{
-	return "wait";
+	return "sel";
 }
 
 #ifdef ADD_COMMENTS
