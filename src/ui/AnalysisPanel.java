@@ -36,22 +36,25 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AnalysisPanel
- * Managenemt of analysis panels
- * Creation: 14/01/2005
- * @version 1.0 14/01/2005
- * @author Ludovic APVRILLE
- * @see MainGUI
- */
+* Class AnalysisPanel
+* Managenemt of analysis panels
+* Creation: 14/01/2005
+* @version 1.0 14/01/2005
+* @author Ludovic APVRILLE
+* @see MainGUI
+*/
 
 package ui;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.util.*;
+
 import ui.iod.*;
 import ui.sd.*;
 import ui.ucd.*;
+import myutil.*;
 
 public class AnalysisPanel extends TURTLEPanel {
     public InteractionOverviewDiagramPanel iodp;
@@ -121,7 +124,7 @@ public class AnalysisPanel extends TURTLEPanel {
         
     }
     
-     public boolean addIODiagram(String s) {
+	public boolean addIODiagram(String s) {
         InteractionOverviewDiagramToolBar toolBarIOD = new InteractionOverviewDiagramToolBar(mgui);
         toolbars.add(toolBarIOD);
         
@@ -142,7 +145,7 @@ public class AnalysisPanel extends TURTLEPanel {
         tabbedPane.addTab(s, IconManager.imgic17, toolBarPanel, "Opens interaction overview diagram");
         
         return true;
-           
+		
     }
     
     public boolean addUseCaseDiagram(String s) {
@@ -167,7 +170,7 @@ public class AnalysisPanel extends TURTLEPanel {
         return true;
     }
     
-
+	
     public String saveHeaderInXml() {
         return "<Modeling type=\"Analysis\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
@@ -197,4 +200,103 @@ public class AnalysisPanel extends TURTLEPanel {
     public boolean isUCDEnabled() {
         return true;
     }  
+	
+	public boolean isSDEnabled() {
+        return true;
+    }  
+	
+	public void addInstancesToLastSD(UseCaseDiagramPanel _ucdp) {
+		TraceManager.addDev("Adding instances to last SD");
+		
+		TDiagramPanel panel = (TDiagramPanel)(panels.get(panels.size()-1));
+		if (!(panel instanceof SequenceDiagramPanel)) {
+			return;
+		}
+		
+		//TraceManager.addDev("Adding instances to last SD Step 2");
+		
+		ListIterator iterator = _ucdp.getComponentList().listIterator();
+		TGComponent tgc;
+		
+		// To determine whether an actor is on the left, or on the right
+		int middleX = 0;
+		int cptTotal = 0;
+		String systemName;
+		UCDBorder border = _ucdp.getFirstUCDBorder();
+		if (border != null) {
+			middleX = border.getX() + border.getWidth()/2;
+			systemName = border.getValue();
+		} else {
+			systemName = "System";
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if ((tgc instanceof UCDActor) || (tgc instanceof UCDActorBox)) {
+					middleX = middleX + tgc.getX();
+					cptTotal ++;
+				}
+			}
+			middleX = middleX / cptTotal;
+		}
+		
+		//TraceManager.addDev("Adding instances to last SD Step 3");
+		
+		// Classify actors
+		LinkedList <TGComponent> actors = new LinkedList();
+		iterator = _ucdp.getComponentList().listIterator();
+		int i;
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if ((tgc instanceof UCDActor) || (tgc instanceof UCDActorBox)) {
+				for(i=0; i<actors.size(); i++) {
+					if (actors.get(i).getX() > tgc.getX()) {
+						break;
+					}
+				}
+				// added at index i
+				actors.add(i, tgc);
+			}
+		}
+		
+		//TraceManager.addDev("Adding instances to last SD Step 3 nb of actors = " + actors.size());
+		
+		int initX = 100;
+		int initY = 100;
+		int stepX = 150;
+		SDInstance sdi;
+		boolean systemAdded = false;
+		// Add actors (and the system)
+		for(TGComponent elt: actors) {
+			if (elt.getX() > middleX && !systemAdded) {
+				sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+				sdi.setValue(systemName);
+				sdi.setActor(false);
+				panel.addComponent(sdi, initX, initY, false, true);
+				initX += stepX;
+				systemAdded = true;
+			}
+			sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+			sdi.setValue(elt.getValue());
+			sdi.setActor(true);
+			panel.addComponent(sdi, initX, initY, false, true);
+			initX += stepX;
+		}
+		
+		if (!systemAdded) {
+			sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
+			sdi.setValue(systemName);
+			sdi.setActor(false);
+			panel.addComponent(sdi, initX, initY, false, true);
+			initX += stepX;
+			systemAdded = true;
+		}
+		
+		while(initX > panel.getMaxX()) {
+			panel.setMaxX(panel.getMaxX() + panel.getIncrement());
+			panel.updateSize();
+		}
+		
+		panel.repaint();
+		
+		TraceManager.addDev("initX = " + initX + " nb of components:" + panel.getComponentList().size());
+	}
 }

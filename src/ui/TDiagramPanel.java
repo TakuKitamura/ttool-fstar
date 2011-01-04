@@ -1439,6 +1439,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         captureSelected = new JMenuItem("Save as an Image");
         captureSelected.addActionListener(menuAL);
     }
+	
+	public int getIncrement() {
+		return increment;
+	}
     
     public void popupAction(ActionEvent e) {
         if (e.getSource() == remove) {

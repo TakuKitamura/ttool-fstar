@@ -177,6 +177,7 @@ public class TGComponentManager {
     public static final int SD_COREGION = 600;
     
     public static final int UCD_ACTOR = 700;
+	public static final int UCD_ACTORBOX = 703;
     public static final int UCD_USECASE = 701;
     public static final int UCD_BORDER = 702;
     
@@ -563,6 +564,9 @@ public class TGComponentManager {
                 break;
             case UCD_ACTOR:
                 tgc = new UCDActor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case UCD_ACTORBOX:
+                tgc = new UCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case UCD_USECASE:
                 tgc = new UCDUseCase(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1027,6 +1031,8 @@ public class TGComponentManager {
             return SD_COREGION;
         } else if (tgc instanceof UCDActor) {
             return UCD_ACTOR;
+        } else if (tgc instanceof UCDActorBox) {
+            return UCD_ACTORBOX;
         } else if (tgc instanceof UCDUseCase) {
             return UCD_USECASE;
         } else if (tgc instanceof UCDBorder) {

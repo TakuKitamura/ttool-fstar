@@ -4611,6 +4611,41 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return true;
     }
     
+	
+	public boolean createUniqueSequenceDiagram(TURTLEPanel tp, String s) {
+		int i;
+		for(i=0; i<1000; i++) {
+			if(!isSDCreated(tp, s+i)) {
+				break;
+			}
+		}
+        
+        
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+        
+        ((AnalysisPanel)tp).addSequenceDiagram(s+i);
+        setPanelMode();
+        return true;
+    }
+	
+	public boolean createSequenceDiagramFromUCD(TURTLEPanel tp, String s, UseCaseDiagramPanel _ucdp) {
+		if (!createUniqueSequenceDiagram(tp, s)) {
+			return false;
+		}
+		
+		if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+		
+		 ((AnalysisPanel)tp).addInstancesToLastSD(_ucdp);
+		
+        return true;
+    }
+	
+	
+	
     public boolean createIODiagram(int index, String s) {
         return createIODiagram((TURTLEPanel)(tabs.elementAt(index)), s);
     }
@@ -6338,6 +6373,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.UCD_ACTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UCD_ACTOR);
+        } else if (command.equals(actions[TGUIAction.UCD_ACTORBOX].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UCD_ACTORBOX);
         } else if (command.equals(actions[TGUIAction.UCD_USECASE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.UCD_USECASE);
         } else if (command.equals(actions[TGUIAction.UCD_BORDER].getActionCommand())) {

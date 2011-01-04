@@ -48,10 +48,14 @@ package ui.sd;
 
 import java.awt.*;
 import javax.swing.*;
+import org.w3c.dom.*;
 import java.awt.event.*;
 
 import myutil.*;
 import ui.*;
+import ui.window.*;
+
+
 
 public class SDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
     //private int lineLength = 5;
@@ -59,6 +63,10 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     private int spacePt = 10;
     private int wText = 10, hText = 15;
     private int increaseSlice = 250;
+	private boolean isActor;
+	private static int heightActor = 30;
+	private static int widthActor = 16;
+	
     
     public SDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -85,6 +93,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
         
         value = "Instance name";
         name = "instance";
+		isActor = false;
         
         myImageIcon = IconManager.imgic500;
         
@@ -99,18 +108,37 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
         g.drawString(value, x - (wText / 2) + width/2, y - 3);
         g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
         g.drawLine(x+(width/2), y, x+(width/2), y +height);
+		
+		if (isActor) {
+			int xtmp = x + (width-widthActor) / 2;
+			int ytmp = y-hText;
+			// Head
+			g.drawOval(xtmp+(widthActor/4)-1, ytmp-heightActor, 2+widthActor/2, 2+widthActor/2);
+			//Body
+			g.drawLine(xtmp+widthActor/2, ytmp-heightActor/3, xtmp+widthActor/2, ytmp-(2*heightActor)/3);
+			//Arms
+			g.drawLine(xtmp, ytmp-(heightActor/2) - 2, xtmp+widthActor, ytmp-(heightActor/2) - 2);
+			//Left leg
+			g.drawLine(xtmp+widthActor, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
+			//right leg
+			g.drawLine(xtmp, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
+		}
     }
     
     public TGComponent isOnOnlyMe(int _x, int _y) {
-        //System.out.println("coucou");
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
-        //System.out.println("youp");
+		
         if (GraphicLib.isInRectangle(_x, _y, x + (width/2) - (wText/2) , y-hText, wText, hText)) {
             return this;
         }
-        //System.out.println("KO");
+		
+		if (isActor) {
+			if (GraphicLib.isInRectangle(_x, _y, x + (width-widthActor) / 2, y-heightActor-hText, widthActor, heightActor)) {
+				return this;
+			}
+		}
         return null;
     }
     
@@ -149,31 +177,39 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-        String oldValue = value;
+		String oldValue = value;
+		
+		JDialogSDInstance jdsdi = new JDialogSDInstance(frame, value, isActor, "Instance attributes");
+        jdsdi.setSize(300, 250);
+        GraphicLib.centerOnParent(jdsdi);
+        jdsdi.show(); // blocked until dialog has been closed
+		
+		
         String text = getName() + ": ";
         if (hasFather()) {
             text = getTopLevelName() + " / " + text;
         }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-        null,
-        getValue());
-        
-        if (s != null) {
-            s = s.trim();
-        }
-        
-        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            if (!TAttribute.isAValidId(s, false, false)) {
-                JOptionPane.showMessageDialog(frame,
-                "Could not change the name of the instance: the new name is not a valid name",
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-                return false;
-            }
-            setValue(s);
-            return true;
-        }
+		
+		if (jdsdi.hasBeenUpdated()) {
+			isActor = jdsdi.isAnActor();
+			String s = jdsdi.getInstanceName();
+			
+			if (s != null) {
+				s = s.trim();
+			}
+			
+			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+				if (!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog(frame,
+						"Could not change the name of the instance: the new name is not a valid name",
+						"Error",
+						JOptionPane.INFORMATION_MESSAGE);
+					return false;
+				}
+				setValue(s);
+				return true;
+			}
+		}
         return false;
     }
     
@@ -436,5 +472,50 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
             tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
         }    
      }
+	 
+	 protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<Actor data=\"");
+        sb.append(""+isActor);
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+    
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        //System.out.println("*** load extra synchro ***");
+        try {
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            
+            for(int i=0; i<nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //System.out.println(n1);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
+                        //System.out.println(n2);
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("Actor")) {
+								if (elt.getAttribute("data").compareTo("true") == 0) {
+									isActor = true;
+								}
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
+	
+	public void setActor(boolean b) {
+		isActor = b;
+	}
     
 }

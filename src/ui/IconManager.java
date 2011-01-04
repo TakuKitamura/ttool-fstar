@@ -101,7 +101,7 @@ public class IconManager {
     public static ImageIcon imgic500, imgic502, imgic504, imgic506, imgic508, imgic510;
     public static ImageIcon imgic512, imgic514, imgic516, imgic518, imgic520, imgic522, imgic524;
 
-    public static ImageIcon imgic600, imgic602, imgic604, imgic606, imgic608, imgic610, imgic612;
+    public static ImageIcon imgic600, imgic602, imgic604, imgic606, imgic608, imgic610, imgic612, imgic614;
     
     public static ImageIcon imgic700, imgic702;
     
@@ -379,6 +379,7 @@ public class IconManager {
     private static String icon608 = "images/ucdextend.gif";
     private static String icon610 = "images/ucdspecia.gif";
     private static String icon612 = "images/ucdborder.gif";
+	private static String icon614 = "images/ucdactorbox.gif";
     
     // Deployment diagrams
     private static String icon700 = "images/ddnode.gif";
@@ -734,6 +735,7 @@ public class IconManager {
         imgic608 = getIcon(icon608);
         imgic610 = getIcon(icon610);
         imgic612 = getIcon(icon612);
+		imgic614 = getIcon(icon614);
         
         imgic700 = getIcon(icon700);
         imgic702 = getIcon(icon702);

@@ -239,6 +239,10 @@ public abstract class TURTLEPanel implements GenericTree {
     public boolean isUCDEnabled() {
         return false;
     }
+	
+	public boolean isSDEnabled() {
+        return false;
+    }
     
     public boolean isReqEnabled() {
         return false;

@@ -50,7 +50,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
+import ui.ucd.*;
 import myutil.*;
 
 
@@ -59,7 +59,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     private JPopupMenu menu;
     protected MainGUI mgui;
     
-    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newreq, 
+    private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdfromucd, newreq, 
 	newebrdd, newprosmd, newavatarrd, newavatarpd;
     private JMenuItem newatd;
 	
@@ -93,11 +93,13 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         moveLeft = createMenuItem("Move to the left");
         moveRight = createMenuItem("Move to the right");
         sort = createMenuItem("Sort");
-        newucd = createMenuItem("New use case diagram");
-        newreq = createMenuItem("New requirement diagram");
+        newucd = createMenuItem("New Use Case Diagram");
+		newsd = createMenuItem("New Sequence Diagram");
+		newsdfromucd = createMenuItem("New Sequence Diagram (from Use Case Diagram)");
+        newreq = createMenuItem("New Requirement Diagram");
 		newebrdd = createMenuItem("New Event-Based Requirement Description Diagram");
-        newprosmd = createMenuItem("New ProActive state machine diagram");
-		newatd = createMenuItem("New attack tree diagram");
+        newprosmd = createMenuItem("New ProActive State Machine Diagram");
+		newatd = createMenuItem("New Attack Tree Diagram");
 		newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
 		newavatarpd = createMenuItem("New AVATAR Parametric Diagram");
         
@@ -111,6 +113,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(sort);
         menu.addSeparator();
         menu.add(newucd);
+		menu.add(newsd);
+		menu.add(newsdfromucd);
         menu.addSeparator();
         menu.add(newreq);
 		menu.add(newebrdd);
@@ -157,6 +161,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         }
         
         newucd.setEnabled(tp.isUCDEnabled());
+		newsd.setEnabled(tp.isSDEnabled());
+		newsdfromucd.setEnabled(tp.isSDEnabled() && (mgui.getCurrentTDiagramPanel() instanceof UseCaseDiagramPanel));
         newreq.setEnabled(tp.isReqEnabled());
 		newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
@@ -180,19 +186,25 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             } else if (ac.equals("Sort")) {
                 GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
                 mgui.changeMade(null, -1);
-            } else if (ac.equals("New use case diagram")) {
-                mgui.createUseCaseDiagram(tp, "Use Case diagram");
+            } else if (ac.equals("New Use Case Diagram")) {
+                mgui.createUseCaseDiagram(tp, "Use Case Diagram");
                 mgui.changeMade(null, -1);
-            } else if (ac.equals("New requirement diagram")) {
-                mgui.createRequirementDiagram(tp, "Requirement diagram");
+            } else if (ac.equals("New Sequence Diagram")) {
+                mgui.createUniqueSequenceDiagram(tp, "MyScenario");
                 mgui.changeMade(null, -1);
-            } else if (ac.equals("New attack tree diagram")) {
+            } else if (item == newsdfromucd) {
+                mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel)(mgui.getCurrentTDiagramPanel()));
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Requirement Diagram")) {
+                mgui.createRequirementDiagram(tp, "Requirement Diagram");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Attack Tree Diagram")) {
                 mgui.createAttackTreeDiagram(tp, "Attack Tree");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
                 mgui.createEBRDD(tp, "EBRDD");
                 mgui.changeMade(null, -1);
-            } else if (ac.equals("New ProActive state machine diagram")) {
+            } else if (ac.equals("New ProActive State Machine Diagram")) {
                 mgui.createProActiveSMD(tp, "ProActive SMD");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarrd) {

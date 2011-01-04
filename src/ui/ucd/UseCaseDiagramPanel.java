@@ -46,6 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.ucd;
 
+import java.util.*;
 
 import ui.*;
 
@@ -138,5 +139,19 @@ public class UseCaseDiagramPanel extends TDiagramPanel {
             }
         }*/
     }
+	
+	public UCDBorder getFirstUCDBorder() {
+		TGComponent tgc;
+		
+		ListIterator iterator = getComponentList().listIterator();
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof UCDBorder) {
+				return (UCDBorder)tgc;
+			}
+		}
+		
+		return null;
+	}
     
 }

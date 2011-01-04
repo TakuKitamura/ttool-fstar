@@ -148,6 +148,7 @@ public class TGUIAction extends AbstractAction {
     
     public static final int UCD_EDIT = 104;
     public static final int UCD_ACTOR = 105;
+	public static final int UCD_ACTORBOX = 333;
     public static final int UCD_USECASE = 106;
     public static final int UCD_CONNECTOR_ACTOR_UC = 107;
     public static final int UCD_CONNECTOR_INCLUDE = 108;
@@ -452,7 +453,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 333;
+    public static final int NB_ACTION = 334;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -678,6 +679,7 @@ public class TGUIAction extends AbstractAction {
         
         actions[UCD_EDIT] = new TAction("edit-ucd-diagram", "Edit use case diagram", IconManager.imgic100, IconManager.imgic101, "Edit use case diagram", "Make it possible to edit the currently opened use case diagram", 0);
         actions[UCD_ACTOR] = new TAction("add-actor", "Add an actor", IconManager.imgic600, IconManager.imgic600, "Actor", "Add an actor to the currently opened use case diagram", 0);
+        actions[UCD_ACTORBOX] = new TAction("add-actor-box", "Add an actor (box format)", IconManager.imgic614, IconManager.imgic614, "Actor (box format)", "Add an actor in box format to the currently opened use case diagram", 0);
         actions[UCD_USECASE] = new TAction("add-usecase", "Add a use case", IconManager.imgic602, IconManager.imgic602, "Add a use case", "Add a use case to the currently opened use case diagram", 0);
         actions[UCD_BORDER] = new TAction("add-border", "Add a border", IconManager.imgic612, IconManager.imgic612, "Add a border", "Add a border to the currently opened use case diagram", 0);
         actions[UCD_CONNECTOR_ACTOR_UC] = new TAction("add-connector-actor-uc", "actor <-> use case", IconManager.imgic604, IconManager.imgic604, "Actor <-> use case", "Add a connector between an actor and a use case of the currently opened use case diagram", 0);

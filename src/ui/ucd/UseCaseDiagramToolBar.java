@@ -63,6 +63,7 @@ public class UseCaseDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
         mgui.actions[TGUIAction.UCD_ACTOR].setEnabled(b);
+		mgui.actions[TGUIAction.UCD_ACTORBOX].setEnabled(b);
         mgui.actions[TGUIAction.UCD_USECASE].setEnabled(b);
         mgui.actions[TGUIAction.UCD_BORDER].setEnabled(b);
         mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC].setEnabled(b);
@@ -98,6 +99,8 @@ public class UseCaseDiagramToolBar extends TToolBar {
         this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.UCD_ACTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+		 button = this.add(mgui.actions[TGUIAction.UCD_ACTORBOX]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();
