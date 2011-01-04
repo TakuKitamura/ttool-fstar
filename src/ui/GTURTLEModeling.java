@@ -5287,6 +5287,7 @@ public class GTURTLEModeling {
 		
 		if ((checkingErrors != null) && (checkingErrors.size() > 0)){
 			analyzeErrors();
+			warnings = gtmlm.getCheckingWarnings();
 			return false;
 		} else {
 			//tmap.removeAllRandomSequences();

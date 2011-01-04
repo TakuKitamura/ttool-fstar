@@ -476,7 +476,7 @@ public class GTMLModeling  {
 					
                 } else {
                     removedRequests.add(new String(tmlro.getRequestName()));
-                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Event " +  tmlro.getRequestName() + " has been removed");
+                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Request " +  tmlro.getRequestName() + " has been removed");
                     ce.setTDiagramPanel(tmldp.tmltdp);
                     ce.setTGComponent(tmlro);
                     warnings.add(ce);
@@ -1634,6 +1634,8 @@ public class GTMLModeling  {
 	
 	public TMLMapping translateToTMLMapping() {
 		tmlm = new TMLModeling(true);
+		
+		
 		archi = new TMLArchitecture();
 		map = new TMLMapping(tmlm, archi, false);
 		
@@ -1646,6 +1648,10 @@ public class GTMLModeling  {
 			return null;
 		}
 		makeMapping();
+		
+		//TraceManager.addDev("<--- TML modeling:");
+		//TraceManager.addDev("TML: " + tmlm.toString());
+		//TraceManager.addDev("End of TML modeling --->");
 		
 		removeActionsWithRecords();
 		
