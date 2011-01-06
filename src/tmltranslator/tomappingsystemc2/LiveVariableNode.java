@@ -142,12 +142,12 @@ public class LiveVariableNode{
 		}
 		iCheckInfo.setOperationMode(CheckpointInfo.KILLED_DEF);
 		if (atLeast1DepDefForVars(_defVars, false, 1, iCheckInfo)){
-			//System.out.println("kills dependent definitions");
+			//System.out.println(getStatementDescr() + "  kills dependent definitions!!!");
 			aReasonCode += CheckpointInfo.KILLED_DEF;
 		}
 		iCheckInfo.setOperationMode(CheckpointInfo.VAR_OUT_OF_SCOPE);
 		if (atLeast1DepDefForVars(_useVars, true, 1, iCheckInfo)){
-			//System.out.println("variable went out of scope");
+			//System.out.println(getStatementDescr()+ " variable went out of scope!!! ");
 			aReasonCode += CheckpointInfo.VAR_OUT_OF_SCOPE;
 		}
 		if(_varDepSource){
@@ -716,5 +716,9 @@ public class LiveVariableNode{
 		}
 		aResult+="\"";
 		return aResult;
+	}
+	
+	public boolean isCheckpoint(){
+		return (_checkpoint!=null);
 	}
 }

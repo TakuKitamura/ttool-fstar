@@ -174,7 +174,7 @@ public class StaticAnalysis{
 		return aResult;
 	}
 
-	public void startAnalysis(){
+	public LiveVariableNode startAnalysis(){
 		int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
 		//int aNumberOfBytes=0;
 		//LiveVariableNode.reset();
@@ -198,8 +198,11 @@ public class StaticAnalysis{
 		}
 		if (_task.isRequested()){
 			int[] aReqVars = parseExprToVariableMap("arg1__req", null);
-			parseExprToVariableMap("arg2__req", aReqVars);
-			parseExprToVariableMap("arg3__req", aReqVars);
+			for (int i=2; i<=_task.getRequest().getNbOfParams(); i++){
+				parseExprToVariableMap("arg" + i + "__req", aReqVars);
+			}
+			//parseExprToVariableMap("arg2__req", aReqVars);
+			//parseExprToVariableMap("arg3__req", aReqVars);
 			int[] aReqChannelVar = new int[_bytesForVars];
 			aReqChannelVar[_bytesForVars-1] = 1 << ((aNbOfLiveElements-1) & 0x1F);
 			aStartNode = new LiveVariableNode(this, aReqChannelVar, aReqVars, null, null, true);
@@ -265,6 +268,7 @@ public class StaticAnalysis{
 			for(LiveVariableNode aLiveNode: liveNodes)
 				aChange |= aLiveNode.infectionAnalysis();
 		}while(aChange);
+		return aStartNode;
 	}
 
 	public void determineCheckpoints(int[] iStatistics){
@@ -276,6 +280,8 @@ public class StaticAnalysis{
 		int aNbOfCheckPoints=0, aNbOfCandidates=0;
 		for(LiveVariableNode aLiveNode: liveNodes){
 			int aStatResult = aLiveNode.varStatistics(aStatistics);
+			//aLiveNode.printReachingEntries();
+			//printLiveVarNode(aLiveNode);
 			if((aStatResult & 1)!=0){
 				aLiveNode.printReachingEntries();
 				printLiveVarNode(aLiveNode);
@@ -412,27 +418,36 @@ public class StaticAnalysis{
 		} else if (iCurrElem instanceof TMLSendEvent){
 			TMLSendEvent aSendCmd=(TMLSendEvent)iCurrElem;
 			int[] aSendVars=null;
-			if (aSendCmd.getEvent().isBlocking())
+			//if (aSendCmd.getEvent().isBlocking())
 				aSendVars = parseEventToVariableMap(aSendCmd.getEvent());
-			else
-				aSendVars = new int[_bytesForVars];
-			parseExprToVariableMap(aSendCmd.getParam(0), aSendVars);
-			parseExprToVariableMap(aSendCmd.getParam(1), aSendVars);
-			parseExprToVariableMap(aSendCmd.getParam(2), aSendVars);
+			//else
+				//aSendVars = new int[_bytesForVars];
+			//parseExprToVariableMap(aSendCmd.getParam(0), aSendVars);
+			//parseExprToVariableMap(aSendCmd.getParam(1), aSendVars);
+			//parseExprToVariableMap(aSendCmd.getParam(2), aSendVars);
+			for (int i=0; i<aSendCmd.getNbOfParams(); i++){	
+				parseExprToVariableMap(aSendCmd.getParam(i), aSendVars);
+			}
 			aResNode = new LiveVariableNode(this, aSendVars, new int[_bytesForVars], iCurrElem, iSuperiorNode);
 		
 		} else if (iCurrElem instanceof TMLSendRequest){
 			TMLSendRequest aSendReqCmd=(TMLSendRequest)iCurrElem;
 			int[] aSendReqVars = parseExprToVariableMap(aSendReqCmd.getParam(0), null);
-			parseExprToVariableMap(aSendReqCmd.getParam(1), aSendReqVars);
-			parseExprToVariableMap(aSendReqCmd.getParam(2), aSendReqVars);
+			//parseExprToVariableMap(aSendReqCmd.getParam(1), aSendReqVars);
+			//parseExprToVariableMap(aSendReqCmd.getParam(2), aSendReqVars);
+			for (int i=1; i<aSendReqCmd.getNbOfParams(); i++){
+				parseExprToVariableMap(aSendReqCmd.getParam(i), aSendReqVars);
+			}
 			aResNode = new LiveVariableNode(this, aSendReqVars, new int[_bytesForVars], iCurrElem, iSuperiorNode);
 
 		} else if (iCurrElem instanceof TMLWaitEvent){
 			TMLWaitEvent aWaitCmd=(TMLWaitEvent)iCurrElem;
 			int[] aWaitVars = parseExprToVariableMap(aWaitCmd.getParam(0), null);
-			parseExprToVariableMap(aWaitCmd.getParam(1), aWaitVars);
-			parseExprToVariableMap(aWaitCmd.getParam(2), aWaitVars);
+			//parseExprToVariableMap(aWaitCmd.getParam(1), aWaitVars);
+			//parseExprToVariableMap(aWaitCmd.getParam(2), aWaitVars);
+			for (int i=1; i<aWaitCmd.getNbOfParams(); i++){
+				parseExprToVariableMap(aWaitCmd.getParam(i), aWaitVars);
+			}
 			aResNode = new LiveVariableNode(this, parseEventToVariableMap(aWaitCmd.getEvent()), aWaitVars, iCurrElem, iSuperiorNode, true);
 			if (aWaitCmd.getEvent().getNbOfParams()>0) aResNode.setVarDepSource(true);
 			

@@ -283,6 +283,7 @@ public class TML2MappingSystemC {
 					param= "," + evt.getMaxSize() + ",0";
 				}
 			}
+			param += "," + evt.getNbOfParams();
 			if (tmlmapping.isCommNodeMappedOn(evt,null)){
 				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param +")" + SCCR;
 				
@@ -299,9 +300,9 @@ public class TML2MappingSystemC {
 		for(TMLTask task: tmlmodeling.getTasks()) {
 			if (task.isRequested()){
 				if (tmlmapping.isCommNodeMappedOn(task.getRequest(),null)){
-					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +  task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0,true)" + SCCR;
+					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +  task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
 				}else{
-					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
 				}
 				declaration += "addRequest(reqChannel_"+ task.getName() +")"+ SCCR;
 			}
@@ -351,6 +352,7 @@ public class TML2MappingSystemC {
 		ArrayList<TMLChannel> channels;
 		ArrayList<TMLEvent> events;
 		ArrayList<TMLRequest> requests;
+		int[] aStatistics = new int[8];
 		for(TMLTask task: tmlmapping.getMappedTasks()){
 			node=(HwExecutionNode)iterator.next();
 			int noOfCores;
@@ -371,7 +373,7 @@ public class TML2MappingSystemC {
 
 			mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping);
 			//mst.generateSystemC(debug, optimize, dependencies);
-			mst.generateSystemC(debug, optimize);
+			mst.generateSystemC(debug, optimize, aStatistics);
 			tasks.add(mst);
 			for(TMLChannel channelb: channels)
 				declaration += "," + channelb.getExtendedName()+CR;
@@ -386,8 +388,8 @@ public class TML2MappingSystemC {
 			declaration += ")" + SCCR;
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
-		int[] aStatistics = new int[8];
-		for(MappedSystemCTask task: tasks) task.determineCheckpoints(aStatistics);
+		//int[] aStatistics = new int[8];
+		//for(MappedSystemCTask task: tasks) task.determineCheckpoints(aStatistics);
 		if (aStatistics[0]!=0) System.out.println("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
 		if (aStatistics[2]!=0) System.out.println("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
 		if (aStatistics[4]!=0) System.out.println("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);

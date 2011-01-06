@@ -62,6 +62,7 @@ public class MappedSystemCTask {
 	private boolean debug;
 	private boolean optimize;
 	private StaticAnalysis _analysis;
+	private LiveVariableNode _startAnaNode;
 	
 	private final static String DOTH = ".h";
 	private final static String DOTCPP = ".cpp";
@@ -104,8 +105,9 @@ public class MappedSystemCTask {
 		return task;
 	}
     
-	public void generateSystemC(boolean _debug, boolean _optimize) {
-		_analysis.startAnalysis();
+	public void generateSystemC(boolean _debug, boolean _optimize, int[] aStatistics) {
+		_startAnaNode = _analysis.startAnalysis();
+		_analysis.determineCheckpoints(aStatistics); //NEW
         	debug = _debug;
 		optimize=_optimize;
 		basicCPPCode();
@@ -244,14 +246,19 @@ public class MappedSystemCTask {
 			hcode+="TMLWaitCommand " + firstCommand + SCCR;
 			initCommand+= "," + firstCommand + "(" + task.getActivityDiagram().getFirst().getID() + ",this,requestChannel,"; 
 			if (params==0){
-				initCommand+= "0,\"\")" + CR;
+				initCommand+= "0,"+ getFormattedLiveVarStr(_startAnaNode) + ")" + CR;
 			}else{
-				initCommand+= "(ParamFuncPointer)&" + reference + "::" + "waitOnRequest_func,\"\")" + CR;
-				functionSig+="void waitOnRequest_func(Parameter<ParamType>& ioParam)" + SCCR;
-				functions+="void " + reference + "::waitOnRequest_func(Parameter<ParamType>& ioParam){" + CR;
-				functions+="arg1__req=ioParam.getP1()" + SCCR;
-				if (params>1) functions+= "arg2__req=ioParam.getP2()" + SCCR;
-				if (params>2) functions+= "arg3__req=ioParam.getP3()" + SCCR;
+				initCommand+= "(ParamFuncPointer)&" + reference + "::" + "waitOnRequest_func," + getFormattedLiveVarStr(_startAnaNode)  + ")" + CR;
+				functionSig+="Parameter<ParamType>* waitOnRequest_func(Parameter<ParamType>* ioParam)" + SCCR;
+				functions+="Parameter<ParamType>* " + reference + "::waitOnRequest_func(Parameter<ParamType>* ioParam){" + CR;
+				//functions+="arg1__req=ioParam.getP1()" + SCCR;
+				//if (params>1) functions+= "arg2__req=ioParam.getP2()" + SCCR;
+				//if (params>2) functions+= "arg3__req=ioParam.getP3()" + SCCR;
+				functions+= "ioParam->getP(&arg1__req";
+				for (int i=1; i<params; i++){
+					functions+= ", &arg" + (i+1) + "__req";
+				}
+				functions+=")" + SCCR + "return 0" + SCCR;
 				functions+="}\n\n"; 
 			}	
 			String xx = firstCommand + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(task.getActivityDiagram().getFirst(),false,"&"+firstCommand,null,null) + "))"+ SCCR;
@@ -306,7 +313,7 @@ public class MappedSystemCTask {
 		hcode += "void refreshStateHash(const char* iLiveVarList);\n";
 		functions+= "void " + reference + "::refreshStateHash(const char* iLiveVarList){\n";
 		int aSeq=0;
-		functions += "_stateHash.init((uint32_t)_currCommand,30);\n";
+		functions += "_stateHash.init((HashValueType)this,30);\nif(iLiveVarList!=0){\n";
 		for(TMLAttribute att: task.getAttributes()) {
 			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _stateHash.addValue(" + att.getName() + ");\n";
 			aSeq++;
@@ -334,17 +341,25 @@ public class MappedSystemCTask {
 		}*/
 		//functions += "_lastStateHash = iHash->getHash();\n";
 		//functions += "_commonExecution = false;\n";
-		functions += "}\n\n";
+		functions += "}\n}\n\n";
 		//return anEvalFunc;
 		//functions+=_analysis.makeLiveVarEvalFunc()+ "}\n\n";
 	}
 
 	private String getFormattedLiveVarStr(TMLActivityElement currElem){
-		if (_analysis.getLiveVarNodeByCommand(currElem)==null)
-			return "0";
-		else
-			return _analysis.getLiveVarNodeByCommand(currElem).getLiveVariableString();
+		return getFormattedLiveVarStr(_analysis.getLiveVarNodeByCommand(currElem));
 	}
+	
+	private String getFormattedLiveVarStr(LiveVariableNode currNode){
+		if (currNode==null){
+			return "0, false";
+		}else{
+			String checkpoint = (currNode.isCheckpoint())? "true":"false";
+			return currNode.getLiveVariableString() + "," + checkpoint;
+		}
+	}
+	
+	
 
 	private String makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement){
 		String nextCommand="",cmdName="";
@@ -449,9 +464,9 @@ public class MappedSystemCTask {
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",0,0)"+CR;
 			if (isIntValue(((TMLExecI)currElem).getAction()))
-				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,0," + ((TMLExecI)currElem).getAction() + ")" + CR;
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,0," + ((TMLExecI)currElem).getAction() + "," + getFormattedLiveVarStr(currElem) + ")" + CR;
 			else
-				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0)" + CR;
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this," + makeCommandLenFunc(cmdName, ((TMLExecI)currElem).getAction(), null) + ",0,1," + getFormattedLiveVarStr(currElem) + ")" + CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecC){
@@ -459,9 +474,9 @@ public class MappedSystemCTask {
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			if (isIntValue(((TMLExecC)currElem).getAction()))
-				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,1," + ((TMLExecC)currElem).getAction() + ")" + CR;
+				initCommand+= "," + cmdName + "(" + currElem.getID() + ",this,0,1," + ((TMLExecC)currElem).getAction() + "," + getFormattedLiveVarStr(currElem) + ")" + CR;
 			else
-				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecC)currElem).getAction(), null) + ",1)"+CR;
+				initCommand+= "," + cmdName + "("+ currElem.getID() + ",this,"+ makeCommandLenFunc(cmdName, ((TMLExecC)currElem).getAction(), null) + ",1,1," + getFormattedLiveVarStr(currElem) + ")"+CR;
 				
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
@@ -470,7 +485,7 @@ public class MappedSystemCTask {
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",0)"+CR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0,1," + getFormattedLiveVarStr(currElem) + ")" +CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecCInterval){
@@ -478,7 +493,7 @@ public class MappedSystemCTask {
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",1)"+CR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecCInterval)currElem).getMinDelay(), ((TMLExecCInterval)currElem).getMaxDelay()) + ",1)"+CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecCInterval)currElem).getMinDelay(), ((TMLExecCInterval)currElem).getMaxDelay()) + ",1,1," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 
 					
@@ -500,23 +515,7 @@ public class MappedSystemCTask {
 					return makeCommands(initAction, false, firstCmdInLoop, nextCommandCont, null);
 				}
 				
-			}else{
-				/*TMLActionState initAction=new TMLActionState("lpInitAc",null);
-				initAction.setAction(fl.getInit());
-				TMLActionState incAction=new TMLActionState("#"+ fl.getID() + "\\lpIncAc",null);
-				incAction.setAction(fl.getIncrement());
-				TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
-				if (fl.getCondition().isEmpty())
-					lpChoice.addGuard("[ true ]");
-				else
-					lpChoice.addGuard("[ " + fl.getCondition() + " ]");
-				lpChoice.addGuard("[ else ]");
-				lpChoice.addNext(fl.getNextElement(0));  //inside loop
-				lpChoice.addNext(fl.getNextElement(1));  //after loop           cmdName= "_choice" + currElem.getID();
-				makeCommands(incAction, false, "&_lpChoice" + fl.getID(), null, null);
-				makeCommands(lpChoice, false, "&_lpIncAc" + fl.getID(), null, retElement);
-				return makeCommands(initAction, false, "&_lpChoice" + fl.getID(), nextCommandCont, null);*/
-				
+			}else{	
 				TMLChoice lpChoice=new TMLChoice("#"+ fl.getID() + "\\lpChoice",null);
 				//if (fl.getCondition().isEmpty())
 				//	lpChoice.addGuard("[ true ]");
@@ -599,7 +598,8 @@ public class MappedSystemCTask {
 			TMLSendEvent sendEvt=(TMLSendEvent)currElem;
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
-			handleParameters(sendEvt.getNbOfParams(), new String[]{sendEvt.getParam(0), sendEvt.getParam(1), sendEvt.getParam(2)}, cmdName, currElem.getID(), sendEvt.getEvent().getExtendedName(), false,getFormattedLiveVarStr(currElem));
+			//handleParameters(sendEvt.getNbOfParams(), new String[]{sendEvt.getParam(0), sendEvt.getParam(1), sendEvt.getParam(2)}, cmdName, currElem.getID(), sendEvt.getEvent().getExtendedName(), false,getFormattedLiveVarStr(currElem));
+			handleParameters(currElem, cmdName, false, getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 			
 		} else if (currElem instanceof TMLSendRequest){
@@ -607,7 +607,8 @@ public class MappedSystemCTask {
 			TMLSendRequest sendReq=(TMLSendRequest)currElem;
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
-			handleParameters(sendReq.getNbOfParams(), new String[]{sendReq.getParam(0), sendReq.getParam(1), sendReq.getParam(2)}, cmdName, currElem.getID(), sendReq.getRequest().getExtendedName(),false, getFormattedLiveVarStr(currElem));
+			//handleParameters(sendReq.getNbOfParams(), new String[]{sendReq.getParam(0), sendReq.getParam(1), sendReq.getParam(2)}, cmdName, currElem.getID(), sendReq.getRequest().getExtendedName(),false, getFormattedLiveVarStr(currElem));
+			handleParameters(currElem, cmdName, false, getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;	
 	
 		} else if (currElem instanceof TMLWaitEvent){
@@ -615,14 +616,15 @@ public class MappedSystemCTask {
 			TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
-			handleParameters(waitEvt.getNbOfParams(), new String[]{waitEvt.getParam(0), waitEvt.getParam(1), waitEvt.getParam(2)}, cmdName, currElem.getID(), waitEvt.getEvent().getExtendedName(),true, getFormattedLiveVarStr(currElem));
+			//handleParameters(waitEvt.getNbOfParams(), new String[]{waitEvt.getParam(0), waitEvt.getParam(1), waitEvt.getParam(2)}, cmdName, currElem.getID(), waitEvt.getEvent().getExtendedName(),true, getFormattedLiveVarStr(currElem));
+			handleParameters(currElem, cmdName, true, getFormattedLiveVarStr(currElem));
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLNotifiedEvent){
 			if (debug) System.out.println("Checking Notified\n");
 			cmdName= "_notified" + currElem.getID();
 			hcode+="TMLNotifiedCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",(TMLLength*)&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\")" + CR;
+			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",(TMLLength*)&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\"," + getFormattedLiveVarStr(currElem) + ")" + CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null,null) + "))"+ SCCR; 
 		
 		} else if (currElem instanceof TMLSequence){
@@ -816,23 +818,20 @@ public class MappedSystemCTask {
 						paramList+=",(ParamFuncPointer)0";
 					}else{
 
-						functionSig+="void " + cmdName + "_func_" + i + "(Parameter<ParamType>& ioParam)" + SCCR;
-						functions+="void " + reference + "::" + cmdName +  "_func_" + i + "(Parameter<ParamType>& ioParam){" + CR;
+						functionSig+="Parameter<ParamType>* " + cmdName + "_func_" + i + "(Parameter<ParamType>* ioParam)" + SCCR;
+						functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func_" + i + "(Parameter<ParamType>* ioParam){" + CR;
 						paramList+=",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
-						functions += "ioParam.getP(";
-						for(int j=0; j<3; j++) {
-							if (j>0) functions += ",";
-							//if (((TMLSelectEvt)currElem).getParam(i,j) != null) {
-								//if (!((TMLSelectEvt)currElem).getParam(i,j).isEmpty()) {
-									//paramList += ((TMLSelectEvt)currElem).getParam(i,j);
-									//functions += ((TMLSelectEvt)currElem).getParam(i,j) + "=ioParam.getP" + (j+1) +"()"+ SCCR;
-								//}
-							if (((TMLSelectEvt)currElem).getParam(i,j)== null || ((TMLSelectEvt)currElem).getParam(i,j).isEmpty())
-								functions+="rnd__0";
-							else
-								functions+=((TMLSelectEvt)currElem).getParam(i,j);
+						functions += "ioParam->getP(&" + ((TMLSelectEvt)currElem).getParam(i,0);
+						for(int j=1; j<evt.getNbOfParams(); j++) {
+						//for(int j=0; j<3; j++) {
+							//if (j>0) functions += ",";
+							//if (((TMLSelectEvt)currElem).getParam(i,j)== null || ((TMLSelectEvt)currElem).getParam(i,j).isEmpty())
+							//	functions+="rnd__0";
+							//else
+							//	functions+=((TMLSelectEvt)currElem).getParam(i,j);
+							functions+= ", &" + ((TMLSelectEvt)currElem).getParam(i,j);
 						}
-						functions+=");\n}\n\n"; 
+						functions+=");\nreturn 0;\n}\n\n"; 
 					}
 					nextCommand+= ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement,null,null); 
 				}
@@ -880,30 +879,50 @@ public class MappedSystemCTask {
 		}  
 	}
 
-	private void handleParameters(int nbOfParams, String[] param, String cmdName, int ID, String channelName, boolean wait, String liveVarString){
-		String params="";
+	private void handleParameters(TMLActivityElement currElem, String cmdName, boolean wait, String liveVarString){
+		String concatParams="", channelName="";
+		String[] paramArray=null;
 		boolean areStatic=true;
+		int nbOfParams=0;
+		String address=(wait)? "&":"";
+		if (currElem instanceof TMLActivityElementEvent){
+			nbOfParams=((TMLActivityElementEvent)currElem).getNbOfParams();
+			paramArray = new String[nbOfParams];
+			for (int i=0; i< nbOfParams; i++){
+				paramArray[i]=((TMLActivityElementEvent)currElem).getParam(i);
+			}
+			channelName = ((TMLActivityElementEvent)currElem).getEvent().getExtendedName();
+		}
+		else if (currElem instanceof TMLSendRequest){
+			nbOfParams=((TMLSendRequest)currElem).getNbOfParams();
+			paramArray = new String[nbOfParams];
+			for (int i=0; i< nbOfParams; i++){
+				paramArray[i]=((TMLSendRequest)currElem).getParam(i);
+			}
+			channelName = ((TMLSendRequest)currElem).getRequest().getExtendedName();
+		}
 		if (nbOfParams==0){
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0," + liveVarString +")"+CR;
-			return;
-		}
-		for(int i=0; i<3; i++){
-			if(areStatic && !isIntValue(param[i])) areStatic=false;
-			if (i>0) params+=",";
-			//if (param[i]==null || param[i].isEmpty()) params+="rnd__0"; else params+=param[i];
-			if (param[i]==null || param[i].isEmpty()) params+="0"; else params+=param[i];
-		}
-		if (areStatic){
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",0," + liveVarString + ",Parameter<ParamType>("+ params + "))"+CR;
+			initCommand+= "," + cmdName + "("+ currElem.getID() +",this," + channelName + ",0," + liveVarString +")"+CR;
 		}else{
-			initCommand+= "," + cmdName + "("+ ID +",this," + channelName + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func,"+ liveVarString + ")" + CR;
-			functionSig+="void " + cmdName + "_func(Parameter<ParamType>& ioParam)" + SCCR;
-			functions+="void " + reference + "::" + cmdName +  "_func(Parameter<ParamType>& ioParam){" + CR;
-			if (wait)
-				functions += "ioParam.getP(" + params + ")" + SCCR;
-			else
-				functions += "ioParam.setP(" + params + ")" + SCCR;
-			functions+="}\n\n"; 
+			for(int i=0; i<nbOfParams; i++){
+				if(areStatic && !isIntValue(paramArray[i])) areStatic=false;
+				if (i>0) concatParams+=",";
+				//concatParams+=",";
+				if (paramArray[i]==null || paramArray[i].isEmpty()) concatParams+="0"; else concatParams+= address + paramArray[i];
+			}
+			if (areStatic){
+				initCommand+= "," + cmdName + "("+ currElem.getID() +",this," + channelName + ",0," + liveVarString + ",Parameter<ParamType>(" + nbOfParams + "," + concatParams + "))"+CR;
+			}else{
+				initCommand+= "," + cmdName + "("+ currElem.getID() +",this," + channelName + ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func,"+ liveVarString + ")" + CR;
+				functionSig+="Parameter<ParamType>* " + cmdName + "_func(Parameter<ParamType>* ioParam)" + SCCR;
+				functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func(Parameter<ParamType>* ioParam){" + CR;
+				if (wait)
+					functions += "ioParam->getP(" + concatParams + ")" + SCCR + "return 0" + SCCR;
+				else
+					//functions += "ioParam.setP(" + concatParams + ")" + SCCR;
+					functions += "return new Parameter<ParamType>(" + nbOfParams + "," + concatParams + ")" + SCCR;
+				functions+="}\n\n"; 
+			}
 		}
 	}
 
@@ -987,7 +1006,7 @@ public class MappedSystemCTask {
 		return null;
 	}
 	
-	public void determineCheckpoints(int[] aStatistics){
-		_analysis.determineCheckpoints(aStatistics);
-	}
+	//public void determineCheckpoints(int[] aStatistics){
+	//	_analysis.determineCheckpoints(aStatistics);
+	//}
 }
