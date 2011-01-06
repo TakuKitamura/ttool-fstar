@@ -53,10 +53,12 @@ public:
 	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iLengthFunc Pointer to the function returning the length of the command
-	\param iType Exec Type (ExecI, ExecC,...) 
+	\param iType Exec Type (ExecI, ExecC,...)
 	\param iStatLength Static length of command if applicable
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
     	*/
-	TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength=1);
+	TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;

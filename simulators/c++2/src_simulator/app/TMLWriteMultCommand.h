@@ -57,9 +57,10 @@ public:
 	\param iChannels Pointer to an array of pointers to channels which may be written
 	\param iNbOfChannels Number of channels
 	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
 	\param iStatLength Static length of command if applicable
 	*/
-	TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, const char* iLiveVarList, TMLLength iStatLength=1);
+	TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, const char* iLiveVarList, bool iCheckpoint, TMLLength iStatLength=1);
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;

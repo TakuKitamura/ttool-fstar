@@ -139,7 +139,7 @@ ID TMLChannel::getID() const {
 	return _ID;
 }
 
-TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
 	return iNbOfSamples;
 }
 

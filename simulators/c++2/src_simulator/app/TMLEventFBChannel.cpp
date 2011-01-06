@@ -42,13 +42,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFBChannel::TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
+TMLEventFBChannel::TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, unsigned int iParamNo): TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iParamNo),_length(iLength){
 }
 
 void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	//if (iTrans->getCommand()->getParamFuncPointer()!=0) (_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
-	iTrans->getCommand()->setParams(_tmpParam);
+	//iTrans->getCommand()->setParams(_tmpParam);
+	_tmpParam = iTrans->getCommand()->setParams(0);
 	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
 	_overflow = (_content==_length);
 }
@@ -66,7 +66,7 @@ void TMLEventFBChannel::write(){
 	_paramQueue.push_back(_tmpParam);   //NEW
 #ifdef STATE_HASH_ENABLED
 	//_stateHash+=_tmpParam.getStateHash();
-	_tmpParam.getStateHash(&_stateHash);
+	_tmpParam->getStateHash(&_stateHash);
 #endif
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(_writeTrans->getEndTime());
@@ -124,7 +124,7 @@ std::string TMLEventFBChannel::toString() const{
 	return outp.str();
 }
 
-TMLLength TMLEventFBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+TMLLength TMLEventFBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
 	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;

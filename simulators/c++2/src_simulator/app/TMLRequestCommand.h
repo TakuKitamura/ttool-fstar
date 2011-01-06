@@ -57,9 +57,10 @@ public:
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iParamFunc Pointer to a parameter function
 	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
 	\param iStatParam Static parameter if applicable 
 	*/
-	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, Parameter<ParamType> iStatParam = Parameter<ParamType>(0,0,0));
+	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam = Parameter<ParamType>(0));
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;
@@ -71,7 +72,7 @@ public:
 	/**
 	\param ioParam Parameter data structure
 	*/ 
-	void setParams(Parameter<ParamType>& ioParam);
+	Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
 protected:
 	///Channel on which the event is conveyed
 	TMLEventBChannel* _channel;

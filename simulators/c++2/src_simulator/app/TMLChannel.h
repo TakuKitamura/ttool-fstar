@@ -149,7 +149,7 @@ public:
 	\param iParam Parameter to insert
       	\return Returns true if successful
     	*/ 
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam);
 	///Writes XML information about the component to a stream
 	/**
       	\param s Reference to an output stream

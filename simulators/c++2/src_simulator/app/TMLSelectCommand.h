@@ -56,9 +56,10 @@ public:
 	\param iChannel Pointer to an array of pointers to channels conveying the desired signals
 	\param iNumbChannels Number of channels in the array
 	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
 	\param iParamFunc Pointer to an array of parameter functions pointers
 	*/
-	TMLSelectCommand(ID iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, ParamFuncPointer* iParamFunc);
+	TMLSelectCommand(ID iID, TMLTask* iTask,TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, bool iCheckpoint, ParamFuncPointer* iParamFunc);
 	///Destructor
 	~TMLSelectCommand();
 	void execute();
@@ -69,7 +70,7 @@ public:
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
-	void setParams(Parameter<ParamType>& ioParam);
+	Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
 #ifdef ADD_COMMENTS
 	std::string getCommentString(Comment* iCom)  const;
 #endif

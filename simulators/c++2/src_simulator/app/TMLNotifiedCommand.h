@@ -56,8 +56,10 @@ public:
 	\param iChannel Pointer to the channel on which the event is conveyed
 	\param iResultVar Pointer to the variable which has to contain the result
 	\param iResultVarDescr String representation of the result variable
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
 	*/
-	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr);
+	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;

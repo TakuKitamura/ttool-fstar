@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
@@ -75,24 +75,8 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 #ifdef STATE_HASH_ENABLED
-		if(_liveVarList!=0){
-			//_hash->init(static_cast<HashValueType>(this), 70);
-			_task->refreshStateHash(_liveVarList);
-			//HashValueType aStateHash =_hash->getHash();
-			_simComp->checkForRecurringSystemState();
-			/*if (_stateHashes.empty()){
-				_stateHashes.insert(aStateHash);
-				_task->setCommonExecution(true);
-			}else{
-				if (_stateHashes.find(aStateHash)==_stateHashes.end()){
-					_stateHashes.insert(aStateHash);
-				}else{
-					std::cout << "State has been recognized, cmd ID: " << _ID << "\n";
-					_task->setCommonExecution(true);
-					_simComp->checkForRecurringSystemState();
-				}
-			}*/
-		}
+		_task->refreshStateHash(_liveVarList);
+		if(_checkpoint)_simComp->checkForRecurringSystemState();
 #endif
 		//std::cout << "COMMAND FINISHED!!n";
 #ifdef LISTENERS_ENABLED
@@ -200,7 +184,8 @@ TMLTask* TMLCommand::getDependentTask(unsigned int iIndex)const{
 	return 0;
 }
 
-void TMLCommand::setParams(Parameter<ParamType>& ioParam){
+Parameter<ParamType>* TMLCommand::setParams(Parameter<ParamType>* ioParam){
+	return 0;
 }
 
 #ifdef ADD_COMMENTS

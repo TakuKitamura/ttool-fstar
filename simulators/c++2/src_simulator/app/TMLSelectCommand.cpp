@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels, iLiveVarList), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0) {
+TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, bool iCheckpoint, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0) {
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
@@ -188,6 +188,10 @@ std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
 }
 #endif
 
-void TMLSelectCommand::setParams(Parameter<ParamType>& ioParam){
-	if (_paramFuncs[_indexNextCommand]!=0) (_task->*_paramFuncs[_indexNextCommand])(ioParam);
+Parameter<ParamType>* TMLSelectCommand::setParams(Parameter<ParamType>* ioParam){
+	//if (_paramFuncs[_indexNextCommand]!=0) (_task->*_paramFuncs[_indexNextCommand])(ioParam);
+	Parameter<ParamType>* aResult = 0;
+	if (_paramFuncs[_indexNextCommand]!=0) aResult = (_task->*_paramFuncs[_indexNextCommand])(ioParam);
+	delete ioParam;
+	return aResult;
 }

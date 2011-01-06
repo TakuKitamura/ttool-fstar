@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 #include <EBRDD.h>
 
-SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false), _knownStateReached(false), _systemHash() {
+SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(false) {
 }
 
 SimComponents::~SimComponents(){
@@ -336,7 +336,8 @@ void SimComponents::checkForRecurringSystemState(){
 		if (aCurrCmd!=0){
 			std::cout << "add curr cmd and progress Task " << (*i)->toString() << "\n";
 			_systemHash.addValue((HashValueType)aCurrCmd);
-			_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
+			//_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
+			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
 		}
 	}
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){

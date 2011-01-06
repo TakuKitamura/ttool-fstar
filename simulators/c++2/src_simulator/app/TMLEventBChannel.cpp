@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventBChannel::TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+TMLEventBChannel::TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iParamNo, bool iRequestChannel, bool iSourceIsFile):TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iParamNo), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 	_overflow = false; 
 	if (_sourceIsFile){
 		std::cout << "try to open Event file " << _name.c_str() << std::endl;
@@ -63,10 +63,12 @@ void TMLEventBChannel::readNextEvents(){
 	//std::cout << "vv" << std::endl;
 	if (_eventFile->is_open()){
 		unsigned int i=0;
-		Parameter<ParamType> aNewParam; //NEW
+		//Parameter<ParamType> aNewParam;
+		Parameter<ParamType>* aNewParam; //NEW
 		while (++i<NO_EVENTS_TO_LOAD && !_eventFile->eof()){
 			_content++;
-			(*_eventFile) >> aNewParam;  //NEW
+			aNewParam = new Parameter<ParamType>(_paramNo);
+			(*_eventFile) >> *aNewParam;  //NEW
 			//aNewParam.readTxtStream(*_eventFile);
 #ifdef STATE_HASH_ENABLED
 			//_stateHash+=aNewParam.getStateHash();
@@ -80,10 +82,8 @@ void TMLEventBChannel::readNextEvents(){
 
 void TMLEventBChannel::testWrite(TMLTransaction* iTrans){
 	_writeTrans=iTrans;
-	//if (iTrans->getCommand()->getParamFuncPointer()!=0){
-	//(_writeTask->*(iTrans->getCommand()->getParamFuncPointer()))(_tmpParam);  //NEW
-	iTrans->getCommand()->setParams(_tmpParam);
-	//}
+	//iTrans->getCommand()->setParams(_tmpParam);
+	_tmpParam = iTrans->getCommand()->setParams(0);
 	_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 }
 
@@ -104,7 +104,7 @@ void TMLEventBChannel::write(TMLTransaction* iTrans){
 	_paramQueue.push_back(_tmpParam);   //NEW
 #ifdef STATE_HASH_ENABLED
 	//_stateHash+=_tmpParam.getStateHash();
-	_tmpParam.getStateHash(&_stateHash);
+	_tmpParam->getStateHash(&_stateHash);
 #endif
 	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
 		_readTrans->setRunnableTime(iTrans->getEndTime());
@@ -125,6 +125,7 @@ bool TMLEventBChannel::read(){
 		if (_content==0 && _sourceIsFile) readNextEvents();
 		//std::cout << "read next" << std::endl;
 		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
+		//std::cout << "read!!!!!!!!!!!!!\n";
 		_readTrans->getCommand()->setParams(_paramQueue.front());
 #ifdef STATE_HASH_ENABLED
 		//_stateHash-=_paramQueue.front().getStateHash();
@@ -203,7 +204,7 @@ void TMLEventBChannel::reset(){
 	}
 }
 
-TMLLength TMLEventBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>& iParam){
+TMLLength TMLEventBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
 	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;

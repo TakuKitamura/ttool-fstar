@@ -162,12 +162,14 @@ using std::max;
 #define TAG_CONTENTc "</content>"
 #define TAG_PARAMo "<param>"
 #define TAG_PARAMc "</param>"
-#define TAG_E1o "<e1>"
-#define TAG_E1c "</e1>"
-#define TAG_E2o "<e2>"
-#define TAG_E2c "</e2>"
-#define TAG_E3o "<e3>"
-#define TAG_E3c "</e3>"
+//#define TAG_E1o "<e1>"
+//#define TAG_E1c "</e1>"
+//#define TAG_E2o "<e2>"
+//#define TAG_E2c "</e2>"
+//#define TAG_E3o "<e3>"
+//#define TAG_E3c "</e3>"
+#define TAG_Pxo "<e"
+#define TAG_Pxc "</e"
 
 #define TAG_UTILo "<util>"
 #define TAG_UTILc "</util>"
@@ -234,7 +236,7 @@ typedef std::map<ID, EBRDDCommand*> CommandHashTabEBRDD;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
-typedef std::deque<Parameter<ParamType> > ParamQueue;
+typedef std::deque<Parameter<ParamType>* > ParamQueue;
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
@@ -244,7 +246,7 @@ typedef TMLTime (TMLTask::*LengthFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef int (EBRDD::*EBRDDFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
-typedef unsigned int (TMLTask::*ParamFuncPointer) (Parameter<ParamType>& ioParam);
+typedef Parameter<ParamType>* (TMLTask::*ParamFuncPointer) (Parameter<ParamType>* ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)
 typedef bool (*BreakCondFunc)(TMLTask*);
 ///Datatype holding references to TraceableDevices (for VCD output)

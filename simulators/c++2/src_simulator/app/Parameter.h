@@ -43,55 +43,77 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <HashAlgo.h>
-///This class encapsulates three parameters
+
 template <typename T>
-class Parameter{
+class Parameter {
 public:
 	///Constructor
-	/**
-	\param ip1 Value 1
-	\param ip2 Value 2
-	\param ip3 Value 3
-	*/
-	Parameter(const T& ip1,const T& ip2,const T& ip3):_p1(ip1),_p2(ip2),_p3(ip3){}
-	///Constructor
-	Parameter():_p1(0),_p2(0),_p3(0){}
-	///Constructor
-	/**
-	\param s Stream providing the three parameter values
-	*/
-	Parameter(std::istream& s){
-		READ_STREAM(s, _p1);
-		READ_STREAM(s, _p2);
-		READ_STREAM(s, _p3);
-#ifdef DEBUG_SERIALIZE
-		print();
-#endif
+	
+	Parameter(unsigned int iParamNo): _p(0), _paramNo(iParamNo){
+		if(_paramNo!=0) _p = new T[_paramNo];
 	}
-	/////Assignement operator, copies all parameters
-	/*const Parameter<T>& operator=(const Parameter<T>& rhs){
-		_p1=rhs._p1;
-		_p2=rhs._p2;
-		_p3=rhs._p3;
-		return *this;
-	}*/
+	
+	Parameter(unsigned int iParamNo, const T& ip1 ...): _p(0), _paramNo(iParamNo){
+		_p = new T[_paramNo];
+		T arg=ip1;
+		va_list args; // argument list
+		va_start(args, ip1); // initialize args
+		for (unsigned int i=0;i<_paramNo;i++){
+			_p[i]=arg;
+			arg=va_arg(args, T);
+		}
+	}
+		
+	Parameter(const Parameter& iRhs): _p(0), _paramNo(iRhs._paramNo){
+		if (_paramNo!=0){
+			_p = new T[_paramNo];
+			memcpy(_p, iRhs._p, _paramNo*sizeof(T));
+		}
+	}
+
+	Parameter(unsigned int iParamNo, std::istream& s): _p(0), _paramNo(iParamNo){
+		if (_paramNo!=0){
+			_paramNo=iParamNo;
+			_p = new T[_paramNo];
+			for (unsigned int i=0;i<_paramNo;i++){
+				READ_STREAM(s, _p[i]);
+			}
+#ifdef DEBUG_SERIALIZE
+			print();
+#endif
+		}
+	}
+	
+	~Parameter(){
+		if (_p!=0) delete [] _p;
+	}
+	
 	///Print function for testing purposes
 	void print() const{
-		//if (_p1!=0 || _p2!=0 || _p3!=0)
-		std::cout << "p1:" << _p1 << " p2:" << _p2 << " p3:" << _p3 << std::endl;
+		std::cout << "print:\n";
+		for (unsigned int i=0;i<_paramNo;i++){
+			std::cout << " p[" << (i+1) << "]:" << _p[i];
+		}
+		std::cout << std::endl;
+		std::cout << "end print:\n";
 	}
+	
 	inline std::ostream& writeObject(std::ostream& s){
-		WRITE_STREAM(s, _p1);
-		WRITE_STREAM(s, _p2);
-		WRITE_STREAM(s, _p3);
+		std::cout << "writeObject:\n";
+		for (unsigned int i=0;i<_paramNo;i++){
+			WRITE_STREAM(s, _p[i]);
+		}
 #ifdef DEBUG_SERIALIZE
 		print();
 #endif
+		std::cout << "end writeObject:\n";
 		return s;
 	}
 	///Stream operator >>
 	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
-		is >> obj._p1 >> obj._p2 >> obj._p3;
+		for (unsigned int i=0;i<obj._paramNo;i++){
+			is >> obj._p[i];
+		}
  		return is;
 	}
 	///Streams the parameter in XML format
@@ -99,81 +121,52 @@ public:
 	\param s Stream
 	*/
 	void streamStateXML(std::ostream& s) const{
-		s << TAG_PARAMo << TAG_E1o << _p1 << TAG_E1c << TAG_E2o << _p2 << TAG_E2c << TAG_E3o << _p3 << TAG_E3c << TAG_PARAMc;
+		std::cout << "streamStateXML:\n";
+		s << TAG_PARAMo;
+		for (unsigned int i=0;i<_paramNo;i++){
+			 s << TAG_Pxo << i << ">" << _p[i] << TAG_Pxc << i << ">";
+		}
+		s << TAG_PARAMc;
+		std::cout << "end streamStateXML:\n";
 	}
-	//inline static void * operator new(size_t size){
-	//	return memPool.pmalloc(size);
+
+	/*inline void setP(T ip1 ...){
+		T arg=ip1;
+		va_list args; // argument list
+		va_start(args, ip1); // initialize args
+		for (unsigned int i=0;i<_paramNo;i++){
+			_p[i]=arg;
+			arg=va_arg(args, T);
+		}
+	}*/
+
+	inline void getP(T* op1 ...) const {
+		std::cout << "getP:\n";
+		T* arg=op1;
+		va_list args; // argument list
+		va_start(args, op1); // initialize args
+		for (unsigned int i=0;i<_paramNo;i++){
+			*arg=_p[i];
+			arg=va_arg(args, T*);
+		}
+		std::cout << "end getP:\n";
+	}
+	
+	//inline T getPByIndex(unsigned int iIndex){
+	//	return _p[iIndex];
 	//}
-	//inline static void operator delete(void *p, size_t size){
-	//	memPool.pfree(p, size);
-	//}
-	///Returns parameter no 1
-	/**
-	\return Parameter no 1
-	*/
-	inline T getP1() const { return _p1;}
-	///Returns parameter no 2
-	/**
-	\return Parameter no 2
-	*/
-	inline T getP2() const { return _p2;}
-	///Returns parameter no 3
-	/**
-	\return Parameter no 3
-	*/
-	inline T getP3()const { return _p3;}
-	///Sets parameter no 1
-	/**
-	\param iP1 Parameter no 1
-	*/
-	inline void setP1(T iP1){ _p1=iP1;}
-	///Sets parameter no 2
-	/**
-	\param iP2 Parameter no 2
-	*/
-	inline void setP2(T iP2){ _p2=iP2;}
-	///Sets parameter no 3
-	/**
-	\param iP3 Parameter no 3
-	*/
-	inline void setP3(T iP3){ _p3=iP3;}
-	///Sets all parameters
-	/**
-	\param iP1 Parameter no 1
-	\param iP2 Parameter no 2
-	\param iP3 Parameter no 3
-	*/
-	inline void setP(T iP1, T iP2, T iP3){ _p1=iP1; _p2=iP2; _p3=iP3;}
-	///Gets all parameters
-	/**
-	\param oP1 Variable no 1
-	\param oP2 Variable no 2
-	\param oP3 Variable no 3
-	*/
-	inline void getP(T& oP1, T& oP2, T& oP3) const { oP1=_p1; oP2=_p2; oP3=_p3;}
-	inline void getP(T& oP1, T& oP2, const T& oP3) const { oP1=_p1; oP2=_p2;}
-	inline void getP(T& oP1, const T& oP2, const T& oP3) const { oP1=_p1;}
 	
 	inline void getStateHash(HashAlgo* iHash) const{
 		std::cout << "add param vals:\n";
-		iHash->addValue((HashValueType)_p1);
-		iHash->addValue((HashValueType)_p2);
-		iHash->addValue((HashValueType)_p3);
+		for (unsigned int i=0;i<_paramNo;i++){
+			iHash->addValue((HashValueType)_p[i]);
+		}
+		std::cout << "end add param vals:\n";
 	}
 		
-	/*inline void removeStateHash(HashAlgo* iHash) const{
-		iHash->removeValue((HashValueType)_p1);
-		iHash->removeValue((HashValueType)_p2);
-		iHash->removeValue((HashValueType)_p3);
-	}*/
-	
 protected:
-	///Parameter no 1
-	T _p1;
-	///Parameter no 2
-	T _p2;
-	///Parameter no 3
-	T _p3;
 	//static Pool<Parameter<T> > memPool;
+	T* _p;
+	unsigned int _paramNo;
 };
 #endif

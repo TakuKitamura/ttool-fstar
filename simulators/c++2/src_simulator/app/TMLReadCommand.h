@@ -56,9 +56,10 @@ public:
 	\param iLengthFunc Pointer to the function returning the length of the command
 	\param iChannel Pointer to the channel which is read
 	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
 	\param iStatLength Static length of command if applicable
 	*/
-	TMLReadCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, const char* iLiveVarList, TMLLength iStatLength=1);
+	TMLReadCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, const char* iLiveVarList, bool iCheckpoint, TMLLength iStatLength=1);
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;

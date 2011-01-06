@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSendCommand::TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, Parameter<ParamType> iStatParam): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList), _channel(iChannel), _paramFunc(iParamFunc), _statParam(iStatParam) {
+TMLSendCommand::TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFunc(iParamFunc), _statParam(iStatParam) {
 }
 
 void TMLSendCommand::execute(){
@@ -101,10 +101,12 @@ std::string TMLSendCommand::getCommandStr() const{
 	return _paramFunc;
 }*/
 
-void TMLSendCommand::setParams(Parameter<ParamType>& ioParam){
-	if (_paramFunc==0)
+//void TMLSendCommand::setParams(Parameter<ParamType>& ioParam){
+Parameter<ParamType>* TMLSendCommand::setParams(Parameter<ParamType>* ioParam){
+	/*if (_paramFunc==0)
 		ioParam=_statParam;
 	else
-		(_task->*_paramFunc)(ioParam);
+		(_task->*_paramFunc)(ioParam);*/
+	return (_paramFunc==0)? new Parameter<ParamType>(_statParam):(_task->*_paramFunc)(ioParam);
 }
 

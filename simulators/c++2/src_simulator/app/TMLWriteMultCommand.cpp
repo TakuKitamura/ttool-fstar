@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWriteMultCommand::TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, const char* iLiveVarList, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1, iLiveVarList), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
+TMLWriteMultCommand::TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, const char* iLiveVarList, bool iCheckpoint, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
 	_length=iStatLength * _channels[0]->getWidth();
 }
 

@@ -63,9 +63,10 @@ public:
 	\param iLength Virtual length of the command
 	\param iNbOfNextCmds Number of next commands
 	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
     	*/
 	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
-	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList);
+	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint);
 	///Destructor
 	virtual ~TMLCommand();
 	///Initializes the command and passes the control flow to the prepare() method of the next command if necessary
@@ -112,7 +113,8 @@ public:
 	/**
 	\param ioParam Parameter data structure
 	*/
-	virtual void setParams(Parameter<ParamType>& ioParam);
+	//virtual void setParams(Parameter<ParamType>& ioParam);
+	virtual Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation
@@ -203,6 +205,11 @@ public:
 	\return Command length
 	*/
 	TMLLength getLength() const;
+	///Returns whether the command is considered as Checkpoint for system state comparisons
+	/**
+	\return true if command is a checkpoint
+	*/
+	bool isCheckpoint();
 protected:
 	///ID of the command
 	ID _ID;
@@ -243,6 +250,8 @@ protected:
 	TMLTime _commandStartTime;
 	///Bitmap of live variables
 	const char* _liveVarList;
+	///Checkpoint Flag
+	bool _checkpoint;
 	/////Hash Algorithm object
 	//HashAlgo* _hash;
 };

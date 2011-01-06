@@ -812,12 +812,15 @@ void Simulator::decodeCommand(std::string iCmd){
 				anErrorCode=2;
 			}else{
 				aInpStream >> aParam1;
-				Parameter<ParamType> anInsertParam;
+				//Parameter<ParamType> anInsertParam;
 				if (dynamic_cast<TMLEventChannel*>(aChannel)==0){
-					aChannel->insertSamples(aParam1, anInsertParam);
+					//aChannel->insertSamples(aParam1, anInsertParam);
+					aChannel->insertSamples(aParam1, 0);
 				}else{
+					Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
 					aInpStream >> anInsertParam;
-					aChannel->insertSamples(aParam1, anInsertParam);
+					//aChannel->insertSamples(aParam1, anInsertParam);
+					aChannel->insertSamples(aParam1, &anInsertParam);
 				}
 				aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;
 			}

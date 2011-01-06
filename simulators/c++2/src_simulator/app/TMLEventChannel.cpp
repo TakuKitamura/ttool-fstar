@@ -40,10 +40,12 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLEventChannel.h>
 
-TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0,0,0), _stateHash((HashValueType)this, 30), _hashValid(true) {
+TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iParamNo): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0), _stateHash((HashValueType)this, 30), _hashValid(true), _paramNo(iParamNo) {
 }
 
 TMLEventChannel::~TMLEventChannel(){
+	for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
+		delete *i;
 }
 
 //TMLLength TMLEventChannel::getContent() const{
@@ -59,7 +61,7 @@ std::ostream& TMLEventChannel::writeObject(std::ostream& s){
 	//std::cout << "write size of channel " << _name << " :" << _content << std::endl;
 	TMLStateChannel::writeObject(s);
 	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		i->writeObject(s);
+		(*i)->writeObject(s);
 	}
 	//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
 	return s;
@@ -74,7 +76,8 @@ std::istream& TMLEventChannel::readObject(std::istream& s){
 	//_paramQueue.clear();
 	for(aParamNo=0; aParamNo < _content; aParamNo++){
 		//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
-		_paramQueue.push_back(Parameter<ParamType>(s));
+		//_paramQueue.push_back(Parameter<ParamType>(s));
+		_paramQueue.push_back(new Parameter<ParamType>(_paramNo, s));
 	}
 	_hashValid = false;
 	return s;
@@ -82,7 +85,7 @@ std::istream& TMLEventChannel::readObject(std::istream& s){
 
 void TMLEventChannel::print() const{
 	for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		i->print();
+		(*i)->print();
 	}
 }
 
@@ -99,7 +102,7 @@ void TMLEventChannel::streamStateXML(std::ostream& s) const{
 	s << TAG_CHANNELo << " name=\"" << _name << "\" id=\"" << _ID << "\">" << std::endl;
 	s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc << std::endl;
 	for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		i->streamStateXML(s);
+		(*i)->streamStateXML(s);
 		s <<std::endl;
 	}
 	s << TAG_CHANNELc << std::endl;
@@ -112,11 +115,15 @@ void TMLEventChannel::getStateHash(HashAlgo* iHash) const{
 		if (!_hashValid){
 			_stateHash.init((HashValueType)this, 30);
 			for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-				i->getStateHash(&_stateHash);
+				(*i)->getStateHash(&_stateHash);
 			}
 			_hashValid = true;
 		}
 		iHash->addValue(_stateHash.getHash());
 		iHash->addValue(_content);
 	}
+}
+
+unsigned int TMLEventChannel::getParamNo(){
+	return _paramNo;
 }
