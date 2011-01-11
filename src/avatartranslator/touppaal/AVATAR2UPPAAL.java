@@ -654,7 +654,6 @@ public class AVATAR2UPPAAL {
 	
 	
 	public UPPAALLocation translateAvatarActionOnSignal(AvatarActionOnSignal _aaos, AvatarBlock _block, UPPAALTemplate _template, UPPAALLocation _previous, String _guard) {
-		UPPAALLocation loc1;
 		
 		String [] ss = manageSynchro(_block, _aaos);
 		UPPAALLocation loc = addLocation(_template);
@@ -669,24 +668,17 @@ public class AVATAR2UPPAAL {
 		
 		TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
 		
-		/*loc1 = hash.get(_aaos);
-		if (loc1 == null) {
-			hash.put(_aaos, loc);
-			/*if (_aaos.isCheckable()) {
-				loc1 = addLocation(_template);  
-				tr = addTransition(_template, loc, loc1);
-				TraceManager.addDev("---> Action on signal " + _aaos + " is selected for checking");
+		if (_aaos.isCheckable()) {
+			if (hashChecking.get(_aaos) == null) {
 				hashChecking.put(_aaos, loc);
 				loc.unsetOptimizable();
-				loc.setCommitted();
+			/*} else {
+				UPPAALLocation loc1 = (UPPAALLocation)(hashChecking.get(_aaos));
+				UPPAALTransition tr1 = addTransition(_template, loc, loc1);
+				loc = loc1;
+				loc.setCommitted();*/
 			}
-		} else {
-			// Must link to the other location
-			tr = addTransition(_template, loc, loc1);
-			loc.setCommitted();
-			TraceManager.addDev("<--- Action on signal " + _aaos + " is linked to a previous translation of it");
-			return loc1;
-		}*/
+		}
 		
 		return loc;
 	}
@@ -716,7 +708,7 @@ public class AVATAR2UPPAAL {
 				tr = addTransition(_template, _previous, loc1);
 				tmps = convertGuard(_at.getGuard());
 				setGuard(tr, tmps);
-				TraceManager.addDev("MAKE CHOICefrom guard");
+				TraceManager.addDev("MAKE CHOICE from guard");
 				setSynchronization(tr, "makeChoice!");
 				madeTheChoice = true;
 				loc = loc1;
@@ -886,6 +878,12 @@ public class AVATAR2UPPAAL {
 						
 						if (aaos.isCheckable()) {
 							if (hashChecking.get(at.getNext(0)) == null) {
+								hashChecking.put(aaos, locend);
+								locend.unsetOptimizable();
+							} else {
+								// Enforce the new information
+								TraceManager.addDev("---------------- Already set as checkable -> enforcing new information");
+								hashChecking.remove(aaos);
 								hashChecking.put(aaos, locend);
 								locend.unsetOptimizable();
 							}
@@ -1326,6 +1324,7 @@ public class AVATAR2UPPAAL {
 					if (loc != null) {
 						ret += "." + loc.name;
 					} else {
+						TraceManager.addDev("Unknown element in hash checking");
 						return null;
 					}
 				} else {

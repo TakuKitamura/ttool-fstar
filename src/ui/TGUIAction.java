@@ -441,6 +441,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int ACT_TOGGLE_ATTR = 220;
 	
 	public static final int ACT_TOGGLE_DIPLO_ID = 264;
+	public static final int ACT_TOGGLE_AVATAR_ID = 334;
 	
 	public static final int ACT_TOGGLE_INTERNAL_COMMENT = 227;
    
@@ -453,7 +454,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 334;
+    public static final int NB_ACTION = 335;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -541,6 +542,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_TOGGLE_ATTR] = new TAction("toggle-attr-command", "Show / hide attributes (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide element attributes (OFF -> Partial -> Full)", "Show / hide attributes (OFF -> Partial -> Full)", '0');
         
 		actions[ACT_TOGGLE_DIPLO_ID] = new TAction("toggle-tml-id", "Show / hide DIPLODOCUS IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide DIPLODOCUS IDs", "Show / hide DIPLODOCUS IDs", '0');
+        actions[ACT_TOGGLE_AVATAR_ID] = new TAction("toggle-avatar-id", "Show / hide AVATAR IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide AVATAR IDs", "Show / hide AVATAR IDs", '0');
         
 		actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');
         
@@ -549,7 +551,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate LOTOS specification",  "Generates a LOTOS specification from TURTLE diagrams", '0');
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "Generate LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate LOTOS-based RG ",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
-        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic34, IconManager.imgic35, "Generate UPPAAL specification",  "Generates a UPPAAL specification from DIPLODOCUS diagrams", '0');
+        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic34, IconManager.imgic35, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
         actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
 		actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);

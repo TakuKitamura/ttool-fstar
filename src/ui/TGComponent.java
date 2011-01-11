@@ -106,6 +106,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	private int DIPLOID = -1;
 	private boolean DIPLO_running = false;
 	
+	// AVATAR ID
+	private int AVATARID = -1;
+	private boolean AVATAR_running = false;
+	
     
     // Zone of drawing -> relative to father if applicable
     protected int minX;
@@ -469,6 +473,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	public void drawAVATARID(Graphics g) {
+		if (getAVATARID() != -1) {
+			g.setColor(ColorManager.AVATARID);
+			g.drawString(""+getAVATARID(), x+width, y+height + 5);
+		}
+	}
+	
 	public void drawRunningDiploID(Graphics g, RunningInfo ri) {
 		//System.out.println("Drawing running DIPLO");
 		int wb = 30;
@@ -679,6 +690,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			}
 		} else if (tdp.DIPLO_ID_ON) {
 			drawDiploID(g);
+		} else if (tdp.AVATAR_ID_ON) {
+			drawAVATARID(g);
 		}
 		
 		if (this instanceof EmbeddedComment) {
@@ -2281,6 +2294,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	public int getDIPLOID() {
 		return DIPLOID;
+	}
+	
+	// AVATAR ID
+	public void setAVATARID(int _ID) {
+		AVATARID = _ID;
+	}
+	
+	public int getAVATARID() {
+		return AVATARID;
 	}
 	
     

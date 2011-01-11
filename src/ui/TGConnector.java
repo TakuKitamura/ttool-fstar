@@ -220,6 +220,21 @@ public abstract class TGConnector extends TGCWithInternalComponent {
         makeSquareWithoutMovingTGComponents();
         return true;
     }
+	
+	public void drawAVATARID(Graphics g) {
+		if (getAVATARID() != -1) {
+			g.setColor(ColorManager.AVATARID);
+			int xx, yy;
+			if (getIndexOfLastTGCPointOfConnector() >= 0) {
+				xx = tgcomponent[0].x;
+				yy = tgcomponent[0].y;
+			} else {
+				xx = p2.getX();
+				yy = p2.getY();
+			}
+			g.drawString(""+getAVATARID(), (p1.getX()+xx)/2, ((p1.getY()+yy)/2) + 5);
+		}
+	}
     
     public void makeSquareWithoutMovingTGComponents() {
         if ((p1 == null) ||(p2 == null)) {

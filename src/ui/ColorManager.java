@@ -67,6 +67,7 @@ public class ColorManager {
 	public static final Color CURRENT_COMMAND_TERMINATED = new Color(255, 42, 50, 200);
 	public static final Color CURRENT_COMMAND_UNKNOWN = new Color(107, 97, 97, 200);
 	public static final Color DIPLOID = new Color(163, 5, 253);
+	public static final Color AVATARID = new Color(163, 5, 253);
     public static Color SELECTED_0 = Color.blue;
     public static final Color MOVING_0 = Color.magenta;
     public static final Color ADDING_0 = Color.lightGray;

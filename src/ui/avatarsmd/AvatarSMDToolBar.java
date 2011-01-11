@@ -83,6 +83,9 @@ public class AvatarSMDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		
+		mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].setEnabled(b);
+		
 		mgui.updateZoomInfo();
     }
     
@@ -163,12 +166,12 @@ public class AvatarSMDToolBar extends TToolBar {
 		/*this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
 		
 		this.addSeparator();
 		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
-        button.addMouseListener(mgui.mouseHandler);*/
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID]);
+        button.addMouseListener(mgui.mouseHandler);
        
     }
 } // Class

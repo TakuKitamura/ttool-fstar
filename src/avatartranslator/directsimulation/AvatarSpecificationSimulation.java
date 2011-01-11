@@ -61,7 +61,7 @@ public class AvatarSpecificationSimulation  {
 	private long clockValue;
 	private LinkedList<AvatarSimulationBlock> blocks;
 	private LinkedList<AvatarActionOnSignal> asynchronousMessages;
-	private LinkedList<AvatarSimulationTransaction> pendingTransactions;
+	private LinkedList<AvatarSimulationPendingTransaction> pendingTransactions;
 	private LinkedList<AvatarSimulationTransaction> allTransactions;
 	
     public AvatarSpecificationSimulation(AvatarSpecification _avspec) {
@@ -92,7 +92,7 @@ public class AvatarSpecificationSimulation  {
 		asynchronousMessages = new LinkedList<AvatarActionOnSignal>();
 		
 		// Create the structure for pending and executed transactions
-		pendingTransactions = new LinkedList<AvatarSimulationTransaction>();
+		pendingTransactions = new LinkedList<AvatarSimulationPendingTransaction>();
 		allTransactions = new LinkedList<AvatarSimulationTransaction>();
 	}
 	
@@ -102,7 +102,7 @@ public class AvatarSpecificationSimulation  {
 	
 	public void runSimulation() {
 		int index[];
-		LinkedList<AvatarSimulationTransaction> selectedTransactions;
+		LinkedList<AvatarSimulationPendingTransaction> selectedTransactions;
 		
 		TraceManager.addDev("Simulation started at time: " + clockValue);
 		boolean go = true;
@@ -125,7 +125,7 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		
-		TraceManager.addDev("Simulation finished at time: " + clockValue);
+		TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
 		
 		printExecutedTransactions();
 	}
@@ -138,8 +138,13 @@ public class AvatarSpecificationSimulation  {
 		}
 	}
 	
-	public LinkedList<AvatarSimulationTransaction> selectTransactions(LinkedList<AvatarSimulationTransaction> _pendingTransactions) {
-		LinkedList<AvatarSimulationTransaction> ll = new LinkedList<AvatarSimulationTransaction>();
+	public LinkedList<AvatarSimulationPendingTransaction> selectTransactions(LinkedList<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		LinkedList<AvatarSimulationPendingTransaction> ll = new LinkedList<AvatarSimulationPendingTransaction>();
+		
+		
+		
+		
+		
 		return ll;
 	}
 	

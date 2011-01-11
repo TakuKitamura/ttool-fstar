@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarSimulationTransaction
- * Avatar: notion of transaction in simulation
- * Creation: 14/12/2010
- * @version 1.0 14/12/2010
+ * Class AvatarSimulationPendingTransaction
+ * Avatar: notion of pending transaction in simulation
+ * Creation: 11/01/2011
+ * @version 1.0 11/01/2011
  * @author Ludovic APVRILLE
  * @see
  */
@@ -52,37 +52,20 @@ import java.util.*;
 import avatartranslator.*;
 import myutil.*;
 
-public class AvatarSimulationTransaction  {
-  
-	public static long ID;
+public class AvatarSimulationPendingTransaction  {
 	
-    public AvatarBlock block;
 	public AvatarSimulationBlock asb;
-	public AvatarStateMachineElement executedElement;
-	public AvatarStateMachineElement concernedElement; // Used for communication
-	public long initialClockValue;
-	public long clockValueWhenPerformed;
-	public long id;
-	public LinkedList<String> attributeValues;
+	public AvatarStateMachineElement elementToExecute;
+	public AvatarStateMachineElement involvedElement; //(transition)
+	public long clockValue;
 	
-    public AvatarSimulationTransaction() {
+    public AvatarSimulationPendingTransaction() {
     }
 	
-	public static void reinit() {
-		ID = 0;
-	}
-	
-	public static synchronized long setID() {
-		long tmp = ID;
-		ID++;
-		return tmp;
-	}
+
 	
 	public String toString() {
-		String res = "" + id + " @" + clockValueWhenPerformed + " " + executedElement + " in block " + block.getName() + "\nattributes=";
-		for(String s: attributeValues) {
-			res += s + " ";
-		}
+		String res = " @" + clockValue + " " + elementToExecute + " in block " + asb.getName();
 		return res;
 	}
 }

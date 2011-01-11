@@ -5626,6 +5626,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
 	
+	// AVATAR Simulation
+	public void setAVATARIDs(boolean b) {
+		TDiagramPanel.AVATAR_ID_ON = b;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
+	public void toggleAVATARIDs() {
+        setAVATARIDs(!TDiagramPanel.AVATAR_ID_ON);
+		TraceManager.addDev("AVATAR id: " + TDiagramPanel.AVATAR_ID_ON);
+	}
 	
 	// For simulation purpose
 	public void resetAllDIPLOIDs() {
@@ -6137,6 +6150,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             toggleAttributes();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].getActionCommand())) {
             toggleDiploIDs();
+        } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].getActionCommand())) {
+            toggleAVATARIDs();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {
             toggleGates();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_SYNCHRO].getActionCommand())) {

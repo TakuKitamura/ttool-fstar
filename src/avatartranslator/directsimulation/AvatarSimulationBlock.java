@@ -65,8 +65,15 @@ public class AvatarSimulationBlock  {
 		completed = false;
     }
 	
-	public LinkedList<AvatarSimulationTransaction> getPendingTransactions(LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
-		LinkedList<AvatarSimulationTransaction> ll = new LinkedList<AvatarSimulationTransaction>();
+	public String getName() {
+		if (block != null) {
+			return block.getName();
+		}
+		return "noname";
+	}
+	
+	public LinkedList<AvatarSimulationPendingTransaction> getPendingTransactions(LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+		LinkedList<AvatarSimulationPendingTransaction> ll = new LinkedList<AvatarSimulationPendingTransaction>();
 		
 		if (completed) {
 			return ll;
@@ -76,7 +83,7 @@ public class AvatarSimulationBlock  {
 			runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
 		}
 		
-		if (completed) {
+		if ((lastTransaction == null) || completed) {
 			return ll;
 		}
 		
@@ -84,8 +91,26 @@ public class AvatarSimulationBlock  {
 		// ...
 		// ...
 		// To be done!
-		
-		
+		AvatarSimulationPendingTransaction aspt;
+		for(int i=0; i<lastTransaction.executedElement.nbOfNexts(); i++) {
+			aspt = new AvatarSimulationPendingTransaction();
+			aspt.asb = this;
+			aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
+			if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
+				AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
+				if (!trans.hasDelay() && (trans.getNbOfAction() == 0)){
+					// empty transition, "empty" is the meaning of actions -> look for an action after
+					if(trans.getNext(0) != null) {
+						if (trans.getNext(0) instanceof AvatarActionOnSignal) {
+							aspt.involvedElement = trans;
+							aspt.elementToExecute = trans.getNext(0);
+						}
+					}
+				}
+			}
+			aspt.clockValue = _clockValue;
+			ll.add(aspt);
+		}
 		return ll;
 	}
 	
