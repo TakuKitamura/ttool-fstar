@@ -71,6 +71,12 @@ public class UPPAALTransition {
     }
 	
     public String getXML() {
+		if (guard == null) {
+			guard = "";
+		}
+		
+		
+		
 		String ret = "<transition>\n";
 		
 		if(sourceLoc != null) {
