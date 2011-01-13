@@ -898,7 +898,7 @@ public class GTMLModeling  {
 					rc = ((TMLCPrimitiveComponent)tgc).getRecordNamed(ta.getTypeOther());
 					if (rc == null) {
 						tt = new TMLType(TMLType.OTHER);
-						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown record: " + ta.getType() + " used in task " + tmltask.getName());
+						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown record: " + ta.getTypeOther() + " of attribute " + ta.getId() + " declared in task " + tmltask.getName());
 						ce.setTDiagramPanel(tmlcdp.tmlctdp);
 						ce.setTMLTask(tmltask);
 						ce.setTGComponent(tgc);
