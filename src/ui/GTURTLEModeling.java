@@ -4352,7 +4352,7 @@ public class GTURTLEModeling {
 			NodeList nl = n.getChildNodes();
 			elt = (Element)n;
 			elt1 = elt;
-			//TraceManager.addDev("elt=" + elt);
+			TraceManager.addDev("elt=" + elt);
 
 			int myType = Integer.decode(elt.getAttribute("type")).intValue();
 			int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
@@ -4445,7 +4445,7 @@ public class GTURTLEModeling {
 						tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 						if (tgc instanceof SwallowedTGComponent) {
 							((SwallowTGComponent)father).addSwallowedTGComponent(tgc, myX, myY);
-							TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
+							//TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
 						} else {
 							throw new MalformedModelingException();
 						}
@@ -4527,7 +4527,7 @@ public class GTURTLEModeling {
 				}
 
 				if ((tgc instanceof AvatarBDBlock) && (decId >0)){
-					TraceManager.addDev("Going to load ad of task " + oldClassName + " myValue=" + myValue);
+					//TraceManager.addDev("Going to load ad of task " + oldClassName + " myValue=" + myValue);
 					loadAvatarSMD(tdp, oldClassName, myValue);
 				}
 				

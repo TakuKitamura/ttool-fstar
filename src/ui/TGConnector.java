@@ -370,7 +370,7 @@ public abstract class TGConnector extends TGCWithInternalComponent {
             }
             
             if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
-                return nbInternalTGComponent;
+                return getIndexOfLastTGCPointOfConnector()+1;
             }
             
         } else {
@@ -400,11 +400,12 @@ public abstract class TGConnector extends TGCWithInternalComponent {
     }
     
     public CDElement[] getPointedSegment(int x1, int y1) {
-        TGComponent p3, p4;
+        TGCPointOfConnector p3, p4;
         CDElement [] pt = new CDElement[2];
+		try {
         
         if (hasTGCPointOfConnector()) {
-            p3 = tgcomponent[0];
+            p3 = (TGCPointOfConnector)tgcomponent[0];
             p4 = p3;
             if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1)) < distanceSelected) {
                 pt[0] = p1;
@@ -412,8 +413,8 @@ public abstract class TGConnector extends TGCWithInternalComponent {
                 return pt;
             }
             for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
-                p3 = tgcomponent[i];
-                p4 = tgcomponent[i+1];
+                p3 = (TGCPointOfConnector)(tgcomponent[i]);
+                p4 = (TGCPointOfConnector)(tgcomponent[i+1]);
                 
                 if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
                     pt[0] = p3;
@@ -437,6 +438,7 @@ public abstract class TGConnector extends TGCWithInternalComponent {
                 }
             }
         }
+		} catch (Exception e) {}
         return null;
     }
     
@@ -542,6 +544,7 @@ public abstract class TGConnector extends TGCWithInternalComponent {
     }
     
     private boolean addTGCPointOfConnector(int x, int y) {
+		//TraceManager.addDev("Adding point of connector at "+  x + "," + y);
         CDElement [] pt = getPointedSegment(x, y);
                 /*System.out.println("Two pts");
                 System.out.println("p1  x=" + pt[0].x + " y=" + pt[0].y);
@@ -558,13 +561,16 @@ public abstract class TGConnector extends TGCWithInternalComponent {
             } else {
                 indexCon = 1;
             }
+			//TraceManager.addDev("tgcpoint of connector added at index " + index + " indexCon=" + indexCon);
             
             TGCPointOfConnector t = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
             if (addInternalComponent(t, index) ) {
                 pointHasBeenAdded(t, index, indexCon);
+				//TraceManager.addDev("Return true");
                 return true;
-            }
+            } 
         }
+		//TraceManager.addDev("Return false");
         return false;
     }
     
