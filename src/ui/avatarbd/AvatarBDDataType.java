@@ -346,7 +346,6 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 	protected void setJDialogOptions(JDialogAvatarBlock _jdab) {
         //jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
         _jdab.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        _jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         _jdab.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 		_jdab.addType(TAttribute.getStringType(TAttribute.INTEGER), true);
 		_jdab.enableInitialValue(true);

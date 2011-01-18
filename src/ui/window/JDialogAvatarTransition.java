@@ -155,15 +155,15 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         panel1.add(guardT, c1);
         
         // After
-        c1.gridwidth = 5;
-        c1.gridheight = 5;
-        c1.weighty = 5.0;
-        c1.weightx = 5.0;
+        c1.gridwidth = 1;
+        c1.gridheight = 1;
+        c1.weighty = 1.0;
+        c1.weightx = 1.0;
         panel1.add(new JLabel("after ("), c1);
-		afterMinT = new JTextField(afterMin);
+		afterMinT = new JTextField(afterMin, 10);
         panel1.add(afterMinT, c1);
 		panel1.add(new JLabel(","), c1);
-		afterMaxT = new JTextField(afterMax);
+		afterMaxT = new JTextField(afterMax, 10);
         panel1.add(afterMaxT, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		panel1.add(new JLabel(")"), c1);
@@ -174,10 +174,10 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         panel1.add(new JLabel("compute for ("), c1);
-		computeMinT = new JTextField(computeMin);
+		computeMinT = new JTextField(computeMin, 10);
         panel1.add(computeMinT, c1);
 		panel1.add(new JLabel(","), c1);
-		computeMaxT = new JTextField(computeMax);
+		computeMaxT = new JTextField(computeMax, 10);
         panel1.add(computeMaxT, c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 		panel1.add(new JLabel(")"), c1);
@@ -203,7 +203,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         actionsT.setMargin(new Insets(10, 10, 10, 10));
         actionsT.setTabSize(3);
         actionsT.setFont(new Font("times", Font.PLAIN, 12));
-        actionsT.setPreferredSize(new Dimension(300, 250));
+        actionsT.setPreferredSize(new Dimension(350, 250));
         JScrollPane jsp = new JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		for(int i=0; i<actions.size(); i++) {
 			actionsT.append(actions.get(i) + "\n");

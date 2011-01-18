@@ -48,12 +48,12 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 public interface CheckableAccessibility  {
-	public static final int UNKNOWN;
-	public static final int NON_REACHABLE;
+	//public static final int UNKNOWN;
+	//public static final int NON_REACHABLE;
 	
 	
     public void setCheckableAccessibility(boolean b); 
 	public boolean getCheckableAccessibility();
 	
-	public void setReachability(
+	//public void setReachability();
 }
