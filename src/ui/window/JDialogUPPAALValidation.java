@@ -407,21 +407,22 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 		data = processCmd(cmd1);
 		if(showDetails.isSelected()) {
 			jta.append(data);
-		} else {
-			if (mode != NOT_STARTED) {
-				if (data.indexOf("[error]") > -1) {
-					jta.append("ERROR -> property could not be studied\n");
-				} else {
-					if (data.indexOf("NOT") > -1) {
-						jta.append("-> property is NOT satisfied\n");
-					} else {
-						jta.append("-> property is satisfied\n");			
-					}
-				}
+		} 
+		if (mode != NOT_STARTED) {
+			if (data.indexOf("[error]") > -1) {
+				jta.append("ERROR -> property could not be studied\n");
 			} else {
-				jta.append("** verification stopped **\n");
+				if (data.indexOf("NOT") > -1) {
+					jta.append("-> property is NOT satisfied\n");
+				} else {
+					jta.append("-> property is satisfied\n");			
+				}
 			}
+		} else {
+			jta.append("** verification stopped **\n");
 		}
+		
+		
 		
 		if (generateTrace.isSelected()) {
 			generateTraceFile(fn, trace_id, rshc);
