@@ -575,7 +575,7 @@ public class AVATAR2UPPAAL {
 				_previous.setCommitted();
 				loc = addLocation(_template);  
 				tr = addTransition(_template, _previous, loc);
-				hashChecking.put(_elt, loc);
+				hashChecking.put(_elt, _previous);
 				_previous = loc;
 				
 			}

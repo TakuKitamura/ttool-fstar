@@ -58,7 +58,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements CheckableAccessibility, BasicErrorHighlight {
+public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
