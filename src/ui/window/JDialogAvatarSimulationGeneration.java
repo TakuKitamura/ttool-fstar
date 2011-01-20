@@ -107,6 +107,8 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
     protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
 	protected JComboBox versionSimulator;
 	
+	protected AvatarSpecificationSimulation ass = null;
+	
 	//EBRDD
 	//private JPanel panele1, panele2, panele3, panele4, panel5, panel6;
     
@@ -364,15 +366,20 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
     }
     
     public void stopProcess() {
-        try {
-            rshc.stopFillJTA();
-        } catch (LauncherException le) {
-            
-        }
-        rshc = null;
-        mode = 	STOPPED;
-        setButtons();
-        go = false;
+		if (ass != null) {
+			ass.stopSimulation();
+			go = false;
+		} else {
+			try {
+				rshc.stopFillJTA();
+			} catch (LauncherException le) {
+				
+			}
+			rshc = null;
+			mode = 	STOPPED;
+			setButtons();
+			go = false;
+		}
     }
     
     public void startProcess() {
@@ -526,9 +533,12 @@ public class JDialogAvatarSimulationGeneration extends javax.swing.JDialog imple
 				}
 			} else {
 				AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
-				AvatarSpecificationSimulation ass = new AvatarSpecificationSimulation(avspec);
+				ass = new AvatarSpecificationSimulation(avspec);
 				ass.initialize();
 				ass.runSimulation();
+				ass = null;
+				mode = 	STOPPED;
+				setButtons();
 			}
             
         } catch (InterruptedException ie) {

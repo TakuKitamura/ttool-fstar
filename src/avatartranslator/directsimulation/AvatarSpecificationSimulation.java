@@ -64,6 +64,8 @@ public class AvatarSpecificationSimulation  {
 	private LinkedList<AvatarSimulationPendingTransaction> pendingTransactions;
 	private LinkedList<AvatarSimulationTransaction> allTransactions;
 	
+	private boolean stopped = false;
+	
     public AvatarSpecificationSimulation(AvatarSpecification _avspec) {
         avspec = _avspec;
     }
@@ -106,7 +108,7 @@ public class AvatarSpecificationSimulation  {
 		
 		TraceManager.addDev("Simulation started at time: " + clockValue);
 		boolean go = true;
-		while(go == true) {
+		while(go == true && !stopped) {
 			gatherPendingTransactions();
 			
 			if (pendingTransactions.size() == 0) {
@@ -120,6 +122,7 @@ public class AvatarSpecificationSimulation  {
 					TraceManager.addDev("Deadlock: no transaction can be selected");
 				} else {
 					TraceManager.addDev("Nb of selected transactions: " + selectedTransactions.size());
+					go = performSelectedTransactions(selectedTransactions);
 				}
 				
 			}
@@ -141,17 +144,55 @@ public class AvatarSpecificationSimulation  {
 	public LinkedList<AvatarSimulationPendingTransaction> selectTransactions(LinkedList<AvatarSimulationPendingTransaction> _pendingTransactions) {
 		LinkedList<AvatarSimulationPendingTransaction> ll = new LinkedList<AvatarSimulationPendingTransaction>();
 		
+		// Put in ll the first possible logical transaction which is met
+		// andom select the first index
+		int decIndex = (int)(Math.floor(Math.random()*_pendingTransactions.size()));
+		
+		AvatarSimulationPendingTransaction currentTransaction;
 		
 		
+		// First consider logical transactions only
+		for(int i=0; i<_pendingTransactions.size(); i++) {
+			currentTransaction = _pendingTransactions.get((i+decIndex)%_pendingTransactions.size());
+			
+			if (currentTransaction.elementToExecute instanceof AvatarTransition) {
+				AvatarTransition tr = (AvatarTransition)(currentTransaction.elementToExecute);
+				if (!tr.hasDelay()) {
+					ll.add(currentTransaction);
+				}
+				break;
+			}
+		}
+		
+		// Then consider timed transactions
 		
 		
 		return ll;
+	}
+	
+	public boolean performSelectedTransactions(LinkedList<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		if (_pendingTransactions.size() == 1) {
+			_pendingTransactions.get(0).asb.runSoloPendingTransaction(_pendingTransactions.get(0), allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW);
+			return true;
+		} else if (_pendingTransactions.size() == 1) { // synchro
+			//Not yet handled
+			return false;
+		} else {
+			 // error!
+			 return false;
+		}
 	}
 	
 	public void printExecutedTransactions() {
 		for(AvatarSimulationTransaction ast: allTransactions) {
 			TraceManager.addDev(ast.toString() + "\n");
 		}
+	}
+	
+	
+	public synchronized void stopSimulation() {
+		TraceManager.addDev("Simulation stopped");
+		stopped = true;
 	}
 
 }

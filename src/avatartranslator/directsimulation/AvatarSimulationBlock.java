@@ -167,6 +167,14 @@ public class AvatarSimulationBlock  {
 		}
 	}
 	
+	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+		if (_aspt.involvedElement != null) {
+			executeElement(_allTransactions, _aspt.involvedElement, _clockValue);
+		}
+		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue);
+		runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
+	}
+	
 	
 	public boolean isBlocking(AvatarStateMachineElement _elt) {
 		TraceManager.addDev("Testing whether " + _elt + "is blocking or not");
