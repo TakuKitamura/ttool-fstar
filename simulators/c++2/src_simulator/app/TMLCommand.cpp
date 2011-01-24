@@ -76,7 +76,11 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		TMLCommand* aNextCommand;
 #ifdef STATE_HASH_ENABLED
 		_task->refreshStateHash(_liveVarList);
-		if(_checkpoint)_simComp->checkForRecurringSystemState();
+		if(_checkpoint){
+			ID aStateID=0;
+			aStateID = _simComp->checkForRecurringSystemState();
+			if (_currTransaction!=0) _currTransaction->setStateID(aStateID);
+		}
 #endif
 		//std::cout << "COMMAND FINISHED!!n";
 #ifdef LISTENERS_ENABLED

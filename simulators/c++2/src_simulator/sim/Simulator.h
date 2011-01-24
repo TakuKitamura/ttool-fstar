@@ -217,6 +217,8 @@ public:
 	\param iTraceFileName Name of the output trace file
 	*/
 	void schedule2Graph(std::string& iTraceFileName) const;
+	//ID schedule2Graph(std::ostream& iFile, ID iStartState) const;
+	ID schedule2GraphDOT(std::ostream& iFile, ID iStartState) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**
 	\param iTraceFileName Name of the output trace file

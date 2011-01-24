@@ -85,6 +85,90 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 	return aMarker; 
 }
 
+/*void Simulator::schedule2Graph(std::string& iTraceFileName) const{
+	struct timeval aBegin,aEnd;
+	gettimeofday(&aBegin,NULL);
+	std::ofstream myfile (iTraceFileName.c_str());
+	if (myfile.is_open()){
+ 		CPUList::iterator i;
+		GraphTransactionQueue aQueue;
+		TMLTransaction* aTrans, *aTopElement;
+		unsigned int aTransitionNo=0;
+		for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+			aTrans = (*i)->getTransactions1By1(true);
+			if (aTrans!=0) aQueue.push(aTrans);
+		}
+		std::ostringstream aOutp;
+		while (!aQueue.empty()){
+			//std::ostringstream aTempStr;
+			CPU* aCPU;
+			aTopElement = aQueue.top();
+			aCPU = aTopElement->getCommand()->getTask()->getCPU();
+			for (TMLLength a=0; a < aTopElement->getVirtualLength(); a++){
+				aOutp << "(" << aTransitionNo << ",\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+				if (aTopElement->getChannel()!=0){
+					aOutp << "__" << aTopElement->getChannel()->toShortString();
+					//if (dynamic_cast<TMLEventChannel*>(aTopElement->getChannel())==0) aOutp << "<" << aTopElement->getVirtualLength() << ", " << ">";	
+				}
+				aOutp << ")\"," << ++aTransitionNo << ")\n";
+			
+				//aOutp << aTempStr.str() << ++aTransitionNo << ")\n";
+			}
+			//myfile << aTempStr.str();
+			aQueue.pop();
+			aTrans = aCPU->getTransactions1By1(false);
+			if (aTrans!=0) aQueue.push(aTrans);
+    		}
+		myfile << "des (0, " << aTransitionNo+1 << ", " << aTransitionNo+2 << ")\n";
+		myfile <<  aOutp.str() << "(" << aTransitionNo << ",\"i(exit)\", " << aTransitionNo+1 << ")\n";
+		myfile.close();
+	}
+	else
+		std::cout << "Unable to open Graph output file" << std::endl;
+	gettimeofday(&aEnd,NULL);
+	std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
+}*/
+
+ID Simulator::schedule2GraphDOT(std::ostream& iFile, ID iStartState) const{
+	CPUList::iterator i;
+	GraphTransactionQueue aQueue;
+	TMLTransaction* aTrans, *aTopElement;
+	ID aStartState=iStartState, aEndState=0;
+	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+		aTrans = (*i)->getTransactions1By1(true);
+		if (aTrans!=0) aQueue.push(aTrans);
+	}
+	//std::ostringstream aOutp;
+	while (!aQueue.empty()){
+		//std::ostringstream aTempStr;
+		CPU* aCPU;
+		aTopElement = aQueue.top();
+		aCPU = aTopElement->getCommand()->getTask()->getCPU();
+		for (TMLLength a=0; a < aTopElement->getVirtualLength(); a++){
+			aEndState = aTopElement->getStateID();
+			if (aEndState==0){
+				aEndState=TMLTransaction::getID();
+				TMLTransaction::incID();
+			}
+			//13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
+			iFile << aStartState << " -> " << aEndState << " [label = \"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+			if (aTopElement->getChannel()!=0){
+				iFile << "__" << aTopElement->getChannel()->toShortString();
+				//if (dynamic_cast<TMLEventChannel*>(aTopElement->getChannel())==0) aOutp << "<" << aTopElement->getVirtualLength() << ", " << ">";	
+			}
+			iFile << ")\"]\n";
+			aStartState = aEndState;
+			//aOutp << aTempStr.str() << ++aTransitionNo << ")\n";
+		}
+		//myfile << aTempStr.str();
+		aQueue.pop();
+		aTrans = aCPU->getTransactions1By1(false);
+		if (aTrans!=0) aQueue.push(aTrans);
+	}
+	return aStartState;
+}
+
+
 void Simulator::schedule2Graph(std::string& iTraceFileName) const{
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
@@ -546,9 +630,11 @@ void Simulator::decodeCommand(std::string iCmd){
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
 					_leafsID=0;
-					std::ofstream myfile ("tree");
+					std::ofstream myfile ("tree.dot");
 					if (myfile.is_open()){
+						myfile << "digraph BCG {\nsize = \"7, 10.5\";\ncenter = TRUE;\nnode [shape = circle];\n0 [peripheries = 2];\n";
 						exploreTree(0, 0, myfile);
+						myfile << "}\n";
 						myfile.close();
 					}
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
@@ -1128,7 +1214,8 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		myfile.close();*/
 	TMLTransaction* aLastTrans;
 	if (iDepth<RECUR_DEPTH){
-		ID aMyID= ++_leafsID;
+		//ID aMyID= ++_leafsID;
+		ID aLastID, knownID;
 		bool aSimTerminated=false;
 		TMLChoiceCommand* aChoiceCmd;
 		do{
@@ -1140,26 +1227,32 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		//aStreamBuffer << "edge_" << iPrevID << "_" << aMyID;
 		//std::string aStringBuffer(aStreamBuffer.str());
 		//schedule2TXT(aStringBuffer);
-		iFile << "***** edge_" << iPrevID << "_" << aMyID << " *****\n";
+		//iFile << "***** edge_" << iPrevID << "_" << aMyID << " *****\n";
 		/*for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 			(*i)->schedule2TXT(iFile);
 		}*/
-		for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
-			(*i)->schedule2TXT(iFile);
-		}
-		iFile << "\n";
-		HashValueType aCurrState;
-		if (_simComp->wasKnownStateReached(&aCurrState)){
-				iFile << "Simulation " << iPrevID << "_" << aMyID << " encountered known state " << aCurrState << std::endl;
+		//for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i !=_simComp->getTaskIterator(true); ++i){
+		aLastID = schedule2GraphDOT(iFile,iPrevID);
+		//}
+		//iFile << "\n";
+		//HashValueType aCurrState;
+		//if (_simComp->wasKnownStateReached(&aCurrState)){
+		if ((knownID=_simComp->wasKnownStateReached())!=0){
+				//iFile << "Simulation " << iPrevID << "_" << aMyID << " encountered known state " << aCurrState << std::endl;
+				//13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
+				iFile << aLastID << " -> " << knownID << " [label = \"i\"]\n";
 		}else{
 			if(aChoiceCmd==0){
-				iFile << "Simulation " << iPrevID << "_" << aMyID << " terminated" << std::endl;
+				//iFile << "Simulation " << iPrevID << "_" << aMyID << " terminated" << std::endl;
+				knownID = TMLTransaction::getID();
+				TMLTransaction::incID();
+				iFile << aLastID << " -> " << knownID << " [label = \"i(exit)\"]\n";
 			}else{
 				unsigned int aNbNextCmds;
 				std::stringstream aStreamBuffer;
 				std::string aStringBuffer;
 				aChoiceCmd->getNextCommands(aNbNextCmds);
-				std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
+				//std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
 				_simComp->writeObject(aStreamBuffer);
 				aStringBuffer=aStreamBuffer.str();
 				//for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_simComp->getStopFlag(); aBranch++){
@@ -1168,7 +1261,8 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 					aStreamBuffer.str(aStringBuffer);
 					_simComp->readObject(aStreamBuffer);
 					aChoiceCmd->setPreferredBranch(aBranch);
-					exploreTree(iDepth+1, aMyID, iFile);
+					//exploreTree(iDepth+1, aMyID, iFile);
+					exploreTree(iDepth+1, aLastID, iFile);
 					//_simComp->reset();
 					//_simComp->readObject(aBuffer);
 				}

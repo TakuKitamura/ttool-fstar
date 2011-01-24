@@ -262,7 +262,8 @@ typedef std::list<BusMaster*> BusMasterList;
 ///Type used for hash values of system states
 typedef uint32_t HashValueType;
 ///Set used by Commands to store encountered state hash values
-typedef std::set<HashValueType> StateHashSet;
+//typedef std::set<HashValueType> StateHashSet;
+typedef std::map<HashValueType,ID> StateHashSet;
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{

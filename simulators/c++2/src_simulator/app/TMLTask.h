@@ -223,7 +223,7 @@ public:
 	//void setCommonExecution(bool iCommonExecution);
 	virtual void refreshStateHash(const char* iLiveVarList)=0;
 	void addRawTransaction(TMLTransaction* iTrans);
-	void schedule2TXT(std::ofstream& myfile) const;
+	void schedule2TXT(std::ostream& myfile) const;
 protected:
 	///ID of the task
 	ID _ID;

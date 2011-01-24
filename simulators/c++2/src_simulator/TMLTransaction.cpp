@@ -49,7 +49,7 @@ TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, T
 #ifdef PENALTIES_ENABLED
  _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
 #endif
- /*_terminated(false),*/ _channel(iChannel) {
+ /*_terminated(false),*/ _channel(iChannel),_stateID(0) {
 }
 
 TMLTime TMLTransaction::getRunnableTime() const{
@@ -215,4 +215,24 @@ void TMLTransaction::operator delete(void *p, size_t size){
 
 void TMLTransaction::reset(){
 	memPool.reset();
+}
+
+void TMLTransaction::incID(){
+	_ID++;
+}
+
+ID TMLTransaction::getID(){
+	return _ID;
+}
+
+void TMLTransaction::resetID(){
+	_ID=1;
+}
+
+void TMLTransaction::setStateID(ID iID){
+	_stateID=iID;
+}
+
+ID TMLTransaction::getStateID(){
+	return _stateID;
 }

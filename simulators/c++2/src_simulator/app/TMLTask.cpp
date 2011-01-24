@@ -443,7 +443,7 @@ void TMLTask::addRawTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 }
 
-void TMLTask::schedule2TXT(std::ofstream& myfile) const{
+void TMLTask::schedule2TXT(std::ostream& myfile) const{
 	myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;

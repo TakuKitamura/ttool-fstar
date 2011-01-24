@@ -256,13 +256,14 @@ public:
 	*/
 	std::string getCmpNameByID(ID iID);
 	///Halts the simulation if the current system state has been encountered before
-	void checkForRecurringSystemState();
+	ID checkForRecurringSystemState();
 	///Checks if a known system state was reached
 	/**
 	\param oSystemHash Current system hash
 	\return Flag indicating whether a known state has been encountered
 	*/
-	bool wasKnownStateReached(HashValueType* oSystemHash) const;
+	//ID wasKnownStateReached(HashValueType* oSystemHash) const;
+	ID wasKnownStateReached() const;
 	///Resets the global system hash
 	void resetStateHash();
 protected:
@@ -297,7 +298,7 @@ protected:
 	///System Hash
 	HashAlgo _systemHash;
 	///Flag indicating whether a known state has been encountered
-	bool _knownStateReached;
+	ID _knownStateReached;
 };
 #endif
 

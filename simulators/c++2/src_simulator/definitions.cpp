@@ -49,6 +49,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <BusMaster.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
+ID TMLTransaction::_ID=1;
 
 int myrand(int n1, int n2){
 	static bool firstTime = true;

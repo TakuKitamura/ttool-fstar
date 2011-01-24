@@ -53,7 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 #include <EBRDD.h>
 
-SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(false) {
+SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(0) {
 }
 
 SimComponents::~SimComponents(){
@@ -184,6 +184,7 @@ void SimComponents::reset(){
 
 void SimComponents::resetStateHash(){
 	_systemHashTable.clear();
+	TMLTransaction::resetID();
 }
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
@@ -327,42 +328,51 @@ void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){
 	}
 }
 
-void SimComponents::checkForRecurringSystemState(){
+//void SimComponents::checkForRecurringSystemState(){
+ID SimComponents::checkForRecurringSystemState(){
 	_systemHash.init((HashValueType)this, _taskList.size());
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
-		std::cout << "add Task Hash " << (*i)->toString() << "\n";
+		//std::cout << "add Task Hash " << (*i)->toString() << "\n";
 		_systemHash.addValue((*i)->getStateHash());
 		TMLCommand* aCurrCmd = (*i)->getCurrCommand();
 		if (aCurrCmd!=0){
-			std::cout << "add curr cmd and progress Task " << (*i)->toString() << "\n";
+			//std::cout << "add curr cmd and progress Task " << (*i)->toString() << "\n";
 			_systemHash.addValue((HashValueType)aCurrCmd);
 			//_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
 			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
 		}
 	}
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
-		std::cout << "add channel " << (*i)->toString() << "\n";
+		//std::cout << "add channel " << (*i)->toString() << "\n";
 		(*i)->getStateHash(&_systemHash);
 	}
 	//std::cout << "HASH VALUE: " << _systemHash.getHash() << "\n";
 	//std::pair<StateHashSet::iterator,bool> aRet = _systemHashTable.insert(_systemHash);
-	TMLTransaction* iInfoTrans = new TMLTransaction(0,_systemHash.getHash(),0);
+	//TMLTransaction* iInfoTrans = new TMLTransaction(0,_systemHash.getHash(),0);
 	/*for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
 		(*i)->addRawTransaction(iInfoTrans);
 	}*/
-	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+	/*for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		(*i)->addRawTransaction(iInfoTrans);
-	}
-	if (_systemHashTable.insert(_systemHash.getHash()).second){
-		_knownStateReached = false;
+	}*/
+	//if (_systemHashTable.insert(_systemHash.getHash()).second){
+	std::pair<StateHashSet::const_iterator,bool> aRes = _systemHashTable.insert(std::pair<HashValueType,ID>(_systemHash.getHash(),TMLTransaction::getID()));
+	if (aRes.second){
+		TMLTransaction::incID();
+		//_knownStateReached = false;
+		_knownStateReached = 0;
 	}else{
 		setStopFlag(true, "Recurring system state");
-		_knownStateReached= true;
+		//_knownStateReached= true;
+		_knownStateReached= aRes.first->second;
 	}
+	return _knownStateReached;
 }
 	
-bool SimComponents::wasKnownStateReached(HashValueType* oSystemHash) const{
-	*oSystemHash = _systemHash.getHash();
+//ID SimComponents::wasKnownStateReached(HashValueType* oSystemHash) const{
+ID SimComponents::wasKnownStateReached() const{
+	//*oSystemHash = _systemHash.getHash();
+	//return _knownStateReached;
 	return _knownStateReached;
 }
 

@@ -179,6 +179,11 @@ public:
 	static void * operator new(size_t size);
 	static void operator delete(void *p, size_t size);
 	static void reset();
+	static void incID();
+	static ID getID();
+	static void resetID();
+	void setStateID(ID iID);
+	ID getStateID();
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;
@@ -200,8 +205,11 @@ protected:
 #endif
 	///Channel on which data was conveyed
 	TMLChannel* _channel;
+	ID _stateID;
 	///Memory pool for transactions
 	static MemPool<TMLTransaction> memPool;
+	///Current Transaction ID
+	static ID _ID;
 };
 
 #endif
