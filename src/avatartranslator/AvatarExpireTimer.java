@@ -60,4 +60,8 @@ public class AvatarExpireTimer extends AvatarTimerOperator {
 		return aet;
 	}
 	
+	public String getNiceName() {
+		return "Expiration of timer " + getName();
+	}
+	
 }

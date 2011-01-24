@@ -47,7 +47,7 @@ package ui.avatarinteractivesimulation;
 
 //import java.io.*;
 import javax.swing.*;
-//import javax.swing.event.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -63,7 +63,7 @@ import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 
 
-public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	
 	
 	private static String buttonStartS = "Start simulator";
@@ -100,7 +100,12 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
 	protected JTextField benchmarkFileName;
-	protected JComboBox cpus, busses, mems, tasks, chans;
+	//protected JComboBox cpus, busses, mems, tasks, chans;
+	
+	//List of transactions
+	private JList listPendingTransactions;
+	private TGComponent selectedComponentForTransaction;
+	private AvatarSimulationBlock previousBlock;
 	
 	
 	//private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
@@ -325,17 +330,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		mainTop.add(commands, c02);
 		
 		commandTab = new JTabbedPane();
+		commands.add(commandTab);
 		//commandTab.setBackground(ColorManager.InteractiveSimulationBackground);
+		
 		
 		// Control commands
 		jp01 = new JPanel(new BorderLayout());
+		commandTab.addTab("Control", null, jp01, "Main control commands");
 		//jp01.setMinimumSize(new Dimension(375, 400));
 		//gridbag01 = new GridBagLayout();
 		//c01 = new GridBagConstraints();
 		//jp01.setLayout(gridbag01);
-		
-		commandTab.addTab("Control", null, jp01, "Main control commands");
-		
 		
 		mctb = new AvatarMainCommandsToolBar(this);
 		jp01.add(mctb, BorderLayout.NORTH);
@@ -357,6 +362,22 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		paramMainCommand = new JTextField("1", 30);
 		jp02.add(paramMainCommand, c01);
+		// list of pending transactions
+        JPanel panellpt = new JPanel();
+        panellpt.setLayout(new BorderLayout());
+        panellpt.setBorder(new javax.swing.border.TitledBorder("Pending transactions"));
+		
+        listPendingTransactions = new JList();
+        //listPendingTransactions.setPreferredSize(new Dimension(150, 150));
+        listPendingTransactions.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION );
+        listPendingTransactions.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listPendingTransactions);
+		scrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		panellpt.add(scrollPane1);
+		jp02.add(panellpt, c01);
+		jp01.add(jp02, BorderLayout.CENTER);
+		
+	
 		
 		/*c01.gridwidth = 1;
 		jp02.add(new JLabel("CPUs: "), c01);
@@ -408,49 +429,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 		jp02.add(chans, c01);*/
 		
-		jp01.add(jp02, BorderLayout.CENTER);
 		
 		
-		// Text commands
-		/*jp01 = new JPanel();
-		//jp01.setPreferredSize(new Dimension(375, 400));
-		gridbag01 = new GridBagLayout();
-		c01 = new GridBagConstraints();
-		jp01.setLayout(gridbag01);
 		
-		commandTab.addTab("Text commands", null, jp01, "Sending text commands to simulator");
 		
-		c01.gridheight = 1;
-		c01.weighty = 1.0;
-		c01.weightx = 1.0;
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		c01.fill = GridBagConstraints.BOTH;
-		c01.gridheight = 1;
-		
-		c01.gridheight = 2;
-		jp01.add(new JLabel("Enter a text command:"), c01);
-		textCommand = new JTextField(30);
-		jp01.add(textCommand, c01);
-		c01.gridheight = 1;
-		jp01.add(new JLabel(" "), c01);
-		c01.gridheight = 2;
-		sendTextCommand = new JButton("Send Command", IconManager.imgic71);
-		sendTextCommand.addMouseListener(this);
-		jp01.add(sendTextCommand, c01);
-		c01.gridheight = 1;
-		jp01.add(new JLabel(" "), c01);
-		c01.gridheight = 2;
-		printHelpTextCommands = new JButton("Help on a text command", IconManager.imgic33);
-		printHelpTextCommands.addMouseListener(this);
-		jp01.add(printHelpTextCommands, c01);
-		c01.gridheight = 1;
-		jp01.add(new JLabel(" "), c01);
-		c01.gridheight = 2;
-		listTextCommands = new JButton("List all text commands", IconManager.imgic29);
-		listTextCommands.addMouseListener(this);
-		jp01.add(listTextCommands, c01);*/
-		
-		commands.add(commandTab);
 		
 		// Set variables
 		/*jpsv = new JPanelSetVariables(this, valueTable);
@@ -761,6 +743,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	public void setMode(int _mode) {
 		busyMode = _mode;
 		TraceManager.addDev("****************** mode set to " + busyMode);
+		TraceManager.addDev("# of Pending transactions: " + ass.getPendingTransitions().size());
 		setAll();
 		
 		
@@ -808,6 +791,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		//actions[AvatarInteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
 		
 		setLabelColors();
+		setcontentOfListOfPendingTransactions();
 	}
 	
 	public void setLabelColors() {
@@ -835,6 +819,19 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				break;
 			}
 		}
+	}
+	
+	public void setcontentOfListOfPendingTransactions() {
+		Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
+		try {
+		listPendingTransactions.clearSelection();
+		selectedComponentForTransaction = null;
+		if (ll != null) {
+			listPendingTransactions.setListData(ll);
+		} else {
+			listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
+		}
+		} catch (Exception e) {}
 	}
 	
 	public void resetMetElements() {
@@ -876,9 +873,14 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 						// Search for corresponding element in avatar spec
 						tgc = (TGComponent)(asme.getReferenceObject());
 						if (tgc != null) {
-							TraceManager.addDev("Found an object:" + tgc);
+							//TraceManager.addDev("Found an object:" + tgc);
 							runningTGComponents.add(tgc);
 						}
+					}
+				}
+				if (openDiagram.isSelected()) {
+					if (ass.getPreviousBlock() != null) {
+						mgui.openAVATARSMD(ass.getPreviousBlock().getName());
 					}
 				}
 			}
@@ -888,6 +890,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public boolean isRunningComponent(TGComponent _tgc) {
 		return runningTGComponents.contains(_tgc);
+	}
+	
+	public boolean isSelectedComponentFromTransaction(TGComponent _tgc) {
+		return _tgc == selectedComponentForTransaction;
 	}
 	
 	
@@ -953,6 +959,36 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void error(String error) {
 		jta.append("error: " + error + "\n");
+	}
+	
+	public void valueChanged(ListSelectionEvent e) {
+		int index = listPendingTransactions.getSelectedIndex();
+		if (index > -1) {
+			try {
+				AvatarSimulationPendingTransaction aspt = (AvatarSimulationPendingTransaction)(listPendingTransactions.getSelectedValue());
+				selectedComponentForTransaction = (TGComponent)(aspt.elementToExecute.getReferenceObject());
+				if (!(busyMode == AvatarSpecificationSimulation.RUNNING)) {
+					ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
+				}
+				if (animate.isSelected() && (openDiagram.isSelected())) {
+					if (aspt.asb != null) {
+						previousBlock = aspt.asb;
+						mgui.openAVATARSMD(previousBlock.getName());
+					}
+				}
+			} catch (Exception ex){
+				selectedComponentForTransaction = null;
+				if (previousBlock != null) {
+					mgui.openAVATARSMD(previousBlock.getName());
+				}
+			}
+		} else {
+			selectedComponentForTransaction = null;
+			if (previousBlock != null) {
+				mgui.openAVATARSMD(previousBlock.getName());
+			}
+		}
+		
 	}
 	
 

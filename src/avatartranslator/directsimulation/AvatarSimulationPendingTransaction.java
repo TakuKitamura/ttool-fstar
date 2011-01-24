@@ -57,15 +57,38 @@ public class AvatarSimulationPendingTransaction  {
 	public AvatarSimulationBlock asb;
 	public AvatarStateMachineElement elementToExecute;
 	public AvatarStateMachineElement involvedElement; //(transition)
+	public AvatarSimulationPendingTransaction linkedTransaction;
+	public AvatarSimulationAsynchronousTransaction linkedAsynchronousMessage;
 	public long clockValue;
+	public long nextMinClockValue;
+	public long nextMaxClockValue;
 	
     public AvatarSimulationPendingTransaction() {
     }
 	
+	public AvatarSimulationPendingTransaction cloneMe() {
+		
+		AvatarSimulationPendingTransaction aspt = new AvatarSimulationPendingTransaction();
+		aspt.asb = this.asb;
+		aspt.elementToExecute = this.elementToExecute;
+		aspt.involvedElement = this.involvedElement;
+		aspt.linkedTransaction = this.linkedTransaction;
+		aspt.linkedAsynchronousMessage = this.linkedAsynchronousMessage;
+		aspt.clockValue = this.clockValue;
+		
+		return aspt;
+	}
+	
 
 	
 	public String toString() {
-		String res = " @" + clockValue + " " + elementToExecute + " in block " + asb.getName();
+		String res = "in Block " + asb.getName() + ": ";
+		if (linkedTransaction == null) {
+			res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
+		} else {
+			res += "[SYNCHRO]" + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
+			res += " | " + linkedTransaction.toString();
+		}
 		return res;
 	}
 }

@@ -92,4 +92,8 @@ public class AvatarRandom extends AvatarStateMachineElement {
 		return ar;
 	}
 	
+	public String getNiceName() {
+		return "Random between " + minValue + " and " + maxValue + " stored in " + variable;
+	}
+	
 }

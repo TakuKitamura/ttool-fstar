@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarSimulationTransaction
- * Avatar: notion of transaction in simulation
- * Creation: 14/12/2010
- * @version 1.0 14/12/2010
+ * Class AvatarSimulationAsynchronousTransaction
+ * Avatar: notion of asynchronous transaction in simulation
+ * Creation: 24/01/2011
+ * @version 1.0 24/01/2011
  * @author Ludovic APVRILLE
  * @see
  */
@@ -52,47 +52,29 @@ import java.util.*;
 import avatartranslator.*;
 import myutil.*;
 
-public class AvatarSimulationTransaction  {
+public class AvatarSimulationAsynchronousTransaction  {
   
-	public static long ID;
-	public static LinkedList<AvatarStateMachineElement> allExecutedElements;
+	private Vector<String> parameters;
+    private AvatarRelation relation;
 	
-    public AvatarBlock block;
-	public AvatarSimulationBlock asb;
-	public AvatarStateMachineElement executedElement;
-	public AvatarStateMachineElement concernedElement; // Used for communication
-	public long initialClockValue;
-	public long clockValueWhenPerformed;
-	public long id;
-	public Vector<String> attributeValues;
-	
-    public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
-		executedElement = _executeElement;
-		addExecutedElement(executedElement);
+    public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar) {
+		relation = _ar;
+		parameters = new Vector<String>();
     }
 	
-	public static void reinit() {
-		ID = 0;
-		allExecutedElements = new LinkedList<AvatarStateMachineElement>();
+	public AvatarRelation getRelation() {
+		return relation;
 	}
 	
-	public static void addExecutedElement(AvatarStateMachineElement _asme) {
-		if (!allExecutedElements.contains(_asme)) {
-			allExecutedElements.add(_asme);
-		}
+	public void addParameter(String _s) {
+		parameters.add(_s);
 	}
 	
-	public static synchronized long setID() {
-		long tmp = ID;
-		ID++;
-		return tmp;
+	public int getNbOfParameters() {
+		return parameters.size();
 	}
 	
-	public String toString() {
-		String res = "" + id + " @" + clockValueWhenPerformed + " " + executedElement + " in block " + block.getName() + "\nattributes=";
-		for(String s: attributeValues) {
-			res += s + " ";
-		}
-		return res;
+	public Vector<String> getParameters() {
+		return parameters;
 	}
 }

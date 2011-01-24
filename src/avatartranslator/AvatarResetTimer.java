@@ -60,4 +60,8 @@ public class AvatarResetTimer extends AvatarTimerOperator {
 		return art;
 	}
 	
+	public String getNiceName() {
+		return "Reseting of timer " + getName();
+	}
+	
 }

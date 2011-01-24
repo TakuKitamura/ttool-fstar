@@ -61,14 +61,18 @@ public class AvatarSimulationBlock  {
   
     private AvatarBlock block;
 	private AvatarSimulationTransaction lastTransaction;
-	private LinkedList<AvatarSimulationTransaction> transactions;
+	private Vector <AvatarSimulationTransaction> transactions;
 	private boolean completed;
 	
     public AvatarSimulationBlock(AvatarBlock _block) {
 		block = _block;
-		transactions = new LinkedList<AvatarSimulationTransaction>();
+		transactions = new Vector<AvatarSimulationTransaction>();
 		completed = false;
     }
+	
+	public AvatarBlock getBlock() {
+		return block;
+	}
 	
 	public String getName() {
 		if (block != null) {
@@ -96,19 +100,27 @@ public class AvatarSimulationBlock  {
 		return STARTED;
 	}
 	
-	public LinkedList<AvatarSimulationTransaction> getTransactions() {
+	public Vector<AvatarSimulationTransaction> getTransactions() {
 		return transactions;
 	}
 	
-	public LinkedList<AvatarSimulationPendingTransaction> getPendingTransactions(LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
-		LinkedList<AvatarSimulationPendingTransaction> ll = new LinkedList<AvatarSimulationPendingTransaction>();
+	public Vector<AvatarSimulationPendingTransaction> getPendingTransactions(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 		
 		if (completed) {
 			return ll;
 		}
 		
 		if (lastTransaction == null) {
-			runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
+			//runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
+			// First transaction
+			AvatarStartState ass = block.getStateMachine().getStartState();
+			if (ass == null) {
+				completed = true;
+				return ll;
+			}
+			makeExecutedTransaction(_allTransactions, ass, _clockValue);
+			
 		}
 		
 		if ((lastTransaction == null) || completed) {
@@ -142,7 +154,7 @@ public class AvatarSimulationBlock  {
 		return ll;
 	}
 	
-	public void runToNextBlockingElement(LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+	/*public void runToNextBlockingElement(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
 		
 		// No previous transaction
 		if (lastTransaction == null) {
@@ -193,14 +205,16 @@ public class AvatarSimulationBlock  {
 			TraceManager.addDev("Too many transactions in a row: aborting block");
 			completed = true;
 		}
-	}
+	}*/
 	
-	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
 		if (_aspt.involvedElement != null) {
 			executeElement(_allTransactions, _aspt.involvedElement, _clockValue);
 		}
 		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue);
-		runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
+		
+	
+		//runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
 	}
 	
 	
@@ -232,7 +246,7 @@ public class AvatarSimulationBlock  {
 		return true;
 	}
 	
-	public void executeElement(LinkedList<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
+	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
 		// Stop state
 		if (_elt instanceof AvatarStopState) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
@@ -255,7 +269,7 @@ public class AvatarSimulationBlock  {
 		}
 	}
 	
-	public void makeExecutedTransaction(LinkedList<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
+	public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
 			AvatarSimulationTransaction ast = new AvatarSimulationTransaction(_elt);
 			ast.block = block;
 			ast.asb = this;
@@ -265,7 +279,7 @@ public class AvatarSimulationBlock  {
 			ast.id = ast.setID();
 			
 			// Attributes
-			LinkedList<String> attributeValues = new LinkedList<String>();
+			Vector<String> attributeValues = new Vector<String>();
 			String s;
 			if (lastTransaction == null) {
 				for(AvatarAttribute aa: block.getAttributes()) {
@@ -282,7 +296,7 @@ public class AvatarSimulationBlock  {
 			addExecutedTransaction(_allTransactions, ast);
 	}
 	
-	public void addExecutedTransaction(LinkedList<AvatarSimulationTransaction> _allTransactions, AvatarSimulationTransaction _ast) {
+	public void addExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarSimulationTransaction _ast) {
 		transactions.add(_ast);
 		lastTransaction = _ast;
 		_allTransactions.add(_ast);

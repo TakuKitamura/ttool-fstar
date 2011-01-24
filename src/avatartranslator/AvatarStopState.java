@@ -58,5 +58,9 @@ public class AvatarStopState extends AvatarStateMachineElement {
 	public AvatarStateMachineElement basicCloneMe() {
 		return new AvatarStartState(getName(), getReferenceObject());
 	}
+	
+	public String getNiceName() {
+		return "Stop state";
+	}
     
 }

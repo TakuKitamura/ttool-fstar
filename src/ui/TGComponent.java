@@ -507,7 +507,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 	}
 	
-	public void drawAVATARComp(Graphics g) {
+	// _mode: 1 : running
+	//       2 : slected for execution 
+	public void drawAVATARComp(Graphics g, int _mode) {
 		int wb = 30;
 		int hb = 10;
 		int wh = 15;
@@ -550,7 +552,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		xp[6] = myx - sep - wb -wh;
 		yp[6] = myy + ((myheight+hb) / 2);
 		
-		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		if (_mode == 1) {
+			g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		} else {
+			g.setColor(ColorManager.CURRENT_COMMAND_SUSPENDED);
+		}
 		g.fillPolygon(xp, yp, 7);
 	}
 		
@@ -774,9 +780,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			if (AVATAR_met) {
 				drawAVATARMet(g);
 			}
-			if (tdp.getMGUI().isRunningAvatarComponent(this)) {
+			int ret = tdp.getMGUI().isRunningAvatarComponent(this);
+			if (ret > 0) {
 				//TraceManager.addDev("Avatar animate!");
-				drawAVATARComp(g);
+				drawAVATARComp(g, ret);
 			}
 		}
 		

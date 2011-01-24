@@ -103,5 +103,13 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 	public String getExtendedName() {
 		return getName() + ":" + getSignal().getName();
 	}
+	
+	public String getNiceName() {
+		if (signal.isIn()) {
+			return "Receiving signal " + signal.getName();
+		} else {
+			return "Sending signal " + signal.getName();
+		}
+	}
     
 }

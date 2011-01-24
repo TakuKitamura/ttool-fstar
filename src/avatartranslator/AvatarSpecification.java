@@ -134,6 +134,10 @@ public class AvatarSpecification extends AvatarElement {
 		return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
 	}
 	
+	public String putRealAttributeValueInString(String _source, AvatarAttribute _at) {
+		return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getInitialValue());
+	}
+	
 	
 	public void removeCompositeStates() {
 		for(AvatarBlock block: blocks) {

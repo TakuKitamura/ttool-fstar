@@ -263,5 +263,7 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 		return true;
 	}
 	
+	public abstract String getNiceName();
+	
     
 }

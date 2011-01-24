@@ -62,4 +62,8 @@ public class AvatarState extends AvatarStateMachineElement {
 		AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
 		return as;
 	}
+	
+	public String getNiceName() {
+		return "State " + getName();
+	}
 }

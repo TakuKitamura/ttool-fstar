@@ -3246,7 +3246,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			dtree.toBeUpdated();*/
 			jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
 			jfais.setIconImage(IconManager.img9);
-			jfais.setSize(1024, 900);
+			jfais.setSize(1024, 600);
 			GraphicLib.centerOnParent(jfais);
 			jfais.setVisible(true);
 		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
@@ -5536,6 +5536,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		selectTab(getCurrentTURTLEPanel(), tab);
 	}
 	
+	public void openAVATARSMD(String tab) {
+		TDiagramPanel cur = getCurrentTDiagramPanel();
+		selectTab(getCurrentTURTLEPanel(), tab);
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp == cur) {
+			tdp.repaint();
+		}
+	}
+	
 	public boolean selectHighLevelTab(String s) {
 		TURTLEPanel tp = getTURTLEPanel(s);
 		if (s != null) {
@@ -5665,11 +5674,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		setDiploAnimate(!TDiagramPanel.DIPLO_ANIMATE_ON);
 	}
 	
-	public boolean isRunningAvatarComponent(TGComponent _tgc) {
+	public int isRunningAvatarComponent(TGComponent _tgc) {
 		if(jfais.isVisible()) {
-			return jfais.isRunningComponent(_tgc);
+			if (jfais.isRunningComponent(_tgc)) {
+				return 1;
+			}
+			if (jfais.isSelectedComponentFromTransaction(_tgc)) {
+				return 2;
+			}
 		}
-		return false;
+		return 0;
 	}
 	
 	public void setDiploAnimate(boolean b) {
