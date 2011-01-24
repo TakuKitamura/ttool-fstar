@@ -65,6 +65,7 @@ import ui.ad.*;
 import ui.atd.*;
 import ui.cd.*;
 import ui.file.*;
+import ui.avatarinteractivesimulation.*;
 import ui.interactivesimulation.*;
 import ui.iod.*;
 import ui.req.*;
@@ -264,6 +265,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	private ArrayList<RunningInfo> runningIDs;
 	private ArrayList<LoadInfo> loadIDs;
 	private JFrameInteractiveSimulation jfis;
+	private JFrameAvatarInteractiveSimulation jfais;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn) {
         systemcOn = _systemcOn;
@@ -3237,11 +3239,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         TURTLEPanel tp = getCurrentTURTLEPanel();
 		if (tp instanceof AvatarDesignPanel) {
 			TraceManager.addDev("AVATAR Simulation");
-			JDialogAvatarSimulationGeneration jgen = new JDialogAvatarSimulationGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.AVATARSimulationHost, ConfigurationTTool.AVATARCPPSIMCodeDirectory, ConfigurationTTool.AVATARCPPSIMCompileCommand, ConfigurationTTool.AVATARCPPSIMCodeExecuteCommand, ConfigurationTTool.AVATARCPPSIMInteractiveExecuteCommand);
+			/*JDialogAvatarSimulationGeneration jgen = new JDialogAvatarSimulationGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.AVATARSimulationHost, ConfigurationTTool.AVATARCPPSIMCodeDirectory, ConfigurationTTool.AVATARCPPSIMCompileCommand, ConfigurationTTool.AVATARCPPSIMCodeExecuteCommand, ConfigurationTTool.AVATARCPPSIMInteractiveExecuteCommand);
 			jgen.setSize(500, 750);
 			GraphicLib.centerOnParent(jgen);
 			jgen.setVisible(true);
-			dtree.toBeUpdated();
+			dtree.toBeUpdated();*/
+			jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
+			jfais.setIconImage(IconManager.img9);
+			jfais.setSize(1024, 900);
+			GraphicLib.centerOnParent(jfais);
+			jfais.setVisible(true);
 		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
 			JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand);
 			jgen.setSize(500, 750);
@@ -5658,8 +5665,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		setDiploAnimate(!TDiagramPanel.DIPLO_ANIMATE_ON);
 	}
 	
+	public boolean isRunningAvatarComponent(TGComponent _tgc) {
+		if(jfais.isVisible()) {
+			return jfais.isRunningComponent(_tgc);
+		}
+		return false;
+	}
+	
 	public void setDiploAnimate(boolean b) {
 		TDiagramPanel.DIPLO_ANIMATE_ON = b;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
+	public void setAvatarAnimate(boolean b) {
+		TDiagramPanel.AVATAR_ANIMATE_ON = b;
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
 			tdp.repaint();

@@ -36,63 +36,53 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarSimulationTransaction
- * Avatar: notion of transaction in simulation
- * Creation: 14/12/2010
- * @version 1.0 14/12/2010
+ * Class AvatarSaveCommandsToolBar
+ * Toolbar associated with avatar interactive simulation (save commands)
+ * Creation: 21/01/2011
+ * @version 1.0 21/01/2011
  * @author Ludovic APVRILLE
  * @see
  */
 
+package ui.avatarinteractivesimulation;
 
-package avatartranslator.directsimulation;
+import javax.swing.*;
 
-import java.util.*;
+import ui.*;
 
-import avatartranslator.*;
-import myutil.*;
-
-public class AvatarSimulationTransaction  {
-  
-	public static long ID;
-	public static LinkedList<AvatarStateMachineElement> allExecutedElements;
-	
-    public AvatarBlock block;
-	public AvatarSimulationBlock asb;
-	public AvatarStateMachineElement executedElement;
-	public AvatarStateMachineElement concernedElement; // Used for communication
-	public long initialClockValue;
-	public long clockValueWhenPerformed;
-	public long id;
-	public LinkedList<String> attributeValues;
-	
-    public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
-		executedElement = _executeElement;
-		addExecutedElement(executedElement);
+public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
+    
+    
+    public AvatarSaveCommandsToolBar(JFrameAvatarInteractiveSimulation _jfais) {
+        super(_jfais);
     }
-	
-	public static void reinit() {
-		ID = 0;
-		allExecutedElements = new LinkedList<AvatarStateMachineElement>();
-	}
-	
-	public static void addExecutedElement(AvatarStateMachineElement _asme) {
-		if (!allExecutedElements.contains(_asme)) {
-			allExecutedElements.add(_asme);
-		}
-	}
-	
-	public static synchronized long setID() {
-		long tmp = ID;
-		ID++;
-		return tmp;
-	}
-	
-	public String toString() {
-		String res = "" + id + " @" + clockValueWhenPerformed + " " + executedElement + " in block " + block.getName() + "\nattributes=";
-		for(String s: attributeValues) {
-			res += s + " ";
-		}
-		return res;
-	}
-}
+    
+    protected void setActive(boolean b) {
+		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+    }
+    
+    protected void setButtons() {
+        JButton button;
+        
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_VCD]);
+        button.addMouseListener(jfais.mouseHandler);
+        
+		this.addSeparator();
+		
+		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML]);
+        button.addMouseListener(jfais.mouseHandler);
+        
+		this.addSeparator();
+		
+		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT]);
+        button.addMouseListener(jfais.mouseHandler);
+        
+    }
+} // Class
+
+
+
+
+

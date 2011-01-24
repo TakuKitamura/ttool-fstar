@@ -54,10 +54,17 @@ import myutil.*;
 
 
 public class AvatarSpecificationSimulation  {
-	
 	private static int MAX_TRANSACTION_IN_A_ROW = 1000; 
-  
+	
+	public final static int OTHER = 0;
+	public final static int STOPPED = 1;
+	public final static int RUNNING = 2;
+	public final static int TERMINATED = 3;
+	
+	private int mode;
+	
     private AvatarSpecification avspec;
+	private AvatarSimulationInteraction asi;
 	private long clockValue;
 	private LinkedList<AvatarSimulationBlock> blocks;
 	private LinkedList<AvatarActionOnSignal> asynchronousMessages;
@@ -65,17 +72,41 @@ public class AvatarSpecificationSimulation  {
 	private LinkedList<AvatarSimulationTransaction> allTransactions;
 	
 	private boolean stopped = false;
+	private boolean killed = false;
 	
-    public AvatarSpecificationSimulation(AvatarSpecification _avspec) {
+	private int nbOfCommands = -1; // means: until it blocks
+	
+    public AvatarSpecificationSimulation(AvatarSpecification _avspec, AvatarSimulationInteraction _asi) {
         avspec = _avspec;
+		asi = _asi;
     }
 	
+	public LinkedList<AvatarSimulationBlock> getSimulationBlocks() {
+		return blocks;
+	}
+	
+	public LinkedList<AvatarSimulationTransaction> getAllTransactions() {
+		return allTransactions;
+	}
+	
+	public long getClockValue() {
+		return clockValue;
+	}
+	
 	public void initialize() {
+		
 		// Remove composite states
 		avspec.removeCompositeStates();
 		
 		// Remove timers
 		avspec.removeTimers();
+		
+		reset();
+	}
+	
+	public void reset() {
+		killed = false;
+		unsetNbOfCommands();
 		
 		// Reinit clock
 		clockValue = 0;
@@ -103,31 +134,56 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public void runSimulation() {
+		setMode(RUNNING);
 		int index[];
 		LinkedList<AvatarSimulationPendingTransaction> selectedTransactions;
 		
-		TraceManager.addDev("Simulation started at time: " + clockValue);
 		boolean go = true;
-		while(go == true && !stopped) {
-			gatherPendingTransactions();
-			
-			if (pendingTransactions.size() == 0) {
-				go = false;
-				TraceManager.addDev("No more pending transactions");
-			} else {
-				selectedTransactions = selectTransactions(pendingTransactions);
-				
-				if (selectedTransactions.size() == 0) {
-					go = false;
-					TraceManager.addDev("Deadlock: no transaction can be selected");
-				} else {
-					TraceManager.addDev("Nb of selected transactions: " + selectedTransactions.size());
-					go = performSelectedTransactions(selectedTransactions);
-				}
-				
+		stopped = true;
+		
+		if (stopped && go) {
+			setMode(STOPPED);
+			TraceManager.addDev("Simulation waiting for run");
+			waitForUnstopped();
+			if (go) {
+				setMode(RUNNING);
 			}
 		}
 		
+		TraceManager.addDev("Simulation started at time: " + clockValue);
+		
+		while((go == true) && !killed) {
+			while((go == true) && !stopped && !killed) {
+				gatherPendingTransactions();
+				
+				if (pendingTransactions.size() == 0) {
+					go = false;
+					TraceManager.addDev("No more pending transactions");
+				} else {
+					selectedTransactions = selectTransactions(pendingTransactions);
+					
+					if (selectedTransactions.size() == 0) {
+						go = false;
+						TraceManager.addDev("Deadlock: no transaction can be selected");
+					} else {
+						TraceManager.addDev("* * * * * Nb of selected transactions: " + selectedTransactions.size());
+						go = performSelectedTransactions(selectedTransactions);
+						TraceManager.addDev("NbOfcommands=" + nbOfCommands);
+						nbOfCommands --;
+						if (nbOfCommands == 0) {
+							stopSimulation();
+							stopSimulation(go);
+						}
+					}
+					
+				}
+			}
+			if (stopped && go && !killed) {
+				stopSimulation(go);
+				
+			}
+		}
+		setMode(TERMINATED);
 		TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
 		
 		printExecutedTransactions();
@@ -166,7 +222,6 @@ public class AvatarSpecificationSimulation  {
 		
 		// Then consider timed transactions
 		
-		
 		return ll;
 	}
 	
@@ -190,9 +245,63 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	
+	public synchronized void waitForUnstopped() {
+		while(stopped && !killed) {
+			try {
+				wait();
+			} catch (Exception e) {
+			}
+		}
+	}
+	
+	public synchronized void unstop() {
+		stopped = false;
+		notifyAll();
+	}
+	
 	public synchronized void stopSimulation() {
-		TraceManager.addDev("Simulation stopped");
+		TraceManager.addDev("Ask for simulation stop");
+		notifyAll();
 		stopped = true;
 	}
+	
+	public synchronized void killSimulation() {
+		TraceManager.addDev("Simulation killed");
+		killed = true;
+		stopped = true;
+		notifyAll();
+	}
+	
+	public void setMode(int _mode) {
+		mode = _mode;
+		
+		if (mode == STOPPED) {
+			unsetNbOfCommands();
+		}
+		
+		if (asi != null) {
+			asi.setMode(mode);
+		}
+	}
+	
+	public void setNbOfCommands(int _nbOfCommands) {
+		nbOfCommands = _nbOfCommands;
+	}
+	
+	public void unsetNbOfCommands() {
+		nbOfCommands = -1;
+	}
+	
+	public void stopSimulation(boolean _go) {
+		setMode(STOPPED);
+		unsetNbOfCommands();
+		TraceManager.addDev("Simulation stopped at time: " + clockValue + "\n--------------------------------------");
+		waitForUnstopped();
+		if (_go && !killed) {
+			setMode(RUNNING);
+		}
+	}
+	
+	
 
 }

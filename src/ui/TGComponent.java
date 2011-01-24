@@ -109,6 +109,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	// AVATAR ID
 	private int AVATARID = -1;
 	private boolean AVATAR_running = false;
+	private boolean AVATAR_met = false;
 	
     
     // Zone of drawing -> relative to father if applicable
@@ -163,6 +164,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	// Zoom
 	public double dx=0, dy=0, dwidth, dheight;
+
 	
     //Constructor
     public TGComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -190,7 +192,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
     public abstract void internalDrawing(Graphics g);
     public abstract TGComponent isOnMe(int _x, int _y);
     public abstract void setState(int s);
-    
+	
     // Internal component operations
     public void setFather(TGComponent _father) {
         father = _father;
@@ -480,6 +482,79 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	public void setAVATARMet(boolean _b) {
+		AVATAR_met = _b;
+	}
+	
+	public void drawAVATARMet(Graphics g) {
+		int dech = 8;
+		int decw = 12;
+		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		int myx, myy, mywidth;
+		if (this instanceof TGConnector) {
+			TGConnector tgco = (TGConnector)this;
+			myx = tgco.getMiddleFirstSegment().x;
+			myy = tgco.getMiddleFirstSegment().y;
+			mywidth = 2;
+		} else {
+			myx = getX();
+			myy = getY();
+			mywidth = width+1;
+		}
+		
+		g.drawLine(myx+mywidth, myy+1+dech/2, myx+mywidth + decw/3, myy+dech);
+		g.drawLine(myx+mywidth + decw/3, myy+dech, myx+mywidth + decw, myy);
+		
+	}
+	
+	public void drawAVATARComp(Graphics g) {
+		int wb = 30;
+		int hb = 10;
+		int wh = 15;
+		int hh = 20;
+		int sep = 10;
+		
+		int[] xp = new int[7];
+		int[] yp = new int[7];
+		
+		int myx, myy, myheight;
+		if (this instanceof TGConnector) {
+			TGConnector tgco = (TGConnector)this;
+			myx = tgco.getMiddleFirstSegment().x;
+			myy = tgco.getMiddleFirstSegment().y;
+			myheight = 4;
+		} else {
+			myx = getX();
+			myy = getY();
+			myheight = height;
+		}
+		
+		xp[0] = myx - sep - wb -wh;
+		yp[0] = myy + ((myheight-hb) / 2);
+		
+		xp[1] = myx - sep - wh;
+		yp[1] = myy + ((myheight-hb) / 2);
+		
+		xp[2] = myx - sep - wh;
+		yp[2] = myy + ((myheight-hh) / 2);
+		
+		xp[3] = myx - sep;
+		yp[3] = myy + (myheight / 2);
+		
+		xp[4] = myx - sep - wh;
+		yp[4] = myy + ((myheight+hh) / 2);
+		
+		xp[5] = myx - sep - wh;
+		yp[5] = myy + ((myheight+hb) / 2);
+		
+		xp[6] = myx - sep - wb -wh;
+		yp[6] = myy + ((myheight+hb) / 2);
+		
+		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		g.fillPolygon(xp, yp, 7);
+	}
+		
+	
 	public void drawRunningDiploID(Graphics g, RunningInfo ri) {
 		//System.out.println("Drawing running DIPLO");
 		int wb = 30;
@@ -692,6 +767,17 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			drawDiploID(g);
 		} else if (tdp.AVATAR_ID_ON) {
 			drawAVATARID(g);
+		} 
+		
+		if (tdp.AVATAR_ANIMATE_ON) {
+			//TraceManager.addDev("Avatar animate?");
+			if (AVATAR_met) {
+				drawAVATARMet(g);
+			}
+			if (tdp.getMGUI().isRunningAvatarComponent(this)) {
+				//TraceManager.addDev("Avatar animate!");
+				drawAVATARComp(g);
+			}
 		}
 		
 		if (this instanceof EmbeddedComment) {

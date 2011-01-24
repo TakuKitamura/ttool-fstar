@@ -53,6 +53,11 @@ import avatartranslator.*;
 import myutil.*;
 
 public class AvatarSimulationBlock  {
+	public final static int NOT_STARTED = 0;
+	public final static int STARTED = 1;
+	public final static int COMPLETED = 2;
+	
+	
   
     private AvatarBlock block;
 	private AvatarSimulationTransaction lastTransaction;
@@ -70,6 +75,29 @@ public class AvatarSimulationBlock  {
 			return block.getName();
 		}
 		return "noname";
+	}
+	
+	public int getID() {
+		if (block != null) {
+			return block.getID();
+		}
+		return -1;
+	}
+	
+	public int getStatus() {
+		if (completed) {
+			return COMPLETED;
+		}
+		
+		if (lastTransaction == null) {
+			return NOT_STARTED;
+		}
+		
+		return STARTED;
+	}
+	
+	public LinkedList<AvatarSimulationTransaction> getTransactions() {
+		return transactions;
 	}
 	
 	public LinkedList<AvatarSimulationPendingTransaction> getPendingTransactions(LinkedList<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
@@ -228,10 +256,9 @@ public class AvatarSimulationBlock  {
 	}
 	
 	public void makeExecutedTransaction(LinkedList<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
-			AvatarSimulationTransaction ast = new AvatarSimulationTransaction();
+			AvatarSimulationTransaction ast = new AvatarSimulationTransaction(_elt);
 			ast.block = block;
 			ast.asb = this;
-			ast.executedElement = _elt;
 			ast.concernedElement = null;
 			ast.initialClockValue = _clockValue;
 			ast.clockValueWhenPerformed = _clockValue;
@@ -259,5 +286,13 @@ public class AvatarSimulationBlock  {
 		transactions.add(_ast);
 		lastTransaction = _ast;
 		_allTransactions.add(_ast);
+	}
+	
+	public AvatarStateMachineElement getCurrentAvatarElement() {
+		if (lastTransaction == null) {
+			return block.getStateMachine().getStartState();
+		}
+		
+		return lastTransaction.executedElement;
 	}
 }

@@ -174,6 +174,19 @@ public abstract class TGConnector extends TGCWithInternalComponent {
     public boolean isP2(CDElement cd) {
         return (p2 == cd);
     }
+	
+	public Point getMiddleFirstSegment() {
+		if (nbInternalTGComponent ==0) {
+			return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+		}
+		
+		if (tgcomponent[0] instanceof TGCPointOfConnector) {
+			//TraceManager.addDev("TGCPointOfConnector");
+			return new Point((p1.getX()+tgcomponent[0].getX())/2, (p1.getY()+tgcomponent[0].getY())/2);
+		}
+		
+		return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
+	}
     
     public boolean alignTGComponents() {
         int dist_y = p2.getY() - p1.getY();

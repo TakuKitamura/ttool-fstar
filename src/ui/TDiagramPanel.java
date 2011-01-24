@@ -196,6 +196,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	
 	// AVATAR ID -> for simulation purpose
 	public static boolean AVATAR_ID_ON;
+	public static boolean AVATAR_ANIMATE_ON;
     
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {

@@ -53,6 +53,8 @@ import java.util.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 
+import myutil.*;
+
 public class AvatarDesignPanel extends TURTLEPanel {
     public AvatarBDPanel abdp; 
     public Vector validated, ignored;
@@ -161,6 +163,21 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public String toString() {
         return mgui.getTitleAt(this) + " (AVATAR Design)";
     }
+	
+	public void resetMetElements() {
+		TraceManager.addDev("Reset met elements");
+		TGComponent tgc;
+		
+		
+		for(int i=0; i<panels.size(); i++) {
+			ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				tgc.setAVATARMet(false);
+			}
+		}
+		
+	}
 	
 	/*public ArrayList<String> getAllTMLTaskNames(String _name) {
 		return tmltdp.getAllTMLTaskNames(_name);
