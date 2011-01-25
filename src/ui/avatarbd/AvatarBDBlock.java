@@ -191,7 +191,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		
 		//g.setColor(ColorManager.AVATAR_BLOCK);
 		Color avat = ColorManager.AVATAR_BLOCK;
-		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
         

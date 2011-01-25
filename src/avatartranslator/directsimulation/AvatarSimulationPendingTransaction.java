@@ -60,10 +60,28 @@ public class AvatarSimulationPendingTransaction  {
 	public AvatarSimulationPendingTransaction linkedTransaction;
 	public AvatarSimulationAsynchronousTransaction linkedAsynchronousMessage;
 	public long clockValue;
-	public long nextMinClockValue;
-	public long nextMaxClockValue;
+	
+	// To store a delay prior to execution
+	public String myMinDelay;
+	public String myMaxDelay;
+	public boolean hasDelay;
+	// For time already elapsed for that transition
+	public boolean hasElapsedTime;
+	public int elapsedTime;
+	
+	// To store a computed delay
+	public int myMinDuration; // computed min delay by simulator
+	public int myMaxDuration; // computed max delay by simulator 
+	public int selectedDuration; // duration selected by simulator
+	public long maxDuration; // max duration selcted by simulator
+	public boolean hasClock; // Selected by simulator to indicate a delay on that transaction
+	
+	
 	
     public AvatarSimulationPendingTransaction() {
+		hasClock = false;
+		hasElapsedTime = false;
+		hasDelay = false;
     }
 	
 	public AvatarSimulationPendingTransaction cloneMe() {
@@ -76,6 +94,17 @@ public class AvatarSimulationPendingTransaction  {
 		aspt.linkedAsynchronousMessage = this.linkedAsynchronousMessage;
 		aspt.clockValue = this.clockValue;
 		
+		aspt.myMinDelay = this.myMinDelay;
+		aspt.myMaxDelay = this.myMaxDelay;
+		aspt.hasDelay = this.hasDelay;
+		aspt.hasElapsedTime = this.hasElapsedTime;
+		aspt.elapsedTime = this.elapsedTime;
+		aspt.myMinDuration = this.myMinDuration;
+		aspt.myMaxDuration = this.myMaxDuration;
+		aspt.selectedDuration = this.selectedDuration;
+		aspt.maxDuration = this.maxDuration;
+		aspt.hasClock = this.hasClock;
+		
 		return aspt;
 	}
 	
@@ -85,6 +114,14 @@ public class AvatarSimulationPendingTransaction  {
 		String res = "in Block " + asb.getName() + ": ";
 		if (linkedTransaction == null) {
 			res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
+			if (hasClock) {
+				if (myMinDuration == maxDuration) {
+					res += " [Delay: " +myMinDuration + "]";
+				} else {
+					res += " [Delay: between " +myMinDuration + " and " + maxDuration + "]";
+				}
+			}
+			
 		} else {
 			res += "[SYNCHRO]" + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
 			res += " | " + linkedTransaction.toString();

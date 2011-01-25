@@ -63,7 +63,7 @@ import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 
 
-public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	
 	
 	private static String buttonStartS = "Start simulator";
@@ -162,6 +162,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		mgui = _mgui;
 		title = _title;
 		avspec = _avspec;
+		
+		addWindowListener(this);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
+		setIconImage(IconManager.img5100);
 		
 		/*valueTable = new Hashtable<Integer, String>();
 		rowTable = new Hashtable<Integer, Integer>();
@@ -512,7 +516,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jp02.add(status);
 		jp02.add(new JLabel(" "));
 		jp02.add(new JLabel("Time:"));
-		time = new JLabel("Unknown");
+		time = new JLabel("0");
 		time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(time);
 		jp02.add(new JLabel(" "));
@@ -679,6 +683,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		dispose();
 		setVisible(false);
 		runningTGComponents.clear();
+		resetMetElements();
 		mgui.setAvatarAnimate(false);
 	}
 	
@@ -796,7 +801,16 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void setLabelColors() {
 		if ((time !=null) && (status != null) && (info != null)) {
-			time.setText(""+ass.getClockValue());
+			String oldTime = time.getText();
+			int index = oldTime.indexOf("(");
+			if (index != -1) {
+				oldTime = oldTime.substring(0, index).trim();
+			}
+			String newTime = ""+ass.getClockValue();
+			if (oldTime.compareTo(newTime) != 0) {
+				newTime += " (before:" + oldTime + ")";
+			}
+			time.setText(newTime);
 			info.setText(""+ass.getAllTransactions().size());
 			switch(busyMode) {
 			case AvatarSpecificationSimulation.STOPPED:
@@ -889,11 +903,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public boolean isRunningComponent(TGComponent _tgc) {
-		return runningTGComponents.contains(_tgc);
+		if (isVisible()) {
+			return runningTGComponents.contains(_tgc);
+		}
+		return false;
 	}
 	
 	public boolean isSelectedComponentFromTransaction(TGComponent _tgc) {
-		return _tgc == selectedComponentForTransaction;
+		if (isVisible()) {
+			return _tgc == selectedComponentForTransaction;
+		}
+		return false;
 	}
 	
 	
@@ -1005,6 +1025,29 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			mgui.setTransationProgression(animateWithInfo.isSelected());
 		}*/
 	}
+	
+	public void windowClosing(WindowEvent e) {
+		TraceManager.addDev("Windows closed!");
+        close();
+    }
+    
+    public void windowClosed(WindowEvent e) {
+    }
+    
+    public void windowOpened(WindowEvent e) {
+    }
+    
+    public void windowIconified(WindowEvent e) {
+    }
+    
+    public void windowDeiconified(WindowEvent e) {
+    }
+    
+    public void windowActivated(WindowEvent e) {
+    }
+    
+    public void windowDeactivated(WindowEvent e) {
+    }
 	
 	
 	/*private void printCPUs() {

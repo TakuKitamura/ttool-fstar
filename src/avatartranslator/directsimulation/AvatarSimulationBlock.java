@@ -57,18 +57,27 @@ public class AvatarSimulationBlock  {
 	public final static int STARTED = 1;
 	public final static int COMPLETED = 2;
 	
-	
-  
     private AvatarBlock block;
 	private AvatarSimulationTransaction lastTransaction;
 	private Vector <AvatarSimulationTransaction> transactions;
 	private boolean completed;
 	
+	//private int elapsedTime; 
+	
     public AvatarSimulationBlock(AvatarBlock _block) {
 		block = _block;
 		transactions = new Vector<AvatarSimulationTransaction>();
 		completed = false;
+		//elapsedTime = 0;
     }
+	
+	/*public void addElapsedTime(int _elapsedTimed) {
+		elapsedTime += _elapsedTimed;
+	}
+	
+	public void resetElapsedTime() {
+		elapsedTime = 0;
+	}*/
 	
 	public AvatarBlock getBlock() {
 		return block;
@@ -148,6 +157,35 @@ public class AvatarSimulationBlock  {
 					}
 				}
 			}
+			
+			if (aspt.elementToExecute instanceof AvatarTransition) { 
+				AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
+				if (trans.hasDelay()) {
+					aspt.myMinDelay = trans.getMinDelay();
+					aspt.myMaxDelay = trans.getMaxDelay();
+					aspt.hasDelay = true;
+					if (lastTransaction != null) {
+						if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+							aspt.hasElapsedTime = true;
+							aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+						}
+					}
+				}
+			} else if (aspt.involvedElement instanceof AvatarTransition) {
+				AvatarTransition trans = (AvatarTransition)(aspt.involvedElement);
+				if (trans.hasDelay()) {
+					aspt.myMinDelay = trans.getMinDelay();
+					aspt.myMaxDelay = trans.getMaxDelay();
+					aspt.hasDelay = true;
+					
+					if (lastTransaction != null) {
+						if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+							aspt.hasElapsedTime = true;
+							aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+						}
+					}
+				}
+			}
 			aspt.clockValue = _clockValue;
 			ll.add(aspt);
 		}
@@ -218,7 +256,7 @@ public class AvatarSimulationBlock  {
 	}
 	
 	
-	public boolean isBlocking(AvatarStateMachineElement _elt) {
+	/*public boolean isBlocking(AvatarStateMachineElement _elt) {
 		TraceManager.addDev("Testing whether " + _elt + "is blocking or not");
 		
 		if (_elt instanceof AvatarStopState) {
@@ -244,7 +282,7 @@ public class AvatarSimulationBlock  {
 		}
 		
 		return true;
-	}
+	}*/
 	
 	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
 		// Stop state

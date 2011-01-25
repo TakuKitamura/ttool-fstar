@@ -72,9 +72,10 @@ public class ColorManager {
     public static final Color MOVING_0 = Color.magenta;
     public static final Color ADDING_0 = Color.lightGray;
 	
-    public static final Color POINTED_0 = Color.orange;
+    //public static final Color POINTED_0 = Color.orange;
 	//public static final Color POINTED_0 = new Color(231, 132, 19);
-    
+    public static final Color POINTED_0 = new Color(139, 79, 11);
+	
 	//public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
 	public static final Color UML_NOTE_BG = new Color(173, 190, 234);
 	
