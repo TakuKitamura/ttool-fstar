@@ -1067,9 +1067,9 @@ public class AVATAR2UPPAAL {
 					nbOfInt ++;
 				} else {
 					if (_aaos.isSending()) {
-						result[1] = result[1] + ACTION_INT + nbOfBool + " = " + aa.getName();
+						result[1] = result[1] + ACTION_BOOL + nbOfBool + " = " + aa.getName();
 					} else {
-						result[1] = result[1] + aa.getName() + " = " + ACTION_INT + nbOfBool;
+						result[1] = result[1] + aa.getName() + " = " + ACTION_BOOL + nbOfBool;
 					}
 					nbOfBool ++;
 				}
@@ -1145,9 +1145,9 @@ public class AVATAR2UPPAAL {
 					nbOfInt ++;
 				} else {
 					if (_aaos.isSending()) {
-						result[1] = result[1] + ACTION_INT + nbOfBool + " = " + aa.getName();
+						result[1] = result[1] + ACTION_BOOL + nbOfBool + " = " + aa.getName();
 					} else {
-						result[1] = result[1] + aa.getName() + " = " + ACTION_INT + nbOfBool;
+						result[1] = result[1] + aa.getName() + " = " + ACTION_BOOL + nbOfBool;
 					}
 					nbOfBool ++;
 				}
