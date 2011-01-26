@@ -760,8 +760,10 @@ public class ActivityDiagram extends Vector{
 				ADParallel adpar1 = (ADParallel)(get(i));
 				
 				g = adpar1.getSpecialGate();
-				g = t.getGateByName(g.getName());
-				adpar.setSpecialGate(g);
+				if (g != null) {
+					g = t.getGateByName(g.getName());
+					adpar.setSpecialGate(g);
+				}
 				
 				/*for(j=0; j<adch1.getNbGuard(); j++) {
 					adch.addGuard(adch1.getGuard(j));

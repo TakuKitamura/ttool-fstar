@@ -416,22 +416,24 @@ public class AVATAR2UPPAAL {
 					templateAsynchronous.addDeclaration("int head__" + name0 + " = 0;\n");
 					templateAsynchronous.addDeclaration("int tail__" + name0 + " = 0;\n");
 					
-					int cpt = 0;
+					int cpt_int = 0;
+					int cpt_bool = 0;
 					String listName;
 					
 					for(AvatarAttribute aa: sig1.getListOfAttributes()) {
-						listName = "list__" + name0 + "_" + cpt;
+						listName = "list__" + name0 + "_" + (cpt_int+cpt_bool);
 						
 						if (aa.isInt()) {
 							templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
-							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt + ";\n";
-							dequeue += "  " + ACTION_INT + cpt + " = " + listName +  "[head__" + name0 + "] " + ";\n";
+							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt_int + ";\n";
+							dequeue += "  " + ACTION_INT + cpt_int + " = " + listName +  "[head__" + name0 + "] " + ";\n";
+							cpt_int ++;
 						} else {
 							templateAsynchronous.addDeclaration("bool " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
-							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt + ";\n";
-							dequeue += "  " + ACTION_BOOL + cpt + " = " + listName +  "[head__" + name0 + "] " + ";\n";
+							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt_bool + ";\n";
+							dequeue += "  " + ACTION_BOOL + cpt_bool + " = " + listName +  "[head__" + name0 + "] " + ";\n";
+							cpt_bool ++;
 						}
-						cpt ++;
 					}
 					enqueue += "  tail__" + name0 + " = (tail__" + name0 + "+1) %" + ar.getSizeOfFIFO() + ";\n";
 					enqueue += "  size__" + name0 + "++;\n";
