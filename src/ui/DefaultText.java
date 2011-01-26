@@ -48,8 +48,8 @@ package ui;
 
 
 public class DefaultText  {
-    public static String BUILD = "7186";
-	public static String DATE = "2011/01/26 13:55:03 CET";
+    public static String BUILD = "7187";
+	public static String DATE = "2011/01/26 14:11:27 CET";
 
     public static StringBuffer sbAbout = makeAbout();
     
@@ -70,26 +70,9 @@ public class DefaultText  {
         sb.append("TTool version " + getFullVersion() + "\n\n");
         sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck - Telecom ParisTech - contact email: ludovic.apvrille@telecom-paristech.fr\n");
         sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck \n\n");
-        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n");
-		sb.append("*TURTLE*:\n");
-        sb.append("The following people have been the main contributors to the definition of the TURTLE profile:\n");
-        sb.append("\tLudovic Apvrille, Telecom ParisTech, ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tJean-Pierre Courtiat, LAAS-CNRS, courtiat@laas.fr\n");
-        sb.append("\tPierre de Saqui-Sannes, ENSICA, pdss@isae.fr\n");
-        sb.append("\tFerhat Khendek, Concordia university, khendek@ece.concordia.ca\n");
-        sb.append("\tChristophe Lohr, LAAS-CNRS, christophe.lohr@enst-bretagne.fr\n");
-        sb.append("\tPatrick Senac, ENSICA, patrick.senac@isae.fr\n");
-        sb.append("\n");
-        sb.append("For more information regarding the TURTLE profile, you can consult:\n");
-        sb.append("TURTLE's website: http://labsoc.comelec.enst.fr/turtle\n\n\n");
-		sb.append("*DIPLODOCUS*:\nThe following people have been the main contributors to the definition of the DIPLODOCUS profile:\n");
-        sb.append("\tRabea Ameur-Boulifa, Telecom Paristech\n");
-		sb.append("\tLudovic Apvrille, Telecom Paristech\n");
-		sb.append("\tSophie Coudert, Telecom Paristech\n");
-		sb.append("\tRenaud Pacalet, Telecom Paristech\n");
-        sb.append("\n");
-        sb.append("For more information regarding the DIPLODOCUS profile, you can consult:\n");
-        sb.append("DIPLODOCUS's website: http://www.comelec.enst.fr/recherche/labsoc/projets/DIPLODOCUS/\n\n");
+        sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
+        sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
+        sb.append("TTool's website: http://labsoc.comelec.enst.fr/ttool/\n\n");
         return sb;
     }
 	
