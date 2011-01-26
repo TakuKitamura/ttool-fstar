@@ -99,6 +99,17 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         }*/
 		
+		Point p_one;
+		boolean isp1;
+		if (getIndexOfLastTGCPointOfConnector() == -1) {
+			p_one = new Point(p1.getX(), p1.getY());
+			isp1 = true;
+		} else {
+			TGComponent tmpc = tgcomponent[getIndexOfLastTGCPointOfConnector()];
+			p_one = new Point(tmpc.getX(), tmpc.getY());
+			isp1 = false;
+		}
+		
 		//g.drawLine(x1, y1, x2, y2);
 		Color col = g.getColor();
 		int cz = (int)(tdp.getZoom() * c);
@@ -119,7 +130,12 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 			}
 		}
 		
-		Point p11 = GraphicLib.intersectionRectangleSegment(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz, x1, y1, x2, y2);
+		Point p11;
+		if (isp1) {
+			p11 = GraphicLib.intersectionRectangleSegment(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz, x1, y1, x2, y2);
+		} else {
+			p11 = new Point(p_one.x, p_one.y);
+		}
 		if (p11 == null) {
 			p11 = new Point(p1.getX(), p1.getY());
 			//System.out.println("null point");
