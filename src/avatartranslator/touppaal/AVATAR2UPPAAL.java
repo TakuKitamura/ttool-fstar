@@ -423,12 +423,16 @@ public class AVATAR2UPPAAL {
 					for(AvatarAttribute aa: sig1.getListOfAttributes()) {
 						listName = "list__" + name0 + "_" + (cpt_int+cpt_bool);
 						
+						TraceManager.addDev("* * * -> ATTRIBUTE: "+ aa.toStringType());
+						
 						if (aa.isInt()) {
+							TraceManager.addDev("isInt");
 							templateAsynchronous.addDeclaration("int " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
 							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_INT + cpt_int + ";\n";
 							dequeue += "  " + ACTION_INT + cpt_int + " = " + listName +  "[head__" + name0 + "] " + ";\n";
 							cpt_int ++;
 						} else {
+							TraceManager.addDev("isBool");
 							templateAsynchronous.addDeclaration("bool " + listName + "[" + ar.getSizeOfFIFO() + "];\n");
 							enqueue += "  " + listName +  "[tail__" + name0 + "] = " +  ACTION_BOOL + cpt_bool + ";\n";
 							dequeue += "  " + ACTION_BOOL + cpt_bool + " = " + listName +  "[head__" + name0 + "] " + ";\n";

@@ -346,7 +346,7 @@ public class AvatarDesignPanelTranslator {
 				uiam = (AvatarMethod)(v.get(i));
 				atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
 				ab.addMethod(atam);
-				makeParameters(atam, uiam);
+				makeParameters(ab, atam, uiam);
 				makeReturnParameters(ab, block, atam, uiam);
 			}
 			// Create signals
@@ -360,7 +360,7 @@ public class AvatarDesignPanelTranslator {
 					atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
 				}
 				ab.addSignal(atas);
-				makeParameters(atas, uias);
+				makeParameters(ab, atas, uias);
 			}
 			
 		}
@@ -426,7 +426,7 @@ public class AvatarDesignPanelTranslator {
 		
 	}
 	
-	public void makeParameters(avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
+	public void makeParameters(AvatarBlock _block, avatartranslator.AvatarMethod _atam, ui.AvatarMethod _uiam) {
 		String typeIds[] = _uiam.getTypeIds();
 		String types[] = _uiam.getTypes();
 		AvatarAttribute aa;
@@ -437,6 +437,12 @@ public class AvatarDesignPanelTranslator {
 		for(int i=0; i<types.length; i++) {
 			v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
 			if (v == null) {
+				if (AvatarType.getType(types[i]) == -1) {
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + types[i] + " declared in method" + _atam + " of block " + _block.getName());
+					ce.setAvatarBlock(_block);
+					ce.setTDiagramPanel(adp.getAvatarBDPanel());
+					addCheckingError(ce);
+				}
 				aa = new AvatarAttribute(typeIds[i], AvatarType.getType(types[i]), _uiam);
 				_atam.addParameter(aa);
 			} else {

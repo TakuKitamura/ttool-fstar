@@ -311,6 +311,8 @@ public class AvatarMethod {
             return 	BOOLEAN;
         } else if (s.equals("int")) {
             return 	INTEGER;
+        } else if (s.equals("Integer")) {
+            return 	INTEGER;
         }
         return OTHER;
     }

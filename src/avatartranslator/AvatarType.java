@@ -63,9 +63,13 @@ public class AvatarType {
     public static int getType(String s) {
         if (s.equals("bool")) {
             return 	BOOLEAN;
+        } else if (s.equals("Boolean")) {
+            return 	BOOLEAN;
         } else if (s.equals("int")) {
             return 	INTEGER;
-        } else if (s.equals("Timer")) {
+        } else if (s.equals("Integer")) {
+            return 	INTEGER;
+		} else if (s.equals("Timer")) {
             return 	TIMER;
         }
         return -1;

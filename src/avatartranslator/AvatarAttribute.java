@@ -62,6 +62,15 @@ public class AvatarAttribute extends AvatarElement{
     
 	public AvatarAttribute(String _name, int _type, Object _referenceObject) {
 		super(_name, _referenceObject);
+		/*if (_type == -1) {
+			TraceManager.addDev("- - - - - - - - - - - - " + _name + ": " + _type);
+			try {
+				int x = 1 / 0;
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}*/
 		type = _type;
 	}
 	
@@ -121,6 +130,15 @@ public class AvatarAttribute extends AvatarElement{
 	
 	public String toString() {
 		String ret = AvatarType.getStringType(type) + " " + getName();
+		if (initialValue  == null) {
+			return ret;
+		}
+		
+		return ret + " = " + initialValue;
+	}
+	
+	public String toStringType() {
+		String ret = AvatarType.getStringType(type) + " " + getName() + " typeid= " + getType();
 		if (initialValue  == null) {
 			return ret;
 		}
