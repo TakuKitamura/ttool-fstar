@@ -190,7 +190,7 @@ public class AvatarDesignPanelTranslator {
 			}
 			blockName = tmp.substring(0, index);
 			
-			TraceManager.addDev("blockName=" + blockName);
+			//TraceManager.addDev("blockName=" + blockName);
 			// Search for the block
 			for(Object o: _blocks) {
 				block = (AvatarBDBlock)o;
@@ -198,7 +198,7 @@ public class AvatarDesignPanelTranslator {
 					if (b) {
 						// authenticity
 						stateName = tmp.substring(index+1, tmp.length());
-						TraceManager.addDev("stateName=" + stateName);
+						//TraceManager.addDev("stateName=" + stateName);
 						index = stateName.indexOf(".");
 						if (index == -1) {
 							return null;
@@ -626,7 +626,7 @@ public class AvatarDesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						addCheckingError(ce);
 					}
-					if (asmdrs.getNbOfValues() == -1) {
+					if (asmdrs.getNbOfValues() == -1){
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal: " + asmdrs.getValue());
 						ce.setAvatarBlock(_ab);
 						ce.setTDiagramPanel(tdp);
@@ -643,20 +643,14 @@ public class AvatarDesignPanelTranslator {
 								addCheckingError(ce);
 							} else {
 								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdrs.getValue());
-								// Check that tmp is the identifier of an attribute
-								// Find the TAttribute
-								/*ta = getTAttribute(tmp);
-								
-								aa = _ab.getAvatarAttributeWithName(tmp);
-								if (aa == null) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdrs.getValue());
+								if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> nb of parameters does not match definition");
+									TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
 									ce.setAvatarBlock(_ab);
 									ce.setTDiagramPanel(tdp);
 									ce.setTGComponent(tgc);
 									addCheckingError(ce);
-								} else {
-									aaos.addValue(tmp);
-								}*/
+								}
 							}
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
@@ -705,6 +699,14 @@ public class AvatarDesignPanelTranslator {
 								addCheckingError(ce);
 							} else {
 								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
+								if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+									TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								}
 								// Check that tmp is the identifier of an attribute
 								/*aa = _ab.getAvatarAttributeWithName(tmp);
 								if (aa == null) {

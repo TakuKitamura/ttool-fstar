@@ -140,6 +140,16 @@ public class AvatarBlock extends AvatarElement {
 		return attributes.get(_index);
 	}
 	
+	public int getIndexOfAvatarAttributeWithName(String _name) {
+		int cpt = 0;
+		for(AvatarAttribute attribute: attributes) {
+			if (attribute.getName().compareTo(_name)== 0) {
+				return cpt;
+			}
+			cpt ++;
+		}
+		return -1;
+	}
 	
 	public AvatarAttribute getAvatarAttributeWithName(String _name) {
 		for(AvatarAttribute attribute: attributes) {

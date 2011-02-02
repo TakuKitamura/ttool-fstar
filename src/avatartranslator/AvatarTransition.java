@@ -241,30 +241,43 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	
 	// Assumes actions are correctly formatted
 	public boolean hasMethodCall() {
-		int index;
+		
 		
 		for(String action: actions) {
-			index = action.indexOf("=");
-			
-			// Method of the form f(...)
-			if (index == -1) {
+			if (isAMethodCall(action)) {
 				return true;
-			}
-			
-			// Method of the form x = f(...)
-			action = action.substring(index+1, action.length()).trim();
-			index = action.indexOf("(");
-			if (index != -1) {
-				action = action.substring(0, index).trim();
-				 boolean b1 = (action.substring(0,1)).matches("[a-zA-Z]");
-				 boolean b2 = action.matches("\\w*");
-				 if (b1 && b2) {
-					 return true;
-				 }
 			}
 		}
 		return false;
 			
+	}
+	
+	public static boolean isAMethodCall(String _action) {
+		int index;
+		index = _action.indexOf("=");
+		
+		// Method of the form f(...)
+		if (index == -1) {
+			return true;
+		}
+		
+		// Method of the form x = f(...)
+		_action = _action.substring(index+1, _action.length()).trim();
+		index = _action.indexOf("(");
+		if (index != -1) {
+			_action = _action.substring(0, index).trim();
+			if (_action.length() == 0) {
+				return false;
+				
+			}
+			boolean b1 = (_action.substring(0,1)).matches("[a-zA-Z]");
+			boolean b2 = _action.matches("\\w*");
+			if (b1 && b2) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public String getNiceName() {

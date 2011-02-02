@@ -93,7 +93,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	
 	// Commands
-	JPanel main, mainTop, commands, save, state, infos, outputs, cpuPanel, variablePanel; // from MGUI
+	JPanel main, mainTop, commands, save, state, infos; 
+	//outputs, cpuPanel; // from MGUI
 	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
@@ -125,10 +126,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	//JPanelSetVariables jpsv;
 	
 	// Blocks
-	JPanel blockPanel;
-	BlockTableModel blocktm;
-	//JButton updateBlockInformationButton;
+	private JPanel blockPanel;
+	private BlockTableModel blocktm;
 	private JScrollPane jspBlockInfo;
+	
+	// Variables
+	private JPanel variablePanel;
+	private VariableTableModel variabletm;
+	private JScrollPane jspVariableInfo;
+	
+	//JButton updateBlockInformationButton;
+	
 	
 	private int busyMode = 0; // Mode of AvatarSpecificationSimulation
 	
@@ -598,6 +606,26 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jspBlockInfo.getVerticalScrollBar().setUnitIncrement(10);
 		jspBlockInfo.setPreferredSize(new Dimension(500, 300));
 		blockPanel.add(jspBlockInfo, BorderLayout.NORTH);
+		
+		// Variables
+		variablePanel = new JPanel();
+		variablePanel.setLayout(new BorderLayout());
+		infoTab.addTab("Variables", IconManager.imgic1202, variablePanel, "Variables");
+		variabletm = new VariableTableModel(ass);
+	
+		sorterPI = new TableSorter(variabletm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(150);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspVariableInfo = new JScrollPane(jtablePI);
+		jspVariableInfo.setWheelScrollingEnabled(true);
+		jspVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspVariableInfo.setPreferredSize(new Dimension(500, 300));
+		variablePanel.add(jspVariableInfo, BorderLayout.NORTH);
 		//updateTaskInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS]);
 		//taskPanel.add(updateTaskInformationButton, BorderLayout.SOUTH);
 		
@@ -675,6 +703,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	public void setComponents() {
 		setAll();
 		animateDiagrams();
+		animateFutureTransactions();
 	}
 	
 	public void close() {
@@ -758,6 +787,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			animateDiagrams();
 		}
 		
+		animateFutureTransactions();
+		
 	}
 	
 	public void setAll() {
@@ -796,7 +827,18 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		//actions[AvatarInteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
 		
 		setLabelColors();
-		setcontentOfListOfPendingTransactions();
+		
+		if ((blockPanel != null) && (blockPanel.isVisible())) {
+			blockPanel.repaint();
+		}
+		
+		if ((variablePanel != null) && (variablePanel.isVisible())) {
+			variablePanel.repaint();
+		}
+	}
+	
+	public void animateFutureTransactions() {
+		setContentOfListOfPendingTransactions();
 	}
 	
 	public void setLabelColors() {
@@ -835,13 +877,15 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 	}
 	
-	public void setcontentOfListOfPendingTransactions() {
+	public void setContentOfListOfPendingTransactions() {
 		Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
 		try {
-		listPendingTransactions.clearSelection();
-		selectedComponentForTransaction = null;
+			listPendingTransactions.clearSelection();
+			selectedComponentForTransaction = null;
 		if (ll != null) {
 			listPendingTransactions.setListData(ll);
+			int random = (int)(Math.floor((Math.random()*ll.size())));
+			listPendingTransactions.setSelectedIndex(random);
 		} else {
 			listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
 		}

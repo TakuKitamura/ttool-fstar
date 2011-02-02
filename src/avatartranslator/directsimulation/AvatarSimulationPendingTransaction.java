@@ -60,6 +60,9 @@ public class AvatarSimulationPendingTransaction  {
 	public AvatarSimulationPendingTransaction linkedTransaction;
 	public AvatarSimulationAsynchronousTransaction linkedAsynchronousMessage;
 	public long clockValue;
+	public boolean isSynchronous;
+	public boolean isSending;
+	public Vector<String> parameters;
 	
 	// To store a delay prior to execution
 	public String myMinDelay;

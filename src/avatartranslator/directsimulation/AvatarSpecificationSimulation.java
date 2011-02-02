@@ -337,7 +337,7 @@ public class AvatarSpecificationSimulation  {
 			if (ar.isAsynchronous()) {
 				// Mus see whether the channel is full or not
 				if (ar.isBlocking()) {
-					// Must see whether te channel is full or not
+					// Must see whether the channel is full or not
 					int nb = getNbOfAsynchronousMessages(ar);
 					if (nb < ar.getSizeOfFIFO()) {
 						transactions.add(_aspt);
@@ -437,7 +437,13 @@ public class AvatarSpecificationSimulation  {
 		if (_aspt.elementToExecute instanceof AvatarActionOnSignal) {
 			AvatarSignal sig = ((AvatarActionOnSignal)(_aspt.elementToExecute)).getSignal();
 			AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
+			if (sig.isOut()) {
+				_aspt.isSending = true;
+			} else {
+				_aspt.isSending = false;
+			}
 			if (rel.isAsynchronous()) {
+				_aspt.isSynchronous = false;
 				if (sig.isOut()) {
 					// Create the stucture to put elements
 					AvatarSimulationAsynchronousTransaction asat = new AvatarSimulationAsynchronousTransaction(rel);
@@ -449,6 +455,8 @@ public class AvatarSpecificationSimulation  {
 					asynchronousMessages.remove(asat);
 					_aspt.linkedAsynchronousMessage = asat;
 				}
+			} else {
+				_aspt.isSynchronous = true;
 			}
 		}
 		

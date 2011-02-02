@@ -65,6 +65,7 @@ public class AvatarSimulationTransaction  {
 	public long clockValueWhenPerformed;
 	public long id;
 	public Vector<String> attributeValues;
+	public Vector<String> actions;
 	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;
@@ -92,6 +93,14 @@ public class AvatarSimulationTransaction  {
 		String res = "" + id + " @" + clockValueWhenPerformed + " " + executedElement + " in block " + block.getName() + "\nattributes=";
 		for(String s: attributeValues) {
 			res += s + " ";
+		}
+		if (actions != null) {
+			int cpt = 0;
+			res+= "\n";
+			for(String action: actions) {
+				res += "action#" + cpt + ": " + action + " ";
+				cpt ++;
+			}
 		}
 		return res;
 	}

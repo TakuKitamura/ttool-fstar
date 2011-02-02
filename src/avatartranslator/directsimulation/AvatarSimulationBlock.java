@@ -109,6 +109,14 @@ public class AvatarSimulationBlock  {
 		return STARTED;
 	}
 	
+	public String getAttributeValue(int _index) {
+		if (lastTransaction == null) {
+			return block.getAttribute(_index).getInitialValue();
+		}
+		
+		return lastTransaction.attributeValues.get(_index);
+	}
+	
 	public Vector<AvatarSimulationTransaction> getTransactions() {
 		return transactions;
 	}
@@ -128,7 +136,7 @@ public class AvatarSimulationBlock  {
 				completed = true;
 				return ll;
 			}
-			makeExecutedTransaction(_allTransactions, ass, _clockValue);
+			makeExecutedTransaction(_allTransactions, ass, _clockValue, null);
 			
 		}
 		
@@ -141,198 +149,283 @@ public class AvatarSimulationBlock  {
 		// ...
 		// To be done!
 		AvatarSimulationPendingTransaction aspt;
+		AvatarStateMachineElement asme;
+		boolean guardOk;
 		for(int i=0; i<lastTransaction.executedElement.nbOfNexts(); i++) {
-			aspt = new AvatarSimulationPendingTransaction();
-			aspt.asb = this;
-			aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
-			if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
-				AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
-				if (!trans.hasDelay() && (trans.getNbOfAction() == 0)){
-					// empty transition, "empty" is the meaning of actions -> look for an action after
-					if(trans.getNext(0) != null) {
-						if (trans.getNext(0) instanceof AvatarActionOnSignal) {
-							aspt.involvedElement = trans;
-							aspt.elementToExecute = trans.getNext(0);
-						}
-					}
+			asme = lastTransaction.executedElement.getNext(i);
+			guardOk = true;
+			// Guard on transition ? -> must evaluate the guard!
+			if (asme instanceof AvatarTransition) {
+				AvatarTransition at = (AvatarTransition)(asme);
+				if (at.isGuarded()) {
+					// Must evaluate the guard
+					String guard = at.getGuard();
+					String s = Conversion.replaceAllString(guard, "[", "").trim();
+					s = Conversion.replaceAllString(s, "]", "").trim();
+					guardOk = evaluateBoolExpression(s, lastTransaction.attributeValues);
+					TraceManager.addDev("guard ok=" + guardOk);
 				}
 			}
 			
-			if (aspt.elementToExecute instanceof AvatarTransition) { 
-				AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
-				if (trans.hasDelay()) {
-					aspt.myMinDelay = trans.getMinDelay();
-					aspt.myMaxDelay = trans.getMaxDelay();
-					aspt.hasDelay = true;
-					if (lastTransaction != null) {
-						if (lastTransaction.clockValueWhenPerformed < _clockValue) {
-							aspt.hasElapsedTime = true;
-							aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+			if(guardOk) {
+				aspt = new AvatarSimulationPendingTransaction();
+				aspt.asb = this;
+				aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
+				if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
+					AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
+					if (!trans.hasDelay() && (trans.getNbOfAction() == 0)){
+						// empty transition, "empty" is the meaning of actions -> look for an action after
+						if(trans.getNext(0) != null) {
+							if (trans.getNext(0) instanceof AvatarActionOnSignal) {
+								aspt.involvedElement = trans;
+								aspt.elementToExecute = trans.getNext(0);
+							}
 						}
 					}
 				}
-			} else if (aspt.involvedElement instanceof AvatarTransition) {
-				AvatarTransition trans = (AvatarTransition)(aspt.involvedElement);
-				if (trans.hasDelay()) {
-					aspt.myMinDelay = trans.getMinDelay();
-					aspt.myMaxDelay = trans.getMaxDelay();
-					aspt.hasDelay = true;
-					
-					if (lastTransaction != null) {
-						if (lastTransaction.clockValueWhenPerformed < _clockValue) {
-							aspt.hasElapsedTime = true;
-							aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+				
+				if (aspt.elementToExecute instanceof AvatarTransition) { 
+					AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
+					if (trans.hasDelay()) {
+						aspt.myMinDelay = trans.getMinDelay();
+						aspt.myMaxDelay = trans.getMaxDelay();
+						aspt.hasDelay = true;
+						if (lastTransaction != null) {
+							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+								aspt.hasElapsedTime = true;
+								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+							}
+						}
+					}
+				} else if (aspt.involvedElement instanceof AvatarTransition) {
+					AvatarTransition trans = (AvatarTransition)(aspt.involvedElement);
+					if (trans.hasDelay()) {
+						aspt.myMinDelay = trans.getMinDelay();
+						aspt.myMaxDelay = trans.getMaxDelay();
+						aspt.hasDelay = true;
+						
+						if (lastTransaction != null) {
+							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+								aspt.hasElapsedTime = true;
+								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+							}
 						}
 					}
 				}
+				aspt.clockValue = _clockValue;
+				ll.add(aspt);
 			}
-			aspt.clockValue = _clockValue;
-			ll.add(aspt);
 		}
 		return ll;
 	}
 	
-	/*public void runToNextBlockingElement(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
-		
-		// No previous transaction
-		if (lastTransaction == null) {
-			AvatarStartState ass = block.getStateMachine().getStartState();
-			if (ass == null) {
-				completed = true;
-				return;
-			}
-			makeExecutedTransaction(_allTransactions, ass, _clockValue);
-		}
-		
-		boolean go = true;
-		int nbOfTransactions = 0;
-		AvatarStateMachineElement elt;
-		while(go) {
-			elt = lastTransaction.executedElement;
-			TraceManager.addDev("" + nbOfTransactions + "-> " + elt);
-			
-			// Last element?
-			if (elt.nbOfNexts() == 0) {
-				completed = true;
-				go = false;
-			}
-			
-			// Only one next?
-			if (elt.nbOfNexts() == 1) {
-				if (isBlocking(elt.getNext(0))) {
-					TraceManager.addDev("is blocking!");
-					go = false;
-				} else {
-					TraceManager.addDev("not blocking -> going on!");
-					executeElement(_allTransactions, elt.getNext(0), _clockValue);
-				}
-			}
-			
-			if (elt.nbOfNexts() > 1) {
-				go = false;
-			}
-			
-			nbOfTransactions ++;
-			if (nbOfTransactions == _maxTransationsInARow) {
-				go = false;
-			}
-		}
-		
-		if (nbOfTransactions == _maxTransationsInARow) {
-			go = false;
-			TraceManager.addDev("Too many transactions in a row: aborting block");
-			completed = true;
-		}
-	}*/
-	
 	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
 		if (_aspt.involvedElement != null) {
-			executeElement(_allTransactions, _aspt.involvedElement, _clockValue);
+			executeElement(_allTransactions, _aspt.involvedElement, _clockValue, _aspt);
 		}
-		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue);
+		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue, _aspt);
 		
 	
 		//runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
 	}
 	
 	
-	/*public boolean isBlocking(AvatarStateMachineElement _elt) {
-		TraceManager.addDev("Testing whether " + _elt + "is blocking or not");
-		
-		if (_elt instanceof AvatarStopState) {
-			return false;
-		}
-		
-		if (_elt instanceof AvatarState) {
-			return false;
-		}
-		
-		if (_elt instanceof AvatarRandom) {
-			return false;
-		}
-		
-		if (_elt instanceof AvatarTransition) {
-			AvatarTransition at = (AvatarTransition)_elt;
-			
-			if ((at.hasDelay()) || (at.hasCompute())) {
-				return true;
-			}
-			
-			return false;
-		}
-		
-		return true;
-	}*/
-	
-	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
+	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt) {
 		// Stop state
 		if (_elt instanceof AvatarStopState) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
 			
 		// Random
 		} else if (_elt instanceof AvatarState) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
 			
 		// Random
 		} else if (_elt instanceof AvatarRandom) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
 			
 		// Transition
 		} else if (_elt instanceof AvatarTransition) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
 		
 		// Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
 		}
 	}
 	
-	public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue) {
-			AvatarSimulationTransaction ast = new AvatarSimulationTransaction(_elt);
-			ast.block = block;
-			ast.asb = this;
-			ast.concernedElement = null;
-			ast.initialClockValue = _clockValue;
-			ast.clockValueWhenPerformed = _clockValue;
-			ast.id = ast.setID();
-			
-			// Attributes
-			Vector<String> attributeValues = new Vector<String>();
-			String s;
-			if (lastTransaction == null) {
-				for(AvatarAttribute aa: block.getAttributes()) {
-					s = new String(aa.getInitialValue());
-					attributeValues.add(s);
+	public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt) {
+		AvatarTransition at;
+		String action;
+		int i;
+		Vector<String> actions;
+		String value;
+		AvatarAttribute avat;
+		String result, name, param;
+		int index;
+		
+		AvatarSimulationTransaction ast = new AvatarSimulationTransaction(_elt);
+		ast.block = block;
+		ast.asb = this;
+		ast.concernedElement = null;
+		ast.initialClockValue = _clockValue;
+		ast.clockValueWhenPerformed = _clockValue;
+		ast.id = ast.setID();
+		
+		// Attributes
+		Vector<String> attributeValues = new Vector<String>();
+		String s;
+		if (lastTransaction == null) {
+			for(AvatarAttribute aa: block.getAttributes()) {
+				s = new String(aa.getInitialValue());
+				attributeValues.add(s);
+			}
+		} else {
+			// Recopy of previous values
+			for(String ss: lastTransaction.attributeValues) {
+				attributeValues.add(""+ss);
+			}
+			// Transition?
+			if (_elt instanceof AvatarTransition) {
+				at = (AvatarTransition)(_elt);
+				// Must compute new values of attributes
+				if (at.hasActions()) {
+					actions = new Vector<String>();
+					for(i=0; i<at.getNbOfAction(); i++) {
+						action = at.getAction(i);
+						makeAction(action, attributeValues, actions);
+					}
+					ast.actions = actions;
 				}
-			} else {
-				for(String ss: lastTransaction.attributeValues) {
-					attributeValues.add(""+ss);
+			} 
+			
+			// Action on signal?
+			if (_elt instanceof AvatarActionOnSignal) {
+				AvatarActionOnSignal aaos = (AvatarActionOnSignal)_elt;
+				if (_aspt != null) {
+					// Must put the right parameters
+					if (_aspt.isSynchronous) {
+						// Synchronous call
+						if ((_aspt.isSending) && (_aspt.linkedTransaction != null)){
+							// Synchronous Sending!
+							// Must be in the receiving transaction the right parameters
+							Vector<String> parameters = new Vector<String>();
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								value = aaos.getValue(i);
+								// Must get the type of the value
+								//TraceManager.addDev("Sending aaos: " + aaos + " block=" + block.getName());
+								try {
+									avat = aaos.getSignal().getListOfAttributes().get(i);
+									result = "";
+									if (avat.getType() == AvatarType.INTEGER) {
+										result += evaluateIntExpression(value, lastTransaction.attributeValues);
+									} else if (avat.getType() == AvatarType.BOOLEAN) {
+										result += evaluateBoolExpression(value, lastTransaction.attributeValues);
+									} 
+									
+									TraceManager.addDev("Adding value:" + result);
+									parameters.add(result);
+								} catch (Exception e) {}
+							}
+							_aspt.linkedTransaction.parameters = parameters;
+						} else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
+							// Synchronous Receiving
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								param = _aspt.parameters.get(i);
+								name = aaos.getValue(i);
+								index = block.getIndexOfAvatarAttributeWithName(name);
+								if (index != -1) {
+									attributeValues.remove(index);
+									attributeValues.add(index, param);
+									TraceManager.addDev("Reading value:" + param);
+								}
+							}
+						}
+						
+					} else {
+						// Asynchronous call
+						if ((_aspt.isSending) && (_aspt.linkedAsynchronousMessage != null)){
+							
+							// Asynchronous Sending
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								value = aaos.getValue(i);
+								// Must get the type of the value
+								avat = aaos.getSignal().getListOfAttributes().get(i);
+								result = "";
+								if (avat.getType() == AvatarType.INTEGER) {
+									result += evaluateIntExpression(value, lastTransaction.attributeValues);
+								} else if (avat.getType() == AvatarType.BOOLEAN) {
+									result += evaluateBoolExpression(value, lastTransaction.attributeValues);
+								} 
+								TraceManager.addDev("Adding value:" + result);
+								_aspt.linkedAsynchronousMessage.addParameter(result);
+							}
+							
+						} else if ((!(_aspt.isSending)) && (_aspt.linkedAsynchronousMessage != null)) {
+							// Asynchronous Receiving 
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								param = _aspt.linkedAsynchronousMessage.getParameters().get(i);
+								name = aaos.getValue(i);
+								index = block.getIndexOfAvatarAttributeWithName(name);
+								if (index != -1) {
+									attributeValues.remove(index);
+									attributeValues.add(index, param);
+									TraceManager.addDev("Reading value:" + param);
+								}
+							}
+						}
+					}
 				}
 			}
-			ast.attributeValues = attributeValues;
-			
-			addExecutedTransaction(_allTransactions, ast);
+		}
+		ast.attributeValues = attributeValues;
+		
+		addExecutedTransaction(_allTransactions, ast);
 	}
+	
+	public void makeAction(String _action, Vector<String> _attributeValues, Vector<String> _actions) {
+		String nameOfVar;
+		String act;
+		int ind;
+		
+		ind = _action.indexOf("=");
+		if (ind == -1) {
+			return;
+		}
+		
+		nameOfVar= _action.substring(0, ind).trim();
+		act = _action.substring(ind+1, _action.length());
+		
+		//TraceManager.addDev("1- Working on attribute =" + nameOfVar);
+		
+		if (AvatarTransition.isAMethodCall(_action)) {
+			_actions.add(nameOfVar + " = " + act);
+			return;
+		}
+		
+		// Variable
+		TraceManager.addDev("2- Working on attribute =" + nameOfVar);
+		int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
+		if (indexVar != -1) {
+			// int or bool???
+			int type = block.getAttribute(indexVar).getType();
+			if (type == AvatarType.INTEGER) {
+				int result = evaluateIntExpression(act, _attributeValues);
+				_actions.add(nameOfVar + " = " + result);
+				_attributeValues.remove(indexVar);
+				_attributeValues.add(indexVar, ""+result);
+			} else if (type == AvatarType.BOOLEAN) {
+				boolean bool = evaluateBoolExpression(act, _attributeValues);
+				_actions.add(nameOfVar + " = " + bool);
+				_attributeValues.remove(indexVar);
+				_attributeValues.add(indexVar, ""+bool);
+			}
+		}
+		
+		// find the index of the attribute, and put its new value
+		return;
+	}
+	
+
 	
 	public void addExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarSimulationTransaction _ast) {
 		transactions.add(_ast);
@@ -346,5 +439,38 @@ public class AvatarSimulationBlock  {
 		}
 		
 		return lastTransaction.executedElement;
+	}
+	
+	public String getAttributeName(int _index) {
+		return block.getAttribute(_index).getName();
+	}
+	
+	public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {
+		String act = _expr;
+		int cpt = 0;
+		for(String attrValue: _attributeValues) {
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
+			cpt ++;
+		}
+		
+		return (int)(new IntExpressionEvaluator().getResultOf(act));
+	}
+	
+	public boolean evaluateBoolExpression(String _expr, Vector<String> _attributeValues) {
+		String act = _expr;
+		int cpt = 0;
+		for(String attrValue: _attributeValues) {
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
+			cpt ++;
+		}
+		
+		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+		boolean result = bee.getResultOf(act);
+		if (bee.getError() != null) {
+			TraceManager.addDev("Error: " + bee.getError());
+		}
+		
+		//TraceManager.addDev("Result of " + _expr + " = " + result);
+		return result;
 	}
 }

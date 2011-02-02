@@ -52,7 +52,7 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarSpecification extends AvatarElement {
-   private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};
+   public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};
     
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;

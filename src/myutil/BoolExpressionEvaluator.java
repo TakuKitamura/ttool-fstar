@@ -58,7 +58,10 @@ public class BoolExpressionEvaluator {
 	public static final int NUMBER_TOKEN = -1;
 	public static final int BOOL_TOKEN = -2;
 	public static final int EQUAL_TOKEN = -3;
-	public static final int EOLN_TOKEN = -3;
+	public static final int LT_TOKEN = -4;
+	public static final int GT_TOKEN = -5;
+	public static final int NEG_TOKEN = -6;
+	public static final int EOLN_TOKEN = -7;
 	
 	private StringTokenizer tokens;
 	private String errorMessage = null;
@@ -86,10 +89,13 @@ public class BoolExpressionEvaluator {
 	
 	public boolean getResultOf(String _expr) {
 		TraceManager.addDev("Evaluating bool expr: " + _expr);
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
+		_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
+		
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=",true);
 		
 		computeNextToken();
-		double result =  parseExpression();
+		int result =  (int)(parseExpression());
 		
 		if (result == TRUE_VALUE) {
 			return true;
@@ -129,7 +135,7 @@ public class BoolExpressionEvaluator {
 				errorMessage = "Expected an integer number.";
 			else if (token == BOOL_TOKEN) 
 				errorMessage = "Expected a boolean.";
-			else if (token == EQUAL_TOKEN) 
+			else if (token == EQUAL_TOKEN)
 				errorMessage = "Expected an equal.";
 			else errorMessage = 
 				"Expected a " + ((char) token) + ".";
@@ -193,7 +199,9 @@ public class BoolExpressionEvaluator {
 		int intresult2;
 		if (errorMessage != null) return result;
 		
+		
 		while (true) {
+			TraceManager.addDev("Token:" + currentType + " value=" + currentValue);
 			if (currentType == EQUAL_TOKEN) {
 				match(EQUAL_TOKEN);
 				if (errorMessage != null) return result;
@@ -212,6 +220,76 @@ public class BoolExpressionEvaluator {
 				}*/
 				
 				if (result == resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == LT_TOKEN) {
+				match(LT_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
+					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
+				}
+				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
+					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
+				}*/
+				
+				if (result < resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == GT_TOKEN) {
+				match(GT_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
+					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
+				}
+				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
+					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
+				}*/
+				
+				if (result > resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == NEG_TOKEN) {
+				match(NEG_TOKEN);
+				if (errorMessage != null) return result;
+				
+				TraceManager.addDev("NEG TOKEN!");
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
+					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
+				}
+				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
+					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
+				}*/
+				
+				if (((int)(resulttmp)) == 0) {
 					return TRUE_VALUE;
 				} else {
 					return FALSE_VALUE;
@@ -272,6 +350,19 @@ public class BoolExpressionEvaluator {
 			if (errorMessage != null) return result;
 		}
 		
+		else if (currentType==NEG_TOKEN){
+			match(NEG_TOKEN);
+			result = parseExpression();
+			if (result == TRUE_VALUE) {
+				result = FALSE_VALUE;
+			} else {
+				result = TRUE_VALUE;
+			}
+			if (errorMessage != null) return result;
+			//match(NEG_TOKEN);
+			if (errorMessage != null) return result;
+		}
+		
 		else {
 			errorMessage = "Expected a value or a parenthesis.";
 		}
@@ -326,9 +417,30 @@ public class BoolExpressionEvaluator {
 				return;
 			}
 			
-			if (s.compareTo("==") == 0) {
+			if (s.compareTo("<") == 0) {
+				currentValue = 0;
+				currentType = LT_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo(">") == 0) {
+				currentValue = 0;
+				currentType = GT_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo("=") == 0) {
 				currentValue = 0;
 				currentType = EQUAL_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo("!") == 0) {
+				currentValue = 0;
+				currentType = NEG_TOKEN;
 				//TraceManager.addDev("equal token!");
 				return;
 			}

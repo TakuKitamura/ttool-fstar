@@ -86,6 +86,9 @@ public class AvatarAttribute extends AvatarElement{
 	}
 	
 	public String getInitialValue() {
+		if ((initialValue == null) || (initialValue.length() == 0)) {
+			return getDefaultInitialValue();
+		}
 		return initialValue;
 	}
 	

@@ -74,6 +74,10 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 		values.add(_val);
 	}
 	
+	public LinkedList<String> getValues() {
+		return values;
+	}
+	
 	public int getNbOfValues() {
 		return values.size();
 	}
