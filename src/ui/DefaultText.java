@@ -48,8 +48,8 @@ package ui;
 
 
 public class DefaultText  {
-    public static String BUILD = "7342";
-	public static String DATE = "2011/02/03 14:21:21 CET";
+    public static String BUILD = "7343";
+	public static String DATE = "2011/02/03 14:21:41 CET";
 
     public static StringBuffer sbAbout = makeAbout();
     
