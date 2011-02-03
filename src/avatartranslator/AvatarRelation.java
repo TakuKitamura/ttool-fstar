@@ -173,5 +173,13 @@ public class AvatarRelation extends AvatarElement {
 		return Math.max(index1, index2);
 	}
 	
+	public int getIndexOfSignal(AvatarSignal sig) {
+		int index1 = signals1.indexOf(sig);
+		if (index1 > -1) {
+			return index1;
+		}
+		return signals2.indexOf(sig);
+	}
+	
 
 }

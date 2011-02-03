@@ -56,6 +56,7 @@ public class AvatarSimulationAsynchronousTransaction  {
   
 	private Vector<String> parameters;
     private AvatarRelation relation;
+	public AvatarSimulationTransaction firstTransaction;
 	
     public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar) {
 		relation = _ar;

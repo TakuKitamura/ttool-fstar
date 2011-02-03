@@ -88,7 +88,7 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public boolean getResultOf(String _expr) {
-		TraceManager.addDev("Evaluating bool expr: " + _expr);
+		//TraceManager.addDev("Evaluating bool expr: " + _expr);
 		_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
 		
@@ -201,7 +201,7 @@ public class BoolExpressionEvaluator {
 		
 		
 		while (true) {
-			TraceManager.addDev("Token:" + currentType + " value=" + currentValue);
+			//TraceManager.addDev("Token:" + currentType + " value=" + currentValue);
 			if (currentType == EQUAL_TOKEN) {
 				match(EQUAL_TOKEN);
 				if (errorMessage != null) return result;

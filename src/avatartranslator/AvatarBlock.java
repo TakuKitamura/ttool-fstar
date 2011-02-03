@@ -174,6 +174,15 @@ public class AvatarBlock extends AvatarElement {
 		return null;
 	}
 	
+	public AvatarAttribute getNTypeOfMethod(String methodName, int indexOfAttribute) {
+		AvatarMethod am = getAvatarMethodWithName(methodName);
+		if (am == null) {
+			return null;
+		}
+		
+		return am.getListOfAttributes().get(indexOfAttribute);
+	}
+	
 	public AvatarBlock getBlockOfMethodWithName(String _name) {
 		for(AvatarMethod method: methods) {
 			if (method.getName().compareTo(_name)== 0) {

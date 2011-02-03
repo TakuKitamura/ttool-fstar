@@ -83,6 +83,10 @@ public class AvatarSimulationBlock  {
 		return block;
 	}
 	
+	public AvatarSimulationTransaction getLastTransaction() {
+		return lastTransaction;
+	}
+	
 	public String getName() {
 		if (block != null) {
 			return block.getName();
@@ -269,6 +273,11 @@ public class AvatarSimulationBlock  {
 		ast.concernedElement = null;
 		ast.initialClockValue = _clockValue;
 		ast.clockValueWhenPerformed = _clockValue;
+		if (_aspt != null) {
+			if (_aspt.hasClock) {
+				ast.duration = _aspt.selectedDuration;
+			}
+		}
 		ast.id = ast.setID();
 		
 		// Attributes
@@ -292,6 +301,7 @@ public class AvatarSimulationBlock  {
 					actions = new Vector<String>();
 					for(i=0; i<at.getNbOfAction(); i++) {
 						action = at.getAction(i);
+						//TraceManager.addDev("action #" + i  + " = " + action);
 						makeAction(action, attributeValues, actions);
 					}
 					ast.actions = actions;
@@ -309,6 +319,7 @@ public class AvatarSimulationBlock  {
 							// Synchronous Sending!
 							// Must be in the receiving transaction the right parameters
 							Vector<String> parameters = new Vector<String>();
+							TraceManager.addDev("Adding value in :" + aaos);
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								value = aaos.getValue(i);
 								// Must get the type of the value
@@ -324,21 +335,37 @@ public class AvatarSimulationBlock  {
 									
 									TraceManager.addDev("Adding value:" + result);
 									parameters.add(result);
-								} catch (Exception e) {}
+								} catch (Exception e) {
+									TraceManager.addDev("EXCEPTION on adding value " + aaos);
+								}
 							}
 							_aspt.linkedTransaction.parameters = parameters;
 						} else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
+							TraceManager.addDev("Reading value " + aaos);
 							// Synchronous Receiving
+							String myAction = "";
 							for(i=0; i<aaos.getNbOfValues(); i++) {
+								TraceManager.addDev("Reading value #" + i);
 								param = _aspt.parameters.get(i);
 								name = aaos.getValue(i);
 								index = block.getIndexOfAvatarAttributeWithName(name);
+								
 								if (index != -1) {
 									attributeValues.remove(index);
 									attributeValues.add(index, param);
 									TraceManager.addDev("Reading value:" + param);
+									if (myAction.length() == 0) {
+										myAction = "" + param;
+									} else {
+										myAction = ", " + param;
+									}
 								}
 							}
+							if (myAction.length() > 0) {
+								ast.actions = new Vector<String>();
+								ast.actions.add(myAction);
+							}
+							
 						}
 						
 					} else {
@@ -346,6 +373,7 @@ public class AvatarSimulationBlock  {
 						if ((_aspt.isSending) && (_aspt.linkedAsynchronousMessage != null)){
 							
 							// Asynchronous Sending
+							String myAction = "";
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								value = aaos.getValue(i);
 								// Must get the type of the value
@@ -358,10 +386,22 @@ public class AvatarSimulationBlock  {
 								} 
 								TraceManager.addDev("Adding value:" + result);
 								_aspt.linkedAsynchronousMessage.addParameter(result);
+								_aspt.linkedAsynchronousMessage.firstTransaction = ast;
+								if (myAction.length() == 0) {
+										myAction = "" + result;
+									} else {
+										myAction = ", " + result;
+									}
+							}
+							if (myAction.length() > 0) {
+								ast.actions = new Vector<String>();
+								ast.actions.add(myAction);
 							}
 							
 						} else if ((!(_aspt.isSending)) && (_aspt.linkedAsynchronousMessage != null)) {
 							// Asynchronous Receiving 
+							String myAction = "";
+							ast.linkedTransaction = _aspt.linkedAsynchronousMessage.firstTransaction;
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								param = _aspt.linkedAsynchronousMessage.getParameters().get(i);
 								name = aaos.getValue(i);
@@ -370,7 +410,16 @@ public class AvatarSimulationBlock  {
 									attributeValues.remove(index);
 									attributeValues.add(index, param);
 									TraceManager.addDev("Reading value:" + param);
+									if (myAction.length() == 0) {
+										myAction = "" + param;
+									} else {
+										myAction = ", " + param;
+									}
 								}
+							}
+							if (myAction.length() > 0) {
+								ast.actions = new Vector<String>();
+								ast.actions.add(myAction);
 							}
 						}
 					}
@@ -385,8 +434,57 @@ public class AvatarSimulationBlock  {
 	public void makeAction(String _action, Vector<String> _attributeValues, Vector<String> _actions) {
 		String nameOfVar;
 		String act;
+		String nameOfMethod;
 		int ind;
 		
+		if (AvatarTransition.isAMethodCall(_action)) {
+			// Evaluate all elements of the method call!
+			ind = _action.indexOf("(");
+			if (ind == -1) {
+				return;
+			}
+			nameOfVar = _action.substring(0, ind).trim();
+			
+			act = _action.substring(ind+1, _action.length()).trim();
+			
+			ind = act.lastIndexOf(")");
+			if(ind == -1) {
+				return;
+			}
+			act = act.substring(0, ind);
+			
+			ind = nameOfVar.indexOf("=");
+			if (ind != -1) {
+				nameOfMethod = nameOfVar.substring(ind+1, nameOfVar.length());
+			} else {
+				nameOfMethod = nameOfVar;
+			}
+			
+			String[] params = act.split(",");
+			String parameters = "";
+			String s;
+			int indexAtt;
+			int cpt = 0;
+			for(int i=0; i<params.length; i++) {
+				s = params[i].trim();
+				if (s.length() > 0) {
+					indexAtt = block.getIndexOfAvatarAttributeWithName(s);
+					TraceManager.addDev("indexAtt=" + indexAtt + " s=" + s);
+					if (indexAtt > -1) {
+						if (cpt>0) {
+							parameters += ", ";
+						}
+						parameters += _attributeValues.get(indexAtt);
+						cpt = cpt + 1;
+					}
+				}
+			}
+			
+			_actions.add(nameOfVar + "(" + parameters + ")");
+			return;
+		}
+		
+		// Regular attribute
 		ind = _action.indexOf("=");
 		if (ind == -1) {
 			return;
@@ -395,12 +493,9 @@ public class AvatarSimulationBlock  {
 		nameOfVar= _action.substring(0, ind).trim();
 		act = _action.substring(ind+1, _action.length());
 		
-		//TraceManager.addDev("1- Working on attribute =" + nameOfVar);
+		TraceManager.addDev("1- Working on attribute =" + nameOfVar + " action=" + _action);
 		
-		if (AvatarTransition.isAMethodCall(_action)) {
-			_actions.add(nameOfVar + " = " + act);
-			return;
-		}
+		
 		
 		// Variable
 		TraceManager.addDev("2- Working on attribute =" + nameOfVar);

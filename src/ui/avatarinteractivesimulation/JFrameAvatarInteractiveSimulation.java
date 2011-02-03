@@ -109,6 +109,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private AvatarSimulationBlock previousBlock;
 	
 	
+	
 	//private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	
 	// Status elements
@@ -134,6 +135,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private JPanel variablePanel;
 	private VariableTableModel variabletm;
 	private JScrollPane jspVariableInfo;
+	
+	// Sequence Diagram
+	private AvatarSpecificationSimulationSDPanel sdpanel;
 	
 	//JButton updateBlockInformationButton;
 	
@@ -174,6 +178,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		addWindowListener(this);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
 		setIconImage(IconManager.img5100);
+		setBackground(Color.WHITE);
 		
 		/*valueTable = new Hashtable<Integer, String>();
 		rowTable = new Hashtable<Integer, Integer>();
@@ -286,7 +291,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		JPanel mainpanel = new JPanel(new BorderLayout());
 		//mainpanel.setBackground(ColorManager.InteractiveSimulationBackground);
-		framePanel.add(mainpanel, BorderLayout.NORTH);
+		framePanel.add(mainpanel, BorderLayout.CENTER);
 		
 		JPanel jp = new JPanel();
 		//jp.setBackground(ColorManager.InteractiveSimulationBackground);
@@ -307,8 +312,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		c02.fill = GridBagConstraints.BOTH;
 		c02.gridheight = 1;
 		
-		// Ouput textArea
-		jta = new ScrolledJTextArea();
+		// Ouput SD
+		/*jta = new ScrolledJTextArea();
 		jta.setBackground(ColorManager.InteractiveSimulationJTABackground);
 		jta.setForeground(ColorManager.InteractiveSimulationJTAForeground);
 		jta.setMinimumSize(new Dimension(800, 200));
@@ -325,15 +330,23 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
         //jsp.setColumnHeaderView(100);
         //jsp.setRowHeaderView(30);
-		
-		
-		jsp.setMaximumSize(new Dimension(800, 400));
-		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, jsp);
+		//jsp.setMaximumSize(new Dimension(800, 400));*/
+		JPanel lowerPartPanel = new JPanel(); lowerPartPanel.setLayout(new BorderLayout());
+		sdpanel = new AvatarSpecificationSimulationSDPanel(ass);
+        //ass.setName("Interaction Overview Diagram");
+        JScrollPane jsp	= new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        sdpanel.setMyScrollPanel(jsp);
+        jsp.setWheelScrollingEnabled(true);
+		//jsp.setPreferredSize(new Dimension(800, 400));
+        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+		lowerPartPanel.add(jsp, BorderLayout.CENTER);
+	
+		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, lowerPartPanel);
 		//split.setBackground(ColorManager.InteractiveSimulationBackground);
 		mainpanel.add(split, BorderLayout.CENTER);
 		
 		// Commands
-		commands = new JPanel();
+		commands = new JPanel(new BorderLayout());
 		//commands.setFloatable(true);
 		//commands.setMinimumSize(new Dimension(300, 250));
 		commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
@@ -342,7 +355,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		mainTop.add(commands, c02);
 		
 		commandTab = new JTabbedPane();
-		commands.add(commandTab);
+		commands.add(commandTab, BorderLayout.CENTER);
 		//commandTab.setBackground(ColorManager.InteractiveSimulationBackground);
 		
 		
@@ -380,7 +393,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         panellpt.setBorder(new javax.swing.border.TitledBorder("Pending transactions"));
 		
         listPendingTransactions = new JList();
-        //listPendingTransactions.setPreferredSize(new Dimension(150, 150));
+        //listPendingTransactions.setPreferredSize(new Dimension(400, 300));
         listPendingTransactions.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION );
         listPendingTransactions.addListSelectionListener(this);
         JScrollPane scrollPane1 = new JScrollPane(listPendingTransactions);
@@ -389,66 +402,6 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jp02.add(panellpt, c01);
 		jp01.add(jp02, BorderLayout.CENTER);
 		
-	
-		
-		/*c01.gridwidth = 1;
-		jp02.add(new JLabel("CPUs: "), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		if (cpuIDs == null) {
-			cpus = new JComboBox();
-		} else {
-			cpus = new JComboBox(cpuIDs);
-		}
-		jp02.add(cpus, c01);
-		
-		c01.gridwidth = 1;
-		jp02.add(new JLabel("Busses: "), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		if (busIDs == null) {
-			busses = new JComboBox();
-		} else {
-			busses = new JComboBox(busIDs);
-		}
-		jp02.add(busses, c01);
-		
-		c01.gridwidth = 1;
-		jp02.add(new JLabel("Memories: "), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		if (memIDs == null) {
-			mems = new JComboBox();
-		} else {
-			mems = new JComboBox(memIDs);
-		}
-		jp02.add(mems, c01);
-		
-		c01.gridwidth = 1;
-		jp02.add(new JLabel("Tasks: "), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		if (taskIDs == null) {
-			tasks = new JComboBox();
-		} else {
-			tasks = new JComboBox(taskIDs);
-		}
-		jp02.add(tasks, c01);
-		
-		c01.gridwidth = 1;
-		jp02.add(new JLabel("Channels: "), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		if (chanIDs == null) {
-			chans = new JComboBox();
-		} else {
-			chans = new JComboBox(chanIDs);
-		}
-		jp02.add(chans, c01);*/
-		
-		
-		
-		
-		
-		
-		// Set variables
-		/*jpsv = new JPanelSetVariables(this, valueTable);
-		commandTab.addTab("Set variables", null, jpsv, "Set variables");*/
 		
 		// Save commands
 		jp01 = new JPanel(new BorderLayout());
@@ -505,19 +458,19 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		//Info
 		infos = new JPanel(new BorderLayout());
-		infos.setMinimumSize(new Dimension(300, 250));
+		infos.setPreferredSize(new Dimension(300, 200));
 		//infos.setPreferredSize(new Dimension(400, 450));
 		infos.setBorder(new javax.swing.border.TitledBorder("Simulation information"));
 		c02.gridwidth = GridBagConstraints.REMAINDER; //end row
 		mainTop.add(infos, c02);
 		
 		infoTab = new JTabbedPane();
-		infoTab.setMinimumSize(new Dimension(300, 250));
-		infos.add(infoTab, BorderLayout.NORTH);
+		infoTab.setPreferredSize(new Dimension(300, 200));
+		infos.add(infoTab, BorderLayout.CENTER);
 		
 		// Simulation time
 		jp02 = new JPanel();
-		infos.add(jp02, BorderLayout.SOUTH);
+		infos.add(jp02, BorderLayout.NORTH);
 		jp02.add(new JLabel("Status:"));
 		status = new JLabel("Unknown");
 		status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
@@ -553,7 +506,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
 		
-		jp01.add(new JLabel(" "), c01);
+		//jp01.add(new JLabel(" "), c01);
 		/*latex = new JCheckBox("Generate info in Latex format");
 		jp01.add(latex, c01);*/
 		/*debug = new JCheckBox("Print messages received from server");
@@ -571,10 +524,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		openDiagram = new JCheckBox("Automatically open active task diagram");
 		jp01.add(openDiagram, c01);
 		openDiagram.setSelected(true);
-		update = new JCheckBox("Automatically update information (variables)");
-		jp01.add(update, c01);
-		update.addItemListener(this);
-		update.setSelected(true);
+		//update = new JCheckBox("Automatically update information (variables)");
+		//jp01.add(update, c01);
+		//update.addItemListener(this);
+		//update.setSelected(true);
 		
 		animate.addItemListener(this);
 		animate.setSelected(true);
@@ -599,13 +552,13 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
 		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(80);
-		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(300);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(150);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspBlockInfo = new JScrollPane(jtablePI);
 		jspBlockInfo.setWheelScrollingEnabled(true);
 		jspBlockInfo.getVerticalScrollBar().setUnitIncrement(10);
-		jspBlockInfo.setPreferredSize(new Dimension(500, 300));
-		blockPanel.add(jspBlockInfo, BorderLayout.NORTH);
+		jspBlockInfo.setPreferredSize(new Dimension(250, 300));
+		blockPanel.add(jspBlockInfo, BorderLayout.CENTER);
 		
 		// Variables
 		variablePanel = new JPanel();
@@ -618,14 +571,14 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		sorterPI.setTableHeader(jtablePI.getTableHeader());
 		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
 		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(150);
-		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(150);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
 		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jspVariableInfo = new JScrollPane(jtablePI);
 		jspVariableInfo.setWheelScrollingEnabled(true);
 		jspVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
-		jspVariableInfo.setPreferredSize(new Dimension(500, 300));
-		variablePanel.add(jspVariableInfo, BorderLayout.NORTH);
+		jspVariableInfo.setPreferredSize(new Dimension(250, 300));
+		variablePanel.add(jspVariableInfo, BorderLayout.CENTER);
 		//updateTaskInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS]);
 		//taskPanel.add(updateTaskInformationButton, BorderLayout.SOUTH);
 		
@@ -835,6 +788,12 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		if ((variablePanel != null) && (variablePanel.isVisible())) {
 			variablePanel.repaint();
 		}
+		
+		if ((sdpanel != null) && (sdpanel.isVisible())) {
+			sdpanel.repaint();
+			sdpanel.scrollToLowerPosition();
+		}
+		
 	}
 	
 	public void animateFutureTransactions() {

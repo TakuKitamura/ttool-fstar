@@ -61,15 +61,19 @@ public class AvatarSimulationTransaction  {
 	public AvatarSimulationBlock asb;
 	public AvatarStateMachineElement executedElement;
 	public AvatarStateMachineElement concernedElement; // Used for communication
+	public AvatarSimulationTransaction linkedTransaction;
 	public long initialClockValue;
+	public long duration;
 	public long clockValueWhenPerformed;
 	public long id;
 	public Vector<String> attributeValues;
 	public Vector<String> actions;
+	public int x,y; // for graphical representation only
 	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;
 		addExecutedElement(executedElement);
+		duration = 0;
     }
 	
 	public static void reinit() {

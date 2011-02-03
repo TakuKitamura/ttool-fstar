@@ -87,6 +87,10 @@ public class AvatarSpecificationSimulation  {
 		iee = new IntExpressionEvaluator();
     }
 	
+	public AvatarSpecification getAvatarSpecification() {
+		return avspec;
+	}
+	
 	public Vector<AvatarSimulationBlock> getSimulationBlocks() {
 		return blocks;
 	}
@@ -334,6 +338,7 @@ public class AvatarSpecificationSimulation  {
 			} 
 		} else {
 			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+			int index0 = ar.getIndexOfSignal(as);
 			if (ar.isAsynchronous()) {
 				// Mus see whether the channel is full or not
 				if (ar.isBlocking()) {
@@ -349,21 +354,24 @@ public class AvatarSpecificationSimulation  {
 			} else {
 				// Synchronous -> must find a corresponding synchronous one
 				// Each time one is found, a new pending transaction is added, linked with the receiving action
-				TraceManager.addDev("Found a synchronous signal");
+				//TraceManager.addDev("Found a synchronous signal");
 				for(AvatarSimulationPendingTransaction 	otherTransaction: pendingTransactions) {
 					if (otherTransaction != _aspt) {
 						if (otherTransaction.elementToExecute instanceof AvatarActionOnSignal) {
-							TraceManager.addDev("step 2");
+							//TraceManager.addDev("step 2");
 							AvatarSignal sig = ((AvatarActionOnSignal)(otherTransaction.elementToExecute)).getSignal();
 							AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
 							if (rel == ar) {
-								TraceManager.addDev("step 3");
-								if (sig.isIn()) {
-									// Found one!
-									TraceManager.addDev("step 4");
-									AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
-									newone.linkedTransaction = otherTransaction;
-									transactions.add(newone);
+								int index1 = rel.getIndexOfSignal(sig);
+								if (index1 == index0) {
+									//TraceManager.addDev("step 3");
+									if (sig.isIn()) {
+										// Found one!
+										TraceManager.addDev("step 4 sig=" + sig + " as = " + as + "rel = " + rel + "ar=" + ar);
+										AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
+										newone.linkedTransaction = otherTransaction;
+										transactions.add(newone);
+									}
 								}
 							}
 						}
@@ -411,15 +419,19 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public boolean performSelectedTransactions(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		
 		if (_pendingTransactions.size() == 1) {
 			preExecutedTransaction(_pendingTransactions.get(0));
 			_pendingTransactions.get(0).asb.runSoloPendingTransaction(_pendingTransactions.get(0), allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW);
 			postExecutedTransaction(_pendingTransactions.get(0));
 			previousBlock = _pendingTransactions.get(0).asb;
 			if (_pendingTransactions.get(0).linkedTransaction != null) {
+				AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
 				preExecutedTransaction(_pendingTransactions.get(0).linkedTransaction);
 				_pendingTransactions.get(0).linkedTransaction.asb.runSoloPendingTransaction(_pendingTransactions.get(0).linkedTransaction, allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW);
 				postExecutedTransaction(_pendingTransactions.get(0).linkedTransaction);
+				AvatarSimulationTransaction transaction1 = _pendingTransactions.get(0).linkedTransaction.asb.getLastTransaction();
+				transaction1.linkedTransaction = transaction0;
 			}
 			
 			
