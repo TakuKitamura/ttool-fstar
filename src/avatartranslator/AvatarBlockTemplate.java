@@ -112,7 +112,7 @@ public class AvatarBlockTemplate  {
 		
 		// expire
 		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos5, _reference);
-		at.setDelays("value", "value");
+		at.setDelays("__value", "__value");
 		at = makeAvatarEmptyTransitionBetween(asm, aaos5, as1, _reference);
 		
 		// reset

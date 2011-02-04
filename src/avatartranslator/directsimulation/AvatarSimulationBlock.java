@@ -308,6 +308,21 @@ public class AvatarSimulationBlock  {
 				}
 			} 
 			
+			// Random?
+			if (_elt instanceof AvatarRandom) {
+				AvatarRandom random = (AvatarRandom)(_elt);
+				index = block.getIndexOfAvatarAttributeWithName(random.getVariable());
+				if (index >-1) {
+					int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
+					int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
+					valMin = (int)(Math.floor((Math.random()*(valMax - valMin)))) + valMin;
+					attributeValues.remove(index);
+					attributeValues.add(index, "" + valMin);
+					ast.actions = new Vector<String>();
+					ast.actions.add(random.getVariable() + " = " + valMin);
+				}
+			} 
+			
 			// Action on signal?
 			if (_elt instanceof AvatarActionOnSignal) {
 				AvatarActionOnSignal aaos = (AvatarActionOnSignal)_elt;

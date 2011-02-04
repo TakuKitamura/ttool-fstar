@@ -79,6 +79,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 	private int verticalSpaceUnderBlocks = 15;
 	private int spaceVerticalText = 2;
 	private int spaceHorizontalText = 2;
+	private int spaceStop = 20;
 	private int verticalLink = 10;
 	private int lengthAsync = 50;
 	
@@ -171,6 +172,12 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		Vector<AvatarSimulationTransaction> allTransactions = ass.getAllTransactions();
 		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
 		
+		if (allTransactions.size() > 0) {
+			ast = allTransactions.get(0);
+			clockValue = ast.clockValueWhenPerformed-ast.duration;
+			g.drawString("@" + clockValue, 10, currentY); 
+		}
+		
 		for(int i=Math.max(allTransactions.size()-drawnTransactions, 0); i<allTransactions.size(); i++) {
 			ast = allTransactions.get(i);
 			ast.stamp = stamp;
@@ -184,7 +191,11 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				newCurrentY = drawTransition(g, (AvatarTransition)(ast.executedElement), ast, xOfBlock, currentY); 
 			} else if (ast.executedElement instanceof AvatarActionOnSignal) {
 				newCurrentY = drawAvatarActionOnSignal(g, (AvatarActionOnSignal)(ast.executedElement), ast, xOfBlock, currentY, currentX); 
-			}
+			} else if (ast.executedElement instanceof AvatarStopState) {
+				newCurrentY = drawAvatarStopState(g, xOfBlock, currentY, currentX); 
+			} else if (ast.executedElement instanceof AvatarRandom) {
+				newCurrentY = drawRandom(g, (AvatarRandom)(ast.executedElement), ast, xOfBlock, currentY); 
+			} 
 			
 			
 			// Draw the line of other blocks
@@ -195,6 +206,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 						g.drawLine(xOfBlock, currentY, xOfBlock, newCurrentY);
 					}
 					xOfBlock += spaceBetweenLifeLines;
+				}
+				if (ast.clockValueWhenPerformed != clockValue) {
+					clockValue = ast.clockValueWhenPerformed;
+					g.drawString("@" + clockValue, 10, currentY); 
 				}
 			}
 			
@@ -267,7 +282,6 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 			w = Math.max(g.getFontMetrics().stringWidth(action), w);
 		}
 		
-		
 		x = currentX - w/2 - spaceHorizontalText;
 		y = currentY;
 		width = w + 2*spaceHorizontalText;
@@ -288,6 +302,37 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 			cpt ++;
 		}
 		g.setColor(c);
+		
+		currentY += height;
+		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
+		return currentY + verticalLink;
+	}
+	
+	private int drawRandom(Graphics g, AvatarRandom arandom, AvatarSimulationTransaction ast, int currentX, int currentY) {
+		int w;
+		int x, y, width, height;
+		Color c = g.getColor();
+		
+		if (ast.actions == null) {
+			return currentY;
+		}
+		
+		String action = ast.actions.get(0);
+		
+		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
+		currentY += verticalLink;
+		
+		w = g.getFontMetrics().stringWidth(action);
+		x = currentX - w/2 - spaceHorizontalText;
+		y = currentY;
+		width = w + 2*spaceHorizontalText;
+		height = g.getFontMetrics().getHeight() + spaceVerticalText * 2;
+		g.setColor(Color.WHITE);
+		g.fillRoundRect(x, y, width, height, 5, 5);
+		g.setColor(c);
+		g.drawRoundRect(x, y, width, height, 5, 5);
+		
+		g.drawString(action, x + spaceHorizontalText, y+height-2*spaceVerticalText);
 		
 		currentY += height;
 		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
@@ -369,7 +414,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 							if (x + lengthAsync < currentX-lengthAsync) {
 								// Forward
 								g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
-								GraphicLib.dashedLine(g, x + lengthAsync, y-1, x + lengthAsync, currentY-1);
+								GraphicLib.dashedLine(g, x + lengthAsync - 1, y, x + lengthAsync-1, currentY);
 								GraphicLib.dashedLine(g, x + lengthAsync, currentY-1, currentX-lengthAsync, currentY-1);
 								g.setColor(c);
 								GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, currentY);
@@ -377,9 +422,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 							} else {
 								// Backward
 								g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
-								GraphicLib.dashedLine(g, x + lengthAsync, y-1, x + lengthAsync, y+6);
+								GraphicLib.dashedLine(g, x + lengthAsync-1, y, x + lengthAsync-1, y+7);
 								GraphicLib.dashedLine(g, x + lengthAsync, y+6, currentX-lengthAsync, y+6);
-								GraphicLib.dashedLine(g, currentX-lengthAsync, currentY, currentX-lengthAsync, y+6);
+								GraphicLib.dashedLine(g, currentX-lengthAsync-1, currentY, currentX-lengthAsync-1, y+7);
 								g.setColor(c);
 								GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, y+7);
 								GraphicLib.dashedLine(g, x + lengthAsync, y+7, currentX-lengthAsync, y+7);
@@ -432,6 +477,24 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		
 		return currentY;
 		
+	}
+	
+	private int drawAvatarStartState(Graphics g, int currentX, int currentY, int startX) {
+		currentX -= 7;
+		g.fillOval(currentX, currentY, 15, 15);
+		g.drawLine(currentX, currentY, currentX, currentY+20);
+		
+		currentY += 20;
+		return currentY;
+	}
+	
+	private int drawAvatarStopState(Graphics g, int currentX, int currentY, int startX) {
+		g.drawLine(currentX, currentY, currentX, currentY+spaceStop+3);
+		currentX -= (spaceStop/2);
+		g.drawLine(currentX, currentY, currentX+spaceStop, currentY+spaceStop);
+		g.drawLine(currentX, currentY+spaceStop, currentX+spaceStop, currentY);
+		currentY += spaceStop + 3;
+		return currentY;
 	}
 	
 	public void setNewSize() {
