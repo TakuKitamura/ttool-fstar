@@ -64,6 +64,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 	
 	private static int MAX_X = 800;
 	private static int MAX_Y = 200;
+	private static long stamp = 0;
 	
 	// Drawing area
     private int minLimit = 10;
@@ -79,7 +80,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 	private int spaceVerticalText = 2;
 	private int spaceHorizontalText = 2;
 	private int verticalLink = 10;
-	private int lenghtAsync = 50;
+	private int lengthAsync = 50;
 	
 	private AvatarSpecificationSimulation ass;
 	
@@ -111,9 +112,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		int oldMaxY = maxY;
 		int oldMaxX = maxX;
 		
-		currentY = paintTopElements(g, currentX, currentY);
 		
+		currentY = paintTopElements(g, currentX, currentY);
 		paintTransactions(g, currentX, currentY);
+		stamp ++;
 		
 		if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
 			maxX = Math.max(maxX, MAX_X);
@@ -128,7 +130,6 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				mustScroll = false;
 			}
 		}
-		
     }
 	
 	protected void scrollToLowerPosition() {
@@ -172,6 +173,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		
 		for(int i=Math.max(allTransactions.size()-drawnTransactions, 0); i<allTransactions.size(); i++) {
 			ast = allTransactions.get(i);
+			ast.stamp = stamp;
 			
 			index = blocks.indexOf(ast.asb);
 			xOfBlock = currentX + (index * spaceBetweenLifeLines) + spaceBetweenLifeLines/2;
@@ -183,6 +185,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 			} else if (ast.executedElement instanceof AvatarActionOnSignal) {
 				newCurrentY = drawAvatarActionOnSignal(g, (AvatarActionOnSignal)(ast.executedElement), ast, xOfBlock, currentY, currentX); 
 			}
+			
 			
 			// Draw the line of other blocks
 			if (currentY != newCurrentY) {
@@ -348,18 +351,53 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				
 				currentY += 10;
 				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
-				g.drawLine(currentX-lenghtAsync, currentY-1, currentX, currentY-1);
+				g.drawLine(currentX-lengthAsync, currentY-1, currentX, currentY-1);
 				g.setColor(c);
-				GraphicLib.arrowWithLine(g, 1, 1, 10, currentX-lenghtAsync, currentY, currentX, currentY, false);
+				GraphicLib.arrowWithLine(g, 1, 1, 10, currentX-lengthAsync, currentY, currentX, currentY, false);
 				
 				// Putting the message name
 				w = g.getFontMetrics().stringWidth(messageName);
-				g.drawString(messageName, currentX-lenghtAsync+w/2, currentY-2); 
+				g.drawString(messageName, currentX-lengthAsync+w/2, currentY-2); 
+				
+				// Search for sender
+				if (ast.linkedTransaction != null) {
+					if (ast.linkedTransaction.stamp == ast.stamp) {
+						if ((ast.linkedTransaction.x >0) && (ast.linkedTransaction.y >0)) {
+							int x = ast.linkedTransaction.x;
+							int y = ast.linkedTransaction.y;
+							
+							if (x + lengthAsync < currentX-lengthAsync) {
+								// Forward
+								g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+								GraphicLib.dashedLine(g, x + lengthAsync, y-1, x + lengthAsync, currentY-1);
+								GraphicLib.dashedLine(g, x + lengthAsync, currentY-1, currentX-lengthAsync, currentY-1);
+								g.setColor(c);
+								GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, currentY);
+								GraphicLib.dashedLine(g, x + lengthAsync, currentY, currentX-lengthAsync, currentY);
+							} else {
+								// Backward
+								g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+								GraphicLib.dashedLine(g, x + lengthAsync, y-1, x + lengthAsync, y+6);
+								GraphicLib.dashedLine(g, x + lengthAsync, y+6, currentX-lengthAsync, y+6);
+								GraphicLib.dashedLine(g, currentX-lengthAsync, currentY, currentX-lengthAsync, y+6);
+								g.setColor(c);
+								GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, y+7);
+								GraphicLib.dashedLine(g, x + lengthAsync, y+7, currentX-lengthAsync, y+7);
+								GraphicLib.dashedLine(g, currentX-lengthAsync, currentY, currentX-lengthAsync, y+7);
+							}
+							
+							//g.drawLine(x + lengthAsync, y, currentX-lengthAsync, currentY);
+						}
+					}
+				}
 				
 				currentY += 10;
 				
 				// Vertical line of receiving block
 				g.drawLine(currentX, currentY-20, currentX, currentY);
+				
+				
+				
 				return currentY;
 			}
 		} else {
@@ -373,13 +411,13 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				
 				currentY += 10;
 				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
-				g.drawLine(currentX+lenghtAsync, currentY-1, currentX, currentY-1);
+				g.drawLine(currentX+lengthAsync, currentY-1, currentX, currentY-1);
 				g.setColor(c);
-				GraphicLib.arrowWithLine(g, 1, 1, 10, currentX, currentY, currentX+lenghtAsync, currentY, false);
+				GraphicLib.arrowWithLine(g, 1, 1, 10, currentX, currentY, currentX+lengthAsync, currentY, false);
 				
 				// Putting the message name
 				w = g.getFontMetrics().stringWidth(messageName);
-				g.drawString(messageName, currentX+lenghtAsync-w/2, currentY-2); 
+				g.drawString(messageName, currentX+lengthAsync-w/2, currentY-2); 
 				
 				ast.x = currentX;
 				ast.y = currentY;

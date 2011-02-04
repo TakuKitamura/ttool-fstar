@@ -342,6 +342,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		lowerPartPanel.add(jsp, BorderLayout.CENTER);
 	
 		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, lowerPartPanel);
+		split.setResizeWeight(0.5);
 		//split.setBackground(ColorManager.InteractiveSimulationBackground);
 		mainpanel.add(split, BorderLayout.CENTER);
 		

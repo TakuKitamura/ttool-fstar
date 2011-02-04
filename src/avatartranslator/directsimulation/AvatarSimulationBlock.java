@@ -355,9 +355,9 @@ public class AvatarSimulationBlock  {
 									attributeValues.add(index, param);
 									TraceManager.addDev("Reading value:" + param);
 									if (myAction.length() == 0) {
-										myAction = "" + param;
+										myAction += "" + param;
 									} else {
-										myAction = ", " + param;
+										myAction += ", " + param;
 									}
 								}
 							}
@@ -388,10 +388,10 @@ public class AvatarSimulationBlock  {
 								_aspt.linkedAsynchronousMessage.addParameter(result);
 								_aspt.linkedAsynchronousMessage.firstTransaction = ast;
 								if (myAction.length() == 0) {
-										myAction = "" + result;
-									} else {
-										myAction = ", " + result;
-									}
+									myAction += "" + result;
+								} else {
+									myAction += ", " + result;
+								}
 							}
 							if (myAction.length() > 0) {
 								ast.actions = new Vector<String>();
@@ -411,9 +411,9 @@ public class AvatarSimulationBlock  {
 									attributeValues.add(index, param);
 									TraceManager.addDev("Reading value:" + param);
 									if (myAction.length() == 0) {
-										myAction = "" + param;
+										myAction += "" + param;
 									} else {
-										myAction = ", " + param;
+										myAction += ", " + param;
 									}
 								}
 							}

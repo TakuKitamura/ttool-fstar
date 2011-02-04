@@ -3246,7 +3246,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			dtree.toBeUpdated();*/
 			jfais = new JFrameAvatarInteractiveSimulation(frame, this, "Interactive simulation", gtm.getAvatarSpecification());
 			jfais.setIconImage(IconManager.img9);
-			jfais.setSize(1024, 600);
+			jfais.setSize(800, 600);
 			GraphicLib.centerOnParent(jfais);
 			jfais.setVisible(true);
 		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {

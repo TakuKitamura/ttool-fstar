@@ -69,6 +69,7 @@ public class AvatarSimulationTransaction  {
 	public Vector<String> attributeValues;
 	public Vector<String> actions;
 	public int x,y; // for graphical representation only
+	public long stamp;
 	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;
