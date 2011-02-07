@@ -575,6 +575,7 @@ public class AVATAR2UPPAAL {
 			
 			// Avatar State
 		} else if (_elt instanceof AvatarState) {
+			TraceManager.addDev("- - - - - - - - - - - - - - - - - - State " + _elt + ": first handling");
 			if (_elt.isCheckable()) {
 				TraceManager.addDev("State " + _elt + " is selected for checking");
 				_previous.unsetOptimizable();
@@ -735,6 +736,7 @@ public class AVATAR2UPPAAL {
 		
 		if (_at.hasActions()) {
 			for(i=0; i<_at.getNbOfAction(); i++) {
+				TraceManager.addDev("Adding Action :" + _at.getAction(i));
 				tmps = _at.getAction(i);
 				
 				// Setting a variable

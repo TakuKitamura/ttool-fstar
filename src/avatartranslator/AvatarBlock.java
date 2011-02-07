@@ -329,7 +329,7 @@ public class AvatarBlock extends AvatarElement {
 		for (AvatarAttribute aa: attributes) {
 			if (aa.getType() == AvatarType.TIMER) {
 				as = new AvatarSignal("set__" + aa.getName(), AvatarSignal.OUT, aa.getReferenceObject());
-				value = new AvatarAttribute("__value", AvatarType.INTEGER,  aa.getReferenceObject());
+				value = new AvatarAttribute("__myvalue", AvatarType.INTEGER,  aa.getReferenceObject());
 				as.addParameter(value);
 				addSignal(as);
 				addSignal(new AvatarSignal("reset__" + aa.getName(), AvatarSignal.OUT, aa.getReferenceObject()));

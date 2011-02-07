@@ -118,7 +118,7 @@ public class UPPAALTransition {
 	public boolean isAnEmptyTransition() {
 		
 		if (guard == null) {
-			return true;
+			guard = "";
 		}
 		
 		if (guard.length() > 0) {

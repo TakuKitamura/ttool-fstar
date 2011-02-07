@@ -59,13 +59,17 @@ public class AvatarBlockTemplate  {
 	public static AvatarBlock getTimerBlock(String _name, Object _reference) {
 		AvatarBlock ab = new AvatarBlock(_name, _reference);
 		
+		AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _reference);
+		ab.addAttribute(aa2);
 		AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, _reference);
 		ab.addAttribute(aa);
+		AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _reference);
+		ab.addAttribute(aa1);
 		
 		AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _reference);
 		AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _reference);
 		AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _reference);
-		AvatarAttribute val = new AvatarAttribute("__value", AvatarType.INTEGER,  aa.getReferenceObject());
+		AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER,  aa.getReferenceObject());
 		set.addParameter(val);
 		ab.addSignal(set);
 		ab.addSignal(reset);
@@ -112,7 +116,7 @@ public class AvatarBlockTemplate  {
 		
 		// expire
 		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos5, _reference);
-		at.setDelays("__value", "__value");
+		at.setDelays("value", "value");
 		at = makeAvatarEmptyTransitionBetween(asm, aaos5, as1, _reference);
 		
 		// reset
