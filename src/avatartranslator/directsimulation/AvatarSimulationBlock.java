@@ -177,7 +177,7 @@ public class AvatarSimulationBlock  {
 				aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
 				if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
 					AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
-					if (!trans.hasDelay() && (trans.getNbOfAction() == 0)){
+					if (trans.getNbOfAction() == 0){
 						// empty transition, "empty" is the meaning of actions -> look for an action after
 						if(trans.getNext(0) != null) {
 							if (trans.getNext(0) instanceof AvatarActionOnSignal) {
@@ -191,8 +191,8 @@ public class AvatarSimulationBlock  {
 				if (aspt.elementToExecute instanceof AvatarTransition) { 
 					AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
 					if (trans.hasDelay()) {
-						aspt.myMinDelay = trans.getMinDelay();
-						aspt.myMaxDelay = trans.getMaxDelay();
+						aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
+						aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
 						aspt.hasDelay = true;
 						if (lastTransaction != null) {
 							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
@@ -204,9 +204,11 @@ public class AvatarSimulationBlock  {
 				} else if (aspt.involvedElement instanceof AvatarTransition) {
 					AvatarTransition trans = (AvatarTransition)(aspt.involvedElement);
 					if (trans.hasDelay()) {
-						aspt.myMinDelay = trans.getMinDelay();
-						aspt.myMaxDelay = trans.getMaxDelay();
+						aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
+						aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
 						aspt.hasDelay = true;
+						
+						TraceManager.addDev(">>>>>   Signal with delay before");
 						
 						if (lastTransaction != null) {
 							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
@@ -217,6 +219,17 @@ public class AvatarSimulationBlock  {
 					}
 				}
 				aspt.clockValue = _clockValue;
+				
+				if (aspt.hasDelay) {
+					aspt.myMinDelay = Math.max(0, aspt.myMinDelay);
+					aspt.myMaxDelay = Math.max(0, aspt.myMaxDelay);
+				}
+				
+				if (aspt.hasElapsedTime) {
+					 aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
+					 aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
+				}
+				
 				ll.add(aspt);
 			}
 		}

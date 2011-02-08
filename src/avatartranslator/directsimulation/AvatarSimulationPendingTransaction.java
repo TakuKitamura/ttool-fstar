@@ -65,8 +65,8 @@ public class AvatarSimulationPendingTransaction  {
 	public Vector<String> parameters;
 	
 	// To store a delay prior to execution
-	public String myMinDelay;
-	public String myMaxDelay;
+	public int myMinDelay;
+	public int myMaxDelay;
 	public boolean hasDelay;
 	// For time already elapsed for that transition
 	public boolean hasElapsedTime;
@@ -76,8 +76,13 @@ public class AvatarSimulationPendingTransaction  {
 	public int myMinDuration; // computed min delay by simulator
 	public int myMaxDuration; // computed max delay by simulator 
 	public int selectedDuration; // duration selected by simulator
-	public long maxDuration; // max duration selcted by simulator
+	public long maxDuration; // max duration selected by simulator
 	public boolean hasClock; // Selected by simulator to indicate a delay on that transaction
+	public boolean durationSelected;
+	
+	// if linked duration
+	public boolean durationOnCurrent;
+	public boolean durationOnOther;
 	
 	
 	
