@@ -61,6 +61,8 @@ public class BoolExpressionEvaluator {
 	public static final int LT_TOKEN = -4;
 	public static final int GT_TOKEN = -5;
 	public static final int NEG_TOKEN = -6;
+	public static final int OR_TOKEN = -6;
+	public static final int AND_TOKEN = -6;
 	public static final int EOLN_TOKEN = -7;
 	
 	private StringTokenizer tokens;
@@ -90,9 +92,11 @@ public class BoolExpressionEvaluator {
 	public boolean getResultOf(String _expr) {
 		//TraceManager.addDev("Evaluating bool expr: " + _expr);
 		_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
+		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=",true);
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|",true);
 		
 		computeNextToken();
 		int result =  (int)(parseExpression());
@@ -271,6 +275,40 @@ public class BoolExpressionEvaluator {
 					return FALSE_VALUE;
 				}
 				
+			} else if (currentType == OR_TOKEN) {
+				match(OR_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				
+				if ((result != 0) || (resulttmp != 0)) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == AND_TOKEN) {
+				match(AND_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				
+				if ((result != 0)  && (resulttmp != 0)) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
 			} else if (currentType == NEG_TOKEN) {
 				match(NEG_TOKEN);
 				if (errorMessage != null) return result;
@@ -441,6 +479,19 @@ public class BoolExpressionEvaluator {
 			if (s.compareTo("!") == 0) {
 				currentValue = 0;
 				currentType = NEG_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo("|") == 0) {
+				currentValue = 0;
+				currentType = OR_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			if (s.compareTo("&") == 0) {
+				currentValue = 0;
+				currentType = AND_TOKEN;
 				//TraceManager.addDev("equal token!");
 				return;
 			}
