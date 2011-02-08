@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TimeTConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
-	TimeTConstraint(TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iIncludeBounds), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
+	TimeTConstraint(TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iIncludeBounds), PropertyStateConstraint (GENERAL), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
 	}
 	
 	void notifiedReset(){
@@ -75,24 +75,23 @@ protected:
 	void evalInput(){
 		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
 			if(_enabledNotified==TRUE && _includeBounds){
-				std::cout << "_enabledNotified && _includeBounds\n";
+				//std::cout << "_enabledNotified && _includeBounds\n";
 				_constrEnabled=true;
 			}
 			unsigned int aEnaFlag=0;
 			bool aSigOut=false;
 			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
 			if(_constrEnabled){
-				//TMLTime aCurrTime = getSimulationTime();
-				TMLTime aCurrTime = 11;
 				if (_s1Notified==TRUE){
 					if (_s1Time==-1){
-						_s1Time=aCurrTime;
+						_s1Time=_simTime;
 						aEnaFlag |=2;
 					}else{
-						if (_retrigger) _s1Time=aCurrTime;
+						if (_retrigger) _s1Time=_simTime;
 					}
 				}
-				if (_s1Time!=-1 && aCurrTime-_s1Time>=_t){
+				if (_s1Time!=-1 && _simTime-_s1Time>=_t){
+					if (_simTime-_s1Time > _t && _aboveConstr!=0) _aboveConstr[0]->forceDisable();
 					aEnaFlag |=1;
 					aSigOut=true;
 					_s1Time=-1;

@@ -66,6 +66,10 @@ public:
 		return aProperty;
 	}
 	
+	void forceDisable(){
+		for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->forceDisable();
+	}
+	
 	void notifyEnable(unsigned int iSigState){
 		for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->notifyEnable(iSigState);
 	}

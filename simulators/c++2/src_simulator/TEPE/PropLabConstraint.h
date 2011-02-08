@@ -66,6 +66,10 @@ public:
 		return _property;
 	}
 	
+	void forceDisable(){
+		_aboveConstr[0]->forceDisable();
+	}
+	
 	void notifyEnable(unsigned int iSigState){
 		_aboveConstr[0]->notifyEnable(iSigState);
 	}

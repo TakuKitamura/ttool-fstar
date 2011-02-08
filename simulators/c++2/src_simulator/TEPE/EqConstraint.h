@@ -38,87 +38,64 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef PropertyStateConstraintH
-#define PropertyStateConstraintH
-#include "PropertyConstraint.h"
+#ifndef EqConstraintH
+#define EqConstraintH
+#include "TwoSigConstraint.h"
+#include "PropertyStateConstraint.h"
 
-typedef enum{GENERAL, NGENERAL, FINALLY, NFINALLY} PropType;
-
-class PropertyStateConstraint: public PropertyConstraint{
+class EqConstraint: public TwoSigConstraint, public PropertyStateConstraint{
 public:
-	PropertyStateConstraint(PropType iType): _type(iType), _constrEnabled(false), _enabledNotified(UNDEF), _disabledNotified(UNDEF),  _property(_type==GENERAL || _type == NFINALLY){
+	EqConstraint(PropType iType, bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _eqResult(true){
 	}
 	
-	bool evalProp(){
-		if (_aboveConstr==0)
-			return _property;
-		else
-			return _aboveConstr[0]->evalProp() && _property;
+	void notifiedReset(){
+		TwoSigConstraint::notifiedReset();
+		PropertyStateConstraint::notifiedReset();
 	}
 	
-	void notifyEnable(unsigned int iSigState){
-		_disabledNotified = ((iSigState & 1)==0)? FALSE:TRUE;
-		_enabledNotified = ((iSigState & 2)==0)? FALSE:TRUE;
-		evalInput();
+	void reset(){
+		PropertyStateConstraint::reset();
+		_s1Time=-1;
 	}
 	
-	virtual void notifiedReset(){
-		_enabledNotified=UNDEF;
-		_disabledNotified=UNDEF;
-	}
-	
-	virtual void reset(){
-		_constrEnabled=false;
-	}
-	
-	void forceDisable(){
-		_constrEnabled=false;
-	}
-	
-	virtual std::ostream& writeObject(std::ostream& s){
-		unsigned char aTmp = (_property)?1:0;
-		std::cout << "_property written " << _property << "\n";
-		if (_constrEnabled) aTmp |= 2;
-		WRITE_STREAM(s, aTmp);
-		PropertyConstraint::writeObject(s);
+	std::ostream& writeObject(std::ostream& s){
+		PropertyStateConstraint::writeObject(s);
+		WRITE_STREAM(s, _s1Time);
 		return s;
 	}
 	
-	virtual std::istream& readObject(std::istream& s){
-		unsigned char aTmp;
-		READ_STREAM(s, aTmp);
-		_property = ((aTmp & 1) !=0);
-		std::cout << "_property read " << _property << "\n";
-		_constrEnabled = ((aTmp & 2) !=0);
-		PropertyConstraint::readObject(s);
+	std::istream& readObject(std::istream& s){
+		PropertyStateConstraint::readObject(s);
+		READ_STREAM(s, _s1Time);
 		return s;
 	}
 	
 protected:
-	virtual void evalInput()=0;
 	
-	void reportPropOccurrence(bool iProp){
-		switch (_type){
-		case GENERAL:
-			_property &= iProp;
-			break;
-		case NGENERAL:
-			_property |= !iProp;
-			break;
-		case FINALLY:
-			_property |= iProp;
-			break;
-		case NFINALLY:
-			_property &= !iProp;
-			break;
+	void evalInput(){
+		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF || _s2Notified==UNDEF)){
+			if(_enabledNotified==TRUE && _includeBounds){
+				_constrEnabled=true;
+			}
+			unsigned int aEnaFlag=0;
+			bool aSigOut=false;
+			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
+			if (_s1Notified==TRUE) _eqResult=true;
+			if (_s2Notified==TRUE) _eqResult=false; 
+			if (_constrEnabled && !_eqResult) reportPropOccurrence(false);
+			
+				
+			_constrEnabled |= (_enabledNotified==TRUE);
+			notifiedReset();
+			if (_disabledNotified==TRUE){
+				aEnaFlag |=1;
+				reset();
+			}
+			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
+			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
 		}
 	}
-	
-	PropType _type;
-	bool _constrEnabled;
-	Tristate _enabledNotified;
-	Tristate _disabledNotified;
-private:
-	bool _property;
+	bool _eqResult;
 };
+
 #endif

@@ -52,6 +52,8 @@ public:
 	
 	virtual bool evalProp()=0;
 	
+	virtual void forceDisable()=0;
+	
 	virtual void notifyEnable(unsigned int iSigState)=0;
 	
 	virtual std::ostream& writeObject(std::ostream& s){

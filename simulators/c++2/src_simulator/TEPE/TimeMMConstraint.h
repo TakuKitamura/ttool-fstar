@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TimeMMConstraint: public TwoSigConstraint, public PropertyStateConstraint{
 public:
-	TimeMMConstraint(TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), _tmin(iTmin), _tmax(iTmax), _retrigger(iRetrigger), _s1Time(-1){
+	TimeMMConstraint(PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _tmin(iTmin), _tmax(iTmax), _retrigger(iRetrigger), _s1Time(-1){
 	}
 	
 	void notifiedReset(){
@@ -82,23 +82,26 @@ protected:
 			bool aSigOut=false;
 			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
 			if(_constrEnabled){
-				//TMLTime aCurrTime = getSimulationTime();
-				TMLTime aCurrTime = 11;
 				if (_s1Notified==TRUE){
 					if (_s1Time==-1){
-						_s1Time=aCurrTime;
+						_s1Time=_simTime;
 						aEnaFlag |=2;
 					}else{
-						if (_retrigger) _s1Time=aCurrTime;
+						if (_retrigger){
+							std::cout << "retrigger!!!\n";
+							_s1Time=_simTime;
+						}
 					}
 				}
 				if (_s1Time!=-1){
-					//if (aCurrTime-_s1Time>_tmax) _propViolation=true;
-					if (aCurrTime-_s1Time>_tmax) reportPropViolation();
+					//if (_simTime-_s1Time>_tmax) reportPropViolation();
+					if (_simTime-_s1Time>_tmax) reportPropOccurrence(false);
+
 					if (_s2Notified==TRUE){
 						aEnaFlag |=1;
-						//if (aCurrTime-_s1Time<_tmin) _propViolation=true;
-						if (aCurrTime-_s1Time<_tmin) reportPropViolation();
+						std::cout << "s2 notified  _simTime " << _simTime << "  _s1Time " << _s1Time << "\n";
+						//if (_simTime-_s1Time<_tmin) reportPropViolation();
+						if (_simTime-_s1Time<=_tmax) reportPropOccurrence(_simTime-_s1Time >= _tmin);
 						aSigOut=true;
 						_s1Time=-1;
 					}
@@ -113,7 +116,6 @@ protected:
 			}
 			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
 			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
-
 		}
 	}
 	

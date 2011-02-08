@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class FSMConstraint: public ThreeSigConstraint, public PropertyStateConstraint{
 public:
-	FSMConstraint(bool iIncludeBounds): ThreeSigConstraint(iIncludeBounds), _state(0){
+	FSMConstraint(PropType iType, bool iIncludeBounds): ThreeSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _state(0){
 	}
 	
 	void notifiedReset(){
@@ -81,38 +81,41 @@ protected:
 			}
 			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
 			unsigned int aEnableFlag=0;
-			bool aSigOutFlag=false;
+			bool aSigOutFlag=false, aPropResult=true;
 			if(_constrEnabled){
 				//std::cout << "_constrEnabled\n";
-				if( _s1Notified==TRUE) moveToNextState(1, &aEnableFlag, &aSigOutFlag);
-				if( _sfNotified==TRUE) moveToNextState(3, &aEnableFlag, &aSigOutFlag);
-				if( _s2Notified==TRUE) moveToNextState(2, &aEnableFlag, &aSigOutFlag);
+				if( _s1Notified==TRUE) aPropResult &= moveToNextState(1, &aEnableFlag, &aSigOutFlag);
+				if( _sfNotified==TRUE) aPropResult &= moveToNextState(3, &aEnableFlag, &aSigOutFlag);
+				if( _s2Notified==TRUE) aPropResult &= moveToNextState(2, &aEnableFlag, &aSigOutFlag);
 			}
 			_constrEnabled |= (_enabledNotified==TRUE);
 			if (_disabledNotified==TRUE){
-				//std::cout << "DISABLE=============================\n";
+				std::cout << "DISABLE=============================\n";
 				aEnableFlag |=1;
-				//_propViolation |= (_state!=0);
-				if (_state!=0) reportPropViolation();
+				//if (_state!=0) reportPropOccurrence(false);
+				aPropResult &= (_state==0);
 				//if (_state!=0) std::cout << "Violation detected!!!\n";
 				reset();
 			}
 			notifiedReset();
 			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnableFlag);
 			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOutFlag);
+			//if (aSigOutFlag || !aPropResult) reportPropOccurrence(aPropResult);
+			if (aSigOutFlag || (aEnableFlag & 1)!=0) reportPropOccurrence(aPropResult);
 			//std::cout << "... violation: " << _propViolation << "\n";
 		}//else
 			//std::cout << "_notificationMask=" << _notificationMask << "\n";
 	}
 	
-	void moveToNextState(unsigned int iSignal, unsigned int * iEnableFlag, bool * iSigOutFlag){
+	bool moveToNextState(unsigned int iSignal, unsigned int * iEnableFlag, bool * iSigOutFlag){
 		unsigned int aTabEntry = _transTable[iSignal + (_state << 2)];
-		//_propViolation |= (aTabEntry & 1 !=0);
-		if ((aTabEntry & 1) !=0) reportPropViolation();
+		//if ((aTabEntry & 1) !=0) reportPropViolation();
+		//if ((aTabEntry & 1) !=0) reportPropOccurrence(false);
 		*iEnableFlag |= ((aTabEntry>>1) & 3);
 		*iSigOutFlag |= ((aTabEntry & 8)!=0);
 		_state = (aTabEntry >> 4);
 		//std::cout << "State: " << _state << "  enable: " << ((aTabEntry>>1) & 3) << "  sigout: " << ((aTabEntry & 8)!=0) << "  violation: " << _propViolation << "\n";
+		return ((aTabEntry & 1) ==0);
 	}
 	
 	const unsigned int* _transTable;

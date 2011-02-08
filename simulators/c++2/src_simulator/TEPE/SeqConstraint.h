@@ -44,11 +44,11 @@ Ludovic Apvrille, Renaud Pacalet
 
 class SeqConstraint: public FSMConstraint{
 public:
-	SeqConstraint(bool iIncludeBounds): FSMConstraint(iIncludeBounds){
+	SeqConstraint(PropType iType, bool iIncludeBounds): FSMConstraint(iType, iIncludeBounds){
 		_transTable=_transTableSeq;
 	}
 	
 protected:
-	static const unsigned int _transTableSeq[8];
+	static const unsigned int _transTableSeq[12];
 };
 #endif

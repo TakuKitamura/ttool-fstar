@@ -44,10 +44,10 @@ Ludovic Apvrille, Renaud Pacalet
 
 class LogConstraint: public FSMConstraint{
 public:
-	LogConstraint(bool iIncludeBounds): FSMConstraint(iIncludeBounds){
+	LogConstraint(PropType iType, bool iIncludeBounds): FSMConstraint(iType, iIncludeBounds){
 		_transTable=_transTableLog;
 	}
 protected:
-	static const unsigned int _transTableLog[12];
+	static const unsigned int _transTableLog[20];
 };
 #endif

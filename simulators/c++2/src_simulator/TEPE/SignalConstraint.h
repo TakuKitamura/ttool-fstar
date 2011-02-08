@@ -70,6 +70,10 @@ public:
 		_s1Notified = UNDEF;
 	}
 	
+	static void setSimTime(TMLTime iSimTime){
+		_simTime = iSimTime;
+	}
+	
 protected:
 	virtual void evalInput()=0;
 	//bool _s1Notified;
@@ -78,5 +82,6 @@ protected:
 	NtfSigFuncPointer _ntfFuncSigOut;
 	SignalConstraint *_rightConstr;
 	bool _includeBounds;
+	static TMLTime _simTime;
 };
 #endif
