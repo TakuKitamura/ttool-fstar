@@ -52,6 +52,7 @@ public:
 	void notifyS1(bool iSigState){
 		//_s1Notified = iSigState;
 		//_notificationMask |=1;
+		std::cout << "Notify S1\n;";
 		_s1Notified = (iSigState)?TRUE:FALSE;
 		evalInput();
 	}

@@ -91,7 +91,8 @@ protected:
 			_constrEnabled |= (_enabledNotified==TRUE);
 			if (_disabledNotified==TRUE){
 				std::cout << "DISABLE=============================\n";
-				aEnableFlag |=1;
+				//aEnableFlag |=1;
+				if (_state!=0) aEnableFlag |=1;
 				//if (_state!=0) reportPropOccurrence(false);
 				aPropResult &= (_state==0);
 				//if (_state!=0) std::cout << "Violation detected!!!\n";
@@ -101,7 +102,11 @@ protected:
 			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnableFlag);
 			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOutFlag);
 			//if (aSigOutFlag || !aPropResult) reportPropOccurrence(aPropResult);
-			if (aSigOutFlag || (aEnableFlag & 1)!=0) reportPropOccurrence(aPropResult);
+			if (aSigOutFlag || ((aEnableFlag & 1)!=0 && !aPropResult) ){
+			//if (aSigOutFlag || (aEnableFlag & 1)!=0){
+				std::cout << "Report occurrence of FSM: " << aPropResult << "\n";
+				reportPropOccurrence(aPropResult);
+			}
 			//std::cout << "... violation: " << _propViolation << "\n";
 		}//else
 			//std::cout << "_notificationMask=" << _notificationMask << "\n";

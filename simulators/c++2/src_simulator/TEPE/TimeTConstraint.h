@@ -99,11 +99,11 @@ protected:
 				
 			}
 			_constrEnabled |= (_enabledNotified==TRUE);
-			notifiedReset();
 			if (_disabledNotified==TRUE){
-				aEnaFlag |=1;
+				if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
 				reset();
 			}
+			notifiedReset();
 			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
 			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
 

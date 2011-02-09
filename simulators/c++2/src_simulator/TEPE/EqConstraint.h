@@ -40,62 +40,95 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef EqConstraintH
 #define EqConstraintH
-#include "TwoSigConstraint.h"
+#include "SignalConstraint.h"
 #include "PropertyStateConstraint.h"
 
-class EqConstraint: public TwoSigConstraint, public PropertyStateConstraint{
+class EqConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
-	EqConstraint(PropType iType, bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _eqResult(true){
+	EqConstraint(PropType iType, bool iIncludeBounds): SignalConstraint(iIncludeBounds), PropertyStateConstraint(iType), _eqResult(true), _propReported(false){
 	}
 	
 	void notifiedReset(){
-		TwoSigConstraint::notifiedReset();
+		SignalConstraint::notifiedReset();
 		PropertyStateConstraint::notifiedReset();
 	}
 	
 	void reset(){
 		PropertyStateConstraint::reset();
-		_s1Time=-1;
+		_propReported=false;
 	}
 	
 	std::ostream& writeObject(std::ostream& s){
+		unsigned char aTmp = (_eqResult)?1:0;
+		if (_propReported) aTmp |=2;
 		PropertyStateConstraint::writeObject(s);
-		WRITE_STREAM(s, _s1Time);
+		WRITE_STREAM(s, aTmp);
 		return s;
 	}
 	
 	std::istream& readObject(std::istream& s){
+		unsigned char aTmp;
 		PropertyStateConstraint::readObject(s);
-		READ_STREAM(s, _s1Time);
+		READ_STREAM(s, aTmp);
+		_eqResult = ((aTmp & 1)!=0);
+		_propReported = ((aTmp & 2)!=0);
 		return s;
 	}
 	
 protected:
 	
 	void evalInput(){
-		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF || _s2Notified==UNDEF)){
-			if(_enabledNotified==TRUE && _includeBounds){
-				_constrEnabled=true;
-			}
-			unsigned int aEnaFlag=0;
-			bool aSigOut=false;
-			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
-			if (_s1Notified==TRUE) _eqResult=true;
-			if (_s2Notified==TRUE) _eqResult=false; 
-			if (_constrEnabled && !_eqResult) reportPropOccurrence(false);
-			
+		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
+			if(_enabledNotified==TRUE && _includeBounds){		//early enable
 				
+				std::cout << "Enabled\n";
+				_constrEnabled=true;	
+				_propReported = false;  //why do we need that? --> failure may otherwise not be reported if _eqResult==true
+			}
+			
+			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;	//early disable
+			
+			if (_s1Notified==TRUE){		//sigout and enable/disable notifications for connected operators
+				if (_eqResult){
+					_eqResult=false;
+					//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(1);
+					if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(false);
+				}else{
+					_eqResult=true;
+					//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(2);
+					if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(true);
+				}
+			}else{
+				//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(0);
+				if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(false);
+			}
+			
+			if (_constrEnabled && (!_eqResult) && (!_propReported)){		//report failure
+				reportPropOccurrence(false);
+				std::cout << "Report occurrence of Eq: 0\n";
+				_propReported = true;
+			}
+			
 			_constrEnabled |= (_enabledNotified==TRUE);
-			notifiedReset();
-			if (_disabledNotified==TRUE){
-				aEnaFlag |=1;
+			/*if (!_constrEnabled && _enabledNotified==TRUE && _disabledNotified==FALSE){	//enable
+				//_constrEnabled = true;
+				//_propReported = false;
+			}*/
+			if (_disabledNotified==TRUE){	//disable, report success
+				std::cout << " DIsable*********************************************\n";
+				if (!_propReported){
+					reportPropOccurrence(true);
+					std::cout << "Report occurrence of Eq: 1\n";
+				}else
+					std::cout << "Prop occurrence suppressed\n";
 				reset();
 			}
-			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
-			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
+			notifiedReset();
 		}
+			//if (_disabledNotified==TRUE) std::cout << "Blooooooooocked!!!!\n";
 	}
 	bool _eqResult;
+	bool _propReported;
 };
 
 #endif
