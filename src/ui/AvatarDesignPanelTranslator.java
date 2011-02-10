@@ -643,15 +643,16 @@ public class AvatarDesignPanelTranslator {
 								addCheckingError(ce);
 							} else {
 								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdrs.getValue());
-								if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> nb of parameters does not match definition");
-									TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								}
 							}
+						}
+						
+						if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> nb of parameters does not match definition");
+							TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+							ce.setAvatarBlock(_ab);
+							ce.setTDiagramPanel(tdp);
+							ce.setTGComponent(tgc);
+							addCheckingError(ce);
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
 						listE.addCor(aaos, tgc);
@@ -699,27 +700,27 @@ public class AvatarDesignPanelTranslator {
 								addCheckingError(ce);
 							} else {
 								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
-								if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-									TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								}
-								// Check that tmp is the identifier of an attribute
-								/*aa = _ab.getAvatarAttributeWithName(tmp);
-								if (aa == null) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								} else {
-									aaos.addValue(tmp);
-								}*/
 							}
 						}
+						if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+							TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+							ce.setAvatarBlock(_ab);
+							ce.setTDiagramPanel(tdp);
+							ce.setTGComponent(tgc);
+							addCheckingError(ce);
+						}
+						// Check that tmp is the identifier of an attribute
+						/*aa = _ab.getAvatarAttributeWithName(tmp);
+						if (aa == null) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+						} else {
+						aaos.addValue(tmp);
+						}*/
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
 						listE.addCor(aaos, tgc);
 						tgc.setAVATARID(aaos.getID());

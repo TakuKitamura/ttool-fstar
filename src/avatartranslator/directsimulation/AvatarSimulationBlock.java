@@ -289,7 +289,12 @@ public class AvatarSimulationBlock  {
 		if (_aspt != null) {
 			if (_aspt.hasClock) {
 				if(lastTransaction != null) {
-					ast.duration = Math.min(_aspt.myMaxDuration, _aspt.selectedDuration + (_clockValue - lastTransaction.clockValueWhenPerformed));
+					//TraceManager.addDev(" CLOCK CLOCK : selectedDuration=" + _aspt.selectedDuration + " previousclock = " + 
+					if (_aspt.selectedDuration < (_clockValue - lastTransaction.clockValueWhenPerformed)) {
+						ast.duration = Math.min(_aspt.myMaxDuration, _clockValue - lastTransaction.clockValueWhenPerformed);
+					} else {
+						ast.duration = _aspt.selectedDuration;
+					}
 				}
 			}
 		}
