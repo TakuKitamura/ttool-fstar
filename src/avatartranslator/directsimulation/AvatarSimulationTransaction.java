@@ -64,7 +64,7 @@ public class AvatarSimulationTransaction  {
 	public AvatarSimulationTransaction linkedTransaction;
 	public long initialClockValue;
 	public long duration;
-	public long clockValueWhenPerformed;
+	public long clockValueWhenFinished;
 	public long id;
 	public Vector<String> attributeValues;
 	public Vector<String> actions;

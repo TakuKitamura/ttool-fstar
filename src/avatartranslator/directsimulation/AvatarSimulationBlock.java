@@ -284,18 +284,21 @@ public class AvatarSimulationBlock  {
 		ast.block = block;
 		ast.asb = this;
 		ast.concernedElement = null;
-		ast.initialClockValue = _clockValue;
-		ast.clockValueWhenPerformed = _clockValue;
+		ast.initialClockValue = 0;
+		_aspt.clockValueAtEnd = clockValue;
+		if (lastTransaction != null) {
+			ast.initialClockValue = lastTransaction.clockValueWhenPerformed;
+		}
+		ast.clockValueWhenFinished = _clockValue;
+		ast.duration = _aspt.selectedDuration;
 		if (_aspt != null) {
 			if (_aspt.hasClock) {
-				if(lastTransaction != null) {
-					//TraceManager.addDev(" CLOCK CLOCK : selectedDuration=" + _aspt.selectedDuration + " previousclock = " + 
-					if (_aspt.selectedDuration < (_clockValue - lastTransaction.clockValueWhenPerformed)) {
-						ast.duration = Math.min(_aspt.myMaxDuration, _clockValue - lastTransaction.clockValueWhenPerformed);
-					} else {
-						ast.duration = _aspt.selectedDuration;
-					}
+				if(_aspt.hasElaspedTime) {
+					ast.duration = _aspt.elapsedTime + _aspt.selectedDuration;
+					ast.duration = Math.min(_aspt.myMaxDuration, ast.duration);
 				}
+				ast.clockValueWhenFinished = _clockValue + ast.duration;
+				_aspt.clockValueAtEnd = ast.clockValueWhenFinished;
 			}
 		}
 		ast.id = ast.setID();

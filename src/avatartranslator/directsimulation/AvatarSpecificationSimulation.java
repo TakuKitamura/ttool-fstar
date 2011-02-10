@@ -509,7 +509,7 @@ public class AvatarSpecificationSimulation  {
 	public void postExecutedTransaction(AvatarSimulationPendingTransaction _aspt) {
 		// Time transition?
 		if (_aspt.hasClock) {
-			clockValue += _aspt.selectedDuration;
+			clockValue = _aspt.clockValueAtEnd;
 			// Must set the elapsed time to all blocks having a time transition
 			// Must reset the elapsed time to other blocks
 			/*boolean found;

@@ -79,6 +79,7 @@ public class AvatarSimulationPendingTransaction  {
 	public long maxDuration; // max duration selected by simulator
 	public boolean hasClock; // Selected by simulator to indicate a delay on that transaction
 	public boolean durationSelected;
+	public long clockValueAtEnd;
 	
 	// if linked duration
 	public boolean durationOnCurrent;
