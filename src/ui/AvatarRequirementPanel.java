@@ -171,9 +171,9 @@ public class AvatarRequirementPanel extends TURTLEPanel {
             return true;
         }
 		
-		/*if ((panels.elementAt(index) instanceof EBRDDPanel)){
+		if ((panels.elementAt(index) instanceof AvatarPDPanel)){
             return true;
-        }*/
+        }
 		
         return false;
     }

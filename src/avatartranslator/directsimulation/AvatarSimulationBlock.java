@@ -288,7 +288,9 @@ public class AvatarSimulationBlock  {
 		ast.clockValueWhenPerformed = _clockValue;
 		if (_aspt != null) {
 			if (_aspt.hasClock) {
-				ast.duration = _aspt.selectedDuration;
+				if(lastTransaction != null) {
+					ast.duration = Math.min(_aspt.myMaxDuration, _aspt.selectedDuration + (_clockValue - lastTransaction.clockValueWhenPerformed));
+				}
 			}
 		}
 		ast.id = ast.setID();

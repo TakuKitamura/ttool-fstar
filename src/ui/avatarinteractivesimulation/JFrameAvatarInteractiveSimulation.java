@@ -522,7 +522,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		//jp01.add(animateWithInfo, c01);
 		animateWithInfo.addItemListener(this);
 		animateWithInfo.setSelected(true);
-		openDiagram = new JCheckBox("Automatically open active task diagram");
+		openDiagram = new JCheckBox("Automatically open active state machine diagram");
 		jp01.add(openDiagram, c01);
 		openDiagram.setSelected(true);
 		//update = new JCheckBox("Automatically update information (variables)");
