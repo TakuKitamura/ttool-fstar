@@ -95,7 +95,7 @@ public class AvatarSimulationTransaction  {
 	}
 	
 	public String toString() {
-		String res = "" + id + " @" + clockValueWhenPerformed + "/ " + duration + ": " +executedElement + " in block " + block.getName() + "\nattributes=";
+		String res = "" + id + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName() + "\nattributes=";
 		for(String s: attributeValues) {
 			res += s + " ";
 		}

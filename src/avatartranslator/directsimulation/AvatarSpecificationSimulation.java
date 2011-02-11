@@ -440,6 +440,7 @@ public class AvatarSpecificationSimulation  {
 			postExecutedTransaction(_pendingTransactions.get(0));
 			previousBlock = _pendingTransactions.get(0).asb;
 			if (_pendingTransactions.get(0).linkedTransaction != null) {
+				tempo_clock_Value = clockValue; 
 				AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
 				preExecutedTransaction(_pendingTransactions.get(0).linkedTransaction);
 				_pendingTransactions.get(0).linkedTransaction.asb.runSoloPendingTransaction(_pendingTransactions.get(0).linkedTransaction, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW);
@@ -507,8 +508,9 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public void postExecutedTransaction(AvatarSimulationPendingTransaction _aspt) {
+		clockValue = _aspt.clockValueAtEnd;
 		// Time transition?
-		if (_aspt.hasClock) {
+		/*if (_aspt.hasClock) {
 			clockValue = _aspt.clockValueAtEnd;
 			// Must set the elapsed time to all blocks having a time transition
 			// Must reset the elapsed time to other blocks
@@ -527,8 +529,8 @@ public class AvatarSpecificationSimulation  {
 					asb.resetElapsedTime();
 				}
 				
-			}*/
-		}
+			}
+		}*/
 	}
 	
 	public void printExecutedTransactions() {

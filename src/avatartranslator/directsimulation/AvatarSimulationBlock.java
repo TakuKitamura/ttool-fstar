@@ -195,9 +195,9 @@ public class AvatarSimulationBlock  {
 						aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
 						aspt.hasDelay = true;
 						if (lastTransaction != null) {
-							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+							if (lastTransaction.clockValueWhenFinished < _clockValue) {
 								aspt.hasElapsedTime = true;
-								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenFinished);
 							}
 						}
 					}
@@ -211,9 +211,9 @@ public class AvatarSimulationBlock  {
 						TraceManager.addDev(">>>>>   Signal with delay before");
 						
 						if (lastTransaction != null) {
-							if (lastTransaction.clockValueWhenPerformed < _clockValue) {
+							if (lastTransaction.clockValueWhenFinished < _clockValue) {
 								aspt.hasElapsedTime = true;
-								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenPerformed);
+								aspt.elapsedTime = (int)(_clockValue - lastTransaction.clockValueWhenFinished);
 							}
 						}
 					}
@@ -239,7 +239,11 @@ public class AvatarSimulationBlock  {
 	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
 		if (_aspt.involvedElement != null) {
 			executeElement(_allTransactions, _aspt.involvedElement, _clockValue, _aspt);
+			/*if (lastTransaction != null) {
+				_clockValue = lastTransaction.clockValueWhenFinished;
+			}*/
 		}
+		
 		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue, _aspt);
 		
 	
@@ -285,21 +289,26 @@ public class AvatarSimulationBlock  {
 		ast.asb = this;
 		ast.concernedElement = null;
 		ast.initialClockValue = 0;
-		_aspt.clockValueAtEnd = clockValue;
 		if (lastTransaction != null) {
-			ast.initialClockValue = lastTransaction.clockValueWhenPerformed;
+			ast.initialClockValue = lastTransaction.clockValueWhenFinished;
 		}
 		ast.clockValueWhenFinished = _clockValue;
-		ast.duration = _aspt.selectedDuration;
+		
 		if (_aspt != null) {
+			_aspt.clockValueAtEnd = _clockValue;
+			ast.duration = _aspt.selectedDuration;
+			_aspt.clockValueAtEnd = _clockValue;
 			if (_aspt.hasClock) {
-				if(_aspt.hasElaspedTime) {
+				if(_aspt.hasElapsedTime) {
 					ast.duration = _aspt.elapsedTime + _aspt.selectedDuration;
 					ast.duration = Math.min(_aspt.myMaxDuration, ast.duration);
+					ast.duration = Math.max(_aspt.myMinDuration, ast.duration);
 				}
-				ast.clockValueWhenFinished = _clockValue + ast.duration;
+				ast.clockValueWhenFinished = _aspt.selectedDuration + _clockValue;
 				_aspt.clockValueAtEnd = ast.clockValueWhenFinished;
 			}
+		} else {
+			ast.duration = 0;
 		}
 		ast.id = ast.setID();
 		

@@ -174,7 +174,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		
 		if (allTransactions.size() > 0) {
 			ast = allTransactions.get(0);
-			clockValue = ast.clockValueWhenPerformed-ast.duration;
+			clockValue = ast.clockValueWhenFinished-ast.duration;
 			g.drawString("@" + clockValue, 10, currentY); 
 		}
 		
@@ -207,9 +207,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 					}
 					xOfBlock += spaceBetweenLifeLines;
 				}
-				if (ast.clockValueWhenPerformed != clockValue) {
-					clockValue = ast.clockValueWhenPerformed;
-					g.drawString("@" + clockValue, 10, currentY); 
+				if (ast.clockValueWhenFinished != clockValue) {
+					clockValue = ast.clockValueWhenFinished;
+					g.drawString("@" + clockValue, 10, newCurrentY); 
 				}
 			}
 			
