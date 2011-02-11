@@ -343,6 +343,7 @@ public class JDialogSelectTMLComponent extends javax.swing.JDialog implements Ac
 		}
 		validated = val;
 		ignored = ign;
+		optimized = optimize.isSelected();
 		dispose();
 	}
 	

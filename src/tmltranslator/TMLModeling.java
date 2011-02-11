@@ -574,6 +574,14 @@ public class TMLModeling {
         return ll;
     }
 	
+	 public TMLRequest getRequestToMe(TMLTask task) {
+		 LinkedList ll = getRequestsToMe(task);
+		 if ((ll == null) || (ll.size() == 0)) {
+			 return null;
+		 }
+		 return (TMLRequest)(ll.get(0));
+	 }
+	
 	public void prefixAllNamesWith(String _prefix) {
 		for(TMLChannel channel: channels) {
 			channel.prefixName(_prefix);
@@ -714,7 +722,8 @@ public class TMLModeling {
 			if (attr.isNat() || attr.isBool()) {
 				//System.out.println("Getting usage");
 				name = attr.getName();
-				if ((name.compareTo("arg1__req") != 0) && (name.compareTo("arg2__req") != 0) && (name.compareTo("arg3__req") != 0)){
+				if (!(name.startsWith("arg")) && (name.endsWith("__req"))) {
+				//if ((name.compareTo("arg1__req") != 0) && (name.compareTo("arg2__req") != 0) && (name.compareTo("arg3__req") != 0)){
 					usage = getUsageOfAttribute(task, activity, attr);
 					//System.out.println("End getting usage");
 					if (usage == 0) {
@@ -1226,6 +1235,15 @@ public class TMLModeling {
 			TMLActivity activity = task.getActivityDiagram();
 			if (activity != null) {
 				activity.splitActionStatesWithUnderscoreVariables(task);
+			}
+		 }
+	}
+	
+	public void splitActionStatesWithDollars() {
+		for (TMLTask task: tasks) {
+			TMLActivity activity = task.getActivityDiagram();
+			if (activity != null) {
+				activity.splitActionStatesWithDollars(task);
 			}
 		 }
 	}

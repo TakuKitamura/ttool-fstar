@@ -316,6 +316,75 @@ public class TMLActivity extends TMLElement {
 		previous.addNext(tmlae);
 		
 	}
+	
+	public void splitActionStatesWithDollars(TMLTask _task) {
+		//TraceManager.addDev("Splitting actions in task " + _task.getName());
+		
+		TMLActivityElement ae;
+		Vector<TMLActionState> states = new Vector<TMLActionState>();
+        for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+            if (ae instanceof TMLActionState) {
+				states.add((TMLActionState)ae);
+            }
+        }
+		
+		for(TMLActionState as: states) {
+			 splitActionStatesWithDollars(as, _task);
+		}
+		
+	}
+	
+	private void splitActionStatesWithDollars(TMLActionState _ae, TMLTask _task) {
+		// Is ae if the form name0 = name1 with variables in the task of type name0__ and name1__ ?
+		String s = _ae.getAction();
+		
+		if (s == null) {
+			return;
+		}
+		
+		//TraceManager.addDev("Analyzing action to split : " + s);
+		
+		s = s.trim();
+		
+		if (s.length() == 0) {
+			return;
+		}
+		
+		int index0 = s.indexOf('$');
+		if (index0 == -1) {
+			return;
+		}
+		
+		String name0 = s.substring(0, index0).trim();
+		String name1 = s.substring(index0+1, s.length()).trim();
+		
+		if ((name0.length() ==0) || (name1.length() == 0)) {
+			_ae.setAction(Conversion.replaceAllString(_ae.getAction(), "$", " ").trim());
+			return;
+		}
+		
+		//TraceManager.addDev("Found action to split : " + s);
+		
+		TMLActionState previous, tmlas;
+		TMLActivityElement tmlae = _ae.getNextElement(0);
+		
+		TraceManager.addDev("Setting action0 to " + name0);
+		_ae.setAction(name0);
+		_ae.clearNexts();
+		previous = _ae;
+		
+		tmlas = new TMLActionState(previous.getName(), previous.getReferenceObject());
+		tmlas.setAction(name1);
+		TraceManager.addDev("Setting action1 to " + name1);
+		elements.add(tmlas);
+		previous.addNext(tmlas);
+		previous = tmlas;
+		previous.addNext(tmlae);
+		
+		splitActionStatesWithDollars(tmlas, _task);
+		
+	}
     
  
 }

@@ -45,7 +45,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
-
 public class TMLActivityElementWithAction extends TMLActivityElement {
     protected String action;
     

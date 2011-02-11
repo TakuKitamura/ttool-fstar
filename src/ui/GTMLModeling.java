@@ -122,6 +122,7 @@ public class GTMLModeling  {
 				addTMLEvents();
 				addTMLRequests();
 				generateTasksActivityDiagrams();
+				removeActionsWithDollars();
 				removeActionsWithRecords();
 			} catch (MalformedTMLDesignException mtmlde) {
 				TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
@@ -176,6 +177,7 @@ public class GTMLModeling  {
 				addTMLCEvents();
 				addTMLCRequests();
 				generateTasksActivityDiagrams();
+				removeActionsWithDollars();
 				removeActionsWithRecords();
 			} catch (MalformedTMLDesignException mtmlde) {
 				TraceManager.addDev("Modeling error:" + mtmlde.getMessage());
@@ -1351,6 +1353,60 @@ public class GTMLModeling  {
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 					}
                 }
+			
+			} else if (tgc instanceof TMLADReadRequestArg) {	
+				request = tmlm.getRequestToMe(tmltask);
+				if (request == null) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "This task is not requested: cannot use \"reading request arg\" operator");
+					ce.setTMLTask(tmltask);
+					ce.setTDiagramPanel(tadp);
+					ce.setTGComponent(tgc);
+					checkingErrors.add(ce);
+					((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+                } else {
+					tmlaction = new TMLActionState("action reading args", tgc);
+					String act = "";
+					int cpt = 1;
+					for(int i=0; i<((TMLADReadRequestArg)tgc).realNbOfParams(); i++) {
+						tmp = modifyString(((TMLADReadRequestArg)tgc).getRealParamValue(i));
+						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
+						
+						if (allVariables.size() > 0) {
+							for(int k=0; k<allVariables.size(); k++) {
+								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								if (cpt != 1) {
+									act += "$";
+								}
+								act += allVariables.get(k) + " = arg" + cpt + "__req";
+								cpt ++;
+							}
+						} else {
+							TraceManager.addDev("Adding param: " + tmp);
+							if (cpt != 1) {
+								act += "$";
+							}
+							act += tmp + " = arg" + cpt + "__req";
+							cpt ++;
+						}
+					}
+					if (request.getNbOfParams() != (cpt-1)) {
+						TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " read request arg#:" + (cpt-1));
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Wrong number of parameters in \"reading request arg\" operator");
+                        ce.setTMLTask(tmltask);
+                        ce.setTDiagramPanel(tadp);
+                        ce.setTGComponent(tgc);
+                        checkingErrors.add(ce);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+					} else {
+						TraceManager.addDev("Adding action = " + act);
+						tmlaction.setAction(act);
+						activity.addElement(tmlaction);
+						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
+						listE.addCor(tmlaction, tgc);
+					}
+					
+					
+				}
 				
             } else if (tgc instanceof TMLADStopState) {
                 tmlstopstate = new TMLStopState("stop state", tgc);
@@ -2113,8 +2169,13 @@ public class GTMLModeling  {
 	}
 	
 	public void removeActionsWithRecords() {
-		TraceManager.addDev("Reworking actions with records");
+		//TraceManager.addDev("Reworking actions with records");
 		tmlm.splitActionStatesWithUnderscoreVariables();
+	}
+	
+	public void removeActionsWithDollars() {
+		//TraceManager.addDev("Reworking actions with records");
+		tmlm.splitActionStatesWithDollars();
 	}
     
 }

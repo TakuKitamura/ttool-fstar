@@ -4352,7 +4352,7 @@ public class GTURTLEModeling {
 			NodeList nl = n.getChildNodes();
 			elt = (Element)n;
 			elt1 = elt;
-			TraceManager.addDev("elt=" + elt);
+			//TraceManager.addDev("elt=" + elt);
 
 			int myType = Integer.decode(elt.getAttribute("type")).intValue();
 			int myId = Integer.decode(elt.getAttribute("id")).intValue() + decId;
@@ -5232,6 +5232,7 @@ public class GTURTLEModeling {
 			return false;
 		} else {
 			if (optimize) {
+				//TraceManager.addDev("OPTIMIZE");
 				warningsOptimize = tmlm.optimize();
 			}
 

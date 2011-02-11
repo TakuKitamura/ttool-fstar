@@ -6504,6 +6504,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CHANNEL);
         } else if (command.equals(actions[TGUIAction.TMLAD_SEND_REQUEST].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SEND_REQUEST);
+        } else if (command.equals(actions[TGUIAction.TMLAD_READ_REQUEST_ARG].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_REQUEST_ARG);
         } else if (command.equals(actions[TGUIAction.TMLAD_SEND_EVENT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SEND_EVENT);
         } else if (command.equals(actions[TGUIAction.TMLAD_WAIT_EVENT].getActionCommand())) {

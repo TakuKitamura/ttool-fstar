@@ -211,6 +211,7 @@ public class TGComponentManager {
 	public static final int TMLAD_DELAY = 1026;
 	public static final int TMLAD_INTERVAL_DELAY = 1028;
 	public static final int TMLAD_FOR_EVER_LOOP = 1030;
+	public static final int TMLAD_READ_REQUEST_ARG = 1034;
 	
 	public static final int TMLARCHI_CPUNODE = 1100;
 	public static final int TMLARCHI_ARTIFACT = 1101;
@@ -688,6 +689,9 @@ public class TGComponentManager {
 			case TMLAD_FOR_EVER_LOOP:
                 tgc = new TMLADForEverLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TMLAD_READ_REQUEST_ARG:
+                tgc = new TMLADReadRequestArg(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLAD_SEQUENCE:
                 tgc = new TMLADSequence(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1127,6 +1131,8 @@ public class TGComponentManager {
             return TMLAD_FOR_STATIC_LOOP;
         } else if (tgc instanceof TMLADForEverLoop) {
             return TMLAD_FOR_EVER_LOOP;
+        } else if (tgc instanceof TMLADReadRequestArg) {
+            return TMLAD_READ_REQUEST_ARG;
         } else if (tgc instanceof TMLADSequence) {
             return TMLAD_SEQUENCE;
         } else if (tgc instanceof TMLADUnorderedSequence) {

@@ -82,6 +82,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLAD_SEND_EVENT].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_WAIT_EVENT].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_NOTIFIED_EVENT].setEnabled(b);
+		mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_FOR_LOOP].setEnabled(b);
 		mgui.actions[TGUIAction.TMLAD_FOR_STATIC_LOOP].setEnabled(b);
 		mgui.actions[TGUIAction.TMLAD_FOR_EVER_LOOP].setEnabled(b);
@@ -141,6 +142,9 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.TMLAD_NOTIFIED_EVENT]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();
