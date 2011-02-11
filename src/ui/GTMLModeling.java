@@ -794,7 +794,6 @@ public class GTMLModeling  {
 						addToTable(port2.getFather().getValue() + "/" + port2.getPortName(), name);
 					}
 					
-					
 					request = new TMLRequest(name, port1);
 					
                     for(i=0; i<port1.getNbMaxAttribute(); i++) {
@@ -805,7 +804,7 @@ public class GTMLModeling  {
 									// Search for the record
 									record = tmlc.getRecordNamed(tt.getTypeOther());
 									if (record == null) {
-										String msg = " event " + name + " is declared as using an unknown type: " + tt.getTypeOther();
+										String msg = " request " + name + " is declared as using an unknown type: " + tt.getTypeOther();
 										CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
 										ce.setTDiagramPanel(tmlcdp.tmlctdp);
 										ce.setTGComponent(tgc);
@@ -814,7 +813,13 @@ public class GTMLModeling  {
 									} else {
 										for(int k=0; k<record.getAttributes().size(); k++) {
 											ta = (TAttribute)(record.getAttributes().get(k));
-											tmlt = new TMLType(ta.getType());
+											if (ta.getType() == TAttribute.NATURAL) {
+												tmlt = new TMLType(TMLType.NATURAL);
+											} else if (ta.getType() == TAttribute.BOOLEAN) {
+												tmlt = new TMLType(TMLType.BOOLEAN);
+											} else {
+												tmlt = new TMLType(TMLType.OTHER);
+											}
 											request.addParam(tmlt);
 										}
 									}
