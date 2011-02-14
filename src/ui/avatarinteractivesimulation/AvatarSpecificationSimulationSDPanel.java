@@ -60,7 +60,7 @@ import avatartranslator.directsimulation.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarSpecificationSimulationSDPanel extends JPanel  {
+public class AvatarSpecificationSimulationSDPanel extends JPanel implements MouseMotionListener  {
 	
 	private static int MAX_X = 800;
 	private static int MAX_Y = 200;
@@ -73,7 +73,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
     private final int limit = 10;
 	
 	// Drawing parameters
-	private int spaceBetweenLifeLines = 200;
+	private int spaceBetweenLifeLines = 150;
 	private int spaceAtEnd = 50;
 	private int spaceAtTop = 50;
 	private int verticalSpaceUnderBlocks = 15;
@@ -93,6 +93,11 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 	private JScrollPane jsp;
 	private boolean mustScroll = true;
 	
+	// Mouse
+	private int xMouse, yMouse;
+	private boolean drawInfo = false;
+	private long clockValueMouse;
+	
 	
     public AvatarSpecificationSimulationSDPanel(AvatarSpecificationSimulation _ass) {
 		ass = _ass;
@@ -100,6 +105,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		setBackground(Color.WHITE);
 		
 		setNewSize();
+		
+		addMouseMotionListener(this);
     }
 	
 	public void setMyScrollPanel(JScrollPane _jsp) {
@@ -130,6 +137,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				scrollToLowerPosition();
 				mustScroll = false;
 			}
+		}
+		
+		if (drawInfo) {
+			drawInfo(g);
 		}
     }
 	
@@ -175,7 +186,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		if (allTransactions.size() > 0) {
 			ast = allTransactions.get(0);
 			clockValue = ast.clockValueWhenFinished-ast.duration;
-			g.drawString("@" + clockValue, 10, currentY); 
+			clockValueMouse = clockValue;
+			g.drawString("@" + clockValue, 10, currentY+g.getFontMetrics().getHeight()/2); 
 		}
 		
 		for(int i=Math.max(allTransactions.size()-drawnTransactions, 0); i<allTransactions.size(); i++) {
@@ -209,7 +221,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 				}
 				if (ast.clockValueWhenFinished != clockValue) {
 					clockValue = ast.clockValueWhenFinished;
-					g.drawString("@" + clockValue, 10, newCurrentY); 
+					if (yMouse >= newCurrentY) {
+						clockValueMouse = clockValue;
+					}
+					g.drawString("@" + clockValue, 10, newCurrentY+g.getFontMetrics().getHeight()/2); 
 				}
 			}
 			
@@ -384,7 +399,6 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 					// Vertical line of receiving block
 					g.drawLine(currentX, currentY-20, currentX, currentY);
 					return currentY;
-					
 				}
 			} else {
 				// In, asynchronous
@@ -434,6 +448,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 							//g.drawLine(x + lengthAsync, y, currentX-lengthAsync, currentY);
 						}
 					}
+				} else {
+					TraceManager.addDev("No linked transaction");
 				}
 				
 				currentY += 10;
@@ -501,6 +517,44 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel  {
 		setPreferredSize(new Dimension(maxX + limit, maxY + limit));
 		mustScroll = true;
 		revalidate();
+	}
+	
+	public void mouseDragged(MouseEvent e) {
+	}
+ 
+	public void mouseMoved(MouseEvent e) {
+		xMouse = e.getX();
+		yMouse = e.getY();
+		if ((xMouse > minLimit) && (xMouse<maxX-spaceAtEnd) && (yMouse> spaceAtTop) && (yMouse<(maxY))) {
+			drawInfo = true;
+			repaint();
+			return;
+		}
+		
+		if( drawInfo == true) {
+			drawInfo = false;
+			repaint();
+			return;
+		}
+		
+		drawInfo = false;
+	}
+	
+	private void drawInfo(Graphics g) {
+		GraphicLib.dashedLine(g, spaceAtEnd, yMouse, maxX-spaceAtEnd, yMouse);
+		g.drawString("@" + clockValueMouse, 10, yMouse+g.getFontMetrics().getHeight()/2); 
+		
+		String name;
+		int w;
+		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+		int x = spaceAtEnd;
+		
+		for(AvatarSimulationBlock block: blocks) {
+			name = block.getBlock().getName();
+			w = g.getFontMetrics().stringWidth(name);
+			g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse - spaceVerticalText);
+			x += spaceBetweenLifeLines;
+		}
 	}
 	
 }

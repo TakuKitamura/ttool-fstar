@@ -181,19 +181,20 @@ public class AvatarSpecificationSimulation  {
 							go = false;
 							TraceManager.addDev("Deadlock: no transaction can be selected");
 						} else {
-							TraceManager.addDev("* * * * * Nb of selected transactions: " + selectedTransactions.size());
+							//TraceManager.addDev("* * * * * Nb of selected transactions: " + selectedTransactions.size());
 							go = performSelectedTransactions(selectedTransactions);
-							TraceManager.addDev("NbOfcommands=" + nbOfCommands);
+							//TraceManager.addDev("NbOfcommands=" + nbOfCommands);
 							nbOfCommands --;
+							//TraceManager.addDev("------------- new NbOfcommands=" + nbOfCommands);
 						}
 					}
 				}
 			}
 		}
 		setMode(TERMINATED);
-		TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
+		//TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
 		
-		printExecutedTransactions();
+		//printExecutedTransactions();
 	}
 	
 	public void gatherPendingTransactions() {
@@ -318,11 +319,10 @@ public class AvatarSpecificationSimulation  {
 			// If synchronous, not taken into account -> taken into account at sending side
 			if (ar.isAsynchronous()) {
 				// Must check whether there is at least one element to read in the channel
-				AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(ar);
+				AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(ar, as);
 				if (asat != null) {
 					_aspt.linkedAsynchronousMessage = asat;
 					transactions.add(_aspt);
-					
 				}
 			} 
 		} else {
@@ -395,10 +395,12 @@ public class AvatarSpecificationSimulation  {
 		}
 	}
 	
-	public AvatarSimulationAsynchronousTransaction getAsynchronousMessage(AvatarRelation _ar) {
+	public AvatarSimulationAsynchronousTransaction getAsynchronousMessage(AvatarRelation _ar, AvatarSignal _as) {
 		for(AvatarSimulationAsynchronousTransaction asat: asynchronousMessages) {
 			if (asat.getRelation() == _ar) {
-				return asat;
+				if (_ar.getIndexOfSignal(_as) == asat.getIndex()) {
+					return asat;
+				}
 			}
 		}
 		return null;
@@ -473,12 +475,13 @@ public class AvatarSpecificationSimulation  {
 				_aspt.isSynchronous = false;
 				if (sig.isOut()) {
 					// Create the stucture to put elements
-					AvatarSimulationAsynchronousTransaction asat = new AvatarSimulationAsynchronousTransaction(rel);
+					// Get the index of the signal in the relation
+					AvatarSimulationAsynchronousTransaction asat = new AvatarSimulationAsynchronousTransaction(rel, rel.getIndexOfSignal(sig));
 					_aspt.linkedAsynchronousMessage = asat;
 					asynchronousMessages.add(asat);
 				} else {
 					// Must remove the asynchronous operation, and give the parameters
-					AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(rel);
+					AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(rel, sig);
 					asynchronousMessages.remove(asat);
 					_aspt.linkedAsynchronousMessage = asat;
 				}

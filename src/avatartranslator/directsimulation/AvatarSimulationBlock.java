@@ -220,15 +220,16 @@ public class AvatarSimulationBlock  {
 				}
 				aspt.clockValue = _clockValue;
 				
+				if (aspt.hasElapsedTime) {
+					 aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
+					 aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
+				}
+				
 				if (aspt.hasDelay) {
 					aspt.myMinDelay = Math.max(0, aspt.myMinDelay);
 					aspt.myMaxDelay = Math.max(0, aspt.myMaxDelay);
 				}
 				
-				if (aspt.hasElapsedTime) {
-					 aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
-					 aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
-				}
 				
 				ll.add(aspt);
 			}
@@ -293,25 +294,25 @@ public class AvatarSimulationBlock  {
 			ast.initialClockValue = lastTransaction.clockValueWhenFinished;
 		}
 		ast.clockValueWhenFinished = _clockValue;
-		
+		ast.duration = 0;
+		ast.id = ast.setID();
 		if (_aspt != null) {
-			_aspt.clockValueAtEnd = _clockValue;
-			ast.duration = _aspt.selectedDuration;
 			_aspt.clockValueAtEnd = _clockValue;
 			if (_aspt.hasClock) {
 				if(_aspt.hasElapsedTime) {
 					ast.duration = _aspt.elapsedTime + _aspt.selectedDuration;
-					ast.duration = Math.min(_aspt.myMaxDuration, ast.duration);
-					ast.duration = Math.max(_aspt.myMinDuration, ast.duration);
+				} else {
+					ast.duration = _aspt.selectedDuration;
+					ast.duration = Math.min(_aspt.myMaxDuration+_aspt.elapsedTime, ast.duration);
+					ast.duration = Math.max(_aspt.myMinDuration+_aspt.elapsedTime, ast.duration);
 				}
 				ast.clockValueWhenFinished = _aspt.selectedDuration + _clockValue;
 				_aspt.clockValueAtEnd = ast.clockValueWhenFinished;
 			}
-		} else {
-			ast.duration = 0;
-		}
-		ast.id = ast.setID();
+			TraceManager.addDev("Id= " + ast.id + " duration=" + ast.duration + " elapsed=" + _aspt.elapsedTime + " selectedDur=" + _aspt.selectedDuration + " at end: " + _aspt.clockValueAtEnd + "clockValue=" + _clockValue);
+		} 
 		
+				
 		// Attributes
 		Vector<String> attributeValues = new Vector<String>();
 		String s;
@@ -449,6 +450,9 @@ public class AvatarSimulationBlock  {
 							// Asynchronous Receiving 
 							String myAction = "";
 							ast.linkedTransaction = _aspt.linkedAsynchronousMessage.firstTransaction;
+							if (_aspt.linkedAsynchronousMessage.firstTransaction == null) {
+								TraceManager.addDev("NULL FIRST TRANSACTION !!!");
+							}
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								param = _aspt.linkedAsynchronousMessage.getParameters().get(i);
 								name = aaos.getValue(i);
@@ -468,6 +472,8 @@ public class AvatarSimulationBlock  {
 								ast.actions = new Vector<String>();
 								ast.actions.add(myAction);
 							}
+						} else {
+							TraceManager.addDev("ERROR TRANSACTION");
 						}
 					}
 				}

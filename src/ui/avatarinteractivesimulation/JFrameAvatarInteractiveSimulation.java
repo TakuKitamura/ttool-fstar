@@ -682,7 +682,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		} catch (Exception e) {
 			nb = 1;
 		}
-		ass.setNbOfCommands(1);
+		ass.setNbOfCommands(nb);
 		ass.unstop();
 	}
 	
@@ -920,6 +920,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		return false;
 	}
 	
+	public void actSaveTxt() {
+		ass.printExecutedTransactions();
+	}
+	
 	
 	// Mouse management
 	public void mouseReleased(MouseEvent e) {}
@@ -976,6 +980,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
 			close();
+			return;
+			//TraceManager.addDev("Start simulation!");
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
+			actSaveTxt();
 			return;
 			//TraceManager.addDev("Start simulation!");
 		}

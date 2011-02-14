@@ -56,10 +56,12 @@ public class AvatarSimulationAsynchronousTransaction  {
   
 	private Vector<String> parameters;
     private AvatarRelation relation;
+	private int index;
 	public AvatarSimulationTransaction firstTransaction;
 	
-    public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar) {
+    public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
 		relation = _ar;
+		index = _index;
 		parameters = new Vector<String>();
     }
 	
@@ -77,5 +79,9 @@ public class AvatarSimulationAsynchronousTransaction  {
 	
 	public Vector<String> getParameters() {
 		return parameters;
+	}
+	
+	public int getIndex() {
+		return index;
 	}
 }
