@@ -185,6 +185,9 @@ public class AvatarSpecificationSimulation  {
 							go = performSelectedTransactions(selectedTransactions);
 							//TraceManager.addDev("NbOfcommands=" + nbOfCommands);
 							nbOfCommands --;
+							if (asi != null) {
+								asi.updateTransactionAndTime(allTransactions.size(), clockValue);
+							}
 							//TraceManager.addDev("------------- new NbOfcommands=" + nbOfCommands);
 						}
 					}
@@ -206,7 +209,7 @@ public class AvatarSpecificationSimulation  {
 			pendingTransactions.addAll(asb.getPendingTransactions(allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW));
 		}
 		
-		TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
+		//TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
 		
 		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 		
@@ -223,7 +226,7 @@ public class AvatarSpecificationSimulation  {
 					// It has in fact no delay!
 					aspt.hasDelay = false;
 				} else {
-					TraceManager.addDev("min Duration = " + aspt.myMinDuration + " max duration=" + aspt.myMaxDuration);
+					//TraceManager.addDev("min Duration = " + aspt.myMinDuration + " max duration=" + aspt.myMaxDuration);
 				}
 			}
 		}

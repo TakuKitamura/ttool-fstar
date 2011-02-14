@@ -51,4 +51,6 @@ package avatartranslator.directsimulation;
 public interface AvatarSimulationInteraction  {
   
 	public void setMode(int _mode);
+	
+	public void updateTransactionAndTime(int _nbOfTransactions, long clockValue);
 }
