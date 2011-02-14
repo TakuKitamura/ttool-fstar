@@ -73,7 +73,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     private final int limit = 10;
 	
 	// Drawing parameters
+	private int minSpaceBetweenLifeLines = 5;
 	private int spaceBetweenLifeLines = 150;
+	private boolean spaceBetweenLifeLinesComputed = false;
 	private int spaceAtEnd = 50;
 	private int spaceAtTop = 50;
 	private int verticalSpaceUnderBlocks = 15;
@@ -119,6 +121,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		int currentX = spaceAtEnd;
 		int oldMaxY = maxY;
 		int oldMaxX = maxX;
+		
+		if (!spaceBetweenLifeLinesComputed) {
+			computeSpaceBetweenLifeLines(g);
+		}
 		
 		
 		currentY = paintTopElements(g, currentX, currentY);
@@ -169,6 +175,20 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		maxX = currentX;
 		
 		return currentY + verticalSpaceUnderBlocks;
+	}
+	
+	private void computeSpaceBetweenLifeLines(Graphics g) {
+		int w;
+		
+		spaceBetweenLifeLinesComputed = true;
+		
+		for(AvatarSimulationBlock block: ass.getSimulationBlocks()) {
+			w = g.getFontMetrics().stringWidth(block.getBlock().getName());
+			if ((w+minSpaceBetweenLifeLines) > spaceBetweenLifeLines) {
+				spaceBetweenLifeLines = w+minSpaceBetweenLifeLines;
+			}
+		}
+		
 	}
 	
 	// returns the currentY position
@@ -449,7 +469,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 						}
 					}
 				} else {
-					TraceManager.addDev("No linked transaction");
+					//TraceManager.addDev("No linked transaction");
 				}
 				
 				currentY += 10;
@@ -525,7 +545,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	public void mouseMoved(MouseEvent e) {
 		xMouse = e.getX();
 		yMouse = e.getY();
-		if ((xMouse > minLimit) && (xMouse<maxX-spaceAtEnd) && (yMouse> spaceAtTop) && (yMouse<(maxY))) {
+		if ((xMouse > minLimit) && (xMouse<maxX) && (yMouse> spaceAtTop) && (yMouse<(maxY))) {
 			drawInfo = true;
 			repaint();
 			return;

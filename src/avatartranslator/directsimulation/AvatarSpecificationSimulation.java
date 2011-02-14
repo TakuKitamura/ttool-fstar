@@ -323,6 +323,9 @@ public class AvatarSpecificationSimulation  {
 				if (asat != null) {
 					_aspt.linkedAsynchronousMessage = asat;
 					transactions.add(_aspt);
+					/*if (asat.firstTransaction == null) {
+						TraceManager.addDev("NULL FIRST");
+					}*/
 				}
 			} 
 		} else {

@@ -167,7 +167,7 @@ public class AvatarSimulationBlock  {
 					String s = Conversion.replaceAllString(guard, "[", "").trim();
 					s = Conversion.replaceAllString(s, "]", "").trim();
 					guardOk = evaluateBoolExpression(s, lastTransaction.attributeValues);
-					TraceManager.addDev("guard ok=" + guardOk);
+					//TraceManager.addDev("guard ok=" + guardOk);
 				}
 			}
 			
@@ -208,7 +208,7 @@ public class AvatarSimulationBlock  {
 						aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
 						aspt.hasDelay = true;
 						
-						TraceManager.addDev(">>>>>   Signal with delay before");
+						//TraceManager.addDev(">>>>>   Signal with delay before");
 						
 						if (lastTransaction != null) {
 							if (lastTransaction.clockValueWhenFinished < _clockValue) {
@@ -309,7 +309,7 @@ public class AvatarSimulationBlock  {
 				ast.clockValueWhenFinished = _aspt.selectedDuration + _clockValue;
 				_aspt.clockValueAtEnd = ast.clockValueWhenFinished;
 			}
-			TraceManager.addDev("Id= " + ast.id + " duration=" + ast.duration + " elapsed=" + _aspt.elapsedTime + " selectedDur=" + _aspt.selectedDuration + " at end: " + _aspt.clockValueAtEnd + "clockValue=" + _clockValue);
+			//TraceManager.addDev("Id= " + ast.id + " duration=" + ast.duration + " elapsed=" + _aspt.elapsedTime + " selectedDur=" + _aspt.selectedDuration + " at end: " + _aspt.clockValueAtEnd + "clockValue=" + _clockValue);
 		} 
 		
 				
@@ -367,7 +367,7 @@ public class AvatarSimulationBlock  {
 							// Synchronous Sending!
 							// Must be in the receiving transaction the right parameters
 							Vector<String> parameters = new Vector<String>();
-							TraceManager.addDev("Adding value in :" + aaos);
+							//TraceManager.addDev("Adding value in :" + aaos);
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								value = aaos.getValue(i);
 								// Must get the type of the value
@@ -381,7 +381,7 @@ public class AvatarSimulationBlock  {
 										result += evaluateBoolExpression(value, lastTransaction.attributeValues);
 									} 
 									
-									TraceManager.addDev("Adding value:" + result);
+									//TraceManager.addDev("Adding value:" + result);
 									parameters.add(result);
 								} catch (Exception e) {
 									TraceManager.addDev("EXCEPTION on adding value " + aaos);
@@ -393,7 +393,7 @@ public class AvatarSimulationBlock  {
 							// Synchronous Receiving
 							String myAction = "";
 							for(i=0; i<aaos.getNbOfValues(); i++) {
-								TraceManager.addDev("Reading value #" + i);
+								//TraceManager.addDev("Reading value #" + i);
 								param = _aspt.parameters.get(i);
 								name = aaos.getValue(i);
 								index = block.getIndexOfAvatarAttributeWithName(name);
@@ -401,7 +401,7 @@ public class AvatarSimulationBlock  {
 								if (index != -1) {
 									attributeValues.remove(index);
 									attributeValues.add(index, param);
-									TraceManager.addDev("Reading value:" + param);
+									//TraceManager.addDev("Reading value:" + param);
 									if (myAction.length() == 0) {
 										myAction += "" + param;
 									} else {
@@ -422,6 +422,7 @@ public class AvatarSimulationBlock  {
 							
 							// Asynchronous Sending
 							String myAction = "";
+							_aspt.linkedAsynchronousMessage.firstTransaction = ast;
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								value = aaos.getValue(i);
 								// Must get the type of the value
@@ -432,9 +433,9 @@ public class AvatarSimulationBlock  {
 								} else if (avat.getType() == AvatarType.BOOLEAN) {
 									result += evaluateBoolExpression(value, lastTransaction.attributeValues);
 								} 
-								TraceManager.addDev("Adding value:" + result);
+								//TraceManager.addDev("Adding value:" + result);
 								_aspt.linkedAsynchronousMessage.addParameter(result);
-								_aspt.linkedAsynchronousMessage.firstTransaction = ast;
+								
 								if (myAction.length() == 0) {
 									myAction += "" + result;
 								} else {
@@ -467,6 +468,9 @@ public class AvatarSimulationBlock  {
 										myAction += ", " + param;
 									}
 								}
+							} 
+							if (_aspt.linkedAsynchronousMessage == null) {
+								TraceManager.addDev("NULL ASYN MSG");
 							}
 							if (myAction.length() > 0) {
 								ast.actions = new Vector<String>();
