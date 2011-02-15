@@ -57,8 +57,10 @@ import ui.interactivesimulation.*;
 import tmltranslator.tomappingsystemc.*;
 import tmltranslator.tomappingsystemc2.*;
 import ui.*;
-import ui.ebrdd.*;
+import ui.avatarpd.*;
+//import ui.ebrdd.*;
 import req.ebrdd.*;
+import tepe.*;
 
 import launcher.*;
 
@@ -108,7 +110,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 	protected JComboBox versionSimulator;
 	
 	//EBRDD
-	private static Vector validated, ignored;
+	/*private static Vector validated, ignored;
 	private Vector val, ign;
 	private JList listIgnored;
     private JList listValidated;
@@ -116,7 +118,22 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     private JButton addOneValidated;
     private JButton addOneIgnored;
     private JButton allIgnored;
-	private JPanel panele1, panele2, panele3, panele4, panel5, panel6;
+	private JPanel panele1, panele2, panele3, panele4, panel5, panel6;*/
+	
+	
+	//TEPED
+	private static Vector validatedTepe, ignoredTepe;
+	private Vector valTepe, ignTepe;
+	private JList listIgnoredTepe;
+    private JList listValidatedTepe;
+    private JButton allValidatedTepe;
+    private JButton addOneValidatedTepe;
+    private JButton addOneIgnoredTepe;
+    private JButton allIgnoredTepe;
+	private JPanel panele1Tepe, panele2Tepe, panele3Tepe, panele4Tepe, panel5Tepe, panel6Tepe;
+	
+	
+	
     
     private Thread t;
     private boolean go = false;
@@ -163,24 +180,24 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 	
 	protected void makeLists() {
-		if (validated == null) {
-			validated = new Vector();
+		if (validatedTepe == null) {
+			validatedTepe = new Vector();
 		}
 		
-		if (ignored == null) {
-			ignored = new Vector();
+		if (ignoredTepe == null) {
+			ignoredTepe = new Vector();
 		}
 		
-		val = new Vector();
-		ign = new Vector();
+		valTepe = new Vector();
+		ignTepe = new Vector();
 		
-		ArrayList<EBRDDPanel> al = mgui.getAllEBRDDPanels();
+		ArrayList<AvatarPDPanel> al = mgui.getAllAvatarPDPanels();
 		
-		for(EBRDDPanel panel: al) {
-			if(ignored.contains(panel)) {
-				ign.add(panel);
+		for(AvatarPDPanel panel: al) {
+			if(ignoredTepe.contains(panel)) {
+				ignTepe.add(panel);
 			} else {
-				val.add(panel);
+				valTepe.add(panel);
 			}
 		}
 	}
@@ -277,35 +294,35 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         jp01.add(new JLabel(" "), c01);
         
 		//EBRDDs
-		panele1 = new JPanel();
-        panele1.setLayout(new BorderLayout());
-        panele1.setBorder(new javax.swing.border.TitledBorder("EBRDDs ignored"));
-        listIgnored = new JList(ign);
+		panele1Tepe = new JPanel();
+        panele1Tepe.setLayout(new BorderLayout());
+        panele1Tepe.setBorder(new javax.swing.border.TitledBorder("Ignored TEPE Diagrams"));
+        listIgnoredTepe = new JList(ignTepe);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
-        listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        listIgnored.addListSelectionListener(this);
-        JScrollPane scrollPane1 = new JScrollPane(listIgnored);
-        panele1.add(scrollPane1, BorderLayout.CENTER);
-        panele1.setPreferredSize(new Dimension(200, 250));
+        listIgnoredTepe.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listIgnoredTepe.addListSelectionListener(this);
+        JScrollPane scrollPane1 = new JScrollPane(listIgnoredTepe);
+        panele1Tepe.add(scrollPane1, BorderLayout.CENTER);
+        panele1Tepe.setPreferredSize(new Dimension(200, 250));
         
         // validated list
-        panele2 = new JPanel();
-        panele2.setLayout(new BorderLayout());
-        panele2.setBorder(new javax.swing.border.TitledBorder("EBRDDs taken into account"));
-        listValidated = new JList(val);
+        panele2Tepe = new JPanel();
+        panele2Tepe.setLayout(new BorderLayout());
+        panele2Tepe.setBorder(new javax.swing.border.TitledBorder("EBRDDs taken into account"));
+        listValidatedTepe = new JList(valTepe);
         //listValidated.setPreferredSize(new Dimension(200, 250));
-        listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
-        listValidated.addListSelectionListener(this);
-        JScrollPane scrollPane2 = new JScrollPane(listValidated);
-        panele2.add(scrollPane2, BorderLayout.CENTER);
-        panele2.setPreferredSize(new Dimension(200, 250));
+        listValidatedTepe.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+        listValidatedTepe.addListSelectionListener(this);
+        JScrollPane scrollPane2 = new JScrollPane(listValidatedTepe);
+        panele2Tepe.add(scrollPane2, BorderLayout.CENTER);
+        panele2Tepe.setPreferredSize(new Dimension(200, 250));
  
         
         // central buttons
-        panele3 = new JPanel();
+        panele3Tepe = new JPanel();
 		GridBagLayout gridbage1 = new GridBagLayout();
         GridBagConstraints ce1 = new GridBagConstraints();
-        panele3.setLayout(gridbage1);
+        panele3Tepe.setLayout(gridbage1);
         
         ce1.weighty = 1.0;
         ce1.weightx = 1.0;
@@ -313,40 +330,40 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         ce1.fill = GridBagConstraints.HORIZONTAL;
         ce1.gridheight = 1;
         
-        allValidated = new JButton(IconManager.imgic50);
-        allValidated.setPreferredSize(new Dimension(50, 25));
-        allValidated.addActionListener(this);
-        allValidated.setActionCommand("allValidated");
-        panele3.add(allValidated, ce1);
+        allValidatedTepe = new JButton(IconManager.imgic50);
+        allValidatedTepe.setPreferredSize(new Dimension(50, 25));
+        allValidatedTepe.addActionListener(this);
+        allValidatedTepe.setActionCommand("allValidatedTepe");
+        panele3Tepe.add(allValidatedTepe, ce1);
         
-        addOneValidated = new JButton(IconManager.imgic48);
-        addOneValidated.setPreferredSize(new Dimension(50, 25));
-        addOneValidated.addActionListener(this);
-        addOneValidated.setActionCommand("addOneValidated");
-        panele3.add(addOneValidated, ce1);
+        addOneValidatedTepe = new JButton(IconManager.imgic48);
+        addOneValidatedTepe.setPreferredSize(new Dimension(50, 25));
+        addOneValidatedTepe.addActionListener(this);
+        addOneValidatedTepe.setActionCommand("addOneValidatedTepe");
+        panele3Tepe.add(addOneValidatedTepe, ce1);
         
-        panele3.add(new JLabel(" "), ce1);
+        panele3Tepe.add(new JLabel(" "), ce1);
         
-        addOneIgnored = new JButton(IconManager.imgic46);
-        addOneIgnored.addActionListener(this);
-        addOneIgnored.setPreferredSize(new Dimension(50, 25));
-        addOneIgnored.setActionCommand("addOneIgnored");
-        panele3.add(addOneIgnored, ce1);
+        addOneIgnoredTepe = new JButton(IconManager.imgic46);
+        addOneIgnoredTepe.addActionListener(this);
+        addOneIgnoredTepe.setPreferredSize(new Dimension(50, 25));
+        addOneIgnoredTepe.setActionCommand("addOneIgnoredTepe");
+        panele3Tepe.add(addOneIgnoredTepe, ce1);
         
-        allIgnored = new JButton(IconManager.imgic44);
-        allIgnored.addActionListener(this);
-        allIgnored.setPreferredSize(new Dimension(50, 25));
-        allIgnored.setActionCommand("allIgnored");
-        panele3.add(allIgnored, ce1);
+        allIgnoredTepe = new JButton(IconManager.imgic44);
+        allIgnoredTepe.addActionListener(this);
+        allIgnoredTepe.setPreferredSize(new Dimension(50, 25));
+        allIgnoredTepe.setActionCommand("allIgnoredTepe");
+        panele3Tepe.add(allIgnoredTepe, ce1);
 		
 		
-		panele4 = new JPanel();
-		panele4.setLayout(new BorderLayout());
-		panele4.add(panele1, BorderLayout.WEST);
-		panele4.add(panele2, BorderLayout.EAST);
-		panele4.add(panele3, BorderLayout.CENTER);
+		panele4Tepe = new JPanel();
+		panele4Tepe.setLayout(new BorderLayout());
+		panele4Tepe.add(panele1Tepe, BorderLayout.WEST);
+		panele4Tepe.add(panele2Tepe, BorderLayout.EAST);
+		panele4Tepe.add(panele3Tepe, BorderLayout.CENTER);
 		
-		jp01.add(panele4, c01);
+		jp01.add(panele4Tepe, c01);
         jp1.add("Generate code", jp01);
         
         // Panel 02
@@ -463,14 +480,14 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
-        } else if (command.equals("addOneIgnored")) {
-            addOneIgnored();
-        } else if (command.equals("addOneValidated")) {
-            addOneValidated();
-        } else if (command.equals("allValidated")) {
-            allValidated();
-        } else if (command.equals("allIgnored")) {
-            allIgnored();
+        } else if (command.equals("addOneIgnoredTepe")) {
+            addOneIgnoredTepe();
+        } else if (command.equals("addOneValidatedTepe")) {
+            addOneValidatedTepe();
+        } else if (command.equals("allValidatedTepe")) {
+            allValidatedTepe();
+        } else if (command.equals("allIgnoredTepe")) {
+            allIgnoredTepe();
         } else if (evt.getSource() == versionSimulator) {
 			selectedItem = versionSimulator.getSelectedIndex();
 		}
@@ -594,7 +611,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 						if (mgui.gtm.getArtificialTMLMapping() == null) {
 							tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
 						} else {
-							System.out.println("Using artifical mapping");
+							TraceManager.addDev("Using artifical mapping");
 							tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
 						}
 					} else {
@@ -617,7 +634,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					
 					// Making EBRDDs
 					ArrayList<EBRDD> al = new ArrayList<EBRDD>();
-					EBRDDTranslator ebrddt;
+					ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
+					/*EBRDDTranslator ebrddt;
 					EBRDDPanel ep;
 					EBRDD ebrdd;
 					
@@ -634,18 +652,18 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 							jta.append("No Syntax error: EBRDD taken into account\n\n");
 							al.add(ebrdd);
 						}
-					}
+					}*/
 					
 					// Generating code
 					if (mgui.gtm.getTMLMapping() == null) {
 						if (mgui.gtm.getArtificialTMLMapping() == null) {
-							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al);
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
 						} else {
-							System.out.println("Using artifical mapping");
-							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al);
+							TraceManager.addDev("Using artifical mapping");
+							tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
 						}
 					} else {
-						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al);
+						tml2systc = new tmltranslator.tomappingsystemc2.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
 					}
 					tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
 					testGo();
@@ -798,95 +816,95 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 	
 	private void setList() {
-        int i1 = listIgnored.getSelectedIndex();
-        int i2 = listValidated.getSelectedIndex();
+        int i1 = listIgnoredTepe.getSelectedIndex();
+        int i2 = listValidatedTepe.getSelectedIndex();
         
         if (i1 == -1) {
-            addOneValidated.setEnabled(false);
+            addOneValidatedTepe.setEnabled(false);
         } else {
-            addOneValidated.setEnabled(true);
+            addOneValidatedTepe.setEnabled(true);
             //listValidated.clearSelection();
         }
         
         if (i2 == -1) {
-            addOneIgnored.setEnabled(false);
+            addOneIgnoredTepe.setEnabled(false);
         } else {
-            addOneIgnored.setEnabled(true);
+            addOneIgnoredTepe.setEnabled(true);
             //listIgnored.clearSelection();
         }
         
-        if (ign.size() ==0) {
-            allValidated.setEnabled(false);
+        if (ignTepe.size() ==0) {
+            allValidatedTepe.setEnabled(false);
         } else {
-            allValidated.setEnabled(true);
+            allValidatedTepe.setEnabled(true);
         }
         
-        if (val.size() ==0) {
-            allIgnored.setEnabled(false);
+        if (valTepe.size() ==0) {
+            allIgnoredTepe.setEnabled(false);
         } else {
-            allIgnored.setEnabled(true);
+            allIgnoredTepe.setEnabled(true);
         }
     }
 	
-	private void addOneIgnored() {
-        int [] list = listValidated.getSelectedIndices();
+	private void addOneIgnoredTepe() {
+        int [] list = listValidatedTepe.getSelectedIndices();
         Vector v = new Vector();
         Object o;
         for (int i=0; i<list.length; i++){
-            o = val.elementAt(list[i]);
-            ign.addElement(o);
+            o = valTepe.elementAt(list[i]);
+            ignTepe.addElement(o);
             v.addElement(o);
         }
         
-        val.removeAll(v);
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+        valTepe.removeAll(v);
+        listIgnoredTepe.setListData(ignTepe);
+        listValidatedTepe.setListData(valTepe);
         setList();
     }
     
-    private void addOneValidated() {
-        int [] list = listIgnored.getSelectedIndices();
+    private void addOneValidatedTepe() {
+        int [] list = listIgnoredTepe.getSelectedIndices();
         Vector v = new Vector();
         Object o;
         for (int i=0; i<list.length; i++){
-            o = ign.elementAt(list[i]);
-            val.addElement(o);
+            o = ignTepe.elementAt(list[i]);
+            valTepe.addElement(o);
             v.addElement(o);
         }
         
-        ign.removeAll(v);
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+        ignTepe.removeAll(v);
+        listIgnoredTepe.setListData(ignTepe);
+        listValidatedTepe.setListData(valTepe);
         setList();
     }
     
-    private void allValidated() {
-        val.addAll(ign);
-        ign.removeAllElements();
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+    private void allValidatedTepe() {
+        valTepe.addAll(ignTepe);
+        ignTepe.removeAllElements();
+        listIgnoredTepe.setListData(ignTepe);
+        listValidatedTepe.setListData(valTepe);
         setList();
     }
     
-    private void allIgnored() {
-        ign.addAll(val);
-        val.removeAllElements();
-        listIgnored.setListData(ign);
-        listValidated.setListData(val);
+    private void allIgnoredTepe() {
+        ignTepe.addAll(valTepe);
+        valTepe.removeAllElements();
+        listIgnoredTepe.setListData(ignTepe);
+        listValidatedTepe.setListData(valTepe);
         setList();
     }
 	
 	private void updateStaticList() {
-		validated = new Vector();
-		ignored = new Vector();
+		validatedTepe = new Vector();
+		ignoredTepe = new Vector();
 		int i;
 		
-		for(i=0; i<ign.size(); i++) {
-			ignored.add(ign.get(i));
+		for(i=0; i<ignTepe.size(); i++) {
+			ignoredTepe.add(ignTepe.get(i));
 		}
 		
-		for(i=0;i<val.size(); i++) {
-			validated.add(val.get(i));
+		for(i=0;i<valTepe.size(); i++) {
+			validatedTepe.add(valTepe.get(i));
 		}
 	}
 }

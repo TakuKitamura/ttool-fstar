@@ -976,7 +976,7 @@ public class AvatarDesignPanelTranslator {
 								s = modifyString(s.trim());
 								// Variable assignation or method call?
 								
-								TraceManager.addDev("IsAVariable Assignation: " + s + " -> " + isAVariableAssignation(s));
+								//TraceManager.addDev("IsAVariable Assignation: " + s + " -> " + isAVariableAssignation(s));
 								
 								if (!isAVariableAssignation(s)) {
 									// Method call
@@ -1068,7 +1068,7 @@ public class AvatarDesignPanelTranslator {
 				block1 = port.getAvatarBDBlock1();
 				block2 = port.getAvatarBDBlock2();
 				
-				TraceManager.addDev("Searching block with name " + block1.getBlockName());
+				//TraceManager.addDev("Searching block with name " + block1.getBlockName());
 				b1 = _as.getBlockWithName(block1.getBlockName());
 				b2 = _as.getBlockWithName(block2.getBlockName());
 				
@@ -1082,7 +1082,7 @@ public class AvatarDesignPanelTranslator {
 					for(i=0; i<l1.size(); i++) {
 						name1 = AvatarSignal.getSignalNameFromFullSignalString(l1.get(i));
 						name2 = AvatarSignal.getSignalNameFromFullSignalString(l2.get(i));
-						TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
+						//TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
 						atas1 = b1.getAvatarSignalWithName(name1);
 						atas2 = b2.getAvatarSignalWithName(name2);
 						if ((atas1 != null) && (atas2 != null)) {
@@ -1139,7 +1139,7 @@ public class AvatarDesignPanelTranslator {
 			return _input;
 		}
 		
-		TraceManager.addDev("-> -> Analyzing method call " + s);
+		//TraceManager.addDev("-> -> Analyzing method call " + s);
 		TAttribute ta, tatmp; 
 		
 		String [] actions = s.split(",");
@@ -1198,7 +1198,7 @@ public class AvatarDesignPanelTranslator {
 			}
 		}
 		
-		TraceManager.addDev("-> -> Returning method call " + s);
+		//TraceManager.addDev("-> -> Returning method call " + s);
 		
 		return s;
 	}
@@ -1219,7 +1219,7 @@ public class AvatarDesignPanelTranslator {
 		
 		tmp = tmp.substring(0, index);
 		
-		TraceManager.addDev("rest= >" + tmp + "<");
+		//TraceManager.addDev("rest= >" + tmp + "<");
 		int length = tmp.length();
 		tmp = tmp.trim();
 		if (tmp.length() != length) {

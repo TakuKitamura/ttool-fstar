@@ -103,6 +103,7 @@ public class AvatarSpecification extends AvatarElement {
 	}
 	
 	public String toString() {
+		//Thread.currentThread().dumpStack();
 		StringBuffer sb = new StringBuffer("Blocks:\n");
 		for(AvatarBlock block: blocks) {
 			sb.append("*** " + block.toString()+"\n");

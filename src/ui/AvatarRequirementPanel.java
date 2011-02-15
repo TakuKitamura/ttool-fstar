@@ -190,13 +190,13 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         return true;
     }*/
 	
-	/*public void addAllEBRDDPanels(ArrayList<EBRDDPanel> _al) {
+	public void addAllAvatarPDPanels(ArrayList<AvatarPDPanel> _al) {
 		for(int i=0; i<panels.size(); i++) {
-			if (panelAt(i) instanceof EBRDDPanel) {
-				_al.add(((EBRDDPanel)panelAt(i)));
+			if (panelAt(i) instanceof AvatarPDPanel) {
+				_al.add(((AvatarPDPanel)panelAt(i)));
 			}
 		}
-	}*/
+	}
     
 
 }

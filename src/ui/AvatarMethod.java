@@ -89,7 +89,7 @@ public class AvatarMethod {
 	// Returns null in case the method is not valid
 	public static AvatarMethod isAValidMethod(String _method) {
 		
-		TraceManager.addDev("Is a valid method? " + _method);
+		//TraceManager.addDev("Is a valid method? " + _method);
 		
 		String method, tmp, id;
 		String rt = ""; 
@@ -117,8 +117,8 @@ public class AvatarMethod {
 					TraceManager.addDev("Unvalid type: " + rt);
 					return null;
 				} 
-				TraceManager.addDev("Found a return type: " + rt);
-				TraceManager.addDev("Now working with method: " + method);
+				//TraceManager.addDev("Found a return type: " + rt);
+				//TraceManager.addDev("Now working with method: " + method);
 			}
 		}
 		
@@ -218,7 +218,7 @@ public class AvatarMethod {
 					TraceManager.addDev("Unvalid id of parameter " + splitted[i+1]);
 					return null;
 				} 
-				TraceManager.addDev("Adding parameter: " + splitted[i] + " " + splitted[i+1]);
+				//TraceManager.addDev("Adding parameter: " + splitted[i] + " " + splitted[i+1]);
 				types[i/2] = splitted[i];
 				typeIds[i/2] = splitted[i+1];
 			}
@@ -227,7 +227,7 @@ public class AvatarMethod {
 			return null;
 		}
 		
-		TraceManager.addDev("Returning method");
+		//TraceManager.addDev("Returning method");
 		
 		return new AvatarMethod(id, types, typeIds, rt);
 	}

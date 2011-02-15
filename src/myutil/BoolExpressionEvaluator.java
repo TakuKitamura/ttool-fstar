@@ -96,7 +96,9 @@ public class BoolExpressionEvaluator {
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|",true);
+		//TraceManager.addDev("Computing:" + _expr);
+		
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|<>",true);
 		
 		computeNextToken();
 		int result =  (int)(parseExpression());
@@ -234,17 +236,8 @@ public class BoolExpressionEvaluator {
 				if (errorMessage != null) return result;
 				
 				resulttmp = parseRootexp();
-				//intresult = (int)(resulttmp);
-				//intresult2 = (int)(result);
 				
 				if (errorMessage != null) return result;
-				
-				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
-					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
-				}
-				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
-					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
-				}*/
 				
 				if (result < resulttmp) {
 					return TRUE_VALUE;
@@ -257,17 +250,8 @@ public class BoolExpressionEvaluator {
 				if (errorMessage != null) return result;
 				
 				resulttmp = parseRootexp();
-				//intresult = (int)(resulttmp);
-				//intresult2 = (int)(result);
 				
 				if (errorMessage != null) return result;
-				
-				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
-					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
-				}
-				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
-					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
-				}*/
 				
 				if (result > resulttmp) {
 					return TRUE_VALUE;

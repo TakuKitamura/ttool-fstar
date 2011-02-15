@@ -195,7 +195,7 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		setMode(TERMINATED);
-		//TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
+		TraceManager.addDev("Simulation finished at time: " + clockValue + "\n--------------------------------------");
 		
 		//printExecutedTransactions();
 	}
@@ -258,11 +258,11 @@ public class AvatarSpecificationSimulation  {
 				}
 			}
 			pendingTransactions = ll;
-			TraceManager.addDev("At least on logical transition");
+			//TraceManager.addDev("At least on logical transition");
 			return;
 		}
 		
-		TraceManager.addDev("No logical transition -> temporal transitions?");
+		//TraceManager.addDev("No logical transition -> temporal transitions?");
 		// Resolving time constraints
 		int indexMin = -1;
 		int minMin = Integer.MAX_VALUE;
@@ -274,11 +274,11 @@ public class AvatarSpecificationSimulation  {
 				if (aspt.myMinDuration < minMin) {
 					minMin = aspt.myMinDuration;
 					indexMin = ll.size();
-					TraceManager.addDev("Setting min duration = " +  minMin);
+					//TraceManager.addDev("Setting min duration = " +  minMin);
 				}
 				if (aspt.myMaxDuration < maxDuration) {
 					maxDuration = aspt.myMaxDuration;
-					TraceManager.addDev("Setting max Duration = " +  maxDuration);
+					//TraceManager.addDev("Setting max Duration = " +  maxDuration);
 				}
 			}
 			ll.add(aspt);
@@ -290,12 +290,12 @@ public class AvatarSpecificationSimulation  {
 		
 		// Temporal transitions
 		if ((pendingTransactions.size() > 0) && (indexMin > -1)) {
-			TraceManager.addDev("At least one temporal trans");
+			//TraceManager.addDev("At least one temporal trans");
 			// Must compute the min index, and the max duration
 			// We put in ll all transactions that are between the min and the max of the selected index
 			AvatarSimulationPendingTransaction aspt_tmp = pendingTransactions.get(indexMin);
 			for(AvatarSimulationPendingTransaction 	aspt1: pendingTransactions) {
-				TraceManager.addDev("aspt1 min=" + aspt1.myMinDuration + " max autre=" + aspt_tmp.myMaxDuration);
+				//TraceManager.addDev("aspt1 min=" + aspt1.myMinDuration + " max autre=" + aspt_tmp.myMaxDuration);
 				if (aspt1.myMinDuration <= aspt_tmp.myMaxDuration) {
 					ll.add(aspt1);
 					aspt1.maxDuration = maxDuration;
@@ -501,7 +501,7 @@ public class AvatarSpecificationSimulation  {
 			if (_aspt.linkedTransaction != null) {
 				if (_aspt.durationOnCurrent) {
 					_aspt.selectedDuration = _aspt.myMinDuration + (int)(Math.floor(Math.random()*(_aspt.maxDuration-_aspt.myMinDuration)));
-					TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
+					//TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
 					if (_aspt.durationOnOther) {
 						_aspt.linkedTransaction.durationSelected = true;
 						_aspt.linkedTransaction.selectedDuration = _aspt.selectedDuration;
@@ -511,7 +511,7 @@ public class AvatarSpecificationSimulation  {
 				}
 			} else {
 				_aspt.selectedDuration = _aspt.myMinDuration + (int)(Math.floor(Math.random()*(_aspt.maxDuration-_aspt.myMinDuration)));
-				TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
+				//TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
 			}
 		}
 	}

@@ -3621,9 +3621,9 @@ public class GTURTLEModeling {
 		makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tdp);
 		//TraceManager.addDev("Subcomponents");
 		makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tdp);
-		TraceManager.addDev("RealPoints");
+		//TraceManager.addDev("RealPoints");
 		connectConnectorsToRealPoints(tdp);
-		TraceManager.addDev("Structure changed");
+		//TraceManager.addDev("Structure changed");
 		tdp.structureChanged();
 		//TraceManager.addDev("Post loading");
 		makePostLoading(tdp, 0);
@@ -3678,7 +3678,7 @@ public class GTURTLEModeling {
 		String name;
 
 		name = elt.getAttribute("name");
-		TraceManager.addDev("Loading SMD of:" + name);
+		//TraceManager.addDev("Loading SMD of:" + name);
 		AvatarSMDPanel asmdp = mgui.getAvatarSMDPanel(indexDesign, name);
 
 		if (asmdp == null) {

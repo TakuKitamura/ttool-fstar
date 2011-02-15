@@ -122,7 +122,7 @@ public class AvatarStateMachine extends AvatarElement {
 			removeElement(asme);
 		}
 		
-		TraceManager.addDev(_block.toString());
+		//TraceManager.addDev(_block.toString());
 		
 		removeAllSuperStates();
 	}

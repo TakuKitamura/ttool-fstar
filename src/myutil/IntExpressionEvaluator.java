@@ -74,6 +74,7 @@ public class IntExpressionEvaluator {
    }
    
    public double getResultOf(String _expr) {
+	   //TraceManager.addDev("Computing:" + _expr);
 	   tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
 	   
 	   computeNextToken();
@@ -239,7 +240,6 @@ public class IntExpressionEvaluator {
         try {
           currentValue = Integer.valueOf(s).intValue();
           currentType = NUMBER_TOKEN;
-		  System.out.println("value:" + s);
         }
         catch (NumberFormatException x) {
           errorMessage = "Illegal format for a number.";

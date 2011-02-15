@@ -563,7 +563,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 			int index;
 			for(int i=0; i<v.size(); i++) {
 				assoc = (String)(v.get(i));
-				TraceManager.addDev("assoc=" + assoc);
+				//TraceManager.addDev("assoc=" + assoc);
 				as1 = block1.getSignalNameBySignalDef(getFirstSignalOfSignalAssociation(assoc));
 				as2 = block2.getSignalNameBySignalDef(getSecondSignalOfSignalAssociation(assoc));
 				
@@ -577,7 +577,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 						outSignalsAtDestination.add(as2.toString());
 					}
 				} else {
-					TraceManager.addDev("null signals: removing assoc");
+					//TraceManager.addDev("null signals: removing assoc");
 				}
 			}
 		} catch (Exception e) {

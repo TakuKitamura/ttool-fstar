@@ -389,7 +389,7 @@ public class AvatarSimulationBlock  {
 							}
 							_aspt.linkedTransaction.parameters = parameters;
 						} else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
-							TraceManager.addDev("Reading value " + aaos);
+							//TraceManager.addDev("Reading value " + aaos);
 							// Synchronous Receiving
 							String myAction = "";
 							for(i=0; i<aaos.getNbOfValues(); i++) {
@@ -461,7 +461,7 @@ public class AvatarSimulationBlock  {
 								if (index != -1) {
 									attributeValues.remove(index);
 									attributeValues.add(index, param);
-									TraceManager.addDev("Reading value:" + param);
+									//TraceManager.addDev("Reading value:" + param);
 									if (myAction.length() == 0) {
 										myAction += "" + param;
 									} else {
@@ -526,7 +526,7 @@ public class AvatarSimulationBlock  {
 				s = params[i].trim();
 				if (s.length() > 0) {
 					indexAtt = block.getIndexOfAvatarAttributeWithName(s);
-					TraceManager.addDev("indexAtt=" + indexAtt + " s=" + s);
+					//TraceManager.addDev("indexAtt=" + indexAtt + " s=" + s);
 					if (indexAtt > -1) {
 						if (cpt>0) {
 							parameters += ", ";
@@ -550,12 +550,12 @@ public class AvatarSimulationBlock  {
 		nameOfVar= _action.substring(0, ind).trim();
 		act = _action.substring(ind+1, _action.length());
 		
-		TraceManager.addDev("1- Working on attribute =" + nameOfVar + " action=" + _action);
+		//TraceManager.addDev("1- Working on attribute =" + nameOfVar + " action=" + _action);
 		
 		
 		
 		// Variable
-		TraceManager.addDev("2- Working on attribute =" + nameOfVar);
+		//TraceManager.addDev("2- Working on attribute =" + nameOfVar);
 		int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
 		if (indexVar != -1) {
 			// int or bool???

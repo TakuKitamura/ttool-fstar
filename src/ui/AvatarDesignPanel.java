@@ -165,9 +165,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
     }
 	
 	public void resetMetElements() {
-		TraceManager.addDev("Reset met elements");
+		//TraceManager.addDev("Reset met elements");
 		TGComponent tgc;
-		
 		
 		for(int i=0; i<panels.size(); i++) {
 			ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();

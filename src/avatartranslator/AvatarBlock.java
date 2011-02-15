@@ -108,6 +108,7 @@ public class AvatarBlock extends AvatarElement {
 	}
 	
 	public String toString() {
+		//Thread.currentThread().dumpStack();
 		StringBuffer sb = new StringBuffer("block:" + getName() + " ID=" + getID() + " \n");
 		if (getFather() != null) {
 			sb.append("  subblock of: " + getFather().getName() + " ID=" + getFather().getID()+ "\n"); 
@@ -214,20 +215,20 @@ public class AvatarBlock extends AvatarElement {
 	public boolean isAValidMethodCall(String _s) {
 		int i;
 		
-		TraceManager.addDev("****** method=" + _s);
+		//TraceManager.addDev("****** method=" + _s);
 		String all = _s;
 		
 		int indexeq = _s.indexOf('=');
 		
 		if (indexeq != -1) {
 			_s = _s.substring(indexeq + 1, _s.length()).trim();
-			TraceManager.addDev("****** cut method: " + _s);
+			//TraceManager.addDev("****** cut method: " + _s);
 		}
 		
 		int index0 = _s.indexOf("(");
 		int index1 = _s.indexOf(")");
 		if ((index0 == -1) || (index1 == -1) || (index1 < index0)) {
-			TraceManager.addDev("No parenthesis");
+			//TraceManager.addDev("No parenthesis");
 			return false;
 		}
 		
@@ -235,12 +236,12 @@ public class AvatarBlock extends AvatarElement {
 		
 		AvatarMethod am = getAvatarMethodWithName(method);
 		if (am == null) {
-			TraceManager.addDev("Method not found");
+			//TraceManager.addDev("Method not found");
 			return false;
 		}
 		
 		String params = _s.substring(index0+1, index1).trim();
-		TraceManager.addDev("params=" + params);
+		//TraceManager.addDev("params=" + params);
 		if (params.length() == 0) {
 			if (am.getListOfAttributes().size() == 0) {
 				return true;
@@ -248,7 +249,7 @@ public class AvatarBlock extends AvatarElement {
 				return false;
 			}
 		}
-		TraceManager.addDev("params=" + params);
+		//TraceManager.addDev("params=" + params);
 		String [] actions = params.split(",");
 		if (am.getListOfAttributes().size() != actions.length) {
 			return false;
@@ -256,23 +257,23 @@ public class AvatarBlock extends AvatarElement {
 		
 		AvatarAttribute aa;
 		for(i=0; i<actions.length; i++) {
-			TraceManager.addDev("params=" + params +  " actions=" + actions[i]);
+			//TraceManager.addDev("params=" + params +  " actions=" + actions[i]);
 			aa = getAvatarAttributeWithName(actions[i].trim());
 			if (aa == null) {
-				TraceManager.addDev("Failed for attribute " + actions[i]);
+				//TraceManager.addDev("Failed for attribute " + actions[i]);
 				return false;
 			}
 		}
 		
 		// Checking for return attributes
 		if (indexeq != -1) {
-			TraceManager.addDev("Checking for return params");
+			//TraceManager.addDev("Checking for return params");
 			String retparams = all.substring(0, indexeq).trim();
 			
 			// multiple params
 			if (retparams.charAt(0) == '(') {
 				if (retparams.charAt(retparams.length()-1) != ')') {
-					TraceManager.addDev("Bad format for return params: " + retparams);
+					//TraceManager.addDev("Bad format for return params: " + retparams);
 					return false;
 				}
 				
@@ -283,10 +284,10 @@ public class AvatarBlock extends AvatarElement {
 				}
 				
 				for(i=0; i<actions.length; i++) {
-					TraceManager.addDev("params=" + retparams +  " actions=" + actions[i]);
+					//TraceManager.addDev("params=" + retparams +  " actions=" + actions[i]);
 					aa = getAvatarAttributeWithName(actions[i].trim());
 					if (aa == null) {
-						TraceManager.addDev("Failed for attribute " + actions[i]);
+						//TraceManager.addDev("Failed for attribute " + actions[i]);
 						return false;
 					}
 				}
@@ -295,18 +296,18 @@ public class AvatarBlock extends AvatarElement {
 				// Only one param.
 				aa = getAvatarAttributeWithName(retparams);
 				if (aa == null) {
-					TraceManager.addDev("Failed for return attribute " + retparams);
+					//TraceManager.addDev("Failed for return attribute " + retparams);
 					return false;
 				}
 				
 				if (am.getListOfReturnAttributes().size() != 1) {
-					TraceManager.addDev("Wrong number of return parameters in :" + retparams);
+					//TraceManager.addDev("Wrong number of return parameters in :" + retparams);
 					return false;
 				}
 			}
 			
 		}
-		TraceManager.addDev("Ok for method " + _s);
+		//TraceManager.addDev("Ok for method " + _s);
 		
 		return true;
 		
