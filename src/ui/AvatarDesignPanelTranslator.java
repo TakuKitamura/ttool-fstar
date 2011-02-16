@@ -476,7 +476,7 @@ public class AvatarDesignPanelTranslator {
 			return ;
 		}
 		
-		TraceManager.addDev("Found: " + ta.getId());
+		//TraceManager.addDev("Found: " + ta.getId());
 		
 		AvatarAttribute aa;
 		Vector v = new Vector();
@@ -493,7 +493,7 @@ public class AvatarDesignPanelTranslator {
 			v.add(_name);
 		}
 		
-		TraceManager.addDev("Size of vector:" + v.size());
+		//TraceManager.addDev("Size of vector:" + v.size());
 		for(i=0; i<v.size(); i++) {
 			aa = _ab.getAvatarAttributeWithName((String)(v.get(i)));
 			if (aa == null) {
@@ -654,6 +654,31 @@ public class AvatarDesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							addCheckingError(ce);
 						}
+						
+						// Checking expressions passed as parameter
+						for(i=0; i<aaos.getNbOfValues(); i++) {
+							String theVal = aaos.getValue(i);
+							if (atas.getListOfAttributes().get(i).isInt()) {
+								if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								}
+							} else {
+								// We assume it is a bool attribute
+								if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								}
+							}
+						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
 						listE.addCor(aaos, tgc);
 						tgc.setAVATARID(aaos.getID());
@@ -703,13 +728,39 @@ public class AvatarDesignPanelTranslator {
 							}
 						}
 						if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
 							TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
 							ce.setAvatarBlock(_ab);
 							ce.setTDiagramPanel(tdp);
 							ce.setTGComponent(tgc);
 							addCheckingError(ce);
 						}
+						
+						// Checking expressions passed as parameter
+						for(i=0; i<aaos.getNbOfValues(); i++) {
+							String theVal = aaos.getValue(i);
+							if (atas.getListOfAttributes().get(i).isInt()) {
+								if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								}
+							} else {
+								// We assume it is a bool attribute
+								if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								}
+							}
+						}
+						
 						// Check that tmp is the identifier of an attribute
 						/*aa = _ab.getAvatarAttributeWithName(tmp);
 						if (aa == null) {

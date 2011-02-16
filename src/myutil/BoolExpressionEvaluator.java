@@ -62,8 +62,10 @@ public class BoolExpressionEvaluator {
 	public static final int GT_TOKEN = -5;
 	public static final int NEG_TOKEN = -6;
 	public static final int OR_TOKEN = -6;
-	public static final int AND_TOKEN = -6;
-	public static final int EOLN_TOKEN = -7;
+	public static final int AND_TOKEN = -7;
+	public static final int LTEQ_TOKEN = -8;
+	public static final int GTEQ_TOKEN = -9;
+	public static final int EOLN_TOKEN = -10;
 	
 	private StringTokenizer tokens;
 	private String errorMessage = null;
@@ -95,6 +97,8 @@ public class BoolExpressionEvaluator {
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
+		_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
+		_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 		
 		//TraceManager.addDev("Computing:" + _expr);
 		
@@ -111,7 +115,9 @@ public class BoolExpressionEvaluator {
 			return false;
 		}
 		
-		errorMessage = "Not a boolean expression";
+		errorMessage = "Not a boolean expression: " + _expr;
+		
+		
 		
 		return false;
 	}
@@ -254,6 +260,34 @@ public class BoolExpressionEvaluator {
 				if (errorMessage != null) return result;
 				
 				if (result > resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == GTEQ_TOKEN) {
+				match(GTEQ_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				
+				if (errorMessage != null) return result;
+				
+				if (result >= resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			} else if (currentType == LTEQ_TOKEN) {
+				match(LTEQ_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				
+				if (errorMessage != null) return result;
+				
+				if (result <= resulttmp) {
 					return TRUE_VALUE;
 				} else {
 					return FALSE_VALUE;
@@ -449,6 +483,20 @@ public class BoolExpressionEvaluator {
 			if (s.compareTo(">") == 0) {
 				currentValue = 0;
 				currentType = GT_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo(":") == 0) {
+				currentValue = 0;
+				currentType = GTEQ_TOKEN;
+				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo("<") == 0) {
+				currentValue = 0;
+				currentType = LTEQ_TOKEN;
 				//TraceManager.addDev("equal token!");
 				return;
 			}

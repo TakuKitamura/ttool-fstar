@@ -73,6 +73,13 @@ public class AvatarSyntaxChecker  {
 		return parse(_as, _ab, "actionnat", _expr);
 	}
 	
+	public static int isAValidBoolExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
+		if (_expr.trim().length() == 0) {
+			return 0;
+		}
+		return parse(_as, _ab, "actionbool", _expr);
+	}
+	
 	public static int isAValidVariableExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
 		int index0 = _expr.indexOf("=");
 		if (index0 == -1) {
@@ -139,7 +146,7 @@ public class AvatarSyntaxChecker  {
 		}
 		
 		for(i=0; i<_ab.attributeNb(); i++) {
-			modif = _as.putAttributeValueInString(modif, _ab.getAttribute(i));
+			modif = AvatarSpecification.putAttributeValueInString(modif, _ab.getAttribute(i));
 		}
 		
 		parser = new TMLExprParser(new StringReader(_parseCmd + " " + modif));
@@ -150,7 +157,7 @@ public class AvatarSyntaxChecker  {
 			//System.out.println("Parse ok");
 		} catch (ParseException e) {
 			TraceManager.addDev("\nAvatar Parsing :" + _parseCmd + " " + modif);
-			TraceManager.addDev("\nn(Original parsing :" + _parseCmd + " " + _action);
+			TraceManager.addDev("\n(Original parsing :" + _parseCmd + " " + _action + ")");
 			TraceManager.addDev("ParseException --------> Parse error in :" + _parseCmd + " " + _action);
 			return -2;
 		} catch (TokenMgrError tke ) {

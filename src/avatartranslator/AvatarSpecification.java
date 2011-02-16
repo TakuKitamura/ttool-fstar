@@ -131,11 +131,11 @@ public class AvatarSpecification extends AvatarElement {
 		return null;
 	}
 	
-	public String putAttributeValueInString(String _source, AvatarAttribute _at) {
+	public static String putAttributeValueInString(String _source, AvatarAttribute _at) {
 		return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
 	}
 	
-	public String putRealAttributeValueInString(String _source, AvatarAttribute _at) {
+	public static String putRealAttributeValueInString(String _source, AvatarAttribute _at) {
 		return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getInitialValue());
 	}
 	

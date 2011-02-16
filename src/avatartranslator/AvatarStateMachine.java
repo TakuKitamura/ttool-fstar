@@ -448,7 +448,7 @@ public class AvatarStateMachine extends AvatarElement {
 	
 	public void replace(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
 		
-		TraceManager.addDev("Replacing " + oldone + " with " + newone);
+		//TraceManager.addDev("Replacing " + oldone + " with " + newone);
 		
 		addElement(newone);
 		removeElement(oldone);

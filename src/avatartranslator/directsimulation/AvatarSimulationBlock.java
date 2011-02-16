@@ -617,6 +617,11 @@ public class AvatarSimulationBlock  {
 		}
 		
 		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+		
+		if (act.trim().startsWith("100")) {
+			TraceManager.addDev("Current block " + this.getBlock().getName() + " lastTransaction=" + lastTransaction);
+		}
+		
 		boolean result = bee.getResultOf(act);
 		if (bee.getError() != null) {
 			TraceManager.addDev("Error: " + bee.getError());

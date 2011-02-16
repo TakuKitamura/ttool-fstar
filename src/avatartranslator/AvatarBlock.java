@@ -258,11 +258,24 @@ public class AvatarBlock extends AvatarElement {
 		AvatarAttribute aa;
 		for(i=0; i<actions.length; i++) {
 			//TraceManager.addDev("params=" + params +  " actions=" + actions[i]);
-			aa = getAvatarAttributeWithName(actions[i].trim());
+			// Must check tha validity of this action
+			
+			if (am.getListOfAttributes().get(i).isInt()) {
+				if (AvatarSyntaxChecker.isAValidIntExpr(null, this, actions[i].trim()) < 0) {
+					return false;
+				}
+			} else {
+				// Assume it is a bool attribute
+				if (AvatarSyntaxChecker.isAValidBoolExpr(null, this, actions[i].trim()) < 0) {
+					return false;
+				}
+			}
+			
+			/*aa = getAvatarAttributeWithName(actions[i].trim());
 			if (aa == null) {
 				//TraceManager.addDev("Failed for attribute " + actions[i]);
 				return false;
-			}
+			}*/
 		}
 		
 		// Checking for return attributes
