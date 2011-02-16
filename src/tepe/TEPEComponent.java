@@ -49,12 +49,25 @@ import java.util.*;
 
 import myutil.*;
 
-public class TEPEComponent  {
+public abstract class TEPEComponent  {
 	private static int ID = 0;
 	
-    private String name;
-	private Object referenceObject;
+    protected String name;
+	protected Object referenceObject;
 	private int id;
+	
+	protected String value;
+	
+	protected Vector <TEPEComponent> inAttributeComponents;
+	protected Vector <TEPEComponent> outAttributeComponents;
+	
+	protected Vector <TEPEComponent> inSignalComponents;
+	protected Vector <TEPEComponent> inNegatedSignalComponents;
+	protected Vector <TEPEComponent> outSignalComponents;
+	
+	protected Vector <TEPEComponent> inPropertyComponents;
+	protected Vector <TEPEComponent> inNegatedPropertyComponents;
+	protected Vector <TEPEComponent> outPropertyComponents;
     
     public TEPEComponent(String _name, Object _referenceObject) {
 		name = _name;
@@ -68,6 +81,14 @@ public class TEPEComponent  {
 		return name;
 	}
 	
+	public void setValue(String _value) {
+		value = _value;
+	}
+	
+	public String getValue() {
+		return value;
+	}
+	
 	public Object getReferenceObject() {
 		return referenceObject;
 	}
@@ -75,5 +96,40 @@ public class TEPEComponent  {
 	public static void reinitID() {
 		ID = 0;
 	}
+	
+	public boolean hasInAttributeComponents() {
+		return ((inAttributeComponents != null) && (inAttributeComponents.size()>0));
+	}
+	
+	public boolean hasOutAttributeComponents() {
+		return ((outAttributeComponents != null) && (outAttributeComponents.size()>0));
+	}
+	
+	public boolean hasInSignalComponents() {
+		return ((inSignalComponents != null) && (inSignalComponents.size()>0));
+	}
+	
+	public boolean hasInNegatedSignalComponents() {
+		return ((inNegatedSignalComponents != null) && (inNegatedSignalComponents.size()>0));
+	}
+	
+	public boolean hasOutSignalComponents() {
+		return ((outSignalComponents != null) && (outSignalComponents.size()>0));
+	}
+	
+	public boolean hasInPropertyComponents() {
+		return ((inPropertyComponents != null) && (inPropertyComponents.size()>0));
+	}
+	
+	public boolean hasInNegatedPropertyComponents() {
+		return ((inNegatedPropertyComponents != null) && (inNegatedPropertyComponents.size()>0));
+	}
+	
+	public boolean hasOutPropertyComponents() {
+		return ((outPropertyComponents != null) && (outPropertyComponents.size()>0));
+	}
+	
+	
+	
     
 }

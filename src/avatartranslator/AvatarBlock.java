@@ -397,6 +397,36 @@ public class AvatarBlock extends AvatarElement {
 		return aa;
 	}
 	
+	public boolean hasARealBehaviour() {
+		if (asm == null) {
+			return false;
+		}
+		
+		AvatarStartState ass = asm.getStartState();
+		if (ass == null) {
+			return false;
+		}
+		
+		AvatarStateMachineElement asme = ass.getNext(0);
+		
+		if (asme == null) {
+			return false;
+		}
+		
+		if (asme instanceof AvatarTransition) {
+			AvatarTransition at = (AvatarTransition)asme;
+			if (at.hasDelay() || at.hasCompute() || at.hasActions()) {
+				return true;
+			}
+			
+			if (at.getNext(0) instanceof AvatarStopState) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	
     
 }

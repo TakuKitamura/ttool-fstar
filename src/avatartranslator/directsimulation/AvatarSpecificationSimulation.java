@@ -127,8 +127,10 @@ public class AvatarSpecificationSimulation  {
 		// Create all simulation blocks
 		blocks = new Vector<AvatarSimulationBlock>();
 		for(AvatarBlock block: avspec.getListOfBlocks()) {
-			AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
-			blocks.add(asb);
+			if (block.hasARealBehaviour()) {
+				AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
+				blocks.add(asb);
+			}
 		}
 		
 		// Create all simulation asynchronous channels
