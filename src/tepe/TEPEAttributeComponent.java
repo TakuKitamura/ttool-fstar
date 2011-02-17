@@ -49,7 +49,7 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPEAttributeComponent  {
+public  class TEPEAttributeComponent  extends TEPEComponent  {
 	protected String blockName;
 	
     public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
@@ -61,6 +61,10 @@ public  class TEPEAttributeComponent  {
 	
 	public String getBlockName() {
 		return blockName;
+	}
+	
+	public String getExtraString() {
+		return "\nDeclared in block: " + blockName;
 	}
     
     

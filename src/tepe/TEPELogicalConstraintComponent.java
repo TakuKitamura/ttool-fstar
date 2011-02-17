@@ -49,7 +49,7 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPELogicalConstraintComponent  {
+public  class TEPELogicalConstraintComponent  extends TEPEComponent  {
 	
 	public static final int SEQUENCE = 0;
 	public static final int NO_SEQUENCE = 1;
@@ -68,6 +68,16 @@ public  class TEPELogicalConstraintComponent  {
 	
 	public int getType() {
 		return type;
+	}
+	
+	public String getExtraString() {
+		if (type == SEQUENCE) {
+			return "\nSequence";
+		}
+		if (type == NO_SEQUENCE) {
+			return "\nSet of signals";
+		}
+		return "Unknown type";
 	}
     
     

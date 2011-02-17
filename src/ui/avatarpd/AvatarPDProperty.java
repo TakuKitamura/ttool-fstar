@@ -353,5 +353,19 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         return value;
     }
 	
-    
+	public boolean isLiveness() {
+		return (liveness && !not);
+	}
+	
+	public boolean isNotLiveness() {
+		return (liveness && not);
+	}
+	
+	public boolean isRechability() {
+		return (!liveness && !not);
+	}
+	
+    public boolean isNotRechability() {
+		return (!liveness && not);
+	}
 }

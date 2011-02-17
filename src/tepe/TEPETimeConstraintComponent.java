@@ -49,7 +49,7 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPETimeConstraintComponent  {
+public  class TEPETimeConstraintComponent  extends TEPEComponent  {
 	
 	public static final int SEQUENCE = 0;
 	public static final int NO_SEQUENCE = 1;

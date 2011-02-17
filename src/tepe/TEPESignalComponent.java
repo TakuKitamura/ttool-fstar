@@ -49,10 +49,10 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPESignalComponent  {
+public  class TEPESignalComponent  extends TEPEComponent  {
 	protected String blockName;
 	
-    public TEPESignalComponent(String _name, Object _referenceObject String _blockName) {
+    public TEPESignalComponent(String _name, Object _referenceObject, String _blockName) {
 		super(_name, _referenceObject);
 		blockName = _blockName;
 		outSignalComponents = new Vector<TEPEComponent>();
@@ -60,5 +60,9 @@ public  class TEPESignalComponent  {
     
     public String getBlockName() {
 		return blockName;
+	}
+	
+	public String getExtraString() {
+		return "\nDeclared in block: " + blockName;
 	}
 }

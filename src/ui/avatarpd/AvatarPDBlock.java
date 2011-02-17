@@ -608,6 +608,30 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         return list;
     }
 	
+	public Vector<AvatarPDAttribute> getAllAvatarPDAttribute() {
+		Vector<AvatarPDAttribute> v = new Vector<AvatarPDAttribute>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarPDBlock) {
+				v.addAll(((AvatarPDBlock)tgcomponent[i]).getAllAvatarPDAttribute());
+            } else if (tgcomponent[i] instanceof AvatarPDAttribute) {
+				v.add((AvatarPDAttribute)tgcomponent[i]);
+			}
+        }
+		return v;
+	}
+	
+	public Vector<AvatarPDSignal> getAllAvatarPDSignal() {
+		Vector<AvatarPDSignal> v = new Vector<AvatarPDSignal>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarPDBlock) {
+				v.addAll(((AvatarPDBlock)tgcomponent[i]).getAllAvatarPDSignal());
+            } else if (tgcomponent[i] instanceof AvatarPDSignal) {
+				v.add((AvatarPDSignal)tgcomponent[i]);
+			}
+        }
+		return v;
+	}
+	
 	public boolean hasInternalBlockWithName(String name) {
 		LinkedList<AvatarPDBlock> list  = getFullBlockList();
 		for(AvatarPDBlock b: list) {

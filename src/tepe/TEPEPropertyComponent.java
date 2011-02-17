@@ -49,7 +49,7 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPEPropertyComponent  {
+public  class TEPEPropertyComponent  extends TEPEComponent  {
 	
 	public static final int LIVENESS = 0;
 	public static final int NON_LIVENESS = 1;
@@ -68,6 +68,26 @@ public  class TEPEPropertyComponent  {
 	
 	public int getType() {
 		return type;
+	}
+	
+	public String getExtraString() {
+		String ret = "\ntype:";
+		switch(type) {
+		case 0:
+			ret += "liveness";
+			break;
+		case 1:
+			ret += "non liveness";
+			break;
+		case 2:
+			ret += "reachability";
+			break;
+		case 3:
+		default:
+			ret += "non reachability";
+		}
+		
+		return ret;
 	}
     
     

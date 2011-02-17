@@ -49,7 +49,7 @@ import java.util.*;
 
 import myutil.*;
 
-public  class TEPEEquationComponent  {
+public  class TEPEEquationComponent  extends TEPEComponent   {
 	
 	
     public TEPEEquationComponent(String _name, Object _referenceObject) {

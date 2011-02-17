@@ -36,12 +36,12 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TEPEComponent
- * Creation: 15/02/2011
- * @version 1.0 15/02/2011
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TEPEComponent
+* Creation: 15/02/2011
+* @version 1.0 15/02/2011
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package tepe;
 
@@ -76,7 +76,7 @@ public abstract class TEPEComponent  {
 		ID ++;
     }
     
-   
+	
 	public String getName() {
 		return name;
 	}
@@ -91,6 +91,65 @@ public abstract class TEPEComponent  {
 	
 	public Object getReferenceObject() {
 		return referenceObject;
+	}
+	
+	public String getExtraString() {
+		return "";
+	}
+	
+	public String toString() {
+		String ret = "Component: " + name + " id: " + id + " value: " + value;
+		ret += getExtraString();
+		if (hasInAttributeComponents()) {
+			ret += "\n    in Attributes:";
+			for(TEPEComponent comp: inAttributeComponents) {
+				ret += " " + comp.getName() + "/ID=" + id;
+			}
+		}
+		if (hasOutAttributeComponents()) {
+			ret += "\n    out Attributes:";
+			for(TEPEComponent comp: outAttributeComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasInSignalComponents()) {
+			ret += "\n    in Signals:";
+			for(TEPEComponent comp: inSignalComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasInNegatedSignalComponents()) {
+			ret += "\n    in negated Signals:";
+			for(TEPEComponent comp: inNegatedSignalComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasOutSignalComponents()) {
+			ret += "\n    out Signals:";
+			for(TEPEComponent comp: outSignalComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasInPropertyComponents()) {
+			ret += "\n    in Properties:";
+			for(TEPEComponent comp: inPropertyComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasInNegatedPropertyComponents()) {
+			ret += "\n    in negated Properties:";
+			for(TEPEComponent comp: inNegatedPropertyComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		if (hasOutPropertyComponents()) {
+			ret += "\n    out Properties:";
+			for(TEPEComponent comp: outPropertyComponents) {
+				ret += " " + comp.getName();
+			}
+		}
+		
+		return ret;
 	}
 	
 	public static void reinitID() {
@@ -129,7 +188,17 @@ public abstract class TEPEComponent  {
 		return ((outPropertyComponents != null) && (outPropertyComponents.size()>0));
 	}
 	
+	public void addInAttributeComponent(TEPEComponent _tepec) {
+		if (inAttributeComponents != null) {
+			inAttributeComponents.add(_tepec);
+		}
+	}
 	
+	public void addOutAttributeComponent(TEPEComponent _tepec) {
+		if (outAttributeComponents != null) {
+			outAttributeComponents.add(_tepec);
+		}
+	}
 	
     
 }

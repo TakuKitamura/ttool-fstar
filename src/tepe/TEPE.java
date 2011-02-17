@@ -71,4 +71,13 @@ public class TEPE extends Vector<TEPEComponent> {
 		return referenceObject;
 	}
 	
+	public String toString() {
+		String ret = "TEPE model: " + name + "\n";
+		for(TEPEComponent tepec: this) {
+			ret += tepec.toString() + "\n";
+		}
+		return ret;
+		
+	}
+	
 }

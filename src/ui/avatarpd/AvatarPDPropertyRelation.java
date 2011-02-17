@@ -231,6 +231,22 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
 	public String getCurrentConstraint() {
 		return value;
 	}
+	
+	public boolean isOr() {
+		return (value.compareTo(STEREOTYPES[0]) == 0);
+	}
+	
+	public boolean isAnd() {
+		return (value.compareTo(STEREOTYPES[1]) == 0);
+	}
+	
+	public boolean isImply() {
+		return (value.compareTo(STEREOTYPES[2]) == 0);
+	}
+	
+	public boolean isEquivalent() {
+		return (value.compareTo(STEREOTYPES[3]) == 0);
+	}
   
     
 }

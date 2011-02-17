@@ -635,6 +635,16 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					// Making EBRDDs
 					ArrayList<EBRDD> al = new ArrayList<EBRDD>();
 					ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
+					TEPE tepe;
+					AvatarRequirementPanelTranslator arpt = new AvatarRequirementPanelTranslator();
+					for(int k=0; k<valTepe.size(); k++) {
+						testGo();
+						tepe = arpt.generateTEPESpecification((AvatarPDPanel)(valTepe.get(k)));
+						jta.append("TEPE: " + tepe.getName() + "\n");
+						jta.append("Checking syntax\n");
+						alTepe.add(tepe);
+						jta.append("Done.\n");
+					}
 					/*EBRDDTranslator ebrddt;
 					EBRDDPanel ep;
 					EBRDD ebrdd;
@@ -668,6 +678,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 					tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
 					testGo();
 					jta.append("SystemC code generation done\n");
+					
+					for(TEPE tep: alTepe) {
+						TraceManager.addDev(tep.toString());
+					}
 					//t2j.printJavaClasses();
 					try {
 						jta.append("Generating SystemC file\n");
