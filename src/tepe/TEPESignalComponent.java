@@ -50,12 +50,15 @@ import java.util.*;
 import myutil.*;
 
 public  class TEPESignalComponent  {
+	protected String blockName;
 	
-	
-    public TEPESignalComponent(String _name, Object _referenceObject) {
+    public TEPESignalComponent(String _name, Object _referenceObject String _blockName) {
 		super(_name, _referenceObject);
+		blockName = _blockName;
 		outSignalComponents = new Vector<TEPEComponent>();
     }
     
-    
+    public String getBlockName() {
+		return blockName;
+	}
 }

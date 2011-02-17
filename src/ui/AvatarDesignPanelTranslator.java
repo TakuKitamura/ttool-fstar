@@ -98,6 +98,7 @@ public class AvatarDesignPanelTranslator {
 		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
 		createBlocks(as, blocks);
 		createRelationsBetweenBlocks(as, blocks);
+		makeBlockStateMachines(as);
 		createPragmas(as, blocks);
 		return as;
 	}
@@ -376,7 +377,9 @@ public class AvatarDesignPanelTranslator {
 				}
 			}
 		}
-		
+	}
+	
+	public void makeBlockStateMachines(AvatarSpecification _as) {
 		// Make state machine of blocks
 		for(AvatarBlock block: _as.getListOfBlocks()) {
 			makeStateMachine(_as, block);
@@ -592,6 +595,7 @@ public class AvatarDesignPanelTranslator {
 		AvatarSetTimer asettimer;
 		AvatarResetTimer aresettimer;
 		AvatarExpireTimer aexpiretimer;
+		AvatarRelation ar;
 		int i;
 		String tmp;
 		TAttribute ta;
@@ -615,6 +619,15 @@ public class AvatarDesignPanelTranslator {
 					addCheckingError(ce);
 					
 				} else {
+					// Get relation of that signal
+					ar = _as.getAvatarRelationWithSignal(atas);
+					if (ar == null) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for receiving in " + asmdrs.getValue() + " is not connected to a channel");
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} 
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
 					if (asmdrs.hasCheckableAccessibility()) {
 						aaos.setCheckable();
@@ -690,6 +703,7 @@ public class AvatarDesignPanelTranslator {
 			} else if (tgc instanceof AvatarSMDSendSignal) {
 				asmdss = (AvatarSMDSendSignal)tgc;
 				atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
+				
 				if (atas == null) {
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Unknown signal: " + asmdss.getSignalName());
 					ce.setAvatarBlock(_ab);
@@ -697,6 +711,16 @@ public class AvatarDesignPanelTranslator {
 					ce.setTGComponent(tgc);
 					addCheckingError(ce);
 				} else {
+					// Get relation of that signal
+					ar = _as.getAvatarRelationWithSignal(atas);
+					if (ar == null) {
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Signal used for sending in " + asmdss.getValue() + " is not connected to a channel");
+						ce.setAvatarBlock(_ab);
+						ce.setTDiagramPanel(tdp);
+						ce.setTGComponent(tgc);
+						addCheckingError(ce);
+					} 
+					
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
 					if (asmdss.hasCheckableAccessibility()) {
 						aaos.setCheckable();

@@ -50,13 +50,18 @@ import java.util.*;
 import myutil.*;
 
 public  class TEPEAttributeComponent  {
+	protected String blockName;
 	
-	
-    public TEPEAttributeComponent(String _name, Object _referenceObject) {
+    public TEPEAttributeComponent(String _name, Object _referenceObject, String _blockName) {
 		super(_name, _referenceObject);
+		blockName = _blockName;
 		outAttributeComponents = new Vector<TEPEComponent>();
-		outSignalComponents = new Vector<TEPEComponent>();
+		outSignalComponents = new Vector<TEPEComponent>(); // toggle
     }
+	
+	public String getBlockName() {
+		return blockName;
+	}
     
     
 }
