@@ -232,6 +232,27 @@ public class AvatarRequirementPanelTranslator {
 						element2.addInAttributeComponent(element1);
 					}
 				}
+			} else if (tgc instanceof AvatarPDPropertyConnector) {
+				AvatarPDPropertyConnector apdpco = (AvatarPDPropertyConnector)tgc;
+				tgc1 = _apdp.getComponentToWhichBelongs(apdpco.getTGConnectingPointP1());
+				tgc2 = _apdp.getComponentToWhichBelongs(apdpco.getTGConnectingPointP2());
+				if ((tgc1 == null) || (tgc2 == null)) {
+					TraceManager.addDev("Tgcs null in Avatar translation");
+				} else {
+					element1 = (TEPEComponent)(listE.getObject(tgc1));
+					element2 = (TEPEComponent)(listE.getObject(tgc2));
+					if ((element1 != null) && (element2 != null)) {
+						TraceManager.addDev("Adding output / input");
+						element1.addOutAttributeComponent(element2);
+						
+						// Must know whether it is negated, or not
+						if (apdpco.isNegated()) {
+							element2.addInNegatedPropertyComponent(element1);
+						} else {
+							element2.addInPropertyComponent(element1);
+						}
+					}
+				}
 			}
 		}
 	}

@@ -198,6 +198,13 @@ public  class AvatarPDPropertyConnector extends TGConnector implements ScalableT
 		oldScaleFactor = scaleFactor;
 	}
 	
+	public boolean isNegated() {
+		if (value.compareTo("not") == 0) {
+			return true;
+		}
+		return false;
+	}
+	
 	
     
 }

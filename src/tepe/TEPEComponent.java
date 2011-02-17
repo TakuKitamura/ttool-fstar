@@ -200,5 +200,42 @@ public abstract class TEPEComponent  {
 		}
 	}
 	
+	public void addInSignalComponent(TEPEComponent _tepec) {
+		if (inSignalComponents != null) {
+			inSignalComponents.add(_tepec);
+		}
+	}
+	
+	public void addInNegatedSignalComponent(TEPEComponent _tepec) {
+		if (inNegatedSignalComponents != null) {
+			inNegatedSignalComponents.add(_tepec);
+		}
+	}
+	
+	public void addOutSignalComponent(TEPEComponent _tepec) {
+		if (outSignalComponents != null) {
+			outSignalComponents.add(_tepec);
+		}
+		
+	}
+	
+	public void addInPropertyComponent(TEPEComponent _tepec) {
+		if (inPropertyComponents != null) {
+			inPropertyComponents.add(_tepec);
+		}
+	}
+	
+	public void addInNegatedPropertyComponent(TEPEComponent _tepec) {
+		if (inNegatedPropertyComponents != null) {
+			inNegatedPropertyComponents.add(_tepec);
+		}
+	}
+	
+	public void addOutPropertyComponent(TEPEComponent _tepec) {
+		if (outPropertyComponents != null) {
+			outPropertyComponents.add(_tepec);
+		}
+	}
+	
     
 }
