@@ -227,7 +227,7 @@ public class AvatarRequirementPanelTranslator {
 					element1 = (TEPEComponent)(listE.getObject(tgc1));
 					element2 = (TEPEComponent)(listE.getObject(tgc2));
 					if ((element1 != null) && (element2 != null)) {
-						TraceManager.addDev("Adding output / input");
+						//TraceManager.addDev("Adding output / input");
 						element1.addOutAttributeComponent(element2);
 						element2.addInAttributeComponent(element1);
 					}
@@ -242,19 +242,103 @@ public class AvatarRequirementPanelTranslator {
 					element1 = (TEPEComponent)(listE.getObject(tgc1));
 					element2 = (TEPEComponent)(listE.getObject(tgc2));
 					if ((element1 != null) && (element2 != null)) {
-						TraceManager.addDev("Adding output / input");
+						//TraceManager.addDev("Adding output / input");
 						element1.addOutAttributeComponent(element2);
 						
 						// Must know whether it is negated, or not
-						if (apdpco.isNegated()) {
-							element2.addInNegatedPropertyComponent(element1);
-						} else {
+						if (!(tgc2 instanceof AvatarPDPropertyRelation)) {
 							element2.addInPropertyComponent(element1);
+							if (apdpco.isNegated()) {
+								element2.addInNegatedProperty(new Boolean(true));
+							} else {
+								element2.addInNegatedProperty(new Boolean(false));
+							}
+						}
+					}
+				}
+			} else if (tgc instanceof AvatarPDSignalConnector) {
+				AvatarPDSignalConnector apdsco = (AvatarPDSignalConnector)tgc;
+				tgc1 = _apdp.getComponentToWhichBelongs(apdsco.getTGConnectingPointP1());
+				tgc2 = _apdp.getComponentToWhichBelongs(apdsco.getTGConnectingPointP2());
+				if ((tgc1 == null) || (tgc2 == null)) {
+					TraceManager.addDev("Tgcs null in Avatar translation");
+				} else {
+					element1 = (TEPEComponent)(listE.getObject(tgc1));
+					element2 = (TEPEComponent)(listE.getObject(tgc2));
+					if ((element1 != null) && (element2 != null)) {
+						element1.addOutAttributeComponent(element2);
+						
+						// Must know whether it is negated, or not
+						if (apdsco.getTGConnectingPointP2() instanceof AvatarPDForbiddenSignalConnectingPoint) {
+							element2.addInNegatedSignalComponent(element1);
+						} else {
+							// Must enforce order of connectors
+							if ((tgc2 instanceof AvatarPDLogicalConstraint) || (tgc2 instanceof AvatarPDTemporalConstraint)) {
+								// Must enforce order of connectors
+								// Done afterwards
+							} else {
+								element2.addInSignalComponent(element1);
+							}
+						}
+						
+					}
+				}
+			}
+		}
+		
+		// Enforcing order in AvatarPDLogicalConstraint
+		iterator =  _apdp.getComponentList().listIterator();
+		TGConnector tgco;
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof AvatarPDLogicalConstraint) {
+				for(int i=2; i<8; i++) {
+					tgco = _apdp.getConnectorConnectedTo(tgc.getTGConnectingPointAtIndex(i));
+					if (tgco != null) {
+						AvatarPDSignalConnector apdsco = (AvatarPDSignalConnector)tgco;
+						tgc1 = _apdp.getComponentToWhichBelongs(apdsco.getTGConnectingPointP1());
+						element1 = (TEPEComponent)(listE.getObject(tgc1));
+						element2 = (TEPEComponent)(listE.getObject(tgc));
+						if ((element1 != null) && (element2 != null)) {
+							element2.addInSignalComponent(element1);
+						}
+					}
+				}
+			} else if (tgc instanceof AvatarPDTemporalConstraint) {
+				for(int i=2; i<4; i++) {
+					tgco = _apdp.getConnectorConnectedTo(tgc.getTGConnectingPointAtIndex(i));
+					if (tgco != null) {
+						AvatarPDSignalConnector apdsco = (AvatarPDSignalConnector)tgco;
+						tgc1 = _apdp.getComponentToWhichBelongs(apdsco.getTGConnectingPointP1());
+						element1 = (TEPEComponent)(listE.getObject(tgc1));
+						element2 = (TEPEComponent)(listE.getObject(tgc));
+						if ((element1 != null) && (element2 != null)) {
+							element2.addInSignalComponent(element1);
+						}
+					}
+				}
+			} else if (tgc instanceof AvatarPDPropertyRelation) {
+				for(int i=0; i<8; i++) {
+					tgco = _apdp.getConnectorConnectedTo(tgc.getTGConnectingPointAtIndex(i));
+					if (tgco != null) {
+						AvatarPDPropertyConnector apdpco = (AvatarPDPropertyConnector)tgco;
+						tgc1 = _apdp.getComponentToWhichBelongs(apdpco.getTGConnectingPointP1());
+						element1 = (TEPEComponent)(listE.getObject(tgc1));
+						element2 = (TEPEComponent)(listE.getObject(tgc));
+						if ((element1 != null) && (element2 != null)) {
+							element2.addInPropertyComponent(element1);
+							if (apdpco.isNegated()) {
+								element2.addInNegatedProperty(new Boolean(true));
+							} else {
+								element2.addInNegatedProperty(new Boolean(false));
+							}
 						}
 					}
 				}
 			}
 		}
+		
 	}
 	
 }

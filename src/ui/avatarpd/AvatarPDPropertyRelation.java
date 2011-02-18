@@ -80,7 +80,21 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
         
-        connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+		connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+        connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
+        connectingPoint[2] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.25, 0.0);
+        connectingPoint[3] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+        connectingPoint[4] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
+        connectingPoint[5] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 1.0, 0.25);
+        connectingPoint[6] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, false, 1.0, 0.50);
+		
+        connectingPoint[7] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[8] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+        connectingPoint[9] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+        connectingPoint[10] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[11] = new AvatarPDPropertyConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+		
+        /*connectingPoint[0] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
         connectingPoint[1] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
         connectingPoint[2] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
         connectingPoint[3] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
@@ -91,7 +105,7 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
         connectingPoint[8] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
         connectingPoint[9] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
         connectingPoint[10] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
-        connectingPoint[11] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+        connectingPoint[11] = new AvatarPDPropertyConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);*/
         //addTGConnectingPointsComment();
         
         moveable = true;

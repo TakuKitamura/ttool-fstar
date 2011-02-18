@@ -66,7 +66,7 @@ public abstract class TEPEComponent  {
 	protected Vector <TEPEComponent> outSignalComponents;
 	
 	protected Vector <TEPEComponent> inPropertyComponents;
-	protected Vector <TEPEComponent> inNegatedPropertyComponents;
+	protected Vector <Boolean> inNegatedProperty;
 	protected Vector <TEPEComponent> outPropertyComponents;
     
     public TEPEComponent(String _name, Object _referenceObject) {
@@ -98,54 +98,50 @@ public abstract class TEPEComponent  {
 	}
 	
 	public String toString() {
-		String ret = "Component: " + name + " id: " + id + " value: " + value;
+		String ret = "* Component: " + name + " id: " + id + " value: " + value;
 		ret += getExtraString();
 		if (hasInAttributeComponents()) {
 			ret += "\n    in Attributes:";
 			for(TEPEComponent comp: inAttributeComponents) {
-				ret += " " + comp.getName() + "/ID=" + id;
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		if (hasOutAttributeComponents()) {
 			ret += "\n    out Attributes:";
 			for(TEPEComponent comp: outAttributeComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		if (hasInSignalComponents()) {
 			ret += "\n    in Signals:";
 			for(TEPEComponent comp: inSignalComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		if (hasInNegatedSignalComponents()) {
 			ret += "\n    in negated Signals:";
 			for(TEPEComponent comp: inNegatedSignalComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		if (hasOutSignalComponents()) {
 			ret += "\n    out Signals:";
 			for(TEPEComponent comp: outSignalComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		if (hasInPropertyComponents()) {
 			ret += "\n    in Properties:";
+			int cpt = 0;
 			for(TEPEComponent comp: inPropertyComponents) {
-				ret += " " + comp.getName();
-			}
-		}
-		if (hasInNegatedPropertyComponents()) {
-			ret += "\n    in negated Properties:";
-			for(TEPEComponent comp: inNegatedPropertyComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue() + " negated: " + inNegatedProperty.get(cpt).booleanValue();
+				cpt ++;
 			}
 		}
 		if (hasOutPropertyComponents()) {
 			ret += "\n    out Properties:";
 			for(TEPEComponent comp: outPropertyComponents) {
-				ret += " " + comp.getName();
+				ret += " " + comp.getName() + "/ID: " + id + " value: " + comp.getValue();
 			}
 		}
 		
@@ -181,7 +177,7 @@ public abstract class TEPEComponent  {
 	}
 	
 	public boolean hasInNegatedPropertyComponents() {
-		return ((inNegatedPropertyComponents != null) && (inNegatedPropertyComponents.size()>0));
+		return ((inNegatedProperty != null) && (inNegatedProperty.size()>0));
 	}
 	
 	public boolean hasOutPropertyComponents() {
@@ -225,9 +221,9 @@ public abstract class TEPEComponent  {
 		}
 	}
 	
-	public void addInNegatedPropertyComponent(TEPEComponent _tepec) {
-		if (inNegatedPropertyComponents != null) {
-			inNegatedPropertyComponents.add(_tepec);
+	public void addInNegatedProperty(Boolean _bool) {
+		if (inNegatedProperty != null) {
+			inNegatedProperty.add(_bool);
 		}
 	}
 	

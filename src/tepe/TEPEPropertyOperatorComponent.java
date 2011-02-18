@@ -62,7 +62,7 @@ public  class TEPEPropertyOperatorComponent  extends TEPEComponent  {
 		super(_name, _referenceObject);
 		type = _type;
 		inPropertyComponents = new Vector<TEPEComponent>();
-		inNegatedPropertyComponents = new Vector<TEPEComponent>();
+		inNegatedProperty = new Vector<Boolean>();
 		outPropertyComponents = new Vector<TEPEComponent>();
     }
 	

@@ -62,6 +62,7 @@ public  class TEPETimeConstraintComponent  extends TEPEComponent  {
 		inNegatedSignalComponents = new Vector<TEPEComponent>();
 		outSignalComponents = new Vector<TEPEComponent>();
 		inPropertyComponents = new Vector<TEPEComponent>();
+		inNegatedProperty = new Vector<Boolean>();
 		outPropertyComponents = new Vector<TEPEComponent>();
     }
 	
