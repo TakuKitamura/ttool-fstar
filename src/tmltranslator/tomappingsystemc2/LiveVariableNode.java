@@ -698,6 +698,10 @@ public class LiveVariableNode{
 	public String getLiveVariableString(){
 		return intArrayToHexString(_outVars);
 	}
+	
+	public String getStartLiveVariableString(){
+		return intArrayToHexString(_inVars);
+	}
 
 	public String getStateModificationString(){
 		return intArrayToHexString(_defVars);

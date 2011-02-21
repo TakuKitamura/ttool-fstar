@@ -18,13 +18,14 @@ public class StaticAnalysis{
 	private int _bytesForDefs;
 	private int _bytesForVars;
 	private LiveVariableNode[] _defLookup=null;
-	private Set<Integer> _depChannels = new HashSet<Integer>(); 
+	private Set<Integer> _depChannels;
 
-	public StaticAnalysis(TMLTask iTask, ArrayList<TMLChannel>iChannels, ArrayList<TMLEvent> iEvents, ArrayList<TMLRequest> iRequests){
+	public StaticAnalysis(TMLTask iTask, ArrayList<TMLChannel>iChannels, ArrayList<TMLEvent> iEvents, ArrayList<TMLRequest> iRequests, Set<Integer> iDepChannels){
 		_task = iTask;
 		_channels=iChannels;
 		_events=iEvents;
 		_requests=iRequests;
+		_depChannels = iDepChannels;
 	}
 	
 	public int getNextDefID(){
@@ -48,10 +49,12 @@ public class StaticAnalysis{
 	}
 
 	public void addDepChannel(int iID){
+		System.out.println("Add Dependent Channel: " + iID);
 		_depChannels.add(iID);
 	}
 
 	public boolean isChannelDep(int iID){
+		System.out.println("Check if Channel dep: " + iID + " answer: "  + _depChannels.contains(iID));
 		return _depChannels.contains(iID);
 	}
 
@@ -183,7 +186,7 @@ public class StaticAnalysis{
 		_bytesForVars = aNbOfLiveElements >>> 5;
 		if ((aNbOfLiveElements & 0x1F)!=0) _bytesForVars++;
 		LiveVariableNode aStartNode=null, aLastNode=null;
-		_depChannels.clear();
+		//_depChannels.clear();
 		for(TMLAttribute att: _task.getAttributes()) {
 			if (att.hasInitialValue())
 				aStartNode = new LiveVariableNode(this, new int[_bytesForVars], parseExprToVariableMap(att.name, null), null, null,

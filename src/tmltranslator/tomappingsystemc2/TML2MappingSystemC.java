@@ -355,6 +355,7 @@ public class TML2MappingSystemC {
 		ArrayList<TMLEvent> events;
 		ArrayList<TMLRequest> requests;
 		int[] aStatistics = new int[8];
+		Set<Integer> mappedChannels = new HashSet<Integer>(); 
 		for(TMLTask task: tmlmapping.getMappedTasks()){
 			node=(HwExecutionNode)iterator.next();
 			int noOfCores;
@@ -373,9 +374,9 @@ public class TML2MappingSystemC {
 			events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
 			requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
-			mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping);
+			mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
 			//mst.generateSystemC(debug, optimize, dependencies);
-			mst.generateSystemC(debug, optimize, aStatistics);
+			//mst.generateSystemC(debug, optimize);
 			tasks.add(mst);
 			for(TMLChannel channelb: channels)
 				declaration += "," + channelb.getExtendedName()+CR;
@@ -391,7 +392,10 @@ public class TML2MappingSystemC {
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
 		//int[] aStatistics = new int[8];
-		//for(MappedSystemCTask task: tasks) task.determineCheckpoints(aStatistics);
+		for(MappedSystemCTask task: tasks){
+			task.determineCheckpoints(aStatistics);
+			task.generateSystemC(debug, optimize);
+		}
 		if (aStatistics[0]!=0) System.out.println("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
 		if (aStatistics[2]!=0) System.out.println("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
 		if (aStatistics[4]!=0) System.out.println("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
