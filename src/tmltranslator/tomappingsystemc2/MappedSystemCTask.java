@@ -315,7 +315,7 @@ public class MappedSystemCTask {
 		hcode += "void refreshStateHash(const char* iLiveVarList);\n";
 		functions+= "void " + reference + "::refreshStateHash(const char* iLiveVarList){\n";
 		int aSeq=0;
-		functions += "_stateHash.init((HashValueType)this,30);\nif(iLiveVarList!=0){\n";
+		functions += "_stateHash.init((HashValueType)_ID,30);\nif(iLiveVarList!=0){\n";
 		for(TMLAttribute att: task.getAttributes()) {
 			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _stateHash.addValue(" + att.getName() + ");\n";
 			aSeq++;
