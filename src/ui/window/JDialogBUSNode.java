@@ -136,6 +136,7 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         arbitrationPolicy.addItem("Round Robin");
 		arbitrationPolicy.addItem("Priority Based");
 		arbitrationPolicy.addItem("CAN");
+		arbitrationPolicy.addItem("Crossbar");
 		arbitrationPolicy.setSelectedIndex(node.getArbitrationPolicy());
         panel2.add(arbitrationPolicy, c2);
         
