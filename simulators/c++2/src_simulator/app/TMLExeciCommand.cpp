@@ -48,7 +48,7 @@ TMLExeciCommand::TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLeng
 }
 
 void TMLExeciCommand::execute(){
-	std::cout << "execi: " << _currTransaction->toShortString() << std::endl;
+	//std::cout << "execi: " << _currTransaction->toShortString() << std::endl;
 	_progress+=_currTransaction->getVirtualLength();
 	_task->addTransaction(_currTransaction);
 	//std::cout << "Execi execute prepare" << std::endl;

@@ -343,9 +343,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	CPU* depCPU;
 	struct timeval aBegin,aEnd;
 	gettimeofday(&aBegin,NULL);
-//#ifdef DEBUG_KERNEL
+#ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
-//#endif
+#endif
 	_simComp->setStopFlag(false,"");
 	//std::cout << "before loop " << std::endl;
 	for(TaskList::const_iterator i=_simComp->getTaskIterator(false); i!=_simComp->getTaskIterator(true);i++){
@@ -485,7 +485,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	NOTIFY_SIM_STOPPED();
 #endif
 	gettimeofday(&aEnd,NULL);
-	std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
+	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
 	return (transLET==0 && !_simComp->getStoppedOnAction());
 }
 
@@ -1277,7 +1277,8 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		}else{
 			//iFile << "Simulation " << iPrevID << "_" << aMyID << " encountered known state " << aCurrState << std::endl;
 			//13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
-			//iFile << aLastID << " -> " << knownID << " [label = \"i\"]\n";
+			//iFile << aLastID << " -> " << aLastID << " [label = \"i\"]\n";
+			
 			ID aNewID = TMLTransaction::getID();
 			TMLTransaction::incID();
 			iFile << aLastID << " -> " << aNewID << " [label = \"option\"]\n";

@@ -73,11 +73,12 @@ TMLCommand::~TMLCommand(){
 TMLCommand* TMLCommand::prepare(bool iInit){
 	//Do not set _currTransaction=0 as specialized commands access the variable in the scope of the execute method (set terminated flag) 
 	//std::cout << "Prepare command ID: " << _ID << "\n";
+	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 #ifdef STATE_HASH_ENABLED
 		if(!_simComp->getOnKnownPath()){
-			_task->refreshStateHash(_liveVarList);
+			//_task->refreshStateHash(_liveVarList);
 			if(_checkpoint){
 				ID aStateID=0;
 				aStateID = _simComp->checkForRecurringSystemState();

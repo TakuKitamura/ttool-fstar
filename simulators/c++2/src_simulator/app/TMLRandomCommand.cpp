@@ -51,7 +51,7 @@ void TMLRandomCommand::execute(){
 unsigned int TMLRandomCommand::getRandomRange(){
 	ParamType aMax;
 	(_task->*_rangeFunc)(_aMin, aMax);
-	std::cout << "Got amin: " << _aMin << " got amax: " << aMax << "\n";
+	//std::cout << "Got amin: " << _aMin << " got amax: " << aMax << "\n";
 	return aMax-_aMin+1;
 }
 
