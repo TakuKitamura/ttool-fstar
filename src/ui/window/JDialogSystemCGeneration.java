@@ -308,7 +308,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         // validated list
         panele2Tepe = new JPanel();
         panele2Tepe.setLayout(new BorderLayout());
-        panele2Tepe.setBorder(new javax.swing.border.TitledBorder("EBRDDs taken into account"));
+        panele2Tepe.setBorder(new javax.swing.border.TitledBorder("TEPE Diagrams taken into account"));
         listValidatedTepe = new JList(valTepe);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidatedTepe.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );

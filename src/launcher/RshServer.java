@@ -47,6 +47,8 @@
 package launcher;
 
 
+import myutil.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -62,9 +64,12 @@ public class RshServer {
     public static final String VERSION = "0.61";
     private int BUFSIZE = 511;
     private boolean []sessions = new boolean[10]; // 0 is never used.
+	
+	private static int MAX_NB_TRY = 25;
+	private int nbTry = 0;
 
     public RshServer() {
-		System.out.println("Using port: " + port);
+		TraceManager.addDev("Using port: " + port);
         processes = new Vector();
         try {
             server = new ServerSocket(port);
@@ -101,6 +106,7 @@ public class RshServer {
         try {
             s = server.accept();
         } catch (Exception e) {
+			nbTry ++;
             return null;
         }
         return s;
@@ -482,7 +488,7 @@ public class RshServer {
         Socket s = null;
         
         
-        while(true) {
+        while(nbTry < MAX_NB_TRY) {
             // Wait for client request
             printProcessRunning();
             

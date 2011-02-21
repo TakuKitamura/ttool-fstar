@@ -2959,8 +2959,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     
     public boolean generateRTLOTOS(boolean automatic) {
+		int ret = 0;
 		if (gtm.getTURTLEModelingState() > 0) {
-			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, RT_LOTOS)) {
+			if ((ret = generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, RT_LOTOS)) == -1) {
 				return false;
 			}
 		}
@@ -2970,7 +2971,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         gtm.reinitRG();
         gtm.reinitRGAUT();
         gtm.reinitRGAUTPROJDOT();
-        gtm.generateRTLOTOS(lotosfile);
+		if (ret == 0) {
+			gtm.generateRTLOTOS(lotosfile);
+		}
 		if (!automatic) {
 			JOptionPane.showMessageDialog(frame,
 				"RT-LOTOS specification generated",
@@ -2987,8 +2990,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	
     public boolean generateLOTOS(boolean automatic) {
+		int ret = 0;
 		if (gtm.getTURTLEModelingState() > 0) {
-			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, LOTOS)) {
+			ret = generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), automatic, LOTOS);
+			if (ret == -1) {
 				dtree.toBeUpdated();
 				TraceManager.addDev("Generate from state failed");
 				return false;
@@ -2999,15 +3004,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 		
 		//System.out.println("generate LOTOS");
-        gtm.generateFullLOTOS(lotosfile);
-		//System.out.println("LOTOS generated");
-		if (!automatic) {
-			JOptionPane.showMessageDialog(frame,
-				"LOTOS specification generated (" + getCheckingWarnings().size() + " warning(s))",
-				"LOTOS specification",
-				JOptionPane.INFORMATION_MESSAGE);
+		if (ret == 0) {
+			gtm.generateFullLOTOS(lotosfile);
+			//System.out.println("LOTOS generated");
+			if (!automatic) {
+				JOptionPane.showMessageDialog(frame,
+					"LOTOS specification generated (" + getCheckingWarnings().size() + " warning(s))",
+					"LOTOS specification",
+					JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
-		
+		setMode(MainGUI.RTLOTOS_OK);
         dtree.toBeUpdated();
 		return true;
     }
@@ -3017,19 +3024,31 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		dtree.toBeUpdated();
 	}
 	
-	public boolean generateTURTLEModelingFromState(int state, boolean automatic, int generator) {
+	// -1 : error
+	// 0: ok
+	// 1: ok, code already generated
+	public int generateTURTLEModelingFromState(int state, boolean automatic, int generator) {
 		if (state == 1) {
-			return generateTIFFromMapping(automatic, generator);
+			if (generateTIFFromMapping(automatic, generator)) {
+				return 1;
+			}
+			return -1;
 		}
 		if (state == 2) {
 			TraceManager.addDev("Generating from state 2");
-			return generateTIFFromTMLModeling(automatic, generator);
+			if (generateTIFFromTMLModeling(automatic, generator)) {
+				return 0;
+			}
+			return -1;
 		}
 		if (state == 3) {
 			TraceManager.addDev("Generating from state 3 (Avatar)");
-			return generateTIFFromAvatarSpecification(automatic, generator);
+			if (generateTIFFromAvatarSpecification(automatic, generator)) {
+				return 0;
+			}
+			return -1;
 		}
-		return false;
+		return -1;
 	}
 	
 	public boolean generateTIFFromAvatarSpecification(boolean automatic, int generator) {
@@ -3151,7 +3170,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				}
 				return;
 			} else {
-				if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL)) {
+				if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
 					return;
 				}
 				JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
@@ -3207,7 +3226,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void generateJava() {
 		
 		if (gtm.getTURTLEModelingState() == 1) {
-			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, JAVA)) {
+			if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, JAVA) == -1) {
 				return;
 			}
 		}
@@ -3350,7 +3369,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void generateDesign() {
 		if (gtm.getTURTLEModelingState() == 1) {
-			if (!generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, DESIGN)) {
+			if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, DESIGN) == -1) {
 				return;
 			}
 		}

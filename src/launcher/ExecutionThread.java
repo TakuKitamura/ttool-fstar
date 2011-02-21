@@ -46,6 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package launcher;
 
+import myutil.*;
 
 import java.io.*;
 import java.net.*;
@@ -93,7 +94,7 @@ class ExecutionThread extends Thread {
     public synchronized void waitingForPipe() {
         while(pipe == null) {
             try {
-                System.out.println("Waiting for pipe");
+                TraceManager.addDev("Waiting for pipe");
                 wait();
             } catch (InterruptedException ie) {
                 
@@ -125,13 +126,13 @@ class ExecutionThread extends Thread {
     
     private Socket waitForClient() {
         Socket s = null;
-        System.out.println("process " + port + " is waiting for client");
+        TraceManager.addDev("process " + port + " is waiting for client");
         try {
             s = server.accept();
         } catch (Exception e) {
             return null;
         }
-        System.out.println("processe " + port + " got client");
+        TraceManager.addDev("processe " + port + " got client");
         return s;
     }
     
@@ -146,7 +147,7 @@ class ExecutionThread extends Thread {
         go = false;
         proc.destroy();
         proc_in = null;
-        //System.out.println("Stop process");
+        //TraceManager.addDev("Stop process");
     }
     
     private void respond(PrintStream out, String s) {
@@ -160,7 +161,7 @@ class ExecutionThread extends Thread {
     
     public void run() {
         isStarted = true;
-        System.out.println("Starting process for command " + cmd);
+        TraceManager.addDev("Starting process for command " + cmd);
         proc = null;
         BufferedReader in = null;
         String str;
@@ -170,12 +171,12 @@ class ExecutionThread extends Thread {
             try {
                 proc = Runtime.getRuntime().exec(cmd);
                 if (piped) {
-                    System.out.println("Giving my pipe to the other");
+                    TraceManager.addDev("Giving my pipe to the other");
                     et.setMyPipe(proc.getOutputStream());
                 }
-                System.out.println("Waiting for pipe");
+                TraceManager.addDev("Waiting for pipe");
                 waitingForPipe();
-                System.out.println("Got pipe");
+                TraceManager.addDev("Got pipe");
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 try {
                     while (((str = proc_in.readLine()) != null) && (go == true)){
@@ -185,21 +186,21 @@ class ExecutionThread extends Thread {
                     
                 }
             } catch (Exception e) {
-                System.out.println("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
             }
             try {
                 pipe.flush();
                 pipe.close();
             } catch (Exception e) {
-                System.out.println("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
             }
-            System.out.println("Ending command " + cmd);
+            TraceManager.addDev("Ending command " + cmd);
             
             // print output on socket
         } else {
             Socket s =  waitForClient();
             if (s == null) {
-                System.out.println("Client did not connect on time");
+                TraceManager.addDev("Client did not connect on time");
                 rsh.removeProcess(this);
                 return;
             }
@@ -207,13 +208,13 @@ class ExecutionThread extends Thread {
             PrintStream out = null;
             
             try {
-                System.out.println("Going to start command " + cmd);
+                TraceManager.addDev("Going to start command " + cmd);
                 out = new PrintStream(s.getOutputStream(), true);
                 
                 proc = Runtime.getRuntime().exec(cmd);
                 
                 if (piped) {
-                    System.out.println("Giving my pipe to the other");
+                    TraceManager.addDev("Giving my pipe to the other");
                     et.setMyPipe(proc.getOutputStream());
                 }
                 
@@ -223,14 +224,14 @@ class ExecutionThread extends Thread {
                 
                 
                 while (((str = proc_in.readLine()) != null) && (go == true)){
-                    System.out.println("out " + str);
+                    TraceManager.addDev("out " + str);
                     respond(out, "4" + str);
                 }
                 
             } catch (Exception e) {
-                System.out.println("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+                TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
             }
-            System.out.println("Ending command " + cmd);
+            TraceManager.addDev("Ending command " + cmd);
             respond(out, "5");
             if (s != null) {
                 closeConnect(s);

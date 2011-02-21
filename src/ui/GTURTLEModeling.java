@@ -314,14 +314,19 @@ public class GTURTLEModeling {
 
 	public void generateLOTOS(File f) {
 		//tm.print();
+		TraceManager.addDev("Generating Lotos");
 		TURTLETranslator tt = new TURTLETranslator(tm);
 		rtlotos = tt.generateLOTOS(true);
 		warnings = tt.getWarnings();
+		TraceManager.addDev("Lotos generated");
 
+		
+		
 		nbRTLOTOS ++;
 		if (f != null) {
 			saveInFile(f, rtlotos);
 		}
+		TraceManager.addDev("LOTOS to file done");
 		languageID = LOTOS;
 		mgui.setMode(MainGUI.RTLOTOS_OK);
 	}
