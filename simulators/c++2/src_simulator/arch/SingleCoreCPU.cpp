@@ -156,7 +156,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 #endif
 }
 
-bool SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
+void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	//return truncateNextTransAt(iTime);
 	//not a problem if scheduling does not take place at time when transaction is actually truncated, tested

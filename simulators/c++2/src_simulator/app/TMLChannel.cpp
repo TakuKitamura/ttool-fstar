@@ -113,6 +113,7 @@ std::string TMLChannel::toShortString() const{
 std::ostream& TMLChannel::writeObject(std::ostream& s){
 	//WRITE_STREAM(s,_writeTransCurrHop);
 	//WRITE_STREAM(s,_readTransCurrHop);
+	//if (_ID==53 && _significance==0) std::cout << "failure before write\n";
 	WRITE_STREAM(s, _significance);
 	return s;
 }
@@ -120,6 +121,8 @@ std::istream& TMLChannel::readObject(std::istream& s){
 	//READ_STREAM(s,_writeTransCurrHop);
 	//READ_STREAM(s,_readTransCurrHop);
 	READ_STREAM(s, _significance);
+	//if (_ID==53 && _significance==0) std::cout << "failure after read\n";
+	//std::cout << "read\n";
 	return s;
 }
 
@@ -132,6 +135,7 @@ void TMLChannel::reset(){
 	_writeTransCurrHop=0;
 	_readTransCurrHop=_numberOfHops-1;
 	_significance=0;
+	//std::cout << "reset\n";
 	//std::cout << "Channel reset end" << std::endl;
 }
 
@@ -168,13 +172,16 @@ unsigned int TMLChannel::getWidth(){
 }
 
 void TMLChannel::setSignificance(TMLTask* iTask, bool iSignificance){
-	int aInput = (iTask==_writeTask)?1:2;
+	//unsigned int aInput = (iTask==_writeTask)?1:2;
+	unsigned char aInput = (iTask==_writeTask)?1:2;
 	if (iSignificance)
 		_significance |= aInput;
 	else
-		_significance &= (~aInput);	
+		_significance &= (~aInput);
 }
 
-//bool TMLChannel::getSignificance(){
-//	return (_significance != 0);
-//}
+bool TMLChannel::getSignificance(){
+	//std::cout << "get\n";
+	//if (_ID==53 && _significance==0) std::cout << "failure\n";
+	return (_significance != 0);
+}

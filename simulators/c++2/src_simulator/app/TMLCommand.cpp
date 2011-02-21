@@ -45,6 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <Parameter.h>
 #include <TMLChoiceCommand.h>
+#include <TMLRandomChoiceCommand.h>
 #include <TMLActionCommand.h>
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
@@ -75,11 +76,13 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	if(_length==_progress){
 		TMLCommand* aNextCommand;
 #ifdef STATE_HASH_ENABLED
-		_task->refreshStateHash(_liveVarList);
-		if(_checkpoint){
-			ID aStateID=0;
-			aStateID = _simComp->checkForRecurringSystemState();
-			if (_currTransaction!=0) _currTransaction->setStateID(aStateID);
+		if(!_simComp->getOnKnownPath()){
+			_task->refreshStateHash(_liveVarList);
+			if(_checkpoint){
+				ID aStateID=0;
+				aStateID = _simComp->checkForRecurringSystemState();
+				if (_currTransaction!=0) _currTransaction->setStateID(aStateID);
+			}
 		}
 #endif
 		//std::cout << "COMMAND FINISHED!!n";
@@ -101,7 +104,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			return aNextCommand->prepare(false);
 		}
 	}else{
-		if (_commandStartTime==-1) _commandStartTime = SchedulableDevice::getSimulatedTime();
+		if (_commandStartTime==((TMLTime)-1)) _commandStartTime = SchedulableDevice::getSimulatedTime();
 		//std::cout << "Prepare next transaction TMLCmd " << _listeners.size() << std::endl;
 		TMLCommand* result;
 		if (iInit){
@@ -225,6 +228,9 @@ std::istream& TMLCommand::readObject(std::istream& s){
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
+#ifdef STATE_HASH_ENABLED
+	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+#endif
 	//std::cout << "End Read Object TMLCommand " << _ID << std::endl;
 	return s;
 }
@@ -278,13 +284,14 @@ unsigned long TMLCommand::getStateHash() const{
 }
 
 TMLTime TMLCommand::getCommandStartTime() const{
-	return (_commandStartTime==-1)? 0: _commandStartTime;
+	return (_commandStartTime==((TMLTime)-1))? 0: _commandStartTime;
 }
 
 TMLLength TMLCommand::getLength() const{
 	return _length;
 }
 
+template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLActionCommand>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(CommandListener* iListener, TMLTask* aTask);

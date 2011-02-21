@@ -56,7 +56,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLEventBChannel.h>
 #include <TMLEventFChannel.h>
 #include <TMLEventFBChannel.h>
-//#include <RdvChannel.h>
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>
@@ -66,8 +65,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenersSimCmd.h>
 #include <KernelListener.h>
 #include <KernelListener.h>
+#ifdef EBRDD_ENABLED 
 #include <ERC.h>
 #include <ERB.h>
+#endif
 
 #define RECUR_DEPTH 20
 
@@ -188,7 +189,7 @@ public:
 	\param oLastTrans Returns the last transaction executed during a simulation
 	\return Return value of simulate() function
 	*/
-	bool runToNextChoiceCommand(TMLTransaction*& oLastTrans);
+	bool runToNextRandomCommand(TMLTransaction*& oLastTrans);
 	///Runs the simulation until a given condition is satisfied
 	/**
 	\param iCond Condition expressed in terms of task variables of a given task
@@ -204,7 +205,7 @@ public:
 	\param iPrevID ID of the parent leaf
 	\param iFile Reference to the output file
 	*/
-	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile);
+	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile/*, std::ofstream& iFile2*/);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file

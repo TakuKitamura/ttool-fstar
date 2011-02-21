@@ -88,7 +88,7 @@ public:
 	\param iTime Indicates at what time the transaction should be truncated
 	\return Returns true if scheduling of device has been performed
 	*/
-	virtual bool truncateAndAddNextTransAt(TMLTime iTime)=0;
+	virtual void truncateAndAddNextTransAt(TMLTime iTime)=0;
 	//virtual TMLTime truncateNextTransAt(TMLTime iTime)=0;
 	///Adds a new bus master to the internal list
 	/**
@@ -114,7 +114,7 @@ public:
 	///Invalidate schedule of CPU
 	void setRescheduleFlag(){
 		_schedulingNeeded=true;
-		std::cout <<" CPU " << _name << " forwards to scheduler\n";
+		//std::cout <<" CPU " << _name << " forwards to scheduler\n";
 		_scheduler->resetScheduledFlag();
 	}
 

@@ -38,52 +38,47 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <TMLExeciCommand.h>
+#include <TMLRandomChoiceCommand.h>
+#include <SimComponents.h>
+#include <CommandListener.h>
 #include <TMLTask.h>
-#include <TMLTransaction.h>
 
-
-TMLExeciCommand::TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _lengthFunc(iLengthFunc), _type(iType){
-	_length=iStatLength;
+TMLRandomChoiceCommand::TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches):TMLChoiceCommand(iID, iTask, iRangeFunc, iNbOfBranches), _dynamicRange(0){
 }
 
-void TMLExeciCommand::execute(){
-	std::cout << "execi: " << _currTransaction->toShortString() << std::endl;
-	_progress+=_currTransaction->getVirtualLength();
-	_task->addTransaction(_currTransaction);
-	//std::cout << "Execi execute prepare" << std::endl;
-	prepare(false);
-}
-
-TMLCommand* TMLExeciCommand::prepareNextTransaction(){
-	//std::cout << _ID << " prepare execi: " << _length << std::endl;
-	if (_progress==0){
-		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
-		if (_length==0){
-			//std::cout << "ExeciCommand len==0 " << std::endl;
-			TMLCommand* aNextCommand=getNextCommand();
-			_task->setCurrCommand(aNextCommand);
-			if (aNextCommand!=0) return aNextCommand->prepare(false);
-		}
+TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
+	ParamType aMin, aMax;
+	_randomValue = (_task->*_rangeFunc)(aMin, aMax);
+	//std::cout << "Random value set:" << _randomValue << "\n";
+	
+	if (aMin==-1)
+		_dynamicRange = aMax | INT_MSB;
+	else
+		_dynamicRange = aMax+1;
+	if (_simComp->getStopFlag()){
+		_simComp->setStoppedOnAction();
+		_task->setCurrCommand(this);
+		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
-
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
-	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
-	return this;
+	
+	TMLCommand* aNextCommand=getNextCommand();
+	//std::cout << "set next:" << aNextCommand << "\n";
+	_task->setCurrCommand(aNextCommand);
+#ifdef LISTENERS_ENABLED
+	NOTIFY_CMD_FINISHED(this);
+#endif
+	//std::cout << "TMLRandomChoiceCommand prepare Next Cmd:\n";
+	if (aNextCommand!=0) return aNextCommand->prepare(false);
+	//else
+		//std::cout << "no next\n";
+	return 0;
 }
 
-std::string TMLExeciCommand::toString() const{
-	std::ostringstream outp;
-	outp << "Execi in " << TMLCommand::toString();
-	return outp.str();
+unsigned int TMLRandomChoiceCommand::getRandomRange(){
+	return _dynamicRange;
 }
 
-std::string TMLExeciCommand::toShortString() const{
-	std::ostringstream outp;
-	outp << _task->toString() << ": Execi " << _length;
-	return outp.str();
-}
-
-std::string TMLExeciCommand::getCommandStr() const{
-	return "exe";
+TMLCommand* TMLRandomChoiceCommand::getNextCommand() const{
+	//std::cout << "Here we go " << _randomValue << " .................\n";
+	return _nextCommand[_randomValue];
 }

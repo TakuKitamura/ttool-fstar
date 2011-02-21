@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, bool iCheckpoint, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0), _maxChannelIndex(0) {
+TMLSelectCommand::TMLSelectCommand(ID iID, TMLTask* iTask, TMLEventChannel** iChannel, unsigned int iNumbChannels, const char* iLiveVarList, bool iCheckpoint, ParamFuncPointer* iParamFuncs):TMLCommand(iID, iTask, WAIT_SEND_VLEN, iNumbChannels, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFuncs(iParamFuncs), /*_numbChannels(iNumbChannels),*/ _indexNextCommand(0) {
 }
 
 TMLSelectCommand::~TMLSelectCommand(){
@@ -195,3 +195,7 @@ Parameter<ParamType>* TMLSelectCommand::setParams(Parameter<ParamType>* ioParam)
 	delete ioParam;
 	return aResult;
 }
+
+//unsigned int TMLSelectCommand::getRandomRange(){
+//	return _nbOfPossSync ;
+//}

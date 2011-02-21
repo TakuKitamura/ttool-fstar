@@ -60,8 +60,10 @@ std::ostream& TMLEventChannel::writeObject(std::ostream& s){
 	ParamQueue::iterator i;
 	//std::cout << "write size of channel " << _name << " :" << _content << std::endl;
 	TMLStateChannel::writeObject(s);
-	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-		(*i)->writeObject(s);
+	if (_paramNo!=0){
+		for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+			(*i)->writeObject(s);
+		}
 	}
 	//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
 	return s;
@@ -74,10 +76,12 @@ std::istream& TMLEventChannel::readObject(std::istream& s){
 	TMLStateChannel::readObject(s);
 	//std::cout << "Read Object TMLEventChannel " << _name << std::endl;
 	//_paramQueue.clear();
-	for(aParamNo=0; aParamNo < _content; aParamNo++){
-		//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
-		//_paramQueue.push_back(Parameter<ParamType>(s));
-		_paramQueue.push_back(new Parameter<ParamType>(_paramNo, s));
+	if (_paramNo!=0){
+		for(aParamNo=0; aParamNo < _content; aParamNo++){
+			//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
+			//_paramQueue.push_back(Parameter<ParamType>(s));
+			_paramQueue.push_back(new Parameter<ParamType>(_paramNo, s));
+		}
 	}
 	_hashValid = false;
 	return s;
@@ -112,14 +116,16 @@ void TMLEventChannel::getStateHash(HashAlgo* iHash) const{
 	//TMLStateChannel::getStateHash(iHash);
 	//iHash->addValue(_stateHash.getHash());
 	if (_significance!=0){
-		if (!_hashValid){
-			_stateHash.init((HashValueType)this, 30);
-			for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
-				(*i)->getStateHash(&_stateHash);
+		if (_paramNo!=0){
+			if (!_hashValid){
+				_stateHash.init((HashValueType)this, 30);
+				for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+					(*i)->getStateHash(&_stateHash);
+				}
+				_hashValid = true;
 			}
-			_hashValid = true;
+			iHash->addValue(_stateHash.getHash());
 		}
-		iHash->addValue(_stateHash.getHash());
 		iHash->addValue(_content);
 	}
 }

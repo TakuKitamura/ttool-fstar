@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <SchedulableDevice.h>
 #include <TMLCommand.h>
-#include <TMLChoiceCommand.h>
+#include <TMLRandomChoiceCommand.h>
 #include <TMLActionCommand.h>
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
@@ -199,12 +199,14 @@ CondBreakpoint::~CondBreakpoint(){
 
 //************************************************************************
 RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simComp(iSimComp), _enabled(false){
-	TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(this,0);
+	//TMLCommand::registerGlobalListenerForType<TMLRandomChoiceCommand>(this,0);
+	TMLCommand::registerGlobalListenerForType<IndeterminismSource>(this,0);
 }
 
 void RunTillNextRandomChoice::commandEntered(TMLCommand* iComm, ID iID){
-	TMLChoiceCommand* aChoice=dynamic_cast<TMLChoiceCommand*>(iComm);
-	if (_enabled && aChoice!=0 && aChoice->isNonDeterministic()){
+	//TMLRandomChoiceCommand* aChoice=dynamic_cast<TMLRandomChoiceCommand*>(iComm);
+	IndeterminismSource* aChoice=dynamic_cast<IndeterminismSource*>(iComm);
+	if (_enabled && aChoice!=0 ){
 		_simComp->setStopFlag(true, MSG_RANDOMCHOICE);
 		//return true;
 	}

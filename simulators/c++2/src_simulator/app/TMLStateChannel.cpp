@@ -93,7 +93,7 @@ bool TMLStateChannel::getUnderflow() const{
 
 void TMLStateChannel::getStateHash(HashAlgo* iHash) const{
 	if (_significance!=0){
-		std::cout << "add channel content:\n";
+		//std::cout << "add channel content:\n";
 		iHash->addValue(_content);
 	}
 }

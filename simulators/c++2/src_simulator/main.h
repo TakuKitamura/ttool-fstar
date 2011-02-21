@@ -63,8 +63,10 @@ int main(int len, char ** args) {
 	Simulator mySim(&mySync);
 	mySync._simComponents->setSimulator(&mySim);
 	TMLCommand::setSimComponents(mySync._simComponents);
+#ifdef EBRDD_ENABLED
 	ERB::setSimComponents(mySync._simComponents);
 	ERC::setSimComponents(mySync._simComponents);
+#endif
 	//ESO::setSimComponents(mySync._simComponents);
 	gettimeofday(&end,NULL);
 	std::cout << "The preparation took " << getTimeDiff(begin,end) << "usec.\n";

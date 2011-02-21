@@ -111,3 +111,12 @@ int getexename(char* buf, size_t size){
 	buf[ret] = 0;
 	return ret;
 }
+
+unsigned int getEnabledBranchNo(int iNo, int iMask){
+	unsigned int retIndex=0;
+	while (iMask!=0 && iNo!=0){
+		if ((iMask & 1)!=0) iNo--;
+		iMask >>= 1; retIndex++;
+	}
+	return retIndex-1;
+}

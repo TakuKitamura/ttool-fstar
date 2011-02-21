@@ -37,53 +37,60 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-
-#include <TMLExeciCommand.h>
+#include <TMLRandomCommand.h>
+#include <SimComponents.h>
+#include <CommandListener.h>
 #include <TMLTask.h>
-#include <TMLTransaction.h>
 
-
-TMLExeciCommand::TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _lengthFunc(iLengthFunc), _type(iType){
-	_length=iStatLength;
+TMLRandomCommand::TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar): TMLCommand(iID, iTask, 1, 1, 0, false), _rangeFunc(iRangeFunc), _resultVar(iResultVar), _aMin(0){
 }
 
-void TMLExeciCommand::execute(){
-	std::cout << "execi: " << _currTransaction->toShortString() << std::endl;
-	_progress+=_currTransaction->getVirtualLength();
-	_task->addTransaction(_currTransaction);
-	//std::cout << "Execi execute prepare" << std::endl;
-	prepare(false);
+void TMLRandomCommand::execute(){
 }
 
-TMLCommand* TMLExeciCommand::prepareNextTransaction(){
-	//std::cout << _ID << " prepare execi: " << _length << std::endl;
-	if (_progress==0){
-		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
-		if (_length==0){
-			//std::cout << "ExeciCommand len==0 " << std::endl;
-			TMLCommand* aNextCommand=getNextCommand();
-			_task->setCurrCommand(aNextCommand);
-			if (aNextCommand!=0) return aNextCommand->prepare(false);
-		}
+unsigned int TMLRandomCommand::getRandomRange(){
+	ParamType aMax;
+	(_task->*_rangeFunc)(_aMin, aMax);
+	std::cout << "Got amin: " << _aMin << " got amax: " << aMax << "\n";
+	return aMax-_aMin+1;
+}
+
+TMLCommand* TMLRandomCommand::prepareNextTransaction(){
+	//std::cout << "In TMLChoice::prepare next transaction\n";
+	if (_simComp->getStopFlag()){
+		//std::cout << "aSimStopped=true " << std::endl;
+		_simComp->setStoppedOnAction();
+		_task->setCurrCommand(this);
+		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
-
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
-	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
-	return this;
+	TMLCommand* aNextCommand=getNextCommand();
+	if (_randomValue==(unsigned int)-1){
+		ParamType aMin, aMax;
+		(_task->*_rangeFunc)(aMin, aMax);
+		*_resultVar = myrand(aMin, aMax);
+	}else{
+		*_resultVar = _aMin + _randomValue;
+		_randomValue=(unsigned int)-1;
+	}
+	_task->setCurrCommand(aNextCommand);
+#ifdef LISTENERS_ENABLED
+	NOTIFY_CMD_FINISHED(this);
+#endif
+	//std::cout << "after notify listeners" << std::endl;
+	if (aNextCommand!=0) return aNextCommand->prepare(false);
+	return 0;
 }
 
-std::string TMLExeciCommand::toString() const{
-	std::ostringstream outp;
-	outp << "Execi in " << TMLCommand::toString();
+std::string TMLRandomCommand::TMLRandomCommand::toString() const{
+	std::ostringstream outp;	
+	outp << "Random in " << TMLCommand::toString();
 	return outp.str();
 }
 
-std::string TMLExeciCommand::toShortString() const{
-	std::ostringstream outp;
-	outp << _task->toString() << ": Execi " << _length;
-	return outp.str();
+std::string TMLRandomCommand::toShortString() const{
+	return "Random";
 }
 
-std::string TMLExeciCommand::getCommandStr() const{
-	return "exe";
+std::string TMLRandomCommand::getCommandStr() const{
+	return "rnd";
 }

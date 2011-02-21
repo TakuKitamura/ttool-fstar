@@ -63,7 +63,7 @@ void TMLEventFBChannel::testRead(TMLTransaction* iTrans){
 void TMLEventFBChannel::write(){
 	_content++;
 	//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
-	_paramQueue.push_back(_tmpParam);   //NEW
+	if (_paramNo!=0) _paramQueue.push_back(_tmpParam);   //NEW
 #ifdef STATE_HASH_ENABLED
 	//_stateHash+=_tmpParam.getStateHash();
 	_tmpParam->getStateHash(&_stateHash);
@@ -86,13 +86,16 @@ bool TMLEventFBChannel::read(){
 	}else{
 		_content--;
 		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
-		_readTrans->getCommand()->setParams(_paramQueue.front());
+		if (_paramNo!=0){
+			_readTrans->getCommand()->setParams(_paramQueue.front());
+			_paramQueue.pop_front();  //NEW
+		}
 #ifdef STATE_HASH_ENABLED
 		//_stateHash-=_paramQueue.front().getStateHash();
 		//_paramQueue.front().removeStateHash(&_stateHash);
 		_hashValid = false;
 #endif
-		_paramQueue.pop_front();  //NEW
+		
 		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
 			_writeTrans->setRunnableTime(_readTrans->getEndTime());
 			_writeTrans->setChannel(this);

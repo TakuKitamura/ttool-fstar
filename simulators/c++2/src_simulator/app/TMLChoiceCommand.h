@@ -55,39 +55,17 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
 	\param iNbOfBranches Number of branches of the choice
-	\param iNonDeterm Flag is true for non deterministic commands
     	*/
-	TMLChoiceCommand(ID iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm);
+	TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches);
 	void execute();
-	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
-	///Set preferred branch manually
-	void setPreferredBranch(unsigned int iBranch);
-	/////Returns the number of branches
-	////**
-	//\return Number of branches
-	//*/
-	//unsigned int getNumberOfBranches();
-	///Returns the state of non non deterministic flag
-	/**
-	\return Non deterministic flag
-	*/
-	bool isNonDeterministic();
 protected:
 	///Member function pointer to the condition function returning the index of the next command
-	CondFuncPointer _condFunc;
-	///Index of the next command within the _nextCommand array
-	unsigned int _indexNextCommand;
-	/////Number of branches
-	//unsigned int _nbOfBranches;
-	///Index of the manually set branch
-	mutable unsigned int _preferredBranch;
-	///Flag to label non determinsitic choice commands
-	bool _nonDeterm;
-	TMLCommand* getNextCommand() const;
-	TMLCommand* prepareNextTransaction();
+	RangeFuncPointer _rangeFunc;
+	virtual TMLCommand* getNextCommand() const;
+	virtual TMLCommand* prepareNextTransaction();
 };
 
 #endif

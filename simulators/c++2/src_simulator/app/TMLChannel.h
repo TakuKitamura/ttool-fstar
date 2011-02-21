@@ -191,6 +191,7 @@ public:
 	\param iSignificance Flag indicating if operations performed by this task are still reachable
 	*/
 	void setSignificance(TMLTask* iTask, bool iSignificance);
+	bool getSignificance();
 protected:
 	///ID of channel
 	ID _ID;
@@ -219,6 +220,7 @@ protected:
 	///channel priority
 	Priority _priority;
 	///Flag indicating if read or write commands for that channel are still reachable
+	//unsigned int _significance;
 	unsigned char _significance;
 };
 

@@ -83,6 +83,7 @@ using std::max;
 #undef PENALTIES_ENABLED
 #define STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
+#undef EBRDD_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -100,6 +101,8 @@ using std::max;
 #define RUNNING 2
 #define RUNNABLE 1
 #define SUSPENDED 0
+
+#define INT_MSB (1 << (sizeof(unsigned int)*8-1))
 
 //XML Tags
 #define TAG_HEADER "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>"
@@ -162,12 +165,6 @@ using std::max;
 #define TAG_CONTENTc "</content>"
 #define TAG_PARAMo "<param>"
 #define TAG_PARAMc "</param>"
-//#define TAG_E1o "<e1>"
-//#define TAG_E1c "</e1>"
-//#define TAG_E2o "<e2>"
-//#define TAG_E2c "</e2>"
-//#define TAG_E3o "<e3>"
-//#define TAG_E3c "</e3>"
 #define TAG_Pxo "<e"
 #define TAG_Pxc "</e"
 
@@ -225,14 +222,12 @@ typedef std::list<Serializable*> SerializableList;
 typedef std::list<Slave*> SlaveList;
 ///Datatype used in SimComponents to store channel objects
 typedef std::list<TMLChannel*> ChannelList;
-///Datatype used in SimComponents to store EBRDD objects
-typedef std::list<EBRDD*> EBRDDList;
+
 ///Datatype used in Tasks to store comments concerning the task execution
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
 typedef std::map<ID, TMLCommand*> CommandHashTab;
-///Datatype used in EBRDD Tasks in order to associate a command with an ID 
-typedef std::map<ID, EBRDDCommand*> CommandHashTabEBRDD;
+
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
@@ -240,11 +235,12 @@ typedef std::deque<Parameter<ParamType>* > ParamQueue;
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
-typedef unsigned int (TMLTask::*ActionFuncPointer) ();
+typedef void (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef TMLTime (TMLTask::*LengthFuncPointer) ();
-///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
-typedef int (EBRDD::*EBRDDFuncPointer) ();
+
+typedef unsigned int (TMLTask::*RangeFuncPointer) (ParamType& oMin, ParamType& oMax);
+
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
 typedef Parameter<ParamType>* (TMLTask::*ParamFuncPointer) (Parameter<ParamType>* ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)
@@ -262,8 +258,16 @@ typedef std::list<BusMaster*> BusMasterList;
 ///Type used for hash values of system states
 typedef uint32_t HashValueType;
 ///Set used by Commands to store encountered state hash values
-//typedef std::set<HashValueType> StateHashSet;
 typedef std::map<HashValueType,ID> StateHashSet;
+
+#ifdef EBRDD_ENABLED
+///Datatype used in SimComponents to store EBRDD objects
+typedef std::list<EBRDD*> EBRDDList;
+///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
+typedef int (EBRDD::*EBRDDFuncPointer) ();
+///Datatype used in EBRDD Tasks in order to associate a command with an ID 
+typedef std::map<ID, EBRDDCommand*> CommandHashTabEBRDD;
+#endif
 
 struct ltstr{
 	bool operator()(const char* s1, const char* s2) const{
@@ -413,4 +417,5 @@ long getTimeDiff(struct timeval& begin, struct timeval& end);
 void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
 std::string vcdValConvert(unsigned int iVal);
 int getexename(char* buf, size_t size);
+unsigned int getEnabledBranchNo(int iNo, int iMask);
 #endif

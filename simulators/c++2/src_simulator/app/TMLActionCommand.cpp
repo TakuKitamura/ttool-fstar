@@ -52,7 +52,7 @@ void TMLActionCommand::execute(){
 TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	if (_simComp->getStopFlag()){
 		_simComp->setStoppedOnAction();
-		std::cout << "sim stopped in action command " << std::endl;
+		//std::cout << "sim stopped in action command " << std::endl;
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}

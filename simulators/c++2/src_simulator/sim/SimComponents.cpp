@@ -49,11 +49,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Slave.h>
 #include <Memory.h>
 #include <Bridge.h>
-#include <TMLChoiceCommand.h>
+#include <IndeterminismSource.h>
 #include <ListenersSimCmd.h>
+#ifdef EBRDD_ENABLED
 #include <EBRDD.h>
+#endif
 
-SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(0) {
+SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(0), _onKnownPath(false) {
 }
 
 SimComponents::~SimComponents(){
@@ -63,9 +65,12 @@ SimComponents::~SimComponents(){
 	for(SlaveList::iterator i=_slList.begin(); i != _slList.end(); ++i){
 		delete (*i);
 	}
+#ifdef EBRDD_ENABLED
 	for(EBRDDList::iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		delete (*i);
 	}
+#endif
+	//_myfile.close();
 }
 
 void SimComponents::addTask(TMLTask* iTask){
@@ -114,9 +119,11 @@ void SimComponents::addMem(Memory* iMem){
 	_slList.push_back(dynamic_cast<Slave*>(iMem));
 }
 
+#ifdef EBRDD_ENABLED
 void SimComponents::addEBRDD(EBRDD* iEBRDD){
 	_ebrddList.push_back(iEBRDD);
 }
+#endif
 
 void SimComponents::streamBenchmarks(std::ostream& s) const{
 	for (TraceableDeviceList::const_iterator i=_vcdList.begin(); i!= _vcdList.end(); ++i){
@@ -131,11 +138,14 @@ std::ostream& SimComponents::writeObject(std::ostream& s){
 	for(SerializableList::const_iterator i=_serList.begin(); i != _serList.end(); ++i){
 		(*i)->writeObject(s);
 	}
+#ifdef EBRDD_ENABLED
 	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		(*i)->writeObject(s);
 	}
+#endif
 	TMLTime aSimulatedTime = SchedulableDevice::getSimulatedTime();
 	WRITE_STREAM(s, aSimulatedTime);
+	WRITE_STREAM(s, _onKnownPath);
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Write: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
@@ -151,12 +161,15 @@ std::istream& SimComponents::readObject(std::istream& s){
 		//std::cout << "SimComponents --> next Device" << std::endl;
 		(*i)->readObject(s);
 	}
+#ifdef EBRDD_ENABLED
 	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		(*i)->readObject(s);
 	}
+#endif
 	TMLTime aSimulatedTime;
 	READ_STREAM(s, aSimulatedTime);
 	SchedulableDevice::setSimulatedTime(aSimulatedTime);
+	READ_STREAM(s, _onKnownPath);
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Read: SimComponents simulatedTime: " << aSimulatedTime << std::endl;
 	std::cout << "----------------------------------------------------\n";
@@ -175,9 +188,11 @@ void SimComponents::reset(){
 #ifdef ADD_COMMENTS
 	Comment::reset();
 #endif
+#ifdef EBRDD_ENABLED
 	for(EBRDDList::const_iterator i=_ebrddList.begin(); i != _ebrddList.end(); ++i){
 		(*i)->reset();
 	}
+#endif
 	//std::cout << "----------------------------------------------- RESET\n";
 	_knownStateReached = false;
 }
@@ -185,6 +200,7 @@ void SimComponents::reset(){
 void SimComponents::resetStateHash(){
 	_systemHashTable.clear();
 	TMLTransaction::resetID();
+	_onKnownPath=false;
 }
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
@@ -262,14 +278,24 @@ TMLChannel* SimComponents::getChannelByID(ID iID) const{
 	return NULL;
 }
 
-TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
+/*TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
 	TMLChoiceCommand* aResult;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		aResult = dynamic_cast<TMLChoiceCommand*>((*i)->getCurrCommand());
 		if (aResult!=0) return aResult;
 	}
 	return 0;
+}*/
+
+IndeterminismSource* SimComponents::getCurrentRandomCmd(){
+	IndeterminismSource* aResult;
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		aResult = dynamic_cast<IndeterminismSource*>((*i)->getCurrCommand());
+		if (aResult!=0) return aResult;
+	}
+	return 0;
 }
+
 
 std::string SimComponents::getCmpNameByID(ID iID){
 	SchedulableDevice* aSched = getCPUByID(iID);
@@ -301,9 +327,11 @@ TraceableDeviceList::const_iterator SimComponents::getVCDIterator(bool iEnd) con
 	return (iEnd)? _vcdList.end():_vcdList.begin();
 }
 
+#ifdef EBRDD_ENABLED
 EBRDDList::const_iterator SimComponents::getEBRDDIterator(bool iEnd) const{
 	return (iEnd)? _ebrddList.end():_ebrddList.begin();
 }
+#endif
 
 CPUList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
 	return (iEnd)? _cpuList.end():_cpuList.begin();
@@ -342,37 +370,42 @@ ID SimComponents::checkForRecurringSystemState(){
 			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
 		}
 	}
+	//std::cout << " *** New channel list: ***\n";
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
 		//std::cout << "add channel " << (*i)->toString() << "\n";
 		(*i)->getStateHash(&_systemHash);
+		/*if ((*i)->getSignificance()) std::cout  << (*i)->toShortString() << " has sig. content: " << (*i)->getContent() << "\n";
+		else
+			std::cout << (*i)->toShortString() << " is not significant in 2nd step!!!!!!!!!!!!!!\n";*/
 	}
-	//std::cout << "HASH VALUE: " << _systemHash.getHash() << "\n";
-	//std::pair<StateHashSet::iterator,bool> aRet = _systemHashTable.insert(_systemHash);
-	//TMLTransaction* iInfoTrans = new TMLTransaction(0,_systemHash.getHash(),0);
-	/*for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
-		(*i)->addRawTransaction(iInfoTrans);
-	}*/
-	/*for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
-		(*i)->addRawTransaction(iInfoTrans);
-	}*/
-	//if (_systemHashTable.insert(_systemHash.getHash()).second){
+	//std::cout  << "-> Hash Value: " << _systemHash.getHash() << "\n";
+	ID aRetVal;
 	std::pair<StateHashSet::const_iterator,bool> aRes = _systemHashTable.insert(std::pair<HashValueType,ID>(_systemHash.getHash(),TMLTransaction::getID()));
 	if (aRes.second){
+		aRetVal=TMLTransaction::getID();
 		TMLTransaction::incID();
-		//_knownStateReached = false;
+		//std::cout  << "*** Added as " << aRetVal << "***\n";
+		//std::cout << "STATE CREATED "<< TMLTransaction::getID() << " +++++++++++++++++++++++++++++\n";
 		_knownStateReached = 0;
+		if (_onKnownPath) std::cout << "YOU SHOULD NOT SEE THIS\n";
 	}else{
-		setStopFlag(true, "Recurring system state");
-		//_knownStateReached= true;
+		_onKnownPath=true;
+		setStopFlag(true, "Recurring system state");   //to be restablished!!!!!!!!!!!!
+		//std::cout << "KNOWN STATE REACHED "<< aRes.first->second << " ***************************\n";
 		_knownStateReached= aRes.first->second;
+		aRetVal = aRes.first->second;
+		//std::cout  << "*** Merged with " << aRetVal << "***\n";
 	}
-	return _knownStateReached;
+	//return _knownStateReached;
+	return aRetVal;
 }
 	
-//ID SimComponents::wasKnownStateReached(HashValueType* oSystemHash) const{
 ID SimComponents::wasKnownStateReached() const{
-	//*oSystemHash = _systemHash.getHash();
-	//return _knownStateReached;
 	return _knownStateReached;
+}
+
+bool SimComponents::getOnKnownPath(){
+	_knownStateReached=0;
+	return _onKnownPath;
 }
 

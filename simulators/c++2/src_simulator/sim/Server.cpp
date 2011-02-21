@@ -45,7 +45,7 @@ Server::Server():_socketClient(-1){
 }
 
 int Server::run(){
-	int aSocketServer;	// listen on aSocketServer, client connection on _socketClient
+	int aSocketServer=0;	// listen on aSocketServer, client connection on _socketClient
 	struct addrinfo aHints; 		//aHints for getaddrinfo
 	struct addrinfo *aServerInfo;		//information about the server, created by getaddrinfo
 	struct sockaddr_storage aClientAddrInfo;// connector's address information

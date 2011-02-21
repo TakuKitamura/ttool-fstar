@@ -50,8 +50,10 @@ class TMLEventBChannel;
 class Bridge;
 class Memory;
 class Simulator;
-class TMLChoiceCommand;
+class IndeterminismSource;
+#ifdef EBRDD_ENABLED
 class EBRDD;
+#endif
 
 ///Class encapsulating architecture and application objects
 class SimComponents: public Serializable{
@@ -103,11 +105,13 @@ public:
 	\param iMem Pointer to memory
 	*/
 	void addMem(Memory* iMem);
+#ifdef EBRDD_ENABLED
 	///Add an EBRDD
 	/**
 	\param iEBRDD Pointer to EBRDD
 	*/
 	void addEBRDD(EBRDD* iEBRDD);
+#endif
 	///Calls streamBenchmarks of all traceable devices contained in vcdList
 	/**
 	param s Reference to output stream object
@@ -217,7 +221,8 @@ public:
 	/**
 	\return Pointer if choice command was found, null otherwise
 	*/
-	TMLChoiceCommand* getCurrentChoiceCmd();
+	//TMLChoiceCommand* getCurrentChoiceCmd();
+	IndeterminismSource* getCurrentRandomCmd();
 	///Returns a hash value for the current application and architecture
 	/**
 	\return Hash value
@@ -229,12 +234,14 @@ public:
 	\return Const iterator for task list
 	*/
 	TaskList::const_iterator getTaskIterator(bool iEnd) const;
+#ifdef EBRDD_ENABLED
 	///Returns an iterator for the internal EBRDD list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for EBRDD list
 	*/
 	EBRDDList::const_iterator getEBRDDIterator(bool iEnd) const;
+#endif
 	///Returns the reason why the simulation stopped
 	/**
 	\return Reason why the simulation stopped
@@ -266,6 +273,7 @@ public:
 	ID wasKnownStateReached() const;
 	///Resets the global system hash
 	void resetStateHash();
+	bool getOnKnownPath();
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;
@@ -283,8 +291,10 @@ protected:
 	TaskList _taskList;
 	///List holding channels
 	ChannelList _channelList;
+#ifdef EBRDD_ENABLED
 	///List holding EBRDDs
 	EBRDDList _ebrddList;
+#endif
 	///Flag indicating whether the simulation must be stopped
 	bool _stopFlag;
 	///Hash Value for application and architecture
@@ -299,6 +309,9 @@ protected:
 	HashAlgo _systemHash;
 	///Flag indicating whether a known state has been encountered
 	ID _knownStateReached;
+	bool _onKnownPath;
+	
+	//std::ofstream _myfile;
 };
 #endif
 

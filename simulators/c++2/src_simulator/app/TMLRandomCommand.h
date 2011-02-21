@@ -38,52 +38,26 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#include <TMLExeciCommand.h>
-#include <TMLTask.h>
-#include <TMLTransaction.h>
+#ifndef TMLRandomCommandH
+#define TMLRandomCommandH
 
+#include <IndeterminismSource.h>
+#include <TMLCommand.h>
 
-TMLExeciCommand::TMLExeciCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, unsigned int iType, TMLLength iStatLength, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _lengthFunc(iLengthFunc), _type(iType){
-	_length=iStatLength;
-}
+class TMLRandomCommand: public TMLCommand, public IndeterminismSource{
+public:
+	TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar);
+	
+	void execute();
+	unsigned int getRandomRange();
+	TMLCommand* prepareNextTransaction();
+	std::string toString() const;
+	std::string toShortString() const;
+	std::string getCommandStr() const;
+protected:
+	RangeFuncPointer _rangeFunc;
+	ParamType* _resultVar;
+	ParamType _aMin;
+};
 
-void TMLExeciCommand::execute(){
-	std::cout << "execi: " << _currTransaction->toShortString() << std::endl;
-	_progress+=_currTransaction->getVirtualLength();
-	_task->addTransaction(_currTransaction);
-	//std::cout << "Execi execute prepare" << std::endl;
-	prepare(false);
-}
-
-TMLCommand* TMLExeciCommand::prepareNextTransaction(){
-	//std::cout << _ID << " prepare execi: " << _length << std::endl;
-	if (_progress==0){
-		if (_lengthFunc!=0) _length = (_task->*_lengthFunc)();
-		if (_length==0){
-			//std::cout << "ExeciCommand len==0 " << std::endl;
-			TMLCommand* aNextCommand=getNextCommand();
-			_task->setCurrCommand(aNextCommand);
-			if (aNextCommand!=0) return aNextCommand->prepare(false);
-		}
-	}
-
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
-	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
-	return this;
-}
-
-std::string TMLExeciCommand::toString() const{
-	std::ostringstream outp;
-	outp << "Execi in " << TMLCommand::toString();
-	return outp.str();
-}
-
-std::string TMLExeciCommand::toShortString() const{
-	std::ostringstream outp;
-	outp << _task->toString() << ": Execi " << _length;
-	return outp.str();
-}
-
-std::string TMLExeciCommand::getCommandStr() const{
-	return "exe";
-}
+#endif

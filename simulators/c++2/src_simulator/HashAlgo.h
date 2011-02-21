@@ -103,7 +103,7 @@ public:
 	}
 	
 	void addValue(HashValueType iVal){
-		std::cout << "++++++++++++++++++++ Added value: " << iVal << std::endl;
+		//std::cout << "++++++++++++++++++++ Added value: " << iVal << std::endl;
 		_finalized = false;
 		switch(_state){
 		  case 0: _a+= iVal; break;

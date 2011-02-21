@@ -94,7 +94,7 @@ public:
       	\return Pointer to transaction
     	*/
 	TMLTransaction* getNextTransaction();
-	bool truncateAndAddNextTransAt(TMLTime iTime);
+	void truncateAndAddNextTransAt(TMLTime iTime);
 	///Returns a string representation of the CPU
 	/**
 	\return Detailed string representation

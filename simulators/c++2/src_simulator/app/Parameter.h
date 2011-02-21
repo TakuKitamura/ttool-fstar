@@ -99,14 +99,14 @@ public:
 	}
 	
 	inline std::ostream& writeObject(std::ostream& s){
-		std::cout << "writeObject:\n";
+		//std::cout << "writeObject:\n";
 		for (unsigned int i=0;i<_paramNo;i++){
 			WRITE_STREAM(s, _p[i]);
 		}
 #ifdef DEBUG_SERIALIZE
 		print();
 #endif
-		std::cout << "end writeObject:\n";
+		//std::cout << "end writeObject:\n";
 		return s;
 	}
 	///Stream operator >>
@@ -121,13 +121,13 @@ public:
 	\param s Stream
 	*/
 	void streamStateXML(std::ostream& s) const{
-		std::cout << "streamStateXML:\n";
+		//std::cout << "streamStateXML:\n";
 		s << TAG_PARAMo;
 		for (unsigned int i=0;i<_paramNo;i++){
 			 s << TAG_Pxo << i << ">" << _p[i] << TAG_Pxc << i << ">";
 		}
 		s << TAG_PARAMc;
-		std::cout << "end streamStateXML:\n";
+		//std::cout << "end streamStateXML:\n";
 	}
 
 	/*inline void setP(T ip1 ...){
@@ -141,7 +141,7 @@ public:
 	}*/
 
 	inline void getP(T* op1 ...) const {
-		std::cout << "getP:\n";
+		//std::cout << "getP:\n";
 		T* arg=op1;
 		va_list args; // argument list
 		va_start(args, op1); // initialize args
@@ -149,7 +149,7 @@ public:
 			*arg=_p[i];
 			arg=va_arg(args, T*);
 		}
-		std::cout << "end getP:\n";
+		//std::cout << "end getP:\n";
 	}
 	
 	//inline T getPByIndex(unsigned int iIndex){
@@ -157,11 +157,11 @@ public:
 	//}
 	
 	inline void getStateHash(HashAlgo* iHash) const{
-		std::cout << "add param vals:\n";
+		//std::cout << "add param vals:\n";
 		for (unsigned int i=0;i<_paramNo;i++){
 			iHash->addValue((HashValueType)_p[i]);
 		}
-		std::cout << "end add param vals:\n";
+		//std::cout << "end add param vals:\n";
 	}
 		
 protected:

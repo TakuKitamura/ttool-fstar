@@ -44,54 +44,35 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <CommandListener.h>
 
-TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, CondFuncPointer iCondFunc, unsigned int iNbOfBranches, bool iNonDeterm):TMLCommand(iID, iTask, 1, iNbOfBranches, 0, false), _condFunc(iCondFunc), _indexNextCommand(0), /*_nbOfBranches(iNbOfBranches),*/ _preferredBranch(-1), _nonDeterm(iNonDeterm){
+TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches /*, bool iNonDeterm*/):TMLCommand(iID, iTask, 1, iNbOfBranches, 0, false), _rangeFunc(iRangeFunc) {
 }
 
 void TMLChoiceCommand::execute(){
 }
 
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
-	if (_preferredBranch==((unsigned int)-1)){
-		return _nextCommand[_indexNextCommand];
-	}else{
-		std::cout << "Command was enforced: " << _preferredBranch << std::endl;
-		unsigned int aPreferredBranch=_preferredBranch;
-		_preferredBranch=-1;
-		return _nextCommand[aPreferredBranch];
-	}
+	ParamType aMin, aMax;
+	return _nextCommand[(_task->*_rangeFunc)(aMin, aMax)];
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
-	//std::cout << "In TMLChoice::prepare next transaction\n";
 	if (_simComp->getStopFlag()){
-		std::cout << "aSimStopped=true " << std::endl;
 		_simComp->setStoppedOnAction();
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
-	//TMLCommand* aNextCommand;
-	//std::cout << "Choice func " << std::endl;
-	_indexNextCommand=(_task->*_condFunc)();
-	//std::cout << "after Choice func " << std::endl;
 	TMLCommand* aNextCommand=getNextCommand();
-	//std::cout << "get next cmd" << std::endl;
 	_task->setCurrCommand(aNextCommand);
-	//std::cout << " after get next cmd" << std::endl;
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
 #endif
-	//std::cout << "after notify listeners" << std::endl;
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;
 }
 
-/*TMLTask* TMLChoiceCommand::getDependentTask() const{
-	return 0;
-}*/
-
 std::string TMLChoiceCommand::toString() const{
 	std::ostringstream outp;	
-	outp << "Choice in " << TMLCommand::toString() << " nextCommand:" << _indexNextCommand;
+	outp << "Choice in " << TMLCommand::toString();
 	return outp.str();
 }
 
@@ -101,16 +82,4 @@ std::string TMLChoiceCommand::toShortString() const{
 
 std::string TMLChoiceCommand::getCommandStr() const{
 	return "cho";
-}
-
-void TMLChoiceCommand::setPreferredBranch(unsigned int iBranch){
-	_preferredBranch=iBranch;
-}
-
-//unsigned int TMLChoiceCommand::getNumberOfBranches(){
-//	return _nbOfBranches;
-//}
-
-bool TMLChoiceCommand::isNonDeterministic(){
-	return _nonDeterm;
 }
