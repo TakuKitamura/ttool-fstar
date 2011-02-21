@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLEventChannel.h>
 
-TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iParamNo): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0), _stateHash((HashValueType)this, 30), _hashValid(true), _paramNo(iParamNo) {
+TMLEventChannel::TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iParamNo): TMLStateChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0), _stateHash((HashValueType)_ID, 30), _hashValid(true), _paramNo(iParamNo) {
 }
 
 TMLEventChannel::~TMLEventChannel(){
@@ -97,7 +97,7 @@ void TMLEventChannel::reset(){
 	//std::cout << "EventChannel reset" << std::endl;
 	TMLStateChannel::reset();
 	_paramQueue.clear();
-	_stateHash.init((HashValueType)this, 30);
+	_stateHash.init((HashValueType)_ID, 30);
 	_hashValid=true;
 	//std::cout << "EventChannel reset end" << std::endl; 
 }
@@ -118,7 +118,7 @@ void TMLEventChannel::getStateHash(HashAlgo* iHash) const{
 	if (_significance!=0){
 		if (_paramNo!=0){
 			if (!_hashValid){
-				_stateHash.init((HashValueType)this, 30);
+				_stateHash.init((HashValueType)_ID, 30);
 				for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
 					(*i)->getStateHash(&_stateHash);
 				}

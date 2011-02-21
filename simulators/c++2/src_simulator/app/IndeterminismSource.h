@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 class IndeterminismSource{
 	public:
 		IndeterminismSource(): _randomValue(-1) {}
+		virtual ~IndeterminismSource(){}
 		virtual unsigned int getRandomRange()=0;
 		virtual void setRandomValue(unsigned int iValue){
 			_randomValue=iValue;

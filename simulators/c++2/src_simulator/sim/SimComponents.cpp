@@ -358,14 +358,15 @@ void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){
 
 //void SimComponents::checkForRecurringSystemState(){
 ID SimComponents::checkForRecurringSystemState(){
-	_systemHash.init((HashValueType)this, _taskList.size());
+	_systemHash.init((HashValueType)0xabcd, _taskList.size());
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		//std::cout << "add Task Hash " << (*i)->toString() << "\n";
 		_systemHash.addValue((*i)->getStateHash());
 		TMLCommand* aCurrCmd = (*i)->getCurrCommand();
 		if (aCurrCmd!=0){
 			//std::cout << "add curr cmd and progress Task " << (*i)->toString() << "\n";
-			_systemHash.addValue((HashValueType)aCurrCmd);
+			//_systemHash.addValue((HashValueType)aCurrCmd);
+			_systemHash.addValue((HashValueType)aCurrCmd->getID());
 			//_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
 			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
 		}
