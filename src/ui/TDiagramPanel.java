@@ -255,7 +255,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 	
 	public void updateComponentsAfterZoom() {
-		//System.out.println("Zoom factor=" + zoom);
+		//TraceManager.addDev("Zoom factor=" + zoom);
 		TGComponent tgc;
         Iterator iterator = componentList.listIterator();
 		boolean change = false;
@@ -360,12 +360,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			
 			if (!overcomeShowing) {
 				if (!isShowing()) {
-					System.out.println("Not showing!" + tp);
+					//TraceManager.addDev("Not showing!" + tp);
 					return;
 				}
 			}
 			
-			//System.out.println("Draw");
+			//TraceManager.addDev("Draw");
 			
 			try {
 				super.paintComponent(g);
@@ -388,7 +388,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			for(int i=componentList.size()-1; i>=0; i--) {
 				tgc = (TGComponent)(componentList.get(i));
 				if (!tgc.isHidden()) {
-					//System.out.println("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
+					//TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
 					tgc.draw(g);
 					if (mgui.getTypeButtonSelected() != TGComponentManager.EDIT) {
 						tgc.drawTGConnectingPoint(g, mgui.getIdButtonSelected());
@@ -412,7 +412,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 					}*/
 					
 					/*if ((attributesOn) && (tgc instanceof WithAttributes)) {
-						//System.out.println("Attributes to de drawn for" + tgc);
+						//TraceManager.addDev("Attributes to de drawn for" + tgc);
 						tgc.drawAttributes(g, ((WithAttributes)tgc).getAttributes());
 					}*/
 				}
@@ -470,7 +470,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			}
 			
 			if ((this instanceof TDPWithAttributes) && (getAttributeState() != 0))  {
-				//System.out.println("Tdp with attributes");
+				//TraceManager.addDev("Tdp with attributes");
 				for(int i=componentList.size()-1; i>=0; i--) {
 					tgc = (TGComponent)(componentList.get(i));
 					if (!tgc.isHidden()) {
@@ -562,7 +562,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append(tgc.saveInXML());
         sb.append("\n");
         sb.append(getXMLCloneTail());
-        //System.out.println("sb=\n" + sb);
+        //TraceManager.addDev("sb=\n" + sb);
         return sb;
     }
     
@@ -588,7 +588,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
             
         }
-        //System.out.println("making copy sb=\n" + sb);
+        //TraceManager.addDev("making copy sb=\n" + sb);
         return sb;
     }
     
@@ -599,7 +599,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     // Selecting components
     public int selectComponentInRectangle(int x, int y, int width, int height) {
-        //System.out.println("x=" + x + " y=" + y + " width=" +width + " height=" + height);
+        //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
         TGComponent tgc;
         int cpt = 0;
         Iterator iterator = componentList.listIterator();
@@ -867,10 +867,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	// return true if swallowed
     public boolean addComponent(TGComponent tgc, int x, int y, boolean swallow, boolean addToList) {
         boolean ret = false;
-        //System.out.println("add component " + tgc.getName());
+        //TraceManager.addDev("add component " + tgc.getName());
         if (tgc != null) {
             if ((swallow) && (tgc instanceof SwallowedTGComponent)) {
-                //System.out.println("Swallowed component !");
+                //TraceManager.addDev("Swallowed component !");
                 SwallowTGComponent stgc = findSwallowTGComponent(x, y, tgc);
                 if (stgc != null) {
                     stgc.addSwallowedTGComponent(tgc, x, y);
@@ -993,8 +993,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     public void setConnectorHead(TGComponent tgc) {
         type = TGComponentManager.getType(tgc);
-        //System.out.println("class tgc=" + tgc.getClass());
-        //System.out.println("type=" + type);
+        //TraceManager.addDev("class tgc=" + tgc.getClass());
+        //TraceManager.addDev("type=" + type);
     }
     
     
@@ -1657,7 +1657,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             buildComponentPopupMenu(componentPopup, x, y);
             setComponentPopupMenu();
             componentMenu.show(this, x, y);
-            //System.out.println("closed");
+            //TraceManager.addDev("closed");
         } else if ((mode == SELECTED_COMPONENTS) && (GraphicLib.isInRectangle(x, y, xSel, ySel, widthSel, heightSel))) {
             buildSelectedPopupMenu();
             setSelectedPopupMenu();
@@ -1825,7 +1825,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             try {
                 mgui.gtm.copyModelingFromXML(this, copyData, X, Y);
             } catch (MalformedModelingException mme) {
-                System.out.println("Paste Exception: " + mme.getMessage());
+                TraceManager.addDev("Paste Exception: " + mme.getMessage());
                 JOptionPane.showMessageDialog(mgui.getFrame(), "Exception", "Paste failed", JOptionPane.INFORMATION_MESSAGE);
             }
             mgui.changeMade(this, NEW_COMPONENT);
@@ -1835,12 +1835,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     public void insertLibrary(int X, int Y) {
         String data = mgui.loadLibrary();
-        //System.out.println(data);
+        //TraceManager.addDev(data);
         if (data != null) {
             try {
                 mgui.gtm.copyModelingFromXML(this, data, X, Y);
             } catch (MalformedModelingException mme) {
-                System.out.println("Insert Library Exception: " + mme.getMessage());
+                TraceManager.addDev("Insert Library Exception: " + mme.getMessage());
                 JOptionPane.showMessageDialog(mgui.getFrame(), "Exception", "insertion of library has failed", JOptionPane.INFORMATION_MESSAGE);
             }
             mgui.changeMade(this, NEW_COMPONENT);
@@ -1857,10 +1857,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			tgc.getFather().bringToBack(tgc);
 		} else {
 			tgc = tgc.getTopFather();
-			//System.out.println("Bring front: " + tgc.getName());
+			//TraceManager.addDev("Bring front: " + tgc.getName());
 			int index = componentList.indexOf(tgc);
 			if (index > -1) {
-				//System.out.println("Ok bring");
+				//TraceManager.addDev("Ok bring");
 				componentList.remove(index);
 				componentList.add(tgc);
 			}
@@ -1909,9 +1909,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 tgc.actionOnRemove();
                 return;
             } else {
-				//System.out.println("Testing remove internal component");
+				//TraceManager.addDev("Testing remove internal component");
                 if (t.removeInternalComponent(tgc)) {
-					//System.out.println("Remove internal component");
+					//TraceManager.addDev("Remove internal component");
                     removeConnectors(tgc);
                     return;
                 }
@@ -1951,7 +1951,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
     
     public void removeOneConnector(TGConnectingPoint cp) {
-		//System.out.println("Remove one connector");
+		//TraceManager.addDev("Remove one connector");
         TGConnector tgcon;
         TGComponent t;
         int j, k;
@@ -1978,14 +1978,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         // copy
         String clone = mgui.gtm.makeXMLFromComponentOfADiagram(this, _tgc, getMaxIdSelected(), _tgc.getX(), _tgc.getY());
         
-        //System.out.println("clone=\n"+ clone);
+        //TraceManager.addDev("clone=\n"+ clone);
         
         // paste
         
         try {
             mgui.gtm.copyModelingFromXML(this, clone, _tgc.getX() + 50, _tgc.getY() + 25);
         } catch (MalformedModelingException mme) {
-            System.out.println("Clone Exception: " + mme.getMessage());
+            TraceManager.addDev("Clone Exception: " + mme.getMessage());
             JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
         }
         bringToBack(_tgc);
@@ -2134,7 +2134,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         TGConnector tgcon = getNextTGConnector(tgc, index);
         
         if (tgcon == null) {
-            //System.out.println("TGCon is null");
+            //TraceManager.addDev("TGCon is null");
             return null; 
         }
         
@@ -2153,7 +2153,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         pt1 = tgc.getNextTGConnectingPoint(index);
         
         if (pt1 == null) {
-            //System.out.println("pt1 is null");
+            //TraceManager.addDev("pt1 is null");
             return null;
         }
         
@@ -2909,7 +2909,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             o = (TGComponent)(iterator.next());
             if (o instanceof Requirement) {
                 req = (Requirement)o;
-                //System.out.println("analysing s = " + s + " vs " + req.getRequirementName());
+                //TraceManager.addDev("analysing s = " + s + " vs " + req.getRequirementName());
                 if (req.getRequirementName().compareTo(s) == 0) {               
                     return false;
                 }
@@ -2949,9 +2949,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     tgc2 = (TGComponent)(componentList.get(j));
                     tgc2 = tgc2.getIfId(tgc1.getId());
                     if (tgc2 != null) {
-                        System.out.println("*** Same ID ***");
-                        System.out.println("tgc1" + tgc1.getClass());
-                        System.out.println("tgc2" + tgc2.getClass());
+                        TraceManager.addDev("*** Same ID ***");
+                        TraceManager.addDev("tgc1" + tgc1.getClass());
+                        TraceManager.addDev("tgc2" + tgc2.getClass());
                     }
                 }
             }
@@ -3036,7 +3036,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         Iterator iterator = componentList.listIterator();
         int j;
         
-        //System.out.println("Checking " + ta);
+        //TraceManager.addDev("Checking " + ta);
         
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
@@ -3046,12 +3046,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 ttwoattrib = tgso.getSynchroGateList().getGates();
                 for(j=0; j<ttwoattrib.size(); j++) {
                     tt = (TTwoAttributes)(ttwoattrib.elementAt(j));
-                    //System.out.println("tt= " + tt);
+                    //TraceManager.addDev("tt= " + tt);
                     if ((tt.ta1 == ta) || (tt.ta2 == ta)) {
-                        //System.out.println("true");
+                        //TraceManager.addDev("true");
                         return true;
                     }
-                    //System.out.println("false!");
+                    //TraceManager.addDev("false!");
                 }
             }
         }
@@ -3148,7 +3148,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int y = getRealMinY();
         w = getRealMaxX() - x;
         h = getRealMaxY() - y;
-        //System.out.println("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
+        //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
         x = x - 5;
         y = y -5;
         w = w + 10;
@@ -3159,7 +3159,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         y = Math.max(5, y);
         w = Math.min(w, getWidth() - x);
         h = Math.min(h, getHeight() - y);
-        //System.out.println("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
+        //TraceManager.addDev("x=" + x + " y=" + y + " w=" + w + " h=" + h + " getWidth = " + this.getWidth() + " getHeight = " + this.getHeight());
         image = image.getSubimage(x, y, w, h);
         g.dispose();
         draw = b;
@@ -3191,7 +3191,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             cur = tgc.getCurrentMinX();
-            //System.out.println("cur=" + cur + " res=" + res + " tgc=" + tgc.getName());
+            //TraceManager.addDev("cur=" + cur + " res=" + res + " tgc=" + tgc.getName());
             if (cur < res)
                 res = cur;
         }
@@ -3336,7 +3336,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		
 		int i, j;
 		
-		//System.out.println("Autoconnect");
+		//TraceManager.addDev("Autoconnect");
 		
 		Vector listPoint = new Vector();
 		
@@ -3388,7 +3388,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 					}
 				}
 				if (found != null) {
-					//System.out.println("Adding connector");
+					//TraceManager.addDev("Adding connector");
 					if (found.isIn()) {
 						tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(), added.getDefaultConnector(), this, tgcp, found, listPoint);
 					} else {
@@ -3397,11 +3397,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 					found.setFree(false);
 					tgcp.setFree(false);
 					componentList.add(tgco);
-					//System.out.println("Connector added");
+					//TraceManager.addDev("Connector added");
 				}
 			}
 		}
-		//System.out.println("End Autoconnect");
+		//TraceManager.addDev("End Autoconnect");
 	}
 	
 	public void resetAllDIPLOIDs() {

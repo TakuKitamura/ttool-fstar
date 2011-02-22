@@ -97,7 +97,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos; 
 	//outputs, cpuPanel; // from MGUI
-	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
+	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo, executeEmptyTransition, executeStateEntering;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
@@ -307,16 +307,16 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		mainpanel.add(jp, BorderLayout.NORTH);
 		
 		
-		GridBagLayout gridbag02 = new GridBagLayout();
-		GridBagConstraints c02 = new GridBagConstraints();
-		mainTop = new JPanel(gridbag02);
+		//GridBagLayout gridbag02 = new GridBagLayout();
+		//GridBagConstraints c02 = new GridBagConstraints();
+		//mainTop = new JPanel(gridbag02);
 		//mainTop.setPreferredSize(new Dimension(800, 375));
-		c02.gridheight = 1;
-		c02.weighty = 1.0;
-		c02.weightx = 1.0;
-		c02.gridwidth = 1; 
-		c02.fill = GridBagConstraints.BOTH;
-		c02.gridheight = 1;
+		//c02.gridheight = 1;
+		//c02.weighty = 1.0;
+		//c02.weightx = 1.0;
+		//c02.gridwidth = 1; 
+		//c02.fill = GridBagConstraints.BOTH;
+		//c02.gridheight = 1;
 		
 		// Ouput SD
 		/*jta = new ScrolledJTextArea();
@@ -347,10 +347,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
 		lowerPartPanel.add(jsp, BorderLayout.CENTER);
 	
-		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, lowerPartPanel);
-		split.setResizeWeight(0.5);
-		//split.setBackground(ColorManager.InteractiveSimulationBackground);
-		mainpanel.add(split, BorderLayout.CENTER);
+
 		
 		// Commands
 		commands = new JPanel(new BorderLayout());
@@ -359,7 +356,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
 		
 		
-		mainTop.add(commands, c02);
+
 		
 		commandTab = new JTabbedPane();
 		commands.add(commandTab, BorderLayout.CENTER);
@@ -468,8 +465,19 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		infos.setPreferredSize(new Dimension(300, 200));
 		//infos.setPreferredSize(new Dimension(400, 450));
 		infos.setBorder(new javax.swing.border.TitledBorder("Simulation information"));
-		c02.gridwidth = GridBagConstraints.REMAINDER; //end row
-		mainTop.add(infos, c02);
+		
+		
+		// Main panels
+		//mainTop.add(infos, c02);
+		//mainTop.add(commands, c02);
+		JSplitPane mainTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, commands, infos);
+		mainTop.setResizeWeight(0.5);
+		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mainTop, lowerPartPanel);
+		split.setResizeWeight(0.5);
+		mainpanel.add(split, BorderLayout.CENTER);
+		
+		//c02.gridwidth = GridBagConstraints.REMAINDER; //end row
+		
 		
 		infoTab = new JTabbedPane();
 		infoTab.setPreferredSize(new Dimension(300, 200));
@@ -538,6 +546,18 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		animate.addItemListener(this);
 		animate.setSelected(true);
+		
+		executeEmptyTransition = new JCheckBox("Automatically execute empty transitions");
+		jp01.add(executeEmptyTransition, c01);
+		executeEmptyTransition.setSelected(true);
+		executeEmptyTransition.addItemListener(this);
+		ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
+		
+		executeStateEntering = new JCheckBox("Automatically enter states");
+		jp01.add(executeStateEntering, c01);
+		executeStateEntering.setSelected(true);
+		executeStateEntering.addItemListener(this);
+		ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
 		
 		
 		TableSorter sorterPI;
@@ -738,8 +758,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void setMode(int _mode) {
 		busyMode = _mode;
-		TraceManager.addDev("****************** mode set to " + busyMode);
-		TraceManager.addDev("# of Pending transactions: " + ass.getPendingTransitions().size());
+		//TraceManager.addDev("****************** mode set to " + busyMode);
+		//TraceManager.addDev("# of Pending transactions: " + ass.getPendingTransitions().size());
 		setAll();
 		
 		
@@ -1011,10 +1031,15 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void valueChanged(ListSelectionEvent e) {
 		int index = listPendingTransactions.getSelectedIndex();
+		//TraceManager.addDev("Selected index = " +  index);
 		if (index > -1) {
 			try {
 				AvatarSimulationPendingTransaction aspt = (AvatarSimulationPendingTransaction)(listPendingTransactions.getSelectedValue());
 				selectedComponentForTransaction = (TGComponent)(aspt.elementToExecute.getReferenceObject());
+				if ((selectedComponentForTransaction == null) && (aspt.linkedTransaction != null)) {
+					//TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
+					selectedComponentForTransaction = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
+				}
 				if (!(busyMode == AvatarSpecificationSimulation.RUNNING)) {
 					ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
 				}
@@ -1025,6 +1050,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 					}
 				}
 			} catch (Exception ex){
+				TraceManager.addDev("Exception selected component");
 				selectedComponentForTransaction = null;
 				if (previousBlock != null) {
 					mgui.openAVATARSMD(previousBlock.getName());
@@ -1049,9 +1075,12 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			openDiagram.setEnabled(animate.isSelected());
 		} else if (e.getSource() == diploids) {
 			mgui.setAVATARIDs(diploids.isSelected());
-		} /*else if (e.getSource() == animateWithInfo) {
-			mgui.setTransationProgression(animateWithInfo.isSelected());
-		}*/
+		} else if (e.getSource() == executeEmptyTransition) {
+			ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
+		} else if (e.getSource() == executeStateEntering) {
+			ass.setExecuteStateEntering(executeStateEntering.isSelected());
+		} 
+		
 	}
 	
 	public void windowClosing(WindowEvent e) {

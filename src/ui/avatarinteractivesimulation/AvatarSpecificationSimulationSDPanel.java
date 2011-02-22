@@ -204,7 +204,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
 		
 		if (allTransactions.size() > 0) {
-			ast = allTransactions.get(0);
+			ast = allTransactions.get(Math.max(0, allTransactions.size()-1000));
 			clockValue = ast.clockValueWhenFinished-ast.duration;
 			clockValueMouse = clockValue;
 			g.drawString("@" + clockValue, 10, currentY+g.getFontMetrics().getHeight()/2); 

@@ -350,7 +350,7 @@ public class AvatarBlock extends AvatarElement {
 				addSignal(new AvatarSignal("expire__" + aa.getName(), AvatarSignal.IN, aa.getReferenceObject()));
 				
 				// Create a timer block, and connect signals
-				AvatarBlock ab = AvatarBlockTemplate.getTimerBlock("Timer__" + aa.getName(), getReferenceObject());
+				AvatarBlock ab = AvatarBlockTemplate.getTimerBlock("Timer__" + aa.getName(), getReferenceObject(), null, null, null);
 				_addedBlocks.add(ab);
 				
 				AvatarRelation ar;

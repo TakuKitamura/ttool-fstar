@@ -79,12 +79,18 @@ public class AvatarSpecificationSimulation  {
 	private int nbOfCommands = -1; // means: until it blocks
 	private int indexSelectedTransaction = -1;
 	
+	private boolean executeEmptyTransition;
+	private boolean executeStateEntering;
+	private boolean silentTransactionExecuted;
+	
 	private IntExpressionEvaluator iee;
 	
     public AvatarSpecificationSimulation(AvatarSpecification _avspec, AvatarSimulationInteraction _asi) {
         avspec = _avspec;
 		asi = _asi;
 		iee = new IntExpressionEvaluator();
+		executeEmptyTransition = true;
+		executeStateEntering = true;
     }
 	
 	public AvatarSpecification getAvatarSpecification() {
@@ -172,11 +178,14 @@ public class AvatarSpecificationSimulation  {
 							setMode(RUNNING);
 						}
 					} else if (nbOfCommands == 0) {
-						stopSimulation();
-						stopSimulation(go);
+						if (getSilentTransactionToExecute(pendingTransactions) == null) {
+							stopSimulation();
+							stopSimulation(go);
+						}
 					}
 					
 					if (!killed) {
+						silentTransactionExecuted = false;
 						selectedTransactions = selectTransactions(pendingTransactions);
 						
 						if (selectedTransactions.size() == 0) {
@@ -186,7 +195,9 @@ public class AvatarSpecificationSimulation  {
 							//TraceManager.addDev("* * * * * Nb of selected transactions: " + selectedTransactions.size());
 							go = performSelectedTransactions(selectedTransactions);
 							//TraceManager.addDev("NbOfcommands=" + nbOfCommands);
-							nbOfCommands --;
+							if (!silentTransactionExecuted) {
+								nbOfCommands --;
+							}
 							if (asi != null) {
 								asi.updateTransactionAndTime(allTransactions.size(), clockValue);
 							}
@@ -424,12 +435,96 @@ public class AvatarSpecificationSimulation  {
 		return cpt;
 	}
 	
+	public AvatarSimulationPendingTransaction getSilentTransactionToExecute(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		if(!executeEmptyTransition && !executeStateEntering) {
+			return null;
+		}
+		
+		if (_pendingTransactions.size() == 0) {
+			return null;
+		}
+		
+		for(AvatarSimulationPendingTransaction tr: _pendingTransactions) {
+			
+			// Empty transition?
+			if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
+				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
+				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+						return tr;
+					}
+				}
+			// State entering?
+			} else if ((tr.elementToExecute instanceof AvatarState) && (executeStateEntering)) {
+				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+					return tr;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public AvatarSimulationPendingTransaction getRandomSilentTransactionToExecute(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		if(!executeEmptyTransition && !executeStateEntering) {
+			return null;
+		}
+		
+		if (_pendingTransactions.size() == 0) {
+			return null;
+		}
+		
+		int index = (int)(Math.floor(Math.random()*_pendingTransactions.size()));
+		
+		AvatarSimulationPendingTransaction tr;
+		for(int i=0; i<_pendingTransactions.size(); i++) {
+			tr = _pendingTransactions.get((i+index)%pendingTransactions.size());
+			// Empty transition?
+			if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
+				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
+				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+						return tr;
+					}
+				}
+			// State entering?
+			} else if ((tr.elementToExecute instanceof AvatarState) && (executeStateEntering)) {
+				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+					return tr;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public int nbOfTransactions(AvatarSimulationBlock _asb, Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		int cpt = 0;
+		for(AvatarSimulationPendingTransaction tr: _pendingTransactions) {
+			if (tr.asb == _asb) {
+				cpt ++;
+			}
+		}
+		return cpt;
+	}
+	
+	
+	
+	
 	public Vector<AvatarSimulationPendingTransaction> selectTransactions(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
 		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 		
+		// Silent transition ?
+		AvatarSimulationPendingTransaction tr = getRandomSilentTransactionToExecute(_pendingTransactions);
+		if (tr != null) {
+			ll.add(tr);
+			indexSelectedTransaction = -1;
+			silentTransactionExecuted = true;
+			return ll;
+		}
+		
 		// Put in ll the first possible logical transaction which is met
 		// Random select the first index if none has been selected
-		
 		if (indexSelectedTransaction == -1) {
 			//TraceManager.addDev("No transition selected");
 			indexSelectedTransaction = (int)(Math.floor(Math.random()*_pendingTransactions.size()));
@@ -566,7 +661,7 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public synchronized void stopSimulation() {
-		TraceManager.addDev("Ask for simulation stop");
+		//TraceManager.addDev("Ask for simulation stop");
 		notifyAll();
 		stopped = true;
 	}
@@ -601,7 +696,7 @@ public class AvatarSpecificationSimulation  {
 	public void stopSimulation(boolean _go) {
 		setMode(STOPPED);
 		unsetNbOfCommands();
-		TraceManager.addDev("Simulation stopped at time: " + clockValue + "\n--------------------------------------");
+		//TraceManager.addDev("Simulation stopped at time: " + clockValue + "\n--------------------------------------");
 		waitForUnstopped();
 		if (_go && !killed) {
 			setMode(RUNNING);
@@ -617,8 +712,16 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public void setIndexSelectedTransaction(int _index) {
-		TraceManager.addDev("Selected transition: " + _index);
+		//TraceManager.addDev("Selected transition: " + _index);
 		indexSelectedTransaction = _index;
+	}
+	
+	public void setExecuteEmptyTransition(boolean _b) {
+		executeEmptyTransition = _b;
+	}
+	
+	public void setExecuteStateEntering(boolean _b) {
+		executeStateEntering = _b;
 	}
 
 }

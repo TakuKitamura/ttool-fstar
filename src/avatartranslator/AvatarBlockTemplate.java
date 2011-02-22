@@ -56,19 +56,19 @@ public class AvatarBlockTemplate  {
     public AvatarBlockTemplate() {
     }
 	
-	public static AvatarBlock getTimerBlock(String _name, Object _reference) {
-		AvatarBlock ab = new AvatarBlock(_name, _reference);
+	public static AvatarBlock getTimerBlock(String _name, Object _referenceBlock, Object _referenceSet, Object _referenceExpire, Object _referenceReset) {
+		AvatarBlock ab = new AvatarBlock(_name, _referenceBlock);
 		
-		AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _reference);
+		AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _referenceBlock);
 		ab.addAttribute(aa2);
-		AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, _reference);
+		AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, _referenceBlock);
 		ab.addAttribute(aa);
-		AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _reference);
+		AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _referenceBlock);
 		ab.addAttribute(aa1);
 		
-		AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _reference);
-		AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _reference);
-		AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _reference);
+		AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _referenceBlock);
+		AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _referenceBlock);
+		AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _referenceBlock);
 		AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER,  aa.getReferenceObject());
 		set.addParameter(val);
 		ab.addSignal(set);
@@ -76,55 +76,55 @@ public class AvatarBlockTemplate  {
 		ab.addSignal(expire);
 		
 		AvatarStateMachine asm = ab.getStateMachine();
-		AvatarStartState ass = new AvatarStartState("start", _reference);
+		AvatarStartState ass = new AvatarStartState("start", _referenceBlock);
 		
 		asm.setStartState(ass);
 		asm.addElement(ass);
 		
-		AvatarState as1 = new AvatarState("wait4set", _reference);
+		AvatarState as1 = new AvatarState("wait4set", _referenceBlock);
 		asm.addElement(as1);
 		
-		AvatarState as2 = new AvatarState("wait4expire", _reference);
+		AvatarState as2 = new AvatarState("wait4expire", _referenceBlock);
 		asm.addElement(as2);
 		
-		AvatarActionOnSignal aaos1 = new AvatarActionOnSignal("set1", set, _reference);
+		AvatarActionOnSignal aaos1 = new AvatarActionOnSignal("set1", set, _referenceSet);
 		aaos1.addValue("value");
 		asm.addElement(aaos1);
 		
-		AvatarActionOnSignal aaos2 = new AvatarActionOnSignal("set2", set, _reference);
+		AvatarActionOnSignal aaos2 = new AvatarActionOnSignal("set2", set, _referenceSet);
 		aaos2.addValue("value");
 		asm.addElement(aaos2);
 		
-		AvatarActionOnSignal aaos3 = new AvatarActionOnSignal("reset1", reset, _reference);
+		AvatarActionOnSignal aaos3 = new AvatarActionOnSignal("reset1", reset, _referenceReset);
 		asm.addElement(aaos3);
 		
-		AvatarActionOnSignal aaos4 = new AvatarActionOnSignal("reset2", reset, _reference);
+		AvatarActionOnSignal aaos4 = new AvatarActionOnSignal("reset2", reset, _referenceReset);
 		asm.addElement(aaos4);
 		
-		AvatarActionOnSignal aaos5 = new AvatarActionOnSignal("expire", expire, _reference);
+		AvatarActionOnSignal aaos5 = new AvatarActionOnSignal("expire", expire, _referenceExpire);
 		asm.addElement(aaos5);
 		
 		AvatarTransition at;
 		
 		// set
-		at = makeAvatarEmptyTransitionBetween(asm, ass, as1, _reference);
-		at = makeAvatarEmptyTransitionBetween(asm, as1, aaos1, _reference);
-		at = makeAvatarEmptyTransitionBetween(asm, aaos1, as2, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, ass, as1, _referenceBlock);
+		at = makeAvatarEmptyTransitionBetween(asm, as1, aaos1, _referenceBlock);
+		at = makeAvatarEmptyTransitionBetween(asm, aaos1, as2, _referenceBlock);
 		
-		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos2, _reference);
-		at = makeAvatarEmptyTransitionBetween(asm, aaos2, as2, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos2, _referenceBlock);
+		at = makeAvatarEmptyTransitionBetween(asm, aaos2, as2, _referenceBlock);
 		
 		// expire
-		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos5, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos5, _referenceBlock);
 		at.setDelays("value", "value");
-		at = makeAvatarEmptyTransitionBetween(asm, aaos5, as1, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, aaos5, as1, _referenceBlock);
 		
 		// reset
-		at = makeAvatarEmptyTransitionBetween(asm, as1, aaos3, _reference);
-		at = makeAvatarEmptyTransitionBetween(asm, aaos3, as1, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, as1, aaos3, _referenceBlock);
+		at = makeAvatarEmptyTransitionBetween(asm, aaos3, as1, _referenceBlock);
 		
-		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos4, _reference);
-		at = makeAvatarEmptyTransitionBetween(asm, aaos4, as1, _reference);
+		at = makeAvatarEmptyTransitionBetween(asm, as2, aaos4, _referenceBlock);
+		at = makeAvatarEmptyTransitionBetween(asm, aaos4, as1, _referenceBlock);
 		
 		
 		return ab;
