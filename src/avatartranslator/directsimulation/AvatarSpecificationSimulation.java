@@ -451,12 +451,14 @@ public class AvatarSpecificationSimulation  {
 				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
 				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
 					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+						tr.isSilent = true;
 						return tr;
 					}
 				}
 			// State entering?
 			} else if ((tr.elementToExecute instanceof AvatarState) && (executeStateEntering)) {
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+					tr.isSilent = true;
 					return tr;
 				}
 			}
@@ -615,28 +617,40 @@ public class AvatarSpecificationSimulation  {
 	
 	public void postExecutedTransaction(AvatarSimulationPendingTransaction _aspt) {
 		clockValue = _aspt.clockValueAtEnd;
-		// Time transition?
-		/*if (_aspt.hasClock) {
-			clockValue = _aspt.clockValueAtEnd;
-			// Must set the elapsed time to all blocks having a time transition
-			// Must reset the elapsed time to other blocks
-			/*boolean found;
-			for(AvatarSimulationBlock asb: blocks) {
-				found = false;
-				for(AvatarSimulationPendingTransaction 	aspt1: pendingTimedTransactions) {
-					if (aspt1.asb == asb) {
-						found = true;
-						break;
-					}
-				}
-				if (found) {
-					asb.addElapsedTime(_aspt.selectedDuration);
-				} else {
-					asb.resetElapsedTime();
-				}
-				
-			}
-		}*/
+	}
+	
+	public synchronized void backOneTransaction(boolean _ignoredSilent) {
+		if (mode != STOPPED) {
+			return;
+		}
+		
+		if (allTransactions.size() == 0) {
+			return;
+		}
+		
+		// Remove one transaction
+		// Getting last transaction
+		AvatarSimulationTransaction ast = allTransactions.get(allTransactions.size()-1);
+		allTransactions.removeElementAt(allTransactions.size()-1);
+		
+		if (ast.asb != null) {
+			ast.asb.removeLastTransaction(ast);
+		}
+		
+		// Must handle asynchronous messages
+		if (ast.receivedMessage != null) {
+			asynchronousMessages.add(0, ast.receivedMessage);
+		}
+		
+		if (ast.sentMessage != null) {
+			asynchronousMessages.remove(ast.sentMessage);
+		}
+		
+		if ((ast.silent) && (!_ignoredSilent)) {
+			backOneTransaction(_ignoredSilent);
+		}
+		
+		gatherPendingTransactions();
 	}
 	
 	public void printExecutedTransactions() {

@@ -297,6 +297,9 @@ public class AvatarSimulationBlock  {
 		ast.duration = 0;
 		ast.id = ast.setID();
 		if (_aspt != null) {
+			ast.silent = _aspt.isSilent;
+		}
+		if (_aspt != null) {
 			_aspt.clockValueAtEnd = _clockValue;
 			if (_aspt.hasClock) {
 				if(_aspt.hasElapsedTime) {
@@ -423,6 +426,7 @@ public class AvatarSimulationBlock  {
 							// Asynchronous Sending
 							String myAction = "";
 							_aspt.linkedAsynchronousMessage.firstTransaction = ast;
+							ast.sentMessage = _aspt.linkedAsynchronousMessage;
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								value = aaos.getValue(i);
 								// Must get the type of the value
@@ -451,6 +455,7 @@ public class AvatarSimulationBlock  {
 							// Asynchronous Receiving 
 							String myAction = "";
 							ast.linkedTransaction = _aspt.linkedAsynchronousMessage.firstTransaction;
+							ast.receivedMessage = _aspt.linkedAsynchronousMessage;
 							if (_aspt.linkedAsynchronousMessage.firstTransaction == null) {
 								TraceManager.addDev("NULL FIRST TRANSACTION !!!");
 							}
@@ -583,6 +588,13 @@ public class AvatarSimulationBlock  {
 		transactions.add(_ast);
 		lastTransaction = _ast;
 		_allTransactions.add(_ast);
+	}
+	
+	public void removeLastTransaction(AvatarSimulationTransaction _ast) {
+		if (lastTransaction == _ast) {
+			transactions.removeElementAt(transactions.size()-1);
+			lastTransaction = transactions.get(transactions.size()-1);
+		}
 	}
 	
 	public AvatarStateMachineElement getCurrentAvatarElement() {

@@ -66,10 +66,21 @@ public class AvatarSimulationTransaction  {
 	public long duration;
 	public long clockValueWhenFinished;
 	public long id;
+	
+	// Indicates whether the transaction is a silent transaction, or not
+	// Silent means that the transaction was automatically selecteed by the simulator ->
+	// not assumed to be part of RG or state comparison computation
+	public boolean silent;
+	
+	
 	public Vector<String> attributeValues;
 	public Vector<String> actions;
+	
 	public int x,y; // for graphical representation only
 	public long stamp;
+	
+	public AvatarSimulationAsynchronousTransaction sentMessage;
+	public AvatarSimulationAsynchronousTransaction receivedMessage;
 	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;
@@ -95,7 +106,11 @@ public class AvatarSimulationTransaction  {
 	}
 	
 	public String toString() {
-		String res = "" + id + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName() + "\nattributes=";
+		String res = "" + id + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName();
+		if (silent) {
+			 res += " (silent)";
+		}
+		res += "\nattributes=";
 		for(String s: attributeValues) {
 			res += s + " ";
 		}

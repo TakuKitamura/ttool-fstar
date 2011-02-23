@@ -82,6 +82,11 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU]);
         button.addMouseListener(jfais.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE]);
+        button.addMouseListener(jfais.mouseHandler);
         
 		this.addSeparator();
 		
@@ -90,6 +95,8 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU]);
         button.addMouseListener(jfais.mouseHandler);
+		
+		
 		
 		this.addSeparator();
 		

@@ -85,6 +85,9 @@ public class AvatarSimulationPendingTransaction  {
 	public boolean durationOnCurrent;
 	public boolean durationOnOther;
 	
+	// silent
+	public boolean isSilent;
+	
 	
 	
     public AvatarSimulationPendingTransaction() {

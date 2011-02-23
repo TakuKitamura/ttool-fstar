@@ -58,6 +58,7 @@ public class AvatarSimulationAsynchronousTransaction  {
     private AvatarRelation relation;
 	private int index;
 	public AvatarSimulationTransaction firstTransaction;
+	//public AvatarSimulationTransaction receivedTransaction;
 	
     public AvatarSimulationAsynchronousTransaction(AvatarRelation _ar, int _index) {
 		relation = _ar;
