@@ -723,6 +723,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		ass.killSimulation();
 	}
 	
+	public void backwardOneTransaction() {
+		ass.backOneTransaction(true);
+	}
+	
 	
 	public void mouseClicked(MouseEvent e) {}
 	
@@ -1010,6 +1014,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand()))  {
 			stopSimulation();
+			//TraceManager.addDev("Start simulation!");
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].getActionCommand()))  {
+			backwardOneTransaction();
 			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand()))  {
 			resetSimulation();
