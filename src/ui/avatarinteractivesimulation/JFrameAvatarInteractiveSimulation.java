@@ -724,7 +724,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void backwardOneTransaction() {
-		ass.backOneTransaction(true);
+		ass.backOneTransaction(true); 
 	}
 	
 	
