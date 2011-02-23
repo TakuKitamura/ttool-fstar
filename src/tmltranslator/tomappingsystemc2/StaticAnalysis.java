@@ -49,12 +49,12 @@ public class StaticAnalysis{
 	}
 
 	public void addDepChannel(int iID){
-		System.out.println("Add Dependent Channel: " + iID);
+		//System.out.println("Add Dependent Channel: " + iID);
 		_depChannels.add(iID);
 	}
 
 	public boolean isChannelDep(int iID){
-		System.out.println("Check if Channel dep: " + iID + " answer: "  + _depChannels.contains(iID));
+		//System.out.println("Check if Channel dep: " + iID + " answer: "  + _depChannels.contains(iID));
 		return _depChannels.contains(iID);
 	}
 
@@ -258,9 +258,11 @@ public class StaticAnalysis{
 					aConstChange |= aLiveNode.determineIfConstant();
 			}while(aConstChange>1);
 
-			/*for(LiveVariableNode aLiveNode: liveNodes){
+			/*System.out.println("-----------------new step------------");
+			for(LiveVariableNode aLiveNode: liveNodes){
 				aLiveNode.printReachingEntries();
 				printLiveVarNode(aLiveNode);
+			
 			}*/
 
 			 
@@ -286,6 +288,7 @@ public class StaticAnalysis{
 			//aLiveNode.printReachingEntries();
 			//printLiveVarNode(aLiveNode);
 			if((aStatResult & 1)!=0){
+			//if(_task.getID()==3){
 				aLiveNode.printReachingEntries();
 				printLiveVarNode(aLiveNode);
 				aNbOfCandidates++;

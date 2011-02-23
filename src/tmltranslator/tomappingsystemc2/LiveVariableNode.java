@@ -297,45 +297,47 @@ public class LiveVariableNode{
 		//if (_linkedElem!=null && (_linkedElem instanceof TMLRandom || _linkedElem instanceof TMLWaitEvent || _linkedElem instanceof TMLNotifiedEvent || _linkedElem instanceof TMLSelectEvt)) return false;
 		if (_isConstant) return 0;
 		_valid=false;
-		int[] aReachingDefForVar= new int[_analysis.getBytesForDefs()];
 		//boolean aIsConst=true;
-		int aResult;
-		if (_constantStuckToFalse) aResult=0; else aResult=2;
+		int aResult=0;
+		if (!_constantStuckToFalse){
+			int[] aReachingDefForVar= new int[_analysis.getBytesForDefs()];
+			aResult=2;
 		//System.out.println("!!!!Checking if  " + getStatementDescr() + " is constant");
-		for (int bytes=0; bytes<_useVars.length; bytes++){
-			for (int bits=0; bits<32;bits++){
-				if ((_useVars[bytes] & (1<< bits))!=0){
-					//System.out.println("var " + ((bytes << 5)|bits) + " is used  usevars:" + _useVars[bytes]);
-					//System.out.println("Reached by definitions: ");
-					//printDefList(_inDefs);
-					for (int i=0; i<_analysis.getBytesForDefs();i++){
-						aReachingDefForVar[i] = _analysis.getDefsForVar()[(bytes << 5)|bits][i] & _inDefs[i];
-					}
-					//aIsConst &= allDefsConstant(aReachingDefForVar);
-					if(allDefsConstantAndEqual(aReachingDefForVar)){
-						//toggle bit no [bits] = set it to zero as it is one
-						_useVars[bytes]^= (1<< bits);
-						//System.out.println("*** " + getStatementDescr() + "toggle bit " + ((bytes << 5)|bits) + "***");
-						//_inVars[bytes] = _useVars[bytes] & _defNegVars[bytes];
-						//_inVars[bytes] = _useVars[bytes] & (~_defVars[bytes]);  NEW!!!!!!!
-						aResult |= 1;   //set bit 2^0
-					}else{
-						//System.out.println("not all defs constant for variable " + ((bytes << 5)|bits));
-						//aIsConst=false;
-						aResult &= 1;  //del bit 2^1
+			for (int bytes=0; bytes<_useVars.length; bytes++){
+				for (int bits=0; bits<32;bits++){
+					if ((_useVars[bytes] & (1<< bits))!=0){
+						//System.out.println("var " + ((bytes << 5)|bits) + " is used  usevars:" + _useVars[bytes]);
+						//System.out.println("Reached by definitions: ");
+						//printDefList(_inDefs);
+						for (int i=0; i<_analysis.getBytesForDefs();i++){
+							aReachingDefForVar[i] = _analysis.getDefsForVar()[(bytes << 5)|bits][i] & _inDefs[i];
+						}
+						//aIsConst &= allDefsConstant(aReachingDefForVar);
+						if(allDefsConstantAndEqual(aReachingDefForVar)){
+							//toggle bit no [bits] = set it to zero as it is one
+							_useVars[bytes]^= (1<< bits);
+							//System.out.println("*** " + getStatementDescr() + "toggle bit " + ((bytes << 5)|bits) + "***");
+							//_inVars[bytes] = _useVars[bytes] & _defNegVars[bytes];
+							//_inVars[bytes] = _useVars[bytes] & (~_defVars[bytes]);  NEW!!!!!!!
+							aResult |= 1;   //set bit 2^0
+						}else{
+							//System.out.println("not all defs constant for variable " + ((bytes << 5)|bits));
+							//aIsConst=false;
+							aResult &= 1;  //del bit 2^1
+						}
 					}
 				}
 			}
-		}
-		_isConstant = ((aResult & 2)!=0);
-		if (_isConstant && !(_lhs==null ||_lhs.isEmpty())){
-			_unrolledExpr+= "xx_xx=" + _rhs + ";";
-			//try{
-				_exprValue = evaluate(_unrolledExpr);
-				//System.out.println("Expr: *" + _unrolledExpr + "* evaluated to: " + _exprValue);
-			//}catch(IllegalArgumentException e){
-				//System.out.println("At lest one variable of the expression remains undefined: " + _rhs);
-			//}
+			_isConstant = ((aResult & 2)!=0);
+			if (_isConstant && !(_lhs==null ||_lhs.isEmpty())){
+				_unrolledExpr+= "xx_xx=" + _rhs + ";";
+				//try{
+					_exprValue = evaluate(_unrolledExpr);
+					//System.out.println("Expr: *" + _unrolledExpr + "* evaluated to: " + _exprValue);
+				//}catch(IllegalArgumentException e){
+					//System.out.println("At lest one variable of the expression remains undefined: " + _rhs);
+				//}
+			}
 		}
 		//boolean aChangeInResult = (_constantStuckToFalse)? false : aIsConst!= _isConstant;
 		//boolean aChangeInResult = (_constantStuckToFalse)? false : aIsConst;
@@ -651,12 +653,13 @@ public class LiveVariableNode{
 	}
 
 	public boolean isEmptyNode(){
-		if (_succList.size()>1) return false;
+		return false;
+		/*if (_succList.size()>1) return false;
 		for (int i=0; i<_defVars.length;i++)
 			if (_defVars[i]!=0) return false;
 		for (int i=0; i<_useVars.length;i++)
 			if (_useVars[i]!=0) return false;
-		return true;
+		return true;*/
 	}
 
 	public void setSuccessor(LiveVariableNode iSucc){
@@ -696,6 +699,11 @@ public class LiveVariableNode{
 	}
 
 	public String getLiveVariableString(){
+		/*System.out.print("Numbers: ");
+		for (int aPos=0; aPos<_outVars.length; aPos++){
+			System.out.print(Integer.toHexString(_outVars[aPos]) + ", ");
+		}
+		System.out.println();*/
 		return intArrayToHexString(_outVars);
 	}
 	
@@ -714,11 +722,12 @@ public class LiveVariableNode{
 			int anItem = iArray[aPos];
 			for (int bytes=0; bytes<4; bytes++){
 			//for (int bits=0; bits<32; bits+=8)
-				aResult+= "\\x" + Integer.toHexString(anItem & 0xF);
+				aResult+= "\\x" + Integer.toHexString(anItem & 0xFF);
 				anItem >>>= 8;
 			}
 		}
 		aResult+="\"";
+		//System.out.println("String: " + aResult);
 		return aResult;
 	}
 	

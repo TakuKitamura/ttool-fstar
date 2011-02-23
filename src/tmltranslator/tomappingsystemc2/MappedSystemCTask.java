@@ -312,40 +312,45 @@ public class MappedSystemCTask {
 				functions += "0" + SCCR;
 		}
 		functions+= "}\n\n";
-		hcode += "void refreshStateHash(const char* iLiveVarList);\n";
+		/*hcode += "void refreshStateHash(const char* iLiveVarList);\n";
 		functions+= "void " + reference + "::refreshStateHash(const char* iLiveVarList){\n";
 		int aSeq=0;
-		functions += "_stateHash.init((HashValueType)_ID,30);\nif(iLiveVarList!=0){\n";
+		functions += "_stateHash.init((HashValueType)_ID,30);\nif(iLiveVarList!=0){\n";*/
+		hcode += "HashValueType getStateHash();\n";
+		functions+= "HashValueType " + reference + "::getStateHash(){\n";
+		int aSeq=0;
+		//functions += "if(_liveVarList!=0 && _hashInvalidated){\n";
+		functions += "if(_hashInvalidated){\n";
+		functions += "_hashInvalidated=false;\n_stateHash.init((HashValueType)_ID,30);\n";
 		for(TMLAttribute att: task.getAttributes()) {
-			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _stateHash.addValue(" + att.getName() + ");\n";
+			functions += "if ((_liveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _stateHash.addValue(" + att.getName() + ");\n";
+			//functions += "_stateHash.addValue(" + att.getName() + ");\n";
 			aSeq++;
 		}
 		int i=0;
 		//for channels: include hash only if performed action is blocking
 		//for events: include filling level for senders (notified possible), include parameters for readers (if parameters set)
 		for(TMLChannel ch: channels) {
-			//if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
-			if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "_channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "_channels[" + i +"]->setSignificance(this, " + "((_liveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			//if (ch.getType()==TMLChannel.BRBW || (ch.getType()==TMLChannel.BRNBW && ch.getDestinationTask()==task)) functions += "_channels[" + i +"]->setSignificance(this, true);\n";
+
 			aSeq++; i++;
 		}
 		for(TMLEvent evt: events) {
-			//if (evt.isBlocking() || evt.getDestinationTask()==task) functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
-			if (evt.isBlocking() || evt.getDestinationTask()==task) functions += " _channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			if (evt.isBlocking() || evt.getDestinationTask()==task) functions += " _channels[" + i +"]->setSignificance(this, " + "((_liveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			//if (evt.isBlocking() || evt.getDestinationTask()==task) functions += " _channels[" + i +"]->setSignificance(this, true);\n";
 			aSeq++; i++;
 		}
 		if (task.isRequested()){
-			//functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(&_stateHash);\n";
-			functions += " _channels[" + i +"]->setSignificance(this, " + "((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			functions += " _channels[" + i +"]->setSignificance(this, " + "((_liveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0));\n";
+			//functions += " _channels[" + i +"]->setSignificance(this, true);\n";
 		}
 		/*for(i=0; i< channels.size() + events.size() + (task.isRequested()? 1:0) ; i++){
 			functions += "if ((iLiveVarList[" + (aSeq >>> 3) + "] & " + (1 << (aSeq & 0x7)) + ")!=0) _channels[" + i +"]->getStateHash(iHash);\n";
 			aSeq++;
 		}*/
-		//functions += "_lastStateHash = iHash->getHash();\n";
-		//functions += "_commonExecution = false;\n";
-		functions += "}\n}\n\n";
-		//return anEvalFunc;
-		//functions+=_analysis.makeLiveVarEvalFunc()+ "}\n\n";
+		//functions += "}\n}\n\n";
+		functions += "}\nreturn _stateHash.getHash();\n}\n\n";
 	}
 
 	private String getFormattedLiveVarStr(TMLActivityElement currElem){
@@ -396,7 +401,7 @@ public class MappedSystemCTask {
 			cmdName= "_random" + currElem.getID();
 			TMLRandom random = (TMLRandom)currElem;
 			hcode+="TMLRandomCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+ currElem.getID() + ",this," + makeCommandRangeFunc(cmdName, random.getMinValue(), random.getMaxValue()) + ",&" + random.getVariable() + ")"+CR;
+			initCommand+= "," + cmdName + "("+ currElem.getID() + ",this," + makeCommandRangeFunc(cmdName, random.getMinValue(), random.getMaxValue()) + ",&" + random.getVariable() + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "));\n";
 			//functions+="void "+ reference + "::" + cmdName + "_func(ParamType& oMin, ParamType& oMax){\n oMin=" + modifyString(random.getMinValue()) + ";\noMax=" + modifyString(random.getMaxValue()) + SCCR;
 			//functions+= "}" + CR2;
@@ -427,14 +432,14 @@ public class MappedSystemCTask {
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				//System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_action" + currElem.getID();
 				idString=String.valueOf(currElem.getID());
 			}
 			hcode+="TMLActionCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func)"+CR;
+			initCommand+= "," + cmdName + "("+ idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) +  ")"+CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "));\n";
 			functions+="void "+ reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
 			//functions+="return 0"+ SCCR;
@@ -640,7 +645,7 @@ public class MappedSystemCTask {
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				//System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_choice" + currElem.getID();
@@ -717,7 +722,7 @@ public class MappedSystemCTask {
 			//	hcode+="TMLChoiceCommand " + cmdName + SCCR;
 			//else
 			hcode+="TMLRandomChoiceCommand " + cmdName + SCCR;
-			initCommand+= "," + cmdName + "("+ idString +",this,(RangeFuncPointer)&" + reference + "::" + cmdName + "_func," + noOfGuards + ")"+CR;
+			initCommand+= "," + cmdName + "("+ idString +",this,(RangeFuncPointer)&" + reference + "::" + cmdName + "_func," + noOfGuards + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			functions+="unsigned int "+ reference + "::" + cmdName + "_func(ParamType& oMin, ParamType& oMax){" + CR + code +CR+ "}" + CR2;
 			functionSig+="unsigned int " + cmdName + "_func(ParamType& oMin, ParamType& oMax)" + SCCR;
 					
