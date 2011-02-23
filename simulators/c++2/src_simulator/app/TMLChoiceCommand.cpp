@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SimComponents.h>
 #include <CommandListener.h>
 
-TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches /*, bool iNonDeterm*/):TMLCommand(iID, iTask, 1, iNbOfBranches, 0, false), _rangeFunc(iRangeFunc) {
+TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, iNbOfBranches, iLiveVarList, iCheckpoint), _rangeFunc(iRangeFunc) {
 }
 
 void TMLChoiceCommand::execute(){
@@ -63,6 +63,9 @@ TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 	}
 	TMLCommand* aNextCommand=getNextCommand();
 	_task->setCurrCommand(aNextCommand);
+#ifdef STATE_HASH_ENABLED
+	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+#endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
 #endif

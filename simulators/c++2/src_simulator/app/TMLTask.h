@@ -210,7 +210,7 @@ public:
 	/**
 	\return Current state hash
 	*/
-	HashValueType getStateHash();
+	virtual HashValueType getStateHash()=0;
 	/////Returns whether the current task state has been encountered before
 	////**
 	//\return Common execution flag
@@ -221,8 +221,8 @@ public:
 	//\param iCommonExecution Common execution flag
 	//*/
 	//void setCommonExecution(bool iCommonExecution);
-	virtual void refreshStateHash(const char* iLiveVarList)=0;
-	void addRawTransaction(TMLTransaction* iTrans);
+	void refreshStateHash(const char* iLiveVarList);
+	//void addRawTransaction(TMLTransaction* iTrans);
 	void schedule2TXT(std::ostream& myfile) const;
 protected:
 	///ID of the task
@@ -278,6 +278,8 @@ protected:
 	/////Flag indicating whether the task state has been encoutered before
 	//bool _commonExecution;
 	HashAlgo _stateHash;
+	const char* _liveVarList;
+	bool _hashInvalidated;
 };
 
 #endif

@@ -1222,6 +1222,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 		ID aLastID;
 		bool aSimTerminated=false;
 		IndeterminismSource* aRandomCmd;
+		//std::cout << "====================\n";
 		do{
 			//aSimTerminated=runToNextBreakpoint(aLastTrans);
 			aSimTerminated=runToNextRandomCommand(aLastTrans);
@@ -1279,7 +1280,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 			//13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
 			//iFile << aLastID << " -> " << aLastID << " [label = \"i\"]\n";
 			
-			ID aNewID = TMLTransaction::getID();
+			/*ID aNewID = TMLTransaction::getID();
 			TMLTransaction::incID();
 			iFile << aLastID << " -> " << aNewID << " [label = \"option\"]\n";
 			std::stringstream aStreamBuffer;
@@ -1288,8 +1289,8 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 			aStringBuffer=aStreamBuffer.str();
 			_simComp->reset();
 			aStreamBuffer.str(aStringBuffer);
-			_simComp->readObject(aStreamBuffer);
-			exploreTree(iDepth, aNewID, iFile/*, iFile2*/);
+			_simComp->readObject(aStreamBuffer);*/
+			//exploreTree(iDepth, aNewID, iFile/*, iFile2*/);
 		}	
 	}
 }

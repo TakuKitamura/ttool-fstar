@@ -55,7 +55,7 @@ public:
       	\param iTask Pointer to the task the command belongs to
 	\param iActionFunc Member function pointer to the action function
     	*/
-	TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc);
+	TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;

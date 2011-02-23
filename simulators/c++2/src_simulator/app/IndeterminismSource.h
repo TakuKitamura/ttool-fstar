@@ -40,6 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef IndeterminismSourceH
 #define IndeterminismSourceH
+#include <definitions.h>
 
 class IndeterminismSource{
 	public:
@@ -48,6 +49,7 @@ class IndeterminismSource{
 		virtual unsigned int getRandomRange()=0;
 		virtual void setRandomValue(unsigned int iValue){
 			_randomValue=iValue;
+			//std::cout << "Random value by sim" << _randomValue << "\n";
 		}
 	protected:
 		mutable unsigned int _randomValue;

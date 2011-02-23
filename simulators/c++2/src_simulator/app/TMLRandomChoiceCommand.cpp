@@ -43,18 +43,19 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <TMLTask.h>
 
-TMLRandomChoiceCommand::TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches):TMLChoiceCommand(iID, iTask, iRangeFunc, iNbOfBranches), _dynamicRange(0){
+TMLRandomChoiceCommand::TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint):TMLChoiceCommand(iID, iTask, iRangeFunc, iNbOfBranches, iLiveVarList, iCheckpoint), _dynamicRange(0){
 }
 
 TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	ParamType aMin, aMax;
-	_randomValue = (_task->*_rangeFunc)(aMin, aMax);
-	//std::cout << "Random value set:" << _randomValue << "\n";
-	
-	if (aMin==-1)
-		_dynamicRange = aMax | INT_MSB;
-	else
-		_dynamicRange = aMax+1;
+	if (_randomValue==-1){
+		_randomValue = (_task->*_rangeFunc)(aMin, aMax);
+		//if (_ID==234) std::cout << "Random value set randomly:" << _randomValue << "\n";
+		if (aMin==-1)
+			_dynamicRange = aMax | INT_MSB;
+		else
+			_dynamicRange = aMax+1;
+	}
 	if (_simComp->getStopFlag()){
 		_simComp->setStoppedOnAction();
 		_task->setCurrCommand(this);
@@ -64,6 +65,10 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	TMLCommand* aNextCommand=getNextCommand();
 	//std::cout << "set next:" << aNextCommand << "\n";
 	_task->setCurrCommand(aNextCommand);
+	_randomValue=-1;
+#ifdef STATE_HASH_ENABLED
+	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+#endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
 #endif

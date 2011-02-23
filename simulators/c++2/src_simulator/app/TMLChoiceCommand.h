@@ -56,7 +56,7 @@ public:
 	\param iCondFunc Member function pointer to the condition function returning the index of the next command
 	\param iNbOfBranches Number of branches of the choice
     	*/
-	TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches);
+	TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	std::string toString() const;
 	std::string toShortString() const;

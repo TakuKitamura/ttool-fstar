@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLRandomCommand: public TMLCommand, public IndeterminismSource{
 public:
-	TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar);
+	TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar, const char* iLiveVarList, bool iCheckpoint);
 	
 	void execute();
 	unsigned int getRandomRange();

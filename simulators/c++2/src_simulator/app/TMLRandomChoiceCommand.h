@@ -46,7 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLRandomChoiceCommand: public TMLChoiceCommand, public IndeterminismSource{
 public:
-	TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches);
+	TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
 	TMLCommand* prepareNextTransaction();
 	unsigned int getRandomRange();
 protected:

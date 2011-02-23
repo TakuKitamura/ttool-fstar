@@ -49,7 +49,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 unsigned int TMLTask::_instanceCount=1;
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), _isScheduled(false), _stateHash(0, 30) {
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), _isScheduled(false), _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
 	for (unsigned int i=0; i< _noOfCPUs; i++)
 		_cpus[i]->registerTask(this);
 #ifdef ADD_COMMENTS
@@ -328,6 +328,7 @@ void TMLTask::reset(){
 	_CPUContentionDelay=0;
 	_noCPUTransactions=0;
 	_justStarted=true;
+	_hashInvalidated=true;
 	//_isScheduled=false;
 	//if (_noOfCPUs>1) _currentCPU=0;
 	RESET_SCHEDULING;
@@ -431,21 +432,29 @@ void TMLTask::setRescheduleFlagForCores(){
 	}
 }
 
-HashValueType TMLTask::getStateHash(){
-	return _stateHash.getHash();
-}
+//HashValueType TMLTask::getStateHash(){
+//	return _stateHash.getHash();
+//}
 
 /*unsigned int TMLTask::getNoOfCPUs(){
 	return _noOfCPUs;
 }*/
 
-void TMLTask::addRawTransaction(TMLTransaction* iTrans){
-	_transactList.push_back(iTrans);
-}
+//void TMLTask::addRawTransaction(TMLTransaction* iTrans){
+//	_transactList.push_back(iTrans);
+//}
 
 void TMLTask::schedule2TXT(std::ostream& myfile) const{
 	myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
 	for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
 		myfile << (*i)->toShortString() << std::endl;
 	}
+}
+
+void TMLTask::refreshStateHash(const char* iLiveVarList){
+	//if (iLiveVarList!=0){
+		//_hashInvalidated = (_liveVarList!=iLiveVarList);
+		_hashInvalidated = true;
+		_liveVarList = iLiveVarList;
+	//}
 }

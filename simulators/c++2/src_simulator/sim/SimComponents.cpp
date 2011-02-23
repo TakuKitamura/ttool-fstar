@@ -358,6 +358,7 @@ void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){
 
 //void SimComponents::checkForRecurringSystemState(){
 ID SimComponents::checkForRecurringSystemState(){
+	//std::cout << "Recurring Sys State\n";
 	_systemHash.init((HashValueType)0xabcd, _taskList.size());
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		//std::cout << "add Task Hash " << (*i)->toString() << "\n";
@@ -367,9 +368,11 @@ ID SimComponents::checkForRecurringSystemState(){
 			//std::cout << "add curr cmd and progress Task " << (*i)->toString() << "\n";
 			//_systemHash.addValue((HashValueType)aCurrCmd);
 			_systemHash.addValue((HashValueType)aCurrCmd->getID());
+			//std::cout << "cmd ID: " << aCurrCmd->getID() << "\n";
 			//_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
 			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
-		}
+		}else
+			std::cout << "FEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n";
 	}
 	//std::cout << " *** New channel list: ***\n";
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){

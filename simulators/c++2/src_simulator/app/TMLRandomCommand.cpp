@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CommandListener.h>
 #include <TMLTask.h>
 
-TMLRandomCommand::TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar): TMLCommand(iID, iTask, 1, 1, 0, false), _rangeFunc(iRangeFunc), _resultVar(iResultVar), _aMin(0){
+TMLRandomCommand::TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _rangeFunc(iRangeFunc), _resultVar(iResultVar), _aMin(0){
 }
 
 void TMLRandomCommand::execute(){
@@ -73,6 +73,9 @@ TMLCommand* TMLRandomCommand::prepareNextTransaction(){
 		_randomValue=(unsigned int)-1;
 	}
 	_task->setCurrCommand(aNextCommand);
+#ifdef STATE_HASH_ENABLED
+	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+#endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
 #endif

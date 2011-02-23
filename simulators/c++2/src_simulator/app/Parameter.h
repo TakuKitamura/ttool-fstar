@@ -160,8 +160,9 @@ public:
 		//std::cout << "add param vals:\n";
 		for (unsigned int i=0;i<_paramNo;i++){
 			iHash->addValue((HashValueType)_p[i]);
+			//std::cout << _p[i] << ", ";
 		}
-		//std::cout << "end add param vals:\n";
+		//std::cout << "\nend add param vals:\n";
 	}
 		
 protected:
