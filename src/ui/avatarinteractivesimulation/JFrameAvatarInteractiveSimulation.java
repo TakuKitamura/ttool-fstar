@@ -204,18 +204,27 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		nbOfAllExecutedElements = 0;
 		resetMetElements();
 		ass = new AvatarSpecificationSimulation(avspec, this);
-		ass.initialize();
+		//ass.initialize();
 		simulationThread = new Thread(this);
 		simulationThread.start();
 	}
 	
 	public void run() {
+		previousTime = System.currentTimeMillis();
+		ass.runSimulation();
+		TraceManager.addDev("Simulation thread ended");
+	}
+	
+	/*public void run() {
 		resetThread = false;
 		killThread = false;
 		
 		previousTime = System.currentTimeMillis();
 		
-		ass.runSimulation();
+		if (ass.getState() ==  AvatarSpecificationSimulation.INITIALIZE) {
+			ass.runSimulation();
+		}
+		
 		if (killThread) {
 			return;
 		}
@@ -231,7 +240,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			runningTGComponents = new LinkedList<TGComponent>();
 			nbOfAllExecutedElements = 0;
 			resetMetElements();
-			ass.reset();
+			ass.resetSimulation();
 			previousTime = System.currentTimeMillis();
 			run();
 		}
@@ -257,7 +266,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		resetThread = true;
 		TraceManager.addDev("Reset thread = " + resetThread);
 		notifyAll();
-	}
+	}*/
 	
 	
 	
@@ -687,8 +696,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void close() {
-		killThread();
-		ass.killSimulation();
+		//killThread();
+		if (ass != null) {
+			ass.killSimulation();
+		}
 		dispose();
 		setVisible(false);
 		runningTGComponents.clear();
@@ -698,7 +709,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void runSimulation() {
 		previousTime = System.currentTimeMillis();
-		ass.unstop();
+		if (ass != null) {
+			ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTIONS);
+			ass.goSimulation();
+		}
 	}
 	
 	public void runXCommands() {
@@ -709,22 +723,32 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		} catch (Exception e) {
 			nb = 1;
 		}
-		ass.setNbOfCommands(nb);
-		previousTime = System.currentTimeMillis();
-		ass.unstop();
+		if (ass != null) {
+			ass.setNbOfCommands(nb);
+			previousTime = System.currentTimeMillis();
+			ass.goSimulation();
+		}
 	}
 	
 	public void stopSimulation() {
-		ass.stopSimulation();
+		//previousTime = System.currentTimeMillis();
+		if (ass != null) {
+			ass.stopSimulation();
+		}
 	}
 	
 	public void resetSimulation() {
-		resetThread();
-		ass.killSimulation();
+		//resetThread();
+		previousTime = System.currentTimeMillis();
+		if (ass != null) {
+			ass.resetSimulation();
+		}
+		//ass.killSimulation();
 	}
 	
 	public void backwardOneTransaction() {
-		ass.backOneTransaction(true); 
+		previousTime = System.currentTimeMillis();
+		ass.backOneTransactionBunch(); 
 	}
 	
 	
@@ -768,7 +792,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		
 		// Diagram animation?
-		if (!(busyMode == AvatarSpecificationSimulation.RUNNING)) {
+		if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
 			updateMetElements();
 			animateDiagrams();
 		}
@@ -789,15 +813,18 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		boolean b= true;
 		
 		switch(busyMode) {
-		case AvatarSpecificationSimulation.STOPPED:
+		case AvatarSpecificationSimulation.DONT_EXECUTE:
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(true);
+			actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
 			b = true;
 			break;
-		case AvatarSpecificationSimulation.RUNNING:
+		case AvatarSpecificationSimulation.GATHER:
+		case AvatarSpecificationSimulation.EXECUTE:
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+			actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
 			actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
 			actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);
@@ -805,6 +832,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			break;
 		case AvatarSpecificationSimulation.TERMINATED:
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+			actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
+			actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
+			actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+			actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
+			b = true;
+			break;
+		case AvatarSpecificationSimulation.INITIALIZE:
+		case AvatarSpecificationSimulation.RESET:
+		case AvatarSpecificationSimulation.KILLED:
+			actions[AvatarInteractiveSimulationActions.ACT_RUN_SIMU].setEnabled(false);
+			actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
 			actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
@@ -853,15 +891,22 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				newTime += " (before:" + oldTime + ")";
 			}
 			time.setText(newTime);
-			info.setText(""+ass.getAllTransactions().size());
+			if (ass.getAllTransactions() != null) {
+				info.setText(""+ass.getAllTransactions().size());
+			} else {
+				info.setText("0");
+			}
 			switch(busyMode) {
-			case AvatarSpecificationSimulation.STOPPED:
+			case AvatarSpecificationSimulation.DONT_EXECUTE:
 				status.setText("Stopped");
 				status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 				time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 				info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 				break;
-			case AvatarSpecificationSimulation.RUNNING:
+			case AvatarSpecificationSimulation.GATHER:
+			case AvatarSpecificationSimulation.EXECUTE:
+			case AvatarSpecificationSimulation.RESET:
+			case AvatarSpecificationSimulation.INITIALIZE:
 				status.setText("Running...");
 				status.setForeground(ColorManager.InteractiveSimulationText_BUSY);
 				time.setForeground(ColorManager.InteractiveSimulationText_BUSY);
@@ -873,12 +918,23 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				time.setForeground(ColorManager.InteractiveSimulationText_TERM);
 				info.setForeground(ColorManager.InteractiveSimulationText_TERM);
 				break;
+			case AvatarSpecificationSimulation.KILLED:
+				status.setText("killed");
+				status.setForeground(ColorManager.InteractiveSimulationText_TERM);
+				time.setForeground(ColorManager.InteractiveSimulationText_TERM);
+				info.setForeground(ColorManager.InteractiveSimulationText_TERM);
+				break;
 			}
 		}
 	}
 	
 	public void setContentOfListOfPendingTransactions() {
+		if (ass == null) {
+			return;
+		}
+		
 		Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
+		
 		try {
 			listPendingTransactions.clearSelection();
 			selectedComponentForTransaction = null;
@@ -904,6 +960,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		TGComponent tgc;
 		Object o;
 		
+		if (allExecutedElements == null) {
+			nbOfAllExecutedElements = 0;
+			return;
+		}
+		
 		if (allExecutedElements.size() > nbOfAllExecutedElements) {
 			for(int i=nbOfAllExecutedElements; i<allExecutedElements.size(); i++) {
 				o = allExecutedElements.get(i).getReferenceObject();
@@ -919,7 +980,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	
 	public void animateDiagrams() {
-		if (animate != null) {
+		if ((animate != null) && (ass != null) && (ass.getSimulationBlocks() != null)) {
 			if (animate.isSelected()) {
 				// We go through all blocks
 				runningTGComponents.clear();
@@ -1047,7 +1108,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 					//TraceManager.addDev("Adding reference object: " + aspt.linkedTransaction.elementToExecute.getReferenceObject());
 					selectedComponentForTransaction = (TGComponent)(aspt.linkedTransaction.elementToExecute.getReferenceObject());
 				}
-				if (!(busyMode == AvatarSpecificationSimulation.RUNNING)) {
+				if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
 					ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
 				}
 				if (animate.isSelected() && (openDiagram.isSelected())) {

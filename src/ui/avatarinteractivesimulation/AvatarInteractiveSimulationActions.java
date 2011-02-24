@@ -143,7 +143,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "Run x commands", IconManager.imgic1308, IconManager.imgic1308, "Run x commands", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
         
-		actions[ACT_BACK_ONE] = new TAction("back-one", "Back one transaction", IconManager.imgic46, IconManager.imgic47, "Back one transaction", "Go one transaction backward", 'B');
+		actions[ACT_BACK_ONE] = new TAction("back-one", "Back one transaction", IconManager.imgic47, IconManager.imgic47, "Back one transaction", "Go one transaction backward", 'B');
         
 		
 		actions[ACT_RUN_EXPLORATION] = new TAction("run-exploration", "Run exploration", IconManager.imgic1326, IconManager.imgic1326, "Run exploration", "Explore branches of the simulation", 'R');

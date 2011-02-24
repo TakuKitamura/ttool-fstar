@@ -125,7 +125,7 @@ public class AvatarSimulationBlock  {
 		return transactions;
 	}
 	
-	public Vector<AvatarSimulationPendingTransaction> getPendingTransactions(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+	public Vector<AvatarSimulationPendingTransaction> getPendingTransactions(Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow, long _bunchid) {
 		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 		
 		if (completed) {
@@ -140,7 +140,7 @@ public class AvatarSimulationBlock  {
 				completed = true;
 				return ll;
 			}
-			makeExecutedTransaction(_allTransactions, ass, _clockValue, null);
+			makeExecutedTransaction(_allTransactions, ass, _clockValue, null, _bunchid);
 			
 		}
 		
@@ -237,45 +237,45 @@ public class AvatarSimulationBlock  {
 		return ll;
 	}
 	
-	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow) {
+	public void runSoloPendingTransaction(AvatarSimulationPendingTransaction _aspt, Vector<AvatarSimulationTransaction> _allTransactions, long _clockValue, int _maxTransationsInARow, long _bunchid) {
 		if (_aspt.involvedElement != null) {
-			executeElement(_allTransactions, _aspt.involvedElement, _clockValue, _aspt);
+			executeElement(_allTransactions, _aspt.involvedElement, _clockValue, _aspt, _bunchid);
 			/*if (lastTransaction != null) {
 				_clockValue = lastTransaction.clockValueWhenFinished;
 			}*/
 		}
 		
-		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue, _aspt);
+		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue, _aspt, _bunchid);
 		
 	
 		//runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
 	}
 	
 	
-	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt) {
+	public void executeElement(Vector<AvatarSimulationTransaction>_allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
 		// Stop state
 		if (_elt instanceof AvatarStopState) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
 		// Random
 		} else if (_elt instanceof AvatarState) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
 		// Random
 		} else if (_elt instanceof AvatarRandom) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
 		// Transition
 		} else if (_elt instanceof AvatarTransition) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 		
 		// Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
-			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt);
+			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 		}
 	}
 	
-	public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt) {
+	public void makeExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarStateMachineElement _elt, long _clockValue, AvatarSimulationPendingTransaction _aspt, long _bunchid) {
 		AvatarTransition at;
 		String action;
 		int i;
@@ -290,6 +290,7 @@ public class AvatarSimulationBlock  {
 		ast.asb = this;
 		ast.concernedElement = null;
 		ast.initialClockValue = 0;
+		ast.bunchid = _bunchid;
 		if (lastTransaction != null) {
 			ast.initialClockValue = lastTransaction.clockValueWhenFinished;
 		}
@@ -593,7 +594,11 @@ public class AvatarSimulationBlock  {
 	public void removeLastTransaction(AvatarSimulationTransaction _ast) {
 		if (lastTransaction == _ast) {
 			transactions.removeElementAt(transactions.size()-1);
-			lastTransaction = transactions.get(transactions.size()-1);
+			if (transactions.size() > 0) {
+				lastTransaction = transactions.get(transactions.size()-1);
+			} else {
+				lastTransaction = null;
+			}
 		}
 	}
 	

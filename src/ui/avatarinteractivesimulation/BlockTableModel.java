@@ -65,6 +65,10 @@ public class BlockTableModel extends AbstractTableModel {
 
 	// From AbstractTableModel
 	public int getRowCount() {
+		
+		if (nbOfRows == -1) {
+			computeData();
+		}
 		return nbOfRows;
 	}
 
@@ -138,7 +142,11 @@ public class BlockTableModel extends AbstractTableModel {
 			return ;
 		}
 		
-		nbOfRows = ass.getSimulationBlocks().size();
+		if (ass.getSimulationBlocks() != null) {
+			nbOfRows = ass.getSimulationBlocks().size();
+		}
+		
+		nbOfRows = -1;
 		
 		return;
 	}

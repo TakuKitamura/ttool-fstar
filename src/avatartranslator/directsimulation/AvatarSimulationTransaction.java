@@ -66,6 +66,7 @@ public class AvatarSimulationTransaction  {
 	public long duration;
 	public long clockValueWhenFinished;
 	public long id;
+	public long bunchid;
 	
 	// Indicates whether the transaction is a silent transaction, or not
 	// Silent means that the transaction was automatically selecteed by the simulator ->
@@ -105,8 +106,12 @@ public class AvatarSimulationTransaction  {
 		return tmp;
 	}
 	
+	public static synchronized void setID(long _id) {
+		ID = _id;
+	}
+	
 	public String toString() {
-		String res = "" + id + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName();
+		String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName();
 		if (silent) {
 			 res += " (silent)";
 		}
