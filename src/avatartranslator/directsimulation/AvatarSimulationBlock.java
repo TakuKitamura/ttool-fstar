@@ -299,7 +299,10 @@ public class AvatarSimulationBlock  {
 		ast.id = ast.setID();
 		if (_aspt != null) {
 			ast.silent = _aspt.isSilent;
+		} else {
+			ast.silent = true;
 		}
+		TraceManager.addDev("Transaction " + ast.id + " silent=" + ast.silent);
 		if (_aspt != null) {
 			_aspt.clockValueAtEnd = _clockValue;
 			if (_aspt.hasClock) {

@@ -103,7 +103,9 @@ public class AvatarSpecificationSimulation  {
 		executeEmptyTransition = true;
 		executeStateEntering = true;
 		
-		setState(INITIALIZE);
+		initialize();
+		reset();
+		setState(GATHER);
     }
 	
 	public AvatarSpecification getAvatarSpecification() {
@@ -684,7 +686,7 @@ public class AvatarSpecificationSimulation  {
 					}
 				}
 			// State entering?
-			} else if ((tr.elementToExecute instanceof AvatarState) && (executeStateEntering)) {
+			} else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
 					tr.isSilent = true;
 					return tr;
@@ -713,13 +715,19 @@ public class AvatarSpecificationSimulation  {
 			if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
 				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
 				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+					TraceManager.addDev("Empty transition?");
 					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+						tr.isSilent = true;
+						TraceManager.addDev("Yes");
 						return tr;
 					}
 				}
 			// State entering?
-			} else if ((tr.elementToExecute instanceof AvatarState) && (executeStateEntering)) {
+			} else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
+				TraceManager.addDev("Empty state enter?");
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+					tr.isSilent = true;
+					TraceManager.addDev("Yes");
 					return tr;
 				}
 			}
@@ -848,6 +856,10 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public synchronized void backOneTransactionBunch() {
+		backOneTransactionBunch(false);
+	}
+	
+	public synchronized void backOneTransactionBunch(boolean _rec) {
 		if ( (state != DONT_EXECUTE) && (state != TERMINATED)) {
 			return;
 		}
@@ -862,11 +874,11 @@ public class AvatarSpecificationSimulation  {
 		// Getting last transaction
 		
 		AvatarSimulationTransaction ast = allTransactions.get(allTransactions.size()-1);
-		long bunchid = ast.bunchid;
+		long bunchid_tmp = ast.bunchid;
 		
 		boolean isAllSilent = true;
 		
-		while((ast != null) && (ast.bunchid == bunchid)) {
+		while((ast != null) && (ast.bunchid == bunchid_tmp)) {
 			allTransactions.removeElementAt(allTransactions.size()-1);
 			if (ast.asb != null) {
 				ast.asb.removeLastTransaction(ast);
@@ -892,9 +904,19 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		
-		if (ast != null) {
+		if (isAllSilent) {
+			backOneTransactionBunch(true);
+		}
+		
+		if (_rec) {
+			return;
+		}
+		
+		TraceManager.addDev("Backward size="+ allTransactions.size());
+		
+		if (allTransactions.size() > 0) {
 			bunchid = (allTransactions.get(allTransactions.size()-1).bunchid) + 1;
-			clockValue = ast.clockValueWhenFinished;
+			clockValue = (allTransactions.get(allTransactions.size()-1)).clockValueWhenFinished;
 		} else {
 			bunchid = 0;
 			clockValue =  0;
@@ -902,13 +924,7 @@ public class AvatarSpecificationSimulation  {
 		
 		AvatarSimulationTransaction.setID(allTransactions.size());
 		
-		
-		TraceManager.addDev("Backward size="+ allTransactions.size());
-		
-		if (isAllSilent) {
-			backOneTransactionBunch();
-		}
-		
+		setNbOfCommands(0);
 		newState = true;
 		notifyAll();
 	}

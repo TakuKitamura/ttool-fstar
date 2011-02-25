@@ -56,6 +56,8 @@ import ui.*;
 
 import ui.tmldd.*;
 
+import myutil.*;
+
 
 public class JDialogCommunicationArtifact extends javax.swing.JDialog implements ActionListener  {
     
@@ -80,8 +82,15 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 		
 		//System.out.println("New window");
         
+		TraceManager.addDev("init components");
+		
         initComponents();
+		
+		TraceManager.addDev("my init components");
+		
         myInitComponents();
+		
+		TraceManager.addDev("pack");
         pack();
     }
     
@@ -116,6 +125,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         c1.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Task:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		TraceManager.addDev("Getting communications");
 		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
 		int index = 0;
 		if (list.size() == 0) {
@@ -126,6 +136,9 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 			index = indexOf(list, artifact.getFullValue());
 			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
 		}
+		
+		TraceManager.addDev("Got communications");
+		
         referenceCommunicationName = new JComboBox(list);
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);

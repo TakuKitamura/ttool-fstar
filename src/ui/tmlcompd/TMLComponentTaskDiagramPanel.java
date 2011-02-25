@@ -304,9 +304,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
-					while(ite.hasNext()) {
+					//while(ite.hasNext()) {
 						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-					}
+					//}
 					
 					if (portstome.size() == 1) {
 						port2 = (TMLCPrimitivePort)(portstome.get(0));

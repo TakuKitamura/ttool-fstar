@@ -144,9 +144,9 @@ public class BlockTableModel extends AbstractTableModel {
 		
 		if (ass.getSimulationBlocks() != null) {
 			nbOfRows = ass.getSimulationBlocks().size();
+		} else {
+			nbOfRows = -1;
 		}
-		
-		nbOfRows = -1;
 		
 		return;
 	}
