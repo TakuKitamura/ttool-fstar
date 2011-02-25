@@ -6,7 +6,7 @@ import java.util.regex.*;
 //import java.util.HashSet;
 
 public class StaticAnalysis{
-	private ArrayList<LiveVariableNode> liveNodes;
+	private ArrayList<LiveVariableNode> liveNodes= new ArrayList<LiveVariableNode>();;
 	private final static Pattern _varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
 	private TMLTask _task;
 	private ArrayList<TMLChannel> _channels;
@@ -289,8 +289,8 @@ public class StaticAnalysis{
 			//printLiveVarNode(aLiveNode);
 			if((aStatResult & 1)!=0){
 			//if(_task.getID()==3){
-				aLiveNode.printReachingEntries();
-				printLiveVarNode(aLiveNode);
+				//aLiveNode.printReachingEntries();
+				//printLiveVarNode(aLiveNode);
 				aNbOfCandidates++;
 				if((aStatResult & 2)!=0) aNbOfCheckPoints++;
 			}
