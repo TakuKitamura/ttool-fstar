@@ -51,9 +51,6 @@ import myutil.*;
 
 public  class TEPETimeConstraintComponent  extends TEPEComponent  {
 	
-	public static final int SEQUENCE = 0;
-	public static final int NO_SEQUENCE = 1;
-	
 	protected int type, minTime, maxTime;
 	
     public TEPETimeConstraintComponent(String _name, Object _referenceObject) {
