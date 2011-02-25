@@ -29,7 +29,8 @@ public class LiveVariableNode{
 	private boolean _guard=false;
 	private TMLActivityElement _linkedElem = null;
 	private LiveVariableNode _superiorBranchNode = null;
-	private int _exprValue = 0;
+	//private int _exprValue = 0;
+	private String _exprValue = "";
 	private String _lhs = "";
 	private String _rhs = "";
 	private String _unrolledExpr = "";
@@ -165,19 +166,28 @@ public class LiveVariableNode{
 
 	}
 
-	public static int evaluate(String string) throws IllegalArgumentException{
+	//public static int evaluate(String string) throws IllegalArgumentException{
+	public String evaluate(String expression) throws IllegalArgumentException{
 		ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 		try{
 			//Object object = engine.eval("eval("+string+")");
-			engine.eval(string);
+			engine.eval(expression);
 			Object object = engine.get("xx_xx");
-			if ((object != null) && (object instanceof Number)){
-                		return ((Number)(object)).intValue();
+			if (object != null){
+				String result="";
+				if(object instanceof Number){
+					result = Integer.toString(((Number)(object)).intValue());
+				}else if (object instanceof Boolean){
+					result = ((Boolean)(object)).toString();
+				}else{
+					throw new IllegalArgumentException("Input is neither Integer nor Boolean: '"+expression+"'");
+				}
+                		return result;
 			}else{
-				throw new IllegalArgumentException("Invalid input: '"+string+"'");
+				throw new IllegalArgumentException("Invalid expression: '"+expression+"'");
 			}
 		}catch (ScriptException e){
-			throw new IllegalArgumentException("Invalid input: '"+string+"'", e);
+			throw new IllegalArgumentException("Invalid input: '"+expression+"'", e);
 		}
 	}
 	
@@ -264,7 +274,8 @@ public class LiveVariableNode{
 
 	private boolean allDefsConstantAndEqual(int[] iDefinitions){
 		boolean aIsConst=true, aFirstTime=true, aDefFound=false;
-		int aLastExprVal=0; 
+		//int aLastExprVal=0;
+		String aLastExprVal="";  
 		//System.out.println("******* allDefsConstantAndEqual");
 		for (int bytes=0; bytes<iDefinitions.length && aIsConst; bytes++){
 			for (int bits=0; bits<32 && aIsConst; bits++){
@@ -273,7 +284,8 @@ public class LiveVariableNode{
 					aDefFound=true;
 					if (_analysis.getDefLookUp()[anIndex].isConstant()){
 						//System.out.println(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " said to be constant");
-						if (aFirstTime || _analysis.getDefLookUp()[anIndex].getExpressionValue() == aLastExprVal){
+						//if (aFirstTime || _analysis.getDefLookUp()[anIndex].getExpressionValue() == aLastExprVal){
+						if (aFirstTime || _analysis.getDefLookUp()[anIndex].getExpressionValue().equals(aLastExprVal)){
 							aLastExprVal = _analysis.getDefLookUp()[anIndex].getExpressionValue();
 							_unrolledExpr+= _analysis.getDefLookUp()[anIndex].getExpressionString() + ";";
 							aFirstTime=false;
@@ -359,7 +371,8 @@ public class LiveVariableNode{
 		return _lhs + "=" + _exprValue;
 	}
 	
-	public int getExpressionValue(){
+	//public int getExpressionValue(){
+	public String getExpressionValue(){
 		return _exprValue;
 	}
 
@@ -451,11 +464,11 @@ public class LiveVariableNode{
 		aName += " | const: ";
 		if (_isConstant){
 			if (_lhs==null || _lhs.isEmpty())
-				aName+= "true";
+				aName+= "yes";
 			else
 				aName+= _exprValue;
 		}else 
-			aName += "false"; 
+			aName += "no"; 
 		aName += " | to be removed: " + canBeRemoved() + " | checkp:";
 		if (_checkpoint==null)
 			aName += "0";

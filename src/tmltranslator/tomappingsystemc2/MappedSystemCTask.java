@@ -62,7 +62,7 @@ public class MappedSystemCTask {
 	private boolean debug;
 	private boolean optimize;
 	private StaticAnalysis _analysis;
-	private LiveVariableNode _startAnaNode;
+	private LiveVariableNode _startAnaNode=null;
 	
 	private final static String DOTH = ".h";
 	private final static String DOTCPP = ".cpp";
@@ -411,7 +411,7 @@ public class MappedSystemCTask {
 			String action,comment;
 			if (currElem instanceof TMLActionState){				
 				if (debug) System.out.println("Checking Action\n");
-				action = ((TMLActionState)currElem).getAction();
+				action = formatAction(((TMLActionState)currElem).getAction());
 				comment=action;
 			}else{
 				if (debug) System.out.println("Checking Delay\n");
@@ -703,7 +703,7 @@ public class MappedSystemCTask {
 									nextCommandTemp+= ",(TMLCommand*)" + makeCommands(choice.getNextElement(indElseGuard), false, retElement,null);
 								
 							}else{
-								code += "if "+ formatGuard(choice.getGuard(i)) + "{\noC++;\n";
+								code += "if "+ formatAction(formatGuard(choice.getGuard(i))) + "{\noC++;\n";
 								code += "oMax += " + (1 << noOfGuards) + SCCR + "\n}\n";
 								nextCommandTemp += ",(TMLCommand*)" + makeCommands(choice.getNextElement(i), false, retElement,null);
 							}
@@ -775,6 +775,13 @@ public class MappedSystemCTask {
 		guard = Conversion.replaceAllChar(guard, '[', "(");
 		guard = Conversion.replaceAllChar(guard, ']', ")");
 		return guard;
+	}
+	
+	public static String formatAction(String action){
+		action = action.replaceAll("not","!");
+		action = action.replaceAll("and","&&");
+		action = action.replaceAll("or","||");
+		return action;
 	}
 
 	private boolean ChannelMappedOnSameHW(TMLWriteChannel writeCmd){

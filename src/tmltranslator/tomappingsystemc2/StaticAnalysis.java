@@ -285,15 +285,12 @@ public class StaticAnalysis{
 		int aNbOfCheckPoints=0, aNbOfCandidates=0;
 		for(LiveVariableNode aLiveNode: liveNodes){
 			int aStatResult = aLiveNode.varStatistics(aStatistics);
-			//aLiveNode.printReachingEntries();
-			//printLiveVarNode(aLiveNode);
-			if((aStatResult & 1)!=0){
-			//if(_task.getID()==3){
-				//aLiveNode.printReachingEntries();
-				//printLiveVarNode(aLiveNode);
+			//if((aStatResult & 1)!=0){
+				aLiveNode.printReachingEntries();
+				printLiveVarNode(aLiveNode);
 				aNbOfCandidates++;
 				if((aStatResult & 2)!=0) aNbOfCheckPoints++;
-			}
+			//}
 		}
 		if (aNbOfCandidates==0)
 			System.out.println("No checkpoint candidates");
@@ -348,7 +345,7 @@ public class StaticAnalysis{
 			return iReturnNode;
 
 		} else if (iCurrElem instanceof TMLActionState){
-			String[] aTokens=((TMLActionState)iCurrElem).getAction().split("=",2);
+			String[] aTokens=MappedSystemCTask.formatAction(((TMLActionState)iCurrElem).getAction()).split("=",2);
 			if (aTokens.length<2) aTokens=new String[2];
 			aResNode = new LiveVariableNode(this, parseExprToVariableMap(aTokens[1], null), parseExprToVariableMap(aTokens[0], null), iCurrElem, iSuperiorNode, 
 			false, aTokens[0], aTokens[1]);	

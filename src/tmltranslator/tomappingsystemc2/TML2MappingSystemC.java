@@ -72,7 +72,8 @@ public class TML2MappingSystemC {
 	private ArrayList<MappedSystemCTask> tasks;
 	
 	private ArrayList<EBRDD> ebrdds;
-	private ArrayList<TEPE> tepes;
+	//private ArrayList<TEPE> tepes;
+	SystemCTEPE tepeTranslator;
 	private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
@@ -89,12 +90,16 @@ public class TML2MappingSystemC {
 		tmlmodeling = _tmlm;
 		ebrdds = _ebrdds;
 		tmlmapping = tmlmodeling.getDefaultMapping();
+		tepeTranslator = new  SystemCTEPE(_tepes);
+		tepeTranslator.generateTEPEs();
 	}
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
-        tmlmapping = _tmlmapping;
+		tmlmapping = _tmlmapping;
 		ebrdds = _ebrdds;
 		tmlmapping.makeMinimumMapping();
+		tepeTranslator = new  SystemCTEPE(_tepes);
+		tepeTranslator.generateTEPEs();
  	}
     
 	public void saveFile(String path, String filename) throws FileException {  
@@ -102,6 +107,7 @@ public class TML2MappingSystemC {
         	FileUtils.saveFile(path + filename + ".cpp", getFullCode());
 		src += filename + ".cpp";
 		FileUtils.saveFile(path + "Makefile.src", src);
+		tepeTranslator.saveFile(path + "src_simulator/TEPE/test.h");
 	}
 	
 	public String getFullCode() {
