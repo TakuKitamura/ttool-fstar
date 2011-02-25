@@ -54,7 +54,7 @@ public  class TEPETimeConstraintComponent  extends TEPEComponent  {
 	public static final int SEQUENCE = 0;
 	public static final int NO_SEQUENCE = 1;
 	
-	protected int type;
+	protected int type, minTime, maxTime;
 	
     public TEPETimeConstraintComponent(String _name, Object _referenceObject) {
 		super(_name, _referenceObject);
@@ -69,6 +69,21 @@ public  class TEPETimeConstraintComponent  extends TEPEComponent  {
 	public int getType() {
 		return type;
 	}
-    
-    
+
+	public void setMinTime(int _minTime){
+		minTime=_minTime;
+	}
+
+	public void setMaxTime(int _maxTime){
+		maxTime = _maxTime;
+	}
+
+	public int getMinTime(){
+		return minTime;
+	}
+	
+	public int getMaxTime(){
+		return maxTime;
+	}
+
 }

@@ -51,8 +51,7 @@ import myutil.*;
 
 public abstract class TEPEComponent  {
 	private static int ID = 0;
-	
-    protected String name;
+	protected String name;
 	protected Object referenceObject;
 	private int id;
 	
@@ -69,13 +68,44 @@ public abstract class TEPEComponent  {
 	protected Vector <Boolean> inNegatedProperty;
 	protected Vector <TEPEComponent> outPropertyComponents;
     
-    public TEPEComponent(String _name, Object _referenceObject) {
+	public TEPEComponent(String _name, Object _referenceObject) {
 		name = _name;
 		referenceObject = _referenceObject;
 		id = ID;
 		ID ++;
-    }
+	}
     
+	public int getID(){
+		return id;
+	}
+
+	public Vector<TEPEComponent> getInAttributes(){
+		return inAttributeComponents;
+	}
+	
+	public Vector<TEPEComponent> getOutAttributes(){
+		return outAttributeComponents;
+	}
+
+	public Vector<TEPEComponent> getInSignals(){
+		return inSignalComponents;
+	}
+	
+	public Vector<TEPEComponent> getInNegatedSignals(){
+		return inNegatedSignalComponents;
+	}
+
+	public Vector<TEPEComponent> getOutSignals(){
+		return outSignalComponents;
+	}
+
+	public Vector<TEPEComponent> getInProperties(){
+		return inPropertyComponents;
+	}
+
+	public Vector<TEPEComponent> getOutProperties(){
+		return outPropertyComponents;
+	}
 	
 	public String getName() {
 		return name;
