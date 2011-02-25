@@ -243,7 +243,7 @@ public class AvatarRequirementPanelTranslator {
 					element2 = (TEPEComponent)(listE.getObject(tgc2));
 					if ((element1 != null) && (element2 != null)) {
 						//TraceManager.addDev("Adding output / input");
-						element1.addOutAttributeComponent(element2);
+						element1.addOutPropertyComponent(element2);
 						
 						// Must know whether it is negated, or not
 						if (!(tgc2 instanceof AvatarPDPropertyRelation)) {
