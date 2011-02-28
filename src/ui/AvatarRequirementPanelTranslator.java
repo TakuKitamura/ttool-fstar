@@ -266,7 +266,7 @@ public class AvatarRequirementPanelTranslator {
 					element1 = (TEPEComponent)(listE.getObject(tgc1));
 					element2 = (TEPEComponent)(listE.getObject(tgc2));
 					if ((element1 != null) && (element2 != null)) {
-						element1.addOutAttributeComponent(element2);
+						element1.addOutSignalComponent(element2);
 						
 						// Must know whether it is negated, or not
 						if (apdsco.getTGConnectingPointP2() instanceof AvatarPDForbiddenSignalConnectingPoint) {
