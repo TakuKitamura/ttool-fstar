@@ -44,12 +44,16 @@ Ludovic Apvrille, Renaud Pacalet
 
 class ThreeSigConstraint: public TwoSigConstraint{
 public:
-	ThreeSigConstraint(bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), _sfNotified(UNDEF){
+	ThreeSigConstraint(ID iID, bool iIncludeBounds): TwoSigConstraint(iID, iIncludeBounds), _sfNotified(UNDEF){
 	}
 	
 	void notifySf(bool iSigState){
 		//_sfNotified = iSigState;
 		//_notificationMask |=4;
+		if (iSigState)
+			std::cout << _ID << ": sf ok\n";
+		else
+			std::cout << _ID << ": sf --\n";
 		_sfNotified = (iSigState)?TRUE:FALSE;
 		evalInput();
 	}

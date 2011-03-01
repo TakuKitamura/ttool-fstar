@@ -86,7 +86,7 @@ std::string TMLNotifiedCommand::toShortString() const{
 }
 
 std::string TMLNotifiedCommand::getCommandStr() const{
-	return "not";
+	return "notified";
 }
 
 #ifdef ADD_COMMENTS

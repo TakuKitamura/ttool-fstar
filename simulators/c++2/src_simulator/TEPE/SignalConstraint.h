@@ -46,13 +46,16 @@ typedef void (SignalConstraint::*NtfSigFuncPointer) (bool iSigState);
 
 class SignalConstraint{
 public:
-	SignalConstraint(bool iIncludeBounds):_s1Notified(UNDEF), _ntfFuncSigOut(0), _rightConstr(0), _includeBounds(iIncludeBounds){
+	SignalConstraint(ID iID, bool iIncludeBounds): _ID(iID), _s1Notified(UNDEF), _ntfFuncSigOut(0), _rightConstr(0), _includeBounds(iIncludeBounds){
 	}
 	
 	void notifyS1(bool iSigState){
 		//_s1Notified = iSigState;
 		//_notificationMask |=1;
-		std::cout << "Notify S1\n;";
+		if (iSigState)
+			std::cout << _ID << ": s1 ok\n";
+		else
+			std::cout << _ID << ": s1 --\n";
 		_s1Notified = (iSigState)?TRUE:FALSE;
 		evalInput();
 	}
@@ -77,9 +80,8 @@ public:
 	
 protected:
 	virtual void evalInput()=0;
-	//bool _s1Notified;
+	ID _ID;
 	Tristate _s1Notified;
-	//unsigned int _notificationMask;
 	NtfSigFuncPointer _ntfFuncSigOut;
 	SignalConstraint *_rightConstr;
 	bool _includeBounds;

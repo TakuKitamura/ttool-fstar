@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class SeqConstraint: public FSMConstraint{
 public:
-	SeqConstraint(PropType iType, bool iIncludeBounds): FSMConstraint(iType, iIncludeBounds){
+	SeqConstraint(ID iID, PropType iType, bool iIncludeBounds): FSMConstraint(iID, iType, iIncludeBounds){
 		_transTable=_transTableSeq;
 	}
 	

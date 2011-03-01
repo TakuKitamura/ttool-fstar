@@ -93,7 +93,7 @@ std::string TMLWaitCommand::toShortString() const{
 }
 
 std::string TMLWaitCommand::getCommandStr() const{
-	if (_channel->getRequestChannel()) return "wre"; else return "wai";
+	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
 }
 
 /*ParamFuncPointer TMLWaitCommand::getParamFuncPointer() const{

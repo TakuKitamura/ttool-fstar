@@ -110,5 +110,5 @@ std::string TMLWriteCommand::toShortString() const{
 }
 
 std::string TMLWriteCommand::getCommandStr() const{
-	return "wri";
+	return "wr";
 }

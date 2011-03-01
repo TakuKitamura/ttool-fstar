@@ -54,7 +54,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
@@ -94,6 +94,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		_progress=0;
 		_currTransaction=0;  //NEW!!!!!!!!!!!
 		_commandStartTime=-1; //NEW
+		_execTimes++;
 		//std::cout << "Prepare command, get next command" << std::endl;
 		aNextCommand=getNextCommand();
 		//std::cout << "Prepare command, to next command" << std::endl;
@@ -105,7 +106,9 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 			return aNextCommand->prepare(false);
 		}
 	}else{
-		if (_commandStartTime==((TMLTime)-1)) _commandStartTime = SchedulableDevice::getSimulatedTime();
+		if (_commandStartTime==((TMLTime)-1)){
+			_commandStartTime = SchedulableDevice::getSimulatedTime();
+		}
 		//std::cout << "Prepare next transaction TMLCmd " << _listeners.size() << std::endl;
 		TMLCommand* result;
 		if (iInit){
@@ -221,6 +224,9 @@ std::ostream& TMLCommand::writeObject(std::ostream& s){
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
+#ifdef SAVE_BENCHMARK_VARS 
+	WRITE_STREAM(s, _execTimes);
+#endif
 	return s;
 }
 
@@ -228,6 +234,9 @@ std::istream& TMLCommand::readObject(std::istream& s){
 	READ_STREAM(s,_progress);
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+#endif
+#ifdef SAVE_BENCHMARK_VARS 
+	READ_STREAM(s, _execTimes);
 #endif
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
@@ -240,6 +249,8 @@ void TMLCommand::reset(){
 	_progress=0;
 	if (_currTransaction!=0) delete _currTransaction;
 	_currTransaction=0;
+	_commandStartTime=-1;
+	_execTimes=0;
 	_stateHashes.clear();
 }
 
@@ -290,6 +301,12 @@ TMLTime TMLCommand::getCommandStartTime() const{
 
 TMLLength TMLCommand::getLength() const{
 	return _length;
+}
+
+void TMLCommand::streamStateXML(std::ostream& s){
+	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		s << TAG_CMDo << " id=" << (*i)->_ID << ">" << TAG_EXECTIMESo << (*i)->_execTimes << TAG_EXECTIMESc << TAG_CMDc << "\n";
+	}
 }
 
 template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(CommandListener* iListener, TMLTask* aTask);

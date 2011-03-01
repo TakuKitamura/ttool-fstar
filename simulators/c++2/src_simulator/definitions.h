@@ -64,6 +64,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <netinet/in.h>
 #include <pthread.h>
 #include <dlfcn.h>
+#include <stdlib.h>
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
 //std::cout << sizeof(v) << " bytes written" << std::endl;
@@ -84,6 +85,7 @@ using std::max;
 #define STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
 #undef EBRDD_ENABLED
+#undef DOT_GRAPH_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -130,6 +132,10 @@ using std::max;
 #define TAG_GLOBALc "</global>"
 #define TAG_CURRCMDo "<currcmd"
 #define TAG_CURRCMDc "</currcmd>"
+#define TAG_CMDo "<cmd"
+#define TAG_CMDc "</cmd>"
+#define TAG_EXECTIMESo "<exectimes>"
+#define TAG_EXECTIMESc "</exectimes>"
 #define TAG_STARTTIMEo "<starttime>"
 #define TAG_STARTTIMEc "</starttime>"
 #define TAG_FINISHTIMEo "<finishtime>"

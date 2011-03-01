@@ -91,7 +91,7 @@ std::string TMLRequestCommand::toShortString() const{
 }
 
 std::string TMLRequestCommand::getCommandStr() const{
-	return "req";
+	return "sendReq";
 }
 
 /*ParamFuncPointer TMLRequestCommand::getParamFuncPointer() const{

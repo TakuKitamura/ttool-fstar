@@ -73,6 +73,7 @@ TMLCommand* TMLRandomCommand::prepareNextTransaction(){
 		_randomValue=(unsigned int)-1;
 	}
 	_task->setCurrCommand(aNextCommand);
+	_execTimes++;
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 #endif

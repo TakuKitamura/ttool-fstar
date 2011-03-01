@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TimeTConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
-	TimeTConstraint(TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iIncludeBounds), PropertyStateConstraint (GENERAL), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
+	TimeTConstraint(ID iID, TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), PropertyStateConstraint (GENERAL), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
 	}
 	
 	void notifiedReset(){

@@ -205,7 +205,7 @@ public:
 	\param iPrevID ID of the parent leaf
 	\param iFile Reference to the output file
 	*/
-	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile/*, std::ofstream& iFile2*/);
+	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile, unsigned int& oTransCounter);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file
@@ -219,7 +219,7 @@ public:
 	*/
 	void schedule2Graph(std::string& iTraceFileName) const;
 	//ID schedule2Graph(std::ostream& iFile, ID iStartState) const;
-	ID schedule2GraphDOT(std::ostream& iFile, ID iStartState) const;
+	ID schedule2GraphDOT(std::ostream& iFile, ID iStartState, unsigned int& oTransCounter) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**
 	\param iTraceFileName Name of the output trace file

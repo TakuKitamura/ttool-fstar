@@ -44,15 +44,20 @@ Ludovic Apvrille, Renaud Pacalet
 
 class AliasConstraint: public TwoSigConstraint{
 public:
-	AliasConstraint(): TwoSigConstraint(false){
+	AliasConstraint(ID iID): TwoSigConstraint(iID, false){
 	}
 	
 protected:
 	void evalInput(){
+		//if (_rightConstr==0) std::cout << "Not connected\n";
+		//if (_s1Notified==UNDEF) std::cout << "s1 undef\n";
+		//if (_s2Notified==UNDEF) std::cout << "s2 undef\n";
 		if (!( _s1Notified==UNDEF || _s2Notified==UNDEF || _rightConstr==0)){
+			//std::cout << "Allright\n";
 			(_rightConstr->*_ntfFuncSigOut)(_s1Notified==TRUE || _s2Notified==TRUE);
-		}
-		notifiedReset();
+			notifiedReset();
+		}//else
+			//std::cout << "Something is wrong\n";
 	}
 };
 #endif

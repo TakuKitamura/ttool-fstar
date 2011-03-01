@@ -371,8 +371,7 @@ ID SimComponents::checkForRecurringSystemState(){
 			//std::cout << "cmd ID: " << aCurrCmd->getID() << "\n";
 			//_systemHash.addValue((HashValueType)(aCurrCmd->getLength()-aCurrCmd->getProgress()));
 			_systemHash.addValue((HashValueType)(aCurrCmd->getProgress()));
-		}else
-			std::cout << "FEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE\n";
+		}
 	}
 	//std::cout << " *** New channel list: ***\n";
 	for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){

@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class EqConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
-	EqConstraint(PropType iType, bool iIncludeBounds): SignalConstraint(iIncludeBounds), PropertyStateConstraint(iType), _eqResult(true), _propReported(false){
+	EqConstraint(ID iID, PropType iType, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), PropertyStateConstraint(iType), _eqResult(true), _propReported(false){
 	}
 	
 	void notifiedReset(){
@@ -81,7 +81,7 @@ protected:
 		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
 			if(_enabledNotified==TRUE && _includeBounds){		//early enable
 				
-				std::cout << "Enabled\n";
+				//std::cout << "Enabled\n";
 				_constrEnabled=true;	
 				_propReported = false;  //why do we need that? --> failure may otherwise not be reported if _eqResult==true
 			}
@@ -105,7 +105,7 @@ protected:
 			
 			if (_constrEnabled && (!_eqResult) && (!_propReported)){		//report failure
 				reportPropOccurrence(false);
-				std::cout << "Report occurrence of Eq: 0\n";
+				//std::cout << "Report occurrence of Eq: 0\n";
 				_propReported = true;
 			}
 			
@@ -115,12 +115,12 @@ protected:
 				//_propReported = false;
 			}*/
 			if (_disabledNotified==TRUE){	//disable, report success
-				std::cout << " DIsable*********************************************\n";
+				//std::cout << " DIsable*********************************************\n";
 				if (!_propReported){
 					reportPropOccurrence(true);
-					std::cout << "Report occurrence of Eq: 1\n";
-				}else
-					std::cout << "Prop occurrence suppressed\n";
+					//std::cout << "Report occurrence of Eq: 1\n";
+				}//else
+					//std::cout << "Prop occurrence suppressed\n";
 				reset();
 			}
 			notifiedReset();

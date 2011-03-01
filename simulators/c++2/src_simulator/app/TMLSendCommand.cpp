@@ -94,7 +94,7 @@ std::string TMLSendCommand::toShortString() const{
 }
 
 std::string TMLSendCommand::getCommandStr() const{
-	return "snd";
+	return "notify";
 }
 
 /*ParamFuncPointer TMLSendCommand::getParamFuncPointer() const{

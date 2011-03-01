@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class LogConstraint: public FSMConstraint{
 public:
-	LogConstraint(PropType iType, bool iIncludeBounds): FSMConstraint(iType, iIncludeBounds){
+	LogConstraint(ID iID, PropType iType, bool iIncludeBounds): FSMConstraint(iID, iType, iIncludeBounds){
 		_transTable=_transTableLog;
 	}
 protected:

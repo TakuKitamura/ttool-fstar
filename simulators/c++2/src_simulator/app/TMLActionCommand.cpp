@@ -59,6 +59,7 @@ TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	TMLCommand* aNextCommand=getNextCommand();
 	//std::cout << "Action func CALLED length: " << *_pLength << " progress:" << _progress << std::endl;
 	(_task->*_actionFunc)();
+	_execTimes++;
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 #endif

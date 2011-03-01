@@ -108,5 +108,5 @@ std::string TMLReadCommand::toShortString() const{
 }
 
 std::string TMLReadCommand::getCommandStr() const{
-	return "rea";
+	return "rd";
 }

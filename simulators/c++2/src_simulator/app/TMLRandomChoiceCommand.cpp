@@ -66,6 +66,7 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	//std::cout << "set next:" << aNextCommand << "\n";
 	_task->setCurrCommand(aNextCommand);
 	_randomValue=-1;
+	_execTimes++;
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 #endif

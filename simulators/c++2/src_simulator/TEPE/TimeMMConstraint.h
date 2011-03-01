@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TimeMMConstraint: public TwoSigConstraint, public PropertyStateConstraint{
 public:
-	TimeMMConstraint(PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds): TwoSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _tmin(iTmin), _tmax(iTmax), _retrigger(iRetrigger), _s1Time(-1){
+	TimeMMConstraint(ID iID, PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds): TwoSigConstraint(iID, iIncludeBounds), PropertyStateConstraint(iType), _tmin(iTmin), _tmax(iTmax), _retrigger(iRetrigger), _s1Time(-1){
 	}
 	
 	void notifiedReset(){

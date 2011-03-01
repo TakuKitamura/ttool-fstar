@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class FSMConstraint: public ThreeSigConstraint, public PropertyStateConstraint{
 public:
-	FSMConstraint(PropType iType, bool iIncludeBounds): ThreeSigConstraint(iIncludeBounds), PropertyStateConstraint(iType), _state(0){
+	FSMConstraint(ID iID, PropType iType, bool iIncludeBounds): ThreeSigConstraint(iID, iIncludeBounds), PropertyStateConstraint(iType), _state(0){
 	}
 	
 	void notifiedReset(){

@@ -210,6 +210,7 @@ public:
 	\return true if command is a checkpoint
 	*/
 	bool isCheckpoint();
+	static void streamStateXML(std::ostream& s);
 protected:
 	///ID of the command
 	ID _ID;
@@ -252,6 +253,8 @@ protected:
 	const char* _liveVarList;
 	///Checkpoint Flag
 	bool _checkpoint;
+	///Number of executions of the command
+	unsigned int _execTimes;
 	/////Hash Algorithm object
 	//HashAlgo* _hash;
 };
