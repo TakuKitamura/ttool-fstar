@@ -112,6 +112,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	private boolean AVATAR_running = false;
 	private boolean AVATAR_met = false;
 	
+	// TEPE ID
+	private int TEPEID = -1;
+	
     
     // Zone of drawing -> relative to father if applicable
     protected int minX;
@@ -476,6 +479,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	public void drawTEPEID(Graphics g) {
+		if (getTEPEID() != -1) {
+			g.setColor(ColorManager.TEPEID);
+			g.drawString(""+getTEPEID(), x+width, y+height + 5);
+		}
+	}
+	
 	public void drawAVATARID(Graphics g) {
 		if (getAVATARID() != -1) {
 			g.setColor(ColorManager.AVATARID);
@@ -808,6 +818,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			drawDiploID(g);
 		} else if (tdp.AVATAR_ID_ON) {
 			drawAVATARID(g);
+		} else if (tdp.TEPE_ID_ON) {
+			drawTEPEID(g);
 		} 
 		
 		if (tdp.AVATAR_ANIMATE_ON) {
@@ -2422,6 +2434,15 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	public int getDIPLOID() {
 		return DIPLOID;
+	}
+	
+	// TEPE ID
+	public void setTEPEID(int _ID) {
+		TEPEID = _ID;
+	}
+	
+	public int getTEPEID() {
+		return TEPEID;
 	}
 	
 	// AVATAR ID

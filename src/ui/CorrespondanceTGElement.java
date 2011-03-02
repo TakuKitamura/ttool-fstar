@@ -56,6 +56,7 @@ import translator.*;
 import tmltranslator.*;
 import sddescription.*;
 import ui.cd.*;
+import tepe.*;
 
 public class CorrespondanceTGElement {
     private Vector tg; //tgelement
@@ -466,6 +467,26 @@ public class CorrespondanceTGElement {
 					//System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
 					tgc = (TGComponent)(o1);
 					tgc.setDIPLOID(de.getID());
+					list.add(tgc);
+				}
+			}
+		}
+	}
+	
+	public void makeTEPEIDs() {
+		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		Object o0, o1;
+		TEPEComponent te;
+		TGComponent tgc;
+		for (int i=0; i<data.size(); i++) {
+			o0 = data.get(i);
+			if (o0 instanceof TEPEComponent) {
+				o1 = tg.get(i);
+				if ((o1 != null) && !(list.contains(o1))){
+					te = (TEPEComponent)(o0);
+					//System.out.println("Putting DIPLO ID on " + o1 + ": " + de.getID());
+					tgc = (TGComponent)(o1);
+					tgc.setTEPEID(te.getID());
 					list.add(tgc);
 				}
 			}

@@ -194,6 +194,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	public static boolean DIPLO_ID_ON;
 	public static boolean DIPLO_TRANSACTION_PROGRESSION_ON;
 	
+	// TEPE ID -> for simulation purpose
+	public static boolean TEPE_ID_ON;
+	
 	// AVATAR ID -> for simulation purpose
 	public static boolean AVATAR_ID_ON;
 	public static boolean AVATAR_ANIMATE_ON;

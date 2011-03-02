@@ -86,6 +86,8 @@ public class AvatarRequirementPanelTranslator {
 		makeComponents(tepe, _apdp);
 		makeLinksBetweenComponents(tepe, _apdp);
 		
+		listE.makeTEPEIDs();
+		
 		TraceManager.addDev(tepe.toString());
 		
 		return tepe;

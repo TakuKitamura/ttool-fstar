@@ -5703,6 +5703,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setDiploIDs(!TDiagramPanel.DIPLO_ID_ON);
 	}
 	
+	public void toggleTEPEIDs() {
+        setTEPEIDs(!TDiagramPanel.TEPE_ID_ON);
+	}
+	
 	public void toggleDiploAnimate() {
 		setDiploAnimate(!TDiagramPanel.DIPLO_ANIMATE_ON);
 	}
@@ -5737,6 +5741,14 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void setDiploIDs(boolean b) {
 		TDiagramPanel.DIPLO_ID_ON = b;
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
+	public void setTEPEIDs(boolean b) {
+		TDiagramPanel.TEPE_ID_ON = b;
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
 			tdp.repaint();
@@ -6219,6 +6231,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             toggleAttributes();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].getActionCommand())) {
             toggleDiploIDs();
+        } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_TEPE_ID].getActionCommand())) {
+            toggleTEPEIDs();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].getActionCommand())) {
             toggleAVATARIDs();
         } else if (command.equals(actions[TGUIAction.ACT_TOGGLE_GATES].getActionCommand())) {

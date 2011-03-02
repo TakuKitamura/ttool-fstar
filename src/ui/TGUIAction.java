@@ -443,6 +443,7 @@ public class TGUIAction extends AbstractAction {
 	
 	public static final int ACT_TOGGLE_DIPLO_ID = 264;
 	public static final int ACT_TOGGLE_AVATAR_ID = 334;
+	public static final int ACT_TOGGLE_TEPE_ID = 336;
 	
 	public static final int ACT_TOGGLE_INTERNAL_COMMENT = 227;
    
@@ -455,7 +456,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 336;
+    public static final int NB_ACTION = 337;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -544,6 +545,7 @@ public class TGUIAction extends AbstractAction {
         
 		actions[ACT_TOGGLE_DIPLO_ID] = new TAction("toggle-tml-id", "Show / hide DIPLODOCUS IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide DIPLODOCUS IDs", "Show / hide DIPLODOCUS IDs", '0');
         actions[ACT_TOGGLE_AVATAR_ID] = new TAction("toggle-avatar-id", "Show / hide AVATAR IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide AVATAR IDs", "Show / hide AVATAR IDs", '0');
+        actions[ACT_TOGGLE_TEPE_ID] = new TAction("toggle-tepe-id", "Show / hide TEPE IDs", IconManager.imgic138, IconManager.imgic138, "Show / hide TEPE IDs", "Show / hide TEPE IDs", '0');
         
 		actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');
         

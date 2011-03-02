@@ -86,6 +86,8 @@ public class AvatarPDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.APD_SIGNAL_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.APD_COMPOSITION_CONNECTOR].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID].setEnabled(b);
         
     }
     
@@ -157,6 +159,11 @@ public class AvatarPDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.APD_PROPERTY_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_TEPE_ID]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		/*this.addSeparator();
