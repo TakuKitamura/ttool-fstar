@@ -76,6 +76,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected static final String SIMULATION_TASK = "task";
 	protected static final String SIMULATION_CPU = "cpu";
 	protected static final String SIMULATION_BUS = "bus";
+	protected static final String SIMULATION_COMMAND = "cmd";
 	
 	private static String buttonStartS = "Start simulator";
 	private static String buttonCloseS = "Close";
@@ -208,6 +209,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		if (tmap != null) {
 			tmap.makeMinimumMapping();
 			hashCode = tmap.getHashCode();
+			tmap.getTMLModeling().computeCorrespondance();
 		} else {
 			hashOK = false;
 		}
@@ -1135,8 +1137,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return false;
 		}
 		Element elt, elt0;
-		Node node, node0;
-		NodeList nl;
+		Node node, node0, node00;
+		NodeList nl, nl0;
 		
 		
 		String tmp;
@@ -1221,6 +1223,30 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						if ((nl != null) && (nl.getLength() > 0)) {
 							node0 = nl.item(0);
 							hash = node0.getTextContent();
+						}
+						
+						nl = elt.getElementsByTagName(SIMULATION_COMMAND);
+						for(int kk=0; kk<nl.getLength(); kk++) {
+							node0 = nl.item(kk);
+							elt0 = (Element)node0;
+							id = null;
+							name = null;
+							command = null;
+							id = elt0.getAttribute("id");
+							//TraceManager.addDev("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+							nl0 = elt0.getElementsByTagName("exectimes");
+							if ((nl0 != null) && (nl0.getLength() > 0)) {
+								node00 = nl0.item(0);
+								//TraceManager.addDev("nl0:" + nl0 + " value=" + node00.getNodeValue() + " content=" + node00.getTextContent());
+								util = node00.getTextContent();
+							}
+							
+							//TraceManager.addDev("Got info on command " + id + " util=" + util);
+							
+							if ((id != null) && (util != null)) {
+								//TraceManager.addDev("Updating command");
+								updateCommandExecutionState(id, util);
+							}
 						}
 						
 					}
@@ -1398,6 +1424,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								updateBusState(id, util);
 							}
 						}
+						
+						
 					}
 				}
 			}
@@ -1834,6 +1862,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}*/
 	}
 	
+	private void updateExecutedCommands() {
+		if (tmap == null) {
+			return;
+		}
+		
+		if (mode != STARTED_AND_CONNECTED) {
+			return;
+		}
+		
+		sendCommand("get-executed-operators"); 
+	}
+	
 
 	
 	private void updateRunningCommand(String id, String command, String progression, String startTime, String finishTime, String nextCommand, String transStartTime, String transFinishTime, String _state) {
@@ -2102,11 +2142,32 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void updateCommandExecutionState(String _id, String _nbOfExec) {
+		Integer id = getInteger(_id);
+		Integer nbOfExec = getInteger(_nbOfExec);
+		
+		//TraceManager.addDev("Updating execution of command " + _id + " to " + _nbOfExec);
+		
+		if (tmap != null) {
+			TMLElement tmle = tmap.getTMLModeling().getCorrespondance(id);
+			if (tmle != null) {
+				Object o = tmle.getReferenceObject();
+				if ((o != null) && (o instanceof TGComponent)) {
+					//TraceManager.addDev("Setting met DIPLO = " + o);
+					((TGComponent)o).setDIPLOMet(nbOfExec);
+				}
+			}
+		}
+		
+		//tmap.getElementByID();
+	}
+	
 	public void askForUpdate() {
 		sendCommand("time");
 		if (hashOK) {
 			if (animate.isSelected()) {
 				updateTaskCommands();
+				updateExecutedCommands();
 			}
 			if (update.isSelected()) {
 				updateTasks();

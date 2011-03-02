@@ -91,7 +91,7 @@ ttooljar_std:
 
 launcher:
 	rm -f $(TTOOL_BIN)/$(LAUNCHER_BINARY)
-	cd $(TTOOL_SRC);$(JAR) cmf $(LAUNCHER_JAR_TXT) $(TTOOL_BIN)/$(LAUNCHER_BINARY)  RTLLauncher.class launcher/*.class
+	cd $(TTOOL_SRC);$(JAR) cmf $(LAUNCHER_JAR_TXT) $(TTOOL_BIN)/$(LAUNCHER_BINARY)  RTLLauncher.class launcher/*.class myutil/*.class
 
 tiftranslator:
 	rm -f $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY)

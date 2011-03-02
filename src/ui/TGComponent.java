@@ -105,6 +105,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	// DIPLODOCUS ID
 	private int DIPLOID = -1;
 	private boolean DIPLO_running = false;
+	private int DIPLO_met = 0;
 	
 	// AVATAR ID
 	private int AVATARID = -1;
@@ -482,6 +483,35 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	public void setDIPLOMet(int _nb) {
+		DIPLO_met = _nb;
+	}
+	
+	public void drawDIPLOMet(Graphics g) {
+		int dech = 8;
+		int decw = 12;
+		g.setColor(ColorManager.CURRENT_COMMAND_RUNNING);
+		int myx, myy, mywidth;
+		if (this instanceof TGConnector) {
+			TGConnector tgco = (TGConnector)this;
+			myx = tgco.getMiddleFirstSegment().x;
+			myy = tgco.getMiddleFirstSegment().y;
+			mywidth = 2;
+		} else {
+			myx = getX();
+			myy = getY();
+			mywidth = width+1;
+		}
+		
+		g.drawLine(myx+mywidth, myy+1+dech/2, myx+mywidth + decw/3, myy+dech);
+		g.drawLine(myx+mywidth + decw/3, myy+dech, myx+mywidth + decw, myy);
+		
+		if (DIPLO_met > 1) {
+			g.drawString(""+ DIPLO_met, myx+mywidth + decw + 1, myy);
+		}
+		
+	}
+	
 	public void setAVATARMet(boolean _b) {
 		AVATAR_met = _b;
 	}
@@ -713,6 +743,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
 						if (tdp.DIPLO_ID_ON) {
 							drawDiploID(g);
 						}
+						
+						if (DIPLO_met > 0) {
+							drawDIPLOMet(g);
+						}
+						
 						ri = tdp.getMGUI().isRunningID(getDIPLOID());
 						if (ri != null) {
 							drawRunningDiploID(g, ri);

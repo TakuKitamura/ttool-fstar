@@ -206,5 +206,21 @@ public class TMLTask extends TMLElement {
 		}
 		return v;
 	}
+	
+	public int computeMaxID() {
+		int max = getID();
+		if (activity != null) {
+			max = Math.max(max, activity.computeMaxID());
+		}
+		return max;
+	}
+	
+	public void computeCorrespondance(TMLElement [] _correspondance) {
+		_correspondance[getID()] = this;
+		if (activity != null) {
+			activity.computeCorrespondance(_correspondance);
+		}
+		
+	}
  
 }

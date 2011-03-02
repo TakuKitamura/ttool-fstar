@@ -385,6 +385,26 @@ public class TMLActivity extends TMLElement {
 		splitActionStatesWithDollars(tmlas, _task);
 		
 	}
+	
+	public int computeMaxID() {
+		int max = -1;
+		TMLActivityElement ae;
+		for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+			max = Math.max(max, ae.getID());
+        }
+		return max;
+	}
+	
+	public void computeCorrespondance(TMLElement [] _correspondance) {
+		_correspondance[getID()] = this;
+		TMLActivityElement ae;
+		for(int i=0; i<elements.size(); i++) {
+            ae = (TMLActivityElement)(elements.elementAt(i));
+			_correspondance[ae.getID()] = ae;
+        }
+		
+	}
     
  
 }

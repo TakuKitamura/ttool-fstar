@@ -251,7 +251,12 @@ public class CommandParser {
 		sc = new SimulationCommand("get-benchmark", "gb", "10", params, paramNames, "Returns information on hardware nodes of the architecture");
 		commandList.add(sc);
 		
-		
+		// get-executed-operators
+		params = new int[0];
+		paramNames = new String[0];
+		sc = new SimulationCommand("get-executed-operators", "geo", "21", params, paramNames, "Returns the list of executed operators");
+		commandList.add(sc);
+	
 		// get-hash-code
 		params = new int[0];
 		paramNames = new String[0];

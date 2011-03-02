@@ -57,6 +57,8 @@ public class TMLModeling {
     private ArrayList<TMLRequest> requests;
     private ArrayList<TMLEvent> events;
 	
+	private TMLElement correspondance[];
+	
 	private boolean optimized = false;
 	
 	private String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ","};
@@ -1246,6 +1248,67 @@ public class TMLModeling {
 				activity.splitActionStatesWithDollars(task);
 			}
 		 }
+	}
+	
+	public TMLElement getCorrespondance(int _id) {
+		if (correspondance == null) {
+			return null;
+		}
+		
+		if (_id <0) {
+			return null;
+		}
+		
+		if (_id >= correspondance.length) {
+			return null;
+		}
+		
+		return correspondance[_id];
+	}
+	
+	public int computeMaxID() {
+		int max = -1;
+		for(TMLTask task: tasks) {
+			max = Math.max(max, task.computeMaxID());
+		}
+		
+		for(TMLChannel channel: channels) {
+			max = Math.max(max, channel.getID());
+		}
+		
+		for(TMLRequest request: requests) {
+			max = Math.max(max, request.getID());
+		}
+		
+		for(TMLEvent event: events) {
+			max = Math.max(max, event.getID());
+		}
+		
+		return max;
+	}
+	
+	public void computeCorrespondance() {
+		int max = computeMaxID();
+		
+		//TraceManager.addDev("Max ID=" + max);
+		
+		correspondance = new TMLElement[max+1];
+		
+		for(TMLTask task: tasks) {
+			task.computeCorrespondance(correspondance);
+		}
+		
+		for(TMLChannel channel: channels) {
+			correspondance[channel.getID()] = channel;
+		}
+		
+		for(TMLRequest request: requests) {
+			correspondance[request.getID()] = request;
+		}
+		
+		for(TMLEvent event: events) {
+			correspondance[event.getID()] = event;
+		}
 	}
   
 }

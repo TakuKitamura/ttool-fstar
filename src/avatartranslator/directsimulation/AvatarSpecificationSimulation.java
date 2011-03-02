@@ -86,7 +86,7 @@ public class AvatarSpecificationSimulation  {
 	
 	private long bunchid;
 	
-	
+	private boolean nbOfCommandsActivated = false;
 	private int nbOfCommands = -1; // means: until it blocks
 	private int indexSelectedTransaction = -1;
 	
@@ -266,7 +266,7 @@ public class AvatarSpecificationSimulation  {
 					setState(TERMINATED);
 					TraceManager.addDev("No more pending transactions");
 				} else {
-					if (nbOfCommands < 1) {
+					if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
 						if (getSilentTransactionToExecute(pendingTransactions) == null) {
 							setState(DONT_EXECUTE);
 						} else {
@@ -289,7 +289,9 @@ public class AvatarSpecificationSimulation  {
 				} else {
 					if (performSelectedTransactions(selectedTransactions)) {
 						if (!silentTransactionExecuted) {
-							nbOfCommands --;
+							if (nbOfCommandsActivated) {
+								nbOfCommands --;
+							}
 						}
 						if (asi != null) {
 							asi.updateTransactionAndTime(allTransactions.size(), clockValue);
@@ -407,10 +409,14 @@ public class AvatarSpecificationSimulation  {
 	
 	public void setNbOfCommands(int _nbOfCommands) {
 		nbOfCommands = _nbOfCommands;
+		if (nbOfCommands > 0) {
+			nbOfCommandsActivated = true;
+		}
 	}
 	
 	public void unsetNbOfCommands() {
 		nbOfCommands = -1;
+		nbOfCommandsActivated = false;
 	}
 	
 	// External control functions
@@ -868,7 +874,7 @@ public class AvatarSpecificationSimulation  {
 			return;
 		}
 		
-		TraceManager.addDev("Backward size="+ allTransactions.size());
+		//TraceManager.addDev("Backward size="+ allTransactions.size());
 		
 		// Remove one transaction
 		// Getting last transaction
@@ -912,7 +918,7 @@ public class AvatarSpecificationSimulation  {
 			return;
 		}
 		
-		TraceManager.addDev("Backward size="+ allTransactions.size());
+		//TraceManager.addDev("Backward size="+ allTransactions.size());
 		
 		if (allTransactions.size() > 0) {
 			bunchid = (allTransactions.get(allTransactions.size()-1).bunchid) + 1;
