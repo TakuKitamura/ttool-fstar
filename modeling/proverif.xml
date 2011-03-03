@@ -4,72 +4,160 @@
 
 <Modeling type="AVATAR Design" nameTab="KeyMasterProtocol" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
-<COMPONENT type="5000" id="25" >
-<cdparam x="82" y="180" />
-<sizeparam width="223" height="427" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<CONNECTOR type="5002" id="1545" >
+<cdparam x="1029" y="448" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector from Block0 to Block0" value="" />
+<P1  x="986" y="454" id="1523" />
+<P2  x="986" y="590" id="1532" />
+<Point x="1014" y="454" />
+<Point x="1014" y="589" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<iso value="in chin(Message msg)" />
+<iso value="in chinprivate(Message msg)" />
+<osd value="out chout(Message msg)" />
+<osd value="out choutprivate(Message msg)" />
+<isd value="in chin(Message msg)" />
+<isd value="in chinprivate(Message msg)" />
+<oso value="out chout(Message msg)" />
+<oso value="out choutprivate(Message msg)" />
+<FIFOType asynchronous="false" size="1" blocking="false" />
+</extraparam>
+</CONNECTOR><SUBCOMPONENT type="-1" id="1546" >
+<father id="1545" num="0" />
+<cdparam x="1014" y="454" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="Block0" value="ECUN" />
-<TGConnectingPoint num="0" id="1" />
-<TGConnectingPoint num="1" id="2" />
-<TGConnectingPoint num="2" id="3" />
-<TGConnectingPoint num="3" id="4" />
-<TGConnectingPoint num="4" id="5" />
-<TGConnectingPoint num="5" id="6" />
-<TGConnectingPoint num="6" id="7" />
-<TGConnectingPoint num="7" id="8" />
-<TGConnectingPoint num="8" id="9" />
-<TGConnectingPoint num="9" id="10" />
-<TGConnectingPoint num="10" id="11" />
-<TGConnectingPoint num="11" id="12" />
-<TGConnectingPoint num="12" id="13" />
-<TGConnectingPoint num="13" id="14" />
-<TGConnectingPoint num="14" id="15" />
-<TGConnectingPoint num="15" id="16" />
-<TGConnectingPoint num="16" id="17" />
-<TGConnectingPoint num="17" id="18" />
-<TGConnectingPoint num="18" id="19" />
-<TGConnectingPoint num="19" id="20" />
-<TGConnectingPoint num="20" id="21" />
-<TGConnectingPoint num="21" id="22" />
-<TGConnectingPoint num="22" id="23" />
-<TGConnectingPoint num="23" id="24" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="1547" >
+<father id="1545" num="1" />
+<cdparam x="1014" y="589" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+
+<COMPONENT type="301" id="109" >
+<cdparam x="203" y="10" />
+<sizeparam width="416" height="164" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="UML Note" value="#Confidentiality ECU1.SesK
+#Confidentiality ECU1.confData
+
+#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth
+
+#InitialCommonKnowledge ECU1.PSK1 KM.PSK1
+#InitialCommonKnowledge ECUN.PSKN KM.PSKN
+#InitialCommonKnowledge ECUN.ACK ECU1.ACK KM.ACK
+#InitialCommonKnowledge KM.timerexpire TimerKM.timerexpire
+" />
+<TGConnectingPoint num="0" id="101" />
+<TGConnectingPoint num="1" id="102" />
+<TGConnectingPoint num="2" id="103" />
+<TGConnectingPoint num="3" id="104" />
+<TGConnectingPoint num="4" id="105" />
+<TGConnectingPoint num="5" id="106" />
+<TGConnectingPoint num="6" id="107" />
+<TGConnectingPoint num="7" id="108" />
 <extraparam>
-<Attribute access="0" id="PSKN" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="keyOfGroup" value="" type="5" typeOther="Key" />
-<Attribute access="0" id="msg" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg3" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg4" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg5" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="msg6" value="" type="5" typeOther="Message" />
-<Attribute access="0" id="timestamp" value="" type="8" typeOther="" />
-<Attribute access="0" id="ACK" value="" type="8" typeOther="" />
-<Attribute access="0" id="b" value="" type="4" typeOther="" />
-<Attribute access="0" id="secretData" value="" type="8" typeOther="" />
-<Method value="Message encrypt(Message msg, Key k)" />
-<Method value="Message decrypt(Message msg, Key k)" />
-<Method value="Message sencrypt(Message msg, Key k)" />
-<Method value="Message sdecrypt(Message msg, Key k)" />
-<Method value="Message MAC(Message msg, Key k)" />
-<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
-<Method value="Message concat2(Message msg1, Message msg2)" />
-<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
-<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Method value="get2(Message msg, Message msg1, Message msg2)" />
-<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
-<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in chin(Message msg)" />
-<Signal value="out chout(Message msg)" />
+<Line value="#Confidentiality ECU1.SesK" />
+<Line value="#Confidentiality ECU1.confData" />
+<Line value="" />
+<Line value="#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth" />
+<Line value="" />
+<Line value="#InitialCommonKnowledge ECU1.PSK1 KM.PSK1" />
+<Line value="#InitialCommonKnowledge ECUN.PSKN KM.PSKN" />
+<Line value="#InitialCommonKnowledge ECUN.ACK ECU1.ACK KM.ACK" />
+<Line value="#InitialCommonKnowledge KM.timerexpire TimerKM.timerexpire" />
 </extraparam>
 </COMPONENT>
 
-<COMPONENT type="5000" id="75" >
-<cdparam x="584" y="10" />
-<sizeparam width="324" height="324" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<COMPONENT type="5003" id="118" >
+<cdparam x="644" y="83" />
+<sizeparam width="102" height="54" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="DataType0" value="Message" />
+<TGConnectingPoint num="0" id="110" />
+<TGConnectingPoint num="1" id="111" />
+<TGConnectingPoint num="2" id="112" />
+<TGConnectingPoint num="3" id="113" />
+<TGConnectingPoint num="4" id="114" />
+<TGConnectingPoint num="5" id="115" />
+<TGConnectingPoint num="6" id="116" />
+<TGConnectingPoint num="7" id="117" />
+<extraparam>
+<Attribute access="0" id="data" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5003" id="127" >
+<cdparam x="767" y="82" />
+<sizeparam width="110" height="56" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="DataType0" value="Key" />
+<TGConnectingPoint num="0" id="119" />
+<TGConnectingPoint num="1" id="120" />
+<TGConnectingPoint num="2" id="121" />
+<TGConnectingPoint num="3" id="122" />
+<TGConnectingPoint num="4" id="123" />
+<TGConnectingPoint num="5" id="124" />
+<TGConnectingPoint num="6" id="125" />
+<TGConnectingPoint num="7" id="126" />
+<extraparam>
+<Attribute access="0" id="data" value="" type="8" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="5000" id="1518" >
+<cdparam x="44" y="181" />
+<sizeparam width="942" height="546" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Block0" value="SecuredSystem" />
+<TGConnectingPoint num="0" id="1519" />
+<TGConnectingPoint num="1" id="1520" />
+<TGConnectingPoint num="2" id="1521" />
+<TGConnectingPoint num="3" id="1522" />
+<TGConnectingPoint num="4" id="1523" />
+<TGConnectingPoint num="5" id="1524" />
+<TGConnectingPoint num="6" id="1525" />
+<TGConnectingPoint num="7" id="1526" />
+<TGConnectingPoint num="8" id="1527" />
+<TGConnectingPoint num="9" id="1528" />
+<TGConnectingPoint num="10" id="1529" />
+<TGConnectingPoint num="11" id="1530" />
+<TGConnectingPoint num="12" id="1531" />
+<TGConnectingPoint num="13" id="1532" />
+<TGConnectingPoint num="14" id="1533" />
+<TGConnectingPoint num="15" id="1534" />
+<TGConnectingPoint num="16" id="1535" />
+<TGConnectingPoint num="17" id="1536" />
+<TGConnectingPoint num="18" id="1537" />
+<TGConnectingPoint num="19" id="1538" />
+<TGConnectingPoint num="20" id="1539" />
+<TGConnectingPoint num="21" id="1540" />
+<TGConnectingPoint num="22" id="1541" />
+<TGConnectingPoint num="23" id="1542" />
+<extraparam>
+<Signal value="in chin(Message msg)" />
+<Signal value="out chout(Message msg)" />
+<Signal value="in chinprivate(Message msg)" />
+<Signal value="out choutprivate(Message msg)" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="5000" id="75" >
+<father id="1518" num="0" />
+<cdparam x="567" y="266" />
+<sizeparam width="324" height="434" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="618" minY="0" maxY="112" />
 <infoparam name="Block0" value="KM" />
 <TGConnectingPoint num="0" id="51" />
 <TGConnectingPoint num="1" id="52" />
@@ -126,18 +214,14 @@
 <Method value="get2(Message msg, Message msg1, Message msg2)" />
 <Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
 <Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in chin(Message msg)" />
-<Signal value="out chout(Message msg)" />
-<Signal value="in chinprivate(Message msg)" />
-<Signal value="out choutprivate(Message msg)" />
 </extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="50" >
 <father id="75" num="0" />
-<cdparam x="684" y="74" />
+<cdparam x="677" y="329" />
 <sizeparam width="212" height="134" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="112" minY="0" maxY="190" />
+<cdrectangleparam minX="0" maxX="112" minY="0" maxY="300" />
 <infoparam name="Block0" value="TimerKM" />
 <TGConnectingPoint num="0" id="26" />
 <TGConnectingPoint num="1" id="27" />
@@ -178,18 +262,14 @@
 <Method value="get2(Message msg, Message msg1, Message msg2)" />
 <Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
 <Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in chin(Message msg)" />
-<Signal value="out chout(Message msg)" />
-<Signal value="in chinprivate(Message msg)" />
-<Signal value="out choutprivate(Message msg)" />
 </extraparam>
 </SUBCOMPONENT>
-
-<COMPONENT type="5000" id="100" >
-<cdparam x="309" y="181" />
-<sizeparam width="223" height="212" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<SUBCOMPONENT type="5000" id="100" >
+<father id="1518" num="1" />
+<cdparam x="322" y="281" />
+<sizeparam width="223" height="405" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<cdrectangleparam minX="0" maxX="719" minY="0" maxY="141" />
 <infoparam name="Block0" value="ECU1" />
 <TGConnectingPoint num="0" id="76" />
 <TGConnectingPoint num="1" id="77" />
@@ -242,84 +322,67 @@
 <Method value="get2(Message msg, Message msg1, Message msg2)" />
 <Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
 <Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
-<Signal value="in chin(Message msg)" />
-<Signal value="out chout(Message msg)" />
 </extraparam>
-</COMPONENT>
-
-<COMPONENT type="301" id="109" >
-<cdparam x="163" y="10" />
-<sizeparam width="416" height="164" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5000" id="25" >
+<father id="1518" num="2" />
+<cdparam x="79" y="280" />
+<sizeparam width="223" height="427" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="UML Note" value="#Confidentiality ECU1.SesK
-#Confidentiality ECU1.confData
-
-#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth
-
-#InitialCommonKnowledge ECU1.PSK1 KM.PSK1
-#InitialCommonKnowledge ECUN.PSKN KM.PSKN
-#InitialCommonKnowledge ECUN.ACK ECU1.ACK KM.ACK
-#InitialCommonKnowledge KM.timerexpire TimerKM.timerexpire
-" />
-<TGConnectingPoint num="0" id="101" />
-<TGConnectingPoint num="1" id="102" />
-<TGConnectingPoint num="2" id="103" />
-<TGConnectingPoint num="3" id="104" />
-<TGConnectingPoint num="4" id="105" />
-<TGConnectingPoint num="5" id="106" />
-<TGConnectingPoint num="6" id="107" />
-<TGConnectingPoint num="7" id="108" />
+<cdrectangleparam minX="0" maxX="719" minY="0" maxY="119" />
+<infoparam name="Block0" value="ECUN" />
+<TGConnectingPoint num="0" id="1" />
+<TGConnectingPoint num="1" id="2" />
+<TGConnectingPoint num="2" id="3" />
+<TGConnectingPoint num="3" id="4" />
+<TGConnectingPoint num="4" id="5" />
+<TGConnectingPoint num="5" id="6" />
+<TGConnectingPoint num="6" id="7" />
+<TGConnectingPoint num="7" id="8" />
+<TGConnectingPoint num="8" id="9" />
+<TGConnectingPoint num="9" id="10" />
+<TGConnectingPoint num="10" id="11" />
+<TGConnectingPoint num="11" id="12" />
+<TGConnectingPoint num="12" id="13" />
+<TGConnectingPoint num="13" id="14" />
+<TGConnectingPoint num="14" id="15" />
+<TGConnectingPoint num="15" id="16" />
+<TGConnectingPoint num="16" id="17" />
+<TGConnectingPoint num="17" id="18" />
+<TGConnectingPoint num="18" id="19" />
+<TGConnectingPoint num="19" id="20" />
+<TGConnectingPoint num="20" id="21" />
+<TGConnectingPoint num="21" id="22" />
+<TGConnectingPoint num="22" id="23" />
+<TGConnectingPoint num="23" id="24" />
 <extraparam>
-<Line value="#Confidentiality ECU1.SesK" />
-<Line value="#Confidentiality ECU1.confData" />
-<Line value="" />
-<Line value="#Authenticity ECU1.makingFirstMessage.SesK KM.decipherOK.msgauth" />
-<Line value="" />
-<Line value="#InitialCommonKnowledge ECU1.PSK1 KM.PSK1" />
-<Line value="#InitialCommonKnowledge ECUN.PSKN KM.PSKN" />
-<Line value="#InitialCommonKnowledge ECUN.ACK ECU1.ACK KM.ACK" />
-<Line value="#InitialCommonKnowledge KM.timerexpire TimerKM.timerexpire" />
+<Attribute access="0" id="PSKN" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="keyOfGroup" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="msg" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg1" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg2" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg3" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg4" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg5" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="msg6" value="" type="5" typeOther="Message" />
+<Attribute access="0" id="timestamp" value="" type="8" typeOther="" />
+<Attribute access="0" id="ACK" value="" type="8" typeOther="" />
+<Attribute access="0" id="b" value="" type="4" typeOther="" />
+<Attribute access="0" id="secretData" value="" type="8" typeOther="" />
+<Method value="Message encrypt(Message msg, Key k)" />
+<Method value="Message decrypt(Message msg, Key k)" />
+<Method value="Message sencrypt(Message msg, Key k)" />
+<Method value="Message sdecrypt(Message msg, Key k)" />
+<Method value="Message MAC(Message msg, Key k)" />
+<Method value="bool verifyMAC(Message msg, Key k, Message macmsg)" />
+<Method value="Message concat2(Message msg1, Message msg2)" />
+<Method value="Message concat3(Message msg1, Message msg2, Message msg3)" />
+<Method value="Message concat4(Message msg1, Message msg2, Message msg3, Message msg4)" />
+<Method value="get2(Message msg, Message msg1, Message msg2)" />
+<Method value="get3(Message msg, Message msg1, Message msg2, Message msg3)" />
+<Method value="get4(Message msg, Message msg1, Message msg2, Message msg3, Message msg4)" />
 </extraparam>
-</COMPONENT>
-
-<COMPONENT type="5003" id="118" >
-<cdparam x="660" y="340" />
-<sizeparam width="102" height="54" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="DataType0" value="Message" />
-<TGConnectingPoint num="0" id="110" />
-<TGConnectingPoint num="1" id="111" />
-<TGConnectingPoint num="2" id="112" />
-<TGConnectingPoint num="3" id="113" />
-<TGConnectingPoint num="4" id="114" />
-<TGConnectingPoint num="5" id="115" />
-<TGConnectingPoint num="6" id="116" />
-<TGConnectingPoint num="7" id="117" />
-<extraparam>
-<Attribute access="0" id="data" value="" type="0" typeOther="" />
-</extraparam>
-</COMPONENT>
-
-<COMPONENT type="5003" id="127" >
-<cdparam x="544" y="339" />
-<sizeparam width="110" height="56" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="DataType0" value="Key" />
-<TGConnectingPoint num="0" id="119" />
-<TGConnectingPoint num="1" id="120" />
-<TGConnectingPoint num="2" id="121" />
-<TGConnectingPoint num="3" id="122" />
-<TGConnectingPoint num="4" id="123" />
-<TGConnectingPoint num="5" id="124" />
-<TGConnectingPoint num="6" id="125" />
-<TGConnectingPoint num="7" id="126" />
-<extraparam>
-<Attribute access="0" id="data" value="" type="8" typeOther="" />
-</extraparam>
-</COMPONENT>
+</SUBCOMPONENT>
 
 
 </AVATARBlockDiagramPanel>
@@ -2652,8 +2715,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1132" >
-<cdparam x="347" y="264" />
-<sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="351" y="264" />
+<sizeparam width="109" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="chout(timerexpire)" />
@@ -2702,8 +2765,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1168" >
-<cdparam x="356" y="110" />
-<sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="358" y="110" />
+<sizeparam width="93" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="chin(settimer)" />
@@ -2726,6 +2789,19 @@
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
 <TGConnectingPoint num="0" id="1169" />
+</COMPONENT>
+
+
+</AVATARStateMachineDiagramPanel>
+
+<AVATARStateMachineDiagramPanel name="SecuredSystem" minX="10" maxX="1400" minY="10" maxY="900" >
+<COMPONENT type="5100" id="1543" >
+<cdparam x="400" y="50" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="start state" value="null" />
+<TGConnectingPoint num="0" id="1544" />
 </COMPONENT>
 
 
@@ -3393,7 +3469,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Block0 to Block0" value="" />
 <P1  x="324" y="185" id="1483" />
-<P2  x="385" y="209" id="1457" />
+<P2  x="389" y="187" id="1457" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <isd value="in fromnet()" />
@@ -3402,7 +3478,7 @@
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="1469" >
-<cdparam x="385" y="133" />
+<cdparam x="389" y="111" />
 <sizeparam width="131" height="102" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />

@@ -642,6 +642,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 						tepe = arpt.generateTEPESpecification((AvatarPDPanel)(valTepe.get(k)));
 						jta.append("TEPE: " + tepe.getName() + "\n");
 						jta.append("Checking syntax\n");
+						// tepe.checkSyntax();
 						alTepe.add(tepe);
 						jta.append("Done.\n");
 					}

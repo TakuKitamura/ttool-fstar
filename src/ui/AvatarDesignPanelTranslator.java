@@ -627,6 +627,7 @@ public class AvatarDesignPanelTranslator {
 						ce.setTDiagramPanel(tdp);
 						ce.setTGComponent(tgc);
 						addCheckingError(ce);
+						//_as.addBroadcastSignal(atas);
 					} 
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);
 					if (asmdrs.hasCheckableAccessibility()) {
@@ -719,6 +720,7 @@ public class AvatarDesignPanelTranslator {
 						ce.setTDiagramPanel(tdp);
 						ce.setTGComponent(tgc);
 						addCheckingError(ce);
+						//_as.addBroadcastSignal(atas);
 					} 
 					
 					aaos = new AvatarActionOnSignal("action_on_signal", atas, tgc);

@@ -118,6 +118,38 @@ public class AvatarMethod extends AvatarElement{
 		ret += ")";
 		return ret;
 	}
+	
+	public boolean isCompatibleWith(AvatarMethod _am) {
+		if (parameters.size() != _am.getListOfAttributes().size()) {
+			return false;
+		}
+		
+		AvatarAttribute _ama;
+		int cpt = 0;
+		for(AvatarAttribute aa: parameters) {
+			_ama = _am.getListOfAttributes().get(cpt);
+			if (_ama.getType() != aa.getType()) {
+				return false;
+			}
+			cpt ++;
+		}
+		
+		if (returnParameters.size() != _am.getListOfReturnAttributes().size()) {
+			return false;
+		}
+		
+		cpt = 0;
+		for(AvatarAttribute aa: returnParameters) {
+			_ama = _am.getListOfReturnAttributes().get(cpt);
+			if (_ama.getType() != aa.getType()) {
+				return false;
+			}
+			cpt ++;
+		}
+		
+		return true;
+	}
+	
     
 
 }

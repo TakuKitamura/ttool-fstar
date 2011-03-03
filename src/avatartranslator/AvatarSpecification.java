@@ -57,6 +57,8 @@ public class AvatarSpecification extends AvatarElement {
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;
    
+   //private AvatarBroadcast broadcast;
+   
    private LinkedList<String> pragmas;
   
 	
@@ -64,6 +66,7 @@ public class AvatarSpecification extends AvatarElement {
         super(_name, _referenceObject);
 		blocks = new LinkedList<AvatarBlock>();
 		relations = new LinkedList<AvatarRelation>();
+		//broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
 		pragmas = new LinkedList<String>();
     }
 	
@@ -97,6 +100,16 @@ public class AvatarSpecification extends AvatarElement {
 	public void addRelation(AvatarRelation _relation) {
 		relations.add(_relation);
 	}
+	
+	/*public void addBroadcastSignal(AvatarSignal _as) {
+		if (!broadcast.containsSignal(_as)) {
+			broadcast.addSignal(_as);
+		}
+	}
+	
+	public AvatarBroadcast getBroadcast() {
+		return broadcast;
+	}*/
 	
 	public void addPragma(String _pragma) {
 		pragmas.add(_pragma);
