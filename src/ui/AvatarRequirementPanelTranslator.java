@@ -115,6 +115,14 @@ public class AvatarRequirementPanelTranslator {
 				_tepe.add(tepeattributec);
 				listE.addCor(tepeattributec, tgc);
 				
+				
+			// Setting of Attributes
+			} else if (tgc instanceof AvatarPDAttributeSetting) {
+				TEPESettingComponent tepesettingc = new TEPESettingComponent("Attribute setting", tgc);
+				tepesettingc.setValue(tgc.getValue());
+				_tepe.add(tepesettingc);
+				listE.addCor(tepesettingc, tgc);				
+				
 			// Block
 			} else if (tgc instanceof AvatarPDBlock) {
 				Vector<AvatarPDAttribute> va = ((AvatarPDBlock)tgc).getAllAvatarPDAttribute();
@@ -175,6 +183,7 @@ public class AvatarRequirementPanelTranslator {
 				_tepe.add(tepepropertyc);
 				listE.addCor(tepepropertyc, tgc);
 			
+			// Operators between properties
 			} else if (tgc instanceof AvatarPDPropertyRelation) {
 				AvatarPDPropertyRelation apdpr = (AvatarPDPropertyRelation)tgc;
 				
