@@ -56,7 +56,7 @@ public class AvatarRelation extends AvatarElement {
     
     public AvatarBlock block1, block2;
 	private LinkedList<AvatarSignal> signals1, signals2;
-	private boolean blocking, asynchronous;
+	private boolean blocking, asynchronous, isPrivate;
 	private int sizeOfFIFO;
   
 	
@@ -84,12 +84,20 @@ public class AvatarRelation extends AvatarElement {
 		blocking = _b;
 	}
 	
+	public void setPrivate(boolean _b) {
+		isPrivate = _b;
+	}
+	
 	public void setSizeOfFIFO(int _sizeOfFIFO) {
 		sizeOfFIFO = _sizeOfFIFO;
 	}
 	
 	public boolean isAsynchronous() {
 		return asynchronous;
+	}
+	
+	public boolean isPrivate() {
+		return isPrivate;
 	}
 	
 	public int getSizeOfFIFO() {

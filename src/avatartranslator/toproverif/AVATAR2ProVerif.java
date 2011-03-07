@@ -593,14 +593,20 @@ public class AVATAR2ProVerif {
 		} else if (_asme instanceof AvatarActionOnSignal){
 			aaos = (AvatarActionOnSignal)_asme;
 			as = aaos.getSignal();
+			
+			boolean isPrivate = false;
+			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+			if (ar != null) {
+				isPrivate = ar.isPrivate();
+			}
+			
 			if (as.isOut()) {
 				tmp ="out";
 			} else {
 				tmp = "in";
 			}
 			
-			
-			if (as.getName().indexOf("private") == -1) {
+			if (!isPrivate) {
 				tmp+="(ch, ";
 			} else {
 				tmp +="(chprivate, ";

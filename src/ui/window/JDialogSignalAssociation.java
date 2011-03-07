@@ -66,8 +66,8 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	private JRadioButton synchronous, asynchronous;
 	private JLabel labelFIFO;
 	private JTextField sizeOfFIFO;
-	private JCheckBox blocking;
-    private JPanel panel1, panel2, panel3;
+	private JCheckBox blocking, isPrivate;
+    private JPanel panel1, panel2, panel3, panel4;
 	
 	private boolean cancelled = false;
     
@@ -117,10 +117,12 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
 		GridBagLayout gridbag3 = new GridBagLayout();
+		GridBagLayout gridbag4 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
 		GridBagConstraints c3 = new GridBagConstraints();
+		GridBagConstraints c4 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -141,6 +143,11 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Connector type"));
         panel3.setPreferredSize(new Dimension(600, 100));
+		
+		panel4 = new JPanel();
+        panel4.setLayout(gridbag4);
+        panel4.setBorder(new javax.swing.border.TitledBorder("Security issues"));
+        panel4.setPreferredSize(new Dimension(600, 50));
         
         // first line panel1
         c1.weighty = 1.0;
@@ -247,6 +254,18 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 		blocking.setSelected(connector.isBlocking());
 		panel3.add(blocking, c3);
 		
+		
+		c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c4.fill = GridBagConstraints.BOTH;
+        c4.gridheight = 1;
+        c4.weighty = 1;
+        c4.weightx = 10.0;
+		//panel3.add(new JLabel(" "), c3);
+		
+		isPrivate = new JCheckBox("Private channel (an attacker cannot listen to it)");
+		isPrivate.setSelected(connector.isPrivate());
+		panel4.add(isPrivate, c4);
+		
 		updateSynchronousElements();
 		
 		
@@ -260,6 +279,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
 		c.add(panel3, c0);
+		c.add(panel4, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -448,6 +468,10 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	
 	public boolean isBlocking() {
 		return blocking.isSelected();
+	}
+	
+	public boolean isPrivate() {
+		return isPrivate.isSelected();
 	}
     
 }

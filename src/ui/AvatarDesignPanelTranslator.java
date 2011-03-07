@@ -1173,6 +1173,7 @@ public class AvatarDesignPanelTranslator {
 					r.setBlocking(port.isBlocking());
 					r.setAsynchronous(port.isAsynchronous());
 					r.setSizeOfFIFO(port.getSizeOfFIFO());
+					r.setPrivate(port.isPrivate());
 					
 					_as.addRelation(r);
 				} else {
