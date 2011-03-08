@@ -12,9 +12,9 @@ LOPT   = -O1 -pthread -ldl
 DEBUG  = -g
 OTHER  = -Wall
 TRY    = -Wno-deprecated
-#CFLAGS = $(OPT) $(OTHER) $(TRY)
+CFLAGS = $(OPT) $(OTHER) $(TRY)
 LFLAGS = $(LOPT) $(OTHER) $(TRY)
-CFLAGS = $(DEBUG) $(OTHER)
+#CFLAGS = $(DEBUG) $(OTHER)
 OBJDIR = lib
 
 MODULE = run
