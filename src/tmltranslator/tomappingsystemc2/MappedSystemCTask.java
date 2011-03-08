@@ -276,6 +276,7 @@ public class MappedSystemCTask {
 		// public dec
 		hcode += CR + functionSig + CR + "public:" + CR;
 		hcode += "friend bool condFunc(TMLTask* _ioTask_);\n";
+		hcode += "friend class CurrentComponents;\n";
 		// Simulation
 		hcode += makeConstructorSignature() + SCCR; // + "~" + reference + "()" + SCCR;
 		makeSerializableFuncs();
@@ -952,5 +953,9 @@ public class MappedSystemCTask {
 	
 	public void determineCheckpoints(int[] aStatistics){
 		_analysis.determineCheckpoints(aStatistics);
+	}
+	
+	public StaticAnalysis getAnalysis(){
+		return _analysis;
 	}
 }

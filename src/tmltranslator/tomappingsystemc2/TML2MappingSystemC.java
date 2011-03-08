@@ -71,10 +71,10 @@ public class TML2MappingSystemC {
 	private String header, declaration, mainFile, src;
 	private ArrayList<MappedSystemCTask> tasks;
 	
-	private ArrayList<EBRDD> ebrdds;
+	//private ArrayList<EBRDD> ebrdds;
 	//private ArrayList<TEPE> tepes;
 	SystemCTEPE tepeTranslator;
-	private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
+	//private ArrayList<SystemCEBRDD> systemCebrdds = new ArrayList<SystemCEBRDD>();
     
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
@@ -88,18 +88,18 @@ public class TML2MappingSystemC {
 
 	public TML2MappingSystemC(TMLModeling _tmlm, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
 		tmlmodeling = _tmlm;
-		ebrdds = _ebrdds;
+		//ebrdds = _ebrdds;
 		tmlmapping = tmlmodeling.getDefaultMapping();
-		tepeTranslator = new  SystemCTEPE(_tepes);
-		tepeTranslator.generateTEPEs();
+		tepeTranslator = new  SystemCTEPE(_tepes, this);
+		//tepeTranslator.generateTEPEs();
 	}
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
 		tmlmapping = _tmlmapping;
-		ebrdds = _ebrdds;
+		//ebrdds = _ebrdds;
 		tmlmapping.makeMinimumMapping();
-		tepeTranslator = new  SystemCTEPE(_tepes);
-		tepeTranslator.generateTEPEs();
+		tepeTranslator = new  SystemCTEPE(_tepes, this);
+		//tepeTranslator.generateTEPEs();
  	}
     
 	public void saveFile(String path, String filename) throws FileException {  
@@ -107,7 +107,7 @@ public class TML2MappingSystemC {
         	FileUtils.saveFile(path + filename + ".cpp", getFullCode());
 		src += filename + ".cpp";
 		FileUtils.saveFile(path + "Makefile.src", src);
-		tepeTranslator.saveFile(path + "src_simulator/TEPE/test.h");
+		//tepeTranslator.saveFile(path + "src_simulator/TEPE/test.h");
 	}
 	
 	public String getFullCode() {
@@ -121,7 +121,7 @@ public class TML2MappingSystemC {
 		tmlmodeling = tmlmapping.getTMLModeling();
 		tasks = new ArrayList<MappedSystemCTask>();
         	//generateSystemCTasks();
-		generateEBRDDs();
+		//generateEBRDDs();
 		generateMainFile();
 		generateMakefileSrc();
 	}
@@ -129,6 +129,7 @@ public class TML2MappingSystemC {
 	private void generateMainFile() {
 		makeHeader();
 		makeDeclarations();
+		header += tepeTranslator.getEqFuncDeclaration() + "\n";
 		mainFile = header + declaration;
 		mainFile = Conversion.indentString(mainFile, 4);
 	}
@@ -138,22 +139,31 @@ public class TML2MappingSystemC {
 		for(TMLTask mst: tmlmapping.getMappedTasks()) {
 			src += mst.getName() + ".cpp ";
 		}
-		for(EBRDD ebrdd: ebrdds){
-			src += ebrdd.getName() + ".cpp ";
-		}
+		//for(EBRDD ebrdd: ebrdds){
+		//	src += ebrdd.getName() + ".cpp ";
+		//}
 	}
 	
 	private void makeHeader() {
 		// System headers
 		header = "#include <Simulator.h>" + CR;
+		header += "#include <AliasConstraint.h>\n#include <EqConstraint.h>\n#include <LogConstraint.h>\n#include <PropLabConstraint.h>\n";
+		header += "#include <PropRelConstraint.h>\n#include <SeqConstraint.h>\n#include <SignalConstraint.h>\n#include <TimeMMConstraint.h>\n";
+		header += "#include <TimeTConstraint.h>\n";
+		header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <RRScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
+		header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
+		header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
+		header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
+		header += "#include <SimComponents.h>\n#include <Server.h>\n#include <SimServSyncInfo.h>\n#include <ListenersSimCmd.h>\n";
+
 		// Generate tasks header
 		for(TMLTask mst: tmlmapping.getMappedTasks()) {
 			//header += "#include <" + mst.getReference() + ".h>" + CR;
 			header += "#include <" + mst.getName() + ".h>" + CR;
 		}
-		for(EBRDD ebrdd: ebrdds){
-			header += "#include <" + ebrdd.getName() + ".h>" + CR;
-		}
+		//for(EBRDD ebrdd: ebrdds){
+		//	header += "#include <" + ebrdd.getName() + ".h>" + CR;
+		//}
 		header += CR;
 	}
 	
@@ -398,26 +408,36 @@ public class TML2MappingSystemC {
 			declaration += "addTask(task__"+ task.getName() +")"+ SCCR;
 		}
 		//int[] aStatistics = new int[8];
+		declaration += "\n}\n\n";
+		
+		//Declaration of TEPEs
+		declaration += "void generateTEPEs(){" + CR;
+		declaration += "//Declaration of TEPEs" + CR;
+		tepeTranslator.generateTEPEs();
+		declaration += tepeTranslator.getCode();
+		
+		//Generation of tasks
 		for(MappedSystemCTask task: tasks){
 			task.determineCheckpoints(aStatistics);
 			task.generateSystemC(debug, optimize);
 		}
+		
+		//Declaration of TEPEs continued
+		declaration += CR;
+		declaration += "}\n};\n\n" + tepeTranslator.getEqFuncs();
+		declaration +="#include <main.h>\n";
+		
 		if (aStatistics[0]!=0) System.out.println("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
 		if (aStatistics[2]!=0) System.out.println("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
 		if (aStatistics[4]!=0) System.out.println("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
 		if (aStatistics[6]!=0) System.out.println("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
-		declaration += CR;
-
+		
 		//Declaration of EBRDDs
-		declaration += "//Declaration of EBRDDs" + CR;
+		/*declaration += "//Declaration of EBRDDs" + CR;
 		for(EBRDD ebrdd: ebrdds){
 			declaration += ebrdd.getName() + "* ebrdd__" + ebrdd.getName() + " = new " + ebrdd.getName() + "(0, \""+ ebrdd.getName() + "\");\n";
 			declaration += "addEBRDD(ebrdd__"+ ebrdd.getName() +")"+ SCCR;
-		}
-
-
-		declaration += "}\n};\n\n";
-		declaration +="#include <main.h>\n";
+		}*/
   	}
 
 
@@ -609,20 +629,28 @@ public class TML2MappingSystemC {
 		return null;
 	}
 
-	private void generateEBRDDs(){
+	/*private void generateEBRDDs(){
 		for(EBRDD ebrdd: ebrdds){
 			SystemCEBRDD newEbrdd = new SystemCEBRDD(ebrdd, tmlmodeling, tmlmapping);
 			newEbrdd.generateSystemC(debug);
 			systemCebrdds.add(newEbrdd);
 		}
-	}
+	}*/
 	
 	private void generateTaskFiles(String path) throws FileException {
 		for(MappedSystemCTask mst: tasks) {
 			mst.saveInFiles(path);
 		}
-		for(SystemCEBRDD ebrdd: systemCebrdds) {
-			ebrdd.saveInFiles(path);
+		//for(SystemCEBRDD ebrdd: systemCebrdds) {
+		//	ebrdd.saveInFiles(path);
+		//}
+	}
+	
+	
+	public MappedSystemCTask getMappedTaskByName(String iName){
+		for(MappedSystemCTask task: tasks){
+			if (task.getTMLTask().getName().equals(iName)) return task;
 		}
+		return null;
 	}
 }

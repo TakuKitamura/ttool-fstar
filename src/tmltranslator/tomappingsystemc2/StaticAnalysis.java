@@ -6,7 +6,7 @@ import java.util.regex.*;
 //import java.util.HashSet;
 
 public class StaticAnalysis{
-	private ArrayList<LiveVariableNode> liveNodes= new ArrayList<LiveVariableNode>();;
+	private ArrayList<LiveVariableNode> liveNodes= new ArrayList<LiveVariableNode>();
 	private final static Pattern _varPattern = Pattern.compile("[\\w&&\\D]+[\\w]*");
 	private TMLTask _task;
 	private ArrayList<TMLChannel> _channels;
@@ -59,6 +59,7 @@ public class StaticAnalysis{
 	}
 
 	private int getVarSeqNoByName(String attName){
+		attName=attName.trim();
 		int aSeq=0;
 		for(TMLAttribute att: _task.getAttributes()) {
 			if (att.name.equals(attName)) return aSeq;
@@ -285,12 +286,12 @@ public class StaticAnalysis{
 		int aNbOfCheckPoints=0, aNbOfCandidates=0;
 		for(LiveVariableNode aLiveNode: liveNodes){
 			int aStatResult = aLiveNode.varStatistics(aStatistics);
-			//if((aStatResult & 1)!=0){
-				aLiveNode.printReachingEntries();
-				printLiveVarNode(aLiveNode);
+			if((aStatResult & 1)!=0){
+				//aLiveNode.printReachingEntries();
+				//printLiveVarNode(aLiveNode);
 				aNbOfCandidates++;
 				if((aStatResult & 2)!=0) aNbOfCheckPoints++;
-			//}
+			}
 		}
 		if (aNbOfCandidates==0)
 			System.out.println("No checkpoint candidates");
@@ -502,5 +503,30 @@ public class StaticAnalysis{
 		for(LiveVariableNode aLiveNode: liveNodes)
 			if (aLiveNode.getLinkedElement()==iCmd) return aLiveNode;
 		return null;
+	}
+	
+	public void getCommandsImpactingVar(String iVarName, HashSet<Integer> oList){
+		//int[] aVarMap=new int[_bytesForVars];
+		int aVarSeqNo = getVarSeqNoByName(iVarName);
+		if (aVarSeqNo>=0){
+			//aVarMap[aVarSeqNo >>> 5] |= 1 << (aVarSeqNo & 0x1F);
+			int intPos = aVarSeqNo >>> 5;
+			int bitMask = 1 << (aVarSeqNo & 0x1F);
+			for(LiveVariableNode aLiveNode: liveNodes){
+				/*int[] aDefVars = aLiveNode.getDefVars();
+				boolean aMatchFound=false;
+				for (int i=0; i<aDefVars.length && !aMatchFound;i++){
+					aMatchFound |= ((aDefVars[i] & aVarMap[i]) !=0);
+				}*/
+				
+				//if (aMatchFound && aLiveNode.getLinkedElement()!=null) oList.add(aLiveNode.getLinkedElement().getID());
+				if ((aLiveNode.getInitialDefVars()[intPos] & bitMask)!=0){
+					if (aLiveNode.getLinkedElement()!=null) oList.add(aLiveNode.getLinkedElement().getID());
+					else System.out.println("No linked elem");
+				}else
+					System.out.println("Bit for var not set");
+			}
+		}else
+			System.out.println("Variable " + iVarName + " not found in getCommandsImpactingVar");
 	}
 }

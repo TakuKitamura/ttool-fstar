@@ -11,6 +11,7 @@ public class LiveVariableNode{
 	//** Live Variable Analysis
 	private int[] _useVars;
 	private int[] _defVars;
+	private int[] _initialDefVars;
 	private int[] _inVars;
 	private int[] _outVars;
 	//** Reachable Definition analysis
@@ -54,6 +55,9 @@ public class LiveVariableNode{
 	LiveVariableNode(StaticAnalysis iAnalysis, int[] iUseVars, int[] iDefVars, TMLActivityElement iLinkedElem, LiveVariableNode iSuperiorNode){
 		_useVars=iUseVars;
 		_defVars=iDefVars;
+		_initialDefVars = new int[_defVars.length];
+		for (int i=0; i<_defVars.length; i++)
+			_initialDefVars[i]=_defVars[i];
 		_superiorBranchNode = iSuperiorNode;
 		_linkedElem = iLinkedElem;
 		_analysis = iAnalysis;
@@ -701,6 +705,10 @@ public class LiveVariableNode{
 
 	public int[] getOutDefs(){
 		return _outDefs;
+	}
+
+	public int[] getInitialDefVars(){
+		return _initialDefVars;
 	}
 
 	private boolean canBeRemoved(){
