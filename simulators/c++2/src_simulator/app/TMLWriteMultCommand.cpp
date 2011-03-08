@@ -46,6 +46,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 TMLWriteMultCommand::TMLWriteMultCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel** iChannels, unsigned int iNbOfChannels, const char* iLiveVarList, bool iCheckpoint, TMLLength iStatLength): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _lengthFunc(iLengthFunc), _channels(iChannels), _nbOfChannels(iNbOfChannels){
 	_length=iStatLength * _channels[0]->getWidth();
+	_type = WR;
 }
 
 void TMLWriteMultCommand::execute(){

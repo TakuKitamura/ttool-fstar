@@ -44,17 +44,19 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <Serializable.h>
 #include <ListenerSubject.h>
+#include <GeneralListener.h>
 
 class TMLTransaction;
 class TMLTask;
 class TMLChannel;
-class CommandListener;
+//class CommandListener;
 class Comment;
 class SimComponents;
 class HashAlgo;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
-class TMLCommand: public Serializable, public ListenerSubject <CommandListener> {
+class TMLCommand: public Serializable, public ListenerSubject <GeneralListener>{
+//class TMLCommand: public Serializable, public ListenerSubject <CommandListener>, public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
     	/**
@@ -145,18 +147,21 @@ public:
 	/**
 	\param  iListener Pointer to the listener
 	*/
-	static void registerGlobalListener(CommandListener* iListener);
+	//static void registerGlobalListener(CommandListener* iListener);
+	static void registerGlobalListener(GeneralListener* iListener);
 	///Registers a listener at all TMLCommand instances of a specific type
 	/**
 	\param iListener Pointer to the listener
 	\param aTask Only commands of this task are taken into account, if set to 0 all tasks are considered
 	*/
-	template<typename T> static void registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask);
+	//template<typename T> static void registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask);
+	template<typename T> static void registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask);
 	///Removes a listener at all TMLCommand instances
 	/**
 	\param  iListener Pointer to the listener
 	*/
-	static void removeGlobalListener(CommandListener* iListener);
+	//static void removeGlobalListener(CommandListener* iListener);
+	static void removeGlobalListener(GeneralListener* iListener);
 	///Returns the unique ID of the command
 	/**
       	\return Unique ID
@@ -166,7 +171,8 @@ public:
 	/**
       	\param iBreakp Pointer to breakpoint
     	*/ 
-	void setBreakpoint(CommandListener* iBreakp);
+	//void setBreakpoint(CommandListener* iBreakp);
+	void setBreakpoint(GeneralListener* iBreakp);
 	///Removes the breakpoint
 	void removeBreakpoint();
 	///Returns the progress of the command
@@ -211,11 +217,15 @@ public:
 	*/
 	bool isCheckpoint();
 	static void streamStateXML(std::ostream& s);
+	static TMLCommand* getCommandByID(ID iID);
+	unsigned int getType();
 protected:
 	///ID of the command
 	ID _ID;
 	///Length of the command
 	TMLLength _length;
+	///Command type
+	CommandType _type;
 	///Progress of the command (in execution units)
 	TMLLength _progress;
 	///Pointer to the current transaction
@@ -227,7 +237,8 @@ protected:
 	///Number of successors of this command
 	unsigned int _nbOfNextCmds;
 	///Breakpoint
-	CommandListener* _breakpoint;
+	//CommandListener* _breakpoint;
+	GeneralListener* _breakpoint;
 	///Is true until the first transaction of a task is executed
 	bool _justStarted;
 	///Determines the next command based on the _nextCommand array

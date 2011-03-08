@@ -38,27 +38,36 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TransactionListenerH
-#define TransactionListenerH
+#include <SignalConstraint.h>
+	
+SignalConstraint::SignalConstraint(ID iID, bool iIncludeBounds): _ID(iID), _s1Notified(UNDEF), _ntfFuncSigOut(0), _rightConstr(0), _includeBounds(iIncludeBounds){
+}
 
-#define NOTIFY_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<TransactionListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
+void SignalConstraint::notifyS1(bool iSigState){
+	//_s1Notified = iSigState;
+	//_notificationMask |=1;
+	if (iSigState)
+		std::cout << _ID << ": s1 ok\n";
+	else
+		std::cout << _ID << ": s1 --\n";
+	_s1Notified = (iSigState)?TRUE:FALSE;
+	evalInput();
+}
 
-///Encapsulates events associated with transactions
-class TransactionListener{
-public:
-	///Gets called when a transaction is executed
-	/**
-	\param iTrans Pointer to the transaction
-	\param iID ID of the event source
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans, ID iID){}
-	/////Gets called when a transaction is scheduled
-	////**
-	//\param  iTrans Pointer to the transaction
-	//*/
-	//virtual void transScheduled(TMLTransaction* iTrans){}
-	///Destructor
-	virtual ~TransactionListener(){}
-protected:
-};
-#endif
+void SignalConstraint::notifyS2(bool iSigState){}
+
+void SignalConstraint::notifySf(bool iSigState){}
+
+void SignalConstraint::connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc){
+	_ntfFuncSigOut = iNotFunc;
+	_rightConstr = iRightConstr;
+}
+
+void SignalConstraint::notifiedReset(){
+	//_notificationMask=0;
+	_s1Notified = UNDEF;
+}
+
+//void SignalConstraint::setSimTime(TMLTime iSimTime){
+//	_simTime = iSimTime;
+//}

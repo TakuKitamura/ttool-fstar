@@ -38,44 +38,68 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef BusAbstrH
-#define BusAbstrH
-#include <Bus.h>
+#include <TimeTConstraint.h>
+#include <SchedulableDevice.h>
 
-///Abstraction of Bus component
-class BusAbstr{
-public:
-	///Constructor
-    	/**
-	\param iBus pointer to the bus 
-      	*/
-	BusAbstr(Bus* iBus):_bus(iBus){
+TimeTConstraint::TimeTConstraint(ID iID, TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), PropertyStateConstraint (GENERAL), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
+}
+
+void TimeTConstraint::notifiedReset(){
+	SignalConstraint::notifiedReset();
+	PropertyStateConstraint::notifiedReset();
+}
+
+void TimeTConstraint::reset(){
+	PropertyStateConstraint::reset();
+	_s1Time=-1;
+}
+
+std::ostream& TimeTConstraint::writeObject(std::ostream& s){
+	PropertyStateConstraint::writeObject(s);
+	WRITE_STREAM(s, _s1Time);
+	return s;
+}
+
+std::istream& TimeTConstraint::readObject(std::istream& s){
+	PropertyStateConstraint::readObject(s);
+	READ_STREAM(s, _s1Time);
+	return s;
+}
+
+void TimeTConstraint::evalInput(){
+	if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
+		if(_enabledNotified==TRUE && _includeBounds){
+			//std::cout << "_enabledNotified && _includeBounds\n";
+			_constrEnabled=true;
+		}
+		unsigned int aEnaFlag=0;
+		bool aSigOut=false;
+		if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
+		if(_constrEnabled){
+			if (_s1Notified==TRUE){
+				if (_s1Time==-1){
+					_s1Time = SchedulableDevice::getSimulatedTime();
+					aEnaFlag |=2;
+				}else{
+					if (_retrigger) _s1Time = SchedulableDevice::getSimulatedTime();
+				}
+			}
+			if (_s1Time!=-1 && SchedulableDevice::getSimulatedTime() -_s1Time>=_t){
+				if (SchedulableDevice::getSimulatedTime() - _s1Time > _t && _aboveConstr!=0) _aboveConstr[0]->forceDisable();
+				aEnaFlag |=1;
+				aSigOut=true;
+				_s1Time=-1;
+			}
+			
+		}
+		_constrEnabled |= (_enabledNotified==TRUE);
+		if (_disabledNotified==TRUE){
+			if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
+			reset();
+		}
+		notifiedReset();
+		if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
+		if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
+
 	}
-	///Destructor
-	~BusAbstr(){
-	}
-	///Returns the size of an atomic bus transaction
-	/**
-	\return Burst size
-	*/
-	inline TMLLength getBurstSize() const{
-		return _bus->getBurstSize();
-	}
-	///Returns a string representation of the Bus
-	/**
-	\return Detailed string representation
-	*/
-	inline std::string getName() const{
-		return _bus->toString();
-	}
-	///Returns the unique ID of the bus
-	/**
-      	\return Unique ID
-    	*/ 
-	inline ID getID() const{
-		return _bus->getID();
-	}
-private:
-	Bus* _bus;
-};
-#endif
+}

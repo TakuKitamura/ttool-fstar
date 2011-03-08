@@ -41,9 +41,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLActionCommand.h>
 #include <TMLTask.h>
 #include <SimComponents.h>
-#include <CommandListener.h>
+//#include <CommandListener.h>
 
 TMLActionCommand::TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
+	_type=ACT;
 }
 
 void TMLActionCommand::execute(){
@@ -67,6 +68,7 @@ TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
+	//NOTIFY_CMD_FINISHED(0);
 #endif
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;

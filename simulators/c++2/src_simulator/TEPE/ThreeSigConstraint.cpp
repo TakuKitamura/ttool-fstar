@@ -38,37 +38,23 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef CPUAbstrH
-#define CPUAbstrH
-#include <CPU.h>
+#include <ThreeSigConstraint.h>
 
-///Abstraction of CPU component
-class CPUAbstr{
-public:
-	///Constructor
-    	/**
-      	\param iCPU Pointer to CPU object which shall be encapsulated
-    	*/
-	CPUAbstr(CPU* iCPU):_cpu(iCPU){
-	}
-	///Destructor
-	~CPUAbstr(){
-	}
-	///Returns the name of the CPU
-	/**
-	\return Name of the CPU
-	*/
-	inline std::string getName() const{
-		return _cpu->toString();
-	}
-	///Returns the unique ID of the CPU
-	/**
-      	\return Unique ID
-    	*/ 
-	inline ID getID() const{
-		return _cpu->getID();
-	}
-private:
-	CPU* _cpu;
-};
-#endif
+ThreeSigConstraint::ThreeSigConstraint(ID iID, bool iIncludeBounds): TwoSigConstraint(iID, iIncludeBounds), _sfNotified(UNDEF){
+}
+
+void ThreeSigConstraint::notifySf(bool iSigState){
+	//_sfNotified = iSigState;
+	//_notificationMask |=4;
+	if (iSigState)
+		std::cout << _ID << ": sf ok\n";
+	else
+		std::cout << _ID << ": sf --\n";
+	_sfNotified = (iSigState)?TRUE:FALSE;
+	evalInput();
+}
+
+void ThreeSigConstraint::notifiedReset(){
+	TwoSigConstraint::notifiedReset();
+	_sfNotified=UNDEF;
+}

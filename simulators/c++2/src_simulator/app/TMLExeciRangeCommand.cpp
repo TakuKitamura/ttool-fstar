@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 
 TMLExeciRangeCommand::TMLExeciRangeCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iType, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _rangeFunc(iRangeFunc), _minRange(0), _type(iType){
+	_type=EXE;
 }
 
 void TMLExeciRangeCommand::execute(){

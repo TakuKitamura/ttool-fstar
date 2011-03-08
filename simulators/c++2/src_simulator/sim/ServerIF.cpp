@@ -41,6 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<ServerIF.h>
 #include<definitions.h>
 #include<Simulator.h>
+#include<SimServSyncInfo.h>
 
 void ServerIF::setSimSyncInfo(SimServSyncInfo* iSyncInfo){
 	 _syncInfo=iSyncInfo;

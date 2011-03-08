@@ -40,80 +40,23 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef PropertyStateConstraintH
 #define PropertyStateConstraintH
-#include "PropertyConstraint.h"
+#include <PropertyConstraint.h>
 
 typedef enum{GENERAL, NGENERAL, FINALLY, NFINALLY} PropType;
 
 class PropertyStateConstraint: public PropertyConstraint{
 public:
-	PropertyStateConstraint(PropType iType): _type(iType), _constrEnabled(false), _enabledNotified(UNDEF), _disabledNotified(UNDEF),  _property(_type==GENERAL || _type == NFINALLY){
-	}
-	
-	bool evalProp(){
-		if (_aboveConstr==0)
-			return _property;
-		else
-			return _aboveConstr[0]->evalProp() && _property;
-	}
-	
-	void notifyEnable(unsigned int iSigState){
-		_disabledNotified = ((iSigState & 1)==0)? FALSE:TRUE;
-		_enabledNotified = ((iSigState & 2)==0)? FALSE:TRUE;
-		evalInput();
-	}
-	
-	virtual void notifiedReset(){
-		_enabledNotified=UNDEF;
-		_disabledNotified=UNDEF;
-	}
-	
-	virtual void reset(){
-		_constrEnabled=false;
-	}
-	
-	void forceDisable(){
-		_constrEnabled=false;
-	}
-	
-	virtual std::ostream& writeObject(std::ostream& s){
-		unsigned char aTmp = (_property)?1:0;
-		std::cout << "_property written " << _property << "\n";
-		if (_constrEnabled) aTmp |= 2;
-		WRITE_STREAM(s, aTmp);
-		PropertyConstraint::writeObject(s);
-		return s;
-	}
-	
-	virtual std::istream& readObject(std::istream& s){
-		unsigned char aTmp;
-		READ_STREAM(s, aTmp);
-		_property = ((aTmp & 1) !=0);
-		std::cout << "_property read " << _property << "\n";
-		_constrEnabled = ((aTmp & 2) !=0);
-		PropertyConstraint::readObject(s);
-		return s;
-	}
-	
+	PropertyStateConstraint(PropType iType);
+	bool evalProp();
+	void notifyEnable(unsigned int iSigState);
+	virtual void notifiedReset();
+	virtual void reset();
+	void forceDisable();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 protected:
 	virtual void evalInput()=0;
-	
-	void reportPropOccurrence(bool iProp){
-		switch (_type){
-		case GENERAL:
-			_property &= iProp;
-			break;
-		case NGENERAL:
-			_property |= !iProp;
-			break;
-		case FINALLY:
-			_property |= iProp;
-			break;
-		case NFINALLY:
-			_property &= !iProp;
-			break;
-		}
-	}
-	
+	void reportPropOccurrence(bool iProp);
 	PropType _type;
 	bool _constrEnabled;
 	Tristate _enabledNotified;

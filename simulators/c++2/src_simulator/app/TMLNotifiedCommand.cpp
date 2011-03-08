@@ -45,6 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 
 TMLNotifiedCommand::TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
+	_type=NOTIF;
 }
 
 void TMLNotifiedCommand::execute(){

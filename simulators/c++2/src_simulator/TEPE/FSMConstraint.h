@@ -39,90 +39,19 @@ Ludovic Apvrille, Renaud Pacalet
  */
 #ifndef FSMConstraintH
 #define FSMConstraintH
-#include "ThreeSigConstraint.h"
-#include "PropertyStateConstraint.h"
+#include <ThreeSigConstraint.h>
+#include <PropertyStateConstraint.h>
 
 class FSMConstraint: public ThreeSigConstraint, public PropertyStateConstraint{
 public:
-	FSMConstraint(ID iID, PropType iType, bool iIncludeBounds): ThreeSigConstraint(iID, iIncludeBounds), PropertyStateConstraint(iType), _state(0){
-	}
-	
-	void notifiedReset(){
-		ThreeSigConstraint::notifiedReset();
-		PropertyStateConstraint::notifiedReset();
-	}
-	
-	void reset(){
-		PropertyStateConstraint::reset();
-		_state=0;
-	}
-	
-	virtual std::ostream& writeObject(std::ostream& s){
-		PropertyStateConstraint::writeObject(s);
-		std::cout << "_state written " << _state << "\n";
-		WRITE_STREAM(s, _state);
-		return s;
-	}
-	
-	virtual std::istream& readObject(std::istream& s){
-		PropertyStateConstraint::readObject(s);
-		READ_STREAM(s, _state);
-		std::cout << "_state read " << _state << "\n";
-		return s;
-	}
+	FSMConstraint(ID iID, PropType iType, bool iIncludeBounds);
+	void notifiedReset();
+	void reset();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
 protected:
-	
-	void evalInput(){
-		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF || _sfNotified==UNDEF || _s2Notified==UNDEF)){
-			//std::cout << "_notificationMask=15\n";
-			if(_enabledNotified==TRUE && _includeBounds){
-				//std::cout << "_enabledNotified && _includeBounds\n";
-				_constrEnabled=true;
-			}
-			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
-			unsigned int aEnableFlag=0;
-			bool aSigOutFlag=false, aPropResult=true;
-			if(_constrEnabled){
-				//std::cout << "_constrEnabled\n";
-				if( _s1Notified==TRUE) aPropResult &= moveToNextState(1, &aEnableFlag, &aSigOutFlag);
-				if( _sfNotified==TRUE) aPropResult &= moveToNextState(3, &aEnableFlag, &aSigOutFlag);
-				if( _s2Notified==TRUE) aPropResult &= moveToNextState(2, &aEnableFlag, &aSigOutFlag);
-			}
-			_constrEnabled |= (_enabledNotified==TRUE);
-			if (_disabledNotified==TRUE){
-				std::cout << "DISABLE=============================\n";
-				//aEnableFlag |=1;
-				if (_state!=0) aEnableFlag |=1;
-				//if (_state!=0) reportPropOccurrence(false);
-				aPropResult &= (_state==0);
-				//if (_state!=0) std::cout << "Violation detected!!!\n";
-				reset();
-			}
-			notifiedReset();
-			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnableFlag);
-			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOutFlag);
-			//if (aSigOutFlag || !aPropResult) reportPropOccurrence(aPropResult);
-			if (aSigOutFlag || ((aEnableFlag & 1)!=0 && !aPropResult) ){
-			//if (aSigOutFlag || (aEnableFlag & 1)!=0){
-				std::cout << "Report occurrence of FSM: " << aPropResult << "\n";
-				reportPropOccurrence(aPropResult);
-			}
-			//std::cout << "... violation: " << _propViolation << "\n";
-		}//else
-			//std::cout << "_notificationMask=" << _notificationMask << "\n";
-	}
-	
-	bool moveToNextState(unsigned int iSignal, unsigned int * iEnableFlag, bool * iSigOutFlag){
-		unsigned int aTabEntry = _transTable[iSignal + (_state << 2)];
-		//if ((aTabEntry & 1) !=0) reportPropViolation();
-		//if ((aTabEntry & 1) !=0) reportPropOccurrence(false);
-		*iEnableFlag |= ((aTabEntry>>1) & 3);
-		*iSigOutFlag |= ((aTabEntry & 8)!=0);
-		_state = (aTabEntry >> 4);
-		//std::cout << "State: " << _state << "  enable: " << ((aTabEntry>>1) & 3) << "  sigout: " << ((aTabEntry & 8)!=0) << "  violation: " << _propViolation << "\n";
-		return ((aTabEntry & 1) ==0);
-	}
-	
+	void evalInput();
+	bool moveToNextState(unsigned int iSignal, unsigned int * iEnableFlag, bool * iSigOutFlag);
 	const unsigned int* _transTable;
 	unsigned int _state;
 };

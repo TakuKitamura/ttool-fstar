@@ -38,47 +38,24 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TaskAbstrH
-#define TaskAbstrH
-#include <TMLTask.h>
+#include <TwoSigConstraint.h>
 
-///Abstraction of TML Tasks
-class TaskAbstr{
-public:
-	///Constructor
-    	/**
-      	\param iTask Pointer to Task object which shall be encapsulated
-    	*/
-	TaskAbstr(TMLTask* iTask):_task(iTask) {
-	}
-	///Destructor
-	~TaskAbstr(){
-	}
-	///Returns the priority of the task
-	/**
-      	\return Priority
-    	*/
-	inline Priority getPriority() const{
-		return _task->getPriority();
-	}
+TwoSigConstraint::TwoSigConstraint(ID iID, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), _s2Notified(UNDEF){
+}
 
-	///Returns the name of the task
-	/**
-	\return Name of the task
-	*/
-	inline std::string getName() const{
-		return _task->toString();
-	}
-	///Returns the unique ID of the task
-	/**
-      	\return Unique ID
-    	*/ 
-	inline ID getID() const{
-		return _task->getID();
-	}
-	//getExecTime()
-	//getAvContDelay()
-private:
-	TMLTask* _task;
-};
-#endif
+void TwoSigConstraint::notifyS2(bool iSigState){
+	//_s2Notified = iSigState;
+	//_notificationMask |=2;
+	if (iSigState)
+		std::cout << _ID << ": s2 ok\n";
+	else
+		std::cout << _ID << ": s2 --\n";
+	_s2Notified = (iSigState)?TRUE:FALSE;
+	evalInput();
+}
+
+void TwoSigConstraint::notifiedReset(){
+	//_notificationMask=0;
+	SignalConstraint::notifiedReset();
+	_s2Notified = UNDEF;
+}

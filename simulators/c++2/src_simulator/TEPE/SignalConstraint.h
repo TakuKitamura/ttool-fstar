@@ -41,43 +41,20 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef SignalConstraintH
 #define SignalConstraintH
 
+#include <definitions.h>
+
 class SignalConstraint;
 typedef void (SignalConstraint::*NtfSigFuncPointer) (bool iSigState);
 
 class SignalConstraint{
 public:
-	SignalConstraint(ID iID, bool iIncludeBounds): _ID(iID), _s1Notified(UNDEF), _ntfFuncSigOut(0), _rightConstr(0), _includeBounds(iIncludeBounds){
-	}
-	
-	void notifyS1(bool iSigState){
-		//_s1Notified = iSigState;
-		//_notificationMask |=1;
-		if (iSigState)
-			std::cout << _ID << ": s1 ok\n";
-		else
-			std::cout << _ID << ": s1 --\n";
-		_s1Notified = (iSigState)?TRUE:FALSE;
-		evalInput();
-	}
-	
-	virtual void notifyS2(bool iSigState){};
-	
-	virtual void notifySf(bool iSigState){};
-	
-	void connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc){
-		_ntfFuncSigOut = iNotFunc;
-		_rightConstr = iRightConstr;
-	}
-	
-	virtual void notifiedReset(){
-		//_notificationMask=0;
-		_s1Notified = UNDEF;
-	}
-	
-	static void setSimTime(TMLTime iSimTime){
-		_simTime = iSimTime;
-	}
-	
+	SignalConstraint(ID iID, bool iIncludeBounds);
+	void notifyS1(bool iSigState);
+	virtual void notifyS2(bool iSigState);
+	virtual void notifySf(bool iSigState);
+	void connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc);
+	virtual void notifiedReset();
+	//static void setSimTime(TMLTime iSimTime);
 protected:
 	virtual void evalInput()=0;
 	ID _ID;

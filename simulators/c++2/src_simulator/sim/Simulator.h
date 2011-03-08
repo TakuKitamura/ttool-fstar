@@ -40,35 +40,41 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef SimulatorH
 #define SimulatorH
 
-#include <Simulator.h>
-#include <Parameter.h>
+//#include <Parameter.h>
 #include <definitions.h>
-#include <CPU.h>
-#include <SingleCoreCPU.h>
-#include <RRScheduler.h>
-#include <PrioScheduler.h>
-#include <Bus.h>
-#include <Bridge.h>
-#include <Memory.h>
-#include <TMLbrbwChannel.h>
-#include <TMLnbrnbwChannel.h>
-#include <TMLbrnbwChannel.h>
-#include <TMLEventBChannel.h>
-#include <TMLEventFChannel.h>
-#include <TMLEventFBChannel.h>
-#include <TMLTransaction.h>
-#include <TMLCommand.h>
-#include <TMLTask.h>
-#include <SimComponents.h>
-#include <Server.h>
-#include <SimServSyncInfo.h>
+#include <GeneralListener.h>
+#include <ListenerSubject.h>
 #include <ListenersSimCmd.h>
-#include <KernelListener.h>
-#include <KernelListener.h>
+//#include <CPU.h>
+//#include <SingleCoreCPU.h>
+//#include <RRScheduler.h>
+//#include <PrioScheduler.h>
+//#include <Bus.h>
+//#include <Bridge.h>
+//#include <Memory.h>
+//#include <TMLbrbwChannel.h>
+//#include <TMLnbrnbwChannel.h>
+//#include <TMLbrnbwChannel.h>
+//#include <TMLEventBChannel.h>
+//#include <TMLEventFChannel.h>
+//#include <TMLEventFBChannel.h>
+//#include <TMLTransaction.h>
+//#include <TMLCommand.h>
+//#include <TMLTask.h>
+//#include <SimComponents.h>
+//#include <Server.h>
+//#include <SimServSyncInfo.h>
+//#include <ListenersSimCmd.h>
 #ifdef EBRDD_ENABLED 
 #include <ERC.h>
 #include <ERB.h>
 #endif
+
+class CPU;
+class TMLTransaction;
+class TMLCommand;
+class TMLTask;
+class SchedulableCommDevice;
 
 #define RECUR_DEPTH 20
 
@@ -89,7 +95,8 @@ class SimServSyncInfo;
 class ServerIF;
 
 ///Simulation engine and output capabilities
-class Simulator: public ListenerSubject<KernelListener> {
+//class Simulator: public ListenerSubject<KernelListener> {
+class Simulator: public ListenerSubject<GeneralListener> {
 public:
 	///Constructor
 	/**
@@ -230,6 +237,7 @@ public:
 	\return Busy flag
 	*/
 	bool isBusy();
+	//void init();
 protected:
 	///Runs the simulation
 	/**

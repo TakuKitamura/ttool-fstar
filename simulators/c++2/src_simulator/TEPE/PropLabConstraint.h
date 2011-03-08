@@ -40,55 +40,19 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef PropLabConstraintH
 #define PropLabConstraintH
-#include "PropertyConstraint.h"
+#include <PropertyConstraint.h>
 
 typedef enum{LIVENESS, NLIVENESS, REACHABILITY, NREACHABILITY} PropLabType;
+
 class PropLabConstraint: public PropertyConstraint{
 public:
-	PropLabConstraint(PropLabType iType): _type(iType), _property(_type==LIVENESS || _type == NREACHABILITY){
-	}
-	
-	bool evalProp(){
-		switch (_type){
-		case LIVENESS:
-			_property &= _aboveConstr[0]->evalProp();
-			break;
-		case NLIVENESS:
-			_property |= (!_aboveConstr[0]->evalProp());
-			break;
-		case REACHABILITY:
-			_property |= (_aboveConstr[0]->evalProp());
-			break;
-		case NREACHABILITY:
-			_property &= (!_aboveConstr[0]->evalProp());
-			break;
-		}
-		return _property;
-	}
-	
-	void forceDisable(){
-		_aboveConstr[0]->forceDisable();
-	}
-	
-	void notifyEnable(unsigned int iSigState){
-		_aboveConstr[0]->notifyEnable(iSigState);
-	}
-	
-	virtual std::ostream& writeObject(std::ostream& s){
-		unsigned char aTmp = (_property)?1:0;
-		WRITE_STREAM(s, aTmp);
-		_aboveConstr[0]->writeObject(s);
-		return s;
-	}
-	
-	virtual std::istream& readObject(std::istream& s){
-		unsigned char aTmp;
-		READ_STREAM(s, aTmp);
-		_property = (aTmp ==1);
-		_aboveConstr[0]->readObject(s);
-		return s;
-	}
-	
+	PropLabConstraint(PropLabType iType);
+	bool evalProp();
+	void forceDisable();
+	void notifyEnable(unsigned int iSigState);
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	virtual void reset();
 protected:
 	PropLabType _type;
 	bool _property;

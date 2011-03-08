@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 
 TMLStopCommand::TMLStopCommand(ID iID, TMLTask* iTask): TMLCommand(iID, iTask, 1, 0, 0, false){
+	_type=STP;
 }
 
 void TMLStopCommand::execute(){

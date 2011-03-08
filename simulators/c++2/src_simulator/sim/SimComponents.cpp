@@ -55,7 +55,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <EBRDD.h>
 #endif
 
-SimComponents::SimComponents(int iHashValue): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(0), _onKnownPath(false) {
+SimComponents::SimComponents(int iHashValue /*, Simulator* iSimulator*/): _simulator(0), _stopFlag(false), _hashValue(iHashValue), _stoppedOnAction(false),  _systemHash(), _knownStateReached(0), _onKnownPath(false) {
 }
 
 SimComponents::~SimComponents(){
@@ -124,6 +124,12 @@ void SimComponents::addEBRDD(EBRDD* iEBRDD){
 	_ebrddList.push_back(iEBRDD);
 }
 #endif
+
+void SimComponents::addTEPEConstraint(PropertyConstraint* iPropConstr){
+	std::cout << "before add\n";
+	_serList.push_back(dynamic_cast<Serializable*>(iPropConstr));
+	std::cout << "after add\n";
+}
 
 void SimComponents::streamBenchmarks(std::ostream& s) const{
 	for (TraceableDeviceList::const_iterator i=_vcdList.begin(); i!= _vcdList.end(); ++i){
@@ -216,6 +222,7 @@ TMLTask* SimComponents::getTaskByName(const std::string& iTask) const{
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		if ((*i)->toString()==iTask) return (*i);
 	}
+	std::cerr << "aborting, task " << iTask << " does not exist\n";
 	return NULL;
 }
 
@@ -244,13 +251,19 @@ TMLChannel* SimComponents::getChannelByName(const std::string& iChannel) const{
 }
 
 SchedulableDevice* SimComponents::getCPUByID(ID iID) const{
-	for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
+	std::cerr << "getCPUByID " << iID << "\n";
+	CPUList::const_iterator i=_cpuList.begin();
+	std::cerr << "getCPUByID after i=_cpuList.begin()" << iID << "\n";
+	for(/*CPUList::const_iterator i=_cpuList.begin()*/; i != _cpuList.end(); ++i){
+		std::cout << "CPU x\n";
 		if ((*i)->getID()==iID) return (*i);
 	}
+	std::cout << "End CPU\n";
 	return NULL;
 }
 
 TMLTask* SimComponents::getTaskByID(ID iID) const{
+	std::cout << "Task " << iID << "\n";
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		if ((*i)->getID()==iID) return (*i);
 	}
@@ -309,6 +322,27 @@ std::string SimComponents::getCmpNameByID(ID iID){
 	TMLChannel* aChan = getChannelByID(iID);
 	if (aChan!=0) return aChan->toShortString();
 	return std::string("unknown");
+}
+
+//ListenerSubject <TransactionListener>* SimComponents::getListenerByID(ID iID){
+ListenerSubject <GeneralListener>* SimComponents::getListenerByID(ID iID){
+	std::cerr << "Hello 1\n";
+	ListenerSubject <GeneralListener>* aListener = getCPUByID(iID);
+	if (aListener!=0) return aListener;
+	std::cerr << "Hello 2\n";
+	aListener = TMLCommand::getCommandByID(iID);
+	if (aListener!=0) return aListener;
+	std::cerr << "Hello 3\n";
+	aListener = getTaskByID(iID);
+	if (aListener!=0) return aListener;
+	std::cerr << "Hello 4\n";
+	aListener = getBusByID(iID);
+	if (aListener!=0) return aListener;
+	std::cerr << "Hello 5\n";
+	aListener = getSlaveByID(iID);
+	if (aListener!=0) return aListener;
+	std::cerr << "Hello 6\n";
+	return getChannelByID(iID);
 }
 
 int SimComponents::getHashValue(){

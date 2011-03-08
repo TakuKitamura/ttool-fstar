@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef SeqConstraintH
 #define SeqConstraintH
-#include "FSMConstraint.h"
+#include <FSMConstraint.h>
 
 class SeqConstraint: public FSMConstraint{
 public:

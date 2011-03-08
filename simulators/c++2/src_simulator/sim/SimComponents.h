@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <Serializable.h>
 #include <HashAlgo.h>
+#include <ListenerSubject.h>
 
 class TMLEventChannel;
 class TMLEventBChannel;
@@ -51,6 +52,8 @@ class Bridge;
 class Memory;
 class Simulator;
 class IndeterminismSource;
+class GeneralListener;
+class PropertyConstraint;
 #ifdef EBRDD_ENABLED
 class EBRDD;
 #endif
@@ -62,7 +65,7 @@ public:
 	/**
 	\param iHashValue Hash Value for application and architecture
 	*/
-	SimComponents(int iHashValue);
+	SimComponents(int iHashValue /*, Simulator* iSimulator*/);
 	///Destructor
 	virtual	~SimComponents();
 	///Add a task
@@ -112,6 +115,11 @@ public:
 	*/
 	void addEBRDD(EBRDD* iEBRDD);
 #endif
+	///Add a TEPE constraint
+	/**
+	\param iPropConstr TEPE Constraint
+	*/
+	void addTEPEConstraint(PropertyConstraint* iPropConstr);
 	///Calls streamBenchmarks of all traceable devices contained in vcdList
 	/**
 	param s Reference to output stream object
@@ -274,6 +282,9 @@ public:
 	///Resets the global system hash
 	void resetStateHash();
 	bool getOnKnownPath();
+	//ListenerSubject <TransactionListener>* getListenerByID(ID iID);
+	ListenerSubject<GeneralListener>* getListenerByID(ID iID);
+	virtual void generateTEPEs()=0;
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;

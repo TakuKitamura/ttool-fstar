@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef LogConstraintH
 #define LogConstraintH
-#include "FSMConstraint.h"
+#include <FSMConstraint.h>
 
 class LogConstraint: public FSMConstraint{
 public:

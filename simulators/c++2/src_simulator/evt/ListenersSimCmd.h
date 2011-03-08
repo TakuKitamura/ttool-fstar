@@ -41,14 +41,17 @@ Ludovic Apvrille, Renaud Pacalet
 #define ListenersSimCmdH
 
 #include <definitions.h>
-#include <TransactionListener.h>
-#include <CommandListener.h>
+//#include <TransactionListener.h>
+//#include <CommandListener.h>
+#include <GeneralListener.h>
 #include <ListenerSubject.h>
-#include <TransactionAbstr.h>
-#include <CommandAbstr.h>
-#include <TaskAbstr.h>
-#include <CPUAbstr.h>
-#include <ChannelAbstr.h>
+//#include <TransactionAbstr.h>
+//#include <CommandAbstr.h>
+//#include <TaskAbstr.h>
+//#include <CPUAbstr.h>
+//#include <ChannelAbstr.h>
+#include <SignalConstraint.h>
+#include <PropertyConstraint.h>
 
 #define MSG_RUNXTRANSACTIONS "Transactions executed"
 #define MSG_BREAKPOINT "Breakpoint reached"
@@ -66,7 +69,8 @@ class SimComponents;
 
 //************************************************************************
 ///Listener which stops the simulation after a given number of transactions
-class RunXTransactions: public TransactionListener{
+class RunXTransactions: public GeneralListener{
+//class RunXTransactions: public TransactionListener{
 public:
 	///Constructor
 	/**
@@ -93,7 +97,8 @@ protected:
 
 //************************************************************************
 ///Listener establishing a breakpoint
-class Breakpoint: public CommandListener{
+class Breakpoint: public GeneralListener{
+//class Breakpoint: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -116,7 +121,8 @@ protected:
 
 //************************************************************************
 ///Breakpoint based on a condition
-class CondBreakpoint: public CommandListener{
+//class CondBreakpoint: public CommandListener{
+class CondBreakpoint: public GeneralListener{
 public:
 	///Constructor
 	/**
@@ -128,6 +134,7 @@ public:
 	///Destructor
 	~CondBreakpoint();
 	void commandFinished(TMLCommand* iComm, ID iID);
+	//void commandFinished(TMLTransaction* iTrans, ID iID);
 	///Enable/disable all conditional breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -166,7 +173,8 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a random choice command is encountered
-class RunTillNextRandomChoice: public CommandListener{
+//class RunTillNextRandomChoice: public CommandListener{
+class RunTillNextRandomChoice: public GeneralListener{
 public:
 	///Constructor
 	/**
@@ -189,7 +197,8 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation after a given number of commands
-class RunXCommands: public CommandListener{
+//class RunXCommands: public CommandListener{
+class RunXCommands: public GeneralListener{
 public:
 	///Constructor
 	/**
@@ -200,6 +209,7 @@ public:
 	///Destructor
 	virtual ~RunXCommands();
 	void commandFinished(TMLCommand* iComm, ID iID);
+	//void commandFinished(TMLTransaction* iTrans, ID iID);
 	///Sets the number of commands to execute
 	/**
 	\param  iCommandsToExecute Number of commands to execute
@@ -218,7 +228,8 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation at a given time
-class RunXTimeUnits: public TransactionListener{
+//class RunXTimeUnits: public TransactionListener{
+class RunXTimeUnits: public GeneralListener{
 public:
 	///Constructor
 	/**
@@ -245,14 +256,16 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a transaction is executed on a given device
-class RunTillTransOnDevice: public TransactionListener{
+//class RunTillTransOnDevice: public TransactionListener{
+class RunTillTransOnDevice: public GeneralListener{
 public:
 	///Constructor
 	/**
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Device to listen on
 	*/
-	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
+	//RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
+	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
 	void transExecuted(TMLTransaction* iTrans, ID iID);
@@ -260,20 +273,23 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Device to listen on
-	ListenerSubject <TransactionListener> * _subject;
+	//ListenerSubject <TransactionListener> * _subject;
+	ListenerSubject <GeneralListener> * _subject;
 };
 
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a given task executes a transaction
-class RunTillTransOnTask: public TaskListener{
+//class RunTillTransOnTask: public TaskListener{
+class RunTillTransOnTask: public GeneralListener{
 public:
 	///Constructor
 	/**
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Task to listen on
 	*/
-	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
+	//RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
+	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
 	void transExecuted(TMLTransaction* iTrans, ID iID);
@@ -281,20 +297,23 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Task to listen on
-	ListenerSubject <TaskListener> * _subject;
+	//ListenerSubject <TaskListener> * _subject;
+	ListenerSubject <GeneralListener> * _subject;
 };
 
 
 //************************************************************************
 ///Listener which stops the simulation as soon data is conveyed on a given channel
-class RunTillTransOnChannel: public ChannelListener{
+//class RunTillTransOnChannel: public ChannelListener{
+class RunTillTransOnChannel: public GeneralListener{
 public:
 	///Constructor
 	/**
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Channel to listen on
 	*/
-	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
+	//RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
+	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
 	void transExecuted(TMLTransaction* iTrans, ID iID);
@@ -302,10 +321,83 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Channel to listen on
-	ListenerSubject <ChannelListener> * _subject;
+	//ListenerSubject <ChannelListener> * _subject;
+	ListenerSubject <GeneralListener> * _subject;
 };
 
+//************************************************************************
+class TEPESigListener: public GeneralListener{
+public:
+	TEPESigListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, unsigned int iEvtBitmap, unsigned int iTransTypeBitmap, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
+	~TEPESigListener();
+	void simulationStarted();
+	void simulationStopped();
+	void timeAdvances(TMLTime iCurrTime);
+	void taskStarted(TMLTransaction* iTrans, ID iID);
+	void taskFinished(TMLTransaction* iTrans, ID iID);
+	void transExecuted(TMLTransaction* iTrans, ID iID);
+	void commandEntered(TMLCommand* iComm, ID iID);
+	void commandFinished(TMLCommand* iComm, ID iID);
+	//void commandFinished(TMLTransaction* iTrans, ID iID);
+	void commandStarted(TMLCommand* iComm, ID iID);
+	void readTrans(TMLTransaction* iTrans, ID iID);
+	void writeTrans(TMLTransaction* iTrans, ID iID);
+protected:
+	ID* _subjectIDs;
+	unsigned int _nbOfSubjectIDs;
+	unsigned int _evtBitmap;
+	unsigned int _transTypeBitmap;
+	unsigned int _nbOfSignals;
+	SignalConstraint** _notifConstr;
+	NtfSigFuncPointer* _notifFunc;
+	bool _sigNotified;
+	SimComponents* _simComp;
+	ListenerSubject<GeneralListener>* _simulator;
+	
+};
 
+//************************************************************************
+class TEPEFloatingSigListener: public GeneralListener{
+public:
+	TEPEFloatingSigListener(ListenerSubject<GeneralListener>* iSimulator, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, unsigned int iNbOfStartNodes, PropertyConstraint** iStartNodes);
+	~TEPEFloatingSigListener();
+	void timeAdvances(TMLTime iCurrTime);
+	void simulationStarted();
+	void simulationStopped();
+protected:
+	ListenerSubject<GeneralListener>* _simulator;
+	unsigned int _nbOfSignals;
+	SignalConstraint** _notifConstr;
+	NtfSigFuncPointer* _notifFunc;
+	unsigned int _nbOfStartNodes;
+	PropertyConstraint** _startNodes;
+};
+
+//************************************************************************
+class TEPEEquationListener: public GeneralListener{
+	//bool EquationFunc(TMLTask** iTasks){
+	//return iTasks[1]->a + iTasks[1]->b = iTasks[1]->c + iTasks[3]->e;
+	//}  is friend of each Task in iTasks
+public:
+	TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
+	~TEPEEquationListener();
+	void commandFinished(TMLCommand* iComm, ID iID);	
+	void timeAdvances(TMLTime iCurrTime);
+	void simulationStarted();
+	void simulationStopped();
+protected:
+	ID* _subjectIDs;
+	unsigned int _nbOfSubjectIDs;
+	ParamType** _var;
+	EqFuncPointer _eqFunc;
+	bool _eqResult;
+	SignalConstraint* _notifConstr;
+	NtfSigFuncPointer _notifFunc;
+	bool _sigNotified;
+	SimComponents* _simComp;
+	ListenerSubject<GeneralListener>* _simulator;
+};
+	
 //************************************************************************
 /*class TestListener: public TaskListener, public ChannelListener, public CommandListener{
 public:

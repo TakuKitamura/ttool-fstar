@@ -40,31 +40,14 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef TwoSigConstraintH
 #define TwoSigConstraintH
-#include "SignalConstraint.h"
+#include <SignalConstraint.h>
 
 class TwoSigConstraint: public SignalConstraint{
 public:
-	TwoSigConstraint(ID iID, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), _s2Notified(UNDEF){
-	}
-	
-	void notifyS2(bool iSigState){
-		//_s2Notified = iSigState;
-		//_notificationMask |=2;
-		if (iSigState)
-			std::cout << _ID << ": s2 ok\n";
-		else
-			std::cout << _ID << ": s2 --\n";
-		_s2Notified = (iSigState)?TRUE:FALSE;
-		evalInput();
-	}
-	
-	virtual void notifiedReset(){
-		//_notificationMask=0;
-		SignalConstraint::notifiedReset();
-		_s2Notified = UNDEF;
-	}
+	TwoSigConstraint(ID iID, bool iIncludeBounds);
+	void notifyS2(bool iSigState);
+	virtual void notifiedReset();
 protected:
-	 //bool _s2Notified;
 	 Tristate _s2Notified;
 };
 #endif

@@ -61,7 +61,10 @@ int main(int len, char ** args) {
 	gettimeofday(&begin,NULL);
 	mySync._simComponents = new CurrentComponents();
 	Simulator mySim(&mySync);
+	//mySync._simComponents = new CurrentComponents(&mySim);
 	mySync._simComponents->setSimulator(&mySim);
+	//mySim.init();
+	mySync._simComponents->generateTEPEs();
 	TMLCommand::setSimComponents(mySync._simComponents);
 #ifdef EBRDD_ENABLED
 	ERB::setSimComponents(mySync._simComponents);

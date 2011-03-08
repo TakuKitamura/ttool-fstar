@@ -38,11 +38,20 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 #include <Simulator.h>
-#include <TMLChoiceCommand.h>
+//#include <Server.h>
+//#include <ServerLocal.h>
+#include <SimServSyncInfo.h>
+#include <TMLCommand.h>
+#include <TMLTransaction.h>
+#include <SimComponents.h>
+#include <IndeterminismSource.h>
+#include <CPU.h>
+#include <TMLTask.h>
+#include <TMLChannel.h>
+#include <ServerIF.h>
 #include <Server.h>
 #include <ServerLocal.h>
-#include <TMLSelectCommand.h>
-#include <IndeterminismSource.h>
+#include <TMLEventChannel.h>
 #ifdef EBRDD_ENABLED
 #include <EBRDD.h>
 #include <EBRDDCommand.h>
@@ -50,12 +59,18 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false), _leafsID(0), _randChoiceBreak(_syncInfo->_simComponents) {
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents),/*_simComp(0),*/ _busy(false), _simTerm(false), _leafsID(0), /*_randChoiceBreak(0),*/  _randChoiceBreak(_syncInfo->_simComponents){
 }
 
 Simulator::~Simulator(){
 	//if (_currCmdListener!=0) delete _currCmdListener;
+	//if (_randChoiceBreak!=0) delete _randChoiceBreak;
 }
+
+//void Simulator::init(){
+//	_simComp = _syncInfo->_simComponents;
+//	_randChoiceBreak = new RunTillNextRandomChoice(_syncInfo->_simComponents);
+//}
 
 TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevice) const{
 	//int tmp=0;
@@ -420,9 +435,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 		     if (depCPU==0){
 			aRescheduleCoresFlag=true;
-#ifdef DEBUG_KERNEL
+//#ifdef DEBUG_KERNEL
 			std::cout << "Multi Core scheduling procedure\n";
-#endif 
+//#endif 
 			depTask->setRescheduleFlagForCores();
 			continue;
 		     }
@@ -1201,39 +1216,46 @@ bool Simulator::runXTimeUnits(TMLTime iTime, TMLTransaction*& oLastTrans){
 }
 
 bool Simulator::runToBusTrans(SchedulableCommDevice* iBus, TMLTransaction*& oLastTrans){
-	ListenerSubject <TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
+	//ListenerSubject <TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iBus);
+	ListenerSubject <GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iBus);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
 bool Simulator::runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans){
-	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iCPU);
+	//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iCPU);
+	ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iCPU);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
 bool Simulator::runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans){
-	ListenerSubject<TaskListener>* aSubject= static_cast<ListenerSubject<TaskListener>* > (iTask);
+	//ListenerSubject<TaskListener>* aSubject= static_cast<ListenerSubject<TaskListener>* > (iTask);
+	ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iTask);
 	RunTillTransOnTask aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
 bool Simulator::runToSlaveTrans(Slave* iSlave, TMLTransaction*& oLastTrans){
-	ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iSlave);
+	//ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iSlave);
+	ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iSlave);
 	RunTillTransOnDevice aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
 bool Simulator::runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans){
-	ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
+	//ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
+	ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iChannel);
 	RunTillTransOnChannel aListener(_simComp, aSubject);
 	return simulate(oLastTrans);
 }
 
 bool Simulator::runToNextRandomCommand(TMLTransaction*& oLastTrans){
 	_randChoiceBreak.setEnabled(true);
+	//_randChoiceBreak->setEnabled(true);
 	bool aSimTerminated=simulate(oLastTrans);
 	_randChoiceBreak.setEnabled(false);
+	//_randChoiceBreak->setEnabled(false);
 	return aSimTerminated;
 }
 

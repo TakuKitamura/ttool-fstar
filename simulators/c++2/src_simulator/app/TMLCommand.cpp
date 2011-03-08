@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <CPU.h>
-#include <CommandListener.h>
+//#include <CommandListener.h>
 #include <Parameter.h>
 #include <TMLChoiceCommand.h>
 #include <TMLRandomChoiceCommand.h>
@@ -54,7 +54,7 @@ Ludovic Apvrille, Renaud Pacalet
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _type(NONE), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0){
 	_instanceList.push_back(this);
 	_task->addCommand(iID, this);
 	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
@@ -89,7 +89,9 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		//std::cout << "COMMAND FINISHED!!n";
 #ifdef LISTENERS_ENABLED
 		NOTIFY_CMD_FINISHED(this);
+		//NOTIFY_CMD_FINISHED(_currTransaction);
 		if (_justStarted) NOTIFY_CMD_STARTED(this);
+		//if (_justStarted) NOTIFY_CMD_STARTED(_currTransaction);
 #endif
 		_progress=0;
 		_currTransaction=0;  //NEW!!!!!!!!!!!
@@ -132,10 +134,12 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 				_justStarted=true;
 			}else{
 #ifdef LISTENERS_ENABLED
-				NOTIFY_CMD_EXECUTED(this);
+				//NOTIFY_CMD_EXECUTED(this);
+				NOTIFY_CMD_EXECUTED(_currTransaction);
 #endif
 				if (_justStarted){
 #ifdef LISTENERS_ENABLED
+					//NOTIFY_CMD_STARTED(_currTransaction);
 					NOTIFY_CMD_STARTED(this);
 #endif
 					_justStarted=false;
@@ -205,7 +209,8 @@ std::string TMLCommand::getCommentString(Comment* iCom) const{
 }
 #endif
 
-void TMLCommand::setBreakpoint(CommandListener* iBreakp){
+void TMLCommand::setBreakpoint(GeneralListener* iBreakp){
+//void TMLCommand::setBreakpoint(CommandListener* iBreakp){
 	removeBreakpoint();
 	_breakpoint=iBreakp;
 	registerListener(iBreakp);
@@ -224,9 +229,9 @@ std::ostream& TMLCommand::writeObject(std::ostream& s){
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
-#ifdef SAVE_BENCHMARK_VARS 
+/*#ifdef SAVE_BENCHMARK_VARS 
 	WRITE_STREAM(s, _execTimes);
-#endif
+#endif*/
 	return s;
 }
 
@@ -235,9 +240,9 @@ std::istream& TMLCommand::readObject(std::istream& s){
 #ifdef DEBUG_SERIALIZE
 	std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
-#ifdef SAVE_BENCHMARK_VARS 
+/*#ifdef SAVE_BENCHMARK_VARS 
 	READ_STREAM(s, _execTimes);
-#endif
+#endif*/
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 #endif
@@ -250,11 +255,12 @@ void TMLCommand::reset(){
 	if (_currTransaction!=0) delete _currTransaction;
 	_currTransaction=0;
 	_commandStartTime=-1;
-	_execTimes=0;
+	//_execTimes=0;
 	_stateHashes.clear();
 }
 
-void TMLCommand::registerGlobalListener(CommandListener* iListener){
+//void TMLCommand::registerGlobalListener(CommandListener* iListener){
+void TMLCommand::registerGlobalListener(GeneralListener* iListener){
 	std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->registerListener(iListener);
@@ -262,14 +268,16 @@ void TMLCommand::registerGlobalListener(CommandListener* iListener){
 }
 
 template<typename T>
-void TMLCommand::registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask){
+//void TMLCommand::registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask){
+void TMLCommand::registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask){
 	//std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		if (dynamic_cast<T*>(*i)!=0 && (aTask==0 || (*i)->getTask()==aTask)) (*i)->registerListener(iListener);
 	}
 }
 
-void TMLCommand::removeGlobalListener(CommandListener* iListener){
+//void TMLCommand::removeGlobalListener(CommandListener* iListener){
+void TMLCommand::removeGlobalListener(GeneralListener* iListener){
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->removeListener(iListener);
 	}
@@ -305,13 +313,30 @@ TMLLength TMLCommand::getLength() const{
 
 void TMLCommand::streamStateXML(std::ostream& s){
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
-		s << TAG_CMDo << " id=" << (*i)->_ID << ">" << TAG_EXECTIMESo << (*i)->_execTimes << TAG_EXECTIMESc << TAG_CMDc << "\n";
+		s << TAG_CMDo << " id=\"" << (*i)->_ID << "\">" << TAG_EXECTIMESo << (*i)->_execTimes << TAG_EXECTIMESc << TAG_CMDc << "\n";
 	}
 }
 
-template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(CommandListener* iListener, TMLTask* aTask);
+TMLCommand* TMLCommand::getCommandByID(ID iID){
+	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		if ((*i)->_ID == iID) return *i;
+	}
+	return 0;
+}
+
+unsigned int TMLCommand::getType(){
+	return _type;
+}
+
+/*template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLActionCommand>(CommandListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(CommandListener* iListener, TMLTask* aTask);
-template void TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(CommandListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(CommandListener* iListener, TMLTask* aTask);*/
+
+template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(GeneralListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(GeneralListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLActionCommand>(GeneralListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(GeneralListener* iListener, TMLTask* aTask);
+template void TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(GeneralListener* iListener, TMLTask* aTask);
 

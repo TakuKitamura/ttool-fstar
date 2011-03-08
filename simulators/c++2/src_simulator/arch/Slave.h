@@ -43,13 +43,15 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <ListenerSubject.h>
-#include <TransactionListener.h>
+//#include <TransactionListener.h>
+#include <GeneralListener.h>
 
 class Master;
 class TMLTransaction;
 
 ///Base class for Bus slaves
-class Slave: public ListenerSubject <TransactionListener> {
+class Slave: public ListenerSubject <GeneralListener> {
+//class Slave: public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
 	Slave(ID iID, std::string iName):_name(iName), _ID(iID) {}

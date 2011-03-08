@@ -45,6 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 
 TMLSendCommand::TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFunc(iParamFunc), _statParam(iStatParam) {
+	_type=SND;
 }
 
 void TMLSendCommand::execute(){
@@ -94,7 +95,7 @@ std::string TMLSendCommand::toShortString() const{
 }
 
 std::string TMLSendCommand::getCommandStr() const{
-	return "notify";
+	return "snd";
 }
 
 /*ParamFuncPointer TMLSendCommand::getParamFuncPointer() const{

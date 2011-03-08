@@ -48,7 +48,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Comment.h>
 #include <MemPool.h>
 #include <ListenerSubject.h>
-#include <TaskListener.h>
+//#include <TaskListener.h>
+#include <GeneralListener.h>
 #include <WorkloadSource.h>
 #include <HashAlgo.h>
 
@@ -63,7 +64,8 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-class TMLTask: public TraceableDevice, public ListenerSubject <TaskListener>, public WorkloadSource{
+//class TMLTask: public TraceableDevice, public ListenerSubject <TaskListener>, public ListenerSubject <TransactionListener>, public WorkloadSource{
+class TMLTask: public TraceableDevice, public ListenerSubject <GeneralListener>, public WorkloadSource{
 public:	
 	///Constructor
     	/**
@@ -146,7 +148,7 @@ public:
 	\param oIsId Is set to true if an ID was passed to this function 
 	\return Pointer to the variable
 	*/
-	ParamType* getVariableByName(std::string& iVarName ,bool& oIsId);
+	ParamType* getVariableByName(const std::string& iVarName ,bool& oIsId);
 	///Searches for a Command based on its ID
 	/**
 	\param iID ID of the Command

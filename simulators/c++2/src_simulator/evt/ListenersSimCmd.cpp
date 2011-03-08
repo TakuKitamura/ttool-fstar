@@ -47,6 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <TMLTask.h>
+#include <CPU.h>
 #define COND_SOURCE_FILE_NAME "newlib.c"
 #define COND_OBJ_FILE_NAME "newlib.o"
 
@@ -164,6 +165,7 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 }
 
 void CondBreakpoint::commandFinished(TMLCommand* iComm, ID iID){
+//void CondBreakpoint::commandFinished(TMLTransaction* iTrans, ID iID){
 	if (_enabled && _condFunc!=0){
 		if ((*_condFunc)(_task)){
 			std::ostringstream aOut;
@@ -228,6 +230,7 @@ RunXCommands::~RunXCommands(){
 }
 
 void RunXCommands::commandFinished(TMLCommand* iComm, ID iID){
+//void RunXCommands::commandFinished(TMLTransaction* iTrans, ID iID){
 	_count++;
 	if (_count>=_commandsToExecute){
 		std::ostringstream aOut;
@@ -270,7 +273,8 @@ void RunXTimeUnits::setEndTime(TMLTime iEndTime){
 
 
 //************************************************************************
-RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject <TransactionListener> * iSubject):_simComp(iSimComp), _subject(iSubject) {
+//RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject <TransactionListener> * iSubject):_simComp(iSimComp), _subject(iSubject) {
+RunTillTransOnDevice::RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject <GeneralListener> * iSubject):_simComp(iSimComp), _subject(iSubject) {
 	_subject->registerListener(this);
 }
 RunTillTransOnDevice::~RunTillTransOnDevice(){
@@ -285,7 +289,8 @@ void RunTillTransOnDevice::transExecuted(TMLTransaction* iTrans, ID iID){
 
 
 //************************************************************************
-RunTillTransOnTask::RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+//RunTillTransOnTask::RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+RunTillTransOnTask::RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
 	_subject->registerListener(this);
 }
 
@@ -301,7 +306,8 @@ void RunTillTransOnTask::transExecuted(TMLTransaction* iTrans, ID iID){
 
 
 //************************************************************************
-RunTillTransOnChannel::RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+//RunTillTransOnChannel::RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
+RunTillTransOnChannel::RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject):_simComp(iSimComp), _subject(iSubject) {
 	_subject->registerListener(this);
 }
 
@@ -315,7 +321,203 @@ void RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans, ID iID){
 	//return true;
 }
 
+//************************************************************************
+//{SIM_START, SIM_END, TIME_ADV, TASK_START, TASK_END, CMD_RUNNABLE, CMD_START, CMD_END, TRANS_EXEC} EventType;
+TEPESigListener::TEPESigListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, unsigned int iEvtBitmap, unsigned int iTransTypeBitmap, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator): _subjectIDs(iSubjectIDs), _nbOfSubjectIDs(iNbOfSubjectIDs), _evtBitmap(iEvtBitmap), _transTypeBitmap(iTransTypeBitmap), _nbOfSignals(inbOfSignals), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _sigNotified(false), _simComp(iSimComp), _simulator(iSimulator){
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->registerListener(this);
+	}
+	_simulator->registerListener(this);
+}
 
+TEPESigListener::~TEPESigListener(){
+	/*for (unsigned int i=0; i< nbOfSubjectIDs; i++){
+		ListenerSubject <GeneralListener>*  aSubject = iSimComp->getListenerByID(iSubjectIDs[i]);
+		if (aSubject!=0) aSubject->removeListener(this);
+	}*/
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->removeListener(this);
+	}
+	_simulator->removeListener(this);
+	delete [] _subjectIDs;
+	delete [] _notifConstr;
+	delete [] _notifFunc;
+}
+
+void TEPESigListener::simulationStarted(){
+	//(_notifConstr->*_notifFunc)((_evtBitmap & SIM_START)!=0);
+	bool aNotified = (_evtBitmap & SIM_START)!=0;
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(aNotified);
+}
+
+void TEPESigListener::simulationStopped(){
+	//(_notifConstr->*_notifFunc)((_evtBitmap & SIM_END)!=0);
+	bool aNotified = (_evtBitmap & SIM_END)!=0;
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(aNotified);
+}
+
+void TEPESigListener::timeAdvances(TMLTime iCurrTime){
+	/*if(_sigNotified){
+		(_notifConstr->*_notifFunc)(true);
+		_sigNotified=false;
+	}else{
+		(_notifConstr->*_notifFunc)(false);
+	}*/
+	//if (_sigNotified) std::cout << "Signal notified!!!\n";
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(_sigNotified);
+	_sigNotified=false;
+}
+
+void TEPESigListener::taskStarted(TMLTransaction* iTrans, ID iID){
+	if ((_evtBitmap & TASK_START)!=0 && (iTrans->getCommand()->getType() & _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}
+}
+
+void TEPESigListener::taskFinished(TMLTransaction* iTrans, ID iID){
+	if ((_evtBitmap & TASK_END)!=0 && (iTrans->getCommand()->getType() & _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}
+}
+
+void TEPESigListener::transExecuted(TMLTransaction* iTrans, ID iID){
+	if ((_evtBitmap & TRANS_EXEC)!=0 && (iTrans->getCommand()->getType() & _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}
+}
+
+void TEPESigListener::commandEntered(TMLCommand* iComm, ID iID){
+	if ((_evtBitmap & CMD_RUNNABLE)!=0 && (iComm->getType()& _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}
+}
+
+void TEPESigListener::commandFinished(TMLCommand* iComm, ID iID){
+//void TEPESigListener::commandFinished(TMLTransaction* iTrans, ID iID){
+	//std::cout << "cmd finished!!!\n";
+	//std::cout << "cmd_end: " << (1<<CMD_END) << "\n";
+	//std::cout << "_evtBitmap: " << _evtBitmap << "\n";
+	std::cout << "command finished...\n";
+	if ((_evtBitmap & CMD_END)!=0 && ( iComm->getType() & _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}else
+		std::cout << "but not taken into account\n";
+}
+
+void TEPESigListener::commandStarted(TMLCommand* iComm, ID iID){
+	if ((_evtBitmap & CMD_START)!=0 && (iComm->getType() & _transTypeBitmap)!=0){
+		//(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}
+}
+
+
+//***********************************************************************
+TEPEFloatingSigListener::TEPEFloatingSigListener(ListenerSubject<GeneralListener>* iSimulator, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, unsigned int iNbOfStartNodes, PropertyConstraint** iStartNodes): _simulator(iSimulator), _nbOfSignals(inbOfSignals), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _nbOfStartNodes(iNbOfStartNodes), _startNodes(iStartNodes){
+	_simulator->registerListener(this);
+}
+
+TEPEFloatingSigListener::~TEPEFloatingSigListener(){
+	_simulator->removeListener(this);
+	delete [] _notifConstr;
+	delete [] _notifFunc;
+	delete [] _startNodes;
+}
+void TEPEFloatingSigListener::timeAdvances(TMLTime iCurrTime){
+	for (unsigned int i=0; i<_nbOfSignals; i++){
+		(_notifConstr[i]->*_notifFunc[i])(false);
+	}
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->notifyEnable(0);
+	}
+}
+
+void TEPEFloatingSigListener::simulationStarted(){
+	for (unsigned int i=0; i<_nbOfSignals; i++){
+		(_notifConstr[i]->*_notifFunc[i])(false);
+	}
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->notifyEnable(2);
+	}
+}
+
+void TEPEFloatingSigListener::simulationStopped(){
+	for (unsigned int i=0; i<_nbOfSignals; i++){
+		(_notifConstr[i]->*_notifFunc[i])(false);
+	}
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->notifyEnable(1);
+	}
+	for (unsigned int i=0; i<_nbOfStartNodes; i++)
+		std::cout << "Eval Prop " << i << ": " << _startNodes[i]->evalProp() << "\n";
+}
+
+//***********************************************************************
+//bool EquationFunc(TMLTask** iTasks){
+//return iTasks[1]->a + iTasks[1]->b = iTasks[1]->c + iTasks[3]->e;
+//}  is friend of each Task in iTasks
+TEPEEquationListener::TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator)
+  : _subjectIDs(iSubjectIDs), _nbOfSubjectIDs(iNbOfSubjectIDs), _var(iVar), _eqFunc(iEqFunc), _eqResult(true), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _sigNotified(false), _simComp(iSimComp), _simulator(iSimulator){
+	std::cerr << "before func\n";
+	//_eqResult = _eqFunc(_var);
+	std::cerr << "before loop\n";
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		std::cerr << "next id: " << _subjectIDs[i] << "\n";
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->registerListener(this);
+	}
+	_simulator->registerListener(this);
+}
+
+TEPEEquationListener::~TEPEEquationListener(){
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->removeListener(this);
+	}
+	_simulator->removeListener(this);
+	delete [] _subjectIDs;
+	delete [] _var;
+}
+
+void TEPEEquationListener::commandFinished(TMLCommand* iComm, ID iID){
+	/*if (_eqResult != _eqFunc(_var)){
+		_eqResult = !_eqResult;
+		(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}*/
+	//if several alternations of variables at the same time only last one is taken into account
+	_sigNotified = (_eqResult != _eqFunc(_var));
+	std::cout << "Check equation result: " << _sigNotified << "\n";
+}
+
+void TEPEEquationListener::timeAdvances(TMLTime iCurrTime){
+	if(_sigNotified){
+		_sigNotified=false;
+		(_notifConstr->*_notifFunc)(true);
+		_eqResult = !_eqResult;
+	}else{
+		(_notifConstr->*_notifFunc)(false);
+	}
+}
+
+void TEPEEquationListener::simulationStarted(){
+	(_notifConstr->*_notifFunc)(false);
+}
+
+void TEPEEquationListener::simulationStopped(){
+	(_notifConstr->*_notifFunc)(false);
+}
+	
 //************************************************************************
 /*TestListener::TestListener(SimComponents* iSimComp):_simComp(iSimComp){
 }

@@ -39,6 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 #include<Server.h>
 #include<Simulator.h>
+#include<SimServSyncInfo.h>
 
 Server::Server():_socketClient(-1){
 	pthread_mutex_init(&_replyMutex, NULL);

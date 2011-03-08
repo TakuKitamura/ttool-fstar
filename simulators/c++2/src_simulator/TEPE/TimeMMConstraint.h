@@ -40,88 +40,20 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef TimeMMConstraintH
 #define TimeMMConstraintH
-#include "TwoSigConstraint.h"
-#include "PropertyStateConstraint.h"
+#include <TwoSigConstraint.h>
+#include <PropertyStateConstraint.h>
 
 class TimeMMConstraint: public TwoSigConstraint, public PropertyStateConstraint{
 public:
-	TimeMMConstraint(ID iID, PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds): TwoSigConstraint(iID, iIncludeBounds), PropertyStateConstraint(iType), _tmin(iTmin), _tmax(iTmax), _retrigger(iRetrigger), _s1Time(-1){
-	}
-	
-	void notifiedReset(){
-		TwoSigConstraint::notifiedReset();
-		PropertyStateConstraint::notifiedReset();
-	}
-	
-	void reset(){
-		PropertyStateConstraint::reset();
-		_s1Time=-1;
-	}
-	
-	std::ostream& writeObject(std::ostream& s){
-		PropertyStateConstraint::writeObject(s);
-		WRITE_STREAM(s, _s1Time);
-		return s;
-	}
-	
-	std::istream& readObject(std::istream& s){
-		PropertyStateConstraint::readObject(s);
-		READ_STREAM(s, _s1Time);
-		return s;
-	}
-	
+	TimeMMConstraint(ID iID, PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds);
+	void notifiedReset();
+	void reset();
+	std::ostream& writeObject(std::ostream& s);
+	std::istream& readObject(std::istream& s);
 protected:
-	
-	void evalInput(){
-		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF || _s2Notified==UNDEF)){
-			if(_enabledNotified==TRUE && _includeBounds){
-				std::cout << "_enabledNotified && _includeBounds\n";
-				_constrEnabled=true;
-			}
-			unsigned int aEnaFlag=0;
-			bool aSigOut=false;
-			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
-			if(_constrEnabled){
-				if (_s1Notified==TRUE){
-					if (_s1Time==-1){
-						_s1Time=_simTime;
-						aEnaFlag |=2;
-					}else{
-						if (_retrigger){
-							std::cout << "retrigger!!!\n";
-							_s1Time=_simTime;
-						}
-					}
-				}
-				if (_s1Time!=-1){
-					//if (_simTime-_s1Time>_tmax) reportPropViolation();
-					if (_simTime-_s1Time>_tmax) reportPropOccurrence(false);
-
-					if (_s2Notified==TRUE){
-						aEnaFlag |=1;
-						std::cout << "s2 notified  _simTime " << _simTime << "  _s1Time " << _s1Time << "\n";
-						//if (_simTime-_s1Time<_tmin) reportPropViolation();
-						if (_simTime-_s1Time<=_tmax) reportPropOccurrence(_simTime-_s1Time >= _tmin);
-						aSigOut=true;
-						_s1Time=-1;
-					}
-				}
-				
-			}
-			_constrEnabled |= (_enabledNotified==TRUE);
-			if (_disabledNotified==TRUE){
-				if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
-				reset();
-			}
-			notifiedReset();
-			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
-			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
-		}
-	}
-	
+	void evalInput();
 	TMLTime _tmin, _tmax;
 	bool _retrigger;
 	TMLTime _s1Time;
 };
-
 #endif

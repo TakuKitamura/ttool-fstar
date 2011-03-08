@@ -38,44 +38,40 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef CommandListenerH
-#define CommandListenerH
+#include <PropRelConstraint.h>
 
-#define NOTIFY_CMD_ENTERED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm,_ID); listenersUnLock();}
-#define NOTIFY_CMD_EXECUTED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm,_ID); listenersUnLock();}
-#define NOTIFY_CMD_FINISHED(iComm) {listenersLock();for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm,_ID); listenersUnLock();}
-#define NOTIFY_CMD_STARTED(iComm) {listenersLock(); for(std::list<CommandListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm,_ID); listenersUnLock();}
+PropRelConstraint::PropRelConstraint(PropRelType iType): _type(iType){
+}
 
+bool PropRelConstraint::evalProp(){
+	bool aProperty;
+	switch (_type){
+	case AND:
+		aProperty=true;
+		for (unsigned int i=0;i <_noAboveConstr && aProperty; i++)
+			aProperty &=  _aboveConstr[i]->evalProp();
+		break;
+	case OR:
+		aProperty=false;
+		for (unsigned int i=0;i <_noAboveConstr && !aProperty; i++)
+			aProperty |=  _aboveConstr[i]->evalProp();
+		break;
+	}
+	return aProperty;
+}
 
-///Encapsulates events associated with commands
-class CommandListener{
-public:
-	///Gets called when a command is entered the first time
-	/**
-	\param iComm Pointer to the command
-	\param iID ID of the event source
-	*/
-	virtual void commandEntered(TMLCommand* iComm, ID iID){}
-	///Gets called when a transaction of the command is executed
-	/**
-	\param iComm Pointer to the command
-	\param iID ID of the event source
-	*/
-	virtual	void commandExecuted(TMLCommand* iComm, ID iID){}
-	///Gets called when a the last transaction of the command is executed
-	/**
-	\param iComm Pointer to the command
-	\param iID ID of the event source
-	*/
-	virtual void commandFinished(TMLCommand* iComm, ID iID){}
-	///Gets called when a the first transaction of the command is executed
-	/**
-	\param iComm Pointer to the command
-	\param iID ID of the event source
-	*/
-	virtual void commandStarted(TMLCommand* iComm, ID iID){}
-	///Destructor
-	virtual ~CommandListener(){}
-protected:
-};
-#endif
+void PropRelConstraint::forceDisable(){
+	for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->forceDisable();
+}
+
+void PropRelConstraint::notifyEnable(unsigned int iSigState){
+	for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->notifyEnable(iSigState);
+}
+
+std::ostream& PropRelConstraint::writeObject(std::ostream& s){
+	return s;
+}
+
+std::istream& PropRelConstraint::readObject(std::istream& s){
+	return s;
+}

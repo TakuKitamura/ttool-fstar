@@ -85,7 +85,7 @@ using std::max;
 #define STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
 #undef EBRDD_ENABLED
-#undef DOT_GRAPH_ENABLED
+#define DOT_GRAPH_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -203,10 +203,8 @@ class EBRDD;
 class EBRDDCommand;
 
 ///Datatype used for time measurements
-//typedef unsigned long long TMLTime;
 typedef unsigned long long TMLTime;
 ///Datatype used to indicate the virtual length of commands (execution units, data units)
-//typedef unsigned long long TMLLength;
 typedef unsigned long long TMLLength;
 ///Priorities
 typedef unsigned int Priority;
@@ -229,6 +227,13 @@ typedef std::list<Slave*> SlaveList;
 ///Datatype used in SimComponents to store channel objects
 typedef std::list<TMLChannel*> ChannelList;
 
+///Type of a TMLCommand
+typedef enum {NONE=(1), EXE=(1<<1), RD=(1<<2), WR=(1<<3), SEL=(1<<4), SND=(1<<5), REQ=(1<<6), WAIT=(1<<7), NOTIF=(1<<8), ACT=(1<<9), CHO=(1<<10), RND=(1<<11), STP=(1<<12)} CommandType;
+///TEPE Tristate Signal Type
+typedef enum {UNDEF, FALSE, TRUE} Tristate;
+///DIPLODOCUS event type
+typedef enum {SIM_START=(1), SIM_END=(1<<1), TIME_ADV=(1<<2), TASK_START=(1<<3), TASK_END=(1<<4), CMD_RUNNABLE=(1<<5), CMD_START=(1<<6), CMD_END=(1<<7), TRANS_EXEC=(1<<8)} EventType;
+
 ///Datatype used in Tasks to store comments concerning the task execution
 typedef std::vector<Comment*> CommentList;
 ///Datatype used in Tasks in order to associate a command with an ID 
@@ -244,9 +249,10 @@ typedef unsigned int (TMLTask::*CondFuncPointer) ();
 typedef void (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef TMLTime (TMLTask::*LengthFuncPointer) ();
-
+///Type of pointer to indicate a function encapsulating a TEPE condition
+typedef bool (*EqFuncPointer)(ParamType**);  
+///Type of pointer to indicate a function returning the random rage of a command
 typedef unsigned int (TMLTask::*RangeFuncPointer) (ParamType& oMin, ParamType& oMax);
-
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
 typedef Parameter<ParamType>* (TMLTask::*ParamFuncPointer) (Parameter<ParamType>* ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)

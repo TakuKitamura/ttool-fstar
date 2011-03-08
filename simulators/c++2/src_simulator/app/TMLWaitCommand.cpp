@@ -45,6 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 
 TMLWaitCommand::TMLWaitCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel), _paramFunc(iParamFunc){
+	_type = WAIT;
 }
 
 void TMLWaitCommand::execute(){

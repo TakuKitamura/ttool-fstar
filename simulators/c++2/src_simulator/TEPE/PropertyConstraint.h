@@ -41,38 +41,19 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef PropertyConstraintH
 #define PropertyConstraintH
 
-class PropertyConstraint{
-public:
-	PropertyConstraint():_aboveConstr(0), _noAboveConstr(0){
-	}
-	
-	virtual ~PropertyConstraint(){
-		if (_aboveConstr!=0) delete [] _aboveConstr;
-	}
-	
-	virtual bool evalProp()=0;
-	
-	virtual void forceDisable()=0;
-	
-	virtual void notifyEnable(unsigned int iSigState)=0;
-	
-	virtual std::ostream& writeObject(std::ostream& s){
-		for (unsigned int i=0; i<_noAboveConstr; i++)
-			_aboveConstr[i]->writeObject(s);
-		return s;
-	}
+#include <definitions.h>
+#include <Serializable.h>
 
-	virtual std::istream& readObject(std::istream& s){
-		for (unsigned int i=0; i<_noAboveConstr; i++)
-			_aboveConstr[i]->readObject(s);
-		return s;
-	}
-	
-	void connectEnaOut(PropertyConstraint** aAboveConstr, unsigned int iNoAboveConstr){
-		_aboveConstr = aAboveConstr;
-		_noAboveConstr = iNoAboveConstr;
-	}
-	
+class PropertyConstraint: public Serializable{
+public:
+	PropertyConstraint();
+	virtual ~PropertyConstraint();
+	virtual bool evalProp()=0;
+	virtual void forceDisable()=0;
+	virtual void notifyEnable(unsigned int iSigState)=0;
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	void connectEnaOut(PropertyConstraint** aAboveConstr, unsigned int iNoAboveConstr);
 protected:
 	PropertyConstraint** _aboveConstr;
 	unsigned int _noAboveConstr;

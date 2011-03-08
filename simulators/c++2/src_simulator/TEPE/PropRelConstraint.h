@@ -40,48 +40,18 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef PropRelConstraintH
 #define PropRelConstraintH
-#include "PropertyConstraint.h"
+#include <PropertyConstraint.h>
 
 typedef enum{AND, OR} PropRelType;
 
 class PropRelConstraint: public PropertyConstraint{
 public:
-	PropRelConstraint(PropRelType iType): _type(iType){
-	}
-	
-	bool evalProp(){
-		bool aProperty;
-		switch (_type){
-		case AND:
-			aProperty=true;
-			for (unsigned int i=0;i <_noAboveConstr && aProperty; i++)
-				aProperty &=  _aboveConstr[i]->evalProp();
-			break;
-		case OR:
-			aProperty=false;
-			for (unsigned int i=0;i <_noAboveConstr && !aProperty; i++)
-				aProperty |=  _aboveConstr[i]->evalProp();
-			break;
-		}
-		return aProperty;
-	}
-	
-	void forceDisable(){
-		for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->forceDisable();
-	}
-	
-	void notifyEnable(unsigned int iSigState){
-		for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->notifyEnable(iSigState);
-	}
-	
-	std::ostream& writeObject(std::ostream& s){
-		return s;
-	}
-
-	std::istream& readObject(std::istream& s){
-		return s;
-	}
-	
+	PropRelConstraint(PropRelType iType);
+	bool evalProp();
+	void forceDisable();
+	void notifyEnable(unsigned int iSigState);
+	std::ostream& writeObject(std::ostream& s);
+	std::istream& readObject(std::istream& s);
 protected:
 	PropRelType _type;
 };

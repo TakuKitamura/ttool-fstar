@@ -69,7 +69,7 @@ protected:
 	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;
 	///Type of command: EXECI, EXECC
-	unsigned int _type;
+	unsigned int _execType;
 };
 
 #endif

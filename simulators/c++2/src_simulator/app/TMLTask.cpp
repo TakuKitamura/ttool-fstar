@@ -334,7 +334,7 @@ void TMLTask::reset(){
 	RESET_SCHEDULING;
 }
 
-ParamType* TMLTask::getVariableByName(std::string& iVarName ,bool& oIsId){
+ParamType* TMLTask::getVariableByName(const std::string& iVarName ,bool& oIsId){
 	if (iVarName[0]>='0' && iVarName[0]<='9'){
 		oIsId=true;
 		return getVariableByID(StringToNum<ID>(iVarName));

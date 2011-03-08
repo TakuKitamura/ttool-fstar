@@ -1,7 +1,7 @@
 ## Variable that points to SystemC installation path
 
 
-INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim -I$(SRCS_base_DIR)/ebrdd
+INCDIR = -I. -I.. -I$(SRCS_base_DIR) -I$(SRCS_base_DIR)/app -I$(SRCS_base_DIR)/arch -I$(SRCS_base_DIR)/evt -I$(SRCS_base_DIR)/sim -I$(SRCS_base_DIR)/TEPE
 LIBDIR = -L. -L.. 
 LIBS   =  -lm $(EXTRA_LIBS)
 
@@ -17,7 +17,7 @@ makedir:
 	echo Making directories
 	mkdir -p ./lib/app
 	mkdir -p ./lib/arch
-	mkdir -p ./lib/ebrdd
+	mkdir -p ./lib/TEPE
 	mkdir -p ./lib/evt
 	mkdir -p ./lib/sim
 

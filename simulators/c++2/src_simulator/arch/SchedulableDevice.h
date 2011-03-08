@@ -48,11 +48,12 @@ Ludovic Apvrille, Renaud Pacalet
 
 class Master;
 class TMLTransaction;
-class TransactionListener;
-class TransactionListener;
+//class TransactionListener;
+class GeneralListener;
 
 ///Base class for devices which perform a scheduling
-class SchedulableDevice: public Serializable, public ListenerSubject <TransactionListener> {
+//class SchedulableDevice: public Serializable, public ListenerSubject <TransactionListener> {
+class SchedulableDevice: public Serializable, public ListenerSubject <GeneralListener> {
 public:
 	///Constructor
 	/**

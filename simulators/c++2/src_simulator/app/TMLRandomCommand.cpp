@@ -39,10 +39,11 @@ Ludovic Apvrille, Renaud Pacalet
  */
 #include <TMLRandomCommand.h>
 #include <SimComponents.h>
-#include <CommandListener.h>
+//#include <CommandListener.h>
 #include <TMLTask.h>
 
 TMLRandomCommand::TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint), _rangeFunc(iRangeFunc), _resultVar(iResultVar), _aMin(0){
+	_type=RND;
 }
 
 void TMLRandomCommand::execute(){
@@ -79,6 +80,7 @@ TMLCommand* TMLRandomCommand::prepareNextTransaction(){
 #endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
+	//NOTIFY_CMD_FINISHED(0);
 #endif
 	//std::cout << "after notify listeners" << std::endl;
 	if (aNextCommand!=0) return aNextCommand->prepare(false);

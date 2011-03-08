@@ -40,79 +40,20 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef TimeTConstraintH
 #define TimeTConstraintH
-#include "SignalConstraint.h"
-#include "PropertyStateConstraint.h"
+#include <SignalConstraint.h>
+#include <PropertyStateConstraint.h>
 
 class TimeTConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
-	TimeTConstraint(ID iID, TMLTime iT, bool iRetrigger, bool iIncludeBounds): SignalConstraint(iID, iIncludeBounds), PropertyStateConstraint (GENERAL), _t(iT), _retrigger(iRetrigger), _s1Time(-1){
-	}
-	
-	void notifiedReset(){
-		SignalConstraint::notifiedReset();
-		PropertyStateConstraint::notifiedReset();
-	}
-	
-	void reset(){
-		PropertyStateConstraint::reset();
-		_s1Time=-1;
-	}
-	
-	std::ostream& writeObject(std::ostream& s){
-		PropertyStateConstraint::writeObject(s);
-		WRITE_STREAM(s, _s1Time);
-		return s;
-	}
-	
-	std::istream& readObject(std::istream& s){
-		PropertyStateConstraint::readObject(s);
-		READ_STREAM(s, _s1Time);
-		return s;
-	}
-	
+	TimeTConstraint(ID iID, TMLTime iT, bool iRetrigger, bool iIncludeBounds);
+	void notifiedReset();
+	void reset();
+	std::ostream& writeObject(std::ostream& s);
+	std::istream& readObject(std::istream& s);
 protected:
-	
-	void evalInput(){
-		if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
-			if(_enabledNotified==TRUE && _includeBounds){
-				//std::cout << "_enabledNotified && _includeBounds\n";
-				_constrEnabled=true;
-			}
-			unsigned int aEnaFlag=0;
-			bool aSigOut=false;
-			if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
-			if(_constrEnabled){
-				if (_s1Notified==TRUE){
-					if (_s1Time==-1){
-						_s1Time=_simTime;
-						aEnaFlag |=2;
-					}else{
-						if (_retrigger) _s1Time=_simTime;
-					}
-				}
-				if (_s1Time!=-1 && _simTime-_s1Time>=_t){
-					if (_simTime-_s1Time > _t && _aboveConstr!=0) _aboveConstr[0]->forceDisable();
-					aEnaFlag |=1;
-					aSigOut=true;
-					_s1Time=-1;
-				}
-				
-			}
-			_constrEnabled |= (_enabledNotified==TRUE);
-			if (_disabledNotified==TRUE){
-				if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
-				reset();
-			}
-			notifiedReset();
-			if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
-			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
-
-		}
-	}
-	
+	void evalInput();
 	TMLTime _t;
 	bool _retrigger;
 	TMLTime _s1Time;
 };
-
 #endif

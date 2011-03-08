@@ -37,38 +37,52 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef TaskListenerH
-#define TaskListenerH
 
-#include <TransactionListener.h>
+#include <PropLabConstraint.h>
 
-#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_TASK_FINISHED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_TASK_STARTED(iTrans) {listenersLock(); for(std::list<TaskListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans,_ID); listenersUnLock();}
+PropLabConstraint::PropLabConstraint(PropLabType iType): _type(iType), _property(_type==LIVENESS || _type == NREACHABILITY){
+}
 
-///Encapsulates events associated with transactions
-class TaskListener{
-public:
-	///Gets called when a task executes its first transaction
-	/**
-	\param iTrans Pointer to the transaction
-	\param iID ID of the event source
-	*/
-	virtual void taskStarted(TMLTransaction* iTrans, ID iID){}
-	///Gets called when a task executes its last transaction
-	/**
-	\param iTrans Pointer to the transaction
-	\param iID ID of the event source
-	*/
-	virtual	void taskFinished(TMLTransaction* iTrans, ID iID){}
-	///Destructor
-	///Gets called when a transaction is executed
-	/**
-	\param iTrans Pointer to the transaction
-	\param iID ID of the event source
-	*/
-	virtual void transExecuted(TMLTransaction* iTrans, ID iID){}
-	virtual ~TaskListener(){}
-protected:
-};
-#endif
+bool PropLabConstraint::evalProp(){
+	switch (_type){
+	case LIVENESS:
+		_property &= _aboveConstr[0]->evalProp();
+		break;
+	case NLIVENESS:
+		_property |= (!_aboveConstr[0]->evalProp());
+		break;
+	case REACHABILITY:
+		_property |= (_aboveConstr[0]->evalProp());
+		break;
+	case NREACHABILITY:
+		_property &= (!_aboveConstr[0]->evalProp());
+		break;
+	}
+	return _property;
+}
+
+void PropLabConstraint::forceDisable(){
+	_aboveConstr[0]->forceDisable();
+}
+
+void PropLabConstraint::notifyEnable(unsigned int iSigState){
+	_aboveConstr[0]->notifyEnable(iSigState);
+}
+
+std::ostream& PropLabConstraint::writeObject(std::ostream& s){
+	unsigned char aTmp = (_property)?1:0;
+	WRITE_STREAM(s, aTmp);
+	_aboveConstr[0]->writeObject(s);
+	return s;
+}
+
+std::istream& PropLabConstraint::readObject(std::istream& s){
+	unsigned char aTmp;
+	READ_STREAM(s, aTmp);
+	_property = (aTmp ==1);
+	_aboveConstr[0]->readObject(s);
+	return s;
+}
+
+void PropLabConstraint::reset(){
+}

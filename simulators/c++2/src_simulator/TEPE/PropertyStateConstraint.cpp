@@ -38,59 +38,69 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef ChnanelAbstrH
-#define ChnanelAbstrH
-#include <TMLChannel.h>
+#include <PropertyStateConstraint.h>
 
-///Abstraction of TML Channels
-class ChannelAbstr{
-public:
-	///Constructor
-    	/**
-      	\param iChannel Pointer to Channel object which shall be encapsulated
-    	*/
-	ChannelAbstr(TMLChannel* iChannel):_channel(iChannel){
-	}
-	///Destructor
-	~ChannelAbstr(){
-	}
-	///Returns the name of the channel
-	/**
-	\return Name of the channel
-	*/
-	inline std::string getName() const{
-		return _channel->toString();
-	}
-	///Returns the unique ID of the device
-	/**
-      	\return Unique ID
-    	*/ 
-	inline ID getID() const{
-		return _channel->getID();
-	}
-	///Returns a flag indicating if a channel overflow has been encoutered
-	/**
-	\return Channel overflow flag
-	*/
-	inline bool getOverflow(){
-		return _channel->getOverflow();	
-	}
-	///Returns a flag indicating if a channel underflow has been encoutered
-	/**
-	\return Channel underflow flag
-	*/
-	inline bool getUnderflow(){
-		return _channel->getUnderflow();
-	}
-	///Returns the number of samples stored in the channel
-	/**
-	\return Content of the channel
-	*/
-	inline TMLLength getContent(){
-		return _channel->getContent();
-	}
-private:
-	TMLChannel* _channel;
-};
-#endif
+PropertyStateConstraint::PropertyStateConstraint(PropType iType): _type(iType), _constrEnabled(false), _enabledNotified(UNDEF), _disabledNotified(UNDEF),  _property(_type==GENERAL || _type == NFINALLY){
+}
 
+bool PropertyStateConstraint::evalProp(){
+	if (_aboveConstr==0)
+		return _property;
+	else
+		return _aboveConstr[0]->evalProp() && _property;
+}
+
+void PropertyStateConstraint::notifyEnable(unsigned int iSigState){
+	_disabledNotified = ((iSigState & 1)==0)? FALSE:TRUE;
+	_enabledNotified = ((iSigState & 2)==0)? FALSE:TRUE;
+	evalInput();
+}
+
+void PropertyStateConstraint::notifiedReset(){
+	_enabledNotified=UNDEF;
+	_disabledNotified=UNDEF;
+}
+
+void PropertyStateConstraint::reset(){
+	_constrEnabled=false;
+}
+
+void PropertyStateConstraint::forceDisable(){
+	_constrEnabled=false;
+}
+
+std::ostream& PropertyStateConstraint::writeObject(std::ostream& s){
+	unsigned char aTmp = (_property)?1:0;
+	std::cout << "_property written " << _property << "\n";
+	if (_constrEnabled) aTmp |= 2;
+	WRITE_STREAM(s, aTmp);
+	PropertyConstraint::writeObject(s);
+	return s;
+}
+
+std::istream& PropertyStateConstraint::readObject(std::istream& s){
+	unsigned char aTmp;
+	READ_STREAM(s, aTmp);
+	_property = ((aTmp & 1) !=0);
+	std::cout << "_property read " << _property << "\n";
+	_constrEnabled = ((aTmp & 2) !=0);
+	PropertyConstraint::readObject(s);
+	return s;
+}
+
+void PropertyStateConstraint::reportPropOccurrence(bool iProp){
+	switch (_type){
+	case GENERAL:
+		_property &= iProp;
+		break;
+	case NGENERAL:
+		_property |= !iProp;
+		break;
+	case FINALLY:
+		_property |= iProp;
+		break;
+	case NFINALLY:
+		_property &= !iProp;
+		break;
+	}
+}

@@ -38,27 +38,19 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef KernelListenerH
-#define KernelListenerH
+#include <AliasConstraint.h>
 
-#define NOTIFY_SIM_STARTED() {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStarted(); listenersUnLock();}
-#define NOTIFY_SIM_STOPPED() {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStopped(); listenersUnLock();}
-#define NOTIFY_TIME_ADVANCES(iTime) {listenersLock(); for(std::list<KernelListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->timeAdvances(iTime); listenersUnLock();}
-
-///Encapsulates events associated with transactions
-class KernelListener{
-public:
-	///Gets called when a the simulation is started
-	virtual void simulationStarted(){}
-	///Gets called when a the simulation is stopped
-	virtual void simulationStopped(){}
-	///Gets called when simulation time advances
-	/**
-	\param  iCurrTime Current simulation time
-	*/
-	virtual void timeAdvances(TMLTime iCurrTime){}
-	///Destructor
-	virtual ~KernelListener(){}
-protected:
-};
-#endif
+AliasConstraint::AliasConstraint(ID iID): TwoSigConstraint(iID, false){
+}
+	
+void AliasConstraint::evalInput(){
+	//if (_rightConstr==0) std::cout << "Not connected\n";
+	//if (_s1Notified==UNDEF) std::cout << "s1 undef\n";
+	//if (_s2Notified==UNDEF) std::cout << "s2 undef\n";
+	if (!( _s1Notified==UNDEF || _s2Notified==UNDEF || _rightConstr==0)){
+		//std::cout << "Allright\n";
+		(_rightConstr->*_ntfFuncSigOut)(_s1Notified==TRUE || _s2Notified==TRUE);
+		notifiedReset();
+	}//else
+		//std::cout << "Something is wrong\n";
+}

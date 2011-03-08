@@ -40,31 +40,14 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef ThreeSigConstraintH
 #define ThreeSigConstraintH
-#include "TwoSigConstraint.h"
+#include <TwoSigConstraint.h>
 
 class ThreeSigConstraint: public TwoSigConstraint{
 public:
-	ThreeSigConstraint(ID iID, bool iIncludeBounds): TwoSigConstraint(iID, iIncludeBounds), _sfNotified(UNDEF){
-	}
-	
-	void notifySf(bool iSigState){
-		//_sfNotified = iSigState;
-		//_notificationMask |=4;
-		if (iSigState)
-			std::cout << _ID << ": sf ok\n";
-		else
-			std::cout << _ID << ": sf --\n";
-		_sfNotified = (iSigState)?TRUE:FALSE;
-		evalInput();
-	}
-	
-	virtual void notifiedReset(){
-		TwoSigConstraint::notifiedReset();
-		_sfNotified=UNDEF;
-	}
+	ThreeSigConstraint(ID iID, bool iIncludeBounds);
+	void notifySf(bool iSigState);
+	virtual void notifiedReset();
 protected:
-	// bool _sfNotified;
 	Tristate _sfNotified;
 };
-
 #endif

@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bus.h>
 #include <Slave.h>
 #include <TMLChannel.h>
-#include <TransactionListener.h>
+//#include <TransactionListener.h>
 
 SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
 #ifdef PENALTIES_ENABLED

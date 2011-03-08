@@ -40,24 +40,13 @@ Ludovic Apvrille, Renaud Pacalet
 
 #ifndef AliasConstraintH
 #define AliasConstraintH
-#include "TwoSigConstraint.h"
+#include <TwoSigConstraint.h>
 
 class AliasConstraint: public TwoSigConstraint{
 public:
-	AliasConstraint(ID iID): TwoSigConstraint(iID, false){
-	}
+	AliasConstraint(ID iID);
 	
 protected:
-	void evalInput(){
-		//if (_rightConstr==0) std::cout << "Not connected\n";
-		//if (_s1Notified==UNDEF) std::cout << "s1 undef\n";
-		//if (_s2Notified==UNDEF) std::cout << "s2 undef\n";
-		if (!( _s1Notified==UNDEF || _s2Notified==UNDEF || _rightConstr==0)){
-			//std::cout << "Allright\n";
-			(_rightConstr->*_ntfFuncSigOut)(_s1Notified==TRUE || _s2Notified==TRUE);
-			notifiedReset();
-		}//else
-			//std::cout << "Something is wrong\n";
-	}
+	void evalInput();
 };
 #endif

@@ -42,9 +42,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <SimComponents.h>
-#include <CommandListener.h>
+//#include <CommandListener.h>
 
 TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, iNbOfBranches, iLiveVarList, iCheckpoint), _rangeFunc(iRangeFunc) {
+	_type=CHO;
 }
 
 void TMLChoiceCommand::execute(){
@@ -69,6 +70,7 @@ TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
 #endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
+	//NOTIFY_CMD_FINISHED(0);
 #endif
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
 	return 0;

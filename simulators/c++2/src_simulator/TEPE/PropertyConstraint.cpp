@@ -37,53 +37,28 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
+#include <PropertyConstraint.h>
 
-#ifndef CommandAbstrH
-#define CommandAbstrH
-#include <TMLCommand.h>
+PropertyConstraint::PropertyConstraint():_aboveConstr(0), _noAboveConstr(0){
+}
 
-///Abstraction of TML commands
-class CommandAbstr{
-public:
-	///Constructor
-    	/**
-      	\param iCmd Pointer to Command object which shall be encapsulated
-    	*/
-	CommandAbstr(TMLCommand* iCmd):_cmd(iCmd){
-	}
-	///Destructor
-	~CommandAbstr(){
-	}
-	///Returns a short string representation of the command type
-	/**
-	\return Short string representation of command type
-	*/
-	inline std::string getCommandStr() const{
-		return _cmd->getCommandStr();
-	}
-	///Returns the unique ID of the command
-	/**
-      	\return Unique ID
-    	*/ 
-	inline ID getID() const{
-		return _cmd->getID();
-	}
-	///Returns the progress of the command
-	/**
-	\return Progress of the command
-	*/
-	inline TMLLength getProgress() const{
-		return _cmd->getProgress();
-	}
-	///Returns the length of the command
-	/**
-	\return Length of the command
-	*/
-	inline TMLLength getLength() const{
-		//_cmd->getLength();
-		return 0;
-	}
-protected:
-	TMLCommand* _cmd;
-};
-#endif
+PropertyConstraint::~PropertyConstraint(){
+	if (_aboveConstr!=0) delete [] _aboveConstr;
+}
+
+std::ostream& PropertyConstraint::writeObject(std::ostream& s){
+	for (unsigned int i=0; i<_noAboveConstr; i++)
+		_aboveConstr[i]->writeObject(s);
+	return s;
+}
+
+std::istream& PropertyConstraint::readObject(std::istream& s){
+	for (unsigned int i=0; i<_noAboveConstr; i++)
+		_aboveConstr[i]->readObject(s);
+	return s;
+}
+
+void PropertyConstraint::connectEnaOut(PropertyConstraint** aAboveConstr, unsigned int iNoAboveConstr){
+	_aboveConstr = aAboveConstr;
+	_noAboveConstr = iNoAboveConstr;
+}

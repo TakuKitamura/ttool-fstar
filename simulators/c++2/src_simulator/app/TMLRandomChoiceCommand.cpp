@@ -40,10 +40,11 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <TMLRandomChoiceCommand.h>
 #include <SimComponents.h>
-#include <CommandListener.h>
+//#include <CommandListener.h>
 #include <TMLTask.h>
 
 TMLRandomChoiceCommand::TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint):TMLChoiceCommand(iID, iTask, iRangeFunc, iNbOfBranches, iLiveVarList, iCheckpoint), _dynamicRange(0){
+	_type=CHO;
 }
 
 TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
@@ -72,6 +73,7 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 #endif
 #ifdef LISTENERS_ENABLED
 	NOTIFY_CMD_FINISHED(this);
+	//NOTIFY_CMD_FINISHED(0);
 #endif
 	//std::cout << "TMLRandomChoiceCommand prepare Next Cmd:\n";
 	if (aNextCommand!=0) return aNextCommand->prepare(false);
