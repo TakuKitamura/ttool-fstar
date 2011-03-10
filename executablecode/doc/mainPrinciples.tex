@@ -1,0 +1,70 @@
+* All instructions that can be executed immediatyy are executed
+actions on variables, methods, random
+
+
+* All request are stored in an list of request, and added to the system
+As soon as a request can be performed, it is performed
+
+Request = timer setting, sync send, sync receive, async send, async receive
+
+Requests of the same task are linked together
+
+
+* When no request can be performed, the task terminates
+
+* When a request is added:
+The system sees whether that request can be performed immedialty -> if so, request are performed, and related tasks unblocked
+Otherwise, each request is put int its wait queue
+
+
+* request
+
+#define SYNC_REQUEST 0
+#define SYNC_REQUEST_WITH_DELAY 1
+#define ASYNC_REQUEST 2
+#define ASYNC_REQUEST_WITH_DELAY 3
+#define DELAY 4
+
+struct setOfRequest {
+  request *head;
+}
+
+struct request {
+  int type;
+  setOfRequest* listOfRequests;
+  long delay;
+  int [] params;
+  int nbOfParams;
+}
+
+
+* Notion of synchronous channel
+struct syncchannel {
+  char *inname;
+  char *outname;
+  request* inWaitQueue;
+  request* outWaitQueue; 
+}
+
+* Asynchronous channel
+struct asyncchannel {
+  char *inname
+  char *outname;
+  int isInfinite;
+  int isBlocking;
+  int maxNbOfMssages;
+  request* outWaitQueue;
+  request* inWaitQueue;
+  messages *pendingMessages;
+}
+
+* Asynchronous message
+struct Message {
+  int[] params;
+}
+
+
+
+synchannel [10] syncchannels;
+asynchannel [5] asyncchannels;
+
