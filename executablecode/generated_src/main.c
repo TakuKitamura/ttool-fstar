@@ -4,9 +4,11 @@
 #include <stdlib.h>
 
 #include "request.h"
+#include "syncchannel.h"
 #include "debug.h"
 
 
+syncchannel * syncchannels[1];
 
 
 void *send(void *arg) {
@@ -62,6 +64,9 @@ void *receive(void *arg) {
 
 
 int main(int argc, char * argv[]) {
+
+  syncchannels[0] = getNewSyncchannel("outch", "inch");
+
   pthread_t sender;
   pthread_t receiver0, receiver1;
 
