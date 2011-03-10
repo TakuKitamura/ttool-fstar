@@ -3,11 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "transactions.h"
-#include "syncchannel.h"
-#include "timers.h"
+#include "request.h"
 #include "debug.h"
-#include "storeevents.h"
 
 
 
@@ -22,56 +19,6 @@ void *send(void *arg) {
 
   int *p[2];
 
-  synccell *requests[2];
-
-  debugMsg("Setting timer 12 ...");
-  setTimerMs(myid, 12, 10000);
-  debugMsg("Setting timer 12 done");
-
-  // timer reset
-  //sleep(5);
-  //debugMsg("------- Timer reset");
-  //resetTimer(12);
-  //debugMsg("------- Timer reset done");
-
-  debugMsg("Waiting for timerExpiration");
-  waitForTimerExpiration(myid, 12);
-  debugMsg("Timer has expired");
-
-  debugTwoInts("Trying to send", x, y);
-  p[0] = &x;
-  p[1] = &y;
-  sendSyncParams(myid, 1, p, 2);
-  debugMsg("Send OK");
-
-  
-  // Testing multirequest
-  // Trying to send with a timer of 10 seconds
-  debugMsg("Setting timer 12 ...");
-  setTimerMs(myid, 12, 10000);
-  debugMsg("Setting timer 12 done");
-
-  requests[0] = (synccell *)(malloc(sizeof(synccell) + 2*sizeof(int *)));
-  requests[0]->ID = 1;
-  requests[0]->type = SENDING;
-  requests[0]->nParams = 2;
-  requests[0]->params[0] = &x;
-  requests[0]->params[1] = &y;
-  requests[0]->taskID = myid;
-  
-  requests[1] = (synccell *)(malloc(sizeof(synccell)));
-  requests[1]->ID = 12;
-  requests[1]->type = TIMER_EXPIRATION;
-  requests[1]->taskID = myid;
-  
-  debugMsg(" -------------- Making requests");
-
-  x = 31;
-  y = 51;
-  index = makeRequests(requests, 2);
-
-  debugInt("---------------- Request completed", index);
-
   return NULL;
 }
 
@@ -83,29 +30,29 @@ void *receive(void *arg) {
   int sleepTime;
 
   debugInt("Setting timer ", 13 + myid);
-  setTimerMs(myid, 13+myid, 1000);
+  //setTimerMs(myid, 13+myid, 1000);
   debugInt("Setting timer done", 13 + myid);
 
   debugInt("Trying to receive id", myid);
   p[0] = &x;
   p[1] = &y;
-  receiveSyncParams(myid, 1, p ,2);
-  debugThreeInts("Receive OK", x, y, myid);
+  //receiveSyncParams(myid, 1, p ,2);
+  //debugThreeInts("Receive OK", x, y, myid);
   
-  resetTimer(myid, 13+myid);
+  //resetTimer(myid, 13+myid);
   // random wait between 5 and 15 seconds
   // Trying to receive
 
-  sleepTime = 5 + (rand() % 10);
-  debugTwoInts("---------- Waiting for seconds:", sleepTime, myid);
-  setTimerMs(myid, 13+myid, sleepTime * 1000);
+  //sleepTime = 5 + (rand() % 10);
+  //debugTwoInts("---------- Waiting for seconds:", sleepTime, myid);
+  //setTimerMs(myid, 13+myid, sleepTime * 1000);
 
-  debugInt("-------------- Waiting for timerExpiration", myid);
-  waitForTimerExpiration(myid, 13+myid);
+  //debugInt("-------------- Waiting for timerExpiration", myid);
+  //waitForTimerExpiration(myid, 13+myid);
   debugInt("-------------- Timer has expired", myid);
   
   
-  receiveSyncParams(myid, 1, p ,2);
+  //receiveSyncParams(myid, 1, p ,2);
   debugThreeInts("--------------- Second receive OK", x, y, myid);
   
 
@@ -119,10 +66,10 @@ int main(int argc, char * argv[]) {
   pthread_t receiver0, receiver1;
 
   activeDebug();
-  initStoreEvents();
+  //initStoreEvents();
 
   debugMsg("Timer management initialization ...");
-  initTimerManagement();
+  //initTimerManagement();
   debugMsg("Timer management initialization done");
   
   debugMsg("Creating threads");
