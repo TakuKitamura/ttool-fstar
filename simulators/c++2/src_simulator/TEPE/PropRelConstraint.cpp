@@ -75,3 +75,6 @@ std::ostream& PropRelConstraint::writeObject(std::ostream& s){
 std::istream& PropRelConstraint::readObject(std::istream& s){
 	return s;
 }
+
+void PropRelConstraint::reset(){
+}

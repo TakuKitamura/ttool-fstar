@@ -54,6 +54,7 @@ class Simulator;
 class IndeterminismSource;
 class GeneralListener;
 class PropertyConstraint;
+class TEPEFloatingSigListener;
 #ifdef EBRDD_ENABLED
 class EBRDD;
 #endif
@@ -119,7 +120,8 @@ public:
 	/**
 	\param iPropConstr TEPE Constraint
 	*/
-	void addTEPEConstraint(PropertyConstraint* iPropConstr);
+	void addTEPEListener(GeneralListener* iTEPEListener);
+	void setTEPEEntryPoint(TEPEFloatingSigListener* iTEPEEntryPoint);
 	///Calls streamBenchmarks of all traceable devices contained in vcdList
 	/**
 	param s Reference to output stream object
@@ -302,6 +304,8 @@ protected:
 	TaskList _taskList;
 	///List holding channels
 	ChannelList _channelList;
+	///TEPE listener listener
+	TEPEListenerList _tepeListenerList;
 #ifdef EBRDD_ENABLED
 	///List holding EBRDDs
 	EBRDDList _ebrddList;

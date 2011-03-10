@@ -44,23 +44,26 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 
 class SignalConstraint;
-typedef void (SignalConstraint::*NtfSigFuncPointer) (bool iSigState);
 
 class SignalConstraint{
 public:
 	SignalConstraint(ID iID, bool iIncludeBounds);
+	virtual ~SignalConstraint();
 	void notifyS1(bool iSigState);
 	virtual void notifyS2(bool iSigState);
 	virtual void notifySf(bool iSigState);
 	void connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc);
 	virtual void notifiedReset();
+	ID getID();
 	//static void setSimTime(TMLTime iSimTime);
 protected:
 	virtual void evalInput()=0;
+	void notifyRightConstraints(bool iSigState);
 	ID _ID;
 	Tristate _s1Notified;
-	NtfSigFuncPointer _ntfFuncSigOut;
-	SignalConstraint *_rightConstr;
+	//NtfSigFuncPointer _ntfFuncSigOut;
+	//SignalConstraint *_rightConstr;
+	SignalNotificationList _rightConstraints;
 	bool _includeBounds;
 	static TMLTime _simTime;
 };

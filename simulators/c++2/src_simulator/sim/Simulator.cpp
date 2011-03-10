@@ -59,7 +59,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents),/*_simComp(0),*/ _busy(false), _simTerm(false), _leafsID(0), /*_randChoiceBreak(0),*/  _randChoiceBreak(_syncInfo->_simComponents){
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true){
 }
 
 Simulator::~Simulator(){
@@ -148,7 +148,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 	std::cout << "The Graph output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }*/
 
-ID Simulator::schedule2GraphDOT(std::ostream& iFile, ID iStartState, unsigned int& oTransCounter) const{
+ID Simulator::schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const{
 	CPUList::iterator i;
 	GraphTransactionQueue aQueue;
 	TMLTransaction* aTrans, *aTopElement;
@@ -171,20 +171,20 @@ ID Simulator::schedule2GraphDOT(std::ostream& iFile, ID iStartState, unsigned in
 		}
 		//13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
 		oTransCounter++;
-#ifdef DOT_GRAPH_ENABLED 
-		iFile << aStartState << " -> " << aEndState << " [label = \"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+//#ifdef DOT_GRAPH_ENABLED 
+		iDOTFile << aStartState << " -> " << aEndState << " [label = \"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
 		if (aTopElement->getChannel()!=0){
-			iFile << "__" << aTopElement->getChannel()->toShortString();
+			iDOTFile << "__" << aTopElement->getChannel()->toShortString();
 		}
-		iFile << "<" << aTopElement->getVirtualLength() << ">)\"]\n";
-#else
+		iDOTFile << "<" << aTopElement->getVirtualLength() << ">)\"]\n";
+//#else
 		//(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
-		iFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+		iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
 		if (aTopElement->getChannel()!=0){
-			iFile << "__" << aTopElement->getChannel()->toShortString();
+			iAUTFile << "__" << aTopElement->getChannel()->toShortString();
 		}
-		iFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
-#endif
+		iAUTFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
+//#endif
 		aStartState = aEndState;
 		//aOutp << aTempStr.str() << ++aTransitionNo << ")\n";
 		//}
@@ -390,7 +390,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	transLET=getTransLowestEndTime(cpuLET);
 	//std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
-	NOTIFY_SIM_STARTED();
+	if (_wasReset) NOTIFY_SIM_STARTED();
+	_wasReset=false;
 #endif
 	while (transLET!=0 && !_simComp->getStopFlag()){
 #ifdef DEBUG_KERNEL
@@ -506,11 +507,12 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		//sleep(1);
 	}
 #ifdef LISTENERS_ENABLED
-	NOTIFY_SIM_STOPPED();
+	bool aSimCompleted = (transLET==0 && !_simComp->getStoppedOnAction());
+	if (aSimCompleted) NOTIFY_SIM_STOPPED();
 #endif
 	gettimeofday(&aEnd,NULL);
 	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
-	return (transLET==0 && !_simComp->getStoppedOnAction());
+	return (aSimCompleted);
 }
 
 const std::string Simulator::getArgs(const std::string& iComp, const std::string& iDefault, int iLen, char** iArgs){
@@ -659,30 +661,30 @@ void Simulator::decodeCommand(std::string iCmd){
 				case 7: {//Explore Tree
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
-					_leafsID=0;
-					std::ofstream myfile ("tree");
+					std::ofstream myDOTfile ("tree.dot");
+					std::ofstream myAUTfile ("tree.aut.tmp");
 					//std::ofstream myfile2 ("tree.txt");
-					if (myfile.is_open() /*&& myfile2.is_open()*/){
-#ifdef DOT_GRAPH_ENABLED
-						myfile << "digraph BCG {\nsize = \"7, 10.5\";\ncenter = TRUE;\nnode [shape = circle];\n0 [peripheries = 2];\n";
-#endif
+					if (myDOTfile.is_open() && myAUTfile.is_open()){
+//#ifdef DOT_GRAPH_ENABLED
+						myDOTfile << "digraph BCG {\nsize = \"7, 10.5\";\ncenter = TRUE;\nnode [shape = circle];\n0 [peripheries = 2];\n";
+//#endif
 						unsigned int aTransCounter=0;
-						exploreTree(0, 0, myfile, aTransCounter);
-#ifdef DOT_GRAPH_ENABLED
-						myfile << "}\n";
-						system ("mv tree tree.dot");
-						myfile.close();
-#else
-						myfile.close();
-						std::ofstream myfile3 ("header");
-						if (myfile3.is_open()){
+						exploreTree(0, 0, myDOTfile, myAUTfile, aTransCounter);
+//#ifdef DOT_GRAPH_ENABLED
+						myDOTfile << "}\n";
+						//system ("mv tree tree.dot");
+						myDOTfile.close();
+//#else
+						myAUTfile.close();
+						std::ofstream myTMPfile ("header");
+						if (myTMPfile.is_open()){
 							//des (0, 29, 27)
-							myfile3 << "des(0," << aTransCounter << "," << TMLTransaction::getID() << ")\n";
-							myfile3.close();
-							system ("cat header tree > tree.aut");
-							system ("rm header tree");
+							myTMPfile << "des(0," << aTransCounter << "," << TMLTransaction::getID() << ")\n";
+							myTMPfile.close();
+							system ("cat header tree.aut.tmp > tree.aut");
+							system ("rm header tree.aut.tmp");
 						}
-#endif
+//#endif
 						//myfile2.close();
 					}
 					aGlobMsg << TAG_MSGo  << "Tree was explored" << TAG_MSGc << std::endl;
@@ -817,6 +819,7 @@ void Simulator::decodeCommand(std::string iCmd){
 		}
 		case 2:	//reset
 			std::cout << "Simulator reset." << std::endl;
+			_wasReset=true;
 			_simComp->reset();
 			_simComp->resetStateHash();
 			_simTerm=false;
@@ -1267,7 +1270,7 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 	if (oSuccess) return simulate(oLastTrans); else return false;
 }
 
-void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile, unsigned int& oTransCounter){
+void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter){
 	TMLTransaction* aLastTrans;
 	//if (iDepth<RECUR_DEPTH){
 		ID aLastID;
@@ -1277,17 +1280,17 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 			aSimTerminated=runToNextRandomCommand(aLastTrans);
 			aRandomCmd = _simComp->getCurrentRandomCmd();
 		}while (!aSimTerminated && aRandomCmd==0 && _simComp->wasKnownStateReached()==0);
-		aLastID = schedule2GraphDOT(iFile,iPrevID,oTransCounter);
+		aLastID = schedule2GraphDOT(iDOTFile, iAUTFile, iPrevID,oTransCounter);
 		//if (_simComp->wasKnownStateReached()==0){
 			//if(aRandomCmd==0){
 		if(aSimTerminated){
 			oTransCounter++;
-#ifdef DOT_GRAPH_ENABLED				
-			iFile << aLastID << " -> " << TMLTransaction::getID() << " [label = \"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"]\n";
-#else
+//#ifdef DOT_GRAPH_ENABLED				
+			iDOTFile << aLastID << " -> " << TMLTransaction::getID() << " [label = \"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"]\n";
+//#else
 			//(21,"i(allCPUsTerminated)", 25)
-			iFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
-#endif
+			iAUTFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
+//#endif
 			TMLTransaction::incID();
 			//}else{
 		}else if (_simComp->wasKnownStateReached()==0){
@@ -1308,7 +1311,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 						aStreamBuffer.str(aStringBuffer);
 						_simComp->readObject(aStreamBuffer);
 						aRandomCmd->setRandomValue(aBranch);
-						exploreTree(iDepth+1, aLastID, iFile, oTransCounter);
+						exploreTree(iDepth+1, aLastID, iDOTFile, iAUTFile, oTransCounter);
 					}
 				}else{
 					unsigned int aBranch=0;
@@ -1319,7 +1322,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFil
 							aStreamBuffer.str(aStringBuffer);
 							_simComp->readObject(aStreamBuffer);
 							aRandomCmd->setRandomValue(aBranch);
-							exploreTree(iDepth+1, aLastID, iFile, oTransCounter);
+							exploreTree(iDepth+1, aLastID, iDOTFile, iAUTFile, oTransCounter);
 						}
 						aBranch++; aNbNextCmds >>=1;
 					}

@@ -39,6 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <PropertyStateConstraint.h>
+#include <SignalConstraint.h>
 
 PropertyStateConstraint::PropertyStateConstraint(PropType iType): _type(iType), _constrEnabled(false), _enabledNotified(UNDEF), _disabledNotified(UNDEF),  _property(_type==GENERAL || _type == NFINALLY){
 }
@@ -53,6 +54,21 @@ bool PropertyStateConstraint::evalProp(){
 void PropertyStateConstraint::notifyEnable(unsigned int iSigState){
 	_disabledNotified = ((iSigState & 1)==0)? FALSE:TRUE;
 	_enabledNotified = ((iSigState & 2)==0)? FALSE:TRUE;
+	SignalConstraint* testSig= dynamic_cast<SignalConstraint*>(this);
+	if (testSig!=0){
+		switch (iSigState){
+			case 1:
+				std::cout << testSig->getID() << ": -d\n";
+				break;
+			case 2:
+				std::cout << testSig->getID() << ": e-\n";
+				break;
+			case 3:
+				std::cout << testSig->getID() << ": ed\n";
+				break;
+			default: ;
+		}
+	}
 	evalInput();
 }
 
@@ -67,6 +83,8 @@ void PropertyStateConstraint::reset(){
 
 void PropertyStateConstraint::forceDisable(){
 	_constrEnabled=false;
+	if (_aboveConstr!=0) _aboveConstr[0]->forceDisable();
+
 }
 
 std::ostream& PropertyStateConstraint::writeObject(std::ostream& s){

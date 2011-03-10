@@ -86,7 +86,12 @@ public:
 	}
 
 	///Destructor
-	virtual ~ListenerSubject(){}
+	virtual ~ListenerSubject(){
+		//listenersUnLock();
+		//for(typename std::list<T*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {
+		//	delete (*i);
+		//}
+	}
 protected:
 	///List of listeners
 	std::list<T*> _listeners;

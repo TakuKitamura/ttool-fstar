@@ -43,7 +43,11 @@ PropertyConstraint::PropertyConstraint():_aboveConstr(0), _noAboveConstr(0){
 }
 
 PropertyConstraint::~PropertyConstraint(){
-	if (_aboveConstr!=0) delete [] _aboveConstr;
+	if (_aboveConstr!=0){
+		for (unsigned int i=0; i<_noAboveConstr; i++)
+			delete _aboveConstr[i];
+		delete [] _aboveConstr;
+	}
 }
 
 std::ostream& PropertyConstraint::writeObject(std::ostream& s){

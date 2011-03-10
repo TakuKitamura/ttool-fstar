@@ -94,7 +94,8 @@ void FSMConstraint::evalInput(){
 		}
 		notifiedReset();
 		if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnableFlag);
-		if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOutFlag);
+		//if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOutFlag);
+		notifyRightConstraints(aSigOutFlag);
 		//if (aSigOutFlag || !aPropResult) reportPropOccurrence(aPropResult);
 		if (aSigOutFlag || ((aEnableFlag & 1)!=0 && !aPropResult) ){
 		//if (aSigOutFlag || (aEnableFlag & 1)!=0){

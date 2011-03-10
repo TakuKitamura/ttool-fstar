@@ -39,8 +39,19 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <SignalConstraint.h>
+#include <PropertyConstraint.h>
 	
-SignalConstraint::SignalConstraint(ID iID, bool iIncludeBounds): _ID(iID), _s1Notified(UNDEF), _ntfFuncSigOut(0), _rightConstr(0), _includeBounds(iIncludeBounds){
+SignalConstraint::SignalConstraint(ID iID, bool iIncludeBounds): _ID(iID), _s1Notified(UNDEF), /*_ntfFuncSigOut(0), _rightConstr(0),*/ _includeBounds(iIncludeBounds){
+}
+
+SignalConstraint::~SignalConstraint(){
+	/*std::cout << "SignalConstraint Destructor\n";
+	for(SignalNotificationList::const_iterator i=_rightConstraints.begin(); i != _rightConstraints.end(); ++i){
+		if (dynamic_cast<PropertyConstraint*>(i->first)==0){
+			delete i->first;
+			std::cout << "Delete done\n";
+		}
+	}*/
 }
 
 void SignalConstraint::notifyS1(bool iSigState){
@@ -59,13 +70,24 @@ void SignalConstraint::notifyS2(bool iSigState){}
 void SignalConstraint::notifySf(bool iSigState){}
 
 void SignalConstraint::connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc){
-	_ntfFuncSigOut = iNotFunc;
-	_rightConstr = iRightConstr;
+	//_ntfFuncSigOut = iNotFunc;
+	//_rightConstr = iRightConstr;
+	_rightConstraints.push_back(std::pair<SignalConstraint*, NtfSigFuncPointer>(iRightConstr, iNotFunc));
 }
 
 void SignalConstraint::notifiedReset(){
 	//_notificationMask=0;
 	_s1Notified = UNDEF;
+}
+
+void SignalConstraint::notifyRightConstraints(bool iSigState){
+	for(SignalNotificationList::const_iterator i=_rightConstraints.begin(); i != _rightConstraints.end(); ++i){
+		((i->first)->*(i->second))(iSigState);
+	}
+}
+
+ID SignalConstraint::getID(){
+	return _ID;
 }
 
 //void SignalConstraint::setSimTime(TMLTime iSimTime){

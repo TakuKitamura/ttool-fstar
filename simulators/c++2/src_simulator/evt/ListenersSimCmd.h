@@ -357,13 +357,16 @@ protected:
 };
 
 //************************************************************************
-class TEPEFloatingSigListener: public GeneralListener{
+class TEPEFloatingSigListener: public GeneralListener, public Serializable{
 public:
 	TEPEFloatingSigListener(ListenerSubject<GeneralListener>* iSimulator, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, unsigned int iNbOfStartNodes, PropertyConstraint** iStartNodes);
 	~TEPEFloatingSigListener();
 	void timeAdvances(TMLTime iCurrTime);
 	void simulationStarted();
 	void simulationStopped();
+	std::ostream& writeObject(std::ostream& s);
+	std::istream& readObject(std::istream& s);
+	void reset();
 protected:
 	ListenerSubject<GeneralListener>* _simulator;
 	unsigned int _nbOfSignals;
@@ -375,9 +378,6 @@ protected:
 
 //************************************************************************
 class TEPEEquationListener: public GeneralListener{
-	//bool EquationFunc(TMLTask** iTasks){
-	//return iTasks[1]->a + iTasks[1]->b = iTasks[1]->c + iTasks[3]->e;
-	//}  is friend of each Task in iTasks
 public:
 	TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
 	~TEPEEquationListener();
@@ -393,6 +393,29 @@ protected:
 	bool _eqResult;
 	SignalConstraint* _notifConstr;
 	NtfSigFuncPointer _notifFunc;
+	bool _sigNotified;
+	SimComponents* _simComp;
+	ListenerSubject<GeneralListener>* _simulator;
+};
+
+//************************************************************************
+class TEPESettingListener: public GeneralListener{
+public:
+	TEPESettingListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, SettingFuncPointer iSetFunc, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
+	~TEPESettingListener();
+	void commandFinished(TMLCommand* iComm, ID iID);	
+	void timeAdvances(TMLTime iCurrTime);
+	void simulationStarted();
+	void simulationStopped();
+protected:
+	ID* _subjectIDs;
+	unsigned int _nbOfSubjectIDs;
+	ParamType** _var;
+	SettingFuncPointer _setFunc;
+	unsigned int _nbOfSignals;
+	ParamType _setResult;
+	SignalConstraint** _notifConstr;
+	NtfSigFuncPointer* _notifFunc;
 	bool _sigNotified;
 	SimComponents* _simComp;
 	ListenerSubject<GeneralListener>* _simulator;

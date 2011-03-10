@@ -99,7 +99,7 @@ void TimeTConstraint::evalInput(){
 		}
 		notifiedReset();
 		if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(aEnaFlag);
-		if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
-
+		//if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(aSigOut);
+		notifyRightConstraints(aSigOut);
 	}
 }

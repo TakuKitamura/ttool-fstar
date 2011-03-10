@@ -85,7 +85,7 @@ using std::max;
 #define STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
 #undef EBRDD_ENABLED
-#define DOT_GRAPH_ENABLED
+//#define DOT_GRAPH_ENABLED
 
 #define CLOCK_INC 20
 #define BLOCK_SIZE 500000
@@ -199,8 +199,10 @@ class Slave;
 class Comment;
 class WorkloadSource;
 class BusMaster;
+class GeneralListener;
 class EBRDD;
 class EBRDDCommand;
+class SignalConstraint;
 
 ///Datatype used for time measurements
 typedef unsigned long long TMLTime;
@@ -226,6 +228,12 @@ typedef std::list<Serializable*> SerializableList;
 typedef std::list<Slave*> SlaveList;
 ///Datatype used in SimComponents to store channel objects
 typedef std::list<TMLChannel*> ChannelList;
+///Datatype used in SimComponents to store TEPE listeners
+typedef std::list<GeneralListener*> TEPEListenerList;
+///Datatype used in TEPEs to Point to a function to be notified upon a signal occurrence
+typedef void (SignalConstraint::*NtfSigFuncPointer) (bool iSigState);
+///Datatype used in TEPE SignalConstraints to store a list of right constraints to be notified upon a signal occurrence
+typedef std::list<std::pair<SignalConstraint*, NtfSigFuncPointer> > SignalNotificationList;
 
 ///Type of a TMLCommand
 typedef enum {NONE=(1), EXE=(1<<1), RD=(1<<2), WR=(1<<3), SEL=(1<<4), SND=(1<<5), REQ=(1<<6), WAIT=(1<<7), NOTIF=(1<<8), ACT=(1<<9), CHO=(1<<10), RND=(1<<11), STP=(1<<12)} CommandType;
@@ -250,7 +258,9 @@ typedef void (TMLTask::*ActionFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef TMLTime (TMLTask::*LengthFuncPointer) ();
 ///Type of pointer to indicate a function encapsulating a TEPE condition
-typedef bool (*EqFuncPointer)(ParamType**);  
+typedef bool (*EqFuncPointer)(ParamType**); 
+///Type of pointer to indicate a function encapsulating a TEPE setting
+typedef ParamType (*SettingFuncPointer)(ParamType**);  
 ///Type of pointer to indicate a function returning the random rage of a command
 typedef unsigned int (TMLTask::*RangeFuncPointer) (ParamType& oMin, ParamType& oMax);
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)

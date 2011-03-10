@@ -212,7 +212,7 @@ public:
 	\param iPrevID ID of the parent leaf
 	\param iFile Reference to the output file
 	*/
-	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iFile, unsigned int& oTransCounter);
+	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
 	void schedule2HTML(std::string& iTraceFileName) const;
 	///Writes simulation traces in VCD format to an output file
@@ -226,7 +226,7 @@ public:
 	*/
 	void schedule2Graph(std::string& iTraceFileName) const;
 	//ID schedule2Graph(std::ostream& iFile, ID iStartState) const;
-	ID schedule2GraphDOT(std::ostream& iFile, ID iStartState, unsigned int& oTransCounter) const;
+	ID schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**
 	\param iTraceFileName Name of the output trace file
@@ -301,11 +301,11 @@ protected:
 	bool _busy;
 	///Simulation terminated flag
 	bool _simTerm;
-	///Counts the leafs of the tree made up by explored control flow branches
-	unsigned int _leafsID;
 	///Keeps track of all breakpoints set during the simulation 
 	BreakpointSet _breakpoints;
 	///Random choice breakpoint
 	RunTillNextRandomChoice _randChoiceBreak;
+	///Flag indicating if the simulator has previously been reset
+	bool _wasReset;
 };
 #endif

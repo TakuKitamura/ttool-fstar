@@ -73,41 +73,31 @@ std::istream& EqConstraint::readObject(std::istream& s){
 
 void EqConstraint::evalInput(){
 	if (!(_enabledNotified==UNDEF || _s1Notified==UNDEF)){
-		if(_enabledNotified==TRUE && _includeBounds){		//early enable
-			
-			//std::cout << "Enabled\n";
-			_constrEnabled=true;	
+		if(_enabledNotified==TRUE){		//early enable
+			_constrEnabled = (_disabledNotified==FALSE);
 			_propReported = false;  //why do we need that? --> failure may otherwise not be reported if _eqResult==true
 		}
 		
-		if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;	//early disable
-		
+		bool aRelevantEqResult=_eqResult;
 		if (_s1Notified==TRUE){		//sigout and enable/disable notifications for connected operators
 			if (_eqResult){
 				_eqResult=false;
-				//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(1);
-				if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(false);
+				notifyRightConstraints(false);
 			}else{
 				_eqResult=true;
-				//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(2);
-				if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(true);
+				notifyRightConstraints(true);
 			}
 		}else{
-			//if (_aboveConstr!=0) _aboveConstr[0]->notifyEnable(0);
-			if (_rightConstr!=0)  (_rightConstr->*_ntfFuncSigOut)(false);
+			notifyRightConstraints(false);
 		}
+		if (_includeBounds ) aRelevantEqResult=_eqResult;
 		
-		if (_constrEnabled && (!_eqResult) && (!_propReported)){		//report failure
+		std::cout << "Enabled: " << _constrEnabled << "  eqresult: " << _eqResult << "  reported: " << _propReported <<"\n";
+		if (_constrEnabled && (!aRelevantEqResult) && (!_propReported)){		//report failure
 			reportPropOccurrence(false);
-			//std::cout << "Report occurrence of Eq: 0\n";
+			std::cout << "Report occurrence of Eq: 0\n";
 			_propReported = true;
 		}
-		
-		_constrEnabled |= (_enabledNotified==TRUE);
-		/*if (!_constrEnabled && _enabledNotified==TRUE && _disabledNotified==FALSE){	//enable
-			//_constrEnabled = true;
-			//_propReported = false;
-		}*/
 		if (_disabledNotified==TRUE){	//disable, report success
 			//std::cout << " DIsable*********************************************\n";
 			if (!_propReported){
@@ -119,5 +109,4 @@ void EqConstraint::evalInput(){
 		}
 		notifiedReset();
 	}
-		//if (_disabledNotified==TRUE) std::cout << "Blooooooooocked!!!!\n";
 }

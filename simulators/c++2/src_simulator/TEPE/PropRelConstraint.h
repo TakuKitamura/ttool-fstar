@@ -52,6 +52,7 @@ public:
 	void notifyEnable(unsigned int iSigState);
 	std::ostream& writeObject(std::ostream& s);
 	std::istream& readObject(std::istream& s);
+	void reset();
 protected:
 	PropRelType _type;
 };

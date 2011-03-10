@@ -59,6 +59,13 @@ SimComponents::SimComponents(int iHashValue /*, Simulator* iSimulator*/): _simul
 }
 
 SimComponents::~SimComponents(){
+	//std::cerr << "b1\n";
+	for(TEPEListenerList::iterator i=_tepeListenerList.begin(); i != _tepeListenerList.end(); ++i){
+		//std::cerr << "b...\n";
+		delete (*i);
+		//std::cerr << "after b...\n";
+	}
+	//std::cerr << "b2\n";
 	for(SerializableList::iterator i=_serList.begin(); i != _serList.end(); ++i){
 		delete (*i);
 	}
@@ -125,10 +132,14 @@ void SimComponents::addEBRDD(EBRDD* iEBRDD){
 }
 #endif
 
-void SimComponents::addTEPEConstraint(PropertyConstraint* iPropConstr){
-	std::cout << "before add\n";
-	_serList.push_back(dynamic_cast<Serializable*>(iPropConstr));
-	std::cout << "after add\n";
+void SimComponents::addTEPEListener(GeneralListener* iTEPEListener){
+	//std::cout << "before add\n";
+	_tepeListenerList.push_back(iTEPEListener);
+	//std::cout << "after add\n";
+}
+
+void SimComponents::setTEPEEntryPoint(TEPEFloatingSigListener* iTEPEEntryPoint){
+	_serList.push_back(dynamic_cast<Serializable*>(iTEPEEntryPoint));
 }
 
 void SimComponents::streamBenchmarks(std::ostream& s) const{
@@ -251,14 +262,14 @@ TMLChannel* SimComponents::getChannelByName(const std::string& iChannel) const{
 }
 
 SchedulableDevice* SimComponents::getCPUByID(ID iID) const{
-	std::cerr << "getCPUByID " << iID << "\n";
-	CPUList::const_iterator i=_cpuList.begin();
-	std::cerr << "getCPUByID after i=_cpuList.begin()" << iID << "\n";
-	for(/*CPUList::const_iterator i=_cpuList.begin()*/; i != _cpuList.end(); ++i){
-		std::cout << "CPU x\n";
+	//std::cerr << "getCPUByID " << iID << "\n";
+	//CPUList::const_iterator i=_cpuList.begin();
+	//std::cerr << "getCPUByID after i=_cpuList.begin()" << iID << "\n";
+	for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
+		//std::cout << "CPU x\n";
 		if ((*i)->getID()==iID) return (*i);
 	}
-	std::cout << "End CPU\n";
+	//std::cout << "End CPU\n";
 	return NULL;
 }
 
@@ -326,22 +337,22 @@ std::string SimComponents::getCmpNameByID(ID iID){
 
 //ListenerSubject <TransactionListener>* SimComponents::getListenerByID(ID iID){
 ListenerSubject <GeneralListener>* SimComponents::getListenerByID(ID iID){
-	std::cerr << "Hello 1\n";
+	//std::cerr << "Hello 1\n";
 	ListenerSubject <GeneralListener>* aListener = getCPUByID(iID);
 	if (aListener!=0) return aListener;
-	std::cerr << "Hello 2\n";
+	//std::cerr << "Hello 2\n";
 	aListener = TMLCommand::getCommandByID(iID);
 	if (aListener!=0) return aListener;
-	std::cerr << "Hello 3\n";
+	//std::cerr << "Hello 3\n";
 	aListener = getTaskByID(iID);
 	if (aListener!=0) return aListener;
-	std::cerr << "Hello 4\n";
+	//std::cerr << "Hello 4\n";
 	aListener = getBusByID(iID);
 	if (aListener!=0) return aListener;
-	std::cerr << "Hello 5\n";
+	//std::cerr << "Hello 5\n";
 	aListener = getSlaveByID(iID);
 	if (aListener!=0) return aListener;
-	std::cerr << "Hello 6\n";
+	//std::cerr << "Hello 6\n";
 	return getChannelByID(iID);
 }
 

@@ -332,18 +332,23 @@ TEPESigListener::TEPESigListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, 
 }
 
 TEPESigListener::~TEPESigListener(){
-	/*for (unsigned int i=0; i< nbOfSubjectIDs; i++){
-		ListenerSubject <GeneralListener>*  aSubject = iSimComp->getListenerByID(iSubjectIDs[i]);
-		if (aSubject!=0) aSubject->removeListener(this);
-	}*/
+	std::cerr << "Delete Sig\n";
 	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
 		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
 		if (aSubject!=0) aSubject->removeListener(this);
 	}
+	/*for (unsigned int i=0; i<_nbOfSignals; i++){
+		std::cout << "loop\n";
+		if (dynamic_cast<PropertyConstraint*>(_notifConstr[i])==0){
+			delete _notifConstr[i];
+			std::cout << "Delete done II\n";
+		}
+	}*/
 	_simulator->removeListener(this);
 	delete [] _subjectIDs;
 	delete [] _notifConstr;
 	delete [] _notifFunc;
+	std::cerr << "End Delete Sig\n";
 }
 
 void TEPESigListener::simulationStarted(){
@@ -428,12 +433,18 @@ TEPEFloatingSigListener::TEPEFloatingSigListener(ListenerSubject<GeneralListener
 }
 
 TEPEFloatingSigListener::~TEPEFloatingSigListener(){
+	std::cerr << "Delete Floating\n";
 	_simulator->removeListener(this);
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		delete _startNodes[i];
+	}
 	delete [] _notifConstr;
 	delete [] _notifFunc;
 	delete [] _startNodes;
+	std::cerr << "End Delete Floating\n";
 }
 void TEPEFloatingSigListener::timeAdvances(TMLTime iCurrTime){
+	std::cout << "New simulation time: " << iCurrTime << "\n";
 	for (unsigned int i=0; i<_nbOfSignals; i++){
 		(_notifConstr[i]->*_notifFunc[i])(false);
 	}
@@ -462,17 +473,32 @@ void TEPEFloatingSigListener::simulationStopped(){
 		std::cout << "Eval Prop " << i << ": " << _startNodes[i]->evalProp() << "\n";
 }
 
+std::ostream& TEPEFloatingSigListener::writeObject(std::ostream& s){
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->writeObject(s);
+	}
+}
+
+std::istream& TEPEFloatingSigListener::readObject(std::istream& s){
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->readObject(s);
+	}
+}
+
+void TEPEFloatingSigListener::reset(){
+	for (unsigned int i=0; i<_nbOfStartNodes; i++){
+		_startNodes[i]->reset();
+	}
+}
+
+
 //***********************************************************************
-//bool EquationFunc(TMLTask** iTasks){
-//return iTasks[1]->a + iTasks[1]->b = iTasks[1]->c + iTasks[3]->e;
-//}  is friend of each Task in iTasks
 TEPEEquationListener::TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator)
   : _subjectIDs(iSubjectIDs), _nbOfSubjectIDs(iNbOfSubjectIDs), _var(iVar), _eqFunc(iEqFunc), _eqResult(true), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _sigNotified(false), _simComp(iSimComp), _simulator(iSimulator){
-	std::cerr << "before func\n";
-	//_eqResult = _eqFunc(_var);
-	std::cerr << "before loop\n";
+	//std::cerr << "before func\n";
+	//std::cerr << "before loop\n";
 	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
-		std::cerr << "next id: " << _subjectIDs[i] << "\n";
+		//std::cerr << "next id: " << _subjectIDs[i] << "\n";
 		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
 		if (aSubject!=0) aSubject->registerListener(this);
 	}
@@ -480,6 +506,7 @@ TEPEEquationListener::TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSu
 }
 
 TEPEEquationListener::~TEPEEquationListener(){
+	std::cerr << "Delete Eq\n";
 	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
 		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
 		if (aSubject!=0) aSubject->removeListener(this);
@@ -487,37 +514,99 @@ TEPEEquationListener::~TEPEEquationListener(){
 	_simulator->removeListener(this);
 	delete [] _subjectIDs;
 	delete [] _var;
+	std::cerr << "End Delete Eq\n";
 }
 
 void TEPEEquationListener::commandFinished(TMLCommand* iComm, ID iID){
-	/*if (_eqResult != _eqFunc(_var)){
-		_eqResult = !_eqResult;
-		(_notifConstr->*_notifFunc)(true);
-		_sigNotified=true;
-	}*/
-	//if several alternations of variables at the same time only last one is taken into account
-	_sigNotified = (_eqResult != _eqFunc(_var));
+	//if several alternations of variables arise at the same time only last value is taken into account
+	//_sigNotified = (_eqResult != _eqFunc(_var));
+	_sigNotified = true;
 	std::cout << "Check equation result: " << _sigNotified << "\n";
 }
 
 void TEPEEquationListener::timeAdvances(TMLTime iCurrTime){
 	if(_sigNotified){
 		_sigNotified=false;
-		(_notifConstr->*_notifFunc)(true);
-		_eqResult = !_eqResult;
+		bool aNewEqResult = _eqFunc(_var);
+		(_notifConstr->*_notifFunc)(_eqResult != aNewEqResult);
+		_eqResult = aNewEqResult;
 	}else{
 		(_notifConstr->*_notifFunc)(false);
 	}
 }
 
 void TEPEEquationListener::simulationStarted(){
-	(_notifConstr->*_notifFunc)(false);
+	//(_notifConstr->*_notifFunc)(false);
+	bool aNewEqResult =  _eqFunc(_var);
+	(_notifConstr->*_notifFunc)(_eqResult !=aNewEqResult);
+	_eqResult = aNewEqResult;
 }
 
 void TEPEEquationListener::simulationStopped(){
 	(_notifConstr->*_notifFunc)(false);
 }
-	
+
+
+//***********************************************************************
+TEPESettingListener::TEPESettingListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, SettingFuncPointer iSetFunc, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator): _subjectIDs(iSubjectIDs), _nbOfSubjectIDs(iNbOfSubjectIDs), _var(iVar), _setFunc(iSetFunc), _nbOfSignals(inbOfSignals), _setResult( _setFunc(_var)), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _sigNotified(false), _simComp(iSimComp), _simulator(iSimulator){
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		//std::cerr << "next id: " << _subjectIDs[i] << "\n";
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->registerListener(this);
+	}
+	_simulator->registerListener(this);
+}
+
+TEPESettingListener::~TEPESettingListener(){
+	std::cerr << "Delete Setting\n";
+	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){
+		ListenerSubject <GeneralListener>*  aSubject = _simComp->getListenerByID(_subjectIDs[i]);
+		if (aSubject!=0) aSubject->removeListener(this);
+	}
+	_simulator->removeListener(this);
+	delete [] _subjectIDs;
+	delete [] _var;
+	delete [] _notifConstr;
+	delete [] _notifFunc;
+	std::cerr << "End Delete Setting\n";
+}
+
+void TEPESettingListener::commandFinished(TMLCommand* iComm, ID iID){
+	/*if (_eqResult != _eqFunc(_var)){
+		_eqResult = !_eqResult;
+		(_notifConstr->*_notifFunc)(true);
+		_sigNotified=true;
+	}*/
+	//if several alternations of variables at the same time only last one is taken into account
+	_sigNotified=true;
+	//std::cout << "Check setting result: " << _setNewResult << "\n";
+}
+
+void TEPESettingListener::timeAdvances(TMLTime iCurrTime){
+	bool aSigNotification;
+	if (_sigNotified){
+		ParamType aNewSetResult = _setFunc(_var);
+		_sigNotified=false;
+		aSigNotification = (_setResult != aNewSetResult);
+		_setResult = aNewSetResult;
+	}else{
+		aSigNotification=false;
+	}
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(aSigNotification);
+}
+
+void TEPESettingListener::simulationStarted(){
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(false);
+}
+
+void TEPESettingListener::simulationStopped(){
+	for (unsigned int i=0; i<_nbOfSignals; i++)
+		(_notifConstr[i]->*_notifFunc[i])(false);
+}
+  
+
 //************************************************************************
 /*TestListener::TestListener(SimComponents* iSimComp):_simComp(iSimComp){
 }
