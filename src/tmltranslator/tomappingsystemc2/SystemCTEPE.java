@@ -90,6 +90,7 @@ public class SystemCTEPE {
 			else
 				_code+= "array(" + _nbOfFloatingSig + _floatingSigComp + "),array(" + _nbOfFloatingSig + _floatingSigProc + ")";
 			_code += "," + _nbOfStartNodes + ",array(" + _nbOfStartNodes + _floatingEnaComp + "))" + SCCR;
+			_code += "setTEPEEntryPoint(flListener);\n";
 			//_code += "SignalConstraint* opMapping[] = {0" + _floatingSigComp + "}"+SCCR;
 			//_code += "NtfSigFuncPointer fnMapping[] = {0" + _floatingSigProc + "}" + SCCR;
 			//_code += "PropertyConstraint* startNodes[] ={0" + _floatingEnaComp + "}" + SCCR;
@@ -118,8 +119,37 @@ public class SystemCTEPE {
 		return "_" + Conversion.replaceAllChar(currComp.getName(),' ',"") + currComp.getID();
 	}
 	
+	private String[] getExprIDTskvarStrings(TEPEComponent currComp, String initExpr){
+		String[] resultStr = new String[3];
+		for(int i=0; i<3; i++)
+			resultStr[i]="";
+		LinkedList<String> addTokenList = new LinkedList<String>();
+		ArrayList<String> addTskVarList = new ArrayList<String>();
+		HashSet<Integer> addCmdIDList = new HashSet<Integer>();
+		parseExprToTokenList(initExpr, addTokenList);
+		if (currComp instanceof TEPEAttributeComponent){
+			generateTEPEProp(currComp, addTokenList, addTskVarList, addCmdIDList);
+		}else{
+			for(TEPEComponent linkedComps: currComp.getInAttributes()){
+				generateTEPEProp(linkedComps, addTokenList, addTskVarList, addCmdIDList);
+			}
+		}
+		for(String anAddString: addTokenList){
+			resultStr[0] += anAddString;
+		}
+		resultStr[1] += "array(" + addCmdIDList.size();
+		for(Integer id: addCmdIDList){
+			resultStr[1]+= ",(ID)" + id.toString();
+		}
+		resultStr[1] += ")," + addCmdIDList.size() ;
+		resultStr[2] += "array(" + addTskVarList.size();
+		for(String anAddTskVar: addTskVarList)
+			resultStr[2] += "," + anAddTskVar;
+		resultStr[2] += ")";
+		return resultStr;
+	}
 	
-	private String connectOutSignals(TEPEComponent currComp, int maxNoOfSig, int maxNoOfNegSig){
+	private String connectOutSignals(TEPEComponent currComp, int maxNoOfInSig, int maxNoOfNegInSig){
 		String connect="";
 		if (currComp.hasOutSignalComponents()){	
 			for(TEPEComponent outCmp: currComp.getOutSignals()){
@@ -129,16 +159,18 @@ public class SystemCTEPE {
 			}
 		}else
 			System.out.println(getTEPECompName(currComp) + " has no out signal components");
+			
+		//connect floating in Signal Components
 		int noOfSig= (currComp.hasInSignalComponents())? currComp.getInSignals().size():0;
 		System.out.println(getTEPECompName(currComp) + " Number of sig: " + noOfSig);
-		for(int i=noOfSig+1; i<=maxNoOfSig; i++){
+		for(int i=noOfSig+1; i<=maxNoOfInSig; i++){
 			_floatingSigProc += ",&SignalConstraint::notifyS" + i;
 			_floatingSigComp += ",(SignalConstraint*)" + getTEPECompName(currComp);
 			_nbOfFloatingSig++;
 		}
 		noOfSig= (currComp.hasInNegatedSignalComponents())? currComp.getInNegatedSignals().size():0;
 		System.out.println(getTEPECompName(currComp) + " Number of neg sig: " + noOfSig);
-		for(int i=noOfSig; i<maxNoOfNegSig; i++){
+		for(int i=noOfSig; i<maxNoOfNegInSig; i++){
 			_floatingSigProc += ",&SignalConstraint::notifySf";
 			_floatingSigComp += ",(SignalConstraint*)" + getTEPECompName(currComp);
 			_nbOfFloatingSig++;
@@ -148,10 +180,13 @@ public class SystemCTEPE {
 	
 	private String connectOutProperties(TEPEComponent currComp){
 		String connect="";
-		if (currComp.hasInPropertyComponents()){	
+		if (currComp.hasInPropertyComponents()){
+			connect += getTEPECompName(currComp) + "->connectEnaOut(array(" + currComp.getInProperties().size();
 			for(TEPEComponent outCmp: currComp.getInProperties()){
-				connect += getTEPECompName(currComp) + "->connectEnaOut(array(1,(PropertyConstraint*)" + getTEPECompName(outCmp) + "),1)" + SCCR;
+				//connect += getTEPECompName(currComp) + "->connectEnaOut(array(1,(PropertyConstraint*)" + getTEPECompName(outCmp) + "),1)" + SCCR;
+				connect += ",(PropertyConstraint*)" + getTEPECompName(outCmp);
 			}
+			connect += ")," + currComp.getInProperties().size() + ")" + SCCR;
 		}else
 			System.out.println(getTEPECompName(currComp) + " has no out properties.\n");
 		if (!currComp.hasOutPropertyComponents()){
@@ -176,7 +211,6 @@ public class SystemCTEPE {
 	}
 	
 	private void replaceTokenInList(LinkedList<String> iList, String iReplace, String iAdd){
-		//for(TEPEComponent outCmp: currComp.getInProperties()){
 		iReplace = iReplace.trim();
 		ListIterator itr = iList.listIterator();
 		LinkedList<String> addTokenList= new LinkedList<String>();
@@ -201,13 +235,39 @@ public class SystemCTEPE {
 		}while(itr.hasNext());
 	}
 	
+	private String getSignalsForListener(TEPEComponent currComp){
+		String result= currComp.getOutSignals().size() + ",array(" + currComp.getOutSignals().size();
+		String aDstFuncs="";
+		for (TEPEComponent aDstCmp: currComp.getOutSignals()){
+			int index = aDstCmp.getInSignals().indexOf(currComp);
+			String suffix = (index==-1)? "f": ""+(index+1);
+			result += ",(SignalConstraint*)" + getTEPECompName(aDstCmp);
+			aDstFuncs += ",(NtfSigFuncPointer)&SignalConstraint::notifyS" + suffix;
+		}
+		result += "),array(" + currComp.getOutSignals().size() + aDstFuncs + ")";
+		return result;
+	}
+	
 	private void generateTEPEProp(TEPEComponent currComp, LinkedList<String> iTokenList, ArrayList<String> iTskVarList, HashSet<Integer> iCmdIDList){
-		//labc.connectEnaOut(array(1, (PropertyConstraint*)&seqc1),1);
-		//void connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc){
+		
+		if (!(currComp instanceof TEPEPropertyComponent || currComp.hasOutAttributeComponents() || currComp.hasOutSignalComponents() || currComp.hasOutPropertyComponents())) return;
+		
 		String cmpName =  getTEPECompName(currComp);
 		
 		if(currComp instanceof TEPEAttributeComponent){
-			if (iTokenList!=null){
+			if (iTokenList==null){
+				if (currComp.hasOutSignalComponents()){
+					String[] decomp = getExprIDTskvarStrings(currComp, currComp.getValue());
+					_eqFuncDecl+= "ParamType " + cmpName + "_func(ParamType** iVar);\n";
+					_eqFuncs += "ParamType " + cmpName + "_func(ParamType** iVar){\n return " + decomp[0];
+					_eqFuncs += ";\n}\n\n";
+					_listeners+= "TEPESettingListener* " + cmpName + "_listener = new TEPESettingListener(" + decomp[1] + "," + decomp[2];
+					_listeners+= ",&" + cmpName + "_func" + "," + getSignalsForListener(currComp);
+					_listeners+= ",this,_simulator)" + SCCR;
+					_listeners+= "addTEPEListener((GeneralListener*)" + cmpName + "_listener);\n";
+				}
+				
+			}else{
 				//replaceTokenInList(iTokenList, currComp.getValue(), ((TEPEAttributeComponent)currComp).getBlockName() + "x" + currComp.getValue());
 				replaceTokenInList(iTokenList, currComp.getValue(), "*iVar[" + iTskVarList.size() + "]");
 				//iTskVarList.add( "&task__" + ((TEPEAttributeComponent)currComp).getBlockName() + "->" + currComp.getValue());
@@ -228,36 +288,36 @@ public class SystemCTEPE {
 			_connect += connectOutSignals(currComp,2,0);
 		
 		}else if (currComp instanceof TEPEEquationComponent){
-			//EqConstraint(PropType iType, bool iIncludeBounds)
-			//TEPEEquationListener::TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator)
-			LinkedList<String> addTokenList = new LinkedList<String>();
+			/*LinkedList<String> addTokenList = new LinkedList<String>();
 			ArrayList<String> addTskVarList = new ArrayList<String>();
 			HashSet<Integer> addCmdIDList = new HashSet<Integer>();
 			parseExprToTokenList(currComp.getValue(), addTokenList);
 			for(TEPEComponent linkedComps: currComp.getInAttributes()){
 				System.out.println("%%%%%%%%%%% in Attribute");
 				generateTEPEProp(linkedComps, addTokenList, addTskVarList, addCmdIDList);
-			}
+			}*/
+			String[] decomp = getExprIDTskvarStrings(currComp, currComp.getValue());
 			_declare+= "EqConstraint* " + cmpName + " = new EqConstraint(" + currComp.getID() + ",GENERAL,true)" + SCCR;
-			_declare += "addTEPEConstraint(" + cmpName + ");\n";
-			System.out.print(cmpName + "transformed to: ");
+			//System.out.print(cmpName + "transformed to: ");
 			_eqFuncDecl+= "bool " + cmpName + "_func(ParamType** iVar);\n";
-			_eqFuncs += "bool " + cmpName + "_func(ParamType** iVar){\n return ";
-			for(String anAddString: addTokenList){
+			_eqFuncs += "bool " + cmpName + "_func(ParamType** iVar){\n return " + decomp[0];
+			/*for(String anAddString: addTokenList){
 				System.out.print(anAddString);
 				_eqFuncs += anAddString;
 			}
-			System.out.println();
+			System.out.println();*/
 			_eqFuncs += ";\n}\n\n";
-			_listeners+= "TEPEEquationListener* " + cmpName + "_listener = new TEPEEquationListener(" + "array(" + addCmdIDList.size();
+			_listeners+= "TEPEEquationListener* " + cmpName + "_listener = new TEPEEquationListener(" + decomp[1] + "," + decomp[2];
+			/*"array(" + addCmdIDList.size();
 			for(Integer id: addCmdIDList){
 				_listeners+= ",(ID)" + id.toString();
-			}
-			_listeners+= ")," + addCmdIDList.size() + "," + "array(" + addTskVarList.size();
+			} _listeners+= ")," + addCmdIDList.size() + "," + "array(" + addTskVarList.size();
 			for(String anAddTskVar: addTskVarList)
-				_listeners+= "," + anAddTskVar;
-			_listeners+= "),&" + cmpName + "_func" + "," + cmpName + ",&SignalConstraint::notifyS1,this, _simulator)" + SCCR;
+				_listeners+= "," + anAddTskVar;*/
+			_listeners+= ",&" + cmpName + "_func" + "," + cmpName + ",&SignalConstraint::notifyS1,this, _simulator)" + SCCR;
+			_connect += connectOutSignals(currComp,0,0);
 			_connect += connectOutProperties(currComp);
+			_listeners+= "addTEPEListener((GeneralListener*)" + cmpName + "_listener);\n";
 		
 		}else if (currComp instanceof TEPELogicalConstraintComponent){
 			//LogConstraint(PropType iType, bool iIncludeBounds)
@@ -267,7 +327,7 @@ public class SystemCTEPE {
 			}else{
 				_declare += "LogConstraint* " + cmpName + " = new LogConstraint("+ currComp.getID() + ",GENERAL,true)" + SCCR;
 			}
-			_declare += "addTEPEConstraint(" + cmpName + ");\n";
+			//_declare += "addTEPEConstraint(" + cmpName + ");\n";
 			_connect += connectOutSignals(currComp,2,1);
 			_connect += connectOutProperties(currComp);
 		
@@ -285,7 +345,7 @@ public class SystemCTEPE {
 				_declare += "NREACHABILITY";
 			}
 			_declare += ")" + SCCR;
-			_declare += "addTEPEConstraint(" + cmpName + ");\n";
+			//_declare += "addTEPEConstraint(" + cmpName + ");\n";
 			_connect += connectOutProperties(currComp);
 		
 		}else if (currComp instanceof TEPEPropertyOperatorComponent){
@@ -299,21 +359,33 @@ public class SystemCTEPE {
 			}
 			_declare += ")" + SCCR;
 			//_connect += connectOutSignals(currComp);
-			_declare += "addTEPEConstraint(" + cmpName + ");\n";
+			//_declare += "addTEPEConstraint(" + cmpName + ");\n";
 			_connect += connectOutProperties(currComp);
 		
 		}else if (currComp instanceof TEPESettingComponent){
 			//Variable Setting
-			if (iTokenList!=null){
+			//TEPESettingListener::TEPESettingListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, SettingFuncPointer iSetFunc, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
+			if (iTokenList==null){
+				if (currComp.hasOutSignalComponents()){
+					String[] decomp = getExprIDTskvarStrings(currComp, currComp.getValue().split("=",2)[1]);
+					_eqFuncDecl+= "ParamType " + cmpName + "_func(ParamType** iVar);\n";
+					_eqFuncs += "ParamType " + cmpName + "_func(ParamType** iVar){\n return " + decomp[0];
+					_eqFuncs += ";\n}\n\n";
+					_listeners+= "TEPESettingListener* " + cmpName + "_listener = new TEPESettingListener(" + decomp[1] + "," + decomp[2];
+					_listeners+= ",&" + cmpName + "_func" + "," + getSignalsForListener(currComp);
+					_listeners+= ",this,_simulator)" + SCCR;
+					_listeners+= "addTEPEListener((GeneralListener*)" + cmpName + "_listener);\n";
+				}
+			}else{
 				String[] lhsrhs = currComp.getValue().split("=",2);
-				System.out.println("Replace " + lhsrhs[0] + " by " + lhsrhs[1] + " before: ");
+				//System.out.println("Replace " + lhsrhs[0] + " by " + lhsrhs[1] + " before: ");
 				for(String aToken: iTokenList)
 					System.out.print(aToken + ", ");
-				System.out.println("\nafter:");
+				//System.out.println("\nafter:");
 				replaceTokenInList(iTokenList, lhsrhs[0], lhsrhs[1]);
-				for(String aToken: iTokenList)
+				/*for(String aToken: iTokenList)
 					System.out.print(aToken + ", ");
-				System.out.println("");
+				System.out.println("");*/
 				for(TEPEComponent linkedComps: currComp.getInAttributes())
 					generateTEPEProp(linkedComps, iTokenList, iTskVarList, iCmdIDList);
 			}
@@ -332,7 +404,7 @@ public class SystemCTEPE {
 				String[] aTransTypes = aTokens[2].split("_");
 				String[] aEvtDescriptor = {"SIMSTART", "SIMEND", "TIMEADV", "TASKSTART", "TASKEND", "CMDRUNNABLE", "CMDSTART", "CMDEND", "TRANSEXEC"};
 				String[] aTransDescriptor = {"NONE", "EXE", "RD", "WR", "SEL", "SND", "REQ", "WAIT", "NOTIF", "ACT", "CHO", "RND", "STP"};
-				_listeners+= "TEPESigListener* " + cmpName + "= new TEPESigListener(array(" + (aSrcIDs.length-1);
+				_listeners+= "TEPESigListener* " + cmpName + "_listener= new TEPESigListener(array(" + (aSrcIDs.length-1);
 				for(int i=1; i<aSrcIDs.length; i++)
 					_listeners+= ",(ID)" + aSrcIDs[i];
 				_listeners+= ")," + (aSrcIDs.length-1) + ",";
@@ -348,12 +420,8 @@ public class SystemCTEPE {
 					}
 				}
 				
-				_listeners+= aEvtCode + "," + aTransCode + ",";
-				_listeners+= currComp.getOutSignals().size() + ",array(" + currComp.getOutSignals().size();
-				/*int index = currComp.getOutSignals().get(0).getInSignals().indexOf(currComp);
-				String suffix = (index==-1)? "f": ""+(index+1);
-				_listeners += getTEPECompName(currComp.getOutSignals().get(0)) + ",";
-				_listeners += "&SignalConstraint::notifyS" + suffix + ",this, _simulator)" + SCCR;*/
+				_listeners+= aEvtCode + "," + aTransCode + "," + getSignalsForListener(currComp);
+				/*_listeners+= currComp.getOutSignals().size() + ",array(" + currComp.getOutSignals().size();
 				String aDstFuncs="";
 				for (TEPEComponent aDstCmp: currComp.getOutSignals()){
 					int index = aDstCmp.getInSignals().indexOf(currComp);
@@ -361,7 +429,9 @@ public class SystemCTEPE {
 					_listeners += ",(SignalConstraint*)" + getTEPECompName(aDstCmp);
 					aDstFuncs += ",(NtfSigFuncPointer)&SignalConstraint::notifyS" + suffix;
 				}
-				_listeners += "),array(" + currComp.getOutSignals().size() + aDstFuncs + "),this, _simulator)" + SCCR;
+				_listeners += "),array(" + currComp.getOutSignals().size() + aDstFuncs + ")*/
+				_listeners += ",this, _simulator)" + SCCR;
+				_listeners+= "addTEPEListener((GeneralListener*)" + cmpName + "_listener);\n";
 			}
 			
 		}else if (currComp instanceof TEPETimeConstraintComponent){
@@ -369,13 +439,14 @@ public class SystemCTEPE {
 			//TimeTConstraint(TMLTime iT, bool iRetrigger, bool iIncludeBounds)
 			TEPETimeConstraintComponent timeConstr = (TEPETimeConstraintComponent)currComp;
 			if (currComp.getInSignals().size()>1){
-				_declare += "TimeMMConstraint* " + cmpName +  " = new TimeMMConstraint("+ currComp.getID() + ",GENERAL, " + timeConstr.getMinTime() + "," + timeConstr.getMaxTime() + ",false,true)"  + SCCR;
+				String[] minMaxValues = timeConstr.getValue().split(",",2);
+				_declare += "TimeMMConstraint* " + cmpName +  " = new TimeMMConstraint("+ currComp.getID() + ",GENERAL, " + minMaxValues[0] + "," + minMaxValues[1] + ",false,true)"  + SCCR;
 				_connect += connectOutSignals(currComp,2,0);
 			}else{
-				_declare += "TimeTConstraint* " + cmpName + " =  new TimeTConstraint(" + currComp.getID() + "," + timeConstr.getMinTime() + ",false,true)"  + SCCR;
+				_declare += "TimeTConstraint* " + cmpName + " =  new TimeTConstraint(" + currComp.getID() + "," + timeConstr.getValue() + ",false,true)"  + SCCR;
 				_connect += connectOutSignals(currComp,1,0);
 			}
-			_declare += "addTEPEConstraint(" + cmpName + ");\n";
+			//_declare += "addTEPEConstraint(" + cmpName + ");\n";
 			_connect += connectOutProperties(currComp);
 		}
 	}
