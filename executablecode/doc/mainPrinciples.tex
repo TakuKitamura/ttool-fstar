@@ -32,7 +32,9 @@ struct setOfRequest {
 struct request {
   int type;
   setOfRequest* listOfRequests;
+  int hasDelay;
   long delay;
+  int delayElapsed;
   int [] params;
   int nbOfParams;
 }
