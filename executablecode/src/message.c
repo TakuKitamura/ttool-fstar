@@ -20,6 +20,6 @@ message *getNewMessage(int nbOfParams, int *params[]) {
   return msg;
 }
 
-void *destroyMessage(message *msg) {
+void destroyMessage(message *msg) {
   free(msg);
 }

@@ -20,7 +20,7 @@ OBJDIR = lib
 MODULE = run
 SRCS_generated_DIR = generated_src/
 include Makefile.src
-SRCS_base = src/request.c src/message.c src/myerrors.c src/debug.c src/syncchannel.c src/asyncchannel.c
+SRCS_base = src/request.c src/message.c src/myerrors.c src/debug.c src/syncchannel.c src/asyncchannel.c src/request_manager.c
 SRCS_base_DIR = .
 SRCS_base_DIRSRC = src/ 
 OBJS_executor = $(SRCS_base:%.c=lib/%.o)

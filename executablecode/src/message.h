@@ -18,6 +18,6 @@ struct message {
 typedef struct message message;
 
 message * getNewMessage(int nbOfParams, int *params[]);
-void *destroyMessage(message *msg);
+void destroyMessage(message *msg);
 
 #endif

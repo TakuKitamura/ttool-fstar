@@ -447,6 +447,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList1.setEnabled(false);  
 			typeList2.setEnabled(false);
 			typeList3.setEnabled(false);
+			typeList4.setEnabled(false);
+			typeList5.setEnabled(false);
 			blocking.setEnabled(true);
 			finite.setEnabled(false);
 			widthText.setEnabled(true);
@@ -458,6 +460,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList1.setEnabled(true);  
 			typeList2.setEnabled(true);
 			typeList3.setEnabled(true);
+			typeList4.setEnabled(true);  
+			typeList5.setEnabled(true);
 			
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setEnabled(true);
@@ -480,6 +484,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			typeList1.setEnabled(true);  
 			typeList2.setEnabled(true);
 			typeList3.setEnabled(true);
+			typeList4.setEnabled(true);  
+			typeList5.setEnabled(true);
 			blocking.setEnabled(false);
 			if (origin.getSelectedIndex() == 0) {
 				blocking.setSelectedIndex(1);

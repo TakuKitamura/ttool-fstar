@@ -9,6 +9,9 @@
 
 
 syncchannel * syncchannels[1];
+pthread_mutex_t syncmutex[1];
+pthread_cond_t sendConditions[1];
+pthread_cond_t receiveConditions[1];
 
 
 void *send(void *arg) {
@@ -20,6 +23,12 @@ void *send(void *arg) {
   int index;
 
   int *p[2];
+
+  request* req;
+
+  p[0] = &x;
+  p[1] = &y;
+  req = makeNewSendSync(0, 0, 2, p);
 
   return NULL;
 }
@@ -65,7 +74,7 @@ void *receive(void *arg) {
 
 int main(int argc, char * argv[]) {
 
-  syncchannels[0] = getNewSyncchannel("outch", "inch");
+  syncchannels[0] = getNewSyncchannel("outch", "inch", &(syncmutex[0]), &(sendConditions[0]), &(receiveConditions[0]));
 
   pthread_t sender;
   pthread_t receiver0, receiver1;
