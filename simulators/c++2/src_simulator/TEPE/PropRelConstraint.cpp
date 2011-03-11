@@ -68,13 +68,13 @@ void PropRelConstraint::notifyEnable(unsigned int iSigState){
 	for (unsigned int i=0;i <_noAboveConstr; i++) _aboveConstr[i]->notifyEnable(iSigState);
 }
 
-std::ostream& PropRelConstraint::writeObject(std::ostream& s){
-	return s;
-}
+//std::ostream& PropRelConstraint::writeObject(std::ostream& s){
+//	return s;
+//}
 
-std::istream& PropRelConstraint::readObject(std::istream& s){
-	return s;
-}
+//std::istream& PropRelConstraint::readObject(std::istream& s){
+//	return s;
+//}
 
 void PropRelConstraint::reset(){
 }

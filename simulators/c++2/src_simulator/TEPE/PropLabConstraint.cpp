@@ -72,6 +72,7 @@ void PropLabConstraint::notifyEnable(unsigned int iSigState){
 std::ostream& PropLabConstraint::writeObject(std::ostream& s){
 	//unsigned char aTmp = (_property)?1:0;
 	//WRITE_STREAM(s, aTmp);
+	std::cout << "PropLabConstraint::writeObject";
 	_aboveConstr[0]->writeObject(s);
 	return s;
 }
@@ -80,6 +81,7 @@ std::istream& PropLabConstraint::readObject(std::istream& s){
 	//unsigned char aTmp;
 	//READ_STREAM(s, aTmp);
 	//_property = (aTmp ==1);
+	std::cout << "PropLabConstraint::readObject";
 	_aboveConstr[0]->readObject(s);
 	return s;
 }

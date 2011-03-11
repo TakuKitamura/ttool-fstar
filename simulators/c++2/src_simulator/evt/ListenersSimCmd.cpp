@@ -469,17 +469,24 @@ void TEPEFloatingSigListener::simulationStopped(){
 	for (unsigned int i=0; i<_nbOfStartNodes; i++){
 		_startNodes[i]->notifyEnable(1);
 	}
+	//for (unsigned int i=0; i<_nbOfStartNodes; i++)
+	//	std::cout << "Eval Prop " << i << ": " << _startNodes[i]->evalProp() << "\n";
+}
+
+void TEPEFloatingSigListener::evaluate(){
 	for (unsigned int i=0; i<_nbOfStartNodes; i++)
 		std::cout << "Eval Prop " << i << ": " << _startNodes[i]->evalProp() << "\n";
 }
 
 std::ostream& TEPEFloatingSigListener::writeObject(std::ostream& s){
+	std::cout << "TEPEFloatingSigListener::writeObject\n";
 	for (unsigned int i=0; i<_nbOfStartNodes; i++){
 		_startNodes[i]->writeObject(s);
 	}
 }
 
 std::istream& TEPEFloatingSigListener::readObject(std::istream& s){
+	std::cout << "TEPEFloatingSigListener::readObject\n";
 	for (unsigned int i=0; i<_nbOfStartNodes; i++){
 		_startNodes[i]->readObject(s);
 	}

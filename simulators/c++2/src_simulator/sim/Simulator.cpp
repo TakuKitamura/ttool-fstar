@@ -508,7 +508,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	}
 #ifdef LISTENERS_ENABLED
 	bool aSimCompleted = (transLET==0 && !_simComp->getStoppedOnAction());
-	if (aSimCompleted) NOTIFY_SIM_STOPPED();
+	if (aSimCompleted){
+		NOTIFY_SIM_STOPPED();
+		NOTIFY_EVALUATE();
+	}
 #endif
 	gettimeofday(&aEnd,NULL);
 	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";

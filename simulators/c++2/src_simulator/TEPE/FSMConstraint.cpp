@@ -84,7 +84,7 @@ void FSMConstraint::evalInput(){
 		}
 		_constrEnabled |= (_enabledNotified==TRUE);
 		if (_disabledNotified==TRUE){
-			std::cout << "DISABLE=============================\n";
+			std::cout << "DISABLE============================= " << _state << "\n";
 			//aEnableFlag |=1;
 			if (_state!=0) aEnableFlag |=1;
 			//if (_state!=0) reportPropOccurrence(false);

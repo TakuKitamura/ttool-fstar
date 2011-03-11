@@ -364,6 +364,7 @@ public:
 	void timeAdvances(TMLTime iCurrTime);
 	void simulationStarted();
 	void simulationStopped();
+	void evaluate();
 	std::ostream& writeObject(std::ostream& s);
 	std::istream& readObject(std::istream& s);
 	void reset();

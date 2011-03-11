@@ -64,6 +64,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);} listenersUnLock();}
 #define NOTIFY_READ_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);} listenersUnLock();}
+#define NOTIFY_EVALUATE() {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->evaluate();} listenersUnLock();}
 
 ///Encapsulates events associated with transactions
 class GeneralListener{
@@ -140,6 +141,7 @@ public:
 	*/
 	//virtual void writeTrans(TMLTransaction* iTrans, ID iID){}
 	
+	virtual void evaluate(){}
 	///Destructor
 	virtual ~GeneralListener(){}
 protected:

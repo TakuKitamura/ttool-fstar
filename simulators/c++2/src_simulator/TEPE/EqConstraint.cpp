@@ -80,6 +80,7 @@ void EqConstraint::evalInput(){
 		
 		bool aRelevantEqResult=_eqResult;
 		if (_s1Notified==TRUE){		//sigout and enable/disable notifications for connected operators
+			//_eqResult = ! _eqResult;
 			if (_eqResult){
 				_eqResult=false;
 				notifyRightConstraints(false);

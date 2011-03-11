@@ -83,6 +83,7 @@ void PropertyStateConstraint::reset(){
 
 void PropertyStateConstraint::forceDisable(){
 	_constrEnabled=false;
+	std::cout << "Force disable was called\n";
 	if (_aboveConstr!=0) _aboveConstr[0]->forceDisable();
 
 }
