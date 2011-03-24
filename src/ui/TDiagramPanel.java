@@ -70,6 +70,7 @@ import ui.atd.*;
 // AVATAR
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
+import ui.avatarrd.*;
 
 // Added by Solange
 import ui.procsd.*;
@@ -2639,6 +2640,70 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return name;
     }
+	
+	public String findAvatarRequirementName(String name, int start) {
+        boolean ok;
+        int i;
+        int index = start;
+        AvatarRDRequirement areq;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof AvatarRDRequirement) {
+                   areq = (AvatarRDRequirement)o;
+                    if (areq.getValue().equals(name + index)) {
+                        ok = false;
+                    }
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+	
+	public String findAvatarRequirementID(String id) {
+        boolean ok;
+        int i;
+        int index = 0;
+        AvatarRDRequirement areq;
+        Object o;
+        Iterator iterator;
+		try {
+			int intid = Integer.decode(id).intValue();
+			int otherid;
+			
+			while(index >= 0) {
+				ok = true;
+				iterator = componentList.listIterator();
+				while(iterator.hasNext()) {
+					o = (TGComponent)(iterator.next());
+					if (o instanceof AvatarRDRequirement) {
+					   areq = (AvatarRDRequirement)o;
+					   otherid = Integer.decode(areq.getID()).intValue();
+						if (intid == otherid) {
+							ok = false;
+						}
+					}
+				}
+				if (ok) {
+					return "" + intid;
+				}
+				intid ++;
+			}
+			} catch (Exception e) {
+			}
+        return id;
+    }
+	
+	
     
     public String findTObjectName(String name) {
         boolean ok;

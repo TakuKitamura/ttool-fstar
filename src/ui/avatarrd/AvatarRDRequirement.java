@@ -169,7 +169,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         
         // Name of the requirement
         name = "Requirement";
-        value = tdp.findRequirementName("Requirement_");
+		id  = tdp.findAvatarRequirementID(id);
+		try {
+			value = tdp.findAvatarRequirementName("Requirement_", Integer.decode(id).intValue());
+		} catch (Exception e) {
+			value = tdp.findAvatarRequirementName("Requirement_", 0);
+		}
         oldValue = value;
         
         myImageIcon = IconManager.imgic5100;
