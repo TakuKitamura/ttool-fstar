@@ -191,7 +191,7 @@ public class AvatarSMDPanel extends TDiagramPanel {
 	}
 	
 	public boolean hasAutoConnect() {
-		return false;
+		return true;
 	}
     
 }
