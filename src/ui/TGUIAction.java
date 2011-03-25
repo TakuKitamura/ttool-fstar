@@ -555,10 +555,10 @@ public class TGUIAction extends AbstractAction {
         
         actions[ACT_MODEL_CHECKING] = new TAction("checking-command", "Syntax analysis", IconManager.imgic36, IconManager.imgic37, "Syntax analysis",  "Checks that all diagrams follows the TURTLE's syntax", KeyEvent.VK_F5);
         actions[ACT_GEN_RTLOTOS] = new TAction("gen_rtlotos-command", "Generate RT-LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate RT-LOTOS specification",  "Generates a RT-LOTOS specification from TURTLE diagrams", KeyEvent.VK_F6);
-        actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate LOTOS specification",  "Generates a LOTOS specification from TURTLE diagrams", '0');
+        actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TURTLE diagrams", '0');
         actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "Generate LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate LOTOS-based RG ",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');
         actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
-        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic34, IconManager.imgic35, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
+        actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic92, IconManager.imgic92, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
         actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
 		actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
         actions[ACT_SIMU_JAVA] = new TAction("gen_simujava-command", "Java-based simulation", IconManager.imgic38, IconManager.imgic39, "JAVA-based simualtion",  "Simulate diagrams using Java language", 0);

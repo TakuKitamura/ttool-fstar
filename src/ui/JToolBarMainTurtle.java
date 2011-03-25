@@ -50,6 +50,8 @@ import javax.swing.*;
 //import java.awt.*;
 //import java.awt.event.*;
 
+import myutil.*;
+
 /**
 * Class	*
 * @author Ludovic APVRILLE
@@ -249,6 +251,9 @@ public	class JToolBarMainTurtle extends JToolBar	{
     }
 	
 	public void showAvatarActions(boolean b) {
+		
+		TraceManager.addDev("Show avatar options with b = " + b);
+		
 		 avatarSimu.setVisible(b);
 		 avatarFVUPPAAL.setVisible(b);
 		 if (avatarFVProVerif != null) {
@@ -309,6 +314,74 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		 
 		 if (gendesign != null) {
 			 gendesign.setVisible(!b);
+		 }
+		 
+	}
+	
+	public void showDiplodocusActions(boolean b) {
+		
+		TraceManager.addDev("Show diplodocus options with b = " + b);
+		
+		 avatarSimu.setVisible(!b);
+		 avatarFVUPPAAL.setVisible(!b);
+		 if (avatarFVProVerif != null) {
+			 avatarFVProVerif.setVisible(!b);
+		 }
+		 
+		 if (genrtlotos != null) {
+			 genrtlotos.setVisible(!b);
+		 }
+		 
+		 if (genlotos != null) {
+			 genlotos.setVisible(b);
+		 }
+		 
+		 if (genuppaal != null) {
+			 genuppaal.setVisible(b);
+		 }
+		 
+		 if (checkcode != null) {
+			 checkcode.setVisible(!b);
+		 }
+		 
+		 if (simulation != null) {
+			 simulation.setVisible(!b);
+		 }
+		 
+		 if (validation != null) {
+			 validation.setVisible(b);
+		 }
+		 
+		 if (oneClickrtlotos != null) {
+			 oneClickrtlotos.setVisible(!b);
+		 }
+		 
+		 if (onclicklotos != null) {
+			 onclicklotos.setVisible(b);
+		 }        
+		 
+		 if (gensystemc != null) {
+			 gensystemc.setVisible(b);
+		 }
+		 
+		 if (simusystemc != null) {
+			 simusystemc.setVisible(b);
+		 }
+		 
+		 if (gentml != null) {
+			 gentml.setVisible(b);
+		 }
+		 
+		 if (genjava != null) {
+			 genjava.setVisible(!b);
+		 }
+		 
+		 if (nc != null) {
+			 nc.setVisible(!b);
+		 }
+		 
+		 if (gendesign != null) {
+			 gendesign.setVisible(b);
 		 }
 		 
 	}

@@ -5270,7 +5270,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			
 			if ((getCurrentTURTLEPanel() instanceof AvatarDesignPanel) || (getCurrentTURTLEPanel() instanceof AvatarRequirementPanel)) {
 				mainBar.showAvatarActions(true);
-			} else {
+			} else if ((getCurrentTURTLEPanel() instanceof TMLDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) || (getCurrentTURTLEPanel() instanceof TMLArchiPanel)){
+				mainBar.showDiplodocusActions(true);
+			}  else {
 				mainBar.showAvatarActions(false);
 			}
             setEditMode();
