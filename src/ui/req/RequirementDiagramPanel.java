@@ -168,8 +168,8 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
         return cpt;
     }
 	
-	public LinkedList<Requirement> getAllRequirements() {
-		LinkedList<Requirement> list = new LinkedList<Requirement>();
+	public LinkedList<TGComponent> getAllRequirements() {
+		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
 		TGComponent tgc;
 		
 		ListIterator iterator = getComponentList().listIterator();
@@ -177,7 +177,7 @@ public class RequirementDiagramPanel extends TDiagramPanel implements TDPWithAtt
 		while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if (tgc instanceof Requirement) {
-				list.add((Requirement)tgc);
+				list.add(tgc);
 			}
 		}
 		

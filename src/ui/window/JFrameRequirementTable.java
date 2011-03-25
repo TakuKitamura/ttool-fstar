@@ -59,6 +59,7 @@ import myutil.*;
 import ui.*;
 import ui.file.*;
 import ui.req.*;
+import ui.avatarrd.*;
 
 import nc.*;
 
@@ -159,8 +160,9 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		int i, j;
 		TDiagramPanel tdp;
 		RequirementDiagramPanel rdp;
-		LinkedList<Requirement> all, list;
-		all = new LinkedList<Requirement>();
+		AvatarRDPanel ardp;
+		LinkedList<TGComponent> all, list;
+		all = new LinkedList<TGComponent>();
 		String title;
 		String maintitle;
 		
@@ -180,6 +182,19 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 					}
 				}
 			}
+			if (tp instanceof AvatarRequirementPanel) {
+				for(j=0; j<tp.panels.size(); j++) {
+					if (tp.panels.elementAt(j) instanceof AvatarRDPanel) {
+						ardp = (AvatarRDPanel)(tp.panels.elementAt(j));
+						list = ardp.getAllRequirements();
+						all.addAll(list);
+						
+						title = maintitle + " / " + tp.tabbedPane.getTitleAt(j);
+						
+						makeJScrollPane(list, mainTabbedPane, title);
+					}
+				}
+			}
 		}
 		
 		makeJScrollPane(all, mainTabbedPane, "All requirements");
@@ -188,10 +203,10 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		
 		pack();
 		
-		System.out.println("Requirements computed");
+		TraceManager.addDev("Requirements computed");
 	}
 	
-	private void makeJScrollPane(LinkedList<Requirement> list, JTabbedPane tab, String title) {
+	private void makeJScrollPane(LinkedList<TGComponent> list, JTabbedPane tab, String title) {
 		RequirementsTableModel rtm = new RequirementsTableModel(list, pts);
 		TableSorter sorterRTM = new TableSorter(rtm);
 		JTable jtableRTM = new JTable(sorterRTM);
@@ -226,7 +241,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	
 	
 	private void generateDoc() {
-		System.out.println("Generate doc");
+		TraceManager.addDev("Generate doc");
 		HTMLCodeGeneratorForTables doc = new HTMLCodeGeneratorForTables();
 		String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
 		//System.out.println("HTML code:" + s); 
@@ -242,11 +257,11 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		try {
 			FileUtils.saveFile(path, s);
 		} catch (FileException fe) {
-			System.out.println("HTML file could not be saved");
+			TraceManager.addDev("HTML file could not be saved");
 			return ;
 		}
 		
-		System.out.println("File generated in " + path);
+		TraceManager.addDev("File generated in " + path);
 		
 	}
 	

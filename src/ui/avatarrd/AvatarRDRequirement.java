@@ -75,7 +75,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 	private int currentFontSize = -1;
 	private boolean displayText = true;
     
-    protected final static String REGULAR_REQ = "<<Requirement>>";
+    protected final static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<Safety Requirement>>", "<<Security Requirement>>"};
+	protected final static int NB_REQ_TYPE = 3;
+	
+	protected final static int REGULAR_REQ = 0;
+	protected final static int SAFETY_REQ = 1;
+	protected final static int SECURITY_REQ = 2;
     
     public final static int HIGH = 0;
     public final static int MEDIUM = 1;
@@ -85,6 +90,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String []texts;
     protected String kind = "";
     protected String criticality = "";
+	 protected int reqType = 0;
     //protected String violatedAction = "";
 	//protected String attackTreeNode = "";
 	protected String id = "";
@@ -92,6 +98,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 	protected boolean satisfied = false;
 	protected boolean verified = false;
 	
+	private JMenuItem isRegular = null;
+    private JMenuItem isSafety = null;
+	private JMenuItem isSecurity = null;
 	private JMenuItem menuNonSatisfied = null;
 	private JMenuItem menuSatisfied = null;
 	private JMenuItem menuNonVerified = null;
@@ -237,7 +246,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 			size = currentFontSize - 2;
 			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
 		
-			drawLimitedString(g, REGULAR_REQ, x, y + size, width, 1);
+			drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
 	
 			size += currentFontSize;
 			g.setFont(myFontB);
@@ -412,17 +421,17 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return value;
     }
     
-    /*public boolean isFormal() {
+    public boolean isSafety() {
         return (reqType == 1);
-    }*/
+    }
     
-    /*public void setRequirementType(int _type) {
+    public void setRequirementType(int _type) {
         reqType = _type;
     }
     
     public int getRequirementType() {
 	    return reqType;
-    }*/
+    }
     
     public boolean isSatisfied() {
 	    return satisfied;
@@ -440,12 +449,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		
 		componentMenu.addSeparator();
 		
+		isRegular = new JMenuItem("Set as regular requirement");
+		isSafety = new JMenuItem("Set as safety requirement");
+		isSecurity = new JMenuItem("Set as security requirement");
 		menuNonSatisfied = new JMenuItem("Set as non satisfied");
 		menuSatisfied = new JMenuItem("Set as satisfied");
 		menuNonVerified = new JMenuItem("Set as non verified");
 		menuVerified = new JMenuItem("Set as verified");
 			
-			
+		
+		isRegular.addActionListener(menuAL);
+		isSafety.addActionListener(menuAL);
+		isSecurity.addActionListener(menuAL);
 		menuNonSatisfied.addActionListener(menuAL);
 		menuSatisfied.addActionListener(menuAL);
 		menuNonVerified.addActionListener(menuAL);
@@ -454,12 +469,20 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		editAttributes = new JMenuItem("Edit attributes");
 		editAttributes.addActionListener(menuAL);
 		
+		isRegular.setEnabled(reqType != REGULAR_REQ);
+		isSafety.setEnabled(reqType != SAFETY_REQ);
+		isSecurity.setEnabled(reqType != SECURITY_REQ);
+
 		menuNonSatisfied.setEnabled(satisfied);
 		menuSatisfied.setEnabled(!satisfied);
 			
 		menuNonVerified.setEnabled(verified);
 		menuVerified.setEnabled(!verified);
 		
+		componentMenu.add(isRegular);
+		componentMenu.add(isSafety);
+		componentMenu.add(isSecurity);
+		componentMenu.addSeparator();
 		componentMenu.add(menuNonSatisfied);
 		componentMenu.add(menuSatisfied);
 		componentMenu.add(menuNonVerified);
@@ -478,6 +501,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 			verified = false;
 		} else if (e.getSource() == menuVerified) {
 			verified = true;
+		} else if (e.getSource() == isRegular) {
+			reqType = REGULAR_REQ;
+		} else if (e.getSource() == isSafety) {
+			reqType = SAFETY_REQ;
+		} else if (e.getSource() == isSecurity) {
+			reqType = SECURITY_REQ;
 		} else {
 			return editAttributes();
 		}
@@ -513,6 +542,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         sb.append("\" />\n");
         sb.append("<criticality data=\"");
         sb.append(criticality);
+        sb.append("\" />\n");
+		sb.append("<reqType data=\"");
+        sb.append(reqType);
         sb.append("\" />\n");
 		sb.append("<id data=\"");
         sb.append(id);
@@ -567,6 +599,22 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 if (criticality.equals("null")) {
                                     criticality = "";
                                 }
+                            } else if (elt.getTagName().equals("reqType")) {
+                                //System.out.println("Analyzing line2");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    reqType = REGULAR_REQ;
+                                } else {
+									try {
+										reqType = Integer.decode(s).intValue();
+									} catch (Exception e) {
+										 reqType = REGULAR_REQ;
+									}
+								}
+								if (reqType > (NB_REQ_TYPE-1)) {
+									reqType = REGULAR_REQ;
+								}
+								
                             } else if (elt.getTagName().equals("id")) {
                                 //System.out.println("Analyzing line3");
                                 id = elt.getAttribute("data");
@@ -662,7 +710,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		
 		// Must find for both modes which width is desirable
 		String s0, s1;
-		s0 = REGULAR_REQ;
+		s0 = REQ_TYPE_STR[reqType];
 		s1 = "Text=";
 		
 		graphics.setFont(f2);

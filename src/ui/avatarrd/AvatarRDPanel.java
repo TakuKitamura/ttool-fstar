@@ -138,18 +138,18 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         }
         
         return cpt;
-    }
+    }*/
 	
-	public LinkedList<Requirement> getAllRequirements() {
-		LinkedList<Requirement> list = new LinkedList<Requirement>();
+	public LinkedList<TGComponent> getAllRequirements() {
+		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
 		TGComponent tgc;
 		
 		ListIterator iterator = getComponentList().listIterator();
 		
 		while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof Requirement) {
-				list.add((Requirement)tgc);
+            if (tgc instanceof AvatarRDRequirement) {
+				list.add(tgc);
 			}
 		}
 		
@@ -157,7 +157,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
 		
 	}
     
-    public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
+    /*public boolean isLinkedByVerifyTo(TGComponent tgc1, TGComponent tgc2) {
         ListIterator iterator = getComponentList().listIterator();
         TGComponent tgc;
         TGConnectingPoint p1, p2;

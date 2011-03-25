@@ -4110,7 +4110,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	}
 	
 	public void generateDocumentationReq() {
-		System.out.println("Frame Req");
+		TraceManager.addDev("Frame Req");
 		JDialogRequirementTable jdrt = new JDialogRequirementTable(frame, "Selecting table columns");
 		GraphicLib.centerOnParent(jdrt);
 		jdrt.setVisible(true); 
@@ -4118,7 +4118,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			Point [] pts = jdrt.getColumnsInfo();
 			if (pts != null) {
 				for(int i=0; i<pts.length; i++) {
-					System.out.println("" + i + ": (" + pts[i].x + ", " + pts[i].y + ")");
+					TraceManager.addDev("" + i + ": (" + pts[i].x + ", " + pts[i].y + ")");
 				}
 				
 				JFrameRequirementTable jfrt = new JFrameRequirementTable("Requirement table", tabs, mainTabbedPane, pts);

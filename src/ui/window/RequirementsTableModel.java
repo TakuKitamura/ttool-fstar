@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class RequirementsTableModel
- * Main data of requirements
- * Creation: 17/02/2009
- * @version 1.0 17/02/2009
- * @author Ludovic APVRILLE
- * @see
- */
+* Class RequirementsTableModel
+* Main data of requirements
+* Creation: 17/02/2009
+* @version 1.0 17/02/2009
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.window;
 
@@ -51,83 +51,138 @@ import java.awt.*;
 import javax.swing.table.*;
 
 import myutil.*;
+import ui.*;
 import ui.req.*;
+import ui.avatarrd.*;
 
 public class RequirementsTableModel extends AbstractTableModel {
-	private LinkedList<Requirement> list;
+	private LinkedList<TGComponent> list;
 	private Point[] pts;
 	
 	//private String [] names;
-	public RequirementsTableModel(LinkedList<Requirement> _list, Point [] _pts) {
+	public RequirementsTableModel(LinkedList<TGComponent> _list, Point [] _pts) {
 		list = _list;
 		pts = _pts;
 		//computeData(_ncs);
 	}
-
+	
 	// From AbstractTableModel
 	public int getRowCount() {
 		return list.size();
 	}
-
+	
 	public int getColumnCount() {
 		return pts.length;
 	}
-
+	
 	public Object getValueAt(int row, int column) {
-		Requirement r = list.get(row);
-		int index;
-		int type;
+		TGComponent tgc = list.get(row);
 		
-		index = pts[column].x-1;
-		
-		switch(index) {
-		case 0:
-			return r.getID();
-		case 1:
-			return r.getValue();
-		case 2:
-			type = r.getRequirementType();
-			if (type == 0) {
-				return "Regular req.";
-			} else if (type == 1) {
-				return "Formal req.";
-			} else {
-				return "Security req.";
-			}
-		case 3:
-			return r.getText();
-		case 4:
-			return r.getKind();
-		case 5:
-			return r.getCriticality();
-		case 6:
-			if (r.getRequirementType() == 1) {
-				return r.getViolatedAction();
-			} else {
-				return " - ";
-			}
-		case 7:
-			if (r.getRequirementType() == 2) {
-				return r.getAttackTreeNode();
-			} else {
-				return " - ";
-			}
-		case 8:
-			if (r.isVerified()) {
-				if (r.isSatisfied()) {
-					return "yes";
+		if (tgc instanceof Requirement) {
+			Requirement r = (Requirement)(tgc);
+			int index;
+			int type;
+			
+			index = pts[column].x-1;
+			
+			switch(index) {
+			case 0:
+				return r.getID();
+			case 1:
+				return r.getValue();
+			case 2:
+				type = r.getRequirementType();
+				if (type == 0) {
+					return "Regular req.";
+				} else if (type == 1) {
+					return "Formal req.";
 				} else {
-					return "no";
+					return "Security req.";
 				}
-			} else {
-				return "-";
+			case 3:
+				return r.getText();
+			case 4:
+				return r.getKind();
+			case 5:
+				return r.getCriticality();
+			case 6:
+				if (r.getRequirementType() == 1) {
+					return r.getViolatedAction();
+				} else {
+					return " - ";
+				}
+			case 7:
+				if (r.getRequirementType() == 2) {
+					return r.getAttackTreeNode();
+				} else {
+					return " - ";
+				}
+			case 8:
+				if (r.isVerified()) {
+					if (r.isSatisfied()) {
+						return "yes";
+					} else {
+						return "no";
+					}
+				} else {
+					return "-";
+				}
+			}
+		}
+		
+		if (tgc instanceof AvatarRDRequirement) {
+			AvatarRDRequirement rd = (AvatarRDRequirement)(tgc);
+			int index;
+			int type;
+			
+			index = pts[column].x-1;
+			
+			switch(index) {
+			case 0:
+				return rd.getID();
+			case 1:
+				return rd.getValue();
+			case 2:
+				type = rd.getRequirementType();
+				if (type == 0) {
+					return "Regular req.";
+				} else if (type == 1) {
+					return "Safety req.";
+				} else {
+					return "Security req.";
+				}
+			case 3:
+				return rd.getText();
+			case 4:
+				return rd.getKind();
+			case 5:
+				return rd.getCriticality();
+			case 6:
+				/*if (rd.getRequirementType() == 1) {
+					return rd.getViolatedAction();
+				} else {
+					return " - ";
+				}*/
+				return " - ";
+			case 7:
+				return " - ";
+			case 8:
+				if (rd.isVerified()) {
+					if (rd.isSatisfied()) {
+						return "yes";
+					} else {
+						return "no";
+					}
+				} else {
+					return "-";
+				}
 			}
 		}
 		
 		return "Invalid column";
 		
 	}
-
+	
 	public String getColumnName(int columnIndex) {
 		int index = pts[columnIndex].x;
 		
@@ -135,25 +190,25 @@ public class RequirementsTableModel extends AbstractTableModel {
 		
 		/*switch(columnIndex) {
 		case 0:
-			return "ID";
+		return "ID";
 		case 1:
-			return "Name";
+		return "Name";
 		case 2:
-			return "Type";
+		return "Type";
 		case 3:
-			return "Description";
+		return "Description";
 		case 4:
-			return "Kind";
+		return "Kind";
 		case 5:
-			return "Criticality";
+		return "Criticality";
 		case 6:
-			return "Violated action";
+		return "Violated action";
 		case 7:
-			return "Attack Tree Nodes";
+		return "Attack Tree Nodes";
 		case 8:
-			return "Satisfied";
+		return "Satisfied";
 		}*/
 		//return "none";
 	}
-
+	
 }
