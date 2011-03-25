@@ -56,6 +56,13 @@ import javax.swing.*;
 * @see	*/
 
 public	class JToolBarMainTurtle extends JToolBar	{
+	// Avatar
+	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif;
+	
+	// Other
+	JButton genrtlotos, genlotos, genuppaal, gendesign;
+	JButton checkcode, simulation, validation;
+	JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genjava, nc;
     
     public JToolBarMainTurtle(MainGUI mgui) {
         super();
@@ -128,81 +135,95 @@ public	class JToolBarMainTurtle extends JToolBar	{
         button.addMouseListener(mgui.mouseHandler);
         addSeparator();
         
-        button = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
-        button.addMouseListener(mgui.mouseHandler);
+        gendesign = add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
+        gendesign.addMouseListener(mgui.mouseHandler);
         
+		addSeparator();
+		
+		avatarSimu = add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
+		avatarSimu.addMouseListener(mgui.mouseHandler);
+		
+		addSeparator();
+		
+		avatarFVUPPAAL = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
+		avatarFVUPPAAL.addMouseListener(mgui.mouseHandler);
+		if (MainGUI.proverifOn) {
+			avatarFVProVerif = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
+			avatarFVProVerif.addMouseListener(mgui.mouseHandler);
+		}
+		
         addSeparator();
         
-        button = add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
-        button.addMouseListener(mgui.mouseHandler);
+        genrtlotos = add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
+        genrtlotos.addMouseListener(mgui.mouseHandler);
         if (MainGUI.systemcOn) {
-			button = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
-			button.addMouseListener(mgui.mouseHandler);
+			genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
+			genlotos.addMouseListener(mgui.mouseHandler);
 			/*addSeparator();
 			button = add(mgui.actions[TGUIAction.ACT_GEN_AUTS]);
 			button.addMouseListener(mgui.mouseHandler);
 			button = add(mgui.actions[TGUIAction.ACT_GEN_AUT]);
 			button.addMouseListener(mgui.mouseHandler);*/
         } else if (MainGUI.lotosOn) {
-            button = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
-            button.addMouseListener(mgui.mouseHandler);
+            genlotos = add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
+            genlotos.addMouseListener(mgui.mouseHandler);
         }
         
         if (MainGUI.uppaalOn) {
-			button = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
-			button.addMouseListener(mgui.mouseHandler);
+			genuppaal = add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
+			genuppaal.addMouseListener(mgui.mouseHandler);
         }
 		
-		if (MainGUI.proverifOn) {
+		/*if (MainGUI.proverifOn) {
 			button = add(mgui.actions[TGUIAction.ACT_GEN_PROVERIF]);
 			button.addMouseListener(mgui.mouseHandler);
-        }
+        }*/
         
         addSeparator();
         
-        button = add(mgui.actions[TGUIAction.ACT_CHECKCODE]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_SIMULATION]);
-        button.addMouseListener(mgui.mouseHandler);
-        button = add(mgui.actions[TGUIAction.ACT_VALIDATION]);
-        button.addMouseListener(mgui.mouseHandler);
+        checkcode = add(mgui.actions[TGUIAction.ACT_CHECKCODE]);
+        checkcode.addMouseListener(mgui.mouseHandler);
+        simulation = add(mgui.actions[TGUIAction.ACT_SIMULATION]);
+        simulation.addMouseListener(mgui.mouseHandler);
+        validation = add(mgui.actions[TGUIAction.ACT_VALIDATION]);
+        validation.addMouseListener(mgui.mouseHandler);
 		
 		addSeparator();
 		
-		button = add(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
-        button.addMouseListener(mgui.mouseHandler);
+		oneClickrtlotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG]);
+        oneClickrtlotos.addMouseListener(mgui.mouseHandler);
 		if (MainGUI.lotosOn) {
-			button = add(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
-			button.addMouseListener(mgui.mouseHandler);
+			onclicklotos = add(mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG]);
+			onclicklotos.addMouseListener(mgui.mouseHandler);
 		}
         
         addSeparator();
 		
 		if (MainGUI.systemcOn) {
-            button = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
-            button.addMouseListener(mgui.mouseHandler);
+            gensystemc = add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
+            gensystemc.addMouseListener(mgui.mouseHandler);
 			
-			button = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
-            button.addMouseListener(mgui.mouseHandler);
+			simusystemc = add(mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC]);
+            simusystemc.addMouseListener(mgui.mouseHandler);
             addSeparator();
 			
-			button = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
-            button.addMouseListener(mgui.mouseHandler);
+			gentml = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
+            gentml.addMouseListener(mgui.mouseHandler);
             addSeparator();
         }
 		
 		addSeparator();
         
-        button = add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
-        button.addMouseListener(mgui.mouseHandler);
+        genjava = add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
+        genjava.addMouseListener(mgui.mouseHandler);
 		//button = add(mgui.actions[TGUIAction.ACT_SIMU_JAVA]);
         //button.addMouseListener(mgui.mouseHandler);
 		
 		addSeparator();
 		
 		if (MainGUI.ncOn) {
-			button = add(mgui.actions[TGUIAction.ACT_NC]);
-			button.addMouseListener(mgui.mouseHandler);
+			nc = add(mgui.actions[TGUIAction.ACT_NC]);
+			nc.addMouseListener(mgui.mouseHandler);
 		}
         
         addSeparator();
@@ -222,8 +243,73 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			addSeparator();
         }
         
-		
+		showAvatarActions(false);
         
         
     }
+	
+	public void showAvatarActions(boolean b) {
+		 avatarSimu.setVisible(b);
+		 avatarFVUPPAAL.setVisible(b);
+		 if (avatarFVProVerif != null) {
+			 avatarFVProVerif.setVisible(b);
+		 }
+		 
+		 if (genrtlotos != null) {
+			 genrtlotos.setVisible(!b);
+		 }
+		 
+		 if (genlotos != null) {
+			 genlotos.setVisible(!b);
+		 }
+		 
+		 if (genuppaal != null) {
+			 genuppaal.setVisible(!b);
+		 }
+		 
+		 if (checkcode != null) {
+			 checkcode.setVisible(!b);
+		 }
+		 
+		 if (simulation != null) {
+			 simulation.setVisible(!b);
+		 }
+		 
+		 if (validation != null) {
+			 validation.setVisible(!b);
+		 }
+		 
+		 if (oneClickrtlotos != null) {
+			 oneClickrtlotos.setVisible(!b);
+		 }
+		 
+		 if (onclicklotos != null) {
+			 onclicklotos.setVisible(!b);
+		 }        
+		 
+		 if (gensystemc != null) {
+			 gensystemc.setVisible(!b);
+		 }
+		 
+		 if (simusystemc != null) {
+			 simusystemc.setVisible(!b);
+		 }
+		 
+		 if (gentml != null) {
+			 gentml.setVisible(!b);
+		 }
+		 
+		 if (genjava != null) {
+			 genjava.setVisible(!b);
+		 }
+		 
+		 if (nc != null) {
+			 nc.setVisible(!b);
+		 }
+		 
+		 if (gendesign != null) {
+			 gendesign.setVisible(!b);
+		 }
+		 
+	}
 } // Class

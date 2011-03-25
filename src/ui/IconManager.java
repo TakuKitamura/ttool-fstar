@@ -74,7 +74,7 @@ public class IconManager {
     public static ImageIcon imgic50, imgic51, imgic52, imgic53, imgic54, imgic55, imgic56, imgic57, imgic58, imgic59;
     public static ImageIcon imgic60, imgic61, imgic62, imgic63, imgic64, imgic65, imgic66;
     public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77;
-	public static ImageIcon imgic80, imgic82, imgic84;
+	public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88;
 	
     // Class diagram
     public static ImageIcon imgic100, imgic101, imgic102, imgic104, imgic106, imgic108;
@@ -241,6 +241,8 @@ public class IconManager {
 	private static String icon80 = "images/avatarbd.gif";
 	private static String icon82 = "images/avatarpd.gif";
 	private static String icon84 = "images/avatarrd.gif";
+	private static String icon86 = "images/avatarfvuppaal.png";
+	private static String icon88 = "images/avatarfvproverif.png";
 	
     private static String icon100 = "images/toolbarButtonGraphics/general/Properties16.gif";
     private static String icon101 = "images/toolbarButtonGraphics/general/Properties24.gif";
@@ -634,6 +636,8 @@ public class IconManager {
 		imgic80 = getIcon(icon80);
 		imgic82 = getIcon(icon82);
 		imgic84 = getIcon(icon84);
+		imgic86 = getIcon(icon86);
+		imgic88 = getIcon(icon88);
         
         imgic100 = getIcon(icon100);
         imgic101 = getIcon(icon101);

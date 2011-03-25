@@ -451,12 +451,16 @@ public class TGUIAction extends AbstractAction {
     
     public static final int EXTERNAL_ACTION_1 = 207;
     public static final int EXTERNAL_ACTION_2 = 208;
+	
+	public static final int ACT_AVATAR_SIM = 339;
+	public static final int ACT_AVATAR_FV_UPPAAL = 337;
+	public static final int ACT_AVATAR_FV_PROVERIF = 338;
 
     
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 337;
+    public static final int NB_ACTION = 340;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -580,6 +584,12 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_PM_AUTPROJ] = new TAction("viewpmautproj-command", "Power Management Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last minimized AUT graph)",  "Power Management Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
         
+		// AVATAR
+		actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '0');
+        actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '0');
+        actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Formal verification with ProVerif (Security)", IconManager.imgic88, IconManager.imgic88, "Formal verification with ProVerif (Security)",  "Formal verification with ProVerif (Security) of the AVATAR design under edition", '0');
+        
+		
         actions[ACT_VIEW_JAVA] = new TAction("view-java", "Display Java code", IconManager.imgic38, IconManager.imgic39, "Display Java code",  "Display the java code of the pointed component", 0);
         actions[ACT_VIEW_RTLOTOS] = new TAction("view-rtlotos", "Show last formal specification", IconManager.imgic302, IconManager.imgic302, "Show formal specification",  "Display the lastest generated formal specification", 0);
         actions[ACT_VIEW_SUGGESTED_DESIGN] = new TAction("view-suggested-design", "Show last suggested design", IconManager.imgic302, IconManager.imgic302, "Show suggested design",  "Display the lastest generated suggested design", 0);
