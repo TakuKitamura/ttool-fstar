@@ -931,6 +931,7 @@ public class AvatarSpecificationSimulation  {
 		AvatarSimulationTransaction.setID(allTransactions.size());
 		
 		setNbOfCommands(0);
+		nbOfCommandsActivated = true;
 		newState = true;
 		notifyAll();
 	}
