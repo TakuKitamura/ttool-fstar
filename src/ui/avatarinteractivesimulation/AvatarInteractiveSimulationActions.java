@@ -72,7 +72,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_RUN_UNTIL_MEMORY_ACCESS = 24;
 	public static final int ACT_RUN_UNTIL_CHANNEL_ACCESS = 25;
 	
-	public static final int ACT_SAVE_VCD = 10;
+	public static final int ACT_SAVE_SD_PNG = 10;
 	public static final int ACT_SAVE_HTML = 11;
 	public static final int ACT_SAVE_TXT = 12;
 	
@@ -152,7 +152,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_UNTIL_MEMORY_ACCESS] = new TAction("run-to-memory-accessd", "Run until a memory access is performed", IconManager.imgic1322, IconManager.imgic1322, "Run until a memory access is performed", "Run simulation until a memory access is performed on selected memory. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_UNTIL_CHANNEL_ACCESS] = new TAction("run--to-channel-access", "Run until a channel is accessed", IconManager.imgic1324, IconManager.imgic1324, "Run until a channel is accessed", "Run until a channel is accessed. Works only if the simulator is \"ready\"", 'R');
 		
-		actions[ACT_SAVE_VCD] = new TAction("save-vcd", "Save trace in VCD format", IconManager.imgic1310, IconManager.imgic1310, "Save trace in VCD format", "Save trace in VCD format", 'R');
+		actions[ACT_SAVE_SD_PNG] = new TAction("save-sd-png", "Save SD trace in PNG format", IconManager.imgic5104, IconManager.imgic5104, "Save SD trace in PNG format", "Save SD trace in PNG format", '0');
         actions[ACT_SAVE_HTML] = new TAction("save-html", "Save trace in HTML format", IconManager.imgic1312, IconManager.imgic1312, "Save trace in HTML format", "Save trace in HTML format", 'R');
         actions[ACT_SAVE_TXT] = new TAction("save-txt", "Save trace in TXT format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in TXT format", "Save trace in TXT format", 'R');
         

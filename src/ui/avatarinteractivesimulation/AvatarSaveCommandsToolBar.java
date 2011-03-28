@@ -58,7 +58,7 @@ public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
     }
     
     protected void setActive(boolean b) {
-		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
     }
@@ -66,7 +66,7 @@ public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
     protected void setButtons() {
         JButton button;
         
-        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_VCD]);
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG]);
         button.addMouseListener(jfais.mouseHandler);
         
 		this.addSeparator();

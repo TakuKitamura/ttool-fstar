@@ -51,6 +51,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import java.io.*;
 import java.util.*;
 
@@ -137,6 +138,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private JPanel variablePanel;
 	private VariableTableModel variabletm;
 	private JScrollPane jspVariableInfo;
+	
+	// Transactions
+	private JPanel transactionPanel;
+	private TransactionTableModel transactiontm;
+	private JScrollPane jspTransactionInfo;
 	
 	// Sequence Diagram
 	private AvatarSpecificationSimulationSDPanel sdpanel;
@@ -618,6 +624,45 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		//updateTaskInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TASKS]);
 		//taskPanel.add(updateTaskInformationButton, BorderLayout.SOUTH);
 		
+		// Transactions
+		transactionPanel = new JPanel();
+		transactionPanel.setLayout(new BorderLayout());
+		infoTab.addTab("Transactions", IconManager.imgic1202, transactionPanel, "Transactions");
+		transactiontm = new TransactionTableModel(ass);
+	
+		/*sorterPI = new TableSorter(transactiontm);
+		jtablePI = new JTable(sorterPI);
+		sorterPI.setTableHeader(jtablePI.getTableHeader());
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(50);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(6)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspTransactionInfo = new JScrollPane(jtablePI);
+		jspTransactionInfo.setWheelScrollingEnabled(true);
+		jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspTransactionInfo.setPreferredSize(new Dimension(250, 300));
+		transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);*/
+		
+		jtablePI = new JTable(transactiontm);
+		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(50);
+		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(5)).setPreferredWidth(100);
+		((jtablePI.getColumnModel()).getColumn(6)).setPreferredWidth(75);
+		((jtablePI.getColumnModel()).getColumn(7)).setPreferredWidth(100);
+		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		jspTransactionInfo = new JScrollPane(jtablePI);
+		jspTransactionInfo.setWheelScrollingEnabled(true);
+		jspTransactionInfo.getVerticalScrollBar().setUnitIncrement(10);
+		jspTransactionInfo.setPreferredSize(new Dimension(250, 300));
+		transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);
+		
 		// Variables
 		/*variablePanel = new JPanel();
 		variablePanel.setLayout(new BorderLayout());
@@ -794,6 +839,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		// Diagram animation?
 		if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
 			updateMetElements();
+			updateTransactionsTable();
 			animateDiagrams();
 		}
 		
@@ -850,7 +896,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			break;
 		}
 		
-		actions[AvatarInteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
+		actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
@@ -977,7 +1023,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		nbOfAllExecutedElements = allExecutedElements.size();
 	}
 	
-	
+	public void updateTransactionsTable() {
+		if (transactiontm != null) {
+			transactiontm.fireTableStructureChanged();
+		}
+	}
 	
 	public void animateDiagrams() {
 		if ((animate != null) && (ass != null) && (ass.getSimulationBlocks() != null)) {
@@ -1023,6 +1073,32 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	public void actSaveTxt() {
 		ass.printExecutedTransactions();
+	}
+	
+	public void actSaveSDPNG() {
+		//Saving PNG file;
+		BufferedImage bi;
+		File file;
+		
+		bi = sdpanel.performCapture();
+		
+		String filePath="";
+		if (ConfigurationTTool.IMGPath != null) {
+			filePath += ConfigurationTTool.IMGPath;
+			if (!filePath.endsWith(File.separator)) {
+				filePath += File.separator;
+			}
+		}
+		
+		if ((saveFileName.getText() != null) && (saveFileName.getText().length() > 0)) {
+			filePath += saveFileName.getText();
+		} else {
+			filePath += "foo.png";
+		}
+		
+		file = new File(filePath);
+		
+		mgui.writeImageCapture(bi, file, true);
 	}
 	
 	
@@ -1088,6 +1164,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
 			actSaveTxt();
+			return;
+			//TraceManager.addDev("Start simulation!");
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand()))  {
+			actSaveSDPNG();
 			return;
 			//TraceManager.addDev("Start simulation!");
 		}

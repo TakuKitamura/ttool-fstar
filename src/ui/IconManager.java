@@ -522,6 +522,7 @@ public class IconManager {
 	private static String icon5100 = "images/avatarhead16.gif";
 	private static String icon5102 = "images/avatarhead32.gif";
 	
+	private static String icon5104 = "images/savepng24.gif";
 	
     public IconManager() {
         
@@ -872,6 +873,7 @@ public class IconManager {
 		
 		imgic5100 = getIcon(icon5100);
 		imgic5102 = getIcon(icon5102);
+		imgic5104 = getIcon(icon5104);
 		if (imgic5100 != null) {
 			img5100 = imgic5100.getImage();
 		}

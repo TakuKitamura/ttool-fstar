@@ -4108,7 +4108,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
         if (info) {
             JOptionPane.showMessageDialog(frame,
-				"The capture was correctly performed",
+				"The capture was correctly performed and saved in " + file.getAbsolutePath(),
 				"Screen capture ok",
 				JOptionPane.INFORMATION_MESSAGE);
         }
