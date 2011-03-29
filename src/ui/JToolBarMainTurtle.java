@@ -59,7 +59,7 @@ import myutil.*;
 
 public	class JToolBarMainTurtle extends JToolBar	{
 	// Avatar
-	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif;
+	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarCodeGeneration;
 	
 	// Other
 	JButton genrtlotos, genlotos, genuppaal, gendesign;
@@ -155,6 +155,11 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		}
 		
         addSeparator();
+		
+		avatarCodeGeneration = add(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
+		avatarCodeGeneration.addMouseListener(mgui.mouseHandler);
+		
+		addSeparator();
         
         genrtlotos = add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
         genrtlotos.addMouseListener(mgui.mouseHandler);
@@ -259,6 +264,7 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		 if (avatarFVProVerif != null) {
 			 avatarFVProVerif.setVisible(b);
 		 }
+		 avatarCodeGeneration.setVisible(b);
 		 
 		 if (genrtlotos != null) {
 			 genrtlotos.setVisible(!b);
@@ -327,6 +333,7 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		 if (avatarFVProVerif != null) {
 			 avatarFVProVerif.setVisible(!b);
 		 }
+		 avatarCodeGeneration.setVisible(!b);
 		 
 		 if (genrtlotos != null) {
 			 genrtlotos.setVisible(!b);

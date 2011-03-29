@@ -599,6 +599,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
 			actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(true); 
 			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
+			actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(true);
 			break;
 		case REQ_OK:
 			//actions[TGUIAction.ACT_VIEW_MATRIX].setEnabled(true);
@@ -638,6 +639,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(false);
 			actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(false);
 			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
 			break;
 		case METHO_CHANGED:
 			actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
@@ -3179,6 +3181,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void avatarProVerifVerification() {
 		TraceManager.addDev("Avatar proverif fv");
 		JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        jgen.setSize(500, 450);
+        GraphicLib.centerOnParent(jgen);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+	}
+	
+	public void avatarExecutableCodeGeneration() {
+		TraceManager.addDev("Avatar code generation");
+		JDialogAvatarExecutableCodeGeneration jgen = new JDialogAvatarExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution", ConfigurationTTool.AVATARExecutableCodeHost, ConfigurationTTool.AVATARExecutableCodeDirectory,  ConfigurationTTool.AVATARExecutableCodeCompileCommand, ConfigurationTTool.AVATARExecutableCodeExecuteCommand);
         jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
@@ -6307,7 +6318,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			avatarUPPAALVerification();
 		} else if (command.equals(actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].getActionCommand())) {
             avatarProVerifVerification();
-		
+		} else if (command.equals(actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].getActionCommand())) {
+            avatarExecutableCodeGeneration();
 		
 		// AVATAR BD
 		} else if (command.equals(actions[TGUIAction.ABD_BLOCK].getActionCommand())) {

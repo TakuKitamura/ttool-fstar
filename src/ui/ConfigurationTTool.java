@@ -122,6 +122,11 @@ public class ConfigurationTTool {
 	public static String AVATARCPPSIMCodeExecuteCommand = "";
 	public static String AVATARCPPSIMInteractiveExecuteCommand = "";
 	
+	// AVATAR Code generation
+	public static String AVATARExecutableCodeDirectory = "";
+	public static String AVATARExecutableCodeHost = "";
+	public static String AVATARExecutableCodeCompileCommand = "";
+	public static String AVATARExecutableCodeExecuteCommand = "";
     
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
@@ -295,6 +300,13 @@ public class ConfigurationTTool {
         sb.append("AVATARSimulationHost: " + AVATARSimulationHost + "\n");
 		sb.append("AVATARCPPSIMCodeDirectory: " + AVATARCPPSIMCodeDirectory + "\n");
 		sb.append("UPPAALVerifierHOST: " + UPPAALVerifierHost + "\n");
+		
+		// AVATAR: executable code
+		sb.append("\nAVATAR (executable code):\n");
+        sb.append("AVATARExecutableCodeDirectory: " + AVATARExecutableCodeDirectory + "\n");
+		sb.append("AVATARExecutableCodeHost: " + AVATARExecutableCodeHost + "\n");
+		sb.append("AVATARExecutableCodeCompileCommand: " + AVATARExecutableCodeCompileCommand + "\n");
+		sb.append("AVATARExecutableCodeExecuteCommand: " + AVATARExecutableCodeExecuteCommand + "\n");
 		
 		sb.append("\nProVerif:\n");
         sb.append("ProVerifCodeDirectory: " + ProVerifCodeDirectory + "\n");
@@ -496,6 +508,20 @@ public class ConfigurationTTool {
 			nl = doc.getElementsByTagName("AVATARCPPSIMInteractiveExecuteCommand");
             if (nl.getLength() > 0)
                 AVATARCPPSIMInteractiveExecuteCommand(nl);
+			
+			// AVATAR Executable code
+			nl = doc.getElementsByTagName("AVATARExecutableCodeDirectory");
+            if (nl.getLength() > 0)
+                AVATARExecutableCodeDirectory(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableCodeHost");
+            if (nl.getLength() > 0)
+                AVATARExecutableCodeHost(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableCodeCompileCommand");
+            if (nl.getLength() > 0)
+                AVATARExecutableCodeCompileCommand(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableCodeExecuteCommand");
+            if (nl.getLength() > 0)
+                AVATARExecutableCodeExecuteCommand(nl);
             
 			if (systemcOn) {
 					nl = doc.getElementsByTagName("SystemCHost");
@@ -1028,6 +1054,42 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             AVATARCPPSIMInteractiveExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableCodeHost(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableCodeHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableCodeCompileCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableCodeCompileCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableCodeExecuteCommand = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

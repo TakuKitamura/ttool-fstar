@@ -6,7 +6,7 @@
 #include "myerrors.h"
 
 
-request *getNewRequest(int type, int hasDelay, long delay, int nbOfParams, int *params[]) {
+request *getNewRequest(int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int *params[]) {
   int i;
   request *req = (request *)(malloc(sizeof(struct request)+nbOfParams*sizeof(int)));
   
@@ -17,7 +17,8 @@ request *getNewRequest(int type, int hasDelay, long delay, int nbOfParams, int *
   req->listOfRequests = NULL;
   req->type = type;
   req->hasDelay = hasDelay;
-  req->delay = delay;
+  req->minDelay = minDelay;
+  req->maxDelay = maxDelay;
   req->selected = 0;
   req->nbOfParams = nbOfParams;
 

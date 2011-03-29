@@ -455,12 +455,13 @@ public class TGUIAction extends AbstractAction {
 	public static final int ACT_AVATAR_SIM = 339;
 	public static final int ACT_AVATAR_FV_UPPAAL = 337;
 	public static final int ACT_AVATAR_FV_PROVERIF = 338;
+	public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
 
     
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 340;
+    public static final int NB_ACTION = 341;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -588,6 +589,7 @@ public class TGUIAction extends AbstractAction {
 		actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '0');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '0');
         actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Formal verification with ProVerif (Security)", IconManager.imgic88, IconManager.imgic88, "Formal verification with ProVerif (Security)",  "Formal verification with ProVerif (Security) of the AVATAR design under edition", '0');
+        actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Generation of executable code", IconManager.imgic94, IconManager.imgic94, "Generation of executable code",  "Generation of executable code from AVATAR design under edition", '0');
         
 		
         actions[ACT_VIEW_JAVA] = new TAction("view-java", "Display Java code", IconManager.imgic38, IconManager.imgic39, "Display Java code",  "Display the java code of the pointed component", 0);
