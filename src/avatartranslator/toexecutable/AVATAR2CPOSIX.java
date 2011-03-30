@@ -54,17 +54,7 @@ import avatartranslator.*;
 public class AVATAR2CPOSIX {
 
 	private final static String UNKNOWN = "UNKNOWN";
-
-	
-	private final static String BOOLEAN_DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
-	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
-	
-	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encrypt/2.\nreduc decrypt(encrypt(x,pk(y)),y) = x.\n";
-	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
-	private final static String MAC_HEADER = "(* MAC *)\nfun MAC/2.\nreduc verifyMAC(m, k, MAC(m, k)) = true.\n";
-	private final static String CONCAT_HEADER = "(* CONCAT *)\nfun concat/5.\nreduc get1(concat(m1, m2, m3, m4, m5))= m1.\nreduc get2(concat(m1, m2, m3, m4, m5))= m2.\nreduc get3(concat(m1, m2, m3, m4, m5))= m3.\nreduc get4(concat(m1, m2, m3, m4, m5))= m4.\nreduc get5(concat(m1, m2, m3, m4, m5))= m5.\n";
-	
-	private final static String MAIN_DEC = "int main(int argc, char *argv[]) {\n";
+	private final static String CR = "\n";
 	
 	private AvatarSpecification avspec;
 	
@@ -95,8 +85,25 @@ public class AVATAR2CPOSIX {
 	
 	public void generateCPOSIX(boolean _debug) {
 		mainFile = new MainFile("main");
-	
-	
+		
+		// Create a main mutex
+		mainFile.appendToHCode("/* Main mutex */" + CR);
+		mainFile.appendToBeforeMainCode("/* Main mutex */" + CR);
+		mainFile.appendToHCode("extern pthread_mutex_t mainMutex;" + CR + CR);
+		mainFile.appendToBeforeMainCode("pthread_mutex_t mainMutex;" + CR + CR);
+		
+		
+		// Create a synchronous channel per relation/signal
+		mainFile.appendToHCode("/* Synchronous channels */" + CR);
+		mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
+		for(AvatarRelation ar: avspec.getRelations()) {
+				if (!ar.isAsynchronous()) {
+					
+				}
+		}
+			
+		//mainFile.appendToHCode("pthread_mutex_t mainMutex;" + CR);
+		
 	}
 	
 }

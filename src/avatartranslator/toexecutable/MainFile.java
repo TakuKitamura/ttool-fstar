@@ -52,6 +52,9 @@ import myutil.*;
 import avatartranslator.*;
 
 public class MainFile {
+	
+	private final static String H_DEF = "#ifndef MAIN_H\n#define MAIN_H\n";
+	private final static String H_END_DEF = "#endif\n";
 
 	private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
 	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\""; 
@@ -60,23 +63,41 @@ public class MainFile {
 	private final static String CR = "\n";
 	
 	private String name;
+	private String hCode;
+	private String beforeMainCode;
+	private String mainCode;
 	
 	
 	public MainFile(String _name) {
 		name = _name;
+		hCode = "";
+		mainCode = "";
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
+	public void appendToHCode(String _code) {
+		hCode += _code;
+	}
+	
+	public void appendToBeforeMainCode(String _code) {
+		beforeMainCode += _code;
+	}
+	
+	public void appendToMainCode(String _code) {
+		mainCode += _code;
+	}
+	
 	public String getHeaderCode() {
-		return "";
+		return H_DEF + hCode + H_END_DEF;
 	}
 	
 	public String getMainCode() {
 		String s = INCLUDE_HEADER + "\n" + LOCAL_INCLUDE_HEADER + CR + CR;
-		s += MAIN_DEC + CR + CR + "}" + CR;
+		s += beforeMainCode + CR;
+		s += MAIN_DEC + CR + mainCode + CR + "}" + CR;
 		
 		return s;
 		
