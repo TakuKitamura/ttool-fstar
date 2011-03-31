@@ -72,6 +72,7 @@ public class MainFile {
 		name = _name;
 		hCode = "";
 		mainCode = "";
+		beforeMainCode = "";
 	}
 	
 	public String getName() {

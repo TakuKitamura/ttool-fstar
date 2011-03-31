@@ -48,11 +48,14 @@ package avatartranslator.toexecutable;
 import java.awt.*;
 import java.util.*;
 
+import java.io.*;
+
 import myutil.*;
 import avatartranslator.*;
 
 public class AVATAR2CPOSIX {
 
+	private final static String GENERATED_PATH = "generated_src" + File.separator;
 	private final static String UNKNOWN = "UNKNOWN";
 	private final static String CR = "\n";
 	
@@ -62,6 +65,7 @@ public class AVATAR2CPOSIX {
 	
 	private MainFile mainFile;
 	private Vector<TaskFile> taskFiles;
+	private String makefile_src;
 	
 
 	public AVATAR2CPOSIX(AvatarSpecification _avspec) {
@@ -75,14 +79,17 @@ public class AVATAR2CPOSIX {
 		
 		if (mainFile != null) {
 			TraceManager.addDev("Generating main files in " + path + mainFile.getName() + ".h");
-			FileUtils.saveFile(path + mainFile.getName() + ".h", mainFile.getHeaderCode());
-			FileUtils.saveFile(path + mainFile.getName() + ".c", mainFile.getMainCode());
+			FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".h", Conversion.indentString(mainFile.getHeaderCode(), 2));
+			FileUtils.saveFile(path + GENERATED_PATH + mainFile.getName() + ".c", Conversion.indentString(mainFile.getMainCode(), 2));
 		}
 		
 		for(TaskFile taskFile: taskFiles) {
-			FileUtils.saveFile(path + taskFile.getName() + ".h", taskFile.getFullHeaderCode());
-			FileUtils.saveFile(path + taskFile.getName() + ".c", taskFile.getMainCode());
+			FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h", Conversion.indentString(taskFile.getFullHeaderCode(), 2));
+			FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
 		}
+		
+		makeMakefileSrc(GENERATED_PATH);
+		FileUtils.saveFile(path + "Makefile.src", makefile_src);
 	}
 	
 	
@@ -101,6 +108,10 @@ public class AVATAR2CPOSIX {
 		makeSynchronousChannels();
 		
 		makeTasks();
+		
+		makeMainHeader();
+		
+		makeThreadsInMain(_debug);
 	}
 	
 	public void makeMainMutex() {
@@ -157,13 +168,18 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public void defineAllStates(AvatarBlock _block, TaskFile _taskFile) {
-		int id = 0;
+		int id = 1;
+		
+		_taskFile.addToMainCode("#define STATE__START__STATE 0" + CR);
+		
 		for (AvatarStateMachineElement asme: _block.getStateMachine().getListOfElements()) {
 			if (asme instanceof AvatarState) {
 				_taskFile.addToMainCode("#define STATE__" + asme.getName() + " " + id + CR);
 				id ++;
 			}
 		}
+		_taskFile.addToMainCode("#define STATE__STOP__STATE " + id + CR);
+		_taskFile.addToMainCode(CR);
 	}
 	
 	public void defineAllMethods(AvatarBlock _block, TaskFile _taskFile) {
@@ -181,25 +197,113 @@ public class AVATAR2CPOSIX {
 			list = am.getListOfAttributes();
 			int cpt = 0;
 			for(AvatarAttribute aa: list) {
+				if (cpt != 0) {
+					ret += ", ";
+				}
 				ret += getCTypeOf(aa) + " " + aa.getName();
+				cpt ++;
 			}
 			
-			ret += ") {" + CR + "printf(\"Entering method " + am.getName() + "\");" + CR + "}" + CR + CR;
+			ret += ") {" + CR + "printf(\"Entering method " + am.getName() + "\\n\");" + CR + "}" + CR + CR;
 		}
 		_taskFile.addToMainCode(ret + CR);
 		
 	}
 	
+	public void makeMainHeader() {
+		mainFile.appendToBeforeMainCode(CR);
+		for(TaskFile taskFile: taskFiles) {
+			mainFile.appendToBeforeMainCode("#include \"" + taskFile.getName() + ".h\"" + CR);
+		}
+		mainFile.appendToBeforeMainCode(CR);
+		
+	}
+	
 	public void makeMainFunction(AvatarBlock _block, TaskFile _taskFile) {
-		String s = "void mainFunc_" + _block.getName() + "(void *arg)";
+		String s = "void *mainFunc__" + _block.getName() + "(void *arg)";
 		String sh = "extern " + s + ";" + CR;
 		s+= "{" + CR;
 			
 		s += makeAttributesDeclaration(_block, _taskFile);	
-			
-		s += "}\n" + CR;	
+		
+		s+= CR + "int __currentState = STATE__START__STATE;" + CR;
+		
+		s+= CR + "char * __myname = (char *)arg;" + CR;
+		
+		s+= "printf(\"my name = %s\\n\", __myname);" + CR;
+		
+		s+= CR + "/* Main loop on states */" + CR;
+		s+= "while(__currentState != STATE__STOP__STATE) {" + CR;
+		
+		s += "switch(__currentState) {" + CR;
+		
+		// Making start state
+		AvatarStateMachine asm = _block.getStateMachine();
+		s += "case STATE__START__STATE: " + CR + makeBehaviourFromElement(_block, asm.getStartState(), true);
+		s += "break;" + CR + CR;
+		
+		// Making other states
+		for(AvatarStateMachineElement asme: asm.getListOfElements()) {
+			if (asme instanceof AvatarState) {
+				s += "case STATE__" + asme.getName() + ": " + CR + makeBehaviourFromElement(_block, asme, true);
+				s += "break;" + CR + CR;
+			}
+		}
+		
+		s += "}" + CR;
+		
+		s += "}" + CR;
+		
+		s+= "printf(\"Exiting = %s\\n\", __myname);" + CR;
+		s+= "return NULL;" + CR;
+		s += "}" + CR;	
 		_taskFile.addToMainCode(s + CR);
 		_taskFile.addToHeaderCode(sh + CR);	
+	}
+	
+	public String makeBehaviourFromElement(AvatarBlock _block, AvatarStateMachineElement _asme, boolean firstCall) {
+		if (_asme == null) {
+			return "";
+		}
+		
+		String ret = "";
+		int i;
+		
+		if (_asme instanceof AvatarStartState) {
+			return makeBehaviourFromElement(_block, _asme.getNext(0), false);
+		}
+		
+		if (_asme instanceof AvatarTransition) {
+			AvatarTransition at = (AvatarTransition)_asme;
+			for(i=0; i<at.getNbOfAction(); i++) {
+				ret += at.getAction(i) + ";" + CR;
+			}
+			return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
+		}
+	
+		if (_asme instanceof AvatarState) {
+			if (!firstCall) {
+				return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR; 
+			}
+		}
+		
+		if (_asme instanceof AvatarStopState) {
+			return ret + "__currentState = STATE__STOP__STATE;" + CR; 
+		}
+		
+		if (_asme instanceof AvatarRandom) {
+			AvatarRandom ar = (AvatarRandom)_asme;
+			ret += ar.getVariable() + " = computeRandom(" + ar.getMinValue() + ", " + ar.getMaxValue() + ");" + CR;
+			return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
+		}
+		
+		if (_asme instanceof AvatarActionOnSignal) {
+			AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
+			
+		}
+		
+		// Default
+		return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
 	}
 	
 	
@@ -209,6 +313,39 @@ public class AVATAR2CPOSIX {
 			ret += getCTypeOf(aa) + " " + aa.getName() + " = " + aa.getInitialValue() + ";" + CR;
 		}
 		return ret;
+	}
+	
+	public void makeThreadsInMain(boolean _debug) {
+		mainFile.appendToMainCode("/* Threads of tasks */" + CR);  
+		for(TaskFile taskFile: taskFiles) {
+			mainFile.appendToMainCode("pthread_t thread__" + taskFile.getName() + ";" + CR);
+		}
+		
+		if (_debug) {
+			mainFile.appendToMainCode("/* Activating debug messages */" + CR); 
+			mainFile.appendToMainCode("activeDebug();" + CR);  
+		}
+		
+		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Starting tasks\");" + CR);
+		for(TaskFile taskFile: taskFiles) {
+			mainFile.appendToMainCode("pthread_create(&thread__" + taskFile.getName() + ", NULL, mainFunc__" + taskFile.getName() + ", (void *)\"" + taskFile.getName() + "\");" + CR);
+		}
+		
+		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Joining tasks\");" + CR);
+		for(TaskFile taskFile: taskFiles) {
+			mainFile.appendToMainCode("pthread_join(thread__" + taskFile.getName() + ", NULL);" + CR);
+		}
+		
+		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Application terminated\");" + CR);
+	}
+	
+	public void makeMakefileSrc(String _path) {
+		makefile_src = "SRCS = ";
+		makefile_src += _path + "main.c ";
+		for(TaskFile taskFile: taskFiles) {
+			makefile_src += _path + taskFile.getName() + ".c ";
+		}
+		
 	}
 	
 	
