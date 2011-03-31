@@ -54,25 +54,45 @@ import avatartranslator.*;
 public class TaskFile {
 
 	private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\""; 
+	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"main.h\""; 
+	
+	private final static String CR = "\n";
 	
 	private String name;
+	
+	private String headerCode;
+	private String mainCode;
 	
 	
 	public TaskFile(String _name) {
 		name = _name;
+		headerCode = "";
+		mainCode = "";
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public String getHeaderCode() {
-		return "";
+	public String getFullHeaderCode() {
+		String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
+		s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
+		s += headerCode;
+		s += "#endif\n";
+		return s;
 	}
 	
 	public String getMainCode() {
-		return INCLUDE_HEADER + "\n" + LOCAL_INCLUDE_HEADER;
+		return "#include \"" + name + ".h\"" + CR + CR + mainCode;
 	}
+	
+	public void addToHeaderCode(String _code) {
+		headerCode += _code;
+	}
+	
+	public void addToMainCode(String _code) {
+		mainCode += _code;
+	}
+
 	
 }
