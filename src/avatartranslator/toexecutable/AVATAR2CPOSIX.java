@@ -181,7 +181,7 @@ public class AVATAR2CPOSIX {
 			list = am.getListOfAttributes();
 			int cpt = 0;
 			for(AvatarAttribute aa: list) {
-				ret += getCTypeOf(aa) + " " + aa.getName()
+				ret += getCTypeOf(aa) + " " + aa.getName();
 			}
 			
 			ret += ") {" + CR + "printf(\"Entering method " + am.getName() + "\");" + CR + "}" + CR + CR;
@@ -191,9 +191,9 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public void makeMainFunction(AvatarBlock _block, TaskFile _taskFile) {
-		String s = "void mainFunc_" + _block.getName() + "(void *arg)"
+		String s = "void mainFunc_" + _block.getName() + "(void *arg)";
 		String sh = "extern " + s + ";" + CR;
-		s+= {" + CR;
+		s+= "{" + CR;
 			
 		s += makeAttributesDeclaration(_block, _taskFile);	
 			
