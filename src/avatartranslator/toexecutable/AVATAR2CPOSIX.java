@@ -227,6 +227,11 @@ public class AVATAR2CPOSIX {
 		s += makeAttributesDeclaration(_block, _taskFile);	
 		
 		s+= CR + "int __currentState = STATE__START__STATE;" + CR;
+		s+= "request *__req0, *__req1;" + CR;
+		int nbOfMaxParams = _block.getMaxNbOfParams();
+		for(int i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
+			s+= "int *__params0[" + nbOfMaxParams + "];" + CR;
+		}
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
 		
@@ -299,6 +304,22 @@ public class AVATAR2CPOSIX {
 		
 		if (_asme instanceof AvatarActionOnSignal) {
 			AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
+			AvatarSignal as = aaos.getSignal();
+			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+			
+			if (ar != null) {
+				if (aaos.isSending()) {
+					// Putting params
+					for(i=0; i<aaos.getNbOfValues() ;i++) {
+						ret += "__params0[" + i + "] = &" +  aaos.getValue(i) + ";" + CR;
+					}
+					if (ar.isAsynchronous()) {
+						ret += "__req0 = getNewRequest(SEND_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+					} else {
+						ret += "__req0 = getNewRequest(SEND_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+					}
+				}
+			}
 			
 		}
 		
@@ -316,7 +337,7 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public void makeThreadsInMain(boolean _debug) {
-		mainFile.appendToMainCode("/* Threads of tasks */" + CR);  
+		mainFile.appendToMainCode(CR + "/* Threads of tasks */" + CR);  
 		for(TaskFile taskFile: taskFiles) {
 			mainFile.appendToMainCode("pthread_t thread__" + taskFile.getName() + ";" + CR);
 		}

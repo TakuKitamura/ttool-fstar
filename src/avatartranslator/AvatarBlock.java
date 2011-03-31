@@ -440,6 +440,36 @@ public class AvatarBlock extends AvatarElement {
 		return true;
 	}
 	
+	public int getMaxNbOfParams() {
+		if (asm == null) {
+			return 0;
+		}
+		
+		int cpt = 0;
+		
+		for(AvatarStateMachineElement asme :asm.getListOfElements()) {
+			if (asme instanceof AvatarActionOnSignal) {
+				cpt = Math.max(cpt, ((AvatarActionOnSignal)asme).getNbOfValues());
+			}
+		}
+		return cpt;
+	}
+	
+	public int getMaxNbOfMultipleBranches() {
+		if (asm == null) {
+			return 0;
+		}
+		
+		int cpt = 1;
+		
+		for(AvatarStateMachineElement asme :asm.getListOfElements()) {
+			if (asme instanceof AvatarState) {
+				cpt = Math.max(cpt, asme.nbOfNexts());
+			}
+		}
+		return cpt;
+	}
+	
 	
     
 }
