@@ -72,6 +72,10 @@ public class AVATAR2CPOSIX {
 		avspec = _avspec;
 	}
 	
+	public static String getGeneratedPath() {
+		return GENERATED_PATH;
+	}
+	
 	
 	public void saveInFiles(String path) throws FileException {
 		
@@ -118,8 +122,8 @@ public class AVATAR2CPOSIX {
 		// Create a main mutex
 		mainFile.appendToHCode("/* Main mutex */" + CR);
 		mainFile.appendToBeforeMainCode("/* Main mutex */" + CR);
-		mainFile.appendToHCode("extern pthread_mutex_t mainMutex;" + CR + CR);
-		mainFile.appendToBeforeMainCode("pthread_mutex_t mainMutex;" + CR + CR);
+		mainFile.appendToHCode("extern pthread_mutex_t __mainMutex;" + CR + CR);
+		mainFile.appendToBeforeMainCode("pthread_mutex_t __mainMutex;" + CR + CR);
 		
 	}
 	
@@ -132,10 +136,10 @@ public class AVATAR2CPOSIX {
 		for(AvatarRelation ar: avspec.getRelations()) {
 				if (!ar.isAsynchronous()) {
 					for(int i=0; i<ar.nbOfSignals(); i++) {
-						mainFile.appendToHCode("extern syncchannel " + getChannelName(ar, i)  + ";" + CR);
-						mainFile.appendToBeforeMainCode("syncchannel " + getChannelName(ar, i) + ";" + CR);
-						mainFile.appendToMainCode(getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
-						mainFile.appendToMainCode(getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+						mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i)  + ";" + CR);
+						mainFile.appendToBeforeMainCode("syncchannel __" + getChannelName(ar, i) + ";" + CR);
+						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
 					}
 				}
 		}
@@ -204,7 +208,14 @@ public class AVATAR2CPOSIX {
 				cpt ++;
 			}
 			
-			ret += ") {" + CR + "printf(\"Entering method " + am.getName() + "\\n\");" + CR + "}" + CR + CR;
+			ret += ") {" + CR + "debugMsg(\"-> ....() Entering method " + am.getName() + "\");" + CR;
+			
+			list = am.getListOfAttributes();
+			cpt = 0;
+			for(AvatarAttribute aa: list) {
+				ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
+			}
+			ret += "}" + CR + CR;
 		}
 		_taskFile.addToMainCode(ret + CR);
 		
@@ -220,6 +231,8 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public void makeMainFunction(AvatarBlock _block, TaskFile _taskFile) {
+		int i;
+		
 		String s = "void *mainFunc__" + _block.getName() + "(void *arg)";
 		String sh = "extern " + s + ";" + CR;
 		s+= "{" + CR;
@@ -227,11 +240,15 @@ public class AVATAR2CPOSIX {
 		s += makeAttributesDeclaration(_block, _taskFile);	
 		
 		s+= CR + "int __currentState = STATE__START__STATE;" + CR;
-		s+= "request *__req0, *__req1;" + CR;
+			
 		int nbOfMaxParams = _block.getMaxNbOfParams();
-		for(int i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
+		for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
+			s+= "request __req" + i + ";" + CR;
 			s+= "int *__params0[" + nbOfMaxParams + "];" + CR;
 		}
+		
+		s+= "pthread_cond_t __myCond;" + CR;
+		s+= "request *__returnRequest;" + CR;
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
 		
@@ -280,6 +297,17 @@ public class AVATAR2CPOSIX {
 		
 		if (_asme instanceof AvatarTransition) {
 			AvatarTransition at = (AvatarTransition)_asme;
+			
+			if (at.isGuarded()) {
+				String g = modifyGuard(at.getGuard());
+				
+				ret += "if (!" + g + ") {" + CR;
+				ret += "debugMsg(\"Guard failed: " + g + "\");" + CR;
+				ret += "__currentState = STATE__STOP__STATE;" + CR; 
+				ret += "break;" + CR;
+				ret += "}" + CR;
+			}
+			
 			for(i=0; i<at.getNbOfAction(); i++) {
 				ret += at.getAction(i) + ";" + CR;
 			}
@@ -288,7 +316,22 @@ public class AVATAR2CPOSIX {
 	
 		if (_asme instanceof AvatarState) {
 			if (!firstCall) {
+				ret += "debugMsg(\"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
 				return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR; 
+			} else {
+				if (_asme.nbOfNexts() == 0) {
+					return ret + "__currentState = STATE__STOP__STATE;" + CR; 
+				}
+				
+				if (_asme.nbOfNexts() == 1) {
+					return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
+				}
+				
+				// Complex case of states -> several nexts
+				// 1) Only immediatly executable transitions
+				
+				
+				
 			}
 		}
 		
@@ -308,23 +351,46 @@ public class AVATAR2CPOSIX {
 			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
 			
 			if (ar != null) {
+				
+				// Sending
 				if (aaos.isSending()) {
 					// Putting params
 					for(i=0; i<aaos.getNbOfValues() ;i++) {
 						ret += "__params0[" + i + "] = &" +  aaos.getValue(i) + ";" + CR;
 					}
 					if (ar.isAsynchronous()) {
-						ret += "__req0 = getNewRequest(SEND_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "makeNewRequest(&__req0, SEND_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "__req0.asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 					} else {
-						ret += "__req0 = getNewRequest(SEND_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "makeNewRequest(&__req0, SEND_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "__req0.syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 					}
+					ret += executeOneRequest("__req0");
+					
+				// Receiving
+				} else {
+					for(i=0; i<aaos.getNbOfValues() ;i++) {
+						ret += "__params0[" + i + "] = &" +  aaos.getValue(i) + ";" + CR;
+					}
+					if (ar.isAsynchronous()) {
+						ret += "makeNewRequest(&__req0, RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "__req0.asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+					} else {
+						ret += "makeNewRequest(&__req0, RECEIVE_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
+						ret += "__req0.syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+					}
+					ret += executeOneRequest("__req0");
 				}
 			}
-			
 		}
 		
 		// Default
 		return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
+	}
+	
+	private String executeOneRequest(String var) {
+		String ret = "__returnRequest = executeOneRequest(&" + var + ", &__myCond, &__mainMutex);" + CR; 
+		return ret;
 	}
 	
 	
@@ -358,6 +424,7 @@ public class AVATAR2CPOSIX {
 		}
 		
 		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Application terminated\");" + CR);
+		mainFile.appendToMainCode("return 0;" + CR);
 	}
 	
 	public void makeMakefileSrc(String _path) {
@@ -381,5 +448,20 @@ public class AVATAR2CPOSIX {
 	public String getChannelName(AvatarRelation _ar, int _index) {
 		return _ar.block1.getName() + "_" + _ar.getSignal1(_index).getName() + "__" + _ar.block2.getName() + "_" + _ar.getSignal2(_index).getName();
 	}
+	
+	public String getChannelName(AvatarRelation _ar, AvatarSignal _as) {
+		int index = _ar.getIndexOfSignal(_as);
+		return getChannelName(_ar, index);
+	}
+	
+	public String modifyGuard(String _g) {
+		String g = Conversion.replaceAllString(_g, "[", "(").trim();
+		g = Conversion.replaceAllString(g, "]", ")").trim();
+		g = Conversion.replaceOp(g, "and", "&&");
+		g = Conversion.replaceOp(g, "or", "||");
+		g = Conversion.replaceOp(g, "not", "!");
+		return g;
+	}
+				
 	
 }

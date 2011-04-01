@@ -65,7 +65,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
     
     protected MainGUI mgui;
     
-    private String textSysC1 = "Generate executable code in";
+    private String textSysC1 = "Base directory of code generation code:";
     private String textSysC2 = "Compile executable code in";
     //private String textSysC3 = "with";
     private String textSysC4 = "Run code:";
@@ -202,7 +202,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
         jp01.add(removeXFiles, c01);
         
         debugmode = new JCheckBox("Put debug information in generated code");
-        debugmode.setSelected(false);
+        debugmode.setSelected(true);
         jp01.add(debugmode, c01);
 		
 		optimizemode = new JCheckBox("Optimize code");
@@ -378,14 +378,14 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 					
 					if (removeCFiles.isSelected()) {
 						jta.append("Removing all .h files\n");
-						list = FileUtils.deleteFiles(code1.getText(), ".h");
+						list = FileUtils.deleteFiles(code1.getText() +  AVATAR2CPOSIX.getGeneratedPath(), ".h");
 						if (list.length() == 0) {
 							jta.append("No files were deleted\n");
 						} else {
 							jta.append("Files deleted:\n" + list + "\n");
 						}
-						jta.append("Removing all  .cpp files\n");
-						list = FileUtils.deleteFiles(code1.getText(), ".cpp");
+						jta.append("Removing all  .c files\n");
+						list = FileUtils.deleteFiles(code1.getText() +  AVATAR2CPOSIX.getGeneratedPath(), ".c");
 						if (list.length() == 0) {
 							jta.append("No files were deleted\n");
 						} else {
@@ -395,7 +395,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 					
 					if (removeXFiles.isSelected()) {
 						jta.append("Removing all .x files\n");
-						list = FileUtils.deleteFiles(code1.getText(), ".x");
+						list = FileUtils.deleteFiles(code1.getText() , ".x");
 						if (list.length() == 0) {
 							jta.append("No files were deleted\n");
 						} else {

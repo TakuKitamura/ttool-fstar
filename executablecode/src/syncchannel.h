@@ -1,13 +1,15 @@
 #ifndef SYNCCHANNEL_H
 #define SYNCCHANNEL_H
 
+struct syncchannel;
+
 #include "request.h"
 
 struct syncchannel {
   char *outname;
   char *inname;
-  request* inWaitQueue;
-  request* outWaitQueue; 
+  struct request* inWaitQueue;
+  struct request* outWaitQueue; 
 };
 
 typedef struct syncchannel syncchannel;
