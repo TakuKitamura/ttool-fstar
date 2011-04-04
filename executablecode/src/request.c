@@ -59,8 +59,9 @@ request *getRequestAtIndex(setOfRequests *list, int index) {
   int cpt = 0;
   request * req = list->head;
 
-  while(index < cpt) {
+  while(cpt < index) {
     req = req->nextRequestInList;
+    cpt ++;
   }
 
   return req;
@@ -107,4 +108,51 @@ void copyParameters(request *src, request *dst) {
   for(i=0; i<dst->nbOfParams; i++) {
     *(dst->params[i]) = *(src->params[i]);
   }
+}
+
+
+void clearListOfRequests(setOfRequests *list) {
+  list->head = NULL;
+}
+
+setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
+  setOfRequests *list = (setOfRequests *)(malloc(sizeof(setOfRequests)));
+  list->head = NULL;
+  list->wakeupCondition = wakeupCondition;
+  list->mutex = mutex;
+
+  return list;
+}
+
+void fillListOfRequests(setOfRequests *list, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
+  list->head = NULL;
+  list->wakeupCondition = wakeupCondition;
+  list->mutex = mutex;
+}
+
+
+void addRequestToList(setOfRequests *list, request* req) {
+  request *tmpreq;
+
+  if (list == NULL) {
+    criticalError("NULL List in addRequestToList");
+  }
+
+  if (req == NULL) {
+    criticalError("NULL req in addRequestToList");
+  }
+
+  req->listOfRequests = list;
+
+  if (list->head == NULL) {
+    list->head = req;
+    return;
+  }
+
+  tmpreq = list->head;
+  while(tmpreq->nextRequestInList != NULL) {
+    tmpreq = tmpreq->nextRequestInList;
+  }
+
+  tmpreq->nextRequestInList = req;
 }

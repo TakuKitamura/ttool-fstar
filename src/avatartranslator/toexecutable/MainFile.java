@@ -57,7 +57,7 @@ public class MainFile {
 	private final static String H_END_DEF = "#endif\n";
 
 	private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\""; 
+	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"random.h\""; 
 	
 	private final static String MAIN_DEC = "int main(int argc, char *argv[]) {\n";
 	private final static String CR = "\n";

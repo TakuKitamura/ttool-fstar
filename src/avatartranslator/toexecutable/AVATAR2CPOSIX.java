@@ -242,15 +242,19 @@ public class AVATAR2CPOSIX {
 		s+= CR + "int __currentState = STATE__START__STATE;" + CR;
 			
 		int nbOfMaxParams = _block.getMaxNbOfParams();
+		s+= "request *__req;" + CR;
 		for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
 			s+= "request __req" + i + ";" + CR;
-			s+= "int *__params0[" + nbOfMaxParams + "];" + CR;
+			s+= "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
 		}
+		s+= "setOfRequests __list;" + CR;
 		
 		s+= "pthread_cond_t __myCond;" + CR;
 		s+= "request *__returnRequest;" + CR;
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
+		
+		s+= CR + "fillListOfRequests(&__list, &__myCond, &__mainMutex);" + CR; 
 		
 		s+= "printf(\"my name = %s\\n\", __myname);" + CR;
 		
@@ -284,6 +288,9 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public String makeBehaviourFromElement(AvatarBlock _block, AvatarStateMachineElement _asme, boolean firstCall) {
+		AvatarStateMachineElement asme0;
+		
+		
 		if (_asme == null) {
 			return "";
 		}
@@ -328,10 +335,62 @@ public class AVATAR2CPOSIX {
 				}
 				
 				// Complex case of states -> several nexts
+				// Put in list all 
+				
+				
 				// 1) Only immediatly executable transitions
+				for(i=0; i<_asme.nbOfNexts(); i++) {
+					if (_asme.getNext(i) instanceof AvatarTransition) {
+						AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
+						
+						if (at.hasActions()) {
+							ret += makeImmediateAction(at, i);
+						} else {
+							if (at.getNext(0) instanceof AvatarActionOnSignal) {
+								ret += makeSignalAction(at, i);
+							} else {
+								// nothing special to do : immediate choice
+								ret += makeImmediateAction(at, i);
+							}
+						}
+					}
+				}
 				
+				// Make all requests
+				// Test if at least one request in the list!
+				ret += "if (nbOfRequests(&__list) == 0) {" + CR;
+				ret += "debugMsg(\"No possible request\");" + CR;
+				ret += "__currentState = STATE__STOP__STATE;" + CR; 
+				ret += "break;" + CR;
+				ret += "}" + CR;
 				
+				ret += "__req = executeListOfRequests(&__list);" + CR;
+				ret += "clearListOfRequests(&__list);" + CR ;
 				
+				// Resulting requests
+				for(i=0; i<_asme.nbOfNexts(); i++) {
+					if (i != 0) {
+						ret += "else ";
+					}
+					AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
+					if (at.hasActions()) {
+						ret += " if (__req == &__req" + i + ") {" + CR;
+						for(int j=0; j<at.getNbOfAction(); j++) {
+							ret += at.getAction(j) + ";" + CR;
+						}
+						ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
+					}  else {
+						if (at.getNext(0) instanceof AvatarActionOnSignal) {
+							ret += " if (__req == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
+						} else {
+							// nothing special to do : immediate choice
+							ret += " if (__req == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
+						}
+					}
+					ret += CR;
+					
+				}
+				return ret;
 			}
 		}
 		
@@ -347,49 +406,102 @@ public class AVATAR2CPOSIX {
 		
 		if (_asme instanceof AvatarActionOnSignal) {
 			AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
+			ret += makeSignalAction(aaos, 0);
 			AvatarSignal as = aaos.getSignal();
 			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
-			
-			if (ar != null) {
-				
-				// Sending
-				if (aaos.isSending()) {
-					// Putting params
-					for(i=0; i<aaos.getNbOfValues() ;i++) {
-						ret += "__params0[" + i + "] = &" +  aaos.getValue(i) + ";" + CR;
-					}
-					if (ar.isAsynchronous()) {
-						ret += "makeNewRequest(&__req0, SEND_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
-						ret += "__req0.asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
-					} else {
-						ret += "makeNewRequest(&__req0, SEND_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
-						ret += "__req0.syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
-					}
-					ret += executeOneRequest("__req0");
-					
-				// Receiving
-				} else {
-					for(i=0; i<aaos.getNbOfValues() ;i++) {
-						ret += "__params0[" + i + "] = &" +  aaos.getValue(i) + ";" + CR;
-					}
-					if (ar.isAsynchronous()) {
-						ret += "makeNewRequest(&__req0, RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
-						ret += "__req0.asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
-					} else {
-						ret += "makeNewRequest(&__req0, RECEIVE_SYNC_REQUEST, 0, 0, 0, " + aaos.getNbOfValues() + ", __params0);" + CR;
-						ret += "__req0.syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
-					}
-					ret += executeOneRequest("__req0");
-				}
-			}
+			ret += executeOneRequest("__req0");
 		}
 		
 		// Default
 		return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
 	}
 	
+	private String makeSignalAction(AvatarTransition _at, int _index) {
+		String ret = "";
+		AvatarActionOnSignal aaos;
+		
+		if (!(_at.getNext(0) instanceof AvatarActionOnSignal)) {
+			return "";
+		}
+		
+		aaos = (AvatarActionOnSignal)(_at.getNext(0));
+		
+		if (_at.isGuarded()) {
+			String g = modifyGuard(_at.getGuard());
+			ret += "if (" + g + ") {" + CR;
+		}
+		
+		ret += makeSignalAction(aaos, _index);
+		ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
+		
+		if (_at.isGuarded()) {
+			ret += "}" + CR;
+		}
+		
+		return ret;
+	}
+	
+	private String makeSignalAction(AvatarActionOnSignal _aaos, int _index) {
+		String ret = "";
+		int i;
+		
+		AvatarSignal as = _aaos.getSignal();
+		AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+		
+		if (ar != null) {
+			
+			// Sending
+			if (_aaos.isSending()) {
+				// Putting params
+				for(i=0; i<_aaos.getNbOfValues() ;i++) {
+					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
+				}
+				if (ar.isAsynchronous()) {
+					ret += "makeNewRequest(&__req" + _index + ", SEND_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+				} else {
+					ret += "makeNewRequest(&__req" + _index + ", SEND_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+				}
+				
+				// Receiving
+			} else {
+				for(i=0; i<_aaos.getNbOfValues() ;i++) {
+					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
+				}
+				if (ar.isAsynchronous()) {
+					ret += "makeNewRequest(&__req" + _index + ", RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+				} else {
+					ret += "makeNewRequest(&__req" + _index + ", RECEIVE_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	private String makeImmediateAction(AvatarTransition _at, int _index) {
+		String ret = "";
+		if (_at.isGuarded()) {
+			String g = modifyGuard(_at.getGuard());
+			ret += "if (" + g + ") {" + CR;
+		}
+		
+		ret += "makeNewRequest(&__req" + _index + ", IMMEDIATE, 0, 0, 0, 0, __params" + _index + ");" + CR;
+		ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
+		if (_at.isGuarded()) {
+			ret += "}" + CR;
+		}
+		
+		return ret;
+		
+	}
+	
 	private String executeOneRequest(String var) {
-		String ret = "__returnRequest = executeOneRequest(&" + var + ", &__myCond, &__mainMutex);" + CR; 
+		String ret = "__returnRequest = executeOneRequest(&__list, &" + var + ");" + CR;
+		ret += "clearListOfRequests(&__list);" + CR;
 		return ret;
 	}
 	
@@ -412,6 +524,9 @@ public class AVATAR2CPOSIX {
 			mainFile.appendToMainCode("/* Activating debug messages */" + CR); 
 			mainFile.appendToMainCode("activeDebug();" + CR);  
 		}
+		
+		mainFile.appendToMainCode("/* Activating randomness */" + CR); 
+		mainFile.appendToMainCode("initRandom();" + CR);  
 		
 		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Starting tasks\");" + CR);
 		for(TaskFile taskFile: taskFiles) {

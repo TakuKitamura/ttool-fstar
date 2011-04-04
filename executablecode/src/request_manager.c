@@ -133,38 +133,35 @@ void executeReceiveSyncRequest(request *req, syncchannel *channel) {
 }
 
 
-int executable(setOfRequests *list, int nb, int *info) {
+int executable(setOfRequests *list, int nb) {
   int cpt = 0;
   int index = 0;
   request *req = list->head;
 
   debugMsg("Starting loop");
 
-  while(req != NULL) {
+  while((req != NULL) && (cpt < nb)) {
+    req->executable = 0;
     if (req->type == SEND_SYNC_REQUEST) {
       debugMsg("Send sync");
       if (req->syncChannel->inWaitQueue != NULL) {
-	*(info + index) = 1;
+	req->executable = 1;
 	cpt ++;
-      } else {
-	*(info + index) = 0;
-      }
+      } 
       index ++;
     }
 
     if (req->type == RECEIVE_SYNC_REQUEST) {
       debugMsg("receive sync");
       if (req->syncChannel->outWaitQueue != NULL) {
-	*(info + index) = 1;
+	req->executable = 1;
 	cpt ++;
-      } else {
-	*(info + index) = 0;
       }
       index ++;
     }
 
     if (req->type == IMMEDIATE) {
-      *(info + index) = 1;
+      req->executable = 1;
       cpt ++;
     }
 
@@ -203,19 +200,19 @@ void private__makeRequest(request *req) {
 
 
 request *private__executeRequests0(setOfRequests *list, int nb) {
-  int req[nb];
-  int howMany;
+  int howMany, found;
   int selectedIndex, realIndex;
   request *selectedReq;
+  request *req;
   
   // Compute which requests can be executed
   debugMsg("counting requests");
-  howMany = executable(list, nb, &req[0]);
+  howMany = executable(list, nb);
 
   debugInt("Counting requests=", howMany);
 
   if (howMany == 0) {
-    debugMsg("no pending requests");
+    debugMsg("No pending requests");
     // Must make them pending
     
     private__makeRequestPending(list);
@@ -223,21 +220,30 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
     return NULL;
   }
   
-  debugMsg("At least one pending request");
+  debugInt("At least one pending request", howMany);
 
   
   // Select a request
+  req = list->head;
   selectedIndex = (rand() % howMany)+1;
-  
+  debugInt("selectedIndex=", selectedIndex);
   realIndex = 0;
-  while(selectedIndex>0) {
-    if (req[realIndex] == 1) {
-      selectedIndex --;
-    } else {
-      realIndex ++;
+  found = 0;
+  while(req != NULL) {
+    if (req->executable == 1) {
+      found ++;
+      if (found == selectedIndex) {
+	break;
+      }
     }
+    realIndex ++;
+    req = req->nextRequestInList;
   }
+
+  debugInt("Getting request at index", realIndex);
   selectedReq = getRequestAtIndex(list, realIndex);
+
+  debugInt("Selected request of type", selectedReq->type);
 
   // Execute that request
   private__makeRequest(selectedReq);
@@ -267,8 +273,8 @@ request *private__executeRequests(setOfRequests *list) {
 
 
 
-request *executeOneRequest(request *req, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
-  setOfRequests *list = newListOfRequests(wakeupCondition, mutex);
+
+request *executeOneRequest(setOfRequests *list, request *req) {
   req->nextRequestInList = NULL;
   req->listOfRequests = list;
   list->head = req;
@@ -299,41 +305,5 @@ request *executeListOfRequests(setOfRequests *list) {
 
   pthread_mutex_unlock(list->mutex);  
   return req;
-
 }
 
-setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
-  setOfRequests *list = (setOfRequests *)(malloc(sizeof(setOfRequests)));
-  list->head = NULL;
-  list->wakeupCondition = wakeupCondition;
-  list->mutex = mutex;
-
-  return list;
-}
-
-
-void addRequestToList(setOfRequests *list, request* req) {
-  request *tmpreq;
-
-  if (list == NULL) {
-    criticalError("NULL List in addRequestToList");
-  }
-
-  if (req == NULL) {
-    criticalError("NULL req in addRequestToList");
-  }
-
-  req->listOfRequests = list;
-
-  if (list->head == NULL) {
-    list->head = req;
-    return;
-  }
-
-  tmpreq = list->head;
-  while(tmpreq->nextRequestInList != NULL) {
-    tmpreq = tmpreq->nextRequestInList;
-  }
-
-  tmpreq->nextRequestInList = req;
-}

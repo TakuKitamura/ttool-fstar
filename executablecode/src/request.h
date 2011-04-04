@@ -39,6 +39,7 @@ struct request {
   int hasDelay;
   long minDelay;
   long maxDelay;
+  int executable;
   int selected;
   int nbOfParams;
   int **params;
@@ -47,7 +48,6 @@ struct request {
 typedef struct request request;
 
 request *getNewRequest(int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
-
 void makeNewRequest(request *req, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
 void destroyRequest(request *req);
 extern int isRequestSelected(request *req);
@@ -60,5 +60,9 @@ request * removeRequestFromList(request *list, request *requestToRemove);
 
 void copyParameters(request *src, request *dst);
 
+setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
+void addRequestToList(setOfRequests *list, request* req);
+void clearListOfRequests(setOfRequests *list);
+void fillListOfRequests(setOfRequests *list, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
 
 #endif
