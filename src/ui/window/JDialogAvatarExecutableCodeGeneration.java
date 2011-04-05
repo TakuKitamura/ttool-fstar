@@ -63,6 +63,8 @@ import launcher.*;
 
 public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
     
+	private static String[] unitTab = {"usec", "msec", "sec"}; 
+	
     protected MainGUI mgui;
     
     private String textSysC1 = "Base directory of code generation code:";
@@ -101,7 +103,9 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, optimizemode;
-	protected JComboBox versionCodeGenerator;
+	protected JComboBox versionCodeGenerator, units;
+	
+	private static int selectedUnit = 2;
 	
     
     private Thread t;
@@ -208,6 +212,13 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 		optimizemode = new JCheckBox("Optimize code");
 		optimizemode.setSelected(optimizeModeSelected);
         jp01.add(optimizemode, c01);
+		
+		jp01.add(new JLabel("1 time unit ="), c01);
+		
+		units = new JComboBox(unitTab);
+		units.setSelectedIndex(selectedUnit);
+		units.addActionListener(this);
+		jp01.add(units, c01);
 		
 		jp01.add(new JLabel("Code generator used:"), c01);
 		
@@ -325,6 +336,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
             closeDialog();
         } else if (evt.getSource() == versionCodeGenerator) {
 			selectedItem = versionCodeGenerator.getSelectedIndex();
+		} else if (evt.getSource() == units) {
+			selectedUnit = units.getSelectedIndex();
 		}
     }
     
@@ -406,6 +419,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 					testGo();
 					
 					selectedItem = versionCodeGenerator.getSelectedIndex();
+					selectedUnit = units.getSelectedIndex();
 					//System.out.println("Selected item=" + selectedItem);
 					if (selectedItem == 0) {
 						AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
@@ -415,6 +429,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 							jta.append("Error: No AVATAR specification\n");
 						} else {
 							AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec);
+							avatartocposix.setTimeUnit(selectedUnit);
 							avatartocposix.generateCPOSIX(debugmode.isSelected());
 							testGo();
 							jta.append("Generation of C-POSIX executable code: done\n");

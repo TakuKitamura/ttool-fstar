@@ -3,30 +3,45 @@
 #include <unistd.h>
 
 #include "request.h"
+#include "mytimelib.h"
 #include "myerrors.h"
+#include "random.h"
+#include "debug.h"
 
 
-request *getNewRequest(int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
+request *getNewRequest(int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
   request *req = (request *)(malloc(sizeof(struct request)));
   
   if (req == NULL) {
     criticalError("Allocation of request failed");
   }
 
-  makeNewRequest(req, type, hasDelay, minDelay, maxDelay, nbOfParams, params);  
+  makeNewRequest(req,  ID, type, hasDelay, minDelay, maxDelay, nbOfParams, params);  
   return req;
 }
 
-void makeNewRequest(request *req, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
+
+// Delays are in microseconds
+void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
+  long delay;
+
   req->next = NULL;
   req->listOfRequests = NULL;
   req->type = type;
+  req->ID = ID;
   req->hasDelay = hasDelay;
-  req->minDelay = minDelay;
-  req->maxDelay = maxDelay;
+
+  if (req->hasDelay > 0) {
+    delay = computeLongRandom(minDelay, maxDelay);
+    delayToTimeSpec(&(req->delay), delay);
+  }
+
   req->selected = 0;
   req->nbOfParams = nbOfParams;
   req->params = params;
+
+  req->alreadyPending = 0;
+  req->delayElapsed = 0;
 
 }
 
@@ -146,6 +161,7 @@ void addRequestToList(setOfRequests *list, request* req) {
 
   if (list->head == NULL) {
     list->head = req;
+    req->nextRequestInList = NULL;
     return;
   }
 
@@ -155,4 +171,5 @@ void addRequestToList(setOfRequests *list, request* req) {
   }
 
   tmpreq->nextRequestInList = req;
+  req->nextRequestInList = NULL;
 }

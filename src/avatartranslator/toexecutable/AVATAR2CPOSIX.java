@@ -55,6 +55,11 @@ import avatartranslator.*;
 
 public class AVATAR2CPOSIX {
 
+	private final static int USEC = 0;
+	private final static int MSEC = 1;
+	private final static int SEC = 2;
+	
+	
 	private final static String GENERATED_PATH = "generated_src" + File.separator;
 	private final static String UNKNOWN = "UNKNOWN";
 	private final static String CR = "\n";
@@ -67,9 +72,15 @@ public class AVATAR2CPOSIX {
 	private Vector<TaskFile> taskFiles;
 	private String makefile_src;
 	
+	private int timeUnit;
+	
 
 	public AVATAR2CPOSIX(AvatarSpecification _avspec) {
 		avspec = _avspec;
+	}
+	
+	public void setTimeUnit(int _timeUnit) {
+		timeUnit = _timeUnit;
 	}
 	
 	public static String getGeneratedPath() {
@@ -315,6 +326,10 @@ public class AVATAR2CPOSIX {
 				ret += "}" + CR;
 			}
 			
+			if (at.hasDelay()) {
+				ret+= "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
+			}
+			
 			for(i=0; i<at.getNbOfAction(); i++) {
 				ret += at.getAction(i) + ";" + CR;
 			}
@@ -457,10 +472,10 @@ public class AVATAR2CPOSIX {
 					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
 				}
 				if (ar.isAsynchronous()) {
-					ret += "makeNewRequest(&__req" + _index + ", SEND_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
-					ret += "makeNewRequest(&__req" + _index + ", SEND_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				}
 				
@@ -470,10 +485,10 @@ public class AVATAR2CPOSIX {
 					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
 				}
 				if (ar.isAsynchronous()) {
-					ret += "makeNewRequest(&__req" + _index + ", RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
-					ret += "makeNewRequest(&__req" + _index + ", RECEIVE_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				}
 			}
@@ -489,7 +504,11 @@ public class AVATAR2CPOSIX {
 			ret += "if (" + g + ") {" + CR;
 		}
 		
-		ret += "makeNewRequest(&__req" + _index + ", IMMEDIATE, 0, 0, 0, 0, __params" + _index + ");" + CR;
+		if (_at.hasDelay()) {
+			ret += "makeNewRequest(&__req" + _index + ", " + _at.getID() + ", IMMEDIATE, 1, " + reworkDelay(_at.getMinDelay()) + ", " + reworkDelay(_at.getMaxDelay()) + ", 0, __params" + _index + ");" + CR;
+		} else {
+			ret += "makeNewRequest(&__req" + _index + ", " + _at.getID() + ", IMMEDIATE, 0, 0, 0, 0, __params" + _index + ");" + CR;
+		}
 		ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
 		if (_at.isGuarded()) {
 			ret += "}" + CR;
@@ -576,6 +595,20 @@ public class AVATAR2CPOSIX {
 		g = Conversion.replaceOp(g, "or", "||");
 		g = Conversion.replaceOp(g, "not", "!");
 		return g;
+	}
+	
+	public String reworkDelay(String _delay) {
+		
+		switch(timeUnit) {
+		case USEC:
+			return _delay;
+		case MSEC:
+			return "(" + _delay + ")*1000";
+		case SEC:
+			return "(" + _delay + ")*1000000";
+		}
+		
+		return _delay;
 	}
 				
 	

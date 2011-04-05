@@ -25,6 +25,10 @@ struct setOfRequests {
   timespec completionTime;
   pthread_cond_t *wakeupCondition;
   pthread_mutex_t *mutex;
+
+  int hasATimeRequest; // Means that at least on request of the list hasn't completed yet its time delay
+  timespec minTimeToWait;
+  struct request *selectedRequest;
 };
 
 typedef struct setOfRequests setOfRequests;
@@ -36,19 +40,24 @@ struct request {
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
   int type;
-  int hasDelay;
-  long minDelay;
-  long maxDelay;
-  int executable;
-  int selected;
+  int ID;
+  int hasDelay;;
+  timespec delay;
   int nbOfParams;
   int **params;
+
+  // Filled by the request manager
+  int executable;
+  int selected;
+  int alreadyPending; // Whether it has been taken into account for execution or not
+  int delayElapsed;
+  timespec myStartTime; // Time at which the delay has expired
 };
 
 typedef struct request request;
 
-request *getNewRequest(int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
-void makeNewRequest(request *req, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
+void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
+request *getNewRequest(int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params);
 void destroyRequest(request *req);
 extern int isRequestSelected(request *req);
 

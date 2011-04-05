@@ -3,5 +3,5 @@
 
 extern void initRandom();
 extern int computeRandom(int min, int max);
-
+extern long computeLongRandom(long min, long max);
 #endif

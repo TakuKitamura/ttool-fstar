@@ -6,6 +6,8 @@
 #include "request.h"
 #include "myerrors.h"
 #include "debug.h"
+#include "mytimelib.h"
+#include "random.h"
 
 
 
@@ -40,6 +42,7 @@ void executeSendSyncTransaction(request *req) {
 
   // Select the selected request, and notify the information
   selectedReq->selected = 1;
+  selectedReq->listOfRequests->selectedRequest = selectedReq;
 
   // Handle parameters
   copyParameters(req, selectedReq);
@@ -76,6 +79,7 @@ void executeReceiveSyncTransaction(request *req) {
 
   // Select the request, and notify the information in the channel
   selectedReq->selected = 1;
+  selectedReq->listOfRequests->selectedRequest = selectedReq;
 
   // Handle parameters
   copyParameters(selectedReq, req);
@@ -85,84 +89,75 @@ void executeReceiveSyncTransaction(request *req) {
 }
 
 
-void executeSendSyncRequest(request *req, syncchannel *channel) {
-  /*debugMsg("Locking mutex");
-
-  if(channel == NULL) {
-    debugMsg("NULL channel");
-    exit(-1);
-  }
-
-  if(channel->mutex == NULL) {
-    debugMsg("NULL mutex");
-    exit(-1);
-  }
-
-  pthread_mutex_lock(channel->mutex);
-
-  debugMsg("Execute");
-  executeSendSyncTransaction(req, channel);
-
-  while (isRequestSelected(req) == 0) {
-    debugMsg("Stuck waiting for a receive request");
-    pthread_cond_wait(channel->sendCondition, channel->mutex);
-    debugMsg("Woke up from waiting for a receive request");
-  }
-
-  pthread_mutex_unlock(channel->mutex);
-  debugMsg("Mutex unlocked");*/
-
-}
-
-void executeReceiveSyncRequest(request *req, syncchannel *channel) {
-  /*debugMsg("Locking mutex");
-
-  pthread_mutex_lock(channel->mutex);
-
-  debugMsg("Execute");
-  executeReceiveSyncTransaction(req, channel);
-
-  while (isRequestSelected(req) == 0) {
-    debugMsg("Stuck waiting for a send request");
-    pthread_cond_wait(req->listOfRequests->wakeupCondition, channel->mutex);
-    debugMsg("Woke up from waiting for a send request");
-  }
-
-  pthread_mutex_unlock(channel->mutex);
-  debugMsg("Mutex unlocked");*/
-}
-
-
 int executable(setOfRequests *list, int nb) {
   int cpt = 0;
   int index = 0;
   request *req = list->head;
+  timespec ts;
+  int tsDone = 0;
 
   debugMsg("Starting loop");
 
+  list->hasATimeRequest = 0;
+
+  while(req != NULL) {
+    if (!(req->delayElapsed)) {
+      if (req->hasDelay) {
+	// Is the delay elapsed???
+	if (tsDone == 0) {
+	  clock_gettime(CLOCK_REALTIME, &ts);
+	  tsDone = 1;
+	}
+
+	if (isBefore(&(req->myStartTime), &ts)) {
+	  // Delay not elapsed
+	  debugMsg("---------t--------> delay NOT elapsed");
+	  if (list->hasATimeRequest == 0) {
+	    list->hasATimeRequest = 1;
+	    list->minTimeToWait.tv_nsec = req->myStartTime.tv_nsec;
+	    list->minTimeToWait.tv_nsec = req->myStartTime.tv_nsec;
+	  } else {
+	    minTime(&(req->myStartTime), &(list->minTimeToWait),&(list->minTimeToWait));
+	  }
+	}  else {
+	  // Delay elapsed
+	  debugMsg("---------t--------> delay elapsed");
+	  req->delayElapsed = 1;
+	}
+      } else {
+	req->delayElapsed = 1;
+      }
+    }
+    req = req->nextRequestInList;
+  }
+  
+  req = list->head;
   while((req != NULL) && (cpt < nb)) {
     req->executable = 0;
-    if (req->type == SEND_SYNC_REQUEST) {
-      debugMsg("Send sync");
-      if (req->syncChannel->inWaitQueue != NULL) {
-	req->executable = 1;
-	cpt ++;
-      } 
-      index ++;
-    }
+    if (req->delayElapsed) {
+      if (req->type == SEND_SYNC_REQUEST) {
+	debugMsg("Send sync");
 
-    if (req->type == RECEIVE_SYNC_REQUEST) {
-      debugMsg("receive sync");
-      if (req->syncChannel->outWaitQueue != NULL) {
+	if (req->syncChannel->inWaitQueue != NULL) {
+	  req->executable = 1;
+	  cpt ++;
+	} 
+	index ++;
+      }
+
+      if (req->type == RECEIVE_SYNC_REQUEST) {
+	debugMsg("receive sync");
+	if (req->syncChannel->outWaitQueue != NULL) {
+	  req->executable = 1;
+	  cpt ++;
+	}
+	index ++;
+      }
+
+      if (req->type == IMMEDIATE) {
 	req->executable = 1;
 	cpt ++;
       }
-      index ++;
-    }
-
-    if (req->type == IMMEDIATE) {
-      req->executable = 1;
-      cpt ++;
     }
 
     req = req->nextRequestInList;
@@ -175,11 +170,15 @@ int executable(setOfRequests *list, int nb) {
 void private__makeRequestPending(setOfRequests *list) {
   request *req = list->head;
   while(req != NULL) {
-    if (req->type == SEND_SYNC_REQUEST) {
-      req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
-    }
-    if (req->type ==  RECEIVE_SYNC_REQUEST) {
-      req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
+    if ((req->delayElapsed) && (!(req->alreadyPending))) {
+      if (req->type == SEND_SYNC_REQUEST) {
+	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
+	req->alreadyPending = 1;
+      }
+      if (req->type ==  RECEIVE_SYNC_REQUEST) {
+	req->alreadyPending = 1;
+	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
+      }
     }
 
     req = req->nextRequestInList;
@@ -206,7 +205,7 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
   request *req;
   
   // Compute which requests can be executed
-  debugMsg("counting requests");
+  debugMsg("Counting requests");
   howMany = executable(list, nb);
 
   debugInt("Counting requests=", howMany);
@@ -242,6 +241,8 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
 
   debugInt("Getting request at index", realIndex);
   selectedReq = getRequestAtIndex(list, realIndex);
+  selectedReq->selected = 1;
+  selectedReq->listOfRequests->selectedRequest = selectedReq;
 
   debugInt("Selected request of type", selectedReq->type);
 
@@ -254,17 +255,10 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
 
 request *private__executeRequests(setOfRequests *list) {
   // Is a request already selected?
-  request *req;
 
-  req = list->head;
-
-  while(req != NULL) {
-    if (req->selected == 1) {
-      return req;
-    }
-    req = req->nextRequestInList;
+  if (list->selectedRequest != NULL) {
+    return list->selectedRequest;
   }
-
 
   debugMsg("No request selected -> looking for one!");
 
@@ -282,28 +276,57 @@ request *executeOneRequest(setOfRequests *list, request *req) {
 }
 
 
+void setLocalStartTime(setOfRequests *list) {
+  request *req = list->head;
+
+  while(req != NULL) {
+    if (req->hasDelay) {
+      req->delayElapsed = 0;
+      addTime(&(list->startTime), &(req->delay), &(req->myStartTime));
+      debugMsg(" -----t------>: Request with delay");
+    } else {
+      req->delayElapsed = 1;
+      req->myStartTime.tv_nsec = list->startTime.tv_nsec;
+      req->myStartTime.tv_sec = list->startTime.tv_sec;
+    }
+    req = req->nextRequestInList;
+  }
+}
+
+
 // Return the executed request
 request *executeListOfRequests(setOfRequests *list) {
   request *req;
 
   clock_gettime(CLOCK_REALTIME, &list->startTime);
+  list->selectedRequest = NULL;
+  setLocalStartTime(list);
   
   // Try to find a request that could be executed
+  debugMsg("Locking mutex");
   pthread_mutex_lock(list->mutex);
+  debugMsg("Mutex locked");
 
   debugMsg("Going to execute request");
 
   while((req = private__executeRequests(list)) == NULL) {
     debugMsg("Waiting for request!");
-    pthread_cond_wait(list->wakeupCondition, list->mutex);
-    debugMsg("Waking up for requests!");
+    if (list->hasATimeRequest == 1) {
+      debugMsg("Waiting for a request and at most for a given time");
+      pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
+    } else {
+      debugMsg("Releasing mutex");
+      pthread_cond_wait(list->wakeupCondition, list->mutex);
+    }
+    debugMsg("Waking up for requests! -> getting mutex");
   }
 
   debugMsg("Request selected!");
 
   clock_gettime(CLOCK_REALTIME, &list->completionTime);
 
-  pthread_mutex_unlock(list->mutex);  
+  pthread_mutex_unlock(list->mutex); 
+  debugMsg("Mutex unlocked");
   return req;
 }
 

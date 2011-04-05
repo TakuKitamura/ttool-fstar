@@ -8,6 +8,7 @@ void unactiveDebug();
 
 void debugThreeInts(char *msg, int value1, int value2, int value3);
 void debugTwoInts(char *msg, int value1, int value2);
+void debugLong(char *msg, long value);
 void debugInt(char *msg, int value);
 void debugMsg(char *msg);
 

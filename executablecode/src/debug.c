@@ -46,6 +46,16 @@ void debugInt(char *msg, int value) {
   }
 }
 
+void debugLong(char *msg, long value) {
+  if (debug == DEBUG_OFF) {
+    return;
+  }
+  
+  if (msg != NULL) {
+    printf("DT> %s: %ld\n", msg, value);
+  }
+}
+
 void debugMsg(char *msg) {
   if (debug == DEBUG_OFF) {
     return;
