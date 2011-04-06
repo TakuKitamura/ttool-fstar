@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "debug.h"
+
 
 #define DEBUG_ON 1
 #define DEBUG_OFF 2
@@ -64,4 +66,8 @@ void debugMsg(char *msg) {
   if (msg != NULL) {
     printf("DT> %s\n", msg);
   }
+}
+
+void debugTime(struct timespec *ts) {
+  printf("DT> sec=%ld nsec=%ld", ts->tv_sec, ts->tv_nsec);
 }
