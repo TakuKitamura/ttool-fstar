@@ -266,13 +266,16 @@ public class AvatarStateMachine extends AvatarElement {
 		AvatarState as;
 		AvatarTransition at;
 		LinkedList<AvatarStateMachineElement> ll;
+		String tmp;
 		
 		// It cannot be a start / stop state since they have been previously removed ..
 		if (_element instanceof AvatarActionOnSignal) {
 			ll = getPreviousElementsOf(_element);
 			for(AvatarStateMachineElement element: ll) {
 				if (element instanceof AvatarTransition) {
-					as = new AvatarState("internalstate", null);
+					tmp = findUniqueStateName("internalstate__");
+					TraceManager.addDev("Creating state with name=" + tmp);
+					as = new AvatarState(tmp, null);
 					element.removeNext(_element);
 					element.addNext(as);
 					at = new AvatarTransition("internaltransition", null);
@@ -711,6 +714,29 @@ public class AvatarStateMachine extends AvatarElement {
 			astate.setState(ass.getState());
 			replace(ass, astate);
 		}
+	}
+	
+	
+	public String findUniqueStateName(String name) {
+		int id = 0;
+		boolean found;
+		
+		while(id < 10000) {
+			found = false;
+			for(AvatarStateMachineElement elt: elements) {
+				if (elt instanceof AvatarState) {
+					if (elt.getName().compareTo(name+id) == 0) {
+						found = true;
+						break;
+					}
+				}
+			}
+			if (!found) {
+					return name + id;
+				}
+			id ++;
+		}
+		return name + id;
 	}
 
 }

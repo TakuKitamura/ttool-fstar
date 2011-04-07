@@ -11,7 +11,8 @@ void debugTwoInts(char *msg, int value1, int value2);
 void debugLong(char *msg, long value);
 void debugInt(char *msg, int value);
 void debugMsg(char *msg);
-void debugTime(struct timespec *ts);
+void debug2Msg(char *name, char* msg);
+void debugTime(char* msg, struct timespec *ts);
 
 #endif
 

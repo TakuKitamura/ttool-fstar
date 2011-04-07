@@ -9,10 +9,17 @@
 #include <math.h>
 
 int computeRandom(int min, int max) {
+  if (min == max) {
+    return min;
+  }
   return (rand() % (max - min)) + min;
 }
 
 long computeLongRandom(long min, long max) {
+
+  if (min == max) {
+    return min;
+  }
 
   long rand0 = (((long)(rand()))*powl(2, ((((sizeof(long)-2))*8)-1)));
   long rand1 = rand0 % (max - min);

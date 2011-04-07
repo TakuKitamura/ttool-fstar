@@ -27,6 +27,7 @@ void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay,
 
   req->next = NULL;
   req->listOfRequests = NULL;
+  req->nextRequestInList = NULL;
   req->type = type;
   req->ID = ID;
   req->hasDelay = hasDelay;
@@ -42,6 +43,8 @@ void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay,
 
   req->alreadyPending = 0;
   req->delayElapsed = 0;
+
+  req->relatedRequest = NULL;
 
 }
 
@@ -139,8 +142,9 @@ setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_
   return list;
 }
 
-void fillListOfRequests(setOfRequests *list, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
+void fillListOfRequests(setOfRequests *list, char *name, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
   list->head = NULL;
+  list->owner = name;
   list->wakeupCondition = wakeupCondition;
   list->mutex = mutex;
 }
@@ -172,4 +176,33 @@ void addRequestToList(setOfRequests *list, request* req) {
 
   tmpreq->nextRequestInList = req;
   req->nextRequestInList = NULL;
+}
+
+void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne) {
+  setOfRequests *list = req->listOfRequests;
+  request *reqtmp;
+
+  if (list == NULL) {
+    return;
+  }
+
+  reqtmp = list->head;
+
+  while(reqtmp != NULL) {
+    debugInt("Considering request of type", reqtmp->type);
+      if (reqtmp->alreadyPending) {
+	if (reqtmp->type ==  RECEIVE_SYNC_REQUEST) {
+	  debugMsg("Removing request from inWaitQueue");
+	  reqtmp->syncChannel->inWaitQueue = removeRequestFromList(reqtmp->syncChannel->inWaitQueue, reqtmp);
+	  debugMsg("done");
+	}
+
+	if (reqtmp->type ==  SEND_SYNC_REQUEST) {
+	  debugMsg("Removing request from outWaitQueue");
+	  reqtmp->syncChannel->outWaitQueue = removeRequestFromList(reqtmp->syncChannel->outWaitQueue, reqtmp);
+	  debugMsg("done");
+	}
+      }
+    reqtmp = reqtmp->nextRequestInList;
+  }
 }

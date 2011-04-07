@@ -31,6 +31,7 @@ int isBefore(struct timespec *src1, struct timespec *src2) {
 }
 
 void minTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
+  debugMsg("MIN TIME COMPUTATION");
   if (isBefore(src1,src2)) {
     dest->tv_nsec = src1->tv_nsec;
     dest->tv_sec = src1->tv_sec;
@@ -52,9 +53,11 @@ void waitFor(long minDelay, long maxDelay) {
   struct timespec tsret;
   int delay;
 
+  debugMsg("Computing random");
+
   delay = computeLongRandom(minDelay, maxDelay);
 
-  debugLong("random delay=", delay);
+  debugLong("Random delay=", delay);
 
   delayToTimeSpec(&tssrc, delay);
 

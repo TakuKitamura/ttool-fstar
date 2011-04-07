@@ -20,6 +20,7 @@ struct request;
 typedef struct timespec timespec;
 
 struct setOfRequests {
+  char* owner;
   struct request *head;
   timespec startTime;
   timespec completionTime;
@@ -37,6 +38,7 @@ struct request {
   struct request *next;
   struct setOfRequests* listOfRequests;
   struct request* nextRequestInList;
+  struct request* relatedRequest; // For synchro fro example
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
   int type;
@@ -72,6 +74,7 @@ void copyParameters(request *src, request *dst);
 setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
 void addRequestToList(setOfRequests *list, request* req);
 void clearListOfRequests(setOfRequests *list);
-void fillListOfRequests(setOfRequests *list, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
+void fillListOfRequests(setOfRequests *list, char *name, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
 
+void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne);
 #endif

@@ -68,6 +68,16 @@ void debugMsg(char *msg) {
   }
 }
 
-void debugTime(struct timespec *ts) {
-  printf("DT> sec=%ld nsec=%ld", ts->tv_sec, ts->tv_nsec);
+void debug2Msg(char *name, char *msg) {
+  if (debug == DEBUG_OFF) {
+    return;
+  }
+
+  if ((name != NULL) && (msg != NULL)) {
+    printf("DT - %s -> %s\n", name, msg);
+  }
+}
+
+void debugTime(char *msg, struct timespec *ts) {
+  printf("DT> (-------t------->) %s sec=%ld nsec=%ld\n", msg, ts->tv_sec, ts->tv_nsec);
 }

@@ -118,6 +118,9 @@ public class AVATAR2CPOSIX {
 		mainFile = new MainFile("main");
 		taskFiles = new Vector<TaskFile>();
 		
+		avspec.removeCompositeStates();
+		avspec.removeTimers();
+		
 		makeMainMutex();
 	
 		makeSynchronousChannels();
@@ -219,7 +222,7 @@ public class AVATAR2CPOSIX {
 				cpt ++;
 			}
 			
-			ret += ") {" + CR + "debugMsg(\"-> ....() Entering method " + am.getName() + "\");" + CR;
+			ret += ") {" + CR + "debugMsg(\"-> ....() Executing method " + am.getName() + "\");" + CR;
 			
 			list = am.getListOfAttributes();
 			cpt = 0;
@@ -265,7 +268,7 @@ public class AVATAR2CPOSIX {
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
 		
-		s+= CR + "fillListOfRequests(&__list, &__myCond, &__mainMutex);" + CR; 
+		s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR; 
 		
 		s+= "printf(\"my name = %s\\n\", __myname);" + CR;
 		
@@ -320,7 +323,7 @@ public class AVATAR2CPOSIX {
 				String g = modifyGuard(at.getGuard());
 				
 				ret += "if (!" + g + ") {" + CR;
-				ret += "debugMsg(\"Guard failed: " + g + "\");" + CR;
+				ret += "debug2Msg(__myname, \"Guard failed: " + g + "\");" + CR;
 				ret += "__currentState = STATE__STOP__STATE;" + CR; 
 				ret += "break;" + CR;
 				ret += "}" + CR;
@@ -338,7 +341,7 @@ public class AVATAR2CPOSIX {
 	
 		if (_asme instanceof AvatarState) {
 			if (!firstCall) {
-				ret += "debugMsg(\"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
+				ret += "debug2Msg(__myname, \"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
 				return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR; 
 			} else {
 				if (_asme.nbOfNexts() == 0) {
@@ -374,7 +377,7 @@ public class AVATAR2CPOSIX {
 				// Make all requests
 				// Test if at least one request in the list!
 				ret += "if (nbOfRequests(&__list) == 0) {" + CR;
-				ret += "debugMsg(\"No possible request\");" + CR;
+				ret += "debug2Msg(__myname, \"No possible request\");" + CR;
 				ret += "__currentState = STATE__STOP__STATE;" + CR; 
 				ret += "break;" + CR;
 				ret += "}" + CR;
@@ -421,7 +424,7 @@ public class AVATAR2CPOSIX {
 		
 		if (_asme instanceof AvatarActionOnSignal) {
 			AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
-			ret += makeSignalAction(aaos, 0);
+			ret += makeSignalAction(aaos, 0, false, "", "");
 			AvatarSignal as = aaos.getSignal();
 			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
 			ret += executeOneRequest("__req0");
@@ -446,7 +449,11 @@ public class AVATAR2CPOSIX {
 			ret += "if (" + g + ") {" + CR;
 		}
 		
-		ret += makeSignalAction(aaos, _index);
+		if (_at.hasDelay()) {
+			ret += makeSignalAction(aaos, _index, true, _at.getMinDelay(), _at.getMaxDelay());
+		} else {
+			ret += makeSignalAction(aaos, _index, false, "", "");
+		}
 		ret += "addRequestToList(&__list, &__req" + _index + ");" + CR;
 		
 		if (_at.isGuarded()) {
@@ -456,12 +463,20 @@ public class AVATAR2CPOSIX {
 		return ret;
 	}
 	
-	private String makeSignalAction(AvatarActionOnSignal _aaos, int _index) {
+	private String makeSignalAction(AvatarActionOnSignal _aaos, int _index, boolean hasDelay, String minDelay, String maxDelay) {
 		String ret = "";
 		int i;
 		
 		AvatarSignal as = _aaos.getSignal();
 		AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+		
+		String delay;
+		
+		if (hasDelay) {
+			delay = "1, " + reworkDelay(minDelay) + ", " + reworkDelay(maxDelay);
+		} else {
+			delay = "0, 0, 0";
+		}
 		
 		if (ar != null) {
 			
@@ -472,10 +487,10 @@ public class AVATAR2CPOSIX {
 					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
 				}
 				if (ar.isAsynchronous()) {
-					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
-					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				}
 				
@@ -485,10 +500,10 @@ public class AVATAR2CPOSIX {
 					ret += "__params" + _index + "[" + i + "] = &" +  _aaos.getValue(i) + ";" + CR;
 				}
 				if (ar.isAsynchronous()) {
-					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
-					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, 0, 0, 0, " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				}
 			}

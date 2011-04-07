@@ -38,7 +38,9 @@ void executeSendSyncTransaction(request *req) {
     cpt --;
   } 
 
-  req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
+  // Remove all related request from list requests
+  //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
+  req->relatedRequest = selectedReq;
 
   // Select the selected request, and notify the information
   selectedReq->selected = 1;
@@ -66,6 +68,7 @@ void executeReceiveSyncTransaction(request *req) {
 
   while(currentReq != NULL) {
     cpt ++;
+    //debugInt("cpt", cpt);
     currentReq = currentReq->next;
   }
   cpt = random() % cpt;
@@ -75,7 +78,8 @@ void executeReceiveSyncTransaction(request *req) {
     cpt --;
   } 
 
-  req->syncChannel->outWaitQueue = removeRequestFromList(req->syncChannel->outWaitQueue, selectedReq);
+  //req->syncChannel->outWaitQueue = removeRequestFromList(req->syncChannel->outWaitQueue, selectedReq);
+  req->relatedRequest = selectedReq;
 
   // Select the request, and notify the information in the channel
   selectedReq->selected = 1;
@@ -104,18 +108,21 @@ int executable(setOfRequests *list, int nb) {
     if (!(req->delayElapsed)) {
       if (req->hasDelay) {
 	// Is the delay elapsed???
+	debugTime("begin time of list of request", &list->startTime);
+	debugTime("start time of this request", &req->myStartTime);
 	if (tsDone == 0) {
 	  clock_gettime(CLOCK_REALTIME, &ts);
+	  debugTime("Current time", &ts);
 	  tsDone = 1;
 	}
 
-	if (isBefore(&(req->myStartTime), &ts)) {
+	if (isBefore(&ts, &(req->myStartTime)) == 1) {
 	  // Delay not elapsed
 	  debugMsg("---------t--------> delay NOT elapsed");
 	  if (list->hasATimeRequest == 0) {
 	    list->hasATimeRequest = 1;
 	    list->minTimeToWait.tv_nsec = req->myStartTime.tv_nsec;
-	    list->minTimeToWait.tv_nsec = req->myStartTime.tv_nsec;
+	    list->minTimeToWait.tv_sec = req->myStartTime.tv_sec;
 	  } else {
 	    minTime(&(req->myStartTime), &(list->minTimeToWait),&(list->minTimeToWait));
 	  }
@@ -139,9 +146,12 @@ int executable(setOfRequests *list, int nb) {
 	debugMsg("Send sync");
 
 	if (req->syncChannel->inWaitQueue != NULL) {
+	  debugMsg("Send sync executable");
 	  req->executable = 1;
 	  cpt ++;
-	} 
+	}  else {
+	  debugMsg("Send sync not executable");
+	}
 	index ++;
       }
 
@@ -155,6 +165,7 @@ int executable(setOfRequests *list, int nb) {
       }
 
       if (req->type == IMMEDIATE) {
+	debugMsg("immediate");
 	req->executable = 1;
 	cpt ++;
       }
@@ -172,10 +183,12 @@ void private__makeRequestPending(setOfRequests *list) {
   while(req != NULL) {
     if ((req->delayElapsed) && (!(req->alreadyPending))) {
       if (req->type == SEND_SYNC_REQUEST) {
+	debugMsg("Adding pending request in outWaitqueue");
 	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
 	req->alreadyPending = 1;
       }
       if (req->type ==  RECEIVE_SYNC_REQUEST) {
+	debugMsg("Adding pending request in inWaitqueue");
 	req->alreadyPending = 1;
 	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
       }
@@ -195,6 +208,15 @@ void private__makeRequest(request *req) {
   }
 
   // IMMEDIATE: Nothing to do
+  
+  // In all cases: remove other requests of the same list from their pending form
+  debugMsg("Removing original req");
+  removeAllPendingRequestsFromPendingLists(req, 1);
+  if (req->relatedRequest != NULL) {
+    debugMsg("Removing related req");
+    removeAllPendingRequestsFromPendingLists(req->relatedRequest, 0);
+  }
+  
 }
 
 
@@ -283,7 +305,7 @@ void setLocalStartTime(setOfRequests *list) {
     if (req->hasDelay) {
       req->delayElapsed = 0;
       addTime(&(list->startTime), &(req->delay), &(req->myStartTime));
-      debugMsg(" -----t------>: Request with delay");
+      debug2Msg(list->owner, " -----t------>: Request with delay");
     } else {
       req->delayElapsed = 1;
       req->myStartTime.tv_nsec = list->startTime.tv_nsec;
@@ -303,30 +325,31 @@ request *executeListOfRequests(setOfRequests *list) {
   setLocalStartTime(list);
   
   // Try to find a request that could be executed
-  debugMsg("Locking mutex");
+  debug2Msg(list->owner, "Locking mutex");
   pthread_mutex_lock(list->mutex);
-  debugMsg("Mutex locked");
+  debug2Msg(list->owner, "Mutex locked");
 
-  debugMsg("Going to execute request");
+  debug2Msg(list->owner, "Going to execute request");
 
   while((req = private__executeRequests(list)) == NULL) {
-    debugMsg("Waiting for request!");
+    debug2Msg(list->owner, "Waiting for request!");
     if (list->hasATimeRequest == 1) {
-      debugMsg("Waiting for a request and at most for a given time");
+      debug2Msg(list->owner, "Waiting for a request and at most for a given time");
+      debugTime("Min time to wait=", &(list->minTimeToWait));
       pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
     } else {
-      debugMsg("Releasing mutex");
+      debug2Msg(list->owner, "Releasing mutex");
       pthread_cond_wait(list->wakeupCondition, list->mutex);
     }
-    debugMsg("Waking up for requests! -> getting mutex");
+    debug2Msg(list->owner, "Waking up for requests! -> getting mutex");
   }
 
-  debugMsg("Request selected!");
+  debug2Msg(list->owner, "Request selected!");
 
   clock_gettime(CLOCK_REALTIME, &list->completionTime);
 
   pthread_mutex_unlock(list->mutex); 
-  debugMsg("Mutex unlocked");
+  debug2Msg(list->owner, "Mutex unlocked");
   return req;
 }
 
