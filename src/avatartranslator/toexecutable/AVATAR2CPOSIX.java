@@ -73,6 +73,7 @@ public class AVATAR2CPOSIX {
 	private String makefile_src;
 	
 	private int timeUnit;
+	private boolean debug;
 	
 
 	public AVATAR2CPOSIX(AvatarSpecification _avspec) {
@@ -115,6 +116,8 @@ public class AVATAR2CPOSIX {
 
 	
 	public void generateCPOSIX(boolean _debug) {
+		debug = _debug;
+		
 		mainFile = new MainFile("main");
 		taskFiles = new Vector<TaskFile>();
 		
@@ -211,7 +214,7 @@ public class AVATAR2CPOSIX {
 			} else {
 				ret += getCTypeOf(list.get(0));
 			}
-			ret += " " + am.getName() + "(";
+			ret += " " + _block.getName() + "__" + am.getName() + "(";
 			list = am.getListOfAttributes();
 			int cpt = 0;
 			for(AvatarAttribute aa: list) {
@@ -333,8 +336,15 @@ public class AVATAR2CPOSIX {
 				ret+= "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
 			}
 			
+			String act;
 			for(i=0; i<at.getNbOfAction(); i++) {
-				ret += at.getAction(i) + ";" + CR;
+				// Must know whether this is an action or a method call
+				act = at.getAction(i);
+				if (at.isAMethodCall(act)) {
+					ret +=  modifyMethodName(_block, act) + ";" + CR;
+				} else {
+					ret +=  act + ";" + CR;
+				}
 			}
 			return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
 		}
@@ -562,17 +572,17 @@ public class AVATAR2CPOSIX {
 		mainFile.appendToMainCode("/* Activating randomness */" + CR); 
 		mainFile.appendToMainCode("initRandom();" + CR);  
 		
-		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Starting tasks\");" + CR);
+		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));
 		for(TaskFile taskFile: taskFiles) {
 			mainFile.appendToMainCode("pthread_create(&thread__" + taskFile.getName() + ", NULL, mainFunc__" + taskFile.getName() + ", (void *)\"" + taskFile.getName() + "\");" + CR);
 		}
 		
-		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Joining tasks\");" + CR);
+		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Joining tasks"));
 		for(TaskFile taskFile: taskFiles) {
 			mainFile.appendToMainCode("pthread_join(thread__" + taskFile.getName() + ", NULL);" + CR);
 		}
 		
-		mainFile.appendToMainCode(CR + CR + "debugMsg(\"Application terminated\");" + CR);
+		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Application terminated"));
 		mainFile.appendToMainCode("return 0;" + CR);
 	}
 	
@@ -624,6 +634,37 @@ public class AVATAR2CPOSIX {
 		}
 		
 		return _delay;
+	}
+	
+	private String modifyMethodName(AvatarBlock _ab, String _call) {
+		int index;
+		String ret0 = "";
+		
+		index = _call.indexOf("=");
+		
+		
+		
+		if (index > -1) {
+			ret0 = _call.substring(0, index+1);
+			_call = _call.substring(index+2, _call.length());
+		}
+		
+		return ret0 + _ab.getName() + "__" + _call.trim();
+	}
+	
+	private String mainDebugMsg(String s) {
+		if (!debug) {
+			return "";
+		}
+		return "debugMsg(\"" + s + "\");" + CR;
+	}
+	
+	private String taskDebugMsg(String s) {
+		if (!debug) {
+			return "";
+		}
+		
+		return "debug2Msg(__myname, \"" + s + "\");" + CR;
 	}
 				
 	

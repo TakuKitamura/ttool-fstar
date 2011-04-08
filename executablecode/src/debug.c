@@ -79,5 +79,8 @@ void debug2Msg(char *name, char *msg) {
 }
 
 void debugTime(char *msg, struct timespec *ts) {
+  if (debug == DEBUG_OFF) {
+    return;
+  }
   printf("DT> (-------t------->) %s sec=%ld nsec=%ld\n", msg, ts->tv_sec, ts->tv_nsec);
 }
