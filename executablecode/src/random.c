@@ -36,7 +36,7 @@ long computeLongRandom(long min, long max) {
 void initRandom() {
   struct timespec ts;
 
-  clock_gettime(CLOCK_REALTIME, &ts);
+  my_clock_gettime(&ts);
 
   srand((int)(ts.tv_nsec));
 }

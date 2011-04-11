@@ -4,6 +4,31 @@
 #include "random.h"
 #include "debug.h"
 
+#ifndef CLOCK_REALTIME
+#define CLOCK_REALTIME
+
+int clock_gettime(struct timespec *ts) {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  ts->tv_sec = tv.tv_sec;
+  ts->tv_nsec = tv.tv_usec * 1000;
+  return 0;
+}
+
+int my_clock_gettime(struct timespec *tp) {
+  return clock_gettime(tp);
+}
+
+#else
+
+int my_clock_gettime(struct timespec *tp) {
+  return clock_gettime(CLOCK_REALTIME, tp);
+}
+
+#endif
+
+
+
 void addTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
   dest->tv_nsec = src1->tv_nsec + src2->tv_nsec;
   dest->tv_sec = src1->tv_sec + src2->tv_sec;

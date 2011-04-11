@@ -111,7 +111,7 @@ int executable(setOfRequests *list, int nb) {
 	debugTime("begin time of list of request", &list->startTime);
 	debugTime("start time of this request", &req->myStartTime);
 	if (tsDone == 0) {
-	  clock_gettime(CLOCK_REALTIME, &ts);
+	  my_clock_gettime(&ts);
 	  debugTime("Current time", &ts);
 	  tsDone = 1;
 	}
@@ -320,7 +320,7 @@ void setLocalStartTime(setOfRequests *list) {
 request *executeListOfRequests(setOfRequests *list) {
   request *req;
 
-  clock_gettime(CLOCK_REALTIME, &list->startTime);
+  my_clock_gettime(&list->startTime);
   list->selectedRequest = NULL;
   setLocalStartTime(list);
   
@@ -346,7 +346,7 @@ request *executeListOfRequests(setOfRequests *list) {
 
   debug2Msg(list->owner, "Request selected!");
 
-  clock_gettime(CLOCK_REALTIME, &list->completionTime);
+  my_clock_gettime(&list->completionTime);
 
   pthread_mutex_unlock(list->mutex); 
   debug2Msg(list->owner, "Mutex unlocked");

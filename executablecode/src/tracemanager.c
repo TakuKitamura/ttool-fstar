@@ -31,7 +31,7 @@ void addInfo(char *dest, char *info) {
   long tmp1;
   int i;
   struct timespec ts, ts1;
-  clock_gettime(CLOCK_REALTIME, &ts);
+  my_clock_gettime(&ts);
   
   debugMsg("DIFF TIME");
   diffTime(&begints, &ts, &ts1);
@@ -73,7 +73,7 @@ void writeInTrace(char *info) {
 void activeTracingInFile(char *fileName) {
   char *name;
   trace = TRACE_IN_FILE;
-  clock_gettime(CLOCK_REALTIME, &begints); 
+  my_clock_gettime(&begints); 
   if (fileName == NULL) {
     name = TRACE_FILE_NAME;
   } else {
@@ -96,7 +96,7 @@ void traceStateEntering(char *myname, char *statename) {
     return;
   }
 
-  sprintf(s, "#block=%s type=state_entering state=%s\n", myname, statename);
+  sprintf(s, "block=%s type=state_entering state=%s\n", myname, statename);
 
   // Saving trace
   writeInTrace(s);
