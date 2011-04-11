@@ -11,8 +11,21 @@ void addTime(struct timespec *src1, struct timespec *src2, struct timespec *dest
     dest->tv_sec = dest->tv_sec + (dest->tv_nsec / 1000000000);
     dest->tv_nsec = dest->tv_nsec % 1000000000;
   }
-
 }
+
+void diffTime(struct timespec *src1, struct timespec *src2, struct timespec *dest) {
+  int diff = 0;
+  if (src1->tv_nsec > src2->tv_nsec) {
+    diff ++;
+    dest->tv_nsec = src2->tv_nsec - src1->tv_nsec + 1000000000;
+  } else {
+    dest->tv_nsec = src2->tv_nsec - src1->tv_nsec;
+  }
+
+  dest->tv_sec = src2->tv_sec - src1->tv_sec - diff;
+}
+
+
 
 int isBefore(struct timespec *src1, struct timespec *src2) {
   if (src1->tv_sec > src2->tv_sec) {
@@ -26,7 +39,6 @@ int isBefore(struct timespec *src1, struct timespec *src2) {
   if (src1->tv_nsec < src2->tv_nsec) {
     return 1;
   }
-
   return 0;
 }
 

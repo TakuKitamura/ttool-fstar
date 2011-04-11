@@ -696,7 +696,7 @@ public class AVATAR2CPOSIX {
 		if (!tracing) {
 			return "";
 		}
-		return "traceStateEntering(\"" + name + "\", \"" + stateName + "\");" + CR;
+		return "traceStateEntering(" + name + ", \"" + stateName + "\");" + CR;
 	}
 	
 	private String mainDebugMsg(String s) {
