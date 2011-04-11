@@ -74,6 +74,7 @@ public class AVATAR2CPOSIX {
 	
 	private int timeUnit;
 	private boolean debug;
+	private boolean tracing;
 	
 
 	public AVATAR2CPOSIX(AvatarSpecification _avspec) {
@@ -115,8 +116,9 @@ public class AVATAR2CPOSIX {
 	
 
 	
-	public void generateCPOSIX(boolean _debug) {
+	public void generateCPOSIX(boolean _debug, boolean _tracing) {
 		debug = _debug;
+		tracing = _tracing;
 		
 		mainFile = new MainFile("main");
 		taskFiles = new Vector<TaskFile>();
@@ -214,7 +216,7 @@ public class AVATAR2CPOSIX {
 			} else {
 				ret += getCTypeOf(list.get(0));
 			}
-			ret += " " + _block.getName() + "__" + am.getName() + "(";
+			ret += " " + _block.getName() + "__" +am.getName() + "(";
 			list = am.getListOfAttributes();
 			int cpt = 0;
 			for(AvatarAttribute aa: list) {
@@ -225,13 +227,22 @@ public class AVATAR2CPOSIX {
 				cpt ++;
 			}
 			
-			ret += ") {" + CR + "debugMsg(\"-> ....() Executing method " + am.getName() + "\");" + CR;
+			ret += ") {" + CR;
 			
-			list = am.getListOfAttributes();
-			cpt = 0;
-			for(AvatarAttribute aa: list) {
-				ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
+			if (tracing) {
+				ret += traceFunctionCall(_block.getName(), am.getName());
 			}
+			
+			if (debug) {
+				ret += "debugMsg(\"-> ....() Executing method " + am.getName() + "\");" + CR;
+				
+				list = am.getListOfAttributes();
+				cpt = 0;
+				for(AvatarAttribute aa: list) {
+					ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
+				}
+			}
+			
 			ret += "}" + CR + CR;
 		}
 		_taskFile.addToMainCode(ret + CR);
@@ -259,7 +270,7 @@ public class AVATAR2CPOSIX {
 		s+= CR + "int __currentState = STATE__START__STATE;" + CR;
 			
 		int nbOfMaxParams = _block.getMaxNbOfParams();
-		s+= "request *__req;" + CR;
+		//s+= "request *__req;" + CR;
 		for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
 			s+= "request __req" + i + ";" + CR;
 			s+= "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
@@ -282,13 +293,17 @@ public class AVATAR2CPOSIX {
 		
 		// Making start state
 		AvatarStateMachine asm = _block.getStateMachine();
-		s += "case STATE__START__STATE: " + CR + makeBehaviourFromElement(_block, asm.getStartState(), true);
+		s += "case STATE__START__STATE: " + CR;
+		s += traceStateEntering("__myname", "start state");
+		s += makeBehaviourFromElement(_block, asm.getStartState(), true);
 		s += "break;" + CR + CR;
 		
 		// Making other states
 		for(AvatarStateMachineElement asme: asm.getListOfElements()) {
 			if (asme instanceof AvatarState) {
-				s += "case STATE__" + asme.getName() + ": " + CR + makeBehaviourFromElement(_block, asme, true);
+				s += "case STATE__" + asme.getName() + ": " + CR;
+				s += traceStateEntering("__myname", asme.getName());
+				s += makeBehaviourFromElement(_block, asme, true);
 				s += "break;" + CR + CR;
 			}
 		}
@@ -326,7 +341,9 @@ public class AVATAR2CPOSIX {
 				String g = modifyGuard(at.getGuard());
 				
 				ret += "if (!" + g + ") {" + CR;
-				ret += "debug2Msg(__myname, \"Guard failed: " + g + "\");" + CR;
+				if (debug) {
+					ret += "debug2Msg(__myname, \"Guard failed: " + g + "\");" + CR;
+				}
 				ret += "__currentState = STATE__STOP__STATE;" + CR; 
 				ret += "break;" + CR;
 				ret += "}" + CR;
@@ -351,7 +368,9 @@ public class AVATAR2CPOSIX {
 	
 		if (_asme instanceof AvatarState) {
 			if (!firstCall) {
-				ret += "debug2Msg(__myname, \"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
+				if (debug) {
+					ret += "debug2Msg(__myname, \"-> (=====) Entering state + " + _asme.getName() + "\");" + CR;
+				}
 				return ret + "__currentState = STATE__" + _asme.getName() + ";" + CR; 
 			} else {
 				if (_asme.nbOfNexts() == 0) {
@@ -392,8 +411,9 @@ public class AVATAR2CPOSIX {
 				ret += "break;" + CR;
 				ret += "}" + CR;
 				
-				ret += "__req = executeListOfRequests(&__list);" + CR;
+				ret += "__returnRequest = executeListOfRequests(&__list);" + CR;
 				ret += "clearListOfRequests(&__list);" + CR ;
+				ret += traceRequest();
 				
 				// Resulting requests
 				for(i=0; i<_asme.nbOfNexts(); i++) {
@@ -402,17 +422,17 @@ public class AVATAR2CPOSIX {
 					}
 					AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
 					if (at.hasActions()) {
-						ret += " if (__req == &__req" + i + ") {" + CR;
+						ret += " if (__returnRequest == &__req" + i + ") {" + CR;
 						for(int j=0; j<at.getNbOfAction(); j++) {
 							ret += at.getAction(j) + ";" + CR;
 						}
 						ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
 					}  else {
 						if (at.getNext(0) instanceof AvatarActionOnSignal) {
-							ret += " if (__req == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
+							ret += " if (__returnRequest == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0).getNext(0), false) + CR + "}";
 						} else {
 							// nothing special to do : immediate choice
-							ret += " if (__req == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
+							ret += " if (__returnRequest == &__req" + i + ") {" + CR + makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
 						}
 					}
 					ret += CR;
@@ -438,6 +458,7 @@ public class AVATAR2CPOSIX {
 			AvatarSignal as = aaos.getSignal();
 			AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
 			ret += executeOneRequest("__req0");
+			ret += traceRequest();
 		}
 		
 		// Default
@@ -569,6 +590,11 @@ public class AVATAR2CPOSIX {
 			mainFile.appendToMainCode("activeDebug();" + CR);  
 		}
 		
+		if (tracing) {
+			mainFile.appendToMainCode("/* Activating tracing  */" + CR); 
+			mainFile.appendToMainCode("activeTracingInFile(\"trace.txt\");" + CR);  
+		}
+		
 		mainFile.appendToMainCode("/* Activating randomness */" + CR); 
 		mainFile.appendToMainCode("initRandom();" + CR);  
 		
@@ -650,6 +676,27 @@ public class AVATAR2CPOSIX {
 		}
 		
 		return ret0 + _ab.getName() + "__" + _call.trim();
+	}
+	
+	private String traceRequest() {
+		if (!tracing) {
+			return "";
+		}
+		return "traceRequest(__myname, __returnRequest);" + CR;
+	}
+	
+	private String traceFunctionCall(String blockName, String functionName) {
+		if (!tracing) {
+			return "";
+		}
+		return "traceFunctionCall(\"" + blockName + "\", \"" + functionName + "\");" + CR;
+	}
+	
+	private String traceStateEntering(String name, String stateName) {
+		if (!tracing) {
+			return "";
+		}
+		return "traceStateEntering(\"" + name + "\", \"" + stateName + "\");" + CR;
 	}
 	
 	private String mainDebugMsg(String s) {

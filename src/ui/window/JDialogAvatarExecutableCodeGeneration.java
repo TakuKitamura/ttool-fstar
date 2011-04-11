@@ -102,7 +102,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
     protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCFiles, removeXFiles, debugmode, optimizemode;
+    protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode;
 	protected JComboBox versionCodeGenerator, units;
 	
 	private static int selectedUnit = 2;
@@ -208,6 +208,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
         debugmode = new JCheckBox("Put debug information in generated code");
         debugmode.setSelected(true);
         jp01.add(debugmode, c01);
+		
+		tracemode = new JCheckBox("Put tracing capabilities in generated code");
+        tracemode.setSelected(true);
+        jp01.add(tracemode, c01);
 		
 		optimizemode = new JCheckBox("Optimize code");
 		optimizemode.setSelected(optimizeModeSelected);
@@ -430,7 +434,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 						} else {
 							AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec);
 							avatartocposix.setTimeUnit(selectedUnit);
-							avatartocposix.generateCPOSIX(debugmode.isSelected());
+							avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());
 							testGo();
 							jta.append("Generation of C-POSIX executable code: done\n");
 							//t2j.printJavaClasses();

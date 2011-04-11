@@ -14,7 +14,6 @@ struct request;
 #define SEND_ASYNC_REQUEST 4
 #define RECEIVE_ASYNC_REQUEST 6
 #define DELAY 8
-
 #define IMMEDIATE 10
 
 typedef struct timespec timespec;
