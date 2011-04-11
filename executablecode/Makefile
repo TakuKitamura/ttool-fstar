@@ -8,6 +8,9 @@ OPT    = -O1 -pthread
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
 LOPT   = -O1 -pthread -ldl -lrt
+LOPT_MAC = -O1 -pthread -ldl
+
+LOPT = $(LOPT_MAC)
 
 DEBUG  = -g
 OTHER  = -Wall

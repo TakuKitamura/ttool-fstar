@@ -8,6 +8,8 @@
 #include "debug.h"
 #include <math.h>
 
+#include "mytimelib.h"
+
 int computeRandom(int min, int max) {
   if (min == max) {
     return min;
