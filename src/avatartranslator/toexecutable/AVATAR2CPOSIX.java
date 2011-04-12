@@ -243,6 +243,10 @@ public class AVATAR2CPOSIX {
 				}
 			}
 			
+			list = am.getListOfReturnAttributes();
+			if (list.size() != 0) {
+				ret += "return 0;" + CR;
+			} 
 			ret += "}" + CR + CR;
 		}
 		_taskFile.addToMainCode(ret + CR);

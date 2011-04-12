@@ -7,10 +7,10 @@ OPT    = -O1 -pthread
 # Solaris
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT   = -O1 -pthread -ldl -lrt
+LOPT_UNIX   = -O1 -pthread -ldl -lrt
 LOPT_MAC = -O1 -pthread -ldl
 
-LOPT = $(LOPT_MAC)
+LOPT = $(LOPT_UNIX)
 
 DEBUG  = -g
 OTHER  = -Wall
