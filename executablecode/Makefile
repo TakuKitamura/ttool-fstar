@@ -10,7 +10,7 @@ OPT    = -O1 -pthread
 LOPT_UNIX   = -O1 -pthread -ldl -lrt
 LOPT_MAC = -O1 -pthread -ldl
 
-LOPT = $(LOPT_UNIX)
+LOPT = $(LOPT_MAC)
 
 DEBUG  = -g
 OTHER  = -Wall

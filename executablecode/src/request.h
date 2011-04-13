@@ -8,6 +8,7 @@ struct request;
 
 #include "syncchannel.h"
 #include "asyncchannel.h"
+#include "message.h"
 
 #define SEND_SYNC_REQUEST 0
 #define RECEIVE_SYNC_REQUEST 2
@@ -37,15 +38,17 @@ struct request {
   struct request *next;
   struct setOfRequests* listOfRequests;
   struct request* nextRequestInList;
-  struct request* relatedRequest; // For synchro fro example
+  struct request* relatedRequest; // For synchro for example
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
   int type;
   int ID;
   int hasDelay;;
   timespec delay;
-  int nbOfParams;
-  int **params;
+  int nbOfParams; // synchronous com.
+  int **params;  // synchronous com.
+	message *msg; // Asynchronous comm.
+
 
   // Filled by the request manager
   int executable;

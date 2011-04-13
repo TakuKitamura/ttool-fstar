@@ -12,12 +12,16 @@ typedef struct setOfMessages setOfMessages;
 
 struct message {
   int nbOfParams;
-  int *params[];
+  int *params;
 };
 
 typedef struct message message;
 
-message * getNewMessage(int nbOfParams, int *params[]);
+message *getNewMessageWithParams(int nbOfParams);
+message * getNewMessage(int nbOfParams, int *params);
+void destroyMessageWithParams(message *msg);
 void destroyMessage(message *msg);
+
+
 
 #endif

@@ -10,18 +10,16 @@ struct asyncchannel;
 struct asyncchannel {
   char *outname;
   char *inname;
-  int isInfinite;
-  int isBlocking;
-  int maxNbOfMssages;
+  int isBlocking; // In writing. Reading is always blocking
+  int maxNbOfMessages; //
   struct request* outWaitQueue;
   struct request* inWaitQueue;
   setOfMessages *pendingMessages;
-  int nbOfParams;
 };
 
 typedef struct asyncchannel asyncchannel;
 
-asyncchannel *getNewAsyncchannel(char *inname, char *outname, int nbOfParams);
+asyncchannel *getNewAsyncchannel(char *inname, char *outname, int isBlocking, int maxNbOfMessages);
 void destroyAsyncchannel(asyncchannel *syncch);
 
 

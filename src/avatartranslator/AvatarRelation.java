@@ -57,7 +57,7 @@ public class AvatarRelation extends AvatarElement {
     public AvatarBlock block1, block2;
 	private LinkedList<AvatarSignal> signals1, signals2;
 	private boolean blocking, asynchronous, isPrivate;
-	private int sizeOfFIFO;
+	private int sizeOfFIFO; // -1 means infinite
   
 	
     public AvatarRelation(String _name, AvatarBlock _block1, AvatarBlock _block2, Object _referenceObject) {

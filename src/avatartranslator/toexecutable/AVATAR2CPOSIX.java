@@ -130,6 +130,8 @@ public class AVATAR2CPOSIX {
 	
 		makeSynchronousChannels();
 		
+		makeAsynchronousChannels();
+		
 		makeTasks();
 		
 		makeMainHeader();
@@ -159,6 +161,33 @@ public class AVATAR2CPOSIX {
 						mainFile.appendToBeforeMainCode("syncchannel __" + getChannelName(ar, i) + ";" + CR);
 						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
 						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+					}
+				}
+		}
+			
+		//mainFile.appendToHCode("pthread_mutex_t mainMutex;" + CR);
+		
+	}
+	
+	public void makeAsynchronousChannels() {
+		
+		// Create a synchronous channel per relation/signal
+		mainFile.appendToHCode("/* Asynchronous channels */" + CR);
+		mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
+		mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
+		for(AvatarRelation ar: avspec.getRelations()) {
+				if (ar.isAsynchronous()) {
+					for(int i=0; i<ar.nbOfSignals(); i++) {
+						mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i)  + ";" + CR);
+						mainFile.appendToBeforeMainCode("asyncchannel __" + getChannelName(ar, i) + ";" + CR);
+						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+						if (ar.isBlocking()) {
+							mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".isBlocking = 1;" + CR);
+						} else {
+							mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".isBlocking = 0;" + CR);
+						}
+						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".maxNbOfMessages = " + ar.getSizeOfFIFO() + ";" + CR);
 					}
 				}
 		}

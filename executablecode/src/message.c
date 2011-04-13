@@ -6,18 +6,31 @@
 #include "myerrors.h"
 
 
-message *getNewMessage(int nbOfParams, int *params[]) {
-  int i;
+message *getNewMessageWithParams(int nbOfParams) {
+	
+	message *msg = (message *)(malloc(sizeof(struct message)));
+	if (msg == NULL) {
+		criticalError("Allocation of request failed");
+	}
+	msg->nbOfParams = nbOfParams;
+	msg->params = (int *)(malloc(sizeof(int) * nbOfParams));;
+	return msg;
+}
 
-  message *msg = (message *)(malloc(sizeof(struct message) + nbOfParams*sizeof(int *) ));
+message *getNewMessage(int nbOfParams, int *params) {
+
+  message *msg = (message *)(malloc(sizeof(struct message)));
   if (msg == NULL) {
     criticalError("Allocation of request failed");
   }
   msg->nbOfParams = nbOfParams;
-  for(i=0; i<nbOfParams; i++) {
-    msg->params[i] = params[i];
-  }
+	msg->params = params;
   return msg;
+}
+
+void destroyMessageWithParams(message *msg) {
+	free(msg->params);
+	free(msg);
 }
 
 void destroyMessage(message *msg) {
