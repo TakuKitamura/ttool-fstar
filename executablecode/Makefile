@@ -1,5 +1,4 @@
-TARGET_ARCH = linux
-
+UNAME := $(shell uname -s)
 CC     = gcc
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
@@ -10,13 +9,12 @@ OPT    = -O1 -pthread
 LOPT_UNIX   = -O1 -pthread -ldl -lrt
 LOPT_MAC = -O1 -pthread -ldl
 
-LOPT = $(LOPT_MAC)
-
 DEBUG  = -g
 OTHER  = -Wall
 TRY    = 
 CFLAGS = $(OPT) $(OTHER) $(TRY)
-LFLAGS = $(LOPT) $(OTHER) $(TRY)
+LFLAGS_MAC = $(LOPT_MAC) $(OTHER) $(TRY)
+LFLAGS_UNIX = $(LOPT_UNIX) $(OTHER) $(TRY)
 # CFLAGS = $(DEBUG) $(OTHER)
 OBJDIR = lib
 

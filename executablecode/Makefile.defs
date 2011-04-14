@@ -11,7 +11,12 @@ EXE    = $(MODULE).x
 
 
 $(EXE): makedir $(OBJS) $(OBJS_executor) 
-	$(CC) $(LFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(LIBS) 2>&1 | c++filt
+ifeq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_MAC) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(LIBS) 2>&1 | c++filt
+endif
+ifneq ($(UNAME),Darwin)
+	$(CC) $(LFLAGS_UNIX) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_executor) $(LIBS) 2>&1 | c++filt
+endif
 
 makedir:
 	echo Making directories

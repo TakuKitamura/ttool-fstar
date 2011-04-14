@@ -315,6 +315,8 @@ public class AVATAR2CPOSIX {
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
 		
+		s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
+		
 		s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR; 
 		
 		s+= "printf(\"my name = %s\\n\", __myname);" + CR;
@@ -629,7 +631,11 @@ public class AVATAR2CPOSIX {
 		}
 		
 		mainFile.appendToMainCode("/* Activating randomness */" + CR); 
-		mainFile.appendToMainCode("initRandom();" + CR);  
+		mainFile.appendToMainCode("initRandom();" + CR); 
+		
+		mainFile.appendToMainCode("/* Initializing the main mutex */" + CR);
+		mainFile.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
+		
 		
 		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));
 		for(TaskFile taskFile: taskFiles) {
