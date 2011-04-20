@@ -92,6 +92,11 @@ public class MappedSystemCTask {
 		commentText="";
 		commentNum=0;
 		optimize=false;
+		
+		//for(TMLAttribute att: task.getAttributes()) {
+		//	 System.out.println ("************ Attribute: " + att.name);
+		//}	
+		
 		_analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
 		_startAnaNode = _analysis.startAnalysis();
     	}
@@ -779,9 +784,17 @@ public class MappedSystemCTask {
 	}
 	
 	public static String formatAction(String action){
-		action = action.replaceAll("not","!");
-		action = action.replaceAll("and","&&");
-		action = action.replaceAll("or","||");
+		action = action.replaceAll("not\\s","!");
+		action = action.replaceAll("not\\(","!(");
+		action = action.replaceAll("\\sand\\s","&&");
+		action = action.replaceAll("\\sand\\(","&&(");
+		action = action.replaceAll("\\)and\\s",")&&");
+		action = action.replaceAll("\\)and\\(",")&&(");
+		action = action.replaceAll("\\sor\\s","||");
+		action = action.replaceAll("\\sor\\(","||(");
+		action = action.replaceAll("\\)or\\s",")||");
+		action = action.replaceAll("\\)or\\(",")||(");
+		//action = action.replaceAll("[\\s(]or[\\s)]","||");
 		return action;
 	}
 
