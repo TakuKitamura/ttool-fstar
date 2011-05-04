@@ -50,6 +50,7 @@ package ui;
 
 
 public interface SwallowTGComponent  {
+	public boolean acceptSwallowedTGComponent(TGComponent tgc);
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y);
     public void removeSwallowedTGComponent(TGComponent tgc);
 }

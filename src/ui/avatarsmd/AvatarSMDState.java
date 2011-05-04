@@ -269,6 +269,18 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     public int getType() {
         return TGComponentManager.AVATARSMD_STATE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof AvatarSMDBasicComponent) {
+			return true;
+		}
+		
+		if (tgc instanceof AvatarSMDState) {
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;

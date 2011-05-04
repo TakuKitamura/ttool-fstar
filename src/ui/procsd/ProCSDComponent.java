@@ -262,6 +262,14 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 	public int getType() {
 		return TGComponentManager.PROCSD_COMPONENT;
 	}
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof ProCSDComponent) {
+			return true;
+		}
+		
+		return false;
+	}
 		
 	public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		// System.out.println("Add swallow component");

@@ -186,6 +186,14 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
     public int getType() {
         return TGComponentManager.TDD_NODE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof TDDArtifact) {
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

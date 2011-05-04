@@ -347,6 +347,14 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 			
 	}
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		 if (tgc instanceof TMLCPrimitivePort) {
+			 return true;
+		 }
+		 
+		 return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		//boolean swallowed = false;

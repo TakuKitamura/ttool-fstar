@@ -212,6 +212,30 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 		}
         return false;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		 if ((tgc instanceof SDAbsoluteTimeConstraint) || (tgc instanceof SDRelativeTimeConstraint) || (tgc instanceof SDTimeInterval)){
+			return true;
+		}
+		
+		 if ((tgc instanceof SDActionState) || (tgc instanceof SDCoregion)|| (tgc instanceof SDGuard)) {
+			return true;
+		}
+		
+		 if (tgc instanceof SDTimerSetting) {
+			 return true;
+		 }
+		 
+		 if (tgc instanceof SDTimerExpiration) {
+			 return true;
+		 }
+		 
+		 if (tgc instanceof SDTimerCancellation) {
+			 return true;
+		 }
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

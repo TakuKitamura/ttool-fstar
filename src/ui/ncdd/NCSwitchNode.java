@@ -261,6 +261,14 @@ public class NCSwitchNode extends TGCWithInternalComponent implements SwallowTGC
     public int getType() {
         return TGComponentManager.NCDD_SWITCHNODE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof NCRouteArtifact) {
+			return true;
+		}
+		
+		return false;
+    }
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

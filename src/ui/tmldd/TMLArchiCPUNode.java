@@ -395,6 +395,14 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public int getType() {
         return TGComponentManager.TMLARCHI_CPUNODE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof TMLArchiArtifact) {
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

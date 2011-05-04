@@ -288,7 +288,7 @@ public class TMLModeling {
         return null;
     }
     
-    public boolean hasAlmostSimilarRequest(TMLRequest _request) {
+    public TMLRequest hasSimilarRequest(TMLRequest _request) {
         TMLRequest request;
         int i;
         
@@ -299,21 +299,26 @@ public class TMLModeling {
             if (request.getName().compareTo(_request.getName()) == 0) {
                 // must verify whether a param is different or not.
                 if (request.getNbOfParams() != _request.getNbOfParams()) {
-                    return true;
+					TraceManager.addDev("nb of params");
+                    return null;
                 }
                 
                 for(i=0; i<request.getNbOfParams(); i++) {
                     if (request.getType(i).getType() != _request.getType(i).getType()) {
-                        return true;
+						TraceManager.addDev("Params #" + i + " type");
+                        return null;
                     }
                 }
                 
                 if (request.getDestinationTask() != _request.getDestinationTask()) {
-                    return true;
+					TraceManager.addDev("Destination task");
+                    return null;
                 }
+				
+				return request;
             }
         } 
-        return false;
+        return null;
     }
     
     public boolean hasSameEventName(TMLEvent _event) {

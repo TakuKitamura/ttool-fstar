@@ -449,6 +449,22 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		return false;
 		
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof AvatarPDBlock) {
+			return true;
+		}
+		
+		if (tgc instanceof AvatarPDAttribute) {
+			return true;
+		}
+		
+		if (tgc instanceof AvatarPDSignal) {
+			return true;
+		}
+		
+		return false;
+	}
     
     
     public int getType() {

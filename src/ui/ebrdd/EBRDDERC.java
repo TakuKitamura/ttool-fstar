@@ -159,6 +159,18 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
         }
         return false;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof EBRDDESO) {
+			return true;
+		}
+		
+		if (tgc instanceof EBRDDERB) {
+			return true;
+		}
+		
+		return false;
+	}
     
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {

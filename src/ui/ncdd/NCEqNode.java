@@ -227,6 +227,14 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
     public int getType() {
         return TGComponentManager.NCDD_EQNODE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof NCTrafficArtifact) {
+			return true;
+		}
+		
+		return false;
+    }
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

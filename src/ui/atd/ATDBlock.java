@@ -271,6 +271,14 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
     public int getType() {
         return TGComponentManager.ATD_BLOCK;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof ATDAttack) {
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

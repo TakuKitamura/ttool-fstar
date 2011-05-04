@@ -47,7 +47,7 @@
 
 package tmltranslator;
 
-
+import myutil.*;
 
 public class TMLType {
     
@@ -60,6 +60,7 @@ public class TMLType {
     private String typeOther;
     
     public TMLType(int _type) {
+		TraceManager.addDev("New TYPE:" + _type);
         type = _type;
         typeOther = "";
     }

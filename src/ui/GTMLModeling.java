@@ -437,7 +437,8 @@ public class GTMLModeling  {
                 t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmlro);
                 t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmlro);
                 if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
-					if ((request = tmlm.getRequestNamed(tmlro.getRequestName())) == null) {
+					request = tmlm.getRequestNamed(tmlro.getRequestName());
+					if (request == null) {
 						request = new TMLRequest(tmlro.getRequestName(), tmlro);
 						request.setDestinationTask(tmlm.getTMLTaskByName(t2.getTaskName()));
 						tmlm.addRequest(request);
@@ -446,6 +447,41 @@ public class GTMLModeling  {
 							if ((tt != null) && (tt.getType() != TType.NONE)) {
 								tmlt = new TMLType(tt.getType());
 								request.addParam(tmlt);
+							}
+						}
+					} else {
+						// Must check whether the two requests are compatible (parameters)
+						int nbOfParamsCurrent = 0;
+						for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
+							tt = tmlro.getParamAt(i);
+							if ((tt != null) && (tt.getType() != TType.NONE)) {
+								nbOfParamsCurrent ++;
+							}
+						}
+						if (request.getNbOfParams() != nbOfParamsCurrent) {
+							String msg = "request " + tmlro.getRequestName() + " is declared several times with different parameters";
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+							ce.setTDiagramPanel(tmldp.tmltdp);
+							ce.setTGComponent(tgc);
+							checkingErrors.add(ce);
+							throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
+						}
+						
+						// Must check param types as well
+						int cpti = 0;
+						for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
+							tt = tmlro.getParamAt(i);
+							if ((tt != null) && (tt.getType() != TType.NONE)) {
+								tmlt = new TMLType(tt.getType());
+								if (request.getType(cpti).getType() != tmlt.getType()) {
+									String msg = "request " + tmlro.getRequestName() + " is declared several times with different types in parameters";
+									CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+									ce.setTDiagramPanel(tmldp.tmltdp);
+									ce.setTGComponent(tgc);
+									checkingErrors.add(ce);
+									throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
+								}
+								cpti ++;
 							}
 						}
 					}
@@ -833,9 +869,31 @@ public class GTMLModeling  {
 							}
 						}
 					
+					tt1 = tmlm.getTMLTaskByName(port1.getFather().getValue());
+					tt1.setRequested(true);
+					tt1.setRequest(request);
+					request.setDestinationTask(tt1);
+					
+					// Request attributes
+					//TraceManager.addDev("Requests attributes");
+					for(int j=0; j<request.getNbOfParams(); j++) {
+						tmltt = new TMLType(request.getType(j).getType());
+						tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
+						tmlattr.initialValue = tmlattr.getDefaultInitialValue();
+						TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
+						tt1.addAttribute(tmlattr);
+					}
+					
+					for(i=0; i<portstome.size(); i++) {
+						port2 = (TMLCPrimitivePort)(portstome.get(i));
+						tt2 = tmlm.getTMLTaskByName(port2.getFather().getValue());
+						request.addOriginTask(tt2);
+					}
+					
 					
 					if (tmlm.hasSameRequestName(request)) {
-                        if (tmlm.hasAlmostSimilarRequest(request)) {
+						TMLRequest otherReq = tmlm.hasSimilarRequest(request);
+                        if (otherReq == null) {
                             String msg = " request " + name + " is declared several times differently";
                             CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
                             ce.setTDiagramPanel(tmlcdp.tmlctdp);
@@ -843,27 +901,10 @@ public class GTMLModeling  {
 							checkingErrors.add(ce);
 							throw new MalformedTMLDesignException(msg);
                         }
+						for(i=0; i<request.getOriginTasks().size(); i++) {
+							otherReq.addOriginTask(request.getOriginTasks().get(i));
+						}
                     } else {
-						tt1 = tmlm.getTMLTaskByName(port1.getFather().getValue());
-						tt1.setRequested(true);
-						tt1.setRequest(request);
-						request.setDestinationTask(tt1);
-						
-						// Request attributes
-						//TraceManager.addDev("Requests attributes");
-						for(int j=0; j<request.getNbOfParams(); j++) {
-							tmltt = new TMLType(request.getType(j).getType());
-							tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
-							tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-							TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
-							tt1.addAttribute(tmlattr);
-						}
-						
-						for(i=0; i<portstome.size(); i++) {
-							port2 = (TMLCPrimitivePort)(portstome.get(i));
-							tt2 = tmlm.getTMLTaskByName(port2.getFather().getValue());
-							request.addOriginTask(tt2);
-						}
 						tmlm.addRequest(request);
 						listE.addCor(request, tgc);
                         //TraceManager.addDev("Adding request " + request.getName());

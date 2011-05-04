@@ -64,6 +64,14 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
     
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		if (tgc instanceof TMLArchiCommunicationArtifact) {
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         

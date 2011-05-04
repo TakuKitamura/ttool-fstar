@@ -257,6 +257,14 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
     public int getType() {
         return TGComponentManager.TMLARCHI_HWANODE;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		 if ((tgc instanceof TMLArchiArtifact) && (nbInternalTGComponent == 0)){
+			return true;
+		}
+		
+		return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //System.out.println("Add swallow component");

@@ -517,6 +517,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public int getType() {
         return TGComponentManager.AVATARBD_BLOCK;
     }
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		 if (tgc instanceof AvatarBDBlock) {
+			 return true;
+		 }
+		 
+		 return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;

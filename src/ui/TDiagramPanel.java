@@ -910,7 +910,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMeHL(x, y) != null) && (tgc != tgcdiff)) {
-                return ((SwallowTGComponent)tgc);
+				if (((SwallowTGComponent)tgc).acceptSwallowedTGComponent(tgcdiff)) {
+					return ((SwallowTGComponent)tgc);
+				}
             }
         }
         return null;

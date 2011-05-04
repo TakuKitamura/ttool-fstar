@@ -242,16 +242,42 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 			
 	}
+	
+	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+		 if (tgc instanceof TMLCCompositeComponent) {
+            return true;
+        }
+		
+		if (tgc instanceof TMLCRecordComponent) {
+            return true;
+        }
+		
+		if (tgc instanceof TMLCPrimitiveComponent) {
+            return true;
+        }
+		
+		if (tgc instanceof TMLCRemoteCompositeComponent) {
+            return true;
+        }
+		
+		 if (tgc instanceof TMLCCompositePort) {
+			 return true;
+		 }
+		 
+		 return false;
+	}
     
     public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof SwallowTGComponent) {
-				if (tgcomponent[i].isOnMe(x, y) != null) {
-					swallowed = true;
-					((SwallowTGComponent)tgcomponent[i]).addSwallowedTGComponent(tgc, x, y);
-					break;
+				if (((SwallowTGComponent)tgcomponent[i]).acceptSwallowedTGComponent(tgc)) {
+					if (tgcomponent[i].isOnMe(x, y) != null) {
+						swallowed = true;
+						((SwallowTGComponent)tgcomponent[i]).addSwallowedTGComponent(tgc, x, y);
+						break;
+					}
 				}
 			}
         }
