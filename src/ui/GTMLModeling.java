@@ -200,8 +200,10 @@ public class GTMLModeling  {
 					}
 					ce = new CheckingError(type, error.message);
 					tgc = listE.getTG(error.element);
-					ce.setTDiagramPanel(tgc.getTDiagramPanel());
-					ce.setTGComponent(tgc);
+					if (tgc != null) {
+						ce.setTDiagramPanel(tgc.getTDiagramPanel());
+						ce.setTGComponent(tgc);
+					}
 					ce.setTMLTask(error.task);
 					checkingErrors.add(ce);
 					
