@@ -73,7 +73,7 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
 		return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         
         if (tgc instanceof TMLArchiCommunicationArtifact) {
 			// Make it an internal component
@@ -89,7 +89,10 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
             //tgc.setCd(x, y);
 			//add it
 			addInternalComponent(tgc, 0);
+			return true;
         }
+		
+		return false;
         
     }
     

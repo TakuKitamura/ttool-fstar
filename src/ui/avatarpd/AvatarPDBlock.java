@@ -471,7 +471,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         return TGComponentManager.APD_BLOCK;
     }
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
@@ -485,7 +485,11 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         }
 		
 		if (swallowed) {
-			return;
+			return true;
+		}
+		
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
 		}
 		
         //System.out.println("Add swallow component");
@@ -525,6 +529,8 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         
         //add it
         addInternalComponent(tgc, 0);
+		
+		return true;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

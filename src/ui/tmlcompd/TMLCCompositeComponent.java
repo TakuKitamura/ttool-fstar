@@ -267,7 +267,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		 return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
@@ -283,7 +283,11 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         }
 		
 		if (swallowed) {
-			return;
+			return true;
+		}
+		
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
 		}
 		
         //System.out.println("Add swallow component");
@@ -320,6 +324,8 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         
         //add it
         addInternalComponent(tgc, 0);
+		
+		return true;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

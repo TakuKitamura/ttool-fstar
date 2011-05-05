@@ -877,9 +877,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 //TraceManager.addDev("Swallowed component !");
                 SwallowTGComponent stgc = findSwallowTGComponent(x, y, tgc);
                 if (stgc != null) {
-                    stgc.addSwallowedTGComponent(tgc, x, y);
-					tgc.wasSwallowed();
-					ret = true;
+                    if (stgc.addSwallowedTGComponent(tgc, x, y)) {
+						tgc.wasSwallowed();
+						ret = true;
+					} else {
+						if (addToList) {
+							componentList.add(0, tgc);
+						}
+					}
                 } else {
 					if (addToList) {
 						componentList.add(0, tgc);
@@ -910,9 +915,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
             if ((tgc instanceof SwallowTGComponent) && (tgc.isOnMeHL(x, y) != null) && (tgc != tgcdiff)) {
-				if (((SwallowTGComponent)tgc).acceptSwallowedTGComponent(tgcdiff)) {
-					return ((SwallowTGComponent)tgc);
-				}
+				return ((SwallowTGComponent)tgc);
+				/*if (((SwallowTGComponent)tgc).acceptSwallowedTGComponent(tgcdiff)) {
+					
+				}*/
             }
         }
         return null;

@@ -446,7 +446,7 @@ public class GTMLModeling  {
 					
 					if (request != null) {
 						if (request.getName().compareTo(tmlro.getRequestName()) != 0) {
-							String msg = "Two requests declared with the different names have the same destination task: " + tmlro.getRequestName();
+							String msg = "Two requests declared with different names have the same destination task: " + tmlro.getRequestName();
 							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
 							ce.setTDiagramPanel(tmldp.tmltdp);
 							ce.setTGComponent(tgc);
@@ -531,12 +531,16 @@ public class GTMLModeling  {
 					
 					// Request attributes
 					//TraceManager.addDev("Requests attributes");
+					String attname;
 					for(int j=0; j<request.getNbOfParams(); j++) {
-						tmltt = new TMLType(request.getType(j).getType());
-						tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
-						tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-						TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
-						task.addAttribute(tmlattr);
+						attname = "arg" + (j + 1) + "__req";
+						if (task.getAttributeByName(attname) == null) {
+							tmltt = new TMLType(request.getType(j).getType());
+							tmlattr = new TMLAttribute(attname, tmltt);
+							tmlattr.initialValue = tmlattr.getDefaultInitialValue();
+							TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
+							task.addAttribute(tmlattr);
+						}
 					}
 					
 					
@@ -904,18 +908,35 @@ public class GTMLModeling  {
 					
 					// Request attributes
 					//TraceManager.addDev("Requests attributes");
+					String attname;
 					for(int j=0; j<request.getNbOfParams(); j++) {
-						tmltt = new TMLType(request.getType(j).getType());
-						tmlattr = new TMLAttribute("arg" + (j + 1) + "__req", tmltt);
-						tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-						TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
-						tt1.addAttribute(tmlattr);
+						attname = "arg" + (j + 1) + "__req";
+						if (tt1.getAttributeByName(attname) == null) {
+							tmltt = new TMLType(request.getType(j).getType());
+							tmlattr = new TMLAttribute(attname, tmltt);
+							tmlattr.initialValue = tmlattr.getDefaultInitialValue();
+							TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
+							tt1.addAttribute(tmlattr);
+						}
 					}
 					
 					for(i=0; i<portstome.size(); i++) {
 						port2 = (TMLCPrimitivePort)(portstome.get(i));
 						tt2 = tmlm.getTMLTaskByName(port2.getFather().getValue());
 						request.addOriginTask(tt2);
+					}
+					
+					// Check whether there is another request having a different name but with the same destination task
+					TMLRequest request1 = tmlm.getRequestByDestinationTask(request.getDestinationTask());
+					if (request1 != null) {
+						if (request1.getName().compareTo(name) != 0) {
+							String msg = "Two requests port declared on the same destination task have different names: " + name;
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+							ce.setTDiagramPanel(tmlcdp.tmlctdp);
+							ce.setTGComponent(tgc);
+							checkingErrors.add(ce);
+							throw new MalformedTMLDesignException(msg);
+						}
 					}
 					
 					

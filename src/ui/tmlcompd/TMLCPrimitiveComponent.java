@@ -356,7 +356,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		 return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		//boolean swallowed = false;
 		
         //TraceManager.addDev("Add swallow component");
@@ -370,9 +370,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 			 tgc.setDrawingZone(true);
 			 ((TMLCPrimitivePort)tgc).resizeWithFather();
 			 addInternalComponent(tgc, 0);
+			 return true;
 		 }
-        
-        
+		 
+		 return false;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

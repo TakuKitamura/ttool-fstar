@@ -237,7 +237,12 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 		return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
+		}
+		
+		
         //System.out.println("Add swallow component");
         // Choose its position
         int realY = Math.max(y, getY() + spacePt);
@@ -290,6 +295,8 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
         
         //add it
         addInternalComponent(tgc, 0);
+		
+		return true;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

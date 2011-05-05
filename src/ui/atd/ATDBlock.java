@@ -280,28 +280,15 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
 		return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-        //System.out.println("Add swallow component");
-        // Choose its position
-        
-        // Make it an internal component
-        // It's one of my son
-        tgc.setFather(this);
-        tgc.setDrawingZone(true);
-        
-        //Set its coordinates
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         if (tgc instanceof ATDAttack) {
-            //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
             ((ATDAttack)tgc).resizeWithFather();
-            //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-            //tgc.setCd(x, y);
+			addInternalComponent(tgc, 0);
+			return true;
         }
-        
-        // else unknown*/
-        
-        //add it
-        addInternalComponent(tgc, 0);
+		return false;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

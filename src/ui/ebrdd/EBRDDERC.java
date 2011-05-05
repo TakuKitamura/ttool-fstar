@@ -173,7 +173,11 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
 	}
     
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
+		}
+		
         //System.out.println("Add swallow component");
         // Choose its position
         
@@ -203,6 +207,8 @@ public class EBRDDERC extends TGCWithInternalComponent implements SwallowTGCompo
         
         //add it
         addInternalComponent(tgc, 0);
+		
+		return true;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

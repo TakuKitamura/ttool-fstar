@@ -282,7 +282,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		return false;
 	}
     
-    public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
 		for(int i=0; i<nbInternalTGComponent; i++) {
@@ -296,7 +296,11 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         }
 		
 		if (swallowed) {
-			return;
+			return true;
+		}
+		
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
 		}
 		
         //System.out.println("Add swallow component");
@@ -320,6 +324,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         
         //add it
         addInternalComponent(tgc, 0);
+		
+		return true;
     }
     
     public void removeSwallowedTGComponent(TGComponent tgc) {

@@ -71,11 +71,20 @@ RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
 RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) 
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
+
+
 all:
 	date
 	svn update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
 	svn commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
+	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
+
+basicsvnapvrille:
+	date
+	svn --username apvrille update build.txt src/ui/DefaultText.java
+	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
+	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
 myrelease: basic launcher ttooljar_std

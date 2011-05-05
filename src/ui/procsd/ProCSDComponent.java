@@ -271,24 +271,19 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 		return false;
 	}
 		
-	public void addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		// System.out.println("Add swallow component");
-		// Choose its position
-
-		// Make it an internal component
-		// It's one of my son
-		tgc.setFather(this);
-		tgc.setDrawingZone(true);
-
-		// Set its coordinates
+	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		
 		if (tgc instanceof ProCSDComponent) {
+			// Set its coordinates
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
 			((ProCSDComponent) tgc).resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
 		}
 
-		// else unknown*/
-
-		// add it
-		addInternalComponent(tgc, 0);
+		return false;
+		
 	}
 
 	public void removeSwallowedTGComponent(TGComponent tgc) {
