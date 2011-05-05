@@ -490,6 +490,22 @@ public class TMLModeling {
         } 
         return null;
     }
+	
+	 public TMLRequest getRequestByDestinationTask(TMLTask tmlt) {
+		 if (tmlt == null) {
+			 return null;
+		 }
+		 
+        TMLRequest req;
+        ListIterator iterator = requests.listIterator();
+        while(iterator.hasNext()) {
+            req = (TMLRequest)(iterator.next());
+            if (req.getDestinationTask() == tmlt) {
+                return req;
+            }
+        } 
+        return null;
+    }
     
     public ArrayList<TMLTask> getTasks() {
         return tasks;

@@ -150,8 +150,10 @@ public class GTMLModeling  {
 					}
 					ce = new CheckingError(type, error.message);
 					tgc = listE.getTG(error.element);
-					ce.setTDiagramPanel(tgc.getTDiagramPanel());
-					ce.setTGComponent(tgc);
+					if (tgc != null) {
+						ce.setTDiagramPanel(tgc.getTDiagramPanel());
+						ce.setTGComponent(tgc);
+					}
 					ce.setTMLTask(error.task);
 					checkingErrors.add(ce);
 					
@@ -439,6 +441,20 @@ public class GTMLModeling  {
                 t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmlro);
                 t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmlro);
                 if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
+					// Check whether there is another request having a different name but with the same destination task
+					request = tmlm.getRequestByDestinationTask(tmlm.getTMLTaskByName(t2.getTaskName()));
+					
+					if (request != null) {
+						if (request.getName().compareTo(tmlro.getRequestName()) != 0) {
+							String msg = "Two requests declared with the different names have the same destination task: " + tmlro.getRequestName();
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+							ce.setTDiagramPanel(tmldp.tmltdp);
+							ce.setTGComponent(tgc);
+							checkingErrors.add(ce);
+							throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
+						}
+					}
+					
 					request = tmlm.getRequestNamed(tmlro.getRequestName());
 					if (request == null) {
 						request = new TMLRequest(tmlro.getRequestName(), tmlro);
@@ -452,6 +468,16 @@ public class GTMLModeling  {
 							}
 						}
 					} else {
+						// Must check whether the destination task is the same
+						if (request.getDestinationTask() != tmlm.getTMLTaskByName(t2.getTaskName())) {
+							String msg = "Two requests are declared with the same name but with two different destination tasks: " + tmlro.getRequestName();
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+							ce.setTDiagramPanel(tmldp.tmltdp);
+							ce.setTGComponent(tgc);
+							checkingErrors.add(ce);
+							throw new MalformedTMLDesignException(tmlro.getRequestName() + " msg");
+						}
+						
 						// Must check whether the two requests are compatible (parameters)
 						int nbOfParamsCurrent = 0;
 						for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
