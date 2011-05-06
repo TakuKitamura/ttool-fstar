@@ -275,20 +275,23 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 						JOptionPane.INFORMATION_MESSAGE);
 					return false;
 				}
-				
-				if (((TMLComponentTaskDiagramPanel)(tdp)).namePrimitiveComponentInUse(oldValue, s)) {
-					JOptionPane.showMessageDialog(frame,
-						"Error: the name is already in use",
-						"Name modification",
-						JOptionPane.ERROR_MESSAGE);
-					return false;
-				} else {
-					//TraceManager.addDev("Set value with change");
-					setValueWithChange(s);
-					rescaled = true;
-					//TraceManager.addDev("return true");
-					return true;
+				if (oldValue.compareTo(s) != 0) {
+					if (((TMLComponentTaskDiagramPanel)(tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+						JOptionPane.showMessageDialog(frame,
+							"Error: the name is already in use",
+							"Name modification",
+							JOptionPane.ERROR_MESSAGE);
+						return false;
+					}
 				}
+				
+			
+				//TraceManager.addDev("Set value with change");
+				setValueWithChange(s);
+				rescaled = true;
+				//TraceManager.addDev("return true");
+				return true;
+				
 			}
 			return false;
 		}
