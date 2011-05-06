@@ -63,7 +63,30 @@ public class AvatarSyntaxChecker  {
 		if (tmp.compareTo("[]") == 0) {
 			return 0;
 		}
-		return parse(_as, _ab, "guard", _guard);
+		
+		// NEW
+		tmp = Conversion.replaceAllChar(tmp, '[', "").trim();
+		tmp = Conversion.replaceAllChar(tmp, ']', "").trim();
+		
+		String act = tmp;
+		
+		for(AvatarAttribute aa: _ab.getAttributes()) {
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
+		}
+		
+		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+		
+		TraceManager.addDev("Evaluating:" + act);
+		boolean result = bee.getResultOf(act);
+		if (bee.getError() != null) {
+			TraceManager.addDev("Error: " + bee.getError());
+			return -1;
+		}
+		
+		return 0;
+		// END of NEW
+		
+		//return parse(_as, _ab, "guard", _guard);
 	}
 	
 	public static int isAValidIntExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
