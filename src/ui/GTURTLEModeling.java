@@ -4438,7 +4438,7 @@ public class GTURTLEModeling {
 				}
 
 				//TraceManager.addDev("Done");
-				//TraceManager.addDev("My value is " + father.getValue());
+				//TraceManager.addDev("Father My value is " + father.getValue());
 				//TraceManager.addDev("My class is " + father.getClass());
 
 				//TraceManager.addDev("Searching for component " + fatherNum + " at " + tgc.getName());
@@ -4447,8 +4447,11 @@ public class GTURTLEModeling {
 				if (tgc == null) {
 					// To be added to its father -> swallow component
 					if (father instanceof SwallowTGComponent) {
+						//TraceManager.addDev("1 Must add the component to its father:");
 						tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
+						//TraceManager.addDev("2 Must add the component to its father:" + tgc);
 						if (tgc instanceof SwallowedTGComponent) {
+							//TraceManager.addDev("3 Must add the component to its father:");
 							((SwallowTGComponent)father).addSwallowedTGComponent(tgc, myX, myY);
 							//TraceManager.addDev("Swallowed to father = " + father.getValue() + ". My name=" + myName + " decId=" + decId);
 						} else {

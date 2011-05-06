@@ -62,6 +62,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
+		//setAttributesVisible(true);
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

@@ -227,6 +227,7 @@ public class TGComponentManager {
 	public static final int TMLCTD_COPORT = 1203;
 	public static final int TMLCTD_CREMOTECOMPONENT = 1204;
 	public static final int TMLCTD_RCOMPONENT = 1205;
+	public static final int TMLCTD_CREMOTEPORTCOMPONENT = 1206;
 	
 	public static final int EBRDD_START_STATE = 1300;
     public static final int EBRDD_STOP_STATE = 1301;
@@ -710,6 +711,9 @@ public class TGComponentManager {
 			case TMLCTD_CREMOTECOMPONENT:
                 tgc = new TMLCRemoteCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+			case TMLCTD_CREMOTEPORTCOMPONENT:
+                tgc = new TMLCRemotePortCompositeComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 			case TMLCTD_CPORT:
                 tgc = new TMLCCompositePort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1150,6 +1154,8 @@ public class TGComponentManager {
             return TMLCTD_RCOMPONENT;
 		} else if (tgc instanceof TMLCRemoteCompositeComponent) {
             return TMLCTD_CREMOTECOMPONENT;
+		} else if (tgc instanceof TMLCRemotePortCompositeComponent) {
+            return TMLCTD_CREMOTEPORTCOMPONENT;
 		} else if (tgc instanceof TMLCCompositePort) {
             return TMLCTD_CPORT;
 		} else if (tgc instanceof TMLCPrimitivePort) {
