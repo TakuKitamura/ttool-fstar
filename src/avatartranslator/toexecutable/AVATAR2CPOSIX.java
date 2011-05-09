@@ -459,7 +459,12 @@ public class AVATAR2CPOSIX {
 					if (at.hasActions()) {
 						ret += " if (__returnRequest == &__req" + i + ") {" + CR;
 						for(int j=0; j<at.getNbOfAction(); j++) {
-							ret += at.getAction(j) + ";" + CR;
+							if (at.isAMethodCall(at.getAction(j))) {
+								ret +=  modifyMethodName(_block, at.getAction(j)) + ";" + CR;
+							} else {
+								ret +=  at.getAction(j) + ";" + CR;
+							}
+							
 						}
 						ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
 					}  else {

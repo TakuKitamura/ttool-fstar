@@ -470,6 +470,77 @@ public class AvatarBlock extends AvatarElement {
 		return cpt;
 	}
 	
+	public AvatarState removeElseGuards() {
+		if (asm == null) {
+			return null;
+		}
+		
+		AvatarStateMachineElement asme0;
+		AvatarTransition at = null, at0;
+		int nbOfElse;
+		String guard, g;
+		int i;
+		
+		for(AvatarStateMachineElement asme :asm.getListOfElements()) {
+			if (asme instanceof AvatarState) {
+				// Has only one "else" transition?
+				if (asme.nbOfNexts() > 0) {
+					// Search for several "else"
+					nbOfElse = 0;
+					for(i=0; i<asme.nbOfNexts(); i++) {
+						asme0 = asme.getNext(i);
+						if (asme0 instanceof AvatarTransition) {
+							if (((AvatarTransition)asme0).hasElseGuard()) {
+								nbOfElse ++;
+								at = (AvatarTransition)asme0;
+							}
+						}
+					}
+					
+					if ((asme.nbOfNexts() == 1) && (nbOfElse == 1)) {
+						return (AvatarState)asme;
+					}
+					
+					if (nbOfElse > 2) {
+						return (AvatarState)asme;
+					}
+					
+					if (nbOfElse == 1) {
+						// Must compute the new guard
+						guard = "";
+						for(i=0; i<asme.nbOfNexts(); i++) {
+							asme0 = asme.getNext(i);
+							if ((asme0 instanceof AvatarTransition) && (asme0 != at)) {
+								at0 = (AvatarTransition)asme0;
+								g = at0.getGuard();
+								if (g != null) {
+									if (at0.hasNonDeterministicGuard()) {
+										guard = "false";
+										break;
+									} else {
+										if (guard.length() == 0) {
+											guard = "not(" + at0.getGuard() + ")";
+										} else {
+											guard = guard + " and not(" + at0.getGuard() + ")";
+										}
+									}
+								}
+							}
+						}
+						guard = Conversion.replaceAllChar(guard, '[', "("); 
+						guard = Conversion.replaceAllChar(guard, ']', ")");
+						guard = "[" + guard + "]";
+						at.setGuard(guard);
+						TraceManager.addDev("[ else ] replaced with :" + guard);
+					}
+				}
+			}
+		}
+		
+		return null;
+		
+	}
+	
 	
     
 }

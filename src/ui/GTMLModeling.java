@@ -2047,7 +2047,7 @@ public class GTMLModeling  {
 							if (task != null) {
 								tmp.add(task);
 							} else {
-								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Task " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + "is unknown");
+								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Task " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + " is unknown");
 								//ce.setTMLTask(tmltask);
 								ce.setTDiagramPanel(tmlap.tmlap);
 								ce.setTGComponent(tgc);
@@ -2072,7 +2072,7 @@ public class GTMLModeling  {
 								tmp.add(pc);
 								allcomp.add(pc);
 							} else {
-								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Component " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + "is unknown");
+								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Component " + artifact.getTaskName() + " referenced by artifact " + artifact.getValue() + " is unknown");
 								//ce.setTMLTask(tmltask);
 								ce.setTDiagramPanel(tmlap.tmlap);
 								ce.setTGComponent(tgc);

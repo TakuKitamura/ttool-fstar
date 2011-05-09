@@ -117,6 +117,25 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		}
 		return maxCompute;
 	}
+	
+	public boolean hasElseGuard() {
+		if (guard == null) {
+			return false;
+		}
+		
+		return AvatarSpecification.isElseGuard(guard);
+	}
+	
+	public boolean hasNonDeterministicGuard() {
+		if (guard == null) {
+			return false;
+		}
+		
+		String tmp = Conversion.replaceAllChar(guard, ' ', "").trim();
+		
+		return tmp.compareTo("[]") == 0;
+		
+	}
 
 	
 	public AvatarTransition cloneMe() {

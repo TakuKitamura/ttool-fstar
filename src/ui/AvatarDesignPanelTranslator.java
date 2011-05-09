@@ -100,6 +100,9 @@ public class AvatarDesignPanelTranslator {
 		createRelationsBetweenBlocks(as, blocks);
 		makeBlockStateMachines(as);
 		createPragmas(as, blocks);
+		TraceManager.addDev("Removing else guards");
+		as.removeElseGuards();
+		TraceManager.addDev("Removing else guards ... done");
 		return as;
 	}
 	
@@ -1003,11 +1006,16 @@ public class AvatarDesignPanelTranslator {
 						
 						// Guard
 						tmp = modifyString(asmdco.getGuard());
-						error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
-						if (error < 0) {
-							makeError(error, tdp, _ab, tgc, "transition guard", tmp); 
-						} else {
+						
+						if (AvatarSpecification.isElseGuard(tmp)) {
 							at.setGuard(tmp);
+						} else {
+							error = AvatarSyntaxChecker.isAValidGuard(_as, _ab, tmp);
+							if (error < 0) {
+								makeError(error, tdp, _ab, tgc, "transition guard", tmp); 
+							} else {
+								at.setGuard(tmp);
+							}
 						}
 						
 						// Delays
@@ -1308,53 +1316,6 @@ public class AvatarDesignPanelTranslator {
 		return !(TAttribute.isAValidId(tmp, false, false)); 
 	}
 	
-	/*private String makeTIFActionOnParam(String _s) {
-		String ret = _s.trim();
-		int index0 = ret.indexOf("=");
-		if (index0 == -1) {
-			return ret;
-		}
-		
-		return ret.substring(index0+1, ret.length()).trim();
-		
-	}
-	
-	private String makeTIFAction(String _s, String _replace) {
-		String ret = _s.trim();
-		int index0 = ret.indexOf("(");
-		if (index0 == -1) {
-			return "";
-		}
-		
-		int index1 = ret.indexOf(")");
-		if (index1 == -1) {
-			return "";
-		}
-		
-		ret = ret.substring(index0, index1); 
-		
-		ret = Conversion.replaceAllString(ret, "(", _replace);
-		ret = Conversion.replaceAllString(ret, ",", _replace);
-		ret = Conversion.replaceAllString(ret, " ", "");
-		
-		return ret;
-	}
-	
-	// Checks whether all states with internal state machines have at most one start state
-	private TGComponent checkForStartStateOfCompositeStates(AvatarSMDPanel _panel) {
-		TGComponent tgc;
-		ListIterator iterator = _panel.getComponentList().listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof AvatarSMDState) {
-				tgc = (((AvatarSMDState)(tgc)).checkForStartStateOfCompositeStates());
-				if (tgc != null) {
-					return tgc;
-				}
-			}
-		}
-		return null;
-	}*/
-	
+
 	
 }

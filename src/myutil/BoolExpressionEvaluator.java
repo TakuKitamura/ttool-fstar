@@ -74,8 +74,6 @@ public class BoolExpressionEvaluator {
 	private int currentValue; 
 	
 	
-	
-	
 	public BoolExpressionEvaluator() {
 	}
 	
@@ -102,7 +100,7 @@ public class BoolExpressionEvaluator {
 		
 		//TraceManager.addDev("Computing:" + _expr);
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|<>",true);
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|<>:;",true);
 		
 		computeNextToken();
 		int result =  (int)(parseExpression());
@@ -116,8 +114,6 @@ public class BoolExpressionEvaluator {
 		}
 		
 		errorMessage = "Not a boolean expression: " + _expr;
-		
-		
 		
 		return false;
 	}
@@ -494,7 +490,7 @@ public class BoolExpressionEvaluator {
 				return;
 			}
 			
-			if (s.compareTo("<") == 0) {
+			if (s.compareTo(";") == 0) {
 				currentValue = 0;
 				currentType = LTEQ_TOKEN;
 				//TraceManager.addDev("equal token!");

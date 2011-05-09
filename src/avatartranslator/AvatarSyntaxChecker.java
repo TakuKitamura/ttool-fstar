@@ -76,10 +76,10 @@ public class AvatarSyntaxChecker  {
 		
 		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 		
-		TraceManager.addDev("Evaluating:" + act);
+		//TraceManager.addDev("Evaluating guard:" + act);
 		boolean result = bee.getResultOf(act);
 		if (bee.getError() != null) {
-			TraceManager.addDev("Error: " + bee.getError());
+			//TraceManager.addDev("Error: " + bee.getError());
 			return -1;
 		}
 		
@@ -93,14 +93,52 @@ public class AvatarSyntaxChecker  {
 		if (_expr.trim().length() == 0) {
 			return 0;
 		}
-		return parse(_as, _ab, "actionnat", _expr);
+		
+		String tmp = _expr.replaceAll(" ", "").trim();
+		String act = tmp;
+		
+		for(AvatarAttribute aa: _ab.getAttributes()) {
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
+		}
+		
+		IntExpressionEvaluator iee = new IntExpressionEvaluator();
+		
+		//TraceManager.addDev("Evaluating int:" + act);
+		double result = iee.getResultOf(act);
+		if (iee.getError() != null) {
+			//TraceManager.addDev("Error: " + iee.getError());
+			return -1;
+		}
+		
+		return 0;
+		// OLD return parse(_as, _ab, "actionnat", _expr);*/
+		
+		
 	}
 	
 	public static int isAValidBoolExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
 		if (_expr.trim().length() == 0) {
 			return 0;
 		}
-		return parse(_as, _ab, "actionbool", _expr);
+		
+		String tmp = _expr.replaceAll(" ", "").trim();
+		String act = tmp;
+		
+		for(AvatarAttribute aa: _ab.getAttributes()) {
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
+		}
+		
+		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+		
+		//TraceManager.addDev("Evaluating bool:" + act);
+		boolean result = bee.getResultOf(act);
+		if (bee.getError() != null) {
+			//TraceManager.addDev("Error: " + bee.getError());
+			return -1;
+		}
+		
+		return 0;
+		// OLD return parse(_as, _ab, "actionbool", _expr);
 	}
 	
 	public static int isAValidVariableExpr(AvatarSpecification _as, AvatarBlock _ab, String _expr) {
@@ -118,9 +156,11 @@ public class AvatarSyntaxChecker  {
 		String action = _expr.substring(index0 + 1,  _expr.length()).trim();
 		
 		if (aa.isInt()) {
-			return parse(_as, _ab, "actionnat", action);
+			return isAValidIntExpr(_as, _ab, action);
+			//return parse(_as, _ab, "actionnat", action);
 		} else if (aa.isBool()) {
-			return parse(_as, _ab, "actionbool", action);
+			return isAValidBoolExpr(_as, _ab, action);
+			//return parse(_as, _ab, "actionbool", action);
 		} 
 		return -1;
 	}

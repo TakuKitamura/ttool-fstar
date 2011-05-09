@@ -345,4 +345,27 @@ public class AvatarSpecification extends AvatarElement {
 		return null;
 	}
 	
+	public AvatarState removeElseGuards() {
+		AvatarState state;
+		
+		for(AvatarBlock block: blocks) {
+			state = block.removeElseGuards();
+			if (state != null) {
+				return state;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static boolean isElseGuard(String _guard) {
+		if (_guard == null) {
+			return false;
+		}
+		
+		String guard = Conversion.replaceAllChar(_guard, ' ', "").trim();
+		
+		return guard.compareTo("[else]") == 0;
+	}
+	
 }
