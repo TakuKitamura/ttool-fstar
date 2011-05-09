@@ -689,12 +689,12 @@ public class GTMLModeling  {
 				while(li.hasNext()) {
 					port1 = (TMLCPrimitivePort)(li.next());
 					portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
-					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
 					
 					ListIterator ite = portstome.listIterator();
-					//while(ite.hasNext()) {
-						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
-					//}
+					while(ite.hasNext()) {
+						TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+					}
 					
 					if (portstome.size() != 1) {
 						String msg = "port " + port1.getPortName() + " is not correctly connected";
@@ -777,6 +777,8 @@ public class GTMLModeling  {
 								ce.setTGComponent(tgc);
 								checkingErrors.add(ce);
 								throw new MalformedTMLDesignException(msg);
+							} else {
+								TraceManager.addDev("Same evt : not added");
 							}
 						} else {
 							tt1 = tmlm.getTMLTaskByName(port1.getFather().getValue());

@@ -258,6 +258,14 @@ public class TMLModeling {
                 if (channel.getType() != _channel.getType()) {
                     return true;
                 }
+				
+				if (channel.getOriginTask() != _channel.getOriginTask()) {
+					return true;
+				}
+				
+				if (channel.getDestinationTask() != _channel.getDestinationTask()) {
+					return true;
+				}
             }
         }
         return false;
@@ -352,6 +360,14 @@ public class TMLModeling {
                         return true;
                     }
                 }
+				
+				// Must check for origin and destination task
+				if (event.getOriginTask() != _event.getOriginTask()) {
+					return true;
+				}
+				if (event.getDestinationTask() != _event.getDestinationTask()) {
+					return true;
+				}
             }
         } 
         return false;
