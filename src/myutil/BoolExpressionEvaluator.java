@@ -90,26 +90,44 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public boolean getResultOf(String _expr) {
-		//TraceManager.addDev("Evaluating bool expr: " + _expr);
-		_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		TraceManager.addDev("Evaluating bool expr: " + _expr);
+		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
 		_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
 		_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 		
-		//TraceManager.addDev("Computing:" + _expr);
+		// For not() -> must find the closing bracket
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()!=&|<>:;",true);
+		int index;
+		int indexPar;
+		
+		while((index = _expr.indexOf("not(")) != -1) {
+			indexPar = Conversion.findMatchingParenthesis(_expr, index+3, '(', ')');
+			if( indexPar == -1)	{
+				errorMessage = "Parenthisis not maching at index " + (index + 3) + " in expression: " + _expr;
+				return false;
+			}
+			
+			_expr = _expr.substring(0, index) + "(!" + _expr.substring(index+3, indexPar) + ")" + _expr.substring(indexPar, _expr.length());
+		}
+		
+		
+		TraceManager.addDev("Computing:" + _expr);
+		
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/!=&|<>:;()",true);
 		
 		computeNextToken();
 		int result =  (int)(parseExpression());
 		
 		if (result == TRUE_VALUE) {
+			TraceManager.addDev("equal true");
 			return true;
 		}
 		
 		if (result == FALSE_VALUE) {
+			TraceManager.addDev("equal false");
 			return false;
 		}
 		

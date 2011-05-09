@@ -521,7 +521,7 @@ public class AvatarBlock extends AvatarElement {
 										if (guard.length() == 0) {
 											guard = "not(" + at0.getGuard() + ")";
 										} else {
-											guard = guard + " and not(" + at0.getGuard() + ")";
+											guard = guard + " and (not(" + at0.getGuard() + "))";
 										}
 									}
 								}

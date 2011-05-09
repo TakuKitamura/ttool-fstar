@@ -810,6 +810,7 @@ public class AvatarDesignPanelTranslator {
 				
 			// State
 			} else if (tgc instanceof AvatarSMDState) {
+				TraceManager.addDev("Value = " + tgc.getValue());
 				astate = asm.getStateWithName(tgc.getValue());
 				if (astate == null) {
 					astate = new AvatarState(tgc.getValue(), tgc);
