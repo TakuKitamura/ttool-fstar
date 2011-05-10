@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/Generator.c generated_src/TestBlock.c 
+SRCS = generated_src/main.c generated_src/DUT.c generated_src/scenario.c 

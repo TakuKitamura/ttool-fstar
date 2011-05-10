@@ -308,7 +308,7 @@ public class GTMLModeling  {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
 				}
                 tmlt = new TMLTask(tmlcpc.getValue(), tmlcpc, tmladp);
-				//TraceManager.addDev("Task added:" + tmlcpc.getValue());
+				TraceManager.addDev("Task added:" + tmlcpc.getValue());
 				listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);
 				tmlt.setExit(false);
@@ -917,7 +917,7 @@ public class GTMLModeling  {
 							tmltt = new TMLType(request.getType(j).getType());
 							tmlattr = new TMLAttribute(attname, tmltt);
 							tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-							TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
+							//TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
 							tt1.addAttribute(tmlattr);
 						}
 					}
@@ -1373,11 +1373,11 @@ public class GTMLModeling  {
 						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
 						if (allVariables.size() > 0) {
 							for(int k=0; k<allVariables.size(); k++) {
-								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								//TraceManager.addDev("Adding record: " + allVariables.get(k));
 								tmlsendevent.addParam(allVariables.get(k));
 							}
 						} else {
-							TraceManager.addDev("Adding param: " + tmp);
+							//TraceManager.addDev("Adding param: " + tmp);
 							tmlsendevent.addParam(tmp);
 						}
 					}
@@ -1423,11 +1423,11 @@ public class GTMLModeling  {
 						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
 						if (allVariables.size() > 0) {
 							for(int k=0; k<allVariables.size(); k++) {
-								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								//TraceManager.addDev("Adding record: " + allVariables.get(k));
 								tmlsendrequest.addParam(allVariables.get(k));
 							}
 						} else {
-							TraceManager.addDev("Adding param: " + tmp);
+							//TraceManager.addDev("Adding param: " + tmp);
 							tmlsendrequest.addParam(tmp);
 						}
 					}
@@ -1465,7 +1465,7 @@ public class GTMLModeling  {
 						
 						if (allVariables.size() > 0) {
 							for(int k=0; k<allVariables.size(); k++) {
-								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								//TraceManager.addDev("Adding record: " + allVariables.get(k));
 								if (cpt != 1) {
 									act += "$";
 								}
@@ -1473,7 +1473,7 @@ public class GTMLModeling  {
 								cpt ++;
 							}
 						} else {
-							TraceManager.addDev("Adding param: " + tmp);
+							//TraceManager.addDev("Adding param: " + tmp);
 							if (cpt != 1) {
 								act += "$";
 							}
@@ -1490,7 +1490,7 @@ public class GTMLModeling  {
                         checkingErrors.add(ce);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
 					} else {
-						TraceManager.addDev("Adding action = " + act);
+						//TraceManager.addDev("Adding action = " + act);
 						tmlaction.setAction(act);
 						activity.addElement(tmlaction);
 						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
@@ -1562,11 +1562,11 @@ public class GTMLModeling  {
 						Vector<String> allVariables = tmltask.getAllAttributesStartingWith(tmp + "__");
 						if (allVariables.size() > 0) {
 							for(int k=0; k<allVariables.size(); k++) {
-								TraceManager.addDev("Adding record: " + allVariables.get(k));
+								//TraceManager.addDev("Adding record: " + allVariables.get(k));
 								tmlwaitevent.addParam(allVariables.get(k));
 							}
 						} else {
-							TraceManager.addDev("Adding param: " + tmp);
+							//TraceManager.addDev("Adding param: " + tmp);
 							tmlwaitevent.addParam(tmp);
 						}
 					}
@@ -2111,7 +2111,22 @@ public class GTMLModeling  {
 		}
 		
 		if (cpanels.size() > 0) {
-			TMLComponentDesignPanel panel = cpanels.get(cpanels.size()-1);
+			for(TMLComponentDesignPanel panel: cpanels) {
+				gtml =  new GTMLModeling(panel, false);
+				gtml.setComponents(allcomp);
+				tmpm = gtml.translateToTMLModeling(true, false);
+				warnings.addAll(gtml.getCheckingWarnings());
+				if (gtml.getCheckingErrors().size() >0) {
+					checkingErrors.addAll(gtml.getCheckingErrors());
+					return false;
+				}
+				s = tmlap.getMainGUI().getTitleAt(panel);
+				s = s.replaceAll("\\s", "");
+				tmpm.prefixAllNamesWith(s + "__");
+				//TraceManager.addDev("Intermediate TMLModeling: " + tmpm);
+				tmlm.mergeWith(tmpm);
+			}
+			/*TMLComponentDesignPanel panel = cpanels.get(cpanels.size()-1);
 			gtml =  new GTMLModeling(panel, false);
 			gtml.setComponents(allcomp);
 			tmpm = gtml.translateToTMLModeling(true, false);
@@ -2124,8 +2139,10 @@ public class GTMLModeling  {
 			s = s.replaceAll("\\s", "");
 			tmpm.prefixAllNamesWith(s + "__");
 			//TraceManager.addDev("Intermediate TMLModeling: " + tmpm);
-			tmlm.mergeWith(tmpm);
+			tmlm.mergeWith(tmpm);*/
 		}
+		
+		TraceManager.addDev("TMLModeling tasks: " + tmlm.tasksToString());
 		
 		/*for(TMLComponentDesignPanel panel: cpanels) {
 		gtml =  new GTMLModeling(panel);
@@ -2196,8 +2213,11 @@ public class GTMLModeling  {
 					for(TMLArchiArtifact artifact:artifacts) {
 						//TraceManager.addDev("Exploring artifact " + artifact.getValue());
 						s = artifact.getReferenceTaskName();
+						TraceManager.addDev("1) Trying to get task named:" + s); 
 						s = s.replaceAll("\\s", "");
+						TraceManager.addDev("2) Trying to get task named:" + s); 
 						s = s + "__" + artifact.getTaskName();
+						TraceManager.addDev("3) Trying to get task named:" + s); 
 						task = tmlm.getTMLTaskByName(s);
 						if (task != null) {
 							map.addTaskToHwExecutionNode(task, (HwExecutionNode)node);
