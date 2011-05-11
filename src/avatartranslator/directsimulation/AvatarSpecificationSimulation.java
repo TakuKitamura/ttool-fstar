@@ -612,6 +612,7 @@ public class AvatarSpecificationSimulation  {
 									if (sig.isIn()) {
 										// Found one!
 										//TraceManager.addDev("step 4 sig=" + sig + " as = " + as + "rel = " + rel + "ar=" + ar);
+										
 										AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
 										newone.linkedTransaction = otherTransaction;
 										transactions.add(newone);

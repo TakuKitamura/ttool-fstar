@@ -77,7 +77,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 	protected int sizeOfFIFO;
 	protected boolean blockingFIFO;
 	protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
-	
+	protected boolean isBroadcast = false;
 	
     
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -284,6 +284,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		asynchronous = jdas.isAsynchronous();
 		blockingFIFO = jdas.isBlocking();
 		isPrivate = jdas.isPrivate();
+		isBroadcast = jdas.isBroadcast();
 		
 		try {
 			sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
@@ -326,6 +327,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 		sb.append("\" size=\"" + sizeOfFIFO);
 		sb.append("\" blocking=\"" + blockingFIFO);
 		sb.append("\" private=\"" + isPrivate);
+		sb.append("\" broadcast=\"" + isBroadcast);
 		sb.append("\" />\n");
 		
         sb.append("</extraparam>\n");
@@ -337,7 +339,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
             NodeList nli;
             Node n1, n2;
             Element elt;
-			String val, val1, val2, val3;
+			String val, val1, val2, val3, val4;
 			sizeOfFIFO = 4;
 			blockingFIFO = false;
 			asynchronous = false;
@@ -389,6 +391,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 								val1 = elt.getAttribute("size");
 								val2 = elt.getAttribute("blocking");
 								val3 = elt.getAttribute("private");
+								val4 = elt.getAttribute("brodcast");
                                 
                                 if ((val != null) && (!(val.equals("null")))) {
 									if (val.trim().toLowerCase().compareTo("true") == 0) {
@@ -425,6 +428,17 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
                                     
                                 } else {
 									isPrivate = true;
+								}
+								
+								if ((val4 != null) && (!(val4.equals("null")))) {
+									if (val3.trim().toLowerCase().compareTo("false") == 0) {
+										isBroadcast = false;
+									} else {
+										isBroadcast = true;
+									}
+                                    
+                                } else {
+									isBroadcast = false;
 								}
 							}
                         }
@@ -624,6 +638,10 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 	
 	public boolean isPrivate() {
 		return isPrivate;
+	}
+	
+	public boolean isBroadcast() {
+		return isBroadcast;
 	}
 	
     

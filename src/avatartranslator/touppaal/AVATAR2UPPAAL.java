@@ -69,6 +69,7 @@ public class AVATAR2UPPAAL {
 	
 	private LinkedList gatesNotSynchronized; // String
 	private LinkedList gatesSynchronized;
+	private LinkedList gatesSynchronizedRelations;
 	private LinkedList gatesAsynchronized;
 	
 	private int nbOfIntParameters, nbOfBooleanParameters;
@@ -161,6 +162,7 @@ public class AVATAR2UPPAAL {
 		gatesNotSynchronized = new LinkedList();
 		gatesNotSynchronized.add("makeChoice");
 		gatesSynchronized = new LinkedList();
+		gatesSynchronizedRelations = new LinkedList();
 		gatesAsynchronized = new LinkedList();
 		
 		// Deal with blocks
@@ -251,6 +253,7 @@ public class AVATAR2UPPAAL {
 			} else {
 				for(int i=0; i<ar.nbOfSignals(); i++) {
 					gatesSynchronized.add(relationToString(ar, i));
+					gatesSynchronizedRelations.add(ar);
 				}
 			}
 		}
@@ -477,10 +480,17 @@ public class AVATAR2UPPAAL {
 		spec.addGlobalDeclaration("\n//Declarations for synchronous channels\n");
 		
 		String action;
+		AvatarRelation ar;
 		ListIterator iterator = gatesSynchronized.listIterator();
+		ListIterator iterator0 = gatesSynchronizedRelations.listIterator();
 		while(iterator.hasNext()) {
 			action = (String)(iterator.next());
-			spec.addGlobalDeclaration("urgent chan " + action + ";\n");
+			ar = (AvatarRelation)(iterator0.next());
+			if (!(ar.isBroadcast())) {
+				spec.addGlobalDeclaration("urgent chan " + action + ";\n");
+			} else {
+				spec.addGlobalDeclaration("urgent broadcast chan " + action + ";\n");
+			}
 		}
 		
 		

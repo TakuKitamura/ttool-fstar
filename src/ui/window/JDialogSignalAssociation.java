@@ -66,7 +66,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	private JRadioButton synchronous, asynchronous;
 	private JLabel labelFIFO;
 	private JTextField sizeOfFIFO;
-	private JCheckBox blocking, isPrivate;
+	private JCheckBox blocking, isPrivate, isBroadcast;
     private JPanel panel1, panel2, panel3, panel4;
 	
 	private boolean cancelled = false;
@@ -234,6 +234,10 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 		synchronous = new JRadioButton("synchronous");
 		synchronous.addActionListener(this);
         panel3.add(synchronous, c3);
+		isBroadcast = new JCheckBox("Broadcast channel");
+		isBroadcast.setSelected(connector.isBroadcast());
+		panel3.add(isBroadcast, c3);
+		
 		asynchronous = new JRadioButton("asynchronous");
 		asynchronous.addActionListener(this);
         panel3.add(asynchronous, c3);
@@ -326,6 +330,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 		labelFIFO.setEnabled(b);
 		sizeOfFIFO.setEnabled(b);
 		blocking.setEnabled(b);
+		isBroadcast.setEnabled(!b);
 	}
 	
 	private void updateAddButton() {
@@ -472,6 +477,10 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	
 	public boolean isPrivate() {
 		return isPrivate.isSelected();
+	}
+	
+	public boolean isBroadcast() {
+		return isBroadcast.isSelected();
 	}
     
 }

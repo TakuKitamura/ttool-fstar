@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarSimulationBlock
- * Avatar: notion of block in simulation
- * Creation: 14/12/2010
- * @version 1.0 14/12/2010
- * @author Ludovic APVRILLE
- * @see
- */
+* Class AvatarSimulationBlock
+* Avatar: notion of block in simulation
+* Creation: 14/12/2010
+* @version 1.0 14/12/2010
+* @author Ludovic APVRILLE
+* @see
+*/
 
 
 package avatartranslator.directsimulation;
@@ -72,11 +72,11 @@ public class AvatarSimulationBlock  {
     }
 	
 	/*public void addElapsedTime(int _elapsedTimed) {
-		elapsedTime += _elapsedTimed;
+	elapsedTime += _elapsedTimed;
 	}
 	
 	public void resetElapsedTime() {
-		elapsedTime = 0;
+	elapsedTime = 0;
 	}*/
 	
 	public AvatarBlock getBlock() {
@@ -221,8 +221,8 @@ public class AvatarSimulationBlock  {
 				aspt.clockValue = _clockValue;
 				
 				if (aspt.hasElapsedTime) {
-					 aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
-					 aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
+					aspt.myMinDelay = aspt.myMinDelay -aspt.elapsedTime;
+					aspt.myMaxDelay = aspt.myMaxDelay -aspt.elapsedTime;
 				}
 				
 				if (aspt.hasDelay) {
@@ -241,13 +241,13 @@ public class AvatarSimulationBlock  {
 		if (_aspt.involvedElement != null) {
 			executeElement(_allTransactions, _aspt.involvedElement, _clockValue, _aspt, _bunchid);
 			/*if (lastTransaction != null) {
-				_clockValue = lastTransaction.clockValueWhenFinished;
+			_clockValue = lastTransaction.clockValueWhenFinished;
 			}*/
 		}
 		
 		executeElement(_allTransactions, _aspt.elementToExecute, _clockValue, _aspt, _bunchid);
 		
-	
+		
 		//runToNextBlockingElement(_allTransactions, _clockValue, _maxTransationsInARow);
 	}
 	
@@ -257,19 +257,19 @@ public class AvatarSimulationBlock  {
 		if (_elt instanceof AvatarStopState) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
-		// Random
+			// Random
 		} else if (_elt instanceof AvatarState) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
-		// Random
+			// Random
 		} else if (_elt instanceof AvatarRandom) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
-		// Transition
+			// Transition
 		} else if (_elt instanceof AvatarTransition) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
-		
-		// Signal
+			
+			// Signal
 		} else if (_elt instanceof AvatarActionOnSignal) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 		}
@@ -319,7 +319,7 @@ public class AvatarSimulationBlock  {
 			//TraceManager.addDev("Id= " + ast.id + " duration=" + ast.duration + " elapsed=" + _aspt.elapsedTime + " selectedDur=" + _aspt.selectedDuration + " at end: " + _aspt.clockValueAtEnd + "clockValue=" + _clockValue);
 		} 
 		
-				
+		
 		// Attributes
 		Vector<String> attributeValues = new Vector<String>();
 		String s;
@@ -370,7 +370,7 @@ public class AvatarSimulationBlock  {
 					// Must put the right parameters
 					if (_aspt.isSynchronous) {
 						// Synchronous call
-						if ((_aspt.isSending) && (_aspt.linkedTransaction != null)){
+						if ((_aspt.isSending) && (_aspt.linkedTransaction != null )){
 							// Synchronous Sending!
 							// Must be in the receiving transaction the right parameters
 							Vector<String> parameters = new Vector<String>();
@@ -394,7 +394,9 @@ public class AvatarSimulationBlock  {
 									TraceManager.addDev("EXCEPTION on adding value " + aaos);
 								}
 							}
-							_aspt.linkedTransaction.parameters = parameters;
+							//for(i=0; i<_aspt.linkedTransactions.size(); i++) {
+								_aspt.linkedTransaction.parameters = parameters;
+							//}
 						} else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
 							//TraceManager.addDev("Reading value " + aaos);
 							// Synchronous Receiving
@@ -586,7 +588,7 @@ public class AvatarSimulationBlock  {
 		return;
 	}
 	
-
+	
 	
 	public void addExecutedTransaction(Vector<AvatarSimulationTransaction> _allTransactions, AvatarSimulationTransaction _ast) {
 		transactions.add(_ast);
