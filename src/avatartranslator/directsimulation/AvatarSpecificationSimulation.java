@@ -489,6 +489,8 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		
+		// Work on broadcast transactions
+		
 		// Select possible logical transactions
 		pendingTransactions = ll;
 		ll = new Vector<AvatarSimulationPendingTransaction>();
@@ -614,6 +616,9 @@ public class AvatarSpecificationSimulation  {
 										//TraceManager.addDev("step 4 sig=" + sig + " as = " + as + "rel = " + rel + "ar=" + ar);
 										
 										AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
+										if (ar.isBroadcast()) {
+											newone.isBroadcast = true;
+										}
 										newone.linkedTransaction = otherTransaction;
 										transactions.add(newone);
 										if (_aspt.hasDelay) {

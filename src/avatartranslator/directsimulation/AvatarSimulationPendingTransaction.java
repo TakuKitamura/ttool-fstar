@@ -58,6 +58,7 @@ public class AvatarSimulationPendingTransaction  {
 	public AvatarStateMachineElement elementToExecute;
 	public AvatarStateMachineElement involvedElement; //(transition)
 	public AvatarSimulationPendingTransaction linkedTransaction;
+	public Vector<AvatarSimulationPendingTransaction> linkedTransactions; // Used for broadcasts
 	public AvatarSimulationAsynchronousTransaction linkedAsynchronousMessage;
 	public long clockValue;
 	public boolean isSynchronous;
@@ -88,12 +89,16 @@ public class AvatarSimulationPendingTransaction  {
 	// silent
 	public boolean isSilent;
 	
+	// broadcast
+	public boolean isBroadcast;
+	
 	
 	
     public AvatarSimulationPendingTransaction() {
 		hasClock = false;
 		hasElapsedTime = false;
 		hasDelay = false;
+		isBroadcast = false;
     }
 	
 	public AvatarSimulationPendingTransaction cloneMe() {
@@ -116,6 +121,7 @@ public class AvatarSimulationPendingTransaction  {
 		aspt.selectedDuration = this.selectedDuration;
 		aspt.maxDuration = this.maxDuration;
 		aspt.hasClock = this.hasClock;
+		aspt.isBroadcast = this.isBroadcast;
 		
 		return aspt;
 	}
