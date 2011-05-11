@@ -48,7 +48,10 @@ template <typename T>
 class MemPool {
 public:
 	///Constructor
-	MemPool(); //:_headFreeList(0){}
+	/**
+	\param iBlockSize Size of chunks to be allocated
+	*/
+	MemPool(unsigned int iBlockSize); //:_headFreeList(0){}
 	//MemPool();
 	///Allocation method
 	/**
@@ -70,6 +73,8 @@ public:
 private:
 	///Head pointer of the free list
 	T* _headFreeList;
+	///Size of chunks to be allocated
+	unsigned int _blockSize;
 	///List containing allocated memory chunks
 	std::list<T*> _chunkList;
 };

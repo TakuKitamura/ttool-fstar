@@ -49,11 +49,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <BusMaster.h>
 #include <SeqConstraint.h>
 #include <LogConstraint.h>
+//#include <MemPool.h>
+//#include <Parameter.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
 ID TMLTransaction::_ID=1;
 const unsigned int SeqConstraint::_transTableSeq[12]={0,20,0,0,16,16,10,32,32,32,11,32};
 const unsigned int LogConstraint::_transTableLog[20]={0, 20, 52, 0, 16, 16, 10, 32, 32, 32, 11, 32, 48, 10, 48, 64, 64, 11, 64, 64};
+//template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);
 
 int myrand(int n1, int n2){
 	static bool firstTime = true;

@@ -307,5 +307,7 @@ protected:
 	RunTillNextRandomChoice _randChoiceBreak;
 	///Flag indicating if the simulator has previously been reset
 	bool _wasReset;
+	///Graph output path
+	std::string _graphOutPath;
 };
 #endif

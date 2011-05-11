@@ -39,12 +39,12 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLRequestCommand.h>
-#include <TMLEventBChannel.h>
+#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLRequestCommand::TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam): TMLCommand(iID,  iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFunc(iParamFunc), _statParam(iStatParam) {
+TMLRequestCommand::TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam*/): TMLCommand(iID,  iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint), _channel(iChannel), _paramFunc(iParamFunc)/*, _statParam(iStatParam) */{
 	_type=REQ;
 }
 
@@ -110,6 +110,7 @@ std::string TMLRequestCommand::getCommandStr() const{
 	//std::cout << "\n";
 }*/
 
-Parameter<ParamType>* TMLRequestCommand::setParams(Parameter<ParamType>* ioParam){
-	return (_paramFunc==0)? new Parameter<ParamType>(_statParam):(_task->*_paramFunc)(ioParam);
+Parameter* TMLRequestCommand::setParams(Parameter* ioParam){
+	//return (_paramFunc==0)? 0:(_task->*_paramFunc)(ioParam);
+	return (_task->*_paramFunc)(ioParam);
 }

@@ -62,7 +62,7 @@ public:
 	\param iScheduler Pointer to the scheduler object
 	*/
 	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0), _deleteScheduler(true) {
-		_transactList.reserve(BLOCK_SIZE);
+		_transactList.reserve(BLOCK_SIZE_TRANS);
 	}
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;

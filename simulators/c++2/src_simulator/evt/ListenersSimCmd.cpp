@@ -483,6 +483,7 @@ std::ostream& TEPEFloatingSigListener::writeObject(std::ostream& s){
 	for (unsigned int i=0; i<_nbOfStartNodes; i++){
 		_startNodes[i]->writeObject(s);
 	}
+	return s;
 }
 
 std::istream& TEPEFloatingSigListener::readObject(std::istream& s){
@@ -490,6 +491,7 @@ std::istream& TEPEFloatingSigListener::readObject(std::istream& s){
 	for (unsigned int i=0; i<_nbOfStartNodes; i++){
 		_startNodes[i]->readObject(s);
 	}
+	return s;
 }
 
 void TEPEFloatingSigListener::reset(){

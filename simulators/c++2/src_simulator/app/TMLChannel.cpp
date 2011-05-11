@@ -143,7 +143,7 @@ ID TMLChannel::getID() const {
 	return _ID;
 }
 
-TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
+TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter* iParam){
 	return iNbOfSamples;
 }
 
@@ -184,4 +184,8 @@ bool TMLChannel::getSignificance(){
 	//std::cout << "get\n";
 	//if (_ID==53 && _significance==0) std::cout << "failure\n";
 	return (_significance != 0);
+}
+
+bool TMLChannel::mappedOnBus(){
+	return _numberOfHops!=0;
 }

@@ -60,7 +60,7 @@ public:
 	\param iCheckpoint Checkpoint Flag
 	\param iStatParam Static parameter if applicable 
 	*/
-	TMLWaitCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam = Parameter<ParamType>(0));
+	TMLWaitCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam = 0*/);
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;
@@ -77,7 +77,7 @@ public:
 	/**
 	\param ioParam Parameter data structure
 	*/ 
-	Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
+	Parameter* setParams(Parameter* ioParam);
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;

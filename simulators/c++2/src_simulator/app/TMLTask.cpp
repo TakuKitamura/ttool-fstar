@@ -43,19 +43,17 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStopCommand.h>
 #include <CPU.h>
 
-//#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;std::cout << "Scheduling for Task " << _name << " reset "<< _currentCPU << "\n";}
-
-#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;}
+//#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;}
 
 unsigned int TMLTask::_instanceCount=1;
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), _isScheduled(false), _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), /*_isScheduled(false),*/ _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
 	for (unsigned int i=0; i< _noOfCPUs; i++)
 		_cpus[i]->registerTask(this);
 #ifdef ADD_COMMENTS
-	_commentList.reserve(BLOCK_SIZE);
+	_commentList.reserve(BLOCK_SIZE_TRANS);
 #endif
-	_transactList.reserve(BLOCK_SIZE);
+	_transactList.reserve(BLOCK_SIZE_TRANS);
 	_instanceCount++;
 	if (_noOfCPUs==1) _currentCPU = _cpus[0];
 }
@@ -127,10 +125,7 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	_transactList.push_back(iTrans);
 	_endLastTransaction=iTrans->getEndTime();
 	_busyCycles+=iTrans->getOperationLength();
-	//_isScheduled=false;
-	//if (_noOfCPUs>1) _currentCPU=0;
-	RESET_SCHEDULING;
-	//FOR_EACH_TASKLISTENER (*i)->transExecuted(iTrans);
+	//RESET_SCHEDULING; 
 #ifdef LISTENERS_ENABLED
 	NOTIFY_TASK_TRANS_EXECUTED(iTrans);
 #endif
@@ -329,9 +324,7 @@ void TMLTask::reset(){
 	_noCPUTransactions=0;
 	_justStarted=true;
 	_hashInvalidated=true;
-	//_isScheduled=false;
-	//if (_noOfCPUs>1) _currentCPU=0;
-	RESET_SCHEDULING;
+	//RESET_SCHEDULING;
 }
 
 ParamType* TMLTask::getVariableByName(const std::string& iVarName ,bool& oIsId){
@@ -396,53 +389,30 @@ unsigned int TMLTask::getState() const{
 
 TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
 	//std::cout << "Task::getNextTransaction\n";
-	//return (_currCommand==0)?0:_currCommand->getCurrTransaction();
-	return (_currCommand==0 || _isScheduled)?0:_currCommand->getCurrTransaction();
+	return (_currCommand==0)?0:_currCommand->getCurrTransaction();
+	//return (_currCommand==0 || _isScheduled)?0:_currCommand->getCurrTransaction();
 }
 
 unsigned int TMLTask::getInstanceNo(){
 	return _myInstance;
 }
 
-void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
-	_isScheduled=true;
-	if (_noOfCPUs>1) _currentCPU = dynamic_cast<CPU*>(iCPU);
-	//if (_noOfCPUs>1) _currentCPU = iCPU;
-	//std::cout << "Scheduling for Task " << _name << " set\n";
-	//std::cout << _name << " CANNOT be scheduled any more by CPUs\n";
-}
+//void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
+	//_isScheduled=true;
+	//if (_noOfCPUs>1) _currentCPU = dynamic_cast<CPU*>(iCPU);
+//}
 
-void TMLTask::resetScheduledFlag(){
-	//std::cout << "TMLTask::resetScheduledFlag\n";
-	//_isScheduled=false;
-	//std::cout << _name << " CAN be scheduled by CPUs\n";
-	//if (_noOfCPUs>1) _currentCPU=0;
-	//std::cout << " ---------- RESET scheduled flag end in task " << _name << "\n";
+/*void TMLTask::resetScheduledFlag(){
 	RESET_SCHEDULING;
 }
 
 void TMLTask::setRescheduleFlagForCores(){
-	//_isScheduled=false;
-	//std::cout << _name << " CAN be scheduled by CPUs\n";
-	//_currentCPU=0;
 	RESET_SCHEDULING;
 	for (unsigned int i=0; i< _noOfCPUs; i++){
 		//std::cout << "in Task " << _name << " next CPU\n";
 		_cpus[i]->setRescheduleFlag();
 	}
-}
-
-//HashValueType TMLTask::getStateHash(){
-//	return _stateHash.getHash();
-//}
-
-/*unsigned int TMLTask::getNoOfCPUs(){
-	return _noOfCPUs;
 }*/
-
-//void TMLTask::addRawTransaction(TMLTransaction* iTrans){
-//	_transactList.push_back(iTrans);
-//}
 
 void TMLTask::schedule2TXT(std::ostream& myfile) const{
 	myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
@@ -457,4 +427,17 @@ void TMLTask::refreshStateHash(const char* iLiveVarList){
 		_hashInvalidated = true;
 		_liveVarList = iLiveVarList;
 	//}
+}
+
+int TMLTask::hasRunnableTrans(CPU* iCPU){
+	bool aIsMappedOnCPU=false;
+	for (unsigned int i=0; i< _noOfCPUs; i++){
+		aIsMappedOnCPU |= (_cpus[i]==iCPU);
+	}
+	if (!aIsMappedOnCPU || _currCommand==0) return 0;
+	TMLTransaction* aCurrTrans = _currCommand->getCurrTransaction();
+	if (aCurrTrans==0 || aCurrTrans->getVirtualLength()==0) return 0;
+	if (aCurrTrans->getChannel()!=0 && aCurrTrans->getChannel()->mappedOnBus()) return 2;
+	//std::cout << "There would be: " << _currCommand->getCurrTransaction()->toString() << "\n";
+	return 1;
 }

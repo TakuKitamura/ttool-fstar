@@ -143,7 +143,7 @@ std::string TMLbrbwChannel::toString() const{
 	return outp.str();
 }
 
-TMLLength TMLbrbwChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
+TMLLength TMLbrbwChannel::insertSamples(TMLLength iNbOfSamples, Parameter* iParam){
 	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
 		_content=0;

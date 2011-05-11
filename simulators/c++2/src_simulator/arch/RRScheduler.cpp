@@ -188,7 +188,7 @@ std::ostream& RRScheduler::writeObject(std::ostream &os){
 	return os;
 }
 
-void RRScheduler::transWasScheduled(SchedulableDevice* iDevice){
-	if (_lastSource!=0) _lastSource->transWasScheduled(iDevice);
-}
+//void RRScheduler::transWasScheduled(SchedulableDevice* iDevice){
+//	if (_lastSource!=0) _lastSource->transWasScheduled(iDevice);
+//}
 

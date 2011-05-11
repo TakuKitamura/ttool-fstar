@@ -42,132 +42,46 @@ Ludovic Apvrille, Renaud Pacalet
 #define ParameterH
 
 #include <definitions.h>
-#include <HashAlgo.h>
+class HashAlgo;
+#include <MemPool.h>
 
-template <typename T>
 class Parameter {
 public:
 	///Constructor
+	virtual void print() const=0;
+	virtual std::ostream& writeObject(std::ostream& s) = 0;
+	virtual void streamStateXML(std::ostream& s) const = 0;
+	virtual void getP(void* op1 ...) const = 0;
+	virtual void getStateHash(HashAlgo* iHash) const = 0;
+	virtual void readFromStream(std::istream &is)=0;
 	
-	Parameter(unsigned int iParamNo): _p(0), _paramNo(iParamNo){
-		if(_paramNo!=0) _p = new T[_paramNo];
-	}
-	
-	Parameter(unsigned int iParamNo, const T& ip1 ...): _p(0), _paramNo(iParamNo){
-		_p = new T[_paramNo];
-		T arg=ip1;
-		va_list args; // argument list
-		va_start(args, ip1); // initialize args
-		for (unsigned int i=0;i<_paramNo;i++){
-			_p[i]=arg;
-			arg=va_arg(args, T);
-		}
-	}
-		
-	Parameter(const Parameter& iRhs): _p(0), _paramNo(iRhs._paramNo){
-		if (_paramNo!=0){
-			_p = new T[_paramNo];
-			memcpy(_p, iRhs._p, _paramNo*sizeof(T));
-		}
-	}
-
-	Parameter(unsigned int iParamNo, std::istream& s): _p(0), _paramNo(iParamNo){
-		if (_paramNo!=0){
-			_paramNo=iParamNo;
-			_p = new T[_paramNo];
-			for (unsigned int i=0;i<_paramNo;i++){
-				READ_STREAM(s, _p[i]);
-			}
-#ifdef DEBUG_SERIALIZE
-			print();
-#endif
-		}
-	}
-	
-	~Parameter(){
-		if (_p!=0) delete [] _p;
-	}
-	
-	///Print function for testing purposes
-	void print() const{
-		std::cout << "print:\n";
-		for (unsigned int i=0;i<_paramNo;i++){
-			std::cout << " p[" << (i+1) << "]:" << _p[i];
-		}
-		std::cout << std::endl;
-		std::cout << "end print:\n";
-	}
-	
-	inline std::ostream& writeObject(std::ostream& s){
-		//std::cout << "writeObject:\n";
-		for (unsigned int i=0;i<_paramNo;i++){
-			WRITE_STREAM(s, _p[i]);
-		}
-#ifdef DEBUG_SERIALIZE
-		print();
-#endif
-		//std::cout << "end writeObject:\n";
-		return s;
-	}
 	///Stream operator >>
-	friend std::istream& operator >>(std::istream &is,Parameter<T> &obj){
-		for (unsigned int i=0;i<obj._paramNo;i++){
-			is >> obj._p[i];
-		}
+	friend std::istream& operator >>(std::istream &is,Parameter* obj){
+		obj->readFromStream(is);
+		//for (unsigned int i=0;i<obj.size;i++){
+		//	is >> obj._p[i];
+		//}
  		return is;
 	}
-	///Streams the parameter in XML format
-	/**
-	\param s Stream
-	*/
-	void streamStateXML(std::ostream& s) const{
-		//std::cout << "streamStateXML:\n";
-		s << TAG_PARAMo;
-		for (unsigned int i=0;i<_paramNo;i++){
-			 s << TAG_Pxo << i << ">" << _p[i] << TAG_Pxc << i << ">";
-		}
-		s << TAG_PARAMc;
-		//std::cout << "end streamStateXML:\n";
-	}
-
-	/*inline void setP(T ip1 ...){
-		T arg=ip1;
-		va_list args; // argument list
-		va_start(args, ip1); // initialize args
-		for (unsigned int i=0;i<_paramNo;i++){
-			_p[i]=arg;
-			arg=va_arg(args, T);
-		}
-	}*/
-
-	inline void getP(T* op1 ...) const {
-		//std::cout << "getP:\n";
-		T* arg=op1;
-		va_list args; // argument list
-		va_start(args, op1); // initialize args
-		for (unsigned int i=0;i<_paramNo;i++){
-			*arg=_p[i];
-			arg=va_arg(args, T*);
-		}
-		//std::cout << "end getP:\n";
-	}
-	
-	//inline T getPByIndex(unsigned int iIndex){
-	//	return _p[iIndex];
-	//}
-	
-	inline void getStateHash(HashAlgo* iHash) const{
-		//std::cout << "add param vals:\n";
-		for (unsigned int i=0;i<_paramNo;i++){
-			iHash->addValue((HashValueType)_p[i]);
-			//std::cout << _p[i] << ", ";
-		}
-		//std::cout << "\nend add param vals:\n";
-	}
+};
 		
+template <typename T, int size>
+class SizedParameter: public Parameter {
+public:
+	SizedParameter();
+	SizedParameter(const T& ip1 ...);
+	SizedParameter(std::istream& s);
+	~SizedParameter();
+	void print() const;
+	std::ostream& writeObject(std::ostream& s);
+	void streamStateXML(std::ostream& s) const;
+	 void getP(void* op1 ...) const;
+	void getStateHash(HashAlgo* iHash) const;
+	static void * operator new(size_t iSize);
+	static void operator delete(void *p, size_t iSize);
+	void readFromStream(std::istream &is);
 protected:
-	//static Pool<Parameter<T> > memPool;
-	T* _p;
-	unsigned int _paramNo;
+	static MemPool<SizedParameter<T,size> > memPool;
+	T _p[size];
 };
 #endif

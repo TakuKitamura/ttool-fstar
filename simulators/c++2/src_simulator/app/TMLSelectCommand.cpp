@@ -130,7 +130,7 @@ TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 		_channel[i]->testRead(_currTransaction);
 		if (_currTransaction->getVirtualLength()!=0) _maxChannelIndex=i+1;
 	}
-	//std::cout << "Max channel index:" << _maxChannelIndex << "  virtual length:" << _currTransaction->getVirtualLength()  << std::endl;
+	//std::cout << "Max channel index:" << _maxChannelIndex <<  std::endl;
 	return this;
 }
 
@@ -146,16 +146,18 @@ TMLChannel* TMLSelectCommand::getChannel(unsigned int iIndex) const{
 }
 
 unsigned int TMLSelectCommand::getNbOfChannels() const{
-	return 1;
+	//return 1;
+	return _nbOfNextCmds;
 }
 
 TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
-	if (_currTransaction==0) 
+	return _channel[iIndex]->getBlockedWriteTask();
+	/*if (_currTransaction==0){
+		std::cout << "This is baaaad\n";
 		return _channel[_indexNextCommand]->getBlockedWriteTask();
-	else
-		return _currTransaction->getChannel()->getBlockedWriteTask();
-	//return _channel[_indexNextCommand]->getBlockedWriteTask();	TO INCLUDE
-	//return _currTransaction->getChannel()->getBlockedWriteTask();
+	}else
+		return _currTransaction->getChannel()->getBlockedWriteTask();*/
+	
 }
 
 TMLCommand* TMLSelectCommand::getNextCommand() const{
@@ -189,12 +191,11 @@ std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
 }
 #endif
 
-Parameter<ParamType>* TMLSelectCommand::setParams(Parameter<ParamType>* ioParam){
-	//if (_paramFuncs[_indexNextCommand]!=0) (_task->*_paramFuncs[_indexNextCommand])(ioParam);
-	Parameter<ParamType>* aResult = 0;
+Parameter* TMLSelectCommand::setParams(Parameter* ioParam){
+	/*Parameter* aResult = 0;
 	if (_paramFuncs[_indexNextCommand]!=0) aResult = (_task->*_paramFuncs[_indexNextCommand])(ioParam);
-	delete ioParam;
-	return aResult;
+	return aResult;*/
+	return (_task->*_paramFuncs[_indexNextCommand])(ioParam);
 }
 
 //unsigned int TMLSelectCommand::getRandomRange(){

@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLWaitCommand::TMLWaitCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel), _paramFunc(iParamFunc){
+TMLWaitCommand::TMLWaitCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam*/):TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel), _paramFunc(iParamFunc){
 	_type = WAIT;
 }
 
@@ -101,10 +101,11 @@ std::string TMLWaitCommand::getCommandStr() const{
 	return _paramFunc;
 }*/
 
-Parameter<ParamType>* TMLWaitCommand::setParams(Parameter<ParamType>* ioParam){
-	//std::cout << "In WaitCmd\n";
-	Parameter<ParamType>* aResult = 0;
-	if (_paramFunc!=0) aResult = (_task->*_paramFunc)(ioParam);
-	delete ioParam;
-	return aResult;
+Parameter* TMLWaitCommand::setParams(Parameter* ioParam){
+	/*Parameter* aResult = 0;
+	if (_paramFunc!=0) {
+		aResult = (_task->*_paramFunc)(ioParam); 
+	}
+	return aResult;*/
+	return (_task->*_paramFunc)(ioParam);
 }

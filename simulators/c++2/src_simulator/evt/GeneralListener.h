@@ -41,30 +41,30 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef GeneralListenerH
 #define GeneralListenerH
 
-#define NOTIFY_SIM_STARTED() {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStarted(); listenersUnLock();}
-#define NOTIFY_SIM_STOPPED() {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->simulationStopped(); listenersUnLock();}
-#define NOTIFY_TIME_ADVANCES(iTime) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->timeAdvances(iTime); listenersUnLock();}
-#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_TASK_FINISHED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskFinished(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_TASK_STARTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->taskStarted(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
-#define NOTIFY_CMD_ENTERED(iComm) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandEntered(iComm,_ID); listenersUnLock();}
+#define NOTIFY_SIM_STARTED() {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->simulationStarted(); this->listenersUnLock();}
+#define NOTIFY_SIM_STOPPED() {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->simulationStopped(); this->listenersUnLock();}
+#define NOTIFY_TIME_ADVANCES(iTime) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->timeAdvances(iTime); this->listenersUnLock();}
+#define NOTIFY_TASK_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->transExecuted(iTrans,this->_ID); this->listenersUnLock();}
+#define NOTIFY_TASK_FINISHED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->taskFinished(iTrans,this->_ID); this->listenersUnLock();}
+#define NOTIFY_TASK_STARTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->taskStarted(iTrans,this->_ID); this->listenersUnLock();}
+#define NOTIFY_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->transExecuted(iTrans,this->_ID); this->listenersUnLock();}
+#define NOTIFY_CMD_ENTERED(iComm) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandEntered(iComm,this->_ID); this->listenersUnLock();}
 
-//#define NOTIFY_CMD_EXECUTED(iComm) {listenersLock();for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandExecuted(iComm,_ID); listenersUnLock();}
-#define NOTIFY_CMD_EXECUTED(iTrans) {listenersLock();for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->transExecuted(iTrans,_ID); listenersUnLock();}
+//#define NOTIFY_CMD_EXECUTED(iComm) {this->listenersLock();for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandExecuted(iComm,this->_ID); this->listenersUnLock();}
+#define NOTIFY_CMD_EXECUTED(iTrans) {this->listenersLock();for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->transExecuted(iTrans,this->_ID); this->listenersUnLock();}
 
-#define NOTIFY_CMD_FINISHED(iComm) {listenersLock();for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iComm,_ID); listenersUnLock();}
-//#define NOTIFY_CMD_FINISHED(iTrans) {listenersLock();for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandFinished(iTrans,_ID); listenersUnLock();}
+#define NOTIFY_CMD_FINISHED(iComm) {this->listenersLock();for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandFinished(iComm,this->_ID); this->listenersUnLock();}
+//#define NOTIFY_CMD_FINISHED(iTrans) {this->listenersLock();for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandFinished(iTrans,this->_ID); this->listenersUnLock();}
 
-#define NOTIFY_CMD_STARTED(iComm) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iComm,_ID); listenersUnLock();}
-//#define NOTIFY_CMD_STARTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) (*i)->commandStarted(iTrans,_ID); listenersUnLock();}
+#define NOTIFY_CMD_STARTED(iComm) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandStarted(iComm,this->_ID); this->listenersUnLock();}
+//#define NOTIFY_CMD_STARTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandStarted(iTrans,this->_ID); this->listenersUnLock();}
 
-//#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);(*i)->writeTrans(iTrans,_ID);} listenersUnLock();}
-//#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);(*i)->readTrans(iTrans,_ID);} listenersUnLock();}
+//#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) {(*i)->transExecuted(iTrans,this->_ID);(*i)->writeTrans(iTrans,this->_ID);} this->listenersUnLock();}
+//#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) {(*i)->transExecuted(iTrans,this->_ID);(*i)->readTrans(iTrans,this->_ID);} this->listenersUnLock();}
 
-#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);} listenersUnLock();}
-#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->transExecuted(iTrans,_ID);} listenersUnLock();}
-#define NOTIFY_EVALUATE() {listenersLock(); for(std::list<GeneralListener*>::iterator i=_listeners.begin(); i != _listeners.end(); ++i) {(*i)->evaluate();} listenersUnLock();}
+#define NOTIFY_WRITE_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) {(*i)->transExecuted(iTrans,this->_ID);} this->listenersUnLock();}
+#define NOTIFY_READ_TRANS_EXECUTED(iTrans) {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) {(*i)->transExecuted(iTrans,this->_ID);} this->listenersUnLock();}
+#define NOTIFY_EVALUATE() {this->listenersLock(); for(std::list<GeneralListener*>::iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) {(*i)->evaluate();} this->listenersUnLock();}
 
 ///Encapsulates events associated with transactions
 class GeneralListener{

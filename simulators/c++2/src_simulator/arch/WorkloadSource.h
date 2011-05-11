@@ -109,11 +109,11 @@ public:
 	/**
 	\param iDevice Pointer to the device
 	*/
-	virtual void transWasScheduled(SchedulableDevice* iDevice) {}
+	/*virtual void transWasScheduled(SchedulableDevice* iDevice) {}
 	///Signals that the last scheduled transaction is not selected by the device any more
 	virtual void resetScheduledFlag(){
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i) (*i)->resetScheduledFlag();
-	}
+	}*/
 protected:
 	///List of sources which provide transactions to the scheduler
 	WorkloadList _workloadList;

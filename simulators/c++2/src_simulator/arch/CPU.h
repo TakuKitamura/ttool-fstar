@@ -70,7 +70,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0), _schedulingNeeded(false){
+	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0)/*,_schedulingNeeded(false)*/{
 	}
 	///Destructor
 	virtual ~CPU(){
@@ -100,7 +100,7 @@ public:
 	virtual void reset(){
 		SchedulableDevice::reset();
 		_lastTransaction=0;
-		_schedulingNeeded=false;
+		//_schedulingNeeded=false;
 	}
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is){
@@ -112,43 +112,36 @@ public:
 		return os;
 	}
 	///Invalidate schedule of CPU
-	void setRescheduleFlag(){
+	/*void setRescheduleFlag(){
 		_schedulingNeeded=true;
 		//std::cout <<" CPU " << _name << " forwards to scheduler\n";
 		_scheduler->resetScheduledFlag();
-	}
+	}*/
 
 	///Truncates current transaction if schedule is invalid
 	/**
 	\param iTime Truncation time
 	*/
-	void truncateIfNecessary(TMLTime iTime){
-		/*if(_schedulingNeeded){
-			
-			if(getNextTransaction()==0){
-				TMLTransaction* aTrans = SchedulableDevice::getNextTransaction();
-				if (aTrans!=0) aTrans->getCommand()->getTask()->transWasScheduled(this);
-			}else{*/
+	/*void truncateIfNecessary(TMLTime iTime){
 		if(_schedulingNeeded && getNextTransaction()!=0){
 			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
 			_schedulingNeeded=false;	
 			truncateAndAddNextTransAt(iTime);
 			//std::cout << "truncateIfNecessary end\n";
-			//}
 		}
-	}
+	}*/
 
 	///Reschedules CPU if schedule is invalid
-	void rescheduleIfNecessary(){
+	/*void rescheduleIfNecessary(){
 		if(_schedulingNeeded){
 			//std::cout << "rescheduleIfNecessary for CPU " << _name << "\n";
 			_schedulingNeeded=false;
 			schedule();
 			//std::cout << "rescheduleIfNecessary end\n";
 		}
-	}
+	}*/
 	
-	/*void truncateAndRescheduleIfNecessary(TMLTime iTime){
+	/*void truncateAndRescheduleIfNecessary(TMLTime iTime){  commented out
 		std::cout << "truncateAndRescheduleIfNecessary for CPU " << _name << " started\n";
 		if(_schedulingNeeded){
 			_schedulingNeeded=false;
@@ -173,7 +166,7 @@ protected:
 	///List of bus masters
 	BusMasterList _busMasterList;
 	///Dirty flag of the current scheduling decision
-	bool _schedulingNeeded;
+	//bool _schedulingNeeded;
 };
 
 #endif

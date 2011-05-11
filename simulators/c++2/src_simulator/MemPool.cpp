@@ -41,29 +41,34 @@ Ludovic Apvrille, Renaud Pacalet
 #include<MemPool.h>
 #include<TMLTransaction.h>
 #include<Comment.h>
+#include<Parameter.h>
 
 ///Generic Memory pool class
 
 template <typename T>
-MemPool<T>::MemPool():_headFreeList(0){}
+MemPool<T>::MemPool(unsigned int iBlockSize):_headFreeList(0), _blockSize(iBlockSize){
+	//std::cerr << "Construct Mem Pool ********\n";
+}
 
 template <typename T>
 void* MemPool<T>::pmalloc(unsigned int n){
 	if (n != sizeof(T)){
+		std::cerr << "MemPool ERROR malloc********\n";
 		return ::operator new(n);
 	}
+	//std::cerr << "ALLOC in MemPool " << this << "--------------\n";
 	T* aHead = _headFreeList;
 	if (aHead){
 		_headFreeList = *(reinterpret_cast<T**>(aHead));
 	}else{
 		T** aAdr;
-		T* newBlock = static_cast<T*>(::operator new(BLOCK_SIZE * sizeof(T)));
+		T* newBlock = static_cast<T*>(::operator new(_blockSize * sizeof(T)));
 		_chunkList.push_back(newBlock);
-		for (int i = 1; i < BLOCK_SIZE-1; ++i){
+		for (unsigned int i = 1; i < _blockSize-1; ++i){
 			aAdr = reinterpret_cast<T**>(&newBlock[i]);
 			*aAdr = &newBlock[i+1];
 		}
-		aAdr = reinterpret_cast<T**>(&newBlock[BLOCK_SIZE-1]);
+		aAdr = reinterpret_cast<T**>(&newBlock[_blockSize-1]);
 		*aAdr = 0;
 		aHead = newBlock;
 		_headFreeList = &newBlock[1];
@@ -73,14 +78,18 @@ void* MemPool<T>::pmalloc(unsigned int n){
 
 template <typename T>
 void MemPool<T>::pfree(void *p, unsigned int n){
+	//std::cerr << "DELETE in MemPool--------------\n";
 	if (p == 0) return;
 	if (n != sizeof(T)){
+		std::cerr << "MemPool ERROR delete********\n";
 		::operator delete(p);
 		return;
 	}
 	T* aDelObj = static_cast<T*>(p);
 	T** aAdr = reinterpret_cast<T**>(aDelObj);
+	//std::cerr << "Lets crash\n";
 	*aAdr = _headFreeList;
+	//std::cerr << "Not crashed\n";
 	_headFreeList = aDelObj;
 }
 
@@ -97,4 +106,10 @@ MemPool<T>::~MemPool(){
 }
 
 template class MemPool<TMLTransaction>;
-template class MemPool<Comment>;  
+template class MemPool<Comment>;
+template class MemPool<SizedParameter<ParamType, 0> >;
+template class MemPool<SizedParameter<ParamType, 1> >;
+template class MemPool<SizedParameter<ParamType, 2> >;
+template class MemPool<SizedParameter<ParamType, 3> >;
+template class MemPool<SizedParameter<ParamType, 4> >;
+template class MemPool<SizedParameter<ParamType, 5> >;

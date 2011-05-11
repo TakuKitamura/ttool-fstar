@@ -42,13 +42,14 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLEventBChannelH
 
 #include <definitions.h>
-#include <TMLEventChannel.h>
+#include <TMLEventSizedChannel.h>
 
 class TMLCommand;
 class Bus;
 
 ///This class models a blocking read non blocking write channel (infinite FIFO).
-class TMLEventBChannel:public TMLEventChannel{
+template <typename T, int paramNo> 
+class TMLEventBChannel : public TMLEventSizedChannel<T,paramNo>{
 public:
 	///Constructor
     	/**
@@ -58,15 +59,14 @@ public:
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
-	\param iParamNo Number of Parameters
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file
     	*/
-	TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent,  unsigned int iParamNo, bool iRequestChannel=false, bool iSourceIsFile=false);
+	TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false);
 	~TMLEventBChannel();
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
-	void write();
+	//void write();
 	void write(TMLTransaction* iTrans);
 	bool read();
 	void cancelReadTransaction();
@@ -77,7 +77,7 @@ public:
 	std::ostream& writeObject(std::ostream& s);
 	std::istream& readObject(std::istream& s);
 	void reset();
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
 protected:
 	void readNextEvents();
 	///Flag indicating if channel is used by a request

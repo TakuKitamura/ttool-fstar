@@ -42,103 +42,132 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLEventFBChannel::TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, unsigned int iParamNo): TMLEventChannel(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iParamNo),_length(iLength){
+template <typename T, int paramNo> TMLEventFBChannel<T,paramNo>::TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
 }
 
-void TMLEventFBChannel::testWrite(TMLTransaction* iTrans){
-	_writeTrans=iTrans;
-	//iTrans->getCommand()->setParams(_tmpParam);
-	_tmpParam = iTrans->getCommand()->setParams(0);
-	_writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
-	_overflow = (_content==_length);
+template <typename T, int paramNo> void TMLEventFBChannel<T,paramNo>::testWrite(TMLTransaction* iTrans){
+	this->_writeTrans=iTrans;
+	if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+	this->_writeTrans->setVirtualLength((_length-this->_content>0)?WAIT_SEND_VLEN:0);
+	this->_overflow = (this->_content==_length);
 }
 
-void TMLEventFBChannel::testRead(TMLTransaction* iTrans){
-	_readTrans=iTrans;
-	_readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
-	_readTrans->setChannel(this);	//NEW!!!!
-	_underflow = (_content==0);
+template <typename T, int paramNo> void TMLEventFBChannel<T,paramNo>::testRead(TMLTransaction* iTrans){
+	this->_readTrans=iTrans;
+	this->_readTrans->setVirtualLength((this->_content>0)?WAIT_SEND_VLEN:0);
+	this->_readTrans->setChannel(this);	//NEW!!!!
+	this->_underflow = (this->_content==0);
 }
 
-void TMLEventFBChannel::write(){
-	_content++;
-	//_paramQueue.push_back(_writeTrans->getCommand()->getParam());
-	if (_paramNo!=0) _paramQueue.push_back(_tmpParam);   //NEW
+/*template <typename T, int paramNo> void TMLEventFBChannel<T,paramNo>::write(){
+	this->_content++;
+	if (paramNo!=0){
+		this->_paramQueue.push_back(this->_tmpParam);   //NEW
 #ifdef STATE_HASH_ENABLED
-	//_stateHash+=_tmpParam.getStateHash();
-	_tmpParam->getStateHash(&_stateHash);
+		this->_tmpParam->getStateHash(&_stateHash);   //NEW in if
 #endif
-	if (_readTrans!=0 && _readTrans->getVirtualLength()==0){
-		_readTrans->setRunnableTime(_writeTrans->getEndTime());
-		_readTrans->setChannel(this);
-		_readTrans->setVirtualLength(WAIT_SEND_VLEN);
 	}
-	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
+	if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
+		std::cout << "FB: Wake up trans in channel: " << this->_name << "\n";
+		this->_readTrans->setRunnableTime(this->_writeTrans->getEndTime());
+		this->_readTrans->setChannel(this);
+		this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
+	}
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(this->_writeTrans);
 #ifdef LISTENERS_ENABLED
-	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
+	NOTIFY_WRITE_TRANS_EXECUTED(this->_writeTrans);
 #endif
-	_writeTrans=0;
+	this->_writeTrans=0;
+}*/
+
+template <typename T, int paramNo> void TMLEventFBChannel<T,paramNo>::write(TMLTransaction* iTrans){
+	this->_content++;
+	if (paramNo!=0){
+		this->_paramQueue.push_back(this->_tmpParam);   //NEW
+#ifdef STATE_HASH_ENABLED
+		this->_tmpParam->getStateHash(&_stateHash);   //NEW in if
+#endif
+	}
+	if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
+		//std::cout << "FB: Wake up trans in channel: " << this->_name << "\n";
+		this->_readTrans->setRunnableTime(iTrans->getEndTime());
+		this->_readTrans->setChannel(this);
+		this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
+	}
+	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+#ifdef LISTENERS_ENABLED
+	NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
+#endif
+	this->_writeTrans=0; //TEST 
 }
 
-bool TMLEventFBChannel::read(){
-	if (_content<1){
+template <typename T, int paramNo> bool TMLEventFBChannel<T,paramNo>::read(){
+	if (this->_content<1){
 		return false;
 	}else{
-		_content--;
-		//if (_readTrans->getCommand()->getParamFuncPointer()!=0) (_readTask->*(_readTrans->getCommand()->getParamFuncPointer()))(_paramQueue.front()); //NEW
-		if (_paramNo!=0){
-			_readTrans->getCommand()->setParams(_paramQueue.front());
-			_paramQueue.pop_front();  //NEW
+		this->_content--;
+		//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
+		if (paramNo!=0){
+			this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
+			delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
+			this->_paramQueue.pop_front();  //NEW
 		}
 #ifdef STATE_HASH_ENABLED
-		//_stateHash-=_paramQueue.front().getStateHash();
-		//_paramQueue.front().removeStateHash(&_stateHash);
+		//_stateHash-=this->_paramQueue.front().getStateHash();
+		//this->_paramQueue.front().removeStateHash(&_stateHash);
 		_hashValid = false;
 #endif
 		
-		if (_writeTrans!=0 && _writeTrans->getVirtualLength()==0){
-			_writeTrans->setRunnableTime(_readTrans->getEndTime());
-			_writeTrans->setChannel(this);
-			_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
+		if (this->_writeTrans!=0 && this->_writeTrans->getVirtualLength()==0){
+			this->_writeTrans->setRunnableTime(this->_readTrans->getEndTime());
+			this->_writeTrans->setChannel(this);
+			this->_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		}
 #ifdef LISTENERS_ENABLED	
-		NOTIFY_READ_TRANS_EXECUTED(_readTrans);
+		NOTIFY_READ_TRANS_EXECUTED(this->_readTrans);
 #endif
-		_readTrans=0;
+		this->_readTrans=0;
 		return true;
 	}
 }
 
-void TMLEventFBChannel::cancelReadTransaction(){
-	_readTrans=0;
+template <typename T, int paramNo> void TMLEventFBChannel<T,paramNo>::cancelReadTransaction(){
+	this->_readTrans=0;
 }
 
-TMLTask* TMLEventFBChannel::getBlockedReadTask() const{
-	return _readTask;
+template <typename T, int paramNo> TMLTask* TMLEventFBChannel<T,paramNo>::getBlockedReadTask() const{
+	return this->_readTask;
 }
 
-TMLTask* TMLEventFBChannel::getBlockedWriteTask() const{
-	return _writeTask;
+template <typename T, int paramNo> TMLTask* TMLEventFBChannel<T,paramNo>::getBlockedWriteTask() const{
+	return this->_writeTask;
 }
 
-std::string TMLEventFBChannel::toString() const{
+template <typename T, int paramNo> std::string TMLEventFBChannel<T,paramNo>::toString() const{
 	std::ostringstream outp;
-	outp << _name << "(evtFB) len:" << _length << " content:" << _content;
+	outp << this->_name << "(evtFB) len:" << _length << " content:" << this->_content;
 	return outp.str();
 }
 
-TMLLength TMLEventFBChannel::insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam){
+template <typename T, int paramNo> TMLLength TMLEventFBChannel<T,paramNo>::insertSamples(TMLLength iNbOfSamples, Parameter* iParam){
 	TMLLength aNbToInsert;
 	if (iNbOfSamples==0){
-		_content=0;
-		_paramQueue.clear();
+		this->_content=0;
+		this->_paramQueue.clear();
 		aNbToInsert=0;
 	}else{
-		aNbToInsert=min(iNbOfSamples, _length-_content);
-		_content+=aNbToInsert;
-		for (TMLLength i=0; i<aNbToInsert; i++) _paramQueue.push_back(iParam);
+		aNbToInsert=min(iNbOfSamples, _length-this->_content);
+		this->_content+=aNbToInsert;
+		for (TMLLength i=0; i<aNbToInsert; i++) this->_paramQueue.push_back(iParam);
 	} 
-	if (_writeTrans!=0) _writeTrans->setVirtualLength((_length-_content>0)?WAIT_SEND_VLEN:0);
-	if (_readTrans!=0) _readTrans->setVirtualLength((_content>0)?WAIT_SEND_VLEN:0);
+	if (this->_writeTrans!=0) this->_writeTrans->setVirtualLength((_length-this->_content>0)?WAIT_SEND_VLEN:0);
+	if (this->_readTrans!=0) this->_readTrans->setVirtualLength((this->_content>0)?WAIT_SEND_VLEN:0);
 	return aNbToInsert;
 }
+
+template class TMLEventFBChannel<ParamType, 0>;
+template class TMLEventFBChannel<ParamType, 1>;
+template class TMLEventFBChannel<ParamType, 2>;
+template class TMLEventFBChannel<ParamType, 3>;
+template class TMLEventFBChannel<ParamType, 4>;
+template class TMLEventFBChannel<ParamType, 5>;

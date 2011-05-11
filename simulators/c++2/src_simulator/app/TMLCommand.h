@@ -115,8 +115,7 @@ public:
 	/**
 	\param ioParam Parameter data structure
 	*/
-	//virtual void setParams(Parameter<ParamType>& ioParam);
-	virtual Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
+	virtual Parameter* setParams(Parameter* ioParam);
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation

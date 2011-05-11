@@ -162,10 +162,12 @@ void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 	//not a problem if scheduling does not take place at time when transaction is actually truncated, tested
 	//std::cout << "CPU:truncateAndAddNextTransAt " << _name << "time: +++++++++++++++++++++" << iTime << "\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(iTime);
-	_schedulingNeeded=false;
+	//_schedulingNeeded=false;  05/05/11
 	TMLTransaction* aNewTransaction =_scheduler->getNextTransaction(iTime);
 	//std::cout << "before if\n"; 
-	_scheduler->transWasScheduled(this); //NEW  was in if before
+	
+	//_scheduler->transWasScheduled(this); //NEW  was in if before 05/05/11
+	
 	if (aNewTransaction!=_nextTransaction){
 		//std::cout << "in if\n";
 		if (truncateNextTransAt(iTime)!=0) addTransaction();
@@ -280,12 +282,14 @@ void SingleCoreCPU::schedule(){
 	//std::cout <<"Hello\n";
 	//std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n"; 
 	TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
-	_schedulingNeeded=false;
+	//_schedulingNeeded=false;  05/05/11
 	//std::cout << "1\n";
 	TMLTransaction* aOldTransaction = _nextTransaction;
 	_nextTransaction=_scheduler->getNextTransaction(_endSchedule);
 	//std::cout << "2\n";
-	_scheduler->transWasScheduled(this); //NEW
+	
+	//_scheduler->transWasScheduled(this); //NEW 05/05/11
+	
 	//if (aOldTransaction!=0){
 	if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW
 		//std::cout << "3\n";

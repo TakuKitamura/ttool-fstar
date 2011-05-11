@@ -97,8 +97,9 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 		_currTransaction=0;  //NEW!!!!!!!!!!!
 		_commandStartTime=-1; //NEW
 		_execTimes++;
-		//std::cout << "Prepare command, get next command" << std::endl;
+		//std::cerr << "Prepare command, get next command 1" << std::endl;
 		aNextCommand=getNextCommand();
+		//std::cerr << "Prepare command, get next command 2" << std::endl;
 		//std::cout << "Prepare command, to next command" << std::endl;
 		_task->setCurrCommand(aNextCommand);
 		if (aNextCommand==0){
@@ -168,6 +169,7 @@ void TMLCommand::setNextCommand(TMLCommand** iNextCommand){
 }
 
 TMLCommand* TMLCommand::getNextCommand() const{
+	//std::cerr << "getNext Cmd of TMLCommand\n";
 	return (_nextCommand==0)?0:_nextCommand[0];
 }
 
@@ -183,7 +185,7 @@ TMLTransaction* TMLCommand::getCurrTransaction() const{
 
 std::string TMLCommand::toString() const{
 	std::ostringstream outp;	
-	outp << _task->toString() << " len:" << _length << " progress:" << _progress;
+	outp << _task->toString() << " len:" << _length << " progress:" << _progress << " ID:" << _ID;
 	return outp.str();
 }
 
@@ -199,7 +201,7 @@ TMLTask* TMLCommand::getDependentTask(unsigned int iIndex)const{
 	return 0;
 }
 
-Parameter<ParamType>* TMLCommand::setParams(Parameter<ParamType>* ioParam){
+Parameter* TMLCommand::setParams(Parameter* ioParam){
 	return 0;
 }
 

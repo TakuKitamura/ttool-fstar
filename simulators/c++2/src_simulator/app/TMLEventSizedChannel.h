@@ -38,18 +38,19 @@ Ludovic Apvrille, Renaud Pacalet
  *
  */
 
-#ifndef TMLEventFChannelH
-#define TMLEventFChannelH
+#ifndef TMLEventSizedChannelH
+#define TMLEventSizedChannelH
 
 #include <definitions.h>
-#include <TMLEventSizedChannel.h>
+#include <TMLEventChannel.h>
+#include <Parameter.h>
+#include <HashAlgo.h>
 
-class TMLCommand;
 class Bus;
 
-///This class models a blocking read non blocking write channel (finite FIFO, samples which do not fit in the channel are dropped).
+///This class represents the base class for all event channels.
 template <typename T, int paramNo> 
-class TMLEventFChannel:public TMLEventSizedChannel<T,paramNo>{
+class TMLEventSizedChannel: public TMLEventChannel{
 public:
 	///Constructor
     	/**
@@ -58,22 +59,34 @@ public:
 	\param iNumberOfHops Number of buses on which the channel is mapped
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
-	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
-	void testWrite(TMLTransaction* iCommand);
-	void testRead(TMLTransaction* iCommand);
-	void write(TMLTransaction* iTrans);
-	bool read();
-	void cancelReadTransaction();
-	TMLTask* getBlockedReadTask() const;
-	TMLTask* getBlockedWriteTask() const;
-	std::string toString() const;
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
+	TMLEventSizedChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent);
+	///Destructor
+	virtual ~TMLEventSizedChannel();
+	virtual std::ostream& writeObject(std::ostream& s);
+	virtual std::istream& readObject(std::istream& s);
+	void print()  const;
+	virtual void reset();
+	virtual void streamStateXML(std::ostream& s) const;
+	void getStateHash(HashAlgo* iHash) const;
+	bool getRequestChannel() const;
+	/////Returns the number of parameters
+	////**
+	//\return Number of Parameters
+	//*/
+	//unsigned int getParamNo();
+	Parameter* buildParameter();
+	//Parameter* buildParameter(Parameter* iCloneParam);
 protected:
-	///Length of the channel
-	TMLLength _length;
+	///Queue for parameters
+	ParamQueue _paramQueue;
+	///Temporary buffer for the parameters of the registered write transaction 
+	Parameter* _tmpParam;
+	///Channel State Hash
+	mutable HashAlgo _stateHash;
+	///Flag indicating whether the current hash is up to date
+	mutable bool _hashValid;
 };
 
 #endif

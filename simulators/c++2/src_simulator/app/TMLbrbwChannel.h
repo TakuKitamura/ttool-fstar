@@ -70,7 +70,7 @@ public:
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
 protected:
 	///Determines the virtual length of read and write transactions based on the state of the channel
 	void setTransactionLength() const;

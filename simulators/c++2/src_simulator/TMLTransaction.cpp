@@ -43,13 +43,14 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <TMLCommand.h>
 
-MemPool<TMLTransaction> TMLTransaction::memPool;
+MemPool<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
 TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
 #ifdef PENALTIES_ENABLED
  _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
 #endif
  /*_terminated(false),*/ _channel(iChannel),_stateID(0) {
+	//if (_virtualLength!=0) std::cout << "Trans runnable: " << toString() << "\n";
 }
 
 TMLTime TMLTransaction::getRunnableTime() const{
@@ -113,6 +114,7 @@ TMLLength TMLTransaction::getVirtualLength() const{
 }
 
 void TMLTransaction::setVirtualLength(TMLLength iLength){
+	//if (iLength!=0 && _virtualLength==0) std::cout << "Trans runnable: " << toString() << "\n";
 	_virtualLength=iLength;
 }
 
@@ -183,6 +185,7 @@ void TMLTransaction::setTerminatedFlag(){
 std::string TMLTransaction::toString() const{
 	std::ostringstream outp;	
 	outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
+	if (_channel!=0) outp << " Ch: " << _channel->toShortString();
 	return outp.str();
 }
 

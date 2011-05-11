@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <Parameter.h>
 
-class TMLEventBChannel;
+class TMLEventChannel;
 
 ///This class models a send request operation within a TML task.
 class TMLRequestCommand:public TMLCommand{
@@ -60,7 +60,7 @@ public:
 	\param iCheckpoint Checkpoint Flag
 	\param iStatParam Static parameter if applicable 
 	*/
-	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventBChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint, Parameter<ParamType> iStatParam = Parameter<ParamType>(0));
+	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam = 0*/);
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
 	unsigned int getNbOfChannels() const;
@@ -72,14 +72,14 @@ public:
 	/**
 	\param ioParam Parameter data structure
 	*/ 
-	Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
+	Parameter* setParams(Parameter* ioParam);
 protected:
 	///Channel on which the event is conveyed
-	TMLEventBChannel* _channel;
+	TMLEventChannel* _channel;
 	///Pointer to the parameter function of the command
 	ParamFuncPointer _paramFunc;
-	///Static parameter if applicable
-	Parameter<ParamType> _statParam;
+	/////Static parameter if applicable
+	//Parameter* _statParam;
 	/////Bitmap of live variables
 	//const char* _liveVarList;
 	TMLCommand* prepareNextTransaction();

@@ -42,13 +42,14 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLEventFBChannelH
 
 #include <definitions.h>
-#include <TMLEventChannel.h>
+#include <TMLEventSizedChannel.h>
 
 class TMLCommand;
 class Bus;
 
 ///This class models a blocking read blocking write channel (finite blocking FIFO).
-class TMLEventFBChannel:public TMLEventChannel{
+template <typename T, int paramNo> 
+class TMLEventFBChannel:public TMLEventSizedChannel<T,paramNo>{
 public:
 	///Constructor
     	/**
@@ -59,18 +60,17 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
-	\param iParamNo Number of Parameters
     	*/
-	TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent,  unsigned int iParamNo);
+	TMLEventFBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
-	void write();
+	void write(TMLTransaction* iTrans);
 	bool read();
 	void cancelReadTransaction();
 	TMLTask* getBlockedReadTask() const;
 	TMLTask* getBlockedWriteTask() const;
 	std::string toString() const;
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
 protected:
 	///Length of the channel
 	TMLLength _length;

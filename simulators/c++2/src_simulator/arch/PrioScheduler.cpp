@@ -52,12 +52,14 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	Priority aHighestPrioPast=-1;
 	TMLTime aTransTimeFuture=-1,aRunnableTime;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
+	//std::cout << "Prio Scheduler " << _name << ":\n";
 	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 		(*i)->schedule(iEndSchedule);
 		//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
 		aTempTrans=(*i)->getNextTransaction(iEndSchedule);
 		//std::cout << "after getCurrTransaction " << std::endl;
 		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
+			//std::cout << "Found on " << (*i)->toString() << ": " << aTempTrans->toString() << "\n";
 			aRunnableTime=aTempTrans->getRunnableTime();	
 			if (aRunnableTime<=iEndSchedule){
 			//Past
@@ -76,6 +78,7 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 				
 			}
 		}
+			//else std::cout << "Found on " << (*i)->toString() << " nothing\n";
 	}
 	if (aMarkerPast==0){
 		_nextTransaction=aMarkerFuture;
@@ -84,6 +87,10 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 		_nextTransaction=aMarkerPast;
 		_lastSource=aSourcePast; //NEW
 	}
+	/*if (_nextTransaction==0)
+		std::cout << "Scheduler " << _name << " hasn't found anything.\n";
+	else
+		std::cout << "Scheduler " << _name << " schedules " << _nextTransaction->toString() << "\n";*/
 	return 0;
 }
 
@@ -104,6 +111,6 @@ void PrioScheduler::reset(){
 	_nextTransaction=0;
 }
 
-void PrioScheduler::transWasScheduled(SchedulableDevice* iDevice){
-	if (_lastSource!=0) _lastSource->transWasScheduled(iDevice);
-}
+//void PrioScheduler::transWasScheduled(SchedulableDevice* iDevice){
+//	if (_lastSource!=0) _lastSource->transWasScheduled(iDevice);
+//}

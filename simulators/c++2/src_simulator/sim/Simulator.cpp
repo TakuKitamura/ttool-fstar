@@ -96,9 +96,15 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 				oResultDevice=aTempDevice;
 			}
 		}
-#ifdef DEBUG_KERNEL
-		else std::cout << "kernel:getTLET: no transaction found on " << aTempDevice->toString() << std::endl;
-#endif
+//#ifdef DEBUG_KERNEL
+		else {
+			/*if (!_simComp->couldCPUBeIdle(*i)){
+				std::cout << "kernel:getTLET: no transaction found on " << aTempDevice->toString() << std::endl;
+				std::cout << "Cry !!!!!!!!";
+				//exit(1);
+			}*/
+		}
+//#endif
 	}
 	//if (tmp==1) std::cout << "trans only on one CPU " << oResultDevice->toString() << "\n";
 	return aMarker; 
@@ -384,7 +390,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	}
 #endif
 	//std::cout << "after loop2" << std::endl;
-	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
+	//for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
 	for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
 	//std::cout << "after schedule" << std::endl;
 	transLET=getTransLowestEndTime(cpuLET);
@@ -398,15 +404,12 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
 		commandLET=transLET->getCommand();
-		//if (commandLET->getBreakpoint()) break;
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
 #endif
 		if (cpuLET->addTransaction()){
-		 //cpuLET->schedule();
-		 //if (commandLET->getTask()->getNoOfCPUs()==1) cpuLET->schedule();
 		 unsigned int nbOfChannels = commandLET->getNbOfChannels();
-		 bool aRescheduleCoresFlag=false;
+		 //bool aRescheduleCoresFlag=false;
 		 for (unsigned int i=0;i<nbOfChannels; i++){
 		 if ((depTask=commandLET->getDependentTask(i))==0) continue;
 		 //if (depTask!=0){
@@ -424,8 +427,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		     //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
 		   if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) { //RIGHT one
 
-		   //if (depCommand!=0 && channelImpactsCommand(commandLET->getChannel(i), depCommand)) {
-		   //if (depCommand!=0 && (dynamic_cast<TMLSelectCommand*>(depCommand)!=0 || channelImpactsCommand(commandLET->getChannel(i), depCommand))){
 #ifdef DEBUG_KERNEL
 		    std::cout << "kernel:simulate: commands are accessing the same channel" << std::endl;
 #endif
@@ -434,14 +435,14 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
 		     std::cout << "kernel:simulate: dependent task has a current transaction and is not blocked any more" << std::endl;
 #endif
-		     if (depCPU==0){
+		    /* if (depCPU==0){
 			aRescheduleCoresFlag=true;
 //#ifdef DEBUG_KERNEL
 			std::cout << "Multi Core scheduling procedure\n";
 //#endif 
 			depTask->setRescheduleFlagForCores();
 			continue;
-		     }
+		     }*/
 		     //std::cout << "Let's crash!!!!!!!!\n";
 		     depCPUnextTrans=depCPU->getNextTransaction();
 		     //std::cout << "Not crahed!!!!!!!!\n";
@@ -454,17 +455,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
  			std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
 #endif
-			//if (depCPU->truncateAndAddNextTransAt(transLET->getEndTime())!=0){
 #ifdef DEBUG_KERNEL
 				depCPU->truncateAndAddNextTransAt(transLET->getEndTime());
 				std::cout << "kernel:simulate: dependent transaction truncated" << std::endl;
 #endif
-				//depCPU->addTransaction();
-			//}
-//#ifdef DEBUG_KERNEL
-			//std::cout << "kernel:simulate: schedule dependent CPU" << std::endl;
-//#endif
-			//depCPU->schedule();
 		      }
 		     }else{
 #ifdef DEBUG_KERNEL
@@ -476,30 +470,22 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		   }
 		  }
 		 }
-		 //reschedule CPUs if necessary
-		//std::cout << "new reschedule position\n";
 #ifdef DEBUG_KERNEL
 		 std::cout << "kernel:simulate: invoke schedule on executing CPU" << std::endl;
 #endif
-		//if (aRescheduleCoresFlag) for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true), bind2nd(std::mem_fun(&CPU::truncateAndRescheduleIfNecessary), transLET->getEndTime()));
-		if (aRescheduleCoresFlag){
-			//std::cout << "new reschedule loop\n";
+		/*if (aRescheduleCoresFlag){
 			for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 				if (*i!=cpuLET) (*i)->truncateIfNecessary(transLET->getEndTime());
 			}
 			for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
 				if (*i!=cpuLET) (*i)->rescheduleIfNecessary();
 			}
-			//std::cout << "end new reschedule loop\n";
-		}
+		}*/
 		cpuLET->schedule();
 #ifdef LISTENERS_ENABLED
                  NOTIFY_TIME_ADVANCES(transLET->getEndTime());
 #endif
 		}
-//#ifdef DEBUG_KERNEL
-		//else std::cout << "kernel:simulate: *** this should never happen ***" << std::endl;
-//#endif
 		oLastTrans=transLET;
 		//std::cout << "kernel:simulate: getTransLowestEndTime" << std::endl;
 		transLET=getTransLowestEndTime(cpuLET);
@@ -515,6 +501,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 	gettimeofday(&aEnd,NULL);
 	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
+	//_simComp->showTaskStates();
 	return (aSimCompleted);
 }
 
@@ -557,6 +544,7 @@ void Simulator::run(){
 ServerIF* Simulator::run(int iLen, char ** iArgs){
 	std::string aTraceFileName;
 	std::cout << "Starting up...\n";
+	_graphOutPath = getArgs("-gpath", "", iLen, iArgs);
 	aTraceFileName =getArgs("-server", "server", iLen, iArgs);
 	if (!aTraceFileName.empty()) return new Server();
 	aTraceFileName =getArgs("-file", "file", iLen, iArgs);
@@ -664,8 +652,13 @@ void Simulator::decodeCommand(std::string iCmd){
 				case 7: {//Explore Tree
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
-					std::ofstream myDOTfile ("tree.dot");
-					std::ofstream myAUTfile ("tree.aut.tmp");
+					std::stringstream aPath;
+					aPath << _graphOutPath << "/tree.dot";
+					std::ofstream myDOTfile (aPath.str().c_str());
+					aPath.str("");
+					aPath << _graphOutPath << "/tree.aut.tmp";
+					std::ofstream myAUTfile (aPath.str().c_str());
+					aPath.str("");
 					//std::ofstream myfile2 ("tree.txt");
 					if (myDOTfile.is_open() && myAUTfile.is_open()){
 //#ifdef DOT_GRAPH_ENABLED
@@ -679,13 +672,21 @@ void Simulator::decodeCommand(std::string iCmd){
 						myDOTfile.close();
 //#else
 						myAUTfile.close();
-						std::ofstream myTMPfile ("header");
+						aPath.str("");
+						aPath <<  _graphOutPath << "/header";
+						std::ofstream myTMPfile (aPath.str().c_str());
 						if (myTMPfile.is_open()){
 							//des (0, 29, 27)
 							myTMPfile << "des(0," << aTransCounter << "," << TMLTransaction::getID() << ")\n";
 							myTMPfile.close();
-							system ("cat header tree.aut.tmp > tree.aut");
-							system ("rm header tree.aut.tmp");
+							//system ("cat header tree.aut.tmp > tree.aut");
+							//system ("rm header tree.aut.tmp");
+							aPath.str("");
+							aPath << "cat " << _graphOutPath << "/header " << _graphOutPath << "/tree.aut.tmp > " << _graphOutPath << "/tree.aut";
+							system(aPath.str().c_str());
+							aPath.str("");
+							aPath << "rm " <<  _graphOutPath << "/header " << _graphOutPath << "/tree.aut.tmp";
+							system(aPath.str().c_str());
 						}
 //#endif
 						//myfile2.close();
@@ -952,15 +953,16 @@ void Simulator::decodeCommand(std::string iCmd){
 				anErrorCode=2;
 			}else{
 				aInpStream >> aParam1;
-				//Parameter<ParamType> anInsertParam;
-				if (dynamic_cast<TMLEventChannel*>(aChannel)==0){
+				TMLEventChannel* anEventChannel = dynamic_cast<TMLEventChannel*>(aChannel);
+				if (anEventChannel==0){
 					//aChannel->insertSamples(aParam1, anInsertParam);
 					aChannel->insertSamples(aParam1, 0);
 				}else{
-					Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
+					//Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
+					Parameter* anInsertParam = anEventChannel->buildParameter();
 					aInpStream >> anInsertParam;
 					//aChannel->insertSamples(aParam1, anInsertParam);
-					aChannel->insertSamples(aParam1, &anInsertParam);
+					aChannel->insertSamples(aParam1, anInsertParam);
 				}
 				aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;
 			}

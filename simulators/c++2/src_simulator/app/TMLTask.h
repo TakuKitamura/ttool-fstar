@@ -64,7 +64,6 @@ enum vcdTaskVisState
 	START_TRANS
 };
 
-//class TMLTask: public TraceableDevice, public ListenerSubject <TaskListener>, public ListenerSubject <TransactionListener>, public WorkloadSource{
 class TMLTask: public TraceableDevice, public ListenerSubject <GeneralListener>, public WorkloadSource{
 public:	
 	///Constructor
@@ -203,11 +202,11 @@ public:
 	/**
 	\param iCPU CPU that has scheduled the Task
 	*/
-	void transWasScheduled(SchedulableDevice* iCPU);
+	//void transWasScheduled(SchedulableDevice* iCPU);
 	///Resets the flag indicating that the Task has been scheduled
-	void resetScheduledFlag();
+	//void resetScheduledFlag();
 	///Invalidates the schedule of all cores the task is mapped onto 
-	void setRescheduleFlagForCores();
+	//void setRescheduleFlagForCores();
 	///Returns the current state hash
 	/**
 	\return Current state hash
@@ -226,6 +225,7 @@ public:
 	void refreshStateHash(const char* iLiveVarList);
 	//void addRawTransaction(TMLTransaction* iTrans);
 	void schedule2TXT(std::ostream& myfile) const;
+	int hasRunnableTrans(CPU* iCPU);
 protected:
 	///ID of the task
 	ID _ID;
@@ -274,7 +274,7 @@ protected:
 	///Consecutive number of this task instance
 	unsigned int _myInstance;
 	///Indicates whether this task has already been scheduled
-	bool _isScheduled;
+	//bool _isScheduled;
 	/////Last established state Hash
 	//HashValueType _lastStateHash;
 	/////Flag indicating whether the task state has been encoutered before

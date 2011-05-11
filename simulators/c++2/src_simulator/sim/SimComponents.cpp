@@ -45,7 +45,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <TMLChannel.h>
 #include <TMLEventChannel.h>
-#include <TMLEventBChannel.h>
+//#include <TMLEventBChannel.h>
 #include <Slave.h>
 #include <Memory.h>
 #include <Bridge.h>
@@ -97,7 +97,7 @@ void SimComponents::addEvent(TMLEventChannel* iEvt){
 	_channelList.push_back(iEvt);
 }
 
-void SimComponents::addRequest(TMLEventBChannel* iReq){
+void SimComponents::addRequest(TMLEventChannel* iReq){
 	_serList.push_back(dynamic_cast<Serializable*>(iReq));
 	_channelList.push_back(iReq);
 }
@@ -457,3 +457,25 @@ bool SimComponents::getOnKnownPath(){
 	return _onKnownPath;
 }
 
+void SimComponents::showTaskStates(){
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		std::cout << "State of " << (*i)->toString() << ": " ;
+		if ((*i)->getCurrCommand()==0 || (*i)->getCurrCommand()->getCurrTransaction()==0){
+			std::cout << "has no transaction\n";
+		}else{
+			if ((*i)->getCurrCommand()->getCurrTransaction()->getVirtualLength()==0)
+				std::cout << "has NOT runnable transaction\n";
+			else
+				std::cout << "has runnable transaction: " << (*i)->getCurrCommand()->getCurrTransaction()->toString() << "\n";
+		}
+	}
+}
+
+bool SimComponents::couldCPUBeIdle(CPU* iCPU){
+	int aRunFlag =0;
+	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
+		aRunFlag |= (*i)->hasRunnableTrans(iCPU);
+		if ((aRunFlag & 2)!=0) return true;
+	}
+	return ((aRunFlag & 1)==0);
+}

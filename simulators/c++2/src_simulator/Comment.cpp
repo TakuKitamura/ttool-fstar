@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include<Comment.h>
 
-MemPool<Comment> Comment::memPool;
+MemPool<Comment> Comment::memPool(BLOCK_SIZE_COMMENT);
 
 Comment::Comment(TMLTime iTime, TMLCommand* iCommand, unsigned int iActionCode):_time(iTime), _command(iCommand), _actionCode(iActionCode){}
 

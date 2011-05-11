@@ -152,7 +152,7 @@ public:
 	\param iParam Parameter to insert
       	\return Returns true if successful
     	*/ 
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter<ParamType>* iParam);
+	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
 	///Writes XML information about the component to a stream
 	/**
       	\param s Reference to an output stream
@@ -195,6 +195,7 @@ public:
 	*/
 	void setSignificance(TMLTask* iTask, bool iSignificance);
 	bool getSignificance();
+	bool mappedOnBus();
 protected:
 	///ID of channel
 	ID _ID;

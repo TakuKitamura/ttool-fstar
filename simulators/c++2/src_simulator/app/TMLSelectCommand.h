@@ -70,7 +70,7 @@ public:
 	std::string toString() const;
 	std::string toShortString() const;
 	std::string getCommandStr() const;
-	Parameter<ParamType>* setParams(Parameter<ParamType>* ioParam);
+	Parameter* setParams(Parameter* ioParam);
 #ifdef ADD_COMMENTS
 	std::string getCommentString(Comment* iCom)  const;
 #endif

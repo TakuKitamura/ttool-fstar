@@ -82,13 +82,15 @@ using std::max;
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
 #undef PENALTIES_ENABLED
-#define STATE_HASH_ENABLED
+#undef STATE_HASH_ENABLED
 #define LISTENERS_ENABLED
 #undef EBRDD_ENABLED
 //#define DOT_GRAPH_ENABLED
 
 #define CLOCK_INC 20
-#define BLOCK_SIZE 500000
+#define BLOCK_SIZE_TRANS 500000
+#define BLOCK_SIZE_PARAM 100
+#define BLOCK_SIZE_COMMENT 100
 #define PARAMETER_BLOCK_SIZE 1000
 #undef ADD_COMMENTS
 #define NO_EVENTS_TO_LOAD 10
@@ -190,7 +192,7 @@ class TMLCommand;
 class CPU;
 class SchedulableCommDevice;
 class SchedulableDevice;
-template <typename T> class Parameter;
+class Parameter;
 class TraceableDevice;
 class Master;
 class Serializable;
@@ -250,7 +252,7 @@ typedef std::map<ID, TMLCommand*> CommandHashTab;
 ///Datatype for event parameters
 typedef int ParamType;
 ///Datatype used in EventChannels to store parameters of events
-typedef std::deque<Parameter<ParamType>* > ParamQueue;
+typedef std::deque<Parameter* > ParamQueue;
 ///Type of member function pointer used to indicate a function encapsulating a condition (for TMLChoiceCommand)
 typedef unsigned int (TMLTask::*CondFuncPointer) ();
 ///Type of member function pointer used to indicate a function encapsulating an action (for TMLActionCommand)
@@ -264,7 +266,7 @@ typedef ParamType (*SettingFuncPointer)(ParamType**);
 ///Type of pointer to indicate a function returning the random rage of a command
 typedef unsigned int (TMLTask::*RangeFuncPointer) (ParamType& oMin, ParamType& oMax);
 ///Type of member function pointer used to indicate a function encapsulating parameter manipulation (for TMLWaitCommand, TMLSendCommand)
-typedef Parameter<ParamType>* (TMLTask::*ParamFuncPointer) (Parameter<ParamType>* ioParam);
+typedef Parameter* (TMLTask::*ParamFuncPointer) (Parameter* ioParam);
 ///Breakpoint condition function pointer (points to condition function in shared library)
 typedef bool (*BreakCondFunc)(TMLTask*);
 ///Datatype holding references to TraceableDevices (for VCD output)

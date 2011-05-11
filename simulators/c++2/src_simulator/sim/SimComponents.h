@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ListenerSubject.h>
 
 class TMLEventChannel;
-class TMLEventBChannel;
+class TMLEventChannel;
 class Bridge;
 class Memory;
 class Simulator;
@@ -88,7 +88,7 @@ public:
 	/**
 	\param iReq Pointer to request
 	*/
-	void addRequest(TMLEventBChannel* iReq);
+	void addRequest(TMLEventChannel* iReq);
 	///Add a CPU
 	/**
 	\param iCPU Pointer to CPU
@@ -287,6 +287,8 @@ public:
 	//ListenerSubject <TransactionListener>* getListenerByID(ID iID);
 	ListenerSubject<GeneralListener>* getListenerByID(ID iID);
 	virtual void generateTEPEs()=0;
+	void showTaskStates();
+	bool couldCPUBeIdle(CPU* iCPU);
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;

@@ -51,48 +51,21 @@ class Bus;
 ///This class represents the base class for all event channels.
 class TMLEventChannel:public TMLStateChannel{
 public:
-	///Constructor
-    	/**
-	\param iID ID of channel
-      	\param iName Name of the channel
-	\param iNumberOfHops Number of buses on which the channel is mapped
-	\param iMasters Pointers to the masters which the channel is connected to
-	\param iSlaves Pointers to the slaves on which the channel is mapped
-	\param iContent Initial content of the channel
-	\param iParamNo Number of Parameters
-    	*/
-	TMLEventChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iParamNo);
-	///Destructor
-	virtual ~TMLEventChannel();
+	TMLEventChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority): TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iContent, iPriority){}
 	///Cancels a pending read operation 
 	virtual void cancelReadTransaction()=0;
 	///Returns a flag indicating if the channel is used by a request
     	/**
       	\return True if channel is used by a request, false otherwise
 	*/
-	virtual bool getRequestChannel()  const;
-	virtual std::ostream& writeObject(std::ostream& s);
-	virtual std::istream& readObject(std::istream& s);
-	void print()  const;
-	virtual void reset();
-	virtual void streamStateXML(std::ostream& s) const;
-	void getStateHash(HashAlgo* iHash) const;
-	///Returns the number of parameters
-	/**
-	\return Number of Parameters
-	*/
-	unsigned int getParamNo();
-protected:
-	///Queue for parameters
-	ParamQueue _paramQueue;
-	///Temporary buffer for the parameters of the registered write transaction 
-	Parameter<ParamType>* _tmpParam;
-	///Channel State Hash
-	mutable HashAlgo _stateHash;
-	///Flag indicating whether the current hash is up to date
-	mutable bool _hashValid;
-	///Number of Parameters
-	unsigned int _paramNo;
+	virtual void write(TMLTransaction* iTrans)=0;
+	void write(){
+		write(this->_writeTrans);	
+		_writeTrans=0;
+	}
+	virtual bool getRequestChannel() const {return false;}
+	virtual void print()  const=0;
+	virtual Parameter* buildParameter()=0;
+	//virtual Parameter* buildParameter(Parameter* iCloneParam)=0;
 };
-
 #endif
