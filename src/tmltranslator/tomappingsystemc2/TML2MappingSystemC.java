@@ -290,18 +290,18 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of events" + CR;
 		for(TMLEvent evt: tmlmodeling.getEvents()) {		
 			if (evt.isInfinite()) {
-				tmp = "TMLEventBChannel";
+				tmp = "TMLEventBChannel<ParamType," + evt.getNbOfParams() + ">";
 				param= ",0";
 			} else {
 				if (evt.isBlocking()) {
-					tmp = "TMLEventFBChannel";
+					tmp = "TMLEventFBChannel<ParamType," + evt.getNbOfParams() + ">";
 					param= "," + evt.getMaxSize() + ",0";
 				} else {
-					tmp = "TMLEventFChannel";
+					tmp = "TMLEventFChannel<ParamType," + evt.getNbOfParams() + ">";
 					param= "," + evt.getMaxSize() + ",0";
 				}
 			}
-			param += "," + evt.getNbOfParams();
+			//param += "," + evt.getNbOfParams();
 			if (tmlmapping.isCommNodeMappedOn(evt,null)){
 				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param +")" + SCCR;
 				
@@ -318,9 +318,14 @@ public class TML2MappingSystemC {
 		for(TMLTask task: tmlmodeling.getTasks()) {
 			if (task.isRequested()){
 				if (tmlmapping.isCommNodeMappedOn(task.getRequest(),null)){
-					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +  task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
+					//declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +
+					declaration += "TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">(" +
+					task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," +
+					determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
+					tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0,true)" + SCCR;
 				}else{
-					declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" + task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
+					declaration += "TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">(" + //task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
+					task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
 				}
 				declaration += "addRequest(reqChannel_"+ task.getName() +")"+ SCCR;
 			}

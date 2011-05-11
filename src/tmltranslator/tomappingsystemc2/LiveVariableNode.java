@@ -612,8 +612,10 @@ public class LiveVariableNode{
 			return false;
 		}else{
 			if (_superiorBranchNode!=null && _superiorBranchNode.isInfected()){
+				//control dependency
 				_infected=true;
 			}else{
+				//data dependency
 				int[] aRelevantDefs = new int[_analysis.getBytesForDefs()];
 				for (int bytes=0; bytes<_useVars.length; bytes++){
 					for (int bits=0; bits<32;bits++){
@@ -627,7 +629,7 @@ public class LiveVariableNode{
 				_infected |= (defsInfected(aRelevantDefs)<0);
 			}
 		}
-		
+		//synchronization dependency
 		if (_infected && _linkedElem!=null){
 			//System.out.println("in if 1");
 			if(_linkedElem instanceof TMLReadChannel || _linkedElem instanceof TMLWriteChannel){

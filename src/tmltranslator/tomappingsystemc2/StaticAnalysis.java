@@ -296,6 +296,7 @@ public class StaticAnalysis{
 		if (aNbOfCandidates==0)
 			System.out.println("No checkpoint candidates");
 		else{
+			System.out.println("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
 			int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
 			int nbOfVars=0, nbOfChannels=0, nbOfEvents=0;
 			for(int i=0; i<_task.getAttributes().size(); i++)
@@ -325,9 +326,9 @@ public class StaticAnalysis{
 				iStatistics[5] += _events.size() * aNbOfCandidates - nbOfEvents;
 				System.out.println("Events Gain: " + aEvtGain);
 			}
-			System.out.println("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
-			if (_task.isRequested()) System.out.println("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
-			System.out.println("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
+			//System.out.println("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
+			//if (_task.isRequested()) System.out.println("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
+			//System.out.println("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
 			iStatistics[6] += aNbOfCandidates;
 			iStatistics[7] += aNbOfCandidates - aNbOfCheckPoints;
 			System.out.println("Checkpoint Gain: " + (100 * (aNbOfCandidates - aNbOfCheckPoints) / aNbOfCandidates));
