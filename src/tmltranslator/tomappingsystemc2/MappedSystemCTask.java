@@ -896,16 +896,16 @@ public class MappedSystemCTask {
 		String code = "";
 		int i;
 		for(TMLAttribute att: task.getAttributes()) {
-			if (!att.name.endsWith("__req")){ //NEW
+			//if (!att.name.endsWith("__req")){ //NEW
 				if (att.hasInitialValue())
 					code += ","+ att.name + "(" + att.initialValue + ")"+CR;
 				else
 					code += ","+ att.name + "(0)"+CR;
-			}
+			//}
 		}
-		code += ",arg1__req(0)"+CR;
-		code += ",arg2__req(0)"+CR;
-		code += ",arg3__req(0)"+CR;
+		//code += ",arg1__req(0)"+CR;
+		//code += ",arg2__req(0)"+CR;
+		//code += ",arg3__req(0)"+CR;
 		return code;
 	}
 	
@@ -913,14 +913,14 @@ public class MappedSystemCTask {
 		String code = "";
 		int i;
 		for(TMLAttribute att: task.getAttributes()) { 
-			if (!att.name.endsWith("__req")){  //NEW
+			//if (!att.name.endsWith("__req")){  //NEW
 				code += "ParamType " + att.name;
 				code += ";\n";
-			}
+			//}
 		}
-		code += "ParamType arg1__req" + SCCR;
-		code += "ParamType arg2__req" + SCCR;
-		code += "ParamType arg3__req" + SCCR;
+		//code += "ParamType arg1__req" + SCCR;
+		//code += "ParamType arg2__req" + SCCR;
+		//code += "ParamType arg3__req" + SCCR;
 		code += "ParamType rnd__0" + SCCR;
 		code += "TMLChannel* _channels[" + (channels.size() + events.size() + (task.isRequested()? 1:0)) + "]" + SCCR;
 		return code;
