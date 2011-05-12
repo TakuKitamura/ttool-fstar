@@ -42,8 +42,8 @@ Ludovic Apvrille, Renaud Pacalet
 #define ParameterH
 
 #include <definitions.h>
-class HashAlgo;
 #include <MemPool.h>
+#include <HashAlgo.h>
 
 class Parameter {
 public:
@@ -68,20 +68,121 @@ public:
 template <typename T, int size>
 class SizedParameter: public Parameter {
 public:
-	SizedParameter();
-	SizedParameter(const T& ip1 ...);
-	SizedParameter(std::istream& s);
-	~SizedParameter();
-	void print() const;
-	std::ostream& writeObject(std::ostream& s);
-	void streamStateXML(std::ostream& s) const;
-	 void getP(void* op1 ...) const;
-	void getStateHash(HashAlgo* iHash) const;
-	static void * operator new(size_t iSize);
-	static void operator delete(void *p, size_t iSize);
-	void readFromStream(std::istream &is);
-protected:
-	static MemPool<SizedParameter<T,size> > memPool;
-	T _p[size];
+	SizedParameter(){
+	}
+	
+	SizedParameter(const T& ip1 ...){
+		T arg=ip1;
+		va_list args; // argument list
+		va_start(args, ip1); // initialize args
+		for (unsigned int i=0;i<size;i++){
+			_p[i]=arg;
+			arg=va_arg(args, T);
+		}
+	}
+			
+	SizedParameter(std::istream& s){
+		for (unsigned int i=0;i<size;i++){
+			READ_STREAM(s, _p[i]);
+		}
+	#ifdef DEBUG_SERIALIZE
+		print();
+	#endif
+	}
+
+		
+	~SizedParameter(){
+	}
+		
+		///Print function for testing purposes
+	void print() const{
+		std::cerr << "print " << size << " elements in mempool " << &memPool << " :\n";
+		for (unsigned int i=0;i<size;i++){
+			std::cerr << " p[" << (i+1) << "]:" << _p[i];
+		}
+		std::cerr << std::endl;
+		std::cerr << "end print:\n";
+	}
+		
+	std::ostream& writeObject(std::ostream& s){
+		//std::cout << "writeObject:\n";
+		for (unsigned int i=0;i<size;i++){
+			WRITE_STREAM(s, _p[i]);
+		}
+	#ifdef DEBUG_SERIALIZE
+		print();
+	#endif
+		//std::cout << "end writeObject:\n";
+		return s;
+	}
+		
+	///Streams the parameter in XML format
+	/**
+	\param s Stream
+	*/
+	void streamStateXML(std::ostream& s) const{
+		//std::cout << "streamStateXML:\n";
+		s << TAG_PARAMo;
+		for (unsigned int i=0;i<size;i++){
+			s << TAG_Pxo << i << ">" << _p[i] << TAG_Pxc << i << ">";
+		}
+		s << TAG_PARAMc;
+		//std::cout << "end streamStateXML:\n";
+	}
+
+	/* template <typename T, int size> void SizedParameter<T,size>::setP(T ip1 ...){
+		T arg=ip1;
+		va_list args; // argument list
+		va_start(args, ip1); // initialize args
+		for (unsigned int i=0;i<size;i++){
+			_p[i]=arg;
+			arg=va_arg(args, T);
+		}
+	}*/
+
+	void getP(void* op1 ...) const {
+		//std::cout << "getP:\n";
+		T* arg= (T*) op1;
+		va_list args; // argument list
+		va_start(args, op1); // initialize args
+		for (unsigned int i=0;i<size;i++){
+			//std::cerr << "set Param " << i << "\n";
+			*arg=_p[i];
+			arg=va_arg(args, T*);
+		}
+		//std::cout << "end getP:\n";
+	}
+		
+	//inline T getPByIndex(unsigned int iIndex){
+	//	return _p[iIndex];
+	//}
+		
+	void getStateHash(HashAlgo* iHash) const{
+			//std::cout << "add param vals:\n";
+			for (unsigned int i=0;i<size;i++){
+				iHash->addValue((HashValueType)_p[i]);
+				//std::cout << _p[i] << ", ";
+			}
+			//std::cout << "\nend add param vals:\n";
+		}
+		
+	static void * operator new(size_t iSize){
+			return memPool.pmalloc(iSize);
+	}
+
+	static void operator delete(void *p, size_t iSize){
+			memPool.pfree(p, iSize);
+	}
+		
+	void readFromStream(std::istream &is){
+		for (unsigned int i=0;i<size;i++){
+			is >> _p[i];
+		}
+	}
+	protected:
+		static MemPool<SizedParameter<T,size> > memPool;
+		T _p[size];
 };
+
+template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);
 #endif

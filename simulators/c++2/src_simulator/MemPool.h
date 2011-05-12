@@ -51,25 +51,68 @@ public:
 	/**
 	\param iBlockSize Size of chunks to be allocated
 	*/
-	MemPool(unsigned int iBlockSize); //:_headFreeList(0){}
+	MemPool(unsigned int iBlockSize) :_headFreeList(0), _blockSize(iBlockSize){}
 	//MemPool();
 	///Allocation method
 	/**
 	\param n Size of memory chunk to be allocated
 	\return Pointer to the allocated chunk of memory
 	*/
-	void* pmalloc(unsigned int n);
+	void* pmalloc(unsigned int n){
+		if (n != sizeof(T)){
+			std::cerr << "MemPool ERROR malloc********\n";
+			return ::operator new(n);
+		}
+		//std::cerr << "ALLOC in MemPool " << this << "--------------\n";
+		T* aHead = _headFreeList;
+		if (aHead){
+			_headFreeList = *(reinterpret_cast<T**>(aHead));
+		}else{
+			T** aAdr;
+			T* newBlock = static_cast<T*>(::operator new(_blockSize * sizeof(T)));
+			_chunkList.push_back(newBlock);
+			for (unsigned int i = 1; i < _blockSize-1; ++i){
+				aAdr = reinterpret_cast<T**>(&newBlock[i]);
+				*aAdr = &newBlock[i+1];
+			}
+			aAdr = reinterpret_cast<T**>(&newBlock[_blockSize-1]);
+			*aAdr = 0;
+			aHead = newBlock;
+			_headFreeList = &newBlock[1];
+		}
+		return aHead;
+	}
 
 	///Deallocation method
 	/**
 	\param p Pointer to the memory chunk to be deallocated 
 	\param n Size of memory chunk to be deallocated
 	*/
-	void pfree(void *p, unsigned int n);
+	void pfree(void *p, unsigned int n){
+		//std::cerr << "DELETE in MemPool--------------\n";
+		if (p == 0) return;
+		if (n != sizeof(T)){
+			std::cerr << "MemPool ERROR delete********\n";
+			::operator delete(p);
+			return;
+		}
+		T* aDelObj = static_cast<T*>(p);
+		T** aAdr = reinterpret_cast<T**>(aDelObj);
+		//std::cerr << "Lets crash\n";
+		*aAdr = _headFreeList;
+		//std::cerr << "Not crashed\n";
+		_headFreeList = aDelObj;
+	}
 	///Reset memory pool, deallocate all memory chunks
-	void reset();
+	void reset(){
+		_headFreeList=0;
+		for(typename std::list<T*>::iterator i=_chunkList.begin(); i != _chunkList.end(); ++i) ::operator delete(*i);
+		_chunkList.clear();
+	}
 	///Destructor
-	~MemPool();
+	~MemPool(){
+		reset();
+	}
 private:
 	///Head pointer of the free list
 	T* _headFreeList;

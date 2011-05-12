@@ -40,7 +40,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include<Parameter.h>
 #include <HashAlgo.h>
 
-template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);
+//template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);
 
 template <typename T, int size>	SizedParameter<T,size>::SizedParameter(){
 }
@@ -160,3 +160,4 @@ template class SizedParameter<ParamType, 2>;
 template class SizedParameter<ParamType, 3>;
 template class SizedParameter<ParamType, 4>;
 template class SizedParameter<ParamType, 5>;
+template class SizedParameter<ParamType, 6>;

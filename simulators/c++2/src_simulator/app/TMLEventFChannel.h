@@ -61,16 +61,101 @@ public:
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
     	*/
-	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent);
-	void testWrite(TMLTransaction* iCommand);
-	void testRead(TMLTransaction* iCommand);
-	void write(TMLTransaction* iTrans);
-	bool read();
-	void cancelReadTransaction();
-	TMLTask* getBlockedReadTask() const;
-	TMLTask* getBlockedWriteTask() const;
-	std::string toString() const;
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
+	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
+	}
+
+	void testWrite(TMLTransaction* iTrans){
+		this->_writeTrans=iTrans;
+		if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+		this->_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
+		this->_overflow = (this->_content==_length);
+	}
+
+	void testRead(TMLTransaction* iTrans){
+		this->_readTrans=iTrans;
+		this->_readTrans->setVirtualLength((this->_content>0)?WAIT_SEND_VLEN:0);
+		this->_readTrans->setChannel(this);	//NEW!!!!
+		this->_underflow = (this->_content==0);
+	}
+
+	void write(TMLTransaction* iTrans){
+		if (this->_content<_length){
+			this->_content++;
+			if (paramNo!=0){
+				this->_paramQueue.push_back(this->_tmpParam);   //NEW
+	#ifdef STATE_HASH_ENABLED
+				this->_tmpParam->getStateHash(&_stateHash);	//new in if
+	#endif
+			}
+			if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
+				this->_readTrans->setRunnableTime(iTrans->getEndTime());
+				this->_readTrans->setChannel(this);
+				this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
+			}
+		}
+		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+	#ifdef LISTENERS_ENABLED
+		NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
+	#endif
+		this->_writeTrans=0; //TEST 
+	}
+
+	bool read(){
+		if (this->_content<1){
+			return false;
+		}else{
+			this->_content--;
+			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
+			if (paramNo!=0){
+				this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
+				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
+				this->_paramQueue.pop_front();  //NEW
+			}
+	#ifdef STATE_HASH_ENABLED
+			//_stateHash-=this->_paramQueue.front().getStateHash();
+			//this->_paramQueue.front().removeStateHash(&_stateHash);
+			_hashValid = false;
+	#endif
+	#ifdef LISTENERS_ENABLED
+			NOTIFY_READ_TRANS_EXECUTED(this->_readTrans);
+	#endif
+			this->_readTrans=0;
+			return true;
+		}
+	}
+
+	void cancelReadTransaction(){
+		this->_readTrans=0;
+	}
+
+	TMLTask* getBlockedReadTask() const{
+		return this->_readTask;
+	}
+
+	TMLTask* getBlockedWriteTask() const{
+		return 0;
+	}
+
+	std::string toString() const{
+		std::ostringstream outp;
+		outp << this->_name << "(evtF) len:" << _length << " content:" << this->_content;
+		return outp.str();
+	}
+
+	TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam){
+		TMLLength aNbToInsert;
+		if (iNbOfSamples==0){
+			this->_content=0;
+			this->_paramQueue.clear();
+			aNbToInsert=0;
+		}else{
+			aNbToInsert=min(iNbOfSamples, _length-this->_content);
+			this->_content+=aNbToInsert;
+			for (TMLLength i=0; i<aNbToInsert; i++) this->_paramQueue.push_back(iParam);
+		} 
+		if (this->_readTrans!=0) this->_readTrans->setVirtualLength((this->_content>0)?WAIT_SEND_VLEN:0);
+		return aNbToInsert;
+	}
 protected:
 	///Length of the channel
 	TMLLength _length;

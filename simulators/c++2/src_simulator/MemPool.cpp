@@ -105,7 +105,7 @@ MemPool<T>::~MemPool(){
 	reset();
 }
 
-template class MemPool<TMLTransaction>;
+/*template class MemPool<TMLTransaction>;
 template class MemPool<Comment>;
 template class MemPool<SizedParameter<ParamType, 0> >;
 template class MemPool<SizedParameter<ParamType, 1> >;
@@ -113,3 +113,4 @@ template class MemPool<SizedParameter<ParamType, 2> >;
 template class MemPool<SizedParameter<ParamType, 3> >;
 template class MemPool<SizedParameter<ParamType, 4> >;
 template class MemPool<SizedParameter<ParamType, 5> >;
+template class MemPool<SizedParameter<ParamType, 6> >;*/

@@ -91,7 +91,10 @@ template <typename T, int paramNo> void TMLEventSizedChannel<T,paramNo>::print()
 
 template <typename T, int paramNo> void TMLEventSizedChannel<T,paramNo>::reset(){
 	//std::cout << "EventChannel reset" << std::endl;
+	ParamQueue::iterator i;
 	TMLStateChannel::reset();
+	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
+		delete (*i);
 	_paramQueue.clear();
 	_stateHash.init((HashValueType)_ID, 30);
 	_hashValid=true;
@@ -144,3 +147,4 @@ template class TMLEventSizedChannel<ParamType, 2>;
 template class TMLEventSizedChannel<ParamType, 3>;
 template class TMLEventSizedChannel<ParamType, 4>;
 template class TMLEventSizedChannel<ParamType, 5>;
+template class TMLEventSizedChannel<ParamType, 6>;

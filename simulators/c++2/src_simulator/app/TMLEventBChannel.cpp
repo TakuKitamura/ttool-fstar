@@ -235,3 +235,4 @@ template class TMLEventBChannel<ParamType, 2>;
 template class TMLEventBChannel<ParamType, 3>;
 template class TMLEventBChannel<ParamType, 4>;
 template class TMLEventBChannel<ParamType, 5>;
+template class TMLEventBChannel<ParamType, 6>;
