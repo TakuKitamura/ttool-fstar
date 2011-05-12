@@ -489,7 +489,11 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		
+		// Transactions are only put with one another
+		// Synchronous transactions: the sending one has a link to the receiving one
 		// Work on broadcast transactions
+		ll = workOnBroadcastTransactions(ll);
+		
 		
 		// Select possible logical transactions
 		pendingTransactions = ll;
@@ -502,14 +506,30 @@ public class AvatarSpecificationSimulation  {
 			}
 		}
 		
+		boolean hasSilentTransaction = false;
 		if (nbOfPureLogicalTransitions >0) {
 			for(AvatarSimulationPendingTransaction 	aspt: pendingTransactions) {
 				if (!aspt.hasDelay) {
+					if (isASilentTransaction(aspt, pendingTransactions)) {
+						hasSilentTransaction = true;
+					}
 					ll.add(aspt);
 				}
 			}
 			pendingTransactions = ll;
 			//TraceManager.addDev("At least on logical transition");
+			
+			if (hasSilentTransaction) {
+				// Must keep only silent transactions
+				ll = new Vector<AvatarSimulationPendingTransaction>();
+				for(AvatarSimulationPendingTransaction aspt: pendingTransactions) {
+					if (isASilentTransaction(aspt, pendingTransactions)) {
+						ll.add(aspt);
+					}
+				}
+				pendingTransactions = ll;
+			}
+			
 			return;
 		}
 		
@@ -564,6 +584,24 @@ public class AvatarSpecificationSimulation  {
 		
 		pendingTransactions = ll;
 		
+	}
+	
+	public boolean isASilentTransaction(AvatarSimulationPendingTransaction aspt, Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		if (aspt.elementToExecute instanceof AvatarTransition) {
+			AvatarTransition atr = (AvatarTransition)(aspt.elementToExecute);
+			if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
+				if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
+					return true;
+				}
+			}
+			// State entering?
+		} else if (((aspt.elementToExecute instanceof AvatarState) ||  (aspt.elementToExecute instanceof AvatarStopState))) {
+			if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public void workOnAvatarActionOnSignalTransaction(Vector<AvatarSimulationPendingTransaction> transactions, AvatarSimulationPendingTransaction _aspt, AvatarActionOnSignal _aaos) {
@@ -804,6 +842,21 @@ public class AvatarSpecificationSimulation  {
 				transaction1.linkedTransaction = transaction0;
 			}
 			
+		
+			if (_pendingTransactions.get(0).linkedTransactions != null) {
+				tempo_clock_Value = clockValue; 
+				AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
+				for(AvatarSimulationPendingTransaction aspt: _pendingTransactions.get(0).linkedTransactions) {
+					if (aspt.linkedTransaction != null) {
+						preExecutedTransaction(aspt.linkedTransaction);
+						aspt.linkedTransaction.asb.runSoloPendingTransaction(aspt.linkedTransaction, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
+						postExecutedTransaction(aspt.linkedTransaction);
+						AvatarSimulationTransaction transaction1 = aspt.linkedTransaction.asb.getLastTransaction();
+						transaction1.linkedTransaction = transaction0;
+					}
+				}
+			}
+			
 			if (!(_pendingTransactions.get(0).isSilent)) {
 				bunchid++;
 			}
@@ -947,6 +1000,171 @@ public class AvatarSpecificationSimulation  {
 			TraceManager.addDev(ast.toString() + "\n");
 		}
 	}
+	
+	
+	private Vector<AvatarSimulationPendingTransaction> workOnBroadcastTransactions(Vector<AvatarSimulationPendingTransaction> transactions) {
+		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
+		Vector<AvatarSimulationPendingTransaction> met = new Vector<AvatarSimulationPendingTransaction>();
+		
+		boolean isMet;
+		
+		for (AvatarSimulationPendingTransaction aspt: transactions) {
+			if (!(aspt.isBroadcast)) {
+				ll.add(aspt);
+			} else {
+				isMet = false;
+				for (AvatarSimulationPendingTransaction maspt: met) {
+					if (aspt.elementToExecute == aspt.elementToExecute) {
+						isMet = true;
+						break;
+					}
+				}
+				if (!isMet) {
+					workOnABroadcastTransaction(transactions, ll, aspt);
+					met.add(aspt);
+				}
+			}
+		}
+		
+		
+		// Must remove redondant transactions
+		
+		return ll;
+	}
+	
+	private void workOnABroadcastTransaction(Vector<AvatarSimulationPendingTransaction> _oldTransactions, Vector<AvatarSimulationPendingTransaction> _newTransactions, AvatarSimulationPendingTransaction _aspt) {
+		boolean isMet = false;
+		// Other transactions?
+		for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+			if ((aspt.elementToExecute == _aspt.elementToExecute) && (aspt != _aspt)) {
+				isMet = true;
+				break;
+			}
+		}
+		
+		if (!isMet) {
+			_newTransactions.add(_aspt);
+			return;
+		}
+		
+		// Working on that broadcast
+		// Searching for a timed broadcast transaction
+		isMet = false;
+		AvatarSimulationPendingTransaction untimedTransaction = null;
+		for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+			if (aspt.elementToExecute == _aspt.elementToExecute) {
+				if (aspt.hasConfiguredDurationMoreThan0()) {
+					isMet = true;
+					break;
+				} else {
+					untimedTransaction = aspt;
+				}
+			}
+		}
+		
+		if (!isMet) {
+			// At least one untimed transaction: We only aggregate all untimed transactions to untimedTransaction
+			untimedTransaction.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
+			for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+				if ((aspt != untimedTransaction) && (aspt.elementToExecute == untimedTransaction.elementToExecute)) {
+					if (!(aspt.hasConfiguredDurationMoreThan0())) {
+						untimedTransaction.linkedTransactions.add(aspt);
+					}
+				}
+			}
+			_newTransactions.add(untimedTransaction);
+			return;
+		}
+		
+		
+		// Must see whether other transactions can be agregated
+		// Timing issues are resolved afterwards
+		/*for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+			if ((aspt != _aspt) && (aspt.isBroadcast) && (aspt.) {
+			}
+		}*/
+		
+		// We locate the transaction with the minimum max, and all transactions with a minimum which is strctly 
+		// higher than this max are removed
+		int max = Integer.MAX_VALUE;
+		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
+		for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+			if (aspt.myMaxDuration < max) {
+				max = aspt.myMaxDuration;
+			}
+		}
+		
+		if (max < 0) {
+			return;
+		}
+		
+		for (AvatarSimulationPendingTransaction aspt: _oldTransactions) {
+			if (aspt.myMinDuration <= max) {
+				ll.add(aspt);
+			}
+		}
+		
+		if (ll.size() == 0) {
+			return;
+		}
+		
+		if (ll.size() == 1) {
+			_newTransactions.add(ll.get(0));
+			return;
+		}
+		
+		// -> At least two transactions
+		// Then, for each interval between a min and another min / or a max, 
+		// We compute sets of possible transactions
+		
+		ll = basicSortOnMinDuration(ll);
+		
+		AvatarSimulationPendingTransaction a0;
+		for(int i=0; i<ll.size(); i++) {
+			a0 = ll.get(i);
+			// We compute all possible sets of transactions that are before a0
+			
+		}
+
+		
+		return;
+	}
+	
+	
+	public Vector<AvatarSimulationPendingTransaction> basicSortOnMinDuration(Vector<AvatarSimulationPendingTransaction> _vector) {
+		
+		if (_vector.size() == 1) {
+			return _vector;
+		}
+		
+		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
+		
+		
+		int min;
+		int index = 0;
+		int cpt = 0;
+		
+		
+		while(_vector.size() >0) {
+			min = Integer.MAX_VALUE;
+			index = 0;
+			cpt = 0;
+			for(AvatarSimulationPendingTransaction aspt: _vector) {
+				if(aspt.myMinDuration < min) {
+					index = cpt;
+					min = aspt.myMinDuration;
+				}
+				cpt ++;
+			}
+		
+			ll.add(_vector.get(index));
+			_vector.remove(index);
+		}
+		
+		return ll;
+	}
+	
+	
 	
 	/*public synchronized void waitForKillResetOrBackward() {
 		while(stopped && !killed) {

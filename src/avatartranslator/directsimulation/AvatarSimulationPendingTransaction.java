@@ -58,7 +58,7 @@ public class AvatarSimulationPendingTransaction  {
 	public AvatarStateMachineElement elementToExecute;
 	public AvatarStateMachineElement involvedElement; //(transition)
 	public AvatarSimulationPendingTransaction linkedTransaction;
-	public Vector<AvatarSimulationPendingTransaction> linkedTransactions; // Used for broadcasts
+	public Vector<AvatarSimulationPendingTransaction> linkedTransactions; // Used for broadcast
 	public AvatarSimulationAsynchronousTransaction linkedAsynchronousMessage;
 	public long clockValue;
 	public boolean isSynchronous;
@@ -126,10 +126,36 @@ public class AvatarSimulationPendingTransaction  {
 		return aspt;
 	}
 	
+	public boolean hasConfiguredDurationMoreThan0() {
+		if (linkedTransaction == null) {
+			if (!hasDelay) {
+				return false;
+			}
+			if (myMinDuration>0) {
+				return true;
+			}
+			return false;
+		}
+		
+		if ((!durationOnCurrent) && (!durationOnOther)) {
+			return false;
+		}
+		
+		if (myMinDuration >0) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
 
 	
 	public String toString() {
 		String res = "in Block " + asb.getName() + ": ";
+		if (linkedTransactions != null) {
+			res  = res + "broadcast ";
+		}
 		if (linkedTransaction == null) {
 			res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
 			if (hasClock) {

@@ -434,9 +434,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 					g.setColor(c);
 					GraphicLib.arrowWithLine(g, 1, 0, 10, xOf2ndBlock, currentY, currentX, currentY, true);
 					points.add(new Point(xOf2ndBlock, currentY));
+					transactionsOfPoints.add(ast.linkedTransaction);
 					transactionsOfPoints.add(ast);
 					points.add(new Point(currentX, currentY));
-					transactionsOfPoints.add(ast.linkedTransaction);
+					
 					
 					// Putting the message name
 					w = g.getFontMetrics().stringWidth(messageName);
