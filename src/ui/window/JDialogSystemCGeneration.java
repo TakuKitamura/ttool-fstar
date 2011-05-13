@@ -149,7 +149,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     
     
     /** Creates new form  */
-    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute) {
+    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute, String _graphPath) {
         super(f, title, true);
         
         mgui = _mgui;

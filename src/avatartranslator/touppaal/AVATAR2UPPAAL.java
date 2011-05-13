@@ -563,7 +563,9 @@ public class AVATAR2UPPAAL {
 			_previous.setCommitted();
 			loc.setCommitted();
 			hash.put(_elt, _previous);
-			makeElementBehavior(_block, _template, _elt.getNext(0), loc, _end, null, false, false);
+			loc1 = addLocation(_template); 
+			tr = addTransition(_template, loc, loc1);
+			makeElementBehavior(_block, _template, _elt.getNext(0), loc1, _end, null, false, false);
 			return;
 			
 			
