@@ -724,10 +724,12 @@ public class MappedSystemCTask {
 						newIndElseGuard= noOfGuards;
 						stopCmdToAdd = ",(TMLCommand*)&_stop" + idString;
 						noOfGuards++;
+						hcode+="TMLStopCommand " + "_stop" + idString + SCCR;
+						initCommand+= ", _stop" + idString + "(" + idString + ",this)" + CR;
 					}
-						code += "if (oMax==0){\n oMax=" + (1 << newIndElseGuard) + SCCR;
-						//code += "oC=1;\n}\n";
-						code += "return " + newIndElseGuard + ";\n}\n";
+					code += "if (oMax==0){\n oMax=" + (1 << newIndElseGuard) + SCCR;
+					//code += "oC=1;\n}\n";
+					code += "return " + newIndElseGuard + ";\n}\n";
 					//}
 					code += "return getEnabledBranchNo(myrand(1,oC), oMax);\n";
 				}	
@@ -741,8 +743,6 @@ public class MappedSystemCTask {
 			initCommand+= "," + cmdName + "("+ idString +",this,(RangeFuncPointer)&" + reference + "::" + cmdName + "_func," + noOfGuards + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			functions+="unsigned int "+ reference + "::" + cmdName + "_func(ParamType& oMin, ParamType& oMax){" + CR + code +CR+ "}" + CR2;
 			functionSig+="unsigned int " + cmdName + "_func(ParamType& oMin, ParamType& oMax)" + SCCR;
-			hcode+="TMLStopCommand " + "_stop" + idString + SCCR;
-			initCommand+= ", _stop" + idString + "(" + idString + ",this)" + CR;
 					
 		} else if (currElem instanceof TMLSelectEvt){
 			TMLEvent evt;
