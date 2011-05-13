@@ -661,7 +661,7 @@ public class MappedSystemCTask {
 				idString=String.valueOf(currElem.getID());
 			}
 			TMLChoice choice = (TMLChoice)currElem;
-			String code = "", nextCommandTemp="";
+			String code = "", nextCommandTemp="", stopCmdToAdd="";
 			int noOfGuards=0;
 			if (debug) System.out.println("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
@@ -719,13 +719,20 @@ public class MappedSystemCTask {
 							noOfGuards++;
 						}
 					}
-					if (newIndElseGuard!=-1){
-						code += "if (oMax==0){\n oMax=" + (1 << newIndElseGuard) + SCCR;
-						code += "oC=1;\n}\n";
+					//if (newIndElseGuard!=-1){
+					if (newIndElseGuard==-1){
+						newIndElseGuard= noOfGuards;
+						stopCmdToAdd = ",(TMLCommand*)&_stop" + idString;
+						noOfGuards++;
 					}
+						code += "if (oMax==0){\n oMax=" + (1 << newIndElseGuard) + SCCR;
+						//code += "oC=1;\n}\n";
+						code += "return " + newIndElseGuard + ";\n}\n";
+					//}
 					code += "return getEnabledBranchNo(myrand(1,oC), oMax);\n";
 				}	
-				nextCommand= cmdName + ".setNextCommand(array(" + noOfGuards + nextCommandTemp + "))" + SCCR;
+				//nextCommand= cmdName + ".setNextCommand(array(" + noOfGuards + nextCommandTemp + "))" + SCCR;
+				nextCommand= cmdName + ".setNextCommand(array(" + noOfGuards + nextCommandTemp + stopCmdToAdd+ "))" + SCCR;
 			}
 			//if (choice.nbOfNonDeterministicGuard()==0 &&  choice.nbOfStochasticGuard()==0) 
 			//	hcode+="TMLChoiceCommand " + cmdName + SCCR;
@@ -734,6 +741,8 @@ public class MappedSystemCTask {
 			initCommand+= "," + cmdName + "("+ idString +",this,(RangeFuncPointer)&" + reference + "::" + cmdName + "_func," + noOfGuards + "," + getFormattedLiveVarStr(currElem) + ")"+CR;
 			functions+="unsigned int "+ reference + "::" + cmdName + "_func(ParamType& oMin, ParamType& oMax){" + CR + code +CR+ "}" + CR2;
 			functionSig+="unsigned int " + cmdName + "_func(ParamType& oMin, ParamType& oMax)" + SCCR;
+			hcode+="TMLStopCommand " + "_stop" + idString + SCCR;
+			initCommand+= ", _stop" + idString + "(" + idString + ",this)" + CR;
 					
 		} else if (currElem instanceof TMLSelectEvt){
 			TMLEvent evt;
