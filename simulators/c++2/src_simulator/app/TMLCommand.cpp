@@ -50,13 +50,16 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <SimComponents.h>
+#include <TMLStopCommand.h>
 
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
 
 TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _type(NONE), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0){
-	_instanceList.push_back(this);
-	_task->addCommand(iID, this);
+	if (dynamic_cast<TMLStopCommand*>(this)==0){
+		_instanceList.push_back(this);
+		_task->addCommand(iID, this);
+	}
 	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
 }
 

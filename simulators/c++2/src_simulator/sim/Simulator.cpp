@@ -545,6 +545,8 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	std::string aTraceFileName;
 	std::cout << "Starting up...\n";
 	_graphOutPath = getArgs("-gpath", "", iLen, iArgs);
+	if (_graphOutPath.length()>0 && _graphOutPath[_graphOutPath.length()-1]!='/')
+		 _graphOutPath+="/";
 	aTraceFileName =getArgs("-server", "server", iLen, iArgs);
 	if (!aTraceFileName.empty()) return new Server();
 	aTraceFileName =getArgs("-file", "file", iLen, iArgs);
@@ -653,10 +655,10 @@ void Simulator::decodeCommand(std::string iCmd){
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
 					std::stringstream aPath;
-					aPath << _graphOutPath << "/tree.dot";
+					aPath << _graphOutPath << "tree.dot";
 					std::ofstream myDOTfile (aPath.str().c_str());
 					aPath.str("");
-					aPath << _graphOutPath << "/tree.aut.tmp";
+					aPath << _graphOutPath << "tree.aut.tmp";
 					std::ofstream myAUTfile (aPath.str().c_str());
 					aPath.str("");
 					//std::ofstream myfile2 ("tree.txt");
@@ -673,7 +675,7 @@ void Simulator::decodeCommand(std::string iCmd){
 //#else
 						myAUTfile.close();
 						aPath.str("");
-						aPath <<  _graphOutPath << "/header";
+						aPath <<  _graphOutPath << "header";
 						std::ofstream myTMPfile (aPath.str().c_str());
 						if (myTMPfile.is_open()){
 							//des (0, 29, 27)
@@ -682,10 +684,10 @@ void Simulator::decodeCommand(std::string iCmd){
 							//system ("cat header tree.aut.tmp > tree.aut");
 							//system ("rm header tree.aut.tmp");
 							aPath.str("");
-							aPath << "cat " << _graphOutPath << "/header " << _graphOutPath << "/tree.aut.tmp > " << _graphOutPath << "/tree.aut";
+							aPath << "cat " << _graphOutPath << "header " << _graphOutPath << "tree.aut.tmp > " << _graphOutPath << "tree.aut";
 							system(aPath.str().c_str());
 							aPath.str("");
-							aPath << "rm " <<  _graphOutPath << "/header " << _graphOutPath << "/tree.aut.tmp";
+							aPath << "rm " <<  _graphOutPath << "header " << _graphOutPath << "tree.aut.tmp";
 							system(aPath.str().c_str());
 						}
 //#endif
