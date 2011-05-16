@@ -47,7 +47,7 @@ struct request {
   timespec delay;
   int nbOfParams; // synchronous com.
   int **params;  // synchronous com.
-	message *msg; // Asynchronous comm.
+  message *msg; // Asynchronous comm.
 
 
   // Filled by the request manager

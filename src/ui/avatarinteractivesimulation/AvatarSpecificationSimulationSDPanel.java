@@ -85,6 +85,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	private int spaceStop = 20;
 	private int verticalLink = 10;
 	private int lengthAsync = 50;
+	private int spaceBroadcast = 25;
 	
 	private AvatarSpecificationSimulation ass;
 	
@@ -555,12 +556,12 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 				
 				currentY += 10;
 				g.setColor(ColorManager.AVATAR_SEND_SIGNAL);
-				g.drawLine(currentX+lengthAsync, currentY-1, currentX, currentY-1);
+				g.drawLine(currentX+spaceBetweenLifeLines-spaceBroadcast, currentY-1, currentX, currentY-1);
 				g.setColor(c);
-				GraphicLib.arrowWithLine(g, 1, 0, 10, currentX, currentY, currentX+lengthAsync, currentY, true);
+				GraphicLib.arrowWithLine(g, 1, 0, 10, currentX, currentY, currentX+spaceBetweenLifeLines-spaceBroadcast, currentY, true);
 				points.add(new Point(currentX, currentY));
 				transactionsOfPoints.add(ast);
-				g.fillOval(currentX+lengthAsync, currentY-5, 10, 10);
+				g.fillOval(currentX+spaceBetweenLifeLines-spaceBroadcast, currentY-5, 10, 10);
 					
 				// Putting the message name
 				w = g.getFontMetrics().stringWidth(messageName);

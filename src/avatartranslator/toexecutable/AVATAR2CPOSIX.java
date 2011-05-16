@@ -161,6 +161,9 @@ public class AVATAR2CPOSIX {
 						mainFile.appendToBeforeMainCode("syncchannel __" + getChannelName(ar, i) + ";" + CR);
 						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
 						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+						if (ar.isBroadcast()) {
+							mainFile.appendToMainCode("setBroadcast(&__" + getChannelName(ar, i) + ", true);" + CR);
+						}
 					}
 				}
 		}

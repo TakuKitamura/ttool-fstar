@@ -391,7 +391,7 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 								val1 = elt.getAttribute("size");
 								val2 = elt.getAttribute("blocking");
 								val3 = elt.getAttribute("private");
-								val4 = elt.getAttribute("brodcast");
+								val4 = elt.getAttribute("broadcast");
                                 
                                 if ((val != null) && (!(val.equals("null")))) {
 									if (val.trim().toLowerCase().compareTo("true") == 0) {
@@ -431,13 +431,13 @@ public  class AvatarBDPortConnector extends TGConnector implements ScalableTGCom
 								}
 								
 								if ((val4 != null) && (!(val4.equals("null")))) {
-									if (val3.trim().toLowerCase().compareTo("false") == 0) {
-										isBroadcast = false;
-									} else {
+									if (val4.trim().toLowerCase().compareTo("true") == 0) {
 										isBroadcast = true;
+									} else {
+										isBroadcast = false;
 									}
                                     
-                                } else {
+                } else {
 									isBroadcast = false;
 								}
 							}

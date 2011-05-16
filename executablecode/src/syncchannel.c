@@ -16,9 +16,14 @@ syncchannel *getNewSyncchannel(char *outname, char *inname) {
   syncch->outname = outname;
   syncch->inWaitQueue = NULL;
   syncch->outWaitQueue = NULL;
-
+  syncch->isBroadcast = false;
   return syncch;
 }
+
+void setBroadcast(syncchannel *syncch, bool b) {
+  syncch->isBroadcast = b;
+}
+
 
 
 /*request *makeNewSendSync(int hasDelay, long delay, int nbOfParams, int *params[]) {

@@ -4,12 +4,14 @@
 struct syncchannel;
 
 #include "request.h"
+#include "defs.h"
 
 struct syncchannel {
   char *outname;
   char *inname;
   struct request* inWaitQueue;
   struct request* outWaitQueue; 
+  bool isBroadcast;
 };
 
 typedef struct syncchannel syncchannel;

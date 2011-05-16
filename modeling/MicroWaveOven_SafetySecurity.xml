@@ -4405,7 +4405,7 @@ or by a maintenance station
 <oso value="out obs_open()" />
 <oso value="out obs_closed()" />
 <oso value="out obs_magnetronStart()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2271" >
@@ -4418,7 +4418,7 @@ or by a maintenance station
 <extraparam>
 <isd value="in remoteStart(int value)" />
 <oso value="out remoteStart(int value)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2274" >
@@ -4433,7 +4433,7 @@ or by a maintenance station
 <extraparam>
 <iso value="in wirelessChannelRead(Message msg)" />
 <osd value="out wirelessChannelWrite(Message msg)" />
-<FIFOType asynchronous="true" size="5" blocking="false" private="false" />
+<FIFOType asynchronous="true" size="5" blocking="false" private="false" broadcast="false" />
 </extraparam>
 </CONNECTOR><SUBCOMPONENT type="-1" id="2272" >
 <father id="2274" num="0" />
@@ -4462,7 +4462,7 @@ or by a maintenance station
 <extraparam>
 <isd value="in ring()" />
 <oso value="out ringBell()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2276" >
@@ -4477,7 +4477,7 @@ or by a maintenance station
 <isd value="in closed()" />
 <oso value="out open()" />
 <oso value="out closed()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2277" >
@@ -4492,7 +4492,7 @@ or by a maintenance station
 <isd value="in stopM()" />
 <oso value="out startMagnetron()" />
 <oso value="out stopMagnetron()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="2278" >
@@ -4509,7 +4509,7 @@ or by a maintenance station
 <osd value="out stopCooking()" />
 <isd value="in start(int duration)" />
 <oso value="out startButton(int duration)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="2303" >
@@ -4588,7 +4588,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="301" id="2330" >
-<cdparam x="152" y="54" />
+<cdparam x="133" y="37" />
 <sizeparam width="568" height="84" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
