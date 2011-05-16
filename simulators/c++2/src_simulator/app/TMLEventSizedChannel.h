@@ -61,23 +61,102 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLEventSizedChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent);
-	///Destructor
-	virtual ~TMLEventSizedChannel();
-	virtual std::ostream& writeObject(std::ostream& s);
-	virtual std::istream& readObject(std::istream& s);
-	void print()  const;
-	virtual void reset();
-	virtual void streamStateXML(std::ostream& s) const;
-	void getStateHash(HashAlgo* iHash) const;
-	bool getRequestChannel() const;
-	/////Returns the number of parameters
-	////**
-	//\return Number of Parameters
-	//*/
-	//unsigned int getParamNo();
-	Parameter* buildParameter();
-	//Parameter* buildParameter(Parameter* iCloneParam);
+	TMLEventSizedChannel (ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLEventChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0),_tmpParam(0), _stateHash((HashValueType)_ID, 30), _hashValid(true){
+	}
+
+	virtual ~TMLEventSizedChannel(){
+		//for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
+		//	delete *i;
+	}
+
+	bool getRequestChannel() const{
+		return false;
+	}
+
+	virtual std::ostream& writeObject(std::ostream& s){
+		ParamQueue::iterator i;
+		//std::cout << "write size of channel " << _name << " :" << _content << std::endl;
+		TMLStateChannel::writeObject(s);
+		if (paramNo!=0){
+			for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+				(*i)->writeObject(s);
+			}
+		}
+		//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
+		return s;
+	}
+
+	virtual std::istream& readObject(std::istream& s){
+		TMLLength aParamNo;
+		ParamQueue::iterator i;
+		//Parameter<ParamType>* aNewParam;
+		TMLStateChannel::readObject(s);
+		//std::cout << "Read Object TMLEventChannel " << _name << std::endl;
+		//_paramQueue.clear();
+		if (paramNo!=0){
+			for(aParamNo=0; aParamNo < _content; aParamNo++){
+				//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
+				//_paramQueue.push_back(Parameter<ParamType>(s));
+				_paramQueue.push_back(new SizedParameter<T,paramNo>(s));
+			}
+		}
+		_hashValid = false;
+		return s;
+	}
+
+	void print() const{
+		for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+			(*i)->print();
+		}
+	}
+
+	virtual void reset(){
+		//std::cout << "EventChannel reset" << std::endl;
+		ParamQueue::iterator i;
+		TMLStateChannel::reset();
+		for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
+			delete dynamic_cast<SizedParameter<T,paramNo>*>(*i);
+		_paramQueue.clear();
+		_stateHash.init((HashValueType)_ID, 30);
+		_hashValid=true;
+		//std::cout << "EventChannel reset end" << std::endl; 
+	}
+
+	virtual void streamStateXML(std::ostream& s) const{
+		s << TAG_CHANNELo << " name=\"" << _name << "\" id=\"" << _ID << "\">" << std::endl;
+		s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc << std::endl;
+		for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+			(*i)->streamStateXML(s);
+			s <<std::endl;
+		}
+		s << TAG_CHANNELc << std::endl;
+	}
+
+	void getStateHash(HashAlgo* iHash) const{
+		//TMLStateChannel::getStateHash(iHash);
+		//iHash->addValue(_stateHash.getHash());
+		if (_significance!=0){
+			if (paramNo!=0){
+				if (!_hashValid){
+					_stateHash.init((HashValueType)_ID, 30);
+					for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
+						(*i)->getStateHash(&_stateHash);
+					}
+					_hashValid = true;
+				}
+				iHash->addValue(_stateHash.getHash());
+			}
+			iHash->addValue(_content);
+		}
+	}
+
+
+	Parameter* buildParameter(){
+		return new SizedParameter<T, paramNo>();
+	}
+	
+	
+	
 protected:
 	///Queue for parameters
 	ParamQueue _paramQueue;

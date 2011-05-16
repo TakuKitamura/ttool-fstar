@@ -94,7 +94,7 @@ template <typename T, int paramNo> void TMLEventSizedChannel<T,paramNo>::reset()
 	ParamQueue::iterator i;
 	TMLStateChannel::reset();
 	for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
-		delete (*i);
+		delete dynamic_cast<SizedParameter<T,paramNo>*>(*i);
 	_paramQueue.clear();
 	_stateHash.init((HashValueType)_ID, 30);
 	_hashValid=true;
@@ -141,10 +141,10 @@ template <typename T, int paramNo> Parameter* TMLEventSizedChannel<T,paramNo>::b
 	return new SizedParameter<T, paramNo>();
 }
 
-template class TMLEventSizedChannel<ParamType, 0>;
+/*template class TMLEventSizedChannel<ParamType, 0>;
 template class TMLEventSizedChannel<ParamType, 1>;
 template class TMLEventSizedChannel<ParamType, 2>;
 template class TMLEventSizedChannel<ParamType, 3>;
 template class TMLEventSizedChannel<ParamType, 4>;
 template class TMLEventSizedChannel<ParamType, 5>;
-template class TMLEventSizedChannel<ParamType, 6>;
+template class TMLEventSizedChannel<ParamType, 6>;*/
