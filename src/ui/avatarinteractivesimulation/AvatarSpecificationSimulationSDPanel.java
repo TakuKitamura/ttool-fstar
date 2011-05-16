@@ -527,7 +527,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
 				g.drawLine(currentX+lengthAsync, currentY-1, currentX, currentY-1);
 				g.setColor(c);
-				GraphicLib.arrowWithLine(g, 1, 1, 10, currentX, currentY, currentX+lengthAsync, currentY, false);
+				GraphicLib.arrowWithLine(g, 1, 2, 10, currentX, currentY, currentX+lengthAsync, currentY, false);
 				points.add(new Point(currentX, currentY));
 				transactionsOfPoints.add(ast);
 					
@@ -543,6 +543,38 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 				// Vertical line of receiving block
 				g.drawLine(currentX, currentY-20, currentX, currentY);
 				return currentY;
+				
+			// Solo Broadcast Sending?
+			} else if (ast.isSolo) {
+				// Draw a lost message
+				String messageName = sig.getName() + "(";
+				if(ast.actions != null) {
+					messageName += ast.actions.get(0); 
+				}
+				messageName += ")";
+				
+				currentY += 10;
+				g.setColor(ColorManager.AVATAR_SEND_SIGNAL);
+				g.drawLine(currentX+lengthAsync, currentY-1, currentX, currentY-1);
+				g.setColor(c);
+				GraphicLib.arrowWithLine(g, 1, 0, 10, currentX, currentY, currentX+lengthAsync, currentY, true);
+				points.add(new Point(currentX, currentY));
+				transactionsOfPoints.add(ast);
+				g.fillOval(currentX+lengthAsync, currentY-5, 10, 10);
+					
+				// Putting the message name
+				w = g.getFontMetrics().stringWidth(messageName);
+				g.drawString(messageName, currentX+10, currentY-2); 
+				
+				ast.x = currentX;
+				ast.y = currentY;
+				
+				currentY += 10;
+				
+				// Vertical line of receiving block
+				g.drawLine(currentX, currentY-20, currentX, currentY);
+				return currentY;
+				
 			}
 		}
 		

@@ -492,7 +492,7 @@ public class AvatarSpecificationSimulation  {
 		// Transactions are only put with one another
 		// Synchronous transactions: the sending one has a link to the receiving one
 		// Work on broadcast transactions
-		ll = workOnBroadcastTransactions(ll);
+		// ll = workOnBroadcastTransactions(ll);
 		
 		
 		// Select possible logical transactions
@@ -636,13 +636,14 @@ public class AvatarSpecificationSimulation  {
 					transactions.add(_aspt);
 				}
 			} else {
-				// Synchronous -> must find a corresponding synchronous one
-				// Each time one is found, a new pending transaction is added, linked with the receiving action
-				//TraceManager.addDev("Found a synchronous signal");
-				for(AvatarSimulationPendingTransaction 	otherTransaction: pendingTransactions) {
-					if (otherTransaction != _aspt) {
-						if (otherTransaction.elementToExecute instanceof AvatarActionOnSignal) {
-							//TraceManager.addDev("step 2");
+				if (ar.isBroadcast()) {
+					// Broadcast -> The sender can execute at once
+					// Each time one is found, a new pending transaction is added, linked with the receiving action
+					//TraceManager.addDev("Found a synchronous signal");
+					transactions.add(_aspt);
+					_aspt.isBroadcast = true;
+					for(AvatarSimulationPendingTransaction 	otherTransaction: pendingTransactions) {
+						if ((otherTransaction != _aspt) && (otherTransaction.elementToExecute instanceof AvatarActionOnSignal)){
 							AvatarSignal sig = ((AvatarActionOnSignal)(otherTransaction.elementToExecute)).getSignal();
 							AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
 							if (rel == ar) {
@@ -650,37 +651,66 @@ public class AvatarSpecificationSimulation  {
 								if (index1 == index0) {
 									//TraceManager.addDev("step 3");
 									if (sig.isIn()) {
-										// Found one!
-										//TraceManager.addDev("step 4 sig=" + sig + " as = " + as + "rel = " + rel + "ar=" + ar);
-										
-										AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
-										if (ar.isBroadcast()) {
-											newone.isBroadcast = true;
-										}
-										newone.linkedTransaction = otherTransaction;
-										transactions.add(newone);
-										if (_aspt.hasDelay) {
-											if (otherTransaction.hasDelay) {
-												newone.myMinDuration = Math.max(otherTransaction.myMinDuration, _aspt.myMinDuration);
-												newone.myMaxDuration = Math.max(otherTransaction.myMaxDuration, _aspt.myMaxDuration);
-												newone.hasDelay = true;
-												newone.durationOnOther = true;
-												newone.durationOnCurrent = true;
-											} else {
-												newone.durationOnOther = false;
-												newone.durationOnCurrent = true;
+										if (!(otherTransaction.hasDelay)) {
+											if (_aspt.linkedTransactions == null) {
+												_aspt.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
 											}
-										} else {
-											if (otherTransaction.hasDelay) {
-												newone.hasDelay = true;
-												newone.myMinDuration = otherTransaction.myMinDuration;
-												newone.myMaxDuration = otherTransaction.myMaxDuration;
-												TraceManager.addDev("Other transaction hasDelay MyMax = " + otherTransaction.myMaxDuration);
-												newone.durationOnOther = true;
-												newone.durationOnCurrent = false;
+											_aspt.linkedTransactions.add(otherTransaction);
+											otherTransaction.isBroadcast = true;
+										}
+									}
+								}
+							}
+						}
+					}
+					
+				} else {
+					// Synchronous -> must find a corresponding synchronous one
+					// Each time one is found, a new pending transaction is added, linked with the receiving action
+					//TraceManager.addDev("Found a synchronous signal");
+					for(AvatarSimulationPendingTransaction 	otherTransaction: pendingTransactions) {
+						if (otherTransaction != _aspt) {
+							if (otherTransaction.elementToExecute instanceof AvatarActionOnSignal) {
+								//TraceManager.addDev("step 2");
+								AvatarSignal sig = ((AvatarActionOnSignal)(otherTransaction.elementToExecute)).getSignal();
+								AvatarRelation rel = avspec.getAvatarRelationWithSignal(sig);
+								if (rel == ar) {
+									int index1 = rel.getIndexOfSignal(sig);
+									if (index1 == index0) {
+										//TraceManager.addDev("step 3");
+										if (sig.isIn()) {
+											// Found one!
+											//TraceManager.addDev("step 4 sig=" + sig + " as = " + as + "rel = " + rel + "ar=" + ar);
+											
+											AvatarSimulationPendingTransaction newone = _aspt.cloneMe();
+											/*if (ar.isBroadcast()) {
+												newone.isBroadcast = true;
+											}*/
+											newone.linkedTransaction = otherTransaction;
+											transactions.add(newone);
+											if (_aspt.hasDelay) {
+												if (otherTransaction.hasDelay) {
+													newone.myMinDuration = Math.max(otherTransaction.myMinDuration, _aspt.myMinDuration);
+													newone.myMaxDuration = Math.max(otherTransaction.myMaxDuration, _aspt.myMaxDuration);
+													newone.hasDelay = true;
+													newone.durationOnOther = true;
+													newone.durationOnCurrent = true;
+												} else {
+													newone.durationOnOther = false;
+													newone.durationOnCurrent = true;
+												}
 											} else {
-												newone.durationOnOther = false;
-												newone.durationOnCurrent = false;
+												if (otherTransaction.hasDelay) {
+													newone.hasDelay = true;
+													newone.myMinDuration = otherTransaction.myMinDuration;
+													newone.myMaxDuration = otherTransaction.myMaxDuration;
+													TraceManager.addDev("Other transaction hasDelay MyMax = " + otherTransaction.myMaxDuration);
+													newone.durationOnOther = true;
+													newone.durationOnCurrent = false;
+												} else {
+													newone.durationOnOther = false;
+													newone.durationOnCurrent = false;
+												}
 											}
 										}
 									}
@@ -688,8 +718,8 @@ public class AvatarSpecificationSimulation  {
 							}
 						}
 					}
+					
 				}
-				
 			}
 		}
 	}
@@ -832,9 +862,15 @@ public class AvatarSpecificationSimulation  {
 			_pendingTransactions.get(0).asb.runSoloPendingTransaction(_pendingTransactions.get(0), allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
 			postExecutedTransaction(_pendingTransactions.get(0));
 			previousBlock = _pendingTransactions.get(0).asb;
+			AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
+			if (_pendingTransactions.get(0).isBroadcast) {
+				TraceManager.addDev("BROADCAST");
+				transaction0.isBroadcast = true;
+				transaction0.isSolo = true;
+			} 
+			
 			if (_pendingTransactions.get(0).linkedTransaction != null) {
 				tempo_clock_Value = clockValue; 
-				AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
 				preExecutedTransaction(_pendingTransactions.get(0).linkedTransaction);
 				_pendingTransactions.get(0).linkedTransaction.asb.runSoloPendingTransaction(_pendingTransactions.get(0).linkedTransaction, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
 				postExecutedTransaction(_pendingTransactions.get(0).linkedTransaction);
@@ -844,16 +880,16 @@ public class AvatarSpecificationSimulation  {
 			
 		
 			if (_pendingTransactions.get(0).linkedTransactions != null) {
+				//TraceManager.addDev("BROADCAST");
 				tempo_clock_Value = clockValue; 
-				AvatarSimulationTransaction transaction0 = _pendingTransactions.get(0).asb.getLastTransaction();
 				for(AvatarSimulationPendingTransaction aspt: _pendingTransactions.get(0).linkedTransactions) {
-					if (aspt.linkedTransaction != null) {
-						preExecutedTransaction(aspt.linkedTransaction);
-						aspt.linkedTransaction.asb.runSoloPendingTransaction(aspt.linkedTransaction, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
-						postExecutedTransaction(aspt.linkedTransaction);
-						AvatarSimulationTransaction transaction1 = aspt.linkedTransaction.asb.getLastTransaction();
-						transaction1.linkedTransaction = transaction0;
-					}
+					TraceManager.addDev("Executing broadcast transactions");
+					preExecutedTransaction(aspt);
+					aspt.asb.runSoloPendingTransaction(aspt, allTransactions, tempo_clock_Value, MAX_TRANSACTION_IN_A_ROW, bunchid);
+					postExecutedTransaction(aspt);
+					AvatarSimulationTransaction transaction1 = aspt.asb.getLastTransaction();
+					transaction1.linkedTransaction = transaction0;
+					transaction0.isSolo = false;
 				}
 			}
 			
@@ -1120,14 +1156,40 @@ public class AvatarSpecificationSimulation  {
 		ll = basicSortOnMinDuration(ll);
 		
 		AvatarSimulationPendingTransaction a0;
+		AvatarSimulationPendingTransaction tmp;
 		for(int i=0; i<ll.size(); i++) {
 			a0 = ll.get(i);
 			// We compute all possible sets of transactions that are before a0
-			
+			// a0 is then cloned with all possibilities
+			//_newTransactions.add(a0);
+			makeRandom(a0, 0, i, ll, _newTransactions);
 		}
 
+		TraceManager.addDev("Size of new transactions: " + _newTransactions.size());
 		
 		return;
+	}
+	
+	private void makeRandom(AvatarSimulationPendingTransaction mainTransaction, int index, int indexMax, Vector<AvatarSimulationPendingTransaction> _transactions, Vector<AvatarSimulationPendingTransaction> _newTransactions) {
+		if (index >= indexMax) {
+			return;
+		}
+		
+		// Dont add the current one to the list
+		makeRandom(mainTransaction, index+1, indexMax, _transactions, _newTransactions);
+		
+		// Add the current one to the list
+		AvatarSimulationPendingTransaction aspt = _transactions.get(index);
+		AvatarSimulationPendingTransaction asptnew = mainTransaction.fullCloneMe();
+		
+		if (asptnew.linkedTransactions == null) {
+			asptnew.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
+		}
+		
+		asptnew.linkedTransactions.add(aspt);
+		_newTransactions.add(asptnew);
+		makeRandom(asptnew, index+1, indexMax, _transactions, _newTransactions);
+		
 	}
 	
 	

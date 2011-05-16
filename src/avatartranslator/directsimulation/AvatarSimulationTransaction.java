@@ -83,6 +83,9 @@ public class AvatarSimulationTransaction  {
 	public AvatarSimulationAsynchronousTransaction sentMessage;
 	public AvatarSimulationAsynchronousTransaction receivedMessage;
 	
+	public boolean isBroadcast;
+	public boolean isSolo; // Used in broadcast transactions to know whether the signal was forwarded to other elements, or not
+	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;
 		addExecutedElement(executedElement);
@@ -114,6 +117,13 @@ public class AvatarSimulationTransaction  {
 		String res = "" + id + " bunchid:" + bunchid + " @" + clockValueWhenFinished + "/ " + duration + ": " +executedElement + " in block " + block.getName();
 		if (silent) {
 			 res += " (silent)";
+		}
+		if (isBroadcast) {
+			if (isSolo) {
+			 res += " (solo broadcast)";
+			} else {
+				res += " (broadcast)";
+			}
 		}
 		res += "\nattributes=";
 		for(String s: attributeValues) {

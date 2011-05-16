@@ -126,6 +126,19 @@ public class AvatarSimulationPendingTransaction  {
 		return aspt;
 	}
 	
+	public AvatarSimulationPendingTransaction fullCloneMe() {
+		
+		AvatarSimulationPendingTransaction aspt = cloneMe();
+		if (linkedTransactions != null) {
+			aspt.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
+			for(AvatarSimulationPendingTransaction aspt0: linkedTransactions) {
+				aspt.linkedTransactions.add(aspt0);
+			}
+		}
+		
+		return aspt;
+	}
+	
 	public boolean hasConfiguredDurationMoreThan0() {
 		if (linkedTransaction == null) {
 			if (!hasDelay) {
