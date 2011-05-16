@@ -116,6 +116,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	protected SaveCommandsToolBar sctb;
 	protected StateCommandsToolBar stctb;
 	protected BenchmarkCommandsToolBar bctb;
+	protected FormalVerificationToolBar fvtb;
 	
 	
 	// Commands
@@ -539,6 +540,32 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp02.add(benchmarkFileName, c01);
 		
 		jp01.add(jp02, BorderLayout.CENTER);
+		
+		// Formal verification
+		jp01 = new JPanel(new BorderLayout());
+		
+		commandTab.addTab("Formal verification", null, jp01, "Formal verification");
+		
+		fvtb = new FormalVerificationToolBar(this);
+		jp01.add(fvtb, BorderLayout.NORTH);
+		
+		/*jp02 = new JPanel();
+		gridbag01 = new GridBagLayout();
+		c01 = new GridBagConstraints();
+		jp02.setLayout(gridbag01);
+		
+		c01.gridheight = 1;
+		c01.weighty = 1.0;
+		c01.weightx = 1.0;
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		c01.gridheight = 1;
+		
+		jp02.add(new JLabel("File name:"), c01);
+		benchmarkFileName = new JTextField(30);
+		jp02.add(benchmarkFileName, c01);
+		
+		jp01.add(jp02, BorderLayout.CENTER);*/
 		
 		
 		//Info
@@ -1764,6 +1791,16 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void runExploration() {
+		animate.setSelected(false);
+		mgui.setDiploAnimate(animate.isSelected());
+		diploids.setEnabled(animate.isSelected());
+		animateWithInfo.setEnabled(animate.isSelected());
+		openDiagram.setEnabled(animate.isSelected());
+		update.setSelected(false);
+		sendCommand("run-exploration");
+	}
+	
 	
 	
 	private void updateVariables() {
@@ -2178,6 +2215,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 	
+	private void analyzeRG() {
+		mgui.statAUTDiplodocus();
+	}
+	
+	private void viewRG() {
+		mgui.showRGDiplodocus();
+	}
+	
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == animate) {
 			mgui.setDiploAnimate(animate.isSelected());
@@ -2217,7 +2262,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
             sendCommandWithPositiveInt("run-x-commands");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].getActionCommand()))  {
-            sendCommand("run-exploration");
+            runExploration();
+			//sendCommand("run-exploration");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_TO_NEXT_BUS_TRANSFER].getActionCommand()))  {
             toNextBusTransfer();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CPU_EXECUTES].getActionCommand()))  {
@@ -2263,6 +2309,10 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
             printCPUs();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_PRINT_BUS].getActionCommand())) {
             printBuses();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_ANALYSIS_RG].getActionCommand())) {
+            analyzeRG();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_VIEW_RG].getActionCommand())) {
+            viewRG();
         } 
 	}
 	

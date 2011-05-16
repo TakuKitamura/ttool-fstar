@@ -452,6 +452,8 @@ public	class JMenuBarTurtle extends JMenuBar	{
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ]);
         menuItem.addMouseListener(mgui.mouseHandler);
+		menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS]);
+        menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT]);
         menuItem.addMouseListener(mgui.mouseHandler);
 		
@@ -520,6 +522,10 @@ public	class JMenuBarTurtle extends JMenuBar	{
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RGAUTPROJDOT]);
         menuItem.addMouseListener(mgui.mouseHandler);
 		menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_MODIFIEDAUTDOT]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+		
+		view.addSeparator();
+		menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS]);
         menuItem.addMouseListener(mgui.mouseHandler);
         
         view.addSeparator();

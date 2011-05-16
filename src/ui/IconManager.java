@@ -94,7 +94,7 @@ public class IconManager {
     public static ImageIcon imgic310, imgic312, imgic314, imgic315, imgic316, imgic317, imgic318, imgic319;
     public static ImageIcon imgic320, imgic321, imgic322, imgic323, imgic324;
     public static ImageIcon imgic330, imgic331, imgic332, imgic333, imgic334, imgic335, imgic336, imgic337, imgic338, imgic339;
-    public static ImageIcon imgic340, imgic341, imgic342;
+    public static ImageIcon imgic340, imgic341, imgic342, imgic344;
     
     //IOD
     public static ImageIcon imgic400, imgic402;
@@ -321,7 +321,7 @@ public class IconManager {
     private static String icon306 = "images/dta.gif";
     //private static String icon307 = "images/dta.gif";
     private static String icon308 = "images/rg.gif";
-    //private static String icon309 = "images/rg.gif";
+   
     private static String icon310 = "images/formalvalidation.gif";
     //private static String icon311 = "images/formalvalidation.gif";
     private static String icon312 = "images/simulation.gif";
@@ -356,6 +356,8 @@ public class IconManager {
     private static String icon341 = "images/toolbarButtonGraphics/general/Export24.gif";
 	
 	private static String icon342 = "images/oneformalvalidation.gif";;
+	
+	private static String icon344 = "images/viewrg.gif";
     
     
     // IOD
@@ -723,6 +725,7 @@ public class IconManager {
         imgic340 = getIcon(icon340);
         imgic341 = getIcon(icon341);
 		imgic342 = getIcon(icon342);
+		imgic344 = getIcon(icon344);
         
         imgic400 = getIcon(icon400);
         imgic402 = getIcon(icon402);

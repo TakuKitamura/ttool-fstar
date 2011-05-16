@@ -94,8 +94,11 @@ public class InteractiveSimulationActions extends AbstractAction {
 	
 	public static final int ACT_PRINT_CPUS = 28;
 	public static final int ACT_PRINT_BUS = 29;
+	
+	public static final int ACT_ANALYSIS_RG = 30;
+	public static final int ACT_VIEW_RG = 31;
    
-    public static final int NB_ACTION = 30;
+    public static final int NB_ACTION = 32;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -172,6 +175,9 @@ public class InteractiveSimulationActions extends AbstractAction {
 		
 		actions[ACT_PRINT_BENCHMARK] = new TAction("print-benchmark", "Print benchmark", IconManager.imgic29, IconManager.imgic29, "Print benchmark", "Print benchmark at simulator side", 'R');
         actions[ACT_SAVE_BENCHMARK] = new TAction("save-benchmark", "Save benchmark", IconManager.imgic25, IconManager.imgic25, "Save benchmark", "Save benchmark at simulator side", 'R');
+        
+		actions[ACT_ANALYSIS_RG] = new TAction("analysis-rg", "Analysis of last RG", IconManager.imgic29, IconManager.imgic29, "Analysis of last RG", "Analyzis of the lastly generated RG", '0');
+        actions[ACT_VIEW_RG] = new TAction("view-rg", "View last RG", IconManager.imgic344, IconManager.imgic344, "View last RG", "View last RG with Dotty (note: Dotty must be installed and configured to do so)", '0');
         
         
     }

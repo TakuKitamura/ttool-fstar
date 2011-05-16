@@ -164,8 +164,12 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         if (pathExecute == null)
             pathExecute = _pathExecute;
 		
-		if (pathInteractiveExecute == null)
+		if (pathInteractiveExecute == null) {
+			if (_graphPath != null) {
+				_pathInteractiveExecute += " -gpath " + _graphPath;
+			}
             pathInteractiveExecute = _pathInteractiveExecute;
+		}
         
         hostSystemC = _hostSystemC;
         

@@ -536,6 +536,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.EXTERNAL_ACTION_1].setEnabled(true);
 			actions[TGUIAction.EXTERNAL_ACTION_2].setEnabled(true);
 			actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
+			actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
+			actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
 			break;
 		case OPENED:
 			actions[TGUIAction.ACT_MERGE].setEnabled(true);
@@ -3724,6 +3726,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void statAUT() {
         showAUT("Analysis on the last RG (AUT format)", gtm.getLastTextualRGAUT());
     }
+	
+	public void statAUTDiplodocus() {
+		String spec = loadFile(new File(ConfigurationTTool.TGraphPath + "/tree.aut"));
+        if (spec == null) {
+			JOptionPane.showMessageDialog(frame,
+				"The fill could not be loaded:",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        showAUT("Analysis on the last DIPLODOCUS RG", spec);
+    }
     
     public void statAUTProj() {
         showAUT("Analysis on the last minimized RG (AUT format)", gtm.getLastTextualRGAUTProj());
@@ -3920,6 +3935,16 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void showRGAutProj() {
         String s = gtm.showRGAutProj();
+        if (s != null) {
+            JOptionPane.showMessageDialog(frame,
+				"The RG could not be displayed: " + s,
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+	
+	public void showRGDiplodocus() {
+        String s = gtm.showRGDiplodocus();
         if (s != null) {
             JOptionPane.showMessageDialog(frame,
 				"The RG could not be displayed: " + s,
@@ -6216,6 +6241,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             seekDeadlockSavedAUT();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_STAT_AUT].getActionCommand())) {
             statAUT();
+        }  else if (command.equals(actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].getActionCommand())) {
+            statAUTDiplodocus();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ].getActionCommand())) {
             statAUTProj();
         }  else if (command.equals(actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT].getActionCommand())) {
@@ -6254,6 +6281,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             showRGAutProj();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_MODIFIEDAUTDOT].getActionCommand())) {
             showModifiedAUTDOT();
+        } else if (command.equals(actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].getActionCommand())) {
+            showRGDiplodocus();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_SAVED_LOT].getActionCommand())) {
             showSavedRTLOTOS();
         } else if (command.equals(actions[TGUIAction.ACT_VIEW_SAVED_DOT].getActionCommand())) {
