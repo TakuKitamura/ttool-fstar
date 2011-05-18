@@ -198,10 +198,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 		ArrayList<AvatarPDPanel> al = mgui.getAllAvatarPDPanels();
 		
 		for(AvatarPDPanel panel: al) {
-			if(ignoredTepe.contains(panel)) {
-				ignTepe.add(panel);
-			} else {
+			if(validatedTepe.contains(panel)) {
 				valTepe.add(panel);
+			} else {
+				ignTepe.add(panel);
 			}
 		}
 	}
