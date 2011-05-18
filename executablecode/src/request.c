@@ -192,17 +192,68 @@ void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne) {
     debugInt("Considering request of type", reqtmp->type);
       if (reqtmp->alreadyPending) {
 	if (reqtmp->type ==  RECEIVE_SYNC_REQUEST) {
-	  debugMsg("Removing request from inWaitQueue");
+	  debugMsg("Removing send sync request from inWaitQueue");
 	  reqtmp->syncChannel->inWaitQueue = removeRequestFromList(reqtmp->syncChannel->inWaitQueue, reqtmp);
 	  debugMsg("done");
 	}
 
 	if (reqtmp->type ==  SEND_SYNC_REQUEST) {
-	  debugMsg("Removing request from outWaitQueue");
+	  debugMsg("Removing receive sync request from outWaitQueue");
 	  reqtmp->syncChannel->outWaitQueue = removeRequestFromList(reqtmp->syncChannel->outWaitQueue, reqtmp);
+	  debugMsg("done");
+	}
+
+	if (reqtmp->type ==  RECEIVE_BROADCAST_REQUEST) {
+	  debugMsg("Removing broadcast receive request from inWaitQueue");
+	  reqtmp->syncChannel->inWaitQueue = removeRequestFromList(reqtmp->syncChannel->inWaitQueue, reqtmp);
 	  debugMsg("done");
 	}
       }
     reqtmp = reqtmp->nextRequestInList;
   }
+}
+
+
+// Identical means belonging to the same ListOfRequest
+// Returns the identical request if found, otherwise, null
+request *hasIdenticalRequestInListOfSelectedRequests(request *req, request *list) {
+ 
+  while(list != NULL) {
+    if (list->listOfRequests == req->listOfRequests) {
+      return list;
+    }
+    list = list->relatedRequest;
+  }
+
+  return NULL;
+}
+
+request* replaceInListOfSelectedRequests(request *oldRequest, request *newRequest, request *list) {
+  request *head = list;
+
+  if (list == oldRequest) {
+    newRequest->relatedRequest = oldRequest->relatedRequest;
+    return newRequest;
+  }
+
+  //list=list->relatedRequest;
+  while(list->relatedRequest != oldRequest) {
+    list = list->relatedRequest;
+  }
+
+  list->relatedRequest = newRequest;
+  newRequest->relatedRequest = oldRequest->relatedRequest;
+
+  return head;
+}
+
+
+int nbOfRelatedRequests(request *list) {
+  int cpt = 0;
+  while(list->relatedRequest != NULL) {
+    cpt ++;
+    list = list->relatedRequest;
+  }
+
+  return cpt;
 }

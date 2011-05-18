@@ -47,10 +47,12 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package avatartranslator.directsimulation;
 
+import java.awt.*;
 import java.util.*;
 
 import avatartranslator.*;
 import myutil.*;
+
 
 public class AvatarSimulationPendingTransaction  {
 	
@@ -183,6 +185,40 @@ public class AvatarSimulationPendingTransaction  {
 			res += "[SYNCHRO]" + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
 			res += " | " + linkedTransaction.toString();
 		}
+        
+        if (linkedTransactions != null) {
+            res += " --to--> [";
+            int cpt = 0;
+            for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+                if (cpt == 0) {
+                    cpt ++;
+                } else {
+                    res += " ";
+                }
+                res += aspt.elementToExecute.getID();
+            }
+            res += "]";
+        }
+        
 		return res;
 	}
+    
+    public Point hasDuplicatedBlockTransaction() {
+        Vector<AvatarSimulationBlock> blocks = new Vector<AvatarSimulationBlock>();
+        
+        if (linkedTransactions == null) {
+            return null;
+        }
+        
+        for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+            if (blocks.contains(aspt.asb)) {
+                return new Point(blocks.indexOf(aspt.asb), blocks.size());
+            }
+            blocks.add(aspt.asb);
+        
+        }
+        return null;
+    }
+    
+    
 }

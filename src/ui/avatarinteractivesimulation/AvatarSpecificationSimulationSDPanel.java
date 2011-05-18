@@ -553,7 +553,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 					messageName += ast.actions.get(0); 
 				}
 				messageName += ")";
-				
+	    			
 				currentY += 10;
 				g.setColor(ColorManager.AVATAR_SEND_SIGNAL);
 				g.drawLine(currentX+spaceBetweenLifeLines-spaceBroadcast, currentY-1, currentX, currentY-1);

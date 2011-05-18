@@ -8,4 +8,7 @@
 
 request *executeOneRequest(setOfRequests *list, request *req);
 request *executeListOfRequests(setOfRequests *list);
+
+void removeAllPendingRequestsFromPendingListsRelatedRequests(request *req);
+
 #endif

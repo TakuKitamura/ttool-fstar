@@ -47,6 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package avatartranslator.directsimulation;
 
+import java.awt.*;
 import java.util.*;
 
 import avatartranslator.*;
@@ -492,7 +493,7 @@ public class AvatarSpecificationSimulation  {
 		// Transactions are only put with one another
 		// Synchronous transactions: the sending one has a link to the receiving one
 		// Work on broadcast transactions
-		// ll = workOnBroadcastTransactions(ll);
+		ll = workOnBroadcastTransactions(ll);
 		
 		
 		// Select possible logical transactions
@@ -1038,34 +1039,33 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	
-	private Vector<AvatarSimulationPendingTransaction> workOnBroadcastTransactions(Vector<AvatarSimulationPendingTransaction> transactions) {
+    // Must split transactions when a broadcast transactions contains more than one transaction per block
+	private Vector<AvatarSimulationPendingTransaction> workOnBroadcastTransactions(Vector<AvatarSimulationPendingTransaction> _transactions) {
 		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
-		Vector<AvatarSimulationPendingTransaction> met = new Vector<AvatarSimulationPendingTransaction>();
 		
-		boolean isMet;
-		
-		for (AvatarSimulationPendingTransaction aspt: transactions) {
-			if (!(aspt.isBroadcast)) {
-				ll.add(aspt);
-			} else {
-				isMet = false;
-				for (AvatarSimulationPendingTransaction maspt: met) {
-					if (aspt.elementToExecute == aspt.elementToExecute) {
-						isMet = true;
-						break;
-					}
-				}
-				if (!isMet) {
-					workOnABroadcastTransaction(transactions, ll, aspt);
-					met.add(aspt);
-				}
-			}
-		}
-		
-		
-		// Must remove redondant transactions
-		
-		return ll;
+        AvatarSimulationPendingTransaction asptfound, newaspt;
+        Point p;
+        
+        while(true) {
+            asptfound = null;
+            p = null;
+            for(AvatarSimulationPendingTransaction aspt: _transactions) {
+                if ((aspt.isBroadcast) && (aspt.linkedTransactions != null)) {
+                    if ((p = aspt.hasDuplicatedBlockTransaction()) != null) {
+                        TraceManager.addDev("FOUND DUPLICATED BLOCK");
+                        asptfound = aspt;
+                        break;
+                    }
+                }
+            }
+            if (asptfound == null) {
+                return _transactions;
+            }
+            newaspt = asptfound.fullCloneMe();
+            newaspt.linkedTransactions.removeElementAt(p.x);
+            _transactions.add(newaspt);
+            asptfound.linkedTransactions.removeElementAt(p.y);
+        }
 	}
 	
 	private void workOnABroadcastTransaction(Vector<AvatarSimulationPendingTransaction> _oldTransactions, Vector<AvatarSimulationPendingTransaction> _newTransactions, AvatarSimulationPendingTransaction _aspt) {

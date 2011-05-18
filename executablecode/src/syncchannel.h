@@ -17,7 +17,7 @@ struct syncchannel {
 typedef struct syncchannel syncchannel;
 
 
-
+void setBroadcast(syncchannel *syncch, bool b);
 syncchannel *getNewSyncchannel(char *inname, char *outname);
 //request *makeNewSendSync(int hasDelay, long delay, int nbOfParams, int *params[]);
 //request *makeNewReceiveSync(int hasDelay, long delay, int nbOfParams, int *params[]);

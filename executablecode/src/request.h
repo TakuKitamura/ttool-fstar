@@ -16,6 +16,8 @@ struct request;
 #define RECEIVE_ASYNC_REQUEST 6
 #define DELAY 8
 #define IMMEDIATE 10
+#define SEND_BROADCAST_REQUEST 12
+#define RECEIVE_BROADCAST_REQUEST 14
 
 typedef struct timespec timespec;
 
@@ -38,7 +40,7 @@ struct request {
   struct request *next;
   struct setOfRequests* listOfRequests;
   struct request* nextRequestInList;
-  struct request* relatedRequest; // For synchro for example
+  struct request* relatedRequest; // For synchro and broadcast
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
   int type;
@@ -79,4 +81,8 @@ void clearListOfRequests(setOfRequests *list);
 void fillListOfRequests(setOfRequests *list, char *name, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex);
 
 void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne);
+request *hasIdenticalRequestInListOfSelectedRequests(request *req, request *list);
+request* replaceInListOfSelectedRequests(request *oldRequest, request *newRequest, request *list);
+int nbOfRelatedRequests(request *list);
+
 #endif

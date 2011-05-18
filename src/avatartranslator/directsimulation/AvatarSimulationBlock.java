@@ -370,7 +370,7 @@ public class AvatarSimulationBlock  {
 					// Must put the right parameters
 					if (_aspt.isSynchronous) {
 						// Synchronous call
-						if ((_aspt.isSending) && (_aspt.linkedTransaction != null )){
+						if ((_aspt.isSending) && ((_aspt.linkedTransaction != null ) || (_aspt.linkedTransactions != null))){
 							// Synchronous Sending!
 							// Must be in the receiving transaction the right parameters
 							Vector<String> parameters = new Vector<String>();
@@ -395,7 +395,15 @@ public class AvatarSimulationBlock  {
 								}
 							}
 							//for(i=0; i<_aspt.linkedTransactions.size(); i++) {
-								_aspt.linkedTransaction.parameters = parameters;
+                            if (_aspt.linkedTransaction != null) {
+							_aspt.linkedTransaction.parameters = parameters;
+                            }
+                            
+                             if (_aspt.linkedTransactions != null) {
+                                 for(AvatarSimulationPendingTransaction aspt0: _aspt.linkedTransactions) {
+                                     aspt0.parameters = parameters;
+                                 }
+                             }
 							//}
 						} else if ((!(_aspt.isSending))  && (_aspt.parameters != null)){
 							//TraceManager.addDev("Reading value " + aaos);

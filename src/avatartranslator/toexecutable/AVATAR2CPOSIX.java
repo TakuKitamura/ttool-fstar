@@ -564,8 +564,13 @@ public class AVATAR2CPOSIX {
 					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", SEND_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
-					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+                    if (ar.isBroadcast()) {
+					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    } else {
+                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+                        ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    }
 				}
 				
 				// Receiving
@@ -577,8 +582,13 @@ public class AVATAR2CPOSIX {
 					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_ASYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".asyncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 				} else {
+                    if (ar.isBroadcast()) {
+                        ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_BROADCAST_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
+					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    } else {
 					ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 					ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
+                    }
 				}
 			}
 		}

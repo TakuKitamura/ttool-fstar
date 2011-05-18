@@ -93,9 +93,67 @@ void executeReceiveSyncTransaction(request *req) {
 }
 
 
+void executeSendBroadcastTransaction(request *req) {
+  int cpt;
+  request *tmpreq;
+
+  // At least one transaction available -> must select all of them
+  // but at most one per task
+  // Then, broadcast the new condition!
+
+  request* currentReq = req->syncChannel->inWaitQueue;
+  request* currentLastReq = req;
+  debugMsg("Execute broadcast sync tr");
+
+  
+  while(currentReq != NULL) {
+    tmpreq = hasIdenticalRequestInListOfSelectedRequests(currentReq, req->relatedRequest);
+    if (tmpreq != NULL) {
+      // Must select one of the two
+      // If =1, replace, otherwise, just do nothing
+      cpt = random() % 2;
+      if (cpt == 1) {
+	debugMsg("Replacing broadcast request");
+	req->relatedRequest = replaceInListOfSelectedRequests(tmpreq, currentReq, req->relatedRequest);
+	currentReq->listOfRequests->selectedRequest = currentReq;
+	copyParameters(req, currentReq);
+	currentReq->selected = 1;
+	currentLastReq = req;
+	while(currentLastReq->relatedRequest != NULL) {
+	  currentLastReq = currentLastReq->relatedRequest;
+	}
+      }
+    } else {
+      currentLastReq->relatedRequest = currentReq;
+      currentReq->relatedRequest = NULL;
+      currentReq->selected = 1;
+      currentReq->listOfRequests->selectedRequest = currentReq;
+      copyParameters(req, currentReq);
+      currentLastReq = currentReq;
+    }
+
+    currentReq = currentReq->next;
+    
+    debugInt("Nb of requests selected:", nbOfRelatedRequests(req));
+  }
+
+
+  debugMsg("Signaling");
+  currentReq = req->relatedRequest;
+  cpt = 0;
+  while(currentReq != NULL) {
+    cpt ++;
+    pthread_cond_signal(currentReq->listOfRequests->wakeupCondition);
+    currentReq = currentReq->relatedRequest;
+  }
+
+  debugInt("NUMBER of broadcast Requests", cpt);
+}
+
+
 int executable(setOfRequests *list, int nb) {
   int cpt = 0;
-  int index = 0;
+  //int index = 0;
   request *req = list->head;
   timespec ts;
   int tsDone = 0;
@@ -152,7 +210,7 @@ int executable(setOfRequests *list, int nb) {
 	}  else {
 	  debugMsg("Send sync not executable");
 	}
-	index ++;
+	//index ++;
       }
 
       if (req->type == RECEIVE_SYNC_REQUEST) {
@@ -161,8 +219,22 @@ int executable(setOfRequests *list, int nb) {
 	  req->executable = 1;
 	  cpt ++;
 	}
-	index ++;
+	//index ++;
       }
+
+      if (req->type == SEND_BROADCAST_REQUEST) {
+	debugMsg("send broadcast");
+	req->executable = 1;
+	cpt ++;
+      }
+
+      if (req->type == RECEIVE_BROADCAST_REQUEST) {
+	debugMsg("receive broadcast");
+	// A receive broadcast is never executable
+	req->executable = 0;
+	//index ++;
+      }
+      
 
       if (req->type == IMMEDIATE) {
 	debugMsg("immediate");
@@ -192,6 +264,19 @@ void private__makeRequestPending(setOfRequests *list) {
 	req->alreadyPending = 1;
 	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
       }
+
+      if (req->type ==  RECEIVE_BROADCAST_REQUEST) {
+	debugMsg("Adding pending broadcast request in inWaitqueue");
+	req->alreadyPending = 1;
+	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
+      }
+
+      if (req->type ==  SEND_BROADCAST_REQUEST) {
+	debugMsg("Adding pending broadcast request in outWaitqueue");
+	req->alreadyPending = 1;
+	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
+      }
+      
     }
 
     req = req->nextRequestInList;
@@ -207,16 +292,30 @@ void private__makeRequest(request *req) {
     executeReceiveSyncTransaction(req);
   }
 
+  if (req->type == SEND_BROADCAST_REQUEST) {
+    executeSendBroadcastTransaction(req);
+  }
+
   // IMMEDIATE: Nothing to do
   
   // In all cases: remove other requests of the same list from their pending form
   debugMsg("Removing original req");
   removeAllPendingRequestsFromPendingLists(req, 1);
+  removeAllPendingRequestsFromPendingListsRelatedRequests(req);
+  /*if (req->relatedRequest != NULL) {
+    debugMsg("Removing related req");
+    removeAllPendingRequestsFromPendingLists(req->relatedRequest, 0);
+    }*/
+  
+}
+
+void removeAllPendingRequestsFromPendingListsRelatedRequests(request *req) {
   if (req->relatedRequest != NULL) {
     debugMsg("Removing related req");
     removeAllPendingRequestsFromPendingLists(req->relatedRequest, 0);
+    // Recursive call
+    removeAllPendingRequestsFromPendingListsRelatedRequests(req->relatedRequest);
   }
-  
 }
 
 
@@ -241,7 +340,7 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
     return NULL;
   }
   
-  debugInt("At least one pending request", howMany);
+  debugInt("At least one pending request is executable", howMany);
 
   
   // Select a request
