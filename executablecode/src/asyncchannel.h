@@ -14,13 +14,15 @@ struct asyncchannel {
   int maxNbOfMessages; //
   struct request* outWaitQueue;
   struct request* inWaitQueue;
-  setOfMessages *pendingMessages;
+  message *pendingMessages;
+  int currentNbOfMessages;
 };
 
 typedef struct asyncchannel asyncchannel;
 
 asyncchannel *getNewAsyncchannel(char *inname, char *outname, int isBlocking, int maxNbOfMessages);
 void destroyAsyncchannel(asyncchannel *syncch);
-
+message* getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel);
+void addMessageToAsyncChannel(asyncchannel *channel, message *msg);
 
 #endif

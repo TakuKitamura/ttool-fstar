@@ -137,6 +137,13 @@ void traceRequest(char *myname, request *req) {
   case RECEIVE_SYNC_REQUEST:
     sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
     break;
+   case SEND_ASYNC_REQUEST:
+    debug2Msg("Async channel", req->asyncChannel->outname);
+    sprintf(s, "block=%s type=send_async channel=%s\n", myname, req->asyncChannel->outname);
+    break;
+   case RECEIVE_ASYNC_REQUEST:
+    sprintf(s, "block=%s type=receive_async channel=%s\n", myname, req->asyncChannel->inname);
+    break;
    case SEND_BROADCAST_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
     sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);

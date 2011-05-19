@@ -24,6 +24,7 @@ request *getNewRequest(int ID, int type, int hasDelay, long minDelay, long maxDe
 // Delays are in microseconds
 void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay, long maxDelay, int nbOfParams, int **params) {
   long delay;
+  int i;
 
   req->next = NULL;
   req->listOfRequests = NULL;
@@ -45,6 +46,14 @@ void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay,
   req->delayElapsed = 0;
 
   req->relatedRequest = NULL;
+
+  if (type == SEND_ASYNC_REQUEST) {
+    // Must create a new message
+    req->msg = getNewMessageWithParams(nbOfParams);
+    for(i=0; i<nbOfParams; i++) {
+      req->msg->params[i] = *(params[i]);
+    }
+  }
 
 }
 

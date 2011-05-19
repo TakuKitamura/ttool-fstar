@@ -24,13 +24,15 @@ message *getNewMessage(int nbOfParams, int *params) {
     criticalError("Allocation of request failed");
   }
   msg->nbOfParams = nbOfParams;
-	msg->params = params;
+  msg->params = params;
   return msg;
 }
 
+
+
 void destroyMessageWithParams(message *msg) {
-	free(msg->params);
-	free(msg);
+  free(msg->params);
+  free(msg);
 }
 
 void destroyMessage(message *msg) {

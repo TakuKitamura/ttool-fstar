@@ -2,15 +2,8 @@
 #define MESSAGE_H
 
 
-struct message;
-
-struct setOfMessages {
-  struct message *head;
-};
-
-typedef struct setOfMessages setOfMessages;
-
 struct message {
+  struct message *next;
   int nbOfParams;
   int *params;
 };

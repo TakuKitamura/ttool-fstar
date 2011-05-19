@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "mytimelib.h"
 #include "random.h"
+#include "asyncchannel.h"
 
 
 
@@ -90,6 +91,49 @@ void executeReceiveSyncTransaction(request *req) {
 
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+}
+
+
+void executeSendAsyncTransaction(request *req) {
+  request *selectedReq;
+
+  // Full FIFO?
+  if (req->asyncChannel->currentNbOfMessages == req->asyncChannel->maxNbOfMessages) {
+    // Must remove the oldest  message
+    getAndRemoveOldestMessageFromAsyncChannel(req->asyncChannel);
+  }
+
+  addMessageToAsyncChannel(req->asyncChannel, req->msg);
+  
+  debugMsg("Signaling async write to all requests waiting ");
+  selectedReq = req->asyncChannel->inWaitQueue;
+  while (selectedReq != NULL) {
+    pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    selectedReq = selectedReq->next;
+  }
+}
+
+void executeReceiveAsyncTransaction(request *req) {
+  int i;
+  request *selectedReq;
+
+  req->msg = getAndRemoveOldestMessageFromAsyncChannel(req->asyncChannel);
+    
+  debugMsg("Signaling async read to all requests waiting ");
+  selectedReq = req->asyncChannel->outWaitQueue;
+
+  // Must recopy parameters
+  for(i=0; i<req->nbOfParams; i++) {
+    *(req->params[i]) = req->msg->params[i];
+  }
+
+  // unallocate message
+  destroyMessageWithParams(req->msg);
+
+  while (selectedReq != NULL) {
+    pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    selectedReq = selectedReq->next;
+  }
 }
 
 
@@ -222,6 +266,41 @@ int executable(setOfRequests *list, int nb) {
 	//index ++;
       }
 
+      if (req->type == SEND_ASYNC_REQUEST) {
+	debugMsg("Send async");
+
+	if (!(req->asyncChannel->isBlocking)) {
+	  // Can always add a message -> executable
+	  debugMsg("Send async executable since non blocking");
+	  req->executable = 1;
+	  cpt ++;
+
+	  //blocking case ... channel full?
+	} else {
+	  if (req->asyncChannel->currentNbOfMessages < req->asyncChannel->maxNbOfMessages) {
+	    // Not full!
+	    debugMsg("Send async executable since channel not full");
+	    req->executable = 1;
+	    cpt ++;
+	  } else {
+	    debugMsg("Send async not executable: full, and channel is blocking");
+	  }
+	}
+      }
+
+      if (req->type == RECEIVE_ASYNC_REQUEST) {
+	debugMsg("receive async");
+	if (req->asyncChannel->currentNbOfMessages >0) {
+	  debugMsg("Receive async executable: not empty");
+	  req->executable = 1;
+	  cpt ++;
+	} else {
+	  debugMsg("Receive async not executable: empty");
+	}
+	//index ++;
+      }
+      
+
       if (req->type == SEND_BROADCAST_REQUEST) {
 	debugMsg("send broadcast");
 	req->executable = 1;
@@ -234,6 +313,8 @@ int executable(setOfRequests *list, int nb) {
 	req->executable = 0;
 	//index ++;
       }
+
+      
       
 
       if (req->type == IMMEDIATE) {
@@ -259,10 +340,23 @@ void private__makeRequestPending(setOfRequests *list) {
 	req->syncChannel->outWaitQueue = addToRequestQueue(req->syncChannel->outWaitQueue, req);
 	req->alreadyPending = 1;
       }
+
       if (req->type ==  RECEIVE_SYNC_REQUEST) {
 	debugMsg("Adding pending request in inWaitqueue");
 	req->alreadyPending = 1;
 	req->syncChannel->inWaitQueue = addToRequestQueue(req->syncChannel->inWaitQueue, req);
+      }
+
+      if (req->type == SEND_ASYNC_REQUEST) {
+	debugMsg("Adding pending request in outWaitqueue");
+	req->asyncChannel->outWaitQueue = addToRequestQueue(req->asyncChannel->outWaitQueue, req);
+	req->alreadyPending = 1;
+      }
+
+      if (req->type ==  RECEIVE_ASYNC_REQUEST) {
+	debugMsg("Adding pending request in inWaitqueue");
+	req->alreadyPending = 1;
+	req->asyncChannel->inWaitQueue = addToRequestQueue(req->asyncChannel->inWaitQueue, req);
       }
 
       if (req->type ==  RECEIVE_BROADCAST_REQUEST) {
@@ -290,6 +384,14 @@ void private__makeRequest(request *req) {
 
   if (req->type == RECEIVE_SYNC_REQUEST) {
     executeReceiveSyncTransaction(req);
+  }
+
+  if (req->type == SEND_ASYNC_REQUEST) {
+    executeSendAsyncTransaction(req);
+  }
+
+  if (req->type == RECEIVE_ASYNC_REQUEST) {
+    executeReceiveAsyncTransaction(req);
   }
 
   if (req->type == SEND_BROADCAST_REQUEST) {
