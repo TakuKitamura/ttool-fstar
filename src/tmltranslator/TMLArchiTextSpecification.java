@@ -66,7 +66,7 @@ public class TMLArchiTextSpecification {
 	
 	private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY"};
 	private String nodetypes[] = {"CPU", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA"};
-	private String cpuparameters[] = {"byteDataSize", "pipelineSize", "goIdleTime", "taskSwitchingTime", "branchingPredictionPenalty", "schedulingPolicy", "execiTime"};
+	private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
 	private String linkparameters[] = {"bus", "node", "priority"};
 	private String hwaparameters[] = {"byteDataSize", "execiTime"};
 	private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
@@ -147,13 +147,18 @@ public class TMLArchiTextSpecification {
 				name = prepareString(node.getName());
 				set = "SET " + name + " ";
 				code += "NODE CPU " +  name + CR;
+				code += set + "nbOfCores " + cpu.nbOfCores + CR;
 				code += set + "byteDataSize " + cpu.byteDataSize + CR;  
 				code += set + "pipelineSize " + cpu.pipelineSize + CR;
 				code += set + "goIdleTime " + cpu.goIdleTime + CR;  
+				code += set + "maxConsecutiveIdleCycles " + cpu.maxConsecutiveIdleCycles + CR;  
 				code += set + "taskSwitchingTime " + cpu.taskSwitchingTime + CR;
 				code += set + "branchingPredictionPenalty " + cpu.branchingPredictionPenalty + CR;  
+				code += set + "cacheMiss " + cpu.cacheMiss + CR;
 				code += set + "schedulingPolicy " + cpu.schedulingPolicy + CR;
+				code += set + "sliceTime " + cpu.sliceTime + CR;
 				code += set + "execiTime " + cpu.execiTime + CR;
+				code += set + "execcTime " + cpu.execcTime + CR;
 			}
 			
 			//HWA
@@ -164,6 +169,7 @@ public class TMLArchiTextSpecification {
 				code += "NODE HWA " +  name + CR;
 				code += set + "byteDataSize " + hwa.byteDataSize + CR;  
 				code += set + "execiTime " + hwa.execiTime + CR;
+				code += set + "execcTime " + hwa.execcTime + CR;
 			}
 			
 			// BUS
@@ -481,6 +487,10 @@ public class TMLArchiTextSpecification {
 						return -1;
 					}
 					
+					if (_split[2].toUpperCase().equals("NBOFCORES")) {
+						cpu.nbOfCores = Integer.decode(_split[3]).intValue();
+					}
+					
 					if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
 						cpu.byteDataSize = Integer.decode(_split[3]).intValue();
 					}
@@ -493,20 +503,36 @@ public class TMLArchiTextSpecification {
 						cpu.goIdleTime = Integer.decode(_split[3]).intValue();
 					}
 					
-					if (_split[2].toUpperCase().equals("TASKSWITCHINGTIME")) {
-						cpu.taskSwitchingTime = Integer.decode(_split[3]).intValue();
+					if (_split[2].toUpperCase().equals("MAXCONSECUTIVEIDLECYCLES")) {
+						cpu.maxConsecutiveIdleCycles = Integer.decode(_split[3]).intValue();
 					}
 					
-					if (_split[2].toUpperCase().equals("SCHEDULINGPOLICY")) {
-						cpu.schedulingPolicy = Integer.decode(_split[3]).intValue();
+					if (_split[2].toUpperCase().equals("TASKSWITCHINGTIME")) {
+						cpu.taskSwitchingTime = Integer.decode(_split[3]).intValue();
 					}
 					
 					if (_split[2].toUpperCase().equals("BRANCHINGPREDICTIONPENALTY")) {
 						cpu.branchingPredictionPenalty = Integer.decode(_split[3]).intValue();
 					}
 					
+					if (_split[2].toUpperCase().equals("CACHEMISS")) {
+						cpu.cacheMiss = Integer.decode(_split[3]).intValue();
+					}
+					
+					if (_split[2].toUpperCase().equals("SCHEDULINGPOLICY")) {
+						cpu.schedulingPolicy = Integer.decode(_split[3]).intValue();
+					}
+					
+					if (_split[2].toUpperCase().equals("SLICETIME")) {
+						cpu.sliceTime = Integer.decode(_split[3]).intValue();
+					}
+					
 					if (_split[2].toUpperCase().equals("EXECITIME")) {
 						cpu.execiTime = Integer.decode(_split[3]).intValue();
+					}
+					
+					if (_split[2].toUpperCase().equals("EXECCTIME")) {
+						cpu.execcTime = Integer.decode(_split[3]).intValue();
 					}
 				}
 				

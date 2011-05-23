@@ -1865,7 +1865,8 @@ public class GTMLModeling  {
 					cpu.taskSwitchingTime = node.getTaskSwitchingTime();
 					cpu.branchingPredictionPenalty = node.getBranchingPredictionPenalty();
 					cpu.cacheMiss = node.getCacheMiss();
-					cpu.schedulingPolicy = node.getSchedulingPolicy();  
+					cpu.schedulingPolicy = node.getSchedulingPolicy();
+					cpu.sliceTime = node.getSliceTime();  
 					cpu.execiTime = node.getExeciTime();
 					cpu.execcTime = node.getExeccTime();
 					cpu.clockRatio = node.getClockRatio();

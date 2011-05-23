@@ -36,12 +36,12 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class HwBus
- * Creation: 05/09/2007
- * @version 1.0 05/09/2007
- * @author Ludovic APVRILLE
- * @see
- */
+* Class HwBus
+* Creation: 05/09/2007
+* @version 1.0 05/09/2007
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package tmltranslator;
 
@@ -59,12 +59,12 @@ public class HwBus extends HwCommunicationNode  {
 	public static final int DEFAULT_PIPELINE_SIZE = 1;
 	public static final int DEFAULT_ARBITRATION = BASIC_ROUND_ROBIN;
 	
-    public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
+	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 	public int pipelineSize = DEFAULT_PIPELINE_SIZE;
 	public int arbitration = DEFAULT_ARBITRATION;
- 
-    public HwBus(String _name) {
+	
+	public HwBus(String _name) {
 		super(_name);
-    }
- 
+	}
+	
 }

@@ -62,6 +62,7 @@ public class HwCPU extends HwExecutionNode  {
 	public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 2;
 	public static final int DEFAULT_CACHE_MISS = 5;
 	public static final int DEFAULT_SCHEDULING = BASIC_ROUND_ROBIN;
+	public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
 	
 	public int nbOfCores = DEFAULT_NB_OF_CORES; // Should be equal or greater than 1
 	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
@@ -72,6 +73,7 @@ public class HwCPU extends HwExecutionNode  {
 	public int branchingPredictionPenalty = DEFAULT_BRANCHING_PREDICTION_PENALTY; // Percentage: between 0 and 100
 	public int cacheMiss = DEFAULT_CACHE_MISS; // Percentage: between 0 and 100
 	public int schedulingPolicy = DEFAULT_SCHEDULING;
+	public int sliceTime = DEFAULT_SLICE_TIME;
 	
 	
     public HwCPU(String _name) {

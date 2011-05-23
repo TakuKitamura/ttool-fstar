@@ -365,7 +365,7 @@ public class GTURTLEModeling {
 			TMLTextSpecification spec = new TMLTextSpecification(_title);
 			spec.toTextFormat(tmlm);
 			try {
-				spec.saveFile(ConfigurationTTool.TMLCodeDirectory, "spec.tml");
+				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml");
 			} catch (Exception e) {
 				TraceManager.addError("File could not be saved: " + e.getMessage());
 			}
@@ -373,7 +373,7 @@ public class GTURTLEModeling {
 			TMLMappingTextSpecification spec = new TMLMappingTextSpecification(_title);
 			spec.toTextFormat(tmap);
 			try {
-				spec.saveFile(ConfigurationTTool.TMLCodeDirectory, "spec");
+				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec");
 			} catch (Exception e) {
 				TraceManager.addError("Files could not be saved: " + e.getMessage());
 			}
