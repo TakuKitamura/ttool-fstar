@@ -66,7 +66,10 @@ public:
 
 	void testWrite(TMLTransaction* iTrans){
 		this->_writeTrans=iTrans;
-		if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+		//if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+#if paramNo>0
+		this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+#endif
 		this->_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		this->_overflow = (this->_content==_length);
 	}
@@ -81,12 +84,14 @@ public:
 	void write(TMLTransaction* iTrans){
 		if (this->_content<_length){
 			this->_content++;
-			if (paramNo!=0){
+	#if paramNo>0
+			//if (paramNo!=0){
 				this->_paramQueue.push_back(this->_tmpParam);   //NEW
 	#ifdef STATE_HASH_ENABLED
 				this->_tmpParam->getStateHash(&_stateHash);	//new in if
 	#endif
-			}
+			//}
+	#endif
 			if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
 				this->_readTrans->setRunnableTime(iTrans->getEndTime());
 				this->_readTrans->setChannel(this);
@@ -106,11 +111,13 @@ public:
 		}else{
 			this->_content--;
 			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
-			if (paramNo!=0){
+	#if paramNo>0
+			//if (paramNo!=0){
 				this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
 				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
 				this->_paramQueue.pop_front();  //NEW
-			}
+			//}
+	#endif
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);

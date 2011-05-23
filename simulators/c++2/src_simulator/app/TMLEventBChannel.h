@@ -89,14 +89,16 @@ public:
 
 	void write(TMLTransaction* iTrans){
 		this->_content++;
-		if (paramNo!=0){
+	#if paramNo>0
+		//if (paramNo!=0){
 			//this->_paramQueue.push_back(_tmpParam);
 			//std::cerr << "write!\n";
 			this->_paramQueue.push_back(iTrans->getCommand()->setParams(0));
 	#ifdef STATE_HASH_ENABLED
 			_tmpParam->getStateHash(&_stateHash);  //new in if
 	#endif
-		}
+		//}
+	#endif
 		if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
 			this->_readTrans->setRunnableTime(iTrans->getEndTime());
 			this->_readTrans->setChannel(this);
@@ -117,14 +119,16 @@ public:
 			if (this->_content==0 && _sourceIsFile) readNextEvents();
 			//std::cout << "read next" << std::endl;
 			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
-			if (paramNo!=0){
+	#if paramNo>0
+			//if (paramNo!=0){
 				//std::cerr << "read! ...";
 				//this->_paramQueue.front()->print();
 				//std::cerr << "\n";
 				this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
 				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
 				this->_paramQueue.pop_front();  //NEW
-			}
+			//}
+	#endif
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);

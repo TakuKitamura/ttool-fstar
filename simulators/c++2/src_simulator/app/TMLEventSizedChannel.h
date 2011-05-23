@@ -74,32 +74,36 @@ public:
 	}
 
 	virtual std::ostream& writeObject(std::ostream& s){
-		ParamQueue::iterator i;
 		//std::cout << "write size of channel " << _name << " :" << _content << std::endl;
 		TMLStateChannel::writeObject(s);
-		if (paramNo!=0){
+#if paramNo>0
+		ParamQueue::iterator i;
+		//if (paramNo!=0){
 			for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
 				(*i)->writeObject(s);
 			}
-		}
+		//}
+#endif
 		//for_each( _paramQueue.begin(), _paramQueue.end(), std::bind2nd(std::bind1st(std::mem_fun(&(Parameter<ParamType>::writeObject)),s),(unsigned int)_writeTask));
 		return s;
 	}
 
 	virtual std::istream& readObject(std::istream& s){
-		TMLLength aParamNo;
-		ParamQueue::iterator i;
 		//Parameter<ParamType>* aNewParam;
 		TMLStateChannel::readObject(s);
 		//std::cout << "Read Object TMLEventChannel " << _name << std::endl;
 		//_paramQueue.clear();
-		if (paramNo!=0){
+#if paramNo>0
+		TMLLength aParamNo;
+		ParamQueue::iterator i;
+		//if (paramNo!=0){
 			for(aParamNo=0; aParamNo < _content; aParamNo++){
 				//aNewParam = new Parameter<ParamType>(s, (unsigned int) _writeTask);
 				//_paramQueue.push_back(Parameter<ParamType>(s));
 				_paramQueue.push_back(new SizedParameter<T,paramNo>(s));
 			}
-		}
+		//}
+#endif
 		_hashValid = false;
 		return s;
 	}
@@ -114,9 +118,11 @@ public:
 		//std::cout << "EventChannel reset" << std::endl;
 		ParamQueue::iterator i;
 		TMLStateChannel::reset();
+	#if paramNo>0
 		for(i=_paramQueue.begin(); i != _paramQueue.end(); ++i)
 			delete dynamic_cast<SizedParameter<T,paramNo>*>(*i);
 		_paramQueue.clear();
+	#endif
 		_stateHash.init((HashValueType)_ID, 30);
 		_hashValid=true;
 		//std::cout << "EventChannel reset end" << std::endl; 
@@ -136,7 +142,8 @@ public:
 		//TMLStateChannel::getStateHash(iHash);
 		//iHash->addValue(_stateHash.getHash());
 		if (_significance!=0){
-			if (paramNo!=0){
+	#if paramNo>0
+			//if (paramNo!=0){
 				if (!_hashValid){
 					_stateHash.init((HashValueType)_ID, 30);
 					for(ParamQueue::const_iterator i=_paramQueue.begin(); i != _paramQueue.end(); ++i){
@@ -145,7 +152,8 @@ public:
 					_hashValid = true;
 				}
 				iHash->addValue(_stateHash.getHash());
-			}
+			//}
+	#endif
 			iHash->addValue(_content);
 		}
 	}

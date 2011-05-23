@@ -72,6 +72,7 @@ public:
 	}
 	
 	SizedParameter(const T& ip1 ...){
+#if size>0
 		T arg=ip1;
 		va_list args; // argument list
 		va_start(args, ip1); // initialize args
@@ -79,39 +80,46 @@ public:
 			_p[i]=arg;
 			arg=va_arg(args, T);
 		}
+#endif
 	}
 			
 	SizedParameter(std::istream& s){
+#if size>0
 		for (unsigned int i=0;i<size;i++){
 			READ_STREAM(s, _p[i]);
 		}
-	#ifdef DEBUG_SERIALIZE
+#ifdef DEBUG_SERIALIZE
 		print();
-	#endif
+#endif
+#endif
 	}
 
 		
-	~SizedParameter(){
+	virtual ~SizedParameter(){
 	}
 		
 		///Print function for testing purposes
 	void print() const{
 		std::cerr << "print " << size << " elements in mempool " << &memPool << " :\n";
+#if size>0
 		for (unsigned int i=0;i<size;i++){
 			std::cerr << " p[" << (i+1) << "]:" << _p[i];
 		}
+#endif
 		std::cerr << std::endl;
 		std::cerr << "end print:\n";
 	}
 		
 	std::ostream& writeObject(std::ostream& s){
+#if size>0
 		//std::cout << "writeObject:\n";
 		for (unsigned int i=0;i<size;i++){
 			WRITE_STREAM(s, _p[i]);
 		}
-	#ifdef DEBUG_SERIALIZE
+#ifdef DEBUG_SERIALIZE
 		print();
-	#endif
+#endif
+#endif
 		//std::cout << "end writeObject:\n";
 		return s;
 	}
@@ -123,9 +131,11 @@ public:
 	void streamStateXML(std::ostream& s) const{
 		//std::cout << "streamStateXML:\n";
 		s << TAG_PARAMo;
+#if size>0
 		for (unsigned int i=0;i<size;i++){
 			s << TAG_Pxo << i << ">" << _p[i] << TAG_Pxc << i << ">";
 		}
+#endif
 		s << TAG_PARAMc;
 		//std::cout << "end streamStateXML:\n";
 	}
@@ -142,6 +152,7 @@ public:
 
 	void getP(void* op1 ...) const {
 		//std::cout << "getP:\n";
+#if size>0
 		T* arg= (T*) op1;
 		va_list args; // argument list
 		va_start(args, op1); // initialize args
@@ -150,6 +161,7 @@ public:
 			*arg=_p[i];
 			arg=va_arg(args, T*);
 		}
+#endif
 		//std::cout << "end getP:\n";
 	}
 		
@@ -158,12 +170,14 @@ public:
 	//}
 		
 	void getStateHash(HashAlgo* iHash) const{
+#if size>0
 			//std::cout << "add param vals:\n";
 			for (unsigned int i=0;i<size;i++){
 				iHash->addValue((HashValueType)_p[i]);
 				//std::cout << _p[i] << ", ";
 			}
 			//std::cout << "\nend add param vals:\n";
+#endif
 		}
 		
 	static void * operator new(size_t iSize){
@@ -175,13 +189,18 @@ public:
 	}
 		
 	void readFromStream(std::istream &is){
+#if size>0
 		for (unsigned int i=0;i<size;i++){
 			is >> _p[i];
 		}
+#endif
 	}
 	protected:
 		static MemPool<SizedParameter<T,size> > memPool;
+#if size>0
 		T _p[size];
+#endif
+		
 };
 
 template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);
