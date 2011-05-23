@@ -114,6 +114,62 @@ public class HTMLCodeGeneratorForTables  {
 
 	}
 	
+	public StringBuffer getHTMLCodeFromSorters(ArrayList<TableSorter> tss, ArrayList<String> titles, String mainTitle) {
+		StringBuffer sb = new StringBuffer();
+		int max = Math.min(tss.size(), titles.size());
+		
+		
+		sb.append("<html>\n");
+		sb.append(getHTMLHeader(mainTitle));
+		
+		sb.append("<body>\n");
+		sb.append("<center><h1>" +  mainTitle + "</h1></center>\n");
+		
+		for (int i=0; i<max; i++) {
+			sb.append(getHTMLCodeFromSorter(tss.get(i), titles.get(i)));
+		}
+		
+		sb.append("</body>\n</html>");
+		
+		return sb;
+	}
+		
+		
+
+	public StringBuffer getHTMLCodeFromSorter(TableSorter ts, String title) {
+		int i, j;
+		String s;
+		
+		StringBuffer sb = new StringBuffer("\n<BR><BR>\n<TABLE BORDER>\n");
+		sb.append("<CAPTION><B>" + title + "</B></CAPTION>\n");
+		
+		// Top part of table
+		sb.append("<TR>");
+		for(j=0; j<ts.getColumnCount(); j++) {
+			sb.append("<TH BGCOLOR=\"#C0C0C0\"> " + ts.getColumnName(j) + " </TH> "); 
+		}
+		sb.append("</TR>\n");
+		
+		// Table itself
+		for(i=0; i<ts.getRowCount(); i++) {
+			sb.append("<TR>");
+			for(j=0; j<ts.getColumnCount(); j++) {
+				s = ts.getValueAt(i, j).toString();
+				if (s.length() == 0) {
+					s = "-";
+				}
+				sb.append("<TD> " + s + " </TD> "); 
+			}
+			sb.append("</TR>\n");
+		}
+		
+		// End of table
+		sb.append("</TABLE>\n\n");
+		
+		return sb;
+
+	}
+	
 	public String getHTMLHeader(String mainTitle) {
 		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
 		Date date = calendar.getTime();

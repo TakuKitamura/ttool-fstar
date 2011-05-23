@@ -69,6 +69,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	private Vector tabs;
 	
 	private ArrayList<AbstractTableModel> atms;
+	private ArrayList<TableSorter> tss;
 	private ArrayList<String> titles;
 	
 	//private StatisticsTableModel tm;
@@ -104,6 +105,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		//makeRequirements();
 		
 		atms = new ArrayList<AbstractTableModel>();
+		tss = new ArrayList<TableSorter>();
 		titles = new ArrayList<String>();
 		
 		makeComponents();
@@ -222,7 +224,9 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		
 		tab.addTab(title, IconManager.imgic13, jspRTM, title);
 	
+		
 		atms.add(rtm);
+		tss.add(sorterRTM);
 		titles.add(title);
 	}
 	
@@ -243,7 +247,8 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 	private void generateDoc() {
 		TraceManager.addDev("Generate doc");
 		HTMLCodeGeneratorForTables doc = new HTMLCodeGeneratorForTables();
-		String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
+		//String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
+		String s = doc.getHTMLCodeFromSorters(tss, titles, "List of Requirements").toString();
 		//System.out.println("HTML code:" + s); 
 		
 		String path;
