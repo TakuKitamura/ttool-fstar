@@ -216,6 +216,33 @@ stdrelease:
 jttooljar:
 	cd $(JTTOOL);$(JAVAC) $(JTTOOL_DIR)/*.java;$(JAR) cmf $(TTOOL_SRC)/$(TTOOL_JAR_TXT) $(TTOOL_BIN)/$(JTTOOL_JAR) $(JTTOOL_DIR)/*.class 
 
+updatesimulator:
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/Doxyfile /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/app/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/app/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/app/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/app/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/arch/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/arch/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/arch/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/arch/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/ebrdd/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/ebrdd/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/ebrdd/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/ebrdd/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/evt/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/evt/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/evt/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/evt/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/sim/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/sim/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/sim/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/sim/
+
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/TEPE/*.cpp /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/TEPE/
+	cp /homes/apvrille/TTool/simulators/c++2/src_simulator/TEPE/*.h /homes/apvrille/TechTTool/SystemCCode/generated/src_simulator/TEPE/
+
+	cp /homes/apvrille/TTool/simulators/c++2/Makefile /homes/apvrille/TechTTool/SystemCCode/generated/
+
+	cd /homes/apvrille/TechTTool/SystemCCode/generated/; make ultraclean
+
 clean:
 	rm -f $(TTOOL_SRC)/*.dot $(TTOOL_SRC)/*.dta $(TTOOL_SRC)/*.sim $(TTOOL_SRC)/*.lot
 	rm -f $(TTOOL_SRC)/*.class $(TTOOL_SRC)/*.java~
