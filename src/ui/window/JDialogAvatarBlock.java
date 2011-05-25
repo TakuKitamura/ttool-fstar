@@ -532,7 +532,6 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         } else if (evt.getSource() == upButton) {
             upAttribute();
         } else if (evt.getSource() == upMethodButton) {
-			//TraceManager.addDev("Up method");
 			upMethod();
 		}  else if (evt.getSource() == downMethodButton) {
 			downMethod();
@@ -542,6 +541,8 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 			addMethod();
 		} else if (evt.getSource() == downSignalButton) {
 			downSignal();
+		} else if (evt.getSource() == upSignalButton) {
+			upSignal();
 		} else if (evt.getSource() == removeSignalButton) {
 			removeSignal();
 		} else if (evt.getSource() == addSignalButton) {
@@ -656,7 +657,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     }
 	
 	public void addMethod() {
-		TraceManager.addDev("addMethod");
+		//TraceManager.addDev("addMethod");
         String s = methodText.getText();
 		AvatarMethod am = AvatarMethod.isAValidMethod(s);
 		AvatarMethod amtmp;
@@ -691,7 +692,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     }
 	
 	public void addSignal() {
-		TraceManager.addDev("addSignal");
+		//TraceManager.addDev("addSignal");
         String s = signalText.getText();
 		AvatarSignal as = AvatarSignal.isAValidSignal(signalInOutBox.getSelectedIndex(), s);
 		AvatarSignal astmp;
@@ -748,7 +749,9 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     
     public void upAttribute() {
         int i = listAttribute.getSelectedIndex();
+        //TraceManager.addDev("Selected index = " + i);
         if (i > 0) {
+            //TraceManager.addDev("Modifying ...");
             Object o = attributes.elementAt(i);
             attributes.removeElementAt(i);
             attributes.insertElementAt(o, i-1);
@@ -769,6 +772,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 	
 	public void upMethod() {
         int i = listMethod.getSelectedIndex();
+        //TraceManager.addDev("Selected index method = " + i);
         if (i > 0) {
             Object o = methods.elementAt(i);
             methods.removeElementAt(i);

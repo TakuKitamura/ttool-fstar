@@ -59,7 +59,6 @@ public class AvatarBlock extends AvatarElement {
 	private AvatarStateMachine asm;
 	
 	
-	
     public AvatarBlock(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		attributes = new LinkedList<AvatarAttribute>();

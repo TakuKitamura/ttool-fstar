@@ -124,6 +124,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
 	JTabbedPane commandTab, infoTab;
 	protected JTextField paramMainCommand;
+    protected JTextField saveDirName;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
 	protected JTextField benchmarkFileName;
@@ -483,6 +484,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
 		
+        jp02.add(new JLabel("Directory:"), c01);
+        saveDirName = new JTextField(30);
+        if (ConfigurationTTool.SystemCCodeDirectory != null) {
+            saveDirName.setText(ConfigurationTTool.SystemCCodeDirectory);
+        }
+        jp02.add(saveDirName, c01);
 		jp02.add(new JLabel("File name:"), c01);
 		saveFileName = new JTextField(30);
 		jp02.add(saveFileName, c01);
@@ -1757,6 +1764,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	public void sendSaveTraceCommand(String format) {
 		String param = saveFileName.getText().trim();
+        if (saveDirName.getText().length() > 0) {
+            param = saveDirName.getText() + File.separator + param;
+        }
 		if (param.length() >0) {
 			sendCommand("save-trace-in-file" + " " + format + " " + param);
 		} else {

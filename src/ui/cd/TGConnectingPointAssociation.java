@@ -37,7 +37,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 /**
  * Class TGConnectingPointAssociation
- * Definition of connecting points on which attrbiute connectors can be connected
+ * Definition of connecting points on which attribute connectors can be connected
  * Creation: 20/12/2003
  * @version 1.0 20/12/2003
  * @author Ludovic APVRILLE

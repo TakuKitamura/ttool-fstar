@@ -162,8 +162,9 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         jta.setTabSize(3);
         jta.append(text);
         jta.setFont(new Font("times", Font.PLAIN, 12));
-        jta.setPreferredSize(new Dimension(300, 200));
+       
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 200));
         panel1.add(jsp);
         //}
         

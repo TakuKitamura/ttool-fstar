@@ -87,9 +87,8 @@ public class JDialogNote extends javax.swing.JDialog implements ActionListener {
         jta.setTabSize(3);
         jta.append(text);
         jta.setFont(new Font("times", Font.PLAIN, 12));
-        jta.setPreferredSize(new Dimension(300, 300));
         JScrollPane jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
+        jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
         
         close = new JButton("Ok", IconManager.imgic25);
