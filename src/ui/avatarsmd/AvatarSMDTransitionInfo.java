@@ -85,8 +85,15 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		afterMax = "";
 		computeMin = "";
 		computeMax = "";
-		
-		
+        
+        
+		nbConnectingPoint = 4;
+        connectingPoint = new TGConnectingPoint[4];
+        connectingPoint[0] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointComment(this, 0, 0, true, true, 0.5, 1.0);
+        connectingPoint[2] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[3] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0, 0.5);
+        
         listOfActions = new Vector<String>();
         
         myImageIcon = IconManager.imgic302;
@@ -100,14 +107,21 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		int step = 0;
 		String s;
         h  = g.getFontMetrics().getHeight();
+        for (int j=0; j<nbConnectingPoint; j++) {
+            connectingPoint[j].setCdY(-h+1);
+        }
+        
         ColorManager.setColor(g, getState(), 0);
 		int inc = h;
+        
+        boolean atLeastOneThing = false;
 		
 		g.setColor(ColorManager.AVATAR_GUARD);
 		
 		if (guard.length() > 0) {
 			if (guard.compareTo("[ ]") != 0) {
 				g.drawString(guard, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(guard), width);
 					width = Math.max(minWidth, width);
@@ -122,6 +136,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			if (afterMax.length() > 0) {
 				s = "after (" + afterMin + "," + afterMax + ")";
 				g.drawString(s, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(s), width);
 					width = Math.max(minWidth, width);
@@ -130,6 +145,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			} else {
 				s = "after (" + afterMin + ")";
 				g.drawString(s, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(s), width);
 					width = Math.max(minWidth, width);
@@ -142,6 +158,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			if (computeMax.length() > 0) {
 				s = "computeFor (" + computeMin + "," + computeMax + ")";
 				g.drawString(s, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(s), width);
 					width = Math.max(minWidth, width);
@@ -150,6 +167,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			} else {
 				s = "computeFor (" + computeMin + ")";
 				g.drawString(s, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(s), width);
 					width = Math.max(minWidth, width);
@@ -164,6 +182,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			s = listOfActions.get(i);
 			if (s.length() > 0) {
 				g.drawString(s, x, y + step);
+                atLeastOneThing = true;
 				if (!tdp.isScaled()) {
 					width = Math.max(g.getFontMetrics().stringWidth(s), width);
 					width = Math.max(minWidth, width);
@@ -173,8 +192,12 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		}
 		
 		if (!tdp.isScaled()) {
-			height = step;
+			height = Math.max(step, minHeight);
 		}
+        
+        if (!atLeastOneThing) {
+            width=minWidth;
+        }
 		
 		ColorManager.setColor(g, state, 0);
 		if ((getState() == TGState.POINTER_ON_ME) ||  (getState() == TGState.POINTED)||  (getState() == TGState.MOVING)){

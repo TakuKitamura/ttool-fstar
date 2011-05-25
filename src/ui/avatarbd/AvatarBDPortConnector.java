@@ -58,7 +58,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public  class AvatarBDPortConnector extends TGConnector implements ScalableTGComponent {
+public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	protected int c = 10; //square length 

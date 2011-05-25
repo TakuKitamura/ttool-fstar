@@ -1104,6 +1104,28 @@ public abstract class TGComponent implements CDElement, GenericTree {
         return 	nbInternalTGComponent;
     }
     
+     public int getNbInternalPoints() {
+        int i;
+        int cpt = 0;
+        for(i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof TGCPointOfConnector) {
+                cpt ++;
+            }
+        }
+        return cpt;
+    }
+    
+    public void getTGCPointOfConnectors(TGCPointOfConnector [] _points) {
+        int index = 0;
+        int i;
+        for(i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof TGCPointOfConnector) {
+                _points[index] = ((TGCPointOfConnector)tgcomponent[i]);
+                index ++;
+            }
+        }
+    }
+    
     
     public int makeLovelyIds(int firstId) {
         int i;

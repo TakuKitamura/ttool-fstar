@@ -54,7 +54,7 @@ import javax.swing.*;
 import myutil.*;
 import ui.*;
 
-public  class AvatarSMDConnector extends TGConnector {
+public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints {
     protected int arrowLength = 10;
 	//protected AvatarSMDTransitionInfo myTransitionInfo;
     
