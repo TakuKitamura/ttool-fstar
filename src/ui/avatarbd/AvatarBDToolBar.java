@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarBDToolBar
- * Implements the toolbar to be used in conjunction with the panel of an AVATAR block diagram
- * Creation: 06/04/2010
- * @version 1.0 06/04/2010
- * @author Ludovic APVRILLE
- * @see AvatarBDPanel
- */
+* Class AvatarBDToolBar
+* Implements the toolbar to be used in conjunction with the panel of an AVATAR block diagram
+* Creation: 06/04/2010
+* @version 1.0 06/04/2010
+* @author Ludovic APVRILLE
+* @see AvatarBDPanel
+*/
 
 package ui.avatarbd;
 
@@ -78,11 +78,11 @@ public class AvatarBDToolBar extends TToolBar {
 		
         //mgui.actions[TGUIAction.ATD_ATTACK].setEnabled(b);
 		
-		 //mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
-		 
-		 //mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
+        //mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].setEnabled(b);
+        
+        //mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 		
-		//mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
         
     }
     
@@ -139,10 +139,10 @@ public class AvatarBDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
-		this.addSeparator();
+		this.addSeparator();*/
 		
-		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
-        button.addMouseListener(mgui.mouseHandler);*/
+	    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
+        button.addMouseListener(mgui.mouseHandler);
 		
 		
     }

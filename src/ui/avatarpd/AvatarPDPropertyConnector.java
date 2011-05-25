@@ -60,7 +60,7 @@ import ui.*;
 import ui.cd.*;
 import ui.window.*;
 
-public  class AvatarPDPropertyConnector extends TGConnector implements ScalableTGComponent {
+public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	protected int c = 10; //square length 

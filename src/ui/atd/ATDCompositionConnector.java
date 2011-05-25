@@ -60,7 +60,7 @@ import ui.*;
 import ui.cd.*;
 import ui.window.*;
 
-public  class ATDCompositionConnector extends TGConnector implements ScalableTGComponent{
+public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent{
     protected int d = 20;
 	protected int D = 26;
     //protected int widthValue, heightValue, maxWidthValue, h;

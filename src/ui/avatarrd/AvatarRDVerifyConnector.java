@@ -54,7 +54,7 @@ import myutil.*;
 
 import ui.*;
 
-public  class AvatarRDVerifyConnector extends TGConnector {
+public  class AvatarRDVerifyConnector extends TGConnectorWithCommentConnectionPoints {
     int w, h;
     
     public AvatarRDVerifyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -76,7 +76,7 @@ public  class AvatarRDVerifyConnector extends TGConnector {
 		
         w  = g.getFontMetrics().stringWidth(value);
         h = g.getFontMetrics().getHeight();
-        g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+        g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2)/2);
 		g.setFont(old);
     }
     

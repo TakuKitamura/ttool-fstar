@@ -54,7 +54,7 @@ import myutil.*;
 
 import ui.*;
 
-public  class AvatarRDCompositionConnector extends TGConnector {
+public  class AvatarRDCompositionConnector extends TGConnectorWithCommentConnectionPoints {
     int w, h;
 	private int radius = 5;
     

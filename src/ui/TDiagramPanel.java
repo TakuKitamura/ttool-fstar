@@ -187,6 +187,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	protected int internalCommentVisible = 0;
     protected boolean channelsVisible = true, eventsVisible = true, requestsVisible = true;
 	protected int attributesOn = 0;
+    
+    public final int OFF = 0;
+    public final int PARTIAL = 1;
+    public final int FULL = 2;
 	
 	int adjustMode = 0;
 	

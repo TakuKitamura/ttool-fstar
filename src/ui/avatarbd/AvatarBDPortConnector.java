@@ -158,6 +158,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		int w;
 		String s;
 		
+        
+        if (((g.getColor() == ColorManager.POINTER_ON_ME_0) && (tdp.getAttributeState() == tdp.PARTIAL)) || (tdp.getAttributeState() == tdp.FULL)) {
 		// Signals at origin
 		if (inSignalsAtOrigin.size() > 0) {
 			//g.drawString("in:", p1.getX() + decX, p1.getY() + h);
@@ -215,6 +217,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 				}
 			}
 		}
+        }
 		
 		g.setFont(fold);
 		
