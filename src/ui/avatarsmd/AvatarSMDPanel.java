@@ -190,8 +190,145 @@ public class AvatarSMDPanel extends TDiagramPanel {
 		}
 	}
 	
-	public boolean hasAutoConnect() {
-		return false;
+    public boolean hasAutoConnect() {
+		return true;
+	}
+	
+	public void autoConnect(TGComponent added) {
+		
+		
+		boolean cond = hasAutoConnect();
+		
+		if (!cond) {
+			return;
+		}
+		
+		int i, j;
+		
+		//TraceManager.addDev("Autoconnect");
+		
+		Vector listPoint = new Vector();
+		
+		Vector v = new Vector();
+		
+		int distance = 100;
+        int dist1, dist2;
+        int x1, y1;
+		TGConnectingPoint found = null;
+		int distanceTmp;
+		
+		boolean cd1, cd2;
+		
+		TGConnectingPoint tgcp, tgcp1;
+		
+		TGConnector tgco;
+		
+		TGComponent tgc;
+        Iterator iterator;
+        
+        boolean inTaken = false;
+        boolean outTaken = false;
+        
+        //Tries to locate the two closer connecting point both in and out
+        // Connection can occur only from top to down
+        
+        
+        int foundDistanceIn = 100;
+        int foundDistanceOut = 100;
+        TGConnectingPoint foundIn1 = null, foundIn2 = null;
+        TGConnectingPoint foundOut1 = null, foundOut2 = null;
+		
+        for(i=0; i<added.getNbConnectingPoint(); i++) {
+			tgcp = added.getTGConnectingPointAtIndex(i);
+            // Only two at most : one up, one down!
+			if (tgcp.isFree() && tgcp.isCompatibleWith(added.getDefaultConnector())) {
+				
+				// Try to connect that connecting point
+				found = null;
+				distance = 100;
+				
+				iterator = componentList.listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					if (tgc != added) {
+						for(j=0; j<tgc.getNbConnectingPoint(); j++) {
+							tgcp1 = tgc.getTGConnectingPointAtIndex(j);
+							if ((tgcp1 != null) && tgcp1.isFree()) {
+                                if (tgcp1.isCompatibleWith(added.getDefaultConnector())) {
+                                    if (tgcp1.getY() > tgcp.getY()) {
+                                        // out connector
+                                        if (tgcp.isOut() && tgcp1.isIn()) {
+                                            distanceTmp = (int)(Math.sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+                                            if (distanceTmp < foundDistanceOut) {
+                                                foundDistanceOut = distanceTmp;
+                                                foundOut1 = tgcp;
+                                                foundOut2 = tgcp1;
+                                            } else if ((distanceTmp == foundDistanceOut) && (foundOut1 != null)) {
+                                                // Distance from the center
+                                                x1 = added.getX() + added.getWidth() / 2;
+                                                y1 = added.getY()  + added.getHeight() / 2;
+                                                dist1 = (int)(Math.sqrt(Math.pow(foundOut1.getX() - x1, 2) + Math.pow(foundOut1.getY() - y1, 2)));
+                                                dist2 = (int)(Math.sqrt(Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
+                                                if (dist2 <= dist1) {
+                                                    foundOut1 = tgcp;
+                                                    foundOut2 = tgcp1;
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        // In connector
+                                        if (tgcp1.isOut() && tgcp.isIn()) {
+                                            distanceTmp = (int)(Math.sqrt(Math.pow(tgcp1.getX() - tgcp.getX(), 2) + Math.pow(tgcp1.getY() - tgcp.getY(), 2)));
+                                            if (distanceTmp < foundDistanceIn) {
+                                                foundDistanceIn = distanceTmp;
+                                                foundIn1 = tgcp1;
+                                                foundIn2 = tgcp;
+                                            } else if ((distanceTmp == foundDistanceIn) && (foundIn2 != null)) {
+                                                x1 = added.getX() + added.getWidth() / 2;
+                                                y1 = added.getY()  + added.getHeight() / 2;
+                                                dist1 = (int)(Math.sqrt(Math.pow(foundIn2.getX() - x1, 2) + Math.pow(foundIn2.getY() - y1, 2)));
+                                                dist2 = (int)(Math.sqrt(Math.pow(tgcp.getX() - x1, 2) + Math.pow(tgcp.getY() - y1, 2)));
+                                                if (dist2 <= dist1) {
+                                                    foundIn1 = tgcp1;
+                                                    foundIn2 = tgcp;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+							}
+						}
+					}
+				}
+				if (found != null) {
+					//TraceManager.addDev("Adding connector");
+					if (found.isIn()) {
+						tgco = TGComponentManager.addConnector(tgcp.getX(), tgcp.getY(), added.getDefaultConnector(), this, tgcp, found, listPoint);
+					} else {
+						tgco = TGComponentManager.addConnector(found.getX(), found.getY(), added.getDefaultConnector(), this, found, tgcp, listPoint);
+					}
+					found.setFree(false);
+					tgcp.setFree(false);
+					componentList.add(tgco);
+					//TraceManager.addDev("Connector added");
+				}
+			}
+		}
+        
+        if (foundIn1 != null) {
+            tgco = TGComponentManager.addConnector(foundIn1.getX(), foundIn1.getY(), added.getDefaultConnector(), this, foundIn1, foundIn2, listPoint);
+            foundIn1.setFree(false);
+            foundIn2.setFree(false);
+            componentList.add(tgco);
+        }
+        
+        if ((foundOut1 != null) && (foundOut1.isFree()) && (foundOut2.isFree())) {
+            tgco = TGComponentManager.addConnector(foundOut1.getX(), foundOut1.getY(), added.getDefaultConnector(), this, foundOut1, foundOut2, listPoint);
+            foundOut1.setFree(false);
+            foundOut2.setFree(false);
+            componentList.add(tgco);
+        }
+		//TraceManager.addDev("End Autoconnect");
 	}
     
 }
