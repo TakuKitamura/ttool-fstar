@@ -51,13 +51,13 @@ void addInfo(char *dest, char *info) {
   }
   s1[9] = '\0';
   
-  sprintf(dest, "#%d @%ld.%s %s", id, ts1.tv_sec, s1, info);
+  sprintf(dest, "#%d time=%ld.%s %s", id, ts1.tv_sec, s1, info);
   id ++;
 }
 
 
 void writeInTrace(char *info) {
-  char s[1024];
+  char s[CHAR_ALLOC_SIZE];
   addInfo(s, info);
 		 //printf("Write in file\n");
   if (file != NULL) {
@@ -88,7 +88,7 @@ void unactiveTracing() {
 
 
 void traceStateEntering(char *myname, char *statename) {
-  char s[1024];
+  char s[CHAR_ALLOC_SIZE];
 
   debugMsg("Trace function");
 
@@ -102,8 +102,8 @@ void traceStateEntering(char *myname, char *statename) {
   writeInTrace(s);
 }
 
-void traceFunctionCall(char *block, char *func) {
-  char s[1024];
+void traceFunctionCall(char *block, char *func, char *params) {
+  char s[CHAR_ALLOC_SIZE];
 
   debugMsg("Trace function");
 
@@ -111,11 +111,40 @@ void traceFunctionCall(char *block, char *func) {
     return;
   }
 
-  sprintf(s, "block=%s type=function_call func=%s\n", block, func);
+  sprintf(s, "block=%s type=function_call func=%s parameters=%s\n", block, func, params);
 
   // Saving trace
   writeInTrace(s);
 }
+
+
+// type=0: int type = 1:bool
+void traceVariableModification(char *block, char *var, int value, int type) {
+  char s[CHAR_ALLOC_SIZE];
+  debugMsg("Trace variable modification");
+
+  if (trace == TRACE_OFF) {
+    return;
+  }
+
+  
+  if (type == 0) {
+    sprintf(s, "block=%s type=variable_modification variable=%s setTo=%d\n", block, var, value);
+  }
+
+  if (type == 1) {
+    if (value == 0) {
+      sprintf(s, "block=%s type=variable_modification variable=%s setTo=false\n", block, var);
+    } else {
+      sprintf(s, "block=%s type=variable_modification variable=%s setTo=true\n", block, var);
+    }
+  }
+
+  // Saving trace
+  writeInTrace(s);
+
+}
+
 
 void traceRequest(char *myname, request *req) {
   char s[1024];

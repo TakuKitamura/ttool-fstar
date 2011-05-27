@@ -262,7 +262,25 @@ public class AVATAR2CPOSIX {
 			ret += ") {" + CR;
 			
 			if (tracing) {
-				ret += traceFunctionCall(_block.getName(), am.getName());
+                String tr = "";
+                cpt = 0;
+                if (list.size() > 0) {
+                    ret += "char my__attr[CHAR_ALLOC_SIZE];" + CR;
+                    ret += "sprintf(my__attr, \"";
+                    for(AvatarAttribute aa: list) {
+                        if (cpt != 0) {
+                            tr += ",";
+                            ret += ",";
+                        }
+                        tr += aa.getName();
+                        ret += "%d";
+                        cpt ++;
+                    }
+                    ret += "\"," + tr + ");" + CR;
+                    ret += traceFunctionCall(_block.getName(), am.getName(), "my__attr");
+                }  else {
+                    ret += traceFunctionCall(_block.getName(), am.getName(), null);
+                }
 			}
 			
 			if (debug) {
@@ -317,6 +335,10 @@ public class AVATAR2CPOSIX {
 		s+= "request *__returnRequest;" + CR;
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
+        
+        /*if (tracing) {
+            s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
+        }*/
 		
 		s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
 		
@@ -392,7 +414,8 @@ public class AVATAR2CPOSIX {
 			}
 			
 			String act;
-			for(i=0; i<at.getNbOfAction(); i++) {
+            ret += makeActionsOfTransaction(_block, at);
+			/*for(i=0; i<at.getNbOfAction(); i++) {
 				// Must know whether this is an action or a method call
 				act = at.getAction(i);
 				if (at.isAMethodCall(act)) {
@@ -400,7 +423,7 @@ public class AVATAR2CPOSIX {
 				} else {
 					ret +=  act + ";" + CR;
 				}
-			}
+			}*/
 			return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
 		}
 	
@@ -461,14 +484,16 @@ public class AVATAR2CPOSIX {
 					AvatarTransition at = (AvatarTransition)(_asme.getNext(i));
 					if (at.hasActions()) {
 						ret += " if (__returnRequest == &__req" + i + ") {" + CR;
-						for(int j=0; j<at.getNbOfAction(); j++) {
+                         ret += makeActionsOfTransaction(_block, at);
+						/*for(int j=0; j<at.getNbOfAction(); j++) {
 							if (at.isAMethodCall(at.getAction(j))) {
 								ret +=  modifyMethodName(_block, at.getAction(j)) + ";" + CR;
 							} else {
 								ret +=  at.getAction(j) + ";" + CR;
+                                    
 							}
 							
-						}
+						}*/
 						ret += makeBehaviourFromElement(_block, at.getNext(0), false) + CR + "}";
 					}  else {
 						if (at.getNext(0) instanceof AvatarActionOnSignal) {
@@ -741,12 +766,24 @@ public class AVATAR2CPOSIX {
 		}
 		return "traceRequest(__myname, __returnRequest);" + CR;
 	}
-	
-	private String traceFunctionCall(String blockName, String functionName) {
+    
+    private String traceVariableModification(String blockName, String varName, String type) {
 		if (!tracing) {
 			return "";
 		}
-		return "traceFunctionCall(\"" + blockName + "\", \"" + functionName + "\");" + CR;
+        
+		return "traceVariableModification(\"" + blockName + "\", \"" + varName + "\", " + varName + "," + type + ");" + CR;
+	}
+	
+	private String traceFunctionCall(String blockName, String functionName, String params) {
+		if (!tracing) {
+			return "";
+		}
+        
+        if (params == null) {
+            params = "\"-\"";
+        }
+		return "traceFunctionCall(\"" + blockName + "\", \"" + functionName + "\", " + params + ");" + CR;
 	}
 	
 	private String traceStateEntering(String name, String stateName) {
@@ -770,6 +807,36 @@ public class AVATAR2CPOSIX {
 		
 		return "debug2Msg(__myname, \"" + s + "\");" + CR;
 	}
-				
+    
+    public String makeActionsOfTransaction(AvatarBlock _block, AvatarTransition _at) {
+        String ret = "";
+        String act;
+        String var;
+        String type;
+        for(int i=0; i<_at.getNbOfAction(); i++) {
+            // Must know whether this is an action or a method call
+            act = _at.getAction(i);
+            if (_at.isAMethodCall(act)) {
+                ret +=  modifyMethodName(_block, act) + ";" + CR;
+            } else {
+                ret +=  act + ";" + CR;
+                 var = _at.getVariableInAction(act);
+                 AvatarAttribute aa;
+                    aa = _block.getAvatarAttributeWithName(var);
+                    if (aa != null) {
+                        if (aa.isInt()) {
+                            type = "0";
+                        } else {
+                            type = "1";
+                        }
+                        //ret += "sprintf(__value, \"%d\", " + var + ");" + CR;
+                         ret += traceVariableModification(_block.getName(), var, type);
+                    }
+               
+            }
+        }
+        
+        return ret;
+    }		
 	
 }

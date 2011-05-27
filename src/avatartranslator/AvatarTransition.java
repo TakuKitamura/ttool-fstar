@@ -312,6 +312,16 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		
 		return "Empty transition";
 	}
+    
+    public static String getVariableInAction(String action) {
+        action = action.trim();
+        int index = action.indexOf("=");
+        if (index == -1) {
+            return action;
+        }
+        
+        return action.substring(0, index).trim();
+    }
 	
 	
 	

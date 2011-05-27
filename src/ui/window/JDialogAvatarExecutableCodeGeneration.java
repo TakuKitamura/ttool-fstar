@@ -50,6 +50,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.io.*;
 import java.util.*;
 
 import myutil.*;
@@ -60,11 +61,14 @@ import avatartranslator.*;
 import avatartranslator.toexecutable.*;
 import launcher.*;
 
+import ui.interactivesimulation.*;
 
-public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog implements ActionListener, Runnable, MasterProcessInterface  {
+
+public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame implements ActionListener, Runnable, MasterProcessInterface  {
     
 	private static String[] unitTab = {"usec", "msec", "sec"}; 
 	
+    protected Frame f;
     protected MainGUI mgui;
     
     private String textSysC1 = "Base directory of code generation code:";
@@ -99,11 +103,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 	protected JRadioButton exe, exeint;
 	protected ButtonGroup exegroup;
     protected JLabel gen, comp;
-    protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int;
+    protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int, simulationTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode;
 	protected JComboBox versionCodeGenerator, units;
+    protected JButton showSimulationTrace;
 	
 	private static int selectedUnit = 2;
 	
@@ -120,9 +125,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
     
     
     /** Creates new form  */
-    public JDialogAvatarExecutableCodeGeneration(Frame f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute) {
-        super(f, title, true);
+    public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute) {
+        super(title);
         
+        f = _f;
         mgui = _mgui;
         
         if (pathCode == null) {
@@ -178,6 +184,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
         GridBagConstraints c03 = new GridBagConstraints();
         jp03.setLayout(gridbag03);
         jp03.setBorder(new javax.swing.border.TitledBorder("Execution"));
+        
+        JPanel jp04 = new JPanel();
+        GridBagLayout gridbag04 = new GridBagLayout();
+        GridBagConstraints c04 = new GridBagConstraints();
+        jp04.setLayout(gridbag04);
+        jp04.setBorder(new javax.swing.border.TitledBorder("Simulation trace"));
         
         
         c01.gridheight = 1;
@@ -279,7 +291,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
         jp03.add(exe, c03);
         
         exe2 = new JTextField(pathExecute, 100);
-        jp03.add(exe2, c02);
+        jp03.add(exe2, c03);
 		
 		/*exeint = new JRadioButton(textSysC5, true);
 		exeint.addActionListener(this);
@@ -293,6 +305,24 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
         jp03.add(new JLabel(" "), c03);
         
         jp1.add("Execute", jp03);
+        
+        // Panel 04
+        c04.gridheight = 1;
+        c04.weighty = 1.0;
+        c04.weightx = 1.0;
+        c04.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c04.fill = GridBagConstraints.BOTH;
+        c04.gridheight = 1;
+        simulationTraceFile = new JTextField(pathCode + File.separator + "trace.txt", 100);
+        jp04.add(simulationTraceFile, c04);
+        
+        showSimulationTrace = new JButton("Show simulation trace");
+        showSimulationTrace.addActionListener(this);
+         jp04.add(showSimulationTrace, c04);
+        
+        jp1.add("Results", jp04);
+        
+        
         
         c.add(jp1, BorderLayout.NORTH);
         
@@ -342,6 +372,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
 			selectedItem = versionCodeGenerator.getSelectedIndex();
 		} else if (evt.getSource() == units) {
 			selectedUnit = units.getSelectedIndex();
+		} else if (evt.getSource() == showSimulationTrace) {
+			showSimulationTrace();
 		}
     }
     
@@ -572,6 +604,16 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JDialog i
     
     public void setError() {
         hasError = true;
+    }
+    
+    public void showSimulationTrace() {
+        JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
+        jfssdp.setIconImage(IconManager.img8);
+        jfssdp.setSize(600, 600);
+        GraphicLib.centerOnParent(jfssdp);
+        jfssdp.setFileReference(simulationTraceFile.getText());
+        jfssdp.setVisible(true);
+        TraceManager.addDev("Ok JFrame");
     }
 	
 	
