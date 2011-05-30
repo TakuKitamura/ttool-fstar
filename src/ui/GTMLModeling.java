@@ -103,7 +103,7 @@ public class GTMLModeling  {
 	}
     
     public void putPrefixName(boolean _b) {
-        putPrefixName = b;
+        putPrefixName = _b;
     }
 	
     public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
