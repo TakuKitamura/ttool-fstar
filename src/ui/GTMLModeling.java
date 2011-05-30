@@ -74,6 +74,8 @@ public class GTMLModeling  {
 	TMLMapping map;
 	TMLArchitecture archi;
     
+    private boolean putPrefixName = false;
+    
     public GTMLModeling(TMLDesignPanel _tmldp, boolean resetList) {
         tmldp = _tmldp;
 		if (resetList) {
@@ -99,6 +101,10 @@ public class GTMLModeling  {
 	public TMLModeling translateToTMLModeling(boolean _resetID) {
 		return translateToTMLModeling(false, _resetID);
 	}
+    
+    public void putPrefixName(boolean _b) {
+        putPrefixName = b;
+    }
 	
     public TMLModeling translateToTMLModeling(boolean onlyTakenIntoAccount, boolean _resetID) {
         tmlm = new TMLModeling(_resetID);
@@ -2032,6 +2038,8 @@ public class GTMLModeling  {
 					namePanel = artifact.getReferenceTaskName();
 					try {
 						tup = (TURTLEPanel)(tmlap.getMainGUI().getTURTLEPanel(namePanel));
+                        
+                        // Regular design panel
 						if (tup instanceof TMLDesignPanel) {
 							tmldp = (TMLDesignPanel)tup;
 							if (panels.contains(tmldp)) {
@@ -2055,6 +2063,7 @@ public class GTMLModeling  {
 								checkingErrors.add(ce);
 							}
 							
+                          // Component design panel
 						} else if (tup instanceof TMLComponentDesignPanel) {
 							tmlcdp = (TMLComponentDesignPanel)(tup);
 							if (cpanels.contains(tmlcdp)) {
@@ -2115,6 +2124,7 @@ public class GTMLModeling  {
 			for(TMLComponentDesignPanel panel: cpanels) {
 				gtml =  new GTMLModeling(panel, false);
 				gtml.setComponents(allcomp);
+                 gtml.putPrefixName(true);
 				tmpm = gtml.translateToTMLModeling(true, false);
 				warnings.addAll(gtml.getCheckingWarnings());
 				if (gtml.getCheckingErrors().size() >0) {
