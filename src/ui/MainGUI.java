@@ -1262,6 +1262,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         frame.setVisible(true);
     }
     
+     public String getTitleOf(TDiagramPanel _tdp) {
+     	 TURTLEPanel panel;
+     	 for(int i=0; i<tabs.size(); i++) {
+     	 	 panel = (TURTLEPanel)(tabs.get(i));
+     	 	 if (panel.hasTDiagramPanel(_tdp)) {
+     	 	 	 return getTitleAt(panel);
+     	 	 }
+     	 }
+     	 
+     	 return "Unknown";
+  
+        
+    }
+    
     public String getTitleAt(TURTLEPanel tp) {
         int index = tabs.indexOf(tp);
         if (index == -1) {

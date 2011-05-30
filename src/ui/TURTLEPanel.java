@@ -77,6 +77,16 @@ public abstract class TURTLEPanel implements GenericTree {
     public TDiagramPanel panelAt(int index) {
         return (TDiagramPanel)(panels.elementAt(index));
     }
+    
+    public boolean hasTDiagramPanel(TDiagramPanel _tdp) {
+    	for(int i=0; i<panels.size(); i++) {
+    		if (panels.get(i) == _tdp) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+    }
 	
 	public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
 		for(int i=0; i<panels.size(); i++) {

@@ -646,6 +646,33 @@ public class TMLModeling {
 		tasks.addAll(tmlm.getTasks());
 	}
 	
+	// Elements with same names are not duplicated
+	public void advancedMergeWith(TMLModeling tmlm) {
+		for(TMLChannel ch: tmlm.getChannels()) {
+			if (!(hasSameChannelName(ch))) {
+				channels.add(ch);
+			}
+		}
+		
+		for(TMLEvent evt: tmlm.getEvents()) {
+			if (!(hasSameEventName(evt))) {
+				events.add(evt);
+			}
+		}
+		
+		for(TMLRequest req: tmlm.getRequests()) {
+			if (!(hasSameRequestName(req))) {
+				requests.add(req);
+			}
+		}
+		
+		for(TMLTask task: tmlm.getTasks()) {
+			if (getTMLTaskByName(task.getName()) == null) {
+				tasks.add(task);
+			}
+		}
+	}
+	
 	public void sortByName() {
 		ArrayList<TMLTask> ttasks = new ArrayList<TMLTask>();
 		ArrayList<TMLChannel> tchannels = new ArrayList<TMLChannel>();
