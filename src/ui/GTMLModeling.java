@@ -464,11 +464,14 @@ public class GTMLModeling  {
 				t1 = tmldp.tmltdp.getTask1ToWhichIamConnected(tmlro);
 				t2 = tmldp.tmltdp.getTask2ToWhichIamConnected(tmlro);
 				if ((t1 != null) && (t2 != null) && (tasksToTakeIntoAccount.contains(t1)) && (tasksToTakeIntoAccount.contains(t2)) ) {
+                    name = makeName(tgc, tmlro.getRequestName());
+                     addToTable(makeName(tgc, t1.getTaskName()) + "/" + tmlro.getRequestName(), name);
+                        addToTable(makeName(tgc, t2.getTaskName()) + "/" + tmlro.getRequestName(), name);
 					// Check whether there is another request having a different name but with the same destination task
 					request = tmlm.getRequestByDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName())));
 					
 					if (request != null) {
-						if (request.getName().compareTo(tmlro.getRequestName()) != 0) {
+						if (request.getName().compareTo(name) != 0) {
 							String msg = "Two requests declared with different names have the same destination task: " + tmlro.getRequestName();
 							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
 							ce.setTDiagramPanel(tmldp.tmltdp);
@@ -478,9 +481,10 @@ public class GTMLModeling  {
 						}
 					}
 					
-					request = tmlm.getRequestNamed(tmlro.getRequestName());
+					request = tmlm.getRequestNamed(name);
 					if (request == null) {
-						request = new TMLRequest(makeName(tgc, tmlro.getRequestName()), tmlro);
+						request = new TMLRequest(name, tmlro);
+                       
 						request.setDestinationTask(tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName())));
 						tmlm.addRequest(request);
 						for(int i=0; i<tmlro.getRequestMaxParam(); i++) {
@@ -1464,7 +1468,7 @@ public class GTMLModeling  {
 						}
 					}
 					if (request.getNbOfParams() != tmlsendrequest.getNbOfParams()) {
-						TraceManager.addDev("ERROR : event#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
+						TraceManager.addDev("ERROR : request#:" + request.getNbOfParams() + " sendrequest#:" + tmlsendrequest.getNbOfParams());
 						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADSendRequest)tgc).getRequestName() + ": wrong number of parameters");
 						ce.setTMLTask(tmltask);
 						ce.setTDiagramPanel(tadp);
@@ -2308,7 +2312,7 @@ public class GTMLModeling  {
 	}
 	
 	public String getFromTable(TMLTask task, String s) {
-		//TraceManager.addDev("Getting from channel task=" + task.getName() + " element=" + s);
+		TraceManager.addDev("TABLE GET: Getting from task=" + task.getName() + " element=" + s);
 		
 		if (table == null) {
 			return s;
