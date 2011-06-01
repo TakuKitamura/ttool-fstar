@@ -5227,6 +5227,7 @@ public class GTURTLEModeling {
 		mgui.setMode(MainGUI.VIEW_SUGG_DESIGN_KO);
 		
 		GTMLModeling gctmlm = new GTMLModeling(tmlcdp, true);
+        gctmlm.putPrefixName(true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
 		

@@ -648,6 +648,7 @@ public class TMLModeling {
 	
 	// Elements with same names are not duplicated
 	public void advancedMergeWith(TMLModeling tmlm) {
+        TraceManager.addDev("**************** Advanced merge!");
 		for(TMLChannel ch: tmlm.getChannels()) {
 			if (!(hasSameChannelName(ch))) {
 				channels.add(ch);
@@ -668,6 +669,7 @@ public class TMLModeling {
 		
 		for(TMLTask task: tmlm.getTasks()) {
 			if (getTMLTaskByName(task.getName()) == null) {
+                
 				tasks.add(task);
 			}
 		}

@@ -4274,22 +4274,38 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
     }
 	
-	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String name) {
+	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(TDiagramPanel _tdp, String name) {
 		TURTLEPanel tp;
 		TMLActivityDiagramPanel tmladp;
 		//TraceManager.addDev("global search for: " + name);
 		for(int i=0; i<tabs.size(); i++) {
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLComponentDesignPanel) {
-				tmladp = ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
-				if (tmladp != null) {
-					//TraceManager.addDev("Found");
-					return tmladp;
-				}
+                if (tp.hasTDiagramPanel(_tdp)) {
+                    tmladp = ((TMLComponentDesignPanel)tp).getTMLActivityDiagramPanel(name);
+                    if (tmladp != null) {
+                        //TraceManager.addDev("Found");
+                        return tmladp;
+                    }
+                }
 			}
 		}
 		
 		TraceManager.addDev("Not found");
+		return null;
+	}
+    
+    public TURTLEPanel getTURTLEPanelOfTDiagramPanel(TDiagramPanel _tdp) {
+		TURTLEPanel tp;
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLComponentDesignPanel) {
+                if (tp.hasTDiagramPanel(_tdp)) {
+                    return tp;
+        
+                }
+			}
+		}
 		return null;
 	}
 	

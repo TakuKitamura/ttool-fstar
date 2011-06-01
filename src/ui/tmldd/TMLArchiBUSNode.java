@@ -36,13 +36,13 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLArchiBUSNode
- * Node. To be used in TML architecture diagrams.
- * Creation: 31/10/2007
- * @version 1.0 31/10/2007
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLArchiBUSNode
+* Node. To be used in TML architecture diagrams.
+* Creation: 31/10/2007
+* @version 1.0 31/10/2007
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.tmldd;
 
@@ -68,6 +68,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 	private int byteDataSize = HwBus.DEFAULT_BYTE_DATA_SIZE;
 	private int pipelineSize = HwBus.DEFAULT_PIPELINE_SIZE;
 	private int arbitrationPolicy = HwBus.DEFAULT_ARBITRATION;
+    private int sliceTime = HwBus.DEFAULT_SLICE_TIME;
     
     public TMLArchiBUSNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -191,12 +192,12 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 		if (dialog.getNodeName().length() != 0) {
 			tmpName = dialog.getNodeName();
 			tmpName = tmpName.trim();
-			 if (!TAttribute.isAValidId(tmpName, false, false)) {
+            if (!TAttribute.isAValidId(tmpName, false, false)) {
                 error = true;
 				errors += "Name of the node  ";
-			 } else {
-				 name = tmpName;
-			 }
+            } else {
+                name = tmpName;
+            }
 		}
 		
 		arbitrationPolicy = dialog.getArbitrationPolicy();
@@ -228,6 +229,21 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 			} catch (Exception e) {
 				error = true;
 				errors += "Data size  ";
+			}
+		}
+        
+        if (dialog.getSliceTime().length() != 0) {	
+			try {
+				tmp = sliceTime;
+				sliceTime = Integer.decode(dialog.getSliceTime()).intValue();
+				if (sliceTime <= 0) {
+					sliceTime = tmp;
+					error = true;
+					errors += "Slice time  ";
+				}
+			} catch (Exception e) {
+				error = true;
+				errors += "Slice time  ";
 			}
 		}
 		
@@ -266,7 +282,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                 "Invalid value for the following attributes: " + errors,
                 "Error",
                 JOptionPane.INFORMATION_MESSAGE);
-                return false;
+            return false;
 		}
 		
         return true;
@@ -283,6 +299,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         sb.append("\" />\n");
 		sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
 		sb.append(" arbitrationPolicy=\"" + arbitrationPolicy + "\" ");
+        sb.append(" sliceTime=\"" + sliceTime + "\" ");
 		sb.append(" pipelineSize=\"" + pipelineSize + "\" ");
 		sb.append(" clockRatio=\"" + clockRatio + "\" ");
         sb.append("/>\n");
@@ -325,8 +342,11 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();
 								pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
-							if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
+                                if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
 									clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
+								}
+                                if ((elt.getAttribute("sliceTime") != null) &&  (elt.getAttribute("sliceTime").length() > 0)){
+									sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
 								}
                             }
                         }
@@ -339,31 +359,36 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         }
     }
     
-	  
-	  public int getByteDataSize(){
-		  return byteDataSize;
-	  }
-	  
-	  public int getPipelineSize(){
-		  return pipelineSize;
-	  }
-	  
-	  public int getArbitrationPolicy(){
-		  return arbitrationPolicy;
-	  }
-	  
-	  public String getAttributes() {
-		  String attr = "";
-		  attr += "Data size (in byte) = " + byteDataSize + "\n";
-		  attr += "Pipeline size = " + pipelineSize + "\n";
-		  if (arbitrationPolicy == HwBus.DEFAULT_ARBITRATION) {
-			  attr += "Arbitration policy = basic Round Robin\n";
-		  } else if (arbitrationPolicy == HwBus.PRIORITY_BASED) {
-			  attr += "Arbitration policy = priority based\n";
-		  }
-		   attr += "Clock ratio = " + clockRatio + "\n";
-		  return attr;
-	  }
-	  
+    
+    public int getByteDataSize(){
+        return byteDataSize;
+    }
+    
+    public int getPipelineSize(){
+        return pipelineSize;
+    }
+    
+    public int getSliceTime(){
+		return sliceTime;
+	}
+    
+    public int getArbitrationPolicy(){
+        return arbitrationPolicy;
+    }
+    
+    public String getAttributes() {
+        String attr = "";
+        attr += "Data size (in byte) = " + byteDataSize + "\n";
+        attr += "Pipeline size = " + pipelineSize + "\n";
+        if (arbitrationPolicy == HwBus.DEFAULT_ARBITRATION) {
+            attr += "Arbitration policy = basic Round Robin\n";
+        } else if (arbitrationPolicy == HwBus.PRIORITY_BASED) {
+            attr += "Arbitration policy = priority based\n";
+        }
+        attr += "Slice time (in microseconds) = " + sliceTime + "\n"; 
+        attr += "Clock ratio = " + clockRatio + "\n";
+        return attr;
+    }
+    
     
 }

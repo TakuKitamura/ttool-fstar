@@ -161,6 +161,7 @@ public class TMLSyntaxChecking {
 				
 				if (elt instanceof TMLSendEvent) {
 					evt = ((TMLSendEvent)elt).getEvent();
+                     TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
 					if (evt.getOriginTask() != t) {
 						addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
 					}
@@ -168,6 +169,7 @@ public class TMLSyntaxChecking {
 				
 				if (elt instanceof TMLWaitEvent) {
 					evt = ((TMLWaitEvent)elt).getEvent();
+                    TraceManager.addDev("wait evt= " + evt.getName() + " task=" + t.getName() + " destination=" + evt.getDestinationTask().getName());
 					if (evt.getDestinationTask() != t) {
 						addError(t, elt, evt.getName() + ": " + WRONG_DESTINATION_EVENT, TMLError.ERROR_BEHAVIOR);
 					}

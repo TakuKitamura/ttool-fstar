@@ -141,14 +141,14 @@ public class JDialogCPUNode extends javax.swing.JDialog implements ActionListene
 		c2.gridwidth = 1;
 		panel2.add(new JLabel("Slice time (in microseconds):"), c2);
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		nbOfCores = new JTextField(""+node.getSliceTime(), 15);
-		panel2.add(nbOfCores, c2);
+		sliceTime = new JTextField(""+node.getSliceTime(), 15);
+		panel2.add(sliceTime, c2);
 		
 		c2.gridwidth = 1;
 		panel2.add(new JLabel("Nb of cores:"), c2);
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-		sliceTime = new JTextField(""+node.getNbOfCores(), 15);
-		panel2.add(sliceTime, c2);
+		nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
+		panel2.add(nbOfCores, c2);
 		
 		c2.gridwidth = 1;
 		panel2.add(new JLabel("Data size (in byte):"), c2);

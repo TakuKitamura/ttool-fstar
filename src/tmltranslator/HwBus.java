@@ -54,6 +54,7 @@ public class HwBus extends HwCommunicationNode  {
 	public static final int PRIORITY_BASED = 1;
 	public static final int CAN = 2;
 	public static final int CROSSBAR = 3;
+    public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
 	
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 	public static final int DEFAULT_PIPELINE_SIZE = 1;
@@ -62,6 +63,7 @@ public class HwBus extends HwCommunicationNode  {
 	public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
 	public int pipelineSize = DEFAULT_PIPELINE_SIZE;
 	public int arbitration = DEFAULT_ARBITRATION;
+    public int sliceTime = DEFAULT_SLICE_TIME;
 	
 	public HwBus(String _name) {
 		super(_name);

@@ -72,6 +72,7 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
 	// Panel2
     protected JTextField byteDataSize, pipelineSize, clockRatio;
 	protected JComboBox arbitrationPolicy;
+    protected JTextField sliceTime;
 	
     
     // Main Panel
@@ -151,6 +152,12 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
+        
+        c2.gridwidth = 1;
+		panel2.add(new JLabel("Slice time (in microseconds):"), c2);
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		sliceTime = new JTextField(""+node.getSliceTime(), 15);
+		panel2.add(sliceTime, c2);
 		
 		c2.gridwidth = 1;
         panel2.add(new JLabel("Clock ratio:"), c2);
@@ -228,6 +235,10 @@ public class JDialogBUSNode extends javax.swing.JDialog implements ActionListene
     public int getArbitrationPolicy() {
         return arbitrationPolicy.getSelectedIndex();
     }
+    
+    public String getSliceTime() {
+		return sliceTime.getText();
+	}
     
     
 }

@@ -82,7 +82,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
         return null;
     }
 	
-	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(String _name) {
+	public TMLActivityDiagramPanel getReferencedTMLActivityDiagramPanel(TDiagramPanel _tdp, String _name) {
 		//System.out.println("Searching for activity diagram of:" + _name);
         TMLActivityDiagramPanel tmladp = getTMLActivityDiagramPanel(_name);
 		if (tmladp != null) {
@@ -91,7 +91,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 		}
         
 		// Search on other tabs
-		return mgui.getReferencedTMLActivityDiagramPanel(_name);
+		return mgui.getReferencedTMLActivityDiagramPanel(_tdp, _name);
     }
     
     public void addTMLActivityDiagram(String s) {
@@ -185,7 +185,7 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
                 tmlcpc = (TMLCPrimitiveComponent)tgc;
 				if (tmlcpc.getDIPLOID() != -1) {
 					//System.out.println("Searching for ad of name: " + tmlcpc.getValue());
-					tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getValue());
+					tmladp = mgui.getReferencedTMLActivityDiagramPanel(tmlcpc.getTDiagramPanel(), tmlcpc.getValue());
 					if (tmladp != null) {
 						tmladp.getListOfBreakPoints(points, tmlcpc.getDIPLOID());
 					} else {
