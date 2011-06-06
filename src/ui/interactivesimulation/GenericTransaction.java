@@ -58,11 +58,13 @@ public class GenericTransaction  {
     public final static int FUNCTION_CALL = 1;
     public final static int STATE_ENTERING = 2;
     public final static int VAR_MODIFICATION = 3;
+    public final static int SEND_SYNCHRO = 4;
     
 	public int ID;
     public int type;
     public String entityName;
-    public String name;
+    public String otherEntityName; /*  name of destination in synchro, etc. */
+    public String name; /* Used for channel names */
     public String action;
     public long startingTime;
     public long finishTime;
