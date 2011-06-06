@@ -150,7 +150,7 @@ public class TML2MappingSystemC {
 		header += "#include <AliasConstraint.h>\n#include <EqConstraint.h>\n#include <LogConstraint.h>\n#include <PropLabConstraint.h>\n";
 		header += "#include <PropRelConstraint.h>\n#include <SeqConstraint.h>\n#include <SignalConstraint.h>\n#include <TimeMMConstraint.h>\n";
 		header += "#include <TimeTConstraint.h>\n";
-		header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <RRScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
+		header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <RRScheduler.h>\n#include <RRPrioScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
 		header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
 		header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
 		header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
@@ -178,8 +178,11 @@ public class TML2MappingSystemC {
 				if (exNode.getType().equals("CPURRPB"))
 					declaration += "PrioScheduler* " + exNode.getName() + "_scheduler = new PrioScheduler(\"" + exNode.getName() + "_PrioSched\",0)" + SCCR;
 				else
-					 declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
-				for(int cores=0; cores<exNode.nbOfCores; cores++){
+					//tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
+					 //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
+					 declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float)(exNode.clockRatio * Math.max(exNode.execiTime,exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize +100 - exNode.branchingPredictionPenalty))/100) + " ) " + SCCR;
+				//for(int cores=0; cores<exNode.nbOfCores; cores++){
+				for(int cores=0; cores<1; cores++){
 				//if (tmlmapping.isAUsedHwNode(node)) {	
 					declaration += "CPU* " + exNode.getName() + cores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + cores + "\", " + exNode.getName() + "_scheduler" + ", ";
 					
@@ -242,7 +245,8 @@ public class TML2MappingSystemC {
 					for(HwLink link: nodeLinks){
 						//declaration+= "BusMaster* " + node.getName() + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + node.getName() + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", 1, array(1, (SchedulableCommDevice*)" +  link.bus.getName() + "))" + SCCR;
 						int noOfCores;
-						if (node instanceof HwCPU) noOfCores= ((HwCPU)node).nbOfCores; else noOfCores=1;
+						//if (node instanceof HwCPU) noOfCores= ((HwCPU)node).nbOfCores; else noOfCores=1;
+						noOfCores=1;
 						for (int cores=0; cores<noOfCores; cores++){
 							String nodeName=node.getName();
 							if (node instanceof HwCPU) nodeName+= cores;
@@ -280,6 +284,7 @@ public class TML2MappingSystemC {
 					param= "";
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
+				System.out.println("Channel: " + channel.getName());
 				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority() + ")"+ SCCR;
 				declaration += "addChannel("+ channel.getExtendedName() +")"+ SCCR;
 			}
@@ -303,6 +308,7 @@ public class TML2MappingSystemC {
 			}
 			//param += "," + evt.getNbOfParams();
 			if (tmlmapping.isCommNodeMappedOn(evt,null)){
+				System.out.println("Evt: " + evt.getName());
 				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param +")" + SCCR;
 				
 			}else{
@@ -319,6 +325,7 @@ public class TML2MappingSystemC {
 			if (task.isRequested()){
 				if (tmlmapping.isCommNodeMappedOn(task.getRequest(),null)){
 					//declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +
+					System.out.println("Request: " + task.getRequest().getName());
 					declaration += "TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">(" +
 					task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," +
 					determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
@@ -343,7 +350,8 @@ public class TML2MappingSystemC {
 					for(HwLink link: busLinks){
 						if (link.hwnode instanceof HwExecutionNode || link.hwnode instanceof HwBridge){
 								if (link.hwnode instanceof HwCPU){
-									for (int cores=0; cores< ((HwCPU)link.hwnode).nbOfCores; cores++){
+									//for (int cores=0; cores< ((HwCPU)link.hwnode).nbOfCores; cores++){
+									for (int cores=0; cores< 1; cores++){
 										devices += ", (WorkloadSource*)" + link.hwnode.getName()+ cores + "_" + node.getName() + "_Master";
 										numDevices++;
 									}
@@ -355,6 +363,7 @@ public class TML2MappingSystemC {
 					}
 					declaration += node.getName() + "_0->setScheduler((WorkloadSource*) new ";
 					if (((HwBus)node).arbitration==HwBus.BASIC_ROUND_ROBIN)
+						//declaration+="RRScheduler(\"" + node.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)node.clockRatio)/((float)((HwBus)node).byteDataSize)) + ", array(";
 						declaration+="RRScheduler(\"" + node.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)node.clockRatio)/((float)((HwBus)node).byteDataSize)) + ", array(";
 					else
 						declaration+="PrioScheduler(\"" + node.getName() + "_PrioSched\", 0, array(";
@@ -382,11 +391,14 @@ public class TML2MappingSystemC {
 			int noOfCores;
 			declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\", array(";
 			if (node instanceof HwCPU){
-				declaration+= ((HwCPU)node).nbOfCores;
-				for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+				//declaration+= ((HwCPU)node).nbOfCores;
+				declaration+= 1;
+				//for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+				for (int cores=0; cores< 1; cores++){
 					declaration+= "," + node.getName()+cores;
 				}
-				declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+				//declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+				declaration+= "),1" + CR;
 			}else{ 
 			 	declaration += "1," + node.getName() + "),1" + CR; 
 			}
