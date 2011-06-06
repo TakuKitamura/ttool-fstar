@@ -99,8 +99,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
     private static int[] clockDivisers = {1000000000, 1000000, 1000, 1};
     protected JComboBox units;
     
-	protected JButton buttonClose;
-    protected JButton buttonRefresh;
+	protected JButton buttonClose, buttonRefresh;
     protected JSimulationSDPanel sdpanel;
     protected JLabel status;
     //, buttonStart, buttonStopAndClose;
@@ -147,6 +146,8 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
         units.setSelectedIndex(1);
         units.addActionListener(this);
         topPanel.add(units);
+		buttonRefresh = new JButton(actions[InteractiveSimulationActions.ACT_REFRESH]);
+        topPanel.add(buttonRefresh);
         framePanel.add(topPanel, BorderLayout.NORTH);
         
         // Simulation panel
@@ -186,6 +187,12 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 		setVisible(false);
 		
 	}
+	
+	public void refresh() {
+		if (sdpanel != null ){
+			sdpanel.refresh();
+		}
+	}
     
 	
 	public void	actionPerformed(ActionEvent evt)  {
@@ -194,6 +201,10 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 		
 		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
 			close();
+			return;
+			//TraceManager.addDev("Start simulation!");
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_REFRESH].getActionCommand()))  {
+			refresh();
 			return;
 			//TraceManager.addDev("Start simulation!");
 		} else if (evt.getSource() == units) {

@@ -161,7 +161,10 @@ void traceRequest(char *myname, request *req) {
   switch(req->type) {
   case SEND_SYNC_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
-    sprintf(s, "block=%s type=send_synchro channel=%s\n", myname, req->syncChannel->outname);
+    if ( req->relatedRequest == NULL) {
+      printf("NULL related\n");
+    }
+    sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s\n", myname, req->syncChannel->outname, req->relatedRequest->listOfRequests->owner);
     break;
   case RECEIVE_SYNC_REQUEST:
     sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);

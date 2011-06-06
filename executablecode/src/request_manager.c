@@ -41,7 +41,17 @@ void executeSendSyncTransaction(request *req) {
 
   // Remove all related request from list requests
   //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
+  debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
+  selectedReq->relatedRequest = req;
+
+  if (req->relatedRequest == NULL) {
+    debugMsg("NULL related req");
+  }
+
+  if (selectedReq->relatedRequest == NULL) {
+    debugMsg("Other NULL related req");
+  }
 
   // Select the selected request, and notify the information
   selectedReq->selected = 1;
@@ -80,7 +90,17 @@ void executeReceiveSyncTransaction(request *req) {
   } 
 
   //req->syncChannel->outWaitQueue = removeRequestFromList(req->syncChannel->outWaitQueue, selectedReq);
+  debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
+  selectedReq->relatedRequest = req;
+
+  if (req->relatedRequest == NULL) {
+    debugMsg("NULL related req");
+  }
+
+  if (selectedReq->relatedRequest == NULL) {
+    debugMsg("Other NULL related req");
+  }
 
   // Select the request, and notify the information in the channel
   selectedReq->selected = 1;
@@ -403,7 +423,7 @@ void private__makeRequest(request *req) {
   // In all cases: remove other requests of the same list from their pending form
   debugMsg("Removing original req");
   removeAllPendingRequestsFromPendingLists(req, 1);
-  removeAllPendingRequestsFromPendingListsRelatedRequests(req);
+  //removeAllPendingRequestsFromPendingListsRelatedRequests(req);
   /*if (req->relatedRequest != NULL) {
     debugMsg("Removing related req");
     removeAllPendingRequestsFromPendingLists(req->relatedRequest, 0);
@@ -416,7 +436,7 @@ void removeAllPendingRequestsFromPendingListsRelatedRequests(request *req) {
     debugMsg("Removing related req");
     removeAllPendingRequestsFromPendingLists(req->relatedRequest, 0);
     // Recursive call
-    removeAllPendingRequestsFromPendingListsRelatedRequests(req->relatedRequest);
+    //removeAllPendingRequestsFromPendingListsRelatedRequests(req->relatedRequest);
   }
 }
 

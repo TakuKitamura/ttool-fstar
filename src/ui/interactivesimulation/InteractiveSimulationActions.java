@@ -92,13 +92,15 @@ public class InteractiveSimulationActions extends AbstractAction {
 	public static final int ACT_UPDATE_BUS = 18;  
 	public static final int ACT_UPDATE_TASKS = 19;
 	
+	public static final int ACT_REFRESH = 32;
+	
 	public static final int ACT_PRINT_CPUS = 28;
 	public static final int ACT_PRINT_BUS = 29;
 	
 	public static final int ACT_ANALYSIS_RG = 30;
 	public static final int ACT_VIEW_RG = 31;
    
-    public static final int NB_ACTION = 32;
+    public static final int NB_ACTION = 33;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -169,6 +171,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_UPDATE_MEMS] = new TAction("update-mems", "Update Memories information", IconManager.imgic75, IconManager.imgic75, "Update Memories information", "Update information on Memories", 'R');
         actions[ACT_UPDATE_BUS] = new TAction("update-bus", "Update bus info", IconManager.imgic75, IconManager.imgic75, "Update bus information", "Update information on busses", 'R');
         actions[ACT_UPDATE_TASKS] = new TAction("update-tasks", "Update task information", IconManager.imgic75, IconManager.imgic75, "Update task information", "Update information on tasks", 'R');
+		actions[ACT_REFRESH] = new TAction("refresh", "Refresh transactions", IconManager.imgic75, IconManager.imgic75, "Refresh", "Refresh the Sequence Diagram representing transactions", 'R');
 		
 		actions[ACT_PRINT_CPUS] = new TAction("print-cpus", "Print CPU info", IconManager.imgic75, IconManager.imgic75, "Print CPU information", "Print information on CPUs", 'R');
 		actions[ACT_PRINT_BUS] = new TAction("print-bus", "Print Bus info", IconManager.imgic75, IconManager.imgic75, "Print Bus information", "Print information on Busses", 'R');

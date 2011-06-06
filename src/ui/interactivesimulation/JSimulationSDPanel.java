@@ -727,6 +727,17 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         Thread t = new Thread(this);
         t.start();
     }
+	
+	public void refresh() {
+		if (mode == FILE_MODE) {
+			entityNames.clear();
+			transactions.clear();
+			transactionsOfPoints.clear();
+			points.clear();
+			Thread t = new Thread(this);
+			t.start();
+		}
+	}
     
     public void run() {
         TraceManager.addDev("Reading file");

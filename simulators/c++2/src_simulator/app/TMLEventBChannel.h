@@ -168,7 +168,8 @@ public:
 	std::ostream& writeObject(std::ostream& s){
 		TMLEventSizedChannel<T,paramNo>::writeObject(s);
 		if (_eventFile!=0){
-			std::istream::streampos aPos=_eventFile->tellg();
+			//std::istream::streampos aPos=_eventFile->tellg();
+			int aPos=_eventFile->tellg();
 			WRITE_STREAM(s,aPos);
 	#ifdef DEBUG_SERIALIZE
 			std::cout << "Write: TMLEventBChannel " << this->_name << " posInFile: " <<  _eventFile->tellg() << std::endl;
@@ -178,7 +179,8 @@ public:
 	}
 
 	std::istream& readObject(std::istream& s){
-		std::istream::streampos aPos;
+		//std::istream::streampos aPos;
+		int aPos;
 		TMLEventSizedChannel<T,paramNo>::readObject(s);
 		//std::cout << "Read Object TMLEventBChannel " << _name << std::endl;
 		if (_eventFile!=0){
