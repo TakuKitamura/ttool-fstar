@@ -100,6 +100,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
     protected JComboBox units;
     
 	protected JButton buttonClose;
+    protected JButton buttonRefresh;
     protected JSimulationSDPanel sdpanel;
     protected JLabel status;
     //, buttonStart, buttonStopAndClose;
