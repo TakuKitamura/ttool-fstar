@@ -57,6 +57,8 @@ public:
 	\param iChannel Channel on which data was conveyed
     	*/
 	TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel=0);
+	///Constructor
+	TMLTransaction();
 	///Returns the time when the transaction became runnable
 	/**
       	\return Runnable time
@@ -142,20 +144,16 @@ public:
       	\param iTaskSwitchingPenalty Task switching penalty
     	*/	
 	void setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty);
-	///Returns the branching panalty of the transaction
-	/**
-      	\return Branching penalty
-    	*/	
-	TMLTime getBranchingPenalty() const;
-	///Sets the branching panalty of the transaction
-	/**
-      	\param iBranchingPenalty Branching penalty
-    	*/
-	void setBranchingPenalty(TMLTime iBranchingPenalty);
-	/////Returns the terminated flag of the transaction
-	//bool getTerminatedFlag() const;
-	/////Sets the terminated flag of the transaction to true
-	//void setTerminatedFlag();
+	/////Returns the branching panalty of the transaction
+	////**
+      	//\return Branching penalty
+    	//*/	
+	//TMLTime getBranchingPenalty() const;
+	////Sets the branching panalty of the transaction
+	////**
+      	////\param iBranchingPenalty Branching penalty
+    	//*/
+	//void setBranchingPenalty(TMLTime iBranchingPenalty);
 	///Returns a string representation of the transaction
 	/**
 	\return Detailed string representation
@@ -200,8 +198,8 @@ protected:
 	TMLTime _idlePenalty;
 	///Task switching penalty
 	TMLTime _taskSwitchingPenalty;
-	///Branching penalty
-	TMLTime _branchingPenalty;
+	/////Branching penalty
+	//TMLTime _branchingPenalty;
 #endif
 	///Channel on which data was conveyed
 	TMLChannel* _channel;

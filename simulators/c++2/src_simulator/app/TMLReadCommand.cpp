@@ -75,7 +75,8 @@ TMLCommand* TMLReadCommand::prepareNextTransaction(){
 		}
 	}
 
-	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
+	_currTransaction = new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test read" << std::endl;
 	//std::cout << "--begin-- TMLReadCommand::prepareNextTransaction\n"; 
 	_channel->testRead(_currTransaction);

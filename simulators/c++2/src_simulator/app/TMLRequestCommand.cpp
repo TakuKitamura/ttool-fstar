@@ -62,7 +62,8 @@ void TMLRequestCommand::execute(){
 
 TMLCommand* TMLRequestCommand::prepareNextTransaction(){
 	//std::cout << "prepare bext transaction testWrite prg:" << _progress << " to execute:" << (*_pLength)-_progress << std::endl;
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
+	_currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
 	_channel->testWrite(_currTransaction);
 	return this;
 }

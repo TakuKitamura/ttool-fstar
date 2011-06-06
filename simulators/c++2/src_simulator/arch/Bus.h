@@ -77,7 +77,7 @@ public:
 	///Determines the next bus transaction to be executed
 	void schedule();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	bool addTransaction();
+	bool addTransaction(TMLTransaction* iTransToBeAdded);
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction

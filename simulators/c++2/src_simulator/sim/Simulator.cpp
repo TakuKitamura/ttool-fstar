@@ -407,7 +407,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
 		std::cout << "kernel:simulate: add trans " << commandLET->toString() << std::endl;
 #endif
-		if (cpuLET->addTransaction()){
+		if (cpuLET->addTransaction(0)){
 		 unsigned int nbOfChannels = commandLET->getNbOfChannels();
 		 //bool aRescheduleCoresFlag=false;
 		 for (unsigned int i=0;i<nbOfChannels; i++){
@@ -492,8 +492,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		//_syncInfo->_server->sendReply("Sleep once again\n");
 		//sleep(1);
 	}
-#ifdef LISTENERS_ENABLED
+
 	bool aSimCompleted = (transLET==0 && !_simComp->getStoppedOnAction());
+#ifdef LISTENERS_ENABLED
 	if (aSimCompleted){
 		NOTIFY_SIM_STOPPED();
 		NOTIFY_EVALUATE();
@@ -501,7 +502,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
 	gettimeofday(&aEnd,NULL);
 	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
-	//_simComp->showTaskStates();
+	_simComp->showTaskStates();
 	return (aSimCompleted);
 }
 

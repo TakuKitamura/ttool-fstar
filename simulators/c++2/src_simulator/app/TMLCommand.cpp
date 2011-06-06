@@ -60,17 +60,14 @@ TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int i
 		_instanceList.push_back(this);
 		_task->addCommand(iID, this);
 	}
-	//if (_liveVarList!=0) _hash = new HashAlgo(static_cast<HashValueType>(this), 70);
 }
 
 TMLCommand::~TMLCommand(){
-	if (_currTransaction!=0) delete _currTransaction;
+	//if (_currTransaction!=0) delete _currTransaction;  NEW
 	//if (_currTransaction!=0) std::cout << "transaction not yet deleted: " << getCommandStr() << std::endl;
 	if (_nextCommand!=0) delete[] _nextCommand;
-	//if (_param!=0) delete _param;
 	_instanceList.remove(this);
 	removeBreakpoint();
-	//if (_liveVarList!=0) delete _hash;
 }
 
 TMLCommand* TMLCommand::prepare(bool iInit){
@@ -257,14 +254,13 @@ std::istream& TMLCommand::readObject(std::istream& s){
 
 void TMLCommand::reset(){
 	_progress=0;
-	if (_currTransaction!=0) delete _currTransaction;
+	//if (_currTransaction!=0) delete _currTransaction; NEW
 	_currTransaction=0;
 	_commandStartTime=-1;
 	//_execTimes=0;
 	_stateHashes.clear();
 }
 
-//void TMLCommand::registerGlobalListener(CommandListener* iListener){
 void TMLCommand::registerGlobalListener(GeneralListener* iListener){
 	std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
@@ -273,7 +269,6 @@ void TMLCommand::registerGlobalListener(GeneralListener* iListener){
 }
 
 template<typename T>
-//void TMLCommand::registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask){
 void TMLCommand::registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask){
 	//std::cout << "Global cmd listener created \n";
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
@@ -281,7 +276,6 @@ void TMLCommand::registerGlobalListenerForType(GeneralListener* iListener, TMLTa
 	}
 }
 
-//void TMLCommand::removeGlobalListener(CommandListener* iListener){
 void TMLCommand::removeGlobalListener(GeneralListener* iListener){
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->removeListener(iListener);
@@ -332,12 +326,6 @@ TMLCommand* TMLCommand::getCommandByID(ID iID){
 unsigned int TMLCommand::getType(){
 	return _type;
 }
-
-/*template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(CommandListener* iListener, TMLTask* aTask);
-template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(CommandListener* iListener, TMLTask* aTask);
-template void TMLCommand::registerGlobalListenerForType<TMLActionCommand>(CommandListener* iListener, TMLTask* aTask);
-template void TMLCommand::registerGlobalListenerForType<TMLNotifiedCommand>(CommandListener* iListener, TMLTask* aTask);
-template void TMLCommand::registerGlobalListenerForType<TMLWaitCommand>(CommandListener* iListener, TMLTask* aTask);*/
 
 template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(GeneralListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(GeneralListener* iListener, TMLTask* aTask);

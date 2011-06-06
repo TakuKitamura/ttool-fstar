@@ -88,12 +88,18 @@ Ludovic Apvrille, Renaud Pacalet
 class HashAlgo{
 public:	
 	
-	HashAlgo(){
+	HashAlgo()/*: _bufferSize(0), _buffer(0), _bufferPos(0)*/{
 		init(0,0);
 	}
 	
-	HashAlgo(HashValueType iInitVal, HashValueType iLength){
+	HashAlgo(HashValueType iInitVal, HashValueType iLength /*, iBufferSize=0*/)/*: _bufferSize(iBufferSize), _buffer(0), _bufferPos(0)*/{
 		init(iInitVal, iLength);
+		//if (_bufferSize!=0) _buffer = new HashValueType[_bufferSize];
+		//memset(_buffer, 0, _bufferSize*sizeof(HashValueType));
+	}
+	
+	~HashAlgo(){
+		//if (_bufferSize!=0) delete [] _buffer;
 	}
 	
 	void init(HashValueType iInitVal, HashValueType iLength){
@@ -143,5 +149,8 @@ public:
 	mutable HashValueType _result;
 	char _state;
 	mutable bool _finalized;
+	//unsigned int _bufferSize;
+	//HashValueType * _buffer;
+	//unsigned int _bufferPos;
 };
 #endif

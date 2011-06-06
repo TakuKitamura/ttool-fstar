@@ -37,14 +37,14 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef RRSchedulerH
-#define RRSchedulerH
+#ifndef RRPrioSchedulerH
+#define RRPrioSchedulerH
 #include <WorkloadSource.h>
 
 class TMLTransaction;
 
-///Round Robin scheduler
-class RRScheduler: public WorkloadSource{
+///Round Robin Priotity based scheduler
+class RRPrioScheduler: public WorkloadSource{
 public:
 	///Constructor
     	/**
@@ -53,7 +53,7 @@ public:
 	\param iTimeSlice Time slice which is granted to clients
 	\param iMinSliceSize Minimum size of a time slice
     	*/
-	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
+	RRPrioScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
 	//RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice);
 	///Constructor
     	/**
@@ -64,10 +64,10 @@ public:
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/
-	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	RRPrioScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	//RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	///Destructor
-	~RRScheduler();
+	~RRPrioScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
 	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
 	void reset();

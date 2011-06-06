@@ -47,15 +47,24 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChannel.h>
 //#include <TransactionListener.h>
 
-SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle),
+SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
 #ifdef PENALTIES_ENABLED
-_pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate), _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle),
+, _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
+, _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
 #endif 
-_cyclesPerExeci(iCyclesPerExeci), _busyCycles(0), _timePerExeci(_cyclesPerExeci*_timePerCycle)
+, _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0)
 #ifdef PENALTIES_ENABLED
- ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle), _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle), _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle), _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci),_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
+, _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
+,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
+, _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle)
+, _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle) 
+#else
+, _timePerExeci(_cyclesPerExeci*_timePerCycle)
 #endif
+//, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
+//,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 {
+	std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
 	//_transactList.reserve(BLOCK_SIZE);
 }
 
@@ -130,11 +139,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 		//calculate length of transaction
 		//if (_nextTransaction->getOperationLength()!=-1){
 		if (iTimeSlice!=0){
-#ifdef PENALTIES_ENABLED
-			_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), 100 * iTimeSlice /((_missrateTimesPipelinesize+100) * _timePerExeci)));
-#else
-			_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), iTimeSlice /_timePerExeci));
-#endif
+			_nextTransaction->setVirtualLength(max(min(_nextTransaction->getVirtualLength(), (TMLLength)(iTimeSlice /_timePerExeci)), (TMLTime)1));
 		}
 		_nextTransaction->setLength(_nextTransaction->getVirtualLength()*_timePerExeci);
 			
@@ -142,10 +147,6 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 	}
 #endif
 #ifdef PENALTIES_ENABLED
-	if (_brachingMissrate!=0 && _masterNextTransaction==0){
-		_nextTransaction->setBranchingPenalty(_nextTransaction->getVirtualLength() * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
-	}
-
 	if (_lastTransaction==0 || _lastTransaction->getCommand()->getTask()!=_nextTransaction->getCommand()->getTask()){
 		_nextTransaction->setTaskSwitchingPenalty(_taskSwitchingTime);
 	}
@@ -170,7 +171,7 @@ void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
 	
 	if (aNewTransaction!=_nextTransaction){
 		//std::cout << "in if\n";
-		if (truncateNextTransAt(iTime)!=0) addTransaction();
+		if (truncateNextTransAt(iTime)!=0) addTransaction(0);
 		//if (_nextTransaction!=0 && truncateNextTransAt(iTime)!=0) addTransaction(); //NEW!!!!
 		if (_nextTransaction!=0 && _masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
 		_nextTransaction = aNewTransaction;
@@ -193,17 +194,13 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 #endif
 		}else{
 			aNewDuration-=aStaticPenalty;
-			//std::cout << _name << " virtual length before cut: " << _nextTransaction->getVirtualLength() << std::endl;
-			_nextTransaction->setVirtualLength(100* aNewDuration /((_missrateTimesPipelinesize+100) * _timePerExeci));
+			_nextTransaction->setVirtualLength(max((TMLTime)(aNewDuration /_timePerExeci),(TMLTime)1));
 			_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
 		}
-		if (_brachingMissrate!=0){
-			_nextTransaction->setBranchingPenalty(_nextTransaction->getVirtualLength() * _brachingMissrate / 100 *_pipelineSizeTimesExeci);
-		}
 #else
-		if (iTime <= _nextTransaction->getStartTime()) return 0;
+		if (iTime <= _nextTransaction->getStartTime()) return 0;  //before: <=
 		TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
-		_nextTransaction->setVirtualLength(aNewDuration /_timePerExeci);
+		_nextTransaction->setVirtualLength(max((TMLTime)(aNewDuration /_timePerExeci), (TMLTime)1));
 		_nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
 #endif
 #ifdef DEBUG_CPU
@@ -214,8 +211,9 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 	return _nextTransaction->getOverallLength();
 }
 
-bool SingleCoreCPU::addTransaction(){
+bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
 	bool aFinish;
+	//TMLTransaction* aTransCopy=0;
 	if (_masterNextTransaction==0){
 		aFinish=true;
 #ifdef DEBUG_CPU
@@ -230,6 +228,8 @@ bool SingleCoreCPU::addTransaction(){
 		if (aFollowingMaster==0){
 			//std::cout << "1\n";
 			aFinish=true;
+			//aTransCopy = new TMLTransaction(*_nextTransaction);
+			//_nextTransaction = aTransCopy;
 			BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
 			//std::cout << "2\n";
 			Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
@@ -237,9 +237,10 @@ bool SingleCoreCPU::addTransaction(){
 			aTempMaster->addBusContention(_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
 			while (aTempMaster!=0){
 				//std::cout << "3a\n";
-				aTempMaster->addTransaction();
+				aTempMaster->addTransaction(_nextTransaction);
 				//std::cout << "3b\n";
-				if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);
+				//if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);
+				if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);  //NEW
 				//std::cout << "4\n";
 				aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
 				//std::cout << "5\n";
@@ -335,9 +336,11 @@ void SingleCoreCPU::schedule2HTML(std::ofstream& myfile) const{
 		if (aLength!=0){
 			if (aLength==1){
 				//myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
-				myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+				//myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+				myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
 			}else{
-				myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+				//myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
+				myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
 			}
 		}
 		aLength=aCurrTrans->getOperationLength();

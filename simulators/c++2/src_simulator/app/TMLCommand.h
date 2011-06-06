@@ -45,11 +45,10 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Serializable.h>
 #include <ListenerSubject.h>
 #include <GeneralListener.h>
+#include <TMLTransaction.h>
 
-class TMLTransaction;
 class TMLTask;
 class TMLChannel;
-//class CommandListener;
 class Comment;
 class SimComponents;
 class HashAlgo;
@@ -236,7 +235,6 @@ protected:
 	///Number of successors of this command
 	unsigned int _nbOfNextCmds;
 	///Breakpoint
-	//CommandListener* _breakpoint;
 	GeneralListener* _breakpoint;
 	///Is true until the first transaction of a task is executed
 	bool _justStarted;
@@ -265,6 +263,8 @@ protected:
 	bool _checkpoint;
 	///Number of executions of the command
 	unsigned int _execTimes;
+	///Buffer for transaction to be proposed to kernel
+	TMLTransaction transBuffer;
 	/////Hash Algorithm object
 	//HashAlgo* _hash;
 };

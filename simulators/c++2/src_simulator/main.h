@@ -89,5 +89,7 @@ int main(int len, char ** args) {
 		delete myServer;
 	}
 	delete mySync._simComponents;
+	std::cout << "Terminate\n";
+	return 0;
 }
 #endif

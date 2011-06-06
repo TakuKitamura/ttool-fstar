@@ -88,7 +88,7 @@ public:
     	//*/
 	//virtual void registerTask(TMLTask* iTask);
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	virtual bool addTransaction();
+	virtual bool addTransaction(TMLTransaction* iTransToBeAdded);
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
@@ -172,7 +172,7 @@ protected:
 	
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit
-	TMLTime _timePerExeci;
+	float _timePerExeci;
 #ifdef PENALTIES_ENABLED
 	///Task switching penalty in time units
 	TMLTime _taskSwitchingTime;
@@ -180,10 +180,10 @@ protected:
 	TMLTime _timeBeforeIdle;
 	///Time needed to switch into idle mode
 	TMLTime _changeIdleModeTime;
-	///_pipelineSize * _timePerExeci
-	TMLTime _pipelineSizeTimesExeci;
-	///_brachingMissrate * _pipelineSize
-	unsigned int _missrateTimesPipelinesize;
+	////_pipelineSize * _timePerExeci
+	//TMLTime _pipelineSizeTimesExeci;
+	////_brachingMissrate * _pipelineSize
+	//unsigned int _missrateTimesPipelinesize;
 	//varibales for branch miss calculation
 	////Indicates the number of commands executed since the last branch miss
 	//unsigned int _branchMissReminder;

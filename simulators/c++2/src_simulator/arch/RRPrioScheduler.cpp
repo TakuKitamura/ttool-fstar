@@ -37,18 +37,18 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#include<RRScheduler.h>
+#include <RRPrioScheduler.h>
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>
 
-RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
+RRPrioScheduler::RRPrioScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
 
-RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
+RRPrioScheduler::RRPrioScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
 
-TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
+TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	//std::cout << _name << ": Schedule called \n";
 	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans;
@@ -62,7 +62,7 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 		if (_lastSource->getNextTransaction(iEndSchedule)!=0 && _lastSource->getNextTransaction(iEndSchedule)->getVirtualLength()!=0){
 			//if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
 			if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getOperationLength() + _minSliceSize){
-				//std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
+				std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
 			}
@@ -70,6 +70,8 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	}
 	if (!aSameTaskFound){
 		//std::cout << _name << ": Second if\n";
+		Priority aHighestPrioPast=-1;
+		
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 			//std::cout << "Loop\n";
 			//if (*i!=aScheduledSource)
@@ -77,11 +79,15 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 			//std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
 			aTempTrans=(*i)->getNextTransaction(iEndSchedule);
 			//std::cout << "after getCurrTransaction " << std::endl;
+			
+			//if ((*i)->getPriority()<aHighestPrioPast){
+				
 			if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
 				aRunnableTime=aTempTrans->getRunnableTime();	
 				if (aRunnableTime<=iEndSchedule){
 					//Past
-					if (aRunnableTime<aLowestRunnableTimePast){
+					if ((*i)->getPriority()<aHighestPrioPast || ((*i)->getPriority()==aHighestPrioPast && aRunnableTime<aLowestRunnableTimePast)){
+						aHighestPrioPast=(*i)->getPriority();
 						aLowestRunnableTimePast=aRunnableTime;
 						aSourcePast=*i;
 					}
@@ -126,26 +132,26 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	return _timeSlice-_elapsedTime;
 }
 
-TMLTransaction* RRScheduler::getNextTransaction(TMLTime iEndSchedule) const{
+TMLTransaction* RRPrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
 	return _nextTransaction;
 }
 
-void RRScheduler::reset(){
+void RRPrioScheduler::reset(){
 	WorkloadSource::reset();
 	_nextTransaction=0;
 	_elapsedTime=0;
 	_lastSource=0;
 }
 
-std::string RRScheduler::toString() const{
+std::string RRPrioScheduler::toString() const{
 	return _name;
 }
 
-RRScheduler::~RRScheduler(){
+RRPrioScheduler::~RRPrioScheduler(){
 	std::cout << _name << ": Scheduler deleted\n";
 }
 
-std::istream& RRScheduler::readObject(std::istream &is){
+std::istream& RRPrioScheduler::readObject(std::istream &is){
 	WorkloadSource::readObject(is);
 	READ_STREAM(is,_elapsedTime);
 #ifdef DEBUG_SERIALIZE
@@ -166,7 +172,7 @@ std::istream& RRScheduler::readObject(std::istream &is){
 	return is;
 }
 
-std::ostream& RRScheduler::writeObject(std::ostream &os){
+std::ostream& RRPrioScheduler::writeObject(std::ostream &os){
 	WorkloadSource::writeObject(os);
 	WRITE_STREAM(os,_elapsedTime);
 #ifdef DEBUG_SERIALIZE

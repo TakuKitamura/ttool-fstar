@@ -76,11 +76,12 @@ void Bus::registerTransaction(){
 	_nextTransaction=0;
 }
 
-bool Bus::addTransaction(){
+bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
 	//std::cout << "Bus add trans " << _nextTransaction << "\n";
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
-	_transactList.push_back(_nextTransaction);
+	//_transactList.push_back(_nextTransaction);
+	_transactList.push_back(iTransToBeAdded);  //NEW!!!!!
 	_busyCycles += _nextTransaction->getOperationLength();
 #ifdef DEBUG_BUS
 	std::cout << "Bus::addTrans: add trans at bus " << _name << ": " << _nextTransaction->toString() << std::endl;
@@ -99,7 +100,7 @@ void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
 	
 	//if (_nextTransaction->getOperationLength()!=-1){
 	if (iTimeSlice!=0){
-		_nextTransaction->setVirtualLength(min(_nextTransaction->getVirtualLength(), iTimeSlice *_busWidth/_timePerSample));
+		_nextTransaction->setVirtualLength(max(min(_nextTransaction->getVirtualLength(), iTimeSlice *_busWidth/_timePerSample),(TMLTime)1));
 	}
 	TMLTime aLength = _nextTransaction->getVirtualLength();
 	

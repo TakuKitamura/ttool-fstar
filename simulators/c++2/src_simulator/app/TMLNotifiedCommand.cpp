@@ -44,7 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <Bus.h>
 
-TMLNotifiedCommand::TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar, const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
+TMLNotifiedCommand::TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,ParamType* iResultVar, const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint): TMLCommand(iID, iTask, WAIT_SEND_VLEN, 1, iLiveVarList, iCheckpoint),_channel(iChannel),_resultVar(iResultVar),_resultVarDescr(iResultVarDescr){
 	_type=NOTIF;
 }
 
@@ -62,7 +62,8 @@ void TMLNotifiedCommand::execute(){
 }
 
 TMLCommand* TMLNotifiedCommand::prepareNextTransaction(){
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
+	_currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction(),_channel);
 	return this;
 }
 

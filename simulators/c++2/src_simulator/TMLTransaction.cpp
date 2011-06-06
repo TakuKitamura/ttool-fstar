@@ -45,11 +45,19 @@ Ludovic Apvrille, Renaud Pacalet
 
 MemPool<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
+
+TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),
+#ifdef PENALTIES_ENABLED
+ _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
+#endif
+_channel(0),_stateID(0) {
+}
+
 TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
 #ifdef PENALTIES_ENABLED
- _idlePenalty(0), _taskSwitchingPenalty(0), _branchingPenalty(0),
+ _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif
- /*_terminated(false),*/ _channel(iChannel),_stateID(0) {
+_channel(iChannel),_stateID(0) {
 	//if (_virtualLength!=0) std::cout << "Trans runnable: " << toString() << "\n";
 }
 
@@ -59,14 +67,11 @@ TMLTime TMLTransaction::getRunnableTime() const{
 
 void TMLTransaction::setRunnableTime(TMLTime iRunnableTime){
 	_runnableTime = max(_runnableTime,iRunnableTime);
-	//if (_runnableTimeSet){
-	//	std::cout << "ERROR: runnable time set twice\n";
-	//}else{
-		//_runnableTimeSet=true;
-//#ifdef REGISTER_TRANS_AT_CPU 
-//	_command->getTask()->getCPU()->registerTransaction(this,0);
-//#endif
-	//}
+	/*if (_runnableTimeSet){
+		std::cout << "ERROR: runnable time set twice\n";
+	}else{
+		_runnableTimeSet=true;
+	}*/
 }
 
 TMLTime TMLTransaction::getStartTime() const{
@@ -75,7 +80,8 @@ TMLTime TMLTransaction::getStartTime() const{
 
 TMLTime TMLTransaction::getStartTimeOperation() const{
 #ifdef PENALTIES_ENABLED
-	return _startTime + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	//return _startTime + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	return _startTime + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _startTime;
 #endif
@@ -95,7 +101,8 @@ void TMLTransaction::setLength(TMLTime iLength){
 
 TMLTime TMLTransaction::getOverallLength() const{
 #ifdef PENALTIES_ENABLED
-	return _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	//return _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	return _length + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _length;
 #endif
@@ -103,7 +110,8 @@ TMLTime TMLTransaction::getOverallLength() const{
 
 TMLTime TMLTransaction::getPenalties() const{
 #ifdef PENALTIES_ENABLED
-	return _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	//return _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	return _idlePenalty + _taskSwitchingPenalty;
 #else
 	return 0;
 #endif
@@ -124,11 +132,11 @@ TMLCommand* TMLTransaction::getCommand() const{
 
 TMLTime TMLTransaction::getEndTime() const{
 #ifdef PENALTIES_ENABLED
-	return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	//return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
+	return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _startTime  + _length;
 #endif
-	//return _startTime  + _length;
 }
 
 TMLTime TMLTransaction::getIdlePenalty() const{
@@ -159,27 +167,18 @@ void TMLTransaction::setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty){
 #endif	
 }
 
-TMLTime TMLTransaction::getBranchingPenalty() const{
+/*TMLTime TMLTransaction::getBranchingPenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _branchingPenalty;
 #else
 	return 0;
 #endif
-}
+}*/
 
-void TMLTransaction::setBranchingPenalty(TMLTime iBranchingPenalty){
+/*void TMLTransaction::setBranchingPenalty(TMLTime iBranchingPenalty){
 #ifdef PENALTIES_ENABLED
 	_branchingPenalty=iBranchingPenalty;
 #endif
-}
-
-/*bool TMLTransaction::getTerminatedFlag() const{
-	return _terminated;
-}
-
-void TMLTransaction::setTerminatedFlag(){
-	_terminated=true;
-	//std::cout << "TERMINATED FLAG SET!!!!!!!!!!!!!!!!!!!!!  " << this << std::endl;
 }*/
 
 std::string TMLTransaction::toString() const{

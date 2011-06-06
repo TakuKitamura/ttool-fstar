@@ -122,7 +122,8 @@ void TMLSelectCommand::execute(){
 TMLCommand* TMLSelectCommand::prepareNextTransaction(){
 	unsigned int i;
 	//std::cout << "SC: New transaction."<< std::endl;
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	_currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "SC: loop."<< std::endl;
 	for (i=0;i<_nbOfNextCmds && _maxChannelIndex==0;i++){
 		//std::cout << "SC: inner."<< i<< std::endl;

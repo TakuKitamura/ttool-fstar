@@ -68,7 +68,8 @@ TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 		}
 	}
 
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	_currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
 	return this;
 }

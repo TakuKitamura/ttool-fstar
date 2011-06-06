@@ -66,10 +66,10 @@ public:
 
 	void testWrite(TMLTransaction* iTrans){
 		this->_writeTrans=iTrans;
-	#if paramNo>0
+	//#if paramNo>0
 		//if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
-		this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
-	#endif
+		if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
+	//#endif
 		this->_writeTrans->setVirtualLength((_length-this->_content>0)?WAIT_SEND_VLEN:0);
 		this->_overflow = (this->_content==_length);
 	}
@@ -83,14 +83,14 @@ public:
 
 	void write(TMLTransaction* iTrans){
 		this->_content++;
-	#if paramNo>0
-		//if (paramNo!=0){
+	//#if paramNo>0
+		if (paramNo!=0){
 			this->_paramQueue.push_back(this->_tmpParam);   //NEW
 	#ifdef STATE_HASH_ENABLED
 			this->_tmpParam->getStateHash(&_stateHash);   //NEW in if
 	#endif
-		//}
-	#endif
+		}
+	//#endif
 		if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
 			//std::cout << "FB: Wake up trans in channel: " << this->_name << "\n";
 			this->_readTrans->setRunnableTime(iTrans->getEndTime());
@@ -110,13 +110,13 @@ public:
 		}else{
 			this->_content--;
 			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
-	#if paramNo>0
-			//if (paramNo!=0){
+	//#if paramNo>0
+			if (paramNo!=0){
 				this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
 				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
 				this->_paramQueue.pop_front();  //NEW
-			//}
-	#endif
+			}
+	//#endif
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);

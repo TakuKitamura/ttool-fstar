@@ -77,7 +77,8 @@ TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 		}
 	}
 	
-	_currTransaction=new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
+	_currTransaction = new TMLTransaction(this, _length-_progress, _task->getEndLastTransaction(), _channel);
 	//std::cout << "before test write" << std::endl;
 	//std::cout << "--begin-- TMLWriteCommand::prepareNextTransaction\n"; 
 	_channel->testWrite(_currTransaction);

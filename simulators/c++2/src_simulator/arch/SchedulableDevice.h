@@ -67,7 +67,7 @@ public:
 	///Determines the next transaction to be executed
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
-	virtual bool addTransaction()=0;
+	virtual bool addTransaction(TMLTransaction* iTransToBeAdded)=0;
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction

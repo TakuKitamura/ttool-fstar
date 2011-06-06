@@ -65,7 +65,8 @@ TMLCommand* TMLExeciRangeCommand::prepareNextTransaction(){
 			if (aNextCommand!=0) return aNextCommand->prepare(false);
 		}
 	}
-	_currTransaction=new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	_currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
 	//std::cout << "new fails? " << _currTransaction->toString() << std::endl;
 	return this;
 }
@@ -98,5 +99,5 @@ void TMLExeciRangeCommand::setRandomValue(unsigned int iValue){
 	//ParamType aMax, aMin;
 	//(_task->*_rangeFunc)(aMin, aMax);
 	_length= _minRange + iValue;
-	_currTransaction=new TMLTransaction(this, _length,_task->getEndLastTransaction());
+	_currTransaction = :: new (&transBuffer) TMLTransaction(this, _length,_task->getEndLastTransaction());
 }

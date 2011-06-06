@@ -71,7 +71,8 @@ TMLCommand* TMLWriteMultCommand::prepareNextTransaction(){
 	}
 	TMLLength unitsLeft =_length-_progress;
 	//TMLLength minLength;
-	_currTransaction=new TMLTransaction(this, unitsLeft, _task->getEndLastTransaction(), _channels[0]);
+	//_currTransaction = ::new (&transBuffer) TMLTransaction(this, unitsLeft, _task->getEndLastTransaction(), _channels[0]);
+	_currTransaction = new TMLTransaction(this, unitsLeft, _task->getEndLastTransaction(), _channels[0]);
 	//_channels[0]->testWrite(_currTransaction);
 	//minLength=_currTransaction->getVirtualLength();
 	//std::cout << "--begin-- TMLWriteMultCommand::prepareNextTransaction\n"; 

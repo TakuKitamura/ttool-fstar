@@ -59,7 +59,7 @@ public:
 	\param iLiveVarList Bitmap of live variables
 	\param iCheckpoint Checkpoint Flag
 	*/
-	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,TMLLength* iResultVar,const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint);
+	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,ParamType* iResultVar,const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	TMLChannel* getChannel() const;
@@ -73,7 +73,7 @@ protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;
 	///Index of the statement to execute (this value is passed to TMLTask::executeStatement())
-	TMLLength* _resultVar;
+	ParamType* _resultVar;
 	///String representation of the result variable
 	std::string _resultVarDescr;
 	TMLCommand* prepareNextTransaction();

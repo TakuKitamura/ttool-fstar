@@ -103,10 +103,10 @@ public:
 		return _nextTransaction;
 	}
 
-	void addTransaction(){
+	void addTransaction(TMLTransaction* iTransToBeAdded){
 		//std::cout << _name << ": add Trans\n";
 		//std::cout << _name << ": trans added on Bus: " << _nextBus->toString() << std::endl;
-		_nextBus->addTransaction();
+		_nextBus->addTransaction(iTransToBeAdded);
 		_nextTransaction=0;
 		//std::cout << _name << ": end add" << std::endl;
 	}

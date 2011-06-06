@@ -469,6 +469,12 @@ void SimComponents::showTaskStates(){
 				std::cout << "has runnable transaction: " << (*i)->getCurrCommand()->getCurrTransaction()->toString() << "\n";
 		}
 	}
+	for(BusList::const_iterator i=_busList.begin(); i != _busList.end(); ++i){
+		TMLTransaction* nextBusTrans = dynamic_cast<SchedulableDevice*>(*i)->getNextTransaction();
+		if (nextBusTrans!=0){
+			std::cout << "Bus " << (*i)->toString() << " has next trans: " << nextBusTrans->toString() << "\n";
+		}
+	}
 }
 
 bool SimComponents::couldCPUBeIdle(CPU* iCPU){
