@@ -57,6 +57,7 @@ import myutil.*;
 public class AvatarSimulationPendingTransaction  {
 	
 	public AvatarSimulationBlock asb;
+    public AvatarStateMachineElement previouslyExecutedElement;
 	public AvatarStateMachineElement elementToExecute;
 	public AvatarStateMachineElement involvedElement; //(transition)
 	public AvatarSimulationPendingTransaction linkedTransaction;
@@ -108,6 +109,7 @@ public class AvatarSimulationPendingTransaction  {
 		AvatarSimulationPendingTransaction aspt = new AvatarSimulationPendingTransaction();
 		aspt.asb = this.asb;
 		aspt.elementToExecute = this.elementToExecute;
+		aspt.previouslyExecutedElement = this.previouslyExecutedElement;
 		aspt.involvedElement = this.involvedElement;
 		aspt.linkedTransaction = this.linkedTransaction;
 		aspt.linkedAsynchronousMessage = this.linkedAsynchronousMessage;

@@ -5,6 +5,7 @@
 
 #define CHAR_ALLOC_SIZE 1024
 
+
 void activeTracingInFile();
 void unactiveTracing();
 void traceRequest(char *myname, request *req);

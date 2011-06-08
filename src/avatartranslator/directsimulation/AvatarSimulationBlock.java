@@ -175,6 +175,7 @@ public class AvatarSimulationBlock  {
 				aspt = new AvatarSimulationPendingTransaction();
 				aspt.asb = this;
 				aspt.elementToExecute = lastTransaction.executedElement.getNext(i);
+				aspt.previouslyExecutedElement = lastTransaction.executedElement;
 				if ((aspt.elementToExecute instanceof AvatarTransition) && (lastTransaction.executedElement instanceof AvatarState)) {
 					AvatarTransition trans = (AvatarTransition)(aspt.elementToExecute);
 					if (trans.getNbOfAction() == 0){

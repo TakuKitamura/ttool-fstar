@@ -591,9 +591,11 @@ public class AvatarSpecificationSimulation  {
 		if (aspt.elementToExecute instanceof AvatarTransition) {
 			AvatarTransition atr = (AvatarTransition)(aspt.elementToExecute);
 			if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
-				if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
-					return true;
-				}
+                if ((aspt.previouslyExecutedElement != null) && (aspt.previouslyExecutedElement.nbOfNexts() < 2)) {
+					if (nbOfTransactions(aspt.asb, _pendingTransactions) < 2) {
+						return true;
+					}
+                }
 			}
 			// State entering?
 		} else if (((aspt.elementToExecute instanceof AvatarState) ||  (aspt.elementToExecute instanceof AvatarStopState))) {
@@ -762,6 +764,7 @@ public class AvatarSpecificationSimulation  {
 				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
 				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
 					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+                          TraceManager.addDev("Setting to silent");
 						tr.isSilent = true;
 						return tr;
 					}
@@ -769,6 +772,7 @@ public class AvatarSpecificationSimulation  {
 			// State entering?
 			} else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
+                     TraceManager.addDev("Setting to silent");
 					tr.isSilent = true;
 					return tr;
 				}

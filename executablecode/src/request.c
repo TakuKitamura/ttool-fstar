@@ -29,6 +29,9 @@ void makeNewRequest(request *req, int ID, int type, int hasDelay, long minDelay,
   req->next = NULL;
   req->listOfRequests = NULL;
   req->nextRequestInList = NULL;
+
+  req->linkedTo = NULL;
+
   req->type = type;
   req->ID = ID;
   req->hasDelay = hasDelay;

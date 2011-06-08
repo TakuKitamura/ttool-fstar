@@ -65,6 +65,7 @@ public class GenericTransaction  {
     public String entityName;
     public String otherEntityName; /*  name of destination in synchro, etc. */
     public String name; /* Used for channel names */
+    public String params; /* values separated with commas */
     public String action;
     public long startingTime;
     public long finishTime;

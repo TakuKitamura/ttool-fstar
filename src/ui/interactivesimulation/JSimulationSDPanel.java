@@ -360,7 +360,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
 		currentY += verticalLink;
 		
-		messageName = _gt.name + "(" + ")";
+		messageName = _gt.name + "(" + _gt.params + ")";
 		
 		Color c = g.getColor();
 		
@@ -775,6 +775,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			points.clear();
 			Thread t = new Thread(this);
 			t.start();
+            repaint();
 		}
 	}
 	
@@ -933,6 +934,11 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		tmp = extract(trans, "channel");
 		if (tmp != null) {
 			gt.name = tmp;
+		}
+        
+        tmp = extract(trans, "params");
+		if (tmp != null) {
+			gt.params = tmp;
 		}
 		
 		transactions.add(gt);

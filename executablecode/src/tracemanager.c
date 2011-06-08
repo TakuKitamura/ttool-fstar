@@ -13,8 +13,7 @@
 #define TRACE_FILE_NAME "Trace.txt"
 
 
-//pthread_mutex_t traceMutex;
-//pthread_cond_t wakeupTraceManager;
+pthread_mutex_t __traceMutex;
 
 int trace = TRACE_OFF;
 int id = 0;
@@ -22,7 +21,6 @@ int id = 0;
 FILE *file;
 
 struct timespec begints;
-
 
 
 void addInfo(char *dest, char *info) {
@@ -57,6 +55,7 @@ void addInfo(char *dest, char *info) {
 
 
 void writeInTrace(char *info) {
+  mutex_lock(&__traceMutex);
   char s[CHAR_ALLOC_SIZE];
   addInfo(s, info);
 		 //printf("Write in file\n");
@@ -67,6 +66,7 @@ void writeInTrace(char *info) {
     fprintf(file, s);
     fflush(file);
   }
+  mutex_unlock(&__traceMutex);
 }
 
 
@@ -80,6 +80,9 @@ void activeTracingInFile(char *fileName) {
     name  = fileName;
   }
   file = fopen(name,"w");
+
+  /* Initializing mutex */
+  if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
 }
 
 void unactiveTracing() {
@@ -148,6 +151,8 @@ void traceVariableModification(char *block, char *var, int value, int type) {
 
 void traceRequest(char *myname, request *req) {
   char s[1024];
+  int i;
+ 
 
   debugMsg("Trace request");
 
@@ -161,10 +166,16 @@ void traceRequest(char *myname, request *req) {
   switch(req->type) {
   case SEND_SYNC_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
-    if ( req->linkedTo == NULL) {
-      printf("NULL related\n");
-    }
-    sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s\n", myname, req->syncChannel->outname, req->linkedTo->listOfRequests->owner);
+      //sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s\n", myname, req->syncChannel->outname, req->linkedTo->listOfRequests->owner);
+      sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s params=", myname, req->syncChannel->outname, req->linkedTo->listOfRequests->owner);
+      for(i=0; i<req->nbOfParams; i++) {
+	if (i>0) {
+	  sprintf(s, "%s,", s);
+	}
+	sprintf(s, "%s%d", s, *(req->params[i]));
+      }
+      sprintf(s, "%s\n", s);
+ 
     break;
   case RECEIVE_SYNC_REQUEST:
     sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
