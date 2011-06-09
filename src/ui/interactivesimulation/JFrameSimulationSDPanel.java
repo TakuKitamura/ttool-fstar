@@ -151,7 +151,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
         framePanel.add(topPanel, BorderLayout.NORTH);
         
         // Simulation panel
-        sdpanel = new JSimulationSDPanel();
+        sdpanel = new JSimulationSDPanel(this);
         JScrollPane jsp	= new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sdpanel.setMyScrollPanel(jsp);
         jsp.setWheelScrollingEnabled(true);
@@ -197,7 +197,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
-		TraceManager.addDev("Command:" + command);
+		//TraceManager.addDev("Command:" + command);
 		
 		if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_ALL].getActionCommand()))  {
 			close();
@@ -224,6 +224,18 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
             sdpanel.setFileReference(_fileReference);
         }
     }
+	
+	public void setCurrentTime(long timeValue) {
+		status.setText("time = " + timeValue);
+	}
+	
+	public void setStatus(String _status) {
+		status.setText(_status);
+	}
+	
+	public void setNbOfTransactions(int x, long minTime, long maxTime) {
+		status.setText("" + x + " transactions, min time=" + minTime + ", max time=" + maxTime);
+	}
 	
     
 	

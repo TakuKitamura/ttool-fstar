@@ -632,8 +632,13 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	}
 	
 	private void drawInfo(Graphics g) {
+		String timeValue = "@" + clockValueMouse;
+		Color c = g.getColor();
+		g.setColor(ColorManager.AVATAR_ACTION);
 		GraphicLib.dashedLine(g, spaceAtEnd, yMouse, maxX-spaceAtEnd, yMouse);
-		g.drawString("@" + clockValueMouse, 10, yMouse+g.getFontMetrics().getHeight()/2);
+		g.drawString(timeValue, 10, yMouse+g.getFontMetrics().getHeight()/2);
+		g.drawString(timeValue, maxX-spaceAtEnd + 1, yMouse+g.getFontMetrics().getHeight()/2);
+		
 		/*if (minIdValueMouse == maxIdValueMouse) {
 			g.drawString("ID: " + minIdValueMouse, 10, yMouse+(g.getFontMetrics().getHeight()/2)+12);
 		} else {
@@ -651,6 +656,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 			g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse - spaceVerticalText);
 			x += spaceBetweenLifeLines;
 		}
+		g.setColor(c);
 	}
 	
 	private void drawIDInfo(Graphics g, int _x, int _y, long _id) {

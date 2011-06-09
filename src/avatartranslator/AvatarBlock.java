@@ -361,8 +361,14 @@ public class AvatarBlock extends AvatarElement {
 			}
 		}
 		
+
+		
 		// Modify the state machine
-		asm.removeTimers(this);
+		if (asm.removeTimers(this, "__timerValue")) {
+			// Add an attribute for the timer value
+			value = new AvatarAttribute("__timerValue", AvatarType.INTEGER,  getReferenceObject());
+			addAttribute(value);
+		}
 		
 		// Remove Timer attribute
 		LinkedList<AvatarAttribute> tmps = attributes;

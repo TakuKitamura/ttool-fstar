@@ -59,12 +59,12 @@ public class AvatarBlockTemplate  {
 	public static AvatarBlock getTimerBlock(String _name, Object _referenceBlock, Object _referenceSet, Object _referenceExpire, Object _referenceReset) {
 		AvatarBlock ab = new AvatarBlock(_name, _referenceBlock);
 		
-		AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _referenceBlock);
-		ab.addAttribute(aa2);
+		/*AvatarAttribute aa2 = new AvatarAttribute("toto", AvatarType.INTEGER, _referenceBlock);
+		ab.addAttribute(aa2);*/
 		AvatarAttribute aa = new AvatarAttribute("value", AvatarType.INTEGER, _referenceBlock);
 		ab.addAttribute(aa);
-		AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _referenceBlock);
-		ab.addAttribute(aa1);
+		/*AvatarAttribute aa1 = new AvatarAttribute("__value", AvatarType.INTEGER, _referenceBlock);
+		ab.addAttribute(aa1);*/
 		
 		AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _referenceBlock);
 		AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _referenceBlock);

@@ -43,8 +43,6 @@ struct request {
   struct request* relatedRequest; // For synchro and broadcast
   struct syncchannel *syncChannel;
   struct asyncchannel *asyncChannel;
-
-  struct request *linkedTo;
   
   int type;
   int ID;

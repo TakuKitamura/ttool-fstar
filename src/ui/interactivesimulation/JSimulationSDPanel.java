@@ -105,6 +105,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	private long clockDiviser = 1000000; //ms
 	private Vector<Point> points;
 	private Vector<GenericTransaction> transactionsOfPoints;
+	private Hashtable<String, Point> asyncMsgs;
 	
 	// List of entities ... List is discovered progressively
 	// Or the list is described in the trace (header information)
@@ -118,21 +119,28 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	
 	Vector<GenericTransaction> transactions;
 	
+	JFrameSimulationSDPanel jfssdp;
 	
-	public JSimulationSDPanel() {
+	
+	public JSimulationSDPanel(JFrameSimulationSDPanel _jfssdp) {
 		//points = new Vector<Point>();
 		//transactionsOfPoints = new Vector<AvatarSimulationTransaction>();
+		jfssdp = _jfssdp;
 		
 		entityNames = new Vector <String>();
 		transactions = new Vector<GenericTransaction>();
 		transactionsOfPoints = new Vector<GenericTransaction>();
 		points = new Vector<Point>();
 		
+		asyncMsgs = new Hashtable<String, Point>();
+		
 		mode = NO_MODE;
 		
 		setBackground(Color.WHITE);
 		setNewSize();
 		addMouseMotionListener(this);
+		
+		
 		
 		
 	}
@@ -250,13 +258,22 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			
 			points.clear();
 			transactionsOfPoints.clear();
+			//TraceManager.addDev("Clearing hash");
+			//asyncMsgs.clear();
+			
 			
 			if (gt.type == gt.STATE_ENTERING) {
 				newCurrentY = drawState(g, gt, xOfBlock, currentY); 
 			}  else if (gt.type == gt.FUNCTION_CALL) {
 				newCurrentY = drawFunctionCall(g, gt, xOfBlock, currentY); 
 			} else if (gt.type == gt.SEND_SYNCHRO) {
+				//newCurrentY = drawSendSynchro(g, gt, xOfBlock, currentY); 
+			} else if (gt.type == gt.SYNCHRO) {
 				newCurrentY = drawSendSynchro(g, gt, xOfBlock, currentY); 
+			} else if (gt.type == gt.SEND_ASYNCHRO) {
+				newCurrentY = drawSendAsynchro(g, gt, xOfBlock, currentY); 
+			} else if (gt.type == gt.RECEIVE_ASYNCHRO) {
+				newCurrentY = drawReceiveAsynchro(g, gt, xOfBlock, currentY); 
 			} 
 			
 			if ((yMouse>= currentY) && (yMouse <= newCurrentY)) {
@@ -276,11 +293,17 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 					xOfBlock += spaceBetweenLifeLines;
 				}
 				if (gt.finishTime != clockValue) {
+					boolean alsoText = false;
+					if ((gt.finishTime / clockDiviser) != (clockValue / clockDiviser)) {
+						alsoText = true;
+					}
 					clockValue = gt.finishTime;
 					if (yMouse >= newCurrentY) {
 						clockValueMouse = clockValue;
 					}
-					g.drawString("@" + clockValue/clockDiviser, 10, newCurrentY+g.getFontMetrics().getHeight()/2); 
+					if (alsoText) {
+						g.drawString("@" + clockValue/clockDiviser, 10, newCurrentY+g.getFontMetrics().getHeight()/2);
+					}
 				}
 			}
 			
@@ -381,6 +404,110 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		w = g.getFontMetrics().stringWidth(messageName);
 		int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
 		g.drawString(messageName, xtmp, currentY-2); 
+		
+		currentY += 10;
+		
+		// Vertical line of receiving block
+		g.drawLine(currentX, currentY-20, currentX, currentY);
+		return currentY;
+	}
+	
+	private int drawSendAsynchro(Graphics g, GenericTransaction _gt, int currentX, int currentY) {
+		int w;
+		int x, y, width, height;
+		String messageName;
+		
+		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
+		currentY += verticalLink;
+		
+		messageName = _gt.name + "(" + _gt.params + ")";
+		
+		Color c = g.getColor();
+		
+		x = currentX;
+		y = currentY;
+		
+		int xOf2ndBlock = x + 2*spaceBetweenLifeLines/3;
+		
+		g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+		g.drawLine(xOf2ndBlock, currentY-1, currentX, currentY-1);
+		g.setColor(c);
+		GraphicLib.arrowWithLine(g, 1, 2, 10, currentX, currentY, xOf2ndBlock, currentY, false);
+		transactionsOfPoints.add(_gt);
+		points.add(new Point(currentX, currentY));
+		TraceManager.addDev("Putting " + _gt.messageID + " in hash");
+		asyncMsgs.put(_gt.messageID, new Point(currentX, currentY));
+		
+		// Putting the message name
+		w = g.getFontMetrics().stringWidth(messageName);
+		int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
+		g.drawString(messageName, xtmp, currentY-2); 
+		
+		currentY += 10;
+		
+		// Vertical line of receiving block
+		g.drawLine(currentX, currentY-20, currentX, currentY);
+		return currentY;
+	}
+	
+	private int drawReceiveAsynchro(Graphics g, GenericTransaction _gt, int currentX, int currentY) {
+		int w;
+		int x, y, width, height;
+		String messageName;
+		
+		g.drawLine(currentX, currentY, currentX, currentY+verticalLink);
+		currentY += verticalLink;
+		
+		messageName = _gt.name + "(" + _gt.params + ")";
+		
+		Color c = g.getColor();
+		
+		x = currentX;
+		y = currentY;
+		
+		int xOf2ndBlock = x - 2*spaceBetweenLifeLines/3;
+		
+		g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+		g.drawLine(xOf2ndBlock, currentY-1, currentX, currentY-1);
+		g.setColor(c);
+		GraphicLib.arrowWithLine(g, 1, 2, 10, xOf2ndBlock, currentY, currentX, currentY, false);
+		transactionsOfPoints.add(_gt);
+		points.add(new Point(currentX, currentY));
+		
+		// Putting the message name
+		w = g.getFontMetrics().stringWidth(messageName);
+		int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
+		g.drawString(messageName, xtmp, currentY-2);
+		
+		
+		// Linking to sender?
+		Point p = asyncMsgs.get(_gt.messageID);
+		TraceManager.addDev("Testing " + _gt.messageID + " in hash = " + p + " hashsize=" + asyncMsgs.size() );
+		if (p != null) {
+			x = p.x;
+			y = p.y;
+			int lengthAsync = 2*spaceBetweenLifeLines/3;
+			
+			if ((x +  lengthAsync) < (currentX-lengthAsync)) {
+				// Forward
+				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+				GraphicLib.dashedLine(g, x + lengthAsync - 1, y, x + lengthAsync-1, currentY);
+				GraphicLib.dashedLine(g, x + lengthAsync, currentY-1, currentX-lengthAsync, currentY-1);
+				g.setColor(c);
+				GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, currentY);
+				GraphicLib.dashedLine(g, x + lengthAsync, currentY, currentX-lengthAsync, currentY);
+			} else {
+				// Backward
+				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+				GraphicLib.dashedLine(g, x + lengthAsync-1, y, x + lengthAsync-1, y+7);
+				GraphicLib.dashedLine(g, x + lengthAsync, y+6, currentX-lengthAsync, y+6);
+				GraphicLib.dashedLine(g, currentX-lengthAsync-1, currentY, currentX-lengthAsync-1, y+7);
+				g.setColor(c);
+				GraphicLib.dashedLine(g, x + lengthAsync, y, x + lengthAsync, y+7);
+				GraphicLib.dashedLine(g, x + lengthAsync, y+7, currentX-lengthAsync, y+7);
+				GraphicLib.dashedLine(g, currentX-lengthAsync, currentY, currentX-lengthAsync, y+7);
+			}
+		}
 		
 		currentY += 10;
 		
@@ -719,13 +846,12 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	}
 	
 	private void drawInfo(Graphics g) {
+		String timeValue = "@" + clockValueMouse/clockDiviser;
+		Color c = g.getColor();
+		g.setColor(ColorManager.AVATAR_ACTION);
 		GraphicLib.dashedLine(g, spaceAtEnd, yMouse, maxX-spaceAtEnd, yMouse);
-		g.drawString("@" + clockValueMouse/clockDiviser, 10, yMouse+g.getFontMetrics().getHeight()/2);
-		/*if (minIdValueMouse == maxIdValueMouse) {
-		g.drawString("ID: " + minIdValueMouse, 10, yMouse+(g.getFontMetrics().getHeight()/2)+12);
-		} else {
-		g.drawString("ID: " + minIdValueMouse + " to " + maxIdValueMouse, 10, yMouse+(g.getFontMetrics().getHeight()/2)+12);
-		}*/
+		g.drawString(timeValue, 10, yMouse+g.getFontMetrics().getHeight()/2);
+		g.drawString(timeValue, maxX-spaceAtEnd + 1, yMouse+g.getFontMetrics().getHeight()/2);
 		
 		int w;
 		int x = spaceAtEnd;
@@ -735,6 +861,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse - spaceVerticalText);
 			x += spaceBetweenLifeLines;
 		}
+		g.setColor(c);
 	}
 	
 	private void drawIDInfo(Graphics g, int _x, int _y, long _id) {
@@ -767,20 +894,22 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		t.start();
 	}
 	
-	public void refresh() {
+	public synchronized void refresh() {
 		if (mode == FILE_MODE) {
 			entityNames.clear();
 			transactions.clear();
 			transactionsOfPoints.clear();
 			points.clear();
-			Thread t = new Thread(this);
-			t.start();
-            repaint();
+			if (t == null) {
+				Thread t = new Thread(this);
+				t.start();
+				repaint();
+			}
 		}
 	}
 	
 	public void run() {
-		TraceManager.addDev("Reading file");
+		//TraceManager.addDev("Reading file");
 		
 		go = true;
 		Thread t;
@@ -796,6 +925,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			// Read the content of the file
 			// Read line by line
 			// Upate the graphic regularly
+			jfssdp.setStatus("Reading " + fileReference);
 			try{
 				// Open the file that is the first 
 				// command line parameter
@@ -807,7 +937,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 				//Read File Line By Line
 				while ((strLine = br.readLine()) != null)   {
 					// Print the content on the console
-					TraceManager.addDev("Computing transaction:" + strLine);
+					//TraceManager.addDev("Computing transaction:" + strLine);
 					addGenericTransaction(strLine);
 				}
 				//Close the input stream
@@ -815,7 +945,21 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			} catch (Exception e){//Catch exception if any
 				TraceManager.addDev("Reading file Error: " + e.getMessage());
 			}
+			
+			if (jfssdp != null) {
+				updateInfoOnTransactions();
+			}
 		} 
+		
+		t = null;
+	}
+	
+	private void updateInfoOnTransactions() {
+		if (transactions.size() == 0) {
+			jfssdp.setNbOfTransactions(transactions.size(), 0, 0);
+		} else {
+			jfssdp.setNbOfTransactions(transactions.size(), transactions.get(0).startingTime/clockDiviser, transactions.get(transactions.size()-1).finishTime/clockDiviser);
+		}
 	}
 	
 	public void addGenericTransaction(String trans) {
@@ -856,10 +1000,11 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		try {
 			index0 = tmp.indexOf('.');
 			if (index0 == -1) {
+				TraceManager.addDev("Invalid time value");
 				return;
 			}
 			tmp1 = tmp.substring(0, index0);
-			tmp2 = tmp.substring(index0+1, tmp.length());
+			tmp2 = Conversion.removeStartingCharacters(tmp.substring(index0+1, tmp.length()), "0");
 			//TraceManager.addDev("2 tmp1=" + tmp1 + " tmp2=" + tmp2);
 			value1 = Integer.decode(tmp1).intValue();
 			value2 = Integer.decode(tmp2).intValue();
@@ -867,6 +1012,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			gt.startingTime = value;
 			gt.finishTime = value;
 		} catch (Exception e) {
+			TraceManager.addDev("Exception: " + e.getMessage());
 			return;
 		}
 		
@@ -877,6 +1023,8 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		if (tmp == null) {
 			return;
 		}
+		
+		//TraceManager.addDev("4");
 		
 		addEntityNameIfApplicable(tmp);
 		gt.entityName = tmp;
@@ -897,6 +1045,18 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		
 		if (tmp.compareTo("send_synchro") == 0) {
 			gt.type = GenericTransaction.SEND_SYNCHRO;
+		}
+		
+		if (tmp.compareTo("synchro") == 0) {
+			gt.type = GenericTransaction.SYNCHRO;
+		}
+		
+		if (tmp.compareTo("send_async") == 0) {
+			gt.type = GenericTransaction.SEND_ASYNCHRO;
+		}
+		
+		if (tmp.compareTo("receive_async") == 0) {
+			gt.type = GenericTransaction.RECEIVE_ASYNCHRO;
 		}
 		
 		// State of the transaction?
@@ -928,6 +1088,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		tmp = extract(trans, "blockdestination");
 		if (tmp != null) {
 			gt.otherEntityName = tmp;
+			addEntityNameIfApplicable(tmp);
 		}
 		
 		// Channel of the transaction?
@@ -941,8 +1102,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			gt.params = tmp;
 		}
 		
+		tmp = extract(trans, "msgid");
+		if (tmp != null) {
+			gt.messageID = tmp;
+		}
+		
 		transactions.add(gt);
-		TraceManager.addDev("One transactions added");
+		//TraceManager.addDev("One transactions added");
 		
 	}
 	
@@ -965,11 +1131,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	
 	public void addEntityNameIfApplicable(String _entityName) {
 		for(String name: entityNames) {
+			//TraceManager.addDev("Examining name= " + name + " entityName=" + _entityName);
 			if (name.compareTo(_entityName) ==0) {
 				return;
 			}
 		}
 		
+		//TraceManager.addDev("Adding name: " + _entityName);
 		entityNames.add(_entityName);
 	}
 	
@@ -987,5 +1155,6 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	
 	public void setClockDiviser(long _clockDiviser) {
 		clockDiviser = _clockDiviser;
+		updateInfoOnTransactions();
 	}
 }

@@ -407,7 +407,8 @@ public class AvatarStateMachine extends AvatarElement {
 		return null;
 	}
 	
-	public void removeTimers(AvatarBlock _block) {
+	// Return true iff at least one timer was removed
+	public boolean removeTimers(AvatarBlock _block, String timerAttributeName) {
 		AvatarSetTimer ast;
 		AvatarTimerOperator ato;
 		
@@ -420,9 +421,22 @@ public class AvatarStateMachine extends AvatarElement {
 			if (elt instanceof AvatarSetTimer) {
 				ast = (AvatarSetTimer)elt;
 				AvatarActionOnSignal aaos = new AvatarActionOnSignal(elt.getName(), _block.getAvatarSignalWithName("set__" + ast.getTimer().getName()), elt.getReferenceObject());
-				aaos.addValue(ast.getTimerValue());
+				aaos.addValue(timerAttributeName);
 				olds.add(elt);
 				news.add(aaos);
+				
+				// Modifying the transition just before
+				LinkedList<AvatarStateMachineElement> previous = getPreviousElementsOf(ast);
+				if (previous.size() == 1) {
+					if (previous.get(0) instanceof AvatarTransition) {
+						AvatarTransition at = (AvatarTransition)(previous.get(0));
+						at.addAction(timerAttributeName + " = " + ast.getTimerValue());
+					} else {
+						TraceManager.addError("The element before a set time is not a transition!");
+					}
+				} else {
+					TraceManager.addError("More than one transition before a set time!");
+				}
 				
 			// Reset timer
 			} else if (elt instanceof AvatarResetTimer) {
@@ -447,6 +461,8 @@ public class AvatarStateMachine extends AvatarElement {
 			newelt = news.get(i);
 			replace(oldelt, newelt);
 		}
+		
+		return (olds.size() > 0);
 	}
 	
 	public void replace(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
@@ -737,6 +753,17 @@ public class AvatarStateMachine extends AvatarElement {
 			id ++;
 		}
 		return name + id;
+	}
+	
+	public void handleUnfollowedStartState() {
+		if (startState.nbOfNexts() == 0) {
+			AvatarStopState stopState = new AvatarStopState("__StopState", startState.getReferenceObject());
+			AvatarTransition at = new AvatarTransition("__toStop", startState.getReferenceObject());
+			addElement(stopState);
+			addElement(at);
+			startState.addNext(at);
+			at.addNext(stopState);
+		}
 	}
 
 }

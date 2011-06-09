@@ -59,6 +59,9 @@ public class GenericTransaction  {
     public final static int STATE_ENTERING = 2;
     public final static int VAR_MODIFICATION = 3;
     public final static int SEND_SYNCHRO = 4;
+	public final static int SYNCHRO = 5;
+	public final static int SEND_ASYNCHRO = 6;
+	public final static int RECEIVE_ASYNCHRO = 7;
     
 	public int ID;
     public int type;
@@ -66,6 +69,7 @@ public class GenericTransaction  {
     public String otherEntityName; /*  name of destination in synchro, etc. */
     public String name; /* Used for channel names */
     public String params; /* values separated with commas */
+	public String messageID; /* Used for identifiying asynchronous messages */
     public String action;
     public long startingTime;
     public long finishTime;

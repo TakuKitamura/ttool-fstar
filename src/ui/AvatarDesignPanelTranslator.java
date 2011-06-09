@@ -1097,6 +1097,8 @@ public class AvatarDesignPanelTranslator {
 				}
 			}
 		}
+		
+		asm.handleUnfollowedStartState();
 	
 	}
 	

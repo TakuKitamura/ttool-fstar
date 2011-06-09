@@ -105,6 +105,17 @@ public class Conversion {
         return output + s;
     }
 	
+	public static String removeStartingCharacters(String s, String toRemove) {
+		if (s == null) {
+			return s;
+		}
+        if (s.startsWith(toRemove)) {
+			return removeStartingCharacters(s.substring(toRemove.length(), s.length()), toRemove);
+		}
+		
+		return s;
+    }
+	
 	public static String replaceRecursiveAllString(String s, String input, String snew) {
         int index;
         while((index = s.indexOf(input)) > -1 ) {

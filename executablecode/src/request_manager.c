@@ -9,6 +9,7 @@
 #include "mytimelib.h"
 #include "random.h"
 #include "asyncchannel.h"
+#include "tracemanager.h"
 
 
 
@@ -43,7 +44,6 @@ void executeSendSyncTransaction(request *req) {
   //req->syncChannel->inWaitQueue = removeRequestFromList(req->syncChannel->inWaitQueue, selectedReq);
   debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
-  req->linkedTo = selectedReq;
 
   // Select the selected request, and notify the information
   selectedReq->selected = 1;
@@ -54,6 +54,8 @@ void executeSendSyncTransaction(request *req) {
 
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+
+  traceSynchroRequest(req, selectedReq);
 }
 
 void executeReceiveSyncTransaction(request *req) {
@@ -84,7 +86,6 @@ void executeReceiveSyncTransaction(request *req) {
   //req->syncChannel->outWaitQueue = removeRequestFromList(req->syncChannel->outWaitQueue, selectedReq);
   debugMsg("Setting related request");
   req->relatedRequest = selectedReq;
-  selectedReq->linkedTo = req;
 
   // Select the request, and notify the information in the channel
   selectedReq->selected = 1;
@@ -95,6 +96,8 @@ void executeReceiveSyncTransaction(request *req) {
 
   debugMsg("Signaling");
   pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+
+  traceSynchroRequest(selectedReq, req);
 }
 
 
@@ -115,6 +118,8 @@ void executeSendAsyncTransaction(request *req) {
     pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
     selectedReq = selectedReq->next;
   }
+
+  traceAsynchronousSendRequest(req);
 }
 
 void executeReceiveAsyncTransaction(request *req) {
@@ -130,6 +135,8 @@ void executeReceiveAsyncTransaction(request *req) {
   for(i=0; i<req->nbOfParams; i++) {
     *(req->params[i]) = req->msg->params[i];
   }
+
+  traceAsynchronousReceiveRequest(req);
 
   // unallocate message
   destroyMessageWithParams(req->msg);
@@ -192,6 +199,7 @@ void executeSendBroadcastTransaction(request *req) {
   while(currentReq != NULL) {
     cpt ++;
     pthread_cond_signal(currentReq->listOfRequests->wakeupCondition);
+    traceSynchroRequest(req, currentReq);
     currentReq = currentReq->relatedRequest;
   }
 

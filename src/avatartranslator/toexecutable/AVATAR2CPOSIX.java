@@ -354,7 +354,7 @@ public class AVATAR2CPOSIX {
 		// Making start state
 		AvatarStateMachine asm = _block.getStateMachine();
 		s += "case STATE__START__STATE: " + CR;
-		s += traceStateEntering("__myname", "start state");
+		s += traceStateEntering("__myname", "__StartState");
 		s += makeBehaviourFromElement(_block, asm.getStartState(), true);
 		s += "break;" + CR + CR;
 		
@@ -678,6 +678,9 @@ public class AVATAR2CPOSIX {
 		
 		mainFile.appendToMainCode("/* Initializing the main mutex */" + CR);
 		mainFile.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
+		
+		mainFile.appendToMainCode("/* Initializing mutex of messages */" + CR); 
+		mainFile.appendToMainCode("initMessages();" + CR); 
 		
 		
 		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));

@@ -55,7 +55,7 @@ void addInfo(char *dest, char *info) {
 
 
 void writeInTrace(char *info) {
-  mutex_lock(&__traceMutex);
+  pthread_mutex_lock(&__traceMutex);
   char s[CHAR_ALLOC_SIZE];
   addInfo(s, info);
 		 //printf("Write in file\n");
@@ -66,7 +66,7 @@ void writeInTrace(char *info) {
     fprintf(file, s);
     fflush(file);
   }
-  mutex_unlock(&__traceMutex);
+  pthread_mutex_unlock(&__traceMutex);
 }
 
 
@@ -148,6 +148,75 @@ void traceVariableModification(char *block, char *var, int value, int type) {
 
 }
 
+void traceSynchroRequest(request *from, request *to) {
+  char s[1024];
+  int i;
+
+  sprintf(s, "block=%s blockdestination=%s type=synchro channel=%s params=", from->listOfRequests->owner, to->listOfRequests->owner, from->syncChannel->outname);
+  for(i=0; i<from->nbOfParams; i++) {
+    if (i>0) {
+      sprintf(s, "%s,", s);
+    }
+    sprintf(s, "%s%d", s, *(from->params[i]));
+  }
+  sprintf(s, "%s\n", s);
+
+  debugMsg("Trace request synchro");
+  
+
+  // Saving trace
+  writeInTrace(s);
+}
+
+
+void traceAsynchronousSendRequest(request *req) {
+  char s[1024];
+  int i;
+
+
+  sprintf(s, "block=%s type=send_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
+  if (req->msg != NULL) {
+    debugMsg("Computing params");
+    for(i=0; i<req->msg->nbOfParams; i++) {
+      if (i>0) {
+	sprintf(s, "%s,", s);
+      }
+      sprintf(s, "%s%d", s, req->msg->params[i]);
+    }
+  }
+  sprintf(s, "%s\n", s);
+
+  
+
+  // Saving trace
+  writeInTrace(s);
+}
+
+
+void traceAsynchronousReceiveRequest(request *req) {
+  char s[1024];
+  int i;
+
+
+  sprintf(s, "block=%s type=receive_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
+  if (req->msg != NULL) {
+    debugMsg("Computing params");
+    for(i=0; i<req->msg->nbOfParams; i++) {
+      if (i>0) {
+	sprintf(s, "%s,", s);
+      }
+      sprintf(s, "%s%d", s, req->msg->params[i]);
+    }
+  }
+  sprintf(s, "%s\n", s);
+
+  
+
+  // Saving trace
+  writeInTrace(s);
+}
+
+
 
 void traceRequest(char *myname, request *req) {
   char s[1024];
@@ -164,28 +233,27 @@ void traceRequest(char *myname, request *req) {
   // Build corresponding char*;
 
   switch(req->type) {
-  case SEND_SYNC_REQUEST:
+    case SEND_SYNC_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
-      //sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s\n", myname, req->syncChannel->outname, req->linkedTo->listOfRequests->owner);
-      sprintf(s, "block=%s type=send_synchro channel=%s blockdestination=%s params=", myname, req->syncChannel->outname, req->linkedTo->listOfRequests->owner);
-      for(i=0; i<req->nbOfParams; i++) {
-	if (i>0) {
-	  sprintf(s, "%s,", s);
-	}
-	sprintf(s, "%s%d", s, *(req->params[i]));
+    sprintf(s, "block=%s type=send_synchro channel=%s params=", myname, req->syncChannel->outname);
+    for(i=0; i<req->nbOfParams; i++) {
+      if (i>0) {
+	sprintf(s, "%s,", s);
       }
-      sprintf(s, "%s\n", s);
+      sprintf(s, "%s%d", s, *(req->params[i]));
+    }
+    sprintf(s, "%s\n", s);
  
     break;
   case RECEIVE_SYNC_REQUEST:
     sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
     break;
-   case SEND_ASYNC_REQUEST:
+    case SEND_ASYNC_REQUEST:
     debug2Msg("Async channel", req->asyncChannel->outname);
-    sprintf(s, "block=%s type=send_async channel=%s\n", myname, req->asyncChannel->outname);
+    sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
     break;
-   case RECEIVE_ASYNC_REQUEST:
-    sprintf(s, "block=%s type=receive_async channel=%s\n", myname, req->asyncChannel->inname);
+  case RECEIVE_ASYNC_REQUEST:
+    sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
     break;
    case SEND_BROADCAST_REQUEST:
     debug2Msg("Sync channel", req->syncChannel->outname);
