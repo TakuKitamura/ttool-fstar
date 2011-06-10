@@ -435,7 +435,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		GraphicLib.arrowWithLine(g, 1, 2, 10, currentX, currentY, xOf2ndBlock, currentY, false);
 		transactionsOfPoints.add(_gt);
 		points.add(new Point(currentX, currentY));
-		TraceManager.addDev("Putting " + _gt.messageID + " in hash");
+		//TraceManager.addDev("Putting " + _gt.messageID + " in hash");
 		asyncMsgs.put(_gt.messageID, new Point(currentX, currentY));
 		
 		// Putting the message name
@@ -482,7 +482,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		
 		// Linking to sender?
 		Point p = asyncMsgs.get(_gt.messageID);
-		TraceManager.addDev("Testing " + _gt.messageID + " in hash = " + p + " hashsize=" + asyncMsgs.size() );
+		//TraceManager.addDev("Testing " + _gt.messageID + " in hash = " + p + " hashsize=" + asyncMsgs.size() );
 		if (p != null) {
 			x = p.x;
 			y = p.y;
