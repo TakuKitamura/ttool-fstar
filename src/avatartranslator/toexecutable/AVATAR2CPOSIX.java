@@ -137,6 +137,7 @@ public class AVATAR2CPOSIX {
 		makeMainHeader();
 		
 		makeThreadsInMain(_debug);
+		
 	}
 	
 	public void makeMainMutex() {
@@ -238,67 +239,96 @@ public class AVATAR2CPOSIX {
 	}
 	
 	public void defineAllMethods(AvatarBlock _block, TaskFile _taskFile) {
+		Vector<String> allNames = new Vector<String>();
+		for (AvatarMethod am: _block.getMethods()) {
+			makeMethod(_block, am, allNames, _taskFile);
+		}
+		
+		// Make method of father
+		makeFatherMethod(_block, _block, allNames, _taskFile);
+	}
+	
+	private void makeFatherMethod(AvatarBlock _originBlock, AvatarBlock _currentBlock, Vector<String> _allNames, TaskFile _taskFile) {
+		if (_currentBlock.getFather() == null) {
+			return;
+		}
+		
+		for (AvatarMethod am: _currentBlock.getFather().getMethods()) {
+			makeMethod(_originBlock, am, _allNames, _taskFile);
+		}
+		
+		makeFatherMethod(_originBlock, _currentBlock.getFather(), _allNames, _taskFile);
+		
+	}
+	
+	private void makeMethod(AvatarBlock _block, AvatarMethod _am, Vector<String> _allNames, TaskFile _taskFile) {
 		String ret = "";
 		LinkedList<AvatarAttribute> list;
+		String nameMethod = _block.getName() + "__" +_am.getName();
 		
-		for (AvatarMethod am: _block.getMethods()) {
-			list = am.getListOfReturnAttributes();
-			if (list.size() == 0) {
-				ret += "void";
-			} else {
-				ret += getCTypeOf(list.get(0));
+		for(String s: _allNames) {
+			if (s.compareTo(nameMethod) == 0) {
+				return;
 			}
-			ret += " " + _block.getName() + "__" +am.getName() + "(";
-			list = am.getListOfAttributes();
-			int cpt = 0;
-			for(AvatarAttribute aa: list) {
-				if (cpt != 0) {
-					ret += ", ";
-				}
-				ret += getCTypeOf(aa) + " " + aa.getName();
-				cpt ++;
-			}
-			
-			ret += ") {" + CR;
-			
-			if (tracing) {
-                String tr = "";
-                cpt = 0;
-                if (list.size() > 0) {
-                    ret += "char my__attr[CHAR_ALLOC_SIZE];" + CR;
-                    ret += "sprintf(my__attr, \"";
-                    for(AvatarAttribute aa: list) {
-                        if (cpt != 0) {
-                            tr += ",";
-                            ret += ",";
-                        }
-                        tr += aa.getName();
-                        ret += "%d";
-                        cpt ++;
-                    }
-                    ret += "\"," + tr + ");" + CR;
-                    ret += traceFunctionCall(_block.getName(), am.getName(), "my__attr");
-                }  else {
-                    ret += traceFunctionCall(_block.getName(), am.getName(), null);
-                }
-			}
-			
-			if (debug) {
-				ret += "debugMsg(\"-> ....() Executing method " + am.getName() + "\");" + CR;
-				
-				list = am.getListOfAttributes();
-				cpt = 0;
-				for(AvatarAttribute aa: list) {
-					ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
-				}
-			}
-			
-			list = am.getListOfReturnAttributes();
-			if (list.size() != 0) {
-				ret += "return 0;" + CR;
-			} 
-			ret += "}" + CR + CR;
 		}
+		
+		list = _am.getListOfReturnAttributes();
+		if (list.size() == 0) {
+			ret += "void";
+		} else {
+			ret += getCTypeOf(list.get(0));
+		}
+		
+		ret += " " + nameMethod + "(";
+		list = _am.getListOfAttributes();
+		int cpt = 0;
+		for(AvatarAttribute aa: list) {
+			if (cpt != 0) {
+				ret += ", ";
+			}
+			ret += getCTypeOf(aa) + " " + aa.getName();
+			cpt ++;
+		}
+		
+		ret += ") {" + CR;
+		
+		if (tracing) {
+			String tr = "";
+			cpt = 0;
+			if (list.size() > 0) {
+				ret += "char my__attr[CHAR_ALLOC_SIZE];" + CR;
+				ret += "sprintf(my__attr, \"";
+				for(AvatarAttribute aa: list) {
+					if (cpt != 0) {
+						tr += ",";
+						ret += ",";
+					}
+					tr += aa.getName();
+					ret += "%d";
+					cpt ++;
+				}
+				ret += "\"," + tr + ");" + CR;
+				ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
+			}  else {
+				ret += traceFunctionCall(_block.getName(), _am.getName(), null);
+			}
+		}
+		
+		if (debug) {
+			ret += "debugMsg(\"-> ....() Executing method " + _am.getName() + "\");" + CR;
+			
+			list = _am.getListOfAttributes();
+			cpt = 0;
+			for(AvatarAttribute aa: list) {
+				ret += "debugInt(\"Attribute " + aa.getName() + " = \"," + aa.getName() + ");" + CR;
+			}
+		}
+		
+		list = _am.getListOfReturnAttributes();
+		if (list.size() != 0) {
+			ret += "return 0;" + CR;
+		} 
+		ret += "}" + CR + CR;
 		_taskFile.addToMainCode(ret + CR);
 		
 	}
@@ -663,15 +693,14 @@ public class AVATAR2CPOSIX {
 			mainFile.appendToMainCode("pthread_t thread__" + taskFile.getName() + ";" + CR);
 		}
 		
+		makeArgumentsInMain(_debug);
+		
 		if (_debug) {
 			mainFile.appendToMainCode("/* Activating debug messages */" + CR); 
 			mainFile.appendToMainCode("activeDebug();" + CR);  
 		}
 		
-		if (tracing) {
-			mainFile.appendToMainCode("/* Activating tracing  */" + CR); 
-			mainFile.appendToMainCode("activeTracingInFile(\"trace.txt\");" + CR);  
-		}
+		
 		
 		mainFile.appendToMainCode("/* Activating randomness */" + CR); 
 		mainFile.appendToMainCode("initRandom();" + CR); 
@@ -695,6 +724,15 @@ public class AVATAR2CPOSIX {
 		
 		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Application terminated"));
 		mainFile.appendToMainCode("return 0;" + CR);
+	}
+	
+	public void makeArgumentsInMain(boolean _debug) {
+		mainFile.appendToMainCode("/* Activating tracing  */" + CR); 
+		
+		if (tracing) {
+			mainFile.appendToMainCode("if (argc>1){" + CR);
+			mainFile.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "}" + CR);  
+		}
 	}
 	
 	public void makeMakefileSrc(String _path) {

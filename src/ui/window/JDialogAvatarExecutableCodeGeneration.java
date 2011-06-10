@@ -75,15 +75,18 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     private String textSysC2 = "Compile executable code in";
     //private String textSysC3 = "with";
     private String textSysC4 = "Run code:";
+	private String textSysC5 = "Run code and trace events (if enable at code gneration):";
     
     private static String unitCycle = "1";
 	
 	private static String[] codes = {"AVATAR CPOSIX"};
 	private static int selectedItem = 0;
+	private static int selectedRun = 1;
     
     protected static String pathCode;
     protected static String pathCompiler;
     protected static String pathExecute;
+	protected static String pathExecuteWithTracing;
 	
 	
 	protected static boolean optimizeModeSelected = true;
@@ -100,7 +103,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected JButton stop;
     protected JButton close;
     
-	protected JRadioButton exe, exeint;
+	protected JRadioButton exe, exeint, exetrace;
 	protected ButtonGroup exegroup;
     protected JLabel gen, comp;
     protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int, simulationTraceFile;
@@ -287,11 +290,22 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exe = new JRadioButton(textSysC4, false);
 		exe.addActionListener(this);
 		exegroup.add(exe);
-        //exeJava.addActionListener(this);
         jp03.add(exe, c03);
         
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c03);
+		
+		exegroup.add(exe);
+		exetrace = new JRadioButton(textSysC5, false);
+		exetrace.addActionListener(this);
+		exegroup.add(exetrace);
+		 jp03.add(exetrace, c03);
+		
+		exe3 = new JTextField(pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
+        jp03.add(exe3, c03);
+		
+		exe.setSelected(selectedRun == 0);
+		exetrace.setSelected(selectedRun == 1);
 		
 		/*exeint = new JRadioButton(textSysC5, true);
 		exeint.addActionListener(this);
@@ -374,6 +388,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 			selectedUnit = units.getSelectedIndex();
 		} else if (evt.getSource() == showSimulationTrace) {
 			showSimulationTrace();
+		} else if ((evt.getSource() == exe) || (evt.getSource() == exetrace)) {
+			if (exe.isSelected()) {
+				selectedRun = 0;
+			} else {
+				selectedRun = 1;
+			}
 		}
     }
     
@@ -516,7 +536,11 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 				
 				if (jp1.getSelectedIndex() == 2) {
 					try {
-						cmd = exe2.getText();
+						if (exe.isSelected()) {
+							cmd = exe2.getText();
+						} else {
+							cmd = exe3.getText();
+						}
 						
 						jta.append("Executing code with command: \n" + cmd + "\n");
 						

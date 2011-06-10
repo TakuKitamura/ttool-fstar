@@ -84,7 +84,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	private int spaceVerticalText = 2;
 	private int spaceHorizontalText = 2;
 	private int spaceStop = 20;
-	private int verticalLink = 10;
+	private int verticalLink = 7;
 	private int lengthAsync = 50;
 	private int spaceBroadcast = 25;
 	
@@ -117,6 +117,8 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	private boolean go;
 	private Thread t;
 	
+	private int excluOnList = 1; 
+	
 	Vector<GenericTransaction> transactions;
 	
 	JFrameSimulationSDPanel jfssdp;
@@ -140,9 +142,33 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		setNewSize();
 		addMouseMotionListener(this);
 		
-		
-		
-		
+	}
+	
+	//Return true iff exclu was obtained
+	private synchronized boolean tryToGetExclu() {
+		if (excluOnList == 1) {
+			excluOnList = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	private synchronized void getExclu() {
+		//TraceManager.addDev("Trying to get exlu");
+		while(excluOnList == 0) {
+			try {
+				//TraceManager.addDev("Waiting");
+				wait();
+			} catch (Exception e) {
+			}
+		}
+		//TraceManager.addDev("got the exlu");
+		excluOnList = 0;
+	}
+	
+	private synchronized void removeExclu() {
+		excluOnList = 1;
+		notifyAll();
 	}
 	
 	public void setMyScrollPanel(JScrollPane _jsp) {
@@ -156,31 +182,36 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 		int oldMaxY = maxY;
 		int oldMaxX = maxX;
 		
-		if (!spaceBetweenLifeLinesComputed) {
-			computeSpaceBetweenLifeLines(g);
-		}
-		
-		
-		currentY = paintTopElements(g, currentX, currentY);
-		paintTransactions(g, currentX, currentY);
-		stamp ++;
-		
-		if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
-			maxX = Math.max(maxX, MAX_X);
-			maxY = Math.max(maxY, MAX_Y);
+		boolean mustDraw = tryToGetExclu();
+		if (mustDraw) {
+			if (!spaceBetweenLifeLinesComputed) {
+				computeSpaceBetweenLifeLines(g);
+			}
+			
+			
+			currentY = paintTopElements(g, currentX, currentY);
+			paintTransactions(g, currentX, currentY);
+			stamp ++;
+			
 			if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
-				setNewSize();
-				//repaint();
+				maxX = Math.max(maxX, MAX_X);
+				maxY = Math.max(maxY, MAX_Y);
+				if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
+					setNewSize();
+					//repaint();
+				}
+			} else {
+				if (mustScroll) {
+					scrollToLowerPosition();
+					mustScroll = false;
+				}
 			}
-		} else {
-			if (mustScroll) {
-				scrollToLowerPosition();
-				mustScroll = false;
+			
+			if (drawInfo) {
+				drawInfo(g);
 			}
-		}
-		
-		if (drawInfo) {
-			drawInfo(g);
+			
+			removeExclu();
 		}
 	}
 	
@@ -903,7 +934,6 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			if (t == null) {
 				Thread t = new Thread(this);
 				t.start();
-				repaint();
 			}
 		}
 	}
@@ -925,6 +955,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			// Read the content of the file
 			// Read line by line
 			// Upate the graphic regularly
+			getExclu();
 			jfssdp.setStatus("Reading " + fileReference);
 			try{
 				// Open the file that is the first 
@@ -949,6 +980,9 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			if (jfssdp != null) {
 				updateInfoOnTransactions();
 			}
+			removeExclu();
+			
+			repaint();
 		} 
 		
 		t = null;

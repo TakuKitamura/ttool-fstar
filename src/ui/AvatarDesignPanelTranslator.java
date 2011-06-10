@@ -124,11 +124,11 @@ public class AvatarDesignPanelTranslator {
 					if ((tmp.startsWith("#") && (tmp.length() > 1))) {
 							tmp = tmp.substring(1, tmp.length()).trim();
 							
-							TraceManager.addDev("Reworking pragma =" + tmp);
+							//TraceManager.addDev("Reworking pragma =" + tmp);
 							
 							tmp = reworkPragma(tmp, _blocks);
 							
-							TraceManager.addDev("Reworked pragma =" + tmp);
+							//TraceManager.addDev("Reworked pragma =" + tmp);
 							
 							if (tmp == null) {
 								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
@@ -137,7 +137,7 @@ public class AvatarDesignPanelTranslator {
 								addWarning(ce);
 							} else {
 								_as.addPragma(tmp);
-								TraceManager.addDev("Adding pragma:" + tmp);
+								//TraceManager.addDev("Adding pragma:" + tmp);
 							}
 					}
 				}
@@ -810,7 +810,7 @@ public class AvatarDesignPanelTranslator {
 				
 			// State
 			} else if (tgc instanceof AvatarSMDState) {
-				TraceManager.addDev("Value = " + tgc.getValue());
+				//TraceManager.addDev("Value = " + tgc.getValue());
 				astate = asm.getStateWithName(tgc.getValue());
 				if (astate == null) {
 					astate = new AvatarState(tgc.getValue(), tgc);

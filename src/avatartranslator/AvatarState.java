@@ -55,12 +55,12 @@ public class AvatarState extends AvatarStateMachineElement {
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 		
-		TraceManager.addDev("CREATING state with name = "+ _name);
+		//TraceManager.addDev("CREATING state with name = "+ _name);
     }
 	
 	public AvatarState(String _name, Object _referenceObject, boolean _isCheckable) {
         super(_name, _referenceObject, _isCheckable);
-		TraceManager.addDev("CREATING state with name = "+ _name);
+		//TraceManager.addDev("CREATING state with name = "+ _name);
     }
 	
 	public AvatarStateMachineElement basicCloneMe() {
