@@ -71,6 +71,7 @@ public class AVATAR2CPOSIX {
 	private MainFile mainFile;
 	private Vector<TaskFile> taskFiles;
 	private String makefile_src;
+	private String makefile_SocLib;
 	
 	private int timeUnit;
 	private boolean debug;
@@ -105,8 +106,13 @@ public class AVATAR2CPOSIX {
 			FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
 		}
 		
+		// Standard Makefile
 		makeMakefileSrc(GENERATED_PATH);
 		FileUtils.saveFile(path + "Makefile.src", makefile_src);
+		
+		// Makefile for SocLib
+		makeMakefileSocLib();
+		FileUtils.saveFile(path + "Makefile.soclib", makefile_SocLib);
 	}
 	
 	
@@ -740,6 +746,15 @@ public class AVATAR2CPOSIX {
 		makefile_src += _path + "main.c ";
 		for(TaskFile taskFile: taskFiles) {
 			makefile_src += _path + taskFile.getName() + ".c ";
+		}
+		
+	}
+	
+	public void makeMakefileSocLib() {
+		makefile_SocLib = "objs = ";
+		makefile_SocLib += "main.o ";
+		for(TaskFile taskFile: taskFiles) {
+			makefile_SocLib += taskFile.getName() + ".o ";
 		}
 		
 	}

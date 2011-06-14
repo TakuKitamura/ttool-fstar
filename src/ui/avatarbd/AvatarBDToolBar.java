@@ -141,6 +141,8 @@ public class AvatarBDToolBar extends TToolBar {
 		this.addSeparator();
 		this.addSeparator();*/
 		
+		this.addSeparator();
+		
 	    button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
         button.addMouseListener(mgui.mouseHandler);
 		
