@@ -152,6 +152,10 @@ void traceSynchroRequest(request *from, request *to) {
   char s[1024];
   int i;
 
+  if (trace == TRACE_OFF) {
+    return;
+  }
+
   sprintf(s, "block=%s blockdestination=%s type=synchro channel=%s params=", from->listOfRequests->owner, to->listOfRequests->owner, from->syncChannel->outname);
   for(i=0; i<from->nbOfParams; i++) {
     if (i>0) {
@@ -173,6 +177,9 @@ void traceAsynchronousSendRequest(request *req) {
   char s[1024];
   int i;
 
+  if (trace == TRACE_OFF) {
+    return;
+  }
 
   sprintf(s, "block=%s type=send_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
   if (req->msg != NULL) {
@@ -197,6 +204,9 @@ void traceAsynchronousReceiveRequest(request *req) {
   char s[1024];
   int i;
 
+  if (trace == TRACE_OFF) {
+    return;
+  }
 
   sprintf(s, "block=%s type=receive_async channel=%s msgid=%ld params=", req->listOfRequests->owner, req->asyncChannel->outname, req->msg->id);
   if (req->msg != NULL) {
