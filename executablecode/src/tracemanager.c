@@ -9,6 +9,7 @@
 
 #define TRACE_OFF 0
 #define TRACE_IN_FILE 1
+#define TRACE_IN_CONSOLE 2
 
 #define TRACE_FILE_NAME "Trace.txt"
 
@@ -59,13 +60,19 @@ void writeInTrace(char *info) {
   char s[CHAR_ALLOC_SIZE];
   addInfo(s, info);
 		 //printf("Write in file\n");
-  if (file != NULL) {
-    
-
-    debug2Msg("Saving in file", s);
-    fprintf(file, s);
-    fflush(file);
+  switch(trace){
+  case TRACE_IN_FILE:
+    if (file != NULL) {
+      debug2Msg("Saving in file", s);
+      fprintf(file, s);
+      fflush(file);
+    }
+    break;
+  case TRACE_IN_CONSOLE:
+    printf("%s\n", s);
+    break;
   }
+  
   pthread_mutex_unlock(&__traceMutex);
 }
 
@@ -81,6 +88,14 @@ void activeTracingInFile(char *fileName) {
   }
   file = fopen(name,"w");
 
+  /* Initializing mutex */
+  if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
+}
+
+void activeTracingInConsole() {
+  trace = TRACE_IN_CONSOLE;
+  my_clock_gettime(&begints); 
+  
   /* Initializing mutex */
   if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
 }

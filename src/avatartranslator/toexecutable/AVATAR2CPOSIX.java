@@ -737,7 +737,8 @@ public class AVATAR2CPOSIX {
 		
 		if (tracing) {
 			mainFile.appendToMainCode("if (argc>1){" + CR);
-			mainFile.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "}" + CR);  
+			mainFile.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "} else {" + CR);  
+			mainFile.appendToMainCode("activeTracingInConsole();" + CR + "}" + CR);
 		}
 	}
 	
