@@ -444,7 +444,7 @@ public class AvatarDesignPanelTranslator {
 			v = adp.getAvatarBDPanel().getAttributesOfDataType(types[i]);
 			if (v == null) {
 				if (AvatarType.getType(types[i]) == -1) {
-					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + types[i] + " declared in method" + _atam + " of block " + _block.getName());
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  \"" + types[i] + "\" declared in method " + _atam + " of block " + _block.getName());
 					ce.setAvatarBlock(_block);
 					ce.setTDiagramPanel(adp.getAvatarBDPanel());
 					addCheckingError(ce);
@@ -670,7 +670,7 @@ public class AvatarDesignPanelTranslator {
 							ce.setTDiagramPanel(tdp);
 							ce.setTGComponent(tgc);
 							addCheckingError(ce);
-						}
+						} else {
 						
 						// Checking expressions passed as parameter
 						for(i=0; i<aaos.getNbOfValues(); i++) {
@@ -695,6 +695,7 @@ public class AvatarDesignPanelTranslator {
 									addCheckingError(ce);
 								}
 							}
+						}
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
 						listE.addCor(aaos, tgc);
@@ -744,48 +745,53 @@ public class AvatarDesignPanelTranslator {
 						ce.setTGComponent(tgc);
 						addCheckingError(ce);
 					} else {
-						for(i=0; i<asmdss.getNbOfValues(); i++) {
-							tmp = asmdss.getValue(i);
-							if (tmp.length() == 0) {
-								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
+						//TraceManager.addDev("Nb of values in signal" + atas.getName() + " :" + atas.getListOfAttributes().size());
+						//TraceManager.addDev("Nb of values in admdss :" + asmdss.getNbOfValues());
+						
+							for(i=0; i<asmdss.getNbOfValues(); i++) {
+								tmp = asmdss.getValue(i);
+								if (tmp.length() == 0) {
+									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
+									ce.setAvatarBlock(_ab);
+									ce.setTDiagramPanel(tdp);
+									ce.setTGComponent(tgc);
+									addCheckingError(ce);
+								} else {
+									manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
+								}
+							}
+							if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+								TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
 								ce.setAvatarBlock(_ab);
 								ce.setTDiagramPanel(tdp);
 								ce.setTGComponent(tgc);
 								addCheckingError(ce);
-							} else {
-								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
-							}
-						}
-						if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-							TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-							ce.setAvatarBlock(_ab);
-							ce.setTDiagramPanel(tdp);
-							ce.setTGComponent(tgc);
-							addCheckingError(ce);
-						}
-						
-						// Checking expressions passed as parameter
-						for(i=0; i<aaos.getNbOfValues(); i++) {
-							String theVal = aaos.getValue(i);
-							if (atas.getListOfAttributes().get(i).isInt()) {
-								if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
-									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								}
-							} else {
-								// We assume it is a bool attribute
-								if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
-									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
+							}  else {
+							
+							// Checking expressions passed as parameter
+							TraceManager.addDev("Block = " + _ab.getName());
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								String theVal = aaos.getValue(i);
+								if (atas.getListOfAttributes().get(i).isInt()) {
+									if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
+										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+										//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+										ce.setAvatarBlock(_ab);
+										ce.setTDiagramPanel(tdp);
+										ce.setTGComponent(tgc);
+										addCheckingError(ce);
+									}
+								} else {
+									// We assume it is a bool attribute
+									if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
+										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> value at index #" + i + " does not match definition");
+										//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+										ce.setAvatarBlock(_ab);
+										ce.setTDiagramPanel(tdp);
+										ce.setTGComponent(tgc);
+										addCheckingError(ce);
+									}
 								}
 							}
 						}

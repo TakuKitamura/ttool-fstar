@@ -77,6 +77,8 @@ public class TAttribute {
     private String initialValue;
     private int type;
     private String typeOther;
+	
+	public boolean isAvatar;
     
     private boolean set = false;
     
@@ -305,13 +307,48 @@ public class TAttribute {
                 return "";
         }
     }
+	
+	public static String getStringAvatarType(int type) {
+        switch(type) {
+            case INTEGER:
+                return "int";
+            case BOOLEAN:
+                return "bool";
+			case TIMER:
+                return "Timer";
+            default:
+                return "";
+        }
+    }
     
     public String toString() {
+		if (isAvatar) {
+			return toAvatarString();
+		}
         String myType;
         if (type == OTHER) {
             myType = typeOther;
         } else {
             myType = getStringType(type);
+        }
+		
+        if ((initialValue == null)  || (initialValue.equals(""))) {
+            return getStringAccess(access) + " " + id + " : " + myType + ";";
+        } else {
+			if (type == ARRAY_NAT) {
+				return getStringAccess(access) + " " + id + " [" + getInitialValue() + "] : " + myType + ";";
+			} else {
+				return getStringAccess(access) + " " + id + " = " + getInitialValue() + " : " + myType + ";";
+			}
+        }
+    }
+	
+	 public String toAvatarString() {
+        String myType;
+        if (type == OTHER) {
+            myType = typeOther;
+        } else {
+            myType = getStringAvatarType(type);
         }
 		
         if ((initialValue == null)  || (initialValue.equals(""))) {
@@ -386,6 +423,8 @@ public class TAttribute {
     }
     
     public TAttribute makeClone() {
-        return new TAttribute(access, id, initialValue, type, typeOther);
+		TAttribute ta = new TAttribute(access, id, initialValue, type, typeOther);
+		ta.isAvatar = isAvatar;
+        return ta;
     }
 }

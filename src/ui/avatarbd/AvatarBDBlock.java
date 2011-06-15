@@ -256,7 +256,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 					break;
 				}
 				a = (TAttribute)(myAttributes.get(index));
-				attr = a.toString();
+				attr = a.toAvatarString();
 				w = g.getFontMetrics().stringWidth(attr);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(attr, x + textX, y + cpt);
@@ -488,7 +488,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
-            //return false;
+		//return false;
         //}
 		((AvatarBDPanel)tdp).updateAllSignalsOnConnectors();
 		rescaled = true;
@@ -499,8 +499,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
         _jdab.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
         //_jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
-        _jdab.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-		_jdab.addType(TAttribute.getStringType(TAttribute.INTEGER), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.BOOLEAN), true);
+		_jdab.addType(TAttribute.getStringAvatarType(TAttribute.INTEGER), true);
 		_jdab.addType(TAttribute.getStringType(TAttribute.TIMER), false);
 		
 		for(String s: tdp.getAllDataTypes()) {
@@ -519,11 +519,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		 if (tgc instanceof AvatarBDBlock) {
-			 return true;
-		 }
-		 
-		 return false;
+		if (tgc instanceof AvatarBDBlock) {
+			return true;
+		}
+		
+		return false;
 	}
     
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -700,6 +700,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+									ta.isAvatar = true;
                                     myAttributes.addElement(ta);
                                 }
                             }
@@ -844,10 +845,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		TAttribute a;
 		
 		for(int i=0; i<myAttributes.size(); i++) {
-			 a = (TAttribute)(myAttributes.elementAt(i));
-			 if (a.getType() == TAttribute.TIMER) {
-				 v.add(a.getId());
-			 }
+			a = (TAttribute)(myAttributes.elementAt(i));
+			if (a.getType() == TAttribute.TIMER) {
+				v.add(a.getId());
+			}
 		}
 		return v;
 	}
@@ -889,11 +890,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
 	public AvatarSignal getAvatarSignalFromFullName(String _id) {
 		if(_id.startsWith("in ")) {
-				return getSignalNameBySignalDef(_id.substring(3, _id.length()).trim());
+			return getSignalNameBySignalDef(_id.substring(3, _id.length()).trim());
 		}
 		
 		if(_id.startsWith("out ")) {
-				return getSignalNameBySignalDef(_id.substring(4, _id.length()).trim());
+			return getSignalNameBySignalDef(_id.substring(4, _id.length()).trim());
 		}
 		return null;
 	}
@@ -980,6 +981,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		}
 	}
 	
-
+	
     
 }
