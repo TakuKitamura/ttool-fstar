@@ -41,16 +41,17 @@ void addInfo(char *dest, char *info) {
     tmp = -tmp;
   }
 
-  tmp1 = 100000000;
+  /*tmp1 = 100000000;
 
   for(i=0; i<9; i++) {
     s1[i] = 48 + (tmp / tmp1);
     tmp = tmp % tmp1;
     tmp1 = tmp1 / 10;
-  }
-  s1[9] = '\0';
+    }
+    s1[9] = '\0';*/
   
-  sprintf(dest, "#%d time=%ld.%s %s", id, ts1.tv_sec, s1, info);
+  /* s1 -> tmp */
+  sprintf(dest, "#%d time=%ld.%09ld %s", id, ts1.tv_sec, tmp, info);
   id ++;
 }
 

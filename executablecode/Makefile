@@ -28,3 +28,5 @@ OBJS_executor = $(SRCS_base:%.c=lib/%.o)
 OBJS = $(SRCS:%.c=lib/%.o)
 
 include Makefile.defs
+
+include Makefile.forsoclib

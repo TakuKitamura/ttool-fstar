@@ -1,0 +1,19 @@
+updateruntime:
+	cp ~/TTool/executablecode/src/*.c ~/Prog/mutekh/libavatar/
+	cp ~/TTool/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/   
+
+updategeneratedcode:
+	cp ~/TTool/executableCode/generated_src/*.h ~/Prog/mutekh/examples/avatar
+	cp ~/TTool/executableCode/generated_src/*.c ~/Prog/mutekh/examples/avatar 
+	cp ~/TTool/executableCode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
+
+compilesoclib:
+	export PATH=$PATH:/packages/crosscompilers/bin/ 
+	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-mips32el:pf-tutorial:memcheck
+
+runsoclib:
+	echo "running soclib"
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; SOCLIB_GDB=S SOCLIB_MEMCHK=T ./system.x mips32el:4 ~/Prog/mutekh/avatar-soclib-mips32el.out
+
+allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
+
