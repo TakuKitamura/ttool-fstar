@@ -60,6 +60,7 @@ public class AVATAR2CPOSIX {
 	private final static int SEC = 2;
 	
 	
+	private final static String UNUSED_ATTR = "__attribute__((unused))";
 	private final static String GENERATED_PATH = "generated_src" + File.separator;
 	private final static String UNKNOWN = "UNKNOWN";
 	private final static String CR = "\n";
@@ -362,13 +363,13 @@ public class AVATAR2CPOSIX {
 		int nbOfMaxParams = _block.getMaxNbOfParams();
 		//s+= "request *__req;" + CR;
 		for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
-			s+= "request __req" + i + ";" + CR;
-			s+= "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
+			s+= UNUSED_ATTR + " request __req" + i + ";" + CR;
+			s+= UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
 		}
-		s+= "setOfRequests __list;" + CR;
+		s+= UNUSED_ATTR + "setOfRequests __list;" + CR;
 		
-		s+= "pthread_cond_t __myCond;" + CR;
-		s+= "request *__returnRequest;" + CR;
+		s+= UNUSED_ATTR + "pthread_cond_t __myCond;" + CR;
+		s+= UNUSED_ATTR + "request *__returnRequest;" + CR;
 		
 		s+= CR + "char * __myname = (char *)arg;" + CR;
         

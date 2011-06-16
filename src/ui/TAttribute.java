@@ -49,6 +49,8 @@ package ui;
 
 import java.util.*;
 
+
+import myutil.*;
 import translator.*;
 import translator.tojava.*;
 
@@ -175,6 +177,8 @@ public class TAttribute {
 		boolean b;
 		int val;
 		
+		//TraceManager.addDev("Is A Valid Inital Value type=" + type + " value=" + value);
+		
         switch(type) {
             case NATURAL:
                 return value.matches("\\d*");
@@ -264,6 +268,21 @@ public class TAttribute {
         }
         return -1;
     }
+	
+	public static int getAvatarType(String s) {
+        if (s.equals("int")) {
+            return 	INTEGER;
+        } else if (s.equals("bool")) {
+            return 	BOOLEAN;
+        } else if (s.equals("Timer")) {
+            return TIMER;
+        } else if (s.equals("Integer")) {
+            return INTEGER;
+        } else if (!s.equals("")) {
+            return OTHER;
+        }
+        return -1;
+    }
     
     
     
@@ -316,8 +335,10 @@ public class TAttribute {
                 return "bool";
 			case TIMER:
                 return "Timer";
+			case NATURAL:
+                return "int";
             default:
-                return "";
+                return "unknown";
         }
     }
     

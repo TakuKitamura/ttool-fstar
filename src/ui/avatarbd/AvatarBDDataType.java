@@ -346,8 +346,8 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 	protected void setJDialogOptions(JDialogAvatarBlock _jdab) {
         //jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
         _jdab.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
-        _jdab.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
-		_jdab.addType(TAttribute.getStringType(TAttribute.INTEGER), true);
+        _jdab.addType(TAttribute.getStringAvatarType(TAttribute.BOOLEAN), true);
+		_jdab.addType(TAttribute.getStringAvatarType(TAttribute.INTEGER), true);
 		_jdab.enableInitialValue(true);
         _jdab.enableRTLOTOSKeyword(false);
         _jdab.enableJavaKeyword(false);
@@ -424,7 +424,11 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //System.out.println("Adding attribute " + id + " typeOther=" + typeOther);
+									if (type == TAttribute.NATURAL) {
+										type = TAttribute.INTEGER;
+									}
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+									ta.isAvatar = true;
                                     myAttributes.addElement(ta);
                                 }
                             }

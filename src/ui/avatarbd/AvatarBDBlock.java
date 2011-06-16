@@ -699,6 +699,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 }
                                 if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
+									if (type == TAttribute.NATURAL) {
+										type = TAttribute.INTEGER;
+									}
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
 									ta.isAvatar = true;
                                     myAttributes.addElement(ta);

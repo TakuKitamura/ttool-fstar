@@ -25,10 +25,10 @@ struct timespec begints;
 
 
 void addInfo(char *dest, char *info) {
-  char s1[10];
+  //char s1[10];
   long tmp;
-  long tmp1;
-  int i;
+  //long tmp1;
+  //int i;
   struct timespec ts, ts1;
   my_clock_gettime(&ts);
   

@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/ObserverProp1.c generated_src/RemotelyControlledMicrowave.c generated_src/RemoteControl.c generated_src/MicroWaveOven.c generated_src/Bell.c generated_src/ControlPanel.c generated_src/Controller.c generated_src/Magnetron.c generated_src/Door.c generated_src/WirelessInterface.c 
+SRCS = generated_src/main.c generated_src/Block0.c 
