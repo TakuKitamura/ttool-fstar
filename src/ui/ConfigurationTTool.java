@@ -127,6 +127,9 @@ public class ConfigurationTTool {
 	public static String AVATARExecutableCodeHost = "";
 	public static String AVATARExecutableCodeCompileCommand = "";
 	public static String AVATARExecutableCodeExecuteCommand = "";
+	public static String AVATARExecutableSoclibCodeCompileCommand = "";
+	public static String AVATARExecutableSoclibCodeExecuteCommand = "";
+	public static String AVATARExecutableSoclibTraceFile = "";
     
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
@@ -307,6 +310,9 @@ public class ConfigurationTTool {
 		sb.append("AVATARExecutableCodeHost: " + AVATARExecutableCodeHost + "\n");
 		sb.append("AVATARExecutableCodeCompileCommand: " + AVATARExecutableCodeCompileCommand + "\n");
 		sb.append("AVATARExecutableCodeExecuteCommand: " + AVATARExecutableCodeExecuteCommand + "\n");
+		sb.append("AVATARExecutableSocLibCodeCompileCommand: " + AVATARExecutableSoclibCodeCompileCommand + "\n");
+		sb.append("AVATARExecutableSocLibCodeExecuteCommand: " + AVATARExecutableSoclibCodeExecuteCommand + "\n");
+		sb.append("AVATARExecutableSocLibCodeTraceFile: " + AVATARExecutableSoclibTraceFile + "\n");
 		
 		sb.append("\nProVerif:\n");
         sb.append("ProVerifCodeDirectory: " + ProVerifCodeDirectory + "\n");
@@ -522,6 +528,15 @@ public class ConfigurationTTool {
 			nl = doc.getElementsByTagName("AVATARExecutableCodeExecuteCommand");
             if (nl.getLength() > 0)
                 AVATARExecutableCodeExecuteCommand(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeCompileCommand");
+            if (nl.getLength() > 0)
+                AVATARExecutableSoclibCodeCompileCommand(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableSoclibCodeExecuteCommand");
+            if (nl.getLength() > 0)
+                AVATARExecutableSoclibCodeExecuteCommand(nl);
+			nl = doc.getElementsByTagName("AVATARExecutableSoclibTraceFile");
+            if (nl.getLength() > 0)
+                AVATARExecutableSoclibTraceFile(nl);
             
 			if (systemcOn) {
 					nl = doc.getElementsByTagName("SystemCHost");
@@ -1090,6 +1105,33 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             AVATARExecutableCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableSoclibCodeCompileCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableSoclibCodeCompileCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableSoclibCodeExecuteCommand(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableSoclibCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+	
+	private static void AVATARExecutableSoclibTraceFile(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AVATARExecutableSoclibTraceFile = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

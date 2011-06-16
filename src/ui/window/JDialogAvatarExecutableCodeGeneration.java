@@ -73,20 +73,29 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     
     private String textSysC1 = "Base directory of code generation code:";
     private String textSysC2 = "Compile executable code in";
+	private String textSysC3 = "Compile soclib executable with";
     //private String textSysC3 = "with";
     private String textSysC4 = "Run code:";
-	private String textSysC5 = "Run code and trace events (if enable at code gneration):";
+	private String textSysC5 = "Run code and trace events (if enabled at code generation):";
+	private String textSysC6 = "Run code in soclib / mutekh:";
+	private String textSysC8 = "Show trace from file:";
+	private String textSysC9 = "Show trace from soclib file:";
     
     private static String unitCycle = "1";
 	
 	private static String[] codes = {"AVATAR CPOSIX"};
 	private static int selectedItem = 0;
 	private static int selectedRun = 1;
+	private static int selectedCompile = 0;
+	private static int selectedViewTrace = 0;
     
     protected static String pathCode;
     protected static String pathCompiler;
     protected static String pathExecute;
 	protected static String pathExecuteWithTracing;
+	protected static String pathCompileSoclib;
+	protected static String pathExecuteSoclib;
+	protected static String pathSoclibTraceFile;
 	
 	
 	protected static boolean optimizeModeSelected = true;
@@ -103,10 +112,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected JButton stop;
     protected JButton close;
     
-	protected JRadioButton exe, exeint, exetrace;
-	protected ButtonGroup exegroup;
-    protected JLabel gen, comp;
-    protected JTextField code1, code2, compiler1, exe1, exe2, exe3, exe2int, simulationTraceFile;
+	protected JRadioButton exe, exeint, exetrace, exesoclib, compile, compilesoclib, viewtrace, viewtracesoclib;
+	protected ButtonGroup compilegroup, exegroup, viewgroup;
+    protected JLabel gen;
+    protected JTextField code1, code2, compiler1, compiler2, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
     protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode;
@@ -128,7 +137,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     
     
     /** Creates new form  */
-    public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute) {
+    public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute, String _pathCompilerSoclib, String _pathExecuteSoclib, String _pathSoclibTraceFile) {
         super(title);
         
         f = _f;
@@ -144,6 +153,18 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         if (pathExecute == null)
             pathExecute = _pathExecute;
         
+		if (pathCompileSoclib == null) {
+			pathCompileSoclib = _pathCompilerSoclib;
+		}
+		
+		if (pathExecuteSoclib == null) {
+			pathExecuteSoclib = _pathExecuteSoclib;
+		}
+		
+		if (pathSoclibTraceFile == null){
+			pathSoclibTraceFile = _pathSoclibTraceFile;
+		}
+		
         hostExecute = _hostExecute;
         
 		
@@ -159,6 +180,9 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected void myInitComponents() {
         mode = NOT_STARTED;
         setButtons();
+		makeSelectionCompile();
+		makeSelectionExecute();
+		makeSelectionViewTrace();
     }
     
     protected void initComponents() {
@@ -254,31 +278,44 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         jp01.add(new JLabel(" "), c01);
         jp1.add("Generate code", jp01);
         
-        // Panel 02
+        // Panel 02 -> compile
         c02.gridheight = 1;
         c02.weighty = 1.0;
         c02.weightx = 1.0;
         c02.gridwidth = GridBagConstraints.REMAINDER; //end row
         c02.fill = GridBagConstraints.BOTH;
         c02.gridheight = 1;
+		
+		compilegroup =  new ButtonGroup();
         
-        comp = new JLabel(textSysC2);
-        //compJava.addActionListener(this);
-        jp02.add(comp, c02);
+        compile = new JRadioButton(textSysC2, false);
+        jp02.add(compile, c02);
+		compile.addActionListener(this);
+        compilegroup.add(compile);
+        //code2 = new JTextField(pathCode, 100);
+        //jp02.add(code2, c02);
         
-        code2 = new JTextField(pathCode, 100);
-        jp02.add(code2, c02);
-        
-        jp02.add(new JLabel("with"), c02);
+        //jp02.add(new JLabel("with"), c02);
         
         compiler1 = new JTextField(pathCompiler, 100);
         jp02.add(compiler1, c02);
         
         jp02.add(new JLabel(" "), c02);
-        
+		
+		
+		compilesoclib = new JRadioButton(textSysC3, false);
+		compilesoclib.addActionListener(this);
+        jp02.add(compilesoclib, c02);
+        compilegroup.add(compilesoclib);
+        compiler2 = new JTextField(pathCompileSoclib, 100);
+        jp02.add(compiler2, c02);
+		
+		compile.setSelected(selectedCompile == 0);
+		compilesoclib.setSelected(selectedCompile == 1);
+		
         jp1.add("Compile", jp02);
         
-        // Panel 03
+        // Panel 03 -> Execute
         c03.gridheight = 1;
         c03.weighty = 1.0;
         c03.weightx = 1.0;
@@ -291,21 +328,27 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 		exe.addActionListener(this);
 		exegroup.add(exe);
         jp03.add(exe, c03);
-        
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c03);
-		
 		exegroup.add(exe);
+		
 		exetrace = new JRadioButton(textSysC5, false);
 		exetrace.addActionListener(this);
 		exegroup.add(exetrace);
-		 jp03.add(exetrace, c03);
-		
+		jp03.add(exetrace, c03);
 		exe3 = new JTextField(pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
         jp03.add(exe3, c03);
 		
+		exesoclib = new JRadioButton(textSysC6, false);
+		exesoclib.addActionListener(this);
+		exegroup.add(exesoclib);
+		jp03.add(exesoclib, c03);
+		exe4 = new JTextField(pathExecuteSoclib, 100);
+        jp03.add(exe4, c03);
+		
 		exe.setSelected(selectedRun == 0);
 		exetrace.setSelected(selectedRun == 1);
+		exesoclib.setSelected(selectedRun == 2);
 		
 		/*exeint = new JRadioButton(textSysC5, true);
 		exeint.addActionListener(this);
@@ -320,20 +363,35 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         
         jp1.add("Execute", jp03);
         
-        // Panel 04
+        // Panel 04 -> View trace
         c04.gridheight = 1;
         c04.weighty = 1.0;
         c04.weightx = 1.0;
         c04.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c04.fill = GridBagConstraints.BOTH;
+        c04.fill = GridBagConstraints.HORIZONTAL;
         c04.gridheight = 1;
+		
+		viewgroup = new ButtonGroup();
+		viewtrace = new JRadioButton(textSysC8, false);
+		viewgroup.add(viewtrace);
+		viewtrace.addActionListener(this);
+		 jp04.add(viewtrace, c04);
         simulationTraceFile = new JTextField(pathCode + File.separator + "trace.txt", 100);
         jp04.add(simulationTraceFile, c04);
+		viewtracesoclib = new JRadioButton(textSysC9, false);
+		viewgroup.add(viewtracesoclib);
+		viewtracesoclib.addActionListener(this);
+		 jp04.add(viewtracesoclib, c04);
+		simulationsoclibTraceFile = new JTextField(pathSoclibTraceFile, 100);
+        jp04.add(simulationsoclibTraceFile, c04);
         
         showSimulationTrace = new JButton("Show simulation trace");
         showSimulationTrace.addActionListener(this);
-         jp04.add(showSimulationTrace, c04);
+        jp04.add(showSimulationTrace, c04);
         
+		viewtrace.setSelected(selectedViewTrace == 0);
+		viewtracesoclib.setSelected(selectedViewTrace == 1);
+		
         jp1.add("Results", jp04);
         
         
@@ -388,12 +446,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 			selectedUnit = units.getSelectedIndex();
 		} else if (evt.getSource() == showSimulationTrace) {
 			showSimulationTrace();
-		} else if ((evt.getSource() == exe) || (evt.getSource() == exetrace)) {
-			if (exe.isSelected()) {
-				selectedRun = 0;
-			} else {
-				selectedRun = 1;
-			}
+		} else if ((evt.getSource() == exe) || (evt.getSource() == exetrace)|| (evt.getSource() == exesoclib)) {
+			makeSelectionExecute();
+		} else if ((evt.getSource() == compile) || (evt.getSource() == compilesoclib)) {
+			makeSelectionCompile();
+		} else if ((evt.getSource() == viewtrace) || (evt.getSource() == viewtracesoclib)) {
+			makeSelectionViewTrace();
 		}
     }
     
@@ -404,6 +462,48 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 		optimizeModeSelected = optimizemode.isSelected();
         dispose();
     }
+	
+	public void makeSelectionExecute() {
+			if (exe.isSelected()) {
+				selectedRun = 0;
+			} else {
+				if (exetrace.isSelected()) {
+					selectedRun = 1;
+				} else {
+					selectedRun = 2;
+				}
+			}
+			
+			exe2.setEnabled(selectedRun == 0);
+			exe3.setEnabled(selectedRun == 1);
+			exe4.setEnabled(selectedRun == 2);
+			
+	}
+	
+	public void makeSelectionCompile() {
+			if (compile.isSelected()) {
+				selectedCompile = 0;
+			} else {
+				selectedCompile = 1;
+			}
+			
+			//code2.setEnabled(selectedCompile == 0);
+			compiler1.setEnabled(selectedCompile == 0);
+			compiler2.setEnabled(selectedCompile == 1);
+			
+	}
+	
+	public void makeSelectionViewTrace() {
+			if (viewtrace.isSelected()) {
+				selectedViewTrace = 0;
+			} else {
+				selectedViewTrace = 1;
+			}
+			
+			simulationTraceFile.setEnabled(selectedViewTrace == 0);
+			simulationsoclibTraceFile.setEnabled(selectedViewTrace == 1);
+			
+	}
     
     public void stopProcess() {
 			try {
@@ -511,7 +611,11 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 				// Compilation
 				if (jp1.getSelectedIndex() == 1) {
 					
+					if (selectedCompile == 0) {
 					cmd = compiler1.getText();
+					} else {
+						cmd = compiler2.getText();
+					}
 					
 					jta.append("Compiling executable code with command: \n" + cmd + "\n");
 					
@@ -536,10 +640,14 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 				
 				if (jp1.getSelectedIndex() == 2) {
 					try {
-						if (exe.isSelected()) {
+						if (selectedRun == 0) {
 							cmd = exe2.getText();
 						} else {
-							cmd = exe3.getText();
+							if (selectedRun == 1) {
+								cmd = exe3.getText();
+							} else {
+								cmd = exe4.getText();
+							}
 						}
 						
 						jta.append("Executing code with command: \n" + cmd + "\n");
@@ -635,7 +743,11 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         jfssdp.setIconImage(IconManager.img8);
         jfssdp.setSize(600, 600);
         GraphicLib.centerOnParent(jfssdp);
+		if (selectedViewTrace == 0) {
         jfssdp.setFileReference(simulationTraceFile.getText());
+		} else {
+			  jfssdp.setFileReference(simulationsoclibTraceFile.getText());
+		}
         jfssdp.setVisible(true);
         TraceManager.addDev("Ok JFrame");
     }
