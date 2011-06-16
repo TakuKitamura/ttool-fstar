@@ -66,6 +66,9 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	protected String computeMin;
 	protected String computeMax;
 	protected Vector<String> listOfActions;
+	
+	protected String [] filesToInclude;
+	protected String [] codeToInclude;
     
     protected int minWidth = 10;
     protected int minHeight = 15;
@@ -85,6 +88,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		afterMax = "";
 		computeMin = "";
 		computeMax = "";
+		filesToInclude = null;
+		codeToInclude = null;
         
         
 		nbConnectingPoint = 4;
@@ -278,12 +283,28 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			sb.append(GTURTLEModeling.transformString(listOfActions.get(i)));
 			sb.append("\" />\n");
 		}
+		
+		for(int i=0; i<filesToInclude.length; i++) {
+            sb.append("<filesToIncludeLine value=\"");
+            sb.append(GTURTLEModeling.transformString(filesToInclude[i]));
+            sb.append("\" />\n");
+        }
+		
+		for(int i=0; i<codeToInclude.length; i++) {
+            sb.append("<codeToIncludeLine value=\"");
+            sb.append(GTURTLEModeling.transformString(codeToInclude[i]));
+            sb.append("\" />\n");
+        }
+		
 		sb.append("</extraparam>\n");
 		return new String(sb);
 	}
 	
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 		//System.out.println("*** load extra synchro *** " + getId());
+		String tmpFilesToInclude = "";
+		String tmpCodeToInclude = "";
+		
 		try {
 			listOfActions = new Vector();
 			
@@ -291,7 +312,6 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			Node n1, n2;
 			Element elt;
 			String s;
-			
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
 				//System.out.println(n1);
@@ -338,6 +358,24 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 									listOfActions.add(s);
 								}
 							}
+							
+							if (elt.getTagName().equals("filesToIncludeLine")) {
+                                //System.out.println("Analyzing line");
+                                s = elt.getAttribute("value");
+                                if (s.equals("null")) {
+                                    s = "";
+                                }
+                                tmpFilesToInclude += GTURTLEModeling.decodeString(s) + "\n";
+                            }
+							
+							if (elt.getTagName().equals("codeToIncludeLine")) {
+                                //System.out.println("Analyzing line");
+                                s = elt.getAttribute("value");
+                                if (s.equals("null")) {
+                                    s = "";
+                                }
+                                tmpCodeToInclude += GTURTLEModeling.decodeString(s) + "\n";
+                            }
 						}
 					}
 				}
@@ -346,6 +384,9 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		} catch (Exception e) {
 			throw new MalformedModelingException();
 		}
+
+		filesToInclude = Conversion.wrapText(tmpFilesToInclude);
+		codeToInclude = Conversion.wrapText(tmpCodeToInclude);
 	}
 	
 	public String getGuard() {
@@ -370,5 +411,13 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	
 	public Vector<String> getActions() {
 		return listOfActions;
+	}
+	
+	public String[] getFilesToInclude() {
+		return filesToInclude;
+	}
+	
+	public String[] getCodeToInclude() {
+		return codeToInclude;
 	}
 }
