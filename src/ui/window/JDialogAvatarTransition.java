@@ -51,6 +51,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
+import myutil.*;
 import ui.*;
 
 public class JDialogAvatarTransition extends javax.swing.JDialog implements ActionListener  {
@@ -59,10 +60,14 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 	private String guard, afterMin, afterMax, computeMin, computeMax; 
 	private Vector myAttributes, myMethods;
 	private Vector<String> allElements, insertElements;
+	
+	protected String [] filesToInclude;
+	protected String [] codeToInclude;
     
     private boolean cancelled = false;
     
     private JPanel panel1;
+	private JPanel panel2;
     
     // Panel1
 	private JTextField guardT, afterMinT, afterMaxT, computeMinT, computeMaxT;
@@ -73,11 +78,14 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
+	
+	// Panel of code and files
+	protected JTextArea jtaCode, jtaFiles;
     
     
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, Vector _myAttributes, Vector _myMethods) {
+    public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions, Vector _myAttributes, Vector _myMethods, String[] _filesToInclude, String[] _codeToInclude) {
         
         super(_f, _title, true);
        
@@ -90,6 +98,9 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 		
 		myAttributes = _myAttributes;
 		myMethods = _myMethods;
+		
+		filesToInclude = _filesToInclude;
+		codeToInclude = _codeToInclude;
 		
 		makeElements();
 		
@@ -124,11 +135,15 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
     }
     
     private void initComponents() {
+		int i;
+		
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
+		GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
+		GridBagConstraints c2 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -205,25 +220,75 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         actionsT.setFont(new Font("times", Font.PLAIN, 12));
         actionsT.setPreferredSize(new Dimension(350, 250));
         JScrollPane jsp = new JScrollPane(actionsT, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		for(int i=0; i<actions.size(); i++) {
+		for(i=0; i<actions.size(); i++) {
 			actionsT.append(actions.get(i) + "\n");
 		}
 		panel1.add(jsp, c1);
         
-        // main panel;
+       
+		panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+           
+        panel2.setBorder(new javax.swing.border.TitledBorder("Code"));
+		// guard
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.gridwidth = 1;
+		c2.gridheight = 1;
+        c2.fill = GridBagConstraints.BOTH;
+		c2.gridwidth = GridBagConstraints.REMAINDER;
+        c2.gridheight = 1;
+		panel2.add(new JLabel("Files to include:"), c2);
+		jtaFiles = new JTextArea();
+        jtaFiles.setEditable(true);
+        jtaFiles.setMargin(new Insets(10, 10, 10, 10));
+        jtaFiles.setTabSize(3);
+		String files = "";
+		for(i=0; i<filesToInclude.length; i++) {
+			files += filesToInclude[i] + "\n";
+		}
+        jtaFiles.append(files);
+        jtaFiles.setFont(new Font("times", Font.PLAIN, 12));
+        jsp = new JScrollPane(jtaFiles, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //jsp.setPreferredSize(new Dimension(300, 300));
+        panel2.add(jsp, c2);
+		panel2.add(new JLabel("Code to execute at the end of the transition"), c2);
+		jtaCode = new JTextArea();
+        jtaCode.setEditable(true);
+        jtaCode.setMargin(new Insets(10, 10, 10, 10));
+        jtaCode.setTabSize(3);
+		String code = "";
+		for(i=0; i<codeToInclude.length; i++) {
+			code += codeToInclude[i] + "\n";
+		}
+        jtaCode.append(code);
+        jtaCode.setFont(new Font("times", Font.PLAIN, 12));
+        jsp = new JScrollPane(jtaCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //jsp.setPreferredSize(new Dimension(300, 300));
+        panel2.add(jsp, c2);
+    
+        
+		 // main panel;
         c0.gridwidth = 1;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         
-        c.add(panel1, c0);
+		
+        
+		JTabbedPane jtp = new JTabbedPane();
+		jtp.add("General", panel1);
+		jtp.add("Prototyping", panel2);
+        c.add(jtp, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
+		
+		
         closeButton.addActionListener(this);
         c.add(closeButton, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -258,6 +323,8 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 				actions.add(act[i]);
 			}
 		}
+		filesToInclude =  Conversion.wrapText(jtaFiles.getText());
+		codeToInclude =  Conversion.wrapText(jtaCode.getText());
         dispose();
     }
     
@@ -293,4 +360,13 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
 		cancelled = true;
         dispose();
     }
+	
+	public String[] getFilesToInclude() {
+		return filesToInclude;
+	}
+	
+	public String[] getCodeToInclude() {
+		return codeToInclude;
+	}
+	
 }

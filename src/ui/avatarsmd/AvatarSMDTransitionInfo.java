@@ -231,7 +231,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	public boolean editOndoubleClick(JFrame frame) {
 		Vector attributes = tdp.getMGUI().getAllAttributes();
 		Vector methods = tdp.getMGUI().getAllMethods();
-		JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods);
+		JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude);
 		jdat.setSize(700, 500);
 		GraphicLib.centerOnParent(jdat);
 		jdat.show(); // blocked until dialog has been closed
@@ -252,7 +252,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		afterMax = jdat.getAfterMax().trim();
 		computeMin = jdat.getComputeMin().trim();
 		computeMax = jdat.getComputeMax().trim();
-		
+		filesToInclude = jdat.getFilesToInclude();
+		codeToInclude =  jdat.getCodeToInclude();
 		return true;
 	}
 	
