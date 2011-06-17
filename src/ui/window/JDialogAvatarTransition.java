@@ -244,8 +244,10 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         jtaFiles.setMargin(new Insets(10, 10, 10, 10));
         jtaFiles.setTabSize(3);
 		String files = "";
-		for(i=0; i<filesToInclude.length; i++) {
-			files += filesToInclude[i] + "\n";
+		if (filesToInclude != null) {
+			for(i=0; i<filesToInclude.length; i++) {
+				files += filesToInclude[i] + "\n";
+			}
 		}
         jtaFiles.append(files);
         jtaFiles.setFont(new Font("times", Font.PLAIN, 12));
@@ -258,8 +260,10 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         jtaCode.setMargin(new Insets(10, 10, 10, 10));
         jtaCode.setTabSize(3);
 		String code = "";
-		for(i=0; i<codeToInclude.length; i++) {
-			code += codeToInclude[i] + "\n";
+		if (codeToInclude != null) {
+			for(i=0; i<codeToInclude.length; i++) {
+				code += codeToInclude[i] + "\n";
+			}
 		}
         jtaCode.append(code);
         jtaCode.setFont(new Font("times", Font.PLAIN, 12));
