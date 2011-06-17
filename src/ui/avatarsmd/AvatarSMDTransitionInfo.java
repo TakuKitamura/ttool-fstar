@@ -285,17 +285,21 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			sb.append("\" />\n");
 		}
 		
-		for(int i=0; i<filesToInclude.length; i++) {
-            sb.append("<filesToIncludeLine value=\"");
-            sb.append(GTURTLEModeling.transformString(filesToInclude[i]));
-            sb.append("\" />\n");
-        }
+		if (filesToInclude != null) {
+			for(int i=0; i<filesToInclude.length; i++) {
+				sb.append("<filesToIncludeLine value=\"");
+				sb.append(GTURTLEModeling.transformString(filesToInclude[i]));
+				sb.append("\" />\n");
+			}
+		}
 		
-		for(int i=0; i<codeToInclude.length; i++) {
-            sb.append("<codeToIncludeLine value=\"");
-            sb.append(GTURTLEModeling.transformString(codeToInclude[i]));
-            sb.append("\" />\n");
-        }
+		if (codeToInclude != null) {
+			for(int i=0; i<codeToInclude.length; i++) {
+				sb.append("<codeToIncludeLine value=\"");
+				sb.append(GTURTLEModeling.transformString(codeToInclude[i]));
+				sb.append("\" />\n");
+			}
+		}
 		
 		sb.append("</extraparam>\n");
 		return new String(sb);
