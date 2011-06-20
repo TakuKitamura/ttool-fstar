@@ -1041,7 +1041,11 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			tmp2 = Conversion.removeStartingCharacters(tmp.substring(index0+1, tmp.length()), "0");
 			//TraceManager.addDev("2 tmp1=" + tmp1 + " tmp2=" + tmp2);
 			value1 = Integer.decode(tmp1).intValue();
-			value2 = Integer.decode(tmp2).intValue();
+			if (tmp2.length() == 0) {
+				value2 = 0;
+			} else {
+				value2 = Integer.decode(tmp2).intValue();
+			}
 			value = ((long)value1)*1000000000+value2;
 			gt.startingTime = value;
 			gt.finishTime = value;
