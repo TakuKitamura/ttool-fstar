@@ -238,6 +238,10 @@ public class Main implements ActionListener {
                 TraceManager.devPolicy = TraceManager.TO_CONSOLE;
             }
 			
+			if (args[i].compareTo("-nocolor") == 0) {
+                ColorManager.noColor();
+            }
+			
         }
         
         // Icons

@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/Block0.c 
+SRCS = generated_src/main.c generated_src/PageLoader.c generated_src/UserModel.c generated_src/DisplayDriver.c generated_src/EReaderController.c 

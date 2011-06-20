@@ -110,6 +110,8 @@ request * addToRequestQueue(request *list, request *requestToAdd) {
   
   list->next = requestToAdd;
 
+  requestToAdd->next = NULL;
+
   return origin;
 }
 

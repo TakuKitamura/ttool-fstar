@@ -78,7 +78,7 @@ public class ColorManager {
     public static final Color POINTED_0 = new Color(139, 79, 11);
 	
 	//public static final Color UML_NOTE_BG = new Color(189, 91, 13, 200);
-	public static final Color UML_NOTE_BG = new Color(173, 190, 234);
+	public static  Color UML_NOTE_BG = new Color(173, 190, 234);
 	
     public static final Color COMPOSITION_OPERATOR = Color.yellow;
     public static final Color ATTRIBUTE_BOX = new Color(199, 243, 105);
@@ -136,37 +136,37 @@ public class ColorManager {
 	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
 	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
 	//public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
-	public static final Color AVATAR_BLOCK = new Color(193, 218, 241);
+	public static  Color AVATAR_BLOCK = new Color(193, 218, 241);
 	//public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
-	public static final Color AVATAR_DATATYPE = new Color(156, 220, 162);
-	public static final Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
-	public static final Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
+	public static  Color AVATAR_DATATYPE = new Color(156, 220, 162);
+	public static  Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
+	public static  Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
 	//public static final Color AVATAR_GUARD = new Color(128, 180, 205);
-	public static final Color AVATAR_GUARD = new Color(0, 89, 26);
+	public static  Color AVATAR_GUARD = new Color(0, 89, 26);
 	//public static final Color AVATAR_TIME = new Color(108, 92, 67);
-	public static final Color AVATAR_TIME = new Color(105, 75, 11);	
+	public static  Color AVATAR_TIME = new Color(105, 75, 11);	
 	//public static final Color AVATAR_ACTION = new Color(128, 92, 168);
-	public static final Color AVATAR_ACTION = new Color(119, 16, 243);
+	public static  Color AVATAR_ACTION = new Color(119, 16, 243);
 	//public static final Color AVATAR_STATE = new Color(149, 193, 210);
-	public static final Color AVATAR_STATE = new Color(193, 218, 241);
+	public static  Color AVATAR_STATE = new Color(193, 218, 241);
 	
-	public static final Color AVATAR_SET_TIMER = new Color(255, 180, 105);
-	public static final Color AVATAR_RESET_TIMER = new Color(255, 180, 105);
-	public static final Color AVATAR_EXPIRE_TIMER = new Color(255, 180, 105);
+	public static  Color AVATAR_SET_TIMER = new Color(255, 180, 105);
+	public static  Color AVATAR_RESET_TIMER = new Color(255, 180, 105);
+	public static  Color AVATAR_EXPIRE_TIMER = new Color(255, 180, 105);
 	
 	
-	public static final Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
-	public static final Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
+	public static  Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
+	public static  Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
 	
-	public static final Color AVATARPD_ATTRIBUTE = new Color(143, 182, 110);
-	public static final Color AVATARPD_SIGNAL = new Color(205, 196, 109);
-	public static final Color AVATARPD_PROPERTY = new Color(228, 241, 242);
-	public static final Color AVATARPD_PROPERTY_RELATION = AVATARPD_PROPERTY;
-	public static final Color AVATARPD_LOGICAL_CONSTRAINT = AVATARPD_SIGNAL;
-	public static final Color AVATARPD_TEMPORAL_CONSTRAINT = AVATARPD_SIGNAL;
-	public static final Color AVATARPD_ALIAS = AVATARPD_SIGNAL;
-	public static final Color AVATARPD_ATTRIBUTE_SETTING = AVATARPD_ATTRIBUTE;
-	public static final Color AVATARPD_BOOLEQ = AVATARPD_ATTRIBUTE;
+	public static  Color AVATARPD_ATTRIBUTE = new Color(143, 182, 110);
+	public static  Color AVATARPD_SIGNAL = new Color(205, 196, 109);
+	public static  Color AVATARPD_PROPERTY = new Color(228, 241, 242);
+	public static  Color AVATARPD_PROPERTY_RELATION = AVATARPD_PROPERTY;
+	public static  Color AVATARPD_LOGICAL_CONSTRAINT = AVATARPD_SIGNAL;
+	public static  Color AVATARPD_TEMPORAL_CONSTRAINT = AVATARPD_SIGNAL;
+	public static  Color AVATARPD_ALIAS = AVATARPD_SIGNAL;
+	public static  Color AVATARPD_ATTRIBUTE_SETTING = AVATARPD_ATTRIBUTE;
+	public static  Color AVATARPD_BOOLEQ = AVATARPD_ATTRIBUTE;
 	
 	
     public static final Color DIAGRAM_BACKGROUND = Color.white;
@@ -219,6 +219,15 @@ public class ColorManager {
             }
         }
     }
+	
+	public static void noColor() {
+		UML_NOTE_BG = Color.white;
+		AVATAR_BLOCK = Color.white;
+		AVATAR_DATATYPE = Color.white;
+		AVATAR_STATE = Color.white;
+		AVATAR_REQUIREMENT_TOP = Color.white;
+		AVATAR_REQUIREMENT_ATTRIBUTES = Color.white;
+	}
     
 } // Class Color
 

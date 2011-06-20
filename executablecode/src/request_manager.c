@@ -118,6 +118,7 @@ void executeSendAsyncTransaction(request *req) {
     pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
     selectedReq = selectedReq->next;
   }
+  debugMsg("Signaling done");
 
   traceAsynchronousSendRequest(req);
 }
@@ -128,7 +129,6 @@ void executeReceiveAsyncTransaction(request *req) {
 
   req->msg = getAndRemoveOldestMessageFromAsyncChannel(req->asyncChannel);
     
-  debugMsg("Signaling async read to all requests waiting ");
   selectedReq = req->asyncChannel->outWaitQueue;
 
   // Must recopy parameters
@@ -141,10 +141,12 @@ void executeReceiveAsyncTransaction(request *req) {
   // unallocate message
   destroyMessageWithParams(req->msg);
 
+  debugMsg("Signaling async read to all requests waiting ");
   while (selectedReq != NULL) {
     pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
     selectedReq = selectedReq->next;
   }
+  debugMsg("Signaling done");
 }
 
 
