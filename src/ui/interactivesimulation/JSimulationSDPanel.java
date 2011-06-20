@@ -1046,7 +1046,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 			gt.startingTime = value;
 			gt.finishTime = value;
 		} catch (Exception e) {
-			TraceManager.addDev("Exception: " + e.getMessage());
+			TraceManager.addDev("Exception: " + e.getMessage() + " on transaction " + trans);
 			return;
 		}
 		

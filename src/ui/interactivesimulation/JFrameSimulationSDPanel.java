@@ -220,7 +220,7 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
     
     public void setFileReference(String _fileReference) {
         if (sdpanel != null) {
-            TraceManager.addDev("RSetting file");
+            TraceManager.addDev("Resetting file");
             sdpanel.setFileReference(_fileReference);
         }
     }
