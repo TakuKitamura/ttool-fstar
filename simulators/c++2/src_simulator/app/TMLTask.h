@@ -81,32 +81,32 @@ public:
 	/**
       	\return Priority
     	*/
-	Priority getPriority() const;
+	inline Priority getPriority() const {return _priority;}
 	///Returns the end of the last scheduled transaction of the task
 	/**
       	\return End of transaction
     	*/
-	TMLTime getEndLastTransaction() const;
+	inline TMLTime getEndLastTransaction() const {return _endLastTransaction;}
 	///Returns a pointer to the current command of the task
 	/**
       	\return Pointer to the current command
     	*/
-	TMLCommand* getCurrCommand() const;
+	inline TMLCommand* getCurrCommand() const {return _currCommand;}
 	///Sets the pointer to the current command of the task
 	/**
       	\param iCurrCommand Pointer to the current command
     	*/
-	void setCurrCommand(TMLCommand* iCurrCommand);
+	inline void setCurrCommand(TMLCommand* iCurrCommand){_currCommand=iCurrCommand;}
 	///Return a pointer to the CPU on which the task in running
 	/**
       	\return Pointer to the CPU
     	*/
-	CPU* getCPU() const;
+	inline CPU* getCPU() const {return _currentCPU;}
 	///Returns a string representation of the task
 	/**
 	\return Detailed string representation
 	*/
-	virtual std::string toString() const;
+	virtual std::string toString() const {return _name;}
 	///Returns a short string representation of the Task
 	/**
 	\return Short string representation
@@ -116,13 +116,13 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	ID getID() const;
+	inline ID getID() const {return _ID;}
 #ifdef ADD_COMMENTS
 	///Adds a new execution comment to the internal list
 	/**
       	\param iComment Pointer to the comment
     	*/ 
-	void addComment(Comment* iComment);
+	inline void addComment(Comment* iComment) {_commentList.push_back(iComment);}
 	///Returns the next execution comment (pointed to by _posCommentList)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
@@ -131,7 +131,8 @@ public:
     	*/ 
 	std::string getNextComment(bool iInit, Comment*& oComment);
 #endif
-	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	///Adds a given transaction to the internal transaction list
 	/**
       	\param iTrans Pointer to the transaction
@@ -153,32 +154,34 @@ public:
 	\param iID ID of the Command
 	\return Pointer to the Commmand
 	*/
-	TMLCommand* getCommandByID(ID iID);
+	inline TMLCommand* getCommandByID(ID iID) {return _commandHash[iID];}
 	///Adds a new command to the internal list
 	/**
 	\param iID ID of the command
 	\param iCmd Pointer to the command
 	*/
-	void addCommand(ID iID, TMLCommand* iCmd);
+	inline void addCommand(ID iID, TMLCommand* iCmd) {_commandHash[iID]=iCmd;}
 	///Returns a pointer to the task variable specified by its ID
 	/**
 	\param iVarID ID of the task variable
 	\return Pointer to the variable
 	*/
-	ParamType* getVariableByID(ID iVarID);
-	void streamStateXML(std::ostream& s) const;
+	inline ParamType* getVariableByID(ID iVarID) {return _varLookUpID[iVarID];}
+	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
 	///Returns an iterator for the internal variable ID hash table
 	/**
 	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
 	\return Const iterator for variable table
 	*/
-	VariableLookUpTableID::const_iterator getVariableIteratorID(bool iEnd) const;
+	//VariableLookUpTableID::const_iterator getVariableIteratorID(bool iEnd) const;
+	inline const VariableLookUpTableID& getVariableLookUpTableID() const{return _varLookUpID;}
 	///Returns an iterator for the internal variable Name hash table
 	/**
 	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
 	\return Const iterator for variable table
 	*/
-	VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
+	//VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
+	const VariableLookUpTableName& getVariableLookUpTableName() const{return _varLookUpName;}
 	///Is called when a stop command is encountered
 	void finished();
 	///Returns the current task state 
@@ -197,7 +200,7 @@ public:
 	/**
 	\return Instance number 
 	*/
-	unsigned int getInstanceNo();
+	inline unsigned int getInstanceNo() {return _myInstance;}
 	///Notifies the Task of being scheduled by a CPU
 	/**
 	\param iCPU CPU that has scheduled the Task

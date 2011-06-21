@@ -86,6 +86,6 @@ std::string TMLExeciCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLExeciCommand::getCommandStr() const{
-	return "exe";
-}
+//std::string TMLExeciCommand::getCommandStr() const{
+//	return "exe";
+//}

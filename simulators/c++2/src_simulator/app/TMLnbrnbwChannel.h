@@ -66,10 +66,10 @@ public:
 	void testRead(TMLTransaction* iCommand);
 	void write();
 	bool read();
-	TMLTask* getBlockedReadTask() const;
-	TMLTask* getBlockedWriteTask() const;
+	inline TMLTask* getBlockedReadTask() const {return 0;}
+	inline TMLTask* getBlockedWriteTask() const {return 0;}
 	std::string toString() const;
-	void getStateHash(HashAlgo* iHash) const;
+	inline void getStateHash(HashAlgo* iHash) const {}
 protected:
 };
 

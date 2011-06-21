@@ -73,7 +73,7 @@ public:
 	///Destructor
 	virtual ~Bus();
 	///Add a transaction waiting for execution to the internal list
-	void registerTransaction();
+	inline void registerTransaction() {_schedulingNeeded=true; _nextTransaction=0;}
 	///Determines the next bus transaction to be executed
 	void schedule();
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
@@ -82,17 +82,20 @@ public:
     	/**
       	\return Pointer to transaction
     	*/
-	TMLTransaction* getNextTransaction();
+	inline TMLTransaction* getNextTransaction() {
+		if (_schedulingNeeded) schedule();
+		return _nextTransaction;
+	}
 	///Returns the size of an atomic bus transaction
 	/**
 	\return Burst size
 	*/
-	TMLLength getBurstSize() const;
+	inline TMLLength getBurstSize() const {return _burstSize;}
 	///Returns a string representation of the Bus
 	/**
 	\return Detailed string representation
 	*/
-	std::string toString() const;
+	inline std::string toString() const {return _name;}
 	///Returns a short string representation of the bus
 	/**
 	\return Short string representation
@@ -108,10 +111,11 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile) const;
-	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
-	void streamStateXML(std::ostream& s) const;
+	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
 protected:
@@ -128,8 +132,8 @@ protected:
 	TMLTime _timePerSample;
 	///Bus width in bytes
 	unsigned int _busWidth;
-	///Busy cycles since simulation start
-	TMLTime _busyCycles;
+	/////Busy cycles since simulation start
+	//TMLTime _busyCycles;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
 };

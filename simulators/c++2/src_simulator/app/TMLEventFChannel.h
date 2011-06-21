@@ -51,6 +51,8 @@ class Bus;
 template <typename T, int paramNo> 
 class TMLEventFChannel:public TMLEventSizedChannel<T,paramNo>{
 public:
+	//typedef TMLEventSizedChannel<T,paramNo> SC;
+	
 	///Constructor
     	/**
 	\param iID ID of channel
@@ -88,7 +90,7 @@ public:
 			if (paramNo!=0){
 				this->_paramQueue.push_back(this->_tmpParam);   //NEW
 	#ifdef STATE_HASH_ENABLED
-				this->_tmpParam->getStateHash(&_stateHash);	//new in if
+				this->_tmpParam->getStateHash(& this->_stateHash);	//new in if
 	#endif
 			}
 	//#endif
@@ -121,7 +123,7 @@ public:
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);
-			_hashValid = false;
+			this->_hashValid = false;
 	#endif
 	#ifdef LISTENERS_ENABLED
 			NOTIFY_READ_TRANS_EXECUTED(this->_readTrans);

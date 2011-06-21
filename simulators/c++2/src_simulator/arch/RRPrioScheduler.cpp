@@ -132,9 +132,9 @@ TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
 	return _timeSlice-_elapsedTime;
 }
 
-TMLTransaction* RRPrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
-	return _nextTransaction;
-}
+//TMLTransaction* RRPrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
+//	return _nextTransaction;
+//}
 
 void RRPrioScheduler::reset(){
 	WorkloadSource::reset();
@@ -143,9 +143,9 @@ void RRPrioScheduler::reset(){
 	_lastSource=0;
 }
 
-std::string RRPrioScheduler::toString() const{
-	return _name;
-}
+//std::string RRPrioScheduler::toString() const{
+//	return _name;
+//}
 
 RRPrioScheduler::~RRPrioScheduler(){
 	std::cout << _name << ": Scheduler deleted\n";

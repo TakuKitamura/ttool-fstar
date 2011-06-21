@@ -94,13 +94,13 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 	return 0;
 }
 
-TMLTransaction* PrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
-	return _nextTransaction;
-}
+//TMLTransaction* PrioScheduler::getNextTransaction(TMLTime iEndSchedule) const{
+//	return _nextTransaction;
+//}
 
-std::string PrioScheduler::toString() const{
-	return _name;
-}
+//std::string PrioScheduler::toString() const{
+//	return _name;
+//}
 
 PrioScheduler::~PrioScheduler(){
 	std::cout << _name << ": Scheduler deleted\n";

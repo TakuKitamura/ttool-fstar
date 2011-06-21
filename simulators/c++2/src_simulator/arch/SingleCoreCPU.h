@@ -99,7 +99,7 @@ public:
 	/**
 	\return Detailed string representation
 	*/
-	std::string toString() const;
+	inline std::string toString() const {return _name;}
 	///Returns a short string representation of the transaction
 	/**
 	\return Short string representation
@@ -110,7 +110,8 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2HTML(std::ofstream& myfile) const;
-	TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
+	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	///Writes a plain text representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -119,7 +120,7 @@ public:
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
 	//void truncateAndRescheduleIfNecessary(TMLTime iTime);
-	void streamStateXML(std::ostream& s) const;
+	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
 	/////Adds a new bus master to the internal list
 	//**
 	//\param iMaster Pointer to bus master 
@@ -167,8 +168,8 @@ protected:
 #endif
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
-	///Busy cycles since simulation start
-	TMLTime _busyCycles;
+	/////Busy cycles since simulation start
+	//TMLTime _busyCycles;
 	
 	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit

@@ -52,6 +52,8 @@ class Bus;
 template <typename T, int paramNo> 
 class TMLEventBChannel : public TMLEventSizedChannel<T,paramNo>{
 public:
+	//typedef TMLEventSizedChannel<T,paramNo> SC;
+	
 	///Constructor
     	/**
       	\param iID ID of channel
@@ -90,12 +92,13 @@ public:
 	void write(TMLTransaction* iTrans){
 		this->_content++;
 	//#if paramNo>0
-		if (paramNo!=0){
+		if (paramNo!=0){		
 			//this->_paramQueue.push_back(_tmpParam);
 			//std::cerr << "write!\n";
-			this->_paramQueue.push_back(iTrans->getCommand()->setParams(0));
+			this->_tmpParam = iTrans->getCommand()->setParams(0);
+			this->_paramQueue.push_back(this->_tmpParam);
 	#ifdef STATE_HASH_ENABLED
-			_tmpParam->getStateHash(&_stateHash);  //new in if
+			this->_tmpParam->getStateHash(& this->_stateHash);  //new in if
 	#endif
 		}
 	//#endif
@@ -132,7 +135,7 @@ public:
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);
-			_hashValid = false;
+			this->_hashValid = false;
 	#endif
 			
 	#ifdef LISTENERS_ENABLED
@@ -187,7 +190,7 @@ public:
 			READ_STREAM(s,aPos);
 			_eventFile->seekg(aPos);
 	#ifdef DEBUG_SERIALIZE
-			std::cout << "Read: TMLEventBChannel " << _name << " posInFile: " <<  aPos << std::endl;
+			std::cout << "Read: TMLEventBChannel " << this->_name << " posInFile: " <<  aPos << std::endl;
 	#endif
 			
 		}

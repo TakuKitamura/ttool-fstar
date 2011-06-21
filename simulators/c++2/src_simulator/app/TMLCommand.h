@@ -82,39 +82,39 @@ public:
 	/**
 	\param iNextCommand Pointer to an array of pointers to the next commands
 	*/
-	void setNextCommand(TMLCommand** iNextCommand);
+	inline void setNextCommand(TMLCommand** iNextCommand) {_nextCommand=iNextCommand;}
 	///Returns a pointer to the task the command belongs to
 	/**
 	\return Pointer to the task
 	*/
-	TMLTask* getTask() const;
+	inline TMLTask* getTask() const {return _task;}
 	///Returns a pointer to the current transaction
 	/**
 	\return Pointer to the current transaction
 	*/
-	TMLTransaction* getCurrTransaction() const;
+	inline TMLTransaction* getCurrTransaction() const {return _currTransaction;}
 	///Returns a pointer to the task which could be unblocked by the command
 	/**
 	\param iIndex Index of the task
 	\return Pointer to the dependent task
 	*/
-	virtual TMLTask* getDependentTask(unsigned int iIndex)const;
+	inline virtual TMLTask* getDependentTask(unsigned int iIndex) const {return 0;}
 	///Returns a pointer to the channel on which the command performs operations
 	/**
 	\param iIndex Index of the channel
 	\return Pointer to the channel
 	*/
-	virtual TMLChannel* getChannel(unsigned int iIndex) const;
+	inline virtual TMLChannel* getChannel(unsigned int iIndex) const {return 0;}
 	///Returns the number of channels impacted by the command
 	/**
 	\return Number of channels
 	*/
-	virtual unsigned int getNbOfChannels() const;
+	inline virtual unsigned int getNbOfChannels() const {return 0;}
 	///Initializes a parameter structure to the values specified by the command
 	/**
 	\param ioParam Parameter data structure
 	*/
-	virtual Parameter* setParams(Parameter* ioParam);
+	inline virtual Parameter* setParams(Parameter* ioParam) {return 0;}
 	///Returns a string representation of the command
 	/**
 	\return Detailed string representation
@@ -136,7 +136,7 @@ public:
 	\param iCom Pointer to comment
 	\return Sring representation of the comment
 	*/
-	virtual std::string getCommentString(Comment* iCom) const;
+	inline virtual std::string getCommentString(Comment* iCom) const {return "no comment available";}
 #endif
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
@@ -164,7 +164,7 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	ID getID() const;
+	inline ID getID() const {return _ID;}
 	///Sets a new breakpoint
 	/**
       	\param iBreakp Pointer to breakpoint
@@ -177,17 +177,17 @@ public:
 	/**
 	\return Progress of the command
 	*/
-	TMLLength getProgress() const;
+	inline TMLLength getProgress() const {return _progress;}
 	///Returns the progress of the command in percent
 	/**
 	\return Progress of the command in percent
 	*/
-	unsigned int getProgressInPercent() const;
+	inline unsigned int getProgressInPercent() const {return (_length==0)? 0:_progress*100/_length;}
 	///Sets the internal pointer to the simulation components
 	/**
       	\param iSimComp Pointer to simulation components
     	*/ 
-	static void setSimComponents(SimComponents* iSimComp);
+	inline static void setSimComponents(SimComponents* iSimComp) {_simComp=iSimComp;}
 	///Returns a pointer to the next command array and the number of successors of this command
 	/**
 	\param oNbOfCmd Number of successors of this command
@@ -198,17 +198,17 @@ public:
 	/**
 	\return Hash Value
 	*/
-	unsigned long getStateHash() const;
+	inline unsigned long getStateHash() const {return _ID + _progress;}
 	///Returns the simulation time when the command is prepared for its first transaction
 	/**
 	\return Command start time
 	*/
-	TMLTime getCommandStartTime() const;
+	inline TMLTime getCommandStartTime() const {return (_commandStartTime==((TMLTime)-1))? 0: _commandStartTime;}
 	///Returns the virtual length of the command
 	/**
 	\return Command length
 	*/
-	TMLLength getLength() const;
+	inline TMLLength getLength() const {return _length;}
 	///Returns whether the command is considered as Checkpoint for system state comparisons
 	/**
 	\return true if command is a checkpoint
@@ -216,7 +216,7 @@ public:
 	bool isCheckpoint();
 	static void streamStateXML(std::ostream& s);
 	static TMLCommand* getCommandByID(ID iID);
-	unsigned int getType();
+	inline unsigned int getType() {return _type;}
 protected:
 	///ID of the command
 	ID _ID;
@@ -242,7 +242,7 @@ protected:
 	/**
 	\return Pointer to the next command
 	*/
-	virtual TMLCommand* getNextCommand() const;
+	inline virtual TMLCommand* getNextCommand() const {return (_nextCommand==0)?0:_nextCommand[0];}
 	///Special actions taken by subclasses of TMLCommand to prepare the next transaction
 	/**
 	\return True if there was a transaction to prepare

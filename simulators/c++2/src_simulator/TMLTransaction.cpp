@@ -43,7 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <CPU.h>
 #include <TMLCommand.h>
 
-MemPool<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
+MemPoolNoDel<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
 
 TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),
@@ -58,114 +58,103 @@ TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, T
  _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif
 _channel(iChannel),_stateID(0) {
-	//if (_virtualLength!=0) std::cout << "Trans runnable: " << toString() << "\n";
 }
 
-TMLTime TMLTransaction::getRunnableTime() const{
-	return _runnableTime;
-}
+//TMLTime TMLTransaction::getRunnableTime() const{
+//	return _runnableTime;
+//}
 
-void TMLTransaction::setRunnableTime(TMLTime iRunnableTime){
-	_runnableTime = max(_runnableTime,iRunnableTime);
-	/*if (_runnableTimeSet){
-		std::cout << "ERROR: runnable time set twice\n";
-	}else{
-		_runnableTimeSet=true;
-	}*/
-}
+//void TMLTransaction::setRunnableTime(TMLTime iRunnableTime){
+//	_runnableTime = max(_runnableTime,iRunnableTime);
+//}
 
-TMLTime TMLTransaction::getStartTime() const{
-	return _startTime;
-}
+//TMLTime TMLTransaction::getStartTime() const{
+//	return _startTime;
+//}
 
-TMLTime TMLTransaction::getStartTimeOperation() const{
+/*TMLTime TMLTransaction::getStartTimeOperation() const{
 #ifdef PENALTIES_ENABLED
-	//return _startTime + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
 	return _startTime + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _startTime;
 #endif
-}
+}*/
 
-void TMLTransaction::setStartTime(TMLTime iStartTime){
-	_startTime=iStartTime;
-}
+//void TMLTransaction::setStartTime(TMLTime iStartTime){
+//	_startTime=iStartTime;
+//}
 
-TMLTime TMLTransaction::getOperationLength() const{
-	return _length;
-}
+//TMLTime TMLTransaction::getOperationLength() const{
+//	return _length;
+//}
 
-void TMLTransaction::setLength(TMLTime iLength){
-	_length=iLength;
-}
+//void TMLTransaction::setLength(TMLTime iLength){
+//	_length=iLength;
+//}
 
-TMLTime TMLTransaction::getOverallLength() const{
+/*TMLTime TMLTransaction::getOverallLength() const{
 #ifdef PENALTIES_ENABLED
-	//return _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
 	return _length + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _length;
 #endif
-}
+}*/
 
-TMLTime TMLTransaction::getPenalties() const{
+/*TMLTime TMLTransaction::getPenalties() const{
 #ifdef PENALTIES_ENABLED
-	//return _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
 	return _idlePenalty + _taskSwitchingPenalty;
 #else
 	return 0;
 #endif
-}
+}*/
 
-TMLLength TMLTransaction::getVirtualLength() const{
-	return _virtualLength;
-}
+//TMLLength TMLTransaction::getVirtualLength() const{
+//	return _virtualLength;
+//}
 
-void TMLTransaction::setVirtualLength(TMLLength iLength){
-	//if (iLength!=0 && _virtualLength==0) std::cout << "Trans runnable: " << toString() << "\n";
-	_virtualLength=iLength;
-}
+//void TMLTransaction::setVirtualLength(TMLLength iLength){
+//	_virtualLength=iLength;
+//}
 
-TMLCommand* TMLTransaction::getCommand() const{
-	return _command;
-}
+//TMLCommand* TMLTransaction::getCommand() const{
+//	return _command;
+//}
 
-TMLTime TMLTransaction::getEndTime() const{
+/*TMLTime TMLTransaction::getEndTime() const{
 #ifdef PENALTIES_ENABLED
-	//return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty + _branchingPenalty;
 	return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty;
 #else
 	return _startTime  + _length;
 #endif
-}
+}*/
 
-TMLTime TMLTransaction::getIdlePenalty() const{
+/*TMLTime TMLTransaction::getIdlePenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _idlePenalty;
 #else
 	return 0;
 #endif
-}
+}*/
 
-void TMLTransaction::setIdlePenalty(TMLTime iIdlePenalty){
+/*void TMLTransaction::setIdlePenalty(TMLTime iIdlePenalty){
 #ifdef PENALTIES_ENABLED
 	_idlePenalty=iIdlePenalty;
 #endif
-}
+}*/
 
-TMLTime TMLTransaction::getTaskSwitchingPenalty() const{
+/*TMLTime TMLTransaction::getTaskSwitchingPenalty() const{
 #ifdef PENALTIES_ENABLED
 	return _taskSwitchingPenalty;
 #else
 	return 0;
 #endif
-}
+}*/
 
-void TMLTransaction::setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty){
+/*void TMLTransaction::setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty){
 #ifdef PENALTIES_ENABLED
 	_taskSwitchingPenalty=iTaskSwitchingPenalty;
 #endif	
-}
+}*/
 
 /*TMLTime TMLTransaction::getBranchingPenalty() const{
 #ifdef PENALTIES_ENABLED
@@ -199,42 +188,42 @@ std::string TMLTransaction::toShortString() const{
 	return outp.str();
 }
 
-void TMLTransaction::setChannel(TMLChannel* iChannel){
-	_channel=iChannel;
-}
+//void TMLTransaction::setChannel(TMLChannel* iChannel){
+//	_channel=iChannel;
+//}
 
-TMLChannel* TMLTransaction::getChannel() const{
-	return _channel;
-}
+//TMLChannel* TMLTransaction::getChannel() const{
+//	return _channel;
+//}
 
-void * TMLTransaction::operator new(size_t size){
-	return memPool.pmalloc(size);
-}
+//void * TMLTransaction::operator new(size_t size){
+//	return memPool.pmalloc(size);
+//}
 
-void TMLTransaction::operator delete(void *p, size_t size){
-	memPool.pfree(p, size);
-}
+//void TMLTransaction::operator delete(void *p, size_t size){
+//	memPool.pfree(p, size);
+//}
 
-void TMLTransaction::reset(){
-	memPool.reset();
-}
+//void TMLTransaction::reset(){
+//	memPool.reset();
+//}
 
-void TMLTransaction::incID(){
-	_ID++;
-}
+//void TMLTransaction::incID(){
+//	_ID++;
+//}
 
-ID TMLTransaction::getID(){
-	return _ID;
-}
+//ID TMLTransaction::getID(){
+//	return _ID;
+//}
 
-void TMLTransaction::resetID(){
-	_ID=1;
-}
+//void TMLTransaction::resetID(){
+//	_ID=1;
+//}
 
-void TMLTransaction::setStateID(ID iID){
-	_stateID=iID;
-}
+//void TMLTransaction::setStateID(ID iID){
+//	_stateID=iID;
+//}
 
-ID TMLTransaction::getStateID(){
-	return _stateID;
-}
+//ID TMLTransaction::getStateID(){
+//	return _stateID;
+//}

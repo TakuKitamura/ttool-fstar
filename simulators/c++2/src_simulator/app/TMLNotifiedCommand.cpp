@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLNotifiedCommand.h>
-#include <TMLEventChannel.h>
+//#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -71,9 +71,9 @@ TMLCommand* TMLNotifiedCommand::prepareNextTransaction(){
 	return 0;
 }*/
 
-TMLChannel* TMLNotifiedCommand::getChannel() const{
-	return _channel;
-}
+//TMLChannel* TMLNotifiedCommand::getChannel() const{
+//	return _channel;
+//}
 
 std::string TMLNotifiedCommand::toString() const{
 	std::ostringstream outp;
@@ -87,9 +87,9 @@ std::string TMLNotifiedCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLNotifiedCommand::getCommandStr() const{
-	return "notified";
-}
+//std::string TMLNotifiedCommand::getCommandStr() const{
+//	return "notified";
+//}
 
 #ifdef ADD_COMMENTS
 std::string TMLNotifiedCommand::getCommentString(Comment* iCom) const{

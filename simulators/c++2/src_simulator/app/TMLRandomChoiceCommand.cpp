@@ -82,11 +82,11 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	return 0;
 }
 
-unsigned int TMLRandomChoiceCommand::getRandomRange(){
-	return _dynamicRange;
-}
+//unsigned int TMLRandomChoiceCommand::getRandomRange(){
+//	return _dynamicRange;
+//}
 
-TMLCommand* TMLRandomChoiceCommand::getNextCommand() const{
+//TMLCommand* TMLRandomChoiceCommand::getNextCommand() const{
 	//std::cout << "Here we go " << _randomValue << " .................\n";
-	return _nextCommand[_randomValue];
-}
+//	return _nextCommand[_randomValue];
+//}

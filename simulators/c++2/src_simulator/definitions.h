@@ -65,6 +65,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <pthread.h>
 #include <dlfcn.h>
 #include <stdlib.h>
+#include <sys/times.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
 //std::cout << sizeof(v) << " bytes written" << std::endl;
@@ -81,14 +84,15 @@ using std::max;
 
 #define BUS_ENABLED
 #define WAIT_SEND_VLEN 1
-#define PENALTIES_ENABLED
-#undef STATE_HASH_ENABLED
-#undef LISTENERS_ENABLED
+#undef PENALTIES_ENABLED
+#define STATE_HASH_ENABLED
+#define LISTENERS_ENABLED
+#define EXPLO_ENABLED
 #undef EBRDD_ENABLED
-//#define DOT_GRAPH_ENABLED
+#define EXPLOGRAPH_ENABLED
 
 #define CLOCK_INC 20
-#define BLOCK_SIZE_TRANS 500000
+#define BLOCK_SIZE_TRANS 8000000
 #define BLOCK_SIZE_PARAM 100
 #define BLOCK_SIZE_COMMENT 100
 #define PARAMETER_BLOCK_SIZE 1000
@@ -97,7 +101,6 @@ using std::max;
 #define SAVE_BENCHMARK_VARS 
 #define PORT "3490"
 #define BACKLOG 10
-#define VCD_PREFIX "b"
 
 //Task VCD output
 #define UNKNOWN 4
@@ -372,10 +375,16 @@ public:
 	\param iTime Time when the change occurred 
 	\param iDevice Pointer to the device the signal belongs to
 	*/
-	SignalChangeData( std::string& iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
+	//SignalChangeData( std::string& iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
+	//}
+	SignalChangeData(unsigned int iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
+		//std::cout << _sigChange << " " << _time << " " << _device << " " << " constructor***\n";
+	}
+	SignalChangeData():_sigChange(0),_time(0),_device(0){
 	}
 	///String representation of the signal change in VCD format
-	std::string _sigChange;
+	//std::string _sigChange;
+	unsigned int _sigChange;
 	///Time when the change occurred 
 	TMLTime _time;
 	///Pointer to the device the signal belongs to
@@ -383,14 +392,14 @@ public:
 };
 
 ///Function object for the comparison of the runnable time of two transaction
-struct greaterRunnableTime{
+/*struct greaterRunnableTime{
 	bool operator()(TMLTransaction const* p1, TMLTransaction const* p2);
 };
 
 ///Function object for the comparison of the priority of two transaction
 struct greaterPrio{
 	bool operator()(TMLTransaction const* p1, TMLTransaction const* p2);
-};
+};*/
 
 ///Function object for the comparison of the start time of two transaction
 struct greaterStartTime{
@@ -400,7 +409,7 @@ struct greaterStartTime{
 namespace std{
 	///Specialization of std::greater for SignalChangeData pointers
 	template<> struct greater<SignalChangeData*>{
-	bool operator()(SignalChangeData const* p1, SignalChangeData const* p2){
+	inline bool operator()(SignalChangeData const* p1, SignalChangeData const* p2){
 		return p1->_time > p2->_time;
 	}
 	};
@@ -408,10 +417,10 @@ namespace std{
 
 ///Priority queue for SignalChangeData objects, keeps track of the temporal ordering of signal changes (for VCD output)
 typedef std::priority_queue<SignalChangeData*, std::vector<SignalChangeData*>, std::greater<SignalChangeData*> > SignalChangeQueue;
-///Priority queue for not yet processed transactions, runnableTime being less than the end of the last scheduled transaction of the device
-typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterPrio > PastTransactionQueue;
-///Priority queue for not yet processed transactions, runnableTime being greater than the end of the last scheduled transaction of the device
-typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterRunnableTime > FutureTransactionQueue;
+////Priority queue for not yet processed transactions, runnableTime being less than the end of the last scheduled transaction of the device
+//typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterPrio > PastTransactionQueue;
+////Priority queue for not yet processed transactions, runnableTime being greater than the end of the last scheduled transaction of the device
+//typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterRunnableTime > FutureTransactionQueue;
 ///Priority queue holding Transactions for the graph output
 typedef std::priority_queue<TMLTransaction*, std::vector<TMLTransaction*>, greaterStartTime > GraphTransactionQueue;
 //typedef std::map<SchedulableCommDevice*, FutureTransactionQueue*> BridgeTransactionListHash;
@@ -439,7 +448,8 @@ long getTimeDiff(struct timeval& begin, struct timeval& end);
 	\param iReplace String which is filled in
 */
 void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
-std::string vcdValConvert(unsigned int iVal);
+inline std::string vcdValConvert(unsigned int iVal) {if(iVal==1 || iVal==2) return "1"; else return "0";}
+std::string vcdTimeConvert(TMLTime iVal);
 int getexename(char* buf, size_t size);
 unsigned int getEnabledBranchNo(int iNo, int iMask);
 #endif

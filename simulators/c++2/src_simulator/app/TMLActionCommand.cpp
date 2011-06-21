@@ -47,8 +47,8 @@ TMLActionCommand::TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iAc
 	_type=ACT;
 }
 
-void TMLActionCommand::execute(){
-}
+//void TMLActionCommand::execute(){
+//}
 
 TMLCommand* TMLActionCommand::prepareNextTransaction(){
 	if (_simComp->getStopFlag()){
@@ -84,10 +84,10 @@ std::string TMLActionCommand::toString() const{
 	return outp.str();
 }
 
-std::string TMLActionCommand::toShortString() const{
-	return "Action";
-}
+//std::string TMLActionCommand::toShortString() const{
+//	return "Action";
+//}
 
-std::string TMLActionCommand::getCommandStr() const{
-	return "act";
-}
+//std::string TMLActionCommand::getCommandStr() const{
+//	return "act";
+//}

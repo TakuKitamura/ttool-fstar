@@ -57,10 +57,10 @@ public:
 	\param iNbOfBranches Number of branches of the choice
     	*/
 	TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
-	void execute();
+	inline void execute() {}
 	std::string toString() const;
-	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string toShortString() const {return "Choice";}
+	inline std::string getCommandStr() const {return "cho";}
 protected:
 	///Member function pointer to the condition function returning the index of the next command
 	RangeFuncPointer _rangeFunc;

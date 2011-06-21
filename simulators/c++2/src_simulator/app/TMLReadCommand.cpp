@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLReadCommand.h>
-#include <TMLChannel.h>
+//#include <TMLChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -85,17 +85,17 @@ TMLCommand* TMLReadCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLChannel* TMLReadCommand::getChannel(unsigned int iIndex) const{
-	return _channel;
-}
+//TMLChannel* TMLReadCommand::getChannel(unsigned int iIndex) const{
+//	return _channel;
+//}
 
-unsigned int TMLReadCommand::getNbOfChannels() const{
-	return 1;
-}
+//unsigned int TMLReadCommand::getNbOfChannels() const{
+//	return 1;
+//}
 
-TMLTask* TMLReadCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel->getBlockedWriteTask();
-}
+//TMLTask* TMLReadCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channel->getBlockedWriteTask();
+//}
 
 std::string TMLReadCommand::toString() const{
 	std::ostringstream outp;
@@ -109,6 +109,6 @@ std::string TMLReadCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLReadCommand::getCommandStr() const{
-	return "rd";
-}
+//std::string TMLReadCommand::getCommandStr() const{
+//	return "rd";
+//}

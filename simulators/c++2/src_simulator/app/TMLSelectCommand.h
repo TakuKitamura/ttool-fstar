@@ -43,8 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <TMLCommand.h>
-
-class TMLEventChannel;
+#include <TMLEventChannel.h>
 
 ///This class models the waiting operation for one amongst multiple events.
 class TMLSelectCommand:public TMLCommand{
@@ -64,19 +63,19 @@ public:
 	~TMLSelectCommand();
 	void execute();
 	TMLChannel* getChannel(unsigned int iIndex) const;
-	unsigned int getNbOfChannels() const;
-	TMLTask* getDependentTask(unsigned int iIndex)const;
-	ParamFuncPointer getParamFuncPointer() const;
+	inline unsigned int getNbOfChannels() const {return _nbOfNextCmds;}
+	inline TMLTask* getDependentTask(unsigned int iIndex)const {return _channel[iIndex]->getBlockedWriteTask();}
+	inline ParamFuncPointer getParamFuncPointer() const {return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];}
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
-	Parameter* setParams(Parameter* ioParam);
+	inline std::string getCommandStr() const {return "sel";}
+	inline Parameter* setParams(Parameter* ioParam) {return (_task->*_paramFuncs[_indexNextCommand])(ioParam);}
 #ifdef ADD_COMMENTS
-	std::string getCommentString(Comment* iCom)  const;
+	inline std::string getCommentString(Comment* iCom)  const {return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();}
 #endif
 protected:
 	TMLCommand* prepareNextTransaction();
-	TMLCommand* getNextCommand() const;
+	inline TMLCommand* getNextCommand() const {return _nextCommand[_indexNextCommand];}
 	///Pointer to an array of pointers to channels conveying the desired signals
 	TMLEventChannel** _channel;
 	///Pointer to an array of parameter function pointers

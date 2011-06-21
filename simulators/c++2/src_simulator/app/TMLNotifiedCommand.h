@@ -43,8 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <TMLCommand.h>
-
-class TMLEventChannel;
+#include <TMLEventChannel.h>
 
 ///This class models a TML command which determines the number of events queued in a channel
 class TMLNotifiedCommand:public TMLCommand{
@@ -62,10 +61,10 @@ public:
 	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,ParamType* iResultVar,const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
-	TMLChannel* getChannel() const;
+	inline TMLChannel* getChannel() const {return dynamic_cast<TMLChannel*>(_channel);}
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string getCommandStr() const {return "notified";}
 #ifdef ADD_COMMENTS
 	std::string getCommentString(Comment* iCom)  const;
 #endif

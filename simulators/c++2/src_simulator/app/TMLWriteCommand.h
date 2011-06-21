@@ -43,8 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <TMLCommand.h>
-
-class TMLChannel;
+#include <TMLChannel.h>
 
 ///This class models write operations on TML channels.
 class TMLWriteCommand:public TMLCommand{
@@ -61,12 +60,12 @@ public:
 	*/
 	TMLWriteCommand(ID iID, TMLTask* iTask, LengthFuncPointer iLengthFunc, TMLChannel* iChannel, const char* iLiveVarList, bool iCheckpoint, TMLLength iStatLength=1);
 	void execute();
-	TMLChannel* getChannel(unsigned int iIndex) const;
-	unsigned int getNbOfChannels() const;
-	TMLTask* getDependentTask(unsigned int iIndex)const;
+	inline TMLChannel* getChannel(unsigned int iIndex) const {return _channel;}
+	inline unsigned int getNbOfChannels() const {return 1;}
+	inline TMLTask* getDependentTask(unsigned int iIndex)const {return _channel->getBlockedReadTask();}
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string getCommandStr() const {return "wr";}
 protected:
 	///Pointer to the function returning the length of the command
 	LengthFuncPointer _lengthFunc;

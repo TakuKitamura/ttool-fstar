@@ -83,9 +83,9 @@ std::string TMLExeciRangeCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLExeciRangeCommand::getCommandStr() const{
-	return "exe";
-}
+//std::string TMLExeciRangeCommand::getCommandStr() const{
+//	return "exe";
+//}
 
 unsigned int TMLExeciRangeCommand::getRandomRange(){
 	ParamType aMax, aMin;

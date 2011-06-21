@@ -3,19 +3,19 @@ TARGET_ARCH = linux
 CC     = g++
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
-OPT    = -O1 -pthread
+OPT    = -O3 -pthread
 # Solaris
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT   = -O1 -pthread -ldl
+LOPT   = -O3 -pthread -ldl
 
 DEBUG  = -g
 PROFILE = -pg
 OTHER  = -Wall
 TRY    = -Wno-deprecated
 #make  = $(OPT) $(OTHER) $(TRY)
-LFLAGS = $(LOPT) $(OTHER) $(TRY) $(PROFILE)
-CFLAGS = $(PROFILE) $(OTHER)
+LFLAGS = $(LOPT) $(OTHER) $(TRY)
+CFLAGS = $(OTHER)
 OBJDIR = lib
 
 MODULE = run

@@ -69,11 +69,11 @@ public:
 	///Destructor
 	~RRScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
+	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
 	void reset();
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
-	std::string toString() const;
+	inline std::string toString() const {return _name;}
 	//void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler

@@ -64,7 +64,8 @@ public:
 	\param oNoMoreTrans Is true if the last transaction of the schedule has been retrieved
 	\return Point in time when the signal changes
     	*/ 
-	virtual TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans)=0;
+	//virtual TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans)=0;
+	virtual void getNextSignalChange(bool iInit, SignalChangeData* oSigData)=0;
 	///Writes benchmarking data to a given stream
 	/**
       	\param s Reference to an output stream

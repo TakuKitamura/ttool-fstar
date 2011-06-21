@@ -61,7 +61,7 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0), _deleteScheduler(true) {
+	SchedulableDevice(ID iID, std::string iName, WorkloadSource* iScheduler):_ID(iID), _name(iName), _endSchedule(0), _scheduler(iScheduler), _nextTransaction(0), _deleteScheduler(true), _busyCycles(0) {
 		_transactList.reserve(BLOCK_SIZE_TRANS);
 	}
 	///Determines the next transaction to be executed
@@ -162,6 +162,10 @@ public:
 		_transactList.push_back(iTrans);
 	}
 	
+	TMLTime getBusyCycles(){
+		return _busyCycles;
+	}
+	
 protected:
 	///Unique ID of the device
 	ID _ID;
@@ -181,6 +185,9 @@ protected:
 	TransactionList::iterator _posTrasactListGraph;
 	///Flag indicating whether the scheduler has to be deleted when the device is deleted
 	bool _deleteScheduler;
+	///Busy cycles since simulation start
+	TMLTime _busyCycles;
+
 };
 
 #endif

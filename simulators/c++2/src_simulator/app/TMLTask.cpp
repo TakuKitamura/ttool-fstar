@@ -67,30 +67,29 @@ TMLTask::~TMLTask(){
 	if (_comment!=0) delete [] _comment;
 }
 
-Priority TMLTask::getPriority() const{
-	return _priority;
-}
+//Priority TMLTask::getPriority() const{
+//	return _priority;
+//}
 
-TMLTime TMLTask::getEndLastTransaction() const{
-	return _endLastTransaction;
-}
+//TMLTime TMLTask::getEndLastTransaction() const{
+//	return _endLastTransaction;
+//}
 
-TMLCommand* TMLTask::getCurrCommand() const{
-	return _currCommand;
-}
+//TMLCommand* TMLTask::getCurrCommand() const{
+//	return _currCommand;
+//}
 
-void TMLTask::setCurrCommand(TMLCommand* iCurrCommand){
-	//std::cout << _name << "currentcommand: " << iCurrCommand->toString() << std::endl;
-	_currCommand=iCurrCommand;
-}
+//void TMLTask::setCurrCommand(TMLCommand* iCurrCommand){
+//	_currCommand=iCurrCommand;
+//}
 
-CPU* TMLTask::getCPU() const{
-	return _currentCPU;
-}
+//CPU* TMLTask::getCPU() const{
+//	return _currentCPU;
+//}
 
-std::string TMLTask::toString() const{
-	return _name;
-}
+//std::string TMLTask::toString() const{
+//	return _name;
+//}
 
 std::string TMLTask::toShortString() const{
 	std::ostringstream outp;
@@ -98,14 +97,14 @@ std::string TMLTask::toShortString() const{
 	return outp.str();
 }
 
-ID TMLTask::getID() const{
-	return _ID;
-}
+//ID TMLTask::getID() const{
+//	return _ID;
+//}
 
 #ifdef ADD_COMMENTS
-void TMLTask::addComment(Comment* iComment){
-	_commentList.push_back(iComment);
-}
+//void TMLTask::addComment(Comment* iComment){
+//	_commentList.push_back(iComment);
+//}
 
 std::string TMLTask::getNextComment(bool iInit, Comment*& oComment){
 	if (iInit) _posCommentList=_commentList.begin();
@@ -141,69 +140,68 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	}
 }
 
-TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
-	std::ostringstream outp;
+//TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
+void TMLTask::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
+	//std::ostringstream outp;
 	if (iInit){
-		//std::cout << "Init" << std::endl; 
 		_posTrasactListVCD=_transactList.begin();
-		//std::cout << "Init2" << std::endl; 
 		_previousTransEndTime=0;
 		_vcdOutputState=END_TRANS;
 	}
 	if (_posTrasactListVCD == _transactList.end()){
-		//if (iInit || _transactList.back()->getTerminatedFlag()){
-			//outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
-		//}else{
-			//outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
-		//}
-		//if (iInit || (! _transactList.back()->getTerminatedFlag())){
 		if (iInit || dynamic_cast<TMLStopCommand*>(_currCommand)==0){
-			outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;	
+			//outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << "ta" << _ID;
+			new (oSigData) SignalChangeData(SUSPENDED, _previousTransEndTime, this);
 		}else{
-			outp << VCD_PREFIX << vcdValConvert(TERMINATED) << " ta" << _ID;
+			//outp << VCD_PREFIX << vcdValConvert(TERMINATED) << "ta" << _ID;
+			new (oSigData) SignalChangeData(TERMINATED, _previousTransEndTime, this);
 		}
-		oSigChange=outp.str();
-		oNoMoreTrans=true;
-		return _previousTransEndTime;
+		//oSigChange=outp.str();
+		//oNoMoreTrans=true;
+		//return _previousTransEndTime;
 	}else{
-		//std::cout << "VCD out trans: " << (*_posTrasactListVCD)->toShortString() << std::endl;
 		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
-		oNoMoreTrans=false;
+		//oNoMoreTrans=false;
 		switch (_vcdOutputState){
 			case END_TRANS:
 				if (aCurrTrans->getRunnableTime()==_previousTransEndTime){
-					outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << " ta" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << "ta" << _ID;
 					_vcdOutputState=START_TRANS;
+					new (oSigData) SignalChangeData(RUNNABLE, _previousTransEndTime, this);
 				}else{
-					outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << " ta" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(SUSPENDED) << "ta" << _ID;
+					new (oSigData) SignalChangeData(SUSPENDED, _previousTransEndTime, this);
 					if (aCurrTrans->getRunnableTime()==aCurrTrans->getStartTimeOperation()){
 						_vcdOutputState=START_TRANS;
+						
 					}else{
 						_vcdOutputState=BETWEEN_TRANS;
 					}
 				}
-				oSigChange=outp.str();
-				return _previousTransEndTime;
+				//oSigChange=outp.str();
+				//return _previousTransEndTime;
 			break;
 			case BETWEEN_TRANS:
-				outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << " ta" << _ID;
-				oSigChange=outp.str();
+				//outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << "ta" << _ID;
+				//oSigChange=outp.str();
 				_vcdOutputState=START_TRANS;
-				return aCurrTrans->getRunnableTime();
+				//return aCurrTrans->getRunnableTime();
+				new (oSigData) SignalChangeData(RUNNABLE, aCurrTrans->getRunnableTime(), this);
 			break;
 			case START_TRANS:
-				outp << VCD_PREFIX << vcdValConvert(RUNNING) << " ta" << _ID;
-				oSigChange=outp.str();
+				//outp << VCD_PREFIX << vcdValConvert(RUNNING) << "ta" << _ID;
+				//oSigChange=outp.str();
 				do{
 					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 					_posTrasactListVCD++;
 				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
 				_vcdOutputState=END_TRANS;
-				return aCurrTrans->getStartTimeOperation();
+				//return aCurrTrans->getStartTimeOperation();
+				new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
 			break;
 		}
 	}
-	return 0;
+	//return 0;
 }
 
 std::ostream& TMLTask::writeObject(std::ostream& s){
@@ -336,29 +334,29 @@ ParamType* TMLTask::getVariableByName(const std::string& iVarName ,bool& oIsId){
 	return _varLookUpName[iVarName.c_str()];
 }
 
-ParamType* TMLTask::getVariableByID(ID iVarID){
-	return _varLookUpID[iVarID];
-}
+//ParamType* TMLTask::getVariableByID(ID iVarID){
+//	return _varLookUpID[iVarID];
+//}
 
-void TMLTask::addCommand(ID iID, TMLCommand* iCmd){
-	_commandHash[iID]=iCmd;
-}
+//void TMLTask::addCommand(ID iID, TMLCommand* iCmd){
+//	_commandHash[iID]=iCmd;
+//}
 
-TMLCommand* TMLTask::getCommandByID(ID iID){
-	return _commandHash[iID];
-}
+//TMLCommand* TMLTask::getCommandByID(ID iID){
+//	return _commandHash[iID];
+//}
 
-void TMLTask::streamStateXML(std::ostream& s) const{
-	streamBenchmarks(s);
-}
+//void TMLTask::streamStateXML(std::ostream& s) const{
+//	streamBenchmarks(s);
+//}
 
-VariableLookUpTableID::const_iterator TMLTask::getVariableIteratorID(bool iEnd) const{
+/*VariableLookUpTableID::const_iterator TMLTask::getVariableIteratorID(bool iEnd) const{
 	return (iEnd)?_varLookUpID.end():_varLookUpID.begin();
 }
 
 VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iEnd) const{
 	return (iEnd)?_varLookUpName.end():_varLookUpName.begin();
-}
+}*/
 
 void TMLTask::finished(){
 	_justStarted=true;
@@ -393,9 +391,9 @@ TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
 	//return (_currCommand==0 || _isScheduled)?0:_currCommand->getCurrTransaction();
 }
 
-unsigned int TMLTask::getInstanceNo(){
-	return _myInstance;
-}
+//unsigned int TMLTask::getInstanceNo(){
+//	return _myInstance;
+//}
 
 //void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
 	//_isScheduled=true;

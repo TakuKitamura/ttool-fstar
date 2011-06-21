@@ -77,15 +77,13 @@ long getTimeDiff(struct timeval& begin, struct timeval& end){
 }
 
 
-bool greaterRunnableTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
-	//std::cout << "greaterRunnableTime\n";
+/*bool greaterRunnableTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
 	return p1->getRunnableTime() > p2->getRunnableTime();
 }
 
 bool greaterPrio::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
-	//std::cout << "greaterPrio\n";
 	return p1->getCommand()->getTask()->getPriority() > p2->getCommand()->getTask()->getPriority();
-}
+}*/
 
 bool greaterStartTime::operator()(TMLTransaction const* p1, TMLTransaction const* p2){
 	return p1->getStartTime() > p2->getStartTime();
@@ -98,7 +96,11 @@ void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace){
 	}
 }
 
-std::string vcdValConvert(unsigned int iVal){
+//std::string vcdValConvert(unsigned int iVal){
+//	if(iVal==1 || iVal==2) return "1"; else return "0";
+//}
+
+std::string vcdTimeConvert(TMLTime iVal){
 	std::string iResult;
 	do{
 		if (iVal & 1) iResult="1" + iResult; else iResult="0" + iResult;

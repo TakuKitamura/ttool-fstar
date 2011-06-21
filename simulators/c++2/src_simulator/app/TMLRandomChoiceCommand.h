@@ -48,10 +48,10 @@ class TMLRandomChoiceCommand: public TMLChoiceCommand, public IndeterminismSourc
 public:
 	TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
 	TMLCommand* prepareNextTransaction();
-	unsigned int getRandomRange();
+	inline unsigned int getRandomRange() {return _dynamicRange;}
 protected:
 	unsigned int _dynamicRange;
-	TMLCommand* getNextCommand() const;
+	inline TMLCommand* getNextCommand() const {return _nextCommand[_randomValue];}
 };
 
 #endif

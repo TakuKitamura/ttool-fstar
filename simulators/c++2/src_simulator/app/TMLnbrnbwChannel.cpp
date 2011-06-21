@@ -71,13 +71,13 @@ bool TMLnbrnbwChannel::read(){
 	return true;
 }
 
-TMLTask* TMLnbrnbwChannel::getBlockedReadTask() const{
-	return 0;
-}
+//TMLTask* TMLnbrnbwChannel::getBlockedReadTask() const{
+//	return 0;
+//}
 
-TMLTask* TMLnbrnbwChannel::getBlockedWriteTask() const{
-	return 0;
-}
+//TMLTask* TMLnbrnbwChannel::getBlockedWriteTask() const{
+//	return 0;
+//}
 
 std::string TMLnbrnbwChannel::toString() const{
 	std::ostringstream outp;
@@ -85,5 +85,5 @@ std::string TMLnbrnbwChannel::toString() const{
 	return outp.str();
 }
 
-void TMLnbrnbwChannel::getStateHash(HashAlgo* iHash) const{
-}
+//void TMLnbrnbwChannel::getStateHash(HashAlgo* iHash) const{
+//}

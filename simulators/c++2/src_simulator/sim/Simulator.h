@@ -95,7 +95,6 @@ class SimServSyncInfo;
 class ServerIF;
 
 ///Simulation engine and output capabilities
-//class Simulator: public ListenerSubject<KernelListener> {
 class Simulator: public ListenerSubject<GeneralListener> {
 public:
 	///Constructor
@@ -118,7 +117,6 @@ public:
 	/**
 	\param iCmd Command string
 	*/
-	//bool execAsyncCmd(const char* iCmd);
 	bool execAsyncCmd(const std::string& iCmd);
 	///Sends simulator status information to client
 	void sendStatus();
@@ -237,13 +235,11 @@ public:
 	\return Busy flag
 	*/
 	bool isBusy();
-	//void init();
 protected:
 	///Runs the simulation
 	/**
 	\return returns true if the simulation is completed, false otherwise
 	*/
-	//bool simulate();
 	bool simulate(TMLTransaction*& oLastTrans);
 	///Returns a pointer to the transaction with the lowest end time proposed by CPU schedulers
 	/**
@@ -256,7 +252,6 @@ protected:
 	\param iCmd Pointer to the command
 	\return Returns false if simulator should be terminated
 	*/
-	//void decodeCommand(char* iCmd);
 	void decodeCommand(std::string iCmd);
 	///Searches for switches in the command line string
 	/**
@@ -309,5 +304,11 @@ protected:
 	bool _wasReset;
 	///Graph output path
 	std::string _graphOutPath;
+	///Longest runtime
+	TMLTime _longRunTime;
+	///Shortest runtime
+	TMLTime _shortRunTime;
+	///Flag indicating whether replies should be sent back to the server, not set in command line mode
+	bool _replyToServer;
 };
 #endif

@@ -62,7 +62,7 @@ public:
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string getCommandStr() const {return "exe";}
 	unsigned int getRandomRange();
 	void setRandomValue(unsigned int iValue);
 protected:

@@ -91,7 +91,7 @@ public:
 	/**
 	\param iReadTask Pointer to the task
 	*/
-	void setBlockedReadTask(TMLTask* iReadTask);
+	inline void setBlockedReadTask(TMLTask* iReadTask) {_readTask=iReadTask;}
 	///Returns a pointer to the tasks which performs read operation on the channel
 	/**
 	\return Pointer to the task
@@ -101,7 +101,7 @@ public:
 	/**
 	\param iWriteTask Pointer to the task
 	*/
-	void setBlockedWriteTask(TMLTask* iWriteTask);
+	inline void setBlockedWriteTask(TMLTask* iWriteTask) {_writeTask=iWriteTask;}
 	///Returns a pointer to the tasks which performs write operation on the channel
 	/**
 	\return Pointer to the task
@@ -137,7 +137,7 @@ public:
 	/**
 	\return Short string representation
 	*/
-	std::string toShortString() const;
+	inline std::string toShortString() const {return _name;}
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
@@ -145,34 +145,34 @@ public:
 	/**
       	\return Unique ID
     	*/ 
-	ID getID() const;
+	inline ID getID() const {return _ID;}
 	///Inserts samples into the channel
 	/**
 	\param iNbOfSamples Number of samples to insert
 	\param iParam Parameter to insert
       	\return Returns true if successful
     	*/ 
-	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
+	inline virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam) {return iNbOfSamples;}
 	///Writes XML information about the component to a stream
 	/**
       	\param s Reference to an output stream
 	*/
-	virtual void streamStateXML(std::ostream& s) const;
+	inline virtual void streamStateXML(std::ostream& s) const {}
 	///Returns the number of samples stored in the channel
    	/**
       	\return Content of the channel
 	*/
-	virtual TMLLength getContent()  const;
+	inline virtual TMLLength getContent()  const {return 0;}
 	///Returns a flag indicating if a channel overflow has been encoutered
 	/**
 	\return Channel overflow flag
 	*/
-	virtual bool getOverflow() const;
+	inline virtual bool getOverflow() const {return false;}
 	///Returns a flag indicating if a channel underflow has been encoutered
 	/**
 	\return Channel underflow flag
 	*/
-	virtual bool getUnderflow() const;
+	inline virtual bool getUnderflow() const {return false;}
 	///Returns the hash value for the current task state
 	/**
 	\param iHash Hash algorithm object
@@ -182,20 +182,20 @@ public:
 	/**
 	\return Hash Value
 	*/
-	Priority getPriority();
+	inline Priority getPriority() {return _priority;}
 	///Returns the width of the channel
 	/**
 	\return Channel width
 	*/
-	unsigned int getWidth();
+	inline unsigned int getWidth() {return _width;}
 	///Returns the width of the channel
 	/**
 	\param iTask Reference to reading or writing task
 	\param iSignificance Flag indicating if operations performed by this task are still reachable
 	*/
 	void setSignificance(TMLTask* iTask, bool iSignificance);
-	bool getSignificance();
-	bool mappedOnBus();
+	inline bool getSignificance() {return (_significance != 0);}
+	inline bool mappedOnBus() {return _numberOfHops!=0;}
 protected:
 	///ID of channel
 	ID _ID;

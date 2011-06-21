@@ -67,5 +67,6 @@ public:
 	virtual void print()  const=0;
 	virtual Parameter* buildParameter()=0;
 	//virtual Parameter* buildParameter(Parameter* iCloneParam)=0;
+protected:
 };
 #endif

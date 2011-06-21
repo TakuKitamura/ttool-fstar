@@ -126,9 +126,9 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	return _timeSlice-_elapsedTime;
 }
 
-TMLTransaction* RRScheduler::getNextTransaction(TMLTime iEndSchedule) const{
-	return _nextTransaction;
-}
+//TMLTransaction* RRScheduler::getNextTransaction(TMLTime iEndSchedule) const{
+//	return _nextTransaction;
+//}
 
 void RRScheduler::reset(){
 	WorkloadSource::reset();
@@ -137,9 +137,9 @@ void RRScheduler::reset(){
 	_lastSource=0;
 }
 
-std::string RRScheduler::toString() const{
-	return _name;
-}
+//std::string RRScheduler::toString() const{
+//	return _name;
+//}
 
 RRScheduler::~RRScheduler(){
 	std::cout << _name << ": Scheduler deleted\n";

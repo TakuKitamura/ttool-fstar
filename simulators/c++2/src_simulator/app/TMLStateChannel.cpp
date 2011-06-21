@@ -79,17 +79,17 @@ void TMLStateChannel::streamStateXML(std::ostream& s) const{
 	s << TAG_CHANNELc << std::endl;
 }
 
-TMLLength TMLStateChannel::getContent()  const{
-	return _content;
-}
+//TMLLength TMLStateChannel::getContent()  const{
+//	return _content;
+//}
 
-bool TMLStateChannel::getOverflow() const{
-	return _overflow;
-}
+//bool TMLStateChannel::getOverflow() const{
+//	return _overflow;
+//}
 
-bool TMLStateChannel::getUnderflow() const{
-	return _underflow;
-}
+//bool TMLStateChannel::getUnderflow() const{
+//	return _underflow;
+//}
 
 void TMLStateChannel::getStateHash(HashAlgo* iHash) const{
 	if (_significance!=0){

@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLRequestCommand.h>
-#include <TMLEventChannel.h>
+//#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -68,17 +68,17 @@ TMLCommand* TMLRequestCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLChannel* TMLRequestCommand::getChannel(unsigned int iIndex) const{
-	return dynamic_cast<TMLChannel*>(_channel);
-}
+//TMLChannel* TMLRequestCommand::getChannel(unsigned int iIndex) const{
+//	return dynamic_cast<TMLChannel*>(_channel);
+//}
 
-unsigned int TMLRequestCommand::getNbOfChannels() const{
-	return 1;
-}
+//unsigned int TMLRequestCommand::getNbOfChannels() const{
+//	return 1;
+//}
 
-TMLTask* TMLRequestCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel->getBlockedReadTask();
-}
+//TMLTask* TMLRequestCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channel->getBlockedReadTask();
+//}
 
 std::string TMLRequestCommand::toString() const{
 	std::ostringstream outp;
@@ -92,9 +92,9 @@ std::string TMLRequestCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLRequestCommand::getCommandStr() const{
-	return "sendReq";
-}
+//std::string TMLRequestCommand::getCommandStr() const{
+//	return "sendReq";
+//}
 
 /*ParamFuncPointer TMLRequestCommand::getParamFuncPointer() const{
 	return _paramFunc;
@@ -111,7 +111,6 @@ std::string TMLRequestCommand::getCommandStr() const{
 	//std::cout << "\n";
 }*/
 
-Parameter* TMLRequestCommand::setParams(Parameter* ioParam){
-	//return (_paramFunc==0)? 0:(_task->*_paramFunc)(ioParam);
-	return (_task->*_paramFunc)(ioParam);
-}
+//Parameter* TMLRequestCommand::setParams(Parameter* ioParam){
+	//return (_task->*_paramFunc)(ioParam);
+//}

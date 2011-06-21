@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLWriteMultCommand.h>
-#include <TMLChannel.h>
+//#include <TMLChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -86,17 +86,17 @@ TMLCommand* TMLWriteMultCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLChannel* TMLWriteMultCommand::getChannel(unsigned int iIndex) const{
-	return _channels[iIndex];
-}
+//TMLChannel* TMLWriteMultCommand::getChannel(unsigned int iIndex) const{
+//	return _channels[iIndex];
+//}
 
-unsigned int TMLWriteMultCommand::getNbOfChannels() const{
-	return _nbOfChannels;
-}
+//unsigned int TMLWriteMultCommand::getNbOfChannels() const{
+//	return _nbOfChannels;
+//}
 
-TMLTask* TMLWriteMultCommand::getDependentTask(unsigned int iIndex)const{
-	return _channels[iIndex]->getBlockedReadTask();
-}
+//TMLTask* TMLWriteMultCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channels[iIndex]->getBlockedReadTask();
+//}
 
 std::string TMLWriteMultCommand::toString() const{
 	std::ostringstream outp;
@@ -110,6 +110,6 @@ std::string TMLWriteMultCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLWriteMultCommand::getCommandStr() const{
-	return "wr";
-}
+//std::string TMLWriteMultCommand::getCommandStr() const{
+//	return "wr";
+//}

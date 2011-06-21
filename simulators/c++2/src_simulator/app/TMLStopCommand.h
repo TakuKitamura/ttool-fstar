@@ -43,6 +43,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 #include <definitions.h>
 #include <TMLCommand.h>
+#include <TMLTask.h>
 
 
 ///This class represents a TML Stop command (denotes the end of a task)
@@ -54,13 +55,13 @@ public:
       	\param iTask Pointer to the task the command belongs to
     	*/
 	TMLStopCommand(ID iID, TMLTask* iTask);
-	void execute();
+	inline void execute() {}
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
-	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string toShortString() const {return "stp";}
+	inline std::string getCommandStr() const {return "stp";}
 protected:
-	TMLCommand* prepareNextTransaction();
+	inline TMLCommand* prepareNextTransaction() {_task->finished(); return 0;}
 };
 
 #endif

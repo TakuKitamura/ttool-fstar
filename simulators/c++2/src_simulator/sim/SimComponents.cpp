@@ -51,6 +51,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Bridge.h>
 #include <IndeterminismSource.h>
 #include <ListenersSimCmd.h>
+#include <Simulator.h>
 #ifdef EBRDD_ENABLED
 #include <EBRDD.h>
 #endif
@@ -356,11 +357,11 @@ ListenerSubject <GeneralListener>* SimComponents::getListenerByID(ID iID){
 	return getChannelByID(iID);
 }
 
-int SimComponents::getHashValue(){
-	return _hashValue;
-}
+//int SimComponents::getHashValue(){
+//	return _hashValue;
+//}
 
-TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
+/*TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
 	return (iEnd)? _taskList.end():_taskList.begin();
 }
 
@@ -380,7 +381,7 @@ EBRDDList::const_iterator SimComponents::getEBRDDIterator(bool iEnd) const{
 
 CPUList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
 	return (iEnd)? _cpuList.end():_cpuList.begin();
-}
+}*/
 
 /*void SimComponents::setBreakpointOnChoiceCmds(){
 	TMLChoiceCommand* aResult;
@@ -448,16 +449,29 @@ ID SimComponents::checkForRecurringSystemState(){
 	return aRetVal;
 }
 	
-ID SimComponents::wasKnownStateReached() const{
-	return _knownStateReached;
-}
+//ID SimComponents::wasKnownStateReached() const{
+//	return _knownStateReached;
+//}
 
-bool SimComponents::getOnKnownPath(){
-	_knownStateReached=0;
-	return _onKnownPath;
-}
+//bool SimComponents::getOnKnownPath(){
+//	_knownStateReached=0;
+//	return _onKnownPath;
+//}
 
 void SimComponents::showTaskStates(){
+	static int iCount=0;
+	static ParamType *aDatalen, *aStandard;
+	static SchedulableDevice *aFEP, *aDeint, *aChDec;
+	if (iCount==0){
+		bool oIsID;
+		aDatalen = getTaskByName("PacketManagerDesign__PacketGenerator")->getVariableByName("datalen", oIsID);
+		aStandard = getTaskByName("PacketManagerDesign__PacketGenerator")->getVariableByName("standard", oIsID);
+		aFEP = getCPUByName("FEP_0");
+		aDeint = getCPUByName("Deinterleaver_0");
+		aChDec = getCPUByName("ChannelDecoder_0");
+	}
+	
+	/*std::cout<< "***** NEW entry " << iCount++ << "   Sim Time " << SchedulableDevice::getSimulatedTime() <<  " *****\n";
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		std::cout << "State of " << (*i)->toString() << ": " ;
 		if ((*i)->getCurrCommand()==0 || (*i)->getCurrCommand()->getCurrTransaction()==0){
@@ -474,7 +488,10 @@ void SimComponents::showTaskStates(){
 		if (nextBusTrans!=0){
 			std::cout << "Bus " << (*i)->toString() << " has next trans: " << nextBusTrans->toString() << "\n";
 		}
-	}
+	}*/
+	std::cout << *aDatalen << "," << *aStandard << "," << SchedulableDevice::getSimulatedTime() << "," <<
+	aFEP->getBusyCycles() << "," << aDeint->getBusyCycles() << "," << aChDec->getBusyCycles() << "\n";
+	
 }
 
 bool SimComponents::couldCPUBeIdle(CPU* iCPU){

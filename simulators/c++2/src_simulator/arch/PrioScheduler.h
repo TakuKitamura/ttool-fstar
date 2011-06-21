@@ -62,8 +62,8 @@ public:
 	PrioScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
 	~PrioScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const;
-	std::string toString() const;
+	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
+	inline std::string toString() const {return _name;}
 	void reset();
 	//void transWasScheduled(SchedulableDevice* iDevice);
 protected:

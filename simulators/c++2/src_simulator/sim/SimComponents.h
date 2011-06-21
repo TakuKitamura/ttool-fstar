@@ -196,24 +196,27 @@ public:
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for CPU list
 	*/	
-	CPUList::const_iterator getCPUIterator(bool iEnd) const;
+	//CPUList::const_iterator getCPUIterator(bool iEnd) const;
+	inline const CPUList& getCPUList() const{return _cpuList;}
 	///Returns an iterator for the internal bus list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for bus list
 	*/	
-	BusList::const_iterator getBusIterator(bool iEnd) const;
+	//BusList::const_iterator getBusIterator(bool iEnd) const;
+	inline const BusList& getBusList() const{return _busList;}
 	///Returns an iterator for the internal VCD list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for VCD list
 	*/	
-	TraceableDeviceList::const_iterator getVCDIterator(bool iEnd) const;
+	//TraceableDeviceList::const_iterator getVCDIterator(bool iEnd) const;
+	inline const TraceableDeviceList& getVCDList() const{return _vcdList;}
 	///Returns the state of the stop flag
 	/**
 	\return Stop flag
 	*/	
-	bool getStopFlag() const {return _stopFlag;}
+	inline bool getStopFlag() const {return _stopFlag;}
 	///Sets the value of the stop flag
 	/**
 	\param iStopFlag Stop flag
@@ -224,49 +227,50 @@ public:
 	/**
 	\return Flag indicating if the simulation stopped on an Action command
 	*/
-	bool getStoppedOnAction(){return _stoppedOnAction;}
+	inline bool getStoppedOnAction(){return _stoppedOnAction;}
 	///Sets the flag indicating that the simulation stopped on an Action command
-	void setStoppedOnAction(){_stoppedOnAction=true; /*std::cout << "_stoppedOnAction=true\n";*/}
+	inline void setStoppedOnAction(){_stoppedOnAction=true; /*std::cout << "_stoppedOnAction=true\n";*/}
 	///If a task has a choice command as current command, a pointer to it is returned
 	/**
 	\return Pointer if choice command was found, null otherwise
 	*/
-	//TMLChoiceCommand* getCurrentChoiceCmd();
 	IndeterminismSource* getCurrentRandomCmd();
 	///Returns a hash value for the current application and architecture
 	/**
 	\return Hash value
 	*/
-	int getHashValue();
+	inline int getHashValue() {return _hashValue;}
 	///Returns an iterator for the internal task list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for task list
 	*/
-	TaskList::const_iterator getTaskIterator(bool iEnd) const;
+	//TaskList::const_iterator getTaskIterator(bool iEnd) const;
+	inline const TaskList& getTaskList() const{return _taskList;}
 #ifdef EBRDD_ENABLED
 	///Returns an iterator for the internal EBRDD list
 	/**
 	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for EBRDD list
 	*/
-	EBRDDList::const_iterator getEBRDDIterator(bool iEnd) const;
+	//EBRDDList::const_iterator getEBRDDIterator(bool iEnd) const;
+	inline const EBRDDList& getEBRDDList() const{return _ebrddList;}
 #endif
 	///Returns the reason why the simulation stopped
 	/**
 	\return Reason why the simulation stopped
 	*/
-	std::string getStopReason(){return _stopReason;}
+	inline std::string getStopReason(){return _stopReason;}
 	///Returns a pointer to the simulator
 	/**
 	\return Pointer to simulator
 	*/
-	Simulator* getSimulator(){return _simulator;}
+	inline Simulator* getSimulator(){return _simulator;}
 	///Sets a reference to the simulator
 	/**
 	\param iSim Pointer to simulator
 	*/
-	void setSimulator(Simulator* iSim){_simulator=iSim;}
+	inline void setSimulator(Simulator* iSim){_simulator=iSim;}
 	///Returns the name of the component with the indicated ID
 	/**
 	\param iID Component ID
@@ -280,10 +284,14 @@ public:
 	\return Flag indicating whether a known state has been encountered
 	*/
 	//ID wasKnownStateReached(HashValueType* oSystemHash) const;
-	ID wasKnownStateReached() const;
+	inline ID wasKnownStateReached() const {return _knownStateReached;}
+	//inline ID wasKnownStateReached() const {return false;}
 	///Resets the global system hash
 	void resetStateHash();
-	bool getOnKnownPath();
+	inline bool getOnKnownPath(){
+		_knownStateReached=0;
+		return _onKnownPath;
+	}
 	//ListenerSubject <TransactionListener>* getListenerByID(ID iID);
 	ListenerSubject<GeneralListener>* getListenerByID(ID iID);
 	virtual void generateTEPEs()=0;

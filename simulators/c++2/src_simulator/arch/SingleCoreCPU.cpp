@@ -52,7 +52,7 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
 , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
 , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
 #endif 
-, _cyclesPerExeci(iCyclesPerExeci), _busyCycles(0)
+, _cyclesPerExeci(iCyclesPerExeci) /*, _busyCycles(0)*/
 #ifdef PENALTIES_ENABLED
 , _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
 ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
@@ -69,7 +69,8 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
 }
 
 SingleCoreCPU::~SingleCoreCPU(){  
-	std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
+	std::cout << _transactList.size() << " elements in List of " << _name << ", busy cycles: " << _busyCycles << std::endl;
+	
 	//delete _scheduler;
 }
 
@@ -304,10 +305,9 @@ void SingleCoreCPU::schedule(){
 	//std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
-std::string SingleCoreCPU::toString() const{
-	//std::cout << "SingleCoreCPU::toString() called" << std::endl;
-	return _name;
-}
+//std::string SingleCoreCPU::toString() const{
+//	return _name;
+//}
 
 std::string SingleCoreCPU::toShortString() const{
 	std::ostringstream outp;
@@ -396,27 +396,30 @@ void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
 	}
 }
 
-TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
-	std::ostringstream outp;
-	oNoMoreTrans=false;
+//TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
+void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
+	//new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
+	//std::ostringstream outp;
+	//oNoMoreTrans=false;
 	if (iInit){
 		 _posTrasactListVCD=_transactList.begin();
 		_previousTransEndTime=0;
 		_vcdOutputState=END_IDLE_CPU;
-		//if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==0) _vcdOutputState=END_IDLE_CPU; else _vcdOutputState=END_TASK_CPU;
 		if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-				outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
-				oSigChange=outp.str();
-				return 0;
+				//outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+				//oSigChange=outp.str();
+				new (oSigData) SignalChangeData(END_IDLE_CPU, 0, this);
+				//return 0
+				return;
 		} 
 	}
 	if (_posTrasactListVCD == _transactList.end()){
-		outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
-		oSigChange=outp.str();
-		oNoMoreTrans=true;
-		return _previousTransEndTime;
+		//outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+		//oSigChange=outp.str();
+		//oNoMoreTrans=true;
+		//return _previousTransEndTime;
+		new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
 	}else{
-		//std::cout << "VCD out trans: " << (*_posTrasactListVCD)->toShortString() << std::endl;
 		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
 		switch (_vcdOutputState){
 			case END_TASK_CPU:
@@ -425,36 +428,41 @@ TMLTime SingleCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, 
 					_posTrasactListVCD++;
 				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
 				if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
-					outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << " cpu" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
 					_vcdOutputState=END_PENALTY_CPU;
+					new (oSigData) SignalChangeData(END_PENALTY_CPU, _previousTransEndTime, this);
 				}else{
-					outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << " cpu" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
 					_vcdOutputState=END_IDLE_CPU;
-					if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;						
+					//if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;						
+					new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
 				}
-				oSigChange=outp.str();
-				return _previousTransEndTime;
+				//oSigChange=outp.str();
+				//return _previousTransEndTime;
 			break;
 			case END_PENALTY_CPU:
-				outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << " cpu" << _ID;
-				oSigChange=outp.str();
+				//outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
+				//oSigChange=outp.str();
 				_vcdOutputState=END_TASK_CPU;
-				return aCurrTrans->getStartTimeOperation();
+				//return aCurrTrans->getStartTimeOperation();
+				new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
 			break;
 			case END_IDLE_CPU:
 				if (aCurrTrans->getPenalties()==0){
-					outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << " cpu" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
 					_vcdOutputState=END_TASK_CPU;
+					new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTime(), this);
 				}else{
-					outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << " cpu" << _ID;
+					//outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
 					_vcdOutputState=END_PENALTY_CPU;
+					new (oSigData) SignalChangeData(END_PENALTY_CPU, aCurrTrans->getStartTime(), this);
 				}
-				oSigChange=outp.str();
-				return aCurrTrans->getStartTime();
+				//oSigChange=outp.str();
+				//return aCurrTrans->getStartTime();
 			break;
 		}
 	}
-	return 0;
+	//return 0;
 }
 
 void SingleCoreCPU::reset(){
@@ -474,9 +482,9 @@ void SingleCoreCPU::streamBenchmarks(std::ostream& s) const{
 	s << TAG_CPUc; 
 }
 
-void SingleCoreCPU::streamStateXML(std::ostream& s) const{
-	streamBenchmarks(s);
-}
+//void SingleCoreCPU::streamStateXML(std::ostream& s) const{
+//	streamBenchmarks(s);
+//}
 
 /*void SingleCoreCPU::addBusMaster(BusMaster* iMaster){
 	_busMasterList.push_back(iMaster);

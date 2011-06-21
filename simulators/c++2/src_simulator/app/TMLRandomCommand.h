@@ -48,12 +48,12 @@ class TMLRandomCommand: public TMLCommand, public IndeterminismSource{
 public:
 	TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar, const char* iLiveVarList, bool iCheckpoint);
 	
-	void execute();
+	void execute() {}
 	unsigned int getRandomRange();
 	TMLCommand* prepareNextTransaction();
 	std::string toString() const;
-	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string toShortString() const {return "Random";}
+	inline std::string getCommandStr() const {return "rnd";}
 protected:
 	RangeFuncPointer _rangeFunc;
 	ParamType* _resultVar;

@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLSelectCommand.h>
-#include <TMLEventChannel.h>
+//#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -141,34 +141,24 @@ TMLChannel* TMLSelectCommand::getChannel(unsigned int iIndex) const{
 		return _channel[_indexNextCommand];
 	else
 		return _currTransaction->getChannel();
-		
-	//return _channel[_indexNextCommand]; TO INCLUDE
-	//return _currTransaction->getChannel();
 }
 
-unsigned int TMLSelectCommand::getNbOfChannels() const{
-	//return 1;
-	return _nbOfNextCmds;
-}
+//unsigned int TMLSelectCommand::getNbOfChannels() const{
+//	return _nbOfNextCmds;
+//}
 
-TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel[iIndex]->getBlockedWriteTask();
-	/*if (_currTransaction==0){
-		std::cout << "This is baaaad\n";
-		return _channel[_indexNextCommand]->getBlockedWriteTask();
-	}else
-		return _currTransaction->getChannel()->getBlockedWriteTask();*/
-	
-}
+//TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channel[iIndex]->getBlockedWriteTask();
+//}
 
-TMLCommand* TMLSelectCommand::getNextCommand() const{
-	return _nextCommand[_indexNextCommand];
-}
+//TMLCommand* TMLSelectCommand::getNextCommand() const{
+//	return _nextCommand[_indexNextCommand];
+//}
 
 
-ParamFuncPointer TMLSelectCommand::getParamFuncPointer() const{
-	return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];
-}
+//ParamFuncPointer TMLSelectCommand::getParamFuncPointer() const{
+//	return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];
+//}
 
 std::string TMLSelectCommand::toString() const{
 	std::ostringstream outp;
@@ -182,22 +172,19 @@ std::string TMLSelectCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLSelectCommand::getCommandStr() const{
-	return "sel";
-}
+//std::string TMLSelectCommand::getCommandStr() const{
+//	return "sel";
+//}
 
-#ifdef ADD_COMMENTS
-std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
-	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
-}
-#endif
+//#ifdef ADD_COMMENTS
+//std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
+//	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
+//}
+//#endif
 
-Parameter* TMLSelectCommand::setParams(Parameter* ioParam){
-	/*Parameter* aResult = 0;
-	if (_paramFuncs[_indexNextCommand]!=0) aResult = (_task->*_paramFuncs[_indexNextCommand])(ioParam);
-	return aResult;*/
-	return (_task->*_paramFuncs[_indexNextCommand])(ioParam);
-}
+//Parameter* TMLSelectCommand::setParams(Parameter* ioParam){
+//	return (_task->*_paramFuncs[_indexNextCommand])(ioParam);
+//}
 
 //unsigned int TMLSelectCommand::getRandomRange(){
 //	return _nbOfPossSync ;

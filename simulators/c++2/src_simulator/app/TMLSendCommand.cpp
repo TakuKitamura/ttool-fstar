@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLSendCommand.h>
-#include <TMLEventChannel.h>
+//#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -70,18 +70,17 @@ TMLCommand* TMLSendCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLChannel* TMLSendCommand::getChannel(unsigned int iIndex) const{
-	return _channel;
-}
+//TMLChannel* TMLSendCommand::getChannel(unsigned int iIndex) const{
+//	return _channel;
+//}
 
-unsigned int TMLSendCommand::getNbOfChannels() const{
-	//return (_channel->getBlockedReadTask()==0)?0:1;
-	return 1;
-}
+//unsigned int TMLSendCommand::getNbOfChannels() const{
+//	return 1;
+//}
 
-TMLTask* TMLSendCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel->getBlockedReadTask();
-}
+//TMLTask* TMLSendCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channel->getBlockedReadTask();
+//}
 
 std::string TMLSendCommand::toString() const{
 	std::ostringstream outp;
@@ -95,17 +94,11 @@ std::string TMLSendCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLSendCommand::getCommandStr() const{
-	return "snd";
-}
+//std::string TMLSendCommand::getCommandStr() const{
+//	return "snd";
+//}
 
-/*ParamFuncPointer TMLSendCommand::getParamFuncPointer() const{
-	return _paramFunc;
-}*/
-
-//void TMLSendCommand::setParams(Parameter<ParamType>& ioParam){
-Parameter* TMLSendCommand::setParams(Parameter* ioParam){
-	//return (_paramFunc==0)? 0:(_task->*_paramFunc)(ioParam);
-	return (_task->*_paramFunc)(ioParam);
-}
+//Parameter* TMLSendCommand::setParams(Parameter* ioParam){
+//	return (_task->*_paramFunc)(ioParam);
+//}
 

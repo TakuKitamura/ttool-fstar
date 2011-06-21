@@ -102,14 +102,14 @@ public:
 		
 	///Print function for testing purposes
 	void print() const{
-		std::cerr << "print " << size << " elements in mempool " << &memPool << " :\n";
+		//std::cerr << "print " << size << " elements in mempool " << &memPool << " :\n";
 //#if size>0	
 		for (unsigned int i=0;i<size;i++){
-				std::cerr << " p[" << (i+1) << "]:" << _p[i];
+				std::cout << " p[" << (i+1) << "]:" << _p[i];
 		}
 //#endif
-		std::cerr << std::endl;
-		std::cerr << "end print:\n";
+		//std::cerr << std::endl;
+		//std::cerr << "end print:\n";
 	}
 		
 	std::ostream& writeObject(std::ostream& s){

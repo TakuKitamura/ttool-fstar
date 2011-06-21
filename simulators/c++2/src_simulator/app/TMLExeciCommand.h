@@ -63,7 +63,7 @@ public:
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string getCommandStr() const {return "exe";}
 protected:
 	TMLCommand* prepareNextTransaction();
 	///Pointer to the function returning the length of the command

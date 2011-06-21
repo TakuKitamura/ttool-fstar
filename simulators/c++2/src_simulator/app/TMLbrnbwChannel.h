@@ -66,8 +66,8 @@ public:
 	void testRead(TMLTransaction* iTrans);
 	void write();
 	bool read();
-	TMLTask* getBlockedReadTask() const;
-	TMLTask* getBlockedWriteTask() const;
+	inline TMLTask* getBlockedReadTask() const {return _readTask;}
+	inline TMLTask* getBlockedWriteTask() const {return 0;}
 	std::string toString() const;
 	virtual TMLLength insertSamples(TMLLength iNbOfSamples, Parameter* iParam);
 protected:

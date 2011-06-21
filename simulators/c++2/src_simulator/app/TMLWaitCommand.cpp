@@ -39,7 +39,7 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLWaitCommand.h>
-#include <TMLEventChannel.h>
+//#include <TMLEventChannel.h>
 #include <TMLTask.h>
 #include <TMLTransaction.h>
 #include <Bus.h>
@@ -69,18 +69,17 @@ TMLCommand* TMLWaitCommand::prepareNextTransaction(){
 	return this;
 }
 
-TMLChannel* TMLWaitCommand::getChannel(unsigned int iIndex) const{
-	return _channel;
-}
+//TMLChannel* TMLWaitCommand::getChannel(unsigned int iIndex) const{
+//	return _channel;
+//}
 
-unsigned int TMLWaitCommand::getNbOfChannels() const{
-	//return (_channel->getBlockedWriteTask()==0)?0:1;
-	return 1;
-}
+//unsigned int TMLWaitCommand::getNbOfChannels() const{
+//	return 1;
+//}
 
-TMLTask* TMLWaitCommand::getDependentTask(unsigned int iIndex)const{
-	return _channel->getBlockedWriteTask();
-}
+//TMLTask* TMLWaitCommand::getDependentTask(unsigned int iIndex)const{
+//	return _channel->getBlockedWriteTask();
+//}
 
 std::string TMLWaitCommand::toString() const{
 	std::ostringstream outp;
@@ -94,19 +93,10 @@ std::string TMLWaitCommand::toShortString() const{
 	return outp.str();
 }
 
-std::string TMLWaitCommand::getCommandStr() const{
-	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
-}
+//std::string TMLWaitCommand::getCommandStr() const{
+//	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
+//}
 
-/*ParamFuncPointer TMLWaitCommand::getParamFuncPointer() const{
-	return _paramFunc;
-}*/
-
-Parameter* TMLWaitCommand::setParams(Parameter* ioParam){
-	/*Parameter* aResult = 0;
-	if (_paramFunc!=0) {
-		aResult = (_task->*_paramFunc)(ioParam); 
-	}
-	return aResult;*/
-	return (_task->*_paramFunc)(ioParam);
-}
+//Parameter* TMLWaitCommand::setParams(Parameter* ioParam){
+//	return (_task->*_paramFunc)(ioParam);
+//}

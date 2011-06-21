@@ -68,9 +68,9 @@ public:
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
 	virtual void streamStateXML(std::ostream& s) const;
-	virtual TMLLength getContent() const;
-	bool getOverflow() const;
-	bool getUnderflow() const;
+	inline virtual TMLLength getContent() const {return _content;}
+	inline bool getOverflow() const {return _overflow;}
+	inline bool getUnderflow() const {return _underflow;}
 	virtual void getStateHash(HashAlgo* iHash) const;
 protected:
 	///Content of the channel

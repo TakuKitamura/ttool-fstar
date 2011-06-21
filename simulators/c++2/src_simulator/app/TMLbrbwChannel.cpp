@@ -129,13 +129,13 @@ void TMLbrbwChannel::setTransactionLength() const{
 	}
 }
 
-TMLTask* TMLbrbwChannel::getBlockedReadTask() const{
-	return _readTask;
-}
+//TMLTask* TMLbrbwChannel::getBlockedReadTask() const{
+//	return _readTask;
+//}
 
-TMLTask* TMLbrbwChannel::getBlockedWriteTask() const{
-	return _writeTask;
-}
+//TMLTask* TMLbrbwChannel::getBlockedWriteTask() const{
+//	return _writeTask;
+//}
 
 std::string TMLbrbwChannel::toString() const{
 	std::ostringstream outp;

@@ -56,11 +56,11 @@ public:
 	\param iActionFunc Member function pointer to the action function
     	*/
 	TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint);
-	void execute();
+	inline void execute() {}
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
-	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string toShortString() const {return "Action";}
+	inline std::string getCommandStr() const {return "act";}
 protected:
 	///Member function pointer to the action function
 	ActionFuncPointer _actionFunc;

@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define TMLTransactionH
 
 #include <definitions.h>
-#include <MemPool.h>
+#include <MemPoolNoDel.h>
 
 class TMLCommand;
 class TMLChannel;
@@ -63,87 +63,131 @@ public:
 	/**
       	\return Runnable time
     	*/
-	TMLTime getRunnableTime() const;
+	inline TMLTime getRunnableTime() const {return _runnableTime;}
 	///Sets the time when the transaction became runnable
 	/**
       	\param iRunnableTime Runnable time
     	*/
-	void setRunnableTime(TMLTime iRunnableTime);
+	inline void setRunnableTime(TMLTime iRunnableTime) {_runnableTime = max(_runnableTime,iRunnableTime);}
 	///Returns the start time of the transaction
 	/**
       	\return Start time
     	*/
-	TMLTime getStartTime() const;
+	inline TMLTime getStartTime() const {return _startTime;}
 	///Returns the start time of the operational part of the transaction
 	/**
       	\return Start time of the operational part
     	*/
-	TMLTime getStartTimeOperation() const;
+	inline TMLTime getStartTimeOperation() const {
+#ifdef PENALTIES_ENABLED
+		return _startTime + _idlePenalty + _taskSwitchingPenalty;
+#else
+		return _startTime;
+#endif
+	}
 	///Sets the start time of the transaction
 	/**
       	\param iStartTime Start time
     	*/
-	void setStartTime(TMLTime iStartTime);
+	inline void setStartTime(TMLTime iStartTime) {_startTime=iStartTime;}
 	///Returns the length of the operational part of the transaction
 	/**
       	\return Length of the operational part
     	*/
-	TMLTime getOperationLength() const;
+	inline TMLTime getOperationLength() const {return _length;}
 	///Returns the length of the operation and penalties
 	/**
       	\return Overall transaction length
     	*/
-	TMLTime getOverallLength() const;
+	inline TMLTime getOverallLength() const{
+#ifdef PENALTIES_ENABLED
+	return _length + _idlePenalty + _taskSwitchingPenalty;
+#else
+	return _length;
+#endif
+	}
 	///Sets the length of the transaction
 	/**
       	\param iLength Length of the transaction
     	*/
-	void setLength(TMLTime iLength);
+	inline void setLength(TMLTime iLength) {_length=iLength;}
 	///Returns the length of all penalties
 	/**
       	\return Length of penalties
     	*/
-	TMLTime getPenalties() const;
+	inline TMLTime getPenalties() const{
+#ifdef PENALTIES_ENABLED
+		return _idlePenalty + _taskSwitchingPenalty;
+#else
+		return 0;
+#endif
+	}
 	///Returns the virtual length of the transaction (number of execution units already carried out by previous transactions)
 	/**
       	\return Virtual length
     	*/
-	TMLLength getVirtualLength() const;
+	inline TMLLength getVirtualLength() const {return _virtualLength;}
 	///Sets the virtual length of the transaction (number of execution units already carried out by previous transactions)
 	/**
       	\param iLength Virtual length of the transaction
     	*/
-	void setVirtualLength(TMLLength iLength);
+	inline void setVirtualLength(TMLLength iLength) {_virtualLength=iLength;}
 	///Returns a pointer to the command the transaction belongs to
 	/**
       	\return Pointer to command
     	*/
-	TMLCommand* getCommand() const;
+	inline TMLCommand* getCommand() const {return _command;}
 	///Returns the end time of the transaction
 	/**
       	\return End time
     	*/
-	TMLTime getEndTime() const;
+	inline TMLTime getEndTime() const{
+#ifdef PENALTIES_ENABLED
+		return _startTime  + _length + _idlePenalty + _taskSwitchingPenalty;
+#else
+		return _startTime  + _length;
+#endif
+	}
 	///Returns the idle panalty of the transaction
 	/**
       	\return Idle panalty
     	*/
-	TMLTime getIdlePenalty() const;
+	inline TMLTime getIdlePenalty() const{
+#ifdef PENALTIES_ENABLED
+		return _idlePenalty;
+#else
+		return 0;
+#endif
+	}
 	///Sets the idle panalty of the transaction
 	/**
       	\param iIdlePenalty Idle penalty
     	*/
-	void setIdlePenalty(TMLTime iIdlePenalty);
+	inline void setIdlePenalty(TMLTime iIdlePenalty){
+#ifdef PENALTIES_ENABLED
+		_idlePenalty=iIdlePenalty;
+#endif
+	}
 	///Returns the task switching panalty of the transaction
 	/**
       	\return Task switching penalty
     	*/	
-	TMLTime getTaskSwitchingPenalty() const;
+	inline TMLTime getTaskSwitchingPenalty() const{
+#ifdef PENALTIES_ENABLED
+		return _taskSwitchingPenalty;
+#else
+		return 0;
+#endif
+	}
 	///Sets the task switching panalty of the transaction
 	/**
       	\param iTaskSwitchingPenalty Task switching penalty
     	*/	
-	void setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty);
+	inline void setTaskSwitchingPenalty(TMLTime iTaskSwitchingPenalty){
+#ifdef PENALTIES_ENABLED
+	_taskSwitchingPenalty=iTaskSwitchingPenalty;
+#endif	
+	}
 	/////Returns the branching panalty of the transaction
 	////**
       	//\return Branching penalty
@@ -168,20 +212,20 @@ public:
 	/**
 	\param iChannel Pointer to a channel
 	*/
-	void setChannel(TMLChannel* iChannel);
+	inline void setChannel(TMLChannel* iChannel) {_channel=iChannel;}
 	///Get channel on which data was conveyed
 	/**
 	\return Pointer to channel
 	*/
-	TMLChannel* getChannel() const;
-	static void * operator new(size_t size);
-	static void operator delete(void *p, size_t size);
-	static void reset();
-	static void incID();
-	static ID getID();
-	static void resetID();
-	void setStateID(ID iID);
-	ID getStateID();
+	inline TMLChannel* getChannel() const {return _channel;}
+	inline static void * operator new(size_t size) {return memPool.pmalloc(size);}
+	inline static void operator delete(void *p, size_t size) {memPool.pfree(p, size);}
+	inline static void reset() {memPool.reset();}
+	inline static void incID() {_ID++;}
+	inline static ID getID() {return _ID;}
+	inline static void resetID() {_ID=1;}
+	inline void setStateID(ID iID) {_stateID=iID;}
+	inline ID getStateID() {return _stateID;}
 protected:
 	///Time when the transaction became runnable
 	TMLTime _runnableTime;
@@ -205,7 +249,7 @@ protected:
 	TMLChannel* _channel;
 	ID _stateID;
 	///Memory pool for transactions
-	static MemPool<TMLTransaction> memPool;
+	static MemPoolNoDel<TMLTransaction> memPool;
 	///Current Transaction ID
 	static ID _ID;
 };

@@ -58,12 +58,12 @@ bool CondBreakpoint::_enabled=true;
 
 //************************************************************************
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
-	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
+	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->registerListener(this);	
 }
 
 RunXTransactions::~RunXTransactions(){
-	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
+	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->removeListener(this);
 }
 
@@ -115,7 +115,8 @@ CondBreakpoint::CondBreakpoint(SimComponents* iSimComp, std::string iCond, TMLTa
 		_cSourceFileCreated=true;
 		std::ostringstream aCmd;
 		myfile << "#include <" << iTask->toString() << ".h>\n";
-		for(VariableLookUpTableName::const_iterator i=iTask->getVariableIteratorName(false); i !=iTask->getVariableIteratorName(true); ++i){ 
+		//for(VariableLookUpTableName::const_iterator i=iTask->getVariableIteratorName(false); i !=iTask->getVariableIteratorName(true); ++i){
+		for(VariableLookUpTableName::const_iterator i=iTask->getVariableLookUpTableName().begin(); i !=iTask->getVariableLookUpTableName().end(); ++i){ 
 			myfile << "#define " << *(i->first) << " _castTask_->" << *(i->first) << "\n";
 		}
 		myfile << "class TMLTask;\n\n";
@@ -249,12 +250,12 @@ void RunXCommands::setCmdsToExecute(unsigned int iCommandsToExecute){
 
 //************************************************************************
 RunXTimeUnits::RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime):_simComp(iSimComp), _endTime(iEndTime){
-	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
+	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->registerListener(this);	
 }
 
 RunXTimeUnits::~RunXTimeUnits(){
-	for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i)
+	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->removeListener(this);
 }
 

@@ -44,8 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <TMLCommand.h>
 #include <Parameter.h>
-
-class TMLEventChannel;
+#include <TMLEventChannel.h>
 
 ///This class models a send request operation within a TML task.
 class TMLRequestCommand:public TMLCommand{
@@ -62,17 +61,17 @@ public:
 	*/
 	TMLRequestCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam = 0*/);
 	void execute();
-	TMLChannel* getChannel(unsigned int iIndex) const;
-	unsigned int getNbOfChannels() const;
-	TMLTask* getDependentTask(unsigned int iIndex)const;
+	inline TMLChannel* getChannel(unsigned int iIndex) const {return dynamic_cast<TMLChannel*>(_channel);}
+	inline unsigned int getNbOfChannels() const {return 1;}
+	inline TMLTask* getDependentTask(unsigned int iIndex)const {return _channel->getBlockedReadTask();}
 	std::string toString() const;
 	std::string toShortString() const;
-	std::string getCommandStr() const;
+	inline std::string getCommandStr() const {return "sendReq";}
 	///Sets a parameter data structure according to the parameters of the command
 	/**
 	\param ioParam Parameter data structure
 	*/ 
-	Parameter* setParams(Parameter* ioParam);
+	inline Parameter* setParams(Parameter* ioParam) {return (_task->*_paramFunc)(ioParam);}
 protected:
 	///Channel on which the event is conveyed
 	TMLEventChannel* _channel;
