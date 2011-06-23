@@ -400,7 +400,7 @@ public class AvatarStateMachine extends AvatarElement {
 	
 	public AvatarStateMachineElement getStateMachineElementFromReferenceObject(Object _o) {
 		for(AvatarStateMachineElement element: elements) {
-			if(element.getReferenceObject() == _o) {
+			if(element.hasReferenceObject(_o)) {
 				return element;
 			}
 		}

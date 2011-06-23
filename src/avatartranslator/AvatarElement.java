@@ -45,6 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package avatartranslator;
 
+import java.util.*;
+
 import myutil.*;
 
 public class AvatarElement {
@@ -53,6 +55,7 @@ public class AvatarElement {
 	
 	protected String name;
 	protected Object referenceObject;
+	protected Vector<Object> otherReferenceObjects;
     private int myID;
     
     public AvatarElement(String _name, Object _referenceObject) {
@@ -60,6 +63,29 @@ public class AvatarElement {
 	   name = _name;
 	   referenceObject = _referenceObject;
     }
+	
+	public void addReferenceObject(Object _ref) {
+		if (otherReferenceObjects == null) {
+			otherReferenceObjects = new Vector<Object>();
+		}
+		otherReferenceObjects.add(_ref);
+	}
+	
+	public boolean hasReferenceObject(Object _ref) {
+		if (referenceObject == _ref) {
+			return true;
+		}
+		
+		if (otherReferenceObjects != null) {
+			for(Object obj: otherReferenceObjects) {
+				if (obj == _ref) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 	public String getName() {
 		return name;

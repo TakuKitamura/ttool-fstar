@@ -827,6 +827,7 @@ public class AvatarDesignPanelTranslator {
 					TraceManager.addDev("Setting as checkable : " + tgc.getValue());
 				}
 				listE.addCor(astate, tgc);
+				astate.addReferenceObject(tgc);
 				tgc.setAVATARID(astate.getID());
 			
 				
