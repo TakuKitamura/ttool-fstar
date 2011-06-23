@@ -52,6 +52,7 @@ TTOOL_PATH := $(shell /bin/pwd)
 TTOOL_SRC = $(TTOOL_PATH)/src
 TTOOL_BIN = $(TTOOL_PATH)/bin
 TTOOL_MODELING = $(TTOOL_PATH)/modeling
+TTOOL_EXECUTABLECODE = $(TTOOL_PATH)/executablecode
 TTOOL_SIMULATORS = $(TTOOL_PATH)/simulators
 TTOOL_DOC = $(TTOOL_PATH)/doc
 TTOOL_DOC_HTML = $(TTOOL_PATH)/doc/html
@@ -195,6 +196,17 @@ stdrelease:
 # Basic doc
 	mkdir -p $(TTOOL_TARGET)/doc
 	cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
+# AVATAR executable code
+	mkdir -p $(TTOOL_TARGET)/executablecode
+	mkdir -p $(TTOOL_TARGET)/executablecode/src
+	mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
+	cp $(TTOOL_EXECUTABLECODE)/Makefile $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.defs $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/Makefile.forsoclib $(TTOOL_TARGET)/executablecode/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.c $(TTOOL_TARGET)/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/src/*.h $(TTOOL_TARGET)/executablecode/src/
+	cp $(TTOOL_EXECUTABLECODE)/generated_src/README $(TTOOL_TARGET)/executablecode/generated_src/
+
 # Basic bin
 	mkdir -p $(TTOOL_TARGET)/bin
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin

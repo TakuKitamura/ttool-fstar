@@ -42,9 +42,17 @@
 <UPPAALCodeDirectory data="/localhome/ludo/TTool/uppaal/" />
 <UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<ProVerifCodeDirectory data="/localhome/ludo//TTool/proverif/" />
+<ProVerifCodeDirectory data="/localhome/ludo/TTool/proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
+<AVATARExecutableCodeDirectory data="/localhome/ludo/TTool/executablecode/" />
+<AVATARExecutableCodeHost data="localhost"/>
+<AVATARExecutableCodeCompileCommand data="make -C /localhome/ludo/TTool/executablecode" />
+<AVATARExecutableCodeExecuteCommand data="/localhome/ludo/TTool/executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C /localhome/ludo/TTool/executablecode updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C /localhome/ludo/TTool/executablecode runsoclib" />
+<AVATARExecutableSoclibTraceFile data="/localhome/ludo/TToolvrille/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
+
 
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="/opt/local/bin/gtkwave /localhome/ludo/TTool/simulators/c++2/vcddump.vcd"/>

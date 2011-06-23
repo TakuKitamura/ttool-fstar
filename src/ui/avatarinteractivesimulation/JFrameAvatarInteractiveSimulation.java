@@ -177,6 +177,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	private long previousTime;
 	
+	private boolean simulationRunning;
+	
 	public JFrameAvatarInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, AvatarSpecification _avspec) {
 		super(_title);
 		
@@ -211,14 +213,45 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		resetMetElements();
 		ass = new AvatarSpecificationSimulation(avspec, this);
 		//ass.initialize();
+		simulationRunning = false;
 		simulationThread = new Thread(this);
 		simulationThread.start();
 	}
 	
+	public synchronized void setSimulationRunning() {
+		simulationRunning = true;
+	}
+	
+	public synchronized void stopSimulationRunning() {
+		simulationRunning = false;
+	}
+	
 	public void run() {
-		previousTime = System.currentTimeMillis();
-		ass.runSimulation();
-		TraceManager.addDev("Simulation thread ended");
+		if (simulationRunning == true) {
+			if (ass == null) {
+				return;
+			}
+			
+			Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
+			
+			try {
+				listPendingTransactions.clearSelection();
+				selectedComponentForTransaction = null;
+			if (ll != null) {
+				listPendingTransactions.setListData(ll);
+				int random = (int)(Math.floor((Math.random()*ll.size())));
+				listPendingTransactions.setSelectedIndex(random);
+			} else {
+				listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
+			}
+			} catch (Exception e) {}
+		} else {
+			setSimulationRunning();
+			previousTime = System.currentTimeMillis();
+			ass.runSimulation();
+			TraceManager.addDev("Simulation thread ended");
+			stopSimulationRunning();
+		}
 	}
 	
 	/*public void run() {
@@ -975,23 +1008,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void setContentOfListOfPendingTransactions() {
-		if (ass == null) {
-			return;
-		}
-		
-		Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
-		
-		try {
-			listPendingTransactions.clearSelection();
-			selectedComponentForTransaction = null;
-		if (ll != null) {
-			listPendingTransactions.setListData(ll);
-			int random = (int)(Math.floor((Math.random()*ll.size())));
-			listPendingTransactions.setSelectedIndex(random);
-		} else {
-			listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
-		}
-		} catch (Exception e) {}
+		EventQueue.invokeLater(this);
 	}
 	
 	public void resetMetElements() {

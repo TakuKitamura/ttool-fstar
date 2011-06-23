@@ -90,7 +90,7 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public boolean getResultOf(String _expr) {
-		TraceManager.addDev("Evaluating bool expr: " + _expr);
+		//TraceManager.addDev("Evaluating bool expr: " + _expr);
 		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
@@ -114,7 +114,7 @@ public class BoolExpressionEvaluator {
 		}
 		
 		
-		TraceManager.addDev("Computing:" + _expr);
+		//TraceManager.addDev("Computing:" + _expr);
 		
 		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/!=&|<>:;()",true);
 		
@@ -122,12 +122,12 @@ public class BoolExpressionEvaluator {
 		int result =  (int)(parseExpression());
 		
 		if (result == TRUE_VALUE) {
-			TraceManager.addDev("equal true");
+			//TraceManager.addDev("equal true");
 			return true;
 		}
 		
 		if (result == FALSE_VALUE) {
-			TraceManager.addDev("equal false");
+			//TraceManager.addDev("equal false");
 			return false;
 		}
 		

@@ -770,7 +770,7 @@ public class AvatarDesignPanelTranslator {
 							}  else {
 							
 							// Checking expressions passed as parameter
-							TraceManager.addDev("Block = " + _ab.getName());
+							//TraceManager.addDev("Block = " + _ab.getName());
 							for(i=0; i<aaos.getNbOfValues(); i++) {
 								String theVal = aaos.getValue(i);
 								if (atas.getListOfAttributes().get(i).isInt()) {
@@ -824,6 +824,7 @@ public class AvatarDesignPanelTranslator {
 				}
 				if (tgc.hasCheckableAccessibility()) {
 					astate.setCheckable();
+					TraceManager.addDev("Setting as checkable : " + tgc.getValue());
 				}
 				listE.addCor(astate, tgc);
 				tgc.setAVATARID(astate.getID());
