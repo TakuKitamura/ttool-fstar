@@ -22,11 +22,13 @@ TTOOL_BINARY = ttool.jar
 LAUNCHER_BINARY = launcher.jar
 TIFTRANSLATOR_BINARY = tiftranslator.jar
 TMLTRANSLATOR_BINARY = tmltranslator.jar
+RUNDSE_BINARY = rundse.jar
 REMOTESIMULATOR_BINARY = simulationcontrol.jar
 TTOOL_JAR_TXT = ttool.txt
 LAUNCHER_JAR_TXT = launcher.txt
 TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
 TMLTRANSLATOR_JAR_TXT = tmltranslator.txt
+RUNDSE_JAR_TXT = rundse.txt
 REMOTESIMULATOR_JAR_TXT = simulationcontrol.txt
 TTOOL_CONFIG = config.xml
 TTOOL_CONFIG_SRC = config.xml
@@ -110,6 +112,11 @@ tiftranslator:
 tmltranslator:
 	rm -f $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY)
 	cd $(TTOOL_SRC);$(JAR) cmf $(TMLTRANSLATOR_JAR_TXT) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY)  TMLTranslator.class tmltranslator/*.class tmltranslator/*/*.class myutil/*.class translator/*.class uppaaldesc/*.class ui/CheckingError.class compiler/tmlparser/*.class
+
+rundse:
+	rm -f $(TTOOL_BIN)/$(RUNDSE_BINARY)
+	cd $(TTOOL_SRC);$(JAR) cmf $(RUNDSE_JAR_TXT) $(TTOOL_BIN)/$(RUNDSE_BINARY)  RunDSE.class dseengine/*.class tmltranslator/*.class myutil/*.class tmltranslator/tomappingsystemc2/*.class
+
 
 remotesimulator:
 	rm -f $(TTOOL_BIN)/$(REMOTESIMULATOR_BINARY)
