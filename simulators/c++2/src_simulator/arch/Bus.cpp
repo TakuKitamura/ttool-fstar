@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 //#include <TransactionListener.h>
 #include <WorkloadSource.h>
 
-Bus::Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth) /*, _busyCycles(0)*/{}
+Bus::Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurstSize, unsigned int ibusWidth, TMLTime iTimePerSample, bool iChannelBasedPrio): SchedulableCommDevice(iID, iName, iScheduler, iChannelBasedPrio), _burstSize(iBurstSize), _schedulingNeeded(true), _timePerSample(iTimePerSample), _busWidth(ibusWidth){}
 
 Bus::~Bus(){
 	//delete _scheduler;
@@ -81,7 +81,9 @@ bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
 	//_transactList.push_back(_nextTransaction);
+#ifdef TRANSLIST_ENABLED
 	_transactList.push_back(iTransToBeAdded);  //NEW!!!!!
+#endif
 	_busyCycles += _nextTransaction->getOperationLength();
 #ifdef DEBUG_BUS
 	std::cout << "Bus::addTrans: add trans at bus " << _name << ": " << _nextTransaction->toString() << std::endl;
@@ -111,23 +113,6 @@ void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
 	Slave* aSlave = _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
 	if (aSlave!=0) aSlave->CalcTransactionLength(_nextTransaction);
 }
-
-//TMLTransaction* Bus::getNextTransaction(){
-//	if (_schedulingNeeded) schedule();
-//	return _nextTransaction;
-//}
-
-//TMLLength Bus::getBurstSize() const{
-//	return _burstSize;
-//}
-
-//void Bus::truncateToBurst(TMLTransaction* iTrans) const{
-//	iTrans->setVirtualLength(min(iTrans->getVirtualLength(), _burstSize));
-//}
-
-//std::string Bus::toString() const{
-//	return _name;
-//}
 
 std::string Bus::toShortString() const{
 	std::ostringstream outp;
@@ -174,7 +159,6 @@ void Bus::schedule2TXT(std::ofstream& myfile) const{
 	}
 }
 
-//TMLTime Bus::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
 void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	//std::ostringstream outp;
 	if (iInit){
@@ -270,10 +254,6 @@ void Bus::streamBenchmarks(std::ostream& s) const{
 	if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
 	s << TAG_BUSc;
 }
-
-//void Bus::streamStateXML(std::ostream& s) const{
-//	streamBenchmarks(s);
-//}
 
 std::istream& Bus::readObject(std::istream &is){
 	SchedulableDevice::readObject(is);

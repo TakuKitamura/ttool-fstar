@@ -57,9 +57,8 @@ public:
 	\param iParamFunc Pointer to a parameter function
 	\param iLiveVarList Bitmap of live variables
 	\param iCheckpoint Checkpoint Flag
-	\param iStatParam Static parameter if applicable 
 	*/
-	TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam=0*/);
+	TMLSendCommand(ID iID, TMLTask* iTask, TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	inline TMLChannel* getChannel(unsigned int iIndex) const {return dynamic_cast<TMLChannel*>(_channel);}
 	inline unsigned int getNbOfChannels() const {return 1;}

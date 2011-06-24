@@ -80,14 +80,10 @@ protected:
 	TMLEventChannel** _channel;
 	///Pointer to an array of parameter function pointers
 	ParamFuncPointer* _paramFuncs;
-	/////Number of channels in the array
-	//unsigned int _numbChannels;
 	///Index of the next command within the _nextCommand array
 	unsigned int _indexNextCommand;
 	///Highest index of the channels on which the TMLChannel::testRead() method has been performed.
 	unsigned int _maxChannelIndex;
-	/////Bitmap of live variables
-	//const char* _liveVarList;
 };
 
 #endif

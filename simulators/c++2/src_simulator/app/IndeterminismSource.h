@@ -42,16 +42,28 @@ Ludovic Apvrille, Renaud Pacalet
 #define IndeterminismSourceH
 #include <definitions.h>
 
+///This interface characterizes a non-deterministic behavior of a TML command
 class IndeterminismSource{
 	public:
+		///Constructor
 		IndeterminismSource(): _randomValue(-1) {}
+		///Destructor
 		virtual ~IndeterminismSource(){}
+		///Returns the range of the random variable
+		/**
+		\return Range of random variable
+		*/
 		virtual unsigned int getRandomRange()=0;
+		///Sets the value of the random variable in exploration mode
+		/**
+		\param iValue Value of random variable
+		*/
 		virtual void setRandomValue(unsigned int iValue){
 			_randomValue=iValue;
 			//std::cout << "Random value by sim" << _randomValue << "\n";
 		}
 	protected:
+		///Value of random variable
 		mutable unsigned int _randomValue;
 };
 #endif

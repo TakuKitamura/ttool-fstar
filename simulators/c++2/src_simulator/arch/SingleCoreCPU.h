@@ -82,11 +82,6 @@ public:
 	virtual ~SingleCoreCPU();
 	///Determines the next CPU transaction to be executed
 	virtual void schedule();
-	////Stores a new task in the internal task list
-	//**
-      	//\param iTask Pointer to the task to add
-    	//*/
-	//virtual void registerTask(TMLTask* iTask);
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction(TMLTransaction* iTransToBeAdded);
 	///Returns a pointer to the transaction determined by the scheduling algorithm
@@ -110,7 +105,6 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2HTML(std::ofstream& myfile) const;
-	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	///Writes a plain text representation of the schedule to an output file
 	/**
@@ -119,13 +113,7 @@ public:
 	void schedule2TXT(std::ofstream& myfile) const;
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
-	//void truncateAndRescheduleIfNecessary(TMLTime iTime);
 	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
-	/////Adds a new bus master to the internal list
-	//**
-	//\param iMaster Pointer to bus master 
-	//*/
-	//void addBusMaster(BusMaster* iMaster);
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);
 protected:
@@ -144,16 +132,10 @@ protected:
 	\param iDummy Dummy Bus Master
 	*/
 	BusMaster* getMasterForBus(BusMaster* iDummy);
-	/////List of all tasks running on the CPU
-	//TaskList _taskList;
-	/////Pointer to the last transaction which has been executed
-	//TMLTransaction* _lastTransaction;
 	///Pointer to the bus which will be accessed by the next transaction
 	BusMaster* _masterNextTransaction;
 	///1/Processor frequency
 	TMLTime _timePerCycle;
-	/////List of bus masters
-	//BusMasterList _busMasterList;
 #ifdef PENALTIES_ENABLED
 	///Pipeline size
 	unsigned int _pipelineSize;
@@ -168,10 +150,6 @@ protected:
 #endif
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
-	/////Busy cycles since simulation start
-	//TMLTime _busyCycles;
-	
-	//values deduced from CPU parameters 
 	///Time needed to execute one execi unit
 	float _timePerExeci;
 #ifdef PENALTIES_ENABLED
@@ -181,15 +159,6 @@ protected:
 	TMLTime _timeBeforeIdle;
 	///Time needed to switch into idle mode
 	TMLTime _changeIdleModeTime;
-	////_pipelineSize * _timePerExeci
-	//TMLTime _pipelineSizeTimesExeci;
-	////_brachingMissrate * _pipelineSize
-	//unsigned int _missrateTimesPipelinesize;
-	//varibales for branch miss calculation
-	////Indicates the number of commands executed since the last branch miss
-	//unsigned int _branchMissReminder;
-	////Potentially new value of _branchMissReminder
-	//unsigned int _branchMissTempReminder;
 #endif
 	///State variable for the VCD output
 	vcdCPUVisState _vcdOutputState;

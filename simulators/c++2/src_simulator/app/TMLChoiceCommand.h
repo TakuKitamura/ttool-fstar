@@ -46,15 +46,16 @@ Ludovic Apvrille, Renaud Pacalet
 
 
 ///This class stands for a fork in the control flow of a TML task.
-/**Depending on the condition, one item of the _nextCommand array is chosen to determine the following command. The conditions are located in TMLTask::evaluateCondition() and the return value of this method is evaluated here.*/
 class TMLChoiceCommand:public TMLCommand{
 public:
 	///Constructor
     	/**
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
-	\param iCondFunc Member function pointer to the condition function returning the index of the next command
+	\param iRangeFunc function returning the rage of enabled branches
 	\param iNbOfBranches Number of branches of the choice
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
     	*/
 	TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
 	inline void execute() {}

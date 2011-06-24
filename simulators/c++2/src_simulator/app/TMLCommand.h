@@ -55,7 +55,6 @@ class HashAlgo;
 
 ///This class defines the basic interfaces and functionalites of a TML command. All specific commands are derived from this base class. 
 class TMLCommand: public Serializable, public ListenerSubject <GeneralListener>{
-//class TMLCommand: public Serializable, public ListenerSubject <CommandListener>, public ListenerSubject <TransactionListener> {
 public:
 	///Constructor
     	/**
@@ -66,7 +65,6 @@ public:
 	\param iLiveVarList Bitmap of live variables
 	\param iCheckpoint Checkpoint Flag
     	*/
-	//TMLCommand(unsigned int iID, TMLTask* iTask, TMLLength iLength, ParamFuncPointer iParamFunc, unsigned int iNbOfNextCmds);
 	TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint);
 	///Destructor
 	virtual ~TMLCommand();
@@ -145,20 +143,17 @@ public:
 	/**
 	\param  iListener Pointer to the listener
 	*/
-	//static void registerGlobalListener(CommandListener* iListener);
 	static void registerGlobalListener(GeneralListener* iListener);
 	///Registers a listener at all TMLCommand instances of a specific type
 	/**
 	\param iListener Pointer to the listener
 	\param aTask Only commands of this task are taken into account, if set to 0 all tasks are considered
 	*/
-	//template<typename T> static void registerGlobalListenerForType(CommandListener* iListener, TMLTask* aTask);
 	template<typename T> static void registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask);
 	///Removes a listener at all TMLCommand instances
 	/**
 	\param  iListener Pointer to the listener
 	*/
-	//static void removeGlobalListener(CommandListener* iListener);
 	static void removeGlobalListener(GeneralListener* iListener);
 	///Returns the unique ID of the command
 	/**
@@ -169,7 +164,6 @@ public:
 	/**
       	\param iBreakp Pointer to breakpoint
     	*/ 
-	//void setBreakpoint(CommandListener* iBreakp);
 	void setBreakpoint(GeneralListener* iBreakp);
 	///Removes the breakpoint
 	void removeBreakpoint();
@@ -265,8 +259,6 @@ protected:
 	unsigned int _execTimes;
 	///Buffer for transaction to be proposed to kernel
 	TMLTransaction transBuffer;
-	/////Hash Algorithm object
-	//HashAlgo* _hash;
 };
 
 #endif

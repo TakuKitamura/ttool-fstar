@@ -74,11 +74,6 @@ SingleCoreCPU::~SingleCoreCPU(){
 	//delete _scheduler;
 }
 
-/*void SingleCoreCPU::registerTask(TMLTask* iTask){
-	_taskList.push_back(iTask);
-	if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
-}*/
-
 TMLTransaction* SingleCoreCPU::getNextTransaction(){
 #ifdef BUS_ENABLED
 	if (_masterNextTransaction==0 || _nextTransaction==0){
@@ -265,10 +260,14 @@ bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
 		_endSchedule=_nextTransaction->getEndTime();
 		//std::cout << "set end schedule CPU: " << _endSchedule << "\n";
 		_simulatedTime=max(_simulatedTime,_endSchedule);
+		_overallTransNo++; //NEW!!!!!!!!
+		_overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
 		//std::cout << "lets crash execute\n";
 		_nextTransaction->getCommand()->execute();  //NEW!!!!
 		//std::cout << "not crashed\n";
+#ifdef TRANSLIST_ENABLED
 		_transactList.push_back(_nextTransaction);
+#endif
 		_lastTransaction=_nextTransaction;
 		_busyCycles+=_nextTransaction->getOverallLength();
 #ifdef LISTENERS_ENABLED
@@ -481,14 +480,6 @@ void SingleCoreCPU::streamBenchmarks(std::ostream& s) const{
 	for(BusMasterList::const_iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i) (*i)->streamBenchmarks(s);
 	s << TAG_CPUc; 
 }
-
-//void SingleCoreCPU::streamStateXML(std::ostream& s) const{
-//	streamBenchmarks(s);
-//}
-
-/*void SingleCoreCPU::addBusMaster(BusMaster* iMaster){
-	_busMasterList.push_back(iMaster);
-}*/
 
 BusMaster* SingleCoreCPU::getMasterForBus(BusMaster* iDummy){
 	if (iDummy!=0){

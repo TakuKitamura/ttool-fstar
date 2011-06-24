@@ -559,6 +559,10 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	rusage res;
 	getrusage(RUSAGE_SELF, &res); 
 	std::cerr << res.ru_utime.tv_sec << "," << res.ru_utime.tv_usec << "," << res.ru_stime.tv_sec << "," << res.ru_stime.tv_usec << "\n";
+	double aRunTime = ((double)((res.ru_utime.tv_sec + res.ru_stime.tv_sec) *1000000 + res.ru_utime.tv_usec + res.ru_stime.tv_usec))/1000000;
+	std::cerr << "trans/sec: " << ((double)SchedulableDevice::getOverallTransNo())/aRunTime << "\n";
+	std::cerr << "cycles/trans: " << ((double)SchedulableDevice::getOverallTransSize())/((double)SchedulableDevice::getOverallTransNo()) << "\n";
+	std::cerr << "Trans size: " << SchedulableDevice::getOverallTransSize() << "  trans no: " << SchedulableDevice::getOverallTransNo() << "\n";
 	return 0;
 }
 

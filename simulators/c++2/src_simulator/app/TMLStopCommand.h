@@ -56,7 +56,6 @@ public:
     	*/
 	TMLStopCommand(ID iID, TMLTask* iTask);
 	inline void execute() {}
-	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	inline std::string toShortString() const {return "stp";}
 	inline std::string getCommandStr() const {return "stp";}

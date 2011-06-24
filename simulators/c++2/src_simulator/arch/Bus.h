@@ -111,7 +111,6 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile) const;
-	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();
@@ -132,8 +131,6 @@ protected:
 	TMLTime _timePerSample;
 	///Bus width in bytes
 	unsigned int _busWidth;
-	/////Busy cycles since simulation start
-	//TMLTime _busyCycles;
 	///State variable for the VCD output
 	vcdBusVisState _vcdOutputState;
 };

@@ -49,7 +49,7 @@ class MemPoolNoDel {
 public:
 	///Constructor
 	/**
-	\param iBlockSize Size of chunks to be allocated
+	\param iChunkSize Size of chunks to be allocated
 	*/
 	MemPoolNoDel(unsigned int iChunkSize): _currChunk(0), _currPos(0), _chunkSize(iChunkSize), _currPosInList(_chunkList.end()){}
 	///Allocation method

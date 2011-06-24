@@ -143,23 +143,6 @@ TMLChannel* TMLSelectCommand::getChannel(unsigned int iIndex) const{
 		return _currTransaction->getChannel();
 }
 
-//unsigned int TMLSelectCommand::getNbOfChannels() const{
-//	return _nbOfNextCmds;
-//}
-
-//TMLTask* TMLSelectCommand::getDependentTask(unsigned int iIndex)const{
-//	return _channel[iIndex]->getBlockedWriteTask();
-//}
-
-//TMLCommand* TMLSelectCommand::getNextCommand() const{
-//	return _nextCommand[_indexNextCommand];
-//}
-
-
-//ParamFuncPointer TMLSelectCommand::getParamFuncPointer() const{
-//	return (_paramFuncs==0)?0:_paramFuncs[_indexNextCommand];
-//}
-
 std::string TMLSelectCommand::toString() const{
 	std::ostringstream outp;
 	outp << "SelectEvent in " << TMLCommand::toString() << " " << _channel[_indexNextCommand]->toString();
@@ -171,21 +154,3 @@ std::string TMLSelectCommand::toShortString() const{
 	outp << _task->toString() << ": SelectEvent";
 	return outp.str();
 }
-
-//std::string TMLSelectCommand::getCommandStr() const{
-//	return "sel";
-//}
-
-//#ifdef ADD_COMMENTS
-//std::string TMLSelectCommand::getCommentString(Comment* iCom) const{
-//	return "SelectEvent result: " + _channel[iCom->_actionCode]->toShortString();
-//}
-//#endif
-
-//Parameter* TMLSelectCommand::setParams(Parameter* ioParam){
-//	return (_task->*_paramFuncs[_indexNextCommand])(ioParam);
-//}
-
-//unsigned int TMLSelectCommand::getRandomRange(){
-//	return _nbOfPossSync ;
-//}

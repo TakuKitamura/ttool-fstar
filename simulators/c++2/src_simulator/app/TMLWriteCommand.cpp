@@ -87,18 +87,6 @@ TMLCommand* TMLWriteCommand::prepareNextTransaction(){
 	return this;
 }
 
-//TMLChannel* TMLWriteCommand::getChannel(unsigned int iIndex) const{
-//	return _channel;
-//}
-
-//unsigned int TMLWriteCommand::getNbOfChannels() const{
-//	return 1;
-//}
-
-//TMLTask* TMLWriteCommand::getDependentTask(unsigned int iIndex)const{
-//	return _channel->getBlockedReadTask();
-//}
-
 std::string TMLWriteCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Write in " << TMLCommand::toString() << " " << _channel->toString();
@@ -110,7 +98,3 @@ std::string TMLWriteCommand::toShortString() const{
 	outp << _task->toString() << ": Write " << _length << "," << _channel->toShortString();
 	return outp.str();
 }
-
-//std::string TMLWriteCommand::getCommandStr() const{
-//	return "wr";
-//}

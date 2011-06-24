@@ -57,9 +57,8 @@ public:
 	\param iParamFunc Pointer to a parameter function
 	\param iLiveVarList Bitmap of live variables
 	\param iCheckpoint Checkpoint Flag
-	\param iStatParam Static parameter if applicable 
 	*/
-	TMLWaitCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint/*, Parameter* iStatParam = 0*/);
+	TMLWaitCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel, ParamFuncPointer iParamFunc, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	inline TMLChannel* getChannel(unsigned int iIndex) const {return dynamic_cast<TMLChannel*>(_channel);}
 	inline unsigned int getNbOfChannels() const {return 1;}
@@ -67,11 +66,6 @@ public:
 	std::string toString() const;
 	std::string toShortString() const;
 	inline std::string getCommandStr() const {if (_channel->getRequestChannel()) return "waitReq"; else return "wait";}
-	/////Returns a pointer to the parameter data structure
-	////**
-	//\return Pointer to parameter data structure
-	//*/
-	//ParamFuncPointer getParamFuncPointer() const;
 	///Sets a parameter data structure according to the parameters of the command
 	/**
 	\param ioParam Parameter data structure
@@ -83,8 +77,6 @@ protected:
 	///Pointer to the parameter function of the command
 	ParamFuncPointer _paramFunc;
 	TMLCommand* prepareNextTransaction();
-	////Bitmap of live variables
-	//const char* _liveVarList;
 };
 
 #endif

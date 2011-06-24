@@ -67,14 +67,6 @@ TMLCommand* TMLNotifiedCommand::prepareNextTransaction(){
 	return this;
 }
 
-/*TMLTask* TMLNotifiedCommand::getDependentTask() const{
-	return 0;
-}*/
-
-//TMLChannel* TMLNotifiedCommand::getChannel() const{
-//	return _channel;
-//}
-
 std::string TMLNotifiedCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Notified in " << TMLCommand::toString() << " " << _channel->toString();
@@ -86,10 +78,6 @@ std::string TMLNotifiedCommand::toShortString() const{
 	outp << _task->toString() << ": Notified " << _channel->toShortString();
 	return outp.str();
 }
-
-//std::string TMLNotifiedCommand::getCommandStr() const{
-//	return "notified";
-//}
 
 #ifdef ADD_COMMENTS
 std::string TMLNotifiedCommand::getCommentString(Comment* iCom) const{

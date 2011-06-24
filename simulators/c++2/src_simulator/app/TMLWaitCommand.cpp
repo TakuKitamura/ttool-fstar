@@ -69,18 +69,6 @@ TMLCommand* TMLWaitCommand::prepareNextTransaction(){
 	return this;
 }
 
-//TMLChannel* TMLWaitCommand::getChannel(unsigned int iIndex) const{
-//	return _channel;
-//}
-
-//unsigned int TMLWaitCommand::getNbOfChannels() const{
-//	return 1;
-//}
-
-//TMLTask* TMLWaitCommand::getDependentTask(unsigned int iIndex)const{
-//	return _channel->getBlockedWriteTask();
-//}
-
 std::string TMLWaitCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Wait in " << TMLCommand::toString() << " " << _channel->toString();
@@ -92,11 +80,3 @@ std::string TMLWaitCommand::toShortString() const{
 	outp << _task->toString() << ": Wait " << _channel->toShortString();
 	return outp.str();
 }
-
-//std::string TMLWaitCommand::getCommandStr() const{
-//	if (_channel->getRequestChannel()) return "waitReq"; else return "wait";
-//}
-
-//Parameter* TMLWaitCommand::setParams(Parameter* ioParam){
-//	return (_task->*_paramFunc)(ioParam);
-//}

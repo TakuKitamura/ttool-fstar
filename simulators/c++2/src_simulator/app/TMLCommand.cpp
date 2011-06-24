@@ -134,8 +134,8 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 				NOTIFY_CMD_ENTERED(this);
 #else
 #ifdef EXPLO_ENABLED
-				if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);
-				//if (dynamic_cast<TMLRandomCommand*>(this)!=0) NOTIFY_CMD_ENTERED(this);
+				//if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);
+				if (dynamic_cast<TMLRandomCommand*>(this)!=0) NOTIFY_CMD_ENTERED(this);
 #endif
 #endif
 				_justStarted=true;
@@ -166,28 +166,11 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 	return 0;
 }
 
-//TMLTask* TMLCommand::getTask() const{
-//	return _task;
-//}
-
-//void TMLCommand::setNextCommand(TMLCommand** iNextCommand){
-//	_nextCommand=iNextCommand;
-//}
-
-//TMLCommand* TMLCommand::getNextCommand() const{
-	//std::cerr << "getNext Cmd of TMLCommand\n";
-	//return (_nextCommand==0)?0:_nextCommand[0];
-//}
-
 TMLCommand** TMLCommand::getNextCommands(unsigned int& oNbOfCmd) const{
 	//returned number is not correct for composite choice/choice commands and composite action/choice commands !!!!
 	oNbOfCmd=_nbOfNextCmds;
 	return _nextCommand;
 }
-
-//TMLTransaction* TMLCommand::getCurrTransaction() const{
-//	return _currTransaction;
-//}
 
 std::string TMLCommand::toString() const{
 	std::ostringstream outp;	
@@ -195,30 +178,7 @@ std::string TMLCommand::toString() const{
 	return outp.str();
 }
 
-//TMLChannel* TMLCommand::getChannel(unsigned int iIndex) const{
-//	return 0;
-//}
-
-//unsigned int TMLCommand::getNbOfChannels() const{
-//	return 0;
-//}
-
-//TMLTask* TMLCommand::getDependentTask(unsigned int iIndex)const{
-//	return 0;
-//}
-
-//Parameter* TMLCommand::setParams(Parameter* ioParam){
-//	return 0;
-//}
-
-//#ifdef ADD_COMMENTS
-//std::string TMLCommand::getCommentString(Comment* iCom) const{
-//	return "no comment available";
-//}
-//#endif
-
 void TMLCommand::setBreakpoint(GeneralListener* iBreakp){
-//void TMLCommand::setBreakpoint(CommandListener* iBreakp){
 	removeBreakpoint();
 	_breakpoint=iBreakp;
 	registerListener(iBreakp);
@@ -288,34 +248,6 @@ void TMLCommand::removeGlobalListener(GeneralListener* iListener){
 	}
 }
 
-//ID TMLCommand::getID() const{
-//	return _ID;
-//}
-
-//TMLLength TMLCommand::getProgress() const{
-//	return _progress;
-//}
-
-//unsigned int TMLCommand::getProgressInPercent() const{
-//	return (_length==0)? 0:_progress*100/_length;
-//}
-
-//void TMLCommand::setSimComponents(SimComponents* iSimComp){
-//	_simComp=iSimComp;
-//}
-
-//unsigned long TMLCommand::getStateHash() const{
-//	return _ID + _progress;
-//}
-
-//TMLTime TMLCommand::getCommandStartTime() const{
-//	return (_commandStartTime==((TMLTime)-1))? 0: _commandStartTime;
-//}
-
-//TMLLength TMLCommand::getLength() const{
-//	return _length;
-//}
-
 void TMLCommand::streamStateXML(std::ostream& s){
 	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		s << TAG_CMDo << " id=\"" << (*i)->_ID << "\">" << TAG_EXECTIMESo << (*i)->_execTimes << TAG_EXECTIMESc << TAG_CMDc << "\n";
@@ -328,10 +260,6 @@ TMLCommand* TMLCommand::getCommandByID(ID iID){
 	}
 	return 0;
 }
-
-//unsigned int TMLCommand::getType(){
-//	return _type;
-//}
 
 template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(GeneralListener* iListener, TMLTask* aTask);
 template void TMLCommand::registerGlobalListenerForType<TMLChoiceCommand>(GeneralListener* iListener, TMLTask* aTask);

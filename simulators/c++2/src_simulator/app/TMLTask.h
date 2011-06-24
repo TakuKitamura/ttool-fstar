@@ -48,7 +48,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <Comment.h>
 #include <MemPool.h>
 #include <ListenerSubject.h>
-//#include <TaskListener.h>
 #include <GeneralListener.h>
 #include <WorkloadSource.h>
 #include <HashAlgo.h>
@@ -131,7 +130,6 @@ public:
     	*/ 
 	std::string getNextComment(bool iInit, Comment*& oComment);
 #endif
-	//TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans);
 	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	///Adds a given transaction to the internal transaction list
 	/**
@@ -170,17 +168,13 @@ public:
 	inline void streamStateXML(std::ostream& s) const {streamBenchmarks(s);}
 	///Returns an iterator for the internal variable ID hash table
 	/**
-	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
 	\return Const iterator for variable table
 	*/
-	//VariableLookUpTableID::const_iterator getVariableIteratorID(bool iEnd) const;
 	inline const VariableLookUpTableID& getVariableLookUpTableID() const{return _varLookUpID;}
 	///Returns an iterator for the internal variable Name hash table
 	/**
-	\param iEnd true for iterator pointing to the end of the table, false for iterator pointing to the first element
 	\return Const iterator for variable table
 	*/
-	//VariableLookUpTableName::const_iterator getVariableIteratorName(bool iEnd) const;
 	const VariableLookUpTableName& getVariableLookUpTableName() const{return _varLookUpName;}
 	///Is called when a stop command is encountered
 	void finished();
@@ -201,14 +195,14 @@ public:
 	\return Instance number 
 	*/
 	inline unsigned int getInstanceNo() {return _myInstance;}
-	///Notifies the Task of being scheduled by a CPU
-	/**
-	\param iCPU CPU that has scheduled the Task
-	*/
+	////Notifies the Task of being scheduled by a CPU
+	////**
+	//\param iCPU CPU that has scheduled the Task
+	//*/
 	//void transWasScheduled(SchedulableDevice* iCPU);
-	///Resets the flag indicating that the Task has been scheduled
+	////Resets the flag indicating that the Task has been scheduled
 	//void resetScheduledFlag();
-	///Invalidates the schedule of all cores the task is mapped onto 
+	////Invalidates the schedule of all cores the task is mapped onto 
 	//void setRescheduleFlagForCores();
 	///Returns the current state hash
 	/**
@@ -226,7 +220,6 @@ public:
 	//*/
 	//void setCommonExecution(bool iCommonExecution);
 	void refreshStateHash(const char* iLiveVarList);
-	//void addRawTransaction(TMLTransaction* iTrans);
 	void schedule2TXT(std::ostream& myfile) const;
 	int hasRunnableTrans(CPU* iCPU);
 protected:
@@ -277,11 +270,11 @@ protected:
 	///Consecutive number of this task instance
 	unsigned int _myInstance;
 	///Indicates whether this task has already been scheduled
-	//bool _isScheduled;
-	/////Last established state Hash
-	//HashValueType _lastStateHash;
-	/////Flag indicating whether the task state has been encoutered before
-	//bool _commonExecution;
+	/*bool _isScheduled;
+	///Last established state Hash
+	HashValueType _lastStateHash;
+	///Flag indicating whether the task state has been encoutered before
+	bool _commonExecution;*/
 	HashAlgo _stateHash;
 	const char* _liveVarList;
 	bool _hashInvalidated;

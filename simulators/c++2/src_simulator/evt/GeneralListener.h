@@ -101,8 +101,8 @@ public:
 	\param iID ID of the event source
 	*/
 	virtual void commandEntered(TMLCommand* iComm, ID iID){}
-	///Gets called when a transaction of the command is executed
-	/**
+	//Gets called when a transaction of the command is executed
+	/*
 	\param iComm Pointer to the command
 	\param iID ID of the event source
 	*/
@@ -113,29 +113,27 @@ public:
 	\param iID ID of the event source
 	*/
 	virtual void commandFinished(TMLCommand* iComm, ID iID){}
-	//virtual void commandFinished(TMLTransaction* iTrans, ID iID){}
 	///Gets called when a the first transaction of the command is executed
 	/**
-	\param iTrans Pointer to the transaction
+	\param iComm Pointer to the command
 	\param iID ID of the event source
 	*/
 	virtual void commandStarted(TMLCommand* iComm, ID iID){}
-	//virtual void commandStarted(TMLTransaction* iTrans, ID iID){}
 	
 	
-	///Gets called when a read transaction is executed
-	/**
+	//Gets called when a read transaction is executed
+	/*
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
 	//virtual void readTrans(TMLTransaction* iTrans, ID iID){}
-	///Gets called when a write transaction is executed
-	/**
+	//Gets called when a write transaction is executed
+	/*
 	\param iTrans Pointer to the transaction
 	\param iID ID of the event source
 	*/
 	//virtual void writeTrans(TMLTransaction* iTrans, ID iID){}
-	
+	///Event triggering the evaluation of TEPE constraints
 	virtual void evaluate(){}
 	///Destructor
 	virtual ~GeneralListener(){}

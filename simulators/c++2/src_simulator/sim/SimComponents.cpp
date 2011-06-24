@@ -357,32 +357,6 @@ ListenerSubject <GeneralListener>* SimComponents::getListenerByID(ID iID){
 	return getChannelByID(iID);
 }
 
-//int SimComponents::getHashValue(){
-//	return _hashValue;
-//}
-
-/*TaskList::const_iterator SimComponents::getTaskIterator(bool iEnd) const{
-	return (iEnd)? _taskList.end():_taskList.begin();
-}
-
-BusList::const_iterator SimComponents::getBusIterator(bool iEnd) const{
-	return (iEnd)? _busList.end():_busList.begin();
-}
-
-TraceableDeviceList::const_iterator SimComponents::getVCDIterator(bool iEnd) const{
-	return (iEnd)? _vcdList.end():_vcdList.begin();
-}
-
-#ifdef EBRDD_ENABLED
-EBRDDList::const_iterator SimComponents::getEBRDDIterator(bool iEnd) const{
-	return (iEnd)? _ebrddList.end():_ebrddList.begin();
-}
-#endif
-
-CPUList::const_iterator SimComponents::getCPUIterator(bool iEnd) const{
-	return (iEnd)? _cpuList.end():_cpuList.begin();
-}*/
-
 /*void SimComponents::setBreakpointOnChoiceCmds(){
 	TMLChoiceCommand* aResult;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
@@ -402,7 +376,6 @@ void SimComponents::setStopFlag(bool iStopFlag, const std::string& iStopReason){
 	}
 }
 
-//void SimComponents::checkForRecurringSystemState(){
 ID SimComponents::checkForRecurringSystemState(){
 	//std::cout << "Recurring Sys State\n";
 	_systemHash.init((HashValueType)0xabcd, _taskList.size());
@@ -449,15 +422,6 @@ ID SimComponents::checkForRecurringSystemState(){
 	return aRetVal;
 }
 	
-//ID SimComponents::wasKnownStateReached() const{
-//	return _knownStateReached;
-//}
-
-//bool SimComponents::getOnKnownPath(){
-//	_knownStateReached=0;
-//	return _onKnownPath;
-//}
-
 void SimComponents::showTaskStates(){
 	static int iCount=0;
 	static ParamType *aDatalen, *aStandard;

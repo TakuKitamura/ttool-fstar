@@ -44,12 +44,23 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLChoiceCommand.h>
 #include <IndeterminismSource.h>
 
+///This class models a random fork in control flow within a TML Task
 class TMLRandomChoiceCommand: public TMLChoiceCommand, public IndeterminismSource{
 public:
+	///Constructor
+    	/**
+      	\param iID ID of the command
+      	\param iTask Pointer to the task the command belongs to
+	\param iRangeFunc function returning the rage of enabled branches
+	\param iNbOfBranches Number of branches of the choice
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
+	*/
 	TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iNbOfBranches, const char* iLiveVarList, bool iCheckpoint);
 	TMLCommand* prepareNextTransaction();
 	inline unsigned int getRandomRange() {return _dynamicRange;}
 protected:
+	///A bitmap of enabled branches
 	unsigned int _dynamicRange;
 	inline TMLCommand* getNextCommand() const {return _nextCommand[_randomValue];}
 };

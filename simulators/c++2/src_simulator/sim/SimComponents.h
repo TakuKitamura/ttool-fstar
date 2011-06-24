@@ -66,7 +66,7 @@ public:
 	/**
 	\param iHashValue Hash Value for application and architecture
 	*/
-	SimComponents(int iHashValue /*, Simulator* iSimulator*/);
+	SimComponents(int iHashValue);
 	///Destructor
 	virtual	~SimComponents();
 	///Add a task
@@ -116,11 +116,15 @@ public:
 	*/
 	void addEBRDD(EBRDD* iEBRDD);
 #endif
-	///Add a TEPE constraint
+	///Add a TEPE event listener
 	/**
-	\param iPropConstr TEPE Constraint
+	\param iTEPEListener Pointer to TEPEListener
 	*/
 	void addTEPEListener(GeneralListener* iTEPEListener);
+	///Sets the TEPE root constraint
+	/**
+	\param iTEPEEntryPoint Pointer to TEPEFloatingSigListener
+	*/
 	void setTEPEEntryPoint(TEPEFloatingSigListener* iTEPEEntryPoint);
 	///Calls streamBenchmarks of all traceable devices contained in vcdList
 	/**
@@ -193,24 +197,18 @@ public:
 	TMLChannel* getChannelByID(ID iID) const;
 	///Returns an iterator for the internal CPU list
 	/**
-	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for CPU list
 	*/	
-	//CPUList::const_iterator getCPUIterator(bool iEnd) const;
 	inline const CPUList& getCPUList() const{return _cpuList;}
 	///Returns an iterator for the internal bus list
 	/**
-	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for bus list
 	*/	
-	//BusList::const_iterator getBusIterator(bool iEnd) const;
 	inline const BusList& getBusList() const{return _busList;}
 	///Returns an iterator for the internal VCD list
 	/**
-	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for VCD list
 	*/	
-	//TraceableDeviceList::const_iterator getVCDIterator(bool iEnd) const;
 	inline const TraceableDeviceList& getVCDList() const{return _vcdList;}
 	///Returns the state of the stop flag
 	/**
@@ -242,18 +240,14 @@ public:
 	inline int getHashValue() {return _hashValue;}
 	///Returns an iterator for the internal task list
 	/**
-	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for task list
 	*/
-	//TaskList::const_iterator getTaskIterator(bool iEnd) const;
 	inline const TaskList& getTaskList() const{return _taskList;}
 #ifdef EBRDD_ENABLED
 	///Returns an iterator for the internal EBRDD list
 	/**
-	\param iEnd true for iterator pointing to the end of the list, false for iterator pointing to the first element
 	\return Const iterator for EBRDD list
 	*/
-	//EBRDDList::const_iterator getEBRDDIterator(bool iEnd) const;
 	inline const EBRDDList& getEBRDDList() const{return _ebrddList;}
 #endif
 	///Returns the reason why the simulation stopped
@@ -280,19 +274,16 @@ public:
 	ID checkForRecurringSystemState();
 	///Checks if a known system state was reached
 	/**
-	\param oSystemHash Current system hash
 	\return Flag indicating whether a known state has been encountered
 	*/
-	//ID wasKnownStateReached(HashValueType* oSystemHash) const;
 	inline ID wasKnownStateReached() const {return _knownStateReached;}
-	//inline ID wasKnownStateReached() const {return false;}
+	//inline ID wasKnownStateReached() const {return 0;}
 	///Resets the global system hash
 	void resetStateHash();
 	inline bool getOnKnownPath(){
 		_knownStateReached=0;
 		return _onKnownPath;
 	}
-	//ListenerSubject <TransactionListener>* getListenerByID(ID iID);
 	ListenerSubject<GeneralListener>* getListenerByID(ID iID);
 	virtual void generateTEPEs()=0;
 	void showTaskStates();
@@ -335,8 +326,6 @@ protected:
 	///Flag indicating whether a known state has been encountered
 	ID _knownStateReached;
 	bool _onKnownPath;
-	
-	//std::ofstream _myfile;
 };
 #endif
 

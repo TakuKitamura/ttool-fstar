@@ -46,9 +46,6 @@ TMLRandomCommand::TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRan
 	_type=RND;
 }
 
-//void TMLRandomCommand::execute(){
-//}
-
 unsigned int TMLRandomCommand::getRandomRange(){
 	ParamType aMax;
 	(_task->*_rangeFunc)(_aMin, aMax);
@@ -92,11 +89,3 @@ std::string TMLRandomCommand::TMLRandomCommand::toString() const{
 	outp << "Random in " << TMLCommand::toString();
 	return outp.str();
 }
-
-//std::string TMLRandomCommand::toShortString() const{
-//	return "Random";
-//}
-
-//std::string TMLRandomCommand::getCommandStr() const{
-//	return "rnd";
-//}

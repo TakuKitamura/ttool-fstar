@@ -53,7 +53,10 @@ Ludovic Apvrille, Renaud Pacalet
 //#include <Parameter.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
+TMLTime SchedulableDevice::_overallTransNo=0;
+TMLTime SchedulableDevice::_overallTransSize=0;
 ID TMLTransaction::_ID=1;
+
 const unsigned int SeqConstraint::_transTableSeq[12]={0,20,0,0,16,16,10,32,32,32,11,32};
 const unsigned int LogConstraint::_transTableLog[20]={0, 20, 52, 0, 16, 16, 10, 32, 32, 32, 11, 32, 48, 10, 48, 64, 64, 11, 64, 64};
 //template<class T,int size> MemPool<SizedParameter<T,size> > SizedParameter<T, size>::memPool(BLOCK_SIZE_PARAM);

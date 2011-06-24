@@ -70,18 +70,6 @@ TMLCommand* TMLSendCommand::prepareNextTransaction(){
 	return this;
 }
 
-//TMLChannel* TMLSendCommand::getChannel(unsigned int iIndex) const{
-//	return _channel;
-//}
-
-//unsigned int TMLSendCommand::getNbOfChannels() const{
-//	return 1;
-//}
-
-//TMLTask* TMLSendCommand::getDependentTask(unsigned int iIndex)const{
-//	return _channel->getBlockedReadTask();
-//}
-
 std::string TMLSendCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Send in " << TMLCommand::toString() << " " << _channel->toString();
@@ -93,12 +81,4 @@ std::string TMLSendCommand::toShortString() const{
 	outp << _task->toString() << ": Send " << _channel->toShortString();
 	return outp.str();
 }
-
-//std::string TMLSendCommand::getCommandStr() const{
-//	return "snd";
-//}
-
-//Parameter* TMLSendCommand::setParams(Parameter* ioParam){
-//	return (_task->*_paramFunc)(ioParam);
-//}
 

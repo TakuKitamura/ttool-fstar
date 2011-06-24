@@ -71,8 +71,6 @@ protected:
 	LengthFuncPointer _lengthFunc;
 	///Channel which is read
 	TMLChannel* _channel;
-	/////Bitmap of live variables
-	//const char* _liveVarList;
 	TMLCommand* prepareNextTransaction();
 };
 

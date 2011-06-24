@@ -166,6 +166,14 @@ public:
 		return _busyCycles;
 	}
 	
+	static TMLTime getOverallTransNo(){
+		return _overallTransNo;
+	}
+	
+	static TMLTime getOverallTransSize(){
+		return _overallTransSize;
+	}
+	
 protected:
 	///Unique ID of the device
 	ID _ID;
@@ -187,7 +195,8 @@ protected:
 	bool _deleteScheduler;
 	///Busy cycles since simulation start
 	TMLTime _busyCycles;
-
+	static TMLTime _overallTransNo;
+	static TMLTime _overallTransSize;
 };
 
 #endif

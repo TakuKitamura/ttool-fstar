@@ -70,7 +70,6 @@ class SimComponents;
 //************************************************************************
 ///Listener which stops the simulation after a given number of transactions
 class RunXTransactions: public GeneralListener{
-//class RunXTransactions: public TransactionListener{
 public:
 	///Constructor
 	/**
@@ -98,7 +97,6 @@ protected:
 //************************************************************************
 ///Listener establishing a breakpoint
 class Breakpoint: public GeneralListener{
-//class Breakpoint: public CommandListener{
 public:
 	///Constructor
 	/**
@@ -121,7 +119,6 @@ protected:
 
 //************************************************************************
 ///Breakpoint based on a condition
-//class CondBreakpoint: public CommandListener{
 class CondBreakpoint: public GeneralListener{
 public:
 	///Constructor
@@ -134,7 +131,6 @@ public:
 	///Destructor
 	~CondBreakpoint();
 	void commandFinished(TMLCommand* iComm, ID iID);
-	//void commandFinished(TMLTransaction* iTrans, ID iID);
 	///Enable/disable all conditional breakpoints
 	/**
 	\param iEnabled true=enable, false=disable
@@ -173,7 +169,6 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a random choice command is encountered
-//class RunTillNextRandomChoice: public CommandListener{
 class RunTillNextRandomChoice: public GeneralListener{
 public:
 	///Constructor
@@ -197,7 +192,6 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation after a given number of commands
-//class RunXCommands: public CommandListener{
 class RunXCommands: public GeneralListener{
 public:
 	///Constructor
@@ -209,7 +203,6 @@ public:
 	///Destructor
 	virtual ~RunXCommands();
 	void commandFinished(TMLCommand* iComm, ID iID);
-	//void commandFinished(TMLTransaction* iTrans, ID iID);
 	///Sets the number of commands to execute
 	/**
 	\param  iCommandsToExecute Number of commands to execute
@@ -228,7 +221,6 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation at a given time
-//class RunXTimeUnits: public TransactionListener{
 class RunXTimeUnits: public GeneralListener{
 public:
 	///Constructor
@@ -256,7 +248,6 @@ protected:
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a transaction is executed on a given device
-//class RunTillTransOnDevice: public TransactionListener{
 class RunTillTransOnDevice: public GeneralListener{
 public:
 	///Constructor
@@ -264,7 +255,6 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Device to listen on
 	*/
-	//RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<TransactionListener>* iSubject);
 	RunTillTransOnDevice(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnDevice();
@@ -273,14 +263,12 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Device to listen on
-	//ListenerSubject <TransactionListener> * _subject;
 	ListenerSubject <GeneralListener> * _subject;
 };
 
 
 //************************************************************************
 ///Listener which stops the simulation as soon as a given task executes a transaction
-//class RunTillTransOnTask: public TaskListener{
 class RunTillTransOnTask: public GeneralListener{
 public:
 	///Constructor
@@ -288,7 +276,6 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Task to listen on
 	*/
-	//RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<TaskListener>* iSubject);
 	RunTillTransOnTask(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnTask();
@@ -297,14 +284,12 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Task to listen on
-	//ListenerSubject <TaskListener> * _subject;
 	ListenerSubject <GeneralListener> * _subject;
 };
 
 
 //************************************************************************
 ///Listener which stops the simulation as soon data is conveyed on a given channel
-//class RunTillTransOnChannel: public ChannelListener{
 class RunTillTransOnChannel: public GeneralListener{
 public:
 	///Constructor
@@ -312,7 +297,6 @@ public:
 	\param iSimComp Pointer to a SimComponents object
 	\param iSubject Channel to listen on
 	*/
-	//RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<ChannelListener>* iSubject);
 	RunTillTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
 	///Destructor
 	virtual ~RunTillTransOnChannel();
@@ -321,7 +305,6 @@ protected:
 	///Pointer to a SimComponents object
 	SimComponents* _simComp;
 	///Channel to listen on
-	//ListenerSubject <ChannelListener> * _subject;
 	ListenerSubject <GeneralListener> * _subject;
 };
 
@@ -338,7 +321,6 @@ public:
 	void transExecuted(TMLTransaction* iTrans, ID iID);
 	void commandEntered(TMLCommand* iComm, ID iID);
 	void commandFinished(TMLCommand* iComm, ID iID);
-	//void commandFinished(TMLTransaction* iTrans, ID iID);
 	void commandStarted(TMLCommand* iComm, ID iID);
 	void readTrans(TMLTransaction* iTrans, ID iID);
 	void writeTrans(TMLTransaction* iTrans, ID iID);
@@ -421,36 +403,4 @@ protected:
 	SimComponents* _simComp;
 	ListenerSubject<GeneralListener>* _simulator;
 };
-	
-//************************************************************************
-/*class TestListener: public TaskListener, public ChannelListener, public CommandListener{
-public:
-	//Constructor
-	//\param iSimComp Pointer to a SimComponents object
-	//
-	TestListener(SimComponents* iSimComp);
-	void taskStarted(TMLTransaction* iTrans);
-	void taskFinished(TMLTransaction* iTrans);
-	void readTrans(TMLTransaction* iTrans);
-	void writeTrans(TMLTransaction* iTrans);
-	void commandFinished(TMLCommand* iComm);
-	void commandStarted(TMLCommand* iComm);
-	///Destructor
-	virtual ~TestListener();
-	
-protected:
-	///Pointer to a SimComponents object
-	SimComponents* _simComp;
-};
-
-
-************************************************************************
-class ConstraintBlock: public TransactionListener{
-	ConstraintBlock(SimComponents* iSimComp);
-	~ConstraintBlock();
-	void transExecuted(TMLTransaction* iTrans);
-	virtual bool constraintFunc(TransactionAbstr iTrans, CommandAbstr iCmd, TaskAbstr iTask, CPUAbstr iCPU, ChannelAbstr iChan) =0;
-private:
-	SimComponents* _simComp;
-};*/
 #endif

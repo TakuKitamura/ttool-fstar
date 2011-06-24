@@ -44,10 +44,19 @@ Ludovic Apvrille, Renaud Pacalet
 #include <IndeterminismSource.h>
 #include <TMLCommand.h>
 
+///Class modeling a random number generator within a TML Task
 class TMLRandomCommand: public TMLCommand, public IndeterminismSource{
 public:
+	///Constructor
+    	/**
+      	\param iID ID of the command
+      	\param iTask Pointer to the task the command belongs to
+	\param iRangeFunc function returning the rage of enabled branches
+	\param iResultVar Pointer to the variable that is assigned the random value
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
+    	*/
 	TMLRandomCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, ParamType* iResultVar, const char* iLiveVarList, bool iCheckpoint);
-	
 	void execute() {}
 	unsigned int getRandomRange();
 	TMLCommand* prepareNextTransaction();
@@ -55,8 +64,11 @@ public:
 	inline std::string toShortString() const {return "Random";}
 	inline std::string getCommandStr() const {return "rnd";}
 protected:
+	///Function returning the rage of enabled branches
 	RangeFuncPointer _rangeFunc;
+	///Pointer to the variable that is assigned the random value
 	ParamType* _resultVar;
+	///Minimum value of the range of the random variable
 	ParamType _aMin;
 };
 

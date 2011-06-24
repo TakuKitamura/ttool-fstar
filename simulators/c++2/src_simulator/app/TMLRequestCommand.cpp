@@ -68,18 +68,6 @@ TMLCommand* TMLRequestCommand::prepareNextTransaction(){
 	return this;
 }
 
-//TMLChannel* TMLRequestCommand::getChannel(unsigned int iIndex) const{
-//	return dynamic_cast<TMLChannel*>(_channel);
-//}
-
-//unsigned int TMLRequestCommand::getNbOfChannels() const{
-//	return 1;
-//}
-
-//TMLTask* TMLRequestCommand::getDependentTask(unsigned int iIndex)const{
-//	return _channel->getBlockedReadTask();
-//}
-
 std::string TMLRequestCommand::toString() const{
 	std::ostringstream outp;
 	outp << "Request in " << TMLCommand::toString() << " " << _channel->toString();
@@ -91,26 +79,3 @@ std::string TMLRequestCommand::toShortString() const{
 	outp << _task->toString() << ": Request " << _channel->toShortString();
 	return outp.str();
 }
-
-//std::string TMLRequestCommand::getCommandStr() const{
-//	return "sendReq";
-//}
-
-/*ParamFuncPointer TMLRequestCommand::getParamFuncPointer() const{
-	return _paramFunc;
-}*/
-
-/*void TMLRequestCommand::setParams(Parameter<ParamType>& ioParam){
-	if (_paramFunc==0){
-		ioParam=_statParam;
-	}else{
-		(_task->*_paramFunc)(ioParam);
-	}
-	//std::cout << "Hello in setparams: ";
-	//ioParam.print();
-	//std::cout << "\n";
-}*/
-
-//Parameter* TMLRequestCommand::setParams(Parameter* ioParam){
-	//return (_task->*_paramFunc)(ioParam);
-//}

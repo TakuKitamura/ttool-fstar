@@ -60,11 +60,9 @@ public:
 	///Returns the next signal change (for vcd output)
 	/**
       	\param iInit Indicates if the list iterator has to be reset to the beginning of the list
-	\param oSigChange String containing a description of the signal change is returned
-	\param oNoMoreTrans Is true if the last transaction of the schedule has been retrieved
+	\param oSigData Pointer to a SignalChangeData object characterizing the nature of the signal change
 	\return Point in time when the signal changes
     	*/ 
-	//virtual TMLTime getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans)=0;
 	virtual void getNextSignalChange(bool iInit, SignalChangeData* oSigData)=0;
 	///Writes benchmarking data to a given stream
 	/**

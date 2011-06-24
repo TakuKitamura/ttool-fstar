@@ -59,7 +59,6 @@ public:
     	*/
 	TMLExeciRangeCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRangeFunc, unsigned int iType, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
-	//TMLTask* getDependentTask() const;
 	std::string toString() const;
 	std::string toShortString() const;
 	inline std::string getCommandStr() const {return "exe";}

@@ -48,9 +48,6 @@ TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRan
 	_type=CHO;
 }
 
-//void TMLChoiceCommand::execute(){
-//}
-
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
 	ParamType aMin, aMax;
 	return _nextCommand[(_task->*_rangeFunc)(aMin, aMax)];
@@ -81,11 +78,3 @@ std::string TMLChoiceCommand::toString() const{
 	outp << "Choice in " << TMLCommand::toString();
 	return outp.str();
 }
-
-//std::string TMLChoiceCommand::toShortString() const{
-//	return "Choice";
-//}
-
-//std::string TMLChoiceCommand::getCommandStr() const{
-//	return "cho";
-//}

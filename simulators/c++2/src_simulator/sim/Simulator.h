@@ -208,7 +208,9 @@ public:
 	/**
 	\param iDepth Maximal recursion depth
 	\param iPrevID ID of the parent leaf
-	\param iFile Reference to the output file
+	\param iDOTFile Handle of DOT file
+	\param iAUTFile Handle of AUT file
+	\param oTransCounter Reference to transaction counter
 	*/
 	void exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter);
 	///Writes a HTML representation of the schedule of CPUs and buses to an output file
@@ -223,7 +225,14 @@ public:
 	\param iTraceFileName Name of the output trace file
 	*/
 	void schedule2Graph(std::string& iTraceFileName) const;
-	//ID schedule2Graph(std::ostream& iFile, ID iStartState) const;
+	///Writes the simulation graph to a DOT and AUT file, for exploration mode
+	/**
+	\param iDOTFile Handle of DOT file
+	\param iAUTFile Handle of AUT file
+	\param iStartState ID of the state to begin with
+	\param oTransCounter Reference to a transation counter
+	\return ID of the last state writte to the files
+	*/
 	ID schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const;
 	///Writes a plain text representation of the schedule of CPUs to an output file
 	/**

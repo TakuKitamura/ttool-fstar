@@ -39,34 +39,13 @@ Ludovic Apvrille, Renaud Pacalet
  */
 
 #include <TMLStopCommand.h>
-//#include <TMLTask.h>
 
 TMLStopCommand::TMLStopCommand(ID iID, TMLTask* iTask): TMLCommand(iID, iTask, 1, 0, 0, false){
 	_type=STP;
 }
-
-//void TMLStopCommand::execute(){
-//}
-
-//TMLCommand* TMLStopCommand::prepareNextTransaction(){
-//	_task->finished();
-//	return 0;
-//}
-
-/*TMLTask* TMLStopCommand::getDependentTask() const{
-	return 0;
-}*/
 
 std::string TMLStopCommand::toString() const{
 	std::ostringstream outp;	
 	outp << "Stop in " << TMLCommand::toString();
 	return outp.str();
 }
-
-//std::string TMLStopCommand::toShortString() const{
-//	return "stp";
-//}
-
-//std::string TMLStopCommand::getCommandStr() const{
-//	return "stp";
-//}

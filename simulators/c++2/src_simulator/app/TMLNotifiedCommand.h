@@ -60,7 +60,6 @@ public:
 	*/
 	TMLNotifiedCommand(ID iID, TMLTask* iTask,TMLEventChannel* iChannel,ParamType* iResultVar,const std::string& iResultVarDescr, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
-	//TMLTask* getDependentTask() const;
 	inline TMLChannel* getChannel() const {return dynamic_cast<TMLChannel*>(_channel);}
 	std::string toString() const;
 	std::string toShortString() const;

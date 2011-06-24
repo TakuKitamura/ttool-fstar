@@ -54,6 +54,8 @@ public:
       	\param iID ID of the command
       	\param iTask Pointer to the task the command belongs to
 	\param iActionFunc Member function pointer to the action function
+	\param iLiveVarList Bitmap of live variables
+	\param iCheckpoint Checkpoint Flag
     	*/
 	TMLActionCommand(ID iID, TMLTask* iTask, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint);
 	inline void execute() {}

@@ -67,45 +67,13 @@ TMLTask::~TMLTask(){
 	if (_comment!=0) delete [] _comment;
 }
 
-//Priority TMLTask::getPriority() const{
-//	return _priority;
-//}
-
-//TMLTime TMLTask::getEndLastTransaction() const{
-//	return _endLastTransaction;
-//}
-
-//TMLCommand* TMLTask::getCurrCommand() const{
-//	return _currCommand;
-//}
-
-//void TMLTask::setCurrCommand(TMLCommand* iCurrCommand){
-//	_currCommand=iCurrCommand;
-//}
-
-//CPU* TMLTask::getCPU() const{
-//	return _currentCPU;
-//}
-
-//std::string TMLTask::toString() const{
-//	return _name;
-//}
-
 std::string TMLTask::toShortString() const{
 	std::ostringstream outp;
 	outp << "ta" << _ID;
 	return outp.str();
 }
 
-//ID TMLTask::getID() const{
-//	return _ID;
-//}
-
 #ifdef ADD_COMMENTS
-//void TMLTask::addComment(Comment* iComment){
-//	_commentList.push_back(iComment);
-//}
-
 std::string TMLTask::getNextComment(bool iInit, Comment*& oComment){
 	if (iInit) _posCommentList=_commentList.begin();
 	if (_posCommentList == _commentList.end()){
@@ -140,7 +108,6 @@ void TMLTask::addTransaction(TMLTransaction* iTrans){
 	}
 }
 
-//TMLTime TMLTask::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
 void TMLTask::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	//std::ostringstream outp;
 	if (iInit){
@@ -334,30 +301,6 @@ ParamType* TMLTask::getVariableByName(const std::string& iVarName ,bool& oIsId){
 	return _varLookUpName[iVarName.c_str()];
 }
 
-//ParamType* TMLTask::getVariableByID(ID iVarID){
-//	return _varLookUpID[iVarID];
-//}
-
-//void TMLTask::addCommand(ID iID, TMLCommand* iCmd){
-//	_commandHash[iID]=iCmd;
-//}
-
-//TMLCommand* TMLTask::getCommandByID(ID iID){
-//	return _commandHash[iID];
-//}
-
-//void TMLTask::streamStateXML(std::ostream& s) const{
-//	streamBenchmarks(s);
-//}
-
-/*VariableLookUpTableID::const_iterator TMLTask::getVariableIteratorID(bool iEnd) const{
-	return (iEnd)?_varLookUpID.end():_varLookUpID.begin();
-}
-
-VariableLookUpTableName::const_iterator TMLTask::getVariableIteratorName(bool iEnd) const{
-	return (iEnd)?_varLookUpName.end():_varLookUpName.begin();
-}*/
-
 void TMLTask::finished(){
 	_justStarted=true;
 #ifdef LISTENERS_ENABLED
@@ -391,16 +334,12 @@ TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
 	//return (_currCommand==0 || _isScheduled)?0:_currCommand->getCurrTransaction();
 }
 
-//unsigned int TMLTask::getInstanceNo(){
-//	return _myInstance;
-//}
+/*void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
+	_isScheduled=true;
+	if (_noOfCPUs>1) _currentCPU = dynamic_cast<CPU*>(iCPU);
+}
 
-//void TMLTask::transWasScheduled(SchedulableDevice* iCPU){
-	//_isScheduled=true;
-	//if (_noOfCPUs>1) _currentCPU = dynamic_cast<CPU*>(iCPU);
-//}
-
-/*void TMLTask::resetScheduledFlag(){
+void TMLTask::resetScheduledFlag(){
 	RESET_SCHEDULING;
 }
 
