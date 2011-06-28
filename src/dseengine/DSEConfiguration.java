@@ -38,8 +38,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
 * Class DSEScriptReader
 * Reader of script for Design Space Exploration
-* Creation: 24/06/2011
-* @version 1.0 24/06/2011
+* Creation: 28/06/2011
+* @version 1.0 28/06/2011
 * @author Ludovic APVRILLE
 * @see
 */
@@ -64,73 +64,16 @@ import myutil.*;
 
 //import uppaaldesc.*;
 
-public class DSEScriptReader  {
-	public static final int SYNTAX_ERROR_IN_LINE = 3;
-	public static final int OK = 1;
-	public static final int FILE_ERROR = 2;
-	public static final int KO = 4;
+public class DSEConfiguration  {
 	
-	private String fileName;
-	private int lineOfError;
 
-	public  DSEScriptReader(String _fileName) {
-		fileName = _fileName;
-	}
-	
-	
-	
-	// Return an eventual error
-	// OK: all ok
-	// FILE_ERROR: could not read file
-	// KO:
-	
-	public int execute() {
-		String scriptToExecute = "";
-		try {
-			scriptToExecute = FileUtils.loadFile(fileName); 
-		} catch (FileException e) {
-			return FILE_ERROR;
-		}
+	public  DSEConfiguration() {
 		
-		
-		// Read the script line by line, and execute corresponding actions
-		StringReader sr = new StringReader(scriptToExecute);
-        BufferedReader br = new BufferedReader(sr);
-        String s;
-		DSEConfiguration config = new DSEConfiguration();
-		int line = 0;
-		int ret;
-		
-		try {
-            while((s = br.readLine()) != null) {
-				line ++;
-                s = s.trim();
-				if (s.startsWith("#")) {
-					// Comment 
-				} else {
-					if (s.length() > 0) {
-						ret = executeLineOfScript(s, config);
-						if (ret == SYNTAX_ERROR_IN_LINE) {
-							lineOfError = line;
-							return SYNTAX_ERROR_IN_LINE;
-						}
-					}
-				}
-            }
-		} catch (Exception e) {
-			return KO;
-		}
-			return OK;
-	}
-	
-	private int executeLineOfScript(String _line, DSEConfiguration _config) {
-		return OK;
 	}
 	
 	
-	public int getLineOfError() {
-		return lineOfError;
-	}
 	
-} // Class DSEScriptReader
+	
+	
+} // Class DSEConfiguration
 
