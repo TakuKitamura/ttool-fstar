@@ -601,7 +601,11 @@ public class AVATAR2ProVerif {
 			}
 			
 			if (as.isOut()) {
+				if (aaos.getNbOfValues() == 0) {
+					addLine(_p, "new data__");
+				}
 				tmp ="out";
+				
 			} else {
 				tmp = "in";
 			}
@@ -612,17 +616,21 @@ public class AVATAR2ProVerif {
 				tmp +="(chprivate, ";
 			}
 			
-			for(i=0; i<aaos.getNbOfValues(); i++) {
-				if (i>0) {
-					tmp += ", ";
-				}
-				// Work on authenticity
-				/*if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
-					if (as.isOut()) {
-						addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
+			if (aaos.getNbOfValues() == 0) {
+				tmp += "data__";
+			} else {
+				for(i=0; i<aaos.getNbOfValues(); i++) {
+					if (i>0) {
+						tmp += ", ";
 					}
-				}*/
-				tmp += aaos.getValue(i);
+					// Work on authenticity
+					/*if (hasAuthenticityPragma(as.isOut(), _block.getName(), aaos.getValue(i))) {
+						if (as.isOut()) {
+							addLine(_p, "event authenticity__" + _block.getName() + "__" + aaos.getValue(i) + "__out()");
+						}
+					}*/
+					tmp += aaos.getValue(i);
+				}
 			}
 			tmp += ")";
 			addLine(_p, tmp);

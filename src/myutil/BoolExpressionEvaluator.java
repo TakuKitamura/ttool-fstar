@@ -92,6 +92,16 @@ public class BoolExpressionEvaluator {
 	public boolean getResultOf(String _expr) {
 		//TraceManager.addDev("Evaluating bool expr: " + _expr);
 		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		
+		String tmp = Conversion.replaceAllString(_expr, "==", "$").trim();
+		tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
+		tmp = Conversion.replaceAllString(tmp, "<=", ";").trim();
+		if (tmp.indexOf("=") > -1) {
+			errorMessage = "Not a boolean expression because it contains = operators";
+			return false;
+		}
+		
+		
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
