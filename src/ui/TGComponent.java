@@ -1133,10 +1133,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
             firstId = tgcomponent[i].makeLovelyIds(firstId);
         }
         
-        for (i=0; i<nbConnectingPoint; i++) {
-            connectingPoint[i].forceId(firstId);
+		if (connectingPoint != null) {
+        for (i=0; i<Math.min(connectingPoint.length, nbConnectingPoint); i++) {
+			if (connectingPoint[i] != null) {
+				connectingPoint[i].forceId(firstId);
+			}
             firstId++;
         }
+		}
         id = firstId;
         return (firstId + 1);
     }
@@ -2647,7 +2651,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected StringBuffer translateConnectingPoints() {
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<nbConnectingPoint; i++) {
-            sb.append(connectingPoint[i].saveInXML(i));
+			if (connectingPoint[i] != null) {
+				sb.append(connectingPoint[i].saveInXML(i));
+			}
         }
         return sb;
     }
