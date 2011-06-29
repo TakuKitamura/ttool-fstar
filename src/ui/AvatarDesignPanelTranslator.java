@@ -1194,6 +1194,7 @@ public class AvatarDesignPanelTranslator {
 					r.setSizeOfFIFO(port.getSizeOfFIFO());
 					r.setPrivate(port.isPrivate());
 					r.setBroadcast(port.isBroadcast());
+					r.setLossy(port.isLossy());
 					
 					_as.addRelation(r);
 				} else {

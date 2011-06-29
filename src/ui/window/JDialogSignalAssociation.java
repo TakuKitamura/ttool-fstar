@@ -66,7 +66,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	private JRadioButton synchronous, asynchronous;
 	private JLabel labelFIFO;
 	private JTextField sizeOfFIFO;
-	private JCheckBox blocking, isPrivate, isBroadcast;
+	private JCheckBox blocking, isPrivate, isBroadcast, isLossy;
     private JPanel panel1, panel2, panel3, panel4;
 	
 	private boolean cancelled = false;
@@ -246,6 +246,9 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 		bt.add(asynchronous);
 		asynchronous.setSelected(connector.isAsynchronous());
 		synchronous.setSelected(!connector.isAsynchronous());
+		isLossy = new JCheckBox("Lossy channel");
+		isLossy.setSelected(connector.isLossy());
+		panel3.add(isLossy, c3);
 		
 		c3.gridwidth = 3;
 		labelFIFO = new JLabel("Size of FIFO:");
@@ -481,6 +484,10 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 	
 	public boolean isBroadcast() {
 		return isBroadcast.isSelected();
+	}
+	
+	public boolean isLossy() {
+		return isLossy.isSelected();
 	}
     
 }

@@ -78,6 +78,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 	protected boolean blockingFIFO;
 	protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
 	protected boolean isBroadcast = false;
+	protected boolean isLossy = false;
 	
     
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
@@ -288,6 +289,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		blockingFIFO = jdas.isBlocking();
 		isPrivate = jdas.isPrivate();
 		isBroadcast = jdas.isBroadcast();
+		isLossy = jdas.isLossy();
 		
 		try {
 			sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
@@ -331,6 +333,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		sb.append("\" blocking=\"" + blockingFIFO);
 		sb.append("\" private=\"" + isPrivate);
 		sb.append("\" broadcast=\"" + isBroadcast);
+		sb.append("\" lossy=\"" + isLossy);
 		sb.append("\" />\n");
 		
         sb.append("</extraparam>\n");
@@ -342,7 +345,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             NodeList nli;
             Node n1, n2;
             Element elt;
-			String val, val1, val2, val3, val4;
+			String val, val1, val2, val3, val4, val5;
 			sizeOfFIFO = 4;
 			blockingFIFO = false;
 			asynchronous = false;
@@ -395,6 +398,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 								val2 = elt.getAttribute("blocking");
 								val3 = elt.getAttribute("private");
 								val4 = elt.getAttribute("broadcast");
+								val5 = elt.getAttribute("lossy");
                                 
                                 if ((val != null) && (!(val.equals("null")))) {
 									if (val.trim().toLowerCase().compareTo("true") == 0) {
@@ -440,8 +444,20 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 										isBroadcast = false;
 									}
                                     
-                } else {
+								} else {
 									isBroadcast = false;
+								
+								}
+								
+								if ((val5 != null) && (!(val5.equals("null")))) {
+									if (val5.trim().toLowerCase().compareTo("true") == 0) {
+										isLossy = true;
+									} else {
+										isLossy = false;
+									}
+                                    
+								} else {
+									isLossy = false;
 								}
 							}
                         }
@@ -645,6 +661,10 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 	
 	public boolean isBroadcast() {
 		return isBroadcast;
+	}
+	
+	public boolean isLossy() {
+		return isLossy;
 	}
 	
     

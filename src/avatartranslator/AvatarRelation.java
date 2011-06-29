@@ -56,7 +56,7 @@ public class AvatarRelation extends AvatarElement {
     
     public AvatarBlock block1, block2;
 	private LinkedList<AvatarSignal> signals1, signals2;
-	private boolean blocking, asynchronous, isPrivate, isBroadcast;
+	private boolean blocking, asynchronous, isPrivate, isBroadcast, isLossy;
 	private int sizeOfFIFO; // -1 means infinite
   
 	
@@ -93,6 +93,10 @@ public class AvatarRelation extends AvatarElement {
 		isBroadcast = _b;
 	}
 	
+	public void setLossy(boolean _b) {
+		isLossy = _b;
+	}
+	
 	public void setSizeOfFIFO(int _sizeOfFIFO) {
 		sizeOfFIFO = _sizeOfFIFO;
 	}
@@ -107,6 +111,10 @@ public class AvatarRelation extends AvatarElement {
 	
 	public boolean isBroadcast() {
 		return isBroadcast;
+	}
+	
+	public boolean isLossy() {
+		return isLossy;
 	}
 	
 	public int getSizeOfFIFO() {

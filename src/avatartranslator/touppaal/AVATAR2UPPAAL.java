@@ -454,7 +454,14 @@ public class AVATAR2UPPAAL {
 					tr = addTransition(templateAsynchronous, loc, loc);
 					setSynchronization(tr, signalToUPPAALString(sig1)+"?");
 					setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
-					setAssignment(tr, "enqueue__" + name0 + "()"); 
+					setAssignment(tr, "enqueue__" + name0 + "()");
+					
+					// If lossy ...
+					if (ar.isLossy()) {
+						tr = addTransition(templateAsynchronous, loc, loc);
+						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
+						setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
+					}
 					
 					tr = addTransition(templateAsynchronous, loc, loc);
 					setSynchronization(tr, signalToUPPAALString(sig2)+"!");
