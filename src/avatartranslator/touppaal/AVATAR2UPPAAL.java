@@ -466,7 +466,7 @@ public class AVATAR2UPPAAL {
 						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
 						setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
 						tr = addTransition(templateAsynchronous, loc1, loc);
-						setSynchronization(tr, "messageLost!");
+						setSynchronization(tr, "messageLost__!");
 						tr = addTransition(templateAsynchronous, loc1, loc);
 						setAssignment(tr, "enqueue__" + name0 + "()");
 						
