@@ -95,6 +95,9 @@ public class AvatarSimulationPendingTransaction  {
 	// broadcast
 	public boolean isBroadcast;
 	
+	// Lost
+	public boolean isLost;
+	
 	
 	
     public AvatarSimulationPendingTransaction() {

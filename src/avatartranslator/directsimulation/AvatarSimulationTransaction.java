@@ -85,6 +85,7 @@ public class AvatarSimulationTransaction  {
 	
 	public boolean isBroadcast;
 	public boolean isSolo; // Used in broadcast transactions to know whether the signal was forwarded to other elements, or not
+	public boolean isLost; // Used in lossy channel to know whether the message was lost or not
 	
     public AvatarSimulationTransaction(AvatarStateMachineElement _executeElement) {
 		executedElement = _executeElement;

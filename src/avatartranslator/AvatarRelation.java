@@ -206,5 +206,35 @@ public class AvatarRelation extends AvatarElement {
 		return signals2.indexOf(sig);
 	}
 	
+	/*public void makeRobustness() {
+		LinkedList<AvatarSignal> signals1_tmp = new LinkedList<AvatarSignal>();
+		LinkedList<AvatarSignal> signals2_tmp =  new LinkedList<AvatarSignal>();
+		AvatarSignal as1, as2, astmp;
+		for(int i=0; i<signals1.size(); i++) {
+			as1 = signals1.get(i);
+			as2 = signals2.get(i);
+			
+			if (as1.isOut()) {
+				astmp = as2;
+				as2 = as1;
+				as1 = astmp;
+			}
+			
+			signals1_tmp.add(as1);
+			astmp = new AvatarSignal(as1.getName() + "__in", AvatarSignal.IN, as1.getReferenceObject());
+			astmp.setInOut(AvatarSignal.IN);
+			signals2_tmp.add(astmp);
+			
+			
+			astmp = new AvatarSignal(as2.getName() + "__out", AvatarSignal.OUT, as2.getReferenceObject());
+			astmp.setInOut(AvatarSignal.OUT);
+			signals1_tmp.add(astmp);
+			signals2_tmp.add(as2);
+		}
+		
+		signals1 = signals1_tmp;
+		signals2 = signals2_tmp;
+	}*/
+	
 
 }

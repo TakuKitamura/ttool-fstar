@@ -60,6 +60,8 @@ public class AvatarSpecification extends AvatarElement {
    //private AvatarBroadcast broadcast;
    
    private LinkedList<String> pragmas;
+   
+   private boolean robustnessMade = false;
   
 	
     public AvatarSpecification(String _name, Object _referenceObject) {
@@ -366,6 +368,98 @@ public class AvatarSpecification extends AvatarElement {
 		String guard = Conversion.replaceAllChar(_guard, ' ', "").trim();
 		
 		return guard.compareTo("[else]") == 0;
+	}
+	
+	public boolean hasLossyChannel() {
+		for(AvatarRelation relation: relations) {
+			if (relation.isLossy()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	public void makeRobustness() {
+		TraceManager.addDev("Make robustness");
+		if (robustnessMade) {
+			return;
+		}
+		
+		/*robustnessMade = true;
+		
+		TraceManager.addDev("Testing lossy channels");
+		
+		if (hasLossyChannel()) {
+			TraceManager.addDev("Making robustness");
+			int idstate = 0;
+			for(AvatarBlock block: blocks) {
+				idstate = block.getStateMachine().makeMessageLostRobustness(idstate);
+			}
+			
+			/*AvatarBlock ab = new AvatarBlock("Robustness__", this.getReferenceObject());
+			addBlock(ab);
+			AvatarMethod am = new AvatarMethod("messageLost", null);
+			ab.addMethod(am);
+			AvatarStateMachine asm = ab.getStateMachine();
+			AvatarStartState ass = new AvatarStartState("StartState", null);
+			asm.addElement(ass);
+			asm.setStartState(ass);
+			AvatarTransition at = new AvatarTransition("Transition", null);
+			asm.addElement(at);
+			ass.addNext(at);
+			AvatarState state = new AvatarState("MainState", null);
+			asm.addElement(state);
+			at.addNext(state);
+			
+			// Parsing all state machines to add robustness
+			AvatarStateMachine sm;
+			AvatarActionOnSignal aaos;
+			AvatarSignal as;
+			AvatarState state0;
+			int i;
+			
+			for(AvatarRelation ar: relations) {
+				if (ar.isAsynchronous() && ar.isLossy()) {
+					// Modify the relation
+					ar.makeRobustness();
+					for(i=0; i<ar.nbOfSignals(); i = i+2) {
+						as = ar.getInSignal(i);
+						at = new AvatarTransition("TransitionToReceiving", null);
+						asm.addElement(at);
+						state.addNext(at);
+						aaos = new AvatarActionOnSignal("Receiving__" + as.getName(), as, null);
+						asm.addElement(aaos);
+						at.addNext(aaos);
+						at = new AvatarTransition("TransitionToIntermediateState", null);
+						asm.addElement(at);
+						state0 = new AvatarState("Choice__" + as.getName(), null);
+						asm.addElement(state0);
+						aaos.addNext(at);
+						at.addNext(state0);
+						at = new AvatarTransition("TransitionToMainState", null);
+						at.addAction("messageLost()");
+						asm.addElement(at);
+						state0.addNext(at);
+						at.addNext(state);
+						
+						as = ar.getOutSignal(i+1);
+						at = new AvatarTransition("TransitionToSending", null);
+						asm.addElement(at);
+						aaos = new AvatarActionOnSignal("Sending__" + as.getName(), as, null);
+						asm.addElement(aaos);
+						state0.addNext(at);
+						at.addNext(aaos);
+						at = new AvatarTransition("TransitionAfterSending", null);
+						asm.addElement(at);
+						aaos.addNext(at);
+						at.addNext(state);
+					}
+					
+				}
+			}
+		}*/
 	}
 	
 }

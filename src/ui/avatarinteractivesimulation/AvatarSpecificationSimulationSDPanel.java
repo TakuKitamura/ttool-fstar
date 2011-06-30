@@ -531,6 +531,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 				GraphicLib.arrowWithLine(g, 1, 2, 10, currentX, currentY, currentX+lengthAsync, currentY, false);
 				points.add(new Point(currentX, currentY));
 				transactionsOfPoints.add(ast);
+				
+				if (ast.isLost) {
+					g.fillOval(currentX+lengthAsync, currentY-5, 10,10);
+				}
 					
 				// Putting the message name
 				w = g.getFontMetrics().stringWidth(messageName);

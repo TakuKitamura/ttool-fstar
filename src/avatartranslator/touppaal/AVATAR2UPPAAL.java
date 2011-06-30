@@ -155,6 +155,8 @@ public class AVATAR2UPPAAL {
 		
 		avspec.removeCompositeStates();
 		avspec.removeTimers();
+		avspec.makeRobustness();
+		
 		
 		TraceManager.addDev("->   Spec:" + avspec.toString());
 		
@@ -375,6 +377,12 @@ public class AVATAR2UPPAAL {
 			//spec.addGlobalDeclaration("int " + action + TURTLE2UPPAAL.SYNCID + " = 0;\n");
 		}
 		
+		if (avspec.hasLossyChannel()) {
+			tr = addTransition(templateNotSynchronized, loc, loc);
+			setSynchronization(tr, "messageLost__?");
+			//addGuard(tr, action + TURTLE2UPPAAL.SYNCID + " == 0");
+			spec.addGlobalDeclaration("urgent chan messageLost__;\n");
+		}
 		
 	}
 	
@@ -390,7 +398,7 @@ public class AVATAR2UPPAAL {
 		spec.addTemplate(templateAsynchronous);
 		UPPAALLocation loc = addLocation(templateAsynchronous);
 		templateAsynchronous.setInitLocation(loc);
-		UPPAALTransition tr;
+		UPPAALTransition tr, tr1;
 		
 		spec.addGlobalDeclaration("\n//Declarations for asynchronous channels\n");
 		String action;
@@ -451,16 +459,22 @@ public class AVATAR2UPPAAL {
 					templateAsynchronous.addDeclaration(enqueue);
 					templateAsynchronous.addDeclaration(dequeue);
 					
-					tr = addTransition(templateAsynchronous, loc, loc);
-					setSynchronization(tr, signalToUPPAALString(sig1)+"?");
-					setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
-					setAssignment(tr, "enqueue__" + name0 + "()");
-					
-					// If lossy ...
 					if (ar.isLossy()) {
+						UPPAALLocation loc1 = addLocation(templateAsynchronous);
+						loc1.setCommitted();
+						tr = addTransition(templateAsynchronous, loc, loc1);
+						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
+						setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
+						tr = addTransition(templateAsynchronous, loc1, loc);
+						setSynchronization(tr, "messageLost!");
+						tr = addTransition(templateAsynchronous, loc1, loc);
+						setAssignment(tr, "enqueue__" + name0 + "()");
+						
+					} else {
 						tr = addTransition(templateAsynchronous, loc, loc);
 						setSynchronization(tr, signalToUPPAALString(sig1)+"?");
 						setGuard(tr, "size__" + name0 + " <" +  ar.getSizeOfFIFO());
+						setAssignment(tr, "enqueue__" + name0 + "()");
 					}
 					
 					tr = addTransition(templateAsynchronous, loc, loc);

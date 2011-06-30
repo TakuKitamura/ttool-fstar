@@ -466,6 +466,8 @@ public class AvatarSimulationBlock  {
 								ast.actions.add(myAction);
 							}
 							
+							ast.isLost = _aspt.isLost;
+							
 						} else if ((!(_aspt.isSending)) && (_aspt.linkedAsynchronousMessage != null)) {
 							// Asynchronous Receiving 
 							String myAction = "";

@@ -132,6 +132,11 @@ public class AvatarSpecificationSimulation  {
 		
 		// Remove timers
 		avspec.removeTimers();
+		
+		// Robustness
+		avspec.makeRobustness();
+		
+		TraceManager.addDev("Spec:" + avspec.toString());
 	}
 	
 	public void reset() {
@@ -925,7 +930,18 @@ public class AvatarSpecificationSimulation  {
 					// Get the index of the signal in the relation
 					AvatarSimulationAsynchronousTransaction asat = new AvatarSimulationAsynchronousTransaction(rel, rel.getIndexOfSignal(sig));
 					_aspt.linkedAsynchronousMessage = asat;
-					asynchronousMessages.add(asat);
+					// Testing whether the message can be lost or not
+					if (rel.isLossy()) {
+						int ra = ((int)(Math.random()*100))%2;
+						if (ra == 0) {
+							_aspt.isLost = true;
+						} else {
+							_aspt.isLost = false;
+							asynchronousMessages.add(asat);
+						}
+					} else {
+						asynchronousMessages.add(asat);
+					}
 				} else {
 					// Must remove the asynchronous operation, and give the parameters
 					AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(rel, sig);
