@@ -637,7 +637,7 @@ public class AvatarDesignPanelTranslator {
 						aaos.setCheckable();
 					}
 					if (aaos.isSending()) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "a sending signal is used for receiving: " + asmdrs.getValue());
+						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A sending signal is used for receiving: " + asmdrs.getValue());
 						ce.setAvatarBlock(_ab);
 						ce.setTDiagramPanel(tdp);
 						ce.setTGComponent(tgc);

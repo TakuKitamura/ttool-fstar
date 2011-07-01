@@ -132,22 +132,22 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         panel1.setBorder(new javax.swing.border.TitledBorder("Adding signals"));
-        panel1.setPreferredSize(new Dimension(400, 250));
+        panel1.setMinimumSize(new Dimension(325, 250));
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing Signals"));
-        panel2.setPreferredSize(new Dimension(300, 250));
+        panel2.setMinimumSize(new Dimension(325, 250));
 		
 		panel3 = new JPanel();
         panel3.setLayout(gridbag3);
         panel3.setBorder(new javax.swing.border.TitledBorder("Connector type"));
-        panel3.setPreferredSize(new Dimension(600, 100));
+        panel3.setMinimumSize(new Dimension(700, 150));
 		
 		panel4 = new JPanel();
         panel4.setLayout(gridbag4);
         panel4.setBorder(new javax.swing.border.TitledBorder("Security issues"));
-        panel4.setPreferredSize(new Dimension(600, 50));
+        panel4.setMinimumSize(new Dimension(700, 50));
         
         // first line panel1
         c1.weighty = 1.0;
@@ -168,12 +168,14 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         
         signalsBlock1 = new JComboBox();
 		signalsBlock1.addActionListener(this);
+		//signalsBlock1.setMinimumSize(new Dimension(150, 50));
         panel1.add(signalsBlock1, c1);
         c1.gridwidth = 1;
         panel1.add(new JLabel(" = "), c1);
         
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         signalsBlock2 = new JComboBox();
+		//signalsBlock2.setMinimumSize(new Dimension(150, 50));
 		signalsBlock2.addActionListener(this);
         panel1.add(signalsBlock2, c1);
         
@@ -195,7 +197,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         listSignals.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listSignals.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane(listSignals);
-        scrollPane.setSize(300, 250);
+        //scrollPane.setSize(300, 250);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.BOTH;
         c2.gridheight = 5;
@@ -281,6 +283,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
+		c0.fill = GridBagConstraints.BOTH;
         
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -299,6 +302,28 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         cancelButton = new JButton("Cancel", IconManager.imgic27);
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
+		
+		/*JPanel panelButton = new JPanel();
+		closeButton = new JButton("Save and Close", IconManager.imgic25);
+        //closeButton.setPreferredSize(new Dimension(600, 50));
+        closeButton.addActionListener(this);
+        panelButton.add(closeButton);
+        cancelButton = new JButton("Cancel", IconManager.imgic27);
+        cancelButton.addActionListener(this);
+        panelButton.add(cancelButton);
+		
+		JPanel middlePanel = new JPanel(new BorderLayout());
+		middlePanel.add(panel3, BorderLayout.NORTH);
+		middlePanel.add(panel4, BorderLayout.CENTER);
+		middlePanel.add(panelButton, BorderLayout.SOUTH);
+		
+		JPanel topPanel = new JPanel();
+		topPanel.add(panel1);
+		topPanel.add(panel2);
+		c.setLayout(new BorderLayout());
+		c.add(topPanel, BorderLayout.CENTER);
+		c.add(middlePanel, BorderLayout.SOUTH);*/
+		
     }
     
     public void	actionPerformed(ActionEvent evt)  {

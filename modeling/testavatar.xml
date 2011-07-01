@@ -188,8 +188,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="83" >
-<cdparam x="344" y="127" />
-<sizeparam width="77" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="346" y="127" />
+<sizeparam width="73" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="testsig(y, b)" />
@@ -203,6 +203,7 @@
 <TGConnectingPoint num="7" id="80" />
 <TGConnectingPoint num="8" id="81" />
 <TGConnectingPoint num="9" id="82" />
+<accessibility />
 </COMPONENT>
 
 <COMPONENT type="5100" id="85" >
@@ -223,13 +224,13 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Send signal to stop state" value="null" />
 <TGConnectingPoint num="0" id="91" />
-<P1  x="422" y="257" id="110" />
-<P2  x="452" y="309" id="107" />
+<P1  x="425" y="254" id="108" />
+<P2  x="452" y="309" id="118" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="90" >
 <father id="92" num="0" />
 <cdparam x="468" y="290" />
-<sizeparam width="60" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="60" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -255,12 +256,12 @@
 <infoparam name="connector from state0 to Send signal" value="null" />
 <TGConnectingPoint num="0" id="98" />
 <P1  x="387" y="172" id="135" />
-<P2  x="422" y="227" id="109" />
+<P2  x="425" y="224" id="107" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="97" >
 <father id="99" num="0" />
 <cdparam x="440" y="204" />
-<sizeparam width="70" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="70" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -309,32 +310,32 @@
 </extraparam>
 </SUBCOMPONENT>
 
-<COMPONENT type="5101" id="108" >
+<COMPONENT type="5104" id="117" >
+<cdparam x="385" y="229" />
+<sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Receive signal" value="testsig(x, b)" />
+<TGConnectingPoint num="0" id="107" />
+<TGConnectingPoint num="1" id="108" />
+<TGConnectingPoint num="2" id="109" />
+<TGConnectingPoint num="3" id="110" />
+<TGConnectingPoint num="4" id="111" />
+<TGConnectingPoint num="5" id="112" />
+<TGConnectingPoint num="6" id="113" />
+<TGConnectingPoint num="7" id="114" />
+<TGConnectingPoint num="8" id="115" />
+<TGConnectingPoint num="9" id="116" />
+<accessibility />
+</COMPONENT>
+
+<COMPONENT type="5101" id="119" >
 <cdparam x="442" y="314" />
 <sizeparam width="20" height="20" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="stop state" value="null" />
-<TGConnectingPoint num="0" id="107" />
-</COMPONENT>
-
-<COMPONENT type="5104" id="119" >
-<cdparam x="379" y="232" />
-<sizeparam width="86" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="Send signal" value="testsig(x, b)" />
-<TGConnectingPoint num="0" id="109" />
-<TGConnectingPoint num="1" id="110" />
-<TGConnectingPoint num="2" id="111" />
-<TGConnectingPoint num="3" id="112" />
-<TGConnectingPoint num="4" id="113" />
-<TGConnectingPoint num="5" id="114" />
-<TGConnectingPoint num="6" id="115" />
-<TGConnectingPoint num="7" id="116" />
-<TGConnectingPoint num="8" id="117" />
-<TGConnectingPoint num="9" id="118" />
-<accessibility />
+<TGConnectingPoint num="0" id="118" />
 </COMPONENT>
 
 <COMPONENT type="5106" id="144" >
