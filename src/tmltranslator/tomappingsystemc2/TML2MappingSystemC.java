@@ -79,6 +79,7 @@ public class TML2MappingSystemC {
 	public TML2MappingSystemC(TMLModeling _tmlm) {
 		tmlmodeling = _tmlm;
 		tmlmapping = tmlmodeling.getDefaultMapping();
+		tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
 	}
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping) {
