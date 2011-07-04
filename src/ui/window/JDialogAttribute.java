@@ -57,7 +57,7 @@ import ui.*;
 
 public class JDialogAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
     private Vector attributes, attributesPar, forbidden, initValues;
-    private boolean checkKeyword, checkJavaKeyword;
+    private boolean checkKeyword, checkJavaKeyword, checkTMLKeyword;
     
     private JPanel panel1, panel2;
     
@@ -307,6 +307,10 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
     public void enableJavaKeyword(boolean b) {
         checkJavaKeyword = !b;
     }
+	
+	 public void enableTMLKeyword(boolean b) {
+        checkTMLKeyword = !b;
+    }
     
     
     
@@ -318,7 +322,7 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         TAttribute a;
         
         if (s.length()>0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
+            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword, checkTMLKeyword)) && (TAttribute.notIn(s, forbidden))){
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getType(o2.toString());
 				

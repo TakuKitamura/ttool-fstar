@@ -133,8 +133,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -173,8 +171,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -245,8 +241,6 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="done(x, b)" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -275,8 +269,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -305,8 +297,6 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 

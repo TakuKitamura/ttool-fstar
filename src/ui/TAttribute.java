@@ -53,6 +53,7 @@ import java.util.*;
 import myutil.*;
 import translator.*;
 import translator.tojava.*;
+import tmltranslator.*;
 
 public class TAttribute {
     
@@ -142,7 +143,11 @@ public class TAttribute {
         set = b;
     }
     
-    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkJavaKeyword) {
+	public static boolean isAValidId(String id, boolean checkKeyword, boolean checkJavaKeyword) {
+		return isAValidId(id, checkKeyword, checkJavaKeyword, false);
+	}
+	
+    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkJavaKeyword, boolean checkTMLKeyword) {
         // test whether _id is a word
         
         if ((id == null) || (id.length() < 1)) {
@@ -150,7 +155,7 @@ public class TAttribute {
         }
         
         String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b4, b5;
+        boolean b1, b2, b3, b4, b5, b6;
         b1 = (id.substring(0,1)).matches("[a-zA-Z]");
         b2 = id.matches("\\w*");
         if (checkKeyword) {
@@ -169,8 +174,14 @@ public class TAttribute {
         } else {
             b4 = true;
         }
+		
+		if (checkTMLKeyword) {
+            b6 = TMLTextSpecification.checkKeywords(lowerid);
+        } else {
+            b6 = true;
+        }
         
-        return (b1 && b2 && b3 && b4 && b5);
+        return (b1 && b2 && b3 && b4 && b5 && b6);
     }
     
     public static boolean isAValidInitialValue(int type, String value) {

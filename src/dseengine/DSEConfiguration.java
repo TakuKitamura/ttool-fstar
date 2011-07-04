@@ -49,7 +49,7 @@ package dseengine;
 import java.io.*;
 import java.util.*;
 
-//import tmltranslator.*;
+import tmltranslator.*;
 //import tmltranslator.touppaal.*;
 //import tmltranslator.tomappingsystemc.*;
 import tmltranslator.tomappingsystemc2.*;
@@ -66,9 +66,175 @@ import myutil.*;
 
 public class DSEConfiguration  {
 	
-
+	private String errorMessage;
+	
+	private final String PATH_TO_CODE = "No directory selected for putting the generated code";
+	private final String PATH_TO_RESULTS = "No directory selected for putting the results";
+	private final String PATH_TO_SOURCE = "No source model selected";
+	private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
+	private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
+	
+	private String pathToSimulator;
+	private String pathToResults;
+	
+	
+	private File mappingFile = null;
+	private String modelPath = "";
+	
+	private boolean outputVCD = false;
+	private boolean outputHTML = false;
+	
+	private TMLMapping tmap;
+	private TMLModeling tmlm;
+	
+	
+	
+	//private int nbOfSimulations;
+	
 	public  DSEConfiguration() {
 		
+	}
+	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	public int setModelPath(String _path) {
+		// Trying to read the file
+		modelPath = _path;
+		
+		return 0;
+	}
+	
+	public int setMappingFile(String _fileName) {
+		// Trying to read the file
+		mappingFile = new File(modelPath + _fileName);
+		if (!FileUtils.checkFileForOpen(mappingFile)) {
+			mappingFile = null;
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	public int setOutputVCD(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			outputVCD = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			outputVCD = false;
+			return 0;
+		}
+		
+		return -1;
+	}
+	
+	public int setPathToSimulator(String _value) {
+		pathToSimulator = _value;
+		return 0;
+	}
+	
+	public int setPathToResults(String _value) {
+		pathToResults = _value;
+		return 0;
+	}
+	
+	private boolean loadMapping(boolean _optimize) {
+		boolean ret = false;
+		//System.out.println("load");
+		String inputData = FileUtils.loadFileData(mappingFile);
+		TMLMappingTextSpecification spec = new TMLMappingTextSpecification("LoadedSpecification");
+		ret = spec.makeTMLMapping(inputData, modelPath);
+		TraceManager.addDev("load ended");
+		ArrayList<TMLError> warnings;
+		
+		if (!ret) {
+			TraceManager.addDev("Compilation:\n" + spec.printSummary());
+		}
+		
+		if (ret) {
+			//System.out.println("Format OK");
+			tmap = spec.getTMLMapping(); 
+			tmlm = tmap.getTMLModeling();
+			
+			//System.out.println("\n\n*** TML Modeling *** \n");
+			//TMLTextSpecification textspec = new TMLTextSpecification("toto");
+			//String s = textspec.toTextFormat(tmlm);
+			//System.out.println(s);
+			
+			// Checking syntax
+			TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
+			TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
+			syntax.checkSyntax();
+			if (syntax.hasErrors() != 0) {
+				return false;
+			}
+			
+			if (!ret) {
+				TraceManager.addDev("Compilation:\n" + syntax.printSummary());
+				return false;
+			}
+			
+			TraceManager.addDev("Compilation:\n" + spec.printSummary());
+			
+			
+			if (_optimize) {
+				warnings = tmlm.optimize();
+				TraceManager.addDev(tmlm.printSummary(warnings));
+			}
+			//spec.toTextFormat(tmlm);
+			//System.out.println("TMLModeling=" + spec);
+		}
+		
+		return ret;
+	}
+	
+	public int runSimulation(boolean _debug, boolean _optimize) {
+		
+		// Checking for valid arguments
+		if (pathToSimulator == null) {
+			errorMessage = PATH_TO_CODE;
+			return -1;
+		}
+		
+		if (pathToResults == null) {
+			errorMessage = PATH_TO_RESULTS;
+			return -1;
+		}
+		
+		if (mappingFile == null) {
+			errorMessage = PATH_TO_SOURCE;
+			return -1;
+		}
+		
+		if (!outputVCD && !outputHTML) {
+			errorMessage = NO_OUTPUT_SELECTED;
+			return -1;
+		}
+		
+		
+		
+		// Loading model
+		TraceManager.addDev("Loading mapping");
+		if (!loadMapping(_optimize)) {
+			errorMessage = LOAD_MAPPING_FAILED;
+			return -1;
+		}
+		
+		// Generating code
+		TraceManager.addDev("Generating simulation code...");
+		TML2MappingSystemC map = new TML2MappingSystemC(tmap);
+		map.generateSystemC(_debug, _optimize);
+		try {
+			map.saveFile(pathToSimulator, "appmodel");
+		} catch (Exception e) {
+			TraceManager.addDev("SystemC generation failed: " + e.getMessage());
+			return -1;
+		}
+		
+		return 0;
 	}
 	
 	

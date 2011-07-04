@@ -61,6 +61,7 @@ public class TMLSyntaxChecking {
 	private final String WRONG_DESTINATION_EVENT = "is not declared as a destination event of the task";
 	private final String WRONG_ORIGIN_REQUEST = "is not declared as an origin request of the task";
 	private final String SYNTAX_ERROR = "syntax error";
+	private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
 	private final String VARIABLE_ERROR = "variable is not used according to its type";
 	private final String UNDECLARED_VARIABLE = "unknown variable";
 	private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
@@ -215,6 +216,16 @@ public class TMLSyntaxChecking {
 		for(TMLTask t: tmlm.getTasks()) {
 			TMLActivity tactivity = t.getActivityDiagram();
 			TMLActivityElement elt;
+			
+			// Checking names of atrributes
+			for(TMLAttribute attri: t.getAttributes()) {
+				if (!TMLTextSpecification.isAValidId(attri.getName())) {
+					addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid identifier", TMLError.ERROR_STRUCTURE);
+				}
+			}
+			
+			
+			
 			int n = tactivity.nElements();
 			//System.out.println("Task" + t.getName());
 			for(int i=0; i<n; i++) {

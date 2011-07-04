@@ -252,7 +252,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		Vector v = getAssociationSignals();
 		
 		JDialogSignalAssociation jdas = new JDialogSignalAssociation(frame, block1, block2, v, this, "Setting signal association");
-        jdas.setSize(850, 550);
+        jdas.setSize(800, 550);
         GraphicLib.centerOnParent(jdas);
         jdas.show(); // blocked until dialog has been closed
 		

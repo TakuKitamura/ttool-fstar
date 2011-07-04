@@ -96,8 +96,10 @@ public class RunDSE  {
 			return true;
 		}
 		
-		if (args[1].equals("-debug")) {
-			return true;
+		if (args.length > 1) {
+			if (args[1].equals("-debug")) {
+				return true;
+			}
 		}
 		
 		return false;
@@ -108,8 +110,10 @@ public class RunDSE  {
 			return true;
 		}
 		
-		if (args[1].equals("-optimize")) {
-			return true;
+		if (args.length > 1) {
+			if (args[1].equals("-optimize")) {
+				return true;
+			}
 		}
 		
 		return false;
@@ -157,8 +161,16 @@ public class RunDSE  {
 		
 		
 		DSEScriptReader reader = new DSEScriptReader(args[0]);
+		reader.setDebug(debug);
+		reader.setOptimize(optimize);
 		
-		reader.execute();
+		int ret = reader.execute();
+		
+		if (ret != DSEScriptReader.OK) {
+			System.out.println("DSE: error at line " + reader.getLineOfError());
+		} else {
+			System.out.println("DSE was successfully executed"); 
+		}
 	
         
 	}

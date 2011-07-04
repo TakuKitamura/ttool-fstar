@@ -293,7 +293,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
+        c0.fill = GridBagConstraints.VERTICAL;
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);

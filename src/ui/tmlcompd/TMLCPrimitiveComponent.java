@@ -325,6 +325,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 		jda.enableInitialValue(true);
         jda.enableRTLOTOSKeyword(true);
         jda.enableJavaKeyword(false);
+		jda.enableTMLKeyword(false);
     }
 	
 	public Vector<String> getAllRecords() {

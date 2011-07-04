@@ -69,14 +69,29 @@ public class DSEScriptReader  {
 	public static final int OK = 1;
 	public static final int FILE_ERROR = 2;
 	public static final int KO = 4;
+	public static final int ERROR_WHEN_RUNNING = 5;
+	
+	private static String[] commands = {"MappingFile", "SimulationOutputVCD", 
+	"PathToSimulator", "PathToResults", //2, 3
+	"RunSimulation", "ModelPath"}; // 4, 5
 	
 	private String fileName;
 	private int lineOfError;
+	
+	private boolean debug;
+	private boolean optimize;
 
 	public  DSEScriptReader(String _fileName) {
 		fileName = _fileName;
 	}
 	
+	public void setDebug(boolean _debug) {
+		debug = _debug;
+	}
+	
+	public void setOptimize(boolean _optimize) {
+		optimize = _optimize;
+	}
 	
 	
 	// Return an eventual error
@@ -85,6 +100,13 @@ public class DSEScriptReader  {
 	// KO:
 	
 	public int execute() {
+		
+		if (debug) {
+			TraceManager.devPolicy = TraceManager.TO_CONSOLE;
+		} else {
+			TraceManager.devPolicy = TraceManager.TO_DEVNULL;
+		}
+		
 		String scriptToExecute = "";
 		try {
 			scriptToExecute = FileUtils.loadFile(fileName); 
@@ -109,6 +131,7 @@ public class DSEScriptReader  {
 					// Comment 
 				} else {
 					if (s.length() > 0) {
+						TraceManager.addDev("Excuting line: " + s);
 						ret = executeLineOfScript(s, config);
 						if (ret == SYNTAX_ERROR_IN_LINE) {
 							lineOfError = line;
@@ -124,6 +147,89 @@ public class DSEScriptReader  {
 	}
 	
 	private int executeLineOfScript(String _line, DSEConfiguration _config) {
+		int index;
+		String command;
+		String arguments;
+		
+		// Analyze the command
+		index = _line.indexOf('=');
+		
+		if (index == -1) {
+			arguments = "";
+			command = _line.trim();
+		} else {
+			command = _line.substring(0, index).trim();
+			arguments = _line.substring(index+1, _line.length()).trim();
+		}
+		
+		TraceManager.addDev("Command=" + command +  " arguments=" + arguments);
+		
+		// Look for a given command
+		for(int i=0; i<commands.length; i++) {
+			if (command.toLowerCase().compareTo(commands[i].toLowerCase()) == 0) {
+				return makeCommand(i, arguments, _config);
+			}
+		}
+		
+		TraceManager.addDev(command + " is not a valid command");
+		
+		// If no comamnd found -> return 
+		return SYNTAX_ERROR_IN_LINE;
+	}
+	
+	private int makeCommand(int _commandID, String _arguments, DSEConfiguration _config) {
+		switch(_commandID) {
+			case 0:
+				return makeMappingFile(_arguments, _config);
+			case 1:
+				if (_config.setOutputVCD(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+				
+			case 2:
+				if (_config.setPathToSimulator(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+				
+			case 3:
+				if (_config.setPathToResults(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 4:
+				if (_config.runSimulation(debug, optimize) != 0) {
+					return ERROR_WHEN_RUNNING;
+				}
+				return OK;
+				
+			case 5:
+				if (_config.setModelPath(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+		}
+		
+		return KO;
+	}
+	
+	private int makeMappingFile(String _arguments, DSEConfiguration _config) {
+		int index = _arguments.indexOf(" ");
+		if (index != -1) {
+			TraceManager.addDev("\"=\" sign in argument: " + _arguments);
+			return SYNTAX_ERROR_IN_LINE;
+		}
+		
+		if (_config.setMappingFile(_arguments) <0) {
+			TraceManager.addDev("Checking file for open " + _arguments + " failed");
+			return SYNTAX_ERROR_IN_LINE;
+		}
+		
+		if (debug) {
+			TraceManager.addDev("Mapping file correctly set to \"" + _arguments + "\"");
+		}
+		
 		return OK;
 	}
 	
