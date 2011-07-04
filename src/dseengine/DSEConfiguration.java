@@ -155,7 +155,7 @@ public class DSEConfiguration  {
 		}
 		
 		if (ret) {
-			//System.out.println("Format OK");
+			System.out.println("Format OK");
 			tmap = spec.getTMLMapping(); 
 			tmlm = tmap.getTMLModeling();
 			
@@ -168,15 +168,15 @@ public class DSEConfiguration  {
 			TraceManager.addDev("--- Checking syntax of the whole specification (TML, TARCHI, TMAP)---");
 			TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
 			syntax.checkSyntax();
-			if (syntax.hasErrors() != 0) {
+			if (syntax.hasErrors() > 0) {
+				TraceManager.addDev("Printing errors:");
+				TraceManager.addDev(syntax.printErrors());
 				return false;
 			}
 			
-			if (!ret) {
-				TraceManager.addDev("Compilation:\n" + syntax.printSummary());
-				return false;
-			}
-			
+
+			TraceManager.addDev("Compilation:\n" + syntax.printSummary());
+		
 			TraceManager.addDev("Compilation:\n" + spec.printSummary());
 			
 			
@@ -185,10 +185,10 @@ public class DSEConfiguration  {
 				TraceManager.addDev(tmlm.printSummary(warnings));
 			}
 			//spec.toTextFormat(tmlm);
-			//System.out.println("TMLModeling=" + spec);
+			System.out.println("TMLModeling=" + spec);
 		}
 		
-		return ret;
+		return true;
 	}
 	
 	public int runSimulation(boolean _debug, boolean _optimize) {
@@ -220,17 +220,19 @@ public class DSEConfiguration  {
 		TraceManager.addDev("Loading mapping");
 		if (!loadMapping(_optimize)) {
 			errorMessage = LOAD_MAPPING_FAILED;
+			TraceManager.addDev("Loading of the mapping faild!!!!");
 			return -1;
 		}
 		
 		// Generating code
-		TraceManager.addDev("Generating simulation code...");
+		TraceManager.addDev("\n\n\n**** Generating simulation code...");
 		TML2MappingSystemC map = new TML2MappingSystemC(tmap);
-		map.generateSystemC(_debug, _optimize);
 		try {
+			map.generateSystemC(_debug, _optimize);
 			map.saveFile(pathToSimulator, "appmodel");
 		} catch (Exception e) {
-			TraceManager.addDev("SystemC generation failed: " + e.getMessage());
+			TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
+			e.printStackTrace();
 			return -1;
 		}
 		

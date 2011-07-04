@@ -2378,11 +2378,11 @@ public class TMLTextSpecification {
 		}
 		
 		if (_input.startsWith("ORIF(")) {
-				_input = "ORIF (" + _input.substring(7, _input.length());
+				_input = "ORIF (" + _input.substring(5, _input.length());
 		}
 		
 		if (_input.startsWith("ORIF (")) {
-				tmp = _input.substring(8, _input.length());
+				tmp = _input.substring(6, _input.length());
 				tmp = Conversion.replaceAllString(tmp, " ", "");
 				return "ORIF (" + tmp;
 		}	
