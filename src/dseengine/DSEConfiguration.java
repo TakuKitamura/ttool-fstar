@@ -73,6 +73,11 @@ public class DSEConfiguration  {
 	private final String PATH_TO_SOURCE = "No source model selected";
 	private final String NO_OUTPUT_SELECTED = "No format ofr the output has been selected";
 	private final String LOAD_MAPPING_FAILED = "Loading of the mapping failed";
+	private final String SIMULATION_COMPILATION_COMMAND_NOT_SET = "Compilation command missing";
+	private final String SIMULATION_EXECUTION_COMMAND_NOT_SET = "Command to start simulation was noit set";
+	
+	private String simulationCompilationCommand = null;
+	private String simulationExecutionCommand = null;
 	
 	private String pathToSimulator;
 	private String pathToResults;
@@ -83,9 +88,14 @@ public class DSEConfiguration  {
 	
 	private boolean outputVCD = false;
 	private boolean outputHTML = false;
+	private boolean outputTXT = false;
 	
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
+	
+	private boolean optionChanged = true;
+	
+	private int simulationID = 0;
 	
 	
 	
@@ -102,6 +112,7 @@ public class DSEConfiguration  {
 	public int setModelPath(String _path) {
 		// Trying to read the file
 		modelPath = _path;
+		optionChanged = true;
 		
 		return 0;
 	}
@@ -110,9 +121,11 @@ public class DSEConfiguration  {
 		// Trying to read the file
 		mappingFile = new File(modelPath + _fileName);
 		if (!FileUtils.checkFileForOpen(mappingFile)) {
+			optionChanged = true;
 			mappingFile = null;
 			return -1;
 		}
+		
 		
 		return 0;
 	}
@@ -120,11 +133,45 @@ public class DSEConfiguration  {
 	public int setOutputVCD(String _value) {
 		if (_value.toLowerCase().compareTo("true") == 0) {
 			outputVCD = true;
+			optionChanged = true;
 			return 0;
 		}
 		
 		if (_value.toLowerCase().compareTo("false") == 0) {
 			outputVCD = false;
+			optionChanged = true;
+			return 0;
+		}
+		
+		return -1;
+	}
+		
+	public int setOutputHTML(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			outputHTML = true;
+			optionChanged = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			outputHTML = false;
+			optionChanged = true;
+			return 0;
+		}
+		
+		return -1;
+	}
+		
+	public int setOutputTXT(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			outputTXT = true;
+			optionChanged = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			outputTXT = false;
+			optionChanged = true;
 			return 0;
 		}
 		
@@ -133,11 +180,25 @@ public class DSEConfiguration  {
 	
 	public int setPathToSimulator(String _value) {
 		pathToSimulator = _value;
+		optionChanged = true;
 		return 0;
 	}
 	
 	public int setPathToResults(String _value) {
 		pathToResults = _value;
+		optionChanged = true;
+		return 0;
+	}
+	
+	public int setSimulationCompilationCommand(String _value) {
+		simulationCompilationCommand = _value;
+		optionChanged = true;
+		return 0;
+	}
+		
+	public int setSimulationExecutionCommand(String _value) {
+		simulationExecutionCommand = _value;
+		optionChanged = true;
 		return 0;
 	}
 	
@@ -209,11 +270,19 @@ public class DSEConfiguration  {
 			return -1;
 		}
 		
-		if (!outputVCD && !outputHTML) {
+		if (!outputVCD && !outputHTML && !outputTXT) {
 			errorMessage = NO_OUTPUT_SELECTED;
 			return -1;
 		}
 		
+		if (simulationCompilationCommand == null) {
+			errorMessage = SIMULATION_COMPILATION_COMMAND_NOT_SET;
+		}
+		
+		
+		if (simulationExecutionCommand == null) {
+			errorMessage = SIMULATION_EXECUTION_COMMAND_NOT_SET;
+		}
 		
 		
 		// Loading model
@@ -225,18 +294,74 @@ public class DSEConfiguration  {
 		}
 		
 		// Generating code
-		TraceManager.addDev("\n\n\n**** Generating simulation code...");
-		TML2MappingSystemC map = new TML2MappingSystemC(tmap);
-		try {
-			map.generateSystemC(_debug, _optimize);
-			map.saveFile(pathToSimulator, "appmodel");
-		} catch (Exception e) {
-			TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
-			e.printStackTrace();
-			return -1;
+		if (optionChanged) {
+			TraceManager.addDev("\n\n\n**** Generating simulation code...");
+			TML2MappingSystemC map = new TML2MappingSystemC(tmap);
+			try {
+				map.generateSystemC(_debug, _optimize);
+				map.saveFile(pathToSimulator, "appmodel");
+			} catch (Exception e) {
+				TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
+				e.printStackTrace();
+				return -1;
+			}
+			
+			// Compiling the code
+			makeCommand(simulationCompilationCommand + " " + pathToSimulator);
+			
+			optionChanged = false;
 		}
 		
+		
+		// Executing the simulation
+		String cmd = pathToSimulator + simulationExecutionCommand;
+		
+		if (outputVCD) {
+			cmd += " -ovcd " + pathToResults + "output" + simulationID + ".vcd";
+		}
+		
+		if (outputHTML) {
+			cmd += " -ohtml " + pathToResults + "output" + simulationID + ".html";
+		}
+			
+		if (outputTXT) {
+			cmd += " -otxt " + pathToResults + "output" + simulationID + ".txt";
+		}
+		
+		makeCommand(cmd);
+		
+		simulationID ++;
 		return 0;
+	}
+	
+	public void makeCommand(String cmd) {
+		String str = null;
+		BufferedReader proc_in, proc_err;
+        //PrintStream out = null;
+        
+        try {
+            TraceManager.addDev("Going to start command " + cmd);
+            
+            java.lang.Process proc = Runtime.getRuntime().exec(cmd);
+            
+            proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+            
+            //et = new ErrorThread(proc_err, mpi);
+            //et.start();
+            
+            while ((str = proc_in.readLine()) != null){    
+                TraceManager.addDev("Out " + str);
+                //mpi.appendOut(str+"\n");             
+            }
+            
+            //et.stopProcess();
+            
+        } catch (Exception e) {
+            TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+        }
+        TraceManager.addDev("Ending command " + cmd);
+		
 	}
 	
 	

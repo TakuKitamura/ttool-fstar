@@ -73,7 +73,10 @@ public class DSEScriptReader  {
 	
 	private static String[] commands = {"MappingFile", "SimulationOutputVCD", 
 	"PathToSimulator", "PathToResults", //2, 3
-	"RunSimulation", "ModelPath"}; // 4, 5
+	"RunSimulation", "ModelPath", // 4, 5
+	"simulationCompilationCommand", "simulationExecutionCommand", // 6, 7
+	"SimulationOutputHTML", "SimulationOutputTxt" // 8, 9
+	};
 	
 	private String fileName;
 	private int lineOfError;
@@ -209,6 +212,29 @@ public class DSEScriptReader  {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
+				
+			case 6:
+				if (_config.setSimulationCompilationCommand(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+				
+			case 7:
+				if (_config.setSimulationExecutionCommand(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 8:
+				if (_config.setOutputHTML(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 9:
+				if (_config.setOutputTXT(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			
 		}
 		
 		return KO;
