@@ -82,8 +82,9 @@ public class TML2MappingSystemC {
 	}
 	
 	public TML2MappingSystemC(TMLMapping _tmlmapping) {
-        tmlmapping = _tmlmapping;
+		tmlmapping = _tmlmapping;
 		tmlmapping.makeMinimumMapping();
+		tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
  	}
 
 	public TML2MappingSystemC(TMLModeling _tmlm, ArrayList<EBRDD> _ebrdds, ArrayList<TEPE> _tepes) {
