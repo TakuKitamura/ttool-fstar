@@ -49,6 +49,10 @@ package tmltranslator;
 
 public abstract class TMLCommunicationElement extends TMLElement {
    private boolean infected;
+   
+   private boolean isLossy;
+   private int lossPercentage;
+   private int maxNbOfLoss;
     
     public TMLCommunicationElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -56,5 +60,12 @@ public abstract class TMLCommunicationElement extends TMLElement {
     
     public abstract boolean isBlockingAtOrigin();
 	public abstract boolean isBlockingAtDestination();
+	
+	// No maxNbOfLoss -> set it to -1
+	public void setLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+		isLossy = _isLossy;
+		lossPercentage = _percentage;
+		maxNbOfLoss = _maxNbOfLoss;
+	}
 	
 }
