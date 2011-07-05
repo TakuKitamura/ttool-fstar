@@ -82,25 +82,46 @@ using std::max;
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
+//enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
+//cost of a send/wait command
 #define WAIT_SEND_VLEN 1
+//activate tis flag to take penalties (energy mode, branch prediction, context switch) into account
 #undef PENALTIES_ENABLED
+//enables the state hash feature
 #define STATE_HASH_ENABLED
+//enables listerns for interactive simulation, switch off for fast simulation in command line mode
 #define LISTENERS_ENABLED
+//enables listeners needed for coverage enhanced simulation
 #define EXPLO_ENABLED
+//ebrdds are not supported any more
 #undef EBRDD_ENABLED
+//enables the output of a reachability graph for coverage enhanced simulation
 #define EXPLOGRAPH_ENABLED
+//enable recording of transactions
 #define TRANSLIST_ENABLED
+//enable lossy channels
 #undef LOSS_ENABLED
-
-#define CLOCK_INC 20
-#define BLOCK_SIZE_TRANS 8000000
-#define BLOCK_SIZE_PARAM 5000
-#define BLOCK_SIZE_COMMENT 100
-#define PARAMETER_BLOCK_SIZE 1000
+//enables comments on actions/choices in HTML output
 #undef ADD_COMMENTS
-#define NO_EVENTS_TO_LOAD 10
+//enable this flag to restore benchmark variables correctly in coverage enhanced simulation
 #define SAVE_BENCHMARK_VARS 
+
+//Clock scale for VCD output
+#define CLOCK_INC 20
+//size of memory chunk for transaction allocation
+#define BLOCK_SIZE_TRANS 8000000
+//size of memory chunk for parameter allocation
+#define BLOCK_SIZE_PARAM 5000
+//size of memory chunk for comment allocation
+#define BLOCK_SIZE_COMMENT 100
+//size of memory chunks for parameter allocation
+#define PARAMETER_BLOCK_SIZE 1000
+//Number of events to be loaded at once from a file if content of event channel is associated to a file
+#define NO_EVENTS_TO_LOAD 10
+
+
+//port on which the server
 #define PORT "3490"
 #define BACKLOG 10
 
