@@ -104,6 +104,8 @@ public class ColorManager {
 
 
     public static final Color REQ_ATTRIBUTE_BOX = new Color(179, 249, 179);
+	
+	public static final Color LOSSY = new Color(139, 139, 139);
     //public static final Color REQ_ATTRIBUTE_BOX = new Color(190, 229, 158);
     public static final Color OBS_ATTRIBUTE_BOX = new Color(225, 247, 225);
     

@@ -74,7 +74,7 @@ public class TMLTextSpecification {
 	private TMLActivityElement tmlae;
 	private ArrayList<TMLParserSaveElt> parses;
 	
-	private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "BRBW", "NBRNBW", 
+	private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW", 
 		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
 	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
 	"RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
@@ -196,6 +196,10 @@ public class TMLTextSpecification {
 				sb += SP + ch.getMax();
 			}
 			sb += SP + ch.getOriginTask().getName() + SP + ch.getDestinationTask().getName() + CR;
+			
+			if (ch.isLossy()) {
+				sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
+			}
 		}
 		sb+= CR;
 		
@@ -216,6 +220,10 @@ public class TMLTextSpecification {
 			sb +=  SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
 			
 			sb+= CR;
+			
+			if (evt.isLossy()) {
+				sb += "LOSSYEVENT" + SP + evt.getName() + SP + evt.getLossPercentage() + SP + evt.getMaxNbOfLoss() + CR;
+			}
 		}
 		sb+= CR;
 		
@@ -234,6 +242,10 @@ public class TMLTextSpecification {
 			}
 			sb += SP + request.getDestinationTask().getName();
 			sb+= CR;
+			
+			if (request.isLossy()) {
+				sb += "LOSSYREQUEST" + SP + request.getName() + SP + request.getLossPercentage() + SP + request.getMaxNbOfLoss() + CR;
+			}
 		}
 		sb+= CR;
 		

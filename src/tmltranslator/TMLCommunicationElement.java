@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TMLElement
+ * Class TMLCommunicationElement
  * Creation: 22/11/2005
  * @version 1.0 22/11/2005
  * @author Ludovic APVRILLE
@@ -67,5 +67,19 @@ public abstract class TMLCommunicationElement extends TMLElement {
 		lossPercentage = _percentage;
 		maxNbOfLoss = _maxNbOfLoss;
 	}
+	
+	public boolean isLossy() {
+		return isLossy;
+	}
+	
+	public int getLossPercentage() {
+		return lossPercentage;
+	}
+	
+	public int getMaxNbOfLoss() {
+		return maxNbOfLoss;
+	}
+	
+	
 	
 }

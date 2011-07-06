@@ -56,13 +56,17 @@ import myutil.*;
 
 public class JDialogTMLCompositePort extends javax.swing.JDialog implements ActionListener {
 	
-    private JPanel panel1, panel2;
+    private JPanel panel1, panel2, panel3;
     private Frame frame;
     
     private String name;
     private TType type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
+	
+	private boolean isLossy;
+	private int lossPercentage;
+	private int maxNbOfLoss; //-1 means no max
 
     public boolean data;
 
@@ -76,11 +80,16 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
 	private Vector<String> types;
     
+	// Robustness
+	private JCheckBox isLossyBox;
+	private JTextField lossPercentageText, maxNbOfLossText;
+	
+	
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, Frame f, String title, Vector<String> _types) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types) {
         super(f, title, true);
         frame = f;
         
@@ -97,6 +106,10 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		isOrigin = _isOrigin;
         isFinite = _isFinite;
         isBlocking = _isBlocking;
+		
+		isLossy = _isLossy;
+		lossPercentage = _lossPercentage;
+		maxNbOfLoss = _maxNbOfLoss;
         
         myInitComponents();
         initComponents();
@@ -167,6 +180,8 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c2 = new GridBagConstraints();
+		GridBagLayout gridbag3 = new GridBagLayout();
+        GridBagConstraints c3 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -387,6 +402,40 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         blocking.setSelected(isBlocking);
         blocking.addActionListener(this);
         panel2.add(blocking, c1);*/
+		
+		// Robustness
+        panel3 = new JPanel();
+        panel3.setLayout(gridbag3);
+        panel3.setBorder(new javax.swing.border.TitledBorder("Robustness "));
+        panel3.setPreferredSize(new Dimension(300, 300));
+		c3.gridwidth = 1;
+        c3.gridheight = 1;
+        c3.weighty = 1.0;
+        c3.weightx = 1.0;
+        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c3.fill = GridBagConstraints.BOTH;
+        c3.gridheight = 3;
+        panel3.add(new JLabel(" "), c3);
+		
+         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c3.fill = GridBagConstraints.HORIZONTAL;
+        c3.anchor = GridBagConstraints.CENTER;
+		isLossyBox = new JCheckBox("Lossy");
+		isLossyBox.setSelected(isLossy);
+        panel3.add(isLossyBox, c3);
+		
+		c3.gridwidth = 1;
+		panel3.add(new JLabel("Loss percentage"), c3);
+		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+		lossPercentageText = new JTextField(""+lossPercentage);
+		panel3.add(lossPercentageText, c3);
+		
+		c3.gridwidth = 1;
+		panel3.add(new JLabel("Max nb of loss"), c3);
+		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+		maxNbOfLossText = new JTextField(""+maxNbOfLoss);
+		panel3.add(maxNbOfLossText, c3);
+      
 
         // main panel;
         c0.gridwidth = 1;
@@ -394,9 +443,11 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c0.fill = GridBagConstraints.BOTH;
         
         c.add(panel1, c0);
         c.add(panel2, c0);
+		 c.add(panel3, c0);
         
         c0.gridheight = 1;
         c0.fill = GridBagConstraints.HORIZONTAL;
@@ -559,5 +610,25 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		}
 		
 		return types.get(index-3);
+	}
+	
+	public boolean isLossy() {
+		return isLossyBox.isSelected();
+	}
+	
+	public int getLossPercentage() {
+		try {
+			return Integer.decode(lossPercentageText.getText().trim()).intValue();
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+	
+	public int getMaxNbOfLoss() {
+		try {
+			return Integer.decode(maxNbOfLossText.getText().trim()).intValue();
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 }

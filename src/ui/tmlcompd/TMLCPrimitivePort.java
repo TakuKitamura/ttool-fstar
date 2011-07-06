@@ -76,6 +76,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	protected int oldTypep = typep;
 	protected String commName;
 	
+	protected boolean isLossy;
+	protected int lossPercentage;
+	protected int maxNbOfLoss; //-1 means no max
+	
 	protected int decPoint = 3;
 	
     
@@ -231,8 +235,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		px[2] = xtmp;
 		py[2] = ytmp;
 		
+		if (isLossy) {
+			g.setColor(ColorManager.LOSSY);
+		}
 		g.drawPolygon(px, py, 3);
 		g.fillPolygon(px, py, 3);
+		g.setColor(c);
 		
 		if (isBlocking) {
 			switch(currentOrientation) {
@@ -402,8 +410,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 			otherTypes = tgc.getAllRecords();
 		}
 		
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, frame, "Port properties", otherTypes);
-        jda.setSize(350, 550);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes);
+        jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda);
         jda.show(); // blocked until dialog has been closed
         
@@ -420,6 +428,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 				isFinite = jda.isFinite();
 				isBlocking = jda.isBlocking();
 				commName = jda.getParamName();
+				isLossy = jda.isLossy();
+				lossPercentage = jda.getLossPercentage();
+				maxNbOfLoss = jda.getMaxNbOfLoss();
 				oldTypep = typep;
 				typep = jda.getPortType();
 				for(int i=0; i<nbMaxAttribute; i++) {
@@ -466,6 +477,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
         sb.append("\" maxSamples=\"" + maxSamples);
 		sb.append("\" widthSamples=\"" + widthSamples);
+		sb.append("\" isLossy=\"" + isLossy);
+		sb.append("\" lossPercentage=\"" + lossPercentage);
+		sb.append("\" maxNbOfLoss=\"" + maxNbOfLoss);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //System.out.println("Attribute:" + i);
@@ -535,12 +549,24 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 									//System.out.println("Setting width");
 									widthSamples = Integer.decode(elt.getAttribute("widthSamples")).intValue();
 								} catch (Exception e) {
-									System.out.println("Exception:" + e.getMessage());
+								
 								}
+								
+								try {
+									lossPercentage = Integer.decode(elt.getAttribute("lossPercentage")).intValue();
+									maxNbOfLoss = Integer.decode(elt.getAttribute("maxNbOfLoss")).intValue();
+									isLossy = (elt.getAttribute("isLossy").compareTo("true") ==0);
+								} catch (Exception e) {
+									lossPercentage = 0;
+									maxNbOfLoss = -1;
+									isLossy = false;
+								}
+								
                                 try {
                                     isBlocking = (elt.getAttribute("blocking").compareTo("true") ==0);
 									isOrigin = (elt.getAttribute("origin").compareTo("true") ==0);
-									isFinite = (elt.getAttribute("finite").compareTo("true") ==0);
+								isFinite = (elt.getAttribute("finite").compareTo("true") ==0);
+									
                                 } catch (Exception e) {}
                                 
                             }
@@ -673,6 +699,18 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		}
 		
 		return attr;
+	}
+	
+	public boolean isLossy() {
+		return isLossy;
+	}
+	
+	public int getLossPercentage() {
+		return lossPercentage;
+	}
+	
+	public int getMaxNbOfLoss() {
+		return maxNbOfLoss;
 	}
 	
 }

@@ -678,6 +678,11 @@ public class GTMLModeling  {
 							tt1 = tmlm.getTMLTaskByName(makeName(port1, port1.getFather().getValue()));
 							tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
 							channel.setTasks(tt1, tt2);
+							
+							if (port1.isLossy()) {
+								channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+							}
+							
 							tmlm.addChannel(channel);
 							listE.addCor(channel, tgc);
 							TraceManager.addDev("Adding channel " + channel.getName());
@@ -816,6 +821,10 @@ public class GTMLModeling  {
 							tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
                             TraceManager.addDev("Tasks of event: t1=" + tt1.getName() + " t2=" + tt2.getName());
 							event.setTasks(tt1, tt2);
+							
+							if (port1.isLossy()) {
+								event.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+							} 
 							tmlm.addEvent(event);
 							listE.addCor(event, tgc);
 							TraceManager.addDev("Adding event " + event.getName());
@@ -992,6 +1001,9 @@ public class GTMLModeling  {
 							otherReq.addOriginTask(request.getOriginTasks().get(i));
 						}
 					} else {
+						if (port1.isLossy()) {
+								request.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+							} 
 						tmlm.addRequest(request);
 						listE.addCor(request, tgc);
 						//TraceManager.addDev("Adding request " + request.getName());
