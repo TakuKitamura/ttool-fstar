@@ -160,8 +160,8 @@ public class TClassChannelBRNBW extends TClass {
 				
 				adap1 = new ADActionStateWithParam(sample);
 				adap1.setActionValue("samples + 1");
-				acnotlost.addNext(adj);
-				adap1.addNext(acnotlost);
+				acnotlost.addNext(adap1);
+				adap1.addNext(adj);
 				
 				ad.add(choiceLoss);
 				ad.add(adap1);
