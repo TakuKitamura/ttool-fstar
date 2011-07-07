@@ -145,7 +145,7 @@ public class TML2TURTLE {
 				break;
 			default:
 				tch2 = new TClassChannelNBRNBW(name, channel.getName());
-				tch2.makeTClass();
+				tch2.makeTClass(channel.isLossy(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch2);
             }
         }

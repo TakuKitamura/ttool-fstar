@@ -55,15 +55,15 @@ public class TClassChannelNBRNBW extends TClass {
       channelName = _channelName;
     }
 
-    public void makeTClass() {
+    public void makeTClass(boolean _lossy, int _maxNbOfLoss) {
         //System.out.println("toto1");
         
-        Gate read, write;
-        ADActionStateWithGate acread, acwrite;
-        ADChoice choice;
-        //ADStop adstop;
+        Gate read, write, loss = null, notloss = null;
+        ADActionStateWithGate acread, acwrite, aclost, acnotlost;
+        ADChoice choice, choiceLoss;
+        ADActionStateWithParam adap1, adap2; 
         ADJunction adj;
-       
+		
         ActivityDiagram ad = new ActivityDiagram();
         
         /*Param nb = new Param("nb", Param.NAT, "0");
@@ -71,9 +71,24 @@ public class TClassChannelNBRNBW extends TClass {
         
         Param x = new Param("x", Param.NAT, "0");
         addParameter(x);*/
+		
+		Param max = null;
+		Param currentLoss = null;
+		
+		if ((_lossy) && (_maxNbOfLoss > -1)) {
+			max = new Param("maxLoss", Param.NAT, ""+_maxNbOfLoss);
+			addParameter(max);
+			currentLoss = new Param("currentLoss", Param.NAT, "0");
+			addParameter(currentLoss);
+		}
         
         read = addNewGateIfApplicable("rd__" + channelName);
         write = addNewGateIfApplicable("wr__" + channelName);
+		
+		if (_lossy) {
+			loss = addNewGateIfApplicable("msglost__" + channelName);
+			notloss = addNewGateIfApplicable("msgNotLost__" + channelName);
+		}
         
         adj = new ADJunction();
         ad.getStartState().addNext(adj);
@@ -90,7 +105,63 @@ public class TClassChannelNBRNBW extends TClass {
         acwrite.setActionValue("");
         choice.addNext(acwrite);
         ad.add(acwrite);
-        acwrite.addNext(adj);
+		
+		if (_lossy) {
+			if (_maxNbOfLoss > -1) {
+				choiceLoss = new ADChoice();
+				choiceLoss.addGuard("[]");
+				choiceLoss.addGuard("[currentLoss < maxLoss]");
+				acwrite.addNext(choiceLoss);
+				
+				acnotlost = new ADActionStateWithGate(notloss);
+				acnotlost.setActionValue("");
+				ad.add(acnotlost);
+				choiceLoss.addNext(acnotlost);
+				
+				aclost = new ADActionStateWithGate(loss);
+				aclost.setActionValue("");
+				ad.add(aclost);
+				
+				choiceLoss.addNext(aclost);
+				
+				adap2 = new ADActionStateWithParam(currentLoss);
+				adap2.setActionValue("currentLoss + 1");
+				adap2.addNext(adj);
+				aclost.addNext(adap2);
+				
+				acnotlost.addNext(adj);
+				
+				ad.add(choiceLoss);
+				ad.add(adap2);
+				ad.add(aclost);
+				ad.add(acnotlost);
+			} else {
+				choiceLoss = new ADChoice();
+				choiceLoss.addGuard("[]");
+				choiceLoss.addGuard("[]");
+				acwrite.addNext(choiceLoss);
+				
+				 acnotlost = new ADActionStateWithGate(notloss);
+				 acnotlost.setActionValue("");
+				 ad.add(acnotlost);
+				 choiceLoss.addNext(acnotlost);
+				 
+				 aclost = new ADActionStateWithGate(loss);
+				 aclost.setActionValue("");
+				 ad.add(aclost);
+				
+				choiceLoss.addNext(aclost);
+				aclost.addNext(adj);
+				
+				acnotlost.addNext(adj);
+				
+				ad.add(choiceLoss);
+				ad.add(aclost);
+				ad.add(acnotlost);
+			}
+		} else {
+			acwrite.addNext(adj);
+		}
         
         acread = new ADActionStateWithGate(read);
         acread.setActionValue("");
