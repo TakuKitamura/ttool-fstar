@@ -715,6 +715,52 @@ public class TMLTextSpecification {
 				tmlm.addChannel(ch);
 		} // CHANNEL
 		
+		
+		// LOSSYCHANNEL
+		if(isInstruction("LOSSYCHANNEL", _split[0])) {
+			if (!inDec) {
+				error = "A lossychannel may not be declared in a non-declaration part of a TML specification";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (!((_split.length > 3) && (_split.length < 5))) {
+				error = "A lossychannel must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			
+			if (!checkParameter("LOSSYCHANNEL", _split, 1, 0, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYCHANNEL", _split, 2, 1, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYCHANNEL", _split, 3, 1, _lineNb)) {
+				return -1;
+			}
+			
+			
+			ch = tmlm.getChannelByName(_split[1]);
+			if (ch == null) {
+				error = "lossy channel not previsouly declared as a regular channel " + _split[1];
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			try {
+				tmp0 = Integer.decode(_split[2]).intValue();
+				} catch (Exception e) {tmp0 = 5;}
+			try {
+				tmp1 = Integer.decode(_split[3]).intValue();
+				} catch (Exception e) {tmp1 = -1;}
+				
+				ch.setLossy(true, tmp0, tmp1);
+		} // LOSSYCHANNEL
+		
 		// EVENT
 		if(isInstruction("EVENT", _split[0])) {
 			if (!inDec) {
@@ -807,6 +853,51 @@ public class TMLTextSpecification {
 			
 		} // EVENT
 		
+		// LOSSYEVENT
+		if(isInstruction("LOSSYEVENT", _split[0])) {
+			if (!inDec) {
+				error = "A lossyevent may not be declared in a non-declaration part of a TML specification";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (!((_split.length > 3) && (_split.length < 5))) {
+				error = "A lossyevent must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			
+			if (!checkParameter("LOSSYEVENT", _split, 1, 0, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYEVENT", _split, 2, 1, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYEVENT", _split, 3, 1, _lineNb)) {
+				return -1;
+			}
+			
+			
+			evt = tmlm.getEventByName(_split[1]);
+			if (evt == null) {
+				error = "lossyevent not previsouly declared as a regular event " + _split[1];
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			try {
+				tmp0 = Integer.decode(_split[2]).intValue();
+				} catch (Exception e) {tmp0 = 5;}
+			try {
+				tmp1 = Integer.decode(_split[3]).intValue();
+				} catch (Exception e) {tmp1 = -1;}
+				
+				evt.setLossy(true, tmp0, tmp1);
+		} // LOSSYEVENT
+		
 		// REQUEST
 		if((isInstruction("REQUEST", _split[0])) && (inDec)) {
 			if (!inDec) {
@@ -865,6 +956,50 @@ public class TMLTextSpecification {
 			tmlm.addRequest(request);
 		} // REQUEST
 		
+		// LOSSYREQUEST
+		if(isInstruction("LOSSYREQUEST", _split[0])) {
+			if (!inDec) {
+				error = "A lossyrequest may not be declared in a non-declaration part of a TML specification";
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			if (!((_split.length > 3) && (_split.length < 5))) {
+				error = "A lossyrequest must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			
+			if (!checkParameter("LOSSYREQUEST", _split, 1, 0, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYREQUEST", _split, 2, 1, _lineNb)) {
+				return -1;
+			}
+			
+			if (!checkParameter("LOSSYREQUEST", _split, 3, 1, _lineNb)) {
+				return -1;
+			}
+			
+			
+			request = tmlm.getRequestByName(_split[1]);
+			if (request == null) {
+				error = "lossyrequest not previsouly declared as a regular event " + _split[1];
+				addError(0, _lineNb, 0, error);
+				return -1;
+			}
+			
+			try {
+				tmp0 = Integer.decode(_split[2]).intValue();
+				} catch (Exception e) {tmp0 = 5;}
+			try {
+				tmp1 = Integer.decode(_split[3]).intValue();
+				} catch (Exception e) {tmp1 = -1;}
+				
+				request.setLossy(true, tmp0, tmp1);
+		} // LOSSYREQUEST
 		
 		// TASK
 		if((isInstruction("TASK", _split[0]))) {
