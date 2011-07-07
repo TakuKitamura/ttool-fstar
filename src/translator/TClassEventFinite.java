@@ -302,6 +302,8 @@ public class TClassEventFinite extends TClass implements TClassEventCommon, FIFO
           adag.addNext(adj4);
         }
         
+		// if lossy: we don't make the foward!
+		
         adag = new ADActionStateWithGate(forward_0);
         ad.add(adag);
         action = "";
