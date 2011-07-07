@@ -140,7 +140,7 @@ public class TML2TURTLE {
 				break;
 			case TMLChannel.BRBW:
 				tch3 = new TClassChannelBRBW(name, channel.getName());
-				tch3.makeTClass(channel.getMax());
+				tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch3);
 				break;
 			default:
