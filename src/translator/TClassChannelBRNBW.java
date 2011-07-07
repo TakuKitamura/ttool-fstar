@@ -137,6 +137,7 @@ public class TClassChannelBRNBW extends TClass {
 				
 				ad.add(choiceLoss);
 				ad.add(adap1);
+				ad.add(adap2);
 				ad.add(aclost);
 				ad.add(acnotlost);
 			} else {
