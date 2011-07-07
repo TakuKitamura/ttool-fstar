@@ -135,7 +135,7 @@ public class TML2TURTLE {
             switch(channel.getType()) {
 			case TMLChannel.BRNBW:
 				tch1 = new TClassChannelBRNBW(name, channel.getName());
-				tch1.makeTClass();
+				tch1.makeTClass(channel.isLossy(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch1);
 				break;
 			case TMLChannel.BRBW:
