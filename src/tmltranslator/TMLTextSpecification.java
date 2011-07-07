@@ -739,7 +739,7 @@ public class TMLTextSpecification {
 				return -1;
 			}
 			
-			if (!checkParameter("LOSSYCHANNEL", _split, 3, 1, _lineNb)) {
+			if (!checkParameter("LOSSYCHANNEL", _split, 3, 9, _lineNb)) {
 				return -1;
 			}
 			
@@ -876,7 +876,7 @@ public class TMLTextSpecification {
 				return -1;
 			}
 			
-			if (!checkParameter("LOSSYEVENT", _split, 3, 1, _lineNb)) {
+			if (!checkParameter("LOSSYEVENT", _split, 3, 9, _lineNb)) {
 				return -1;
 			}
 			
@@ -979,7 +979,7 @@ public class TMLTextSpecification {
 				return -1;
 			}
 			
-			if (!checkParameter("LOSSYREQUEST", _split, 3, 1, _lineNb)) {
+			if (!checkParameter("LOSSYREQUEST", _split, 3, 9, _lineNb)) {
 				return -1;
 			}
 			
@@ -2408,6 +2408,11 @@ public class TMLTextSpecification {
 					err = true;
 				}
 				break;	
+			case 9:
+				if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
+					err = true;
+				}
+				break;
 			}
 		} else {
 			err = true;
@@ -2442,6 +2447,13 @@ public class TMLTextSpecification {
 	
 	public boolean isANumeral(String _num) {
 		return _num.matches("\\d*");
+	}
+	
+	public boolean isANegativeOrPositiveNumeral(String _num) {
+		if (_num.startsWith("-")) {
+			return isANumeral(_num.substring(1, _num.length()));
+		}
+		return isANumeral(_num);
 	}
 	
 	public boolean isAValidUnit(String s) {
