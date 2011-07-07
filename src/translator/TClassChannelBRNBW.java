@@ -132,8 +132,8 @@ public class TClassChannelBRNBW extends TClass {
 				adap2.addNext(adj);
 				aclost.addNext(adap2);
 				
-				acnotlost.addNext(adj);
-				adap1.addNext(acnotlost);
+				acnotlost.addNext(adap1);
+				adap1.addNext(adj);
 				
 				ad.add(choiceLoss);
 				ad.add(adap1);
