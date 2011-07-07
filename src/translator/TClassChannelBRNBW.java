@@ -76,7 +76,7 @@ public class TClassChannelBRNBW extends TClass {
 		if ((_lossy) && (_maxNbOfLoss > -1)) {
 			max = new Param("maxLoss", Param.NAT, ""+_maxNbOfLoss);
 			addParameter(max);
-			currentLoss = new Param("currentLoss", Param.NAT, ""+_maxNbOfLoss);
+			currentLoss = new Param("currentLoss", Param.NAT, "0");
 			addParameter(currentLoss);
 		}
         
