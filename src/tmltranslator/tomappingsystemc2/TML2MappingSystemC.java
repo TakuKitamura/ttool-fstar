@@ -287,7 +287,9 @@ public class TML2MappingSystemC {
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
 				System.out.println("Channel: " + channel.getName());
-				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority() + ")"+ SCCR;
+				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
+				if (channel.isLossy()) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
+				declaration += ")"+ SCCR;
 				declaration += "addChannel("+ channel.getExtendedName() +")"+ SCCR;
 			}
 		}
@@ -298,7 +300,7 @@ public class TML2MappingSystemC {
 		for(TMLEvent evt: tmlmodeling.getEvents()) {		
 			if (evt.isInfinite()) {
 				tmp = "TMLEventBChannel<ParamType," + evt.getNbOfParams() + ">";
-				param= ",0";
+				param= ",0,false,false";
 			} else {
 				if (evt.isBlocking()) {
 					tmp = "TMLEventFBChannel<ParamType," + evt.getNbOfParams() + ">";
@@ -311,12 +313,13 @@ public class TML2MappingSystemC {
 			//param += "," + evt.getNbOfParams();
 			if (tmlmapping.isCommNodeMappedOn(evt,null)){
 				System.out.println("Evt: " + evt.getName());
-				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param +")" + SCCR;
+				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param;
 				
 			}else{
-				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param +")" + SCCR;   ///old command
+				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\",0,0,0" + param;   ///old command
 			}
-
+			if (evt.isLossy()) declaration += "," + evt.getLossPercentage() + "," + evt.getMaxNbOfLoss();
+			declaration += ")" + SCCR;
 			declaration += "addEvent("+ evt.getExtendedName() +")"+ SCCR;
 		}
 		declaration += CR;
@@ -325,17 +328,20 @@ public class TML2MappingSystemC {
 		declaration += "//Declaration of requests" + CR;
 		for(TMLTask task: tmlmodeling.getTasks()) {
 			if (task.isRequested()){
-				if (tmlmapping.isCommNodeMappedOn(task.getRequest(),null)){
+				TMLRequest req = task.getRequest();
+				if (tmlmapping.isCommNodeMappedOn(req,null)){
 					//declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +
-					System.out.println("Request: " + task.getRequest().getName());
-					declaration += "TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">(" +
-					task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\"," +
-					determineRouting(tmlmapping.getHwNodeOf(task.getRequest().getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
-					tmlmapping.getHwNodeOf(task.getRequest().getDestinationTask()), task.getRequest()) + ",0,true)" + SCCR;
+					System.out.println("Request: " + req.getName());
+					declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" +
+					req.getID() + ",\"reqChannel"+ task.getName() + "\"," +
+					determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
+					tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
 				}else{
-					declaration += "TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + task.getRequest().getNbOfParams() + ">(" + //task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + task.getRequest().getNbOfParams() + ",true)" + SCCR;
-					task.getRequest().getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true)" + SCCR;
+					declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" + //req.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + req.getNbOfParams() + ",true)" + SCCR;
+					req.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0,true,false";
 				}
+				if (req.isLossy()) declaration += "," + req.getLossPercentage() + "," + req.getMaxNbOfLoss();
+				declaration += ")" + SCCR;
 				declaration += "addRequest(reqChannel_"+ task.getName() +")"+ SCCR;
 			}
 		}
