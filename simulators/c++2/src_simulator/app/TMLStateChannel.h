@@ -60,8 +60,10 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
+	\param iLossRate Loss rate of the channel
+	\param maxNbOfLosses Maximum number of losses
     	*/
-	TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority);
+	TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority, unsigned int iLossRate, unsigned int iMaxNbOfLosses);
 	///Destructor
 	virtual ~TMLStateChannel();
 	virtual std::ostream& writeObject(std::ostream& s);
@@ -83,6 +85,16 @@ protected:
 	mutable bool _overflow;
 	///Buffer underflow flag
 	mutable bool _underflow;
+#ifdef LOSS_ENABLED	
+	///Loss rate of the channel
+	unsigned int _lossRate;
+	///Maximum number of losses
+	unsigned int _maxNbOfLosses;
+	///Current nb of losses
+	unsigned int _nbOfLosses;
+	///Loss Reamainder
+	unsigned int _lossRemainder;
+#endif
 };
 
 #endif

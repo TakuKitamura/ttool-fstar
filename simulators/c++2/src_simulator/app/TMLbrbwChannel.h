@@ -61,8 +61,9 @@ public:
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
+	\param iLossy Indicates whether the channel is lossy
     	*/
-	TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, Priority iPriority);
+	TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, Priority iPriority, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();

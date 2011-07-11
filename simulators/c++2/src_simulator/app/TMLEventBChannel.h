@@ -64,8 +64,9 @@ public:
 	\param iContent Initial content of the channel
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file
+	\param iLossy Indicates whether the channel is lossy
     	*/
-	TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel=false, bool iSourceIsFile=false): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
+	TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iLossRate, iMaxNbOfLosses), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 		this->_overflow = false; 
 		if (_sourceIsFile){
 			std::cout << "try to open Event file " << this->_name.c_str() << std::endl;
@@ -90,24 +91,29 @@ public:
 	}
 
 	void write(TMLTransaction* iTrans){
-		this->_content++;
-	//#if paramNo>0
-		if (paramNo!=0){		
-			//this->_paramQueue.push_back(_tmpParam);
-			//std::cerr << "write!\n";
-			this->_tmpParam = iTrans->getCommand()->setParams(0);
-			this->_paramQueue.push_back(this->_tmpParam);
-	#ifdef STATE_HASH_ENABLED
-			this->_tmpParam->getStateHash(& this->_stateHash);  //new in if
-	#endif
+#ifdef LOSS_ENABLED
+		if ((this->_maxNbOfLosses > this->_nbOfLosses) && (myrand(0,99) < this->_lossRate)){
+			this->_nbOfLosses++;
+		}else{
+#endif
+			this->_content++;
+			if (paramNo!=0){		
+				//this->_paramQueue.push_back(_tmpParam);
+				//std::cerr << "write!\n";
+				this->_tmpParam = iTrans->getCommand()->setParams(0);
+				this->_paramQueue.push_back(this->_tmpParam);
+#ifdef STATE_HASH_ENABLED
+				this->_tmpParam->getStateHash(& this->_stateHash);  //new in if
+#endif
+			}
+			if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
+				this->_readTrans->setRunnableTime(iTrans->getEndTime());
+				this->_readTrans->setChannel(this);
+				this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
+			}
+#ifdef LOSS_ENABLED
 		}
-	//#endif
-		if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
-			this->_readTrans->setRunnableTime(iTrans->getEndTime());
-			this->_readTrans->setChannel(this);
-			this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
-		}
-		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
+#endif
 	#ifdef LISTENERS_ENABLED
 		NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
 	#endif
@@ -122,7 +128,6 @@ public:
 			if (this->_content==0 && _sourceIsFile) readNextEvents();
 			//std::cout << "read next" << std::endl;
 			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
-	//#if paramNo>0
 			if (paramNo!=0){
 				//std::cout << "read! ...";
 				//this->_paramQueue.front()->print();
@@ -131,7 +136,6 @@ public:
 				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
 				this->_paramQueue.pop_front();  //NEW
 			}
-	//#endif
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);

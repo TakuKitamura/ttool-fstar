@@ -41,7 +41,11 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLStateChannel.h>
 #include <HashAlgo.h>
 
-TMLStateChannel::TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iPriority): TMLChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iPriority), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false){
+TMLStateChannel::TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iPriority, unsigned int iLossRate, unsigned int iMaxNbOfLosses): TMLChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iPriority), _content(iContent), _nbToWrite(0), _nbToRead(0), _overflow(false), _underflow(false)
+#ifdef LOSS_ENABLED
+, _lossRate(iLossRate), _maxNbOfLosses(iMaxNbOfLosses*iWidth), _nbOfLosses(0), _lossRemainder(0)
+#endif
+{
 }
 
 TMLStateChannel::~TMLStateChannel(){}
@@ -70,6 +74,9 @@ void TMLStateChannel::reset(){
 	_content=0;
 	_nbToWrite=0;
 	_nbToRead=0;
+#ifdef LOSS_ENABLED
+	_nbOfLosses = 0;
+#endif
 	//std::cout << "StateChannel reset end" << std::endl;
 }
 
@@ -78,18 +85,6 @@ void TMLStateChannel::streamStateXML(std::ostream& s) const{
 	s << TAG_CONTENTo << _content << TAG_CONTENTc << TAG_TOWRITEo << _nbToWrite << TAG_TOWRITEc << TAG_TOREADo << _nbToRead << TAG_TOREADc;
 	s << TAG_CHANNELc << std::endl;
 }
-
-//TMLLength TMLStateChannel::getContent()  const{
-//	return _content;
-//}
-
-//bool TMLStateChannel::getOverflow() const{
-//	return _overflow;
-//}
-
-//bool TMLStateChannel::getUnderflow() const{
-//	return _underflow;
-//}
 
 void TMLStateChannel::getStateHash(HashAlgo* iHash) const{
 	if (_significance!=0){

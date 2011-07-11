@@ -43,21 +43,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLTransaction.h>
 
-TMLChannel::TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority), _significance(0) {
+TMLChannel::TMLChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, Priority iPriority): _ID(iID), _name(iName), _width(iWidth), _readTask(0), _writeTask(0), _writeTrans(0), _readTrans(0),_numberOfHops(iNumberOfHops), _masters(iMasters), _slaves(iSlaves), _writeTransCurrHop(0), _readTransCurrHop(iNumberOfHops-1), _priority(iPriority), _significance(0){
 }
 
 TMLChannel::~TMLChannel(){
 	if (_masters!=0) delete[] _masters;
 	if (_slaves!=0) delete[] _slaves;
 }
-
-//void TMLChannel::setBlockedReadTask(TMLTask* iReadTask){
-//	_readTask=iReadTask;
-//}
-
-//void TMLChannel::setBlockedWriteTask(TMLTask* iWriteTask){
-//	_writeTask=iWriteTask;
-//}
 
 BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 	//if (iTrans->getCommand()->getTask()==_writeTask){
@@ -102,10 +94,6 @@ Slave* TMLChannel::getNextSlave(TMLTransaction* iTrans) const{
 	}
 }
 
-//std::string TMLChannel::toShortString() const{
-//	return _name;
-//}
-
 std::ostream& TMLChannel::writeObject(std::ostream& s){
 	//WRITE_STREAM(s,_writeTransCurrHop);
 	//WRITE_STREAM(s,_readTransCurrHop);
@@ -124,8 +112,6 @@ std::istream& TMLChannel::readObject(std::istream& s){
 
 void TMLChannel::reset(){
 	//std::cout << "Channel reset" << std::endl;
-	//_readTask=0;
-	//_writeTask=0;
 	_writeTrans=0;
 	_readTrans=0;
 	_writeTransCurrHop=0;
@@ -135,37 +121,6 @@ void TMLChannel::reset(){
 	//std::cout << "Channel reset end" << std::endl;
 }
 
-//ID TMLChannel::getID() const {
-//	return _ID;
-//}
-
-//TMLLength TMLChannel::insertSamples(TMLLength iNbOfSamples, Parameter* iParam){
-//	return iNbOfSamples;
-//}
-
-//void TMLChannel::streamStateXML(std::ostream& s) const{
-//}
-
-//TMLLength TMLChannel::getContent() const{
-//	return 0;
-//}
-
-//bool TMLChannel::getOverflow() const{
-//	return false;
-//}
-
-//bool TMLChannel::getUnderflow() const{
-//	return false;
-//}
-
-//Priority TMLChannel::getPriority(){
-//	return _priority;
-//}
-
-//unsigned int TMLChannel::getWidth(){
-//	return _width;
-//}
-
 void TMLChannel::setSignificance(TMLTask* iTask, bool iSignificance){
 	//unsigned int aInput = (iTask==_writeTask)?1:2;
 	unsigned char aInput = (iTask==_writeTask)?1:2;
@@ -174,11 +129,3 @@ void TMLChannel::setSignificance(TMLTask* iTask, bool iSignificance){
 	else
 		_significance &= (~aInput);
 }
-
-//bool TMLChannel::getSignificance(){
-//	return (_significance != 0);
-//}
-
-//bool TMLChannel::mappedOnBus(){
-//	return _numberOfHops!=0;
-//}

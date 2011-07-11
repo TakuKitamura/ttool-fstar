@@ -64,7 +64,7 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
 //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
 //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 {
-	std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
+	//std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
 	//_transactList.reserve(BLOCK_SIZE);
 }
 

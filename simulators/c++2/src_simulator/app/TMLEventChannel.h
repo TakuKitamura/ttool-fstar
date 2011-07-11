@@ -51,7 +51,7 @@ class Bus;
 ///This class represents the base class for all event channels.
 class TMLEventChannel:public TMLStateChannel{
 public:
-	TMLEventChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority): TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iContent, iPriority){}
+	TMLEventChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority, unsigned int iLossRate, unsigned int iMaxNbOfLosses): TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iContent, iPriority, iLossRate, iMaxNbOfLosses){}
 	///Cancels a pending read operation 
 	virtual void cancelReadTransaction()=0;
 	///Returns a flag indicating if the channel is used by a request

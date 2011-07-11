@@ -62,16 +62,15 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
+	\param iLossy Indicates whether the channel is lossy
     	*/
-	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent),_length(iLength){
+	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iLossRate, iMaxNbOfLosses),_length(iLength){
 	}
 
 	void testWrite(TMLTransaction* iTrans){
 		this->_writeTrans=iTrans;
 		//if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
-//#if paramNo>0
 		if (paramNo!=0) this->_tmpParam = iTrans->getCommand()->setParams(0);  //NEW in if
-//#endif
 		this->_writeTrans->setVirtualLength(WAIT_SEND_VLEN);
 		this->_overflow = (this->_content==_length);
 	}
@@ -84,23 +83,28 @@ public:
 	}
 
 	void write(TMLTransaction* iTrans){
-		if (this->_content<_length){
-			this->_content++;
-	//#if paramNo>0
-			if (paramNo!=0){
-				this->_paramQueue.push_back(this->_tmpParam);   //NEW
+		if (this->_content<_length){		
+#ifdef LOSS_ENABLED
+			if ((this->_maxNbOfLosses > this->_nbOfLosses) && (myrand(0,99) < this->_lossRate)){
+				this->_nbOfLosses++;
+			}else{
+#endif
+				this->_content++;
+				if (paramNo!=0){
+					this->_paramQueue.push_back(this->_tmpParam);   //NEW
 	#ifdef STATE_HASH_ENABLED
-				this->_tmpParam->getStateHash(& this->_stateHash);	//new in if
+					this->_tmpParam->getStateHash(& this->_stateHash);	//new in if
 	#endif
+				}
+				if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
+					this->_readTrans->setRunnableTime(iTrans->getEndTime());
+					this->_readTrans->setChannel(this);
+					this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
+				}
+#ifdef LOSS_ENABLED
 			}
-	//#endif
-			if (this->_readTrans!=0 && this->_readTrans->getVirtualLength()==0){
-				this->_readTrans->setRunnableTime(iTrans->getEndTime());
-				this->_readTrans->setChannel(this);
-				this->_readTrans->setVirtualLength(WAIT_SEND_VLEN);
-			}
+#endif
 		}
-		//FOR_EACH_TRANSLISTENER (*i)->transExecuted(iTrans);
 	#ifdef LISTENERS_ENABLED
 		NOTIFY_WRITE_TRANS_EXECUTED(iTrans);
 	#endif
@@ -113,13 +117,11 @@ public:
 		}else{
 			this->_content--;
 			//if (this->_readTrans->getCommand()->getParamFuncPointer()!=0) (this->_readTask->*(this->_readTrans->getCommand()->getParamFuncPointer()))(this->_paramQueue.front()); //NEW
-	//#if paramNo>0
 			if (paramNo!=0){
 				this->_readTrans->getCommand()->setParams(this->_paramQueue.front());
 				delete dynamic_cast<SizedParameter<T,paramNo>*>(this->_paramQueue.front());
 				this->_paramQueue.pop_front();  //NEW
 			}
-	//#endif
 	#ifdef STATE_HASH_ENABLED
 			//_stateHash-=this->_paramQueue.front().getStateHash();
 			//this->_paramQueue.front().removeStateHash(&_stateHash);

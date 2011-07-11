@@ -426,8 +426,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
  			std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
 #endif
-#ifdef DEBUG_KERNEL
+
 				depCPU->truncateAndAddNextTransAt(transLET->getEndTime());
+#ifdef DEBUG_KERNEL
 				std::cout << "kernel:simulate: dependent transaction truncated" << std::endl;
 #endif
 		      }
@@ -566,7 +567,6 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	return 0;
 }
 
-//void Simulator::decodeCommand(char* iCmd){
 void Simulator::decodeCommand(std::string iCmd){
 	//std::cout << "Not crashed. I: " << iCmd;
 	//std::cout << iCmd << std::endl;

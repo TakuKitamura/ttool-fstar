@@ -42,7 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 
-TMLbrbwChannel::TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent, Priority iPriority):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority),_length(iLength){
+TMLbrbwChannel::TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength,TMLLength iContent, Priority iPriority, unsigned int iLossRate, unsigned int iMaxNbOfLosses):TMLStateChannel(iID, iName, iWidth, iNumberOfHops, iMasters, iSlaves, iWidth*iContent, iPriority, iLossRate, iMaxNbOfLosses),_length(iLength){
 }
 
 void TMLbrbwChannel::testWrite(TMLTransaction* iTrans){
@@ -61,9 +61,24 @@ void TMLbrbwChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLbrbwChannel::write(){
-	_content+=_writeTrans->getVirtualLength();
+#ifdef LOSS_ENABLED
+	if (_maxNbOfLosses > _nbOfLosses){
+		TMLLength aLostBytes = _writeTrans->getVirtualLength() * _lossRate + _lossRemainder;
+		_lossRemainder = aLostBytes % 100;
+		aLostBytes /= 100;
+		_content += _writeTrans->getVirtualLength() - aLostBytes;
+		//std::cout << "Bytes to write: " << _writeTrans->getVirtualLength()-aLostBytes << "\n";
+		//std::cout << "Bytes lost: " << aLostBytes << "\n";
+		_nbOfLosses +=  aLostBytes;
+	}else{
+#endif
+		//std::cout << "write all  " << _writeTrans->getVirtualLength() << "\n";
+		_content+=_writeTrans->getVirtualLength();
+#ifdef LOSS_ENABLED
+	}
+#endif	
+	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());
 	_nbToWrite=0;
-	if (_readTrans!=0 && _readTrans->getVirtualLength()==0) _readTrans->setRunnableTime(_writeTrans->getEndTime());	
 	//FOR_EACH_TRANSLISTENER (*i)->transExecuted(_writeTrans);
 #ifdef LISTENERS_ENABLED
 	NOTIFY_WRITE_TRANS_EXECUTED(_writeTrans);
@@ -128,14 +143,6 @@ void TMLbrbwChannel::setTransactionLength() const{
 		}
 	}
 }
-
-//TMLTask* TMLbrbwChannel::getBlockedReadTask() const{
-//	return _readTask;
-//}
-
-//TMLTask* TMLbrbwChannel::getBlockedWriteTask() const{
-//	return _writeTask;
-//}
 
 std::string TMLbrbwChannel::toString() const{
 	std::ostringstream outp;

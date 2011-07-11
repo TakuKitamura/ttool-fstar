@@ -61,7 +61,7 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
     	*/
-	TMLEventSizedChannel (ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent): TMLEventChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0), _tmpParam(0), _stateHash((HashValueType)_ID, 30), _hashValid(true){
+	TMLEventSizedChannel (ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0, iLossRate, iMaxNbOfLosses), _tmpParam(0), _stateHash((HashValueType)_ID, 30), _hashValid(true){
 	}
 
 	virtual ~TMLEventSizedChannel(){

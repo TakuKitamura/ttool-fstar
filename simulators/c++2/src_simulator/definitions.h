@@ -89,7 +89,7 @@ using std::max;
 //activate tis flag to take penalties (energy mode, branch prediction, context switch) into account
 #undef PENALTIES_ENABLED
 //enables the state hash feature
-#define STATE_HASH_ENABLED
+#undef STATE_HASH_ENABLED
 //enables listerns for interactive simulation, switch off for fast simulation in command line mode
 #define LISTENERS_ENABLED
 //enables listeners needed for coverage enhanced simulation
@@ -101,7 +101,7 @@ using std::max;
 //enable recording of transactions
 #define TRANSLIST_ENABLED
 //enable lossy channels
-#undef LOSS_ENABLED
+#define LOSS_ENABLED
 //enables comments on actions/choices in HTML output
 #undef ADD_COMMENTS
 //enable this flag to restore benchmark variables correctly in coverage enhanced simulation

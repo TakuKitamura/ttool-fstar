@@ -224,7 +224,6 @@ protected:
 	///channel priority
 	Priority _priority;
 	///Flag indicating if read or write commands for that channel are still reachable
-	//unsigned int _significance;
 	unsigned char _significance;
 };
 
