@@ -1423,7 +1423,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void newTMLDesign() {
         //TraceManager.addDev("NEW DESIGN");
-        addTMLDesignPanel("DIPLODOCUS Design", -1);
+        addTMLDesignPanel("DIPLODOCUS_Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -1432,7 +1432,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public void newTMLComponentDesign() {
         //TraceManager.addDev("NEW DESIGN");
-        addTMLComponentDesignPanel("DIPLODOCUS C-Design", -1);
+        addTMLComponentDesignPanel("DIPLODOCUS_C_Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);

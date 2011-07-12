@@ -133,7 +133,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
            return g;
     }
 
-    public void makeTClass() {
+    public void makeTClass(boolean _isLossy, int _maxNbOfLoss) {
       Gate forward_0, forward_1, g;
         ADActionStateWithGate adag;
         //ADActionStateWithGate adagsize1, adagsize2, adagsize3;
@@ -189,7 +189,6 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adpar0);
         ad.getStartState().addNext(adpar0);
 
-
         // Left branch of the main parallel -> storing data in order
         adj1 = new ADJunction();
         ad.add(adj1);
@@ -236,7 +235,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         ad.add(adch1);
         adj2.addNext(adch1);
 
-        // Notify -> to know whether an event is available, or not
+        // Notified -> to know whether an event is available, or not
         if (sizeGates.size() >0) {
           adch2 = new ADChoice();
           ad.add(adch2);
@@ -288,6 +287,8 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
           adag.addNext(adj4);
         }
         
+		
+		// If there is a loss -> no forward
         adag = new ADActionStateWithGate(forward_0);
         ad.add(adag);
         action = "";

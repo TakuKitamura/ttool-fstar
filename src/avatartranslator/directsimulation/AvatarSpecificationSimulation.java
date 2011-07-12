@@ -464,7 +464,13 @@ public class AvatarSpecificationSimulation  {
 			pendingTransactions.addAll(asb.getPendingTransactions(allTransactions, clockValue, MAX_TRANSACTION_IN_A_ROW, bunchid));
 		}
 		
-		//TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
+		/*TraceManager.addDev("# of pending transactions before selection: " + pendingTransactions.size());
+		
+		int ind = 0;
+		for(AvatarSimulationPendingTransaction asptt :pendingTransactions) {
+			TraceManager.addDev("#" + ind + ": " + asptt);
+			ind ++;
+		}*/
 		
 		Vector<AvatarSimulationPendingTransaction> ll = new Vector<AvatarSimulationPendingTransaction>();
 		
@@ -514,6 +520,7 @@ public class AvatarSpecificationSimulation  {
 		
 		boolean hasSilentTransaction = false;
 		if (nbOfPureLogicalTransitions >0) {
+			//TraceManager.addDev("Pure logical transaction");
 			for(AvatarSimulationPendingTransaction 	aspt: pendingTransactions) {
 				if (!aspt.hasDelay) {
 					if (isASilentTransaction(aspt, pendingTransactions)) {
@@ -527,6 +534,7 @@ public class AvatarSpecificationSimulation  {
 			
 			if (hasSilentTransaction) {
 				// Must keep only silent transactions
+				//TraceManager.addDev("has silent logical transaction");
 				ll = new Vector<AvatarSimulationPendingTransaction>();
 				for(AvatarSimulationPendingTransaction aspt: pendingTransactions) {
 					if (isASilentTransaction(aspt, pendingTransactions)) {
