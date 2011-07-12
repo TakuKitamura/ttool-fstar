@@ -200,7 +200,11 @@ public class TML2UPPAAL {
       }
       spec.addGlobalDeclaration("urgent chan eventSend__" + event.getName() + ", eventNotify__" + event.getName() + ", eventNotified__" + event.getName()+ ";\n");
       spec.addGlobalDeclaration("int notified__" + event.getName() + ";\n");
-      spec.addTemplate(new UPPAALEventTemplate("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE"));
+	  if (event.isLossy()) {
+		  spec.addTemplate(new UPPAALEventTemplateWithLoss("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE", event.getMaxNbOfLoss()));
+	  } else {
+		  spec.addTemplate(new UPPAALEventTemplate("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE"));
+	  }
     }
     
     public void makeTasks() {

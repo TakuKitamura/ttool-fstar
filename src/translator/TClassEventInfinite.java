@@ -330,7 +330,6 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
 			 adag = new ADActionStateWithGate(notloss);
 			ad.add(adag);
 			 adag.setActionValue("");
-			 adag.addNext(adj2);
 			 adchloss.addNext(adag);
 			 comp = adag;
 			
