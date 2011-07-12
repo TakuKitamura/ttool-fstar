@@ -461,7 +461,7 @@ ones in memory (for example, the three last!)
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2806" >
 <father id="2808" num="0" />
-<cdparam x="195" y="1334" />
+<cdparam x="273" y="1333" />
 <sizeparam width="200" height="96" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />

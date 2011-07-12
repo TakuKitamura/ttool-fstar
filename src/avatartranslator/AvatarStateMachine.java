@@ -55,6 +55,8 @@ public class AvatarStateMachine extends AvatarElement {
     
 	protected LinkedList<AvatarStateMachineElement> elements;
 	protected AvatarStartState startState;
+	
+	private static int ID_ELT = 0;
     
 	
     public AvatarStateMachine(String _name, Object _referenceObject) {
@@ -605,8 +607,9 @@ public class AvatarStateMachine extends AvatarElement {
 			
 			TraceManager.addDev("-> Timer modification");
 			
-			AvatarState myState = new AvatarState("statefortransition", _at.getReferenceObject());
-			AvatarTransition at2 = new AvatarTransition("transitionfortransition", _at.getReferenceObject());
+			AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
+			AvatarTransition at2 = new AvatarTransition("transitionfortransition__" + ID_ELT, _at.getReferenceObject());
+			ID_ELT ++;
 			AvatarTransition at1 = (AvatarTransition)(next.getNext(0));
 			
 			next.removeAllNexts();
@@ -619,8 +622,8 @@ public class AvatarStateMachine extends AvatarElement {
 			
 			return;
 		} else {
-			AvatarState myState = new AvatarState("statefortransition", _at.getReferenceObject());
-			AvatarTransition at = new AvatarTransition("transitionfortransition", _at.getReferenceObject());
+			AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
+			AvatarTransition at = new AvatarTransition("transitionfortransition__", _at.getReferenceObject());
 			at.addNext(_at.getNext(0));
 			_at.removeAllNexts();
 			_at.addNext(myState);
