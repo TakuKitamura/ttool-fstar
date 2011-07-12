@@ -176,6 +176,10 @@ public class AvatarRequirementPanelTranslator {
 					type = TEPEPropertyComponent.REACHABILITY;
 				} else if (apdp.isNotRechability()) {
 					type = TEPEPropertyComponent.NON_REACHABILITY;
+				} else if (apdp.isSafety()) {
+					type = TEPEPropertyComponent.SAFETY;
+				} else if (apdp.isNotSafety()) {
+					type = TEPEPropertyComponent.NON_SAFETY;
 				}
 				
 				TEPEPropertyComponent tepepropertyc = new TEPEPropertyComponent("Property", tgc, type);

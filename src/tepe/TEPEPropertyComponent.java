@@ -55,6 +55,8 @@ public  class TEPEPropertyComponent  extends TEPEComponent  {
 	public static final int NON_LIVENESS = 1;
 	public static final int REACHABILITY = 2;
 	public static final int NON_REACHABILITY = 3;
+	public static final int SAFETY = 4;
+	public static final int NON_SAFETY = 5;
 	
 	protected int type;
 	
@@ -83,8 +85,13 @@ public  class TEPEPropertyComponent  extends TEPEComponent  {
 			ret += "reachability";
 			break;
 		case 3:
-		default:
 			ret += "non reachability";
+			break;
+		case 4:	
+			ret += "safety";
+			break;
+		default:
+			ret += "non safety";
 		}
 		
 		return ret;

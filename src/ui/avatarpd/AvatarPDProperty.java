@@ -64,8 +64,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     protected String oldValue = "";
     protected String description = "";
 	private String stereotype = "property";
-	private boolean liveness = true;
-	private boolean not = false;
+	private int kind = 0; //0: liveness, 1 reachability, 2 safety
+	private boolean not = false; // Negation of property
 	 
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
@@ -201,10 +201,12 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 				// Liveness
 				h+= currentFontSize + sizeBetweenNameAndLiveness;
 				String state;
-				if (liveness) {
+				if (kind == 0) {
 					state = "liveness";
-				} else {
+				} else if (kind == 1) {
 					state = "reachability";
+				} else {
+					state = "safety";
 				}
 				if (not) {
 					state = "not " + state;
@@ -237,8 +239,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     
      public boolean editOndoubleClick(JFrame frame) {
 		String oldValue = value;
-		JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, liveness, not);
-		jdap.setSize(300, 230);
+		JDialogAvatarProperty jdap = new JDialogAvatarProperty(frame, value, kind, not);
+		jdap.setSize(300, 280);
         GraphicLib.centerOnParent(jdap);
         jdap.setVisible(true); // blocked until dialog has been closed
 		
@@ -246,8 +248,17 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 			return false;
 		}
         
-        liveness = jdap.isLivenessSelected() || jdap.isNotLivenessSelected();
-		not = jdap.isNotLivenessSelected() || jdap.isNotReachabilitySelected();
+        if (jdap.isLivenessSelected()) {
+			kind = 0;
+		}
+		if (jdap.isReachabilitySelected()) {
+			kind = 1;
+		}
+		if (jdap.isSafetySelected()) {
+			kind = 2;
+		}
+		
+		not = jdap.isNotLivenessSelected() || jdap.isNotReachabilitySelected() || jdap.isNotSafetySelected();
 		String s = jdap.getName();
 		
 		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
@@ -269,7 +280,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 	    protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<liveness data=\"");
-        sb.append(liveness);
+        sb.append(""+kind);
         sb.append("\" />\n");
 		sb.append("<not data=\"");
         sb.append(not);
@@ -300,11 +311,25 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
                             if (elt.getTagName().equals("liveness")) {
                                 //System.out.println("Analyzing line1");
                                 s = elt.getAttribute("data");
+								
+								//TraceManager.addDev("s=" + s);
                                 if (s.equals("true")) {
-                                    liveness = true;
-                                } else {
-									liveness = false;
-								}
+                                    kind = 0;
+                                } 
+								if (s.equals("false")) {
+                                    kind = 1;
+                                } 
+							  if (s.equals("0")) {
+                                    kind = 0;
+                                } 
+								if (s.equals("1")) {
+                                    kind = 1;
+                                } 
+								if (s.equals("2")) {
+                                    kind = 2;
+                                } 
+								
+								//TraceManager.addDev("Loaded kind=" + kind);
 							}
 							if (elt.getTagName().equals("not")) {
                                 //System.out.println("Analyzing line1");
@@ -354,18 +379,26 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     }
 	
 	public boolean isLiveness() {
-		return (liveness && !not);
+		return ((kind == 0) && !not);
 	}
 	
 	public boolean isNotLiveness() {
-		return (liveness && not);
+		return ((kind == 0) && not);
 	}
 	
 	public boolean isRechability() {
-		return (!liveness && !not);
+		return ((kind == 1) && !not);
 	}
 	
     public boolean isNotRechability() {
-		return (!liveness && not);
+		return ((kind == 1) && not);
+	}
+	
+	public boolean isSafety() {
+		return ((kind == 2) && !not);
+	}
+	
+    public boolean isNotSafety() {
+		return ((kind == 2) && not);
 	}
 }

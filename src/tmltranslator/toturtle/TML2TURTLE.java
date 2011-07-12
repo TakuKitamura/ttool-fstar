@@ -172,7 +172,9 @@ public class TML2TURTLE {
         
         while(iterator.hasNext()) {
             event = (TMLEvent)(iterator.next());
+			TraceManager.addDev("Making event");
             if (event.isInfinite()) {
+				TraceManager.addDev("Making event infinite");
 				tce = new TClassEventInfinite(nameEvent + event.getName(), event.getName(), event.getNbOfParams());
 				tce.addWriteGate();
 				tce.addReadGate();

@@ -47,6 +47,8 @@ package translator;
  
 import java.util.*;
 
+import myutil.*;
+
 public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSizeTClass, TClassEventCommon {
   private int nbPara;
   private LinkedList sendReqGates;
@@ -133,11 +135,14 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
            return g;
     }
 
-    public void makeTClass(boolean _isLossy, int _maxNbOfLoss) {
+    public void makeTClass(boolean _lossy, int _maxNbOfLoss) {
       Gate forward_0, forward_1, g;
         ADActionStateWithGate adag;
+		Gate loss = null, notloss = null;
+		ADActionStateWithGate aclost, acnotlost;
         //ADActionStateWithGate adagsize1, adagsize2, adagsize3;
         ADActionStateWithParam adac1, adac2, adac3;
+		Param pmax, currentLoss;
         ADParallel adpar0, adpar1;
         ADStop adstop;
         ADJunction adj1, adj2, adj3, adj4, adj5, adj6, adj7;
@@ -147,6 +152,8 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         int i;
         ListIterator iterator;
         String action;
+		
+		ADComponent comp;
 
         ActivityDiagram ad = new ActivityDiagram();
         setActivityDiagram(ad);
@@ -171,6 +178,13 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         
         nb = new Param("nb", Param.NAT, "0");
         addParameter(nb);
+		
+		if ((_lossy) && (_maxNbOfLoss > -1)) {
+			pmax = new Param("maxLoss", Param.NAT, ""+_maxNbOfLoss);
+			addParameter(pmax);
+			currentLoss = new Param("currentLoss", Param.NAT, "0");
+			addParameter(currentLoss);
+		}
         
         /*maxs = new Param("maxs", Param.NAT, ""+maxSamples);
         addParameter(maxs);*/
@@ -183,6 +197,11 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         
         forward_0 = addNewGateIfApplicable("forward_0");
         forward_1 = addNewGateIfApplicable("forward_1");
+		
+		if (_lossy) {
+			loss = addNewGateIfApplicable("msglost__" + eventName);
+			notloss = addNewGateIfApplicable("msgNotLost__" + eventName);
+		}
 
         adpar0 = new ADParallel();
         adpar0.setValueGate("[forward_0, forward_1]");
@@ -289,59 +308,89 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
         
 		
 		// If there is a loss -> no forward
-        adag = new ADActionStateWithGate(forward_0);
-        ad.add(adag);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-            action += "!pb" + i + "";
-        }
-        action+="!index";
-        adag.setActionValue(action);
-        adj4.addNext(adag);
-
-        adac1 = new ADActionStateWithParam(index);
-        ad.add(adac1);
-        adac1.setActionValue("index+1");
-        adag.addNext(adac1);
-
-        adj5 = new ADJunction();
-        ad.add(adj5);
-        adj5.addNext(adj2);
-        
-        adj6 = new ADJunction();
-        ad.add(adj6);
-        //adch4.addNext(adj6);
-        //adch4.addGuard("[nb==maxs]");
-        
-        adag = new ADActionStateWithGate(forward_1);
-        ad.add(adag);
-        action = "";
-        for(i=0; i<nbPara; i++) {
-            action += "?pa" + i + ":nat";
-        }
-        action += "!index_r";
-        adag.setActionValue(action);
-        adj6.addNext(adag);
-        
-        adac3 = new ADActionStateWithParam(index_r);
-        ad.add(adac3);
-        adac3.setActionValue("index_r+1");
-        adag.addNext(adac3);
-        adac3.addNext(adj5);
-
-        adac2 = new ADActionStateWithParam(nb);
-        ad.add(adac2);
-        adac2.setActionValue("nb+1");
-        adac1.addNext(adac2);
-
-        adch6 = new ADChoice();
-        ad.add(adch6);
-        adac2.addNext(adch6);
-
-        adch6.addNext(adj5);
-        adch6.addGuard("[not(nb==1)]");
-        adch6.addNext(adj6);
-        adch6.addGuard("[nb==1]");
+		if (_lossy) {
+			TraceManager.addDev("Lossy");
+			ADChoice adchloss = new ADChoice();
+			ad.add(adchloss);
+			adj4.addNext(adchloss);
+			
+			
+			
+			adchloss.addGuard("[]");
+			adchloss.addGuard("[]");
+			
+			// loss ...
+			adag = new ADActionStateWithGate(loss);
+			ad.add(adag);
+			 adag.setActionValue("");
+			 adag.addNext(adj2);
+			 adchloss.addNext(adag);
+			
+			 // no loss
+			 adag = new ADActionStateWithGate(notloss);
+			ad.add(adag);
+			 adag.setActionValue("");
+			 adag.addNext(adj2);
+			 adchloss.addNext(adag);
+			 comp = adag;
+			
+		} else {
+			TraceManager.addDev("Not lossy");
+			comp = adj4;
+		}
+		adag = new ADActionStateWithGate(forward_0);
+		ad.add(adag);
+		action = "";
+		for(i=0; i<nbPara; i++) {
+			action += "!pb" + i + "";
+		}
+		action+="!index";
+		adag.setActionValue(action);
+		comp.addNext(adag);
+		
+		adac1 = new ADActionStateWithParam(index);
+		ad.add(adac1);
+		adac1.setActionValue("index+1");
+		adag.addNext(adac1);
+		
+		adj5 = new ADJunction();
+		ad.add(adj5);
+		adj5.addNext(adj2);
+		
+		adj6 = new ADJunction();
+		ad.add(adj6);
+		//adch4.addNext(adj6);
+		//adch4.addGuard("[nb==maxs]");
+		
+		adag = new ADActionStateWithGate(forward_1);
+		ad.add(adag);
+		action = "";
+		for(i=0; i<nbPara; i++) {
+			action += "?pa" + i + ":nat";
+		}
+		action += "!index_r";
+		adag.setActionValue(action);
+		adj6.addNext(adag);
+		
+		adac3 = new ADActionStateWithParam(index_r);
+		ad.add(adac3);
+		adac3.setActionValue("index_r+1");
+		adag.addNext(adac3);
+		adac3.addNext(adj5);
+		
+		adac2 = new ADActionStateWithParam(nb);
+		ad.add(adac2);
+		adac2.setActionValue("nb+1");
+		adac1.addNext(adac2);
+		
+		adch6 = new ADChoice();
+		ad.add(adch6);
+		adac2.addNext(adch6);
+		
+		adch6.addNext(adj5);
+		adch6.addGuard("[not(nb==1)]");
+		adch6.addNext(adj6);
+		adch6.addGuard("[nb==1]");
 
         // Wait event branch
         adj7 = new ADJunction();

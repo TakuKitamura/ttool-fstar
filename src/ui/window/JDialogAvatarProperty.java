@@ -56,10 +56,11 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     private JPanel panel1;
     
 	private String name;
-	private boolean livenessSelected, notSelected;
+	private int kind;
+	boolean notSelected;
 	private boolean hasBeenCancelled = false;
 	private JTextField myName;
-	private JRadioButton reachability, liveness, notReachability, notLiveness;
+	private JRadioButton safety, notSafety, reachability, liveness, notReachability, notLiveness;
     
     // Main Panel
     private JButton closeButton;
@@ -68,12 +69,12 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
     //private String id1, id2;
     
     /** Creates new form  */
-    public JDialogAvatarProperty(Frame f, String _name, boolean _livenessSelected, boolean _notSelected) {
+    public JDialogAvatarProperty(Frame f, String _name, int _kind, boolean _notSelected) {
         
         super(f, "Setting property attributes", true);
        
 		name = _name;
-        livenessSelected = _livenessSelected;
+        kind = _kind;
 		notSelected = _notSelected;
 
         initComponents();
@@ -102,7 +103,7 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
            
         panel1.setBorder(new javax.swing.border.TitledBorder("Property"));
     
-        panel1.setPreferredSize(new Dimension(200, 150));
+        //panel1.setPreferredSize(new Dimension(200, 150));
         
         // first line panel1
         c1.weighty = 1.0;
@@ -120,29 +121,41 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         reachability = new JRadioButton("Reachable");
-		reachability.setSelected(!livenessSelected && !notSelected);
+		reachability.setSelected((kind == 1) && !notSelected);
         panel1.add(reachability, c1);
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         notReachability = new JRadioButton("Not reachable");
-		notReachability.setSelected(!livenessSelected && notSelected);
+		notReachability.setSelected((kind == 1) && notSelected);
         panel1.add(notReachability, c1);
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         liveness = new JRadioButton("Liveness");
-		liveness.setSelected(livenessSelected && !notSelected);
+		liveness.setSelected((kind == 0) && !notSelected);
         panel1.add(liveness, c1);
 		
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         notLiveness = new JRadioButton("Not Liveness");
-		notLiveness.setSelected(livenessSelected && notSelected);
+		notLiveness.setSelected((kind == 0) && notSelected);
         panel1.add(notLiveness, c1);
+		
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        safety = new JRadioButton("Safety");
+		safety.setSelected((kind == 2) && !notSelected);
+        panel1.add(safety, c1);
+		
+		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        notSafety = new JRadioButton("Not Safety");
+		notSafety.setSelected((kind == 2) && notSelected);
+        panel1.add(notSafety, c1);
 		
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(reachability);
 		bg.add(liveness);
 		bg.add(notReachability);
 		bg.add(notLiveness);
+		bg.add(safety);
+		bg.add(notSafety);
         
         // main panel;
         c0.gridwidth = 1;
@@ -200,6 +213,14 @@ public class JDialogAvatarProperty extends javax.swing.JDialog implements Action
 	
 	public boolean isNotLivenessSelected() {
         return notLiveness.isSelected();
+    }
+	
+	 public boolean isSafetySelected() {
+        return safety.isSelected();
+    }
+	
+	public boolean isNotSafetySelected() {
+        return notSafety.isSelected();
     }
 	
 	public String getName() {
