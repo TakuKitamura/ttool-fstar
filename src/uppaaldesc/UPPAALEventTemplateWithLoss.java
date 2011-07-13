@@ -82,6 +82,10 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 		}
 		declaration += "  head = (head+1)%maxR;\n  size --;\n}\n\n";
 		
+		if (maxNbOfLoss > -1) {
+			declaration += "  int nbOfLoss__;\n";
+		}
+		
 		// Main location
 		initLocation = new UPPAALLocation();
 		initLocation.idPoint = new Point(-64, -80);
@@ -89,17 +93,17 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 		initLocation.name = "main_state";
 		locations.add(initLocation);
 		
-		// Loss location
+		// Loss locations
 		lossLocation = new UPPAALLocation();
-		lossLocation.idPoint = new Point(-134, -150);
-		lossLocation.namePoint = new Point(-180, -156);
+		lossLocation.idPoint = new Point(-104, -232);
+		lossLocation.namePoint = new Point(-160, -272);
 		lossLocation.name = "loss_or_not_loss";
 		lossLocation.setCommitted();
 		locations.add(lossLocation);
 		
 		lossOccuredLocation = new UPPAALLocation();
-		lossOccuredLocation.idPoint = new Point(-100, -130);
-		lossOccuredLocation.namePoint = new Point(-150, -100);
+		lossOccuredLocation.idPoint = new Point(-104, -176);
+		lossOccuredLocation.namePoint = new Point(-144, -160);
 		lossOccuredLocation.name = "loss_occured";
 		lossOccuredLocation.setCommitted();
 		locations.add(lossOccuredLocation);
@@ -109,13 +113,13 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 		tr.sourceLoc = initLocation;
 		tr.destinationLoc = lossLocation;
 		tr.guard = "size < maxR";
-		tr.guardPoint = new Point(-336, -112);
+		tr.guardPoint = new Point(-312, -152);
 		tr.synchronization = "eventSend__" +  event.getName() + "?";
-		tr.synchronizationPoint = new Point(-280, -88);
+		tr.synchronizationPoint = new Point(-344, -128);
 		//tr.assignment = "enqueueE()";
 		//tr.assignmentPoint = new Point(-304, -64);
-		tr.points.add(new Point(-208, -232));
-		tr.points.add(new Point(-208, 104));
+		tr.points.add(new Point(-224, 16));
+		tr.points.add(new Point(-216, -216));
 		transitions.add(tr);
 		
 		// Transition for releasing event (infinite + finite)
@@ -165,13 +169,18 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 		tr = new UPPAALTransition();
 		tr.sourceLoc = lossLocation;
 		tr.destinationLoc = lossOccuredLocation;
-		tr.points.add(new Point(45, 59));
+		tr.synchronization = "evt__" + event.getName() + "__loss!";
+		if (maxNbOfLoss > -1) {
+			tr.guard = " nbOfLoss__ < " + maxNbOfLoss;
+		}
+		tr.assignment = "nbOfLoss__ = nbOfLoss__ + 1";
+		tr.points.add(new Point(-56, -176));
 		transitions.add(tr);
 		
 		tr = new UPPAALTransition();
 		tr.sourceLoc = lossOccuredLocation;
 		tr.destinationLoc = initLocation;
-		tr.points.add(new Point(55, 78));
+		tr.points.add(new Point(-176, -136));
 		transitions.add(tr);
 		
 		// no loss
@@ -180,8 +189,9 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 		tr.destinationLoc = initLocation;
 		tr.guard = "size < maxR";
 		tr.assignment = "enqueueE()";
-		tr.assignmentPoint = new Point(-404, -164);
-		tr.points.add(new Point(18, 24));
+		tr.synchronization = "evt__" + event.getName() + "__noloss!";
+		tr.assignmentPoint = new Point(-64, -240);
+		tr.points.add(new Point(-16, -200));
 		transitions.add(tr);
 		
 		if (!event.isInfinite() && !event.isBlocking()) {
@@ -190,6 +200,7 @@ public class UPPAALEventTemplateWithLoss extends  UPPAALTemplate{
 			tr.destinationLoc = initLocation;
 			tr.guard = "size == maxR";
 			tr.assignment = "dequeueE(),\nenqueueE()";
+			tr.synchronization = "evt__" + event.getName() + "__noloss!";
             tr.assignmentPoint = new Point(-188, -316);
 			tr.points.add(new Point(145, 330));
 			transitions.add(tr);

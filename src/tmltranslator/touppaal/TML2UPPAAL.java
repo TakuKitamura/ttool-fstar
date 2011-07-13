@@ -59,6 +59,8 @@ public class TML2UPPAAL {
     private TMLModeling tmlmodeling;
     private UPPAALSpec spec;
 	private RelationTMLUPPAAL rtu;
+	private UPPAALTemplate lossTemplate;
+	private Vector<String> lossNames;
 	
     private boolean debug;
 	private int sizeInfiniteFIFO = DEFAULT_INFINITE_FIFO_SIZE;
@@ -126,6 +128,8 @@ public class TML2UPPAAL {
         debug = _debug;
         spec = new UPPAALSpec();
 		rtu = new RelationTMLUPPAAL();
+		lossTemplate = null;
+		
         // Must fill spec!
 
         makeGlobal();
@@ -135,7 +139,7 @@ public class TML2UPPAAL {
         
         // Make tasks
         makeTasks();
-        
+		
         // Instanciation of the system
         makeSystem();
 		
@@ -183,7 +187,12 @@ public class TML2UPPAAL {
         spec.addGlobalDeclaration(request.getType(i).toString() + " tail" + i + "__" + request.getName()+ ";\n");
       }
       spec.addGlobalDeclaration("urgent chan request__" + request.getName() + ", wait__" + request.getName() + ";\n");
-      spec.addTemplate(new UPPAALRequestTemplate("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE"));
+	  if (request.isLossy()) {
+		  spec.addTemplate(new UPPAALRequestTemplateWithLoss("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE", request.getMaxNbOfLoss()));
+		  makeLoss("req__" + request.getName());
+	  } else {
+		  spec.addTemplate(new UPPAALRequestTemplate("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE"));
+	  }
     }
     
     public void makeEvents() {
@@ -202,6 +211,7 @@ public class TML2UPPAAL {
       spec.addGlobalDeclaration("int notified__" + event.getName() + ";\n");
 	  if (event.isLossy()) {
 		  spec.addTemplate(new UPPAALEventTemplateWithLoss("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE", event.getMaxNbOfLoss()));
+		  makeLoss("evt__" + event.getName());
 	  } else {
 		  spec.addTemplate(new UPPAALEventTemplate("EvtManager__" + event.getName(), event, "DEFAULT_INFINITE_SIZE"));
 	  }
@@ -729,6 +739,37 @@ public class TML2UPPAAL {
       
       spec.addInstanciation(dec+system);
     }
+	
+	public void makeLoss(String name) {
+		TraceManager.addDev("Makking loss");
+		if (lossTemplate == null) {
+			lossTemplate = new UPPAALTemplate();
+			lossTemplate.setName("LossManager__");
+			spec.addTemplate(lossTemplate);
+			UPPAALLocation loc = addLocation(lossTemplate);
+			loc.name = "main__loss";
+			lossTemplate.setInitLocation(loc);
+			lossNames = new Vector<String>();
+		} else {
+			// loss already computed?
+			for(String s: lossNames) {
+				if (s.compareTo(name) == 0) {
+					return;
+				}
+			}
+		}
+		
+		lossNames.add(name);
+		
+		UPPAALTransition tr = addTransition(lossTemplate, lossTemplate.getInitLocation(), lossTemplate.getInitLocation());
+		 setSynchronization(tr, name + "__loss?");
+		 tr = addTransition(lossTemplate, lossTemplate.getInitLocation(), lossTemplate.getInitLocation());
+		 setSynchronization(tr, name + "__noloss?");
+		 
+		 spec.addGlobalDeclaration("\n// Lossy communications\n");
+		 spec.addGlobalDeclaration("urgent chan " + name + "__loss, " + name + "__noloss;\n");
+		
+	}
     
     public String modifyString(String _input) {
         //System.out.println("Modify string=" + _input);
