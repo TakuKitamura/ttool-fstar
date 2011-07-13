@@ -104,8 +104,31 @@ public  class AvatarPDSignalConnector extends TGConnectorWithCommentConnectionPo
         }
 		
 		if (p2 instanceof AvatarPDForbiddenSignalConnectingPoint) {
+			//g.drawLine(x2-l, y2-l, x2+l, y2+l);
+			//g.drawLine(x2-l, y2+l, x2+l, y2-l);
+			y2 = y2 + 3;
 			g.drawLine(x2-l, y2-l, x2+l, y2+l);
 			g.drawLine(x2-l, y2+l, x2+l, y2-l);
+			y2 = y2 + 1;
+			g.drawLine(x2-l, y2-l, x2+l, y2+l);
+			g.drawLine(x2-l, y2+l, x2+l, y2-l);
+		}
+		
+		// Getting father of connecting point
+		
+		if (p2.getFather() instanceof AvatarPDLogicalConstraint) {
+			AvatarPDLogicalConstraint lc = (AvatarPDLogicalConstraint)(p2.getFather());
+			
+			//TraceManager.addDev("Logical constraint");
+			
+			Font f = g.getFont();
+			Font fontbis = g.getFont().deriveFont((float)10);
+			g.setFont(fontbis);
+			if (lc.getCurrentConstraint().compareTo("<<LS>>") == 0) {
+				g.drawString(""+lc.getBusyIndex(p2), x2+2, y2+4);
+			}
+			g.setFont(f);
+			
 		}
 		//}
 		

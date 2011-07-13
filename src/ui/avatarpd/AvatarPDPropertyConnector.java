@@ -123,6 +123,7 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 				//System.out.println("drawn");
 			}
         } else {
+			//g.drawLine(x1, y1, p.x, p.y);
             GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
         }
 		

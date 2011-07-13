@@ -244,6 +244,20 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
 	public String getCurrentConstraint() {
 		return value;
 	}
+	
+	public int getBusyIndex(TGConnectingPoint p) {
+		int cpt = 1;
+		for(int i=2; i<8; i++) {
+			if (connectingPoint[i] == p) {
+				return cpt;
+			}
+			if (!(connectingPoint[i].isFree())) {
+				cpt ++;
+			}
+		}
+		
+		return -1;
+	}
   
     
 }
