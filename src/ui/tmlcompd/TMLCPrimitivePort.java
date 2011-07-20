@@ -702,7 +702,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	}
 	
 	public boolean isLossy() {
-		return isLossy;
+		return isLossy && isOrigin;
 	}
 	
 	public int getLossPercentage() {

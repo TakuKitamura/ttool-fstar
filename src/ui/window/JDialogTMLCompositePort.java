@@ -76,6 +76,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JTextField nameText, maxText, widthText;
     private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
     private JComboBox origin, finite, blocking;
+	private JLabel lossPercentageLabel, maxNbOfLossLabel;
 	private int portIndex;
     private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
 	private Vector<String> types;
@@ -425,13 +426,15 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         panel3.add(isLossyBox, c3);
 		
 		c3.gridwidth = 1;
-		panel3.add(new JLabel("Loss percentage"), c3);
+		lossPercentageLabel = new JLabel("Loss percentage");
+		panel3.add(lossPercentageLabel, c3);
 		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 		lossPercentageText = new JTextField(""+lossPercentage);
 		panel3.add(lossPercentageText, c3);
 		
 		c3.gridwidth = 1;
-		panel3.add(new JLabel("Max nb of loss"), c3);
+		maxNbOfLossLabel = new JLabel("Max nb of loss");
+		panel3.add(maxNbOfLossLabel, c3);
 		c3.gridwidth = GridBagConstraints.REMAINDER; //end row
 		maxNbOfLossText = new JTextField(""+maxNbOfLoss);
 		panel3.add(maxNbOfLossText, c3);
@@ -551,6 +554,13 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 		}
            /*maxText.setEnabled(finite.isSelected());
            blocking.setEnabled(finite.isSelected());*/
+		   
+		   panel3.setEnabled(origin.getSelectedIndex() == 0);
+		   isLossyBox.setEnabled(origin.getSelectedIndex() == 0);
+		   lossPercentageText.setEnabled(origin.getSelectedIndex() == 0);
+		   maxNbOfLossText.setEnabled(origin.getSelectedIndex() == 0);
+		   lossPercentageLabel.setEnabled(origin.getSelectedIndex() == 0);
+		   maxNbOfLossLabel.setEnabled(origin.getSelectedIndex() == 0);
     }
     
     public boolean hasNewData() {
