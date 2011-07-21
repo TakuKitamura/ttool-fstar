@@ -166,15 +166,20 @@ public class TML2UPPAAL {
 		  
         spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
 		 if (ch.isLossy()) {
-        spec.addTemplate(new UPPAALFiniteFIFOTemplateLoss("channel__" + ch.getName(), ch.getName(), ch.getMax(), ch.getMaxNbOfLoss()));
-		 makeLoss("ch__" + ch.getName());
+			 spec.addTemplate(new UPPAALFiniteFIFOTemplateLoss("channel__" + ch.getName(), ch.getName(), ch.getMax(), ch.getMaxNbOfLoss()));
+			 makeLoss("ch__" + ch.getName());
 		 } else {
 			  spec.addTemplate(new UPPAALFiniteFIFOTemplate("channel__" + ch.getName(), ch.getName(), ch.getMax()));
 			  
 		 }
       } else if (ch.getType() == TMLChannel.BRNBW) {
         spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
-        spec.addTemplate(new UPPAALInfiniteFIFOTemplate("channel__" + ch.getName(), ch.getName()));
+		 if (ch.isLossy()) {
+			 spec.addTemplate(new UPPAALInfiniteFIFOTemplateLoss("channel__" + ch.getName(), ch.getName(), ch.getMaxNbOfLoss()));
+			 makeLoss("ch__" + ch.getName());
+		 } else {
+			 spec.addTemplate(new UPPAALInfiniteFIFOTemplate("channel__" + ch.getName(), ch.getName()));
+		 }
       } else if (ch.getType() == TMLChannel.NBRNBW) {
         spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
         spec.addTemplate(new UPPAALMemoryTemplate("channel__" + ch.getName(), ch.getName()));
