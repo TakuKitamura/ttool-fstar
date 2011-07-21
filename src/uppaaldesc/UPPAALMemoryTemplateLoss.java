@@ -36,9 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class UPPAALMemoryTemplate
- * Creation: 06/11/2006
- * @version 1.0 06/11/2006
+ * Class UPPAALMemoryTemplateLoss
+ * Creation: 21/07/2011
+ * @version 1.0 21/07/2011
  * @author Ludovic APVRILLE
  * @see
  */
@@ -49,12 +49,18 @@ import java.awt.Point;
 
 
 
-public class UPPAALMemoryTemplate extends  UPPAALTemplate{
+public class UPPAALMemoryTemplateLoss extends  UPPAALTemplate{
+	protected UPPAALLocation lossLocation;
+	protected UPPAALLocation lossOccuredLocation;
 
-    public UPPAALMemoryTemplate(String name, String chname) {
+    public UPPAALMemoryTemplateLoss(String name, String chname, int maxNbOfLoss) {
            super();
            setName(name);
            declaration = "";
+		   
+		   if (maxNbOfLoss > -1) {
+			declaration += "  int nbOfLoss__;\n";
+		   }
 
            // Main state
            initLocation = new UPPAALLocation();
@@ -62,6 +68,21 @@ public class UPPAALMemoryTemplate extends  UPPAALTemplate{
            initLocation.namePoint = new Point(-80, -56);
            initLocation.name = "main_state";
            locations.add(initLocation);
+		   
+		   // Loss locations
+			lossLocation = new UPPAALLocation();
+			lossLocation.idPoint = new Point(-104, -232);
+			lossLocation.namePoint = new Point(-160, -272);
+			lossLocation.name = "loss_or_not_loss";
+			lossLocation.setCommitted();
+			locations.add(lossLocation);
+			
+			lossOccuredLocation = new UPPAALLocation();
+			lossOccuredLocation.idPoint = new Point(-104, -176);
+			lossOccuredLocation.namePoint = new Point(-144, -160);
+			lossOccuredLocation.name = "loss_occured";
+			lossOccuredLocation.setCommitted();
+			locations.add(lossOccuredLocation);
 
            // Transition for writting
            UPPAALTransition tr = new UPPAALTransition();
@@ -89,6 +110,36 @@ public class UPPAALMemoryTemplate extends  UPPAALTemplate{
            tr.points.add(new Point(64, 80));
            tr.points.add(new Point(64, -232));
            transitions.add(tr);
+		   
+		   // Handling Loss
+			// loss
+			tr = new UPPAALTransition();
+			tr.sourceLoc = lossLocation;
+			tr.destinationLoc = lossOccuredLocation;
+			tr.synchronization = "ch__" + chname + "__loss!";
+			if (maxNbOfLoss > -1) {
+				tr.guard = " nbOfLoss__ < " + maxNbOfLoss;
+			}
+			
+			tr.assignment = "nbOfLoss__ = nbOfLoss__ + 1";
+			tr.points.add(new Point(-56, -176));
+			transitions.add(tr);
+			
+			tr = new UPPAALTransition();
+			tr.sourceLoc = lossOccuredLocation;
+			tr.destinationLoc = initLocation;
+			tr.points.add(new Point(-176, -136));
+			transitions.add(tr);
+			
+			// no loss
+			tr = new UPPAALTransition();
+			tr.sourceLoc = lossLocation;
+			tr.destinationLoc = initLocation;
+			//tr.assignment = "buffer = buffer + 1";
+			tr.synchronization = "ch__" + chname + "__noloss!";
+			//tr.assignmentPoint = new Point(-304, -64);
+			tr.points.add(new Point(-16, -200));
+			transitions.add(tr);
     }
 
 
