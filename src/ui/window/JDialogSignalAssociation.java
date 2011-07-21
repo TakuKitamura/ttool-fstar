@@ -359,6 +359,7 @@ public class JDialogSignalAssociation extends javax.swing.JDialog implements Act
 		sizeOfFIFO.setEnabled(b);
 		blocking.setEnabled(b);
 		isBroadcast.setEnabled(!b);
+		isLossy.setEnabled(b);
 	}
 	
 	private void updateAddButton() {
