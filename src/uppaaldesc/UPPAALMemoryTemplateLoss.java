@@ -87,7 +87,7 @@ public class UPPAALMemoryTemplateLoss extends  UPPAALTemplate{
            // Transition for writting
            UPPAALTransition tr = new UPPAALTransition();
            tr.sourceLoc = initLocation;
-           tr.destinationLoc = initLocation;
+           tr.destinationLoc = lossLocation;
            //tr.guard = "buffer<maxBuffer";
            //tr.guardPoint = new Point(-336, -112);
            tr.synchronization = "wr__" + chname + "?";
