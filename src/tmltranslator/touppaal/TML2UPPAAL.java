@@ -167,9 +167,10 @@ public class TML2UPPAAL {
         spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
 		 if (ch.isLossy()) {
         spec.addTemplate(new UPPAALFiniteFIFOTemplateLoss("channel__" + ch.getName(), ch.getName(), ch.getMax(), ch.getMaxNbOfLoss()));
+		 makeLoss("ch__" + ch.getName());
 		 } else {
 			  spec.addTemplate(new UPPAALFiniteFIFOTemplate("channel__" + ch.getName(), ch.getName(), ch.getMax()));
-			   makeLoss("ch__" + ch.getName());
+			  
 		 }
       } else if (ch.getType() == TMLChannel.BRNBW) {
         spec.addGlobalDeclaration("urgent chan rd__" + ch.getName() + ", wr__" + ch.getName() + ";\n");
