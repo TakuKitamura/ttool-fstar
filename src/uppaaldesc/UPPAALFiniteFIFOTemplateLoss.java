@@ -117,10 +117,11 @@ public class UPPAALFiniteFIFOTemplateLoss extends  UPPAALTemplate {
 			tr = new UPPAALTransition();
 			tr.sourceLoc = lossLocation;
 			tr.destinationLoc = lossOccuredLocation;
-			//tr.synchronization = "evt__" + event.getName() + "__loss!";
+			tr.synchronization = "ch__" + chname + "__loss!";
 			if (maxNbOfLoss > -1) {
 				tr.guard = " nbOfLoss__ < " + maxNbOfLoss;
 			}
+			
 			tr.assignment = "nbOfLoss__ = nbOfLoss__ + 1";
 			tr.points.add(new Point(-56, -176));
 			transitions.add(tr);
@@ -136,6 +137,7 @@ public class UPPAALFiniteFIFOTemplateLoss extends  UPPAALTemplate {
 			tr.sourceLoc = lossLocation;
 			tr.destinationLoc = initLocation;
 			tr.assignment = "buffer = buffer + 1";
+			tr.synchronization = "ch__" + chname + "__noloss!";
 			tr.assignmentPoint = new Point(-304, -64);
 			tr.points.add(new Point(-16, -200));
 			transitions.add(tr);
