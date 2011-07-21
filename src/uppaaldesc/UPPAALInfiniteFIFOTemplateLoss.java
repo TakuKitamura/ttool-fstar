@@ -49,7 +49,7 @@ import java.awt.Point;
 
 
 
-public class UPPAALInfiniteFIFOTemplateLoss extends  UPPAALTemplate{
+public class UPPAALInfiniteFIFOTemplateLoss extends UPPAALTemplate{
 	protected UPPAALLocation lossLocation;
 	protected UPPAALLocation lossOccuredLocation;
 	
