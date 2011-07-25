@@ -58,12 +58,12 @@ public class TML2UPPAAL {
     
     private TMLModeling tmlmodeling;
     private UPPAALSpec spec;
-	private RelationTMLUPPAAL rtu;
-	private UPPAALTemplate lossTemplate;
-	private Vector<String> lossNames;
+    private RelationTMLUPPAAL rtu;
+    private UPPAALTemplate lossTemplate;
+    private Vector<String> lossNames;
 	
     private boolean debug;
-	private int sizeInfiniteFIFO = DEFAULT_INFINITE_FIFO_SIZE;
+    private int sizeInfiniteFIFO = DEFAULT_INFINITE_FIFO_SIZE;
     
     private int currentX, currentY;
     
