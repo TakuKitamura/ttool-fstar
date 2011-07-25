@@ -971,6 +971,11 @@ public class GTMLModeling  {
                             TraceManager.addDev(" NO NO NO NO Destination taskin request!");
                         }
 						request.addOriginTask(tt2);
+						//TraceManager.addDev("LOSS?");
+						if (port2.isLossy()) {
+							//TraceManager.addDev("LOSS***** Lossy request port");
+							request.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+						} 
 					}
 					
 					// Check whether there is another request having a different name but with the same destination task
@@ -1001,9 +1006,7 @@ public class GTMLModeling  {
 							otherReq.addOriginTask(request.getOriginTasks().get(i));
 						}
 					} else {
-						if (port1.isLossy()) {
-								request.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
-							} 
+						
 						tmlm.addRequest(request);
 						listE.addCor(request, tgc);
 						//TraceManager.addDev("Adding request " + request.getName());

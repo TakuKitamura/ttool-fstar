@@ -199,17 +199,19 @@ public class TML2UPPAAL {
     }
     
     public void makeRequest(TMLRequest request) {
-		for(int i=0; i<request.getNbOfParams(); i++) {
-			spec.addGlobalDeclaration(request.getType(i).toString() + " head" + i + "__" + request.getName()+ ";\n");
-			spec.addGlobalDeclaration(request.getType(i).toString() + " tail" + i + "__" + request.getName()+ ";\n");
-		}
-		spec.addGlobalDeclaration("urgent chan request__" + request.getName() + ", wait__" + request.getName() + ";\n");
-		if (request.isLossy()) {
-			spec.addTemplate(new UPPAALRequestTemplateWithLoss("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE", request.getMaxNbOfLoss()));
-			makeLoss("req__" + request.getName());
-		} else {
-			spec.addTemplate(new UPPAALRequestTemplate("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE"));
-		}
+      for(int i=0; i<request.getNbOfParams(); i++) {
+        spec.addGlobalDeclaration(request.getType(i).toString() + " head" + i + "__" + request.getName()+ ";\n");
+        spec.addGlobalDeclaration(request.getType(i).toString() + " tail" + i + "__" + request.getName()+ ";\n");
+      }
+      spec.addGlobalDeclaration("urgent chan request__" + request.getName() + ", wait__" + request.getName() + ";\n");
+	  if (request.isLossy()) {
+		  TraceManager.addDev("Lossy req");
+		  spec.addTemplate(new UPPAALRequestTemplateWithLoss("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE", request.getMaxNbOfLoss()));
+		  makeLoss("req__" + request.getName());
+	  } else {
+		  TraceManager.addDev("Non lossy req");
+		  spec.addTemplate(new UPPAALRequestTemplate("ReqManager__" + request.getName(), request, "DEFAULT_INFINITE_SIZE"));
+	  }
     }
     
     public void makeEvents() {
