@@ -60,6 +60,8 @@ public:
 	\param iMasters Pointers to the masters which the channel is connected to
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
+	\param iLossRate Loss rate of the channel
+	\param iMaxNbOfLosses Maximum number of losses
     	*/
 	TMLEventSizedChannel (ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventChannel(iID, iName, 1, iNumberOfHops, iMasters, iSlaves, iContent, 0, iLossRate, iMaxNbOfLosses), _tmpParam(0), _stateHash((HashValueType)_ID, 30), _hashValid(true){
 	}

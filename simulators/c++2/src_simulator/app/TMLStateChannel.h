@@ -61,7 +61,7 @@ public:
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
 	\param iLossRate Loss rate of the channel
-	\param maxNbOfLosses Maximum number of losses
+	\param iMaxNbOfLosses Maximum number of losses
     	*/
 	TMLStateChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves ,TMLLength iContent, unsigned int iPriority, unsigned int iLossRate, unsigned int iMaxNbOfLosses);
 	///Destructor
@@ -89,9 +89,9 @@ protected:
 	///Loss rate of the channel
 	unsigned int _lossRate;
 	///Maximum number of losses
-	unsigned int _maxNbOfLosses;
+	TMLLength _maxNbOfLosses;
 	///Current nb of losses
-	unsigned int _nbOfLosses;
+	TMLLength _nbOfLosses;
 	///Loss Reamainder
 	unsigned int _lossRemainder;
 #endif

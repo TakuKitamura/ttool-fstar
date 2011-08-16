@@ -44,18 +44,37 @@ Ludovic Apvrille, Renaud Pacalet
 #include <definitions.h>
 #include <Serializable.h>
 
+///Class representing TEPE constraints that provide a property input/output
 class PropertyConstraint: public Serializable{
 public:
+	///Constructor
 	PropertyConstraint();
+	///Destructor
 	virtual ~PropertyConstraint();
+	///Determines the current property value of the constraint
+	/**
+	\return Property value of the constraint
+	*/
 	virtual bool evalProp()=0;
+	///Instantaneous deactivation of the constraint
 	virtual void forceDisable()=0;
+	///Notify the enable input signal
+	/**
+	\param iSigState Indicates whether the signal was notified
+	*/
 	virtual void notifyEnable(unsigned int iSigState)=0;
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
+	///Connects the enable ouput to the enable input of another constraint
+	/**
+	\param aAboveConstr Target constraints to be connected to the enable output
+	\param iNoAboveConstr Number of target constraints
+	*/
 	void connectEnaOut(PropertyConstraint** aAboveConstr, unsigned int iNoAboveConstr);
 protected:
+	///Target constraints that are connected to the enable output
 	PropertyConstraint** _aboveConstr;
+	///Number of target constraints
 	unsigned int _noAboveConstr;
 };
 #endif

@@ -42,13 +42,21 @@ Ludovic Apvrille, Renaud Pacalet
 #define SeqConstraintH
 #include <FSMConstraint.h>
 
+///Class representing a TEPE Sequence Constraint
 class SeqConstraint: public FSMConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	SeqConstraint(ID iID, PropType iType, bool iIncludeBounds): FSMConstraint(iID, iType, iIncludeBounds){
 		_transTable=_transTableSeq;
 	}
 	
 protected:
+	///Transition table of state machine
 	static const unsigned int _transTableSeq[12];
 };
 #endif

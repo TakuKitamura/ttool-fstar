@@ -42,12 +42,15 @@ Ludovic Apvrille, Renaud Pacalet
 #define ThreeSigConstraintH
 #include <TwoSigConstraint.h>
 
+///Class representing any TEPE constraint with 3 input signals
 class ThreeSigConstraint: public TwoSigConstraint{
 public:
+	///Constructor
 	ThreeSigConstraint(ID iID, bool iIncludeBounds);
 	void notifySf(bool iSigState);
 	virtual void notifiedReset();
 protected:
+	///State of the negated input (failure) signal
 	Tristate _sfNotified;
 };
 #endif

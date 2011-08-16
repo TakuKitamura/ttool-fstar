@@ -47,24 +47,54 @@ class SignalConstraint;
 
 class SignalConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	SignalConstraint(ID iID, bool iIncludeBounds);
+	///Destructor
 	virtual ~SignalConstraint();
+	///Notify the first input signal
+	/**
+	\param iSigState Indicates whether the signal was notified
+	*/
 	void notifyS1(bool iSigState);
+	///Notify the second input signal
+	/**
+	\param iSigState Indicates whether the signal was notified
+	*/
 	virtual void notifyS2(bool iSigState);
+	///Notify the negated (failure) input signal
+	/**
+	\param iSigState Indicates whether the signal was notified
+	*/
 	virtual void notifySf(bool iSigState);
+	///Connects the signal ouput to the input of another constraint
+	/**
+	\param iRightConstr Target constraint to be connected to the signal output
+	\param iNotFunc Notification function of the target constraint
+	*/
 	void connectSigOut(SignalConstraint* iRightConstr, NtfSigFuncPointer iNotFunc);
+	///
 	virtual void notifiedReset();
+	///Returns the ID of the constraint
+	/**
+	\return ID of the constraint
+	*/
 	ID getID();
 	//static void setSimTime(TMLTime iSimTime);
 protected:
 	virtual void evalInput()=0;
 	void notifyRightConstraints(bool iSigState);
 	ID _ID;
+	///State of first input signal
 	Tristate _s1Notified;
-	//NtfSigFuncPointer _ntfFuncSigOut;
-	//SignalConstraint *_rightConstr;
+	///Constraint connected to signal output
 	SignalNotificationList _rightConstraints;
+	///Indicates whether the verification interval is open or closed (on both sides in each case)
 	bool _includeBounds;
+	///Simulation time
 	static TMLTime _simTime;
 };
 #endif

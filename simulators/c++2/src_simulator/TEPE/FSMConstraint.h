@@ -42,8 +42,15 @@ Ludovic Apvrille, Renaud Pacalet
 #include <ThreeSigConstraint.h>
 #include <PropertyStateConstraint.h>
 
+///Class representing a TEPE constraint whose behavior is described with an FSM
 class FSMConstraint: public ThreeSigConstraint, public PropertyStateConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	FSMConstraint(ID iID, PropType iType, bool iIncludeBounds);
 	void notifiedReset();
 	void reset();
@@ -51,8 +58,17 @@ public:
 	virtual std::istream& readObject(std::istream& s);
 protected:
 	void evalInput();
+	///Reads the transition table and deduces the next state, iEnableFlag and iSigOutFlag as a function of the received input signals
+	/**
+	\param iSignal Signal Code between 1 and 3 for first, second, and failure signal
+	\param iEnableFlag Enable flag of the constraint
+	\param iSigOutFlag Flag indicating whether an output signal is sent
+	\return False if the property was violated, true otherwise
+	*/
 	bool moveToNextState(unsigned int iSignal, unsigned int * iEnableFlag, bool * iSigOutFlag);
+	///Transition table of FSM
 	const unsigned int* _transTable;
+	///Current state of FSM
 	unsigned int _state;
 };
 #endif

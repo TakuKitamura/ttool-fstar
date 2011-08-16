@@ -309,8 +309,21 @@ protected:
 };
 
 //************************************************************************
+///Listener for generating signals to be evaluated by TEPE constraints
 class TEPESigListener: public GeneralListener{
 public:
+	///Constructor
+	/**
+	\param iSubjectIDs IDs of event sources to be taken into account
+	\param iNbOfSubjectIDs Number of event sources
+	\param iEvtBitmap Bitmap of event types to be taken into account
+	\param iTransTypeBitmap Bitmap of tranaction types to be taken into account
+	\param inbOfSignals Number of signals to be driven
+	\param iNotifConstr Pointer to constraints the signals belong to
+	\param iNotifFunc Notification function of constraints
+	\param iSimComp Pointer to SimComponents object
+	\param iSimulator Pointer to simulator as event source
+	*/
 	TEPESigListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, unsigned int iEvtBitmap, unsigned int iTransTypeBitmap, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
 	~TEPESigListener();
 	void simulationStarted();
@@ -325,22 +338,42 @@ public:
 	void readTrans(TMLTransaction* iTrans, ID iID);
 	void writeTrans(TMLTransaction* iTrans, ID iID);
 protected:
+	///IDs of event sources to be taken into account
 	ID* _subjectIDs;
+	///Number of event sources
 	unsigned int _nbOfSubjectIDs;
+	///Bitmap of event types to be taken into account
 	unsigned int _evtBitmap;
+	///Bitmap of tranaction types to be taken into account
 	unsigned int _transTypeBitmap;
+	///Number of signals to be driven
 	unsigned int _nbOfSignals;
+	///Pointer to constraints the signals belong to
 	SignalConstraint** _notifConstr;
+	///Dedicated notification function of constraints
 	NtfSigFuncPointer* _notifFunc;
+	///Flag indicating whether the signal was notified
 	bool _sigNotified;
+	///Pointer to SimComponents object
 	SimComponents* _simComp;
+	///Pointer to simulator as event source
 	ListenerSubject<GeneralListener>* _simulator;
 	
 };
 
 //************************************************************************
+///Listener for generating signals for floating inputs of TEPE constraints
 class TEPEFloatingSigListener: public GeneralListener, public Serializable{
 public:
+	///Constructor
+	/**
+	\param iSimulator Pointer to simulator as event source
+	\param inbOfSignals Number of signals to be driven
+	\param iNotifConstr Pointer to constraints the signals belong to
+	\param iNotifFunc Notification function of constraints
+	\param iNbOfStartNodes Number of TEPE constraints whose property output is not connected to any other constraint
+	\param iStartNodes TEPE constraints whose property output is not connected to any other constraint
+	*/
 	TEPEFloatingSigListener(ListenerSubject<GeneralListener>* iSimulator, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, unsigned int iNbOfStartNodes, PropertyConstraint** iStartNodes);
 	~TEPEFloatingSigListener();
 	void timeAdvances(TMLTime iCurrTime);
@@ -351,17 +384,35 @@ public:
 	std::istream& readObject(std::istream& s);
 	void reset();
 protected:
+	///Pointer to simulator as event source
 	ListenerSubject<GeneralListener>* _simulator;
+	///Number of signals to be driven
 	unsigned int _nbOfSignals;
+	///Pointer to constraints the signals belong to
 	SignalConstraint** _notifConstr;
+	///Notification function of constraints
 	NtfSigFuncPointer* _notifFunc;
+	///Number of TEPE constraints whose property output is not connected to any other constraint
 	unsigned int _nbOfStartNodes;
+	///TEPE constraints whose property output is not connected to any other constraint
 	PropertyConstraint** _startNodes;
 };
 
 //************************************************************************
+///Listener for generating signals indicating the a TEPE equation has to be reevaluated
 class TEPEEquationListener: public GeneralListener{
 public:
+	///Constructor
+	/**
+	\param iSubjectIDs IDs of event sources to be taken into account (TML commands that modify significant variables)
+	\param iNbOfSubjectIDs Number of event sources
+	\param iVar Task Variables referred to in the equation
+	\param iEqFunc Evaluation function for the equation
+	\param iNotifConstr Pointer to the equation constraint
+	\param iNotifFunc Notification function of the equation constraint
+	\param iSimComp Pointer to SimComponents object
+	\param iSimulator Pointer to simulator as event source
+	*/
 	TEPEEquationListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, EqFuncPointer iEqFunc, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
 	~TEPEEquationListener();
 	void commandFinished(TMLCommand* iComm, ID iID);	
@@ -369,21 +420,44 @@ public:
 	void simulationStarted();
 	void simulationStopped();
 protected:
+	///IDs of event sources to be taken into account (TML commands that modify significant variables)
 	ID* _subjectIDs;
+	///Number of event sources
 	unsigned int _nbOfSubjectIDs;
+	///Task Variables referred to in the equation
 	ParamType** _var;
+	///Evaluation function for the equation
 	EqFuncPointer _eqFunc;
+	///Result of the equation
 	bool _eqResult;
+	///Pointer to the equation constraint
 	SignalConstraint* _notifConstr;
+	///Notification function of the equation constraint
 	NtfSigFuncPointer _notifFunc;
+	///Flag indicating whether the signal was notified
 	bool _sigNotified;
+	///Pointer to SimComponents object
 	SimComponents* _simComp;
+	///Pointer to simulator as event source
 	ListenerSubject<GeneralListener>* _simulator;
 };
 
 //************************************************************************
+///Listener for generating signals indicating the a TEPE equation has to be reevaluated
 class TEPESettingListener: public GeneralListener{
 public:
+	///Constructor
+	/**
+	\param iSubjectIDs IDs of event sources to be taken into account (TML commands that modify significant variables)
+	\param iNbOfSubjectIDs Number of event sources
+	\param iVar Task Variables referred to in the setting
+	\param iSetFunc Evaluation function for the setting
+	\param inbOfSignals Number of signals to be driven
+	\param iNotifConstr Pointer to the setting constraints
+	\param iNotifFunc Notification function of setting constraint
+	\param iSimComp Pointer to SimComponents object
+	\param iSimulator Pointer to simulator as event source
+	*/
 	TEPESettingListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, ParamType** iVar, SettingFuncPointer iSetFunc, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator);
 	~TEPESettingListener();
 	void commandFinished(TMLCommand* iComm, ID iID);	
@@ -391,16 +465,27 @@ public:
 	void simulationStarted();
 	void simulationStopped();
 protected:
+	///IDs of event sources to be taken into account (TML commands that modify significant variables)
 	ID* _subjectIDs;
+	///Number of event sources
 	unsigned int _nbOfSubjectIDs;
+	///Task Variables referred to in the setting
 	ParamType** _var;
+	///Evaluation function for the setting
 	SettingFuncPointer _setFunc;
+	///Number of signals to be driven
 	unsigned int _nbOfSignals;
+	///Result of the setting
 	ParamType _setResult;
+	///Pointer to the setting constraints
 	SignalConstraint** _notifConstr;
+	///Notification function of setting constraint
 	NtfSigFuncPointer* _notifFunc;
+	///Flag indicating whether the signal was notified
 	bool _sigNotified;
+	///Pointer to SimComponents object
 	SimComponents* _simComp;
+	///Pointer to simulator as event source
 	ListenerSubject<GeneralListener>* _simulator;
 };
 #endif

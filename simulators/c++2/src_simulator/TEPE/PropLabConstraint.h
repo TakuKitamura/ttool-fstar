@@ -44,8 +44,13 @@ Ludovic Apvrille, Renaud Pacalet
 
 typedef enum{LIVENESS, NLIVENESS, REACHABILITY, NREACHABILITY} PropLabType;
 
+///Class representing a TEPE property label constraint
 class PropLabConstraint: public PropertyConstraint{
 public:
+	///Constructor
+	/**
+	\param iType Path quantifier: LIVENESS, NLIVENESS, REACHABILITY, NREACHABILITY
+	*/
 	PropLabConstraint(PropLabType iType);
 	bool evalProp();
 	void forceDisable();
@@ -54,7 +59,9 @@ public:
 	virtual std::istream& readObject(std::istream& s);
 	virtual void reset();
 protected:
+	///Path quantifier: LIVENESS, NLIVENESS, REACHABILITY, NREACHABILITY
 	PropLabType _type;
+	///Current value of the property for all explored paths
 	bool _property;
 };
 #endif

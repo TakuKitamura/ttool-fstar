@@ -76,6 +76,7 @@ void TMLStateChannel::reset(){
 	_nbToRead=0;
 #ifdef LOSS_ENABLED
 	_nbOfLosses = 0;
+	_lossRemainder = 0;
 #endif
 	//std::cout << "StateChannel reset end" << std::endl;
 }

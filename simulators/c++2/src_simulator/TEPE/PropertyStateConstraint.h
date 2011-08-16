@@ -44,24 +44,40 @@ Ludovic Apvrille, Renaud Pacalet
 
 typedef enum{GENERAL, NGENERAL, FINALLY, NFINALLY} PropType;
 
+///Class representing a stateful TEPE constraint
 class PropertyStateConstraint: public PropertyConstraint{
 public:
+	///Constructor
+	/**
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	*/
 	PropertyStateConstraint(PropType iType);
 	bool evalProp();
 	void notifyEnable(unsigned int iSigState);
+	///Reset function to be called after a simulation round, thus upon advance of simulation time
 	virtual void notifiedReset();
 	virtual void reset();
 	void forceDisable();
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 protected:
+	///Logics that evaluates the input signals, updates the internal state of the constraint and generates output signals
 	virtual void evalInput()=0;
+	///Is called to report a(n) (un)successfull property occurrence
+	/**
+	\param iProp Property value
+	*/
 	void reportPropOccurrence(bool iProp);
+	///Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
 	PropType _type;
+	///Constraint enabled flag
 	bool _constrEnabled;
+	///State of enable input signal
 	Tristate _enabledNotified;
+	///State of disable input signal
 	Tristate _disabledNotified;
 private:
+	///Current value of the property for the current path to be explored
 	bool _property;
 };
 #endif

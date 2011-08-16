@@ -60,7 +60,8 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iContent Initial content of the channel
 	\param iPriority Priority of the channel
-	\param iLossy Indicates whether the channel is lossy
+	\param iLossRate Loss rate of the channel
+	\param iMaxNbOfLosses Maximum number of losses
     	*/
 	TMLbrnbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, Priority iPriority, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0);
 	void testWrite(TMLTransaction* iTrans);

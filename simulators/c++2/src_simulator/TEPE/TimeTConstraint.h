@@ -43,8 +43,16 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SignalConstraint.h>
 #include <PropertyStateConstraint.h>
 
+///Class representing the TEPE Time Constraint with one input signal and one time value
 class TimeTConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iT Time that the property must hold
+	\param iRetrigger Indicates whether a sencond occurrence of the first input signals retriggers the timer
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	TimeTConstraint(ID iID, TMLTime iT, bool iRetrigger, bool iIncludeBounds);
 	void notifiedReset();
 	void reset();
@@ -52,8 +60,11 @@ public:
 	std::istream& readObject(std::istream& s);
 protected:
 	void evalInput();
+	///Time that the property must hold
 	TMLTime _t;
+	///Indicates whether a sencond occurrence of the first input signals retriggers the timer
 	bool _retrigger;
+	///Time of occurrence of the first input signal
 	TMLTime _s1Time;
 };
 #endif

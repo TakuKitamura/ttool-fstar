@@ -43,8 +43,15 @@ Ludovic Apvrille, Renaud Pacalet
 #include <SignalConstraint.h>
 #include <PropertyStateConstraint.h>
 
+///Class representing a TEPE equation constraint
 class EqConstraint: public SignalConstraint, public PropertyStateConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	EqConstraint(ID iID, PropType iType, bool iIncludeBounds);
 	void notifiedReset();
 	void reset();	
@@ -52,7 +59,9 @@ public:
 	std::istream& readObject(std::istream& s);	
 protected:
 	void evalInput();
+	///Result of equation
 	bool _eqResult;
+	///Indiactes whether the property occurrence has already been reported
 	bool _propReported;
 };
 #endif

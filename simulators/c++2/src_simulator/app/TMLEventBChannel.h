@@ -64,7 +64,8 @@ public:
 	\param iContent Initial content of the channel
 	\param iRequestChannel Flag indicating if channel is used by a request
 	\param iSourceIsFile Flag indicating if events are read from a file
-	\param iLossy Indicates whether the channel is lossy
+	\param iLossRate Loss rate of the channel
+	\param iMaxNbOfLosses Maximum number of losses
     	*/
 	TMLEventBChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iContent, bool iRequestChannel, bool iSourceIsFile, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iLossRate, iMaxNbOfLosses), _requestChannel(iRequestChannel), _sourceIsFile(iSourceIsFile),_eventFile(0) {
 		this->_overflow = false; 

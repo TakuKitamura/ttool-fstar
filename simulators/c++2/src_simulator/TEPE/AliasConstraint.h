@@ -42,8 +42,13 @@ Ludovic Apvrille, Renaud Pacalet
 #define AliasConstraintH
 #include <TwoSigConstraint.h>
 
+///Class representing the TEPE Alias Constraint
 class AliasConstraint: public TwoSigConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	*/
 	AliasConstraint(ID iID);
 	
 protected:

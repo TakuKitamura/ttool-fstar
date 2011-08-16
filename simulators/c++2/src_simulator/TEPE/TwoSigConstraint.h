@@ -42,12 +42,19 @@ Ludovic Apvrille, Renaud Pacalet
 #define TwoSigConstraintH
 #include <SignalConstraint.h>
 
+///Class representing any TEPE constraint with 2 input signals
 class TwoSigConstraint: public SignalConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	TwoSigConstraint(ID iID, bool iIncludeBounds);
 	void notifyS2(bool iSigState);
 	virtual void notifiedReset();
 protected:
-	 Tristate _s2Notified;
+	///State of second input signal
+	Tristate _s2Notified;
 };
 #endif

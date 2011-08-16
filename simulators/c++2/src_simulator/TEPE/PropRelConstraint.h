@@ -44,16 +44,20 @@ Ludovic Apvrille, Renaud Pacalet
 
 typedef enum{AND, OR} PropRelType;
 
+///Class representing a TEPE Property Logics Constraint
 class PropRelConstraint: public PropertyConstraint{
 public:
+	///Constructor
+	/**
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	*/
 	PropRelConstraint(PropRelType iType);
 	bool evalProp();
 	void forceDisable();
 	void notifyEnable(unsigned int iSigState);
-	//std::ostream& writeObject(std::ostream& s);
-	//std::istream& readObject(std::istream& s);
 	void reset();
 protected:
+	///Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
 	PropRelType _type;
 };
 #endif

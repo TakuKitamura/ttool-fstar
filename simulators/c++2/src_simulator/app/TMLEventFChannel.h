@@ -62,7 +62,8 @@ public:
 	\param iSlaves Pointers to the slaves on which the channel is mapped
 	\param iLength Length of the channel
 	\param iContent Initial content of the channel
-	\param iLossy Indicates whether the channel is lossy
+	\param iLossRate Loss rate of the channel
+	\param iMaxNbOfLosses Maximum number of losses
     	*/
 	TMLEventFChannel(ID iID, std::string iName, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0): TMLEventSizedChannel<T,paramNo>(iID, iName, iNumberOfHops, iMasters, iSlaves, iContent, iLossRate, iMaxNbOfLosses),_length(iLength){
 	}

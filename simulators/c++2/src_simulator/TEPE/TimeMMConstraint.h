@@ -43,8 +43,18 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TwoSigConstraint.h>
 #include <PropertyStateConstraint.h>
 
+///Class representing the TEPE Time Constraint with one input signal and one time value
 class TimeMMConstraint: public TwoSigConstraint, public PropertyStateConstraint{
 public:
+	///Constructor
+	/**
+	\param iID ID of the constraint
+	\param iType Temporal quantifier: GENERAL, NGENERAL, FINALLY, NFINALLY
+	\param iTmin Minimum time to elapse between the two input signals
+	\param iTmax Maximum time to elapse between the two input signals
+	\param iRetrigger Indicates whether a sencond occurrence of the first input signals retriggers the timer
+	\param iIncludeBounds Indicates whether the verification interval is open or closed (on both sides in each case)
+	*/
 	TimeMMConstraint(ID iID, PropType iType, TMLTime iTmin, TMLTime iTmax, bool iRetrigger, bool iIncludeBounds);
 	void notifiedReset();
 	void reset();
@@ -52,8 +62,13 @@ public:
 	std::istream& readObject(std::istream& s);
 protected:
 	void evalInput();
-	TMLTime _tmin, _tmax;
+	///Minimum time to elapse between the two input signals
+	TMLTime _tmin;
+	///Maximum time to elapse between the two input signals
+	TMLTime _tmax;
+	///Indicates whether a sencond occurrence of the first input signals retriggers the timer
 	bool _retrigger;
+	///Time of occurrence of the first input signal
 	TMLTime _s1Time;
 };
 #endif
