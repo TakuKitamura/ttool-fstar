@@ -60,7 +60,7 @@ public:
 	inline std::string toShortString() const {return "stp";}
 	inline std::string getCommandStr() const {return "stp";}
 protected:
-	inline TMLCommand* prepareNextTransaction() {_task->finished(); return 0;}
+	inline TMLCommand* prepareNextTransaction() {_execTimes++; _task->finished(); return 0;}
 };
 
 #endif

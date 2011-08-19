@@ -75,7 +75,7 @@ public:
 #endif
 protected:
 	TMLCommand* prepareNextTransaction();
-	inline TMLCommand* getNextCommand() const {return _nextCommand[_indexNextCommand];}
+	inline TMLCommand* getNextCommand() const {_coveredBranchMap |= (1 << _indexNextCommand); return _nextCommand[_indexNextCommand];}
 	///Pointer to an array of pointers to channels conveying the desired signals
 	TMLEventChannel** _channel;
 	///Pointer to an array of parameter function pointers

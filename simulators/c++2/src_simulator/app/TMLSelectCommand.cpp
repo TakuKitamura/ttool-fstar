@@ -101,7 +101,7 @@ void TMLSelectCommand::execute(){
 	//bool check=false;
 	for (_indexNextCommand=0;_indexNextCommand<aLoopLimit;_indexNextCommand++){
 		if(_channel[_indexNextCommand]==aReadChannel){
-			if (!_channel[_indexNextCommand]->read()) std::cout <<"Fehler read!!!!\n" ;
+			if (!_channel[_indexNextCommand]->read()) std::cout <<"Fatal error read!!!!\n" ;
 			aFinalIndex=_indexNextCommand;
 			//check=true;
 		}else{

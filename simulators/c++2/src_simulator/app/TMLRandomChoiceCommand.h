@@ -62,7 +62,7 @@ public:
 protected:
 	///A bitmap of enabled branches
 	unsigned int _dynamicRange;
-	inline TMLCommand* getNextCommand() const {return _nextCommand[_randomValue];}
+	inline TMLCommand* getNextCommand() const {_coveredBranchMap |= (1 << _randomValue); return _nextCommand[_randomValue];}
 };
 
 #endif

@@ -55,11 +55,17 @@ Ludovic Apvrille, Renaud Pacalet
 
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
+unsigned int TMLCommand::_branchNo=0;
 
-TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _type(NONE), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0){
+TMLCommand::TMLCommand(ID iID, TMLTask* iTask, TMLLength iLength, unsigned int iNbOfNextCmds, const char* iLiveVarList, bool iCheckpoint): _ID(iID), _length(iLength), _type(NONE), _progress(0), _currTransaction(0), _task(iTask), _nextCommand(0), /*_paramFunc(iParamFunc),*/ _nbOfNextCmds(iNbOfNextCmds), _breakpoint(0), _justStarted(true), _commandStartTime(-1), _liveVarList(iLiveVarList), _checkpoint(iCheckpoint), _execTimes(0), _coveredBranchMap(0){
 	if (dynamic_cast<TMLStopCommand*>(this)==0){
 		_instanceList.push_back(this);
 		_task->addCommand(iID, this);
+		if (_nbOfNextCmds>1){
+			//std::cout << "** " << this->toShortString() << " has " << _nbOfNextCmds << " branches.\n";
+			_branchNo+=_nbOfNextCmds;
+		}
+		
 	}
 }
 
@@ -134,8 +140,8 @@ TMLCommand* TMLCommand::prepare(bool iInit){
 				NOTIFY_CMD_ENTERED(this);
 #else
 #ifdef EXPLO_ENABLED
-				//if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);
-				if (dynamic_cast<TMLRandomCommand*>(this)!=0) NOTIFY_CMD_ENTERED(this);
+				if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);
+				//if (dynamic_cast<TMLRandomCommand*>(this)!=0) NOTIFY_CMD_ENTERED(this);
 #endif
 #endif
 				_justStarted=true;
@@ -229,7 +235,7 @@ void TMLCommand::reset(){
 
 void TMLCommand::registerGlobalListener(GeneralListener* iListener){
 	std::cout << "Global cmd listener created \n";
-	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->registerListener(iListener);
 	}
 }
@@ -237,28 +243,51 @@ void TMLCommand::registerGlobalListener(GeneralListener* iListener){
 template<typename T>
 void TMLCommand::registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask){
 	//std::cout << "Global cmd listener created \n";
-	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		if (dynamic_cast<T*>(*i)!=0 && (aTask==0 || (*i)->getTask()==aTask)) (*i)->registerListener(iListener);
 	}
 }
 
 void TMLCommand::removeGlobalListener(GeneralListener* iListener){
-	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		(*i)->removeListener(iListener);
 	}
 }
 
 void TMLCommand::streamStateXML(std::ostream& s){
-	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		s << TAG_CMDo << " id=\"" << (*i)->_ID << "\">" << TAG_EXECTIMESo << (*i)->_execTimes << TAG_EXECTIMESc << TAG_CMDc << "\n";
 	}
 }
 
 TMLCommand* TMLCommand::getCommandByID(ID iID){
-	for(std::list<TMLCommand*>::iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
 		if ((*i)->_ID == iID) return *i;
 	}
 	return 0;
+}
+
+unsigned int TMLCommand::getCmdCoverage(){
+	unsigned int aCoveredCmds=0;
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		if ((*i)->_execTimes>0) aCoveredCmds++; //else std::cout << "Not covered: " << (*i)->toShortString() << "\n";
+	}
+	//std::cout << "Total no of commands: " << _instanceList.size() << "\n";
+	return aCoveredCmds * 100 / _instanceList.size();
+}
+
+unsigned int TMLCommand::getBranchCoverage(){
+	unsigned int aCoveredBranchNo=0;
+	//std::cout << "Total branch no: " << _branchNo << "\n";
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		//if ((*i)->_nbOfNextCmds>1) std::cout << "** " << (*i)->toShortString() << " ID " << (*i)->_ID << " has " << (*i)->_nbOfNextCmds << " branches, covered map : " << (*i)->_coveredBranchMap << "\n";
+		long unsigned int aCoveredBranchMap = (*i)->_coveredBranchMap;
+		while (aCoveredBranchMap>0){
+			aCoveredBranchNo++;
+			aCoveredBranchMap >>=1;
+		}
+	}
+	return (_branchNo==0)? 100: aCoveredBranchNo * 100 / _branchNo;
 }
 
 template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(GeneralListener* iListener, TMLTask* aTask);

@@ -86,6 +86,7 @@ class SchedulableCommDevice;
 #define MSG_SIMSTOPPED "Simulation stopped"
 #define MSG_SIMPAUSED "Simulation paused"
 #define MSG_SIMENDED "Simulation completed"
+#define MSG_COVREACHED "Coverage reached"
 #define SIM_READY "ready"
 #define SIM_BUSY "busy"
 #define SIM_TERM "term"
@@ -319,5 +320,9 @@ protected:
 	TMLTime _shortRunTime;
 	///Flag indicating whether replies should be sent back to the server, not set in command line mode
 	bool _replyToServer;
+	///Branch coverage to target
+	unsigned int _branchCoverage;
+	///Statement coverage to target
+	unsigned int _commandCoverage;
 };
 #endif

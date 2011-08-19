@@ -211,6 +211,16 @@ public:
 	static void streamStateXML(std::ostream& s);
 	static TMLCommand* getCommandByID(ID iID);
 	inline unsigned int getType() {return _type;}
+	///Returns the code statement coverage of the whole model
+	/**
+	\return Statement coverage in percent
+	*/
+	static unsigned int getCmdCoverage();
+	///Returns the code branch coverage of the whole model
+	/**
+	\return Branch coverage in percent
+	*/
+	static unsigned int getBranchCoverage();
 protected:
 	///ID of the command
 	ID _ID;
@@ -259,6 +269,10 @@ protected:
 	unsigned int _execTimes;
 	///Buffer for transaction to be proposed to kernel
 	TMLTransaction transBuffer;
+	///Number of branches in the whole DIPLODOCUS model
+	static unsigned int _branchNo;
+	///Bitmap of covered branches of this specific command
+	mutable long unsigned int _coveredBranchMap;	
 };
 
 #endif

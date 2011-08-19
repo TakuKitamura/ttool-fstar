@@ -51,6 +51,10 @@ Bus::Bus(ID iID, std::string iName, WorkloadSource* iScheduler, TMLLength iBurst
 
 Bus::~Bus(){
 	//delete _scheduler;
+	//std::cout << _transactList.size() << " elements in List of " << _name << ", busy cycles: " << _busyCycles << std::endl;
+	//for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+	//	std::cout << (*i)->toString() << "\n";
+	//}
 }
 
 void Bus::schedule(){
@@ -116,7 +120,8 @@ void Bus::calcStartTimeLength(TMLTime iTimeSlice) const{
 
 std::string Bus::toShortString() const{
 	std::ostringstream outp;
-	outp << "bus" << _ID;
+	//outp << "bus" << _ID;
+	outp << "bus" << _name;
 	return outp.str();
 }
 
@@ -161,6 +166,7 @@ void Bus::schedule2TXT(std::ofstream& myfile) const{
 
 void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	//std::ostringstream outp;
+	//std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
 	if (iInit){
 		 _posTrasactListVCD=_transactList.begin();
 		_previousTransEndTime=0;

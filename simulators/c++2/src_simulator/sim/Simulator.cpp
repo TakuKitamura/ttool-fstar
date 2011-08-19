@@ -59,7 +59,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true){
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100){
 }
 
 Simulator::~Simulator(){
@@ -496,7 +496,17 @@ const std::string Simulator::getArgs(const std::string& iComp, const std::string
 }
 
 void Simulator::printHelp(){
-	std::cout << "*****\nCommand line usage: run.x -ohtml myfile.htm -ovcd myfile.vcd -otxt myfile.txt\nParameters can be omitted if respective output is not needed; if file name is omitted default values will be applied.\nFor server mode: run.x -server\n*****\n";
+	std::cout << 	"\n************************** Command line arguments *************************\n"
+			"-gpath                 specify path for graph output\n"
+			"-server                launch simulator in server mode\n"
+			"-file                  read simulation commands from file\n"
+			"-help                  display this help text\n"
+			"-ohtml ofile           simulate and write traces to ofile in html format\n"
+			"-otxt ofile            simulate and write traces to ofile in text format\n"
+			"-ovcd ofile            simulate and write traces to ofile in vcd format\n"
+			"-ograph ofile          simulate and write traces to ofile in aut format\n"
+			"-cmd \'c1 p1 p2;c2\'     execute commands c1 with parameters p1 and p2 and c2\n"
+			"***************************************************************************\n\n";
 }
 
 void Simulator::run(){
@@ -518,52 +528,62 @@ void Simulator::run(){
 }
 
 ServerIF* Simulator::run(int iLen, char ** iArgs){
-	std::string aTraceFileName;
+	std::string aArgString;
 	std::cout << "Starting up...\n";
 	_graphOutPath = getArgs("-gpath", "", iLen, iArgs);
 	if (_graphOutPath.length()>0 && _graphOutPath[_graphOutPath.length()-1]!='/')
 		 _graphOutPath+="/";
-	aTraceFileName =getArgs("-server", "server", iLen, iArgs);
-	if (!aTraceFileName.empty()) return new Server();
-	aTraceFileName =getArgs("-file", "file", iLen, iArgs);
-	if (!aTraceFileName.empty()) return new ServerLocal(aTraceFileName);
-	//aTraceFileName =getArgs("-explore", "file", iLen, iArgs);
-	//if (!aTraceFileName.empty()) return new ServerExplore();
+	aArgString =getArgs("-server", "server", iLen, iArgs);
+	if (!aArgString.empty()) return new Server();
+	aArgString =getArgs("-file", "file", iLen, iArgs);
+	if (!aArgString.empty()) return new ServerLocal(aArgString);
+	//aArgString =getArgs("-explore", "file", iLen, iArgs);
+	//if (!aArgString.empty()) return new ServerExplore();
 	std::cout << "Running in command line mode.\n";
 	_replyToServer = false;
-	aTraceFileName =getArgs("-help", "help", iLen, iArgs);
-	if (aTraceFileName.empty()){
-		aTraceFileName =getArgs("-explo", "explo", iLen, iArgs);
-		if (aTraceFileName.empty()){
+	aArgString =getArgs("-help", "help", iLen, iArgs);
+	if (aArgString.empty()){
+		//aArgString =getArgs("-explo", "explo", iLen, iArgs);
+		aArgString =getArgs("-cmd", "1 0", iLen, iArgs);
+		if (aArgString.empty()){
 			TMLTransaction* oLastTrans;
 			simulate(oLastTrans);
-			aTraceFileName=getArgs("-ohtml", "scheduling.html", iLen, iArgs);
-			if (!aTraceFileName.empty()) schedule2HTML(aTraceFileName);
-			aTraceFileName=getArgs("-otxt", "scheduling.txt", iLen, iArgs);
-			if (!aTraceFileName.empty()) schedule2TXT(aTraceFileName);
-			aTraceFileName=getArgs("-ovcd", "scheduling.vcd", iLen, iArgs);
-			if (!aTraceFileName.empty()) schedule2VCD(aTraceFileName);
-			aTraceFileName=getArgs("-ograph", "scheduling.aut", iLen, iArgs);
-			if (!aTraceFileName.empty()) schedule2Graph(aTraceFileName);
+			aArgString=getArgs("-ohtml", "scheduling.html", iLen, iArgs);
+			if (!aArgString.empty()) schedule2HTML(aArgString);
+			aArgString=getArgs("-otxt", "scheduling.txt", iLen, iArgs);
+			if (!aArgString.empty()) schedule2TXT(aArgString);
+			aArgString=getArgs("-ovcd", "scheduling.vcd", iLen, iArgs);
+			if (!aArgString.empty()) schedule2VCD(aArgString);
+			aArgString=getArgs("-ograph", "scheduling.aut", iLen, iArgs);
+			if (!aArgString.empty()) schedule2Graph(aArgString);
 			_simComp->streamBenchmarks(std::cout);
 			std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 		}else{
-			decodeCommand("1 7");
+			std::string aNextCmd;
+			std::istringstream iss(aArgString+";");
+			getline(iss, aNextCmd, ';');
+			while (!(iss.eof() || aNextCmd.empty())){
+				std::cout << "next cmd to execute: \"" << aNextCmd << "\"\n";
+				decodeCommand(aNextCmd);
+				getline(iss, aNextCmd, ';');
+			}
 		}
-	}
-	else
+		rusage res;
+		getrusage(RUSAGE_SELF, &res); 
+		//std::cerr << res.ru_utime.tv_sec << "," << res.ru_utime.tv_usec << "," << res.ru_stime.tv_sec << "," << res.ru_stime.tv_usec << "\n";
+		double aRunTime = ((double)((res.ru_utime.tv_sec + res.ru_stime.tv_sec) *1000000 + res.ru_utime.tv_usec + res.ru_stime.tv_usec))/1000000;
+		std::cerr << "trans/sec: " << ((double)SchedulableDevice::getOverallTransNo())/aRunTime << "\n";
+		std::cerr << "cycles/trans: " << ((double)SchedulableDevice::getOverallTransSize())/((double)SchedulableDevice::getOverallTransNo()) << "\n";
+		std::cerr << "Trans size: " << SchedulableDevice::getOverallTransSize() << "  trans no: " << SchedulableDevice::getOverallTransNo() << "\n";
+		std::cerr << "Statement coverage of application: " << TMLCommand::getCmdCoverage() << "%\n";
+		std::cerr << "Branch coverage of application: " << TMLCommand::getBranchCoverage() << "%\n";
+	}else{
 		printHelp();
+	}
 	//clock_t tick =sysconf(_SC_CLK_TCK);
 	//tms test;
 	//times(&test);
 	//std::cout << "user time: " << test.tms_utime << "  system time: " << test.tms_stime + test.tms_cstime << "  tick: " << tick << "\n";
-	rusage res;
-	getrusage(RUSAGE_SELF, &res); 
-	std::cerr << res.ru_utime.tv_sec << "," << res.ru_utime.tv_usec << "," << res.ru_stime.tv_sec << "," << res.ru_stime.tv_usec << "\n";
-	double aRunTime = ((double)((res.ru_utime.tv_sec + res.ru_stime.tv_sec) *1000000 + res.ru_utime.tv_usec + res.ru_stime.tv_usec))/1000000;
-	std::cerr << "trans/sec: " << ((double)SchedulableDevice::getOverallTransNo())/aRunTime << "\n";
-	std::cerr << "cycles/trans: " << ((double)SchedulableDevice::getOverallTransSize())/((double)SchedulableDevice::getOverallTransNo()) << "\n";
-	std::cerr << "Trans size: " << SchedulableDevice::getOverallTransSize() << "  trans no: " << SchedulableDevice::getOverallTransNo() << "\n";
 	return 0;
 }
 
@@ -646,6 +666,9 @@ void Simulator::decodeCommand(std::string iCmd){
 				case 7: {//Explore Tree
 					//for (int i=0; i<RECUR_DEPTH; i++) leafsForLevel[i]=0;
 					std::cout << "Explore tree." << std::endl;
+					_commandCoverage=100; _branchCoverage=100;
+					aInpStream >> _commandCoverage;
+					aInpStream >> _branchCoverage;
 					std::stringstream aPath;
 					aPath << _graphOutPath << "tree.dot";
 					std::ofstream myDOTfile (aPath.str().c_str());
@@ -1298,6 +1321,11 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 			iAUTFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
 //#endif
 			TMLTransaction::incID();
+			
+			if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
+				_simComp->setStopFlag(true, MSG_COVREACHED);
+				_syncInfo->_terminate=true;
+			}
 			//}else{
 		}else if (_simComp->wasKnownStateReached()==0){
 			if(aRandomCmd==0){
@@ -1312,7 +1340,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 				_simComp->writeObject(aStreamBuffer);
 				aStringBuffer=aStreamBuffer.str();
 				if ((aNbNextCmds & INT_MSB)==0){
-					for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
+					for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
 						_simComp->reset();
 						aStreamBuffer.str(aStringBuffer);
 						//std::cout << "Read 1 in exploreTree\n";
@@ -1323,7 +1351,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 				}else{
 					unsigned int aBranch=0;
 					aNbNextCmds ^= INT_MSB;
-					while (aNbNextCmds!=0){
+					while (aNbNextCmds!=0 && !_syncInfo->_terminate){
 						if ((aNbNextCmds & 1)!=0){
 							_simComp->reset();
 							aStreamBuffer.str(aStringBuffer);

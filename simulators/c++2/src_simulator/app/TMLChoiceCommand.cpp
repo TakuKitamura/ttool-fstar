@@ -50,7 +50,10 @@ TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRan
 
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
 	ParamType aMin, aMax;
-	return _nextCommand[(_task->*_rangeFunc)(aMin, aMax)];
+	//return _nextCommand[(_task->*_rangeFunc)(aMin, aMax)];
+	unsigned int aNextIndex = (_task->*_rangeFunc)(aMin, aMax);
+	_coveredBranchMap |= (1 << aNextIndex);
+	return _nextCommand[aNextIndex];
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){

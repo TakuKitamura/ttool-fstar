@@ -64,7 +64,7 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	}
 	
 	TMLCommand* aNextCommand=getNextCommand();
-	//std::cout << "set next:" << aNextCommand << "\n";
+	//std::cout << _ID << " set next:" << (_randomValue+1) << "\n";
 	_task->setCurrCommand(aNextCommand);
 	_randomValue=-1;
 	_execTimes++;

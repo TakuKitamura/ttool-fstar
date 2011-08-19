@@ -57,6 +57,7 @@ void TMLWriteCommand::execute(){
 	_progress+=_currTransaction->getVirtualLength();
 	//_task->setEndLastTransaction(_currTransaction->getEndTime());
 	_task->addTransaction(_currTransaction);
+	//std::cout << "Trans written: " << _currTransaction->toString() << "\n";
 	prepare(false);
 	//if (aNextCommand==0) _currTransaction->setTerminatedFlag();
 	//if (_progress==0 && aNextCommand!=this) _currTransaction=0;

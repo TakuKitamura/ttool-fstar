@@ -74,7 +74,7 @@ public:
     	*/
 	//virtual TMLTransaction* getNextTransaction()=0;
 	virtual TMLTransaction* getNextTransaction(){
-		//std::cout << "Raw version of getNextTransaction\n";
+		//std::cout << "Raw version of getNextTransaction " << _nextTransaction << "\n";
 		return _nextTransaction;
 	}
 	///Writes a HTML representation of the schedule to an output file
