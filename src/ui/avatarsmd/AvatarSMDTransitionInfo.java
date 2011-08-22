@@ -232,7 +232,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		Vector attributes = tdp.getMGUI().getAllAttributes();
 		Vector methods = tdp.getMGUI().getAllMethods();
 		JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude);
-		jdat.setSize(500, 600);
+		jdat.setSize(600, 550);
 		GraphicLib.centerOnParent(jdat);
 		jdat.show(); // blocked until dialog has been closed
 		

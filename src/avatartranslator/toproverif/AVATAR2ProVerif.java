@@ -60,9 +60,11 @@ public class AVATAR2ProVerif {
 	private final static String BOOLEAN_DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
 	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
 	
-	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encrypt/2.\nreduc decrypt(encrypt(x,pk(y)),y) = x.\n";
+	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encryptPK/2.\nreduc decryptPK(encryptPK(x,pk(y)),y) = x.\nfun encryptSK/2.\nreduc decryptSK(encryptSK(x, y), pk(y)) = x.\n";
+	
 	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
 	private final static String MAC_HEADER = "(* MAC *)\nfun MAC/2.\nreduc verifyMAC(m, k, MAC(m, k)) = true.\n";
+	private final static String HASH_HEADER = "(* HASH *)\nfun hash/1.\n";
 	private final static String CONCAT_HEADER = "(* CONCAT *)\nfun concat/5.\nreduc get1(concat(m1, m2, m3, m4, m5))= m1.\nreduc get2(concat(m1, m2, m3, m4, m5))= m2.\nreduc get3(concat(m1, m2, m3, m4, m5))= m3.\nreduc get4(concat(m1, m2, m3, m4, m5))= m4.\nreduc get5(concat(m1, m2, m3, m4, m5))= m5.\n";
 	
 	private ProVerifSpec spec;
@@ -137,6 +139,7 @@ public class AVATAR2ProVerif {
 		spec.addToGlobalSpecification(PK_HEADER + "\n");
 		spec.addToGlobalSpecification(SK_HEADER + "\n");
 		spec.addToGlobalSpecification(MAC_HEADER + "\n");
+		spec.addToGlobalSpecification(HASH_HEADER + "\n");
 		spec.addToGlobalSpecification(CONCAT_HEADER + "\n");
 		
 		spec.addToGlobalSpecification("\n(* Channel *)\nfree ch.\n");
@@ -932,6 +935,8 @@ public class AVATAR2ProVerif {
 				ab[0] = _guard;
 				ab[1] = "true";
 				return ab;
+			} else {
+				return null;
 			}
 		}
 		
