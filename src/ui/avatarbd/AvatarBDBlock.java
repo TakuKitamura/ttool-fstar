@@ -908,11 +908,16 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
 	public void addCryptoElements() {
 		// Adding function
-		String method = "Message encrypt(Message msg, Key k)";
+		String method = "Message encryptSK(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
-		method = "Message decrypt(Message msg, Key k)";
+		method = "Message decryptSK(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		
+		method = "Message encryptPK(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "Message decryptPK(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+	
 		method = "Message sencrypt(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		method = "Message sdecrypt(Message msg, Key k)";
@@ -943,10 +948,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		addMethodIfApplicable(myMethods, method);
 		
 		// Adding channels chin chout
-		String signal = "in chin(Message msg)";
+		/*String signal = "in chin(Message msg)";
 		addSignalIfApplicable(mySignals, signal);
 		signal = "out chout(Message msg)";
-		addSignalIfApplicable(mySignals, signal);
+		addSignalIfApplicable(mySignals, signal);*/
 		
 	}
 	

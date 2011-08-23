@@ -347,6 +347,18 @@ public class AvatarSpecification extends AvatarElement {
 		return null;
 	}
 	
+	public AvatarBlock getBlockWithAttribute(String _attributeName) {
+		int index;
+		
+		for(AvatarBlock block: blocks) {
+			index = block.getIndexOfAvatarAttributeWithName(_attributeName);
+			if (index > -1) {
+				return block;
+			}
+		}
+		return null;
+	}
+	
 	public AvatarState removeElseGuards() {
 		AvatarState state;
 		

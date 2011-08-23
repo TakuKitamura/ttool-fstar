@@ -59,8 +59,8 @@ import ui.window.*;
 
 public class AvatarDesignPanelTranslator {
 	
-	private final String[] PRAGMAS = {"Confidentiality", "Secret", "InitialCommonKnowledge", "Authenticity"};
-	private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "InitialCommonKnowledge", "Authenticity"};
+	private final String[] PRAGMAS = {"Confidentiality", "Secret", "InitialCommonKnowledge", "Authenticity", "PublicPrivateKey"};
+	private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "InitialCommonKnowledge", "Authenticity", "PublicPrivateKey"};
 	
 	protected AvatarDesignPanel adp;
 	protected Vector checkingErrors, warnings;
@@ -122,23 +122,23 @@ public class AvatarDesignPanelTranslator {
 				for(int i=0; i<values.length; i++) {
 					tmp = values[i].trim();
 					if ((tmp.startsWith("#") && (tmp.length() > 1))) {
-							tmp = tmp.substring(1, tmp.length()).trim();
-							
-							//TraceManager.addDev("Reworking pragma =" + tmp);
-							
-							tmp = reworkPragma(tmp, _blocks);
-							
-							//TraceManager.addDev("Reworked pragma =" + tmp);
-							
-							if (tmp == null) {
-								CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
-								ce.setTGComponent(tgc);
-								ce.setTDiagramPanel(adp.getAvatarBDPanel());
-								addWarning(ce);
-							} else {
-								_as.addPragma(tmp);
-								//TraceManager.addDev("Adding pragma:" + tmp);
-							}
+						tmp = tmp.substring(1, tmp.length()).trim();
+						
+						//TraceManager.addDev("Reworking pragma =" + tmp);
+						
+						tmp = reworkPragma(tmp, _blocks);
+						
+						//TraceManager.addDev("Reworked pragma =" + tmp);
+						
+						if (tmp == null) {
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Invalid pragma: " + values[i].trim() + " (ignored)");
+							ce.setTGComponent(tgc);
+							ce.setTDiagramPanel(adp.getAvatarBDPanel());
+							addWarning(ce);
+						} else {
+							_as.addPragma(tmp);
+							//TraceManager.addDev("Adding pragma:" + tmp);
+						}
 					}
 				}
 			}
@@ -162,12 +162,13 @@ public class AvatarDesignPanelTranslator {
 		
 		for(i=0; i<PRAGMAS.length; i++) {
 			if (header.compareTo(PRAGMAS[i]) == 0) {
-					break;
+				break;
 			}
 		}
 		
 		// Invalid header?
 		if (i == PRAGMAS.length) {
+			TraceManager.addDev("Invalid Pragma " + 0);
 			return null;
 		}
 		
@@ -178,6 +179,7 @@ public class AvatarDesignPanelTranslator {
 		// Checking for arguments
 		
 		boolean b = ret.startsWith("Authenticity ");
+		boolean b1 = ret.startsWith("PublicPrivateKey ");
 		String arguments [] = _pragma.substring(index+1, _pragma.length()).trim().split(" ");
 		String tmp;
 		String blockName, stateName, paramName;
@@ -185,84 +187,174 @@ public class AvatarDesignPanelTranslator {
 		Vector types;
 		AvatarBDBlock block;
 		TAttribute ta;
+		AvatarBlock ab;
 		
 		for(i=0; i<arguments.length; i++) {
 			tmp = arguments[i];
-			index = tmp.indexOf(".");
-			if (index == -1) {
-				return null;
-			}
-			blockName = tmp.substring(0, index);
 			
-			//TraceManager.addDev("blockName=" + blockName);
-			// Search for the block
-			for(Object o: _blocks) {
-				block = (AvatarBDBlock)o;
-				if (block.getBlockName().compareTo(blockName) == 0) {
-					if (b) {
-						// authenticity
-						stateName = tmp.substring(index+1, tmp.length());
-						//TraceManager.addDev("stateName=" + stateName);
-						index = stateName.indexOf(".");
-						if (index == -1) {
-							return null;
-						}
-						paramName = stateName.substring(index+1, stateName.length());
-						stateName = stateName.substring(0, index);
-						
+			if (b1) {
+				// Public / Private key?
+				if (i == 0) {
+					// Shall be an attribute name
+					// Look for at least a block having that attribute
+					found = false;
+					for(Object o: _blocks) {
+						block = (AvatarBDBlock)o;
 						for(Object oo: block.getAttributeList()) {
 							ta = (TAttribute)oo;
-							if (ta.getId().compareTo(paramName) == 0) {
+							if (ta.getId().compareTo(tmp) == 0) {
 								found = true;
 								
 								if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
-									ret = ret + blockName + "." + paramName + " ";
+									ret = ret  + tmp + " ";
 								} else if (ta.getType() == TAttribute.OTHER) {
 									// Must find all subsequent types
 									types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
 									if (types == null) {
+										TraceManager.addDev("Invalid Pragma " + 1);
 										return null;
+										
 									} else {
 										for(int j=0; j<types.size(); j++) {
-											ret = ret + blockName + "." + stateName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+											ret = ret + tmp + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
 										}
 									}
-									
-								} else {
-									return null;
 								}
 								
-								break;
 							}
 						}
-						
-					} else {
-						// Other: confidentiality, initial common knowledge
-						paramName = tmp.substring(index+1, tmp.length());
-						for(Object oo: block.getAttributeList()) {
-							ta = (TAttribute)oo;
-							if (ta.getId().compareTo(paramName) == 0) {
-								found = true;
-								
-								if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
-									ret = ret + blockName + "." + paramName + " ";
-								} else if (ta.getType() == TAttribute.OTHER) {
-									// Must find all subsequent types
-									types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
-									if (types == null) {
-										return null;
-									} else {
-										for(int j=0; j<types.size(); j++) {
-											ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+					}
+					if (found == false) {
+						TraceManager.addDev("Invalid Pragma " + 2);
+						return null;
+					}
+					
+				} else if (i == 1) {
+					// shall be of the form Block.attribute
+					index = tmp.indexOf(".");
+					if (index == -1) {
+						return null;
+					}
+					blockName = tmp.substring(0, index);
+					for(Object o: _blocks) {
+						block = (AvatarBDBlock)o;
+						if (block.getBlockName().compareTo(blockName) == 0) {
+							paramName = tmp.substring(index+1, tmp.length());
+							for(Object oo: block.getAttributeList()) {
+								ta = (TAttribute)oo;
+								if (ta.getId().compareTo(paramName) == 0) {
+									found = true;
+									
+									if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+										ret = ret + blockName + "." + paramName + " ";
+									} else if (ta.getType() == TAttribute.OTHER) {
+										// Must find all subsequent types
+										types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+										if (types == null) {
+											TraceManager.addDev("Invalid Pragma " + 3);
+											return null;
+										} else {
+											for(int j=0; j<types.size(); j++) {
+												ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+											}
 										}
+										
+									} else {
+										TraceManager.addDev("Invalid Pragma " + 4);
+										return null;
 									}
 									
-								} else {
-									return null;
+									break;
 								}
-								
-								break;
 							}
+						}
+					}
+				} else {
+					// Badly formatted
+					TraceManager.addDev("Invalid Pragma " + 5);
+					return null;
+				}
+				
+			} else {
+				index = tmp.indexOf(".");
+				if (index == -1) {
+					return null;
+				}
+				blockName = tmp.substring(0, index);
+				
+				//TraceManager.addDev("blockName=" + blockName);
+				// Search for the block
+				for(Object o: _blocks) {
+					block = (AvatarBDBlock)o;
+					if (block.getBlockName().compareTo(blockName) == 0) {
+						if (b) {
+							// authenticity
+							stateName = tmp.substring(index+1, tmp.length());
+							//TraceManager.addDev("stateName=" + stateName);
+							index = stateName.indexOf(".");
+							if (index == -1) {
+								return null;
+							}
+							paramName = stateName.substring(index+1, stateName.length());
+							stateName = stateName.substring(0, index);
+							
+							for(Object oo: block.getAttributeList()) {
+								ta = (TAttribute)oo;
+								if (ta.getId().compareTo(paramName) == 0) {
+									found = true;
+									
+									if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+										ret = ret + blockName + "." + paramName + " ";
+									} else if (ta.getType() == TAttribute.OTHER) {
+										// Must find all subsequent types
+										types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+										if (types == null) {
+											return null;
+										} else {
+											for(int j=0; j<types.size(); j++) {
+												ret = ret + blockName + "." + stateName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+											}
+										}
+										
+									} else {
+										return null;
+									}
+									
+									break;
+								}
+							}
+							
+						} else {
+							
+							
+							// Other: confidentiality, initial common knowledge
+							paramName = tmp.substring(index+1, tmp.length());
+							for(Object oo: block.getAttributeList()) {
+								ta = (TAttribute)oo;
+								if (ta.getId().compareTo(paramName) == 0) {
+									found = true;
+									
+									if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
+										ret = ret + blockName + "." + paramName + " ";
+									} else if (ta.getType() == TAttribute.OTHER) {
+										// Must find all subsequent types
+										types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
+										if (types == null) {
+											return null;
+										} else {
+											for(int j=0; j<types.size(); j++) {
+												ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+											}
+										}
+										
+									} else {
+										return null;
+									}
+									
+									break;
+								}
+							}
+							
 						}
 					}
 				}
@@ -402,8 +494,8 @@ public class AvatarDesignPanelTranslator {
 		}
 		
 		if ((rt.compareTo("int") == 0) || (rt.compareTo("bool") == 0)) {
-				aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _block); 
-				_atam.addReturnParameter(aa);
+			aa = new AvatarAttribute("return__0", AvatarType.getType(rt), _block); 
+			_atam.addReturnParameter(aa);
 		} else {
 			types = adp.getAvatarBDPanel().getAttributesOfDataType(rt);
 			if (types == null) {
@@ -494,7 +586,7 @@ public class AvatarDesignPanelTranslator {
 			for(i=0; i<v0.size(); i++) {
 				tatmp = (TAttribute)(v0.get(i));
 				v.add(_name + "__" + tatmp.getId());
-				}
+			}
 		} else {
 			v.add(_name);
 		}
@@ -539,7 +631,7 @@ public class AvatarDesignPanelTranslator {
 		}
 		
 		tdp = (TDiagramPanel)asmdp;
-
+		
 		// search for start state
 		LinkedList list = asmdp.getComponentList();
 		Iterator iterator = list.listIterator();
@@ -609,7 +701,7 @@ public class AvatarDesignPanelTranslator {
 		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
-				
+			
 			// Receive signal
 			if (tgc instanceof AvatarSMDReceiveSignal) {
 				asmdrs = (AvatarSMDReceiveSignal)tgc;
@@ -671,31 +763,31 @@ public class AvatarDesignPanelTranslator {
 							ce.setTGComponent(tgc);
 							addCheckingError(ce);
 						} else {
-						
-						// Checking expressions passed as parameter
-						for(i=0; i<aaos.getNbOfValues(); i++) {
-							String theVal = aaos.getValue(i);
-							if (atas.getListOfAttributes().get(i).isInt()) {
-								if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
-									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								}
-							} else {
-								// We assume it is a bool attribute
-								if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
-									//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
+							
+							// Checking expressions passed as parameter
+							for(i=0; i<aaos.getNbOfValues(); i++) {
+								String theVal = aaos.getValue(i);
+								if (atas.getListOfAttributes().get(i).isInt()) {
+									if (AvatarSyntaxChecker.isAValidIntExpr(_as, _ab, theVal) < 0) {
+										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+										//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+										ce.setAvatarBlock(_ab);
+										ce.setTDiagramPanel(tdp);
+										ce.setTGComponent(tgc);
+										addCheckingError(ce);
+									}
+								} else {
+									// We assume it is a bool attribute
+									if (AvatarSyntaxChecker.isAValidBoolExpr(_as, _ab, theVal) < 0) {
+										CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal receiving: " + asmdrs.getValue() + " -> value at index #" + i + " does not match definition");
+										//TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+										ce.setAvatarBlock(_ab);
+										ce.setTDiagramPanel(tdp);
+										ce.setTGComponent(tgc);
+										addCheckingError(ce);
+									}
 								}
 							}
-						}
 						}
 						//adag.setActionValue(makeTIFAction(asmdrs.getValue(), "?"));
 						listE.addCor(aaos, tgc);
@@ -704,7 +796,7 @@ public class AvatarDesignPanelTranslator {
 					}
 				}
 				
-			// Send signals
+				// Send signals
 			} else if (tgc instanceof AvatarSMDSendSignal) {
 				asmdss = (AvatarSMDSendSignal)tgc;
 				atas = _ab.getAvatarSignalWithName(asmdss.getSignalName());
@@ -748,26 +840,26 @@ public class AvatarDesignPanelTranslator {
 						//TraceManager.addDev("Nb of values in signal" + atas.getName() + " :" + atas.getListOfAttributes().size());
 						//TraceManager.addDev("Nb of values in admdss :" + asmdss.getNbOfValues());
 						
-							for(i=0; i<asmdss.getNbOfValues(); i++) {
-								tmp = asmdss.getValue(i);
-								if (tmp.length() == 0) {
-									CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
-									ce.setAvatarBlock(_ab);
-									ce.setTDiagramPanel(tdp);
-									ce.setTGComponent(tgc);
-									addCheckingError(ce);
-								} else {
-									manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
-								}
-							}
-							if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
-								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
-								TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+						for(i=0; i<asmdss.getNbOfValues(); i++) {
+							tmp = asmdss.getValue(i);
+							if (tmp.length() == 0) {
+								CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed parameter: " + tmp + " in signal expression: " + asmdss.getValue());
 								ce.setAvatarBlock(_ab);
 								ce.setTDiagramPanel(tdp);
 								ce.setTGComponent(tgc);
 								addCheckingError(ce);
-							}  else {
+							} else {
+								manageAttribute(tmp, _ab, aaos, tdp, tgc, asmdss.getValue());
+							}
+						}
+						if (aaos.getNbOfValues() != atas.getListOfAttributes().size()) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formed signal sending: " + asmdss.getValue() + " -> nb of parameters does not match definition");
+							TraceManager.addDev(" ERROR NB: in signal : " + aaos.getNbOfValues() + " in signal def:" + atas.getListOfAttributes().size() + " NAME=" + atas.getName());
+							ce.setAvatarBlock(_ab);
+							ce.setTDiagramPanel(tdp);
+							ce.setTGComponent(tgc);
+							addCheckingError(ce);
+						}  else {
 							
 							// Checking expressions passed as parameter
 							//TraceManager.addDev("Block = " + _ab.getName());
@@ -814,7 +906,7 @@ public class AvatarDesignPanelTranslator {
 					}
 				}
 				
-			// State
+				// State
 			} else if (tgc instanceof AvatarSMDState) {
 				//TraceManager.addDev("Value = " + tgc.getValue());
 				astate = asm.getStateWithName(tgc.getValue());
@@ -829,9 +921,9 @@ public class AvatarDesignPanelTranslator {
 				listE.addCor(astate, tgc);
 				astate.addReferenceObject(tgc);
 				tgc.setAVATARID(astate.getID());
-			
 				
-			// Choice
+				
+				// Choice
 			} else if (tgc instanceof AvatarSMDChoice) {
 				astate = new AvatarState("choice__" + choiceID, tgc);
 				choiceID ++;
@@ -839,7 +931,7 @@ public class AvatarDesignPanelTranslator {
 				listE.addCor(astate, tgc);
 				tgc.setAVATARID(astate.getID());
 				
-			// Random
+				// Random
 			} else if (tgc instanceof AvatarSMDRandom) {
 				asmdrand = (AvatarSMDRandom)tgc;
 				arandom = new AvatarRandom("random", tgc);
@@ -868,7 +960,7 @@ public class AvatarDesignPanelTranslator {
 				listE.addCor(arandom, tgc);	
 				tgc.setAVATARID(arandom.getID());
 				
-			// Set timer
+				// Set timer
 			} else if (tgc instanceof AvatarSMDSetTimer) {
 				tmp = ((AvatarSMDSetTimer)tgc).getTimerName();
 				aa = _ab.getAvatarAttributeWithName(tmp);
@@ -900,7 +992,7 @@ public class AvatarDesignPanelTranslator {
 					}
 				}
 				
-			// Reset timer
+				// Reset timer
 			} else if (tgc instanceof AvatarSMDResetTimer) {
 				tmp = ((AvatarSMDResetTimer)tgc).getTimerName();
 				aa = _ab.getAvatarAttributeWithName(tmp);
@@ -926,7 +1018,7 @@ public class AvatarDesignPanelTranslator {
 					}
 				}
 				
-			// Expire timer
+				// Expire timer
 			} else if (tgc instanceof AvatarSMDExpireTimer) {
 				tmp = ((AvatarSMDExpireTimer)tgc).getTimerName();
 				aa = _ab.getAvatarAttributeWithName(tmp);
@@ -951,8 +1043,8 @@ public class AvatarDesignPanelTranslator {
 						tgc.setAVATARID(aexpiretimer.getID());
 					}
 				}
-			
-			// Start state
+				
+				// Start state
 			} else if (tgc instanceof AvatarSMDStartState) {
 				astart = new AvatarStartState("start", tgc);
 				listE.addCor(astart, tgc);
@@ -962,7 +1054,7 @@ public class AvatarDesignPanelTranslator {
 					asm.setStartState(astart);
 				}
 				
-			// Stop state
+				// Stop state
 			} else if (tgc instanceof AvatarSMDStopState) {
 				astop = new AvatarStopState("stop", tgc);
 				listE.addCor(astop, tgc);
@@ -1107,7 +1199,7 @@ public class AvatarDesignPanelTranslator {
 		}
 		
 		asm.handleUnfollowedStartState();
-	
+		
 	}
 	
 	private void makeError(int _error, TDiagramPanel _tdp, AvatarBlock _ab, TGComponent _tgc, String _info, String _element) {
@@ -1169,7 +1261,7 @@ public class AvatarDesignPanelTranslator {
 				b2 = _as.getBlockWithName(block2.getBlockName());
 				
 				if ((b1 != null) && (b2 != null)) {
-				
+					
 					r = new AvatarRelation("relation", b1, b2, tgc);
 					// Signals of l1
 					l1 = port.getListOfSignalsOrigin();
@@ -1262,7 +1354,7 @@ public class AvatarDesignPanelTranslator {
 				}
 			}
 			if (i != actions.length-1) {
-					s = s + ", ";
+				s = s + ", ";
 			}
 		}
 		
@@ -1329,6 +1421,6 @@ public class AvatarDesignPanelTranslator {
 		return !(TAttribute.isAValidId(tmp, false, false)); 
 	}
 	
-
+	
 	
 }
