@@ -4,6 +4,8 @@ import java.util.*;
 import tmltranslator.*;
 import javax.script.*;
 
+import myutil.*;
+
 public class LiveVariableNode{
 	private LinkedList<LiveVariableNode> _succList = new LinkedList<LiveVariableNode>(), _predList = new LinkedList<LiveVariableNode>();
 	private boolean _valid=false;
@@ -43,7 +45,7 @@ public class LiveVariableNode{
 		this(iAnalysis, iUseVars, iDefVars, iLinkedElem, iSuperiorNode, iConstantStuckToFalse);
 		_lhs=iLhs;
 		_rhs= iRhs;
-		//System.out.println("lhs in init:*" + _lhs + "* rhs in init:*" + _rhs);
+		//TraceManager.addDev("lhs in init:*" + _lhs + "* rhs in init:*" + _rhs);
 	}
 	
 	LiveVariableNode(StaticAnalysis iAnalysis, int[] iUseVars, int[] iDefVars, TMLActivityElement iLinkedElem, LiveVariableNode iSuperiorNode, boolean iConstantStuckToFalse){
@@ -85,7 +87,7 @@ public class LiveVariableNode{
 		if(_checkpoint!=null){	
 			for (int bytes=0; bytes < _outVars.length; bytes++){
 				for (int bits=0; bits<32;bits++){
-					//System.out.println("bytes: " + bytes + " stat index: " + (bytes << 5 |bits));
+					//TraceManager.addDev("bytes: " + bytes + " stat index: " + (bytes << 5 |bits));
 					//if((_outVars[bytes] & (1 << bits))!=0)
 					if((_outVars[bytes] & (1 << bits))!=0 || (_useVars[bytes] & (1 << bits))!=0)
 					      ioStatistics[bytes << 5 |bits]++;
@@ -124,12 +126,12 @@ public class LiveVariableNode{
 	private int isCheckpointCandidate(CheckpointInfo iCheckInfo){
 		//being dependent or having at least one dependent inverse operator in the task the communication is established with
 		int aReasonCode=0;
-		//if (_linkedElem!=null) System.out.println("--- " + _linkedElem.getID() + " start isCheckpointCandidate"); else
-		//System.out.println("--- start isCheckpointCandidate");
+		//if (_linkedElem!=null) TraceManager.addDev("--- " + _linkedElem.getID() + " start isCheckpointCandidate"); else
+		//TraceManager.addDev("--- start isCheckpointCandidate");
 		if(_linkedElem instanceof TMLReadChannel || _linkedElem instanceof TMLWriteChannel){
 			for (int i=0; i<((TMLActivityElementChannel)_linkedElem).getNbOfChannels(); i++){
 				TMLChannel aChannel = ((TMLActivityElementChannel)_linkedElem).getChannel(i);
-				//System.out.println("get Infected for channel " + aChannel.getName() + "=" + aChannel.getInfected());
+				//TraceManager.addDev("get Infected for channel " + aChannel.getName() + "=" + aChannel.getInfected());
 				//if (aChannel.getInfected()) aReasonCode = CheckpointInfo.CHANNEL_DEP;
 				if (_analysis.isChannelDep(aChannel.getID())) aReasonCode = CheckpointInfo.CHANNEL_DEP;
 			}
@@ -142,17 +144,17 @@ public class LiveVariableNode{
 		}
 		//consider receive event
 		if (_predList.size()>1){
-			//System.out.println("more than one pred found");
+			//TraceManager.addDev("more than one pred found");
 			aReasonCode += CheckpointInfo.CTRL_FLOW_JOIN;
 		}
 		iCheckInfo.setOperationMode(CheckpointInfo.KILLED_DEF);
 		if (atLeast1DepDefForVars(_defVars, false, 1, iCheckInfo)){
-			//System.out.println(getStatementDescr() + "  kills dependent definitions!!!");
+			//TraceManager.addDev(getStatementDescr() + "  kills dependent definitions!!!");
 			aReasonCode += CheckpointInfo.KILLED_DEF;
 		}
 		iCheckInfo.setOperationMode(CheckpointInfo.VAR_OUT_OF_SCOPE);
 		if (atLeast1DepDefForVars(_useVars, true, 1, iCheckInfo)){
-			//System.out.println(getStatementDescr()+ " variable went out of scope!!! ");
+			//TraceManager.addDev(getStatementDescr()+ " variable went out of scope!!! ");
 			aReasonCode += CheckpointInfo.VAR_OUT_OF_SCOPE;
 		}
 		if(_varDepSource){
@@ -161,11 +163,11 @@ public class LiveVariableNode{
 			else{
 				//_analysis.setLastVarDepSource(_generateDefs);
 				iCheckInfo._depSrcDef = _generateDefs;
-				//System.out.println("Stored defs: "); printDefList(_generateDefs);
+				//TraceManager.addDev("Stored defs: "); printDefList(_generateDefs);
 				aReasonCode += CheckpointInfo.DEP_SRC;
 			}
 		}
-		//System.out.println("--- end isCheckpointCandidate: " +  aReasonCode);
+		//TraceManager.addDev("--- end isCheckpointCandidate: " +  aReasonCode);
 		return aReasonCode;
 
 	}
@@ -202,7 +204,7 @@ public class LiveVariableNode{
 		_killCandidates = new int[_analysis.getBytesForDefs()];
 		_inDefs = new int[_analysis.getBytesForDefs()];
 		_outDefs = new int[_analysis.getBytesForDefs()];
-		//System.out.println("<> varToStatements asso: " + getStatementDescr());
+		//TraceManager.addDev("<> varToStatements asso: " + getStatementDescr());
 		if (_myDefID!=-1){
 		//if (_myDefID!=-1 && !canBeRemoved()){  //NEW!!!!!!!!!!!
 			for (int bytes=0; bytes<_defVars.length;bytes++){
@@ -212,10 +214,10 @@ public class LiveVariableNode{
 					if ((_defVars[bytes] & (1 << bits))!=0){ //NEW!!!!!!!!!!
 						  if((_outVars[bytes] & (1 << bits))==0){
 							_defVars[bytes] ^= (1 << bits);
-							//System.out.println("del");
+							//TraceManager.addDev("del");
 						  }else
 							_analysis.getDefsForVar()[(bytes << 5)|bits][_myDefID >>> 5] |= 1 << (_myDefID & 0x1F);
-						//System.out.println("var found:" + ((bytes << 5)|bits));
+						//TraceManager.addDev("var found:" + ((bytes << 5)|bits));
 					}
 				}
 			}
@@ -224,17 +226,17 @@ public class LiveVariableNode{
 				_analysis.getDefLookUp()[_myDefID]=this;
 			}
 		}
-		//System.out.println("<> END varToStatements asso: " + getStatementDescr());
+		//TraceManager.addDev("<> END varToStatements asso: " + getStatementDescr());
 	}
 
 	public void printKillEntries(){
-		//System.out.println("++++++++++ Kill definitions list ++++++++++");
+		//TraceManager.addDev("++++++++++ Kill definitions list ++++++++++");
 		System.out.print(getStatementDescr() + "  kills definitions: " + printDefList(_killDefs));
-		System.out.println();
+		TraceManager.addDev("");
 	}
 
 	public void printReachingEntries(){
-		//System.out.println("++++++++++ Reaching definitions list ++++++++++");
+		//TraceManager.addDev("++++++++++ Reaching definitions list ++++++++++");
 		//if(_linkedElem!=null && (_linkedElem instanceof TMLReadChannel || _linkedElem instanceof TMLWriteChannel|| _linkedElem instanceof TMLSendEvent || _linkedElem instanceof TMLWaitEvent || _linkedElem instanceof TMLSendRequest)){
 		System.out.print(getStatementDescr());
 		/*printDefList(_inVars);
@@ -246,7 +248,7 @@ public class LiveVariableNode{
 		printDefList(_useVars);*/
 		//+ "  reached by definitions: ");
 		//printDefList(_inDefs);
-		System.out.println();
+		TraceManager.addDev("");
 		//}
 	}
 
@@ -280,14 +282,14 @@ public class LiveVariableNode{
 		boolean aIsConst=true, aFirstTime=true, aDefFound=false;
 		//int aLastExprVal=0;
 		String aLastExprVal="";  
-		//System.out.println("******* allDefsConstantAndEqual");
+		//TraceManager.addDev("******* allDefsConstantAndEqual");
 		for (int bytes=0; bytes<iDefinitions.length && aIsConst; bytes++){
 			for (int bits=0; bits<32 && aIsConst; bits++){
 				int anIndex = (bytes << 5)|bits;
 				if ((iDefinitions[bytes] & (1<< bits))!=0){ //what if there are no definitions????
 					aDefFound=true;
 					if (_analysis.getDefLookUp()[anIndex].isConstant()){
-						//System.out.println(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " said to be constant");
+						//TraceManager.addDev(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " said to be constant");
 						//if (aFirstTime || _analysis.getDefLookUp()[anIndex].getExpressionValue() == aLastExprVal){
 						if (aFirstTime || _analysis.getDefLookUp()[anIndex].getExpressionValue().equals(aLastExprVal)){
 							aLastExprVal = _analysis.getDefLookUp()[anIndex].getExpressionValue();
@@ -296,15 +298,15 @@ public class LiveVariableNode{
 						}else
 							aIsConst=false;
 					}else{
-						//System.out.println(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " said to be NOT constant");
+						//TraceManager.addDev(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " said to be NOT constant");
 						aIsConst=false;
 					}
 				}//else
-					//if (_analysis.getDefLookUp()[anIndex]!=null) System.out.println(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " not concerned"); 
+					//if (_analysis.getDefLookUp()[anIndex]!=null) TraceManager.addDev(_analysis.getDefLookUp()[anIndex].getStatementDescr() + " not concerned"); 
 			}
 		}
 		//if (aIsConst)
-		//System.out.println(aIsConst + " lhs:" + _lhs + " rhs:" + _rhs);
+		//TraceManager.addDev(aIsConst + " lhs:" + _lhs + " rhs:" + _rhs);
 		return (aIsConst && aDefFound);
 	}
 
@@ -318,12 +320,12 @@ public class LiveVariableNode{
 		if (!_constantStuckToFalse){
 			int[] aReachingDefForVar= new int[_analysis.getBytesForDefs()];
 			aResult=2;
-		//System.out.println("!!!!Checking if  " + getStatementDescr() + " is constant");
+		//TraceManager.addDev("!!!!Checking if  " + getStatementDescr() + " is constant");
 			for (int bytes=0; bytes<_useVars.length; bytes++){
 				for (int bits=0; bits<32;bits++){
 					if ((_useVars[bytes] & (1<< bits))!=0){
-						//System.out.println("var " + ((bytes << 5)|bits) + " is used  usevars:" + _useVars[bytes]);
-						//System.out.println("Reached by definitions: ");
+						//TraceManager.addDev("var " + ((bytes << 5)|bits) + " is used  usevars:" + _useVars[bytes]);
+						//TraceManager.addDev("Reached by definitions: ");
 						//printDefList(_inDefs);
 						for (int i=0; i<_analysis.getBytesForDefs();i++){
 							aReachingDefForVar[i] = _analysis.getDefsForVar()[(bytes << 5)|bits][i] & _inDefs[i];
@@ -332,12 +334,12 @@ public class LiveVariableNode{
 						if(allDefsConstantAndEqual(aReachingDefForVar)){
 							//toggle bit no [bits] = set it to zero as it is one
 							_useVars[bytes]^= (1<< bits);
-							//System.out.println("*** " + getStatementDescr() + "toggle bit " + ((bytes << 5)|bits) + "***");
+							//TraceManager.addDev("*** " + getStatementDescr() + "toggle bit " + ((bytes << 5)|bits) + "***");
 							//_inVars[bytes] = _useVars[bytes] & _defNegVars[bytes];
 							//_inVars[bytes] = _useVars[bytes] & (~_defVars[bytes]);  NEW!!!!!!!
 							aResult |= 1;   //set bit 2^0
 						}else{
-							//System.out.println("not all defs constant for variable " + ((bytes << 5)|bits));
+							//TraceManager.addDev("not all defs constant for variable " + ((bytes << 5)|bits));
 							//aIsConst=false;
 							aResult &= 1;  //del bit 2^1
 						}
@@ -349,9 +351,9 @@ public class LiveVariableNode{
 				_unrolledExpr+= "xx_xx=" + _rhs + ";";
 				//try{
 					_exprValue = evaluate(_unrolledExpr);
-					//System.out.println("Expr: *" + _unrolledExpr + "* evaluated to: " + _exprValue);
+					//TraceManager.addDev("Expr: *" + _unrolledExpr + "* evaluated to: " + _exprValue);
 				//}catch(IllegalArgumentException e){
-					//System.out.println("At lest one variable of the expression remains undefined: " + _rhs);
+					//TraceManager.addDev("At lest one variable of the expression remains undefined: " + _rhs);
 				//}
 			}
 		}
@@ -407,7 +409,7 @@ public class LiveVariableNode{
 		int [] aKillIn = new int[_analysis.getBytesForDefs()];
 		if (!_valid){
 			_valid=true;
-			//System.out.println("determineKilledSets for " + getStatementDescr() ); 
+			//TraceManager.addDev("determineKilledSets for " + getStatementDescr() ); 
 			for(LiveVariableNode aPred: _predList) {
 				int[] aKillCandidatesPred = aPred.getKillCandidates();
 				for (int i=0; i<_analysis.getBytesForDefs();i++){
@@ -415,10 +417,10 @@ public class LiveVariableNode{
 					aKillIn[i] |= aKillCandidatesPred[i];
 				}
 			}
-			//System.out.println( "aLocalKillCandidates[0] " + aLocalKillCandidates[0]); 
-			//System.out.println( "killDefs[0] before" + _killDefs[0]); 
+			//TraceManager.addDev( "aLocalKillCandidates[0] " + aLocalKillCandidates[0]); 
+			//TraceManager.addDev( "killDefs[0] before" + _killDefs[0]); 
 			if (_myDefID!=-1){
-				//System.out.println("Statement " + _myDefID + " (" + getStatementDescr() + ") defines: " + _generateDefs[0] + " could kill input: " + aLocalKillCandidates[0]);
+				//TraceManager.addDev("Statement " + _myDefID + " (" + getStatementDescr() + ") defines: " + _generateDefs[0] + " could kill input: " + aLocalKillCandidates[0]);
 				for (int bytes=0; bytes<_defVars.length; bytes++){
 					for (int bits=0; bits<32;bits++){
 						if ((_defVars[bytes] & (1<< bits))!=0){   //for all variables which are defined in this statement
@@ -427,7 +429,7 @@ public class LiveVariableNode{
 								//all kill candidates -> for a specific variable -> variable determined by defVars  
 								//_killDefs[i] |= (aLocalKillCandidates[i] & _varToStatements[(bytes << 5)|bits][i]);
 								_killDefs[i] |= (aKillIn[i] & _analysis.getDefsForVar()[(bytes << 5)|bits][i]);
-								//System.out.println( "killDefs[i] " + _killDefs[i] + " i" + i); 
+								//TraceManager.addDev( "killDefs[i] " + _killDefs[i] + " i" + i); 
 								//int oldCandidates = aLocalKillCandidates[i];
 								//delete all kill candidates for the variable yielded by that definition
 								//aLocalKillCandidates[i] &= ~ _varToStatements[(bytes << 5)|bits][i];
@@ -441,7 +443,7 @@ public class LiveVariableNode{
 					}
 				}
 			}
-			//System.out.println( "killDefs[0] " + _killDefs[0]); 
+			//TraceManager.addDev( "killDefs[0] " + _killDefs[0]); 
 			for (int i=0; i<_analysis.getBytesForDefs();i++){
 				//aChange |= (_killCandidates[i]!=aLocalKillCandidates[i]);
 				aChange |= (_killCandidates[i]!=aKillOut[i]);
@@ -504,13 +506,13 @@ public class LiveVariableNode{
 			if (_checkpoint==null){
 				//int aCandidate = iCheckInfo.__reasonCode | isCheckpointCandidate(iCheckInfo);
 				iCheckInfo._reasonCode |= isCheckpointCandidate(iCheckInfo);
-				//if (_linkedElem!=null) System.out.println(_linkedElem.getID() + "  aCandidate: " + aCandidate);
+				//if (_linkedElem!=null) TraceManager.addDev(_linkedElem.getID() + "  aCandidate: " + aCandidate);
 				iCheckInfo.setOperationMode(CheckpointInfo.CTRL_FLOW_JOIN);
 				//if ((aCandidate & CheckpointInfo.CTRL_FLOW_JOIN)!=0 && !atLeast1DepDefForVars(_inVars, false, 2, iCheckInfo)){
 				if ((iCheckInfo._reasonCode & CheckpointInfo.CTRL_FLOW_JOIN)!=0 && !atLeast1DepDefForVars(_inVars, false, 2, iCheckInfo)){
 					//aCandidate ^= CheckpointInfo.CTRL_FLOW_JOIN;
 					iCheckInfo._reasonCode ^= CheckpointInfo.CTRL_FLOW_JOIN;
-					//System.out.println("aCandidate reset control flow join");
+					//TraceManager.addDev("aCandidate reset control flow join");
 				}
 				//if ((aCandidate & CheckpointInfo.DEP_SRC)!=0){
 				if ((iCheckInfo._reasonCode & CheckpointInfo.DEP_SRC)!=0){
@@ -521,9 +523,9 @@ public class LiveVariableNode{
 					if (!aDefReachable){
 						//aCandidate ^= CheckpointInfo.DEP_SRC;
 						iCheckInfo._reasonCode ^= CheckpointInfo.DEP_SRC;
-						/*System.out.println("aCandidate reset dep src");
-						System.out.println("comp1 in defs: "); printDefList(_outDefs);
-						System.out.println("comp2 stored defs: "); printDefList(_analysis.getLastVarDepSource());*/
+						/*TraceManager.addDev("aCandidate reset dep src");
+						TraceManager.addDev("comp1 in defs: "); printDefList(_outDefs);
+						TraceManager.addDev("comp2 stored defs: "); printDefList(_analysis.getLastVarDepSource());*/
 					}
 				}
 				//if(aCandidate>0){
@@ -549,7 +551,7 @@ public class LiveVariableNode{
 		for (int i=0; i<_analysis.getBytesForDefs();i++){
 			_outDefs[i] = _generateDefs[i] & (~_killDefs[i]);
 		}
-		//System.out.println("out Defs " + getStatementDescr() + " " + _outDefs[0] + " generate Defs: " + _generateDefs[0] + " kill Defs: " + _killDefs[0]);
+		//TraceManager.addDev("out Defs " + getStatementDescr() + " " + _outDefs[0] + " generate Defs: " + _generateDefs[0] + " kill Defs: " + _killDefs[0]);
 	}
 
 	public boolean reachingDefinitionAnalysis(){
@@ -600,15 +602,15 @@ public class LiveVariableNode{
 						System.out.print(aPred.getLinkedElement().getID() + ", ");*/
 				}
 			}
-			//System.out.println();
+			//TraceManager.addDev();
 		}
 		return aPredInvalidated;
 	}
 	
 	public boolean infectionAnalysis(){
-		//if (_linkedElem!=null) System.out.println("Infection Analysis: "+  _linkedElem.getID());
+		//if (_linkedElem!=null) TraceManager.addDev("Infection Analysis: "+  _linkedElem.getID());
 		if (_infected){
-			//System.out.println("cancelled");
+			//TraceManager.addDev("cancelled");
 			return false;
 		}else{
 			if (_superiorBranchNode!=null && _superiorBranchNode.isInfected()){
@@ -631,13 +633,13 @@ public class LiveVariableNode{
 		}
 		//synchronization dependency
 		if (_infected && _linkedElem!=null){
-			//System.out.println("in if 1");
+			//TraceManager.addDev("in if 1");
 			if(_linkedElem instanceof TMLReadChannel || _linkedElem instanceof TMLWriteChannel){
-				//System.out.println("in if 2");
+				//TraceManager.addDev("in if 2");
 				for (int i=0; i<((TMLActivityElementChannel)_linkedElem).getNbOfChannels(); i++){
-					//System.out.println("in loop");
+					//TraceManager.addDev("in loop");
 					TMLChannel aChannel = ((TMLActivityElementChannel)_linkedElem).getChannel(i);
-					//System.out.println("Set Infected for channel " + aChannel.getName());
+					//TraceManager.addDev("Set Infected for channel " + aChannel.getName());
 					//if (aChannel.getType()!=TMLChannel.NBRNBW) aChannel.setInfected(true);
 					if (aChannel.getType()!=TMLChannel.NBRNBW) _analysis.addDepChannel(aChannel.getID());
 				}
@@ -690,7 +692,7 @@ public class LiveVariableNode{
 
 	private void setPredecessor(LiveVariableNode iPred){
 		_predList.add(iPred);
-		//if (_linkedElem!=null) System.out.println(_linkedElem.getID() + " adds pred " + iPred._myDefID);
+		//if (_linkedElem!=null) TraceManager.addDev(_linkedElem.getID() + " adds pred " + iPred._myDefID);
 	}
 
 	public int[] getInVars(){
@@ -726,7 +728,7 @@ public class LiveVariableNode{
 		for (int aPos=0; aPos<_outVars.length; aPos++){
 			System.out.print(Integer.toHexString(_outVars[aPos]) + ", ");
 		}
-		System.out.println();*/
+		TraceManager.addDev();*/
 		return intArrayToHexString(_outVars);
 	}
 	
@@ -750,7 +752,7 @@ public class LiveVariableNode{
 			}
 		}
 		aResult+="\"";
-		//System.out.println("String: " + aResult);
+		//TraceManager.addDev("String: " + aResult);
 		return aResult;
 	}
 	

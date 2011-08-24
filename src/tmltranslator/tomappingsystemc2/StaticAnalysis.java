@@ -3,6 +3,8 @@ package tmltranslator.tomappingsystemc2;
 import java.util.*;
 import tmltranslator.*;
 import java.util.regex.*;
+
+import myutil.*;
 //import java.util.HashSet;
 
 public class StaticAnalysis{
@@ -49,12 +51,12 @@ public class StaticAnalysis{
 	}
 
 	public void addDepChannel(int iID){
-		//System.out.println("Add Dependent Channel: " + iID);
+		//TraceManager.addDev("Add Dependent Channel: " + iID);
 		_depChannels.add(iID);
 	}
 
 	public boolean isChannelDep(int iID){
-		//System.out.println("Check if Channel dep: " + iID + " answer: "  + _depChannels.contains(iID));
+		//TraceManager.addDev("Check if Channel dep: " + iID + " answer: "  + _depChannels.contains(iID));
 		return _depChannels.contains(iID);
 	}
 
@@ -76,7 +78,7 @@ public class StaticAnalysis{
 		else
 			aResMap=iMap;
 		if(!(iExpr==null || iExpr.isEmpty())){
-			//System.out.println("Examine expression: " + iExpr);
+			//TraceManager.addDev("Examine expression: " + iExpr);
 			Matcher matcher = _varPattern.matcher(iExpr);
 			//System.out.print("Found tokens: ");
 			while (matcher.find()){
@@ -85,12 +87,12 @@ public class StaticAnalysis{
 				int aVarSeqNo = getVarSeqNoByName(token);
 				if (aVarSeqNo>=0) aResMap[aVarSeqNo >>> 5] |= 1 << (aVarSeqNo & 0x1F);
 			}
-			//System.out.println();
-			//System.out.println("Byte sequence: ");
+			//TraceManager.addDev();
+			//TraceManager.addDev("Byte sequence: ");
 		}
 		/*for(int i=0; i<_bytesForVars; i++)
 			System.out.print(((int)aResMap[i]) + ", ");
-		System.out.println();*/
+		TraceManager.addDev();*/
 		return aResMap;		
 	}
 
@@ -138,21 +140,21 @@ public class StaticAnalysis{
 		int aSeq=0;
 		for(TMLAttribute att: _task.getAttributes()) {
 			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				System.out.println(att.getName() + ": significant");
+				TraceManager.addDev(att.getName() + ": significant");
 			aSeq++;
 		}
 		for(TMLChannel ch: _channels) {
 			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				System.out.println(ch.getName() + ": significant");
+				TraceManager.addDev(ch.getName() + ": significant");
 			aSeq++;
 		}
 		for(TMLEvent evt: _events) {
 			if ((iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-				System.out.println(evt.getName() + ": significant");
+				TraceManager.addDev(evt.getName() + ": significant");
 			aSeq++;
 		}
 		if (_task.isRequested() && (iNode.getOutVars()[aSeq >>> 5] & (1 << (aSeq & 0x1F)))!=0)
-			System.out.println("reqChannel: significant");
+			TraceManager.addDev("reqChannel: significant");
 	}
 
 	public String printVariables(int[] iVariables){
@@ -222,7 +224,7 @@ public class StaticAnalysis{
 		boolean aChange;
 		int aConstChange;
 		do{
-			//System.out.println("******************* one analysis round");
+			//TraceManager.addDev("******************* one analysis round");
 			_nextDefID=0;
 			for(LiveVariableNode aLiveNode: liveNodes)
 				aLiveNode.liveVariableInit();
@@ -259,7 +261,7 @@ public class StaticAnalysis{
 					aConstChange |= aLiveNode.determineIfConstant();
 			}while(aConstChange>1);
 
-			/*System.out.println("-----------------new step------------");
+			/*TraceManager.addDev("-----------------new step------------");
 			for(LiveVariableNode aLiveNode: liveNodes){
 				aLiveNode.printReachingEntries();
 				printLiveVarNode(aLiveNode);
@@ -278,10 +280,10 @@ public class StaticAnalysis{
 	}
 
 	public void determineCheckpoints(int[] iStatistics){
-		System.out.println("*** Static Analysis for task " + _task.getName());
+		TraceManager.addDev("*** Static Analysis for task " + _task.getName());
 		for(LiveVariableNode aLiveNode: liveNodes)
 			aLiveNode.determineCheckpoints(new CheckpointInfo());
-		//System.out.println("Create array size " + (_bytesForVars << 5));
+		//TraceManager.addDev("Create array size " + (_bytesForVars << 5));
 		int[] aStatistics = new int[_bytesForVars << 5];
 		int aNbOfCheckPoints=0, aNbOfCandidates=0;
 		for(LiveVariableNode aLiveNode: liveNodes){
@@ -294,46 +296,46 @@ public class StaticAnalysis{
 			}
 		}
 		if (aNbOfCandidates==0)
-			System.out.println("No checkpoint candidates");
+			TraceManager.addDev("No checkpoint candidates");
 		else{
-			System.out.println("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
+			TraceManager.addDev("a: " + _task.getAttributes().size() + " c: " + _channels.size() + " e: " + _events.size());
 			int aNbOfLiveElements = _task.getAttributes().size() + _channels.size() + _events.size();
 			int nbOfVars=0, nbOfChannels=0, nbOfEvents=0;
 			for(int i=0; i<_task.getAttributes().size(); i++)
 				nbOfVars += aStatistics[i];
-			System.out.println("Variables Checks: " + nbOfVars + "  Candidates: " + (_task.getAttributes().size() * aNbOfCandidates));
+			TraceManager.addDev("Variables Checks: " + nbOfVars + "  Candidates: " + (_task.getAttributes().size() * aNbOfCandidates));
 			if (!_task.getAttributes().isEmpty()){
 				iStatistics[0] += _task.getAttributes().size() * aNbOfCandidates;
 				int aVarGain = (100 * (_task.getAttributes().size() * aNbOfCandidates - nbOfVars) / (_task.getAttributes().size() * aNbOfCandidates));
 				iStatistics[1] += _task.getAttributes().size() * aNbOfCandidates - nbOfVars;
-				System.out.println("Variables Gain: " + aVarGain);
+				TraceManager.addDev("Variables Gain: " + aVarGain);
 			}
 			for(int i=0; i<_channels.size(); i++)
 				nbOfChannels += aStatistics[i + _task.getAttributes().size()];
-			System.out.println("Channel Checks: " + nbOfChannels + "  Candidates: " + (_channels.size() * aNbOfCandidates));
+			TraceManager.addDev("Channel Checks: " + nbOfChannels + "  Candidates: " + (_channels.size() * aNbOfCandidates));
 			if (!_channels.isEmpty()){
 				iStatistics[2] += _channels.size() * aNbOfCandidates;
 				int aChGain = (100 * (_channels.size() * aNbOfCandidates - nbOfChannels) / (_channels.size() * aNbOfCandidates));
 				iStatistics[3] += _channels.size() * aNbOfCandidates - nbOfChannels;
-				System.out.println("Channels Gain: " + aChGain);
+				TraceManager.addDev("Channels Gain: " + aChGain);
 			}
 			for(int i=0; i<_events.size(); i++)
 				nbOfEvents += aStatistics[i + _task.getAttributes().size() + _channels.size()];
-			System.out.println("Event Checks: " + nbOfEvents + "  Candidates: " + (_events.size() * aNbOfCandidates));
+			TraceManager.addDev("Event Checks: " + nbOfEvents + "  Candidates: " + (_events.size() * aNbOfCandidates));
 			if (!_events.isEmpty()){
 				iStatistics[4] += _events.size() * aNbOfCandidates;
 				int aEvtGain = (100 * (_events.size() * aNbOfCandidates - nbOfEvents) / (_events.size() * aNbOfCandidates));
 				iStatistics[5] += _events.size() * aNbOfCandidates - nbOfEvents;
-				System.out.println("Events Gain: " + aEvtGain);
+				TraceManager.addDev("Events Gain: " + aEvtGain);
 			}
-			//System.out.println("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
-			//if (_task.isRequested()) System.out.println("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
-			//System.out.println("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
+			//TraceManager.addDev("Request Checks: " + aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()] + "  Candidates: " + aNbOfCandidates);
+			//if (_task.isRequested()) TraceManager.addDev("Saved Requests: " + (100* (aNbOfCandidates - aStatistics[_task.getAttributes().size() + _channels.size() + _events.size()]) / aNbOfCandidates));
+			//TraceManager.addDev("Checkpoints: " + aNbOfCheckPoints + "  Candidates: " + aNbOfCandidates);
 			iStatistics[6] += aNbOfCandidates;
 			iStatistics[7] += aNbOfCandidates - aNbOfCheckPoints;
-			System.out.println("Checkpoint Gain: " + (100 * (aNbOfCandidates - aNbOfCheckPoints) / aNbOfCandidates));
+			TraceManager.addDev("Checkpoint Gain: " + (100 * (aNbOfCandidates - aNbOfCheckPoints) / aNbOfCandidates));
 		}	
-		System.out.println("*** End of Static Analysis for task " + _task.getName());
+		TraceManager.addDev("*** End of Static Analysis for task " + _task.getName());
 	}
 
 	private LiveVariableNode buildLiveAnalysisTree(TMLActivityElement iCurrElem, LiveVariableNode iReturnNode, LiveVariableNode iSuperiorNode){
@@ -474,7 +476,7 @@ public class StaticAnalysis{
 				if (!(aChoiceCmd.isNonDeterministicGuard(i) || aChoiceCmd.isStochasticGuard(i) || aChoiceCmd.getElseGuard()==i)) parseExprToVariableMap(aChoiceCmd.getGuard(i), aChoiceVars);
 			aResNode = new LiveVariableNode(this, aChoiceVars, new int[_bytesForVars], iCurrElem, iSuperiorNode);
 			if (aChoiceCmd.nbOfNonDeterministicGuard()>0 || aChoiceCmd.nbOfStochasticGuard()>0) aResNode.setInfected(true);
-			//System.out.println("checl:  " + aChoiceCmd.nbOfNonDeterministicGuard() + " ** "+ aChoiceCmd.nbOfStochasticGuard());
+			//TraceManager.addDev("checl:  " + aChoiceCmd.nbOfNonDeterministicGuard() + " ** "+ aChoiceCmd.nbOfStochasticGuard());
 			for(int i=0; i<aChoiceCmd.getNbNext(); i++)
 				aResNode.setSuccessor(buildLiveAnalysisTree(iCurrElem.getNextElement(i), iReturnNode, aResNode));
 			liveNodes.add(aResNode);
@@ -523,11 +525,11 @@ public class StaticAnalysis{
 				//if (aMatchFound && aLiveNode.getLinkedElement()!=null) oList.add(aLiveNode.getLinkedElement().getID());
 				if ((aLiveNode.getInitialDefVars()[intPos] & bitMask)!=0){
 					if (aLiveNode.getLinkedElement()!=null) oList.add(aLiveNode.getLinkedElement().getID());
-					else System.out.println("No linked elem");
+					else TraceManager.addDev("No linked elem");
 				}else
-					System.out.println("Bit for var not set");
+					TraceManager.addDev("Bit for var not set");
 			}
 		}else
-			System.out.println("Variable " + iVarName + " not found in getCommandsImpactingVar");
+			TraceManager.addDev("Variable " + iVarName + " not found in getCommandsImpactingVar");
 	}
 }

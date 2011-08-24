@@ -217,7 +217,7 @@ public class DSEConfiguration  {
 		}
 		
 		if (ret) {
-			System.out.println("Format OK");
+			//System.out.println("Format OK");
 			tmap = spec.getTMLMapping(); 
 			tmlm = tmap.getTMLModeling();
 			
@@ -247,7 +247,7 @@ public class DSEConfiguration  {
 				TraceManager.addDev(tmlm.printSummary(warnings));
 			}
 			//spec.toTextFormat(tmlm);
-			System.out.println("TMLModeling=" + spec);
+			//System.out.println("TMLModeling=" + spec);
 		}
 		
 		return true;

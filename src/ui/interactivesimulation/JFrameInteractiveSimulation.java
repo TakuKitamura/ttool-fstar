@@ -147,6 +147,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	// Set variables
 	JPanelSetVariables jpsv;
 	
+	// Formal verification
+	JSlider minimalCommandCoverage, minimalBranchCoverage;
+	
 	// Tasks
 	JPanel taskPanel;
 	TaskTableModel tasktm;
@@ -556,7 +559,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		fvtb = new FormalVerificationToolBar(this);
 		jp01.add(fvtb, BorderLayout.NORTH);
 		
-		/*jp02 = new JPanel();
+		jp02 = new JPanel();
 		gridbag01 = new GridBagLayout();
 		c01 = new GridBagConstraints();
 		jp02.setLayout(gridbag01);
@@ -568,11 +571,36 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
 		
-		jp02.add(new JLabel("File name:"), c01);
-		benchmarkFileName = new JTextField(30);
-		jp02.add(benchmarkFileName, c01);
-		
-		jp01.add(jp02, BorderLayout.CENTER);*/
+		jp02.add(new JLabel("minimum COMMAND coverage"), c01);
+		minimalCommandCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalCommandCoverage.setMajorTickSpacing(10);
+        minimalCommandCoverage.setMinorTickSpacing(1);
+        minimalCommandCoverage.setPaintTicks(true);
+        minimalCommandCoverage.setPaintLabels(true);
+        minimalCommandCoverage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+        Font font = new Font("Serif", Font.ITALIC, 10);
+        minimalCommandCoverage.setFont(font);
+		c01.gridwidth = 1; //end row
+		jp02.add(new JLabel(""), c01);
+		jp02.add(minimalCommandCoverage, c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(""), c01);
+		jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		minimalBranchCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalBranchCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalBranchCoverage.setMajorTickSpacing(10);
+        minimalBranchCoverage.setMinorTickSpacing(1);
+        minimalBranchCoverage.setPaintTicks(true);
+        minimalBranchCoverage.setPaintLabels(true);
+        minimalBranchCoverage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+        minimalBranchCoverage.setFont(font);
+		c01.gridwidth = 1; //end row
+		jp02.add(new JLabel(""), c01);
+		jp02.add(minimalBranchCoverage, c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(""), c01);
+		jp01.add(jp02, BorderLayout.CENTER);
 		
 		
 		//Info

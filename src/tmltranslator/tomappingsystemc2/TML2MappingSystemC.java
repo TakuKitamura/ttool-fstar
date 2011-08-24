@@ -286,7 +286,7 @@ public class TML2MappingSystemC {
 					param= "";
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
-				System.out.println("Channel: " + channel.getName());
+				TraceManager.addDev("Channel: " + channel.getName());
 				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
 				if (channel.isLossy()) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
 				declaration += ")"+ SCCR;
@@ -312,7 +312,7 @@ public class TML2MappingSystemC {
 			}
 			//param += "," + evt.getNbOfParams();
 			if (tmlmapping.isCommNodeMappedOn(evt,null)){
-				System.out.println("Evt: " + evt.getName());
+				TraceManager.addDev("Evt: " + evt.getName());
 				declaration += tmp + "* " + evt.getExtendedName() + " = new " + tmp + "(" + evt.getID() + ",\"" + evt.getName() + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param;
 				
 			}else{
@@ -331,7 +331,7 @@ public class TML2MappingSystemC {
 				TMLRequest req = task.getRequest();
 				if (tmlmapping.isCommNodeMappedOn(req,null)){
 					//declaration += "TMLEventBChannel* reqChannel_"+ task.getName() + " = new TMLEventBChannel(" +
-					System.out.println("Request: " + req.getName());
+					TraceManager.addDev("Request: " + req.getName());
 					declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* reqChannel_"+ task.getName() + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" +
 					req.getID() + ",\"reqChannel"+ task.getName() + "\"," +
 					determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
@@ -452,10 +452,10 @@ public class TML2MappingSystemC {
 		declaration += "}\n};\n\n" + tepeTranslator.getEqFuncs();
 		declaration +="#include <main.h>\n";
 		
-		if (aStatistics[0]!=0) System.out.println("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
-		if (aStatistics[2]!=0) System.out.println("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
-		if (aStatistics[4]!=0) System.out.println("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
-		if (aStatistics[6]!=0) System.out.println("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
+		if (aStatistics[0]!=0) TraceManager.addDev("Global gain variables " + 100 * aStatistics[1] / aStatistics[0]);
+		if (aStatistics[2]!=0) TraceManager.addDev("Global gain Channels " + 100 * aStatistics[3] / aStatistics[2]);
+		if (aStatistics[4]!=0) TraceManager.addDev("Global gain events " + 100 * aStatistics[5] / aStatistics[4]);
+		if (aStatistics[6]!=0) TraceManager.addDev("Global gain checkpoints " + 100 * aStatistics[7] / aStatistics[6]);
 		
 		//Declaration of EBRDDs
 		/*declaration += "//Declaration of EBRDDs" + CR;
@@ -474,13 +474,13 @@ public class TML2MappingSystemC {
 			slaves.str+=",static_cast<Slave*>(0)";
 		else
 			firstPart=startNode.getName() + "0";
-		/*System.out.println("------------------------------------------------------");
+		/*TraceManager.addDev("------------------------------------------------------");
 		for(HwCommunicationNode commElem:path){
-			System.out.println("CommELem to process: " + commElem.getName());
+			TraceManager.addDev("CommELem to process: " + commElem.getName());
 		}
-		System.out.println("------------------------------------------------------");*/
+		TraceManager.addDev("------------------------------------------------------");*/
 		for(HwCommunicationNode commElem:path){
-			//System.out.println("CommELem to process: " + commElem.getName());
+			//TraceManager.addDev("CommELem to process: " + commElem.getName());
 			//String commElemName = commElem.getName();
 			//if (commElem instanceof HwCPU) commElemName += "0"; 
 			if (commElem instanceof HwMemory){
@@ -537,7 +537,7 @@ public class TML2MappingSystemC {
 			LinkedList<HwCommunicationNode> commNodes2 = new LinkedList<HwCommunicationNode>(commNodes);
 			//exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute);
 			if (!exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute))
-				System.out.println("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				TraceManager.addDev("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
 			path.add(memory);
 			exploreBuses(0, commNodes2, path, memory, destNode, commElemToRoute);
 
@@ -546,37 +546,37 @@ public class TML2MappingSystemC {
 		if ( (hopNum=extractPath(path, masters, slaves, startNode, destNode, false))<0){
 			hopNum=extractPath(path, masters, slaves, destNode, destNode, true)-hopNum;
 		}
-		/*System.out.println(commElemToRoute.getName() + " is mapped on:");
+		/*TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
 		for(HwCommunicationNode commElem:path){
-			System.out.println(commElem.getName());
+			TraceManager.addDev(commElem.getName());
 		}
-		System.out.println("number of elements: " + hopNum);
-		System.out.println("masters: " + masters.str);
-		System.out.println("slaves: " + slaves.str);*/
+		TraceManager.addDev("number of elements: " + hopNum);
+		TraceManager.addDev("masters: " + masters.str);
+		TraceManager.addDev("slaves: " + slaves.str);*/
 		return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
 	}
 
 	private boolean exploreBuses(int depth, LinkedList<HwCommunicationNode> commNodes, LinkedList<HwCommunicationNode> path, HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
 		//first called with Maping:getCommunicationNodes
 		LinkedList<HwCommunicationNode> nodesToExplore;
-		//System.out.println("No of comm nodes " + commNodes.size());
+		//TraceManager.addDev("No of comm nodes " + commNodes.size());
 		boolean busExploreMode = ((depth & 1) == 0);
 		//if (depth % 2 == 0){
 		if(busExploreMode){
-			//System.out.println("search for buses connected to " + startNode.getName());
+			//TraceManager.addDev("search for buses connected to " + startNode.getName());
 			nodesToExplore=getBusesConnectedToNode(commNodes, startNode);
 		}else{
-			//System.out.println("search for bridges connected to: " + startNode.getName());
+			//TraceManager.addDev("search for bridges connected to: " + startNode.getName());
 			nodesToExplore=getBridgesConnectedToBus(commNodes, (HwBus)startNode);
 		}
 		//HwMemory memory = null;
-		//System.out.println("no of elements found: " + nodesToExplore.size());
+		//TraceManager.addDev("no of elements found: " + nodesToExplore.size());
 		for(HwCommunicationNode currNode:nodesToExplore){
 			//memory = null;
 			if (busExploreMode){
 				//memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute);
 				if(isBusConnectedToNode(currNode, destNode)){
-					//System.out.println(currNode.getName() + " is last node");
+					//TraceManager.addDev(currNode.getName() + " is last node");
 					path.add(currNode);
 					//if (memory!=null) path.add(memory);
 					commNodes.remove(currNode);
@@ -584,7 +584,7 @@ public class TML2MappingSystemC {
 				}
 			}
 			if(tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)){
-				//System.out.println(currNode.getName() + " mapping found for " + commElemToRoute.getName());
+				//TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
 				path.add(currNode);
 				//if (memory!=null) path.add(memory);
 				commNodes.remove(currNode);
@@ -600,7 +600,7 @@ public class TML2MappingSystemC {
 			//if (memory!=null) path.add(memory);
 			commNodes.remove(currNode);
 			//for (int i=0; i<path.size(); i++) System.out.print("  ");
-			//System.out.println(currNode.getName());
+			//TraceManager.addDev(currNode.getName());
 			if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
 			path.remove(currNode);
 			//if (memory!=null) path.remove(memory);

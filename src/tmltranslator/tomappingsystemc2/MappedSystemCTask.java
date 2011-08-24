@@ -94,7 +94,7 @@ public class MappedSystemCTask {
 		optimize=false;
 		
 		//for(TMLAttribute att: task.getAttributes()) {
-		//	 System.out.println ("************ Attribute: " + att.name);
+		//	 TraceManager.addDev ("************ Attribute: " + att.name);
 		//}	
 		
 		_analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
@@ -120,8 +120,8 @@ public class MappedSystemCTask {
     	}
 	
 	public void print() {
-		System.out.println("task: " + reference + DOTH + hcode);
-		System.out.println("task: " + reference + DOTCPP + cppcode);
+		TraceManager.addDev("task: " + reference + DOTH + hcode);
+		TraceManager.addDev("task: " + reference + DOTCPP + cppcode);
 	}
 	
 	
@@ -385,19 +385,19 @@ public class MappedSystemCTask {
 		if (skip) return makeCommands(currElem.getNextElement(0), false,retElement,null);
 
 		if (currElem==null){
-			if (debug) System.out.println("Checking null\n");
+			if (debug) TraceManager.addDev("Checking null\n");
 			return retElement;
 		}
 		
-		if (debug) System.out.println("Checking " + currElem.getName() + CR);
+		if (debug) TraceManager.addDev("Checking " + currElem.getName() + CR);
 
 		if (currElem instanceof TMLStartState) {
-			if (debug) System.out.println("Checking Start\n");
+			if (debug) TraceManager.addDev("Checking Start\n");
 			return makeCommands(currElem.getNextElement(0), false,retElement,null);
 		
 		} else if (currElem instanceof TMLStopState){
 			//add stop state if (retElement.equals("0"))
-			if (debug) System.out.println("Checking Stop\n");
+			if (debug) TraceManager.addDev("Checking Stop\n");
 			if (retElement.equals("0")){
 				cmdName= "_stop" + currElem.getID();
 				hcode+="TMLStopCommand " + cmdName + SCCR;
@@ -406,7 +406,7 @@ public class MappedSystemCTask {
 				return retElement;
 		
 		}else if (currElem instanceof TMLRandom){
-			if (debug) System.out.println("Checking Random\n");
+			if (debug) TraceManager.addDev("Checking Random\n");
 			cmdName= "_random" + currElem.getID();
 			TMLRandom random = (TMLRandom)currElem;
 			hcode+="TMLRandomCommand " + cmdName + SCCR;
@@ -419,11 +419,11 @@ public class MappedSystemCTask {
 		} else if (currElem instanceof TMLActionState || currElem instanceof TMLDelay){
 			String action,comment;
 			if (currElem instanceof TMLActionState){				
-				if (debug) System.out.println("Checking Action\n");
+				if (debug) TraceManager.addDev("Checking Action\n");
 				action = formatAction(((TMLActionState)currElem).getAction());
 				comment=action;
 			}else{
-				if (debug) System.out.println("Checking Delay\n");
+				if (debug) TraceManager.addDev("Checking Delay\n");
 				int masterClockFreq = tmlmapping.getTMLArchitecture().getMasterClockFrequency();
 				TMLDelay delay=(TMLDelay)currElem;
 				action = "TMLTime tmpDelayxy = " + delay.getMaxDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";";
@@ -441,7 +441,7 @@ public class MappedSystemCTask {
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				//System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				//TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_action" + currElem.getID();
@@ -458,7 +458,7 @@ public class MappedSystemCTask {
 			functionSig+="void " + cmdName + "_func()" + SCCR;
 		
 		} else if (currElem instanceof TMLExecI){
-			if (debug) System.out.println("Checking Execi\n");
+			if (debug) TraceManager.addDev("Checking Execi\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecI)currElem).getAction() + ",0,0)"+CR;
@@ -469,7 +469,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecC){
-			if (debug) System.out.println("Checking ExecC\n");
+			if (debug) TraceManager.addDev("Checking ExecC\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			if (isIntValue(((TMLExecC)currElem).getAction()))
@@ -480,20 +480,20 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLExecIInterval){
-			/*if (debug) System.out.println("Checking ExeciInterv\n");
+			/*if (debug) TraceManager.addDev("Checking ExeciInterv\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",0)"+CR;
 			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandLenFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0,1," + getFormattedLiveVarStr(currElem) + ")" +CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;*/
-			if (debug) System.out.println("Checking ExeciInterv\n");
+			if (debug) TraceManager.addDev("Checking ExeciInterv\n");
 			cmdName= "_execi" + currElem.getID();
 			hcode+="TMLExeciRangeCommand " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "("+currElem.getID()+",this,"+ makeCommandRangeFunc(cmdName, ((TMLExecIInterval)currElem).getMinDelay(), ((TMLExecIInterval)currElem).getMaxDelay()) + ",0," + getFormattedLiveVarStr(currElem) + ")" +CR;
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 
 		} else if (currElem instanceof TMLExecCInterval){
-			if (debug) System.out.println("Checking ExecCInterv\n");
+			if (debug) TraceManager.addDev("Checking ExecCInterv\n");
 			cmdName= "_execc" + currElem.getID();
 			hcode+="TMLExeciCommand " + cmdName + SCCR;
 			//initCommand+= "," + cmdName + "(this,"+ ((TMLExecIInterval)currElem).getMinDelay()+ "," + ((TMLExecIInterval)currElem).getMaxDelay() + ",1)"+CR;
@@ -503,7 +503,7 @@ public class MappedSystemCTask {
 					
 		} else if (currElem instanceof TMLForLoop){
 			//makeCommands(TMLActivityElement currElem, boolean skip, String retElement, MergedCmdStr nextCommandCont, String retElseElement)
-			if (debug) System.out.println("Checking Loop\n");
+			if (debug) TraceManager.addDev("Checking Loop\n");
 			TMLForLoop fl = (TMLForLoop)currElem;
 			if (fl.getCondition().isEmpty() || fl.getCondition().trim().toUpperCase().equals("TRUE")){
 				//initAction.addNext(fl.getNextElement(0)); //inside loop
@@ -546,7 +546,7 @@ public class MappedSystemCTask {
 			}
 		
 		} else if (currElem instanceof TMLReadChannel){
-			if (debug) System.out.println("Checking Read\n");
+			if (debug) TraceManager.addDev("Checking Read\n");
 			cmdName= "_read" + currElem.getID();
 			hcode+="TMLReadCommand " + cmdName + SCCR;
 			TMLReadChannel rCommand=(TMLReadChannel)currElem;
@@ -564,7 +564,7 @@ public class MappedSystemCTask {
 			TMLWriteChannel wCommand=(TMLWriteChannel)currElem;
 			if (wCommand.getNbOfChannels()>1){
 				if (ChannelMappedOnSameHW(wCommand)){
-					if (debug) System.out.println("Checking WriteMult with multicast\n");
+					if (debug) TraceManager.addDev("Checking WriteMult with multicast\n");
 					cmdName= "_mwrite" + currElem.getID();
 					hcode+="TMLWriteMultCommand " + cmdName + SCCR;
 					channels="array("+wCommand.getNbOfChannels();
@@ -573,7 +573,7 @@ public class MappedSystemCTask {
 					}
 					channels+=")," + wCommand.getNbOfChannels();
 				}else{
-					if (debug) System.out.println("Checking WriteMult with unicast\n");
+					if (debug) TraceManager.addDev("Checking WriteMult with unicast\n");
 					TMLWriteChannel prevWrite = null, firstWrite=null;
 					for(int i=0; i<wCommand.getNbOfChannels(); i++){
 						TMLWriteChannel newWrite =  new TMLWriteChannel("WriteMult",null);
@@ -598,7 +598,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLSendEvent){
-			if (debug) System.out.println("Checking Send\n");
+			if (debug) TraceManager.addDev("Checking Send\n");
 			TMLSendEvent sendEvt=(TMLSendEvent)currElem;
 			cmdName= "_send" + currElem.getID();
 			hcode+="TMLSendCommand " + cmdName + SCCR;
@@ -606,7 +606,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 			
 		} else if (currElem instanceof TMLSendRequest){
-			if (debug) System.out.println("Checking Request\n");
+			if (debug) TraceManager.addDev("Checking Request\n");
 			TMLSendRequest sendReq=(TMLSendRequest)currElem;
 			cmdName= "_request" + currElem.getID();
 			hcode+="TMLRequestCommand " + cmdName + SCCR;
@@ -614,7 +614,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;	
 	
 		} else if (currElem instanceof TMLWaitEvent){
-			if (debug) System.out.println("Checking Wait\n");
+			if (debug) TraceManager.addDev("Checking Wait\n");
 			TMLWaitEvent waitEvt = (TMLWaitEvent)currElem;
 			cmdName= "_wait" + currElem.getID();
 			hcode+="TMLWaitCommand " + cmdName + SCCR;
@@ -622,7 +622,7 @@ public class MappedSystemCTask {
 			nextCommand= cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0),false,retElement,null) + "))"+ SCCR;
 		
 		} else if (currElem instanceof TMLNotifiedEvent){
-			if (debug) System.out.println("Checking Notified\n");
+			if (debug) TraceManager.addDev("Checking Notified\n");
 			cmdName= "_notified" + currElem.getID();
 			hcode+="TMLNotifiedCommand " + cmdName + SCCR;
 			initCommand+= "," + cmdName + "("+currElem.getID()+",this," + ((TMLNotifiedEvent)currElem).getEvent().getExtendedName() + ",&" + ((TMLNotifiedEvent)currElem).getVariable() +",\"" + ((TMLNotifiedEvent)currElem).getVariable() + "\"," + getFormattedLiveVarStr(currElem) + ")" + CR;
@@ -630,7 +630,7 @@ public class MappedSystemCTask {
 		
 		} else if (currElem instanceof TMLSequence){
 			TMLSequence tmlseq = (TMLSequence)currElem;
-			if (debug) System.out.println("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
+			if (debug) TraceManager.addDev("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
 			if (tmlseq.getNbNext() == 0) {
                 		return retElement;
             		} else {
@@ -639,10 +639,10 @@ public class MappedSystemCTask {
                 		} else {			
 					String nextBranch;
 					tmlseq.sortNexts();
-					if (debug) System.out.println("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
+					if (debug) TraceManager.addDev("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
 					nextBranch= makeCommands(currElem.getNextElement(currElem.getNbNext() - 1),false,retElement,null);
 					for(int i=currElem.getNbNext() - 2; i>=0; i--) {
-						if (debug) System.out.println("Checking Sequence branch "+ i);
+						if (debug) TraceManager.addDev("Checking Sequence branch "+ i);
 						nextBranch=makeCommands(currElem.getNextElement(i),false,nextBranch,null);
 					}
                     			return nextBranch;
@@ -654,7 +654,7 @@ public class MappedSystemCTask {
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				//System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				//TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_choice" + currElem.getID();
@@ -663,7 +663,7 @@ public class MappedSystemCTask {
 			TMLChoice choice = (TMLChoice)currElem;
 			String code = "", nextCommandTemp="", stopCmdToAdd="";
 			int noOfGuards=0;
-			if (debug) System.out.println("Checking Choice\n");
+			if (debug) TraceManager.addDev("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
 				//int indexElseG = choice.getElseGuard(), indexAfterG = choice.getAfterGuard();
 				int noNonDetGuards = choice.nbOfNonDeterministicGuard();
@@ -749,7 +749,7 @@ public class MappedSystemCTask {
 			//Integer nbevt=0;
 			int nbevt=0;
 			String evtList="",paramList="";
-			if (debug) System.out.println("Checking SelectEvt\n");
+			if (debug) TraceManager.addDev("Checking SelectEvt\n");
 			cmdName= "_select" + currElem.getID();
 			for(int i=0; i<currElem.getNbNext(); i++) {
 				evt=((TMLSelectEvt)currElem).getEvent(i);
@@ -780,7 +780,7 @@ public class MappedSystemCTask {
 			nextCommand=cmdName + ".setNextCommand(array(" + nbevt + nextCommand + "))" + SCCR;
 		
 		} else {
-			System.out.println("Operator: " + currElem + " of class " + currElem.getClass().getName() +  " is not managed in the current version of this C++ code generator.");
+			TraceManager.addDev("Operator: " + currElem + " of class " + currElem.getClass().getName() +  " is not managed in the current version of this C++ code generator.");
 		}
 		chaining+=nextCommand; 
 		return (cmdName.equals("0") || cmdName.charAt(0)=='&')? cmdName : "&"+cmdName;

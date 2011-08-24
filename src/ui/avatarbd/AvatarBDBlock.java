@@ -923,6 +923,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		method = "Message sdecrypt(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		
+		method = "Message hash(Message msg)";
+		addMethodIfApplicable(myMethods, method);
+		
 		method = "Message MAC(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		method = "bool verifyMAC(Message msg, Key k, Message macmsg)";

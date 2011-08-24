@@ -105,8 +105,8 @@ public class SystemCEBRDD {
     	}
 	
 	public void print() {
-		System.out.println("EBRDD: " + reference + DOTH + hcode);
-		System.out.println("EBRDD: " + reference + DOTCPP + cppcode);
+		TraceManager.addDev("EBRDD: " + reference + DOTH + hcode);
+		TraceManager.addDev("EBRDD: " + reference + DOTCPP + cppcode);
 	}
 	
 	
@@ -214,18 +214,18 @@ public class SystemCEBRDD {
 		String nextCommand="",cmdName="";
 
 		if (currElem==null){
-			if (debug) System.out.println("Checking null\n");
+			if (debug) TraceManager.addDev("Checking null\n");
 			return retElement;
 		}
 		
-		if (debug) System.out.println("Checking " + currElem.getName() + CR);
+		if (debug) TraceManager.addDev("Checking " + currElem.getName() + CR);
 
 		if (currElem instanceof EBRDDStart) {
-			if (debug) System.out.println("Checking Start\n");
+			if (debug) TraceManager.addDev("Checking Start\n");
 			return makeCommands(currElem.getNextElement(0), retElement,nextCommandCont,null);
 		
 		} else if (currElem instanceof EBRDDStop){
-			if (debug) System.out.println("Checking Stop\n");
+			if (debug) TraceManager.addDev("Checking Stop\n");
 			if (retElement.equals("0")){
 				cmdName= "_stop" + currElem.getID();
 				hcode+="EBRDDStopCommand " + cmdName + SCCR;
@@ -235,13 +235,13 @@ public class SystemCEBRDD {
 		
 		} else if (currElem instanceof EBRDDActionState){
 			String action;
-			if (debug) System.out.println("Checking Action\n");
+			if (debug) TraceManager.addDev("Checking Action\n");
 			action = ((EBRDDActionState)currElem).getAction();
 			String elemName=currElem.getName(), idString;
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_action" + currElem.getID();
@@ -268,7 +268,7 @@ public class SystemCEBRDD {
 			}
 		
 		} else if (currElem instanceof EBRDDLoop){
-			if (debug) System.out.println("Checking Loop\n");
+			if (debug) TraceManager.addDev("Checking Loop\n");
 			EBRDDLoop fl = (EBRDDLoop)currElem;
 			//EBRDDActionState initAction=new EBRDDActionState("lpInitAc",null);
 			//initAction.setAction(fl.getInit());
@@ -301,7 +301,7 @@ public class SystemCEBRDD {
 
 		} else if (currElem instanceof EBRDDSequence){
 			EBRDDSequence tmlseq = (EBRDDSequence)currElem;
-			if (debug) System.out.println("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
+			if (debug) TraceManager.addDev("Checking Sequence with "+ tmlseq.getNbNext()+ " elements.");
 			if (tmlseq.getNbNext() == 0) {
 				//if (lastSequence!=null) return makeCommands(lastSequence, retElement,nextCommandCont,functionCont,null);
                 		return retElement;
@@ -311,10 +311,10 @@ public class SystemCEBRDD {
                 		} else {			
 					String nextBranch;
 					tmlseq.sortNexts();
-					if (debug) System.out.println("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
+					if (debug) TraceManager.addDev("Checking Sequence branch "+ (tmlseq.getNbNext()-1));
 					nextBranch= makeCommands(currElem.getNextElement(currElem.getNbNext() - 1), retElement, null, null);
 					for(int i=currElem.getNbNext() - 2; i>=0; i--) {
-						if (debug) System.out.println("Checking Sequence branch "+ i);
+						if (debug) TraceManager.addDev("Checking Sequence branch "+ i);
 						nextBranch=makeCommands(currElem.getNextElement(i), nextBranch, null, null);
 					}
                     			return nextBranch;
@@ -347,7 +347,7 @@ public class SystemCEBRDD {
 			if (elemName.charAt(0)=='#'){
 				int pos=elemName.indexOf('\\');
 				idString=elemName.substring(1,pos);
-				System.out.println(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+				TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
 				cmdName="_" + elemName.substring(pos+1) + idString;
 			}else{
 				cmdName= "_choice" + currElem.getID();
@@ -355,7 +355,7 @@ public class SystemCEBRDD {
 			}
 			EBRDDChoice choice = (EBRDDChoice)currElem;
 			String code = "", nextCommandTemp="", MCResult="";
-			if (debug) System.out.println("Checking Choice\n");
+			if (debug) TraceManager.addDev("Checking Choice\n");
 			if (choice.getNbGuard() !=0 ) {
 				String guardS = "",code2;
 				int index1 = choice.getElseGuard();
@@ -373,8 +373,8 @@ public class SystemCEBRDD {
 					}
 					if (nextCommandCont==null){
 						MergedCmdStr nextCommandCollection = new MergedCmdStr("",cmdName, returnIndex);
-						//System.out.println("Call makeCommands, task: "+reference);
-						//if (nextCommandCollection==null) System.out.println("Choice: nextCommandCollection==0");
+						//TraceManager.addDev("Call makeCommands, task: "+reference);
+						//if (nextCommandCollection==null) TraceManager.addDev("Choice: nextCommandCollection==0");
 						if (retElseElement!=null && i==index1)
 							//else case
 							MCResult = makeCommands(currElem.getNextElement(i), retElseElement,nextCommandCollection,null);
@@ -392,7 +392,7 @@ public class SystemCEBRDD {
 						}
 					}else{
 						idsMergedCmds += "_commandHash[" + currElem.getID() + "]=&" + nextCommandCont.srcCmd + SCCR;
-						//System.out.println("Choice: Next command!=0 "+ code2);
+						//TraceManager.addDev("Choice: Next command!=0 "+ code2);
 						int oldReturnIndex=nextCommandCont.num;
 						nextCommandCont.funcs += code + "{\n";
 						if (retElseElement!=null && i==index1)
@@ -400,7 +400,7 @@ public class SystemCEBRDD {
 						else
 							MCResult = makeCommands(currElem.getNextElement(i), retElement, nextCommandCont,null);
 						if (oldReturnIndex==nextCommandCont.num){
-							//System.out.println("RETURN, ccINC NUM "+ nextCommandCont.num);
+							//TraceManager.addDev("RETURN, ccINC NUM "+ nextCommandCont.num);
 							nextCommandCont.funcs+= "return " + nextCommandCont.num + SCCR;
 							nextCommandCont.num++;
 							nextCommandCont.nextCmd += ",(EBRDDCommand*)" + MCResult;
@@ -412,7 +412,7 @@ public class SystemCEBRDD {
 				}
 				// If there was no else, do a terminate
 				if (nextCommandCont==null){
-					//System.out.println("Choice: finalization, add new command\n");
+					//TraceManager.addDev("Choice: finalization, add new command\n");
 					if (index1 == -1){
 						code += "return " + returnIndex + SCCR;
 						nextCommand= cmdName + ".setNextCommand(array(" + (returnIndex+1) + nextCommandTemp + ",(EBRDDCommand*)0))" + SCCR;
@@ -424,11 +424,11 @@ public class SystemCEBRDD {
 					functions+="unsigned int "+ reference + "::" + cmdName + "_func(){" + CR + code +CR+ "}" + CR2;
 					functionSig+="unsigned int " + cmdName + "_func()" + SCCR;
 				}else{
-					//System.out.println("Choice: finalization, No new command\n");
+					//TraceManager.addDev("Choice: finalization, No new command\n");
 					if (index1 == -1){
 						nextCommandCont.funcs += "return " + nextCommandCont.num + SCCR;
 						nextCommandCont.nextCmd += ",(EBRDDCommand*)0";
-						//System.out.println("RETURN, ddINC NUM "+ nextCommandCont.num);
+						//TraceManager.addDev("RETURN, ddINC NUM "+ nextCommandCont.num);
 						nextCommandCont.num++;
 					}
 					cmdName=MCResult;
@@ -436,7 +436,7 @@ public class SystemCEBRDD {
 			}
 					
 		} else {
-			System.out.println("Operator: " + currElem + " is not managed in the current version of this C++ code generator." + "))" + SCCR);
+			TraceManager.addDev("Operator: " + currElem + " is not managed in the current version of this C++ code generator." + "))" + SCCR);
 		}
 		chaining+=nextCommand; 
 		return (cmdName.equals("0") || cmdName.charAt(0)=='&')? cmdName : "&"+cmdName;
@@ -510,7 +510,7 @@ public class SystemCEBRDD {
 			for (int i=0; i< tokens.length; i++){
 				System.out.print(tokens[i]+ ", ");
 			}
-			System.out.println("");
+			TraceManager.addDev("");
 			if (tokens.length>1){
 				//eventID, sourceClass, arrayOfSources, numberOfSources
 				String erbName= "_erb" + newID;
@@ -654,10 +654,10 @@ public class SystemCEBRDD {
 			}
 		}
 		String nodeName2 = nodeName;
-		System.out.println("Name of Element: " + nodeName);
+		TraceManager.addDev("Name of Element: " + nodeName);
 		for(TMLElement elem: tmlmodeling.getChannels()){
 			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);
-			System.out.println("Compare to: " + elem.getName());
+			TraceManager.addDev("Compare to: " + elem.getName());
 		}
 		for(TMLElement elem: tmlmodeling.getEvents()){
 			if (elem.getName().equals(nodeName2)) return new idtypewrap(4, ", (unsigned int)" + elem.getID(), 1);

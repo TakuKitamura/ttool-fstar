@@ -75,10 +75,10 @@ public class SystemCTEPE {
 		_nbOfFloatingSig=0; _nbOfStartNodes=0;
 		_floatingSigProc=""; _floatingSigComp=""; _floatingEnaComp=""; _connect=""; _declare=""; _evtRegister=""; _listeners=""; _eqFuncs=""; _eqFuncDecl="";	
 		if (!_tepes.isEmpty()){
-			System.out.println("And the TEPEs are...............");
+			TraceManager.addDev("And the TEPEs are...............");
 			for(TEPE tepe: _tepes) {
 				for(TEPEComponent comp: tepe) {
-					System.out.println("Component: " + comp.getName());
+					TraceManager.addDev("Component: " + comp.getName());
 					generateTEPEProp(comp,null,null,null);
 				}
 			}
@@ -158,18 +158,18 @@ public class SystemCTEPE {
 				connect += getTEPECompName(currComp) + "->connectSigOut(" + getTEPECompName(outCmp) + ",&SignalConstraint::notifyS" + suffix + ")" + SCCR;
 			}
 		}else
-			System.out.println(getTEPECompName(currComp) + " has no out signal components");
+			TraceManager.addDev(getTEPECompName(currComp) + " has no out signal components");
 			
 		//connect floating in Signal Components
 		int noOfSig= (currComp.hasInSignalComponents())? currComp.getInSignals().size():0;
-		System.out.println(getTEPECompName(currComp) + " Number of sig: " + noOfSig);
+		TraceManager.addDev(getTEPECompName(currComp) + " Number of sig: " + noOfSig);
 		for(int i=noOfSig+1; i<=maxNoOfInSig; i++){
 			_floatingSigProc += ",&SignalConstraint::notifyS" + i;
 			_floatingSigComp += ",(SignalConstraint*)" + getTEPECompName(currComp);
 			_nbOfFloatingSig++;
 		}
 		noOfSig= (currComp.hasInNegatedSignalComponents())? currComp.getInNegatedSignals().size():0;
-		System.out.println(getTEPECompName(currComp) + " Number of neg sig: " + noOfSig);
+		TraceManager.addDev(getTEPECompName(currComp) + " Number of neg sig: " + noOfSig);
 		for(int i=noOfSig; i<maxNoOfNegInSig; i++){
 			_floatingSigProc += ",&SignalConstraint::notifySf";
 			_floatingSigComp += ",(SignalConstraint*)" + getTEPECompName(currComp);
@@ -188,7 +188,7 @@ public class SystemCTEPE {
 			}
 			connect += ")," + currComp.getInProperties().size() + ")" + SCCR;
 		}else
-			System.out.println(getTEPECompName(currComp) + " has no out properties.\n");
+			TraceManager.addDev(getTEPECompName(currComp) + " has no out properties.\n");
 		if (!currComp.hasOutPropertyComponents()){
 			_floatingEnaComp+= ",(PropertyConstraint*)" + getTEPECompName(currComp);
 			_nbOfStartNodes++;
@@ -216,17 +216,17 @@ public class SystemCTEPE {
 		LinkedList<String> addTokenList= new LinkedList<String>();
 		parseExprToTokenList(iAdd,addTokenList);
 		boolean aFound;
-		System.out.println("Decomp in replaceTokenInList: ");
+		TraceManager.addDev("Decomp in replaceTokenInList: ");
 		for(String aToken: addTokenList)
 			System.out.print(aToken + ", ");
-		System.out.println("");
+		TraceManager.addDev("");
 		do{
 			aFound=false;
 			while(!aFound && itr.hasNext()){
 				aFound = ((String)itr.next()).equals(iReplace);
 			}
 			if (aFound){
-				System.out.println("Pattern found\n");
+				TraceManager.addDev("Pattern found\n");
 				itr.remove();
 				for(String anAddString: addTokenList){
 					itr.add(anAddString);
@@ -275,9 +275,9 @@ public class SystemCTEPE {
 				//getCommandsImpactingVar(String iVarName, ArrayList<Integer> oList)
 				MappedSystemCTask srcTsk = _tmltranslator.getMappedTaskByName(((TEPEAttributeComponent)currComp).getBlockName());
 				if (srcTsk==null)
-					System.out.println("Task not found: " + ((TEPEAttributeComponent)currComp).getBlockName());
+					TraceManager.addDev("Task not found: " + ((TEPEAttributeComponent)currComp).getBlockName());
 				else{
-					System.out.println("Search for Var " + currComp.getValue() +" in Task " + ((TEPEAttributeComponent)currComp).getBlockName());
+					TraceManager.addDev("Search for Var " + currComp.getValue() +" in Task " + ((TEPEAttributeComponent)currComp).getBlockName());
 					srcTsk.getAnalysis().getCommandsImpactingVar(currComp.getValue(), iCmdIDList);
 				}
 			}
@@ -293,7 +293,7 @@ public class SystemCTEPE {
 			HashSet<Integer> addCmdIDList = new HashSet<Integer>();
 			parseExprToTokenList(currComp.getValue(), addTokenList);
 			for(TEPEComponent linkedComps: currComp.getInAttributes()){
-				System.out.println("%%%%%%%%%%% in Attribute");
+				TraceManager.addDev("%%%%%%%%%%% in Attribute");
 				generateTEPEProp(linkedComps, addTokenList, addTskVarList, addCmdIDList);
 			}*/
 			String[] decomp = getExprIDTskvarStrings(currComp, currComp.getValue());
@@ -305,7 +305,7 @@ public class SystemCTEPE {
 				System.out.print(anAddString);
 				_eqFuncs += anAddString;
 			}
-			System.out.println();*/
+			TraceManager.addDev();*/
 			_eqFuncs += ";\n}\n\n";
 			_listeners+= "TEPEEquationListener* " + cmpName + "_listener = new TEPEEquationListener(" + decomp[1] + "," + decomp[2];
 			/*"array(" + addCmdIDList.size();
@@ -378,14 +378,14 @@ public class SystemCTEPE {
 				}
 			}else{
 				String[] lhsrhs = currComp.getValue().split("=",2);
-				//System.out.println("Replace " + lhsrhs[0] + " by " + lhsrhs[1] + " before: ");
+				//TraceManager.addDev("Replace " + lhsrhs[0] + " by " + lhsrhs[1] + " before: ");
 				for(String aToken: iTokenList)
 					System.out.print(aToken + ", ");
-				//System.out.println("\nafter:");
+				//TraceManager.addDev("\nafter:");
 				replaceTokenInList(iTokenList, lhsrhs[0], lhsrhs[1]);
 				/*for(String aToken: iTokenList)
 					System.out.print(aToken + ", ");
-				System.out.println("");*/
+				TraceManager.addDev("");*/
 				for(TEPEComponent linkedComps: currComp.getInAttributes())
 					generateTEPEProp(linkedComps, iTokenList, iTskVarList, iCmdIDList);
 			}
@@ -395,10 +395,10 @@ public class SystemCTEPE {
 			//TEPESigListener(ID* iSubjectIDs, unsigned int nbOfSubjectIDs, unsigned int iEvtBitmap, unsigned int iTransTypeBitmap, SignalConstraint* iNotifConstr, NtfSigFuncPointer iNotifFunc, SimComponents* iSimComp)
 			if (currComp.hasOutSignalComponents()){
 				String[] aTokens = currComp.getValue().split("__");
-				System.out.println("name of block: "  + currComp.getValue());
+				TraceManager.addDev("name of block: "  + currComp.getValue());
 				for(int i=0; i<aTokens.length; i++)
-					System.out.println("A tokens [" + i + "]: " + aTokens[i]);
-				System.out.println("A tokens lenght: " + aTokens.length);
+					TraceManager.addDev("A tokens [" + i + "]: " + aTokens[i]);
+				TraceManager.addDev("A tokens lenght: " + aTokens.length);
 				String[] aSrcIDs = aTokens[0].split("_");
 				String[] aEvts = aTokens[1].split("_");
 				String[] aTransTypes = aTokens[2].split("_");
