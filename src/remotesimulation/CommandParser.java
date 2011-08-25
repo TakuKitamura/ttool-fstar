@@ -336,8 +336,12 @@ public class CommandParser {
 		commandList.add(sc);
 		
 		// run-exploration
-		params = new int[0];
-		paramNames = new String[0];
+		params = new int[2];
+		paramNames = new String[2];
+		params[0] = 6;
+		params[1] = 6;
+		paramNames[0] = "Minimum number of explored commands";
+		paramNames[1] = "Minimum number of explored branches";
 		sc = new SimulationCommand("run-exploration", "re", "1 7", params, paramNames, "Runs the simulation in exploration mode");
 		commandList.add(sc);
 		

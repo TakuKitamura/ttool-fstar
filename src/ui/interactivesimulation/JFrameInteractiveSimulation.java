@@ -47,12 +47,13 @@ package ui.interactivesimulation;
 
 //import java.io.*;
 import javax.swing.*;
-//import javax.swing.event.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
+
 
 
 import myutil.*;
@@ -69,7 +70,7 @@ import org.xml.sax.*;
 import javax.xml.parsers.*;
 
 
-public	class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+public	class JFrameInteractiveSimulation extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	
 	protected static final String SIMULATION_HEADER = "siminfo";
 	protected static final String SIMULATION_GLOBAL = "global";
@@ -149,6 +150,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	
 	// Formal verification
 	JSlider minimalCommandCoverage, minimalBranchCoverage;
+	JLabel labelMinimalCommandCoverage, labelMinimalBranchCoverage;
 	
 	// Tasks
 	JPanel taskPanel;
@@ -567,39 +569,95 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		c01.gridheight = 1;
 		c01.weighty = 1.0;
 		c01.weightx = 1.0;
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		c01.fill = GridBagConstraints.BOTH;
 		c01.gridheight = 1;
 		
+		// First empty line
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(" "), c01);
+		
+		// Line minimum command: labels
+		c01.gridwidth = 1;
 		jp02.add(new JLabel("minimum COMMAND coverage"), c01);
+		labelMinimalCommandCoverage = new JLabel("100%");
+		c01.fill = GridBagConstraints.CENTER;
+		jp02.add(labelMinimalCommandCoverage, c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		jp02.add(new JLabel(" "), c01);
+		
+		// Line minimum command: slider
+		c01.gridwidth = 1;
+		jp02.add(new JLabel(" "), c01);
 		minimalCommandCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalCommandCoverage.setValue(100);
 		minimalCommandCoverage.setMajorTickSpacing(10);
         minimalCommandCoverage.setMinorTickSpacing(1);
         minimalCommandCoverage.setPaintTicks(true);
         minimalCommandCoverage.setPaintLabels(true);
         minimalCommandCoverage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+		minimalCommandCoverage.addChangeListener(this);
         Font font = new Font("Serif", Font.ITALIC, 10);
         minimalCommandCoverage.setFont(font);
-		c01.gridwidth = 1; //end row
-		jp02.add(new JLabel(""), c01);
 		jp02.add(minimalCommandCoverage, c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		jp02.add(new JLabel(""), c01);
-		jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+		jp02.add(new JLabel(" "), c01);
+		
+		// One empty line
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(" "), c01);
+		
+		// Line minimum command: labels
+		c01.gridwidth = 1;
+		jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+		labelMinimalBranchCoverage = new JLabel("100%");
+		c01.fill = GridBagConstraints.CENTER;
+		jp02.add(labelMinimalBranchCoverage, c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c01.fill = GridBagConstraints.BOTH;
+		jp02.add(new JLabel(" "), c01);
+		
+		// Line minimum branch: slider
+		c01.gridwidth = 1;
+		jp02.add(new JLabel(" "), c01);
 		minimalBranchCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
-		minimalBranchCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalBranchCoverage.setValue(100);
 		minimalBranchCoverage.setMajorTickSpacing(10);
         minimalBranchCoverage.setMinorTickSpacing(1);
         minimalBranchCoverage.setPaintTicks(true);
         minimalBranchCoverage.setPaintLabels(true);
         minimalBranchCoverage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+		minimalBranchCoverage.addChangeListener(this);
         minimalBranchCoverage.setFont(font);
-		c01.gridwidth = 1; //end row
-		jp02.add(new JLabel(""), c01);
 		jp02.add(minimalBranchCoverage, c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-		jp02.add(new JLabel(""), c01);
+		jp02.add(new JLabel(" "), c01);
+		
+		// Last empty line
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(" "), c01);
+		
+		/*c01.gridwidth = 1;
+		jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		labelMinimalBranchCoverage = new JLabel("100%");
+		c01.fill = GridBagConstraints.EAST;
+		jp02.add(labelMinimalBranchCoverage, c01);
+		c01.fill = GridBagConstraints.BOTH;
+		minimalBranchCoverage = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		minimalBranchCoverage.setValue(100);
+		minimalBranchCoverage.setMajorTickSpacing(10);
+        minimalBranchCoverage.setMinorTickSpacing(1);
+        minimalBranchCoverage.setPaintTicks(true);
+        minimalBranchCoverage.setPaintLabels(true);
+        minimalBranchCoverage.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+		minimalBranchCoverage.addChangeListener(this);
+        minimalBranchCoverage.setFont(font);
+		c01.gridwidth = 1; //end row
+		jp02.add(new JLabel(" "), c01);
+		jp02.add(minimalBranchCoverage, c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp02.add(new JLabel(" "), c01);*/
 		jp01.add(jp02, BorderLayout.CENTER);
 		
 		
@@ -1836,7 +1894,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		animateWithInfo.setEnabled(animate.isSelected());
 		openDiagram.setEnabled(animate.isSelected());
 		update.setSelected(false);
-		sendCommand("run-exploration");
+		sendCommand("run-exploration " + minimalCommandCoverage.getValue() + " " + minimalBranchCoverage.getValue());
 	}
 	
 	
@@ -2273,6 +2331,18 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			mgui.setTransationProgression(animateWithInfo.isSelected());
 		}
 	}
+	
+	public void stateChanged(ChangeEvent e) {
+		JSlider source = (JSlider)e.getSource();
+		//if (!source.getValueIsAdjusting()) {
+			int val = (int)source.getValue();
+			if (source == minimalCommandCoverage) {
+				labelMinimalCommandCoverage.setText("" + val+ "%");
+			} else {
+				labelMinimalBranchCoverage.setText("" + val+ "%");
+			}
+		//}
+}
 	
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();

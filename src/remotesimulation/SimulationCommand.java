@@ -63,6 +63,7 @@ public class SimulationCommand {
 	// 3: optional int
 	// 4: optional String
 	// 5: String to translate to id
+	// 6: int: percentage (between 0 and 100) 
 	// WARNING: optional parameters must be put at the end of the list
 	public String help;
 	
@@ -105,6 +106,10 @@ public class SimulationCommand {
 		
 		if (params[i] == 4) {
 			return " [string: " + paramNames[i] + "]"; 
+		}
+		
+		if (params[i] == 6) {
+			return " [int between 0 and 100 (percentage): " + paramNames[i] + "]"; 
 		}
 		
 		return " <unknow param>";
@@ -150,6 +155,12 @@ public class SimulationCommand {
 			}
 			
 			if (params[i] == 3) {
+				if (!checkForInteger(splitCmd[i+1])) {
+					return false;
+				}
+			}
+			
+			if (params[i] == 6) {
 				if (!checkForInteger(splitCmd[i+1])) {
 					return false;
 				}
