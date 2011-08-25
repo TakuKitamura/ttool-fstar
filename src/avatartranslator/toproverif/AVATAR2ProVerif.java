@@ -53,6 +53,8 @@ import myutil.*;
 import avatartranslator.*;
 
 public class AVATAR2ProVerif {
+	
+	private static int GENERAL_ID = 0;  
 
 	private final static String UNKNOWN = "UNKNOWN";
 
@@ -69,6 +71,7 @@ public class AVATAR2ProVerif {
 	
 	private ProVerifSpec spec;
 	private AvatarSpecification avspec;
+	Hashtable<String, Integer> macs;
 	
 	private Vector warnings;
 	
@@ -93,6 +96,9 @@ public class AVATAR2ProVerif {
 	
 	public ProVerifSpec generateProVerif(boolean _debug, boolean _optimize, boolean _stateReachability, boolean _advancedTranslation) {
 		advancedTranslation = _advancedTranslation;
+		GENERAL_ID = 0;
+		
+		macs = new Hashtable<String, Integer>();
 		
 		warnings = new Vector();
 		spec = new ProVerifSpec();
@@ -638,6 +644,8 @@ public class AVATAR2ProVerif {
 		AvatarStateMachine asm = ab.getStateMachine();
 		AvatarStartState ass = asm.getStartState();
 		
+		macs.clear();
+		
 		makeBlockProcesses(ab, asm, ass.getNext(0), p, tmpprocesses, states, null);
 	}
 	
@@ -888,11 +896,17 @@ public class AVATAR2ProVerif {
 							if (values.length < 3) {
 								addLineNoEnd(p, "let " + tmp + " in");
 							} else {
-								addLineNoEnd(p, "let MAC__tmp = MAC(" + values[0].trim() + " , " + values[1].trim() + ") in");
+								addLineNoEnd(p, "let MAC__tmp0__" + GENERAL_ID + " = MAC(" + values[0].trim() + " , " + values[1].trim() + ") in");
+								addLineNoEnd(p, "let MAC__tmp1__" + GENERAL_ID + " = " + values[2].trim() + " in");
+								
+								macs.remove(term);
+								macs.put(term, new Integer(GENERAL_ID));
+								GENERAL_ID++;
 								//addLine(p, "new choice__mac");
 								//addLine(p, "out(chprivate, choice__mac)");
 								
-								ptmp1 = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+								// We don't need anymore the two parralel process
+								/*ptmp1 = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
 								spec.addProcess(ptmp1);
 								_processes.add(ptmp1);
 								_states.add(null);
@@ -902,9 +916,9 @@ public class AVATAR2ProVerif {
 								_processes.add(ptmp2);
 								_states.add(null);
 								
-								addLineNoEnd(p, "((" + ptmp1.processName + ")|(" + ptmp2.processName + "))."); 
+								addLineNoEnd(p, "((" + ptmp1.processName + ")|(" + ptmp2.processName + "))."); */
 								
-								ptmp = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
+								/*ptmp = new ProVerifProcess(_block.getName() + "__" + (_processes.size() + 1));
 								spec.addProcess(ptmp);
 								_processes.add(ptmp);
 								_states.add(null);
@@ -919,7 +933,7 @@ public class AVATAR2ProVerif {
 								//addLine(ptmp2, "in(chprivate, m__)");
 								//addLineNoEnd(ptmp2, "if m__ = choice__mac then");
 								addLineNoEnd(ptmp2, "let " + term + "= false in");
-								addLineNoEnd(ptmp2, ptmp.processName + ".");
+								addLineNoEnd(ptmp2, ptmp.processName + ".");*/
 								
 								/*addLineNoEnd(p, "let MAC__tmp = MAC(" + values[0].trim() + " , " + values[1].trim() + ") in");
 								addLineNoEnd(p, "if MAC__tmp =  " + values[2].trim() + " then");
@@ -927,8 +941,8 @@ public class AVATAR2ProVerif {
 								addLineNoEnd(p, ptmp.processName);
 								addLineNoEnd(p, "else");
 								addLineNoEnd(p, "let " + term + "= false in");
-								addLineNoEnd(p, ptmp.processName + ".");*/
-								p = ptmp;
+								addLineNoEnd(p, ptmp.processName + ".");
+								p = ptmp;*/
 							}
 						} else if ((name.compareTo("concat2") == 0) || (name.compareTo("concat3") == 0) || (name.compareTo("concat4") == 0)){
 							addLineNoEnd(p, "let " + term + " = " + tmp.substring(index1, tmp.length()) + " in");
@@ -977,6 +991,8 @@ public class AVATAR2ProVerif {
 		if (s.startsWith("not(")) {
 			if (s.endsWith(")")) {
 					s = s.substring(4, s.length()-1);
+					
+					
 					// Should have a "a == b";
 					ab = getEqualGuard(s);
 					if (ab == null) {
@@ -999,13 +1015,20 @@ public class AVATAR2ProVerif {
 	// Returns a and b
 	// Otherwise, returns null;
 	public String[] getEqualGuard(String _guard) {
+		Integer myInt;
 		TraceManager.addDev(" -> Analyzing equal guard: " + _guard);
 		int index = _guard.indexOf("==");
 		if (index == -1) {
 			if (AvatarAttribute.isAValidAttributeName(_guard.trim())) {
+				myInt = macs.get(_guard.trim());
 				String[] ab = new String[2];
-				ab[0] = _guard;
-				ab[1] = "true";
+				if (myInt != null) {
+					ab[0] = "MAC__tmp0__" + myInt.intValue();
+					ab[1] = "MAC__tmp1__" + myInt.intValue();
+				} else {
+					ab[0] = _guard;
+					ab[1] = "true";
+				}
 				return ab;
 			} else {
 				return null;
