@@ -103,10 +103,11 @@ public class CommandParser {
 		
 		for(SimulationCommand sc: commandList) {
 			if (sc.userCommand.equals(cmd) || sc.alias.equals(cmd)) {
-				sb.append(sc.getSynopsis() + "\n" + sc.help);
+				sb.append(sc.getSynopsis() + "\n" + sc.help + "\n");
 				if (sc.hasAlias()) {
-					sb.append("\nalias: " + sc.alias + "\n");
+					sb.append("alias: " + sc.alias + "\n");
 				}
+				sb.append("code: " + sc.simulatorCommand);
 				//System.out.println("Command found" + sc.help);
 				commandFound = true;
 			}

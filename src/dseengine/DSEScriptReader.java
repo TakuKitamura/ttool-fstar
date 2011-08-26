@@ -76,6 +76,7 @@ public class DSEScriptReader  {
 	"RunSimulation", "ModelPath", // 4, 5
 	"simulationCompilationCommand", "simulationExecutionCommand", // 6, 7
 	"SimulationOutputHTML", "SimulationOutputTxt", // 8, 9
+	"SimulationExplorationMinimumCommand", "SimulationExplorationMinimumBranch", // 10, 11 
 	"RunExplo"
 	};
 	
@@ -236,6 +237,16 @@ public class DSEScriptReader  {
 				}
 				return OK;
 			case 10:
+				if (_config.setSimulationExplorationMinimumCommand(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 11:
+				if (_config.setSimulationExplorationMinimumBranch(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 12:
 				if (_config.runExplo(_arguments, debug, optimize) != 0) {
 					return ERROR_WHEN_RUNNING;
 				}

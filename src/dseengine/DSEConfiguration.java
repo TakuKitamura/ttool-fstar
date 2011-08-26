@@ -98,6 +98,9 @@ public class DSEConfiguration  {
 	
 	private int simulationID = 0;
 	
+	private int simulationExplorationMinimumCommand = 100;
+	private int simulationExplorationMinimumBranch = 100;
+	
 	
 	
 	//private int nbOfSimulations;
@@ -251,6 +254,26 @@ public class DSEConfiguration  {
 		}
 		
 		return true;
+	}
+	
+	public int setSimulationExplorationMinimumCommand(String _arguments) {
+		try {
+			simulationExplorationMinimumCommand = Integer.decode(_arguments).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		return 0;
+	}
+	
+	public int setSimulationExplorationMinimumBranch(String _arguments) {
+		try {
+			simulationExplorationMinimumBranch = Integer.decode(_arguments).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		return 0;
 	}
 	
 	public int runSimulation(String _arguments, boolean _debug, boolean _optimize) {
@@ -418,7 +441,7 @@ public class DSEConfiguration  {
 		
 		
 		// Executing the simulation
-		String cmd = pathToSimulator + simulationExecutionCommand + " -explo -gpath " + pathToResults;
+		String cmd = pathToSimulator + simulationExecutionCommand + " -cmd '1 7 " +simulationExplorationMinimumCommand + " " + simulationExplorationMinimumBranch + "'  -gpath " + pathToResults;
 		
 		makeCommand(cmd);
 		simulationID ++;
