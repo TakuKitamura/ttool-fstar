@@ -315,7 +315,8 @@ public class TGComponentManager {
 	// AVATAR RD -> starts at 5200
 	public static final int AVATARRD_REQUIREMENT = 5200;
     public static final int AVATARRD_PROPERTY = 5201;
-	public static final int AVATARRD_DERIVE_CONNECTOR = 5202;  
+	public static final int AVATARRD_DERIVE_CONNECTOR = 5202; 
+	public static final int AVATARRD_REFINE_CONNECTOR = 5206;  
 	public static final int AVATARRD_VERIFY_CONNECTOR = 5203;
 	public static final int AVATARRD_COPY_CONNECTOR = 5204;
 	public static final int AVATARRD_COMPOSITION_CONNECTOR = 5205;
@@ -897,6 +898,8 @@ public class TGComponentManager {
 			return AVATARRD_PROPERTY;
 		} else if (tgc instanceof AvatarRDDeriveConnector) {
 			return AVATARRD_DERIVE_CONNECTOR;
+		} else if (tgc instanceof AvatarRDRefineConnector) {
+			return AVATARRD_REFINE_CONNECTOR;
 		} else if (tgc instanceof AvatarRDVerifyConnector) {
 			return AVATARRD_VERIFY_CONNECTOR;
 		} else if (tgc instanceof AvatarRDCopyConnector) {
@@ -1305,6 +1308,9 @@ public class TGComponentManager {
 			// AVATAR RD
 			case AVATARRD_DERIVE_CONNECTOR:
                 tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case AVATARRD_REFINE_CONNECTOR:
+                tgc = new AvatarRDRefineConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
 			case AVATARRD_VERIFY_CONNECTOR:
                 tgc = new AvatarRDVerifyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);

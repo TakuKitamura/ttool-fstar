@@ -36,8 +36,8 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarRDConnectingPointDerive
- * Definition of connecting points on which connectors between requirements may be connected
+ * Class AvatarRDDeriveConnector
+ * Connector to be used in Avatar RD. Connects two requirements
  * Creation: 20/04/2010
  * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE
@@ -46,42 +46,61 @@
 
 package ui.avatarrd;
 
-//import java.awt.*;
+import java.awt.*;
+//import java.awt.geom.*;
+import java.util.*;
+
+import myutil.*;
 
 import ui.*;
 
-public class AvatarRDConnectingPointDerive extends  TGConnectingPointWidthHeight {
+public  class AvatarRDRefineConnector extends TGConnectorWithCommentConnectionPoints {
+    int w, h;
     
-    public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
-        super(_container, _x, _y, _in, _out, _w, _h);
-		orientation = _orientation;
+    public AvatarRDRefineConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        value = "<<refine>>";
+		
+		myImageIcon = IconManager.imgic1008;
     }
     
-    public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
-        if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
+    
+    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
+		 
+        //g.drawLine(x1, y1, x2, y2);
+        GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+        
+        // Indicate semantics
 		
-		if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
+		Font f = g.getFont();
+		Font old = f;
+		if (f.getSize() != tdp.getFontSize()) {
+			f = f.deriveFont((float)tdp.getFontSize());
+			g.setFont(f);
+		}
 		
-		if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-		
-		if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-        //System.out.pr
-        //System.out.println("is compatible with:false");
-        return false;
+        w  = g.getFontMetrics().stringWidth(value);
+        h = g.getFontMetrics().getHeight();
+        g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2)/2);
+		g.setFont(old);
     }
-	
-
+    
+    public TGComponent extraIsOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
+            return this;
+        }
+        return null;
+    }
+    
+    public int getType() {
+        return TGComponentManager.AVATARRD_REFINE_CONNECTOR;
+    }
+    
 }
+
+
+
+
+
+
+

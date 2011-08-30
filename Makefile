@@ -24,6 +24,8 @@ TIFTRANSLATOR_BINARY = tiftranslator.jar
 TMLTRANSLATOR_BINARY = tmltranslator.jar
 RUNDSE_BINARY = rundse.jar
 REMOTESIMULATOR_BINARY = simulationcontrol.jar
+RUNDSE_BINARY = rundse.jar
+RUNDSE_JAR_TXT  = rundse.txt
 TTOOL_JAR_TXT = ttool.txt
 LAUNCHER_JAR_TXT = launcher.txt
 TIFTRANSLATOR_JAR_TXT = tiftranslator.txt
@@ -71,7 +73,7 @@ RELEASE_STD_FILES_WINDIWS_EXE = ttool_windows.bat
 
 RELEASE_STD_FILES_XML = manual-HW.xml DrinkMachineV10.xml WebV01.xml Protocol_example1.xml BasicExchange.xml SmartCardProtocol.xml ProtocolPatterns.xml COCOME_V50.xml CoffeeMachine_Avatar.xml Network_Avatar.xml
 RELEASE_STD_FILES_LIB =  TClock1.lib TTimerv01.lib
-RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) 
+RELEASE_STD_FILES_BIN = $(TTOOL_CONFIG) $(LAUNCHER_BINARY) $(TTOOL_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(REMOTESIMULATOR_BINARY) $(RUNDSE_BINARY) 
 RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
 
@@ -125,7 +127,7 @@ remotesimulator:
 documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 
-release: jttooljar launcher tiftranslator tmltranslator remotesimulator ttooljar_std stdrelease 
+release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar_std stdrelease 
 	@echo release done
 
 ########## RELEASE
@@ -219,7 +221,8 @@ stdrelease:
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
+	
 
 # Basic release
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar *; $(GZIP) -9 $(TTOOL_STD_RELEASE)/release.tar; mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz

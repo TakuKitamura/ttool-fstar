@@ -6429,6 +6429,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARRD_PROPERTY);
 		} else if (command.equals(actions[TGUIAction.ARD_DERIVE_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_DERIVE_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ARD_REFINE_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_REFINE_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.ARD_VERIFY_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_VERIFY_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.ARD_COPY_CONNECTOR].getActionCommand())) {

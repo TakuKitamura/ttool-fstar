@@ -77,8 +77,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         minWidth = 40;
         minHeight = 30;
         
-        nbConnectingPoint = 16;
-        connectingPoint = new TGConnectingPoint[16];
+        nbConnectingPoint = 32;
+        connectingPoint = new TGConnectingPoint[32];
         
         connectingPoint[0] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.0, 0.0);
         connectingPoint[1] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
@@ -97,6 +97,31 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         connectingPoint[13] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
         connectingPoint[14] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
         connectingPoint[15] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+		
+		connectingPoint[16] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.12, 0.0);
+		connectingPoint[17] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.37, 0.0);
+		
+        connectingPoint[18] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.62, 0.0);
+		connectingPoint[19] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.87, 0.0);
+		
+        connectingPoint[20] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.0, 0.12);
+		connectingPoint[21] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.0, 0.37);
+		
+        connectingPoint[22] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 1.0, 0.12);
+		connectingPoint[23] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 1.0, 0.37);
+		
+        connectingPoint[24] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.0, 0.62);
+		connectingPoint[25] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.0, 0.87);
+		
+        connectingPoint[26] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 1.0, 0.62);
+		connectingPoint[27] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 1.0, 0.87);
+		 
+        connectingPoint[28] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.12, 1.0);
+		connectingPoint[29] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.37, 1.0);
+		
+        connectingPoint[30] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.62, 1.0);
+		 connectingPoint[31] = new AvatarSMDConnectingPoint(this, 0, 0, true, true, 0.87, 1.0);
+
         
         addTGConnectingPointsComment();
         

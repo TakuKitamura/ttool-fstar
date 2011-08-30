@@ -326,6 +326,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int ARD_PROPERTY = 302;
 	public static final int ARD_VERIFY_CONNECTOR = 303;
 	public static final int ARD_DERIVE_CONNECTOR = 304;
+	public static final int ARD_REFINE_CONNECTOR = 343;
 	public static final int ARD_COPY_CONNECTOR = 305;
 	public static final int ARD_COMPOSITION_CONNECTOR = 306;
     
@@ -463,7 +464,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 343;
+    public static final int NB_ACTION = 344;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -886,9 +887,10 @@ public class TGUIAction extends AbstractAction {
         actions[ARD_REQUIREMENT] = new TAction("add-ard-requirement", "Add a requirement", IconManager.imgic5006, IconManager.imgic5006, "Requirement", "Add a requirement to the currently opened avatar requirement diagram", 0);
         actions[ARD_PROPERTY] = new TAction("add-ard-property", "Add a property", IconManager.imgic5008, IconManager.imgic5008, "Property", "Add a reference to a property of the currently opened avatar requirement diagram", 0);
         actions[ARD_DERIVE_CONNECTOR] = new TAction("add-ard-derive", "Add a <<deriveReqt>> link", IconManager.imgic1008, IconManager.imgic1008, "DeriveReqt", "Add a <<deriveReqt>> link between two requirements of the currently opened avatar requirement diagram", 0);
+         actions[ARD_REFINE_CONNECTOR] = new TAction("add-ard-refine", "Add a <<refine>> link", IconManager.imgic1016, IconManager.imgic1016, "refine", "Add a <<refine>> link between two requirements of the currently opened avatar requirement diagram", 0);
         actions[ARD_VERIFY_CONNECTOR] = new TAction("add-ard-verify", "Add a <<verify>> link", IconManager.imgic1006, IconManager.imgic1006, "Verify", "Add a <<verify>> link between an observer and a requirement of the currently opened avatar requirement diagram", 0);
 		actions[ARD_COPY_CONNECTOR] = new TAction("add-ard-copy", "Add a <<copy>> link", IconManager.imgic1010, IconManager.imgic1010, "Copy", "Add a <<copy>> link between two requirements of the currently opened avatar requirement diagram", 0);
-        actions[ARD_COMPOSITION_CONNECTOR] = new TAction("add-ard-composition", "Add a <<derive>> link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a <<copy>> link between two requirements of the currently opened avatar requirement diagram", 0);
+        actions[ARD_COMPOSITION_CONNECTOR] = new TAction("add-ard-composition", "Add a  composition link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a composition link between two requirements of the currently opened avatar requirement diagram", 0);
         
 		// AVATAR Parametric Diagrams
 		actions[APD_EDIT] = new TAction("edit-apd-diagram", "Edit AVATAR Parametric Diagrams", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Parametric Diagram", "Make it possible to edit the currently opened AVATAR Parametric Diagram", 0);

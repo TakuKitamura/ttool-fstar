@@ -110,7 +110,7 @@ public class IconManager {
     public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
 	public static ImageIcon imgic920, imgic922, imgic924, imgic926, imgic928, imgic930;    
     // Requirement diagrams
-    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014;
+    public static ImageIcon imgic1000, imgic1002, imgic1004,imgic1006,imgic1008, imgic1010, imgic1012, imgic1014, imgic1016;
 	public static ImageIcon imgic1050, imgic1052, imgic1054,imgic1056, imgic1058, imgic1060;
 	
 	// Attack Tree Diagrams
@@ -430,6 +430,7 @@ public class IconManager {
 	private static String icon1010 = "images/reqcopy.gif";
 	private static String icon1012 = "images/reqcomp.gif";
 	private static String icon1014 = "images/ebrddobs.gif";
+	private static String icon1016 = "images/reqref.gif";
 	
 	
 	// EBRDD
@@ -789,6 +790,7 @@ public class IconManager {
 		imgic1010 = getIcon(icon1010);
 		imgic1012 = getIcon(icon1012);
 		imgic1014 = getIcon(icon1014);
+		imgic1016 = getIcon(icon1016);
 		
 		imgic1050 = getIcon(icon1050);
         imgic1052 = getIcon(icon1052);

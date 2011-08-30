@@ -101,6 +101,8 @@ public class DSEConfiguration  {
 	private int simulationExplorationMinimumCommand = 100;
 	private int simulationExplorationMinimumBranch = 100;
 	
+	private int simulationMaxCycles = -1;
+	
 	
 	
 	//private int nbOfSimulations;
@@ -276,6 +278,16 @@ public class DSEConfiguration  {
 		return 0;
 	}
 	
+	public int setSimulationMaxCycle(String _arguments) {
+		try {
+			simulationMaxCycles = Integer.decode(_arguments).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		return 0;
+	}
+	
 	public int runSimulation(String _arguments, boolean _debug, boolean _optimize) {
 		
 		// Checking for valid arguments
@@ -352,6 +364,11 @@ public class DSEConfiguration  {
 		String cmd;
 		while(nbOfSimulations >0) {
 			cmd = pathToSimulator + simulationExecutionCommand;
+			
+			if (simulationMaxCycles > -1) {
+				cmd += " -cmd \"1 5 " + simulationMaxCycles + "\"";
+			}
+			
 			if (outputVCD) {
 				cmd += " -ovcd " + pathToResults + "output" + simulationID + ".vcd";
 			}
@@ -441,7 +458,7 @@ public class DSEConfiguration  {
 		
 		
 		// Executing the simulation
-		String cmd = pathToSimulator + simulationExecutionCommand + " -cmd '1 7 " +simulationExplorationMinimumCommand + " " + simulationExplorationMinimumBranch + "'  -gpath " + pathToResults;
+		String cmd = pathToSimulator + simulationExecutionCommand + " -cmd \"1 7 " +simulationExplorationMinimumCommand + " " + simulationExplorationMinimumBranch + "\"  -gpath " + pathToResults;
 		
 		makeCommand(cmd);
 		simulationID ++;
@@ -450,6 +467,75 @@ public class DSEConfiguration  {
 	}
 	
 	public void makeCommand(String cmd) {
+		String str = null;
+		BufferedReader proc_in, proc_err;
+        //PrintStream out = null;
+        
+        try {
+            TraceManager.addDev("Going to start command " + cmd);
+			
+			ProcessBuilder pb = new ProcessBuilder(constructCommandList(cmd));
+			Map<String, String> env = pb.environment();
+			java.lang.Process proc = pb.start();
+            
+            proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+            
+            //et = new ErrorThread(proc_err, mpi);
+            //et.start();
+            
+            while ((str = proc_in.readLine()) != null){    
+                TraceManager.addDev("Out " + str);
+                //mpi.appendOut(str+"\n");             
+            }
+            
+            //et.stopProcess();
+            
+        } catch (Exception e) {
+            TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);
+        }
+        TraceManager.addDev("Ending command " + cmd);
+		
+	}
+	
+	public List<String> constructCommandList(String _cmd) {
+		Vector<String> list = new Vector<String>();
+		_cmd = _cmd.trim();
+		char c;
+		String current = "";
+		boolean inQuote0 = false;
+		boolean inQuote1 = false;
+		
+		TraceManager.addDev("Making list from command : " + _cmd);
+		
+		for(int i=0; i<_cmd.length(); i++) {
+			c = _cmd.charAt(i);
+			
+			if ((c == ' ') && (!inQuote0) && (!inQuote1)){
+				TraceManager.addDev("Adding " + current);
+				list.add(current);
+				current = "";
+			} else if (c == '\'') {
+				inQuote1 = !inQuote1;
+			} else if (c == '\"') {
+				inQuote0 = !inQuote0;
+			} else {
+				current += c;
+			}
+			
+		}
+		
+		if (current.length() > 0) {
+			list.add(current);
+		}
+		
+		TraceManager.addDev("List done\n");
+		
+		return (List)list;
+		
+	}
+	
+	public void oldMakeCommand(String cmd) {
 		String str = null;
 		BufferedReader proc_in, proc_err;
         //PrintStream out = null;
