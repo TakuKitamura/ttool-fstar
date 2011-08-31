@@ -325,5 +325,7 @@ protected:
 	unsigned int _branchCoverage;
 	///Statement coverage to target
 	unsigned int _commandCoverage;
+	///Termination flag for exploration mode;
+	bool _terminateExplore;
 };
 #endif

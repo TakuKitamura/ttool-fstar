@@ -59,7 +59,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100){
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100), _terminateExplore(false){
 }
 
 Simulator::~Simulator(){
@@ -613,7 +613,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 	aInpStream >> aCmd;
 	switch (aCmd){
 		case 0: //Quit simulation
-			//std::cout << "QUIT SIMULATION EXECUTED "  << std::endl;
+			std::cout << "QUIT SIMULATION"  << std::endl;
 			break;
 		case 1:{
 			_busy=true;
@@ -691,6 +691,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 						myDOTfile << "digraph BCG {\nsize = \"7, 10.5\";\ncenter = TRUE;\nnode [shape = circle];\n0 [peripheries = 2];\n";
 //#endif
 						unsigned int aTransCounter=0;
+						_terminateExplore=false;
 						exploreTree(0, 0, myDOTfile, myAUTfile, aTransCounter);
 //#ifdef DOT_GRAPH_ENABLED
 						myDOTfile << "}\n";
@@ -1319,8 +1320,6 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 #ifdef EXPLOGRAPH_ENABLED
 		aLastID = schedule2GraphDOT(iDOTFile, iAUTFile, iPrevID,oTransCounter);
 #endif
-		//if (_simComp->wasKnownStateReached()==0){
-			//if(aRandomCmd==0){
 		if(aSimTerminated){
 			oTransCounter++;
 //#ifdef DOT_GRAPH_ENABLED				
@@ -1333,9 +1332,9 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 			
 			if(_commandCoverage <= TMLCommand::getCmdCoverage() && _branchCoverage <= TMLCommand::getBranchCoverage()){
 				_simComp->setStopFlag(true, MSG_COVREACHED);
-				_syncInfo->_terminate=true;
+				_terminateExplore=true;
+				//_syncInfo->_terminate=true;
 			}
-			//}else{
 		}else if (_simComp->wasKnownStateReached()==0){
 			if(aRandomCmd==0){
 				std::cout << "We should never get here\n";
@@ -1343,13 +1342,13 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 				unsigned int aNbNextCmds;
 				std::stringstream aStreamBuffer;
 				std::string aStringBuffer;
-				//aChoiceCmd->getNextCommands(aNbNextCmds);
 				aNbNextCmds = aRandomCmd->getRandomRange();
 				//std::cout << "Simulation " << iPrevID << "_" << aMyID << "continued " << aNbNextCmds << std::endl;
 				_simComp->writeObject(aStreamBuffer);
 				aStringBuffer=aStreamBuffer.str();
 				if ((aNbNextCmds & INT_MSB)==0){
-					for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
+					//for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
+					for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_terminateExplore; aBranch++){
 						_simComp->reset();
 						aStreamBuffer.str(aStringBuffer);
 						//std::cout << "Read 1 in exploreTree\n";
@@ -1360,7 +1359,8 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iDOT
 				}else{
 					unsigned int aBranch=0;
 					aNbNextCmds ^= INT_MSB;
-					while (aNbNextCmds!=0 && !_syncInfo->_terminate){
+					//while (aNbNextCmds!=0 && !_syncInfo->_terminate){
+					while (aNbNextCmds!=0 && !_terminateExplore){
 						if ((aNbNextCmds & 1)!=0){
 							_simComp->reset();
 							aStreamBuffer.str(aStringBuffer);
