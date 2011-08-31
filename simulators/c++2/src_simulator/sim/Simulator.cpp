@@ -506,6 +506,7 @@ void Simulator::printHelp(){
 			"-ovcd ofile            simulate and write traces to ofile in vcd format\n"
 			"-ograph ofile          simulate and write traces to ofile in aut format\n"
 			"-cmd \'c1 p1 p2;c2\'     execute commands c1 with parameters p1 and p2 and c2\n"
+			"-oxml ofile            xml reply is written to ofile, in case the -cmd option is used\n"
 			"***************************************************************************\n\n";
 }
 
@@ -560,7 +561,9 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 			_simComp->streamBenchmarks(std::cout);
 			std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 		}else{
-			std::ofstream aXmlOutFile("reply.xml");
+			std::ofstream aXmlOutFile;
+			std::string aXmlFileName = getArgs("-oxml", "reply.xml", iLen, iArgs);
+			if (aXmlFileName.empty()) aXmlOutFile.open("/dev/null"); else aXmlOutFile.open(aXmlFileName.c_str());
 			if (aXmlOutFile.is_open()){
 				std::string aNextCmd;
 				std::istringstream iss(aArgString+";");

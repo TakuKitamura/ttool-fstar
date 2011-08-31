@@ -262,6 +262,7 @@ protected:
 	\param iCmd Pointer to the command
 	\return Returns false if simulator should be terminated
 	*/
+	//inline void decodeCommand(std::string iCmd){std::ofstream aNullStream("/dev/null"); decodeCommand(iCmd, aNullStream);}
 	void decodeCommand(std::string iCmd, std::ostream& iXmlOutStream=std::cout);
 	///Searches for switches in the command line string
 	/**
