@@ -537,7 +537,8 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	if (!aArgString.empty()) return new Server();
 	aArgString =getArgs("-file", "file", iLen, iArgs);
 	if (!aArgString.empty()) return new ServerLocal(aArgString);
-	//aArgString =getArgs("-explore", "file", iLen, iArgs);
+	aArgString =getArgs("-explore", "file", iLen, iArgs);
+	if (!aArgString.empty()) decodeCommand("1 7");
 	//if (!aArgString.empty()) return new ServerExplore();
 	std::cout << "Running in command line mode.\n";
 	_replyToServer = false;
@@ -1193,7 +1194,7 @@ void Simulator::decodeCommand(std::string iCmd){
 	writeSimState(aGlobMsg);
 	aGlobMsg << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	//std::cout << "Before reply." << std::endl;
-	if (_replyToServer)_syncInfo->_server->sendReply(aGlobMsg.str());
+	if (_replyToServer)_syncInfo->_server->sendReply(aGlobMsg.str()); else std::cout << aGlobMsg.str() << "\n";
 	//std::cout << "End of command decode procedure." << std::endl;
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
