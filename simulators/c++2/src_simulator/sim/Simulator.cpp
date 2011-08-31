@@ -570,9 +570,9 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 					decodeCommand(aNextCmd, aXmlOutFile);
 					getline(iss, aNextCmd, ';');
 				}
+				aXmlOutFile.close();
 			}else
 				std::cout << "XML output file could not be opened, aborting.\n";
-			aXmlOutFile.close();
 		}
 		rusage res;
 		getrusage(RUSAGE_SELF, &res); 
