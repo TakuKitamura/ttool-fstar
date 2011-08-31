@@ -219,6 +219,7 @@ void SimComponents::resetStateHash(){
 	_systemHashTable.clear();
 	TMLTransaction::resetID();
 	_onKnownPath=false;
+	TMLCommand::clearCoverageVars();
 }
 
 SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{

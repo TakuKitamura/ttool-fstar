@@ -221,6 +221,8 @@ public:
 	\return Branch coverage in percent
 	*/
 	static unsigned int getBranchCoverage();
+	///Reset coverage related state variables
+	static void clearCoverageVars();
 protected:
 	///ID of the command
 	ID _ID;
@@ -258,7 +260,7 @@ protected:
 	///Pointer to simulation components
 	static SimComponents* _simComp;
 	///State Hash Map
-	StateHashSet _stateHashes;
+	//StateHashSet _stateHashes;
 	///Command Start Time
 	TMLTime _commandStartTime;
 	///Bitmap of live variables
@@ -267,8 +269,8 @@ protected:
 	bool _checkpoint;
 	///Number of executions of the command
 	unsigned int _execTimes;
-	///Buffer for transaction to be proposed to kernel
-	TMLTransaction transBuffer;
+	////Buffer for transaction to be proposed to kernel
+	//TMLTransaction transBuffer;
 	///Number of branches in the whole DIPLODOCUS model
 	static unsigned int _branchNo;
 	///Bitmap of covered branches of this specific command

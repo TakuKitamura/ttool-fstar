@@ -560,14 +560,18 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 			_simComp->streamBenchmarks(std::cout);
 			std::cout << "Simulated time: " << SchedulableDevice::getSimulatedTime() << " time units.\n";
 		}else{
-			std::string aNextCmd;
-			std::istringstream iss(aArgString+";");
-			getline(iss, aNextCmd, ';');
-			while (!(iss.eof() || aNextCmd.empty())){
-				std::cout << "next cmd to execute: \"" << aNextCmd << "\"\n";
-				decodeCommand(aNextCmd);
+			std::ofstream aXmlOutFile("reply.xml");
+			if (aXmlOutFile.is_open()){
+				std::string aNextCmd;
+				std::istringstream iss(aArgString+";");
 				getline(iss, aNextCmd, ';');
-			}
+				while (!(iss.eof() || aNextCmd.empty())){
+					std::cout << "next cmd to execute: \"" << aNextCmd << "\"\n";
+					decodeCommand(aNextCmd, aXmlOutFile);
+					getline(iss, aNextCmd, ';');
+				}
+			}else
+				std::cout << "XML output file could not be opened, aborting.\n";
 		}
 		rusage res;
 		getrusage(RUSAGE_SELF, &res); 
@@ -588,7 +592,7 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	return 0;
 }
 
-void Simulator::decodeCommand(std::string iCmd){
+void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 	//std::cout << "Not crashed. I: " << iCmd;
 	//std::cout << iCmd << std::endl;
 	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
@@ -1194,7 +1198,7 @@ void Simulator::decodeCommand(std::string iCmd){
 	writeSimState(aGlobMsg);
 	aGlobMsg << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	//std::cout << "Before reply." << std::endl;
-	if (_replyToServer)_syncInfo->_server->sendReply(aGlobMsg.str()); else std::cout << aGlobMsg.str() << "\n";
+	if (_replyToServer)_syncInfo->_server->sendReply(aGlobMsg.str()); else iXmlOutStream << aGlobMsg.str() << "\n";
 	//std::cout << "End of command decode procedure." << std::endl;
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }

@@ -230,7 +230,7 @@ void TMLCommand::reset(){
 	_currTransaction=0;
 	_commandStartTime=-1;
 	//_execTimes=0;
-	_stateHashes.clear();
+	//_stateHashes.clear();
 }
 
 void TMLCommand::registerGlobalListener(GeneralListener* iListener){
@@ -288,6 +288,13 @@ unsigned int TMLCommand::getBranchCoverage(){
 		}
 	}
 	return (_branchNo==0)? 100: aCoveredBranchNo * 100 / _branchNo;
+}
+
+void TMLCommand::clearCoverageVars(){
+	for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+		(*i)->_execTimes=0;
+		(*i)->_coveredBranchMap=0;
+	}
 }
 
 template void TMLCommand::registerGlobalListenerForType<IndeterminismSource>(GeneralListener* iListener, TMLTask* aTask);

@@ -95,5 +95,6 @@ void TMLExeciRangeCommand::setRandomValue(unsigned int iValue){
 	//ParamType aMax, aMin;
 	//(_task->*_rangeFunc)(aMin, aMax);
 	_length= _minRange + iValue;
-	_currTransaction = :: new (&transBuffer) TMLTransaction(this, _length,_task->getEndLastTransaction());
+	//_currTransaction = :: new (&transBuffer) TMLTransaction(this, _length,_task->getEndLastTransaction());
+	_currTransaction = new TMLTransaction(this, _length,_task->getEndLastTransaction());
 }
