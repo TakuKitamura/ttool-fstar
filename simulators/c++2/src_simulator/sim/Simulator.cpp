@@ -572,6 +572,7 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 				}
 			}else
 				std::cout << "XML output file could not be opened, aborting.\n";
+			aXmlOutFile.close();
 		}
 		rusage res;
 		getrusage(RUSAGE_SELF, &res); 
