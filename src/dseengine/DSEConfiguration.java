@@ -527,6 +527,7 @@ public class DSEConfiguration  {
 		
 		if (current.length() > 0) {
 			list.add(current);
+			TraceManager.addDev("Adding " + current);
 		}
 		
 		TraceManager.addDev("List done\n");

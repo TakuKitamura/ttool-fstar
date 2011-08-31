@@ -227,7 +227,7 @@ public class JDialogChannel extends javax.swing.JDialog implements ActionListene
         return sizeText.getText();
     }
     
-    public int getType() {
+    public int getMyType() {
         return typeList.getSelectedIndex();
     }
     

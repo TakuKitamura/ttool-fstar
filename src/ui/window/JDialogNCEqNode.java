@@ -205,7 +205,7 @@ public class JDialogNCEqNode extends javax.swing.JDialog implements ActionListen
         return schedulingPolicyBox.getSelectedIndex();
     }
 	
-	public int getType() {
+	public int getMyType() {
         return typeBox.getSelectedIndex();
     }
     

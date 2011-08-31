@@ -60,7 +60,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
     
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdfromucd, newreq, 
-	newebrdd, newprosmd, newavatarrd, newavatarpd;
+	newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd;
     private JMenuItem newatd;
 	
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -101,7 +101,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newprosmd = createMenuItem("New ProActive State Machine Diagram");
 		newatd = createMenuItem("New Attack Tree Diagram");
 		newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
-		newavatarpd = createMenuItem("New AVATAR Parametric Diagram");
+		newavatarpd = createMenuItem("New AVATAR Property Diagram");
+		newavatarcd = createMenuItem("New AVATAR Context Diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -113,6 +114,9 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(sort);
         menu.addSeparator();
         menu.add(newucd);
+		if (mgui.isAvatarOn()) {
+			menu.add(newavatarcd);
+		}
 		menu.add(newsd);
 		menu.add(newsdfromucd);
         menu.addSeparator();
@@ -168,6 +172,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newprosmd.setEnabled(tp.isProSMDEnabled());
         newatd.setEnabled(tp.isATDEnabled());
 		newavatarrd.setEnabled(tp.isAvatarRDEnabled());
+		newavatarpd.setEnabled(tp.isAvatarPDEnabled());
     }
     
     private Action listener = new AbstractAction() {
@@ -212,6 +217,9 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 mgui.changeMade(null, -1);
 			} else if (e.getSource() == newavatarpd) {
 				mgui.createAvatarPD(tp, "AVATAR PD");
+                mgui.changeMade(null, -1);
+			} else if (e.getSource() == newavatarcd) {
+				mgui.createAvatarCD(tp, "Context Diagram");
                 mgui.changeMade(null, -1);
 			}
         }

@@ -79,6 +79,7 @@ import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
+import ui.avatarcd.*; // Context Diagram
 
 public class TGComponentManager {
     
@@ -336,6 +337,13 @@ public class TGComponentManager {
 	public static final int APD_SIGNAL_CONNECTOR = 5311;
 	public static final int APD_PROPERTY_CONNECTOR = 5312;
 	public static final int APD_COMPOSITION_CONNECTOR = 5313;
+	
+	// AVATAR CD -> starts at 5400
+	public static final int ACD_BLOCK = 5400;
+    public static final int ACD_ACTOR_STICKMAN = 5401;
+	public static final int ACD_ACTOR_BOX = 5402;  
+	public static final int ACD_COMPOSITION_CONNECTOR = 5403;
+	public static final int ACD_ASSOCIATION_CONNECTOR = 5404;
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -427,6 +435,17 @@ public class TGComponentManager {
                 break;
 			case APD_PROPERTY_RELATION:
                 tgc = new AvatarPDPropertyRelation(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+				
+			// AVATAR CD
+			case ACD_BLOCK:
+                tgc = new AvatarCDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case ACD_ACTOR_STICKMAN:
+                tgc = new AvatarCDActorStickman(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case ACD_ACTOR_BOX:
+                tgc = new AvatarCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -936,6 +955,18 @@ public class TGComponentManager {
 			return APD_PROPERTY_CONNECTOR;
 		} else if (tgc instanceof AvatarPDCompositionConnector) {
 			return APD_COMPOSITION_CONNECTOR;
+			
+			// AVATAR CD
+		} else if (tgc instanceof AvatarCDBlock) {
+			return ACD_BLOCK;
+		} else if (tgc instanceof AvatarCDActorStickman) {
+			return ACD_ACTOR_STICKMAN;
+		} else if (tgc instanceof AvatarCDActorBox) {
+			return ACD_ACTOR_BOX;
+		} else if (tgc instanceof AvatarCDCompositionConnector) {
+			return ACD_COMPOSITION_CONNECTOR;
+		}  else if (tgc instanceof AvatarCDAssociationConnector) {
+			return ACD_ASSOCIATION_CONNECTOR;
 			                      
 		// Others
 		} else if (tgc instanceof 	TADDeterministicDelay) {
@@ -1322,6 +1353,14 @@ public class TGComponentManager {
                 tgc = new AvatarRDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
 				
+			// AVATAR CD
+			case ACD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarCDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+			case ACD_ASSOCIATION_CONNECTOR:
+                tgc = new AvatarCDAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;	
+				
 			// AVATAR PD
 			case APD_ATTRIBUTE_CONNECTOR:
                 tgc = new AvatarPDAttributeConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
@@ -1334,7 +1373,7 @@ public class TGComponentManager {
                 break;
 			case APD_COMPOSITION_CONNECTOR:
                 tgc = new AvatarPDCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
-                break;				
+                break;		
 			
 			// Others
             case CONNECTOR_AD_DIAGRAM:

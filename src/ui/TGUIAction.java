@@ -347,6 +347,14 @@ public class TGUIAction extends AbstractAction {
 	public static final int APD_PROPERTY_CONNECTOR = 320;
 	public static final int APD_COMPOSITION_CONNECTOR = 321;
 	
+	// AVATAR context Diagrams
+	public static final int ACD_EDIT = 344;
+	public static final int ACD_BLOCK = 345;
+	public static final int ACD_COMPOSITION_CONNECTOR = 346;
+	public static final int ACD_ACTOR_STICKMAN = 347;
+	public static final int ACD_ACTOR_BOX = 348;
+	public static final int ACD_ASSOCIATION_CONNECTOR = 349;
+	
 	
     public static final int ACT_MODEL_CHECKING = 25;
     public static final int ACT_GEN_RTLOTOS = 27;
@@ -464,7 +472,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 344;
+    public static final int NB_ACTION = 350;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -909,6 +917,14 @@ public class TGUIAction extends AbstractAction {
 		actions[APD_PROPERTY_CONNECTOR] = new TAction("apd-property-connector", "Add a connector between property elements", IconManager.imgic5020, IconManager.imgic5020, "Connector between properties", "Add a connector between properties to the currently opened AVATAR Parametric Diagram", 0);
 		actions[APD_COMPOSITION_CONNECTOR] = new TAction("apd-composition-connector", "Add a composition between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition between blocks", "Add a composition between blocks to the currently opened AVATAR Parametric Diagram", 0);
 		
+		// AVATAR Context Diagrams
+		actions[ACD_EDIT] = new TAction("edit-acd-diagram", "Edit AVATAR Context Diagrams", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Context Diagram", "Make it possible to edit the currently opened AVATAR Context Diagram", 0);
+        actions[ACD_BLOCK] = new TAction("acd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Context Diagram", 0);
+        actions[ACD_COMPOSITION_CONNECTOR] = new TAction("acd-composition-connector", "Add a composition between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition between blocks", "Add a composition between blocks to the currently opened AVATAR Context Diagram", 0);
+		actions[ACD_ASSOCIATION_CONNECTOR] = new TAction("acd-association-connector", "Add an association", IconManager.imgic5044, IconManager.imgic5044, "Association", "Add an association between blocks to the currently opened AVATAR Context Diagram", 0);
+		actions[ACD_ACTOR_STICKMAN] = new TAction("acd-add-actor", "Add an actor (stickman format)", IconManager.imgic600, IconManager.imgic600, "Actor", "Add a stickman actor to the currently opened AVATAR Context diagram", 0);
+        actions[ACD_ACTOR_BOX] = new TAction("acd-add-actor-box", "Add an actor (box format)", IconManager.imgic614, IconManager.imgic614, "Actor (box format)", "Add a box actor  to the currently opened AVATAR Context diagram", 0);
+        
     }
     
     

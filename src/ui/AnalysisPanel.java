@@ -54,6 +54,7 @@ import java.util.*;
 import ui.iod.*;
 import ui.sd.*;
 import ui.ucd.*;
+import ui.avatarcd.*;
 import myutil.*;
 
 public class AnalysisPanel extends TURTLEPanel {
@@ -169,6 +170,28 @@ public class AnalysisPanel extends TURTLEPanel {
         
         return true;
     }
+	
+	public boolean addAvatarContextDiagram(String s) {
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+        
+        AvatarCDToolBar toolBarACD	= new AvatarCDToolBar(mgui);
+        toolbars.add(toolBarACD);
+        
+        AvatarCDPanel acdp = new AvatarCDPanel(mgui, toolBarACD);
+        acdp.setName(s);
+        acdp.tp = this;
+        panels.add(acdp);
+        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(acdp);
+        acdp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        toolBarPanel.add(toolBarACD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the use case diagram of " + s);
+        
+        return true;
+    }
     
 	
     public String saveHeaderInXml() {
@@ -184,14 +207,14 @@ public class AnalysisPanel extends TURTLEPanel {
     }
     
     public boolean removeEnabled(int index) {
-        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
+        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
             return true;
         }
         return false;
     }
     
     public boolean renameEnabled(int index) {
-        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
+        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel)|| ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
             return true;
         }
         return false;

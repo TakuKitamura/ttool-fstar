@@ -79,6 +79,7 @@ import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
+import ui.avatarcd.*;
 
 import avatartranslator.*;
 import avatartranslator.toturtle.*;
@@ -3012,6 +3013,41 @@ public class GTURTLEModeling {
 						makePostLoading(apdp, beginIndex);
 					}
 				}
+			
+			} else if (tdp instanceof AvatarCDPanel) {
+				nl = doc.getElementsByTagName("AvatarCDPanelCopy");
+
+				if (nl == null) {
+					return;
+				}
+
+				AvatarCDPanel acdp = (AvatarCDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (acdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), acdp);
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), acdp);
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), acdp);
+						connectConnectorsToRealPoints(acdp);
+						acdp.structureChanged();
+						makePostLoading(acdp, beginIndex);
+					}
+				}
 			}
 			
 		} catch (IOException e) {
@@ -3304,6 +3340,10 @@ public class GTURTLEModeling {
 					} else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
 						// Managing use case diagrams
 						loadUseCaseDiagram(elt, indexAnalysis, cpt);
+						cpt ++;
+					} else if (elt.getTagName().compareTo("AvatarCDPanel") == 0) {
+						// Managing use case diagrams
+						loadAvatarCD(elt, indexAnalysis, cpt);
 						cpt ++;
 					}
 				}
@@ -3670,6 +3710,11 @@ public class GTURTLEModeling {
 			//TraceManager.addDev("Connectors...");
 			((AvatarPDPanel)tdp).setConnectorsToFront();
 		}
+		
+		if (tdp instanceof AvatarCDPanel) {
+			//TraceManager.addDev("Connectors...");
+			((AvatarCDPanel)tdp).setConnectorsToFront();
+		}
 	}
 
 	// AVATAR
@@ -3726,6 +3771,22 @@ public class GTURTLEModeling {
 		mgui.createAvatarPD(indexAnalysis, name);
 
 		TDiagramPanel tdp = mgui.getAvatarPDPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadAvatarCD(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createAvatarCD(indexAnalysis, name);
+
+		TDiagramPanel tdp = mgui.getAvatarCDPanel(indexAnalysis, indexTab, name);
 
 		if (tdp == null) {
 			throw new MalformedModelingException();

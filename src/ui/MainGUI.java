@@ -90,6 +90,7 @@ import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
+import ui.avatarcd.*;
 
 public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
@@ -4337,8 +4338,6 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		return al;
 	}
 	
-	
-	
 	public LinkedList getAllTMLComponents() {
 		TURTLEPanel tp;
 		LinkedList ll = new LinkedList();
@@ -4809,6 +4808,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
         return true;
     }
+	
+	public boolean createAvatarCD(int index, String s) {
+        return createAvatarCD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createAvatarCD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+        
+        ((AnalysisPanel)tp).addAvatarContextDiagram(s);
+        setPanelMode();
+        return true;
+    }
     
     //Changed by Solange from public boolean...
     public String createProActiveSMD(int index, String s) {
@@ -4960,6 +4973,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public AvatarPDPanel getAvatarPDPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (AvatarPDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+	
+	public AvatarCDPanel getAvatarCDPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarCDPanel(tp, indexTab, s);
+    }
+    
+    
+    public AvatarCDPanel getAvatarCDPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AvatarCDPanel)(tp.panelAt(indexTab));
         }
         return null;
     }
@@ -6471,6 +6497,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_PROPERTY_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.APD_COMPOSITION_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.APD_COMPOSITION_CONNECTOR);
+		
+		// AVATAR CD
+		} else if (command.equals(actions[TGUIAction.ACD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.ACD_BLOCK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ACD_BLOCK);
+		} else if (command.equals(actions[TGUIAction.ACD_ACTOR_STICKMAN].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ACD_ACTOR_STICKMAN);
+		} else if (command.equals(actions[TGUIAction.ACD_ACTOR_BOX].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ACD_ACTOR_BOX);
+		
+		} else if (command.equals(actions[TGUIAction.ACD_ASSOCIATION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_ASSOCIATION_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.ACD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_COMPOSITION_CONNECTOR);
 			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);
@@ -6857,6 +6898,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private JPopupMenu menu;
         
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement;
+		private JMenuItem newAVATARAnalysis;
         
         public PopupListener(MainGUI _mgui) {
             mgui = _mgui;
@@ -6892,8 +6934,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newAnalysis = createMenuItem("New TURTLE Analysis");
             newDesign = createMenuItem("New TURTLE Design");
             newDeployment = createMenuItem("New TURTLE Deployment");
-			newAttackTree = createMenuItem("New Attack Tree (SysML Parametric Diagram)");
-            newRequirement = createMenuItem("New SysML Requirement Diagram");
+			newAttackTree = createMenuItem("New AVATAR Attack Tree");
+            newRequirement = createMenuItem("New TURTLE Requirement Diagram");
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
 			newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
 			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
@@ -6901,6 +6943,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
 			newAVATARRequirement = createMenuItem("New AVATAR Requirement Diagrams");
+			newAVATARAnalysis = createMenuItem("New AVATAR Analysis");
 			newAVATARBD = createMenuItem("New AVATAR Design");
             
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
@@ -6922,10 +6965,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             
             menu.addSeparator();
             
-			menu.add(newAttackTree);
-            menu.add(newRequirement);
 			
-			menu.addSeparator();
+            menu.add(newRequirement);
 			 
             menu.add(newAnalysis);
             menu.add(newDesign);
@@ -6958,7 +6999,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			
 			if (avatarOn) {
 				menu.addSeparator();
+				menu.add(newAttackTree);
 				menu.add(newAVATARRequirement);
+				menu.add(newAVATARAnalysis);
                 menu.add(newAVATARBD);
 			}
             
@@ -7028,7 +7071,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newDeployment();
                 } else if (ac.equals("New Attack Tree (SysML Parametric Diagram)")) {
                     mgui.newAttackTree();
-                } else if (ac.equals("New SysML Requirement Diagram")) {
+                } else if (ac.equals("New TURTLE Requirement Diagram")) {
                     mgui.newRequirement();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
                     mgui.newTMLDesign();
@@ -7046,6 +7089,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newAvatarBD();
                 } else if (e.getSource() == newAVATARRequirement) {
 					mgui.newAvatarRequirement();
+				} else if (e.getSource() == newAVATARAnalysis) {
+					mgui.newAnalysis();
 				}
             }
         };

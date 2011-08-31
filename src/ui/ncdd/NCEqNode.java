@@ -218,7 +218,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 		
 		name = tmp;
 		schedulingPolicy = jdncen.getSchedulingPolicy();
-		type = jdncen.getType();
+		type = jdncen.getMyType();
 		
         return true;
     }

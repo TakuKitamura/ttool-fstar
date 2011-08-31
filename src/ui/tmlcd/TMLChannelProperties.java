@@ -158,7 +158,7 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
                 return false;
             }
             channelName = jda.getChannelName();
-            type = jda.getType();
+            type = jda.getMyType();
         }
         
         makeValue();
