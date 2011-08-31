@@ -537,7 +537,7 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	if (!aArgString.empty()) return new Server();
 	aArgString =getArgs("-file", "file", iLen, iArgs);
 	if (!aArgString.empty()) return new ServerLocal(aArgString);
-	aArgString =getArgs("-explore", "file", iLen, iArgs);
+	aArgString =getArgs("-explo", "file", iLen, iArgs);
 	if (!aArgString.empty()) decodeCommand("1 7");
 	//if (!aArgString.empty()) return new ServerExplore();
 	std::cout << "Running in command line mode.\n";
