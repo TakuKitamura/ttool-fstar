@@ -80,6 +80,7 @@ import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
 import ui.avatarcd.*; // Context Diagram
+import ui.avatarad.*; // Activity Diagram
 
 public class TGComponentManager {
     
@@ -344,6 +345,11 @@ public class TGComponentManager {
 	public static final int ACD_ACTOR_BOX = 5402;  
 	public static final int ACD_COMPOSITION_CONNECTOR = 5403;
 	public static final int ACD_ASSOCIATION_CONNECTOR = 5404;
+	
+	// AVATAR AD -> starts at 5500
+	public static final int AAD_ASSOCIATION_CONNECTOR = 5500;
+	public static final int AAD_START_STATE = 5501;
+	public static final int AAD_STOP_STATE = 5502;
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -446,6 +452,14 @@ public class TGComponentManager {
                 break;
 			case ACD_ACTOR_BOX:
                 tgc = new AvatarCDActorBox(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+                
+             // AVATAR AD
+			case AAD_START_STATE:
+                tgc = new AvatarADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+			case AAD_STOP_STATE:
+                tgc = new AvatarADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -967,7 +981,15 @@ public class TGComponentManager {
 			return ACD_COMPOSITION_CONNECTOR;
 		}  else if (tgc instanceof AvatarCDAssociationConnector) {
 			return ACD_ASSOCIATION_CONNECTOR;
-			                      
+			
+			// AVATAR CD
+		}  else if (tgc instanceof AvatarADStartState) {
+			return AAD_START_STATE;
+		}  else if (tgc instanceof AvatarADStopState) {
+			return AAD_STOP_STATE;
+		}  else if (tgc instanceof AvatarADAssociationConnector) {
+			return AAD_ASSOCIATION_CONNECTOR;
+			
 		// Others
 		} else if (tgc instanceof 	TADDeterministicDelay) {
             return 	TAD_DETERMINISTIC_DELAY;
@@ -1359,6 +1381,11 @@ public class TGComponentManager {
                 break;
 			case ACD_ASSOCIATION_CONNECTOR:
                 tgc = new AvatarCDAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;	
+                
+             // AVATAR AD
+			case AAD_ASSOCIATION_CONNECTOR:
+                tgc = new AvatarADAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;	
 				
 			// AVATAR PD

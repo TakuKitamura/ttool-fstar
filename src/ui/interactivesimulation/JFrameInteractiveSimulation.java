@@ -234,7 +234,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		mgui.resetRunningID();
 		mgui.resetLoadID();
 		
-		setBackground(new Color(50, 40, 40, 200));
+		setBackground(new Color(50, 40, 40));
 		
 		initActions();
 		makeComponents();

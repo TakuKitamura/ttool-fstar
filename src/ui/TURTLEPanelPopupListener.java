@@ -60,7 +60,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
     
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdfromucd, newreq, 
-	newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd;
+	newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad;
     private JMenuItem newatd;
 	
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -103,6 +103,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
 		newavatarpd = createMenuItem("New AVATAR Property Diagram");
 		newavatarcd = createMenuItem("New AVATAR Context Diagram");
+		newavatarad = createMenuItem("New AVATAR Activity Diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -116,6 +117,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(newucd);
 		if (mgui.isAvatarOn()) {
 			menu.add(newavatarcd);
+			menu.add(newavatarad);
 		}
 		menu.add(newsd);
 		menu.add(newsdfromucd);
@@ -220,6 +222,9 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 mgui.changeMade(null, -1);
 			} else if (e.getSource() == newavatarcd) {
 				mgui.createAvatarCD(tp, "Context Diagram");
+                mgui.changeMade(null, -1);
+			} else if (e.getSource() == newavatarad) {
+				mgui.createAvatarAD(tp, "Activity Diagram");
                 mgui.changeMade(null, -1);
 			}
         }

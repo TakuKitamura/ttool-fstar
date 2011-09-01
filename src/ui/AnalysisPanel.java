@@ -55,6 +55,7 @@ import ui.iod.*;
 import ui.sd.*;
 import ui.ucd.*;
 import ui.avatarcd.*;
+import ui.avatarad.*;
 import myutil.*;
 
 public class AnalysisPanel extends TURTLEPanel {
@@ -188,7 +189,29 @@ public class AnalysisPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarACD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the use case diagram of " + s);
+        tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the context diagram of " + s);
+        
+        return true;
+    }
+    
+    public boolean addAvatarActivityDiagram(String s) {
+        JPanel toolBarPanel = new JPanel();
+        toolBarPanel.setLayout(new BorderLayout());
+        
+        AvatarADToolBar toolBarAAD = new AvatarADToolBar(mgui);
+        toolbars.add(toolBarAAD);
+        
+        AvatarADPanel aadp = new AvatarADPanel(mgui, toolBarAAD);
+        aadp.setName(s);
+        aadp.tp = this;
+        panels.add(aadp);
+        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(aadp);
+        aadp.jsp = jsp;
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
+        toolBarPanel.add(toolBarAAD, BorderLayout.NORTH);
+        toolBarPanel.add(jsp, BorderLayout.CENTER);
+        tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the activity diagram of " + s);
         
         return true;
     }

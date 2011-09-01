@@ -91,6 +91,7 @@ import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
 import ui.avatarcd.*;
+import ui.avatarad.*;
 
 public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
@@ -4823,6 +4824,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return true;
     }
     
+    public boolean createAvatarAD(int index, String s) {
+        return createAvatarAD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createAvatarAD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+        
+        ((AnalysisPanel)tp).addAvatarActivityDiagram(s);
+        setPanelMode();
+        return true;
+    }
+    
     //Changed by Solange from public boolean...
     public String createProActiveSMD(int index, String s) {
     	//Adde by Solange String name at  the beginning
@@ -4986,6 +5001,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public AvatarCDPanel getAvatarCDPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (AvatarCDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+    
+    public AvatarADPanel getAvatarADPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarADPanel(tp, indexTab, s);
+    }
+    
+    
+    public AvatarADPanel getAvatarADPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AvatarADPanel)(tp.panelAt(indexTab));
         }
         return null;
     }
@@ -6512,6 +6540,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_ASSOCIATION_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.ACD_COMPOSITION_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ACD_COMPOSITION_CONNECTOR);
+            
+        // AVATAR AD
+        } else if (command.equals(actions[TGUIAction.AAD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.AAD_ASSOCIATION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AAD_ASSOCIATION_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.AAD_START_STATE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_START_STATE);
+		} else if (command.equals(actions[TGUIAction.AAD_STOP_STATE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_STOP_STATE);
+		
 			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

@@ -355,6 +355,12 @@ public class TGUIAction extends AbstractAction {
 	public static final int ACD_ACTOR_BOX = 348;
 	public static final int ACD_ASSOCIATION_CONNECTOR = 349;
 	
+	// AVATAR Activity Diagrams
+	public static final int AAD_EDIT = 350;
+	public static final int AAD_ASSOCIATION_CONNECTOR = 351;
+	public static final int AAD_START_STATE = 352;
+	public static final int AAD_STOP_STATE = 353;
+	
 	
     public static final int ACT_MODEL_CHECKING = 25;
     public static final int ACT_GEN_RTLOTOS = 27;
@@ -472,7 +478,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 350;
+    public static final int NB_ACTION = 354;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -924,6 +930,12 @@ public class TGUIAction extends AbstractAction {
 		actions[ACD_ASSOCIATION_CONNECTOR] = new TAction("acd-association-connector", "Add an association", IconManager.imgic5044, IconManager.imgic5044, "Association", "Add an association between blocks to the currently opened AVATAR Context Diagram", 0);
 		actions[ACD_ACTOR_STICKMAN] = new TAction("acd-add-actor", "Add an actor (stickman format)", IconManager.imgic600, IconManager.imgic600, "Actor", "Add a stickman actor to the currently opened AVATAR Context diagram", 0);
         actions[ACD_ACTOR_BOX] = new TAction("acd-add-actor-box", "Add an actor (box format)", IconManager.imgic614, IconManager.imgic614, "Actor (box format)", "Add a box actor  to the currently opened AVATAR Context diagram", 0);
+        
+        // AVATAR Activity Diagrams
+        actions[AAD_EDIT] = new TAction("edit-aad-diagram", "Edit AVATAR Activity Diagrams", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Activity Diagram", "Make it possible to edit the currently opened AVATAR Activity Diagram", 0);
+        actions[AAD_ASSOCIATION_CONNECTOR] = new TAction("aad-association-connector", "Add an association", IconManager.imgic202, IconManager.imgic202, "Association", "Add an association between blocks to the currently opened AVATAR Activity Diagram", 0);
+		actions[AAD_START_STATE] = new TAction("add-add-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened activity diagram", 0);
+        actions[AAD_STOP_STATE] = new TAction("add-aad-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened activity diagram", 0);
         
     }
     
