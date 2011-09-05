@@ -593,7 +593,7 @@ public	class JMenuBarTurtle extends JMenuBar	{
         // MenuBar
         add(file);
         add(edit);
-        add(diagram);
+        //add(diagram);
         add(vAndV);
         add(codeG);
         add(view);

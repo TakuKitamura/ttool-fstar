@@ -273,6 +273,14 @@ public abstract class TURTLEPanel implements GenericTree {
 	public boolean isAvatarPDEnabled() {
         return false;
     }
+    
+    public boolean isAvatarCDEnabled() {
+        return false;
+    }
+    
+    public boolean isAvatarADEnabled() {
+        return false;
+    }
 	
 	public MainGUI getMainGUI() {
 		return mgui;

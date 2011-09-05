@@ -4630,6 +4630,30 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return (tp.panelAt(index) instanceof SequenceDiagramPanel);
     }
     
+     public boolean isUseCaseDiagramCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof UseCaseDiagramPanel);
+    }
+    
+     public boolean isAvatarCDCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof AvatarCDPanel);
+    }
+    
+    public boolean isAvatarADCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof AvatarADPanel);
+    }
+    
     public boolean isIODCreated(TURTLEPanel tp, String s) {
         int index = tp.tabbedPane.indexOfTab(s);
         if (index == -1) {
@@ -4800,6 +4824,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return createUseCaseDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
     }
     
+    public boolean createUniqueUseCaseDiagram(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+        
+        int i;
+		for(i=0; i<1000; i++) {
+			if(!isUseCaseDiagramCreated(tp, s + " " + i)) {
+				break;
+			}
+		}
+        
+        ((AnalysisPanel)tp).addUseCaseDiagram(s + " " + i);
+        setPanelMode();
+        return true;
+    }
+    
     public boolean createUseCaseDiagram(TURTLEPanel tp, String s) {
         if (!(tp instanceof AnalysisPanel)) {
             return false;
@@ -4814,10 +4855,28 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return createAvatarCD((TURTLEPanel)(tabs.elementAt(index)), s);
     }
     
+    public boolean createUniqueAvatarCD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+        
+        int i;
+		for(i=0; i<1000; i++) {
+			if(!isAvatarCDCreated(tp, s + " " + i)) {
+				break;
+			}
+		}
+        
+        ((AnalysisPanel)tp).addAvatarContextDiagram(s + " " + i);
+        setPanelMode();
+        return true;
+    }
+    
     public boolean createAvatarCD(TURTLEPanel tp, String s) {
         if (!(tp instanceof AnalysisPanel)) {
             return false;
         }
+        
         
         ((AnalysisPanel)tp).addAvatarContextDiagram(s);
         setPanelMode();
@@ -4828,11 +4887,28 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return createAvatarAD((TURTLEPanel)(tabs.elementAt(index)), s);
     }
     
-    public boolean createAvatarAD(TURTLEPanel tp, String s) {
+    public boolean createUniqueAvatarAD(TURTLEPanel tp, String s) {
         if (!(tp instanceof AnalysisPanel)) {
             return false;
         }
         
+        int i;
+		for(i=0; i<1000; i++) {
+			if(!isAvatarADCreated(tp, s + " " + i)) {
+				break;
+			}
+		}
+        
+        ((AnalysisPanel)tp).addAvatarActivityDiagram(s + " " + i);
+        setPanelMode();
+        return true;
+    }
+    
+    public boolean createAvatarAD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AnalysisPanel)) {
+            return false;
+        }
+  
         ((AnalysisPanel)tp).addAvatarActivityDiagram(s);
         setPanelMode();
         return true;
@@ -5081,6 +5157,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //TraceManager.addDev("Align instances");
         if (getCurrentTDiagramPanel() instanceof SequenceDiagramPanel) {
             ((SequenceDiagramPanel)(getCurrentTDiagramPanel())).alignInstances();
+            changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
+            getCurrentTDiagramPanel().repaint();
+        }
+    }
+    
+    public void alignPartitions() {
+        //TraceManager.addDev("Align instances");
+        if (getCurrentTDiagramPanel() instanceof AvatarADPanel) {
+            ((AvatarADPanel)(getCurrentTDiagramPanel())).alignPartitions();
             changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
             getCurrentTDiagramPanel().repaint();
         }
@@ -6550,7 +6635,26 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_START_STATE);
 		} else if (command.equals(actions[TGUIAction.AAD_STOP_STATE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_STOP_STATE);
-		
+		} else if (command.equals(actions[TGUIAction.AAD_CHOICE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_CHOICE);
+        } else if (command.equals(actions[TGUIAction.AAD_JUNCTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_JUNCTION);
+        } else if (command.equals(actions[TGUIAction.AAD_PARALLEL].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_PARALLEL);
+        } else if (command.equals(actions[TGUIAction.AAD_ACTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_ACTION);
+		} else if (command.equals(actions[TGUIAction.AAD_ACTIVITY].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_ACTIVITY);
+        } else if (command.equals(actions[TGUIAction.AAD_STOP_FLOW].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_STOP_FLOW);
+        } else if (command.equals(actions[TGUIAction.AAD_SEND_SIGNAL_ACTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_SEND_SIGNAL_ACTION);
+        } else if (command.equals(actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_ACCEPT_EVENT_ACTION);
+        } else if (command.equals(actions[TGUIAction.AAD_PARTITION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_PARTITION);
+        } else if (command.equals(actions[TGUIAction.AAD_ALIGN_PARTITION].getActionCommand())) {
+            alignPartitions();
 			
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

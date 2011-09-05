@@ -350,6 +350,15 @@ public class TGComponentManager {
 	public static final int AAD_ASSOCIATION_CONNECTOR = 5500;
 	public static final int AAD_START_STATE = 5501;
 	public static final int AAD_STOP_STATE = 5502;
+	public static final int AAD_CHOICE = 5503;
+	public static final int AAD_JUNCTION = 5504;
+	public static final int AAD_PARALLEL = 5505;
+	public static final int AAD_ACTION = 5506;
+	public static final int AAD_ACTIVITY = 5507;
+	public static final int AAD_STOP_FLOW = 5508;
+	public static final int AAD_SEND_SIGNAL_ACTION = 5509;
+	public static final int AAD_ACCEPT_EVENT_ACTION = 5510;
+	public static final int AAD_PARTITION = 5511;
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -460,6 +469,33 @@ public class TGComponentManager {
                 break;
 			case AAD_STOP_STATE:
                 tgc = new AvatarADStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+             case AAD_CHOICE:
+                tgc = new AvatarADChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+             case AAD_JUNCTION:
+                tgc = new AvatarADJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+              case AAD_PARALLEL:
+                tgc = new AvatarADParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+              case AAD_ACTION:
+                tgc = new AvatarADAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACTIVITY:
+                tgc = new AvatarADActivity(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_STOP_FLOW:
+                tgc = new AvatarADStopFlow(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_SEND_SIGNAL_ACTION:
+                tgc = new AvatarADSendSignalAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACCEPT_EVENT_ACTION:
+                tgc = new AvatarADAcceptEventAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_PARTITION:
+                tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -987,6 +1023,24 @@ public class TGComponentManager {
 			return AAD_START_STATE;
 		}  else if (tgc instanceof AvatarADStopState) {
 			return AAD_STOP_STATE;
+		}  else if (tgc instanceof AvatarADChoice) {
+			return AAD_CHOICE;
+		}  else if (tgc instanceof AvatarADJunction) {
+			return AAD_JUNCTION;
+		}  else if (tgc instanceof AvatarADParallel) {
+			return AAD_PARALLEL;
+		}  else if (tgc instanceof AvatarADAction) {
+			return AAD_ACTION;
+		}  else if (tgc instanceof AvatarADActivity) {
+			return AAD_ACTIVITY;
+		}  else if (tgc instanceof AvatarADStopFlow) {
+			return AAD_STOP_FLOW;
+		}  else if (tgc instanceof AvatarADSendSignalAction) {
+			return AAD_SEND_SIGNAL_ACTION;
+		}  else if (tgc instanceof AvatarADAcceptEventAction) {
+			return AAD_ACCEPT_EVENT_ACTION;
+		}  else if (tgc instanceof AvatarADPartition) {
+			return AAD_PARTITION;
 		}  else if (tgc instanceof AvatarADAssociationConnector) {
 			return AAD_ASSOCIATION_CONNECTOR;
 			

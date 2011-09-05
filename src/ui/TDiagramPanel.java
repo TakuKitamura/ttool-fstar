@@ -71,6 +71,7 @@ import ui.atd.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
+import ui.avatarad.*;
 
 // Added by Solange
 import ui.procsd.*;
@@ -2642,6 +2643,37 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         ok = false;
                     }
 					if (s.hasInternalStateWithName(name+index)) {
+						ok = false;
+					}
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+    
+    public String findAvatarADActivityName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        AvatarADActivity s;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof AvatarADActivity) {
+                    s = (AvatarADActivity)o;
+                    if (s.getValue().equals(name + index)) {
+                        ok = false;
+                    }
+					if (s.hasInternalActivityWithName(name+index)) {
 						ok = false;
 					}
                 }

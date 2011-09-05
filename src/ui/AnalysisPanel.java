@@ -230,14 +230,14 @@ public class AnalysisPanel extends TURTLEPanel {
     }
     
     public boolean removeEnabled(int index) {
-        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
+        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel)||(panels.elementAt(index) instanceof AvatarADPanel) || ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
             return true;
         }
         return false;
     }
     
     public boolean renameEnabled(int index) {
-        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel)|| ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
+        if ((panels.elementAt(index) instanceof SequenceDiagramPanel) ||(panels.elementAt(index) instanceof UseCaseDiagramPanel) ||(panels.elementAt(index) instanceof AvatarCDPanel)||(panels.elementAt(index) instanceof AvatarADPanel)|| ((panels.elementAt(index) instanceof InteractionOverviewDiagramPanel) & index != 0)){
             return true;
         }
         return false;
@@ -248,6 +248,14 @@ public class AnalysisPanel extends TURTLEPanel {
     }  
 	
 	public boolean isSDEnabled() {
+        return true;
+    }  
+    
+    public boolean isAvatarCDEnabled() {
+        return true;
+    }  
+    
+     public boolean isAvatarADEnabled() {
         return true;
     }  
 	

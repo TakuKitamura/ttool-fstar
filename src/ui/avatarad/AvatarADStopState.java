@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarADStopState extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint {
+public class AvatarADStopState extends AvatarADBasicComponent implements EmbeddedComment, AllowedBreakpoint {
     private int internalCircleSize = 16;
     private int lineLength = 5;
     

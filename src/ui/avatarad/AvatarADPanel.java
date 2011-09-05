@@ -143,5 +143,40 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
 			componentList.add(tgc1);
 		}
 	}
+	
+	public void alignPartitions() {
+        AvatarADPartition ontheLeft = null, sdi;
+        int x = getMaxX(),xtmp;
+        int y;
+        int i;
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        // search for the instances which is the most on the left
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof AvatarADPartition) {
+                xtmp = tgc.getX();
+                if (xtmp < x) {
+                    x = xtmp;
+                    ontheLeft = (AvatarADPartition)tgc;
+                }
+            }
+        }
+        
+        if (ontheLeft == null)
+            return;
+        
+        // move accordingly other instances
+        y = ontheLeft.getY();
+        iterator = componentList.listIterator();
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if ((tgc instanceof AvatarADPartition) && (tgc !=  ontheLeft)){
+                tgc.setCd(tgc.getX(), y);
+            }
+        }
+        
+    }
     
 }

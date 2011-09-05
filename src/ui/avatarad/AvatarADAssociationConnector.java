@@ -36,17 +36,18 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarADAssociationConnector
- * Connector to be used in activity diagrams. 
- * Creation: 01/09/2011
- * @version 1.0 01/09/2011
- * @author Ludovic APVRILLE
- * @see
- */
+* Class AvatarADAssociationConnector
+* Connector to be used in activity diagrams. 
+* Creation: 01/09/2011
+* @version 1.0 01/09/2011
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.avatarad;
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.*;
 
 import myutil.*;
@@ -62,17 +63,15 @@ public  class AvatarADAssociationConnector extends TGConnector {
     
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
-        g.drawLine(x1, y1, x2, y2);
-        //GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
-        
-        // Indicate semantics 
-        //w  = g.getFontMetrics().stringWidth(value);
-        //h = g.getFontMetrics().getHeight();
-        //g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+        if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
+            g.drawLine(x1, y1, x2, y2);
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 1, 10, x1, y1, x2, y2, false);
+        }
     }
     
     /*protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        GraphicLib.dashedLine(g, x1, y1, x2, y2);
+    GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }*/
     
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
@@ -82,10 +81,10 @@ public  class AvatarADAssociationConnector extends TGConnector {
         return null;
     }
 	
-	 public int getType() {
+    public int getType() {
         return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
-
+    
 }
 
 

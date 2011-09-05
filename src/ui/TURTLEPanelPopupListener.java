@@ -102,8 +102,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newatd = createMenuItem("New Attack Tree Diagram");
 		newavatarrd = createMenuItem("New AVATAR Requirement Diagram");
 		newavatarpd = createMenuItem("New AVATAR Property Diagram");
-		newavatarcd = createMenuItem("New AVATAR Context Diagram");
-		newavatarad = createMenuItem("New AVATAR Activity Diagram");
+		newavatarcd = createMenuItem("New Context Diagram");
+		newavatarad = createMenuItem("New Activity Diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -175,6 +175,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newatd.setEnabled(tp.isATDEnabled());
 		newavatarrd.setEnabled(tp.isAvatarRDEnabled());
 		newavatarpd.setEnabled(tp.isAvatarPDEnabled());
+		newavatarcd.setEnabled(tp.isAvatarCDEnabled());
+		newavatarad.setEnabled(tp.isAvatarADEnabled());
     }
     
     private Action listener = new AbstractAction() {
@@ -194,7 +196,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Use Case Diagram")) {
-                mgui.createUseCaseDiagram(tp, "Use Case Diagram");
+                mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Sequence Diagram")) {
                 mgui.createUniqueSequenceDiagram(tp, "MyScenario");
@@ -221,10 +223,10 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 				mgui.createAvatarPD(tp, "AVATAR PD");
                 mgui.changeMade(null, -1);
 			} else if (e.getSource() == newavatarcd) {
-				mgui.createAvatarCD(tp, "Context Diagram");
+				mgui.createUniqueAvatarCD(tp, "Context Diagram");
                 mgui.changeMade(null, -1);
 			} else if (e.getSource() == newavatarad) {
-				mgui.createAvatarAD(tp, "Activity Diagram");
+				mgui.createUniqueAvatarAD(tp, "Activity Diagram");
                 mgui.changeMade(null, -1);
 			}
         }

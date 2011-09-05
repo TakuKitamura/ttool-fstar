@@ -360,6 +360,16 @@ public class TGUIAction extends AbstractAction {
 	public static final int AAD_ASSOCIATION_CONNECTOR = 351;
 	public static final int AAD_START_STATE = 352;
 	public static final int AAD_STOP_STATE = 353;
+	public static final int AAD_CHOICE = 354;
+	public static final int AAD_JUNCTION = 355;
+	public static final int AAD_PARALLEL = 356;
+	public static final int AAD_ACTIVITY = 357;
+	public static final int AAD_ACTION = 358;
+	public static final int AAD_STOP_FLOW = 359;
+	public static final int AAD_ACCEPT_EVENT_ACTION = 360;
+	public static final int AAD_SEND_SIGNAL_ACTION = 361;
+	public static final int AAD_PARTITION = 362;
+	public static final int AAD_ALIGN_PARTITION = 363;
 	
 	
     public static final int ACT_MODEL_CHECKING = 25;
@@ -478,7 +488,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 354;
+    public static final int NB_ACTION = 364;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -936,6 +946,16 @@ public class TGUIAction extends AbstractAction {
         actions[AAD_ASSOCIATION_CONNECTOR] = new TAction("aad-association-connector", "Add an association", IconManager.imgic202, IconManager.imgic202, "Association", "Add an association between blocks to the currently opened AVATAR Activity Diagram", 0);
 		actions[AAD_START_STATE] = new TAction("add-add-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened activity diagram", 0);
         actions[AAD_STOP_STATE] = new TAction("add-aad-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened activity diagram", 0);
+        actions[AAD_CHOICE] = new TAction("add-aad-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice to the currently opened Avatar activity diagram", 0);
+        actions[AAD_JUNCTION] = new TAction("add-aad-junction", "Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened avatar activity diagram", 0);
+        actions[AAD_PARALLEL] = new TAction("add-adparallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel  operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_ACTIVITY] = new TAction("add-aad-activity", "Activity", IconManager.imgic5048, IconManager.imgic5048, "Activity", "Add a new activity to the currently opened AVATAR avatar activity diagram", 0);
+        actions[AAD_ACTION] = new TAction("add-aad-action", "Action", IconManager.imgic204, IconManager.imgic204, "Action", "Add a new action to the currently opened AVATAR avatar activity diagram", 0);
+        actions[AAD_STOP_FLOW] = new TAction("add-aad-stop-flow", "Stop flow", IconManager.imgic5046, IconManager.imgic5046, "Stop flow", "Add a stop flow state to the currently opened avatar activity diagram", 0);
+        actions[AAD_SEND_SIGNAL_ACTION] = new TAction("add-add-send-signal-action", "Send signal", IconManager.imgic5050, IconManager.imgic5050, "Send signal", "Add a send signal operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic908, IconManager.imgic908, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_PARTITION] = new TAction("add-add-partition", "Partition", IconManager.imgic5052, IconManager.imgic5052, "Partition", "Add a partition to the currently opened avatar activity diagram", 0);
+        actions[AAD_ALIGN_PARTITION] = new TAction("add-aad-align_partitions", "Align partitions", IconManager.imgic5054, IconManager.imgic5054, "Align partitions", "Align partitions of the currently opened avatar activity diagram", 0);
         
     }
     

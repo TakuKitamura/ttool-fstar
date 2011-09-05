@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarADStartState
- * Used to start a new activity 
- * Creation: 01/09/2011
- * @version 1.0 01/09/2011
+ * Class AvatarADStopFlow
+ * Used to terminate an activity of a TML Task.
+ * Creation: 02/09/2011
+ * @version 1.0 02/09/2011
  * @author Ludovic APVRILLE
  * @see
  */
@@ -47,23 +47,23 @@
 package ui.avatarad;
 
 import java.awt.*;
-import java.awt.geom.*;
 
 import myutil.*;
 import ui.*;
 
-public class AvatarADStartState extends AvatarADBasicComponent implements EmbeddedComment{
+public class AvatarADStopFlow extends AvatarADBasicComponent implements EmbeddedComment, AllowedBreakpoint {
+    private int internalCircleSize = 16;
     private int lineLength = 5;
     
-    public AvatarADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarADStopFlow(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 15;
-        height = 15;
+        width = 20;
+        height = 20;
         
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[1];
-        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
+        connectingPoint[0] = new AvatarADConnectingPoint(this, 0, - lineLength, true, false, 0.5, 0.0);
         
         nbInternalTGComponent = 0;
         
@@ -71,34 +71,40 @@ public class AvatarADStartState extends AvatarADBasicComponent implements Embedd
         editable = false;
         removable = true;
         
-        name = "start state";
+        name = "stop state";
         
-        myImageIcon = IconManager.imgic222;
+        myImageIcon = IconManager.imgic210;
     }
     
     public void internalDrawing(Graphics g) {
-        g.fillOval(x, y, width, height);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+        ColorManager.setColor(g, state, 0);
+        //g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
+        g.drawOval(x, y, width, height);
+        g.drawLine((int)(x+width*0.14), (int)(y+height*0.14), (int)(x+width*0.86), (int)(y+height*0.86));
+        g.drawLine((int)(x+width*0.14), (int)(y+height*0.86), (int)(x+width*0.86), (int)(y+height*0.14));
+        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
     }
     
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
-        
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y+height, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-        
         return null;
     }
     
     public int getType() {
-        return TGComponentManager.AAD_START_STATE;
+        return TGComponentManager.AAD_STOP_FLOW;
     }
-    
-    public int getDefaultConnector() {
+	
+	public int getDefaultConnector() {
       return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
     
 }
+
+
+
+
+
+
+
