@@ -77,7 +77,9 @@ public class DSEScriptReader  {
 	"simulationCompilationCommand", "simulationExecutionCommand", // 6, 7
 	"SimulationOutputHTML", "SimulationOutputTxt", // 8, 9
 	"SimulationExplorationMinimumCommand", "SimulationExplorationMinimumBranch", // 10, 11 
-	"RunExplo", "SimulationMaxCycle" //12, 13
+	"RunExplo", "SimulationMaxCycle", //12, 13
+	"CPULoadResult", "BusLoadResult", //14, 15
+	"SimulationOutputXML" // 16
 	};
 	
 	private String fileName;
@@ -253,6 +255,21 @@ public class DSEScriptReader  {
 				return OK;
 			case 13:
 				if (_config.setSimulationMaxCycle(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 14:
+				if (_config.setCPULoadResult(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 15:
+				if (_config.setBusLoadResult(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 16:
+				if (_config.setOutputXML(_arguments) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;

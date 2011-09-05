@@ -90,6 +90,11 @@ public class DSEConfiguration  {
 	private boolean outputVCD = false;
 	private boolean outputHTML = false;
 	private boolean outputTXT = false;
+	private boolean outputXML = false;
+	
+	private boolean cpuLoadResult = false;  
+	private boolean busLoadResult = false;
+	
 	
 	private TMLMapping tmap;
 	private TMLModeling tmlm;
@@ -177,6 +182,54 @@ public class DSEConfiguration  {
 		
 		if (_value.toLowerCase().compareTo("false") == 0) {
 			outputTXT = false;
+			optionChanged = true;
+			return 0;
+		}
+		
+		return -1;
+	}          
+	
+	public int setOutputXML(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			outputXML = true;
+			optionChanged = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			outputXML = false;
+			optionChanged = true;
+			return 0;
+		}
+		
+		return -1;
+	}
+	
+	public int setCPULoadResult(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			cpuLoadResult = true;
+			optionChanged = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			cpuLoadResult = false;
+			optionChanged = true;
+			return 0;
+		}
+		
+		return -1;
+	}
+	
+	public int setBusLoadResult(String _value) {
+		if (_value.toLowerCase().compareTo("true") == 0) {
+			busLoadResult = true;
+			optionChanged = true;
+			return 0;
+		}
+		
+		if (_value.toLowerCase().compareTo("false") == 0) {
+			busLoadResult = false;
 			optionChanged = true;
 			return 0;
 		}
@@ -337,7 +390,7 @@ public class DSEConfiguration  {
 			TraceManager.addDev("Loading mapping");
 			if (!loadMapping(_optimize)) {
 				errorMessage = LOAD_MAPPING_FAILED;
-				TraceManager.addDev("Loading of the mapping faild!!!!");
+				TraceManager.addDev("Loading of the mapping failed!!!!");
 				return -1;
 			}
 		
@@ -362,22 +415,48 @@ public class DSEConfiguration  {
 		
 		// Executing the simulation
 		String cmd;
+		String tmp;
 		while(nbOfSimulations >0) {
 			cmd = pathToSimulator + simulationExecutionCommand;
 			
-			if (simulationMaxCycles > -1) {
-				cmd += " -cmd \"1 5 " + simulationMaxCycles + "\"";
-			}
+			Vector<String> v = new Vector<String>();
 			
 			if (outputVCD) {
-				cmd += " -ovcd " + pathToResults + "output" + simulationID + ".vcd";
+				v.add("7 0 " + pathToResults + "output" + simulationID + ".vcd");
 			}
 			if (outputHTML) {
-				cmd += " -ohtml " + pathToResults + "output" + simulationID + ".html";
+				v.add("7 1 " + pathToResults + "output" + simulationID + ".html");
 			}
 			if (outputTXT) {
-				cmd += " -otxt " + pathToResults + "output" + simulationID + ".txt";
+				v.add("7 2 " +pathToResults + "output" + simulationID + ".txt");
 			}
+			
+			if (simulationMaxCycles > -1) {
+				v.add("1 5 " + simulationMaxCycles);
+			}
+			
+			if ((cpuLoadResult) || (busLoadResult)) {
+				v.add("10 1 " + pathToResults + "benchmark" + simulationID + ".xml");
+			}
+			
+			if (v.size() > 0) {
+				int cpt = 0;
+				for (String s: v) {
+					if (cpt == 0) {
+						cmd += " -cmd \"";
+					} else {
+						cmd += ";";
+					}
+					cmd += s;
+					cpt ++;
+				}
+				cmd += "\"";
+			}
+			
+			if (outputXML) {
+				cmd += " -oxml " + pathToResults + "output" + simulationID + ".xml";
+			}
+			
 			makeCommand(cmd);
 			simulationID ++;
 			nbOfSimulations --;
