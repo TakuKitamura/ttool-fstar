@@ -92,8 +92,7 @@ public class DSEConfiguration  {
 	private boolean outputTXT = false;
 	private boolean outputXML = false;
 	
-	private boolean cpuLoadResult = false;  
-	private boolean busLoadResult = false;
+	private boolean recordResults = false;  
 	
 	
 	private TMLMapping tmap;
@@ -102,11 +101,14 @@ public class DSEConfiguration  {
 	private boolean optionChanged = true;
 	
 	private int simulationID = 0;
+	private int resultsID = 0;
 	
 	private int simulationExplorationMinimumCommand = 100;
 	private int simulationExplorationMinimumBranch = 100;
 	
 	private int simulationMaxCycles = -1;
+	
+	private DSESimulationResult results;
 	
 	
 	
@@ -205,31 +207,15 @@ public class DSEConfiguration  {
 		return -1;
 	}
 	
-	public int setCPULoadResult(String _value) {
+	public int setRecordResults(String _value) {
 		if (_value.toLowerCase().compareTo("true") == 0) {
-			cpuLoadResult = true;
+			recordResults = true;
 			optionChanged = true;
 			return 0;
 		}
 		
 		if (_value.toLowerCase().compareTo("false") == 0) {
-			cpuLoadResult = false;
-			optionChanged = true;
-			return 0;
-		}
-		
-		return -1;
-	}
-	
-	public int setBusLoadResult(String _value) {
-		if (_value.toLowerCase().compareTo("true") == 0) {
-			busLoadResult = true;
-			optionChanged = true;
-			return 0;
-		}
-		
-		if (_value.toLowerCase().compareTo("false") == 0) {
-			busLoadResult = false;
+			recordResults = false;
 			optionChanged = true;
 			return 0;
 		}
@@ -433,9 +419,11 @@ public class DSEConfiguration  {
 			
 			if (simulationMaxCycles > -1) {
 				v.add("1 5 " + simulationMaxCycles);
+			} else {
+				v.add("1 0 ");
 			}
 			
-			if ((cpuLoadResult) || (busLoadResult)) {
+			if (recordResults) {
 				v.add("10 1 " + pathToResults + "benchmark" + simulationID + ".xml");
 			}
 			
@@ -458,9 +446,29 @@ public class DSEConfiguration  {
 			}
 			
 			makeCommand(cmd);
+			
+			if (recordResults) {
+				if (loadSimulationResult(simulationID) <0) {
+					return -1;
+				}
+			}
 			simulationID ++;
 			nbOfSimulations --;
 		}
+		return 0;
+	}
+	
+	public int computeResults(String _arguments, boolean _debug, boolean _optimize) {
+		if (results == null) {
+			return -1;
+		}
+		
+		// Must compute results
+		
+		// Reinit results
+		results.reset();
+		
+		resultsID ++;
 		return 0;
 	}
 	
@@ -643,6 +651,16 @@ public class DSEConfiguration  {
         }
         TraceManager.addDev("Ending command " + cmd);
 		
+	}
+	
+	public int loadSimulationResult(int id) {
+		if (results == null) {
+			results = new DSESimulationResult();
+		}
+		
+		results.loadResultFromXMLFile(pathToResults + "benchmark" + id + ".xml");
+		
+		return 0;
 	}
 	
 	

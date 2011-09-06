@@ -78,7 +78,7 @@ public class DSEScriptReader  {
 	"SimulationOutputHTML", "SimulationOutputTxt", // 8, 9
 	"SimulationExplorationMinimumCommand", "SimulationExplorationMinimumBranch", // 10, 11 
 	"RunExplo", "SimulationMaxCycle", //12, 13
-	"CPULoadResult", "BusLoadResult", //14, 15
+	"RecordResult", "ComputeResults", //14, 15
 	"SimulationOutputXML" // 16
 	};
 	
@@ -259,12 +259,12 @@ public class DSEScriptReader  {
 				}
 				return OK;
 			case 14:
-				if (_config.setCPULoadResult(_arguments) != 0) {
+				if (_config.setRecordResults(_arguments) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
 			case 15:
-				if (_config.setBusLoadResult(_arguments) != 0) {
+				if (_config.computeResults(_arguments, debug, optimize) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
