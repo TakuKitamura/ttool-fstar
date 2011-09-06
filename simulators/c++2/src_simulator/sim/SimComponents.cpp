@@ -144,9 +144,12 @@ void SimComponents::setTEPEEntryPoint(TEPEFloatingSigListener* iTEPEEntryPoint){
 }
 
 void SimComponents::streamBenchmarks(std::ostream& s) const{
+	s << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl;
 	for (TraceableDeviceList::const_iterator i=_vcdList.begin(); i!= _vcdList.end(); ++i){
 		(*i)->streamBenchmarks(s);
+		s << std::endl;
 	}
+	s << TAG_GLOBALc << TAG_STARTc << std::endl;
 }
 
 std::ostream& SimComponents::writeObject(std::ostream& s){
