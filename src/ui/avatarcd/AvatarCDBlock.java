@@ -72,8 +72,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 	private int limitMethod = -1;
 	
 	// Icon
-	private int iconSize = 15;
-	private boolean iconIsDrawn = false;
+	//private int iconSize = 15;
+	//private boolean iconIsDrawn = false;
 	
 	
 	public String oldValue;
@@ -117,7 +117,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         removable = true;
         userResizable = true;
         
-        name = tdp.findAvatarBDBlockName("Block");
+        name = tdp.findAvatarCDBlockName("Block");
 		setValue(name);
 		oldValue = value;
 		
@@ -225,12 +225,12 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 		}
 		
 		// Icon
-		if ((width>30) && (height > (iconSize + 2*textX))) {
+		/*if ((width>30) && (height > (iconSize + 2*textX))) {
 			iconIsDrawn = true;
 			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
 		} else {
 			iconIsDrawn = false;
-		}
+		}*/
 		
 		g.setFont(fold);
 		

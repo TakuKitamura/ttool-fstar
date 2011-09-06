@@ -72,6 +72,7 @@ import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarad.*;
+import ui.avatarcd.*;
 
 // Added by Solange
 import ui.procsd.*;
@@ -2608,6 +2609,37 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 o = (TGComponent)(iterator.next());
                 if (o instanceof AvatarBDBlock) {
                     t = (AvatarBDBlock)o;
+                    if (t.getValue().equals(name + index)) {
+                        ok = false;
+                    }
+					if (t.hasInternalBlockWithName(name+index)) {
+						ok = false;
+					}
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+	
+	public String findAvatarCDBlockName(String name) {
+        boolean ok;
+        int i;
+        int index = 0;
+        AvatarCDBlock t;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof AvatarCDBlock) {
+                    t = (AvatarCDBlock)o;
                     if (t.getValue().equals(name + index)) {
                         ok = false;
                     }
