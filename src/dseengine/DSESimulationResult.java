@@ -53,9 +53,20 @@ import java.util.*;
 import myutil.*;
 
 
+import org.w3c.dom.*;
+import org.xml.sax.*;
+import javax.xml.parsers.*;
+
 //import uppaaldesc.*;
 
 public class DSESimulationResult  {
+	
+	protected static final String SIMULATION_GLOBAL = "global";
+	protected static final String SIMULATION_HEADER = "siminfo";
+	protected static final String SIMULATION_CPU = "cpu";
+	protected static final String SIMULATION_BUS = "bus";
+	
+	
 	private Vector<CPUResult> cpus;
 	private Vector<BusResult> busses;
 	
@@ -76,8 +87,321 @@ public class DSESimulationResult  {
 			return -1;
 		}
 		
+		analyzeServerAnswer(data);
+		
+		
 		return 0;
 	}
+	
+	protected void analyzeServerAnswer(String s) {
+		//System.out.println("From server:" + s);
+		int index0 = s.indexOf("<?xml");
+		String ssxml = "";
+		
+		if (index0 != -1) {
+			//System.out.println("toto1");
+			ssxml = s.substring(index0, s.length()) + "\n";
+		} else {
+			//System.out.println("toto2");
+			ssxml = ssxml + s + "\n";
+		}
+		
+		index0 = ssxml.indexOf("</siminfo>");
+		
+		if (index0 != -1) {
+			//System.out.println("toto3");
+			ssxml = ssxml.substring(0, index0+10);
+			loadXMLInfoFromServer(ssxml);
+			ssxml = "";
+		}
+		//System.out.println("toto4");
+		
+	}
+	
+	protected boolean loadXMLInfoFromServer(String xmldata) {
+		//jta.append("XML from server:" + xmldata + "\n\n");
+		
+		DocumentBuilderFactory dbf;
+		DocumentBuilder db;
+		
+		try {
+			dbf = DocumentBuilderFactory.newInstance();
+			db = dbf.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			dbf = null;
+			db = null;
+		}
+		
+		if ((dbf == null) || (db == null)) {
+			return false;
+		}
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xmldata).getBytes());
+		int i;
+		
+		try {
+			// building nodes from xml String
+			Document doc = db.parse(bais);
+			NodeList nl;
+			Node node;
+			
+			nl = doc.getElementsByTagName(SIMULATION_HEADER);
+			
+			if (nl == null) {
+				return false;
+			}
+			
+			for(i=0; i<nl.getLength(); i++) {
+				node = nl.item(i);
+				//System.out.println("Node = " + dnd);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					// create design, and get an index for it
+					return loadConfiguration(node);
+				}
+			}
+			
+		} catch (IOException e) {
+			TraceManager.addError("Error when parsing server info:" + e.getMessage());
+			return false;
+		} catch (SAXException saxe) {
+			TraceManager.addError("Error when parsing server info:" + saxe.getMessage());
+			TraceManager.addError("xml:" + xmldata);
+			return false;
+		}
+		return true;
+		
+	}
+	
+	protected boolean loadConfiguration(Node node1) {
+		NodeList diagramNl = node1.getChildNodes();
+		if (diagramNl == null) {
+			return false;
+		}
+		Element elt, elt0;
+		Node node, node0, node00;
+		NodeList nl, nl0;
+		
+		
+		/*String tmp;
+		int val;
+		
+		int[] colors;
+		String msg = null;
+		String error = null;
+		String hash = null;
+		
+		String id, idvar;
+		String name;
+		String command;
+		String startTime="", finishTime="";
+		String progression="", nextCommand="";
+		String transStartTime="", transFinishTime="";
+		String util = null;
+		String value;
+		String extime;
+		String contdel;
+		String busname;
+		String busid;
+		String state;*/
+		
+		
+		try {
+			for(int j=0; j<diagramNl.getLength(); j++) {
+				//System.out.println("Ndes: " + j);
+				node = diagramNl.item(j);
+				
+				if (node == null) {
+					TraceManager.addDev("null node");
+					return false;
+				}
+				
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element)node;
+					
+					TraceManager.addDev("Found tag:" + elt.getTagName());
+					
+					if (elt.getTagName().compareTo(SIMULATION_GLOBAL) ==0) {
+						loadGlobalConfiguration(node);
+					}
+					
+					
+					/*nl = node.getChildNodes();
+					if ((nl != null) && (nl.getLength() > 0)) {
+						for(int i=0; i<nl.getLength(); i++) {                                               
+							node0 = nl.item(i);
+							TraceManager.addDev("i: " + i + " Node = " + node0);
+							if (node0.getNodeType() == Node.ELEMENT_NODE) {
+								// create design, and get an index for it
+								return loadGlobalConfiguration(node0);
+							}
+						}
+					}*/
+					
+				}
+			}
+		} catch (Exception e) {
+			TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
+			return false;
+		}
+		
+		return true;
+	}
+			
+	
+	protected boolean loadGlobalConfiguration(Node node1) {
+		
+		TraceManager.addDev("Global configuration");
+		
+		NodeList diagramNl = node1.getChildNodes();
+		if (diagramNl == null) {
+			return false;
+		}
+		Element elt, elt0;
+		Node node, node0, node00;
+		NodeList nl, nl0;
+		
+		
+		String tmp;
+		int val;
+		
+		int[] colors;
+		String msg = null;
+		String error = null;
+		String hash = null;
+		
+		String id, idvar;
+		String name;
+		String command;
+		String startTime="", finishTime="";
+		String progression="", nextCommand="";
+		String transStartTime="", transFinishTime="";
+		String util = null;
+		String value;
+		String extime;
+		String contdel;
+		String busname;
+		String busid;
+		String state;
+		
+		int k, l;
+		
+		try {
+			for(int j=0; j<diagramNl.getLength(); j++) {
+				//System.out.println("Ndes: " + j);
+				node = diagramNl.item(j);
+				
+				if (node == null) {
+					TraceManager.addDev("null node");
+					return false;
+				}
+				
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					elt = (Element)node;
+					
+					TraceManager.addDev("Found tag tag:" + elt.getTagName());
+					
+					// Status
+					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
+						
+						
+						
+					}
+				}
+			}
+		} catch (Exception e) {
+			TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
+			return false;
+		}
+		
+		return true;
+	}
+						
+					
+						
+						/*if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
+							id = null;
+							name = null;
+							command = null;
+							contdel = null;
+							busname = null;
+							busid = null;
+							
+							id = elt.getAttribute("id");
+							name = elt.getAttribute("name");
+							nl = elt.getElementsByTagName("util");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							//System.out.println("toto12");
+							nl = elt.getElementsByTagName("contdel");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								nl = elt.getElementsByTagName("contdel");
+								node0 = nl.item(0);
+								elt0 = (Element)node0;
+								busid = elt0.getAttribute("busID");
+								busname = elt0.getAttribute("busName");
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								contdel = node0.getTextContent();
+							}
+							
+							//System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
+							
+							
+							if ((id != null) && (util != null)) {
+								updateCPUState(id, util, contdel, busname, busid);
+							}
+						}
+						
+						//System.out.println("toto2");
+						
+						if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
+							id = null;
+							name = null;
+							command = null;
+							id = elt.getAttribute("id");
+							name = elt.getAttribute("name");
+							nl = elt.getElementsByTagName("util");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							//System.out.println("Got info on bus " + id + " util=" + util);
+							
+							if ((id != null) && (util != null)) {
+								updateBusState(id, util);
+							}
+						}
+						
+						
+					}
+				}
+			}
+		} catch (Exception e) {
+			TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
+			return false;
+		}
+		
+		return true;
+	}*/
+	
+	public static String decodeString(String s)  {
+		if (s == null)
+			return s;
+		byte b[] = null;
+		try {
+			b = s.getBytes("ISO-8859-1");
+			return new String(b);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	
 	
 	
 } // Class DSEConfiguration

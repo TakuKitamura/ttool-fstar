@@ -78,7 +78,7 @@ public class DSEScriptReader  {
 	"SimulationOutputHTML", "SimulationOutputTxt", // 8, 9
 	"SimulationExplorationMinimumCommand", "SimulationExplorationMinimumBranch", // 10, 11 
 	"RunExplo", "SimulationMaxCycle", //12, 13
-	"RecordResult", "ComputeResults", //14, 15
+	"RecordResults", "ComputeResults", //14, 15
 	"SimulationOutputXML" // 16
 	};
 	
