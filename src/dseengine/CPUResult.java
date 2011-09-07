@@ -61,14 +61,14 @@ public class CPUResult  {
 	
 	public double utilization;
 	
-	public vector<BusContentionResult> contentions;
+	public Vector<BusContentionResult> contentions;
 	
 	public CPUResult() {
 	}
 	
-	public addContentionOnBus(BusContentionResult ct) {
+	public void addContentionOnBus(BusContentionResult ct) {
 		if (contentions == null) {
-			contentions = new vector<BusContentionResult>();
+			contentions = new Vector<BusContentionResult>();
 		}
 		
 		contentions.add(ct);

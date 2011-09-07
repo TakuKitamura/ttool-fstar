@@ -340,7 +340,7 @@ public class DSESimulationResult  {
 									cpur.name = name;
 									
 									if (util != null) {
-										cpur.util = Double.valueOf(util).doubleValue();
+										cpur.utilization = Double.valueOf(util).doubleValue();
 									}
 									
 									if ((contdel != null) && (busid != null) && (busname != null)) {
