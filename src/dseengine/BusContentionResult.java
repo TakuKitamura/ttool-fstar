@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class BusResult
-* Object for storing a bus result after a simulation
-* Creation: 06/09/2011
-* @version 1.0 06/09/2011
+* Class BusContentionResult
+* Object for storing a bus contention result after a simulation
+* Creation: 07/09/2011
+* @version 1.0 07/09/2011
 * @author Ludovic APVRILLE
 * @see
 */
@@ -55,13 +55,13 @@ import myutil.*;
 
 //import uppaaldesc.*;
 
-public class BusResult  {
+public class BusContentionResult  {
 	public int id;
 	public String name;
 	
-	public double utilization;
+	public long contention;
 	
-	public BusResult() {
+	public BusContentionResult() {
 	}
 	
 	

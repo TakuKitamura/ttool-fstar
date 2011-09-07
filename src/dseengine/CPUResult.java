@@ -57,15 +57,22 @@ import myutil.*;
 
 public class CPUResult  {
 	public int id;
-	private String name;
+	public String name;
 	
 	public double utilization;
+	
+	public vector<BusContentionResult> contentions;
 	
 	public CPUResult() {
 	}
 	
-	
-	
+	public addContentionOnBus(BusContentionResult ct) {
+		if (contentions == null) {
+			contentions = new vector<BusContentionResult>();
+		}
+		
+		contentions.add(ct);
+	}
 	
 } // Class BusResult
 

@@ -302,7 +302,60 @@ public class DSESimulationResult  {
 					
 					// Status
 					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
+						id = null;
+						name = null;
+						command = null;
+						contdel = null;
+						busname = null;
+						busid = null;
+						util = null;
 						
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						
+						if ((id != null) && (name != null)) {
+							nl = elt.getElementsByTagName("util");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							//System.out.println("toto12");
+							nl = elt.getElementsByTagName("contdel");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								nl = elt.getElementsByTagName("contdel");
+								node0 = nl.item(0);
+								elt0 = (Element)node0;
+								busid = elt0.getAttribute("busID");
+								busname = elt0.getAttribute("busName");
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								contdel = node0.getTextContent();
+							}
+							
+							if ((util != null) || ((contdel != null) && (busid != null) && (busname != null))) {
+								CPUResult cpur = new CPUResult();
+								try {
+									cpur.id = Integer.decode(id).intValue();
+									cpur.name = name;
+									
+									if (util != null) {
+										cpur.util = Double.valueOf(util).doubleValue();
+									}
+									
+									if ((contdel != null) && (busid != null) && (busname != null)) {
+										BusContentionResult bcr = new BusContentionResult();
+										bcr.id = Integer.decode(busid).intValue();
+										bcr.name = busname;
+										bcr.contention = Long.decode(contdel).longValue();
+										cpur.addContentionOnBus(bcr);
+									}
+									
+									cpus.add(cpur);
+								} catch (Exception e) {
+								}
+							}
+						}
 						
 						
 					}
