@@ -65,10 +65,12 @@ public class DSESimulationResult  {
 	protected static final String SIMULATION_HEADER = "siminfo";
 	protected static final String SIMULATION_CPU = "cpu";
 	protected static final String SIMULATION_BUS = "bus";
+	protected static final String SIMULATION_TASK = "task";
 	
 	
 	private Vector<CPUResult> cpus;
 	private Vector<BusResult> busses;
+	private Vector<TaskResult> tasks;
 	
 	public DSESimulationResult() {
 		reset();
@@ -77,6 +79,7 @@ public class DSESimulationResult  {
 	public void reset() {
 		cpus = new Vector<CPUResult>();
 		busses = new Vector<BusResult>();
+		tasks = new Vector<TaskResult>();
 	}
 	
 	public int loadResultFromXMLFile(String pathToFile) {
@@ -114,6 +117,12 @@ public class DSESimulationResult  {
 			loadXMLInfoFromServer(ssxml);
 			ssxml = "";
 		}
+		
+		TraceManager.addDev("Computing results");
+		TraceManager.addDev("infos on cpus:" + cpus.size());
+		TraceManager.addDev("infos on busses:" + busses.size());
+		TraceManager.addDev("infos on tasks:" + tasks.size());
+		
 		//System.out.println("toto4");
 		
 	}
@@ -153,7 +162,6 @@ public class DSESimulationResult  {
 			
 			for(i=0; i<nl.getLength(); i++) {
 				node = nl.item(i);
-				//System.out.println("Node = " + dnd);
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					// create design, and get an index for it
 					return loadConfiguration(node);
@@ -181,30 +189,6 @@ public class DSESimulationResult  {
 		Node node, node0, node00;
 		NodeList nl, nl0;
 		
-		
-		/*String tmp;
-		int val;
-		
-		int[] colors;
-		String msg = null;
-		String error = null;
-		String hash = null;
-		
-		String id, idvar;
-		String name;
-		String command;
-		String startTime="", finishTime="";
-		String progression="", nextCommand="";
-		String transStartTime="", transFinishTime="";
-		String util = null;
-		String value;
-		String extime;
-		String contdel;
-		String busname;
-		String busid;
-		String state;*/
-		
-		
 		try {
 			for(int j=0; j<diagramNl.getLength(); j++) {
 				//System.out.println("Ndes: " + j);
@@ -223,19 +207,6 @@ public class DSESimulationResult  {
 					if (elt.getTagName().compareTo(SIMULATION_GLOBAL) ==0) {
 						loadGlobalConfiguration(node);
 					}
-					
-					
-					/*nl = node.getChildNodes();
-					if ((nl != null) && (nl.getLength() > 0)) {
-						for(int i=0; i<nl.getLength(); i++) {                                               
-							node0 = nl.item(i);
-							TraceManager.addDev("i: " + i + " Node = " + node0);
-							if (node0.getNodeType() == Node.ELEMENT_NODE) {
-								// create design, and get an index for it
-								return loadGlobalConfiguration(node0);
-							}
-						}
-					}*/
 					
 				}
 			}
@@ -261,22 +232,11 @@ public class DSESimulationResult  {
 		NodeList nl, nl0;
 		
 		
-		String tmp;
-		int val;
-		
-		int[] colors;
-		String msg = null;
-		String error = null;
-		String hash = null;
-		
-		String id, idvar;
+		//int val;
+	
+		String id;
 		String name;
-		String command;
-		String startTime="", finishTime="";
-		String progression="", nextCommand="";
-		String transStartTime="", transFinishTime="";
 		String util = null;
-		String value;
 		String extime;
 		String contdel;
 		String busname;
@@ -304,7 +264,6 @@ public class DSESimulationResult  {
 					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
 						id = null;
 						name = null;
-						command = null;
 						contdel = null;
 						busname = null;
 						busid = null;
@@ -358,6 +317,77 @@ public class DSESimulationResult  {
 						}
 						
 						
+					}
+					
+					if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
+						name = null;
+						id = null;
+						extime = null;
+						
+						
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						
+						if ((id != null) && (name != null)) {
+							nl = elt.getElementsByTagName("util");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								util = node0.getTextContent();
+							}
+							
+							if (util != null) {
+								BusResult busr = new BusResult();
+								try {
+									busr.id = Integer.decode(id).intValue();
+									busr.name = name;
+									busr.utilization = Double.valueOf(util).doubleValue();
+									busses.add(busr);
+								} catch (Exception e) {
+								}
+							}
+							
+						}
+					}
+					
+					if (elt.getTagName().compareTo(SIMULATION_TASK) == 0) {
+						busname = null;
+						busid = null;
+						util = null;
+						extime = null;
+						state = null;
+						
+						id = elt.getAttribute("id");
+						name = elt.getAttribute("name");
+						
+						if ((id != null) && (name != null)) {
+							nl = elt.getElementsByTagName("extime");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								extime = node0.getTextContent();
+							}
+							
+							nl = elt.getElementsByTagName("tskstate");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								state = node0.getTextContent();
+							}
+							
+							if (extime != null) {
+								TaskResult tr = new TaskResult();
+								try {
+									tr.id = Integer.decode(id).intValue();
+									tr.name = name;
+									tr.nbOfExecutedCycles = Long.decode(extime).longValue();
+									tr.state = state;
+									tasks.add(tr);
+								} catch (Exception e) {
+								}
+							}
+							
+						}
 					}
 				}
 			}

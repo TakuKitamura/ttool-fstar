@@ -7,16 +7,20 @@ OPT    = -O3 -pthread
 # Solaris
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT   = -O3 -pthread -ldl
+LOPT   = -O3 -ldl
+LTHREAD = -pthread
 
 DEBUG  = -g
 PROFILE = -pg
 OTHER  = -Wall
+SOLARIS_SPECIFIC = -lsocket -lnsl
 TRY    = -Wno-deprecated
 #make  = $(OPT) $(OTHER) $(TRY) 
 LFLAGS = $(LOPT) $(OTHER) $(TRY)
+LFLAGS_SOLARIS = $(LFLAGS) $(SOLARIS_SPECIFIC)
 CFLAGS = $(OTHER)
 OBJDIR = lib
+OS := $(shell uname)
 
 MODULE = run
 include Makefile.src

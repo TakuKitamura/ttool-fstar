@@ -10,8 +10,14 @@ EXE    = $(MODULE).x
 .SUFFIXES: .cpp .o .x
 
 
-$(EXE): makedir $(OBJS) $(OBJS_simulator) 
-	$(CC) $(LFLAGS) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+$(EXE): makedir $(OBJS) $(OBJS_simulator)
+	echo Making target
+ifeq ($(OS), SunOS) 
+	$(CC) $(LFLAGS_SOLARIS) -lsocket $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt	      
+ endif
+ifneq ($(OS), SunOS) 
+	$(CC) $(LFLAGS) $(LTHREAD) $(INCDIR) $(LIBDIR) -o $@ $(OBJS) $(OBJS_simulator) $(LIBS) 2>&1 | c++filt
+endif 	
 
 makedir:
 	echo Making directories
