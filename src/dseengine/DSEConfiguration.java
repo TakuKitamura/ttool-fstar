@@ -459,11 +459,26 @@ public class DSEConfiguration  {
 	}
 	
 	public int computeResults(String _arguments, boolean _debug, boolean _optimize) {
+		TraceManager.addDev("Computing results");
+		
 		if (results == null) {
+			TraceManager.addDev("No results");
 			return -1;
 		}
 		
 		// Must compute results
+		results.computeResults();
+		
+		TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
+		
+		// Saving to file
+		try {
+			FileUtils.saveFile(pathToResults + "results" + resultsID + ".txt", results.getExplanationHeader() + "\n\n" + results.getWholeResults());
+		} catch (Exception e){
+			TraceManager.addDev("Error when saving results file");
+			return -1;
+			
+		}
 		
 		// Reinit results
 		results.reset();

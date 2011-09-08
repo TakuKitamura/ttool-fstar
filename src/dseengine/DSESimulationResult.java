@@ -72,6 +72,10 @@ public class DSESimulationResult  {
 	private Vector<BusResult> busses;
 	private Vector<TaskResult> tasks;
 	
+	private Vector<CPUWholeResult> wcpus;
+	private Vector<BusWholeResult> wbusses;
+	private Vector<TaskWholeResult> wtasks;
+	
 	public DSESimulationResult() {
 		reset();
 	}
@@ -91,7 +95,6 @@ public class DSESimulationResult  {
 		}
 		
 		analyzeServerAnswer(data);
-		
 		
 		return 0;
 	}
@@ -122,6 +125,9 @@ public class DSESimulationResult  {
 		TraceManager.addDev("infos on cpus:" + cpus.size());
 		TraceManager.addDev("infos on busses:" + busses.size());
 		TraceManager.addDev("infos on tasks:" + tasks.size());
+		
+		
+		// Compute results!
 		
 		//System.out.println("toto4");
 		
@@ -399,78 +405,6 @@ public class DSESimulationResult  {
 		return true;
 	}
 						
-					
-						
-						/*if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
-							id = null;
-							name = null;
-							command = null;
-							contdel = null;
-							busname = null;
-							busid = null;
-							
-							id = elt.getAttribute("id");
-							name = elt.getAttribute("name");
-							nl = elt.getElementsByTagName("util");
-							if ((nl != null) && (nl.getLength() > 0)) {
-								node0 = nl.item(0);
-								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-								util = node0.getTextContent();
-							}
-							
-							//System.out.println("toto12");
-							nl = elt.getElementsByTagName("contdel");
-							if ((nl != null) && (nl.getLength() > 0)) {
-								nl = elt.getElementsByTagName("contdel");
-								node0 = nl.item(0);
-								elt0 = (Element)node0;
-								busid = elt0.getAttribute("busID");
-								busname = elt0.getAttribute("busName");
-								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-								contdel = node0.getTextContent();
-							}
-							
-							//System.out.println("contdel: " + contdel + " busID:" + busid + " busName:" + busname);
-							
-							
-							if ((id != null) && (util != null)) {
-								updateCPUState(id, util, contdel, busname, busid);
-							}
-						}
-						
-						//System.out.println("toto2");
-						
-						if (elt.getTagName().compareTo(SIMULATION_BUS) == 0) {
-							id = null;
-							name = null;
-							command = null;
-							id = elt.getAttribute("id");
-							name = elt.getAttribute("name");
-							nl = elt.getElementsByTagName("util");
-							if ((nl != null) && (nl.getLength() > 0)) {
-								node0 = nl.item(0);
-								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
-								util = node0.getTextContent();
-							}
-							
-							//System.out.println("Got info on bus " + id + " util=" + util);
-							
-							if ((id != null) && (util != null)) {
-								updateBusState(id, util);
-							}
-						}
-						
-						
-					}
-				}
-			}
-		} catch (Exception e) {
-			TraceManager.addError("Exception in xml parsing " + e.getMessage() + " node= " + node1);
-			return false;
-		}
-		
-		return true;
-	}*/
 	
 	public static String decodeString(String s)  {
 		if (s == null)
@@ -482,6 +416,92 @@ public class DSESimulationResult  {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public void computeResults() {
+		
+		Hashtable resultsTable = new Hashtable();
+		Object o;
+		CPUWholeResult cpuwr;
+		BusWholeResult buswr;
+		TaskWholeResult taskwr;
+		
+		// CPUs
+		wcpus = new Vector<CPUWholeResult>();
+		for(CPUResult rescpu: cpus) {
+			o = resultsTable.get(rescpu.id);
+			//TraceManager.addDev("Got o=" + o);
+			if (o == null) {
+				cpuwr = new CPUWholeResult(rescpu);
+				resultsTable.put(rescpu.id, cpuwr);
+				wcpus.add(cpuwr);
+				
+			} else {
+				cpuwr = (CPUWholeResult)o;
+				cpuwr.updateResults(rescpu);
+			}
+		}
+		
+		wbusses = new Vector<BusWholeResult>();
+		for(BusResult resbus: busses) {
+			o = resultsTable.get(resbus.id);
+			//TraceManager.addDev("Got o=" + o);
+			if (o == null) {
+				buswr = new BusWholeResult(resbus);
+				resultsTable.put(resbus.id, buswr);
+				wbusses.add(buswr);
+				
+			} else {
+				buswr = (BusWholeResult)o;
+				buswr.updateResults(resbus);
+			}
+		}
+		
+		wtasks = new Vector<TaskWholeResult>();
+		for(TaskResult restask: tasks) {
+			o = resultsTable.get(restask.id);
+			//TraceManager.addDev("Got o=" + o);
+			if (o == null) {
+				taskwr = new TaskWholeResult(restask);
+				resultsTable.put(restask.id, taskwr);
+				wtasks.add(taskwr);
+				
+			} else {
+				taskwr = (TaskWholeResult)o;
+				taskwr.updateResults(restask);
+			}
+		}
+		
+		//TraceManager.addDev("Done compte results");
+	}
+	
+	public String getWholeResults() {
+		StringBuffer sb = new StringBuffer("");
+		for(CPUWholeResult reswcpu: wcpus) {
+			sb.append(reswcpu.toStringResult() + "\n");
+		}
+		
+		for(BusWholeResult reswbus: wbusses) {
+			sb.append(reswbus.toStringResult() + "\n");
+		}
+		
+		for(TaskWholeResult reswtask: wtasks) {
+			sb.append(reswtask.toStringResult() + "\n");
+		}
+		
+		
+		
+		
+		return sb.toString();
+	}
+	
+	public static String getExplanationHeader() {
+		String s;
+		s = "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
+		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionDelay averageContentionDelay maxContentionDelay\n";
+		s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
+		s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfTerminated\n";
+		return s;
 	}
 	
 	
