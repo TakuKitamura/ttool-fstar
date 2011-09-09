@@ -309,7 +309,7 @@ void TMLTask::finished(){
 }
 
 unsigned int TMLTask::getState() const{
-	if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
+	/*if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
 		return RUNNING;
 	}else{
 		if (_currCommand==0) return TERMINATED;
@@ -325,7 +325,17 @@ unsigned int TMLTask::getState() const{
 					return RUNNABLE;
 		
 		}
-	}	 
+	}*/
+	if (_currCommand->getCurrTransaction()==0 || dynamic_cast<TMLStopCommand*>(_currCommand)!=0){
+		return TERMINATED;
+	} else if (_currCommand->getCurrTransaction()->getVirtualLength()==0){
+		return SUSPENDED;
+	} else if (_currentCPU->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
+		return RUNNING;
+	}else{
+		return RUNNABLE;
+	}
+	return UNKNOWN;
 }
 
 TMLTransaction* TMLTask::getNextTransaction(TMLTime iEndSchedule) const{
