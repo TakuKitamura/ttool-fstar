@@ -475,6 +475,7 @@ public class DSESimulationResult  {
 		//TraceManager.addDev("Done compte results");
 	}
 	
+	
 	public String getWholeResults() {
 		StringBuffer sb = new StringBuffer("");
 		for(CPUWholeResult reswcpu: wcpus) {
@@ -489,8 +490,22 @@ public class DSESimulationResult  {
 			sb.append(reswtask.toStringResult() + "\n");
 		}
 		
+		return sb.toString();
+	}
+	
+	public String getAllResults() {
+		StringBuffer sb = new StringBuffer("");
+		for(CPUResult rescpu: cpus) {
+			sb.append(rescpu.toStringResult() + "\n");
+		}
 		
+		for(BusResult resbus: busses) {
+			sb.append(resbus.toStringResult() + "\n");
+		}
 		
+		for(TaskResult restask: tasks) {
+			sb.append(restask.toStringResult() + "\n");
+		}
 		
 		return sb.toString();
 	}
@@ -498,9 +513,18 @@ public class DSESimulationResult  {
 	public static String getExplanationHeader() {
 		String s;
 		s = "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
-		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionDelay averageContentionDelay maxContentionDelay\n";
+		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionCycles averageContentionCycles maxContentionCycles\n";
 		s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
-		s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfTerminated\n";
+		s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfRunning nbOfsuspended nbOfTerminated\n";
+		return s;
+	}
+	
+	public static String getAllExplanationHeader() {
+		String s;
+		s = "# CPUs: CPU ID Name utilization\n";
+		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName contentionCycle\n";
+		s += "# Busses: BUS ID Name utilization\n";
+		s += "# Tasks: TASK ID Name NbOfExecutedCycles state\n";
 		return s;
 	}
 	

@@ -108,6 +108,8 @@ public class DSEConfiguration  {
 	
 	private int simulationMaxCycles = -1;
 	
+	private int nbOfCores = 1;
+	
 	private DSESimulationResult results;
 	
 	
@@ -247,6 +249,23 @@ public class DSEConfiguration  {
 		return 0;
 	}
 	
+	public int setNbOfCores(String _value) {
+		try {
+			nbOfCores = Integer.decode(_value).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		if (nbOfCores < 1) {
+			nbOfCores = 1;
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		return 0;
+	}
+	
 	private boolean loadMapping(boolean _optimize) {
 		boolean ret = false;
 		//System.out.println("load");
@@ -327,17 +346,7 @@ public class DSEConfiguration  {
 		return 0;
 	}
 	
-	public int runSimulation(String _arguments, boolean _debug, boolean _optimize) {
-		
-		// Checking for valid arguments
-		int nbOfSimulations;
-		try {
-			nbOfSimulations = Integer.decode(_arguments).intValue();
-		} catch (Exception e) {
-			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
-			return -1;
-		}
-		
+	public int checkingSimulationElements() {
 		if (pathToSimulator == null) {
 			errorMessage = PATH_TO_CODE;
 			return -1;
@@ -369,9 +378,10 @@ public class DSEConfiguration  {
 			return -1;
 		}
 		
-		
-		// Loading model
-		
+		return 0;
+	}
+	
+	public int loadingModel(boolean _debug, boolean _optimize) {
 		if (optionChanged) {
 			TraceManager.addDev("Loading mapping");
 			if (!loadMapping(_optimize)) {
@@ -397,54 +407,91 @@ public class DSEConfiguration  {
 			
 			optionChanged = false;
 		}
+		return 0;
+	}
+	
+	String prepareCommand() {
+		String cmd;
 		
+		cmd = pathToSimulator + simulationExecutionCommand;
+		
+		Vector<String> v = new Vector<String>();
+		
+		if (outputVCD) {
+			v.add("7 0 " + pathToResults + "output$.vcd");
+		}
+		if (outputHTML) {
+			v.add("7 1 " + pathToResults + "output$.html");
+		}
+		if (outputTXT) {
+			v.add("7 2 " +pathToResults + "output$.txt");
+		}
+		
+		if (simulationMaxCycles > -1) {
+			v.add("1 5 " + simulationMaxCycles);
+		} else {
+			v.add("1 0 ");
+		}
+		
+		if (recordResults) {
+			v.add("10 1 " + pathToResults + "benchmark$.xml");
+		}
+		
+		if (v.size() > 0) {
+			int cpt = 0;
+			for (String s: v) {
+				if (cpt == 0) {
+					cmd += " -cmd \"";
+				} else {
+					cmd += ";";
+				}
+				cmd += s;
+				cpt ++;
+			}
+			cmd += "\"";
+		}
+		
+		if (outputXML) {
+			cmd += " -oxml " + pathToResults + "output$.xml";
+		}
+		
+		return cmd;
+	}
+	
+	public String putSimulationNbInCommand(String cmd, int value) {
+		String val = "" + value;
+		return Conversion.replaceAllString(cmd, "$", val);
+	}
+	
+	public int runSimulation(String _arguments, boolean _debug, boolean _optimize) {
+		
+		// Checking for valid arguments
+		int nbOfSimulations;
+		try {
+			nbOfSimulations = Integer.decode(_arguments).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		// Checking simulation Elements
+		int ret = checkingSimulationElements();
+		if (ret != 0) {
+			return ret;
+		}
+		
+		// Loading model
+		ret = loadingModel(_debug, _optimize);
+		if (ret != 0) {
+			return ret;
+		}
 		
 		// Executing the simulation
-		String cmd;
+		String cmd = prepareCommand();
 		String tmp;
+		
 		while(nbOfSimulations >0) {
-			cmd = pathToSimulator + simulationExecutionCommand;
-			
-			Vector<String> v = new Vector<String>();
-			
-			if (outputVCD) {
-				v.add("7 0 " + pathToResults + "output" + simulationID + ".vcd");
-			}
-			if (outputHTML) {
-				v.add("7 1 " + pathToResults + "output" + simulationID + ".html");
-			}
-			if (outputTXT) {
-				v.add("7 2 " +pathToResults + "output" + simulationID + ".txt");
-			}
-			
-			if (simulationMaxCycles > -1) {
-				v.add("1 5 " + simulationMaxCycles);
-			} else {
-				v.add("1 0 ");
-			}
-			
-			if (recordResults) {
-				v.add("10 1 " + pathToResults + "benchmark" + simulationID + ".xml");
-			}
-			
-			if (v.size() > 0) {
-				int cpt = 0;
-				for (String s: v) {
-					if (cpt == 0) {
-						cmd += " -cmd \"";
-					} else {
-						cmd += ";";
-					}
-					cmd += s;
-					cpt ++;
-				}
-				cmd += "\"";
-			}
-			
-			if (outputXML) {
-				cmd += " -oxml " + pathToResults + "output" + simulationID + ".xml";
-			}
-			
+			tmp = putSimulationNbInCommand(cmd, simulationID); 
 			makeCommand(cmd);
 			
 			if (recordResults) {
@@ -458,7 +505,43 @@ public class DSEConfiguration  {
 		return 0;
 	}
 	
-	public int computeResults(String _arguments, boolean _debug, boolean _optimize) {
+	public synchronized int increaseSimulationID() {
+		int tmp = simulationID;
+		simulationID ++;
+		return tmp;
+	}
+	
+	public int runParallelSimulation(String _arguments, boolean _debug, boolean _optimize) {
+		return 0;
+	}
+	
+	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
+		TraceManager.addDev("Printing all results");
+		
+		if (results == null) {
+			TraceManager.addDev("No results");
+			return -1;
+		}
+		
+		// Must compute results
+		//results.computeResults();
+		
+		//TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
+		
+		// Saving to file
+		try {
+			TraceManager.addDev(results.getAllExplanationHeader());
+			TraceManager.addDev("----\n" + results.getAllResults());
+			FileUtils.saveFile(pathToResults + "allresults" + resultsID + ".txt", results.getAllExplanationHeader() + "\n\n" + results.getAllResults());
+		} catch (Exception e){
+			TraceManager.addDev("Error when saving results file" + e.getMessage());
+			return -1;
+			
+		}
+		return 0;
+	}
+	
+	public int printResultsSummary(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Computing results");
 		
 		if (results == null) {
@@ -473,13 +556,17 @@ public class DSEConfiguration  {
 		
 		// Saving to file
 		try {
-			FileUtils.saveFile(pathToResults + "results" + resultsID + ".txt", results.getExplanationHeader() + "\n\n" + results.getWholeResults());
+			FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", results.getExplanationHeader() + "\n\n" + results.getWholeResults());
 		} catch (Exception e){
 			TraceManager.addDev("Error when saving results file");
 			return -1;
 			
 		}
 		
+		return 0;
+	}
+	
+	public int resetResults(String _arguments) {
 		// Reinit results
 		results.reset();
 		
@@ -668,7 +755,7 @@ public class DSEConfiguration  {
 		
 	}
 	
-	public int loadSimulationResult(int id) {
+	public synchronized int loadSimulationResult(int id) {
 		if (results == null) {
 			results = new DSESimulationResult();
 		}

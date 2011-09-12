@@ -51,7 +51,7 @@ import java.util.*;
 
 //import tmltranslator.*;
 //import tmltranslator.touppaal.*;
-//import tmltranslator.tomappingsystemc.*;
+//import tmltranslator.tomappingsystemc.*; 
 import tmltranslator.tomappingsystemc2.*;
 //import tmltranslator.toturtle.*;
 
@@ -78,8 +78,10 @@ public class DSEScriptReader  {
 	"SimulationOutputHTML", "SimulationOutputTxt", // 8, 9
 	"SimulationExplorationMinimumCommand", "SimulationExplorationMinimumBranch", // 10, 11 
 	"RunExplo", "SimulationMaxCycle", //12, 13
-	"RecordResults", "ComputeResults", //14, 15
-	"SimulationOutputXML" // 16
+	"RecordResults", "saveAllResults", //14, 15
+	"SimulationOutputXML", "saveResultsSummary", // 16, 17
+	"resetResults", "NbOfCores", // 18, 19
+	"RunParallelSimulation" //20
 	};
 	
 	private String fileName;
@@ -264,12 +266,32 @@ public class DSEScriptReader  {
 				}
 				return OK;
 			case 15:
-				if (_config.computeResults(_arguments, debug, optimize) != 0) {
+				if (_config.printAllResults(_arguments, debug, optimize) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
 			case 16:
 				if (_config.setOutputXML(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 17:
+				if (_config.printResultsSummary(_arguments, debug, optimize) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 18:
+				if (_config.resetResults(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 19:
+				if (_config.setNbOfCores(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 20:
+				if (_config.runParallelSimulation(_arguments, debug, optimize) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;

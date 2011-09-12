@@ -66,6 +66,10 @@ public class TaskResult  {
 	public TaskResult() {
 	}
 	
+	public String toStringResult() {
+		return "TASK " + id + " " + name + " " + nbOfExecutedCycles + " " + state;
+	}
+	
 	
 	
 } // Class TaskResult

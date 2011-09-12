@@ -64,6 +64,10 @@ public class BusResult  {
 	public BusResult() {
 	}
 	
+	public String toStringResult() {
+		return "BUS " + id + " " + name + " " + utilization;
+	}
+	
 	
 	
 	

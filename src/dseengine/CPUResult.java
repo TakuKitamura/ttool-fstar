@@ -74,5 +74,17 @@ public class CPUResult  {
 		contentions.add(ct);
 	}
 	
+	public String toStringResult() {
+		StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
+		if (contentions != null) {
+			for(BusContentionResult bcr: contentions) {
+				sb.append(bcr.toStringResult(id, name));
+			}
+		}
+		return sb.toString();
+		
+	}
+		
+	
 } // Class BusResult
 

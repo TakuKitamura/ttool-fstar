@@ -64,6 +64,10 @@ public class BusContentionResult  {
 	public BusContentionResult() {
 	}
 	
+	public String toStringResult(int cpuid, String cpuname) {
+		return "CPU_BUS_CONTENTION " + cpuid + " " + cpuname + " " + id + " " + name + " " + contention;
+	}
+	
 	
 	
 	
