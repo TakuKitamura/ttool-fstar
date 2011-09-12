@@ -64,7 +64,7 @@ import myutil.*;
 
 //import uppaaldesc.*;
 
-public class DSEConfiguration  {
+public class DSEConfiguration implements Runnable  {
 	
 	private String errorMessage;
 	
@@ -111,6 +111,9 @@ public class DSEConfiguration  {
 	private int nbOfCores = 1;
 	
 	private DSESimulationResult results;
+	
+	private String simulationCmd;
+	private int nbOfRemainingSimulation;
 	
 	
 	
@@ -492,7 +495,7 @@ public class DSEConfiguration  {
 		
 		while(nbOfSimulations >0) {
 			tmp = putSimulationNbInCommand(cmd, simulationID); 
-			makeCommand(cmd);
+			makeCommand(tmp);
 			
 			if (recordResults) {
 				if (loadSimulationResult(simulationID) <0) {
@@ -512,7 +515,57 @@ public class DSEConfiguration  {
 	}
 	
 	public int runParallelSimulation(String _arguments, boolean _debug, boolean _optimize) {
+		// Checking for valid arguments
+		try {
+			nbOfRemainingSimulation = Integer.decode(_arguments).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		// Checking simulation Elements
+		int ret = checkingSimulationElements();
+		if (ret != 0) {
+			return ret;
+		}
+		
+		// Loading model
+		ret = loadingModel(_debug, _optimize);
+		if (ret != 0) {
+			return ret;
+		}
+		
+		// Executing the simulation
+		simulationCmd = prepareCommand();
+		
 		return 0;
+	}
+	
+	public void run() {
+		Stirng tmp;
+		int id;
+		
+		while(hasRemainingSimulations() > 0) {
+			id = increaseSimulationID();
+			tmp = putSimulationNbInCommand(simulationCmd, id); 
+			makeCommand(tmp);
+			
+			if (recordResults) {
+				if (loadSimulationResult(id) <0) {
+					return -1;
+				}
+			}
+		}
+	}
+	
+	private synchronized int hasRemainingSimulations() {
+		if (nbOfRemainingSimulation == 0) {
+			return 0;
+		}
+		
+		int tmp = nbOfRemainingSimulation;
+		nbOfRemainingSimulation --;
+		return tmp;
 	}
 	
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
