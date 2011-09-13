@@ -2298,10 +2298,11 @@ public class GTMLModeling  {
 				if ((node != null) && (node instanceof HwCommunicationNode)) {
 					artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getArtifactList();
 					for(TMLArchiCommunicationArtifact artifact:artifactscomm) {
-						//TraceManager.addDev("Exploring artifact " + artifact.getValue());
+						TraceManager.addDev("Exploring artifact " + artifact.getValue());
 						s = artifact.getReferenceCommunicationName();
 						s = s.replaceAll("\\s", "");
 						s = s + "__" + artifact.getCommunicationName();
+						TraceManager.addDev("Searching for:" + s);
 						elt = tmlm.getCommunicationElementByName(s);
 						
 						if (elt instanceof TMLChannel) {
@@ -2312,7 +2313,7 @@ public class GTMLModeling  {
 						if (elt != null) {
 							map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
 						} else {
-							TraceManager.addDev("Null mapping: no element named" +artifact.getName());
+							TraceManager.addDev("Null mapping: no element named: " +artifact.getCommunicationName());
 						}
 					}
 				}

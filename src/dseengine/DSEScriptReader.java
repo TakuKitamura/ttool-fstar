@@ -81,7 +81,7 @@ public class DSEScriptReader  {
 	"RecordResults", "saveAllResults", //14, 15
 	"SimulationOutputXML", "saveResultsSummary", // 16, 17
 	"resetResults", "NbOfCores", // 18, 19
-	"RunParallelSimulation" //20
+	"RunParallelSimulation", "ShowSimulatorRawOutput" //20, 21
 	};
 	
 	private String fileName;
@@ -292,6 +292,11 @@ public class DSEScriptReader  {
 				return OK;
 			case 20:
 				if (_config.runParallelSimulation(_arguments, debug, optimize) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 21:
+				if (_config.setShowSimulatorRawOutput(_arguments) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;

@@ -121,10 +121,10 @@ public class DSESimulationResult  {
 			ssxml = "";
 		}
 		
-		TraceManager.addDev("Computing results");
-		TraceManager.addDev("infos on cpus:" + cpus.size());
-		TraceManager.addDev("infos on busses:" + busses.size());
-		TraceManager.addDev("infos on tasks:" + tasks.size());
+		//TraceManager.addDev("Computing results");
+		//TraceManager.addDev("infos on cpus:" + cpus.size());
+		//TraceManager.addDev("infos on busses:" + busses.size());
+		//TraceManager.addDev("infos on tasks:" + tasks.size());
 		
 		
 		// Compute results!
@@ -208,7 +208,7 @@ public class DSESimulationResult  {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					elt = (Element)node;
 					
-					TraceManager.addDev("Found tag:" + elt.getTagName());
+					//TraceManager.addDev("Found tag:" + elt.getTagName());
 					
 					if (elt.getTagName().compareTo(SIMULATION_GLOBAL) ==0) {
 						loadGlobalConfiguration(node);
@@ -264,7 +264,7 @@ public class DSESimulationResult  {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					elt = (Element)node;
 					
-					TraceManager.addDev("Found tag tag:" + elt.getTagName());
+					//TraceManager.addDev("Found tag tag:" + elt.getTagName());
 					
 					// Status
 					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
@@ -316,7 +316,7 @@ public class DSESimulationResult  {
 										cpur.addContentionOnBus(bcr);
 									}
 									
-									cpus.add(cpur);
+									AddingCPUResult(cpur);
 								} catch (Exception e) {
 								}
 							}
@@ -348,7 +348,7 @@ public class DSESimulationResult  {
 									busr.id = Integer.decode(id).intValue();
 									busr.name = name;
 									busr.utilization = Double.valueOf(util).doubleValue();
-									busses.add(busr);
+									AddingBusResult(busr);
 								} catch (Exception e) {
 								}
 							}
@@ -388,7 +388,7 @@ public class DSESimulationResult  {
 									tr.name = name;
 									tr.nbOfExecutedCycles = Long.decode(extime).longValue();
 									tr.state = state;
-									tasks.add(tr);
+									AddingTaskResult(tr);
 								} catch (Exception e) {
 								}
 							}
@@ -403,6 +403,18 @@ public class DSESimulationResult  {
 		}
 		
 		return true;
+	}
+	
+	public synchronized void AddingCPUResult(CPUResult cpur) {
+		cpus.add(cpur);
+	}
+	
+	public synchronized void AddingBusResult(BusResult br) {
+		busses.add(br);
+	}
+	
+	public synchronized void AddingTaskResult(TaskResult tr) {
+		tasks.add(tr);
 	}
 						
 	

@@ -92,7 +92,9 @@ public class DSEConfiguration implements Runnable  {
 	private boolean outputTXT = false;
 	private boolean outputXML = false;
 	
-	private boolean recordResults = false;  
+	private boolean recordResults = false; 
+	
+	private boolean showSimulatorRawOutput = false;
 	
 	
 	private TMLMapping tmap;
@@ -349,6 +351,20 @@ public class DSEConfiguration implements Runnable  {
 		return 0;
 	}
 	
+	public int setShowSimulatorRawOutput(String _arguments) {
+		if (_arguments.toLowerCase().compareTo("true") == 0) {
+			showSimulatorRawOutput = true;
+			return 0;
+		}
+		
+		if (_arguments.toLowerCase().compareTo("false") == 0) {
+			showSimulatorRawOutput = false;
+			return 0;
+		}
+		
+		return -1;
+	}
+	
 	public int checkingSimulationElements() {
 		if (pathToSimulator == null) {
 			errorMessage = PATH_TO_CODE;
@@ -483,6 +499,13 @@ public class DSEConfiguration implements Runnable  {
 			return ret;
 		}
 		
+		// Preparing results
+		if (recordResults) {
+			if (results == null) {
+				results = new DSESimulationResult();
+			}
+		}
+		
 		// Loading model
 		ret = loadingModel(_debug, _optimize);
 		if (ret != 0) {
@@ -535,13 +558,49 @@ public class DSEConfiguration implements Runnable  {
 			return ret;
 		}
 		
+		// Preparing results
+		if (recordResults) {
+			if (results == null) {
+				results = new DSESimulationResult();
+			}
+		}
+		
 		// Executing the simulation
 		simulationCmd = prepareCommand();
+		
+		Thread [] t = null;
+		int nb = nbOfCores;
+		if (nb > 1) {
+			t = new Thread[nb-1];
+			while(nb > 1) {
+				t[nbOfCores-nb] = new Thread(this);
+				t[nbOfCores-nb].start();
+				nb --;
+			}
+		}
+		
+		run();
+		
+		// Must wait for all threads to terminate
+		if (nbOfCores > 1) {
+			nb = nbOfCores;
+			
+			while(nb > 1) {
+				try {
+					t[nbOfCores-nb].join();
+					nb --;
+				} catch (Exception e) {
+				}
+			}
+		}
+		
 		
 		return 0;
 	}
 	
 	public void run() {
+		
+		TraceManager.addDev("Thread thread");
 		String tmp;
 		int id;
 		
@@ -726,8 +785,10 @@ public class DSEConfiguration implements Runnable  {
             //et = new ErrorThread(proc_err, mpi);
             //et.start();
             
-            while ((str = proc_in.readLine()) != null){    
-                TraceManager.addDev("Out " + str);
+            while ((str = proc_in.readLine()) != null){
+            	if (showSimulatorRawOutput) {
+                System.out.println("Out " + str);
+                }
                 //mpi.appendOut(str+"\n");             
             }
             
@@ -808,10 +869,7 @@ public class DSEConfiguration implements Runnable  {
 		
 	}
 	
-	public synchronized int loadSimulationResult(int id) {
-		if (results == null) {
-			results = new DSESimulationResult();
-		}
+	public int loadSimulationResult(int id) {
 		
 		results.loadResultFromXMLFile(pathToResults + "benchmark" + id + ".xml");
 		
