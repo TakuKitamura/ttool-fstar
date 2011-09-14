@@ -628,7 +628,7 @@ public class GTMLModeling  {
 					port2 = (TMLCPrimitivePort)(portstome.get(0));
 					
 					String []text1 = port1.getPortName().split(",");
-					String []tesxt2 = port2.getPortName().split(",");
+					String []text2 = port2.getPortName().split(",");
 					
 					for (j=0; j<Math.min(text1.length, text2.length); j++) {
 						name1 = text1[j].trim();
