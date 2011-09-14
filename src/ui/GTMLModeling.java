@@ -643,7 +643,7 @@ public class GTMLModeling  {
 						name = makeName(port1, name1) + "__" + makeName(port2, name2); 
 						
 						if (makeName(port1, name1).compareTo(makeName(port2, name2)) == 0) {
-							
+							name = makeName(port1, name1);
 						}
 						
 						TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
