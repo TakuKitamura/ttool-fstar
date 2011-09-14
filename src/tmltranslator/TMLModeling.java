@@ -199,6 +199,13 @@ public class TMLModeling {
         s += requestsToString();
         return s;
     }
+	
+	public String getStringListCommunicationElements() {
+		String s = channelsToString();
+        s += eventsToString();
+        s += requestsToString();
+        return s;
+	}
     
     public String tasksToString() {
         String s = "Tasks: ";
