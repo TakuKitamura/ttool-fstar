@@ -81,7 +81,10 @@ public class DSEScriptReader  {
 	"RecordResults", "saveAllResults", //14, 15
 	"SimulationOutputXML", "saveResultsSummary", // 16, 17
 	"resetResults", "NbOfCores", // 18, 19
-	"RunParallelSimulation", "ShowSimulatorRawOutput" //20, 21
+	"RunParallelSimulation", "ShowSimulatorRawOutput", //20, 21
+	"TaskModelFile", "MinNbOfCPUs", //22, 23
+	"MaxNbOfCPUs", "NbOfSimulationsPerMapping", //24, 25
+	"runDSE"
 	};
 	
 	private String fileName;
@@ -150,6 +153,8 @@ public class DSEScriptReader  {
 				}
             }
 		} catch (Exception e) {
+			TraceManager.addDev("Exception: " + e.getMessage() + " Trace:");
+			e.printStackTrace();
 			return KO;
 		}
 			return OK;
@@ -300,7 +305,28 @@ public class DSEScriptReader  {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
-			
+			case 22:
+				return makeTaskModelFile(_arguments, _config);
+			case 23:
+				if (_config.setMinNbOfCPUs(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 24:
+				if (_config.setMaxNbOfCPUs(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 25:
+				if (_config.setNbOfSimulationsPerMapping(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 26:
+				if (_config.runDSE(_arguments, debug, optimize) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
 		}
 		
 		return KO;
@@ -320,6 +346,25 @@ public class DSEScriptReader  {
 		
 		if (debug) {
 			TraceManager.addDev("Mapping file correctly set to \"" + _arguments + "\"");
+		}
+		
+		return OK;
+	}
+	
+	private int makeTaskModelFile(String _arguments, DSEConfiguration _config) {
+		int index = _arguments.indexOf(" ");
+		if (index != -1) {
+			TraceManager.addDev("\"=\" sign in argument: " + _arguments);
+			return SYNTAX_ERROR_IN_LINE;
+		}
+		
+		if (_config.setTaskModelFile(_arguments) <0) {
+			TraceManager.addDev("Checking file for open " + _arguments + " failed");
+			return SYNTAX_ERROR_IN_LINE;
+		}
+		
+		if (debug) {
+			TraceManager.addDev("Task model file correctly set to \"" + _arguments + "\"");
 		}
 		
 		return OK;

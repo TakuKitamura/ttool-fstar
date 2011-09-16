@@ -67,6 +67,7 @@ public class DSESimulationResult  {
 	protected static final String SIMULATION_BUS = "bus";
 	protected static final String SIMULATION_TASK = "task";
 	
+	private Vector<String> comments;
 	
 	private Vector<CPUResult> cpus;
 	private Vector<BusResult> busses;
@@ -84,6 +85,11 @@ public class DSESimulationResult  {
 		cpus = new Vector<CPUResult>();
 		busses = new Vector<BusResult>();
 		tasks = new Vector<TaskResult>();
+		comments = new Vector<String>();
+	}
+	
+	public void addComment(String _comment) {
+		comments.add(_comment);
 	}
 	
 	public int loadResultFromXMLFile(String pathToFile) {
@@ -522,12 +528,26 @@ public class DSESimulationResult  {
 		return sb.toString();
 	}
 	
+	public String getAllComments() {
+		String s = "";
+		
+		for(String st: comments) {
+			s+= "#" + st + "\n";
+		}
+		
+		return s;
+		
+	}
+	
 	public static String getExplanationHeader() {
 		String s;
 		s = "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
 		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionCycles averageContentionCycles maxContentionCycles\n";
 		s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
 		s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfRunning nbOfsuspended nbOfTerminated\n";
+		
+		s+= "\n";
+		
 		return s;
 	}
 	
