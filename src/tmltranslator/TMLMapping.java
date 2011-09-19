@@ -316,7 +316,6 @@ public class TMLMapping {
 		hashCode = tmlm.getHashCode() + tmla.getHashCode();
 		TMLMappingTextSpecification tmaptxt = new TMLMappingTextSpecification("spec.tmap");
 		hashCode += tmaptxt.toTextFormat(this).hashCode();
-		System.out.println("TMAP hashcode = " + hashCode); 
 	}
 	
 	public int getHashCode() {
@@ -487,5 +486,33 @@ public class TMLMapping {
 		if (tmlm != null) {
 			tmlm.removeAllRandomSequences();
 		}
+	}
+	
+	public String getSummaryTaskMapping() {
+		StringBuffer sb = new StringBuffer("");
+		int cpt = 0;
+		int found = 0;
+		
+		for (HwNode node: tmla.getHwNodes()) {
+			if (node instanceof HwCPU) {
+				sb.append(node.getName() + "(");
+				found = 0;
+				cpt = 0;
+				for(HwExecutionNode ex: onnodes) {
+					if (ex == node) {
+						if (found > 0) {
+							sb.append(", ");
+						}
+						found = 1;
+						sb.append(mappedtasks.get(cpt).getName());
+					}
+					cpt ++;
+				}
+				sb.append(") ");
+			}
+		}
+		
+		return sb.toString();
+		
 	}
 }

@@ -181,7 +181,7 @@ public class TMLModeling {
 			s = s.substring(index, s.length());
 		}
 		hashCode = s.hashCode();
-		System.out.println("TML hashcode = " + hashCode); 
+		//System.out.println("TML hashcode = " + hashCode); 
 	}
 	
 	public int getHashCode() {

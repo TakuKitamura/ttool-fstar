@@ -122,6 +122,7 @@ public class DSEConfiguration implements Runnable  {
 	private int nbOfSimulationsPerMapping = 1;
 	private TMLModeling taskModel = null;
 	private Vector<TMLMapping> mappings;
+	private Vector<DSESimulationResult> resultsDSE; 
 	
 	
 	
@@ -566,6 +567,26 @@ public class DSEConfiguration implements Runnable  {
 		return 0;
 	}
 	
+	public int generateAndCompileMappingCode(TMLMapping _tmlmap, boolean _debug, boolean _optimize) {
+		
+		// Generating code
+		TraceManager.addDev("\n\n\n**** Generating simulation code from mapping...");
+		TML2MappingSystemC map = new TML2MappingSystemC(_tmlmap);
+		try {
+			map.generateSystemC(_debug, _optimize);
+			map.saveFile(pathToSimulator, "appmodel");
+		} catch (Exception e) {
+			TraceManager.addDev("SystemC generation failed: " + e + " msg=" + e.getMessage());
+			e.printStackTrace();
+			return -1;
+		}
+		
+		// Compiling the code
+		makeCommand(simulationCompilationCommand + " " + pathToSimulator);
+		
+		return 0;
+	}
+	
 	String prepareCommand() {
 		String cmd;
 		
@@ -790,25 +811,41 @@ public class DSEConfiguration implements Runnable  {
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Printing all results");
 		
-		if (results == null) {
-			TraceManager.addDev("No results");
-			return -1;
-		}
-		
-		// Must compute results
-		//results.computeResults();
-		
-		//TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
-		
-		// Saving to file
-		try {
-			TraceManager.addDev(results.getAllExplanationHeader());
-			TraceManager.addDev("----\n" + results.getAllResults());
-			FileUtils.saveFile(pathToResults + "allresults" + resultsID + ".txt", results.getAllExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getAllResults());
-		} catch (Exception e){
-			TraceManager.addDev("Error when saving results file" + e.getMessage());
-			return -1;
+		if (resultsDSE != null) {
+			int cpt = resultsID - resultsDSE.size();
+			for(DSESimulationResult res: resultsDSE) {
+				try {
+					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", res.getAllExplanationHeader() + "\n" + res.getAllComments() + "\n" + res.getAllResults());
+				} catch (Exception e){
+					TraceManager.addDev("Error when saving results file" + e.getMessage());
+					return -1;
+					
+				}
+				cpt ++;
+			}
+		} else {
 			
+			if (results == null) {
+				TraceManager.addDev("No results");
+				return -1;
+			}
+			
+			
+			// Must compute results
+			//results.computeResults();
+			
+			//TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
+			
+			// Saving to file
+			try {
+				TraceManager.addDev(results.getAllExplanationHeader());
+				TraceManager.addDev("----\n" + results.getAllResults());
+				FileUtils.saveFile(pathToResults + "allresults" + resultsID + ".txt", results.getAllExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getAllResults());
+			} catch (Exception e){
+				TraceManager.addDev("Error when saving results file" + e.getMessage());
+				return -1;
+				
+			}
 		}
 		return 0;
 	}
@@ -839,6 +876,10 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	public int resetResults(String _arguments) {
+		if (results == null) {
+			return 0;
+		}
+		
 		// Reinit results
 		results.reset();
 		
@@ -928,6 +969,23 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	public int runDSE(String _arguments, boolean _debug, boolean _optimize) {
+		int nbOfSimulations;
+	
+		if (nbOfSimulationsPerMapping < 1) {
+			nbOfSimulationsPerMapping = 1;
+		}
+		
+		// Checking simulation Elements
+		int ret = checkingSimulationElements();
+		if (ret != 0) {
+			return ret;
+		}
+		
+		// Checking simulation Elements
+		ret = checkingSimulationElements();
+		if (ret != 0) {
+			return ret;
+		}
 		
 		// Must generate all possible mappings.
 		// First : load the task model
@@ -946,10 +1004,56 @@ public class DSEConfiguration implements Runnable  {
 			TraceManager.addDev("Mapping failure");
 		}
 		
-		// for each maping, generate the simulation code
-				// Perform the simulations
-				// Save results
+		int cpt = 0;
+		for(TMLMapping tmla: mappings) {
+			TraceManager.addDev("map " + cpt + ": " + tmla.getSummaryTaskMapping());
+			cpt ++;
+		}
+		
+		// For each maping, generate the simulation code
+		cpt = 0;
+		if (recordResults) {
+			if (resultsDSE == null) {
+				resultsDSE = new Vector<DSESimulationResult>();
+			}
+		}
+		for(TMLMapping tmla: mappings) {
+			TraceManager.addDev("Handling mapping #" + cpt);
+			cpt ++;
+			
+			if (generateAndCompileMappingCode(tmla, _debug, _optimize)  >= 0) {
+				if (recordResults) {
+					results = new DSESimulationResult();
+					resultsID ++;
+				}
 				
+				System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
+				
+				resultsDSE.add(results);
+				nbOfSimulations = nbOfSimulationsPerMapping;
+				// Executing the simulation
+				String cmd = prepareCommand();
+				String tmp;
+				
+				long t0 = System.currentTimeMillis();
+				
+				while(nbOfSimulations >0) {
+					tmp = putSimulationNbInCommand(cmd, simulationID);
+					TraceManager.addDev("Executing: " + tmp);
+					makeCommand(tmp);
+					
+					if (recordResults) {
+						if (loadSimulationResult(simulationID) <0) {
+							return -1;
+						}
+					}
+					simulationID ++;
+					nbOfSimulations --;
+				}
+			} else {
+				return -1;
+			}
+		}	
 		return 0;
 	}
 	
@@ -959,7 +1063,7 @@ public class DSEConfiguration implements Runnable  {
         //PrintStream out = null;
         
         try {
-            TraceManager.addDev("Going to start command " + cmd);
+            //TraceManager.addDev("Going to start command " + cmd);
 			
 			ProcessBuilder pb = new ProcessBuilder(constructCommandList(cmd));
 			Map<String, String> env = pb.environment();
@@ -995,13 +1099,13 @@ public class DSEConfiguration implements Runnable  {
 		boolean inQuote0 = false;
 		boolean inQuote1 = false;
 		
-		TraceManager.addDev("Making list from command : " + _cmd);
+		//TraceManager.addDev("Making list from command : " + _cmd);
 		
 		for(int i=0; i<_cmd.length(); i++) {
 			c = _cmd.charAt(i);
 			
 			if ((c == ' ') && (!inQuote0) && (!inQuote1)){
-				TraceManager.addDev("Adding " + current);
+				//TraceManager.addDev("Adding " + current);
 				list.add(current);
 				current = "";
 			} else if (c == '\'') {
@@ -1016,10 +1120,10 @@ public class DSEConfiguration implements Runnable  {
 		
 		if (current.length() > 0) {
 			list.add(current);
-			TraceManager.addDev("Adding " + current);
+			//TraceManager.addDev("Adding " + current);
 		}
 		
-		TraceManager.addDev("List done\n");
+		//TraceManager.addDev("List done\n");
 		
 		return (List)list;
 		
@@ -1056,7 +1160,6 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	public int loadSimulationResult(int id) {
-		
 		results.loadResultFromXMLFile(pathToResults + "benchmark" + id + ".xml");
 		
 		return 0;
@@ -1089,11 +1192,11 @@ public class DSEConfiguration implements Runnable  {
 		for(int cpt=min; cpt<max; cpt++) {
 			dseID = 0;
 			TraceManager.addDev("Generating mapping for nb of cpu = " + cpt);
-			generateMappings(tmlm, maps, cpt);
+			generateMappings(_tmlm, maps, cpt);
 			TraceManager.addDev("Mappings generated for nb of cpu = " + cpt);
 		}
 		
-		TraceManager.addDev("Mapping generated");
+		TraceManager.addDev("Mapping generated: " + maps.size());
 		
 		return maps;
 	}
@@ -1139,32 +1242,44 @@ public class DSEConfiguration implements Runnable  {
 		TMLTask t = remainingTasks.get(0);
 		remainingTasks.remove(t);
 		
+		TraceManager.addDev("Mapping task: " + t.getName());
+		
 		// Two solutions: either it is mapped on the first free CPU, or it is mapped on an already occupied CPU
 		// Memo: all cpus must have at least on task at the end
 		
-		// Can it be mapped on non a free CPU?
-		if (nbOfFreeCPUs(cpus_tasks) >= remainingTasks.size()) {
+		// Must it be mapped a free CPU?
+		if (nbOfFreeCPUs(cpus_tasks) >= (remainingTasks.size()+1)) {
 			// The task must be mapped on a free CPU
 			// Search for the first free CPU
+			TraceManager.addDev("The following task must be mapped on a free CPU: " + t.getName());
 			for(int i=0; i<cpus_tasks.length; i++) {
 				if (cpus_tasks[i].getNbOfTasks() == 0) {
 					cpus_tasks[i].addTask(t);
 					computeMappings(remainingTasks, cpus_tasks, maps, _tmlm);
+					cpus_tasks[i].removeTask(t);
+					remainingTasks.add(t);
 					return;
 				}
 			}
+			TraceManager.addDev("Task could not be mapped on a free CPU: " + t.getName());
 		}
 		
+		TraceManager.addDev("Regular mapping of: " + t.getName());
 		// It can be mapped on whatever CPU, until the first free one has been met (the first free CPU is inclusive)
 		remainingTasks.remove(t);
 		for(int i=0; i<cpus_tasks.length; i++) {
 			cpus_tasks[i].addTask(t);
+			TraceManager.addDev("Mapping " + t.getName() + " on CPU #" + i);
 			computeMappings(remainingTasks, cpus_tasks, maps, _tmlm);
+			TraceManager.addDev("Removing  " + t.getName() + " from CPU #" + i);
 			cpus_tasks[i].removeTask(t);
 			if (cpus_tasks[i].getNbOfTasks() == 0) {
+				TraceManager.addDev("Stopping mapping since  of" + t.getName() + " since CPU #" + i +  " is free");
+				remainingTasks.add(t);
 				return;
 			}
 		}
+		remainingTasks.add(t);
 		
 	}
 	
@@ -1174,7 +1289,7 @@ public class DSEConfiguration implements Runnable  {
 		HwCPU cpu;
 		
 		for(int i=0; i<cpus_tasks.length; i++) {
-			cpu = new HwCPU("CPU__" + cpus_tasks.length + "_" + dseID + "_" + i);
+			cpu = new HwCPU("CPU__" + (cpus_tasks.length + 1) + "_" + dseID + "_" + (i+1));
 			tmla.addHwNode(cpu);
 			for(TMLTask t: cpus_tasks[i].getTasks()) {
 				tmap.addTaskToHwExecutionNode(t, cpu);
