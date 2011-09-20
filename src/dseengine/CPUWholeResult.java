@@ -93,17 +93,23 @@ public class CPUWholeResult  {
 		BusContentionWholeResult bcwr;
 		
 		if (rescpu.contentions != null) {
+			TraceManager.addDev("Working on contentions");
 			for(BusContentionResult ct: rescpu.contentions) {
+				TraceManager.addDev("One contention");
 				o = contentionTable.get(ct.id);
 				if (o == null) {
 					bcwr = new BusContentionWholeResult(ct);
 					contentionTable.put(ct.id, bcwr);
 					addContentionOnBus(bcwr);
+					TraceManager.addDev("adding contention");
 				} else {
 					bcwr = (BusContentionWholeResult)o;
 					bcwr.updateResults(ct);
+					TraceManager.addDev("updating contention");
 				}
 			}
+		} else {
+			TraceManager.addDev("null contention");
 		}
 	}
 	
@@ -125,6 +131,51 @@ public class CPUWholeResult  {
 		}
 		
 		return sb.toString();
+	}
+	
+	public double getAverageBusContention() {
+		double average = 0;
+		
+		if (contentions == null) {
+			TraceManager.addDev("No contention");
+			return 0;
+		}
+		
+		for(BusContentionWholeResult wbc: contentions) {
+			average += wbc.averageContention;
+		}
+		
+		return average / contentions.size();
+	}    
+	
+	public long getMaxBusContention() {
+		long max = 0;
+		
+		if (contentions == null) {
+			TraceManager.addDev("No contention");
+			return 0;
+		}
+		
+		for(BusContentionWholeResult wbc: contentions) {
+			max = Math.max(max, wbc.maxContention);
+		}
+		
+		return max;
+	}
+	
+	public long getMinBusContention() {
+		long min = 10000000;
+		
+		if (contentions == null) {
+			TraceManager.addDev("No contention");
+			return 0;
+		}
+		
+		for(BusContentionWholeResult wbc: contentions) {
+			min = Math.min(min, wbc.minContention);
+		}
+		
+		return min;
 	}
 	
 } // Class CPUWholeResult

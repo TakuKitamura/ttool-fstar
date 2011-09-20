@@ -77,9 +77,9 @@ public class CPUResult  {
 	public String toStringResult() {
 		StringBuffer sb = new StringBuffer("CPU " + id + " " + name + " " + utilization);
 		if (contentions != null) {
-			sb.append(" ");
+			//sb.append("");
 			for(BusContentionResult bcr: contentions) {
-				sb.append(bcr.toStringResult(id, name));
+				sb.append("\n" + bcr.toStringResult(id, name));
 			}
 		}
 		return sb.toString();

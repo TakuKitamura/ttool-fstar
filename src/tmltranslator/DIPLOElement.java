@@ -61,6 +61,10 @@ public class DIPLOElement {
 		return myID;
     }
 	
+	public static void setGeneralID(int _IDValue) {
+		ID = _IDValue;
+	}
+	
 	public static void resetID() {
 		TraceManager.addDev("Reset DIPLOID");
 		ID = 0;

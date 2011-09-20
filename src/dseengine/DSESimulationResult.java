@@ -560,6 +560,101 @@ public class DSESimulationResult  {
 		return s;
 	}
 	
+	public double getAverageCPUUsage() {
+		double average = 0;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			average += wcpu.averageUtilization;
+		}
+		
+		return average / wcpus.size();
+	}
+	
+	public double getMaxCPUUsage() {
+		double max = 0;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			max = Math.max(max, wcpu.maxUtilization);
+		}
+		
+		return max;
+	}
+	
+	public double getMinCPUUsage() {
+		double min = 1.1;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			min= Math.min(min, wcpu.minUtilization);
+		}
+		
+		return min;
+	}
+	
+	// Bus
+	
+	public double getAverageBusUsage() {
+		double average = 0;
+		
+		for(BusWholeResult wbus: wbusses) {
+			average += wbus.averageUtilization;
+		}
+		
+		return average / busses.size();
+	}
+	
+	public double getMaxBusUsage() {
+		double max = 0;
+		
+		for(BusWholeResult wbus: wbusses) {
+			max = Math.max(max, wbus.maxUtilization);
+		}
+		
+		return max;
+	}
+	
+	public double getMinBusUsage() {
+		double min = 1.1;
+		
+		for(BusWholeResult wbus: wbusses) {
+			min= Math.min(min, wbus.minUtilization);
+		}
+		
+		return min;
+	}
+	
+	// Bus contention
+	
+	
+	public double getAverageBusContention() {
+		double average = 0;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			average += wcpu.getAverageBusContention();
+		}
+		
+		return average / wcpus.size();
+	}
+	
+	public long getMaxBusContention() {
+		long max = 0;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			max = Math.max(max, wcpu.getMaxBusContention());
+		}
+		
+		return max;
+	}
+	
+	public long getMinBusContention() {
+		long min = 0;
+		
+		for(CPUWholeResult wcpu: wcpus) {
+			min= Math.min(min, wcpu.getMinBusContention());
+		}
+		
+		return min;
+	}
+	
 	
 	
 	

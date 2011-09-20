@@ -122,7 +122,7 @@ public class DSEConfiguration implements Runnable  {
 	private int nbOfSimulationsPerMapping = 1;
 	private TMLModeling taskModel = null;
 	private Vector<TMLMapping> mappings;
-	private Vector<DSESimulationResult> resultsDSE; 
+	private DSEMappingSimulationResults dsemapresults;
 	
 	
 	
@@ -810,12 +810,18 @@ public class DSEConfiguration implements Runnable  {
 	
 	public int printAllResults(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Printing all results");
+		String sres;
+		DSESimulationResult res;
 		
-		if (resultsDSE != null) {
-			int cpt = resultsID - resultsDSE.size();
-			for(DSESimulationResult res: resultsDSE) {
+		if (dsemapresults != null) {
+			int cpt = resultsID - dsemapresults.nbOfElements();
+			for(int i=0; i<dsemapresults.nbOfElements(); i++) {
+				res = dsemapresults.getResults(i);
 				try {
-					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", res.getAllExplanationHeader() + "\n" + res.getAllComments() + "\n" + res.getAllResults());
+					sres =  res.getAllExplanationHeader() + "\n";
+					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
+					sres += res.getAllComments() + "\n" + res.getAllResults();
+					FileUtils.saveFile(pathToResults + "alldseresults_mapping" + cpt + ".txt", sres);
 				} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
 					return -1;
@@ -823,6 +829,10 @@ public class DSEConfiguration implements Runnable  {
 				}
 				cpt ++;
 			}
+			
+			
+			
+			
 		} else {
 			
 			if (results == null) {
@@ -853,26 +863,94 @@ public class DSEConfiguration implements Runnable  {
 	public int printResultsSummary(String _arguments, boolean _debug, boolean _optimize) {
 		TraceManager.addDev("Computing results");
 		
-		if (results == null) {
-			TraceManager.addDev("No results");
-			return -1;
-		}
+		String sres;
+		DSESimulationResult res;
 		
-		// Must compute results
-		results.computeResults();
-		
-		TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
-		
-		// Saving to file
-		try {
-			FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", results.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
-		} catch (Exception e){
-			TraceManager.addDev("Error when saving results file");
-			return -1;
+		if (dsemapresults != null) {
+			int cpt = resultsID - dsemapresults.nbOfElements();
+			dsemapresults.computeSummaryResult();
+			for(int i=0; i<dsemapresults.nbOfElements(); i++) {
+				
+				res = dsemapresults.getResults(i);
+				try {
+					sres =  res.getAllExplanationHeader() + "\n";
+					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
+					sres += res.getAllComments() + "\n" + res.getWholeResults();
+					FileUtils.saveFile(pathToResults + "summary_dseresults_ofmapping" + cpt + ".txt", sres);
+				} catch (Exception e){
+					TraceManager.addDev("Error when saving results file" + e.getMessage());
+					return -1;
+					
+				}
+				cpt ++;
+			}
+			StringBuffer sb = new StringBuffer("# Overall results\n");
+			sb.append("#Mappings:\n" + dsemapresults.getDescriptionOfAllMappings() + "\n\n");
 			
+			
+			sb.append("\nCPUs:\n");
+			sb.append("Mapping with Highest min CPU Usage: " + dsemapresults.getMappingWithHighestMinCPUUsage() + "\n");
+			sb.append("Mapping with Lowest min CPU Usage: " + dsemapresults.getMappingWithLowestMinCPUUsage() + "\n");
+			
+			sb.append("Mapping with Highest Average CPU Usage: " + dsemapresults.getMappingWithHighestAverageCPUUsage() + "\n");
+			sb.append("Mapping with Lowest Average CPU Usage: " + dsemapresults.getMappingWithLowestAverageCPUUsage() + "\n");
+			
+			sb.append("Mapping with Highest max CPU Usage: " + dsemapresults.getMappingWithHighestMaxCPUUsage() + "\n");
+			sb.append("Mapping with Lowest max CPU Usage: " + dsemapresults.getMappingWithLowestMaxCPUUsage() + "\n");
+			
+			
+			sb.append("\nBus:\n");
+			sb.append("Mapping with Highest min Bus Usage: " + dsemapresults.getMappingWithHighestMinBusUsage() + "\n");
+			sb.append("Mapping with Lowest min Bus Usage: " + dsemapresults.getMappingWithLowestMinBusUsage() + "\n");
+			
+			sb.append("Mapping with Highest Average Bus Usage: " + dsemapresults.getMappingWithHighestAverageBusUsage() + "\n");
+			sb.append("Mapping with Lowest Average Bus Usage: " + dsemapresults.getMappingWithLowestAverageCPUUsage() + "\n");
+			
+			sb.append("Mapping with Highest max Bus Usage: " + dsemapresults.getMappingWithHighestMaxBusUsage() + "\n");
+			sb.append("Mapping with Lowest max Bus Usage: " + dsemapresults.getMappingWithLowestMaxBusUsage() + "\n");
+			
+			sb.append("\nContentions:\n");
+			sb.append("Mapping with Highest min bus contention: " + dsemapresults.getMappingWithHighestMinBusContention() + "\n");
+			sb.append("Mapping with Lowest min Bus contention: " + dsemapresults.getMappingWithLowestMinBusContention() + "\n");
+			
+			sb.append("Mapping with Highest Average Bus contention: " + dsemapresults.getMappingWithHighestAverageBusUsage() + "\n");
+			sb.append("Mapping with Lowest Average Bus contention: " + dsemapresults.getMappingWithLowestAverageCPUUsage() + "\n");
+			
+			sb.append("Mapping with Highest max Bus contention: " + dsemapresults.getMappingWithHighestMaxBusUsage() + "\n");
+			sb.append("Mapping with Lowest max Bus contention: " + dsemapresults.getMappingWithLowestMaxBusUsage() + "\n");
+			
+			try {
+				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".txt", sb.toString());
+			} catch (Exception e){
+					TraceManager.addDev("Error when saving results file" + e.getMessage());
+					return -1;
+					
+				}
+			return 0;
+			
+		} else {
+			
+			if (results == null) {
+				TraceManager.addDev("No results");
+				return -1;
+			}
+			
+			// Must compute results
+			results.computeResults();
+			
+			TraceManager.addDev("Results: #" + resultsID + "\n" +  results.getWholeResults());
+			
+			// Saving to file
+			try {
+				FileUtils.saveFile(pathToResults + "summary" + resultsID + ".txt", results.getExplanationHeader() + "\n" + results.getAllComments() + "\n" + results.getWholeResults());
+			} catch (Exception e){
+				TraceManager.addDev("Error when saving results file");
+				return -1;
+				
+			}
+			
+			return 0;
 		}
-		
-		return 0;
 	}
 	
 	public int resetResults(String _arguments) {
@@ -1005,16 +1083,16 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		int cpt = 0;
-		for(TMLMapping tmla: mappings) {
+		/*for(TMLMapping tmla: mappings) {
 			TraceManager.addDev("map " + cpt + ": " + tmla.getSummaryTaskMapping());
 			cpt ++;
-		}
+		}*/
 		
 		// For each maping, generate the simulation code
 		cpt = 0;
 		if (recordResults) {
-			if (resultsDSE == null) {
-				resultsDSE = new Vector<DSESimulationResult>();
+			if (dsemapresults == null) {
+				dsemapresults = new DSEMappingSimulationResults();
 			}
 		}
 		for(TMLMapping tmla: mappings) {
@@ -1027,9 +1105,9 @@ public class DSEConfiguration implements Runnable  {
 					resultsID ++;
 				}
 				
-				System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
+				//System.out.println("After Current TML Mapping: " + tmla.getSummaryTaskMapping());
 				
-				resultsDSE.add(results);
+				dsemapresults.addElement("Mapping #" + (cpt-1), results, tmla);
 				nbOfSimulations = nbOfSimulationsPerMapping;
 				// Executing the simulation
 				String cmd = prepareCommand();
@@ -1286,6 +1364,8 @@ public class DSEConfiguration implements Runnable  {
 	private void makeMapping(CPUWithTasks[] cpus_tasks,  Vector<TMLMapping> maps, TMLModeling _tmlm) {
 		TMLArchitecture tmla = new TMLArchitecture();
 		TMLMapping tmap = new TMLMapping(_tmlm, tmla, true);
+		DIPLOElement.setGeneralID(_tmlm.computeMaxID() + 1);
+		
 		HwCPU cpu;
 		
 		for(int i=0; i<cpus_tasks.length; i++) {
