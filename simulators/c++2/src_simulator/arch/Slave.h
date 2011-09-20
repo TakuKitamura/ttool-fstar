@@ -74,6 +74,7 @@ public:
 #ifdef LISTENERS_ENABLED
 		NOTIFY_TRANS_EXECUTED(iTrans);
 #endif
+		std::cout << "******************Priiiiiiiiiiiiiint\n";
 	}
 	///Returns the unique ID of the Slave
 	/**
