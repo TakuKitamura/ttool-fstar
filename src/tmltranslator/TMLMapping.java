@@ -515,4 +515,8 @@ public class TMLMapping {
 		return sb.toString();
 		
 	}
+	
+	public TMLMapping cloneMappingArchitecture() {
+		return null;
+	}
 }

@@ -114,11 +114,13 @@ public class DSEConfiguration implements Runnable  {
 	
 	private int simulationMaxCycles = -1;
 	
-	private int nbOfCores = 1;
+	private int nbOfSimulationThreads = 1;
 	
 	// DSE
 	private int minNbOfCPUs = 1;
 	private int maxNbOfCPUs = 2;
+	private int minNbOfCoresPerCPU = 1;
+	private int maxNbOfCoresPerCPU = 2;
 	private int nbOfSimulationsPerMapping = 1;
 	private TMLModeling taskModel = null;
 	private Vector<TMLMapping> mappings;
@@ -130,8 +132,9 @@ public class DSEConfiguration implements Runnable  {
 	
 	private String simulationCmd;
 	private int nbOfRemainingSimulation;
+	private int totalNbOfSimulations;
 	
-	
+	private int progression = 0;
 	
 	//private int nbOfSimulations;
 	
@@ -280,16 +283,16 @@ public class DSEConfiguration implements Runnable  {
 		return 0;
 	}
 	
-	public int setNbOfCores(String _value) {
+	public int setNbOfSimulationThreads(String _value) {
 		try {
-			nbOfCores = Integer.decode(_value).intValue();
+			nbOfSimulationThreads = Integer.decode(_value).intValue();
 		} catch (Exception e) {
 			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
 			return -1;
 		}
 		
-		if (nbOfCores < 1) {
-			nbOfCores = 1;
+		if (nbOfSimulationThreads < 1) {
+			nbOfSimulationThreads = 1;
 			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
 			return -1;
 		}
@@ -324,6 +327,40 @@ public class DSEConfiguration implements Runnable  {
 		
 		if (maxNbOfCPUs < 1) {
 			maxNbOfCPUs = 1;
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	public int setMinNbOfCoresPerCPU(String _value) {
+		try {
+			minNbOfCoresPerCPU = Integer.decode(_value).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		if (minNbOfCoresPerCPU < 1) {
+			minNbOfCoresPerCPU = 1;
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		return 0;
+	}
+	
+	public int setMaxNbOfCoresPerCPU(String _value) {
+		try {
+			maxNbOfCoresPerCPU = Integer.decode(_value).intValue();
+		} catch (Exception e) {
+			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
+			return -1;
+		}
+		
+		if (maxNbOfCoresPerCPU < 1) {
+			maxNbOfCoresPerCPU = 1;
 			errorMessage = INVALID_ARGUMENT_NATURAL_VALUE;
 			return -1;
 		}
@@ -641,7 +678,6 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	public int runSimulation(String _arguments, boolean _debug, boolean _optimize) {
-		
 		// Checking for valid arguments
 		int nbOfSimulations;
 		try {
@@ -677,9 +713,15 @@ public class DSEConfiguration implements Runnable  {
 		String tmp;
 		
 		long t0 = System.currentTimeMillis();
+		double t;
+		double r;
+		t = nbconfigured;
 		
 		while(nbOfSimulations >0) {
-			tmp = putSimulationNbInCommand(cmd, simulationID); 
+			tmp = putSimulationNbInCommand(cmd, simulationID);
+			r = nbOfSimulations;
+			progression = (int)(((t-r)/t)*100);
+			
 			makeCommand(tmp);
 			
 			if (recordResults) {
@@ -717,6 +759,7 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		int nbconfigured = nbOfRemainingSimulation;
+		totalNbOfSimulations = nbconfigured;
 		
 		// Checking simulation Elements
 		int ret = checkingSimulationElements();
@@ -743,12 +786,12 @@ public class DSEConfiguration implements Runnable  {
 		long t0 = System.currentTimeMillis();
 		
 		Thread [] t = null;
-		int nb = nbOfCores;
+		int nb = nbOfSimulationThreads;
 		if (nb > 1) {
 			t = new Thread[nb-1];
 			while(nb > 1) {
-				t[nbOfCores-nb] = new Thread(this);
-				t[nbOfCores-nb].start();
+				t[nbOfSimulationThreads-nb] = new Thread(this);
+				t[nbOfSimulationThreads-nb].start();
 				nb --;
 			}
 		}
@@ -756,12 +799,12 @@ public class DSEConfiguration implements Runnable  {
 		run();
 		
 		// Must wait for all threads to terminate
-		if (nbOfCores > 1) {
-			nb = nbOfCores;
+		if (nbOfSimulationThreads > 1) {
+			nb = nbOfSimulationThreads;
 			
 			while(nb > 1) {
 				try {
-					t[nbOfCores-nb].join();
+					t[nbOfSimulationThreads-nb].join();
 					nb --;
 				} catch (Exception e) {
 				}
@@ -799,6 +842,12 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	private synchronized int hasRemainingSimulations() {
+		double total = (double)totalNbOfSimulations;
+		double remain = (double)nbOfRemainingSimulation;
+		progression = (int)(((total - remain)/total)*100);
+		
+		//System.out.println("progression = " + progression + " total=" + total +  " remain=" + remain);
+		
 		if (nbOfRemainingSimulation == 0) {
 			return 0;
 		}
@@ -1095,8 +1144,11 @@ public class DSEConfiguration implements Runnable  {
 				dsemapresults = new DSEMappingSimulationResults();
 			}
 		}
+		
 		for(TMLMapping tmla: mappings) {
 			TraceManager.addDev("Handling mapping #" + cpt);
+			progression = (int)(cpt * 100 / (mappings.size()));
+			
 			cpt ++;
 			
 			if (generateAndCompileMappingCode(tmla, _debug, _optimize)  >= 0) {
@@ -1274,6 +1326,8 @@ public class DSEConfiguration implements Runnable  {
 			TraceManager.addDev("Mappings generated for nb of cpu = " + cpt);
 		}
 		
+		computeCoresOfMappings(maps);
+		
 		TraceManager.addDev("Mapping generated: " + maps.size());
 		
 		return maps;
@@ -1304,6 +1358,8 @@ public class DSEConfiguration implements Runnable  {
 		
 		// Computing mappings
 		computeMappings(vtasks, cpus_tasks, maps, _tmlm);
+		
+
 		
 		TraceManager.addDev("Nb of computed mappings:" + maps.size());
 	}
@@ -1388,6 +1444,17 @@ public class DSEConfiguration implements Runnable  {
 			}
 		}
 		return nb;
+	}
+	
+	private void computeCoresOfMappings(Vector<TMLMapping> maps) {
+	}
+	
+	public void resetProgression() {
+		progression = 0;
+	}
+	
+	public int getProgression() {
+		return progression;
 	}
 	
 	

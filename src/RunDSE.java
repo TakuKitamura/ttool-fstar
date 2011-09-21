@@ -167,9 +167,9 @@ public class RunDSE  {
 		int ret = reader.execute();
 		
 		if (ret != DSEScriptReader.OK) {
-			System.out.println("DSE: error at line " + reader.getLineOfError());
+			System.out.println("\nDSE: error at line " + reader.getLineOfError());
 		} else {
-			System.out.println("DSE was successfully executed"); 
+			System.out.println("\nDSE was successfully executed"); 
 		}
 	
         

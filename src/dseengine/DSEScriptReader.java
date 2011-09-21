@@ -64,7 +64,7 @@ import myutil.*;
 
 //import uppaaldesc.*;
 
-public class DSEScriptReader  {
+public class DSEScriptReader implements Runnable {
 	public static final int SYNTAX_ERROR_IN_LINE = 3;
 	public static final int OK = 1;
 	public static final int FILE_ERROR = 2;
@@ -80,18 +80,27 @@ public class DSEScriptReader  {
 	"RunExplo", "SimulationMaxCycle", //12, 13
 	"RecordResults", "saveAllResults", //14, 15
 	"SimulationOutputXML", "saveResultsSummary", // 16, 17
-	"resetResults", "NbOfCores", // 18, 19
+	"resetResults", "NbOfSimulationThreads", // 18, 19
 	"RunParallelSimulation", "ShowSimulatorRawOutput", //20, 21
 	"TaskModelFile", "MinNbOfCPUs", //22, 23
 	"MaxNbOfCPUs", "NbOfSimulationsPerMapping", //24, 25
-	"runDSE"
+	"runDSE", "MinNbOfCoresPerCPU", // 26, 27
+	"MaxbOfCoresPerCPU"//28
 	};
+	
+	private static int step = 0;
+	private static String[] steps = {"-", "\\", "|", "/"};
+	private static char doneChar = '*';
+	
+	private static boolean linePrinted = false;
 	
 	private String fileName;
 	private int lineOfError;
 	
 	private boolean debug;
 	private boolean optimize;
+	
+	private DSEConfiguration config;
 
 	public  DSEScriptReader(String _fileName) {
 		fileName = _fileName;
@@ -127,11 +136,17 @@ public class DSEScriptReader  {
 		}
 		
 		
+		
 		// Read the script line by line, and execute corresponding actions
 		StringReader sr = new StringReader(scriptToExecute);
         BufferedReader br = new BufferedReader(sr);
         String s;
-		DSEConfiguration config = new DSEConfiguration();
+		config = new DSEConfiguration();
+		
+		Thread t = new Thread(this);
+		t.setDaemon(true);
+		t.start();
+		
 		int line = 0;
 		int ret;
 		
@@ -144,6 +159,7 @@ public class DSEScriptReader  {
 				} else {
 					if (s.length() > 0) {
 						TraceManager.addDev("Excuting line: " + s);
+						printLine(line, s); 
 						ret = executeLineOfScript(s, config);
 						if (ret == SYNTAX_ERROR_IN_LINE) {
 							lineOfError = line;
@@ -151,12 +167,15 @@ public class DSEScriptReader  {
 						}
 					}
 				}
+				
             }
 		} catch (Exception e) {
 			TraceManager.addDev("Exception: " + e.getMessage() + " Trace:");
 			e.printStackTrace();
+			config = null;
 			return KO;
 		}
+		config = null;
 			return OK;
 	}
 	
@@ -291,7 +310,7 @@ public class DSEScriptReader  {
 				}
 				return OK;
 			case 19:
-				if (_config.setNbOfCores(_arguments) != 0) {
+				if (_config.setNbOfSimulationThreads(_arguments) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
@@ -327,6 +346,16 @@ public class DSEScriptReader  {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;
+			case 27:
+				if (_config.setMinNbOfCoresPerCPU(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;
+			case 28:
+				if (_config.setMaxNbOfCoresPerCPU(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;	
 		}
 		
 		return KO;
@@ -373,6 +402,74 @@ public class DSEScriptReader  {
 	
 	public int getLineOfError() {
 		return lineOfError;
+	}
+	
+	public synchronized void printLine(int _line, String _command) {
+		config.resetProgression();
+			
+		if (linePrinted) {
+			System.out.print("\r");
+		} else {
+			linePrinted = true;
+		}
+		String s = "#" + _line;
+		while(s.length() < 10) {
+			s += " ";
+		}
+	
+		s += _command;
+		
+		if (s.length() > 60) {
+			s = s.substring(0, 60);
+		}
+		
+		while(s.length() < 60) {
+			s += " ";
+		}
+		
+		System.out.print(s);
+	}
+	
+	public synchronized void printProgression(int _percentage) {
+		
+		if (!linePrinted) {
+			return;
+		}
+		String s = ("\b\b\b\b\b\b\b\b\b\b\b\b|");
+		for(int i=10; i<110; i = i +10) {
+			if (i<=_percentage) {
+				s += "*";
+			} else {
+				if ((i-10) <= _percentage) {
+					s += steps[step%4];
+				} else {
+					s += " ";
+				}
+			}
+		}
+		s += "|";
+		System.out.print(s);
+		step ++;
+		
+	}
+	
+	public void run() {
+		int progression;
+		//System.out.println("Running progression");
+		while(config != null) {
+			try  {
+				Thread.currentThread().sleep(50);
+			} catch (InterruptedException ie) {
+			}
+			try {
+				if (config != null) {
+					progression = config.getProgression();
+					//System.out.println("Printing progression= " + progression);
+					printProgression(progression);
+				}
+			} catch (Exception e) {
+			}
+		}
 	}
 	
 } // Class DSEScriptReader

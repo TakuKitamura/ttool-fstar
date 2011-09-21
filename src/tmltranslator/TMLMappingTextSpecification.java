@@ -392,7 +392,7 @@ public class TMLMappingTextSpecification {
 		
 		tmlmap = new TMLMapping(tmlm, tarchi, false);
 		
-		System.out.println("Compiling mapping...");
+		TraceManager.addDev("Compiling mapping...");
 		
 		browseCode();
 		
@@ -416,12 +416,12 @@ public class TMLMappingTextSpecification {
 		
 		spectml = spec.substring(index0 + 7, index1);
 		
-		System.out.println("Compiling TML...");
+		TraceManager.addDev("Compiling TML...");
 		
 		boolean ret = t.makeTMLModeling(spectml);
 		//errors.addAll(t.getErrors());
 		//warnings.addAll(t.getWarnings());
-		System.out.println(t.printSummary());
+		TraceManager.addDev(t.printSummary());
 		
 		if (!ret) {
 			return null;
@@ -446,12 +446,12 @@ public class TMLMappingTextSpecification {
 		
 		spectml = spec.substring(index0 + 8, index1);
 		
-		System.out.println("Compiling architecture...");
+		TraceManager.addDev("Compiling architecture...");
 		
 		boolean ret = t.makeTMLArchitecture(spectml);
 		//errors.addAll(t.getErrors());
 		//warnings.addAll(t.getWarnings());
-		System.out.println(t.printSummary());
+		TraceManager.addDev(t.printSummary());
 		
 		if (!ret) {
 			return null;
@@ -717,7 +717,7 @@ public class TMLMappingTextSpecification {
 				break;
 			case 5:
 				if (!(_split[_parameter].equals("="))) {
-					System.out.println("Error of =");
+					//System.out.println("Error of =");
 					err = true;
 				}
 				break;

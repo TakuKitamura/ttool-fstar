@@ -373,7 +373,7 @@ public class TMLArchiTextSpecification {
 				return -1;
 			}
 			
-			System.out.println("Master clock frequency = " + value);
+			//System.out.println("Master clock frequency = " + value);
 			tmla.setMasterClockFrequency(value);
 			
 		// NODE
