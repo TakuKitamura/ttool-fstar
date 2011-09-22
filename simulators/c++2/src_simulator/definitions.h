@@ -144,6 +144,8 @@ using std::max;
 #define TAG_MSGc "</msg>"
 #define TAG_TIMEo "<simtime>"
 #define TAG_TIMEc "</simtime>"
+#define TAG_SIMDURo "<simdur>"
+#define TAG_SIMDURc "</simdur>"
 #define TAG_CYCLESo "<simcycles>"
 #define TAG_CYCLESc "</simcycles>"
 #define TAG_TASKo "<task"

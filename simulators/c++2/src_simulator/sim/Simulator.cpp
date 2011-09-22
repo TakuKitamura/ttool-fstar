@@ -340,8 +340,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	TMLTask* depTask;
 	SchedulableDevice* cpuLET;
 	CPU* depCPU;
-	struct timeval aBegin,aEnd;
-	gettimeofday(&aBegin,NULL);
 #ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: first schedule" << std::endl;
 #endif
@@ -476,8 +474,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 		_shortRunTime = min(_shortRunTime, SchedulableDevice::getSimulatedTime());
 		//_simComp->showTaskStates();
 	}
-	gettimeofday(&aEnd,NULL);
-	//std::cout << "The simulation took " << getTimeDiff(aBegin,aEnd) << "usec.\n";
 	return (aSimCompleted);
 }
 
@@ -616,6 +612,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 			std::cout << "QUIT SIMULATION"  << std::endl;
 			break;
 		case 1:{
+			struct timeval aBegin,aEnd;
+			gettimeofday(&aBegin,NULL);
 			_busy=true;
 			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << /*TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl<< */ TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 			if (_replyToServer) _syncInfo->_server->sendReply(anAckMsg.str());
@@ -839,6 +837,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 					aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
 					anErrorCode=3;
 			}
+			gettimeofday(&aEnd,NULL);
+			aGlobMsg << TAG_SIMDURo << getTimeDiff(aBegin,aEnd) << TAG_SIMDURc << std::endl;
 			//std::cout << "Before sim\n";
 			if (anErrorCode==0){
 				//aGlobMsg << TAG_CURRTASKo << oLastTrans->getCommand()->getTask()->getID() << TAG_CURRTASKc;
