@@ -519,6 +519,138 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
+	public int getMappingWithHighestMinSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		long value = 0;
+		long valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getMinSimulationDuration();
+			if (valuetmp > value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+	public int getMappingWithLowestMinSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		long value = Long.MAX_VALUE;
+		long valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getMinSimulationDuration();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+	public int getMappingWithHighestAverageSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		double value = 0;
+		double valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAverageSimulationDuration();
+			if (valuetmp > value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+	public int getMappingWithLowestAverageSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		double value = Long.MAX_VALUE;
+		double valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getAverageSimulationDuration();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+	public int getMappingWithHighestMaxSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		long value = 0;
+		long valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getMaxSimulationDuration();
+			if (valuetmp > value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
+	public int getMappingWithLowestMaxSimulationDuration() {
+		if (results.size() == 0) {
+			return -1;
+		}
+		
+		int currentIndex = 0;
+		int index = 0;
+		long value = Long.MAX_VALUE;
+		long valuetmp;
+		
+		for(DSESimulationResult dserr: results) {
+			valuetmp = dserr.getMaxSimulationDuration();
+			if (valuetmp < value) {
+				value = valuetmp;
+				index = currentIndex;
+			}
+			currentIndex ++;
+		}
+		
+		return index;
+	}
+	
 	
 	
 	

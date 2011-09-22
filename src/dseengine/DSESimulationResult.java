@@ -63,16 +63,20 @@ public class DSESimulationResult  {
 	
 	protected static final String SIMULATION_GLOBAL = "global";
 	protected static final String SIMULATION_HEADER = "siminfo";
+	protected static final String SIMULATION_DURATION = "simdur";
 	protected static final String SIMULATION_CPU = "cpu";
 	protected static final String SIMULATION_BUS = "bus";
 	protected static final String SIMULATION_TASK = "task";
 	
 	private Vector<String> comments;
 	
+	private Vector<Long> simulationDurations;
+	
 	private Vector<CPUResult> cpus;
 	private Vector<BusResult> busses;
 	private Vector<TaskResult> tasks;
 	
+	private SimulationDurationWholeResult sdwr;
 	private Vector<CPUWholeResult> wcpus;
 	private Vector<BusWholeResult> wbusses;
 	private Vector<TaskWholeResult> wtasks;
@@ -86,6 +90,7 @@ public class DSESimulationResult  {
 		busses = new Vector<BusResult>();
 		tasks = new Vector<TaskResult>();
 		comments = new Vector<String>();
+		simulationDurations = new Vector<Long>();
 	}
 	
 	public void addComment(String _comment) {
@@ -254,6 +259,7 @@ public class DSESimulationResult  {
 		String busname;
 		String busid;
 		String state;
+		String simdur;
 		
 		int k, l;
 		
@@ -273,6 +279,12 @@ public class DSESimulationResult  {
 					//TraceManager.addDev("Found tag tag:" + elt.getTagName());
 					
 					// Status
+					if (elt.getTagName().compareTo(SIMULATION_DURATION) == 0) {
+						simdur = elt.getTextContent();
+						//System.out.println("Simulation duration=" + simdur);
+						simulationDurations.add(new Long(simdur));
+					}
+					
 					if (elt.getTagName().compareTo(SIMULATION_CPU) == 0) {
 						id = null;
 						name = null;
@@ -444,6 +456,15 @@ public class DSESimulationResult  {
 		BusWholeResult buswr;
 		TaskWholeResult taskwr;
 		
+		// Durations
+		for(Long l: simulationDurations) {
+			if (sdwr == null) {
+				sdwr = new SimulationDurationWholeResult(l.longValue());
+			} else {
+				sdwr.updateResults(l.longValue());
+			}
+		}
+		
 		// CPUs
 		wcpus = new Vector<CPUWholeResult>();
 		for(CPUResult rescpu: cpus) {
@@ -496,6 +517,9 @@ public class DSESimulationResult  {
 	
 	public String getWholeResults() {
 		StringBuffer sb = new StringBuffer("");
+		
+		sb.append(sdwr.toStringResult() + "\n");
+		
 		for(CPUWholeResult reswcpu: wcpus) {
 			sb.append(reswcpu.toStringResult() + "\n");
 		}
@@ -513,6 +537,11 @@ public class DSESimulationResult  {
 	
 	public String getAllResults() {
 		StringBuffer sb = new StringBuffer("");
+		
+		for(Long l: simulationDurations) {
+			sb.append("DURATION " + l + "\n");
+		}
+		
 		for(CPUResult rescpu: cpus) {
 			sb.append(rescpu.toStringResult() + "\n");
 		}
@@ -541,7 +570,8 @@ public class DSESimulationResult  {
 	
 	public static String getExplanationHeader() {
 		String s;
-		s = "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
+		s = "# Simulation duration: DURATION  nbOfResults minDuration averageDuration maxDuration\n";
+		s += "# CPUs: CPU ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
 		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName nbOfResults minContentionCycles averageContentionCycles maxContentionCycles\n";
 		s += "# Busses: BUS ID Name nbOfResults minUtilization averageUtilization maxUtilization\n";
 		s += "# Tasks: TASK ID Name nbOfResults minExecutedCycles averageExecutedCycles maxExecutedCycles nbOfRunnable nbOfRunning nbOfsuspended nbOfTerminated\n";
@@ -553,7 +583,8 @@ public class DSESimulationResult  {
 	
 	public static String getAllExplanationHeader() {
 		String s;
-		s = "# CPUs: CPU ID Name utilization\n";
+		s = "# Simulation duration: DURATION value (in us)\n";
+		s += "# CPUs: CPU ID Name utilization\n";
 		s += "# Contention on busses: CPU_BUS_CONTENTION CPUID CPUName BusID BusName contentionCycle\n";
 		s += "# Busses: BUS ID Name utilization\n";
 		s += "# Tasks: TASK ID Name NbOfExecutedCycles state\n";
@@ -653,6 +684,18 @@ public class DSESimulationResult  {
 		}
 		
 		return min;
+	}
+	
+	public double getAverageSimulationDuration() {
+		return sdwr.averageDuration;
+	}
+	
+	public long getMaxSimulationDuration() {
+		return sdwr.maxDuration;
+	}
+	
+	public long getMinSimulationDuration() {
+		return sdwr.minDuration;
 	}
 	
 	

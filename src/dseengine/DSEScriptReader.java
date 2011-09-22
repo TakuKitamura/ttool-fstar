@@ -85,7 +85,7 @@ public class DSEScriptReader implements Runnable {
 	"TaskModelFile", "MinNbOfCPUs", //22, 23
 	"MaxNbOfCPUs", "NbOfSimulationsPerMapping", //24, 25
 	"runDSE", "MinNbOfCoresPerCPU", // 26, 27
-	"MaxbOfCoresPerCPU"//28
+	"MaxNbOfCoresPerCPU"//28
 	};
 	
 	private static int step = 0;

@@ -922,7 +922,7 @@ public class DSEConfiguration implements Runnable  {
 				
 				res = dsemapresults.getResults(i);
 				try {
-					sres =  res.getAllExplanationHeader() + "\n";
+					sres =  res.getExplanationHeader() + "\n";
 					sres += "#Mapping description: " + dsemapresults.getMapping(i).getSummaryTaskMapping() + "\n";
 					sres += res.getAllComments() + "\n" + res.getWholeResults();
 					FileUtils.saveFile(pathToResults + "summary_dseresults_ofmapping" + cpt + ".txt", sres);
@@ -935,6 +935,17 @@ public class DSEConfiguration implements Runnable  {
 			}
 			StringBuffer sb = new StringBuffer("# Overall results\n");
 			sb.append("#Mappings:\n" + dsemapresults.getDescriptionOfAllMappings() + "\n\n");
+			
+			sb.append("\nSimulation duration:\n");
+			sb.append("Mapping with Highest min simulation duration: " + dsemapresults.getMappingWithHighestMinSimulationDuration() + "\n");
+			sb.append("Mapping with Lowest min simulation duration: " + dsemapresults.getMappingWithLowestMinSimulationDuration() + "\n");
+			
+			sb.append("Mapping with Highest Average simulation duration: " + dsemapresults.getMappingWithHighestAverageSimulationDuration() + "\n");
+			sb.append("Mapping with Lowest Average simulation duration: " + dsemapresults.getMappingWithLowestAverageSimulationDuration() + "\n");
+			
+			sb.append("Mapping with Highest max simulation duration: " + dsemapresults.getMappingWithHighestMaxSimulationDuration() + "\n");
+			sb.append("Mapping with Lowest max simulation duration: " + dsemapresults.getMappingWithLowestMaxSimulationDuration() + "\n");
+			
 			
 			
 			sb.append("\nCPUs:\n");
