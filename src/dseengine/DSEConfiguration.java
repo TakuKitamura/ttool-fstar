@@ -126,6 +126,11 @@ public class DSEConfiguration implements Runnable  {
 	private Vector<TMLMapping> mappings;
 	private DSEMappingSimulationResults dsemapresults;
 	
+	private int tapMinSimulationDuration = 1;
+	private int tapMaxSimulationDuration = 0;
+	private int tapAverageSimulationDuration = 1;
+	
+	private int tapArchitectureSilicaonArea = 1;
 	
 	
 	private DSESimulationResult results;
@@ -979,6 +984,8 @@ public class DSEConfiguration implements Runnable  {
 			sb.append("Mapping with Highest max Bus contention: " + dsemapresults.getMappingWithHighestMaxBusUsage() + "\n");
 			sb.append("Mapping with Lowest max Bus contention: " + dsemapresults.getMappingWithLowestMaxBusUsage() + "\n");
 			
+			rankMappings(dsemapresults);
+			
 			try {
 				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".txt", sb.toString());
 			} catch (Exception e){
@@ -1457,6 +1464,60 @@ public class DSEConfiguration implements Runnable  {
 		return nb;
 	}
 	
+	private Vector<TMLMapping> rankMappings(DSEMappingSimulationResults _dseresults) {
+		
+		// Give a grade to each mapping
+		int nb = _dseresults.getNbOfMappings();
+		int []cumulativeGrades = new int[nb];
+		
+		
+		long min = Long.MAX_VALUE;
+		int i;
+		long max = 0;
+		long value;
+		double a;
+		double b;
+		double y;
+		
+		for(i=0; i<nb; i++) {
+			cumulativeGrades[i] = 0;
+		}
+		
+		// min get a grade of 100
+		// max get a grade of 0
+		
+		if (tapMinSimulationDuration != 0) {
+			for(i=0; i<nb; i++) {
+				value = _dseresults.getMinSimulationDuration(i);
+				min = Math.min(min, value);
+				max = Math.max(max, value);
+			}
+			
+			// If min = max, no difference between mappings -> no grade to give
+			if (min != max) {
+				
+				a = 100 / (min - max);
+				b = - a * max;
+			
+				for(i=0; i<nb; i++) {
+					value = _dseresults.getMinSimulationDuration(i);
+					y = a * value + b;
+					cumulativeGrades[i] += tapMinSimulationDuration * y; 
+				}
+			}
+		}
+		
+		
+		// Printing grades
+		for(i=0; i<nb; i++) {
+			System.out.println("grade #" + i + ": " + cumulativeGrades[i]);
+		}
+		
+		return null;
+		
+		
+	}
+
 	private void computeCoresOfMappings(Vector<TMLMapping> maps) {
 	}
 	
@@ -1468,8 +1529,6 @@ public class DSEConfiguration implements Runnable  {
 		return progression;
 	}
 	
-	
-	
-	
+
 } // Class DSEConfiguration
 

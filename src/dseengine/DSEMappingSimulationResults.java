@@ -72,6 +72,10 @@ public class DSEMappingSimulationResults  {
 		reset();
 	}
 	
+	public int getNbOfMappings() {
+		return maps.size();
+	}
+	
 	public void reset() {
 		comments = new Vector<String>();
 		results = new Vector<DSESimulationResult>();
@@ -541,6 +545,8 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
+
+
 	public int getMappingWithLowestMinSimulationDuration() {
 		if (results.size() == 0) {
 			return -1;
@@ -562,6 +568,7 @@ public class DSEMappingSimulationResults  {
 		
 		return index;
 	}
+
 	
 	public int getMappingWithHighestAverageSimulationDuration() {
 		if (results.size() == 0) {
@@ -585,6 +592,7 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
+
 	public int getMappingWithLowestAverageSimulationDuration() {
 		if (results.size() == 0) {
 			return -1;
@@ -651,8 +659,12 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
+		// for ranking
+	public long getMinSimulationDuration(int index) {
+		return results.get(index).getMinSimulationDuration();
+	}
 	
 	
-	
+
 } // Class DSEMappingSimulationResults
 
