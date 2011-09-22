@@ -245,6 +245,11 @@ public:
 	\return Busy flag
 	*/
 	bool isBusy();
+	///Returns the time elapsed during simulation since the last reset
+	/**
+	\return Simulation duration
+	*/
+	inline long getSimDuration(){ return _simDuration;}
 protected:
 	///Runs the simulation
 	/**
@@ -327,5 +332,7 @@ protected:
 	unsigned int _commandCoverage;
 	///Termination flag for exploration mode;
 	bool _terminateExplore;
+	///Duration of Simulation
+	long _simDuration;
 };
 #endif

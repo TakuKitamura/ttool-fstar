@@ -59,7 +59,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 
-Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100), _terminateExplore(false){
+Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100), _terminateExplore(false), _simDuration(0){
 }
 
 Simulator::~Simulator(){
@@ -838,7 +838,8 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 					anErrorCode=3;
 			}
 			gettimeofday(&aEnd,NULL);
-			aGlobMsg << TAG_SIMDURo << getTimeDiff(aBegin,aEnd) << TAG_SIMDURc << std::endl;
+			_simDuration += getTimeDiff(aBegin,aEnd);
+			aGlobMsg << TAG_SIMDURo <<  _simDuration << TAG_SIMDURc << std::endl;
 			//std::cout << "Before sim\n";
 			if (anErrorCode==0){
 				//aGlobMsg << TAG_CURRTASKo << oLastTrans->getCommand()->getTask()->getID() << TAG_CURRTASKc;
@@ -855,6 +856,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 			_simComp->reset();
 			_simComp->resetStateHash();
 			_simTerm=false;
+			_simDuration=0;
 			aGlobMsg << TAG_MSGo << "Simulator reset" << TAG_MSGc << std::endl;
 			std::cout << "End Simulator reset." << std::endl;
 			break;

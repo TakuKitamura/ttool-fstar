@@ -149,7 +149,7 @@ void SimComponents::streamBenchmarks(std::ostream& s) const{
 		(*i)->streamBenchmarks(s);
 		s << std::endl;
 	}
-	s << TAG_GLOBALc << TAG_STARTc << std::endl;
+	s << TAG_SIMDURo << _simulator->getSimDuration() << TAG_SIMDURc << TAG_GLOBALc << TAG_STARTc << std::endl;
 }
 
 std::ostream& SimComponents::writeObject(std::ostream& s){
