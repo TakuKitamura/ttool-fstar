@@ -63,7 +63,7 @@ import javax.xml.parsers.*;
 public class DSEMappingSimulationResults  {
 	
 	public final static String HTML_TOP = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
-	public final static String HTML_HEADER = "<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"results.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" /\n<title>DSE summary</title>\n</head>\n<body>\n";
+	public final static String HTML_HEADER = "<head>\n<title>DSE summary</title>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"results.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" /\n</head>\n<body>\n";
 	public final static String HTML_FOOTER = "</body>\n</html>\n";
 	private Vector<String> comments;
 	private Vector<DSESimulationResult> results;
@@ -857,63 +857,130 @@ public class DSEMappingSimulationResults  {
 	
 		int nb = getNbOfMappings();
 		int i;
+		int cpt = 0;
 		
 		StringBuffer sb = new StringBuffer(HTML_TOP);
 		sb.append(HTML_HEADER);
-		sb.append("<table border=\"1\">\n");
-		sb.append("<tr>");
-		sb.append("<td> </td>\n");
-		for(i=0; i<nb; i++) {
-			sb.append("<td>");
-			sb.append("#" + i);
-			sb.append("</td>\n");
+		sb.append("<h1> DSE: List of mappings</h1>\n\n");
+		sb.append("<ul>\n");
+		cpt = 0;
+		for(TMLMapping map: maps) {
+			sb.append("<li>#" +   cpt + ": " + map.getSummaryTaskMapping() + "</li>\n<br>\n");
+			cpt ++;
 		}
-		sb.append("<td> tap </td>\n");
-		sb.append("</tr>");
+		sb.append("</ul>\n");
+		sb.append("<h1> DSE: Results</h1>\n\n");
+		sb.append("<table border=\"1\" id=\"bluetable\" >\n");
 		sb.append("<tr>");
+		sb.append("<th> </th>\n");
+		for(i=0; i<nb; i++) {
+			sb.append("<th>");
+			sb.append("#" + i);
+			sb.append("</th>\n");
+		}
+		sb.append("<th> tap </th>\n");
+		
+		sb.append("<th> </th>\n");
 		sb.append("</tr>");
 		
 		// MinSimulationDuration
 		sb.append("<tr>");
-		sb.append("<td> Min Simulation Duration </td>\n");
+		sb.append("<th> Min Simulation Duration </th>\n");
 		for(i=0; i<nb; i++) {
 			sb.append("<td>");
 			sb.append("" + getMinSimulationDuration(i));
 			sb.append("</td>\n");
 		}
-		sb.append("<td>" +  tapLowestMinSimulationDuration + "</td>\n");
-		sb.append("</tr>");
+		appendEndOfRow(sb, tapLowestMinSimulationDuration);
 		
-		sb.append(HTML_FOOTER);
+		
 		
 		// AverageSimulationDuration
 		sb.append("<tr>");
-		sb.append("<td> Average Simulation Duration </td>\n");
+		sb.append("<th> Average Simulation Duration </th>\n");
 		for(i=0; i<nb; i++) {
 			sb.append("<td>");
 			sb.append("" + getAverageSimulationDuration(i));
 			sb.append("</td>\n");
 		}
-		sb.append("<td>" +  tapLowestAverageSimulationDuration + "</td>\n");
-		sb.append("</tr>");
+		
+		appendEndOfRow(sb, tapLowestAverageSimulationDuration);
+		
 		
 		// MaxSimulationDuration
 		sb.append("<tr>");
-		sb.append("<td> Max Simulation Duration </td>\n");
+		sb.append("<th> Max Simulation Duration </th>\n");
 		for(i=0; i<nb; i++) {
 			sb.append("<td>");
 			sb.append("" + getMaxSimulationDuration(i));
 			sb.append("</td>\n");
 		}
-		sb.append("<td>" +  tapLowestMaxSimulationDuration + "</td>\n");
+		
+		appendEndOfRow(sb, tapLowestMaxSimulationDuration);
+		
+		// Complexity
+		sb.append("<tr>");
+		sb.append("<th>  Mapping complexity </th>\n");
+		for(TMLMapping map: maps) {
+			sb.append("<td>" + map.getArchitectureComplexity() + "</td>\n");
+			cpt ++;
+		}
+		sb.append("<td>" +  tapLowestArchitectureComplexity + "</td>\n");
 		sb.append("</tr>");
 		
 		sb.append("<tr>");
+		sb.append("<th> </th>\n");
 		sb.append("</tr>");
+		sb.append("<tr>");
+		sb.append("<th> </th>\n");
+		sb.append("</tr>");
+		
+		sb.append("<tr>");
+		sb.append("<th> Grade </th>\n");
+		for(i=0; i<cumulativeGrades.length; i++) {
+			sb.append("<td> " + cumulativeGrades[i] + "</td>\n");
+		}
+		sb.append("</tr>");
+		
+		sb.append("<tr>");
+		sb.append("<th> Rank </th>\n");
+		
+		int[] index = new int[cumulativeGrades.length];
+		for(i=0; i<index.length; i++) {
+			index[i] = i;
+		}
+		int[] grades = cumulativeGrades.clone();
+		
+		TraceManager.addDev("Ranking 0");
+		
+		Conversion.quickSort(grades, 0, grades.length-1, index);
+		
+		int myGrade = 0;
+		int myrank;
+		for(i=0; i<index.length; i++) {
+			myGrade = cumulativeGrades[i];
+			myrank = -1;
+			for(int j=index.length; j>=0; j--) {
+				if (myGrade == grades[j]) {
+					sb.append("<td>" + j + "</td>\n");
+					break;
+				}
+			}
+		}
+		
+		sb.append("</tr>");
+		
+		sb.append("</table>");
 		
 		sb.append(HTML_FOOTER);
 		
 		return sb.toString();
+	}
+	
+	public void appendEndOfRow(StringBuffer sb, int value) {
+		sb.append("<td> </td>");
+		sb.append("<td>" +  value + "</td>\n");
+		sb.append("</tr>");
 	}
 	
 	

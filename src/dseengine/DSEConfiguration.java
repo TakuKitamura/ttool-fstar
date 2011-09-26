@@ -1014,7 +1014,7 @@ public class DSEConfiguration implements Runnable  {
 			rankMappings(dsemapresults);
 			
 			sb.append("\nGrades: (Mapping#, grade)\n");
-			int[] grades = dsemapresults.getGrades();
+			int[] grades = dsemapresults.getGrades().clone();
 			int j;
 			for(j=0; j<grades.length; j++) {
 				sb.append("(#" + j + ", " + grades[j] + ")" );
