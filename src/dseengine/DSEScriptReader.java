@@ -85,7 +85,7 @@ public class DSEScriptReader implements Runnable {
 	"TaskModelFile", "MinNbOfCPUs", //22, 23
 	"MaxNbOfCPUs", "NbOfSimulationsPerMapping", //24, 25
 	"runDSE", "MinNbOfCoresPerCPU", // 26, 27
-	"MaxNbOfCoresPerCPU"//28
+	"MaxNbOfCoresPerCPU", "setTap"//28, 29
 	};
 	
 	private static int step = 0;
@@ -353,6 +353,11 @@ public class DSEScriptReader implements Runnable {
 				return OK;
 			case 28:
 				if (_config.setMaxNbOfCoresPerCPU(_arguments) != 0) {
+					return SYNTAX_ERROR_IN_LINE;
+				}
+				return OK;	
+			case 29:
+				if (_config.setTap(_arguments) != 0) {
 					return SYNTAX_ERROR_IN_LINE;
 				}
 				return OK;	

@@ -62,11 +62,13 @@ import javax.xml.parsers.*;
 
 public class DSEMappingSimulationResults  {
 	
-	
+	public final static String HTML_TOP = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
+	public final static String HTML_HEADER = "<head>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"results.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" /\n<title>DSE summary</title>\n</head>\n<body>\n";
+	public final static String HTML_FOOTER = "</body>\n</html>\n";
 	private Vector<String> comments;
 	private Vector<DSESimulationResult> results;
 	private Vector<TMLMapping> maps;
-	
+	private int [] cumulativeGrades;
 	
 	public DSEMappingSimulationResults() {
 		reset();
@@ -659,9 +661,259 @@ public class DSEMappingSimulationResults  {
 		return index;
 	}
 	
-		// for ranking
+	// For ranking
 	public long getMinSimulationDuration(int index) {
 		return results.get(index).getMinSimulationDuration();
+	}
+	
+	public double getAverageSimulationDuration(int index) {
+		return results.get(index).getAverageSimulationDuration();
+	}
+	
+	public long getMaxSimulationDuration(int index) {
+		return results.get(index).getMaxSimulationDuration();
+	}
+	
+	public void computeGrades(int tapLowestMinSimulationDuration, 
+		int tapLowestMaxSimulationDuration, 
+		int tapLowestAverageSimulationDuration,
+		int tapLowestArchitectureComplexity) {
+	
+		// Give a grade to each mapping
+		int nb = getNbOfMappings();
+		cumulativeGrades = new int[nb];
+		
+		
+		long min = Long.MAX_VALUE;
+		int i;
+		long max = 0;
+		long value;
+		double a;
+		double b;
+		int y;
+		double valued;
+		
+		double mind;
+		double maxd = 0;
+		
+		for(i=0; i<nb; i++) {
+			cumulativeGrades[i] = 0;
+		}
+		
+		// min get a grade of 100
+		// max get a grade of 0
+		
+		if (tapLowestMinSimulationDuration != 0) {
+			min = Long.MAX_VALUE;
+			max = 0;
+			for(i=0; i<nb; i++) {
+				value = getMinSimulationDuration(i);
+				min = Math.min(min, value);
+				max = Math.max(max, value);
+				
+				/*if (max == value) {
+					System.out.println("Max is for:" + i + " val=" + value);
+				}
+				
+				if (min== value) {
+					System.out.println("Min is for:" + i + " val=" + value);
+				}*/
+			}
+			
+			// If min = max, no difference between mappings -> no grade to give
+			if (min != max) {
+				
+				a = 100 / ((double)min - (double)max);
+				b = - a * max;
+				
+				//System.out.println("a=" + a + " b=" + b);
+			
+				for(i=0; i<nb; i++) {
+					value = getMinSimulationDuration(i);
+					y = (int)(a * value + b);
+					cumulativeGrades[i] += tapLowestMinSimulationDuration * y; 
+				}
+			}
+		}
+		
+		if (tapLowestAverageSimulationDuration != 0) {
+			mind = Double.MAX_VALUE;
+			maxd = 0;
+			for(i=0; i<nb; i++) {
+				valued = getAverageSimulationDuration(i);
+				
+				mind = Math.min(mind, valued);
+				maxd = Math.max(maxd, valued);
+				
+				/*if (maxd == valued) {
+					System.out.println("Max is for:" + i + " val=" + valued);
+				}
+				
+				if (mind == valued) {
+					System.out.println("Min is for:" + i + " val=" + valued);
+				}*/
+			}
+			
+			// If min = max, no difference between mappings -> no grade to give
+			if (mind != maxd) {
+				
+				a = 100 / (mind - maxd);
+				b = - a * maxd;
+				
+				//System.out.println("a=" + a + " b=" + b);
+			
+				for(i=0; i<nb; i++) {
+					valued = getAverageSimulationDuration(i);
+					y = (int)(a * valued + b);
+					cumulativeGrades[i] += tapLowestAverageSimulationDuration * y; 
+				}
+			}
+		}
+		
+		if (tapLowestMaxSimulationDuration != 0) {
+			min = Long.MAX_VALUE;
+			max = 0;
+			for(i=0; i<nb; i++) {
+				value = getMaxSimulationDuration(i);
+				min = Math.min(min, value);
+				max = Math.max(max, value);
+				
+				/*if (max == value) {
+					System.out.println("Max is for:" + i + " val=" + value);
+				}
+				
+				if (min== value) {
+					System.out.println("Min is for:" + i + " val=" + value);
+				}*/
+			}
+			
+			// If min = max, no difference between mappings -> no grade to give
+			if (min != max) {
+				
+				a = 100 / ((double)min - (double)max);
+				b = - a * max;
+				
+				//System.out.println("a=" + a + " b=" + b);
+			
+				for(i=0; i<nb; i++) {
+					value = getMaxSimulationDuration(i);
+					y = (int)(a * value + b);
+					cumulativeGrades[i] += tapLowestMaxSimulationDuration * y; 
+				}
+			}
+		}
+		
+		if (tapLowestArchitectureComplexity != 0) {
+			min = Long.MAX_VALUE;
+			max = 0;
+			for(i=0; i<nb; i++) {
+				value = maps.get(i).getArchitectureComplexity();
+				min = Math.min(min, value);
+				max = Math.max(max, value);
+				
+				if (max == value) {
+					System.out.println("Max is for:" + i + " val=" + value);
+				}
+				
+				if (min== value) {
+					System.out.println("Min is for:" + i + " val=" + value);
+				}
+			}
+			
+			// If min = max, no difference between mappings -> no grade to give
+			if (min != max) {
+				
+				a = 100 / ((double)min - (double)max);
+				b = - a * max;
+				
+				System.out.println("a=" + a + " b=" + b);
+			
+				for(i=0; i<nb; i++) {
+					value = maps.get(i).getArchitectureComplexity();
+					y = (int)(a * value + b);
+					cumulativeGrades[i] += tapLowestArchitectureComplexity * y; 
+				}
+			}
+		}
+		
+		
+		// Printing grades
+		for(i=0; i<nb; i++) {
+			System.out.println("grade #" + i + ": " + cumulativeGrades[i]);
+		}
+		
+	}
+	
+	public int[] getGrades() {
+		return cumulativeGrades;
+	}
+	
+	
+	public String makeHTMLTableOfResults(int tapLowestMinSimulationDuration, 
+		int tapLowestMaxSimulationDuration, 
+		int tapLowestAverageSimulationDuration,
+		int tapLowestArchitectureComplexity) {
+	
+	
+		int nb = getNbOfMappings();
+		int i;
+		
+		StringBuffer sb = new StringBuffer(HTML_TOP);
+		sb.append(HTML_HEADER);
+		sb.append("<table border=\"1\">\n");
+		sb.append("<tr>");
+		sb.append("<td> </td>\n");
+		for(i=0; i<nb; i++) {
+			sb.append("<td>");
+			sb.append("#" + i);
+			sb.append("</td>\n");
+		}
+		sb.append("<td> tap </td>\n");
+		sb.append("</tr>");
+		sb.append("<tr>");
+		sb.append("</tr>");
+		
+		// MinSimulationDuration
+		sb.append("<tr>");
+		sb.append("<td> Min Simulation Duration </td>\n");
+		for(i=0; i<nb; i++) {
+			sb.append("<td>");
+			sb.append("" + getMinSimulationDuration(i));
+			sb.append("</td>\n");
+		}
+		sb.append("<td>" +  tapLowestMinSimulationDuration + "</td>\n");
+		sb.append("</tr>");
+		
+		sb.append(HTML_FOOTER);
+		
+		// AverageSimulationDuration
+		sb.append("<tr>");
+		sb.append("<td> Average Simulation Duration </td>\n");
+		for(i=0; i<nb; i++) {
+			sb.append("<td>");
+			sb.append("" + getAverageSimulationDuration(i));
+			sb.append("</td>\n");
+		}
+		sb.append("<td>" +  tapLowestAverageSimulationDuration + "</td>\n");
+		sb.append("</tr>");
+		
+		// MaxSimulationDuration
+		sb.append("<tr>");
+		sb.append("<td> Max Simulation Duration </td>\n");
+		for(i=0; i<nb; i++) {
+			sb.append("<td>");
+			sb.append("" + getMaxSimulationDuration(i));
+			sb.append("</td>\n");
+		}
+		sb.append("<td>" +  tapLowestMaxSimulationDuration + "</td>\n");
+		sb.append("</tr>");
+		
+		sb.append("<tr>");
+		sb.append("</tr>");
+		
+		sb.append(HTML_FOOTER);
+		
+		return sb.toString();
 	}
 	
 	

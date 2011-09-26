@@ -126,11 +126,12 @@ public class DSEConfiguration implements Runnable  {
 	private Vector<TMLMapping> mappings;
 	private DSEMappingSimulationResults dsemapresults;
 	
-	private int tapMinSimulationDuration = 1;
-	private int tapMaxSimulationDuration = 0;
-	private int tapAverageSimulationDuration = 1;
 	
-	private int tapArchitectureSilicaonArea = 1;
+	// Taps
+	private static String[] taps = {"LowestMinSimulationDuration",  "LowestAverageSimulationDuration", 
+	"LowestMaxSimulationDuration", "LowestArchitectureComplexity"};
+	
+	private int[] tapValues = {1, 1, 1, 1};
 	
 	
 	private DSESimulationResult results;
@@ -388,6 +389,32 @@ public class DSEConfiguration implements Runnable  {
 		}
 		
 		return 0;
+	}
+	
+	public int setTap(String _value) {
+		_value = _value.trim();
+		
+		int index = _value.indexOf(" ");
+		if (index == -1) {
+			return -1;
+		}
+		
+		String tapName = _value.substring(0, index).trim();
+		String valueOfTap = _value.substring(index+1, _value.length()).trim();
+		
+		for(int i=0; i<taps.length; i++) {
+			if (taps[i].toLowerCase().compareTo(tapName.toLowerCase()) ==0) {
+				try {
+					int intval = new Integer(valueOfTap).intValue();
+					tapValues[i] = intval;
+					return 0;
+				} catch (Exception e) {
+					return -1;
+				}
+			}
+		}
+		
+		return -1;
 	}
 	
 	private boolean loadMapping(boolean _optimize) {
@@ -986,8 +1013,47 @@ public class DSEConfiguration implements Runnable  {
 			
 			rankMappings(dsemapresults);
 			
+			sb.append("\nGrades: (Mapping#, grade)\n");
+			int[] grades = dsemapresults.getGrades();
+			int j;
+			for(j=0; j<grades.length; j++) {
+				sb.append("(#" + j + ", " + grades[j] + ")" );
+			}
+			sb.append("\n");
+			
+			TraceManager.addDev("Ranking");
+			sb.append("\nRanking (Rank, mapping, grade)\n");
+			int[] index = new int[grades.length];
+			for(j=0; j<grades.length; j++) {
+				index[j] = j;
+			}
+			
+			TraceManager.addDev("Ranking 0");
+			
+			Conversion.quickSort(grades, 0, grades.length-1, index);
+			
+			TraceManager.addDev("Ranking 1");
+			
+			for(j=grades.length-1; j>=0; j--) {
+				sb.append("(#" + (grades.length-j) + ", " + index[j] + ", " + grades[j]+ ") ");
+			}
+			
+			TraceManager.addDev("Ranking done");
+			
+			
 			try {
 				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".txt", sb.toString());
+			} catch (Exception e){
+					TraceManager.addDev("Error when saving results file" + e.getMessage());
+					return -1;
+					
+				}
+				
+			sb = new StringBuffer(dsemapresults.makeHTMLTableOfResults(tapValues[0], tapValues[1], tapValues[2], tapValues[3]));
+				
+			
+			try {
+				FileUtils.saveFile(pathToResults + "Overall_results_AllMappings_From_" + resultsID + ".html", sb.toString());
 			} catch (Exception e){
 					TraceManager.addDev("Error when saving results file" + e.getMessage());
 					return -1;
@@ -1464,58 +1530,8 @@ public class DSEConfiguration implements Runnable  {
 		return nb;
 	}
 	
-	private Vector<TMLMapping> rankMappings(DSEMappingSimulationResults _dseresults) {
-		
-		// Give a grade to each mapping
-		int nb = _dseresults.getNbOfMappings();
-		int []cumulativeGrades = new int[nb];
-		
-		
-		long min = Long.MAX_VALUE;
-		int i;
-		long max = 0;
-		long value;
-		double a;
-		double b;
-		double y;
-		
-		for(i=0; i<nb; i++) {
-			cumulativeGrades[i] = 0;
-		}
-		
-		// min get a grade of 100
-		// max get a grade of 0
-		
-		if (tapMinSimulationDuration != 0) {
-			for(i=0; i<nb; i++) {
-				value = _dseresults.getMinSimulationDuration(i);
-				min = Math.min(min, value);
-				max = Math.max(max, value);
-			}
-			
-			// If min = max, no difference between mappings -> no grade to give
-			if (min != max) {
-				
-				a = 100 / (min - max);
-				b = - a * max;
-			
-				for(i=0; i<nb; i++) {
-					value = _dseresults.getMinSimulationDuration(i);
-					y = a * value + b;
-					cumulativeGrades[i] += tapMinSimulationDuration * y; 
-				}
-			}
-		}
-		
-		
-		// Printing grades
-		for(i=0; i<nb; i++) {
-			System.out.println("grade #" + i + ": " + cumulativeGrades[i]);
-		}
-		
-		return null;
-		
-		
+	private void rankMappings(DSEMappingSimulationResults _dseresults) {
+		_dseresults.computeGrades(tapValues[0], tapValues[1], tapValues[2], tapValues[3]);
 	}
 
 	private void computeCoresOfMappings(Vector<TMLMapping> maps) {

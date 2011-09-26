@@ -47,6 +47,7 @@ package tmltranslator;
 
 import java.util.*;
 
+import myutil.*;
 
 public class TMLArchitecture {
     private ArrayList<HwNode> hwnodes;
@@ -313,6 +314,30 @@ public class TMLArchitecture {
 			if (link.bus==bus) tempList.add(link);
 		}
 		return tempList;
+	}
+	
+	public int getArchitectureComplexity() {
+		// CPU complexity depends on its data size 
+		// Bus complexity depends on its data size
+		int complexity = 0;
+		
+		for(HwNode node: hwnodes) {
+			if (node instanceof HwCPU) {
+				HwCPU cpu = (HwCPU)node;
+				complexity += cpu.nbOfCores * cpu.byteDataSize * cpu.pipelineSize;
+				TraceManager.addDev("complexity CPU= " + complexity);
+			}
+			
+			if (node instanceof HwBus) {
+				HwBus bus = (HwBus)node;
+				complexity += bus.byteDataSize * bus.pipelineSize;
+				TraceManager.addDev("complexity bus= " + complexity);
+			}
+		}
+		
+		TraceManager.addDev("Complexity = " + complexity);
+		
+		return complexity;
 	}
 	
 }

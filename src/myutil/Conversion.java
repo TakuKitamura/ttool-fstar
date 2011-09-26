@@ -698,6 +698,70 @@ public class Conversion {
 		String ret = "";
 		while(index = _s.indexOf(
 	}*/
+	
+
+	public static void quickSort(int arr[], int left, int right, int ind[]){
+		int i = left, j = right;
+		int tmp;
+		
+		int pivot = arr[(left + right) / 2];
+		
+		while (i <= j) {
+            while (arr[i] < pivot)
+            	i++;
+            while (arr[j] > pivot)
+            	j--;
+            if (i <= j) {
+            	tmp = arr[i];
+            	arr[i] = arr[j];
+            	arr[j] = tmp;
+            	tmp = ind[i];
+            	ind[i] = ind[j];
+            	ind[j] = tmp;
+            	i++;
+            	j--;
+            }
+        }
+        
+        if (left < i - 1)
+            quickSort(arr, left, i - 1, ind);
+        
+        if (i < right)
+            quickSort(arr, i, right, ind);
+    }
+	
+	
+	/*public static void quick_srt(int array[], int low, int n, int index[]){
+		int lo = low;
+		int hi = n;
+		if (lo >= n) {
+			return;
+		}
+		int mid = array[(lo + hi) / 2];
+		while (lo < hi) {
+			while (lo<hi && array[lo] < mid) {
+				lo++;
+			}
+			while (lo<hi && array[hi] > mid) {
+				hi--;
+			}
+			if (lo < hi) {
+				int T = array[lo];
+				array[lo] = array[hi];
+				array[hi] = T;
+				T = index[lo];
+				index[lo] = index[hi];
+				index[hi] = T;
+			}
+		}
+		if (hi < lo) {
+			int T = hi;
+			hi = lo;
+			lo = T;
+		}
+		quick_srt(array, low, lo, index);
+		quick_srt(array, lo == low ? lo+1 : lo, n, index);
+	}*/
 
 
     

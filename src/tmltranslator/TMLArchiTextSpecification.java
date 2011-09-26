@@ -64,14 +64,15 @@ public class TMLArchiTextSpecification {
 	private ArrayList<TMLTXTError> errors;
 	private ArrayList<TMLTXTError> warnings;
 	
-	private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY"};
-	private String nodetypes[] = {"CPU", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA"};
+	private String keywords[] = {"NODE", "CPU", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
+	private String nodetypes[] = {"CPU", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA", "DMA"};
 	private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
 	private String linkparameters[] = {"bus", "node", "priority"};
 	private String hwaparameters[] = {"byteDataSize", "execiTime"};
 	private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
 	private String bridgeparameters[] = {"bufferByteSize"};
 	private String memoryparameters[] = {"byteDataSize"};
+	private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 	
 	
 	
@@ -138,6 +139,7 @@ public class TMLArchiTextSpecification {
 		HwBus bus;
 		HwBridge bridge;
 		HwMemory memory;
+		HwDMA dma;
 		
 		for(HwNode node: hwnodes) {
 			
@@ -200,6 +202,16 @@ public class TMLArchiTextSpecification {
 				set = "SET " + name + " ";
 				code += "NODE MEMORY " +  name + CR;
 				code += set + "byteDataSize " + memory.byteDataSize + CR;  
+			}
+			
+			// DMA
+			if (node instanceof HwDMA) {
+				dma = (HwDMA)node;
+				name = prepareString(node.getName());
+				set = "SET " + name + " ";
+				code += "NODE DMA " +  name + CR;
+				code += set + "byteDataSize " + dma.byteDataSize + CR; 
+				code += set + "nbOfChannels " + dma.nbOfChannels + CR; 
 			}
 			
 			code += CR;
@@ -402,6 +414,9 @@ public class TMLArchiTextSpecification {
 			} else if (_split[1].equals("MEMORY")) {
 				HwMemory memory = new HwMemory(_split[2]); 
 				tmla.addHwNode(memory);
+			} else if (_split[1].equals("DMA")) {
+				HwDMA dma = new HwDMA(_split[2]); 
+				tmla.addHwNode(dma);
 			} else if (_split[1].equals("BRIDGE")) {
 				HwBridge bridge = new HwBridge(_split[2]); 
 				tmla.addHwNode(bridge);
@@ -609,6 +624,26 @@ public class TMLArchiTextSpecification {
 					
 					if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
 						memory.byteDataSize = Integer.decode(_split[3]).intValue();
+					}
+				}
+				
+				if (node instanceof HwDMA) {
+					HwDMA dma = (HwDMA)node;
+					
+					if (!checkParameter("SET", _split, 2, 12, _lineNb)) {
+						return -1;
+					}
+					
+					if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
+						return -1;
+					}
+					
+					if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
+						dma.byteDataSize = Integer.decode(_split[3]).intValue();
+					}
+					
+					if (_split[2].toUpperCase().equals("NBOFCHANNELS")) {
+						dma.nbOfChannels = Integer.decode(_split[3]).intValue();
 					}
 				}
 			}

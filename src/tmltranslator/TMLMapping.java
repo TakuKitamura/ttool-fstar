@@ -519,4 +519,12 @@ public class TMLMapping {
 	public TMLMapping cloneMappingArchitecture() {
 		return null;
 	}
+	
+	public int getArchitectureComplexity() {
+		if (tmla == null) {
+			return 0;
+		}
+		
+		return tmla.getArchitectureComplexity();
+	}
 }

@@ -81,6 +81,8 @@ public class DSESimulationResult  {
 	private Vector<BusWholeResult> wbusses;
 	private Vector<TaskWholeResult> wtasks;
 	
+
+	
 	public DSESimulationResult() {
 		reset();
 	}
@@ -697,6 +699,8 @@ public class DSESimulationResult  {
 	public long getMinSimulationDuration() {
 		return sdwr.minDuration;
 	}
+	
+	
 	
 	
 	

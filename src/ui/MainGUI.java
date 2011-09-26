@@ -6920,6 +6920,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_HWANODE);
 		}  else if (command.equals(actions[TGUIAction.TMLARCHI_MEMORYNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_MEMORYNODE);
+		}  else if (command.equals(actions[TGUIAction.TMLARCHI_DMANODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_DMANODE);
 		}  else if (command.equals(actions[TGUIAction.TMLARCHI_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);       
 		} else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {

@@ -210,6 +210,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLARCHI_COMMUNICATION_ARTIFACT = 222;
 	public static final int TMLARCHI_HWANODE = 223;
 	public static final int TMLARCHI_MEMORYNODE = 224;
+	public static final int TMLARCHI_DMANODE = 364;
 	public static final int TMLARCHI_BRIDGENODE = 225;
 	
 	public static final int EBRDD_EDIT = 271;
@@ -488,7 +489,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 364;
+    public static final int NB_ACTION = 365;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -815,6 +816,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         
 
         //ProActive State Machine Diagram  

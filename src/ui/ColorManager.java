@@ -115,6 +115,7 @@ public class ColorManager {
 	public static final Color BUS_BOX = new Color(215, 188, 128);
 	public static final Color BRIDGE_BOX = new Color(215, 166, 72);
 	public static final Color MEMORY_BOX = new Color(172, 234, 211);
+	public static final Color DMA_BOX = new Color(172, 234, 211);
 	public static final Color HWA_BOX = new Color(144, 201, 211);
         
 	public static final Color TML_COMPOSITE_COMPONENT = new Color(239, 212, 176, 125);

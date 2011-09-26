@@ -646,9 +646,9 @@ public class GTMLModeling  {
 							name = makeName(port1, name1);
 						}
 						
-						TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
+						//TraceManager.addDev("Adding to table : " + makeName(port1, port1.getFather().getValue()) + "/" + name1);
 						addToTable(makeName(port1, port1.getFather().getValue()) + "/" + name1, name);
-						TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
+						//TraceManager.addDev("Adding to table : " + makeName(port2, port2.getFather().getValue()) + "/" + name2);
 						addToTable(makeName(port2, port2.getFather().getValue()) + "/" + name2, name);
 						
 						channel = new TMLChannel(name, port1);
@@ -1646,7 +1646,7 @@ public class GTMLModeling  {
 				channels = ((TMLADWriteChannel)tgc).getChannelsByName();
 				boolean error = false;
 				for(int i=0; i<channels.length; i++) {
-					TraceManager.addDev("Getting from table " + tmltask.getName() + "/" +channels[i]); 
+					//TraceManager.addDev("Getting from table " + tmltask.getName() + "/" +channels[i]); 
 					channel = tmlm.getChannelByName(getFromTable(tmltask, channels[i]));
 					if (channel == null) {
 						if (Conversion.containsStringInList(removedChannels, ((TMLADWriteChannel)tgc).getChannelName(i))) {
@@ -1895,11 +1895,13 @@ public class GTMLModeling  {
 		TMLArchiBUSNode busnode;
 		TMLArchiBridgeNode bridgenode;
 		TMLArchiMemoryNode memorynode;
+		TMLArchiDMANode dmanode;
 		HwCPU cpu;
 		HwA hwa;
 		HwBus bus;
 		HwBridge bridge;
 		HwMemory memory;
+		HwDMA dma;
 		
 		ArrayList<String> names = new ArrayList<String>();
 		
@@ -2013,6 +2015,26 @@ public class GTMLModeling  {
 					listE.addCor(memory, memorynode);
 					archi.addHwNode(memory);
 					TraceManager.addDev("Memory node added:" + memory.getName());
+				}
+			}
+			
+			if (tgc instanceof TMLArchiDMANode) {
+				dmanode = (TMLArchiDMANode)tgc;
+				if (nameInUse(names, dmanode.getName())) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + dmanode.getName());
+					ce.setTDiagramPanel(tmlap.tmlap);
+					ce.setTGComponent(dmanode);
+					checkingErrors.add(ce);
+				} else {
+					names.add(dmanode.getName());
+					dma = new HwDMA(dmanode.getName());
+					dma.byteDataSize = dmanode.getByteDataSize();
+					dma.nbOfChannels = dmanode.getNbOfChannels();
+					dma.clockRatio = dmanode.getClockRatio();
+					listE.addCor(dma, dmanode);
+					archi.addHwNode(dma);
+					TraceManager.addDev("************************************ DMA node added:" + dma.getName());
 				}
 			}
 		}
@@ -2297,7 +2319,7 @@ public class GTMLModeling  {
 				// Other nodes (memory, bridge, bus)
 			}
 			
-			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)) {
+			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
 				node = archi.getHwNodeByName(tgc.getName());
 				if ((node != null) && (node instanceof HwCommunicationNode)) {
 					artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getArtifactList();
@@ -2333,7 +2355,7 @@ public class GTMLModeling  {
 	}
 	
 	public String getFromTable(TMLTask task, String s) {
-		TraceManager.addDev("TABLE GET: Getting from task=" + task.getName() + " element=" + s);
+		//TraceManager.addDev("TABLE GET: Getting from task=" + task.getName() + " element=" + s);
 		
 		if (table == null) {
 			return s;
@@ -2363,11 +2385,11 @@ public class GTMLModeling  {
 		if (!putPrefixName) {
 			return _name;
 		}
-		TraceManager.addDev("Making name of " + tgc + " from name = " + _name);
+		//TraceManager.addDev("Making name of " + tgc + " from name = " + _name);
 		String s = tgc.getTDiagramPanel().getMGUI().getTitleOf( tgc.getTDiagramPanel());
 		s = s.replaceAll("\\s", "");
 		s = s + "__" + _name;
-		TraceManager.addDev("Making name=" + s);
+		//TraceManager.addDev("Making name=" + s);
 		return s;
 	}
 	

@@ -222,6 +222,7 @@ public class TGComponentManager {
 	public static final int TMLARCHI_HWANODE = 1104;
 	public static final int TMLARCHI_MEMORYNODE = 1105;
 	public static final int TMLARCHI_BRIDGENODE = 1106;
+	public static final int TMLARCHI_DMANODE = 1107;
 	
 	public static final int TMLCTD_CCOMPONENT = 1200;
 	public static final int TMLCTD_CPORT = 1201;
@@ -811,6 +812,9 @@ public class TGComponentManager {
 			case TMLARCHI_MEMORYNODE:
                 tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
+             case TMLARCHI_DMANODE:
+                tgc = new TMLArchiDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
 			case TMLARCHI_ARTIFACT:
                 tgc = new TMLArchiArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1292,6 +1296,8 @@ public class TGComponentManager {
             return TMLARCHI_HWANODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
+        } else if (tgc instanceof TMLArchiDMANode) {
+            return TMLARCHI_DMANODE;
         } else if (tgc instanceof TMLArchiArtifact) {
             return TMLARCHI_ARTIFACT;
         } else if (tgc instanceof TMLArchiCommunicationArtifact) {
