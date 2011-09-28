@@ -62,9 +62,14 @@ import javax.xml.parsers.*;
 
 public class DSEMappingSimulationResults  {
 	
+	public final static String [] colors = {"99FF00", "99CC00", "999900", "996600", "993300", "990000"};
+	
 	public final static String HTML_TOP = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n";
 	public final static String HTML_HEADER = "<head>\n<title>DSE summary</title>\n<link rel=\"stylesheet\" type=\"text/css\" href=\"results.css\" />\n<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\" /\n</head>\n<body>\n";
 	public final static String HTML_FOOTER = "</body>\n</html>\n";
+	
+	
+	
 	private Vector<String> comments;
 	private Vector<DSESimulationResult> results;
 	private Vector<TMLMapping> maps;
@@ -674,10 +679,105 @@ public class DSEMappingSimulationResults  {
 		return results.get(index).getMaxSimulationDuration();
 	}
 	
-	public void computeGrades(int tapLowestMinSimulationDuration, 
-		int tapLowestMaxSimulationDuration, 
-		int tapLowestAverageSimulationDuration,
-		int tapLowestArchitectureComplexity) {
+	private long getLongResultValueByID(int ID, int index) {
+		switch(ID) {
+		case 0:
+			return getMinSimulationDuration(index);
+		case 2: 
+			return getMaxSimulationDuration(index);
+		case 3: 
+			return maps.get(index).getArchitectureComplexity();
+		case 10:
+			return results.get(index).getMinBusContention();
+		case 12:
+			return results.get(index).getMaxBusContention();
+		}
+		return 0;
+	}
+	
+	private double getDoubleResultValueByID(int ID, int index) {
+		switch(ID) {
+		case 1:
+			return results.get(index).getAverageSimulationDuration();
+		case 4: 
+			return results.get(index).getMinCPUUsage();
+		case 5: 
+			return results.get(index).getAverageCPUUsage();
+		case 6: 
+			return results.get(index).getAverageCPUUsage();
+		case 7: 
+			return results.get(index).getMinBusUsage();
+		case 8: 
+			return results.get(index).getAverageBusUsage();
+		case 9: 
+			return results.get(index).getAverageBusUsage();
+		case 11:
+			return results.get(index).getAverageBusContention();
+		}
+		return 0.0;
+	}
+	
+	private void computeGradesDouble(int []cumulativeGrades, int ID, int tap) {
+		double mind, maxd;
+		int i;
+		double valued;
+		double a, b;
+		int y;
+		
+		if (tap == 0) {
+			return;
+		}
+		
+		System.out.println("Computing grades of ID=" + ID + " tap=" + tap + " length=" + cumulativeGrades.length);
+		
+		mind = Long.MAX_VALUE; maxd = 0;
+		for(i=0; i<cumulativeGrades.length; i++) {
+			valued = getDoubleResultValueByID(ID, i);
+			mind = Math.min(mind, valued); maxd = Math.max(maxd, valued);
+		}
+		
+		// If min = max, no difference between mappings -> no grade to give
+		System.out.println("mind= " + mind + " maxd= " + maxd);
+		if (mind != maxd) {
+			a = 100 / ((double)mind - (double)maxd);b = - a * maxd;
+			for(i=0; i<cumulativeGrades.length; i++) {
+				valued = getDoubleResultValueByID(ID, i);
+				y = (int)(a * valued + b);
+				System.out.println("Giving grade at " + i + " = " + tap * y);
+				cumulativeGrades[i] += tap * y; 
+			}
+		}
+	}
+	
+	private void computeGradesLong(int []cumulativeGrades, int ID, int tap) {
+		long min, max;
+		int i;
+		long value;
+		double a, b;
+		int y;
+		
+		if (tap == 0) {
+			return;
+		}
+		
+		min = Long.MAX_VALUE; max = 0;
+		for(i=0; i<cumulativeGrades.length; i++) {
+			value = getLongResultValueByID(ID, i);
+			min = Math.min(min, value); max = Math.max(max, value);
+		}
+		
+		// If min = max, no difference between mappings -> no grade to give
+		if (min != max) {
+			a = 100 / ((double)min - (double)max);b = - a * max;
+			for(i=0; i<cumulativeGrades.length; i++) {
+				value = getLongResultValueByID(ID, i);
+				y = (int)(a * value + b);
+				cumulativeGrades[i] += tap * y; 
+			}
+		}
+	}
+	
+	public void computeGrades(int []tapValues) {
 	
 		// Give a grade to each mapping
 		int nb = getNbOfMappings();
@@ -702,137 +802,13 @@ public class DSEMappingSimulationResults  {
 		
 		// min get a grade of 100
 		// max get a grade of 0
-		
-		if (tapLowestMinSimulationDuration != 0) {
-			min = Long.MAX_VALUE;
-			max = 0;
-			for(i=0; i<nb; i++) {
-				value = getMinSimulationDuration(i);
-				min = Math.min(min, value);
-				max = Math.max(max, value);
-				
-				/*if (max == value) {
-					System.out.println("Max is for:" + i + " val=" + value);
-				}
-				
-				if (min== value) {
-					System.out.println("Min is for:" + i + " val=" + value);
-				}*/
+		for(i=0; i<tapValues.length; i++) {
+			if (DSEConfiguration.tapType[i] == DSEConfiguration.LONG_TYPE) {
+				computeGradesLong(cumulativeGrades, i, tapValues[i]);
 			}
 			
-			// If min = max, no difference between mappings -> no grade to give
-			if (min != max) {
-				
-				a = 100 / ((double)min - (double)max);
-				b = - a * max;
-				
-				//System.out.println("a=" + a + " b=" + b);
-			
-				for(i=0; i<nb; i++) {
-					value = getMinSimulationDuration(i);
-					y = (int)(a * value + b);
-					cumulativeGrades[i] += tapLowestMinSimulationDuration * y; 
-				}
-			}
-		}
-		
-		if (tapLowestAverageSimulationDuration != 0) {
-			mind = Double.MAX_VALUE;
-			maxd = 0;
-			for(i=0; i<nb; i++) {
-				valued = getAverageSimulationDuration(i);
-				
-				mind = Math.min(mind, valued);
-				maxd = Math.max(maxd, valued);
-				
-				/*if (maxd == valued) {
-					System.out.println("Max is for:" + i + " val=" + valued);
-				}
-				
-				if (mind == valued) {
-					System.out.println("Min is for:" + i + " val=" + valued);
-				}*/
-			}
-			
-			// If min = max, no difference between mappings -> no grade to give
-			if (mind != maxd) {
-				
-				a = 100 / (mind - maxd);
-				b = - a * maxd;
-				
-				//System.out.println("a=" + a + " b=" + b);
-			
-				for(i=0; i<nb; i++) {
-					valued = getAverageSimulationDuration(i);
-					y = (int)(a * valued + b);
-					cumulativeGrades[i] += tapLowestAverageSimulationDuration * y; 
-				}
-			}
-		}
-		
-		if (tapLowestMaxSimulationDuration != 0) {
-			min = Long.MAX_VALUE;
-			max = 0;
-			for(i=0; i<nb; i++) {
-				value = getMaxSimulationDuration(i);
-				min = Math.min(min, value);
-				max = Math.max(max, value);
-				
-				/*if (max == value) {
-					System.out.println("Max is for:" + i + " val=" + value);
-				}
-				
-				if (min== value) {
-					System.out.println("Min is for:" + i + " val=" + value);
-				}*/
-			}
-			
-			// If min = max, no difference between mappings -> no grade to give
-			if (min != max) {
-				
-				a = 100 / ((double)min - (double)max);
-				b = - a * max;
-				
-				//System.out.println("a=" + a + " b=" + b);
-			
-				for(i=0; i<nb; i++) {
-					value = getMaxSimulationDuration(i);
-					y = (int)(a * value + b);
-					cumulativeGrades[i] += tapLowestMaxSimulationDuration * y; 
-				}
-			}
-		}
-		
-		if (tapLowestArchitectureComplexity != 0) {
-			min = Long.MAX_VALUE;
-			max = 0;
-			for(i=0; i<nb; i++) {
-				value = maps.get(i).getArchitectureComplexity();
-				min = Math.min(min, value);
-				max = Math.max(max, value);
-				
-				if (max == value) {
-					System.out.println("Max is for:" + i + " val=" + value);
-				}
-				
-				if (min== value) {
-					System.out.println("Min is for:" + i + " val=" + value);
-				}
-			}
-			
-			// If min = max, no difference between mappings -> no grade to give
-			if (min != max) {
-				
-				a = 100 / ((double)min - (double)max);
-				b = - a * max;
-				
-				System.out.println("a=" + a + " b=" + b);
-			
-				for(i=0; i<nb; i++) {
-					value = maps.get(i).getArchitectureComplexity();
-					y = (int)(a * value + b);
-					cumulativeGrades[i] += tapLowestArchitectureComplexity * y; 
-				}
+			if (DSEConfiguration.tapType[i] == DSEConfiguration.DOUBLE_TYPE) {
+				computeGradesDouble(cumulativeGrades, i, tapValues[i]);
 			}
 		}
 		
@@ -849,15 +825,22 @@ public class DSEMappingSimulationResults  {
 	}
 	
 	
-	public String makeHTMLTableOfResults(int tapLowestMinSimulationDuration, 
-		int tapLowestMaxSimulationDuration, 
-		int tapLowestAverageSimulationDuration,
-		int tapLowestArchitectureComplexity) {
+	public String makeHTMLTableOfResults(int[] tapValues) {
 	
 	
 		int nb = getNbOfMappings();
-		int i;
+		int i, j;
 		int cpt = 0;
+		String[] values = new String[nb];
+		long []valuesl;
+		double []valuesd;
+		int min, max;
+		int indexMin, indexMax;
+		int val;
+		long vall;
+		long minl, maxl;
+		double vald;
+		double mind, maxd;
 		
 		StringBuffer sb = new StringBuffer(HTML_TOP);
 		sb.append(HTML_HEADER);
@@ -878,96 +861,63 @@ public class DSEMappingSimulationResults  {
 			sb.append("#" + i);
 			sb.append("</th>\n");
 		}
+		sb.append("<th> </th>\n");
 		sb.append("<th> tap </th>\n");
-		
-		sb.append("<th> </th>\n");
 		sb.append("</tr>");
-		
-		// MinSimulationDuration
-		sb.append("<tr>");
-		sb.append("<th> Min Simulation Duration </th>\n");
-		for(i=0; i<nb; i++) {
-			sb.append("<td>");
-			sb.append("" + getMinSimulationDuration(i));
-			sb.append("</td>\n");
-		}
-		appendEndOfRow(sb, tapLowestMinSimulationDuration);
-		
-		
-		
-		// AverageSimulationDuration
-		sb.append("<tr>");
-		sb.append("<th> Average Simulation Duration </th>\n");
-		for(i=0; i<nb; i++) {
-			sb.append("<td>");
-			sb.append("" + getAverageSimulationDuration(i));
-			sb.append("</td>\n");
-		}
-		
-		appendEndOfRow(sb, tapLowestAverageSimulationDuration);
+		makeAllSetOfValuesLong(sb, "Min Simulation Duration", 0, tapValues[0]);
+		makeAllSetOfValuesDouble(sb, "Average Simulation Duration", 1, tapValues[1]);
+		makeAllSetOfValuesLong(sb, "Max Simulation Duration", 2, tapValues[2]);
+		makeEmptyLine(sb);
+		makeAllSetOfValuesDouble(sb, "Min CPU Usage", 4, tapValues[4]);
+		makeAllSetOfValuesDouble(sb, "Average CPU Usage", 5, tapValues[5]);
+		makeAllSetOfValuesDouble(sb, "Max CPU Usage", 6, tapValues[6]);
+		makeEmptyLine(sb);
+		makeAllSetOfValuesDouble(sb, "Min Bus Usage", 7, tapValues[7]);
+		makeAllSetOfValuesDouble(sb, "Average Bus Usage", 8, tapValues[8]);
+		makeAllSetOfValuesDouble(sb, "Max Bus Usage", 9, tapValues[9]);
+		makeEmptyLine(sb);
+		makeAllSetOfValuesLong(sb, "Min Bus Contention", 10, tapValues[10]);
+		makeAllSetOfValuesDouble(sb, "Average Bus Contention", 11, tapValues[11]);
+		makeAllSetOfValuesLong(sb, "Max Bus Contention", 12, tapValues[12]);
+		makeEmptyLine(sb);
+		makeAllSetOfValuesLong(sb, "Architecture complexity", 3, tapValues[3]);
+		makeEmptyLine(sb);
+		makeEmptyLine(sb);
 		
 		
-		// MaxSimulationDuration
-		sb.append("<tr>");
-		sb.append("<th> Max Simulation Duration </th>\n");
-		for(i=0; i<nb; i++) {
-			sb.append("<td>");
-			sb.append("" + getMaxSimulationDuration(i));
-			sb.append("</td>\n");
-		}
-		
-		appendEndOfRow(sb, tapLowestMaxSimulationDuration);
-		
-		// Complexity
-		sb.append("<tr>");
-		sb.append("<th>  Mapping complexity </th>\n");
-		for(TMLMapping map: maps) {
-			sb.append("<td>" + map.getArchitectureComplexity() + "</td>\n");
-			cpt ++;
-		}
-		sb.append("<td>" +  tapLowestArchitectureComplexity + "</td>\n");
-		sb.append("</tr>");
-		
-		sb.append("<tr>");
-		sb.append("<th> </th>\n");
-		sb.append("</tr>");
-		sb.append("<tr>");
-		sb.append("<th> </th>\n");
-		sb.append("</tr>");
-		
-		sb.append("<tr>");
-		sb.append("<th> Grade </th>\n");
-		for(i=0; i<cumulativeGrades.length; i++) {
-			sb.append("<td> " + cumulativeGrades[i] + "</td>\n");
-		}
-		sb.append("</tr>");
-		
-		sb.append("<tr>");
-		sb.append("<th> Rank </th>\n");
-		
+		// Grades and ranking
 		int[] index = new int[cumulativeGrades.length];
 		for(i=0; i<index.length; i++) {
 			index[i] = i;
 		}
 		int[] grades = cumulativeGrades.clone();
-		
-		TraceManager.addDev("Ranking 0");
-		
 		Conversion.quickSort(grades, 0, grades.length-1, index);
+		
+		sb.append("<tr>");
+		sb.append("<th> Grade </th>\n");
+		for(i=0; i<cumulativeGrades.length; i++) {
+			sb.append("<td bgcolor=\"" + getColorLong(grades[grades.length-1], grades[0], cumulativeGrades[i]) + "\">" + cumulativeGrades[i] + "</td>\n");
+			//sb.append("<td> " + cumulativeGrades[i] + "</td>\n");
+		}
+		sb.append("<th> </th>\n");sb.append("<th> </th>\n");
+		sb.append("</tr>");
+		
+		sb.append("<tr>");
+		sb.append("<th> Rank </th>\n");
+		
+		
 		
 		int myGrade = 0;
 		int myrank;
-		for(i=0; i<index.length; i++) {
-			myGrade = cumulativeGrades[i];
-			myrank = -1;
-			for(int j=index.length; j>=0; j--) {
-				if (myGrade == grades[j]) {
-					sb.append("<td>" + j + "</td>\n");
-					break;
+		for(i=0; i<nb; i++) {
+			for(j=0; j<index.length; j++) {
+				if (index[j] == i) {
+					myrank = nb - j;
+					sb.append("<td bgcolor=\"" + getColorLong(1, nb, myrank) + "\">" + myrank + "</td>\n");
 				}
 			}
 		}
-		
+		sb.append("<th> </th>\n");sb.append("<th> </th>\n");
 		sb.append("</tr>");
 		
 		sb.append("</table>");
@@ -977,10 +927,156 @@ public class DSEMappingSimulationResults  {
 		return sb.toString();
 	}
 	
-	public void appendEndOfRow(StringBuffer sb, int value) {
-		sb.append("<td> </td>");
-		sb.append("<td>" +  value + "</td>\n");
+	public void makeAllSetOfValuesLong(StringBuffer sb, String title, int tapID, int tapValue) {
+		int index, i;
+		long vall;
+		
+		int nb = getNbOfMappings();
+		
+		long[] values = new long[nb];
+		long minl = Long.MAX_VALUE;
+		long maxl = 0;
+		for(i=0; i<nb; i++) {
+			vall = getLongResultValueByID(tapID, i);
+			values[i] =  vall;
+			if (vall < minl) {
+				minl = vall;
+			}
+			
+			if (vall > maxl) {
+				maxl = vall;
+			}
+		}
+		
+		sb.append("<tr>\n<th> " + title + " </th>\n");
+		for(i=0; i<values.length; i++) {
+			sb.append("<td bgcolor=\"" + getColorLongTapValue(minl, maxl, values[i], tapValue) + "\"> " + values[i] + "</td>\n");
+		}
+		appendEndOfRow(sb, tapValue);
+	}
+	
+	public void makeAllSetOfValuesDouble(StringBuffer sb, String title, int tapID, int tapValue) {
+		int index, i;
+		double vall;
+		
+		int nb = getNbOfMappings();
+		
+		double[] values = new double[nb];
+		double minl = Double.MAX_VALUE;
+		double maxl = 0;
+		for(i=0; i<nb; i++) {
+			vall = getDoubleResultValueByID(tapID, i);
+			values[i] =  vall;
+			if (vall < minl) {
+				minl = vall;
+			}
+			
+			if (vall > maxl) {
+				maxl = vall;
+			}
+		}
+		
+		sb.append("<tr>\n<th> " + title + " </th>\n");
+		for(i=0; i<values.length; i++) {
+			sb.append("<td bgcolor=\"" + getColorDoubleTapValue(minl, maxl, values[i], tapValue) + "\"> " +(((int)(100 * values[i]))/100.0) + "</td>\n");
+		}
+		appendEndOfRow(sb, tapValue);
+	}
+	
+	public void makeSetOfValuesLong(StringBuffer sb, String title, long[] values, int minIndex, int maxIndex, long minl, long maxl, int tapValue) {
+		int index;
+		double vald;
+		
+		sb.append("<tr>\n<th> " + title + " </th>\n");
+		for(int i=0; i<values.length; i++) {
+			sb.append("<td bgcolor=\"" + getColorLong(minl, maxl, values[i]) + "\"> " + values[i] + "</td>\n");
+		}
+		appendEndOfRow(sb, tapValue);
+	}
+	
+	public void makeSetOfValuesDouble(StringBuffer sb, String title, double[] values, int minIndex, int maxIndex, double mind, double maxd, int tapValue) {
+		int index;
+		double vald;
+		
+		if (tapValue < 0) {
+			double tmp = maxd;
+			maxd = mind;
+			mind = tmp;
+		}
+		
+		sb.append("<tr>\n<th> " + title + " </th>\n");
+		for(int i=0; i<values.length; i++) {
+			sb.append("<td bgcolor=\"" + getColorDouble(mind, maxd, values[i]) + "\"> " + (((int)(100 * values[i]))/100.0) + "</td>\n");
+		}
+		appendEndOfRow(sb, tapValue);
+	}
+	
+	public void makeSetOfValues(StringBuffer sb, String title, String[] values, int minIndex, int maxIndex, int tapValue) {
+		sb.append("<tr>\n<th> " + title + " </th>\n");
+		for(int i=0; i<values.length; i++) {
+			if (i == minIndex) {
+				sb.append("<td bgcolor=\"#00ff00\"> " + values[i] + "</td>\n");
+			} else if (i == maxIndex) {
+				sb.append("<td bgcolor=\"red\"> " + values[i] + "</td>\n");
+			} else {
+				sb.append("<td> " + values[i] + "</td>\n");
+			}
+		}
+		appendEndOfRow(sb, tapValue);
+	}
+	
+	public void makeEmptyLine(StringBuffer sb) {
+		sb.append("<tr>");
+		for(int i=0; i<cumulativeGrades.length+3; i++) {
+			sb.append("<th> </th>\n");
+		}
 		sb.append("</tr>");
+	}
+	
+	public void appendEndOfRow(StringBuffer sb, int value) {
+		sb.append("<th> </th>");
+		sb.append("<td>" +  value + "</td>\n");
+		sb.append("</tr>\n");
+	}
+	
+	public String getColorLongTapValue(long min, long max, long value, int tapValue) {
+		if (tapValue < 0) {
+			return getColorLong(max, min, value);
+		}
+		return getColorLong(min, max, value);
+	}          
+	
+	public String getColorLong(long min, long max, long value) {
+		if (value == min) {
+			return 	"#00ff00";
+		} else if (value == max) {
+			return "red";
+		} else {
+			int index = (int)((4 * (value - max) / ((double)(max) - (double)(min))) + 5);
+			return getColor(index);
+		}
+	}          
+	
+	public String getColorDoubleTapValue(double mind, double maxd, double value, int tapValue) {
+		if (tapValue < 0) {
+			return getColorDouble(maxd, mind, value);
+		}
+		return getColorDouble(mind, maxd, value);
+	}          
+	
+	public String getColorDouble(double mind, double maxd, double value) {
+		if (value == mind) {
+			return 	"#00ff00";
+		} else if (value == maxd) {
+			return "red";
+		} else {
+			int index = (int)((4 * (value - maxd) / ((double)(maxd) - (double)(mind))) + 5);
+			return getColor(index);
+		}
+	}
+	
+	public String getColor(int index) {
+		return colors[index%6];
 	}
 	
 	

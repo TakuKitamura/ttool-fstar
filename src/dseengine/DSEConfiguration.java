@@ -128,10 +128,30 @@ public class DSEConfiguration implements Runnable  {
 	
 	
 	// Taps
-	private static String[] taps = {"LowestMinSimulationDuration",  "LowestAverageSimulationDuration", 
-	"LowestMaxSimulationDuration", "LowestArchitectureComplexity"};
+	private static String[] taps = {"MinSimulationDuration",  "AverageSimulationDuration", 
+	"MaxSimulationDuration", 
+	"ArchitectureComplexity", 
+	"MinCPUUsage", "AverageCPUUsage", "MaxCPUUsage",
+	"MinBusUsage", "AverageBusUsage", "MaxBusUsage",
+	"MinBusContention", "AverageBusContentione", "MaxBusContention"};
 	
-	private int[] tapValues = {1, 1, 1, 1};
+	private int[] tapValues = {1, 1, 1, 
+	1, // 3
+	1, -10, 1,//4, 5, 6
+	1, 1, 1, // 7, 8, 9
+	1, 1, 1 // 10, 11, 12
+	};
+	
+	
+	public static final int LONG_TYPE = 0;
+	public static final int DOUBLE_TYPE = 1;
+	
+	public static int[] tapType = {LONG_TYPE, DOUBLE_TYPE, LONG_TYPE,
+		LONG_TYPE,
+		DOUBLE_TYPE, DOUBLE_TYPE, DOUBLE_TYPE,
+		DOUBLE_TYPE, DOUBLE_TYPE, DOUBLE_TYPE,
+		LONG_TYPE, DOUBLE_TYPE, LONG_TYPE
+	};
 	
 	
 	private DSESimulationResult results;
@@ -1049,7 +1069,7 @@ public class DSEConfiguration implements Runnable  {
 					
 				}
 				
-			sb = new StringBuffer(dsemapresults.makeHTMLTableOfResults(tapValues[0], tapValues[1], tapValues[2], tapValues[3]));
+			sb = new StringBuffer(dsemapresults.makeHTMLTableOfResults(tapValues));
 				
 			
 			try {
@@ -1531,7 +1551,7 @@ public class DSEConfiguration implements Runnable  {
 	}
 	
 	private void rankMappings(DSEMappingSimulationResults _dseresults) {
-		_dseresults.computeGrades(tapValues[0], tapValues[1], tapValues[2], tapValues[3]);
+		_dseresults.computeGrades(tapValues);
 	}
 
 	private void computeCoresOfMappings(Vector<TMLMapping> maps) {
