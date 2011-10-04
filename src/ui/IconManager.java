@@ -144,9 +144,9 @@ public class IconManager {
 	public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
 	public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036, imgic5038;
 	public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
-	public static ImageIcon imgic5050, imgic5052, imgic5054;
+	public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056;
 	
-	public static ImageIcon imgic5100, imgic5102, imgic5104;
+	public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
 	
        // Delegate ports image removed, by Solange
     //public static ImageIcon imgic2102;
@@ -530,12 +530,17 @@ public class IconManager {
 	private static String icon5048 = "images/avataractivity.gif";
 	private static String icon5050 = "images/avatarsendsignal.gif";
 	private static String icon5052 = "images/avatarpartition.gif";
-	private static String icon5054 = "images/alignpartition.gif";
+	private static String icon5054 = "images/alignpartition.gif";  
+	private static String icon5056 = "images/avatarreceivesignal.gif";
 	
 	private static String icon5100 = "images/avatarhead16.gif";
 	private static String icon5102 = "images/avatarhead32.gif";
+
 	
 	private static String icon5104 = "images/savepng24.gif";
+	
+	private static String icon5106 = "images/attribute.gif";
+	private static String icon5108 = "images/method.gif";
 	
     public IconManager() {
         
@@ -893,10 +898,13 @@ public class IconManager {
 		imgic5050 = getIcon(icon5050);
 		imgic5052 = getIcon(icon5052);
 		imgic5054 = getIcon(icon5054);
+		imgic5056 = getIcon(icon5056);
 		
 		imgic5100 = getIcon(icon5100);
 		imgic5102 = getIcon(icon5102);
 		imgic5104 = getIcon(icon5104);
+		imgic5106 = getIcon(icon5106);
+		imgic5108 = getIcon(icon5108);
 		if (imgic5100 != null) {
 			img5100 = imgic5100.getImage();
 		}

@@ -558,11 +558,11 @@ public class AvatarSpecificationSimulation  {
 			if (aspt.hasDelay) {
 				if (aspt.myMinDuration < minMin) {
 					minMin = aspt.myMinDuration;
-					indexMin = ll.size();
 					//TraceManager.addDev("Setting min duration = " +  minMin);
 				}
 				if (aspt.myMaxDuration < maxDuration) {
 					maxDuration = aspt.myMaxDuration;
+					indexMin = ll.size();
 					//TraceManager.addDev("Setting max Duration = " +  maxDuration);
 				}
 			}
@@ -813,19 +813,19 @@ public class AvatarSpecificationSimulation  {
 			if ((tr.elementToExecute instanceof AvatarTransition) && (executeEmptyTransition)) {
 				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
 				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
-					TraceManager.addDev("Empty transition?");
+					//TraceManager.addDev("Empty transition?");
 					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
 						tr.isSilent = true;
-						TraceManager.addDev("Yes");
+						//TraceManager.addDev("Yes");
 						return tr;
 					}
 				}
 			// State entering?
 			} else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
-				TraceManager.addDev("Empty state enter?");
+				//TraceManager.addDev("Empty state enter?");
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
 					tr.isSilent = true;
-					TraceManager.addDev("Yes");
+					//TraceManager.addDev("Yes");
 					return tr;
 				}
 			}

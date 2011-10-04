@@ -223,6 +223,21 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         }  else if (value instanceof CheckingError) {
             setIcon(IconManager.imgic322);
             setToolTipText(value.toString());
+        } else if (value instanceof TAttribute) {
+            setIcon(IconManager.imgic5106);
+            setToolTipText(value.toString());
+        } else if (value instanceof AvatarSignal) {
+        	if (((AvatarSignal)value).getInOut() == AvatarSignal.OUT) {
+        		setIcon(IconManager.imgic5050);
+            setToolTipText(value.toString());
+        	} else {
+            setIcon(IconManager.imgic5056);
+            setToolTipText(value.toString());
+            }
+        } else if (value instanceof AvatarMethod) {
+            setIcon(IconManager.imgic5108);
+            setToolTipText(value.toString());
+        
         } else {
             setToolTipText(null);
         }

@@ -58,7 +58,7 @@ import ui.window.*;
 import ui.avatarsmd.*;
 
 
-public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree {
     private int textY1 = 3;
     private String stereotype = "block";
 	
@@ -991,6 +991,69 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			_v.add(as);
 		}
 	}
+	
+	public boolean hasDefinitions() {
+		return ((myAttributes.size() + myMethods.size() + mySignals.size() + nbInternalTGComponent)>0);
+	}
+	
+	// Main Tree
+    
+    public int getChildCount() {
+    	//TraceManager.addDev("Counting childs!");
+        return myAttributes.size() + myMethods.size() + mySignals.size() + nbInternalTGComponent;
+    }
+    
+    public Object getChild(int index) {
+    	
+    	int sa = nbInternalTGComponent;
+    	
+    	if (sa > index) {
+    		return tgcomponent[index];
+    	}
+    
+    	index = index - nbInternalTGComponent;
+    	sa = myAttributes.size();
+    //	TraceManager.addDev("index = " + index + " sa=" + sa);
+    	if (sa <= index) {
+    		index = index - sa;
+    		sa = myMethods.size();
+    		if (sa <= index) {
+    			return mySignals.get(index - sa);
+    		} else {
+    			return myMethods.get(index);
+    		}
+    	}
+    	
+    	return myAttributes.get(index);
+    }
+    
+    public int getIndexOfChild(Object child) {
+    	if (child instanceof AvatarBDBlock) {
+    		for(int i=0; i<nbInternalTGComponent; i++) {
+    			if (tgcomponent[i] == child) {
+    				return i;
+    			}
+    		}
+    	}
+    	
+    	if (child instanceof TAttribute) {
+    		return myAttributes.indexOf(child) + nbInternalTGComponent;
+    	}
+    	
+    	if (child instanceof AvatarMethod) {
+    		return myMethods.indexOf(child) + myAttributes.size() + nbInternalTGComponent;
+    	}
+    	
+    	if (child instanceof AvatarSignal) {
+    		return mySignals.indexOf(child) + myAttributes.size() + myMethods.size() + nbInternalTGComponent;
+    	}
+    	
+    	return -1;
+    }
+    
+    public ImageIcon getImageIcon() {
+        return myImageIcon;
+    }
 	
 	
     

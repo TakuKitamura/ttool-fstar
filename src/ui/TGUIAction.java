@@ -955,7 +955,7 @@ public class TGUIAction extends AbstractAction {
         actions[AAD_ACTION] = new TAction("add-aad-action", "Action", IconManager.imgic204, IconManager.imgic204, "Action", "Add a new action to the currently opened AVATAR avatar activity diagram", 0);
         actions[AAD_STOP_FLOW] = new TAction("add-aad-stop-flow", "Stop flow", IconManager.imgic5046, IconManager.imgic5046, "Stop flow", "Add a stop flow state to the currently opened avatar activity diagram", 0);
         actions[AAD_SEND_SIGNAL_ACTION] = new TAction("add-add-send-signal-action", "Send signal", IconManager.imgic5050, IconManager.imgic5050, "Send signal", "Add a send signal operator to the currently opened avatar activity diagram", 0);
-        actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic908, IconManager.imgic908, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic5056, IconManager.imgic5056, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
         actions[AAD_PARTITION] = new TAction("add-add-partition", "Partition", IconManager.imgic5052, IconManager.imgic5052, "Partition", "Add a partition to the currently opened avatar activity diagram", 0);
         actions[AAD_ALIGN_PARTITION] = new TAction("add-aad-align_partitions", "Align partitions", IconManager.imgic5054, IconManager.imgic5054, "Align partitions", "Align partitions of the currently opened avatar activity diagram", 0);
         

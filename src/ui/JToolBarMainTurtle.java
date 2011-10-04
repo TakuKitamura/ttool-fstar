@@ -257,7 +257,7 @@ public	class JToolBarMainTurtle extends JToolBar	{
 	
 	public void showAvatarActions(boolean b) {
 		
-		TraceManager.addDev("Show avatar options with b = " + b);
+		//TraceManager.addDev("Show avatar options with b = " + b);
 		
 		 avatarSimu.setVisible(b);
 		 avatarFVUPPAAL.setVisible(b);

@@ -54,6 +54,8 @@ import translator.*;
 import ui.*;
 import myutil.*;
 
+import ui.avatarbd.*;
+
 public class DiagramTreeModel implements TreeModel {
     private MainGUI mgui;
     private Vector treeModelListeners = new Vector();
@@ -155,6 +157,9 @@ public class DiagramTreeModel implements TreeModel {
             }
             
             if (node instanceof TGComponent) {
+            	if (node instanceof AvatarBDBlock) {
+            		return !((AvatarBDBlock)node).hasDefinitions();
+            	}
                 if (((TGComponent)node).getNbInternalTGComponent() > 0) {
                     return false;
                 }
