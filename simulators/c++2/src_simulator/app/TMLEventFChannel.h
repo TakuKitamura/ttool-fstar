@@ -86,7 +86,7 @@ public:
 	void write(TMLTransaction* iTrans){
 		if (this->_content<_length){		
 #ifdef LOSS_ENABLED
-			if ((this->_maxNbOfLosses > this->_nbOfLosses) && (myrand(0,99) < this->_lossRate)){
+			if (this->_maxNbOfLosses > this->_nbOfLosses && this->_lossRate!=0 && myrand(0,99) < this->_lossRate){
 				this->_nbOfLosses++;
 			}else{
 #endif
