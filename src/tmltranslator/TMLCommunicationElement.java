@@ -45,6 +45,8 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package tmltranslator;
 
+import myutil.*;
+
 
 
 public abstract class TMLCommunicationElement extends TMLElement {
@@ -63,6 +65,9 @@ public abstract class TMLCommunicationElement extends TMLElement {
 	
 	// No maxNbOfLoss -> set it to -1
 	public void setLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+		if (_isLossy) {
+			TraceManager.addDev("***** Setting lossy " + this + " precentage = " + _percentage + " maxLoss = " + _maxNbOfLoss);
+		}
 		isLossy = _isLossy;
 		lossPercentage = _percentage;
 		maxNbOfLoss = _maxNbOfLoss;

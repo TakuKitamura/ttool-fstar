@@ -122,7 +122,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 	protected JComboBox versionCodeGenerator, units;
     protected JButton showSimulationTrace;
 	
-	private static int selectedUnit = 2;
+	private static int selectedUnit = 1;
 	
     
     private Thread t;

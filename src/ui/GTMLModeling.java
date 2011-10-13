@@ -977,8 +977,8 @@ public class GTMLModeling  {
 						request.addOriginTask(tt2);
 						//TraceManager.addDev("LOSS?");
 						if (port2.isLossy()) {
-							//TraceManager.addDev("LOSS***** Lossy request port");
-							request.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+							TraceManager.addDev("LOSS***** Lossy request port" + port2.getLossPercentage() + " maxLoss=" + port2.getMaxNbOfLoss());
+							request.setLossy(true, port2.getLossPercentage(), port2.getMaxNbOfLoss());
 						} 
 					}
 					

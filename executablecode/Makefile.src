@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/PageLoader.c generated_src/UserModel.c generated_src/DisplayDriver.c generated_src/EReaderController.c 
+SRCS = generated_src/main.c generated_src/VentricularController.c generated_src/Heart.c generated_src/ObservingSystem.c generated_src/Chronometer_Observer2.c generated_src/Chronometer_Observer1.c generated_src/PropLRI_PropHRI_Observer.c generated_src/PropVRP.c 
