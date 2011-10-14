@@ -74,7 +74,7 @@ public abstract class TMLCommunicationElement extends TMLElement {
 	}
 	
 	public boolean isLossy() {
-		return isLossy;
+		return (isLossy) && (lossPercentage>0);
 	}
 	
 	public int getLossPercentage() {

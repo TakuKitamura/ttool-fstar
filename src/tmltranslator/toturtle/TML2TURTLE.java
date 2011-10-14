@@ -135,17 +135,17 @@ public class TML2TURTLE {
             switch(channel.getType()) {
 			case TMLChannel.BRNBW:
 				tch1 = new TClassChannelBRNBW(name, channel.getName());
-				tch1.makeTClass(channel.isLossy(), channel.getMaxNbOfLoss());
+				tch1.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch1);
 				break;
 			case TMLChannel.BRBW:
 				tch3 = new TClassChannelBRBW(name, channel.getName());
-				tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getMaxNbOfLoss());
+				tch3.makeTClass(channel.getMax(), channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch3);
 				break;
 			default:
 				tch2 = new TClassChannelNBRNBW(name, channel.getName());
-				tch2.makeTClass(channel.isLossy(), channel.getMaxNbOfLoss());
+				tch2.makeTClass(channel.isLossy(), channel.getLossPercentage(), channel.getMaxNbOfLoss());
 				tm.addTClass(tch2);
             }
         }

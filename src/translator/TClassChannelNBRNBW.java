@@ -55,7 +55,7 @@ public class TClassChannelNBRNBW extends TClass {
       channelName = _channelName;
     }
 
-    public void makeTClass(boolean _lossy, int _maxNbOfLoss) {
+    public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
         //System.out.println("toto1");
         
         Gate read, write, loss = null, notloss = null;

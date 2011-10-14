@@ -54,15 +54,15 @@ public class TClassChannelBRBW extends TClass {
       channelName = _channelName;
     }
 
-    public void makeTClass(int max, boolean _lossy, int _maxNbOfLoss) {
+    public void makeTClass(int max, boolean _lossy, int _percentage, int _maxNbOfLoss) {
         //System.out.println("toto1");
         
         Gate read, write, loss = null, notloss = null;
         ADActionStateWithGate acread, acwrite, aclost, acnotlost;
-        ADChoice choice, choiceLoss;
+        ADChoice choice, choiceLoss, choiceLossPercentage, choiceLoss100;
         ADActionStateWithParam adap1, adap2;   
         //ADStop adstop;
-        ADJunction adj;
+        ADJunction adj, adj1, adj2;
        
         ActivityDiagram ad = new ActivityDiagram();
         
@@ -117,15 +117,33 @@ public class TClassChannelBRBW extends TClass {
 		
 		if (_lossy) {
 			if (_maxNbOfLoss > -1) {
+				adj1 = new ADJunction();
+				adj2 = new ADJunction();
+				choiceLossPercentage = new ADChoice();
 				choiceLoss = new ADChoice();
+				choiceLoss100 = new ADChoice();
+				
+				choiceLossPercentage.addGuard("[" + _percentage + " < 100]");
+				choiceLossPercentage.addGuard("[" + _percentage + " > 99]");
+				choiceLossPercentage.addNext(choiceLoss);
+				choiceLossPercentage.addNext(choiceLoss100);
+				
+				choiceLoss100.addGuard("[currentLoss < maxLoss]");
+				choiceLoss100.addGuard("[not(currentLoss < maxLoss)]");
+				choiceLoss100.addNext(adj1);
+				choiceLoss100.addNext(adj2);
+				
 				choiceLoss.addGuard("[]");
 				choiceLoss.addGuard("[currentLoss < maxLoss]");
-				acwrite.addNext(choiceLoss);
+				choiceLoss.addNext(adj2);
+				choiceLoss.addNext(adj1);
+				
+				acwrite.addNext(choiceLossPercentage);
 				
 				acnotlost = new ADActionStateWithGate(notloss);
 				acnotlost.setActionValue("");
 				ad.add(acnotlost);
-				choiceLoss.addNext(acnotlost);
+				adj2.addNext(acnotlost);
 				
 				aclost = new ADActionStateWithGate(loss);
 				aclost.setActionValue("");
@@ -133,7 +151,7 @@ public class TClassChannelBRBW extends TClass {
 				adap1 = new ADActionStateWithParam(sample);
 				adap1.setActionValue("samples + 1");
 				
-				choiceLoss.addNext(aclost);
+				adj1.addNext(aclost);
 				
 				adap2 = new ADActionStateWithParam(currentLoss);
 				adap2.setActionValue("currentLoss + 1");
@@ -143,15 +161,19 @@ public class TClassChannelBRBW extends TClass {
 				acnotlost.addNext(adap1);
 				adap1.addNext(adj);
 				
+				ad.add(adj1);
+				ad.add(adj2);
 				ad.add(choiceLoss);
+				ad.add(choiceLossPercentage);
+				ad.add(choiceLoss100);
 				ad.add(adap1);
 				ad.add(adap2);
 				ad.add(aclost);
 				ad.add(acnotlost);
 			} else {
 				choiceLoss = new ADChoice();
-				choiceLoss.addGuard("[]");
-				choiceLoss.addGuard("[]");
+				choiceLoss.addGuard("[ " + _percentage + " < 100]");
+				choiceLoss.addGuard("[ ]");
 				acwrite.addNext(choiceLoss);
 				
 				 acnotlost = new ADActionStateWithGate(notloss);

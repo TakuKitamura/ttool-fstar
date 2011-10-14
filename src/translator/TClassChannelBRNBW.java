@@ -55,7 +55,7 @@ public class TClassChannelBRNBW extends TClass {
       channelName = _channelName;
     }
 
-    public void makeTClass(boolean _lossy, int _maxNbOfLoss) {
+    public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
         //System.out.println("toto1");
         
         Gate read, write, loss = null, notloss = null;
@@ -110,8 +110,8 @@ public class TClassChannelBRNBW extends TClass {
 		if (_lossy) {
 			if (_maxNbOfLoss > -1) {
 				choiceLoss = new ADChoice();
-				choiceLoss.addGuard("[]");
-				choiceLoss.addGuard("[currentLoss < maxLoss]");
+				choiceLoss.addGuard("[ (" + _percentage "  < 100) or ((" + _percentage + ">99) and (not(currentLoss < maxLoss)))]");
+				choiceLoss.addGuard("[((" + _percentage "  < 100) and (currentLoss < maxLoss)) or ((" + _percentage + ">99) and (not(currentLoss < maxLoss)))]");
 				acwrite.addNext(choiceLoss);
 				
 				acnotlost = new ADActionStateWithGate(notloss);
@@ -142,8 +142,8 @@ public class TClassChannelBRNBW extends TClass {
 				ad.add(acnotlost);
 			} else {
 				choiceLoss = new ADChoice();
-				choiceLoss.addGuard("[]");
-				choiceLoss.addGuard("[]");
+				choiceLoss.addGuard("[ " + _percentage + " < 100]");
+				choiceLoss.addGuard("[ ]");
 				acwrite.addNext(choiceLoss);
 				
 				 acnotlost = new ADActionStateWithGate(notloss);
