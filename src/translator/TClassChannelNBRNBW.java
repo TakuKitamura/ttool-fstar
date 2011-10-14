@@ -109,8 +109,8 @@ public class TClassChannelNBRNBW extends TClass {
 		if (_lossy) {
 			if (_maxNbOfLoss > -1) {
 				choiceLoss = new ADChoice();
-				choiceLoss.addGuard("[]");
-				choiceLoss.addGuard("[currentLoss < maxLoss]");
+				choiceLoss.addGuard("[ (" + _percentage + "  < 100) or ((" + _percentage + ">99) and (not(currentLoss < maxLoss)))]");
+				choiceLoss.addGuard("[((" + _percentage + "  < 100) and (currentLoss < maxLoss)) or ((" + _percentage + ">99) and (currentLoss < maxLoss))]");
 				acwrite.addNext(choiceLoss);
 				
 				acnotlost = new ADActionStateWithGate(notloss);

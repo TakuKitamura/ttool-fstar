@@ -135,7 +135,7 @@ public class TClassEventInfinite extends TClass implements FIFOInfiniteAndGetSiz
            return g;
     }
 
-    public void makeTClass(boolean _lossy, int _maxNbOfLoss) {
+    public void makeTClass(boolean _lossy, int _percentage, int _maxNbOfLoss) {
       Gate forward_0, forward_1, g;
         ADActionStateWithGate adag;
 		Gate loss = null, notloss = null;
