@@ -181,7 +181,7 @@ public class TML2TURTLE {
 				//if (event.canBeNotified()) {
 				tce.addSizeGate();
 				//}
-				tce.makeTClass(event.isLossy(), event.getMaxNbOfLoss());
+				tce.makeTClass(event.isLossy(), event.getLossPercentage(), event.getMaxNbOfLoss());
 				tm.addTClass(tce);
             } else {
 				if (event.isBlocking()) {
