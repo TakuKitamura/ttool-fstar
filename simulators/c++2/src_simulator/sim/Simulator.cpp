@@ -130,7 +130,7 @@ ID Simulator::schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, 
 		oTransCounter++;
 		iDOTFile << aStartState << " -> " << aEndState << " [label = \"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
 		if (aTopElement->getChannel()!=0){
-			//iDOTFile << "__" << aTopElement->getChannel()->toShortString();
+			iDOTFile << "__" << aTopElement->getChannel()->toShortString();
 		}
 		iDOTFile << "<" << aTopElement->getVirtualLength() << ">)\"]\n";
 		//(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
