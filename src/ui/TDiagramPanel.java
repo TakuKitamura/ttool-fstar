@@ -1969,7 +1969,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
     
     public void removeOneConnector(TGConnectingPoint cp) {
-		TraceManager.addDev("Remove one connector");
+	//TraceManager.addDev("Remove one connector");
         TGConnector tgcon;
         TGComponent t;
         int j, k;
