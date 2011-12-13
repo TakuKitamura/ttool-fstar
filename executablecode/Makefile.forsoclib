@@ -1,3 +1,14 @@
+SOCLIB_CPU=ppc405
+MUTEKH_CPU=ppc
+SOCLIB_CPU_COUNT=5
+
+#SOCLIB_CPU=sparcv8
+#MUTEKH_CPU=sparc
+#SOCLIB_CPU_COUNT=1
+
+PATH+=/opt/mutekh/bin
+export PATH
+
 updateruntime:
 	cp ~/TTool/executablecode/src/*.c ~/Prog/mutekh/libavatar/
 	cp ~/TTool/executablecode/src/*.h ~/Prog/mutekh/libavatar/include/   
@@ -8,12 +19,10 @@ updategeneratedcode:
 	cp ~/TTool/executableCode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
 
 compilesoclib:
-	export PATH=$PATH:/packages/crosscompilers/bin/ 
-	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-mips32el:pf-tutorial:memcheck
+	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
 
 runsoclib:
 	echo "running soclib"
-	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; SOCLIB_GDB=S SOCLIB_MEMCHK=T ./system.x mips32el:4 ~/Prog/mutekh/avatar-soclib-mips32el.out
-
+	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
 allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
 

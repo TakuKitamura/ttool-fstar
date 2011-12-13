@@ -2276,7 +2276,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         //TDiagramPanel tdp1 = ((TDiagramPanel)(designPanels.elementAt(mainDesignTabbedPane.getSelectedIndex()));
 			//tdp1.insertLibrary(tdp1.getMinX(), tdp1.getMinY());
 			TDiagramPanel tdp1 = getCurrentTDiagramPanel();
-			tdp1.insertLibrary(tdp1.getMinX(), tdp1.getMinY());
+			if (tdp1 != null) {
+				tdp1.insertLibrary(tdp1.getMinX(), tdp1.getMinY());
+			}
     }
     
     public void exportLibrary() {
