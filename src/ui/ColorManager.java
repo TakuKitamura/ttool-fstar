@@ -230,6 +230,15 @@ public class ColorManager {
 		AVATAR_STATE = Color.white;
 		AVATAR_REQUIREMENT_TOP = Color.white;
 		AVATAR_REQUIREMENT_ATTRIBUTES = Color.white;
+		AVATARPD_ATTRIBUTE = Color.white;
+		AVATARPD_SIGNAL = Color.white;
+		AVATARPD_PROPERTY = Color.white;
+		AVATARPD_PROPERTY_RELATION = Color.white;
+		AVATARPD_LOGICAL_CONSTRAINT = Color.white;
+		AVATARPD_TEMPORAL_CONSTRAINT = Color.white;
+		AVATARPD_ALIAS = Color.white;
+		AVATARPD_ATTRIBUTE_SETTING = Color.white;
+		AVATARPD_BOOLEQ = Color.white;
 	}
     
 } // Class Color

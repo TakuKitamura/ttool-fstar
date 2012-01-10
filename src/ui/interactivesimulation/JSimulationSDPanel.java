@@ -91,8 +91,8 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 	// Transactions
 	protected String fileReference;
 	
-	private int maxNbOfTransactions = 1000;
-	private int drawnTransactions = 1000;
+	private int maxNbOfTransactions = 10000;
+	private int drawnTransactions = 10000;
 	
 	// My scroll panel
 	private JScrollPane jsp;

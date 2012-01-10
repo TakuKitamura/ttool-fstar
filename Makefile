@@ -272,7 +272,7 @@ clean:
 	rm -f $(TTOOL_TARGET)/modeling/*
 	rm -f $(TTOOL_TARGET)/bin/*
 	rm -f $(TTOOL_TARGET)/lotos/*
-	rm -f $(TTOOL_TARGET)/doc/*
+	rm -rf $(TTOOL_TARGET)/doc/*
 	rm -rf $(TTOOL_TARGET)/src/*
 	rm -f $(TTOOL_TARGET)/lib/*
 	@@for p in $(PACKAGE); do \
