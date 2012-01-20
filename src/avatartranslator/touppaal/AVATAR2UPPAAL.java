@@ -552,6 +552,11 @@ public class AVATAR2UPPAAL {
 			if (_previous == null) {
 				TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
 			}
+			TraceManager.addDev("Linking myself = " + _elt + " to " + loc);
+			UPPAALLocation locc = hashChecking.get(_elt);
+			if (_elt != null) {
+				TraceManager.addDev("In hash:" + _elt + " in location:" + locc);
+			}
 			tr = addTransition(_template, _previous, loc);
 			_previous.setCommitted();
 			return;
@@ -608,20 +613,23 @@ public class AVATAR2UPPAAL {
 			
 			// Avatar State
 		} else if (_elt instanceof AvatarState) {
-			TraceManager.addDev("- - - - - - - - - - - - - - - - - - State " + _elt + ": first handling");
+			TraceManager.addDev("+ + + + + + + + + + + State " + _elt + ": first handling");
 			if (_elt.isCheckable()) {
-				TraceManager.addDev("State " + _elt + " is selected for checking");
+				TraceManager.addDev("State " + _elt + " is selected for checking previous=" + _previous);
 				_previous.unsetOptimizable();
 				_previous.setCommitted();
 				loc = addLocation(_template);  
 				tr = addTransition(_template, _previous, loc);
 				hashChecking.put(_elt, _previous);
+				hash.put(_elt, _previous);
 				_previous = loc;
 				
+			} else {
+				hash.put(_elt, _previous);
 			}
 			
 			state = (AvatarState)_elt;
-			hash.put(_elt, _previous);
+			
 			
 			if (_elt.nbOfNexts() == 0) {
 				return;
@@ -674,7 +682,7 @@ public class AVATAR2UPPAAL {
 		} else if (_elt instanceof AvatarTransition) {
 			at = (AvatarTransition) _elt;
 			hash.put(_elt, _previous);
-			TraceManager.addDev("Transition with guard = " + at.getGuard() + " previous=" + _previousState);
+			//TraceManager.addDev("Transition with guard = " + at.getGuard() + " previous=" + _previousState);
 			if ((at.getNext(0) instanceof AvatarActionOnSignal) && !(at.hasActions()) && _previousState) {
 				if (at.isGuarded()) {
 					makeElementBehavior(_block, _template, _elt.getNext(0), _previous, _end, at.getGuard(), false, false);
@@ -706,7 +714,7 @@ public class AVATAR2UPPAAL {
 		addAssignment(tr, ss[1]);
 		
 		
-		TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
+		//TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
 		
 		if (_aaos.isCheckable()) {
 			if (hashChecking.get(_aaos) == null) {

@@ -70,7 +70,7 @@ public class TTIFFilter extends FileFilter {
     }
     
     public String getDescription() {
-        return "TURTLE TIF Files";
+        return "TIF Image";
     }
     
     public static String getExtension() {

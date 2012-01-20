@@ -70,7 +70,7 @@ public class TImgFilter extends FileFilter {
     }
     
     public String getDescription() {
-        return "TURTLE images";
+        return "PNG images";
     }
     
     public static String getExtension() {

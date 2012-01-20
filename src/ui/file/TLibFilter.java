@@ -70,7 +70,7 @@ public class TLibFilter extends FileFilter {
     }
     
     public String getDescription() {
-        return "TURTLE Librairies";
+        return "TTool Librairies";
     }
     
     public static String getExtension() {
