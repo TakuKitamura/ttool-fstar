@@ -908,15 +908,23 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
 	public void addCryptoElements() {
 		// Adding function
-		String method = "Message encryptSK(Message msg, Key k)";
+		String method = "Message aencrypt(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
-		method = "Message decryptSK(Message msg, Key k)";
+		method = "Message adecrypt(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "Key pk(Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "Signature sign(Message msg, Key k)";
+		addMethodIfApplicable(myMethods, method);
+		method = "bool verifySign(Message msg1, Signature sig, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		
-		method = "Message encryptPK(Message msg, Key k)";
+		/* Certifying */
+		method = "Certificate cert(Key k, Message msg)";
 		addMethodIfApplicable(myMethods, method);
-		method = "Message decryptPK(Message msg, Key k)";
+		method = "bool verifyCert(Certificate cert, Key k)";
 		addMethodIfApplicable(myMethods, method);
+		
 	
 		method = "Message sencrypt(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);

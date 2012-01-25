@@ -62,7 +62,9 @@ public class AVATAR2ProVerif {
 	private final static String BOOLEAN_DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
 	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
 	
-	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun encryptPK/2.\nreduc decryptPK(encryptPK(x,pk(y)),y) = x.\nfun encryptSK/2.\nreduc decryptSK(encryptSK(x, y), pk(y)) = x.\n";
+	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun aencryptPK/2.\nreduc adecryptPK(aencryptPK(x,pk(y)),y) = x.\n";
+	private final static String CERT_HEADER = "(* Certificates  *)\nfun cert/1.\nfun verifyCert/2.\nreduc verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.\nreduc getpk(cert(epk, sign(epk,sk))) = epk.\n";
+
 	
 	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
 	private final static String MAC_HEADER = "(* MAC *)\nfun MAC/2.\nreduc verifyMAC(m, k, MAC(m, k)) = true.\n";
@@ -143,6 +145,7 @@ public class AVATAR2ProVerif {
 		spec.addToGlobalSpecification(FUNC_DATA_HEADER + "\n");
 		
 		spec.addToGlobalSpecification(PK_HEADER + "\n");
+		spec.addToGlobalSpecification(CERT_HEADER + "\n");
 		spec.addToGlobalSpecification(SK_HEADER + "\n");
 		spec.addToGlobalSpecification(MAC_HEADER + "\n");
 		spec.addToGlobalSpecification(HASH_HEADER + "\n");

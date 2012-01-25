@@ -71,4 +71,23 @@ public class AvatarState extends AvatarStateMachineElement {
 	public String getNiceName() {
 		return "State " + getName();
 	}
+	
+	public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
+		AvatarTransition at;
+		int cpt = 0;
+		
+		for(AvatarStateMachineElement asme: nexts) {
+			if (asme instanceof AvatarTransition) {
+				at = (AvatarTransition)asme;
+				if (at.isEmpty()) {
+					if (at.getNext(0) == this) {
+						cpt ++;
+					}
+				}
+			}
+		}
+		
+		
+		return cpt;
+	}
 }

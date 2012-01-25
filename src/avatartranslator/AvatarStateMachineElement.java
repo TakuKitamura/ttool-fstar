@@ -52,7 +52,7 @@ import myutil.*;
 
 public abstract class AvatarStateMachineElement extends AvatarElement {
 	
-	private LinkedList<AvatarStateMachineElement> nexts;
+	protected LinkedList<AvatarStateMachineElement> nexts;
 	private AvatarState myState;
 	
 	private boolean isCheckable;

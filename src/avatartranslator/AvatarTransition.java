@@ -136,6 +136,14 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		return tmp.compareTo("[]") == 0;
 		
 	}
+	
+	public boolean isEmpty() {
+		if (hasDelay() || hasCompute()) {
+			return false;
+		}
+		
+		return (actions.size()  == 0);
+	}
 
 	
 	public AvatarTransition cloneMe() {

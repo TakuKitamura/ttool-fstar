@@ -1200,6 +1200,24 @@ public class AvatarDesignPanelTranslator {
 		
 		asm.handleUnfollowedStartState();
 		
+		// Investigate all states -> put warnings for all empty transitions from a state to the same one (infinite loop)
+		int nb;
+		for(AvatarStateMachineElement asmee: asm.getListOfElements()) {
+			if (asmee instanceof AvatarState) {
+				nb = ((AvatarState)asmee).hasEmptyTransitionsOnItself(asm);
+				if (nb > 0) {
+					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "State(s) " + asmee.getName() + " has " + nb + " empty transition(s) on itself");
+					ce.setAvatarBlock(_ab);
+					ce.setTDiagramPanel(tdp);
+					ce.setTGComponent((TGComponent)(asmee.getReferenceObject()));
+					addWarning(ce);
+				}
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	private void makeError(int _error, TDiagramPanel _tdp, AvatarBlock _ab, TGComponent _tgc, String _info, String _element) {
