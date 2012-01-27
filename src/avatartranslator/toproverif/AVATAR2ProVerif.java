@@ -63,7 +63,8 @@ public class AVATAR2ProVerif {
 	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
 	
 	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun aencryptPK/2.\nreduc adecryptPK(aencryptPK(x,pk(y)),y) = x.\n";
-	private final static String CERT_HEADER = "(* Certificates  *)\nfun cert/1.\nfun verifyCert/2.\nreduc verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.\nreduc getpk(cert(epk, sign(epk,sk))) = epk.\n";
+	private final static String SIG_HEADER = "fun sign/2.\nfun verifySign/3.\nequation verifySign(m, sign(m,sk), pk(sk))=true.\n";
+	private final static String CERT_HEADER = "(* Certificates  *)\nfun cert/2.\nfun verifyCert/2.\nequation verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.\nreduc getpk(cert(epk, sign(epk,sk))) = epk.\n";
 
 	
 	private final static String SK_HEADER = "(* Symmetric key cryptography *)\nfun sencrypt/2.\nreduc sdecrypt(sencrypt(x,k),k) = x.\n";
@@ -73,7 +74,9 @@ public class AVATAR2ProVerif {
 	
 	private ProVerifSpec spec;
 	private AvatarSpecification avspec;
-	Hashtable<String, Integer> macs;
+	private Hashtable<String, Integer> macs;
+	
+	protected Hashtable<String, String> declarations;
 	
 	private Vector warnings;
 	
@@ -101,6 +104,7 @@ public class AVATAR2ProVerif {
 		GENERAL_ID = 0;
 		
 		macs = new Hashtable<String, Integer>();
+		declarations = new Hashtable<String, String>();
 		
 		warnings = new Vector();
 		spec = new ProVerifSpec();
@@ -140,11 +144,16 @@ public class AVATAR2ProVerif {
 		return spec;
 	}
 	
+	private String makeAttrName(String _block, String _attribute) {
+		return _block + "__" + _attribute;
+	}
+	
 	public void makeHeader(boolean _stateReachability) {
 		spec.addToGlobalSpecification(BOOLEAN_DATA_HEADER + "\n");
 		spec.addToGlobalSpecification(FUNC_DATA_HEADER + "\n");
 		
 		spec.addToGlobalSpecification(PK_HEADER + "\n");
+		spec.addToGlobalSpecification(SIG_HEADER + "\n");
 		spec.addToGlobalSpecification(CERT_HEADER + "\n");
 		spec.addToGlobalSpecification(SK_HEADER + "\n");
 		spec.addToGlobalSpecification(MAC_HEADER + "\n");
@@ -173,8 +182,12 @@ public class AVATAR2ProVerif {
 				//TraceManager.addDev("Testing secret of " + block.getName() + "." + attribute.getName() + " ?");
 				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName())) {
 					//TraceManager.addDev("Secret!");
-					spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
-					spec.addToGlobalSpecification("query attacker:" + attribute.getName() + ".\n\n");
+					//spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
+					spec.addToGlobalSpecification("query attacker:" + makeAttrName(block.getName(), attribute.getName()) + ".\n\n");
+				}
+				
+				if (hasConstantPragmaStartingWithAttribute(block.getName(), attribute.getName())) {
+					spec.addToGlobalSpecification("data " + makeAttrName(block.getName(), attribute.getName()) + "/0.\n\n");
 				}
 			}
 			// Queries for states
@@ -378,14 +391,14 @@ public class AVATAR2ProVerif {
 		return ret;
 	}
 	
-	public boolean inPublicPrivateKeyPragma(String _blockName, String attributeName) {
+	public boolean isPublicPrivateKeyPragma(String _blockName, String attributeName) {
 		LinkedList<String> pragmas = avspec.getPragmas();
 		String tmp;
 		String tmps [];
 		int index;
 		
 		for(String pragma: pragmas) {
-			if (isPublicPrivateKeyPragma(pragma)) {
+			if (isPrivatePublicKeyPragma(pragma)) {
 				tmp = pragma.substring(18, pragma.length()).trim();
 				
 				//TraceManager.addDev("Testing prama: " + tmp);
@@ -467,14 +480,131 @@ public class AVATAR2ProVerif {
 		return false;
 	}
 	
-	public boolean hasInitialCommonKnowledgePragmaWithAttribute(String _blockName, String attributeName) {
+	public boolean hasConstantPragmaStartingWithAttribute(String _blockName, String attributeName) {
 		LinkedList<String> pragmas = avspec.getPragmas();
 		String tmp;
 		String tmps [];
 		int index;
 		
 		for(String pragma: pragmas) {
-			if (isInitialCommonKnowledgePragma(pragma)) {
+			if (isSecretPragma(pragma)) {
+				tmp = pragma.substring(7, pragma.length()).trim();
+				
+				//TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return false;
+				}
+				
+				tmps = tmp.split(" ");
+				tmp = tmps[0];
+				
+				index = tmp.indexOf('.');
+				if (index != -1) {
+					try {
+						if (tmp.substring(0, index).compareTo(_blockName) == 0) {
+							if (tmp.substring(index+1, tmp.length()).compareTo(attributeName) == 0) {
+								return true;
+							}
+						}
+					} catch (Exception e) {
+						TraceManager.addDev("Error on testing pragma");
+					}
+				}
+			}
+		}
+		
+
+		return false;
+	}
+	
+	public boolean hasSecretPragmaWithAttribute(String attributeName) {
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
+		
+		for(String pragma: pragmas) {
+			if (isSecretPragma(pragma)) {
+				tmp = pragma.substring(7, pragma.length()).trim();
+				
+				//TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return false;
+				}
+				
+				tmps = tmp.split(" ");
+				for(int i=0; i<tmps.length; i++) {
+					tmp = tmps[i];
+					//TraceManager.addDev("Testing with: " + tmp);
+					if (tmp.length() > 0) {
+						index = tmp.indexOf('.');
+						if (index != -1) {
+							try {
+								
+									if (tmp.substring(index+1, tmp.length()).compareTo(attributeName) == 0) {
+										return true;
+									}
+							
+							} catch (Exception e) {
+								TraceManager.addDev("Error on testing pragma");
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean hasPrivatePublicKeysPragmaWithAttribute(String _blockName, String attributeName) {
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
+		boolean foundBlock = false;
+		
+		for(String pragma: pragmas) {
+			if (isPrivatePublicKeyPragma(pragma)) {
+				tmp = pragma.substring(17, pragma.length()).trim();
+				
+				//TraceManager.addDev("Testing prama: " + tmp);
+				
+				if (tmp.length() == 0) {
+					return false;
+				}
+				
+				tmps = tmp.split(" ");
+				for(int i=0; i<tmps.length; i++) {
+					tmp = tmps[i];
+					if (i == 0) {
+						if (tmp.compareTo(_blockName) == 0) {
+							foundBlock = true;
+						}
+					} else {
+						if ((tmp.compareTo(attributeName) == 0) && (foundBlock)) {
+							return true;
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean hasInitialSystemKnowledgePragmaWithAttribute(String _blockName, String attributeName) {
+		LinkedList<String> pragmas = avspec.getPragmas();
+		String tmp;
+		String tmps [];
+		int index;
+		
+		for(String pragma: pragmas) {
+			if (isInitialSystemKnowledgePragma(pragma)) {
 				tmp = pragma.substring(23, pragma.length()).trim();
 				
 				//TraceManager.addDev("Testing pragma: " + tmp);
@@ -517,12 +647,12 @@ public class AVATAR2ProVerif {
 		return _pragma.startsWith("Authenticity ");
 	}
 	
-	public boolean isInitialCommonKnowledgePragma(String _pragma) {
-		return _pragma.startsWith("InitialCommonKnowledge ");
+	public boolean isInitialSystemKnowledgePragma(String _pragma) {
+		return _pragma.startsWith("InitialSystemKnowledge ");
 	}
 	
-	public boolean isPublicPrivateKeyPragma(String _pragma) {
-		return _pragma.startsWith("PublicPrivateKey ");
+	public boolean isPrivatePublicKeyPragma(String _pragma) {
+		return _pragma.startsWith("PrivatePublicKeys ");
 	}
 	
 	public String[] getListOfBlockParams(String _pragma) {
@@ -530,7 +660,7 @@ public class AVATAR2ProVerif {
 		
 		if (isSecretPragma(s)) {
 			s = s.substring(7, s.length()).trim();
-		} else if (isInitialCommonKnowledgePragma(s)) {
+		} else if (isInitialSystemKnowledgePragma(s)) {
 			s = s.substring(23, s.length()).trim();
 		} else {
 			return null;
@@ -554,7 +684,8 @@ public class AVATAR2ProVerif {
 		String blockName, paramName;
 		
 		for(String pragma: avspec.getPragmas()) {
-			if (isInitialCommonKnowledgePragma(pragma)) {
+			TraceManager.addDev("Working on pragma: " + pragma);
+			if (isInitialSystemKnowledgePragma(pragma)) {
 				// Identify each blockName / paramName
 				list = getListOfBlockParams(pragma);
 				
@@ -566,7 +697,7 @@ public class AVATAR2ProVerif {
 						paramName = tmp.substring(index+1, tmp.length());
 						
 						// Verify whether they are secret or not
-						if (!hasSecretPragmaWithAttribute(blockName, paramName)) {
+						if ((!hasSecretPragmaWithAttribute(paramName)) &&  (!hasPrivatePublicKeysPragmaWithAttribute(blockName, paramName))){
 							found = false;
 							// If not, add them if not already added
 							for(String st: createdVariables) {
@@ -582,38 +713,50 @@ public class AVATAR2ProVerif {
 						}
 					}
 				}
-			} else if (isPublicPrivateKeyPragma(pragma)) {
+			} else if (isPrivatePublicKeyPragma(pragma)) {
+				TraceManager.addDev("Pragma Public: " + pragma);
+				String privK, pubK;
 				index = pragma.indexOf(" ");
 				if (index != -1) {
 					tmp = pragma.substring(index+1, pragma.length()).trim();
 					index = tmp.indexOf(" ");
 					if (index != -1) {
-						attributeName = tmp.substring(0, index);
+						blockName = tmp.substring(0, index);
 						tmp2 = tmp.substring(index+1, tmp.length()).trim();
-						index = tmp2.indexOf('.');
+						index = tmp2.indexOf(" ");
 						if (index != -1) {
-							blockName = tmp2.substring(0, index).trim();
-							paramName = tmp2.substring(index+1, tmp2.length());
+							privK = tmp2.substring(0, index).trim();
+							pubK = tmp2.substring(index+1, tmp2.length());
 							
-							action += "new " + paramName + ";\n";
-							action += "let " + attributeName + " = pk(" + paramName + ") in \n";
-							action += "out(ch, " + attributeName + ");\n";
+							if (!hasSecretPragmaWithAttribute(blockName, privK)) {
+								action += "new " + privK + ";\n";
+							}
+							action += "let " + pubK + " = pk(" + privK + ") in \n";
+							action += "out(ch, " + pubK + ");\n";
 						}
 					}
 				}
 			}
 		}
 		
-		action += "(";
+		action += "(!\n(";
+		
+		// Must add Session Knowledge
+		for(String pragma: avspec.getPragmas()) {
+			TraceManager.addDev("Working on pragma: " + pragma);
+			/*if (isInitialSessionKnowledgePragma(pragma)) {
+				
+			}*/
+		}
 		index = 0;
 		for(AvatarBlock block: blocks) {
 			if (index != 0) {
 				action += " | ";
 			} 
 			index ++;
-			action += "(!" + block.getName() + "__0)";
+			action += "(" + block.getName() + "__0)";
 		}
-		action += ")";
+		action += "))";
 		p.processLines.add(action);
 		spec.addProcess(p);
 		spec.setStartingProcess(p);
@@ -636,8 +779,8 @@ public class AVATAR2ProVerif {
 		
 		for(AvatarAttribute aa: ab.getAttributes()) {
 			//TraceManager.addDev("Testing: " + ab.getName() + "." + aa.getName());
-			if ((!hasInitialCommonKnowledgePragmaWithAttribute(ab.getName(), aa.getName())) && (!(hasSecretPragmaWithAttribute(ab.getName(), aa.getName())))) {
-				if (!inPublicPrivateKeyPragma(ab.getName(), aa.getName())) {
+			if ((!hasInitialSystemKnowledgePragmaWithAttribute(ab.getName(), aa.getName())) && (!(hasSecretPragmaWithAttribute(ab.getName(), aa.getName())))) {
+				if (!isPublicPrivateKeyPragma(ab.getName(), aa.getName())) {
 						TraceManager.addDev("  Adding: " + aa.getName());
 						addLine(p, "new " + aa.getName());
 					}

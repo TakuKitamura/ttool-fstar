@@ -59,14 +59,15 @@ import ui.window.*;
 
 public class AvatarDesignPanelTranslator {
 	
-	private final String[] PRAGMAS = {"Confidentiality", "Secret", "InitialCommonKnowledge", "Authenticity", "PublicPrivateKey"};
-	private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "InitialCommonKnowledge", "Authenticity", "PublicPrivateKey"};
+	private final String[] PRAGMAS = {"Confidentiality", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Constant"};
+	private final String[] PRAGMAS_TRANSLATION = {"Secret", "Secret", "SecrecyAssumption", "InitialSystemKnowledge", "InitialSessionKnowledge", "Authenticity", "PrivatePublicKeys", "Constant"};
 	
 	protected AvatarDesignPanel adp;
 	protected Vector checkingErrors, warnings;
 	protected CorrespondanceTGElement listE; // usual list
 	//protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
 	protected LinkedList <TDiagramPanel> panels;
+	
 	
 	public AvatarDesignPanelTranslator(AvatarDesignPanel _adp) {
 		adp = _adp;
@@ -94,6 +95,7 @@ public class AvatarDesignPanelTranslator {
 	
 	public AvatarSpecification generateAvatarSpecification(Vector _blocks) {
 		LinkedList<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
+		
 		blocks.addAll(_blocks);
 		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
 		createBlocks(as, blocks);
@@ -178,29 +180,43 @@ public class AvatarDesignPanelTranslator {
 		
 		// Checking for arguments
 		
+		
 		boolean b = ret.startsWith("Authenticity ");
-		boolean b1 = ret.startsWith("PublicPrivateKey ");
+		boolean b1 = ret.startsWith("PrivatePublicKeys ");
 		String arguments [] = _pragma.substring(index+1, _pragma.length()).trim().split(" ");
 		String tmp;
-		String blockName, stateName, paramName;
+		String blockName, stateName, paramName = "";
 		boolean found = false;
 		Vector types;
 		AvatarBDBlock block;
 		TAttribute ta;
 		AvatarBlock ab;
+		String myBlockName = "";
+		
+		
+		
 		
 		for(i=0; i<arguments.length; i++) {
 			tmp = arguments[i];
+			TraceManager.addDev("arguments #=" + arguments.length + " pragma=" + _pragma + " tmp=" + tmp);
 			
 			if (b1) {
-				// Public / Private key?
+				
+				// Private Public keys?
 				if (i == 0) {
-					// Shall be an attribute name
-					// Look for at least a block having that attribute
+					// Must be a block name
+					// Look for at least a block
 					found = false;
 					for(Object o: _blocks) {
 						block = (AvatarBDBlock)o;
-						for(Object oo: block.getAttributeList()) {
+						//TraceManager.addDev("Comparing " + block.getBlockName() + " with " + tmp);
+						if (block.getBlockName().compareTo(tmp) ==0) {
+							myBlockName = block.getBlockName();
+							found = true;
+							ret = ret + tmp;
+							break;
+						}
+						/*for(Object oo: block.getAttributeList()) {
 							ta = (TAttribute)oo;
 							if (ta.getId().compareTo(tmp) == 0) {
 								found = true;
@@ -222,31 +238,30 @@ public class AvatarDesignPanelTranslator {
 								}
 								
 							}
-						}
+						}*/
 					}
 					if (found == false) {
 						TraceManager.addDev("Invalid Pragma " + 2);
 						return null;
 					}
 					
-				} else if (i == 1) {
-					// shall be of the form Block.attribute
-					index = tmp.indexOf(".");
-					if (index == -1) {
-						return null;
-					}
-					blockName = tmp.substring(0, index);
+				} else if ((i == 1) || (i == 2)) {
+					// Shall be an attribute
+					TraceManager.addDev("i= " + i);
 					for(Object o: _blocks) {
 						block = (AvatarBDBlock)o;
-						if (block.getBlockName().compareTo(blockName) == 0) {
-							paramName = tmp.substring(index+1, tmp.length());
+						TraceManager.addDev("block= " + block.getBlockName() + " my block name=" + myBlockName);
+						if (block.getBlockName().compareTo(myBlockName) == 0) {
+							TraceManager.addDev("Found the block " + ret);
 							for(Object oo: block.getAttributeList()) {
 								ta = (TAttribute)oo;
-								if (ta.getId().compareTo(paramName) == 0) {
+								TraceManager.addDev("Attribute: " + ta.getId());
+								if (ta.getId().compareTo(tmp) == 0) {
+									paramName = ta.getId();
 									found = true;
-									
+									TraceManager.addDev("Pragma " + ret + " found=" + found);
 									if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
-										ret = ret + blockName + "." + paramName + " ";
+										ret = ret  + " " + paramName + " ";
 									} else if (ta.getType() == TAttribute.OTHER) {
 										// Must find all subsequent types
 										types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
@@ -254,8 +269,9 @@ public class AvatarDesignPanelTranslator {
 											TraceManager.addDev("Invalid Pragma " + 3);
 											return null;
 										} else {
+											TraceManager.addDev("Pragma " + ret + " types size=" + types.size());
 											for(int j=0; j<types.size(); j++) {
-												ret = ret + blockName + "." + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
+												ret = ret  + " " + paramName + "__" + ((TAttribute)(types.elementAt(j))).getId() + " ";
 											}
 										}
 										
@@ -327,7 +343,7 @@ public class AvatarDesignPanelTranslator {
 						} else {
 							
 							
-							// Other: confidentiality, initial common knowledge
+							// Other: confidentiality, initial system knowledge, initial session knowledge, contant
 							paramName = tmp.substring(index+1, tmp.length());
 							for(Object oo: block.getAttributeList()) {
 								ta = (TAttribute)oo;
@@ -365,6 +381,8 @@ public class AvatarDesignPanelTranslator {
 			}
 			
 		}
+		
+		TraceManager.addDev("Reworked pragma: " + ret);
 		
 		return ret.trim();
 		
