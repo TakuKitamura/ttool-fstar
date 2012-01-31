@@ -114,27 +114,13 @@ public class AVATAR2ProVerif {
 		
 		makeHeader(_stateReachability);
 		
+		makeStartingProcess();
+		
 		makeBlocks();
 		
-		makeStartingProcess();
 		
 		//TraceManager.addDev("->   Spec:" + avspec.toString());
 		
-		
-		// Deal with blocks
-		//translateBlocks();
-		
-		//translationRelations();
-		
-		//makeGlobal();
-		
-		
-		// Generate system
-		//makeGlobal(effectiveNb);
-		//makeParallel(nb);
-		
-		
-		//makeSystem();
 		
 		/*if (_optimize) {
 			spec.optimize();
@@ -154,26 +140,32 @@ public class AVATAR2ProVerif {
 		String tmpH = declarations.get(tmp);
 		if (tmpH == null) {
 			declarations.put(tmp, tmp); 
-			tmp = "new " + tmp + ".\n";
+			tmp = "new " + tmp + ";\n";
 			return tmp;
 		}
 		
 		return "";
 	}
 	
-	private String addDeclarationsFromList(int startIndex, String[] list, String result) {
+	private void addDeclarationsFromList(int startIndex, String[] list, String result) {
 		String tmp, blockName, paramName;
 		String tmp1;
+		int index;
+		
+		TraceManager.addDev("Add declaration list length=" + list.length);
 		
 		for(int i=startIndex; i<list.length; i++) {
+			
 			tmp = list[i];
+			TraceManager.addDev("tmp=" + tmp);
 			index = tmp.indexOf('.');
 			if (index != -1) {
 				blockName = tmp.substring(0, index).trim();
 				paramName = tmp.substring(index+1, tmp.length());
 				tmp1 = makeAttrName(blockName, paramName);
-				if (tmp1 == null) {
+				if (tmp1 != null) {
 					declarations.put(tmp1, result);
+					TraceManager.addDev("Adding declaration: " + tmp1 + " result=" + result);
 				}
 			}
 		}
@@ -204,22 +196,61 @@ public class AVATAR2ProVerif {
 			}
 		}*/
 		
+		
+		spec.addToGlobalSpecification("\n(* Data *)\n");
+		LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
+		String[] list;
+		String pragma;
+		
+		
+		/* Data */
+		for(AvatarBlock block: blocks) {
+			for(AvatarAttribute attribute: block.getAttributes()) {
+				pragma = hasConstantPragmaStartingWithAttribute(block.getName(), attribute.getName());
+				if (pragma != null) {
+					spec.addToGlobalSpecification("data " + makeAttrName(block.getName(), attribute.getName()) + "/0.\n");
+					declarations.put(makeAttrName(block.getName(), attribute.getName()), makeAttrName(block.getName(), attribute.getName()));
+					list = getListOfBlockParams(pragma);
+					addDeclarationsFromList(1, list, makeAttrName(block.getName(), attribute.getName()));
+				}
+			}
+		}
+		
+		
+		spec.addToGlobalSpecification("\n(* Secrecy Assumptions *)\n");
+		/* Secrecy Assumptions */
+		int index;
+		String tmp, blockName, paramName, tmp1;
+		for(String pr: avspec.getPragmas()) {
+			if (isSecrecyAssumptionPragma(pr)) {
+				list = getListOfBlockParams(pr);
+				for(int i=0; i<list.length; i++) {
+					tmp = list[i];
+					index = tmp.indexOf('.');
+					if (index != -1) {
+						blockName = tmp.substring(0, index).trim();
+						paramName = tmp.substring(index+1, tmp.length());
+						tmp1 = makeAttrName(blockName, paramName);
+						if (tmp1 != null) {
+							spec.addToGlobalSpecification("not " + tmp1 +".\n");
+						}
+					}
+				}
+			}
+		}
+		
 		/* Queries */
 		/* Parse all attributes starting with "secret" and declare them as non accesible to attacker" */
 		spec.addToGlobalSpecification("\n(* Queries *)\n");
-		LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
 		for(AvatarBlock block: blocks) {
 			for(AvatarAttribute attribute: block.getAttributes()) {
 				// Attribute is preinitialized if it is in a secret pragma
 				//TraceManager.addDev("Testing secret of " + block.getName() + "." + attribute.getName() + " ?");
 				if (hasSecretPragmaWithAttribute(block.getName(), attribute.getName())) {
 					//TraceManager.addDev("Secret!");
-					//spec.addToGlobalSpecification("private free " + attribute.getName() + ".\n");
+					spec.addToGlobalSpecification("private free " + makeAttrName(block.getName(), attribute.getName()) + ".\n");
+					declarations.put(makeAttrName(block.getName(), attribute.getName()), makeAttrName(block.getName(), attribute.getName()));
 					spec.addToGlobalSpecification("query attacker:" + makeAttrName(block.getName(), attribute.getName()) + ".\n\n");
-				}
-				
-				if (hasConstantPragmaStartingWithAttribute(block.getName(), attribute.getName())) {
-					spec.addToGlobalSpecification("data " + makeAttrName(block.getName(), attribute.getName()) + "/0.\n\n");
 				}
 			}
 			// Queries for states
@@ -231,6 +262,7 @@ public class AVATAR2ProVerif {
 				}
 			}
 		}
+				
 		
 		/* Autenticity */
 		makeAuthenticityPragmas();
@@ -512,20 +544,20 @@ public class AVATAR2ProVerif {
 		return false;
 	}
 	
-	public boolean hasConstantPragmaStartingWithAttribute(String _blockName, String attributeName) {
+	public String hasConstantPragmaStartingWithAttribute(String _blockName, String attributeName) {
 		LinkedList<String> pragmas = avspec.getPragmas();
 		String tmp;
 		String tmps [];
 		int index;
 		
 		for(String pragma: pragmas) {
-			if (isSecretPragma(pragma)) {
-				tmp = pragma.substring(7, pragma.length()).trim();
+			if (isConstantPragma(pragma)) {
+				tmp = pragma.substring(8, pragma.length()).trim();
 				
-				//TraceManager.addDev("Testing prama: " + tmp);
+				TraceManager.addDev("Testing CONSTANT pragma: " + tmp);
 				
 				if (tmp.length() == 0) {
-					return false;
+					return null;
 				}
 				
 				tmps = tmp.split(" ");
@@ -536,7 +568,7 @@ public class AVATAR2ProVerif {
 					try {
 						if (tmp.substring(0, index).compareTo(_blockName) == 0) {
 							if (tmp.substring(index+1, tmp.length()).compareTo(attributeName) == 0) {
-								return true;
+								return pragma;
 							}
 						}
 					} catch (Exception e) {
@@ -547,7 +579,7 @@ public class AVATAR2ProVerif {
 		}
 		
 
-		return false;
+		return null;
 	}
 	
 	public boolean hasSecretPragmaWithAttribute(String attributeName) {
@@ -683,6 +715,18 @@ public class AVATAR2ProVerif {
 		return _pragma.startsWith("InitialSystemKnowledge ");
 	}
 	
+	public boolean isInitialSessionKnowledgePragma(String _pragma) {
+		return _pragma.startsWith("InitialSessionKnowledge ");
+	}
+	
+	public boolean isConstantPragma(String _pragma) {
+		return _pragma.startsWith("Constant ");
+	}
+	
+	public boolean isSecrecyAssumptionPragma(String _pragma) {
+		return _pragma.startsWith("SecrecyAssumption ");
+	}
+	
 	public boolean isPrivatePublicKeyPragma(String _pragma) {
 		return _pragma.startsWith("PrivatePublicKeys ");
 	}
@@ -694,6 +738,12 @@ public class AVATAR2ProVerif {
 			s = s.substring(7, s.length()).trim();
 		} else if (isInitialSystemKnowledgePragma(s)) {
 			s = s.substring(23, s.length()).trim();
+		} else if (isInitialSessionKnowledgePragma(s)) {
+			s = s.substring(24, s.length()).trim();
+		} else if (isConstantPragma(s)) {
+			s = s.substring(8, s.length()).trim();
+		} else if (isSecrecyAssumptionPragma(s)) {
+			s = s.substring(17, s.length()).trim();
 		} else {
 			return null;
 		}
@@ -711,7 +761,7 @@ public class AVATAR2ProVerif {
 		p.processName = "starting__";
 		LinkedList<AvatarBlock> blocks = avspec.getListOfBlocks();
 		
-		LinkedList<String> createdVariables = new LinkedList<String>();
+		//LinkedList<String> createdVariables = new LinkedList<String>();
 		String[] list;
 		String blockName, paramName;
 		
@@ -771,14 +821,31 @@ public class AVATAR2ProVerif {
 						index = tmp2.indexOf(" ");
 						if (index != -1) {
 							privK = tmp2.substring(0, index).trim();
-							pubK = tmp2.substring(index+1, tmp2.length());
+							pubK = tmp2.substring(index+1, tmp2.length()).trim();
 							
 							action += makeActionFromBlockParam(blockName, privK);
 							
 							action += "let " + makeAttrName(blockName, pubK) + " = pk(" + makeAttrName(blockName, privK) + ") in \n";
 							action += "out(ch, " + makeAttrName(blockName, pubK) + ");\n";
+							TraceManager.addDev("Putting :" + makeAttrName(blockName, pubK + " -> " + makeAttrName(blockName, pubK)));
 							declarations.put(makeAttrName(blockName, pubK), makeAttrName(blockName, pubK));
 						}
+					}
+				}
+			} else if (isSecrecyAssumptionPragma(pragma)) {
+				// Identify each blockName / paramName
+				list = getListOfBlockParams(pragma);
+				
+				
+				// Declare only the first one of the list
+				if (list.length > 0) {
+					tmp = list[0];
+					index = tmp.indexOf('.');
+					if (index != -1) {
+						blockName = tmp.substring(0, index).trim();
+						paramName = tmp.substring(index+1, tmp.length());
+						
+						action += makeActionFromBlockParam(blockName, paramName);
 					}
 				}
 			}
@@ -789,9 +856,23 @@ public class AVATAR2ProVerif {
 		// Must add Session Knowledge
 		for(String pragma: avspec.getPragmas()) {
 			TraceManager.addDev("Working on pragma: " + pragma);
-			/*if (isInitialSessionKnowledgePragma(pragma)) {
+			if (isInitialSessionKnowledgePragma(pragma)) {
+				list = getListOfBlockParams(pragma);
 				
-			}*/
+				
+				// Declare only the first one of the list
+				if (list.length > 0) {
+					tmp = list[0];
+					index = tmp.indexOf('.');
+					if (index != -1) {
+						blockName = tmp.substring(0, index).trim();
+						paramName = tmp.substring(index+1, tmp.length());
+						
+						action += makeActionFromBlockParam(blockName, paramName);
+						addDeclarationsFromList(1, list, makeAttrName(blockName, paramName));
+					}
+				}
+			}
 		}
 		index = 0;
 		for(AvatarBlock block: blocks) {
@@ -815,6 +896,8 @@ public class AVATAR2ProVerif {
 	}
 	
 	public void makeBlock(AvatarBlock ab) {
+		String dec;
+		
 		LinkedList<ProVerifProcess> tmpprocesses = new LinkedList<ProVerifProcess>();
 		LinkedList<AvatarState> states = new LinkedList<AvatarState>();
 		
@@ -824,12 +907,22 @@ public class AVATAR2ProVerif {
 		
 		for(AvatarAttribute aa: ab.getAttributes()) {
 			//TraceManager.addDev("Testing: " + ab.getName() + "." + aa.getName());
-			if ((!hasInitialSystemKnowledgePragmaWithAttribute(ab.getName(), aa.getName())) && (!(hasSecretPragmaWithAttribute(ab.getName(), aa.getName())))) {
+			/*if ((!hasInitialSystemKnowledgePragmaWithAttribute(ab.getName(), aa.getName())) && (!(hasSecretPragmaWithAttribute(ab.getName(), aa.getName())))) {
 				if (!isPublicPrivateKeyPragma(ab.getName(), aa.getName())) {
 						TraceManager.addDev("  Adding: " + aa.getName());
 						addLine(p, "new " + aa.getName());
 					}
+			}*/
+			TraceManager.addDev("Getting:" + makeAttrName(ab.getName(), aa.getName()));
+			dec = declarations.get(makeAttrName(ab.getName(), aa.getName()));
+			if (dec == null) {
+				addLine(p, "new " + aa.getName());
+			} else {
+				if (dec.compareTo(aa.getName()) != 0) {
+					addLineNoEnd(p, "let " + aa.getName() + " = " + dec + " in");
+				}
 			}
+			
 		}
 		
 		AvatarStateMachine asm = ab.getStateMachine();

@@ -343,7 +343,7 @@ public class AvatarDesignPanelTranslator {
 						} else {
 							
 							
-							// Other: confidentiality, initial system knowledge, initial session knowledge, contant
+							// Other: confidentiality, initial system knowledge, initial session knowledge, constant
 							paramName = tmp.substring(index+1, tmp.length());
 							for(Object oo: block.getAttributeList()) {
 								ta = (TAttribute)oo;

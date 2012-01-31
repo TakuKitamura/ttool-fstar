@@ -4614,8 +4614,8 @@
 <TGConnectingPoint num="0" id="2428" />
 <TGConnectingPoint num="1" id="2429" />
 <TGConnectingPoint num="2" id="2430" />
-<P1  x="841" y="549" id="2540" />
-<P2  x="841" y="658" id="2549" />
+<P1  x="860" y="529" id="2540" />
+<P2  x="860" y="638" id="2549" />
 <Point x="865" y="549" />
 <Point x="865" y="658" />
 <AutomaticDrawing  data="true" />
@@ -4706,29 +4706,27 @@
 </COMPONENT>
 
 <COMPONENT type="301" id="2467" >
-<cdparam x="48" y="10" />
-<sizeparam width="313" height="290" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="23" y="10" />
+<sizeparam width="313" height="275" minWidth="50" minHeight="20" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
-<infoparam name="UML Note" value="
-#PrivatePublicKeys ECU1 mvksk mvkpk
+<infoparam name="UML Note" value="#PrivatePublicKeys ECU1 mvksk mvkpk
 
 #InitialSystemKnowledge ECU1.mvksk ECU2.mvksk
 
-#InitialSessionKnowledge ts0
-#InitialSessionKnowledge ts1
-
+#InitialSessionKnowledge ECU1.ts0 ECU2.ts0
+#InitialSessionKnowledge ECU1.ts1 ECU2.ts1
 
 #SecrecyAssumption ECU1.idk1sk
-#SecrecyAssumtion ECU2.idk2sk
+#SecrecyAssumption ECU2.idk2sk
 #SecrecyAssumption ECU1.mvksk
-#SecrecyAssumption ECU2.mvksk
 
 #Constant ECU1.ack ECU2.ack
-#Constant rpk
-#Contant ecu1id
-#Constant ecu2id
-" />
+#Constant ECU1.rpk ECU2.rpk
+#Constant ECU1.ecu1id ECU2.ecu1id
+#Constant ECU2.ecu2id ECU1.ecu2id
+
+#Confidentiality ECU1.mvksk" />
 <TGConnectingPoint num="0" id="2459" />
 <TGConnectingPoint num="1" id="2460" />
 <TGConnectingPoint num="2" id="2461" />
@@ -4738,24 +4736,23 @@
 <TGConnectingPoint num="6" id="2465" />
 <TGConnectingPoint num="7" id="2466" />
 <extraparam>
-<Line value="" />
 <Line value="#PrivatePublicKeys ECU1 mvksk mvkpk" />
 <Line value="" />
 <Line value="#InitialSystemKnowledge ECU1.mvksk ECU2.mvksk" />
 <Line value="" />
-<Line value="#InitialSessionKnowledge ts0" />
-<Line value="#InitialSessionKnowledge ts1" />
-<Line value="" />
+<Line value="#InitialSessionKnowledge ECU1.ts0 ECU2.ts0" />
+<Line value="#InitialSessionKnowledge ECU1.ts1 ECU2.ts1" />
 <Line value="" />
 <Line value="#SecrecyAssumption ECU1.idk1sk" />
-<Line value="#SecrecyAssumtion ECU2.idk2sk" />
+<Line value="#SecrecyAssumption ECU2.idk2sk" />
 <Line value="#SecrecyAssumption ECU1.mvksk" />
-<Line value="#SecrecyAssumption ECU2.mvksk" />
 <Line value="" />
 <Line value="#Constant ECU1.ack ECU2.ack" />
-<Line value="#Constant rpk" />
-<Line value="#Contant ecu1id" />
-<Line value="#Constant ecu2id" />
+<Line value="#Constant ECU1.rpk ECU2.rpk" />
+<Line value="#Constant ECU1.ecu1id ECU2.ecu1id" />
+<Line value="#Constant ECU2.ecu2id ECU1.ecu2id" />
+<Line value="" />
+<Line value="#Confidentiality ECU1.mvksk" />
 </extraparam>
 </COMPONENT>
 
@@ -4798,7 +4795,7 @@
 </COMPONENT>
 
 <COMPONENT type="5000" id="2560" >
-<cdparam x="50" y="332" />
+<cdparam x="69" y="312" />
 <sizeparam width="791" height="435" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -4828,7 +4825,6 @@
 <TGConnectingPoint num="22" id="2558" />
 <TGConnectingPoint num="23" id="2559" />
 <extraparam>
-<Attribute access="0" id="ack" value="1" type="8" typeOther="" />
 <Signal value="in chin(Message msg)" />
 <Signal value="out chout(Message msg)" />
 <Signal value="in chinprivate(Message msg)" />
@@ -4837,7 +4833,7 @@
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="2510" >
 <father id="2560" num="0" />
-<cdparam x="127" y="447" />
+<cdparam x="146" y="427" />
 <sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="541" minY="0" maxY="235" />
@@ -4868,6 +4864,14 @@
 <TGConnectingPoint num="23" id="2509" />
 <extraparam>
 <Attribute access="0" id="ack" value="1" type="8" typeOther="" />
+<Attribute access="0" id="mvksk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="mvkpk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="ts0" value="" type="8" typeOther="" />
+<Attribute access="0" id="ts1" value="" type="8" typeOther="" />
+<Attribute access="0" id="idk1sk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="rpk" value="" type="8" typeOther="" />
+<Attribute access="0" id="ecu1id" value="" type="8" typeOther="" />
+<Attribute access="0" id="ecu2id" value="" type="8" typeOther="" />
 <Method value="Message aencrypt(Message msg, Key k)" />
 <Method value="Message adecrypt(Message msg, Key k)" />
 <Method value="Key pk(Key k)" />
@@ -4890,7 +4894,7 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="2535" >
 <father id="2560" num="1" />
-<cdparam x="458" y="448" />
+<cdparam x="431" y="427" />
 <sizeparam width="250" height="200" minWidth="5" minHeight="2" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="541" minY="0" maxY="235" />
@@ -4921,6 +4925,12 @@
 <TGConnectingPoint num="23" id="2534" />
 <extraparam>
 <Attribute access="0" id="ack" value="1" type="8" typeOther="" />
+<Attribute access="0" id="ts0" value="" type="8" typeOther="" />
+<Attribute access="0" id="ts1" value="" type="8" typeOther="" />
+<Attribute access="0" id="idk2sk" value="" type="5" typeOther="Key" />
+<Attribute access="0" id="rpk" value="" type="8" typeOther="" />
+<Attribute access="0" id="ecu1id" value="" type="8" typeOther="" />
+<Attribute access="0" id="ecu2id" value="" type="8" typeOther="" />
 <Method value="Message aencrypt(Message msg, Key k)" />
 <Method value="Message adecrypt(Message msg, Key k)" />
 <Method value="Key pk(Key k)" />
