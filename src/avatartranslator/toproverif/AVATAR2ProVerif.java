@@ -148,6 +148,38 @@ public class AVATAR2ProVerif {
 		return _block + "__" + _attribute;
 	}
 	
+	
+	private String makeActionFromBlockParam(String _block, String _param) {
+		String tmp = makeAttrName(_block, _param);
+		String tmpH = declarations.get(tmp);
+		if (tmpH == null) {
+			declarations.put(tmp, tmp); 
+			tmp = "new " + tmp + ".\n";
+			return tmp;
+		}
+		
+		return "";
+	}
+	
+	private String addDeclarationsFromList(int startIndex, String[] list, String result) {
+		String tmp, blockName, paramName;
+		String tmp1;
+		
+		for(int i=startIndex; i<list.length; i++) {
+			tmp = list[i];
+			index = tmp.indexOf('.');
+			if (index != -1) {
+				blockName = tmp.substring(0, index).trim();
+				paramName = tmp.substring(index+1, tmp.length());
+				tmp1 = makeAttrName(blockName, paramName);
+				if (tmp1 == null) {
+					declarations.put(tmp1, result);
+				}
+			}
+		}
+		
+	}
+	
 	public void makeHeader(boolean _stateReachability) {
 		spec.addToGlobalSpecification(BOOLEAN_DATA_HEADER + "\n");
 		spec.addToGlobalSpecification(FUNC_DATA_HEADER + "\n");
@@ -689,7 +721,20 @@ public class AVATAR2ProVerif {
 				// Identify each blockName / paramName
 				list = getListOfBlockParams(pragma);
 				
-				for(int i=0; i<list.length; i++) {
+				
+				// Declare only the first one of the list
+				if (list.length > 0) {
+					tmp = list[0];
+					index = tmp.indexOf('.');
+					if (index != -1) {
+						blockName = tmp.substring(0, index).trim();
+						paramName = tmp.substring(index+1, tmp.length());
+						
+						action += makeActionFromBlockParam(blockName, paramName);
+						addDeclarationsFromList(1, list, makeAttrName(blockName, paramName));
+					}
+				}
+				/*for(int i=0; i<list.length; i++) {
 					tmp = list[i];
 					index = tmp.indexOf('.');
 					if (index != -1) {
@@ -712,7 +757,7 @@ public class AVATAR2ProVerif {
 							}
 						}
 					}
-				}
+				}*/
 			} else if (isPrivatePublicKeyPragma(pragma)) {
 				TraceManager.addDev("Pragma Public: " + pragma);
 				String privK, pubK;
@@ -728,11 +773,11 @@ public class AVATAR2ProVerif {
 							privK = tmp2.substring(0, index).trim();
 							pubK = tmp2.substring(index+1, tmp2.length());
 							
-							if (!hasSecretPragmaWithAttribute(blockName, privK)) {
-								action += "new " + privK + ";\n";
-							}
-							action += "let " + pubK + " = pk(" + privK + ") in \n";
-							action += "out(ch, " + pubK + ");\n";
+							action += makeActionFromBlockParam(blockName, privK);
+							
+							action += "let " + makeAttrName(blockName, pubK) + " = pk(" + makeAttrName(blockName, privK) + ") in \n";
+							action += "out(ch, " + makeAttrName(blockName, pubK) + ");\n";
+							declarations.put(makeAttrName(blockName, pubK), makeAttrName(blockName, pubK));
 						}
 					}
 				}
