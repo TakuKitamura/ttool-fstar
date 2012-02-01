@@ -914,15 +914,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		addMethodIfApplicable(myMethods, method);
 		method = "Key pk(Key k)";
 		addMethodIfApplicable(myMethods, method);
-		method = "Signature sign(Message msg, Key k)";
+		method = "Message sign(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
-		method = "bool verifySign(Message msg1, Signature sig, Key k)";
+		method = "bool verifySign(Message msg1, Message sig, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		
 		/* Certifying */
-		method = "Certificate cert(Key k, Message msg)";
+		method = "Message cert(Key k, Message msg)";
 		addMethodIfApplicable(myMethods, method);
-		method = "bool verifyCert(Certificate cert, Key k)";
+		method = "bool verifyCert(Message cert, Key k)";
 		addMethodIfApplicable(myMethods, method);
 		
 	
