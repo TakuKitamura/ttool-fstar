@@ -70,6 +70,8 @@ public class Main implements ActionListener {
 	public static boolean proverif = false;
 	
     public static void main(String[] args) {
+    	
+    	testMatrix();
 		
 		TraceManager.devPolicy = TraceManager.TO_DEVNULL;
         
@@ -323,6 +325,32 @@ public class Main implements ActionListener {
     
     public void actionPerformed(ActionEvent evt) {
         main.okFinish();
+    }
+    
+    
+    public static void testMatrix() {
+    	String[] names = {"a", "b", "e", "ae4", "be"};
+    	int [] line0 ={-1, 1, 0, 0};
+    	int [] line1 ={0, 0,-1, 1};
+    	int [] line2 ={-4, 4, -1, 1};
+    	int [] line3 ={1, -1, 0, 0};
+    	int [] line4 ={0, 0, 1, -1};
+    	
+    	Matrice myMat = new Matrice(5, 4);
+    	myMat.setNamesOfLine(names);
+    	
+    	
+    	myMat.setLineValues(0, line0);
+    	myMat.setLineValues(1, line1);
+    	myMat.setLineValues(2, line2);
+    	myMat.setLineValues(3, line3);
+    	myMat.setLineValues(4, line4);
+    	
+    	
+    	System.out.println("mat=\n" + myMat.toString() + "\n\n");
+    	myMat.swapLines(0, 1);
+    	System.out.println("mat=\n" + myMat.toString() + "\n\n");
+    	
     }
     
 } // Class Main

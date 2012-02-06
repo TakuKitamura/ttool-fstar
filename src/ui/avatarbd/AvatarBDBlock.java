@@ -924,6 +924,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		addMethodIfApplicable(myMethods, method);
 		method = "bool verifyCert(Message cert, Key k)";
 		addMethodIfApplicable(myMethods, method);
+		method = "Key getpk(Message cert)";
+		addMethodIfApplicable(myMethods, method);
 		
 	
 		method = "Message sencrypt(Message msg, Key k)";
