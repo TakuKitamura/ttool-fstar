@@ -59,7 +59,7 @@ import myutil.*;
 
 public	class JToolBarMainTurtle extends JToolBar	{
 	// Avatar
-	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarCodeGeneration;
+	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration;
 	
 	// Other
 	JButton genrtlotos, genlotos, genuppaal, gendesign;
@@ -153,6 +153,9 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			avatarFVProVerif = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
 			avatarFVProVerif.addMouseListener(mgui.mouseHandler);
 		}
+		
+		avatarFVStaticAnalysis = add(mgui.actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS]);
+		avatarFVStaticAnalysis.addMouseListener(mgui.mouseHandler);
 		
         addSeparator();
 		
@@ -264,6 +267,8 @@ public	class JToolBarMainTurtle extends JToolBar	{
 		 if (avatarFVProVerif != null) {
 			 avatarFVProVerif.setVisible(b);
 		 }
+		 //avatarFVStaticAnalysis.setVisible(b);
+		 avatarFVStaticAnalysis.setVisible(false);
 		 avatarCodeGeneration.setVisible(b);
 		 
 		 if (genrtlotos != null) {

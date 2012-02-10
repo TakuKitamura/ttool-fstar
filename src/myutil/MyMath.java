@@ -36,50 +36,54 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class Place
- * Creation: 04/07/2006
- * @version 1.1 04/07/2006
+ * Class MyMath
+ * Creation: 08/02/2012
+ * Version 1.0 08/02/2012
  * @author Ludovic APVRILLE
  * @see
  */
 
-package tpndescription;
+package myutil;
 
-public class Place {
-    public static int INDEX  = 0;
-    
-    public int nbOfToken;
-    public String name;
-    
-    public Place() {
-        name = generateName();
-    }
-    
-    public Place(String _name) {
-        name = _name;
-    }
-    
-    public String generateName() {
-        int index = INDEX;
-        INDEX ++;
-        return "p" + index;
-    }
-    
-    public void setMark() {
-        nbOfToken = 1;
-    }
-    
-    public void addMark() {
-        nbOfToken ++;
-    }
-    
-    public String toString() {
-        return name;
-    }
-    
-    public String toTINAString() {
-        return "pl " + name + " (" + nbOfToken + ")";
-    }
-    
+import java.util.*;
 
+public class MyMath {
+  
+   
+	public static int gcd(int[] numbers) {
+		if ((numbers ==null) || (numbers.length == 0)){
+			return -1;
+		}
+		
+		if (numbers.length ==1) {
+			return Math.abs(numbers[0]);
+		}
+		
+		int egcd = egcd(Math.abs(numbers[0]), Math.abs(numbers[1]));
+		int index = 2;
+		while(index<numbers.length) {
+			egcd = egcd(egcd, Math.abs(numbers[index]));
+			index ++;
+		}
+		
+		return egcd;
+		
+	}
+	
+	// Euclidian algorithm for GCD
+	// a and b must be positive
+	public static int egcd(int a, int b) {    
+		if (a == 0)        
+			return b;   
+		while (b != 0) {        
+			if (a > b)            
+				a = a - b;        
+			else            
+				b = b - a;    
+		}    
+		return a;
+	}
+	
+  
+  
 }

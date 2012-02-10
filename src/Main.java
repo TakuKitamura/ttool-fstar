@@ -329,14 +329,27 @@ public class Main implements ActionListener {
     
     
     public static void testMatrix() {
-    	String[] names = {"a", "b", "e", "ae4", "be"};
+    	
+    	//int[] numbers = {42, 18, 12,-12};
+    	//System.out.println("GCD=" + MyMath.gcd(numbers));
+    	
+    	
+    	/*String[] names = {"a", "b", "e", "ae4"};
     	int [] line0 ={-1, 1, 0, 0};
     	int [] line1 ={0, 0,-1, 1};
     	int [] line2 ={-4, 4, -1, 1};
     	int [] line3 ={1, -1, 0, 0};
     	int [] line4 ={0, 0, 1, -1};
+    	int [] line4_fake ={10, 10, 11, -11};
     	
-    	Matrice myMat = new Matrice(5, 4);
+    	
+    	int [] line0b ={-1, 1, 1, -1};
+    	int [] line1b ={1, -1,-1, 1};
+    	int [] line2b ={0, 0, 1, 0};
+    	int [] line3b ={1, 0, 0, -1};
+    	int [] line4b ={-1, 0, 0, 1};
+    	
+    	IntMatrix myMat = new IntMatrix(4, 4);
     	myMat.setNamesOfLine(names);
     	
     	
@@ -344,12 +357,32 @@ public class Main implements ActionListener {
     	myMat.setLineValues(1, line1);
     	myMat.setLineValues(2, line2);
     	myMat.setLineValues(3, line3);
-    	myMat.setLineValues(4, line4);
+    	
+    	System.out.println("mat=\n" + myMat.toString() + "\n\n");
+    	
+    	myMat.addLine(line4_fake, "duplicate-be");
+    	myMat.addLine(line4, "be");
+    	
+    	System.out.println("mat=\n" + myMat.toString() + "\n\n");
+    	
+    	myMat.removeLine(4);
     	
     	
     	System.out.println("mat=\n" + myMat.toString() + "\n\n");
-    	myMat.swapLines(0, 1);
+    	myMat.Farkas();
     	System.out.println("mat=\n" + myMat.toString() + "\n\n");
+    	
+    	myMat = new IntMatrix(5, 4);
+    	
+    	
+    	myMat.setLineValues(0, line0b);
+    	myMat.setLineValues(1, line1b);
+    	myMat.setLineValues(2, line2b);
+    	myMat.setLineValues(3, line3b);
+    	myMat.setLineValues(4, line4b);
+    	System.out.println("matb=\n" + myMat.toString() + "\n\n");
+    	myMat.Farkas();
+    	System.out.println("matb=\n" + myMat.toString() + "\n\n");*/
     	
     }
     

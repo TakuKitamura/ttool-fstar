@@ -61,14 +61,23 @@ public class Transition {
     public String action; /* action on a variable for example */
     public String infoSynchro; /* action coming along with synchro; for example !x?y */
     
-    private LinkedList originPlaces;
-    private LinkedList destinationPlaces;
+    private LinkedList<Place> originPlaces;
+    private LinkedList<Place> destinationPlaces;
     
     public Transition(String _label) {
         label = _label;
         name = generateName();
         originPlaces = new LinkedList();
         destinationPlaces = new LinkedList();
+    }
+    
+    
+    public LinkedList<Place> getOriginPlaces() {
+    	return originPlaces;
+    }
+    
+     public LinkedList<Place> getDestinationPlaces() {
+    	return destinationPlaces;
     }
     
     public void addOriginPlace(Place p) {
@@ -93,7 +102,7 @@ public class Transition {
     }
     
     public String toString() {
-        return  name + " " + getStringInterval();
+        return  label;
     }
     
     public String toTINAString() {

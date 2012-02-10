@@ -602,7 +602,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		case AVATAR_SYNTAXCHECKING_OK:
 			actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);
 			actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(true); 
-			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
+			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);  
+			actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(true);
 			actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(true);
 			break;
 		case REQ_OK:
@@ -643,6 +644,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(false);
 			actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(false);
 			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
 			actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
 			break;
 		case METHO_CHANGED:
@@ -3201,6 +3203,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void avatarProVerifVerification() {
 		TraceManager.addDev("Avatar proverif fv");
 		JDialogProVerifGeneration jgen = new JDialogProVerifGeneration(frame, this, "ProVerif: code generation and verification", ConfigurationTTool.ProVerifVerifierHost, ConfigurationTTool.ProVerifCodeDirectory, ConfigurationTTool.ProVerifVerifierPath);
+        jgen.setSize(500, 450);
+        GraphicLib.centerOnParent(jgen);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+	}
+	
+	public void avatarStaticAnalysis() {
+		TraceManager.addDev("Avatar static analysis invariants");
+		JDialogInvariantAnalysis jgen = new JDialogInvariantAnalysis(frame, this, "Static analysis: invariants computation");
         jgen.setSize(500, 450);
         GraphicLib.centerOnParent(jgen);
         jgen.setVisible(true);
@@ -6518,6 +6529,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			avatarUPPAALVerification();
 		} else if (command.equals(actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].getActionCommand())) {
             avatarProVerifVerification();
+		} else if (command.equals(actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].getActionCommand())) {
+            avatarStaticAnalysis();
 		} else if (command.equals(actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].getActionCommand())) {
             avatarExecutableCodeGeneration();
 		

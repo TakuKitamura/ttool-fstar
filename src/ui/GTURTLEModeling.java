@@ -86,6 +86,9 @@ import avatartranslator.*;
 import avatartranslator.toturtle.*;
 import avatartranslator.touppaal.*;
 import avatartranslator.toproverif.*;
+import avatartranslator.totpn.*;
+
+import tpndescription.*;
 
 import ui.tmlad.*;
 import ui.tmlcd.*;
@@ -148,6 +151,9 @@ public class GTURTLEModeling {
 	private RelationTMLUPPAAL uppaalTMLTable;
 	
 	private ProVerifSpec proverif;
+	
+	private AVATAR2TPN avatar2tpn;
+	private TPN tpnFromAvatar;
 	
 	private String tpn;
 	private String sim;
@@ -472,6 +478,35 @@ public class GTURTLEModeling {
 			return false;
 		}
 	}
+	
+	public TPN generateTPNFromAvatar() {
+		avatar2tpn = new AVATAR2TPN(avatarspec);
+		//tml2uppaal.setChoiceDeterministic(choices);
+		//tml2uppaal.setSizeInfiniteFIFO(_size);
+		tpnFromAvatar = avatar2tpn.generateTPN(true, true);
+		languageID = TPN;
+		return tpnFromAvatar;
+	}
+		/*IntMatrix im = tpnFromAvatar.getIncidenceMatrix();
+		TraceManager.addDev("Farkas computing on " + im.toString());
+		im.Farkas();
+		TraceManager.addDev("Farkas done:" + im.toString());
+		
+		
+		
+		languageID = TPN;
+		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
+		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
+		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+		return true;
+		/*try {
+			avatar2tpn.saveInFile(_path);
+			TraceManager.addDev("Specification generated in " + _path);
+			return true;
+		} catch (FileException fe) {
+			TraceManager.addError("Exception: " + fe.getMessage());
+			return false;
+		}*/
 	
 	public ArrayList<String> getUPPAALQueries() {
 		//TraceManager.addDev("Searching for queries");

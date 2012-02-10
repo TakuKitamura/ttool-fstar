@@ -47,11 +47,13 @@ package tpndescription;
 
 import java.util.*;
 
+import myutil.*;
+
 public class TPN {
     public static int INDEX  = 0;
     
-    private LinkedList places;
-    private LinkedList transitions;
+    private LinkedList<Place> places;
+    private LinkedList<Transition> transitions;
     private LinkedList attributes;
     
     public TPN() {
@@ -67,18 +69,32 @@ public class TPN {
         transitions.add(tr);
     }
     
-    public String toString() {
+    public String toTINAString() {
         Place p;
         String tpn = "net generatedWithTTool\n\n";
         ListIterator iterator = transitions.listIterator();
         while(iterator.hasNext()) {
             tpn += ((Transition)(iterator.next())).toTINAString() + "\n";
         }
-        iterator = places.listIterator();
-        while(iterator.hasNext()) {
-            p = (Place)(iterator.next());
+        ListIterator iterator0 = places.listIterator();
+        while(iterator0.hasNext()) {
+            p = (Place)(iterator0.next());
             if (p.nbOfToken > 0)
                 tpn += p.toTINAString() + "\n";
+        }
+        return tpn;
+    }
+    
+    public String toString() {
+        String tpn = "net generatedWithTTool\n\n";
+        ListIterator iterator = transitions.listIterator();
+        while(iterator.hasNext()) {
+            tpn += "transition " + ((Transition)(iterator.next())).toString() + "\n";
+        }
+        tpn +=" Nb of places: " + places.size() + "\n";
+        for(Place p: places) {
+        	
+               tpn += "place "+ p.toString() + "\n";
         }
         return tpn;
     }
@@ -96,6 +112,32 @@ public class TPN {
         
         // Rename places and transitions
         
+    }
+    
+    public IntMatrix getIncidenceMatrix() {
+    	IntMatrix im = new IntMatrix(places.size(), transitions.size());
+    	
+    	int i, j;
+    	
+    	// putting names of lines;
+    	i = 0;
+    	for(Place p: places){
+    		im.setNameOfLine(i, p.toString());
+    		i++;
+    	}
+    	
+    	j=0;
+    	for(Transition tr: transitions) {
+    		for(Place pl0: tr.getDestinationPlaces()) {
+    			im.setValue(places.indexOf(pl0), j, 1);
+    		}
+    		for(Place pl1: tr.getOriginPlaces()) {
+    			im.setValue(places.indexOf(pl1), j, -1);
+    		}
+    		j++;
+    	}
+    	
+    	return im;
     }
 
 }

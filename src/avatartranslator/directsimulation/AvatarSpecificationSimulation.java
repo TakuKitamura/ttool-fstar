@@ -55,9 +55,9 @@ import myutil.*;
 
 
 public class AvatarSpecificationSimulation  {
-	private static int MAX_TRANSACTION_IN_A_ROW = 1000; 
+	public static int MAX_TRANSACTION_IN_A_ROW = 1000; 
 	
-	public static int MAX_TRANSACTIONS = 100000000; 
+	public static int MAX_TRANSACTIONS = 100000; 
 	
 	public final static int INITIALIZE = 0;
 	public final static int RESET = 1;

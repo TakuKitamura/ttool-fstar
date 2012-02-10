@@ -291,6 +291,7 @@ public class AvatarDesignPanelTranslator {
 					return null;
 				}
 				
+			// Other than PrivatePublicKeys
 			} else {
 				index = tmp.indexOf(".");
 				if (index == -1) {
@@ -303,8 +304,9 @@ public class AvatarDesignPanelTranslator {
 				for(Object o: _blocks) {
 					block = (AvatarBDBlock)o;
 					if (block.getBlockName().compareTo(blockName) == 0) {
+						
 						if (b) {
-							// authenticity
+							// Authenticity
 							stateName = tmp.substring(index+1, tmp.length());
 							//TraceManager.addDev("stateName=" + stateName);
 							index = stateName.indexOf(".");
@@ -320,7 +322,7 @@ public class AvatarDesignPanelTranslator {
 									found = true;
 									
 									if ((ta.getType() == TAttribute.NATURAL) || (ta.getType() == TAttribute.INTEGER) || (ta.getType() == TAttribute.BOOLEAN)) {
-										ret = ret + blockName + "." + paramName + " ";
+										ret = ret + blockName + "." + stateName + "." + paramName + " ";
 									} else if (ta.getType() == TAttribute.OTHER) {
 										// Must find all subsequent types
 										types = adp.getAvatarBDPanel().getAttributesOfDataType(ta.getTypeOther());
@@ -341,9 +343,8 @@ public class AvatarDesignPanelTranslator {
 							}
 							
 						} else {
-							
-							
 							// Other: confidentiality, initial system knowledge, initial session knowledge, constant
+							
 							paramName = tmp.substring(index+1, tmp.length());
 							for(Object oo: block.getAttributeList()) {
 								ta = (TAttribute)oo;

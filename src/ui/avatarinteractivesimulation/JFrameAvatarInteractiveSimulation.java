@@ -788,7 +788,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	public void runSimulation() {
 		previousTime = System.currentTimeMillis();
 		if (ass != null) {
-			ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTIONS);
+			ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTION_IN_A_ROW);
 			ass.goSimulation();
 		}
 	}

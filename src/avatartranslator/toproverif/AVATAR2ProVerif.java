@@ -62,7 +62,7 @@ public class AVATAR2ProVerif {
 	private final static String BOOLEAN_DATA_HEADER = "(* Boolean return types *)\ndata true/0.\ndata false/0.\n";
 	private final static String FUNC_DATA_HEADER = "(* Functions data *)\ndata " + UNKNOWN + "/0.\n";
 	
-	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun aencryptPK/2.\nreduc adecryptPK(aencryptPK(x,pk(y)),y) = x.\n";
+	private final static String PK_HEADER = "(* Public key cryptography *)\nfun pk/1.\nfun aencrypt/2.\nreduc adecrypt(aencrypt(x,pk(y)),y) = x.\n";
 	private final static String SIG_HEADER = "fun sign/2.\nfun verifySign/3.\nequation verifySign(m, sign(m,sk), pk(sk))=true.\n";
 	private final static String CERT_HEADER = "(* Certificates  *)\nfun cert/2.\nfun verifyCert/2.\nequation verifyCert(cert(epk, sign(epk, sk)), pk(sk))=true.\nreduc getpk(cert(epk, sign(epk,sk))) = epk.\n";
 
