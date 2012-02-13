@@ -23,13 +23,14 @@ long computeLongRandom(long min, long max) {
     return min;
   }
 
-  long rand0 = (((long)(rand()))*powl(2, ((((sizeof(long)-2))*8)-1)));
+
+  long rand0 = (long)rand();
   long rand1 = rand0 % (max - min);
   //debugLong("min=", min);
   //debugLong("max=", max);
   //debugLong("rand0", rand0);
-  //debugLong("rand1", rand1);
-  debugLong("Random long", rand1 + min);
+ //debugLong("rand1", rand1);
+ //debugLong("Random long", rand1 + min);
   return rand1 + min;
 }
 

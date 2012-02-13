@@ -90,8 +90,11 @@ void waitFor(long minDelay, long maxDelay) {
   struct timespec tsret;
   int delay;
 
-  debugMsg("Computing random");
 
+  
+  debugMsg("Computing random delay");
+  //debugLong("Min delay", minDelay);
+  //debugLong("Max delay", maxDelay);
   delay = computeLongRandom(minDelay, maxDelay);
 
   debugLong("Random delay=", delay);
