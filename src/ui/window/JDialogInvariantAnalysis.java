@@ -246,6 +246,13 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
              jta.append("Computing invariants\n");
             im.Farkas();
             jtainvariants.append("Invariants:\n" + im.namesOfRowToString() + "\n\n");
+            
+            mgui.gtm.clearInvariants();
+            
+            for(int i=0; i<im.getNbOfLines(); i++) {
+            	mgui.gtm.addInvariant(new Invariant(im.getNameOfLine(i)));
+            }
+            
              jta.append("Invariants computed\n");
              testGo();
              

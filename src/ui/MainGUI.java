@@ -806,6 +806,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     }
     
     
+    public LinkedList<Invariant> getInvariants() {
+    	return gtm.getInvariants();
+    }
+    
+    
     private int addAnalysisPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();

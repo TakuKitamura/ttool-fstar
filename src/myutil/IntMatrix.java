@@ -80,6 +80,14 @@ public class IntMatrix {
    	   return -1;
    }
    
+   public int getNbOfLines() {
+   	   return sizeRow;
+   }
+   
+   public String getNameOfLine(int i) {
+   	   return nameOfRows[i];
+   }
+   
    public void setNameOfLine(int line, String name) {
    	   try {
    	   	   nameOfRows[line] = name;

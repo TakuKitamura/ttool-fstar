@@ -152,6 +152,14 @@ public class DiagramTreeModel implements TreeModel {
                 return false;
             }
             
+            if (node instanceof InvariantDataTree) {
+                return false;
+            }
+            
+            if (node instanceof Invariant) {
+                return false;
+            }
+            
             if (node instanceof GroupOfGates) {
                 return false;
             }

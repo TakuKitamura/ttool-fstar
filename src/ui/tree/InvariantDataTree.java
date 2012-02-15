@@ -36,9 +36,9 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ValidationDataTree
- * Creation: 22/12/2003
- * Version 1.0 22/12/2003
+ * Class InvariantDataTree
+ * Creation: 15/02/2012
+ * Version 2.0 15/02/2012
  * @author Ludovic APVRILLE
  * @see
  */
@@ -48,61 +48,43 @@ package ui.tree;
 import ui.*;
 import myutil.*;
 
-public class ValidationDataTree implements GenericTree {
+import java.util.*;
+
+public class InvariantDataTree implements GenericTree {
     
     private MainGUI mgui;
-    private String name = "Validation";
-    private TClassesValidationDataTree tvdt;
-    private SyntaxAnalysisTree mcvdt;
-    private CorrespondanceValidationDataTree cvdt;
-    private InvariantDataTree idt;
+    private String name = "Invariants";
+ 
     
-    public ValidationDataTree(MainGUI _mgui) {
+    public InvariantDataTree(MainGUI _mgui) {
         mgui = _mgui;
-        tvdt = new TClassesValidationDataTree(mgui);
-        mcvdt = new SyntaxAnalysisTree(mgui);
-        cvdt = new CorrespondanceValidationDataTree();
-        idt = new InvariantDataTree(mgui);
     }
     
     // TREE MANAGEMENT
-    
     public String toString() {
         return name;
     }
     
     public int getChildCount() {
-      //System.out.println("Get child count validation");
-        return 4;
+        int nb =  mgui.getInvariants().size();
+        if (nb == 0) {
+        	return 1;
+        }
+        return nb;
     }
     
     public Object getChild(int index) {
-    //System.out.println("Get child validation");
-        switch (index) {
-            case 0:
-                return tvdt;
-            case 1:
-                return mcvdt;
-            case 2:
-                return cvdt;
-            case 3:
-                return idt;
-        }
-        return null;
+    	LinkedList<Invariant> invs = mgui.getInvariants();
+    	if (invs.size() == 0) {
+    		return "Not yet performed";
+    	}
+    	return mgui.getInvariants().get(index);
     }
     
     public int getIndexOfChild(Object child) {
-    //System.out.println("Get index of child validation");
-        if (child instanceof TClassesValidationDataTree) {
-            return 0;
-        }	else if (child instanceof SyntaxAnalysisTree) {
-            return 1;
-        } else if (child instanceof CorrespondanceValidationDataTree) {
-            return 2;
-        } else if (child instanceof InvariantDataTree) {
-            return 3;
-        }
-        return -1;
+    	if (child instanceof String) {
+    		return 0;
+    	}
+       return  mgui.getInvariants().indexOf((Invariant)child);
     }
-    
 }

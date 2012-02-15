@@ -178,6 +178,8 @@ public class GTURTLEModeling {
 	private Vector checkingErrors;
 	private Vector warnings;
 	
+	private LinkedList<Invariant> invariants;
+	
 	ArrayList<TGConnectorInfo> pendingConnectors;
 
 	private Vector savedOperations;
@@ -218,6 +220,8 @@ public class GTURTLEModeling {
 		savedOperations = new Vector();
 		savedPanels = new Vector();
 		pointerOperation = -1;
+		
+		invariants = new LinkedList<Invariant>();
 
 		vdt = new ValidationDataTree(mgui);
 
@@ -238,6 +242,19 @@ public class GTURTLEModeling {
 		}
 		return tm.isARegularTIFSpec();
 	}
+	
+	 public LinkedList<Invariant> getInvariants() {
+    	return invariants;
+    }
+    
+    public void addInvariant(Invariant _inv) {
+    	invariants.add(_inv);
+    	TraceManager.addDev("Adding invariant: " + _inv.toString());
+    }
+    
+    public void clearInvariants() {
+    	invariants.clear();
+    }
 	
 	public String saveTIF() {
 		if (tm == null) {

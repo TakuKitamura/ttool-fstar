@@ -36,73 +36,45 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class ValidationDataTree
- * Creation: 22/12/2003
- * Version 1.0 22/12/2003
+ * Class Invariant implements GenericTree
+ * Invariant computed from Avatar diagrams
+ * Creation: 15/02/2012
+ * @version 1.0 15/02/2012
  * @author Ludovic APVRILLE
- * @see
+ * @see TGComponent
  */
+ 
+package ui;
 
-package ui.tree;
 
-import ui.*;
-import myutil.*;
+public class Invariant {
 
-public class ValidationDataTree implements GenericTree {
+	private String name;
+	
+	public Invariant(String _name) {
+		name = _name;
+	}
     
-    private MainGUI mgui;
-    private String name = "Validation";
-    private TClassesValidationDataTree tvdt;
-    private SyntaxAnalysisTree mcvdt;
-    private CorrespondanceValidationDataTree cvdt;
-    private InvariantDataTree idt;
-    
-    public ValidationDataTree(MainGUI _mgui) {
-        mgui = _mgui;
-        tvdt = new TClassesValidationDataTree(mgui);
-        mcvdt = new SyntaxAnalysisTree(mgui);
-        cvdt = new CorrespondanceValidationDataTree();
-        idt = new InvariantDataTree(mgui);
-    }
-    
-    // TREE MANAGEMENT
-    
-    public String toString() {
+	public String toString() {
         return name;
     }
     
     public int getChildCount() {
-      //System.out.println("Get child count validation");
-        return 4;
+        return 0;
     }
     
     public Object getChild(int index) {
-    //System.out.println("Get child validation");
-        switch (index) {
-            case 0:
-                return tvdt;
-            case 1:
-                return mcvdt;
-            case 2:
-                return cvdt;
-            case 3:
-                return idt;
-        }
-        return null;
+    	return null;
     }
     
     public int getIndexOfChild(Object child) {
-    //System.out.println("Get index of child validation");
-        if (child instanceof TClassesValidationDataTree) {
-            return 0;
-        }	else if (child instanceof SyntaxAnalysisTree) {
-            return 1;
-        } else if (child instanceof CorrespondanceValidationDataTree) {
-            return 2;
-        } else if (child instanceof InvariantDataTree) {
-            return 3;
-        }
-        return -1;
+       return  0;
     }
-    
 }
+
+
+
+
+    
+
+
