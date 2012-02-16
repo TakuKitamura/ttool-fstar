@@ -46,29 +46,69 @@ knowledge of the CeCILL license and that you accept its terms.
  
 package ui;
 
+import myutil.*;
 
-public class Invariant {
+import java.util.*;
+
+
+public class Invariant implements GenericTree {
 
 	private String name;
+	private int tokenValue; // Invariant on a given nb of tokens;
+	private int value; // value on the incidence matrix after computation of the invariant
+	private LinkedList<TGComponent> components;
 	
 	public Invariant(String _name) {
 		name = _name;
+		components = new LinkedList<TGComponent>();
 	}
+	
+	public void setTokenValue(int _value) {
+		tokenValue = _value;
+	}
+	
+	
+	public void setValue(int _value) {
+		value = _value;
+	}
+	
+	public void addComponent(TGComponent _tgc) {
+		components.add(_tgc);
+	}
+	
     
 	public String toString() {
         return name;
     }
     
     public int getChildCount() {
-        return 0;
+        return 2 + components.size();
     }
     
     public Object getChild(int index) {
-    	return null;
+    	if (index == 0) {
+    		return "value: " + value;
+    	}
+    	
+    	if (index == 1) {
+    		return "Token value: " + tokenValue;
+    	}
+    	
+    	return components.get(index-2);
+    	
     }
     
     public int getIndexOfChild(Object child) {
-       return  0;
+    	if (child instanceof String) {
+    		String s = (String)child;
+    		if (s.startsWith("value")) {
+    			return 0;
+    		}
+    		return 1;
+    	}
+    	
+    	return components.indexOf(child)+2;
+    	
     }
 }
 

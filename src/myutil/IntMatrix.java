@@ -88,6 +88,14 @@ public class IntMatrix {
    	   return nameOfRows[i];
    }
    
+   public int getValueOfLine(int i) {
+   	   int cpt = 0;
+   	   for(int j=0;j<sizeColumn; j++) {
+   	   	   cpt += matrice[i][j];
+   	   }
+   	   return cpt;
+   }
+   
    public void setNameOfLine(int line, String name) {
    	   try {
    	   	   nameOfRows[line] = name;

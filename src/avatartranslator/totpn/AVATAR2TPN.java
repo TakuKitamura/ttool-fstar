@@ -184,7 +184,7 @@ public class AVATAR2TPN {
 			}
 			
 			pentry = p1;
-			pexit = new Place("synchroDone__" + getTPNName(_block, _asme));
+			pexit = new Place(getTPNName(_block, _asme));
 			entryPlaces.put(_asme, pentry);    
 			exitPlaces.put(_asme, pexit);
 			

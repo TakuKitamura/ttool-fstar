@@ -409,6 +409,15 @@ public class AvatarStateMachine extends AvatarElement {
 		return null;
 	}
 	
+	public Object getReferenceObjectFromID(int _ID) {
+		for(AvatarStateMachineElement element: elements) {
+			if(element.getID() == _ID) {
+				return element.getReferenceObject();
+			}
+		}
+		return null;
+	}
+	
 	// Return true iff at least one timer was removed
 	public boolean removeTimers(AvatarBlock _block, String timerAttributeName) {
 		AvatarSetTimer ast;

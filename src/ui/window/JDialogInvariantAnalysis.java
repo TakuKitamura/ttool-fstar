@@ -58,7 +58,7 @@ import avatartranslator.totpn.*;
 import avatartranslator.*;
 import tpndescription.*;
 import ui.*;
-
+import ui.avatarsmd.*;
 import launcher.*;
 
 
@@ -249,8 +249,77 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             
             mgui.gtm.clearInvariants();
             
+            Invariant inv;
+            String name;
+            String[] elts;
+            String tmp;
+            String[] tmps;
+            int myid;
+            AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+            AvatarBlock ab = null;
+            Object o;
+            int state;
+            int valToken = 0;
+            
             for(int i=0; i<im.getNbOfLines(); i++) {
-            	mgui.gtm.addInvariant(new Invariant(im.getNameOfLine(i)));
+            	name =  im.getNameOfLine(i);
+            	inv = new Invariant("#" + (i+1) + " " + name);
+            	inv.setValue(im.getValueOfLine(i));
+            	
+            	// Putting components
+            	name = Conversion.replaceAllString(name, " + ", "&"); 
+            	elts = name.split("&");
+            	state = 0;
+            	for(int j=0; j<elts.length; j++) {
+            		tmp = elts[j].trim();
+            		TraceManager.addDev("#" + j + "=" + elts[j]);
+            		tmp = Conversion.replaceAllString(tmp, "__", "&");
+            		tmps = tmp.split("&");
+            		if (tmps.length > 2) {
+            			ab = avspec.getBlockWithName(tmps[0]);
+            			try {
+            					myid = Integer.decode(tmps[2]).intValue();
+            					o = ab.getStateMachine().getReferenceObjectFromID(myid);
+            					TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
+            					inv.addComponent((TGComponent)o);
+            					TraceManager.addDev("Component added:" + o);
+            					if (o instanceof AvatarSMDStartState) {
+            						valToken ++;
+            					}
+            				} catch (Exception e) {
+            					TraceManager.addDev("Exception invariants:" + e.getMessage());
+            				}
+            		}
+            		
+            		/*if (tmp.length() > 0) {
+            			switch(state) {
+            			case 0:
+            				ab = avspec.getBlockWithName(tmp);
+            				state = 1;
+            				break;
+            			case 1:
+            				state = 2;
+            				break;
+            			case 2:
+            				state = 0;
+            				myid = Integer.decode(tmp).intValue();
+            				try {
+            					myid = Integer.decode(tmp).intValue();
+            					o = ab.getStateMachine().getReferenceObjectFromID(myid);
+            					TraceManager.addDev("Adding component to inv");
+            					inv.addComponent((TGComponent)o);
+            					TraceManager.addDev("Component added");
+            				} catch (Exception e) {
+            				}
+            				ab = null;
+            				break;
+            			}
+            		}*/
+            	}
+            	inv.setTokenValue(valToken);
+            	
+            	mgui.gtm.addInvariant(inv);
+            	
             }
             
              jta.append("Invariants computed\n");
