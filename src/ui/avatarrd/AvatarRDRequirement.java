@@ -533,7 +533,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             for(int i=0; i<texts.length; i++) {
                 //value = value + texts[i] + "\n";
                 sb.append("<textline data=\"");
-                sb.append(texts[i]);
+                sb.append(GTURTLEModeling.transformString(texts[i]));
                 sb.append("\" />\n");
             }
         }

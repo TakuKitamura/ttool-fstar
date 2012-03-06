@@ -64,6 +64,8 @@ import launcher.*;
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
     
+	private static boolean IGNORE = true;
+	
     protected MainGUI mgui;
     
     private JTabbedPane jp1;
@@ -80,6 +82,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     protected JButton start;
     protected JButton stop;
     protected JButton close;
+    protected JCheckBox ignoreInvariants;
     
     
     private Thread t;
@@ -122,7 +125,10 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         
         jp1 = new JTabbedPane();
         
-      
+        JPanel panelCompute = new JPanel(new BorderLayout());
+        ignoreInvariants = new JCheckBox("Ignore invariants concerning only one block", IGNORE);
+        panelCompute.add(ignoreInvariants, BorderLayout.NORTH);
+        
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
@@ -131,7 +137,9 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jp1.add("Compute invariants", jsp);
+         panelCompute.add(jsp, BorderLayout.CENTER);
+        jp1.add("Compute invariants", panelCompute);
+        
         
         jtatpn = new ScrolledJTextArea();
         jtatpn.setEditable(false);
@@ -199,6 +207,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         if (mode == STARTED) {
             stopProcess();
         }
+        IGNORE = ignoreInvariants.isSelected();
         dispose();
     }
     
@@ -261,9 +270,15 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             int state;
             int valToken = 0;
             
+            boolean sameBlock;
+            AvatarBlock prevBlock;
+            int ignored = 0;
+            
             for(int i=0; i<im.getNbOfLines(); i++) {
             	name =  im.getNameOfLine(i);
-            	inv = new Invariant("#" + (i+1) + " " + name);
+            	prevBlock = null;
+            	sameBlock = true;
+            	inv = new Invariant("#" + ((i+1)-ignored) + " " + name);
             	inv.setValue(im.getValueOfLine(i));
             	
             	// Putting components
@@ -277,6 +292,14 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             		tmps = tmp.split("&");
             		if (tmps.length > 2) {
             			ab = avspec.getBlockWithName(tmps[0]);
+            			if (prevBlock == null) {
+            				prevBlock = ab;
+            			} else {
+            				if (prevBlock != ab) {
+            					sameBlock = false;
+            				}
+            			}
+            			prevBlock = ab;
             			try {
             					myid = Integer.decode(tmps[2]).intValue();
             					o = ab.getStateMachine().getReferenceObjectFromID(myid);
@@ -290,35 +313,15 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             					TraceManager.addDev("Exception invariants:" + e.getMessage());
             				}
             		}
-            		
-            		/*if (tmp.length() > 0) {
-            			switch(state) {
-            			case 0:
-            				ab = avspec.getBlockWithName(tmp);
-            				state = 1;
-            				break;
-            			case 1:
-            				state = 2;
-            				break;
-            			case 2:
-            				state = 0;
-            				myid = Integer.decode(tmp).intValue();
-            				try {
-            					myid = Integer.decode(tmp).intValue();
-            					o = ab.getStateMachine().getReferenceObjectFromID(myid);
-            					TraceManager.addDev("Adding component to inv");
-            					inv.addComponent((TGComponent)o);
-            					TraceManager.addDev("Component added");
-            				} catch (Exception e) {
-            				}
-            				ab = null;
-            				break;
-            			}
-            		}*/
             	}
             	inv.setTokenValue(valToken);
             	
-            	mgui.gtm.addInvariant(inv);
+            	if (!(ignoreInvariants.isSelected() && sameBlock)) {
+            		mgui.gtm.addInvariant(inv);
+            	} else {
+            		TraceManager.addDev("Invariant ignored " + inv);
+            		ignored ++;
+            	}
             	
             }
             

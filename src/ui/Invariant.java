@@ -87,7 +87,7 @@ public class Invariant implements GenericTree {
     
     public Object getChild(int index) {
     	if (index == 0) {
-    		return "value: " + value;
+    		return "Nb of elements: " + value;
     	}
     	
     	if (index == 1) {
