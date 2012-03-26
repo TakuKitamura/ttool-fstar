@@ -285,8 +285,8 @@ public class IntMatrix {
    }
    
    
-   
-   public void Farkas() {
+   // noMultiplier indicates whether names of lines may contain the "*" sign, or not.
+   public void Farkas(boolean noMultiplier) {
    	   int sizeColumBeforeConcat = sizeColumn;
    	   IntMatrix idMat = new IntMatrix(sizeRow, sizeRow);
    	   idMat.makeID();
@@ -297,6 +297,7 @@ public class IntMatrix {
    	   int l, i;
    	   String s0, s1;
    	   String nameOfNewLine;
+   	   int cpt;
    	   
    	   for(int j=0; j<sizeColumBeforeConcat; j++) {
    	   	   // Loop on lines to add line combinations
@@ -314,14 +315,28 @@ public class IntMatrix {
    	   	   	   	   	   if (Math.abs(lined2[j]) == 1) {
    	   	   	   	   	   	   s0 =  nameOfRows[i] + " + ";
    	   	   	   	   	   } else {
-   	   	   	   	   	   	   s0 = "" + Math.abs(lined2[j]) + "*("  + nameOfRows[i] + ") + ";
+   	   	   	   	   	   	   if (noMultiplier) {
+   	   	   	   	   	   	   	   s0 = nameOfRows[i] + " + ";
+   	   	   	   	   	   	   	   for(cpt=Math.abs(lined2[j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   	   s0 += nameOfRows[i] + " + " ;
+   	   	   	   	   	   	   	   }
+   	   	   	   	   	   	   } else {
+   	   	   	   	   	   	   	   s0 = "" + Math.abs(lined2[j]) + "*("  + nameOfRows[i] + ") + ";
+   	   	   	   	   	   	   }
    	   	   	   	   	   }
    	   	   	   	   	   
-   	   	   	   	   	   if (Math.abs(lined2[j]) == 1) {
-   	   	   	   	   	   	   s1 =  nameOfRows[k];
+   	   	   	   	   	   if (Math.abs(lined1[j]) == 1) {
+   	   	   	   	   	   	    s1 =  nameOfRows[k];
    	   	   	   	   	   } else {
-   	   	   	   	   	   	   s1 = "" + Math.abs(lined1[j]) + "*(" + nameOfRows[k] + ")";
-   	   	   	   	   	   }
+   	   	   	   	   	   	   if (noMultiplier) {
+   	   	   	   	   	   	   	    s1 =  nameOfRows[k];
+   	   	   	   	   	   	   	   for(cpt=Math.abs(lined1[j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   	   s1 += " +" + nameOfRows[k];
+   	   	   	   	   	   	   	   }
+   	   	   	   	   	   	   } else {
+   	   	   	   	   	   	   	   s1 = "" + Math.abs(lined1[j]) + "*("  + nameOfRows[k] + ") + ";
+   	   	   	   	   	   	   }
+   	   	   	   	   	   } 
    	   	   	   	   	   
    	   	   	   	   	   nameOfNewLine = s0 + s1;
    	   	   	   	   	   gcd = MyMath.gcd(lined);
@@ -343,7 +358,7 @@ public class IntMatrix {
    	   	   for(i=0;i<sizeRow; i++) {
    	   	   	   if (matrice[i][j] != 0) {
    	   	   	   	   removeLine(i);
-   	   	   	   	   System.out.println("matafterremove " + i + "=\n" + toString() + "\n\n");
+   	   	   	   	   //System.out.println("matafterremove " + i + "=\n" + toString() + "\n\n");
    	   	   	   	   i--;
    	   	   	   }
    	   	   }

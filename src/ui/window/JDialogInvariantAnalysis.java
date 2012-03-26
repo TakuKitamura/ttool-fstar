@@ -253,8 +253,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
              testGo();
              
              jta.append("Computing invariants\n");
-            im.Farkas();
-            jtainvariants.append("Invariants:\n" + im.namesOfRowToString() + "\n\n");
+            im.Farkas(true);
+            //jtainvariants.append("All invariants:\n" + im.namesOfRowToString() + "\n\n");
             
             mgui.gtm.clearInvariants();
             
@@ -274,6 +274,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             AvatarBlock prevBlock;
             int ignored = 0;
             
+            jtainvariants.append("Computed invariants:\n-----------------\n");
+            
             for(int i=0; i<im.getNbOfLines(); i++) {
             	name =  im.getNameOfLine(i);
             	prevBlock = null;
@@ -287,7 +289,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	state = 0;
             	for(int j=0; j<elts.length; j++) {
             		tmp = elts[j].trim();
-            		TraceManager.addDev("#" + j + "=" + elts[j]);
+            		//TraceManager.addDev("#" + j + "=" + elts[j]);
             		tmp = Conversion.replaceAllString(tmp, "__", "&");
             		tmps = tmp.split("&");
             		if (tmps.length > 2) {
@@ -303,14 +305,14 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             			try {
             					myid = Integer.decode(tmps[2]).intValue();
             					o = ab.getStateMachine().getReferenceObjectFromID(myid);
-            					TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
+            					//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
             					inv.addComponent((TGComponent)o);
-            					TraceManager.addDev("Component added:" + o);
+            					//TraceManager.addDev("Component added:" + o);
             					if (o instanceof AvatarSMDStartState) {
             						valToken ++;
             					}
             				} catch (Exception e) {
-            					TraceManager.addDev("Exception invariants:" + e.getMessage());
+            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[2]=" + tmps[2] + "inv=" + name);
             				}
             		}
             	}
@@ -318,8 +320,10 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	
             	if (!(ignoreInvariants.isSelected() && sameBlock)) {
             		mgui.gtm.addInvariant(inv);
+            		jtainvariants.append(inv + "\n");
             	} else {
-            		TraceManager.addDev("Invariant ignored " + inv);
+            		//TraceManager.addDev("Invariant ignored " + inv);
+            		jtainvariants.append("Ignored invariant: " + inv + "\n");
             		ignored ++;
             	}
             	

@@ -73,12 +73,16 @@ public class Invariant implements GenericTree {
 	}
 	
 	public void addComponent(TGComponent _tgc) {
+		if (_tgc == null) {
+			TraceManager.addDev("NULL Component added to invariant -> IGNORING");
+			return;
+		}
 		components.add(_tgc);
 	}
 	
     
 	public String toString() {
-        return name;
+        return "(" + value + ") " + name;
     }
     
     public int getChildCount() {

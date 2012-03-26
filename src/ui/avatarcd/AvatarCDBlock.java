@@ -186,7 +186,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 		Color avat = ColorManager.AVATAR_BLOCK;
 		int h;
 		h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom())) + 2;
-		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
 		g.fill3DRect(x+1, y+1, width-1, Math.min(h, height)-1, true);
 		g.setColor(c);
         
@@ -219,7 +219,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 		h = h +2;
 		if (h < height) {
 			//g.drawLine(x, y+h, x+width, y+h);
-			g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+			g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
 			g.fill3DRect(x+1, y+h, width-1, height-1-h, true);
 			g.setColor(c);
 		}
