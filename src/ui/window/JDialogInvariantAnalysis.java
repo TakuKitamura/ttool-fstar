@@ -289,7 +289,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	state = 0;
             	for(int j=0; j<elts.length; j++) {
             		tmp = elts[j].trim();
-            		//TraceManager.addDev("#" + j + "=" + elts[j]);
+            		TraceManager.addDev("#" + j + "=" + elts[j]);
             		tmp = Conversion.replaceAllString(tmp, "__", "&");
             		tmps = tmp.split("&");
             		if (tmps.length > 2) {
@@ -302,8 +302,9 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             				}
             			}
             			prevBlock = ab;
+            			
             			try {
-            					myid = Integer.decode(tmps[2]).intValue();
+            					myid = Integer.decode(tmps[tmps.length-1]).intValue();
             					o = ab.getStateMachine().getReferenceObjectFromID(myid);
             					//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
             					inv.addComponent((TGComponent)o);
@@ -312,7 +313,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             						valToken ++;
             					}
             				} catch (Exception e) {
-            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[2]=" + tmps[2] + "inv=" + name);
+            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[2]=" + tmps[tmps.length-1] + " inv=" + name);
             				}
             		}
             	}

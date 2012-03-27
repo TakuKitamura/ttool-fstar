@@ -77,6 +77,15 @@ public class Invariant implements GenericTree {
 			TraceManager.addDev("NULL Component added to invariant -> IGNORING");
 			return;
 		}
+		
+		//Component already belongs to invariant?
+		
+		if (components.contains(_tgc)) {
+			TraceManager.addDev("Duplicated component:" + _tgc);
+			return;
+			
+		}
+		
 		components.add(_tgc);
 	}
 	
@@ -97,6 +106,11 @@ public class Invariant implements GenericTree {
     	if (index == 1) {
     		return "Token value: " + tokenValue;
     	}
+    	
+    	
+    	TGComponent tgc  = components.get(index-2);
+    	//TraceManager.addDev("Getting at index #" + (index-2) + " = " + tgc);
+    	
     	
     	return components.get(index-2);
     	
