@@ -176,6 +176,10 @@ public class DiagramTreeModel implements TreeModel {
                         return false;
                 }
             }
+            
+             if (node instanceof InvariantSynchro) {
+             	 return false;
+             }
             return true;
         }
     }
@@ -192,6 +196,6 @@ public class DiagramTreeModel implements TreeModel {
      * identified by path to newValue.  Not used by this model.
      */
     public void valueForPathChanged(TreePath path, Object newValue) {
-        System.out.println("*** valueForPathChanged : " + path + " --> " + newValue);
+        //System.out.println("*** valueForPathChanged : " + path + " --> " + newValue);
     }
 }

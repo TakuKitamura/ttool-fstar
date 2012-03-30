@@ -223,6 +223,17 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         }  else if (value instanceof CheckingError) {
             setIcon(IconManager.imgic322);
             setToolTipText(value.toString());
+        } else if (value instanceof Invariant) {
+        	Invariant inv = (Invariant)value;
+            setIcon(IconManager.imgic5110);
+            setToolTipText("value=" + inv.getValue() + " tokenValue=" + inv.getTokenValue());
+        } else if (value instanceof InvariantSynchro) {
+        	InvariantSynchro is = (InvariantSynchro)value;
+            setIcon(IconManager.imgic5004);
+            setToolTipText("name=" + is.getName() + " from=" + is.getFrom() + " to=" + is.getTo());
+        } else if (value instanceof InvariantDataTree) {
+            setIcon(IconManager.imgic5112);
+            setToolTipText("List of invariants");
         } else if (value instanceof TAttribute) {
             setIcon(IconManager.imgic5106);
             setToolTipText(value.toString());

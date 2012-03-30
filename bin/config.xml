@@ -59,11 +59,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /localhome/ludo/TTool/uppaal/spec.xml"/>
 
-<LastOpenFile data="/localhome/ludo/TTool/modeling/sncf/trial_Avatar.xml"/>
+<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/EVITA/evita_t2300_23.xml"/>
 
 
 
-<LastWindowAttributes x="138" y="22" width="1039" height="774" max="false" />
+<LastWindowAttributes x="545" y="286" width="1555" height="814" max="false" />
 
 
 </TURTLECONFIGURATION>

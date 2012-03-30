@@ -100,7 +100,7 @@ public class AVATAR2TPN {
 		
 		makeBlocks();
 		
-		TraceManager.addDev("->   tpn:" + tpn.toString());
+		//TraceManager.addDev("->   tpn:" + tpn.toString());
 		
 		
 		/*if (_optimize) {
@@ -162,7 +162,7 @@ public class AVATAR2TPN {
 			pexit = pentry;
 			entryPlaces.put(_asme, pentry);    
 			exitPlaces.put(_asme, pexit);
-			TraceManager.addDev("Adding place : " + pentry);
+			//TraceManager.addDev("Adding place : " + pentry);
 			tpn.addPlace(pentry);
 			link = true;
 			
@@ -189,7 +189,7 @@ public class AVATAR2TPN {
 			exitPlaces.put(_asme, pexit);
 			
 			tpn.addPlace(pexit);
-			TraceManager.addDev("Adding place : " + pentry);
+			//TraceManager.addDev("Adding place : " + pentry);
 			
 		} else {
 			TraceManager.addDev("UNMANAGED ELEMENTS: " +_asme);
@@ -216,9 +216,10 @@ public class AVATAR2TPN {
 	public void interconnectSynchro() {
 		int index;
 		AvatarSignal sig;
-		Transition t0;
+		Transition t0, t1;
+		Place pSynchro;
 		
-		TraceManager.addDev("Interconnecting synchro");
+		//TraceManager.addDev("Interconnecting synchro");
 		
 		// Interconnect sender and receivers together!
 		for(AvatarActionOnSignal destination: receiveActions) {
@@ -230,7 +231,49 @@ public class AVATAR2TPN {
 					for(AvatarActionOnSignal origin:sendActions) {
 						if (origin.getSignal() == sig) {
 							// combination found!
-							TraceManager.addDev("Combination found");
+							//TraceManager.addDev("Combination found");
+							t0 = new Transition("beginning Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
+							pSynchro = new Place("Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
+							tpn.addPlace(pSynchro);
+							t1 = new Transition("end Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
+							
+							t0.addOriginPlace(entryPlaces.get(destination));
+							t0.addOriginPlace(entryPlaces.get(origin));
+							t0.addDestinationPlace(pSynchro);
+							
+							t1.addOriginPlace(pSynchro);
+							t1.addDestinationPlace(exitPlaces.get(origin));
+							t1.addDestinationPlace(exitPlaces.get(destination));
+							
+							tpn.addTransition(t0);
+							tpn.addTransition(t1);
+							
+						}
+					}
+				}
+			}
+		}
+		
+	}
+	/* Old version
+	public void interconnectSynchro() {
+		int index;
+		AvatarSignal sig;
+		Transition t0;
+		
+		//TraceManager.addDev("Interconnecting synchro");
+		
+		// Interconnect sender and receivers together!
+		for(AvatarActionOnSignal destination: receiveActions) {
+			// Find the related relation
+			for(AvatarRelation ar: avspec.getRelations()) {
+				if (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) {
+					index = ar.getIndexOfSignal(destination.getSignal());
+					sig = ar.getOutSignal(index);
+					for(AvatarActionOnSignal origin:sendActions) {
+						if (origin.getSignal() == sig) {
+							// combination found!
+							//TraceManager.addDev("Combination found");
 							t0 = new Transition("Synchro from " + getShortTPNName(origin) + " to " + getShortTPNName(destination));
 							t0.addOriginPlace(entryPlaces.get(origin));
 							t0.addDestinationPlace(exitPlaces.get(origin));
@@ -243,7 +286,7 @@ public class AVATAR2TPN {
 			}
 		}
 		
-	}
+	}*/
 	
 	public String getTPNName(AvatarBlock _block, AvatarStateMachineElement _asme) {
 		return _block.getName() + "__" + _asme.getName() + "__" + _asme.getID();

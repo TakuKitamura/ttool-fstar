@@ -55,6 +55,7 @@ import java.util.*;
 
 //import translator.*;
 import ui.*;
+import myutil.*;
 
 
 public class JDiagramTree extends javax.swing.JTree implements MouseListener, TreeExpansionListener, TreeSelectionListener, Runnable   {
@@ -71,6 +72,9 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
     /** Creates new form  */
     public JDiagramTree(MainGUI _mgui) {
         super(new DiagramTreeModel(_mgui));
+        
+        TraceManager.addDev("TREE CREATED");
+        
         mgui = _mgui;
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         setEditable(false);
@@ -217,6 +221,8 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
     }
     
     public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+    	//TraceManager.addDev("Value changed");
+    	
         if(getSelectionPaths() != null && getSelectionPaths().length >0 ){
             m_selectedTreePaths = getSelectionModel().getSelectionPaths();
         }
@@ -227,6 +233,7 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
         }
         
         Object nodeInfo = tp.getLastPathComponent();
+        Object o;
         
         if (nodeInfo instanceof TDiagramPanel) {
             mgui.selectTab((TDiagramPanel)nodeInfo);
@@ -236,6 +243,24 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
             TGComponent tgc = (TGComponent) nodeInfo;
             mgui.selectTab(tgc.getTDiagramPanel());
             tgc.getTDiagramPanel().highlightTGComponent(tgc);
+        } else if (nodeInfo instanceof Invariant) {
+        	//TraceManager.addDev("Click on invariant");
+            	Invariant inv = (Invariant)nodeInfo;
+            	mgui.setCurrentInvariant(inv);
+            	for(int i=2; i< inv.getChildCount(); i++) {
+            		o = inv.getChild(i);
+            		if (o instanceof TGComponent) {
+            			 TGComponent tgc1 = (TGComponent) (o);
+            			 tgc1.getTDiagramPanel().repaint(); 
+            		}
+            		
+            		if (o instanceof InvariantSynchro) {
+            			InvariantSynchro is = (InvariantSynchro)o;
+            			is.getFrom().getTDiagramPanel().repaint();
+            			is.getTo().getTDiagramPanel().repaint(); 
+            		}
+            		
+            	}
         } else if (nodeInfo instanceof CheckingError) {
             CheckingError ce = (CheckingError)nodeInfo;
             TDiagramPanel tdp; TGComponent tgc;
@@ -253,7 +278,7 @@ public class JDiagramTree extends javax.swing.JTree implements MouseListener, Tr
                 mgui.selectTab("Class diagram");
             } else if (ce.getTMLTask() != null) {
                 mgui.selectTab(ce.getTMLTask().getName());
-            }
+            } 
         }
     }
     

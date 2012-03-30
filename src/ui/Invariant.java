@@ -57,10 +57,12 @@ public class Invariant implements GenericTree {
 	private int tokenValue; // Invariant on a given nb of tokens;
 	private int value; // value on the incidence matrix after computation of the invariant
 	private LinkedList<TGComponent> components;
+	private LinkedList<InvariantSynchro> synchros;
 	
 	public Invariant(String _name) {
 		name = _name;
 		components = new LinkedList<TGComponent>();
+		synchros = new LinkedList<InvariantSynchro>();
 	}
 	
 	public void setTokenValue(int _value) {
@@ -70,6 +72,25 @@ public class Invariant implements GenericTree {
 	
 	public void setValue(int _value) {
 		value = _value;
+	}
+	
+	public int getTokenValue() {
+		return tokenValue;
+	}
+	
+	public int getValue() {
+		return value;
+	}
+	
+	public void addSynchro(InvariantSynchro _synchro) {
+		// Look for similar synchro
+		for(InvariantSynchro is: synchros) {
+			if ((is.getFrom() == _synchro.getFrom()) &&  (is.getTo() == _synchro.getTo())) {
+				return;
+			}
+		}
+		
+		synchros.add(_synchro);
 	}
 	
 	public void addComponent(TGComponent _tgc) {
@@ -89,13 +110,17 @@ public class Invariant implements GenericTree {
 		components.add(_tgc);
 	}
 	
+	public void computeValue() {
+		value = components.size() + synchros.size();
+	}
+	
     
 	public String toString() {
         return "(" + value + ") " + name;
     }
     
     public int getChildCount() {
-        return 2 + components.size();
+        return 2 + synchros.size() + components.size();
     }
     
     public Object getChild(int index) {
@@ -107,6 +132,12 @@ public class Invariant implements GenericTree {
     		return "Token value: " + tokenValue;
     	}
     	
+    	
+    	if (index-2 < synchros.size()) {
+    		return synchros.get(index-2);
+    	}
+    	
+    	index -= synchros.size();
     	
     	TGComponent tgc  = components.get(index-2);
     	//TraceManager.addDev("Getting at index #" + (index-2) + " = " + tgc);
@@ -125,9 +156,22 @@ public class Invariant implements GenericTree {
     		return 1;
     	}
     	
-    	return components.indexOf(child)+2;
+    	if (child instanceof InvariantSynchro) {
+    		return synchros.indexOf(child)+2;
+    	}
     	
+    	return components.indexOf(child)+2+synchros.size();
     }
+    
+    public boolean containsComponent(TGComponent tgc) {
+    	for(InvariantSynchro is: synchros) {
+    		if (is.containsComponent(tgc)) {
+    			return true;
+    		}
+    	}
+    	return components.contains(tgc);
+    }
+    
 }
 
 

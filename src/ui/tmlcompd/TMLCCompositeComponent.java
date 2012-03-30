@@ -117,7 +117,11 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		//FontMetrics fm = g.getFontMetrics();
 		
 		if (myColor == null) {
+			if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
+				myColor = Color.white;
+			} else {
 			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
+			}
 		}
 		
 		if ((rescaled) && (!tdp.isScaled())) {

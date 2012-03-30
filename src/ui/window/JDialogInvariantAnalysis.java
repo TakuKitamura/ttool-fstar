@@ -1,49 +1,49 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- *
- * ludovic.apvrille AT enst.fr
- *
- * This software is a computer program whose purpose is to allow the
- * edition of TURTLE analysis, design and deployment diagrams, to
- * allow the generation of RT-LOTOS or Java code from this diagram,
- * and at last to allow the analysis of formal validation traces
- * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
- * from INRIA Rhone-Alpes.
- *
- * This software is governed by the CeCILL  license under French law and
- * abiding by the rules of distribution of free software.  You can  use,
- * modify and/ or redistribute the software under the terms of the CeCILL
- * license as circulated by CEA, CNRS and INRIA at the following URL
- * "http://www.cecill.info".
- *
- * As a counterpart to the access to the source code and  rights to copy,
- * modify and redistribute granted by the license, users are provided only
- * with a limited warranty  and the software's author,  the holder of the
- * economic rights,  and the successive licensors  have only  limited
- * liability.
- *
- * In this respect, the user's attention is drawn to the risks associated
- * with loading,  using,  modifying and/or developing or reproducing the
- * software by the user in light of its specific status of free software,
- * that may mean  that it is complicated to manipulate,  and  that  also
- * therefore means  that it is reserved for developers  and  experienced
- * professionals having in-depth computer knowledge. Users are therefore
- * encouraged to load and test the software's suitability as regards their
- * requirements in conditions enabling the security of their systems and/or
- * data to be ensured and,  more generally, to use and operate it in the
- * same conditions as regards security.
- *
- * The fact that you are presently reading this means that you have had
- * knowledge of the CeCILL license and that you accept its terms.
- *
- * /**
- * Class JDialogInvariantAnalysis
- * Dialog for managing the generation of ProVerif code and execution of 
- * ProVerif
- * Creation: 09/02/2012
- * @version 1.0 09/01/2012
- * @author Ludovic APVRILLE
- * @see
- */
+*
+* ludovic.apvrille AT enst.fr
+*
+* This software is a computer program whose purpose is to allow the
+* edition of TURTLE analysis, design and deployment diagrams, to
+* allow the generation of RT-LOTOS or Java code from this diagram,
+* and at last to allow the analysis of formal validation traces
+* obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+* from INRIA Rhone-Alpes.
+*
+* This software is governed by the CeCILL  license under French law and
+* abiding by the rules of distribution of free software.  You can  use,
+* modify and/ or redistribute the software under the terms of the CeCILL
+* license as circulated by CEA, CNRS and INRIA at the following URL
+* "http://www.cecill.info".
+*
+* As a counterpart to the access to the source code and  rights to copy,
+* modify and redistribute granted by the license, users are provided only
+* with a limited warranty  and the software's author,  the holder of the
+* economic rights,  and the successive licensors  have only  limited
+* liability.
+*
+* In this respect, the user's attention is drawn to the risks associated
+* with loading,  using,  modifying and/or developing or reproducing the
+* software by the user in light of its specific status of free software,
+* that may mean  that it is complicated to manipulate,  and  that  also
+* therefore means  that it is reserved for developers  and  experienced
+* professionals having in-depth computer knowledge. Users are therefore
+* encouraged to load and test the software's suitability as regards their
+* requirements in conditions enabling the security of their systems and/or
+* data to be ensured and,  more generally, to use and operate it in the
+* same conditions as regards security.
+*
+* The fact that you are presently reading this means that you have had
+* knowledge of the CeCILL license and that you accept its terms.
+*
+* /**
+* Class JDialogInvariantAnalysis
+* Dialog for managing the generation of ProVerif code and execution of 
+* ProVerif
+* Creation: 09/02/2012
+* @version 1.0 09/01/2012
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package ui.window;
 
@@ -137,7 +137,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-         panelCompute.add(jsp, BorderLayout.CENTER);
+        panelCompute.add(jsp, BorderLayout.CENTER);
         jp1.add("Compute invariants", panelCompute);
         
         
@@ -235,7 +235,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     }
     
     public void run() {
-       TPN tpn;
+    	TPN tpn;
         hasError = false;
 		
 		TraceManager.addDev("Thread started");
@@ -244,15 +244,15 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             jta.append("Generating Petri Net\n");
             tpn = mgui.gtm.generateTPNFromAvatar();
             jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
-             testGo();
+            testGo();
             
-             jta.append("Computing incidence matrix\n");
+            jta.append("Computing incidence matrix\n");
             IntMatrix im = tpn.getIncidenceMatrix();
             jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
-             jta.append("Incidence matrix computed\n");
-             testGo();
-             
-             jta.append("Computing invariants\n");
+            jta.append("Incidence matrix computed\n");
+            testGo();
+            
+            jta.append("Computing invariants\n");
             im.Farkas(true);
             //jtainvariants.append("All invariants:\n" + im.namesOfRowToString() + "\n\n");
             
@@ -261,25 +261,30 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             Invariant inv;
             String name;
             String[] elts;
-            String tmp;
+            String tmp, tmp1, tmp2;
             String[] tmps;
             int myid;
             AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
             AvatarBlock ab = null;
+            AvatarBlock ab1, ab2;
             Object o;
             int state;
             int valToken = 0;
             
             boolean sameBlock;
-            AvatarBlock prevBlock;
+            AvatarBlock prevBlock, prevBlock1;
             int ignored = 0;
+            TGComponent tgc1, tgc2;
+            
             
             jtainvariants.append("Computed invariants:\n-----------------\n");
             
             for(int i=0; i<im.getNbOfLines(); i++) {
-            	name =  im.getNameOfLine(i);
             	prevBlock = null;
+            	prevBlock1 = null;
             	sameBlock = true;
+            	name =  im.getNameOfLine(i);
+       
             	inv = new Invariant("#" + ((i+1)-ignored) + " " + name);
             	inv.setValue(im.getValueOfLine(i));
             	
@@ -289,35 +294,120 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	state = 0;
             	for(int j=0; j<elts.length; j++) {
             		tmp = elts[j].trim();
-            		TraceManager.addDev("#" + j + "=" + elts[j]);
-            		tmp = Conversion.replaceAllString(tmp, "__", "&");
-            		tmps = tmp.split("&");
-            		if (tmps.length > 2) {
-            			ab = avspec.getBlockWithName(tmps[0]);
-            			if (prevBlock == null) {
-            				prevBlock = ab;
-            			} else {
-            				if (prevBlock != ab) {
-            					sameBlock = false;
+            		//TraceManager.addDev("#" + j + "=" + elts[j] + " tmp=" + tmp);
+            		
+            		if (tmp.startsWith("Synchro from ")) {
+            			tmp =tmp.substring(13, tmp.length()).trim();
+            			int index = tmp.indexOf(" to ");
+            			if (index != -1) {
+            				tmp1 = tmp.substring(0, index).trim();
+            				tmp2 = tmp.substring(index+4, tmp.length()).trim();
+            				//TraceManager.addDev("Found synchro: " + tmp1 + ", " + tmp2);
+            				tgc1 = null;
+            				tgc2 = null;
+            				ab1 = null;
+            				ab2 = null;
+            				
+            				//tmp1
+            				tmp1 = Conversion.replaceAllString(tmp1, "__", "&");
+            				tmps = tmp1.split("&");
+            				if (tmps.length > 2) {
+            					ab = avspec.getBlockWithName(tmps[0]);
+            					ab1 = ab;
+            					
+            					try {
+            						myid = Integer.decode(tmps[tmps.length-1]).intValue();
+            						o = ab.getStateMachine().getReferenceObjectFromID(myid);
+            						tgc1 = (TGComponent)o;
+            						
+            					} catch (Exception e) {
+            						tgc1 = null;
+            						TraceManager.addDev("Exception invariants tmp1:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+            					}
             				}
+            				
+            				
+            				//tmp2
+            				tmp2 = Conversion.replaceAllString(tmp2, "__", "&");
+            				tmps = tmp2.split("&");
+            				if (tmps.length > 2) {
+            					ab = avspec.getBlockWithName(tmps[0]);
+            					ab2 = ab;
+            					
+            					try {
+            						myid = Integer.decode(tmps[tmps.length-1]).intValue();
+            						o = ab.getStateMachine().getReferenceObjectFromID(myid);
+            						tgc2 = (TGComponent)o;
+            						
+            					} catch (Exception e) {
+            						tgc2 = null;
+            						TraceManager.addDev("Exception invariants tm2:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+            					}
+            				}
+            				
+            				
+            				if ((ab1 != null ) && (ab2 != null)) {
+            					if (prevBlock == null) {
+            						prevBlock = ab1;
+            						prevBlock1 = ab2;
+            					} else {
+            						if ((prevBlock != ab1) && (prevBlock != ab2)) {
+            							sameBlock = false;
+            						}
+            					}
+            				}
+            				
+            				// Can create synchro
+            				//TraceManager.addDev("tg1=" + tgc1 + " tgc2=" + tgc2);
+            				if ((tgc1 != null) && (tgc2 != null)) {
+            					InvariantSynchro is = new InvariantSynchro(elts[j].trim(), tgc1, tgc2);
+            					inv.addSynchro(is);
+            					//TraceManager.addDev("Ading synchro: " + is);
+            				}
+            				
             			}
-            			prevBlock = ab;
+            		} else {
             			
-            			try {
+            			tmp = Conversion.replaceAllString(tmp, "__", "&");
+            			tmps = tmp.split("&");
+            			if (tmps.length > 2) {
+            				ab = avspec.getBlockWithName(tmps[0]);
+            				if (prevBlock == null) {
+            					prevBlock = ab;
+            				} else {
+            					if (prevBlock != ab) {
+            						if (prevBlock1 != null) {
+            							if (prevBlock1 != ab) {
+            								sameBlock = false;
+            							}
+            						} else {
+            							sameBlock = false;
+            						}
+            					}
+            				}
+            				prevBlock = ab;
+            				prevBlock1 = null;
+            				
+            				try {
             					myid = Integer.decode(tmps[tmps.length-1]).intValue();
             					o = ab.getStateMachine().getReferenceObjectFromID(myid);
             					//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
-            					inv.addComponent((TGComponent)o);
+            					if (!((o instanceof AvatarSMDReceiveSignal) || (o instanceof AvatarSMDSendSignal))) {
+            						//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
+            						inv.addComponent((TGComponent)o);
+            					}
             					//TraceManager.addDev("Component added:" + o);
             					if (o instanceof AvatarSMDStartState) {
             						valToken ++;
             					}
             				} catch (Exception e) {
-            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[2]=" + tmps[tmps.length-1] + " inv=" + name);
+            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
             				}
+            			}
             		}
             	}
             	inv.setTokenValue(valToken);
+            	inv.computeValue();
             	
             	if (!(ignoreInvariants.isSelected() && sameBlock)) {
             		mgui.gtm.addInvariant(inv);
@@ -330,60 +420,60 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	
             }
             
-             jta.append("Invariants computed\n");
-             testGo();
-             
-		  jta.append("All done\n");
+            jta.append("Invariants computed\n");
+            testGo();
             
-          
+            jta.append("All done\n");
+            
+            
             
         } catch (InterruptedException ie) {
-            jta.append("Interrupted\n");
+        	jta.append("Interrupted\n");
         }
         
         jta.append("\n\nReady to process next command\n");
         
         checkMode();
         setButtons();
-		
-		//System.out.println("Selected item=" + selectedItem);
+        
+        //System.out.println("Selected item=" + selectedItem);
     }
     
     protected void checkMode() {
-        mode = NOT_STARTED;
+    	mode = NOT_STARTED;
     }
     
     protected void setButtons() {
-        switch(mode) {
-            case NOT_STARTED:
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                //setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-        }
+    	switch(mode) {
+    	case NOT_STARTED:
+    		start.setEnabled(true);
+    		stop.setEnabled(false);
+    		close.setEnabled(true);
+    		//setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    		getGlassPane().setVisible(false);
+    		break;
+    	case STARTED:
+    		start.setEnabled(false);
+    		stop.setEnabled(true);
+    		close.setEnabled(false);
+    		getGlassPane().setVisible(true);
+    		//setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    		break;
+    	case STOPPED:
+    	default:
+    		start.setEnabled(false);
+    		stop.setEnabled(false);
+    		close.setEnabled(true);
+    		getGlassPane().setVisible(false);
+    		break;
+    	}
     }
     
     public boolean hasToContinue() {
-        return (go == true);
+    	return (go == true);
     }
     
     public void setError() {
-        hasError = true;
+    	hasError = true;
     }
 }

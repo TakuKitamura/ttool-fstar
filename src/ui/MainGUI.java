@@ -268,6 +268,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	private ArrayList<LoadInfo> loadIDs;
 	private JFrameInteractiveSimulation jfis;
 	private JFrameAvatarInteractiveSimulation jfais;
+	
+	// Invariants
+	Invariant currentInvariant;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn) {
         systemcOn = _systemcOn;
@@ -279,7 +282,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		ncOn = _ncOn;
 		avatarOn = _avatarOn;
 		proverifOn = _proverifOn;
-    }
+		
+		currentInvariant = null;
+	}
+		
+	
 	
 	public boolean isAvatarOn() {
 		return avatarOn;
@@ -809,6 +816,17 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public LinkedList<Invariant> getInvariants() {
     	return gtm.getInvariants();
     }
+    
+    
+    public void setCurrentInvariant(Invariant inv) {
+    	currentInvariant = inv;
+    }
+    
+    public Invariant getCurrentInvariant() {
+    	return currentInvariant;
+    }
+    
+    
     
     
     private int addAnalysisPanel(String name, int index) {

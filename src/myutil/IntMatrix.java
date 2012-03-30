@@ -291,7 +291,7 @@ public class IntMatrix {
    	   IntMatrix idMat = new IntMatrix(sizeRow, sizeRow);
    	   idMat.makeID();
    	   concatAfter(idMat);
-   	   System.out.println("matconcat=\n" + toString() + "\n\n");
+   	   //System.out.println("matconcat=\n" + toString() + "\n\n");
    	   int[] lined1, lined2, lined;
    	   int gcd;
    	   int l, i;
@@ -363,7 +363,7 @@ public class IntMatrix {
    	   	   	   }
    	   	   }
    	   	   
-   	   	    System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
+   	   	    //System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
    	   	   
    	   }
    	   

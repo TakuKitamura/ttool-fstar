@@ -110,8 +110,8 @@ public class TGCNote extends TGCWithoutInternalComponent {
         g.drawLine(x+width, y, x+width, y+height - limit);
         
 		g.setColor(ColorManager.UML_NOTE_BG);
-		int [] px1 = {x, x+width, x + width, x + width-limit, x};
-        int [] py1 = {y, y, y+height-limit, y+height, y+height};
+		int [] px1 = {x+1, x+width, x + width, x + width-limit, x+1};
+        int [] py1 = {y+1, y+1, y+height-limit, y+height, y+height};
 		g.fillPolygon(px1, py1, 5);
 		g.setColor(c);
 		

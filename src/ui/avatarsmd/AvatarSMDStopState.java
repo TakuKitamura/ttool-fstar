@@ -51,7 +51,7 @@ import java.awt.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarSMDStopState extends AvatarSMDBasicComponent implements EmbeddedComment, AllowedBreakpoint {
+public class AvatarSMDStopState extends AvatarSMDBasicComponent implements EmbeddedComment, AllowedBreakpoint, PartOfInvariant, PartOfHighInvariant {
     private int internalCircleSize = 16;
     private int lineLength = 5;
     

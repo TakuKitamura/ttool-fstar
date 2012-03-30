@@ -207,6 +207,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	// AVATAR ID -> for simulation purpose
 	public static boolean AVATAR_ID_ON;
 	public static boolean AVATAR_ANIMATE_ON;
+	
+	
     
     // Constructor
     public TDiagramPanel(MainGUI _mgui, TToolBar _ttb) {
@@ -219,6 +221,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         mgui = _mgui;
         ttb = _ttb;
         mode = NORMAL;
+        
+      
         
         buildPopupMenus();
     }
@@ -296,6 +300,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void removeAll() {
         componentList = new LinkedList();
     }
+    
+ 
 	
 	public void setInternalCommentVisible(int mode) {
 		internalCommentVisible = mode;
@@ -647,6 +653,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean pointedElementFound = false;
         byte info = 0;
         
+        
         TGComponent tmp = componentPointed;
         componentPointed = null;
         Iterator iterator = componentList.listIterator();
@@ -683,6 +690,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         
         highlightComponent(-1, -1);
         
+        
         if (tgc.getState() == TGState.NORMAL) {
             if (tgc.getTopFather() == tgc) {
                 tgc.setSelectedInternalTGComponent(null);
@@ -694,6 +702,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             repaint();
         }
     }
+    
     
     public TGComponent componentPointed() {
         return componentPointed;

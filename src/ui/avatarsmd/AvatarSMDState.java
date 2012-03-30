@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, SwallowTGComponent, SwallowedTGComponent {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant {
     private int textY1 = 3;
 	
 	private int maxFontSize = 12;
@@ -225,7 +225,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		}
 		
 		// Icon
-		
 		
 		g.setFont(fold);
     }

@@ -845,7 +845,26 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				}
 			}
 		}
+		
+		if (this instanceof PartOfInvariant) {
+			drawInvariantInformation(g);
+			
+		}
 
+    }
+    
+    public void drawInvariantInformation(Graphics g) {
+    	Invariant inv = tdp.getMGUI().getCurrentInvariant();
+			if (inv != null) {
+				if (inv.containsComponent(this)) {
+					g.setColor(ColorManager.ACCESSIBILITY);
+					if (this instanceof PartOfHighInvariant) {
+						g.drawString("inv", x+width+2, y+(height/2));
+					} else {
+						g.drawString("inv", x+width+2, y+height);
+					}
+				}
+			}
     }
 	
 	public void drawWithAttributes(Graphics g) {

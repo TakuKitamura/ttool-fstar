@@ -53,7 +53,7 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarSMDChoice extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarSMDChoice extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight, PartOfInvariant {
     private int lineLength = 10;
     private int lineOutLength = 10;
     private int textX1, textY1, textX2, textY2, textX3, textY3;

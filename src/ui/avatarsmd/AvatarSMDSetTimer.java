@@ -58,7 +58,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight {
+public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;

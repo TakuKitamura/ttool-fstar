@@ -164,13 +164,15 @@ public class EBRDDObserver extends TGCScalableWithInternalComponent implements T
 		g.drawRect(x, y, width, height);
         
 		g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
-		g.setColor(Color.yellow);
+		g.setColor(ColorManager.REQ_TOP_BOX);
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
 		g.setColor(ColorManager.OBS_ATTRIBUTE_BOX);
 		g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
 		ColorManager.setColor(g, getState(), 0);
 		if ((lineHeight > 23) && (width > 23)){
-			g.drawImage(IconManager.img8, x + width - iconSize + 1, y + 3, Color.yellow, null);
+			if (ColorManager.REQ_TOP_BOX != Color.white) {
+				g.drawImage(IconManager.img8, x + width - iconSize + 1, y + 3, Color.yellow, null);
+			}
 		}
 		
 		if (displayText) {
