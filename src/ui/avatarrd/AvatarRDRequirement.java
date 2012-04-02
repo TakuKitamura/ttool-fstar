@@ -91,8 +91,9 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     protected String kind = "";
     protected String criticality = "";
 	 protected int reqType = 0;
-    //protected String violatedAction = "";
-	//protected String attackTreeNode = "";
+    protected String violatedAction = "";
+	protected String attackTreeNode = "";     
+	protected String referenceElements = "";
 	protected String id = "";
 	
 	protected boolean satisfied = false;
@@ -310,9 +311,22 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 			if (size < (height - 2)) {
 				drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
 				size += currentFontSize;
-				/*if ((size < (height - 2)) && (reqType == 2)) {
-					drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
-				}*/
+				if (size < (height - 2)) {
+					
+					drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
+					
+					size += currentFontSize;
+					if (size < (height - 2)) {
+						
+						if (reqType == SECURITY_REQ) {
+							drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+						}
+						
+						if (reqType == SAFETY_REQ) {
+							drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+						}
+					}
+				}
 			}
 		}
 		
@@ -379,7 +393,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 	
 	public boolean editAttributes() {
 		//String oldValue = value;
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, null, 0, null);
+		String atn = null;
+		String va = null;
+		
+		if (reqType == SECURITY_REQ) {
+				atn = attackTreeNode;
+		}
+		
+		
+		if (reqType == SAFETY_REQ) {
+				va = violatedAction;
+		}
+		
+        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
         jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr);
         jdr.show();
@@ -388,13 +414,19 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             return false;
         }
         
-		id = jdr.getId();
+		
+        if (reqType == SAFETY_REQ) {
+        violatedAction = jdr.getViolatedAction();
+        }
+        if (reqType == SECURITY_REQ) {
+		attackTreeNode = jdr.getAttackTreeNode();
+		}
+		referenceElements = jdr.getReferenceElements();
+        id = jdr.getId();
         text = jdr.getText();
         kind = jdr.getKind();
         criticality = jdr.getCriticality();
-        //violatedAction = jdr.getViolatedAction();
-		//attackTreeNode = jdr.getAttackTreeNode();
-        
+		
         makeValue();
         return true;
 	}
@@ -555,6 +587,15 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		sb.append("<verified data=\"");
         sb.append(verified);
         sb.append("\" />\n");
+        sb.append("<attackTreeNode data=\"");
+        sb.append(attackTreeNode);
+        sb.append("\" />\n");
+        sb.append("<violatedAction data=\"");
+        sb.append(violatedAction);
+        sb.append("\" />\n");
+        sb.append("<referenceElements data=\"");
+        sb.append(referenceElements);
+        sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -598,6 +639,24 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                                 criticality = elt.getAttribute("data");
                                 if (criticality.equals("null")) {
                                     criticality = "";
+                                }
+                            } else if (elt.getTagName().equals("violatedAction")) {
+                                //System.out.println("Analyzing line2");
+                                violatedAction  = elt.getAttribute("data");
+                                if (violatedAction.equals("null")) {
+                                    violatedAction = "";
+                                }
+                            } else if (elt.getTagName().equals("attackTreeNode")) {
+                                //System.out.println("Analyzing line2");
+                                attackTreeNode = elt.getAttribute("data");
+                                if (attackTreeNode.equals("null")) {
+                                    attackTreeNode = "";
+                                }
+                            } else if (elt.getTagName().equals("referenceElements")) {
+                                //System.out.println("Analyzing line2");
+                                referenceElements = elt.getAttribute("data");
+                                if (referenceElements.equals("null")) {
+                                    referenceElements = "";
                                 }
                             } else if (elt.getTagName().equals("reqType")) {
                                 //System.out.println("Analyzing line2");
@@ -676,6 +735,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 	public String getKind() {
 		return kind;
 	}
+	
+	public String getViolatedAction() {
+        return violatedAction;
+    }
+	
+    public String getAttackTreeNode() {
+        return attackTreeNode;
+    }
+    
+    public String getReferenceElements() {
+        return referenceElements;
+    }
     
     public int getCriticality() {
         //System.out.println("Criticality=" + criticality);
@@ -693,6 +764,13 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		attr += "Text= " + text + "\n";
 		attr += "Kind= " + kind + "\n";
 		attr += "Risk= " + criticality + "\n";
+		attr += "References= " + referenceElements + "\n";
+		if (reqType == SAFETY_REQ) {
+			attr += "Violated action= " + violatedAction + "\n";
+		}
+		if (reqType == SECURITY_REQ) {
+			attr += "Attack tree node(s)= " + attackTreeNode + "\n";
+		}
 		return attr;
 	}
 	

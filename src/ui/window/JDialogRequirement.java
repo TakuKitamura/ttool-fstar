@@ -64,7 +64,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     private JPanel panel1, panel2;
     private Frame frame;
-    private String kind, criticality, violatedAction, attackTreeNode;
+    private String kind, criticality, violatedAction, attackTreeNode, referenceElements;
     //private String actionbegin1, actionend1, actionbegin2, actionend2;
     //private String time1, time2;
     private String text;
@@ -78,14 +78,14 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
     
     //Panel2
     private JComboBox kindBox, criticalityBox;
-    private JTextField idBox, violatedActionBox, attackTreeNodeBox;
+    private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode) {
+    public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int _type, String _attackTreeNode, String _referenceElements) {
         super(_frame, _title, true);
         frame = _frame;
 		id = _id;
@@ -95,6 +95,7 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         violatedAction = _violatedAction;
         type = _type;
 		attackTreeNode = _attackTreeNode;
+		referenceElements = _referenceElements;
         
         initComponents();
         myInitComponents();
@@ -236,6 +237,16 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
         }
         panel2.add(criticalityBox, c2);
         
+        if (referenceElements != null) {
+			c2.gridwidth = 1;
+			panel2.add(new JLabel("References:"), c2);
+			
+			c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+			referenceElementsBox = new JTextField(referenceElements, 50);
+			referenceElementsBox.setEnabled(true);
+			panel2.add(referenceElementsBox, c2);
+		}
+        
 		if (violatedAction != null) {
 			c2.gridwidth = 1;
 			panel2.add(new JLabel("Violated action:"), c2);
@@ -263,6 +274,8 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
 			}
 			panel2.add(attackTreeNodeBox, c2);
 		}
+		
+		
         
         // main panel;
         c0.gridwidth = 1;
@@ -342,6 +355,10 @@ public class JDialogRequirement extends javax.swing.JDialog implements ActionLis
 	
 	public String getAttackTreeNode() {
         return attackTreeNodeBox.getText();
+    }
+    
+    public String getReferenceElements() {
+        return referenceElementsBox.getText();
     }
     
 }

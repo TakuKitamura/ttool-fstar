@@ -7252,7 +7252,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newDesign();
                 } else if (ac.equals("New TURTLE Deployment")) {
                     mgui.newDeployment();
-                } else if (ac.equals("New Attack Tree (SysML Parametric Diagram)")) {
+			} else if (e.getSource() == newAttackTree) {
                     mgui.newAttackTree();
                 } else if (ac.equals("New TURTLE Requirement Diagram")) {
                     mgui.newRequirement();

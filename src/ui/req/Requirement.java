@@ -384,7 +384,7 @@ public class Requirement extends TGCScalableWithInternalComponent implements Wit
 	
 	public boolean editAttributes() {
 		//String oldValue = value;
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, violatedAction, reqType, attackTreeNode);
+        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, violatedAction, reqType, attackTreeNode, null);
         jdr.setSize(750, 400);
         GraphicLib.centerOnParent(jdr);
         jdr.show();
