@@ -1593,6 +1593,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 s = new String(ba);
             } catch(Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+            } catch (OutOfMemoryError er) {
+            	 JOptionPane.showMessageDialog(frame, "File could not be opened because " + er.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         return s;
