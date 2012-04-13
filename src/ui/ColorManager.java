@@ -131,10 +131,10 @@ public class ColorManager {
 	public static final Color IOD_REFERENCE = new Color(216, 187, 249);
 	
 	
-	public static final Color ATD_BLOCK = new Color(196, 232, 195);
-	public static final Color ATD_ATTACK = new Color(214, 187, 158);
-	public static final Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
-	public static final Color ATD_CONSTRAINT = new Color(191, 153, 161);
+	public static  Color ATD_BLOCK = new Color(196, 232, 195);
+	public static  Color ATD_ATTACK = new Color(214, 187, 158);
+	public static  Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
+	public static  Color ATD_CONSTRAINT = new Color(191, 153, 161);
 	
 	//public static final Color AVATAR_BLOCK = new Color(128, 180, 205);
 	//public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
@@ -253,6 +253,10 @@ public class ColorManager {
 		MEMORY_BOX = Color.white;
 		DMA_BOX = Color.white;
 		HWA_BOX = Color.white;
+		ATD_BLOCK = Color.white;
+		ATD_ATTACK = Color.white;
+		ATD_ROOT_ATTACK = Color.white;
+		ATD_CONSTRAINT = Color.white;
 		
 	}
     
