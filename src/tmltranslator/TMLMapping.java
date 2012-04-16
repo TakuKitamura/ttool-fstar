@@ -261,6 +261,15 @@ public class TMLMapping {
 		return tmla.getCPUIDs();
 	}
 	
+	public String[] getCPUandHwAIDs() {
+		if (tmla == null) {
+			return null;
+		}
+		
+		return tmla.getCPUandHwAIDs();
+	}
+	
+	
 	public String[] getBusIDs() {
 		if (tmla == null) {
 			return null;

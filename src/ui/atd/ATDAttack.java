@@ -213,19 +213,18 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		}
 		
 		g.setFont(fold);
-        /*int w  = g.getFontMetrics().stringWidth(ster);
-		Font f = g.getFont();
-		g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
-		g.setFont(f);
-        w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY2);*/
         
     }
     
    public void setValue(String val, Graphics g) {
         oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
+        String ster;
+		if (isRootAttack) {
+			ster = "<<" + rootStereotype + ">>";
+		} else {
+			ster = "<<" + stereotype + ">>";
+		}
+        int w  = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
 		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 		
         //System.out.println("width=" + width + " w1=" + w1 + " w2=" + w2 + " value=" + value);

@@ -53,6 +53,14 @@ public class HwA extends HwExecutionNode  {
 	public static final int DEFAULT_BYTE_DATA_SIZE = 4;
 	public static final int DEFAULT_EXECI_TIME = 0;
 	
+	public static final int DEFAULT_PIPELINE_SIZE = 1;
+	public static final int DEFAULT_TASK_SWITCHING_TIME = 1;
+	public static final int DEFAULT_BRANCHING_PREDICTION_PENALTY = 0;
+	public static final int DEFAULT_GO_IDLE_TIME = 10;
+	public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
+	public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
+	
+	
     public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // In bytes. Should more than 0
  
     public HwA(String _name) {

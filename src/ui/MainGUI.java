@@ -6147,7 +6147,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		li.id = _id;
 		li.load = _load;
 		loadIDs.add(li);
-		//TraceManager.addDev("Running id " + id +  " added");
+		//TraceManager.addDev("Running id " + _id +  " added load=" + _load);
 		TDiagramPanel tdp = getCurrentTDiagramPanel();
 		if (tdp != null) {
 			tdp.repaint();

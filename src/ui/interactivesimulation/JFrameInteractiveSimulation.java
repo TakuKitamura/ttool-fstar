@@ -372,7 +372,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		jp02.add(paramMainCommand, c01);
 		
 		c01.gridwidth = 1;
-		jp02.add(new JLabel("CPUs: "), c01);
+		jp02.add(new JLabel("CPUs and HwA: "), c01);
 		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 		if (cpuIDs == null) {
 			cpus = new JComboBox();
@@ -800,7 +800,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		// CPUs
 		cpuPanel = new JPanel();
 		cpuPanel.setLayout(new BorderLayout());
-		infoTab.addTab("CPUs", IconManager.imgic1100, cpuPanel, "Current state of CPUs");
+		infoTab.addTab("CPUs/HwA", IconManager.imgic1100, cpuPanel, "Current state of CPUs and hardware accelerators");
 		cputm = new CPUTableModel(tmap, valueTable, rowTable);
 		sorterPI = new TableSorter(cputm);
 		jtablePI = new JTable(sorterPI);
@@ -1927,7 +1927,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 		
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-			if (node instanceof HwCPU) {
+			if ((node instanceof HwCPU) || (node instanceof HwA)){
 				sendCommand("get-info-on-hw 0 " + node.getID()); 
 			}
 		}
@@ -2581,7 +2581,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			return null;
 		}
 		
-		return tmap.getCPUIDs();
+		return tmap.getCPUandHwAIDs();
 	}
 	
 	public String[] makeBusIDs() {

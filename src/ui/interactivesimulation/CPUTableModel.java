@@ -54,7 +54,7 @@ import tmltranslator.*;
 
 public class CPUTableModel extends AbstractTableModel {
 	private TMLMapping tmap;
-	ArrayList<HwCPU> cpus;
+	ArrayList<HwExecutionNode> cpus;
 	private Hashtable <Integer, String> valueTable;
 	private Hashtable <Integer, Integer> rowTable;
 	
@@ -95,7 +95,7 @@ public class CPUTableModel extends AbstractTableModel {
 	public String getColumnName(int columnIndex) {
 		switch(columnIndex) {
 		case 0:
-			return "CPU Name";
+			return "CPU/HwA Name";
 		case 1:
 			return "CPU ID";
 		case 2:
@@ -128,11 +128,11 @@ public class CPUTableModel extends AbstractTableModel {
 			return ;
 		}
 		
-		cpus = new ArrayList<HwCPU>();
+		cpus = new ArrayList<HwExecutionNode>();
 		
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
-			if (node instanceof HwCPU) {
-				cpus.add((HwCPU)node);
+			if ((node instanceof HwCPU) || (node instanceof HwA)) {
+				cpus.add((HwExecutionNode)node);
 			}
 		}
 		

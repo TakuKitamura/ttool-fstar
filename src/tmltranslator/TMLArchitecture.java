@@ -189,6 +189,19 @@ public class TMLArchitecture {
         return list;
 	}
 	
+	public String[] getCPUandHwAIDs() {
+		String [] list = new String[getNbOfCPUandHwA()];
+		int cpt = 0;
+		
+		for(HwNode node: hwnodes) {
+			if ((node instanceof HwCPU) || (node instanceof HwA)) {
+				list[cpt] = node.getName() + " (" + node.getID() + ")"; 
+				cpt ++;
+			}
+		}
+        return list;
+	}
+	
 	public String[] getBusIDs() {
 		String [] list = new String[getNbOfBus()];
 		int cpt = 0;
@@ -221,6 +234,16 @@ public class TMLArchitecture {
 		int cpt = 0;
 		for(HwNode node: hwnodes) {
 			if (node instanceof HwCPU) {
+				cpt ++;
+			}
+		}
+		return cpt;
+	}
+	
+	public int getNbOfCPUandHwA() {
+		int cpt = 0;
+		for(HwNode node: hwnodes) {
+			if ((node instanceof HwCPU) || (node instanceof HwA)) {
 				cpt ++;
 			}
 		}

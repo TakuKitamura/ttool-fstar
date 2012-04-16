@@ -193,6 +193,19 @@ public class TML2MappingSystemC {
 					declaration += "addCPU("+ node.getName() + cores +")"+ SCCR;
 				}
 			}
+			if (node instanceof HwA) {
+				HwA hwaNode = (HwA)node;
+				declaration += "RRScheduler* " + hwaNode.getName() + "_scheduler = new RRScheduler(\"" + hwaNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * hwaNode.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float)(hwaNode.clockRatio * Math.max(hwaNode.execiTime,hwaNode.execcTime) * (hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY * hwaNode.DEFAULT_PIPELINE_SIZE +100 - hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY))/100) + " ) " + SCCR;
+				for(int cores=0; cores<1; cores++){
+				//if (tmlmapping.isAUsedHwNode(node)) {	
+					declaration += "CPU* " + hwaNode.getName() + cores + " = new SingleCoreCPU(" + hwaNode.getID() + ", \"" + hwaNode.getName() + "_" + cores + "\", " + hwaNode.getName() + "_scheduler" + ", ";
+					
+					declaration  += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + hwaNode.DEFAULT_PIPELINE_SIZE + ", " + hwaNode.DEFAULT_TASK_SWITCHING_TIME + ", " + hwaNode.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + hwaNode.DEFAULT_GO_IDLE_TIME + ", "  + hwaNode.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
+					if (cores!=0) declaration+= node.getName() + cores + "->setScheduler(" + hwaNode.getName() + "_scheduler,false)" + SCCR;
+					declaration += "addCPU("+ node.getName() + cores +")"+ SCCR;
+				}
+				
+			}
 		}
 		declaration += CR;
 		
@@ -251,7 +264,8 @@ public class TML2MappingSystemC {
 						noOfCores=1;
 						for (int cores=0; cores<noOfCores; cores++){
 							String nodeName=node.getName();
-							if (node instanceof HwCPU) nodeName+= cores;
+							if ((node instanceof HwCPU) ||  (node instanceof HwA) )
+								nodeName+= cores;
 							declaration+= "BusMaster* " + nodeName + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + nodeName + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
 							for(int i=0; i< link.bus.pipelineSize; i++)
 								declaration+= ", (SchedulableCommDevice*)" +  link.bus.getName() + "_" + i; 
@@ -357,7 +371,7 @@ public class TML2MappingSystemC {
 				if (!busLinks.isEmpty()){
 					for(HwLink link: busLinks){
 						if (link.hwnode instanceof HwExecutionNode || link.hwnode instanceof HwBridge){
-								if (link.hwnode instanceof HwCPU){
+								if ((link.hwnode instanceof HwCPU) || (link.hwnode instanceof HwA)){
 									//for (int cores=0; cores< ((HwCPU)link.hwnode).nbOfCores; cores++){
 									for (int cores=0; cores< 1; cores++){
 										devices += ", (WorkloadSource*)" + link.hwnode.getName()+ cores + "_" + node.getName() + "_Master";
@@ -398,6 +412,7 @@ public class TML2MappingSystemC {
 			node=(HwExecutionNode)iterator.next();
 			int noOfCores;
 			declaration += task.getName() + "* task__" + task.getName() + " = new " + task.getName() + "("+ task.getID() +","+ task.getPriority() + ",\"" + task.getName() + "\", array(";
+			
 			if (node instanceof HwCPU){
 				//declaration+= ((HwCPU)node).nbOfCores;
 				declaration+= 1;
@@ -407,9 +422,20 @@ public class TML2MappingSystemC {
 				}
 				//declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
 				declaration+= "),1" + CR;
-			}else{ 
-			 	declaration += "1," + node.getName() + "),1" + CR; 
+			}else if (node instanceof HwA){ 
+				//declaration+= ((HwCPU)node).nbOfCores;
+				declaration+= 1;
+				//for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+				for (int cores=0; cores< 1; cores++){
+					declaration+= "," + node.getName()+cores;
+				}
+				//declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+				declaration+= "),1" + CR;
+			} else {
+				declaration += "1," + node.getName() + "),1" + CR; 
 			}
+			
+			
 			MappedSystemCTask mst;
 			channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
 			events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
@@ -483,7 +509,7 @@ public class TML2MappingSystemC {
 			//TraceManager.addDev("CommELem to process: " + commElem.getName());
 			//String commElemName = commElem.getName();
 			//if (commElem instanceof HwCPU) commElemName += "0";
-			System.out.println("Next elem in path: " + commElem.getName());
+			//System.out.println("Next elem in path: " + commElem.getName());
 			if (commElem instanceof HwMemory){
 				reverse=true;
 				slaves.str+= ",static_cast<Slave*>(" + commElem.getName() + "),static_cast<Slave*>(" + commElem.getName() + ")";
