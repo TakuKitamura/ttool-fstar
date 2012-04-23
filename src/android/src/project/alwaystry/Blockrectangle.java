@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.SystemClock;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -26,11 +27,15 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 	static final String Tag = "blockrectangle";
 	private String stereotype = "block";
 	private Paint mPaint;
+	private Paint cpPaint;
+	private Paint ePaint;
 	
 	private TextPaint mTextPaint;
+	private Point currentClickedPoint= null;
 	//String mText;
 	
 	private boolean dragActive = false;
+	private boolean showConnectingPoints = true;
 	
 	private int mx =0;
     private int my =0;
@@ -39,18 +44,44 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
     protected Vector myAttributes, myMethods, mySignals;
     
     String name;
-	
+    
+    int nbConnectingPoint = 16;
+    AvatarBDConnectingPointAndroid[] connectingpoints;
+   
+    
+    
 	public Blockrectangle(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+		initRectangle();
 		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public Blockrectangle(Context context) {
+		super(context);
+		initRectangle();
+		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public void initRectangle(){
 		setFocusable(true);
         setClickable(true);
         
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(6);
-        //mPaint.setColor(Color.LTGRAY);
+        mPaint.setStrokeWidth(2);
+        mPaint.setColor(Color.rgb(193, 218, 241));
+        
+        cpPaint = new Paint();
+        cpPaint.setAntiAlias(true);
+        cpPaint.setStrokeWidth(6);
+        cpPaint.setColor(Color.RED);
+        
+        ePaint = new Paint();
+        ePaint.setAntiAlias(true);
+        ePaint.setStrokeWidth(2);
+        ePaint.setColor(Color.BLACK);
         
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
@@ -61,8 +92,26 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
         
         setOnLongClickListener(this);
         setOnTouchListener(this);
+       
+        connectingpoints = new AvatarBDConnectingPointAndroid[16];
         
-
+        connectingpoints[0] = new AvatarBDConnectingPointAndroid(this,0,0,true,true,0,0);
+        connectingpoints[1] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.5, 0.0);
+        connectingpoints[2] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.0);
+        connectingpoints[3] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.0, 0.5);
+        connectingpoints[4] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.5);
+        connectingpoints[5] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.0, 1.0);
+        connectingpoints[6] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.5, 1.0);
+        connectingpoints[7] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 1.0);
+        
+        connectingpoints[8] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.25, 0.0);
+        connectingpoints[9] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.75, 0.0);
+        connectingpoints[10] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.0, 0.25);
+        connectingpoints[11] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.25);
+        connectingpoints[12] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.0, 0.75);
+        connectingpoints[13] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.75);
+        connectingpoints[14] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.25, 1.0);
+        connectingpoints[15] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.75, 1.0);
 	}
 	
 	String getName(){
@@ -78,23 +127,26 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 		float wf = getWidth();
         float hf = getHeight();
         
-        mPaint.setColor(Color.BLACK);
-		canvas.drawRect(0, 0, wf, hf, mPaint);
-		mPaint.setColor(Color.rgb(193, 218, 241));
-		canvas.drawRect(3, 3, wf-3, hf-3, mPaint);
+        mPaint.setColor(Color.rgb(193, 218, 241));
+		canvas.drawRect(10, 10, wf-10, hf-10, mPaint);
+		
+		canvas.drawLine(7, 7, wf-7, 7, ePaint);
+		canvas.drawLine(7, 7, 7, hf-7, ePaint);
+		canvas.drawLine(wf-7, 7, wf-7,hf-7, ePaint);
+		canvas.drawLine(7, hf-7, wf-7, hf-7, ePaint);
 		
 		String ster = "<<"+stereotype+">>";
 		mTextPaint.setFakeBoldText(true);
-		canvas.drawText(ster, (wf-ster.length())/2, 15, mTextPaint);
+		canvas.drawText(ster, (wf-14-ster.length())/2, 25, mTextPaint);
 		
 		mTextPaint.setFakeBoldText(false);
 		if (name != null && name.length() > 0) {
-            canvas.drawText(name,(wf-name.length())/2, 28,mTextPaint);
+            canvas.drawText(name,(wf-14-name.length())/2, 38,mTextPaint);
         }
 		
 		mPaint.setColor(Color.BLACK);
-		mPaint.setStrokeWidth(3);
-		canvas.drawLine(0, 35, wf, 35, mPaint);
+		mPaint.setStrokeWidth(2);
+		canvas.drawLine(7, 42, wf-7, 42, mPaint);
 		
 		int h=0;
 		int w;
@@ -107,16 +159,27 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 		String attr;
 		//draw Attributes
 		
-		canvas.drawText("attribute 1", 50, 50, mTextPaint);
+		canvas.drawText("attribute 1", 50+7, 60, mTextPaint);
 		
 		
-		canvas.drawLine(0, 70, wf, 70, mPaint);
+		canvas.drawLine(7, 70, wf-7, 70, mPaint);
 		
 		//draw methods
 		
 		//draw signals
 	
-		
+		if(showConnectingPoints){
+			Log.i("block", ""+showConnectingPoints);
+			//canvas.drawRect(0, 0, 8, 8, cpPaint);
+			for(int i=0; i<nbConnectingPoint ; i++){
+				Log.i("block", "x: "+connectingpoints[i].getX()+"y: "+connectingpoints[i].getY());
+				int tx = 7+connectingpoints[i].getX()-connectingpoints[i].getWidth()/2;
+				int ty = 7+connectingpoints[i].getY()-connectingpoints[i].getHeight()/2;
+				int bx = 7+connectingpoints[i].getX()+connectingpoints[i].getWidth()/2;
+				int by = 7+connectingpoints[i].getY()+connectingpoints[i].getHeight()/2;
+				canvas.drawRect(tx, ty, bx, by, cpPaint);
+			}
+		}
 		
 	}
 
@@ -133,12 +196,87 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 	}
 
 	
+	public boolean clickOnAConnectingPoint(float x, float y){
+		boolean clicked = false;
+		for(int i = 0; i<nbConnectingPoint;i++){
+			int tx = 7+connectingpoints[i].getX()-connectingpoints[i].getWidth()/2;
+			int ty = 7+connectingpoints[i].getY()-connectingpoints[i].getHeight()/2;
+			int bx = 7+connectingpoints[i].getX()+connectingpoints[i].getWidth()/2;
+			int by = 7+connectingpoints[i].getY()+connectingpoints[i].getHeight()/2;
+			
+			if(x>=tx && x<=bx && y>=ty && y<=by){
+				clicked = true;
+				return clicked;
+			}
+		}
+		return clicked;
+	}
+	
+	public Point getCurrentClickedPoint(){
+		return currentClickedPoint;
+	}
+	
+	public void resetCurrentClickedPoint(){
+		currentClickedPoint = null;
+	}
 	public boolean onTouch(View v, MotionEvent event) {
 		
 		// TODO Auto-generated method stub
 		final int X = (int)event.getRawX();
 		final int Y = (int)event.getRawY();
 		if(event.getAction() == MotionEvent.ACTION_DOWN){
+			float cx = event.getX();
+			float cy = event.getY();
+			
+			if(((AlwaystryActivity)(this.getContext())).getclickaction() == 8){
+				((AlwaystryActivity)(this.getContext())).clickaction =9;
+				int x = (int)event.getX();
+				int y = (int)event.getY();
+				Log.i("blockrectangle!!!", "x: "+x+"y: "+y);
+				if(clickOnAConnectingPoint(cx,cy)){
+					
+					Log.i("block", "clickonAconnectingPoint");
+					int px = (int)this.getLeft()+x;
+					int py = (int)this.getTop()+y;
+							
+					currentClickedPoint = new Point(px,py);
+					/*
+					AvatarBDPortConnectorAndroid avatarpconnector;
+					RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
+					if(layout.getChildAt(0) instanceof AvatarBDPortConnectorAndroid){
+						avatarpconnector = (AvatarBDPortConnectorAndroid)layout.getChildAt(0);
+					}else{
+						avatarpconnector = new AvatarBDPortConnectorAndroid(this.getContext());
+						layout.addView(avatarpconnector, 0);
+					}
+					
+					if(avatarpconnector.getStart()== null){
+						avatarpconnector.setStart(currentClickedPoint);
+					}else if(avatarpconnector.getEnd() == null){
+						avatarpconnector.setEnd(currentClickedPoint);
+						
+					}*/
+					
+					((AlwaystryActivity)(this.getContext())).addAPortConnector(px, py, -1, -1);
+					Log.i(name, "first: "+px+" y: "+py);
+			}
+			
+			}else if(((AlwaystryActivity)(this.getContext())).getclickaction() == 9){
+				int x = (int)event.getX();
+				int y = (int)event.getY();
+				Log.i("blockrectangle!!!", "x: "+x+"y: "+y);
+				if(clickOnAConnectingPoint(cx,cy)){
+					
+					Log.i("block", "clickonAconnectingPoint");
+					int px = (int)this.getLeft()+x;
+					int py = (int)this.getTop()+y;
+							
+					currentClickedPoint = new Point(px,py);
+					((AlwaystryActivity)(this.getContext())).addAPortConnector(-1, -1, px, py);
+					Log.i(name, "second: "+px+" y: "+py);
+				}
+			}else{
+			
 			RelativeLayout.LayoutParams RlParams = (RelativeLayout.LayoutParams)(v.getLayoutParams());
 			Log.i("Alwaystry", "lparams : topmagin, leftmargin " +RlParams.topMargin+"  "+RlParams.leftMargin );
 			mx = X - RlParams.leftMargin;
@@ -196,7 +334,9 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 			}else{
 				click1time = SystemClock.uptimeMillis();
 				Log.i("Alwaystry","just click!!");
+				
 			}
+		}
 		}
 		
 		if(!dragActive){
@@ -213,7 +353,9 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 				RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams)(v.getLayoutParams());
 				lParams.leftMargin = X - mx;
 				lParams.topMargin = Y - my;
+				Log.i("Alwaystry","leftMargin:  "+lParams.leftMargin);
 				v.setLayoutParams(lParams);
+				
 				break;
 				
 			}

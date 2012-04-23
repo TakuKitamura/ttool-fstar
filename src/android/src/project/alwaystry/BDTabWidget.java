@@ -1,5 +1,6 @@
 package project.alwaystry;
 
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -11,6 +12,7 @@ public class BDTabWidget extends TabActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.main);
 
        // Resources res = getResources(); // Resource object to get Drawables
