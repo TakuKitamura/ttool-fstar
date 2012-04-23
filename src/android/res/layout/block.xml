@@ -1,51 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/relativeLayout1"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#FFFFFF" >
+        android:background="#FFFFFF"
+        android:orientation="vertical" >
 
-        <project.alwaystry.Blockrectangle
-            android:id="@+id/blockrectangle1"
+        <project.alwaystry.AvatarbdToolbarAndroid
+            android:id="@+id/avatarbdToolbarAndroid1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="65dp"
-            android:layout_marginTop="75dp" />
+            android:layout_height="wrap_content" >
+        </project.alwaystry.AvatarbdToolbarAndroid>
 
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" >
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-            <ImageButton
-                android:id="@+id/imageButton1"
+            <project.alwaystry.Blockrectangle
+                android:id="@+id/blockrectangle1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/avatarblock" />
+                android:layout_marginLeft="46dp"
+                android:layout_marginTop="129dp" />
 
-            <ImageButton
-                android:id="@+id/imageButton2"
+            <project.alwaystry.Blockrectangle
+                android:id="@+id/blockrectangle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/avatarbdcomp" />
+                 android:layout_marginLeft="50dp"
+                android:layout_marginTop="23dp" />
 
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/avatarbdlink" />
+        </RelativeLayout>
 
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/avatardatatype" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>    

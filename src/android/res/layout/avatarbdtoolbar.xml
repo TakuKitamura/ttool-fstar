@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <ImageButton
+        android:id="@+id/property"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/properties16" 
+        android:onClick="clickbutton"/>
+
+    <ImageButton
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/edit16" 
+        android:onClick="clickbutton"/>
+
+    <ImageButton
+        android:id="@+id/concomment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/concomment"
+        android:onClick="clickbutton" />
+
+    <ImageButton
+        android:id="@+id/block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/avatarblock"
+        android:onClick="clickbutton" />
+
+    <ImageButton
+        android:id="@+id/cryptoblock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/avatarblock" 
+        android:onClick="clickbutton"/>
+
+    <ImageButton
+        android:id="@+id/datatype"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/avatardatatype"
+        android:onClick="clickbutton" />
+
+    <ImageButton
+        android:id="@+id/comp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/avatarbdcomp"
+        android:onClick="clickbutton" />
+
+    <ImageButton
+        android:id="@+id/link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/avatarbdlink"
+        android:onClick="clickbutton" />
+
+</LinearLayout>
