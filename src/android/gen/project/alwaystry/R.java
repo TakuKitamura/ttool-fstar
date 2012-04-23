@@ -15,31 +15,44 @@ public final class R {
         public static final int avatarbdlink=0x7f020001;
         public static final int avatarblock=0x7f020002;
         public static final int avatardatatype=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int starting_logo=0x7f020005;
+        public static final int concomment=0x7f020004;
+        public static final int edit16=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int properties16=0x7f020007;
+        public static final int starting_logo=0x7f020008;
     }
     public static final class id {
-        public static final int blockrectangle1=0x7f050002;
-        public static final int button1=0x7f05000c;
-        public static final int button2=0x7f05000d;
+        public static final int avatarbdToolbarAndroid1=0x7f05000c;
+        public static final int block=0x7f050006;
+        public static final int blockrectangle1=0x7f05000d;
+        public static final int blockrectangle2=0x7f05000e;
+        public static final int button1=0x7f050013;
+        public static final int button2=0x7f050014;
+        public static final int comp=0x7f050009;
+        public static final int concomment=0x7f050005;
+        public static final int cryptoblock=0x7f050007;
+        public static final int datatype=0x7f050008;
         public static final int drageventblock1=0x7f050001;
-        public static final int editText1=0x7f05000a;
-        public static final int imageButton1=0x7f050004;
-        public static final int imageButton2=0x7f050005;
-        public static final int imageButton3=0x7f050006;
-        public static final int imageButton4=0x7f050007;
-        public static final int imageView1=0x7f050008;
-        public static final int linearLayout1=0x7f050003;
+        public static final int edit=0x7f050004;
+        public static final int editText1=0x7f050011;
+        public static final int imageView1=0x7f05000f;
+        public static final int linearLayout1=0x7f05000b;
+        public static final int link=0x7f05000a;
+        public static final int myblockrectangle=0x7f050002;
+        public static final int property=0x7f050003;
         public static final int relativeLayout1=0x7f050000;
-        public static final int tabhost1=0x7f05000b;
-        public static final int textView1=0x7f050009;
+        public static final int tabhost1=0x7f050012;
+        public static final int textView1=0x7f050010;
     }
     public static final class layout {
         public static final int anothertab=0x7f030000;
-        public static final int block=0x7f030001;
-        public static final int blocknamealert=0x7f030002;
-        public static final int editattributesalert=0x7f030003;
-        public static final int main=0x7f030004;
+        public static final int avatarbdblock=0x7f030001;
+        public static final int avatarbdtoolbar=0x7f030002;
+        public static final int avatarblock=0x7f030003;
+        public static final int block=0x7f030004;
+        public static final int blocknamealert=0x7f030005;
+        public static final int editattributesalert=0x7f030006;
+        public static final int main=0x7f030007;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

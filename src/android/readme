@@ -1,0 +1,19 @@
+Draft of TTool for Android
+
+How to compile and execute?
+---------------------------
+
+I have done as follows on my Mac.
+
+To compile:
+$ant debug
+
+Beware, the application is not signed.
+The usual way to compile it is to do:
+$ant release
+
+Then, start the android emulator, and select your target
+$android avd
+
+Install your application on the emulator:
+adb install bin/appli.apk
