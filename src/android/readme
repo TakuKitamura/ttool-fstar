@@ -16,4 +16,10 @@ Then, start the android emulator, and select your target
 $android avd
 
 Install your application on the emulator:
-adb install bin/appli.apk
+$adb install bin/appli.apk
+
+List devices connected to your PC / Mac:
+$adb devices
+
+Installing apk on your phone / tablet via usb
+$adb install bin/appli.apk

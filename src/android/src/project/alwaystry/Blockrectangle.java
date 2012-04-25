@@ -86,7 +86,7 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setColor(Color.BLACK);
+        mTextPaint.setColor(Color.BLUE);
         
         name = "Name";
         
