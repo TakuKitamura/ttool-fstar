@@ -12,25 +12,9 @@
             android:layout_height="wrap_content" >
         </project.alwaystry.AvatarbdToolbarAndroid>
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <project.alwaystry.Blockrectangle
-                android:id="@+id/blockrectangle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="46dp"
-                android:layout_marginTop="129dp" />
-
-            <project.alwaystry.Blockrectangle
-                android:id="@+id/blockrectangle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="23dp" />
-
-        </RelativeLayout>
+        <project.alwaystry.AvatarBDPanelAndroid
+            android:id="@+id/avatarBDPanelAndroid1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 
     </LinearLayout>    
