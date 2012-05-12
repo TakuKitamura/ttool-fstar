@@ -94,7 +94,7 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
         setOnTouchListener(this);
        
         connectingpoints = new AvatarBDConnectingPointAndroid[16];
-        
+        /*
         connectingpoints[0] = new AvatarBDConnectingPointAndroid(this,0,0,true,true,0,0);
         connectingpoints[1] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.5, 0.0);
         connectingpoints[2] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.0);
@@ -111,7 +111,7 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
         connectingpoints[12] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.0, 0.75);
         connectingpoints[13] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 1.0, 0.75);
         connectingpoints[14] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.25, 1.0);
-        connectingpoints[15] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.75, 1.0);
+        connectingpoints[15] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.75, 1.0);*/
 	}
 	
 	String getName(){
@@ -236,7 +236,7 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 				if(clickOnAConnectingPoint(cx,cy)){
 					
 					Log.i("block", "clickonAconnectingPoint");
-					int px = (int)this.getLeft()+x;
+					int px = x;
 					int py = (int)this.getTop()+y;
 							
 					currentClickedPoint = new Point(px,py);
@@ -257,7 +257,7 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 						
 					}*/
 					
-					((AlwaystryActivity)(this.getContext())).addAPortConnector(px, py, -1, -1);
+					//((AlwaystryActivity)(this.getContext())).addAPortConnector(px, py, -1, -1);
 					Log.i(name, "first: "+px+" y: "+py);
 			}
 			
@@ -268,11 +268,11 @@ public class Blockrectangle extends View implements OnLongClickListener,OnTouchL
 				if(clickOnAConnectingPoint(cx,cy)){
 					
 					Log.i("block", "clickonAconnectingPoint");
-					int px = (int)this.getLeft()+x;
+					int px = (int)x;
 					int py = (int)this.getTop()+y;
 							
 					currentClickedPoint = new Point(px,py);
-					((AlwaystryActivity)(this.getContext())).addAPortConnector(-1, -1, px, py);
+				//	((AlwaystryActivity)(this.getContext())).addAPortConnector(-1, -1, px, py);
 					Log.i(name, "second: "+px+" y: "+py);
 				}
 			}else{

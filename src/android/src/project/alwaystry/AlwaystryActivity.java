@@ -10,17 +10,19 @@ import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class AlwaystryActivity extends Activity implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
+public class AlwaystryActivity extends Activity {//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
 	
 	int clickaction = 0;
 	int tx = -1,ty=-1,bx=-1,by=-1;
+	
 	
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);   
-		RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
-		layout.setOnTouchListener(this);
+        AvatarBDPanelAndroid panel = (AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1);
+		//RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
+		//layout.setOnTouchListener(this);
     }
     
     public int getclickaction(){
@@ -49,15 +51,21 @@ public class AlwaystryActivity extends Activity implements OnTouchListener{//imp
     		clickaction =6;
     		break;
     	case R.id.comp:
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
+    		AvatarBDCompositionConnectorAndroid cconnector = new AvatarBDCompositionConnectorAndroid();
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).getCompoconnectorlist().add(cconnector);
     		clickaction =7;
     		break;
     	case R.id.link:
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
+    		AvatarBDPortConnectorAndroid pconnector = new AvatarBDPortConnectorAndroid();
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).getConnectorlist().add(pconnector);
     		clickaction =8;
     		break;
     	}
     		
     }
-
+/*
     public void addAPortConnector(int startx, int starty, int endx, int endy){
     	//int tx,ty,bx,by;
     	if(startx != -1){
@@ -125,6 +133,6 @@ public class AlwaystryActivity extends Activity implements OnTouchListener{//imp
 		}
 		return false;
 	}
-    
+  */  
 
 }
