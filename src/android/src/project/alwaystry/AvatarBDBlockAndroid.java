@@ -9,18 +9,18 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
 
-public class AvatarBDBlockAndroid {
+public class AvatarBDBlockAndroid extends TGComponentAndroid{
 
 	private String stereotype = "block";
 	private String name = "Name";
-	private int x,y;
-	private int width,height;
+	//private int x,y;
+	//private int width,height;
 	private View panel;
 	private Paint mPaint;
 	private Paint cpPaint;
 	private Paint ePaint;
 	private boolean showConnectingPoints;
-	private boolean isClicked;
+	
 	
 	private TextPaint mTextPaint;
 	
@@ -37,7 +37,7 @@ public class AvatarBDBlockAndroid {
 		height = 200;
 		
 		showConnectingPoints = false;
-		isClicked = false;
+		select(false);
 		
 		mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -82,15 +82,22 @@ public class AvatarBDBlockAndroid {
         
 	}
     
-	public boolean isOnOnlyMe(int x1, int y1){
+	public TGComponentAndroid isOnMe(int x1, int y1){
 		if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
-            return true;
+            return this;
        }
-        return false;
+        return null;
 	}
 
 	
-	protected void internalDrawing(Canvas canvas) {
+	public void internalDrawing(Canvas canvas) {
+		if(selected){
+			ePaint.setColor(Color.RED);
+			mTextPaint.setColor(Color.RED);
+		}else{
+			ePaint.setColor(Color.BLACK);
+			mTextPaint.setColor(Color.BLACK);
+		}
 		Log.i("BDblock", "internal drawing!");
 		int lp=getX();
 		int tp=getY();
@@ -106,6 +113,7 @@ public class AvatarBDBlockAndroid {
 		canvas.drawLine(lp, bp, rp, bp, ePaint);
 		
 		String ster = "<<"+stereotype+">>";
+		
 		mTextPaint.setFakeBoldText(true);
 		canvas.drawText(ster, lp+(getWidth()-ster.length())/2, tp+25, mTextPaint);
 		
@@ -114,9 +122,9 @@ public class AvatarBDBlockAndroid {
             canvas.drawText(name,lp+(getWidth()-name.length())/2, tp+38,mTextPaint);
         }
 		
-		mPaint.setColor(Color.BLACK);
-		mPaint.setStrokeWidth(2);
-		canvas.drawLine(x, y+42, rp, y+42, mPaint);
+//		mPaint.setColor(Color.BLACK);
+//		mPaint.setStrokeWidth(2);
+		canvas.drawLine(x, y+42, rp, y+42, ePaint);
 		
 		int h=0;
 		int w;
@@ -131,7 +139,7 @@ public class AvatarBDBlockAndroid {
 		
 		canvas.drawText("attribute 1", x+50+7, y+60, mTextPaint);
 		
-		canvas.drawLine(x, y+70, rp, y+70, mPaint);
+		canvas.drawLine(x, y+70, rp, y+70, ePaint);
 		
 		//draw methods
 		
@@ -141,7 +149,7 @@ public class AvatarBDBlockAndroid {
 			Log.i("block", ""+showConnectingPoints);
 			//canvas.drawRect(0, 0, 8, 8, cpPaint);
 			for(int i=0; i<nbConnectingPoints ; i++){
-				Log.i("block", "drawing points");
+			//	Log.i("block", "drawing points");
 				connectingPoints[i].internalDrawing(canvas);
 			}
 		}
@@ -172,25 +180,7 @@ public class AvatarBDBlockAndroid {
 		this.panel = panel;
 	}
 
-	public int getX() {
-		return x;
-	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getWidth() {
-		return width;
-	}
 
 	public void setWidth(int width) {
 		this.width = width;
@@ -200,17 +190,8 @@ public class AvatarBDBlockAndroid {
 		return height;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
 
-	public boolean isClicked() {
-		return isClicked;
-	}
 
-	public void setClicked(boolean isClicked) {
-		this.isClicked = isClicked;
-	}
 
 	public boolean isShowConnectingPoints() {
 		return showConnectingPoints;

@@ -6,18 +6,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 
-public class AvatarBDCompositionConnectorAndroid {
+public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 
-	private AvatarBDConnectingPointAndroid outPoint,inPoint;
 	private Paint paint;
 	private LinkedList internalpoints;
 	private int D = 26;
 	private int d = 20;
 	
-	public AvatarBDCompositionConnectorAndroid(){
-		outPoint = null;
-		inPoint = null;
+	public AvatarBDCompositionConnectorAndroid(AvatarBDConnectingPointAndroid _p1,AvatarBDConnectingPointAndroid _p2){
+		super(_p1,_p2);
 		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
@@ -25,45 +24,50 @@ public class AvatarBDCompositionConnectorAndroid {
 		paint.setColor(Color.BLACK);
 	}
 	
-	public boolean hasStart(){/*
-		if(tx !=-1 && ty !=-1){
-			return true;
-		}else{
-			return false;
-		}	*/
-		if(outPoint != null){
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean hasEnd(){
-//		if(bx !=-1 && by !=-1){
+//	public boolean hasStart(){/*
+//		if(tx !=-1 && ty !=-1){
 //			return true;
 //		}else{
 //			return false;
+//		}	*/
+//		if(outPoint != null){
+//			return true;
 //		}
-		if(inPoint != null){
-			return true;
-		}
-		return false;
-	}
+//		return false;
+//	}
+//	
+//	public boolean hasEnd(){
+////		if(bx !=-1 && by !=-1){
+////			return true;
+////		}else{
+////			return false;
+////		}
+//		if(inPoint != null){
+//			return true;
+//		}
+//		return false;
+//	}
 	
-	protected void internalDrawing(Canvas canvas){
+	public void internalDrawing(Canvas canvas){
 		
-		
+		if(selected){
+			paint.setColor(Color.RED);
+		}else{
+			paint.setColor(Color.BLACK);
+		}
 		
 		int dd = d;
 		int DD = D;
 		
+	//	if(hasStart())
 		
-		if(hasStart() && hasEnd()){
-			int x1 =outPoint.getX();
-			int y1 =outPoint.getY();
-			int x2 =inPoint.getX();
-			int y2 = inPoint.getY();
+	//	if(hasStart() && hasEnd()){
+			int x1 =p1.getX();
+			int y1 =p1.getY();
+			int x2 =p2.getX();
+			int y2 = p2.getY();
 			
-			canvas.drawLine(outPoint.getX(), outPoint.getY(), inPoint.getX(), inPoint.getY(), paint);
+			canvas.drawLine(x1, y1, x2, y2, paint);
 			double xd[] = new double[4];
 			double yd[] = new double[4];
 			
@@ -117,24 +121,24 @@ public class AvatarBDCompositionConnectorAndroid {
 			paint.setStyle(Paint.Style.FILL);
 			
 			canvas.drawPath(path, paint);
-		}
+	//	}
 	}
 
-	public AvatarBDConnectingPointAndroid getOutPoint() {
-		return outPoint;
-	}
-
-	public void setOutPoint(AvatarBDConnectingPointAndroid outPoint) {
-		this.outPoint = outPoint;
-	}
-
-	public AvatarBDConnectingPointAndroid getInPoint() {
-		return inPoint;
-	}
-
-	public void setInPoint(AvatarBDConnectingPointAndroid inPoint) {
-		this.inPoint = inPoint;
-	}
+//	public AvatarBDConnectingPointAndroid getOutPoint() {
+//		return outPoint;
+//	}
+//
+//	public void setOutPoint(AvatarBDConnectingPointAndroid outPoint) {
+//		this.outPoint = outPoint;
+//	}
+//
+//	public AvatarBDConnectingPointAndroid getInPoint() {
+//		return inPoint;
+//	}
+//
+//	public void setInPoint(AvatarBDConnectingPointAndroid inPoint) {
+//		this.inPoint = inPoint;
+//	}
 
 	public LinkedList getInternalpoints() {
 		return internalpoints;
@@ -142,5 +146,9 @@ public class AvatarBDCompositionConnectorAndroid {
 
 	public void setInternalpoints(LinkedList internalpoints) {
 		this.internalpoints = internalpoints;
+	}
+	
+	protected void addInternalPoint(Point point){
+		internalpoints.add(point);
 	}
 }

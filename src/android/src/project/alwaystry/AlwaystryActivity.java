@@ -1,138 +1,113 @@
 package project.alwaystry;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
 
-public class AlwaystryActivity extends Activity {//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
+public class AlwaystryActivity extends Activity implements OnGesturePerformedListener{//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
 	
 	int clickaction = 0;
 	int tx = -1,ty=-1,bx=-1,by=-1;
+	private GestureLibrary gestureLib;
+	AvatarBDPanelAndroid panel;
+	GestureOverlayView gestures;
+	
 	
 	
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.block);   
-        AvatarBDPanelAndroid panel = (AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1);
-		//RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
-		//layout.setOnTouchListener(this);
+        panel = (AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1);
+		
+        gestureLib = GestureLibraries.fromRawResource(this, R.raw.actions);
+        if(!gestureLib.load()){
+        	finish();
+        }
+        gestures = (GestureOverlayView)findViewById(R.id.gestureOverlayView1);
+		gestures.addOnGesturePerformedListener(this);
+		
+		
+       
     }
     
     public int getclickaction(){
     	return clickaction;
     }
     
+    public void resetClickaction(){
+    	clickaction = 0;
+    }
     public void clickbutton(View v){
     	Log.i("alwaystry", "buttonclicked");
     	switch(v.getId()){
-    	case R.id.property:
+    	case R.id.iod_edit:
     		clickaction =1;
     		break;
-    	case R.id.edit:
+    	case R.id.uml_note:
+    		panel.setCreatedtype(TGComponentAndroid.UML_NOTE);
     		clickaction =2;
     		break;
     	case R.id.concomment:
     		clickaction =3;
     		break;
     	case R.id.block:
+    		panel.setCreatedtype(TGComponentAndroid.AVATARBD_BLOCK);
     		clickaction =4;
     		break;
     	case R.id.cryptoblock:
     		clickaction =5;
     		break;
     	case R.id.datatype:
+    		panel.setCreatedtype(TGComponentAndroid.AVATARBD_DATATYPE);
     		clickaction =6;
     		break;
     	case R.id.comp:
     		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
-    		AvatarBDCompositionConnectorAndroid cconnector = new AvatarBDCompositionConnectorAndroid();
-    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).getCompoconnectorlist().add(cconnector);
+    	//	((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).cleanCompoconnectorlist();
+    		panel.setCreatedtype(TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR);
     		clickaction =7;
     		break;
     	case R.id.link:
     		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
-    		AvatarBDPortConnectorAndroid pconnector = new AvatarBDPortConnectorAndroid();
-    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).getConnectorlist().add(pconnector);
+    	///	((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).cleanConnectorlist();
+    		panel.setCreatedtype(TGComponentAndroid.AVATARBD_PORT_CONNECTOR);
     		clickaction =8;
     		break;
     	}
     		
     }
-/*
-    public void addAPortConnector(int startx, int starty, int endx, int endy){
-    	//int tx,ty,bx,by;
-    	if(startx != -1){
-    		tx = startx;
-    	}
-    	if(starty != -1){
-    		ty = starty;
-    	}
-    	if(endx != -1){
-    		bx = endx;
-    	}
-    	if(endy != -1){
-    		by = endy;
-    	}
-    	Log.i("try", "tx:"+tx+"ty:"+ty+"bx:"+bx+"by:"+by);
-    	if(tx != -1 && ty !=-1 && bx !=-1 && by!=-1){
-    	AvatarBDPortConnectorAndroid portconnector = new AvatarBDPortConnectorAndroid(this);
-    	portconnector.initPortConnector(tx, ty, bx, by);
-    	RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
-    	RelativeLayout.LayoutParams RlParams = new RelativeLayout.LayoutParams(
-	            LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    	RlParams.leftMargin = tx;
-    	RlParams.topMargin = ty;
-    	layout.addView(portconnector, RlParams);
-    	portconnector.invalidate();
-    	Log.i("try", "add a port connector");
-    	}
-    }
+
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
+	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
 		// TODO Auto-generated method stub
-		Log.i("alwaystry ontouch", "panel clicked");
-		if(v.getId() == R.id.relativeLayout1){
-			Log.i("alwaystry ontouch", "panel clicked!!!!!");
-			final int X = (int)event.getX();
-			final int Y = (int)event.getY();
-			
-			if(event.getAction() == MotionEvent.ACTION_DOWN){
-				switch(clickaction){
-				case 1 :
-					break;
-				case 2 :
-					break;
-				case 3 :
-					break;
-				case 4 :
-					Blockrectangle newblock = new Blockrectangle(this);
-					RelativeLayout.LayoutParams RlParams = new RelativeLayout.LayoutParams(
-				            LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-					RlParams.leftMargin = X;
-					RlParams.topMargin = Y;
-					RelativeLayout layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
-					layout.addView(newblock, RlParams);
-					break;
-				case 5 :
-					break;
-				case 6 :
-					break;
-				case 7 :
-					break;
-				case 8 :
-					break;
-				}
+		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+		if(predictions.size()>0){
+			Prediction prediction = predictions.get(0);
+			if(prediction.score>1.0){
+				panel.deleteComponent();
+				Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT).show();
+				
 			}
 		}
-		return false;
 	}
-  */  
+ 
 
 }

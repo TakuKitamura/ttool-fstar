@@ -15,10 +15,13 @@ public class AvatarBDConnectingPointAndroid {
 	private double w ;
 	private double h ;
 	private View panel;
-	private AvatarBDBlockAndroid container;
+	private CDElementAndroid container;
 	private Paint cpPaint;
+	private int id;
 	
-	public AvatarBDConnectingPointAndroid(int _x, int _y, boolean _in, boolean _out, double _w, double _h,AvatarBDBlockAndroid _container,View _panel){
+	private boolean free = true;
+	
+	public AvatarBDConnectingPointAndroid(int _x, int _y, boolean _in, boolean _out, double _w, double _h,CDElementAndroid _container,View _panel){
 		x = _x;
 		y = _y;
 		in = _in;
@@ -48,14 +51,30 @@ public class AvatarBDConnectingPointAndroid {
 	public int getHeight(){
 		return height;
 	}
-	public boolean isOnMe(int x1, int y1){
+	public AvatarBDConnectingPointAndroid isOnMe(int x1, int y1){
 		if ((x1 >= getX()-width/2) && ((getX() + width/2) >= x1) && (y1 >= getY()-height/2) && ((getY() + height/2) >= y1)) {
-            return true;
+            return this;
        }
-        return false;
+        return null;
 	}
 	
 	protected void internalDrawing(Canvas canvas){
 		canvas.drawRect(getX()-width/2, getY()-height/2, getX() + width/2, getY() + height/2, cpPaint);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public boolean isFree() {
+		return free;
+	}
+
+	public void setFree(boolean free) {
+		this.free = free;
 	}
 }
