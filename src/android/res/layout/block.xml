@@ -6,15 +6,22 @@
         android:background="#FFFFFF"
         android:orientation="vertical" >
 
-        <project.alwaystry.AvatarbdToolbarAndroid
-            android:id="@+id/avatarbdToolbarAndroid1"
-            android:layout_width="wrap_content"
+        <android.gesture.GestureOverlayView
+            android:id="@+id/gestureOverlayView1"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
-        </project.alwaystry.AvatarbdToolbarAndroid>
+
+            <project.alwaystry.AvatarbdToolbarAndroid
+                android:id="@+id/avatarbdToolbarAndroid1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </project.alwaystry.AvatarbdToolbarAndroid>
+
+        </android.gesture.GestureOverlayView>
 
         <project.alwaystry.AvatarBDPanelAndroid
             android:id="@+id/avatarBDPanelAndroid1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>    
