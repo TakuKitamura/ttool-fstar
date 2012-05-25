@@ -5,14 +5,14 @@
     android:orientation="horizontal" >
 
     <ImageButton
-        android:id="@+id/property"
+        android:id="@+id/iod_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/properties16" 
         android:onClick="clickbutton"/>
 
     <ImageButton
-        android:id="@+id/edit"
+        android:id="@+id/uml_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/edit16" 
