@@ -210,11 +210,11 @@ public class AvatarBDPanelAndroid extends View {
 			Log.i("AvatarBDPanel", "creating port connector");
 			if(p1 == null){
 				p1 = getPointSelected(x, y);
-				Log.i("panel", "p1: "+p1.getX()+" / "+p1.getY());
+//				Log.i("panel", "p1: "+p1.getX()+" / "+p1.getY());
 			}else{
 				
 				AvatarBDConnectingPointAndroid p2 = getPointSelected(x,y);
-				Log.i("panel", "p2: "+p2.getX()+" / "+p2.getY());
+//				Log.i("panel", "p2: "+p2.getX()+" / "+p2.getY());
 				if(!p1.equals(p2) && p2 != null){
 					AvatarBDPortConnectorAndroid portConnector = new AvatarBDPortConnectorAndroid(p1, p2);
 					compolist.add(portConnector);
