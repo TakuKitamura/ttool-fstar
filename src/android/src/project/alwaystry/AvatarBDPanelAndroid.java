@@ -1,7 +1,10 @@
 package project.alwaystry;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
+
+import myutilandroid.GraphicLibAndroid;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -36,8 +39,15 @@ public class AvatarBDPanelAndroid extends View {
 	private LinkedList compolist;
 	
 	private int mx, my;
+//	protected int initSelectX;
+//    protected int initSelectY;
+//    protected int currentSelectX;
+//    protected int currentSelectY;
 	private int xsel=-1,ysel=-1;
 	private int xendsel =-1, yendsel=-1;
+	protected int xSEL,ySEL,widthSel,heightSel;
+	protected int sel = 5;
+	protected boolean showSelectionZone = false;
 	private int maxX,minX;
 	private AlwaystryActivity activity;
 	int clickedX,clickedY;
@@ -45,7 +55,7 @@ public class AvatarBDPanelAndroid extends View {
 	protected AvatarBDConnectingPointAndroid selectedConnectingPoint;
 	
 	//for adding connectors
-	protected AvatarBDConnectingPointAndroid p1 = null;
+	protected TGConnectingPointAndroid p1 = null;
 	
 	protected TGComponentAndroid componentSelected;
 	protected int createdtype;
@@ -119,14 +129,51 @@ public class AvatarBDPanelAndroid extends View {
 			((TGComponentAndroid)compolist.get(i)).internalDrawing(canvas);
 		}
 		
-		if(this.getXsel()!=-1 && xendsel != -1){
+		if(mode == SELECTING_COMPONENTS){
+			Log.i("panel", "drawing selecting+ xsel: "+getXsel());
+			
+			if(this.getXsel()!=-1 && xendsel != -1){
+				Paint fgPaintSel = new Paint();
+				fgPaintSel.setColor(Color.BLACK);
+				fgPaintSel.setStyle(Style.STROKE);
+				fgPaintSel.setStrokeWidth(2);
+				fgPaintSel.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
+	
+				canvas.drawRect(xsel, ysel, xendsel, yendsel, fgPaintSel);
+			}
+		}
+		
+		if (((mode == SELECTED_COMPONENTS) || (mode == MOVING_SELECTED_COMPONENTS))) {
+			Log.i("panel", "drawing selected "+getMode());
 			Paint fgPaintSel = new Paint();
-			fgPaintSel.setColor(Color.BLACK);
+			if (showSelectionZone) {
+				Log.i("panel", "drawing selected "+xsel+" "+ysel+" "+xendsel+" "+yendsel);
+				if (mode == MOVING_SELECTED_COMPONENTS) {
+					//g.setColor(ColorManager.MOVING_0);
+					fgPaintSel.setColor(Color.MAGENTA);
+				} else {
+					//g.setColor(ColorManager.POINTER_ON_ME_0);
+					fgPaintSel.setColor(Color.RED);
+				}
+				//GraphicLib.setMediumStroke(g);
+			} else {
+				//g.setColor(ColorManager.NORMAL_0);
+			}
+			
+			
 			fgPaintSel.setStyle(Style.STROKE);
 			fgPaintSel.setStrokeWidth(2);
 			fgPaintSel.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
 
-			canvas.drawRect(xsel, ysel, xendsel, yendsel, fgPaintSel);
+			canvas.drawRect(xSEL, ySEL, xSEL+widthSel, ySEL+heightSel, fgPaintSel);
+			fgPaintSel.setStyle(Style.FILL);
+			canvas.drawRect(xSEL - sel, ySEL - sel, xSEL + sel, ySEL + sel,fgPaintSel);
+			canvas.drawRect(xSEL - sel + widthSel, ySEL - sel, xSEL + sel + widthSel,ySEL + sel,fgPaintSel);
+			canvas.drawRect(xSEL - sel, ySEL - sel + heightSel, xSEL + sel, ySEL + sel + heightSel,fgPaintSel);
+			canvas.drawRect(xSEL - sel + widthSel, ySEL - sel + heightSel,xSEL + sel + widthSel, ySEL + sel + heightSel,fgPaintSel);
+			if (showSelectionZone) {
+				//GraphicLib.setNormalStroke(g);
+			}
 		}
 		
 	}
@@ -135,10 +182,10 @@ public class AvatarBDPanelAndroid extends View {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 	
-	public void showAllConnectingPoints(){
+	public void showAllConnectingPoints(int type){
 		for(int i=0; i< compolist.size();i++){
-			if(compolist.get(i) instanceof AvatarBDBlockAndroid){
-			((AvatarBDBlockAndroid)compolist.get(i)).setShowConnectingPoints(true);
+			if(!(compolist.get(i) instanceof TGConnectorAndroid)){
+			((TGComponentAndroid)compolist.get(i)).setCptype(type);
 			}
 		}
 		invalidate();
@@ -146,25 +193,26 @@ public class AvatarBDPanelAndroid extends View {
 	
 	public void hideAllConnectingPoints(){
 		for(int i=0; i< compolist.size();i++){
-			if(compolist.get(i) instanceof AvatarBDBlockAndroid){
-			((AvatarBDBlockAndroid)compolist.get(i)).setShowConnectingPoints(false);
+			if(!(compolist.get(i) instanceof TGConnectorAndroid)){
+			((TGComponentAndroid)compolist.get(i)).setCptype(-1);
 			}
 		}
 		invalidate();
 	}
-	
-	public AvatarBDConnectingPointAndroid getPointSelected(int x1, int y1){
+
+	public TGConnectingPointAndroid getPointSelected(int x1, int y1,int type){
 		Log.i("panel", "point selected:"+x1+" / "+y1);
-		AvatarBDConnectingPointAndroid p;
+		TGConnectingPointAndroid p;
+		TGComponentAndroid com;
+		
 		for(int i=0; i< compolist.size();i++){
-			if(compolist.get(i) instanceof AvatarBDBlockAndroid){
-				AvatarBDBlockAndroid block = (AvatarBDBlockAndroid)compolist.get(i);
-				for(int j=0; j< block.getNbConnectingPoints();j++){
-					p = (AvatarBDConnectingPointAndroid)block.connectingPoints[j].isOnMe(x1, y1);
-					
-					
-					if(p != null){
-						Log.i("panel", "ppppp point selected:"+p.getX()+" / "+p.getY());
+			com= (TGComponentAndroid)(compolist.get(i));
+			for(int j=0; j<com.nbConnectingPoints;j++){
+				p = (TGConnectingPointAndroid)(com.connectingPoints[j]).isOnMe(x1, y1);
+				if(p != null){
+					if(p.isOut() && p.isFree() && p.isCompatibleWith(type)){
+						p.setState(TGConnectingPointAndroid.SELECTED);
+						invalidate();
 						return p;
 					}
 				}
@@ -180,6 +228,29 @@ public class AvatarBDPanelAndroid extends View {
 			compolist.add(note);
 			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
+		case TGComponentAndroid.CONNECTOR_COMMENT:
+			if(p1 == null){
+			TGConnectingPointAndroid point = getPointSelected(x,y,TGComponentAndroid.CONNECTOR_COMMENT);
+				if(point !=null){
+					
+					point.setFree(false);
+					p1 = point;
+					
+				}
+			}else{
+				TGConnectingPointAndroid p2 = getPointSelected(x,y,TGComponentAndroid.CONNECTOR_COMMENT);
+				if(!p1.equals(p2) && p2 != null){
+						p2.setFree(false);
+						TGConnectorCommentAndroid comConnector = new TGConnectorCommentAndroid(p1, p2,this);
+						compolist.add(comConnector);
+						p1 = null;
+						hideAllConnectingPoints();
+						this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+						this.setMode(NORMAL);
+					
+				}
+			}
+			break;
 		case TGComponentAndroid.AVATARBD_BLOCK:
 			AvatarBDBlockAndroid block = new AvatarBDBlockAndroid(x, y, this);
 			compolist.add(block);
@@ -194,38 +265,137 @@ public class AvatarBDPanelAndroid extends View {
 			break;
 		case TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR:
 			if(p1 == null){
-				p1 = getPointSelected(x, y);
+				TGConnectingPointAndroid point = getPointSelected(x,y,TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR);
+				if(point !=null){
+					if(point.isFree()){
+						point.setFree(false);
+						p1 = point;
+					}
+				}
 			}else{
-				AvatarBDConnectingPointAndroid p2 = getPointSelected(x,y);
-				if(!p1.equals(getPointSelected(x,y)) && p2 != null){
-					AvatarBDCompositionConnectorAndroid comConnector = new AvatarBDCompositionConnectorAndroid(p1, p2);
-					compolist.add(comConnector);
-					p1 = null;
-					hideAllConnectingPoints();
-					this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+				TGConnectingPointAndroid p2 = getPointSelected(x,y,TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR);
+				if(!p1.equals(p2) && p2 != null){
+					if(p2.isFree()){
+						p2.setFree(false);
+						AvatarBDCompositionConnectorAndroid comConnector = new AvatarBDCompositionConnectorAndroid(p1, p2,this);
+						compolist.add(comConnector);
+						p1 = null;
+						hideAllConnectingPoints();
+						this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+						this.setMode(NORMAL);
+						
+					}
 				}
 			}
 			break;
 		case TGComponentAndroid.AVATARBD_PORT_CONNECTOR:
 			Log.i("AvatarBDPanel", "creating port connector");
 			if(p1 == null){
-				p1 = getPointSelected(x, y);
+				TGConnectingPointAndroid point = getPointSelected(x,y,TGComponentAndroid.AVATARBD_PORT_CONNECTOR);
+				if(point !=null){
+					if(point.isFree()){
+						point.setFree(false);
+						p1 = point;
+					}
+				}
 //				Log.i("panel", "p1: "+p1.getX()+" / "+p1.getY());
 			}else{
 				
-				AvatarBDConnectingPointAndroid p2 = getPointSelected(x,y);
-//				Log.i("panel", "p2: "+p2.getX()+" / "+p2.getY());
+				TGConnectingPointAndroid p2 = getPointSelected(x,y,TGComponentAndroid.AVATARBD_PORT_CONNECTOR);
+			//	Log.i("panel", "p2: "+p2.getX()+" / "+p2.getY());
 				if(!p1.equals(p2) && p2 != null){
-					AvatarBDPortConnectorAndroid portConnector = new AvatarBDPortConnectorAndroid(p1, p2);
-					compolist.add(portConnector);
-					p1 = null;
-					hideAllConnectingPoints();
-					this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+					if(p2.isFree()){
+						p2.setFree(false);
+						AvatarBDPortConnectorAndroid portConnector = new AvatarBDPortConnectorAndroid(p1, p2,this);
+						compolist.add(portConnector);
+						p1 = null;
+						hideAllConnectingPoints();
+						this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+						this.setMode(NORMAL);
+					}
 				}
 			}
 			break;
 		}
 	}
+	
+	public int selectComponentInRectangle(int x, int y, int width, int height) {
+        //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
+        TGComponentAndroid tgc;
+        int cpt = 0;
+        Iterator iterator = compolist.listIterator();
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponentAndroid)(iterator.next());
+            if (tgc.areAllInRectangle(x, y, width, height)) {
+            	Log.i("panel","tgc ");
+                tgc.select(true);
+               // tgc.setState(TGState.SELECTED);
+                cpt ++;
+            } else {
+                tgc.select(false);
+            //    tgc.setState(TGState.NORMAL);
+            }
+            
+        }
+        
+        return cpt;
+    }
+	public boolean isInSelectedRectangle(int x, int y) {
+        return GraphicLibAndroid.isInRectangle(x, y, xSEL, ySEL, widthSel, heightSel);
+    }
+	
+	public void moveSelected(int x, int y) {
+       // x = Math.min(Math.max(minLimit, x), maxX - widthSel);
+       // y = Math.min(Math.max(minLimit, y), maxY - heightSel);
+        
+        int oldX = xSEL;
+        int oldY = ySEL;
+        xSEL = x;
+        ySEL = y;
+        TGComponentAndroid tgc;
+        Iterator iterator = compolist.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponentAndroid)(iterator.next());
+            if (tgc.isSelected()) {
+            	tgc.setCd(tgc.getX()+xSEL-oldX, tgc.getY()+ySEL-oldY);
+                //tgc.forceMove(xSel - oldX, ySel - oldY);
+            }
+        }
+        invalidate();
+    }
+	
+	public void endSelectComponents() {
+		int nb =0;
+		if(xsel !=-1 && xendsel !=-1)
+			nb = selectComponentInRectangle(Math.min(xsel, xendsel), Math.min(ysel, yendsel), Math.abs(xsel - xendsel), Math.abs(ysel - yendsel));
+        Log.i("panel", "select nimber: "+nb);
+        if(nb !=0){
+        	
+            mode = SELECTED_COMPONENTS;
+            Log.i("panel", "select mode: "+mode);
+        //    mgui.setMode(MainGUI.CUTCOPY_OK);
+          //  mgui.setMode(MainGUI.EXPORT_LIB_OK);
+            showSelectionZone = true;
+            xSEL = Math.min(xsel, xendsel);
+            ySEL = Math.min(ysel, yendsel);
+            widthSel = Math.abs(xsel - xendsel);
+            heightSel = Math.abs(ysel - yendsel);
+        }else{
+        	 
+                 mode = NORMAL;
+                 xsel= -1;
+                 ysel = -1;
+                 xendsel =-1;
+                 yendsel =-1;
+//                 mgui.setMode(MainGUI.CUTCOPY_KO);
+//                 mgui.setMode(MainGUI.EXPORT_LIB_KO);
+          
+        }
+        invalidate();
+		
+    }
 
 	public int getYendsel() {
 		return yendsel;
@@ -266,8 +436,19 @@ public class AvatarBDPanelAndroid extends View {
 
 	public void deleteComponent(){
 		if(componentSelected != null){
+			
+				((TGComponentAndroid) componentSelected).cleanAllPoints();
+			
 			compolist.remove(componentSelected);
 			componentSelected = null;
+		}
+		if(compolist.size()>0){
+			for(int i = compolist.size()-1; i>=0;i--){
+				if(((TGComponentAndroid)compolist.get(i)).isSelected()){
+					((TGComponentAndroid)compolist.get(i)).cleanAllPoints();
+					compolist.remove(i);
+				}
+			}
 		}
 		invalidate();
 	}
@@ -316,6 +497,10 @@ public class AvatarBDPanelAndroid extends View {
 
 	public void setCreatedtype(int createdtype) {
 		this.createdtype = createdtype;
+		if(createdtype == TGComponentAndroid.NOCOMPONENT){
+			this.hideAllConnectingPoints();
+			p1 = null;
+		}
 	}
 
 	public int getMode() {
@@ -325,125 +510,9 @@ public class AvatarBDPanelAndroid extends View {
 	public void setMode(int mode) {
 		this.mode = mode;
 	}
+	public LinkedList getCompolist(){
+		return compolist;
+	}
 	
-	
-//	public boolean onTouch(View v, MotionEvent event) {
-//		// TODO Auto-generated method stub
-//		final int X = (int)event.getX();
-//		final int Y = (int)event.getY();
-//		
-//		switch(event.getAction()){
-//		case MotionEvent.ACTION_DOWN:
-//			boolean blockClicked = false;
-//			Log.i("Panel", "ACTION DOWN!");
-//			if(((AlwaystryActivity)this.getContext()).getclickaction() == 1){
-//				boolean clickonblock = false;
-//				for(int i=0;i<compolist.size();i++){
-//					if(((TGComponentAndroid)compolist.get(i)).isOnOnlyMe(X, Y)){
-//						clickonblock = true;
-//					}
-//				}
-//				if(!clickonblock){
-//				this.setXsel(X);
-//				this.setYsel(Y);	
-//				}
-//			}
-//			if(((AlwaystryActivity)this.getContext()).getclickaction() == 8){
-//				for(int i=0; i<compolist.size();i++){
-//					if(compolist.get(i) instanceof AvatarBDBlockAndroid){
-//						for(int j=0; j<((AvatarBDBlockAndroid)compolist.get(i)).getNbConnectingPoints();j++){
-//							if(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j].isOnMe(X, Y)){
-//								for(int n=0; n<connectorlist.size();n++){
-//									if(!((AvatarBDPortConnectorAndroid)connectorlist.get(n)).hasStart()){
-//										((AvatarBDPortConnectorAndroid)connectorlist.get(n)).setOutPoint(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j]);
-//									}else if(!((AvatarBDPortConnectorAndroid)connectorlist.get(n)).hasEnd()){
-//										((AvatarBDPortConnectorAndroid)connectorlist.get(n)).setInPoint(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j]);
-//										hideAllConnectingPoints();
-//										((AlwaystryActivity)this.getContext()).resetClickaction();
-//									}
-//										
-//								}
-//							}
-//						}
-//					}
-//				}
-//				invalidate();
-//			}
-//			
-//			if(((AlwaystryActivity)this.getContext()).getclickaction() == 7){
-//				for(int i=0; i<compolist.size();i++){
-//					if(compolist.get(i) instanceof AvatarBDBlockAndroid){
-//						for(int j=0; j<((AvatarBDBlockAndroid)compolist.get(i)).getNbConnectingPoints();j++){
-//							if(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j].isOnMe(X, Y)){
-//								for(int n=0; n<compoconnectorlist.size();n++){
-//									if(!((AvatarBDCompositionConnectorAndroid)compoconnectorlist.get(n)).hasStart()){
-//										((AvatarBDCompositionConnectorAndroid)compoconnectorlist.get(n)).setOutPoint(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j]);
-//									}else if(!((AvatarBDCompositionConnectorAndroid)compoconnectorlist.get(n)).hasEnd()){
-//										((AvatarBDCompositionConnectorAndroid)compoconnectorlist.get(n)).setInPoint(((AvatarBDBlockAndroid)compolist.get(i)).connectingPoints[j]);
-//										hideAllConnectingPoints();
-//										((AlwaystryActivity)this.getContext()).resetClickaction();
-//									}
-//										
-//								}
-//							}
-//						}
-//					}
-//				}
-//				invalidate();
-//				
-//			}
-//			for(int i=0;i<compolist.size();i++){
-//				if(((TGComponentAndroid)compolist.get(i)).isOnOnlyMe(X, Y)){
-//					Log.i("Panel", "one block is clicked!");
-//					((TGComponentAndroid)compolist.get(i)).select(true);
-//					blockClicked = true;
-//				}
-//			}
-//			
-//			if(((AlwaystryActivity)this.getContext()).getclickaction() == 4){
-//				AvatarBDBlockAndroid block2 = new AvatarBDBlockAndroid(X,Y,this);
-//				compolist.add(block2);
-//				invalidate();
-//			}
-//			if(((AlwaystryActivity)this.getContext()).getclickaction() == 6){
-//				AvatarBDDataTypeAndroid datatype2 = new AvatarBDDataTypeAndroid(X,Y,this);
-//				compolist.add(datatype2);
-//				invalidate();
-//			}
-//			
-//			
-//			break;
-//		case MotionEvent.ACTION_UP:
-//			if(((AlwaystryActivity)this.getContext()).getclickaction()!=1 && ((AlwaystryActivity)this.getContext()).getclickaction()!=8 && ((AlwaystryActivity)this.getContext()).getclickaction()!=7){
-//				((AlwaystryActivity)this.getContext()).resetClickaction();
-//			}
-//			for(int i=0;i<compolist.size();i++){
-//				((TGComponentAndroid)compolist.get(i)).select(false);
-//			}
-//			break;
-//		case MotionEvent.ACTION_MOVE:
-//			if(this.getXsel()==-1){
-//			for(int i=0;i<compolist.size();i++){
-//				if(((TGComponentAndroid)compolist.get(i)).isSelected()){
-//					Log.i("Panel", "one block is moving!");
-//					int nx = ((TGComponentAndroid)compolist.get(i)).getX()+(X-(int)event.getX());
-//					int ny = ((TGComponentAndroid)compolist.get(i)).getY()+(Y-(int)event.getY());
-//					((TGComponentAndroid)compolist.get(i)).setCd(X, Y);
-//					Log.i("block location", "X: "+X+" Y: "+X);
-//					invalidate();
-//					break;
-//				}
-//			}
-//			}else{
-//				xendsel = X;
-//				yendsel = Y;
-//				invalidate();
-//			}
-//			
-//			break;
-//		}
-//		
-//		return true;
-//	}
 	
 }

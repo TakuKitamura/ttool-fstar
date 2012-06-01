@@ -19,15 +19,14 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 	private Paint mPaint;
 	private Paint cpPaint;
 	private Paint ePaint;
-	private boolean showConnectingPoints;
+	
 	
 	
 	private TextPaint mTextPaint;
 	
 	protected Vector myAttributes, myMethods, mySignals;
 	
-	private int nbConnectingPoints;
-	AvatarBDConnectingPointAndroid[] connectingPoints;
+	
 
 	public AvatarBDBlockAndroid(int _x, int _y,View _panel){
 		x=_x;
@@ -36,7 +35,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		width = 250;
 		height = 200;
 		
-		showConnectingPoints = false;
+		//showConnectingPoints = false;
 		select(false);
 		
 		mPaint = new Paint();
@@ -62,24 +61,25 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
         nbConnectingPoints = 16;
         connectingPoints = new AvatarBDConnectingPointAndroid[16];
         
-        connectingPoints[0] = new AvatarBDConnectingPointAndroid(0,0,true,true,0,0,this,panel);
-        connectingPoints[1] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.5, 0.0,this,panel);
-        connectingPoints[2] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 1.0, 0.0,this,panel);
-        connectingPoints[3] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.0, 0.5,this,panel);
-        connectingPoints[4] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 1.0, 0.5,this,panel);
-        connectingPoints[5] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.0, 1.0,this,panel);
-        connectingPoints[6] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.5, 1.0,this,panel);
-        connectingPoints[7] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 1.0, 1.0,this,panel);
+        connectingPoints[0] = new AvatarBDConnectingPointAndroid(this,0,0,true,true,0,0);
+        connectingPoints[1] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.5, 0.0);
+        connectingPoints[2] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 1.0, 0.0);
+        connectingPoints[3] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.0, 0.5);
+        connectingPoints[4] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 1.0, 0.5);
+        connectingPoints[5] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.0, 1.0);
+        connectingPoints[6] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.5, 1.0);
+        connectingPoints[7] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 1.0, 1.0);
         
-        connectingPoints[8] = new AvatarBDConnectingPointAndroid( 0, 0, true, true, 0.25, 0.0,this,panel);
-        connectingPoints[9] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.75, 0.0,this,panel);
-        connectingPoints[10] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.0, 0.25,this,panel);
-        connectingPoints[11] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 1.0, 0.25,this,panel);
-        connectingPoints[12] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.0, 0.75,this,panel);
-        connectingPoints[13] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 1.0, 0.75,this,panel);
-        connectingPoints[14] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.25, 1.0,this,panel);
-        connectingPoints[15] = new AvatarBDConnectingPointAndroid(0, 0, true, true, 0.75, 1.0,this,panel);
+        connectingPoints[8] = new AvatarBDConnectingPointAndroid(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoints[9] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.75, 0.0);
+        connectingPoints[10] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.0, 0.25);
+        connectingPoints[11] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 1.0, 0.25);
+        connectingPoints[12] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.0, 0.75);
+        connectingPoints[13] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 1.0, 0.75);
+        connectingPoints[14] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.25, 1.0);
+        connectingPoints[15] = new AvatarBDConnectingPointAndroid(this,0, 0, true, true, 0.75, 1.0);
         
+        addTGConnectingPointsComment();
 	}
     
 	public TGComponentAndroid isOnMe(int x1, int y1){
@@ -89,6 +89,8 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
         return null;
 	}
 
+	
+	
 	
 	public void internalDrawing(Canvas canvas) {
 		if(selected){
@@ -145,14 +147,16 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		
 		//draw signals
 	
-		if(showConnectingPoints){
-			Log.i("block", ""+showConnectingPoints);
-			//canvas.drawRect(0, 0, 8, 8, cpPaint);
-			for(int i=0; i<nbConnectingPoints ; i++){
-			//	Log.i("block", "drawing points");
-				connectingPoints[i].internalDrawing(canvas);
-			}
-		}
+//		if(showConnectingPoints){
+//			Log.i("block", ""+showConnectingPoints);
+//			//canvas.drawRect(0, 0, 8, 8, cpPaint);
+//			for(int i=0; i<nbConnectingPoints ; i++){
+//			//	Log.i("block", "drawing points");
+//				connectingPoints[i].internalDrawing(canvas);
+//			}
+//		}
+		
+		drawTGConnectingPoint(canvas, cptype);
 		
 	}
 	
@@ -193,16 +197,18 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 
 
 
-	public boolean isShowConnectingPoints() {
-		return showConnectingPoints;
-	}
-
-	public void setShowConnectingPoints(boolean showConnectingPoints) {
-		this.showConnectingPoints = showConnectingPoints;
-	}
+//	public boolean isShowConnectingPoints() {
+//		return showConnectingPoints;
+//	}
+//
+//	public void setShowConnectingPoints(boolean showConnectingPoints) {
+//		this.showConnectingPoints = showConnectingPoints;
+//	}
     
 	public int getNbConnectingPoints(){
 		return nbConnectingPoints;
 	}
+
+	
 	
 }

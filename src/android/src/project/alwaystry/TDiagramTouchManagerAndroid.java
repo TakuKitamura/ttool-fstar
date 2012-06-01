@@ -26,15 +26,16 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			clickedX = X;
 			clickedY = Y;
 			Log.i("touchmanager touch", "clickedX:"+clickedX+ "clickedY: "+clickedY);
-			if(panel.getMode() == AvatarBDPanelAndroid.NORMAL){
-				panel.setComponentSelected(panel.getSelectedComponent(X, Y));
-				if(panel.getComponentSelected() != null){
-					panel.setMode(AvatarBDPanelAndroid.MOVING_COMPONENT);
-				}else{
-					panel.setMode(AvatarBDPanelAndroid.SELECTING_COMPONENTS);
-					panel.setXsel(X);
-					panel.setYsel(Y);
-				}
+			
+			if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS && panel.isInSelectedRectangle(X, Y)){
+				panel.setMode(AvatarBDPanelAndroid.MOVING_SELECTED_COMPONENTS);
+			} else if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS && !panel.isInSelectedRectangle(X, Y)){
+				panel.setMode(AvatarBDPanelAndroid.NORMAL);
+				panel.setXsel(-1);
+				panel.setYsel(-1);
+				panel.setXendsel(-1);
+				panel.setYendsel(-1);
+				panel.invalidate();
 			}
 			
 			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
@@ -44,10 +45,25 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				panel.invalidate();
 			}
 			
+			if(panel.getMode() == AvatarBDPanelAndroid.NORMAL){
+				panel.setComponentSelected(panel.getSelectedComponent(X, Y));
+				if(panel.getComponentSelected() != null){
+					panel.setMode(AvatarBDPanelAndroid.MOVING_COMPONENT);
+				}else{
+					panel.setMode(AvatarBDPanelAndroid.SELECTING_COMPONENTS);
+					panel.setXsel(X);
+					panel.setYsel(Y);
+				}
+			}	
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.i("touchmanager", "turn to normal");
-			panel.setMode(AvatarBDPanelAndroid.NORMAL);
+			if(panel.getMode() == AvatarBDPanelAndroid.SELECTING_COMPONENTS){
+				panel.endSelectComponents();
+				panel.invalidate();
+			}
+			else
+				panel.setMode(AvatarBDPanelAndroid.NORMAL);
 			break;
 		case MotionEvent.ACTION_MOVE:
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_COMPONENT){
@@ -60,6 +76,12 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				}
 				
 			}
+			
+			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_SELECTED_COMPONENTS){
+				panel.moveSelected(X, Y);
+				panel.invalidate();
+			}
+			
 			if(panel.getMode() == AvatarBDPanelAndroid.SELECTING_COMPONENTS){
 				panel.setXendsel(X);
 				panel.setYendsel(Y);

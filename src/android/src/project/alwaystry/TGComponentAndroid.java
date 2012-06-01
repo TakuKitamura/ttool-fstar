@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 
 public abstract class TGComponentAndroid implements CDElementAndroid{
 
+	public static final int CONNECTOR_COMMENT = 118;
 	public static final int UML_NOTE = 301;
 	public static final int NOCOMPONENT = -1;
 	public static final int AVATARBD_BLOCK = 5000;
@@ -21,6 +22,11 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	
     protected boolean selected;
     protected int distanceSelected = 5;
+    
+    protected int nbConnectingPoints;
+	protected TGConnectingPointAndroid[] connectingPoints;
+	
+	protected int cptype;
     
     public abstract TGComponentAndroid isOnMe(int _x, int _y);
     
@@ -54,6 +60,13 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	    y = _y;
 	}	
 
+	public int getCptype() {
+		return cptype;
+	}
+
+	public void setCptype(int cptype) {
+		this.cptype = cptype;
+	}
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -69,5 +82,124 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 
 	public abstract void internalDrawing(Canvas canvas);
 
-
+	public boolean isInRectangle(int x1, int y1, int width, int height) {
+        if ((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height))) {
+            //System.out.println("Not in my rectangle " + this);
+            return false;
+        } else {
+            return true;
+        }
+    }
+	
+	public boolean areAllInRectangle(int x1, int y1, int width, int height) {
+	     //   TGComponent tgc;
+	        
+        if (!isInRectangle(x1, y1, width, height)) {
+            return false;
+        }
+//	        
+//	        for(int i=0; i<nbInternalTGComponent; i++) {
+//	            if (!tgcomponent[i].isInRectangle(x1, y1, width, height)) {
+//	                return false;
+//	            }
+//	        }
+        return true;
+    }
+	
+	public int makeTGConnectingPointsComment(int nb) {
+        int i, len;
+        
+        //System.out.println("Adding comment points to " + this.getName());
+        if (connectingPoints != null) {
+            TGConnectingPointAndroid[] tmp = connectingPoints;
+            len = tmp.length;
+            nbConnectingPoints = nbConnectingPoints + nb;
+            connectingPoints = new TGConnectingPointAndroid[nbConnectingPoints];
+            for(i=0; i<len; i++) {
+                connectingPoints[i] = tmp[i];
+            }
+        }
+        else {
+            nbConnectingPoints =  nb;
+            connectingPoints = new TGConnectingPointAndroid[nbConnectingPoints];
+            len = 0;
+        }
+        return len;
+    }
+	
+	public void cleanAllPoints(){
+		for(int i=0; i<nbConnectingPoints;i++){
+			connectingPoints[i].setFree(true);
+		}
+	}
+    
+	public void addTGConnectingPointsCommentMiddle() {
+        int len = makeTGConnectingPointsComment(8);
+        generateTGConnectingPointsComment(len, -0.5, 0);
+    }
+    
+    public void addTGConnectingPointsCommentCorner() {
+        int len = makeTGConnectingPointsComment(4);
+        generateTGConnectingPointsCommentCorner(len, 0, 0);
+    }
+    
+    public void addTGConnectingPointsCommentTop() {
+        int len = makeTGConnectingPointsComment(3);
+        generateTGConnectingPointsCommentLine(len, 0, 0);
+    }
+    
+    public void addTGConnectingPointsCommentDown() {
+        int len = makeTGConnectingPointsComment(3);
+        generateTGConnectingPointsCommentLine(len, 0, 1.0);
+    }
+    
+    public void addTGConnectingPointsComment() {
+        int len = makeTGConnectingPointsComment(8);
+        generateTGConnectingPointsComment(len, 0, 0);
+    }
+    
+    public void generateTGConnectingPointsComment(int len, double decw, double dech) {
+        connectingPoints[len] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+        connectingPoints[len + 1] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+        connectingPoints[len + 2] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+        connectingPoints[len + 3] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 0.5 + dech);
+        connectingPoints[len + 4] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 0.5 + dech);
+        connectingPoints[len + 5] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+        connectingPoints[len + 6] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.5 + decw, 1.0 + dech);
+        connectingPoints[len + 7] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 1.0 + dech);
+    }
+    
+    public void generateTGConnectingPointsCommentCorner(int len, double decw, double dech) {
+        connectingPoints[len] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+        connectingPoints[len + 1] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+        connectingPoints[len + 2] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 1.0 + dech);
+        connectingPoints[len + 3] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 1.0 + dech);
+    }
+    
+    public void generateTGConnectingPointsCommentLine(int len, double decw, double dech) {
+        connectingPoints[len] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.0 + decw, 0.0 + dech);
+        connectingPoints[len + 1] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 1.0 + decw, 0.0 + dech);
+        connectingPoints[len + 2] = new TGConnectingPointCommentAndroid(this, 0, 0, true, true, 0.5 + decw, 0.0 + dech);
+    }
+    
+    public void drawTGConnectingPoint(Canvas canvas, int type) {
+        //System.out.println("I am " + getName());
+        for (int i=0; i<nbConnectingPoints; i++) {
+            if (connectingPoints[i].isCompatibleWith(type)) {
+                connectingPoints[i].internalDrawing(canvas);
+            }
+        }
+		
+//		if (this instanceof HiddenInternalComponents) {
+//			if (((HiddenInternalComponents)(this)).areInternalsHidden()) {
+//				return;
+//			}
+//		}
+//		
+//        for(int i=0; i<nbInternalTGComponent; i++) {
+//            tgcomponent[i].drawTGConnectingPoint(g, type);
+//        }
+    }
+    
+    
 }

@@ -50,8 +50,8 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 //		return false;
 //	}
 	
-	public AvatarBDPortConnectorAndroid(AvatarBDConnectingPointAndroid p1, AvatarBDConnectingPointAndroid p2){
-		super(p1,p2);
+	public AvatarBDPortConnectorAndroid(TGConnectingPointAndroid p1, TGConnectingPointAndroid p2,AvatarBDPanelAndroid panel){
+		super(p1,p2,panel);
 		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
@@ -60,6 +60,12 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 	}
 	
 	public void internalDrawing(Canvas canvas){
+		
+		if(p1.isFree() || p2.isFree()){
+			panel.getCompolist().remove(this);
+			return;
+		}
+		
 		if(selected){
 			paint.setColor(Color.RED);
 		}else{
@@ -69,6 +75,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 //			canvas.drawLine(tx, ty, bx, by, paint);
 		//if(hasStart() && hasEnd()){
 		Log.i("portconnector", "internaldrawing");
+		Log.i("portconnector", "p1: "+p1.isFree()+"p2 :" +p2.isFree());
 			canvas.drawRect(p1.getX()-p1.getWidth()/2, p1.getY()-p1.getHeight()/2, p1.getX()+p1.getWidth()/2, p1.getY()+p1.getHeight()/2, paint);
 			canvas.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY(), paint);
 			canvas.drawRect(p2.getX()-p2.getWidth()/2, p2.getY()-p2.getHeight()/2, p2.getX()+p2.getWidth()/2, p2.getY()+p2.getHeight()/2, paint);

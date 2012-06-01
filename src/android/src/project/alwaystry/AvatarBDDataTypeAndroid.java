@@ -24,12 +24,19 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	
 	private TextPaint mTextPaint;
 	
+	private int cptype =-1;
+	
 	public AvatarBDDataTypeAndroid(int _x, int _y,  View _panel)  {
 		x=_x;
 		y=_y;
 		setPanel(_panel);
 		width = 250;
 		height = 200;
+		
+		nbConnectingPoints = 0;
+        connectingPoints = new TGConnectingPointAndroid[0];
+        
+        addTGConnectingPointsComment();
 		
 		mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -104,6 +111,8 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 		
 		canvas.drawLine(x, y+70, rp, y+70, ePaint);
 		
+		this.drawTGConnectingPoint(canvas, getCptype());
+		
 	}
 	public View getPanel() {
 		return panel;
@@ -119,5 +128,13 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
             return this;
        }
 		return null;
+	}
+	
+	public int getCptype() {
+		return cptype;
+	}
+
+	public void setCptype(int cptype) {
+		this.cptype = cptype;
 	}
 }

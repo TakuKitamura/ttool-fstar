@@ -31,6 +31,9 @@ public class TGCNoteAndroid extends TGComponentAndroid{
         //minWidth = 50;
         //minHeight = 20;
         
+        nbConnectingPoints = 0;
+        addTGConnectingPointsComment();
+        
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStrokeWidth(2);
@@ -107,6 +110,8 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 		
 		
 		canvas.drawText(value, x+80, y+15, mTextPaint);
+		
+		this.drawTGConnectingPoint(canvas, getCptype());
 	}
 
 }

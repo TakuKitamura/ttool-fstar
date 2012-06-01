@@ -15,8 +15,8 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 	private int D = 26;
 	private int d = 20;
 	
-	public AvatarBDCompositionConnectorAndroid(AvatarBDConnectingPointAndroid _p1,AvatarBDConnectingPointAndroid _p2){
-		super(_p1,_p2);
+	public AvatarBDCompositionConnectorAndroid(TGConnectingPointAndroid _p1,TGConnectingPointAndroid _p2,AvatarBDPanelAndroid panel){
+		super(_p1,_p2,panel);
 		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
@@ -49,6 +49,11 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 //	}
 	
 	public void internalDrawing(Canvas canvas){
+		
+		if(p1.isFree() || p2.isFree()){
+			panel.getCompolist().remove(this);
+			return;
+		}
 		
 		if(selected){
 			paint.setColor(Color.RED);

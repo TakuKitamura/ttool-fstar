@@ -59,6 +59,8 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     	Log.i("alwaystry", "buttonclicked");
     	switch(v.getId()){
     	case R.id.iod_edit:
+    		panel.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
+    		panel.setMode(AvatarBDPanelAndroid.NORMAL);
     		clickaction =1;
     		break;
     	case R.id.uml_note:
@@ -66,6 +68,10 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     		clickaction =2;
     		break;
     	case R.id.concomment:
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints(TGComponentAndroid.CONNECTOR_COMMENT);
+        	///	((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).cleanConnectorlist();
+        		panel.setCreatedtype(TGComponentAndroid.CONNECTOR_COMMENT);
+        		panel.setMode(AvatarBDPanelAndroid.ADDING_CONNECTOR);
     		clickaction =3;
     		break;
     	case R.id.block:
@@ -80,15 +86,17 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     		clickaction =6;
     		break;
     	case R.id.comp:
-    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints(TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR);
     	//	((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).cleanCompoconnectorlist();
     		panel.setCreatedtype(TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR);
+    		panel.setMode(AvatarBDPanelAndroid.ADDING_CONNECTOR);
     		clickaction =7;
     		break;
     	case R.id.link:
-    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints();
+    		((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).showAllConnectingPoints(TGComponentAndroid.AVATARBD_PORT_CONNECTOR);
     	///	((AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1)).cleanConnectorlist();
     		panel.setCreatedtype(TGComponentAndroid.AVATARBD_PORT_CONNECTOR);
+    		panel.setMode(AvatarBDPanelAndroid.ADDING_CONNECTOR);
     		clickaction =8;
     		break;
     	}
