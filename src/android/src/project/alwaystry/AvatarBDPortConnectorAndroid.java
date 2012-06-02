@@ -50,8 +50,8 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 //		return false;
 //	}
 	
-	public AvatarBDPortConnectorAndroid(TGConnectingPointAndroid p1, TGConnectingPointAndroid p2,AvatarBDPanelAndroid panel){
-		super(p1,p2,panel);
+	public AvatarBDPortConnectorAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel){
+		super(_minWidth, _minHeight, _maxWidth, _maxHeight, p1, p2, panel);
 		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
@@ -62,7 +62,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 	public void internalDrawing(Canvas canvas){
 		
 		if(p1.isFree() || p2.isFree()){
-			panel.getCompolist().remove(this);
+			((AvatarBDPanelAndroid)panel).getCompolist().remove(this);
 			return;
 		}
 		

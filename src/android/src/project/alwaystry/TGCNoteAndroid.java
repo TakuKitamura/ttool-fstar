@@ -9,9 +9,6 @@ import android.view.View;
 
 public class TGCNoteAndroid extends TGComponentAndroid{
 	
-	
-	private View panel;
-	
 	private Paint mPaint;
 	private Paint ePaint;
 	private Paint tPaint;
@@ -22,12 +19,11 @@ public class TGCNoteAndroid extends TGComponentAndroid{
     
     protected int limit = 15;
 	
-	public TGCNoteAndroid(int _x, int _y,View _panel){
-		x=_x;
-		y=_y;
-		panel = _panel;
-		width = 150;
-        height = 30;
+	public TGCNoteAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel){
+		super(_x, _y, _minWidth, _minHeight, _maxWidth, _maxHeight, _panel);
+		
+		width = 180;
+        height = 80;
         //minWidth = 50;
         //minHeight = 20;
         

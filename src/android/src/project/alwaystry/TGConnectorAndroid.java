@@ -1,20 +1,21 @@
 package project.alwaystry;
 
 import android.graphics.Canvas;
+import android.view.View;
 
 public abstract class TGConnectorAndroid extends TGComponentAndroid{
 	
 	protected TGConnectingPointAndroid p1, p2; // initial and destination connecting points.
-	protected AvatarBDPanelAndroid panel;
-
-	public TGConnectorAndroid(TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,AvatarBDPanelAndroid panel){
+	
+	public TGConnectorAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel){
+		super(Math.min(p1.getX(), p2.getX())-p1.width/2, Math.min(p1.getY(), p2.getY())-p1.height/2, _minWidth, _minHeight, _maxWidth, _maxHeight, panel);
 		this.p1 = p1;
 		this.p2 = p2;
-		this.panel = panel;
-		x =Math.min(p1.getX(), p2.getX())-p1.width/2;
-		y = Math.min(p1.getY(), p2.getY())-p1.height/2;
-		width = Math.abs(p2.getX()-p1.getX())+p1.width;
-		height = Math.abs(p2.getY()-p1.getY())+p1.height;
+//		this.panel = panel;
+//		int _x =Math.min(p1.getX(), p2.getX())-p1.width/2;
+//		int _y = Math.min(p1.getY(), p2.getY())-p1.height/2;
+//		width = Math.abs(p2.getX()-p1.getX())+p1.width;
+//		height = Math.abs(p2.getY()-p1.getY())+p1.height;
 		
 	}
 	@Override

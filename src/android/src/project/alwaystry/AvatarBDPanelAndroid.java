@@ -50,7 +50,9 @@ public class AvatarBDPanelAndroid extends View {
 	protected boolean showSelectionZone = false;
 	private int maxX,minX;
 	private AlwaystryActivity activity;
-	int clickedX,clickedY;
+	
+	protected int minWidth = 100,minHeight = 50,maxWidth = 600,maxHeight = 500;
+	
 	
 	protected AvatarBDConnectingPointAndroid selectedConnectingPoint;
 	
@@ -88,7 +90,7 @@ public class AvatarBDPanelAndroid extends View {
 		
 		activity =(AlwaystryActivity)this.getContext();
 
-		AvatarBDBlockAndroid block1 = new AvatarBDBlockAndroid(100,100,this);
+		AvatarBDBlockAndroid block1 = new AvatarBDBlockAndroid(100,100,minWidth,minHeight,maxWidth,maxHeight,this);
 		compolist.add(block1);
 		setClickable(true);
 		
@@ -224,7 +226,7 @@ public class AvatarBDPanelAndroid extends View {
 	public void createComponent(int x, int y,int type){
 		switch(type){
 		case TGComponentAndroid.UML_NOTE:
-			TGCNoteAndroid note = new TGCNoteAndroid(x,y,this);
+			TGCNoteAndroid note = new TGCNoteAndroid(x,y,minWidth,minHeight,maxWidth,maxHeight,this);
 			compolist.add(note);
 			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
@@ -241,7 +243,7 @@ public class AvatarBDPanelAndroid extends View {
 				TGConnectingPointAndroid p2 = getPointSelected(x,y,TGComponentAndroid.CONNECTOR_COMMENT);
 				if(!p1.equals(p2) && p2 != null){
 						p2.setFree(false);
-						TGConnectorCommentAndroid comConnector = new TGConnectorCommentAndroid(p1, p2,this);
+						TGConnectorCommentAndroid comConnector = new TGConnectorCommentAndroid(minWidth,minHeight,maxWidth,maxHeight,p1, p2,this);
 						compolist.add(comConnector);
 						p1 = null;
 						hideAllConnectingPoints();
@@ -252,14 +254,14 @@ public class AvatarBDPanelAndroid extends View {
 			}
 			break;
 		case TGComponentAndroid.AVATARBD_BLOCK:
-			AvatarBDBlockAndroid block = new AvatarBDBlockAndroid(x, y, this);
+			AvatarBDBlockAndroid block = new AvatarBDBlockAndroid(x, y,minWidth,minHeight,maxWidth,maxHeight, this);
 			compolist.add(block);
 			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
 		case TGComponentAndroid.AVATARBD_CRYPTOBLOCK:
 			break;
 		case TGComponentAndroid.AVATARBD_DATATYPE:
-			AvatarBDDataTypeAndroid datatype = new AvatarBDDataTypeAndroid(x, y, this);
+			AvatarBDDataTypeAndroid datatype = new AvatarBDDataTypeAndroid(x, y,minWidth,minHeight,maxWidth,maxHeight, this);
 			compolist.add(datatype);
 			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
@@ -277,7 +279,7 @@ public class AvatarBDPanelAndroid extends View {
 				if(!p1.equals(p2) && p2 != null){
 					if(p2.isFree()){
 						p2.setFree(false);
-						AvatarBDCompositionConnectorAndroid comConnector = new AvatarBDCompositionConnectorAndroid(p1, p2,this);
+						AvatarBDCompositionConnectorAndroid comConnector = new AvatarBDCompositionConnectorAndroid(minWidth,minHeight,maxWidth,maxHeight,p1, p2,this);
 						compolist.add(comConnector);
 						p1 = null;
 						hideAllConnectingPoints();
@@ -306,7 +308,7 @@ public class AvatarBDPanelAndroid extends View {
 				if(!p1.equals(p2) && p2 != null){
 					if(p2.isFree()){
 						p2.setFree(false);
-						AvatarBDPortConnectorAndroid portConnector = new AvatarBDPortConnectorAndroid(p1, p2,this);
+						AvatarBDPortConnectorAndroid portConnector = new AvatarBDPortConnectorAndroid(minWidth,minHeight,maxWidth,maxHeight,p1, p2,this);
 						compolist.add(portConnector);
 						p1 = null;
 						hideAllConnectingPoints();

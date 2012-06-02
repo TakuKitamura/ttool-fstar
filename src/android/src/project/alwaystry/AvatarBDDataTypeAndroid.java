@@ -26,10 +26,9 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	
 	private int cptype =-1;
 	
-	public AvatarBDDataTypeAndroid(int _x, int _y,  View _panel)  {
-		x=_x;
-		y=_y;
-		setPanel(_panel);
+	public AvatarBDDataTypeAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel)  {
+		super(_x, _y, _minWidth, _minHeight, _maxWidth, _maxHeight, _panel);
+		
 		width = 250;
 		height = 200;
 		

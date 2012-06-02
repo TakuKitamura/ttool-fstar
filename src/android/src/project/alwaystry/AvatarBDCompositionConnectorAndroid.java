@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.view.View;
 
 public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 
@@ -15,8 +16,8 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 	private int D = 26;
 	private int d = 20;
 	
-	public AvatarBDCompositionConnectorAndroid(TGConnectingPointAndroid _p1,TGConnectingPointAndroid _p2,AvatarBDPanelAndroid panel){
-		super(_p1,_p2,panel);
+	public AvatarBDCompositionConnectorAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel){
+		super(_minWidth, _minHeight, _maxWidth, _maxHeight, p1, p2, panel);
 		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
@@ -51,7 +52,7 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 	public void internalDrawing(Canvas canvas){
 		
 		if(p1.isFree() || p2.isFree()){
-			panel.getCompolist().remove(this);
+			((AvatarBDPanelAndroid)panel).getCompolist().remove(this);
 			return;
 		}
 		

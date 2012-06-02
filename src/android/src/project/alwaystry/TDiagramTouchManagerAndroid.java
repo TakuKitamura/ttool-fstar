@@ -1,5 +1,6 @@
 package project.alwaystry;
 
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +11,8 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 
 	AvatarBDPanelAndroid panel;
 	int clickedX,clickedY;
+	float dist;
+	TGComponentAndroid rescaleComponent;
 	
 	public TDiagramTouchManagerAndroid(AvatarBDPanelAndroid panel){
 		this.panel = panel;
@@ -19,8 +22,8 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 		// TODO Auto-generated method stub
 		final int X = (int)event.getX();
 		final int Y = (int)event.getY();
-		
-		switch(event.getAction()){
+		dumpEvent(event);
+		switch(event.getAction()& MotionEvent.ACTION_MASK){
 		case MotionEvent.ACTION_DOWN:
 			
 			clickedX = X;
@@ -56,6 +59,21 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				}
 			}	
 			break;
+		case MotionEvent.ACTION_POINTER_DOWN:
+			float dx = event.getX(0) - event.getX(1);
+			float dy = event.getY(0) - event.getY(1);
+			dist = FloatMath.sqrt(dx*dx+dy*dy);
+			Log.i("touch manager", "Dist = "+ dist);
+			if(dist >10f){
+				TGComponentAndroid s1 = panel.getSelectedComponent((int)event.getX(0),(int)event.getY(0));
+				TGComponentAndroid s2 = panel.getSelectedComponent((int)event.getX(1), (int)event.getY(1));
+				if(s1 != null && s2 != null && s1.equals(s2)){
+					rescaleComponent = s1;
+					panel.setMode(AvatarBDPanelAndroid.RESIZING_COMPONENT);
+				}
+				System.out.println("current time :" + System.currentTimeMillis());
+			}
+			break;
 		case MotionEvent.ACTION_UP:
 			Log.i("touchmanager", "turn to normal");
 			if(panel.getMode() == AvatarBDPanelAndroid.SELECTING_COMPONENTS){
@@ -65,12 +83,21 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			else
 				panel.setMode(AvatarBDPanelAndroid.NORMAL);
 			break;
+		case MotionEvent.ACTION_POINTER_UP:
+			panel.setMode(AvatarBDPanelAndroid.NORMAL);
+			break;
 		case MotionEvent.ACTION_MOVE:
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_COMPONENT){
 				if(panel.getComponentSelected() instanceof TGConnectorAndroid){
 				
 				}else{
-					panel.getComponentSelected().setCd(X, Y);
+					int dcx = clickedX - X;
+					int dcy = clickedY - Y;
+					int ox = panel.getComponentSelected().getX();
+					int oy = panel.getComponentSelected().getY();
+					panel.getComponentSelected().setCd(ox-dcx, oy-dcy);
+					clickedX = X;
+					clickedY = Y;
 					Log.i("block location", "X: "+X+" Y: "+X);
 					panel.invalidate();
 				}
@@ -88,12 +115,54 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				panel.invalidate();
 			}
 			
+			if(panel.getMode() == AvatarBDPanelAndroid.RESIZING_COMPONENT){
+				float x1 = event.getX(0)-event.getX(1);
+				float y1 = event.getY(0)-event.getY(1);
+				float newdist = FloatMath.sqrt(x1*x1+y1*y1);
+				
+				rescaleComponent.setRescale(newdist/dist);
+//				int rcx = rescaleComponent.getX();
+//				int rcy = rescaleComponent.getY();
+//				int rcw = rescaleComponent.getWidth();
+//				int rch = rescaleComponent.getHeight();
+//				rescaleComponent.setCd(rcx+, _y)
+				Log.i("touch manager", "rescale: "+rescaleComponent.getRescale());
+				panel.invalidate();
+			}
+			
 			break;
 		}
 		
 		return true;
 	}
 
+	private void dumpEvent(MotionEvent event) {
+		   String names[] = { "DOWN" , "UP" , "MOVE" , "CANCEL" , "OUTSIDE" ,
+		      "POINTER_DOWN" , "POINTER_UP" , "7?" , "8?" , "9?" };
+		   StringBuilder sb = new StringBuilder();
+		   int action = event.getAction();
+		   int actionCode = action & MotionEvent.ACTION_MASK;
+		   sb.append("event ACTION_" ).append(names[actionCode]);
+		   if (actionCode == MotionEvent.ACTION_POINTER_DOWN
+		         || actionCode == MotionEvent.ACTION_POINTER_UP) {
+		      sb.append("(pid " ).append(
+		      action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+		      sb.append(")" );
+		   }
+		   sb.append("[" );
+		   for (int i = 0; i < event.getPointerCount(); i++) {
+		      sb.append("#" ).append(i);
+		      sb.append("(pid " ).append(event.getPointerId(i));
+		      sb.append(")=" ).append((int) event.getX(i));
+		      sb.append("," ).append((int) event.getY(i));
+		      if (i + 1 < event.getPointerCount())
+		         sb.append(";" );
+		   }
+		   sb.append("]" );
+		   Log.d("Touch Manager", sb.toString());
+		}
+
+	
 	public void onClick(View v) {
 		Log.i("touchmanager", "clickedX:"+clickedX+ "clickedY: "+clickedY);
 		if(panel.getCreatedtype() == TGComponentAndroid.NOCOMPONENT){

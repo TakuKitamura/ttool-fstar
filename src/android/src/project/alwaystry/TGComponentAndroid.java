@@ -1,6 +1,7 @@
 package project.alwaystry;
 
 import android.graphics.Canvas;
+import android.view.View;
 
 public abstract class TGComponentAndroid implements CDElementAndroid{
 
@@ -16,7 +17,8 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	
 	// Attributes
     protected int x, y; // absolute cd
-    protected int width, height;
+    protected int width, height,minWidth,maxWidth,minHeight,maxHeight;
+    protected View panel;
     
     protected String name = "TGComponentAndroid";
 	
@@ -27,8 +29,23 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	protected TGConnectingPointAndroid[] connectingPoints;
 	
 	protected int cptype;
-    
+    protected float rescale;
+	
     public abstract TGComponentAndroid isOnMe(int _x, int _y);
+    
+    public TGComponentAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel){
+    	x = _x;
+    	y =_y;
+    	
+    	minWidth =_minWidth;
+    	minHeight = _minHeight;
+    	
+    	maxWidth = _maxWidth;
+    	maxHeight = _maxWidth;
+    	
+    	panel = _panel;
+    }
+    
     
     public final void select(boolean b) {
         selected = b;
@@ -44,6 +61,14 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     
     public  int getY() {
         return y;
+    }
+    
+    public void setWidth(int w){
+    	width = w;
+    }
+    
+    public void setHeight(int h){
+    	height = h;
     }
     
     public  int getWidth() {
@@ -201,5 +226,36 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 //        }
     }
     
-    
+    public float getRescale(){
+    	return rescale;
+    }
+    public void setRescale(float f){
+    	rescale = f;
+    	
+    	int newx,newy,neww,newh;
+    	neww = (int)(this.getWidth()*f);
+		newh = (int)(this.getHeight()*f);
+		
+		if((neww>maxWidth && newh >maxHeight) || (neww<minWidth || newh <minHeight)){
+			return;
+		}
+		
+    	
+    	if(f > 1){
+    		newx = (int)(this.getX()-this.getWidth()*(rescale-1)/2);
+    		newy = (int)(this.getY()-this.getHeight()*(rescale-1)/2);
+    		
+    	}else{
+    		newx = (int)(this.getX()+this.getWidth()*(1-rescale)/2);
+    		newy = (int)(this.getY()+this.getHeight()*(1-rescale)/2);
+    		
+    	}
+    	
+    	
+		
+    	this.setCd(newx, newy);
+    	this.setHeight(newh);
+    	this.setWidth(neww);
+    	
+    }
 }

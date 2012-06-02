@@ -13,9 +13,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 
 	private String stereotype = "block";
 	private String name = "Name";
-	//private int x,y;
-	//private int width,height;
-	private View panel;
+
 	private Paint mPaint;
 	private Paint cpPaint;
 	private Paint ePaint;
@@ -28,10 +26,9 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 	
 	
 
-	public AvatarBDBlockAndroid(int _x, int _y,View _panel){
-		x=_x;
-		y=_y;
-		setPanel(_panel);
+	public AvatarBDBlockAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel){
+		super(_x, _y, _minWidth, _minHeight, _maxWidth, _maxHeight, _panel);
+
 		width = 250;
 		height = 200;
 		

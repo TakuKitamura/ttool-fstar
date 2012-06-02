@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.view.View;
 
 public class TGConnectorCommentAndroid extends TGConnectorAndroid{
 
 	Paint paint;
-	public TGConnectorCommentAndroid(TGConnectingPointAndroid p1,
-			TGConnectingPointAndroid p2, AvatarBDPanelAndroid panel) {
-		super(p1, p2, panel);
+	public TGConnectorCommentAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel) {
+		super(_minWidth, _minHeight, _maxWidth, _maxHeight, p1, p2, panel);
 		// TODO Auto-generated constructor stub
 		paint = new Paint();
 		paint.setStyle(Style.STROKE);
@@ -24,7 +24,7 @@ public class TGConnectorCommentAndroid extends TGConnectorAndroid{
 		// TODO Auto-generated method stub
 		
 		if(p1.isFree() || p2.isFree()){
-			panel.getCompolist().remove(this);
+			((AvatarBDPanelAndroid)panel).getCompolist().remove(this);
 			return;
 		}
 		
