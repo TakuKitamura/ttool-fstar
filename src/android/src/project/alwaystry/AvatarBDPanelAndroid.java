@@ -523,6 +523,10 @@ public class AvatarBDPanelAndroid extends View {
 	public void setCreatedtype(int createdtype) {
 		this.createdtype = createdtype;
 		if(createdtype == TGComponentAndroid.NOCOMPONENT){
+			if(p1 != null){
+				p1.setState(TGConnectingPointAndroid.NORMAL);
+				p1.setFree(true);
+			}
 			this.hideAllConnectingPoints();
 			p1 = null;
 		}
@@ -539,5 +543,11 @@ public class AvatarBDPanelAndroid extends View {
 		return compolist;
 	}
 	
+	public void cleanSelection(){
+		xsel=-1;
+		ysel=-1;
+		xendsel =-1; 
+		yendsel=-1;
+	}
 	
 }

@@ -61,7 +61,9 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     	case R.id.iod_edit:
     		panel.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
     		panel.setMode(AvatarBDPanelAndroid.NORMAL);
+    	    panel.cleanSelection();
     		clickaction =1;
+    		panel.setComponentSelected(null);
     		break;
     	case R.id.uml_note:
     		panel.setCreatedtype(TGComponentAndroid.UML_NOTE);
