@@ -19,6 +19,8 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 	public AvatarBDCompositionConnectorAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel){
 		super(_minWidth, _minHeight, _maxWidth, _maxHeight, p1, p2, panel);
 		
+		type = TGComponentAndroid.AVATARBD_COMPOSITION_CONNECTOR;
+		
 		paint = new Paint();
 		paint.setStrokeWidth(2);
 		paint.setAntiAlias(true);
@@ -55,11 +57,15 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 			((AvatarBDPanelAndroid)panel).getCompolist().remove(this);
 			return;
 		}
-		
+			
 		if(selected){
 			paint.setColor(Color.RED);
 		}else{
 			paint.setColor(Color.BLACK);
+		}
+		
+		if(movingHead){
+			paint.setColor(Color.MAGENTA);
 		}
 		
 		int dd = d;

@@ -57,6 +57,8 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		paint.setStrokeWidth(2);
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
+		
+		type = TGComponentAndroid.AVATARBD_PORT_CONNECTOR;
 	}
 	
 	public void internalDrawing(Canvas canvas){
@@ -70,6 +72,10 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 			paint.setColor(Color.RED);
 		}else{
 			paint.setColor(Color.BLACK);
+		}
+		
+		if(movingHead){
+			paint.setColor(Color.MAGENTA);
 		}
 //		if(tx !=-1 && ty!=-1 && bx!=-1 && by!=-1)
 //			canvas.drawLine(tx, ty, bx, by, paint);

@@ -17,6 +17,9 @@ public class TGConnectorCommentAndroid extends TGConnectorAndroid{
 		paint.setStyle(Style.STROKE);
 		paint.setStrokeWidth(2);
 		paint.setPathEffect(new DashPathEffect(new float[] {10,10}, 0));
+	
+		type = TGComponentAndroid.CONNECTOR_COMMENT;
+		
 	}
 
 	@Override
@@ -32,6 +35,10 @@ public class TGConnectorCommentAndroid extends TGConnectorAndroid{
 			paint.setColor(Color.RED);
 		}else{
 			paint.setColor(Color.BLACK);
+		}
+		
+		if(movingHead){
+			paint.setColor(Color.MAGENTA);
 		}
 		
 		canvas.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY(), paint);

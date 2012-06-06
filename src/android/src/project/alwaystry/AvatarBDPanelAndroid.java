@@ -38,6 +38,12 @@ public class AvatarBDPanelAndroid extends View {
 	
 	private LinkedList compolist;
 	
+	//for moving connector head.
+	protected int x1;
+    protected int y1;
+    protected int x2;
+    protected int y2;
+	
 	private int mx, my;
 //	protected int initSelectX;
 //    protected int initSelectY;
@@ -97,14 +103,16 @@ public class AvatarBDPanelAndroid extends View {
 		TDiagramTouchManagerAndroid tManager = new TDiagramTouchManagerAndroid(this);
 		setOnClickListener(tManager);
 		setOnTouchListener(tManager);
-		
+		setOnLongClickListener(tManager);
+		this.setClickable(true);
+		this.setLongClickable(true);
 		
 		setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 	}
 	
 	
 	
-	protected TGComponentAndroid getSelectedComponent(int x1, int y1){
+	protected TGComponentAndroid getSelectedComponent(int _x1, int _y1){
 		TGComponentAndroid comp;
 		// clearn selected..
 		for(int i=0; i< compolist.size();i++){
@@ -113,7 +121,7 @@ public class AvatarBDPanelAndroid extends View {
 		invalidate();
 		for(int i=0; i< compolist.size();i++){
 			
-			comp = ((TGComponentAndroid)compolist.get(i)).isOnMe(x1, y1);
+			comp = ((TGComponentAndroid)compolist.get(i)).isOnMe(_x1, _y1);
 			if(comp != null){
 				return comp;
 			}
@@ -123,12 +131,27 @@ public class AvatarBDPanelAndroid extends View {
 		return null;
 	}
 	
+	public void setMovingHead(int _x1, int _y1, int _x2, int _y2) {
+        x1 = _x1; y1 = _y1;
+        x2 = _x2; y2 = _y2;
+    }
+	
 	protected void onDraw(Canvas canvas) {
 		Log.i("panel", "drawing");
 		canvas.drawRect(0, 0, getWidth(), getHeight(), panelBGPaint);
 		
 		for(int i=0; i<compolist.size();i++){
 			((TGComponentAndroid)compolist.get(i)).internalDrawing(canvas);
+		}
+		
+		if(mode == MOVE_CONNECTOR_HEAD){
+			Paint fgPaintSel = new Paint();
+			fgPaintSel.setColor(Color.MAGENTA);
+			fgPaintSel.setStyle(Style.STROKE);
+			fgPaintSel.setStrokeWidth(2);
+			fgPaintSel.setPathEffect(new DashPathEffect(new float[] {10,10}, 0));
+			
+			canvas.drawLine(x1, y1, x2, y2, fgPaintSel);
 		}
 		
 		if(mode == SELECTING_COMPONENTS){

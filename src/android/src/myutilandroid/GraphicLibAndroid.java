@@ -2,6 +2,7 @@ package myutilandroid;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.FloatMath;
 
 
 public class GraphicLibAndroid {
@@ -29,4 +30,10 @@ public class GraphicLibAndroid {
 	        c.drawLine(endx, y, endx, endy,p);
 	    }
 	 
+	 public static float distanceBetweenTwoP(float x1,float y1, float x2, float y2){
+		 float dx = x1- x2;
+		 float dy = y1 - y2;
+		 
+		 return FloatMath.sqrt(dx*dx+dy*dy);
+	 }
 }

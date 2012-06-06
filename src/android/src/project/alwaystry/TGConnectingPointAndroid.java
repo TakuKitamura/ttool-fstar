@@ -98,17 +98,17 @@ public class TGConnectingPointAndroid implements CDElementAndroid{
 		//canvas.drawRect(getX()-width/2, getY()-height/2, getX() + width/2, getY() + height/2, cpPaint);
 	}
 	
-	public void drawOutAndFreeAndCompatible(Canvas c, int connectorID) {
-      if (isOut()&& isFree()  && isCompatibleWith(connectorID)) {
-        int mx = getX();
-        int my = getY();
-        mx = mx - width / 2;
-        my = my - height / 2;
-        cpPaint.setColor(myColor);  
-        c.drawRect(mx, my, width, height,cpPaint);
-        GraphicLibAndroid.doubleColorRect(c, mx, my, width, height, Color.LTGRAY, Color.BLACK);
-      }
-    }
+//	public void drawOutAndFreeAndCompatible(Canvas c, int connectorID) {
+//      if (isOut()&& isFree()  && isCompatibleWith(connectorID)) {
+//        int mx = getX();
+//        int my = getY();
+//        mx = mx - width / 2;
+//        my = my - height / 2;
+//        cpPaint.setColor(myColor);  
+//        c.drawRect(mx, my, width, height,cpPaint);
+//        GraphicLibAndroid.doubleColorRect(c, mx, my, width, height, Color.LTGRAY, Color.BLACK);
+//      }
+//    }
 	
 	public boolean isIn() {
         return in;

@@ -2,6 +2,8 @@ package project.alwaystry;
 
 import java.util.Vector;
 
+import myutilandroid.GraphicLibAndroid;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -86,7 +88,9 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
         return null;
 	}
 
-	
+	public boolean inEditNameArea(int x1,int y1){
+		return GraphicLibAndroid.isInRectangle(x1, y1, getX(), getY(), getWidth(), 42);
+	}
 	
 	
 	public void internalDrawing(Canvas canvas) {

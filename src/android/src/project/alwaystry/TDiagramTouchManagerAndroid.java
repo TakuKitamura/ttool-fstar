@@ -1,18 +1,32 @@
 package project.alwaystry;
 
+import myutilandroid.GraphicLibAndroid;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.FloatMath;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickListener{
+public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickListener,OnLongClickListener{
 
 	AvatarBDPanelAndroid panel;
 	int clickedX,clickedY;
 	float dist;
-	TGComponentAndroid rescaleComponent;
+	private TGComponentAndroid tgComponent;
+	private TGConnectorAndroid tgConnector;
+	private boolean isOut;
+	private CDElementAndroid [] cde;
+	private long click1time = 0;
+	
 	
 	public TDiagramTouchManagerAndroid(AvatarBDPanelAndroid panel){
 		this.panel = panel;
@@ -41,17 +55,32 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				panel.invalidate();
 			}
 			
-			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
-//				panel.setMode(AvatarBDPanelAndroid.NORMAL);
-//			}else{
-				panel.createComponent(X,Y,panel.getCreatedtype());
-				panel.invalidate();
-			}
+//			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
+////				panel.setMode(AvatarBDPanelAndroid.NORMAL);
+////			}else{
+//				panel.createComponent(X,Y,panel.getCreatedtype());
+//				panel.invalidate();
+//			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.NORMAL){
-				panel.setComponentSelected(panel.getSelectedComponent(X, Y));
+				tgComponent = panel.getSelectedComponent(X, Y);
+				panel.setComponentSelected(tgComponent);
 				if(panel.getComponentSelected() != null){
-					panel.setMode(AvatarBDPanelAndroid.MOVING_COMPONENT);
+					if(tgComponent instanceof TGConnectorAndroid){
+						tgConnector = (TGConnectorAndroid)tgComponent;
+						cde = tgConnector.closerPToClickFirst(X, Y);
+						panel.setMovingHead(X, Y, cde[1].getX(), cde[1].getY());
+						panel.showAllConnectingPoints(tgConnector.getType());
+						if (cde[0] == tgConnector.getTGConnectingPointP2()) {
+							isOut = false;
+						} else {
+							isOut = true;
+						}
+						panel.setMode(AvatarBDPanelAndroid.MOVE_CONNECTOR_HEAD);
+					}else{
+						panel.setMode(AvatarBDPanelAndroid.MOVING_COMPONENT);
+						
+					}
 				}else{
 					panel.setMode(AvatarBDPanelAndroid.SELECTING_COMPONENTS);
 					panel.setXsel(X);
@@ -60,15 +89,16 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			}	
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-			float dx = event.getX(0) - event.getX(1);
-			float dy = event.getY(0) - event.getY(1);
-			dist = FloatMath.sqrt(dx*dx+dy*dy);
+//			float dx = event.getX(0) - event.getX(1);
+//			float dy = event.getY(0) - event.getY(1);
+//			dist = FloatMath.sqrt(dx*dx+dy*dy);
+			dist = GraphicLibAndroid.distanceBetweenTwoP(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
 			Log.i("touch manager", "Dist = "+ dist);
 			if(dist >10f){
 				TGComponentAndroid s1 = panel.getSelectedComponent((int)event.getX(0),(int)event.getY(0));
 				TGComponentAndroid s2 = panel.getSelectedComponent((int)event.getX(1), (int)event.getY(1));
 				if(s1 != null && s2 != null && s1.equals(s2)){
-					rescaleComponent = s1;
+					tgComponent = s1;
 					panel.setMode(AvatarBDPanelAndroid.RESIZING_COMPONENT);
 				}
 				System.out.println("current time :" + System.currentTimeMillis());
@@ -79,6 +109,23 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			if(panel.getMode() == AvatarBDPanelAndroid.SELECTING_COMPONENTS){
 				panel.endSelectComponents();
 				panel.invalidate();
+			}else if(panel.getMode() == AvatarBDPanelAndroid.MOVE_CONNECTOR_HEAD){
+				panel.setMode(AvatarBDPanelAndroid.NORMAL);
+				tgConnector.setMovingHead(false);
+				panel.hideAllConnectingPoints();
+				TGConnectingPointAndroid p = panel.getPointSelected(X, Y, tgConnector.getType());
+				if(p != null){
+					((TGConnectingPointAndroid)cde[0]).setFree(true);
+					((TGConnectingPointAndroid)cde[0]).setState(TGConnectingPointAndroid.NORMAL);
+					p.setFree(false);
+					if (isOut) {
+						tgConnector.setP1(p);
+					} else {
+						tgConnector.setP2(p);
+					}
+					
+				}
+				panel.invalidate();
 			}
 			else
 				panel.setMode(AvatarBDPanelAndroid.NORMAL);
@@ -87,25 +134,37 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			panel.setMode(AvatarBDPanelAndroid.NORMAL);
 			break;
 		case MotionEvent.ACTION_MOVE:
+			if(panel.getMode() == AvatarBDPanelAndroid.MOVE_CONNECTOR_HEAD){
+				panel.setMovingHead(X, Y, cde[1].getX(), cde[1].getY());
+				panel.invalidate();
+			}
+			
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_COMPONENT){
-				if(panel.getComponentSelected() instanceof TGConnectorAndroid){
-				
-				}else{
+//				if(panel.getComponentSelected() instanceof TGConnectorAndroid){
+//				
+//				}else{
 					int dcx = clickedX - X;
 					int dcy = clickedY - Y;
-					int ox = panel.getComponentSelected().getX();
-					int oy = panel.getComponentSelected().getY();
-					panel.getComponentSelected().setCd(ox-dcx, oy-dcy);
+					int ox = tgComponent.getX();
+					int oy = tgComponent.getY();
+					tgComponent.setCd(ox-dcx, oy-dcy);
 					clickedX = X;
 					clickedY = Y;
 					Log.i("block location", "X: "+X+" Y: "+X);
 					panel.invalidate();
-				}
+//				}
 				
 			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_SELECTED_COMPONENTS){
-				panel.moveSelected(X, Y);
+				int dcx = clickedX - X;
+				int dcy = clickedY - Y;
+				int ox = panel.xSEL;
+				int oy = panel.ySEL;
+				panel.moveSelected(ox-dcx, oy-dcy);
+				clickedX = X;
+				clickedY = Y;
+				
 				panel.invalidate();
 			}
 			
@@ -116,24 +175,26 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.RESIZING_COMPONENT){
-				float x1 = event.getX(0)-event.getX(1);
-				float y1 = event.getY(0)-event.getY(1);
-				float newdist = FloatMath.sqrt(x1*x1+y1*y1);
+//				float x1 = event.getX(0)-event.getX(1);
+//				float y1 = event.getY(0)-event.getY(1);
+//				float newdist = FloatMath.sqrt(x1*x1+y1*y1);
 				
-				rescaleComponent.setRescale(newdist/dist);
+				float newdist = GraphicLibAndroid.distanceBetweenTwoP(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
+				
+				tgComponent.setRescale(newdist/dist);
 //				int rcx = rescaleComponent.getX();
 //				int rcy = rescaleComponent.getY();
 //				int rcw = rescaleComponent.getWidth();
 //				int rch = rescaleComponent.getHeight();
 //				rescaleComponent.setCd(rcx+, _y)
-				Log.i("touch manager", "rescale: "+rescaleComponent.getRescale());
+				Log.i("touch manager", "rescale: "+tgComponent.getRescale());
 				panel.invalidate();
 			}
 			
 			break;
 		}
 		
-		return true;
+		return false;
 	}
 
 	private void dumpEvent(MotionEvent event) {
@@ -164,10 +225,18 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 
 	
 	public void onClick(View v) {
-		Log.i("touchmanager", "clickedX:"+clickedX+ "clickedY: "+clickedY);
-		if(panel.getCreatedtype() == TGComponentAndroid.NOCOMPONENT){
-			panel.setMode(AvatarBDPanelAndroid.NORMAL);
-		}else{
+		Log.i("touchmanager on click", "clickedX:"+clickedX+ "clickedY: "+clickedY);
+		
+//		if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS){
+//			panel.setMode(AvatarBDPanelAndroid.NORMAL);
+//			panel.setXsel(-1);
+//			panel.setYsel(-1);
+//			panel.setXendsel(-1);
+//			panel.setYendsel(-1);
+//			panel.invalidate();
+//		}
+		
+		if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
 			panel.createComponent(clickedX,clickedY,panel.getCreatedtype());
 			panel.invalidate();
 		}
@@ -175,5 +244,45 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 		
 	}
 
+	@Override
+	public boolean onLongClick(View v) {
+		// TODO Auto-generated method stub
+		if(panel.getComponentSelected() instanceof AvatarBDBlockAndroid){
+			final AvatarBDBlockAndroid block = (AvatarBDBlockAndroid)panel.getComponentSelected();
+			if(block.inEditNameArea(clickedX, clickedY)){
+				AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
+				AlertDialog alertDialog;				
+				panel.getContext();
+				LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.blocknamealert,
+				                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
+
+				alert.setTitle("setting value");
+				
+				TextView text = (TextView)layout.findViewById(R.id.textView1);
+				text.setText("Block name");
+				final EditText input = (EditText)layout.findViewById(R.id.editText1);
+				input.setText(block.getName());
+				alert.setView(layout);
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						block.setName(input.getText().toString());
+					    panel.invalidate();
+					  }
+					});
+
+					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					  public void onClick(DialogInterface dialog, int whichButton) {
+					    // Canceled.
+					  }
+					});
+
+					alert.show();
+			}
+		}
+		return true;
+	}
+
+	
 	
 }
