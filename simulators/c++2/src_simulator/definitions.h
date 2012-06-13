@@ -101,7 +101,7 @@ using std::max;
 //enable recording of transactions
 #define TRANSLIST_ENABLED
 //enable lossy channels
-#undef LOSS_ENABLED
+#define LOSS_ENABLED
 //enables comments on actions/choices in HTML output
 #undef ADD_COMMENTS
 //enable this flag to restore benchmark variables correctly in coverage enhanced simulation
