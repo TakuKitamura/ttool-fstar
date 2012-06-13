@@ -197,8 +197,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		runningTable = new Hashtable<Integer, Integer>();
 		diagramTable = new Hashtable<String, String>();*/
 
-		setBackground(new Color(50, 40, 40, 200));
-		
+		try {
+			setBackground(new Color(50, 40, 40, 200));
+		} catch (Exception e) {
+			setBackground(new Color(50, 40, 40));
+		}
 		initActions();
 		
 		initSimulation();
