@@ -165,7 +165,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 				}*/
 				return " - ";
 			case 7:
-				return " - ";
+				return rd.getAttackTreeNode();
 			case 8:
 				if (rd.isVerified()) {
 					if (rd.isSatisfied()) {
@@ -176,7 +176,10 @@ public class RequirementsTableModel extends AbstractTableModel {
 				} else {
 					return "-";
 				}
+			case 9:
+				return rd.getReferenceElements();
 			}
+		
 		}
 		
 		return "Invalid column";

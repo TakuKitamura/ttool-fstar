@@ -59,12 +59,12 @@ public class JDialogRequirementTable extends javax.swing.JDialog implements Acti
     private Frame frame;
     
     private String name;
-    public static String[] items = {"none", "ID", "Name", "Type", "Description", "Kind", "Criticality", "Violated action", "Attack Tree Nodes", "Satisfied"};
+    public static String[] items = {"none", "ID", "Name", "Type", "Description", "Kind", "Criticality", "Violated action", "Targetted attacks", "Satisfied", "Reference elements"};
     public static String[] sizes = {"0", "50", "100", "150", "200", "250", "300", "350", "400", "450", "500"};
    
-	private int nbColumn = 9;
-    private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1};
+	private int nbColumn = 10;
+    private static int[] selectedItems = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	private static int[] selectedSizes = {1, 3, 2, 6, 2, 2, 2, 2, 1, 2};
 	
     // Panel1
     private JTextField nameText;

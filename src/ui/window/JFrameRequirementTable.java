@@ -249,7 +249,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		HTMLCodeGeneratorForTables doc = new HTMLCodeGeneratorForTables();
 		//String s = doc.getHTMLCode(atms, titles, "List of Requirements").toString();
 		String s = doc.getHTMLCodeFromSorters(tss, titles, "List of Requirements").toString();
-		//System.out.println("HTML code:" + s); 
+		TraceManager.addDev("HTML code:" + s); 
 		
 		String path;
 		if (ConfigurationTTool.IMGPath.length() > 0) {
@@ -262,7 +262,7 @@ public	class JFrameRequirementTable extends JFrame implements ActionListener /*,
 		try {
 			FileUtils.saveFile(path, s);
 		} catch (FileException fe) {
-			TraceManager.addDev("HTML file could not be saved");
+			TraceManager.addDev("HTML file could not be saved in " + path);
 			return ;
 		}
 		

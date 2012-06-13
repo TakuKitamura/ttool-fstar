@@ -57,7 +57,7 @@ import sddescription.*;
 import sdtranslator.*;
 
 public class RequirementModeling {
-    protected static final String NOT_FORMAL = "Requirement is not a fomal requirement";
+    protected static final String NOT_FORMAL = "Requirement is not a formal requirement";
     protected static final String TOO_MANY_VERIFY = "Observer is linked with too many verify connectors";
     protected static final String UNKNOWN_DIAGRAM_NAME = "is an unknown diagram";
     protected static final String BAD_FORMATTING = "Bad formal description";
