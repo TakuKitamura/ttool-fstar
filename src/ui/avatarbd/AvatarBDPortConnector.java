@@ -64,7 +64,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 	protected int c = 10; //square length 
 	protected double oldScaleFactor;
 	protected int fontSize = 10;
-	protected int decY = 20;
+	protected int decY = 12;
 	protected int decX = 6;
 	
 	protected LinkedList<String> inSignalsAtOrigin;
