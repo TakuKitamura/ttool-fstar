@@ -4,6 +4,7 @@ import myutilandroid.GraphicLibAndroid;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.SystemClock;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickListener,OnLongClickListener{
+public class TDiagramTouchManagerAndroid implements OnTouchListener{
 
 	AvatarBDPanelAndroid panel;
 	int clickedX,clickedY;
@@ -26,7 +27,7 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 	private boolean isOut;
 	private CDElementAndroid [] cde;
 	private long click1time = 0;
-	
+	private TGComponentAndroid tgComponent1clicked;
 	
 	public TDiagramTouchManagerAndroid(AvatarBDPanelAndroid panel){
 		this.panel = panel;
@@ -55,12 +56,12 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 				panel.invalidate();
 			}
 			
-//			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
-////				panel.setMode(AvatarBDPanelAndroid.NORMAL);
-////			}else{
-//				panel.createComponent(X,Y,panel.getCreatedtype());
-//				panel.invalidate();
-//			}
+			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
+//				panel.setMode(AvatarBDPanelAndroid.NORMAL);
+//			}else{
+				panel.createComponent(X,Y,panel.getCreatedtype());
+				panel.invalidate();
+			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.NORMAL){
 				tgComponent = panel.getSelectedComponent(X, Y);
@@ -106,6 +107,22 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			break;
 		case MotionEvent.ACTION_UP:
 			Log.i("touchmanager", "turn to normal");
+			if(click1time ==0){
+				click1time = SystemClock.uptimeMillis();
+				Log.i("Alwaystry","time is "+click1time);
+				if(tgComponent !=null){
+					tgComponent1clicked = tgComponent;
+				}
+			}else if(SystemClock.uptimeMillis()-click1time < 1000){
+				if(tgComponent1clicked != null &&tgComponent1clicked == tgComponent){
+					Log.i("Alwaystry","double click!!");
+					tgComponent.editOndoubleClick(X, Y);
+				}
+                click1time = 0;    
+			}else{
+				click1time = SystemClock.uptimeMillis();
+			}
+			
 			if(panel.getMode() == AvatarBDPanelAndroid.SELECTING_COMPONENTS){
 				panel.endSelectComponents();
 				panel.invalidate();
@@ -194,7 +211,7 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 			break;
 		}
 		
-		return false;
+		return true;
 	}
 
 	private void dumpEvent(MotionEvent event) {
@@ -223,65 +240,65 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener, OnClickList
 		   Log.d("Touch Manager", sb.toString());
 		}
 
-	
-	public void onClick(View v) {
-		Log.i("touchmanager on click", "clickedX:"+clickedX+ "clickedY: "+clickedY);
-		
-//		if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS){
-//			panel.setMode(AvatarBDPanelAndroid.NORMAL);
-//			panel.setXsel(-1);
-//			panel.setYsel(-1);
-//			panel.setXendsel(-1);
-//			panel.setYendsel(-1);
+//	
+//	public void onClick(View v) {
+//		Log.i("touchmanager on click", "clickedX:"+clickedX+ "clickedY: "+clickedY);
+//		
+////		if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS){
+////			panel.setMode(AvatarBDPanelAndroid.NORMAL);
+////			panel.setXsel(-1);
+////			panel.setYsel(-1);
+////			panel.setXendsel(-1);
+////			panel.setYendsel(-1);
+////			panel.invalidate();
+////		}
+//		
+//		if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
+//			panel.createComponent(clickedX,clickedY,panel.getCreatedtype());
 //			panel.invalidate();
 //		}
-		
-		if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
-			panel.createComponent(clickedX,clickedY,panel.getCreatedtype());
-			panel.invalidate();
-		}
-		
-		
-	}
+//		
+//		
+//	}
 
-	@Override
-	public boolean onLongClick(View v) {
-		// TODO Auto-generated method stub
-		if(panel.getComponentSelected() instanceof AvatarBDBlockAndroid){
-			final AvatarBDBlockAndroid block = (AvatarBDBlockAndroid)panel.getComponentSelected();
-			if(block.inEditNameArea(clickedX, clickedY)){
-				AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
-				AlertDialog alertDialog;				
-				panel.getContext();
-				LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View layout = inflater.inflate(R.layout.blocknamealert,
-				                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
-
-				alert.setTitle("setting value");
-				
-				TextView text = (TextView)layout.findViewById(R.id.textView1);
-				text.setText("Block name");
-				final EditText input = (EditText)layout.findViewById(R.id.editText1);
-				input.setText(block.getName());
-				alert.setView(layout);
-				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						block.setName(input.getText().toString());
-					    panel.invalidate();
-					  }
-					});
-
-					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-					  public void onClick(DialogInterface dialog, int whichButton) {
-					    // Canceled.
-					  }
-					});
-
-					alert.show();
-			}
-		}
-		return true;
-	}
+//	@Override
+//	public boolean onLongClick(View v) {
+//		// TODO Auto-generated method stub
+//		if(panel.getComponentSelected() instanceof AvatarBDBlockAndroid){
+//			final AvatarBDBlockAndroid block = (AvatarBDBlockAndroid)panel.getComponentSelected();
+//			if(block.inEditNameArea(clickedX, clickedY)){
+//				AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
+//				AlertDialog alertDialog;				
+//				panel.getContext();
+//				LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//				View layout = inflater.inflate(R.layout.blocknamealert,
+//				                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
+//
+//				alert.setTitle("setting value");
+//				
+//				TextView text = (TextView)layout.findViewById(R.id.textView1);
+//				text.setText("Block name");
+//				final EditText input = (EditText)layout.findViewById(R.id.editText1);
+//				input.setText(block.getName());
+//				alert.setView(layout);
+//				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int whichButton) {
+//						block.setName(input.getText().toString());
+//					    panel.invalidate();
+//					  }
+//					});
+//
+//					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//					  public void onClick(DialogInterface dialog, int whichButton) {
+//					    // Canceled.
+//					  }
+//					});
+//
+//					alert.show();
+//			}
+//		}
+//		return true;
+//	}
 
 	
 	

@@ -13,42 +13,8 @@ import android.view.View;
 
 public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 
-	//private int tx=-1,ty=-1,bx=-1,by=-1;
-	//private AvatarBDConnectingPointAndroid outPoint,inPoint;
 	private Paint paint;
 	private LinkedList internalpoints;
-	
-//	public void setStart(int _tx,int _ty){
-//		tx = _tx;
-//		ty = _ty;
-//	}
-//	public void setEnd(int _bx, int _by){
-//		bx = _bx;
-//		by = _by;
-//	}
-//	public boolean hasStart(){/*
-//		if(tx !=-1 && ty !=-1){
-//			return true;
-//		}else{
-//			return false;
-//		}	*/
-//		if(outPoint != null){
-//			return true;
-//		}
-//		return false;
-//	}
-//	
-//	public boolean hasEnd(){
-////		if(bx !=-1 && by !=-1){
-////			return true;
-////		}else{
-////			return false;
-////		}
-//		if(inPoint != null){
-//			return true;
-//		}
-//		return false;
-//	}
 	
 	public AvatarBDPortConnectorAndroid(int _minWidth, int _minHeight,int _maxWidth,int _maxHeight,TGConnectingPointAndroid p1,TGConnectingPointAndroid p2,View panel){
 		super(_minWidth, _minHeight, _maxWidth, _maxHeight, p1, p2, panel);
@@ -87,23 +53,18 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 			canvas.drawRect(p2.getX()-p2.getWidth()/2, p2.getY()-p2.getHeight()/2, p2.getX()+p2.getWidth()/2, p2.getY()+p2.getHeight()/2, paint);
 	//	}
 	}
-//	public AvatarBDConnectingPointAndroid getOutPoint() {
-//		return outPoint;
-//	}
-//	public void setOutPoint(AvatarBDConnectingPointAndroid outPoint) {
-//		this.outPoint = outPoint;
-//	}
-//	public AvatarBDConnectingPointAndroid getInPoint() {
-//		return inPoint;
-//	}
-//	public void setInPoint(AvatarBDConnectingPointAndroid inPoint) {
-//		this.inPoint = inPoint;
-//	}
+
 	public LinkedList getInternalpoints() {
 		return internalpoints;
 	}
 	public void setInternalpoints(LinkedList internalpoints) {
 		this.internalpoints = internalpoints;
+	}
+
+	@Override
+	protected boolean editOndoubleClick(int _x, int _y) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

@@ -37,10 +37,11 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
 			return this;
 		}
 		
+		
 		float mx = (p1.getX()-p2.getX())*(_y-p1.getY())/(p1.getY()-p2.getY()) +p1.getX();
 		float my = (p1.getY()-p2.getY())*(_x-p1.getX())/(p1.getX()-p2.getY()) +p1.getY();
 		
-		if(Math.abs(mx-_x)<=distanceSelected || Math.abs(my-_y)<= distanceSelected){
+		if(Math.abs(mx-_x)<=30 || Math.abs(my-_y)<= 30){
 			return this;
 		}
 		return null;

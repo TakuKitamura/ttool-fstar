@@ -2,11 +2,26 @@ package project.alwaystry;
 
 import java.util.Vector;
 
+import copyfromJAVAsource.TAttribute;
+
+import myutilandroid.GraphicLibAndroid;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.text.TextPaint;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
@@ -14,10 +29,7 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	private String stereotype = "datatype";
  
 	protected Vector myAttributes;
-	private View panel;
-	//private int x,y;
-	//private int width,height;
-	private String name = "datatype0";
+
 	private Paint mPaint;
 	private Paint cpPaint;
 	private Paint ePaint;
@@ -28,6 +40,9 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	
 	public AvatarBDDataTypeAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel)  {
 		super(_x, _y, _minWidth, _minHeight, _maxWidth, _maxHeight, _panel);
+		
+		Log.i("datatype", "panel"+panel);
+		name = "datatypeName";
 		
 		width = 250;
 		height = 200;
@@ -84,31 +99,55 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 		
 		String ster = "<<"+stereotype+">>";
 		mTextPaint.setFakeBoldText(true);
-		canvas.drawText(ster, lp+(width-ster.length())/2, tp+25, mTextPaint);
+		canvas.drawText(ster, lp+(width-ster.length())/2, tp+13, mTextPaint);
 		
 		mTextPaint.setFakeBoldText(false);
 		if (name != null && name.length() > 0) {
-            canvas.drawText(name,lp+(width-name.length())/2, tp+38,mTextPaint);
+            canvas.drawText(name,lp+(width-name.length())/2, tp+25,mTextPaint);
         }
 		
 //		mPaint.setColor(Color.BLACK);
 //		mPaint.setStrokeWidth(2);
-		canvas.drawLine(x, y+42, rp, y+42, ePaint);
-		
-		int h=0;
-		int w;
-		
-		h = 3;
+		canvas.drawLine(x, y+30, rp, y+30, ePaint);
 		
 		//Icon
-		int cpt = h;
+
+		//draw Attributes
+		TextPaint tpaint = new TextPaint(mTextPaint);
+		tpaint.setTextAlign(Paint.Align.LEFT);
+		
+		int cpt = 33;
 		int index = 0;
 		String attr;
-		//draw Attributes
+		TAttribute a;
+		int w;
+		int step = 10;
+		
+		while(index< myAttributes.size()){
+			cpt+=step;
+			if(cpt >= getHeight() - 5){
+				break;
+			}
+			a = (TAttribute)(myAttributes.get(index));
+			attr = a.toString();
+			w =attr.length()*8;
+			if(w +5 < width){
+				canvas.drawText(attr, x+5, y+cpt, tpaint);
+			}else{
+				attr = "...";
+				w = attr.length()*8;
+				if(w +5 < width){
+					canvas.drawText(attr, x+5, y+cpt, tpaint);
+				}else{
+					cpt -= step;
+				}
+			}
+			index ++;
+		}
 		
 	//	canvas.drawText("attribute 1", x+50+7, y+60, mTextPaint);
 		
-		canvas.drawLine(x, y+70, rp, y+70, ePaint);
+	//	canvas.drawLine(x, y+70, rp, y+70, ePaint);
 		
 		this.drawTGConnectingPoint(canvas, getCptype());
 		
@@ -135,5 +174,78 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 
 	public void setCptype(int cptype) {
 		this.cptype = cptype;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean inEditNameArea(int x1,int y1){
+		return GraphicLibAndroid.isInRectangle(x1, y1, getX(), getY(), getWidth(), 30);
+	}
+	@Override
+	protected boolean editOndoubleClick(int _x, int _y) {
+		// TODO Auto-generated method stub
+		if(inEditNameArea(_x, _y)){
+			Log.i("datatype", "doubleclick"+panel);
+			AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
+//			AlertDialog alertDialog;				
+//			panel.getContext();
+			LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View layout = inflater.inflate(R.layout.blocknamealert,
+			                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
+
+			alert.setTitle("setting value");
+			
+			TextView text = (TextView)layout.findViewById(R.id.textView1);
+			text.setText("Block name");
+			final EditText input = (EditText)layout.findViewById(R.id.editText1);
+			input.setText(getName());
+			alert.setView(layout);
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					setName(input.getText().toString());
+				    panel.invalidate();
+				  }
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				  public void onClick(DialogInterface dialog, int whichButton) {
+				    // Canceled.
+				  }
+				});
+
+				alert.show();
+		}else{
+			
+			String[] attributes = new String[myAttributes.size()];
+			for(int i=0;i<myAttributes.size();i++){
+				 attributes[i] = ((TAttribute)myAttributes.get(i)).toString();
+			}
+			
+			Bundle attribundle = new Bundle();
+			attribundle.putStringArray("attributes", attributes);
+			
+			Intent intent = new Intent().setClass(panel.getContext(),EditAttributesActivity.class);	
+			intent.putExtras(attribundle);
+			((Activity) panel.getContext()).startActivityForResult(intent,AlwaystryActivity.EDIT_ATTRIBUTES);
+			
+		}
+		return true;
+	}
+	public void setAttributes(String[] attributes){
+		Vector attributesPar = new Vector();
+		for(int i=0; i<attributes.length; i++) {
+            attributesPar.addElement(TAttribute.getTAttributeFromString(attributes[i]));
+        }
+		
+		myAttributes.removeAllElements();
+		for(int i=0; i<attributesPar.size(); i++) {
+			myAttributes.addElement(attributesPar.elementAt(i));
+        }
+	}
+	
+	public String getDataTypeName(){
+		return name;
 	}
 }

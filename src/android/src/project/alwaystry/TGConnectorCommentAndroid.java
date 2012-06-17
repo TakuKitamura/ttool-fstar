@@ -44,4 +44,10 @@ public class TGConnectorCommentAndroid extends TGConnectorAndroid{
 		canvas.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY(), paint);
 	}
 
+	@Override
+	protected boolean editOndoubleClick(int _x, int _y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

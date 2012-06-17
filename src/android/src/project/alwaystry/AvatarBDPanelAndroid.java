@@ -2,7 +2,7 @@ package project.alwaystry;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
+import java.util.Vector;
 
 import myutilandroid.GraphicLibAndroid;
 
@@ -45,10 +45,7 @@ public class AvatarBDPanelAndroid extends View {
     protected int y2;
 	
 	private int mx, my;
-//	protected int initSelectX;
-//    protected int initSelectY;
-//    protected int currentSelectX;
-//    protected int currentSelectY;
+
 	private int xsel=-1,ysel=-1;
 	private int xendsel =-1, yendsel=-1;
 	protected int xSEL,ySEL,widthSel,heightSel;
@@ -101,11 +98,11 @@ public class AvatarBDPanelAndroid extends View {
 		setClickable(true);
 		
 		TDiagramTouchManagerAndroid tManager = new TDiagramTouchManagerAndroid(this);
-		setOnClickListener(tManager);
+		//setOnClickListener(tManager);
 		setOnTouchListener(tManager);
-		setOnLongClickListener(tManager);
-		this.setClickable(true);
-		this.setLongClickable(true);
+		
+		//this.setClickable(true);
+		//this.setLongClickable(true);
 		
 		setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 	}
@@ -282,6 +279,10 @@ public class AvatarBDPanelAndroid extends View {
 			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
 		case TGComponentAndroid.AVATARBD_CRYPTOBLOCK:
+			AvatarBDBlockAndroid cryptoblock = new AvatarBDBlockAndroid(x, y,minWidth,minHeight,maxWidth,maxHeight, this);
+			cryptoblock.addCryptoElements();
+			compolist.add(cryptoblock);
+			this.setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 			break;
 		case TGComponentAndroid.AVATARBD_DATATYPE:
 			AvatarBDDataTypeAndroid datatype = new AvatarBDDataTypeAndroid(x, y,minWidth,minHeight,maxWidth,maxHeight, this);
@@ -548,6 +549,22 @@ public class AvatarBDPanelAndroid extends View {
 		ysel=-1;
 		xendsel =-1; 
 		yendsel=-1;
+	}
+	
+	public Vector<String> getAllDataTypes() {
+		Vector<String> v = new Vector<String>();
+		TGComponentAndroid tgc;
+		Iterator iterator = compolist.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponentAndroid)(iterator.next());
+			
+			if (tgc instanceof AvatarBDDataTypeAndroid) {
+				v.add(((AvatarBDDataTypeAndroid)(tgc)).getDataTypeName());
+			}
+		}
+		
+		return v;
 	}
 	
 }

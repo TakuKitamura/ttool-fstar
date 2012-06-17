@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -29,6 +30,7 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
 	AvatarBDPanelAndroid panel;
 	GestureOverlayView gestures;
 	
+	public static final int EDIT_ATTRIBUTES = 1;
 	
 	
     /** Called when the activity is first created. */
@@ -81,6 +83,7 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     		clickaction =4;
     		break;
     	case R.id.cryptoblock:
+    		panel.setCreatedtype(TGComponentAndroid.AVATARBD_CRYPTOBLOCK);
     		clickaction =5;
     		break;
     	case R.id.datatype:
@@ -119,5 +122,35 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
 		}
 	}
  
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent intent){
+		super.onActivityResult(requestCode, resultCode, intent);
+		Bundle objectBundle = intent.getExtras();
+		switch(requestCode) {
+		case EDIT_ATTRIBUTES:
+			if(resultCode == Activity.RESULT_OK){
+				if(objectBundle != null && objectBundle.containsKey("attributes") ){
+					String[] attributes =objectBundle.getStringArray("attributes");
+					
+					if(objectBundle.containsKey("methods")&& objectBundle.containsKey("signals")){
+						((AvatarBDBlockAndroid)panel.getComponentSelected()).setAttributes(attributes);
+						//((AvatarBDBlockAndroid)panel.getComponentSelected()).setAttributes(attributes);
+						String[] methods =objectBundle.getStringArray("methods");
+						((AvatarBDBlockAndroid)panel.getComponentSelected()).setMethods(methods);
+						String[] signals =objectBundle.getStringArray("signals");
+						((AvatarBDBlockAndroid)panel.getComponentSelected()).setSignals(signals);
+						panel.invalidate();
+					}else{
+						((AvatarBDDataTypeAndroid)panel.getComponentSelected()).setAttributes(attributes);
+					}
+					
+					panel.invalidate();
+				}
+				
+			}
+			break;
+		
+		}		
+	}
 
 }

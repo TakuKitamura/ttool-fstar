@@ -23,7 +23,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     protected String name = "TGComponentAndroid";
 	
     protected boolean selected;
-    protected int distanceSelected = 5;
+    protected int distanceSelected = 20;
     
     protected int nbConnectingPoints;
 	protected TGConnectingPointAndroid[] connectingPoints;
@@ -154,6 +154,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	
 	public void cleanAllPoints(){
 		for(int i=0; i<nbConnectingPoints;i++){
+			connectingPoints[i].setState(TGConnectingPointAndroid.NORMAL);
 			connectingPoints[i].setFree(true);
 		}
 	}
@@ -242,12 +243,12 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 		
     	
     	if(f > 1){
-    		newx = (int)(this.getX()-this.getWidth()*(rescale-1)/2);
-    		newy = (int)(this.getY()-this.getHeight()*(rescale-1)/2);
+    		newx = (int)(this.getX()-50*(rescale-1)/2);
+    		newy = (int)(this.getY()-50*(rescale-1)/2);
     		
     	}else{
-    		newx = (int)(this.getX()+this.getWidth()*(1-rescale)/2);
-    		newy = (int)(this.getY()+this.getHeight()*(1-rescale)/2);
+    		newx = (int)(this.getX()+50*(1-rescale)/2);
+    		newy = (int)(this.getY()+50*(1-rescale)/2);
     		
     	}
     	
@@ -258,4 +259,6 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     	this.setWidth(neww);
     	
     }
+    
+    protected abstract boolean editOndoubleClick(int _x,int _y);
 }

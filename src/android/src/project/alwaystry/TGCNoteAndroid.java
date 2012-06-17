@@ -1,11 +1,17 @@
 package project.alwaystry;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.text.TextPaint;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 public class TGCNoteAndroid extends TGComponentAndroid{
 	
@@ -14,7 +20,7 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 	private Paint tPaint;
 	private TextPaint mTextPaint;
 	
-	protected String value; //applies if editable
+	protected String[] value; //applies if editable
     protected String name ;
     
     protected int limit = 15;
@@ -48,11 +54,11 @@ public class TGCNoteAndroid extends TGComponentAndroid{
         
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setTextAlign(Paint.Align.LEFT);
         mTextPaint.setColor(Color.BLACK);
         
         name = "UML Note";
-        value = "UML note:Long press to edit";
+        value = new String[]{"UML note:","Double click to edit!!!!"};
 	}
 
 	@Override
@@ -73,6 +79,13 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 			ePaint.setColor(Color.BLACK);
 			tPaint.setColor(Color.LTGRAY);
 		}			
+		for(int i=0;i<value.length;i++){
+			if(value[i].length()*5 > width){
+				width = value[i].length()*5;
+			}
+		}
+		
+		height = value.length *15;
 		
 		canvas.drawLine(x, y, x+width, y, ePaint);
 		canvas.drawLine(x, y, x, y+height, ePaint);
@@ -104,10 +117,59 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 		tPaint.setStyle(Paint.Style.FILL);
 		canvas.drawPath(path1, tPaint);
 		
-		
-		canvas.drawText(value, x+80, y+15, mTextPaint);
+		int step =12;
+		int cpt=3;
+		for(int i=0;i<value.length;i++){
+			cpt+=step;
+			canvas.drawText(value[i], x+5, y+cpt, mTextPaint);
+		}
 		
 		this.drawTGConnectingPoint(canvas, getCptype());
+	}
+
+	public void setValue(String s){
+		String[] newValues = s.split("\n");
+		value = new String[newValues.length];
+		for(int i=0;i<newValues.length;i++){
+			value[i] = new String(newValues[i]);
+		}
+	}
+	public String getValue(){
+		String v = "";
+		for(int i=0;i<value.length;i++){
+			v+= (value[i]+"\n");
+		}
+			
+		return v;
+	}
+	@Override
+	protected boolean editOndoubleClick(int _x, int _y) {
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
+		LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.tgcnotealert,
+                (ViewGroup) panel.findViewById(R.id.linearLayout1));
+		alert.setTitle("setting the note");
+		final EditText input = (EditText)layout.findViewById(R.id.noteEditText);
+		input.setText(getValue());
+		alert.setView(layout);
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				setValue(input.getText().toString());
+			    panel.invalidate();
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+			alert.show();
+		
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
