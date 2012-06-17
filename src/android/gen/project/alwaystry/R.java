@@ -8,6 +8,12 @@
 package project.alwaystry;
 
 public final class R {
+    public static final class array {
+        public static final int attributeacc_array=0x7f060000;
+        public static final int attributetype_array=0x7f060001;
+        public static final int attributetype_array_1=0x7f060002;
+        public static final int signaltype_array=0x7f060003;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -22,27 +28,69 @@ public final class R {
         public static final int starting_logo=0x7f020008;
     }
     public static final class id {
-        public static final int avatarBDPanelAndroid1=0x7f06000e;
-        public static final int avatarbdToolbarAndroid1=0x7f06000d;
-        public static final int block=0x7f060006;
-        public static final int button1=0x7f060013;
-        public static final int button2=0x7f060014;
-        public static final int comp=0x7f060009;
-        public static final int concomment=0x7f060005;
-        public static final int cryptoblock=0x7f060007;
-        public static final int datatype=0x7f060008;
-        public static final int drageventblock1=0x7f060001;
-        public static final int editText1=0x7f060011;
-        public static final int gestureOverlayView1=0x7f06000c;
-        public static final int imageView1=0x7f06000f;
-        public static final int iod_edit=0x7f060003;
-        public static final int linearLayout1=0x7f06000b;
-        public static final int link=0x7f06000a;
-        public static final int myblockrectangle=0x7f060002;
-        public static final int relativeLayout1=0x7f060000;
-        public static final int tabhost1=0x7f060012;
-        public static final int textView1=0x7f060010;
-        public static final int uml_note=0x7f060004;
+        public static final int addButton=0x7f07001e;
+        public static final int addMethodButton=0x7f070026;
+        public static final int addSignalButton=0x7f070035;
+        public static final int addsignalrow=0x7f070032;
+        public static final int attributeaccspinner=0x7f07001a;
+        public static final int attributesTab=0x7f070012;
+        public static final int attributetypespinner=0x7f07001d;
+        public static final int avatarBDPanelAndroid1=0x7f07000e;
+        public static final int avatarbdToolbarAndroid1=0x7f07000d;
+        public static final int block=0x7f070006;
+        public static final int cancelButton=0x7f07003c;
+        public static final int closeButton=0x7f07003b;
+        public static final int comp=0x7f070009;
+        public static final int concomment=0x7f070005;
+        public static final int cryptoblock=0x7f070007;
+        public static final int datatype=0x7f070008;
+        public static final int downButton=0x7f070022;
+        public static final int downMethodButton=0x7f07002b;
+        public static final int downSignalButton=0x7f070039;
+        public static final int drageventblock1=0x7f070001;
+        public static final int editText1=0x7f070011;
+        public static final int editTextsignal=0x7f070034;
+        public static final int gestureOverlayView1=0x7f07000c;
+        public static final int horizontalScrollView1=0x7f07003d;
+        public static final int identifierEditText=0x7f07001b;
+        public static final int imageView1=0x7f07000f;
+        public static final int iniValueEditText=0x7f07001c;
+        public static final int iod_edit=0x7f070003;
+        public static final int linearLayout1=0x7f07000b;
+        public static final int link=0x7f07000a;
+        public static final int listView1=0x7f070020;
+        public static final int methodEditText=0x7f070027;
+        public static final int methodListView=0x7f070029;
+        public static final int methodsTab=0x7f070024;
+        public static final int myblockrectangle=0x7f070002;
+        public static final int noteEditText=0x7f07003e;
+        public static final int panelWithTitledBorder1=0x7f070013;
+        public static final int panelWithTitledBorder2=0x7f07001f;
+        public static final int panelWithTitledBorder3=0x7f070025;
+        public static final int panelWithTitledBorder4=0x7f070028;
+        public static final int panelWithTitledBorder5=0x7f07002e;
+        public static final int panelWithTitledBorder6=0x7f070036;
+        public static final int relativeLayout1=0x7f070000;
+        public static final int removeButton=0x7f070023;
+        public static final int removeMethodButton=0x7f07002c;
+        public static final int removeSignalButton=0x7f07003a;
+        public static final int signalListView=0x7f070037;
+        public static final int signalTV=0x7f070031;
+        public static final int signalrow=0x7f070030;
+        public static final int signalsTab=0x7f07002d;
+        public static final int signalspinner=0x7f070033;
+        public static final int tableRow1=0x7f070015;
+        public static final int tableRow2=0x7f070019;
+        public static final int tablelayout1=0x7f070014;
+        public static final int tablelayout2=0x7f07002f;
+        public static final int textView1=0x7f070010;
+        public static final int textView2=0x7f070016;
+        public static final int textView3=0x7f070017;
+        public static final int textView4=0x7f070018;
+        public static final int uml_note=0x7f070004;
+        public static final int upButton=0x7f070021;
+        public static final int upMethodButton=0x7f07002a;
+        public static final int upSignalButton=0x7f070038;
     }
     public static final class layout {
         public static final int anothertab=0x7f030000;
@@ -52,14 +100,19 @@ public final class R {
         public static final int block=0x7f030004;
         public static final int blocknamealert=0x7f030005;
         public static final int editattributesalert=0x7f030006;
-        public static final int main=0x7f030007;
+        public static final int list_item=0x7f030007;
+        public static final int main=0x7f030008;
+        public static final int tgcnotealert=0x7f030009;
     }
     public static final class raw {
         public static final int actions=0x7f040000;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
+        public static final int attributeacc=0x7f050002;
+        public static final int attributetype=0x7f050003;
         public static final int hello=0x7f050000;
+        public static final int signaltype=0x7f050004;
     }
     public static final class styleable {
         /**  These are the attributes that we want to retrieve from the theme
