@@ -2,6 +2,28 @@
 <resources>
 
     <string name="hello">Hello World, AlwaystryActivity!</string>
-    <string name="app_name">Alwaystry</string>
-
+    <string name="app_name">TToolAndroid</string>
+    <string name="attributeacc">-</string>
+    <string-array name="attributeacc_array">
+        <item>-</item>
+    </string-array>
+    <string name="attributetype">-</string>
+    <string-array name="attributetype_array">
+        <item>Boolean</item>
+        <item>Integer</item>
+        <item>Timer</item>
+    </string-array>
+    <string-array name="attributetype_array_1">
+        <item>Nature</item>
+        <item>Boolean</item>
+        <item>Integer</item>
+    </string-array>
+    
+    <string name="signaltype">-</string>
+    <string-array name="signaltype_array">
+        <item>in</item>
+        <item>out</item>
+    </string-array>
+    
+    
 </resources>

@@ -1,51 +1,409 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tabhost1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    
-     <RelativeLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="5dp">
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+    android:layout_height="fill_parent" >
 
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="337dp"
-            android:padding="5dp" >
+    <TabHost
+        android1:id="@android:id/tabhost"
+        android1:layout_width="match_parent"
+        android1:layout_height="wrap_content"
+        android1:layout_alignParentLeft="true"
+        android1:layout_alignParentTop="true"
+        android1:layout_marginTop="10dp"
+        android1:layout_marginLeft="10dp" >
+
+        <LinearLayout
+            android1:layout_width="match_parent"
+            android1:layout_height="match_parent"
+            android1:orientation="vertical" >
+
+            <TabWidget
+                android1:id="@android:id/tabs"
+                android1:layout_width="match_parent"
+                android1:layout_height="wrap_content" >
+            </TabWidget>
+
+            <FrameLayout
+                android1:id="@android:id/tabcontent"
+                android1:layout_width="match_parent"
+                android1:layout_height="match_parent" >
+
+      <RelativeLayout 
+        android:id="@+id/attributesTab"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder1"
+            android:layout_width="300dp"
+            android:layout_height="220dp" >
+        <TableLayout 
+            android:id="@+id/tablelayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp">
+            
+             <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+                
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="acc..." />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="identi..." />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="initial va..." />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="type" />  
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Spinner
+                    android:id="@+id/attributeaccspinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/attributeacc" />
+
+                <EditText
+                    android:id="@+id/identifierEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="3" >
+
+                    <requestFocus />
+                </EditText>
+                <EditText
+                    android:id="@+id/iniValueEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="3" >
+                </EditText>
+                    
+                <Spinner
+                    android:id="@+id/attributetypespinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" 
+                    android:prompt="@string/attributetype"/>
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/addButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:text="Add/Modify Attribute"
+            android:onClick="clickOnEditButtons" />
+
+        </project.alwaystry.PanelWithTitledBorder>
+
+        <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder2"
+            android:layout_width="300dp"
+            android:layout_height="220dp"
+            android:layout_toRightOf="@+id/panelWithTitledBorder1"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true" >
+        
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:background ="#ffffff">
+       	</ListView>
+
+        <Button
+            android:id="@+id/upButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/listView1"
+            android:layout_below="@+id/listView1"
+            android:paddingTop="3dp"
+            android:text="Up" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/downButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/upButton"
+            android:layout_below="@+id/upButton"
+            android:paddingTop="3dp"
+            android:text="Down" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/removeButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/downButton"
+            android:layout_below="@+id/downButton"
+            android:paddingTop="3dp"
+            android:text="Remove Attribute" 
+            android:onClick="clickOnEditButtons"/>
+       
+        </project.alwaystry.PanelWithTitledBorder>
+    </RelativeLayout>
+                    
+
+                <RelativeLayout android:id="@+id/methodsTab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+     <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder3"
+            android:layout_width="300dp"
+            android:layout_height="220dp" >
+
+        <Button
+            android:id="@+id/addMethodButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:text="Add Method"
+            android:onClick="clickOnEditButtons" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="50dp"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="Methods:" />
 
-        </FrameLayout>
+            <EditText
+                android:id="@+id/methodEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >        		
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+
+        </project.alwaystry.PanelWithTitledBorder>
+
+        <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder4"
+            android:layout_width="300dp"
+            android:layout_height="220dp"
+            android:layout_toRightOf="@+id/panelWithTitledBorder3"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true" >
+        
+        <ListView
+            android:id="@+id/methodListView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:background="#ffffff" >
+        </ListView>
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/upMethodButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/methodListView"
+            android:layout_below="@+id/methodListView"
+            android:paddingTop="3dp"
+            android:text="Up" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/downMethodButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/upMethodButton"
+            android:layout_below="@+id/upMethodButton"
+            android:paddingTop="3dp"
+            android:text="Down" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/removeMethodButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/downMethodButton"
+            android:layout_below="@+id/downMethodButton"
+            android:paddingTop="3dp"
+            android:text="Remove Method"
+            android:onClick="clickOnEditButtons" />
+        
+        </project.alwaystry.PanelWithTitledBorder>
+  
+</RelativeLayout>
+
+                <RelativeLayout android:id="@+id/signalsTab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+ <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder5"
+            android:layout_width="300dp"
+            android:layout_height="220dp" >
+
+          <TableLayout 
+            android:id="@+id/tablelayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@android:id/tabcontent"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="21dp"
-            android:text="Button" />
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp">
+            
+             <TableRow
+                android:id="@+id/signalrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+                
+                <TextView
+                    android:id="@+id/signalTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Signal:" />
+             </TableRow>
+
+            <TableRow
+                android:id="@+id/addsignalrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Spinner
+                    android:id="@+id/signalspinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/signaltype" />
+
+                <EditText
+                    android:id="@+id/editTextsignal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <requestFocus />
+                </EditText>
+            </TableRow>
+        </TableLayout>
+
+           <Button
+            android:id="@+id/addSignalButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:text="Add Signal" 
+            android:onClick="clickOnEditButtons"/>
+
+    </project.alwaystry.PanelWithTitledBorder>
+
+        <project.alwaystry.PanelWithTitledBorder
+            android:id="@+id/panelWithTitledBorder6"
+            android:layout_width="300dp"
+            android:layout_height="220dp"
+            android:layout_toRightOf="@+id/panelWithTitledBorder5"
+            android:layout_marginLeft="10dp"
+            android:layout_centerHorizontal="true" >
+        
+        <ListView
+            android:id="@+id/signalListView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:background="#ffffff" >
+        </ListView>
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/button1"
-            android:layout_alignBottom="@+id/button1"
-            android:layout_alignRight="@android:id/tabcontent"
-            android:layout_marginRight="37dp"
-            android:text="Button" />
+            android:id="@+id/upSignalButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/signalListView"
+            android:layout_below="@+id/signalListView"
+            android:paddingTop="3dp"
+            android:text="Up"
+            android:onClick="clickOnEditButtons" />
+        <Button
+            android:id="@+id/downSignalButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/upSignalButton"
+            android:layout_below="@+id/upSignalButton"
+            android:paddingTop="3dp"
+            android:text="Down" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/removeSignalButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/downSignalButton"
+            android:layout_below="@+id/downSignalButton"
+            android:paddingTop="3dp"
+            android:text="Remove Signal" 
+            android:onClick="clickOnEditButtons"/>
+        
+        </project.alwaystry.PanelWithTitledBorder>
 
-    </RelativeLayout>
-</TabHost>
+    
+
+    
+</RelativeLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+    
+     <Button
+            android:id="@+id/closeButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@android:id/tabhost"
+       		android:layout_below="@android:id/tabhost"
+            android:text="Save and close" 
+            android:onClick="clickOnEditButtons"/>
+
+        <Button
+            android:id="@+id/cancelButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/tabhost"
+            android:layout_toRightOf="@+id/closeButton"
+            android:layout_marginLeft="10dp"
+            android:text="Cancel" 
+            android:onClick="clickOnEditButtons"/>
+
+</RelativeLayout>
