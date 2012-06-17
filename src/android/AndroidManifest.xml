@@ -26,6 +26,13 @@
                 <action android:name="android.intent.action.MAIN" />         
             </intent-filter>
         </activity>
+<!--         <activity android:name="EditAttributesActivity" android:theme="@android:style/Theme.Dialog"> -->
+		<activity android:name="EditAttributesActivity">
+        <intent-filter >
+                <action android:name="android.intent.action.MAIN" />         
+            </intent-filter>
+        </activity>
+        
     </application>
 
 </manifest>
