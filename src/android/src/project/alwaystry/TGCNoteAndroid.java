@@ -61,7 +61,6 @@ public class TGCNoteAndroid extends TGComponentAndroid{
         value = new String[]{"UML note:","Double click to edit!!!!"};
 	}
 
-	@Override
 	public TGComponentAndroid isOnMe(int x1, int y1) {
 		if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
             return this;
@@ -70,7 +69,6 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 		
 	}
 
-	@Override
 	public void internalDrawing(Canvas canvas) {
 		if(selected){
 			ePaint.setColor(Color.RED);
@@ -142,7 +140,6 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 			
 		return v;
 	}
-	@Override
 	protected boolean editOndoubleClick(int _x, int _y) {
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());

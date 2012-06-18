@@ -131,13 +131,11 @@ public class TGConnectingPointAndroid implements CDElementAndroid{
     		return null;
     }
     
-	@Override
 	public int getX() {
 		// TODO Auto-generated method stub
 		return x + container.getX() + (int)(container.getWidth() * w);
 	}
 
-	@Override
 	public int getY() {
 		// TODO Auto-generated method stub
 		return y + container.getY() + (int)(container.getHeight() * h);
@@ -162,7 +160,6 @@ public class TGConnectingPointAndroid implements CDElementAndroid{
     public int getHeight() {
         return height;
     }
-	@Override
 	public void setCd(int x, int y) {
 		// TODO Auto-generated method stub
 		this.x = x;

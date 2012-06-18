@@ -412,7 +412,6 @@ public class EditAttributesActivity extends TabActivity {
 		 
 		 methodsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					// TODO Auto-generated method stub
@@ -441,7 +440,6 @@ public class EditAttributesActivity extends TabActivity {
 		 
 		 signalsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					// TODO Auto-generated method stub
@@ -473,7 +471,6 @@ public class EditAttributesActivity extends TabActivity {
 		// attributesList.setSelector(this.getResources().getDrawable(R.color.list_s));
 		 attributesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub

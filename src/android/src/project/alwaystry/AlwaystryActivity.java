@@ -108,7 +108,7 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     		
     }
 
-	@Override
+	
 	public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
 		// TODO Auto-generated method stub
 		ArrayList<Prediction> predictions = gestureLib.recognize(gesture);

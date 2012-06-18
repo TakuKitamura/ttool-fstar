@@ -164,7 +164,6 @@ public class AvatarBDCompositionConnectorAndroid extends TGConnectorAndroid{
 		internalpoints.add(point);
 	}
 
-	@Override
 	protected boolean editOndoubleClick(int _x, int _y) {
 		// TODO Auto-generated method stub
 		return false;

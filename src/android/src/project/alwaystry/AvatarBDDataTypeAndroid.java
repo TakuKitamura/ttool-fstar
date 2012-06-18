@@ -159,7 +159,6 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 		this.panel = panel;
 	}
 
-	@Override
 	public TGComponentAndroid isOnMe(int x1, int y1) {
 		// TODO Auto-generated method stub
 		if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
@@ -183,7 +182,6 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	public boolean inEditNameArea(int x1,int y1){
 		return GraphicLibAndroid.isInRectangle(x1, y1, getX(), getY(), getWidth(), 30);
 	}
-	@Override
 	protected boolean editOndoubleClick(int _x, int _y) {
 		// TODO Auto-generated method stub
 		if(inEditNameArea(_x, _y)){

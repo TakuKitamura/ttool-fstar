@@ -261,7 +261,6 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 //		
 //	}
 
-//	@Override
 //	public boolean onLongClick(View v) {
 //		// TODO Auto-generated method stub
 //		if(panel.getComponentSelected() instanceof AvatarBDBlockAndroid){

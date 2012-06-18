@@ -61,7 +61,6 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		this.internalpoints = internalpoints;
 	}
 
-	@Override
 	protected boolean editOndoubleClick(int _x, int _y) {
 		// TODO Auto-generated method stub
 		return false;

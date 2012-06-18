@@ -78,7 +78,6 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     public  int getHeight() {
         return height;
     }
-	@Override
 	public void setCd(int _x, int _y) {
 		// TODO Auto-generated method stub
 	    x = _x;
@@ -92,7 +91,6 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	public void setCptype(int cptype) {
 		this.cptype = cptype;
 	}
-	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
 		return name;
