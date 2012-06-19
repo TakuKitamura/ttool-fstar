@@ -73,6 +73,7 @@ public class AvatarSpecificationSimulation  {
 	private AvatarSimulationInteraction asi;
 	private long clockValue;
 	private Vector<AvatarSimulationBlock> blocks;
+	private Vector<AvatarSimulationBlock> selectedBlocks;
 	private AvatarSimulationBlock previousBlock;
 	private Vector<AvatarSimulationAsynchronousTransaction> asynchronousMessages;
 	private Vector<AvatarSimulationPendingTransaction> pendingTransactions;
@@ -115,6 +116,20 @@ public class AvatarSpecificationSimulation  {
 	
 	public Vector<AvatarSimulationBlock> getSimulationBlocks() {
 		return blocks;
+	}
+	
+	public void computeSelectedSimulationBlocks() {
+		selectedBlocks = new Vector<AvatarSimulationBlock>();
+		for (AvatarSimulationBlock block: blocks) {
+			if (block.selected) {
+				selectedBlocks.add(block);
+			}
+		}
+	}
+	
+	public Vector<AvatarSimulationBlock> getSelectedSimulationBlocks() {
+		
+		return selectedBlocks;
 	}
 	
 	public Vector<AvatarSimulationTransaction> getAllTransactions() {
@@ -162,6 +177,8 @@ public class AvatarSpecificationSimulation  {
 				blocks.add(asb);
 			}
 		}
+		
+		computeSelectedSimulationBlocks();
 		
 		// Create all simulation asynchronous channels
 		asynchronousMessages = new Vector<AvatarSimulationAsynchronousTransaction>();

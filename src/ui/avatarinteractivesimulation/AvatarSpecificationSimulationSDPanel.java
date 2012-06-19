@@ -76,6 +76,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	// Drawing parameters
 	private int minSpaceBetweenLifeLines = 5;
 	private int spaceBetweenLifeLines = 150;
+	private int basicSpaceBetweenLifeLines = 150;
 	private boolean spaceBetweenLifeLinesComputed = false;
 	private int spaceAtEnd = 50;
 	private int spaceAtTop = 50;
@@ -86,6 +87,13 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	private int verticalLink = 10;
 	private int lengthAsync = 50;
 	private int spaceBroadcast = 25;
+	
+	
+	private double[] zoomValues = {0.2, 0.3, 0.5, 0.60, 0.80, 1.0, 1.2, 1.5, 2, 2.5, 3, 4};
+	private int zoomIndex = 5;
+	private int maxZoomIndex = 11;
+	
+	
 	
 	private AvatarSpecificationSimulation ass;
 	
@@ -108,6 +116,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	
     public AvatarSpecificationSimulationSDPanel(AvatarSpecificationSimulation _ass) {
 		ass = _ass;
+		
+		ass.computeSelectedSimulationBlocks();
 		points = new Vector<Point>();
 		transactionsOfPoints = new Vector<AvatarSimulationTransaction>();
 		
@@ -131,6 +141,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		
 		if (!spaceBetweenLifeLinesComputed) {
 			computeSpaceBetweenLifeLines(g);
+			basicSpaceBetweenLifeLines = spaceBetweenLifeLines;
 		}
 		
 		
@@ -168,15 +179,17 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		String name;
 		int w;
 		
-		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+		Vector<AvatarSimulationBlock> blocks = ass.getSelectedSimulationBlocks();
 		
 		for(AvatarSimulationBlock block: blocks) {
-			g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
-			g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
-			name = block.getBlock().getName();
-			w = g.getFontMetrics().stringWidth(name);
-			g.drawString(name, currentX + ((spaceBetweenLifeLines-w)/2), currentY - spaceVerticalText);
-			currentX += spaceBetweenLifeLines;
+			if (block.selected) {
+				g.drawLine(currentX + (spaceBetweenLifeLines/4), currentY, currentX + (3*spaceBetweenLifeLines/4), currentY);
+				g.drawLine(currentX + (spaceBetweenLifeLines/2), currentY, currentX + (spaceBetweenLifeLines/2), currentY + verticalSpaceUnderBlocks);
+				name = block.getBlock().getName();
+				w = g.getFontMetrics().stringWidth(name);
+				g.drawString(name, currentX + ((spaceBetweenLifeLines-w)/2), currentY - spaceVerticalText);
+				currentX += spaceBetweenLifeLines;
+			}
 		}
 		
 		maxX = currentX;
@@ -208,7 +221,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		
 		// Draw only the last drawnTransactions
 		Vector<AvatarSimulationTransaction> allTransactions = ass.getAllTransactions();
-		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+		//Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+		Vector<AvatarSimulationBlock> blocks = ass.getSelectedSimulationBlocks();
 		
 		if (allTransactions.size() > 0) {
 			ast = allTransactions.get(Math.max(0, allTransactions.size()-1000));
@@ -222,45 +236,47 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 			ast.stamp = stamp;
 			
 			index = blocks.indexOf(ast.asb);
-			xOfBlock = currentX + (index * spaceBetweenLifeLines) + spaceBetweenLifeLines/2;
-			
-			points.clear();
-			transactionsOfPoints.clear();
-			
-			if (ast.executedElement instanceof AvatarState) {
-				newCurrentY = drawState(g, ast, (AvatarState)(ast.executedElement), xOfBlock, currentY); 
-			} else if (ast.executedElement instanceof AvatarTransition) {
-				newCurrentY = drawTransition(g, (AvatarTransition)(ast.executedElement), ast, xOfBlock, currentY); 
-			} else if (ast.executedElement instanceof AvatarActionOnSignal) {
-				newCurrentY = drawAvatarActionOnSignal(g, (AvatarActionOnSignal)(ast.executedElement), ast, xOfBlock, currentY, currentX); 
-			} else if (ast.executedElement instanceof AvatarStopState) {
-				newCurrentY = drawAvatarStopState(g, ast, xOfBlock, currentY, currentX); 
-			} else if (ast.executedElement instanceof AvatarRandom) {
-				newCurrentY = drawRandom(g, (AvatarRandom)(ast.executedElement), ast, xOfBlock, currentY); 
-			} 
-			
-			if ((yMouse>= currentY) && (yMouse <= newCurrentY)) {
-				for(int cpt = 0; cpt<points.size(); cpt++) {
-					drawIDInfo(g, points.get(cpt).x, points.get(cpt).y, transactionsOfPoints.get(cpt).id);
-				}
-			}
+			if (index != -1) {
+				xOfBlock = currentX + (index * spaceBetweenLifeLines) + spaceBetweenLifeLines/2;
 				
-			
-			// Draw the line of other blocks
-			if (currentY != newCurrentY) {
-				xOfBlock = currentX + spaceBetweenLifeLines/2;
-				for(AvatarSimulationBlock block: blocks) {
-					if (block != ast.asb) {
-						g.drawLine(xOfBlock, currentY, xOfBlock, newCurrentY);
+				points.clear();
+				transactionsOfPoints.clear();
+				
+				if (ast.executedElement instanceof AvatarState) {
+					newCurrentY = drawState(g, ast, (AvatarState)(ast.executedElement), xOfBlock, currentY); 
+				} else if (ast.executedElement instanceof AvatarTransition) {
+					newCurrentY = drawTransition(g, (AvatarTransition)(ast.executedElement), ast, xOfBlock, currentY); 
+				} else if (ast.executedElement instanceof AvatarActionOnSignal) {
+					newCurrentY = drawAvatarActionOnSignal(g, (AvatarActionOnSignal)(ast.executedElement), ast, xOfBlock, currentY, currentX); 
+				} else if (ast.executedElement instanceof AvatarStopState) {
+					newCurrentY = drawAvatarStopState(g, ast, xOfBlock, currentY, currentX); 
+				} else if (ast.executedElement instanceof AvatarRandom) {
+					newCurrentY = drawRandom(g, (AvatarRandom)(ast.executedElement), ast, xOfBlock, currentY); 
+				} 
+				
+				if ((yMouse>= currentY) && (yMouse <= newCurrentY)) {
+					for(int cpt = 0; cpt<points.size(); cpt++) {
+						drawIDInfo(g, points.get(cpt).x, points.get(cpt).y, transactionsOfPoints.get(cpt).id);
 					}
-					xOfBlock += spaceBetweenLifeLines;
 				}
-				if (ast.clockValueWhenFinished != clockValue) {
-					clockValue = ast.clockValueWhenFinished;
-					if (yMouse >= newCurrentY) {
-						clockValueMouse = clockValue;
+					
+				
+				// Draw the line of other blocks
+				if (currentY != newCurrentY) {
+					xOfBlock = currentX + spaceBetweenLifeLines/2;
+					for(AvatarSimulationBlock block: blocks) {
+						if (block != ast.asb) {
+							g.drawLine(xOfBlock, currentY, xOfBlock, newCurrentY);
+						}
+						xOfBlock += spaceBetweenLifeLines;
 					}
-					g.drawString("@" + clockValue, 10, newCurrentY+g.getFontMetrics().getHeight()/2); 
+					if (ast.clockValueWhenFinished != clockValue) {
+						clockValue = ast.clockValueWhenFinished;
+						if (yMouse >= newCurrentY) {
+							clockValueMouse = clockValue;
+						}
+						g.drawString("@" + clockValue, 10, newCurrentY+g.getFontMetrics().getHeight()/2); 
+					}
 				}
 			}
 			
@@ -426,30 +442,32 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 					//TraceManager.addDev("Working on message name:" + messageName);
 					// Drawing the arrow
 					// Assume a different block in the two transactions
-					int index = ass.getSimulationBlocks().indexOf(ast.linkedTransaction.asb);
-					int xOf2ndBlock = startX + (index * spaceBetweenLifeLines) + spaceBetweenLifeLines/2;
-					
-					currentY += 10;
-					g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
-					g.drawLine(xOf2ndBlock, currentY-1, currentX, currentY-1);
-					g.setColor(c);
-					GraphicLib.arrowWithLine(g, 1, 0, 10, xOf2ndBlock, currentY, currentX, currentY, true);
-					points.add(new Point(xOf2ndBlock, currentY));
-					transactionsOfPoints.add(ast.linkedTransaction);
-					transactionsOfPoints.add(ast);
-					points.add(new Point(currentX, currentY));
-					
-					
-					// Putting the message name
-					w = g.getFontMetrics().stringWidth(messageName);
-					int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
-					g.drawString(messageName, xtmp, currentY-2); 
-					
-					
-					currentY += 10;
-					
-					// Vertical line of receiving block
-					g.drawLine(currentX, currentY-20, currentX, currentY);
+					int index = ass.getSelectedSimulationBlocks().indexOf(ast.linkedTransaction.asb);
+					if (index != -1) {
+						int xOf2ndBlock = startX + (index * spaceBetweenLifeLines) + spaceBetweenLifeLines/2;
+						
+						currentY += 10;
+						g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+						g.drawLine(xOf2ndBlock, currentY-1, currentX, currentY-1);
+						g.setColor(c);
+						GraphicLib.arrowWithLine(g, 1, 0, 10, xOf2ndBlock, currentY, currentX, currentY, true);
+						points.add(new Point(xOf2ndBlock, currentY));
+						transactionsOfPoints.add(ast.linkedTransaction);
+						transactionsOfPoints.add(ast);
+						points.add(new Point(currentX, currentY));
+						
+						
+						// Putting the message name
+						w = g.getFontMetrics().stringWidth(messageName);
+						int xtmp = (xOf2ndBlock + currentX)/2 - w/2;
+						g.drawString(messageName, xtmp, currentY-2); 
+						
+						
+						currentY += 10;
+						
+						// Vertical line of receiving block
+						g.drawLine(currentX, currentY-20, currentX, currentY);
+					}
 					return currentY;
 				}
 			} else {
@@ -651,7 +669,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		
 		String name;
 		int w;
-		Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
+		Vector<AvatarSimulationBlock> blocks = ass.getSelectedSimulationBlocks();
 		int x = spaceAtEnd;
 		
 		for(AvatarSimulationBlock block: blocks) {
@@ -682,6 +700,20 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         paintComponent(g);
         g.dispose();
         return image;
+	}
+	
+	public void zoomIn() {
+		zoomIndex ++;
+		zoomIndex = Math.min(maxZoomIndex, zoomIndex);
+		spaceBetweenLifeLines = (int)(basicSpaceBetweenLifeLines*zoomValues[zoomIndex]);
+		repaint();
+	}
+	
+	public void zoomOut() {
+		zoomIndex --;
+		zoomIndex = Math.max(0, zoomIndex);
+		spaceBetweenLifeLines = (int)(basicSpaceBetweenLifeLines*zoomValues[zoomIndex]);
+		repaint();
 	}
 	
 }

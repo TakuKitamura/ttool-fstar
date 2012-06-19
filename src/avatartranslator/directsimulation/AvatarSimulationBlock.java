@@ -61,6 +61,7 @@ public class AvatarSimulationBlock  {
 	private AvatarSimulationTransaction lastTransaction;
 	private Vector <AvatarSimulationTransaction> transactions;
 	private boolean completed;
+	public boolean selected; // Free use for graphic purpose
 	
 	//private int elapsedTime; 
 	

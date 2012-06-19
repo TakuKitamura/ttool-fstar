@@ -94,8 +94,11 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
 	
 	public static final int ACT_PRINT_CPUS = 28;
 	public static final int ACT_PRINT_BUS = 29;
+	
+	public static final int ACT_ZOOM_IN = 30;
+	public static final int ACT_ZOOM_OUT = 31;
    
-    public static final int NB_ACTION = 30;
+    public static final int NB_ACTION = 32;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -174,6 +177,10 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
 		
 		actions[ACT_PRINT_BENCHMARK] = new TAction("print-benchmark", "Print benchmark", IconManager.imgic29, IconManager.imgic29, "Print benchmark", "Print benchmark at simulator side", 'R');
         actions[ACT_SAVE_BENCHMARK] = new TAction("save-benchmark", "Save benchmark", IconManager.imgic25, IconManager.imgic25, "Save benchmark", "Save benchmark at simulator side", 'R');
+        
+        actions[ACT_ZOOM_IN] = new TAction("zoommore-command", "Zoom +", IconManager.imgic317, IconManager.imgic317, "Zoom +", "Zoom +", '0');
+        actions[ACT_ZOOM_OUT] = new TAction("zoomless-command", "Zoom -", IconManager.imgic315, IconManager.imgic315, "Zoom -", "Zoom -", '0');
+        
         
     }
     

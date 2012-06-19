@@ -23,3 +23,6 @@ $adb devices
 
 Installing apk on your phone / tablet via usb
 $adb install bin/appli.apk
+
+Removing the application
+*adb uninstall appli.apk

@@ -75,6 +75,8 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
 		
+		
+		
     }
     
     protected void setButtons() {
@@ -102,6 +104,16 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
 		
 		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS]);
         button.addMouseListener(jfais.mouseHandler);
+        
+        this.addSeparator();
+        this.addSeparator();
+        
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT]);
+        button.addMouseListener(jfais.mouseHandler);
+        
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN]);
+        button.addMouseListener(jfais.mouseHandler);
+        
 		
 		/*this.addSeparator();
 		

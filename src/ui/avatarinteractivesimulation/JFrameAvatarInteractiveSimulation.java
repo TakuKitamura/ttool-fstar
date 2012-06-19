@@ -144,6 +144,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private TransactionTableModel transactiontm;
 	private JScrollPane jspTransactionInfo;
 	
+	// DisplayedBlocks
+	private JPanel displayedBlockPanel;
+	private JScrollPane jspDisplayedBlocks;
+	private Vector<JCheckBox> displayedBlocks;
+	
 	// Sequence Diagram
 	private AvatarSpecificationSimulationSDPanel sdpanel;
 	
@@ -699,6 +704,38 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jspTransactionInfo.setPreferredSize(new Dimension(250, 300));
 		transactionPanel.add(jspTransactionInfo, BorderLayout.CENTER);
 		
+		
+		// Displayed blocks
+		displayedBlockPanel = new JPanel();
+		displayedBlockPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.gridheight = 1;
+		c.weighty = 1.0;
+		c.weightx = 1.0;
+		c.gridwidth = GridBagConstraints.REMAINDER; //end row
+		c.fill = GridBagConstraints.BOTH;
+		c.gridheight = 1;
+		
+		displayedBlocks = new Vector<JCheckBox>();
+		for(AvatarSimulationBlock block: ass.getSimulationBlocks()) {
+			JCheckBox jcb = new JCheckBox(block.getName(), true);
+			block.selected = true;
+			jcb.addActionListener(this);
+			TraceManager.addDev("Adding block: " + block);
+			displayedBlocks.add(jcb);
+			displayedBlockPanel.add(jcb, c);
+		}
+		ass.computeSelectedSimulationBlocks();
+		
+		jspDisplayedBlocks = new JScrollPane(displayedBlockPanel);
+		jspDisplayedBlocks.setWheelScrollingEnabled(true);
+		jspDisplayedBlocks.getVerticalScrollBar().setUnitIncrement(10);
+		jspDisplayedBlocks.setPreferredSize(new Dimension(250, 300));
+		infoTab.addTab("Displayed blocks", IconManager.imgic1202, jspDisplayedBlocks, "Displayed blocks");
+		
+		
+		
 		// Variables
 		/*variablePanel = new JPanel();
 		variablePanel.setLayout(new BorderLayout());
@@ -937,8 +974,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
-		//actions[AvatarInteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
-		//actions[AvatarInteractiveSimulationActions.ACT_RESTORE_STATE].setEnabled(b);
+		actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].setEnabled(b);
+		actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT].setEnabled(b);
 		
 		setLabelColors();
 		
@@ -1007,6 +1044,18 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				info.setForeground(ColorManager.InteractiveSimulationText_TERM);
 				break;
 			}
+		}
+	}
+	
+	public void zoomIn() {
+		if (sdpanel != null) {
+			sdpanel.zoomIn();
+		}
+	}
+	
+	public void zoomOut() {
+		if (sdpanel != null) {
+			sdpanel.zoomOut();
 		}
 	}
 	
@@ -1186,10 +1235,28 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			actSaveTxt();
 			return;
 			//TraceManager.addDev("Start simulation!");
-		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand()))  {
-			actSaveSDPNG();
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].getActionCommand()))  {
+			zoomIn();
 			return;
 			//TraceManager.addDev("Start simulation!");
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT].getActionCommand())) {
+			zoomOut();
+			return;
+			
+		}
+		
+		
+		// Check for source of jcheckbox
+		int index = 0;
+		for(JCheckBox jcb: displayedBlocks) {
+			if (evt.getSource() == jcb) {
+				ass.getSimulationBlocks().get(index).selected = jcb.isSelected();
+				TraceManager.addDev("Block " + ass.getSimulationBlocks().get(index) + " is now " + ass.getSimulationBlocks().get(index).selected);
+				ass.computeSelectedSimulationBlocks();
+				sdpanel.repaint();
+				return;
+			}
+			index ++;
 		}
 	}
 	
