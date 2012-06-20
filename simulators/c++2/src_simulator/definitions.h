@@ -41,6 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #ifndef definitionsH
 #define definitionsH
 
+
 #include <list>
 #include <vector>
 #include <string>
