@@ -59,5 +59,20 @@
         android:layout_height="wrap_content"
         android:src="@drawable/avatarbdlink"
         android:onClick="clickbutton" />
+    
 
+    <ImageButton
+        android:id="@+id/addNewTagButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add16"
+        android:onClick="clickbutton"/>
+
+    <ImageButton
+        android:id="@+id/trashButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       	android:src="@drawable/trash16" 
+       	android:onClick="clickbutton"/>
+    
 </LinearLayout>

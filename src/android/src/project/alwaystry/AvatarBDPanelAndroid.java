@@ -1,8 +1,11 @@
 package project.alwaystry;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
+
+import copyfromJAVAsource.AvatarSignal;
 
 import myutilandroid.GraphicLibAndroid;
 
@@ -567,4 +570,68 @@ public class AvatarBDPanelAndroid extends View {
 		return v;
 	}
 	
+	public TGComponentAndroid getComponentToWhichBelongs(TGConnectingPointAndroid p) {
+        TGComponentAndroid tgc1, tgc2;
+        Iterator iterator = compolist.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc1 = (TGComponentAndroid)(iterator.next());
+            if(tgc1.belongsToMe(p)){
+            	return tgc1;
+            }
+//            tgc2 = tgc1.belongsToMe(p);
+//            if (tgc2 != null) {
+//                return tgc2;
+//            }
+        }
+        return null;
+    }
+	
+	public Vector getListOfAvailableSignals(AvatarBDBlockAndroid _block) {
+		int i;
+		TGComponentAndroid tgc;
+		LinkedList<String> ll;
+		AvatarBDPortConnectorAndroid port;
+        Iterator iterator = compolist.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		Vector v = new Vector();
+		Vector listOfBlock = _block.getSignalList();
+		
+		if (listOfBlock.size() == 0) {
+			return v;
+		}
+		
+		v.addAll(listOfBlock);
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponentAndroid)(iterator.next());
+            if (tgc instanceof AvatarBDPortConnectorAndroid) {
+				port = (AvatarBDPortConnectorAndroid)tgc;
+				if (port.getAvatarBDBlock1() == _block) {
+					ll = port.getListOfSignalsOrigin();
+					removeSignals(v, ll);
+				}
+				if (port.getAvatarBDBlock2() == _block) {
+					ll = port.getListOfSignalsDestination();
+					removeSignals(v, ll);
+				}
+			}
+		}
+		
+		return v;
+	}
+	
+	private void removeSignals(Vector v, LinkedList<String> list) {
+		int i;
+		AvatarSignal as;
+		for(String s: list) {
+			for(i=0; i<v.size(); i++) {
+				as = (AvatarSignal)(v.get(i));
+				if (as.toString().compareTo(s) == 0) {
+					v.removeElementAt(i);
+					break;
+				}
+			}
+		}
+	}
 }

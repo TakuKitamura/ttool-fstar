@@ -13,6 +13,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -40,6 +42,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 	
 	protected Vector myAttributes, myMethods, mySignals;
 	
+	protected Bitmap icon;
 	
 
 	public AvatarBDBlockAndroid(int _x, int _y, int _minWidth, int _minHeight,int _maxWidth,int _maxHeight, View _panel){
@@ -100,6 +103,8 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		myMethods = new Vector();
 		mySignals = new Vector();
 		
+		icon = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead16);
+		
 		myAttributes.add(new TAttribute(TAttribute.PRIVATE,"attribute1","2",TAttribute.INTEGER));
 	}
     
@@ -114,6 +119,9 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		return GraphicLibAndroid.isInRectangle(x1, y1, getX(), getY(), getWidth(), 30);
 	}
 	
+	public boolean onIcon(int x1,int y1){
+		return GraphicLibAndroid.isInRectangle(x1, y1, getX()+getWidth()-25, getY()+5, getX()+getWidth()-25+icon.getWidth(), getY()+5+icon.getHeight());
+	}
 	
 	public void internalDrawing(Canvas canvas) {
 		if(selected){
@@ -152,6 +160,12 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		canvas.drawLine(x, y+30, rp, y+30, ePaint);
 		
 		//Icon
+		if(width>30 && height > 30){
+			
+			canvas.drawBitmap(icon, x+width - 25, y+5, ePaint);
+
+		}
+		
 		
 		TextPaint tpaint = new TextPaint(mTextPaint);
 		tpaint.setTextAlign(Paint.Align.LEFT);
@@ -332,12 +346,17 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		// TODO Auto-generated method stub
 		
 		if(inEditNameArea(_x, _y)){
+			if(onIcon(_x,_y)){
+				Intent intent = new Intent().setClass(panel.getContext(),AnotherTagActivity.class);	
+				((Activity) panel.getContext()).startActivity(intent);
+				
+			}else{
 		AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
 		//AlertDialog alertDialog;				
 		//panel.getContext();
 		LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.blocknamealert,
-		                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
+		                               (ViewGroup) panel.findViewById(R.id.blockLayout));
 
 		alert.setTitle("setting value");
 		
@@ -359,7 +378,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 			  }
 			});
 
-			alert.show();
+			alert.show();}
 	}else{
 		
 		String s = ((TAttribute)myAttributes.get(0)).toString();
@@ -380,7 +399,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		 
 		String[] signals = new String[mySignals.size()];
 		for(int i=0;i<mySignals.size();i++){
-			methods[i] = ((AvatarSignal)mySignals.get(i)).toString();
+			signals[i] = ((AvatarSignal)mySignals.get(i)).toString();
 		}
 		
 		String[] datatypes = new String[((AvatarBDPanelAndroid)panel).getAllDataTypes().size()];
@@ -449,6 +468,10 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		for(int i=0; i<signalsPar.size(); i++) {
 			mySignals.addElement(signalsPar.elementAt(i));
         }
+	}
+	
+	public Vector getSignalList() {
+		return mySignals;
 	}
 	
 	public void addCryptoElements() {
@@ -545,5 +568,40 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 			_v.add(am);
 		}
 	}
+	
+	public AvatarSignal getSignalNameBySignalDef(String _id) {
+		int index0 = _id.indexOf('(');
+		if (index0 > -1) {
+			_id = _id.substring(0, index0);
+		}
+		_id = _id.trim();
+		//TraceManager.addDev("Searching for signal with id=" + _id);
+		AvatarSignal as;
+		for(int i=0; i<mySignals.size(); i++) {
+			as = (AvatarSignal)(mySignals.get(i));
+			if (as.getId().compareTo(_id) == 0) {
+				//TraceManager.addDev("found");
+				return as;
+			}
+		}
+		//TraceManager.addDev("Not found");
+		return null;
+	}       
+	
+	public AvatarSignal getAvatarSignalFromFullName(String _id) {
+		if(_id.startsWith("in ")) {
+			return getSignalNameBySignalDef(_id.substring(3, _id.length()).trim());
+		}
+		
+		if(_id.startsWith("out ")) {
+			return getSignalNameBySignalDef(_id.substring(4, _id.length()).trim());
+		}
+		return null;
+	}
+	
+	public Vector getListOfAvailableSignals() {
+		return ((AvatarBDPanelAndroid)(panel)).getListOfAvailableSignals(this);
+	}
+	
 	
 }

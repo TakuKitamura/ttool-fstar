@@ -61,6 +61,7 @@ public class TGCNoteAndroid extends TGComponentAndroid{
         value = new String[]{"UML note:","Double click to edit!!!!"};
 	}
 
+	
 	public TGComponentAndroid isOnMe(int x1, int y1) {
 		if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
             return this;
@@ -69,6 +70,7 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 		
 	}
 
+	
 	public void internalDrawing(Canvas canvas) {
 		if(selected){
 			ePaint.setColor(Color.RED);
@@ -140,12 +142,13 @@ public class TGCNoteAndroid extends TGComponentAndroid{
 			
 		return v;
 	}
+	
 	protected boolean editOndoubleClick(int _x, int _y) {
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
 		LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.tgcnotealert,
-                (ViewGroup) panel.findViewById(R.id.linearLayout1));
+                (ViewGroup) panel.findViewById(R.id.blockLayout));
 		alert.setTitle("setting the note");
 		final EditText input = (EditText)layout.findViewById(R.id.noteEditText);
 		input.setText(getValue());

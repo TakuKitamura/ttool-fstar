@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -20,9 +21,10 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TabHost;
 import android.widget.Toast;
 
-public class AlwaystryActivity extends Activity implements OnGesturePerformedListener{//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
+public class AlwaystryActivity extends TabActivity implements OnGesturePerformedListener{//implements OnTouchListener{//implements OnLongClickListener,OnTouchListener{
 	
 	int clickaction = 0;
 	int tx = -1,ty=-1,bx=-1,by=-1;
@@ -31,12 +33,18 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
 	GestureOverlayView gestures;
 	
 	public static final int EDIT_ATTRIBUTES = 1;
+	public static final int SIGNALASSOCIATION =2;
 	
 	
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.block);   
+        setContentView(R.layout.main);
+        
+        TabHost mTabHost = getTabHost();
+        
+        mTabHost.addTab(mTabHost.newTabSpec("AVATAR BD").setIndicator("AVATAR BD").setContent(R.id.blockLayout));
+        
         panel = (AvatarBDPanelAndroid)findViewById(R.id.avatarBDPanelAndroid1);
 		
         gestureLib = GestureLibraries.fromRawResource(this, R.raw.actions);
@@ -104,6 +112,15 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
     		panel.setMode(AvatarBDPanelAndroid.ADDING_CONNECTOR);
     		clickaction =8;
     		break;
+    	case R.id.addNewTagButton:
+    		TabHost mTabHost = getTabHost();
+            
+            mTabHost.addTab(mTabHost.newTabSpec("NEW TAB").setIndicator("NEW TAB").setContent(R.id.relativeLayout1));
+            
+    		break;
+    	case R.id.trashButton:
+    		panel.deleteComponent();
+    		break;
     	}
     		
     }
@@ -147,6 +164,18 @@ public class AlwaystryActivity extends Activity implements OnGesturePerformedLis
 					panel.invalidate();
 				}
 				
+			}
+			break;
+		case SIGNALASSOCIATION:
+			if(resultCode == Activity.RESULT_OK){
+				
+				AvatarBDPortConnectorAndroid connector = (AvatarBDPortConnectorAndroid)panel.getComponentSelected();
+				int size = objectBundle.getInt("FIFOsize");
+				Boolean asyn = objectBundle.getBoolean("asynchro");
+				Boolean blocking = objectBundle.getBoolean("isBlocking");
+				String[] assocs = objectBundle.getStringArray("signalAssociationsArray");
+				connector.setSignalAssociation(asyn, blocking, size, assocs);
+				panel.invalidate();
 			}
 			break;
 		

@@ -20,6 +20,42 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp" >
+            
+             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/blockLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#FFFFFF"
+        android:orientation="vertical" >
+
+        <android.gesture.GestureOverlayView
+            android:id="@+id/gestureOverlayView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <project.alwaystry.AvatarbdToolbarAndroid
+                android:id="@+id/avatarbdToolbarAndroid1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </project.alwaystry.AvatarbdToolbarAndroid>
+
+        </android.gesture.GestureOverlayView>
+
+        <project.alwaystry.AvatarBDPanelAndroid
+            android:id="@+id/avatarBDPanelAndroid1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>    
+    
+              <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+       
+
+    </RelativeLayout>
         </FrameLayout>
     </LinearLayout>
 

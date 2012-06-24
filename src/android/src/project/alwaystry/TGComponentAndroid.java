@@ -78,6 +78,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     public  int getHeight() {
         return height;
     }
+	
 	public void setCd(int _x, int _y) {
 		// TODO Auto-generated method stub
 	    x = _x;
@@ -91,6 +92,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	public void setCptype(int cptype) {
 		this.cptype = cptype;
 	}
+	
 	public String getName() {
 		// TODO Auto-generated method stub
 		return name;
@@ -259,4 +261,13 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     }
     
     protected abstract boolean editOndoubleClick(int _x,int _y);
+    
+    public boolean belongsToMe(TGConnectingPointAndroid tgp) {
+        for (int i=0; i<nbConnectingPoints; i++) {
+            if (connectingPoints[i] == tgp) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -11,6 +11,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -111,6 +113,12 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 		canvas.drawLine(x, y+30, rp, y+30, ePaint);
 		
 		//Icon
+		if(width>30 && height > 30){
+			Bitmap bitmap = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead16);
+			
+			canvas.drawBitmap(bitmap, x+width - 25, y+5, ePaint);
+
+		}
 
 		//draw Attributes
 		TextPaint tpaint = new TextPaint(mTextPaint);
@@ -159,6 +167,7 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 		this.panel = panel;
 	}
 
+	
 	public TGComponentAndroid isOnMe(int x1, int y1) {
 		// TODO Auto-generated method stub
 		if ((x1 >= x) && ((x + width) >= x1) && (y1 >= y) && ((y + height) >= y1)) {
@@ -182,6 +191,7 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 	public boolean inEditNameArea(int x1,int y1){
 		return GraphicLibAndroid.isInRectangle(x1, y1, getX(), getY(), getWidth(), 30);
 	}
+	
 	protected boolean editOndoubleClick(int _x, int _y) {
 		// TODO Auto-generated method stub
 		if(inEditNameArea(_x, _y)){
@@ -191,7 +201,7 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 //			panel.getContext();
 			LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.blocknamealert,
-			                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
+			                               (ViewGroup) panel.findViewById(R.id.blockLayout));
 
 			alert.setTitle("setting value");
 			

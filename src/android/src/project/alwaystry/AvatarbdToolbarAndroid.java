@@ -30,6 +30,7 @@ public class AvatarbdToolbarAndroid extends LinearLayout {
 		View.inflate(context, R.layout.avatarbdtoolbar, this);
 		Log.v("AvatarbdToolbar", "Number of Child: " + this.getChildCount());
 	}
+	
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		// TODO Auto-generated method stub
 		super.onLayout(changed, l, t, r, b);

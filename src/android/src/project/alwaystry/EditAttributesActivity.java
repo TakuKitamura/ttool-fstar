@@ -134,24 +134,6 @@ public class EditAttributesActivity extends TabActivity {
 		
 		mTabHost.setCurrentTab(0);	
 		
-//		 TabHost tabHost = getTabHost();  // The activity TabHost
-//	     TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-//	     Intent intent; 
-//	     
-//	     intent = new Intent().setClass(this, AttributesEditionActivity.class);
-//	     spec = tabHost.newTabSpec("Attributes").setIndicator("Attributes")
-//                 .setContent(intent);
-//	     tabHost.addTab(spec);
-//	     
-//	     intent = new Intent().setClass(this, MethodsEditionActivity.class);
-//	     spec = tabHost.newTabSpec("Methods").setIndicator("Methods")
-//                 .setContent(intent);
-//	     tabHost.addTab(spec);
-//	     
-//	     intent = new Intent().setClass(this, SignalsEditionActivity.class);
-//	     spec = tabHost.newTabSpec("Signals").setIndicator("Signals")
-//                 .setContent(intent);
-//	     tabHost.addTab(spec);
 	 }
 	 
 	 public void clickOnEditButtons(View v){
@@ -412,6 +394,7 @@ public class EditAttributesActivity extends TabActivity {
 		 
 		 methodsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+				
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					// TODO Auto-generated method stub
@@ -440,6 +423,7 @@ public class EditAttributesActivity extends TabActivity {
 		 
 		 signalsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+				
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					// TODO Auto-generated method stub
@@ -471,6 +455,7 @@ public class EditAttributesActivity extends TabActivity {
 		// attributesList.setSelector(this.getResources().getDrawable(R.color.list_s));
 		 attributesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+			
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
@@ -483,26 +468,6 @@ public class EditAttributesActivity extends TabActivity {
 			}
 		});
 		 
-		 
-		 
-		
-//		 attributesList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//
-//				@Override
-//				public void onItemSelected(AdapterView<?> arg0, View arg1,
-//						int arg2, long arg3) {
-//					// TODO Auto-generated method stub
-//					arg1.setBackgroundColor(Color.BLUE);
-//					
-//				}
-//
-//				@Override
-//				public void onNothingSelected(AdapterView<?> arg0) {
-//					// TODO Auto-generated method stub
-//					arg0.setBackgroundColor(Color.WHITE);
-//				}
-//			});
-//		 attributesList.setBackgroundDrawable(this.getResources().getDrawable(R.drawable.list_selector));
 		 attributesList.invalidate();
 		
 		

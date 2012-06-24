@@ -23,10 +23,12 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
 //		height = Math.abs(p2.getY()-p1.getY())+p1.height;
 		
 	}
+	
 	public abstract void internalDrawing(Canvas canvas) ;
 		// TODO Auto-generated method stub
 
 
+	
 	public TGComponentAndroid isOnMe(int _x, int _y) {
 		// TODO Auto-generated method stub
 		

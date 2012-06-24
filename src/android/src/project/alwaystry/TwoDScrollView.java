@@ -103,6 +103,7 @@ public class TwoDScrollView extends RelativeLayout {
    initTwoDScrollView();
  }
  
+ @Override
  protected float getTopFadingEdgeStrength() {
    if (getChildCount() == 0) {
      return 0.0f;
@@ -114,6 +115,7 @@ public class TwoDScrollView extends RelativeLayout {
    return 1.0f;
  }
  
+ @Override
  protected float getBottomFadingEdgeStrength() {
    if (getChildCount() == 0) {
      return 0.0f;
@@ -127,6 +129,7 @@ public class TwoDScrollView extends RelativeLayout {
    return 1.0f;
  }
  
+ @Override
  protected float getLeftFadingEdgeStrength() {
    if (getChildCount() == 0) {
      return 0.0f;
@@ -138,6 +141,7 @@ public class TwoDScrollView extends RelativeLayout {
    return 1.0f;
  }
  
+ @Override
  protected float getRightFadingEdgeStrength() {
    if (getChildCount() == 0) {
      return 0.0f;
@@ -173,6 +177,7 @@ public class TwoDScrollView extends RelativeLayout {
    mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
  }
  
+ @Override
  public void addView(View child) {
    /*if (getChildCount() > 0) {
      throw new IllegalStateException("TwoDScrollView can host only one direct child");
@@ -180,6 +185,7 @@ public class TwoDScrollView extends RelativeLayout {
    super.addView(child);
  }
  
+ @Override
  public void addView(View child, int index) {
    /*if (getChildCount() > 0) {
      throw new IllegalStateException("TwoDScrollView can host only one direct child");
@@ -187,6 +193,7 @@ public class TwoDScrollView extends RelativeLayout {
    super.addView(child, index);
  }
  
+ @Override
  public void addView(View child, ViewGroup.LayoutParams params) {
    /*if (getChildCount() > 0) {
      throw new IllegalStateException("TwoDScrollView can host only one direct child");
@@ -194,6 +201,7 @@ public class TwoDScrollView extends RelativeLayout {
    super.addView(child, params);
  }
  
+ @Override
  public void addView(View child, int index, ViewGroup.LayoutParams params) {
    /*if (getChildCount() > 0) {
      throw new IllegalStateException("TwoDScrollView can host only one direct child");
@@ -215,6 +223,7 @@ public class TwoDScrollView extends RelativeLayout {
    return false;
  }
  
+ @Override
  public boolean dispatchKeyEvent(KeyEvent event) {
    // Let the focused view and/or our descendants get the key first
    boolean handled = super.dispatchKeyEvent(event);
@@ -279,6 +288,7 @@ public class TwoDScrollView extends RelativeLayout {
    return handled;
  }
  
+ @Override
  public boolean onInterceptTouchEvent(MotionEvent ev) {
    /*
    * This method JUST determines whether we want to intercept the motion.
@@ -343,6 +353,7 @@ public class TwoDScrollView extends RelativeLayout {
    return mIsBeingDragged;
  }
  
+ @Override
  public boolean onTouchEvent(MotionEvent ev) {
  
    if (ev.getAction() == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
@@ -748,15 +759,18 @@ public class TwoDScrollView extends RelativeLayout {
   * <p>The scroll range of a scroll view is the overall height of all of its
   * children.</p>
   */
+ @Override
  protected int computeVerticalScrollRange() {
    int count = getChildCount();
    return count == 0 ? getHeight() : (getChildAt(0)).getBottom();
  }
+ @Override
  protected int computeHorizontalScrollRange() {
    int count = getChildCount();
    return count == 0 ? getWidth() : (getChildAt(0)).getRight();
  }
  
+ @Override
  protected void measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec) {
    ViewGroup.LayoutParams lp = child.getLayoutParams();
    int childWidthMeasureSpec;
@@ -768,6 +782,7 @@ public class TwoDScrollView extends RelativeLayout {
    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
  }
  
+ @Override
  protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
    final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
    final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
@@ -777,6 +792,7 @@ public class TwoDScrollView extends RelativeLayout {
    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
  }
  
+ @Override
  public void computeScroll() {
    if (mScroller.computeScrollOffset()) {
      // This is called at drawing time by ViewGroup.  We don't want to
@@ -911,6 +927,7 @@ public class TwoDScrollView extends RelativeLayout {
    return scrollYDelta;
  }
  
+ @Override
  public void requestChildFocus(View child, View focused) {
    if (!mTwoDScrollViewMovedFocus) {
      if (!mIsLayoutDirty) {
@@ -930,6 +947,7 @@ public class TwoDScrollView extends RelativeLayout {
   * This is more expensive than the default {@link android.view.ViewGroup}
   * implementation, otherwise this behavior might have been made the default.
   */
+ @Override
  protected boolean onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect) {
    // convert from forward / backward notation to up / down / left / right
    // (ugh).
@@ -951,17 +969,20 @@ public class TwoDScrollView extends RelativeLayout {
    return nextFocus.requestFocus(direction, previouslyFocusedRect);
  }
  
+ @Override
  public boolean requestChildRectangleOnScreen(View child, Rect rectangle, boolean immediate) {
    // offset into coordinate space of this scroll view
    rectangle.offset(child.getLeft() - child.getScrollX(), child.getTop() - child.getScrollY());
    return scrollToChildRect(rectangle, immediate);
  }
  
+ @Override
  public void requestLayout() {
    mIsLayoutDirty = true;
    super.requestLayout();
  }
  
+ @Override
  protected void onLayout(boolean changed, int l, int t, int r, int b) {
    super.onLayout(changed, l, t, r, b);
    mIsLayoutDirty = false;
@@ -975,6 +996,7 @@ public class TwoDScrollView extends RelativeLayout {
    scrollTo(getScrollX(), getScrollY());
  }
  
+ @Override
  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
    super.onSizeChanged(w, h, oldw, oldh);
  
