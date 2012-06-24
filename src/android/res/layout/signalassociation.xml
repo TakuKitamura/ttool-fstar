@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <project.alwaystry.PanelWithTitledBorder
+        android:id="@+id/addSignalsBox"
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp" >
+        
+        <LinearLayout
+            android:id="@+id/signalsLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/panelWithTitledBorder1"
+	        android:layout_marginTop="50dp" >
+
+            <Spinner
+                android:id="@+id/signalsSpinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=" = " />
+            
+            <Spinner
+                android:id="@+id/signalsSpinner2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+    	</LinearLayout>
+        
+        <Button
+	        android:id="@+id/addSignalsButton"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/signalsLayout"
+	        android:layout_weight="1"
+	        android:text="Add Signals" 
+	        android:onClick="clickOnEditButtons"/>
+    </project.alwaystry.PanelWithTitledBorder>
+
+    <project.alwaystry.PanelWithTitledBorder
+        android:id="@+id/manageSignalsBox"
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/addSignalsBox"
+        android:layout_alignTop="@+id/addSignalsBox" >
+        <ListView
+            android:id="@+id/signalsListView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="5dp"
+            android:background ="#ffffff">
+       	</ListView>
+
+        <Button
+            android:id="@+id/upSignalsButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/signalsListView"
+            android:layout_below="@+id/signalsListView"
+            android:paddingTop="3dp"
+            android:text="Up" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/downSignalsButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/upSignalsButton"
+            android:layout_below="@+id/upSignalsButton"
+            android:paddingTop="3dp"
+            android:text="Down" 
+            android:onClick="clickOnEditButtons"/>
+        <Button
+            android:id="@+id/removeSignalsButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignLeft="@+id/downSignalsButton"
+            android:layout_below="@+id/downSignalsButton"
+            android:paddingTop="3dp"
+            android:text="Remove Attribute" 
+            android:onClick="clickOnEditButtons"/>
+    </project.alwaystry.PanelWithTitledBorder>
+
+    <project.alwaystry.PanelWithTitledBorder
+        android:id="@+id/connectorTypeBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manageSignalsBox"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="10dp" >
+
+        <RadioGroup 
+            android:id="@+id/sychroRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            
+            <RadioButton
+            android:id="@+id/sychroRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"       
+            android:text="synchronous" 
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/asynchroRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="asynchronous" />
+            
+        </RadioGroup>
+        
+        
+        <LinearLayout
+            android:id="@+id/sizeFIFOLayout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@+id/sychroRadioGroup"
+	        android:layout_marginLeft="5dp" >
+            
+            <TextView
+	            android:id="@+id/sizeFIFOTextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Size of FIFO:" 
+	            android:enabled="false"/>
+            <EditText
+	            android:id="@+id/sizeFIFOEditText"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:inputType="number"
+	            android:enabled="false" >
+       		</EditText>
+   	 </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/blockingBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sizeFIFOLayout"
+            android:layout_marginRight="10dp"
+            android:text="Blocking on write when FIFO is full" 
+            android:enabled="false"/>
+        
+    </project.alwaystry.PanelWithTitledBorder>
+
+        <Button
+            android:id="@+id/signalsCloseButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/addSignalsBox"
+            android:layout_below="@+id/connectorTypeBox"
+            android:text="Save and close" 
+            android:onClick="clickOnEditButtons"/>
+
+        <Button
+            android:id="@+id/signalsCancelButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/manageSignalsBox"
+            android:layout_below="@+id/connectorTypeBox"
+            android:layout_toRightOf="@+id/signalsCloseButton"
+            android:text="Cancel" 
+            android:onClick="clickOnEditButtons"/>
+
+
+</RelativeLayout>
