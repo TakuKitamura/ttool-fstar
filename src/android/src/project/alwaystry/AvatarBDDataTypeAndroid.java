@@ -108,15 +108,13 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
             canvas.drawText(name,lp+(width-name.length())/2, tp+25,mTextPaint);
         }
 		
-//		mPaint.setColor(Color.BLACK);
-//		mPaint.setStrokeWidth(2);
 		canvas.drawLine(x, y+30, rp, y+30, ePaint);
 		
 		//Icon
 		if(width>30 && height > 30){
-			Bitmap bitmap = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead16);
+			Bitmap bitmap = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead32);
 			
-			canvas.drawBitmap(bitmap, x+width - 25, y+5, ePaint);
+			canvas.drawBitmap(bitmap, x+width - 30, y+5, ePaint);
 
 		}
 

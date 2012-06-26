@@ -73,15 +73,12 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		if(movingHead){
 			paint.setColor(Color.MAGENTA);
 		}
-//		if(tx !=-1 && ty!=-1 && bx!=-1 && by!=-1)
-//			canvas.drawLine(tx, ty, bx, by, paint);
-		//if(hasStart() && hasEnd()){
 		Log.i("portconnector", "internaldrawing");
 		Log.i("portconnector", "p1: "+p1.isFree()+"p2 :" +p2.isFree());
 		canvas.drawRect(p1.getX()-p1.getWidth()/2, p1.getY()-p1.getHeight()/2, p1.getX()+p1.getWidth()/2, p1.getY()+p1.getHeight()/2, paint);
 		canvas.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY(), paint);
 		canvas.drawRect(p2.getX()-p2.getWidth()/2, p2.getY()-p2.getHeight()/2, p2.getX()+p2.getWidth()/2, p2.getY()+p2.getHeight()/2, paint);
-	//	}
+	
 		int decX = 6;
 		int decY = 20;
 
@@ -92,7 +89,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 
 		// Signals at origin
 		if (inSignalsAtOrigin.size() > 0) {
-			//g.drawString("in:", p1.getX() + decX, p1.getY() + h);
+			
 			for(String iso: inSignalsAtOrigin) {
 				h += step;
 				s = getShortName(iso);
@@ -105,8 +102,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 			}
 		}
 		if (outSignalsAtOrigin.size() > 0) {
-			//h += step;
-			//g.drawString("out:", p1.getX() + decX, p1.getY() + h);
+			
 			for(String oso: outSignalsAtOrigin) {
 				h += step;
 				s = getShortName(oso);
@@ -121,8 +117,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		// Signals at destination
 		h = - decY;
 		if (outSignalsAtDestination.size() > 0) {
-			//h += step;
-			//g.drawString("out:", p2.getX() + decX, p2.getY() + h);
+			
 			for(String osd: outSignalsAtDestination) {
 				h += step;
 				s = getShortName(osd);
@@ -135,7 +130,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 			}
 		}
 		if (inSignalsAtDestination.size() > 0) {
-			//g.drawString("in:", p2.getX() + decX, p2.getY() + h);
+			
 			for(String isd: inSignalsAtDestination) {
 				h += step;
 				s = getShortName(isd);
@@ -236,11 +231,11 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		String[] block1Signals = new String[block1.mySignals.size()];
 		String[] block2Signals = new String[block2.mySignals.size()];
 		
-		for(int i=0;i<available1.size();i++){
+		for(int i=0;i<block1.mySignals.size();i++){
 			block1Signals[i] = ((AvatarSignal)block1.mySignals.elementAt(i)).toString();
 		}
 		
-		for(int i=0;i<available2.size();i++){
+		for(int i=0;i<block2.mySignals.size();i++){
 			block2Signals[i] = ((AvatarSignal)block2.mySignals.elementAt(i)).toString();
 		}
 		
@@ -249,9 +244,7 @@ public class AvatarBDPortConnectorAndroid extends TGConnectorAndroid{
 		for(int i= 0;i<v.size();i++){
 			asarray[i]=(String)v.elementAt(i);
 		}
-		
-		
-		
+
 		Bundle associabundle = new Bundle();
 		associabundle.putStringArray("associationSignals", asarray);
 		associabundle.putStringArray("availableSignals1", availableSignals1);

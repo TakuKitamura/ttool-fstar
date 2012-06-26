@@ -5,23 +5,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
 
-import copyfromJAVAsource.AvatarSignal;
-
 import myutilandroid.GraphicLibAndroid;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
+import copyfromJAVAsource.AvatarSignal;
 
 public class AvatarBDPanelAndroid extends View {
 	
@@ -77,14 +71,14 @@ public class AvatarBDPanelAndroid extends View {
 	
 	public AvatarBDPanelAndroid(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
+	
 		initPanel();
 	}
 	
 	public AvatarBDPanelAndroid(Context context) {
 		super(context);
 		initPanel();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	private void initPanel(){
@@ -101,11 +95,8 @@ public class AvatarBDPanelAndroid extends View {
 		setClickable(true);
 		
 		TDiagramTouchManagerAndroid tManager = new TDiagramTouchManagerAndroid(this);
-		//setOnClickListener(tManager);
+	
 		setOnTouchListener(tManager);
-		
-		//this.setClickable(true);
-		//this.setLongClickable(true);
 		
 		setCreatedtype(TGComponentAndroid.NOCOMPONENT);
 	}
@@ -174,15 +165,15 @@ public class AvatarBDPanelAndroid extends View {
 			if (showSelectionZone) {
 				Log.i("panel", "drawing selected "+xsel+" "+ysel+" "+xendsel+" "+yendsel);
 				if (mode == MOVING_SELECTED_COMPONENTS) {
-					//g.setColor(ColorManager.MOVING_0);
+					
 					fgPaintSel.setColor(Color.MAGENTA);
 				} else {
-					//g.setColor(ColorManager.POINTER_ON_ME_0);
+					
 					fgPaintSel.setColor(Color.RED);
 				}
-				//GraphicLib.setMediumStroke(g);
+				
 			} else {
-				//g.setColor(ColorManager.NORMAL_0);
+				
 			}
 			
 			
@@ -349,13 +340,17 @@ public class AvatarBDPanelAndroid extends View {
 	}
 	
 	public int selectComponentInRectangle(int x, int y, int width, int height) {
-        //TraceManager.addDev("x=" + x + " y=" + y + " width=" +width + " height=" + height);
+        
         TGComponentAndroid tgc;
         int cpt = 0;
         Iterator iterator = compolist.listIterator();
 
         while(iterator.hasNext()) {
             tgc = (TGComponentAndroid)(iterator.next());
+            if(tgc instanceof TGConnectorAndroid){
+            	Log.i("panel", "x: "+tgc.getX()+"y: "+tgc.getY()+"width: "+ tgc.getWidth()+"height: "+ tgc.getHeight());
+            	Log.i("panel11", "x: "+x+"y: "+y+"width: "+ width+"height: "+ height);
+            }
             if (tgc.areAllInRectangle(x, y, width, height)) {
             	Log.i("panel","tgc ");
                 tgc.select(true);
@@ -399,28 +394,22 @@ public class AvatarBDPanelAndroid extends View {
 		int nb =0;
 		if(xsel !=-1 && xendsel !=-1)
 			nb = selectComponentInRectangle(Math.min(xsel, xendsel), Math.min(ysel, yendsel), Math.abs(xsel - xendsel), Math.abs(ysel - yendsel));
-        Log.i("panel", "select nimber: "+nb);
+        Log.i("panel", "select number: "+nb);
         if(nb !=0){
         	
             mode = SELECTED_COMPONENTS;
             Log.i("panel", "select mode: "+mode);
-        //    mgui.setMode(MainGUI.CUTCOPY_OK);
-          //  mgui.setMode(MainGUI.EXPORT_LIB_OK);
             showSelectionZone = true;
             xSEL = Math.min(xsel, xendsel);
             ySEL = Math.min(ysel, yendsel);
             widthSel = Math.abs(xsel - xendsel);
             heightSel = Math.abs(ysel - yendsel);
-        }else{
-        	 
+        }else{        	 
                  mode = NORMAL;
                  xsel= -1;
                  ysel = -1;
                  xendsel =-1;
-                 yendsel =-1;
-//                 mgui.setMode(MainGUI.CUTCOPY_KO);
-//                 mgui.setMode(MainGUI.EXPORT_LIB_KO);
-          
+                 yendsel =-1;        
         }
         invalidate();
 		
@@ -458,16 +447,16 @@ public class AvatarBDPanelAndroid extends View {
 		this.xsel = xsel;
 	}
 	
-//	public void deleteBlock(int i){
-//		compolist.remove(i);
-//		invalidate();
-//	}
-
 	public void deleteComponent(){
 		if(componentSelected != null){
 			
 				((TGComponentAndroid) componentSelected).cleanAllPoints();
-			
+				if(componentSelected instanceof TGConnectorAndroid){
+					((TGConnectorAndroid)componentSelected).p1.setState(TGConnectingPointAndroid.NORMAL);
+					((TGConnectorAndroid)componentSelected).p1.setFree(true);
+					((TGConnectorAndroid)componentSelected).p2.setState(TGConnectingPointAndroid.NORMAL);
+					((TGConnectorAndroid)componentSelected).p2.setFree(true);
+				}
 			compolist.remove(componentSelected);
 			componentSelected = null;
 		}

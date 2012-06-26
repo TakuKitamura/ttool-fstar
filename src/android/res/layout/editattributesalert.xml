@@ -35,8 +35,8 @@
 
         <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder1"
-            android:layout_width="300dp"
-            android:layout_height="220dp" >
+            android:layout_width="500dp"
+            android:layout_height="250dp" >
         <TableLayout 
             android:id="@+id/tablelayout1"
             android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                     android:id="@+id/identifierEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="3" >
+                    android:ems="5" >
 
                     <requestFocus />
                 </EditText>
@@ -94,7 +94,7 @@
                     android:id="@+id/iniValueEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="3" >
+                    android:ems="5" >
                 </EditText>
                     
                 <Spinner
@@ -118,8 +118,8 @@
 
         <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder2"
-            android:layout_width="300dp"
-            android:layout_height="220dp"
+            android:layout_width="500dp"
+            android:layout_height="250dp"
             android:layout_toRightOf="@+id/panelWithTitledBorder1"
             android:layout_marginLeft="10dp"
             android:layout_centerHorizontal="true" >
@@ -127,9 +127,9 @@
         <ListView
             android:id="@+id/listView1"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="21dp"
             android:layout_marginRight="5dp"
             android:background ="#ffffff">
        	</ListView>
@@ -175,8 +175,8 @@
     
      <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder3"
-            android:layout_width="300dp"
-            android:layout_height="220dp" >
+            android:layout_width="500dp"
+            android:layout_height="250dp" >
 
         <Button
             android:id="@+id/addMethodButton"
@@ -215,8 +215,8 @@
 
         <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder4"
-            android:layout_width="300dp"
-            android:layout_height="220dp"
+            android:layout_width="500dp"
+            android:layout_height="250dp"
             android:layout_toRightOf="@+id/panelWithTitledBorder3"
             android:layout_marginLeft="10dp"
             android:layout_centerHorizontal="true" >
@@ -224,9 +224,9 @@
         <ListView
             android:id="@+id/methodListView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="21dp"
             android:layout_marginRight="5dp"
             android:background="#ffffff" >
         </ListView>
@@ -272,8 +272,8 @@
     
  <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder5"
-            android:layout_width="300dp"
-            android:layout_height="220dp" >
+            android:layout_width="500dp"
+            android:layout_height="250dp" >
 
           <TableLayout 
             android:id="@+id/tablelayout2"
@@ -328,8 +328,8 @@
 
         <project.alwaystry.PanelWithTitledBorder
             android:id="@+id/panelWithTitledBorder6"
-            android:layout_width="300dp"
-            android:layout_height="220dp"
+            android:layout_width="500dp"
+            android:layout_height="250dp"
             android:layout_toRightOf="@+id/panelWithTitledBorder5"
             android:layout_marginLeft="10dp"
             android:layout_centerHorizontal="true" >
@@ -337,9 +337,9 @@
         <ListView
             android:id="@+id/signalListView"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="21dp"
             android:layout_marginRight="5dp"
             android:background="#ffffff" >
         </ListView>
@@ -388,7 +388,7 @@
      <Button
             android:id="@+id/closeButton"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="300dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@android:id/tabhost"
        		android:layout_below="@android:id/tabhost"
@@ -398,7 +398,7 @@
         <Button
             android:id="@+id/cancelButton"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="300dp"
+            android:layout_width="500dp"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/tabhost"
             android:layout_toRightOf="@+id/closeButton"

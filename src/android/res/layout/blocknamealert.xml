@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="26dp"
         android:layout_marginTop="29dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/editname" />
 
     <TextView
         android:id="@+id/textView1"

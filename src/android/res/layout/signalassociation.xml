@@ -5,8 +5,8 @@
 
     <project.alwaystry.PanelWithTitledBorder
         android:id="@+id/addSignalsBox"
-        android:layout_width="300dp"
-        android:layout_height="220dp"
+        android:layout_width="420dp"
+        android:layout_height="250dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
@@ -17,7 +17,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignLeft="@+id/panelWithTitledBorder1"
-	        android:layout_marginTop="50dp" >
+	        android:layout_marginTop="100dp" >
 
             <Spinner
                 android:id="@+id/signalsSpinner1"
@@ -53,9 +53,9 @@
 
     <project.alwaystry.PanelWithTitledBorder
         android:id="@+id/manageSignalsBox"
-        android:layout_width="300dp"
-        android:layout_height="220dp"
-        android:layout_marginLeft="30dp"
+        android:layout_width="420dp"
+        android:layout_height="250dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/addSignalsBox"
         android:layout_alignTop="@+id/addSignalsBox" >
         <ListView
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
             android:background ="#ffffff">
        	</ListView>
@@ -104,14 +104,15 @@
         android:id="@+id/connectorTypeBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/manageSignalsBox"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="10dp" >
-
+        android:layout_toRightOf="@+id/manageSignalsBox"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@+id/manageSignalsBox" >
+		
         <RadioGroup 
             android:id="@+id/sychroRadioGroup"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
             
             <RadioButton
             android:id="@+id/sychroRadioButton"
@@ -133,7 +134,7 @@
             android:id="@+id/sizeFIFOLayout"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_toRightOf="@+id/sychroRadioGroup"
+	        android:layout_below="@+id/sychroRadioGroup"
 	        android:layout_marginLeft="5dp" >
             
             <TextView
@@ -165,20 +166,20 @@
         <Button
             android:id="@+id/signalsCloseButton"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="300dp"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/addSignalsBox"
-            android:layout_below="@+id/connectorTypeBox"
+            android:layout_below="@+id/addSignalsBox"
             android:text="Save and close" 
             android:onClick="clickOnEditButtons"/>
 
         <Button
             android:id="@+id/signalsCancelButton"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="300dp"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/manageSignalsBox"
-            android:layout_below="@+id/connectorTypeBox"
+            android:layout_below="@+id/manageSignalsBox"
             android:layout_toRightOf="@+id/signalsCloseButton"
             android:text="Cancel" 
             android:onClick="clickOnEditButtons"/>

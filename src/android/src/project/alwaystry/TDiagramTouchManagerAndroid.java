@@ -1,26 +1,17 @@
 package project.alwaystry;
 
 import myutilandroid.GraphicLibAndroid;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.SystemClock;
-import android.util.FloatMath;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class TDiagramTouchManagerAndroid implements OnTouchListener{
 
 	AvatarBDPanelAndroid panel;
 	int clickedX,clickedY;
+	int firstClickX,firstClickY;
 	float dist;
 	private TGComponentAndroid tgComponent;
 	private TGConnectorAndroid tgConnector;
@@ -34,7 +25,6 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 	}
 	
 	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
 		final int X = (int)event.getX();
 		final int Y = (int)event.getY();
 		dumpEvent(event);
@@ -57,8 +47,6 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 			}
 			
 			if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
-//				panel.setMode(AvatarBDPanelAndroid.NORMAL);
-//			}else{
 				panel.createComponent(X,Y,panel.getCreatedtype());
 				panel.invalidate();
 			}
@@ -90,9 +78,6 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 			}	
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
-//			float dx = event.getX(0) - event.getX(1);
-//			float dy = event.getY(0) - event.getY(1);
-//			dist = FloatMath.sqrt(dx*dx+dy*dy);
 			dist = GraphicLibAndroid.distanceBetweenTwoP(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
 			Log.i("touch manager", "Dist = "+ dist);
 			if(dist >10f){
@@ -109,14 +94,18 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 			Log.i("touchmanager", "turn to normal");
 			if(click1time ==0){
 				click1time = SystemClock.uptimeMillis();
+				firstClickX = X;
+				firstClickY = Y;
 				Log.i("Alwaystry","time is "+click1time);
 				if(tgComponent !=null){
 					tgComponent1clicked = tgComponent;
 				}
-			}else if(SystemClock.uptimeMillis()-click1time < 1000){
-				if(tgComponent1clicked != null &&tgComponent1clicked == tgComponent){
-					Log.i("Alwaystry","double click!!");
-					tgComponent.editOndoubleClick(X, Y);
+			}else if(SystemClock.uptimeMillis()-click1time < 500){
+				if((int)GraphicLibAndroid.distanceBetweenTwoP(firstClickX,firstClickY,X,Y)<50){
+					if(tgComponent1clicked != null &&tgComponent1clicked == tgComponent){
+						Log.i("Alwaystry","double click!!");
+						tgComponent.editOndoubleClick(X, Y);
+					}
 				}
                 click1time = 0;    
 			}else{
@@ -157,20 +146,15 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_COMPONENT){
-//				if(panel.getComponentSelected() instanceof TGConnectorAndroid){
-//				
-//				}else{
-					int dcx = clickedX - X;
-					int dcy = clickedY - Y;
-					int ox = tgComponent.getX();
-					int oy = tgComponent.getY();
-					tgComponent.setCd(ox-dcx, oy-dcy);
-					clickedX = X;
-					clickedY = Y;
-					Log.i("block location", "X: "+X+" Y: "+X);
-					panel.invalidate();
-//				}
-				
+				int dcx = clickedX - X;
+				int dcy = clickedY - Y;
+				int ox = tgComponent.getX();
+				int oy = tgComponent.getY();
+				tgComponent.setCd(ox-dcx, oy-dcy);
+				clickedX = X;
+				clickedY = Y;
+				Log.i("block location", "X: "+X+" Y: "+X);
+				panel.invalidate();		
 			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.MOVING_SELECTED_COMPONENTS){
@@ -192,18 +176,10 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 			}
 			
 			if(panel.getMode() == AvatarBDPanelAndroid.RESIZING_COMPONENT){
-//				float x1 = event.getX(0)-event.getX(1);
-//				float y1 = event.getY(0)-event.getY(1);
-//				float newdist = FloatMath.sqrt(x1*x1+y1*y1);
-				
 				float newdist = GraphicLibAndroid.distanceBetweenTwoP(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
-				
-				tgComponent.setRescale(newdist/dist);
-//				int rcx = rescaleComponent.getX();
-//				int rcy = rescaleComponent.getY();
-//				int rcw = rescaleComponent.getWidth();
-//				int rch = rescaleComponent.getHeight();
-//				rescaleComponent.setCd(rcx+, _y)
+
+				tgComponent.setRescale(newdist - dist);
+
 				Log.i("touch manager", "rescale: "+tgComponent.getRescale());
 				panel.invalidate();
 			}
@@ -239,67 +215,5 @@ public class TDiagramTouchManagerAndroid implements OnTouchListener{
 		   sb.append("]" );
 		   Log.d("Touch Manager", sb.toString());
 		}
-
-//	
-//	public void onClick(View v) {
-//		Log.i("touchmanager on click", "clickedX:"+clickedX+ "clickedY: "+clickedY);
-//		
-////		if(panel.getMode() == AvatarBDPanelAndroid.SELECTED_COMPONENTS){
-////			panel.setMode(AvatarBDPanelAndroid.NORMAL);
-////			panel.setXsel(-1);
-////			panel.setYsel(-1);
-////			panel.setXendsel(-1);
-////			panel.setYendsel(-1);
-////			panel.invalidate();
-////		}
-//		
-//		if(panel.getCreatedtype() != TGComponentAndroid.NOCOMPONENT){
-//			panel.createComponent(clickedX,clickedY,panel.getCreatedtype());
-//			panel.invalidate();
-//		}
-//		
-//		
-//	}
-
-//	
-//	public boolean onLongClick(View v) {
-//		// TODO Auto-generated method stub
-//		if(panel.getComponentSelected() instanceof AvatarBDBlockAndroid){
-//			final AvatarBDBlockAndroid block = (AvatarBDBlockAndroid)panel.getComponentSelected();
-//			if(block.inEditNameArea(clickedX, clickedY)){
-//				AlertDialog.Builder alert = new AlertDialog.Builder(panel.getContext());
-//				AlertDialog alertDialog;				
-//				panel.getContext();
-//				LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//				View layout = inflater.inflate(R.layout.blocknamealert,
-//				                               (ViewGroup) panel.findViewById(R.id.linearLayout1));
-//
-//				alert.setTitle("setting value");
-//				
-//				TextView text = (TextView)layout.findViewById(R.id.textView1);
-//				text.setText("Block name");
-//				final EditText input = (EditText)layout.findViewById(R.id.editText1);
-//				input.setText(block.getName());
-//				alert.setView(layout);
-//				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int whichButton) {
-//						block.setName(input.getText().toString());
-//					    panel.invalidate();
-//					  }
-//					});
-//
-//					alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//					  public void onClick(DialogInterface dialog, int whichButton) {
-//					    // Canceled.
-//					  }
-//					});
-//
-//					alert.show();
-//			}
-//		}
-//		return true;
-//	}
-
-	
 	
 }

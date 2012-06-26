@@ -103,7 +103,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		myMethods = new Vector();
 		mySignals = new Vector();
 		
-		icon = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead16);
+		icon = BitmapFactory.decodeResource(panel.getResources(), R.drawable.avatarhead32);
 		
 		myAttributes.add(new TAttribute(TAttribute.PRIVATE,"attribute1","2",TAttribute.INTEGER));
 	}
@@ -120,7 +120,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 	}
 	
 	public boolean onIcon(int x1,int y1){
-		return GraphicLibAndroid.isInRectangle(x1, y1, getX()+getWidth()-25, getY()+5, getX()+getWidth()-25+icon.getWidth(), getY()+5+icon.getHeight());
+		return GraphicLibAndroid.isInRectangle(x1, y1, getX()+getWidth()-30, getY()+5, getX()+getWidth()-30+icon.getWidth(), getY()+5+icon.getHeight());
 	}
 	
 	public void internalDrawing(Canvas canvas) {
@@ -131,7 +131,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 			ePaint.setColor(Color.BLACK);
 			mTextPaint.setColor(Color.BLACK);
 		}
-		Log.i("BDblock", "internal drawing!");
+		//Log.i("BDblock", "internal drawing!");
 		int lp=getX();
 		int tp=getY();
 		int rp=getX()+getWidth();
@@ -162,7 +162,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		//Icon
 		if(width>30 && height > 30){
 			
-			canvas.drawBitmap(icon, x+width - 25, y+5, ePaint);
+			canvas.drawBitmap(icon, x+width - 30, y+5, ePaint);
 
 		}
 		
@@ -177,7 +177,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		TAttribute a;
 		
 		int w;
-		Log.i("block drawing", ""+mTextPaint.getTextSize());
+		//Log.i("block drawing", ""+mTextPaint.getTextSize());
 		int step = 10;
 		
 		while(index< myAttributes.size()){
@@ -271,22 +271,6 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 			
 			index++;
 		}
-		//canvas.drawText("attribute 1", x+50+7, y+60, mTextPaint);
-		
-		//canvas.drawLine(x, y+70, rp, y+70, ePaint);
-		
-		//draw methods
-		
-		//draw signals
-	
-//		if(showConnectingPoints){
-//			Log.i("block", ""+showConnectingPoints);
-//			//canvas.drawRect(0, 0, 8, 8, cpPaint);
-//			for(int i=0; i<nbConnectingPoints ; i++){
-//			//	Log.i("block", "drawing points");
-//				connectingPoints[i].internalDrawing(canvas);
-//			}
-//		}
 		
 		drawTGConnectingPoint(canvas, cptype);
 		
@@ -385,7 +369,7 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		TAttribute a = TAttribute.getTAttributeFromString(s);
 		if(a!=null){
 		String s1 = a.toString();
-		Log.i("block", "s1:"+s1);
+		//Log.i("block", "s1:"+s1);
 		}
 		String[] attributes = new String[myAttributes.size()];
 		for(int i=0;i<myAttributes.size();i++){
@@ -447,8 +431,8 @@ public class AvatarBDBlockAndroid extends TGComponentAndroid{
 		Vector methodsPar = new Vector();
 		for(int i=0; i<methods.length; i++) {
 			methodsPar.addElement(AvatarMethod.isAValidMethod(methods[i]));
-			Log.i("set methods", methods[i]);
-			Log.i("set methods", "method "+AvatarMethod.isAValidMethod(methods[i]));
+//			Log.i("set methods", methods[i]);
+//			Log.i("set methods", "method "+AvatarMethod.isAValidMethod(methods[i]));
         }
 		
 		myMethods.removeAllElements();

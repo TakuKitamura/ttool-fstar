@@ -1,9 +1,7 @@
 package project.alwaystry;
 
 import myutilandroid.GraphicLibAndroid;
-
 import android.graphics.Canvas;
-import android.graphics.PointF;
 import android.view.View;
 
 public abstract class TGConnectorAndroid extends TGComponentAndroid{
@@ -16,22 +14,15 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
 		super(Math.min(p1.getX(), p2.getX())-p1.width/2, Math.min(p1.getY(), p2.getY())-p1.height/2, _minWidth, _minHeight, _maxWidth, _maxHeight, panel);
 		this.p1 = p1;
 		this.p2 = p2;
-//		this.panel = panel;
-//		int _x =Math.min(p1.getX(), p2.getX())-p1.width/2;
-//		int _y = Math.min(p1.getY(), p2.getY())-p1.height/2;
-//		width = Math.abs(p2.getX()-p1.getX())+p1.width;
-//		height = Math.abs(p2.getY()-p1.getY())+p1.height;
 		
 	}
 	
 	public abstract void internalDrawing(Canvas canvas) ;
-		// TODO Auto-generated method stub
+		
 
 
 	
 	public TGComponentAndroid isOnMe(int _x, int _y) {
-		// TODO Auto-generated method stub
-		
 		
 		if( p1.isOnMe(_x, _y)!=null|| p2.isOnMe(_x, _y)!=null){
 			return this;
@@ -41,7 +32,7 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
 		float mx = (p1.getX()-p2.getX())*(_y-p1.getY())/(p1.getY()-p2.getY()) +p1.getX();
 		float my = (p1.getY()-p2.getY())*(_x-p1.getX())/(p1.getX()-p2.getY()) +p1.getY();
 		
-		if(Math.abs(mx-_x)<=30 || Math.abs(my-_y)<= 30){
+		if(Math.abs(mx-_x)<=20 || Math.abs(my-_y)<= 20){
 			return this;
 		}
 		return null;
@@ -80,10 +71,7 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
     
     public CDElementAndroid [] closerPToClickFirst(int x, int y) {
         CDElementAndroid [] cde = new CDElementAndroid[2];
-        
-//        int distance1 = (int)(new PointF(x, y).distance(p1.getX(), p1.getY()));
-//        int distance2 = (int)(new Point(x, y).distance(p2.getX(), p2.getY()));
-        
+   
         int distance1 = (int)GraphicLibAndroid.distanceBetweenTwoP(x, y, p1.getX(), p1.getY());
         int distance2 = (int)GraphicLibAndroid.distanceBetweenTwoP(x, y, p2.getX(), p2.getY());
         if (distance1 < distance2) {
@@ -99,6 +87,22 @@ public abstract class TGConnectorAndroid extends TGComponentAndroid{
     
     public int getType(){
     	return type;
+    }
+    
+    public int getWidth(){
+    	return Math.abs(p1.getX()-p2.getX());
+    }
+    
+    public int getHeight(){
+    	return Math.abs(p1.getY()-p2.getY());
+    }
+    
+    public int getX(){
+    	return Math.min(p1.getX(), p2.getX());
+    }
+    
+    public int getY(){
+    	return Math.min(p1.getY(), p2.getY());
     }
 	
 }

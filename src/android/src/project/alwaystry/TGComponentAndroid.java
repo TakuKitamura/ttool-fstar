@@ -108,7 +108,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
 	public abstract void internalDrawing(Canvas canvas);
 
 	public boolean isInRectangle(int x1, int y1, int width, int height) {
-        if ((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height))) {
+        if ((getX() < x1) || (getY() < y1) || ((getX() + this.getWidth()) > (x1 + width)) || ((getY() + this.getHeight()) > (y1 + height))) {
             //System.out.println("Not in my rectangle " + this);
             return false;
         } else {
@@ -117,17 +117,11 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     }
 	
 	public boolean areAllInRectangle(int x1, int y1, int width, int height) {
-	     //   TGComponent tgc;
-	        
+	   		
         if (!isInRectangle(x1, y1, width, height)) {
             return false;
         }
-//	        
-//	        for(int i=0; i<nbInternalTGComponent; i++) {
-//	            if (!tgcomponent[i].isInRectangle(x1, y1, width, height)) {
-//	                return false;
-//	            }
-//	        }
+
         return true;
     }
 	
@@ -215,16 +209,7 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
                 connectingPoints[i].internalDrawing(canvas);
             }
         }
-		
-//		if (this instanceof HiddenInternalComponents) {
-//			if (((HiddenInternalComponents)(this)).areInternalsHidden()) {
-//				return;
-//			}
-//		}
-//		
-//        for(int i=0; i<nbInternalTGComponent; i++) {
-//            tgcomponent[i].drawTGConnectingPoint(g, type);
-//        }
+
     }
     
     public float getRescale(){
@@ -234,26 +219,17 @@ public abstract class TGComponentAndroid implements CDElementAndroid{
     	rescale = f;
     	
     	int newx,newy,neww,newh;
-    	neww = (int)(this.getWidth()*f);
-		newh = (int)(this.getHeight()*f);
+		
+		neww = (int)(this.getWidth()+f/20);
+		newh = (int)(this.getHeight()+f/20);
 		
 		if((neww>maxWidth && newh >maxHeight) || (neww<minWidth || newh <minHeight)){
 			return;
 		}
 		
-    	
-    	if(f > 1){
-    		newx = (int)(this.getX()-50*(rescale-1)/2);
-    		newy = (int)(this.getY()-50*(rescale-1)/2);
-    		
-    	}else{
-    		newx = (int)(this.getX()+50*(1-rescale)/2);
-    		newy = (int)(this.getY()+50*(1-rescale)/2);
-    		
-    	}
-    	
-    	
-		
+		newx = (int)(this.getX()-rescale/20);
+		newy = (int)(this.getY()-rescale/20);
+		 	
     	this.setCd(newx, newy);
     	this.setHeight(newh);
     	this.setWidth(neww);
