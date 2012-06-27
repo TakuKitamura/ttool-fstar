@@ -200,11 +200,10 @@ public class AvatarBDDataTypeAndroid extends TGComponentAndroid{
 			LayoutInflater inflater = (LayoutInflater) panel.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View layout = inflater.inflate(R.layout.blocknamealert,
 			                               (ViewGroup) panel.findViewById(R.id.blockLayout));
-
 			alert.setTitle("setting value");
 			
 			TextView text = (TextView)layout.findViewById(R.id.textView1);
-			text.setText("Block name");
+			text.setText("Datatype name");
 			final EditText input = (EditText)layout.findViewById(R.id.editText1);
 			input.setText(getName());
 			alert.setView(layout);

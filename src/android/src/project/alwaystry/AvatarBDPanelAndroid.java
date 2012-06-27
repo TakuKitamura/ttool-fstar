@@ -568,10 +568,7 @@ public class AvatarBDPanelAndroid extends View {
             if(tgc1.belongsToMe(p)){
             	return tgc1;
             }
-//            tgc2 = tgc1.belongsToMe(p);
-//            if (tgc2 != null) {
-//                return tgc2;
-//            }
+
         }
         return null;
     }
