@@ -1804,6 +1804,98 @@ public class GTURTLEModeling {
 		
 		
     }
+    
+    
+    // Returns the number of states found
+    // Returns -1 in case of error
+    public int computeMutexStatesWith(AvatarSMDState state) {
+    	Vector<TGComponent> list = new Vector<TGComponent>();
+    	
+    	if (state == null) {
+    		state.setMutexWith(TGComponent.MUTEX_UNKNOWN);
+    		return -1;
+    	}
+    	
+    	for(Invariant inv: invariants) {
+    		if (inv.containsComponent(state)) {
+    			// All other states are in mutual exclusion
+    			for(TGComponent tgc: inv.getComponents()) {
+    				if ((tgc instanceof AvatarSMDState) && (tgc != state)) {
+    					if (tgc.getTDiagramPanel() != state.getTDiagramPanel()) {
+    					if (!(list.contains(tgc))) {
+    						tgc.setMutualExclusionWithMasterMutex(state.getTDiagramPanel().getName() + "/" + state.getStateName());
+    						list.add(tgc);
+    						
+    					}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	if (list.size() > 0) {
+    	  state.setMutexWith(TGComponent.MUTEX_OK);
+    	} else {
+    		state.setMutexWith(TGComponent.MUTEX_UNKNOWN);
+    	}
+    	
+    	return list.size();
+    	
+    }
+    
+    
+    public void computeAllMutualExclusions() {
+    	TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
+    	
+    	if (tp == null) {
+    		return;
+    	}
+    	
+    	if (!(tp instanceof AvatarDesignPanel)) {
+    		return;
+    	}
+    	
+    	AvatarDesignPanel adp = (AvatarDesignPanel)(tp);
+    	adp.reinitMutualExclusionStates();
+    	
+    	// First step: build a list of all states being in invariants
+    	Vector<AvatarSMDState> v = new Vector<AvatarSMDState>();
+    	for(Invariant inv: invariants) {
+    		for(TGComponent tgc: inv.getComponents()) {
+    			if (tgc instanceof AvatarSMDState) {
+    				if (!(v.contains(tgc))) {
+    					v.add((AvatarSMDState)tgc);
+    				}
+    			}
+    		}
+    	}
+    	
+    	// Then, add to all states its list of mutually exclusive states
+    	
+    	for(AvatarSMDState s: v) {
+    		Vector<AvatarSMDState> v0 = new Vector<AvatarSMDState>();
+    		for(Invariant inv: invariants) {
+    			if (inv.containsComponent(s)) {
+					for(TGComponent tgc: inv.getComponents()) {
+						if ((tgc instanceof AvatarSMDState) && (tgc != s)) {
+							if (tgc.getTDiagramPanel() != s.getTDiagramPanel()) {
+								if (!(v0.contains(tgc))) {
+									v0.add((AvatarSMDState)tgc);
+								}
+							}
+						}
+					}
+    			}
+    		}
+    		TraceManager.addDev("State " + s.getStateName() + " has " + v0.size() + " mutually eclusive states");
+    		
+    		for(AvatarSMDState s0: v0) {
+    			s.addMutexState(s0);
+    		}
+    	}
+    	
+    	
+    }
 	
 	// From AVATAR to TURTLEModeling
 	public boolean translateAvatarSpecificationToTIF() {
@@ -4628,6 +4720,7 @@ public class GTURTLEModeling {
 			boolean invariant = false;
 			boolean breakpoint = false;
 			boolean hidden = false;
+			boolean masterMutex = false;
 
 			for(i=0; i<nl.getLength(); i++) {
 				n = nl.item(i);
@@ -4670,7 +4763,9 @@ public class GTURTLEModeling {
 						accessibility = true;
 					} else if (elt.getTagName().equals("invariant")) {
 						invariant = true;
-					}else if (elt.getTagName().equals("breakpoint")) {
+					} else if (elt.getTagName().equals("mastermutex")) {
+						masterMutex = true;
+					} else if (elt.getTagName().equals("breakpoint")) {
 						breakpoint = true;
 					}
 				}
@@ -4833,6 +4928,10 @@ public class GTURTLEModeling {
 			
 			if (invariant) {
 				tgc.setCheckableInvariant(invariant);
+			}
+			
+			if (masterMutex) {
+				tgc.setMasterMutex(true);
 			}
 			
 			if (breakpoint) {

@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
     private int textY1 = 3;
 	
 	private int maxFontSize = 12;
@@ -68,6 +68,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	
 	
 	public String oldValue;
+	
+	protected Vector<AvatarSMDState> mutexStates;
     
     public AvatarSMDState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -143,6 +145,29 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         myImageIcon = IconManager.imgic700;
 		
 		//actionOnAdd();
+    }
+    
+    public void addMutexState(AvatarSMDState state) {
+    	if (mutexStates == null) {
+    		mutexStates = new Vector<AvatarSMDState>();
+    	}
+    	
+    	mutexStates.add(state);
+    }
+    
+    public void reinitMutualExclusionStates() {
+    	resetMutexStates();
+    	
+    	 for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarSMDState) {
+            	((AvatarSMDState)tgcomponent[i]).reinitMutualExclusionStates();
+            }
+         }
+    	
+    }
+    
+    public void resetMutexStates() {
+    	mutexStates = null;
     }
     
     public void internalDrawing(Graphics g) {
@@ -227,6 +252,14 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		// Icon
 		
 		g.setFont(fold);
+		
+		/*if ((mutexStates != null) && (state == TGState.POINTER_ON_ME)){
+			String s = "Mutually exclusive states:\n";
+			for(AvatarSMDState st: mutexStates) {
+				s += st.getTDiagramPanel().getName() + "/" + st.getStateName() + "\n";
+			}
+			drawAttributes(g, s);
+		}*/
     }
 	
     
@@ -479,6 +512,19 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	
 	public boolean isACompositeState() {
 		return (nbInternalTGComponent > 0);
+	}
+	
+	public String getAttributes() {
+		if (mutexStates == null) {
+			return null;	
+		}
+		
+		String s = "Mutually exclusive states:\n";
+		for(AvatarSMDState st: mutexStates) {
+			s += "  " + st.getTDiagramPanel().getName() + "/" + st.getStateName() + "\n";
+		}
+		
+		return s;
 	}
 	
     

@@ -170,6 +170,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	public final static int MUTEX_OK = 2;
 	public final static int MUTEX_UNKNOWN = 1;
 	
+	
+	protected boolean masterMutex;
+	protected int mutexWith;
+	protected boolean mutualExclusionWithMasterMutex;
+	protected String nameOfMasterStateMutex;
+	
 	protected boolean breakpoint;
 
 	
@@ -377,6 +383,54 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		}
 	}
 	
+	public void removeAllMutualExclusionWithMasterMutex() {
+		mutualExclusionWithMasterMutex = false;
+		
+		if (nbInternalTGComponent >0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				tgcomponent[i].removeAllMutualExclusionWithMasterMutex();
+			}
+		}
+		
+	}
+	
+	public void setMasterMutex(boolean b) {
+		masterMutex = b;
+	}
+	
+	public boolean getMasterMutex() {
+		return masterMutex;
+	}
+	
+	public void setMutexWith(int value) {
+		mutexWith = value;
+	}
+	
+	public void setMutualExclusionWithMasterMutex(String name) {
+		mutualExclusionWithMasterMutex = true;
+		nameOfMasterStateMutex = name;
+	}
+	
+	public TGComponent hasCheckableMasterMutex() {
+		if (getMasterMutex()) {
+			//TraceManager.addDev("Found element with master mutex: " + this);
+			return this;
+		}
+		
+		TGComponent tgc;
+		if (nbInternalTGComponent >0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				tgc = tgcomponent[i].hasCheckableMasterMutex();
+				if (tgc != null) {
+					return tgc;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	
 	
 	public void setMutexResult(int value) {
 		mutex = value;
@@ -439,6 +493,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	
 	public void drawAttributes(Graphics g, String attr) {
+		if (attr == null) {
+			return;
+		}
+		
         int s0=4, s1=9, s2=15, s3=7;
         
 		ColorManager.setColor(g, state, 0);
@@ -809,6 +867,23 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			/*g.drawLine(x+width-2, y+2, x+width-6, y+6);
 			g.drawLine(x+width-6, y+2, x+width-2, y+6);
 			GraphicLib.setNormalStroke(g);*/
+		}
+		
+		if (masterMutex) {
+			g.setColor(ColorManager.ACCESSIBILITY);
+			if (mutexWith == MUTEX_NOT_YET_STUDIED) {
+				g.drawString("mutual exclusion with others?", x+width+1, y+12);
+			} else if (mutexWith == MUTEX_UNKNOWN) {
+				g.drawString("No mutual exclusion with others found", x+width+1, y+12);
+			} else if (mutexWith == MUTEX_OK) {
+				g.setColor(ColorManager.MUTEX_OK);
+				g.drawString("Mutual exclusion with others found", x+width+1, y+12);
+			}
+		}
+		
+		if (mutualExclusionWithMasterMutex) {
+			g.setColor(ColorManager.MUTEX_OK);
+			g.drawString("Mutual exclusion with " + nameOfMasterStateMutex, x+width+1, y+12);
 		}
 		
 		
@@ -2601,6 +2676,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		sb.append(translateInternalComment());
 		sb.append(translateAccessibility());
 		sb.append(translateInvariant());
+		sb.append(translateMasterMutex());
 		sb.append(translateBreakpoint());
         sb.append(translateExtraParam());
         if (b) {
@@ -2648,6 +2724,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		StringBuffer sb = new StringBuffer();
 		if (invariant) {		
 			sb.append("<invariant />\n");
+		}
+		return new String(sb);
+	}
+	
+	protected String translateMasterMutex() {
+		StringBuffer sb = new StringBuffer();
+		if (masterMutex) {		
+			sb.append("<mastermutex />\n");
 		}
 		return new String(sb);
 	}

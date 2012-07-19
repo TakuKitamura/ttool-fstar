@@ -201,6 +201,56 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		
 	}
 	
+	public TGComponent hasCheckableMasterMutex() {
+		TGComponent tgc, tgctmp; 
+		for(int i=0; i<panels.size(); i++) {
+			tdp = (TDiagramPanel)(panels.get(i));
+			if (tdp instanceof AvatarSMDPanel) {
+				ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					tgctmp = tgc.hasCheckableMasterMutex();
+					if (tgctmp != null) {
+						//TraceManager.addDev("Found element with master mutex: " + tgctmp);
+						return tgctmp;
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	public void removeAllMutualExclusionWithMasterMutex() {
+		TGComponent tgc;
+		for(int i=0; i<panels.size(); i++) {
+			tdp = (TDiagramPanel)(panels.get(i));
+			if (tdp instanceof AvatarSMDPanel) {
+				ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					tgc.removeAllMutualExclusionWithMasterMutex();
+				}
+			}
+		}
+	}
+	
+	public void reinitMutualExclusionStates() {
+		TGComponent tgc;
+		for(int i=0; i<panels.size(); i++) {
+			tdp = (TDiagramPanel)(panels.get(i));
+			if (tdp instanceof AvatarSMDPanel) {
+				ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					if (tgc instanceof AvatarSMDState) {
+						((AvatarSMDState)tgc).reinitMutualExclusionStates();
+					}
+				}
+			}
+		}
+	}
+	
 	
     
 }

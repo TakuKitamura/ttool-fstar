@@ -65,6 +65,7 @@ import launcher.*;
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
     
 	private static boolean IGNORE = true;
+	private static boolean ALL_MUTEX = true;
 	
     protected MainGUI mgui;
     
@@ -82,7 +83,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     protected JButton start;
     protected JButton stop;
     protected JButton close;
-    protected JCheckBox ignoreInvariants;
+    protected JCheckBox ignoreInvariants, computeAllMutualExclusions;
     
     
     private Thread t;
@@ -126,8 +127,12 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         jp1 = new JTabbedPane();
         
         JPanel panelCompute = new JPanel(new BorderLayout());
+        JPanel panelCheck = new JPanel(new BorderLayout());
         ignoreInvariants = new JCheckBox("Ignore invariants concerning only one block", IGNORE);
-        panelCompute.add(ignoreInvariants, BorderLayout.NORTH);
+        panelCheck.add(ignoreInvariants, BorderLayout.NORTH);
+        computeAllMutualExclusions = new JCheckBox("Compute mutual exclusions for all states", ALL_MUTEX);
+        panelCheck.add(computeAllMutualExclusions, BorderLayout.SOUTH);
+        panelCompute.add(panelCheck, BorderLayout.NORTH);
         
         jta = new ScrolledJTextArea();
         jta.setEditable(false);
@@ -208,6 +213,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             stopProcess();
         }
         IGNORE = ignoreInvariants.isSelected();
+        ALL_MUTEX = computeAllMutualExclusions.isSelected();
         dispose();
     }
     
@@ -241,6 +247,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
 		TraceManager.addDev("Thread started");
         
         try {
+        	jta.append("\n*** WARNING: Invariants do NOT take into account variables nor time constraints ***\n");
             jta.append("Generating Petri Net\n");
             tpn = mgui.gtm.generateTPNFromAvatar();
             jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
@@ -441,7 +448,24 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             }
             //jta.append("Mutual exclusions return value: " + mutex + "\n");
             
+            TGComponent tgc = mgui.hasCheckableMasterMutex();
+            if ((tgc != null) && (tgc instanceof AvatarSMDState)){
+            	AvatarSMDState astate = (AvatarSMDState)tgc;
+            	jta.append("Search for states in mutual exclusion with: " + astate.getStateName() + "\n");
+            	int nbOfStates = mgui.gtm.computeMutexStatesWith(astate);
+            	if (nbOfStates == -1) {
+            		jta.append("Error when computing mutual exclusion\n");
+            	} else {
+            		jta.append("" + nbOfStates + " state(s) found\n");
+            	}
+            	
+            }
             
+            if (computeAllMutualExclusions.isSelected()) {
+            	jta.append("Computing mutual exclusions for all states\n");
+            	
+            	mgui.gtm.computeAllMutualExclusions();
+            }
             
             jta.append("All done\n");
             

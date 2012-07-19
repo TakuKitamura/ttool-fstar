@@ -291,6 +291,7 @@ public abstract class TURTLEPanel implements GenericTree {
 			panelAt(i).resetAllDIPLOIDs();
 		}
 	}
+	
     
 }
 

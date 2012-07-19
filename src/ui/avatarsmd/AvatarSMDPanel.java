@@ -55,7 +55,7 @@ import java.util.*;
 
 import ui.*;
 
-public class AvatarSMDPanel extends TDiagramPanel {
+public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     
     public  AvatarSMDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
@@ -63,6 +63,8 @@ public class AvatarSMDPanel extends TDiagramPanel {
         TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);
+        
+        attributesOn = PARTIAL;
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

@@ -111,7 +111,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide;
-	protected JMenuItem checkAccessibility, checkInvariant;
+	protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex;
 	protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1342,6 +1342,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		componentMenu.add(removeInternalComment);
 		componentMenu.add(checkAccessibility);
 		componentMenu.add(checkInvariant);
+		componentMenu.add(checkMasterMutex);
 		componentMenu.add(breakpoint);
         
         tgc.addActionToPopupMenu(componentMenu, menuAL, x, y);
@@ -1431,6 +1432,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         
         checkInvariant = new JMenuItem("Check for mutual exclusion");
         checkInvariant.addActionListener(menuAL);
+        
+        checkMasterMutex = new JMenuItem("Search for other states in mutual exclusion with");
+        checkMasterMutex.addActionListener(menuAL);
 		
 		breakpoint = new JMenuItem("Add / remove breakpoint");
         breakpoint.addActionListener(menuAL);
@@ -1600,6 +1604,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		if (e.getSource() == checkInvariant) {
 			if (componentPopup instanceof CheckableInvariant) {
 				componentPopup.setCheckableInvariant(!componentPopup.getCheckableInvariant());
+			}
+		}
+		
+		if (e.getSource() == checkMasterMutex) {
+			
+			if (componentPopup instanceof CheckableInvariant) {
+				
+				TGComponent tmptgc = mgui.hasCheckableMasterMutex();
+				TraceManager.addDev("Element with Master mutex: " + tmptgc);
+				if ((tmptgc != null) && (tmptgc != componentPopup)){
+					tmptgc.setMasterMutex(false);
+				}
+				mgui.removeAllMutualExclusionWithMasterMutex();
+				componentPopup.setMasterMutex(!componentPopup.getMasterMutex());
+				componentPopup.setMutexWith(TGComponent.MUTEX_NOT_YET_STUDIED);
 			}
 		}
 		

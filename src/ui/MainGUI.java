@@ -826,6 +826,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     	return currentInvariant;
     }
     
+    public TGComponent hasCheckableMasterMutex() {
+    	TURTLEPanel tp = getCurrentTURTLEPanel();
+    	
+    	if (tp instanceof AvatarDesignPanel) {
+    		return ((AvatarDesignPanel)tp).hasCheckableMasterMutex();
+    	}
+    	
+    	return null;
+    }
+    
+    public void removeAllMutualExclusionWithMasterMutex() {
+    	TURTLEPanel tp = getCurrentTURTLEPanel();
+    	
+    	if (tp instanceof AvatarDesignPanel) {
+    		((AvatarDesignPanel)tp).removeAllMutualExclusionWithMasterMutex();
+    	}
+    	
+    }
+    
     
     
     
