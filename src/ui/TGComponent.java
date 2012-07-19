@@ -163,6 +163,13 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	protected boolean accessibility;
 	
+	// Invariants and mutual exclusion
+	protected boolean invariant;
+	protected int mutex;
+	public final static int MUTEX_NOT_YET_STUDIED = 0;
+	public final static int MUTEX_OK = 2;
+	public final static int MUTEX_UNKNOWN = 1;
+	
 	protected boolean breakpoint;
 
 	
@@ -324,6 +331,55 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				tgcomponent[i].getAllCheckableAccessibility(_list);
 			}
 		}
+	
+		
+	}
+	
+	public void setCheckableInvariant(boolean b) {
+		invariant = b;
+	}
+	
+	public boolean getCheckableInvariant() {
+		return invariant;
+	}
+	
+	public boolean hasCheckableInvariant() {
+		if (invariant == true) {
+			return true;
+		}
+		
+		if (nbInternalTGComponent >0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				if (tgcomponent[i].hasCheckableAccessibility()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public LinkedList getAllCheckableInvariant() {
+		LinkedList list = new LinkedList();
+		getAllCheckableInvariant(list);
+		return list;
+	}
+	
+	public void getAllCheckableInvariant(LinkedList _list) {
+		if (invariant) {
+			_list.add(this);
+		}
+		
+		if (nbInternalTGComponent > 0) {
+			for(int i=0; i<tgcomponent.length; i++) {
+				tgcomponent[i].getAllCheckableInvariant(_list);
+			}
+		}
+	}
+	
+	
+	public void setMutexResult(int value) {
+		mutex = value;
 	}
 	
 	public void setBreakpoint(boolean b) {
@@ -737,6 +793,24 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			g.drawLine(x+width-6, y+2, x+width-2, y+6);
 			GraphicLib.setNormalStroke(g);
 		}
+		
+		if (invariant) {
+			g.setColor(ColorManager.ACCESSIBILITY);
+			//GraphicLib.setMediumStroke(g);
+			if (mutex == MUTEX_NOT_YET_STUDIED) {
+				g.drawString("mutual exclusion?", x+width+1, y);
+			} else if (mutex == MUTEX_UNKNOWN) {
+				g.drawString("mutual exclusion: cannot be proved", x+width+1, y);
+			} else if (mutex == MUTEX_OK) {
+				g.setColor(ColorManager.MUTEX_OK);
+				g.drawString("mutual exclusion: OK", x+width+1, y);
+			}
+			
+			/*g.drawLine(x+width-2, y+2, x+width-6, y+6);
+			g.drawLine(x+width-6, y+2, x+width-2, y+6);
+			GraphicLib.setNormalStroke(g);*/
+		}
+		
 		
 		if (tdp.DIPLO_ANIMATE_ON) {
 			if (breakpoint) {
@@ -2526,6 +2600,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
         sb.append(translateJavaCode());
 		sb.append(translateInternalComment());
 		sb.append(translateAccessibility());
+		sb.append(translateInvariant());
 		sb.append(translateBreakpoint());
         sb.append(translateExtraParam());
         if (b) {
@@ -2565,6 +2640,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		StringBuffer sb = new StringBuffer();
 		if (accessibility) {		
 			sb.append("<accessibility />\n");
+		}
+		return new String(sb);
+	}
+	
+	protected String translateInvariant() {
+		StringBuffer sb = new StringBuffer();
+		if (invariant) {		
+			sb.append("<invariant />\n");
 		}
 		return new String(sb);
 	}

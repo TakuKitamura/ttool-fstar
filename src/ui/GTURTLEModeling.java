@@ -255,6 +255,8 @@ public class GTURTLEModeling {
     public void clearInvariants() {
     	invariants.clear();
     }
+    
+
 	
 	public String saveTIF() {
 		if (tm == null) {
@@ -504,6 +506,7 @@ public class GTURTLEModeling {
 		languageID = TPN;
 		return tpnFromAvatar;
 	}
+	
 		/*IntMatrix im = tpnFromAvatar.getIncidenceMatrix();
 		TraceManager.addDev("Farkas computing on " + im.toString());
 		im.Farkas();
@@ -1702,6 +1705,7 @@ public class GTURTLEModeling {
 
 		AvatarDesignPanelTranslator adpt = new AvatarDesignPanelTranslator(adp);
 		avatarspec = adpt.generateAvatarSpecification(blocks);
+		avatarspec.setInformationSource(adp);
 		optimizeAvatar = _optimize;
 		//TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
 		tmState = 3;
@@ -1732,6 +1736,74 @@ public class GTURTLEModeling {
 		
 		return true;*/
 	}
+	
+	// Return values
+	// -1: error
+	// -2: no mutex
+	// -3: invariant for mutex not found
+	// else: invariant found! -> invariant index
+	public int computeMutex() {
+		if (avatarspec == null) {
+			return -1;
+		}
+		
+		AvatarDesignPanel adp = null;
+		
+		try {
+			 adp = (AvatarDesignPanel)(avatarspec.getInformationSource());
+		} catch (Exception e) {
+			TraceManager.addDev("Exception gtm: " + e.getMessage());
+			return -1;
+		}
+		
+		// Building the list of all states in the mutex
+		LinkedList<TGComponent> compInMutex = adp.getListOfComponentsInMutex();
+		TraceManager.addDev("Nb of elements in mutex:" + compInMutex.size());
+		
+		if (compInMutex.size() ==0) {
+			return -2;
+		}
+		
+		LinkedList<TGComponent> comps;
+		boolean found;
+		int nbOfFound;
+		int cpt = 0;
+		// Go thru invariants, and see whether one contains
+		for(Invariant inv: invariants) {
+			comps = inv.getComponents();
+			nbOfFound = 0;
+			for(TGComponent tgc_mutex: compInMutex) {
+				found = false;
+				for(TGComponent tgc_inv: comps) {
+					if (tgc_mutex == tgc_inv) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					break;
+				}
+				nbOfFound ++;
+			}
+			if (nbOfFound == compInMutex.size()) {
+				TraceManager.addDev("Mutex found in inv:" + cpt);
+				for(TGComponent tgc: compInMutex) {
+					tgc.setMutexResult(TGComponent.MUTEX_OK);
+				}
+				return cpt;
+			}
+			cpt ++;
+		}
+		
+		
+		for(TGComponent tgc: compInMutex) {
+			tgc.setMutexResult(TGComponent.MUTEX_UNKNOWN);
+		}
+				
+		return -3;
+		
+		
+    }
 	
 	// From AVATAR to TURTLEModeling
 	public boolean translateAvatarSpecificationToTIF() {
@@ -4553,6 +4625,7 @@ public class GTURTLEModeling {
 			String pre = "", post = "";
 			String internalComment = "";
 			boolean accessibility = false;
+			boolean invariant = false;
 			boolean breakpoint = false;
 			boolean hidden = false;
 
@@ -4595,6 +4668,8 @@ public class GTURTLEModeling {
 						internalComment += elt.getAttribute("value") + "\n";
 					} else if (elt.getTagName().equals("accessibility")) {
 						accessibility = true;
+					} else if (elt.getTagName().equals("invariant")) {
+						invariant = true;
 					}else if (elt.getTagName().equals("breakpoint")) {
 						breakpoint = true;
 					}
@@ -4753,6 +4828,11 @@ public class GTURTLEModeling {
 			
 			if (accessibility) {
 				tgc.setCheckableAccessibility(accessibility);
+			
+			}
+			
+			if (invariant) {
+				tgc.setCheckableInvariant(invariant);
 			}
 			
 			if (breakpoint) {

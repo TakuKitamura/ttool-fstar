@@ -166,6 +166,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	public AvatarStateMachineElement basicCloneMe() {
 		AvatarTransition at = new AvatarTransition(getName() + "_clone", getReferenceObject());
 		
+		at.setGuard(getGuard());
+		
 		for(int i=0; i<getNbOfAction(); i++) {
 			at.addAction(getAction(i));
 		}

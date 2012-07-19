@@ -178,38 +178,29 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		
 	}
 	
-	/*public ArrayList<String> getAllTMLTaskNames(String _name) {
-		return tmltdp.getAllTMLTaskNames(_name);
-	}
+
 	
-	public ArrayList<String> getAllTMLCommunicationNames(String _name) {
-		return tmltdp.getAllTMLCommunicationNames(_name);
-	}
-	
-	public ArrayList<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
-		return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
-	}
-	
-	public TMLTaskOperator getTaskByName(String _name) {
-		return tmltdp.getTaskByName(_name);
-	}
-	
-	public void getListOfBreakPoints(ArrayList<Point> points) {
+	public LinkedList<TGComponent> getListOfComponentsInMutex() {
 		TGComponent tgc;
-		ListIterator iterator = tmltdp.getComponentList().listIterator();
-		TMLTaskOperator tmlto;
-		TMLActivityDiagramPanel tmladp;
+		TDiagramPanel tdp;
 		
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLTaskOperator) {
-                tmlto = (TMLTaskOperator)tgc;
-				if (tmlto.getDIPLOID() != -1) {
-					tmladp = getTMLActivityDiagramPanel(tmlto.getValue());
-					tmladp.getListOfBreakPoints(points, tmlto.getDIPLOID());
+		LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+		
+		for(int i=0; i<panels.size(); i++) {
+			tdp = (TDiagramPanel)(panels.get(i));
+			if (tdp instanceof AvatarSMDPanel) {
+				ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+				while(iterator.hasNext()) {
+					tgc = (TGComponent)(iterator.next());
+					tgc.getAllCheckableInvariant(list);
 				}
 			}
 		}
-	}*/
+		
+		return list;
+		
+	}
+	
+	
     
 }

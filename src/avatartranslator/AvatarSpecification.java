@@ -62,6 +62,8 @@ public class AvatarSpecification extends AvatarElement {
    private LinkedList<String> pragmas;
    
    private boolean robustnessMade = false;
+   
+   private Object informationSource; // element from which the spec has been built
   
 	
     public AvatarSpecification(String _name, Object _referenceObject) {
@@ -70,6 +72,14 @@ public class AvatarSpecification extends AvatarElement {
 		relations = new LinkedList<AvatarRelation>();
 		//broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
 		pragmas = new LinkedList<String>();
+    }
+    
+    public void setInformationSource(Object o) {
+    	informationSource = o;
+    }
+    
+    public Object getInformationSource() {
+    	return informationSource;
     }
 	
 	public LinkedList<AvatarBlock> getListOfBlocks() {

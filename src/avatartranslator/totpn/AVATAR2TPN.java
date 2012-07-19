@@ -183,6 +183,10 @@ public class AVATAR2TPN {
 				receiveActions.add(aaos);
 			}
 			
+			if (p1 == null) {
+				TraceManager.addDev("********* NULL P1");
+			}
+			
 			pentry = p1;
 			pexit = new Place(getTPNName(_block, _asme));
 			entryPlaces.put(_asme, pentry);    

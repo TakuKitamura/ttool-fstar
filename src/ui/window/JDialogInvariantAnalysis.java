@@ -407,6 +407,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             		}
             	}
             	inv.setTokenValue(valToken);
+            	
             	inv.computeValue();
             	
             	if (!(ignoreInvariants.isSelected() && sameBlock)) {
@@ -422,6 +423,25 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             
             jta.append("Invariants computed\n");
             testGo();
+            jta.append("Computing mutual exclusions\n");
+            int mutex = mgui.gtm.computeMutex();
+            mgui.getCurrentTDiagramPanel().repaint();
+            switch(mutex) {
+            case -1:
+            	jta.append("Error when computing mutual exclusion\n");
+            	break;
+            case -2:
+            	jta.append("No mutual exclusion to study\n");
+            	break;
+            case -3:
+            	jta.append("Mutual exclusion cannot be proved\n");
+            	break;
+            default:
+            	jta.append("Mutual exclusion is satisfied\n");
+            }
+            //jta.append("Mutual exclusions return value: " + mutex + "\n");
+            
+            
             
             jta.append("All done\n");
             

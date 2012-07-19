@@ -82,6 +82,10 @@ public class Invariant implements GenericTree {
 		return value;
 	}
 	
+	public LinkedList<TGComponent> getComponents() {
+		return components;
+	}
+	
 	public void addSynchro(InvariantSynchro _synchro) {
 		// Look for similar synchro
 		for(InvariantSynchro is: synchros) {

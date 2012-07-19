@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant {
+public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant {
     private int textY1 = 3;
 	
 	private int maxFontSize = 12;
@@ -194,7 +194,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		Color c = g.getColor();
 		//g.setColor(ColorManager.AVATAR_STATE);
 		Color avat = ColorManager.AVATAR_STATE;
-		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
 		g.fillRoundRect(x, y, width, height, 5, 5);
 		g.setColor(c);
 		g.drawRoundRect(x, y, width, height, 5, 5);

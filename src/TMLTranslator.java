@@ -79,7 +79,7 @@ public class TMLTranslator  {
 	public static void printCopyright() {
 		System.out.println("TMLTranslator: (C) GET/ENST, Ludovic Apvrille, Ludovic.Apvrille@enst.fr");
 		System.out.println("TMLTranslator is released under a CECILL License. See http://www.cecill.info/index.en.html");
-		System.out.println("For more information on TURTLE related technologies, please consult http://labsoc.comelec.enst.fr/turtle/");
+		System.out.println("For more information on TURTLE related technologies, please consult http://ttool.telecom-paristech.fr/");
 		
 		System.out.println("Enjoy!!!\n");
 	}

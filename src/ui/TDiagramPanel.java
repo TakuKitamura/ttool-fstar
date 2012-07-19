@@ -111,7 +111,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JPopupMenu selectedMenu;
     protected int popupX, popupY;
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide;
-	protected JMenuItem checkAccessibility;
+	protected JMenuItem checkAccessibility, checkInvariant;
 	protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1341,6 +1341,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		componentMenu.add(setInternalComment);
 		componentMenu.add(removeInternalComment);
 		componentMenu.add(checkAccessibility);
+		componentMenu.add(checkInvariant);
 		componentMenu.add(breakpoint);
         
         tgc.addActionToPopupMenu(componentMenu, menuAL, x, y);
@@ -1427,6 +1428,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		
 		checkAccessibility = new JMenuItem("Check for accessibility / liveness with UPPAAL");
         checkAccessibility.addActionListener(menuAL);
+        
+        checkInvariant = new JMenuItem("Check for mutual exclusion");
+        checkInvariant.addActionListener(menuAL);
 		
 		breakpoint = new JMenuItem("Add / remove breakpoint");
         breakpoint.addActionListener(menuAL);
@@ -1592,6 +1596,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 				componentPopup.setCheckableAccessibility(!componentPopup.getCheckableAccessibility());
 			}
 		}
+		
+		if (e.getSource() == checkInvariant) {
+			if (componentPopup instanceof CheckableInvariant) {
+				componentPopup.setCheckableInvariant(!componentPopup.getCheckableInvariant());
+			}
+		}
+		
+		
 		
 		if (e.getSource() == breakpoint) {
 			if (componentPopup instanceof AllowedBreakpoint) {
@@ -1771,6 +1783,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             checkAccessibility.setEnabled(true);
         } else {
             checkAccessibility.setEnabled(false);
+        
+        }
+        
+        if (componentPointed instanceof CheckableInvariant){
+            checkInvariant.setEnabled(true);
+        } else {
+            checkInvariant.setEnabled(false);
         }
 		
 		if (componentPointed instanceof AllowedBreakpoint){
@@ -2235,6 +2254,23 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			tgc = (TGComponent)(iterator.next());
 			if (tgc.hasCheckableAccessibility()) {
 				list = tgc.getAllCheckableAccessibility();
+				_list.addAll(list);
+			}
+		}
+	
+	}
+	
+	public void getAllCheckableInvariantTGComponent(ArrayList<TGComponent> _list) {
+		//TraceManager.addDev("Checking for components on=" + this);
+		Iterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		LinkedList list;
+		
+        
+        while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc.hasCheckableInvariant()) {
+				list = tgc.getAllCheckableInvariant();
 				_list.addAll(list);
 			}
 		}

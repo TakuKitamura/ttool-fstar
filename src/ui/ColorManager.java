@@ -60,6 +60,7 @@ public class ColorManager {
     public static final Color NORMAL_0 = Color.black;
     public static final Color POINTER_ON_ME_0 = Color.red;
 	public static final Color ACCESSIBILITY = Color.red;
+	public static final Color MUTEX_OK = new Color(5, 100, 7);
 	public static final Color BREAKPOINT = new Color(13, 248, 18);
 	public static final Color CURRENT_COMMAND_RUNNING = new Color(13, 248, 18, 200);
 	public static final Color CURRENT_COMMAND_RUNNABLE = new Color(162, 178, 22, 200);
