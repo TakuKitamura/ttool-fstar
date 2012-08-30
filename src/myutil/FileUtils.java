@@ -63,6 +63,7 @@ public class FileUtils {
     public final static String lot = "lot";
     public final static String tlsa = "tlsa";
 	public final static String tif = "tif";
+	public final static String svg = "svg";
     
 
     public static String getExtension(File f) {
@@ -148,7 +149,19 @@ public class FileUtils {
     
     // extension is given without the "."
     public static File addFileExtensionIfMissing(File f, String extension) {
-        if (!hasExtension(f, extension)) {
+        /*if (f == null) {
+        	TraceManager.addDev(" nullfile");
+        } else {
+        	TraceManager.addDev("non nullfile");
+        }*/
+    	if (!hasExtension(f, extension)) {
+    		/*if (f == null) {
+        	TraceManager.addDev(" nullfile");
+        } else {
+        	TraceManager.addDev("non nullfile");
+        }*/
+    		
+        	TraceManager.addDev("file=" + f.getAbsolutePath());
             f = new File(f.getAbsolutePath() + "." + extension);
         }
         

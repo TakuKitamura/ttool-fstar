@@ -258,6 +258,12 @@ public class ColorManager {
 		ATD_ATTACK = Color.white;
 		ATD_ROOT_ATTACK = Color.white;
 		ATD_CONSTRAINT = Color.white;
+		AVATAR_GUARD = Color.black;
+		AVATAR_TIME = Color.black;
+		AVATAR_ACTION = Color.black;
+		AVATAR_SEND_SIGNAL = Color.white;
+		AVATAR_RECEIVE_SIGNAL = Color.white;
+		
 		
 	}
     

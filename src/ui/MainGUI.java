@@ -255,6 +255,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     private JFileChooser jfc;
     private JFileChooser jfclib;
     private JFileChooser jfcimg;
+    private JFileChooser jfcimgsvg;
     private JFileChooser jfcggraph;
     private JFileChooser jfctgraph;
     private JFileChooser jfclot;
@@ -342,6 +343,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             jfcimg = new JFileChooser();
         }
         
+        if (ConfigurationTTool.IMGPath.length() > 0) {
+            jfcimgsvg = new JFileChooser(ConfigurationTTool.IMGPath);
+        } else {
+            jfcimgsvg = new JFileChooser();
+        }
+        
         if (ConfigurationTTool.LOTOSPath.length() > 0) {
             jfclot = new JFileChooser(ConfigurationTTool.LOTOSPath);
         } else {
@@ -375,6 +382,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         
         TImgFilter filterImg = new TImgFilter();
         jfcimg.setFileFilter(filterImg);
+        
+        TSVGFilter filterSVG = new TSVGFilter();
+        jfcimgsvg.setFileFilter(filterSVG);
         
         RTLFileFilter filterRTL = new RTLFileFilter();
         jfclot.setFileFilter(filterRTL);
@@ -564,6 +574,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 				actions[TGUIAction.ACT_PASTE].setEnabled(false);
 			}
 			actions[TGUIAction.ACT_DIAGRAM_CAPTURE].setEnabled(true);
+			actions[TGUIAction.ACT_SVG_DIAGRAM_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_DOC].setEnabled(true);
 			actions[TGUIAction.ACT_GEN_DOC_REQ].setEnabled(true);
@@ -4109,6 +4120,42 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
     
+    public void svgDiagramCapture() {
+    	
+    	TraceManager.addDev("SVG capture ");
+    	
+        if (tabs.size() < 1) {
+            JOptionPane.showMessageDialog(frame,
+				"No diagram is under edition",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        File file = selectSVGFileForCapture();
+        
+        if (file == null)
+            return;
+        
+        TDiagramPanel tdp1 = getCurrentTDiagramPanel();
+        if (tdp1 != null) {
+            String s = tdp1.svgCapture();
+            try {
+            	FileUtils.saveFile(file.getAbsolutePath(), s);
+            } catch (Exception e) {
+            	JOptionPane.showMessageDialog(frame,
+            		"File could not be saved: " + e.getMessage(),
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+            }
+            JOptionPane.showMessageDialog(frame,
+				"The capture was correctly performed and saved in " + file.getAbsolutePath(),
+				"Save in svg format ok",
+				JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
     public void allDiagramCapture() {
         if (tabs.size() < 1) {
             JOptionPane.showMessageDialog(frame,
@@ -4170,6 +4217,24 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             file = jfcimg.getSelectedFile();
             file = FileUtils.addFileExtensionIfMissing(file, TImgFilter.getExtension());
+            
+        }
+        if(!checkFileForSave(file)) {
+            JOptionPane.showMessageDialog(frame,
+				"The capture could not be performed: invalid file",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+        return file;
+    }
+    
+    public File selectSVGFileForCapture() {
+        File file = null;
+        int returnVal = jfcimgsvg.showSaveDialog(frame);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            file = jfcimgsvg.getSelectedFile();
+            file = FileUtils.addFileExtensionIfMissing(file, TSVGFilter.getExtension());
             
         }
         if(!checkFileForSave(file)) {
@@ -6519,6 +6584,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             windowCapture();
         } else if (command.equals(actions[TGUIAction.ACT_DIAGRAM_CAPTURE].getActionCommand())) {
             diagramCapture();
+        } else if (command.equals(actions[TGUIAction.ACT_SVG_DIAGRAM_CAPTURE].getActionCommand())) {
+            svgDiagramCapture();
         } else if (command.equals(actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE].getActionCommand())) {
             allDiagramCapture();
         } else if (command.equals(actions[TGUIAction.ACT_SELECTED_CAPTURE].getActionCommand())) {

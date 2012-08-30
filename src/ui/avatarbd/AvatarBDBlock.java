@@ -142,7 +142,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		Font f = g.getFont();
 		Font fold = f;
 		
-		//System.out.println("width=" + width + " height=" + height);
+		//TraceManager.addDev("Avatar Block width=" + width + " height=" + height);
 		
 		if ((rescaled) && (!tdp.isScaled())) {
 			

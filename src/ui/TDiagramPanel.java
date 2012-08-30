@@ -77,6 +77,16 @@ import ui.avatarcd.*;
 // Added by Solange
 import ui.procsd.*;
 
+import java.text.*;
+import java.awt.Rectangle;
+import java.awt.Graphics2D;
+import java.awt.Color;
+import java.awt.font.*;
+import java.awt.geom.*;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
+
 
 
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
@@ -137,6 +147,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 	private boolean zoomed = false;
 	
     private boolean draw;
+    
+    private Graphics lastGraphics;
     
     // MODE
     public int mode;
@@ -364,8 +376,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         paintMycomponents(g, true, 1, 1);
     }
     
+    public void basicPaintMyComponents(Graphics g) {
+    	TGComponent tgc;
+    	for(int i=componentList.size()-1; i>=0; i--) {
+    		tgc = (TGComponent)(componentList.get(i));
+    		if (!tgc.isHidden()) {
+    			TraceManager.addDev("Painting " + tgc.getName() + " x=" + tgc.getX() + " y=" + tgc.getY());
+    			tgc.draw(g);
+    		}
+    	}
+    }
+    
     public void paintMycomponents(Graphics g, boolean b, double w, double h) {
         
+    	lastGraphics = g;
+    	
 		//TraceManager.addDev("Nb of components: " + componentList.size());
 		
 		/*if (!zoomed) {
@@ -376,7 +401,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			
 			if (!overcomeShowing) {
 				if (!isShowing()) {
-					//TraceManager.addDev("Not showing!" + tp);
+					TraceManager.addDev("Not showing!" + tp);
 					return;
 				}
 			}
@@ -386,12 +411,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			try {
 				super.paintComponent(g);
 			} catch (Exception e) {
+				TraceManager.addDev("Got exception: " + e.getMessage());
 				return;
 			}
+			
+			//TraceManager.addDev("Draw 1");
+			
 			//ZoomGraphics g = new ZoomGraphics(gr, zoom);
 			if (!draw) {
 				return;
 			}
+			
+			//TraceManager.addDev("Draw 2");
 			
 			// Draw Components
 			if ((w != 1.0) ||(h != 1.0)) {
@@ -400,6 +431,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			} else {
 				isScaled = false;
 			}
+			//TraceManager.addDev("Draw 3");
+			
 			TGComponent tgc;
 			for(int i=componentList.size()-1; i>=0; i--) {
 				tgc = (TGComponent)(componentList.get(i));
@@ -3647,6 +3680,28 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 			}
 		}
 		
+	}
+	
+	public String svgCapture() {
+		StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+		sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+		sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+		
+		
+		SVGGraphics svgg = new SVGGraphics((Graphics2D)lastGraphics);
+		
+		RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
+		//this.paint(svgg);
+		TraceManager.addDev("Painting for svg");
+		basicPaintMyComponents(svgg); 
+		TraceManager.addDev("Painting for svg done");
+		sb.append(svgg.getSVGString());
+		RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);		
+		
+		sb.append("</svg>");
+		
+		
+		return sb.toString();
 	}
     
     

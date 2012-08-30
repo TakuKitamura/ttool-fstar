@@ -452,6 +452,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_SCREEN_CAPTURE = 58;
     public static final int ACT_TTOOL_WINDOW_CAPTURE = 59;
     public static final int ACT_DIAGRAM_CAPTURE = 60;
+    public static final int ACT_SVG_DIAGRAM_CAPTURE = 366;
     public static final int ACT_ALL_DIAGRAM_CAPTURE = 114;
     public static final int ACT_SELECTED_CAPTURE = 61;
 	
@@ -490,7 +491,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 366;
+    public static final int NB_ACTION = 367;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -644,6 +645,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_SCREEN_CAPTURE] = new TAction("screen-capture", "Screen capture", IconManager.imgic338, IconManager.imgic339, "Screen capture",  "Capture the screen", 0);
         actions[ACT_TTOOL_WINDOW_CAPTURE] = new TAction("tool-window-capture", "Main window capture", IconManager.imgic338, IconManager.imgic339, "Main window capture",  "Capture the main window", 0);
         actions[ACT_DIAGRAM_CAPTURE] = new TAction("diagram-capture", "Diagram capture", IconManager.imgic338, IconManager.imgic339, "Diagram capture",  "Capture the currenlty opened diagram", 0);
+        actions[ACT_SVG_DIAGRAM_CAPTURE] = new TAction("svg-diagram-capture", "Diagram capture (SVG)", IconManager.imgic338, IconManager.imgic339, "Diagram capture (SVG)",  "Capture the currenlty opened diagram in svg format", 0);
         actions[ACT_ALL_DIAGRAM_CAPTURE] = new TAction("all-diagram-capture", "All diagram capture", IconManager.imgic338, IconManager.imgic339, "All diagram capture",  "Capture the currenlty opened set of diagram (analysis, design, etc.)", 0);
         actions[ACT_SELECTED_CAPTURE] = new TAction("selected-capture", "Capture of selected components", IconManager.imgic338, IconManager.imgic339, "Capture of selected components",  "Capture the selected components of the currently opened diagram", 0);
         actions[ACT_GEN_DOC] = new TAction("gen-doc", "Documentation generation", IconManager.imgic28, IconManager.imgic28, "Documentation generation",  "Documentation may be automatically generated, in html format, from edited diagrams", 0);
