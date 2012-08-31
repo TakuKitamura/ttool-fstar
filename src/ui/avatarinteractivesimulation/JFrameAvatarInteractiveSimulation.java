@@ -970,7 +970,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 		
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
-		actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
 		actions[AvatarInteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
@@ -1144,6 +1144,74 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		ass.printExecutedTransactions();
 	}
 	
+	public void actSaveSvg() {
+		TraceManager.addDev("Saving in svg format");
+		
+		// Testing file for save
+		
+		String fileName = saveFileName.getText().trim();
+		
+		if (ConfigurationTTool.IMGPath != null) {
+			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+		}
+		
+		boolean ok = true;
+		
+		try {
+			ok = FileUtils.checkFileForSave(new File(fileName));
+		} catch (Exception e) {
+			ok = false;
+		}
+		
+		if (!ok) {
+			JOptionPane.showMessageDialog(this,
+				"The capture could not be performed: the specified file is not valid",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+		}
+		
+		
+		
+		StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+		sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+		sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+		
+		
+		SVGGraphics svgg = new SVGGraphics(sdpanel.getLastGraphics());
+		
+		RepaintManager.currentManager(this).setDoubleBufferingEnabled(false);
+		//this.paint(svgg);
+		TraceManager.addDev("Painting for svg");
+		sdpanel.paintComponent(svgg); 
+		TraceManager.addDev("Painting for svg done");
+		sb.append(svgg.getSVGString());
+		RepaintManager.currentManager(this).setDoubleBufferingEnabled(true);		
+		
+		sb.append("</svg>");
+		
+		try {
+			FileUtils.saveFile(fileName, sb.toString());
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,
+				"The capture could not be performed: " + e.getMessage(),
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+		}
+		
+		JOptionPane.showMessageDialog(this,
+				"The capture was performed in " + fileName,
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+		
+		//TraceManager.addDev("Svg=" + sb.toString());
+		
+		//return sb.toString();
+		
+	}
+	
 	public void actSaveSDPNG() {
 		//Saving PNG file;
 		BufferedImage bi;
@@ -1217,28 +1285,33 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			//TraceManager.addDev("Start simulation!");
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].getActionCommand()))  {
 			runXCommands();
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand()))  {
 			stopSimulation();
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].getActionCommand()))  {
 			backwardOneTransaction();
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand()))  {
 			resetSimulation();
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
 			close();
 			return;
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
 			actSaveTxt();
 			return;
-			//TraceManager.addDev("Start simulation!");
+			
+			
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].getActionCommand()))  {
+			actSaveSvg();
+			return;
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_IN].getActionCommand()))  {
 			zoomIn();
 			return;
-			//TraceManager.addDev("Start simulation!");
+			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_ZOOM_OUT].getActionCommand())) {
 			zoomOut();
 			return;

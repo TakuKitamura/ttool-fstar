@@ -112,6 +112,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	private Vector<Point> points;
 	private Vector<AvatarSimulationTransaction> transactionsOfPoints;
 	
+	// Graphics
+	private Graphics2D lastGraphics;
+	
 	
 	
     public AvatarSpecificationSimulationSDPanel(AvatarSpecificationSimulation _ass) {
@@ -132,7 +135,12 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		jsp = _jsp;
 	}
 	
+	public Graphics2D getLastGraphics() {
+		return lastGraphics;
+	}
+	
 	protected void paintComponent(Graphics g) {
+		lastGraphics = (Graphics2D)g;
 		super.paintComponent(g);
 		int currentY = spaceAtTop;
 		int currentX = spaceAtEnd;

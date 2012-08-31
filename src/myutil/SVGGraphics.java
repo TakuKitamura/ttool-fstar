@@ -166,6 +166,16 @@ public class SVGGraphics extends Graphics2D {
    	   svgvalue += makeDesc("line", s);
    }
    
+    public void drawOval(int x, int y, int width, int height) {
+    	String s = makeArg("cx", x+width/2);
+   	   s += makeArg("cy", y+height/2);
+   	   s += makeArg("rx", width/2);
+   	   s += makeArg("ry", height/2);
+   	   s += makeArg("fill", "none");
+   	   
+   	   svgvalue += makeDesc("ellipse", s);
+    }
+   
    public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
    	   String s = "";
    	   for(int i=0; i<nPoints; i++) {
@@ -424,7 +434,7 @@ public class SVGGraphics extends Graphics2D {
    	   return true;
    }
    
-   public void drawOval(int x, int y, int width, int height) {}
+  
    
    
    

@@ -59,7 +59,7 @@ public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
     
     protected void setActive(boolean b) {
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].setEnabled(b);
-		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
+		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].setEnabled(b);
 		jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
     }
     
@@ -71,7 +71,7 @@ public class AvatarSaveCommandsToolBar extends AvatarInteractiveSimulationBar {
         
 		this.addSeparator();
 		
-		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_HTML]);
+		button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG]);
         button.addMouseListener(jfais.mouseHandler);
         
 		this.addSeparator();
