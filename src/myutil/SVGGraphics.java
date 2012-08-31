@@ -119,7 +119,7 @@ public class SVGGraphics extends Graphics2D {
    	   return "<" + title + " " + content + ">" + value + "</" + title + ">\n";
    }
    
-   public String getFontInfos() {
+   public String getFontInfos(boolean putColor) {
    	   Font f = graphics.getFont();
    	   String s = "font-size:" + f.getSize() + "; font-family:" + f.getFontName();
    	   if ((f.getStyle() == Font.BOLD) || (f.getStyle() == Font.BOLD+Font.ITALIC)) {
@@ -127,6 +127,10 @@ public class SVGGraphics extends Graphics2D {
    	   }
    	   if ((f.getStyle() == Font.ITALIC) || (f.getStyle() == Font.BOLD+Font.ITALIC)) {
    	   	   s+= "; font-style=italic";
+   	   }
+   	   
+   	   if (putColor) {
+   	   	   s+= "; fill="+getRGBHexaColor();
    	   }
    	   
    	   return s;
@@ -141,6 +145,9 @@ public class SVGGraphics extends Graphics2D {
    	   s += makeArg("width", width);
    	   s += makeArg("height", height);
    	   s += makeArg("fill", "none");
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
+   	   
    	   
    	   svgvalue += makeDesc("rect", s);
    }    
@@ -151,6 +158,8 @@ public class SVGGraphics extends Graphics2D {
    	   s += makeArg("width", width);
    	   s += makeArg("height", height);
    	   s += makeArg("fill", "none");
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
    	   
    	   svgvalue += makeDesc("rect", s);
    }
@@ -161,7 +170,9 @@ public class SVGGraphics extends Graphics2D {
    	   s += makeArg("y1", y1);
    	   s += makeArg("x2", x2);
    	   s += makeArg("y2", y2);
-   	   s += makeArg("fill", getRGBHexaColor());
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
+   	    s += makeArg("fill", "none");
    	   
    	   svgvalue += makeDesc("line", s);
    }
@@ -172,6 +183,8 @@ public class SVGGraphics extends Graphics2D {
    	   s += makeArg("rx", width/2);
    	   s += makeArg("ry", height/2);
    	   s += makeArg("fill", "none");
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
    	   
    	   svgvalue += makeDesc("ellipse", s);
     }
@@ -183,6 +196,8 @@ public class SVGGraphics extends Graphics2D {
    	   }
    	   s = makeArg("points", s);
    	   s += makeArg("fill", "none");
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
    	   
    	   svgvalue += makeDesc("polygon", s);
    	   
@@ -196,6 +211,8 @@ public class SVGGraphics extends Graphics2D {
    	   s += makeArg("rx", arcWidth);
    	   s += makeArg("ry", arcHeight);
    	   s += makeArg("fill", "none");
+   	   s += makeArg("stroke", getRGBHexaColor());
+   	    s += makeArg("stroke-width", 1);
    	   
    	   svgvalue += makeDesc("rect", s);
    }
@@ -203,9 +220,8 @@ public class SVGGraphics extends Graphics2D {
    public  void drawString(String str, int x, int y){
    	   String s = makeArg("x", x);
    	   s += makeArg("y", y);
-   	   s += makeArg("style", getFontInfos());
+   	   s += makeArg("style", getFontInfos(true));
    	   
-   	   s += makeArg("fill", "none");
    	   
    	   
    	   
