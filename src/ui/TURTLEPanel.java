@@ -119,6 +119,26 @@ public abstract class TURTLEPanel implements GenericTree {
         return sb;
     }
     
+    public StringBuffer saveInXML(int indexOfDiagram) {
+        
+        TDiagramPanel tdp;
+        StringBuffer sb = new StringBuffer();
+        sb.append(saveHeaderInXml());
+        StringBuffer s;
+        
+        tdp = (TDiagramPanel)(panels.elementAt(indexOfDiagram));
+        s = tdp.saveInXML();
+        if (s == null) {
+        	System.out.println("Null diagram");
+        	return null;
+        }
+        sb.append(s);
+        sb.append("\n\n");
+        
+        sb.append(saveTailInXml());
+        return sb;
+    }
+    
     public String toString() {
         return "TURTLE Modeling";
     }

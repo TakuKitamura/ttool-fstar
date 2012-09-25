@@ -55,7 +55,7 @@ public	class JMenuBarTurtle extends JMenuBar	{
     private JMenu menugraph;
     
     //Menu
-    private JMenu file, saveLastGraph, diagram, cd, ad, iod, ucd, sd, edit, vAndV, codeG, view, tool, capture, help;
+    private JMenu file, saveLastGraph, diagram, cd, ad, iod, ucd, sd, edit, vAndV, codeG, view, tool, capture, ontologies, help;
     
     public JMenuBarTurtle(MainGUI mgui) {
         super();
@@ -560,6 +560,16 @@ public	class JMenuBarTurtle extends JMenuBar	{
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE]);
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SELECTED_CAPTURE]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        
+        
+        ontologies = new JMenu("Ontologies");
+        tool.add(ontologies);
+        menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS]);
         menuItem.addMouseListener(mgui.mouseHandler);
 		
 		menuItem = tool.add(mgui.actions[TGUIAction.ACT_GEN_DOC]);

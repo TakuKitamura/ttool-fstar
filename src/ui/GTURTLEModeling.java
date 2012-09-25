@@ -2154,6 +2154,29 @@ public class GTURTLEModeling {
 
 		return str;
 	}
+	
+	public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
+		StringBuffer sb = new StringBuffer();
+		//sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
+		sb.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+
+		StringBuffer s;
+		String str;
+
+		
+		s = tp.saveInXML(indexOfDiagram);
+		
+		sb.append(s);
+		sb.append("\n\n");
+	
+
+		sb.append("</TURTLEGMODELING>");
+
+		str = new String(sb);
+		str = encodeString(str);
+
+		return str;
+	}
 
 	public String makeXMLFromTurtleModeling(int index) {
 		StringBuffer sb = new StringBuffer();

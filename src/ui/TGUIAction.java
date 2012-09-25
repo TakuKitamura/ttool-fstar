@@ -486,12 +486,16 @@ public class TGUIAction extends AbstractAction {
 	public static final int ACT_AVATAR_FV_PROVERIF = 338;
 	public static final int ACT_AVATAR_FV_STATICANALYSIS = 365;
 	public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
-
+	
+	// Ontologies
+	public static final int ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM = 367;
+	public static final int ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS = 369;
+	public static final int ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS = 368;
     
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 367;
+    public static final int NB_ACTION = 370;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -962,6 +966,12 @@ public class TGUIAction extends AbstractAction {
         actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic5056, IconManager.imgic5056, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
         actions[AAD_PARTITION] = new TAction("add-add-partition", "Partition", IconManager.imgic5052, IconManager.imgic5052, "Partition", "Add a partition to the currently opened avatar activity diagram", 0);
         actions[AAD_ALIGN_PARTITION] = new TAction("add-aad-align_partitions", "Align partitions", IconManager.imgic5054, IconManager.imgic5054, "Align partitions", "Align partitions of the currently opened avatar activity diagram", 0);
+        
+        // Ontologies
+        actions[ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM] = new TAction("generate-ontology-current-diagram", "Generate ontology (current diagram)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (current diagram)",  "Generate the ontology for the diagram under edition", 0);
+        actions[ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS] = new TAction("generate-ontology-current-set-of-diagrams", "Generate ontology (current set of diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (current set of diagrams)",  "Generate the ontology for the current set of diagrams under edition", 0);
+        actions[ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS] = new TAction("generate-ontology-all-diagrams", "Generate ontology (all diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (all diagrams)",  "Generate the ontology for the diagrams under edition", 0);
+        
         
     }
     

@@ -130,6 +130,11 @@ public class ConfigurationTTool {
 	public static String AVATARExecutableSoclibCodeCompileCommand = "";
 	public static String AVATARExecutableSoclibCodeExecuteCommand = "";
 	public static String AVATARExecutableSoclibTraceFile = "";
+	
+	
+	// Ontology
+	public static String RequirementOntologyWebsite = "";
+	public static String AttackOntologyWebsite = "";
     
     public static String LastOpenFile = "";
     public static boolean LastOpenFileDefined = false;
@@ -189,11 +194,11 @@ public class ConfigurationTTool {
 					//sb.append("data = " + data);
 					write = true;
 					/*try {
-						FileOutputStream fos = new FileOutputStream(f);
-						fos.write(data.getBytes());
-						fos.close();
+					FileOutputStream fos = new FileOutputStream(f);
+					fos.write(data.getBytes());
+					fos.close();
 					} catch (Exception e) {
-						throw new  MalformedConfigurationException("Saving file failed");
+					throw new  MalformedConfigurationException("Saving file failed");
 					}*/
                 }
             }
@@ -361,6 +366,11 @@ public class ConfigurationTTool {
 		sb.append("\nNetwork calculus:\n");
 		sb.append("NCDirectory: " + NCDirectory + "\n");
 		
+		
+		// Ontology
+		sb.append("\nOntologies:\n");
+		sb.append("Requirement ontology website: " + RequirementOntologyWebsite + "\n");
+		sb.append("Attack ontology website: " + AttackOntologyWebsite + "\n");
 		
 		
 		sb.append("\nCustom external commands:\n");
@@ -539,80 +549,90 @@ public class ConfigurationTTool {
                 AVATARExecutableSoclibTraceFile(nl);
             
 			if (systemcOn) {
-					nl = doc.getElementsByTagName("SystemCHost");
-					if (nl.getLength() > 0)
-						SystemCHost(nl);
-					nl = doc.getElementsByTagName("SystemCCodeCompileCommand");
-					if (nl.getLength() > 0)
-						SystemCCodeCompileCommand(nl);
-					nl = doc.getElementsByTagName("SystemCCodeExecuteCommand");
-					if (nl.getLength() > 0)
-						SystemCCodeExecuteCommand(nl);
-					nl = doc.getElementsByTagName("SystemCCodeInteractiveExecuteCommand");
-					if (nl.getLength() > 0)
-						SystemCCodeInteractiveExecuteCommand(nl);
-					nl = doc.getElementsByTagName("GTKWavePath");
-					if (nl.getLength() > 0)
-						GTKWavePath(nl);
-				}
-				
-				nl = doc.getElementsByTagName("TMLCodeDirectory");
+				nl = doc.getElementsByTagName("SystemCHost");
 				if (nl.getLength() > 0)
-					TMLCodeDirectory(nl);
-				
-				nl = doc.getElementsByTagName("VCDPath");
+					SystemCHost(nl);
+				nl = doc.getElementsByTagName("SystemCCodeCompileCommand");
 				if (nl.getLength() > 0)
-					VCDPath(nl);
-				
-				nl = doc.getElementsByTagName("UPPAALCodeDirectory");
+					SystemCCodeCompileCommand(nl);
+				nl = doc.getElementsByTagName("SystemCCodeExecuteCommand");
 				if (nl.getLength() > 0)
-					UPPAALCodeDirectory(nl);
-				
-				nl = doc.getElementsByTagName("UPPAALVerifierPath");
+					SystemCCodeExecuteCommand(nl);
+				nl = doc.getElementsByTagName("SystemCCodeInteractiveExecuteCommand");
 				if (nl.getLength() > 0)
-					UPPAALVerifierPath(nl);
-				
-				nl = doc.getElementsByTagName("UPPAALVerifierHost");
+					SystemCCodeInteractiveExecuteCommand(nl);
+				nl = doc.getElementsByTagName("GTKWavePath");
 				if (nl.getLength() > 0)
-					UPPAALVerifierHost(nl);
-				
-				nl = doc.getElementsByTagName("ProVerifCodeDirectory");
-				if (nl.getLength() > 0)
-					ProVerifCodeDirectory(nl);
-				
-				nl = doc.getElementsByTagName("ProVerifVerifierPath");
-				if (nl.getLength() > 0)
-					ProVerifVerifierPath(nl);
-				
-				nl = doc.getElementsByTagName("ProVerifVerifierHost");
-				if (nl.getLength() > 0)
-					ProVerifVerifierHost(nl);
-				
-				nl = doc.getElementsByTagName("ExternalCommand1Host");
-				if (nl.getLength() > 0)
-					ExternalCommand1Host(nl);
-				
-				nl = doc.getElementsByTagName("ExternalCommand1");
-				if (nl.getLength() > 0)
-					ExternalCommand1(nl);
-				
-				nl = doc.getElementsByTagName("ExternalCommand2Host");
-				if (nl.getLength() > 0)
-					ExternalCommand2Host(nl);
-				
-				nl = doc.getElementsByTagName("ExternalCommand2");
-				if (nl.getLength() > 0)
-					ExternalCommand2(nl);
-				
-				nl = doc.getElementsByTagName("LastOpenFile");
-				if (nl.getLength() > 0)
-					LastOpenFile(nl);
-				
-				nl = doc.getElementsByTagName("LastWindowAttributes");
-				if (nl.getLength() > 0)
-					LastWindowAttributes(nl);
-				
-				
+					GTKWavePath(nl);
+			}
+			
+			nl = doc.getElementsByTagName("TMLCodeDirectory");
+			if (nl.getLength() > 0)
+				TMLCodeDirectory(nl);
+			
+			nl = doc.getElementsByTagName("VCDPath");
+			if (nl.getLength() > 0)
+				VCDPath(nl);
+			
+			nl = doc.getElementsByTagName("UPPAALCodeDirectory");
+			if (nl.getLength() > 0)
+				UPPAALCodeDirectory(nl);
+			
+			nl = doc.getElementsByTagName("UPPAALVerifierPath");
+			if (nl.getLength() > 0)
+				UPPAALVerifierPath(nl);
+			
+			nl = doc.getElementsByTagName("UPPAALVerifierHost");
+			if (nl.getLength() > 0)
+				UPPAALVerifierHost(nl);
+			
+			nl = doc.getElementsByTagName("ProVerifCodeDirectory");
+			if (nl.getLength() > 0)
+				ProVerifCodeDirectory(nl);
+			
+			nl = doc.getElementsByTagName("ProVerifVerifierPath");
+			if (nl.getLength() > 0)
+				ProVerifVerifierPath(nl);
+			
+			nl = doc.getElementsByTagName("ProVerifVerifierHost");
+			if (nl.getLength() > 0)
+				ProVerifVerifierHost(nl);
+			
+			
+			// Ontologies
+			nl = doc.getElementsByTagName("RequirementOntologyWebsite");
+			if (nl.getLength() > 0)
+				RequirementOntologyWebsite(nl);
+			
+			nl = doc.getElementsByTagName("AttackOntologyWebsite");
+			if (nl.getLength() > 0)
+				AttackOntologyWebsite(nl);
+			
+			nl = doc.getElementsByTagName("ExternalCommand1Host");
+			if (nl.getLength() > 0)
+				ExternalCommand1Host(nl);
+			
+			nl = doc.getElementsByTagName("ExternalCommand1");
+			if (nl.getLength() > 0)
+				ExternalCommand1(nl);
+			
+			nl = doc.getElementsByTagName("ExternalCommand2Host");
+			if (nl.getLength() > 0)
+				ExternalCommand2Host(nl);
+			
+			nl = doc.getElementsByTagName("ExternalCommand2");
+			if (nl.getLength() > 0)
+				ExternalCommand2(nl);
+			
+			nl = doc.getElementsByTagName("LastOpenFile");
+			if (nl.getLength() > 0)
+				LastOpenFile(nl);
+			
+			nl = doc.getElementsByTagName("LastWindowAttributes");
+			if (nl.getLength() > 0)
+				LastWindowAttributes(nl);
+			
+			
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
@@ -861,7 +881,7 @@ public class ConfigurationTTool {
         }
     }
 	
-	 private static void JavaHeader(NodeList nl) throws MalformedConfigurationException {
+    private static void JavaHeader(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             JavaHeader = elt.getAttribute("data");
@@ -921,7 +941,7 @@ public class ConfigurationTTool {
         }
     }
 	
-	 private static void NCDirectory(NodeList nl) throws MalformedConfigurationException {
+    private static void NCDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             NCDirectory = elt.getAttribute("data");
@@ -984,7 +1004,7 @@ public class ConfigurationTTool {
         }
     }
 	
-	 private static void TMLCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+    private static void TMLCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             TMLCodeDirectory = elt.getAttribute("data");
@@ -1137,7 +1157,7 @@ public class ConfigurationTTool {
         }
     }
 	
-	 private static void ProVerifCodeDirectory(NodeList nl) throws MalformedConfigurationException {
+    private static void ProVerifCodeDirectory(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element)(nl.item(0));
             ProVerifCodeDirectory = elt.getAttribute("data");
@@ -1159,6 +1179,24 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             ProVerifVerifierHost = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+    
+    private static void RequirementOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            RequirementOntologyWebsite = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+    
+    private static void AttackOntologyWebsite(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            AttackOntologyWebsite = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

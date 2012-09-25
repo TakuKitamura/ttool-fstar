@@ -580,6 +580,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_DOC_REQ].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_JAVA].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_BIRDEYES].setEnabled(true);
+			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM].setEnabled(true);
+			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS].setEnabled(true);
+			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].setEnabled(true);
+			
 			break;
 		case MODEL_OK:
 			actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
@@ -5163,6 +5167,39 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
         return true;
     }
+    
+    public void generateOntologyForCurrentDiagram() {
+    	TraceManager.addDev("Ontology for current diagram");
+    	try {
+			TURTLEPanel tp = getCurrentTURTLEPanel();
+			String modeling = gtm.makeOneDiagramXMLFromGraphicalModel(tp, tp.tabbedPane.getSelectedIndex());
+			TraceManager.addDev("Model made: " + modeling);
+		} catch (Exception e) {
+    	}
+    	
+    }
+    
+    public void generateOntologyForCurrentSetOfDiagrams() {
+    	TraceManager.addDev("Ontology for current set of diagrams");
+    	try {
+    	String modeling = gtm.makeXMLFromTurtleModeling(mainTabbedPane.getSelectedIndex());
+    	TraceManager.addDev("Model made: " + modeling);
+    	} catch (Exception e) {
+    	}
+    	
+    }
+    
+    public void generateOntologyForAllDiagrams() {
+    	TraceManager.addDev("Ontology for all diagrams");
+    	try {
+    	String modeling = gtm.makeXMLFromTurtleModeling(-1);
+    	TraceManager.addDev("Model made");
+    	} catch (Exception e) {
+    	}
+    	
+    }
+    
+    
 	
 	public AvatarRDPanel getAvatarRDPanel(int index, int indexTab, String s) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
@@ -7095,6 +7132,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         } else if (command.equals(actions[TGUIAction.TOSAD_TIME_INTERVAL].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TOSAD_TIME_INTERVAL);
 			
+            
+        // Ontologies
+        } else if (command.equals(actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM].getActionCommand())) {
+            generateOntologyForCurrentDiagram();
+        } else if (command.equals(actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS].getActionCommand())) {
+            generateOntologyForCurrentSetOfDiagrams();
+        } else if (command.equals(actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].getActionCommand())) {
+            generateOntologyForAllDiagrams();
+        
 			// Requirement diagrams
         } else if (command.equals(actions[TGUIAction.TREQ_REQUIREMENT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TREQ_REQUIREMENT);
