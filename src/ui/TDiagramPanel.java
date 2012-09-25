@@ -1840,8 +1840,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         
         if (componentPointed instanceof CheckableInvariant){
             checkInvariant.setEnabled(true);
+            checkMasterMutex.setEnabled(true);
         } else {
             checkInvariant.setEnabled(false);
+            checkMasterMutex.setEnabled(false);
         }
 		
 		if (componentPointed instanceof AllowedBreakpoint){

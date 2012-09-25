@@ -152,7 +152,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     }
     
     public int getMyCurrentMinY() {
-        return Math.min(y-hText, y);
+        return Math.min(y-hText-heightActor, y);
     }
     
     public String getInstanceName() {
