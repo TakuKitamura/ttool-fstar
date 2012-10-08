@@ -70,6 +70,7 @@ SingleCoreCPU::SingleCoreCPU(ID iID, std::string iName, WorkloadSource* iSchedul
 
 SingleCoreCPU::~SingleCoreCPU(){  
 	std::cout << _transactList.size() << " elements in List of " << _name << ", busy cycles: " << _busyCycles << std::endl;
+	std::cout << " consumption value " << ((_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle)<< std::endl;
 	
 	//delete _scheduler;
 }
@@ -477,7 +478,9 @@ void SingleCoreCPU::reset(){
 void SingleCoreCPU::streamBenchmarks(std::ostream& s) const{
 	s << TAG_CPUo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl; 
 	if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
+	s << TAG_ENERGYo << ( (_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle) << TAG_ENERGYc;
 	for(BusMasterList::const_iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i) (*i)->streamBenchmarks(s);
+	
 	s << TAG_CPUc; 
 }
 

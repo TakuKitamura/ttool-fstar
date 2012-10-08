@@ -213,6 +213,8 @@ using std::max;
 #define TAG_PROGRESSc "</progr>"
 #define TAG_CURRTASKo "<currtask>"
 #define TAG_CURRTASKc "</currtask>"
+#define TAG_ENERGYo "<energy>"
+#define TAG_ENERGYc "</energy>"
 
 
 class TMLTask;

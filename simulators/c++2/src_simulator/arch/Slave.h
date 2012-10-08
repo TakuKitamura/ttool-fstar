@@ -70,12 +70,24 @@ public:
 	std::string toString() {return _name;}
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual void addTransaction(TMLTransaction* iTrans){
+/*	virtual void addTransaction(TMLTransaction* iTrans)
+	{
+	  if (dynamic_cast <TLMWriteCommand*> (iTrans->getCommand())==0) 
+	    _nWrite++;
+	  else 
+	    _nRead++; 
+	}
+	 */   
 		//FOR_EACH_TRANSLISTENER (static_cast<TransactionListener*>(*i))->transExecuted(iTrans);
 #ifdef LISTENERS_ENABLED
 		NOTIFY_TRANS_EXECUTED(iTrans);
 #endif
+
+
 		//std::cout << "******************Priiiiiiiiiiiiiint\n";
 	}
+	
+	
 	///Returns the unique ID of the Slave
 	/**
       	\return Unique ID

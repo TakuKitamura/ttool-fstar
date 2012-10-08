@@ -64,7 +64,8 @@ public:
 	\param iLossRate Loss rate of the channel
 	\param iMaxNbOfLosses Maximum number of losses
     	*/
-	TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, TMLLength iContent, Priority iPriority, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0);
+	TMLbrbwChannel(ID iID, std::string iName, unsigned int iWidth, unsigned int iNumberOfHops, BusMaster** iMasters, Slave** iSlaves, TMLLength iLength, 
+		       TMLLength iContent, Priority iPriority, unsigned int iLossRate=0, unsigned int iMaxNbOfLosses=0);
 	void testWrite(TMLTransaction* iTrans);
 	void testRead(TMLTransaction* iTrans);
 	void write();

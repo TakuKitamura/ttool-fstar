@@ -1,6 +1,6 @@
 TARGET_ARCH = linux
 
-CC     = g++
+CC     = g++ -g
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
 OPT    = -O3 -pthread
