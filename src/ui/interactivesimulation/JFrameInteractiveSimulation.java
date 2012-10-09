@@ -1282,6 +1282,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		String busname;
 		String busid;
 		String state;
+		String usedEnergy;
 		
 		int k;
 		
@@ -1493,6 +1494,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							contdel = null;
 							busname = null;
 							busid = null;
+							usedEnergy = null;
 							
 							id = elt.getAttribute("id");
 							name = elt.getAttribute("name");
@@ -1501,6 +1503,12 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 								node0 = nl.item(0);
 								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								util = node0.getTextContent();
+							}
+							nl = elt.getElementsByTagName("energy");
+							if ((nl != null) && (nl.getLength() > 0)) {
+								node0 = nl.item(0);
+								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								usedEnergy = node0.getTextContent();
 							}
 							
 							//System.out.println("toto12");
@@ -1519,7 +1527,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							
 							
 							if ((id != null) && (util != null)) {
-								updateCPUState(id, util, contdel, busname, busid);
+								updateCPUState(id, util, usedEnergy, contdel, busname, busid);
 							}
 						}
 						
@@ -2234,7 +2242,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
 	}
 	
-	private void updateCPUState(String _id, String _utilization, String contdel, String busName, String busID) {
+	private void updateCPUState(String _id, String _utilization, String _usedEnergy, String contdel, String busName, String busID) {
 		Integer i = getInteger(_id);
 		int row;
 		String info;
@@ -2243,6 +2251,9 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			try {
 				valueTable.remove(i);
 				info = "Utilization: " + _utilization;
+				if (_usedEnergy != null) {
+					info += "; used energy: " +  _usedEnergy;
+				}
 				if ((contdel != null) && (busName != null) && (busID != null)) {
 					info += "; Cont. delay on " + busName + " (" + busID + "): " + contdel;
 				}
@@ -2250,7 +2261,11 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				//System.out.println("Searching for old row");
 				row = (Integer)(rowTable.get(i)).intValue();
 				cputm.fireTableCellUpdated(row, 2);
-				mgui.addLoadInfo(i, getDouble(_utilization).doubleValue());
+				if (_usedEnergy != null) {
+					mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
+				} else {
+					mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), getLong(_usedEnergy).longValue());
+				}
 			} catch (Exception e) {
 				TraceManager.addDev("Exception updateCPUState: " + e.getMessage() + " id=" + _id + " util=" + _utilization);
 			}
@@ -2268,7 +2283,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				//TraceManager.addDev("Searching for old row");
 				row = rowTable.get(i).intValue();
 				bustm.fireTableCellUpdated(row, 2);
-				mgui.addLoadInfo(i, getDouble(_utilization).doubleValue());
+				mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
 			} catch (Exception e) {
 				System.err.println("Exception updateBusState: " + e.getMessage());
 			}
@@ -2444,6 +2459,14 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public Integer getInteger(String s) {
 		try {
 			return Integer.decode(s);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public Long getLong(String s) {
+		try {
+			return Long.decode(s);
 		} catch (Exception e) {
 			return null;
 		}

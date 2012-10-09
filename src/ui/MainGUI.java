@@ -6258,7 +6258,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		}
 	}
 	
-	public synchronized void addLoadInfo(int _id, double _load) {
+	public synchronized void addLoadInfo(int _id, double _load, long _energy) {
 		if (loadIDs == null) {
 			loadIDs = new ArrayList<LoadInfo>();
 		}
