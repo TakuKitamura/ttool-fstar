@@ -1507,7 +1507,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							nl = elt.getElementsByTagName("energy");
 							if ((nl != null) && (nl.getLength() > 0)) {
 								node0 = nl.item(0);
-								//System.out.println("nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
+								//System.out.println("energy NL? nl:" + nl + " value=" + node0.getNodeValue() + " content=" + node0.getTextContent());
 								usedEnergy = node0.getTextContent();
 							}
 							
@@ -2261,7 +2261,7 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				//System.out.println("Searching for old row");
 				row = (Integer)(rowTable.get(i)).intValue();
 				cputm.fireTableCellUpdated(row, 2);
-				if (_usedEnergy != null) {
+				if (_usedEnergy == null) {
 					mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), -1);
 				} else {
 					mgui.addLoadInfo(i, getDouble(_utilization).doubleValue(), getLong(_usedEnergy).longValue());
