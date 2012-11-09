@@ -125,6 +125,10 @@ public class AvatarSpecificationSimulation  {
 				selectedBlocks.add(block);
 			}
 		}
+		TraceManager.addDev("computeSelectedSimulationBlocks: Nb of selected blocks: " + selectedBlocks.size() + "\n");
+		//for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+		//	System.out.println(ste);
+		//}
 	}
 	
 	public Vector<AvatarSimulationBlock> getSelectedSimulationBlocks() {
@@ -170,15 +174,27 @@ public class AvatarSpecificationSimulation  {
 		AvatarSimulationTransaction.reinit();
 		
 		// Create all simulation blocks
+		int cpt = 0;
+		Vector<AvatarSimulationBlock> tmpblocks = blocks;
 		blocks = new Vector<AvatarSimulationBlock>();
 		for(AvatarBlock block: avspec.getListOfBlocks()) {
 			if (block.hasARealBehaviour()) {
 				AvatarSimulationBlock asb = new AvatarSimulationBlock(block);
 				blocks.add(asb);
+				if (tmpblocks != null) {
+					asb.selected = tmpblocks.get(cpt).selected; 
+				}
+				cpt ++;
 			}
 		}
+		TraceManager.addDev("Nb of simulated blocks :" + blocks.size() + "\n");
 		
+		
+		// Computing selected blocks
+		TraceManager.addDev("Computing simulation blocks\n");
 		computeSelectedSimulationBlocks();
+		
+		TraceManager.addDev("Nb of selected blocks: " + selectedBlocks.size() + "\n");
 		
 		// Create all simulation asynchronous channels
 		asynchronousMessages = new Vector<AvatarSimulationAsynchronousTransaction>();
