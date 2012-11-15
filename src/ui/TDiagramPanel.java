@@ -91,6 +91,8 @@ import java.io.IOException;
 
 public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
+	protected TDiagramMouseManager tdmm;
+	
    	// for tracking changes
     public static final int NEW_COMPONENT = 0;
     public static final int NEW_CONNECTOR = 1;
@@ -234,7 +236,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         ttb = _ttb;
         mode = NORMAL;
         
-      
+        tdmm = new TDiagramMouseManager(this);
+        addMouseListener(tdmm);
+        addMouseMotionListener(tdmm);
         
         buildPopupMenus();
     }
@@ -1041,7 +1045,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     
     // true if connector not added
     public void stopAddingConnector(boolean b) {
-        p1.setFree(true);
+    	if (p1 != null) {
+    		p1.setFree(true);
+        }
         x1 = -1; x2= -1; y1 = -1; y2 = -1;
         listPoint = null;
     }
@@ -3704,6 +3710,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		
 		
 		return sb.toString();
+	}
+	
+	public void stopAddingConnector() {
+		//TraceManager.addDev("Stop Adding connector in tdp");
+		if (tdmm != null) {
+			tdmm.stopAddingConnector();
+		}
 	}
     
     

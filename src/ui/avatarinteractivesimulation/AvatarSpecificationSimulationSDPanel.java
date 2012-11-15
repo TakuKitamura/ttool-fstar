@@ -701,9 +701,11 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	
 	public BufferedImage performCapture() {
 		int w = this.getWidth();
-        int h = this.getHeight();
+        int h = this.getHeight()+50;
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
+        g.setColor(Color.white);
+        g.fillRect(0, 0, w+1, h+1);
 		g.setColor(Color.black);
         paintComponent(g);
         g.dispose();

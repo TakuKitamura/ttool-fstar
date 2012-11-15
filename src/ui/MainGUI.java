@@ -5406,6 +5406,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             if (activetdp != null) {
                 activetdp.activateActions(false);
                 unactivateDrawing();
+                activetdp.stopAddingConnector();
             }
             //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
             tdp1.activateActions(true);
@@ -5432,6 +5433,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             if (activetdp != null) {
                 activetdp.activateActions(false);
                 unactivateDrawing();
+                activetdp.stopAddingConnector();
             }
             //TraceManager.addDev("Pane analysis action 2");
             tdp1.activateActions(true);
@@ -5458,6 +5460,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             if (activetdp != null) {
                 activetdp.activateActions(false);
                 unactivateDrawing();
+                activetdp.stopAddingConnector();
             }
             //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
             tdp1.activateActions(true);
@@ -5483,6 +5486,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             if (activetdp != null) {
                 activetdp.activateActions(false);
                 unactivateDrawing();
+                activetdp.stopAddingConnector();
             }
             //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
             tdp1.activateActions(true);
@@ -5620,6 +5624,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void paneAction(ChangeEvent e) {
         //TraceManager.addDev("Pane action");
+         TDiagramPanel tdp1 = getCurrentTDiagramPanel();
+			if (tdp1 != null) {
+				//TraceManager.addDev("Stop Adding connector in maingui");
+			tdp1.stopAddingConnector();
+			}
+        
         try {
             if (getCurrentTURTLEPanel() instanceof DesignPanel) {
                 setMethodologicalMode(METHO_DESIGN);
@@ -6442,6 +6452,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         //TraceManager.addDev("Command:" + command);
+        TDiagramPanel tdp1 = getCurrentTDiagramPanel();
+        if (tdp1 != null) {
+        	//TraceManager.addDev("Stop Adding connector in maingui");
+        tdp1.stopAddingConnector();
+        }
+        
         
         // Compare the action command to the known actions.
         if (command.equals(actions[TGUIAction.ACT_NEW].getActionCommand()))  {

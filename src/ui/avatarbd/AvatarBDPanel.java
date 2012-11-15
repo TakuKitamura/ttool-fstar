@@ -59,9 +59,9 @@ public class AvatarBDPanel extends TDiagramPanel {
     
     public  AvatarBDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

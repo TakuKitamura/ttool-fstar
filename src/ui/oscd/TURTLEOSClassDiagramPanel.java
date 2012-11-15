@@ -59,9 +59,9 @@ public class TURTLEOSClassDiagramPanel extends TDiagramPanel implements ClassDia
     
     public TURTLEOSClassDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

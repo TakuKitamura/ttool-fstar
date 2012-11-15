@@ -1099,6 +1099,14 @@ public class AvatarSpecificationSimulation  {
 		}
 	}
 	
+	public String getStringExecutedTransactions() {
+		StringBuffer sb = new StringBuffer("");
+		for(AvatarSimulationTransaction ast: allTransactions) {
+			sb.append(ast.toString() + "\n");
+		}
+		return sb.toString();
+	}
+	
 	
     // Must split transactions when a broadcast transactions contains more than one transaction per block
 	private Vector<AvatarSimulationPendingTransaction> workOnBroadcastTransactions(Vector<AvatarSimulationPendingTransaction> _transactions) {

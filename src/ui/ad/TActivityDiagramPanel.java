@@ -60,9 +60,6 @@ public class TActivityDiagramPanel extends TDiagramPanel implements ActivityDiag
     public  TActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         addComponent(400, 50, TGComponentManager.TAD_START_STATE, false);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

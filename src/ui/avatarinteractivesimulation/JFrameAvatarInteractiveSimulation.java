@@ -1141,8 +1141,50 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void actSaveTxt() {
-		ass.printExecutedTransactions();
+		TraceManager.addDev("Saving in txt format");
+		String fileName = saveFileName.getText().trim();
+		
+		
+		if (ConfigurationTTool.IMGPath != null) {
+			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+		}
+		
+		boolean ok = true;
+		
+		try {
+			ok = FileUtils.checkFileForSave(new File(fileName));
+		} catch (Exception e) {
+			ok = false;
+		}
+		
+		if (!ok) {
+			JOptionPane.showMessageDialog(this,
+				"The capture could not be performed: the specified file is not valid",
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+		}
+		
+		
+		try {
+			FileUtils.saveFile(fileName, ass.getStringExecutedTransactions());
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,
+				"The simulation trace in text format could not be saved: " + e.getMessage(),
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+            return;
+		}
+		
+		JOptionPane.showMessageDialog(this,
+				"Simulation trace was saved in " + fileName,
+				"Error",
+				JOptionPane.INFORMATION_MESSAGE);
+		
+		//ass.printExecutedTransactions();
 	}
+	
 	
 	public void actSaveSvg() {
 		TraceManager.addDev("Saving in svg format");
@@ -1303,6 +1345,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			actSaveTxt();
 			return;
 			
+		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand()))  {
+			actSaveSDPNG();
+			return;
 			
 		} else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_SAVE_SVG].getActionCommand()))  {
 			actSaveSvg();

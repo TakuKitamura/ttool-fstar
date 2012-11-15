@@ -60,9 +60,9 @@ public class EBRDDPanel extends TDiagramPanel {
     public  EBRDDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         addComponent(400, 50, TGComponentManager.EBRDD_START_STATE, false);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

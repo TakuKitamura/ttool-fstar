@@ -49,6 +49,8 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 
+import myutil.*;
+
 public class TDiagramMouseManager implements MouseListener, MouseMotionListener  {
 
 	private TDiagramPanel tdp;
@@ -404,6 +406,15 @@ public class TDiagramMouseManager implements MouseListener, MouseMotionListener 
 			tdp.repaint();
 		}
 
+	}
+	
+	
+	public void stopAddingConnector() {
+		//TraceManager.addDev("Stop Adding connector in tdmm");
+		tdp.mode = TDiagramPanel.NORMAL;
+		tdp.stopAddingConnector(true);
+		//tdp.getGUI().setEditMode();
+		//tdp.repaint();
 	}
 
 	public void setCursor(int info) {

@@ -59,9 +59,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     
     public  TMLComponentTaskDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
 		//setAttributesVisible(true);
     }
     

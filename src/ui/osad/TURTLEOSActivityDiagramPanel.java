@@ -55,9 +55,9 @@ public class TURTLEOSActivityDiagramPanel extends TDiagramPanel implements Activ
     public  TURTLEOSActivityDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         //addComponent(400, 50, TGComponentManager.TMLAD_START_STATE, false);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {

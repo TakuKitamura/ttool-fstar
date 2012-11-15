@@ -60,9 +60,9 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
     public  AvatarSMDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         addComponent(400, 50, TGComponentManager.AVATARSMD_START_STATE, false);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
         
         attributesOn = PARTIAL;
     }

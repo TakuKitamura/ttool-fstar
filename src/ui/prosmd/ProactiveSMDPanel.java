@@ -64,9 +64,9 @@ public class ProactiveSMDPanel extends TDiagramPanel implements Behaviour {
         super(mgui, _ttb);
         //Commented by Solange for copy cases
         //addComponent(400, 50, TGComponentManager.PROSMD_START_STATE, false);
-        TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
+        /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        addMouseMotionListener(tdmm);*/
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
