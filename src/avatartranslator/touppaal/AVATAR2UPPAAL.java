@@ -601,7 +601,7 @@ public class AVATAR2UPPAAL {
 			/*if (_elt.isCheckable()) {
 				loc1 = addLocation(_template);  
 				tr = addTransition(_template, loc, loc1);
-				TraceManager.addDev("action on signal " + _elt + " is selected for checking");
+				TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _elt + " is selected for checking");
 				hashChecking.put(_elt, loc);
 				loc.unsetOptimizable();
 				loc.setCommitted();
@@ -615,7 +615,7 @@ public class AVATAR2UPPAAL {
 		} else if (_elt instanceof AvatarState) {
 			TraceManager.addDev("+ + + + + + + + + + + State " + _elt + ": first handling");
 			if (_elt.isCheckable()) {
-				TraceManager.addDev("State " + _elt + " is selected for checking previous=" + _previous);
+				TraceManager.addDev("[CHECKING] State " + _elt + " is selected for checking previous=" + _previous);
 				_previous.unsetOptimizable();
 				_previous.setCommitted();
 				loc = addLocation(_template);  
@@ -714,10 +714,19 @@ public class AVATAR2UPPAAL {
 		addAssignment(tr, ss[1]);
 		
 		
-		//TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
+		TraceManager.addDev("* * * * * * * * * * * * * * * * Action on signal " + _aaos.getSignal().getName());
 		
 		if (_aaos.isCheckable()) {
+			TraceManager.addDev("[CHECKING] Action on signal ??? " + _aaos.getSignal().getName());
 			if (hashChecking.get(_aaos) == null) {
+				UPPAALLocation loc1 = addLocation(_template);  
+				UPPAALTransition tr1 = addTransition(_template, loc, loc1);
+				TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _elt + " is selected for checking");
+				hashChecking.put(_aaos, loc);
+				loc.unsetOptimizable();
+				loc.setCommitted();
+				loc = loc1;
+				TraceManager.addDev("[CHECKING] Added");
 				hashChecking.put(_aaos, loc);
 				loc.unsetOptimizable();
 			/*} else {
@@ -925,18 +934,20 @@ public class AVATAR2UPPAAL {
 							 _elements.add(at.getNext(0).getNext(0));
 						}
 						
-						if (aaos.isCheckable()) {
-							if (hashChecking.get(at.getNext(0)) == null) {
+						/*if (aaos.isCheckable()) {
+							TraceManager.addDev("--------- action on signal " + aaos + " is selected for checking");
+							if (hashChecking.get(aaos) == null) {
+								TraceManager.addDev("[CHECKING] --------- action on signal " + aaos + " is selected for checking");
 								hashChecking.put(aaos, locend);
 								locend.unsetOptimizable();
 							} else {
 								// Enforce the new information
-								TraceManager.addDev("---------------- Already set as checkable -> enforcing new information");
+								TraceManager.addDev("[CHECKING] ---------------- Already set as checkable -> enforcing new information");
 								hashChecking.remove(aaos);
 								hashChecking.put(aaos, locend);
 								locend.unsetOptimizable();
 							}
-						}
+						}*/
 						
 						
 					} else {
