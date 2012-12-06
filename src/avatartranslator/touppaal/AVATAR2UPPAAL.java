@@ -721,14 +721,13 @@ public class AVATAR2UPPAAL {
 			if (hashChecking.get(_aaos) == null) {
 				UPPAALLocation loc1 = addLocation(_template);  
 				UPPAALTransition tr1 = addTransition(_template, loc, loc1);
-				TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _elt + " is selected for checking");
+				TraceManager.addDev("[CHECKING] +-+-+-+- action on signal " + _aaos + " is selected for checking");
 				hashChecking.put(_aaos, loc);
 				loc.unsetOptimizable();
 				loc.setCommitted();
 				loc = loc1;
 				TraceManager.addDev("[CHECKING] Added");
-				hashChecking.put(_aaos, loc);
-				loc.unsetOptimizable();
+				//loc.unsetOptimizable();
 			/*} else {
 				UPPAALLocation loc1 = (UPPAALLocation)(hashChecking.get(_aaos));
 				UPPAALTransition tr1 = addTransition(_template, loc, loc1);
