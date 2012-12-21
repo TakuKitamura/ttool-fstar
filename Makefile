@@ -178,7 +178,7 @@ stdrelease:
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/evt/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/evt
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
-#	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
+	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
 	cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
 # Licenses
 	cd $(TTOOL_DOC); cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
@@ -221,8 +221,7 @@ stdrelease:
 	cp $(TTOOL_DOC)/README_bin $(TTOOL_TARGET)/bin
 	cp $(TTOOL_BIN)/configuration.gcf $(TTOOL_TARGET)/bin
 	cp -R $(TTOOL_BIN)/$(TTOOL_LOTOS_H).h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.h $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.t  $(TTOOL_BIN)/$(TTOOL_LOTOS_H)_?.f $(TTOOL_TARGET)/bin
-	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
-	
+	cp $(TTOOL_BIN)/$(TTOOL_BINARY) $(TTOOL_BIN)/$(LAUNCHER_BINARY) $(TTOOL_BIN)/$(TIFTRANSLATOR_BINARY) $(TTOOL_BIN)/$(TMLTRANSLATOR_BINARY) $(TTOOL_BIN)/$(RUNDSE_BINARY) $(TTOOL_BIN)/$(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin	
 
 # Basic release
 	cd $(TTOOL_TARGET_RELEASE);$(TAR) cfv $(TTOOL_STD_RELEASE)/release.tar *; $(GZIP) -9 $(TTOOL_STD_RELEASE)/release.tar; mv $(TTOOL_STD_RELEASE)/release.tar.gz $(TTOOL_STD_RELEASE)/release.tgz

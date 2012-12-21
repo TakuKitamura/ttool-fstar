@@ -283,8 +283,10 @@ public class TMLModeling {
         ListIterator iterator = requests.listIterator();
         while(iterator.hasNext()) {
             request = (TMLRequest)(iterator.next());
-            if (request.getName().compareTo(_request.getName()) == 0) {
-                return true;
+            if (request != _request) {
+            	if (request.getName().compareTo(_request.getName()) == 0) {
+            		return true;
+            	}
             }
         } 
         return false;
@@ -303,6 +305,8 @@ public class TMLModeling {
         return null;
     }
     
+    
+    // Returns a similar request if found
     public TMLRequest hasSimilarRequest(TMLRequest _request) {
         TMLRequest request;
         int i;
@@ -314,19 +318,19 @@ public class TMLModeling {
             if (request.getName().compareTo(_request.getName()) == 0) {
                 // must verify whether a param is different or not.
                 if (request.getNbOfParams() != _request.getNbOfParams()) {
-					TraceManager.addDev("nb of params");
+					TraceManager.addDev(" *** -> nb of params is different");
                     return null;
                 }
                 
                 for(i=0; i<request.getNbOfParams(); i++) {
                     if (request.getType(i).getType() != _request.getType(i).getType()) {
-						TraceManager.addDev("Params #" + i + " type");
+						TraceManager.addDev("**** -> Params #" + i + " type");
                         return null;
                     }
                 }
                 
                 if (request.getDestinationTask() != _request.getDestinationTask()) {
-					TraceManager.addDev("Destination task");
+					TraceManager.addDev("**** ->Destination task: found=" + request.getDestinationTask().getName() + " provided=" + _request.getDestinationTask().getName());
                     return null;
                 }
 				

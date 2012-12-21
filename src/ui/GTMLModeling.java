@@ -543,7 +543,7 @@ public class GTMLModeling  {
 					
 					// More: test the compatibility of the request!
 					if (request.getDestinationTask() != tmlm.getTMLTaskByName(makeName((TGComponent)t2, t2.getTaskName()))) {
-						String msg = "request " + tmlro.getRequestName() + " is declared several times differently";
+						String msg = "request " + tmlro.getRequestName() + " is declared several times differently (compatibility issue)";
 						CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
 						ce.setTDiagramPanel(tmldp.tmltdp);
 						ce.setTGComponent(tgc);
