@@ -385,12 +385,13 @@ public class AvatarSimulationBlock  {
 									avat = aaos.getSignal().getListOfAttributes().get(i);
 									result = "";
 									if (avat.getType() == AvatarType.INTEGER) {
+										//TraceManager.addDev("Evaluating expression, value=" + value);
 										result += evaluateIntExpression(value, lastTransaction.attributeValues);
 									} else if (avat.getType() == AvatarType.BOOLEAN) {
 										result += evaluateBoolExpression(value, lastTransaction.attributeValues);
 									} 
 									
-									//TraceManager.addDev("Adding value:" + result);
+									TraceManager.addDev("Adding value:" + result);
 									parameters.add(result);
 								} catch (Exception e) {
 									TraceManager.addDev("EXCEPTION on adding value " + aaos);
@@ -635,9 +636,14 @@ public class AvatarSimulationBlock  {
 		String act = _expr;
 		int cpt = 0;
 		for(String attrValue: _attributeValues) {
+			if (attrValue.trim().startsWith("-")) {
+				attrValue = "(0" + attrValue + ")"; 
+			}
 			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
 			cpt ++;
 		}
+		
+		TraceManager.addDev("Evaluating expression: " + act);
 		
 		return (int)(new IntExpressionEvaluator().getResultOf(act));
 	}

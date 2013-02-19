@@ -248,13 +248,18 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         
         try {
         	jta.append("\n*** WARNING: Invariants do NOT take into account variables nor time constraints ***\n");
+        	jta.append("Clearing invariants on diagrams\n");
+        	mgui.gtm.clearGraphicalInfoOnInvariants();
             jta.append("Generating Petri Net\n");
             tpn = mgui.gtm.generateTPNFromAvatar();
             jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
+            String ret = mgui.saveTPNNDRFormat(tpn.toNDRFormat());
+            jta.append(ret + "\n");
             testGo();
             
             jta.append("Computing incidence matrix\n");
             IntMatrix im = tpn.getIncidenceMatrix();
+            int nbOfColumn = im.sizeColumn;
             jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
             jta.append("Incidence matrix computed\n");
             testGo();
@@ -293,7 +298,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	name =  im.getNameOfLine(i);
        
             	inv = new Invariant("#" + ((i+1)-ignored) + " " + name);
-            	inv.setValue(im.getValueOfLine(i));
+            	inv.setValue(im.getValueOfLineFromColumn(nbOfColumn, i));
             	
             	// Putting components
             	name = Conversion.replaceAllString(name, " + ", "&"); 
@@ -325,7 +330,11 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             					try {
             						myid = Integer.decode(tmps[tmps.length-1]).intValue();
             						o = ab.getStateMachine().getReferenceObjectFromID(myid);
-            						tgc1 = (TGComponent)o;
+            						if (o != null) {
+            							tgc1 = (TGComponent)o;
+            						} else {
+            							tgc1 = null;
+            						}
             						
             					} catch (Exception e) {
             						tgc1 = null;
@@ -344,7 +353,11 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             					try {
             						myid = Integer.decode(tmps[tmps.length-1]).intValue();
             						o = ab.getStateMachine().getReferenceObjectFromID(myid);
-            						tgc2 = (TGComponent)o;
+            						if (o != null) {
+            							tgc2 = (TGComponent)o;
+            						} else {
+            							tgc2 = null;
+            						}
             						
             					} catch (Exception e) {
             						tgc2 = null;
@@ -378,37 +391,42 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             			tmp = Conversion.replaceAllString(tmp, "__", "&");
             			tmps = tmp.split("&");
             			if (tmps.length > 2) {
+            				//TraceManager.addDev("Getting block with name=" + tmps[0]);
             				ab = avspec.getBlockWithName(tmps[0]);
-            				if (prevBlock == null) {
-            					prevBlock = ab;
-            				} else {
-            					if (prevBlock != ab) {
-            						if (prevBlock1 != null) {
-            							if (prevBlock1 != ab) {
-            								sameBlock = false;
-            							}
-            						} else {
-            							sameBlock = false;
-            						}
-            					}
-            				}
-            				prevBlock = ab;
-            				prevBlock1 = null;
-            				
-            				try {
-            					myid = Integer.decode(tmps[tmps.length-1]).intValue();
-            					o = ab.getStateMachine().getReferenceObjectFromID(myid);
-            					//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
-            					if (!((o instanceof AvatarSMDReceiveSignal) || (o instanceof AvatarSMDSendSignal))) {
-            						//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
-            						inv.addComponent((TGComponent)o);
-            					}
-            					//TraceManager.addDev("Component added:" + o);
-            					if (o instanceof AvatarSMDStartState) {
-            						valToken ++;
-            					}
-            				} catch (Exception e) {
-            					TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+            				if (ab != null) {
+								if (prevBlock == null) {
+									prevBlock = ab;
+								} else {
+									if (prevBlock != ab) {
+										if (prevBlock1 != null) {
+											if (prevBlock1 != ab) {
+												sameBlock = false;
+											}
+										} else {
+											sameBlock = false;
+										}
+									}
+								}
+								prevBlock = ab;
+								prevBlock1 = null;
+								
+								try {
+									//TraceManager.addDev("trying ... tmps=" + tmps[tmps.length-1] + "ab=" + ab);
+									myid = Integer.decode(tmps[tmps.length-1]).intValue();
+									//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid);
+									o = ab.getStateMachine().getReferenceObjectFromID(myid);
+									//TraceManager.addDev("Adding component to inv   block=" + ab.getName());
+									if (!((o instanceof AvatarSMDReceiveSignal) || (o instanceof AvatarSMDSendSignal))) {
+										//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
+										inv.addComponent((TGComponent)o);
+									}
+									//TraceManager.addDev("Component added:" + o);
+									if (o instanceof AvatarSMDStartState) {
+										valToken ++;
+									}
+								} catch (Exception e) {
+									TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+								}
             				}
             			}
             		}

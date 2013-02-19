@@ -51,6 +51,7 @@ public class Transition {
     public static int INDEX  = 0;
     
     public String name;
+    public int x, y;
     public String label; /* name of the synchro gate, name of the delay, etc.) */
     public String predicat; /* action to be executed before the transition is fired */
     public int intervalMin = 0;
@@ -153,6 +154,51 @@ public class Transition {
             s += (iterator.next()).toString() + " ";
         }
         return s;
+    }
+    
+    public String toNDRFormat() {
+    	String tr = "";
+    	tr += "t " + x + " " + y + " " + name + " 0 w n\n";
+    	for(int i=0; i<originPlaces.size(); i++) {
+    		tr += "e " +  originPlaces.get(i).name + " " + name + " 1 n\n";
+    	}
+    	for(int j=0; j<destinationPlaces.size(); j++) {
+    		tr += "e " + name + " " + destinationPlaces.get(j).name + " 1 n\n";
+    	}
+    	return tr;
+
+    }
+    
+    public int getXBarycenterOfPlaces() {
+    	int totalX = 0;
+    	int nbMet = 0;
+    	for(Place p1: originPlaces) {
+    		totalX += p1.x;
+    		nbMet ++;
+    	}
+    	for(Place p2: destinationPlaces) {
+    		totalX += p2.x;
+    		nbMet ++;
+    	}
+    	
+    	return (int)(totalX/nbMet);
+    	
+    }
+    
+    public int getYBarycenterOfPlaces() {
+    	int totalY = 0;
+    	int nbMet = 0;
+    	for(Place p1: originPlaces) {
+    		totalY += p1.y;
+    		nbMet ++;
+    	}
+    	for(Place p2: destinationPlaces) {
+    		totalY += p2.y;
+    		nbMet ++;
+    	}
+    	
+    	return (int)(totalY/nbMet);
+    	
     }
     
     

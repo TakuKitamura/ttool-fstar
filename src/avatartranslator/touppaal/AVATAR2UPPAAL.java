@@ -919,7 +919,10 @@ public class AVATAR2UPPAAL {
 					// Must consider whether the transition leads to an action on a signal
 					if (at.followedWithAnActionOnASignal()) {
 						aaos = (AvatarActionOnSignal)(at.getNext(0));
-						loc1 = translateAvatarActionOnSignal(aaos, _block, _template, _loc, "");
+						if (tmps == null) {
+							tmps = "";
+						}
+						loc1 = translateAvatarActionOnSignal(aaos, _block, _template, _loc, tmps);
 						
 						loc2 = hash.get(aaos);
 						if (loc2 == null) {

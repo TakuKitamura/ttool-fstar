@@ -69,6 +69,85 @@ public class TPN {
         transitions.add(tr);
     }
     
+    public String toNDRFormat() {
+    	Place p;
+    	String tpn = "";
+    	int cpt = 0;
+    	int cpty;
+    	int nbOfPlaces;
+    	ListIterator iterator;
+    	String beg;
+    	int index;
+    	
+    	int stepx = 250;
+    	int stepy = 125;
+    	
+    	// Compute the x and y position of each element
+    	// First init all to 0, and then, compute the position
+    	for(Place p0: places) {
+    		p0.x = 0; p0.y=0;
+    	}
+    	for(Transition t0: transitions) {
+    		t0.x=0; t0.y=0;
+    	}
+    	
+    	// Determine an x for each task, with a step of 400 between each, starting at 100
+    	// Vertical placement for the same task name.
+    	cpt = 100;
+    	nbOfPlaces = 0;
+    	for(Place p1: places) {
+    		//Place already met?
+    		if (p1.x == 0) {
+    			// Not met!
+    			index = p1.name.indexOf("_");
+    			if (index == -1) {
+    				beg = p1.name;
+    			} else {
+    				beg = p1.name.substring(0, index);
+    			}
+    			cpty = 100;
+    			p1.x = cpt;
+    			p1.y = cpty;
+    			cpty += stepy;
+    			iterator = places.listIterator();
+				while(iterator.hasNext()) {
+					p = (Place)(iterator.next());
+					if (p.x == 0) {
+						if (p.name.startsWith(beg)) {
+							p.x = cpt;
+							p.y= cpty;
+							cpty+= stepy;
+						}
+					}
+				}
+				cpt += stepx + (nbOfPlaces * 100);
+				nbOfPlaces ++;
+    		}
+    	}
+    	
+    	// For transitions, we use the barycenter of all connected places
+    	for(Transition t: transitions) {
+    		t.x = t.getXBarycenterOfPlaces() + 100;
+    		t.y = t.getYBarycenterOfPlaces() - 50;
+    	}
+    	
+    	
+    	
+    	// Generate text of places and transitions
+    	iterator = places.listIterator();
+        while(iterator.hasNext()) {
+            p = (Place)(iterator.next());
+            tpn += p.toNDRFormat();
+        }
+        iterator = transitions.listIterator();
+        while(iterator.hasNext()) {
+            tpn += ((Transition)(iterator.next())).toNDRFormat() + "\n";
+      
+        }
+        
+        return tpn;
+    }
+    
     public String toTINAString() {
         Place p;
         String tpn = "net generatedWithTTool\n\n";

@@ -116,6 +116,7 @@ public class AVATAR2TPN {
 		for(AvatarBlock block: blocks) {
 			makeBlock(block);
 		}
+		interconnectSynchro();
 	}
 	
 	public void makeBlock(AvatarBlock ab) {
@@ -124,7 +125,7 @@ public class AVATAR2TPN {
 		
 		makeBlockTPN(ab, asm, ass,null);
 		
-		interconnectSynchro();
+		
 	}
 	
 	public void makeBlockTPN(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _asme, AvatarStateMachineElement _previous) {
@@ -146,7 +147,7 @@ public class AVATAR2TPN {
 		if (p0 != null) {
 			// Link the exit place of the previous element to the one of the current element
 			if (p1 != null){
-				t0 = new Transition(getTPNName(_block, _previous) + " to " + getTPNName(_block, _asme));
+				t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
 				t0.addDestinationPlace(p0);
 				t0.addOriginPlace(p1);
 				tpn.addTransition(t0);
@@ -175,6 +176,7 @@ public class AVATAR2TPN {
 			}
 			
 		} else if (_asme instanceof AvatarActionOnSignal){
+			TraceManager.addDev("??????? Analyzing actions on signals: " + _asme);
 			aaos = (AvatarActionOnSignal)_asme;
 			
 			if (aaos.getSignal().isOut()) {
@@ -202,7 +204,7 @@ public class AVATAR2TPN {
 		
 		// Must link the new element to the previous one
 		if ((p1 != null) && (link)){
-			t0 = new Transition(getTPNName(_block, _previous) + " to " + getTPNName(_block, _asme));
+			t0 = new Transition(getTPNName(_block, _previous) + "_to_" + getTPNName(_block, _asme));
 			t0.addDestinationPlace(pentry);
 			t0.addOriginPlace(p1);
 			tpn.addTransition(t0);
@@ -227,6 +229,7 @@ public class AVATAR2TPN {
 		
 		// Interconnect sender and receivers together!
 		for(AvatarActionOnSignal destination: receiveActions) {
+			TraceManager.addDev("Dealing with receive actions : " + destination);
 			// Find the related relation
 			for(AvatarRelation ar: avspec.getRelations()) {
 				if (ar.containsSignal(destination.getSignal()) && !ar.isAsynchronous()) {
@@ -235,11 +238,11 @@ public class AVATAR2TPN {
 					for(AvatarActionOnSignal origin:sendActions) {
 						if (origin.getSignal() == sig) {
 							// combination found!
-							//TraceManager.addDev("Combination found");
-							t0 = new Transition("beginning Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
-							pSynchro = new Place("Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
+							TraceManager.addDev("Combination found for: " + sig);
+							t0 = new Transition("beginning_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_" + getTPNName(ar.getInBlock(index), destination));
+							pSynchro = new Place("Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_" + getTPNName(ar.getInBlock(index), destination));
 							tpn.addPlace(pSynchro);
-							t1 = new Transition("end Synchro from " + getTPNName(ar.getOutBlock(index), origin) + " to " + getTPNName(ar.getInBlock(index), destination));
+							t1 = new Transition("end_Synchro_from_" + getTPNName(ar.getOutBlock(index), origin) + "_to_" + getTPNName(ar.getInBlock(index), destination));
 							
 							t0.addOriginPlace(entryPlaces.get(destination));
 							t0.addOriginPlace(entryPlaces.get(origin));
@@ -293,6 +296,16 @@ public class AVATAR2TPN {
 	}*/
 	
 	public String getTPNName(AvatarBlock _block, AvatarStateMachineElement _asme) {
+		if (_asme instanceof AvatarActionOnSignal) {
+			AvatarActionOnSignal aaos = (AvatarActionOnSignal)_asme;
+			if (aaos.isSending()) {
+				return _block.getName() + "__Send__" + aaos.getSignal().getName() + "__" + _asme.getID();
+			} else {
+				return _block.getName() + "__Receive__" + aaos.getSignal().getName() + "__" + _asme.getID();
+			}
+			
+		}
+		
 		return _block.getName() + "__" + _asme.getName() + "__" + _asme.getID();
 	}
 	

@@ -50,6 +50,7 @@ public class Place {
     
     public int nbOfToken;
     public String name;
+    public int x, y;
     
     public Place() {
         name = generateName();
@@ -79,6 +80,10 @@ public class Place {
     
     public String toTINAString() {
         return "pl " + name + " (" + nbOfToken + ")";
+    }
+    
+    public String toNDRFormat() {
+    	return "p " + x + " " + y + " " + name + " " + nbOfToken + " n\n";
     }
     
 

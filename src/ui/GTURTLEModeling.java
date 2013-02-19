@@ -1805,6 +1805,26 @@ public class GTURTLEModeling {
 		
     }
     
+    public void clearGraphicalInfoOnInvariants() {
+    	if (avatarspec == null) {
+			return;
+		}
+		
+		AvatarDesignPanel adp = null;
+		
+		try {
+			 adp = (AvatarDesignPanel)(avatarspec.getInformationSource());
+		} catch (Exception e) {
+			TraceManager.addDev("Exception gtm: " + e.getMessage());
+			return;
+		}
+		
+		adp.removeAllMutualExclusionWithMasterMutex();
+		
+		
+		
+    }
+    
     
     // Returns the number of states found
     // Returns -1 in case of error

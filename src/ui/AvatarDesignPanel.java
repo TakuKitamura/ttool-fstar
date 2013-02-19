@@ -251,6 +251,10 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		}
 	}
 	
+	public void clearGraphicalInfoOnInvariants() {
+		
+	}
+	
 	
     
 }

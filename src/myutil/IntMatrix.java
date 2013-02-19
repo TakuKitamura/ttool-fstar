@@ -96,6 +96,14 @@ public class IntMatrix {
    	   return cpt;
    }
    
+   public int getValueOfLineFromColumn(int columnIndex, int i) {
+   	   int cpt = 0;
+   	   for(int j=columnIndex;j<sizeColumn; j++) {
+   	   	   cpt += matrice[i][j];
+   	   }
+   	   return cpt;
+   }
+   
    public void setNameOfLine(int line, String name) {
    	   try {
    	   	   nameOfRows[line] = name;
@@ -366,6 +374,10 @@ public class IntMatrix {
    	   	    //System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
    	   	   
    	   }
+   	   
+   	   // Remove m first columns
+   	   
+   	   
    	   
    }
    

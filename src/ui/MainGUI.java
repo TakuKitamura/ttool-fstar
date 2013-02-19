@@ -1731,6 +1731,18 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         saveFile(dtafile, gdata, "Graphical DTA saved under");
     }
     
+    public String saveTPNNDRFormat(String tpn) {
+    	String s = file.getAbsolutePath();
+    	 int l = s.length();
+    	String myFile = s.substring(0, l-4) + ".ndr";
+    	try {
+    	FileUtils.saveFile(myFile, tpn);
+    	} catch (Exception e) {
+    		return "TPN could not be saved in myFile: " +e.getMessage();
+    	}
+    	return "TPN saved in " +myFile;
+    }
+    
     public void saveRG(String tdata, String gdata) {
         File rgfile;
         
