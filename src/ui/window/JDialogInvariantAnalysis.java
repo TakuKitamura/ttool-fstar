@@ -60,12 +60,14 @@ import tpndescription.*;
 import ui.*;
 import ui.avatarsmd.*;
 import launcher.*;
+import frompipe.*;
 
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
     
 	private static boolean IGNORE = true;
 	private static boolean ALL_MUTEX = true;
+	private static boolean FARKAS_SELECTED = true;
 	
     protected MainGUI mgui;
     
@@ -79,7 +81,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     int mode;
     
     //components
-    protected JTextArea jta, jtatpn, jtamatrix, jtainvariants;
+    protected JRadioButton farkasButton, PIPEButton;
+    protected JTextArea jta, jtatpn, jtamatrix, jtamatrixafterfarkas, jtainvariants;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -131,7 +134,24 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         ignoreInvariants = new JCheckBox("Ignore invariants concerning only one block", IGNORE);
         panelCheck.add(ignoreInvariants, BorderLayout.NORTH);
         computeAllMutualExclusions = new JCheckBox("Compute mutual exclusions for all states", ALL_MUTEX);
-        panelCheck.add(computeAllMutualExclusions, BorderLayout.SOUTH);
+        panelCheck.add(computeAllMutualExclusions, BorderLayout.CENTER);
+        
+        JPanel radioButtonsForAlgo = new JPanel(new BorderLayout());
+        farkasButton = new JRadioButton("Farkas algorithm");
+        radioButtonsForAlgo.add(farkasButton, BorderLayout.NORTH);
+        PIPEButton = new JRadioButton("PIPE algorithm");
+        radioButtonsForAlgo.add(PIPEButton, BorderLayout.SOUTH);
+      
+         panelCheck.add(radioButtonsForAlgo, BorderLayout.SOUTH);
+        ButtonGroup group = new ButtonGroup();
+        group.add(farkasButton);
+    	group.add(PIPEButton);
+    	 if (FARKAS_SELECTED) {
+        	farkasButton.setSelected(true);
+        } else {
+        	PIPEButton.setSelected(true);
+        }
+        
         panelCompute.add(panelCheck, BorderLayout.NORTH);
         
         jta = new ScrolledJTextArea();
@@ -150,7 +170,6 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         jtatpn.setEditable(false);
         jtatpn.setMargin(new Insets(10, 10, 10, 10));
         jtatpn.setTabSize(3);
-        //jta.append("Press start to compute invariants\n");
         jtatpn.setFont(f);
         jsp = new JScrollPane(jtatpn, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jp1.add("Petri net", jsp);  
@@ -159,16 +178,22 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         jtamatrix.setEditable(false);
         jtamatrix.setMargin(new Insets(10, 10, 10, 10));
         jtamatrix.setTabSize(3);
-        //jtamatrix.append("Press start to compute invariants\n");
         jtamatrix.setFont(f);
         jsp = new JScrollPane(jtamatrix, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jp1.add("Incidence matrix", jsp);
+        
+        jtamatrixafterfarkas = new ScrolledJTextArea();
+        jtamatrixafterfarkas.setEditable(false);
+        jtamatrixafterfarkas.setMargin(new Insets(10, 10, 10, 10));
+        jtamatrixafterfarkas.setTabSize(3);
+        jtamatrixafterfarkas.setFont(f);
+        jsp = new JScrollPane(jtamatrixafterfarkas, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jp1.add("Incidence matrix after Farkas", jsp);
         
         jtainvariants = new ScrolledJTextArea();
         jtainvariants.setEditable(false);
         jtainvariants.setMargin(new Insets(10, 10, 10, 10));
         jtainvariants.setTabSize(3);
-        //jtamatrix.append("Press start to compute invariants\n");
         jtainvariants.setFont(f);
         jsp = new JScrollPane(jtainvariants, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jp1.add("Invariants", jsp);
@@ -214,6 +239,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         }
         IGNORE = ignoreInvariants.isSelected();
         ALL_MUTEX = computeAllMutualExclusions.isSelected();
+        FARKAS_SELECTED = farkasButton.isSelected();
         dispose();
     }
     
@@ -240,32 +266,211 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         }
     }
     
-    public void run() {
-    	TPN tpn;
-        hasError = false;
-		
-		TraceManager.addDev("Thread started");
-        
-        try {
-        	jta.append("\n*** WARNING: Invariants do NOT take into account variables nor time constraints ***\n");
-        	jta.append("Clearing invariants on diagrams\n");
-        	mgui.gtm.clearGraphicalInfoOnInvariants();
-            jta.append("Generating Petri Net\n");
-            tpn = mgui.gtm.generateTPNFromAvatar();
-            jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
-            String ret = mgui.saveTPNNDRFormat(tpn.toNDRFormat());
-            jta.append(ret + "\n");
+   
+    public void pipeInvariants(TPN tpn, IntMatrix im) throws InterruptedException {
+    	String[] elts;
+    	
+    	mgui.gtm.clearInvariants();
+    	
+    	TraceManager.addDev("Computing invariants with PIPE approach");
+    	Matrix pipeM = new Matrix(im.matrice).transpose();
+    	InvariantAnalysis ia = new InvariantAnalysis();
+    	Matrix result = ia.findVectors(pipeM);
+    	TraceManager.addDev("PN with " + tpn.getNbOfPlaces() + " places and " +  tpn.getNbOfTransitions() + " transitions");
+    	TraceManager.addDev("Basic print:\n" + result.basicPrint());
+    	TraceManager.addDev("Advanced print:\n" + ia.findMyPEquations(result, tpn.getPlaces()) + "\n");
+    	
+    	jtainvariants.append("Computed invariants:\n--------------------\n");
+    	
+    	int[][] arrayOfInv = result.getArray();
+    	Invariant [] invs;
+    	Invariant inv;
+    	String name;
+    	
+    	invs = ia.findMyPEquationsStrings(result, tpn.getPlaces());
+    	if (invs == null) {
+    		// No invariants!
+    		return;
+    	}
+    	
+    	String tmp, tmp1, tmp2;
+    	String[] tmps;
+    	int myid;
+    	AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
+    	AvatarBlock ab = null;
+    	AvatarBlock ab1, ab2;
+    	Object o;
+    	int state;
+    	int valToken = 0;
+    	
+    	boolean sameBlock;
+    	AvatarBlock prevBlock, prevBlock1;
+    	int ignored = 0;
+    	TGComponent tgc1, tgc2;
+    	//Working by invariant
+    	for(int i=0; i<invs.length; i++) {
+    		valToken = 0;
+    		prevBlock = null;
+            prevBlock1 = null;
+            sameBlock = true;
+            	
+    		inv = invs[i];
+    		name = inv.getName();
+    		TraceManager.addDev("Invariant:" + name + "\n");
+    		
+    		name = Conversion.replaceAllString(name, " + ", "&"); 
+    		elts = name.split("&");
+    		
+    		for(int j=0; j<elts.length; j++) {
+    			tmp = elts[j].trim();
+    			
+    			
+    			
+    			if (tmp.startsWith("Synchro_from_")) {
+    				tmp =tmp.substring(13, tmp.length()).trim();
+    				int index = tmp.indexOf("_to_");
+    				if (index != -1) {
+    					tmp1 = tmp.substring(0, index).trim();
+    					tmp2 = tmp.substring(index+4, tmp.length()).trim();
+    					//TraceManager.addDev("Found synchro: " + tmp1 + ", " + tmp2);
+    					tgc1 = null;
+    					tgc2 = null;
+    					ab1 = null;
+    					ab2 = null;
+    					
+    					//tmp1
+    					tmp1 = Conversion.replaceAllString(tmp1, "__", "&");
+    					tmps = tmp1.split("&");
+    					if (tmps.length > 2) {
+    						ab = avspec.getBlockWithName(tmps[0]);
+    						ab1 = ab;
+    						
+    						try {
+    							myid = Integer.decode(tmps[tmps.length-1]).intValue();
+    							o = ab.getStateMachine().getReferenceObjectFromID(myid);
+    							if (o != null) {
+    								tgc1 = (TGComponent)o;
+    							} else {
+    								tgc1 = null;
+    							}
+    							
+    						} catch (Exception e) {
+    							tgc1 = null;
+    							TraceManager.addDev("Exception invariants tmp1:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+    						}
+    					}
+    					
+    					
+    					//tmp2
+    					tmp2 = Conversion.replaceAllString(tmp2, "__", "&");
+    					tmps = tmp2.split("&");
+    					if (tmps.length > 2) {
+    						ab = avspec.getBlockWithName(tmps[0]);
+    						ab2 = ab;
+    						
+    						try {
+    							myid = Integer.decode(tmps[tmps.length-1]).intValue();
+    							o = ab.getStateMachine().getReferenceObjectFromID(myid);
+    							if (o != null) {
+    								tgc2 = (TGComponent)o;
+    							} else {
+    								tgc2 = null;
+    							}
+    							
+    						} catch (Exception e) {
+    							tgc2 = null;
+    							TraceManager.addDev("Exception invariants tm2:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+    						}
+    					}
+    					
+    					
+    					if ((ab1 != null ) && (ab2 != null)) {
+    						if (prevBlock == null) {
+    							prevBlock = ab1;
+    							prevBlock1 = ab2;
+    						} else {
+    							if ((prevBlock != ab1) && (prevBlock != ab2)) {
+    								sameBlock = false;
+    							}
+    						}
+    					}
+    					
+    					// Can create synchro
+    					//TraceManager.addDev("tg1=" + tgc1 + " tgc2=" + tgc2);
+    					if ((tgc1 != null) && (tgc2 != null)) {
+    						InvariantSynchro is = new InvariantSynchro(elts[j].trim(), tgc1, tgc2);
+    						inv.addSynchro(is);
+    						//TraceManager.addDev("Ading synchro: " + is);
+    					}
+    					
+    				}
+    			} else {
+    				
+    				tmp = Conversion.replaceAllString(tmp, "__", "&");
+    				tmps = tmp.split("&");
+    				if (tmps.length > 2) {
+    					//TraceManager.addDev("Getting block with name=" + tmps[0]);
+    					ab = avspec.getBlockWithName(tmps[0]);
+    					if (ab != null) {
+    						if (prevBlock == null) {
+    							prevBlock = ab;
+    						} else {
+    							if (prevBlock != ab) {
+    								if (prevBlock1 != null) {
+    									if (prevBlock1 != ab) {
+    										sameBlock = false;
+    									}
+    								} else {
+    									sameBlock = false;
+    								}
+    							}
+    						}
+    						prevBlock = ab;
+    						prevBlock1 = null;
+    						
+    						try {
+    							//TraceManager.addDev("trying ... tmps=" + tmps[tmps.length-1] + "ab=" + ab);
+    							myid = Integer.decode(tmps[tmps.length-1]).intValue();
+    							//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid);
+    							o = ab.getStateMachine().getReferenceObjectFromID(myid);
+    							//TraceManager.addDev("Adding component to inv   block=" + ab.getName());
+    							if (!((o instanceof AvatarSMDReceiveSignal) || (o instanceof AvatarSMDSendSignal))) {
+    								//TraceManager.addDev("Adding component to inv   block=" + ab.getName() + " id=" + myid + " object=" + o);
+    								inv.addComponent((TGComponent)o);
+    							}
+    							//TraceManager.addDev("Component added:" + o);
+    							if (o instanceof AvatarSMDStartState) {
+    								valToken ++;
+    							}
+    						} catch (Exception e) {
+    							TraceManager.addDev("Exception invariants:" + e.getMessage() + "tmps[end]=" + tmps[tmps.length-1] + " inv=" + name);
+    						}
+    					}
+    				}
+    			}
+    		}
+    		//inv.setTokenValue(valToken);
+    		
+    		inv.computeValue();
+    		
+    		if (!(ignoreInvariants.isSelected() && sameBlock)) {
+            		mgui.gtm.addInvariant(inv);
+            		jtainvariants.append(inv + "\n");
+            	} else {
+            		//TraceManager.addDev("Invariant ignored " + inv);
+            		jtainvariants.append("Ignored invariant: " + inv + "\n");
+            		ignored ++;
+            	}
+    	}
+    }
+    
+    public void farkasInvariants(IntMatrix im) throws InterruptedException {
+    	TraceManager.addDev("Computing invariants with Farkas");
+    	 int nbOfColumn = im.sizeColumn;
+    	im.Farkas(true);
+            jtamatrixafterfarkas.append("Incidence matrix after Farkas:\n" + im.toString() + "\n\n");
+            jta.append("Farkas applied to incidence matrix\n");
             testGo();
-            
-            jta.append("Computing incidence matrix\n");
-            IntMatrix im = tpn.getIncidenceMatrix();
-            int nbOfColumn = im.sizeColumn;
-            jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
-            jta.append("Incidence matrix computed\n");
-            testGo();
-            
-            jta.append("Computing invariants\n");
-            im.Farkas(true);
             //jtainvariants.append("All invariants:\n" + im.namesOfRowToString() + "\n\n");
             
             mgui.gtm.clearInvariants();
@@ -296,6 +501,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	prevBlock1 = null;
             	sameBlock = true;
             	name =  im.getNameOfLine(i);
+            	valToken = 0;
        
             	inv = new Invariant("#" + ((i+1)-ignored) + " " + name);
             	inv.setValue(im.getValueOfLineFromColumn(nbOfColumn, i));
@@ -308,9 +514,9 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             		tmp = elts[j].trim();
             		//TraceManager.addDev("#" + j + "=" + elts[j] + " tmp=" + tmp);
             		
-            		if (tmp.startsWith("Synchro from ")) {
+            		if (tmp.startsWith("Synchro_from_")) {
             			tmp =tmp.substring(13, tmp.length()).trim();
-            			int index = tmp.indexOf(" to ");
+            			int index = tmp.indexOf("_to_");
             			if (index != -1) {
             				tmp1 = tmp.substring(0, index).trim();
             				tmp2 = tmp.substring(index+4, tmp.length()).trim();
@@ -435,16 +641,52 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	
             	inv.computeValue();
             	
-            	if (!(ignoreInvariants.isSelected() && sameBlock)) {
-            		mgui.gtm.addInvariant(inv);
-            		jtainvariants.append(inv + "\n");
-            	} else {
-            		//TraceManager.addDev("Invariant ignored " + inv);
-            		jtainvariants.append("Ignored invariant: " + inv + "\n");
-            		ignored ++;
+            	if (valToken <2) {
+					if (!(ignoreInvariants.isSelected() && sameBlock)) {
+						mgui.gtm.addInvariant(inv);
+						jtainvariants.append(inv + "\n");
+					} else {
+						//TraceManager.addDev("Invariant ignored " + inv);
+						jtainvariants.append("Ignored invariant: " + inv + "\n");
+						ignored ++;
+					}
             	}
             	
             }
+    }
+    
+    public void run() {
+    	TPN tpn;
+        hasError = false;
+		
+		TraceManager.addDev("Thread started");
+		
+
+        
+        try {
+        	jta.append("\n*** WARNING: Invariants do NOT take into account variables nor time constraints ***\n");
+        	jta.append("Clearing invariants on diagrams\n");
+        	mgui.gtm.clearGraphicalInfoOnInvariants();
+            jta.append("Generating Petri Net\n");
+            tpn = mgui.gtm.generateTPNFromAvatar();
+            jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
+            String ret = mgui.saveTPNNDRFormat(tpn.toNDRFormat());
+            jta.append(ret + "\n");
+            testGo();
+            
+            jta.append("Computing incidence matrix\n");
+            IntMatrix im = tpn.getIncidenceMatrix();
+            int nbOfColumn = im.sizeColumn;
+            jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
+            jta.append("Incidence matrix computed\n");
+            testGo();
+            
+            if (PIPEButton.isSelected()) {
+            	pipeInvariants(tpn, im);
+            } else {
+            	farkasInvariants(im);
+            }
+            
             
             jta.append("Invariants computed\n");
             testGo();

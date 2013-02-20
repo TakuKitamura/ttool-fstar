@@ -236,7 +236,7 @@ public class TURTLE2TPN {
             if (t.isActive()) {
                 p = getEntryPlace(t);
                 if (p != null) {
-                    p.nbOfToken = 1;
+                    p.nbOfTokens = 1;
                 }
             }
         }

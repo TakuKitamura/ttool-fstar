@@ -61,12 +61,24 @@ public class TPN {
         transitions = new LinkedList();
     }
     
+    public LinkedList<Place> getPlaces() {
+    	return places;
+    }
+    
     public void addPlace(Place p) {
         places.add(p);
     }
     
     public void addTransition(Transition tr) {
         transitions.add(tr);
+    }
+    
+    public int getNbOfPlaces() {
+    	return places.size();
+    }
+    
+    public int getNbOfTransitions() {
+    	return transitions.size();
     }
     
     public String toNDRFormat() {
@@ -158,7 +170,7 @@ public class TPN {
         ListIterator iterator0 = places.listIterator();
         while(iterator0.hasNext()) {
             p = (Place)(iterator0.next());
-            if (p.nbOfToken > 0)
+            if (p.nbOfTokens > 0)
                 tpn += p.toTINAString() + "\n";
         }
         return tpn;

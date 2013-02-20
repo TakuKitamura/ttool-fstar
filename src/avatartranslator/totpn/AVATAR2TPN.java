@@ -160,6 +160,9 @@ public class AVATAR2TPN {
 		//Start state
 		if ((_asme instanceof AvatarStartState)|| (_asme instanceof AvatarStopState) || (_asme instanceof AvatarState)) {
 			pentry = new Place(getTPNName(_block, _asme));
+			if (_asme instanceof AvatarStartState) {
+				pentry.nbOfTokens = 1;
+			}
 			pexit = pentry;
 			entryPlaces.put(_asme, pentry);    
 			exitPlaces.put(_asme, pexit);

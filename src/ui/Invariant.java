@@ -74,6 +74,10 @@ public class Invariant implements GenericTree {
 		value = _value;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public int getTokenValue() {
 		return tokenValue;
 	}
