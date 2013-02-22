@@ -60,7 +60,7 @@ import tpndescription.*;
 import ui.*;
 import ui.avatarsmd.*;
 import launcher.*;
-//import frompipe.*;
+import frompipe.*;
 
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
@@ -140,12 +140,12 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         farkasButton = new JRadioButton("Farkas algorithm");
         radioButtonsForAlgo.add(farkasButton, BorderLayout.NORTH);
         PIPEButton = new JRadioButton("PIPE algorithm");
-        //radioButtonsForAlgo.add(PIPEButton, BorderLayout.SOUTH);
+        radioButtonsForAlgo.add(PIPEButton, BorderLayout.SOUTH);
       
          panelCheck.add(radioButtonsForAlgo, BorderLayout.SOUTH);
         ButtonGroup group = new ButtonGroup();
         group.add(farkasButton);
-    	//group.add(PIPEButton);
+    	group.add(PIPEButton);
     	 if (FARKAS_SELECTED) {
         	farkasButton.setSelected(true);
         } else {
@@ -272,7 +272,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     
    
     public void pipeInvariants(TPN tpn, IntMatrix im) throws InterruptedException {
-    	/*String[] elts;
+    	String[] elts;
     	
     	mgui.gtm.clearInvariants();
     	
@@ -465,7 +465,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             		jtainvariants.append("Ignored invariant: " + inv + "\n");
             		ignored ++;
             	}
-    	}*/
+    	}
     }
     
     public void farkasInvariants(IntMatrix im) throws InterruptedException {

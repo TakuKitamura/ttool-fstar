@@ -310,7 +310,8 @@ public class IntMatrix implements Runnable {
    	   idMat.makeID();
    	   concatAfter(idMat);
    	   //System.out.println("matconcat=\n" + toString() + "\n\n");
-   	   int[] lined1, lined2, lined;
+   	   //int[] lined1, lined2, lined;
+   	   int[] lined;
    	   int gcd;
    	   int l, i;
    	   String s0, s1;
@@ -321,10 +322,11 @@ public class IntMatrix implements Runnable {
    	   
    	   for(int j=0; j<sizeColumBeforeConcat; j++) {
    	   	   // Loop on lines to add line combinations
-   	   	   for(i=0; i<sizeRow-1; i++) {
+   	   	   tmpSizeRow = sizeRow;
+   	   	   for(i=0; i<tmpSizeRow-1; i++) {
    	   	   	   
-   	   	   	   lined1 = getLine(i);
-   	   	   	   tmpSizeRow = sizeRow;
+   	   	   	   //lined1 = getLine(i);
+   	   	   	   //tmpSizeRow = sizeRow;
    	   	   	   for(int k=i+1; k<tmpSizeRow; k++) {
    	   	   	   	   percentageCompletion = total++;
    	   	   	   	   if (mustGo == false) {
@@ -332,37 +334,38 @@ public class IntMatrix implements Runnable {
    	   	   	   	   	   return;
    	   	   	   	   }
    	   	   	   	   //TraceManager.addDev("Computing k=" + k + " " + sizeRow + "x" + sizeColumn);
-   	   	   	   	   lined2 = getLine(k);
+   	   	   	   	   //lined2 = getLine(k);
    	   	   	   	   
    	   	   	   	   // lines d1 and 2 have opposite signs?
-   	   	   	   	   if (((lined1[j] < 0) && (lined2[j]>0)) || ((lined1[j]>0) && (lined2[j]<0))) {
-   	   	   	   	   	   lined = new int[lined1.length];
+   	   	   	   	   //if (((lined1[j] < 0) && (lined2[j]>0)) || ((lined1[j]>0) && (lined2[j]<0))) {
+   	   	   	   	   if (((matrice[i][j] < 0) && (matrice[k][j]>0)) || ((matrice[i][j]>0) && (matrice[k][j]<0))) {
+   	   	   	   	   	   lined = new int[sizeColumn];
    	   	   	   	   	   for(l=0; l<lined.length; l++) {
-   	   	   	   	   	   	  lined[l] = Math.abs(lined2[j])*lined1[l] + Math.abs(lined1[j])*lined2[l];
+   	   	   	   	   	   	  lined[l] = Math.abs(matrice[k][j])*matrice[i][l] + Math.abs(matrice[i][j])*matrice[k][l];
    	   	   	   	   	   }
-   	   	   	   	   	   if (Math.abs(lined2[j]) == 1) {
+   	   	   	   	   	   if (Math.abs(matrice[k][j]) == 1) {
    	   	   	   	   	   	   s0 =  nameOfRows[i] + " + ";
    	   	   	   	   	   } else {
    	   	   	   	   	   	   if (noMultiplier) {
    	   	   	   	   	   	   	   s0 = nameOfRows[i] + " + ";
-   	   	   	   	   	   	   	   for(cpt=Math.abs(lined2[j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   for(cpt=Math.abs(matrice[k][j]); cpt>1; cpt--) {
    	   	   	   	   	   	   	   	   s0 += nameOfRows[i] + " + " ;
    	   	   	   	   	   	   	   }
    	   	   	   	   	   	   } else {
-   	   	   	   	   	   	   	   s0 = "" + Math.abs(lined2[j]) + "*("  + nameOfRows[i] + ") + ";
+   	   	   	   	   	   	   	   s0 = "" + Math.abs(matrice[k][j]) + "*("  + nameOfRows[i] + ") + ";
    	   	   	   	   	   	   }
    	   	   	   	   	   }
    	   	   	   	   	   
-   	   	   	   	   	   if (Math.abs(lined1[j]) == 1) {
+   	   	   	   	   	   if (Math.abs(matrice[i][j]) == 1) {
    	   	   	   	   	   	    s1 =  nameOfRows[k];
    	   	   	   	   	   } else {
    	   	   	   	   	   	   if (noMultiplier) {
    	   	   	   	   	   	   	    s1 =  nameOfRows[k];
-   	   	   	   	   	   	   	   for(cpt=Math.abs(lined1[j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   for(cpt=Math.abs(matrice[i][j]); cpt>1; cpt--) {
    	   	   	   	   	   	   	   	   s1 += " +" + nameOfRows[k];
    	   	   	   	   	   	   	   }
    	   	   	   	   	   	   } else {
-   	   	   	   	   	   	   	   s1 = "" + Math.abs(lined1[j]) + "*("  + nameOfRows[k] + ") + ";
+   	   	   	   	   	   	   	   s1 = "" + Math.abs(matrice[i][j]) + "*("  + nameOfRows[k] + ") + ";
    	   	   	   	   	   	   }
    	   	   	   	   	   } 
    	   	   	   	   	   
