@@ -47,11 +47,17 @@ package myutil;
 
 import java.util.*;
 
-public class IntMatrix {
+public class IntMatrix implements Runnable {
    public int [][] matrice;
    public int sizeRow;
    public int sizeColumn;
    private String []nameOfRows;
+   
+   private int percentageCompletion;
+   private boolean mustGo;
+   private boolean noMultiplier;
+   private boolean interrupted;
+   private boolean finished;
    
    public IntMatrix(int _sizeRow, int _sizeColumn) {
 	   matrice = new int[_sizeRow][_sizeColumn];
@@ -61,6 +67,10 @@ public class IntMatrix {
 	   for(int i=0; i<sizeRow; i++) {
 	   	   nameOfRows[i] = "" + i;
 	   }
+   }
+   
+   public int getPercentageCompetion() {
+   	   return percentageCompletion;
    }
    
    public void setValue(int i, int j, int value) {
@@ -155,7 +165,7 @@ public class IntMatrix {
    
    // Combine line line0 minus m times line1 ; line0 gets the result 
    public void linearCombination(int line0, int line1, int m) {
-   	   TraceManager.addDev("combination l0 = " + line0 + " line1 = " + line1 + " multiplier m=" + m);
+   	   //TraceManager.addDev("combination l0 = " + line0 + " line1 = " + line1 + " multiplier m=" + m);
    	   for(int j=0; j<sizeColumn; j++){
    	   	   matrice[line0][j] = matrice[line0][j] - (m * matrice[line1][j]);
    	   }
@@ -306,12 +316,22 @@ public class IntMatrix {
    	   String s0, s1;
    	   String nameOfNewLine;
    	   int cpt;
+   	   int total = 0;
+   	   int tmpSizeRow;
    	   
    	   for(int j=0; j<sizeColumBeforeConcat; j++) {
    	   	   // Loop on lines to add line combinations
    	   	   for(i=0; i<sizeRow-1; i++) {
+   	   	   	   
    	   	   	   lined1 = getLine(i);
-   	   	   	   for(int k=i+1; k<sizeRow; k++) {
+   	   	   	   tmpSizeRow = sizeRow;
+   	   	   	   for(int k=i+1; k<tmpSizeRow; k++) {
+   	   	   	   	   percentageCompletion = total++;
+   	   	   	   	   if (mustGo == false) {
+   	   	   	   	   	   interrupted = true;
+   	   	   	   	   	   return;
+   	   	   	   	   }
+   	   	   	   	   //TraceManager.addDev("Computing k=" + k + " " + sizeRow + "x" + sizeColumn);
    	   	   	   	   lined2 = getLine(k);
    	   	   	   	   
    	   	   	   	   // lines d1 and 2 have opposite signs?
@@ -379,6 +399,42 @@ public class IntMatrix {
    	   
    	   
    	   
+   }
+   
+   public synchronized void startFarkas(boolean _noMultiplier) {
+   	   noMultiplier = _noMultiplier;
+   	   Thread t = new Thread(this);
+   	   mustGo = true;
+   	   finished = false;
+   	   interrupted = false;
+   	   t.start();
+   }
+   
+   public synchronized void stopComputation() {
+   	   mustGo = false;
+   	   notifyAll();
+   }
+   
+   public boolean wasInterrupted() {
+   	   return interrupted;
+   }
+   
+   public synchronized void callFinished() {
+   	   mustGo = false;
+   	   notifyAll();
+   }
+   
+   public synchronized boolean isFinished() {
+   	   return finished;
+   }
+   
+   public void run() {
+   	   Farkas(noMultiplier);
+   	   if (!interrupted) {
+   	   	   stopComputation();
+   	   }
+   	   finished = true;
+   	   TraceManager.addDev("Farkas thread completed");
    }
    
    

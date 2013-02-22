@@ -83,6 +83,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     //components
     protected JRadioButton farkasButton, PIPEButton;
     protected JTextArea jta, jtatpn, jtamatrix, jtamatrixafterfarkas, jtainvariants;
+    protected JLabel info;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -92,11 +93,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     private Thread t;
     private boolean go = false;
     private boolean hasError = false;
-	//protected boolean startProcess = false;
-    
-    private String hostProVerif;
-    
-    protected RshClient rshc;
+	protected boolean startProcess = false;
+    private IntMatrix im;
     
     
     /** Creates new form  */
@@ -135,6 +133,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         panelCheck.add(ignoreInvariants, BorderLayout.NORTH);
         computeAllMutualExclusions = new JCheckBox("Compute mutual exclusions for all states", ALL_MUTEX);
         panelCheck.add(computeAllMutualExclusions, BorderLayout.CENTER);
+        info = new JLabel("");
+        panelCheck.add(info, BorderLayout.EAST);
         
         JPanel radioButtonsForAlgo = new JPanel(new BorderLayout());
         farkasButton = new JRadioButton("Farkas algorithm");
@@ -246,7 +246,11 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     public void stopProcess() {
         mode = 	STOPPED;
         setButtons();
+        if (im != null) {
+        	im.stopComputation();
+        }
         go = false;
+        
         if (t != null) {
         	t.interrupt();
         }
@@ -467,7 +471,34 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     public void farkasInvariants(IntMatrix im) throws InterruptedException {
     	TraceManager.addDev("Computing invariants with Farkas");
     	 int nbOfColumn = im.sizeColumn;
-    	im.Farkas(true);
+    	 im.startFarkas(true);
+    	 boolean cont = true;
+    	 int perc;
+    	 while(cont) {
+    	 	 try {
+    	 	 	 perc = im.getPercentageCompetion();
+    	 	 	 info.setText(perc+" lines computed, matrix:" + im.sizeRow + "x" + im.sizeColumn);
+    	 	 	 Thread.currentThread().sleep(100);
+    	 	 	 if (im.isFinished()) {
+    	 	 	 	 cont = false;
+    	 	 	 }
+    	 	 } catch (Exception e) {
+    	 	 	 cont = false;
+    	 	 }
+    	 }
+    	
+    	 
+    	 if (im.wasInterrupted()) {
+    	 	 return;
+    	 }
+    	 
+    	 testGo();
+    	 
+    	  
+    	 TraceManager.addDev("Invariants computed. Analyzing them.");
+    	 
+    	 info.setText("");
+    	 
             jtamatrixafterfarkas.append("Incidence matrix after Farkas:\n" + im.toString() + "\n\n");
             jta.append("Farkas applied to incidence matrix\n");
             testGo();
@@ -495,6 +526,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             
             
             jtainvariants.append("Computed invariants:\n-----------------\n");
+            testGo();
             
             for(int i=0; i<im.getNbOfLines(); i++) {
             	prevBlock = null;
@@ -641,7 +673,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	
             	inv.computeValue();
             	
-            	if (valToken <2) {
+            	if (valToken == 1) {
 					if (!(ignoreInvariants.isSelected() && sameBlock)) {
 						mgui.gtm.addInvariant(inv);
 						jtainvariants.append(inv + "\n");
@@ -675,7 +707,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             testGo();
             
             jta.append("Computing incidence matrix\n");
-            IntMatrix im = tpn.getIncidenceMatrix();
+            im = tpn.getIncidenceMatrix();
             int nbOfColumn = im.sizeColumn;
             jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
             jta.append("Incidence matrix computed\n");
@@ -687,6 +719,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	farkasInvariants(im);
             }
             
+            im = null;
             
             jta.append("Invariants computed\n");
             testGo();
@@ -741,6 +774,8 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         setButtons();
         
         //System.out.println("Selected item=" + selectedItem);
+         
+    	 TraceManager.addDev("Invariants thread completed");
     }
     
     protected void checkMode() {

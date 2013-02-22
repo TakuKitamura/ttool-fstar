@@ -72,17 +72,24 @@ public class MyMath {
 	
 	// Euclidian algorithm for GCD
 	// a and b must be positive
-	public static int egcd(int a, int b) {    
-		if (a == 0)        
-			return b;   
-		while (b != 0) {        
-			if (a > b)            
-				a = a - b;        
-			else            
-				b = b - a;    
-		}    
-		return a;
-	}
+	public static int egcd(int a, int b) {
+    
+		if (a == 0)
+        
+			return b;
+
+   
+		while (b != 0) {
+			if (a > b)
+				a = a - b;
+			else
+				b = b - a;
+		}
+    
+		return a;
+
+	}
+
 	
   
   
