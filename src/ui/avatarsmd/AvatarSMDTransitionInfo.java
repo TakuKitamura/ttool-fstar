@@ -418,11 +418,24 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		return listOfActions;
 	}
 	
-	public String[] getFilesToInclude() {
-		return filesToInclude;
+	public String getFilesToInclude() {
+		if (filesToInclude == null) {
+			return null;
+		}
+		String ret = "";
+		for(int i=0; i<filesToInclude.length; i++) {
+			ret += filesToInclude[i] + "\n";
+		}
+		return ret;
 	}
-	
-	public String[] getCodeToInclude() {
-		return codeToInclude;
+	public String getCodeToInclude() {
+		if (codeToInclude == null) {
+			return null;
+		}
+		String ret = "";
+		for(int i=0; i<codeToInclude.length; i++) {
+			ret += codeToInclude[i] + "\n";
+		}
+		return ret;
 	}
 }

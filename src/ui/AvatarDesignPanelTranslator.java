@@ -1174,6 +1174,10 @@ public class AvatarDesignPanelTranslator {
 							at.setComputes(tmp1, tmp2);
 						}
 						
+						// Executable code
+						at.addExecutableCode(asmdco.getCodeToInclude());
+						_ab.addFilesToInclude(asmdco.getFilesToInclude());	
+						
 						// Actions
 						vs = asmdco.getActions();
 						for(String s: vs) {

@@ -178,6 +178,15 @@ public  class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints 
 	public String getComputeMaxDelay() {
 		return getAvatarSMDTransitionInfo().getComputeMaxDelay();
 	}
+	
+	
+	public String getFilesToInclude() {
+		return getAvatarSMDTransitionInfo().getFilesToInclude();
+	}
+	
+	public String getCodeToInclude() {
+		return getAvatarSMDTransitionInfo().getCodeToInclude();
+	}
 }
 
 

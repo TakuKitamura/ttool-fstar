@@ -58,6 +58,8 @@ public class AvatarBlock extends AvatarElement {
 	private LinkedList<AvatarSignal> signals;
 	private AvatarStateMachine asm;
 	
+	private String filesToInclude;
+	
 	
     public AvatarBlock(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -66,7 +68,22 @@ public class AvatarBlock extends AvatarElement {
 		signals = new LinkedList<AvatarSignal>();
 		asm = new AvatarStateMachine("statemachineofblock__" + _name, _referenceObject);
     }
+    
+    // For code generation
+    public void addFilesToInclude(String _files) {
+    	if (filesToInclude == null) {
+    		filesToInclude = _files;
+    		return;
+    	}
+    	filesToInclude += _files;
+    }
+    
+    public String getFilesToInclude() {
+    	return filesToInclude;
+    }
 	
+    
+    // Relation with parent block
 	public void setFather(AvatarBlock _father) {
 		father = _father;
 	}
