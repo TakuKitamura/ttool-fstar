@@ -60,14 +60,14 @@ import tpndescription.*;
 import ui.*;
 import ui.avatarsmd.*;
 import launcher.*;
-import frompipe.*;
+//import frompipe.*;
 
 
 public class JDialogInvariantAnalysis extends javax.swing.JDialog implements ActionListener, Runnable  {
     
 	private static boolean IGNORE = true;
 	private static boolean ALL_MUTEX = true;
-	private static boolean FARKAS_SELECTED = true;
+	private static boolean FARKAS_SELECTED = false;
 	
     protected MainGUI mgui;
     
@@ -81,7 +81,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     int mode;
     
     //components
-    protected JRadioButton farkasButton, PIPEButton;
+    protected JRadioButton farkasButton, farkasHeuristicsButton, PIPEButton;
     protected JTextArea jta, jtatpn, jtamatrix, jtamatrixafterfarkas, jtainvariants;
     protected JLabel info;
     protected JButton start;
@@ -139,17 +139,19 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         JPanel radioButtonsForAlgo = new JPanel(new BorderLayout());
         farkasButton = new JRadioButton("Farkas algorithm");
         radioButtonsForAlgo.add(farkasButton, BorderLayout.NORTH);
+        farkasHeuristicsButton = new JRadioButton("Farkas algorithm with heuristics (much faster, less complete)");
+        radioButtonsForAlgo.add(farkasHeuristicsButton, BorderLayout.CENTER);
         PIPEButton = new JRadioButton("PIPE algorithm");
-        radioButtonsForAlgo.add(PIPEButton, BorderLayout.SOUTH);
+        //radioButtonsForAlgo.add(PIPEButton, BorderLayout.SOUTH);
       
          panelCheck.add(radioButtonsForAlgo, BorderLayout.SOUTH);
         ButtonGroup group = new ButtonGroup();
         group.add(farkasButton);
-    	group.add(PIPEButton);
+    	group.add(farkasHeuristicsButton);
     	 if (FARKAS_SELECTED) {
         	farkasButton.setSelected(true);
         } else {
-        	PIPEButton.setSelected(true);
+        	farkasHeuristicsButton.setSelected(true);
         }
         
         panelCompute.add(panelCheck, BorderLayout.NORTH);
@@ -272,7 +274,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     
    
     public void pipeInvariants(TPN tpn, IntMatrix im) throws InterruptedException {
-    	String[] elts;
+    	/*String[] elts;
     	
     	mgui.gtm.clearInvariants();
     	
@@ -465,19 +467,30 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             		jtainvariants.append("Ignored invariant: " + inv + "\n");
             		ignored ++;
             	}
-    	}
+    	}*/
     }
     
-    public void farkasInvariants(IntMatrix im) throws InterruptedException {
+    public void farkasInvariants(IntMatrix im, boolean heuristics) throws InterruptedException {
     	TraceManager.addDev("Computing invariants with Farkas");
     	 int nbOfColumn = im.sizeColumn;
-    	 im.startFarkas(true);
+    	 String names[] = new String[im.sizeRow];
+    	 for(int k=0; k<im.sizeRow; k++) {
+    	 	 names[k] = im.getNameOfLine(k);
+    	 }
+    	 
+    	 im.putShortNames();
+    	 
+    	 
+    	 im.startFarkas(true, heuristics);
     	 boolean cont = true;
-    	 int perc;
+    	 double perc;
+    	 String percS;
     	 while(cont) {
     	 	 try {
-    	 	 	 perc = im.getPercentageCompetion();
-    	 	 	 info.setText(perc+" lines computed, matrix:" + im.sizeRow + "x" + im.sizeColumn);
+    	 	 	 perc = (double)(im.getPercentageCompetion());
+    	 	 	 percS = String.format("%.2f", perc/100);
+    	 	 	 //TraceManager.addDev("PercS=" + percS);
+    	 	 	 info.setText(percS+" %, matrix:" + im.sizeRow + "x" + im.sizeColumn);
     	 	 	 Thread.currentThread().sleep(100);
     	 	 	 if (im.isFinished()) {
     	 	 	 	 cont = false;
@@ -499,7 +512,12 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     	 
     	 info.setText("");
     	 
-            jtamatrixafterfarkas.append("Incidence matrix after Farkas:\n" + im.toString() + "\n\n");
+    	 	if ((im.sizeRow < 100) && (im.sizeColumn<100)) {
+    	 		jtamatrixafterfarkas.append("Incidence matrix after Farkas: " + im.sizeRow + "x" + im.sizeColumn +"\n" + im.toString() + "\n\n");
+            } else {
+            	jtamatrixafterfarkas.append("Incidence matrix after Farkas: " + im.sizeRow + "x" + im.sizeColumn +"\n" + "(matrix is tool arge to be displayed)" + "\n\n");
+            }
+            
             jta.append("Farkas applied to incidence matrix\n");
             testGo();
             //jtainvariants.append("All invariants:\n" + im.namesOfRowToString() + "\n\n");
@@ -524,26 +542,63 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             int ignored = 0;
             TGComponent tgc1, tgc2;
             
+            int valLine;
+            int cptInv = 1;
+            BitSet bs;
+            int cptBs;
+            
             
             jtainvariants.append("Computed invariants:\n-----------------\n");
             testGo();
+            
+            
+            // We are interested only in minimal invariants, that is, invariants with at most one token
+            // That is, we ignore lines of the matrix for which more than one start state is present
             
             for(int i=0; i<im.getNbOfLines(); i++) {
             	prevBlock = null;
             	prevBlock1 = null;
             	sameBlock = true;
-            	name =  im.getNameOfLine(i);
+            	
+            	// With names of lines
+            	//name =  im.getNameOfLine(i);
+            	//name = Conversion.replaceAllString(name, "+", "&");
+            	//elts = name.split("&");
+            	
+            	// With bits sets
+            	name = "";
+            	bs = im.bitSetOfMatrix[i];
+            	elts = new String[bs.cardinality()];
+            	
+            	cptBs = 0;
+            	for(int k=0; k<bs.size(); k++) {
+            		if (bs.get(k)) {
+            			elts[cptBs] = ""+k;
+            			cptBs++;
+            		}
+            	}
+            	
+            	
             	valToken = 0;
        
-            	inv = new Invariant("#" + ((i+1)-ignored) + " " + name);
+            	inv = new Invariant("#" + cptInv);
             	inv.setValue(im.getValueOfLineFromColumn(nbOfColumn, i));
             	
             	// Putting components
-            	name = Conversion.replaceAllString(name, " + ", "&"); 
-            	elts = name.split("&");
+
             	state = 0;
             	for(int j=0; j<elts.length; j++) {
+            		
             		tmp = elts[j].trim();
+            		try {
+            			valLine = Integer.decode(tmp).intValue();
+            			tmp = names[valLine];
+            			elts[j] = tmp;
+            		} catch (Exception e) {
+            			TraceManager.addDev("Line baldy formatted:" + tmp);
+            		}
+            		
+            		
             		//TraceManager.addDev("#" + j + "=" + elts[j] + " tmp=" + tmp);
             		
             		if (tmp.startsWith("Synchro_from_")) {
@@ -676,6 +731,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
             	if (valToken == 1) {
 					if (!(ignoreInvariants.isSelected() && sameBlock)) {
 						mgui.gtm.addInvariant(inv);
+						cptInv ++;
 						jtainvariants.append(inv + "\n");
 					} else {
 						//TraceManager.addDev("Invariant ignored " + inv);
@@ -701,27 +757,37 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         	mgui.gtm.clearGraphicalInfoOnInvariants();
             jta.append("Generating Petri Net\n");
             tpn = mgui.gtm.generateTPNFromAvatar();
-            jtatpn.append("Petri Net:\n" + tpn.toString() + "\n\n");
+            if ((tpn.getNbOfPlaces() <100) && (tpn.getNbOfTransitions() < 100)) {
+            	jtatpn.append("Petri Net (" + tpn.getNbOfPlaces() + " places, " + tpn.getNbOfTransitions() + " transitions):\n" + tpn.toString() + "\n\n");
+            } else {
+            	jtatpn.append("Petri Net (" + tpn.getNbOfPlaces() + " places, " + tpn.getNbOfTransitions() + " transitions):\n" + "(Petri net is too large to be displayed)" + "\n\n");
+            }
             String ret = mgui.saveTPNNDRFormat(tpn.toNDRFormat());
             jta.append(ret + "\n");
             testGo();
             
+            
             jta.append("Computing incidence matrix\n");
             im = tpn.getIncidenceMatrix();
             int nbOfColumn = im.sizeColumn;
-            jtamatrix.append("Incidence matrix:\n" + im.toString() + "\n\n");
+            if ((im.sizeRow < 100) && (im.sizeColumn<100)) {
+    	 		jtamatrix.append("Incidence matrix: " + im.sizeRow + "x" + im.sizeColumn +"\n" + im.toString() + "\n\n");
+            } else {
+            	jtamatrix.append("Incidence matrix: " + im.sizeRow + "x" + im.sizeColumn +"\n" + "(matrix is tool arge to be displayed)" + "\n\n");
+            }
             jta.append("Incidence matrix computed\n");
+            jta.append("Computing minimal invariants\n");
             testGo();
             
             if (PIPEButton.isSelected()) {
             	pipeInvariants(tpn, im);
             } else {
-            	farkasInvariants(im);
+            	farkasInvariants(im, farkasHeuristicsButton.isSelected());
             }
             
             im = null;
             
-            jta.append("Invariants computed\n");
+            jta.append("Invariants computed: *" + mgui.gtm.getInvariants().size() + "* invariants\n");
             testGo();
             jta.append("Computing mutual exclusions\n");
             int mutex = mgui.gtm.computeMutex();

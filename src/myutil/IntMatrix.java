@@ -53,11 +53,15 @@ public class IntMatrix implements Runnable {
    public int sizeColumn;
    private String []nameOfRows;
    
-   private int percentageCompletion;
+   private long percentageCompletion;
    private boolean mustGo;
    private boolean noMultiplier;
    private boolean interrupted;
    private boolean finished;
+   
+    private boolean withHeuristics;
+   
+   public BitSet [] bitSetOfMatrix;
    
    public IntMatrix(int _sizeRow, int _sizeColumn) {
 	   matrice = new int[_sizeRow][_sizeColumn];
@@ -67,9 +71,10 @@ public class IntMatrix implements Runnable {
 	   for(int i=0; i<sizeRow; i++) {
 	   	   nameOfRows[i] = "" + i;
 	   }
+	  
    }
    
-   public int getPercentageCompetion() {
+   public long getPercentageCompetion() {
    	   return percentageCompletion;
    }
    
@@ -96,6 +101,12 @@ public class IntMatrix implements Runnable {
    
    public String getNameOfLine(int i) {
    	   return nameOfRows[i];
+   }
+   
+   public void putShortNames() {
+   	   for(int i=0; i<sizeRow; i++) {
+   	   	   nameOfRows[i] = "" + i;
+   	   }
    }
    
    public int getValueOfLine(int i) {
@@ -262,6 +273,63 @@ public class IntMatrix implements Runnable {
    	   nameOfRows = newNameOfRows;
    }
    
+  
+   
+   
+   public void addLines(LinkedList<IntLine> lines) {
+   	   int oldSizeRow = sizeRow;
+   	   sizeRow += lines.size();
+   	   int [][] newMatrice = new int[sizeRow][sizeColumn];
+   	   String []newNameOfRows = new String[sizeRow];
+   	   for(int i=0; i<oldSizeRow; i++) {
+   	   	   for(int j=0; j<sizeColumn; j++) {
+   	   	   	   newMatrice[i][j] = matrice[i][j];
+   	   	   }
+   	   	   newNameOfRows[i] = nameOfRows[i];
+   	   }
+   	   matrice = newMatrice;
+   	   nameOfRows = newNameOfRows;
+   	   
+   	   int cpt = oldSizeRow;
+   	   for(IntLine il: lines) {
+   	   	   matrice[cpt] = il.line;
+   	   	   nameOfRows[cpt] = il.nameOfLine;
+   	   	   cpt ++;
+   	   }
+   	   
+   	   
+   }
+   
+   
+   public void addLinesBitSet(LinkedList<IntLine> lines) {
+   	   int oldSizeRow = sizeRow;
+   	   sizeRow += lines.size();
+   	   int [][] newMatrice = new int[sizeRow][sizeColumn];
+   	   String []newNameOfRows = new String[sizeRow];
+   	   BitSet []newBitSetOfMatrix = new BitSet[sizeRow];
+   	   for(int i=0; i<oldSizeRow; i++) {
+   	   	   for(int j=0; j<sizeColumn; j++) {
+   	   	   	   newMatrice[i][j] = matrice[i][j];
+   	   	   }
+   	   	   newNameOfRows[i] = nameOfRows[i];
+   	   	   newBitSetOfMatrix[i] = bitSetOfMatrix[i];
+   	   }
+   	   matrice = newMatrice;
+   	   nameOfRows = newNameOfRows;
+   	   bitSetOfMatrix = newBitSetOfMatrix;
+   	   
+   	   int cpt = oldSizeRow;
+   	   for(IntLine il: lines) {
+   	   	   matrice[cpt] = il.line;
+   	   	   nameOfRows[cpt] = il.nameOfLine;
+   	   	   bitSetOfMatrix[cpt] = il.bs;
+   	   	   cpt ++;
+   	   }
+   	   
+   	   
+   }
+   
+   
    public void removeLine(int lineIndex) {
    	   sizeRow --;
    	    int [][] newMatrice = new int[sizeRow][sizeColumn];
@@ -319,6 +387,7 @@ public class IntMatrix implements Runnable {
    	   int cpt;
    	   int total = 0;
    	   int tmpSizeRow;
+   	   LinkedList<IntLine> ll = new LinkedList<IntLine>();
    	   
    	   for(int j=0; j<sizeColumBeforeConcat; j++) {
    	   	   // Loop on lines to add line combinations
@@ -369,22 +438,29 @@ public class IntMatrix implements Runnable {
    	   	   	   	   	   	   }
    	   	   	   	   	   } 
    	   	   	   	   	   
+   	   	   	   	   	   //TraceManager.addDev("Name of line=" + s0 + "/" + s1);
    	   	   	   	   	   nameOfNewLine = s0 + s1;
    	   	   	   	   	   gcd = MyMath.gcd(lined);
    	   	   	   	   	   //System.out.println("gcd =" + gcd + " of line =" + lineToString(lined) + " i.e.:" + nameOfNewLine);
    	   	   	   	   	   
    	   	   	   	   	   if (gcd != 0) {
-   	   	   	   	   	   for(l=0; l<lined.length; l++) {
-   	   	   	   	   	   	  lined[l] = lined[l] / gcd;
-   	   	   	   	   	   }
+						   for(l=0; l<lined.length; l++) {
+							  lined[l] = lined[l] / gcd;
+						   }
    	   	   	   	   	   }
    	   	   	   	   	   
-   	   	   	   	   	   addLine(lined, nameOfNewLine);
+   	   	   	   	   	   ll.add(new IntLine(lined, nameOfNewLine));
+   	   	   	   	   	   //addLine(lined, nameOfNewLine);
    	   	   	   	   	   //System.out.println("matafterline=\n" + toString() + "\n\n");
    	   	   	   	   }
    	   	   	   }
    	   	   }
    	   	   
+   	   	   TraceManager.addDev("Adding lines, size=" + sizeRow + "x" + sizeColumn);
+   	   	   addLines(ll);
+   	   	   ll.clear();
+   	   	   
+   	   	    TraceManager.addDev("Removing lines, size=" + sizeRow + "x" + sizeColumn);
    	   	   // Remove lines whose element #j is not 0
    	   	   for(i=0;i<sizeRow; i++) {
    	   	   	   if (matrice[i][j] != 0) {
@@ -393,6 +469,7 @@ public class IntMatrix implements Runnable {
    	   	   	   	   i--;
    	   	   	   }
    	   	   }
+   	   	   TraceManager.addDev("Lines removed, size=" + sizeRow + "x" + sizeColumn);
    	   	   
    	   	    //System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
    	   	   
@@ -404,8 +481,281 @@ public class IntMatrix implements Runnable {
    	   
    }
    
-   public synchronized void startFarkas(boolean _noMultiplier) {
+   // noMultiplier indicates whether names of lines may contain the "*" sign, or not.
+   public void FarkasForInvariants(boolean noMultiplier) {
+   	   int sizeColumBeforeConcat = sizeColumn;
+   	   IntMatrix idMat = new IntMatrix(sizeRow, sizeRow);
+   	   idMat.makeID();
+   	   concatAfter(idMat);
+   	   //System.out.println("matconcat=\n" + toString() + "\n\n");
+   	   //int[] lined1, lined2, lined;
+   	   int[] lined;
+   	   int gcd;
+   	   int l, i;
+   	   String s0, s1;
+   	   String nameOfNewLine;
+   	   int cpt;
+   	   long total = 0;
+   	   int tmpSizeRow;
+   	   LinkedList<IntLine> ll = new LinkedList<IntLine>();
+   	   
+   	  
+   	   
+   	   
+   	   for(int j=0; j<sizeColumBeforeConcat; j++) {
+   	   	   // Loop on lines to add line combinations
+   	   	   tmpSizeRow = sizeRow;
+   	   	   
+   	   	   for(i=0; i<tmpSizeRow-1; i++) {
+   	   	   	   percentageCompletion = (long)(j*10000.0/sizeColumBeforeConcat)+(long)(10000.0*i/tmpSizeRow/sizeColumBeforeConcat);
+   	   	   	   //lined1 = getLine(i);
+   	   	   	   //tmpSizeRow = sizeRow;
+   	   	   	   for(int k=i+1; k<tmpSizeRow; k++) {
+   	   	   	   	   
+   	   	   	   	   if (mustGo == false) {
+   	   	   	   	   	   interrupted = true;
+   	   	   	   	   	   return;
+   	   	   	   	   }
+   	   	   	   	   //TraceManager.addDev("Computing k=" + k + " " + sizeRow + "x" + sizeColumn);
+   	   	   	   	   //lined2 = getLine(k);
+   	   	   	   	   
+   	   	   	   	   // lines d1 and 2 have opposite signs?
+   	   	   	   	   //if (((lined1[j] < 0) && (lined2[j]>0)) || ((lined1[j]>0) && (lined2[j]<0))) {
+   	   	   	   	   if (((matrice[i][j] < 0) && (matrice[k][j]>0)) || ((matrice[i][j]>0) && (matrice[k][j]<0))) {
+   	   	   	   	   	   lined = new int[sizeColumn];
+   	   	   	   	   	   for(l=0; l<lined.length; l++) {
+   	   	   	   	   	   	  lined[l] = Math.abs(matrice[k][j])*matrice[i][l] + Math.abs(matrice[i][j])*matrice[k][l];
+   	   	   	   	   	   }
+   	   	   	   	   	   if (Math.abs(matrice[k][j]) == 1) {
+   	   	   	   	   	   	   s0 =  nameOfRows[i] + "+";
+   	   	   	   	   	   } else {
+   	   	   	   	   	   	   if (noMultiplier) {
+   	   	   	   	   	   	   	   s0 = nameOfRows[i] + "+";
+   	   	   	   	   	   	   	   for(cpt=Math.abs(matrice[k][j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   	   s0 += nameOfRows[i] + "+" ;
+   	   	   	   	   	   	   	   }
+   	   	   	   	   	   	   } else {
+   	   	   	   	   	   	   	   s0 = "" + Math.abs(matrice[k][j]) + "*("  + nameOfRows[i] + ") + ";
+   	   	   	   	   	   	   }
+   	   	   	   	   	   }
+   	   	   	   	   	   
+   	   	   	   	   	   if (Math.abs(matrice[i][j]) == 1) {
+   	   	   	   	   	   	    s1 =  nameOfRows[k];
+   	   	   	   	   	   } else {
+   	   	   	   	   	   	   if (noMultiplier) {
+   	   	   	   	   	   	   	    s1 =  nameOfRows[k];
+   	   	   	   	   	   	   	   for(cpt=Math.abs(matrice[i][j]); cpt>1; cpt--) {
+   	   	   	   	   	   	   	   	   s1 += "+" + nameOfRows[k];
+   	   	   	   	   	   	   	   }
+   	   	   	   	   	   	   } else {
+   	   	   	   	   	   	   	   s1 = "" + Math.abs(matrice[i][j]) + "*("  + nameOfRows[k] + ") + ";
+   	   	   	   	   	   	   }
+   	   	   	   	   	   } 
+   	   	   	   	   	   
+   	   	   	   	   	   //TraceManager.addDev("Name of line=" + s0 + "/" + s1);
+   	   	   	   	   	   nameOfNewLine = s0 + s1;
+   	   	   	   	   	   gcd = MyMath.gcd(lined);
+   	   	   	   	   	   //System.out.println("gcd =" + gcd + " of line =" + lineToString(lined) + " i.e.:" + nameOfNewLine);
+   	   	   	   	   	   
+   	   	   	   	   	   if (gcd != 0) {
+   	   	   	   	   	   for(l=0; l<lined.length; l++) {
+   	   	   	   	   	   	  lined[l] = lined[l] / gcd;
+   	   	   	   	   	   }
+   	   	   	   	   	   }
+   	   	   	   	   	   
+   	   	   	   	   	   ll.add(new IntLine(lined, nameOfNewLine));
+   	   	   	   	   	   //addLine(lined, nameOfNewLine);
+   	   	   	   	   	   //System.out.println("matafterline=\n" + toString() + "\n\n");
+   	   	   	   	   }
+   	   	   	   }
+   	   	   }
+   	   	   
+   	   	   TraceManager.addDev("Adding lines, size=" + sizeRow + "x" + sizeColumn);
+   	   	   addLines(ll);
+   	   	   ll.clear();
+   	   	   
+   	   	    TraceManager.addDev("Removing lines, size=" + sizeRow + "x" + sizeColumn);
+   	   	   // Remove lines whose element #j is not 0
+   	   	   int nbToRemoved = 0;
+   	   	   for(i=0;i<sizeRow; i++) {
+   	   	   	   if (matrice[i][j] != 0) {
+   	   	   	   	   nbToRemoved ++;
+   	   	   	   	   //removeLine(i);
+   	   	   	   	   //System.out.println("matafterremove " + i + "=\n" + toString() + "\n\n");
+   	   	   	   	   //i--;
+   	   	   	   }
+   	   	   }
+   	   	   
+   	   	   TraceManager.addDev("# of lines to be removed: " + nbToRemoved);
+   	   	   if (nbToRemoved > 0) {
+   	   	   	   int index = 0;
+   	   	   	   int[][] newMat = new int[sizeRow-nbToRemoved][sizeColumn];
+   	   	   	   String []newNames = new String[sizeRow-nbToRemoved];
+   	   	   	   for(int ii=0; ii<sizeRow; ii++) {
+   	   	   	   	   if (matrice[ii][j] == 0) {
+   	   	   	   	   	   //TraceManager.addDev("Copying lines to be removed: " + nbToRemoved);
+   	   	   	   	   	   // line copy to index
+   	   	   	   	   	   for(int jj=0; jj<sizeColumn; jj++) {
+   	   	   	   	   	   	   newMat[index][jj] = matrice[ii][jj];
+   	   	   	   	   	   }
+   	   	   	   	   	   newNames[index] = nameOfRows[ii];
+   	   	   	   	   	   index ++;
+   	   	   	   	   }
+   	   	   	   }
+   	   	   	   matrice = newMat;
+   	   	   	   sizeRow -= nbToRemoved;
+   	   	   	   nameOfRows = newNames;
+   	   	   }
+   	   	   
+   	   	   
+   	   	   
+   	   	   TraceManager.addDev("Lines removed, size=" + sizeRow + "x" + sizeColumn);
+   	   	   
+   	   	    //System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
+   	   	   
+   	   }
+   	   
+   	   // Remove m first columns
+   	   
+   	   
+   	   
+   }
+   
+   
+   // noMultiplier indicates whether names of lines may contain the "*" sign, or not.
+   public void FarkasForInvariantsBitSet(boolean withHeuristics) {
+   	   int sizeColumBeforeConcat = sizeColumn;
+   	   IntMatrix idMat = new IntMatrix(sizeRow, sizeRow);
+   	   idMat.makeID();
+   	   concatAfter(idMat);
+   	   //System.out.println("matconcat=\n" + toString() + "\n\n");
+   	   //int[] lined1, lined2, lined;
+   	   int[] lined;
+   	   int gcd;
+   	   int l, i;
+   	   String s0, s1;
+   	   String nameOfNewLine;
+   	   int cpt;
+   	   long total = 0;
+   	   int tmpSizeRow;
+   	   LinkedList<IntLine> ll = new LinkedList<IntLine>();
+   	   bitSetOfMatrix = new BitSet[sizeRow];
+   	   BitSet bs, bs1, bs2;
+   	   
+   	   for(int bi=0; bi<sizeRow; bi++) {
+   	   	   bitSetOfMatrix[bi] = new BitSet(sizeRow);
+   	   	   bitSetOfMatrix[bi].set(bi);
+   	   }
+   	   
+   	  
+   	   
+   	   for(int j=0; j<sizeColumBeforeConcat; j++) {
+   	   	   // Loop on lines to add line combinations
+   	   	   tmpSizeRow = sizeRow;
+   	   	   
+   	   	   for(i=0; i<tmpSizeRow-1; i++) {
+   	   	   	   percentageCompletion = (long)(j*10000.0/sizeColumBeforeConcat)+(long)(10000.0*i/tmpSizeRow/sizeColumBeforeConcat);
+   	   	   	   //lined1 = getLine(i);
+   	   	   	   //tmpSizeRow = sizeRow;
+   	   	   	   for(int k=i+1; k<tmpSizeRow; k++) {
+   	   	   	   	   
+   	   	   	   	   if (mustGo == false) {
+   	   	   	   	   	   interrupted = true;
+   	   	   	   	   	   return;
+   	   	   	   	   }
+   	   	   	   	   //TraceManager.addDev("Computing k=" + k + " " + sizeRow + "x" + sizeColumn);
+   	   	   	   	   //lined2 = getLine(k);
+   	   	   	   	   
+   	   	   	   	   // lines d1 and 2 have opposite signs?
+   	   	   	   	   //if (((lined1[j] < 0) && (lined2[j]>0)) || ((lined1[j]>0) && (lined2[j]<0))) {
+   	   	   	   	   if (((matrice[i][j] < 0) && (matrice[k][j]>0)) || ((matrice[i][j]>0) && (matrice[k][j]<0))) {
+   	   	   	   	   	   
+   	   	   	   	   	   // Take the bit set of the two lines
+   	   	   	   	   	   // Lines not yet taken into account?
+   	   	   	   	   	   if (!withHeuristics || (!(bitSetOfMatrix[i].intersects(bitSetOfMatrix[k])))) {
+   	   	   	   	   	   
+						   lined = new int[sizeColumn];
+						   for(l=0; l<lined.length; l++) {
+							  lined[l] = Math.abs(matrice[k][j])*matrice[i][l] + Math.abs(matrice[i][j])*matrice[k][l];
+						   }
+						   
+						   gcd = MyMath.gcd(lined);
+						   //System.out.println("gcd =" + gcd + " of line =" + lineToString(lined) + " i.e.:" + nameOfNewLine);
+						   
+						   if (gcd != 0) {
+							   for(l=0; l<lined.length; l++) {
+								  lined[l] = lined[l] / gcd;
+							   }
+						   }
+						   bs = ((BitSet)(bitSetOfMatrix[i].clone()));
+						   bs.or(bitSetOfMatrix[k]);
+						  
+						   ll.add(new IntLine(lined, bs));
+						  
+   	   	   	   	   	   }
+   	   	   	   	   	   //addLine(lined, nameOfNewLine);
+   	   	   	   	   	   //System.out.println("matafterline=\n" + toString() + "\n\n");
+   	   	   	   	   }
+   	   	   	   }
+   	   	   }
+   	   	   
+   	   	   TraceManager.addDev("Adding lines, size=" + sizeRow + "x" + sizeColumn);
+   	   	   addLinesBitSet(ll);
+   	   	   ll.clear();
+   	   	   
+   	   	    TraceManager.addDev("Removing lines, size=" + sizeRow + "x" + sizeColumn);
+   	   	   // Remove lines whose element #j is not 0
+   	   	   int nbToRemoved = 0;
+   	   	   for(i=0;i<sizeRow; i++) {
+   	   	   	   if (matrice[i][j] != 0) {
+   	   	   	   	   nbToRemoved ++;
+   	   	   	   	   //removeLine(i);
+   	   	   	   	   //System.out.println("matafterremove " + i + "=\n" + toString() + "\n\n");
+   	   	   	   	   //i--;
+   	   	   	   }
+   	   	   }
+   	   	   
+   	   	   TraceManager.addDev("# of lines to be removed: " + nbToRemoved);
+   	   	   if (nbToRemoved > 0) {
+   	   	   	   int index = 0;
+   	   	   	   int[][] newMat = new int[sizeRow-nbToRemoved][sizeColumn];
+   	   	   	   String []newNames = new String[sizeRow-nbToRemoved];
+   	   	   	   BitSet []newBitSet = new BitSet[sizeRow-nbToRemoved];
+   	   	   	   for(int ii=0; ii<sizeRow; ii++) {
+   	   	   	   	   if (matrice[ii][j] == 0) {
+   	   	   	   	   	   //TraceManager.addDev("Copying lines to be removed: " + nbToRemoved);
+   	   	   	   	   	   // line copy to index
+   	   	   	   	   	   for(int jj=0; jj<sizeColumn; jj++) {
+   	   	   	   	   	   	   newMat[index][jj] = matrice[ii][jj];
+   	   	   	   	   	   }
+   	   	   	   	   	   newNames[index] = nameOfRows[ii];
+   	   	   	   	   	   newBitSet[index] = bitSetOfMatrix[ii];
+   	   	   	   	   	   index ++;
+   	   	   	   	   }
+   	   	   	   }
+   	   	   	   matrice = newMat;
+   	   	   	   sizeRow -= nbToRemoved;
+   	   	   	   nameOfRows = newNames;
+   	   	   	   bitSetOfMatrix = newBitSet;
+   	   	   }
+   	   	   
+   	   	   
+   	   	   
+   	   	   TraceManager.addDev("Lines removed, size=" + sizeRow + "x" + sizeColumn);
+   	   	   
+   	   	    //System.out.println("----------------\nD"+ (j+1) +"=\n" + toString() + "\n\n");
+   	   	   
+   	   }
+   	   
+   	   // Remove m first columns
+   	   
+   	   
+   	   
+   }
+   
+   public synchronized void startFarkas(boolean _noMultiplier, boolean _withHeuristics) {
    	   noMultiplier = _noMultiplier;
+   	   withHeuristics = _withHeuristics;
    	   Thread t = new Thread(this);
    	   mustGo = true;
    	   finished = false;
@@ -432,7 +782,12 @@ public class IntMatrix implements Runnable {
    }
    
    public void run() {
-   	   Farkas(noMultiplier);
+   	   try {
+   	   	   FarkasForInvariantsBitSet(withHeuristics);
+   	   } catch (Error e) {
+   	   	   TraceManager.addDev("Exception when executing Farkas algorithm: " + e.getMessage());
+   	   	   interrupted = true;
+   	   }
    	   if (!interrupted) {
    	   	   stopComputation();
    	   }

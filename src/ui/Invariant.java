@@ -110,7 +110,7 @@ public class Invariant implements GenericTree {
 		//Component already belongs to invariant?
 		
 		if (components.contains(_tgc)) {
-			TraceManager.addDev("Duplicated component:" + _tgc);
+			//TraceManager.addDev("Duplicated component:" + _tgc);
 			return;
 			
 		}
