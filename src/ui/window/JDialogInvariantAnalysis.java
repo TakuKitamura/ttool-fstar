@@ -747,6 +747,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
     	TPN tpn;
         hasError = false;
 		
+        
 		TraceManager.addDev("Thread started");
 		
 
@@ -754,6 +755,7 @@ public class JDialogInvariantAnalysis extends javax.swing.JDialog implements Act
         try {
         	jta.append("\n*** WARNING: Invariants do NOT take into account variables nor time constraints ***\n");
         	jta.append("Clearing invariants on diagrams\n");
+        	mgui.gtm.clearInvariants();
         	mgui.gtm.clearGraphicalInfoOnInvariants();
             jta.append("Generating Petri Net\n");
             tpn = mgui.gtm.generateTPNFromAvatar();

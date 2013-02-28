@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.93-beta3">
+<TURTLEGMODELING version="0.94-beta2">
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
@@ -350,6 +350,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -388,8 +390,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -398,8 +398,8 @@ ones in memory (for example, the three last!)
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to TGComponent" value="null" />
 <TGConnectingPoint num="0" id="166" />
-<P1  x="256" y="1075" id="978" />
-<P2  x="263" y="1113" id="934" />
+<P1  x="256" y="1075" id="934" />
+<P2  x="263" y="1113" id="977" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="165" >
 <father id="167" num="0" />
@@ -418,6 +418,8 @@ ones in memory (for example, the three last!)
 <afterMax value="maxPageLoadingTime" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -426,7 +428,7 @@ ones in memory (for example, the three last!)
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from state0 to state0" value="null" />
 <TGConnectingPoint num="0" id="173" />
-<P1  x="263" y="1205" id="943" />
+<P1  x="263" y="1205" id="942" />
 <P2  x="263" y="1270" id="894" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="172" >
@@ -446,8 +448,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -482,6 +482,8 @@ ones in memory (for example, the three last!)
 <actions value="memory.data2 = memory.data3" />
 <actions value="memory.index3 = pageid" />
 <actions value="memory.data3 = x" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -490,8 +492,8 @@ ones in memory (for example, the three last!)
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to state0" value="null" />
 <TGConnectingPoint num="0" id="187" />
-<P1  x="263" y="1143" id="935" />
-<P2  x="263" y="1155" id="938" />
+<P1  x="263" y="1143" id="978" />
+<P2  x="263" y="1155" id="937" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="186" >
 <father id="188" num="0" />
@@ -510,6 +512,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -539,6 +543,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="pageid = pageid + 1" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -567,8 +573,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -627,8 +631,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -677,6 +679,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -715,8 +719,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -766,8 +768,6 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="page.data = memory.data3" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -797,6 +797,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="page.data = memory.data1" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -825,8 +827,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -855,8 +855,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -885,6 +883,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -913,8 +913,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -943,8 +941,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -973,8 +969,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -983,8 +977,8 @@ ones in memory (for example, the three last!)
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from state0 to state0" value="null" />
 <TGConnectingPoint num="0" id="301" />
-<P1  x="864" y="565" id="787" />
-<P2  x="858" y="606" id="784" />
+<P1  x="864" y="565" id="784" />
+<P2  x="858" y="606" id="786" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="300" >
 <father id="302" num="0" />
@@ -1003,8 +997,6 @@ ones in memory (for example, the three last!)
 <afterMax value="maxPageLoadingTime" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1013,7 +1005,7 @@ ones in memory (for example, the three last!)
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from TGComponent to state0" value="null" />
 <TGConnectingPoint num="0" id="308" />
-<P1  x="858" y="636" id="785" />
+<P1  x="858" y="636" id="787" />
 <P2  x="816" y="660" id="690" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="307" >
@@ -1034,6 +1026,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="page.data = x" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1068,6 +1062,8 @@ ones in memory (for example, the three last!)
 <actions value="memory.data2 = memory.data3" />
 <actions value="memory.index3 = pageid" />
 <actions value="memory.data3 = page.data" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1096,6 +1092,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1125,6 +1123,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="page.data = memory.data2" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1153,8 +1153,6 @@ ones in memory (for example, the three last!)
 <afterMax value="memoryPageAccessTime" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1183,6 +1181,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1211,8 +1211,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1241,6 +1239,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1427,6 +1427,7 @@ ones in memory (for example, the three last!)
 <TGConnectingPoint num="37" id="505" />
 <TGConnectingPoint num="38" id="506" />
 <TGConnectingPoint num="39" id="507" />
+<invariant />
 </COMPONENT>
 
 <COMPONENT type="5107" id="524" >
@@ -1815,27 +1816,27 @@ ones in memory (for example, the three last!)
 <TGConnectingPoint num="38" id="827" />
 <TGConnectingPoint num="39" id="828" />
 </COMPONENT>
-<SUBCOMPONENT type="5108" id="786" >
+<SUBCOMPONENT type="5100" id="785" >
 <father id="829" num="0" />
-<cdparam x="790" y="611" />
-<sizeparam width="136" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="261" minY="0" maxY="210" />
-<infoparam name="TGComponent" value="null" />
-<TGConnectingPoint num="0" id="784" />
-<TGConnectingPoint num="1" id="785" />
-<extraparam>
-<Data variable="x" minValue="0" maxValue="10" functionId="0" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5100" id="788" >
-<father id="829" num="1" />
 <cdparam x="857" y="545" />
 <sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="382" minY="0" maxY="215" />
 <infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="787" />
+<TGConnectingPoint num="0" id="784" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5108" id="788" >
+<father id="829" num="1" />
+<cdparam x="790" y="611" />
+<sizeparam width="136" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="261" minY="0" maxY="210" />
+<infoparam name="TGComponent" value="null" />
+<TGConnectingPoint num="0" id="786" />
+<TGConnectingPoint num="1" id="787" />
+<extraparam>
+<Data variable="x" minValue="0" maxValue="10" functionId="0" />
+</extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="840" >
@@ -2017,75 +2018,75 @@ ones in memory (for example, the three last!)
 <TGConnectingPoint num="38" id="1018" />
 <TGConnectingPoint num="39" id="1019" />
 </COMPONENT>
-<SUBCOMPONENT type="5108" id="936" >
+<SUBCOMPONENT type="5100" id="935" >
 <father id="1020" num="0" />
-<cdparam x="195" y="1118" />
-<sizeparam width="136" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="249" y="1055" />
+<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="228" minY="0" maxY="181" />
-<infoparam name="TGComponent" value="null" />
+<cdrectangleparam minX="0" maxX="243" minY="0" maxY="186" />
+<infoparam name="start state" value="null" />
 <TGConnectingPoint num="0" id="934" />
-<TGConnectingPoint num="1" id="935" />
-<extraparam>
-<Data variable="x" minValue="0" maxValue="10" functionId="0" />
-</extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5106" id="977" >
+<SUBCOMPONENT type="5106" id="976" >
 <father id="1020" num="1" />
 <cdparam x="213" y="1155" />
 <sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="158" minY="0" maxY="151" />
 <infoparam name="state0" value="PagePrefetched" />
-<TGConnectingPoint num="0" id="937" />
-<TGConnectingPoint num="1" id="938" />
-<TGConnectingPoint num="2" id="939" />
-<TGConnectingPoint num="3" id="940" />
-<TGConnectingPoint num="4" id="941" />
-<TGConnectingPoint num="5" id="942" />
-<TGConnectingPoint num="6" id="943" />
-<TGConnectingPoint num="7" id="944" />
-<TGConnectingPoint num="8" id="945" />
-<TGConnectingPoint num="9" id="946" />
-<TGConnectingPoint num="10" id="947" />
-<TGConnectingPoint num="11" id="948" />
-<TGConnectingPoint num="12" id="949" />
-<TGConnectingPoint num="13" id="950" />
-<TGConnectingPoint num="14" id="951" />
-<TGConnectingPoint num="15" id="952" />
-<TGConnectingPoint num="16" id="953" />
-<TGConnectingPoint num="17" id="954" />
-<TGConnectingPoint num="18" id="955" />
-<TGConnectingPoint num="19" id="956" />
-<TGConnectingPoint num="20" id="957" />
-<TGConnectingPoint num="21" id="958" />
-<TGConnectingPoint num="22" id="959" />
-<TGConnectingPoint num="23" id="960" />
-<TGConnectingPoint num="24" id="961" />
-<TGConnectingPoint num="25" id="962" />
-<TGConnectingPoint num="26" id="963" />
-<TGConnectingPoint num="27" id="964" />
-<TGConnectingPoint num="28" id="965" />
-<TGConnectingPoint num="29" id="966" />
-<TGConnectingPoint num="30" id="967" />
-<TGConnectingPoint num="31" id="968" />
-<TGConnectingPoint num="32" id="969" />
-<TGConnectingPoint num="33" id="970" />
-<TGConnectingPoint num="34" id="971" />
-<TGConnectingPoint num="35" id="972" />
-<TGConnectingPoint num="36" id="973" />
-<TGConnectingPoint num="37" id="974" />
-<TGConnectingPoint num="38" id="975" />
-<TGConnectingPoint num="39" id="976" />
+<TGConnectingPoint num="0" id="936" />
+<TGConnectingPoint num="1" id="937" />
+<TGConnectingPoint num="2" id="938" />
+<TGConnectingPoint num="3" id="939" />
+<TGConnectingPoint num="4" id="940" />
+<TGConnectingPoint num="5" id="941" />
+<TGConnectingPoint num="6" id="942" />
+<TGConnectingPoint num="7" id="943" />
+<TGConnectingPoint num="8" id="944" />
+<TGConnectingPoint num="9" id="945" />
+<TGConnectingPoint num="10" id="946" />
+<TGConnectingPoint num="11" id="947" />
+<TGConnectingPoint num="12" id="948" />
+<TGConnectingPoint num="13" id="949" />
+<TGConnectingPoint num="14" id="950" />
+<TGConnectingPoint num="15" id="951" />
+<TGConnectingPoint num="16" id="952" />
+<TGConnectingPoint num="17" id="953" />
+<TGConnectingPoint num="18" id="954" />
+<TGConnectingPoint num="19" id="955" />
+<TGConnectingPoint num="20" id="956" />
+<TGConnectingPoint num="21" id="957" />
+<TGConnectingPoint num="22" id="958" />
+<TGConnectingPoint num="23" id="959" />
+<TGConnectingPoint num="24" id="960" />
+<TGConnectingPoint num="25" id="961" />
+<TGConnectingPoint num="26" id="962" />
+<TGConnectingPoint num="27" id="963" />
+<TGConnectingPoint num="28" id="964" />
+<TGConnectingPoint num="29" id="965" />
+<TGConnectingPoint num="30" id="966" />
+<TGConnectingPoint num="31" id="967" />
+<TGConnectingPoint num="32" id="968" />
+<TGConnectingPoint num="33" id="969" />
+<TGConnectingPoint num="34" id="970" />
+<TGConnectingPoint num="35" id="971" />
+<TGConnectingPoint num="36" id="972" />
+<TGConnectingPoint num="37" id="973" />
+<TGConnectingPoint num="38" id="974" />
+<TGConnectingPoint num="39" id="975" />
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5100" id="979" >
+<SUBCOMPONENT type="5108" id="979" >
 <father id="1020" num="2" />
-<cdparam x="249" y="1055" />
-<sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="195" y="1118" />
+<sizeparam width="136" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="243" minY="0" maxY="186" />
-<infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="978" />
+<cdrectangleparam minX="0" maxX="228" minY="0" maxY="181" />
+<infoparam name="TGComponent" value="null" />
+<TGConnectingPoint num="0" id="977" />
+<TGConnectingPoint num="1" id="978" />
+<extraparam>
+<Data variable="x" minValue="0" maxValue="10" functionId="0" />
+</extraparam>
 </SUBCOMPONENT>
 
 
@@ -2103,7 +2104,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1025" >
 <father id="1027" num="0" />
 <cdparam x="478" y="456" />
-<sizeparam width="63" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="63" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2117,8 +2118,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2133,7 +2132,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1032" >
 <father id="1034" num="0" />
 <cdparam x="472" y="417" />
-<sizeparam width="63" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="63" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2147,8 +2146,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2163,7 +2160,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1039" >
 <father id="1041" num="0" />
 <cdparam x="479" y="374" />
-<sizeparam width="63" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="63" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2177,8 +2174,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2207,6 +2202,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2221,7 +2218,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1053" >
 <father id="1055" num="0" />
 <cdparam x="488" y="245" />
-<sizeparam width="128" height="48" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="128" height="45" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2238,8 +2235,6 @@ ones in memory (for example, the three last!)
 <actions value="doc1.id = 1" />
 <actions value="doc1.nbOfPages = 5" />
 <actions value="doc1.currentPage = 2" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2254,7 +2249,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1060" >
 <father id="1062" num="0" />
 <cdparam x="474" y="327" />
-<sizeparam width="63" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="63" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2268,8 +2263,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2284,7 +2277,7 @@ ones in memory (for example, the three last!)
 </CONNECTOR><SUBCOMPONENT type="-1" id="1067" >
 <father id="1069" num="0" />
 <cdparam x="473" y="504" />
-<sizeparam width="63" height="32" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="63" height="30" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2299,6 +2292,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="index = 1" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2327,6 +2322,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2340,8 +2337,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1089" >
-<cdparam x="408" y="539" />
-<sizeparam width="104" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="407" y="539" />
+<sizeparam width="107" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="goToPage(index)" />
@@ -2358,8 +2355,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1100" >
-<cdparam x="392" y="286" />
-<sizeparam width="130" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="390" y="286" />
+<sizeparam width="134" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="openDocument(doc1)" />
@@ -2433,8 +2430,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1154" >
-<cdparam x="415" y="333" />
-<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="413" y="333" />
+<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="flipNextPage()" />
@@ -2451,8 +2448,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1165" >
-<cdparam x="417" y="380" />
-<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="415" y="380" />
+<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="flipNextPage()" />
@@ -2469,8 +2466,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1176" >
-<cdparam x="417" y="461" />
-<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="415" y="461" />
+<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="flipNextPage()" />
@@ -2487,8 +2484,8 @@ ones in memory (for example, the three last!)
 </COMPONENT>
 
 <COMPONENT type="5103" id="1187" >
-<cdparam x="417" y="422" />
-<sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="415" y="422" />
+<sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="flipNextPage()" />
@@ -2549,7 +2546,7 @@ ones in memory (for example, the three last!)
 <SUBCOMPONENT type="-1" id="1195" >
 <father id="1200" num="3" />
 <cdparam x="410" y="275" />
-<sizeparam width="103" height="48" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="103" height="45" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -2565,6 +2562,8 @@ ones in memory (for example, the three last!)
 <computeMax value="" />
 <actions value="data = page.data" />
 <actions value="printPage(data)" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2593,6 +2592,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2621,12 +2622,14 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="1225" >
-<cdparam x="340" y="222" />
-<sizeparam width="121" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="338" y="222" />
+<sizeparam width="124" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="displayPage(page)" />
@@ -2728,6 +2731,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2776,6 +2781,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2804,6 +2811,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2832,6 +2841,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2890,8 +2901,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2921,8 +2930,6 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="currentDocument.currentPage = currentPage" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2951,8 +2958,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2981,6 +2986,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3010,6 +3017,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="currentDocument.currentPage = currentDocument.currentPage + 1" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3038,6 +3047,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3067,6 +3078,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="currentDocument.currentPage = currentDocument.currentPage + 1" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3095,6 +3108,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3153,6 +3168,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3181,6 +3198,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3209,6 +3228,8 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3237,8 +3258,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3268,6 +3287,8 @@ ones in memory (for example, the three last!)
 <computeMin value="" />
 <computeMax value="" />
 <actions value="currentPage = currentDocument.currentPage" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3296,8 +3317,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3326,8 +3345,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -3386,8 +3403,6 @@ ones in memory (for example, the three last!)
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
-<filesToIncludeLine value="" />
-<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
