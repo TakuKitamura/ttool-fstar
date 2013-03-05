@@ -57,6 +57,7 @@ public class IntExpressionEvaluator {
    private int currentType;
    private int currentValue;
    
+   private int nbOpen;
    
    public IntExpressionEvaluator() {
    }
@@ -74,11 +75,25 @@ public class IntExpressionEvaluator {
    }
    
    public double getResultOf(String _expr) {
-	   //TraceManager.addDev("Computing:" + _expr);
+	   TraceManager.addDev("Computing:" + _expr);
 	   tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
 	   
 	   computeNextToken();
-	   return parseExpression();
+	   double d = parseExpression();
+	   
+	   
+	   
+	   if ((errorMessage == null) && (nbOpen!=0)) {
+			errorMessage = "Badly placed parenthesis";
+		}
+		
+		if (errorMessage != null) {
+	   	   TraceManager.addDev("Expr contains an error:" + errorMessage);
+	   	} else {
+	   		TraceManager.addDev("Expr is correct");	
+	   	}
+		
+		return d;
    }
    
   
@@ -246,6 +261,24 @@ public class IntExpressionEvaluator {
         }
         return;
       }
+      
+      else if (c1 == ')') {
+				currentType = c1;
+				nbOpen --;
+				TraceManager.addDev(") met: Nb of open=" + nbOpen);
+				if (nbOpen < 0) {
+					TraceManager.addDev("int Expr: found pb with a parenthesis");
+				}
+				return;
+			}
+			
+	else if (c1 == '(') {
+			nbOpen ++;
+			TraceManager.addDev("( met: Nb of open=" + nbOpen);
+				currentType = c1;
+				
+				return;
+			}
 
       // Any other single character that is not 
       // white space is a token.

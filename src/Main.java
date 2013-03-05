@@ -133,7 +133,9 @@ public class Main implements ActionListener {
             img = (new ImageIcon(imageURL)).getImage();
             splashFrame = JStartingWindow.splash(img, "Loading TTool's elements");
             //splashFrame.setLicenceMessage("An open-source toolkit from:");
-            splashFrame.setMiddleMessage("version " + DefaultText.getVersion());
+            if (splashFrame != null) {
+            	splashFrame.setMiddleMessage("version " + DefaultText.getVersion());
+            }
             //System.out.println("helly");
         } else {
             System.err.println("Starting image not found");
@@ -147,7 +149,9 @@ public class Main implements ActionListener {
         
         // Starting window
         // setting default language
-        splashFrame.setMessage("Setting language");
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Setting language");
+        }
         Locale.setDefault(new Locale("en"));
 		
 		boolean startLauncher = false;
@@ -247,13 +251,16 @@ public class Main implements ActionListener {
         }
         
         // Icons
-        splashFrame.setMessage("Loading images");
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Loading images");
+        }
         IconManager icma = new IconManager();
         icma.loadImg();
         
         // Loading configuration
-        splashFrame.setMessage("Loading configuration file: " + config);
-        
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Loading configuration file: " + config);
+        }
         
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
@@ -281,9 +288,13 @@ public class Main implements ActionListener {
 		}
         
         // making main window
-        splashFrame.setMessage("Creating main window");
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Creating main window");
+        }
         MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif);
-        splashFrame.setMessage("Building graphical components");
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Building graphical components");
+        }
         mainGUI.build();
         
         // loading configuration
@@ -293,8 +304,9 @@ public class Main implements ActionListener {
             ErrorGUI.exit(ErrorGUI.GUI);
         }
 		
-        
-        splashFrame.setMessage("Starting TTool ...");
+        if (splashFrame != null) {
+        	splashFrame.setMessage("Starting TTool ...");
+        }
         main.waitFinish();
         mainGUI.start();
         

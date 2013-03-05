@@ -652,6 +652,9 @@ public class AvatarSimulationBlock  {
 		String act = _expr;
 		int cpt = 0;
 		for(String attrValue: _attributeValues) {
+			if (attrValue.trim().startsWith("-")) {
+				attrValue = "(0" + attrValue + ")"; 
+			}
 			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, getAttributeName(cpt), attrValue);
 			cpt ++;
 		}

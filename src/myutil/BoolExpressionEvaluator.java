@@ -61,17 +61,19 @@ public class BoolExpressionEvaluator {
 	public static final int LT_TOKEN = -4;
 	public static final int GT_TOKEN = -5;
 	public static final int NEG_TOKEN = -6;
-	public static final int OR_TOKEN = -6;
-	public static final int AND_TOKEN = -7;
-	public static final int LTEQ_TOKEN = -8;
-	public static final int GTEQ_TOKEN = -9;
-	public static final int EOLN_TOKEN = -10;
+	public static final int OR_TOKEN = -7;
+	public static final int AND_TOKEN = -8;
+	public static final int LTEQ_TOKEN = -9;
+	public static final int GTEQ_TOKEN = -10;
+	public static final int EOLN_TOKEN = -11;
 	
 	private StringTokenizer tokens;
 	private String errorMessage = null;
 	
 	private int currentType;
 	private int currentValue; 
+	
+	private int nbOpen;
 	
 	
 	public BoolExpressionEvaluator() {
@@ -92,6 +94,8 @@ public class BoolExpressionEvaluator {
 	public boolean getResultOf(String _expr) {
 		//TraceManager.addDev("Evaluating bool expr: " + _expr);
 		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		
+		nbOpen = 0;
 		
 		String tmp = Conversion.replaceAllString(_expr, "==", "$").trim();
 		tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
@@ -124,6 +128,7 @@ public class BoolExpressionEvaluator {
 		}
 		
 		
+		
 		//TraceManager.addDev("Computing:" + _expr);
 		
 		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/!=&|<>:;()",true);
@@ -131,18 +136,28 @@ public class BoolExpressionEvaluator {
 		computeNextToken();
 		int result =  (int)(parseExpression());
 		
+		if (errorMessage != null) {
+			TraceManager.addDev("Error:" + errorMessage);
+		} 
+		
+		if ((errorMessage == null) && (nbOpen!=0)) {
+			errorMessage = "Badly placed parenthesis";
+			result = -1;
+		}
+		
 		if (result == TRUE_VALUE) {
-			//TraceManager.addDev("equal true");
+			TraceManager.addDev("equal true");
 			return true;
 		}
 		
 		if (result == FALSE_VALUE) {
-			//TraceManager.addDev("equal false");
+			TraceManager.addDev("equal false");
 			return false;
 		}
 		
 		errorMessage = "Not a boolean expression: " + _expr;
 		
+		TraceManager.addDev("Error:" + errorMessage);
 		return false;
 	}
 	
@@ -549,6 +564,21 @@ public class BoolExpressionEvaluator {
 				currentValue = 0;
 				currentType = AND_TOKEN;
 				//TraceManager.addDev("equal token!");
+				return;
+			}
+			
+			if (s.compareTo(")") == 0) {
+				currentType = c1;
+				nbOpen --;
+				if (nbOpen < 0) {
+					TraceManager.addDev("Boolean expr: Found pb with a parenthesis");
+				}
+				return;
+			}
+			
+			if (s.compareTo("(") == 0) {
+				currentType = c1;
+				nbOpen ++;
 				return;
 			}
 			

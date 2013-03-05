@@ -171,11 +171,16 @@ public class JStartingWindow extends Window {
      */
 
     public static JStartingWindow splash(Image splashImage, String msg) {
-        Frame f = new Frame();
-        JStartingWindow w = new JStartingWindow(f, splashImage, msg);
-        // Show the window.
-        w.toFront();
-        w.show();
+    	JStartingWindow w = null;
+    	try {
+    		Frame f = new Frame();
+        	w = new JStartingWindow(f, splashImage, msg);
+        	// Show the window.
+        	w.toFront();
+        	w.show();
+        } catch (Exception e) {
+        	return null;
+        }
 
         // Note: To make sure the user gets a chance to see the
         // splash window we wait until its paint method has been
