@@ -283,7 +283,7 @@ public class JDialogAvatarTransition extends javax.swing.JDialog implements Acti
         
 		JTabbedPane jtp = new JTabbedPane();
 		jtp.add("General", panel1);
-		jtp.add("Prototyping", panel2);
+		//jtp.add("Prototyping", panel2);
         c.add(jtp, c0);
         
         c0.gridwidth = 1;

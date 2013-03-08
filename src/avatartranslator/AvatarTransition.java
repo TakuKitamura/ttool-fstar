@@ -54,7 +54,6 @@ public class AvatarTransition extends AvatarStateMachineElement {
 	private String guard = "[ ]";
 	private String minDelay = "", maxDelay = "";
 	private String minCompute = "", maxCompute = "";
-	private String codeToExecute;
 	
 	private LinkedList<String> actions; // actions on variable, or method call
 	
@@ -63,18 +62,6 @@ public class AvatarTransition extends AvatarStateMachineElement {
 		actions = new LinkedList<String>();
     }
     
-    // For code generation
-    public void addExecutableCode(String _code) {
-    	if (codeToExecute == null) {
-    		codeToExecute = _code;
-    		return;
-    	}
-    	codeToExecute += _code;
-    }
-    
-    public String getExecutableCode() {
-    	return codeToExecute;
-    }
 	
 	public String getGuard() {
 		return guard;

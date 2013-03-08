@@ -58,7 +58,7 @@ public class AvatarBlock extends AvatarElement {
 	private LinkedList<AvatarSignal> signals;
 	private AvatarStateMachine asm;
 	
-	private String filesToInclude;
+	private String globalCode;
 	
 	
     public AvatarBlock(String _name, Object _referenceObject) {
@@ -70,16 +70,22 @@ public class AvatarBlock extends AvatarElement {
     }
     
     // For code generation
-    public void addFilesToInclude(String _files) {
-    	if (filesToInclude == null) {
-    		filesToInclude = _files;
+    public void addGlobalCode(String _code) {
+    	if (_code == null) {
     		return;
     	}
-    	filesToInclude += _files;
+    	if (globalCode == null) {
+    		globalCode = _code;
+    		return;
+    	}
+    	globalCode += _code + "\n";
     }
     
-    public String getFilesToInclude() {
-    	return filesToInclude;
+    public String getGlobalCode() {
+    	if (globalCode == null) {
+    		return "";
+    	}
+    	return globalCode;
     }
 	
     

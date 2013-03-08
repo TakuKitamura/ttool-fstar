@@ -60,6 +60,10 @@ import ui.window.*;
 
 public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	
+	private static String FILE_INFO = "(user files specified)";
+	private static String CODE_INFO = "(user code specified)";
+	
+	
 	protected String guard;
 	protected String afterMin;
 	protected String afterMax;
@@ -196,6 +200,31 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			}
 		}
 		
+		/*g.setColor(ColorManager.AVATAR_CODE);
+		
+		if (hasFilesToInclude()) {
+			atLeastOneThing = true;
+			g.drawString(FILE_INFO, x, y + step);
+			step += inc;
+			if (!tdp.isScaled()) {
+				width = Math.max(g.getFontMetrics().stringWidth(FILE_INFO), width);
+				width = Math.max(minWidth, width);
+			}
+		}
+		
+		if (hasCodeToInclude()) {
+			atLeastOneThing = true;
+			g.drawString(CODE_INFO, x, y + step);
+			step += inc;
+			if (!tdp.isScaled()) {
+				width = Math.max(g.getFontMetrics().stringWidth(CODE_INFO), width);
+				width = Math.max(minWidth, width);
+			}
+		}*/
+		
+		
+		
+		
 		if (!tdp.isScaled()) {
 			height = Math.max(step, minHeight);
 		}
@@ -211,6 +240,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 		
 		
 	}
+	
+	
 	
 	public TGComponent isOnMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y - h + 2, width, height)) {
@@ -364,7 +395,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 								}
 							}
 							
-							if (elt.getTagName().equals("filesToIncludeLine")) {
+							/*if (elt.getTagName().equals("filesToIncludeLine")) {
                                 //System.out.println("Analyzing line");
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
@@ -380,7 +411,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
                                     s = "";
                                 }
                                 tmpCodeToInclude += GTURTLEModeling.decodeString(s) + "\n";
-                            }
+                            }*/
 						}
 					}
 				}
@@ -390,9 +421,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 			throw new MalformedModelingException();
 		}
 
-		filesToInclude = Conversion.wrapText(tmpFilesToInclude);
-		codeToInclude = Conversion.wrapText(tmpCodeToInclude);
-	}
+		
+		if (tmpFilesToInclude.trim().length() == 0) {
+			filesToInclude = null;
+		} else {
+			filesToInclude = Conversion.wrapText(tmpFilesToInclude);
+		}
+		if (tmpCodeToInclude.trim().length() == 0) {
+			codeToInclude = null;
+		} else {
+			codeToInclude = Conversion.wrapText(tmpCodeToInclude);
+		}
+	}	
 	
 	public String getGuard() {
 		return guard;
@@ -416,6 +456,14 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent {
 	
 	public Vector<String> getActions() {
 		return listOfActions;
+	}
+	
+	public boolean hasFilesToInclude() {
+		return ((filesToInclude != null) && (filesToInclude.length > 0));
+	}
+	
+	public boolean hasCodeToInclude() {
+		return ((codeToInclude != null) && (codeToInclude.length > 0));
 	}
 	
 	public String getFilesToInclude() {

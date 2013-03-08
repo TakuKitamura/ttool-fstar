@@ -51,6 +51,7 @@ import myutil.*;
 
 
 public class AvatarState extends AvatarStateMachineElement {
+	private String entryCode;
 	
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -90,4 +91,22 @@ public class AvatarState extends AvatarStateMachineElement {
 		
 		return cpt;
 	}
+	
+	public void addEntryCode(String _code) {
+		if (_code == null) {
+			return;
+		}
+    	if (entryCode == null) {
+    		entryCode = _code;
+    		return;
+    	}
+    	entryCode += _code + "\n";
+    }
+    
+    public String getEntryCode() {
+    	if (entryCode == null) {
+    		return "";
+    	}
+    	return entryCode;
+    }
 }

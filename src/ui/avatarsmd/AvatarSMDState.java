@@ -58,13 +58,19 @@ import ui.window.*;
 
 
 public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
-    private int textY1 = 3;
+    private static String GLOBAL_CODE_INFO = "(global code)";
+	private static String ENTRY_CODE_INFO = "(entry code)";
+	
+	private int textY1 = 3;
 	
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	private int textX = 7;
+	
+	protected String [] globalCode;
+	protected String [] entryCode;
 	
 	
 	public String oldValue;
@@ -239,6 +245,27 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			if ((w < (2*textX + width)) && (h < height)) {
 				g.drawString(value, x + (width - w)/2, y +h);
 			}
+			
+			
+			g.setColor(ColorManager.AVATAR_CODE);
+			int step = h + h;
+			if (hasGlobalCode()) {
+				w = g.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
+				if ((w < (2*textX + width)) && (step + 1 < height)) {
+					g.drawString(GLOBAL_CODE_INFO, x + (width - w)/2, y +step);
+				}
+				step = step + h;
+			}
+			if (hasEntryCode()) {
+				w = g.getFontMetrics().stringWidth(ENTRY_CODE_INFO);
+				if ((w < (2*textX + width)) && (step + 1 < height)) {
+					g.drawString(ENTRY_CODE_INFO, x + (width - w)/2, y +step);
+				}
+				step = step + h;
+			}
+			g.setColor(c);
+			
+			
 			g.setFont(f0);
 		}
 		
@@ -281,10 +308,24 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		oldValue = value;
 		
 		//String text = getName() + ": ";
-		String s = (String)JOptionPane.showInputDialog(frame, "State name",
+		/*String s = (String)JOptionPane.showInputDialog(frame, "State name",
 			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
 			null,
-			getValue());
+			getValue());*/
+			
+			
+		JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting transition parameters", value,  globalCode, entryCode);
+		jdas.setSize(600, 550);
+		GraphicLib.centerOnParent(jdas);
+		jdas.show(); // blocked until dialog has been closed
+		
+		
+		if (jdas.hasBeenCancelled()) {
+			return false;
+		}
+		
+		String s = jdas.getStateName();
+			
 		
 		if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 			//boolean b;
@@ -317,6 +358,10 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 				setValue(oldValue);
 			}*/
 		}
+		
+		globalCode = jdas.getGlobalCode();
+		entryCode =  jdas.getEntryCode();
+		
 		return true;
 		
 		
@@ -525,6 +570,159 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		}
 		
 		return s;
+	}
+	
+	protected String translateExtraParam() {
+		StringBuffer sb = new StringBuffer("<extraparam>\n");
+		
+		if (hasGlobalCode()) {
+			for(int i=0; i<globalCode.length; i++) {
+				sb.append("<globalCode value=\"");
+				sb.append(GTURTLEModeling.transformString(globalCode[i]));
+				sb.append("\" />\n");
+			}
+		}
+		
+		if (hasEntryCode()) {
+			for(int i=0; i<entryCode.length; i++) {
+				sb.append("<entryCode value=\"");
+				sb.append(GTURTLEModeling.transformString(entryCode[i]));
+				sb.append("\" />\n");
+			}
+		}
+		
+		sb.append("</extraparam>\n");
+		return new String(sb);
+	}
+	
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+		//System.out.println("*** load extra synchro *** " + getId());
+		String tmpGlobalCode = "";
+		String tmpEntryCode = "";
+		
+		try {
+			
+			NodeList nli;
+			Node n1, n2;
+			Element elt;
+			String s;
+			for(int i=0; i<nl.getLength(); i++) {
+				n1 = nl.item(i);
+				//System.out.println(n1);
+				if (n1.getNodeType() == Node.ELEMENT_NODE) {
+					nli = n1.getChildNodes();
+					for(int j=0; i<nli.getLength(); i++) {
+						n2 = nli.item(i);
+						//System.out.println(n2);
+						if (n2.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element)n2;
+							
+							
+							if (elt.getTagName().equals("globalCode")) {
+                                //System.out.println("Analyzing line");
+                                s = elt.getAttribute("value");
+                                if (s.equals("null")) {
+                                    s = "";
+                                }
+                                tmpGlobalCode += GTURTLEModeling.decodeString(s) + "\n";
+                            }
+							
+							if (elt.getTagName().equals("entryCode")) {
+                                //System.out.println("Analyzing line");
+                                s = elt.getAttribute("value");
+                                if (s.equals("null")) {
+                                    s = "";
+                                }
+                                tmpEntryCode += GTURTLEModeling.decodeString(s) + "\n";
+                            }
+						}
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			throw new MalformedModelingException();
+		}
+
+		
+		if (tmpGlobalCode.trim().length() == 0) {
+			globalCode = null;
+		} else {
+			globalCode = Conversion.wrapText(tmpGlobalCode);
+		}
+		if (tmpEntryCode.trim().length() == 0) {
+			entryCode = null;
+		} else {
+			entryCode = Conversion.wrapText(tmpEntryCode);
+			TraceManager.addDev("Entry code = " + entryCode);
+		}
+		
+		
+	}	
+	
+	public boolean hasGlobalCode() {
+		if (globalCode == null) {
+			return false;
+		}
+		
+		if (globalCode.length == 0) {
+			return false;
+		}
+		
+		String tmp;
+		for(int i=0; i<globalCode.length; i++) {
+			tmp = globalCode[i].trim();
+			if (tmp.length()>0) {
+			if (!(tmp.equals("\n"))) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean hasEntryCode() {
+		if (entryCode == null) {
+			return false;
+		}
+		
+		if (entryCode.length == 0) {
+			return false;
+		}
+		
+		String tmp;
+		for(int i=0; i<entryCode.length; i++) {
+			tmp = entryCode[i].trim();
+			if (tmp.length()>0) {
+			if (!(tmp.equals("\n"))) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public String getGlobalCode() {
+		if (globalCode == null) {
+			return null;
+		}
+		String ret = "";
+		for(int i=0; i<globalCode.length; i++) {
+			ret += globalCode[i] + "\n";
+		}
+		return ret;
+	}
+	public String getEntryCode() {
+		if (entryCode == null) {
+			return null;
+		}
+		String ret = "";
+		for(int i=0; i<entryCode.length; i++) {
+			ret += entryCode[i] + "\n";
+		}
+		return ret;
 	}
 	
     

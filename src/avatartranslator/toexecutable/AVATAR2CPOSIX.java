@@ -220,6 +220,10 @@ public class AVATAR2CPOSIX {
 		
 		//taskFile.addToMainCode("#include \"" + block.getName() + ".h\"");
 		
+		String tmp = block.getGlobalCode();
+		if (tmp != null) {
+			taskFile.addToHeaderCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+		}
 		
 		defineAllStates(block, taskFile);
 		
@@ -395,11 +399,20 @@ public class AVATAR2CPOSIX {
 		s += makeBehaviourFromElement(_block, asm.getStartState(), true);
 		s += "break;" + CR + CR;
 		
+		String tmp;
 		// Making other states
 		for(AvatarStateMachineElement asme: asm.getListOfElements()) {
 			if (asme instanceof AvatarState) {
 				s += "case STATE__" + asme.getName() + ": " + CR;
 				s += traceStateEntering("__myname", asme.getName());
+				
+				tmp = ((AvatarState)asme).getEntryCode();
+				if (tmp != null) {
+					if (tmp.trim().length() > 0) {
+						s += "/* Entry code */\n" + tmp + "\n/* End of entry code */\n\n";
+					}
+				}
+				
 				s += makeBehaviourFromElement(_block, asme, true);
 				s += "break;" + CR + CR;
 			}
@@ -461,6 +474,8 @@ public class AVATAR2CPOSIX {
 					ret +=  act + ";" + CR;
 				}
 			}*/
+			
+			
 			return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
 		}
 	

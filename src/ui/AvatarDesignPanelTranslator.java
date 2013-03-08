@@ -937,6 +937,11 @@ public class AvatarDesignPanelTranslator {
 					astate.setCheckable();
 					TraceManager.addDev("Setting as checkable : " + tgc.getValue());
 				}
+				
+				// Executable code
+				astate.addEntryCode(((AvatarSMDState)(tgc)).getEntryCode());	
+				_ab.addGlobalCode(((AvatarSMDState)(tgc)).getGlobalCode());	
+				
 				listE.addCor(astate, tgc);
 				astate.addReferenceObject(tgc);
 				tgc.setAVATARID(astate.getID());
@@ -1174,9 +1179,7 @@ public class AvatarDesignPanelTranslator {
 							at.setComputes(tmp1, tmp2);
 						}
 						
-						// Executable code
-						at.addExecutableCode(asmdco.getCodeToInclude());
-						_ab.addFilesToInclude(asmdco.getFilesToInclude());	
+						
 						
 						// Actions
 						vs = asmdco.getActions();

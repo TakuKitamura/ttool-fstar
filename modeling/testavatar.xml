@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGMODELING version="0.93-beta1">
+<TURTLEGMODELING version="0.94-beta2">
 
 <Modeling type="AVATAR Design" nameTab="AVATAR Design" >
 <AVATARBlockDiagramPanel name="AVATAR Block Diagram" minX="10" maxX="1400" minY="10" maxY="900" >
@@ -133,6 +133,8 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -171,6 +173,8 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -184,8 +188,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="83" >
-<cdparam x="346" y="127" />
-<sizeparam width="73" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="344" y="127" />
+<sizeparam width="77" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Send signal" value="testsig(y, b)" />
@@ -226,7 +230,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="90" >
 <father id="92" num="0" />
 <cdparam x="468" y="290" />
-<sizeparam width="60" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="60" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -241,6 +245,9 @@
 <computeMin value="" />
 <computeMax value="" />
 <actions value="done(x, b)" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
+<codeToIncludeLine value="printf(&quot;Done done\n&quot;);" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -255,7 +262,7 @@
 </CONNECTOR><SUBCOMPONENT type="-1" id="97" >
 <father id="99" num="0" />
 <cdparam x="440" y="204" />
-<sizeparam width="70" height="16" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="70" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
@@ -269,6 +276,8 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -277,7 +286,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to state0" value="null" />
 <TGConnectingPoint num="0" id="105" />
-<P1  x="361" y="62" id="145" />
+<P1  x="361" y="62" id="161" />
 <P2  x="362" y="122" id="121" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="104" >
@@ -297,12 +306,14 @@
 <afterMax value="" />
 <computeMin value="" />
 <computeMax value="" />
+<filesToIncludeLine value="" />
+<codeToIncludeLine value="" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="117" >
-<cdparam x="385" y="229" />
-<sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="382" y="229" />
+<sizeparam width="86" height="20" minWidth="30" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="Receive signal" value="testsig(x, b)" />
@@ -328,7 +339,7 @@
 <TGConnectingPoint num="0" id="118" />
 </COMPONENT>
 
-<COMPONENT type="5106" id="144" >
+<COMPONENT type="5106" id="160" >
 <cdparam x="312" y="122" />
 <sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -358,15 +369,31 @@
 <TGConnectingPoint num="21" id="141" />
 <TGConnectingPoint num="22" id="142" />
 <TGConnectingPoint num="23" id="143" />
+<TGConnectingPoint num="24" id="144" />
+<TGConnectingPoint num="25" id="145" />
+<TGConnectingPoint num="26" id="146" />
+<TGConnectingPoint num="27" id="147" />
+<TGConnectingPoint num="28" id="148" />
+<TGConnectingPoint num="29" id="149" />
+<TGConnectingPoint num="30" id="150" />
+<TGConnectingPoint num="31" id="151" />
+<TGConnectingPoint num="32" id="152" />
+<TGConnectingPoint num="33" id="153" />
+<TGConnectingPoint num="34" id="154" />
+<TGConnectingPoint num="35" id="155" />
+<TGConnectingPoint num="36" id="156" />
+<TGConnectingPoint num="37" id="157" />
+<TGConnectingPoint num="38" id="158" />
+<TGConnectingPoint num="39" id="159" />
 </COMPONENT>
 
-<COMPONENT type="5100" id="146" >
+<COMPONENT type="5100" id="162" >
 <cdparam x="354" y="42" />
 <sizeparam width="15" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="145" />
+<TGConnectingPoint num="0" id="161" />
 </COMPONENT>
 
 

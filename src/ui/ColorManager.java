@@ -151,6 +151,7 @@ public class ColorManager {
 	public static  Color AVATAR_TIME = new Color(105, 75, 11);	
 	//public static final Color AVATAR_ACTION = new Color(128, 92, 168);
 	public static  Color AVATAR_ACTION = new Color(119, 16, 243);
+	public static  Color AVATAR_CODE = new Color(255, 176, 37);
 	//public static final Color AVATAR_STATE = new Color(149, 193, 210);
 	public static  Color AVATAR_STATE = new Color(193, 218, 241);
 	
@@ -261,6 +262,7 @@ public class ColorManager {
 		AVATAR_GUARD = Color.black;
 		AVATAR_TIME = Color.black;
 		AVATAR_ACTION = Color.black;
+		AVATAR_CODE = Color.black;
 		AVATAR_SEND_SIGNAL = Color.white;
 		AVATAR_RECEIVE_SIGNAL = Color.white;
 		
