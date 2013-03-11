@@ -460,6 +460,7 @@ public class AvatarDesignPanelTranslator {
 			for(i=0; i<v.size(); i++) {
 				uiam = (AvatarMethod)(v.get(i));
 				atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
+				atam.setImplementationProvided(uiam.isImplementationProvided());
 				ab.addMethod(atam);
 				makeParameters(ab, atam, uiam);
 				makeReturnParameters(ab, block, atam, uiam);
@@ -477,6 +478,9 @@ public class AvatarDesignPanelTranslator {
 				ab.addSignal(atas);
 				makeParameters(ab, atas, uias);
 			}
+			
+			// Put global code
+			ab.addGlobalCode(block.getGlobalCode());	
 			
 		}
 		
@@ -940,7 +944,7 @@ public class AvatarDesignPanelTranslator {
 				
 				// Executable code
 				astate.addEntryCode(((AvatarSMDState)(tgc)).getEntryCode());	
-				_ab.addGlobalCode(((AvatarSMDState)(tgc)).getGlobalCode());	
+				//_ab.addGlobalCode(((AvatarSMDState)(tgc)).getGlobalCode());	
 				
 				listE.addCor(astate, tgc);
 				astate.addReferenceObject(tgc);

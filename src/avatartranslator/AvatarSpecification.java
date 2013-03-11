@@ -57,6 +57,8 @@ public class AvatarSpecification extends AvatarElement {
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;
    
+   private String applicationCode;
+   
    //private AvatarBroadcast broadcast;
    
    private LinkedList<String> pragmas;
@@ -73,6 +75,34 @@ public class AvatarSpecification extends AvatarElement {
 		//broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
 		pragmas = new LinkedList<String>();
     }
+    
+    
+    // For code generation
+    public void addApplicationCode(String _code) {
+    	if (_code == null) {
+    		return;
+    	}
+    	if (applicationCode == null) {
+    		applicationCode = _code;
+    		return;
+    	}
+    	applicationCode += _code + "\n";
+    }
+    
+    public String getApplicationCode() {
+    	if (applicationCode == null) {
+    		return "";
+    	}
+    	return applicationCode;
+    }
+    
+    public boolean hasApplicationCode() {
+    	if (applicationCode == null) {
+    		return false;
+    	}
+    	return (applicationCode.indexOf("__user_init()") != -1);	
+    }
+    
     
     public void setInformationSource(Object o) {
     	informationSource = o;

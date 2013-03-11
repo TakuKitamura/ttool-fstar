@@ -330,7 +330,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent  {
 		
 		// And so -> attributes!
 		
-		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, null, null, null, frame, "Setting attributes of " + value, "Attribute", 0);
+		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, null, null, null, frame, "Setting attributes of " + value, "Attribute", 0, null, false);
         setJDialogOptions(jdab);
         jdab.setSize(650, 375);
         GraphicLib.centerOnParent(jdab);

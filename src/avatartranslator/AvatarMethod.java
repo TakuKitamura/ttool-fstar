@@ -52,6 +52,8 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarMethod extends AvatarElement{
+	
+	protected boolean implementationProvided;
     
 	protected LinkedList<AvatarAttribute> parameters;
 	protected LinkedList<AvatarAttribute> returnParameters;
@@ -63,6 +65,14 @@ public class AvatarMethod extends AvatarElement{
 		returnParameters = new LinkedList<AvatarAttribute>();
     }
 	
+    public void setImplementationProvided(boolean _imp) {
+    	implementationProvided = _imp;
+    }
+    
+    public boolean isImplementationProvided() {
+    	return implementationProvided;
+    }
+    
 	public void addParameter(AvatarAttribute _attribute) {
 		parameters.add(_attribute);
 	}

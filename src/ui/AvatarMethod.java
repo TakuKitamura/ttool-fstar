@@ -66,6 +66,8 @@ public class AvatarMethod {
     protected String types[];
 	
 	protected String returnType;
+	
+	protected boolean implementationProvided;
     
 	
     public AvatarMethod(String _id, String _types[], String _typeIds[]) {
@@ -73,6 +75,8 @@ public class AvatarMethod {
 		types = _types;
 		typeIds = _typeIds;
 		returnType = "";
+		implementationProvided = false;
+		 TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
     }
 	
 	public AvatarMethod(String _id, String _types[], String _typeIds[], String _returnType) {
@@ -80,8 +84,18 @@ public class AvatarMethod {
 		types = _types;
 		typeIds = _typeIds;
 		returnType = _returnType;
+		implementationProvided = false;
+		 TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
     }
-	
+    
+    public boolean isImplementationProvided() {
+    	return implementationProvided;
+    }
+    
+     public void setImplementationProvided(boolean _imp) {
+     	 TraceManager.addDev("Implementation of " + this + " is now set to: " + _imp);
+    	implementationProvided = _imp;
+    }
 	
 	
 	// An operation must be of the form: "id(type id0, type id1, ...)"
@@ -348,6 +362,15 @@ public class AvatarMethod {
 		return method;
     }
     
+    public String toSaveString() {
+    	String ret = "";
+		if (implementationProvided) {
+			TraceManager.addDev("Implementation provided for " + toString());
+			ret += "$";
+		}
+		return ret + toString();
+    }
+    
     // Comparison on id only
     public boolean equals(Object o) {
         if (!(o instanceof AvatarMethod)) {
@@ -392,6 +415,8 @@ public class AvatarMethod {
     }*/
     
     public AvatarMethod makeClone() {
-        return isAValidMethod(toString());
+    	AvatarMethod am = isAValidMethod(toString());
+    	am.setImplementationProvided(isImplementationProvided());
+        return am;
     }
 }

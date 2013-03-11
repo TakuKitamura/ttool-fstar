@@ -59,6 +59,9 @@ import ui.avatarsmd.*;
 
 
 public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree {
+
+	private static String GLOBAL_CODE_INFO = "(global code)";
+
     private int textY1 = 3;
     private String stereotype = "block";
 	
@@ -79,6 +82,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	
 	// TAttribute, AvatarMethod, AvatarSignal
 	protected Vector myAttributes, myMethods, mySignals;
+	protected String [] globalCode;
+	
 	
 	public String oldValue;
     
@@ -374,6 +379,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			}
 		}
 		
+		// Global code
+		if (hasGlobalCode()) {
+			w = g.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
+			if ((w < (2*textX + width)) && (y+cpt < height)) {
+				g.drawString(GLOBAL_CODE_INFO, x + (width - w)/2, y +cpt);
+			}
+			
+		}
+		
+		
+		
 		g.setFont(fold);
 		
         /*int w  = g.getFontMetrics().stringWidth(ster);
@@ -481,7 +497,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			}
 		}
 		
-		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, myMethods, mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab);
+		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, myMethods, mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true);
         setJDialogOptions(jdab);
         jdab.setSize(650, 375);
         GraphicLib.centerOnParent(jdab);
@@ -490,6 +506,11 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //if (oldValue.equals(value)) {
 		//return false;
         //}
+        
+        if (!jdab.hasBeenCancelled()) {
+        	globalCode = jdab.getGlobalCode();
+        }
+        
 		((AvatarBDPanel)tdp).updateAllSignalsOnConnectors();
 		rescaled = true;
 		return true;
@@ -640,7 +661,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //System.out.println("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Method value=\"");
-            sb.append(am.toString());
+            sb.append(am.toSaveString());
             sb.append("\" />\n");
         }
 		for(int i=0; i<mySignals.size(); i++) {
@@ -652,11 +673,22 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             sb.append(as.toString());
             sb.append("\" />\n");
         }
+        if (hasGlobalCode()) {
+			for(int i=0; i<globalCode.length; i++) {
+				sb.append("<globalCode value=\"");
+				sb.append(GTURTLEModeling.transformString(globalCode[i]));
+				sb.append("\" />\n");
+			}
+		}
         sb.append("</extraparam>\n");
         return new String(sb);
     }
     
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    	
+			String s;
+			String tmpGlobalCode = "";
+			
         try {
             NodeList nli;
             Node n1, n2;
@@ -668,6 +700,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			String signal;
 			AvatarMethod am;
 			AvatarSignal as;
+			boolean implementation = false;
+			
             
             //System.out.println("Loading attributes");
             //System.out.println(nl.toString());
@@ -714,8 +748,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 if (method.equals("null")) {
                                     method = "";
                                 }
+                                if (method.startsWith("$")) {
+                                	implementation = true;
+                                	method = method.substring(1, method.length());
+                                } else {
+                                	implementation = false;
+                                }
+                                
 								am = AvatarMethod.isAValidMethod(method);
 								if (am != null) {
+									TraceManager.addDev("Setting to " + implementation + " the implementation of " + am);
+									am.setImplementationProvided(implementation);
 									myMethods.add(am);
 								}
                             }
@@ -733,6 +776,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 									TraceManager.addDev("Invalid signal:" + signal);
 								}
                             }
+                            if (elt.getTagName().equals("globalCode")) {
+                                //System.out.println("Analyzing line");
+                                s = elt.getAttribute("value");
+                                if (s.equals("null")) {
+                                    s = "";
+                                }
+                                tmpGlobalCode += GTURTLEModeling.decodeString(s) + "\n";
+                            }
                         }
                     }
                 }
@@ -741,11 +792,50 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+        
+        if (tmpGlobalCode.trim().length() == 0) {
+			globalCode = null;
+		} else {
+			globalCode = Conversion.wrapText(tmpGlobalCode);
+		}
     }
     
 	public String getBlockName() {
 		return value;
     }
+    
+    public boolean hasGlobalCode() {
+		if (globalCode == null) {
+			return false;
+		}
+		
+		if (globalCode.length == 0) {
+			return false;
+		}
+		
+		String tmp;
+		for(int i=0; i<globalCode.length; i++) {
+			tmp = globalCode[i].trim();
+			if (tmp.length()>0) {
+			if (!(tmp.equals("\n"))) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public String getGlobalCode() {
+		if (globalCode == null) {
+			return null;
+		}
+		String ret = "";
+		for(int i=0; i<globalCode.length; i++) {
+			ret += globalCode[i] + "\n";
+		}
+		return ret;
+	}
     
 	
     

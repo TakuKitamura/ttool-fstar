@@ -133,6 +133,11 @@ public class AVATAR2CPOSIX {
 		avspec.removeCompositeStates();
 		avspec.removeTimers();
 		
+		
+		if (avspec.hasApplicationCode()) {
+			mainFile.appendToBeforeMainCode(avspec.getApplicationCode());
+		}
+		
 		makeMainMutex();
 	
 		makeSynchronousChannels();
@@ -222,7 +227,7 @@ public class AVATAR2CPOSIX {
 		
 		String tmp = block.getGlobalCode();
 		if (tmp != null) {
-			taskFile.addToHeaderCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+			taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
 		}
 		
 		defineAllStates(block, taskFile);
@@ -275,6 +280,11 @@ public class AVATAR2CPOSIX {
 	private void makeMethod(AvatarBlock _block, AvatarMethod _am, Vector<String> _allNames, TaskFile _taskFile) {
 		String ret = "";
 		LinkedList<AvatarAttribute> list;
+		LinkedList<AvatarAttribute> listA;
+		
+		
+		
+		
 		String nameMethod = _block.getName() + "__" +_am.getName();
 		
 		for(String s: _allNames) {
@@ -335,10 +345,47 @@ public class AVATAR2CPOSIX {
 			}
 		}
 		
+		listA = list;
 		list = _am.getListOfReturnAttributes();
 		if (list.size() != 0) {
-			ret += "return 0;" + CR;
-		} 
+			// Returns the first attribute. If not possible, return 0;
+			// Implementation is provided by the user?
+			// In that case, no need to generate the code!
+			if (_am.isImplementationProvided()) {
+				ret += "return _userImplemented_" + nameMethod + "(";
+				cpt = 0;
+				for(AvatarAttribute aaa: listA) {
+					if (cpt != 0) {
+						ret += ", ";
+					}
+					ret += aaa.getName();
+					cpt ++;
+				}
+				ret+= ");" + CR;
+				
+			} else {
+				
+				if (listA.size() >0) {
+					ret += "return " + listA.get(0).getName() + ";" + CR;
+				} else {
+					ret += "return 0;" + CR;
+				}
+			}
+		} else {
+			if (_am.isImplementationProvided()) {
+				ret += "_userImplemented_" + nameMethod + "(";
+				cpt = 0;
+				for(AvatarAttribute aaa: listA) {
+					if (cpt != 0) {
+						ret += ", ";
+					}
+					ret += aaa.getName();
+					cpt ++;
+				}
+				ret+= ");" + CR;
+				
+			}			
+		}
 		ret += "}" + CR + CR;
 		_taskFile.addToMainCode(ret + CR);
 		
@@ -732,6 +779,12 @@ public class AVATAR2CPOSIX {
 		
 		mainFile.appendToMainCode("/* Initializing mutex of messages */" + CR); 
 		mainFile.appendToMainCode("initMessages();" + CR); 
+		
+		
+		if (avspec.hasApplicationCode()) {
+			mainFile.appendToMainCode("/* User initialization */" + CR); 
+			mainFile.appendToMainCode("__user_init();" + CR); 
+		}
 		
 		
 		mainFile.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));

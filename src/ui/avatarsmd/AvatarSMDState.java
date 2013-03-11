@@ -58,7 +58,7 @@ import ui.window.*;
 
 
 public class AvatarSMDState extends TGCScalableWithInternalComponent implements CheckableAccessibility, CheckableInvariant, SwallowTGComponent, SwallowedTGComponent, PartOfInvariant, PartOfHighInvariant, WithAttributes {
-    private static String GLOBAL_CODE_INFO = "(global code)";
+    //private static String GLOBAL_CODE_INFO = "(global code)";
 	private static String ENTRY_CODE_INFO = "(entry code)";
 	
 	private int textY1 = 3;
@@ -69,7 +69,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	private boolean displayText = true;
 	private int textX = 7;
 	
-	protected String [] globalCode;
+	//protected String [] globalCode;
 	protected String [] entryCode;
 	
 	
@@ -249,13 +249,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			
 			g.setColor(ColorManager.AVATAR_CODE);
 			int step = h + h;
-			if (hasGlobalCode()) {
+			/*if (hasGlobalCode()) {
 				w = g.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
 				if ((w < (2*textX + width)) && (step + 1 < height)) {
 					g.drawString(GLOBAL_CODE_INFO, x + (width - w)/2, y +step);
 				}
 				step = step + h;
-			}
+			}*/
 			if (hasEntryCode()) {
 				w = g.getFontMetrics().stringWidth(ENTRY_CODE_INFO);
 				if ((w < (2*textX + width)) && (step + 1 < height)) {
@@ -314,7 +314,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			getValue());*/
 			
 			
-		JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting transition parameters", value,  globalCode, entryCode);
+		JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting transition parameters", value, entryCode);
 		jdas.setSize(600, 550);
 		GraphicLib.centerOnParent(jdas);
 		jdas.show(); // blocked until dialog has been closed
@@ -359,7 +359,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			}*/
 		}
 		
-		globalCode = jdas.getGlobalCode();
+		//globalCode = jdas.getGlobalCode();
 		entryCode =  jdas.getEntryCode();
 		
 		return true;
@@ -575,13 +575,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		
-		if (hasGlobalCode()) {
+		/*if (hasGlobalCode()) {
 			for(int i=0; i<globalCode.length; i++) {
 				sb.append("<globalCode value=\"");
 				sb.append(GTURTLEModeling.transformString(globalCode[i]));
 				sb.append("\" />\n");
 			}
-		}
+		}*/
 		
 		if (hasEntryCode()) {
 			for(int i=0; i<entryCode.length; i++) {
@@ -597,7 +597,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 		//System.out.println("*** load extra synchro *** " + getId());
-		String tmpGlobalCode = "";
+		//String tmpGlobalCode = "";
 		String tmpEntryCode = "";
 		
 		try {
@@ -618,14 +618,14 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 							elt = (Element)n2;
 							
 							
-							if (elt.getTagName().equals("globalCode")) {
+							/*if (elt.getTagName().equals("globalCode")) {
                                 //System.out.println("Analyzing line");
                                 s = elt.getAttribute("value");
                                 if (s.equals("null")) {
                                     s = "";
                                 }
                                 tmpGlobalCode += GTURTLEModeling.decodeString(s) + "\n";
-                            }
+                            }*/
 							
 							if (elt.getTagName().equals("entryCode")) {
                                 //System.out.println("Analyzing line");
@@ -645,11 +645,11 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		}
 
 		
-		if (tmpGlobalCode.trim().length() == 0) {
+		/*if (tmpGlobalCode.trim().length() == 0) {
 			globalCode = null;
 		} else {
 			globalCode = Conversion.wrapText(tmpGlobalCode);
-		}
+		}*/
 		if (tmpEntryCode.trim().length() == 0) {
 			entryCode = null;
 		} else {
@@ -660,7 +660,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		
 	}	
 	
-	public boolean hasGlobalCode() {
+	/*public boolean hasGlobalCode() {
 		if (globalCode == null) {
 			return false;
 		}
@@ -680,7 +680,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		}
 		
 		return false;
-	}
+	}*/
 	
 	public boolean hasEntryCode() {
 		if (entryCode == null) {
@@ -704,7 +704,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 		return false;
 	}
 	
-	public String getGlobalCode() {
+	/*public String getGlobalCode() {
 		if (globalCode == null) {
 			return null;
 		}
@@ -713,7 +713,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			ret += globalCode[i] + "\n";
 		}
 		return ret;
-	}
+	}*/
+	
 	public String getEntryCode() {
 		if (entryCode == null) {
 			return null;

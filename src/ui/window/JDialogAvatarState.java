@@ -57,7 +57,7 @@ import ui.*;
 public class JDialogAvatarState extends javax.swing.JDialog implements ActionListener  {
     
 	
-	protected String [] globalCode;
+	//protected String [] globalCode;
 	protected String [] entryCode;
     
     private boolean cancelled = false;
@@ -75,12 +75,13 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
     private JButton cancelButton;
 	
 	// Panel of code and files
-	protected JTextArea jtaEntryCode, jtaGlobalCode;
+	protected JTextArea jtaEntryCode; 
+	//jtaGlobalCode;
     
     
     /** Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogAvatarState(Frame _f, String _title, String _name, String[] _globalCode, String[] _entryCode) {
+    public JDialogAvatarState(Frame _f, String _title, String _name, String[] _entryCode) {
         
         super(_f, _title, true);
        
@@ -88,7 +89,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 		
 	
 		
-		globalCode = _globalCode;
+		//globalCode = _globalCode;
 		entryCode = _entryCode;
 		
 		
@@ -143,7 +144,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 		panel2 = new JPanel();
         panel2.setLayout(gridbag2);
            
-        panel2.setBorder(new javax.swing.border.TitledBorder("Code"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Entry code"));
 		// guard
         c2.weighty = 1.0;
         c2.weightx = 1.0;
@@ -153,7 +154,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 		c2.gridwidth = GridBagConstraints.REMAINDER;
         c2.gridheight = 1;
        
-		panel2.add(new JLabel("Global code:"), c2);
+		/*panel2.add(new JLabel("Global code:"), c2);
 		jtaGlobalCode = new JTextArea();
         jtaGlobalCode.setEditable(true);
         jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
@@ -168,9 +169,9 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
         jtaGlobalCode.setFont(new Font("times", Font.PLAIN, 12));
         JScrollPane jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 200));
-        panel2.add(jsp, c2);
+        panel2.add(jsp, c2);*/
         
-		panel2.add(new JLabel("Entry code"), c2);
+		//panel2.add(new JLabel("Entry code"), c2);
 		jtaEntryCode = new JTextArea();
         jtaEntryCode.setEditable(true);
         jtaEntryCode.setMargin(new Insets(10, 10, 10, 10));
@@ -183,7 +184,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
 		}
         jtaEntryCode.append(code);
         jtaEntryCode.setFont(new Font("times", Font.PLAIN, 12));
-        jsp = new JScrollPane(jtaEntryCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane jsp = new JScrollPane(jtaEntryCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
          jsp.setPreferredSize(new Dimension(300, 200));
         //jsp.setPreferredSize(new Dimension(300, 300));
         panel2.add(jsp, c2);
@@ -233,7 +234,7 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
     
     public void closeDialog() {
 		
-		globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
+		//globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
 		entryCode =  Conversion.wrapText(jtaEntryCode.getText());
         dispose();
     }
@@ -255,9 +256,9 @@ public class JDialogAvatarState extends javax.swing.JDialog implements ActionLis
         dispose();
     }
 	
-	public String[] getGlobalCode() {
+	/*public String[] getGlobalCode() {
 		return globalCode;
-	}
+	}*/
 	
 	public String[] getEntryCode() {
 		return entryCode;

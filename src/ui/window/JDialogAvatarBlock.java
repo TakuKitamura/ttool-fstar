@@ -57,9 +57,16 @@ import myutil.*;
 
 
 public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
+	
     private Vector attributes, attributesPar, forbidden, initValues;
 	private Vector methods, methodsPar, signals, signalsPar;
     private boolean checkKeyword, checkJavaKeyword;
+    
+    private boolean cancelled = false;
+    
+    protected String [] globalCode;
+    protected JTextArea jtaGlobalCode;
+    protected boolean hasGlobalCode;
     
     private JPanel panel1, panel2;
     
@@ -89,6 +96,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton upMethodButton;
     private JButton downMethodButton;
     private JButton removeMethodButton;
+    private JCheckBox implementationProvided;
 	
 	// Signals
 	private boolean hasSignals = true;
@@ -106,12 +114,13 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogAvatarBlock(Vector _attributes, Vector _methods, Vector _signals, Vector _forbidden, Frame f, String title, String attrib, int _tab) {
+    public JDialogAvatarBlock(Vector _attributes, Vector _methods, Vector _signals, Vector _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
 		methodsPar = _methods;
 		signalsPar = _signals;
+		globalCode = _globalCode;
 		
 		
 		if (methodsPar == null) {
@@ -123,6 +132,13 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 			signalsPar = new Vector();
 			hasSignals = false;
 		}
+		
+		hasGlobalCode = _hasGlobalCode;
+		if (globalCode == null) {
+			globalCode = new String[1];
+			globalCode[0] = "";
+		}
+		
 		
         forbidden = _forbidden;
         initValues = new Vector();
@@ -163,6 +179,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		JPanel panelAttr = new JPanel(new BorderLayout());
 		JPanel panelMethod = new JPanel(new BorderLayout());
 		JPanel panelSignal = new JPanel(new BorderLayout());
+		JPanel panelCode;
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
@@ -170,6 +187,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		GridBagLayout gridbag4 = new GridBagLayout();
 		GridBagLayout gridbag5 = new GridBagLayout();
 		GridBagLayout gridbag6 = new GridBagLayout();
+		GridBagLayout gridbag7 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
@@ -177,6 +195,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		GridBagConstraints c4 = new GridBagConstraints();
 		GridBagConstraints c5 = new GridBagConstraints();
 		GridBagConstraints c6 = new GridBagConstraints();
+		GridBagConstraints c7 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -336,6 +355,15 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel3.add(new JLabel(" "), c3);
         
         // fourth line panel3
+        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c3.fill = GridBagConstraints.BOTH;
+        c3.gridheight = 3;
+        implementationProvided = new JCheckBox("Implementation provided by user");
+        implementationProvided.setSelected(false);
+        panel3.add(implementationProvided, c3);
+        
+        
+        // fifth line panel3
         c3.gridheight = 1;
         c3.fill = GridBagConstraints.HORIZONTAL;
         addMethodButton = new JButton("Add method");
@@ -466,6 +494,38 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         removeSignalButton.addActionListener(this);
         panel6.add(removeSignalButton, c6);
         
+        // Prototyping
+        panelCode = new JPanel();
+        panelCode.setLayout(gridbag7);
+           
+        panelCode.setBorder(new javax.swing.border.TitledBorder("Global code of block"));
+		// guard
+        c7.weighty = 1.0;
+        c7.weightx = 1.0;
+        c7.gridwidth = 1;
+		c7.gridheight = 1;
+        c7.fill = GridBagConstraints.BOTH;
+		c7.gridwidth = GridBagConstraints.REMAINDER;
+        c7.gridheight = 1;
+       
+		panelCode.add(new JLabel("Global code:"), c7);
+		jtaGlobalCode = new JTextArea();
+        jtaGlobalCode.setEditable(true);
+        jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
+        jtaGlobalCode.setTabSize(3);
+		String files = "";
+		if (globalCode != null) {
+			for(int i=0; i<globalCode.length; i++) {
+				files += globalCode[i] + "\n";
+			}
+		}
+        jtaGlobalCode.append(files);
+        jtaGlobalCode.setFont(new Font("times", Font.PLAIN, 12));
+        JScrollPane jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 200));
+        panelCode.add(jsp, c2);
+        
+        
         // main panel;
 		panelAttr.add(panel1, BorderLayout.WEST);
 		panelAttr.add(panel2, BorderLayout.EAST);
@@ -481,6 +541,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 			panelSignal.add(panel5, BorderLayout.WEST);
 			panelSignal.add(panel6, BorderLayout.EAST);
 			tabbedPane.addTab("Signals", panelSignal);
+		}
+		
+		if (hasGlobalCode) {
+			tabbedPane.addTab("Prototyping", panelCode);
 		}
 		
 		tabbedPane.setSelectedIndex(tab);
@@ -662,6 +726,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		//TraceManager.addDev("addMethod");
         String s = methodText.getText();
 		AvatarMethod am = AvatarMethod.isAValidMethod(s);
+		am.setImplementationProvided(implementationProvided.isSelected());
 		AvatarMethod amtmp;
         
         if (am != null) {
@@ -829,6 +894,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     
     
     public void closeDialog() {
+    	cancelled = false;
         attributesPar.removeAllElements();
         for(int i=0; i<attributes.size(); i++) {
             attributesPar.addElement(attributes.elementAt(i));
@@ -841,10 +907,18 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         for(int i=0; i<signals.size(); i++) {
             signalsPar.addElement(signals.elementAt(i));
         }
+        globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
         dispose();
     }
     
+    public boolean hasBeenCancelled() {
+		return cancelled;
+	}
+    
+    
+    
     public void cancelDialog() {
+    	cancelled = true;
         dispose();
     }
     
@@ -889,6 +963,8 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         } else {
             AvatarMethod am = (AvatarMethod)(methods.elementAt(i));
             methodText.setText(am.toString());
+            TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
+            implementationProvided.setSelected(am.isImplementationProvided());
             removeMethodButton.setEnabled(true);
             if (i > 0) {
                 upMethodButton.setEnabled(true);
@@ -938,5 +1014,9 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             }
         }
     }
+    
+    public String[] getGlobalCode() {
+		return globalCode;
+	}
     
 }

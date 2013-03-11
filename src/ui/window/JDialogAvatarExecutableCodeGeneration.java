@@ -88,6 +88,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 	private static int selectedRun = 1;
 	private static int selectedCompile = 0;
 	private static int selectedViewTrace = 0;
+	
+	
     
     protected static String pathCode;
     protected static String pathCompiler;
@@ -103,6 +105,8 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
     protected final static int STOPPED = 3;
+    
+    private static 
     
     int mode;
     
@@ -122,8 +126,12 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 	protected JComboBox versionCodeGenerator, units;
     protected JButton showSimulationTrace;
 	
-	private static int selectedUnit = 1;
-	
+	private static int selectedUnit = 2;
+	private static boolean removeCFilesValue = true;
+	private static boolean removeXFilesValue = true;
+	private static boolean debugValue = false;
+	private static boolean tracingValue = true;
+	private static boolean optimizeValue = true;
     
     private Thread t;
     private boolean go = false;
@@ -237,19 +245,19 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         
         removeCFiles = new JCheckBox("Remove .c / .h files");
-        removeCFiles.setSelected(true);
+        removeCFiles.setSelected(removeCFilesValue);
         jp01.add(removeCFiles, c01);
         
         removeXFiles = new JCheckBox("Remove .x files");
-        removeXFiles.setSelected(true);
+        removeXFiles.setSelected(removeXFilesValue);
         jp01.add(removeXFiles, c01);
         
         debugmode = new JCheckBox("Put debug information in generated code");
-        debugmode.setSelected(true);
+        debugmode.setSelected(debugValue);
         jp01.add(debugmode, c01);
 		
 		tracemode = new JCheckBox("Put tracing capabilities in generated code");
-        tracemode.setSelected(true);
+        tracemode.setSelected(tracingValue);
         jp01.add(tracemode, c01);
 		
 		optimizemode = new JCheckBox("Optimize code");
@@ -452,7 +460,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 			makeSelectionCompile();
 		} else if ((evt.getSource() == viewtrace) || (evt.getSource() == viewtracesoclib)) {
 			makeSelectionViewTrace();
-		}
+		} 
     }
     
     public void closeDialog() {
@@ -460,6 +468,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
             stopProcess();
         }
 		optimizeModeSelected = optimizemode.isSelected();
+		removeCFilesValue = removeCFiles.isSelected();
+		removeXFilesValue = removeXFiles.isSelected();
+		debugValue = debugmode.isSelected();
+		tracingValue = tracemode.isSelected();
         dispose();
     }
 	
