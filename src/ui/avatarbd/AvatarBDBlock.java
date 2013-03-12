@@ -497,9 +497,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			}
 		}
 		
-		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, myMethods, mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true);
+		String mainCode = null;
+		TDiagramPanel ttdp = getTDiagramPanel();
+		if (ttdp instanceof AvatarBDPanel) {
+			mainCode = ((AvatarBDPanel)(ttdp)).getMainCode();
+		}
+		JDialogAvatarBlock jdab = new JDialogAvatarBlock(myAttributes, myMethods, mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
-        jdab.setSize(650, 375);
+        jdab.setSize(650, 575);
         GraphicLib.centerOnParent(jdab);
         jdab.setVisible(true); // blocked until dialog has been closed
         //makeValue();
@@ -509,6 +514,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         
         if (!jdab.hasBeenCancelled()) {
         	globalCode = jdab.getGlobalCode();
+        	String tmp = jdab.getMainCode();
+        	if (tmp != null) {
+        		((AvatarBDPanel)(ttdp)).setMainCode(tmp);
+        	}
         }
         
 		((AvatarBDPanel)tdp).updateAllSignalsOnConnectors();

@@ -98,6 +98,14 @@ public class AvatarDesignPanelTranslator {
 		
 		blocks.addAll(_blocks);
 		AvatarSpecification as = new AvatarSpecification("avatarspecification", adp);
+		
+		if (adp != null) {
+			AvatarBDPanel abdp = adp.getAvatarBDPanel();
+			if (abdp != null) {
+				as.addApplicationCode(abdp.getMainCode());
+			}
+		}
+		
 		createBlocks(as, blocks);
 		createRelationsBetweenBlocks(as, blocks);
 		makeBlockStateMachines(as);

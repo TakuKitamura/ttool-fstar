@@ -56,12 +56,29 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
+	
+	private static final String DEFAULT_MAIN = "void __user_init() {\n}\n\n";
+	
+	private String mainCode;
+	
     
     public  AvatarBDPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
+        mainCode = DEFAULT_MAIN;
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);*/
+    }
+    
+    public void setMainCode(String s) {
+    	if (s == null) {
+    		s = "";
+    	}
+    	mainCode = s;
+    }
+    
+    public String getMainCode() {
+    	return mainCode;
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
@@ -117,7 +134,7 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
     
     public String getXMLHead() {
-        return "<AVATARBlockDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() +" >";
+        return "<AVATARBlockDiagramPanel name=\"" + name + "\"" + sizeParam()  +" >\n" + displayParam();
     }
     
     public String getXMLTail() {
@@ -186,300 +203,49 @@ public class AvatarBDPanel extends TDiagramPanel {
     
     public String displayParam() {
         String s = "";
-        /*if (channelsVisible) {
-            s += " channels=\"true\"";
-        } else {
-            s += " channels=\"false\"";
-        }
-        if (eventsVisible) {
-            s += " events=\"true\"";
-        } else {
-            s += " events=\"false\"";
-        }
-        if (requestsVisible) {
-            s += " requests=\"true\"";
-        } else {
-            s += " requests=\"false\"";
-        }*/
+        String [] tmp =  Conversion.wrapText(mainCode);
         
+        for(int i=0; i<tmp.length; i++) {
+        	s += "<MainCode value=\"" + GTURTLEModeling.transformString(tmp[i]) + "\"/>\n";
+        }
+       
         return s;
     }
     
-    /*public boolean isConnectedToTasks(TMLCompositionOperator co) {
-        if ((getTask1ToWhichIamConnected(co) != null) && (getTask2ToWhichIamConnected(co) != null)) {
-            return true;
-        }
-        return false;
-    }
     
-    public TMLTaskInterface getTask1ToWhichIamConnected(TMLCompositionOperator co) {
-        TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
-        TGComponent tgc;
-        //System.out.println("tmlan t1?");
-        if (tgctmlan != null) {
-            //System.out.println("tmlan found t1");
-            tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP1());
-            if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
-                return (TMLTaskInterface) tgc;
-            }
-        }
-        return null;
-    }
-    
-    public TMLTaskInterface getTask2ToWhichIamConnected(TMLCompositionOperator co) {
-        TGConnectorTMLAssociationNav tgctmlan = getTGConnectorAssociationOf(co);
-        TGComponent tgc;
-        //System.out.println("tmlan t2?");
-        if (tgctmlan != null) {
-            //System.out.println("tmlan found t2");
-            tgc = getTopComponentToWhichBelongs(tgctmlan.getTGConnectingPointP2());
-            if ((tgc != null) && (tgc instanceof TMLTaskInterface)) {
-                return (TMLTaskInterface) tgc;
-            }
-        }
-        return null;
-    }
-    
-    public TGConnectorTMLAssociationNav getTGConnectorAssociationOf(TMLCompositionOperator tcd) {
-        int i;
-        TGConnectingPoint p1, p2;
-        TGConnector tgco;
-        TGConnectorTMLCompositionOperator tgcoco;
-        TGComponent tgc;
-        
-        for(i=0; i<tcd.getNbConnectingPoint(); i++) {
-            //System.out.println("titi");
-            p1 = tcd.tgconnectingPointAtIndex(i);
-            tgco = getConnectorConnectedTo(p1);
-            if (tgco != null) {
-                //System.out.println("Found tgco");
-            }
-            if ((tgco != null) && (tgco instanceof TGConnectorTMLCompositionOperator)){
-                //System.out.println("toto");
-                tgcoco = (TGConnectorTMLCompositionOperator)tgco;
-                if (p1 == tgcoco.getTGConnectingPointP1()) {
-                    p2 = tgcoco.getTGConnectingPointP2();
-                } else {
-                    p2 = tgcoco.getTGConnectingPointP1();
-                }
-                
-                // p2 now contains the connecting point of a association
-                tgc = getComponentToWhichBelongs(p2);
-                if ((tgc != null) && (!p2.isFree()) && (tgc instanceof TGConnectorTMLAssociationNav)) {
-                     //System.out.println("tutu");
-                    return (TGConnectorTMLAssociationNav)tgc;
-                }
-            }
-        }
-        return null;
-    }
-    
-    public boolean connectedToVisible(TGConnectorTMLAssociationNav tgconav) {
-        TGConnectorTMLCompositionOperator tgcoco = tgconav.getTGConnectorTMLCompositionOperator();
-        if (tgcoco == null) {
-            return true;
-        }
-        return connectedToVisible(tgcoco);
-    }
-    
-    public boolean connectedToVisible(TGConnectorTMLCompositionOperator tgcoco) {
-        TGConnectingPoint p2 = tgcoco.getTGConnectingPointP2();
-        TGComponent tgc = getComponentToWhichBelongs(p2);
-        if (tgc instanceof TMLCompositionOperator) {
-            return ((TMLCompositionOperator)tgc).isToggledVisible();
-        }
-        return false;
-    }
-    
-    /*public void makePostLoadingProcessing() throws MalformedModelingException {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDTObject) {
-                ((TCDTObject)tgc).postLoadingProcessing();
-            }
-        }
-    }
-    
-    public TCDTData findTData(String name) {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDTData) {
-                if (tgc.getValue().equals(name)) {
-                    return (TCDTData)tgc;
-                }
-            }
-        }
-        
-        return null;
-    }
-    
-    public TCDTClass getTCDTClass(String name) {
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TCDTClass) {
-                if (((TCDTClass)tgc).getClassName().equals(name)) {
-                    return (TCDTClass)tgc;
-                }
-            }
-        }
-        
-        return null;
-    }
-    
-    public boolean areAllVisible() {
-        return channelsVisible && eventsVisible && requestsVisible;
-    }
-    
-    public boolean areChannelsVisible() {
-        return channelsVisible;
-    }
-    
-    public boolean areEventsVisible() {
-        return eventsVisible;
-    }
-    
-    public boolean areRequestsVisible() {
-        return requestsVisible;
-    }
-    
-    public void setChannelsVisible(boolean b) {
-        channelsVisible = b;
-    }
-    
-    public void setEventsVisible(boolean b) {
-        eventsVisible = b;
-    }
-    
-    public void setRequestsVisible(boolean b) {
-        requestsVisible = b;
-    }*/
+  
     
     public void loadExtraParameters(Element elt) {
         String s;
-        //System.out.println("Extra parameter");
-        /*try {
-            s = elt.getAttribute("channels");
-            //System.out.println("S=" + s);
-            if (s.compareTo("false") ==0) {
-                setChannelsVisible(false);
-            } else {
-                setChannelsVisible(true);
-            }
-            s = elt.getAttribute("events");
-            if (s.compareTo("false") ==0) {
-                setEventsVisible(false);
-            } else {
-                setEventsVisible(true);
-            }
-            s = elt.getAttribute("requests");
-            if (s.compareTo("false") ==0) {
-                setRequestsVisible(false);
-            } else {
-                setRequestsVisible(true);
-            }
-            
+       
+        NodeList nl = elt.getElementsByTagName("MainCode");
+        TraceManager.addDev("Extra parameter of block diagram nbOfElements: " + nl.getLength());
+        Node n;
+        
+        
+        
+        try {
+        	if (nl.getLength()>0) {
+        		mainCode = "";
+        	}
+        	for(int i=0; i<nl.getLength(); i++) {
+        		n = nl.item(i);
+        		if (n.getNodeType() == Node.ELEMENT_NODE) {
+        			s = ((Element)n).getAttribute("value");
+        			TraceManager.addDev("Found value=" + s);
+        			if (s != null) {
+        				mainCode += s + "\n";
+        			}
+        		}
+        	
+        	}
         } catch (Exception e) {
             // Model was saved in an older version of TTool
-            //System.out.println("older format");
-            setChannelsVisible(true);
-            setEventsVisible(true);
-            setRequestsVisible(true);
-        }*/
+            TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
+            
+        }
     }
 	
-	/*public ArrayList<String> getAllTMLTaskNames(String _topname) {
-		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLTaskOperator) {
-				list.add(_topname + "::" + ((TMLTaskOperator)tgc).getTaskName());
-            }
-        }
-		
-		return list;
-	}
-	
-	public ArrayList<String> getAllTMLCommunicationNames(String _topname) {
-		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
-		String name = "";
-		String type = "";
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLCompositionOperator) {
-				if (tgc instanceof TMLEventOperator) {
-					name = ((TMLEventOperator)tgc).getEventName();
-					type = "Event";
-				}
-				if (tgc instanceof TMLChannelOperator) {
-					name = ((TMLChannelOperator)tgc).getChannelName();
-					type = "Channel";
-				}
-				if (tgc instanceof TMLRequestOperator) {
-					name = ((TMLRequestOperator)tgc).getRequestName();
-					type = "Request";
-				}
-				
-				list.add(_topname + "::" + name + " (" + type + ")");
-            }
-        }
-		
-		return list;
-	}
-	
-	public ArrayList<String> getAllNonMappedTMLTaskNames(String _topName, TMLArchiDiagramPanel _tadp, boolean ref, String _name) {
-		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
-		String name;
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLTaskOperator) {
-				name = ((TMLTaskOperator)tgc).getTaskName();
-				if (ref && name.equals(_name)) {
-					list.add(_topName + "::" + name);
-				} else {
-					if (!_tadp.isMapped(_topName,  name)) {
-							list.add(_topName + "::" + name);
-					}
-				}
-            }
-        }
-		
-		return list;
-	}
-	
-	public TMLTaskOperator getTaskByName(String _name) {
-		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
-        
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLTaskOperator) {
-				if (((TMLTaskOperator)tgc).getTaskName().equals(_name)) {
-					return ((TMLTaskOperator)tgc);
-				}
-            }
-        }
-		
-		return null;
-	}*/
 	
 	public void updateAllSignalsOnConnectors() {
 		TGComponent tgc;

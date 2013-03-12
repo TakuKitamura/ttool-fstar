@@ -3960,6 +3960,11 @@ public class GTURTLEModeling {
 		if (tdp instanceof TMLArchiDiagramPanel) {
 			((TMLArchiDiagramPanel)tdp).loadExtraParameters(elt);
 		}
+		
+		
+		if (tdp instanceof AvatarBDPanel) {
+			((AvatarBDPanel)tdp).loadExtraParameters(elt);
+		}
 
 		//TraceManager.addDev("Element" + elt.toString());
 		// Loads components of the class diagram

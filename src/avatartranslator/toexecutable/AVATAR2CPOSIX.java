@@ -135,7 +135,9 @@ public class AVATAR2CPOSIX {
 		
 		
 		if (avspec.hasApplicationCode()) {
+			mainFile.appendToBeforeMainCode("/* User code */\n");
 			mainFile.appendToBeforeMainCode(avspec.getApplicationCode());
+			mainFile.appendToBeforeMainCode("\n/* End of User code */\n\n");
 		}
 		
 		makeMainMutex();

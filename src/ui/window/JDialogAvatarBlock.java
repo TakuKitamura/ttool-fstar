@@ -67,6 +67,8 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     protected String [] globalCode;
     protected JTextArea jtaGlobalCode;
     protected boolean hasGlobalCode;
+    protected String mainCode;
+    protected JTextArea jtaMainCode;
     
     private JPanel panel1, panel2;
     
@@ -114,13 +116,14 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogAvatarBlock(Vector _attributes, Vector _methods, Vector _signals, Vector _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode) {
+    public JDialogAvatarBlock(Vector _attributes, Vector _methods, Vector _signals, Vector _forbidden, Frame f, String title, String attrib, int _tab, String []_globalCode, boolean _hasGlobalCode, String _mainCode) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
 		methodsPar = _methods;
 		signalsPar = _signals;
 		globalCode = _globalCode;
+		mainCode = _mainCode;
 		
 		
 		if (methodsPar == null) {
@@ -343,6 +346,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panel3.add(new JLabel("method:"), c3);
         
         // second line panel3
+        c3.fill = GridBagConstraints.HORIZONTAL;
         methodText = new JTextField();
         methodText.setColumns(50);
         methodText.setEditable(true);
@@ -436,6 +440,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         
         // second line panel5
 		c5.gridwidth = 1;
+		c5.fill = GridBagConstraints.HORIZONTAL;
 		Vector v = new Vector();
 		v.add("in");
 		v.add("out");
@@ -498,7 +503,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         panelCode = new JPanel();
         panelCode.setLayout(gridbag7);
            
-        panelCode.setBorder(new javax.swing.border.TitledBorder("Global code of block"));
+        panelCode.setBorder(new javax.swing.border.TitledBorder("Global code"));
 		// guard
         c7.weighty = 1.0;
         c7.weightx = 1.0;
@@ -507,8 +512,27 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
         c7.fill = GridBagConstraints.BOTH;
 		c7.gridwidth = GridBagConstraints.REMAINDER;
         c7.gridheight = 1;
+        
+        panelCode.add(new JLabel("Global code of application:"), c7);
+		jtaMainCode = new JTextArea();
+        jtaMainCode.setEditable(true);
+        jtaMainCode.setMargin(new Insets(10, 10, 10, 10));
+        jtaMainCode.setTabSize(3);
+        String tmp = "";
+        if (mainCode != null) {
+        	tmp = mainCode;
+        }
+		
+        jtaMainCode.append(tmp);
+        if (mainCode == null) {
+        	jtaMainCode.setEnabled(false);
+        }
+        jtaMainCode.setFont(new Font("times", Font.PLAIN, 12));
+        JScrollPane jsp = new JScrollPane(jtaMainCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 200));
+        panelCode.add(jsp, c2);
        
-		panelCode.add(new JLabel("Global code:"), c7);
+		panelCode.add(new JLabel("Global code of block:"), c7);
 		jtaGlobalCode = new JTextArea();
         jtaGlobalCode.setEditable(true);
         jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
@@ -521,7 +545,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
 		}
         jtaGlobalCode.append(files);
         jtaGlobalCode.setFont(new Font("times", Font.PLAIN, 12));
-        JScrollPane jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 200));
         panelCode.add(jsp, c2);
         
@@ -908,6 +932,7 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
             signalsPar.addElement(signals.elementAt(i));
         }
         globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
+        mainCode = jtaMainCode.getText();
         dispose();
     }
     
@@ -1017,6 +1042,10 @@ public class JDialogAvatarBlock extends javax.swing.JDialog implements ActionLis
     
     public String[] getGlobalCode() {
 		return globalCode;
+	}
+	
+	public String getMainCode() {
+		return mainCode;
 	}
     
 }
