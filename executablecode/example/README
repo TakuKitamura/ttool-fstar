@@ -2,7 +2,7 @@
 $ javac *.java
 
 * Start the microwave interface
-$ java Microwave
+$ java MainMicrowave
 
 * Open the microwave model with code in TTool
 * Generate the code, compile it, execute it

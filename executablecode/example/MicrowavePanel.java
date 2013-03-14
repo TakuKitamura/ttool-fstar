@@ -69,6 +69,7 @@ public class MicrowavePanel extends JPanel  {
 		
 		if (doorOpened) {
 			// Inside the oven
+			int dec = -5;
 			g.setColor(Color.white);
 			g.fillRoundRect(140, 140, 370, 270, 20, 20);
 			g.setColor(Color.black);
@@ -79,6 +80,23 @@ public class MicrowavePanel extends JPanel  {
 			g.drawLine(510, 140, 450, 190);
 			g.drawLine(510, 410, 450, 360);
 			g.drawLine(140, 410, 200, 360);
+			
+			//Door
+			g.setColor(Color.white);
+			g.fillRect(95+dec, 110, 35, 330);
+			g.setColor(Color.black);
+			g.drawRect(95+dec, 110, 35, 330);
+			g.fillRect(95+dec, 110, 10, 330);
+			g.setColor(Color.gray);
+			g.fillRect(65+dec, 100, 25, 350);
+			g.fillRect(65+dec, 150, 35, 30);
+			g.fillRect(65+dec, 370, 35, 30);
+			g.setColor(Color.black);
+			g.drawRect(65+dec, 100, 25, 350);
+			
+			
+			
+			
 		} else {
 			
 		}
