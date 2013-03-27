@@ -862,12 +862,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 			g.setColor(ColorManager.ACCESSIBILITY);
 			//GraphicLib.setMediumStroke(g);
 			if (mutex == MUTEX_NOT_YET_STUDIED) {
-				g.drawString("mutual exclusion?", x+width+1, y);
+				g.drawString("mutual exclusion?", x+width+1, y-12);
 			} else if (mutex == MUTEX_UNKNOWN) {
-				g.drawString("mutual exclusion: cannot be proved", x+width+1, y);
+				g.drawString("mutual exclusion: cannot be proved", x+width+1, y-12);
 			} else if (mutex == MUTEX_OK) {
 				g.setColor(ColorManager.MUTEX_OK);
-				g.drawString("mutual exclusion: OK", x+width+1, y);
+				g.drawString("mutual exclusion: OK", x+width+1, y-12);
 			}
 			
 			/*g.drawLine(x+width-2, y+2, x+width-6, y+6);
@@ -878,12 +878,12 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		if (masterMutex) {
 			g.setColor(ColorManager.ACCESSIBILITY);
 			if (mutexWith == MUTEX_NOT_YET_STUDIED) {
-				g.drawString("mutual exclusion with others?", x+width+1, y+12);
+				g.drawString("mutual exclusion with others?", x+width+1, y);
 			} else if (mutexWith == MUTEX_UNKNOWN) {
-				g.drawString("No mutual exclusion with others found", x+width+1, y+12);
+				g.drawString("No mutual exclusion with others found", x+width+1, y);
 			} else if (mutexWith == MUTEX_OK) {
 				g.setColor(ColorManager.MUTEX_OK);
-				g.drawString("Mutual exclusion with others found", x+width+1, y+12);
+				g.drawString("Mutual exclusion with others found", x+width+1, y);
 			}
 		}
 		
