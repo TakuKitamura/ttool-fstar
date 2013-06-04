@@ -101,7 +101,7 @@ public class BoolExpressionEvaluator {
 		tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
 		tmp = Conversion.replaceAllString(tmp, "<=", ";").trim();
 		if (tmp.indexOf("=") > -1) {
-			errorMessage = "Not a boolean expression because it contains = operators";
+			errorMessage = "Not a boolean expression because it contains \"=\" operators";
 			return false;
 		}
 		
@@ -146,12 +146,12 @@ public class BoolExpressionEvaluator {
 		}
 		
 		if (result == TRUE_VALUE) {
-			TraceManager.addDev("equal true");
+			//TraceManager.addDev("equal true");
 			return true;
 		}
 		
 		if (result == FALSE_VALUE) {
-			TraceManager.addDev("equal false");
+			//TraceManager.addDev("equal false");
 			return false;
 		}
 		

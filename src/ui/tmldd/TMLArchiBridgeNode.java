@@ -73,7 +73,7 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
         width = 250;
         height = 100;
         minWidth = 100;
-        minHeight = 50;
+        minHeight = 35;
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];

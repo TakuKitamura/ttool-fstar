@@ -98,7 +98,6 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	private AvatarSpecificationSimulation ass;
 	
 	// Transactions
-	private int maxNbOfTransactions = 1000;
 	private int drawnTransactions = 1000;
 	
 	// My scroll panel
@@ -115,6 +114,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	// Graphics
 	private Graphics2D lastGraphics;
 	
+	private boolean trace = true;
+	
 	
 	
     public AvatarSpecificationSimulationSDPanel(AvatarSpecificationSimulation _ass) {
@@ -130,6 +131,14 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		
 		addMouseMotionListener(this);
     }
+    
+    public void setNbOfDrawnTransactions(int _d) {
+    	drawnTransactions = _d;
+    }
+    
+    public void setTrace(boolean b) {
+    	trace = b;
+    }
 	
 	public void setMyScrollPanel(JScrollPane _jsp) {
 		jsp = _jsp;
@@ -140,6 +149,12 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	}
 	
 	protected void paintComponent(Graphics g) {
+		if (!trace) {
+			g.clearRect(0, 0, getWidth(), getHeight());
+			return;
+		}
+		
+		//TraceManager.addDev("Painting components");
 		lastGraphics = (Graphics2D)g;
 		super.paintComponent(g);
 		int currentY = spaceAtTop;
@@ -174,6 +189,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 		if (drawInfo) {
 			drawInfo(g);
 		}
+		
+		//TraceManager.addDev("Painting components: done");
     }
 	
 	protected void scrollToLowerPosition() {

@@ -391,7 +391,7 @@ public class AvatarSimulationBlock  {
 										result += evaluateBoolExpression(value, lastTransaction.attributeValues);
 									} 
 									
-									TraceManager.addDev("Adding value:" + result);
+									//TraceManager.addDev("Adding value:" + result);
 									parameters.add(result);
 								} catch (Exception e) {
 									TraceManager.addDev("EXCEPTION on adding value " + aaos);
@@ -643,7 +643,7 @@ public class AvatarSimulationBlock  {
 			cpt ++;
 		}
 		
-		TraceManager.addDev("Evaluating expression: " + act);
+		//TraceManager.addDev("Evaluating expression: " + act);
 		
 		return (int)(new IntExpressionEvaluator().getResultOf(act));
 	}

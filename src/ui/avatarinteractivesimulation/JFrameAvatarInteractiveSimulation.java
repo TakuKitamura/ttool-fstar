@@ -65,6 +65,7 @@ import avatartranslator.directsimulation.*;
 
 
 public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
+	private static int TRACED_TRANSACTIONS = 1000;
 	
 	
 	private static String buttonStartS = "Start simulator";
@@ -98,8 +99,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	// Commands
 	JPanel main, mainTop, commands, save, state, infos; 
 	//outputs, cpuPanel; // from MGUI
-	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo, executeEmptyTransition, executeStateEntering;
+	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo, executeEmptyTransition, executeStateEntering, traceInSD;
 	JTabbedPane commandTab, infoTab;
+	protected JTextField displayedTransactionsText;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
@@ -111,12 +113,14 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private TGComponent selectedComponentForTransaction;
 	private AvatarSimulationBlock previousBlock;
 	
+	private int invokedLater = 0;
+	
 	
 	
 	//private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	
 	// Status elements
-	JLabel status, time, info;
+	JLabel statuss, status, time, info;
 	
 	// Task elements
 	//TaskVariableTableModel tvtm;
@@ -216,6 +220,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	private void initSimulation() {
+		TraceManager.addDev("Init simulation");
 		runningTGComponents = new LinkedList<TGComponent>();
 		nbOfAllExecutedElements = 0;
 		resetMetElements();
@@ -224,6 +229,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		simulationRunning = false;
 		simulationThread = new Thread(this);
 		simulationThread.start();
+		TraceManager.addDev("Init simulation done");
 	}
 	
 	public synchronized void setSimulationRunning() {
@@ -234,17 +240,20 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		simulationRunning = false;
 	}
 	
-	public void run() {
-		if (simulationRunning == true) {
-			if (ass == null) {
-				return;
-			}
-			
-			Vector<AvatarSimulationPendingTransaction> ll = ass.getPendingTransitions();
-			
-			try {
-				listPendingTransactions.clearSelection();
-				selectedComponentForTransaction = null;
+	
+	public synchronized void updatePending() {
+		invokedLater = 0;
+		//TraceManager.addDev("Simulation is already running -> beg of code:" + Thread.currentThread());
+		if (ass == null) {
+			return;
+		}
+		
+		try {
+		
+			Vector<AvatarSimulationPendingTransaction> ll = (Vector<AvatarSimulationPendingTransaction>)(ass.getPendingTransitions().clone());
+		
+			listPendingTransactions.clearSelection();
+			selectedComponentForTransaction = null;
 			if (ll != null) {
 				listPendingTransactions.setListData(ll);
 				int random = (int)(Math.floor((Math.random()*ll.size())));
@@ -252,7 +261,15 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			} else {
 				listPendingTransactions.setListData(new Vector<AvatarSimulationPendingTransaction>());
 			}
-			} catch (Exception e) {}
+		} catch (Exception e) {}
+		
+		//TraceManager.addDev("Simulation is already running -> end of code:" + Thread.currentThread());
+	}
+	
+	public void run() {
+		if (simulationRunning == true) {
+			updatePending();
+			
 		} else {
 			setSimulationRunning();
 			previousTime = System.currentTimeMillis();
@@ -262,66 +279,13 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 	}
 	
-	/*public void run() {
-		resetThread = false;
-		killThread = false;
-		
-		previousTime = System.currentTimeMillis();
-		
-		if (ass.getState() ==  AvatarSpecificationSimulation.INITIALIZE) {
-			ass.runSimulation();
-		}
-		
-		if (killThread) {
-			return;
-		}
-		
-		waitForResetOrKillThread();
-		
-		if (killThread) {
-			return;
-		}
-		
-		if (resetThread) {
-			TraceManager.addDev("Simulation reseted");
-			runningTGComponents = new LinkedList<TGComponent>();
-			nbOfAllExecutedElements = 0;
-			resetMetElements();
-			ass.resetSimulation();
-			previousTime = System.currentTimeMillis();
-			run();
-		}
-		TraceManager.addDev("Simulation thread ended");
-	}
-	
-	public synchronized void waitForResetOrKillThread() {
-		TraceManager.addDev("waitForResetOrKillThread resetThread=" + resetThread + " killThread=" + killThread);
-		while ((resetThread == false) && (killThread == false)){
-			try {
-				wait();
-			} catch (Exception e) {}
-		}
-		TraceManager.addDev("EndWaitForResetOrKillThread");
-	}
-	
-	public synchronized void killThread() {
-		killThread = true;
-		notifyAll();
-	}
-	
-	public synchronized void resetThread() {
-		resetThread = true;
-		TraceManager.addDev("Reset thread = " + resetThread);
-		notifyAll();
-	}*/
-	
 	
 	
 	private JLabel createStatusBar()  {
-        status = new JLabel("Ready...");
-		status.setForeground(ColorManager.InteractiveSimulationText);
-        status.setBorder(BorderFactory.createEtchedBorder());
-        return status;
+        statuss = new JLabel("Ready...");
+		statuss.setForeground(ColorManager.InteractiveSimulationText);
+        statuss.setBorder(BorderFactory.createEtchedBorder());
+        return statuss;
     }
 	
 	public void makeComponents() {
@@ -345,11 +309,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		
 		// statusBar
-        status = createStatusBar();
-		framePanel.add(status, BorderLayout.SOUTH);
+        statuss = createStatusBar();
+		framePanel.add(statuss, BorderLayout.SOUTH);
         
         // Mouse handler
-        mouseHandler = new MouseHandler(status);
+        mouseHandler = new MouseHandler(statuss);
 		
 		JPanel mainpanel = new JPanel(new BorderLayout());
 		//mainpanel.setBackground(ColorManager.InteractiveSimulationBackground);
@@ -552,7 +516,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		time.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(time);
 		jp02.add(new JLabel(" "));
-		jp02.add(new JLabel("nb Of transactions:"));
+		jp02.add(new JLabel("Nb of transactions:"));
 		info = new JLabel("Unknown");
 		info.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
 		jp02.add(info);
@@ -602,6 +566,50 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		animate.addItemListener(this);
 		animate.setSelected(true);
+		
+		
+		c01.gridwidth = 1; 
+		traceInSD = new JCheckBox("Trace in sequence diagram");
+		jp01.add(traceInSD, c01);
+		traceInSD.addItemListener(this);
+		traceInSD.setSelected(true);
+		jp01.add(new JLabel("Traced transactions:"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		displayedTransactionsText = new JTextField(""+TRACED_TRANSACTIONS, 10);
+		jp01.add(displayedTransactionsText, c01);
+		//displayedTransactionsText.addActionListener(this);
+		displayedTransactionsText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+				
+				public void warn() {
+					try {
+					int nb = Integer.parseInt(displayedTransactionsText.getText());
+					if ((nb > 0) && (nb <= 10000)){
+						statuss.setText("Nb of traced transactions modified to: " + nb);
+						if (sdpanel != null) {
+							sdpanel.setNbOfDrawnTransactions(nb);
+							if (sdpanel.isVisible()) {
+								sdpanel.repaint();
+							}
+						}
+						return;
+					}
+					} catch (Exception e) {
+					}
+					statuss.setText("Unknown / bad number: " + displayedTransactionsText.getText());
+				}
+		});
+		
+		
+		
 		
 		executeEmptyTransition = new JCheckBox("Automatically execute empty transitions");
 		jp01.add(executeEmptyTransition, c01);
@@ -905,12 +913,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	public void setMode(int _mode) {
 		busyMode = _mode;
 		//TraceManager.addDev("****************** mode set to " + busyMode);
-		//TraceManager.addDev("# of Pending transactions: " + ass.getPendingTransitions().size());
+		if (ass != null) {
+			if (ass.getPendingTransitions() != null) {
+				//TraceManager.addDev("# of Pending transactions: " + ass.getPendingTransitions().size());
+			}
+		}
 		setAll();
 		
 		
 		// Diagram animation?
 		if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
+			//TraceManager.addDev("Animating");
 			updateMetElements();
 			updateTransactionsTable();
 			animateDiagrams();
@@ -921,6 +934,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void updateTransactionAndTime(int _nbOfTransactions, long clockValue) {
+		//TraceManager.addDev("Update transactions and time");
 		long timeNow = System.currentTimeMillis();
 		if (timeNow - previousTime > SPACE_UPDATE_TIME) {
 			previousTime = timeNow;
@@ -1059,8 +1073,12 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 	}
 	
-	public void setContentOfListOfPendingTransactions() {
-		EventQueue.invokeLater(this);
+	public synchronized void setContentOfListOfPendingTransactions() {
+		if (invokedLater == 0) {
+			invokedLater = 1;
+			//TraceManager.addDev("Invoke later:" + invokedLater);
+			EventQueue.invokeLater(this);
+		}
 	}
 	
 	public void resetMetElements() {
@@ -1118,12 +1136,14 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				}
 				if (openDiagram.isSelected()) {
 					if (ass.getPreviousBlock() != null) {
+						//TraceManager.addDev("Open SMD diag" + ass.getPreviousBlock().getName());
 						mgui.openAVATARSMD(ass.getPreviousBlock().getName());
 					}
 				}
 			}
 			mgui.setAvatarAnimate(animate.isSelected());
 		}
+		//TraceManager.addDev("End animate diag");
 	}
 	
 	public boolean isRunningComponent(TGComponent _tgc) {
@@ -1361,6 +1381,8 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			zoomOut();
 			return;
 			
+		} else if (evt.getSource() == displayedTransactionsText) {
+			TraceManager.addDev("Entered text:" + displayedTransactionsText.getText());
 		}
 		
 		
@@ -1421,7 +1443,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() == animate) {
-			TraceManager.addDev("Animate is ... " + animate.isSelected());
+			//TraceManager.addDev("Animate is ... " + animate.isSelected());
 			animateDiagrams();
 			diploids.setEnabled(animate.isSelected());
 			animateWithInfo.setEnabled(animate.isSelected());
@@ -1432,7 +1454,13 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			ass.setExecuteEmptyTransition(executeEmptyTransition.isSelected());
 		} else if (e.getSource() == executeStateEntering) {
 			ass.setExecuteStateEntering(executeStateEntering.isSelected());
-		} 
+		} else if  (e.getSource() == traceInSD) {
+			if (sdpanel != null) {
+				sdpanel.setTrace(traceInSD.isSelected());
+				sdpanel.repaint();
+			}
+			
+		}
 		
 	}
 	

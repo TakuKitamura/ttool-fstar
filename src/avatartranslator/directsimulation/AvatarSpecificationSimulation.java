@@ -810,7 +810,7 @@ public class AvatarSpecificationSimulation  {
 				AvatarTransition atr = (AvatarTransition)(tr.elementToExecute);
 				if (!(atr.hasDelay()) && !(atr.hasCompute()) && !(atr.hasActions())){
 					if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
-                          TraceManager.addDev("Setting to silent");
+                          //TraceManager.addDev("Setting to silent");
 						tr.isSilent = true;
 						return tr;
 					}
@@ -818,7 +818,7 @@ public class AvatarSpecificationSimulation  {
 			// State entering?
 			} else if (((tr.elementToExecute instanceof AvatarState) ||  (tr.elementToExecute instanceof AvatarStopState)) && (executeStateEntering)) {
 				if (nbOfTransactions(tr.asb, _pendingTransactions) < 2) {
-                     TraceManager.addDev("Setting to silent");
+                     //TraceManager.addDev("Setting to silent");
 					tr.isSilent = true;
 					return tr;
 				}
