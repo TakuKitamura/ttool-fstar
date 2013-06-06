@@ -329,7 +329,7 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 				if (mgui.gtm.generateProVerifFromAVATAR(pathCode, stateReachability.isSelected(), translationOfBooleanFunction.isSelected())) {
 					jta.append("ProVerif code generation done\n");
 				} else {
-					jta.append("Could not generate SystemC file\n");
+					jta.append("Could not generate proverif code\n");
 				}
 			}
 				
