@@ -268,7 +268,7 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			 avatarFVProVerif.setVisible(b);
 		 }
 		 //avatarFVStaticAnalysis.setVisible(b);
-		 avatarFVStaticAnalysis.setVisible(false);
+		 avatarFVStaticAnalysis.setVisible(b);
 		 avatarCodeGeneration.setVisible(b);
 		 
 		 if (genrtlotos != null) {
