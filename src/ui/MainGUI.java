@@ -557,6 +557,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
 			actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
+			if (mainBar != null) {
+				mainBar.activateSearch(false);
+			}
 			break;
 		case OPENED:
 			actions[TGUIAction.ACT_MERGE].setEnabled(true);
@@ -583,6 +586,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM].setEnabled(true);
 			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS].setEnabled(true);
 			actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS].setEnabled(true);
+			actions[TGUIAction.ACT_DELETE].setEnabled(true);
+			if (mainBar != null) {
+				mainBar.activateSearch(true);
+			}
 			
 			break;
 		case MODEL_OK:
@@ -752,13 +759,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		case CUTCOPY_OK:
 			actions[TGUIAction.ACT_CUT].setEnabled(true);
 			actions[TGUIAction.ACT_COPY].setEnabled(true);
-			actions[TGUIAction.ACT_DELETE].setEnabled(true);
+			//actions[TGUIAction.ACT_DELETE].setEnabled(true);
 			actions[TGUIAction.ACT_SELECTED_CAPTURE].setEnabled(true);
 			break;
 		case CUTCOPY_KO:
 			actions[TGUIAction.ACT_CUT].setEnabled(false);
 			actions[TGUIAction.ACT_COPY].setEnabled(false);
-			actions[TGUIAction.ACT_DELETE].setEnabled(false);
+			//actions[TGUIAction.ACT_DELETE].setEnabled(false);
 			actions[TGUIAction.ACT_SELECTED_CAPTURE].setEnabled(false);
 			break;
 		case PASTE_OK:
@@ -825,6 +832,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         for(int	i=0; i<TGUIAction.NB_ACTION; i++) {
             actions[i].setEnabled(b);
         }
+    }
+    
+    public void search(String text) {
+    	
+    	Vector<Object> elements = new Vector<Object>();
+    	
+    	TURTLEPanel panel;
+     	 for(int i=0; i<tabs.size(); i++) {
+     	 	 panel = (TURTLEPanel)(tabs.get(i));
+     	 	 panel.searchForText(text.toLowerCase(), elements);
+     	 }
+     	 
+     	 gtm.setElementsOfSearchTree(elements);
+     	 //TraceManager.addDev("Found " + elements.size() + " elements");
+    	dtree.forceUpdate();
     }
     
     

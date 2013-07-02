@@ -36,72 +36,65 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class TAction
- * Definition of an action to be used in Menu, toolbar, etc.
- * Creation: 15/12/2003
- * @version 1.0 15/12/2003
+ * Class SearchTree
+ * Creation: 29/06/2013
+ * Version 1.0 29/06/2013
  * @author Ludovic APVRILLE
- * @see 
+ * @see
  */
 
-package ui;
+package ui.tree;
 
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
+import java.util.*;
 
-//import java.net.URL;
+import ui.*;
+import myutil.*;
 
-//import javax.swing.AbstractAction;
-//import javax.swing.Action;
-import javax.swing.ImageIcon;
-
-//import javax.swing.event.EventListenerList;
-
-
-public class TAction  {
-	
-	// Action parameters
-	public String ACTION_COMMAND_KEY; 
-   	public String NAME;
-   	public ImageIcon SMALL_ICON;
-   	public ImageIcon LARGE_ICON;
-  	public String SHORT_DESCRIPTION;
-  	public String LONG_DESCRIPTION;
-  	public int MNEMONIC_KEY;
-  	public char KEY;
-  	public boolean hasControl = false;
-
- 	/** 
-	* Creates a new TAction
-  	*/
-     	public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription, String longDescription, int mneKey) {
-     		ACTION_COMMAND_KEY = ActionCommand;
-     		NAME = name;
-     		SMALL_ICON = smallIcon;
-     		LARGE_ICON = largeIcon;
-     		SHORT_DESCRIPTION = shortDescription;
-     		LONG_DESCRIPTION = longDescription;
-     		MNEMONIC_KEY = mneKey;
-     		KEY = (char)mneKey;
-     		hasControl = false;
-	}
-	
-	public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription, String longDescription, int mneKey, boolean _hasControl) {
-     		ACTION_COMMAND_KEY = ActionCommand;
-     		NAME = name;
-     		SMALL_ICON = smallIcon;
-     		LARGE_ICON = largeIcon;
-     		SHORT_DESCRIPTION = shortDescription;
-     		LONG_DESCRIPTION = longDescription;
-     		MNEMONIC_KEY = mneKey;
-     		KEY = (char)mneKey;
-     		hasControl = _hasControl;
-	}
-        
-        public void setName(String name) {
-            NAME = name;
+public class SearchTree implements GenericTree {
+    
+    private MainGUI mgui;
+    private String name = "Search result";
+    private Vector<Object> elements;
+    
+    public SearchTree(MainGUI _mgui) {
+        mgui = _mgui;
+    }
+    
+    public void setElements(Vector<Object> _elements) {
+    	elements = _elements;
+    	TraceManager.addDev("Found in search " + elements.size() + " elements");
+    }
+    
+    // TREE MANAGEMENT
+    
+    public String toString() {
+        return name;
+    }
+    
+    public int getChildCount() {
+      //System.out.println("Get child count validation");
+      if (elements == null) {
+      	  return 0;
+      }
+      return elements.size();
+    }
+    
+    public Object getChild(int index) {
+    //System.out.println("Get child validation");
+        if (elements != null) {
+            return elements.get(index);
         }
-	
-   
-  
+        return null;
+    }
+    
+    public int getIndexOfChild(Object child) {
+    	//System.out.println("Get index of child validation");
+    	if (elements != null) {
+    		return elements.indexOf(child);
+    	}
+    	
+    	return -1;
+    	
+    }
+    
 }

@@ -494,6 +494,9 @@ public	class JMenuBarTurtle extends JMenuBar	{
             menuItem.addMouseListener(mgui.mouseHandler);
         }
         
+        menuItem = codeG.add(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        
         // View
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_BIRDEYES_EMB]);
         menuItem.addMouseListener(mgui.mouseHandler);

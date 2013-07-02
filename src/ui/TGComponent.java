@@ -110,7 +110,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	// AVATAR ID
 	private int AVATARID = -1;
 	private boolean AVATAR_running = false;
-	private boolean AVATAR_met = false;
+	private int AVATAR_met = 0;
 	
 	// TEPE ID
 	private int TEPEID = -1;
@@ -636,8 +636,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 	}
 	
-	public void setAVATARMet(boolean _b) {
-		AVATAR_met = _b;
+	public void setAVATARMet(int _metNb) {
+		AVATAR_met = _metNb;
 	}
 	
 	public void drawAVATARMet(Graphics g) {
@@ -658,6 +658,8 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 		g.drawLine(myx+mywidth, myy+1+dech/2, myx+mywidth + decw/3, myy+dech);
 		g.drawLine(myx+mywidth + decw/3, myy+dech, myx+mywidth + decw, myy);
+		
+		g.drawString(""+AVATAR_met, myx+mywidth + decw, myy);
 		
 	}
 	
@@ -979,7 +981,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 		if (tdp.AVATAR_ANIMATE_ON) {
 			//TraceManager.addDev("Avatar animate?");
-			if (AVATAR_met) {
+			if (AVATAR_met>0) {
 				drawAVATARMet(g);
 			}
 			int ret = tdp.getMGUI().isRunningAvatarComponent(this);
@@ -2656,8 +2658,11 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
     
     // saving
-    
     public StringBuffer saveInXML() {
+    	return saveInXML(true);
+    }
+    
+    public StringBuffer saveInXML(boolean saveSubComponents) {
         StringBuffer sb = null;
         boolean b = (father == null);
         if (b) {
@@ -2690,7 +2695,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
         } else {
             sb.append(XML_SUB_TAIL);
         }
-        sb.append(translateSubComponents());
+        
+        if (saveSubComponents) {
+        	sb.append(translateSubComponents());
+        }
         
         return sb;
     }
@@ -2905,6 +2913,18 @@ public abstract class TGComponent implements CDElement, GenericTree {
     
     public ImageIcon getImageIcon() {
         return myImageIcon;
+    }
+    
+    public void searchForText(String text, Vector<Object> elements) {
+    	String save = saveInXML(false).toString().toLowerCase();
+    	if (save.indexOf(text) >= 0) {
+    		//TraceManager.addDev("Found " + this);
+    		elements.add(this);
+    	}
+    	
+    	for(int i=0; i<nbInternalTGComponent; i++) {
+            tgcomponent[i].searchForText(text, elements);
+        }
     }
     
     

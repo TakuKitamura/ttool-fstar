@@ -1918,7 +1918,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
     
     public void makeDelete() {
-        removeAllSelectedComponents();
+    	//TraceManager.addDev("make delete");
+    	if (nextSelectedComponent() != null) {
+    		removeAllSelectedComponents();
+        } else if (componentPointed != null) {
+        	removeComponent(componentPointed);
+        } else {
+        	return;
+        }
         mode = NORMAL;
         mgui.setMode(MainGUI.CUTCOPY_KO);
         mgui.setMode(MainGUI.EXPORT_LIB_KO);
@@ -3717,6 +3724,29 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		if (tdmm != null) {
 			tdmm.stopAddingConnector();
 		}
+	}
+	
+	public void searchForText(String text, Vector<Object> elements) {
+		TraceManager.addDev("Searching for " + text + " in " + this);
+		
+		Iterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		String save;
+        
+        while(iterator.hasNext()) {
+        	 tgc = (TGComponent)(iterator.next());
+        	 tgc.searchForText(text, elements);
+        	 /*save = tgc.saveInXML().toString().toLowerCase();
+        	 if (save.indexOf(text) >= 0) {
+        	 	 TraceManager.addDev("Found " + tgc);
+        	 	 elements.add(tgc);
+        	 	 CheckingError ce = new CheckingError(CheckingError.INFO, tgc.toString());
+        	 	 ce.setTDiagramPanel(this);
+        	 	 ce.setTGComponent(tgc);
+        	 	 elements.add(ce);
+        	 }*/
+        }
+		
 	}
     
     

@@ -46,9 +46,9 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui;
 
 import javax.swing.*;
-//import javax.swing.event.*;
-//import java.awt.*;
-//import java.awt.event.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
 
 import myutil.*;
 
@@ -57,7 +57,7 @@ import myutil.*;
 * @author Ludovic APVRILLE
 * @see	*/
 
-public	class JToolBarMainTurtle extends JToolBar	{
+public	class JToolBarMainTurtle extends JToolBar implements ActionListener	{
 	// Avatar
 	JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration;
 	
@@ -65,9 +65,14 @@ public	class JToolBarMainTurtle extends JToolBar	{
 	JButton genrtlotos, genlotos, genuppaal, gendesign;
 	JButton checkcode, simulation, validation;
 	JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genjava, nc;
+	
+	JTextField search;
+	
+	MainGUI mgui;
     
-    public JToolBarMainTurtle(MainGUI mgui) {
+    public JToolBarMainTurtle(MainGUI _mgui) {
         super();
+        mgui = _mgui;
         buildToolBar(mgui);
     }
     
@@ -253,8 +258,14 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			addSeparator();
         }
         
-		showAvatarActions(false);
+        addSeparator();
         
+		showAvatarActions(false);
+		 search = new JTextField("", 10);
+		 search.setEnabled(false);
+		 add(search);
+		search.addActionListener(this);
+		  
         
     }
 	
@@ -396,5 +407,21 @@ public	class JToolBarMainTurtle extends JToolBar	{
 			 gendesign.setVisible(b);
 		 }
 		 
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == search) {
+			String text = search.getText();
+			TraceManager.addDev("Searching elements with" + text);
+			if (text.length()>0) {
+				search.setEnabled(false);
+				mgui.search(text);
+				search.setEnabled(true);
+			}
+		}
+	}
+	
+	public void activateSearch(boolean enabled) {
+		search.setEnabled(enabled);
 	}
 } // Class

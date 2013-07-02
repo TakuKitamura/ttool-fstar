@@ -55,6 +55,7 @@ import myutil.*;
 public class AvatarSimulationTransaction  {
   
 	public static long ID;
+	public static Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements;
 	public static LinkedList<AvatarStateMachineElement> allExecutedElements;
 	
     public AvatarBlock block;
@@ -96,12 +97,21 @@ public class AvatarSimulationTransaction  {
 	public static void reinit() {
 		ID = 0;
 		allExecutedElements = new LinkedList<AvatarStateMachineElement>();
+		hashOfAllElements = new Hashtable<AvatarStateMachineElement, Integer>(); 
 	}
 	
 	public static void addExecutedElement(AvatarStateMachineElement _asme) {
 		if (!allExecutedElements.contains(_asme)) {
 			allExecutedElements.add(_asme);
 		}
+		
+		Integer val = hashOfAllElements.get(_asme);
+		if (val == null) {
+			hashOfAllElements.put(_asme, new Integer(1));
+		} else {
+			hashOfAllElements.put(_asme, new Integer(1+val.intValue()));
+		}
+		
 	}
 	
 	public static synchronized long setID() {

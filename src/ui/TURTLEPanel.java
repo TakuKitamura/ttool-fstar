@@ -60,7 +60,7 @@ public abstract class TURTLEPanel implements GenericTree {
     protected MainGUI mgui;
     public Vector toolbars;
     public JPanel toolBarPanel;
-    public Vector panels;
+    public Vector<TDiagramPanel> panels;
     protected ChangeListener cl;
     protected TDiagramPanel tdp;
     
@@ -241,7 +241,7 @@ public abstract class TURTLEPanel implements GenericTree {
         
         Object o = panels.elementAt(src);
         panels.removeElementAt(src);
-        panels.insertElementAt(o, dst);
+        panels.insertElementAt((TDiagramPanel)o, dst);
         
         tabbedPane.setSelectedIndex(dst);
     }
@@ -310,6 +310,23 @@ public abstract class TURTLEPanel implements GenericTree {
 		for(int i=0; i<panels.size(); i++) {
 			panelAt(i).resetAllDIPLOIDs();
 		}
+	}
+	
+	public void searchForText(String text, Vector<Object> elements) {
+		if (panelAt(0) != null) {
+			String s = saveHeaderInXml().toLowerCase();
+			if (s.indexOf(text) >= 0) {
+				elements.add(this);
+				/*CheckingError ce = new CheckingError(CheckingError.INFO, "Diagram");
+				ce.setTDiagramPanel(this.panelAt(0));
+				elements.add(ce);*/
+			}
+		}
+		
+		
+		for(TDiagramPanel tdp: panels) {
+    		tdp.searchForText(text, elements);
+    	}
 	}
 	
     

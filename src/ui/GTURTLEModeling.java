@@ -174,6 +174,7 @@ public class GTURTLEModeling {
 	private int nbTPN;
 
 	private ValidationDataTree vdt;
+	private SearchTree st;
 
 	private Vector checkingErrors;
 	private Vector warnings;
@@ -224,6 +225,7 @@ public class GTURTLEModeling {
 		invariants = new LinkedList<Invariant>();
 
 		vdt = new ValidationDataTree(mgui);
+		st = new SearchTree(mgui);
 
 		/*if (!Charset.isSupported("UTF-8")) {
                         ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
@@ -1139,10 +1141,12 @@ public class GTURTLEModeling {
 	}
 
 	public Object getChild(int index) {
-		if (index < panels.size()) {
+		if (index < panels.size()-1) {
 			return panels.elementAt(index);
-		} else {
+		} else if (index == panels.size()-1) {
 			return vdt;
+		} else {
+			return st;
 		}
 
 	}
@@ -5894,6 +5898,10 @@ public class GTURTLEModeling {
 		}
 		TraceManager.addDev("the EBRDD:\n" + ebrdd.toString());
 		return true;
+	}
+	
+	public void setElementsOfSearchTree(Vector<Object> elements) {
+		st.setElements(elements);
 	}
 
 }

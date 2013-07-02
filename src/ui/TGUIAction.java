@@ -522,7 +522,11 @@ public class TGUIAction extends AbstractAction {
         putValue(Action.LONG_DESCRIPTION, actions[id].LONG_DESCRIPTION);
         //putValue(Action.MNEMONIC_KEY, new Integer(actions[id].MNEMONIC_KEY));
         if (actions[id].MNEMONIC_KEY != 0) {
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].MNEMONIC_KEY, java.awt.event.InputEvent.CTRL_MASK));
+        	if (actions[id].hasControl) {
+        		putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY, java.awt.event.InputEvent.CTRL_MASK));
+            } else {
+            	putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(actions[id].KEY));
+            }
         }
         putValue(Action.ACTION_COMMAND_KEY, actions[id].ACTION_COMMAND_KEY);
         
@@ -561,7 +565,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X');
         actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C');
         actions[ACT_PASTE] = new TAction("paste-command", "Paste",IconManager.imgic334, IconManager.imgic335, "Paste", "Paste - if possible - previously cut / copied components at the minimal position of the currently opened diagram", 'V');
-        actions[ACT_DELETE] = new TAction("delete-command", "Undo", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", 'D');
+        actions[ACT_DELETE] = new TAction("delete-command", "Undo", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_BACK_SPACE);
         
 		actions[ACT_ZOOM_MORE] = new TAction("zoommore-command", "Zoom +", IconManager.imgic316, IconManager.imgic317, "Zoom +", "Zoom +", '0');
         actions[ACT_ZOOM_LESS] = new TAction("zoomless-command", "Zoom -", IconManager.imgic314, IconManager.imgic315, "Zoom -", "Zoom -", '0');
@@ -570,10 +574,10 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_BACKWARD] = new TAction("backward-command", "Undo",IconManager.imgic40, IconManager.imgic41, "Undo", "One operation before", 'Z');
         actions[ACT_FORWARD] = new TAction("forward-command", "Redo", IconManager.imgic42, IconManager.imgic43, "Redo", "One operation ahead", 'Y');
         
-        actions[ACT_FIRST_DIAG] = new TAction("firstdiag-command", "First diagram",IconManager.imgic44, IconManager.imgic45, "First diagram", "Open the first diagram", '1');
-        actions[ACT_BACK_DIAG] = new TAction("backdiag-command", "Previous diagram", IconManager.imgic46, IconManager.imgic47, "Previous diagram", "Open the previous diagram", '2');
-        actions[ACT_NEXT_DIAG] = new TAction("nextdiag-command", "Next diagram",IconManager.imgic48, IconManager.imgic49, "Next diagram", "Open the next diagram", '3');
-        actions[ACT_LAST_DIAG] = new TAction("lastdiag-command", "Last diagram", IconManager.imgic50, IconManager.imgic51, "Last diagram", "Open the last diagram", '4');
+        actions[ACT_FIRST_DIAG] = new TAction("firstdiag-command", "First diagram",IconManager.imgic44, IconManager.imgic45, "First diagram", "Open the first diagram", 'A');
+        actions[ACT_BACK_DIAG] = new TAction("backdiag-command", "Previous diagram", IconManager.imgic46, IconManager.imgic47, "Previous diagram", "Open the previous diagram", 'P', true);
+        actions[ACT_NEXT_DIAG] = new TAction("nextdiag-command", "Next diagram",IconManager.imgic48, IconManager.imgic49, "Next diagram", "Open the next diagram", 'F', true);
+        actions[ACT_LAST_DIAG] = new TAction("lastdiag-command", "Last diagram", IconManager.imgic50, IconManager.imgic51, "Last diagram", "Open the last diagram", 'E');
         
         actions[ACT_TOGGLE_ATTRIBUTES] = new TAction("toggle-att-command", "Show / hide Attributes",IconManager.imgic132, IconManager.imgic132, "Show / hide Attributes", "Show / hide Attributes", '0');
         actions[ACT_TOGGLE_GATES] = new TAction("toggle-gate-command", "Show / hide Gates",IconManager.imgic134, IconManager.imgic134, "Show / hide Gates", "Show / hide Gates", '0');
@@ -588,10 +592,11 @@ public class TGUIAction extends AbstractAction {
         
 		actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');
         
-        actions[ACT_MODEL_CHECKING] = new TAction("checking-command", "Syntax analysis", IconManager.imgic36, IconManager.imgic37, "Syntax analysis",  "Checks that all diagrams follows the TURTLE's syntax", KeyEvent.VK_F5);
+        actions[ACT_MODEL_CHECKING] = new TAction("checking-command", "Syntax analysis", IconManager.imgic36, IconManager.imgic37, "Syntax analysis",  "Checks that all diagrams follows the TURTLE's syntax", '1');
         actions[ACT_GEN_RTLOTOS] = new TAction("gen_rtlotos-command", "Generate RT-LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate RT-LOTOS specification",  "Generates a RT-LOTOS specification from TURTLE diagrams", KeyEvent.VK_F6);
         actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TURTLE diagrams", '0');
-        actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');      actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
+        actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');      
+        actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic92, IconManager.imgic92, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
         actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
 		actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
@@ -603,8 +608,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_AUTS] = new TAction("gen_auts-command", "Generate automata via LOTOS", IconManager.imgic64, IconManager.imgic64, "Generate automata via LOTOS",  "Generates automata from TML Design diagrams, using LOTOS", 0);
         actions[ACT_GEN_DESIGN] = new TAction("gen_design-command", "Generate Design", IconManager.imgic58, IconManager.imgic59, "Generate Design from analysis",  "Generates a TURTLE design from a TURTLE analysis", 0);
         actions[ACT_CHECKCODE] = new TAction("gen_checkcode-command", "Check syntax of formal code", IconManager.imgic312, IconManager.imgic312, "Check syntax of formal code",  "Gives as input to the corresponding tool the lastly generated formal specification", 0);
-        actions[ACT_SIMULATION] = new TAction("gen_sim-command", "Run intensive simulation", IconManager.imgic312, IconManager.imgic312, "Run simulation",  "Generate a simulation trace for the lastly generated formal specification", KeyEvent.VK_F7);
-        actions[ACT_VALIDATION] = new TAction("gen_val-command", "Formal Verification", IconManager.imgic310, IconManager.imgic310, "Formal verification",  "Generate an automata (DTA, RG) from the lastly generated formal specification", KeyEvent.VK_F8);
+        actions[ACT_SIMULATION] = new TAction("gen_sim-command", "Run intensive simulation", IconManager.imgic312, IconManager.imgic312, "Run simulation",  "Generate a simulation trace for the lastly generated formal specification", '0');
+        actions[ACT_VALIDATION] = new TAction("gen_val-command", "Formal Verification", IconManager.imgic310, IconManager.imgic310, "Formal verification",  "Generate an automata (DTA, RG) from the lastly generated formal specification", '0');
         actions[ACT_PROJECTION] = new TAction("proj_val-command", "Make minimization", IconManager.imgic310, IconManager.imgic310, "Make minimization",  "Minimize a RG using Aldebaran", KeyEvent.VK_F9);
         actions[ACT_GRAPH_MODIFICATION] = new TAction("graph_modification-command", "Modify minimized graph", IconManager.imgic310, IconManager.imgic310, "Modify minimized graph",  "Modify minimized graph according to a selected function", 0);
         actions[ACT_BISIMULATION] = new TAction("bisimulation-command", "Make bisimulation (Aldebaran)", IconManager.imgic310, IconManager.imgic310, "Make bisimulation (Aldebaran)",  "Perform bisimulations using Aldebaran", KeyEvent.VK_F10);
@@ -620,11 +625,11 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
         
 		// AVATAR
-		actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '0');
-        actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '0');
-        actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Formal verification with ProVerif (Security)", IconManager.imgic88, IconManager.imgic88, "Formal verification with ProVerif (Security)",  "Formal verification with ProVerif (Security) of the AVATAR design under edition", '0');
-        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Static analysis (invariants)", IconManager.imgic96, IconManager.imgic96, "Static analysis (Invariant)",  "Static analysis (invariants) of the AVATAR design under edition", '0');
-        actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Generation of executable code", IconManager.imgic94, IconManager.imgic94, "Generation of executable code",  "Generation of executable code from AVATAR design under edition", '0');
+		actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
+        actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');
+        actions[ACT_AVATAR_FV_PROVERIF] = new TAction("avatar-formal-verification-proverif", "Formal verification with ProVerif (Security)", IconManager.imgic88, IconManager.imgic88, "Formal verification with ProVerif (Security)",  "Formal verification with ProVerif (Security) of the AVATAR design under edition", '4');
+        actions[ACT_AVATAR_FV_STATICANALYSIS] = new TAction("avatar-formal-verification-staticanalysis", "Static analysis (invariants)", IconManager.imgic96, IconManager.imgic96, "Static analysis (Invariant)",  "Static analysis (invariants) of the AVATAR design under edition", '5');
+        actions[ACT_AVATAR_EXECUTABLE_GENERATION] = new TAction("avatar-executable-generation", "Generation of executable code", IconManager.imgic94, IconManager.imgic94, "Generation of executable code",  "Generation of executable code from AVATAR design under edition", '6');
         
 		
         actions[ACT_VIEW_JAVA] = new TAction("view-java", "Display Java code", IconManager.imgic38, IconManager.imgic39, "Display Java code",  "Display the java code of the pointed component", 0);

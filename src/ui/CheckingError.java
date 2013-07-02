@@ -56,6 +56,7 @@ public class CheckingError {
     
     public final static int STRUCTURE_ERROR = 0;
     public final static int BEHAVIOR_ERROR = 1;
+    public final static int INFO = 2;
     
     private int type;
     private String message;

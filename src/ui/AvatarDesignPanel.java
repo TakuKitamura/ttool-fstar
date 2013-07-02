@@ -104,7 +104,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         panels.add(asmdp);
         tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the state machine of " + s);
-   
+        //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
         return;
     }
     
@@ -131,6 +131,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("AVATAR Design", IconManager.imgic80, toolBarPanel, "Opens the AVATAR Design");
         tabbedPane.setSelectedIndex(0);
+        //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
         
         //jsp.setVisible(true);
  
@@ -172,7 +173,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
 			ListIterator iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
 			while(iterator.hasNext()) {
 				tgc = (TGComponent)(iterator.next());
-				tgc.setAVATARMet(false);
+				tgc.setAVATARMet(0);
 			}
 		}
 		

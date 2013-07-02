@@ -1089,25 +1089,31 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void updateMetElements() {
-		LinkedList<AvatarStateMachineElement> allExecutedElements = AvatarSimulationTransaction.allExecutedElements;
+		Hashtable<AvatarStateMachineElement, Integer> hashOfAllElements  = AvatarSimulationTransaction.hashOfAllElements;
 		TGComponent tgc;
 		Object o;
 		
-		if (allExecutedElements == null) {
+		if (hashOfAllElements == null) {
 			nbOfAllExecutedElements = 0;
 			return;
 		}
 		
-		if (allExecutedElements.size() > nbOfAllExecutedElements) {
-			for(int i=nbOfAllExecutedElements; i<allExecutedElements.size(); i++) {
-				o = allExecutedElements.get(i).getReferenceObject();
-				if (o instanceof TGComponent) {
-					tgc = (TGComponent)o;
-					tgc.setAVATARMet(true);
+		if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
+			Object objs[] = hashOfAllElements.keySet().toArray();
+			TraceManager.addDev("Parsing array of elements: " + objs.length);
+			for(int i=0; i<objs.length; i++) {
+				o = objs[i];
+				TraceManager.addDev("objs: " + o);
+				Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
+				if (oo != null) {
+					tgc = (TGComponent)oo;
+					TraceManager.addDev("TGComponent: " + tgc);
+					tgc.setAVATARMet(hashOfAllElements.get(o).intValue());
 				}
+				
 			}
 		}
-		nbOfAllExecutedElements = allExecutedElements.size();
+		nbOfAllExecutedElements = hashOfAllElements.hashCode();
 	}
 	
 	public void updateTransactionsTable() {

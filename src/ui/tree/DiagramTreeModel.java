@@ -140,6 +140,10 @@ public class DiagramTreeModel implements TreeModel {
                 return false;
             }
             
+            if (node instanceof SearchTree) {
+                return false;
+            }
+            
             if (node instanceof SyntaxAnalysisErrorTree) {
                 return false;
             }

@@ -6167,7 +6167,7 @@ or by a maintenance station
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2972" >
 <father id="2974" num="0" />
-<cdparam x="407" y="190" />
+<cdparam x="412" y="172" />
 <sizeparam width="59" height="15" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -8610,7 +8610,7 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="531" y="264" id="4090" />
+<P1  x="531" y="250" id="4090" />
 <P2  x="607" y="233" id="4098" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
