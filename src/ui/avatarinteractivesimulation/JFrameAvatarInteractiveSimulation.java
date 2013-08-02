@@ -66,6 +66,7 @@ import avatartranslator.directsimulation.*;
 
 public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
 	private static int TRACED_TRANSACTIONS = 1000;
+	private static int LAST_TRANSACTIONS = 0;
 	
 	
 	private static String buttonStartS = "Start simulator";
@@ -101,7 +102,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	//outputs, cpuPanel; // from MGUI
 	JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo, executeEmptyTransition, executeStateEntering, traceInSD;
 	JTabbedPane commandTab, infoTab;
-	protected JTextField displayedTransactionsText;
+	protected JTextField displayedTransactionsText, lastTransactionsText;
 	protected JTextField paramMainCommand;
 	protected JTextField saveFileName;
 	protected JTextField stateFileName;
@@ -573,8 +574,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jp01.add(traceInSD, c01);
 		traceInSD.addItemListener(this);
 		traceInSD.setSelected(true);
-		jp01.add(new JLabel("Traced transactions:"), c01);
-		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		jp01.add(new JLabel("# of transactions:"), c01);
 		displayedTransactionsText = new JTextField(""+TRACED_TRANSACTIONS, 10);
 		jp01.add(displayedTransactionsText, c01);
 		//displayedTransactionsText.addActionListener(this);
@@ -605,6 +605,40 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 					} catch (Exception e) {
 					}
 					statuss.setText("Unknown / bad number: " + displayedTransactionsText.getText());
+				}
+		});
+		jp01.add(new JLabel("Index of last transaction:"), c01);
+		c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+		lastTransactionsText = new JTextField(""+LAST_TRANSACTIONS, 10);
+		jp01.add(lastTransactionsText, c01);
+		//displayedTransactionsText.addActionListener(this);
+		lastTransactionsText.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+				
+				public void warn() {
+					try {
+					int nb = Integer.parseInt(lastTransactionsText.getText());
+					if (nb > -1){
+						statuss.setText("Index of last transation modified to: " + nb);
+						if (sdpanel != null) {
+							sdpanel.setLastDrawnTransactions(nb);
+							if (sdpanel.isVisible()) {
+								sdpanel.repaint();
+							}
+						}
+						return;
+					}
+					} catch (Exception e) {
+					}
+					statuss.setText("Unknown / bad number: " + lastTransactionsText.getText());
 				}
 		});
 		

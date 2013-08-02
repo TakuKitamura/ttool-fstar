@@ -99,6 +99,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 	
 	// Transactions
 	private int drawnTransactions = 1000;
+	private int lastDrawnTransactions = 0; // -1 means the last current one
 	
 	// My scroll panel
 	private JScrollPane jsp;
@@ -134,6 +135,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     
     public void setNbOfDrawnTransactions(int _d) {
     	drawnTransactions = _d;
+    }
+    
+    public void setLastDrawnTransactions(int _d) {
+    	lastDrawnTransactions = _d;
     }
     
     public void setTrace(boolean b) {
@@ -256,7 +261,15 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 			g.drawString("@" + clockValue, 10, currentY+g.getFontMetrics().getHeight()/2); 
 		}
 		
-		for(int i=Math.max(allTransactions.size()-drawnTransactions, 0); i<allTransactions.size(); i++) {
+		
+		int realLast;
+		if (lastDrawnTransactions == 0) {
+			realLast = allTransactions.size();
+		} else {
+			realLast = Math.min(lastDrawnTransactions, allTransactions.size());
+		}
+		
+		for(int i=Math.max(realLast-drawnTransactions, 0); i<realLast; i++) {
 			ast = allTransactions.get(i);
 			ast.stamp = stamp;
 			
