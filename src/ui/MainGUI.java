@@ -962,6 +962,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return index;
     }
     
+    private int addAvatarMADPanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarMADsPanel amadsp = new AvatarMADsPanel(this);
+        tabs.add(index, amadsp);
+        mainTabbedPane.add(amadsp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR Modeling Assumptions diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic82);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        amadsp.init();
+        //ystem.out.println("Design added");
+        return index;
+    }
+    
     private int addDesignPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();
@@ -1222,6 +1238,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	public int createAvatarRequirement(String name) {
         int index = addAvatarRequirementPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+    
+    public int createAvatarMADs(String name) {
+        int index = addAvatarMADPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
@@ -1556,6 +1578,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public void newAvatarRequirement() {
         TraceManager.addDev("NEW AVATAR Requirement");
         addAvatarRequirementPanel("AVATAR Requirements", 0);
+        //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
+    }
+    
+    public void newAvatarMADs() {
+        TraceManager.addDev("NEW AVATAR MAD");
+        addAvatarMADPanel("MADs", 0);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
     }
@@ -5255,10 +5284,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         return getAvatarRDPanel(tp, indexTab, s);
     }
     
-    
     public AvatarRDPanel getAvatarRDPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (AvatarRDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+    
+    public AvatarMADPanel getAvatarMADPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarMADPanel(tp, indexTab, s);
+    }
+    
+    public AvatarMADPanel getAvatarMADPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (AvatarMADPanel)(tp.panelAt(indexTab));
         }
         return null;
     }
@@ -7307,7 +7347,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD;
 		private JMenuItem newAVATARAnalysis;
         
         public PopupListener(MainGUI _mgui) {
@@ -7352,6 +7392,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
+			newMAD = createMenuItem("New AVATAR Modeling Assumptions Diagram");
 			newAVATARRequirement = createMenuItem("New AVATAR Requirement Diagrams");
 			newAVATARAnalysis = createMenuItem("New AVATAR Analysis");
 			newAVATARBD = createMenuItem("New AVATAR Design");
@@ -7410,6 +7451,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			if (avatarOn) {
 				menu.addSeparator();
 				menu.add(newAttackTree);
+				menu.add(newMAD);
 				menu.add(newAVATARRequirement);
 				menu.add(newAVATARAnalysis);
                 menu.add(newAVATARBD);
@@ -7499,6 +7541,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                     mgui.newAvatarBD();
                 } else if (e.getSource() == newAVATARRequirement) {
 					mgui.newAvatarRequirement();
+				} else if (e.getSource() == newMAD) {
+					mgui.newAvatarMADs();
 				} else if (e.getSource() == newAVATARAnalysis) {
 					mgui.newAnalysis();
 				}

@@ -74,30 +74,30 @@ public class AvatarMADsPanel extends TURTLEPanel {
         for(int i=1; i<panels.size(); i++) {
             amadp = (AvatarMADPanel)(panels.elementAt(i));
             if (amadp.getName().compareTo(name) ==0) {
-                return asmdp;
+                return amadp;
             }
         }
         return null;
     }
     
-    public void addAvatarStateMachineDiagramPanel(String s) {
+    public void addAvatarMADPanel(String s) {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
         
-        AvatarSMDToolBar toolBarActivity = new AvatarSMDToolBar(mgui);
+        AvatarMADToolBar toolBarActivity = new AvatarMADToolBar(mgui);
         toolbars.add(toolBarActivity);
         
-        AvatarSMDPanel asmdp = new AvatarSMDPanel(mgui, toolBarActivity);
-        asmdp.tp = this;
-        asmdp.setName(s);
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(asmdp);
-        asmdp.jsp = jsp;
+        AvatarMADPanel amadp = new AvatarMADPanel(mgui, toolBarActivity);
+        amadp.tp = this;
+        amadp.setName(s);
+        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(amadp);
+        amadp.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarActivity, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        panels.add(asmdp);
-        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens the state machine of " + s);
+        panels.add(amadp);
+        tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens Modeling Assumption Panel of " + s);
         //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
         return;
     }
