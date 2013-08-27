@@ -54,7 +54,7 @@ import ui.*;
 
 public class AvatarMADToolBar extends TToolBar {
     
-    public AvatarRDToolBar(MainGUI _mgui) {
+    public AvatarMADToolBar(MainGUI _mgui) {
         super(_mgui);
         
     }
