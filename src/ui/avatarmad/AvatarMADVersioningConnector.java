@@ -36,15 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarRDDeriveConnector
- * Connector to be used in Avatar RD. Connects two requirements
- * Creation: 20/04/2010
- * @version 1.0 20/04/2010
+ * Class AvatarMADVersioningConnector
+ * Connector to be used in Avatar MAD. Connects two assumptions
+ * Creation: 27/08/2013
+ * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 import java.awt.*;
 //import java.awt.geom.*;
@@ -54,12 +54,12 @@ import myutil.*;
 
 import ui.*;
 
-public  class AvatarRDRefineConnector extends TGConnectorWithCommentConnectionPoints {
+public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnectionPoints {
     int w, h;
     
-    public AvatarRDRefineConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public AvatarMADVersioningConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        value = "<<refine>>";
+        value = "<<versioning>>";
 		
 		myImageIcon = IconManager.imgic1008;
     }
@@ -93,7 +93,7 @@ public  class AvatarRDRefineConnector extends TGConnectorWithCommentConnectionPo
     }
     
     public int getType() {
-        return TGComponentManager.AVATARRD_REFINE_CONNECTOR;
+        return TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
     }
     
 }

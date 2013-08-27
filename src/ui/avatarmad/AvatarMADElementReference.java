@@ -36,15 +36,15 @@
 * knowledge of the CeCILL license and that you accept its terms.
 *
 * /**
-* Class AvatarRDProperty
-* Avatar property: to be used in avatar requirement diagrams
-* Creation: 20/04/2010
-* @version 1.0 20/04/2010
+* Class AvatarMADElementReference
+* Avatar element reference: to be used in avatar MAD
+* Creation: 27/08/2013
+* @version 1.0 27/08/2013
 * @author Ludovic APVRILLE
 * @see
 */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 
 
@@ -58,7 +58,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarRDProperty extends TGCScalableWithInternalComponent implements TGAutoAdjust {
+public class AvatarMADElementReference extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -74,15 +74,14 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	
-    protected final static String PROPERTY = "<<Property>>";
+    protected final static String ELEMENT_REFERENCE = "<<Element ref.>>";
 	
 	protected String diagramText;
-	protected String violatedAction = "noAction";
 	
 	private int iconSize = 18;
 	private boolean iconIsDrawn = false;
     
-    public AvatarRDProperty(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarMADElementReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         initScaling(150, lineHeight);
@@ -96,18 +95,18 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.0, 0.25);
-        connectingPoint[1] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.0, 0.75);
-        connectingPoint[3] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 1.0, 0.25);
-        connectingPoint[4] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 1.0, 0.5);
-        connectingPoint[5] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 1.0, 0.75);
-        connectingPoint[6] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.25, 0.0);
-        connectingPoint[7] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.5, 0.0);
-        connectingPoint[8] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.75, 0.0);
-        connectingPoint[9] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.25, 1.0);
-		connectingPoint[10] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.5, 1.0);
-		connectingPoint[11] = new AvatarRDConnectingPointVerify(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[0] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[1] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[3] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[4] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[5] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[6] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[7] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[8] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[9] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[10] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+		connectingPoint[11] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 		
         addTGConnectingPointsCommentTop();    
         
@@ -127,14 +126,14 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 		
         
         // Name of the observer
-        name = "AvatarProperty";
-        value = "AvatarProperty";
+        name = "AvatarElementReference";
+        value = "AvatarElementReference";
 		//value = tdp.findRequirementName("Requirement_");
         oldValue = value;
         
         myImageIcon = IconManager.imgic5100;
 		
-		diagramText = "no diagram";
+		elementText = "no element";
         
         actionOnAdd();
     }
@@ -184,7 +183,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 		if (displayText) {
 			size = currentFontSize - 2;
 			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-			drawLimitedString(g, PROPERTY, x, y + size, width, 1);
+			drawLimitedString(g, ELEMENT_REFERENCE, x, y + size, width, 1);
 			size += currentFontSize;
 			g.setFont(myFontB);
 			w = g.getFontMetrics().stringWidth(value);
@@ -212,7 +211,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 		if ((displayText) && (_y <= (y + lineHeight))) {
 			String texti = getName() + ": ";
 			if (hasFather()) {
-				texti = getTopLevelName() + " / " + diagramText;
+				texti = getTopLevelName() + " / " + elementText;
 			}
 			String s = (String)JOptionPane.showInputDialog(frame, texti,
 				"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
@@ -223,15 +222,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 				//boolean b;
 				if (!TAttribute.isAValidId(s, false, false)) {
 					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Property: the new name is not a valid name",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					return false;
-				}
-				
-				if (!tdp.isRequirementNameUnique(s)) {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Property: the new name is already in use",
+						"Could not change the name of the element reference: the new name is not a valid name",
 						"Error",
 						JOptionPane.INFORMATION_MESSAGE);
 					return false;
@@ -245,15 +236,6 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 				}
 				setValue(s);
 				
-				if (tdp.actionOnDoubleClick(this)) {
-					return true;
-				} else {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Property: this name is already in use",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					setValue(oldValue);
-				}
 			}
 			return false;
 		} else {
@@ -263,21 +245,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
         
     }
 	
-	/*public boolean editAttributes() {
-		JDialogObserver jdo = new JDialogObserver(tdp.getGUI().getFrame(), "Setting diagrams of Observer " + getRequirementObserverName(), diagramText, violatedAction);
-		jdo.setSize(750, 400);
-		GraphicLib.centerOnParent(jdo);
-		jdo.show();
-		
-		if (!jdo.isRegularClose()) {
-			return false;
-		}
-		
-		diagramText = jdo.getText();
-		violatedAction = jdo.getViolatedAction();
-		
-		return true;
-	}*/
+
 	
 	public void rescale(double scaleFactor){
 		dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
@@ -296,41 +264,16 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
         return null;
     }
     
-    public String getRequirementObserverName() {
-        return value;
-    }
     
     
     public  int getType() {
-        return TGComponentManager.AVATARRD_PROPERTY;
+        return TGComponentManager.AVATARMAD_ELEMENT_REFERENCE;
     }
     
-	/* public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-	componentMenu.addSeparator();
-	JMenuItem generate = null;
-	// Should verify first whether it is connected to a formal requirement with a verify relation, or not
-	generate = new JMenuItem("Generate on diagrams");
 	
-	generate.addActionListener(menuAL);
-	componentMenu.add(generate);
-	
-	JMenuItem editAttributes = new JMenuItem("Edit attributes");
-	editAttributes.addActionListener(menuAL);
-	componentMenu.add(editAttributes);
-    }
-    
-    public boolean eventOnPopup(ActionEvent e) {
-	String s = e.getActionCommand();
-	if (s.indexOf("diagrams") > -1) {
-	// To be implemented!
-	} else {
-	return editAttributes();
-	}
-	return true;
-    }*/
     
     public String toString() {
-        String ret =  getValue() + PROPERTY;
+        String ret =  getValue() + DIGRAM_REFERENCE;
         return ret;
     }
 	
@@ -349,7 +292,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 		// Must find for both modes which width is desirable
 		String s0, s1;
 		
-		s0 = PROPERTY;
+		s0 = ELEMENT_REFERENCE;
 		
 		graphics.setFont(f2);
 		int w0 = graphics.getFontMetrics().stringWidth(s0);

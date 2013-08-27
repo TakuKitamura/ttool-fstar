@@ -36,15 +36,15 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class AvatarRDRequirement
-* Avatar requirement: to be used in requirement diagram of AVATAR
-* Creation: 20/04/2010
-* @version 1.0 20/04/2010
+* Class AvatarMADAssumption
+* Avatar assumption: to be used in Modeling Assumptions diagram of AVATAR
+* Creation: 27/08/2013
+* @version 1.0 27/08/2013
 * @author Ludovic APVRILLE
 * @see
 */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 
 import java.awt.*;
@@ -57,7 +57,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarRDRequirement extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
+public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -75,45 +75,34 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 	private int currentFontSize = -1;
 	private boolean displayText = true;
     
-    protected final static String[] REQ_TYPE_STR = {"<<Requirement>>", "<<Safety Requirement>>", "<<Security Requirement>>"};
+    protected final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>", "<<Method Assumption>>"};
 	protected final static int NB_REQ_TYPE = 3;
-	
-	protected final static int REGULAR_REQ = 0;
-	protected final static int SAFETY_REQ = 1;
-	protected final static int SECURITY_REQ = 2;
     
-    public final static int HIGH = 0;
-    public final static int MEDIUM = 1;
-    public final static int LOW = 2;
+    protected final static String[] DURABILITY_TYPE = {"Permanent", "Temporary"};
+	protected final static int NB_DURABILITY_TYPE = 2;
+	
+	protected final static String[] SOURCE_TYPE = {"End-user", "Stakeholder", "Model creator"};
+	protected final static int NB_SOURCE_TYPE = 3;
+	
+	protected final static String[] STATUS_TYPE = {"Applied", "Alleviated"};
+	protected final static int NB_STATUS_TYPE = 2;
+	
+	protected final static String[] LIMITATION_TYPE = {"Language", "Tool", "Method"};
+	protected final static int NB_STATUS_TYPE = 2;
 	
 	protected String text;
     protected String []texts;
-    protected String kind = "";
-    protected String criticality = "";
-	 protected int reqType = 0;
-    protected String violatedAction = "";
-	protected String attackTreeNode = "";     
-	protected String referenceElements = "";
-	protected String id = "";
-	
-	protected boolean satisfied = false;
-	protected boolean verified = false;
-	
-	private JMenuItem isRegular = null;
-    private JMenuItem isSafety = null;
-	private JMenuItem isSecurity = null;
-	private JMenuItem menuNonSatisfied = null;
-	private JMenuItem menuSatisfied = null;
-	private JMenuItem menuNonVerified = null;
-	private JMenuItem menuVerified = null;
-	JMenuItem editAttributes = null;
+    protected int durability = 0,
+    protected int source = 0;
+    protected int status = 0;
+    protected int limitation = "0";
 	
 	
 	// Icon
 	private int iconSize = 18;
 	private boolean iconIsDrawn = false;
     
-    public AvatarRDRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarMADRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
 		initScaling(200, 120);
@@ -127,18 +116,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         
         nbConnectingPoint = 28;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.25, TGConnectingPoint.WEST);
-        connectingPoint[1] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.5, TGConnectingPoint.WEST);
-        connectingPoint[2] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.0, 0.75, TGConnectingPoint.WEST);
-        connectingPoint[3] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.25, TGConnectingPoint.EAST);
-        connectingPoint[4] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.5, TGConnectingPoint.EAST);
-        connectingPoint[5] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 1.0, 0.75, TGConnectingPoint.EAST);
-        connectingPoint[6] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.25, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[7] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[8] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.75, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[9] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[10] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[11] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
+        connectingPoint[0] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.0, 0.25, TGConnectingPoint.WEST);
+        connectingPoint[1] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.0, 0.5, TGConnectingPoint.WEST);
+        connectingPoint[2] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.0, 0.75, TGConnectingPoint.WEST);
+        connectingPoint[3] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 1.0, 0.25, TGConnectingPoint.EAST);
+        connectingPoint[4] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 1.0, 0.5, TGConnectingPoint.EAST);
+        connectingPoint[5] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 1.0, 0.75, TGConnectingPoint.EAST);
+        connectingPoint[6] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.25, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[7] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[8] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.75, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[9] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[10] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[11] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
         connectingPoint[12] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.25, TGConnectingPoint.WEST);
         connectingPoint[13] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.5, TGConnectingPoint.WEST);
         connectingPoint[14] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.75, TGConnectingPoint.WEST);
@@ -151,10 +140,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         connectingPoint[21] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.25, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[22] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[23] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[24] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[25] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[26] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[27] = new AvatarRDConnectingPointDerive(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[24] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[25] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[26] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[27] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		
 		
         addTGConnectingPointsCommentTop();    
@@ -178,18 +167,18 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		id = "0";
         
         // Name of the requirement
-        name = "Requirement";
-		id  = tdp.findAvatarRequirementID(id);
+        name = "Assumption";
+		id  = tdp.findAvatarAssumptionID(id);
 		try {
-			value = tdp.findAvatarRequirementName("Requirement_", Integer.decode(id).intValue());
+			value = tdp.findAvatarAssumptionName("Assumption_", Integer.decode(id).intValue());
 		} catch (Exception e) {
-			value = tdp.findAvatarRequirementName("Requirement_", 0);
+			value = tdp.findAvatarAssumptionName("Assumption_", 0);
 		}
         oldValue = value;
         
         myImageIcon = IconManager.imgic5100;
 		
-		text = "Requirement description:\nDouble-click to edit";
+		text = "Assumption description:\nDouble-click to edit";
         
         actionOnAdd();
     }
@@ -449,103 +438,11 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         return null;
     }
     
-    public String getRequirementName() {
-        return value;
-    }
-    
-    public boolean isSafety() {
-        return (reqType == 1);
-    }
-    
-    public void setRequirementType(int _type) {
-        reqType = _type;
-    }
-    
-    public int getRequirementType() {
-	    return reqType;
-    }
-    
-    public boolean isSatisfied() {
-	    return satisfied;
-    }
-	
-	public boolean isVerified() {
-		return verified;
-	}
-    
     public  int getType() {
-        return TGComponentManager.AVATARRD_REQUIREMENT;
+        return TGComponentManager.AVATARMAD_ASSUMPTION;
     }
     
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-		
-		componentMenu.addSeparator();
-		
-		isRegular = new JMenuItem("Set as regular requirement");
-		isSafety = new JMenuItem("Set as safety requirement");
-		isSecurity = new JMenuItem("Set as security requirement");
-		menuNonSatisfied = new JMenuItem("Set as non satisfied");
-		menuSatisfied = new JMenuItem("Set as satisfied");
-		menuNonVerified = new JMenuItem("Set as non verified");
-		menuVerified = new JMenuItem("Set as verified");
-			
-		
-		isRegular.addActionListener(menuAL);
-		isSafety.addActionListener(menuAL);
-		isSecurity.addActionListener(menuAL);
-		menuNonSatisfied.addActionListener(menuAL);
-		menuSatisfied.addActionListener(menuAL);
-		menuNonVerified.addActionListener(menuAL);
-		menuVerified.addActionListener(menuAL);
-			
-		editAttributes = new JMenuItem("Edit attributes");
-		editAttributes.addActionListener(menuAL);
-		
-		isRegular.setEnabled(reqType != REGULAR_REQ);
-		isSafety.setEnabled(reqType != SAFETY_REQ);
-		isSecurity.setEnabled(reqType != SECURITY_REQ);
-
-		menuNonSatisfied.setEnabled(satisfied);
-		menuSatisfied.setEnabled(!satisfied);
-			
-		menuNonVerified.setEnabled(verified);
-		menuVerified.setEnabled(!verified);
-		
-		componentMenu.add(isRegular);
-		componentMenu.add(isSafety);
-		componentMenu.add(isSecurity);
-		componentMenu.addSeparator();
-		componentMenu.add(menuNonSatisfied);
-		componentMenu.add(menuSatisfied);
-		componentMenu.add(menuNonVerified);
-		componentMenu.add(menuVerified);
-		componentMenu.add(editAttributes);
-    }
     
-    public boolean eventOnPopup(ActionEvent e) {
-        String s = e.getActionCommand();
-		
-		if (e.getSource() == menuNonSatisfied) {
-			satisfied = false;
-		} else if (e.getSource() == menuSatisfied) {
-			satisfied = true;
-		} else if (e.getSource() == menuNonVerified) {
-			verified = false;
-		} else if (e.getSource() == menuVerified) {
-			verified = true;
-		} else if (e.getSource() == isRegular) {
-			reqType = REGULAR_REQ;
-		} else if (e.getSource() == isSafety) {
-			reqType = SAFETY_REQ;
-		} else if (e.getSource() == isSecurity) {
-			reqType = SECURITY_REQ;
-		} else {
-			return editAttributes();
-		}
-		
-		
-        return true;
-    }
     
     public String toString() {
         String ret =  getValue();

@@ -36,50 +36,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarRDConnectingPointDerive
- * Definition of connecting points on which connectors between requirements may be connected
- * Creation: 20/04/2010
- * @version 1.0 20/04/2010
+ * Class AvatarMADToOthersConnectingPoint
+ * Definition of connecting points on which connectors between assumptions 
+ * may be connected to other system elements
+ * Creation: 27/08/2013
+ * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 //import java.awt.*;
 
 import ui.*;
 
-public class AvatarRDConnectingPointDerive extends  TGConnectingPointWidthHeight {
+public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHeight {
     
-    public AvatarRDConnectingPointDerive(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
+    public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
         super(_container, _x, _y, _in, _out, _w, _h);
 		orientation = _orientation;
     }
     
     public boolean isCompatibleWith(int type) {
-        //System.out.println("is compatible with " + type);
-        if (type == TGComponentManager.AVATARRD_DERIVE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
+        if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
             return true;
         }
 		
-		if (type == TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-		
-		if (type == TGComponentManager.AVATARRD_COPY_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-		
-		if (type == TGComponentManager.AVATARRD_REFINE_CONNECTOR) {
-            //System.out.println("is compatible with:true");
-            return true;
-        }
-        //System.out.pr
-        //System.out.println("is compatible with:false");
         return false;
     }
 	

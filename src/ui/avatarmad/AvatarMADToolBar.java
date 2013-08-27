@@ -36,15 +36,15 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AvatarRDToolBar
- * Implements the toolbar to be used in conjunction with the Avatar Requirement Diagram
-* Creation: 20/04/2010
-* @version 1.0 20/04/2010
+ * Class AvatarMADToolBar
+ * Implements the toolbar to be used in conjunction with the Avatar Modeling Assumptions Diagram
+* Creation: 27/08/2013
+* @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  * @see
  */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 import javax.swing.*;
 //import java.awt.*;
@@ -52,7 +52,7 @@ import javax.swing.*;
 
 import ui.*;
 
-public class AvatarRDToolBar extends TToolBar {
+public class AvatarMADToolBar extends TToolBar {
     
     public AvatarRDToolBar(MainGUI _mgui) {
         super(_mgui);
@@ -66,10 +66,10 @@ public class AvatarRDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
 		mgui.updateZoomInfo();
 		
-        mgui.actions[TGUIAction.ARD_EDIT].setEnabled(b);
+        //mgui.actions[TGUIAction.AMAD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
-        mgui.actions[TGUIAction.ARD_REQUIREMENT].setEnabled(b);
+        /*mgui.actions[TGUIAction.ARD_REQUIREMENT].setEnabled(b);
         mgui.actions[TGUIAction.ARD_PROPERTY].setEnabled(b);
         mgui.actions[TGUIAction.ARD_VERIFY_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.ARD_DERIVE_CONNECTOR].setEnabled(b);
@@ -79,17 +79,17 @@ public class AvatarRDToolBar extends TToolBar {
 		
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		
-		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
         
     }
     
     protected void setButtons() {
         JButton button;
         
-        button = this.add(mgui.actions[TGUIAction.ARD_EDIT]);
+        /*button = this.add(mgui.actions[TGUIAction.ARD_EDIT]);
         button.addMouseListener(mgui.mouseHandler);
         
-        this.addSeparator();
+        this.addSeparator();*/
         
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
@@ -99,7 +99,7 @@ public class AvatarRDToolBar extends TToolBar {
         
         this.addSeparator();
         
-        button = this.add(mgui.actions[TGUIAction.ARD_REQUIREMENT]);
+        /*button = this.add(mgui.actions[TGUIAction.ARD_REQUIREMENT]);
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.ARD_PROPERTY]);
@@ -134,7 +134,7 @@ public class AvatarRDToolBar extends TToolBar {
 		this.addSeparator();
          
         button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
-        button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);*/
         
     }
     
