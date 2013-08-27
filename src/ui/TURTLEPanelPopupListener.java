@@ -60,7 +60,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
     
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdfromucd, newreq, 
-	newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad;
+	newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad;
     private JMenuItem newatd;
 	
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -104,6 +104,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newavatarpd = createMenuItem("New AVATAR Property Diagram");
 		newavatarcd = createMenuItem("New Context Diagram");
 		newavatarad = createMenuItem("New Activity Diagram");
+		newavatarmad = createMenuItem("New AVATAR Modeling Assumptions Diagram");
         
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -129,6 +130,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(newprosmd);
 		if (mgui.isAvatarOn()) {
 			menu.addSeparator();
+			menu.add(newavatarmad);
 			menu.add(newavatarrd);
 			menu.add(newavatarpd);
 		}
@@ -177,6 +179,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 		newavatarpd.setEnabled(tp.isAvatarPDEnabled());
 		newavatarcd.setEnabled(tp.isAvatarCDEnabled());
 		newavatarad.setEnabled(tp.isAvatarADEnabled());
+		newavatarmad.setEnabled(tp.isAvatarMADEnabled());
     }
     
     private Action listener = new AbstractAction() {
@@ -228,7 +231,10 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 			} else if (e.getSource() == newavatarad) {
 				mgui.createUniqueAvatarAD(tp, "Activity Diagram");
                 mgui.changeMade(null, -1);
-			}
+			} else if (e.getSource() == newavatarmad) {
+				mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
+                mgui.changeMade(null, -1);
+			} 
         }
     };
 }

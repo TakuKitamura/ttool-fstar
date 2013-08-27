@@ -3626,13 +3626,15 @@ public class GTURTLEModeling {
 
 
 		nameTab = elt.getAttribute("nameTab");
+		
+		TraceManager.addDev("Creating MAD panel ");
 
 		indexReq = mgui.createAvatarMADs(nameTab);
 
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//TraceManager.addDev("Deployment nodes: " + j);
+			TraceManager.addDev("MADs nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;

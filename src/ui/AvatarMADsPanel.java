@@ -105,7 +105,7 @@ public class AvatarMADsPanel extends TURTLEPanel {
     public void init() {
          
         //  Class Diagram toolbar
-        AvatarMADToolBar toolBarAvatarMAD = new AvatarMADToolBar(mgui);
+        /*AvatarMADToolBar toolBarAvatarMAD = new AvatarMADToolBar(mgui);
         toolbars.add(toolBarAvatarMAD);
         
         toolBarPanel = new JPanel();
@@ -113,7 +113,7 @@ public class AvatarMADsPanel extends TURTLEPanel {
         
         //Class	diagram
         AvatarMADPanel amadp = new AvatarMADPanel(mgui, toolBarAvatarMAD);
-        amadp.setName("Model Assumption Diagram");
+        amadp.setName("Modeling Assumption Diagram");
         amadp.tp = this;
         tdp = amadp;
         panels.add(amadp); // Always first in list
@@ -127,13 +127,13 @@ public class AvatarMADsPanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0);
         //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
         
-        //jsp.setVisible(true);
+        //jsp.setVisible(true);*/
  
     }
 	
     
     public String saveHeaderInXml() {
-        return "<Modeling type=\"AVATAR MAD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n"; 
+        return "<Modeling type=\"Avatar MAD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n"; 
     }
     
     public String saveTailInXml() {
@@ -141,9 +141,19 @@ public class AvatarMADsPanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return mgui.getTitleAt(this) + " (AVATAR MAD)";
+        return mgui.getTitleAt(this) + " (Avatar MAD)";
     }
 	
 	
+    public boolean isAvatarMADEnabled() {
+        return true;
+    }
     
+    public boolean removeEnabled(int index) {
+        return true;
+    }
+    
+    public boolean renameEnabled(int index) {
+        return true;
+    }
 }
