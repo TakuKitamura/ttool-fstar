@@ -89,6 +89,7 @@ import ui.prosmd.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
+import ui.avatarmad.*;
 import ui.avatarpd.*;
 import ui.avatarcd.*;
 import ui.avatarad.*;
@@ -5133,6 +5134,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         setPanelMode();
         return true;
     }
+    
+    public boolean createAvatarMAD(int index, String s) {
+        return createAvatarMAD((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createAvatarMAD(TURTLEPanel tp, String s) {
+        if (!(tp instanceof AvatarMADsPanel)) {
+            return false;
+        }
+        
+        ((AvatarMADsPanel)tp).addAvatarMADPanel(s);
+        setPanelMode();
+        return true;
+    }
 	
 	public boolean createAvatarPD(int index, String s) {
         return createAvatarPD((TURTLEPanel)(tabs.elementAt(index)), s);
@@ -5429,6 +5444,33 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         
         setMode(METHO_CHANGED);
         
+    }
+    
+    public void paneMADAction(ChangeEvent e) {
+        //TraceManager.addDev("Pane design action size=" + tabs.size());
+        try {
+            
+            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            //TraceManager.addDev("Pane design action 1");
+            if (activetdp != null) {
+                activetdp.activateActions(false);
+                unactivateDrawing();
+                activetdp.stopAddingConnector();
+            }
+            //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
+            tdp1.activateActions(true);
+            activetdp = tdp1;
+            
+            setEditMode();
+            setPanelMode();
+            //TraceManager.addDev("Pane design action 3");
+            
+            // activate the   drawing	of the right pane
+            basicActivateDrawing();
+            
+        } catch	(Exception ex) {
+            //TraceManager.addDev("Exception pane design action");
+        }
     }
     
     public void paneDesignAction(ChangeEvent e) {
