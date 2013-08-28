@@ -1138,13 +1138,13 @@ public class GTURTLEModeling {
 	}
 
 	public int getChildCount() {
-		return panels.size() + 1;
+		return panels.size() + 2;
 	}
 
 	public Object getChild(int index) {
-		if (index < panels.size()-1) {
+		if (index < panels.size()) {
 			return panels.elementAt(index);
-		} else if (index == panels.size()-1) {
+		} else if (index == panels.size()) {
 			return vdt;
 		} else {
 			return st;
@@ -1159,7 +1159,11 @@ public class GTURTLEModeling {
 			return index;
 		}
 
-		return panels.size();
+		if (child == vdt) {
+			return panels.size();
+		}
+		
+		return panels.size()+1;
 	}
 
 	// Projection management
