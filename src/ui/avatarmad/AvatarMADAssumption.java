@@ -57,7 +57,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
+public class AvatarMADAssumption extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -76,7 +76,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 	private boolean displayText = true;
     
     protected final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>", "<<Method Assumption>>"};
-	protected final static int NB_REQ_TYPE = 3;
+	protected final static int NB_ASSUMPTION_TYPE = 3;
     
     protected final static String[] DURABILITY_TYPE = {"Permanent", "Temporary"};
 	protected final static int NB_DURABILITY_TYPE = 2;
@@ -88,21 +88,22 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 	protected final static int NB_STATUS_TYPE = 2;
 	
 	protected final static String[] LIMITATION_TYPE = {"Language", "Tool", "Method"};
-	protected final static int NB_STATUS_TYPE = 2;
+	protected final static int NB_LIMITATION_TYPE = 2;
 	
 	protected String text;
     protected String []texts;
-    protected int durability = 0,
+    protected int type = 0;
+    protected int durability = 0;
     protected int source = 0;
     protected int status = 0;
-    protected int limitation = "0";
+    protected int limitation = 0;
 	
 	
 	// Icon
 	private int iconSize = 18;
 	private boolean iconIsDrawn = false;
     
-    public AvatarMADRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarMADAssumption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
 		initScaling(200, 120);
@@ -128,18 +129,18 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         connectingPoint[9] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[10] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[11] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
-        connectingPoint[12] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.25, TGConnectingPoint.WEST);
-        connectingPoint[13] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.5, TGConnectingPoint.WEST);
-        connectingPoint[14] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.0, 0.75, TGConnectingPoint.WEST);
-        connectingPoint[15] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.25, TGConnectingPoint.EAST);
-        connectingPoint[16] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.5, TGConnectingPoint.EAST);
-        connectingPoint[17] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 1.0, 0.75, TGConnectingPoint.EAST);
-        connectingPoint[18] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.25, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[19] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.5, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[20] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.75, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[21] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.25, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[22] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[23] = new AvatarRDConnectingPointVerify(this, 0, 0, true, false, 0.75, 1.0, TGConnectingPoint.SOUTH);
+        connectingPoint[12] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.25, TGConnectingPoint.WEST);
+        connectingPoint[13] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.5, TGConnectingPoint.WEST);
+        connectingPoint[14] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.75, TGConnectingPoint.WEST);
+        connectingPoint[15] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.25, TGConnectingPoint.EAST);
+        connectingPoint[16] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.5, TGConnectingPoint.EAST);
+        connectingPoint[17] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.75, TGConnectingPoint.EAST);
+        connectingPoint[18] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[19] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[20] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[21] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[22] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[23] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[24] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[25] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[26] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
@@ -162,15 +163,11 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         userResizable = true;
 		multieditable = true;
 		
-        //reqType = 0;
-		
-		id = "0";
         
         // Name of the requirement
         name = "Assumption";
-		id  = tdp.findAvatarAssumptionID(id);
 		try {
-			value = tdp.findAvatarAssumptionName("Assumption_", Integer.decode(id).intValue());
+			value = tdp.findAvatarAssumptionName("Assumption_", 0);
 		} catch (Exception e) {
 			value = tdp.findAvatarAssumptionName("Assumption_", 0);
 		}
@@ -236,7 +233,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 			size = currentFontSize - 2;
 			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
 		
-			drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
+			drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + size, width, 1);
 	
 			size += currentFontSize;
 			g.setFont(myFontB);
@@ -245,7 +242,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 			
 		}
 		
-		if (verified) {
+		/*if (verified) {
 			if (satisfied) {
 				Color tmp = g.getColor();
 				GraphicLib.setMediumStroke(g);
@@ -264,7 +261,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 				g.setColor(tmp);
 				GraphicLib.setNormalStroke(g);
 			}
-		}
+		}*/
 		
 		g.setFont(myFont);
 		String texti = "Text";
@@ -273,10 +270,10 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 		size = lineHeight + currentFontSize;
 		
 		//ID
-		if (size < (height - 2)) {
+		/*if (size < (height - 2)) {
 			drawLimitedString(g, "ID=" + id, x + textX, y + size, width, 0);
 		}
-		size += currentFontSize;
+		size += currentFontSize;*/
 		
 		//text
         for(i=0; i<texts.length; i++) {
@@ -294,7 +291,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
             
         }
         // Type and risk
-		if (size < (height - 2)) {
+		/*if (size < (height - 2)) {
 			drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
 			size += currentFontSize;
 			if (size < (height - 2)) {
@@ -317,7 +314,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 					}
 				}
 			}
-		}
+		}*/
 		
         
         g.setFont(f);
@@ -341,7 +338,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 				//boolean b;
 				if (!TAttribute.isAValidId(s, false, false)) {
 					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: the new name is not a valid name",
+						"Could not change the name of the Assumption: the new name is not a valid name",
 						"Error",
 						JOptionPane.INFORMATION_MESSAGE);
 					return false;
@@ -349,7 +346,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 				
 				if (!tdp.isRequirementNameUnique(s)) {
 					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: the new name is already in use",
+						"Could not change the name of the Assumption: the new name is already in use",
 						"Error",
 						JOptionPane.INFORMATION_MESSAGE);
 					return false;
@@ -367,7 +364,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 					return true;
 				} else {
 					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Requirement: this name is already in use",
+						"Could not change the name of the Assumption: this name is already in use",
 						"Error",
 						JOptionPane.INFORMATION_MESSAGE);
 					setValue(oldValue);
@@ -382,7 +379,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 	
 	public boolean editAttributes() {
 		//String oldValue = value;
-		String atn = null;
+		/*String atn = null;
 		String va = null;
 		
 		if (reqType == SECURITY_REQ) {
@@ -401,10 +398,10 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         
         if (!jdr.isRegularClose()) {
             return false;
-        }
+        }*/
         
 		
-        if (reqType == SAFETY_REQ) {
+        /*if (reqType == SAFETY_REQ) {
         violatedAction = jdr.getViolatedAction();
         }
         if (reqType == SECURITY_REQ) {
@@ -414,7 +411,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         id = jdr.getId();
         text = jdr.getText();
         kind = jdr.getKind();
-        criticality = jdr.getCriticality();
+        criticality = jdr.getCriticality();*/
 		
         makeValue();
         return true;
@@ -447,10 +444,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
     public String toString() {
         String ret =  getValue();
 		
-		ret += "ID=" + id;
-		
 		ret += " " + text;
-		ret += " criticality=" + criticality;
 		
         return ret;
     }
@@ -466,32 +460,20 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
                 sb.append("\" />\n");
             }
         }
-        sb.append("<kind data=\"");
-        sb.append(kind);
+        sb.append("<type data=\"");
+        sb.append(type);
         sb.append("\" />\n");
-        sb.append("<criticality data=\"");
-        sb.append(criticality);
+        sb.append("<durability data=\"");
+        sb.append(durability);
         sb.append("\" />\n");
-		sb.append("<reqType data=\"");
-        sb.append(reqType);
+		sb.append("<source data=\"");
+        sb.append(source);
         sb.append("\" />\n");
-		sb.append("<id data=\"");
-        sb.append(id);
+		sb.append("<status data=\"");
+        sb.append(status);
         sb.append("\" />\n");
-		sb.append("<satisfied data=\"");
-        sb.append(satisfied);
-        sb.append("\" />\n");
-		sb.append("<verified data=\"");
-        sb.append(verified);
-        sb.append("\" />\n");
-        sb.append("<attackTreeNode data=\"");
-        sb.append(attackTreeNode);
-        sb.append("\" />\n");
-        sb.append("<violatedAction data=\"");
-        sb.append(violatedAction);
-        sb.append("\" />\n");
-        sb.append("<referenceElements data=\"");
-        sb.append(referenceElements);
+		sb.append("<limitation data=\"");
+        sb.append(limitation);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -525,85 +507,24 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
                                     s = "";
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
-                            } else if (elt.getTagName().equals("kind")) {
-                                //System.out.println("Analyzing line1");
-                                kind = elt.getAttribute("data");
-                                if (kind.equals("null")) {
-                                    kind = "";
-                                }
-                            } else if (elt.getTagName().equals("criticality")) {
-                                //System.out.println("Analyzing line2");
-                                criticality = elt.getAttribute("data");
-                                if (criticality.equals("null")) {
-                                    criticality = "";
-                                }
-                            } else if (elt.getTagName().equals("violatedAction")) {
-                                //System.out.println("Analyzing line2");
-                                violatedAction  = elt.getAttribute("data");
-                                if (violatedAction.equals("null")) {
-                                    violatedAction = "";
-                                }
-                            } else if (elt.getTagName().equals("attackTreeNode")) {
-                                //System.out.println("Analyzing line2");
-                                attackTreeNode = elt.getAttribute("data");
-                                if (attackTreeNode.equals("null")) {
-                                    attackTreeNode = "";
-                                }
-                            } else if (elt.getTagName().equals("referenceElements")) {
-                                //System.out.println("Analyzing line2");
-                                referenceElements = elt.getAttribute("data");
-                                if (referenceElements.equals("null")) {
-                                    referenceElements = "";
-                                }
-                            } else if (elt.getTagName().equals("reqType")) {
+                            
+                            } else if (elt.getTagName().equals("Type")) {
                                 //System.out.println("Analyzing line2");
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
-                                    reqType = REGULAR_REQ;
+                                    type = 0;
                                 } else {
 									try {
-										reqType = Integer.decode(s).intValue();
+										type = Integer.decode(s).intValue();
 									} catch (Exception e) {
-										 reqType = REGULAR_REQ;
+										 type = 0;
 									}
 								}
-								if (reqType > (NB_REQ_TYPE-1)) {
-									reqType = REGULAR_REQ;
+								if ((type > (NB_ASSUMPTION_TYPE-1)) || (type < 0)) {
+									type = 0;
 								}
 								
-                            } else if (elt.getTagName().equals("id")) {
-                                //System.out.println("Analyzing line3");
-                                id = elt.getAttribute("data");
-                                if (id.equals("null")) {
-                                    id = "";
-                                }
-								//System.out.println("Analyzing line4");
-							} else if (elt.getTagName().equals("satisfied")) {
-                                //System.out.println("Analyzing line3");
-                                s = elt.getAttribute("data");
-                                if (s.equals("null")) {
-                                    satisfied = false;
-                                } else {
-									if (s.equals("true")) {
-										satisfied = true;
-									} else {
-										satisfied = false;
-									}
-								}
-								//System.out.println("Analyzing line4");
-							} else if (elt.getTagName().equals("verified")) {
-                                //System.out.println("Analyzing line3");
-                                s = elt.getAttribute("data");
-                                if (s.equals("null")) {
-                                    verified = false;
-                                } else {
-									if (s.equals("true")) {
-										verified = true;
-									} else {
-										verified = false;
-									}
-								}
-							}
+                           }
 								//System.out.println("Analyzing line4");
                         }
                     }
@@ -625,7 +546,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         return text;
     }
     
-	public String getID() {
+	/*public String getID() {
 		return id;
 	}
 	
@@ -654,20 +575,12 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
         } else {
             return AvatarRDRequirement.LOW;
         }
-    }
+    }*/
 	
 	public String getAttributes() {
-		String attr = "ID=" + id + "\n";
+		String attr = "";
 		attr += "Text= " + text + "\n";
-		attr += "Kind= " + kind + "\n";
-		attr += "Risk= " + criticality + "\n";
-		attr += "References= " + referenceElements + "\n";
-		if (reqType == SAFETY_REQ) {
-			attr += "Violated action= " + violatedAction + "\n";
-		}
-		if (reqType == SECURITY_REQ) {
-			attr += "Attack tree node(s)= " + attackTreeNode + "\n";
-		}
+		
 		return attr;
 	}
 	
@@ -683,7 +596,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 		Font f1 = f0.deriveFont(Font.BOLD);
 		Font f2 = f.deriveFont((float)(currentFontSize - 2));
 		
-		// Must find for both modes which width is desirable
+		/*// Must find for both modes which width is desirable
 		String s0, s1;
 		s0 = REQ_TYPE_STR[reqType];
 		s1 = "Text=";
@@ -734,7 +647,7 @@ public class AvatarMADAssumptionRequirement extends TGCScalableWithInternalCompo
 		}
 		
 		
-		resize(w4, h);
+		resize(w4, h);*/
 		
 	}
     

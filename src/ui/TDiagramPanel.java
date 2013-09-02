@@ -71,6 +71,7 @@ import ui.atd.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
+import ui.avatarmad.*;
 import ui.avatarad.*;
 import ui.avatarcd.*;
 
@@ -2829,8 +2830,38 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return name;
     }
+    
+    
 	
-	public String findAvatarRequirementName(String name, int start) {
+	public String findAvatarAssumptionName(String name, int start) {
+        boolean ok;
+        int i;
+        int index = start;
+        AvatarMADAssumption assump;
+        Object o;
+        Iterator iterator;
+        
+        while(index >= 0) {
+            ok = true;
+            iterator = componentList.listIterator();
+            while(iterator.hasNext()) {
+                o = (TGComponent)(iterator.next());
+                if (o instanceof AvatarMADAssumption) {
+                   assump = (AvatarMADAssumption)o;
+                    if (assump.getValue().equals(name + index)) {
+                        ok = false;
+                    }
+                }
+            }
+            if (ok) {
+                return name + index;
+            }
+            index ++;
+        }
+        return name;
+    }
+    
+    public String findAvatarRequirementName(String name, int start) {
         boolean ok;
         int i;
         int index = start;

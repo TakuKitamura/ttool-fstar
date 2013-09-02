@@ -6855,7 +6855,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		} else if (command.equals(actions[TGUIAction.ASMD_EXPIRE_TIMER].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_EXPIRE_TIMER);
 			
-		// AVATAR RD
+		// AVATAR MAD
+		} else if (command.equals(actions[TGUIAction.AMAD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1); 
+		} else if (command.equals(actions[TGUIAction.AMAD_ASSUMPTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARMAD_ASSUMPTION);
+		} else if (command.equals(actions[TGUIAction.AMAD_DIAGRAM_REFERENCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARMAD_DIAGRAM_REFERENCE);
+		} else if (command.equals(actions[TGUIAction.AMAD_ELEMENT_REFERENCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARMAD_ELEMENT_REFERENCE);
+		} else if (command.equals(actions[TGUIAction.AMAD_COMPOSITION_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.AMAD_VERSIONING_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR);
+		} else if (command.equals(actions[TGUIAction.AMAD_IMPACT_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_IMPACT_CONNECTOR);
+			
+        // AVATAR RD
 		} else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {
             actionOnButton(TGComponentManager.EDIT, -1); 
 		} else if (command.equals(actions[TGUIAction.ARD_REQUIREMENT].getActionCommand())) {
@@ -6871,8 +6887,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		} else if (command.equals(actions[TGUIAction.ARD_COPY_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COPY_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.ARD_COMPOSITION_CONNECTOR].getActionCommand())) {
-            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR);
-			
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR);    
+            
 			// AVATAR PD
 		} else if (command.equals(actions[TGUIAction.APD_EDIT].getActionCommand())) {
             actionOnButton(TGComponentManager.EDIT, -1); 

@@ -95,18 +95,18 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
-        connectingPoint[1] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
-        connectingPoint[3] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
-        connectingPoint[4] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
-        connectingPoint[5] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
-        connectingPoint[6] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
-        connectingPoint[7] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
-        connectingPoint[8] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
-        connectingPoint[9] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
-		connectingPoint[10] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
-		connectingPoint[11] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
+        connectingPoint[0] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
+        connectingPoint[1] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+        connectingPoint[2] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.75);
+        connectingPoint[3] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.25);
+        connectingPoint[4] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
+        connectingPoint[5] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.75);
+        connectingPoint[6] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.25, 0.0);
+        connectingPoint[7] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
+        connectingPoint[8] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
+        connectingPoint[9] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.25, 1.0);
+		connectingPoint[10] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.5, 1.0);
+		connectingPoint[11] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.75, 1.0);
 		
         addTGConnectingPointsCommentTop();    
         
@@ -273,7 +273,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 	
     
     public String toString() {
-        String ret =  getValue() + DIGRAM_REFERENCE;
+        String ret =  getValue() + DIAGRAM_REFERENCE;
         return ret;
     }
 	

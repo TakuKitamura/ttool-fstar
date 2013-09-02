@@ -44,7 +44,7 @@
  * @see
  */
 
-package ui.avatarrd;
+package ui.avatarmad;
 
 import java.awt.*;
 //import java.awt.geom.*;

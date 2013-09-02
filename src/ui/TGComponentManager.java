@@ -74,7 +74,7 @@ import ui.osad.*;
 
 import ui.ncdd.*;
 
-
+import ui.avatarmad.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
@@ -324,6 +324,14 @@ public class TGComponentManager {
 	public static final int AVATARRD_COPY_CONNECTOR = 5204;
 	public static final int AVATARRD_COMPOSITION_CONNECTOR = 5205;
 	
+	// AVATAR AMD -> starts at 5250
+	public static final int AVATARMAD_ASSUMPTION = 5250;
+    public static final int AVATARMAD_DIAGRAM_REFERENCE = 5251;
+	public static final int AVATARMAD_ELEMENT_REFERENCE = 5252; 
+	public static final int AVATARMAD_COMPOSITION_CONNECTOR = 5253;  
+	public static final int AVATARMAD_VERSIONING_CONNECTOR = 5254;
+	public static final int AVATARMAD_IMPACT_CONNECTOR = 5255;
+	
 	// AVATAR PD -> starts at 5300
 	public static final int APD_BLOCK = 5300;
     public static final int APD_LOGICAL_CONSTRAINT = 5301;
@@ -419,6 +427,16 @@ public class TGComponentManager {
                 break;
 			case AVATARRD_PROPERTY:
                 tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+                
+            case AVATARMAD_ASSUMPTION:
+                tgc = new AvatarMADAssumption(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMAD_DIAGRAM_REFERENCE:
+                tgc = new AvatarMADDiagramReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARMAD_ELEMENT_REFERENCE:
+                tgc = new AvatarMADElementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// AVATAR PD
@@ -964,6 +982,20 @@ public class TGComponentManager {
 			return AVATARSMD_EXPIRE_TIMER;
 			
 			
+		// AVATAR MAD
+		} else if (tgc instanceof AvatarMADAssumption) {
+			return AVATARMAD_ASSUMPTION;
+		} else if (tgc instanceof AvatarMADDiagramReference) {
+			return AVATARMAD_DIAGRAM_REFERENCE;
+		} else if (tgc instanceof AvatarMADElementReference) {
+			return AVATARMAD_ELEMENT_REFERENCE;
+		} else if (tgc instanceof AvatarMADCompositionConnector) {
+			return AVATARMAD_COMPOSITION_CONNECTOR;
+		} else if (tgc instanceof AvatarMADVersioningConnector) {
+			return AVATARMAD_VERSIONING_CONNECTOR;
+		} else if (tgc instanceof AvatarMADImpactConnector) {
+			return AVATARMAD_IMPACT_CONNECTOR;
+			
 		// AVATAR RD
 		} else if (tgc instanceof AvatarRDRequirement) {
 			return AVATARRD_REQUIREMENT;
@@ -1417,7 +1449,18 @@ public class TGComponentManager {
 			case AVATARSMD_CONNECTOR:
                 tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;     
-				
+			
+            // AVATAR MAD
+            case AVATARMAD_COMPOSITION_CONNECTOR:
+                tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_VERSIONING_CONNECTOR:
+                tgc = new AvatarMADVersioningConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_IMPACT_CONNECTOR:
+                tgc = new AvatarMADImpactConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+             
 			// AVATAR RD
 			case AVATARRD_DERIVE_CONNECTOR:
                 tgc = new AvatarRDDeriveConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
