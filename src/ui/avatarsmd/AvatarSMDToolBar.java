@@ -86,6 +86,8 @@ public class AvatarSMDToolBar extends TToolBar {
 		
 		mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID].setEnabled(b);
 		
+		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		
 		mgui.updateZoomInfo();
     }
     

@@ -195,6 +195,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	public final static byte MODEL_PROVERIF_OK = 45;
 	public final static byte EDIT_PROVERIF_OK = 46;
 	public final static byte AVATAR_SYNTAXCHECKING_OK = 47;
+	public final static byte PANEL_CHANGED = 48;
     
     public final static int INCREMENT = 10;
 	
@@ -555,7 +556,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_VIEW_WAVE].setEnabled(true);
 			actions[TGUIAction.EXTERNAL_ACTION_1].setEnabled(true);
 			actions[TGUIAction.EXTERNAL_ACTION_2].setEnabled(true);
-			actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
+			//actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(true);
 			actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
 			actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].setEnabled(ConfigurationTTool.GGraphPath != null);
 			if (mainBar != null) {
@@ -566,9 +567,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_MERGE].setEnabled(true);
 			actions[TGUIAction.ACT_NEW_DESIGN].setEnabled(true);
 			actions[TGUIAction.ACT_NEW_ANALYSIS].setEnabled(true);
-			actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);
-			actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(true);
-			actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(true);
+			//actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(true);
+			//actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(true);
+			//actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(true);
 			actions[TGUIAction.ACT_SAVE_AS].setEnabled(true);
 			actions[TGUIAction.ACT_IMPORT_LIB].setEnabled(true);
 			actions[TGUIAction.ACT_SAVE].setEnabled(false);
@@ -603,6 +604,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
 			break;
+			
 		case MODEL_UPPAAL_OK:
 			//actions[TGUIAction.ACT_SAVE_TIF].setEnabled(true);
 			//actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
@@ -694,6 +696,29 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
 			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
 			break;
+			
+		case PANEL_CHANGED:
+			actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
+			actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+			actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
+			actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
+			actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
+			actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
+			actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_FV_UPPAAL].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS].setEnabled(false);
+			actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION].setEnabled(false);
+			
 		case MODEL_SAVED:
 			actions[TGUIAction.ACT_SAVE].setEnabled(false);
 			break;
@@ -2794,7 +2819,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             NCPanel ncp = (NCPanel) tp;
             b = gtm.translateNC(ncp);
             if (b) {
-                setMode(MainGUI.MODEL_OK);
+                //setMode(MainGUI.MODEL_OK_NC);
 				ret = true;
 				if (!automatic) {
 					JOptionPane.showMessageDialog(frame,
@@ -5765,8 +5790,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 			}  else {
 				mainBar.showAvatarActions(false);
 			}
-            setEditMode();
+            
+			setMode(PANEL_CHANGED);
+			
+			setEditMode();
             setPanelMode();
+            
+            
         } catch	(Exception ex) {
             //TraceManager.addDev("Exception pane action: " + ex.getMessage());
         }

@@ -144,7 +144,8 @@ public class IconManager {
 	public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
 	public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036, imgic5038;
 	public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
-	public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056;
+	public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
+	public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066;
 	
 	public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
 	public static ImageIcon imgic5110, imgic5112;
@@ -435,6 +436,7 @@ public class IconManager {
 	private static String icon1012 = "images/reqcomp.gif";
 	private static String icon1014 = "images/ebrddobs.gif";
 	private static String icon1016 = "images/reqref.gif";
+
 	
 	
 	// EBRDD
@@ -535,6 +537,11 @@ public class IconManager {
 	private static String icon5052 = "images/avatarpartition.gif";
 	private static String icon5054 = "images/alignpartition.gif";  
 	private static String icon5056 = "images/avatarreceivesignal.gif";
+	private static String icon5058 = "images/avatarmaddiag.gif";
+	private static String icon5060 = "images/avatarmadaspt.gif";
+	private static String icon5062 = "images/avatarmadeltref.gif";
+	private static String icon5064 = "images/avatarmadversioning.gif";
+	private static String icon5066 = "images/avatarmadimpact.gif";
 	
 	private static String icon5100 = "images/avatarhead16.gif";
 	private static String icon5102 = "images/avatarhead32.gif";
@@ -905,7 +912,12 @@ public class IconManager {
 		imgic5050 = getIcon(icon5050);
 		imgic5052 = getIcon(icon5052);
 		imgic5054 = getIcon(icon5054);
-		imgic5056 = getIcon(icon5056);
+		imgic5056 = getIcon(icon5056);   
+		imgic5058 = getIcon(icon5058);
+		imgic5060 = getIcon(icon5060);
+		imgic5062 = getIcon(icon5062);
+		imgic5064 = getIcon(icon5064);
+		imgic5066 = getIcon(icon5066);
 		
 		imgic5100 = getIcon(icon5100);
 		imgic5102 = getIcon(icon5102);

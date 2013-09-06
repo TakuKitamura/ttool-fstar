@@ -85,6 +85,9 @@ public class ProactiveSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
+        
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);

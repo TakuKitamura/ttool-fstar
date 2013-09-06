@@ -75,20 +75,20 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 	private int currentFontSize = -1;
 	private boolean displayText = true;
     
-    protected final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>", "<<Method Assumption>>"};
-	protected final static int NB_ASSUMPTION_TYPE = 3;
+    public final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>", "<<Method Assumption>>"};
+
     
-    protected final static String[] DURABILITY_TYPE = {"Permanent", "Temporary"};
-	protected final static int NB_DURABILITY_TYPE = 2;
+    public final static String[] DURABILITY_TYPE = {"Undefined", "Permanent", "Temporary"};
 	
-	protected final static String[] SOURCE_TYPE = {"End-user", "Stakeholder", "Model creator"};
-	protected final static int NB_SOURCE_TYPE = 3;
 	
-	protected final static String[] STATUS_TYPE = {"Applied", "Alleviated"};
-	protected final static int NB_STATUS_TYPE = 2;
+	public final static String[] SOURCE_TYPE = {"Undefined", "End-user", "Stakeholder", "Model creator"};
 	
-	protected final static String[] LIMITATION_TYPE = {"Language", "Tool", "Method"};
-	protected final static int NB_LIMITATION_TYPE = 2;
+	
+	public final static String[] STATUS_TYPE = {"Undefined", "Applied", "Alleviated"};
+	
+	
+	public final static String[] LIMITATION_TYPE = {"Undefined", "Language", "Tool", "Method"};
+	
 	
 	protected String text;
     protected String []texts;
@@ -173,7 +173,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 		}
         oldValue = value;
         
-        myImageIcon = IconManager.imgic5100;
+        myImageIcon = IconManager.imgic5060;
 		
 		text = "Assumption description:\nDouble-click to edit";
         
@@ -220,9 +220,9 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 		g.drawRect(x, y, width, height);
         
 		g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
-		g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
+		g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
-		g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
+		g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
 		g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
 		ColorManager.setColor(g, getState(), 0);
 		if ((lineHeight > 23) && (width > 23)){
@@ -290,6 +290,23 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 			size += currentFontSize;
             
         }
+        if (size < (height - 2)) {
+        	drawLimitedString(g, "Durability=\"" + DURABILITY_TYPE[durability] + "\"", x + textX, y + size, width, 0);
+        	size += currentFontSize;
+        	if (size < (height - 2)) {
+        		drawLimitedString(g, "Source=\"" + SOURCE_TYPE[source] + "\"", x + textX, y + size, width, 0);
+        		size += currentFontSize;
+        		if (size < (height - 2)) {
+        			drawLimitedString(g, "Status=\"" + STATUS_TYPE[status] + "\"", x + textX, y + size, width, 0);
+        			size += currentFontSize;
+        			if (size < (height - 2)) {
+        				drawLimitedString(g, "Limitation=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + size, width, 0);
+        				size += currentFontSize;
+        			}
+        		}
+        	}
+        }
+        
         // Type and risk
 		/*if (size < (height - 2)) {
 			drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
@@ -321,101 +338,63 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     }
     
 	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+		
+		JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(), getAssumptionName(), text, type, durability, source, status, limitation);
+        jda.setSize(850, 500);
+        GraphicLib.centerOnParent(jda);
+        jda.show();
+        
+        if (!jda.isRegularClose()) {
+            return false;
+        }
+        
+        String s = jda.getName();
+        
+        text = jda.getText();
+         makeValue();
+        
+        type = jda.getType();
+        durability = jda.getDurability();
+        source = jda.getSource();
+        status = jda.getStatus();
+        limitation = jda.getLimitation();
+        
+        
+        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+        	//boolean b;
+        	if (!TAttribute.isAValidId(s, false, false)) {
+        		JOptionPane.showMessageDialog(frame,
+        			"Could not change the name of the Assumption: the new name is not a valid name",
+        			"Error",
+        			JOptionPane.INFORMATION_MESSAGE);
+        		return false;
+        	}
+        	
+        	if (!tdp.isRequirementNameUnique(s)) {
+        		JOptionPane.showMessageDialog(frame,
+        			"Could not change the name of the Assumption: the new name is already in use",
+        			"Error",
+        			JOptionPane.INFORMATION_MESSAGE);
+        		return false;
+        	}
+        	
+        	
+        	int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+        	minDesiredWidth = Math.max(size, minWidth);
+        	if (minDesiredWidth != width) {
+        		newSizeForSon(null);
+        	}
+        	setValue(s);
+        }
+        
+        
+        return true;
+		
 		// On the name ?
-        oldValue = value;
-		
-        if ((displayText) && (_y <= (y + lineHeight))) {
-			String text = getName() + ": ";
-			if (hasFather()) {
-				text = getTopLevelName() + " / " + text;
-			}
-			String s = (String)JOptionPane.showInputDialog(frame, text,
-				"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-				null,
-				getValue());
-			
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				//boolean b;
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Assumption: the new name is not a valid name",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					return false;
-				}
-				
-				if (!tdp.isRequirementNameUnique(s)) {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Assumption: the new name is already in use",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					return false;
-				}
-				
-				
-				int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-				minDesiredWidth = Math.max(size, minWidth);
-				if (minDesiredWidth != width) {
-					newSizeForSon(null);
-				}
-				setValue(s);
-				
-				if (tdp.actionOnDoubleClick(this)) {
-					return true;
-				} else {
-					JOptionPane.showMessageDialog(frame,
-						"Could not change the name of the Assumption: this name is already in use",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-					setValue(oldValue);
-				}
-			}
-			return false;
-		}
-		
-		return editAttributes();
+        
 		
     }
 	
-	public boolean editAttributes() {
-		//String oldValue = value;
-		/*String atn = null;
-		String va = null;
-		
-		if (reqType == SECURITY_REQ) {
-				atn = attackTreeNode;
-		}
-		
-		
-		if (reqType == SAFETY_REQ) {
-				va = violatedAction;
-		}
-		
-        JDialogRequirement jdr = new JDialogRequirement(tdp.getGUI().getFrame(), "Setting attributes of Requirement " + getRequirementName(), id, text, kind, criticality, va, reqType, atn, referenceElements);
-        jdr.setSize(750, 400);
-        GraphicLib.centerOnParent(jdr);
-        jdr.show();
-        
-        if (!jdr.isRegularClose()) {
-            return false;
-        }*/
-        
-		
-        /*if (reqType == SAFETY_REQ) {
-        violatedAction = jdr.getViolatedAction();
-        }
-        if (reqType == SECURITY_REQ) {
-		attackTreeNode = jdr.getAttackTreeNode();
-		}
-		referenceElements = jdr.getReferenceElements();
-        id = jdr.getId();
-        text = jdr.getText();
-        kind = jdr.getKind();
-        criticality = jdr.getCriticality();*/
-		
-        makeValue();
-        return true;
-	}
 	
 	public void rescale(double scaleFactor){
 		dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
@@ -508,7 +487,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                                 }
                                 text += GTURTLEModeling.decodeString(s) + "\n";
                             
-                            } else if (elt.getTagName().equals("Type")) {
+                            } else if (elt.getTagName().equals("type")) {
                                 //System.out.println("Analyzing line2");
                                 s = elt.getAttribute("data");
                                 if (s.equals("null")) {
@@ -520,8 +499,72 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 										 type = 0;
 									}
 								}
-								if ((type > (NB_ASSUMPTION_TYPE-1)) || (type < 0)) {
+								if ((type > (ASSUMPTION_TYPE_STR.length-1)) || (type < 0)) {
 									type = 0;
+								}
+								
+                           } else if (elt.getTagName().equals("durability")) {
+                                //System.out.println("Analyzing line2");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    durability = 0;
+                                } else {
+									try {
+										durability = Integer.decode(s).intValue();
+									} catch (Exception e) {
+										 durability = 0;
+									}
+								}
+								if ((durability > (DURABILITY_TYPE.length-1)) || (durability < 0)) {
+									type = 0;
+								}
+								
+                           } else if (elt.getTagName().equals("source")) {
+                                //System.out.println("Analyzing line2");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    source = 0;
+                                } else {
+									try {
+										source = Integer.decode(s).intValue();
+									} catch (Exception e) {
+										 source = 0;
+									}
+								}
+								if ((source > (SOURCE_TYPE.length-1)) || (source < 0)) {
+									source = 0;
+								}
+								
+                           } else if (elt.getTagName().equals("status")) {
+                                //System.out.println("Analyzing line2");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    status = 0;
+                                } else {
+									try {
+										status = Integer.decode(s).intValue();
+									} catch (Exception e) {
+										 status = 0;
+									}
+								}
+								if ((status > (STATUS_TYPE.length-1)) || (status < 0)) {
+									status = 0;
+								}
+								
+                           } else if (elt.getTagName().equals("limitation")) {
+                                //System.out.println("Analyzing line2");
+                                s = elt.getAttribute("data");
+                                if (s.equals("null")) {
+                                    limitation = 0;
+                                } else {
+									try {
+										limitation = Integer.decode(s).intValue();
+									} catch (Exception e) {
+										 limitation = 0;
+									}
+								}
+								if ((limitation > (LIMITATION_TYPE.length-1)) || (limitation < 0)) {
+									limitation = 0;
 								}
 								
                            }
@@ -541,6 +584,10 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 		makeValue();
     }
     
+    
+    public String getAssumptionName() {
+    	return value;
+    }
     
     public String getText() {
         return text;

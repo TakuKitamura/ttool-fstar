@@ -73,6 +73,9 @@ public class NCDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		
+		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		
 		mgui.updateZoomInfo();
     }
     

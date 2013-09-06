@@ -932,12 +932,12 @@ public class TGUIAction extends AbstractAction {
 		
 		// AVATAR Modeling Assumptions Diagram
 		actions[AMAD_EDIT] = new TAction("edit-amad-diagram", "Edit AVATAR Modeling Assumptions Diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR Modeling Assumptions Diagram", "Make it possible to edit the currently opened AVATAR Modeling Assumption diagram", 0);
-		actions[AMAD_ASSUMPTION] = new TAction("add-amad-assumption", "Add an assumption", IconManager.imgic5006, IconManager.imgic5006, "Assumption", "Add an assumption to the currently opened avatar Modeling Assumptions Diagram", 0);
-        actions[AMAD_DIAGRAM_REFERENCE] = new TAction("add-amad-diagram-reference", "Add a diagram reference", IconManager.imgic5006, IconManager.imgic5006, "Diagram reference", "Add a diagram reference to the currently opened avatar Modeling Assumptions Diagram", 0);
-        actions[AMAD_ELEMENT_REFERENCE] = new TAction("add-amad-element-reference", "Add a reference to an modeling element", IconManager.imgic5006, IconManager.imgic5006, "Element reference", "Add a reference to an model element in the currently opened avatar Modeling Assumptions Diagram", 0);
+		actions[AMAD_ASSUMPTION] = new TAction("add-amad-assumption", "Add an assumption", IconManager.imgic5060, IconManager.imgic5060, "Assumption", "Add an assumption to the currently opened avatar Modeling Assumptions Diagram", 0);
+        actions[AMAD_DIAGRAM_REFERENCE] = new TAction("add-amad-diagram-reference", "Add a diagram reference", IconManager.imgic5058, IconManager.imgic5058, "Diagram reference", "Add a diagram reference to the currently opened avatar Modeling Assumptions Diagram", 0);
+        actions[AMAD_ELEMENT_REFERENCE] = new TAction("add-amad-element-reference", "Add a reference to an modeling element", IconManager.imgic5062, IconManager.imgic5062, "Element reference", "Add a reference to an model element in the currently opened avatar Modeling Assumptions Diagram", 0);
         actions[AMAD_COMPOSITION_CONNECTOR] = new TAction("add-amad-composition", "Add a composition link", IconManager.imgic1012, IconManager.imgic1012, "Composition", "Add a composition link between two assumptions of the currently opened avatar Modeling Assumptions diagram", 0);
-        actions[AMAD_VERSIONING_CONNECTOR] = new TAction("add-amad-versioning", "Add a versioning link", IconManager.imgic1012, IconManager.imgic1012, "Versioning", "Add a versioning link between two assumptions of the currently opened avatar Modeling Assumptions diagram", 0);
-        actions[AMAD_IMPACT_CONNECTOR] = new TAction("add-amad-impact", "Add an impact link", IconManager.imgic1012, IconManager.imgic1012, "Impact", "Add an impact link between an assumption and an model element, in the currently opened avatar Modeling Assumptions diagram", 0);
+        actions[AMAD_VERSIONING_CONNECTOR] = new TAction("add-amad-versioning", "Add a versioning link", IconManager.imgic5064, IconManager.imgic5064, "Versioning", "Add a versioning link between two assumptions of the currently opened avatar Modeling Assumptions diagram", 0);
+        actions[AMAD_IMPACT_CONNECTOR] = new TAction("add-amad-impact", "Add an impact link", IconManager.imgic5066, IconManager.imgic5066, "Impact", "Add an impact link between an assumption and an model element, in the currently opened avatar Modeling Assumptions diagram", 0);
         
         
 		// AVATAR Requirement Diagrams

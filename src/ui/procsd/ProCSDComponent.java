@@ -281,6 +281,15 @@ public class ProCSDComponent extends TGCWithInternalComponent implements
 			addInternalComponent(tgc, 0);
 			return true;
 		}
+		
+		if ((tgc instanceof ProCSDInPort) || (tgc instanceof ProCSDOutPort)) {
+			// Set its coordinates
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			//((ProCSDComponent) tgc).resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
 
 		return false;
 		

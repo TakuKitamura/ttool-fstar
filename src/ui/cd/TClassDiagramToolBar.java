@@ -76,6 +76,10 @@ public class TClassDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTRIBUTES].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_GATES].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_SYNCHRO].setEnabled(b);
+        
+        mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ONECLICK_RTLOTOS_RG].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);

@@ -76,6 +76,11 @@ public class TMLArchiDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		
+		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
+		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
+		
 		mgui.updateZoomInfo();
     }
     

@@ -83,6 +83,8 @@ public class AvatarBDToolBar extends TToolBar {
         //mgui.actions[TGUIAction.ATD_CONSTRAINT].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
+		
+		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
         
     }
     

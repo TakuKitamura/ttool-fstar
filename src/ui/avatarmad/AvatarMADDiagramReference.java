@@ -131,7 +131,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 		//value = tdp.findRequirementName("Requirement_");
         oldValue = value;
         
-        myImageIcon = IconManager.imgic5100;
+        myImageIcon = IconManager.imgic5058;
 		
 		diagramText = "no diagram";
         
@@ -171,9 +171,9 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 		g.drawRect(x, y, width, height);
         
 		g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
-		g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
+		g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
-		g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
+		g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
 		g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
 		ColorManager.setColor(g, getState(), 0);
 		if ((lineHeight > 23) && (width > 23)){

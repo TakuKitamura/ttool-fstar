@@ -187,7 +187,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
 		}
         oldValue = value;
         
-        myImageIcon = IconManager.imgic5100;
+        myImageIcon = IconManager.imgic5006;
 		
 		text = "Requirement description:\nDouble-click to edit";
         

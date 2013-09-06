@@ -160,6 +160,11 @@ public class ColorManager {
 	public static  Color AVATAR_EXPIRE_TIMER = new Color(255, 180, 105);
 	
 	
+	public static  Color AVATAR_ASSUMPTION_ATTRIBUTES = new Color(160, 212, 221);
+	//public static  Color AVATAR_ASSUMPTION_ATTRIBUTES = new Color(183, 225, 203);
+	//public static  Color AVATAR_ASSUMPTION_TOP = new Color(141, 181, 161);
+	public static  Color AVATAR_ASSUMPTION_TOP = new Color(131, 209, 221);
+	
 	public static  Color AVATAR_REQUIREMENT_TOP = new Color(228, 241, 242);
 	public static  Color AVATAR_REQUIREMENT_ATTRIBUTES = new Color(205, 196, 109);
 	

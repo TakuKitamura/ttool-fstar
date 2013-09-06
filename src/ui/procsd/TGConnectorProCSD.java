@@ -116,11 +116,13 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
       		 TGComponent father1 =((ProCSDPort)p1.getFather()).getFather();
       		 TGComponent father2 =((ProCSDPort)p2.getFather()).getFather();
       		 
+      		 if ((father1 != null) && (father2 != null)) {
       		 if (father1.getFather() == father2)
       		 {
       		    TGConnectingPoint tmp=p1;
 		        	p1=p2;
 		        	p2=tmp;
+      		 }
       		 }
       	 }
        }
@@ -133,11 +135,14 @@ public  class TGConnectorProCSD extends TGConnectorAssociationProCSD {
         		 TGComponent father1 =((ProCSDPort)p1.getFather()).getFather();
         		 TGComponent father2 =((ProCSDPort)p2.getFather()).getFather();
         		 
-        		 if (father2.getFather() == father1)
-        		 {
-        		    TGConnectingPoint tmp=p1;
- 		        	p1=p2;
- 		        	p2=tmp;
+        		 
+        		 if ((father1 != null) && (father2 != null)) {
+					 if (father2.getFather() == father1)
+					 {
+						TGConnectingPoint tmp=p1;
+						p1=p2;
+						p2=tmp;
+					 }
         		 }
         	 }
 
