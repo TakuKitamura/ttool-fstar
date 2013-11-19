@@ -62,7 +62,7 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
     }
     
     public boolean actionOnDoubleClick(TGComponent tgc) {
-        return true;
+        return false;
     }
     
     public boolean actionOnAdd(TGComponent tgc) {

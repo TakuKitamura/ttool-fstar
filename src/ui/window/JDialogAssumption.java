@@ -122,17 +122,18 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
        
         panel1.setBorder(new javax.swing.border.TitledBorder("Main attributes"));
        
-        panel1.setPreferredSize(new Dimension(300, 350));
+        panel1.setPreferredSize(new Dimension(300, 450));
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Other attributes:"));
-        panel2.setPreferredSize(new Dimension(300, 250));
+        panel2.setPreferredSize(new Dimension(300, 450));
         
         //c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         c1.gridheight = 1;
         c1.weighty = 1.0;
         c1.weightx = 1.0;
+        c1.fill = GridBagConstraints.HORIZONTAL;
         
         c1.gridwidth = 1;
         JLabel label = new JLabel("type:");
@@ -150,6 +151,8 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         panel1.add(nameField, c1);
         
         c1.gridheight = 7;
+        
+        c1.fill = GridBagConstraints.BOTH;
         
         jta = new JTextArea();
         jta.setEditable(true);
@@ -211,11 +214,11 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
         closeButton = new JButton("Save and Close", IconManager.imgic25);
         //closeButton.setPreferredSize(new Dimension(600, 50));
         closeButton.addActionListener(this);

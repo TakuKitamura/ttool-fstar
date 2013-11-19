@@ -1204,6 +1204,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		TraceManager.addDev("Saving in txt format");
 		String fileName = saveFileName.getText().trim();
 		
+		if (fileName.length() == 0) {
+			fileName += "simulationtrace_fromttool.txt";
+		}
+		
 		
 		if (ConfigurationTTool.IMGPath != null) {
 			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
@@ -1252,6 +1256,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		// Testing file for save
 		
 		String fileName = saveFileName.getText().trim();
+		
+		if (fileName.length() == 0) {
+			fileName += "simulationtrace_fromttool.svg";
+		}
 		
 		if (ConfigurationTTool.IMGPath != null) {
 			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
@@ -1332,7 +1340,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		if ((saveFileName.getText() != null) && (saveFileName.getText().length() > 0)) {
 			filePath += saveFileName.getText();
 		} else {
-			filePath += "foo.png";
+			filePath += "simulationtrace_fromttool.png";
 		}
 		
 		file = new File(filePath);

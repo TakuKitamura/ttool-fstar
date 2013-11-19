@@ -989,7 +989,13 @@ public class AvatarDesignPanelTranslator {
 				
 				if (aa == null) {
 					makeError(error, tdp, _ab, tgc, "variable of random", tmp2);
+				} else {
+					// Checking type of variable -> must be an int
+					if (!(aa.isInt())) {
+						makeError(error, tdp, _ab, tgc, ": variable of random must be of type \"int\"", tmp2);
+					}
 				}
+				
 				arandom.setVariable(tmp1);
 				
 				asm.addElement(arandom);
