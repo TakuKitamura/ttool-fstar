@@ -304,8 +304,10 @@ public class AvatarBlock extends AvatarElement {
 		if (indexeq != -1) {
 			//TraceManager.addDev("Checking for return params");
 			String retparams = all.substring(0, indexeq).trim();
+			//TraceManager.addDev("Retparam=" + retparams);
 			
 			// multiple params
+			if (retparams.length()>0) {
 			if (retparams.charAt(0) == '(') {
 				if (retparams.charAt(retparams.length()-1) != ')') {
 					//TraceManager.addDev("Bad format for return params: " + retparams);
@@ -342,6 +344,7 @@ public class AvatarBlock extends AvatarElement {
 			}
 			
 		}
+		} 
 		//TraceManager.addDev("Ok for method " + _s);
 		
 		return true;

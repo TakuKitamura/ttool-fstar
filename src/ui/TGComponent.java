@@ -828,9 +828,9 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		g.drawString("" + (int)(li.load*100) + "%", x+width+sizeOval+(sizeOval) + 1, y+(sizeOval/2));
 		
 		if (li.energy != -1) {
-			g.fillOval(x+width, y+((sizeRect-sizeOval)/2)+20, sizeOval, sizeOval);
-			g.drawLine(x+width+sizeOval, y+(sizeRect/2)+20, x+width+sizeOval+(sizeOval), y+(sizeRect/2)+20);
-			g.drawString("" + (int)(li.energy) + " pW", x+width+sizeOval+(sizeOval) + 1, y+(sizeOval/2) + 20);
+			//g.fillOval(x+width, y+((sizeRect-sizeOval)/2)+20, sizeOval, sizeOval);
+			//g.drawLine(x+width+sizeOval, y+(sizeRect/2)+20, x+width+sizeOval+(sizeOval), y+(sizeRect/2)+20);
+			//g.drawString("" + (int)(li.energy) + " pW", x+width+sizeOval+(sizeOval) + 1, y+(sizeOval/2) + 20);
 		}
 	}
 	

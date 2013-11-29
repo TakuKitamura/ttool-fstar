@@ -455,8 +455,15 @@ public class AvatarDesignPanelTranslator {
 						addCheckingError(ce);
 						return;
 					} else {
+						if (types.size() ==0) {
+							CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + ab.getName());
+							ce.setAvatarBlock(ab);
+							ce.setTDiagramPanel(adp.getAvatarBDPanel());
+							addCheckingError(ce);
+						} else {
 						for(int j=0; j<types.size(); j++) {
 							addRegularAttribute(ab, (TAttribute)(types.elementAt(j)), a.getId() + "__");
+						}
 						}
 					}
 					
