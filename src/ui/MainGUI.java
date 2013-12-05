@@ -5699,9 +5699,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
                 } else {
                     mainDesignTabbedPane.setTitleAt(index, s);
                 }*/
-                getCurrentJTabbedPane().setTitleAt(index, s);
-                tdp.setName(s);
-                changeMade(tdp, TDiagramPanel.NEW_COMPONENT);
+                if (isAValidTabName(s)) {
+                	JOptionPane.showMessageDialog(frame, "Invalid name", "Error", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+					getCurrentJTabbedPane().setTitleAt(index, s);
+					tdp.setName(s);
+					changeMade(tdp, TDiagramPanel.NEW_COMPONENT);
+                }
             }
         }
     }
@@ -6056,16 +6060,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
     
     public void requestRenameTab(int index) {
 		String oldName = mainTabbedPane.getTitleAt(index);
-        String s = (String)JOptionPane.showInputDialog(frame, "TURTLE modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, mainTabbedPane.getTitleAt(index));
+        String s = (String)JOptionPane.showInputDialog(frame, "Name: ", "Renaming a tab=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, mainTabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
             // name already in use?
 			if (s.compareTo(oldName) != 0) {
-				mainTabbedPane.setTitleAt(index, s);
-				changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
-				
-				TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
-				if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
-					renameMapping(oldName, s);
+				if (isAValidTabName(s)) {
+					mainTabbedPane.setTitleAt(index, s);
+					changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
+					
+					TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+					if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+						renameMapping(oldName, s);
+					}
+				} else {
+					JOptionPane.showMessageDialog(frame, "Invalid name", "Error", JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			}
@@ -6553,6 +6561,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
             tmltdp.repaint();
             changeMade(tmltdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
         }
+    }
+    
+    public boolean isAValidTabName(String name) {
+    	return name.matches("((\\w)*(\\s)*)*");
     }
     
     

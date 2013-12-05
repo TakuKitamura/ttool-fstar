@@ -191,6 +191,10 @@ public class AvatarRelation extends AvatarElement {
 		return sb.toString();
 	}
 	
+	public String toStringIndex(int index) {
+		return block1.getName() + "." + signals1.get(index).getName() + " -> " + block2.getName() + "." + signals2.get(index).getName();
+	}
+	
 	// Return index of signal. If not found, return -1
 	public int hasSignal(AvatarSignal sig) {
 		int index1 = signals1.indexOf(sig);

@@ -154,6 +154,16 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private JScrollPane jspDisplayedBlocks;
 	private Vector<JCheckBox> displayedBlocks;
 	
+	// RandomBlocks
+	private JPanel randomPanel;
+	private JTextField randomValue;
+	private JCheckBox imposeRandom;
+	private JButton updateRandom;
+	
+	// Asynchronous transactions
+	private JPanel asyncPanel;
+	private JList asyncmsgs;
+	
 	// Sequence Diagram
 	private AvatarSpecificationSimulationSDPanel sdpanel;
 	
@@ -776,57 +786,51 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		jspDisplayedBlocks.setPreferredSize(new Dimension(250, 300));
 		infoTab.addTab("Displayed blocks", IconManager.imgic1202, jspDisplayedBlocks, "Displayed blocks");
 		
+		//Randomness
+		randomPanel = new JPanel();
+		randomPanel.setLayout(new GridBagLayout());
+		GridBagConstraints cr = new GridBagConstraints();
+		
+		cr.gridheight = 1;
+		cr.weighty = 1.0;
+		cr.weightx = 1.0;
+		cr.gridwidth = GridBagConstraints.REMAINDER; //end row
+		cr.fill = GridBagConstraints.BOTH;
+		cr.gridheight = 1;
+		imposeRandom = new JCheckBox("Force random value");
+		imposeRandom.addActionListener(this);
+		randomPanel.add(imposeRandom, cr);
+		cr.gridwidth = 1;
+		cr.fill = GridBagConstraints.HORIZONTAL;
+		randomPanel.add(new JLabel("value:"), cr);
+		randomValue = new JTextField();
+		randomPanel.add(randomValue, cr);
+		cr.gridwidth = GridBagConstraints.REMAINDER; //end row
+		updateRandom = new JButton("Update", IconManager.imgic16);
+		updateRandom.setToolTipText("Update random value");
+		randomPanel.add(updateRandom, cr);
+		updateRandom.addActionListener(this);
+		
+		infoTab.addTab("Randomness", IconManager.imgic1202, randomPanel, "Randomness");
+		
+		imposeRandom.setSelected(false);
+		randomValue.setEnabled(false);
 		
 		
-		// Variables
-		/*variablePanel = new JPanel();
-		variablePanel.setLayout(new BorderLayout());
-		infoTab.addTab("Tasks variables", null, variablePanel, "Current value of variables");
-		if (tmap == null) {
-			tvtm = new TaskVariableTableModel(null, valueTable, rowTable);
-		} else {
-			tvtm = new TaskVariableTableModel(tmap.getTMLModeling(), valueTable, rowTable);
-		}
-		sorterPI = new TableSorter(tvtm);
-		jtablePI = new JTable(sorterPI);
-		sorterPI.setTableHeader(jtablePI.getTableHeader());
-		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(60);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
-		((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(60);
-		((jtablePI.getColumnModel()).getColumn(4)).setPreferredWidth(100);
-		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		jspTaskVariableInfo = new JScrollPane(jtablePI);
-		jspTaskVariableInfo.setWheelScrollingEnabled(true);
-		jspTaskVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
-		jspTaskVariableInfo.setPreferredSize(new Dimension(500, 300));
-		variablePanel.add(jspTaskVariableInfo, BorderLayout.NORTH);
-		updateTaskVariableInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES]);
-		variablePanel.add(updateTaskVariableInformationButton, BorderLayout.SOUTH);*/
+		//Asynchronous
+		asyncPanel = new JPanel();
+		asyncPanel.setLayout(new GridBagLayout());
+		GridBagConstraints ca = new GridBagConstraints();
 		
-		// CPUs
-		/*cpuPanel = new JPanel();
-		cpuPanel.setLayout(new BorderLayout());
-		infoTab.addTab("CPUs", IconManager.imgic1100, cpuPanel, "Current state of CPUs");
-		cputm = new CPUTableModel(tmap, valueTable, rowTable);
-		sorterPI = new TableSorter(cputm);
-		jtablePI = new JTable(sorterPI);
-		sorterPI.setTableHeader(jtablePI.getTableHeader());
-		((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-		((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-		((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(700);
-		jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		jspCPUInfo = new JScrollPane(jtablePI);
-		jspCPUInfo.setWheelScrollingEnabled(true);
-		jspCPUInfo.getVerticalScrollBar().setUnitIncrement(10);
-		jspCPUInfo.setPreferredSize(new Dimension(500, 300));
-		cpuPanel.add(jspCPUInfo, BorderLayout.NORTH);
-		panelCPU = new JPanel(new FlowLayout());
-		updateCPUInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_CPUS]);
-		panelCPU.add(updateCPUInformationButton);
-		printCPUInfo = new JButton(actions[InteractiveSimulationActions.ACT_PRINT_CPUS]);
-		panelCPU.add(printCPUInfo);
-		cpuPanel.add(panelCPU, BorderLayout.SOUTH);*/
+		ca.gridheight = 1;
+		ca.weighty = 1.0;
+		ca.weightx = 1.0;
+		ca.gridwidth = GridBagConstraints.REMAINDER; //end row
+		ca.fill = GridBagConstraints.BOTH;
+		ca.gridheight = 1;
+		asyncmsgs = new JList();
+		asyncPanel.add(asyncmsgs, ca);
+		infoTab.addTab("Asynch. msg", IconManager.imgic1202, asyncPanel, "Asynch. msg.");
 		
 		pack();
 		
@@ -960,6 +964,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			//TraceManager.addDev("Animating");
 			updateMetElements();
 			updateTransactionsTable();
+			updateAsynchronousChannels();
 			animateDiagrams();
 		}
 		
@@ -1153,6 +1158,17 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	public void updateTransactionsTable() {
 		if (transactiontm != null) {
 			transactiontm.fireTableStructureChanged();
+		}
+	}
+	
+	public void updateAsynchronousChannels() {
+		if (ass != null) {
+			Vector<AvatarSimulationAsynchronousTransaction> msgs = ass.getAsynchronousMessages();
+			if (msgs != null) {
+				if (asyncmsgs != null) {
+					asyncmsgs.setListData(msgs);
+				}
+			}
 		}
 	}
 	
@@ -1431,6 +1447,22 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			
 		} else if (evt.getSource() == displayedTransactionsText) {
 			TraceManager.addDev("Entered text:" + displayedTransactionsText.getText());
+			
+		} else if ((evt.getSource() == imposeRandom) || (evt.getSource() == updateRandom)) {
+			randomValue.setEnabled(imposeRandom.isSelected());
+			if (ass != null) {
+				if (imposeRandom.isSelected()) {
+					int val;
+					try {
+						val = Integer.decode(randomValue.getText().trim()).intValue();
+					} catch (Exception e) {
+						val = -1;
+					}
+					ass.forceRandom(val);
+				} else {
+					ass.forceRandom(-1);
+				}
+			}
 		}
 		
 		

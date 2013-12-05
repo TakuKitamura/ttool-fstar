@@ -85,4 +85,34 @@ public class AvatarSimulationAsynchronousTransaction  {
 	public int getIndex() {
 		return index;
 	}
+	
+	public String toString() {
+		String blockName;
+		if (firstTransaction != null) {
+			blockName = firstTransaction.block.getName();
+		} else {
+			blockName = relation.block1.getName();
+		}
+		
+		AvatarSignal sig1 = relation.getSignal1(index);
+		AvatarSignal sig2 = relation.getSignal2(index);
+		
+		if ((sig1 == null) || (sig2 == null)) {
+			return "?";
+		}
+		
+		String ret = blockName + "." + sig1.getName()+"(";
+		for(int i=0; i<parameters.size(); i++) {
+			if (i !=0) {
+				ret += ",";
+			}
+			ret += parameters.get(i);
+		}
+		ret += ") -> ";
+		
+		ret += relation.block2.getName() + "." + sig2.getName();
+		
+		
+		return ret;
+	}
 }

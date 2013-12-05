@@ -109,6 +109,10 @@ public class AvatarSpecificationSimulation  {
 		reset();
 		setState(GATHER);
     }
+    
+    public Vector<AvatarSimulationAsynchronousTransaction> getAsynchronousMessages() {
+    	return asynchronousMessages;
+    }
 	
 	public AvatarSpecification getAvatarSpecification() {
 		return avspec;
@@ -978,10 +982,38 @@ public class AvatarSpecificationSimulation  {
 							_aspt.isLost = true;
 						} else {
 							_aspt.isLost = false;
-							asynchronousMessages.add(asat);
+							
+							// Must verify that the FIFO is not full if not blocking
+							if (rel.isBlocking()) {
+								// blocking was handled before
+								asynchronousMessages.add(asat);
+							} else {
+								// non blocking -> check the fifo size
+								int nb = getNbOfAsynchronousMessages(rel);
+								if (nb < rel.getSizeOfFIFO()) {
+									TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
+									asynchronousMessages.add(asat);
+								} else {
+									TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
+								}
+							}
 						}
 					} else {
-						asynchronousMessages.add(asat);
+						// Must verify that the FIFO is not full if not blocking
+						if (rel.isBlocking()) {
+							// blocking was handled before
+							asynchronousMessages.add(asat);
+						} else {
+							// non blocking -> check the fifo size
+							int nb = getNbOfAsynchronousMessages(rel);
+							if (nb < rel.getSizeOfFIFO()) {
+								TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
+								asynchronousMessages.add(asat);
+							} else {
+								TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
+							}
+						}
+						
 					}
 				} else {
 					// Must remove the asynchronous operation, and give the parameters
@@ -1384,6 +1416,14 @@ public class AvatarSpecificationSimulation  {
 	
 	public void setExecuteStateEntering(boolean _b) {
 		executeStateEntering = _b;
+	}
+	
+	// value: -1 -> not forcing
+	// other value: random is forced to that value
+	public void forceRandom(int value) {
+		for(AvatarSimulationBlock block: blocks) {
+			block.forceRandom(value);
+		}
 	}
 
 }

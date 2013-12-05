@@ -62,6 +62,8 @@ public class AvatarSimulationBlock  {
 	private Vector <AvatarSimulationTransaction> transactions;
 	private boolean completed;
 	public boolean selected; // Free use for graphic purpose
+	private int forcedRandom = -1;
+	
 	
 	//private int elapsedTime; 
 	
@@ -70,6 +72,10 @@ public class AvatarSimulationBlock  {
 		transactions = new Vector<AvatarSimulationTransaction>();
 		completed = false;
 		//elapsedTime = 0;
+    }
+    
+    public void forceRandom(int _value) {
+    	forcedRandom = _value;
     }
 	
 	/*public void addElapsedTime(int _elapsedTimed) {
@@ -259,7 +265,7 @@ public class AvatarSimulationBlock  {
 		if (_elt instanceof AvatarStopState) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
-			// Random
+			// State
 		} else if (_elt instanceof AvatarState) {
 			makeExecutedTransaction(_allTransactions, _elt, _clockValue, _aspt, _bunchid);
 			
@@ -357,7 +363,14 @@ public class AvatarSimulationBlock  {
 				if (index >-1) {
 					int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
 					int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
-					valMin = (int)(Math.floor((Math.random()*(valMax - valMin)))) + valMin;
+					
+					if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)){
+						// Use provided value as random value
+						valMin = forcedRandom;
+					} else {
+						// randomnly select a value
+						valMin = (int)(Math.floor((Math.random()) * (valMax - valMin + 1))) + valMin;
+					}
 					attributeValues.remove(index);
 					attributeValues.add(index, "" + valMin);
 					ast.actions = new Vector<String>();
