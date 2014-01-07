@@ -73,7 +73,7 @@ public class IconManager {
     public static ImageIcon imgic40, imgic41, imgic42, imgic43, imgic44, imgic45, imgic46, imgic47, imgic48, imgic49;
     public static ImageIcon imgic50, imgic51, imgic52, imgic53, imgic54, imgic55, imgic56, imgic57, imgic58, imgic59;
     public static ImageIcon imgic60, imgic61, imgic62, imgic63, imgic64, imgic65, imgic66;
-    public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77;
+    public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77, imgic78, imgic79;
 	public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88;
 	public static ImageIcon imgic90, imgic92, imgic94, imgic96;
 	
@@ -241,6 +241,8 @@ public class IconManager {
 	private static String icon75 = "images/toolbarButtonGraphics/general/Refresh24.gif";
 	private static String icon76 = "images/toolbarButtonGraphics/general/Preferences16.gif";
 	private static String icon77 = "images/toolbarButtonGraphics/general/Preferences24.gif";
+	private static String icon78 = "images/toolbarButtonGraphics/navigation/Up16.gif";
+	private static String icon79 = "images/toolbarButtonGraphics/navigation/Down16.gif";
 	
     
 	private static String icon80 = "images/avatarbd.gif";
@@ -666,6 +668,8 @@ public class IconManager {
 		imgic75 = getIcon(icon75);
 		imgic76 = getIcon(icon76);
 		imgic77 = getIcon(icon77);
+		imgic78 = getIcon(icon78);
+		imgic79 = getIcon(icon79);
 		
 		imgic80 = getIcon(icon80);
 		imgic82 = getIcon(icon82);

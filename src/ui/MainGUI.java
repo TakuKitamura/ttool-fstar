@@ -94,7 +94,7 @@ import ui.avatarpd.*;
 import ui.avatarcd.*;
 import ui.avatarad.*;
 
-public	class MainGUI implements ActionListener, WindowListener, KeyListener {
+public	class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
     
     public static boolean systemcOn;
     public static boolean lotosOn;
@@ -274,6 +274,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 	
 	// Invariants
 	Invariant currentInvariant;
+	
+	// Thread fof autosave
+	PeriodicBehaviorThread pbt;
     
     public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn) {
         systemcOn = _systemcOn;
@@ -287,6 +290,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
 		proverifOn = _proverifOn;
 		
 		currentInvariant = null;
+		
+		pbt = new PeriodicBehaviorThread(this, 120000); // save every two minutes
+		
 	}
 		
 	
@@ -854,10 +860,40 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener {
         }
     }
     
+    
+    
     private void activeActions(boolean b) {
         for(int	i=0; i<TGUIAction.NB_ACTION; i++) {
             actions[i].setEnabled(b);
         }
+    }
+    
+    
+    public void periodicAction() {
+    	//TraceManager.addDev("Autosaving ");
+    	if (file == null) {
+    		return;
+    	}
+    	
+    	File fileSave = new File(file.getAbsolutePath() + "~");
+    	TraceManager.addDev("Autosaving in " + fileSave.getAbsolutePath());
+    	status.setText("Autosaving in " + fileSave.getAbsolutePath());
+    	
+    	if(checkFileForSave(fileSave)) {
+    		try {
+    			String s = gtm.makeXMLFromTurtleModeling(-1);
+    			FileOutputStream fos = new FileOutputStream(fileSave);
+                fos.write(s.getBytes());
+                fos.close();
+    		} catch (Exception e) {
+    			TraceManager.addDev("Error during autosave: " + e.getMessage());
+    			status.setText("Error during autosave: " + e.getMessage());
+    			return;
+    		}
+    	}
+    	status.setText("Autosave done in " + fileSave.getAbsolutePath());
+    	
+    	
     }
     
     public void search(String text) {

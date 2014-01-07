@@ -110,6 +110,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	//protected JComboBox cpus, busses, mems, tasks, chans;
 	
 	//List of transactions
+	
 	private JList listPendingTransactions;
 	private TGComponent selectedComponentForTransaction;
 	private AvatarSimulationBlock previousBlock;
@@ -162,7 +163,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	
 	// Asynchronous transactions
 	private JPanel asyncPanel;
+	private JComboBox comboFIFOs;
+	private Vector<AvatarInteractiveSimulationFIFOData> fifos;
+	private JButton delete, up, down;
 	private JList asyncmsgs;
+	private int nbOfAsyncMsgs;
 	
 	// Sequence Diagram
 	private AvatarSpecificationSimulationSDPanel sdpanel;
@@ -211,11 +216,6 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE );
 		setIconImage(IconManager.img5100);
 		setBackground(Color.WHITE);
-		
-		/*valueTable = new Hashtable<Integer, String>();
-		rowTable = new Hashtable<Integer, Integer>();
-		runningTable = new Hashtable<Integer, Integer>();
-		diagramTable = new Hashtable<String, String>();*/
 
 		try {
 			setBackground(new Color(50, 40, 40, 200));
@@ -818,6 +818,18 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		
 		//Asynchronous
+		
+		// Making vector of fifos
+		AvatarInteractiveSimulationFIFOData fifo;
+		fifos = new Vector<AvatarInteractiveSimulationFIFOData>();
+		for(AvatarRelation ar: avspec.getRelations()) {
+			if (ar.isAsynchronous()) {
+				fifo = new AvatarInteractiveSimulationFIFOData(ar);
+				fifos.add(fifo);
+			}
+		}
+		
+		
 		asyncPanel = new JPanel();
 		asyncPanel.setLayout(new GridBagLayout());
 		GridBagConstraints ca = new GridBagConstraints();
@@ -826,11 +838,45 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		ca.weighty = 1.0;
 		ca.weightx = 1.0;
 		ca.gridwidth = GridBagConstraints.REMAINDER; //end row
-		ca.fill = GridBagConstraints.BOTH;
+		ca.fill = GridBagConstraints.HORIZONTAL;
 		ca.gridheight = 1;
+		
+		comboFIFOs = new JComboBox(fifos);
+		comboFIFOs.addActionListener(this);
+		asyncPanel.add(comboFIFOs, ca);
+		ca.fill = GridBagConstraints.BOTH;
+
+		JPanel borderjlist = new JPanel(new GridBagLayout());
+		GridBagConstraints cb = new GridBagConstraints();
+		
+		cb.gridheight = 1;
+		cb.weighty = 1.0;
+		cb.weightx = 1.0;
+		cb.gridwidth = GridBagConstraints.REMAINDER; //end row
+		cb.fill = GridBagConstraints.BOTH;
+		cb.gridheight = 1;
+		borderjlist.setBorder(new javax.swing.border.TitledBorder("Top of selected FIFO:"));
 		asyncmsgs = new JList();
-		asyncPanel.add(asyncmsgs, ca);
+		JScrollPane pane = new JScrollPane(asyncmsgs);
+		borderjlist.add(pane, cb);
+		asyncPanel.add(borderjlist, ca);
 		infoTab.addTab("Asynch. msg", IconManager.imgic1202, asyncPanel, "Asynch. msg.");
+		
+		ca.fill = GridBagConstraints.NONE;
+		ca.gridwidth = 1; 
+		delete = new JButton(actions[AvatarInteractiveSimulationActions.ACT_DELETE_ASYNC_MSG]);
+		//delete.addActionListener(this);
+		asyncPanel.add(delete, ca);
+		up = new JButton(actions[AvatarInteractiveSimulationActions.ACT_UP_ASYNC_MSG]);
+		//up.addActionListener(this);
+		asyncPanel.add(up, ca);
+		ca.gridwidth = GridBagConstraints.REMAINDER; //end row
+		down = new JButton(actions[AvatarInteractiveSimulationActions.ACT_DOWN_ASYNC_MSG]);
+		//down.addActionListener(this);
+		asyncPanel.add(down, ca);
+		setDeleteUpDown();
+		asyncmsgs.addListSelectionListener(this);
+		
 		
 		pack();
 		
@@ -991,6 +1037,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
 			actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
+			
 			b = true;
 			break;
 		case AvatarSpecificationSimulation.GATHER:
@@ -1045,7 +1092,34 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			sdpanel.scrollToLowerPosition();
 		}
 		
+		// Delete, up, down
+		setDeleteUpDown(b);
 	}
+	
+	public boolean isBusy() {
+		if (busyMode == AvatarSpecificationSimulation.EXECUTE) {
+			return true;
+		}
+		
+		if (busyMode == AvatarSpecificationSimulation.GATHER) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	public void setDeleteUpDown() {
+		setDeleteUpDown(!isBusy());
+	}
+	
+	public void setDeleteUpDown(boolean b) {
+		if (down != null) {
+			delete.setEnabled(b && (asyncmsgs.getSelectedIndex() > -1));
+			up.setEnabled(b && (asyncmsgs.getSelectedIndex() > 0));
+			down.setEnabled(b && (asyncmsgs.getSelectedIndex() > -1) && (asyncmsgs.getSelectedIndex() < (nbOfAsyncMsgs-1   )));
+		}
+	}   
 	
 	public void animateFutureTransactions() {
 		setContentOfListOfPendingTransactions();
@@ -1162,12 +1236,55 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void updateAsynchronousChannels() {
+		
 		if (ass != null) {
 			Vector<AvatarSimulationAsynchronousTransaction> msgs = ass.getAsynchronousMessages();
-			if (msgs != null) {
-				if (asyncmsgs != null) {
-					asyncmsgs.setListData(msgs);
+			
+			if (fifos != null) {
+				for(AvatarInteractiveSimulationFIFOData fifo: fifos) {
+					fifo.nb=0;
 				}
+				
+				
+			}
+			
+			if (msgs != null) {
+				
+				if (msgs.size() > 0) {
+					for(AvatarSimulationAsynchronousTransaction msg: msgs) {
+						for(AvatarInteractiveSimulationFIFOData fifo0: fifos) {
+							if (fifo0.fifo == msg.getRelation()) {
+								fifo0.nb ++;
+								break;
+							}
+						}
+					}
+				}
+				
+				if (asyncPanel != null) {
+					asyncPanel.revalidate();
+					comboFIFOs.revalidate();
+					comboFIFOs.repaint();
+				}
+				
+				
+				
+				if (asyncmsgs != null) {
+					AvatarInteractiveSimulationFIFOData currentFifo = (AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem()); 
+					if (currentFifo != null) {
+						nbOfAsyncMsgs = 0;
+						Vector<AvatarSimulationAsynchronousTransaction> vectorForList = new Vector<AvatarSimulationAsynchronousTransaction>();
+						for(AvatarSimulationAsynchronousTransaction as: msgs) {
+							if (as.getRelation() == currentFifo.fifo) {
+								vectorForList.add(as);
+								nbOfAsyncMsgs++;
+							}
+						}
+						//Collections.reverse(vectorForList);
+						asyncmsgs.setListData(vectorForList);
+					}
+				}	
+				
 			}
 		}
 	}
@@ -1364,6 +1481,62 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		mgui.writeImageCapture(bi, file, true);
 	}
 	
+	public void deleteAsyncMsg() {
+		//TraceManager.addDev("Deleting async msg");
+		if ((ass != null) && (!isBusy())){
+			int index = asyncmsgs.getSelectedIndex();
+			if (index > -1) {
+				boolean pendingModified = ass.removeAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index);
+				updateAsynchronousChannels();
+				if (pendingModified) {
+					updatePending();
+				}
+			}
+		}
+		
+	}
+	
+	public void upAsyncMsg() {
+		//TraceManager.addDev("Up async msg");
+		if ((ass != null) && (!isBusy())){
+			int index = asyncmsgs.getSelectedIndex();
+			if (index > 0) {
+				ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index ,index-1);
+				updateAsynchronousChannels();
+				asyncmsgs.setSelectedIndex(index-1);
+			}
+		}
+		
+		//printFullList();
+		
+	}
+	
+	public void downAsyncMsg() {
+		//TraceManager.addDev("Down async msg");
+		if ((ass != null) && (!isBusy())){
+			int index = asyncmsgs.getSelectedIndex();
+			if (index > -1) {
+				//TraceManager.addDev("Moving from  index: " + index + " to: " + (index+1));
+				ass.moveAsyncMessage(((AvatarInteractiveSimulationFIFOData)(comboFIFOs.getSelectedItem())).fifo, index, index+1);
+				updateAsynchronousChannels();
+				//TraceManager.addDev("Selecting list at index:" + index);
+				asyncmsgs.repaint();
+				asyncmsgs.setSelectedIndex(index+1);
+			}
+		}
+		//printFullList();
+	}
+	
+	public void printFullList() {
+		int  i = 0;
+		if (ass != null) {
+			for(AvatarSimulationAsynchronousTransaction tr: ass.getAsynchronousMessages()) {
+				TraceManager.addDev("#" + i + "\t: " + tr); 
+				i++;
+			}
+		}
+	}
+	
 	
 	// Mouse management
 	public void mouseReleased(MouseEvent e) {}
@@ -1463,8 +1636,19 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 					ass.forceRandom(-1);
 				}
 			}
+		} else if  (evt.getSource() == comboFIFOs) {
+			updateAsynchronousChannels();
+			setDeleteUpDown();
+		} else if (evt.getSource() == delete)  {
+			deleteAsyncMsg();
+			return;
+		} else if (evt.getSource() == up)  {
+			TraceManager.addDev("Source = up");
+			upAsyncMsg();
+		} else if (evt.getSource() == down)  {
+			TraceManager.addDev("Source = up");
+			downAsyncMsg();
 		}
-		
 		
 		// Check for source of jcheckbox
 		int index = 0;
@@ -1485,6 +1669,11 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	}
 	
 	public void valueChanged(ListSelectionEvent e) {
+		if (e.getSource() == asyncmsgs) {
+			setDeleteUpDown();
+			return;
+		}
+		
 		int index = listPendingTransactions.getSelectedIndex();
 		//TraceManager.addDev("Selected index = " +  index);
 		if (index > -1) {
@@ -1566,6 +1755,5 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
     
     public void windowDeactivated(WindowEvent e) {
     }
-	
-	
+    
 } // Class

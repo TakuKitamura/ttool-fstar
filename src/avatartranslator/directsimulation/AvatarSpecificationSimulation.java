@@ -492,7 +492,7 @@ public class AvatarSpecificationSimulation  {
 	
 	// Simulation functions
 	
-	public void gatherPendingTransactions() {
+	public synchronized void gatherPendingTransactions() {
 		AvatarTransition tr;
 		
 		pendingTransactions.clear();
@@ -777,7 +777,7 @@ public class AvatarSpecificationSimulation  {
 		}
 	}
 	
-	public AvatarSimulationAsynchronousTransaction getAsynchronousMessage(AvatarRelation _ar, AvatarSignal _as) {
+	public synchronized AvatarSimulationAsynchronousTransaction getAsynchronousMessage(AvatarRelation _ar, AvatarSignal _as) {
 		for(AvatarSimulationAsynchronousTransaction asat: asynchronousMessages) {
 			if (asat.getRelation() == _ar) {
 				if (_ar.getIndexOfSignal(_as) == asat.getIndex()) {
@@ -788,7 +788,7 @@ public class AvatarSpecificationSimulation  {
 		return null;
 	}
 	
-	public int getNbOfAsynchronousMessages(AvatarRelation _ar) {
+	public synchronized int getNbOfAsynchronousMessages(AvatarRelation _ar) {
 		int cpt = 0;
 		for(AvatarSimulationAsynchronousTransaction asat: asynchronousMessages) {
 			if (asat.getRelation() == _ar) {
@@ -986,13 +986,13 @@ public class AvatarSpecificationSimulation  {
 							// Must verify that the FIFO is not full if not blocking
 							if (rel.isBlocking()) {
 								// blocking was handled before
-								asynchronousMessages.add(asat);
+								addAsyncMessage(asat);
 							} else {
 								// non blocking -> check the fifo size
 								int nb = getNbOfAsynchronousMessages(rel);
 								if (nb < rel.getSizeOfFIFO()) {
 									TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
-									asynchronousMessages.add(asat);
+									addAsyncMessage(asat);
 								} else {
 									TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
 								}
@@ -1002,13 +1002,13 @@ public class AvatarSpecificationSimulation  {
 						// Must verify that the FIFO is not full if not blocking
 						if (rel.isBlocking()) {
 							// blocking was handled before
-							asynchronousMessages.add(asat);
+							addAsyncMessage(asat);
 						} else {
 							// non blocking -> check the fifo size
 							int nb = getNbOfAsynchronousMessages(rel);
 							if (nb < rel.getSizeOfFIFO()) {
 								TraceManager.addDev("FIFO not full: " + nb + " size=" + rel.getSizeOfFIFO());
-								asynchronousMessages.add(asat);
+								addAsyncMessage(asat);
 							} else {
 								TraceManager.addDev("*** Asyn msg was dropped because FIFO is full");
 							}
@@ -1018,7 +1018,7 @@ public class AvatarSpecificationSimulation  {
 				} else {
 					// Must remove the asynchronous operation, and give the parameters
 					AvatarSimulationAsynchronousTransaction asat = getAsynchronousMessage(rel, sig);
-					asynchronousMessages.remove(asat);
+					removeAsyncMessage(asat);
 					_aspt.linkedAsynchronousMessage = asat;
 				}
 			} else {
@@ -1085,11 +1085,11 @@ public class AvatarSpecificationSimulation  {
 			
 			// Must handle asynchronous messages
 			if (ast.receivedMessage != null) {
-				asynchronousMessages.add(0, ast.receivedMessage);
+				addAsyncMessageAt(0, ast.receivedMessage);
 			}
 			
 			if (ast.sentMessage != null) {
-				asynchronousMessages.remove(ast.sentMessage);
+				removeAsyncMessage(ast.sentMessage);
 			}
 			
 			if (allTransactions.size() > 0) {
@@ -1425,5 +1425,120 @@ public class AvatarSpecificationSimulation  {
 			block.forceRandom(value);
 		}
 	}
-
+	
+	public synchronized void addAsyncMessage(AvatarSimulationAsynchronousTransaction m) {
+		asynchronousMessages.add(m);
+	}
+	
+	public synchronized void addAsyncMessageAt(int index, AvatarSimulationAsynchronousTransaction m) {
+		asynchronousMessages.add(m);
+	}
+	
+	public synchronized void removeAsyncMessage(AvatarSimulationAsynchronousTransaction msg) {
+		asynchronousMessages.remove(msg);
+	}
+	
+	// Asynchronous messages manipulation
+	public synchronized boolean removeAsyncMessage(AvatarRelation ar, int index) {
+		if ((ar != null) && (index >-1)) {
+			int realIndex = 0;
+			boolean found = false;
+			AvatarSimulationAsynchronousTransaction mesg = null;
+			for(AvatarSimulationAsynchronousTransaction msg: asynchronousMessages) {
+				if (msg.getRelation() == ar) {
+					if (index == 0) {
+						found = true;
+						mesg = msg;
+						break;
+					} else {
+						index --;
+					}
+				}
+				realIndex ++;
+			}
+			if (found) {
+				//TraceManager.addDev("Removing at index: " + realIndex);
+				asynchronousMessages.remove(realIndex);
+				return removeAsyncMsgFromPendingTransactions(mesg);
+			}
+		}
+		
+		return false;
+	}
+	
+	public synchronized void moveAsyncMessage(AvatarRelation ar, int oldIndex, int newIndex) {
+		//TraceManager.addDev("Moving from  index: " + oldIndex + " to: " + newIndex);
+		/*int back1 = oldIndex;
+		int back2 = newIndex;*/
+		if ((ar != null) && (oldIndex >-1) && (newIndex >-1) && (oldIndex != newIndex)) {
+			int oldRealIndex = -1;
+			int newRealIndex = -1;
+			int realIndex = 0;
+			boolean found = false;
+			AvatarSimulationAsynchronousTransaction mesg = null;
+			for(AvatarSimulationAsynchronousTransaction msg: asynchronousMessages) {
+				if (msg.getRelation() == ar) {
+					if ((oldIndex == 0) && (oldRealIndex == -1)){
+						oldRealIndex = realIndex;
+						mesg = msg;
+					} else {
+						oldIndex --;
+					}
+					if ((newIndex == 0) && (newRealIndex == -1)) {
+						newRealIndex = realIndex;
+					} else {
+						newIndex --;
+					}
+				}
+				realIndex ++;
+			}
+			if ((newRealIndex != -1) && (mesg != null)) {
+				//TraceManager.addDev("Moving from: " + oldRealIndex + " to: "+ newRealIndex);
+				asynchronousMessages.set(oldRealIndex, asynchronousMessages.get(newRealIndex));
+				asynchronousMessages.set(newRealIndex, mesg);
+				
+				
+				//asynchronousMessages.insertElementAt(mesg, newRealIndex);
+				
+				/*if (back1 < back2) {
+					asynchronousMessages.insertElementAt(mesg, newRealIndex);
+				} else {
+					asynchronousMessages.insertElementAt(mesg, newRealIndex);
+				}*/
+			}
+		}
+		TraceManager.addDev("Move done");
+		
+	}
+	
+	
+	
+	public synchronized  boolean removeAsyncMsgFromPendingTransactions(AvatarSimulationAsynchronousTransaction msg) {
+		if (msg == null) {
+			return false;
+		}
+		
+		boolean found = false;
+		Vector<AvatarSimulationPendingTransaction> vect = new Vector<AvatarSimulationPendingTransaction>();
+		if ((pendingTransactions != null) && (pendingTransactions.size() > 0)) {
+			for(AvatarSimulationPendingTransaction tr: pendingTransactions) {
+				if (tr.linkedAsynchronousMessage == msg) {
+					//TraceManager.addDev("Msg to remove from pending transaction");
+					vect.add(tr);
+					found = true;
+				}
+			}
+		}
+		
+		if (vect.size()>0) {
+			for(AvatarSimulationPendingTransaction toRem: vect) {
+				//TraceManager.addDev("Removing pending transaction");
+				pendingTransactions.remove(toRem);
+			}
+		}
+		
+		TraceManager.addDev("Returning " + found);
+		
+		return found;
+	}
 }

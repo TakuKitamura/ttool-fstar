@@ -92,7 +92,7 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public boolean getResultOf(String _expr) {
-		//TraceManager.addDev("Evaluating bool expr: " + _expr);
+		TraceManager.addDev("Evaluating bool expr: " + _expr);
 		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 		
 		nbOpen = 0;
@@ -105,7 +105,8 @@ public class BoolExpressionEvaluator {
 			return false;
 		}
 		
-		
+		_expr = Conversion.replaceAllString(_expr, "||", "|").trim();
+		_expr = Conversion.replaceAllString(_expr, "&&", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
@@ -120,7 +121,7 @@ public class BoolExpressionEvaluator {
 		while((index = _expr.indexOf("not(")) != -1) {
 			indexPar = Conversion.findMatchingParenthesis(_expr, index+3, '(', ')');
 			if( indexPar == -1)	{
-				errorMessage = "Parenthisis not maching at index " + (index + 3) + " in expression: " + _expr;
+				errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
 				return false;
 			}
 			

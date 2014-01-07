@@ -59,6 +59,8 @@ public class AvatarSyntaxChecker  {
     }
 	
 	public static int isAValidGuard(AvatarSpecification _as, AvatarBlock _ab, String _guard) {
+		//TraceManager.addDev("Evaluating (non modified) guard:" + _guard);
+		
 		String tmp = _guard.replaceAll(" ", "").trim();
 		if (tmp.compareTo("[]") == 0) {
 			return 0;
@@ -70,13 +72,14 @@ public class AvatarSyntaxChecker  {
 		
 		String act = tmp;
 		
+		
 		for(AvatarAttribute aa: _ab.getAttributes()) {
 			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
 		}
 		
 		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 		
-		//TraceManager.addDev("Evaluating guard:" + act);
+		//TraceManager.addDev("Evaluating (modified) guard:" + act);
 		boolean result = bee.getResultOf(act);
 		if (bee.getError() != null) {
 			//TraceManager.addDev("Error: " + bee.getError());

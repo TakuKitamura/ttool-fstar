@@ -97,8 +97,12 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
 	
 	public static final int ACT_ZOOM_IN = 30;
 	public static final int ACT_ZOOM_OUT = 31;
+	
+	public static final int ACT_DELETE_ASYNC_MSG = 32;
+	public static final int ACT_UP_ASYNC_MSG = 33;
+	public static final int ACT_DOWN_ASYNC_MSG = 34;
    
-    public static final int NB_ACTION = 32;
+    public static final int NB_ACTION = 35;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -181,7 +185,9 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_ZOOM_IN] = new TAction("zoommore-command", "Zoom +", IconManager.imgic317, IconManager.imgic317, "Zoom +", "Zoom +", '0');
         actions[ACT_ZOOM_OUT] = new TAction("zoomless-command", "Zoom -", IconManager.imgic315, IconManager.imgic315, "Zoom -", "Zoom -", '0');
         
-        
+        actions[ACT_DELETE_ASYNC_MSG] = new TAction("delete-async-command", "Delete", IconManager.imgic336, IconManager.imgic336, "Delete msg +", "Delete the selected message", '0');
+        actions[ACT_UP_ASYNC_MSG] = new TAction("up-async-command", "Up", IconManager.imgic78, IconManager.imgic78, "Up msg", "Put a async msg closer to the FIFO exit", '0');
+        actions[ACT_DOWN_ASYNC_MSG] = new TAction("up-async-command", "Down", IconManager.imgic79, IconManager.imgic79, "Down msg", "Put a async msg further from the FIFO exit", '0'); 
     }
     
     public String getActionCommand()  {

@@ -534,6 +534,7 @@ public class Conversion {
 	}
 	
 	public static String putVariableValueInString(String[] ops, String expr, String variableName, String value) {
+		//TraceManager.addDev("Putting variable value = " + value + " of " + variableName + " in " + expr);
 		String ret = " " + expr + " ";
 		String name = " " + variableName + " ";
 		String s0;

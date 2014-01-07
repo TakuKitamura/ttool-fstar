@@ -52,7 +52,7 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarSpecification extends AvatarElement {
-   public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}"};
+   public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     
    private LinkedList<AvatarBlock> blocks;
    private LinkedList<AvatarRelation> relations;
@@ -169,7 +169,7 @@ public class AvatarSpecification extends AvatarElement {
 		}
 		sb.append("\nPragmas:\n");
 		for(String pragma: pragmas) {
-			sb.append("Pagma:" + pragma.toString() + "\n");
+			sb.append("Pragma:" + pragma.toString() + "\n");
 		}
 		
 		return sb.toString();
