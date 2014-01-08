@@ -434,7 +434,7 @@ public class AVATAR2CPOSIX {
 		
 		s+= CR + "fillListOfRequests(&__list, __myname, &__myCond, &__mainMutex);" + CR; 
 		
-		s+= "printf(\"my name = %s\\n\", __myname);" + CR;
+		s+= "//printf(\"my name = %s\\n\", __myname);" + CR;
 		
 		s+= CR + "/* Main loop on states */" + CR;
 		s+= "while(__currentState != STATE__STOP__STATE) {" + CR;
@@ -471,7 +471,7 @@ public class AVATAR2CPOSIX {
 		
 		s += "}" + CR;
 		
-		s+= "printf(\"Exiting = %s\\n\", __myname);" + CR;
+		s+= "//printf(\"Exiting = %s\\n\", __myname);" + CR;
 		s+= "return NULL;" + CR;
 		s += "}" + CR;	
 		_taskFile.addToMainCode(s + CR);

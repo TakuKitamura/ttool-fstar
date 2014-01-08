@@ -60,6 +60,8 @@ public class MainFile {
 	private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"random.h\"\n#include \"tracemanager.h\""; 
 	
 	private final static String MAIN_DEC = "int main(int argc, char *argv[]) {\n";
+	private final static String DISABLE_BUFFERING = "/* disable buffering on stdout */\nsetvbuf(stdout, NULL, _IONBF, 0);\n";
+	
 	private final static String CR = "\n";
 	
 	private String name;
@@ -98,7 +100,9 @@ public class MainFile {
 	public String getMainCode() {
 		String s = INCLUDE_HEADER + "\n" + LOCAL_INCLUDE_HEADER + CR + CR;
 		s += beforeMainCode + CR;
-		s += MAIN_DEC + CR + mainCode + CR + "}" + CR;
+		s += MAIN_DEC + CR;
+		s += DISABLE_BUFFERING;
+		s += CR + mainCode + CR + "}" + CR;
 		
 		return s;
 		

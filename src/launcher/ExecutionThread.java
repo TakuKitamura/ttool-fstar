@@ -196,6 +196,7 @@ class ExecutionThread extends Thread {
             }
             TraceManager.addDev("Ending command " + cmd);
             
+            
             // print output on socket
         } else {
             Socket s =  waitForClient();
@@ -222,11 +223,18 @@ class ExecutionThread extends Thread {
                 
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 
-                
+                //TraceManager.addDev("Reading the output stream of the process " + cmd);
                 while (((str = proc_in.readLine()) != null) && (go == true)){
-                    TraceManager.addDev("out " + str);
+                	System.out.println("out:" + str);
+                    //TraceManager.addDev("out " + str);
                     respond(out, "4" + str);
                 }
+                /*int c;
+                while (((c = proc_in.read()) > 0) && (go == true)){
+                	System.out.println("char:" + (char)c);
+                    TraceManager.addDev("out " + (char)c);
+                    respond(out, "4" + c);
+                }*/
                 
             } catch (Exception e) {
                 TraceManager.addDev("Exception [" + e.getMessage() + "] occured when executing " + cmd);

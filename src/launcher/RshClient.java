@@ -50,6 +50,8 @@ import java.io.*;
 import java.net.*;
 import javax.swing.*;
 
+import myutil.*;
+
 
 public class RshClient {
     
@@ -229,6 +231,26 @@ public class RshClient {
         
         String s;
         
+        //TraceManager.addDev("Waiting for process data");
+        while (((s = readProcessData()) != null) && (go == true)) {
+        	//TraceManager.addDev("Adding to jta:" + s);
+            jta.append(s + "\n");
+        }
+        
+        //System.out.println("no more data : stopped");
+        closeConnect();
+        //System.out.println("Closed");
+        
+    }
+    
+    public void fillJTAByLine(JTextArea jta) throws LauncherException {
+        go = true;
+        
+        //System.out.println("Connect");
+        connect(portString);
+        
+        String s;
+        
         //System.out.println("Waiting for data");
         while (((s = readProcessData()) != null) && (go == true)) {
             jta.append(s + "\n");
@@ -295,7 +317,7 @@ public class RshClient {
         return true;
     }*/
     
-    private String readProcessData() throws LauncherException {
+    public String readProcessData() throws LauncherException {
         int nb;
         String s = null;
         try {
