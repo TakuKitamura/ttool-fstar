@@ -128,7 +128,7 @@ public class AvatarSyntaxChecker  {
 		String act = tmp;
 		
 		for(AvatarAttribute aa: _ab.getAttributes()) {
-			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValue());
+			act = Conversion.putVariableValueInString(AvatarSpecification.ops, act, aa.getName(), aa.getDefaultInitialValueTF());
 		}
 		
 		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();

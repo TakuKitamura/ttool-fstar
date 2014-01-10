@@ -49,8 +49,8 @@ import java.util.*;
 
 public class BoolExpressionEvaluator {
 	
-	public static final String TRUE = "true";
-	public static final String FALSE = "false";
+	public static final String TRUE = "t";
+	public static final String FALSE = "f";
 	
 	public static final int TRUE_VALUE = 1;
 	public static final int FALSE_VALUE = 0;
@@ -58,14 +58,20 @@ public class BoolExpressionEvaluator {
 	public static final int NUMBER_TOKEN = -1;
 	public static final int BOOL_TOKEN = -2;
 	public static final int EQUAL_TOKEN = -3;
-	public static final int LT_TOKEN = -4;
-	public static final int GT_TOKEN = -5;
-	public static final int NEG_TOKEN = -6;
+	public static final int NOT_TOKEN = -6;
 	public static final int OR_TOKEN = -7;
 	public static final int AND_TOKEN = -8;
+	public static final int LT_TOKEN = -4;
+	public static final int GT_TOKEN = -5;
 	public static final int LTEQ_TOKEN = -9;
 	public static final int GTEQ_TOKEN = -10;
 	public static final int EOLN_TOKEN = -11;
+	public static final int OPEN_PAR_TOKEN = -12;
+	public static final int CLOSE_PAR_TOKEN = -13;
+	public static final int WHITE_SPACE_TOKEN = -14;
+	
+	// PARSING_STAGE
+	public static final int BEGIN_EXPR = 1;
 	
 	private StringTokenizer tokens;
 	private String errorMessage = null;
@@ -80,6 +86,15 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public String getError() {
+		int index = errorMessage.indexOf("/");
+		if (index == -1) {
+			return errorMessage;
+		}
+		
+		return errorMessage.substring(index+1, errorMessage.length());
+	}
+	
+	public String getFullError() {
 		return errorMessage;
 	}
 	
@@ -132,9 +147,21 @@ public class BoolExpressionEvaluator {
 		
 		//TraceManager.addDev("Computing:" + _expr);
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/!=&|<>:;()",true);
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r!=&|<>():;tf",true);
 		
-		computeNextToken();
+		int result = parseRootExpr1();
+		
+		if (result == TRUE_VALUE) {
+			TraceManager.addDev("equal true");
+			return true;
+		}
+		
+		if (result == FALSE_VALUE) {
+			TraceManager.addDev("equal false");
+			return false;
+		}
+		
+		/*computeNextToken();
 		int result =  (int)(parseExpression());
 		
 		if (errorMessage != null) {
@@ -147,19 +174,354 @@ public class BoolExpressionEvaluator {
 		}
 		
 		if (result == TRUE_VALUE) {
-			//TraceManager.addDev("equal true");
+			TraceManager.addDev("equal true");
 			return true;
 		}
 		
 		if (result == FALSE_VALUE) {
-			//TraceManager.addDev("equal false");
+			TraceManager.addDev("equal false");
 			return false;
 		}
 		
 		errorMessage = "Not a boolean expression: " + _expr;
 		
-		TraceManager.addDev("Error:" + errorMessage);
+		TraceManager.addDev("Error:" + errorMessage);*/
 		return false;
+	}
+	
+	
+	public int parseRootExpr1() {
+		int[] result = parseNonEmptyExpr();
+		
+		if ((result[1] == NUMBER_TOKEN) && (errorMessage == null)) {
+			errorMessage = "0/Unexpected integer value";
+			return result[0];
+		}
+		
+		return result[0];
+		
+	}
+	
+	// Returns the value and type of the return
+	// <boolexpr>
+	public int[] parseNonEmptyExpr() {
+		TraceManager.addDev("1/Parsing non empty expr");
+		int[] result = new int[2];
+		
+		computeNextToken1();
+		
+		TraceManager.addDev("currentType=" + currentType);
+	
+		if (endOfParsing()) {
+			errorMessage = "2/Unexpected end of expression";
+			return result;
+		}
+	
+		
+		if (currentType == CLOSE_PAR_TOKEN) {
+			errorMessage = "3/Unexpected closing parenthesis";
+			return result;
+		}
+		
+		if ((currentType == BOOL_TOKEN) || (currentType == NUMBER_TOKEN)) {
+			result[0] = currentValue;
+			result[1] = currentType;
+			//computeNextToken();
+			return parseEmptyOrOpExpr(result);
+		}
+		
+		TraceManager.addDev("Testing parenthesis type=" + currentType);
+		if (currentType == NOT_TOKEN) {
+			result = parseNonEmptyExpr();
+			if (result[0] == 0) {
+				result[0] = 1;
+			} else {
+				result[0] = 0;
+			}
+			return result;
+		}
+		
+		if (currentType == OPEN_PAR_TOKEN) {
+			TraceManager.addDev("opening par token");
+			result = parseNonEmptyExpr();
+			if (currentType != CLOSE_PAR_TOKEN) {
+				errorMessage = "4/Expecting closing parenthesis";
+				return result;
+			}
+			
+			return parseEmptyOrOpExpr(result);
+		}
+		
+		return result;
+	}
+	
+	// <empty> or <op bool/int expr>
+	public int[] parseEmptyOrOpExpr(int[] result) {
+		TraceManager.addDev("parseEmptyOrOpExpr result0= " + result[0] + " result1=" + result[1] + " currentType=" + currentType);
+		
+		computeNextToken1();
+		
+		if (endOfParsing()) {
+			return result;
+		}
+		
+		if ((currentType == BOOL_TOKEN) || (currentType == NUMBER_TOKEN)) {
+			errorMessage = "5/Unexpected value";
+			return result;
+		}
+		
+		if (currentType == OPEN_PAR_TOKEN) {
+			errorMessage = "6/Unexpected opening parenthesis";
+			return result;
+		}
+		
+		if (currentType == CLOSE_PAR_TOKEN) {
+			//errorMessage = "7/Unexpected closing parenthesis";
+			return result;
+		}
+		
+		return parseBeginExprOp(result);
+	}
+	
+	
+	//<op bool/int expr>
+	// Wrning: token already computed
+	public int[] parseBeginExprOp(int[] result) {
+		TraceManager.addDev("parseBeginExprOp result0= " + result[0] + " result1=" + result[1] + " currentType=" + currentType);
+		if (endOfParsing()) {
+			errorMessage = "8/Unexpected end of expression";
+			return result;
+		}
+	
+		
+		if (currentType == CLOSE_PAR_TOKEN) {
+			errorMessage = "9/Unexpected closing parenthesis";
+			return result;
+		}
+		
+		if (currentType == OPEN_PAR_TOKEN) {
+			errorMessage = "10/Unexpected opening parenthesis";
+			return result;
+		}
+		
+		if ((currentType == BOOL_TOKEN) || (currentType == NUMBER_TOKEN)) {
+			errorMessage = "11/Unexpected value";
+			return result;
+		}
+		
+		// So, this is an op!
+		int typeOfOp = currentType;
+		TraceManager.addDev("Parsing right expression");
+		int resultRight[] = parseNonEmptyExpr();
+		
+		if (hasError()) {
+			return result;
+		}
+		
+		// Same type on operand
+		if (resultRight[1] != result[1]) {
+			errorMessage = "12/Type on left and right operand not compatible";
+			return result;
+		}
+		
+		// Boolean ops
+		if (resultRight[1] == BOOL_TOKEN) {
+			TraceManager.addDev("** Bool operator = " + typeOfOp);
+			if (typeOfOp == EQUAL_TOKEN) {
+				if (result[0] == resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				
+			} else if (typeOfOp == OR_TOKEN) {
+				result[0] = result[0] + resultRight[0];
+				if (result[0] > 1) {
+					result[0] = 1;
+				}
+				TraceManager.addDev("Or result=" + result[0]);
+				
+			} else if (typeOfOp == AND_TOKEN) {
+				result[0] = (result[0] * resultRight[0]);
+				
+			} else {
+				errorMessage = "13/Invalid boolean operator";
+			}
+					
+		// Int ops
+		} else {
+			TraceManager.addDev("** Int operator = " + typeOfOp);
+			if (typeOfOp == EQUAL_TOKEN) {
+				if (result[0] == resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				result[1] = BOOL_TOKEN;
+				
+			} else if (typeOfOp == LT_TOKEN) {
+				if (result[0] < resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				result[1] = BOOL_TOKEN;
+				
+			} else if (typeOfOp == GT_TOKEN) {
+				if (result[0] > resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				result[1] = BOOL_TOKEN;
+				
+			} else if (typeOfOp == GTEQ_TOKEN) {
+				if (result[0] >= resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				result[1] = BOOL_TOKEN;
+				
+			} else if (typeOfOp == LTEQ_TOKEN) {
+				if (result[0] <= resultRight[0]) {
+					result[0] = 1; 
+				} else {
+					result[0] = 0; 
+				}
+				result[1] = BOOL_TOKEN;
+			}
+				
+		}
+		
+		return result;
+		
+	}
+	
+	
+	public boolean endOfParsing() {
+		return (currentType == EOLN_TOKEN);
+	}
+	
+	
+	
+	public void computeNextToken1() {
+		// If we're at the end, make it an EOLN_TOKEN.
+		if (!tokens.hasMoreTokens()) {
+			currentType = EOLN_TOKEN;
+			return;
+		}
+		
+		// Get a token--if it looks like a number, 
+		// make it a NUMBER_TOKEN.
+		
+		String s = tokens.nextToken();
+		TraceManager.addDev("Token? = >" + s + "<");
+		
+		char c1 = s.charAt(0);
+		if (Character.isDigit(c1)) {
+			TraceManager.addDev("digit found");
+			try {
+				currentValue = Integer.valueOf(s).intValue();
+				currentType = NUMBER_TOKEN;
+				//System.out.println("value:" + s);
+			}
+			catch (NumberFormatException x) {
+				errorMessage = "Illegal format for a number.";
+			}
+			return;
+		}
+		
+		//TraceManager.addDev("next 1");
+		
+		if (s.compareTo(TRUE) == 0) {
+			currentValue = TRUE_VALUE;
+			currentType = BOOL_TOKEN;
+			//TraceManager.addDev("true token!");
+			return;
+		}
+		
+		if (s.compareTo(FALSE) == 0) {
+			currentValue = FALSE_VALUE;
+			currentType = BOOL_TOKEN;
+			//TraceManager.addDev("false token!");
+			return;
+		}
+		
+		if (s.compareTo("<") == 0) {
+			currentValue = 0;
+			currentType = LT_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo(">") == 0) {
+			currentValue = 0;
+			currentType = GT_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo(":") == 0) {
+			currentValue = 0;
+			currentType = GTEQ_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo(";") == 0) {
+			currentValue = 0;
+			currentType = LTEQ_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo("=") == 0) {
+			currentValue = 0;
+			currentType = EQUAL_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo("!") == 0) {
+			currentValue = 0;
+			currentType = NOT_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo("|") == 0) {
+			currentValue = 0;
+			currentType = OR_TOKEN;
+			return;
+		}
+		if (s.compareTo("&") == 0) {
+			currentValue = 0;
+			currentType = AND_TOKEN;
+			return;
+		}
+		
+		if (s.compareTo(")") == 0) {
+			currentType = CLOSE_PAR_TOKEN;
+			nbOpen --;
+			if (nbOpen < 0) {
+				TraceManager.addDev("Boolean expr: Found pb with a parenthesis");
+				errorMessage = "Parenthesis mismatch";
+			}
+			return;
+		}
+		
+		//TraceManager.addDev("next 10");
+		
+		if (s.compareTo("(") == 0) {
+			//TraceManager.addDev("opening par token");
+			currentType = OPEN_PAR_TOKEN;
+			nbOpen ++;
+			return;
+		}
+		
+		// Any other single character that is not 
+		// white space is a token.
+		
+		if (Character.isWhitespace(c1)) {
+			currentType = WHITE_SPACE_TOKEN;
+			TraceManager.addDev("White space found: looping");
+			computeNextToken1();
+		}
 	}
 	
 	
@@ -367,11 +729,11 @@ public class BoolExpressionEvaluator {
 					return FALSE_VALUE;
 				}
 				
-			} else if (currentType == NEG_TOKEN) {
-				match(NEG_TOKEN);
+			} else if (currentType == NOT_TOKEN) {
+				match(NOT_TOKEN);
 				if (errorMessage != null) return result;
 				
-				TraceManager.addDev("NEG TOKEN!");
+				TraceManager.addDev("NOT TOKEN!");
 				resulttmp = parseRootexp();
 				//intresult = (int)(resulttmp);
 				//intresult2 = (int)(result);
@@ -446,8 +808,8 @@ public class BoolExpressionEvaluator {
 			if (errorMessage != null) return result;
 		}
 		
-		else if (currentType==NEG_TOKEN){
-			match(NEG_TOKEN);
+		else if (currentType==NOT_TOKEN){
+			match(NOT_TOKEN);
 			result = parseExpression();
 			if (result == TRUE_VALUE) {
 				result = FALSE_VALUE;
@@ -482,7 +844,7 @@ public class BoolExpressionEvaluator {
 			// make it a NUMBER_TOKEN.
 			
 			String s = tokens.nextToken();
-			//TraceManager.addDev("Token? = >" + s + "<");
+			TraceManager.addDev("Token? = >" + s + "<");
 			
 			char c1 = s.charAt(0);
 			if (Character.isDigit(c1)) {
@@ -516,55 +878,47 @@ public class BoolExpressionEvaluator {
 			if (s.compareTo("<") == 0) {
 				currentValue = 0;
 				currentType = LT_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			
 			if (s.compareTo(">") == 0) {
 				currentValue = 0;
 				currentType = GT_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			
 			if (s.compareTo(":") == 0) {
 				currentValue = 0;
 				currentType = GTEQ_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			
 			if (s.compareTo(";") == 0) {
 				currentValue = 0;
 				currentType = LTEQ_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			
 			if (s.compareTo("=") == 0) {
 				currentValue = 0;
 				currentType = EQUAL_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			
 			if (s.compareTo("!") == 0) {
 				currentValue = 0;
-				currentType = NEG_TOKEN;
-				//TraceManager.addDev("equal token!");
+				currentType = NOT_TOKEN;
 				return;
 			}
 			
 			if (s.compareTo("|") == 0) {
 				currentValue = 0;
 				currentType = OR_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			if (s.compareTo("&") == 0) {
 				currentValue = 0;
 				currentType = AND_TOKEN;
-				//TraceManager.addDev("equal token!");
 				return;
 			}
 			

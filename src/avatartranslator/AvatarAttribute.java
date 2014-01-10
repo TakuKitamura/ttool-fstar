@@ -96,6 +96,10 @@ public class AvatarAttribute extends AvatarElement{
 		return AvatarType.getDefaultInitialValue(type);
 	}
 	
+	public String getDefaultInitialValueTF() {
+		return AvatarType.getDefaultInitialValueTF(type);
+	}
+	
 	public int getType() {
 		return type;
 	}

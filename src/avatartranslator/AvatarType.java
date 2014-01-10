@@ -98,4 +98,16 @@ public class AvatarType {
         }
 		return "";
 	}
+	
+	public static String getDefaultInitialValueTF(int _type) {
+		switch(_type) {
+            case BOOLEAN:
+                return "f";
+			case INTEGER:
+                return "0";
+			case TIMER:
+                return "0";
+        }
+		return "";
+	}
 }

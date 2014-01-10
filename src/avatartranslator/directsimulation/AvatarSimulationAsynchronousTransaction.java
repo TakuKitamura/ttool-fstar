@@ -115,4 +115,17 @@ public class AvatarSimulationAsynchronousTransaction  {
 		
 		return ret;
 	}
+	
+	public String parametersToString() {
+		String ret="(";
+		for(int i=0; i<parameters.size(); i++) {
+			if (i !=0) {
+				ret += ",";
+			}
+			ret += parameters.get(i);
+		}
+		ret += ")";
+		
+		return ret;
+	}
 }

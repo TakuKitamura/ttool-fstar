@@ -62,6 +62,7 @@ import ui.file.*;
 
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
+import ui.avatarbd.*;
 
 
 public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarSimulationInteraction, ActionListener, Runnable, MouseListener, ItemListener, ListSelectionListener, WindowListener/*, StoppableGUIElement, SteppedAlgorithm, ExternalCall*/ {
@@ -203,6 +204,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 	private long previousTime;
 	
 	private boolean simulationRunning;
+	
+	// Async messages
+	Vector<AvatarSimulationAsynchronousTransaction> lastAsyncmsgs;
 	
 	public JFrameAvatarInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, AvatarSpecification _avspec) {
 		super(_title);
@@ -1234,11 +1238,61 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			transactiontm.fireTableStructureChanged();
 		}
 	}
+
+	
+	public String[] getFirstMessagesOnEachConnectorSide(AvatarBDPortConnector conn) {
+		String []messages = new String[2];
+		messages[0] = null;
+		messages[1] = null;
+		boolean b0, b1;
+		AvatarRelation ar;
+		AvatarBlock ab;
+		int index;
+		String info;
+		
+		if (asyncmsgs == null) {
+			return messages;
+		}
+		
+		b0 = false; b1 = false;
+		for(AvatarSimulationAsynchronousTransaction msg: lastAsyncmsgs) {
+			ar = msg.getRelation();
+			if (ar.hasReferenceObject(conn)) {
+				ab = ar.getInBlock(msg.getIndex());
+				
+				if (ab == ar.block1) {
+					info = ar.getSignal1(msg.getIndex()).getName();
+					index = 0;
+				} else {
+					info = ar.getSignal2(msg.getIndex()).getName();
+					index = 1;
+				}
+				
+				info += msg.parametersToString();
+				
+				if ((index == 0) && (!b0)) {
+					b0 = true;
+					messages[0] = info;
+				} else if ((index == 1) && (!b1)) {
+					b1 = true;
+					messages[1] = info;
+				}
+				
+				if (b0 && b1) {
+					break;
+				}
+			}
+			
+		}
+		
+		return messages;
+	}
+	
 	
 	public void updateAsynchronousChannels() {
 		
 		if (ass != null) {
-			Vector<AvatarSimulationAsynchronousTransaction> msgs = ass.getAsynchronousMessages();
+			lastAsyncmsgs = (Vector<AvatarSimulationAsynchronousTransaction>)(ass.getAsynchronousMessages().clone());
 			
 			if (fifos != null) {
 				for(AvatarInteractiveSimulationFIFOData fifo: fifos) {
@@ -1248,10 +1302,10 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				
 			}
 			
-			if (msgs != null) {
+			if (lastAsyncmsgs != null) {
 				
-				if (msgs.size() > 0) {
-					for(AvatarSimulationAsynchronousTransaction msg: msgs) {
+				if (lastAsyncmsgs.size() > 0) {
+					for(AvatarSimulationAsynchronousTransaction msg: lastAsyncmsgs) {
 						for(AvatarInteractiveSimulationFIFOData fifo0: fifos) {
 							if (fifo0.fifo == msg.getRelation()) {
 								fifo0.nb ++;
@@ -1274,7 +1328,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 					if (currentFifo != null) {
 						nbOfAsyncMsgs = 0;
 						Vector<AvatarSimulationAsynchronousTransaction> vectorForList = new Vector<AvatarSimulationAsynchronousTransaction>();
-						for(AvatarSimulationAsynchronousTransaction as: msgs) {
+						for(AvatarSimulationAsynchronousTransaction as: lastAsyncmsgs) {
 							if (as.getRelation() == currentFifo.fifo) {
 								vectorForList.add(as);
 								nbOfAsyncMsgs++;

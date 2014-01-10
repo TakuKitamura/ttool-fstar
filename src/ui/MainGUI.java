@@ -6321,6 +6321,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		return 0;
 	}
 	
+	public String[] hasMessageInformationForAvatarConnector(AvatarBDPortConnector _conn) {
+		if(jfais.isVisible()) {
+			return jfais.getFirstMessagesOnEachConnectorSide(_conn);
+		}
+		return null;
+	}
+	
 	public void setDiploAnimate(boolean b) {
 		TDiagramPanel.DIPLO_ANIMATE_ON = b;
 		TDiagramPanel tdp = getCurrentTDiagramPanel();

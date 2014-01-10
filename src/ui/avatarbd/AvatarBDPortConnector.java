@@ -57,6 +57,7 @@ import org.w3c.dom.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
+import myutil.*;
 
 public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
@@ -231,6 +232,23 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 			g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
 			g.setFont(f);
 		}*/
+		
+		// Animation?
+		if ((tdp.AVATAR_ANIMATE_ON) && (isAsynchronous())){
+			//TraceManager.addDev("anim port connector: " + this);
+			String messageInformation[] = tdp.getMGUI().hasMessageInformationForAvatarConnector(this);
+			if (messageInformation != null) {
+				if (messageInformation[0] != null) {
+					g.setColor(Color.BLUE);
+					g.drawString(messageInformation[0], p1.getX() + decX, p1.getY());
+				}
+				if (messageInformation[1] != null) {
+					g.setColor(Color.BLUE);
+					g.drawString(messageInformation[1], p2.getX() + decX, p2.getY());
+				}
+				g.setColor(Color.BLACK);
+			}
+		}
 		
 		
 	

@@ -71,8 +71,14 @@ public class Main implements ActionListener {
 	
     public static void main(String[] args) {
     	
-    	testMatrix();
+    	testBoolExpr();
+    	//testMatrix();
 		
+/*    	int x = 5 * 2 + 3;
+    	int y = 3 + 5 * 2;
+    	System.out.println("x=" + x + " y=" + y);*/
+    	
+    	
 		TraceManager.devPolicy = TraceManager.TO_DEVNULL;
         
         System.out.println("\n*** TTool version: " + DefaultText.getFullVersion() + " ***\n");
@@ -396,6 +402,27 @@ public class Main implements ActionListener {
     	myMat.Farkas();
     	System.out.println("matb=\n" + myMat.toString() + "\n\n");*/
     	
+    }
+    
+    public static void testBoolExpr() {
+    	
+    	
+    	evalBool("t or f");
+    	
+    	evalBool("(t) or f");
+    	
+    	
+    	
+    	System.exit(-1);
+    }
+    
+    public static void evalBool(String s) {
+    	BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+    	System.out.println("->Result of " + s + " =" + bee.getResultOf(s));
+    	if (bee.hasError()) {
+    		System.out.println("Error = " + bee.getFullError());
+    	}
+    	System.out.println("\n\n");
     }
     
 } // Class Main

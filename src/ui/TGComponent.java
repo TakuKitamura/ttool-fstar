@@ -664,7 +664,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	}
 	
 	// _mode: 1 : running
-	//       2 : slected for execution 
+	//       2 : selected for execution 
 	public void drawAVATARComp(Graphics g, int _mode) {
 		int wb = 30;
 		int hb = 10;
@@ -989,6 +989,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 				//TraceManager.addDev("Avatar animate!");
 				drawAVATARComp(g, ret);
 			}
+			
 		}
 		
 		if (this instanceof EmbeddedComment) {
