@@ -71,7 +71,7 @@ public class Main implements ActionListener {
 	
     public static void main(String[] args) {
     	
-    	testBoolExpr();
+    	//testBoolExpr();
     	//testMatrix();
 		
 /*    	int x = 5 * 2 + 3;

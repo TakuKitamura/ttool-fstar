@@ -86,6 +86,10 @@ public class Test  {
     	
     	nbOfPb += evalBool("f or t)", true, true);
     	
+    	nbOfPb += evalBool("f or t and f", false, false);
+    	
+    	nbOfPb += evalBool("(3>5)or (4<6) or (1>2)", true, false);
+    	
     	System.out.println("Nb of problems found:" + nbOfPb);
     	
     	System.exit(-1);

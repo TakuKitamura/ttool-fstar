@@ -86,6 +86,9 @@ public class BoolExpressionEvaluator {
 	}
 	
 	public String getError() {
+		if (errorMessage == null) {
+			return null;
+		}
 		int index = errorMessage.indexOf("/");
 		if (index == -1) {
 			return errorMessage;
@@ -120,6 +123,8 @@ public class BoolExpressionEvaluator {
 			return false;
 		}
 		
+		_expr = Conversion.replaceAllString(_expr, "true", "t").trim();
+		_expr = Conversion.replaceAllString(_expr, "false", "f").trim();
 		_expr = Conversion.replaceAllString(_expr, "||", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "&&", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();

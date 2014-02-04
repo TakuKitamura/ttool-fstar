@@ -77,6 +77,7 @@ public class AVATAR2CPOSIX {
 	private int timeUnit;
 	private boolean debug;
 	private boolean tracing;
+	private boolean includeUserCode = true;
 	
 
 	public AVATAR2CPOSIX(AvatarSpecification _avspec) {
@@ -85,6 +86,10 @@ public class AVATAR2CPOSIX {
 	
 	public void setTimeUnit(int _timeUnit) {
 		timeUnit = _timeUnit;
+	}
+	
+	public void includeUserCode(boolean _inc) {
+		includeUserCode = _inc;
 	}
 	
 	public static String getGeneratedPath() {
@@ -134,7 +139,7 @@ public class AVATAR2CPOSIX {
 		avspec.removeTimers();
 		
 		
-		if (avspec.hasApplicationCode()) {
+		if (avspec.hasApplicationCode() && includeUserCode) {
 			mainFile.appendToBeforeMainCode("/* User code */\n");
 			mainFile.appendToBeforeMainCode(avspec.getApplicationCode());
 			mainFile.appendToBeforeMainCode("\n/* End of User code */\n\n");
@@ -227,9 +232,11 @@ public class AVATAR2CPOSIX {
 		
 		//taskFile.addToMainCode("#include \"" + block.getName() + ".h\"");
 		
-		String tmp = block.getGlobalCode();
-		if (tmp != null) {
-			taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+		if (includeUserCode) {
+			String tmp = block.getGlobalCode();
+			if (tmp != null) {
+				taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+			}
 		}
 		
 		defineAllStates(block, taskFile);
@@ -455,10 +462,12 @@ public class AVATAR2CPOSIX {
 				s += "case STATE__" + asme.getName() + ": " + CR;
 				s += traceStateEntering("__myname", asme.getName());
 				
-				tmp = ((AvatarState)asme).getEntryCode();
-				if (tmp != null) {
-					if (tmp.trim().length() > 0) {
-						s += "/* Entry code */\n" + tmp + "\n/* End of entry code */\n\n";
+				if (includeUserCode) {
+					tmp = ((AvatarState)asme).getEntryCode();
+					if (tmp != null) {
+						if (tmp.trim().length() > 0) {
+							s += "/* Entry code */\n" + tmp + "\n/* End of entry code */\n\n";
+						}
 					}
 				}
 				

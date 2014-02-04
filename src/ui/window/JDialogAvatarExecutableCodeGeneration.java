@@ -88,6 +88,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 	private static int selectedRun = 1;
 	private static int selectedCompile = 0;
 	private static int selectedViewTrace = 0;
+	private static boolean static_putUserCode = true;
 	
 	
     
@@ -122,7 +123,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
     protected JTextField code1, code2, compiler1, compiler2, exe1, exe2, exe3, exe4, exe2int, simulationTraceFile, simulationsoclibTraceFile;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
-    protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode;
+    protected JCheckBox removeCFiles, removeXFiles, debugmode, tracemode, optimizemode, putUserCode;
 	protected JComboBox versionCodeGenerator, units;
     protected JButton showSimulationTrace;
 	
@@ -263,6 +264,10 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 		optimizemode = new JCheckBox("Optimize code");
 		optimizemode.setSelected(optimizeModeSelected);
         jp01.add(optimizemode, c01);
+        
+        putUserCode = new JCheckBox("Include user code");
+		putUserCode.setSelected(static_putUserCode);
+        jp01.add(putUserCode, c01);
 		
 		jp01.add(new JLabel("1 time unit ="), c01);
 		
@@ -472,6 +477,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 		removeXFilesValue = removeXFiles.isSelected();
 		debugValue = debugmode.isSelected();
 		tracingValue = tracemode.isSelected();
+		static_putUserCode = putUserCode.isSelected();
         dispose();
     }
 	
@@ -597,6 +603,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 							jta.append("Error: No AVATAR specification\n");
 						} else {
 							AVATAR2CPOSIX avatartocposix = new AVATAR2CPOSIX(avspec);
+							avatartocposix.includeUserCode(putUserCode.isSelected());
 							avatartocposix.setTimeUnit(selectedUnit);
 							avatartocposix.generateCPOSIX(debugmode.isSelected(), tracemode.isSelected());
 							testGo();
