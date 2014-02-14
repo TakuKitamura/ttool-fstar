@@ -172,7 +172,7 @@ public class AnalysisPanel extends TURTLEPanel {
         return true;
     }
 	
-	public boolean addAvatarContextDiagram(String s) {
+	/*public boolean addAvatarContextDiagram(String s) {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
         
@@ -192,9 +192,9 @@ public class AnalysisPanel extends TURTLEPanel {
         tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the context diagram of " + s);
         
         return true;
-    }
+    }*/
     
-    public boolean addAvatarActivityDiagram(String s) {
+    /*public boolean addAvatarActivityDiagram(String s) {
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
         
@@ -214,7 +214,7 @@ public class AnalysisPanel extends TURTLEPanel {
         tabbedPane.addTab(s, IconManager.imgic80, toolBarPanel, "Open the activity diagram of " + s);
         
         return true;
-    }
+    }*/
     
 	
     public String saveHeaderInXml() {
@@ -252,11 +252,12 @@ public class AnalysisPanel extends TURTLEPanel {
     }  
     
     public boolean isAvatarCDEnabled() {
-        return true;
+    	return false;
+        //return true;
     }  
     
      public boolean isAvatarADEnabled() {
-        return true;
+        return false;
     }  
 	
 	public void addInstancesToLastSD(UseCaseDiagramPanel _ucdp) {

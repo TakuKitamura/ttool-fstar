@@ -4,21 +4,25 @@ import java.util.*;
  
 public class DatagramServer implements Runnable {
 	private static final int PORT = 8374;
+	private static final int SENDING_PORT = 8373;
 	
-    protected DatagramSocket socket = null;
+    protected DatagramSocket socket;
     protected BufferedReader in = null;
     protected DatagramPacket dgp;
     
     protected Feeder feed;
  
-    protected int port;
+    protected int port, sendingPort;
     protected boolean go;
+    
+    protected boolean notReceived = true;
     
     private Thread t;
     
     
     public DatagramServer() {
     	port = PORT;
+    	sendingPort = SENDING_PORT;
     }
     
     public void setPort(int _port) {
@@ -53,10 +57,12 @@ public class DatagramServer implements Runnable {
     	
 		try {
 			socket = new DatagramSocket(port);
+			//sendingSocket = new DatagramSocket(sendingPort);
 			dgp = new DatagramPacket(buf, buf.length);
     		System.out.println("Server started on port:" + port);
     		while (go) {
     			socket.receive(dgp);
+    			notReceived = false;
     			String rec = new String(dgp.getData(), 0, dgp.getLength());
     			String rcvd =  rec + ", length=" + dgp.getLength() + ", from address: "
     			+ dgp.getAddress() + ", port: " + dgp.getPort();
@@ -91,6 +97,43 @@ public class DatagramServer implements Runnable {
 			System.out.println("Exception e:" + e.getMessage());
 			return false;
 		}
+		return true;
+	}
+	
+	public boolean sendDatagramTo(String s, int port) {
+		if (socket == null) {
+			return false;
+		}
+		
+		System.out.println("Datagram sending 1");
+		
+		
+		try {
+			DatagramSocket sendingSocket = new DatagramSocket(port+100);
+			InetAddress addr = InetAddress.getByName("localhost");;
+		/*if (notReceived) {
+			// We assume "localhost" for the address
+			System.out.println("Datagram sending 1.1");
+			addr = InetAddress.getByName("localhost");
+		} else {
+			System.out.println("Datagram sending 1.2");
+			addr = dgp.getAddress();
+		}*/
+		
+		//System.out.println("Datagram sending 2");
+			byte[] buf = s.getBytes();
+			System.out.println("Datagram sending 3 on port=" + port);
+			DatagramPacket out = new DatagramPacket(buf, buf.length, addr, port);
+			System.out.println("Datagram sending 4");
+			sendingSocket.send(out);
+			System.out.println("Datagram sending 5");
+			sendingSocket.close();
+			System.out.println("Datagram sending 5.1");
+		} catch (Exception e) {
+			System.out.println("Exception e:" + e.getMessage());
+			return false;
+		}
+		System.out.println("Datagram sending 6");
 		return true;
 	}
 	

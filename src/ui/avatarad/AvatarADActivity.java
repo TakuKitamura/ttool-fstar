@@ -57,7 +57,7 @@ import ui.*;
 import ui.window.*;
 
 
-public class AvatarADActivity extends TGCScalableWithInternalComponent implements CheckableAccessibility, SwallowTGComponent, SwallowedTGComponent {
+public class AvatarADActivity extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
     private int textY1 = 3;
 	
 	private int maxFontSize = 12;
@@ -281,6 +281,10 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		if (tgc instanceof AvatarADBasicComponent) {
+			return true;
+		}
+		
+		if (tgc instanceof AvatarADChoice) {
 			return true;
 		}
 		

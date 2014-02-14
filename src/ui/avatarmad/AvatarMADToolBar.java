@@ -74,6 +74,7 @@ public class AvatarMADToolBar extends TToolBar {
         mgui.actions[TGUIAction.AMAD_ELEMENT_REFERENCE].setEnabled(b);
         mgui.actions[TGUIAction.AMAD_COMPOSITION_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.AMAD_VERSIONING_CONNECTOR].setEnabled(b);
+		mgui.actions[TGUIAction.AMAD_MEET_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.AMAD_IMPACT_CONNECTOR].setEnabled(b);
 		
 		/*mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
@@ -119,6 +120,11 @@ public class AvatarMADToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.AMAD_MEET_CONNECTOR]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.AMAD_IMPACT_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);

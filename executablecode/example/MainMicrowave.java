@@ -8,15 +8,16 @@ import java.io.*;
 import java.util.*;
 
  
-public class MainMicrowave extends JFrame implements Feeder {
+public class MainMicrowave extends JFrame implements Feeder, MouseListener {
 	
     private MicrowavePanel mp;
+    private DatagramServer ds;
     
     public MainMicrowave() {
     	super("Microwave demonstration");
     	setSize(800, 600);
     	setVisible(true);
-    	DatagramServer ds = new DatagramServer();
+    	ds = new DatagramServer();
     	ds.setFeeder(this);
     	
     	initComponents();
@@ -26,6 +27,7 @@ public class MainMicrowave extends JFrame implements Feeder {
     public void initComponents() {
     	setLayout(new BorderLayout());
     	mp = new MicrowavePanel();
+    	mp.addMouseListener(this);
     	mp.setPreferredSize(new Dimension(800,600));
     	add(mp, BorderLayout.CENTER);
     	mp.revalidate();
@@ -78,7 +80,28 @@ public class MainMicrowave extends JFrame implements Feeder {
     	
     	mp.repaint();
     }
-
+    
+    public void mouseClicked(MouseEvent e){
+    	int x = e.getX();
+    	int y = e.getY();
+    	
+    	System.out.println("Mouse clicked!!!");
+    	
+    	// START?
+    	if ((x>630)&&(x<720)&&(y>335)&&(y<365)) {
+    			System.out.println("Mouse clicked on start");
+    			if (ds != null) {
+    			ds.sendDatagramTo(" ", 8375);
+    			
+    			}
+    			System.out.println("Action on start sent");
+    	}
+    	
+    }
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mousePressed(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){}
     	
     public static void main(String[] args) {
     	MainMicrowave mmw = new MainMicrowave();

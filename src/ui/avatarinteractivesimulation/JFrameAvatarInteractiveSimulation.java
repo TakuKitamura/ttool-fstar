@@ -1366,6 +1366,9 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 						//TraceManager.addDev("Open SMD diag" + ass.getPreviousBlock().getName());
 						mgui.openAVATARSMD(ass.getPreviousBlock().getName());
 					}
+				} else {
+					//Refresh current diagram
+					mgui.refreshCurrentPanel();
 				}
 			}
 			mgui.setAvatarAnimate(animate.isSelected());
@@ -1741,23 +1744,39 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				if (!(busyMode == AvatarSpecificationSimulation.GATHER) && !(busyMode == AvatarSpecificationSimulation.EXECUTE)) {
 					ass.setIndexSelectedTransaction(listPendingTransactions.getSelectedIndex());
 				}
-				if (animate.isSelected() && (openDiagram.isSelected())) {
-					if (aspt.asb != null) {
-						previousBlock = aspt.asb;
-						mgui.openAVATARSMD(previousBlock.getName());
+				if (animate.isSelected()) {
+					if (openDiagram.isSelected()) {
+						if (aspt.asb != null) {
+							previousBlock = aspt.asb;
+							mgui.openAVATARSMD(previousBlock.getName());
+						}
+					} else {
+						mgui.refreshCurrentPanel();
 					}
 				}
 			} catch (Exception ex){
 				TraceManager.addDev("Exception selected component");
 				selectedComponentForTransaction = null;
-				if (previousBlock != null) {
-					mgui.openAVATARSMD(previousBlock.getName());
+				if (openDiagram.isSelected()) {
+					if ((previousBlock != null) &&  (animate.isSelected())){
+						mgui.openAVATARSMD(previousBlock.getName());
+					} else {
+						mgui.refreshCurrentPanel();
+					}
+				} else {
+					mgui.refreshCurrentPanel();
 				}
 			}
 		} else {
 			selectedComponentForTransaction = null;
-			if (previousBlock != null) {
-				mgui.openAVATARSMD(previousBlock.getName());
+			if ((previousBlock != null) && (animate.isSelected())) {
+				if (openDiagram.isSelected()) {
+					mgui.openAVATARSMD(previousBlock.getName());
+				} else {
+					mgui.refreshCurrentPanel();
+				}
+			} else {
+				mgui.refreshCurrentPanel();
 			}
 		}
 		

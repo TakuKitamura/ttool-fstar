@@ -174,6 +174,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
 			while(iterator.hasNext()) {
 				tgc = (TGComponent)(iterator.next());
 				tgc.setAVATARMet(0);
+				tgc.setInternalAvatarMet(0);
+				
 			}
 		}
 		

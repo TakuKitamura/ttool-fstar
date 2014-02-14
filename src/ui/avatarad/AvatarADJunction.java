@@ -96,6 +96,8 @@ public class AvatarADJunction extends AvatarADBasicComponent {
 		
 		myImageIcon = IconManager.imgic212;
 	}
+	
+
 
 	public void internalDrawing(Graphics g) {
 		//g.drawLine(x +width/2, y,  x+width/2, y + height);

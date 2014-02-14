@@ -53,7 +53,7 @@ import java.awt.geom.*;
 import myutil.*;
 import ui.*;
 
-public class AvatarADChoice extends TGCWithInternalComponent implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADChoice extends TGCWithInternalComponent implements SwallowedTGComponent, EmbeddedComment, BasicErrorHighlight {
     private int lineLength = 10;
     private int lineOutLength = 25;
     private int textX1, textY1, textX2, textY2, textX3, textY3;
@@ -169,6 +169,16 @@ public class AvatarADChoice extends TGCWithInternalComponent implements Embedded
          if ((i>=0) && (i<nbInternalTGComponent)) {
             tgcomponent[i].setValue(guard);
          }
+    }
+    
+    	public void resizeWithFather() {
+        if ((father != null) && (father instanceof AvatarADActivity)) {
+			// Too large to fit in the father? -> resize it!
+			resizeToFatherSize();
+			
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            setMoveCd(x, y);
+        }
     }
     
     public int getType() {

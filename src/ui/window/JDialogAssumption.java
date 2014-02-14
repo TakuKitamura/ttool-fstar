@@ -136,7 +136,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         c1.fill = GridBagConstraints.HORIZONTAL;
         
         c1.gridwidth = 1;
-        JLabel label = new JLabel("type:");
+        JLabel label = new JLabel("Type:");
         panel1.add(label, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         typeBox = new JComboBox(AvatarMADAssumption.ASSUMPTION_TYPE_STR);
@@ -144,7 +144,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         panel1.add(typeBox, c1);
         
         c1.gridwidth = 1;
-        label = new JLabel("name:");
+        label = new JLabel("Name:");
         panel1.add(label, c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         nameField = new JTextField(name, 40);
@@ -174,7 +174,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         c2.fill = GridBagConstraints.HORIZONTAL;
         
         c2.gridwidth = 1;
-        label = new JLabel("durability:");
+        label = new JLabel("Durability:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         durabilityBox = new JComboBox(AvatarMADAssumption.DURABILITY_TYPE);
@@ -182,7 +182,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         panel2.add(durabilityBox, c2);
         
         c2.gridwidth = 1;
-        label = new JLabel("source:");
+        label = new JLabel("Source:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         sourceBox = new JComboBox(AvatarMADAssumption.SOURCE_TYPE);
@@ -190,7 +190,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         panel2.add(sourceBox, c2);
         
         c2.gridwidth = 1;
-        label = new JLabel("status:");
+        label = new JLabel("Status:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         statusBox = new JComboBox(AvatarMADAssumption.STATUS_TYPE);
@@ -198,7 +198,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         panel2.add(statusBox, c2);
         
         c2.gridwidth = 1;
-        label = new JLabel("limitation:");
+        label = new JLabel("Scope:");
         panel2.add(label, c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         limitationBox = new JComboBox(AvatarMADAssumption.LIMITATION_TYPE);

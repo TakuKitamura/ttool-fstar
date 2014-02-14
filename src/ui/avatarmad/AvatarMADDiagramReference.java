@@ -93,20 +93,32 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 		minWidth = 10;
         minHeight = lineHeight;
         
-        nbConnectingPoint = 12;
+        nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.25);
-        connectingPoint[1] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-        connectingPoint[2] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.0, 0.75);
-        connectingPoint[3] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.25);
-        connectingPoint[4] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.5);
-        connectingPoint[5] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 1.0, 0.75);
-        connectingPoint[6] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.25, 0.0);
-        connectingPoint[7] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.5, 0.0);
-        connectingPoint[8] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.75, 0.0);
-        connectingPoint[9] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.25, 1.0);
-		connectingPoint[10] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.5, 1.0);
-		connectingPoint[11] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, false, 0.75, 1.0);
+        connectingPoint[0] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.0, 0.25);
+        connectingPoint[1] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.0, 0.5);
+        connectingPoint[2] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.0, 0.75);
+        connectingPoint[3] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 1.0, 0.25);
+        connectingPoint[4] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 1.0, 0.5);
+        connectingPoint[5] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 1.0, 0.75);
+        connectingPoint[6] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.25, 0.0);
+        connectingPoint[7] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+        connectingPoint[8] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.75, 0.0);
+        connectingPoint[9] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.25, 1.0);
+		connectingPoint[10] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+		connectingPoint[11] = new AvatarMADToOthersConnectingPoint(this, 0, 0, true, true, 0.75, 1.0);
+		connectingPoint[12] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.0, 0.25);
+        connectingPoint[13] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.0, 0.5);
+        connectingPoint[14] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.0, 0.75);
+        connectingPoint[15] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 1.0, 0.25);
+        connectingPoint[16] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+        connectingPoint[17] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 1.0, 0.75);
+        connectingPoint[18] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.25, 0.0);
+        connectingPoint[19] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.5, 0.0);
+        connectingPoint[20] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.75, 0.0);
+        connectingPoint[21] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.25, 1.0);
+		connectingPoint[22] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.5, 1.0);
+		connectingPoint[23] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 		
         addTGConnectingPointsCommentTop();    
         

@@ -76,6 +76,8 @@ import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
 import ui.avatarmad.*;
+import ui.avatarad.*;
+import ui.avatarcd.*;
 
 
 public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
@@ -100,7 +102,16 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         if (value instanceof AvatarDesignPanel) {
 			setIcon(IconManager.imgic80);
             setToolTipText("Avatar Design");
-		} else if (value instanceof AvatarBDPanel) {
+		} else if (value instanceof AvatarAnalysisPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("Avatar Analysis");
+        } else if (value instanceof AvatarCDPanel) {
+            setIcon(IconManager.imgic600);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarADPanel) {
+            setIcon(IconManager.imgic5048);
+            setToolTipText("Avatar Block Diagram");
+        } else if (value instanceof AvatarBDPanel) {
             setIcon(IconManager.imgic80);
             setToolTipText("Avatar Block Diagram");
         } else if (value instanceof AvatarSMDPanel) {

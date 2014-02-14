@@ -128,6 +128,15 @@ public class MicrowavePanel extends JPanel  {
 		g.setColor(Color.black);
 		g.fillRect(630, 165, 90, 140);
 		
+		// Panel for start button
+		g.setColor(Color.white);
+		g.fillRect(625, 330, 100, 40);
+		g.setColor(Color.black);
+		g.fillRect(630, 335, 90, 30);
+		g.setColor(Color.white);
+		g.drawString("START", 655, 355);
+		g.setColor(Color.black);
+		
 		g.setColor(Color.green);
 		//System.out.println("Duration=" + duration);
 		Font fold = g.getFont();

@@ -75,7 +75,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 	private int currentFontSize = -1;
 	private boolean displayText = true;
     
-    public final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>", "<<Method Assumption>>"};
+    public final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>"};
 
     
     public final static String[] DURABILITY_TYPE = {"Undefined", "Permanent", "Temporary"};
@@ -87,7 +87,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 	public final static String[] STATUS_TYPE = {"Undefined", "Applied", "Alleviated"};
 	
 	
-	public final static String[] LIMITATION_TYPE = {"Undefined", "Language", "Tool", "Method"};
+	public final static String[] LIMITATION_TYPE = {"Undefined", "Language", "Tool", "Modeling activity", "Verification"};
 	
 	
 	protected String text;
@@ -129,18 +129,18 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         connectingPoint[9] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[10] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[11] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
-        connectingPoint[12] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.25, TGConnectingPoint.WEST);
-        connectingPoint[13] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.5, TGConnectingPoint.WEST);
-        connectingPoint[14] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.0, 0.75, TGConnectingPoint.WEST);
-        connectingPoint[15] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.25, TGConnectingPoint.EAST);
-        connectingPoint[16] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.5, TGConnectingPoint.EAST);
-        connectingPoint[17] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 1.0, 0.75, TGConnectingPoint.EAST);
-        connectingPoint[18] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[19] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[20] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 0.0, TGConnectingPoint.NORTH);
-        connectingPoint[21] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.25, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[22] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
-		connectingPoint[23] = new AvatarMADToOthersConnectingPoint(this, 0, 0, false, true, 0.75, 1.0, TGConnectingPoint.SOUTH);
+        connectingPoint[12] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.0, 0.25, TGConnectingPoint.WEST);
+        connectingPoint[13] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.0, 0.5, TGConnectingPoint.WEST);
+        connectingPoint[14] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.0, 0.75, TGConnectingPoint.WEST);
+        connectingPoint[15] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 1.0, 0.25, TGConnectingPoint.EAST);
+        connectingPoint[16] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 1.0, 0.5, TGConnectingPoint.EAST);
+        connectingPoint[17] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 1.0, 0.75, TGConnectingPoint.EAST);
+        connectingPoint[18] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.25, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[19] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.5, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[20] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.75, 0.0, TGConnectingPoint.NORTH);
+        connectingPoint[21] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.25, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[22] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.5, 1.0, TGConnectingPoint.SOUTH);
+		connectingPoint[23] = new AvatarMADToAssumptionsConnectingPoint(this, 0, 0, true, false, 0.75, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[24] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[25] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
 		connectingPoint[26] = new AvatarMADAssumptionConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, TGConnectingPoint.SOUTH);
@@ -300,7 +300,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         			drawLimitedString(g, "Status=\"" + STATUS_TYPE[status] + "\"", x + textX, y + size, width, 0);
         			size += currentFontSize;
         			if (size < (height - 2)) {
-        				drawLimitedString(g, "Limitation=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + size, width, 0);
+        				drawLimitedString(g, "Scope=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + size, width, 0);
         				size += currentFontSize;
         			}
         		}
@@ -577,7 +577,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
                 text = oldtext;
             }
         } catch (Exception e) {
-			TraceManager.addError("Failed when loading requirement extra parameters (AVATARRD)");
+			TraceManager.addError("Failed when loading requirement extra parameters (AVATARMAD)");
             throw new MalformedModelingException();
         }
 		

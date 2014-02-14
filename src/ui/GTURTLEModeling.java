@@ -3530,6 +3530,8 @@ public class GTURTLEModeling {
 			loadAvatarRequirement(node);
 		} else if (type.compareTo("Avatar MAD") == 0) {
 			loadAvatarMADs(node);
+		} else if (type.compareTo("Avatar Analysis") == 0) {
+			loadAvatarAnalysis(node);
 			
 			
 		// TURTLE 
@@ -3721,6 +3723,57 @@ public class GTURTLEModeling {
 						cpt ++;
 					}
 				}
+			}
+		}
+	}
+	
+	public void loadAvatarAnalysis(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexAnalysis;
+		int cpt = 0;
+		
+		//TraceManager.addDev("Loading Avatar analysis");
+		
+		nameTab = elt.getAttribute("nameTab");
+		
+		indexAnalysis = mgui.createAvatarAnalysis(nameTab);
+		
+		diagramNl = node.getChildNodes();
+		
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//TraceManager.addDev("Design nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				
+				if (elt.getTagName().compareTo("SequenceDiagramPanel") == 0) {
+					//TraceManager.addDev("Loading seq diag");
+					loadSequenceDiagram(elt, indexAnalysis);
+					//TraceManager.addDev("Loading seq diag done");
+					cpt ++;
+				} else if (elt.getTagName().compareTo("UseCaseDiagramPanel") == 0) {
+					// Managing use case diagrams
+					//TraceManager.addDev("Loading ucd diag");
+					loadUseCaseDiagram(elt, indexAnalysis, cpt);
+					//TraceManager.addDev("Loading ucd diag done");
+					
+					cpt ++;
+				} else if (elt.getTagName().compareTo("AvatarCDPanel") == 0) {
+					// Managing use case diagrams
+					//TraceManager.addDev("Loading cd diag");
+					loadAvatarCD(elt, indexAnalysis, cpt);
+					//TraceManager.addDev("Loading cd diag done");
+					cpt ++;
+				} else if (elt.getTagName().compareTo("AvatarADPanel") == 0) {
+					// Managing use case diagrams
+					//TraceManager.addDev("Loading ad diag");
+					loadAvatarAD(elt, indexAnalysis, cpt);
+					//TraceManager.addDev("Loading ad diag done");
+					cpt ++;
+				}
+				
 			}
 		}
 	}
@@ -4455,15 +4508,20 @@ public class GTURTLEModeling {
 		if (!(mgui.isSDCreated(indexAnalysis, name))) {
 			mgui.createSequenceDiagram(indexAnalysis, name);
 		}
+		//TraceManager.addDev("Loading seq diag1");
 		SequenceDiagramPanel sdp = mgui.getSequenceDiagramPanel(indexAnalysis, name);
+		//TraceManager.addDev("Loading seq diag2");
 
 		if (sdp == null) {
 			throw new MalformedModelingException();
 		}
+		//TraceManager.addDev("Loading seq diag3");
 
 		sdp.removeAll();
+		//TraceManager.addDev("Loading seq diag4");
 
 		loadDiagram(elt, sdp);
+		//TraceManager.addDev("Loading seq diag5");
 	}
 
 	public void loadUseCaseDiagram(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {

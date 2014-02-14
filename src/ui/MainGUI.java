@@ -962,6 +962,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //TraceManager.addDev("Main analysis added");
         return index;
     }
+    
+    private int addAvatarAnalysisPanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarAnalysisPanel aap = new AvatarAnalysisPanel(this);
+        tabs.add(index, aap); // should look for the first
+        //mainTabbedPane.addTab(name, IconManager.imgic17, ap.tabbedPane, "Opens analysis diagrams");
+        mainTabbedPane.add(aap.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open analysis diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic17);
+        aap.init();
+        //TraceManager.addDev("Main analysis added");
+        return index;
+    }
 	
 	private int addAttackTreePanel(String name, int index) {
         if (index == -1) {
@@ -1351,6 +1367,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
     
+    public int createAvatarAnalysis(String name) {
+        int index = addAvatarAnalysisPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+    
     public int createDeployment(String name) {
         int index = addDeploymentPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1582,6 +1604,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void newAnalysis() {
         //TraceManager.addDev("NEW ANALYSIS");
         addAnalysisPanel("Analysis", 0);
+        ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
+        //paneAction(null);
+        //frame.repaint();
+    }
+    
+    public void newAvatarAnalysis() {
+        //TraceManager.addDev("NEW ANALYSIS");
+        addAvatarAnalysisPanel("Analysis", 0);
+        //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
+        //paneAction(null);
+        //frame.repaint();
+    }
+    
+    
+    public void newCommunicationPattern() {
+        //TraceManager.addDev("NEW ANALYSIS");
+        //addCommunicationPatternPanel("CP", 0);
         ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
@@ -2749,6 +2790,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 				setMode(MainGUI.GEN_DESIGN_OK);
 				//setMode(MainGUI.MODEL_OK);
             }
+            
+        
             
         } else if (tp instanceof DesignPanel) {
             //Design
@@ -5009,11 +5052,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             return false;
         }
         
-        if (!(tp instanceof AnalysisPanel)) {
+        if (!((tp instanceof AnalysisPanel) || (tp instanceof AvatarAnalysisPanel))) {
             return false;
         }
         
-        ((AnalysisPanel)tp).addSequenceDiagram(s);
+        if (tp instanceof AnalysisPanel) {
+			((AnalysisPanel)tp).addSequenceDiagram(s);
+		} else if (tp instanceof AvatarAnalysisPanel) {
+			((AvatarAnalysisPanel)tp).addSequenceDiagram(s);
+		}
         setPanelMode();
         return true;
     }
@@ -5027,12 +5074,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			}
 		}
         
+		if (tp instanceof AnalysisPanel) {
+			((AnalysisPanel)tp).addSequenceDiagram(s+i);
+		} else if (tp instanceof AvatarAnalysisPanel) {
+			((AvatarAnalysisPanel)tp).addSequenceDiagram(s+i);
+		}
         
-        if (!(tp instanceof AnalysisPanel)) {
-            return false;
-        }
-        
-        ((AnalysisPanel)tp).addSequenceDiagram(s+i);
         setPanelMode();
         return true;
     }
@@ -5042,11 +5089,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			return false;
 		}
 		
-		if (!(tp instanceof AnalysisPanel)) {
+		if (! ((tp instanceof AnalysisPanel) || (tp instanceof AvatarAnalysisPanel))) {
             return false;
         }
 		
-		 ((AnalysisPanel)tp).addInstancesToLastSD(_ucdp);
+        if (tp instanceof AnalysisPanel) {
+			((AnalysisPanel)tp).addInstancesToLastSD(_ucdp);
+		} else if (tp instanceof AvatarAnalysisPanel) {
+			((AvatarAnalysisPanel)tp).addInstancesToLastSD(_ucdp);
+		}
 		
         return true;
     }
@@ -5076,7 +5127,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public boolean createUniqueUseCaseDiagram(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+        if (!((tp instanceof AnalysisPanel) || (tp instanceof AvatarAnalysisPanel)))  {
             return false;
         }
         
@@ -5087,17 +5138,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			}
 		}
         
-        ((AnalysisPanel)tp).addUseCaseDiagram(s + " " + i);
+		if (tp instanceof AnalysisPanel) {
+			((AnalysisPanel)tp).addUseCaseDiagram(s + " " + i);
+        } else {
+        	((AvatarAnalysisPanel)tp).addUseCaseDiagram(s + " " + i);
+        }
         setPanelMode();
         return true;
     }
     
     public boolean createUseCaseDiagram(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+    	if (!((tp instanceof AnalysisPanel) || (tp instanceof AvatarAnalysisPanel)))  {
             return false;
-        }
+        }     
         
-        ((AnalysisPanel)tp).addUseCaseDiagram(s);
+        if (tp instanceof AnalysisPanel) {
+        	((AnalysisPanel)tp).addUseCaseDiagram(s);
+        } else {
+        	((AvatarAnalysisPanel)tp).addUseCaseDiagram(s);
+        }
         setPanelMode();
         return true;
     }
@@ -5107,9 +5166,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public boolean createUniqueAvatarCD(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+        if (!(tp instanceof AvatarAnalysisPanel))  {
             return false;
-        }
+        }      
         
         int i;
 		for(i=0; i<1000; i++) {
@@ -5118,18 +5177,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			}
 		}
         
-        ((AnalysisPanel)tp).addAvatarContextDiagram(s + " " + i);
+		((AvatarAnalysisPanel)tp).addAvatarContextDiagram(s + " " + i);
+       
+  
         setPanelMode();
         return true;
     }
     
     public boolean createAvatarCD(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+        if (!(tp instanceof AvatarAnalysisPanel))  {
             return false;
-        }
+        }     
         
         
-        ((AnalysisPanel)tp).addAvatarContextDiagram(s);
+        ((AvatarAnalysisPanel)tp).addAvatarContextDiagram(s);
+       
+        
         setPanelMode();
         return true;
     }
@@ -5139,7 +5202,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public boolean createUniqueAvatarAD(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+        if (!(tp instanceof AvatarAnalysisPanel)) {
             return false;
         }
         
@@ -5150,17 +5213,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			}
 		}
         
-        ((AnalysisPanel)tp).addAvatarActivityDiagram(s + " " + i);
+        ((AvatarAnalysisPanel)tp).addAvatarActivityDiagram(s + " " + i);
         setPanelMode();
         return true;
     }
     
     public boolean createAvatarAD(TURTLEPanel tp, String s) {
-        if (!(tp instanceof AnalysisPanel)) {
+       if (!(tp instanceof AvatarAnalysisPanel)) {
             return false;
         }
   
-        ((AnalysisPanel)tp).addAvatarActivityDiagram(s);
+        
+        ((AvatarAnalysisPanel)tp).addAvatarActivityDiagram(s);
+       
         setPanelMode();
         return true;
     }
@@ -6167,6 +6232,13 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		selectTab(getCurrentTURTLEPanel(), tab);
 	}
 	
+	public void refreshCurrentPanel() {
+		TDiagramPanel tdp = getCurrentTDiagramPanel();
+		if (tdp != null) {
+			tdp.repaint();
+		}
+	}
+	
 	public void openAVATARSMD(String tab) {
 		TDiagramPanel cur = getCurrentTDiagramPanel();
 		selectTab(getCurrentTURTLEPanel(), tab);
@@ -6955,6 +7027,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR);
 		} else if (command.equals(actions[TGUIAction.AMAD_IMPACT_CONNECTOR].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_IMPACT_CONNECTOR);
+        } else if (command.equals(actions[TGUIAction.AMAD_MEET_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.AVATARMAD_MEET_CONNECTOR);
 			
         // AVATAR RD
 		} else if (command.equals(actions[TGUIAction.ARD_EDIT].getActionCommand())) {
@@ -7645,7 +7719,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 				} else if (e.getSource() == newMAD) {
 					mgui.newAvatarMADs();
 				} else if (e.getSource() == newAVATARAnalysis) {
-					mgui.newAnalysis();
+					mgui.newAvatarAnalysis();
 				}
             }
         };

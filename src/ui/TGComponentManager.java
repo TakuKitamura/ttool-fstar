@@ -331,6 +331,7 @@ public class TGComponentManager {
 	public static final int AVATARMAD_COMPOSITION_CONNECTOR = 5253;  
 	public static final int AVATARMAD_VERSIONING_CONNECTOR = 5254;
 	public static final int AVATARMAD_IMPACT_CONNECTOR = 5255;
+	public static final int AVATARMAD_MEET_CONNECTOR = 5256;
 	
 	// AVATAR PD -> starts at 5300
 	public static final int APD_BLOCK = 5300;
@@ -995,6 +996,8 @@ public class TGComponentManager {
 			return AVATARMAD_VERSIONING_CONNECTOR;
 		} else if (tgc instanceof AvatarMADImpactConnector) {
 			return AVATARMAD_IMPACT_CONNECTOR;
+		} else if (tgc instanceof AvatarMADMeetConnector) {
+			return AVATARMAD_MEET_CONNECTOR;
 			
 		// AVATAR RD
 		} else if (tgc instanceof AvatarRDRequirement) {
@@ -1459,6 +1462,9 @@ public class TGComponentManager {
                 break;
             case AVATARMAD_IMPACT_CONNECTOR:
                 tgc = new AvatarMADImpactConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case AVATARMAD_MEET_CONNECTOR:
+                tgc = new AvatarMADMeetConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
              
 			// AVATAR RD
