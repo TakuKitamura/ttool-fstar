@@ -81,6 +81,8 @@ import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
+import ui.tmlcp.*;
+import ui.tmlsd.*;
 
 import ui.procsd.*;
 import ui.prosmd.*;
@@ -963,6 +965,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
     
+    private int addTMLCPPanel(String name, int index) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        TMLCommunicationPatternPanel tmlcpp = new TMLCommunicationPatternPanel(this);
+        tabs.add(index, tmlcpp); // should look for the first
+        //mainTabbedPane.addTab(name, IconManager.imgic17, ap.tabbedPane, "Opens analysis diagrams");
+        mainTabbedPane.add(tmlcpp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open CP diagrams");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic17);
+        tmlcpp.init();
+        //TraceManager.addDev("Main analysis added");
+        return index;
+    }
+    
     private int addAvatarAnalysisPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();
@@ -1342,6 +1360,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
+    
+    public int createTMLCP(String name) {
+        int index = addTMLCPPanel(name, -1);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
 	
 	public int createTMLArchitecture(String name) {
         int index = addTMLArchiPanel(name, -1);
@@ -1643,6 +1667,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         addTMLComponentDesignPanel("DIPLODOCUS_C_Design", -1);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+    
+    public void newTMLCP() {
+        //TraceManager.addDev("NEW ANALYSIS");
+        addTMLCPPanel("CP", 0);
+        ((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
         //frame.repaint();
     }
@@ -4904,6 +4937,36 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         
     }
     
+    // TMLCP
+    public boolean isTMLCPSDCreated(int index, String s) {
+        return isTMLCPSDCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+    }
+    
+    public boolean isTMLCPSDCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof TMLSDPanel);
+    }
+    
+    public boolean isTMLCPCreated(int index, String s) {
+        return isTMLCPCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
+    }
+    
+    public boolean isTMLCPCreated(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof TMLCPPanel);
+    }
+    
+    
+    
+    
+    // IOD, SD
+    
     public boolean isSDCreated(int index, String s) {
         return isSDCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
     }
@@ -4982,6 +5045,86 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
     
+    public boolean openTMLCPSequenceDiagram(String s) {
+        int index = getCurrentJTabbedPane().indexOfTab(s);
+        if (index > -1) {
+            getCurrentJTabbedPane().setSelectedIndex(index);
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean openTMLCPDiagram(String s) {
+        int index = getCurrentJTabbedPane().indexOfTab(s);
+        if (index > -1) {
+            getCurrentJTabbedPane().setSelectedIndex(index);
+            return true;
+        }
+        return false;
+    }
+    
+    
+    // TMLCP
+    
+    public boolean createTMLCPSequenceDiagram(int index, String s) {
+        return createTMLCPSequenceDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createTMLCPSequenceDiagram(TURTLEPanel tp, String s) {
+        if(isSDCreated(tp, s)) {
+            return false;
+        }
+        
+        if (!(tp instanceof TMLCommunicationPatternPanel) ) {
+            return false;
+        }
+        
+        
+		((TMLCommunicationPatternPanel)tp).addCPSequenceDiagram(s);
+		
+        setPanelMode();
+        return true;
+    }
+    
+	
+	public boolean createUniqueTMLCPSequenceDiagram(TURTLEPanel tp, String s) {
+		int i;
+		for(i=0; i<1000; i++) {
+			if(!isTMLCPSDCreated(tp, s+i)) {
+				break;
+			}
+		}
+       
+		((TMLCommunicationPatternPanel)tp).addCPSequenceDiagram(s+i);
+        
+        setPanelMode();
+        return true;
+    }
+	
+	
+	
+	
+    public boolean createTMLCPDiagram(int index, String s) {
+        return createTMLCPDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+    
+    public boolean createTMLCPDiagram(TURTLEPanel tp, String s) {
+        if(isTMLCPCreated(tp, s)) {
+            return false;
+        }
+        
+        if (!(tp instanceof TMLCommunicationPatternPanel)) {
+            return false;
+        }
+        
+        ((TMLCommunicationPatternPanel)tp).addCPDiagram(s);
+        setPanelMode();
+        return true;
+    }
+    
+    // End of TMLCP
+    
+    
     public SequenceDiagramPanel getSequenceDiagramPanel(int index, String s) {
         //TraceManager.addDev("Searching for " + s);
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
@@ -4999,6 +5142,39 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             if (tp.tabbedPane.getTitleAt(i).equals(s)) {
                 if (tp.panelAt(i) instanceof AttackTreeDiagramPanel)
                     return  (AttackTreeDiagramPanel)(tp.panelAt(i));
+            }
+        }
+        return null;
+    }
+    
+    
+    public TMLCPPanel getTMLCPDiagramPanel(int index, String s) {
+        //TraceManager.addDev("Searching for " + s);
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getTMLCPDiagramPanel(tp, s);
+    }
+    
+    public TMLCPPanel getTMLCPDiagramPanel(TURTLEPanel tp, String s) {
+        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                if (tp.panelAt(i) instanceof TMLCPPanel)
+                    return  (TMLCPPanel)(tp.panelAt(i));
+            }
+        }
+        return null;
+    }
+    
+    public TMLSDPanel getTMLCPSDDiagramPanel(int index, String s) {
+        //TraceManager.addDev("Searching for " + s);
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getTMLCPSDDiagramPanel(tp, s);
+    }
+    
+    public TMLSDPanel getTMLCPSDDiagramPanel(TURTLEPanel tp, String s) {
+        for(int i=0; i<tp.tabbedPane.getTabCount(); i++) {
+            if (tp.tabbedPane.getTitleAt(i).equals(s)) {
+                if (tp.panelAt(i) instanceof TMLSDPanel)
+                    return  (TMLSDPanel)(tp.panelAt(i));
             }
         }
         return null;
@@ -7398,6 +7574,39 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		} else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);       
 			
+            
+       
+        // Communication patterns
+        } else if (command.equals(actions[TGUIAction.TMLCP_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1);
+        } else if (command.equals(actions[TGUIAction.TMLCP_CONNECTOR].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_TMLCP);
+        } else if (command.equals(actions[TGUIAction.TMLCP_CHOICE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_CHOICE);
+		} else if (command.equals(actions[TGUIAction.TMLCP_FORK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_FORK);
+		} else if (command.equals(actions[TGUIAction.TMLCP_JOIN].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JOIN);
+		} else if (command.equals(actions[TGUIAction.TMLCP_REF_CP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_REF_CP);
+		} else if (command.equals(actions[TGUIAction.TMLCP_REF_SD].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_REF_SD);
+		} else if (command.equals(actions[TGUIAction.TMLCP_START].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_START_STATE);
+		} else if (command.equals(actions[TGUIAction.TMLCP_STOP].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_STOP_STATE);
+		} else if (command.equals(actions[TGUIAction.TMLCP_JUNCTION].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JUNCTION);
+		} else if (command.equals(actions[TGUIAction.TMLSD_EDIT].getActionCommand())) {
+            actionOnButton(TGComponentManager.EDIT, -1);
+        } else if (command.equals(actions[TGUIAction.TMLSD_MESSAGE_ASYNC].getActionCommand())) {
+            actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD);
+        } else if (command.equals(actions[TGUIAction.TMLSD_INSTANCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_INSTANCE);
+		} else if (command.equals(actions[TGUIAction.TMLSD_ACTION_STATE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_ACTION_STATE);
+		
+		
 		// Attack Tree Diagrams
 		} else if (command.equals(actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
@@ -7522,7 +7731,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private MainGUI mgui;
         private JPopupMenu menu;
         
-        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD;
+        private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, 
+        newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP;
 		private JMenuItem newAVATARAnalysis;
         
         public PopupListener(MainGUI _mgui) {
@@ -7563,7 +7773,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newRequirement = createMenuItem("New TURTLE Requirement Diagram");
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
 			newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
-			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
+			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");    
+			newTMLCP = createMenuItem("New DIPLODOCUS Communication Pattern");
             newProactiveDesign = createMenuItem("New Proactive Design");
             newTURTLEOSDesign = createMenuItem("New TURTLE-OS Design");
 			newNCDesign = createMenuItem("New Network Calculus Design");
@@ -7615,6 +7826,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 menu.addSeparator();
                 menu.add(newTMLDesign);
 				menu.add(newTMLComponentDesign);
+				menu.add(newTMLCP);
 				menu.add(newTMLArchi);
             }
 			
@@ -7704,6 +7916,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     mgui.newTMLDesign();
                 } else if (ac.equals("New Component-based DIPLODOCUS Design")) {
                     mgui.newTMLComponentDesign();
+                } else if (e.getSource() == newTMLCP) {
+                    mgui.newTMLCP();
                 } else if (ac.equals("New DIPLODOCUS Architecture")) {
                     mgui.newTMLArchi();
                 } else if (ac.equals("New Proactive Design")) {

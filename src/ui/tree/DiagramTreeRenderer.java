@@ -65,6 +65,8 @@ import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmldd.*;
 import ui.tmlcompd.*;
+import ui.tmlcp.*;
+import ui.tmlsd.*;
 
 import ui.ncdd.*;
 
@@ -105,6 +107,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
 		} else if (value instanceof AvatarAnalysisPanel) {
             setIcon(IconManager.imgic18);
             setToolTipText("Avatar Analysis");
+        } else if (value instanceof TMLCommunicationPatternPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("DIPLODOCUS Communication Patterns");
         } else if (value instanceof AvatarCDPanel) {
             setIcon(IconManager.imgic600);
             setToolTipText("Avatar Block Diagram");
@@ -159,9 +164,15 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof InteractionOverviewDiagramPanel) {
             setIcon(IconManager.imgic17);
             setToolTipText("TURTLE Interaction Overview Diagram");
+        } else if (value instanceof TMLCPPanel) {
+            setIcon(IconManager.imgic17);
+            setToolTipText("DIPLODOCUS Communication Pattern");
         } else if (value instanceof SequenceDiagramPanel) {
             setIcon(IconManager.imgic18);
             setToolTipText("TURTLE Sequence Diagram");
+        } else if (value instanceof TMLSDPanel) {
+            setIcon(IconManager.imgic18);
+            setToolTipText("DIPLODOCUS Sequence Diagram");
         } else if (value instanceof UseCaseDiagramPanel) {
             setIcon(IconManager.imgic19);
             setToolTipText("TURTLE Use Case Diagram");

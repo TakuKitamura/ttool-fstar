@@ -133,11 +133,13 @@ public class AvatarSyntaxChecker  {
 		
 		BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 		
-		//TraceManager.addDev("Evaluating bool:" + act);
+		TraceManager.addDev("IsValidBoolExpr Evaluating bool:" + act);
 		boolean result = bee.getResultOf(act);
 		if (bee.getError() != null) {
-			//TraceManager.addDev("Error: " + bee.getError());
+			TraceManager.addDev("Error: " + bee.getError());
 			return -1;
+		} else {
+			TraceManager.addDev("IsValidBoolExpr ! (" + act + ")");
 		}
 		
 		return 0;

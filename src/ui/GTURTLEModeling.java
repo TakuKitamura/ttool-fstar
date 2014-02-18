@@ -95,6 +95,8 @@ import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
+import ui.tmlcp.*;
+import ui.tmlsd.*;
 import tmltranslator.*;
 import tmltranslator.tosystemc.*;
 import tmltranslator.toturtle.*;
@@ -2844,7 +2846,105 @@ public class GTURTLEModeling {
 						makePostLoading(tmladp, beginIndex);
 					}
 				}
-			}  else if (tdp instanceof TMLArchiDiagramPanel) {
+			}  else if (tdp instanceof TMLCPPanel) {
+				nl = doc.getElementsByTagName("TMLCPPanelCopy");
+				docCopy = doc;
+
+				if (nl == null) {
+					return;
+				}
+
+				//TraceManager.addDev("Toto 1");
+
+				TMLCPPanel tmlcpp = (TMLCPPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (tmlcpp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						//tmlcpp.loadExtraParameters(elt);
+
+						//TraceManager.addDev("Toto 2");
+
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmlcpp);
+						//TraceManager.addDev("Toto 3");
+						makePostProcessing(tmlcpp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmlcpp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmlcpp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
+						connectConnectorsToRealPoints(tmlcpp);
+						tmlcpp.structureChanged();
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						makePostLoading(tmlcpp, beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
+					}
+				}
+			} else if (tdp instanceof TMLSDPanel) {
+				nl = doc.getElementsByTagName("TMLSDPanelCopy");
+				docCopy = doc;
+
+				if (nl == null) {
+					return;
+				}
+
+				//TraceManager.addDev("Toto 1");
+
+				TMLSDPanel tmlsdp = (TMLSDPanel)tdp;
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (tmlsdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						//tmlcpp.loadExtraParameters(elt);
+
+						//TraceManager.addDev("Toto 2");
+
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tmlsdp);
+						//TraceManager.addDev("Toto 3");
+						makePostProcessing(tmlsdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tmlsdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tmlsdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
+						connectConnectorsToRealPoints(tmlsdp);
+						tmlsdp.structureChanged();
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						makePostLoading(tmlsdp, beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
+					}
+				}
+			} else if (tdp instanceof TMLArchiDiagramPanel) {
 				nl = doc.getElementsByTagName("TMLArchiDiagramPanelCopy");
 				docCopy = doc;
 
@@ -3551,6 +3651,8 @@ public class GTURTLEModeling {
 			loadTMLDesign(node);
 		} else if (type.compareTo("TML Component Design") == 0) {
 			loadTMLComponentDesign(node);
+		} else if (type.compareTo("TML CP") == 0) {
+			loadTMLCP(node);
 		} else if (type.compareTo("TML Architecture") == 0) {
 			loadTMLArchitecture(node);
 		} else if (type.compareTo("TURTLE-OS Design") == 0) {
@@ -3713,7 +3815,7 @@ public class GTURTLEModeling {
 						// Managing use case diagrams
 						loadUseCaseDiagram(elt, indexAnalysis, cpt);
 						cpt ++;
-					} else if (elt.getTagName().compareTo("AvatarCDPanel") == 0) {
+					} /*else if (elt.getTagName().compareTo("AvatarCDPanel") == 0) {
 						// Managing use case diagrams
 						loadAvatarCD(elt, indexAnalysis, cpt);
 						cpt ++;
@@ -3721,7 +3823,39 @@ public class GTURTLEModeling {
 						// Managing use case diagrams
 						loadAvatarAD(elt, indexAnalysis, cpt);
 						cpt ++;
-					}
+					}*/
+				}
+			}
+		}
+	}
+	
+	public void loadTMLCP(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexTMLCP;
+		int cpt = 0;
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexTMLCP = mgui.createTMLCP(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//TraceManager.addDev("Nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("CommunicationPatternDiagramPanel") == 0) {
+					// CP
+					loadTMLCPDiagram(elt, indexTMLCP);
+					cpt ++;
+				} else { // Managing sequence diagrams
+					if (elt.getTagName().compareTo("TMLSDPanel") == 0) {
+						loadTMLSDDiagram(elt, indexTMLCP);
+						cpt ++;
+					} 
 				}
 			}
 		}
@@ -4442,6 +4576,42 @@ public class GTURTLEModeling {
 		}
 
 		TDiagramPanel tdp = mgui.getIODiagramPanel(indexAnalysis, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadTMLCPDiagram(Element elt, int indexAnalysis) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		if (!(mgui.isTMLCPCreated(indexAnalysis, name))) {
+			mgui.createTMLCPDiagram(indexAnalysis, name);
+		}
+
+		TDiagramPanel tdp = mgui.getTMLCPDiagramPanel(indexAnalysis, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadTMLSDDiagram(Element elt, int indexAnalysis) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		if (!(mgui.isTMLCPSDCreated(indexAnalysis, name))) {
+			mgui.createTMLCPSequenceDiagram(indexAnalysis, name);
+		}
+
+		TDiagramPanel tdp = mgui.getTMLCPSDDiagramPanel(indexAnalysis, name);
 
 		if (tdp == null) {
 			throw new MalformedModelingException();

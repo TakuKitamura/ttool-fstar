@@ -213,6 +213,23 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLARCHI_DMANODE = 364;
 	public static final int TMLARCHI_BRIDGENODE = 225;
 	
+	public static final int TMLCP_EDIT = 378;    
+	public static final int TMLCP_CONNECTOR = 379;
+	public static final int TMLCP_REF_SD = 380;
+	public static final int TMLCP_REF_CP = 381;
+	public static final int TMLCP_FORK = 382;
+	public static final int TMLCP_JOIN = 383;
+	public static final int TMLCP_START = 384;
+	public static final int TMLCP_STOP = 385;
+	public static final int TMLCP_CHOICE = 386;
+	public static final int TMLCP_JUNCTION = 387;
+	
+	public static final int TMLSD_INSTANCE = 388;
+	public static final int TMLSD_ACTION_STATE = 389;
+	public static final int TMLSD_MESSAGE_ASYNC = 390;
+	public static final int TMLSD_EDIT = 391;    
+	
+	
 	public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
     public static final int EBRDD_START = 273;
@@ -505,7 +522,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 378;
+    public static final int NB_ACTION = 392;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -840,6 +857,23 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
+        
+        
+        actions[TMLCP_EDIT] = new TAction("edit-tmlcp-diagram", "Edit communication pattern diagram", IconManager.imgic100, IconManager.imgic101, "Edit communication pattern diagram", "Make it possible to edit the currently opened communication pattern diagram", 0);
+        actions[TMLCP_CONNECTOR] = new TAction("add-tmlcp-connector", "Add CP Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened communication pattern diagram", 0);
+        actions[TMLCP_REF_SD] = new TAction("add-ref-sd-tmlcp", "Add reference to a SD", IconManager.imgic400, IconManager.imgic400, "Reference to a SD", "Add a reference to a sequence diagram in the the currently opened communication pattern diagram", 0);
+        actions[TMLCP_REF_CP] = new TAction("add-ref-cp-tmlcp", "Add reference to a CP", IconManager.imgic400, IconManager.imgic400, "Reference to a CP", "Add a reference to a communication pattern diagram in the currently opened communication pattern diagram", 0);
+        actions[TMLCP_FORK] = new TAction("add-tmlcp-fork", "Add fork", IconManager.imgic206, IconManager.imgic206, "Fork", "Add a fork to the currently opened communication pattern diagram", 0);
+        actions[TMLCP_JOIN] = new TAction("add-tmlcp-join", "Add join", IconManager.imgic206, IconManager.imgic206, "Join", "Add a join to the currently opened communication pattern diagram", 0);  
+        actions[TMLCP_CHOICE] = new TAction("add-tmlcp-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened communication pattern diagram", 0);
+        actions[TMLCP_START] = new TAction("add-tmlcp-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened communication pattern diagram", 0);
+        actions[TMLCP_STOP] = new TAction("add-tmlcp-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened communication pattern diagram", 0);
+        actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
+        
+        actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit The sequence diagram of  communication patterns", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchonous msg", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_INSTANCE] = new TAction("add-instance-tmlsd", "Instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add an instance to the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
         
 
         //ProActive State Machine Diagram  

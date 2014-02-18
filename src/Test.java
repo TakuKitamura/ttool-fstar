@@ -61,7 +61,7 @@ public class Test  {
     public static void testBoolExpr() {
     	int nbOfPb = 0;
     	
-    	nbOfPb += evalBool("t or f", true, false);
+    	/*nbOfPb += evalBool("t or f", true, false);
     	
     	nbOfPb += evalBool("(t) or f", true, false);
     	
@@ -73,6 +73,7 @@ public class Test  {
     	
     	nbOfPb += evalBool("t and f and t", false, false);
     	
+    	nbOfPb += evalBool("(0==0)", false, false);
     	
     	nbOfPb += evalBool("(2==2)==f", false, false);
     	nbOfPb += evalBool("(2==1)==f", true, false);
@@ -88,7 +89,10 @@ public class Test  {
     	
     	nbOfPb += evalBool("f or t and f", false, false);
     	
-    	nbOfPb += evalBool("(3>5)or (4<6) or (1>2)", true, false);
+    	nbOfPb += evalBool("(3>5)or (4<6) or (1>2)", true, false);*/
+    	
+    	nbOfPb += evalBool("(0==0)", true, false);    
+    	nbOfPb += evalBool("t==t", true, false);
     	
     	System.out.println("Nb of problems found:" + nbOfPb);
     	

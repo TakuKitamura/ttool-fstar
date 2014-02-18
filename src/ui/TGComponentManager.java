@@ -61,10 +61,14 @@ import ui.ebrdd.*;
 
 import ui.atd.*;
 
+
+// DIPLODOCUS
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmldd.*;
 import ui.tmlcompd.*;
+import ui.tmlcp.*;
+import ui.tmlsd.*;
 
 import ui.procsd.*;
 import ui.prosmd.*;
@@ -251,6 +255,20 @@ public class TGComponentManager {
 	public static final int ATD_ATTACK = 1401;
 	public static final int ATD_CONSTRAINT = 1402;
 	
+	// TML Communication patterns and TMLSD
+	public static final int TMLCP_CHOICE = 1500;
+	public static final int CONNECTOR_TMLCP = 1501;
+	public static final int TMLCP_FORK = 1502;
+	public static final int TMLCP_JOIN = 1503;
+	public static final int TMLCP_REF_CP = 1504;
+	public static final int TMLCP_REF_SD = 1505;
+	public static final int TMLCP_START_STATE = 1506;
+	public static final int TMLCP_STOP_STATE = 1507;
+	public static final int TMLCP_JUNCTION = 1508;
+
+	public static final int TMLSD_INSTANCE = 1520;
+	public static final int CONNECTOR_MESSAGE_ASYNC_TMLSD = 1521;
+	public static final int TMLSD_ACTION_STATE = 1522;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -840,6 +858,41 @@ public class TGComponentManager {
             case TMLARCHI_COMMUNICATION_ARTIFACT:
                 tgc = new TMLArchiCommunicationArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+                
+                
+                // Communication patterns + SD
+            case TMLCP_CHOICE:
+                tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_FORK:
+                tgc = new TMLCPFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_JOIN:
+                tgc = new TMLCPJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_REF_CP:
+                tgc = new TMLCPRefCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_REF_SD:
+                tgc = new TMLCPRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_START_STATE:
+                tgc = new TMLCPStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_STOP_STATE:
+                tgc = new TMLCPStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCP_JUNCTION:
+                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_ACTION_STATE:
+                tgc = new TMLSDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLSD_INSTANCE:
+                tgc = new TMLSDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+                
+            // Requirements
             case TREQ_REQUIREMENT:
                 tgc = new Requirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1337,6 +1390,36 @@ public class TGComponentManager {
             return TMLARCHI_ARTIFACT;
         } else if (tgc instanceof TMLArchiCommunicationArtifact) {
             return TMLARCHI_COMMUNICATION_ARTIFACT;
+            
+        // Communication patterns
+        } else if (tgc instanceof TMLCPChoice) {
+            return TMLCP_CHOICE;
+        } else if (tgc instanceof TMLCPFork) {
+            return TMLCP_FORK;
+        } else if (tgc instanceof TMLCPJoin) {
+            return TMLCP_JOIN;
+        } else if (tgc instanceof TMLCPRefCP) {
+            return TMLCP_REF_CP;
+        } else if (tgc instanceof TMLCPRefSD) {
+            return TMLCP_REF_SD;
+        } else if (tgc instanceof TMLCPStartState) {
+            return TMLCP_START_STATE;
+        } else if (tgc instanceof TMLCPStopState) {
+            return TMLCP_STOP_STATE;
+        } else if (tgc instanceof TMLCPJunction) {
+            return TMLCP_JUNCTION;
+        } else if (tgc instanceof TGConnectorTMLCP) {
+            return CONNECTOR_TMLCP;
+        } else if (tgc instanceof TMLSDActionState) {
+            return TMLSD_ACTION_STATE;
+        } else if (tgc instanceof TMLSDInstance) {
+            return TMLSD_INSTANCE;
+        } else if (tgc instanceof TGConnectorMessageAsyncTMLSD) {
+            return CONNECTOR_MESSAGE_ASYNC_TMLSD;
+            
+            
+           
+            
         } else if (tgc instanceof TGConnectorComment) {
             return CONNECTOR_COMMENT;
         } else if (tgc instanceof Requirement) {
@@ -1600,6 +1683,15 @@ public class TGComponentManager {
             case CONNECTOR_TML_COMPOSITION_OPERATOR:
                 tgc = new TGConnectorTMLCompositionOperator(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
+                
+            case CONNECTOR_TMLCP:
+            	tgc = new TGConnectorTMLCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+            case CONNECTOR_MESSAGE_ASYNC_TMLSD:
+            	tgc = new TGConnectorMessageAsyncTMLSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+                
+                
             case CONNECTOR_DERIVE_REQ:
                 tgc = new TGConnectorDerive(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;

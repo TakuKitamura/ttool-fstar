@@ -58,6 +58,7 @@ public class BoolExpressionEvaluator {
 	public static final int NUMBER_TOKEN = -1;
 	public static final int BOOL_TOKEN = -2;
 	public static final int EQUAL_TOKEN = -3;
+	public static final int NOT_EQUAL_TOKEN = -15;
 	public static final int NOT_TOKEN = -6;
 	public static final int OR_TOKEN = -7;
 	public static final int AND_TOKEN = -8;
@@ -111,14 +112,16 @@ public class BoolExpressionEvaluator {
 	
 	public boolean getResultOf(String _expr) {
 		TraceManager.addDev("Evaluating bool expr: " + _expr);
-		//_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
+		_expr = Conversion.replaceAllString(_expr, "not", "!").trim();
 		
 		nbOpen = 0;
 		
 		String tmp = Conversion.replaceAllString(_expr, "==", "$").trim();
+		tmp = Conversion.replaceAllString(tmp, "!=", "$").trim();
 		tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
 		tmp = Conversion.replaceAllString(tmp, "<=", ";").trim();
 		if (tmp.indexOf("=") > -1) {
+			TraceManager.addDev("Not a bool");
 			errorMessage = "Not a boolean expression because it contains \"=\" operators";
 			return false;
 		}
@@ -130,6 +133,7 @@ public class BoolExpressionEvaluator {
 		_expr = Conversion.replaceAllString(_expr, "or", "|").trim();
 		_expr = Conversion.replaceAllString(_expr, "and", "&").trim();
 		_expr = Conversion.replaceAllString(_expr, "==", "=").trim();
+		_expr = Conversion.replaceAllString(_expr, "!=", "$").trim();
 		_expr = Conversion.replaceAllString(_expr, ">=", ":").trim();
 		_expr = Conversion.replaceAllString(_expr, "<=", ";").trim();
 		
@@ -152,9 +156,15 @@ public class BoolExpressionEvaluator {
 		
 		//TraceManager.addDev("Computing:" + _expr);
 		
-		tokens = new java.util.StringTokenizer(_expr," \t\n\r!=&|<>():;tf",true);
+		tokens = new java.util.StringTokenizer(_expr," \t\n\r!$=&|<>():;tf",true);
+		
+		TraceManager.addDev("Evaluating bool bool bool expr: " + _expr);
 		
 		int result = parseRootExpr1();
+		
+		if (getError() != null) {
+			TraceManager.addDev("Error: " + getError());
+		}
 		
 		if (result == TRUE_VALUE) {
 			TraceManager.addDev("equal true");
@@ -339,6 +349,13 @@ public class BoolExpressionEvaluator {
 					result[0] = 0; 
 				}
 				
+			} else if (typeOfOp == NOT_EQUAL_TOKEN) {
+				if (result[0] == resultRight[0]) {
+					result[0] = 0; 
+				} else {
+					result[0] = 1; 
+				}
+				
 			} else if (typeOfOp == OR_TOKEN) {
 				result[0] = result[0] + resultRight[0];
 				if (result[0] > 1) {
@@ -364,7 +381,15 @@ public class BoolExpressionEvaluator {
 				}
 				result[1] = BOOL_TOKEN;
 				
-			} else if (typeOfOp == LT_TOKEN) {
+			} else if (typeOfOp == NOT_EQUAL_TOKEN) {
+				if (result[0] == resultRight[0]) {
+					result[0] = 0; 
+				} else {
+					result[0] = 1; 
+				}
+				result[1] = BOOL_TOKEN;
+				
+			}else if (typeOfOp == LT_TOKEN) {
 				if (result[0] < resultRight[0]) {
 					result[0] = 1; 
 				} else {
@@ -483,6 +508,12 @@ public class BoolExpressionEvaluator {
 			return;
 		}
 		
+		if (s.compareTo("$") == 0) {
+			currentValue = 0;
+			currentType = NOT_EQUAL_TOKEN;
+			return;
+		}
+		
 		if (s.compareTo("!") == 0) {
 			currentValue = 0;
 			currentType = NOT_TOKEN;
@@ -556,6 +587,8 @@ public class BoolExpressionEvaluator {
 				errorMessage = "Expected a boolean.";
 			else if (token == EQUAL_TOKEN)
 				errorMessage = "Expected an equal.";
+			else if (token == NOT_EQUAL_TOKEN)
+				errorMessage = "Expected an not equal.";
 			else errorMessage = 
 				"Expected a " + ((char) token) + ".";
 			return;
@@ -644,7 +677,30 @@ public class BoolExpressionEvaluator {
 					return FALSE_VALUE;
 				}
 				
-			} else if (currentType == LT_TOKEN) {
+			} else if (currentType == NOT_EQUAL_TOKEN) {
+				match(NOT_EQUAL_TOKEN);
+				if (errorMessage != null) return result;
+				
+				resulttmp = parseRootexp();
+				//intresult = (int)(resulttmp);
+				//intresult2 = (int)(result);
+				
+				if (errorMessage != null) return result;
+				
+				/*if ((intresult2 != TRUE_VALUE) && (intresult2 != FALSE_VALUE)) {
+					errorMessage = "Expression on the left is not a boolean (result=" + intresult2 + ")";
+				}
+				if ((intresult != TRUE_VALUE) && (intresult != FALSE_VALUE)) {
+					errorMessage = "Expression on the right is not a boolean (result=" + intresult + ")";
+				}*/
+				
+				if (result != resulttmp) {
+					return TRUE_VALUE;
+				} else {
+					return FALSE_VALUE;
+				}
+				
+			}else if (currentType == LT_TOKEN) {
 				match(LT_TOKEN);
 				if (errorMessage != null) return result;
 				
@@ -907,6 +963,12 @@ public class BoolExpressionEvaluator {
 			if (s.compareTo("=") == 0) {
 				currentValue = 0;
 				currentType = EQUAL_TOKEN;
+				return;
+			}
+			
+			if (s.compareTo("$") == 0) {
+				currentValue = 0;
+				currentType = NOT_EQUAL_TOKEN;
 				return;
 			}
 			

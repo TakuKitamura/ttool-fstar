@@ -411,6 +411,8 @@ public class Main implements ActionListener {
     	
     	evalBool("(t) or f");
     	
+    	evalBool("(0==0)");
+    	
     	
     	
     	System.exit(-1);
