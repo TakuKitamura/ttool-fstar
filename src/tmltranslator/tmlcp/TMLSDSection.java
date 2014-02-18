@@ -36,37 +36,55 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class DIPLOElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLSDSection
+* Creation: 18/02/2014
+* @version 1.0 18/02/2014
+* @author Ludovic APVRILLE
+* @see
+*/
 
-package tmltranslator;
+package tmltranslator.tmlcp;;
 
+import java.util.*;
+
+import tmltranslator.*;
 import myutil.*;
 
-public class DIPLOElement {
+public class TMLSDSection  {
+    private ArrayList<TMLSDInstance> instances; 
+    private ArrayList<TMLAttribute> globalVariables; 
+    private ArrayList<TMLSDMessage> messages; 
 	
-	protected static int ID=0;
+	private int hashCode;
+	private boolean hashCodeComputed = false;
 	
-    private int myID;
     
-    public DIPLOElement() {
-       myID=++ID;
+    public TMLSDSection() {
+        init();
+    }
+	
+    private void init() {
+        globalVariables = new ArrayList<TMLAttribute>();
+        instances = new ArrayList<TMLSDInstance>();  
+        messages = new ArrayList<TMLSDMessage>();
     }
     
-    public int getID(){
-		return myID;
+    public void addVariable(TMLAttribute _attr) {
+        globalVariables.add(_attr);
     }
 	
-	public static void setGeneralID(int _IDValue) {
-		ID = _IDValue;
+	public ArrayList<TMLAttribute> getAttributes() {
+		return globalVariables;
 	}
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
-	}
+	
+	public void addInstance(TMLSDInstance _elt) {
+        instances.add(_elt);
+    }
+    
+    public void addMessage(TMLSDMessage _elt) {
+        messages.add(_elt);
+    }
+    
+	
 }

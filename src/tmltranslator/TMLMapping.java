@@ -57,6 +57,10 @@ public class TMLMapping {
 	private ArrayList<HwCommunicationNode> oncommnodes;
 	private ArrayList<TMLElement> mappedcommelts;
 	
+	private ArrayList<TMLCP> instancesOfCPs;
+	private ArrayList<TMLElement> commEltsMappedOnCPs;
+	
+	
 	private boolean optimized = false;
 	
 	private int hashCode;

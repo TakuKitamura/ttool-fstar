@@ -36,37 +36,69 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class DIPLOElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLCP
+* Creation: 18/02/2014
+* @version 1.0 18/02/2014
+* @author Ludovic APVRILLE
+* @see
+*/
 
 package tmltranslator;
 
+import java.util.*;
+
+import tmltranslator.tmlcp.*;
+
 import myutil.*;
 
-public class DIPLOElement {
+public class TMLCP  {
+    private TMLCPSection mainCP;
+    private ArrayList<TMLCPSection> otherCPs; //Ref to other CPs
+    private ArrayList<TMLSDSection> sds; //Ref to sd
 	
-	protected static int ID=0;
 	
-    private int myID;
+	private int hashCode;
+	private boolean hashCodeComputed = false;
+	
     
-    public DIPLOElement() {
-       myID=++ID;
-    }
-    
-    public int getID(){
-		return myID;
+    public TMLCP() {
+        init();
     }
 	
-	public static void setGeneralID(int _IDValue) {
-		ID = _IDValue;
+    private void init() {
+        otherCPs = new ArrayList<TMLCPSection>();
+        sds = new ArrayList<TMLSDSection>();
+    }
+	
+	private void computeHashCode() {
+		/*TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
+		String s = architxt.toTextFormat(this);
+		hashCode = s.hashCode();*/
+		//System.out.println("TARCHI hashcode = " + hashCode); 
 	}
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
+	public int getHashCode() {
+		return 0;
+		/*if (!hashCodeComputed) {
+			computeHashCode();
+			hashCodeComputed = true;
+		}
+		return hashCode;*/
 	}
+	
+	
+	public void setMainCP(TMLCPSection _tmlcpSection) {
+		mainCP = _tmlcpSection;
+	}
+	
+	public void addTMLCPSection(TMLCPSection _tmlcpSection) {
+        otherCPs.add(_tmlcpSection);
+    }
+    
+    public void addTMLSDSection(TMLSDSection _tmlsdSection) {
+        sds.add(_tmlsdSection);
+    }
+	
+	
+	
 }

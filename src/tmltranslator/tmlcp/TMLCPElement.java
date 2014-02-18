@@ -36,37 +36,39 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class DIPLOElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLCPElement
+* Creation: 18/02/2014
+* @version 1.0 18/02/2014
+* @author Ludovic APVRILLE
+* @see
+*/
 
-package tmltranslator;
+package tmltranslator.tmlcp;;
+
+import tmltranslator.*;
+import java.util.*;
+
 
 import myutil.*;
 
-public class DIPLOElement {
+public abstract class TMLCPElement extends TMLElement  {
+    private ArrayList<TMLCPElement> nexts; 
+  
 	
-	protected static int ID=0;
-	
-    private int myID;
-    
-    public DIPLOElement() {
-       myID=++ID;
-    }
-    
-    public int getID(){
-		return myID;
+    public TMLCPElement(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+        nexts = new ArrayList<TMLCPElement>();
     }
 	
-	public static void setGeneralID(int _IDValue) {
-		ID = _IDValue;
-	}
+    public void addNextElement(TMLCPElement _elt) {
+        nexts.add(_elt);
+    }
+    
+    public ArrayList<TMLCPElement> getNextElements() {
+    	return nexts;
+    }
+    
+    
+    
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
-	}
 }

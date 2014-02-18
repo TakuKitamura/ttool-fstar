@@ -36,37 +36,54 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class DIPLOElement
- * Creation: 24/03/2008
- * @version 1.0 24/03/2008
- * @author Ludovic APVRILLE
- * @see
- */
+* Class TMLCPSection
+* Creation: 18/02/2014
+* @version 1.0 18/02/2014
+* @author Ludovic APVRILLE
+* @see
+*/
 
-package tmltranslator;
+package tmltranslator.tmlcp;;
 
+import java.util.*;
+
+import tmltranslator.*;
 import myutil.*;
 
-public class DIPLOElement {
+public class TMLCPSection  {
+    private TMLCPStart start;
+    private ArrayList<TMLCPElement> elements; // Including the start element
+    private ArrayList<TMLAttribute> globalVariables; 
 	
-	protected static int ID=0;
+	private int hashCode;
+	private boolean hashCodeComputed = false;
 	
-    private int myID;
     
-    public DIPLOElement() {
-       myID=++ID;
+    public TMLCPSection() {
+        init();
+    }
+	
+    private void init() {
+        globalVariables = new ArrayList<TMLAttribute>();
+        elements = new ArrayList<TMLCPElement>();
     }
     
-    public int getID(){
-		return myID;
+    public void addVariable(TMLAttribute _attr) {
+        globalVariables.add(_attr);
     }
 	
-	public static void setGeneralID(int _IDValue) {
-		ID = _IDValue;
+	public ArrayList<TMLAttribute> getAttributes() {
+		return globalVariables;
 	}
 	
-	public static void resetID() {
-		TraceManager.addDev("Reset DIPLOID");
-		ID = 0;
-	}
+	public void setStartElement(TMLCPStart _elt) {
+        start = _elt;
+    }
+	
+	
+	public void addTMLCPElement(TMLCPElement _elt) {
+        elements.add(_elt);
+    }
+    
+	
 }
