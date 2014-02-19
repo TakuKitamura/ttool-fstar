@@ -53,9 +53,13 @@ import myutil.*;
 public class TMLCPRefSD extends TMLCPElement  {
 	private TMLCPRefSD reference;
 	
-    public TMLCPRefSD(TMLCPSection _ref, String _name, Object _referenceObject) {
+    public TMLCPRefSD(TMLCPRefSD _ref, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         reference = _ref;
+    }
+    
+    public TMLCPRefSD getReference() {
+    	return reference;
     }
 	
 }

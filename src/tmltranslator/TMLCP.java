@@ -54,7 +54,7 @@ import myutil.*;
 public class TMLCP  {
     private TMLCPSection mainCP;
     private ArrayList<TMLCPSection> otherCPs; //Ref to other CPs
-    private ArrayList<TMLSDSection> sds; //Ref to sd
+    private ArrayList<TMLSDSection> sds; //Ref to SDs
 	
 	
 	private int hashCode;

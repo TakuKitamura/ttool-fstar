@@ -57,5 +57,9 @@ public class TMLCPRefCP extends TMLCPElement  {
         super(_name, _referenceObject);
         reference = _ref;
     }
+    
+    public TMLCPSection getReference() {
+    	return reference;
+    }
 	
 }

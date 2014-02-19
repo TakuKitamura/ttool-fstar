@@ -51,9 +51,15 @@ import java.util.*;
 import myutil.*;
 
 public class TMLSDAction extends TMLSDElement  {
+	private String action;
 	
-    public TMLSDSendMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
+    public TMLSDAction(String _action, String _name, Object _referenceObject) {
         super(_msg, _name, _referenceObject);
+        action = _action;
+    }
+    
+    public String getAction() {
+    	return action;
     }
 	
 }
