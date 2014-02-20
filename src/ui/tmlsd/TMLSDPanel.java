@@ -154,7 +154,7 @@ public class TMLSDPanel extends TDiagramPanel {
             }
         }
         return null;
-    }
+    }			
     
     
     public TGComponent getSecondTGComponent(TGConnector tgco) {
