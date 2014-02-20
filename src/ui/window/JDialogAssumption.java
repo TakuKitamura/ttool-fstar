@@ -270,7 +270,7 @@ public class JDialogAssumption extends javax.swing.JDialog implements ActionList
         return jta.getText();
     }
     
-    public int getType() {
+    public int getAssumptionType() {
         return typeBox.getSelectedIndex();
     }
     

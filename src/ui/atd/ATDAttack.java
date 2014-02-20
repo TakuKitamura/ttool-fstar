@@ -177,11 +177,15 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         
         // Strings
 		int w;
+		
+		//TraceManager.addDev("display text of attack=" + displayText);
+		
 		if (displayText) {
 			f = f.deriveFont((float)currentFontSize);
 			Font f0 = g.getFont();
 			
 			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
+			//TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
 			
 			if (cannotWriteAttack) {
 				w  = g.getFontMetrics().stringWidth(value);
@@ -207,9 +211,15 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 				w  = g.getFontMetrics().stringWidth(value);
 				h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
 				if ((w < (2*textX + width)) && (h < height)) {
+					//TraceManager.addDev("Drawing value=" + value);
 					g.drawString(value, x + (width - w)/2, y + h);
+				} else {
+					//TraceManager.addDev("--------------------------------------------------- Cannot draw value=" + value);
+					//TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
 				}
 			}
+		} else {
+			//TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
 		}
 		
 		g.setFont(fold);

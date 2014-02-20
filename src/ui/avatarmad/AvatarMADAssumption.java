@@ -353,7 +353,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         text = jda.getText();
          makeValue();
         
-        type = jda.getType();
+        type = jda.getAssumptionType();
         durability = jda.getDurability();
         source = jda.getSource();
         status = jda.getStatus();

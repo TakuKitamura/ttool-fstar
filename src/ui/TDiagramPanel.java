@@ -3425,6 +3425,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         boolean b = draw;
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
+        if (lastGraphics != null) {
+        	g.setFont(lastGraphics.getFont());
+        }
         draw = true;
         //paintMycomponents(g);
         overcomeShowing = true;
@@ -3459,6 +3462,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int h = this.getHeight();
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
+        if (lastGraphics != null) {
+        	g.setFont(lastGraphics.getFont());
+        }
         selectedTemp = false;
         Color colorTmp = ColorManager.SELECTED_0;
         ColorManager.SELECTED_0 = ColorManager.NORMAL_0;
