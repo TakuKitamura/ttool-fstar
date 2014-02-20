@@ -157,42 +157,6 @@ public class TMLSDPanel extends TDiagramPanel {
     }
     
     
-    public void alignInstances() {
-        TMLSDInstance ontheLeft = null, sdi;
-        int x = getMaxX(),xtmp;
-        int y;
-        int i;
-        TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-        
-        // search for the instances which is the most on the left
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLSDInstance) {
-                xtmp = tgc.getX();
-                if (xtmp < x) {
-                    x = xtmp;
-                    ontheLeft = (TMLSDInstance)tgc;
-                }
-            }
-        }
-        
-        if (ontheLeft == null)
-            return;
-        
-        // move accordingly other instances
-        y = ontheLeft.getY();
-        iterator = componentList.listIterator();
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-            if ((tgc instanceof TMLSDInstance) && (tgc !=  ontheLeft)){
-                tgc.setCd(tgc.getX(), y);
-            }
-        }
-        
-    }
-    
-    
     public TGComponent getSecondTGComponent(TGConnector tgco) {
         TGComponent tmp;
         TGComponent tmp1;
@@ -310,4 +274,40 @@ public class TMLSDPanel extends TDiagramPanel {
             updateSize();
 		}
 	}
+	
+	
+	public void alignInstances() {
+        TMLSDInstance ontheLeft = null, sdi;
+        int x = getMaxX(),xtmp;
+        int y;
+        int i;
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        // search for the instances which is the most on the left
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLSDInstance) {
+                xtmp = tgc.getX();
+                if (xtmp < x) {
+                    x = xtmp;
+                    ontheLeft = (TMLSDInstance)tgc;
+                }
+            }
+        }
+        
+        if (ontheLeft == null)
+            return;
+        
+        // move accordingly other instances
+        y = ontheLeft.getY();
+        iterator = componentList.listIterator();
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if ((tgc instanceof TMLSDInstance) && (tgc !=  ontheLeft)){
+                tgc.setCd(tgc.getX(), y);
+            }
+        }
+        
+    }
 }

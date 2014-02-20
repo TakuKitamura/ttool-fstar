@@ -36,8 +36,8 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogTMLTaskArtifact
- * Dialog for managing artifacts on hw nodes
+ * Class JDialogReferenceCommunicationPattern
+ * Dialog for managing the reference  to a communication pattern
  * Creation: 19/09/2007
  * @version 1.0 19/09/2007
  * @author Ludovic APVRILLE
@@ -59,26 +59,27 @@ import ui.tmldd.*;
 import myutil.*;
 
 
-public class JDialogCommunicationArtifact extends javax.swing.JDialog implements ActionListener  {
+public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog implements ActionListener  {
     
     private boolean regularClose;
 	private boolean emptyList = false;
     
     private JPanel panel2;
     private Frame frame;
-    private TMLArchiCommunicationArtifact artifact;
+    private TMLArchiCPNode cp;
     
-	protected JComboBox referenceCommunicationName, priority;
+    protected JTextField name;
+	protected JComboBox referenceCommunicationPattern;
 	
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogCommunicationArtifact(Frame _frame, String _title, TMLArchiCommunicationArtifact _artifact) {
+    public JDialogReferenceCommunicationPattern(Frame _frame, String _title, TMLArchiCPNode _cp) {
         super(_frame, _title, true);
         frame = _frame;
-        artifact = _artifact;
+        cp = _cp;
 		
 		//System.out.println("New window");
         
@@ -95,7 +96,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
     }
     
     private void myInitComponents() {
-		selectPriority();
+		//selectPriority();
     }
     
     private void initComponents() {
@@ -115,7 +116,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
         panel2.setPreferredSize(new Dimension(350, 250));
         
 		c1.gridwidth = 1;
@@ -123,36 +124,32 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Channel:"), c2);
+        panel2.add(new JLabel("Name:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		TraceManager.addDev("Getting communications");
-		Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllTMLCommunicationNames();
+        name = new JTextField(cp.getNodeName());
+        panel2.add(name, c1);
+        panel2.add(new JLabel("Reference:"), c2);
+        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+		TraceManager.addDev("Getting references");
+		Vector<String> list = cp.getTDiagramPanel().getMGUI().getAllTMLCP();
 		int index = 0;
 		if (list.size() == 0) {
-			list.add("No communication to map");
+			list.add("No CP to reference");
 			emptyList = true;
 		} else {
 			
-			index = indexOf(list, artifact.getFullValue());
+			index = indexOf(list, cp.getReference());
 			//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
 		}
 		
-		TraceManager.addDev("Got communications");
 		
-        referenceCommunicationName = new JComboBox(list);
-		referenceCommunicationName.setSelectedIndex(index);
-		referenceCommunicationName.addActionListener(this);
+        referenceCommunicationPattern = new JComboBox(list);
+		referenceCommunicationPattern.setSelectedIndex(index);
+		referenceCommunicationPattern.addActionListener(this);
         //referenceTaskName.setEditable(true);
         //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
-		panel2.add(referenceCommunicationName, c1);
+		panel2.add(referenceCommunicationPattern, c1);
 		
-		list = new Vector<String>();
-		for(int i=0; i<11; i++) {
-			list.add(""+i);
-		}
-		priority = new JComboBox(list);
-		priority.setSelectedIndex(artifact.getPriority());
-		panel2.add(priority, c1);
 		
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -193,10 +190,9 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
             return;
         }*/
 		
-		if (evt.getSource() == referenceCommunicationName) {
-			selectPriority();
-		}
-        
+		/*if (evt.getSource() == referenceCommunicationPattern) {
+			selectReference();
+		}*/
         
         String command = evt.getActionCommand();
         
@@ -209,11 +205,6 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
     }
 	
 	
-	public void selectPriority() {
-		//System.out.println("Select priority");
-		int index = ((TMLArchiDiagramPanel)artifact.getTDiagramPanel()).getMaxPriority((String)(referenceCommunicationName.getSelectedItem()));
-		priority.setSelectedIndex(index);
-	}
     
     public void closeDialog() {
         regularClose = true;
@@ -228,42 +219,18 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         return regularClose;
     }
 	
-	public String getReferenceCommunicationName() {
+	public String getReference() {
 		if (emptyList) {
-			return null;
+			return "";
 		}
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        return tmp.substring(0, index);
-    }
-    
-    public String getCommunicationName() {
-        String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index = tmp.indexOf("::");
-		if (index == -1) {
-			return tmp;
-		}
-        tmp = tmp.substring(index+2, tmp.length());
-		
-		index =  tmp.indexOf("(");
-		if (index > -1) {
-			tmp = tmp.substring(0, index).trim();
-		}
-		//System.out.println("tmp=" + tmp);
+		String tmp = (String)(referenceCommunicationPattern.getSelectedItem());
 		return tmp;
     }
+    
+   
 	
-	 public String getTypeName() {
-		String tmp = (String)(referenceCommunicationName.getSelectedItem());
-		int index1 = tmp.indexOf("(");
-		int index2 = tmp.indexOf(")");
-		if ((index1 > -1) && (index2 > index1)) {
-			return tmp.substring(index1+1, index2);
-		}
-		return "";
+	 public String getNodeName() {
+		return name.getText().trim();
 	 }
 	
 	
@@ -278,8 +245,6 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
 		return 0;
 	}
 	
-	public int getPriority() {
-		return priority.getSelectedIndex();
-	}
+
     
 }

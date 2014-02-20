@@ -68,6 +68,7 @@ public class Main implements ActionListener {
     public static boolean nc = true ; // Network calculus
 	public static boolean avatar = true ; // avatar profile
 	public static boolean proverif = false;
+	public static boolean experimental = false;
 	
     public static void main(String[] args) {
     	
@@ -189,6 +190,10 @@ public class Main implements ActionListener {
                 lotos = true;
                 System.out.println("Diplodocus features activated");
             }
+            if (args[i].compareTo("-experimental") == 0) {
+                experimental = true;
+                System.out.println("Experimental features activated");
+            }
 			if (args[i].compareTo("-nodiplodocus") == 0) {
                 systemc = false;
                 System.out.println("Diplodocus features deactivated");
@@ -297,7 +302,7 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
         	splashFrame.setMessage("Creating main window");
         }
-        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif);
+        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, experimental);
         if (splashFrame != null) {
         	splashFrame.setMessage("Building graphical components");
         }

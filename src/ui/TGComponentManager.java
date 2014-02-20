@@ -227,6 +227,7 @@ public class TGComponentManager {
 	public static final int TMLARCHI_MEMORYNODE = 1105;
 	public static final int TMLARCHI_BRIDGENODE = 1106;
 	public static final int TMLARCHI_DMANODE = 1107;
+	public static final int TMLARCHI_CPNODE = 1108;
 	
 	public static final int TMLCTD_CCOMPONENT = 1200;
 	public static final int TMLCTD_CPORT = 1201;
@@ -840,6 +841,9 @@ public class TGComponentManager {
 			case TMLARCHI_BUSNODE:
                 tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
+            case TMLARCHI_CPNODE:
+                tgc = new TMLArchiCPNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
 			case TMLARCHI_BRIDGENODE:
                 tgc = new TMLArchiBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
@@ -1378,6 +1382,8 @@ public class TGComponentManager {
             return TMLARCHI_CPUNODE;
         } else if (tgc instanceof TMLArchiBUSNode) {
             return TMLARCHI_BUSNODE;
+        } else if (tgc instanceof TMLArchiCPNode) {
+            return TMLARCHI_CPNODE;
         } else if (tgc instanceof TMLArchiBridgeNode) {
             return TMLARCHI_BRIDGENODE;
         } else if (tgc instanceof TMLArchiHWANode) {

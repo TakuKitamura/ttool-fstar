@@ -107,6 +107,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 	public static boolean ncOn;
 	public static boolean avatarOn;
 	public static boolean proverifOn;
+	public static boolean experimentalOn;
 	
 	public final static int LOTOS = 0;
 	public final static int RT_LOTOS = 1;
@@ -280,7 +281,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 	// Thread fof autosave
 	PeriodicBehaviorThread pbt;
     
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn) {
+    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean _experimental) {
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
@@ -290,6 +291,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		ncOn = _ncOn;
 		avatarOn = _avatarOn;
 		proverifOn = _proverifOn;
+		experimentalOn = _experimental;
 		
 		currentInvariant = null;
 		
@@ -1145,6 +1147,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			tp = (TURTLEPanel)(tabs.elementAt(i));
 			if (tp instanceof TMLDesignPanel) {
 				list.addAll(((TMLDesignPanel)tp).getAllTMLTaskNames(mainTabbedPane.getTitleAt(i)));
+			}
+		}
+		return list;
+	}
+	
+	public Vector<String> getAllTMLCP() {
+		TURTLEPanel tp;
+		Vector<String> list = new Vector<String>();
+		
+		for(int i=0; i<tabs.size(); i++) {
+			tp = (TURTLEPanel)(tabs.elementAt(i));
+			if (tp instanceof TMLCommunicationPatternPanel) {
+				list.add(mainTabbedPane.getTitleAt(i));
 			}
 		}
 		return list;
@@ -5710,6 +5725,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
             getCurrentTDiagramPanel().repaint();
         }
+        
+        if (getCurrentTDiagramPanel() instanceof TMLSDPanel) {
+            ((TMLSDPanel)(getCurrentTDiagramPanel())).alignInstances();
+            changeMade(getCurrentTDiagramPanel(), TDiagramPanel.MOVE_COMPONENT);
+            getCurrentTDiagramPanel().repaint();
+        }
     }
     
     public void alignPartitions() {
@@ -7561,7 +7582,9 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPUNODE);
 		} else if (command.equals(actions[TGUIAction.TMLARCHI_BUSNODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_BUSNODE);
-		}  else if (command.equals(actions[TGUIAction.TMLARCHI_BRIDGENODE].getActionCommand())) {
+		} else if (command.equals(actions[TGUIAction.TMLARCHI_CPNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPNODE);
+		} else if (command.equals(actions[TGUIAction.TMLARCHI_BRIDGENODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_BRIDGENODE);
 		}  else if (command.equals(actions[TGUIAction.TMLARCHI_HWANODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_HWANODE);
