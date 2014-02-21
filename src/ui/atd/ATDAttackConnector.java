@@ -109,7 +109,7 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
 				Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
 				g.setFont(f0);
 			}
-			g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
+			g.drawString(value, x2+(cz/2)+1, y2);
 			g.setFont(f);
 		}
 	
@@ -164,6 +164,8 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
 		
 		oldScaleFactor = scaleFactor;
 	}
+	
+
 	
 
     

@@ -70,6 +70,8 @@ public class JDialogConstraint extends javax.swing.JDialog implements ActionList
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
+    
+    
 	
 	private ConstraintListInterface constraint;
     
@@ -169,6 +171,7 @@ public class JDialogConstraint extends javax.swing.JDialog implements ActionList
 	public String getStereotype() {
 		return (String)(stereotype.getSelectedItem());
     }
-
+    
+ 
     
 }

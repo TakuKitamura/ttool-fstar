@@ -36,7 +36,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCPStop
+* Class TMLCPJunction
 * Creation: 18/02/2014
 * @version 1.0 18/02/2014
 * @author Ludovic APVRILLE
@@ -53,7 +53,7 @@ import myutil.*;
 public abstract class TMLCPJunction extends TMLCPElement  {
 
 	
-    public TMLCPStop(String _name, Object _referenceObject) {
+    public TMLCPJunction(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
 	

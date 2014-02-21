@@ -56,7 +56,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class ATDConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
+public class ATDConstraint extends TGCScalableWithInternalComponent implements  SwallowedTGComponent, ConstraintListInterface {
     private int textY1 = 5;
     //private int textY2 = 30;
 	
@@ -69,12 +69,14 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	private int textX = 1;
+	
+	private String equation;
     
     public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        width = (int)(150* tdp.getZoom());
+        height = (int)(50 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;
@@ -99,6 +101,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
         removable = true;
         
         value = "<<OR>>";
+        equation = "";
 		
 		currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
@@ -124,7 +127,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 			// If font is less than 4, no text is displayed
 			
 			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0;
+			int w0, w1;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
 			//System.out.println("max current font size:" + maxCurrentFontSize);
@@ -162,6 +165,14 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 			g.setFont(f.deriveFont(Font.BOLD));
 			int w  = g.getFontMetrics().stringWidth(value);
 			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
+			g.setFont(f0.deriveFont(f0.getSize()-2).deriveFont(Font.ITALIC));
+			w  = g.getFontMetrics().stringWidth(equation);
+			if (w >= width) {
+				w  = g.getFontMetrics().stringWidth("...");
+				g.drawString("...", x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
+			} else {
+				g.drawString(equation, x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
+			}
 			g.setFont(f0);
 		}
         
@@ -187,7 +198,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 		String tmp;
 		boolean error = false;
 		
-		JDialogConstraint dialog = new JDialogConstraint(frame, "Setting constraint attributes", (ConstraintListInterface)this);
+		JDialogConstraintText dialog = new JDialogConstraintText(frame, "Setting constraint attributes", (ConstraintListInterface)this, equation, "Equation");
 		dialog.setSize(450, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -203,6 +214,8 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 		if (dialog.getStereotype().length() > 0) {
 			value = dialog.getStereotype();
 		}
+		
+		equation = dialog.getText();
 			
 		rescaled = true;
 		
@@ -228,6 +241,62 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements C
 	public String getCurrentConstraint() {
 		return value;
 	}
+	
+	public String getEquation() {
+		return equation;
+	}
+	
+	protected String translateExtraParam() {
+        StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<info equation=\"" + GTURTLEModeling.transformString(getEquation()));
+        sb.append("\" />\n");
+        sb.append("</extraparam>\n");
+        return new String(sb);
+    }
+    
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        //System.out.println("*** load extra synchro ***");
+        try {
+            
+            NodeList nli;
+            Node n1, n2;
+            Element elt;
+            int t1id;
+            String sdescription = null;
+			String prio;
+			String isRoot = null;
+            
+            for(int i=0; i<nl.getLength(); i++) {
+                n1 = nl.item(i);
+                //System.out.println(n1);
+                if (n1.getNodeType() == Node.ELEMENT_NODE) {
+                    nli = n1.getChildNodes();
+                    for(int j=0; i<nli.getLength(); i++) {
+                        n2 = nli.item(i);
+                        //System.out.println(n2);
+                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
+                            elt = (Element) n2;
+                            if (elt.getTagName().equals("info")) {
+                                equation = elt.getAttribute("equation");
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            throw new MalformedModelingException();
+        }
+    }
+    
+    public void resizeWithFather() {
+        if ((father != null) && (father instanceof ATDBlock)) {
+            //System.out.println("cdRect comp");
+            setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
+            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
+            setMoveCd(x, y);
+        }
+    }
   
     
 }

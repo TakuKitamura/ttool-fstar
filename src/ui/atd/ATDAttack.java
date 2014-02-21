@@ -383,6 +383,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		s += "Id=" + getId();
 		return s;
 	}
+
 	
 	public boolean isRootAttack() {
 		return isRootAttack;

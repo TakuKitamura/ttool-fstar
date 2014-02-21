@@ -288,6 +288,15 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
 			addInternalComponent(tgc, 0);
 			return true;
         }
+        
+        if (tgc instanceof ATDConstraint) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+            ((ATDConstraint)tgc).resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+        }
+        
 		return false;
     }
     
