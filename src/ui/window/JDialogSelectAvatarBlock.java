@@ -57,8 +57,8 @@ import ui.avatarbd.*;
 
 
 public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    public static Vector validated, ignored;
-	private static boolean optimized = true;
+    public Vector validated, ignored;
+	private boolean optimized = true;
     
     private Vector val, ign, back;
     
@@ -76,11 +76,16 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
     private JButton closeButton;
     private JButton cancelButton;
     
+    private boolean hasBeenCancelled = false;
+    
     /** Creates new form  */
-    public JDialogSelectAvatarBlock(Frame f, Vector _back, LinkedList componentList, String title) {
+    public JDialogSelectAvatarBlock(Frame f, Vector _back, LinkedList componentList, String title, Vector _validated, Vector _ignored, boolean _optimized) {
         super(f, title, true);
         
         back = _back;
+        validated = _validated;
+        ignored = _ignored;
+        optimized = _optimized;
         
         if ((validated == null) || (ignored == null)) {
             val = makeNewVal(componentList);
@@ -325,6 +330,7 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
     }
     
     public void cancelDialog() {
+    	hasBeenCancelled = true;
         dispose();
     }
     
@@ -366,7 +372,19 @@ public class JDialogSelectAvatarBlock extends javax.swing.JDialog implements Act
         setButtons();
     }
 	
-	public boolean getOptimize() {
+	public boolean getOptimized() {
 		return optimized;
 	}
+	
+	public boolean hasBeenCancelled() {
+		return hasBeenCancelled;
+	}
+	
+	public Vector getValidated() {
+    	return validated;
+    }
+    
+    public Vector getIgnored() {
+    	return ignored;
+    }
 }

@@ -2904,20 +2904,30 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		} else if (tp instanceof AvatarDesignPanel) {
             //Design
             AvatarDesignPanel adp = (AvatarDesignPanel)tp;
-            JDialogModelChecking.validated = adp.validated;
-            JDialogModelChecking.ignored = adp.ignored;
+            //JDialogModelChecking.validated = adp.validated;
+            //JDialogModelChecking.ignored = adp.ignored;
             tclassesToValidate = new Vector();
-            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, tclassesToValidate, adp.getAvatarBDPanel().getFullBlockList(), "Choosing blocks to validate");
+            JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, tclassesToValidate, adp.getAvatarBDPanel().getFullBlockList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
 			if (!automatic) {
 				GraphicLib.centerOnParent(jdmc);
 				jdmc.setVisible(true); // blocked until dialog has been closed
 			} else {
 				jdmc.closeDialog();
 			}
-			boolean optimize = jdmc.getOptimize();
+			
+			if (jdmc.hasBeenCancelled()) {
+				return false;
+			}
+			
+			adp.setValidated(jdmc.getValidated());
+            adp.setIgnored(jdmc.getIgnored());
+            adp.setOptimized(jdmc.getOptimized());
+			
+			
+			boolean optimize = jdmc.getOptimized();
             if (tclassesToValidate.size() > 0) {
-                adp.validated = JDialogModelChecking.validated;
-                adp.ignored = JDialogModelChecking.ignored;
+                /*adp.validated = JDialogModelChecking.validated;
+                adp.ignored = JDialogModelChecking.ignored;*/
                 b = gtm.checkAvatarDesign(tclassesToValidate, adp, optimize);
                 if (b) {
 					ret = true;

@@ -336,6 +336,17 @@ public class AvatarSpecificationSimulation  {
 								nbOfCommands --;
 							}
 						}
+						// If breakpoint at the end of selectTransactions -> set the nb of commands to 0
+						for (AvatarSimulationPendingTransaction tr: selectedTransactions) {
+							AvatarStateMachineElement elt = tr.elementToExecute.getNext(0);
+							if (elt != null) {
+								if (elt.hasBreakpoint()) {
+									nbOfCommands = 0;
+									TraceManager.addDev("Brk reached");
+								}
+							}
+						}
+						
 						if (asi != null) {
 							asi.updateTransactionAndTime(allTransactions.size(), clockValue);
 						}

@@ -56,6 +56,9 @@ import java.util.*;
 import myutil.*;
 
 public class AvatarBDPanel extends TDiagramPanel {
+	private Vector validated, ignored;
+	private String val = null, ign = null;
+	private boolean optimized = true;
 	
 	private static final String DEFAULT_MAIN = "void __user_init() {\n}\n\n";
 	
@@ -70,17 +73,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         addMouseMotionListener(tdmm);*/
     }
     
-    public void setMainCode(String s) {
-    	if (s == null) {
-    		s = "";
-    	}
-    	mainCode = s;
-    }
-    
-    public String getMainCode() {
-    	return mainCode;
-    }
-    
+
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //System.out.println("Action");
         if (tgc instanceof AvatarBDBlock) {
@@ -204,11 +197,40 @@ public class AvatarBDPanel extends TDiagramPanel {
     public String displayParam() {
         String s = "";
         String [] tmp =  Conversion.wrapText(mainCode);
+        String tmps;
+        int i;
         
-        for(int i=0; i<tmp.length; i++) {
+        for(i=0; i<tmp.length; i++) {
         	s += "<MainCode value=\"" + GTURTLEModeling.transformString(tmp[i]) + "\"/>\n";
         }
-       
+        
+        if (optimized) {
+        	s += "<Optimized value=\"true\" />\n";
+        } else {
+        	s += "<Optimized value=\"false\" />\n";
+        }
+        
+        if (validated == null) {
+        	s += "<Validated value=\"\" />\n";
+        } else {
+        	s+= "<Validated value=\"";
+        	for(i=0; i<validated.size();i++) {
+        		s += ((AvatarBDBlock)(validated.elementAt(i))).getBlockName() + ";";
+        	}
+        	s += "\" />\n";
+        }
+        
+        if (ignored == null) {
+        	s += "<Ignored value=\"\" />\n";
+        } else {
+        	s+= "<Ignored value=\"";
+        	for(i=0; i<ignored.size();i++) {
+        		s += ((AvatarBDBlock)(ignored.elementAt(i))).getBlockName() + ";";
+        	}
+        	s += "\" />\n";
+        }
+        
+        
         return s;
     }
     
@@ -217,12 +239,11 @@ public class AvatarBDPanel extends TDiagramPanel {
     
     public void loadExtraParameters(Element elt) {
         String s;
-       
+        
+        // Main code
         NodeList nl = elt.getElementsByTagName("MainCode");
-        TraceManager.addDev("Extra parameter of block diagram nbOfElements: " + nl.getLength());
+        //TraceManager.addDev("Extra parameter of block diagram nbOfElements: " + nl.getLength());
         Node n;
-        
-        
         
         try {
         	if (nl.getLength()>0) {
@@ -237,13 +258,76 @@ public class AvatarBDPanel extends TDiagramPanel {
         				mainCode += s + "\n";
         			}
         		}
-        	
+        		
         	}
         } catch (Exception e) {
             // Model was saved in an older version of TTool
             TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
             
         }
+        
+        // Optimized
+        nl = elt.getElementsByTagName("Optimized");
+        try {
+        	if (nl.getLength()>0) {
+        		n = nl.item(0);
+        		if (n.getNodeType() == Node.ELEMENT_NODE) {
+        			s = ((Element)n).getAttribute("value");
+        			TraceManager.addDev("Found value=" + s);
+        			if (s != null) {
+        				if (s.compareTo("true") == 0) {
+        					optimized = true;
+        				} else {
+        					optimized = false;
+        				}
+        			}
+        		}
+        	}
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
+            
+        }
+        
+        // Validated
+        nl = elt.getElementsByTagName("Validated");
+        try {
+        	if (nl.getLength()>0) {
+        		n = nl.item(0);
+        		if (n.getNodeType() == Node.ELEMENT_NODE) {
+        			s = ((Element)n).getAttribute("value");
+        			TraceManager.addDev("Found value=" + s);
+        			if (s != null) {
+        				val = s;
+        			}
+        		}
+        	}
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
+            
+        }
+        
+        // Ignored
+        nl = elt.getElementsByTagName("Ignored");
+        try {
+        	if (nl.getLength()>0) {
+        		n = nl.item(0);
+        		if (n.getNodeType() == Node.ELEMENT_NODE) {
+        			s = ((Element)n).getAttribute("value");
+        			TraceManager.addDev("Found value=" + s);
+        			if (s != null) {
+        				ign = s;
+        			}
+        		}
+        	}
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
+            
+        }
+        
+        
     }
 	
 	
@@ -400,5 +484,89 @@ public class AvatarBDPanel extends TDiagramPanel {
 
 		return null;
 	}
+	
+	    public void setMainCode(String s) {
+    	if (s == null) {
+    		s = "";
+    	}
+    	mainCode = s;
+    }
+    
+    public String getMainCode() {
+    	return mainCode;
+    }
+    
+    public Vector getValidated() {
+    	if ((val != null) && (validated == null)) {
+    		makeValidated();
+    	}
+    	return validated;
+    }
+    
+    public Vector getIgnored() {
+    	if ((ign != null) && (ignored == null)) {
+    		makeIgnored();
+    	}
+    	return ignored;
+    }
+    
+    public boolean getOptimized() {
+    	return optimized;
+    }
+    
+    
+    public void setValidated(Vector _validated) {
+    	validated = _validated;
+    }
+    
+    public void setIgnored(Vector _ignored) {
+    	ignored = _ignored;
+    }
+    
+    public void setOptimized(boolean _optimized) {
+    	optimized = _optimized;
+    }
+    
+    public void makeValidated() {
+    	TraceManager.addDev("Making validated with val=" + val);
+    	validated = new Vector();
+    	LinkedList<AvatarBDBlock> list = getFullBlockList();
+    	String tmp;
+    	
+    	String split[] = val.split(";");
+    	for(int i=0; i<split.length; i++) {
+    		tmp = split[i].trim();
+    		if (tmp.length() > 0) {
+    			for (AvatarBDBlock block: list) {
+    				if (block.getBlockName().compareTo(tmp) == 0) {
+    					validated.add(block);
+    					break;
+    				}
+    			}
+    		}
+    	}
+    	val = null;
+    }
+    
+    public void makeIgnored() {
+    	TraceManager.addDev("Making ignored with ign=" + val);
+    	ignored = new Vector();
+    	LinkedList<AvatarBDBlock> list = getFullBlockList();
+    	String tmp;
+    	
+    	String split[] = ign.split(";");
+    	for(int i=0; i<split.length; i++) {
+    		tmp = split[i].trim();
+    		if (tmp.length() > 0) {
+    			for (AvatarBDBlock block: list) {
+    				if (block.getBlockName().compareTo(tmp) == 0) {
+    					validated.add(block);
+    					break;
+    				}
+    			}
+    		}
+    	}
+    	ign = null;
+    }
     
 }

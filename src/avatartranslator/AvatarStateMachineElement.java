@@ -48,6 +48,7 @@ package avatartranslator;
 import java.util.*;
 
 import myutil.*;
+import ui.TGComponent;
 
 
 public abstract class AvatarStateMachineElement extends AvatarElement {
@@ -261,6 +262,20 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 		
 		
 		return true;
+	}
+	
+	public boolean hasBreakpoint() {
+		if (referenceObject == null) {
+			return false;
+		}
+		
+		if (referenceObject instanceof TGComponent) {
+			TGComponent tgc = (TGComponent)referenceObject;
+			return tgc.getBreakpoint();
+		}
+		
+		return false;
+		
 	}
 	
 	public abstract String getNiceName();

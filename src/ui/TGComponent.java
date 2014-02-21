@@ -982,6 +982,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		} else if (tdp.DIPLO_ID_ON) {
 			drawDiploID(g);
 		} else if (tdp.AVATAR_ID_ON) {
+			
 			drawAVATARID(g);
 		} else if (tdp.TEPE_ID_ON) {
 			drawTEPEID(g);
@@ -989,6 +990,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
 		
 		if (tdp.AVATAR_ANIMATE_ON) {
 			//TraceManager.addDev("Avatar animate?");
+			if (breakpoint) {
+				//System.out.println("breakpoint");
+				g.setColor(ColorManager.BREAKPOINT);
+				Font f = g.getFont();
+				g.setFont(f.deriveFont(Font.BOLD));
+				g.drawString("bk", x+width, y+3);
+				g.setFont(f);
+			}
 			if (AVATAR_met>0) {
 				drawAVATARMet(g);
 			}

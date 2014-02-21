@@ -57,7 +57,10 @@ import myutil.*;
 
 public class AvatarDesignPanel extends TURTLEPanel {
     public AvatarBDPanel abdp; 
-    public Vector validated, ignored;
+ //   public Vector validated, ignored;
+    
+    
+    
     
     public AvatarDesignPanel(MainGUI _mgui) {
         super(_mgui);
@@ -69,6 +72,45 @@ public class AvatarDesignPanel extends TURTLEPanel {
         };
         tabbedPane.addChangeListener(cl);
         tabbedPane.addMouseListener(new TURTLEPanelPopupListener(this, mgui));
+    }
+    
+    public void setValidated(Vector _validated) {
+    	if (abdp != null) {
+    		abdp.setValidated(_validated);
+    	}
+    }
+    
+    public void setIgnored(Vector _ignored) {
+    	if (abdp != null) {
+    		abdp.setIgnored(_ignored);
+    	}
+    }
+    
+    public void setOptimized(boolean _optimized) {
+    	if (abdp != null) {
+    		abdp.setOptimized(_optimized);
+    	}
+    }
+    
+    public Vector getValidated() {
+    	if (abdp != null) {
+    		return abdp.getValidated();
+    	}
+    	return null;
+    }
+    
+    public Vector getIgnored() {
+    	if (abdp != null) {
+    		return abdp.getIgnored();
+    	}
+    	return null;
+    }
+    
+    public boolean getOptimized() {
+    	if (abdp != null) {
+    		return abdp.getOptimized();
+    	}
+    	return true;
     }
 	
    public AvatarBDPanel getAvatarBDPanel() {
