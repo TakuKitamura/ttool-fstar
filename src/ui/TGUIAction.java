@@ -172,6 +172,8 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLCTD_PCOMPONENT = 239;
 	public static final int TMLCTD_COPORT = 240;
 	public static final int TMLCTD_RCOMPONENT = 330;
+	public static final int TMLCTD_JOIN = 393;
+	public static final int TMLCTD_FORK = 394;
 	
     
     public static final int TMLAD_EDIT = 134;
@@ -523,7 +525,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 393;
+    public static final int NB_ACTION = 395;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -805,6 +807,8 @@ public class TGUIAction extends AbstractAction {
 		actions[TMLCTD_COPORT] = new TAction("add-tmlccd-coport", "Add a primitive port", IconManager.imgic1206, IconManager.imgic1206, "Add a primitive port", "Add a primitive port to the currently opened TML component Task diagram", 0);
 		actions[TMLCTD_PORT_CONNECTOR] = new TAction("add-tmlccd-port-connector", "Add a connector between two ports", IconManager.imgic202, IconManager.imgic202, "Add a connector between two ports", "Add a connector between two ports of the currently opened TML component Task diagram", 0);
 		actions[TMLCTD_RCOMPONENT] = new TAction("add-tmlccd-rcomponent", "Add a record component", IconManager.imgic1202, IconManager.imgic1202, "Add a record component", "Add a record component to the currently opened TML component Task diagram", 0);
+		actions[TMLCTD_FORK] = new TAction("add-tmlccd-fork", "Add a channel fork", IconManager.imgic1204, IconManager.imgic1204, "Add a channel fork", "Add a fork channel port to the currently opened TML component Task diagram", 0);
+		actions[TMLCTD_JOIN] = new TAction("add-tmlccd-join", "Add a channel join", IconManager.imgic1204, IconManager.imgic1204, "Add a channel join", "Add a join channel port to the currently opened TML component Task diagram", 0);
 		
         actions[TMLAD_EDIT] = new TAction("edit-tmlad-diagram", "Edit TML Task activity diagram", IconManager.imgic100, IconManager.imgic101, "Edit TML task activity diagram", "Make it possible to edit the currently opened TML task activity diagram", 0);
         actions[TMLAD_CONNECTOR] = new TAction("add-tmlad-connector", "Connect two operators together", IconManager.imgic202, IconManager.imgic202, "Connect two operators together", "Connect two operators of the currently opened TML task activity diagram", 0);

@@ -7579,6 +7579,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_RCOMPONENT);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_CPORT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_CPORT);
+		} else if (command.equals(actions[TGUIAction.TMLCTD_FORK].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_FORK);
+		} else if (command.equals(actions[TGUIAction.TMLCTD_JOIN].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_JOIN);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_COPORT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCTD_COPORT);
 		} else if (command.equals(actions[TGUIAction.TMLCTD_PORT_CONNECTOR].getActionCommand())) {

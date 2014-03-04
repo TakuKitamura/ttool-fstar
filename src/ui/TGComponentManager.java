@@ -236,6 +236,8 @@ public class TGComponentManager {
 	public static final int TMLCTD_CREMOTECOMPONENT = 1204;
 	public static final int TMLCTD_RCOMPONENT = 1205;
 	public static final int TMLCTD_CREMOTEPORTCOMPONENT = 1206;
+	public static final int TMLCTD_FORK = 1207;
+	public static final int TMLCTD_JOIN = 1208;
 	
 	public static final int EBRDD_START_STATE = 1300;
     public static final int EBRDD_STOP_STATE = 1301;
@@ -826,6 +828,12 @@ public class TGComponentManager {
 			case TMLCTD_CPORT:
                 tgc = new TMLCCompositePort(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+            case TMLCTD_JOIN:
+                tgc = new TMLCJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLCTD_FORK:
+                tgc = new TMLCFork(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
 			case TMLCTD_PCOMPONENT:
                 tgc = new TMLCPrimitiveComponent(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1364,6 +1372,10 @@ public class TGComponentManager {
             return TMLCTD_CREMOTEPORTCOMPONENT;
 		} else if (tgc instanceof TMLCCompositePort) {
             return TMLCTD_CPORT;
+        } else if (tgc instanceof TMLCJoin) {
+            return TMLCTD_JOIN;
+        } else if (tgc instanceof TMLCFork) {
+            return TMLCTD_FORK;
 		} else if (tgc instanceof TMLCPrimitivePort) {
             return TMLCTD_COPORT;
 			
