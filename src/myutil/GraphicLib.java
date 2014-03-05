@@ -185,10 +185,10 @@ public final class GraphicLib {
         // tete de la fleche
         xPoints[0] = x1;
         yPoints[0] = y1;
-        xPoints[1] = (int)(longueur*Math.cos(alpha-angle) + x1);
-        yPoints[1] = (int)(longueur*Math.sin(alpha-angle) + y1);
-        xPoints[2] = (int)(longueur*Math.cos(alpha+angle) + x1);
-        yPoints[2] = (int)(longueur*Math.sin(alpha+angle) + y1);
+        xPoints[1] = (int)(length*Math.cos(alpha-angle) + x1);
+        yPoints[1] = (int)(length*Math.sin(alpha-angle) + y1);
+        xPoints[2] = (int)(length*Math.cos(alpha+angle) + x1);
+        yPoints[2] = (int)(length*Math.sin(alpha+angle) + y1);
         
         
         if (full) {

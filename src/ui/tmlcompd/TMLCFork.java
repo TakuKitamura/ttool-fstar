@@ -60,7 +60,7 @@ import tmltranslator.*;
 
 public class TMLCFork extends TGCScalableWithInternalComponent implements WithAttributes {
 	private Color myColor, portColor;
-	private int halfwidth = 13;
+	private int radius = 11;
 	protected int decPoint = 3;
 	
 	protected TMLCPrimitivePort inp, outp;
@@ -72,7 +72,7 @@ public class TMLCFork extends TGCScalableWithInternalComponent implements WithAt
     public TMLCFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(2*halfwidth, 2*halfwidth);
+		initScaling(2*radius, 2*radius);
 		
         minWidth = 1;
         minHeight = 1;
@@ -81,12 +81,12 @@ public class TMLCFork extends TGCScalableWithInternalComponent implements WithAt
         connectingPoint = new TGConnectingPoint[7];
 		
 		connectingPoint[0] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[1] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[2] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[3] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[4] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[5] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
-		connectingPoint[6] = new TMLCPortConnectingPoint(this, 0, 0, true, false, 0.0, 0.5);
+		connectingPoint[1] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+		connectingPoint[2] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 1.0, 0.5);
+		connectingPoint[3] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
+		connectingPoint[4] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.134);
+		connectingPoint[5] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
+		connectingPoint[6] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
 	
         
         addTGConnectingPointsComment();
@@ -98,7 +98,7 @@ public class TMLCFork extends TGCScalableWithInternalComponent implements WithAt
         removable = true;
         userResizable = false;
         
-		value = "";
+		value = "F";
 		name = "Composite port";
 		
 		//insides = new ArrayList<TMLCPrimitivePort>();
@@ -115,22 +115,37 @@ public class TMLCFork extends TGCScalableWithInternalComponent implements WithAt
 		
 		calculatePortColor();
 		
-		// Zoom is assumed to be computed
-		Color c = g.getColor();
-		/*g.drawRect(x, y, width, height);
-		if ((width > 2) && (height > 2)) {
-			g.setColor(myColor);
-			g.fillRect(x+1, y+1, width-1, height-1);
-			g.setColor(c);
-		}*/
+		
 		
 		// Draw arrow showing the connection if necessary
 		//if (outp != null ){
 		//	System.out.println("non null outp CurrentOrientation=" + currentOrientation);
 		//}
 		
-		g.drawOval(x, y, halfwidth, halfwidth);
-		g.drawString("F", x, y);
+		
+		
+		// Zoom is assumed to be computed
+		Color c = g.getColor();
+		//g.drawRect(x, y, width, height);
+		if ((width > 2) && (height > 2)) {
+			g.setColor(myColor);
+			g.fillOval(x, y, radius*2, radius*2);
+			g.setColor(c);
+		}
+		g.drawOval(x, y, radius*2, radius*2);
+		//GraphicLib.arrowWithLine(g, 1, 1, 5, x, y+radius, x+radius, y+radius, false);
+		g.drawLine(x, y+radius, x+radius, y+radius);
+		//g.drawLine(x+radius, y+radius, x+2*radius, y+radius);
+		//g.drawLine(x+radius, y+radius, x+3*radius/2, (int)(y+(0.134*radius)));
+		//g.drawLine(x+radius, y+radius, x+3*radius/2, (int)(y+2*radius-(0.134*radius)));
+		
+		GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+2*radius, y+radius, false);
+		GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+3*radius/2, (int)(y+(0.134*radius)), false);
+		GraphicLib.arrowWithLine(g, 1, 1, 5, x+radius, y+radius, x+3*radius/2, (int)(y+2*radius-(0.134*radius)), false);
+		
+		/*int w = g.getFontMetrics().stringWidth(value);
+		int currentFontSize = g.getFont().getSize();
+		g.drawString(value, x+radius-(w/2), y+radius+(currentFontSize/2));*/
 		
     }
 	
