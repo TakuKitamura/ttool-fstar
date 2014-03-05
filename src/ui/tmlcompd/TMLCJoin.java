@@ -58,24 +58,15 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class TMLCJoin extends TGCScalableWithInternalComponent implements WithAttributes {
-	private Color myColor, portColor;
-	private int radius = 11;
+public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
+	protected int radius = 11;
 	protected int decPoint = 3;
-	
-	protected TMLCPrimitivePort inp, outp;
-	protected int inpIndex, outpIndex; 
-	protected boolean conflict = false;
-	protected String conflictMessage;
 	
     
     public TMLCJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(2*radius, 2*radius);
 		
-        minWidth = 1;
-        minHeight = 1;
         
         nbConnectingPoint = 7;
         connectingPoint = new TGConnectingPoint[7];
@@ -95,12 +86,9 @@ public class TMLCJoin extends TGCScalableWithInternalComponent implements WithAt
         
         nbInternalTGComponent = 0;
         
-        moveable = true;
-        editable = false;
-        removable = true;
-        userResizable = false;
+    
         
-		value = "";
+		value = "J";
 		name = "Composite port";
 		
 		//insides = new ArrayList<TMLCPrimitivePort>();
@@ -154,96 +142,14 @@ public class TMLCJoin extends TGCScalableWithInternalComponent implements WithAt
     }
 	
     
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
+  
 
     
     public int getType() {
         return TGComponentManager.TMLCTD_JOIN;
     }
 	
-	public void calculatePortColor() {
-		if (conflict) {
-			myColor = Color.red;
-		} else {
-			
-			TMLCPrimitivePort port = inp;
-			if (port == null) {
-				port = outp;
-				//System.out.println("Outp =" + outp + " id=" + getId());
-			}
-			if (port == null) {
-				portColor = null;
-				if (myColor == null) {
-					myColor = new Color(251, 252, 155- (getMyDepth() * 10));
-				}
-			} else {
-				int typep = port.getPortType();
-				if (typep == 0) {
-					myColor = ColorManager.TML_PORT_CHANNEL;
-				} else if (typep == 1) {
-					myColor = ColorManager.TML_PORT_EVENT;
-				} else {
-					myColor = ColorManager.TML_PORT_REQUEST;
-				}
-			}
-		}
-		portColor = myColor;
-	}
 	
-	public void setInPort(TMLCPrimitivePort _inp) {
-		inp = _inp;
-		calculatePortColor();
-	}
-	
-	public void setOutPort(TMLCPrimitivePort _outp) {
-		outp = _outp;
-		calculatePortColor();
-		//System.out.println("outp is set outp=" + outp + "id=" + +getId());
-	}
-	
-	public TMLCPrimitivePort getInPort() {
-		return inp;
-	}
-	
-	public TMLCPrimitivePort getOutPort() {
-		return outp;
-	}
-	
-	public int getInpIndex() {
-		return inpIndex;
-	}
-	
-	public int getOutpIndex() {
-		return outpIndex;
-	}
-	
-	public void setInpIndex(int _inpIndex) {
-		inpIndex = _inpIndex;
-	}
-	
-	public void setOutpIndex(int _outpIndex) {
-		outpIndex = _outpIndex;
-	}
-	
-	public boolean getConflict() {
-		return conflict;
-	}
-	
-	public void setConflict(boolean _conflict, String _msg) {
-		conflict = _conflict;
-		myColor = null;
-		conflictMessage = _msg;
-		calculatePortColor();
-	}
-    
-   	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_PORT_TMLC;
-     }
 	 
 	 public String getAttributes() {
 		 if (conflict) {
@@ -266,9 +172,7 @@ public class TMLCJoin extends TGCScalableWithInternalComponent implements WithAt
 	 }
 	 
 	
-	public Color getPortColor() {
-		return portColor;
-	}
+
 	 
 	 
 }

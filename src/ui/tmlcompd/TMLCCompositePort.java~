@@ -58,27 +58,27 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedTGComponent, WithAttributes {
-	//private Color myColor, portColor;
+public class TMLCCompositePort extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
+	private Color myColor, portColor;
 	private int orientation;
 	private int oldx, oldy;
 	private int halfwidth = 13;
 	private int currentOrientation = GraphicLib.NORTH;
 	protected int decPoint = 3;
 	
-	/*protected TMLCPrimitivePort inp, outp;
+	protected TMLCPrimitivePort inp, outp;
 	protected int inpIndex, outpIndex; 
 	protected boolean conflict = false;
-	protected String conflictMessage;*/
+	protected String conflictMessage;
 	
     
     public TMLCCompositePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		/*initScaling(2*halfwidth, 2*halfwidth);
+		initScaling(2*halfwidth, 2*halfwidth);
 		
         minWidth = 1;
-        minHeight = 1;*/
+        minHeight = 1;
         
         nbConnectingPoint = 10;
         connectingPoint = new TGConnectingPoint[10];
@@ -94,10 +94,10 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
         
         nbInternalTGComponent = 0;
         
-        /*moveable = true;
+        moveable = true;
         editable = false;
         removable = true;
-        userResizable = false;*/
+        userResizable = false;
         
 		value = "";
 		name = "Composite port";
@@ -244,12 +244,12 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		}
 	}
     
-    /*public TGComponent isOnOnlyMe(int _x, int _y) {
+    public TGComponent isOnOnlyMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
         return null;
-    }*/
+    }
 
     
     public int getType() {
@@ -292,7 +292,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		calculatePortColor();
 	}
 	
-	/*public void calculatePortColor() {
+	public void calculatePortColor() {
 		if (conflict) {
 			myColor = Color.red;
 		} else {
@@ -365,7 +365,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		myColor = null;
 		conflictMessage = _msg;
 		calculatePortColor();
-	}*/
+	}
     
    	public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
