@@ -68,7 +68,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
         
 		
 		
-      
+       initScaling(2*radius, 2*radius);
         
         nbConnectingPoint = 7;
         connectingPoint = new TGConnectingPoint[7];

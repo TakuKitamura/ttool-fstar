@@ -70,6 +70,8 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 	private boolean displayText = true;
 	private int textX = 1;
 	
+	private static int arc = 7;
+	
 	private String equation;
     
     public ATDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -153,10 +155,15 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 		}
 		
         Color c = g.getColor();
-		g.draw3DRect(x, y, width, height, true);
+		//g.draw3DRect(x, y, width, height, true);
+		g.setColor(ColorManager.ATD_CONSTRAINT);
+		g.fillRoundRect(x, y, width, height, arc, arc);
+		g.setColor(c);
+		g.drawRoundRect(x, y, width, height, arc, arc);
 		
 		g.setColor(ColorManager.ATD_CONSTRAINT);
-		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		//g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		
 		g.setColor(c);
         
 		Font f0 = g.getFont();

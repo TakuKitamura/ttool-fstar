@@ -854,7 +854,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		}
 		
 		// We take each primitive ports individually and we go thru the graph
-		ArrayList<TMLCCompositePort> mets = new ArrayList<TMLCCompositePort>();
+		ArrayList<TMLCChannelFacility> mets = new ArrayList<TMLCChannelFacility>();
 		TGConnector connector;
 		TGConnectingPoint tp;
 		String conflictMessage;
@@ -870,7 +870,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 					//System.out.println("Connector");
 					mets.clear();
 					conflictMessage = propagate(pport, tp, connector, mets);
-					//System.out.println("Conflict=" + conflictMessage);
+					TraceManager.addDev("Conflict=" + conflictMessage);
 					analysePorts(pport, mets, (conflictMessage != null), conflictMessage);
 				} else {
 					//System.out.println("no connector");
@@ -879,9 +879,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		}
 	}
 	
-	public String propagate(TMLCPrimitivePort pport, TGConnectingPoint tp, TGConnector connector, ArrayList<TMLCCompositePort> mets) {
+	public String propagate(TMLCPrimitivePort pport, TGConnectingPoint tp, TGConnector connector, ArrayList<TMLCChannelFacility> mets) {
 		TGConnectingPoint tp2;
-		TMLCCompositePort cp;
+		TMLCChannelFacility cp = null;
 		//boolean conflict = false;
 		String conflictMessage = null;
 		String conflictMessageTmp;
@@ -911,7 +911,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		//System.out.println("Composite port? tgc=" + tgc);
 		if(tgc instanceof TMLCCompositePort) {
 			//System.out.println("Composite port!");
-			cp = (TMLCCompositePort)tgc;
+			cp = (TMLCChannelFacility)tgc;
 			mets.add(cp);
 			
 			inindex = cp.getInpIndex();
@@ -972,12 +972,93 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 					conflictMessage = conflictMessageTmp;
 				} 
 			}
+		} else if(tgc instanceof TMLCFork) {
+			// Only one out, more than one in is ok
+			// No TMLCJoin
+			cp = (TMLCChannelFacility)tgc;
+			mets.add(cp);
+			
+			// Checks that "mets" contains no TMLJoin
+			for(TMLCChannelFacility met: mets) {
+				if (met instanceof TMLCJoin) {
+					conflictMessage = "Join and Fork operators are mixed in the same channel";
+					conflictMessageTmp = explore(pport, tp2, cp, mets); 
+					if (conflictMessageTmp != null) {
+						conflictMessage = conflictMessageTmp;
+					} 
+					return conflictMessage;
+				}
+			}
+			
+			if (pport.isOrigin()) {
+				
+				//System.out.println("Origin port");
+				if ((cp.getInPort() != null) && (cp.getInPort() != pport)) {
+					conflictMessage = "More than two sending ports  in a fork architecture";
+				} 
+				
+				cp.setInPort(pport);
+				
+				//System.out.println("Explore next");
+				conflictMessageTmp = explore(pport, tp2, cp, mets); 
+				//System.out.println("Explore done");
+				if (conflictMessageTmp != null) {
+					conflictMessage = conflictMessageTmp;
+				} 
+			} else {
+				conflictMessage = explore(pport, tp2, cp, mets); 
+			}
+		} else if(tgc instanceof TMLCJoin) {
+			// Only one out, more than one in is ok
+			// No TMLCFork
+			cp = (TMLCChannelFacility)tgc;
+			mets.add(cp);
+			
+			// Checks that "mets" contains no TMLJoin
+			for(TMLCChannelFacility met: mets) {
+				if (met instanceof TMLCFork) {
+					conflictMessage = "Fork and Join operators are mixed in the same channel";
+					conflictMessageTmp = explore(pport, tp2, cp, mets); 
+					if (conflictMessageTmp != null) {
+						conflictMessage = conflictMessageTmp;
+					} 
+					return conflictMessage;
+				}
+			}
+			
+			if (!pport.isOrigin()) {
+				
+				//System.out.println("Origin port");
+				if ((cp.getOutPort() != null) && (cp.getOutPort() != pport)) { 
+					conflictMessage = "More than two receiving ports in a join architecture";
+				} 
+				cp.setOutPort(pport);
+				
+				
+				//System.out.println("Explore next");
+				conflictMessageTmp = explore(pport, tp2, cp, mets); 
+				//System.out.println("Explore done");
+				if (conflictMessageTmp != null) {
+					conflictMessage = conflictMessageTmp;
+				} 
+			} else {
+				conflictMessage = explore(pport, tp2, cp, mets); 
+			}
+		}
+		if (cp != null) {
+			if ((cp.getInPort() != null) && (cp.getOutPort() != null)){
+				if (cp.getInPort().getType() != cp.getOutPort().getType()) {
+					conflictMessage = "Ports are not compatible";
+				} else {
+					TraceManager.addDev("ports of " + cp + " are compatible out=" + cp.getOutPort().getType() + " in=" + cp.getInPort().getType());
+				}
+			}
 		}
 		
 		return conflictMessage;
 	}
 	
-	public String explore(TMLCPrimitivePort pport, TGConnectingPoint _tp, TMLCCompositePort cp, ArrayList<TMLCCompositePort> mets) {
+	public String explore(TMLCPrimitivePort pport, TGConnectingPoint _tp, TMLCChannelFacility cp, ArrayList<TMLCChannelFacility> mets) {
 		String conflictMessage = null;
 		String conflictMessageTmp;
 		TGConnectingPoint tp;
@@ -999,12 +1080,12 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		return conflictMessage;
 	}
 	
-	public void analysePorts(TMLCPrimitivePort pport, ArrayList<TMLCCompositePort> mets, boolean conflict, String message) {
+	public void analysePorts(TMLCPrimitivePort pport, ArrayList<TMLCChannelFacility> mets, boolean conflict, String message) {
 		if (mets.size() == 0) {
 			return;
 		}
 		
-		for(TMLCCompositePort port: mets) {
+		for(TMLCChannelFacility port: mets) {
 			port.setConflict(conflict, message);
 		}
 	}

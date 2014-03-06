@@ -66,7 +66,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     public TMLCJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		
+		initScaling(2*radius, 2*radius);
         
         nbConnectingPoint = 7;
         connectingPoint = new TGConnectingPoint[7];

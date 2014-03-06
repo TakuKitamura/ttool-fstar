@@ -60,8 +60,6 @@ import tmltranslator.*;
 
 public abstract class TMLCChannelFacility extends TGCScalableWithInternalComponent {
 	protected Color myColor, portColor;
-	protected int radius = 11;
-	protected int decPoint = 3;
 	
 	protected TMLCPrimitivePort inp, outp;
 	protected int inpIndex, outpIndex; 
@@ -72,10 +70,9 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
     public TMLCChannelFacility(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(2*radius, 2*radius);
 		
-        minWidth = 1;
-        minHeight = 1;
+        minWidth = 10;
+        minHeight = 10;
         
         
         moveable = true;
@@ -96,9 +93,6 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
     }
 
     
-    public int getType() {
-        return TGComponentManager.TMLCTD_FORK;
-    }
 	
 	public void calculatePortColor() {
 		if (conflict) {
@@ -173,6 +167,14 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
 		myColor = null;
 		conflictMessage = _msg;
 		calculatePortColor();
+	}
+	
+	public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_PORT_TMLC;
+     }
+     
+     public Color getPortColor() {
+		return portColor;
 	}
     
 

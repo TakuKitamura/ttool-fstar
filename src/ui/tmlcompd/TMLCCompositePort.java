@@ -75,10 +75,11 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
     public TMLCCompositePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		/*initScaling(2*halfwidth, 2*halfwidth);
+		initScaling(2*halfwidth, 2*halfwidth);
 		
-        minWidth = 1;
-        minHeight = 1;*/
+        minWidth = 10;
+        minHeight = 10;
+        
         
         nbConnectingPoint = 10;
         connectingPoint = new TGConnectingPoint[10];
@@ -124,6 +125,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		
 		// Zoom is assumed to be computed
 		Color c = g.getColor();
+		//TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" +height);
 		g.drawRect(x, y, width, height);
 		if ((width > 2) && (height > 2)) {
 			g.setColor(myColor);
@@ -269,7 +271,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 	}
 	
 	public void resizeWithFather() {
-		//System.out.println("Resize port with father");
+		//TraceManager.addDev("Resize port with father");
         if ((father != null) && (father instanceof TMLCCompositeComponent)) {
 			// Too large to fit in the father? -> resize it!
 			//resizeToFatherSize();
@@ -365,11 +367,11 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		myColor = null;
 		conflictMessage = _msg;
 		calculatePortColor();
-	}*/
+	}
     
    	public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
-     }
+     }*/
 	 
 	 public String getAttributes() {
 		 if (conflict) {
@@ -400,9 +402,9 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		father = null;
 	}
 	
-	public Color getPortColor() {
+	/*public Color getPortColor() {
 		return portColor;
-	}
+	}*/
 	 
 	 
 }

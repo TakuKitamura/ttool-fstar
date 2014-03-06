@@ -59,6 +59,8 @@ import ui.window.*;
 public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
     private int textY1 = 3;
     private int textY2 = 3;
+    
+    private static int arc = 7;
 	//private int textX = 10;
 	
     protected String oldValue = "";
@@ -71,7 +73,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int textX = 2;
+	private int textX = 10;
     
     public ATDAttack(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -166,6 +168,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
+		//g.drawRoundRect(x, y, width, height, arc, arc);
 		
 		if (isRootAttack) {
 			g.setColor(ColorManager.ATD_ROOT_ATTACK);
@@ -173,6 +176,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 			g.setColor(ColorManager.ATD_ATTACK);
 		}
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		//g.fillRoundRect(x+1, y+1, width-1, height-1, arc, arc);
 		g.setColor(c);
         
         // Strings
