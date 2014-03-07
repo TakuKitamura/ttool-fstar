@@ -1,0 +1,5 @@
+#This is a list of the bugs to be corrected in TTool
+
+- No error or warning is communicated to the user when an erroneous mapping configuration leads to the impossibility of generating
+	the simulator code. A notification is printed to the console (normal mode, no debug mode) but no pop-up window is present.
+	[07/03/2014]
