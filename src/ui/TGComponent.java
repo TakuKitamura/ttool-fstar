@@ -95,8 +95,10 @@ public abstract class TGComponent implements CDElement, GenericTree {
     protected int minDesiredHeight = 0;
     protected int minWidth = 0;
     protected int minHeight = 0;
-    protected int maxWidth = 1000;
+    protected int maxWidth = 2000;
     protected int maxHeight = 2000;
+    protected static int defMaxWidth = 2000;
+    protected static int defMaxHeight = 2000;
     protected TGComponent father;
     private boolean moveWithFather = true;
     
@@ -180,7 +182,7 @@ public abstract class TGComponent implements CDElement, GenericTree {
 
 	
 	// Zoom
-	public double dx=0, dy=0, dwidth, dheight;
+	public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight;
 
 	
     //Constructor

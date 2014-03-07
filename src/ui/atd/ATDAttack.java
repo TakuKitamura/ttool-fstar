@@ -69,8 +69,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 	private String rootStereotype = "root attack";
 	private boolean isRootAttack = false;
 	 
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	private static int maxFontSize = 14;
+	private static int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	private int textX = 10;
@@ -106,7 +106,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         value = "attack01";
 		description = "blah blah blah";
 		
-		currentFontSize = maxFontSize;
+		currentFontSize = -1;
 		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic702;
@@ -126,19 +126,23 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 			setValue(value, g);
 		}
 		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
+		
+		if (currentFontSize == -1) {
 				currentFontSize = f.getSize();
 			}
+		
+		if ((rescaled) && (!tdp.isScaled())) {
 			rescaled = false;
+			
+			
+			
 			// Must set the font size ..
 			// Find the biggest font not greater than max_font size
 			// By Increment of 1
 			// Or decrement of 1
 			// If font is less than 4, no text is displayed
 			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+			/*int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
 			int w0, w1, w2;
 			f = f.deriveFont((float)maxCurrentFontSize);
 			g.setFont(f);
@@ -162,21 +166,29 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 				displayText = true;
 				f = f.deriveFont((float)currentFontSize);
 				g.setFont(f);
-			}
+			}*/
 			
+			
+			float scale = (float)(f.getSize()*tdp.getZoom());
+			scale = Math.min(maxFontSize, scale);
+			currentFontSize = (int)scale;
+			if (scale < minFontSize) {
+				displayText = false;
+			} else {
+				displayText = true;
+				setValue(value, g);
+			}
 		}
 		
+		// Core of the attack
         Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
-		//g.drawRoundRect(x, y, width, height, arc, arc);
-		
 		if (isRootAttack) {
 			g.setColor(ColorManager.ATD_ROOT_ATTACK);
 		} else {
 			g.setColor(ColorManager.ATD_ATTACK);
 		}
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		//g.fillRoundRect(x+1, y+1, width-1, height-1, arc, arc);
 		g.setColor(c);
         
         // Strings
@@ -186,7 +198,8 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		
 		if (displayText) {
 			f = f.deriveFont((float)currentFontSize);
-			Font f0 = g.getFont();
+			g.setFont(f);
+			//Font f0 = g.getFont();
 			
 			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
 			//TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
@@ -211,9 +224,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 					g.drawString(ster, x + (width - w)/2, y + h);
 					cumulated = h;
 				}
-				g.setFont(f0);
+				g.setFont(f);
 				w  = g.getFontMetrics().stringWidth(value);
-				h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
+				h = cumulated + (int)currentFontSize + (int)(textY1 * tdp.getZoom());
 				if ((w < (2*textX + width)) && (h < height)) {
 					//TraceManager.addDev("Drawing value=" + value);
 					g.drawString(value, x + (width - w)/2, y + h);
@@ -230,7 +243,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         
     }
     
-   public void setValue(String val, Graphics g) {
+    public void setValue(String val, Graphics g) {
         oldValue = value;
         String ster;
 		if (isRootAttack) {
@@ -238,6 +251,15 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 		} else {
 			ster = "<<" + stereotype + ">>";
 		}
+		
+		Font f0 = g.getFont();
+		
+		if (currentFontSize != -1) {
+			if (currentFontSize != f0.getSize()) {
+				g.setFont(f0.deriveFont((float)currentFontSize));
+			}
+		}
+		
         int w  = Math.max(g.getFontMetrics().stringWidth(value), g.getFontMetrics().stringWidth(ster));
 		int w1 = Math.max((int)(minWidth*tdp.getZoom()), w + 2 * textX);
 		
@@ -246,6 +268,10 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
             width = w1;
             resizeWithFather();
         }
+        
+        
+        g.setFont(f0);
+        
         //System.out.println("width=" + width + " w1=" + w1 + " value=" + value);
     }
     

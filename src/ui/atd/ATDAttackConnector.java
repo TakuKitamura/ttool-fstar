@@ -63,7 +63,7 @@ import ui.window.*;
 public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
-	protected int c = 10; //square length 
+	protected int c = 5; //square length 
 	protected double oldScaleFactor;
 	protected int fontSize = 12;
 	
@@ -85,10 +85,59 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
 		
 		//g.drawLine(x1, y1, x2, y2);
 		int cz = (int)(tdp.getZoom() * c);
-		g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
-		g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);
 		
-		Point p = GraphicLib.intersectionRectangleSegment(x2-(cz/2), y2-(cz/2), cz, cz, x1, y1, x2, y2);
+		// white squares only if ATDConstraint
+		
+		TGConnectingPoint cp = p1;
+		CDElement comp = cp.getFather();
+		int decX = 0;
+		int decY = 0;
+		// Origin = constraint?
+		if (comp instanceof ATDConstraint) {
+			if (comp.getX() == cp.getX()) {
+				decX = 0;	
+			} else if (comp.getX() + comp.getWidth() == cp.getX()) {
+				decX = -cz;
+			} else {
+				decX = -cz/2;
+			}
+			
+			if (comp.getY() == cp.getY()) {
+				decY = 0;	
+			} else if (comp.getY() + comp.getHeight() == cp.getY()) {
+				decY = -cz;
+			} else {
+				decY = -cz/2;
+			}
+			
+			g.drawRect(cp.getX() + decX, cp.getY() + decY, cz, cz);
+		}
+		cp = p2;
+		comp = cp.getFather();
+		if (comp instanceof ATDConstraint) {
+			if (comp.getX() == cp.getX()) {
+				decX = 0;	
+			} else if (comp.getX() + comp.getWidth() == cp.getX()) {
+				decX = -cz;
+			} else {
+				decX = -cz/2;
+			}
+			
+			if (comp.getY() == cp.getY()) {
+				decY = 0;	
+			} else if (comp.getY() + comp.getHeight() == cp.getY()) {
+				decY = -cz;
+			} else {
+				decY = -cz/2;
+			}
+			g.drawRect(x2+decX, y2+decY, cz, cz);
+		}
+		
+		
+		/*g.fillRect(x2-(cz/2), y2-(cz/2), cz, cz);
+		g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);*/
+		
+		Point p = new Point(x2, y2);
 		if (p == null) {
 			//System.out.println("null point");
 		} else {

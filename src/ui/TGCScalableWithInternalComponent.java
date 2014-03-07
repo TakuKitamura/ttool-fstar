@@ -63,10 +63,17 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 		dheight = (height + dheight) / oldScaleFactor * scaleFactor;
 		dx = (dx + x) / oldScaleFactor * scaleFactor;
 		dy = (dy + y) / oldScaleFactor * scaleFactor;
+		dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
+		dMaxHeight = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
+		
 		width = (int)(dwidth);
 		dwidth = dwidth - width; 
 		height = (int)(dheight);
 		dheight = dheight - height;
+		maxWidth = (int)(dMaxWidth);
+		maxHeight = (int)(dMaxHeight);
+		dMaxWidth = dMaxWidth - maxWidth; 
+		dMaxHeight = dMaxHeight - maxHeight; 
 		x = (int)(dx);
 		dx = dx - x;
 		y = (int)(dy);
@@ -100,6 +107,15 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 		dheight = h * oldScaleFactor;
 		height = (int)(dheight);
 		dheight = dheight - height;
+		
+		dMaxWidth = defMaxWidth * oldScaleFactor;
+		dMaxHeight = defMaxHeight * oldScaleFactor;
+		
+		maxWidth = (int)defMaxWidth;
+		maxHeight = (int)defMaxHeight;
+		
+		dMaxWidth = dMaxWidth - maxWidth;
+		dMaxHeight = dMaxHeight - maxHeight;
 		
 		rescaled = true;
 	}

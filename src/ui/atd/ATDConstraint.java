@@ -64,8 +64,8 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	private static int maxFontSize = 14;
+	private static int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	private int textX = 1;
@@ -105,7 +105,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
         value = "<<OR>>";
         equation = "";
 		
-		currentFontSize = maxFontSize;
+		currentFontSize = -1;
 		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
@@ -116,42 +116,22 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
 		Font f = g.getFont();
 		Font fold = f;
 		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
+		if (currentFontSize == -1) {
 				currentFontSize = f.getSize();
 			}
+		
+		if ((rescaled) && (!tdp.isScaled())) {
+			
 			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
 			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0, w1;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//System.out.println("max current font size:" + maxCurrentFontSize);
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				w0 = g.getFontMetrics().stringWidth(value);
-				if (w0 < (width - (2*textX))) {
-					break;
-				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
+			float scale = (float)(f.getSize()*tdp.getZoom());
+			scale = Math.min(maxFontSize, scale);
+			currentFontSize = (int)scale;
+			if (scale < minFontSize) {
 				displayText = false;
 			} else {
 				displayText = true;
-				f = f.deriveFont((float)currentFontSize);
-				g.setFont(f);
 			}
-			
 		}
 		
         Color c = g.getColor();
@@ -168,7 +148,7 @@ public class ATDConstraint extends TGCScalableWithInternalComponent implements  
         
 		Font f0 = g.getFont();
 		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
+			f = f.deriveFont(currentFontSize);
 			g.setFont(f.deriveFont(Font.BOLD));
 			int w  = g.getFontMetrics().stringWidth(value);
 			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
