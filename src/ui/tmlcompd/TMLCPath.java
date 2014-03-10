@@ -106,7 +106,11 @@ public class TMLCPath  {
 	}
 	
 	public void mergeWith(TMLCPath _path) {
-		cports.addAll(_path.cports);
+		cports.addAll(_path.cports);   
+		producerPorts.addAll(_path.producerPorts);
+		consumerPorts.addAll(_path.consumerPorts);
+		forks.addAll(_path.forks);
+		joins.addAll(_path.joins);
 	}
 	
 	
