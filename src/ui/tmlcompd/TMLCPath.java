@@ -60,27 +60,73 @@ import tmltranslator.*;
 
 public class TMLCPath  {
 	
+	
 	public ArrayList<TMLCCompositePort> cports;
 	public ArrayList<TMLCPrimitivePort> producerPorts;
 	public ArrayList<TMLCPrimitivePort> consumerPorts;
-	public ArrayList<TMLCFork> forks;
+	public ArrayList<TMLCFork> forks; 
 	public ArrayList<TMLCJoin> joins;
+	
+	private int errorNumber; 
+	
+	private String[] errors = {"Fork and Join operators in the same path",
+	"More than one producer in a path with a fork"};
 	
 	public TMLCPath() {
 		cports = new ArrayList<TMLCCompositePort>();
-		producerPorts = new ArrayList<TMLCCompositePort>();
+		producerPorts = new ArrayList<TMLCPrimitivePort>();
 		consumerPorts = new ArrayList<TMLCPrimitivePort>();
 		forks = new ArrayList<TMLCFork>();
 		joins = new ArrayList<TMLCJoin>();
 	}
 	
-	public void addComponent(TGComponent) {
+	public void addComponent(TGComponent _tgc) {
+		if (_tgc instanceof TMLCCompositePort) {
+			cports.add((TMLCCompositePort)_tgc);
+		}
+		
+		if (_tgc instanceof TMLCPrimitivePort) {
+			TMLCPrimitivePort p = (TMLCPrimitivePort)_tgc;
+			if (p.isOrigin()) {
+				producerPorts.add(p);
+			} else {
+				consumerPorts.add(p);
+			}
+		}
+		
+		if (_tgc instanceof TMLCFork) {
+			forks.add((TMLCFork)_tgc);
+		}
+		
+		if (_tgc instanceof TMLCJoin) {
+			joins.add((TMLCJoin)_tgc);
+		}
+		
+		
 	}
 	
 	public void mergeWith(TMLCPath _path) {
+		cports.addAll(_path.cports);
 	}
 	
+	
+	public boolean hasError() {
+		return (errorNumber != -1);
+	}
+	
+	
 	public void checkRules() {
+		errorNumber = -1;
+		
+		//rule0: fork or join, but not both
+		if ((forks.size() > 0) && (joins.size() >0)) {
+			errorNumber = 0;
+		}
+		
+		// If fork: must have only one producer
+		if ((forks.size() > 0) && (producerPorts.size() >1)) {
+			errorNumber = 1;
+		}
 	}
 	 
 	

@@ -803,6 +803,8 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
 	
 	public void updatePorts() {
+		makePaths();
+		
 		TraceManager.addDev("Update ports / nb of components = " + componentList.size());
 		Iterator iterator;
 		TGComponent tgc;
@@ -1235,5 +1237,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		}
 		
 		return getRecordNamed((TMLCCompositeComponent)(comp.getFather()), _nameOfRecord);
+	}
+	
+	public void makePaths() {
+		TMLCPath path;
 	}
 }
