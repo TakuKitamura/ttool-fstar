@@ -70,7 +70,10 @@ public class TMLCPath  {
 	private int errorNumber; 
 	
 	private String[] errors = {"Fork and Join operators in the same path",
-	"More than one producer in a path with a fork"};
+	"Must have at least one sender",
+	"Must have at least one receiver",
+	"More than one sender in a path with a fork",
+	"Senders and receivers are not of the same kind"};
 	
 	public TMLCPath() {
 		cports = new ArrayList<TMLCCompositePort>();
@@ -105,6 +108,31 @@ public class TMLCPath  {
 		
 	}
 	
+	public boolean contains(TGComponent tgc) {
+		if (cports.contains(tgc)) {
+			return true;
+		}
+		
+		if (producerPorts.contains(tgc)) {
+			return true;
+		}
+		
+		if (consumerPorts.contains(tgc)) {
+			return true;
+		}
+		
+		if (forks.contains(tgc)) {
+			return true;
+		}
+		
+		if (joins.contains(tgc)) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
 	public void mergeWith(TMLCPath _path) {
 		cports.addAll(_path.cports);   
 		producerPorts.addAll(_path.producerPorts);
@@ -118,6 +146,14 @@ public class TMLCPath  {
 		return (errorNumber != -1);
 	}
 	
+	public String getErrorMessage() {
+		if (hasError()) {
+			return errors[errorNumber];
+		}
+		
+		return "";
+	}
+	
 	
 	public void checkRules() {
 		errorNumber = -1;
@@ -127,10 +163,36 @@ public class TMLCPath  {
 			errorNumber = 0;
 		}
 		
-		// If fork: must have only one producer
-		if ((forks.size() > 0) && (producerPorts.size() >1)) {
+		//rule1: Must have at least one producer
+		if (producerPorts.size() == 0) {
 			errorNumber = 1;
 		}
+		
+		//rule2: Must have at least one receiver
+		if (consumerPorts.size() == 0) {
+			errorNumber = 2;
+		}
+		
+		//rule3: If fork: must have only one producer
+		if ((forks.size() > 0) && (producerPorts.size() >1)) {
+			errorNumber = 3;
+		}
+		
+		//rule4: producers and consumers must be of the same type
+		if ((forks.size() > 0) && (producerPorts.size() >1)) {
+			errorNumber = 4;
+		}
+	}
+	
+	public void setColor() {
+		/*if (hasError()) {
+			// Setting the red color
+		}*/
+		
+		// set the inp and outp primitive ports if possible (otherwise, null)
+		
+		// if no error: set conflict to false
+		// If error -> set the conflict to true
 	}
 	 
 	

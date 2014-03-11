@@ -803,7 +803,21 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 	}
 	
 	public void updatePorts() {
-		makePaths();
+		TraceManager.addDev("Making paths");
+		ArrayList<TMLCPath> paths = makePaths();
+		
+		// Checking rules of paths, and setting colors accordingly
+		for(TMLCPath path: paths) {
+			path.checkRules();
+			if (path.hasError()) {
+				TraceManager.addDev("Path error:" + path.getErrorMessage());
+			}
+			path.setColor();
+		}
+		
+	}
+	
+	public void updatePorts_oldVersion() {
 		
 		TraceManager.addDev("Update ports / nb of components = " + componentList.size());
 		Iterator iterator;
@@ -1239,7 +1253,127 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		return getRecordNamed((TMLCCompositeComponent)(comp.getFather()), _nameOfRecord);
 	}
 	
-	public void makePaths() {
-		TMLCPath path;
+	public ArrayList<TMLCPath> makePaths() {
+		ArrayList<TMLCPath> paths = new ArrayList<TMLCPath>();
+		
+		
+		// Go through the compnent lisg, and make paths. Then, go thru connectors, and merge paths until no
+		// more merging is possible
+		
+		ListIterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		
+		ArrayList<TMLCCompositePort> listcp;
+		ArrayList<TMLCPrimitivePort> listpp;
+		
+
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof TMLCCompositeComponent) {
+				listcp = ((TMLCCompositeComponent)tgc).getAllInternalCompositePorts();
+				for(TMLCCompositePort cp: listcp) {
+					addToPaths(paths, cp);
+				}
+				
+				listpp = ((TMLCCompositeComponent)tgc).getAllInternalPrimitivePorts();
+				for(TMLCPrimitivePort pp: listpp) {
+					addToPaths(paths, pp);
+				}
+				
+				/*referencedports.addAll(((TMLCCompositeComponent)tgc).getAllReferencedCompositePorts());*/
+			}
+			
+			/*if (tgc instanceof TMLCRemoteCompositeComponent) {
+				ports.addAll(((TMLCRemoteCompositeComponent)tgc).getAllInternalCompositePorts());
+				pports.addAll(((TMLCRemoteCompositeComponent)tgc).getAllInternalPrimitivePorts());
+			}*/
+			
+			if (tgc instanceof TMLCPrimitiveComponent) {
+				listpp = ((TMLCPrimitiveComponent)tgc).getAllInternalPrimitivePorts();
+				for(TMLCPrimitivePort pp: listpp) {
+					addToPaths(paths, pp);
+				}
+			}
+			
+			if (tgc instanceof TMLCPrimitivePort) {
+				addToPaths(paths, tgc);
+			}
+			
+			if (tgc instanceof TMLCChannelFacility) {
+				addToPaths(paths, tgc);
+			}
+		}
+		
+		
+		// Use connectors to merge paths with one another
+		iterator = componentList.listIterator();
+		TMLCPortConnector connector;
+		TGComponent tgc1, tgc2;
+		TMLCPath path1, path2;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof TMLCPortConnector) {
+				connector = (TMLCPortConnector)tgc;
+				if (connector.getTGConnectingPointP1().getFather() instanceof TGComponent) {
+					tgc1 = (TGComponent)(connector.getTGConnectingPointP1().getFather());
+				} else {
+					tgc1 = null;
+				}
+				if (connector.getTGConnectingPointP2().getFather() instanceof TGComponent) {
+					tgc2 = (TGComponent)(connector.getTGConnectingPointP2().getFather());
+				} else {
+					tgc2 = null;
+				}
+				if ((tgc1 != null) && (tgc2 != null) && (tgc1 != tgc2)) {
+					path1 = getPathOf(paths, tgc1);
+					path2 = getPathOf(paths, tgc2);
+					if ((path1 != null) && (path2 != null)) {
+						// Not in the same path -> we must do a merging
+						// and then we remove path2 from path
+						if (path1 != path2) {
+							path1.mergeWith(path2);
+							paths.remove(path2);
+						}
+					}
+				}
+				
+			}
+		}
+		
+		TraceManager.addDev("----------- Nb of paths: " + paths.size());
+		
+		
+		return paths;
+		
+	}
+	
+	public TMLCPath getPathOf(ArrayList<TMLCPath> paths, TGComponent tgc) {
+		for(TMLCPath path: paths) {
+			if (path.contains(tgc)) {
+				return path;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void addToPaths(ArrayList<TMLCPath> paths, TGComponent tgc) {
+		Boolean found = false;
+		
+		for(TMLCPath path: paths) {
+			if (path.contains(tgc)) {
+				found = true;
+				return;
+			}
+		}
+		
+		// Create a new path
+		TMLCPath ph = new TMLCPath();
+		ph.addComponent(tgc);
+		paths.add(ph);
+		
 	}
 }
