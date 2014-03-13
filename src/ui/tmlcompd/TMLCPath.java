@@ -179,8 +179,20 @@ public class TMLCPath  {
 		}
 		
 		//rule4: producers and consumers must be of the same type
-		if ((forks.size() > 0) && (producerPorts.size() >1)) {
-			errorNumber = 4;
+		if ((consumerPorts.size()>0) && (producerPorts.size()>0)) {
+			int type = consumerPorts.get(0).getPortType();
+			for(TMLCPrimitivePort porto: producerPorts) {
+				if (porto.getPortType() != type) {
+					errorNumber = 4;
+					break;
+				}
+			}
+			for(TMLCPrimitivePort porti: consumerPorts) {
+				if (porti.getPortType() != type) {
+					errorNumber = 4;
+					break;
+				}
+			}
 		}
 	}
 	
@@ -189,10 +201,83 @@ public class TMLCPath  {
 			// Setting the red color
 		}*/
 		
+		// For each channel facility,
 		// set the inp and outp primitive ports if possible (otherwise, null)
-		
 		// if no error: set conflict to false
 		// If error -> set the conflict to true
+		
+		for(TMLCFork fork: forks) {
+			if (producerPorts.size() > 0) {
+				fork.setOutPort(producerPorts.get(0));
+			} else {
+				fork.setOutPort(null);
+			}
+			
+			if (consumerPorts.size() > 0) {
+				fork.setInPort(consumerPorts.get(0));
+			} else {
+				fork.setInPort(null);
+			}
+			
+			if (hasError()) {
+				fork.setConflict(hasError(), errors[errorNumber]);
+			} else {
+				fork.setConflict(false, "");
+			}
+		}        
+		
+		for(TMLCJoin join: joins) {
+			if (producerPorts.size() > 0) {
+				join.setOutPort(producerPorts.get(0));
+			} else {
+				join.setOutPort(null);
+			}
+			
+			if (consumerPorts.size() > 0) {
+				join.setInPort(consumerPorts.get(0));
+			} else {
+				join.setInPort(null);
+			}
+			if (hasError()) {
+				join.setConflict(hasError(), errors[errorNumber]);
+			} else {
+				join.setConflict(false, "");
+			}
+		}
+		
+		for(TMLCCompositePort port: cports) {
+			if (producerPorts.size() > 0) {
+				port.setOutPort(producerPorts.get(0));
+			} else {
+				port.setOutPort(null);
+			}
+			
+			if (consumerPorts.size() > 0) {
+				port.setInPort(consumerPorts.get(0));
+			} else {
+				port.setInPort(null);
+			}
+			if (hasError()) {
+				port.setConflict(hasError(), errors[errorNumber]);
+			} else {
+				port.setConflict(false, "");
+			}
+		}
+		
+		for(TMLCPrimitivePort pport: producerPorts) {
+			if (hasError()) {
+				pport.setConflict(hasError(), errors[errorNumber]);
+			} else {
+				pport.setConflict(false, "");
+			}
+		}
+		for(TMLCPrimitivePort cport: consumerPorts) {
+			if (hasError()) {
+				cport.setConflict(hasError(), errors[errorNumber]);
+			} else {
+				cport.setConflict(false, "");
+			}
+		}
 	}
 	 
 	

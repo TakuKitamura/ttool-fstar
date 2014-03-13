@@ -151,7 +151,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 	
 	
 	 
-	 public String getAttributes() {
+	 /*public String getAttributes() {
 		 if (conflict) {
 			 return conflictMessage;
 		 }
@@ -169,7 +169,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 		 }
 		 
 		 return s;
-	 }
+	 }*/
 	 
 	
 

@@ -373,7 +373,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
         return TGComponentManager.CONNECTOR_PORT_TMLC;
      }*/
 	 
-	 public String getAttributes() {
+	 /*public String getAttributes() {
 		 if (conflict) {
 			 return conflictMessage;
 		 }
@@ -391,7 +391,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		 }
 		 
 		 return s;
-	 }
+	 }*/
 	 
 	 public void myActionWhenRemoved() {
 		tdp = null;

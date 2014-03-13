@@ -82,6 +82,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	
 	protected int decPoint = 3;
 	
+	protected boolean conflict = false;
+	protected String conflictMessage;
+	
     
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -135,17 +138,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		}
 		
 		//System.out.println("NbTGConnectingPoint=" + nbConnectingPoint);
-		
-		if ((myColor == null) || (oldTypep != typep)) {
-			//myColor = new Color(134, 229- (getMyDepth() * 10), 255);
-			if (typep == 0) {
-				myColor = ColorManager.TML_PORT_CHANNEL;
-			} else if (typep == 1) {
-				myColor = ColorManager.TML_PORT_EVENT;
-			} else {
-				myColor = ColorManager.TML_PORT_REQUEST;
-			}
-		}
+		calculatePortColor();
 		
 		if (rescaled) {
 			rescaled = false;	
@@ -153,12 +146,24 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 		
 		// Zoom is assumed to be computed
 		Color c = g.getColor();
-		g.drawRect(x, y, width, height);
 		if ((width > 2) && (height > 2)) {
 			g.setColor(myColor);
-			g.fillRect(x+1, y+1, width-1, height-1);
+			g.fillRect(x, y, width, height);
+			if (conflict) {
+				if (typep == 0) {
+					g.setColor(ColorManager.TML_PORT_CHANNEL);
+				} else if (typep == 1) {
+					g.setColor(ColorManager.TML_PORT_EVENT);
+				} else {
+					g.setColor(ColorManager.TML_PORT_REQUEST);
+				}
+				g.fillRect(x, y, width, height/2);
+			} 
+			
 			g.setColor(c);
 		}
+		g.drawRect(x, y, width, height);
+		
 		
 		int []px = new int[5];
 		int []py = new int[5];
@@ -698,6 +703,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 			}
 		}
 		
+		if (conflict) {
+			attr += "Error in path=" + conflictMessage;
+		}
+		
 		return attr;
 	}
 	
@@ -711,6 +720,31 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 	
 	public int getMaxNbOfLoss() {
 		return maxNbOfLoss;
+	}
+	
+	public boolean getConflict() {
+		return conflict;
+	}
+	
+	public void setConflict(boolean _conflict, String _msg) {
+		conflict = _conflict;
+		myColor = null;
+		conflictMessage = _msg;
+		calculatePortColor();
+	}
+	
+	public void calculatePortColor() {
+		if (conflict) {
+			myColor = Color.red;
+		} else {
+			if (typep == 0) {
+				myColor = ColorManager.TML_PORT_CHANNEL;
+			} else if (typep == 1) {
+				myColor = ColorManager.TML_PORT_EVENT;
+			} else {
+				myColor = ColorManager.TML_PORT_REQUEST;
+			}
+		}
 	}
 	
 }

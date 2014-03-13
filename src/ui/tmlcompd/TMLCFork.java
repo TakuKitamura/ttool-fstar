@@ -149,7 +149,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 	
 
 	 
-	 public String getAttributes() {
+	 /*public String getAttributes() {
 		 if (conflict) {
 			 return conflictMessage;
 		 }
@@ -167,7 +167,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 		 }
 		 
 		 return s;
-	 }
+	 }*/
 	 
 	
 

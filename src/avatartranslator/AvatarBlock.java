@@ -159,6 +159,27 @@ public class AvatarBlock extends AvatarElement {
 		return attributes.size();
 	}
 	
+	public void putAllTimers(ArrayList<AvatarAttribute> timers) {
+		for(AvatarAttribute attribute: attributes) {
+			if (attribute.getType() == AvatarType.TIMER) {
+				timers.add(attribute);
+			}
+		}
+	}
+	
+	public boolean hasTimer(String _name) {
+		for(AvatarAttribute attribute: attributes) {
+			if (attribute.getType() == AvatarType.TIMER) {
+				if (attribute.getName().compareTo(_name) == 0) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
 	public AvatarAttribute getAttribute(int _index) {
 		return attributes.get(_index);
 	}

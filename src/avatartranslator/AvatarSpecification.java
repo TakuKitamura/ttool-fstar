@@ -202,6 +202,8 @@ public class AvatarSpecification extends AvatarElement {
 	}
 	
 	public void removeTimers() {
+		renameTimers();
+		
 		LinkedList<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
 		for(AvatarBlock block: blocks) {
 			block.removeTimers(this, addedBlocks);
@@ -210,6 +212,27 @@ public class AvatarSpecification extends AvatarElement {
 		for(int i=0; i<addedBlocks.size(); i++) {
 			addBlock(addedBlocks.get(i));
 		}
+	}
+	
+	private void renameTimers() {
+		// Check whether timers have the same name in different blocks
+		ArrayList<AvatarAttribute> allTimers = new ArrayList<AvatarAttribute>();
+		for(AvatarBlock block: blocks) {
+			allTimers.clear();
+			block.putAllTimers(allTimers);
+			for(AvatarAttribute att: allTimers) {
+				for(AvatarBlock bl: blocks) {
+					if (block != bl) {
+						if (bl.hasTimer(att.getName())) {
+							// Must change name of timer
+							TraceManager.addDev("Changing name of Timer:" + att);
+							att.setName(att.getName() + "__" + block.getName());
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {

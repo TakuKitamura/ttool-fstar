@@ -87,6 +87,10 @@ public class AvatarElement {
 		return false;
 	}
 	
+	public void setName(String _name) {
+		name = _name;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -176,6 +176,30 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
      public Color getPortColor() {
 		return portColor;
 	}
+	
+	public String getAttributes() {
+		 if (conflict) {
+			 return conflictMessage;
+		 }
+		 
+		 String s = "";
+		 if (inp != null) {
+			 s = s + inp.getAttributes();
+			 if (outp != null) {
+				 s = s + "\n";
+			 }
+		 }
+		 
+		 if (outp != null) {
+			  s = s + outp.getAttributes();
+		 }
+		 
+		 if (conflict) {
+			s += "Error in path=" + conflict;
+		}
+		 
+		 return s;
+	 }
     
 
 	 
