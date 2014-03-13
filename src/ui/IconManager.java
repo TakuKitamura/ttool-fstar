@@ -123,6 +123,7 @@ public class IconManager {
     
 	// TML component task diagram
 	public static ImageIcon imgic1200, imgic1202, imgic1204, imgic1206, imgic1208;
+	public static ImageIcon imgic1210, imgic1212;
 	public static ImageIcon imgic1300, imgic1302, imgic1304, imgic1306, imgic1308;
 	public static ImageIcon imgic1310, imgic1312, imgic1314, imgic1316, imgic1318;
 	public static ImageIcon imgic1320, imgic1322, imgic1324, imgic1326, imgic1328;
@@ -470,6 +471,8 @@ public class IconManager {
 	private static String icon1204 = "images/tmlcompport.gif";
 	private static String icon1206 = "images/tmlprimport.gif";
 	private static String icon1208 = "images/tmlcompdiag.gif";
+	private static String icon1210 = "images/tmlcfork.gif";
+	private static String icon1212 = "images/tmlcjoin.gif";
 	
 	private static String icon1300 = "images/stepforwardxtimeunits24.gif";
     private static String icon1302 = "images/stepforwardtobreakpoint24.gif";
@@ -849,6 +852,8 @@ public class IconManager {
 		imgic1204 = getIcon(icon1204);
 		imgic1206 = getIcon(icon1206);
 		imgic1208 = getIcon(icon1208);
+		imgic1210 = getIcon(icon1210);
+		imgic1212 = getIcon(icon1212);
 		
 		imgic1300 = getIcon(icon1300);
 		imgic1302 = getIcon(icon1302);
