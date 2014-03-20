@@ -92,7 +92,7 @@ basicsvnapvrille:
 	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
-myrelease: basic launcher ttooljar_std
+myrelease: basic launcher ttooljar
 
 basic:
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
@@ -126,7 +126,7 @@ remotesimulator:
 documentation:
 	$(JAVADOC) $(CLASSPATH) $(TTOOL_SRC) -d $(TTOOL_DOC_HTML) $(TTOOL_SRC)/*.java $(TTOOL_SRC)/*/*.java $(TTOOL_SRC)/*/*/*.java $(TTOOL_SRC)/fr/inria/oasis/vercors/cttool/model/*.java
 
-release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar_std stdrelease 
+release: jttooljar launcher tiftranslator tmltranslator rundse remotesimulator ttooljar stdrelease 
 	@echo release done
 
 ########## RELEASE

@@ -52,7 +52,7 @@ import myutil.*;
 
 public class TMLSDReceiveMessage extends TMLSDMessageManipulation  {
 	
-    public TMLSDMessageManipulation(TMLSDMessage _msg, String _name, Object _referenceObject) {
+    public TMLSDReceiveMessage(TMLSDMessage _msg, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
 
     }
