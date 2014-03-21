@@ -4818,6 +4818,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		return mainTabbedPane.getTitleAt(index);
 	}
 	
+	public ArrayList<TMLComponentTaskDiagramPanel> getAllPanelsReferencingTMLCCompositeComponent(TMLCCompositeComponent tmlcc) {
+		TURTLEPanel tp;
+		ArrayList<TMLComponentTaskDiagramPanel> foundPanels = new ArrayList<TMLComponentTaskDiagramPanel>();
+        
+        for(int i=0; i<tabs.size();i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof TMLComponentDesignPanel) {
+                ((TMLComponentDesignPanel)tp).tmlctdp.getPanelsUsingAComponent(tmlcc, foundPanels);
+            }
+        }
+        
+        return foundPanels;
+	}
+	
 	public void updateReferenceToTMLCCompositeComponent(TMLCCompositeComponent tmlcc) {
 		TURTLEPanel tp;
         

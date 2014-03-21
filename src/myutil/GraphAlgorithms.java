@@ -63,7 +63,7 @@ public class GraphAlgorithms {
             return false;
         }
 		
-        System.out.println("cycle0? Nb state = " + nbState);
+        TraceManager.addDev("cycle0? Nb state = " + nbState + "\n");
         DijkstraState[] states = new DijkstraState[nbState];
 		
 		for(i=0; i<nbState; i++) {
@@ -77,7 +77,7 @@ public class GraphAlgorithms {
 			return false;
 		}
 		
-		System.out.println("cycle1? Nb state = " + nbState);
+		TraceManager.addDev("cycle1? Nb state = " + nbState + "\n");
 		// Succ
 		int succ;
 		for(i=0; i<nbState; i++) {
@@ -98,7 +98,7 @@ public class GraphAlgorithms {
 		
 		int nb = 0;
 		ArrayList<Integer> list = new ArrayList<Integer>();
-		System.out.println("cycle2? Nb state = " + nbState);
+		TraceManager.addDev("cycle2? Nb state = " + nbState+ "\n");
 		for(i=0; i<nbState; i++) {
             if (states[i].weight == 0) {
 				list.add(new Integer(i));
@@ -106,7 +106,7 @@ public class GraphAlgorithms {
 			}
         }
 		
-		System.out.println("cycle3? Nb state = " + nbState +  " nb=" + nb);
+		TraceManager.addDev("cycle3? Nb state = " + nbState +  " nb=" + nb + "\n");
 		int index;
 		while((list.size() > 0) && (go == true)){
 			index = list.get(0).intValue();
@@ -123,7 +123,7 @@ public class GraphAlgorithms {
 			}
 		}
 		
-		System.out.println("cycle4? Nb state = " + nbState +  " nb=" + nb);
+		TraceManager.addDev("cycle4? Nb state = " + nbState +  " nb=" + nb + "\n");
 		
 		return !(nb == nbState);
 		

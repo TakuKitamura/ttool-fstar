@@ -107,7 +107,7 @@ public class AUTGraph  implements myutil.Graph {
                 }
             }
         } catch (Exception e) {
-			System.out.println("Exception when reading graph information: " + e.getMessage());
+			TraceManager.addDev("Exception when reading graph information: " + e.getMessage() + "\n");
         	return;
         }
         
@@ -115,7 +115,7 @@ public class AUTGraph  implements myutil.Graph {
         hasExitTransition = new boolean[nbState];
         hasEntryTransition = new boolean[nbState];
 		
-		System.out.println("NbState=" + nbState + "  NbTransition=" + nbTransition);
+		TraceManager.addDev("NbState=" + nbState + "  NbTransition=" + nbTransition + "\n");
         
         /*for(cpt=0; cpt<nbState; cpt ++) {
         	hasExitTransition[cpt] = false;
@@ -142,7 +142,7 @@ public class AUTGraph  implements myutil.Graph {
                 }
             }
         } catch (Exception e) {
-        	System.out.println("Cancelled: " + e.getMessage());
+        	TraceManager.addDev("Cancelled: " + e.getMessage() + "\n");
         	return;
         }
     }

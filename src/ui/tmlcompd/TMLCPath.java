@@ -60,12 +60,18 @@ import tmltranslator.*;
 
 public class TMLCPath  {
 	
-	
-	public ArrayList<TMLCCompositePort> cports;
 	public ArrayList<TMLCPrimitivePort> producerPorts;
 	public ArrayList<TMLCPrimitivePort> consumerPorts;
+	
+	// Facilities
+	public ArrayList<TMLCCompositePort> cports;
 	public ArrayList<TMLCFork> forks; 
 	public ArrayList<TMLCJoin> joins;
+	
+	private HashMap links;
+	// Create the notion of pair of (tgcomponent, tgcomponent) as the key of the hashmap.
+	
+	private boolean errorOfConnection = false;
 	
 	private int errorNumber; 
 	
@@ -73,7 +79,8 @@ public class TMLCPath  {
 	"Must have at least one sender",
 	"Must have at least one receiver",
 	"More than one sender in a path with a fork",
-	"Senders and receivers are not of the same kind"};
+	"Senders and receivers are not of the same kind",
+	"One of more element of the path is badly connected"};
 	
 	public TMLCPath() {
 		cports = new ArrayList<TMLCCompositePort>();
@@ -81,6 +88,7 @@ public class TMLCPath  {
 		consumerPorts = new ArrayList<TMLCPrimitivePort>();
 		forks = new ArrayList<TMLCFork>();
 		joins = new ArrayList<TMLCJoin>();
+		links = new HashMap();
 	}
 	
 	public void addComponent(TGComponent _tgc) {
@@ -106,6 +114,14 @@ public class TMLCPath  {
 		}
 		
 		
+	}
+	
+	public void setErrorOfConnection(boolean _err) {
+		errorOfConnection = _err;
+	}
+	
+	public boolean getErrorOfConnection() {
+		return errorOfConnection;
 	}
 	
 	public boolean contains(TGComponent tgc) {
@@ -139,6 +155,7 @@ public class TMLCPath  {
 		consumerPorts.addAll(_path.consumerPorts);
 		forks.addAll(_path.forks);
 		joins.addAll(_path.joins);
+		setErrorOfConnection(getErrorOfConnection() || _path.getErrorOfConnection());
 	}
 	
 	
@@ -193,6 +210,11 @@ public class TMLCPath  {
 					break;
 				}
 			}
+		}
+		
+		//rule5: Error of connection
+		if (errorOfConnection) {
+				errorNumber = 5;
 		}
 	}
 	

@@ -1253,93 +1253,161 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		return getRecordNamed((TMLCCompositeComponent)(comp.getFather()), _nameOfRecord);
 	}
 	
-	public ArrayList<TMLCPath> makePaths() {
-		ArrayList<TMLCPath> paths = new ArrayList<TMLCPath>();
+	
+	public void findAllReferencedPanels(ArrayList<TMLComponentTaskDiagramPanel> panels) {
+		if (panels.contains(this)) {
+			return;
+		}
 		
 		
-		// Go through the compnent lisg, and make paths. Then, go thru connectors, and merge paths until no
-		// more merging is possible
+		panels.add(this); 
 		
 		ListIterator iterator = componentList.listIterator();
 		TGComponent tgc;
 		
-		ArrayList<TMLCCompositePort> listcp;
-		ArrayList<TMLCPrimitivePort> listpp;
-		
-
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			
+			if (tgc instanceof TMLCRemoteCompositeComponent) {
+				TMLCRemoteCompositeComponent remote = (TMLCRemoteCompositeComponent)tgc;
+				TDiagramPanel panel = remote.getReferencedDiagram();
+				if ((panel != null) && (panel instanceof TMLComponentTaskDiagramPanel)){
+					((TMLComponentTaskDiagramPanel)panel).findAllReferencedPanels(panels);
+				}
+			}
 			
 			if (tgc instanceof TMLCCompositeComponent) {
-				listcp = ((TMLCCompositeComponent)tgc).getAllInternalCompositePorts();
-				for(TMLCCompositePort cp: listcp) {
-					addToPaths(paths, cp);
+				//We must find all panels referencing this component
+				panels.addAll(mgui.getAllPanelsReferencingTMLCCompositeComponent((TMLCCompositeComponent)tgc));
+			}
+		}
+	}
+	
+	public ArrayList<TMLCPath> makePaths() {
+		ArrayList<TMLComponentTaskDiagramPanel> panels = new ArrayList<TMLComponentTaskDiagramPanel>();
+		
+		// We first find all the implicated panels
+		findAllReferencedPanels(panels);
+		TraceManager.addDev("Nb of handled panels:" + panels.size());
+		
+		ArrayList<TMLCPath> paths = new ArrayList<TMLCPath>();
+		ListIterator iterator;
+		TGComponent tgc;
+		
+		// Go through the compnent list of all panels, and make paths. Then, go thru connectors, and merge paths until no
+		// more merging is possible
+		
+		for (TDiagramPanel panel: panels) {
+			iterator = panel.getComponentList().listIterator();
+			
+			
+			ArrayList<TMLCCompositePort> listcp;
+			ArrayList<TMLCPrimitivePort> listpp;
+			
+	
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				
+				if (tgc instanceof TMLCCompositeComponent) {
+					listcp = ((TMLCCompositeComponent)tgc).getAllInternalCompositePorts();
+					for(TMLCCompositePort cp: listcp) {
+						addToPaths(paths, cp);
+					}
+					
+					listpp = ((TMLCCompositeComponent)tgc).getAllInternalPrimitivePorts();
+					for(TMLCPrimitivePort pp: listpp) {
+						addToPaths(paths, pp);
+					}
 				}
 				
-				listpp = ((TMLCCompositeComponent)tgc).getAllInternalPrimitivePorts();
-				for(TMLCPrimitivePort pp: listpp) {
-					addToPaths(paths, pp);
+				if (tgc instanceof TMLCPrimitiveComponent) {
+					listpp = ((TMLCPrimitiveComponent)tgc).getAllInternalPrimitivePorts();
+					for(TMLCPrimitivePort pp: listpp) {
+						addToPaths(paths, pp);
+					}
 				}
 				
-				/*referencedports.addAll(((TMLCCompositeComponent)tgc).getAllReferencedCompositePorts());*/
-			}
-			
-			/*if (tgc instanceof TMLCRemoteCompositeComponent) {
-				ports.addAll(((TMLCRemoteCompositeComponent)tgc).getAllInternalCompositePorts());
-				pports.addAll(((TMLCRemoteCompositeComponent)tgc).getAllInternalPrimitivePorts());
-			}*/
-			
-			if (tgc instanceof TMLCPrimitiveComponent) {
-				listpp = ((TMLCPrimitiveComponent)tgc).getAllInternalPrimitivePorts();
-				for(TMLCPrimitivePort pp: listpp) {
-					addToPaths(paths, pp);
+				if (tgc instanceof TMLCPrimitivePort) {
+					addToPaths(paths, tgc);
 				}
-			}
-			
-			if (tgc instanceof TMLCPrimitivePort) {
-				addToPaths(paths, tgc);
-			}
-			
-			if (tgc instanceof TMLCChannelFacility) {
-				addToPaths(paths, tgc);
+				
+				if (tgc instanceof TMLCChannelFacility) {
+					addToPaths(paths, tgc);
+				}
+				
+				/* We also include the paths of diagrams referenced via referenced components */
+				if (tgc instanceof TMLCRemoteCompositeComponent) {
+					TMLCRemoteCompositeComponent remote = (TMLCRemoteCompositeComponent)tgc;
+					
+					// Nothing to do: referenced ports are added thanks to the analyzes of the referenced panels
+					// and the handling of that issue in connector analysis
+				}
 			}
 		}
 		
 		
 		// Use connectors to merge paths with one another
-		iterator = componentList.listIterator();
-		TMLCPortConnector connector;
-		TGComponent tgc1, tgc2;
-		TMLCPath path1, path2;
 		
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
+		for (TDiagramPanel panel: panels) {
+			iterator = panel.getComponentList().listIterator();
+			TMLCPortConnector connector;
+			TGComponent tgc1, tgc2;
+			TMLCPath path1, path2;
 			
-			if (tgc instanceof TMLCPortConnector) {
-				connector = (TMLCPortConnector)tgc;
-				if (connector.getTGConnectingPointP1().getFather() instanceof TGComponent) {
-					tgc1 = (TGComponent)(connector.getTGConnectingPointP1().getFather());
-				} else {
-					tgc1 = null;
-				}
-				if (connector.getTGConnectingPointP2().getFather() instanceof TGComponent) {
-					tgc2 = (TGComponent)(connector.getTGConnectingPointP2().getFather());
-				} else {
-					tgc2 = null;
-				}
-				if ((tgc1 != null) && (tgc2 != null) && (tgc1 != tgc2)) {
-					path1 = getPathOf(paths, tgc1);
-					path2 = getPathOf(paths, tgc2);
-					if ((path1 != null) && (path2 != null)) {
-						// Not in the same path -> we must do a merging
-						// and then we remove path2 from path
-						if (path1 != path2) {
-							path1.mergeWith(path2);
-							paths.remove(path2);
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				
+				if (tgc instanceof TMLCPortConnector) {
+					connector = (TMLCPortConnector)tgc;
+					if (connector.getTGConnectingPointP1().getFather() instanceof TGComponent) {
+						tgc1 = (TGComponent)(connector.getTGConnectingPointP1().getFather());
+					} else {
+						tgc1 = null;
+					}
+					if (connector.getTGConnectingPointP2().getFather() instanceof TGComponent) {
+						tgc2 = (TGComponent)(connector.getTGConnectingPointP2().getFather());
+					} else {
+						tgc2 = null;
+					}
+					
+					
+					if (tgc1 instanceof TMLCRemoteCompositeComponent) {
+						tgc1 = ((TMLCRemoteCompositeComponent)tgc1).getPortOf(connector.getTGConnectingPointP1());
+					}
+					if (tgc2 instanceof TMLCRemoteCompositeComponent) {
+						tgc2 = ((TMLCRemoteCompositeComponent)tgc2).getPortOf(connector.getTGConnectingPointP2());
+					}
+					
+					TraceManager.addDev("tgc1=" + tgc1 +  " tgc2=" + tgc2);
+					
+					
+					if ((tgc1 != null) && (tgc2 != null) && (tgc1 != tgc2)) {
+						
+						path1 = getPathOf(paths, tgc1);
+						path2 = getPathOf(paths, tgc2);
+						if ((path1 != null) && (path2 != null)) {
+							// Not in the same path -> we must do a merging
+							// and then we remove path2 from path
+							if (path1 != path2) {
+								path1.mergeWith(path2);
+								paths.remove(path2);
+							}
+						}
+					} else {
+						// If there is a null component in the path, then, we must set an error in the path
+						if ((tgc1 == null) && (tgc2 != null)) {
+							path2 = getPathOf(paths, tgc2);
+							path2.setErrorOfConnection(true);
+							
+						}
+						
+						if ((tgc2 == null) && (tgc1 != null)) {
+							path1 = getPathOf(paths, tgc1);
+							path1.setErrorOfConnection(true);
 						}
 					}
+					
 				}
-				
 			}
 		}
 		
@@ -1375,5 +1443,29 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
 		ph.addComponent(tgc);
 		paths.add(ph);
 		
+	}
+	
+	
+	public void getPanelsUsingAComponent(TMLCCompositeComponent tmlcc, ArrayList<TMLComponentTaskDiagramPanel> panels) {
+		//System.out.println("Update from " + tmlcc.getValue());
+		Iterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		
+		while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLCCompositeComponent) {
+				if (((TMLCCompositeComponent)tgc).hasRefencesTo(tmlcc)) {
+					panels.add(this);
+					return;
+				}
+            }
+			
+			if (tgc instanceof TMLCRemoteCompositeComponent) {
+				if (((TMLCRemoteCompositeComponent)tgc).getReference() == tmlcc) {
+					panels.add(this);
+					return;
+				}
+			}
+        }
 	}
 }

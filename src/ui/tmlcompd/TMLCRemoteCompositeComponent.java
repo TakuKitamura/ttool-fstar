@@ -456,6 +456,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 				connectingPoint[cpt].forceId(old[cpt].getId());
 				TraceManager.addDev("Setting id: " + old[cpt].getId());
 			}*/
+			
+			// Make paths
+			((TMLComponentTaskDiagramPanel)getTDiagramPanel()).makePaths();
             
         } catch (Exception e) {
             throw new MalformedModelingException();
@@ -682,9 +685,14 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	}
 	
 	public TGComponent getPortOf(TGConnectingPoint tp) {
+		if (ports == null) {
+			return null;
+		}
 		for (int i=0; i<nbConnectingPoint; i++) {
 			if (connectingPoint[i] == tp) {
-				return ports.get((int)(i/5));
+				if (((int)(i/5)) < ports.size()) {
+					return ports.get((int)(i/5));
+				}
 			}
 		}
 		return null;
@@ -802,6 +810,17 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	
 	public String getAttributes() {
 		return "";
+	}
+	
+	public TDiagramPanel getReferencedDiagram() {
+		if (tmlcc == null) {
+			return null;
+		}
+		return tmlcc.getTDiagramPanel();
+	}
+	
+	public TMLCCompositeComponent getReference() {
+		return tmlcc;
 	}
     
 }

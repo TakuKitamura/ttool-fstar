@@ -677,5 +677,26 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 	public void portRemoved() {
 		compositePortNb --;
 	}
+	
+	public boolean hasRefencesTo(TMLCCompositeComponent tmlcc) {
+		boolean b;
+		
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof TMLCRemoteCompositeComponent) {
+				b = ((TMLCRemoteCompositeComponent)tgcomponent[i]).getReference() == tmlcc;
+				if (b) {
+					return true;
+				}
+			}
+			if (tgcomponent[i] instanceof TMLCCompositeComponent) {
+				b = ((TMLCCompositeComponent)tgcomponent[i]).hasRefencesTo(tmlcc);
+				if (b) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
     
 }
