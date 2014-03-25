@@ -152,7 +152,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 			int []px = new int[3];
 			int []py = new int[3];
 			switch(wayTo) {
-				case GraphicLib.NORTH:
+				/*case GraphicLib.NORTH:
 					px[0] = x + decPoint;
 					px[1] = x + width - decPoint;
 					px[2] = x + width/2;
@@ -183,10 +183,24 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 					px[2] = x + width - decPoint;
 					py[0] = y + decPoint;
 					py[1] = y + height - decPoint;
-					py[2] = y + height/2;
+					py[2] = y + height/2;*/
+				case GraphicLib.NORTH:
+				case GraphicLib.SOUTH:
+					px[0] = x+width/2;
+					px[1] = x +width/2;
+					py[0] = y;
+					py[1] = y + height;
+				case GraphicLib.EAST:
+				case GraphicLib.WEST:
+				default:
+					px[0] = x;
+					px[1] = x +width;
+					py[0] = y+height/2;
+					py[1] = y + height/2;
+					break;
 			}
-			g.drawPolygon(px, py, 3);
-			g.fillPolygon(px, py, 3);
+			g.drawPolygon(px, py, 2);
+			//g.fillPolygon(px, py, 2);
 		}
     }
 	

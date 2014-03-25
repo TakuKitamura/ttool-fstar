@@ -715,8 +715,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                 // Assuma data are on the remote host
                 // Command
                 try {
-                    data = processCmd(cmd);
-                    jta.append(data);
+                    processCmd(cmd, jta);
+                    //jta.append(data);
                     jta.append("Compilation done\n");
                 } catch (LauncherException le) {
                     jta.append("Error: " + le.getMessage() + "\n");
@@ -740,8 +740,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
                     // Assuma data are on the remote host
                     // Command
                     
-                    data = processCmd(cmd);
-                    jta.append(data);
+                    processCmd(cmd, jta);
+                    //jta.append(data);
                     jta.append("Execution done\n");
                 } catch (LauncherException le) {
                     jta.append("Error: " + le.getMessage() + "\n");
@@ -771,12 +771,14 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 		//System.out.println("Selected item=" + selectedItem);
     }
     
-    protected String processCmd(String cmd) throws LauncherException {
+    protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
         rshc.sendProcessRequest();
-        s = rshc.getDataFromProcess();
-        return s;
+        rshc.fillJTA(_jta);
+        //s = rshc.getDataFromProcess();
+        //return s;
+        return;
     }
     
     protected void checkMode() {

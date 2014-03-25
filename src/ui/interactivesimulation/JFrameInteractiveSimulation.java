@@ -1574,7 +1574,8 @@ public	class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		} else if (msg != null) {
 			printFromServer("Server: " + msg);
 		} else {
-			printFromServer("Server: error " + error);
+			//TraceManager.addDev("Node: " +node1 + " diagramNL=" + diagramNl);
+			//printFromServer("Server: error " + error);
 		}
 		
 		if ((hash != null) && (tmap != null)) {
