@@ -305,6 +305,10 @@ public abstract class TURTLEPanel implements GenericTree {
     public boolean isAvatarMADEnabled() {
         return false;
     }
+    
+     public boolean isDiplodocusMethodologyEnabled() {
+        return false;
+    }
 	
 	public MainGUI getMainGUI() {
 		return mgui;
@@ -331,6 +335,22 @@ public abstract class TURTLEPanel implements GenericTree {
 		for(TDiagramPanel tdp: panels) {
     		tdp.searchForText(text, elements);
     	}
+	}
+	
+	public boolean supportUppaalFormalVerification() {
+		return false;
+	}
+	
+	public boolean supportLotosFormalVerification() {
+		return false;
+	}
+	
+	public boolean supportCPPSimulation() {
+		return false;
+	}
+	
+	public boolean supportTMLGeneration() {
+		return false;
 	}
 	
     

@@ -69,6 +69,7 @@ import ui.tmldd.*;
 import ui.tmlcompd.*;
 import ui.tmlcp.*;
 import ui.tmlsd.*;
+import ui.diplodocusmethodology.*;
 
 import ui.procsd.*;
 import ui.prosmd.*;
@@ -189,6 +190,13 @@ public class TGComponentManager {
     
     public static final int TDD_NODE = 800;
     public static final int TDD_ARTIFACT = 801;
+    
+    public static final int DIPLODODUSMETHODOLOGY_REF_APPLICATION = 6000;
+    public static final int DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE = 6001;
+    public static final int DIPLODODUSMETHODOLOGY_REF_MAPPING = 6002;
+    public static final int DIPLODODUSMETHODOLOGY_REF_REQUIREMENT = 6003;
+    public static final int DIPLODOCUSMETHODOLOGY_CONNECTOR = 6004;
+    
     
     public static final int TMLAD_START_STATE = 1000;
     public static final int TMLAD_STOP_STATE = 1001;
@@ -732,6 +740,19 @@ public class TGComponentManager {
 			case ATD_CONSTRAINT:
                 tgc = new ATDConstraint(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+            case DIPLODODUSMETHODOLOGY_REF_APPLICATION:
+                tgc = new DiplodocusMethodologyDiagramReferenceToApplication(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE:
+                tgc = new DiplodocusMethodologyDiagramReferenceToArchitecture(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_MAPPING:
+                tgc = new DiplodocusMethodologyDiagramReferenceToMapping(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_REF_REQUIREMENT:
+                tgc = new DiplodocusMethodologyDiagramReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+                
             case TMLAD_START_STATE:
                 tgc = new TMLADStartState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1309,6 +1330,16 @@ public class TGComponentManager {
             return ATD_COMPOSITION_CONNECTOR;
         } else if (tgc instanceof ATDAttackConnector) {
             return ATD_ATTACK_CONNECTOR;
+        } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToApplication) {
+            return DIPLODODUSMETHODOLOGY_REF_APPLICATION;
+        } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToArchitecture) {
+            return DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE;
+        } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToMapping) {
+            return DIPLODODUSMETHODOLOGY_REF_MAPPING;
+        } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToRequirement) {
+            return DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
+        } else if (tgc instanceof DiplodocusMethodologyConnector) {
+            return DIPLODOCUSMETHODOLOGY_CONNECTOR;
         } else if (tgc instanceof TMLADStartState) {
             return TMLAD_START_STATE;
         } else if (tgc instanceof TMLADStopState) {
@@ -1686,6 +1717,11 @@ public class TGComponentManager {
 			case ATD_ATTACK_CONNECTOR:
                 tgc = new ATDAttackConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;
+                
+            case DIPLODOCUSMETHODOLOGY_CONNECTOR:
+            	tgc = new DiplodocusMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;
+                
             case CONNECTOR_TMLAD:
                 tgc = new TGConnectorTMLAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;

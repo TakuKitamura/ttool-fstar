@@ -1106,6 +1106,26 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //ystem.out.println("Design added");
         return index;
     }
+    
+    private int addDiplodocusMethodologyPanel(String name, int index, boolean addDefaultElements) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        DiplodocusMethodologyPanel dp = new DiplodocusMethodologyPanel(this);
+        tabs.add(index, dp);
+        mainTabbedPane.add(dp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open DIPLODOCUS methodology");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic62);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        dp.init();
+        if (addDefaultElements) {
+        	dp.initElements();
+        }
+        //ystem.out.println("Design added");
+        return index;
+    }
+    
 	
 	private int addTMLComponentDesignPanel(String name, int index) {
         if (index == -1) {
@@ -1364,6 +1384,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
     
+    public int createDiplodocusMethodology(String name) {
+        int index = addDiplodocusMethodologyPanel(name, -1, false);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+    
     public int createTMLDesign(String name) {
         int index = addTMLDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -1488,6 +1514,10 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tabs = new Vector();
         
         frame.setVisible(true);
+    }
+    
+    public Vector getTabs() {
+    	return tabs;
     }
     
      public String getTitleOf(TDiagramPanel _tdp) {
@@ -1671,6 +1701,15 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void newTMLDesign() {
         //TraceManager.addDev("NEW DESIGN");
         addTMLDesignPanel("DIPLODOCUS_Design", -1);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+    
+    public void newDiplodocusMethodology() {
+        //TraceManager.addDev("NEW DESIGN");
+        addDiplodocusMethodologyPanel("DIPLODOCUS_Methodology", -1, true);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -4946,6 +4985,11 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tp.tabbedPane.setTitleAt(0, name);
     }
     
+    public void setDiplodocusMethodologyDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        tp.tabbedPane.setTitleAt(0, name);
+    }  
+    
     public void setTMLTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
         tp.tabbedPane.setTitleAt(0, name);
@@ -5867,6 +5911,34 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
             //TraceManager.addDev("Pane design action 1");
             if (activetdp != null) {
+                activetdp.activateActions(false);
+                unactivateDrawing();
+                activetdp.stopAddingConnector();
+            }
+            //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
+            tdp1.activateActions(true);
+            activetdp = tdp1;
+            
+            setEditMode();
+            setPanelMode();
+            //TraceManager.addDev("Pane design action 3");
+            
+            // activate the   drawing	of the right pane
+            basicActivateDrawing();
+            
+        } catch	(Exception ex) {
+            //TraceManager.addDev("Exception pane design action");
+        }
+    }
+    
+    public void paneDiplodocusMethodologyAction(ChangeEvent e) {
+        //TraceManager.addDev("Pane design action size=" + tabs.size());
+        try {
+            
+            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            //TraceManager.addDev("Pane design action 1");
+            if (activetdp != null) {
+            	
                 activetdp.activateActions(false);
                 unactivateDrawing();
                 activetdp.stopAddingConnector();
@@ -7783,7 +7855,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private JPopupMenu menu;
         
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign, 
-        newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP;
+        newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo;
 		private JMenuItem newAVATARAnalysis;
         
         public PopupListener(MainGUI _mgui) {
@@ -7822,6 +7894,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newDeployment = createMenuItem("New TURTLE Deployment");
 			newAttackTree = createMenuItem("New AVATAR Attack Tree");
             newRequirement = createMenuItem("New TURTLE Requirement Diagram");
+            newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
 			newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
 			newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");    
@@ -7875,6 +7948,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             
             if (systemcOn) {
                 menu.addSeparator();
+                menu.add(newTMLMethodo);
                 menu.add(newTMLDesign);
 				menu.add(newTMLComponentDesign);
 				menu.add(newTMLCP);
@@ -7963,6 +8037,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     mgui.newAttackTree();
                 } else if (ac.equals("New TURTLE Requirement Diagram")) {
                     mgui.newRequirement();
+                }    else if (e.getSource() == newTMLMethodo) {
+					mgui.newDiplodocusMethodology();
                 } else if (ac.equals("New DIPLODOCUS Design")) {
                     mgui.newTMLDesign();
                 } else if (ac.equals("New Component-based DIPLODOCUS Design")) {
