@@ -196,6 +196,7 @@ public class TGComponentManager {
     public static final int DIPLODODUSMETHODOLOGY_REF_MAPPING = 6002;
     public static final int DIPLODODUSMETHODOLOGY_REF_REQUIREMENT = 6003;
     public static final int DIPLODOCUSMETHODOLOGY_CONNECTOR = 6004;
+    public static final int DIPLODODUSMETHODOLOGY_DIAGRAM_NAME = 6005;
     
     
     public static final int TMLAD_START_STATE = 1000;
@@ -751,6 +752,9 @@ public class TGComponentManager {
                 break;
             case DIPLODODUSMETHODOLOGY_REF_REQUIREMENT:
                 tgc = new DiplodocusMethodologyDiagramReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case DIPLODODUSMETHODOLOGY_DIAGRAM_NAME:
+                tgc = new DiplodocusMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
                 
             case TMLAD_START_STATE:
@@ -1338,6 +1342,8 @@ public class TGComponentManager {
             return DIPLODODUSMETHODOLOGY_REF_MAPPING;
         } else if (tgc instanceof DiplodocusMethodologyDiagramReferenceToRequirement) {
             return DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
+        } else if (tgc instanceof DiplodocusMethodologyDiagramName) {
+            return DIPLODODUSMETHODOLOGY_DIAGRAM_NAME;
         } else if (tgc instanceof DiplodocusMethodologyConnector) {
             return DIPLODOCUSMETHODOLOGY_CONNECTOR;
         } else if (tgc instanceof TMLADStartState) {

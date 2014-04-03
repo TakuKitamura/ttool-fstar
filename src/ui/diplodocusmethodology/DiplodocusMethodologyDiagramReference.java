@@ -60,7 +60,7 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableWithInternalComponent  {
+public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -424,7 +424,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         int tmpy; 
         for(String s: selected) {
         	if (!hasDiplodocusMethodologyDiagramName(s)) {	
-        		tmpy = y + 30 + (index * 15);
+        		tmpy = y + 40 + (index * 15);
         		dn = new  DiplodocusMethodologyDiagramName(x + 10, tmpy, x + 10, x+10, tmpy, tmpy, true, this, getTDiagramPanel());
         		dn.setValue(s);
         		addInternalComponent(dn, index);
@@ -490,6 +490,24 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     }
     
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
+    
+    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+    	if (tgc instanceof DiplodocusMethodologyDiagramName) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+    	tgc.setFather(this);
+    	addInternalComponent(tgc, 0);
+    	//tgc.setDrawingZone(true);
+    	return true;
+    }
+    
+    public void removeSwallowedTGComponent(TGComponent tgc) {
+    	removeInternalComponent(tgc);
+    }
     
     
     

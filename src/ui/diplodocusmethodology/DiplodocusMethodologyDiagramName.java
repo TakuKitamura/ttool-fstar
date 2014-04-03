@@ -54,9 +54,24 @@ import javax.swing.*;
 import ui.*;
 import myutil.*;
 
-public class DiplodocusMethodologyDiagramName extends TGCWithoutInternalComponent { 
-    protected boolean emptyText;
-	
+public class DiplodocusMethodologyDiagramName extends TGCWithoutInternalComponent implements SwallowedTGComponent { 
+    //protected boolean emptyText;
+    
+    protected int minSim = -1;
+    protected int maxSim = -1;
+    protected final static String Sim = "sim";
+    
+    protected int minUpp = -1;
+    protected int maxUpp = -1;
+    protected final static String Upp = "ipp";
+    
+    protected int minLot = -1;
+    protected int maxLot = -1;
+    protected final static String Lot = "lot";
+    
+    protected int minTml = -1;
+    protected int maxTml = -1;
+	protected final static String Tml = "tml";
 	
     public DiplodocusMethodologyDiagramName(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -68,8 +83,6 @@ public class DiplodocusMethodologyDiagramName extends TGCWithoutInternalComponen
         moveable = true;
         editable = true;
         removable = false;
-		
-		emptyText = false;
         
         name = "value ";
         
@@ -81,6 +94,9 @@ public class DiplodocusMethodologyDiagramName extends TGCWithoutInternalComponen
             width = g.getFontMetrics().stringWidth(value);
             height = g.getFontMetrics().getHeight();
         }
+        
+        
+        
         g.drawString(value, x, y);
         if (value.equals("")) {
             g.drawString("value?", x, y);
@@ -98,5 +114,14 @@ public class DiplodocusMethodologyDiagramName extends TGCWithoutInternalComponen
         
          
         return false;
+    }
+    
+    
+    public  int getType() {
+        return TGComponentManager.DIPLODODUSMETHODOLOGY_DIAGRAM_NAME;
+    }
+    
+   	public int getDefaultConnector() {
+      return TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
     }
 }
