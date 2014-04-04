@@ -51,7 +51,7 @@ import tmltranslator.tmlcp.*;
 
 import myutil.*;
 
-public class TMLCP  {
+public class TMLCP extends TMLElement {
     private TMLCPSection mainCP;
     private ArrayList<TMLCPSection> otherCPs; //Ref to other CPs
     private ArrayList<TMLSDSection> sds; //Ref to SDs
@@ -61,7 +61,8 @@ public class TMLCP  {
 	private boolean hashCodeComputed = false;
 	
     
-    public TMLCP() {
+    public TMLCP(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
         init();
     }
 	

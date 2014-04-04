@@ -50,7 +50,7 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class TMLCPSection  {
+public class TMLCPSection  extends TMLElement {
     private TMLCPStart start;
     private ArrayList<TMLCPElement> elements; // Including the start element
     private ArrayList<TMLAttribute> globalVariables; 
@@ -59,7 +59,8 @@ public class TMLCPSection  {
 	private boolean hashCodeComputed = false;
 	
     
-    public TMLCPSection() {
+    public TMLCPSection(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
         init();
     }
 	

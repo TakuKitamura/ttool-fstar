@@ -50,7 +50,7 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class TMLSDSection  {
+public class TMLSDSection  extends TMLElement {
     private ArrayList<TMLSDInstance> instances; 
     private ArrayList<TMLAttribute> globalVariables; 
     private ArrayList<TMLSDMessage> messages; 
@@ -59,7 +59,8 @@ public class TMLSDSection  {
 	private boolean hashCodeComputed = false;
 	
     
-    public TMLSDSection() {
+    public TMLSDSection(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
         init();
     }
 	
