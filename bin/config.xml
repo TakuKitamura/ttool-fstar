@@ -59,11 +59,11 @@
 <ExternalCommand2Host data="localhost"/>
 <ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /localhome/ludo/TTool/uppaal/spec.xml"/>
 
-<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/Daniel/MPEG-2-Decoder_MemoryBandWidth_dan_V06.xml"/>
+<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/MicroWaveOven_SafetySecurity_invariants.xml"/>
 
 
 
-<LastWindowAttributes x="703" y="22" width="1857" height="1414" max="true" />
+<LastWindowAttributes x="963" y="261" width="1143" height="980" max="true" />
 
 
 </TURTLECONFIGURATION>

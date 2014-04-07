@@ -872,6 +872,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
     
+    public String getModelFileFullPath() {
+    	if (file == null) {
+    		return "./";
+    	}
+    	return file.getAbsolutePath();
+    }
     
     public void periodicAction() {
     	//TraceManager.addDev("Autosaving ");

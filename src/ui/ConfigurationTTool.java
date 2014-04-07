@@ -145,6 +145,16 @@ public class ConfigurationTTool {
     
     public static String fileName = "";
     
+    public static void makeDefaultConfiguration() {
+    	//System.out.println(Paths.get("").toAbsolutePath().toString());
+    	//System.out.println("User.dir path:" + System.getProperty("user.dir"));
+    	//Path currentRelativePath = Paths.get("");
+    	//String s = currentRelativePath.toAbsolutePath().toString();
+    	//String s = System.getProperty("user.dir");
+    	//IMGPath = s;
+    	
+    }
+    
     
     public static void loadConfiguration(String _fileName, boolean systemcOn) throws MalformedConfigurationException {
         fileName = _fileName;

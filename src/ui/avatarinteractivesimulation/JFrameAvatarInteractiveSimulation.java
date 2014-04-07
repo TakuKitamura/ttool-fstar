@@ -1401,19 +1401,26 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		
 		if (ConfigurationTTool.IMGPath != null) {
 			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+		} else {
+			// Using model directory
+			String path = mgui.getModelFileFullPath();
+			fileName = path.substring(0,path.lastIndexOf(File.separator)+1) + fileName;
 		}
+		
+		TraceManager.addDev("New Filename = " + fileName);
 		
 		boolean ok = true;
 		
 		try {
 			ok = FileUtils.checkFileForSave(new File(fileName));
 		} catch (Exception e) {
+			TraceManager.addDev("Exception=" + e.getMessage());
 			ok = false;
 		}
 		
 		if (!ok) {
 			JOptionPane.showMessageDialog(this,
-				"The capture could not be performed: the specified file is not valid",
+				"The capture could not be performed: the file name or path is not valid",
 				"Error",
 				JOptionPane.INFORMATION_MESSAGE);
             return;

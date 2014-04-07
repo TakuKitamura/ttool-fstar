@@ -273,6 +273,8 @@ public class Main implements ActionListener {
         	splashFrame.setMessage("Loading configuration file: " + config);
         }
         
+        
+        ConfigurationTTool.makeDefaultConfiguration();
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
         } catch (Exception e) {
