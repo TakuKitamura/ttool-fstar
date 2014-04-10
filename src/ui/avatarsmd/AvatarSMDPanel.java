@@ -332,5 +332,17 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         }
 		//TraceManager.addDev("End Autoconnect");
 	}
+	
+	public void resetStateSecurityInfo() {
+		ListIterator iterator = getComponentList().listIterator();
+		TGComponent tgc;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof AvatarSMDState) {
+				((AvatarSMDState)tgc).resetSecurityInfo();
+			}
+		}
+	}
     
 }

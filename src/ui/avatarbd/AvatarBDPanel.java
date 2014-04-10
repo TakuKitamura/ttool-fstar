@@ -410,6 +410,16 @@ public class AvatarBDPanel extends TDiagramPanel {
 		 return list;
 	}
 	
+	public TAttribute getAttributeByBlockName(String _blockName, String attributeName) {
+		TAttribute a;
+		for(AvatarBDBlock block: getFullBlockList()) {
+			if (block.getBlockName().compareTo(_blockName) == 0) {
+				return block.getAttributeByName(attributeName);
+			}
+		}
+		return null;
+	}
+	
 	public Vector getAllAttributesOfBlock(String _name) {
 		LinkedList<AvatarBDBlock> list = getFullBlockList();
 		for(AvatarBDBlock block: list) {

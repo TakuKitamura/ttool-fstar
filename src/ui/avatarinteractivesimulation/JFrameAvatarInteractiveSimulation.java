@@ -1399,15 +1399,16 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		}
 		
 		
-		if (ConfigurationTTool.IMGPath != null) {
+		if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
 			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
 		} else {
 			// Using model directory
 			String path = mgui.getModelFileFullPath();
 			fileName = path.substring(0,path.lastIndexOf(File.separator)+1) + fileName;
+			TraceManager.addDev("New Filename = " + fileName);
 		}
 		
-		TraceManager.addDev("New Filename = " + fileName);
+		
 		
 		boolean ok = true;
 		
@@ -1458,8 +1459,13 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 			fileName += "simulationtrace_fromttool.svg";
 		}
 		
-		if (ConfigurationTTool.IMGPath != null) {
+		if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
 			fileName = ConfigurationTTool.IMGPath + System.getProperty("file.separator") + fileName;
+		} else {
+			// Using model directory
+			String path = mgui.getModelFileFullPath();
+			fileName = path.substring(0,path.lastIndexOf(File.separator)+1) + fileName;
+			TraceManager.addDev("New Filename = " + fileName);
 		}
 		
 		boolean ok = true;
@@ -1527,11 +1533,14 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		bi = sdpanel.performCapture();
 		
 		String filePath="";
-		if (ConfigurationTTool.IMGPath != null) {
+		if (ConfigurationTTool.isConfigured(ConfigurationTTool.IMGPath)) {
 			filePath += ConfigurationTTool.IMGPath;
 			if (!filePath.endsWith(File.separator)) {
 				filePath += File.separator;
 			}
+		} else {
+			String path = mgui.getModelFileFullPath();
+			filePath = path.substring(0,path.lastIndexOf(File.separator)+1);
 		}
 		
 		if ((saveFileName.getText() != null) && (saveFileName.getText().length() > 0)) {

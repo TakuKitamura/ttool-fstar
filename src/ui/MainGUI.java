@@ -96,6 +96,8 @@ import ui.avatarpd.*;
 import ui.avatarcd.*;
 import ui.avatarad.*;
 
+import proverifspec.*;
+
 public	class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
     
     public static boolean systemcOn;
@@ -3308,6 +3310,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     
     public Vector getCheckingWarnings() {
         return gtm.getCheckingWarnings();
+    }
+    
+    public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
+    	TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp == null) {
+			return;
+		}
+		
+		if (!(tp instanceof AvatarDesignPanel)) {
+			return;
+		}
+		
+		AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+		adp.modelBacktracingProVerif(pvoa);
+		getCurrentTDiagramPanel().repaint();
     }
 	
 	public void generateRTLOTOS() {

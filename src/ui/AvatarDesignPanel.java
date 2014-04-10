@@ -53,13 +53,14 @@ import java.util.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 
+
+import proverifspec.*;
+
 import myutil.*;
 
 public class AvatarDesignPanel extends TURTLEPanel {
     public AvatarBDPanel abdp; 
  //   public Vector validated, ignored;
-    
-    
     
     
     public AvatarDesignPanel(MainGUI _mgui) {
@@ -297,6 +298,124 @@ public class AvatarDesignPanel extends TURTLEPanel {
 	}
 	
 	public void clearGraphicalInfoOnInvariants() {
+		
+	}
+	
+	public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
+		
+		
+		if (abdp == null) {
+			return;
+		}
+		
+		String block, attr, state;
+		int index;
+		TAttribute a;
+		int i;
+		ListIterator iterator;
+		TGComponent tgc;
+		
+		// Confidential attributes
+		for(AvatarBDBlock block1: abdp.getFullBlockList()) {
+			block1.resetConfidentialityOfAttributes();
+		}
+		
+		for(String s: pvoa.getSecretTerms()) {
+			index = s.indexOf("__");
+			if (index != -1) {
+				block = s.substring(0, index);
+				attr = s.substring(index+2, s.length());
+				index = attr.indexOf("__");
+				if (index != -1) {
+					attr = attr.substring(0, index);
+				}
+				TraceManager.addDev("Analyzing block=" + block + " attr=" + attr);
+				a = abdp.getAttributeByBlockName(block, attr);
+				if (a != null) {
+					TraceManager.addDev("Setting conf to ok");
+					a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+				}
+			}
+		}
+		
+		for(String s: pvoa.getNonSecretTerms()) {
+			index = s.indexOf("__");
+			if (index != -1) {
+				block = s.substring(0, index);
+				attr = s.substring(index+2, s.length());
+				index = attr.indexOf("__");
+				if (index != -1) {
+					attr = attr.substring(0, index);
+				}
+				TraceManager.addDev("Analyzing block=" + block + " attr=" + attr);
+				a = abdp.getAttributeByBlockName(block, attr);
+				if (a != null) {
+					TraceManager.addDev("Setting conf to ok");
+					a.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+				}
+			}
+		}
+		
+		// Reachable states
+		// Reset states
+		for(i=0; i<panels.size(); i++) {
+			tdp = (TDiagramPanel)(panels.get(i));
+			if (tdp instanceof AvatarSMDPanel) {
+				((AvatarSMDPanel)tdp).resetStateSecurityInfo();
+			}
+		}
+		
+		for(String s: pvoa.getReachableEvents()) {
+			index = s.indexOf("__");
+			if (index != -1) {
+				block = s.substring(index+2, s.length());
+				index = block.indexOf("__");
+				if (index != -1) {
+					state = block.substring(index+2, block.length());
+					block = block.substring(0, index);
+					TraceManager.addDev("Block=" + block + " state=" + state);
+					for(i=0; i<panels.size(); i++) {
+						tdp = (TDiagramPanel)(panels.get(i));
+						if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
+						  iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+							while(iterator.hasNext()) {
+								tgc = (TGComponent)(iterator.next());
+								if (tgc instanceof AvatarSMDState) {
+									((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.REACHABLE, state);
+								}
+							}
+							
+						}
+					}
+				}
+			}
+		}
+		
+		for(String s: pvoa.getNonReachableEvents()) {
+			index = s.indexOf("__");
+			if (index != -1) {
+				block = s.substring(index+2, s.length());
+				index = block.indexOf("__");
+				if (index != -1) {
+					state = block.substring(index+2, block.length());
+					block = block.substring(0, index);
+					TraceManager.addDev("Block=" + block + " state=" + state);
+					for(i=0; i<panels.size(); i++) {
+						tdp = (TDiagramPanel)(panels.get(i));
+						if ((tdp instanceof AvatarSMDPanel) && (tdp.getName().compareTo(block) == 0)){
+						  iterator = ((TDiagramPanel)(panels.get(i))).getComponentList().listIterator();
+							while(iterator.hasNext()) {
+								tgc = (TGComponent)(iterator.next());
+								if (tgc instanceof AvatarSMDState) {
+									((AvatarSMDState)tgc).setSecurityInfo(AvatarSMDState.NOT_REACHABLE, state);
+								}
+							}
+							
+						}
+					}
+				}
+			}
+		}
 		
 	}
 	

@@ -1271,4 +1271,8 @@ public class ConfigurationTTool {
         }
     }
     
+    public static boolean  isConfigured(String s) {
+    	return ((s != null) && (s.trim().length() > 0));
+    }
+    
 } //

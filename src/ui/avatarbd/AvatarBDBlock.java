@@ -63,7 +63,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	private static String GLOBAL_CODE_INFO = "(global code)";
 
     private int textY1 = 3;
-    private String stereotype = "block";
+    private static String stereotype = "block";
+    private static String stereotypeCrypto = "cryptoblock";
 	
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
@@ -78,6 +79,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 	// Icon
 	private int iconSize = 15;
 	private boolean iconIsDrawn = false;
+	
+	private boolean isCryptoBlock = false;
 	
 	
 	// TAttribute, AvatarMethod, AvatarSignal
@@ -143,7 +146,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
     
     public void internalDrawing(Graphics g) {
-		String ster = "<<" + stereotype + ">>";
+    	String ster;
+    	if (!isCryptoBlock) {
+    		ster = "<<" + stereotype + ">>";
+		} else {
+			ster = "<<" + stereotypeCrypto + ">>";
+		}
 		Font f = g.getFont();
 		Font fold = f;
 		
@@ -265,12 +273,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 				w = g.getFontMetrics().stringWidth(attr);
 				if ((w + (2 * textX) + 1) < width) {
 					g.drawString(attr, x + textX, y + cpt);
+					if (a.getConfidentialityVerification() > 0) {
+							//TraceManager.addDev("Drawing confidentiality for " + a.getId());
+							drawConfidentialityVerification(a.getConfidentialityVerification(), g, x, y+cpt);
+						}
 					limitAttr = y + cpt;
 				} else {
 					attr = "...";
 					w = g.getFontMetrics().stringWidth(attr);
 					if ((w + textX + 2) < width) {
 						g.drawString(attr, x + textX + 1, y + cpt);
+						
 						limitAttr = y + cpt;
 					} else {
 						// skip attribute
@@ -404,7 +417,33 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
 		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
-	
+    
+    
+    private void drawConfidentialityVerification(int confidentialityVerification, Graphics g, int _x, int _y) {
+    	Color c = g.getColor();
+    	Color c1;
+    	switch(confidentialityVerification) {
+    	case TAttribute.CONFIDENTIALITY_OK:
+    		c1 = Color.green;
+    		break;
+    	case TAttribute.CONFIDENTIALITY_KO:
+    		c1 = Color.red;
+    		break;
+    	case TAttribute.COULD_NOT_VERIFY_CONFIDENTIALITY:
+    		c1 = Color.orange;
+    		break;
+    	default:
+    		return;
+    	}
+    	
+    	g.drawOval(_x+6, _y-10, 6, 9);
+    	g.setColor(c1);
+    	g.fillRect(_x+4, _y-7, 9, 7);
+    	g.setColor(c);
+    	g.drawRect(_x+4, _y-7, 9, 7);
+    	  
+    }
+    
     
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
@@ -647,6 +686,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		//System.out.println("Loading extra params of " + value);
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
+        sb.append("<CryptoBlock value=\"" + isCryptoBlock + "\" />\n");
         for(int i=0; i<myAttributes.size(); i++) {
             //System.out.println("Attribute:" + i);
             a = (TAttribute)(myAttributes.elementAt(i));
@@ -710,6 +750,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 			AvatarMethod am;
 			AvatarSignal as;
 			boolean implementation = false;
+			String crypt;
 			
             
             //System.out.println("Loading attributes");
@@ -725,6 +766,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                         //System.out.println(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
+                            if (elt.getTagName().equals("CryptoBlock")) {
+                            	crypt = elt.getAttribute("value");
+                            	if (crypt.compareTo("true") == 0) {
+                            		isCryptoBlock = true;
+                            	}
+                            }
                             if (elt.getTagName().equals("Attribute")) {
                                 //System.out.println("Analyzing attribute");
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
@@ -762,6 +809,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 	method = method.substring(1, method.length());
                                 } else {
                                 	implementation = false;
+                                }
+                                
+                                if (method.startsWith("aencrypt(")) {
+                                	isCryptoBlock = true;
                                 }
                                 
 								am = AvatarMethod.isAValidMethod(method);
@@ -912,6 +963,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 		return myAttributes;
 	}
 	
+	public TAttribute getAttributeByName(String _name) {
+		TAttribute a;
+		for(int i=0; i<myAttributes.size(); i++) {
+			a = (TAttribute)(myAttributes.elementAt(i));
+			if (a.getId().compareTo(_name) == 0) {
+				return a;
+			}
+		}
+		return null;
+	}
+	
 	public Vector getMethodList() {
 		return myMethods;
 	}
@@ -1006,6 +1068,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 	
 	public void addCryptoElements() {
+		isCryptoBlock = true;
+		
 		// Adding function
 		String method = "Message aencrypt(Message msg, Key k)";
 		addMethodIfApplicable(myMethods, method);
@@ -1162,6 +1226,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     
     public ImageIcon getImageIcon() {
         return myImageIcon;
+    }
+    
+    public void resetConfidentialityOfAttributes() {
+    	TAttribute a;
+    	
+    	for(int i=0; i<myAttributes.size(); i++) {
+			a = (TAttribute)(myAttributes.elementAt(i));
+			a.setConfidentialityVerification(TAttribute.NOT_VERIFIED);
+		}
     }
 	
 	

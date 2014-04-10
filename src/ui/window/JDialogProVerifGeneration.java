@@ -399,6 +399,8 @@ public class JDialogProVerifGeneration extends javax.swing.JDialog implements Ac
 						}
 					}
 					
+					mgui.modelBacktracingProVerif(pvoa);
+					
                     jta.append("\nAll done\n");
                 } catch (LauncherException le) {
                     jta.append("Error: " + le.getMessage() + "\n");

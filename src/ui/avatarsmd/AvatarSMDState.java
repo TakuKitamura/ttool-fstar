@@ -73,6 +73,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	protected String [] entryCode;
 	
 	
+	// Security
+	public final static int NOT_VERIFIED = 0;
+	public final static int REACHABLE = 1;
+	public final static int NOT_REACHABLE = 2;
+	
+	protected int securityInformation;
+	
 	public String oldValue;
 	
 	protected Vector<AvatarSMDState> mutexStates;
@@ -287,6 +294,35 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			}
 			drawAttributes(g, s);
 		}*/
+		
+		drawSecurityInformation(g);
+    }
+    
+    public void drawSecurityInformation(Graphics g) {
+    	if (securityInformation > 0) {
+    		
+    		Color c = g.getColor();
+    		Color c1;
+    		switch(securityInformation) {
+    		case REACHABLE:
+    			c1 = Color.green;
+    			break;
+    		case NOT_REACHABLE:
+    			c1 = Color.red;
+    			break;
+    		default:
+    			return;
+    		}
+    		
+    		GraphicLib.arrowWithLine(g, 1, 0, 10, x-30, y+4, x-15, y+4, true);
+    		g.drawOval(x-11, y-3, 7, 9);
+    		g.setColor(c1);
+    		g.fillRect(x-12, y, 9, 7);
+    		g.setColor(c);
+    		g.drawRect(x-12, y, 9, 7);
+    		
+    	}
+    	
     }
 	
     
@@ -724,6 +760,31 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			ret += entryCode[i] + "\n";
 		}
 		return ret;
+	}
+	
+	
+	public void resetSecurityInfo() {
+		securityInformation = NOT_VERIFIED;
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarSMDState) {
+				((AvatarSMDState)tgcomponent[i]).resetSecurityInfo();
+			}
+		}
+		
+	}
+	
+	public void setSecurityInfo(int _info, String _name) {
+		//TraceManager.addDev("Testing " + getValue() + " with state " + _name);
+		if (getValue().compareTo(_name) == 0) {
+			//TraceManager.addDev("Setting state " + _name + " as info=" + _info);
+			securityInformation = _info;
+		}
+		for(int i=0; i<nbInternalTGComponent; i++) {
+            if (tgcomponent[i] instanceof AvatarSMDState) {
+				((AvatarSMDState)tgcomponent[i]).setSecurityInfo(_info, _name);
+			}
+		}
+		
 	}
 	
     

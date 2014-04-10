@@ -161,7 +161,7 @@ public class Main implements ActionListener {
         }
         Locale.setDefault(new Locale("en"));
 		
-		boolean startLauncher = false;
+		boolean startLauncher = true;
         
         // Analyzing arguments
         String config = "config.xml";
@@ -274,7 +274,7 @@ public class Main implements ActionListener {
         }
         
         
-        ConfigurationTTool.makeDefaultConfiguration();
+        //ConfigurationTTool.makeDefaultConfiguration();
         try {
             ConfigurationTTool.loadConfiguration(config, systemc);
         } catch (Exception e) {

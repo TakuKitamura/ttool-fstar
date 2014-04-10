@@ -827,7 +827,7 @@ public class AVATAR2ProVerif {
 							
 							action += "let " + makeAttrName(blockName, pubK) + " = pk(" + makeAttrName(blockName, privK) + ") in \n";
 							action += "out(ch, " + makeAttrName(blockName, pubK) + ");\n";
-							TraceManager.addDev("Putting :" + makeAttrName(blockName, pubK + " -> " + makeAttrName(blockName, pubK)));
+							//TraceManager.addDev("********************************* Putting :" + makeAttrName(blockName, pubK + " -> " + makeAttrName(blockName, pubK)));
 							declarations.put(makeAttrName(blockName, pubK), makeAttrName(blockName, pubK));
 						}
 					}

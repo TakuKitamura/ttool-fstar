@@ -73,6 +73,12 @@ public class TAttribute {
 	public final static int ARRAY_NAT = 7;
 	public final static int INTEGER = 8;
 	public final static int TIMER = 9;
+	
+	// Confidentiality verififcation
+    public final static int NOT_VERIFIED = 0;
+    public final static int CONFIDENTIALITY_OK = 1;
+    public final static int CONFIDENTIALITY_KO = 2;
+    public final static int COULD_NOT_VERIFY_CONFIDENTIALITY = 3;
     
     
     private int access;
@@ -80,6 +86,8 @@ public class TAttribute {
     private String initialValue;
     private int type;
     private String typeOther;
+    
+    private int confidentialityVerification = NOT_VERIFIED;
 	
 	public boolean isAvatar;
     
@@ -458,5 +466,13 @@ public class TAttribute {
 		TAttribute ta = new TAttribute(access, id, initialValue, type, typeOther);
 		ta.isAvatar = isAvatar;
         return ta;
+    }
+    
+    public int getConfidentialityVerification() {
+    	return confidentialityVerification;
+    }
+    
+    public void setConfidentialityVerification(int _confidentialityVerification) {
+    	confidentialityVerification = _confidentialityVerification;
     }
 }
