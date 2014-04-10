@@ -49,8 +49,8 @@ package ui;
 
 public class DefaultText  {
 
-    public static String BUILD = "11649";
-	public static String DATE = "2014/04/10 14:47:16 CET";
+    public static String BUILD = "11650";
+	public static String DATE = "2014/04/10 14:50:49 CET";
 
 
     public static StringBuffer sbAbout = makeAbout();
@@ -74,7 +74,7 @@ public class DefaultText  {
         sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck \n\n");
         sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
         sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
-        sb.append("TTool's website: http://labsoc.comelec.enst.fr/ttool/\n\n");
+        sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
         return sb;
     }
 	
