@@ -89,6 +89,16 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     	return false;
     }
     
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    	dn.setValidationsNumber(4);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT);    
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.UPP);
+    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML);
+    }
+    
+  
+    
    
     
 }

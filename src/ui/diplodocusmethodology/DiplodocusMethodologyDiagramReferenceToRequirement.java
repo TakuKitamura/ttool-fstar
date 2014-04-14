@@ -80,13 +80,16 @@ public class DiplodocusMethodologyDiagramReferenceToRequirement extends Diplodoc
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT;
     }
     
-    public
-    boolean isAValidPanelType(TURTLEPanel panel) {
+    public boolean isAValidPanelType(TURTLEPanel panel) {
     	if (panel instanceof AvatarRequirementPanel) {
     		return true;
     	}
     	
     	return false;
+    }
+    
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    	dn.setValidationsNumber(0);
     }
       
 }

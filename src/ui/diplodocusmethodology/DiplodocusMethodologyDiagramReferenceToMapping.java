@@ -90,6 +90,12 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
     	return false;
     }
     
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    	dn.setValidationsNumber(3);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT);    
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.TML);
+    }
    
     
 }

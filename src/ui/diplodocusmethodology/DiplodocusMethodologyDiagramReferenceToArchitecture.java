@@ -90,6 +90,10 @@ public class DiplodocusMethodologyDiagramReferenceToArchitecture extends Diplodo
     	return false;
     }
     
+    public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
+    	dn.setValidationsNumber(0);
+    }
+    
    
     
 }

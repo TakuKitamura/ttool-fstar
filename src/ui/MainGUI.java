@@ -5170,6 +5170,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     
+    
     // TMLCP
     
     public boolean createTMLCPSequenceDiagram(int index, String s) {
@@ -6628,6 +6629,20 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public boolean selectMainTab(String id) {
+    	TURTLEPanel tp;
+        
+        for(int i=0; i<tabs.size(); i++) {
+        	tp = (TURTLEPanel)(tabs.elementAt(i));
+        	if (getTabName(tp).compareTo(id) == 0) {
+        		selectTab(tp);
+        		return true;
+        	}
+        }
+        
+        return false;
     }
     
     public void selectTab(TURTLEPanel tp) {

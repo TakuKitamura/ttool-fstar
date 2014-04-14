@@ -421,11 +421,13 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         // We then add the ones that are newly selected
         int index;
         index = 0;
-        int tmpy; 
+        int tmpx, tmpy; 
         for(String s: selected) {
         	if (!hasDiplodocusMethodologyDiagramName(s)) {	
-        		tmpy = y + 40 + (index * 15);
-        		dn = new  DiplodocusMethodologyDiagramName(x + 10, tmpy, x + 10, x+10, tmpy, tmpy, true, this, getTDiagramPanel());
+        		tmpy = (int)(y + (40*tdp.getZoom()) + (index * 15 *tdp.getZoom()));
+        		tmpx = (int)(DiplodocusMethodologyDiagramName.X_MARGIN*tdp.getZoom());
+        		dn = new  DiplodocusMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
+        		//makeValidationInfos(dn);
         		dn.setValue(s);
         		addInternalComponent(dn, index);
         		
@@ -433,6 +435,8 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         	index ++;
         }
     }
+    
+    public abstract void makeValidationInfos(DiplodocusMethodologyDiagramName dn);
     
     public boolean hasDiplodocusMethodologyDiagramName(String s) {
     	for(int i=0; i<nbInternalTGComponent; i++) {
