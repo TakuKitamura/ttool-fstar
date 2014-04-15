@@ -91,5 +91,9 @@ public class DiplodocusMethodologyDiagramReferenceToRequirement extends Diplodoc
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
     	dn.setValidationsNumber(0);
     }
+    
+    public boolean makeCall(int index) {
+    	return true;
+    }
       
 }

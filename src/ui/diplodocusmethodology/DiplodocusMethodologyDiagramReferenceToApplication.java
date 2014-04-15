@@ -97,6 +97,34 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML);
     }
     
+    public boolean makeCall(int index) {
+    	
+    	switch(index) {
+    	case 0:
+    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    			tdp.getMGUI().generateSystemC();
+    		}
+    		break;
+    	case 1:
+    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		}
+    		break;
+    	case 2:
+    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		}
+    		break;
+    	case 3:
+    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		}
+    		break;
+    	default:
+    		return false;
+    	}
+    	
+    	return true;
+    	
+    }
+    
   
     
    

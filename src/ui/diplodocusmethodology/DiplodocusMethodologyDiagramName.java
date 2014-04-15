@@ -62,7 +62,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     
     
     protected final static String SIM = "sim";
-    protected final static String UPP = "ipp";
+    protected final static String UPP = "upp";
     protected final static String LOT = "lot";
 	protected final static String TML = "tml";
 	
@@ -236,17 +236,24 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-    	DiplodocusMethodologyDiagramReference ref = ((DiplodocusMethodologyDiagramReference)(getFather()));
     	
-        if (indexOnMe == -1) {
+        if (indexOnMe > -2) {
         	// Opening the diagram
         	if (!tdp.getMGUI().selectMainTab(value)) {
         		TraceManager.addDev("Diagram removed?");
+        		return false;
         	}
         	
         }
+        
+        
+        if (indexOnMe > -1) {
+        	DiplodocusMethodologyDiagramReference ref = ((DiplodocusMethodologyDiagramReference)(getFather()));
+        	ref.makeCall(indexOnMe);
+        }
+        
          
-        return false;
+        return true;
     }
     
     

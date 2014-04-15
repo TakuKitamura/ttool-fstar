@@ -96,6 +96,20 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
     	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT);    
     	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.TML);
     }
+    
+    public boolean makeCall(int index) {
+    	
+    	switch(index) {
+    	case 0:
+    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    			tdp.getMGUI().generateSystemC();
+    		}
+    		break;
+    	}
+    	
+    	return true;
+    	
+    }
    
     
 }

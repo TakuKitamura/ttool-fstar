@@ -94,6 +94,10 @@ public class DiplodocusMethodologyDiagramReferenceToArchitecture extends Diplodo
     	dn.setValidationsNumber(0);
     }
     
+    public boolean makeCall(int index) {
+    	return true;
+    }
+    
    
     
 }

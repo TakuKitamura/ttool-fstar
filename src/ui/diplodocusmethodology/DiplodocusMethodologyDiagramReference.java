@@ -513,6 +513,8 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     	removeInternalComponent(tgc);
     }
     
+    public abstract boolean makeCall(int index);
+    
     
     
     /*public String getDiagramReferences() {
