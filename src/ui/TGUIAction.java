@@ -572,14 +572,14 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_NEW_DESIGN] = new TAction("new-command-design", "New design", IconManager.imgic14, IconManager.imgic14, "New design", "New TURTLE design", 0);
         actions[ACT_NEW_ANALYSIS] = new TAction("new-command-analysis", "New analysis", IconManager.imgic17, IconManager.imgic17, "New analysis", "New TURTLE analysis", 0);
         actions[ACT_OPEN] = new TAction("open-command","Open", IconManager.imgic22, IconManager.imgic23, "Open", "Open an existing TURTLE modeling",'O');
-        actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TURTLE modeling", 0);
-        actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TURTLE modeling with another one saved in a file ", 0);
-		actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TURTLE modeling", 'S');
+        actions[ACT_OPEN_LAST] = new TAction("openlast-command","Open file: " + ConfigurationTTool.LastOpenFile, IconManager.imgic22, IconManager.imgic23, "Open: " + ConfigurationTTool.LastOpenFile, "Open the lastly saved TTool model", 0);
+        actions[ACT_MERGE] = new TAction("merge-command","Merge", IconManager.imgic22, IconManager.imgic23, "Merge", "Merge the current TTool modeling with another one saved in a file ", 0);
+		actions[ACT_SAVE] = new TAction("save-command", "Save",IconManager.imgic24, IconManager.imgic25, "Save", "Save an opened or a new TTool modeling", 'S');
         actions[ACT_SAVE_TIF] = new TAction("save-tif-command", "Save TIF specification",IconManager.imgic24, IconManager.imgic25, "Save TIF Specification", "Save in TIF a TURTLE modeling", 0);
         actions[ACT_OPEN_TIF] = new TAction("open-tif-command", "Open TIF specification",IconManager.imgic24, IconManager.imgic25, "Open TIF Specification", "Open a TURTLE modeling given in TIF", 0);
         actions[ACT_OPEN_SD] = new TAction("open-sd-command", "Open MSC specification",IconManager.imgic24, IconManager.imgic25, "Open MSC Specification", "Open a MSC specification given in xml format", 0);
-        actions[ACT_SAVE_AS] = new TAction("saveas-command", "Save as",IconManager.imgic24, IconManager.imgic25, "Save as", "Save an opened or a new TURTLE modeling under a new name", 0);
-        actions[ACT_QUIT] = new TAction("quit-command", "Quit", IconManager.imgic26, IconManager.imgic27, "Quit",  "Quit the TURTLE editor", 'Q');
+        actions[ACT_SAVE_AS] = new TAction("saveas-command", "Save as",IconManager.imgic24, IconManager.imgic25, "Save as", "Save an opened or a new TTool modeling under a new name", 0);
+        actions[ACT_QUIT] = new TAction("quit-command", "Quit", IconManager.imgic26, IconManager.imgic27, "Quit",  "Quit TTool", 'Q');
         
         actions[ACT_SAVE_LOTOS] = new TAction("save-last-lotos", "Save last RT-LOTOS specification",IconManager.imgic24, IconManager.imgic25, "Save last RT-LOTOS specification", "Save the lastest automatically generated RT-LOTOS specification", 0);
         actions[ACT_SAVE_DTA] = new TAction("save-last-dta", "Save last DTA",IconManager.imgic24, IconManager.imgic25, "Save last DTA", "Save the lastest built DTA", 0);
@@ -589,8 +589,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_SAVE_AUTPROJ] = new TAction("save-last-rg-autproj", "Save last minimized RG (AUT format)",IconManager.imgic24, IconManager.imgic25, "Save last minimized RG (AUT format)", "Save the lastest minimized RG (AUT Format)", 0);
         actions[ACT_SAVE_AUTMODIFIED] = new TAction("save-last-rg-modified", "Save last modified RG (AUT format)",IconManager.imgic24, IconManager.imgic25, "Save last modified RG (AUT format)", "Save the lastest modified RG (AUT Format)", 0);
               
-        actions[ACT_IMPORT_LIB] = new TAction("import-lib-command", "Import library", IconManager.imgic338, IconManager.imgic339, "Import library",  "Import a TURTLE library", 'E');
-        actions[ACT_EXPORT_LIB] = new TAction("export-lib-command", "Export library", IconManager.imgic340, IconManager.imgic341, "Export library",  "Export a TURTLE library", 'I');
+        actions[ACT_IMPORT_LIB] = new TAction("import-lib-command", "Import library", IconManager.imgic338, IconManager.imgic339, "Import library",  "Import a TTool library", 'E');
+        actions[ACT_EXPORT_LIB] = new TAction("export-lib-command", "Export library", IconManager.imgic340, IconManager.imgic341, "Export library",  "Export a TTool library", 'I');
         
         actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X');
         actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C');
@@ -622,11 +622,11 @@ public class TGUIAction extends AbstractAction {
         
 		actions[ACT_TOGGLE_INTERNAL_COMMENT] = new TAction("toggle-internal-comment-command", "Show / hide (OFF -> partial -> Full)", IconManager.imgic138, IconManager.imgic138, "Show / hide internal comments (OFF -> partial -> Full)", "Show / hide internal comments (OFF -> partial -> Full)", '0');
         
-        actions[ACT_MODEL_CHECKING] = new TAction("checking-command", "Syntax analysis", IconManager.imgic36, IconManager.imgic37, "Syntax analysis",  "Checks that all diagrams follows the TURTLE's syntax", '1');
-        actions[ACT_GEN_RTLOTOS] = new TAction("gen_rtlotos-command", "Generate RT-LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate RT-LOTOS specification",  "Generates a RT-LOTOS specification from TURTLE diagrams", KeyEvent.VK_F6);
-        actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TURTLE diagrams", '0');
-        actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TURTLE diagrams", '0');      
-        actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TURTLE diagrams", '0');
+        actions[ACT_MODEL_CHECKING] = new TAction("checking-command", "Syntax analysis", IconManager.imgic36, IconManager.imgic37, "Syntax analysis",  "Checks that all diagrams follows the TTool's syntax", '1');
+        actions[ACT_GEN_RTLOTOS] = new TAction("gen_rtlotos-command", "Generate RT-LOTOS", IconManager.imgic34, IconManager.imgic35, "Generate RT-LOTOS specification",  "Generates a RT-LOTOS specification from TTool diagrams", KeyEvent.VK_F6);
+        actions[ACT_GEN_LOTOS] = new TAction("gen_lotos-command", "Generate LOTOS", IconManager.imgic90, IconManager.imgic90, "Generate LOTOS specification",  "Generates a LOTOS specification from TTool diagrams", '0');
+        actions[ACT_ONECLICK_LOTOS_RG] = new TAction("gen_rglotos-command", "One-click LOTOS-based verification", IconManager.imgic342, IconManager.imgic342, "One-click LOTOS-based verification",  "Generates a LOTOS-based RG  from TTool diagrams", '0');      
+        actions[ACT_ONECLICK_RTLOTOS_RG] = new TAction("gen_rgrtlotos-command", "Generate RT-LOTOS-based RG", IconManager.imgic342, IconManager.imgic342, "Generate RT-LOTOS-based RG ",  "Generates an RT-LOTOS-based RG  from TTool diagrams", '0');
         actions[ACT_GEN_UPPAAL] = new TAction("gen_uppaal-command", "Generate UPPAAL", IconManager.imgic92, IconManager.imgic92, "Generate UPPAAL specification",  "Generates a UPPAAL specification from TTool diagrams", '0');
         actions[ACT_GEN_PROVERIF] = new TAction("gen_proverif-command", "Generate ProVerif Code", IconManager.imgic34, IconManager.imgic35, "Generate ProVerif specification",  "Generates a ProVerif specification from AVATAR diagrams", '0');
 		actions[ACT_GEN_JAVA] = new TAction("gen_java-command", "Generate JAVA", IconManager.imgic38, IconManager.imgic39, "Generate JAVA",  "Generates Java code from TURTLE diagrams", 0);
@@ -690,8 +690,8 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_DOC] = new TAction("gen-doc", "Documentation generation", IconManager.imgic28, IconManager.imgic28, "Documentation generation",  "Documentation may be automatically generated, in html format, from edited diagrams", 0);
         actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
         
-        actions[ACT_ABOUT] = new TAction("about-command", "About", IconManager.imgic30, IconManager.imgic31, "About", "TURTLE Toolkit information", 0);
-        actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TURTLE's website", IconManager.imgic30, IconManager.imgic31, "TURTLE's website", "Various information on the TURTLE profile", 0);
+        actions[ACT_ABOUT] = new TAction("about-command", "About", IconManager.imgic30, IconManager.imgic31, "About", "TTool information", 0);
+        actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TURTLE's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information on the TURTLE profile", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "TURTLE online help", IconManager.imgic30, IconManager.imgic31, "TURTLE online help", "TURTLE online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
         actions[ACT_TTOOL_CONFIGURATION] = new TAction("configuration-command", "Configuration", IconManager.imgic76, IconManager.imgic77, "Configuration", "Configuration loaded at startup", 0);
@@ -734,7 +734,7 @@ public class TGUIAction extends AbstractAction {
         actions[TCD_SYNCHRO_OPERATOR] = new TAction("add-synchro-operator", "Add Synchro composition operator", IconManager.imgic110, IconManager.imgic110, "Synchro composition operator", "Adds a Synchro composition operator to the currently opened class diagram", 0);
         actions[TCD_INVOCATION_OPERATOR] = new TAction("add-invocation-operator", "Add Invocation composition operator", IconManager.imgic126, IconManager.imgic126, "Invocation composition operator", "Adds an invocation composition operator to the currently opened class diagram", 0);
         actions[TCD_ASSOCIATION_NAVIGATION] = new TAction("add-association-navigation", "Add association with navigation", IconManager.imgic106, IconManager.imgic108, "Association with navigation", "Adds an association with a navigation indication between two tclasses of the currently opened class diagram", 0);
-        actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TURTLE diagram", 0);
+        actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         
         
         actions[IOD_EDIT] = new TAction("edit-io-diagram", "Edit interaction overview diagram", IconManager.imgic100, IconManager.imgic101, "Edit interaction overview diagram", "Make it possible to edit the currently opened interaction overview diagram", 0);

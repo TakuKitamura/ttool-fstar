@@ -61,12 +61,29 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public final static int Y_MARGIN = 3;
     
     
-    protected final static String SIM = "sim";
-    protected final static String UPP = "upp";
-    protected final static String LOT = "lot";
-	protected final static String TML = "tml";
+    protected final static int SIM_APP_DIPLO = 0;
+    protected final static int UPP_APP_DIPLO = 1;
+    protected final static int LOT_APP_DIPLO = 2;
+	protected final static int TML_APP_DIPLO = 3;
 	
-	protected String[] validations;
+	protected final static int FV_MAPPING_DIPLO = 4;
+	protected final static int SIM_MAPPING_DIPLO = 5;   
+	protected final static int TML_MAPPING_DIPLO = 6;
+	
+	protected final String[] SHORT_ACTION_NAMES = {
+	"sim", "upp", "lot", "tml", 
+	"fv", "sim", "tmap"};
+	
+	protected final String[] LONG_ACTION_NAMES = {
+	"Simulate a DIPLODOCUS functional model", 
+	"Verify a DIPLODOCUS functional model with UPPAAL", 
+	"Generate a Reachability graph of a DIPLODOCUS functional model",
+	"Generate a TML text description of a DIPLODOCUS functional model",
+	"Formal verify a DIPLODOCUS mapping model", 
+	"Simulate a DIPLODOCUS mapping model", 
+	"Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model"};
+	
+	protected int[] validations;
 	protected int[] valMinX;
 	protected int[] valMaxX;
 	
@@ -151,7 +168,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         saveCurrentMaxX = currentMaxX;
         
         if (wf < w+(2*X_MARGIN)) {
-        	makeScale(g, w);
+        	makeScale(g, w+(2*X_MARGIN));
         	return;
         }
         
@@ -162,13 +179,13 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         if ((validations != null) & (validations.length >0)) {
 			for(int i=validations.length-1; i>=0; i--) {
 				//TraceManager.addDev("Validations[" + i + "] = " + validations[i]);
-				w1 = g.getFontMetrics().stringWidth(validations[i]);
+				w1 = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
 				
 				if ((currentMaxX - w1) > (x + w)) {
 					if ((onMe && indexOnMe == i)) {
 						g.setFont(f.deriveFont(Font.BOLD));
 					}
-					g.drawString(validations[i], currentMaxX - w1, y);
+					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxX - w1, y);
 					g.setFont(f.deriveFont(Font.ITALIC));
 					valMinX[i] = currentMaxX-w1;
 					valMaxX[i] = currentMaxX;
@@ -214,11 +231,13 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         	
         	if (_x <= (x+widthAppli)) {
         		indexOnMe = -1;
+        		tdp.getMGUI().setStatusBarText("Open the " + value + " model");
         	}
         	if ((validations != null) && (validations.length > 0)) {
         		for(int i=0; i<validations.length; i++) {
         			if ((_x >= valMinX[i]) && (_x <= valMaxX[i])) {
         				indexOnMe = i;
+        				tdp.getMGUI().setStatusBarText(LONG_ACTION_NAMES[validations[i]]);
         				//TraceManager.addDev("Index on " + indexOnMe);
         				break;
         			}
@@ -237,7 +256,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     
     public boolean editOndoubleClick(JFrame frame) {
     	
-        if (indexOnMe > -2) {
+        if (indexOnMe == -1) {
         	// Opening the diagram
         	if (!tdp.getMGUI().selectMainTab(value)) {
         		TraceManager.addDev("Diagram removed?");
@@ -249,7 +268,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         
         if (indexOnMe > -1) {
         	DiplodocusMethodologyDiagramReference ref = ((DiplodocusMethodologyDiagramReference)(getFather()));
-        	ref.makeCall(indexOnMe);
+        	ref.makeCall(value, indexOnMe);
         }
         
          
@@ -266,11 +285,11 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     }
     
     public void setValidationsNumber(int size) {
-    	validations = new String[size];
+    	validations = new int[size];
     }
     
-    public void setValidationsInfo(int index, String s) {
-    	validations[index] = s;
+    public void setValidationsInfo(int _index, int _val) {
+    	validations[_index] = _val;
     }
     
     public void rescale(double scaleFactor){

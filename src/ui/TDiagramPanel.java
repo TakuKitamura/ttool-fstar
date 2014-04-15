@@ -480,7 +480,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 				}
 				//g.setColor(Color.black);
 				//g.drawString(name, 20, 20);
-				mgui.setStatusBarText(name1);
+				//mgui.setStatusBarText(name1);
 			}
 			
 			//Draw component being added

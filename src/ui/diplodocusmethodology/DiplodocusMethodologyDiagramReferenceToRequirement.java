@@ -92,7 +92,7 @@ public class DiplodocusMethodologyDiagramReferenceToRequirement extends Diplodoc
     	dn.setValidationsNumber(0);
     }
     
-    public boolean makeCall(int index) {
+    public boolean makeCall(String diagramName, int index) {
     	return true;
     }
       

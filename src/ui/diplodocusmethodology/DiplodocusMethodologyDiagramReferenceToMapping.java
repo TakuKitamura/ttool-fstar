@@ -92,19 +92,46 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
     
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
     	dn.setValidationsNumber(3);
-    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM);
-    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT);    
-    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.TML);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_MAPPING_DIPLO);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);    
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
     }
     
-    public boolean makeCall(int index) {
+    public boolean makeCall(String diagramName, int index) {
+    	String tmp;
     	
     	switch(index) {
     	case 0:
-    		if (tdp.getMGUI().checkModelingSyntax(true)) {
-    			tdp.getMGUI().generateSystemC();
+    		if (!openDiagram(diagramName)) {
+        		return false;
+        	}
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateSystemC(true);
+    			return true;
+    		}
+    		return false;
+    	case 1:
+    		if (!openDiagram(diagramName)) {
+        		return false;
+        	}
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateSystemC(true);
+    			return true;
+    		}
+    		return false;
+    	case 2:
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			TraceManager.addDev("Generate TML");
+    			tmp = tdp.getMGUI().generateTMLTxt();
+    			if (tmp == null) {
+    				giveInformation("TML generation failed");
+    				return false;
+    			}
+    			giveInformation("TML files generated in " + tmp);
     		}
     		break;
+    	default:
+    		return false;
     	}
     	
     	return true;

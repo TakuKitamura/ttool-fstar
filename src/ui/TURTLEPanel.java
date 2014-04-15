@@ -247,7 +247,7 @@ public abstract class TURTLEPanel implements GenericTree {
     }
     
     public void requestRenameTab(int index) {
-        String s = (String)JOptionPane.showInputDialog(mgui.frame, "TURTLE modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
+        String s = (String)JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
         if ((s != null) && (s.length() > 0)){
             // name already in use?
             if (!nameInUse(s)) {

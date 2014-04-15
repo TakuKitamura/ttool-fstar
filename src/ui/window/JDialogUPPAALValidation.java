@@ -84,9 +84,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 	protected JCheckBox deadlockE, deadlockA, generateTrace, custom, stateE, stateA, showDetails;
 	protected JTextField customText;
 	
+	protected TURTLEPanel tp;
+	
 	
 	/** Creates new form  */
-	public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host) {
+	public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {
 		super(f, title, true);
 		
 		mgui = _mgui;
@@ -96,6 +98,10 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 		pathTrace = _pathTrace;
 		spec = _spec;
 		host = _host;
+		tp = _tp;
+		
+		//TraceManager.addDev("Panel in UPPAAL Validation: " + mgui.getTabName(tp));
+		
 		
 		initComponents();
 		myInitComponents();
@@ -308,7 +314,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			}
 			
 			if (stateE.isSelected()&& (mode != NOT_STARTED)) {
-				ArrayList<String> list = mgui.gtm.getUPPAALQueries();
+				ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
 				if ((list != null) && (list.size() > 0)){
 					for(String s: list) {
 						index = s.indexOf('$');
@@ -329,7 +335,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 			}
 			
 			if (stateA.isSelected() && (mode != NOT_STARTED)) {
-				ArrayList<String> list = mgui.gtm.getUPPAALQueries();
+				ArrayList<String> list = mgui.gtm.getUPPAALQueries(tp);
 				if ((list != null) && (list.size() > 0)){
 					for(String s: list) {
 						index = s.indexOf('$');

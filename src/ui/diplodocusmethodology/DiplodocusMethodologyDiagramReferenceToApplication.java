@@ -91,30 +91,68 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
     	dn.setValidationsNumber(4);
-    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM);
-    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT);    
-    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.UPP);
-    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_APP_DIPLO);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT_APP_DIPLO);    
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.UPP_APP_DIPLO);
+    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
     }
     
-    public boolean makeCall(int index) {
+    public boolean makeCall(String diagramName, int index) {
+    	String tmp;
     	
     	switch(index) {
     	case 0:
-    		if (tdp.getMGUI().checkModelingSyntax(true)) {
-    			tdp.getMGUI().generateSystemC();
+    		if (!openDiagram(diagramName)) {
+        		return false;
+        	}
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateSystemC(true);
+    			return true;
     		}
-    		break;
+    		return false;
+    		
     	case 1:
-    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			if (!tdp.getMGUI().generateLOTOS(true)) {
+    				TraceManager.addDev("Generate LOTOS: error");
+    				giveInformation("Error when generating LOTOS file");
+    				return false;
+    			}
+    			tdp.getMGUI().formalValidation(true);
+    			giveInformation("RG generated");
+    			return true;
+    			
+    		} else {
+    			giveInformation("Syntax error");
+    			return false;
     		}
-    		break;
+    		
     	case 2:
-    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateUPPAAL(false);
+    			boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 8, false);
+    			if (!result) {
+    				giveInformation("UPPAAL Generation failed");
+    				return false;
+    			}
+    			if (tdp.getMGUI().formalValidation(true, diagramName)) {
+    				giveInformation("UPPAAL-based verification done");
+    				return true;
+    			}
+    			giveInformation("UPPAAL-based verification falied");
+    			return false;
+    			
     		}
     		break;
     	case 3:
-    		if (tdp.getMGUI().checkModelingSyntax(true)) {
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			TraceManager.addDev("Generate TML");
+    			tmp = tdp.getMGUI().generateTMLTxt();
+    			if (tmp == null) {
+    				giveInformation("TML generation failed");
+    				return false;
+    			}
+    			giveInformation("TML file generated in " + tmp);
     		}
     		break;
     	default:

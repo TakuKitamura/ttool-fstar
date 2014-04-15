@@ -393,7 +393,7 @@ public class GTURTLEModeling {
 		}
 	}
 	
-	public void generateTMLTxt(String _title) {
+	public boolean generateTMLTxt(String _title) {
 		if (tmap == null) {
 			TMLTextSpecification spec = new TMLTextSpecification(_title);
 			spec.toTextFormat(tmlm);
@@ -401,6 +401,7 @@ public class GTURTLEModeling {
 				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml");
 			} catch (Exception e) {
 				TraceManager.addError("File could not be saved: " + e.getMessage());
+				return false;
 			}
 		} else {
 			TMLMappingTextSpecification spec = new TMLMappingTextSpecification(_title);
@@ -409,8 +410,11 @@ public class GTURTLEModeling {
 				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec");
 			} catch (Exception e) {
 				TraceManager.addError("Files could not be saved: " + e.getMessage());
+				return false;
 			}
 		}
+		
+		return true;
 	}
 	
 	/*public void setUPPAALData(String _uppaal, RelationTIFUPPAAL _uppaalTable) {
@@ -533,10 +537,13 @@ public class GTURTLEModeling {
 			TraceManager.addError("Exception: " + fe.getMessage());
 			return false;
 		}*/
-	
+		
 	public ArrayList<String> getUPPAALQueries() {
-		//TraceManager.addDev("Searching for queries");
-		TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
+		return getUPPAALQueries(mgui.getCurrentTURTLEPanel());
+	}
+	
+	public ArrayList<String> getUPPAALQueries(TURTLEPanel tp) {
+		TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
 		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
 		ArrayList<TClass> tclasses;
 		tp.getAllCheckableTGComponent(list);

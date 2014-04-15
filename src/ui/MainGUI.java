@@ -1124,7 +1124,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.add(dp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open DIPLODOCUS methodology");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic62);
+        mainTabbedPane.setIconAt(index, IconManager.imgic98);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         dp.init();
         if (addDefaultElements) {
@@ -2843,7 +2843,25 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		checkModelingSyntax(false);
 	}
 	
+	public boolean checkModelingSyntax(String panelName, boolean automatic) {
+		TURTLEPanel tp = getTURTLEPanel(panelName);
+		if (tp != null) {
+			return checkModelingSyntax(tp, automatic);
+		}
+		
+		return false;
+	}
+	
 	public boolean checkModelingSyntax(boolean automatic) {
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+		if (tp != null) {
+			return checkModelingSyntax(tp, automatic);
+		}
+		
+		return false;
+	}
+	
+	public boolean checkModelingSyntax(TURTLEPanel tp, boolean automatic) {
         String msg = "";
         boolean b = false;
 		boolean ret = false;
@@ -2856,7 +2874,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 			return false;
 		}
 		
-        TURTLEPanel tp = getCurrentTURTLEPanel();
+        
         if (tp instanceof AnalysisPanel) {
             try {
                 b = gtm.buildTURTLEModelingFromAnalysis((AnalysisPanel)tp);
@@ -3574,44 +3592,58 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         dtree.toBeUpdated();
 	}
     
-    public void generateUPPAAL() {
+	public void generateUPPAAL() {
+		generateUPPAAL(true);
+	}
+	
+    public void generateUPPAAL(boolean showWindow) {
 		//TraceManager.addDev("Generate UPPAAL!");
 		//gtm.mergeChoices(true);
 		if (gtm.getTURTLEModelingState() > 0) {
 			if (gtm.getTURTLEModelingState() == 3) {
 				//AVATAR
 				boolean result = gtm.generateUPPAALFromAVATAR(ConfigurationTTool.UPPAALCodeDirectory);
-				if (result) {
-				JOptionPane.showMessageDialog(frame,
-						"0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
-						"Successful translation to UPPAAL",
-						JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(frame,
-						"" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
-						"Translation to UPPAAL failed",
-						JOptionPane.INFORMATION_MESSAGE);
-			return;
+				if (showWindow) {
+					if (result) {
+						JOptionPane.showMessageDialog(frame,
+							"0 error, " + getCheckingWarnings().size() + " warning(s). UPPAAL specification generated",
+							"Successful translation to UPPAAL",
+							JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(frame,
+							"" + getCheckingErrors().size() + " errors, " +getCheckingWarnings().size() + " warning(s). UPPAAL specification could NOT be generated",
+							"Translation to UPPAAL failed",
+							JOptionPane.INFORMATION_MESSAGE);
+						
+						
+					}
 				}
-				return;
+				if (!result) {
+					return;
+				}
 			} else {
 				if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, UPPAAL) == -1) {
 					return;
 				}
-				JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
-				jgen.setSize(450, 500);
-				GraphicLib.centerOnParent(jgen);
-				jgen.setVisible(true);
+				if (showWindow) {
+					JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.DIPLODOCUS_MODE);
+					jgen.setSize(450, 500);
+					GraphicLib.centerOnParent(jgen);
+					jgen.setVisible(true);
+					
+				}
 				return;
 			}
 		}
 		
 		//TraceManager.addDev("After UPPAAL");
-		JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
-        jgen.setSize(450, 600);
-        GraphicLib.centerOnParent(jgen);
-        jgen.setVisible(true);
-        //dtree.toBeUpdated();
+		if (showWindow) {
+			JDialogUPPAALGeneration jgen = new JDialogUPPAALGeneration(frame, this, "UPPAAL code generation", ConfigurationTTool.UPPAALCodeDirectory, JDialogUPPAALGeneration.TURTLE_MODE);
+			jgen.setSize(450, 600);
+			GraphicLib.centerOnParent(jgen);
+			jgen.setVisible(true);
+			//dtree.toBeUpdated();
+        }
     }
 	
 	public void generateProVerif() {
@@ -3680,17 +3712,23 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public void generateSystemC() {
+    	generateSystemC(false);
+    }
+    
+    public void generateSystemC(boolean automatic) {
         TURTLEPanel tp = getCurrentTURTLEPanel();
 		if (tp instanceof AvatarDesignPanel) {
 			avatarSimulation();
 		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
-			JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation", ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath);
+			JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation", 
+				ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, 
+				ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, automatic);
 			jgen.setSize(500, 750);
 			GraphicLib.centerOnParent(jgen);
 			jgen.setVisible(true);
 			dtree.toBeUpdated();
 			
-			if (jgen.isInteractiveSimulationSelected()) {
+			if (jgen.isInteractiveSimulationSelected() && !automatic) {
 				interactiveSimulationSystemC(jgen.getPathInteractiveExecute());
 			}
 		}
@@ -3772,13 +3810,19 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 		return points;
 	}
 	
-	public void generateTMLTxt() {
+	// Returns null if failed
+	// Otherwise the path of the generated file
+	public String generateTMLTxt() {
 		String path = ConfigurationTTool.FILEPath;
 		if (file != null) {
 			path = file.getAbsolutePath();
 		}
 		//TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
-		gtm.generateTMLTxt(path);
+		if (gtm.generateTMLTxt(path)) {
+			return ConfigurationTTool.TMLCodeDirectory;
+		}
+		
+		return null;
 		//TraceManager.addDev("Done");
     }
     
@@ -3897,8 +3941,22 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 	public void formalValidation() {
 		formalValidation(false);
 	}
+	
+	public void formalValidation(boolean automatic) {
+		formalValidation(automatic, getCurrentTURTLEPanel());
+	}
+	
+	public boolean formalValidation(boolean automatic, String diagramName) {
+		TURTLEPanel tp = getTURTLEPanel(diagramName);
+		if (tp != null) {
+			formalValidation(automatic, tp);
+			return true;
+		}
+		return false;
+	}
+	
     
-    public void formalValidation(boolean automatic) {
+    public void formalValidation(boolean automatic, TURTLEPanel _tp) {
         if (gtm.getLanguageID() == GTURTLEModeling.RT_LOTOS) {
             JDialogFormalValidation jdfv = new JDialogFormalValidation(frame,
 				this,
@@ -3939,7 +3997,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 				gtm.getPathUPPAALFile(),
 				REMOTE_UPPAAL_FILE,
 				gtm.getLastUPPAALSpecification().getStringSpec(),
-				gtm.getUPPAALVerifierHost());
+				gtm.getUPPAALVerifierHost(),
+				_tp);
             jduv.setSize(450, 600);
             GraphicLib.centerOnParent(jduv);
             jduv.setVisible(true);

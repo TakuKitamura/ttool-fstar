@@ -168,6 +168,7 @@ public class DiagramTreeModel implements TreeModel {
                 return false;
             }
             
+            
             if (node instanceof TGComponent) {
             	if (node instanceof AvatarBDBlock) {
             		return !((AvatarBDBlock)node).hasDefinitions();

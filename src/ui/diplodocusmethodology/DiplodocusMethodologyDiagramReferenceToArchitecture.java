@@ -94,7 +94,7 @@ public class DiplodocusMethodologyDiagramReferenceToArchitecture extends Diplodo
     	dn.setValidationsNumber(0);
     }
     
-    public boolean makeCall(int index) {
+    public boolean makeCall(String diagramName, int index) {
     	return true;
     }
     

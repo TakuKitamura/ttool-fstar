@@ -513,7 +513,19 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     	removeInternalComponent(tgc);
     }
     
-    public abstract boolean makeCall(int index);
+    public abstract boolean makeCall(String diagramName, int index);
+    
+    protected boolean openDiagram(String tabName) {
+    	if (!tdp.getMGUI().selectMainTab(tabName)) {
+    		TraceManager.addDev("Diagram removed?");
+    		return false;
+    	}
+        return true;
+    }
+    
+    protected void giveInformation(String info) {
+    	tdp.getMGUI().setStatusBarText(info);
+    }
     
     
     
