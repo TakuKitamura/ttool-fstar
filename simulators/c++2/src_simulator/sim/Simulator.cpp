@@ -501,6 +501,7 @@ void Simulator::printHelp(){
 			"-otxt ofile            simulate and write traces to ofile in text format\n"
 			"-ovcd ofile            simulate and write traces to ofile in vcd format\n"
 			"-ograph ofile          simulate and write traces to ofile in aut format\n"
+	  		"-explo                 generate the reachability graph                 \n"              
 			"-cmd \'c1 p1 p2;c2\'     execute commands c1 with parameters p1 and p2 and c2\n"
 			"-oxml ofile            xml reply is written to ofile, in case the -cmd option is used\n"
 			"***************************************************************************\n\n";
