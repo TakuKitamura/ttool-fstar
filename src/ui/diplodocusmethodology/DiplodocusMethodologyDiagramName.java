@@ -61,27 +61,32 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public final static int Y_MARGIN = 3;
     
     
-    protected final static int SIM_APP_DIPLO = 0;
+    protected final static int SIM_TRACE_APP_DIPLO = 0;
+    protected final static int SIM_ANIM_APP_DIPLO = 7;
     protected final static int UPP_APP_DIPLO = 1;
     protected final static int LOT_APP_DIPLO = 2;
 	protected final static int TML_APP_DIPLO = 3;
 	
 	protected final static int FV_MAPPING_DIPLO = 4;
-	protected final static int SIM_MAPPING_DIPLO = 5;   
+	protected final static int SIM_TRACE_MAPPING_DIPLO = 5;   
+	protected final static int SIM_ANIM_MAPPING_DIPLO = 8;   
 	protected final static int TML_MAPPING_DIPLO = 6;
 	
 	protected final String[] SHORT_ACTION_NAMES = {
-	"sim", "upp", "lot", "tml", 
-	"fv", "sim", "tmap"};
+	"sim-trace", "upp", "lot", "tml", 
+	"fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
 	
 	protected final String[] LONG_ACTION_NAMES = {
-	"Simulate a DIPLODOCUS functional model", 
+	/*0*/ "Generate a vcd simulation trace of a DIPLODOCUS functional model", 
 	"Verify a DIPLODOCUS functional model with UPPAAL", 
 	"Generate a Reachability graph of a DIPLODOCUS functional model",
 	"Generate a TML text description of a DIPLODOCUS functional model",
 	"Formal verify a DIPLODOCUS mapping model", 
-	"Simulate a DIPLODOCUS mapping model", 
-	"Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model"};
+	/*5*/ "Simulate a DIPLODOCUS mapping model", 
+	"Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model",
+	"Simulate and animate DIPLODOCUS functional models",
+	"Simulate and animate DIPLODOCUS mapping models"
+	};
 	
 	protected int[] validations;
 	protected int[] valMinX;

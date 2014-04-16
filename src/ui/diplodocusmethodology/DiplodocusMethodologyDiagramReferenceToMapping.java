@@ -91,10 +91,11 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
     }
     
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-    	dn.setValidationsNumber(3);
-    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_MAPPING_DIPLO);
-    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);    
-    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
+    	dn.setValidationsNumber(4);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_MAPPING_DIPLO);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.SIM_TRACE_MAPPING_DIPLO);
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);    
+    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
     }
     
     public boolean makeCall(String diagramName, int index) {
@@ -106,7 +107,7 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
         		return false;
         	}
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-    			tdp.getMGUI().generateSystemC(true);
+    			tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
     			return true;
     		}
     		return false;
@@ -115,11 +116,20 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
         		return false;
         	}
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-    			tdp.getMGUI().generateSystemC(true);
+    			tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
     			return true;
     		}
     		return false;
     	case 2:
+    		if (!openDiagram(diagramName)) {
+        		return false;
+        	}
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.FORMAL_VERIFICATION);
+    			return true;
+    		}
+    		return false;
+    	case 3:
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
     			TraceManager.addDev("Generate TML");
     			tmp = tdp.getMGUI().generateTMLTxt();

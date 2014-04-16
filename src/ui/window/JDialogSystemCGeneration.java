@@ -96,6 +96,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     
     int mode;
     
+    
+    
     //components
     protected JTextArea jta;
     protected JButton start;
@@ -149,12 +151,18 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     
     protected RshClient rshc;
     
-    private boolean automatic;
+    // Automatic modes
+    public final static int MANUAL = 0;
+    public final static int ONE_TRACE = 1;
+    public final static int ANIMATION = 2;
+    public final static int FORMAL_VERIFICATION = 3;
+    
+    private int automatic;
     private boolean wasClosed = false;
     
     
     /** Creates new form  */
-    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute, String _graphPath, boolean _automatic) {
+    public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _hostSystemC, String _pathCode, String _pathCompiler, String _pathExecute, String _pathInteractiveExecute, String _graphPath, int _automatic) {
         super(f, title, true);
         
         mgui = _mgui;
@@ -180,9 +188,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 			pathFormalExecute = pathInteractiveExecute;
 			
 			int index = pathFormalExecute.indexOf("-server");
-			if (index == -1) {
+			if (index != -1) {
 				pathFormalExecute = pathFormalExecute.substring(0, index) + pathFormalExecute.substring(index+7, pathFormalExecute.length());
-				pathFormalExecute += " -cmd '1 7 100 100'";
+				pathFormalExecute += " -explo";
 			}
 		}
         
@@ -199,7 +207,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         //getGlassPane().addMouseListener( new MouseAdapter() {});
         getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         
-        if (automatic) {
+        if (automatic > 0) {
         	startProcess();
         }
     }
@@ -389,7 +397,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
 		panele4Tepe.add(panele3Tepe, BorderLayout.CENTER);
 		
 		jp01.add(panele4Tepe, c01);
-		if (automatic) {
+		if (automatic > 0) {
         	//GraphicLib.enableComponents(jp01, false);
         }
 		
@@ -437,25 +445,30 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c02);
 		
+        
+        
 		exeint = new JRadioButton(textSysC5, true);
 		exeint.addActionListener(this);
 		exegroup.add(exeint);
         //exeJava.addActionListener(this);
         jp03.add(exeint, c03);
+        exe2int = new JTextField(pathInteractiveExecute, 100);
+        jp03.add(exe2int, c02);
         
-        exe2formal = new JTextField(pathInteractiveExecute, 100);
-        jp03.add(exe2formal, c02);
         
         exeformal = new JRadioButton(textSysC6, true);
 		exeformal.addActionListener(this);
 		exegroup.add(exeformal);
+		jp03.add(exeformal, c03);
+		exe2formal = new JTextField(pathFormalExecute, 100);
+        jp03.add(exe2formal, c02);
         
         jp03.add(new JLabel(" "), c03);
         
         jp1.add("Execute", jp03);
         
         c.add(jp1, BorderLayout.NORTH);
-        if (automatic) {
+        if (automatic > 0) {
         	//GraphicLib.enableComponents(jp03, false);
         	GraphicLib.enableComponents(jp1, false);
         }
@@ -464,7 +477,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        if (!automatic) {
+        if (automatic == 0) {
         	jta.append("Select options and then, click on 'start' to launch SystemC code generation / compilation\n");
         }
         Font f = new Font("Courrier", Font.BOLD, 12);
@@ -492,7 +505,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         close.addActionListener(this);
         
         JPanel jp2 = new JPanel();
-        if (!automatic) {
+        if (automatic == 0) {
         	jp2.add(start);
         	jp2.add(stop);
         }
@@ -503,15 +516,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 	
 	public void updateInteractiveSimulation() {
-		if (!automatic) {
-			interactiveSimulationSelected = !(exe.isSelected());
-			if (!interactiveSimulationSelected) {
-				exe2.setEnabled(true);
-				exe2int.setEnabled(false);
-			} else {
-				exe2.setEnabled(false);
-				exe2int.setEnabled(true);
-			}
+		if (automatic == 0) {
+			exe2.setEnabled(exe.isSelected());
+			exe2int.setEnabled(exeint.isSelected());
+			exe2formal.setEnabled(exeformal.isSelected());
 		}
 	}
     
@@ -569,24 +577,24 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
     
     public void startProcess() {
-    	if (automatic) {
+    	if (automatic > 0) {
     		startProcess = false;
 			t = new Thread(this);
 			mode = STARTED;
 			go = true;
 			t.start();
     	} else {
-			if ((interactiveSimulationSelected) && (jp1.getSelectedIndex() == 2)) {
+			/*if ((interactiveSimulationSelected) && (jp1.getSelectedIndex() == 2)) {
 				startProcess = true;
 				dispose();
-			} else {
+			} else {*/
 				startProcess = false;
 				t = new Thread(this);
 				mode = STARTED;
 				setButtons();
 				go = true;
 				t.start();
-			}
+			//}
 		}
     }
     
@@ -605,7 +613,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
         
         try {
             
-        	if (automatic) {
+        	if (automatic > 0) {
         		
         		generateCode();
         		testGo();
@@ -838,22 +846,87 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     		return;
     	}
     	
-    	if (automatic) {
+    	String cmd;
+    	int mode = 0;
+    	
+    	if (automatic > 0) {
+    		mode = automatic;
+    	} else {
+    		if (exe.isSelected()) {
+    			mode = ONE_TRACE;
+    		}
+    		if (exeint.isSelected()) {
+    			mode = ANIMATION;
+    		}
+    		if (exeformal.isSelected()) {
+    			mode = FORMAL_VERIFICATION;
+    		}
+    	}
+    	
+    	TraceManager.addDev("Mode=" + mode);
+    	
+    	switch(mode) {
+    	case ONE_TRACE:
+    		executeSimulationCommand(exe2.getText());
+    		break;
+    	case ANIMATION:
+    		dispose();
+    		mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
+    		break;
+    	case FORMAL_VERIFICATION:
+    		executeSimulationCommand(exe2formal.getText());
+    		break;
+    	default:
+    		
+    	}
+    	
+    	/*
+    	if (automatic > 0) {
+    		switch(automatic) {
+    		
+    			
+    			
+    		}
     		if (interactiveSimulationSelected) {
     			dispose();
     			mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
     		}
-    	}
-    	
-    	String cmd;
-    	
-    	try {
-    		cmd = exe2.getText();
+    	} else {
     		
-    		jta.append("Executing SystemC code with command: \n" + cmd + "\n");
+    		
+    		
+    		try {
+    			cmd = exe2.getText();
+    			
+    			jta.append("Executing SystemC code with command: \n" + cmd + "\n");
+    			
+    			rshc = new RshClient(hostSystemC);
+    			// It assumes that data are on the remote host
+    			// Command
+    			
+    			processCmd(cmd, jta);
+    			//jta.append(data);
+    			jta.append("Execution done\n");
+    		} catch (LauncherException le) {
+    			jta.append("Error: " + le.getMessage() + "\n");
+    			mode = 	STOPPED;
+    			setButtons();
+    			return;
+    		} catch (Exception e) {
+    			mode = 	STOPPED;
+    			setButtons();
+    			return;
+    		}
+    	}*/
+    }
+    
+    protected void executeSimulationCommand(String cmd) {
+    	try {
+    		
+    		jta.append("Executing simulation code with command: \n" + cmd + "\n");
     		
     		rshc = new RshClient(hostSystemC);
-    		// Assuma data are on the remote host
+    		// It assumes that data are on the remote host
     		// Command
     		
     		processCmd(cmd, jta);
@@ -871,6 +944,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     	}
     }
     
+ 
+    
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
@@ -886,7 +961,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
     
     protected void setButtons() {
-    	if (!automatic) {
+    	if (automatic == 0) {
 			switch(mode) {
 			case NOT_STARTED:
 				start.setEnabled(true);
@@ -941,7 +1016,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     }
 	
 	private void setList() {
-		if (!automatic) {
+		if (automatic == 0) {
 			int i1 = listIgnoredTepe.getSelectedIndex();
 			int i2 = listValidatedTepe.getSelectedIndex();
 			

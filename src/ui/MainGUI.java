@@ -3712,25 +3712,26 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public void generateSystemC() {
-    	generateSystemC(false);
+    	generateSystemC(0);
     }
     
-    public void generateSystemC(boolean automatic) {
+    // Modes are defined in JDialogSystemCGeneration "automatic modes"
+    public void generateSystemC(int _mode) {
         TURTLEPanel tp = getCurrentTURTLEPanel();
 		if (tp instanceof AvatarDesignPanel) {
 			avatarSimulation();
 		} else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel))  {
 			JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation code generation and compilation", 
 				ConfigurationTTool.SystemCHost, ConfigurationTTool.SystemCCodeDirectory, ConfigurationTTool.SystemCCodeCompileCommand, 
-				ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, automatic);
+				ConfigurationTTool.SystemCCodeExecuteCommand, ConfigurationTTool.SystemCCodeInteractiveExecuteCommand, ConfigurationTTool.GGraphPath, _mode);
 			jgen.setSize(500, 750);
 			GraphicLib.centerOnParent(jgen);
 			jgen.setVisible(true);
 			dtree.toBeUpdated();
 			
-			if (jgen.isInteractiveSimulationSelected() && !automatic) {
+			/*if (jgen.isInteractiveSimulationSelected() && (mode == 0)) {
 				interactiveSimulationSystemC(jgen.getPathInteractiveExecute());
-			}
+			}*/
 		}
     }
 	

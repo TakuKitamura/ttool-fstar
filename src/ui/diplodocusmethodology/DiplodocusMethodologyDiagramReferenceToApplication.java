@@ -90,11 +90,12 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     }
     
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
-    	dn.setValidationsNumber(4);
-    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_APP_DIPLO);
-    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.LOT_APP_DIPLO);    
-    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.UPP_APP_DIPLO);
-    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
+    	dn.setValidationsNumber(5);
+    	dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
+    	dn.setValidationsInfo(1, DiplodocusMethodologyDiagramName.SIM_TRACE_APP_DIPLO);
+    	dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.LOT_APP_DIPLO);    
+    	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.UPP_APP_DIPLO);
+    	dn.setValidationsInfo(4, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
     }
     
     public boolean makeCall(String diagramName, int index) {
@@ -106,12 +107,20 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
         		return false;
         	}
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
-    			tdp.getMGUI().generateSystemC(true);
+    			tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ANIMATION);
     			return true;
     		}
     		return false;
-    		
     	case 1:
+    		if (!openDiagram(diagramName)) {
+        		return false;
+        	}
+    		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
+    			tdp.getMGUI().generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
+    			return true;
+    		}
+    		return false;	
+    	case 2:
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
     			if (!tdp.getMGUI().generateLOTOS(true)) {
     				TraceManager.addDev("Generate LOTOS: error");
@@ -127,7 +136,7 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     			return false;
     		}
     		
-    	case 2:
+    	case 3:
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
     			tdp.getMGUI().generateUPPAAL(false);
     			boolean result = tdp.getMGUI().gtm.generateUPPAALFromTML(ConfigurationTTool.UPPAALCodeDirectory, false, 8, false);
@@ -144,7 +153,7 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
     			
     		}
     		break;
-    	case 3:
+    	case 4:
     		if (tdp.getMGUI().checkModelingSyntax(diagramName, true)) {
     			TraceManager.addDev("Generate TML");
     			tmp = tdp.getMGUI().generateTMLTxt();
