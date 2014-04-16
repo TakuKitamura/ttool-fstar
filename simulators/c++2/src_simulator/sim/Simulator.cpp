@@ -535,7 +535,9 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 	aArgString =getArgs("-file", "file", iLen, iArgs);
 	if (!aArgString.empty()) return new ServerLocal(aArgString);
 	aArgString =getArgs("-explo", "file", iLen, iArgs);
-	if (!aArgString.empty()) decodeCommand("1 7");
+	std::cout << "Just analyzed explo 1->" + aArgString + "<-\n";
+	if (!aArgString.empty()) decodeCommand("1 7 100 100");
+	std::cout << "Just analyzed explo 2\n";
 	//if (!aArgString.empty()) return new ServerExplore();
 	std::cout << "Running in command line mode.\n";
 	_replyToServer = false;
@@ -593,21 +595,24 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 }
 
 void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
-	//std::cout << "Not crashed. I: " << iCmd;
-	//std::cout << iCmd << std::endl;
-	unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
-	//std::string anIssuedCmd(iCmd);
-	std::istringstream aInpStream(iCmd);
-	//std::cout << "Not crashed. II\n";
-	std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
-	std::string aStrParam;
-	//bool aSimTerminated=false;
-	//std::cout << "Not crashed. III\n";
-	_simComp->setStopFlag(false,"");
-	//anEntityMsg.str("");
-	aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl /*<< TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl*/;
-	aInpStream >> aCmd;
-	switch (aCmd){
+  //std::cout << "Not crashed. I: " << iCmd << std::endl;
+  //std::cout << iCmd << std::endl;
+  unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
+  //std::string anIssuedCmd(iCmd);
+  std::istringstream aInpStream(iCmd);
+  //std::cout << "Not crashed. II\n";
+  std::ostringstream aGlobMsg, anEntityMsg, anAckMsg;
+  std::string aStrParam;
+  //bool aSimTerminated=false;
+  //std::cout << "Not crashed. III\n";
+  //std::cout << "Not crashed. I: " << iCmd << std::endl;
+  _simComp->setStopFlag(false,"");
+  //anEntityMsg.str("");
+  aGlobMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl /*<< TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl*/;
+  aInpStream >> aCmd;
+  //std::cout << "Not crashed. I: " << iCmd << std::endl;
+  //std::cout << "Decoding command:" << iCmd << std::endl;
+  switch (aCmd){
 		case 0: //Quit simulation
 			std::cout << "QUIT SIMULATION"  << std::endl;
 			break;
@@ -615,9 +620,15 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 			struct timeval aBegin,aEnd;
 			gettimeofday(&aBegin,NULL);
 			_busy=true;
+			//std::cout << "Not crashed. I: " << iCmd << std::endl;
 			anAckMsg << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << /*TAG_REPLYo << anIssuedCmd << TAG_REPLYc << std::endl<< */ TAG_MSGo << "Command received" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl << TAG_STATUSo << SIM_BUSY << TAG_STATUSc << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
-			if (_replyToServer) _syncInfo->_server->sendReply(anAckMsg.str());
+			if (_replyToServer) {
+			  if (_syncInfo != NULL)
+			    if (_syncInfo->_server != NULL)
+			      _syncInfo->_server->sendReply(anAckMsg.str());
+			}
 			aInpStream >> aParam1;
+			//std::cout << "Not crashed. I: " << iCmd << std::endl;
 			TMLTransaction* oLastTrans;
 			switch (aParam1){
 				case 0:	//Run to next breakpoint
@@ -1205,7 +1216,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 	writeSimState(aGlobMsg);
 	aGlobMsg << std::endl << TAG_GLOBALc << std::endl << anEntityMsg.str() << TAG_STARTc << std::endl;
 	//std::cout << "Before reply." << std::endl;
-	if (_replyToServer)_syncInfo->_server->sendReply(aGlobMsg.str()); else iXmlOutStream << aGlobMsg.str() << "\n";
+	if (_replyToServer)
+	  if (_syncInfo->_server != NULL)
+	    _syncInfo->_server->sendReply(aGlobMsg.str()); else iXmlOutStream << aGlobMsg.str() << "\n";
 	//std::cout << "End of command decode procedure." << std::endl;
 	//std::cout << "Command: " << aCmd << "  Param1: " << aParam1 << "  Param2: " << aParam2 << std::endl;
 }
