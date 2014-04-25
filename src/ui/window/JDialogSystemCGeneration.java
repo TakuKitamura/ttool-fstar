@@ -847,43 +847,10 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     	}
     	
     	String cmd;
-    	int mode = 0;
     	
-    	if (automatic > 0) {
-    		mode = automatic;
-    	} else {
-    		if (exe.isSelected()) {
-    			mode = ONE_TRACE;
-    		}
-    		if (exeint.isSelected()) {
-    			mode = ANIMATION;
-    		}
-    		if (exeformal.isSelected()) {
-    			mode = FORMAL_VERIFICATION;
-    		}
-    	}
-    	
-    	TraceManager.addDev("Mode=" + mode);
-    	
-    	switch(mode) {
-    	case ONE_TRACE:
-    		executeSimulationCommand(exe2.getText());
-    		break;
-    	case ANIMATION:
-    		dispose();
-    		mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
-    		break;
-    	case FORMAL_VERIFICATION:
-    		executeSimulationCommand(exe2formal.getText());
-    		break;
-    	default:
-    		
-    	}
-    	
-    	/*
     	if (automatic > 0) {
     		switch(automatic) {
-    		
+    		case MANUAL:
     			
     			
     		}
@@ -917,30 +884,6 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     			setButtons();
     			return;
     		}
-    	}*/
-    }
-    
-    protected void executeSimulationCommand(String cmd) {
-    	try {
-    		
-    		jta.append("Executing simulation code with command: \n" + cmd + "\n");
-    		
-    		rshc = new RshClient(hostSystemC);
-    		// It assumes that data are on the remote host
-    		// Command
-    		
-    		processCmd(cmd, jta);
-    		//jta.append(data);
-    		jta.append("Execution done\n");
-    	} catch (LauncherException le) {
-    		jta.append("Error: " + le.getMessage() + "\n");
-    		mode = 	STOPPED;
-    		setButtons();
-    		return;
-    	} catch (Exception e) {
-    		mode = 	STOPPED;
-    		setButtons();
-    		return;
     	}
     }
     
