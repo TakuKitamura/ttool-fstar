@@ -69,6 +69,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/times.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <unistd.h>
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
 //std::cout << sizeof(v) << " bytes written" << std::endl;
