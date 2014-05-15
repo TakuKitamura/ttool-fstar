@@ -111,8 +111,8 @@ public class AvatarStateMachine extends AvatarElement {
 		LinkedList<AvatarStateMachineElement> toRemove = new LinkedList<AvatarStateMachineElement>();
 		
 		while((at = getCompositeTransition()) != null) {
-			//TraceManager.addDev("*** Found composite transition: " + at.toString());
-			//TraceManager.addDev(_block.toString());
+			TraceManager.addDev("*** Found composite transition: " + at.toString());
+			TraceManager.addDev(_block.toString());
 			if (!(toRemove.contains(getPreviousElementOf(at)))) {
 				toRemove.add(getPreviousElementOf(at));
 			}

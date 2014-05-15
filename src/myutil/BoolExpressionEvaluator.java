@@ -557,7 +557,11 @@ public class BoolExpressionEvaluator {
 			currentType = WHITE_SPACE_TOKEN;
 			TraceManager.addDev("White space found: looping");
 			computeNextToken1();
+			return;
 		}
+		
+		// Invalid token
+		errorMessage = "Unknown element: " + s;
 	}
 	
 	
