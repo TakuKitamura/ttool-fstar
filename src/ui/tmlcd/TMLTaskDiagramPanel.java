@@ -410,6 +410,26 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		
 		return list;
 	}
+
+	public ArrayList<String> getAllTMLEventNames( String _topname ) {
+		TGComponent tgc;
+   	Iterator iterator = componentList.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		String name = "";
+		String type = "";
+        
+        while( iterator.hasNext() ) {
+					tgc = (TGComponent)( iterator.next() );
+          if (tgc instanceof TMLCompositionOperator) {
+						if (tgc instanceof TMLEventOperator) {
+							name = ((TMLEventOperator)tgc).getEventName();
+							type = "Event";
+						}
+						list.add( _topname + "::" + name + " (" + type + ")" );
+          }
+        }
+		return list;
+	}
 	
 	public ArrayList<String> getAllNonMappedTMLTaskNames(String _topName, TMLArchiDiagramPanel _tadp, boolean ref, String _name) {
 		TGComponent tgc;

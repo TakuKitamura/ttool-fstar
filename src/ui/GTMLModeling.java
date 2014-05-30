@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 *
-* ludovic.apvrille AT enst.fr
+* ludovic.apvrille AT telecom-paristech.fr
+* andrea.enrici AT telecom-paristech.fr
 *
 * This software is a computer program whose purpose is to allow the
 * edition of TURTLE analysis, design and deployment diagrams, to
@@ -39,8 +40,8 @@
 * Class GTMLModeling
 * Use to translate graphical TML modeling to  "tmlmodeling"
 * Creation: 23/11/2005
-* @version 1.0 23/11/2005
-* @author Ludovic APVRILLE
+* @version 1.1 30/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -2288,6 +2289,7 @@ public class GTMLModeling  {
 		TGComponent tgc;
 		ArrayList<TMLArchiArtifact> artifacts;
 		ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+		ArrayList<TMLArchiEventArtifact> artifactsEvt;
 		HwNode node;
 		TMLTask task;
 		TMLElement elt;
@@ -2322,8 +2324,8 @@ public class GTMLModeling  {
 			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
 				node = archi.getHwNodeByName(tgc.getName());
 				if ((node != null) && (node instanceof HwCommunicationNode)) {
-					artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getArtifactList();
-					for(TMLArchiCommunicationArtifact artifact:artifactscomm) {
+					artifactscomm = ((TMLArchiCommunicationNode)(tgc)).getChannelArtifactList();
+					for( TMLArchiCommunicationArtifact artifact:artifactscomm )	{
 						TraceManager.addDev("Exploring artifact " + artifact.getValue());
 						s = artifact.getReferenceCommunicationName();
 						s = s.replaceAll("\\s", "");
@@ -2340,7 +2342,27 @@ public class GTMLModeling  {
 						if (elt != null) {
 							map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
 						} else {
-							TraceManager.addDev("Null mapping: no element named: " +artifact.getCommunicationName());
+							TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
+						}
+					}
+					artifactsEvt = ( (TMLArchiCommunicationNode)(tgc) ).getEventArtifactList();
+					for( TMLArchiEventArtifact artifact:artifactsEvt ) {
+						TraceManager.addDev("Exploring artifact " + artifact.getValue());
+						s = artifact.getReferenceEventName();
+						s = s.replaceAll( "\\s", "" );
+						s = s + "__" + artifact.getEventArtifactName();
+						TraceManager.addDev( "Searching for:" + s );
+						elt = tmlm.getCommunicationElementByName(s);
+						TraceManager.addDev( "evt elts:" + tmlm.getStringListCommunicationElements() );
+						
+						if( elt instanceof TMLChannel )	{
+							//TraceManager.addDev("Setting priority");
+							( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
+						}
+						if ( elt != null )	{
+							map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
+						} else {
+							TraceManager.addDev( "Null mapping: no element named: " + artifact.getEventArtifactName() );
 						}
 					}
 				}

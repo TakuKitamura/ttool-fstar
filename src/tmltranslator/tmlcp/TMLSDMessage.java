@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
 ludovic.apvrille AT enst.fr
+andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -38,8 +39,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
 * Class TMLSDMessage
 * Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @version 1.1 15/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -52,15 +53,24 @@ import myutil.*;
 
 public class TMLSDMessage extends TMLElement  {
 	private String nameOfMessage;
-	
+	private ArrayList<TMLSDAttribute> attributeList;	
 	
     public TMLSDMessage(String _nameOfMsg, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nameOfMessage = _nameOfMsg;
+				attributeList = new ArrayList<TMLSDAttribute>();
     }
     
+		public void addAttribute( TMLSDAttribute _attribute )	{
+				attributeList.add( _attribute );
+		}
+
     public String getMessageName() {
     	return nameOfMessage;
     }
+
+		public ArrayList<TMLSDAttribute> getAttributes()	{
+			return attributeList;
+		}
 	
-}
+}	//End of class

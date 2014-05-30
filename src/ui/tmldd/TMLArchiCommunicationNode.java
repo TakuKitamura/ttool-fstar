@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TMLArchiCommunicationNode
  * Node. To be used in TML architecture diagrams.
  * Creation: 23/11/2007
- * @version 1.0 23/11/2007
- * @author Ludovic APVRILLE
+ * @version 1.1 30/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -66,60 +67,81 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
     
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof TMLArchiCommunicationArtifact) {
-			return true;
-		}
-		
-		return false;
+		return ( (tgc instanceof TMLArchiCommunicationArtifact) || (tgc instanceof TMLArchiEventArtifact) );
 	}
     
-    public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+	public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )	{
         
-        if (tgc instanceof TMLArchiCommunicationArtifact) {
+  	if( tgc instanceof TMLArchiCommunicationArtifact )	{
 			// Make it an internal component
 			// It's one of my son
 			//Set its coordinates
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			//System.out.println("Internal component");
-            //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-            //System.out.println("cdRect comp swallow");
-            ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
-            //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-            //tgc.setCd(x, y);
+     	//tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
+      //System.out.println("cdRect comp swallow");
+      ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
+      //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+      //tgc.setCd(x, y);
 			//add it
-			addInternalComponent(tgc, 0);
+			addInternalComponent( tgc, 0 );
 			return true;
-        }
-		
+		}
+		else	{
+  		if( tgc instanceof TMLArchiEventArtifact )	{
+				tgc.setFather( this );
+				tgc.setDrawingZone( true );
+        ( (TMLArchiEventArtifact)tgc ).resizeWithFather();
+				addInternalComponent( tgc, 0 );
+				return true;
+		}
 		return false;
-        
     }
+	}
     
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
     
     
-    public ArrayList<TMLArchiCommunicationArtifact> getArtifactList() {
-        ArrayList<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiCommunicationArtifact) {
-                v.add((TMLArchiCommunicationArtifact)(tgcomponent[i]));
-            }
-        }
-        return v;
-    }
-    
-    public void hasBeenResized() {
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiCommunicationArtifact) {
-                ((TMLArchiCommunicationArtifact)tgcomponent[i]).resizeWithFather();
-            }
-        }
-    }
-    
-   	public int getDefaultConnector() {
-        return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
+    public ArrayList<TMLArchiCommunicationArtifact> getChannelArtifactList() {
+      
+			ArrayList<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
+      for( int i = 0; i < nbInternalTGComponent; i++ ) {
+        if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact )	{
+        	v.add( (TMLArchiCommunicationArtifact)( tgcomponent[i]) );
+      	}
       }
+    	return v;
+    }
+
+	public ArrayList<TMLArchiEventArtifact> getEventArtifactList() {
+
+  	ArrayList<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
+    for( int i = 0; i < nbInternalTGComponent; i++ )	{
+			if( tgcomponent[i] instanceof TMLArchiEventArtifact )	{
+				v.add( (TMLArchiEventArtifact)(tgcomponent[i]) );
+      }
+    }
+    return v;
+  }
+    
+	public void hasBeenResized() {
+    
+		for( int i = 0; i < nbInternalTGComponent; i++ )	{
+			if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
+				( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
+			}
+			else	{
+				if( tgcomponent[i] instanceof TMLArchiEventArtifact )	{
+					( (TMLArchiEventArtifact)tgcomponent[i] ).resizeWithFather();
+				}
+  		}
+  	}
+	}
+    
+	public int getDefaultConnector() {
+  	return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
+  }
 }

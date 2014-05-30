@@ -1646,35 +1646,35 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     }
   }
 
-  final private boolean jj_2_1(int xla) {
+  private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_1(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(0, xla); }
   }
 
-  final private boolean jj_2_2(int xla) {
+  private boolean jj_2_2(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_2(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(1, xla); }
   }
 
-  final private boolean jj_2_3(int xla) {
+  private boolean jj_2_3(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_3(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(2, xla); }
   }
 
-  final private boolean jj_2_4(int xla) {
+  private boolean jj_2_4(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_4(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(3, xla); }
   }
 
-  final private boolean jj_3_2() {
+  private boolean jj_3_2() {
     if (jj_3R_4()) return true;
     if (jj_3R_5()) return true;
     if (jj_3R_6()) return true;
@@ -1684,7 +1684,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_5() {
+  private boolean jj_3R_5() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_1()) {
@@ -1703,7 +1703,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3_1() {
+  private boolean jj_3_1() {
     if (jj_3R_1()) return true;
     if (jj_3R_2()) return true;
     if (jj_3R_1()) return true;
@@ -1713,7 +1713,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_14() {
+  private boolean jj_3R_14() {
     if (jj_3R_22()) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -1721,7 +1721,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_13() {
+  private boolean jj_3R_13() {
     if (jj_3R_20()) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -1729,7 +1729,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_12() {
+  private boolean jj_3R_12() {
     if (jj_3R_18()) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -1737,7 +1737,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_11() {
+  private boolean jj_3R_11() {
     if (jj_3R_4()) return true;
     if (jj_3R_1()) return true;
     if (jj_3R_6()) return true;
@@ -1747,7 +1747,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_1() {
+  private boolean jj_3R_1() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_11()) {
@@ -1763,7 +1763,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_49() {
+  private boolean jj_3R_49() {
     if (jj_scan_token(DESTROY)) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_1()) return true;
@@ -1773,7 +1773,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_48() {
+  private boolean jj_3R_48() {
     if (jj_scan_token(DEQUEUE)) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_37()) return true;
@@ -1781,7 +1781,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_47() {
+  private boolean jj_3R_47() {
     if (jj_scan_token(ENQUEUE)) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_1()) return true;
@@ -1791,7 +1791,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_44() {
+  private boolean jj_3R_44() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_47()) {
@@ -1804,7 +1804,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_2() {
+  private boolean jj_3R_2() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(35)) {
@@ -1823,7 +1823,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_8() {
+  private boolean jj_3R_8() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(11)) {
@@ -1833,39 +1833,39 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_43() {
+  private boolean jj_3R_43() {
     if (jj_3R_46()) return true;
     return false;
   }
 
-  final private boolean jj_3R_3() {
+  private boolean jj_3R_3() {
     if (jj_3R_15()) return true;
     return false;
   }
 
-  final private boolean jj_3R_45() {
+  private boolean jj_3R_45() {
     if (jj_scan_token(QUEUE_LITERAL)) return true;
     return false;
   }
 
-  final private boolean jj_3R_42() {
+  private boolean jj_3R_42() {
     if (jj_3R_45()) return true;
     return false;
   }
 
-  final private boolean jj_3R_41() {
+  private boolean jj_3R_41() {
     if (jj_3R_44()) return true;
     return false;
   }
 
-  final private boolean jj_3R_40() {
+  private boolean jj_3R_40() {
     if (jj_3R_4()) return true;
     if (jj_3R_37()) return true;
     if (jj_3R_6()) return true;
     return false;
   }
 
-  final private boolean jj_3R_37() {
+  private boolean jj_3R_37() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_40()) {
@@ -1881,7 +1881,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_24() {
+  private boolean jj_3R_24() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(70)) {
@@ -1894,7 +1894,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_32() {
+  private boolean jj_3R_32() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(48)) {
@@ -1913,28 +1913,28 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_20() {
+  private boolean jj_3R_20() {
     if (jj_scan_token(NATURAL_LITERAL)) return true;
     return false;
   }
 
-  final private boolean jj_3R_27() {
+  private boolean jj_3R_27() {
     if (jj_3R_32()) return true;
     if (jj_3R_1()) return true;
     return false;
   }
 
-  final private boolean jj_3R_6() {
+  private boolean jj_3R_6() {
     if (jj_scan_token(RPAREN)) return true;
     return false;
   }
 
-  final private boolean jj_3R_7() {
+  private boolean jj_3R_7() {
     if (jj_3R_15()) return true;
     return false;
   }
 
-  final private boolean jj_3R_39() {
+  private boolean jj_3R_39() {
     if (jj_scan_token(LAST)) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_37()) return true;
@@ -1942,7 +1942,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_38() {
+  private boolean jj_3R_38() {
     if (jj_scan_token(FIRST)) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_37()) return true;
@@ -1950,12 +1950,12 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_4() {
+  private boolean jj_3R_4() {
     if (jj_scan_token(LPAREN)) return true;
     return false;
   }
 
-  final private boolean jj_3R_34() {
+  private boolean jj_3R_34() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_38()) {
@@ -1965,17 +1965,17 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_10() {
+  private boolean jj_3R_10() {
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  final private boolean jj_3R_17() {
+  private boolean jj_3R_17() {
     if (jj_3R_27()) return true;
     return false;
   }
 
-  final private boolean jj_3R_33() {
+  private boolean jj_3R_33() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(73)) {
@@ -1985,22 +1985,22 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_36() {
+  private boolean jj_3R_36() {
     if (jj_scan_token(EMPTY)) return true;
     return false;
   }
 
-  final private boolean jj_3R_26() {
+  private boolean jj_3R_26() {
     if (jj_3R_15()) return true;
     return false;
   }
 
-  final private boolean jj_3R_29() {
+  private boolean jj_3R_29() {
     if (jj_3R_34()) return true;
     return false;
   }
 
-  final private boolean jj_3R_18() {
+  private boolean jj_3R_18() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_28()) {
@@ -2010,7 +2010,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_28() {
+  private boolean jj_3R_28() {
     if (jj_3R_33()) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_1()) return true;
@@ -2020,17 +2020,17 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_35() {
+  private boolean jj_3R_35() {
     if (jj_scan_token(NOT)) return true;
     return false;
   }
 
-  final private boolean jj_3R_9() {
+  private boolean jj_3R_9() {
     if (jj_3R_15()) return true;
     return false;
   }
 
-  final private boolean jj_3R_31() {
+  private boolean jj_3R_31() {
     if (jj_3R_36()) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_37()) return true;
@@ -2038,13 +2038,13 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_15() {
+  private boolean jj_3R_15() {
     if (jj_3R_24()) return true;
     if (jj_3R_5()) return true;
     return false;
   }
 
-  final private boolean jj_3R_30() {
+  private boolean jj_3R_30() {
     if (jj_3R_35()) return true;
     if (jj_3R_4()) return true;
     if (jj_3R_5()) return true;
@@ -2052,7 +2052,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_25() {
+  private boolean jj_3R_25() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_30()) {
@@ -2062,17 +2062,17 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_21() {
+  private boolean jj_3R_21() {
     if (jj_3R_27()) return true;
     return false;
   }
 
-  final private boolean jj_3R_46() {
+  private boolean jj_3R_46() {
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  final private boolean jj_3R_16() {
+  private boolean jj_3R_16() {
     if (jj_3R_25()) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -2080,27 +2080,27 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
-  final private boolean jj_3R_19() {
+  private boolean jj_3R_19() {
     if (jj_3R_27()) return true;
     return false;
   }
 
-  final private boolean jj_3_4() {
+  private boolean jj_3_4() {
     if (jj_3R_10()) return true;
     return false;
   }
 
-  final private boolean jj_3R_23() {
+  private boolean jj_3R_23() {
     if (jj_3R_27()) return true;
     return false;
   }
 
-  final private boolean jj_3R_22() {
+  private boolean jj_3R_22() {
     if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
-  final private boolean jj_3_3() {
+  private boolean jj_3_3() {
     if (jj_3R_8()) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -2108,40 +2108,44 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
+  /** Generated Token Manager. */
   public TMLExprParserTokenManager token_source;
   SimpleCharStream jj_input_stream;
-  public Token token, jj_nt;
+  /** Current token. */
+  public Token token;
+  /** Next token. */
+  public Token jj_nt;
   private int jj_ntk;
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
-  public boolean lookingAhead = false;
-  private boolean jj_semLA;
   private int jj_gen;
   final private int[] jj_la1 = new int[44];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
   static {
-      jj_la1_0();
-      jj_la1_1();
-      jj_la1_2();
+      jj_la1_init_0();
+      jj_la1_init_1();
+      jj_la1_init_2();
    }
-   private static void jj_la1_0() {
+   private static void jj_la1_init_0() {
       jj_la1_0 = new int[] {0xe0fff800,0x0,0x0,0x0,0x0,0xc0000000,0xc0000000,0x0,0xc0000000,0x0,0x18000000,0x18000000,0x0,0x0,0x0,0x0,0x20000000,0x20000000,0x0,0x0,0x0,0x0,0x0,0x1800,0x0,0x0,0x0,0x1800,0x0,0x0,0x0,0x0,0x1800,0x0,0x0,0x0,0x1800,0x0,0x0,0x0,0x1800,0x3000000,0x1800,0x1800,};
    }
-   private static void jj_la1_1() {
+   private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0x8f0000,0x8f0000,0x8f0000,0x8f0000,0x0,0x0,0x0,0x0,0x8f0000,0x1,0x1,0x100,0x100,0x100,0x100,0x0,0x0,0x100,0x0,0x70c,0xc,0x50,0x0,0x50,0x50,0x50,0x0,0x50,0x50,0x50,0x50,0x0,0x50,0x50,0x50,0x0,0x50,0x50,0x50,0x0,0x0,0x0,0x0,};
    }
-   private static void jj_la1_2() {
+   private static void jj_la1_init_2() {
       jj_la1_2 = new int[] {0x4a700,0x0,0x0,0x0,0x0,0x4a600,0x600,0x600,0x0,0x0,0x4c000,0x0,0xc0,0xc0,0xc0,0xc0,0x100,0x100,0xc0,0xc0,0x0,0x0,0x0,0xa000,0x0,0x0,0x800000,0xa000,0x0,0x0,0x0,0x0,0xa000,0x0,0x0,0x800000,0xa000,0x0,0x0,0x0,0xa000,0x0,0x2000,0x0,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[4];
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
+  /** Constructor with InputStream. */
   public TMLExprParser(java.io.InputStream stream) {
      this(stream, null);
   }
+  /** Constructor with InputStream and supplied encoding */
   public TMLExprParser(java.io.InputStream stream, String encoding) {
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new TMLExprParserTokenManager(jj_input_stream);
@@ -2152,9 +2156,11 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
+  /** Reinitialise. */
   public void ReInit(java.io.InputStream stream) {
      ReInit(stream, null);
   }
+  /** Reinitialise. */
   public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
@@ -2166,6 +2172,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
+  /** Constructor. */
   public TMLExprParser(java.io.Reader stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new TMLExprParserTokenManager(jj_input_stream);
@@ -2176,6 +2183,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
+  /** Reinitialise. */
   public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
@@ -2187,6 +2195,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
+  /** Constructor with generated Token Manager. */
   public TMLExprParser(TMLExprParserTokenManager tm) {
     token_source = tm;
     token = new Token();
@@ -2196,6 +2205,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
+  /** Reinitialise. */
   public void ReInit(TMLExprParserTokenManager tm) {
     token_source = tm;
     token = new Token();
@@ -2206,7 +2216,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  final private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -2232,7 +2242,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
 
   static private final class LookaheadSuccess extends java.lang.Error { }
   final private LookaheadSuccess jj_ls = new LookaheadSuccess();
-  final private boolean jj_scan_token(int kind) {
+  private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
       if (jj_scanpos.next == null) {
@@ -2253,6 +2263,8 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return false;
   }
 
+
+/** Get the next Token. */
   final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -2261,8 +2273,9 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return token;
   }
 
+/** Get the specific Token. */
   final public Token getToken(int index) {
-    Token t = lookingAhead ? jj_scanpos : token;
+    Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
       else t = t.next = token_source.getNextToken();
@@ -2270,14 +2283,14 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return t;
   }
 
-  final private int jj_ntk() {
+  private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  private java.util.Vector jj_expentries = new java.util.Vector();
+  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   private int[] jj_expentry;
   private int jj_kind = -1;
   private int[] jj_lasttokens = new int[100];
@@ -2292,31 +2305,26 @@ void BoolExtendedExpressionAfterIDComparisonID() :
       for (int i = 0; i < jj_endpos; i++) {
         jj_expentry[i] = jj_lasttokens[i];
       }
-      boolean exists = false;
-      for (java.util.Enumeration e = jj_expentries.elements(); e.hasMoreElements();) {
-        int[] oldentry = (int[])(e.nextElement());
+      jj_entries_loop: for (java.util.Iterator<?> it = jj_expentries.iterator(); it.hasNext();) {
+        int[] oldentry = (int[])(it.next());
         if (oldentry.length == jj_expentry.length) {
-          exists = true;
           for (int i = 0; i < jj_expentry.length; i++) {
             if (oldentry[i] != jj_expentry[i]) {
-              exists = false;
-              break;
+              continue jj_entries_loop;
             }
           }
-          if (exists) break;
+          jj_expentries.add(jj_expentry);
+          break jj_entries_loop;
         }
       }
-      if (!exists) jj_expentries.addElement(jj_expentry);
       if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
     }
   }
 
+  /** Generate ParseException. */
   public ParseException generateParseException() {
-    jj_expentries.removeAllElements();
+    jj_expentries.clear();
     boolean[] la1tokens = new boolean[89];
-    for (int i = 0; i < 89; i++) {
-      la1tokens[i] = false;
-    }
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -2340,7 +2348,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
-        jj_expentries.addElement(jj_expentry);
+        jj_expentries.add(jj_expentry);
       }
     }
     jj_endpos = 0;
@@ -2348,18 +2356,20 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
     for (int i = 0; i < jj_expentries.size(); i++) {
-      exptokseq[i] = (int[])jj_expentries.elementAt(i);
+      exptokseq[i] = jj_expentries.get(i);
     }
     return new ParseException(token, exptokseq, tokenImage);
   }
 
+  /** Enable tracing. */
   final public void enable_tracing() {
   }
 
+  /** Disable tracing. */
   final public void disable_tracing() {
   }
 
-  final private void jj_rescan_token() {
+  private void jj_rescan_token() {
     jj_rescan = true;
     for (int i = 0; i < 4; i++) {
     try {
@@ -2381,7 +2391,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     jj_rescan = false;
   }
 
-  final private void jj_save(int index, int xla) {
+  private void jj_save(int index, int xla) {
     JJCalls p = jj_2_rtns[index];
     while (p.gen > jj_gen) {
       if (p.next == null) { p = p.next = new JJCalls(); break; }

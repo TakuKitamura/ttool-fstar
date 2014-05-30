@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 *
 * ludovic.apvrille AT enst.fr
+* andrea.enrici AT enst.fr
 *
 * This software is a computer program whose purpose is to allow the
 * edition of TURTLE analysis, design and deployment diagrams, to
@@ -41,7 +42,8 @@
 * Creation: 15/12/2003
 * Version: 1.1 21/12/2003
 * Version: 1.2 29/09/2004
-* @author Ludovic APVRILLE
+* Version: 1.3 28/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -1227,6 +1229,21 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 				list.addAll(((TMLDesignPanel)tp).getAllTMLCommunicationNames(mainTabbedPane.getTitleAt(i)));
 			} else if (tp instanceof TMLComponentDesignPanel) {
 				list.addAll(((TMLComponentDesignPanel)tp).getAllTMLCommunicationNames(mainTabbedPane.getTitleAt(i)));
+			}
+		}
+		return list;
+	}
+
+	public Vector<String> getAllTMLEventNames() {
+		TURTLEPanel tp;
+		Vector<String> list = new Vector<String>();
+		
+		for( int i = 0; i < tabs.size(); i++ ) {
+			tp = ( TURTLEPanel )( tabs.elementAt(i) );
+			if ( tp instanceof TMLDesignPanel ) {
+				list.addAll( ( (TMLDesignPanel)tp ).getAllTMLEventNames( mainTabbedPane.getTitleAt(i) ) );
+			} else if ( tp instanceof TMLComponentDesignPanel ) {
+				list.addAll( ( (TMLComponentDesignPanel)tp ).getAllTMLEventNames( mainTabbedPane.getTitleAt(i) ) );
 			}
 		}
 		return list;
@@ -7794,6 +7811,8 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);       
 		} else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);       
+		} else if (command.equals(actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_EVENT_ARTIFACT);       
 			
             
        

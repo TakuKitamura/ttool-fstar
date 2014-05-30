@@ -52,6 +52,7 @@ import myutil.*;
 
 public class TMLSDSection  extends TMLElement {
     private ArrayList<TMLSDInstance> instances; 
+    private ArrayList<TMLSDInstance> mappingInstances; 
     private ArrayList<TMLAttribute> globalVariables; 
     private ArrayList<TMLSDMessage> messages; 
 	
@@ -70,22 +71,171 @@ public class TMLSDSection  extends TMLElement {
         messages = new ArrayList<TMLSDMessage>();
     }
     
-    public void addVariable(TMLAttribute _attr) {
-        globalVariables.add(_attr);
+ 	public void addVariable( TMLAttribute _attr ) throws MultipleVariableDeclarationException	{
+
+		if( !checkVariableUniqueness( _attr.getName() ) )	{
+			String errorMessage = "TMLCOMPILER ERROR: variable " + _attr.getName() + " in diagram " + this.name + " has mutliple declarations";
+			throw new MultipleVariableDeclarationException( errorMessage );
+		}
+		else	{
+      globalVariables.add(_attr);
     }
+	}
 	
 	public ArrayList<TMLAttribute> getAttributes() {
 		return globalVariables;
 	}
 	
+	public void addInstance( TMLSDInstance _elt ) throws MultipleInstanceDeclarationException {
+		
+		if( declaredInstance( _elt ) )	{
+			String errorMessage = "TMLCP COMPILER ERROR: instance " + _elt.getName() + " in diagram " + this.name + " declared multiple times";
+			throw new MultipleInstanceDeclarationException( errorMessage );
+		}
+		else	{
+	    instances.add( _elt );
+		}
+ 	}
+
+	public void addMappingInstance( TMLSDInstance _elt ) {
+    mappingInstances.add( _elt );
+ 	}
+   
+	public ArrayList<TMLSDInstance> getInstances()	{
+		return instances;
+	}
 	
-	public void addInstance(TMLSDInstance _elt) {
-        instances.add(_elt);
-    }
-    
-    public void addMessage(TMLSDMessage _elt) {
-        messages.add(_elt);
-    }
-    
+	public ArrayList<TMLSDInstance> getMappingInstances()	{
+		return mappingInstances;
+	}
 	
-}
+	public void addMessage( TMLSDMessage _elt ) {
+  	messages.add( _elt );
+  }
+    
+	public void insertInitialValue( String _name, String value ) throws UninitializedVariableException	{
+			
+		int i = 0;
+		String str;
+		TMLAttribute tempAttr;
+		TMLType tempType, _attrType;
+		TMLAttribute _attr = new TMLAttribute( _name, new TMLType(1) );
+
+		for( i = 0; i < globalVariables.size(); i++ )	{
+			tempAttr = globalVariables.get(i);
+			str = tempAttr.getName();
+			if( str.equals( _attr.getName() ) )	{
+				tempType = tempAttr.getType();
+				_attrType = _attr.getType();
+				if( tempType.getType() == _attrType.getType() )	{
+					_attr.initialValue = value;
+					globalVariables.set( i, _attr );
+					return;
+				}
+			}
+		}
+		String errorMessage = "TMLCOMPILER ERROR: variable " + _name + " in diagram " + this.name + " is not initialized";
+		throw new UninitializedVariableException( errorMessage );
+	}
+
+	public boolean containsInstance( String _name )	{
+		
+		int i, instCounter = 0;
+		TMLSDInstance inst;
+
+		for( i = 0; i < instances.size(); i++ )	{
+			inst = instances.get(i);
+			if( _name.equals( inst.getName() ) )	{
+				instCounter++;
+			}
+		}
+		return ( instCounter != 0 );
+	}
+
+	public int isVariableInitialized( String _name )	{
+
+		int i, countNotDecl = 0;
+		TMLAttribute attr;
+
+		for( i = 0; i < globalVariables.size(); i++ )	{
+			attr = globalVariables.get(i);
+			if( _name.equals( attr.getName() ) )	{
+				countNotDecl++;
+				if( attr.getInitialValue() == null )	{
+					return 0;
+				}
+			}
+		}
+		if( countNotDecl > 1 )	{
+			return 1;	//declared multiple times
+		}
+		else	{
+			if( countNotDecl == 0 )	{
+				return 2;	//not declared
+			}
+			else	{
+				return 3;		//everything is okay
+			}
+		}
+	}
+
+	private boolean declaredInstance( TMLSDInstance _inst )	{
+		
+		int i;
+		String instName;
+		ArrayList<TMLSDInstance> list;
+		TMLSDInstance inst;
+
+		list = getInstances();
+		if( list.size() == 0 )	{
+			return false;
+		}
+		else	{
+			for( i = 0 ; i < list.size(); i++ )	{
+				inst = list.get(i);
+				instName = inst.getName();
+				if( instName.equals( _inst.getName() ) )	{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	private boolean checkVariableUniqueness( String _name )	{
+		
+		int i;
+		ArrayList<TMLAttribute> list;
+		TMLAttribute attr;
+
+		list = getAttributes();
+		for( i = 0 ; i < list.size(); i++ )	{
+			attr = list.get(i);
+			if( _name.equals( attr.getName() ) )	{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public ArrayList<TMLSDMessage> getMessages()	{
+		return messages;
+	}
+
+	public TMLSDInstance retrieveInstance( String _name )	{
+			
+			ArrayList<TMLSDInstance> instList;
+			TMLSDInstance inst = new TMLSDInstance( "error", new Object() );
+			int i;
+
+			for( i = 0; i < instances.size(); i++ )	{
+				inst = instances.get(i);
+				if( _name.equals( inst.getName() ) )	{
+					instances.remove(i);
+					return inst;
+				}
+			}
+			return inst;
+	}
+
+}	//End of class

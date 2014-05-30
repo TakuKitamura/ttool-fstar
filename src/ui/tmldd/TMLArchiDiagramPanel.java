@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TMLArchiDiagramPanel
  * Panel for drawing an architecture diagram
  * Creation: 19/09/2007
- * @version 1.0 19/09/2007
- * @author Ludovic APVRILLE
+ * @version 1.1 30/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -265,7 +266,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		TMLArchiNode node;
 		Vector v;
 		TMLArchiArtifact artifact;
-		ArrayList<TMLArchiCommunicationArtifact> list;
+		ArrayList<TMLArchiCommunicationArtifact> ChannelList;
+		ArrayList<TMLArchiEventArtifact> EventList;
 		int i;
 		
 		while(iterator.hasNext()) {
@@ -290,72 +292,89 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 				}
 			}
 			
-			// Channel, event, request mapping
-			if (node instanceof TMLArchiCommunicationNode) {
-				list = ((TMLArchiCommunicationNode)node).getArtifactList();
-				
-				for(TMLArchiCommunicationArtifact arti: list) {
-					if (arti.getReferenceCommunicationName().compareTo(oldName) == 0) {
-						arti.setReferenceCommunicationName(newName);
+			// Channel, request mapping
+			if( node instanceof TMLArchiCommunicationNode ) {
+				ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
+				for( TMLArchiCommunicationArtifact arti: ChannelList )	{
+					if( arti.getReferenceCommunicationName().compareTo( oldName ) == 0) {
+						arti.setReferenceCommunicationName( newName );
+					}
+				}
+				//Event mapping
+				EventList = ((TMLArchiCommunicationNode)node).getEventArtifactList();
+				for(TMLArchiEventArtifact arti: EventList) {
+					if( arti.getReferenceEventName().compareTo( oldName ) == 0 ) {
+						arti.setReferenceEventName( newName );
 					}
 				}
 			}
 		}
 	}
 	
-	public void setPriority(String _name, int _priority) {
+	public void setPriority( String _name, int _priority ) {
+
 		ListIterator iterator = getListOfNodes().listIterator();
 		TMLArchiNode node;
 		Vector v;
 		TMLArchiArtifact artifact;
-		ArrayList<TMLArchiCommunicationArtifact> list;
+		ArrayList<TMLArchiCommunicationArtifact> ChannelList;
+		ArrayList<TMLArchiEventArtifact> EventList;
 		int i;
 		
 		while(iterator.hasNext()) {
 			node = (TMLArchiNode)(iterator.next());
 			
 			
-			// Channel, event, request mapping
-			if (node instanceof TMLArchiCommunicationNode) {
-				list = ((TMLArchiCommunicationNode)node).getArtifactList();
-				
-				for(TMLArchiCommunicationArtifact arti: list) {
-					if (arti.getFullValue().compareTo(_name) == 0) {
+			// Channel, request mapping
+			if( node instanceof TMLArchiCommunicationNode ) {
+				ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
+				for( TMLArchiCommunicationArtifact arti: ChannelList ) {
+					if( arti.getFullValue().compareTo( _name ) == 0) {
 						arti.setPriority(_priority);
+					}
+				}
+				//Event mapping
+				EventList = ( (TMLArchiCommunicationNode)node ).getEventArtifactList();
+				for( TMLArchiEventArtifact arti: EventList ) {
+					if( arti.getFullValue().compareTo( _name ) == 0) {
+						arti.setPriority( _priority );
 					}
 				}
 			}
 		}
-		
 	}
 	
-	public int getMaxPriority(String _name) {
-	ListIterator iterator = getListOfNodes().listIterator();
+	public int getMaxPriority( String _name ) {
+
+		ListIterator iterator = getListOfNodes().listIterator();
 		TMLArchiNode node;
 		Vector v;
 		TMLArchiArtifact artifact;
-		ArrayList<TMLArchiCommunicationArtifact> list;
+		ArrayList<TMLArchiCommunicationArtifact> ChannelList;
+		ArrayList<TMLArchiEventArtifact> EventList;
 		int i;
 		int prio = 0;
 		
 		while(iterator.hasNext()) {
 			node = (TMLArchiNode)(iterator.next());
-			
-			
-			// Channel, event, request mapping
-			if (node instanceof TMLArchiCommunicationNode) {
-				list = ((TMLArchiCommunicationNode)node).getArtifactList();
-				
-				for(TMLArchiCommunicationArtifact arti: list) {
-					if (arti.getFullValue().compareTo(_name) == 0) {
+			//Channel, request mapping
+			if( node instanceof TMLArchiCommunicationNode ) {
+				ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
+				for( TMLArchiCommunicationArtifact arti: ChannelList ) {
+					if( arti.getFullValue().compareTo( _name ) == 0) {
 						prio = Math.max(prio, arti.getPriority());
+					}
+				}
+				//Event mapping
+				EventList = ((TMLArchiCommunicationNode)node).getEventArtifactList();
+				for( TMLArchiEventArtifact arti: EventList) {
+					if( arti.getFullValue().compareTo( _name ) == 0) {
+						prio = Math.max( prio, arti.getPriority() );
 					}
 				}
 			}
 		}	
-		
 		return prio;
 	}
     
-
-}
+}//End of class

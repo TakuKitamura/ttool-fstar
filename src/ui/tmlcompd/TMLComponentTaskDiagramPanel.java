@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
 ludovic.apvrille AT enst.fr
+andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -40,7 +41,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * Panel for drawing TML component-tasks
  * Creation: 10/03/2008
  * @version 1.0 10/03/2008
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -296,40 +297,88 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         
 		//TraceManager.addDev("*** Adding channels ***");
 		
-        while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TMLCPrimitiveComponent) {
-				tmlc = (TMLCPrimitiveComponent)tgc;
+        while( iterator.hasNext() ) {
+					tgc = ( TGComponent )( iterator.next() );
+					if( tgc instanceof TMLCPrimitiveComponent ) {
+						tmlc = ( TMLCPrimitiveComponent )tgc;
+						//TraceManager.addDev("Component:" + tmlc.getValue());
+						ports = tmlc.getAllChannelsOriginPorts();
+						//TraceManager.addDev("Ports size:" + ports.size());
+						li = ports.listIterator();
+						while( li.hasNext() ) {
+							port1 = (TMLCPrimitivePort)( li.next() );
+							portstome = getPortsConnectedTo( port1, components );
+							//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
+					
+							ListIterator ite = portstome.listIterator();
+							//while(ite.hasNext()) {
+							//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+							//}
+							if ( portstome.size() == 1 ) {
+								port2 = ( TMLCPrimitivePort )( portstome.get(0) );
+								String []text1 = port1.getPortName().split( "," );
+								String []text2 = port2.getPortName().split( "," );
+								for ( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
+									name1 = text1[j].trim();
+									name2 = text2[j].trim();
+									if( name1.equals( name2 ) ) {
+										name = name1;
+									}
+									else {
+										name = name1 + "__" + name2;
+									}
+									al.add( _topname + "::" + name );
+								}
+							}
+						}
+					}
+				}
+				return al;
+			}
+
+	public ArrayList<String> getAllTMLEventNames( String _topname ) {
+		
+		ArrayList<String> al = new ArrayList<String>();
+		TGComponent tgc;
+    TMLCPrimitiveComponent tmlc;
+		LinkedList components = getPrimitiveComponentList();
+    ListIterator iterator = components.listIterator();
+		ListIterator li, li2;
+		LinkedList ports, portstome;
+		String name, name1, name2;
+		TMLCPrimitivePort port1, port2;
+		int j;
+		
+    while( iterator.hasNext() ) {
+			tgc = ( TGComponent )( iterator.next() );
+			if( tgc instanceof TMLCPrimitiveComponent ) {
+				tmlc = ( TMLCPrimitiveComponent )tgc;
 				//TraceManager.addDev("Component:" + tmlc.getValue());
-				ports = tmlc.getAllChannelsOriginPorts();
+				ports = tmlc.getAllEventsOriginPorts();
 				//TraceManager.addDev("Ports size:" + ports.size());
 				li = ports.listIterator();
-				while(li.hasNext()) {
-					port1 = (TMLCPrimitivePort)(li.next());
-					portstome = getPortsConnectedTo(port1, components);
+				while( li.hasNext() ) {
+					port1 = (TMLCPrimitivePort)( li.next() );
+					portstome = getPortsConnectedTo( port1, components );
 					//TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
-					
 					ListIterator ite = portstome.listIterator();
 					//while(ite.hasNext()) {
-						//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
+					//TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
 					//}
-					
-					if (portstome.size() == 1) {
-						port2 = (TMLCPrimitivePort)(portstome.get(0));
-						
-						String []text1 = port1.getPortName().split(",");
-						String []text2 = port2.getPortName().split(",");
-						
-						for (j=0; j<Math.min(text1.length, text2.length); j++) {
+					if ( portstome.size() == 1 ) {
+						port2 = ( TMLCPrimitivePort )( portstome.get(0) );
+						String []text1 = port1.getPortName().split( "," );
+						String []text2 = port2.getPortName().split( "," );
+						for ( j = 0; j < Math.min( text1.length, text2.length ); j++ ) {
 							name1 = text1[j].trim();
 							name2 = text2[j].trim();
-							
-							if (name1.equals(name2)) {
+							if( name1.equals( name2 ) ) {
 								name = name1;
-							} else {
+							}
+							else {
 								name = name1 + "__" + name2;
 							}
-							al.add(_topname + "::" + name);
+							al.add( _topname + "::" + name );
 						}
 					}
 				}

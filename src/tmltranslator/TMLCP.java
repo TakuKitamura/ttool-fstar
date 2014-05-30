@@ -46,9 +46,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator;
 
 import java.util.*;
-
 import tmltranslator.tmlcp.*;
-
 import myutil.*;
 
 public class TMLCP extends TMLElement {
@@ -61,15 +59,15 @@ public class TMLCP extends TMLElement {
 	private boolean hashCodeComputed = false;
 	
     
-    public TMLCP(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        init();
-    }
+  public TMLCP(String _name, Object _referenceObject) {
+  	super(_name, _referenceObject);
+    init();
+  }
 	
-    private void init() {
-        otherCPs = new ArrayList<TMLCPSection>();
-        sds = new ArrayList<TMLSDSection>();
-    }
+  private void init() {
+  	otherCPs = new ArrayList<TMLCPSection>();
+    sds = new ArrayList<TMLSDSection>();
+  }
 	
 	private void computeHashCode() {
 		/*TMLArchiTextSpecification architxt = new TMLArchiTextSpecification("spec.tarchi");
@@ -77,7 +75,79 @@ public class TMLCP extends TMLElement {
 		hashCode = s.hashCode();*/
 		//System.out.println("TARCHI hashcode = " + hashCode); 
 	}
+
+	private boolean checkDiagramDeclaration( TMLSDSection _tmlsdSection )	{
+		
+		int i;
+		TMLCPSection CPsection;
+
+		//first check the main CP
+		if( mainCP.containsSDDiagram( _tmlsdSection.getName() ) )	{
+			return true;
+		}
+		else	{
+			// then check on the other CPs
+			for( i = 0; i < otherCPs.size(); i++ )	{
+				CPsection = otherCPs.get(i);
+				if( CPsection.containsSDDiagram( _tmlsdSection.getName() ) )	{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	private boolean checkDiagramDeclaration( TMLCPSection _tmlcpSection )	{
+
+		int i;
+		TMLCPSection CPsection;
+
+		if( mainCP.containsADDiagram( _tmlcpSection.getName() ) )	{ //first check in the main CP's list
+			return true;
+		}
+		else	{
+			for( i = 0; i < otherCPs.size(); i++ )	{ // then check in the other CPs' lists
+				CPsection = otherCPs.get(i);
+				if( CPsection.containsADDiagram( _tmlcpSection.getName() ) )	{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 	
+	private boolean checkMultipleDiagramDeclaration( TMLSDSection _tmlsdSection )	{
+		
+		int i, counterSD = 0;
+		String tempString;
+		TMLSDSection tempSD;
+
+		for( i = 0; i < sds.size(); i++ )	{
+			tempSD = sds.get(i);
+			tempString = tempSD.getName();
+			if( tempString.equals( _tmlsdSection.getName() ) )	{
+				counterSD++;
+			}
+		}
+		return ( counterSD > 0 );
+	}
+
+	private boolean checkMultipleDiagramDeclaration( TMLCPSection _tmlcpSection )	{
+
+		int i, counterAD = 0;
+		String tempString;
+		TMLCPSection tempAD;
+
+		for( i = 0; i < otherCPs.size(); i++ )	{
+			tempAD = otherCPs.get(i);
+			tempString = tempAD.getName();
+			if( tempString.equals( _tmlcpSection.getName() ) )	{
+				counterAD++;
+			}
+		}
+		return ( counterAD > 0 );
+	}
+
 	public int getHashCode() {
 		return 0;
 		/*if (!hashCodeComputed) {
@@ -92,14 +162,284 @@ public class TMLCP extends TMLElement {
 		mainCP = _tmlcpSection;
 	}
 	
-	public void addTMLCPSection(TMLCPSection _tmlcpSection) {
-        otherCPs.add(_tmlcpSection);
-    }
+	public void addTMLCPSection( TMLCPSection _tmlcpSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException {
+
+		if( checkDiagramDeclaration( _tmlcpSection ) )	{
+			if( checkMultipleDiagramDeclaration( _tmlcpSection ) )	{
+				String errorMessage = "TMLCP COMPILER ERROR: activity diagram " + _tmlcpSection.getName() + " is defined multiple times";
+				throw new MultipleDiagDeclarationsException( errorMessage );
+			}
+			else	{
+  			otherCPs.add( _tmlcpSection );
+			}
+		}
+		else	{
+			String errorMessage = "TMLCP COMPILER ERROR: activity diagram " + _tmlcpSection.getName() + " undeclared";
+			throw new UndeclaredDiagramException( errorMessage );
+		}
+  }
     
-    public void addTMLSDSection(TMLSDSection _tmlsdSection) {
-        sds.add(_tmlsdSection);
-    }
+  public void addTMLSDSection( TMLSDSection _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
+
+		if( checkDiagramDeclaration( _tmlsdSection ) )	{
+			if( checkMultipleDiagramDeclaration( _tmlsdSection ) )	{
+				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " is defined multiple times";
+				throw new MultipleDiagDeclarationsException( errorMessage );
+			}
+			else	{
+   			sds.add( _tmlsdSection );
+			}
+		}
+		else	{
+			String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " undeclared";
+			throw new UndeclaredDiagramException( errorMessage );
+		}
+  }
 	
-	
-	
-}
+	/* Debugging methods */
+	public int getNumSections() {
+		return otherCPs.size();
+	}
+
+	public int getNumSequences() {
+		return sds.size();
+	}
+
+	public ArrayList<TMLCPSection> getCPSections()	{
+		return otherCPs;
+	}
+
+	public ArrayList<TMLSDSection> getSDSections()	{
+		return sds;
+	}
+
+	public TMLCPSection getMainCP()	{
+		return mainCP;
+	}
+
+	public ArrayList<String> checkSDsDefinition()	{
+		
+		ArrayList<String> undefinedSDs = new ArrayList<String>();
+		ArrayList<String> SDlist;
+		String declaredSD;
+		TMLSDSection definedSD;
+		boolean isSDdefined = false;
+		int i, j, k;
+		
+		//check in mainCP first
+		SDlist = mainCP.getSDlist();
+		for( j = 0; j < SDlist.size(); j++ )	{
+			declaredSD = SDlist.get(j);
+			for( i = 0; i < sds.size(); i++ )	{
+				definedSD = sds.get(i);
+				if( declaredSD.equals( definedSD.getName() ) )	{
+					isSDdefined = true;
+					break;
+				}
+			}
+			if( !isSDdefined )	{
+				undefinedSDs.add( declaredSD );
+			}
+			isSDdefined = false;	//reset to false for next iteration of the list of declared SDs
+		}
+
+		//then check in all other CPs
+		isSDdefined = false;
+		TMLCPSection AD;
+
+		for( k = 0; k < otherCPs.size(); k++ )	{
+			AD = otherCPs.get(k);
+			SDlist = AD.getSDlist();
+			for( j = 0; j < SDlist.size(); j++ )	{
+				declaredSD = SDlist.get(j);	//the diagram to check
+				for( i = 0; i < sds.size(); i++ )	{
+					definedSD = sds.get(i);
+					if( declaredSD.equals( definedSD.getName() ) )	{
+						isSDdefined = true;
+						break;
+					}
+				}	
+				if( !isSDdefined )	{
+					undefinedSDs.add( declaredSD );
+				}
+				isSDdefined = false;	//reset to false for next iteration of the list of declared SDs
+			}
+		}
+
+		return undefinedSDs;
+	}
+
+	public ArrayList<String> checkADsDefinition()	{
+
+		ArrayList<String> undefinedADs = new ArrayList<String>();
+		ArrayList<String> ADlist;
+		String declaredAD;
+		TMLCPSection definedAD;
+		boolean isADdefined = false;
+		int i, j, k;
+		
+		//check in mainCP first
+		ADlist = mainCP.getADlist();
+		for( j = 0; j < ADlist.size(); j++ )	{
+			declaredAD = ADlist.get(j);
+			for( i = 0; i < otherCPs.size(); i++ )	{
+				definedAD = otherCPs.get(i);
+				if( declaredAD.equals( definedAD.getName() ) )	{
+					isADdefined = true;
+					break;
+				}
+			}
+			if( !isADdefined )	{
+				undefinedADs.add( declaredAD );
+			}
+			isADdefined = false;	//reset to false for next iteration of the list of declared SDs
+		}
+
+		//then check in all other CPs
+		isADdefined = false;
+		TMLCPSection AD;
+
+		for( k = 0; k < otherCPs.size(); k++ )	{
+			AD = otherCPs.get(k);
+			ADlist = AD.getADlist();
+			for( j = 0; j < ADlist.size(); j++ )	{
+				declaredAD = ADlist.get(j);	//the diagram to check
+				for( i = 0; i < otherCPs.size(); i++ )	{
+					definedAD = otherCPs.get(i);
+					if( declaredAD.equals( definedAD.getName() ) )	{
+						isADdefined = true;
+						break;
+					}
+				}	
+				if( !isADdefined )	{
+					undefinedADs.add( declaredAD );
+				}
+				isADdefined = false;	//reset to false for next iteration of the list of declared SDs
+			}
+		}
+		return undefinedADs;
+	}
+
+	public void correctReferences()	{
+		
+		TMLCPSection CPsection;
+		int i;
+
+		mainCP.correctReferences( this );
+		for( i = 0; i < otherCPs.size(); i++ )	{
+			CPsection = otherCPs.get(i);
+			CPsection.correctReferences( this );
+		}
+	}
+
+	public void printDataStructure()	{
+
+		ArrayList<TMLCPSection> CPlist = new ArrayList<TMLCPSection>();
+		ArrayList<TMLSDSection> SDlist = new ArrayList<TMLSDSection>();
+		ArrayList<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
+		TMLCPSection tempCP;
+		TMLSDSection tempSD;
+		TMLAttribute attr;
+		int i, j, k;
+
+		System.out.println( "The data structure contains " + getNumSections() + " CP sections (AD) and " +
+		getNumSequences() + " CP sequences (SD):" );
+
+		//Print the data structure for the main CP section
+
+		//Print the data structure for the CP sections
+		CPlist = getCPSections();
+		for( i = 0; i < CPlist.size(); i++ )	{
+			tempCP = CPlist.get(i);
+			System.out.printf( "Activity Diagram n. %d: %s\n", i+1, tempCP.getName() );			
+			listAttributes = tempCP.getAttributes();
+
+			//Print attributes
+			System.out.printf( "\tAttributes:\n");
+			for( j = 0; j < listAttributes.size(); j++ )	{
+				attr = listAttributes.get( j );
+				System.out.printf( "\t\t%s\t%s\t%s\n",	attr.getName(), attr.getType(), attr.getInitialValue() ); 
+			}
+
+			//Print list of AD sections
+			ArrayList<String> ADList;
+			ADList = tempCP.getADlist();
+			System.out.println( "\tDeclared AD: " );
+			for( j = 0; j < ADList.size(); j++ )	{
+				System.out.println( "\t\t\t" + ADList.get(j) );
+			}
+
+			//Print list of SD sections
+			ArrayList<String> SDList;
+			SDList = tempCP.getSDlist();
+			System.out.println( "\tDeclared SD: " );
+			for( j = 0; j < SDList.size(); j++ )	{
+				System.out.println( "\t\t\t" + SDList.get(j) );
+			}
+
+			//Print list of Elements
+			ArrayList<TMLCPElement> ElementsList;
+			TMLCPElement tempElem;
+			ElementsList = tempCP.getElements();
+			System.out.println( "\tDeclared elements:" );
+			for( j = 0; j < ElementsList.size(); j++ )	{
+				if( ElementsList.get(j) instanceof TMLCPRefCP )	{
+					TMLCPRefCP refCP = (TMLCPRefCP) ElementsList.get(j);
+					tempCP = refCP.getReference();
+					ADList = tempCP.getADlist();
+					System.out.println( "\tPrinting from reference to " + tempCP.getName() );
+					for( k = 0; k < ADList.size(); k++ )	{
+						System.out.println( "\t\t\t\t" + ADList.get(k) );
+					}
+					System.out.println( "\tStop printing from reference" );
+				}
+				/*else	{
+					TMLSDSection tempSD = tempElem.getReference();
+				}*/
+				System.out.println( "\t\t\t" + ElementsList.get(j) );
+			}
+
+			System.out.println("\n");
+		}
+
+		SDlist = getSDSections();
+		for( i = 0; i < SDlist.size(); i++ )	{
+				tempSD = SDlist.get(i);
+				System.out.printf( "Sequence Diagram n. %d: %s\n", i+1, tempSD.getName() );
+
+				//Print Variables
+				listAttributes = tempSD.getAttributes();
+				System.out.printf( "\tAttributes:\n");
+				for( j = 0; j < listAttributes.size(); j++ )	{
+					attr = listAttributes.get( j );
+					System.out.printf( "\t\t %s\t%s\t%s\n",	attr.getName(), attr.getType(), attr.getInitialValue() ); 
+				}
+
+				//Print Instances
+				ArrayList<TMLSDInstance> listInstances;
+				TMLSDInstance inst;
+				listInstances = tempSD.getInstances();
+				System.out.println( "\tInstances:" );
+				for( j = 0; j < listInstances.size(); j++ )	{
+					inst = listInstances.get( j );
+					System.out.printf( "\t\t%s\n",	inst.getName() );
+				}
+
+				//Print Messages
+				ArrayList<TMLSDMessage> listMessages;
+				ArrayList<TMLSDAttribute> msgAttributes;
+				TMLSDMessage msg;
+				listMessages = tempSD.getMessages();
+				System.out.println( "\tMessages:" );
+				for( j = 0; j < listMessages.size(); j++ )	{
+					msg = listMessages.get( j );
+					System.out.printf( "\t\t%s\n",	msg.getName() );
+					msgAttributes = msg.getAttributes();
+					for( k = 0; k < msgAttributes.size(); k++ )	{
+						System.out.printf( "\t\t\t%s\n",	msgAttributes.get(k) );
+					}
+				}
+		}
+
+	}
+}	//End of the class

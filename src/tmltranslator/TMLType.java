@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
  * ludovic.apvrille AT enst.fr
+ * andrea.enrici AT enst.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -40,7 +41,7 @@
  * Correspondance between data of a TML modeling and graphical elements
  * Creation: 23/11/2005
  * @version 1.0 23/11/2005
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -134,10 +135,8 @@ public class TMLType {
 		
 	}
     
-    
-    
-    public static String getStringType(int type) {
-        switch(type) {
+  public static String getStringType(int type) {
+  	switch(type) {
             case NATURAL:
                 return "int";
             case BOOLEAN:
@@ -151,6 +150,11 @@ public class TMLType {
     
     public String toString() {
         return getStringType(type);
-    }
+  }
+
+	public boolean equals( TMLType _other )	{
+		
+		return ( type == _other.getType() );
+	}
     
-}
+}	//End of class

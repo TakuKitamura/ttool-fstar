@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
 ludovic.apvrille AT enst.fr
+andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -38,8 +39,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
 * Class TMLCPElement
 * Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @version 1.0 22/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -67,8 +68,8 @@ public abstract class TMLCPElement extends TMLElement  {
     public ArrayList<TMLCPElement> getNextElements() {
     	return nexts;
     }
-    
-    
-    
-	
-}
+
+		public String toString()	{
+			return this.name;
+		}
+}	//End of class

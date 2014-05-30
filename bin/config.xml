@@ -6,7 +6,8 @@
 <DTA2DOTPath data="/packages/RT-LOTOS.0.12/bin/dta2dot" />
 <RG2TLSAPath data="/packages/RT-LOTOS.0.12/bin/rg2tlsa" />
 <RGSTRAPPath data="/packages/RT-LOTOS.0.12/bin/rgstrap" />
-<DOTTYPath data="//opt/csw/bin/dotty" />
+<!--DOTTYPath data="/usr/bin/dot" /-->
+<DOTTYPath data="/usr/bin/dotty" />
 <DOTTYHost data="localhost" />
 <AldebaranHost data="localhost" />
 <AldebaranPath data="/packages/cadp/com/aldebaran" />
@@ -16,54 +17,54 @@
 <BcgmergePath data="/packages/cadp/com/bcg_merge" />
 <CaesarPath data="/packages/cadp/bin.iX86/caesar" />
 <CaesarOpenPath data="/packages/cadp/com/caesar.open" />
-<FILEPath data="/localhome/ludo/TTool/modeling" />
-<LIBPath data="/localhome/ludo/TTool/lib" />
-<IMGPath data="/localhome/ludo/TTool/figure" />
-<LOTOSPath data="/localhome/ludo/TTool/lotos" />
-<GGraphPath data="/localhome/ludo/TTool/graphs" />
-<TGraphPath data="/localhome/ludo/TTool/graphs" />
+<FILEPath data="/home/enrici/TURTLE/modeling" />
+<LIBPath data="/home/enrici/TURTLE/lib" />
+<IMGPath data="/home/enrici/TURTLE/figure" />
+<LOTOSPath data="/home/enrici/TURTLE/lotos" />
+<GGraphPath data="/home/enrici/TURTLE/graphs" />
+<TGraphPath data="/home/enrici/TURTLE/graphs" />
 <TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
 <TToolUpdateProxy data="false" />
 <TToolUpdateProxyPort data="8080" />
 <TToolUpdateProxyHost data="To Be Completed" />
-<JavaCodeDirectory data="/localhome/ludo/TTool/javacode" />
+<JavaCodeDirectory data="/home/enrici/TURTLE/javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
-<TToolClassPath data="/localhome/ludo/TTool/javacode" />
+<TToolClassPath data="/home/enrici/TURTLE/javacode" />
 <JavaExecutePath data="/usr/bin/java" />
 <JavaHeader data="import java.sql.*;" />
-<SystemCCodeDirectory data="/localhome/ludo/TTool/simulators/c++2/" />
+<SystemCCodeDirectory data="/home/enrici/TURTLE/simulators/c++2/" />
 <SystemCHost data="localhost"/>
-<SystemCCodeCompileCommand data="make -C /localhome/ludo/TTool/simulators/c++2/" />
-<SystemCCodeExecuteCommand data="/localhome/ludo/TTool/simulators/c++2/run.x -ovcd /localhome/ludo/TTool/simulators/c++2/vcddump.vcd" />
-<SystemCCodeInteractiveExecuteCommand data="/localhome/ludo/TTool/simulators/c++2/run.x -server" />
-<TMLCodeDirectory data="/localhome/ludo/TTool/tmlcode" />
-<GTKWavePath data="/opt/local/bin/gtkwave" />
-<VCDPath data="/localhome/ludo/TTool/vcd/" />
-<UPPAALCodeDirectory data="/localhome/ludo/TTool/uppaal/" />
-<UPPAALVerifierPath data="/packages/uppaal-4.0.11/verifyta" />
+<SystemCCodeCompileCommand data="make -C /home/enrici/TURTLE/simulators/c++2/" />
+<SystemCCodeExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -ovcd /home/enrici/TURTLE/simulators/c++2/vcddump.vcd" />
+<SystemCCodeInteractiveExecuteCommand data="/home/enrici/TURTLE/simulators/c++2/run.x -server" />
+<TMLCodeDirectory data="/home/enrici/TURTLE/tmlcode" />
+<GTKWavePath data="/usr/bin/gtkwave" />
+<VCDPath data="/home/enrici/TURTLE/vcd/" />
+<UPPAALCodeDirectory data="/home/enrici/TURTLE/uppaal/" />
+<UPPAALVerifierPath data="/home/enrici/TURTLE/uppaal/bin-Linux/verifyta" />
 <UPPAALVerifierHost data="localhost" />
-<ProVerifCodeDirectory data="/localhome/ludo/TTool/proverif/" />
+<ProVerifCodeDirectory data="/home/enrici/TURTLE/proverif/" />
 <ProVerifVerifierPath data="/packages/proverif/proverif" />
 <ProVerifVerifierHost data="localhost" />
-<AVATARExecutableCodeDirectory data="/localhome/ludo/TTool/executablecode/" />
+<AVATARExecutableCodeDirectory data="/home/enrici/TURTLE/executablecode/" />
 <AVATARExecutableCodeHost data="localhost"/>
-<AVATARExecutableCodeCompileCommand data="make -C /localhome/ludo/TTool/executablecode" />
-<AVATARExecutableCodeExecuteCommand data="/localhome/ludo/TTool/executablecode/run.x" />
-<AVATARExecutableSoclibCodeCompileCommand data="make -C /localhome/ludo/TTool/executablecode updategeneratedcode compilesoclib" />
-<AVATARExecutableSoclibCodeExecuteCommand data="make -C /localhome/ludo/TTool/executablecode runsoclib" />
-<AVATARExecutableSoclibTraceFile data="/localhome/ludo/TToolvrille/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
+<AVATARExecutableCodeCompileCommand data="make -C /home/enrici/TURTLE/executablecode" />
+<AVATARExecutableCodeExecuteCommand data="/home/enrici/TURTLE/executablecode/run.x" />
+<AVATARExecutableSoclibCodeCompileCommand data="make -C /home/enrici/TURTLE/executablecode updategeneratedcode compilesoclib" />
+<AVATARExecutableSoclibCodeExecuteCommand data="make -C /home/enrici/TURTLE/executablecode runsoclib" />
+<AVATARExecutableSoclibTraceFile data="/home/enrici/TURTLE/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/vcitty" />
 
 
 <ExternalCommand1Host data="localhost"/>
-<ExternalCommand1 data="/opt/local/bin/gtkwave /localhome/ludo/TTool/simulators/c++2/vcddump.vcd"/>
+<ExternalCommand1 data="/usr/bin/gtkwave /home/enrici/TURTLE/simulators/c++2/vcddump.vcd"/>
 <ExternalCommand2Host data="localhost"/>
-<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /localhome/ludo/TTool/uppaal/spec.xml"/>
+<ExternalCommand2 data="/packages/uppaal(4.0.11/uppaal /home/enrici/TURTLE/uppaal/spec.xml"/>
 
-<LastOpenFile data="/Users/ludovicapvrille/TTool/modeling/MicroWaveOven_SafetySecurity_invariants.xml"/>
+<LastOpenFile data="/home/enrici/TURTLE/modeling/prova.xml"/>
 
 
 
-<LastWindowAttributes x="963" y="261" width="1143" height="980" max="true" />
+<LastWindowAttributes x="-1" y="27" width="1368" height="742" max="true" />
 
 
 </TURTLECONFIGURATION>

@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
 ludovic.apvrille AT enst.fr
+andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -38,8 +39,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
 * Class TMLCPRefSD
 * Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @version 1.0 23/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -51,14 +52,14 @@ import java.util.*;
 import myutil.*;
 
 public class TMLCPRefSD extends TMLCPElement  {
-	private TMLCPRefSD reference;
+	private TMLSDSection reference;
 	
-    public TMLCPRefSD(TMLCPRefSD _ref, String _name, Object _referenceObject) {
+    public TMLCPRefSD(TMLSDSection _ref, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         reference = _ref;
     }
     
-    public TMLCPRefSD getReference() {
+    public TMLSDSection getReference() {
     	return reference;
     }
 	

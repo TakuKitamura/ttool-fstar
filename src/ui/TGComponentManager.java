@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -232,11 +233,12 @@ public class TGComponentManager {
 	public static final int TMLARCHI_ARTIFACT = 1101;
 	public static final int TMLARCHI_BUSNODE = 1102;
 	public static final int TMLARCHI_COMMUNICATION_ARTIFACT = 1103;
-	public static final int TMLARCHI_HWANODE = 1104;
-	public static final int TMLARCHI_MEMORYNODE = 1105;
-	public static final int TMLARCHI_BRIDGENODE = 1106;
-	public static final int TMLARCHI_DMANODE = 1107;
-	public static final int TMLARCHI_CPNODE = 1108;
+	public static final int TMLARCHI_EVENT_ARTIFACT = 1104;
+	public static final int TMLARCHI_HWANODE = 1105;
+	public static final int TMLARCHI_MEMORYNODE = 1106;
+	public static final int TMLARCHI_BRIDGENODE = 1107;
+	public static final int TMLARCHI_DMANODE = 1108;
+	public static final int TMLARCHI_CPNODE = 1109;
 	
 	public static final int TMLCTD_CCOMPONENT = 1200;
 	public static final int TMLCTD_CPORT = 1201;
@@ -895,6 +897,9 @@ public class TGComponentManager {
             case TMLARCHI_COMMUNICATION_ARTIFACT:
                 tgc = new TMLArchiCommunicationArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+            case TMLARCHI_EVENT_ARTIFACT:
+                tgc = new TMLArchiEventArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
                 
                 
                 // Communication patterns + SD
@@ -1445,6 +1450,8 @@ public class TGComponentManager {
             return TMLARCHI_ARTIFACT;
         } else if (tgc instanceof TMLArchiCommunicationArtifact) {
             return TMLARCHI_COMMUNICATION_ARTIFACT;
+        } else if (tgc instanceof TMLArchiEventArtifact) {
+            return TMLARCHI_EVENT_ARTIFACT;
             
         // Communication patterns
         } else if (tgc instanceof TMLCPChoice) {

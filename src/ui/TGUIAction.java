@@ -211,6 +211,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLARCHI_CPNODE = 392;
     public static final int TMLARCHI_ARTIFACT = 219;
 	public static final int TMLARCHI_COMMUNICATION_ARTIFACT = 222;
+	public static final int TMLARCHI_EVENT_ARTIFACT = 395;
 	public static final int TMLARCHI_HWANODE = 223;
 	public static final int TMLARCHI_MEMORYNODE = 224;
 	public static final int TMLARCHI_DMANODE = 364;
@@ -525,7 +526,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 395;
+    public static final int NB_ACTION = 396;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -858,7 +859,8 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_BUSNODE] = new TAction("add-tmlarchi-busnode", "Add a Bus node", IconManager.imgic1102, IconManager.imgic1102, "Bus node", "Add a bus node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CPNODE] = new TAction("add-tmlarchi-cpnode", "Add a Communication pattern node", IconManager.imgic1102, IconManager.imgic1102, "CP node", "Add a communication pattern node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_ARTIFACT] = new TAction("add-tmlarchi-artifact", "Map a task", IconManager.imgic702, IconManager.imgic702, "Map a task", "Map a task onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
-        actions[TMLARCHI_COMMUNICATION_ARTIFACT] = new TAction("add-tmlarchi-communication-artifact", "Map a channel / event / request", IconManager.imgic702, IconManager.imgic702, "Map a channel / event / request", "Map a channel, event or request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_COMMUNICATION_ARTIFACT] = new TAction("add-tmlarchi-communication-artifact", "Map a channel / request", IconManager.imgic702, IconManager.imgic702, "Map a channel / request", "Map a channel or request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event", IconManager.imgic702, IconManager.imgic702, "Map an event", "Map an event onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);

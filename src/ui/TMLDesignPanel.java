@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
 ludovic.apvrille AT enst.fr
+andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TMLDesignPanel
  * Managenemt of TML design panels
  * Creation: 27/10/2006
- * @version 1.0 27/10/2006
- * @author Ludovic APVRILLE
+ * @version 1.0 28/05/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see MainGUI
  */
  
@@ -151,6 +152,10 @@ public class TMLDesignPanel extends TURTLEPanel {
 		return tmltdp.getAllTMLCommunicationNames(_name);
 	}
 	
+	public ArrayList<String> getAllTMLEventNames( String _name ) {
+		return tmltdp.getAllTMLEventNames( _name );
+	}
+
 	public ArrayList<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
 		return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
 	}

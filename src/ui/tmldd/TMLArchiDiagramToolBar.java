@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -71,6 +72,7 @@ public class TMLArchiDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
+		mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_DMANODE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
@@ -130,10 +132,12 @@ public class TMLArchiDiagramToolBar extends TToolBar {
         if (MainGUI.experimentalOn) {
         	button = this.add(mgui.actions[TGUIAction.TMLARCHI_CPNODE]);
         	button.addMouseListener(mgui.mouseHandler);
+					button = this.add(mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT]);
+        	button.addMouseListener(mgui.mouseHandler);
         }
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
-		
+
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
