@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -38,7 +39,8 @@
  * /**
  * Class GTURTLEModeling
  * Creation: 09/12/2003
- * @author Ludovic APVRILLE
+ * Version: 1.1 02/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -393,23 +395,37 @@ public class GTURTLEModeling {
 		}
 	}
 	
-	public boolean generateTMLTxt(String _title) {
-		if (tmap == null) {
-			TMLTextSpecification spec = new TMLTextSpecification(_title);
-			spec.toTextFormat(tmlm);
+	public boolean generateTMLTxt( String _title ) {
+
+		//TO DO: make a third branch for the syntax checking from the CP panel
+
+		//This branch is activated if doing the syntax check from the application panel
+		if( tmap == null ) {
+			TMLTextSpecification spec = new TMLTextSpecification( _title );
+			spec.toTextFormat( tmlm );	//TMLModeling
+			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+			specCP.toTextFormat( tmlm );	//TMLCP
 			try {
-				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml");
-			} catch (Exception e) {
-				TraceManager.addError("File could not be saved: " + e.getMessage());
+				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
+				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+			}
+			catch( Exception e ) {
+				TraceManager.addError( "File could not be saved: " + e.getMessage() );
 				return false;
 			}
-		} else {
-			TMLMappingTextSpecification spec = new TMLMappingTextSpecification(_title);
-			spec.toTextFormat(tmap);
+		}
+		//This branch is activated if doing the syntax check from the architecture panel, regardless the presence of mapping artifacts
+		else {
+			TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+			spec.toTextFormat( tmap );	//TMLMapping
+			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+			specCP.toTextFormat( tmap );	//TMLCP
 			try {
-				spec.saveFile(ConfigurationTTool.TMLCodeDirectory + File.separator, "spec");
-			} catch (Exception e) {
-				TraceManager.addError("Files could not be saved: " + e.getMessage());
+				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+			}
+			catch( Exception e ) {
+				TraceManager.addError( "Files could not be saved: " + e.getMessage() );
 				return false;
 			}
 		}
@@ -6117,7 +6133,7 @@ public class GTURTLEModeling {
 		GTMLModeling gtmlm = new GTMLModeling(tmlap, true);
 		
 		
-		gtmlm.setNodes(nodesToTakeIntoAccount);
+		gtmlm.setNodes(nodesToTakeIntoAccount);	//simply transforms the parameter from a Vector to LinkedList
 		tmlm = null;
 		tm = null;
 		tmState = 1;
@@ -6140,6 +6156,41 @@ public class GTURTLEModeling {
 			mgui.resetAllDIPLOIDs();
 			listE.useDIPLOIDs();
 			mgui.setMode(MainGUI.GEN_DESIGN_OK);
+			return true;
+		}
+	}
+
+	//Newly introduced to perform Syntax check of CP diagrams
+	public boolean checkSyntaxTMLMapping( Vector nodesToTakeIntoAccount, TMLCommunicationPatternPanel tmlcpp, boolean optimize ) {
+
+		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
+		warnings = new Vector();
+		mgui.setMode( MainGUI.VIEW_SUGG_DESIGN_KO );
+		//TraceManager.addDev("New TML Mapping");
+		GTMLModeling gtmlm = new GTMLModeling( tmlcpp, true );
+		
+		gtmlm.setNodes( nodesToTakeIntoAccount );	//simply transforms the parameter from a Vector to LinkedList
+		tmlm = null;
+		tm = null;
+		tmState = 1;
+		tmap = gtmlm.translateToTMLCP();
+		listE = gtmlm.getCorrespondanceTable();
+		checkingErrors = gtmlm.getCheckingErrors();
+		
+		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
+			analyzeErrors();
+			warnings = gtmlm.getCheckingWarnings();
+			return false;
+		}
+		else {
+			//tmap.removeAllRandomSequences();
+			if( optimize )	{
+				warningsOptimize = tmap.optimize();
+			}
+			warnings.addAll( convertToCheckingErrorTMLErrors(warningsOptimize, tmlcpp.tmlcpp ) );
+			mgui.resetAllDIPLOIDs();
+			listE.useDIPLOIDs();
+			mgui.setMode( MainGUI.GEN_DESIGN_OK );
 			return true;
 		}
 	}

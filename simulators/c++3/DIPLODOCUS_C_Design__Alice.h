@@ -33,11 +33,11 @@ class DIPLODOCUS_C_Design__Alice: public TMLTask {
     private:
     // Attributes
     ParamType rnd__0;
-    TMLChannel* _channels[2];
+    TMLChannel* _channels[3];
     
-    TMLWaitCommand _wait13;
-    TMLReadCommand _read12;
-    TMLStopCommand _stop14;
+    TMLWaitCommand _wait15;
+    TMLReadCommand _read14;
+    TMLStopCommand _stop16;
     
     
     public:
@@ -46,6 +46,7 @@ class DIPLODOCUS_C_Design__Alice: public TMLTask {
     DIPLODOCUS_C_Design__Alice(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs
     , TMLChannel* channel__DIPLODOCUS_C_Design__Phone
     , TMLEventChannel* event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call
+    , TMLEventChannel* event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm
     );
     std::istream& readObject(std::istream& i_stream_var);
     std::ostream& writeObject(std::ostream& i_stream_var);

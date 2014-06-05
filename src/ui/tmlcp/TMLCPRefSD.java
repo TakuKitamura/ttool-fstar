@@ -54,12 +54,16 @@ import javax.swing.*;
 import myutil.*;
 import ui.*;
 
+import ui.tmlsd.*;
+
 public class TMLCPRefSD extends TGCOneLineText {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
-    
+		private TMLSDPanel refToSD;
+		//private int index = 0;
+
     public TMLCPRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -77,10 +81,10 @@ public class TMLCPRefSD extends TGCOneLineText {
         moveable = true;
         editable = true;
         removable = true;
-        
-        value = "Scenario";
-        name = "Reference to a SD";
-        
+        value = "Reference to a SD";
+        name = "SequenceDiagram";
+				refToSD = null;
+
         myImageIcon = IconManager.imgic400;
     }
     
@@ -103,7 +107,7 @@ public class TMLCPRefSD extends TGCOneLineText {
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        g.drawString(value, x + (width - w) / 2, y + textY + 15);
+        g.drawString(name, x + (width - w) / 2, y + textY + 15);
         g.drawString("sd", x+3, y+12);
         g.drawLine(x, y+15, x+15, y+15);
         g.drawLine(x+25, y, x+25, y+8);
@@ -131,32 +135,65 @@ public class TMLCPRefSD extends TGCOneLineText {
         return TGComponentManager.TMLCP_REF_SD;
     }
     
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
-        boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated(value);
-        JMenuItem isSDCreated;
+    public void addActionToPopupMenu( JPopupMenu componentMenu, ActionListener menuAL, int x, int y ) {
+			
+			componentMenu.addSeparator();
+      boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
+      JMenuItem isSDCreated;
         
-        if (b) { 
-            isSDCreated = new JMenuItem("Open diagram");
-        } else {
-            isSDCreated = new JMenuItem("Create sequence diagram");
-        }
+      if( b )	{ 
+				isSDCreated = new JMenuItem("Open diagram");
+			}
+			else	{
+				isSDCreated = new JMenuItem( "Create sequence diagram" );
+      }
         
-        isSDCreated.addActionListener(menuAL);
-        componentMenu.add(isSDCreated);
+      isSDCreated.addActionListener( menuAL );
+      componentMenu.add( isSDCreated );
     }
     
     public boolean eventOnPopup(ActionEvent e) {
-        boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated(value);
-        if (b) {
-            ((TMLCPPanel)tdp).openTMLCPSequenceDiagram(value);
-        } else {
-            ((TMLCPPanel)tdp).createTMLCPSequenceDiagram(value);
-        }   
-        return true;
+
+			boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
+      if( b )	{
+				( (TMLCPPanel)tdp ).openTMLCPSequenceDiagram( name );
+      }
+			else {
+				( (TMLCPPanel)tdp ).createTMLCPSequenceDiagram( name );
+			}   
+      return true;
     }
 	
 	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLCP;
     }
-}
+
+	/*public void setReferenceToSD( TMLSDPanel _panel )	{
+		refToSD = _panel;
+	}*/
+
+	@Override public boolean editOndoubleClick(JFrame frame) {
+		
+		//System.out.println("Double click");
+     String text = "Reference to a SD: ";
+    if( hasFather() ) {
+			text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text,
+		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
+    if( (s != null) && (s.length() > 0) )	{
+			setName(s);
+			/*if( refToSD != null )	{
+				TraceManager.addDev( "About to change the name of the Diag" );
+				refToSD.setName(s);
+				//refToSD.changeName( index, s );
+			}*/
+			return true;
+		}
+    return false;
+    }
+
+	/*public void setIndex( int i )	{
+		index = i;
+	}*/
+}	//End of Class

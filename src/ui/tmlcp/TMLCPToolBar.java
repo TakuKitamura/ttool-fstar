@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TMLCPToolBar
  * Implements the toolbar to be used in conjunction with the panel of an interaction overview diagram
  * Creation: 29/09/2004
- * @version 1.0 29/09/2004
- * @author Ludovic APVRILLE
+ * @version 1.1 02/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see TClassDiagramPanel
  */
 
@@ -77,6 +78,7 @@ public class TMLCPToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.updateZoomInfo();
         
     }

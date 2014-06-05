@@ -982,7 +982,7 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             index = tabs.size();
         }
         TMLCommunicationPatternPanel tmlcpp = new TMLCommunicationPatternPanel(this);
-        tabs.add(index, tmlcpp); // should look for the first
+        tabs.add( index, tmlcpp ); // should look for the first
         //mainTabbedPane.addTab(name, IconManager.imgic17, ap.tabbedPane, "Opens analysis diagrams");
         mainTabbedPane.add(tmlcpp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open CP diagrams");
@@ -3167,7 +3167,48 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 					}
 				}
             }
-        } else if (tp instanceof RequirementPanel) {
+        }
+				else if( tp instanceof TMLCommunicationPatternPanel ) {
+					TMLCommunicationPatternPanel tmlcpp = (TMLCommunicationPatternPanel) tp;
+          JDialogSelectCPDiagrams.validated =  tmlcpp.validated;
+          JDialogSelectCPDiagrams.ignored =  tmlcpp.ignored;
+          Vector tmlDiagramsToValidate = new Vector();
+          JDialogSelectCPDiagrams jdscpd = new JDialogSelectCPDiagrams( frame, tmlDiagramsToValidate, tmlcpp.tmlcpp.getComponentList(),
+																														"Choosing Diagrams to validate" );
+					if( !automatic ) {
+						GraphicLib.centerOnParent( jdscpd );
+						jdscpd.setVisible( true ); // Blocked until dialog has been closed
+					}
+					else {
+						jdscpd.closeDialog();
+					}
+					//tmlcpp.tmlcpp.setMasterClockFrequency(jdstmln.getClock());
+			    if( tmlDiagramsToValidate.size() > 0 ) {
+						tmlcpp.validated = JDialogSelectCPDiagrams.validated;
+						tmlcpp.ignored = JDialogSelectCPDiagrams.ignored;
+						TraceManager.addDev("Ready to generate TML mapping for Communication Patterns!");
+						b = gtm.checkSyntaxTMLMapping( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
+						if( b ) {
+							//setMode(MainGUI.MODEL_OK);
+							setMode( MainGUI.GEN_SYSTEMC_OK );
+							setMode( MainGUI.MODEL_OK );
+							ret = true;
+							if( !automatic ) {
+								JOptionPane.showMessageDialog( frame, "0 error, " + getCheckingWarnings().size() +
+								" warning(s). You can now generate a formal (LOTOS, RT-LOTOS) specification or executable code (systemC)",
+								"Syntax analysis successful on TML mapping",
+								JOptionPane.INFORMATION_MESSAGE );
+							}
+						}
+						else {
+							if( !automatic ) {
+								JOptionPane.showMessageDialog( frame, "The TML mapping contains several errors", "Syntax analysis failed",
+																								JOptionPane.INFORMATION_MESSAGE );
+							}
+						}
+          }
+        }
+				else if( tp instanceof RequirementPanel ) {
             TDiagramPanel tdp = getCurrentTDiagramPanel();
             if (!(tdp instanceof RequirementDiagramPanel)) {
 				if (tdp instanceof EBRDDPanel) {
@@ -6575,6 +6616,29 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         changeMade(null, -1);
     }
+
+/*    public void requestRenameTab( int index, String s )	{
+
+			String oldName = mainTabbedPane.getTitleAt(index);
+        if ((s != null) && (s.length() > 0)){
+            // name already in use?
+			if (s.compareTo(oldName) != 0) {
+				if (isAValidTabName(s)) {
+					mainTabbedPane.setTitleAt(index, s);
+					changeMade(getCurrentTDiagramPanel(), ((TURTLEPanel)(tabs.elementAt(index))).tdp.MOVE_COMPONENT);
+					
+					TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+					if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel)) {
+						renameMapping(oldName, s);
+					}
+				} else {
+					JOptionPane.showMessageDialog(frame, "Invalid name", "Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}
+        }
+        changeMade(null, -1);
+    }*/
 	
 	public void renameMapping(String oldName, String newName) {
 		TURTLEPanel tp;

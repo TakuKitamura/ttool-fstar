@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paritech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
 * Class TIFTranslator
 * Linecommand application for translating TIF to other languages
 * Creation: 29/06/2007
-* @version 1.0 29/06/2007
-* @author Ludovic APVRILLE
+* @version 1.1 30/05/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -63,8 +64,10 @@ public class TMLTranslator  {
 	// 1 -> UPPAAL
 	// 2 -> SystemC
 	// 3 -> SystemC2
+	// 4 -> TML
+	// 5 -> Systemc3
 	
-    public static int conversionType; 
+	public static int conversionType; 
 	public static File inputFile;
 	public static File outputFile;
 	public static String outputFileName;
@@ -77,7 +80,7 @@ public class TMLTranslator  {
 	
 	
 	public static void printCopyright() {
-		System.out.println("TMLTranslator: (C) GET/ENST, Ludovic Apvrille, Ludovic.Apvrille@enst.fr");
+		System.out.println("TMLTranslator: (C) GET/ENST, Ludovic APVRILLE, Andrea ENRICI\n{ludovic.apvrille, andrea.enrici}@telecom-paristech.fr");
 		System.out.println("TMLTranslator is released under a CECILL License. See http://www.cecill.info/index.en.html");
 		System.out.println("For more information on TURTLE related technologies, please consult http://ttool.telecom-paristech.fr/");
 		
@@ -357,6 +360,31 @@ public class TMLTranslator  {
 		//System.out.println("SystemC conversion not yet implemented");
 		return true;
 	}
+
+	public static boolean convertToSystemC3() {
+
+		tmltranslator.tomappingsystemc3.TML2MappingSystemC map;	
+
+		System.out.println("Converting to SystemC3...");
+		if( tmap == null )	{
+			System.out.println("Taking TMLModeling...");
+			map = new tmltranslator.tomappingsystemc3.TML2MappingSystemC( tmlm );
+		}
+		else	{
+			System.out.println("Taking TMLMapping...");
+			map = new tmltranslator.tomappingsystemc3.TML2MappingSystemC( tmap );
+		}
+		map.generateSystemC( debug, true );
+		try {
+			map.saveFile( outputFileName, "appmodel" );
+		}
+		catch( Exception e ) {
+			System.out.println( "SystemC generation failed: " + e.getMessage() );
+			return false;
+		}
+		System.out.println( "Sorry...SystemC3 conversion not yet implemented" );
+		return true;
+	}
 	
 	public static boolean convertToTML() {
 		
@@ -482,6 +510,8 @@ public class TMLTranslator  {
 		case 4:
 			convert = convertToTML();
 			break;
+		case 5:
+			convert = convertToSystemC3();
 		}
 		
 		if (!convert) {

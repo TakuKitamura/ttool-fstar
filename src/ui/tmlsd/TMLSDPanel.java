@@ -310,4 +310,8 @@ public class TMLSDPanel extends TDiagramPanel {
         }
         
     }
+
+	/*public void changeName( int i, String s ){
+		mgui.requestRenameTab( i, s);
+	}*/
 }

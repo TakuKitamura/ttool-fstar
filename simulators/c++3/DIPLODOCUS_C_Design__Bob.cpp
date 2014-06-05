@@ -3,10 +3,11 @@
 DIPLODOCUS_C_Design__Bob::DIPLODOCUS_C_Design__Bob(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs
 , TMLChannel* channel__DIPLODOCUS_C_Design__Phone
 , TMLEventChannel* event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call
+, TMLEventChannel* event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm
 ):TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs)
-,_send17(17,this,event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call,0,"\x0\x0\x0\x0",false)
-,_write16(16,this,0,channel__DIPLODOCUS_C_Design__Phone,"\x0\x0\x0\x0",false,1)
-,_stop18(18,this)
+,_send19(19,this,event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call,0,"\x0\x0\x0\x0",false)
+,_write18(18,this,0,channel__DIPLODOCUS_C_Design__Phone,"\x0\x0\x0\x0",false,1)
+,_stop20(20,this)
 
 {
     //generate task variable look-up table
@@ -15,15 +16,17 @@ DIPLODOCUS_C_Design__Bob::DIPLODOCUS_C_Design__Bob(ID iID, Priority iPriority, s
     //set blocked read task/set blocked write task
     channel__DIPLODOCUS_C_Design__Phone->setBlockedWriteTask(this);
     event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call->setBlockedWriteTask(this);
+    event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm->setBlockedWriteTask(this);
     
     //command chaining
-    _write16.setNextCommand(array(1,(TMLCommand*)&_stop18));
-    _send17.setNextCommand(array(1,(TMLCommand*)&_write16));
-    _currCommand=&_send17;
-    _firstCommand=&_send17;
+    _write18.setNextCommand(array(1,(TMLCommand*)&_stop20));
+    _send19.setNextCommand(array(1,(TMLCommand*)&_write18));
+    _currCommand=&_send19;
+    _firstCommand=&_send19;
     
     _channels[0] = channel__DIPLODOCUS_C_Design__Phone;
     _channels[1] = event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call;
+    _channels[2] = event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm;
     refreshStateHash("\x2\x0\x0\x0");
 }
 

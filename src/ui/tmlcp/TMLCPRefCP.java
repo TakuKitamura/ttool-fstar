@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -37,10 +38,10 @@
  *
  * /**
  * Class TMLCPRefCP
- * Reference to a communication pattern from another communication pattern
+ * Reference to an Activity Diagram from another Activity Diagram (including the main communication pattern)
  * Creation: 17/02/2014
  * @version 1.0 17/02/2014
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -78,8 +79,8 @@ public class TMLCPRefCP extends TGCOneLineText {
         editable = true;
         removable = true;
         
-        value = "ref to a cp";
-        name = "Reference to a CP";
+        value = "Reference to a CP";
+        name = "ActivityDiagram";
         
         myImageIcon = IconManager.imgic400;
     }
@@ -105,7 +106,7 @@ public class TMLCPRefCP extends TGCOneLineText {
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        g.drawString(value, x + (width - w) / 2, y + textY + 15);
+        g.drawString(name, x + (width - w) / 2, y + textY + 15);
         g.drawString("iod", x+3, y+12);
         g.drawLine(x, y+15, x+15, y+15);
         g.drawLine(x+25, y, x+25, y+8);
@@ -135,32 +136,52 @@ public class TMLCPRefCP extends TGCOneLineText {
         return TGComponentManager.TMLCP_REF_CP;
     }
     
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
-        componentMenu.addSeparator();
-        boolean b = ((TMLCPPanel)tdp).isTMLCPCreated(value);
-        JMenuItem isCPCreated;
+    public void addActionToPopupMenu( JPopupMenu componentMenu, ActionListener menuAL, int x, int y ) {
+
+      componentMenu.addSeparator();
+      boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
+      JMenuItem isCPCreated;
         
-        if (b) {
-            isCPCreated = new JMenuItem("Open diagram");
-        } else {
-            isCPCreated = new JMenuItem("Create communication pattern");
-        }
+      if( b ) {
+				isCPCreated = new JMenuItem("Open diagram");
+      }
+			else {
+          isCPCreated = new JMenuItem("Create communication pattern");
+      }
         
-        isCPCreated.addActionListener(menuAL);
-        componentMenu.add(isCPCreated);
+			isCPCreated.addActionListener( menuAL );
+      componentMenu.add( isCPCreated );
     }
     
-    public boolean eventOnPopup(ActionEvent e) {
-        boolean b = ((TMLCPPanel)tdp).isTMLCPCreated(value);
-        if (b) {
-            ((TMLCPPanel)tdp).openTMLCPDiagram(value);
-        } else {
-            ((TMLCPPanel)tdp).createTMLCPDiagram(value);
-        }
-        return true;
+    public boolean eventOnPopup( ActionEvent e ) {
+
+			boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
+      if (b) {
+				( (TMLCPPanel)tdp ).openTMLCPDiagram( name );
+      }
+			else {
+				( (TMLCPPanel)tdp ).createTMLCPDiagram( name );
+      }
+      return true;
     }
 	
 	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLCP;
+    }
+
+	@Override public boolean editOndoubleClick( JFrame frame ) {
+		
+		//System.out.println("Double click");
+     String text = "Reference to AD: ";
+    if( hasFather() ) {
+			text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text,
+		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
+    if( (s != null) && (s.length() > 0) )	{
+			setName(s);
+			return true;
+		}
+    return false;
     }
 }

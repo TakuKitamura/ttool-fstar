@@ -60,6 +60,7 @@ import myutil.*;
 
 public class TMLCommunicationPatternPanel extends TURTLEPanel {
     public TMLCPPanel tmlcpp;
+		public Vector validated, ignored;
     
     public TMLCommunicationPatternPanel(MainGUI _mgui) {
         super(_mgui);
@@ -99,31 +100,46 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         //jsp.setVisible(true);
     }
     
-    public boolean addCPSequenceDiagram(String s) {
-        JPanel toolBarPanel = new JPanel();
-        toolBarPanel.setLayout(new BorderLayout());
+    public boolean addCPSequenceDiagram( String s ) {
+
+    	JPanel toolBarPanel = new JPanel();
+      toolBarPanel.setLayout( new BorderLayout() );
         
-        TMLSDToolBar toolBarSequence	= new TMLSDToolBar(mgui);
-        toolbars.add(toolBarSequence);
+      TMLSDToolBar toolBarSequence	= new TMLSDToolBar( mgui );
+      toolbars.add( toolBarSequence );
         
-        TMLSDPanel sdp = new TMLSDPanel(mgui, toolBarSequence);
-        sdp.setName(s);
-        sdp.tp = this;
-        panels.add(sdp);
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(sdp);
-        sdp.jsp = jsp;
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
-        toolBarPanel.add(toolBarSequence, BorderLayout.NORTH);
-        toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s);
-        //tabbedPane.setVisible(true);
-        //sdp.setVisible(true);
-        //jsp.setVisible(true);
-        //tabbedPane.setSelectedIndex(panels.size()-1);
+      TMLSDPanel sdp = new TMLSDPanel( mgui, toolBarSequence );
+      sdp.setName( s );
+      sdp.tp = this;
+      panels.add( sdp );
+      JScrollDiagramPanel jsp	= new JScrollDiagramPanel( sdp );
+      sdp.jsp = jsp;
+      jsp.setWheelScrollingEnabled( true );
+      jsp.getVerticalScrollBar().setUnitIncrement( mgui.INCREMENT );
+      toolBarPanel.add(toolBarSequence, BorderLayout.NORTH );
+      toolBarPanel.add( jsp, BorderLayout.CENTER );
+      tabbedPane.addTab( s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s );
+
+//			Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
+			/*TDiagramPanel mainCP = panels.get( 0 );	//get the Main CP
+			TraceManager.addDev( mainCP.getName() );
+			LinkedList mainCPelems = mainCP.getComponentList();
+			for( int i = 0; i < mainCPelems.size(); i++ )	{
+				TGComponent elem = (TGComponent) mainCPelems.get(i);
+				TraceManager.addDev( elem.getName() );
+				if( elem instanceof TMLCPRefSD && s.equals(elem.getName()) )	{
+					TMLCPRefSD cpRefSD = (TMLCPRefSD) mainCPelems.get(i);
+					cpRefSD.setReferenceToSD( sdp );
+					//cpRefSD.setIndex( i );
+					TraceManager.addDev( "Found and added the reference" );
+				}
+			}*/
+      //tabbedPane.setVisible(true);
+      //sdp.setVisible(true);
+      //jsp.setVisible(true);
+      //tabbedPane.setSelectedIndex(panels.size()-1);
         
-        return true;
-        
+      return true;
     }
     
 	public boolean addCPDiagram(String s) {
@@ -137,7 +153,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         tmlcppNew.setName(s);
         tmlcppNew.tp = this;
         tdp = tmlcppNew;
-        panels.add(tmlcppNew);
+        panels.add( tmlcppNew );
         JScrollDiagramPanel jsp	= new JScrollDiagramPanel(tmlcppNew);
         tmlcppNew.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
@@ -150,9 +166,6 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
 		
     }
     
-   
-    
-	
     public String saveHeaderInXml() {
         return "<Modeling type=\"TML CP\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }

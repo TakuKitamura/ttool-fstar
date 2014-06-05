@@ -879,7 +879,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
         
         actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit The sequence diagram of  communication patterns", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);
-        actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchonous msg", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchronous msg", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_INSTANCE] = new TAction("add-instance-tmlsd", "Instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add an instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
         

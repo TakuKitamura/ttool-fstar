@@ -33,11 +33,11 @@ class DIPLODOCUS_C_Design__Bob: public TMLTask {
     private:
     // Attributes
     ParamType rnd__0;
-    TMLChannel* _channels[2];
+    TMLChannel* _channels[3];
     
-    TMLSendCommand _send17;
-    TMLWriteCommand _write16;
-    TMLStopCommand _stop18;
+    TMLSendCommand _send19;
+    TMLWriteCommand _write18;
+    TMLStopCommand _stop20;
     
     
     public:
@@ -46,6 +46,7 @@ class DIPLODOCUS_C_Design__Bob: public TMLTask {
     DIPLODOCUS_C_Design__Bob(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs
     , TMLChannel* channel__DIPLODOCUS_C_Design__Phone
     , TMLEventChannel* event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call
+    , TMLEventChannel* event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm
     );
     std::istream& readObject(std::istream& i_stream_var);
     std::ostream& writeObject(std::ostream& i_stream_var);

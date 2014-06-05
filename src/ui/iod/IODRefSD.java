@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -59,7 +60,7 @@ public class IODRefSD extends TGCOneLineText {
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
-    
+
     public IODRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -159,4 +160,21 @@ public class IODRefSD extends TGCOneLineText {
 	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_INTERACTION;
     }
+
+	/*public boolean editOndoubleClick(JFrame frame) {
+		
+		//System.out.println("Double click");
+     String text = getName() + ": ";
+    if( hasFather() ) {
+			text = getTopLevelName() + " / " + text;
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text,
+		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+			null, getName() );
+    if( (s != null) && (s.length() > 0) )	{
+			setName(s);
+			return true;
+		}
+    return false;
+    }*/
 }

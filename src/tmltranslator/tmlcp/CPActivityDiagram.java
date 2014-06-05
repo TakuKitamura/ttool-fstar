@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCPSection
+* Class CPActivityDiagram
 * Creation: 18/02/2014
 * @version 1.0 21/05/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -51,7 +51,7 @@ import tmltranslator.*;
 import myutil.*;
 //import compiler.tmlCPparser.myexceptions.*;
 
-public class TMLCPSection  extends TMLElement {
+public class CPActivityDiagram  extends TMLElement {
 	
 	private TMLCPStart start;
   private ArrayList<TMLCPElement> elements; // Including the start element
@@ -87,7 +87,7 @@ public class TMLCPSection  extends TMLElement {
 		sds = new ArrayList<String>();
   }
     
-  public TMLCPSection(String _name, Object _referenceObject) {
+  public CPActivityDiagram(String _name, Object _referenceObject) {
   	super(_name, _referenceObject);
     init();
   }
@@ -247,31 +247,31 @@ public class TMLCPSection  extends TMLElement {
 	public void correctReferences( TMLCP _refTopCP )	{
 		
 		TMLCPElement tempElem;
-		TMLCPSection tempCP;
-		TMLSDSection tempSD;
+		CPActivityDiagram tempCP;
+		CPSequenceDiagram tempSD;
 		String tempString;
 		int i, j, k;
 
-		ArrayList<TMLCPSection> activityList = _refTopCP.getCPSections();
+		ArrayList<CPActivityDiagram> activityList = _refTopCP.getCPSections();
 		for( i = 0; i < elements.size(); i++ )	{
 			tempElem = elements.get(i);
 			tempString = tempElem.getName();
-			if( tempElem instanceof TMLCPRefCP )	{
+			if( tempElem instanceof CPRefAD )	{
 				for( j = 0; j < activityList.size(); j++ )	{
 					tempCP = activityList.get(j);
 					if( tempString.equals( tempCP.getName() ) )	{
-						TMLCPRefCP CPRef = new TMLCPRefCP( tempCP, tempElem.getName(), new Object() );
+						CPRefAD CPRef = new CPRefAD( tempCP, tempElem.getName(), new Object() );
 						elements.set( i, CPRef );
 						break;
 					}
 				}
 			}
 			else	{ //A reference to a sequence diagram must be inserted instead
-				ArrayList<TMLSDSection> sequenceList = _refTopCP.getSDSections();
+				ArrayList<CPSequenceDiagram> sequenceList = _refTopCP.getSDSections();
 				for( k = 0; k < sequenceList.size(); k++ )	{
 					tempSD = sequenceList.get(k);
 					if( tempString.equals( tempSD.getName() ) )	{
-						TMLCPRefSD SDRef = new TMLCPRefSD( tempSD, tempElem.getName(), new Object() );
+						CPRefSD SDRef = new CPRefSD( tempSD, tempElem.getName(), new Object() );
 						elements.set( i, SDRef );
 						break;
 					}

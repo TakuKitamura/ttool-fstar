@@ -277,10 +277,3 @@ public class TMLCPPanel extends TDiagramPanel {
 	}
    
 }
-
-
-
-
-
-
-

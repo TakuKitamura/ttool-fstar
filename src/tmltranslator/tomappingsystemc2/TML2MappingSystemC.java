@@ -587,24 +587,24 @@ public class TML2MappingSystemC {
 	private boolean exploreBuses(int depth, LinkedList<HwCommunicationNode> commNodes, LinkedList<HwCommunicationNode> path, HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
 		//first called with Maping:getCommunicationNodes
 		LinkedList<HwCommunicationNode> nodesToExplore;
-		//TraceManager.addDev("No of comm nodes " + commNodes.size());
+		TraceManager.addDev("No of comm nodes " + commNodes.size());
 		boolean busExploreMode = ((depth & 1) == 0);
 		//if (depth % 2 == 0){
 		if(busExploreMode){
-			//TraceManager.addDev("search for buses connected to " + startNode.getName());
+			TraceManager.addDev("search for buses connected to " + startNode.getName());
 			nodesToExplore=getBusesConnectedToNode(commNodes, startNode);
 		}else{
-			//TraceManager.addDev("search for bridges connected to: " + startNode.getName());
+			TraceManager.addDev("search for bridges connected to: " + startNode.getName());
 			nodesToExplore=getBridgesConnectedToBus(commNodes, (HwBus)startNode);
 		}
 		//HwMemory memory = null;
-		//TraceManager.addDev("no of elements found: " + nodesToExplore.size());
+		TraceManager.addDev("no of elements found: " + nodesToExplore.size());
 		for(HwCommunicationNode currNode:nodesToExplore){
 			//memory = null;
 			if (busExploreMode){
 				//memory = getMemConnectedToBusChannelMapped(commNodes, (HwBus)currNode, commElemToRoute);
 				if(isBusConnectedToNode(currNode, destNode)){
-					//TraceManager.addDev(currNode.getName() + " is last node");
+					TraceManager.addDev(currNode.getName() + " is last node");
 					path.add(currNode);
 					//if (memory!=null) path.add(memory);
 					commNodes.remove(currNode);
@@ -612,7 +612,7 @@ public class TML2MappingSystemC {
 				}
 			}
 			if(tmlmapping.isCommNodeMappedOn(commElemToRoute, currNode)){
-				//TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
+				TraceManager.addDev(currNode.getName() + " mapping found for " + commElemToRoute.getName());
 				path.add(currNode);
 				//if (memory!=null) path.add(memory);
 				commNodes.remove(currNode);
@@ -628,7 +628,7 @@ public class TML2MappingSystemC {
 			//if (memory!=null) path.add(memory);
 			commNodes.remove(currNode);
 			//for (int i=0; i<path.size(); i++) System.out.print("  ");
-			//TraceManager.addDev(currNode.getName());
+			TraceManager.addDev(currNode.getName());
 			if (exploreBuses(depth+1, commNodes, path, currNode, destNode, commElemToRoute)) return true;
 			path.remove(currNode);
 			//if (memory!=null) path.remove(memory);

@@ -35,14 +35,12 @@
 
 class CurrentComponents: public SimComponents{
     public:
-    CurrentComponents():SimComponents(-1103520087){
+    CurrentComponents():SimComponents(1379091812){
         //Declaration of CPUs
         RRScheduler* CPU1_scheduler = new RRScheduler("CPU1_RRSched", 0, 2000000, 2 ) ;
         CPU* CPU10 = new SingleCoreCPU(1, "CPU1_0", CPU1_scheduler, 1, 1, 1, 5, 20, 2, 10, 10, 4);
-        addCPU(CPU10);
         RRScheduler* CPU0_scheduler = new RRScheduler("CPU0_RRSched", 0, 2000000, 2 ) ;
         CPU* CPU00 = new SingleCoreCPU(2, "CPU0_0", CPU0_scheduler, 1, 1, 1, 5, 20, 2, 10, 10, 4);
-        addCPU(CPU00);
         
         //Declaration of Buses
         Bus* BusNORD_0 = new Bus(3,"BusNORD_0",0, 100, 4, 1,false);
@@ -53,6 +51,8 @@ class CurrentComponents: public SimComponents{
         //Declaration of Bridges
         
         //Declaration of Memories
+        Memory* Memory0 = new Memory(5,"Memory0", 1, 4);
+        addMem(Memory0);
         
         //Declaration of Bus masters
         BusMaster* CPU10_BusNORD_Master = new BusMaster("CPU10_BusNORD_Master", 0, 1, array(1, (SchedulableCommDevice*)BusNORD_0));
@@ -65,12 +65,14 @@ class CurrentComponents: public SimComponents{
         CPU00->addBusMaster(CPU00_BusSUD_Master);
         
         //Declaration of channels
-        TMLnbrnbwChannel* channel__DIPLODOCUS_C_Design__Phone = new TMLnbrnbwChannel(9,"DIPLODOCUS_C_Design__Phone",4,2,array(2,CPU00_BusNORD_Master,CPU10_BusNORD_Master),array(2,static_cast<Slave*>(0),static_cast<Slave*>(0)),0);
+        TMLnbrnbwChannel* channel__DIPLODOCUS_C_Design__Phone = new TMLnbrnbwChannel(10,"DIPLODOCUS_C_Design__Phone",4,2, array(2,CPU00_BusSUD_Master,CPU10_BusSUD_Master), array(2,static_cast<Slave*>(Memory0),static_cast<Slave*>(Memory0)),0);
         addChannel(channel__DIPLODOCUS_C_Design__Phone);
         
         //Declaration of events
-        TMLEventBChannel<ParamType,0>* event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call = new TMLEventBChannel<ParamType,0>(10,"DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call",0,0,0,0,false,false);
+        TMLEventBChannel<ParamType,0>* event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call = new TMLEventBChannel<ParamType,0>(11,"DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call",0,0,0,0,false,false);
         addEvent(event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call);
+        TMLEventBChannel<ParamType,0>* event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm = new TMLEventBChannel<ParamType,0>(12,"DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm",0,0,0,0,false,false);
+        addEvent(event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm);
         
         //Declaration of requests
         
@@ -79,14 +81,16 @@ class CurrentComponents: public SimComponents{
         BusSUD_0->setScheduler((WorkloadSource*) new RRScheduler("BusSUD_RRSched", 0, 5, 1, array(2, (WorkloadSource*)CPU10_BusSUD_Master, (WorkloadSource*)CPU00_BusSUD_Master), 2));
         
         //Declaration of tasks
-        DIPLODOCUS_C_Design__Alice* task__DIPLODOCUS_C_Design__Alice = new DIPLODOCUS_C_Design__Alice(5,0,"DIPLODOCUS_C_Design__Alice", array(1,CPU10),1
+        DIPLODOCUS_C_Design__Alice* task__DIPLODOCUS_C_Design__Alice = new DIPLODOCUS_C_Design__Alice(6,0,"DIPLODOCUS_C_Design__Alice", array(1,CPU10),1
         ,channel__DIPLODOCUS_C_Design__Phone
         ,event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call
+        ,event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm
         );
         addTask(task__DIPLODOCUS_C_Design__Alice);
-        DIPLODOCUS_C_Design__Bob* task__DIPLODOCUS_C_Design__Bob = new DIPLODOCUS_C_Design__Bob(7,0,"DIPLODOCUS_C_Design__Bob", array(1,CPU00),1
+        DIPLODOCUS_C_Design__Bob* task__DIPLODOCUS_C_Design__Bob = new DIPLODOCUS_C_Design__Bob(8,0,"DIPLODOCUS_C_Design__Bob", array(1,CPU00),1
         ,channel__DIPLODOCUS_C_Design__Phone
         ,event__DIPLODOCUS_C_Design__Call__DIPLODOCUS_C_Design__Call
+        ,event__DIPLODOCUS_C_Design__comm__DIPLODOCUS_C_Design__comm
         );
         addTask(task__DIPLODOCUS_C_Design__Bob);
         

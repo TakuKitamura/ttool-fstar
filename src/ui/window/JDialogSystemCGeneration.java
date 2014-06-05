@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.f
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -39,8 +40,8 @@
  * Class JDialogSystemCGeneration
  * Dialog for managing the generation and compilation of SystemC code
  * Creation: 01/12/2005
- * @version 1.1 03/09/2007
- * @author Ludovic APVRILLE
+ * @version 1.2 02/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -78,7 +79,9 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     
     private static String unitCycle = "1";
 	
-	private static String[] simus = {"SystemC Simulator - LabSoC version", "C++ Simulator - LabSoc version"};
+	private static String[] simus = { "SystemC Simulator - LabSoC version",
+																		"C++ Simulator - LabSoc version",
+																		"C++ Simulator with Communication Patterns" };
 	private static int selectedItem = 1;
     
     protected static String pathCode;
@@ -725,33 +728,37 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     	
     	selectedItem = versionSimulator.getSelectedIndex();
     	//System.out.println("Selected item=" + selectedItem);
-    	if (selectedItem == 0) {
-    		tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
-    		if (mgui.gtm.getTMLMapping() == null) {
-    			if (mgui.gtm.getArtificialTMLMapping() == null) {
-    				tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
-    			} else {
-    				TraceManager.addDev("Using artifical mapping");
-    				tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
+    	switch( selectedItem ) {	//Old SystemC generator
+				case 0:	{
+					tmltranslator.tomappingsystemc.TML2MappingSystemC tml2systc;
+	    		if (mgui.gtm.getTMLMapping() == null) {
+  	  			if (mgui.gtm.getArtificialTMLMapping() == null) {
+    					tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLModeling());
+    				} else {
+    					TraceManager.addDev("Using artifical mapping");
+    					tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping());
+	    			}
+  	  		}
+					else {
+    				tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLMapping());
     			}
-    		} else {
-    			tml2systc = new tmltranslator.tomappingsystemc.TML2MappingSystemC(mgui.gtm.getTMLMapping());
-    		}
-    		tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
-    		testGo();
-    		jta.append("SystemC code generation done\n");
-    		//t2j.printJavaClasses();
-    		try {
-    			jta.append("Generating SystemC file\n");
-    			pathCode = code1.getText();
-    			tml2systc.saveFile(pathCode, "appmodel");
-    			jta.append("SystemC files generated\n");
-    		} catch (Exception e) {
-    			jta.append("Could not generate SystemC file\n");
-    		}
-    	} else {
+    			tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+	    		testGo();
+  	  		jta.append("SystemC code generation done\n");
+    			//t2j.printJavaClasses();
+    			try {
+    				jta.append("Generating SystemC file\n");
+    				pathCode = code1.getText();
+	    			tml2systc.saveFile(pathCode, "appmodel");
+  	  			jta.append("SystemC files generated\n");
+    			}
+					catch( Exception e ) {
+    				jta.append("Could not generate SystemC file\n");
+    			}
+				break;
+			}
+			case 1:	{	//Simulator without CPs (Daniel's version)
     		tmltranslator.tomappingsystemc2.TML2MappingSystemC tml2systc;
-    		
     		// Making EBRDDs
     		ArrayList<EBRDD> al = new ArrayList<EBRDD>();
     		ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
@@ -812,9 +819,76 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     		} catch (Exception e) {
     			jta.append("Could not generate SystemC file\n");
     		}
+			break;
     	}
-    	
-    }
+		case 2:	{	//Simulator version with CPs
+    		tmltranslator.tomappingsystemc3.TML2MappingSystemC tml2systc;
+    		// Making EBRDDs
+    		ArrayList<EBRDD> al = new ArrayList<EBRDD>();
+    		ArrayList<TEPE> alTepe = new ArrayList<TEPE>();
+    		TEPE tepe;
+    		AvatarRequirementPanelTranslator arpt = new AvatarRequirementPanelTranslator();
+    		for(int k=0; k<valTepe.size(); k++) {
+    			testGo();
+    			tepe = arpt.generateTEPESpecification((AvatarPDPanel)(valTepe.get(k)));
+    			jta.append("TEPE: " + tepe.getName() + "\n");
+    			jta.append("Checking syntax\n");
+    			// tepe.checkSyntax();
+    			alTepe.add(tepe);
+    			jta.append("Done.\n");
+    		}
+    		/*EBRDDTranslator ebrddt;
+    		EBRDDPanel ep;
+    		EBRDD ebrdd;
+    		
+    		for(int k=0; k<val.size(); k++) {
+    		testGo();
+    		ebrddt = new EBRDDTranslator();
+    		ep = (EBRDDPanel)(val.get(k));
+    		jta.append("EBRDD: " + ep.getName() + "\n");
+    		ebrdd = ebrddt.generateEBRDD(ep, ep.getName());
+    		jta.append("Checking syntax\n");
+    		if (ebrddt.getErrors().size() > 0) {
+    		jta.append("Syntax error: ignoring EBRDD\n\n");
+    		} else {
+    		jta.append("No Syntax error: EBRDD taken into account\n\n");
+    		al.add(ebrdd);
+    		}
+    		}*/
+    		
+    		// Generating code
+    		if (mgui.gtm.getTMLMapping() == null) {
+    			if (mgui.gtm.getArtificialTMLMapping() == null) {
+    				tml2systc = new tmltranslator.tomappingsystemc3.TML2MappingSystemC(mgui.gtm.getTMLModeling(), al, alTepe);
+    			} else {
+    				TraceManager.addDev("Using artifical mapping");
+    				tml2systc = new tmltranslator.tomappingsystemc3.TML2MappingSystemC(mgui.gtm.getArtificialTMLMapping(), al, alTepe);
+    			}
+    		}
+				else {
+    			tml2systc = new tmltranslator.tomappingsystemc3.TML2MappingSystemC(mgui.gtm.getTMLMapping(), al, alTepe);
+    		}
+				TraceManager.addDev( "Before exception" );
+    		tml2systc.generateSystemC( debugmode.isSelected(), optimizemode.isSelected() );
+    		testGo();
+    		jta.append("SystemC code generation done\n");
+    		
+    		for(TEPE tep: alTepe) {
+    			TraceManager.addDev(tep.toString());
+    		}
+    		//t2j.printJavaClasses();
+    		try {
+    			jta.append("Generating SystemC file\n");
+    			pathCode = code1.getText();
+    			tml2systc.saveFile(pathCode, "appmodel");
+    			jta.append("SystemC files generated\n");
+    		} catch (Exception e) {
+    			jta.append("Could not generate SystemC file\n");
+    		}
+			break;
+			}
+		}
+	}	//End of method generateCode()
     
     public void compileCode() throws InterruptedException {
     	String cmd = compiler1.getText();

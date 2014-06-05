@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -36,10 +37,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDSection
+* Class CPSequenceDiagram
 * Creation: 18/02/2014
 * @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -50,26 +51,27 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class TMLSDSection  extends TMLElement {
-    private ArrayList<TMLSDInstance> instances; 
-    private ArrayList<TMLSDInstance> mappingInstances; 
-    private ArrayList<TMLAttribute> globalVariables; 
-    private ArrayList<TMLSDMessage> messages; 
+public class CPSequenceDiagram  extends TMLElement {
+	
+	private ArrayList<TMLSDInstance> instances; 
+	private ArrayList<TMLSDInstance> mappingInstances;
+	private ArrayList<TMLAttribute> globalVariables;
+	private ArrayList<TMLSDMessage> messages; 
 	
 	private int hashCode;
 	private boolean hashCodeComputed = false;
 	
     
-    public TMLSDSection(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        init();
-    }
-	
-    private void init() {
-        globalVariables = new ArrayList<TMLAttribute>();
-        instances = new ArrayList<TMLSDInstance>();  
-        messages = new ArrayList<TMLSDMessage>();
-    }
+	public CPSequenceDiagram( String _name, Object _referenceObject )	{
+		super( _name, _referenceObject );
+		init();
+	}
+
+	private void init() {
+		globalVariables = new ArrayList<TMLAttribute>();
+		instances = new ArrayList<TMLSDInstance>();
+		messages = new ArrayList<TMLSDMessage>();
+	}
     
  	public void addVariable( TMLAttribute _attr ) throws MultipleVariableDeclarationException	{
 

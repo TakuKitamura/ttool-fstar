@@ -54,12 +54,16 @@ import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
+import ui.tmlcp.*;
 import tmltranslator.*;
+import tmltranslator.tmlcp.*;
 import myutil.*;
 
 public class GTMLModeling  {
 	private TMLDesignPanel tmldp;
 	private TMLComponentDesignPanel tmlcdp;
+	private TMLArchiPanel tmlap;
+	private TMLCommunicationPatternPanel tmlcpp;
 	private TMLModeling tmlm;
 	private Vector checkingErrors, warnings;
 	private LinkedList tasksToTakeIntoAccount;
@@ -69,7 +73,7 @@ public class GTMLModeling  {
 	private static CorrespondanceTGElement listE;
 	private Hashtable<String, String> table;
 	
-	private TMLArchiPanel tmlap;
+	
 	//private ArrayList<HwNode> nodesToTakeIntoAccount;
 	private LinkedList nodesToTakeIntoAccount;
 	TMLMapping map;
@@ -95,6 +99,14 @@ public class GTMLModeling  {
 	
 	public GTMLModeling(TMLArchiPanel _tmlap, boolean resetList) {
 		tmlap = _tmlap;
+        table = new Hashtable<String, String>();
+		if (resetList) {
+			listE = new CorrespondanceTGElement();
+		}
+	}
+
+	public GTMLModeling( TMLCommunicationPatternPanel _tmlcpp, boolean resetList ) {
+		tmlcpp = _tmlcpp;
         table = new Hashtable<String, String>();
 		if (resetList) {
 			listE = new CorrespondanceTGElement();
@@ -1870,6 +1882,34 @@ public class GTMLModeling  {
 		
 		return map;
 	}
+
+	public TMLMapping translateToTMLCP() {
+
+		tmlm = new TMLModeling( true );
+		archi = new TMLArchitecture();
+		map = new TMLMapping( tmlm, archi, false );
+		
+		checkingErrors = new Vector();
+		warnings = new Vector();
+		//listE = new CorrespondanceTGElement();
+		
+		TraceManager.addDev( "Making Communication Pattern" );
+		makeCommunicationPattern();
+		/*TraceManager.addDev( "Making TML modeling" );
+		if (!makeTMLModeling()) {	//Attention, this routine will provoke errors...
+			return null;
+		}
+		TraceManager.addDev("Making mapping");
+		makeMapping();*/	//Attention this routine will provoke errors...
+		
+		//TraceManager.addDev("<--- TML modeling:");
+		//TraceManager.addDev("TML: " + tmlm.toString());
+		//TraceManager.addDev("End of TML modeling --->");
+		
+		removeActionsWithRecords();
+		
+		return map;
+	}
 	
 	private boolean nameInUse(ArrayList<String> _names, String _name) {
 		for(String s: _names) {
@@ -2080,6 +2120,130 @@ public class GTMLModeling  {
 			}
 		}
 	}
+
+	private void makeCommunicationPattern() {
+
+		TGComponent tgc;
+		TMLCPRefSD refSDnode;
+		CPRefSD refSD;
+		TMLCPRefCP refCPnode;
+		CPRefAD refCP;
+		ArrayList<String> names = new ArrayList<String>();
+		CPSequenceDiagram SD;
+		CPActivityDiagram AD;
+
+		if( nodesToTakeIntoAccount == null ) {
+			components = tmlcpp.tmlcpp.getComponentList();
+		}
+		else {
+			components = nodesToTakeIntoAccount;
+		}
+
+		ListIterator iterator = components.listIterator();
+		Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
+
+		//TO BE DONE: For the main CP
+
+		for( int i = 0; i < components.size(); i++ ) {
+			tgc = (TGComponent)( components.get(i) );
+			TraceManager.addDev("Iteration: " + i + " testing " + tgc.getName() );
+			if( tgc instanceof TMLCPRefSD ) {
+				refSDnode = (TMLCPRefSD) tgc;
+				if( nameInUse( names, refSDnode.getName() ) ) {
+					// Node with the same name
+					CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + refSDnode.getName() );
+					ce.setTDiagramPanel( tmlcpp.tmlcpp );
+					ce.setTGComponent( refSDnode );
+					checkingErrors.add( ce );
+				}
+				else {
+					names.add( refSDnode.getName() );
+					String SDname = refSDnode.getName();
+					for( TDiagramPanel panel: panelList )	{
+						TraceManager.addDev("Testing panel: " + panel.getName() + " against SD ref " + SDname );
+						if( SDname.equals( panel.getName() ) )	{
+							TraceManager.addDev("Found match: " + panel.getName() );
+							LinkedList elemList = panel.getComponentList();
+							TraceManager.addDev("Lenght of elements: " + elemList.size() );
+							for( int j = 0; j < elemList.size(); j++ )	{
+								TGComponent elem = (TGComponent) elemList.get(j);
+								TraceManager.addDev( elem.getName() );
+							}
+							break;
+						}
+					}
+				}
+			}
+			if( tgc instanceof TMLCPRefCP ) {
+				refCPnode = (TMLCPRefCP) tgc;
+				if( nameInUse( names, refCPnode.getName() ) ) {
+					// Node with the same name
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + refCPnode.getName());
+					ce.setTDiagramPanel( tmlcpp.tmlcpp );
+					ce.setTGComponent( refCPnode );
+					checkingErrors.add( ce );
+				}
+				else {
+					names.add( refCPnode.getName() );
+					String CPname = refCPnode.getName();
+					for( TDiagramPanel panel: panelList )	{
+						TraceManager.addDev("Testing panel: " + panel.getName() + " against AD ref" + CPname );
+						if( CPname.equals( panel.getName() ) )	{
+							TraceManager.addDev("Found match: " + panel.getName() );
+							LinkedList elemList = panel.getComponentList();
+							TraceManager.addDev("Lenght of elements: " + elemList.size() );
+							for( int k = 0; k < elemList.size(); k++ )	{
+								TGComponent elem = (TGComponent) elemList.get(k);
+								TraceManager.addDev( elem.getName() );
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+		
+		// Links between nodes
+		/*TGComponent tgc1, tgc2;
+		TGConnectingPoint p1, p2;
+		TMLArchiConnectorNode connector;
+		HwLink hwlink;
+		HwNode originNode;
+		
+		iterator = tmlap.tmlap.getComponentList().listIterator();
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof TMLArchiConnectorNode) {
+				//TraceManager.addDev("Found link");
+				connector = (TMLArchiConnectorNode)tgc;
+				tgc1 = null; tgc2 = null;
+				p1 = connector.getTGConnectingPointP1();
+				p2 = connector.getTGConnectingPointP2();
+				tgc1 = tgc.getTDiagramPanel().getComponentToWhichBelongs(p1);
+				tgc2 = tgc.getTDiagramPanel().getComponentToWhichBelongs(p2);
+				if ((tgc1 != null) && (tgc2 != null)) {
+					//TraceManager.addDev("Not null");
+					if (components.contains(tgc1) && components.contains(tgc2)) {
+						//TraceManager.addDev("Getting closer");
+						if (tgc2 instanceof TMLArchiBUSNode) {
+							originNode = listE.getHwNode(tgc1);
+							bus  = (HwBus)(listE.getHwNode(tgc2));
+							if ((originNode != null) && (bus != null)) {
+								hwlink = new HwLink("link_" +originNode.getName() + "_to_" + bus.getName());
+								hwlink.setPriority(connector.getPriority());
+								hwlink.bus = bus;
+								hwlink.hwnode = originNode;
+								listE.addCor(hwlink, connector);
+								archi.addHwLink(hwlink);
+								//TraceManager.addDev("Link added");
+							}
+						}
+					}
+				}
+			}
+		}
+	}*/
 	
 	private boolean makeTMLModeling() {
 		// Determine all TML Design to be used -> TMLDesignPanels

@@ -150,8 +150,3 @@ public class TMLArchiDiagramToolBar extends TToolBar {
     }
     
 } // Class
-
-
-
-
-

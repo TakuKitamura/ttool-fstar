@@ -158,6 +158,10 @@ public abstract class TURTLEPanel implements GenericTree {
         }
         return panels.size();
     }
+
+	public Vector<TDiagramPanel> getPanels()	{
+		return panels;
+	}
     
     public boolean nameInUse(String s) {
         for(int i = 0; i<tabbedPane.getTabCount(); i++) {
@@ -355,10 +359,3 @@ public abstract class TURTLEPanel implements GenericTree {
 	
     
 }
-
-
-
-
-
-
-
