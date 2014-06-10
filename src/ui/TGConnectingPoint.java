@@ -87,6 +87,8 @@ public class TGConnectingPoint implements CDElement {
 	public static final int EAST=1;
 	public static final int SOUTH=2;
 	public static final int WEST=3;
+
+	private TGConnector referenceToConnector;
    
     
     public TGConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
@@ -281,11 +283,11 @@ public class TGConnectingPoint implements CDElement {
 	protected TGComponent getFather() {
 		return father;
 	}*/
+	public void setReferenceToConnector( TGConnector _ref )	{
+		referenceToConnector = _ref;
+	}
+	
+	public TGConnector getReferenceToConnector()	{
+		return referenceToConnector;
+	}
 }
-
-
-
-
-
-
-

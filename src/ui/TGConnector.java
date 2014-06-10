@@ -70,6 +70,8 @@ public abstract class TGConnector extends TGCWithInternalComponent {
     protected int DIST_Y = 20;
     
     protected boolean automaticDrawing = true; // Used when user select to enhance the diagram automatically
+
+		protected String endName, startName;	//the name of the entities attached to the connector
     
     // WARNING: point of connectors must be put first in the list of internal components ...
     
@@ -88,7 +90,9 @@ public abstract class TGConnector extends TGCWithInternalComponent {
             //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
             tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
         }
-        name = "connector from " + p1.getName() + " to " + p2.getName();
+				endName = p2.getName();
+				startName = p1.getName();
+        name = "connector from " + startName + " to " + endName;
         
         canBeCloned = false;
         removable = true;

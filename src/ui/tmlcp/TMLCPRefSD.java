@@ -62,6 +62,7 @@ public class TMLCPRefSD extends TGCOneLineText {
     protected int textY =  15;
     protected int arc = 5;
 		private TMLSDPanel refToSD;
+//		private TGConnectorTMLCP[] connectors = new TGConnectorTMLCP[2];
 		//private int index = 0;
 
     public TMLCPRefSD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -183,6 +184,17 @@ public class TMLCPRefSD extends TGCOneLineText {
 		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
     if( (s != null) && (s.length() > 0) )	{
 			setName(s);
+			//When the name of a refToSD is changed, the connector name must be updated accordingly
+			if( connectingPoint[0].getReferenceToConnector() != null )	{
+				TGConnectorTMLCP connector = (TGConnectorTMLCP) connectingPoint[0].getReferenceToConnector();
+				connector.changeEndName(s);
+				TraceManager.addDev( connector.getName() );
+				if( connectingPoint[1].getReferenceToConnector() != null )	{
+					connector = (TGConnectorTMLCP) connectingPoint[1].getReferenceToConnector();
+					connector.changeStartName(s);
+					TraceManager.addDev( connector.getName() );
+				}
+			}
 			/*if( refToSD != null )	{
 				TraceManager.addDev( "About to change the name of the Diag" );
 				refToSD.setName(s);

@@ -144,6 +144,7 @@ public class GTURTLEModeling {
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
+	//private TMLCP tmcp;
 	private RequirementModeling rm;
 	private NCStructure ncs;
 	private MainGUI mgui;
@@ -399,7 +400,8 @@ public class GTURTLEModeling {
 
 		//TO DO: make a third branch for the syntax checking from the CP panel
 
-		//This branch is activated if doing the syntax check from the application panel
+		//This branch is activated if doing the syntax check from the application panel.
+		//It only generates the application TML text
 		if( tmap == null ) {
 			TMLTextSpecification spec = new TMLTextSpecification( _title );
 			spec.toTextFormat( tmlm );	//TMLModeling
@@ -414,7 +416,8 @@ public class GTURTLEModeling {
 				return false;
 			}
 		}
-		//This branch is activated if doing the syntax check from the architecture panel, regardless the presence of mapping artifacts
+		//This branch is activated if doing the syntax check from the architecture panel.
+		//It generates the text TML for the architecture and the application + mapping information
 		else {
 			TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 			spec.toTextFormat( tmap );	//TMLMapping
@@ -6174,6 +6177,7 @@ public class GTURTLEModeling {
 		tm = null;
 		tmState = 1;
 		tmap = gtmlm.translateToTMLCP();
+		//tmcp = gtmlm.translateToTMLCP();
 		listE = gtmlm.getCorrespondanceTable();
 		checkingErrors = gtmlm.getCheckingErrors();
 		
@@ -6183,9 +6187,10 @@ public class GTURTLEModeling {
 			return false;
 		}
 		else {
-			//tmap.removeAllRandomSequences();
+			//tmcp.removeAllRandomSequences();
 			if( optimize )	{
 				warningsOptimize = tmap.optimize();
+				//warningsOptimize = tmcp.optimize();
 			}
 			warnings.addAll( convertToCheckingErrorTMLErrors(warningsOptimize, tmlcpp.tmlcpp ) );
 			mgui.resetAllDIPLOIDs();

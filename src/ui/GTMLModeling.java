@@ -76,8 +76,10 @@ public class GTMLModeling  {
 	
 	//private ArrayList<HwNode> nodesToTakeIntoAccount;
 	private LinkedList nodesToTakeIntoAccount;
-	TMLMapping map;
-	TMLArchitecture archi;
+
+	private TMLMapping map;
+	private TMLArchitecture archi;
+	private TMLCP cp;
 	
 	private boolean putPrefixName = false;
 	
@@ -1855,9 +1857,8 @@ public class GTMLModeling  {
 	}
 	
 	public TMLMapping translateToTMLMapping() {
+
 		tmlm = new TMLModeling(true);
-		
-		
 		archi = new TMLArchitecture();
 		map = new TMLMapping(tmlm, archi, false);
 		
@@ -1887,13 +1888,15 @@ public class GTMLModeling  {
 
 		tmlm = new TMLModeling( true );
 		archi = new TMLArchitecture();
+		//cp = new TMLCP();
+		//map = new TMLMapping( tmlm, archi, cp, false );
 		map = new TMLMapping( tmlm, archi, false );
 		
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		//listE = new CorrespondanceTGElement();
 		
-		TraceManager.addDev( "Making Communication Pattern" );
+		TraceManager.addDev( "Making mapping with Communication Pattern" );
 		makeCommunicationPattern();
 		/*TraceManager.addDev( "Making TML modeling" );
 		if (!makeTMLModeling()) {	//Attention, this routine will provoke errors...
@@ -2142,9 +2145,19 @@ public class GTMLModeling  {
 		ListIterator iterator = components.listIterator();
 		Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
 
+		TDiagramPanel mainCP = panelList.get(0);
+		LinkedList mainCPcomponents =  mainCP.getComponentList();	//the list of components from the main CP
+
+//		LinkedList elemList = panel.getComponentList();
+		TraceManager.addDev("Lenght of elements: " + mainCPcomponents.size() );
+		for( int k = 0; k < mainCPcomponents.size(); k++ )	{
+			TGComponent temp = (TGComponent) mainCPcomponents.get(k);
+			TraceManager.addDev( temp.getName() + "\t" + temp.getValue() );
+		}
+
 		//TO BE DONE: For the main CP
 
-		for( int i = 0; i < components.size(); i++ ) {
+		for( int i = 0; i < components.size(); i++ ) {	//The components of the Communication Pattern panel
 			tgc = (TGComponent)( components.get(i) );
 			TraceManager.addDev("Iteration: " + i + " testing " + tgc.getName() );
 			if( tgc instanceof TMLCPRefSD ) {
@@ -2159,6 +2172,7 @@ public class GTMLModeling  {
 				else {
 					names.add( refSDnode.getName() );
 					String SDname = refSDnode.getName();
+					//CPSequenceDiagram sd = new CPSequenceDiagram( SDname, null );
 					for( TDiagramPanel panel: panelList )	{
 						TraceManager.addDev("Testing panel: " + panel.getName() + " against SD ref " + SDname );
 						if( SDname.equals( panel.getName() ) )	{
@@ -2167,8 +2181,9 @@ public class GTMLModeling  {
 							TraceManager.addDev("Lenght of elements: " + elemList.size() );
 							for( int j = 0; j < elemList.size(); j++ )	{
 								TGComponent elem = (TGComponent) elemList.get(j);
-								TraceManager.addDev( elem.getName() );
+								TraceManager.addDev( elem.getName() + "\t" + elem.getValue() );
 							}
+							//cp.addSD(sd);
 							break;
 						}
 					}

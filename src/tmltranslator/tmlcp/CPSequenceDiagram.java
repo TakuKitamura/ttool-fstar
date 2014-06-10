@@ -67,6 +67,11 @@ public class CPSequenceDiagram  extends TMLElement {
 		init();
 	}
 
+	public CPSequenceDiagram()	{
+		super( "DefaultName", null );
+		init();
+	}
+
 	private void init() {
 		globalVariables = new ArrayList<TMLAttribute>();
 		instances = new ArrayList<TMLSDInstance>();

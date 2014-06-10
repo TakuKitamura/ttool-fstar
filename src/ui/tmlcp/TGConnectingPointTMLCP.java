@@ -50,6 +50,8 @@ package ui.tmlcp;
 import ui.*;
 
 public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
+
+
     
     public TGConnectingPointTMLCP(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
@@ -64,5 +66,5 @@ public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
         //System.out.println("is compatible with:false");
         return false;
     }
-    
+  
 }

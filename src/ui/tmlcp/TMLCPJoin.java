@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -41,7 +42,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * To be used in communication patterns diagrams
  * Creation: 17/02/2014
  * @version 1.0 17/02/2014
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see 
  */
  
@@ -53,7 +54,10 @@ import myutil.*;
 import ui.*;
 
 public class TMLCPJoin extends TGCWithoutInternalComponent{
+
 	private int lineLength = 0;
+	private static int instanceCounter = 0;
+	private int counter = 0;
 	//private int textX, textY;
 
 	public TMLCPJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -83,7 +87,9 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		editable = false;
 		removable = true;
 
-		name = "join";
+		instanceCounter++;
+		counter = instanceCounter;
+		name = "join" + Integer.toString(counter);
 		
 		myImageIcon = IconManager.imgic206;
 	}

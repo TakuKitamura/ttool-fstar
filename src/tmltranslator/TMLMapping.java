@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -38,8 +39,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
  * Class TMLMapping
  * Creation: 05/09/2007
- * @version 1.0 05/09/2007
- * @author Ludovic APVRILLE
+ * @version 1.1 10/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -49,15 +50,17 @@ import java.util.*;
 
 
 public class TMLMapping {
-    private TMLModeling tmlm;
-    private TMLArchitecture tmla;
- 
+
+	private TMLModeling tmlm;
+  private TMLArchitecture tmla;
+	private TMLCP tmlcp;
+
 	private ArrayList<HwExecutionNode> onnodes;
 	private ArrayList<TMLTask> mappedtasks;
 	private ArrayList<HwCommunicationNode> oncommnodes;
 	private ArrayList<TMLElement> mappedcommelts;
 	
-	private ArrayList<TMLCP> instancesOfCPs;
+	private ArrayList<TMLCP> mappedCPs;
 	private ArrayList<TMLElement> commEltsMappedOnCPs;
 	
 	
@@ -66,17 +69,28 @@ public class TMLMapping {
 	private int hashCode;
 	private boolean hashCodeComputed = false;
     
-    public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
-        tmlm = _tmlm;
+  public TMLMapping(TMLModeling _tmlm, TMLArchitecture _tmla, boolean reset) {
+  	
+		tmlm = _tmlm;
 		tmla = _tmla;
 		init();
 		
-		if (reset) {
+		if( reset ) {
 			DIPLOElement.resetID();
 		}
-    }
-	
+	}
 
+  public TMLMapping( TMLModeling _tmlm, TMLArchitecture _tmla, TMLCP _tmlcp, boolean reset ) {
+  	
+		tmlm = _tmlm;
+		tmla = _tmla;
+		tmlcp = _tmlcp;
+		init();
+		
+		if( reset ) {
+			DIPLOElement.resetID();
+		}
+	}
 	
 	public void makeMinimumMapping() {
 		HwCPU cpu;
@@ -227,10 +241,13 @@ public class TMLMapping {
 	}
 	
 	private void init() {
+
 		mappedtasks = new ArrayList<TMLTask>();
 		onnodes = new ArrayList<HwExecutionNode>();
 		oncommnodes = new ArrayList<HwCommunicationNode>();
 		mappedcommelts = new ArrayList<TMLElement>();
+		mappedCPs = new ArrayList<TMLCP>();
+		commEltsMappedOnCPs = new ArrayList<TMLElement>();
 	}
 	
 	public TMLTask getTMLTaskByCommandID(int id) {

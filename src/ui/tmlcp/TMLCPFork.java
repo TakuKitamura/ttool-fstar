@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -53,7 +54,10 @@ import myutil.*;
 import ui.*;
 
 public class TMLCPFork extends TGCWithoutInternalComponent{
+	
 	private int lineLength = 0;
+	private static int instanceCounter = 0;
+	private int counter = 0;
 	//private int textX, textY;
 
 	public TMLCPFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -82,7 +86,9 @@ public class TMLCPFork extends TGCWithoutInternalComponent{
 		editable = false;
 		removable = true;
 
-		name = "fork";
+		instanceCounter++;
+		counter = instanceCounter;
+		name = "fork" + Integer.toString(counter);
 		
 		myImageIcon = IconManager.imgic206;
 	}

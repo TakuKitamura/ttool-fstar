@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -38,8 +39,8 @@ knowledge of the CeCILL license and that you accept its terms.
 /**
 * Class TMLCP
 * Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @version 1.1 10/06/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -50,17 +51,21 @@ import tmltranslator.tmlcp.*;
 import myutil.*;
 
 public class TMLCP extends TMLElement {
-    private CPActivityDiagram mainCP;
-    private ArrayList<CPActivityDiagram> otherCPs; //Ref to other CPs
-    private ArrayList<CPSequenceDiagram> sds; //Ref to SDs
-	
-	
+
+	private CPActivityDiagram mainCP;
+	private ArrayList<CPActivityDiagram> otherCPs; //Ref to other CPs
+	private ArrayList<CPSequenceDiagram> sds; //Ref to SDs
 	private int hashCode;
 	private boolean hashCodeComputed = false;
 	
     
-  public TMLCP(String _name, Object _referenceObject) {
-  	super(_name, _referenceObject);
+  public TMLCP( String _name, Object _referenceObject ) {
+  	super( _name, _referenceObject );
+    init();
+  }
+
+  public TMLCP() {
+  	super( "DefaultCP", null );	//no reference to any object in the default constructor
     init();
   }
 	

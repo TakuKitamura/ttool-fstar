@@ -59,6 +59,9 @@ public  class TGConnectorTMLCP extends TGConnector {
     public TGConnectorTMLCP(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
+
+				_p1.setReferenceToConnector( this );
+				_p2.setReferenceToConnector( this );
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
@@ -72,11 +75,12 @@ public  class TGConnectorTMLCP extends TGConnector {
     public int getType() {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
+
+		public void changeStartName( String _name )	{
+			name = "connector from " + _name + " to " + endName;
+		}
+
+		public void changeEndName( String _name )	{
+			name = "connector from " + startName + " to " + _name;
+		}
 }
-
-
-
-
-
-
-
