@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paritech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class SDInstance
  * Fixed duration operator. To be used in sequence diagrams
  * Creation: 04/10/2004
- * @version 1.0 04/10/2004
- * @author Ludovic APVRILLE
+ * @version 1.1 10/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -63,9 +64,9 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     private int spacePt = 10;
     private int wText = 10, hText = 15;
     private int increaseSlice = 250;
-	private boolean isActor;
-	private static int heightActor = 30;
-	private static int widthActor = 16;
+		private boolean isActor;
+		private static int heightActor = 30;
+		private static int widthActor = 16;
 	
     
     public SDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -93,7 +94,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
         
         value = "Instance name";
         name = "instance";
-		isActor = false;
+				isActor = false;
         
         myImageIcon = IconManager.imgic500;
         
@@ -101,28 +102,29 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     }
     
     public void internalDrawing(Graphics g) {
-        if (!tdp.isScaled()) {
-            wText  = g.getFontMetrics().stringWidth(value);
-            hText = g.getFontMetrics().getHeight();
-        }
-        g.drawString(value, x - (wText / 2) + width/2, y - 3);
-        g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
-        g.drawLine(x+(width/2), y, x+(width/2), y +height);
+			
+			if( !tdp.isScaled() ) {
+      	wText  = g.getFontMetrics().stringWidth(value);
+        hText = g.getFontMetrics().getHeight();
+      }
+      g.drawString( name, x - (wText / 2) + width/2, y - 3 );
+      g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
+      g.drawLine(x+(width/2), y, x+(width/2), y +height);
 		
-		if (isActor) {
-			int xtmp = x + (width-widthActor) / 2;
-			int ytmp = y-hText;
-			// Head
-			g.drawOval(xtmp+(widthActor/4)-1, ytmp-heightActor, 2+widthActor/2, 2+widthActor/2);
-			//Body
-			g.drawLine(xtmp+widthActor/2, ytmp-heightActor/3, xtmp+widthActor/2, ytmp-(2*heightActor)/3);
-			//Arms
-			g.drawLine(xtmp, ytmp-(heightActor/2) - 2, xtmp+widthActor, ytmp-(heightActor/2) - 2);
-			//Left leg
-			g.drawLine(xtmp+widthActor, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
-			//right leg
-			g.drawLine(xtmp, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
-		}
+			if( isActor ) {
+				int xtmp = x + (width-widthActor) / 2;
+				int ytmp = y-hText;
+				// Head
+				g.drawOval(xtmp+(widthActor/4)-1, ytmp-heightActor, 2+widthActor/2, 2+widthActor/2);
+				//Body
+				g.drawLine(xtmp+widthActor/2, ytmp-heightActor/3, xtmp+widthActor/2, ytmp-(2*heightActor)/3);
+				//Arms
+				g.drawLine(xtmp, ytmp-(heightActor/2) - 2, xtmp+widthActor, ytmp-(heightActor/2) - 2);
+				//Left leg
+				g.drawLine(xtmp+widthActor, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
+				//right leg
+				g.drawLine(xtmp, ytmp, xtmp+widthActor/2, ytmp-heightActor/3);
+			}
     }
     
     public TGComponent isOnOnlyMe(int _x, int _y) {
@@ -177,9 +179,9 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-		String oldValue = value;
+		String oldValue = name;
 		
-		JDialogSDInstance jdsdi = new JDialogSDInstance(frame, value, isActor, "Instance attributes");
+		JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
         jdsdi.setSize(300, 250);
         GraphicLib.centerOnParent(jdsdi);
         jdsdi.show(); // blocked until dialog has been closed
@@ -198,15 +200,14 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
 				s = s.trim();
 			}
 			
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog(frame,
+			if((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+				if(!TAttribute.isAValidId(s, false, false)) {
+					JOptionPane.showMessageDialog( frame,
 						"Could not change the name of the instance: the new name is not a valid name",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
+						"Error", JOptionPane.INFORMATION_MESSAGE );
 					return false;
 				}
-				setValue(s);
+				setName(s);
 				return true;
 			}
 		}

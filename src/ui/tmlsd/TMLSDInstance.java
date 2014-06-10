@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,8 +40,8 @@ knowledge of the CeCILL license and that you accept its terms.
  * Class TMLSDInstance
  * Instance of a TML sequence diagram
  * Creation: 17/02/2004
- * @version 1.0 17/02/2004
- * @author Ludovic APVRILLE
+ * @version 1.1 10/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -93,7 +94,7 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
         
         value = "Instance name";
         name = "instance";
-		isActor = false;
+				isActor = false;
         
         myImageIcon = IconManager.imgic500;
         
@@ -102,10 +103,10 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
     
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
-            wText  = g.getFontMetrics().stringWidth(value);
+            wText  = g.getFontMetrics().stringWidth(name);
             hText = g.getFontMetrics().getHeight();
         }
-        g.drawString(value, x - (wText / 2) + width/2, y - 3);
+        g.drawString(name, x - (wText / 2) + width/2, y - 3);
         g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
         g.drawLine(x+(width/2), y, x+(width/2), y +height);
 		
@@ -177,26 +178,26 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-		String oldValue = value;
-		
-		JDialogSDInstance jdsdi = new JDialogSDInstance(frame, value, isActor, "Instance attributes");
-        jdsdi.setSize(300, 250);
-        GraphicLib.centerOnParent(jdsdi);
-        jdsdi.show(); // blocked until dialog has been closed
-		
-		
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
-        }
-		
-		if (jdsdi.hasBeenUpdated()) {
-			isActor = jdsdi.isAnActor();
-			String s = jdsdi.getInstanceName();
 			
-			if (s != null) {
-				s = s.trim();
-			}
+			String oldValue = name;
+		
+			JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
+      jdsdi.setSize(300, 250);
+      GraphicLib.centerOnParent(jdsdi);
+      jdsdi.show(); // blocked until dialog has been closed
+		
+		
+     	String text = getName() + ": ";
+      if(hasFather() ) {
+        text = getTopLevelName() + " / " + text;
+      }
+		
+			if( jdsdi.hasBeenUpdated() ) {
+				isActor = jdsdi.isAnActor();
+				String s = jdsdi.getInstanceName();
+				if( s != null ) {
+					s = s.trim();
+				}
 			
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 				if (!TAttribute.isAValidId(s, false, false)) {
@@ -206,7 +207,7 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
 						JOptionPane.INFORMATION_MESSAGE);
 					return false;
 				}
-				setValue(s);
+				setName(s);
 				return true;
 			}
 		}
