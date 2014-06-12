@@ -141,15 +141,45 @@ public class TMLSDPanel extends TDiagramPanel {
         }*/
     }
     
-    public TMLSDInstance getTMLSDInstance(String name) {
+    public TMLSDTransferInstance getTMLSDTransferInstance(String name) {
         TGComponent tgc;
         Iterator iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
-            if (tgc instanceof TMLSDInstance) {
+            if (tgc instanceof TMLSDTransferInstance) {
                 if (tgc.getValue().compareTo(name) ==0) {
-                    return (TMLSDInstance)tgc;
+                    return (TMLSDTransferInstance)tgc;
+                }
+            }
+        }
+        return null;
+    }			
+
+    public TMLSDControllerInstance getTMLSDControllerInstance(String name) {
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLSDControllerInstance) {
+                if (tgc.getValue().compareTo(name) ==0) {
+                    return (TMLSDControllerInstance)tgc;
+                }
+            }
+        }
+        return null;
+    }			
+
+    public TMLSDStorageInstance getTMLSDStorageInstance(String name) {
+        TGComponent tgc;
+        Iterator iterator = componentList.listIterator();
+        
+        while(iterator.hasNext()) {
+            tgc = (TGComponent)(iterator.next());
+            if (tgc instanceof TMLSDStorageInstance) {
+                if (tgc.getValue().compareTo(name) ==0) {
+                    return (TMLSDStorageInstance)tgc;
                 }
             }
         }
@@ -174,6 +204,7 @@ public class TMLSDPanel extends TDiagramPanel {
         return null;
     }
     
+		//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
     public TGConnector messageActionCloserTo(TGComponent tgc, TMLSDInstance sd) {
         int distance = 25;
         TGConnector found = null;
@@ -203,6 +234,7 @@ public class TMLSDPanel extends TDiagramPanel {
         return found;
     }
     
+		//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
     public TGConnectingPoint TGConnectingPointActionCloserTo(TGComponent tc1, TGConnector tgco, TMLSDInstance sdi) {
         TGConnectingPoint p1, p2;
         p1 = tgco.getTGConnectingPointP1();
@@ -234,6 +266,7 @@ public class TMLSDPanel extends TDiagramPanel {
         }
     }
     
+		//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
     public TGComponent getActionCloserTo(int y, TMLSDInstance sdi) {
         int distance = 25;
         TGComponent tgc, found = null;
@@ -254,6 +287,7 @@ public class TMLSDPanel extends TDiagramPanel {
         return found;
     }
 	
+	//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
 	public void increaseInstanceSize(int size) {
 		Iterator iterator = componentList.listIterator();
         TGComponent tgc;
@@ -276,6 +310,7 @@ public class TMLSDPanel extends TDiagramPanel {
 	}
 	
 	
+	//TMLSDStorage,Controller,Transfer inherit from TMLSDInstance so they are also of type TMLSDInstance
 	public void alignInstances() {
         TMLSDInstance ontheLeft = null, sdi;
         int x = getMaxX(),xtmp;

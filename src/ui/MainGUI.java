@@ -7905,8 +7905,12 @@ public	class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(actions[TGUIAction.TMLSD_MESSAGE_ASYNC].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD);
-        } else if (command.equals(actions[TGUIAction.TMLSD_INSTANCE].getActionCommand())) {
-            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_INSTANCE);
+        } else if (command.equals(actions[TGUIAction.TMLSD_STORAGE_INSTANCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_STORAGE_INSTANCE);
+        } else if (command.equals(actions[TGUIAction.TMLSD_CONTROLLER_INSTANCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_CONTROLLER_INSTANCE);
+        } else if (command.equals(actions[TGUIAction.TMLSD_TRANSFER_INSTANCE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_TRANSFER_INSTANCE);
 		} else if (command.equals(actions[TGUIAction.TMLSD_ACTION_STATE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_ACTION_STATE);
 		

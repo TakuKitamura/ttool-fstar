@@ -228,7 +228,9 @@ public class TGUIAction extends AbstractAction {
 	public static final int TMLCP_CHOICE = 386;
 	public static final int TMLCP_JUNCTION = 387;
 	
-	public static final int TMLSD_INSTANCE = 388;
+	public static final int TMLSD_STORAGE_INSTANCE = 388;
+	public static final int TMLSD_CONTROLLER_INSTANCE = 396;
+	public static final int TMLSD_TRANSFER_INSTANCE = 397;
 	public static final int TMLSD_ACTION_STATE = 389;
 	public static final int TMLSD_MESSAGE_ASYNC = 390;
 	public static final int TMLSD_EDIT = 391;    
@@ -526,7 +528,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 396;
+    public static final int NB_ACTION = 398;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -880,7 +882,9 @@ public class TGUIAction extends AbstractAction {
         
         actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit The sequence diagram of  communication patterns", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_MESSAGE_ASYNC] = new TAction("add-tmlsd-messageasync", "Add async msg", IconManager.imgic202, IconManager.imgic202, "Asynchronous msg", "Add an asynchronous message between two components of the currently opened communication pattern sequence diagram", 0);
-        actions[TMLSD_INSTANCE] = new TAction("add-instance-tmlsd", "Instance", IconManager.imgic500, IconManager.imgic500, "Instance", "Add an instance to the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_STORAGE_INSTANCE] = new TAction("add-storage-instance-tmlsd", "Storage instance", IconManager.imgic500, IconManager.imgic500, "Storage instance", "Add a storage instance to the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_TRANSFER_INSTANCE] = new TAction("add-transfer-instance-tmlsd", "Transfer instance", IconManager.imgic500, IconManager.imgic500, "Transfer instance", "Add a transfer instance to the currently opened communication pattern sequence diagram", 0);
+        actions[TMLSD_CONTROLLER_INSTANCE] = new TAction("add-controller-instance-tmlsd", "Controller instance", IconManager.imgic500, IconManager.imgic500, "Controller instance", "Add a controller instance to the currently opened communication pattern sequence diagram", 0);
         actions[TMLSD_ACTION_STATE] = new TAction("add-action-tmlsd", "Action state", IconManager.imgic512, IconManager.imgic512, "Action state", "Add an action state to the currently opened communication pattern sequence diagram", 0);
         
 

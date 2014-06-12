@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -41,7 +42,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * sequence diagram
  * Creation: 17/02/2004
  * @version 1.0 17/02/2004
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see TMLSDPanel
  */
 
@@ -52,6 +53,7 @@ import javax.swing.*;
 //import java.awt.event.*;
 
 import ui.*;
+import myutil.*;
 
 public class TMLSDToolBar extends TToolBar {
     
@@ -65,7 +67,9 @@ public class TMLSDToolBar extends TToolBar {
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
         mgui.actions[TGUIAction.TMLSD_MESSAGE_ASYNC].setEnabled(b);
-        mgui.actions[TGUIAction.TMLSD_INSTANCE].setEnabled(b);
+        mgui.actions[TGUIAction.TMLSD_STORAGE_INSTANCE].setEnabled(b);
+        mgui.actions[TGUIAction.TMLSD_CONTROLLER_INSTANCE].setEnabled(b);
+        mgui.actions[TGUIAction.TMLSD_TRANSFER_INSTANCE].setEnabled(b);
         mgui.actions[TGUIAction.TMLSD_ACTION_STATE].setEnabled(b); 
         mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].setEnabled(b);
 		
@@ -96,7 +100,12 @@ public class TMLSDToolBar extends TToolBar {
         
         this.addSeparator();
         
-        button = this.add(mgui.actions[TGUIAction.TMLSD_INSTANCE]);
+				TraceManager.addDev( "Value is: " + TGUIAction.TMLSD_STORAGE_INSTANCE );
+        button = this.add(mgui.actions[TGUIAction.TMLSD_STORAGE_INSTANCE]);
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLSD_CONTROLLER_INSTANCE]);
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLSD_TRANSFER_INSTANCE]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();

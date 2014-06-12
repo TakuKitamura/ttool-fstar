@@ -56,17 +56,19 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
+import tmltranslator.tmlcp.*;
 
+//Abstract class, getType() is abstract
+public abstract class TMLSDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
 
-public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
-    //private int lineLength = 5;
-    //private int textX, textY;
-    private int spacePt = 10;
-    private int wText = 10, hText = 15;
-    private int increaseSlice = 250;
-	private boolean isActor;
-	private static int heightActor = 30;
-	private static int widthActor = 16;
+    //protected int lineLength = 5;
+    //protected int textX, textY;
+    protected int spacePt = 10;
+    protected int wText = 10, hText = 15;
+    protected int increaseSlice = 250;
+		protected boolean isActor;
+		protected static int heightActor = 30;
+		protected static int widthActor = 16;
 	
     
     public TMLSDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -97,9 +99,7 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
 				isActor = false;
         
         myImageIcon = IconManager.imgic500;
-        
-        
-    }
+	}
     
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
@@ -157,22 +157,20 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
     }
     
     public String getInstanceName() {
-        return getValue();
+        return getName();
     }
     
-    public int getType() {
-        return TGComponentManager.TMLSD_INSTANCE;
-    }
+    public abstract int getType();
     
-    private void makeTGConnectingPoints() {
+    protected void makeTGConnectingPoints() {
         
-        nbConnectingPoint = ((height - (2 * spacePt)) / spacePt) + 1;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        nbConnectingPoint = ( (height - (2 * spacePt) ) / spacePt ) + 1;
+        connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
         
         int yh = spacePt;
         
-        for(int i=0; i<nbConnectingPoint; i ++, yh+=spacePt) {
-            connectingPoint[i] = new TGConnectingPointTMLSD(this, (width/2), yh, true, true);
+        for(int i = 0; i < nbConnectingPoint; i++, yh += spacePt ) {
+            connectingPoint[i] = new TGConnectingPointTMLSD(this, ( width/2), yh, true, true );
         }
         
     }
@@ -201,13 +199,27 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
 			
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog( frame,
 						"Could not change the name of the instance: the new name is not a valid name",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
+						"Error", JOptionPane.INFORMATION_MESSAGE );
 					return false;
 				}
 				setName(s);
+				TraceManager.addDev( Integer.toString( connectingPoint.length ) );
+        for( int i = 0; i < connectingPoint.length; i++ ) {
+				//for each connecting point connected to something
+					if( connectingPoint[i].getReferenceToConnector() != null )	{
+						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
+						if( connectingPoint[i].isSource() )	{
+							connector.changeStartName(s);
+							TraceManager.addDev( connector.getConnectorName() );
+						}
+						else	{
+							connector.changeEndName(s);
+							TraceManager.addDev( connector.getConnectorName() );
+						}
+					}
+				}
 				return true;
 			}
 		}
@@ -215,13 +227,9 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
     }
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		
-		
 		 if ((tgc instanceof TMLSDActionState)) {
 			return true;
 		}
-		
-		
 		return false;
 	}
     
@@ -399,7 +407,7 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
         }
      }
      
-     private void setCDRectangleOfSwallowed(TGComponent tgc) {
+     protected void setCDRectangleOfSwallowed(TGComponent tgc) {
       
         
         if ((tgc instanceof TMLSDActionState)) {
@@ -454,4 +462,15 @@ public class TMLSDInstance extends TGCWithInternalComponent implements SwallowTG
 		isActor = b;
 	}
     
+	public int getNumberInternalComponents()	{
+		return nbInternalTGComponent;
+	}
+
+	public TGComponent[] getInternalComponents()	{
+		return tgcomponent;
+	}
+
+	public TGConnectingPoint[] getConnectingPoint()	{
+		return connectingPoint;
+	}
 }

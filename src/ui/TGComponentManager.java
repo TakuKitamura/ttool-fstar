@@ -41,7 +41,7 @@
  * Definition and creation of all possible TURTLE graphical component
  * Creation: 21/12/2003
  * @version 1.1 28/10/2005
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -280,9 +280,11 @@ public class TGComponentManager {
 	public static final int TMLCP_STOP_STATE = 1507;
 	public static final int TMLCP_JUNCTION = 1508;
 
-	public static final int TMLSD_INSTANCE = 1520;
-	public static final int CONNECTOR_MESSAGE_ASYNC_TMLSD = 1521;
-	public static final int TMLSD_ACTION_STATE = 1522;
+	public static final int TMLSD_STORAGE_INSTANCE = 1520;
+	public static final int TMLSD_TRANSFER_INSTANCE = 1521;
+	public static final int TMLSD_CONTROLLER_INSTANCE = 1522;
+	public static final int CONNECTOR_MESSAGE_ASYNC_TMLSD = 1523;
+	public static final int TMLSD_ACTION_STATE = 1524;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -930,8 +932,14 @@ public class TGComponentManager {
             case TMLSD_ACTION_STATE:
                 tgc = new TMLSDActionState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case TMLSD_INSTANCE:
-                tgc = new TMLSDInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            case TMLSD_STORAGE_INSTANCE:
+                tgc = new TMLSDStorageInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+								break;
+            case TMLSD_CONTROLLER_INSTANCE:
+                tgc = new TMLSDControllerInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+								break;
+            case TMLSD_TRANSFER_INSTANCE:
+                tgc = new TMLSDTransferInstance(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
                 
             // Requirements
@@ -1474,8 +1482,12 @@ public class TGComponentManager {
             return CONNECTOR_TMLCP;
         } else if (tgc instanceof TMLSDActionState) {
             return TMLSD_ACTION_STATE;
-        } else if (tgc instanceof TMLSDInstance) {
-            return TMLSD_INSTANCE;
+        } else if (tgc instanceof TMLSDStorageInstance) {
+            return TMLSD_STORAGE_INSTANCE;
+        } else if (tgc instanceof TMLSDTransferInstance) {
+            return TMLSD_TRANSFER_INSTANCE;
+        } else if (tgc instanceof TMLSDControllerInstance) {
+            return TMLSD_CONTROLLER_INSTANCE;
         } else if (tgc instanceof TGConnectorMessageAsyncTMLSD) {
             return CONNECTOR_MESSAGE_ASYNC_TMLSD;
             
