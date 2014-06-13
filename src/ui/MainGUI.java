@@ -1232,6 +1232,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
+   public Vector<String> getAllTMLEventNames() {
+     TURTLEPanel tp;
+    Vector<String> list = new Vector<String>();
+ 
+     for( int i = 0; i < tabs.size(); i++ ) {
+       tp = ( TURTLEPanel )( tabs.elementAt(i) );
+       if ( tp instanceof TMLDesignPanel ) {
+         list.addAll( ( (TMLDesignPanel)tp ).getAllTMLEventNames( mainTabbedPane.getTitleAt(i) ) );
+       } else if ( tp instanceof TMLComponentDesignPanel ) {
+         list.addAll( ( (TMLComponentDesignPanel)tp ).getAllTMLEventNames( mainTabbedPane.getTitleAt(i) ) );
+       }
+     }
+     return list;
+   }
+
     public Vector<String> getAllNonMappedTMLTaskNames(TMLArchiDiagramPanel tadp, String ref, String name) {
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();
@@ -3165,12 +3180,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 					else {
 						jdscpd.closeDialog();
 					}
-					//tmlcpp.tmlcpp.setMasterClockFrequency(jdstmln.getClock());
 			    if( tmlDiagramsToValidate.size() > 0 ) {
 						tmlcpp.validated = JDialogSelectCPDiagrams.validated;
 						tmlcpp.ignored = JDialogSelectCPDiagrams.ignored;
 						TraceManager.addDev("Ready to generate TML mapping for Communication Patterns!");
-						b = gtm.checkSyntaxTMLMapping( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
+						//b = gtm.checkSyntaxTMLCP( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
 						if( b ) {
 							//setMode(MainGUI.MODEL_OK);
 							setMode( MainGUI.GEN_SYSTEMC_OK );
