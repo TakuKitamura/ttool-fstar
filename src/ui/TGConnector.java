@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -40,7 +41,7 @@
  * High level view of connectors to be used in TURTLE diagrams
  * Creation: 22/12/2003
  * @version 1.0 22/12/2003
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -789,5 +790,27 @@ public abstract class TGConnector extends TGCWithInternalComponent {
 	public boolean getNegation() {
 		return false;
 	}
-    
+
+	public void setStartName( String _name )	{
+		startName = _name;
+		name = "connector from " + startName + " to " + endName;
+	}
+
+	public void setEndName( String _name )	{
+		endName = _name;
+		name = "connector from " + startName + " to " + endName;
+	}
+
+	public String getStartName()	{
+		return startName;
+	}
+
+	public String getEndName()	{
+		return endName;
+	}
+
+	//getName is declared as final in TGComponent
+	public String getConnectorName()	{
+		return "connector from " + startName + " to " + endName;
+	}
 }
