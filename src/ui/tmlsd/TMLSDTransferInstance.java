@@ -127,11 +127,11 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 					if( connectingPoint[i].getReferenceToConnector() != null )	{
 						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
 						if( connectingPoint[i].isSource() )	{
-							connector.changeStartName(s);
+							connector.setStartName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 						else	{
-							connector.changeEndName(s);
+							connector.setEndName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 					}
@@ -144,5 +144,9 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 
 	@Override public int getType() {
 		return TGComponentManager.TMLSD_TRANSFER_INSTANCE;
+	}
+
+	public String getInstanceType()	{
+		return "TRANSFER";
 	}
 }	//End of class

@@ -183,11 +183,11 @@ public class TMLCPRefCP extends TGCOneLineText {
 			//When the name of a refToCP is changed, the connector name must be updated accordingly
 			if( connectingPoint[0].getReferenceToConnector() != null )	{
 				TGConnectorTMLCP connector = (TGConnectorTMLCP) connectingPoint[0].getReferenceToConnector();
-				connector.changeEndName(s);
+				connector.setEndName(s);
 				TraceManager.addDev( connector.getName() );
 				if( connectingPoint[1].getReferenceToConnector() != null )	{
 					connector = (TGConnectorTMLCP) connectingPoint[1].getReferenceToConnector();
-					connector.changeStartName(s);
+					connector.setStartName(s);
 					TraceManager.addDev( connector.getName() );
 				}
 			}

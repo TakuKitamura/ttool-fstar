@@ -126,11 +126,11 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 					if( connectingPoint[i].getReferenceToConnector() != null )	{
 						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
 						if( connectingPoint[i].isSource() )	{
-							connector.changeStartName(s);
+							connector.setStartName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 						else	{
-							connector.changeEndName(s);
+							connector.setEndName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 					}
@@ -143,5 +143,9 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 
 	@Override public int getType() {
 		return TGComponentManager.TMLSD_STORAGE_INSTANCE;
+	}
+
+	public String getInstanceType()	{
+		return "STORAGE";
 	}
 }	//End of class

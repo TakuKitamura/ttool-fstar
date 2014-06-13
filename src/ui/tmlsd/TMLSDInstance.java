@@ -211,11 +211,11 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 					if( connectingPoint[i].getReferenceToConnector() != null )	{
 						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
 						if( connectingPoint[i].isSource() )	{
-							connector.changeStartName(s);
+							connector.setStartName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 						else	{
-							connector.changeEndName(s);
+							connector.setEndName(s);
 							TraceManager.addDev( connector.getConnectorName() );
 						}
 					}
