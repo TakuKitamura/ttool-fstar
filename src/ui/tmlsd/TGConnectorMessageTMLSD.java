@@ -46,8 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-
-
 //import java.awt.*;
 //import java.awt.geom.*;
 import javax.swing.*;
@@ -55,10 +53,14 @@ import java.util.*;
 
 import myutil.*;
 import ui.*;
+import ui.window.*;
+import org.w3c.dom.*;
 
-public  abstract class TGConnectorMessageTMLSD extends TGConnector {
+public abstract class TGConnectorMessageTMLSD extends TGConnector {
     protected int arrowLength = 10;
     protected int widthValue, heightValue;
+    protected int nParam = 5;
+    protected String [] params = new String[nParam];
     
     public TGConnectorMessageTMLSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -132,25 +134,55 @@ public  abstract class TGConnectorMessageTMLSD extends TGConnector {
 		return true;
 	}
 	
-	
-    
-    public boolean editOndoubleClick(JFrame frame) {
-        //System.out.println("Double click");
-        String text = getName() + ": ";
-        if (hasFather()) {
-            text = getTopLevelName() + " / " + text;
+    @Override public boolean editOndoubleClick( JFrame frame ) {
+			
+			String [] labels = new String[nParam + 1];
+      String [] values = new String[nParam + 1];
+      labels[0] = "Message name";
+      values[0] = this.name;
+      for( int i = 0; i< nParam; i++ ) {
+				labels[i+1] = "Param #" + (i+1);
+        values[i+1] = params[i];
+      }
+         
+      JDialogMultiString jdms = new JDialogMultiString( frame, "Setting message properties", nParam+1, labels, values );
+      jdms.setSize( 350, 300 );
+      GraphicLib.centerOnParent(jdms);
+      jdms.show(); // blocked until dialog has been closed
+       
+      if(jdms.hasBeenSet() && (jdms.hasValidString(0))) {
+				this.name = jdms.getString(0);
+        for( int i = 0; i < nParam; i++ ) {
+					params[i] = jdms.getString(i+1);
         }
-        String s = (String)JOptionPane.showInputDialog(frame, text,
-			"setting message value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-			null,
-			getValue());
-        if ((s != null) && (s.length() > 0)) {
-            setValue(s);
-            return true;
-        }
-        return false;
+      makeValue();
+      return true;
+      }
+    	return false;
     }
-    
+
+    public void makeValue() {
+			
+			boolean first = true;
+      value = this.name + "(";
+			for( int i = 0; i < nParam; i++ ) {
+				if( params[i].length() > 0 ) {
+					if( !first ) {
+						value += ", " + params[i];
+					}
+					else {
+						first = false;
+						value += params[i];
+					}
+        }
+			}
+			value += ")";
+    }
+
+	public String[] getParams()	{
+		return params;
+	}
+	
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {  
         //System.out.println("Extra");
         if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
