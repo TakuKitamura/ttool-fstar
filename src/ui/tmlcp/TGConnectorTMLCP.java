@@ -76,11 +76,4 @@ public  class TGConnectorTMLCP extends TGConnector {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
 
-		public void changeStartName( String _name )	{
-			name = "connector from " + _name + " to " + endName;
-		}
-
-		public void changeEndName( String _name )	{
-			name = "connector from " + startName + " to " + _name;
-		}
 }
