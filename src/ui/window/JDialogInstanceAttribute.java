@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -36,11 +37,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class JDialogAttribute
+ * Class JDialogInstanceAttribute, like JDialogAttribute but with a third panel for setting the name of the instance
  * Dialog for managing attributes
  * Creation: 18/12/2003
- * @version 1.0 18/12/2003
- * @author Ludovic APVRILLE
+ * @version 1.0 12/06/2014
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -55,35 +56,16 @@ import java.util.*;
 import ui.*;
 
 
-public class JDialogAttribute extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
-    protected Vector attributes, attributesPar, forbidden, initValues;
-    protected boolean checkKeyword, checkJavaKeyword, checkTMLKeyword;
+public class JDialogInstanceAttribute extends JDialogAttribute implements ActionListener, ListSelectionListener  {
     
-    protected JPanel panel1, panel2;
-    
-    protected Frame frame;
-    
-    protected String attrib; // "Attributes", "Gates", etc.
-    
-    // Panel1
-    protected JComboBox accessBox, typeBox;
-    protected JTextField identifierText;
-    protected JTextField initialValue;
-    protected JButton addButton;
-    
-    //Panel2
-    protected JList listAttribute;
-    protected JButton upButton;
-    protected JButton downButton;
-    protected JButton removeButton;
-    
-    // Main Panel
-    protected JButton closeButton;
-    protected JButton cancelButton;
+    protected JPanel panel3;
+    protected JTextField instanceNameField;
+		protected String instanceName;
     
     /** Creates new form  */
-    public JDialogAttribute(Vector _attributes, Vector _forbidden, Frame f, String title, String attrib) {
-        super(f, title, true);
+    public JDialogInstanceAttribute( Vector _attributes, Vector _forbidden, Frame f, String title, String attrib ) {
+        super( _attributes, _forbidden, f, title, attrib );
+				instanceName = title;
         frame = f;
         attributesPar = _attributes;
         forbidden = _forbidden;
@@ -96,16 +78,9 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
             attributes.addElement(((TAttribute)(attributesPar.elementAt(i))).makeClone());
         }
         
-        
         initComponents();
         myInitComponents();
         pack();
-    }
-    
-    protected void myInitComponents() {
-        removeButton.setEnabled(false);
-        upButton.setEnabled(false);
-        downButton.setEnabled(false);
     }
     
     protected void initComponents() {
@@ -131,6 +106,15 @@ public class JDialogAttribute extends javax.swing.JDialog implements ActionListe
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing " + attrib + "s"));
         panel2.setPreferredSize(new Dimension(300, 250));
+
+/*        panel3 = new JPanel();
+        panel3.setLayout(gridbag2);
+        panel3.setBorder(new javax.swing.border.TitledBorder("Name:" + attrib + "s"));
+        panel3.setPreferredSize(new Dimension(300, 250));
+				panel3.add(new JLabel( "Name:" ), c1 );
+        instanceNameField = new JTextField( instanceName );
+				panel3.add( instanceNameField, c1 );
+				c.add( panel3, c0 );*/
         
         // first line panel1
         c1.gridwidth = 1;
