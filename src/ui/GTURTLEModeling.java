@@ -144,7 +144,7 @@ public class GTURTLEModeling {
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
-	//private TMLCP tmcp;
+	private TMLCP.TMLCPGraphicalCP tmlcp;
 	private RequirementModeling rm;
 	private NCStructure ncs;
 	private MainGUI mgui;
@@ -399,41 +399,52 @@ public class GTURTLEModeling {
 	public boolean generateTMLTxt( String _title ) {
 
 		//TO DO: make a third branch for the syntax checking from the CP panel
-
-		//This branch is activated if doing the syntax check from the application panel.
-		//It only generates the application TML text
-		if( tmap == null ) {
-			TMLTextSpecification spec = new TMLTextSpecification( _title );
-			spec.toTextFormat( tmlm );	//TMLModeling
-			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-			specCP.toTextFormat( tmlm );	//TMLCP
-			try {
-				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
-				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-			}
-			catch( Exception e ) {
-				TraceManager.addError( "File could not be saved: " + e.getMessage() );
-				return false;
-			}
-		}
-		//This branch is activated if doing the syntax check from the architecture panel.
-		//It generates the text TML for the architecture and the application + mapping information
-		else {
-			TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
-			spec.toTextFormat( tmap );	//TMLMapping
-			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-			specCP.toTextFormat( tmap );	//TMLCP
-			try {
-				spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
-				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-			}
-			catch( Exception e ) {
-				TraceManager.addError( "Files could not be saved: " + e.getMessage() );
-				return false;
-			}
-		}
 		
-		return true;
+		if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
+			TraceManager.addError( "About to generate the TMLText for CPs" );
+			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+			specCP.toTextFormat( tmlcp );	//TMLCP.TMLCPGraphicalCP
+			try	{
+				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+			}
+			catch( Exception e ) {
+				TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
+				return false;
+			}
+		}
+		else	{
+
+			//This branch is activated if doing the syntax check from the application panel.
+			//It only generates the application TML text
+			if( tmap == null ) {
+				TMLTextSpecification spec = new TMLTextSpecification( _title );
+				spec.toTextFormat( tmlm );	//TMLModeling
+				try {
+					spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
+				}
+				catch( Exception e ) {
+					TraceManager.addError( "File could not be saved: " + e.getMessage() );
+					return false;
+				}
+			}
+			//This branch is activated if doing the syntax check from the architecture panel.
+			//It generates the text TML for the architecture and the application + mapping information
+			else {
+				TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+				spec.toTextFormat( tmap );	//TMLMapping
+//			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+//			specCP.toTextFormat( tmap );	//TMLCP
+				try {
+					spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+//				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+				}
+				catch( Exception e ) {
+					TraceManager.addError( "Files could not be saved: " + e.getMessage() );
+					return false;
+				}
+			}
+		}
+		return true;	//temporary, just to check functionality
 	}
 	
 	/*public void setUPPAALData(String _uppaal, RelationTIFUPPAAL _uppaalTable) {
@@ -6164,7 +6175,7 @@ public class GTURTLEModeling {
 	}
 
 	//Newly introduced to perform Syntax check of CP diagrams
-	public boolean checkSyntaxTMLMapping( Vector nodesToTakeIntoAccount, TMLCommunicationPatternPanel tmlcpp, boolean optimize ) {
+	public boolean checkSyntaxTMLCP( Vector nodesToTakeIntoAccount, TMLCommunicationPatternPanel tmlcpp, boolean optimize ) {
 
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();
@@ -6176,9 +6187,8 @@ public class GTURTLEModeling {
 		tmlm = null;
 		tm = null;
 		tmState = 1;
-		tmap = gtmlm.translateToTMLCP();
-		//tmcp = gtmlm.translateToTMLCP();
-		listE = gtmlm.getCorrespondanceTable();
+		tmlcp = gtmlm.translateToTMLCP();
+		/*listE = gtmlm.getCorrespondanceTable();
 		checkingErrors = gtmlm.getCheckingErrors();
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
@@ -6197,7 +6207,8 @@ public class GTURTLEModeling {
 			listE.useDIPLOIDs();
 			mgui.setMode( MainGUI.GEN_DESIGN_OK );
 			return true;
-		}
+		}*/
+		return true;	//temporary, just to check functionality
 	}
 	
 	public boolean translateTMLMapping(boolean _sample, boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {

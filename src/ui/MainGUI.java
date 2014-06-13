@@ -3184,7 +3184,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 						tmlcpp.validated = JDialogSelectCPDiagrams.validated;
 						tmlcpp.ignored = JDialogSelectCPDiagrams.ignored;
 						TraceManager.addDev("Ready to generate TML mapping for Communication Patterns!");
-						//b = gtm.checkSyntaxTMLCP( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
+						b = gtm.checkSyntaxTMLCP( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
 						if( b ) {
 							//setMode(MainGUI.MODEL_OK);
 							setMode( MainGUI.GEN_SYSTEMC_OK );

@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCP
+* Class TMLCP: data structure for the TMLTxt and the graphical2TMLTxt parsers
 * Creation: 18/02/2014
 * @version 1.1 10/06/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -52,13 +52,64 @@ import myutil.*;
 
 public class TMLCP extends TMLElement {
 
+	public static class TMLCPGraphicalCP	{
+
+		private String name;
+		//private TMLCPGraphicalAD mainAD;
+		//private ArrayList<TMLCPGraphicalAD> otherADs;
+		private ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> otherSDs;
+
+		public TMLCPGraphicalCP( String _name )	{
+			this.name = _name;
+			init();
+		}
+
+		private void init()	{
+			otherSDs = new ArrayList<CPSequenceDiagram.TMLCPGraphicalSD>();
+			//otherADs = new ArrayList<CPSequenceDiagram.TMLCPGraphicalAD>();
+		}
+
+		public void setName( String _name )	{
+			if( _name != "" )	{
+				this.name = _name;
+			}
+			else	{
+				this.name = "NoNameTMLCPGraphicalCP";
+			}
+		}
+
+		/*public void addGraphicalAD( TMLCPGraphicalAD _ad )	{
+			otherADs.add( _ad );
+		}*/
+
+		public void addGraphicalSD( CPSequenceDiagram.TMLCPGraphicalSD _sd )	{
+			otherSDs.add( _sd );
+		}
+
+		public ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> getGraphicalSDs()	{
+			return otherSDs;
+		}
+
+		public String getName()	{
+			return this.name;
+		}
+
+		@Override public String toString()	{
+			return "TMLCPGraphicalCP " + getName();
+		}
+	}
+
+
+/*#############################################################################*/
+
+	//Data structure for TMLtext2ModelsTransformations
 	private CPActivityDiagram mainCP;
 	private ArrayList<CPActivityDiagram> otherCPs; //Ref to other CPs
 	private ArrayList<CPSequenceDiagram> sds; //Ref to SDs
+
 	private int hashCode;
 	private boolean hashCodeComputed = false;
 	
-    
   public TMLCP( String _name, Object _referenceObject ) {
   	super( _name, _referenceObject );
     init();
@@ -421,8 +472,8 @@ public class TMLCP extends TMLElement {
 				}
 
 				//Print Instances
-				ArrayList<TMLSDInstance> listInstances;
-				TMLSDInstance inst;
+				ArrayList<TMLSDInstanceDS> listInstances;
+				TMLSDInstanceDS inst;
 				listInstances = tempSD.getInstances();
 				System.out.println( "\tInstances:" );
 				for( j = 0; j < listInstances.size(); j++ )	{
@@ -445,6 +496,5 @@ public class TMLCP extends TMLElement {
 					}
 				}
 		}
-
 	}
 }	//End of the class

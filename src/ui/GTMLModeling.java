@@ -55,6 +55,7 @@ import ui.tmlcd.*;
 import ui.tmlcompd.*;
 import ui.tmldd.*;
 import ui.tmlcp.*;
+import ui.tmlsd.*;
 import tmltranslator.*;
 import tmltranslator.tmlcp.*;
 import myutil.*;
@@ -79,7 +80,7 @@ public class GTMLModeling  {
 
 	private TMLMapping map;
 	private TMLArchitecture archi;
-	private TMLCP cp;
+	private TMLCP.TMLCPGraphicalCP tmlcp;
 	
 	private boolean putPrefixName = false;
 	
@@ -1859,7 +1860,7 @@ public class GTMLModeling  {
 	public TMLMapping translateToTMLMapping() {
 
 		tmlm = new TMLModeling(true);
-		archi = new TMLArchitecture();
+		archi = new TMLArchitecture();	//filled by makeArchitecture
 		map = new TMLMapping(tmlm, archi, false);
 		
 		checkingErrors = new Vector();
@@ -1867,13 +1868,13 @@ public class GTMLModeling  {
 		//listE = new CorrespondanceTGElement();
 		
 		TraceManager.addDev("Making architecture");
-		makeArchitecture();
+		makeArchitecture();	//fills archi
 		TraceManager.addDev("Making TML modeling");
 		if (!makeTMLModeling()) {
 			return null;
 		}
 		TraceManager.addDev("Making mapping");
-		makeMapping();
+		makeMapping();	//fills map
 		
 		//TraceManager.addDev("<--- TML modeling:");
 		//TraceManager.addDev("TML: " + tmlm.toString());
@@ -1881,37 +1882,38 @@ public class GTMLModeling  {
 		
 		removeActionsWithRecords();
 		
-		return map;
+		return map;	// the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
 	}
 
-	public TMLMapping translateToTMLCP() {
+	//Checking the syntax of CP without mapping
+	public TMLCP.TMLCPGraphicalCP translateToTMLCP() {
 
-		tmlm = new TMLModeling( true );
-		archi = new TMLArchitecture();
-		//cp = new TMLCP();
+		//tmlm = new TMLModeling( true );
+		//archi = new TMLArchitecture();
+		tmlcp = new TMLCP.TMLCPGraphicalCP("");
 		//map = new TMLMapping( tmlm, archi, cp, false );
-		map = new TMLMapping( tmlm, archi, false );
+		//map = new TMLMapping( tmlm, archi, false );
 		
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		//listE = new CorrespondanceTGElement();
 		
-		TraceManager.addDev( "Making mapping with Communication Pattern" );
-		makeCommunicationPattern();
+		TraceManager.addDev( "Making Communication Pattern data structure to check the syntax, without mapping" );
+		makeCommunicationPattern(); //this routine will fill archi, but now it fills
 		/*TraceManager.addDev( "Making TML modeling" );
 		if (!makeTMLModeling()) {	//Attention, this routine will provoke errors...
 			return null;
 		}
 		TraceManager.addDev("Making mapping");
-		makeMapping();*/	//Attention this routine will provoke errors...
+		makeMapping();	//Attention this routine will fill map
 		
-		//TraceManager.addDev("<--- TML modeling:");
-		//TraceManager.addDev("TML: " + tmlm.toString());
-		//TraceManager.addDev("End of TML modeling --->");
+		TraceManager.addDev("<--- TML modeling:");
+		TraceManager.addDev("TML: " + tmlm.toString());
+		TraceManager.addDev("End of TML modeling --->");
 		
-		removeActionsWithRecords();
+		removeActionsWithRecords();*/
 		
-		return map;
+		return tmlcp;
 	}
 	
 	private boolean nameInUse(ArrayList<String> _names, String _name) {
@@ -2132,8 +2134,9 @@ public class GTMLModeling  {
 		TMLCPRefCP refCPnode;
 		CPRefAD refCP;
 		ArrayList<String> names = new ArrayList<String>();
-		CPSequenceDiagram SD;
-		CPActivityDiagram AD;
+		//TMLCP.TMLCPGraphicalCP graphicalCP;
+		CPSequenceDiagram.TMLCPGraphicalSD graphicalSD;
+		//CPActivityDiagram.TMLCPGraphicalAD graphicalAD;
 
 		if( nodesToTakeIntoAccount == null ) {
 			components = tmlcpp.tmlcpp.getComponentList();
@@ -2149,7 +2152,7 @@ public class GTMLModeling  {
 		LinkedList mainCPcomponents =  mainCP.getComponentList();	//the list of components from the main CP
 
 //		LinkedList elemList = panel.getComponentList();
-		TraceManager.addDev("Lenght of elements: " + mainCPcomponents.size() );
+		TraceManager.addDev("Main CP, lenght of elements: " + mainCPcomponents.size() );
 		for( int k = 0; k < mainCPcomponents.size(); k++ )	{
 			TGComponent temp = (TGComponent) mainCPcomponents.get(k);
 			TraceManager.addDev( temp.getName() + "\t" + temp.getValue() );
@@ -2172,18 +2175,78 @@ public class GTMLModeling  {
 				else {
 					names.add( refSDnode.getName() );
 					String SDname = refSDnode.getName();
-					//CPSequenceDiagram sd = new CPSequenceDiagram( SDname, null );
+					graphicalSD = new CPSequenceDiagram.TMLCPGraphicalSD( SDname );
 					for( TDiagramPanel panel: panelList )	{
 						TraceManager.addDev("Testing panel: " + panel.getName() + " against SD ref " + SDname );
 						if( SDname.equals( panel.getName() ) )	{
 							TraceManager.addDev("Found match: " + panel.getName() );
 							LinkedList elemList = panel.getComponentList();
 							TraceManager.addDev("Lenght of elements: " + elemList.size() );
+							//order messages according to the inverse of Y coordinate
 							for( int j = 0; j < elemList.size(); j++ )	{
 								TGComponent elem = (TGComponent) elemList.get(j);
-								TraceManager.addDev( elem.getName() + "\t" + elem.getValue() );
+								if( elem instanceof TMLSDStorageInstance )	{
+									TMLSDStorageInstance elem1 = (TMLSDStorageInstance) elemList.get(j);
+									TraceManager.addDev( "Found storage instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
+																				+ " internal component" );
+									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
+									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
+										TGComponent[] comp = elem1.getInternalComponents();
+										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
+											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
+											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+										}
+									}
+								}
+								if( elem instanceof TMLSDControllerInstance )	{
+									TMLSDControllerInstance elem1 = (TMLSDControllerInstance) elemList.get(j);
+									TraceManager.addDev( "Found controller instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
+																				+ " internal component" );
+									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
+									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
+										TGComponent[] comp = elem1.getInternalComponents();
+										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
+											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
+											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+										}
+									}
+								}
+								if( elem instanceof TMLSDTransferInstance )	{
+									TMLSDTransferInstance elem1 = (TMLSDTransferInstance) elemList.get(j);
+									Vector myvect = elem1.getAttributes();
+									TraceManager.addDev( "Found transfer instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
+																				+ " internal component with " + myvect.size() " attributes");
+									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
+									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
+										TGComponent[] comp = elem1.getInternalComponents();
+										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
+											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
+											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+										}
+									}
+								}
+								if( elem instanceof TGConnectorMessageTMLSD )	{
+									TGConnectorMessageAsyncTMLSD conn = (TGConnectorMessageAsyncTMLSD) elemList.get(j);
+									TraceManager.addDev( "Found message: " + conn.getName() + " " + conn.getValue() + " " + conn.getY() + conn.getParams() );
+									graphicalSD.addGraphicalSDElement( conn.getValue() + "(" + conn.getStartName() + ", " + conn.getEndName() + ")", conn.getY() );
+								}
 							}
-							//cp.addSD(sd);
+							ArrayList<CPSequenceDiagram.GraphicalSDElement> pippo = graphicalSD.getGraphicalSDElements();
+							TraceManager.addDev( "*************************************************" );
+							for( int p = 0; p < pippo.size(); p++ )	{
+								CPSequenceDiagram.GraphicalSDElement tempy = pippo.get(p);
+								TraceManager.addDev( tempy.getValue() + " " + tempy.getyCoord() );
+							}
+							TraceManager.addDev( "*************************************************" );
+
+							ArrayList<CPSequenceDiagram.TMLCPGraphicalSDInstance> inst = graphicalSD.getTMLCPGraphicalSDInstances();
+							TraceManager.addDev( "*************************************************" );
+							for( int pp = 0; pp < inst.size(); pp++ )	{
+								CPSequenceDiagram.TMLCPGraphicalSDInstance tempyy = inst.get(pp);
+								TraceManager.addDev( tempyy.getName() + " " + tempyy.getType() );
+							}
+							TraceManager.addDev( "*************************************************" );
+							tmlcp.addGraphicalSD( graphicalSD );
 							break;
 						}
 					}

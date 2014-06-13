@@ -51,6 +51,7 @@ package tmltranslator;
 import java.util.*;
 import java.io.*;
 import myutil.*;
+import tmltranslator.tmlcp.*;
 
 public class TMLCPTextSpecification {
 	public final static String CR = "\n";
@@ -58,6 +59,9 @@ public class TMLCPTextSpecification {
 	public final static String CR2 = "\n\n";
 	public final static String SC = ";";
 	public final static String C = ",";
+	public final static String TAB = "\t";
+	public final static String MAIN = "MAIN";
+	public final static String END = "END";
     
     private String spec;
 	private String title;
@@ -175,10 +179,11 @@ public class TMLCPTextSpecification {
 		return spec;
 	}
 	
-	public String toTextFormat( TMLModeling tmlm ) {
-		tmlm.sortByName();
-		spec = makeDeclarations(tmlm);
-		spec += makeTasks(tmlm);
+	public String toTextFormat( TMLCP.TMLCPGraphicalCP tmlcp ) {
+
+		//tmlcp.sortByName();
+		spec = makeDeclarations( tmlcp );
+		//spec += makeTasks( tmlcp );
 		indent();
 		return spec;
 	}
@@ -193,14 +198,37 @@ public class TMLCPTextSpecification {
 		return "FAKE";
 	}
 	
-	public String makeDeclarations(TMLModeling tmlm) {
-		int i;
+	public String makeDeclarations( TMLCP.TMLCPGraphicalCP tmlcp ) {
+
 		String sb = "";
 		sb += "// TML Communication Pattern - FORMAT 0.1" + CR;
 		sb += "// Communication Pattern: " + title + CR;
 		sb += "// Generated: " + new Date().toString() + CR2; 
 		
-		sb += "// Channels" + CR;
+		ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> listSDs = tmlcp.getGraphicalSDs();
+
+		for( int i = 0; i < listSDs.size(); i++ )	{
+			CPSequenceDiagram.TMLCPGraphicalSD tempSD = listSDs.get(i);
+			sb += "SCENARIO " + tempSD.getName() + CR + TAB + TAB;
+			ArrayList<CPSequenceDiagram.TMLCPGraphicalSDInstance> listInstances = tempSD.getTMLCPGraphicalSDInstances();
+			ArrayList<CPSequenceDiagram.GraphicalSDElement> listElements = tempSD.getGraphicalSDElements();
+			for( CPSequenceDiagram.TMLCPGraphicalSDInstance inst: listInstances )	{
+				sb += inst.toString();
+				sb += CR + TAB + TAB;
+			}
+			sb += CR2;
+			sb += MAIN + CR;
+			//elements must be order according to Y!
+			for( CPSequenceDiagram.GraphicalSDElement elem: listElements )	{
+				sb += elem.toString();
+				sb += CR + TAB;
+			}
+			sb += CR;
+		}
+		sb += END + CR;
+		sb += END;
+
+		/*sb += "// Channels" + CR;
 		for(TMLChannel ch:tmlm.getChannels()) {
 			sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
 			if (!ch.isInfinite()) {
@@ -257,11 +285,10 @@ public class TMLCPTextSpecification {
 			if (request.isLossy()) {
 				sb += "LOSSYREQUEST" + SP + request.getName() + SP + request.getLossPercentage() + SP + request.getMaxNbOfLoss() + CR;
 			}
-		}
+		}*/
 		sb+= CR;
 		
 		return sb;
-		
 	}
 	
 	public String makeTasks(TMLModeling tmlm) {

@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class CPSequenceDiagram
+* Class CPSequenceDiagram. The class contains the da structure for the graphical2TMLtext compiler as well as for the TMLCP parser
 * Creation: 18/02/2014
 * @version 1.0 18/02/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -52,9 +52,116 @@ import tmltranslator.*;
 import myutil.*;
 
 public class CPSequenceDiagram  extends TMLElement {
+
+	//Nested classes for the data structure of the compiler graphical2TMLText
 	
-	private ArrayList<TMLSDInstance> instances; 
-	private ArrayList<TMLSDInstance> mappingInstances;
+	public static class TMLCPGraphicalSDInstance	{
+		String name;
+		String type;
+
+		public TMLCPGraphicalSDInstance( String _name, String _type )	{
+			this.name = _name;
+			this.type = _type;
+		}
+
+		public void setName( String _name )	{
+			this.name = _name;
+		}
+
+		public void setType( String _type )	{
+			this.type = _type;
+		}
+
+		public String getName()	{
+			return this.name;
+		}
+
+		public String getType()	{
+			return this.type;
+		}
+
+		@Override public String toString()	{
+			return this.type + " " + this.name;
+		}
+	}	//End of class TMLCPGraphicalSDInstance
+
+
+/*#############################################################################*/
+
+	public static class GraphicalSDElement	{
+		String value;
+		int yCoord;
+
+		public GraphicalSDElement( String _value, int _yCoord )	{
+			value = _value;
+			yCoord = _yCoord;
+		}
+
+		public void setValue( String _value )	{
+			value = _value;
+		}
+
+		public void setyCoord( int _yCoord )	{
+			yCoord = _yCoord;
+		}
+
+		public String getValue()	{
+			return value;
+		}
+
+		public int getyCoord()	{
+			return yCoord;
+		}
+
+		@Override public String toString()	{
+			return value + " " + Integer.toString( yCoord );
+		}
+
+	}	//End of class GraphicalSD
+
+/*#############################################################################*/
+
+	public static class TMLCPGraphicalSD	{
+
+		private String name;
+		private ArrayList<TMLCPGraphicalSDInstance> TMLCPGraphicalSDInstanceList;
+		private ArrayList<GraphicalSDElement> GraphicalSDElementList;
+
+		public TMLCPGraphicalSD( String _name )	{
+			this.name = _name;
+			GraphicalSDElementList = new ArrayList<GraphicalSDElement>();
+			TMLCPGraphicalSDInstanceList = new ArrayList<TMLCPGraphicalSDInstance>();
+		}
+
+		public void addGraphicalSDElement( String _value, int _yCoord )	{
+			GraphicalSDElementList.add( new GraphicalSDElement( _value, _yCoord ) );
+		}
+
+		public ArrayList<GraphicalSDElement> getGraphicalSDElements()	{
+			return GraphicalSDElementList;
+		}
+	
+		public void addTMLCPGraphicalSDInstance( String _name, String _type )	{
+			TMLCPGraphicalSDInstanceList.add( new TMLCPGraphicalSDInstance( _name, _type ) );
+		}
+
+		public ArrayList<TMLCPGraphicalSDInstance> getTMLCPGraphicalSDInstances()	{
+			return TMLCPGraphicalSDInstanceList;
+		}
+
+		@Override public String toString()	{
+			return "TMLCPGraphicalSD " + this.name;
+		}
+
+		public String getName()	{
+			return this.name;
+		}
+	}	//End of class
+
+/*#############################################################################*/
+
+	private ArrayList<TMLSDInstanceDS> instances; 
+	private ArrayList<TMLSDInstanceDS> mappingInstances;
 	private ArrayList<TMLAttribute> globalVariables;
 	private ArrayList<TMLSDMessage> messages; 
 	
@@ -67,14 +174,14 @@ public class CPSequenceDiagram  extends TMLElement {
 		init();
 	}
 
-	public CPSequenceDiagram()	{
+	/*public CPSequenceDiagram()	{
 		super( "DefaultName", null );
 		init();
-	}
+	}*/
 
 	private void init() {
 		globalVariables = new ArrayList<TMLAttribute>();
-		instances = new ArrayList<TMLSDInstance>();
+		instances = new ArrayList<TMLSDInstanceDS>();
 		messages = new ArrayList<TMLSDMessage>();
 	}
     
@@ -93,7 +200,7 @@ public class CPSequenceDiagram  extends TMLElement {
 		return globalVariables;
 	}
 	
-	public void addInstance( TMLSDInstance _elt ) throws MultipleInstanceDeclarationException {
+	public void addInstance( TMLSDInstanceDS _elt ) throws MultipleInstanceDeclarationException {
 		
 		if( declaredInstance( _elt ) )	{
 			String errorMessage = "TMLCP COMPILER ERROR: instance " + _elt.getName() + " in diagram " + this.name + " declared multiple times";
@@ -104,15 +211,15 @@ public class CPSequenceDiagram  extends TMLElement {
 		}
  	}
 
-	public void addMappingInstance( TMLSDInstance _elt ) {
+	public void addMappingInstance( TMLSDInstanceDS _elt ) {
     mappingInstances.add( _elt );
  	}
    
-	public ArrayList<TMLSDInstance> getInstances()	{
+	public ArrayList<TMLSDInstanceDS> getInstances()	{
 		return instances;
 	}
 	
-	public ArrayList<TMLSDInstance> getMappingInstances()	{
+	public ArrayList<TMLSDInstanceDS> getMappingInstances()	{
 		return mappingInstances;
 	}
 	
@@ -148,7 +255,7 @@ public class CPSequenceDiagram  extends TMLElement {
 	public boolean containsInstance( String _name )	{
 		
 		int i, instCounter = 0;
-		TMLSDInstance inst;
+		TMLSDInstanceDS inst;
 
 		for( i = 0; i < instances.size(); i++ )	{
 			inst = instances.get(i);
@@ -186,12 +293,12 @@ public class CPSequenceDiagram  extends TMLElement {
 		}
 	}
 
-	private boolean declaredInstance( TMLSDInstance _inst )	{
+	private boolean declaredInstance( TMLSDInstanceDS _inst )	{
 		
 		int i;
 		String instName;
-		ArrayList<TMLSDInstance> list;
-		TMLSDInstance inst;
+		ArrayList<TMLSDInstanceDS> list;
+		TMLSDInstanceDS inst;
 
 		list = getInstances();
 		if( list.size() == 0 )	{
@@ -229,10 +336,10 @@ public class CPSequenceDiagram  extends TMLElement {
 		return messages;
 	}
 
-	public TMLSDInstance retrieveInstance( String _name )	{
+	public TMLSDInstanceDS retrieveInstance( String _name )	{
 			
-			ArrayList<TMLSDInstance> instList;
-			TMLSDInstance inst = new TMLSDInstance( "error", new Object() );
+			ArrayList<TMLSDInstanceDS> instList;
+			TMLSDInstanceDS inst = new TMLSDInstanceDS( "error", new Object() );
 			int i;
 
 			for( i = 0; i < instances.size(); i++ )	{
