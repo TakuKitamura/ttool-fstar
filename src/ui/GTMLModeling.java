@@ -2215,7 +2215,7 @@ public class GTMLModeling  {
 									TMLSDTransferInstance elem1 = (TMLSDTransferInstance) elemList.get(j);
 									Vector myvect = elem1.getAttributes();
 									TraceManager.addDev( "Found transfer instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
-																				+ " internal component with " + myvect.size() " attributes");
+																				+ " internal component with " + myvect.size()  + " attributes");
 									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
 									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 										TGComponent[] comp = elem1.getInternalComponents();
