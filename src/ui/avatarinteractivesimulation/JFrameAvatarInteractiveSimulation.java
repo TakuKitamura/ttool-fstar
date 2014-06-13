@@ -606,7 +606,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 				public void warn() {
 					try {
 					int nb = Integer.parseInt(displayedTransactionsText.getText());
-					if ((nb > 0) && (nb <= 10000)){
+					if ((nb > 0) && (nb <= 100000)){
 						statuss.setText("Nb of traced transactions modified to: " + nb);
 						if (sdpanel != null) {
 							sdpanel.setNbOfDrawnTransactions(nb);
