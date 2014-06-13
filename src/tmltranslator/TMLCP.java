@@ -472,8 +472,8 @@ public class TMLCP extends TMLElement {
 				}
 
 				//Print Instances
-				ArrayList<TMLSDInstanceDS> listInstances;
-				TMLSDInstanceDS inst;
+				ArrayList<TMLSDInstance> listInstances;
+				TMLSDInstance inst;
 				listInstances = tempSD.getInstances();
 				System.out.println( "\tInstances:" );
 				for( j = 0; j < listInstances.size(); j++ )	{

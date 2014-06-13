@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDInstance
+* Class TMLSDInstance, TML Sequence Diagram Instance Data Structure
 * Creation: 18/02/2014
-* @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @version 1.1 11/06/2014
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -55,17 +55,17 @@ public class TMLSDInstance extends TMLElement  {
 		
 	private ArrayList<TMLSDElement> elements;
 	
-    public TMLSDInstance(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        elements = new ArrayList<TMLSDElement>();
-    }
+	public TMLSDInstance(String _name, Object _referenceObject) {
+  	super(_name, _referenceObject);
+		elements = new ArrayList<TMLSDElement>();
+	}
     
-    public void addElement(TMLSDElement _elt) {
-    		elements.add(_elt);
-    }
+  public void addElement(TMLSDElement _elt) {
+  	elements.add(_elt);
+  }
     
-    public ArrayList<TMLSDElement> getElements() {
-    	return elements;
-    }
+  public ArrayList<TMLSDElement> getElements() {
+  	return elements;
+  }
 	
 }
