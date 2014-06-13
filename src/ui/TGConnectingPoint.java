@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -40,7 +41,7 @@ knowledge of the CeCILL license and that you accept its terms.
  * Definition of connecting points on which connectors can be connected
  * Creation: 22/12/2003
  * @version 1.0 22/12/2003
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea Enrici
  * @see
  */
 
@@ -81,16 +82,17 @@ public class TGConnectingPoint implements CDElement {
     protected static final Color INOUT = Color.orange;
     protected static final Color NO = Color.white;
 	
-	protected int orientation;
+		protected int orientation;
 	
-	public static final int NORTH=0;
-	public static final int EAST=1;
-	public static final int SOUTH=2;
-	public static final int WEST=3;
+		public static final int NORTH=0;
+		public static final int EAST=1;
+		public static final int SOUTH=2;
+		public static final int WEST=3;
 
-	private TGConnector referenceToConnector;
+		private TGConnector referenceToConnector;
+
+		private boolean source = false;
    
-    
     public TGConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
         container = _container;
         x = _x;
@@ -289,5 +291,13 @@ public class TGConnectingPoint implements CDElement {
 	
 	public TGConnector getReferenceToConnector()	{
 		return referenceToConnector;
+	}
+
+	public void setSource( boolean _value )	{
+		source = _value;
+	}
+
+	public boolean isSource()	{
+		return source;
 	}
 }
