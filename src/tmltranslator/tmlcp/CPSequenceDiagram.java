@@ -160,8 +160,8 @@ public class CPSequenceDiagram  extends TMLElement {
 
 /*#############################################################################*/
 
-	private ArrayList<TMLSDInstanceDS> instances; 
-	private ArrayList<TMLSDInstanceDS> mappingInstances;
+	private ArrayList<TMLSDInstance> instances; 
+	private ArrayList<TMLSDInstance> mappingInstances;
 	private ArrayList<TMLAttribute> globalVariables;
 	private ArrayList<TMLSDMessage> messages; 
 	
@@ -181,7 +181,7 @@ public class CPSequenceDiagram  extends TMLElement {
 
 	private void init() {
 		globalVariables = new ArrayList<TMLAttribute>();
-		instances = new ArrayList<TMLSDInstanceDS>();
+		instances = new ArrayList<TMLSDInstance>();
 		messages = new ArrayList<TMLSDMessage>();
 	}
     
@@ -200,7 +200,7 @@ public class CPSequenceDiagram  extends TMLElement {
 		return globalVariables;
 	}
 	
-	public void addInstance( TMLSDInstanceDS _elt ) throws MultipleInstanceDeclarationException {
+	public void addInstance( TMLSDInstance _elt ) throws MultipleInstanceDeclarationException {
 		
 		if( declaredInstance( _elt ) )	{
 			String errorMessage = "TMLCP COMPILER ERROR: instance " + _elt.getName() + " in diagram " + this.name + " declared multiple times";
@@ -211,15 +211,15 @@ public class CPSequenceDiagram  extends TMLElement {
 		}
  	}
 
-	public void addMappingInstance( TMLSDInstanceDS _elt ) {
+	public void addMappingInstance( TMLSDInstance _elt ) {
     mappingInstances.add( _elt );
  	}
    
-	public ArrayList<TMLSDInstanceDS> getInstances()	{
+	public ArrayList<TMLSDInstance> getInstances()	{
 		return instances;
 	}
 	
-	public ArrayList<TMLSDInstanceDS> getMappingInstances()	{
+	public ArrayList<TMLSDInstance> getMappingInstances()	{
 		return mappingInstances;
 	}
 	
@@ -255,7 +255,7 @@ public class CPSequenceDiagram  extends TMLElement {
 	public boolean containsInstance( String _name )	{
 		
 		int i, instCounter = 0;
-		TMLSDInstanceDS inst;
+		TMLSDInstance inst;
 
 		for( i = 0; i < instances.size(); i++ )	{
 			inst = instances.get(i);
@@ -293,12 +293,12 @@ public class CPSequenceDiagram  extends TMLElement {
 		}
 	}
 
-	private boolean declaredInstance( TMLSDInstanceDS _inst )	{
+	private boolean declaredInstance( TMLSDInstance _inst )	{
 		
 		int i;
 		String instName;
-		ArrayList<TMLSDInstanceDS> list;
-		TMLSDInstanceDS inst;
+		ArrayList<TMLSDInstance> list;
+		TMLSDInstance inst;
 
 		list = getInstances();
 		if( list.size() == 0 )	{
@@ -336,10 +336,10 @@ public class CPSequenceDiagram  extends TMLElement {
 		return messages;
 	}
 
-	public TMLSDInstanceDS retrieveInstance( String _name )	{
+	public TMLSDInstance retrieveInstance( String _name )	{
 			
-			ArrayList<TMLSDInstanceDS> instList;
-			TMLSDInstanceDS inst = new TMLSDInstanceDS( "error", new Object() );
+			ArrayList<TMLSDInstance> instList;
+			TMLSDInstance inst = new TMLSDInstance( "error", new Object() );
 			int i;
 
 			for( i = 0; i < instances.size(); i++ )	{
