@@ -91,28 +91,41 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
         myImageIcon = IconManager.imgic500;
 	}
     
-	@Override public boolean editOndoubleClick( JFrame frame ) {
+	public boolean editOndoubleClick(JFrame frame) {
 			
-			String oldValue = name;
+		String oldValue = name;
 		
-			JDialogSDInstance jdsdi = new JDialogSDInstance( frame, name, isActor, "Controller attributes" );
+		/*	JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
       jdsdi.setSize(300, 250);
       GraphicLib.centerOnParent(jdsdi);
       jdsdi.show(); // blocked until dialog has been closed
-		
+		*/
+		JDialogAttribute jda = new JDialogAttribute( myAttributes, null, frame, "Setting attributes of " + this.name, "Attribute" );
+    setJDialogOptions( jda );
+    jda.setSize( 650, 375 );
+    GraphicLib.centerOnParent( jda );
+    jda.setVisible( true ); // blocked until dialog has been closed
+    //makeValue();
+    //if (oldValue.equals(value)) {
+	    //return false;
+    //}
+		/*rescaled = true;
+		return true;
+    }*/
 		
      	String text = getName() + ": ";
       if(hasFather() ) {
         text = getTopLevelName() + " / " + text;
       }
 		
-			if( jdsdi.hasBeenUpdated() ) {
+			/*if( jdsdi.hasBeenUpdated() ) {
 				isActor = jdsdi.isAnActor();
 				String s = jdsdi.getInstanceName();
 				if( s != null ) {
 					s = s.trim();
-				}
+				}*/
 			
+			String s = this.name;
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 				if (!TAttribute.isAValidId(s, false, false)) {
 					JOptionPane.showMessageDialog( frame,
@@ -138,9 +151,28 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 				}
 				return true;
 			}
+			return false;
 		}
-        return false;
-    }
+/*        return false;
+    }*/
+	
+	protected void setJDialogOptions( JDialogAttribute jda ) {
+		
+		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
+		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
+		jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
+		jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
+		
+/*		Vector<String> records = ( (TMLComponentTaskDiagramPanel )(tdp)).getAllRecords(this);
+		for( String s: records ) {
+			jda.addType(s, false);
+		}*/
+		
+		jda.enableInitialValue(true);
+		jda.enableRTLOTOSKeyword(true);
+		jda.enableJavaKeyword(false);
+		jda.enableTMLKeyword(false);
+	}
 
 	@Override public int getType() {
 		return TGComponentManager.TMLSD_CONTROLLER_INSTANCE;

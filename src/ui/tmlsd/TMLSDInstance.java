@@ -51,6 +51,7 @@ import java.awt.*;
 import javax.swing.*;
 import org.w3c.dom.*;
 import java.awt.event.*;
+import java.util.*;
 
 import myutil.*;
 import ui.*;
@@ -58,7 +59,7 @@ import ui.window.*;
 
 import tmltranslator.tmlcp.*;
 
-//Abstract class, getType() is abstract
+//Abstract class, getType() and editOndoubleClick( JFrame ) are abstract
 public abstract class TMLSDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
 
     //protected int lineLength = 5;
@@ -69,6 +70,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		protected boolean isActor;
 		protected static int heightActor = 30;
 		protected static int widthActor = 16;
+		protected Vector myAttributes;
 	
     
     public TMLSDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -82,22 +84,16 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
         maxWidth = 10;
         minHeight = 250;
         maxHeight = 1500;
-        
-        
         makeTGConnectingPoints();
         //addTGConnectingPointsComment();
-        
         nbInternalTGComponent = 0;
-        
         moveable = true;
         editable = true;
         removable = true;
         userResizable = true;
-        
         value = "Instance name";
         name = "instance";
-				isActor = false;
-        
+				myAttributes = new Vector();
         myImageIcon = IconManager.imgic500;
 	}
     
@@ -175,56 +171,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
         
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
-			
-			String oldValue = name;
-		
-			JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
-      jdsdi.setSize(300, 250);
-      GraphicLib.centerOnParent(jdsdi);
-      jdsdi.show(); // blocked until dialog has been closed
-		
-		
-     	String text = getName() + ": ";
-      if(hasFather() ) {
-        text = getTopLevelName() + " / " + text;
-      }
-		
-			if( jdsdi.hasBeenUpdated() ) {
-				isActor = jdsdi.isAnActor();
-				String s = jdsdi.getInstanceName();
-				if( s != null ) {
-					s = s.trim();
-				}
-			
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog( frame,
-						"Could not change the name of the instance: the new name is not a valid name",
-						"Error", JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-				setName(s);
-				TraceManager.addDev( Integer.toString( connectingPoint.length ) );
-        for( int i = 0; i < connectingPoint.length; i++ ) {
-				//for each connecting point connected to something
-					if( connectingPoint[i].getReferenceToConnector() != null )	{
-						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
-						if( connectingPoint[i].isSource() )	{
-							connector.setStartName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-						else	{
-							connector.setEndName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-					}
-				}
-				return true;
-			}
-		}
-        return false;
-    }
+	public abstract boolean editOndoubleClick( JFrame frame );
 	
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		 if ((tgc instanceof TMLSDActionState)) {
@@ -472,5 +419,9 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 
 	public TGConnectingPoint[] getConnectingPoint()	{
 		return connectingPoint;
+	}
+
+	public Vector getAttributes()	{
+		return myAttributes;
 	}
 }
