@@ -92,64 +92,10 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
         myImageIcon = IconManager.imgic500;
 	}
     
-/*    @Override public boolean editOndoubleClick(JFrame frame) {
-			
-			String oldValue = name;
-		
-			JDialogSDInstance jdsdi = new JDialogSDInstance( frame, name, isActor, "Storage attributes" );
-      jdsdi.setSize( 300, 250 );
-      GraphicLib.centerOnParent( jdsdi );
-      jdsdi.show(); // blocked until dialog has been closed
-		
-     	String text = getName() + ": ";
-      if(hasFather() ) {
-        text = getTopLevelName() + " / " + text;
-      }
-		
-			if( jdsdi.hasBeenUpdated() ) {
-				isActor = jdsdi.isAnActor();
-				String s = jdsdi.getInstanceName();
-				if( s != null ) {
-					s = s.trim();
-				}
-			
-			if( (s != null) && (s.length() > 0) && ( !s.equals(oldValue) ) ) {
-				if( !TAttribute.isAValidId(s, false, false) ) {
-					JOptionPane.showMessageDialog( frame,
-						"Could not change the name of the instance: the new name is not a valid name",
-						"Error", JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-				setName(s);
-				TraceManager.addDev( Integer.toString( connectingPoint.length ) );
-        for( int i = 0; i < connectingPoint.length; i++ ) {
-				//for each connecting point connected to something
-					if( connectingPoint[i].getReferenceToConnector() != null )	{
-						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
-						if( connectingPoint[i].isSource() )	{
-							connector.setStartName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-						else	{
-							connector.setEndName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-					}
-				}
-				return true;
-			}
-		}
-        return false;
-    }*/
 	public boolean editOndoubleClick(JFrame frame) {
 			
 		String oldValue = name;
 		
-		/*	JDialogSDInstance jdsdi = new JDialogSDInstance(frame, name, isActor, "Instance attributes");
-      jdsdi.setSize(300, 250);
-      GraphicLib.centerOnParent(jdsdi);
-      jdsdi.show(); // blocked until dialog has been closed
-		*/
 		JDialogAttribute jda = new JDialogAttribute( myAttributes, null, frame, "Setting attributes of " + this.name, "Attribute" );
     setJDialogOptions( jda );
     jda.setSize( 650, 375 );
@@ -163,19 +109,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 		return true;
     }*/
 		
-     	String text = getName() + ": ";
-      if(hasFather() ) {
-        text = getTopLevelName() + " / " + text;
-      }
-		
-			/*if( jdsdi.hasBeenUpdated() ) {
-				isActor = jdsdi.isAnActor();
-				String s = jdsdi.getInstanceName();
-				if( s != null ) {
-					s = s.trim();
-				}*/
-			
-			String s = this.name;
+			/*String s = this.name;
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 				if (!TAttribute.isAValidId(s, false, false)) {
 					JOptionPane.showMessageDialog( frame,
@@ -200,11 +134,9 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 					}
 				}
 				return true;
-			}
-			return false;
-		}
-/*        return false;
-    }*/
+			}*/
+			return true;	//true means that the component has been modified
+	}
 	
 	protected void setJDialogOptions( JDialogAttribute jda ) {
 		
