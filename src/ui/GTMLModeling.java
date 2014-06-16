@@ -80,7 +80,8 @@ public class GTMLModeling  {
 
 	private TMLMapping map;
 	private TMLArchitecture archi;
-	private TMLCP.TMLCPGraphicalCP tmlcp;
+	//private TMLCP.TMLCPGraphicalCP tmlcp;
+	private TMLCP tmlcp;
 	
 	private boolean putPrefixName = false;
 	
@@ -1886,11 +1887,11 @@ public class GTMLModeling  {
 	}
 
 	//Checking the syntax of CP without mapping
-	public TMLCP.TMLCPGraphicalCP translateToTMLCP() {
+	public TMLCP translateToTMLCP() {
 
 		//tmlm = new TMLModeling( true );
 		//archi = new TMLArchitecture();
-		tmlcp = new TMLCP.TMLCPGraphicalCP("");
+		tmlcp = new TMLCP();
 		//map = new TMLMapping( tmlm, archi, cp, false );
 		//map = new TMLMapping( tmlm, archi, false );
 		
@@ -2136,7 +2137,10 @@ public class GTMLModeling  {
 		ArrayList<String> names = new ArrayList<String>();
 		//TMLCP.TMLCPGraphicalCP graphicalCP;
 		CPSequenceDiagram.TMLCPGraphicalSD graphicalSD;
+		CPSequenceDiagram SD;
 		//CPActivityDiagram.TMLCPGraphicalAD graphicalAD;
+		String delims = "[ +=:;]+";		//the delimiter chars used to parse attributes of SD instance
+		String[] tokens;							//used to get the tokens of the string for a SD attribute
 
 		if( nodesToTakeIntoAccount == null ) {
 			components = tmlcpp.tmlcpp.getComponentList();
@@ -2176,6 +2180,7 @@ public class GTMLModeling  {
 					names.add( refSDnode.getName() );
 					String SDname = refSDnode.getName();
 					graphicalSD = new CPSequenceDiagram.TMLCPGraphicalSD( SDname );
+					SD = new CPSequenceDiagram( SDname, null );
 					for( TDiagramPanel panel: panelList )	{
 						TraceManager.addDev("Testing panel: " + panel.getName() + " against SD ref " + SDname );
 						if( SDname.equals( panel.getName() ) )	{
@@ -2185,50 +2190,138 @@ public class GTMLModeling  {
 							//order messages according to the inverse of Y coordinate
 							for( int j = 0; j < elemList.size(); j++ )	{
 								TGComponent elem = (TGComponent) elemList.get(j);
+								//include the package name of the class to avoid confusion with the graphical TMLSDInstance
+								//tmltranslator.tmlcp.TMLSDInstance instance = new tmltranslator.tmlcp.TMLSDInstance( elem.getName() );
+								Vector attributes;
+								int index1;
+								int index2;
+								TGComponent[] components;
+								TMLType type;
+								String toParse;
+								Object attribute;
+								TGConnectorMessageAsyncTMLSD connector;
 								if( elem instanceof TMLSDStorageInstance )	{
-									TMLSDStorageInstance elem1 = (TMLSDStorageInstance) elemList.get(j);
-									TraceManager.addDev( "Found storage instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
-																				+ " internal component" );
-									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
-									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
-										TGComponent[] comp = elem1.getInternalComponents();
-										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
-											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
-											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+									TMLSDStorageInstance storage = (TMLSDStorageInstance) elemList.get(j);
+									SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( storage.getName(), null, "STORAGE" ) );
+									attributes = storage.getAttributes();
+									TraceManager.addDev( "Found storage instance: " + storage.getName() + " with " + storage.getNumberInternalComponents()
+																				+ " internal component component with " + attributes.size()  + " attributes:" );
+									for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
+										attribute = attributes.get( index1 );
+										toParse = attribute.toString();
+										tokens = toParse.split( delims );
+										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+											type = new TMLType(1);
+											} 
+										else {
+											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+												type = new TMLType(2);
+												}
+											else	{
+												type = new TMLType(3);	//other type
+											}
+										}
+										for( int tt = 0; tt < tokens.length; tt++	)	{
+											TraceManager.addDev( "STORAGE:" + tokens[tt]);
+										}
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+									}
+									//graphicalSD.addTMLCPGraphicalSDInstance( storage.getName(), storage.getInstanceType() );
+									if( storage.getNumberInternalComponents() > 0 )	{	// action states are stored as internal components of an instance
+										components = storage.getInternalComponents();
+										for( index2 = 0; index2 < storage.getNumberInternalComponents(); index2++ )	{
+											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
+																						" " + components[index2].getY() );
+											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
+											// must do syntax check on this string also
+											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
 									}
 								}
 								if( elem instanceof TMLSDControllerInstance )	{
-									TMLSDControllerInstance elem1 = (TMLSDControllerInstance) elemList.get(j);
-									TraceManager.addDev( "Found controller instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
-																				+ " internal component" );
-									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
-									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
-										TGComponent[] comp = elem1.getInternalComponents();
-										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
-											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
-											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+									TMLSDControllerInstance controller = (TMLSDControllerInstance) elemList.get(j);
+									SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( controller.getName(), null, "CONTROLLER" ) );
+									attributes = controller.getAttributes();
+									TraceManager.addDev( "Found controller instance: " + controller.getName() + " with " + controller.getNumberInternalComponents()
+																				+ " internal component component with " + attributes.size()  + " attributes:" );
+									for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
+										attribute = attributes.get( index1 );
+										toParse = attribute.toString();
+										tokens = toParse.split( delims );
+										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+											type = new TMLType(1);
+											} 
+										else {
+											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+												type = new TMLType(2);
+												}
+											else	{
+												type = new TMLType(3);	//other type
+											}
+										}
+										for( int tt = 0; tt < tokens.length; tt++	)	{
+											TraceManager.addDev( "CONTROLLER:" + tokens[tt]);
+										}
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+									}
+									//graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
+									if( controller.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
+										components = controller.getInternalComponents();
+										for( index2 = 0; index2 < controller.getNumberInternalComponents(); index2++ )	{	//get action states
+											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
+																						" " + components[index2].getY() );
+											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
+											// must do syntax check on this string also
+											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
 									}
 								}
 								if( elem instanceof TMLSDTransferInstance )	{
-									TMLSDTransferInstance elem1 = (TMLSDTransferInstance) elemList.get(j);
-									Vector myvect = elem1.getAttributes();
-									TraceManager.addDev( "Found transfer instance: " + elem1.getName() + " with " + elem1.getNumberInternalComponents()
-																				+ " internal component with " + myvect.size()  + " attributes");
-									graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
-									if( elem1.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
-										TGComponent[] comp = elem1.getInternalComponents();
-										for( int f = 0; f < elem1.getNumberInternalComponents(); f++ )	{
-											TraceManager.addDev( comp[f].getName() + " " + comp[f].getValue() + " " + comp[f].getY() );
-											graphicalSD.addGraphicalSDElement( comp[f].getValue(), comp[f].getY() );
+									TMLSDTransferInstance transfer = (TMLSDTransferInstance) elemList.get(j);
+									attributes = transfer.getAttributes();
+									TraceManager.addDev( "Found transfer instance: " + transfer.getName() + " with " + transfer.getNumberInternalComponents()
+																				+ " internal component with " + attributes.size()  + " attributes:");
+									for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
+										attribute = attributes.get( index1 );
+										toParse = attribute.toString();
+										tokens = toParse.split( delims );
+										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+											type = new TMLType(1);
+											} 
+										else {
+											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+												type = new TMLType(2);
+												}
+											else	{
+												type = new TMLType(3);	//other type
+											}
+										}
+										for( int tt = 0; tt < tokens.length; tt++	)	{
+											TraceManager.addDev( "CONTROLLER:" + tokens[tt]);
+										}
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+									}
+									//graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
+									if( transfer.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
+										components = transfer.getInternalComponents();
+										for( index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++ )	{	//get action states
+											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
+																						" " + components[index2].getY() );
+											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
+											// must do syntax check on this string also
+											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
 									}
 								}
 								if( elem instanceof TGConnectorMessageTMLSD )	{
-									TGConnectorMessageAsyncTMLSD conn = (TGConnectorMessageAsyncTMLSD) elemList.get(j);
-									TraceManager.addDev( "Found message: " + conn.getName() + " " + conn.getValue() + " " + conn.getY() + conn.getParams() );
-									graphicalSD.addGraphicalSDElement( conn.getValue() + "(" + conn.getStartName() + ", " + conn.getEndName() + ")", conn.getY() );
+									connector = (TGConnectorMessageAsyncTMLSD) elemList.get(j);
+									SD.addMessage( new TMLSDMessage( connector.getName(), null, connector.getParams() ) );
+									TraceManager.addDev( "Found message: " + connector.getValue() + " " + connector.getY() );
+									for( String param : connector.getParams() )	{
+										TraceManager.addDev( param );
+									}
+									//graphicalSD.addGraphicalSDElement( conn.getValue() +
+									//"(" + conn.getStartName() + ", " + conn.getEndName() + ")", conn.getY() );
 								}
 							}
 							ArrayList<CPSequenceDiagram.GraphicalSDElement> pippo = graphicalSD.getGraphicalSDElements();
@@ -2246,7 +2339,7 @@ public class GTMLModeling  {
 								TraceManager.addDev( tempyy.getName() + " " + tempyy.getType() );
 							}
 							TraceManager.addDev( "*************************************************" );
-							tmlcp.addGraphicalSD( graphicalSD );
+							tmlcp.addCPSequenceDiagram( SD );
 							break;
 						}
 					}
