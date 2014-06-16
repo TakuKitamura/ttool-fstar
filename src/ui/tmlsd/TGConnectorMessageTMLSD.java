@@ -182,6 +182,17 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 	public String[] getParams()	{
 		return params;
 	}
+
+	/*public int getNumberParams()	{
+
+		int counter = 0;
+		for( int i = 0; i < nParam; i++	)	{
+			if( params[i] != null )	{
+				counter++;
+			}
+		}
+		return counter;
+	}*/
 	
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {  
         //System.out.println("Extra");
@@ -190,4 +201,81 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
         }
         return null;
     }
+
+	 protected String translateExtraParam() {
+        String a;
+        StringBuffer sb = new StringBuffer( "<extraparam>\n" );
+        for( int i = 0; i < params.length; i++ )	{
+					//TraceManager.addDev("Attribute:" + i);
+          a = params[i];
+          //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
+          //value = value + a + "\n";
+          sb.append( "<Parameter access=\"" );
+          //sb.append( /*a.getAccess()*/ );
+          sb.append( "\" id=\"" );
+          sb.append( a /*a.getAccess()*/ );
+          sb.append( "\" value=\"" );
+          //sb.append( /*a.getInitialValue()*/ );
+          sb.append( "\" type=\"" );
+          //sb.append( /*a.getType()*/ );
+          sb.append( "\" typeOther=\"" );
+          //sb.append( /*a.getTypeOther()*/ );
+          sb.append( "\" />\n" );
+        }
+        sb.append( "</extraparam>\n" );
+        return new String(sb);
+    }
+
+    /*public void loadExtraParam( NodeList nl, int decX, int decY, int decId ) throws MalformedModelingException{
+    	//System.out.println("*** load extra synchro ***");
+      try {
+          NodeList nli;
+          Node n1, n2;
+          Element elt;
+          int access, type, counter = 0;
+          String typeOther;
+          String id, valueAtt;
+          
+          for( int i = 0; i < nl.getLength(); i++ ) {
+              n1 = nl.item(i);
+              //System.out.println(n1);
+              if( n1.getNodeType() == Node.ELEMENT_NODE ) {
+							nli = n1.getChildNodes();
+							for( int j = 0; i < nli.getLength(); i++ ) {
+								n2 = nli.item(i);
+								//System.out.println(n2);
+								if( n2.getNodeType() == Node.ELEMENT_NODE ) {
+									elt = (Element) n2;
+									//TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
+									if( elt.getTagName().equals("Parameter") )	{
+										//TraceManager.addDev("Analyzing parameter");
+										access = Integer.decode(elt.getAttribute("access")).intValue();
+										type = Integer.decode(elt.getAttribute("type")).intValue();
+										try {
+											typeOther = elt.getAttribute("typeOther");
+										}
+										catch ( Exception e )	{
+											typeOther = "";
+										}
+										id = elt.getAttribute("id");
+										valueAtt = elt.getAttribute("value");
+										if( valueAtt.equals("null") )	{
+											valueAtt = "";
+										}
+										if( (TAttribute.isAValidId(id, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
+											//TraceManager.addDev("Adding parameter " + id + " typeOther=" + typeOther);
+											TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+											//myAttributes.addElement(ta);
+											params[counter] = id;
+											}
+                    }
+                  }
+                }
+              }
+						}
+				}
+				catch ( Exception e ) {
+					throw new MalformedModelingException();
+				}
+    }*/
 }

@@ -365,44 +365,87 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
      }
 	 
 	 protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<Actor data=\"");
-        sb.append(""+isActor);
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
+        TAttribute a;
+        StringBuffer sb = new StringBuffer( "<extraparam>\n" );
+        sb.append( "<Actor data=\"" );
+        sb.append( ""+isActor );
+        sb.append( "\" />\n" );
+        for( int i = 0; i < myAttributes.size(); i++ )	{
+					//TraceManager.addDev("Attribute:" + i);
+          a = (TAttribute)( myAttributes.elementAt(i) );
+          //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
+          //value = value + a + "\n";
+          sb.append( "<Attribute access=\"" );
+          sb.append( a.getAccess() );
+          sb.append( "\" id=\"" );
+          sb.append( a.getId() );
+          sb.append( "\" value=\"" );
+          sb.append( a.getInitialValue() );
+          sb.append( "\" type=\"" );
+          sb.append( a.getType() );
+          sb.append( "\" typeOther=\"" );
+          sb.append( a.getTypeOther() );
+          sb.append( "\" />\n" );
+        }
+        sb.append( "</extraparam>\n" );
         return new String(sb);
     }
     
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam( NodeList nl, int decX, int decY, int decId ) throws MalformedModelingException{
         //System.out.println("*** load extra synchro ***");
         try {
             NodeList nli;
             Node n1, n2;
             Element elt;
+            int access, type;
+            String typeOther;
+            String id, valueAtt;
             
-            for(int i=0; i<nl.getLength(); i++) {
+            for( int i = 0; i < nl.getLength(); i++ ) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; i<nli.getLength(); i++) {
-                        n2 = nli.item(i);
-                        //System.out.println(n2);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("Actor")) {
-								if (elt.getAttribute("data").compareTo("true") == 0) {
-									isActor = true;
-								}
-                            }
-                        }
+                if( n1.getNodeType() == Node.ELEMENT_NODE ) {
+									nli = n1.getChildNodes();
+									for( int j = 0; i < nli.getLength(); i++ ) {
+										n2 = nli.item(i);
+										//System.out.println(n2);
+										if( n2.getNodeType() == Node.ELEMENT_NODE ) {
+											elt = (Element) n2;
+											if( elt.getTagName().equals("Actor") ) {
+												if( elt.getAttribute("data").compareTo("true") == 0 ) {
+													isActor = true;
+												}
+											}
+											//TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
+											if( elt.getTagName().equals("Attribute") )	{
+												//TraceManager.addDev("Analyzing attribute");
+												access = Integer.decode(elt.getAttribute("access")).intValue();
+												type = Integer.decode(elt.getAttribute("type")).intValue();
+												try {
+													typeOther = elt.getAttribute("typeOther");
+												}
+												catch ( Exception e )	{
+													typeOther = "";
+												}
+												id = elt.getAttribute("id");
+												valueAtt = elt.getAttribute("value");
+												if( valueAtt.equals("null") )	{
+													valueAtt = "";
+												}
+												if( (TAttribute.isAValidId(id, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
+													//TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
+													TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+													myAttributes.addElement(ta);
+												}
+                      }
                     }
+                  }
                 }
-            }
-            
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
+							}
+						}
+						catch ( Exception e ) {
+							throw new MalformedModelingException();
+						}
     }
 	
 	public void setActor(boolean b) {
