@@ -164,6 +164,7 @@ public class CPSequenceDiagram  extends TMLElement {
 	private ArrayList<TMLSDInstance> mappingInstances;
 	private ArrayList<TMLAttribute> globalVariables;
 	private ArrayList<TMLSDMessage> messages; 
+	private ArrayList<TMLSDAction> actions;
 	
 	private int hashCode;
 	private boolean hashCodeComputed = false;
@@ -174,15 +175,11 @@ public class CPSequenceDiagram  extends TMLElement {
 		init();
 	}
 
-	/*public CPSequenceDiagram()	{
-		super( "DefaultName", null );
-		init();
-	}*/
-
 	private void init() {
 		globalVariables = new ArrayList<TMLAttribute>();
 		instances = new ArrayList<TMLSDInstance>();
 		messages = new ArrayList<TMLSDMessage>();
+		actions = new ArrayList<TMLSDAction>();
 	}
     
  	public void addVariable( TMLAttribute _attr ) throws MultipleVariableDeclarationException	{
@@ -195,16 +192,33 @@ public class CPSequenceDiagram  extends TMLElement {
       globalVariables.add(_attr);
     }
 	}
+
+	public void addAttribute( TMLAttribute _attribute )	{	//used by the graphical 2 TMLTxt compiler
+      globalVariables.add( _attribute );
+	}
 	
 	public ArrayList<TMLAttribute> getAttributes() {
 		return globalVariables;
 	}
+
+	public void addAttribute( TMLSDAction _action ) {
+		actions.add( _action );
+	}
+
+	public ArrayList<TMLSDAction> getActions() {
+		return actions;
+	}
+
+	public void addAction( TMLSDAction _action ) {
+		actions.add( _action );
+	}
 	
-	public void addInstance( TMLSDInstance _elt ) throws MultipleInstanceDeclarationException {
+	//commenting the throw exception because bot needed by the graphical 2 TMLTxt compiler yet
+	public void addInstance( TMLSDInstance _elt )/* throws MultipleInstanceDeclarationException*/ {
 		
 		if( declaredInstance( _elt ) )	{
 			String errorMessage = "TMLCP COMPILER ERROR: instance " + _elt.getName() + " in diagram " + this.name + " declared multiple times";
-			throw new MultipleInstanceDeclarationException( errorMessage );
+			/*throw new MultipleInstanceDeclarationException( errorMessage );*/
 		}
 		else	{
 	    instances.add( _elt );
@@ -339,7 +353,7 @@ public class CPSequenceDiagram  extends TMLElement {
 	public TMLSDInstance retrieveInstance( String _name )	{
 			
 			ArrayList<TMLSDInstance> instList;
-			TMLSDInstance inst = new TMLSDInstance( "error", new Object() );
+			TMLSDInstance inst;
 			int i;
 
 			for( i = 0; i < instances.size(); i++ )	{
@@ -349,7 +363,7 @@ public class CPSequenceDiagram  extends TMLElement {
 					return inst;
 				}
 			}
-			return inst;
+			return new TMLSDInstance( "error", null, "NO_TYPE" );
 	}
 
 }	//End of class

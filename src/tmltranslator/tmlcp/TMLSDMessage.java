@@ -52,25 +52,37 @@ import tmltranslator.*;
 import myutil.*;
 
 public class TMLSDMessage extends TMLElement  {
-	private String nameOfMessage;
+
 	private ArrayList<TMLSDAttribute> attributeList;	
+	private int yCoord;
 	
-    public TMLSDMessage(String _nameOfMsg, String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        nameOfMessage = _nameOfMsg;
-				attributeList = new ArrayList<TMLSDAttribute>();
+    public TMLSDMessage( String _name, Object _referenceObject ) {
+    	super( _name, _referenceObject );
+			attributeList = new ArrayList<TMLSDAttribute>();
     }
+
+		public TMLSDMessage( String _name, Object _referenceObject, String[] _params )	{
+    	super( _name, _referenceObject );
+			attributeList = new ArrayList<TMLSDAttribute>();
+			for( String p: _params )	{
+				attributeList.add( new TMLSDAttribute(p) );
+			}
+		}
     
 		public void addAttribute( TMLSDAttribute _attribute )	{
 				attributeList.add( _attribute );
 		}
 
-    public String getMessageName() {
-    	return nameOfMessage;
-    }
-
 		public ArrayList<TMLSDAttribute> getAttributes()	{
 			return attributeList;
+		}
+
+		public int getYCoord()	{
+			return this.yCoord;
+		}
+
+		public void setYCoord( int _coord )	{
+			this.yCoord = _coord;
 		}
 	
 }	//End of class

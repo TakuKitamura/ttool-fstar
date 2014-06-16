@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -52,11 +53,18 @@ import java.util.*;
 import myutil.*;
 
 public class TMLSDInstance extends TMLElement  {
-		
+
 	private ArrayList<TMLSDElement> elements;
+	private String type;
 	
-	public TMLSDInstance(String _name, Object _referenceObject) {
-  	super(_name, _referenceObject);
+	public TMLSDInstance( String _name, Object _referenceObject, String _type ) {
+  	super( _name, _referenceObject );
+		this.type = _type;
+		elements = new ArrayList<TMLSDElement>();
+	}
+
+	public TMLSDInstance( String _name ) {
+  	super( _name, null );
 		elements = new ArrayList<TMLSDElement>();
 	}
     
@@ -67,5 +75,18 @@ public class TMLSDInstance extends TMLElement  {
   public ArrayList<TMLSDElement> getElements() {
   	return elements;
   }
+
+	public void setType( String _type )	{
+		if( _type != "" )	{
+			this.type = _type;
+		}
+		else	{
+			this.type = "NO_TYPE";
+		}
+	}
+	
+	public String getType()	{
+		return this.type;
+	}
 	
 }

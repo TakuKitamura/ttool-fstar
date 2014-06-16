@@ -144,7 +144,8 @@ public class GTURTLEModeling {
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
-	private TMLCP.TMLCPGraphicalCP tmlcp;
+	//private TMLCP.TMLCPGraphicalCP tmlcp;
+	private TMLCP tmlcp;
 	private RequirementModeling rm;
 	private NCStructure ncs;
 	private MainGUI mgui;

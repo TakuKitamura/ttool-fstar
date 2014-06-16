@@ -235,12 +235,12 @@ public class TMLCP extends TMLElement {
 		}
   }
     
-  public void addCPSequenceDiagram( CPSequenceDiagram _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
+  public void addCPSequenceDiagram( CPSequenceDiagram _tmlsdSection ) /*throws UndeclaredDiagramException, MultipleDiagDeclarationsException*/	{
 
 		if( checkDiagramDeclaration( _tmlsdSection ) )	{
 			if( checkMultipleDiagramDeclaration( _tmlsdSection ) )	{
 				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " is defined multiple times";
-				throw new MultipleDiagDeclarationsException( errorMessage );
+				/*throw new MultipleDiagDeclarationsException( errorMessage );*/
 			}
 			else	{
    			sds.add( _tmlsdSection );
@@ -248,7 +248,7 @@ public class TMLCP extends TMLElement {
 		}
 		else	{
 			String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " undeclared";
-			throw new UndeclaredDiagramException( errorMessage );
+			/*throw new UndeclaredDiagramException( errorMessage );*/
 		}
   }
 	

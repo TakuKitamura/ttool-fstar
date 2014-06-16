@@ -179,7 +179,7 @@ public class TMLCPTextSpecification {
 		return spec;
 	}
 	
-	public String toTextFormat( TMLCP.TMLCPGraphicalCP tmlcp ) {
+	public String toTextFormat( TMLCP tmlcp ) {
 
 		//tmlcp.sortByName();
 		spec = makeDeclarations( tmlcp );
@@ -198,14 +198,14 @@ public class TMLCPTextSpecification {
 		return "FAKE";
 	}
 	
-	public String makeDeclarations( TMLCP.TMLCPGraphicalCP tmlcp ) {
+	public String makeDeclarations( TMLCP tmlcp ) {
 
 		String sb = "";
 		sb += "// TML Communication Pattern - FORMAT 0.1" + CR;
 		sb += "// Communication Pattern: " + title + CR;
 		sb += "// Generated: " + new Date().toString() + CR2; 
 		
-		ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> listSDs = tmlcp.getGraphicalSDs();
+		/*ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> listSDs = tmlcp.getGraphicalSDs();
 
 		for( int i = 0; i < listSDs.size(); i++ )	{
 			CPSequenceDiagram.TMLCPGraphicalSD tempSD = listSDs.get(i);
@@ -226,66 +226,8 @@ public class TMLCPTextSpecification {
 			sb += CR;
 		}
 		sb += END + CR;
-		sb += END;
+		sb += END;*/
 
-		/*sb += "// Channels" + CR;
-		for(TMLChannel ch:tmlm.getChannels()) {
-			sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
-			if (!ch.isInfinite()) {
-				sb += SP + ch.getMax();
-			}
-			sb += SP + ch.getOriginTask().getName() + SP + ch.getDestinationTask().getName() + CR;
-			
-			if (ch.isLossy()) {
-				sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
-			}
-		}
-		sb+= CR;
-		
-		sb += "// Events" + CR;
-		for(TMLEvent evt:tmlm.getEvents()) {
-			sb += "EVENT" + SP + evt.getName() + "(";
-				for(i=0; i<evt.getNbOfParams(); i++) {
-					if (i != 0) {
-						sb+= ", ";
-					}
-					sb += TMLType.getStringType(evt.getType(i).getType());
-				}
-				sb += ")";
-			sb += SP + evt.getTypeTextFormat();
-			if (!evt.isInfinite()) {
-				sb += SP + evt.getMaxSize();
-			}
-			sb +=  SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
-			
-			sb+= CR;
-			
-			if (evt.isLossy()) {
-				sb += "LOSSYEVENT" + SP + evt.getName() + SP + evt.getLossPercentage() + SP + evt.getMaxNbOfLoss() + CR;
-			}
-		}
-		sb+= CR;
-		
-		sb += "// Requests" + CR;
-		for(TMLRequest request:tmlm.getRequests()) {
-			sb += "REQUEST" + SP + request.getName() + "(";
-				for(i=0; i<request.getNbOfParams(); i++) {
-					if (i != 0) {
-						sb+= ", ";
-					}
-					sb += TMLType.getStringType(request.getType(i).getType());
-				}
-				sb += ")";
-			for(TMLTask t: request.getOriginTasks()) {
-				sb+= SP + t.getName();
-			}
-			sb += SP + request.getDestinationTask().getName();
-			sb+= CR;
-			
-			if (request.isLossy()) {
-				sb += "LOSSYREQUEST" + SP + request.getName() + SP + request.getLossPercentage() + SP + request.getMaxNbOfLoss() + CR;
-			}
-		}*/
 		sb+= CR;
 		
 		return sb;

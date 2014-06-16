@@ -54,7 +54,10 @@ public class TMLSDAttribute extends DIPLOElement {
     public String name;
     public String initialValue;
     
-    public TMLSDAttribute() {
+    public TMLSDAttribute( String _name ) {
+			this.name = _name;
+			type = new TMLSDType( "unknown" );
+			initialValue = "unknown";
     }
     
     public TMLSDAttribute( String _name, TMLSDType _type ) {
