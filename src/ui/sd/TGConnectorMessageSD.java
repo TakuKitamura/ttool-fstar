@@ -141,7 +141,7 @@ public  abstract class TGConnectorMessageSD extends TGConnector {
             text = getTopLevelName() + " / " + text;
         }
         String s = (String)JOptionPane.showInputDialog(frame, text,
-			"setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+			"setting message name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
 			null,
 			getValue());
         if ((s != null) && (s.length() > 0)) {

@@ -60,7 +60,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
     protected int arrowLength = 10;
     protected int widthValue, heightValue;
     protected int nParam = 5;
-    protected String [] params = new String[nParam];
+    protected String[] params = new String[nParam];
     
     public TGConnectorMessageTMLSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -123,7 +123,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		tmp = tmp.substring(index0+1, tmp.length()-1);
 		
 		String[] params = tmp.split(",");
-		for(int i=0; i<params.length; i++) {
+		for(int i=0; i<nParam; i++) {
 			tmp = params[i].trim();
 			//System.out.println("First=" + tmp);
 			if (!TAttribute.isAValidId(tmp, false, false)) {
@@ -179,8 +179,15 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 			value += ")";
     }
 
-	public String[] getParams()	{
-		return params;
+	public ArrayList<String> getParams()	{
+
+		ArrayList<String> toBeReturned = new ArrayList<String>();
+		for( int i = 0; i < nParam; i++ )	{
+			if( ( params[i] != "" ) && ( params[i] != "null") )	{
+				toBeReturned.add( params[i] );
+			}
+		}
+		return toBeReturned;
 	}
 
 	/*public int getNumberParams()	{
@@ -205,28 +212,30 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 	 protected String translateExtraParam() {
         String a;
         StringBuffer sb = new StringBuffer( "<extraparam>\n" );
-        for( int i = 0; i < params.length; i++ )	{
+        for( int i = 0; i < nParam; i++ )	{
 					//TraceManager.addDev("Attribute:" + i);
-          a = params[i];
-          //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
-          //value = value + a + "\n";
-          sb.append( "<Parameter access=\"" );
-          //sb.append( /*a.getAccess()*/ );
-          sb.append( "\" id=\"" );
-          sb.append( a /*a.getAccess()*/ );
-          sb.append( "\" value=\"" );
-          //sb.append( /*a.getInitialValue()*/ );
-          sb.append( "\" type=\"" );
-          //sb.append( /*a.getType()*/ );
-          sb.append( "\" typeOther=\"" );
-          //sb.append( /*a.getTypeOther()*/ );
-          sb.append( "\" />\n" );
+					if( params[i] != "" )	{
+    	      a = params[i];
+  	        //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
+	          //value = value + a + "\n";
+        	  sb.append( "<Parameter" );
+      	    //sb.append( /*a.getAccess()*/ );
+    	      sb.append( " id=\"" );
+  	        sb.append( a /*a.getAccess()*/ );
+	          //sb.append( "\" value=\"" );
+          	//sb.append( /*a.getInitialValue()*/ );
+        	  //sb.append( "\" type=\"" );
+      	    //sb.append( /*a.getType()*/ );
+    	      //sb.append( "\" typeOther=\"" );
+  	        //sb.append( /*a.getTypeOther()*/ );
+	          sb.append( "\" />\n" );
+					}
         }
         sb.append( "</extraparam>\n" );
         return new String(sb);
     }
 
-    /*public void loadExtraParam( NodeList nl, int decX, int decY, int decId ) throws MalformedModelingException{
+    public void loadExtraParam( NodeList nl, int decX, int decY, int decId ) throws MalformedModelingException{
     	//System.out.println("*** load extra synchro ***");
       try {
           NodeList nli;
@@ -246,27 +255,28 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 								//System.out.println(n2);
 								if( n2.getNodeType() == Node.ELEMENT_NODE ) {
 									elt = (Element) n2;
-									//TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
+									TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
 									if( elt.getTagName().equals("Parameter") )	{
-										//TraceManager.addDev("Analyzing parameter");
-										access = Integer.decode(elt.getAttribute("access")).intValue();
+										TraceManager.addDev("Analyzing parameter");
+										/*access = Integer.decode(elt.getAttribute("access")).intValue();
 										type = Integer.decode(elt.getAttribute("type")).intValue();
 										try {
 											typeOther = elt.getAttribute("typeOther");
 										}
 										catch ( Exception e )	{
 											typeOther = "";
-										}
+										}*/
 										id = elt.getAttribute("id");
-										valueAtt = elt.getAttribute("value");
+										/*valueAtt = elt.getAttribute("value");
 										if( valueAtt.equals("null") )	{
 											valueAtt = "";
-										}
-										if( (TAttribute.isAValidId(id, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
+										}*/
+										if( (TAttribute.isAValidId(id, false, false) ) /*&& ( TAttribute.isAValidInitialValue(type, valueAtt))*/ )	{
 											//TraceManager.addDev("Adding parameter " + id + " typeOther=" + typeOther);
-											TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+											//TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
 											//myAttributes.addElement(ta);
 											params[counter] = id;
+											counter++;
 											}
                     }
                   }
@@ -277,5 +287,5 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 				catch ( Exception e ) {
 					throw new MalformedModelingException();
 				}
-    }*/
+    }
 }

@@ -58,14 +58,14 @@ import ui.*;
 
 public class JDialogInstanceAttribute extends JDialogAttribute implements ActionListener, ListSelectionListener  {
     
-    protected JPanel panel3;
+    /*protected JPanel panel3;
     protected JTextField instanceNameField;
-		protected String instanceName;
+		protected String instanceName;*/
     
     /** Creates new form  */
     public JDialogInstanceAttribute( Vector _attributes, Vector _forbidden, Frame f, String title, String attrib ) {
         super( _attributes, _forbidden, f, title, attrib );
-				instanceName = title;
+				//instanceName = title;
         frame = f;
         attributesPar = _attributes;
         forbidden = _forbidden;
@@ -82,8 +82,88 @@ public class JDialogInstanceAttribute extends JDialogAttribute implements Action
         myInitComponents();
         pack();
     }
-    
-    protected void initComponents() {
+
+  @Override  public void addAttribute() {
+        Object o1 = accessBox.getSelectedItem();
+        Object o2 = typeBox.getSelectedItem();
+        String s = identifierText.getText();
+        String value = initialValue.getText();
+        TAttribute a;
+        
+        if (s.length()>0) {
+            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword, checkTMLKeyword)) && (TAttribute.notIn(s, forbidden))){
+                int i = TAttribute.getAccess(o1.toString());
+                int j = TAttribute.getType(o2.toString());
+				
+				if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
+					value = "2";
+				}
+                
+                if ((i != -1) && (j!= -1)) {
+                    
+                    if ((value.length() < 1) || (initialValue.isEnabled() == false)){
+						
+                        //value = "";
+                            JOptionPane.showMessageDialog(frame,
+                            "An initial value MUST be inserted",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                    } else {
+                        if (!TAttribute.isAValidInitialValue(j, value)) {
+                            JOptionPane.showMessageDialog(frame,
+                            "The initial value is NOT valid",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                    }
+                    if (j == TAttribute.OTHER) {
+                        a = new TAttribute(i, s, value, o2.toString());
+                        //System.out.println("New attribute: " + o2.toString());
+                    } else {
+                        a = new TAttribute(i, s, value, j);
+                    }
+                    //checks whether the same attribute already belongs to the list
+                    int index = attributes.size();
+                    if (attributes.contains(a)) {
+                        index = attributes.indexOf(a);
+                        a = (TAttribute)(attributes.elementAt(index));
+                        a.setAccess(i);
+                        if (j == TAttribute.OTHER) {
+                            a.setTypeOther(o2.toString());
+                        }
+                        a.setType(j);                        
+                        a.setInitialValue(value);
+                        //attributes.removeElementAt(index);
+                    } else {
+                        attributes.add(index, a);
+                    }
+                    listAttribute.setListData(attributes);
+                    identifierText.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(frame,
+                    "Bad access / type",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame,
+                "Bad identifier: identifier already in use, or invalid identifier",
+                "Error",
+                JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame,
+            "Bad identifier",
+            "Error",
+            JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+    }
+    @Override protected void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -106,15 +186,6 @@ public class JDialogInstanceAttribute extends JDialogAttribute implements Action
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Managing " + attrib + "s"));
         panel2.setPreferredSize(new Dimension(300, 250));
-
-/*        panel3 = new JPanel();
-        panel3.setLayout(gridbag2);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Name:" + attrib + "s"));
-        panel3.setPreferredSize(new Dimension(300, 250));
-				panel3.add(new JLabel( "Name:" ), c1 );
-        instanceNameField = new JTextField( instanceName );
-				panel3.add( instanceNameField, c1 );
-				c.add( panel3, c0 );*/
         
         // first line panel1
         c1.gridwidth = 1;
@@ -239,228 +310,4 @@ public class JDialogInstanceAttribute extends JDialogAttribute implements Action
         cancelButton.addActionListener(this);
         c.add(cancelButton, c0);
     }
-    
-    public void	actionPerformed(ActionEvent evt)  {
-        if (evt.getSource() == typeBox) {
-            boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-            initialValue.setEnabled(b);
-            return;
-        }
-        
-        
-        String command = evt.getActionCommand();
-        
-        // Compare the action command to the known actions.
-        if (command.equals("Save and Close"))  {
-            closeDialog();
-        } else if (command.equals("Add / Modify " + attrib)) {
-            addAttribute();
-        } else if (command.equals("Cancel")) {
-            cancelDialog();
-        } else if (command.equals("Remove " + attrib)) {
-            removeAttribute();
-        } else if (command.equals("Down")) {
-            downAttribute();
-        } else if (command.equals("Up")) {
-            upAttribute();
-        }
-    }
-    
-    public void addAccess(String s) {
-        accessBox.addItem(s);
-    }
-    
-    public void addType(String s) {
-        initValues.add(new Boolean(true));
-        typeBox.addItem(s);
-    }
-    
-    public void addType(String s, boolean b) {
-        initValues.add(new Boolean(b));
-        typeBox.addItem(s);
-    }
-    
-    public void enableInitialValue(boolean b) {
-        initialValue.setEnabled(b);
-    }
-    
-    public void enableRTLOTOSKeyword(boolean b) {
-        checkKeyword = !b;
-    }
-    
-    public void enableJavaKeyword(boolean b) {
-        checkJavaKeyword = !b;
-    }
-	
-	 public void enableTMLKeyword(boolean b) {
-        checkTMLKeyword = !b;
-    }
-    
-    
-    
-    public void addAttribute() {
-        Object o1 = accessBox.getSelectedItem();
-        Object o2 = typeBox.getSelectedItem();
-        String s = identifierText.getText();
-        String value = initialValue.getText();
-        TAttribute a;
-        
-        if (s.length()>0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword, checkTMLKeyword)) && (TAttribute.notIn(s, forbidden))){
-                int i = TAttribute.getAccess(o1.toString());
-                int j = TAttribute.getType(o2.toString());
-				
-				if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
-					value = "2";
-				}
-                
-                if ((i != -1) && (j!= -1)) {
-                    
-                    if ((value.length() < 1) || (initialValue.isEnabled() == false)){
-						
-                        value = "";
-                    } else {
-                        if (!TAttribute.isAValidInitialValue(j, value)) {
-                            JOptionPane.showMessageDialog(frame,
-                            "The initial value is not valid",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
-                    }
-                    if (j == TAttribute.OTHER) {
-                        a = new TAttribute(i, s, value, o2.toString());
-                        //System.out.println("New attribute: " + o2.toString());
-                    } else {
-                        a = new TAttribute(i, s, value, j);
-                    }
-                    //checks whether the same attribute already belongs to the list
-                    int index = attributes.size();
-                    if (attributes.contains(a)) {
-                        index = attributes.indexOf(a);
-                        a = (TAttribute)(attributes.elementAt(index));
-                        a.setAccess(i);
-                        if (j == TAttribute.OTHER) {
-                            a.setTypeOther(o2.toString());
-                        }
-                        a.setType(j);                        
-                        a.setInitialValue(value);
-                        //attributes.removeElementAt(index);
-                    } else {
-                        attributes.add(index, a);
-                    }
-                    listAttribute.setListData(attributes);
-                    identifierText.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(frame,
-                    "Bad access / type",
-                    "Error",
-                    JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-            } else {
-                JOptionPane.showMessageDialog(frame,
-                "Bad identifier: identifier already in use, or invalid identifier",
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-        } else {
-            JOptionPane.showMessageDialog(frame,
-            "Bad identifier",
-            "Error",
-            JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-    }
-    
-    public void removeAttribute() {
-        int i = listAttribute.getSelectedIndex() ;
-        if (i!= -1) {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
-            a.setAccess(-1);
-            attributes.removeElementAt(i);
-            listAttribute.setListData(attributes);
-        }
-    }
-    
-    public void downAttribute() {
-        int i = listAttribute.getSelectedIndex();
-        if ((i!= -1) && (i != attributes.size() - 1)) {
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i+1);
-            listAttribute.setListData(attributes);
-            listAttribute.setSelectedIndex(i+1);
-        }
-    }
-    
-    public void upAttribute() {
-        int i = listAttribute.getSelectedIndex();
-        if (i > 0) {
-            Object o = attributes.elementAt(i);
-            attributes.removeElementAt(i);
-            attributes.insertElementAt(o, i-1);
-            listAttribute.setListData(attributes);
-            listAttribute.setSelectedIndex(i-1);
-        }
-    }
-    
-    
-    public void closeDialog() {
-        attributesPar.removeAllElements();
-        for(int i=0; i<attributes.size(); i++) {
-            attributesPar.addElement(attributes.elementAt(i));
-        }
-        dispose();
-    }
-    
-    public void cancelDialog() {
-        dispose();
-    }
-    
-    public void valueChanged(ListSelectionEvent e) {
-        int i = listAttribute.getSelectedIndex() ;
-        if (i == -1) {
-            removeButton.setEnabled(false);
-            upButton.setEnabled(false);
-            downButton.setEnabled(false);
-            identifierText.setText("");
-            //initialValue.setText("");
-        } else {
-            TAttribute a = (TAttribute)(attributes.elementAt(i));
-            identifierText.setText(a.getId());
-            initialValue.setText(a.getInitialValue());
-            select(accessBox, a.getStringAccess(a.getAccess()));
-            if (a.getType() == TAttribute.OTHER) {
-                select(typeBox, a.getTypeOther());
-            } else {
-                select(typeBox, a.getStringType(a.getType()));
-            }
-            removeButton.setEnabled(true);
-            if (i > 0) {
-                upButton.setEnabled(true);
-            } else {
-                upButton.setEnabled(false);
-            }
-            if (i != attributes.size() - 1) {
-                downButton.setEnabled(true);
-            } else {
-                downButton.setEnabled(false);
-            }
-        }
-    }
-    
-    public void select(JComboBox jcb, String text) {
-        String s;
-        for(int i=0; i<jcb.getItemCount(); i++) {
-            s = (String)(jcb.getItemAt(i));
-            //System.out.println("String found: *" + s + "* *" + text + "*");
-            if (s.equals(text)) {
-                jcb.setSelectedIndex(i);
-                return;
-            }
-        }
-    }
-    
 }

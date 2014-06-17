@@ -52,57 +52,6 @@ import myutil.*;
 
 public class TMLCP extends TMLElement {
 
-	public static class TMLCPGraphicalCP	{
-
-		private String name;
-		//private TMLCPGraphicalAD mainAD;
-		//private ArrayList<TMLCPGraphicalAD> otherADs;
-		private ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> otherSDs;
-
-		public TMLCPGraphicalCP( String _name )	{
-			this.name = _name;
-			init();
-		}
-
-		private void init()	{
-			otherSDs = new ArrayList<CPSequenceDiagram.TMLCPGraphicalSD>();
-			//otherADs = new ArrayList<CPSequenceDiagram.TMLCPGraphicalAD>();
-		}
-
-		public void setName( String _name )	{
-			if( _name != "" )	{
-				this.name = _name;
-			}
-			else	{
-				this.name = "NoNameTMLCPGraphicalCP";
-			}
-		}
-
-		/*public void addGraphicalAD( TMLCPGraphicalAD _ad )	{
-			otherADs.add( _ad );
-		}*/
-
-		public void addGraphicalSD( CPSequenceDiagram.TMLCPGraphicalSD _sd )	{
-			otherSDs.add( _sd );
-		}
-
-		public ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> getGraphicalSDs()	{
-			return otherSDs;
-		}
-
-		public String getName()	{
-			return this.name;
-		}
-
-		@Override public String toString()	{
-			return "TMLCPGraphicalCP " + getName();
-		}
-	}
-
-
-/*#############################################################################*/
-
-	//Data structure for TMLtext2ModelsTransformations
 	private CPActivityDiagram mainCP;
 	private ArrayList<CPActivityDiagram> otherCPs; //Ref to other CPs
 	private ArrayList<CPSequenceDiagram> sds; //Ref to SDs
@@ -235,12 +184,12 @@ public class TMLCP extends TMLElement {
 		}
   }
     
-  public void addCPSequenceDiagram( CPSequenceDiagram _tmlsdSection ) /*throws UndeclaredDiagramException, MultipleDiagDeclarationsException*/	{
+ /* public void addCPSequenceDiagram( CPSequenceDiagram _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
 
 		if( checkDiagramDeclaration( _tmlsdSection ) )	{
 			if( checkMultipleDiagramDeclaration( _tmlsdSection ) )	{
 				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " is defined multiple times";
-				/*throw new MultipleDiagDeclarationsException( errorMessage );*/
+				throw new MultipleDiagDeclarationsException( errorMessage );
 			}
 			else	{
    			sds.add( _tmlsdSection );
@@ -248,9 +197,13 @@ public class TMLCP extends TMLElement {
 		}
 		else	{
 			String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " undeclared";
-			/*throw new UndeclaredDiagramException( errorMessage );*/
+			throw new UndeclaredDiagramException( errorMessage );
 		}
-  }
+  }*/
+
+	public void addCPSequenceDiagram( CPSequenceDiagram _sd )	{
+		sds.add( _sd );
+	}
 	
 	/* Debugging methods */
 	public int getNumSections() {
@@ -261,11 +214,11 @@ public class TMLCP extends TMLElement {
 		return sds.size();
 	}
 
-	public ArrayList<CPActivityDiagram> getCPSections()	{
+	public ArrayList<CPActivityDiagram> getCPActivityDiagrams()	{
 		return otherCPs;
 	}
 
-	public ArrayList<CPSequenceDiagram> getSDSections()	{
+	public ArrayList<CPSequenceDiagram> getCPSequenceDiagrams()	{
 		return sds;
 	}
 
@@ -404,7 +357,7 @@ public class TMLCP extends TMLElement {
 		//Print the data structure for the main CP section
 
 		//Print the data structure for the CP sections
-		CPlist = getCPSections();
+		CPlist = getCPActivityDiagrams();
 		for( i = 0; i < CPlist.size(); i++ )	{
 			tempCP = CPlist.get(i);
 			System.out.printf( "Activity Diagram n. %d: %s\n", i+1, tempCP.getName() );			
@@ -458,7 +411,7 @@ public class TMLCP extends TMLElement {
 			System.out.println("\n");
 		}
 
-		SDlist = getSDSections();
+		SDlist = getCPSequenceDiagrams();
 		for( i = 0; i < SDlist.size(); i++ )	{
 				tempSD = SDlist.get(i);
 				System.out.printf( "Sequence Diagram n. %d: %s\n", i+1, tempSD.getName() );

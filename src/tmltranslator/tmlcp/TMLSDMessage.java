@@ -53,6 +53,7 @@ import myutil.*;
 
 public class TMLSDMessage extends TMLElement  {
 
+	//mind the difference between TMLSDAttribute and TMLAttribute!
 	private ArrayList<TMLSDAttribute> attributeList;	
 	private int yCoord;
 	
@@ -61,7 +62,7 @@ public class TMLSDMessage extends TMLElement  {
 			attributeList = new ArrayList<TMLSDAttribute>();
     }
 
-		public TMLSDMessage( String _name, Object _referenceObject, String[] _params )	{
+		public TMLSDMessage( String _name, Object _referenceObject, ArrayList<String> _params )	{
     	super( _name, _referenceObject );
 			attributeList = new ArrayList<TMLSDAttribute>();
 			for( String p: _params )	{
@@ -70,6 +71,7 @@ public class TMLSDMessage extends TMLElement  {
 		}
     
 		public void addAttribute( TMLSDAttribute _attribute )	{
+			if( _attribute != null )
 				attributeList.add( _attribute );
 		}
 

@@ -205,33 +205,60 @@ public class TMLCPTextSpecification {
 		sb += "// Communication Pattern: " + title + CR;
 		sb += "// Generated: " + new Date().toString() + CR2; 
 		
-		/*ArrayList<CPSequenceDiagram.TMLCPGraphicalSD> listSDs = tmlcp.getGraphicalSDs();
+		ArrayList<CPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 
 		for( int i = 0; i < listSDs.size(); i++ )	{
-			CPSequenceDiagram.TMLCPGraphicalSD tempSD = listSDs.get(i);
-			sb += "SCENARIO " + tempSD.getName() + CR + TAB + TAB;
-			ArrayList<CPSequenceDiagram.TMLCPGraphicalSDInstance> listInstances = tempSD.getTMLCPGraphicalSDInstances();
-			ArrayList<CPSequenceDiagram.GraphicalSDElement> listElements = tempSD.getGraphicalSDElements();
-			for( CPSequenceDiagram.TMLCPGraphicalSDInstance inst: listInstances )	{
-				sb += inst.toString();
-				sb += CR + TAB + TAB;
+			CPSequenceDiagram SD = listSDs.get(i);
+			sb += "SCENARIO " + SD.getName() + CR + TAB + TAB;
+			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = SD.getInstances();
+			ArrayList<TMLSDMessage> listMessages = SD.getMessages();
+			ArrayList<TMLSDAction> listActions = SD.getActions();
+			ArrayList<TMLAttribute> listAttributes = SD.getAttributes();
+			//ArrayList<String> actions = new ArrayList<String>();
+			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
+				sb += inst.getType() + " " + inst.getName() + CR + TAB + TAB;
+			}
+			for( TMLAttribute attr: listAttributes )	{
+				sb += attr.getType().toString() + " " + attr.getName() + CR + TAB + TAB;
+			}
+			for( TMLAttribute attr: listAttributes )	{
+				sb += attr.getName() + " = " + attr.getInitialValue() + CR + TAB + TAB;
 			}
 			sb += CR2;
 			sb += MAIN + CR;
-			//elements must be order according to Y!
-			for( CPSequenceDiagram.GraphicalSDElement elem: listElements )	{
-				sb += elem.toString();
+			//actions and messages must be order according to Y before being written!
+			//sortedMessages = sort( listMessages );
+			ArrayList<TMLSDMessage> sortedMessages = listMessages;
+			for( TMLSDMessage msg: sortedMessages )	{	//print the message and all its attributes
+				sb += msg.getName() + "(";
+				ArrayList<TMLSDAttribute> listAttr = msg.getAttributes();	//mind the difference between TMLSDAttribute and TMLAttribute
+				for( int index = 0; index < listAttr.size(); index++ )	{
+					if( index == ( listAttr.size() - 1 ) )	{
+						sb += listAttr.get(index).getName();
+					}
+					else	{	
+						sb += listAttr.get(index).getName() + ", ";
+					}
+				}
+				sb += ")";
 				sb += CR + TAB;
+			}
+			for( TMLSDAction action: listActions )	{
+				sb += action.getAction() + CR;
 			}
 			sb += CR;
 		}
 		sb += END + CR;
-		sb += END;*/
-
+		sb += END;
 		sb+= CR;
-		
 		return sb;
 	}
+
+
+/*	private ArrayList<TMLSDMessage> sort( ArrayList<TMLSDMessage> input ) {
+		//To be implemented...
+		return sorted;
+	}*/
 	
 	public String makeTasks(TMLModeling tmlm) {
 		String sb = "";

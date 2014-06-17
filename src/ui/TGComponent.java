@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -66,7 +67,7 @@ import ui.tmlcompd.*;
 import ui.tmldd.*;
 import ui.tree.*;
 
-
+import tmltranslator.*;
 
 public abstract class TGComponent implements CDElement, GenericTree {
     
@@ -180,7 +181,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
 	
 	protected boolean breakpoint;
 
-	
 	// Zoom
 	public double dx=0, dy=0, dwidth, dheight, dMaxWidth, dMaxHeight;
 
@@ -2946,6 +2946,4 @@ public abstract class TGComponent implements CDElement, GenericTree {
             tgcomponent[i].searchForText(text, elements);
         }
     }
-    
-    
 }

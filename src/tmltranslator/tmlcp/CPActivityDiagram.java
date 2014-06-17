@@ -252,7 +252,7 @@ public class CPActivityDiagram  extends TMLElement {
 		String tempString;
 		int i, j, k;
 
-		ArrayList<CPActivityDiagram> activityList = _refTopCP.getCPSections();
+		ArrayList<CPActivityDiagram> activityList = _refTopCP.getCPActivityDiagrams();
 		for( i = 0; i < elements.size(); i++ )	{
 			tempElem = elements.get(i);
 			tempString = tempElem.getName();
@@ -267,7 +267,7 @@ public class CPActivityDiagram  extends TMLElement {
 				}
 			}
 			else	{ //A reference to a sequence diagram must be inserted instead
-				ArrayList<CPSequenceDiagram> sequenceList = _refTopCP.getSDSections();
+				ArrayList<CPSequenceDiagram> sequenceList = _refTopCP.getCPSequenceDiagrams();
 				for( k = 0; k < sequenceList.size(); k++ )	{
 					tempSD = sequenceList.get(k);
 					if( tempString.equals( tempSD.getName() ) )	{

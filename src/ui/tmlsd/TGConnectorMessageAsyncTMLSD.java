@@ -54,13 +54,22 @@ import java.util.*;
 
 import myutil.*;
 import ui.*;
+import tmltranslator.tmlcp.*;
 
-public  class TGConnectorMessageAsyncTMLSD extends TGConnectorMessageTMLSD {
+public class TGConnectorMessageAsyncTMLSD extends TGConnectorMessageTMLSD {
+
     protected int arrowLength = 10;
     
-    public TGConnectorMessageAsyncTMLSD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
+    public TGConnectorMessageAsyncTMLSD( int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos,
+																				TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2,
+																				Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic504;
+
+				_p1.setSource( true );	//set p1 as source connectingPoint to know the direction of the message w.r.t connectingPoints
+				_p2.setSource( false );	//set p2 as destination connectingPoint to know the direction of the message w.r.t connectingPoints
+				_p1.setReferenceToConnector(this);
+				_p2.setReferenceToConnector(this);
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
@@ -81,5 +90,4 @@ public  class TGConnectorMessageAsyncTMLSD extends TGConnectorMessageTMLSD {
     public int getType() {
         return TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD;
     }
- 
 }

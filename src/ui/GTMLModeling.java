@@ -80,7 +80,6 @@ public class GTMLModeling  {
 
 	private TMLMapping map;
 	private TMLArchitecture archi;
-	//private TMLCP.TMLCPGraphicalCP tmlcp;
 	private TMLCP tmlcp;
 	
 	private boolean putPrefixName = false;
@@ -2135,10 +2134,7 @@ public class GTMLModeling  {
 		TMLCPRefCP refCPnode;
 		CPRefAD refCP;
 		ArrayList<String> names = new ArrayList<String>();
-		//TMLCP.TMLCPGraphicalCP graphicalCP;
-		CPSequenceDiagram.TMLCPGraphicalSD graphicalSD;
 		CPSequenceDiagram SD;
-		//CPActivityDiagram.TMLCPGraphicalAD graphicalAD;
 		String delims = "[ +=:;]+";		//the delimiter chars used to parse attributes of SD instance
 		String[] tokens;							//used to get the tokens of the string for a SD attribute
 
@@ -2179,7 +2175,6 @@ public class GTMLModeling  {
 				else {
 					names.add( refSDnode.getName() );
 					String SDname = refSDnode.getName();
-					graphicalSD = new CPSequenceDiagram.TMLCPGraphicalSD( SDname );
 					SD = new CPSequenceDiagram( SDname, null );
 					for( TDiagramPanel panel: panelList )	{
 						TraceManager.addDev("Testing panel: " + panel.getName() + " against SD ref " + SDname );
@@ -2199,7 +2194,7 @@ public class GTMLModeling  {
 								TMLType type;
 								String toParse;
 								Object attribute;
-								TGConnectorMessageAsyncTMLSD connector;
+								TGConnectorMessageTMLSD connector;
 								if( elem instanceof TMLSDStorageInstance )	{
 									TMLSDStorageInstance storage = (TMLSDStorageInstance) elemList.get(j);
 									SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( storage.getName(), null, "STORAGE" ) );
@@ -2210,11 +2205,11 @@ public class GTMLModeling  {
 										attribute = attributes.get( index1 );
 										toParse = attribute.toString();
 										tokens = toParse.split( delims );
-										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+										if( tokens[3].equals("Natural") )	{
 											type = new TMLType(1);
 											} 
 										else {
-											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+											if( tokens[3].equals("Boolean") )	{
 												type = new TMLType(2);
 												}
 											else	{
@@ -2224,15 +2219,13 @@ public class GTMLModeling  {
 										for( int tt = 0; tt < tokens.length; tt++	)	{
 											TraceManager.addDev( "STORAGE:" + tokens[tt]);
 										}
-										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
 									}
-									//graphicalSD.addTMLCPGraphicalSDInstance( storage.getName(), storage.getInstanceType() );
 									if( storage.getNumberInternalComponents() > 0 )	{	// action states are stored as internal components of an instance
 										components = storage.getInternalComponents();
 										for( index2 = 0; index2 < storage.getNumberInternalComponents(); index2++ )	{
 											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
 																						" " + components[index2].getY() );
-											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
 											// must do syntax check on this string also
 											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
@@ -2248,11 +2241,11 @@ public class GTMLModeling  {
 										attribute = attributes.get( index1 );
 										toParse = attribute.toString();
 										tokens = toParse.split( delims );
-										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+										if( tokens[3].equals("Natural") )	{
 											type = new TMLType(1);
 											} 
 										else {
-											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+											if( tokens[3].equals("Boolean") )	{
 												type = new TMLType(2);
 												}
 											else	{
@@ -2262,15 +2255,14 @@ public class GTMLModeling  {
 										for( int tt = 0; tt < tokens.length; tt++	)	{
 											TraceManager.addDev( "CONTROLLER:" + tokens[tt]);
 										}
-										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+										TraceManager.addDev( tokens[3].toUpperCase() );
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
 									}
-									//graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
 									if( controller.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 										components = controller.getInternalComponents();
 										for( index2 = 0; index2 < controller.getNumberInternalComponents(); index2++ )	{	//get action states
 											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
 																						" " + components[index2].getY() );
-											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
 											// must do syntax check on this string also
 											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
@@ -2278,6 +2270,7 @@ public class GTMLModeling  {
 								}
 								if( elem instanceof TMLSDTransferInstance )	{
 									TMLSDTransferInstance transfer = (TMLSDTransferInstance) elemList.get(j);
+									SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( transfer.getName(), null, "TRANSFER" ) );
 									attributes = transfer.getAttributes();
 									TraceManager.addDev( "Found transfer instance: " + transfer.getName() + " with " + transfer.getNumberInternalComponents()
 																				+ " internal component with " + attributes.size()  + " attributes:");
@@ -2285,11 +2278,11 @@ public class GTMLModeling  {
 										attribute = attributes.get( index1 );
 										toParse = attribute.toString();
 										tokens = toParse.split( delims );
-										if( tokens[3].toUpperCase() == Integer.toString( TMLType.NATURAL ) )	{
+										if( tokens[3].equals("Natural") )	{
 											type = new TMLType(1);
 											} 
 										else {
-											if( tokens[3].toUpperCase() == Integer.toString( TMLType.BOOLEAN ) )	{
+											if( tokens[3].equals("Boolean") )	{
 												type = new TMLType(2);
 												}
 											else	{
@@ -2297,34 +2290,32 @@ public class GTMLModeling  {
 											}
 										}
 										for( int tt = 0; tt < tokens.length; tt++	)	{
-											TraceManager.addDev( "CONTROLLER:" + tokens[tt]);
+											TraceManager.addDev( "TRANSFER:" + tokens[tt]);
 										}
-										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[3] ) );	//name, type, initial value
+										TraceManager.addDev( tokens[3].toUpperCase() );
+										SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
 									}
-									//graphicalSD.addTMLCPGraphicalSDInstance( elem1.getName(), elem1.getInstanceType() );
 									if( transfer.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 										components = transfer.getInternalComponents();
 										for( index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++ )	{	//get action states
 											TraceManager.addDev( components[index2].getName() + " " + components[index2].getValue() + 
 																						" " + components[index2].getY() );
-											//graphicalSD.addGraphicalSDElement( components[index2].getValue(), components[index2].getY() );
 											// must do syntax check on this string also
 											SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
 										}
 									}
 								}
 								if( elem instanceof TGConnectorMessageTMLSD )	{
-									connector = (TGConnectorMessageAsyncTMLSD) elemList.get(j);
+									connector = (TGConnectorMessageTMLSD) elemList.get(j);
 									SD.addMessage( new TMLSDMessage( connector.getName(), null, connector.getParams() ) );
 									TraceManager.addDev( "Found message: " + connector.getValue() + " " + connector.getY() );
 									for( String param : connector.getParams() )	{
 										TraceManager.addDev( param );
 									}
-									//graphicalSD.addGraphicalSDElement( conn.getValue() +
 									//"(" + conn.getStartName() + ", " + conn.getEndName() + ")", conn.getY() );
 								}
 							}
-							ArrayList<CPSequenceDiagram.GraphicalSDElement> pippo = graphicalSD.getGraphicalSDElements();
+							/*ArrayList<CPSequenceDiagram.GraphicalSDElement> pippo = graphicalSD.getGraphicalSDElements();
 							TraceManager.addDev( "*************************************************" );
 							for( int p = 0; p < pippo.size(); p++ )	{
 								CPSequenceDiagram.GraphicalSDElement tempy = pippo.get(p);
@@ -2338,7 +2329,7 @@ public class GTMLModeling  {
 								CPSequenceDiagram.TMLCPGraphicalSDInstance tempyy = inst.get(pp);
 								TraceManager.addDev( tempyy.getName() + " " + tempyy.getType() );
 							}
-							TraceManager.addDev( "*************************************************" );
+							TraceManager.addDev( "*************************************************" );*/
 							tmlcp.addCPSequenceDiagram( SD );
 							break;
 						}

@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
  *
- * ludovic.apvrille AT enst.fr
+ * ludovic.apvrille AT telecom-paristech.fr
+ * andrea.enrici AT telecom-paristech.fr
  *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
@@ -40,7 +41,7 @@
  * Dialog for managing parameters of instances of SD
  * Creation: 04/01/2011
  * @version 1.0 04/01/2011
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Andrea ENRICI
  * @see
  */
 
@@ -116,7 +117,7 @@ public class JDialogSDInstance extends javax.swing.JDialog implements ActionList
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel("instance:"), c1);
+        panel1.add(new JLabel( "Name:" ), c1);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         instanceName = new JTextField(name);
         panel1.add(instanceName, c1);
