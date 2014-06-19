@@ -1,7 +1,7 @@
 /**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
-andrea.enrici AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class CPRefSD
+* Class TMLCPRefAD
 * Creation: 18/02/2014
 * @version 1.1 04/06/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -50,17 +50,25 @@ import java.util.*;
 
 import myutil.*;
 
-public class CPRefSD extends TMLCPElement  {
-
-	private CPSequenceDiagram reference;
+public class TMLCPRefAD extends TMLCPElement  {
 	
-	public CPRefSD( CPSequenceDiagram _ref, String _name, Object _referenceObject ) {
+	private TMLCPActivityDiagram reference;
+	
+ 	public TMLCPRefAD( TMLCPActivityDiagram _ref, String _name, Object _referenceObject ) {
   	super( _name, _referenceObject );
-		reference = _ref;
-	}
+    reference = _ref;
+ 	}
+
+ 	public TMLCPRefAD( String _name, Object _referenceObject ) {
+  	super( _name, _referenceObject );
+    reference = null;
+ 	}
     
-	public CPSequenceDiagram getReference() {
-  	return reference;
-	}
-	
+  public TMLCPActivityDiagram getReference() {
+  	return this.reference;
+  }
+
+  public void setReference( TMLCPActivityDiagram _ref ) {
+  	this.reference = _ref;
+  }
 }

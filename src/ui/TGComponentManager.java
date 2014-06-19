@@ -915,7 +915,7 @@ public class TGComponentManager {
                 tgc = new TMLCPJoin(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLCP_REF_CP:
-                tgc = new TMLCPRefCP(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                tgc = new TMLCPRefAD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLCP_REF_SD:
                 tgc = new TMLCPRefSD(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1468,7 +1468,7 @@ public class TGComponentManager {
             return TMLCP_FORK;
         } else if (tgc instanceof TMLCPJoin) {
             return TMLCP_JOIN;
-        } else if (tgc instanceof TMLCPRefCP) {
+        } else if (tgc instanceof TMLCPRefAD) {
             return TMLCP_REF_CP;
         } else if (tgc instanceof TMLCPRefSD) {
             return TMLCP_REF_SD;

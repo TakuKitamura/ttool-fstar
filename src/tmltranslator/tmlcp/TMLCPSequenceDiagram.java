@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class CPSequenceDiagram. 
+* Class TMLCPSequenceDiagram. 
 * Creation: 18/02/2014
 * @version 1.1 18/05/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -51,7 +51,7 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class CPSequenceDiagram  extends TMLElement {
+public class TMLCPSequenceDiagram  extends TMLElement {
 
 	private ArrayList<TMLSDInstance> instances; 
 	private ArrayList<TMLSDInstance> mappingInstances;
@@ -63,7 +63,7 @@ public class CPSequenceDiagram  extends TMLElement {
 	private boolean hashCodeComputed = false;
 	
     
-	public CPSequenceDiagram( String _name, Object _referenceObject )	{
+	public TMLCPSequenceDiagram( String _name, Object _referenceObject )	{
 		super( _name, _referenceObject );
 		init();
 	}

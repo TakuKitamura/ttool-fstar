@@ -144,7 +144,6 @@ public class GTURTLEModeling {
 	private TMLModeling tmlm;
 	private TMLMapping artificialtmap;
 	private TMLMapping tmap;
-	//private TMLCP.TMLCPGraphicalCP tmlcp;
 	private TMLCP tmlcp;
 	private RequirementModeling rm;
 	private NCStructure ncs;
@@ -399,8 +398,6 @@ public class GTURTLEModeling {
 	
 	public boolean generateTMLTxt( String _title ) {
 
-		//TO DO: make a third branch for the syntax checking from the CP panel
-		
 		if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
 			TraceManager.addError( "About to generate the TMLText for CPs" );
 			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );

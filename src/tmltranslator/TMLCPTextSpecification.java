@@ -204,11 +204,44 @@ public class TMLCPTextSpecification {
 		sb += "// TML Communication Pattern - FORMAT 0.1" + CR;
 		sb += "// Communication Pattern: " + title + CR;
 		sb += "// Generated: " + new Date().toString() + CR2; 
-		
-		ArrayList<CPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 
+		//Generating code for the main CP
+		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
+		sb += "COMMUNICATION_PATTERN" + SP + mainCP.getName() + CR;
+		ArrayList<TMLCPConnector> listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+		ArrayList<TMLCPElement> listElements = mainCP.getElements();
+		for( TMLCPElement elem : listElements )	{
+			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
+				tmltranslator.tmlcp.TMLCPRefAD refAD = (tmltranslator.tmlcp.TMLCPRefAD) elem;
+				sb += "ACTIVITY" + SP + refAD.getName() + CR + TAB;
+			}
+			if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
+				tmltranslator.tmlcp.TMLCPRefSD refSD = (tmltranslator.tmlcp.TMLCPRefSD) elem;
+				sb += "SEQUENCE" + SP + refSD.getName() + CR + TAB;
+			}
+			if( elem instanceof TMLCPConnector )	{
+				listTMLCPConnectors.add( (TMLCPConnector) elem);
+			}
+		}
+		//global variables should go here, but there are none up to now
+		sb += CR + MAIN + CR + TAB + "<>" + SC;
+		//sortYCoord( listTMLConnectors );	//to be implemented
+		ArrayList<String> connNameList = new ArrayList<String>();
+		for( TMLCPConnector conn : listTMLCPConnectors )	{
+			connNameList.add( Integer.toString( conn.getYCoord() ) + SP + conn.getSourceName() + SP + conn.getDestName() );
+		}
+		Collections.sort( connNameList );
+		TraceManager.addDev( "PRINTING ORDERED LIST" );
+		for( int y = 0; y < connNameList.size(); y++ )	{
+			TraceManager.addDev( connNameList.get(y) );
+		}
+		sb += CR;
+		sb += END + CR + END + CR2;
+
+		//Generating code for Sequence Diagrams
+		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		for( int i = 0; i < listSDs.size(); i++ )	{
-			CPSequenceDiagram SD = listSDs.get(i);
+			TMLCPSequenceDiagram SD = listSDs.get(i);
 			sb += "SCENARIO " + SD.getName() + CR + TAB + TAB;
 			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = SD.getInstances();
 			ArrayList<TMLSDMessage> listMessages = SD.getMessages();
@@ -222,11 +255,16 @@ public class TMLCPTextSpecification {
 				sb += attr.getType().toString() + " " + attr.getName() + CR + TAB + TAB;
 			}
 			for( TMLAttribute attr: listAttributes )	{
-				sb += attr.getName() + " = " + attr.getInitialValue() + CR + TAB + TAB;
+				if( attr.isBool() )	{
+					sb += attr.getName() + " = " + attr.getInitialValue().toUpperCase() + CR + TAB + TAB;
+				}
+				else	{
+					sb += attr.getName() + " = " + attr.getInitialValue() + CR + TAB + TAB;
+				}
 			}
 			sb += CR2;
 			sb += MAIN + CR;
-			//actions and messages must be order according to Y before being written!
+			//actions and messages must be ordered and printed according to Y before being written!
 			//sortedMessages = sort( listMessages );
 			ArrayList<TMLSDMessage> sortedMessages = listMessages;
 			for( TMLSDMessage msg: sortedMessages )	{	//print the message and all its attributes
@@ -247,10 +285,8 @@ public class TMLCPTextSpecification {
 				sb += action.getAction() + CR;
 			}
 			sb += CR;
+			sb += END + CR + END + CR2;
 		}
-		sb += END + CR;
-		sb += END;
-		sb+= CR;
 		return sb;
 	}
 

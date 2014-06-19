@@ -1,6 +1,7 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
 
-ludovic.apvrille AT enst.fr
+ludovic.apvrille AT telecom-paristech.fr
+andrea.enrici AT telecom-paristech.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -39,7 +40,7 @@ knowledge of the CeCILL license and that you accept its terms.
 * Class TMLCPChoice
 * Creation: 18/02/2014
 * @version 1.0 18/02/2014
-* @author Ludovic APVRILLE
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -50,20 +51,21 @@ import java.util.*;
 
 import myutil.*;
 
+//The method is not very suited for the language, I should come back later...
 public class TMLCPChoice extends TMLCPElement  {
-	private ArrayList<String> guards;  
+		private ArrayList<String> guards;  
 	
     public TMLCPChoice(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         guards = new ArrayList<String>();
     }
     
-    public void addGuard(String _guard) {
-        nexts.add(_guard);
+/*    public void addGuard( String _guard ) {
+        nexts.add( new TMLCPElement( _guard, null ) );
     }
     
-    public String<TMLCPElement> getGuards() {
+    public ArrayList<String> getGuards() {
     	return guards;
     }
-	
+*/
 }

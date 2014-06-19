@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class CPActivityDiagram
+* Class TMLCPActivityDiagram
 * Creation: 18/02/2014
 * @version 1.0 21/05/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -51,13 +51,13 @@ import tmltranslator.*;
 import myutil.*;
 //import compiler.tmlCPparser.myexceptions.*;
 
-public class CPActivityDiagram  extends TMLElement {
+public class TMLCPActivityDiagram  extends TMLElement {
 	
 	private TMLCPStart start;
   private ArrayList<TMLCPElement> elements; // Including the start element
-	private ArrayList<String> ads;	//a list of the activity diagrams declared in a section
-	private ArrayList<String> sds;	//a list of the sequence diagrams declated in a section
   private ArrayList<TMLAttribute> globalVariables; 
+	private ArrayList<String> ads;	//a list of the activity diagrams declared in a section (for parsing of text)
+	private ArrayList<String> sds;	//a list of the sequence diagrams declated in a section (for parsing of text)
 	
 	private int hashCode;
 	private boolean hashCodeComputed = false;
@@ -87,7 +87,7 @@ public class CPActivityDiagram  extends TMLElement {
 		sds = new ArrayList<String>();
   }
     
-  public CPActivityDiagram(String _name, Object _referenceObject) {
+  public TMLCPActivityDiagram(String _name, Object _referenceObject) {
   	super(_name, _referenceObject);
     init();
   }
@@ -247,31 +247,31 @@ public class CPActivityDiagram  extends TMLElement {
 	public void correctReferences( TMLCP _refTopCP )	{
 		
 		TMLCPElement tempElem;
-		CPActivityDiagram tempCP;
-		CPSequenceDiagram tempSD;
+		TMLCPActivityDiagram tempCP;
+		TMLCPSequenceDiagram tempSD;
 		String tempString;
 		int i, j, k;
 
-		ArrayList<CPActivityDiagram> activityList = _refTopCP.getCPActivityDiagrams();
+		ArrayList<TMLCPActivityDiagram> activityList = _refTopCP.getCPActivityDiagrams();
 		for( i = 0; i < elements.size(); i++ )	{
 			tempElem = elements.get(i);
 			tempString = tempElem.getName();
-			if( tempElem instanceof CPRefAD )	{
+			if( tempElem instanceof TMLCPRefAD )	{
 				for( j = 0; j < activityList.size(); j++ )	{
 					tempCP = activityList.get(j);
 					if( tempString.equals( tempCP.getName() ) )	{
-						CPRefAD CPRef = new CPRefAD( tempCP, tempElem.getName(), new Object() );
+						TMLCPRefAD CPRef = new TMLCPRefAD( tempCP, tempElem.getName(), new Object() );
 						elements.set( i, CPRef );
 						break;
 					}
 				}
 			}
 			else	{ //A reference to a sequence diagram must be inserted instead
-				ArrayList<CPSequenceDiagram> sequenceList = _refTopCP.getCPSequenceDiagrams();
+				ArrayList<TMLCPSequenceDiagram> sequenceList = _refTopCP.getCPSequenceDiagrams();
 				for( k = 0; k < sequenceList.size(); k++ )	{
 					tempSD = sequenceList.get(k);
 					if( tempString.equals( tempSD.getName() ) )	{
-						CPRefSD SDRef = new CPRefSD( tempSD, tempElem.getName(), new Object() );
+						TMLCPRefSD SDRef = new TMLCPRefSD( tempSD, tempElem.getName(), new Object() );
 						elements.set( i, SDRef );
 						break;
 					}

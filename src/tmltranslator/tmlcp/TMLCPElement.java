@@ -53,9 +53,8 @@ import java.util.*;
 import myutil.*;
 
 public abstract class TMLCPElement extends TMLElement  {
-    private ArrayList<TMLCPElement> nexts; 
+    protected ArrayList<TMLCPElement> nexts; 
   
-	
     public TMLCPElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         nexts = new ArrayList<TMLCPElement>();

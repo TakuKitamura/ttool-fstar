@@ -114,7 +114,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 		for( int i = 0; i < list.size(); i++ ) {
 			tgc = (TGComponent)( list.get(i) );
       //System.out.println(tgc);
-      if ( ( tgc instanceof TMLCPRefSD ) || ( tgc instanceof TMLCPRefCP ) ) {
+      if ( ( tgc instanceof TMLCPRefSD ) || ( tgc instanceof TMLCPRefAD ) ) {
          v.addElement( tgc );
       }
     }
@@ -124,11 +124,11 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 	private void checkDiagram( Vector tobeChecked, LinkedList source ) {
   	
 		TMLCPRefSD sd;
-		TMLCPRefCP cp;
+		TMLCPRefAD cp;
         
     for(int i = 0; i < tobeChecked.size(); i++ ) {
 //    	sd = (TMLCPRefSD)( tobeChecked.elementAt(i) );
-//    	cp = (TMLCPRefCP)( tobeChecked.elementAt(i) );
+//    	cp = (TMLCPRefAD)( tobeChecked.elementAt(i) );
     	if( tobeChecked.elementAt(i) instanceof TMLCPRefSD )	{
 				sd = (TMLCPRefSD) tobeChecked.elementAt(i);
 				if( !source.contains( sd) )	{
@@ -137,8 +137,8 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 				}
 			}
     	else	{
-				if( tobeChecked.elementAt(i) instanceof TMLCPRefCP )	{
-					cp = (TMLCPRefCP) tobeChecked.elementAt(i);
+				if( tobeChecked.elementAt(i) instanceof TMLCPRefAD )	{
+					cp = (TMLCPRefAD) tobeChecked.elementAt(i);
 	      	if( !source.contains( cp ) )	{
   	    		tobeChecked.removeElementAt(i);
     	    	i--;
@@ -170,7 +170,7 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
         
     for( int i = 0; i < source.size(); i++ ) {
 			tgc = (TGComponent)( source.get(i) );
-			if( ( tgc instanceof TMLCPRefSD ) && ( tgc instanceof TMLCPRefCP ) && ( !added.contains(tgc) ) && ( !notSource.contains(tgc) ) )	{
+			if( ( tgc instanceof TMLCPRefSD ) && ( tgc instanceof TMLCPRefAD ) && ( !added.contains(tgc) ) && ( !notSource.contains(tgc) ) )	{
 				added.addElement( tgc );
 				//System.out.println("New element");
       }

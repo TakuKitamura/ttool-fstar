@@ -50,9 +50,8 @@ import java.util.*;
 
 import myutil.*;
 
-public abstract class TMLCPJunction extends TMLCPElement  {
+public class TMLCPJunction extends TMLCPElement  {
 
-	
     public TMLCPJunction(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }

@@ -37,7 +37,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class TMLCPRefCP
+ * Class TMLCPRefAD
  * Reference to an Activity Diagram from another Activity Diagram (including the main communication pattern)
  * Creation: 17/02/2014
  * @version 1.0 17/02/2014
@@ -55,13 +55,13 @@ import javax.swing.*;
 import myutil.*;
 import ui.*;
 
-public class TMLCPRefCP extends TGCOneLineText {
+public class TMLCPRefAD extends TGCOneLineText {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
     
-    public TMLCPRefCP(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TMLCPRefAD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 30;

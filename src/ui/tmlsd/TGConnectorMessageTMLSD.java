@@ -66,6 +66,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
         value = "msg?";
+				name = value;
         editable = true;
     }
     
@@ -142,7 +143,9 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
       values[0] = this.name;
       for( int i = 0; i< nParam; i++ ) {
 				labels[i+1] = "Param #" + (i+1);
-        values[i+1] = params[i];
+				if( params[i] != "" && params[i] != null )	{
+        	values[i+1] = params[i];
+				}
       }
          
       JDialogMultiString jdms = new JDialogMultiString( frame, "Setting message properties", nParam+1, labels, values );

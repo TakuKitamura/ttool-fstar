@@ -649,6 +649,12 @@ public abstract class TGConnector extends TGCWithInternalComponent {
         sb.append(translateSubComponents());
         return  sb;
     }
+
+    protected String translateNameValue() {
+        String s = "<infoparam name=\"" + name + "\" start=\"" + startName + "\" end=\"" + endName + "\" value=\"";
+        s = s + GTURTLEModeling.transformString(value);
+        return s +  "\" />\n";
+		}
     
     public String translateP1() {
         int id = p1.getId();

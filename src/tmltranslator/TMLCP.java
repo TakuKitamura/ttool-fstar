@@ -52,9 +52,9 @@ import myutil.*;
 
 public class TMLCP extends TMLElement {
 
-	private CPActivityDiagram mainCP;
-	private ArrayList<CPActivityDiagram> otherCPs; //Ref to other CPs
-	private ArrayList<CPSequenceDiagram> sds; //Ref to SDs
+	private TMLCPActivityDiagram mainCP;
+	private ArrayList<TMLCPActivityDiagram> otherCPs; //Ref to other CPs
+	private ArrayList<TMLCPSequenceDiagram> sds; //Ref to SDs
 
 	private int hashCode;
 	private boolean hashCodeComputed = false;
@@ -70,8 +70,8 @@ public class TMLCP extends TMLElement {
   }
 	
   private void init() {
-  	otherCPs = new ArrayList<CPActivityDiagram>();
-    sds = new ArrayList<CPSequenceDiagram>();
+  	otherCPs = new ArrayList<TMLCPActivityDiagram>();
+    sds = new ArrayList<TMLCPSequenceDiagram>();
   }
 	
 	private void computeHashCode() {
@@ -81,10 +81,10 @@ public class TMLCP extends TMLElement {
 		//System.out.println("TARCHI hashcode = " + hashCode); 
 	}
 
-	private boolean checkDiagramDeclaration( CPSequenceDiagram _tmlsdSection )	{
+	private boolean checkDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )	{
 		
 		int i;
-		CPActivityDiagram CPsection;
+		TMLCPActivityDiagram CPsection;
 
 		//first check the main CP
 		if( mainCP.containsSDDiagram( _tmlsdSection.getName() ) )	{
@@ -102,10 +102,10 @@ public class TMLCP extends TMLElement {
 		}
 	}
 
-	private boolean checkDiagramDeclaration( CPActivityDiagram _tmlcpSection )	{
+	private boolean checkDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )	{
 
 		int i;
-		CPActivityDiagram CPsection;
+		TMLCPActivityDiagram CPsection;
 
 		if( mainCP.containsADDiagram( _tmlcpSection.getName() ) )	{ //first check in the main CP's list
 			return true;
@@ -121,11 +121,11 @@ public class TMLCP extends TMLElement {
 		}
 	}
 	
-	private boolean checkMultipleDiagramDeclaration( CPSequenceDiagram _tmlsdSection )	{
+	private boolean checkMultipleDiagramDeclaration( TMLCPSequenceDiagram _tmlsdSection )	{
 		
 		int i, counterSD = 0;
 		String tempString;
-		CPSequenceDiagram tempSD;
+		TMLCPSequenceDiagram tempSD;
 
 		for( i = 0; i < sds.size(); i++ )	{
 			tempSD = sds.get(i);
@@ -137,11 +137,11 @@ public class TMLCP extends TMLElement {
 		return ( counterSD > 0 );
 	}
 
-	private boolean checkMultipleDiagramDeclaration( CPActivityDiagram _tmlcpSection )	{
+	private boolean checkMultipleDiagramDeclaration( TMLCPActivityDiagram _tmlcpSection )	{
 
 		int i, counterAD = 0;
 		String tempString;
-		CPActivityDiagram tempAD;
+		TMLCPActivityDiagram tempAD;
 
 		for( i = 0; i < otherCPs.size(); i++ )	{
 			tempAD = otherCPs.get(i);
@@ -163,11 +163,11 @@ public class TMLCP extends TMLElement {
 	}
 	
 	
-	public void setMainCP(CPActivityDiagram _tmlcpSection) {
+	public void setMainCP(TMLCPActivityDiagram _tmlcpSection) {
 		mainCP = _tmlcpSection;
 	}
 	
-	public void addCPActivityDiagram( CPActivityDiagram _tmlcpSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException {
+	/*public void addCPActivityDiagram( TMLCPActivityDiagram _tmlcpSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException {
 
 		if( checkDiagramDeclaration( _tmlcpSection ) )	{
 			if( checkMultipleDiagramDeclaration( _tmlcpSection ) )	{
@@ -182,9 +182,13 @@ public class TMLCP extends TMLElement {
 			String errorMessage = "TMLCP COMPILER ERROR: activity diagram " + _tmlcpSection.getName() + " undeclared";
 			throw new UndeclaredDiagramException( errorMessage );
 		}
-  }
+  }*/
+
+	public void addCPActivityDiagram( TMLCPActivityDiagram _diag )	{
+		otherCPs.add( _diag );
+	}
     
- /* public void addCPSequenceDiagram( CPSequenceDiagram _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
+ /* public void addCPSequenceDiagram( TMLCPSequenceDiagram _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
 
 		if( checkDiagramDeclaration( _tmlsdSection ) )	{
 			if( checkMultipleDiagramDeclaration( _tmlsdSection ) )	{
@@ -201,7 +205,7 @@ public class TMLCP extends TMLElement {
 		}
   }*/
 
-	public void addCPSequenceDiagram( CPSequenceDiagram _sd )	{
+	public void addCPSequenceDiagram( TMLCPSequenceDiagram _sd )	{
 		sds.add( _sd );
 	}
 	
@@ -214,15 +218,15 @@ public class TMLCP extends TMLElement {
 		return sds.size();
 	}
 
-	public ArrayList<CPActivityDiagram> getCPActivityDiagrams()	{
+	public ArrayList<TMLCPActivityDiagram> getCPActivityDiagrams()	{
 		return otherCPs;
 	}
 
-	public ArrayList<CPSequenceDiagram> getCPSequenceDiagrams()	{
+	public ArrayList<TMLCPSequenceDiagram> getCPSequenceDiagrams()	{
 		return sds;
 	}
 
-	public CPActivityDiagram getMainCP()	{
+	public TMLCPActivityDiagram getMainCP()	{
 		return mainCP;
 	}
 
@@ -231,7 +235,7 @@ public class TMLCP extends TMLElement {
 		ArrayList<String> undefinedSDs = new ArrayList<String>();
 		ArrayList<String> SDlist;
 		String declaredSD;
-		CPSequenceDiagram definedSD;
+		TMLCPSequenceDiagram definedSD;
 		boolean isSDdefined = false;
 		int i, j, k;
 		
@@ -254,7 +258,7 @@ public class TMLCP extends TMLElement {
 
 		//then check in all other CPs
 		isSDdefined = false;
-		CPActivityDiagram AD;
+		TMLCPActivityDiagram AD;
 
 		for( k = 0; k < otherCPs.size(); k++ )	{
 			AD = otherCPs.get(k);
@@ -283,7 +287,7 @@ public class TMLCP extends TMLElement {
 		ArrayList<String> undefinedADs = new ArrayList<String>();
 		ArrayList<String> ADlist;
 		String declaredAD;
-		CPActivityDiagram definedAD;
+		TMLCPActivityDiagram definedAD;
 		boolean isADdefined = false;
 		int i, j, k;
 		
@@ -306,7 +310,7 @@ public class TMLCP extends TMLElement {
 
 		//then check in all other CPs
 		isADdefined = false;
-		CPActivityDiagram AD;
+		TMLCPActivityDiagram AD;
 
 		for( k = 0; k < otherCPs.size(); k++ )	{
 			AD = otherCPs.get(k);
@@ -331,7 +335,7 @@ public class TMLCP extends TMLElement {
 
 	public void correctReferences()	{
 		
-		CPActivityDiagram CPsection;
+		TMLCPActivityDiagram CPsection;
 		int i;
 
 		mainCP.correctReferences( this );
@@ -343,11 +347,11 @@ public class TMLCP extends TMLElement {
 
 	public void printDataStructure()	{
 
-		ArrayList<CPActivityDiagram> CPlist = new ArrayList<CPActivityDiagram>();
-		ArrayList<CPSequenceDiagram> SDlist = new ArrayList<CPSequenceDiagram>();
+		ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();
+		ArrayList<TMLCPSequenceDiagram> SDlist = new ArrayList<TMLCPSequenceDiagram>();
 		ArrayList<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
-		CPActivityDiagram tempCP;
-		CPSequenceDiagram tempSD;
+		TMLCPActivityDiagram tempCP;
+		TMLCPSequenceDiagram tempSD;
 		TMLAttribute attr;
 		int i, j, k;
 
@@ -392,8 +396,8 @@ public class TMLCP extends TMLElement {
 			ElementsList = tempCP.getElements();
 			System.out.println( "\tDeclared elements:" );
 			for( j = 0; j < ElementsList.size(); j++ )	{
-				if( ElementsList.get(j) instanceof CPRefAD )	{
-					CPRefAD refCP = (CPRefAD) ElementsList.get(j);
+				if( ElementsList.get(j) instanceof TMLCPRefAD )	{
+					TMLCPRefAD refCP = (TMLCPRefAD) ElementsList.get(j);
 					tempCP = refCP.getReference();
 					ADList = tempCP.getADlist();
 					System.out.println( "\tPrinting from reference to " + tempCP.getName() );
@@ -403,7 +407,7 @@ public class TMLCP extends TMLElement {
 					System.out.println( "\tStop printing from reference" );
 				}
 				/*else	{
-					CPSequenceDiagram tempSD = tempElem.getReference();
+					TMLCPSequenceDiagram tempSD = tempElem.getReference();
 				}*/
 				System.out.println( "\t\t\t" + ElementsList.get(j) );
 			}
