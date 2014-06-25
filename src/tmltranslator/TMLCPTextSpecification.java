@@ -361,11 +361,6 @@ public class TMLCPTextSpecification {
 	}
 
 
-	private String parseConnectors( ArrayList<TMLCPConnector> list, String _elem ) {
-		
-		return "ERROR";
-	}
-	
 	public String makeTasks(TMLModeling tmlm) {
 		String sb = "";
 		for(TMLTask task: tmlm.getTasks()) {
