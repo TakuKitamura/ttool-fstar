@@ -57,6 +57,8 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 	private ArrayList<TMLSDInstance> mappingInstances;
 	private ArrayList<TMLAttribute> globalVariables;
 	private ArrayList<TMLSDMessage> messages; 
+	//used to sort messages and actions according to their order in the graphical window, to produce the TMLTxt code
+	private ArrayList<TMLSDItem> items; 	
 	private ArrayList<TMLSDAction> actions;
 	
 	private int hashCode;
@@ -73,6 +75,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		instances = new ArrayList<TMLSDInstance>();
 		messages = new ArrayList<TMLSDMessage>();
 		actions = new ArrayList<TMLSDAction>();
+		items = new ArrayList<TMLSDItem>();
 	}
     
  	/*public void addVariable( TMLAttribute _attr ) throws MultipleVariableDeclarationException	{
@@ -85,6 +88,14 @@ public class TMLCPSequenceDiagram  extends TMLElement {
       globalVariables.add(_attr);
     }
 	}*/
+
+	public ArrayList<TMLSDItem> getItems()	{
+		return items;
+	}
+
+	public void addItem( TMLSDItem _item )	{
+		items.add( _item );
+	}
 
 	public void addVariable( TMLAttribute _attr )	{
 		globalVariables.add( _attr );
@@ -108,6 +119,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 
 	public void addAction( TMLSDAction _action ) {
 		actions.add( _action );
+		addItem( new TMLSDItem( _action.getAction(), _action.getYCoord() ) );
 	}
 	
 	//commenting the throw exception because bot needed by the graphical 2 TMLTxt compiler yet
@@ -138,8 +150,9 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		return mappingInstances;
 	}
 	
-	public void addMessage( TMLSDMessage _elt ) {
-  	messages.add( _elt );
+	public void addMessage( TMLSDMessage _msg ) {
+  	messages.add( _msg );
+		addItem( new TMLSDItem( _msg.toString(), _msg.getYCoord() ) );
   }
     
 	public void insertInitialValue( String _name, String value ) throws UninitializedVariableException	{

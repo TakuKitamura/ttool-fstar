@@ -55,7 +55,7 @@ import java.util.*;
 
 import myutil.*;
 
-public abstract class TGConnector extends TGCWithInternalComponent {
+public abstract class TGConnector extends TGCWithInternalComponent	{
     
     protected final static String XML_CONNECTOR_HEAD = "<CONNECTOR type=\"";
     protected final static String XML_ID = "\" id=\"";
@@ -799,12 +799,12 @@ public abstract class TGConnector extends TGCWithInternalComponent {
 
 	public void setStartName( String _name )	{
 		startName = _name;
-		name = "connector from " + startName + " to " + endName;
+		//name = "connector from " + startName + " to " + endName;
 	}
 
 	public void setEndName( String _name )	{
 		endName = _name;
-		name = "connector from " + startName + " to " + endName;
+		//name = "connector from " + startName + " to " + endName;
 	}
 
 	public String getStartName()	{

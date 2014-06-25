@@ -37,9 +37,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDMessage
+* Class TMLSDItem. An item is either a message or an action. This class is used to produce the TML code corresponding to messages
+* and actions that are sorted according to the graphical version of a SD diagram.
 * Creation: 18/02/2014
-* @version 1.1 15/05/2014
+* @version 1.0 26/06/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
@@ -51,54 +52,51 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class TMLSDMessage extends TMLElement  {
+public class TMLSDItem implements Comparable<TMLSDItem>  {
 
 	//mind the difference between TMLSDAttribute and TMLAttribute!
-	private ArrayList<TMLSDAttribute> attributeList;	
+	private String value;
 	private int yCoord;
 	
-  public TMLSDMessage( String _name, int _yCoord, Object _referenceObject ) {
-  	super( _name, _referenceObject );
-		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLSDAttribute>();
-	}
+    public TMLSDItem( String _value, int _yCoord ) {
+			this.value = _value;
+			this.yCoord = _yCoord;
+    }
 
-	public TMLSDMessage( String _name, int _yCoord, Object _referenceObject, ArrayList<String> _params )	{
-		super( _name, _referenceObject );
-		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLSDAttribute>();
-		for( String p: _params )	{
-			attributeList.add( new TMLSDAttribute(p) );
+		public String getValue()	{
+			return this.value;
 		}
-	}
-    
-	public void addAttribute( TMLSDAttribute _attribute )	{
-		if( _attribute != null )
-			attributeList.add( _attribute );
-	}
 
-	public ArrayList<TMLSDAttribute> getAttributes()	{
-		return attributeList;
-	}
+		public int getYCoord()	{
+			return this.yCoord;
+		}
 
-	public int getYCoord()	{
-		return this.yCoord;
-	}
+		public void setYCoord( int _coord )	{
+			this.yCoord = _coord;
+		}
 
-	public void setYCoord( int _coord )	{
-		this.yCoord = _coord;
-	}
+		public void setValue( String _value )	{
+			this.value = _value;
+		}
 	
-	@Override public String toString()	{
-		String s = this.name + "( ";
-		for( TMLSDAttribute attribute: attributeList )	{
-			if( attribute.getName() != "" && attribute.getName() != "null" && attribute.getName() != null )	{
-				s += attribute.getName() + ", ";
-			}
+		public int compareTo( TMLSDItem _item )	{
+
+			int compareValue = ((TMLSDItem) _item).getYCoord();
+			//sort in ascending order
+			return this.yCoord - compareValue;
 		}
-		String newS = s.substring( 0, s.length()-2 );
-//		s.setCharAt( s.length()-1, ' ' );
-		s = newS + " )";
-		return s;
+
+		/*public static Comparator<TMLSDItem> yCoordComparator = new Comparator<TMLSDItem>()	{
+			public int compare( TMLSDItem _item1, TMLSDItem _item2 )	{
+				int yCoord1 = _item1.getYCoord(); 
+				int yCoord2 = _item2.getYCoord(); 
+
+				//ascending order
+				return yCoord1.compareTo( yCoord2 );
+			}
+		};*/
+
+	@Override public String toString()	{
+		return "TMLSDItem " + this.value + " " + this.yCoord;
 	}
 }	//End of class

@@ -2368,7 +2368,7 @@ public class GTMLModeling  {
 								}
 								if( elem instanceof TGConnectorMessageTMLSD )	{
 									connector = (TGConnectorMessageTMLSD) elemList.get(j);
-									SD.addMessage( new TMLSDMessage( connector.getName(), null, connector.getParams() ) );
+									SD.addMessage( new TMLSDMessage( connector.getName(), connector.getY(), null, connector.getParams() ) );
 									TraceManager.addDev( "Found message: " + connector.getValue() + " " + connector.getY() );
 									for( String param : connector.getParams() )	{
 										TraceManager.addDev( param );

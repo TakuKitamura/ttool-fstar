@@ -5669,7 +5669,7 @@ public class GTURTLEModeling {
 			int myX = -1, myY = -1, myWidth = -1, myHeight =-1;
 			int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
 			int myMaxWidth = -1, myMaxHeight = -1;
-			String myName = null, myValue = null;
+			String myName = null, myValue = null, endName = null, startName = null;
 			int tmpx, tmpy, tmpid;
 			TGConnectingPoint p1 = null, p2=null;
 			Vector pointList = new Vector();
@@ -5701,6 +5701,8 @@ public class GTURTLEModeling {
 						myMinDesiredHeight = Integer.decode(elt.getAttribute("minDesiredHeight")).intValue();
 					} else if (elt.getTagName().equals("infoparam")) {
 						myName = elt.getAttribute("name");
+						startName = elt.getAttribute("start");
+						endName = elt.getAttribute("end");
 						myValue = elt.getAttribute("value");
 					} else if (elt.getTagName().equals("P1")) {
 						tmpx = Integer.decode(elt.getAttribute("x")).intValue() + decX;
@@ -5755,6 +5757,12 @@ public class GTURTLEModeling {
 
 			if (myName != null) {
 				tgco.setName(myName);
+			}
+			if(startName != null) {
+				tgco.setStartName(startName);
+			}
+			if( endName != null) {
+				tgco.setEndName(endName);
 			}
 
 			if ((myValue != null) && (!myValue.equals(null))){

@@ -220,21 +220,101 @@ public class TMLCPTextSpecification {
 				sb += "SEQUENCE" + SP + refSD.getName() + CR + TAB;
 			}
 			if( elem instanceof TMLCPConnector )	{
-				listTMLCPConnectors.add( (TMLCPConnector) elem);
+				TMLCPConnector connector = (TMLCPConnector) elem;
+				listTMLCPConnectors.add( connector );
 			}
+/*			if( elem instanceof TMLCPFork )	{
+				tmltranslator.tmlcp.TMLCPFork fork = (TMLCPFork) elem;
+				listTMLADItems.add( new TMLADItem( fork.getName(), fork.getStartName(), fork.getEndName(), "FORK", fork.getYCoord() ) );
+			}
+			if( elem instanceof TMLCPJoin )	{
+				tmltranslator.tmlcp.TMLCPJoin join = (TMLCPJoin) elem;
+				listTMLADItems.add( new TMLADItem( join.getName(), join.getStartName(), join.getEndName(), "FORK", join.getYCoord() ) );
+			}
+			if( elem instanceof TMLCPChoice )	{
+				tmltranslator.tmlcp.TMLCPChoice choice = (TMLCPChoice) elem;
+				listTMLADItems.add( new TMLADItem( choice.getName(), choice.getStartName(), choice.getEndName(), "FORK", choice.getYCoord() ) );
+			}*/
 		}
 		//global variables should go here, but there are none up to now
-		sb += CR + MAIN + CR + TAB + "<>" + SC;
-		//sortYCoord( listTMLConnectors );	//to be implemented
-		ArrayList<String> connNameList = new ArrayList<String>();
+		sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
 		for( TMLCPConnector conn : listTMLCPConnectors )	{
-			connNameList.add( Integer.toString( conn.getYCoord() ) + SP + conn.getSourceName() + SP + conn.getDestName() );
+			TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
 		}
-		Collections.sort( connNameList );
+		//up to know I just consider sequence, activities, fork and join, no choices, no guards, no nested structures keep things simple!
+		String currentElem = "start state";
+		String nextElem = "seqXXX";
+		while( nextElem.substring(0,3).equals( "seq" ) || nextElem.substring(0,3).equals( "act" ) || nextElem.substring(0,4).equals( "join" ) )	{
+//		while( !nextElem.substring(0,3).equals( "stop state" ) )	{
+			for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
+				if( conn.getStartName().equals( currentElem ) )	{
+					nextElem = conn.getEndName();
+					break;
+				}
+			}
+			if( nextElem.substring(0,3).equals( "seq" ) || nextElem.substring(0,3).equals( "act" ) )	{		//returned diagram name
+				sb += nextElem + " " + SC + " ";
+			}
+			if( nextElem.substring(0,4).equals( "fork" ) )	{		//returned fork node
+				sb += "{ ";
+				ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
+				for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
+					if( conn.getStartName().equals( nextElem ) )	{
+						connToFork.add( conn );
+					}
+				}
+				for( TMLCPConnector conn: connToFork )	{	//Does not work in case diagrams dont have a unique name
+					sb += conn.getEndName() + "*";
+					nextElem = conn.getEndName();
+				}
+				String newS = sb.substring( 0, sb.length()-1 );
+				sb = newS;
+			}
+			if( nextElem.substring(0,4).equals( "join" ) )	{
+				sb += " }" + SC;
+			}
+			//to avoid the problems with parenthesis I need to parse everything in a block that opens and closes parentheses!
+			// from a graphical viewpoint I am missing the possibility to add guards. I think I should not continue that much: add
+			// choice and junction, then refine all the missing parts: e.g., syntax analysis. KISS!
+			if( nextElem.substring(0,6).equals( "choice" ) )	{
+				sb += " || {";
+				//there can be three branches that must all terminate with either a stop state or a junction
+				//get branches
+				ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
+				for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
+					if( conn.getStartName().equals( nextElem ) )	{
+						connToChoice.add( conn );
+					}
+				}
+				//explore them till stop state or junction
+				for( TMLCPConnector conn: connToChoice )	{	//Does not work in case diagrams dont have a unique name
+					nextElem = conn.getEndName();
+					//start again recursively
+				}
+			}	//I need to rethink the algotrithm...
+				//Better to stop here and boucler the existing with a complete syntax analysis and TML generation for all the ADs
+			if( nextElem.equals( "ERROR" ) )	{
+				TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
+			}
+			currentElem = nextElem;
+		}
+		String newS = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
+		sb = newS;
+		
+		//Yet to add:
+		//	1) nested forks
+		//	2) choices and junctions
+		//	I dont remember the grammar/syntax for choice nodes exactly, I need to check, I will put || bewteen two blocks!
+
+
+		//
+		//It is misleading to sort connectors 
+
+		/*Collections.sort( listTMLCPConnectors );
 		TraceManager.addDev( "PRINTING ORDERED LIST" );
-		for( int y = 0; y < connNameList.size(); y++ )	{
-			TraceManager.addDev( connNameList.get(y) );
-		}
+		for( TMLCPConnector conn : listTMLCPConnectors )	{
+			TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
+		}*/
 		sb += CR;
 		sb += END + CR + END + CR2;
 
@@ -247,7 +327,6 @@ public class TMLCPTextSpecification {
 			ArrayList<TMLSDMessage> listMessages = SD.getMessages();
 			ArrayList<TMLSDAction> listActions = SD.getActions();
 			ArrayList<TMLAttribute> listAttributes = SD.getAttributes();
-			//ArrayList<String> actions = new ArrayList<String>();
 			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
 				sb += inst.getType() + " " + inst.getName() + CR + TAB + TAB;
 			}
@@ -265,24 +344,15 @@ public class TMLCPTextSpecification {
 			sb += CR2;
 			sb += MAIN + CR;
 			//actions and messages must be ordered and printed according to Y before being written!
-			//sortedMessages = sort( listMessages );
-			ArrayList<TMLSDMessage> sortedMessages = listMessages;
-			for( TMLSDMessage msg: sortedMessages )	{	//print the message and all its attributes
-				sb += msg.getName() + "(";
-				ArrayList<TMLSDAttribute> listAttr = msg.getAttributes();	//mind the difference between TMLSDAttribute and TMLAttribute
-				for( int index = 0; index < listAttr.size(); index++ )	{
-					if( index == ( listAttr.size() - 1 ) )	{
-						sb += listAttr.get(index).getName();
-					}
-					else	{	
-						sb += listAttr.get(index).getName() + ", ";
-					}
-				}
-				sb += ")";
-				sb += CR + TAB;
+			ArrayList<TMLSDItem> listItems = SD.getItems();
+			Collections.sort( listItems );
+			TraceManager.addDev( "PRINTING SORTED ITEMS" );
+			for( TMLSDItem item: listItems )	{	//print the items
+				TraceManager.addDev( item.toString() );
 			}
-			for( TMLSDAction action: listActions )	{
-				sb += action.getAction() + CR;
+			for( TMLSDItem item: listItems )	{	
+				sb += item.getValue();
+				sb += CR + TAB;
 			}
 			sb += CR;
 			sb += END + CR + END + CR2;
@@ -291,10 +361,10 @@ public class TMLCPTextSpecification {
 	}
 
 
-/*	private ArrayList<TMLSDMessage> sort( ArrayList<TMLSDMessage> input ) {
-		//To be implemented...
-		return sorted;
-	}*/
+	private String parseConnectors( ArrayList<TMLCPConnector> list, String _elem ) {
+		
+		return "ERROR";
+	}
 	
 	public String makeTasks(TMLModeling tmlm) {
 		String sb = "";
