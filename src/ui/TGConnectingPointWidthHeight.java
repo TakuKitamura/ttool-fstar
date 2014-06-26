@@ -73,14 +73,4 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint{
 	public void setH(double _h) {
 		h = _h;
 	}
-	
-	
-    
 } // Class
-
-
-
-
-
-
-

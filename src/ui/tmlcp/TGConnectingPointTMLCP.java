@@ -66,5 +66,4 @@ public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
         //System.out.println("is compatible with:false");
         return false;
     }
-  
 }

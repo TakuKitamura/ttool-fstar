@@ -48,6 +48,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package ui.tmlcp;
 
 import java.awt.*;
+import java.util.*;
 import java.awt.geom.*;
 
 import myutil.*;
@@ -160,6 +161,15 @@ public class TMLCPChoice extends TGCWithInternalComponent {
         }
         return "";
     }
+
+		public ArrayList<String> getGuards()	{
+			
+			ArrayList<String> guards = new ArrayList<String>();
+			for( int i = 0; i < nbInternalTGComponent; i++ ) {
+				guards.add( getGuard(i) );
+			}
+			return guards;
+		}
     
     public boolean hasUnvalidGuards() {
         return (getUnvalidGuards() != null);
@@ -193,4 +203,11 @@ public class TMLCPChoice extends TGCWithInternalComponent {
       return TGComponentManager.CONNECTOR_TMLCP;
     }
 	
+	public TGConnectingPoint[] getConnectingPoints()	{
+		return connectingPoint;
+	}
+
+	public TGComponent[] getTGComponents()	{
+		return tgcomponent;
+	}
 }

@@ -49,12 +49,15 @@ package ui.tmlcp;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
+import javax.swing.*;
 
 import myutil.*;
 import ui.*;
+import ui.window.*;
 
-public  class TGConnectorTMLCP extends TGConnector {
+public class TGConnectorTMLCP extends TGConnector {
     protected int arrowLength = 10;
+		protected String guard = "";
     
     public TGConnectorTMLCP(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -65,6 +68,8 @@ public  class TGConnectorTMLCP extends TGConnector {
         name = "connector from " + startName + " to " + endName;
 				_p1.setReferenceToConnector( this );
 				_p2.setReferenceToConnector( this );
+
+				//editable = true;
     }
     
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
@@ -79,4 +84,16 @@ public  class TGConnectorTMLCP extends TGConnector {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
 
+	public String getGuard()	{
+		CDElement container = p1.getFather();
+		if( container instanceof TMLCPChoice )	{
+			TGConnectingPoint[] connectingPoint = ((TMLCPChoice)container).getConnectingPoints();
+			for( int j = 0; j < connectingPoint.length; j++ )	{
+				if( connectingPoint[j] == p1 )	{
+						return ((TMLCPChoice)container).getGuard(j-1);
+				}
+			}
+		}
+		return "noGuard";
+	}
 }

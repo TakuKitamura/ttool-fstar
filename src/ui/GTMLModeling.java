@@ -2152,7 +2152,6 @@ public class GTMLModeling  {
 		TDiagramPanel mainCP = panelList.get(0);
 		LinkedList mainCPcomponents =  mainCP.getComponentList();	//the list of components from the main CP
 	
-	//TO BE DONE: For the main CP
 	//LinkedList elemList = panel.getComponentList();
 		TraceManager.addDev( "ADDING TO DATA STRUCTURE MAIN CP" );
 		tmltranslator.tmlcp.TMLCPStart start;
@@ -2205,7 +2204,7 @@ public class GTMLModeling  {
 			}
 			if( component instanceof ui.tmlcp.TMLCPChoice )	{
 				TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
-			 	choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), component );
+			 	choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
 				AD.addTMLCPElement( choice );
 			}
 			if( component instanceof ui.tmlcp.TGConnectorTMLCP)	{
@@ -2213,7 +2212,8 @@ public class GTMLModeling  {
 														((ui.TGConnector)component).getEndName() + "\t" + component.getY() );
 				TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector( ((ui.tmlcp.TGConnectorTMLCP)component).getStartName(),
 																														((ui.tmlcp.TGConnectorTMLCP)component).getEndName(),
-																														((ui.tmlcp.TGConnectorTMLCP)component).getY(), component );
+																														((ui.tmlcp.TGConnectorTMLCP)component).getY(),
+																														((TGConnectorTMLCP)component).getGuard(), component );
 				AD.addTMLCPElement( TMLCPconnector );
 			}
 		}
@@ -2407,16 +2407,15 @@ public class GTMLModeling  {
 				}
 				else {
 					names.add( refADnode.getName() );
-					String ADname = refADnode.getName();
 					for( TDiagramPanel panel: panelList )	{
-						//TraceManager.addDev("Testing panel: " + panel.getName() + " against AD ref " + ADname );
-						if( ADname.equals( panel.getName() ) )	{
+						//TraceManager.addDev("Testing panel: " + panel.getName() + " against AD ref " + refADnode.getName() );
+						if( refADnode.getName().equals( panel.getName() ) )	{
+							AD  = new tmltranslator.tmlcp.TMLCPActivityDiagram( refADnode.getName(), panel );
 							TraceManager.addDev("Found match with Activity Diagram: " + panel.getName() );
 							LinkedList elemList = panel.getComponentList();
 							TraceManager.addDev("Lenght of elements: " + elemList.size() );
 							for( int k = 0; k < elemList.size(); k++ )	{
 								TGComponent component = (TGComponent) elemList.get(k);
-								AD  = new tmltranslator.tmlcp.TMLCPActivityDiagram( component.getName(), component );
 								TraceManager.addDev( "Element of Activity Diagram: " + component.getName() );
 								if( component instanceof ui.tmlcp.TMLCPStartState )	{
 									TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
@@ -2454,14 +2453,15 @@ public class GTMLModeling  {
 								}
 								if( component instanceof ui.tmlcp.TMLCPChoice )	{
 									TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
-								 	choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), component );
+								 	choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
 									AD.addTMLCPElement( choice );
 								}
 								if( component instanceof ui.tmlcp.TGConnectorTMLCP)	{
 									TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 									TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector( (( ui.tmlcp.TGConnectorTMLCP)component).getStartName(),
 																																			((ui.tmlcp.TGConnectorTMLCP)component).getEndName(),
-																																			((ui.tmlcp.TGConnectorTMLCP)component).getY(), component );
+																																			((ui.tmlcp.TGConnectorTMLCP)component).getY(),
+																																			((TGConnectorTMLCP)component).getGuard(), component );
 									AD.addTMLCPElement( TMLCPconnector );
 								}
 							}

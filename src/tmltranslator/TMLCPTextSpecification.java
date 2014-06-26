@@ -200,6 +200,11 @@ public class TMLCPTextSpecification {
 	
 	public String makeDeclarations( TMLCP tmlcp ) {
 
+		ArrayList<TMLCPConnector> listTMLCPConnectors;
+		ArrayList<TMLCPElement> listElements;
+		String currentElem = "";
+		String nextElem = "";
+		String newSb = "";
 		String sb = "";
 		sb += "// TML Communication Pattern - FORMAT 0.1" + CR;
 		sb += "// Communication Pattern: " + title + CR;
@@ -208,8 +213,8 @@ public class TMLCPTextSpecification {
 		//Generating code for the main CP
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 		sb += "COMMUNICATION_PATTERN" + SP + mainCP.getName() + CR;
-		ArrayList<TMLCPConnector> listTMLCPConnectors = new ArrayList<TMLCPConnector>();
-		ArrayList<TMLCPElement> listElements = mainCP.getElements();
+		listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+		listElements = mainCP.getElements();
 		for( TMLCPElement elem : listElements )	{
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
 				tmltranslator.tmlcp.TMLCPRefAD refAD = (tmltranslator.tmlcp.TMLCPRefAD) elem;
@@ -223,18 +228,6 @@ public class TMLCPTextSpecification {
 				TMLCPConnector connector = (TMLCPConnector) elem;
 				listTMLCPConnectors.add( connector );
 			}
-/*			if( elem instanceof TMLCPFork )	{
-				tmltranslator.tmlcp.TMLCPFork fork = (TMLCPFork) elem;
-				listTMLADItems.add( new TMLADItem( fork.getName(), fork.getStartName(), fork.getEndName(), "FORK", fork.getYCoord() ) );
-			}
-			if( elem instanceof TMLCPJoin )	{
-				tmltranslator.tmlcp.TMLCPJoin join = (TMLCPJoin) elem;
-				listTMLADItems.add( new TMLADItem( join.getName(), join.getStartName(), join.getEndName(), "FORK", join.getYCoord() ) );
-			}
-			if( elem instanceof TMLCPChoice )	{
-				tmltranslator.tmlcp.TMLCPChoice choice = (TMLCPChoice) elem;
-				listTMLADItems.add( new TMLADItem( choice.getName(), choice.getStartName(), choice.getEndName(), "FORK", choice.getYCoord() ) );
-			}*/
 		}
 		//global variables should go here, but there are none up to now
 		sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
@@ -242,10 +235,9 @@ public class TMLCPTextSpecification {
 			TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
 		}
 		//up to know I just consider sequence, activities, fork and join, no choices, no guards, no nested structures keep things simple!
-		String currentElem = "start state";
-		String nextElem = "seqXXX";
+		currentElem = "start state";
+		nextElem = "seqXXX";
 		while( nextElem.substring(0,3).equals( "seq" ) || nextElem.substring(0,3).equals( "act" ) || nextElem.substring(0,4).equals( "join" ) )	{
-//		while( !nextElem.substring(0,3).equals( "stop state" ) )	{
 			for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
 				if( conn.getStartName().equals( currentElem ) )	{
 					nextElem = conn.getEndName();
@@ -267,8 +259,8 @@ public class TMLCPTextSpecification {
 					sb += conn.getEndName() + "*";
 					nextElem = conn.getEndName();
 				}
-				String newS = sb.substring( 0, sb.length()-1 );
-				sb = newS;
+				newSb = sb.substring( 0, sb.length()-1 );
+				sb = newSb;
 			}
 			if( nextElem.substring(0,4).equals( "join" ) )	{
 				sb += " }" + SC;
@@ -276,39 +268,38 @@ public class TMLCPTextSpecification {
 			//to avoid the problems with parenthesis I need to parse everything in a block that opens and closes parentheses!
 			// from a graphical viewpoint I am missing the possibility to add guards. I think I should not continue that much: add
 			// choice and junction, then refine all the missing parts: e.g., syntax analysis. KISS!
-			if( nextElem.substring(0,6).equals( "choice" ) )	{
-				sb += " || {";
+			//if( nextElem.substring(0,6).equals( "choice" ) )	{
+				//sb += " || {";
 				//there can be three branches that must all terminate with either a stop state or a junction
 				//get branches
-				ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
-				for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
-					if( conn.getStartName().equals( nextElem ) )	{
-						connToChoice.add( conn );
-					}
-				}
+				//ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
+				//for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
+					//if( conn.getStartName().equals( nextElem ) )	{
+						//connToChoice.add( conn );
+					//}
+				//}
 				//explore them till stop state or junction
-				for( TMLCPConnector conn: connToChoice )	{	//Does not work in case diagrams dont have a unique name
-					nextElem = conn.getEndName();
+				//for( TMLCPConnector conn: connToChoice )	{	//Does not work in case diagrams dont have a unique name
+					//nextElem = conn.getEndName();
 					//start again recursively
-				}
-			}	//I need to rethink the algotrithm...
+				//}
+			//}	//I need to rethink the algotrithm...
 				//Better to stop here and boucler the existing with a complete syntax analysis and TML generation for all the ADs
 			if( nextElem.equals( "ERROR" ) )	{
 				TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
 			}
 			currentElem = nextElem;
 		}
-		String newS = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
-		sb = newS;
+		newSb = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
+		sb = newSb;
 		
 		//Yet to add:
 		//	1) nested forks
 		//	2) choices and junctions
 		//	I dont remember the grammar/syntax for choice nodes exactly, I need to check, I will put || bewteen two blocks!
 
-
 		//
-		//It is misleading to sort connectors 
+		//It is misleading to base the algorithm on sorting connectors according to their Y coordinate
 
 		/*Collections.sort( listTMLCPConnectors );
 		TraceManager.addDev( "PRINTING ORDERED LIST" );
@@ -318,6 +309,125 @@ public class TMLCPTextSpecification {
 		sb += CR;
 		sb += END + CR + END + CR2;
 
+		/***************************************************************************/
+		//Generating code for the other ADs
+		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+		for( TMLCPActivityDiagram AD: listADs )	{
+			TraceManager.addDev( "GENERATING THE CODE FOR THE AD " + AD.getName() );
+			sb += "START ACTIVITY" + SP + AD.getName() + CR;
+			listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+			listElements = AD.getElements();
+			for( TMLCPElement elem : listElements )	{
+				if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
+					tmltranslator.tmlcp.TMLCPRefAD refAD = (tmltranslator.tmlcp.TMLCPRefAD) elem;
+					sb += "ACTIVITY" + SP + refAD.getName() + CR + TAB;
+				}
+				if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
+					tmltranslator.tmlcp.TMLCPRefSD refSD = (tmltranslator.tmlcp.TMLCPRefSD) elem;
+					sb += "SEQUENCE" + SP + refSD.getName() + CR + TAB;
+				}
+				if( elem instanceof TMLCPConnector )	{
+					TMLCPConnector connector = (TMLCPConnector) elem;
+					listTMLCPConnectors.add( connector );
+					//TraceManager.addDev( connector.getStartName() + SP + connector.getEndName() + SP + connector.getGuard() );
+				}
+			}
+			//global variables should go here, but there are none up to now
+			sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
+			/*for( TMLCPConnector conn : listTMLCPConnectors )	{
+				TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
+			}*/
+			//up to know I just consider sequence, activities, fork and join, no choices, no guards, no nested structures keep things simple!
+			currentElem = "start state";
+			while( listTMLCPConnectors.size() != 0 )	{		//Does not work in case diagrams dont have a unique name
+				//look for the connector that starts in currentElem and remove it from the list
+				for( TMLCPConnector conn: listTMLCPConnectors )	{
+					if( conn.getStartName().equals( currentElem ) )	{
+						nextElem = conn.getEndName();
+						listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
+						break;
+					}
+				}
+				String token = nextElem.substring(0,4);
+				switch( token )	{
+					case "fork":	{
+						sb += "{ ";
+						ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
+						//loof for all the connectors that start from that fork node, put them into a list and delete them from the general
+						//list
+						for( TMLCPConnector conn: listTMLCPConnectors )	{
+							if( conn.getStartName().equals( nextElem ) )	{
+								connToFork.add( conn );
+								//listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
+							}
+						}
+						for( TMLCPConnector conn: connToFork )	{	//Does not work in case diagrams dont have a unique name
+							sb += conn.getEndName() + "*";
+							nextElem = conn.getEndName();	//no nested fork: all connectors terminate in the same join
+						}
+						newSb = sb.substring( 0, sb.length()-1 );
+						sb = newSb;
+						break;
+					}
+					case "join":	{
+						sb += " }" + SC;
+						break;
+					}
+					case "choi":	{
+						if( nextElem.length() >= 6 )	{
+							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
+								//get the list of guards -- now useless since each connector is associated a guard
+								/*for( TMLCPElement elem: listElements )	{
+									if( elem instanceof tmltranslator.tmlcp.TMLCPChoice && elem.getName().equals( nextElem ) )	{
+										ArrayList<String> guards = ((tmltranslator.tmlcp.TMLCPChoice)elem).getGuards();
+									}
+								}*/
+								//get the list of connectors linked to that choice node
+								ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
+								for( TMLCPConnector conn: listTMLCPConnectors )	{
+									if( conn.getStartName().equals( nextElem ) )	{
+										connToChoice.add( conn );
+										//listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
+									}
+								}
+								//for each element in connToChoice go until a junction or till the end, it means to restart from zero
+								sb += SP;
+							}
+						}
+						break;
+					}
+					case "junc":	{
+						if( nextElem.length() >=8 )	{
+							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
+								sb += SP;
+							}
+						}
+						break;
+					}
+					default:	{	//an arbitrary name for a sequence or an activity diagram
+						if( !nextElem.equals( "stop state" ) )	{
+							sb += nextElem + SC;
+						}
+						break;
+					}
+				}	//End of switch
+				if( nextElem.equals( "ERROR" ) )	{
+					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
+				}
+				if( nextElem.equals( "stop state" ) )	{
+					break; //exit while loop when reaching the last connector
+				}
+				else	{
+					currentElem = nextElem;
+				}
+			}	//End of while
+			newSb = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
+			sb = newSb;
+			sb += CR;
+			sb += END + CR + END + CR2;
+		}
+
+		/***************************************************************************/
 		//Generating code for Sequence Diagrams
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		for( int i = 0; i < listSDs.size(); i++ )	{
