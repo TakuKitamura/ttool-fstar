@@ -3183,7 +3183,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 			    if( tmlDiagramsToValidate.size() > 0 ) {
 						tmlcpp.validated = JDialogSelectCPDiagrams.validated;
 						tmlcpp.ignored = JDialogSelectCPDiagrams.ignored;
-						TraceManager.addDev("Ready to generate TML mapping for Communication Patterns!");
+						TraceManager.addDev("Ready to generate TML code for Communication Patterns!");
 						b = gtm.checkSyntaxTMLCP( tmlDiagramsToValidate, tmlcpp, jdscpd.getOptimize() );
 						if( b ) {
 							//setMode(MainGUI.MODEL_OK);
@@ -3199,7 +3199,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 						}
 						else {
 							if( !automatic ) {
-								JOptionPane.showMessageDialog( frame, "The TML mapping contains several errors", "Syntax analysis failed",
+								JOptionPane.showMessageDialog( frame, "The CP design contains several errors", "Syntax analysis failed",
 																								JOptionPane.INFORMATION_MESSAGE );
 							}
 						}

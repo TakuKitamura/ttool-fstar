@@ -4217,14 +4217,14 @@ public class GTURTLEModeling {
 		diagramNl = node.getChildNodes();
 
 		for(int j=0; j<diagramNl.getLength(); j++) {
-			//TraceManager.addDev("TML Architecture nodes: " + j);
+			TraceManager.addDev("TML Architecture nodes: " + j);
 			node = diagramNl.item(j);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("TMLArchiDiagramPanel") == 0) {
-					//TraceManager.addDev("Loading TML DD");
+					TraceManager.addDev("Loading TML DD" + elt.getTagName() );
 					loadTMLArchitectureDiagram(elt, indexDesign);
-					//TraceManager.addDev("End loading TML DD");
+					TraceManager.addDev("End loading TML DD");
 				}
 			}
 		}
@@ -4338,6 +4338,7 @@ public class GTURTLEModeling {
 		}
 		
 		if (tdp instanceof TMLArchiDiagramPanel) {
+			TraceManager.addDev( "I AM STUCK HERE!" );
 			((TMLArchiDiagramPanel)tdp).loadExtraParameters(elt);
 		}
 		
@@ -4346,31 +4347,31 @@ public class GTURTLEModeling {
 			((AvatarBDPanel)tdp).loadExtraParameters(elt);
 		}
 
-		//TraceManager.addDev("Element" + elt.toString());
+		TraceManager.addDev("Element" + elt.toString());
 		// Loads components of the class diagram
-		//TraceManager.addDev("Components");
+		TraceManager.addDev("Components");
 		makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tdp);
-		//TraceManager.addDev("Post processing");
+		TraceManager.addDev("Post processing");
 		makePostProcessing(tdp);
-		//TraceManager.addDev("Connectors");
+		TraceManager.addDev("Connectors");
 		makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tdp);
-		//TraceManager.addDev("Subcomponents");
+		TraceManager.addDev("Subcomponents");
 		makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tdp);
-		//TraceManager.addDev("RealPoints");
+		TraceManager.addDev("RealPoints");
 		connectConnectorsToRealPoints(tdp);
-		//TraceManager.addDev("Structure changed");
+		TraceManager.addDev("Structure changed");
 		tdp.structureChanged();
-		//TraceManager.addDev("Post loading");
+		TraceManager.addDev("Post loading");
 		makePostLoading(tdp, 0);
 		
-		//TraceManager.addDev("Test connectors");
+		TraceManager.addDev("Test connectors");
 		if (tdp instanceof TMLComponentTaskDiagramPanel) {
-			//TraceManager.addDev("Connectors...");
+			TraceManager.addDev("Connectors...");
 			((TMLComponentTaskDiagramPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof EBRDDPanel) {
-			//TraceManager.addDev("Connectors...");
+			TraceManager.addDev("Connectors...");
 			((EBRDDPanel)tdp).setConnectorsToFront();
 		}
 		
@@ -5171,11 +5172,12 @@ public class GTURTLEModeling {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				try {
 					tgc = makeXMLComponent(n, tdp);
+					//TraceManager.addDev("About to add component= " + tgc);
 					if ((tgc != null) && (tgc.getFather() == null)) {
 						//TraceManager.addDev("Component added to diagram tgc=" + tgc);
 						tdp.addBuiltComponent(tgc);
 					} else {
-						//TraceManager.addDev("Component not added to diagram");
+						TraceManager.addDev("Component not added to diagram");
 					}
 				} catch (MalformedModelingException mme) {
 					error = true;
@@ -5276,7 +5278,7 @@ public class GTURTLEModeling {
 				throw new MalformedModelingException();
 			}
 
-			//TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
+			TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
 			//TGComponent is ready to be built
 			if(fatherId != -1) {
 				fatherId += decId;
@@ -5321,7 +5323,7 @@ public class GTURTLEModeling {
 			} else {
 				tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 			}
-			//TraceManager.addDev("TGComponent built " + myType);
+			TraceManager.addDev("TGComponent built " + myType);
 
 			if (tgc == null) {
 				throw new MalformedModelingException();
@@ -5338,7 +5340,7 @@ public class GTURTLEModeling {
             }*/
 
 			String oldClassName = myValue;
-			//TraceManager.addDev("Old class name=" + oldClassName);
+			TraceManager.addDev("Old class name=" + oldClassName);
 			//Added by Solange
 			if ((myValue != null) && (!myValue.equals(null))){
 				if (tgc instanceof ProCSDComponent)
@@ -5440,10 +5442,10 @@ public class GTURTLEModeling {
 			}
 
 			//extra param
-			//TraceManager.addDev("Extra params");
+			TraceManager.addDev("Extra params" + tgc.getClass());
 			//TraceManager.addDev("My value = " + tgc.getValue());
 			tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-			//TraceManager.addDev("Extra param ok");
+			TraceManager.addDev("Extra param ok");
 
 			if ((tgc instanceof TCDTObject) && (decId > 0)) {
 				TCDTObject to = (TCDTObject)tgc;

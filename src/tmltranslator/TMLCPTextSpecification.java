@@ -62,8 +62,12 @@ public class TMLCPTextSpecification {
 	public final static String TAB = "\t";
 	public final static String MAIN = "MAIN";
 	public final static String END = "END";
+	//Reserved strings for operations
+	public final static String SEQUENCE_OP = SC;
+	public final static String PARALLELISM_OP = "*";
+	public final static String SELECTION_OP = "+";
     
-    private String spec;
+  private String spec;
 	private String title;
 	
 	private TMLModeling tmlm;
@@ -79,7 +83,7 @@ public class TMLCPTextSpecification {
 	private TMLActivityElement tmlae;
 	private ArrayList<TMLParserSaveElt> parses;
 	
-	private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW", 
+	/*private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW", 
 		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
 	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
 	"RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
@@ -88,10 +92,16 @@ public class TMLCPTextSpecification {
 	private String eventtypes[] = {"INF", "NIB", "NINB"};
 	
 	private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ORIF", "SELECTEVT", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
-	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};	
-	
+	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};	*/
+
+	private String nextElem;	//used to produce the TML text
+	private String currentElem;	//used to produce the TML text
+	private ArrayList<Integer> indexOfConnToRemove;
+	private ArrayList<TMLCPConnector> listTMLCPConnectors;
+
 	public TMLCPTextSpecification(String _title) {
 		title = _title;
+		init();
     }   
 	
 	public TMLCPTextSpecification(String _title, boolean reset) {
@@ -99,14 +109,20 @@ public class TMLCPTextSpecification {
 		if (reset) {
 			DIPLOElement.resetID();
 		}
-    }
+		init();
+	}
+
+	private void init()	{
+		indexOfConnToRemove = new ArrayList<Integer>();
+		listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+	}
 	
 	public void saveFile(String path, String filename) throws FileException {
 		TraceManager.addUser("Saving TMLCP spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }
 	
-	public TMLModeling getTMLModeling() {
+/*	public TMLModeling getTMLModeling() {
 		return tmlm;
 	}
 	
@@ -118,13 +134,12 @@ public class TMLCPTextSpecification {
 		return warnings;
 	}
 	
-	
-	
 	public void indent() {
 		indent(4);
 	}
+*/
 	
-	public void indent(int _nbDec) {
+/*	public void indent(int _nbDec) {
 		int dec = 0;
         int indexEnd;
         String output = "";
@@ -149,16 +164,17 @@ public class TMLCPTextSpecification {
 		}
 		spec = output;
 	}
+*/
 	
-	private int nbOfOpen(String tmp) {
+/*	private int nbOfOpen(String tmp) {
 		return nbOf(tmp, beginArray);
 	}
 	
 	private int nbOfClose(String tmp) {
 		return nbOf(tmp, endArray);
 	}
-	
-	private int nbOf(String _tmp, String[] array) {
+*/	
+/*	private int nbOf(String _tmp, String[] array) {
 		String tmp;
 		int size;
 		
@@ -174,6 +190,7 @@ public class TMLCPTextSpecification {
 		}
 		return 0;
 	}
+*/
 	
 	public String toString() {
 		return spec;
@@ -184,7 +201,7 @@ public class TMLCPTextSpecification {
 		//tmlcp.sortByName();
 		spec = makeDeclarations( tmlcp );
 		//spec += makeTasks( tmlcp );
-		indent();
+		//indent();
 		return spec;
 	}
 
@@ -200,10 +217,10 @@ public class TMLCPTextSpecification {
 	
 	public String makeDeclarations( TMLCP tmlcp ) {
 
-		ArrayList<TMLCPConnector> listTMLCPConnectors;
+
 		ArrayList<TMLCPElement> listElements;
-		String currentElem = "";
-		String nextElem = "";
+		currentElem = "";
+		nextElem = "";
 		String newSb = "";
 		String sb = "";
 		sb += "// TML Communication Pattern - FORMAT 0.1" + CR;
@@ -213,7 +230,6 @@ public class TMLCPTextSpecification {
 		//Generating code for the main CP
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 		sb += "COMMUNICATION_PATTERN" + SP + mainCP.getName() + CR;
-		listTMLCPConnectors = new ArrayList<TMLCPConnector>();
 		listElements = mainCP.getElements();
 		for( TMLCPElement elem : listElements )	{
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
@@ -315,7 +331,7 @@ public class TMLCPTextSpecification {
 		for( TMLCPActivityDiagram AD: listADs )	{
 			TraceManager.addDev( "GENERATING THE CODE FOR THE AD " + AD.getName() );
 			sb += "START ACTIVITY" + SP + AD.getName() + CR;
-			listTMLCPConnectors = new ArrayList<TMLCPConnector>();
+			listTMLCPConnectors.clear();
 			listElements = AD.getElements();
 			for( TMLCPElement elem : listElements )	{
 				if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
@@ -334,64 +350,25 @@ public class TMLCPTextSpecification {
 			}
 			//global variables should go here, but there are none up to now
 			sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
-			/*for( TMLCPConnector conn : listTMLCPConnectors )	{
-				TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
-			}*/
-			//up to know I just consider sequence, activities, fork and join, no choices, no guards, no nested structures keep things simple!
+			//up to know I just consider sequence, activities, fork, join, choice but no junctions and no nested structures to keep things simple!
 			currentElem = "start state";
-			while( listTMLCPConnectors.size() != 0 )	{		//Does not work in case diagrams dont have a unique name
-				//look for the connector that starts in currentElem and remove it from the list
-				for( TMLCPConnector conn: listTMLCPConnectors )	{
-					if( conn.getStartName().equals( currentElem ) )	{
-						nextElem = conn.getEndName();
-						listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
-						break;
-					}
-				}
+			while( listTMLCPConnectors.size()!= 0 && !currentElem.equals("stop state") )	{		//Does not work in case diagrams dont have a unique name
+				nextElem = getNextElem();	//get next element and remove connector from currentElem to nextElem
 				String token = nextElem.substring(0,4);
 				switch( token )	{
-					case "fork":	{
-						sb += "{ ";
-						ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
-						//loof for all the connectors that start from that fork node, put them into a list and delete them from the general
-						//list
-						for( TMLCPConnector conn: listTMLCPConnectors )	{
-							if( conn.getStartName().equals( nextElem ) )	{
-								connToFork.add( conn );
-								//listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
-							}
-						}
-						for( TMLCPConnector conn: connToFork )	{	//Does not work in case diagrams dont have a unique name
-							sb += conn.getEndName() + "*";
-							nextElem = conn.getEndName();	//no nested fork: all connectors terminate in the same join
-						}
-						newSb = sb.substring( 0, sb.length()-1 );
-						sb = newSb;
+					case "fork":	{	//no nested fork!
+						sb += exploreTillNextJoin();
 						break;
 					}
 					case "join":	{
-						sb += " }" + SC;
+						sb += " }" + SEQUENCE_OP;
 						break;
 					}
 					case "choi":	{
 						if( nextElem.length() >= 6 )	{
 							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
-								//get the list of guards -- now useless since each connector is associated a guard
-								/*for( TMLCPElement elem: listElements )	{
-									if( elem instanceof tmltranslator.tmlcp.TMLCPChoice && elem.getName().equals( nextElem ) )	{
-										ArrayList<String> guards = ((tmltranslator.tmlcp.TMLCPChoice)elem).getGuards();
-									}
-								}*/
-								//get the list of connectors linked to that choice node
-								ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
-								for( TMLCPConnector conn: listTMLCPConnectors )	{
-									if( conn.getStartName().equals( nextElem ) )	{
-										connToChoice.add( conn );
-										//listTMLCPConnectors.remove( listTMLCPConnectors.indexOf( conn ) );
-									}
-								}
-								//for each element in connToChoice go until a junction or till the end, it means to restart from zero
-								sb += SP;
+								sb += exploreChoiceBranches() + "}";
+								nextElem = "stop state";	//temporary: force termination here!
 							}
 						}
 						break;
@@ -399,14 +376,15 @@ public class TMLCPTextSpecification {
 					case "junc":	{
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
-								sb += SP;
+								//ignore junction and continue straight on
+								currentElem = nextElem;	//skip junction node at next iteration
 							}
 						}
 						break;
 					}
-					default:	{	//an arbitrary name for a sequence or an activity diagram
+					default:	{	// found the name of a sequence/activity diagram
 						if( !nextElem.equals( "stop state" ) )	{
-							sb += nextElem + SC;
+							sb += nextElem + SEQUENCE_OP;
 						}
 						break;
 					}
@@ -414,14 +392,14 @@ public class TMLCPTextSpecification {
 				if( nextElem.equals( "ERROR" ) )	{
 					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
 				}
-				if( nextElem.equals( "stop state" ) )	{
-					break; //exit while loop when reaching the last connector
+				if( nextElem.equals( "stop state" ) )	{ //exit while loop when reaching the last connector
+					break;
 				}
 				else	{
 					currentElem = nextElem;
 				}
-			}	//End of while
-			newSb = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
+			}	//End of while loop
+			newSb = sb.substring( 0, sb.length()-1 );	// drop last semi-colon
 			sb = newSb;
 			sb += CR;
 			sb += END + CR + END + CR2;
@@ -453,9 +431,8 @@ public class TMLCPTextSpecification {
 			}
 			sb += CR2;
 			sb += MAIN + CR;
-			//actions and messages must be ordered and printed according to Y before being written!
 			ArrayList<TMLSDItem> listItems = SD.getItems();
-			Collections.sort( listItems );
+			Collections.sort( listItems ); 			//actions and messages must be ordered and printed according to Y before being written!
 			TraceManager.addDev( "PRINTING SORTED ITEMS" );
 			for( TMLSDItem item: listItems )	{	//print the items
 				TraceManager.addDev( item.toString() );
@@ -470,8 +447,142 @@ public class TMLCPTextSpecification {
 		return sb;
 	}
 
+	private String exploreTillNextJoin()	{
 
-	public String makeTasks(TMLModeling tmlm) {
+		String sb = "{ ";
+		ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
+		//look for all the connectors that start from the fork node in nextElem and put them into a list
+		TMLCPConnector conn;
+		int i;
+		indexOfConnToRemove.clear();
+		for( i = 0; i < listTMLCPConnectors.size(); i++ )	{
+			conn = listTMLCPConnectors.get(i);
+			if( conn.getStartName().equals( nextElem ) )	{
+				connToFork.add( conn );
+				indexOfConnToRemove.add(i);
+			}
+		}
+		removeConnectors();
+		for( int j = 0; j < connToFork.size(); j++ )	{	//Does not work in case diagrams dont have a unique name
+			sb += connToFork.get(j).getEndName() + PARALLELISM_OP;
+			nextElem = connToFork.get(j).getEndName();	//no nested fork: all connectors terminate in the same join
+		}
+		String newSb = sb.substring( 0, sb.length()-1 );	// delete last semicolon
+		return newSb;
+	}
+
+	private String exploreChoiceBranches()	{
+	
+		boolean foundJunction = false;
+		String token, globalSb = "", localSb = "";
+		ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
+		int i;
+		TMLCPConnector conn;
+
+		indexOfConnToRemove.clear();
+		for( i = 0; i < listTMLCPConnectors.size(); i++ )	{
+			conn = listTMLCPConnectors.get(i);
+			if( conn.getStartName().equals( nextElem ) )	{
+				connToChoice.add( conn );
+				indexOfConnToRemove.add(i);
+			}
+		}
+		removeConnectors();
+		globalSb += SP + "{";
+		for( int j = 0; j < connToChoice.size(); j++ )	{	//for each connector in connToChoice go until all branches terminate with the stop state
+			currentElem = connToChoice.get(j).getEndName();
+			localSb += SP + "{";
+			while( listTMLCPConnectors.size()!= 0 && !currentElem.equals("stop state") )	{
+				nextElem = getNextElem();	//get next element and remove connector
+				token = nextElem.substring(0,4);
+				switch( token )	{
+					case "fork":	{
+						localSb += exploreTillNextJoin();	//explore till the next join and remove the explored connectors
+						break;
+					}
+					case "join":	{
+						localSb += SP + "}" + SEQUENCE_OP;
+						break;
+					}
+					case "choi":	{
+						if( nextElem.length() >= 6 )	{
+							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
+								TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE!" );
+								System.exit(0);
+							}
+						}
+						break;
+					}
+					case "junc":	{
+						if( nextElem.length() >=8 )	{
+							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
+								foundJunction = true;
+								localSb += currentElem;
+								nextElem = "stop state";	//terminate exploration of current branch
+							}
+						}
+						break;
+					}
+					default:	{	//found the name of a sequence/activity diagram
+						if( !currentElem.equals( "stop state" ) )	{
+							localSb += currentElem;
+							if( !nextElem.equals( "stop state" ) )	{ localSb += SEQUENCE_OP; }
+						}
+						break;
+					}
+				}	//End of switch
+				if( nextElem.equals( "ERROR" ) )	{
+					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
+				}
+				if( nextElem.equals( "stop state" ) )	{ //time to leave and pack...
+					if( foundJunction )	{
+						foundJunction = false;
+						//localSb += SP + "}";
+						String temp = connToChoice.get(j).getGuard() + "{" + localSb + "}";
+						localSb = temp;
+					}
+					else	{
+						localSb += SP + "}" + connToChoice.get(j).getGuard() + SP + SELECTION_OP + SP;	//End of a branch
+					}
+					break;	//exit while
+				}
+				else	{ currentElem = nextElem; }	//never stop exploring...
+			}	//End of while
+			globalSb += localSb;
+			localSb = "";
+		}	//End of for, end of exploration of all branches
+		String newSb = /*globalSb.substring( 0, globalSb.length()-3 )*/ globalSb + SP + "}" + SP ;	//drop the last space and SELECTION_OP
+		return newSb;
+	}
+
+	//Look for a connector that starts from currentElem, get the endName as nextElem and remove the connector from the global list
+	private String getNextElem()	{
+
+		TMLCPConnector conn;
+		String endName = "";
+		int i;
+		for( i = 0; i < listTMLCPConnectors.size(); i++ )	{
+			conn = listTMLCPConnectors.get(i);
+			if( conn.getStartName().equals( currentElem ) )	{
+				endName = conn.getEndName();
+				break;
+			}
+		}
+		listTMLCPConnectors.remove(i);
+		return endName;
+	}
+
+	private void removeConnectors()	{
+
+		for( Integer index: indexOfConnToRemove )	{
+			/*TraceManager.addDev( index + SP + "ABOUT TO REMOVE CONNECTOR:" + listTMLCPConnectors.get(index).getStartName() +
+														listTMLCPConnectors.get(index).getEndName() );*/
+			listTMLCPConnectors.remove( index );
+		}
+		indexOfConnToRemove.clear();
+	}
+
+/*	public String makeTasks(TMLModeling tmlm) {
 		String sb = "";
 		for(TMLTask task: tmlm.getTasks()) {
 			sb += "TASK" + SP + task.getName() + CR;
@@ -632,12 +743,12 @@ public class TMLCPTextSpecification {
 						}
 						//TraceManager.addDev("guard = " + code1 + " i=" + i);
 						if (nb != 0) {
-							/*if (choice.isNonDeterministicGuard(i)) {
-								code = "CASERAND 50";
-							} else {
-								code = "CASERAND " + prepareString(choice.getStochasticGuard(i));
-								
-							}*/
+							//if (choice.isNonDeterministicGuard(i)) {
+							//	code = "CASERAND 50";
+							//} else {
+							//	code = "CASERAND " + prepareString(choice.getStochasticGuard(i));
+							//	
+							//}
 							//nb ++;
 							if (i != index1) {
 								code += "CASERAND " + code2 + CR;
@@ -717,7 +828,7 @@ public class TMLCPTextSpecification {
 		
 		return (errors.size() == 0);
 	}
-	
+*/	
 	public String printErrors() {
 		String ret = "";
 		for(TMLTXTError error: errors) {
@@ -755,2041 +866,2042 @@ public class TMLCPTextSpecification {
 		return ret;
 	}
 	
-	public void browseCode() {
-		// Browse lines of code one after the other
-		// Build accordinlgy the TMLModeling and updates errors and warnings
-		// In case of fatal error, immedialty quit code bowsing
-		
-		StringReader sr = new StringReader(spec);
-        BufferedReader br = new BufferedReader(sr);
-        String s;
-		String s1;
-		String [] split;
-		int lineNb = 0;
-		
-		inDec = true;
-		inTask = false;
-		inTaskDec = false;
-		inTaskBehavior = false;
-		
-		
-		String instruction;
-        
-		parses = new ArrayList<TMLParserSaveElt>();
-		
-        try {
-            while((s = br.readLine()) != null) {
-				if (s != null) {
-					s = s.trim();
-					//TraceManager.addDev("s=" + s);
-					s = removeUndesiredWhiteSpaces(s, lineNb);
-					s1 = Conversion.replaceAllString(s, "\t", " ");
-					s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
-					//TraceManager.addDev("s1=" + s1);
-					if (s1 != null) {
-						split = s1.split("\\s");
-						if (split.length > 0) {
-							//TraceManager.addDev("analyse");
-							analyseInstruction(s, lineNb, split);
-							//TraceManager.addDev("end analyse");
-						}
-					}
-					
-					lineNb++;
-				}
-            }
-        } catch (Exception e) {
-            TraceManager.addError("Exception when reading specification: " + e.getMessage());
-			addError(0, lineNb, 0, "Exception when reading specification");
-        }
-	}
-	
-	public void addError(int _type, int _lineNb, int _charNb, String _msg) {
-		TMLTXTError error = new TMLTXTError(_type);
-		error.lineNb = _lineNb;
-		error.charNb = _charNb;
-		error.message = _msg;
-		errors.add(error);
-	}
-	
-	public int analyseInstruction(String _line, int _lineNb, String[] _split) {
-		String error;
-		String params;
-		String id;
-		TMLChannel ch;
-		TMLEvent evt;
-		TMLRequest request;
-		TMLTask t1, t2;
-		TMLAttribute attribute;
-		TMLType type;
-		TMLStopState stop;
-		TMLRandom random;
-		int tmp, tmp0, tmp1, i;
-		int dec = 0;
-		boolean blocking;
-		TMLParserSaveElt parseElt;
-		
-		//TraceManager.addDev("Analyzing instruction:" + _line);
-		
-		if (parses.size() > 0) {
-			parseElt = parses.get(0);
-			if ((parseElt.type == TMLParserSaveElt.SELECTEVT) && ((!isInstruction("CASE", _split[0]) && (!isInstruction("ENDSELECTEVT", _split[0]))))) {
-				error = "CASE or ENDSELECTEVT instruction expected";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			if ((parseElt.type == TMLParserSaveElt.RAND) && ((!isInstruction("CASERAND", _split[0]) && (!isInstruction("ENDRAND", _split[0]))))) {
-				error = "CASERAND or ENDRAND instruction expected";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-		}
-		
-		// CHANNEL
-		if(isInstruction("CHANNEL", _split[0])) {
-			if (!inDec) {
-				error = "A channel may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!((_split.length > 5) && (_split.length < 8))) {
-				error = "A channel must be declared with only 5 or 6 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length == 7) {
-				dec = 1;
-			} else {
-				dec = 0;
-			}
-			
-			if (!checkParameter("CHANNEL", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("CHANNEL", _split, 2, 2, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("CHANNEL", _split, 3, 1, _lineNb)) {
-				return -1;
-			}
-			
-			if (_split.length == 7) {
-				if (!checkParameter("CHANNEL", _split, 4, 1, _lineNb)) {
-					return -1;
-				}
-			}
-			
-			
-			if (!checkParameter("CHANNEL", _split, 4 + dec, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("CHANNEL", _split, 5 + dec, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (tmlm.getChannelByName(_split[1]) != null) {
-				error = "Duplicate definition of channel " + _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split[2].toUpperCase().compareTo("NIB") == 0) {
-				
-			}
-			
-			ch = new TMLChannel(_split[1], null);
-			ch.setTypeByName(_split[2]);
-			try {
-				tmp = Integer.decode(_split[3]).intValue();
-				} catch (Exception e) {tmp = 4;}
-				ch.setSize(tmp);
-				
-				if (_split.length == 7) {
-					try {
-						tmp = Integer.decode(_split[4]).intValue();
-					} catch (Exception e) {tmp = 8;}
-					//TraceManager.addDev("Setting max to" + tmp);
-					ch.setMax(tmp);
-				}
-				
-				t1 = tmlm.getTMLTaskByName(_split[4+dec]);
-				if (t1 == null) {
-					t1 = new TMLTask(_split[4+dec], null, null);
-					//TraceManager.addDev("New task:" + _split[4+dec]);
-					tmlm.addTask(t1);
-				}
-				t2 = tmlm.getTMLTaskByName(_split[5+dec]);
-				if (t2 == null) {
-					t2 = new TMLTask(_split[5+dec], null, null);
-					//TraceManager.addDev("New task:" + _split[5+dec]);
-					tmlm.addTask(t2);
-				}
-				ch.setTasks(t1, t2);
-				tmlm.addChannel(ch);
-		} // CHANNEL
-		
-		
-		// LOSSYCHANNEL
-		if(isInstruction("LOSSYCHANNEL", _split[0])) {
-			if (!inDec) {
-				error = "A lossychannel may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!((_split.length > 3) && (_split.length < 5))) {
-				error = "A lossychannel must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
-			if (!checkParameter("LOSSYCHANNEL", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYCHANNEL", _split, 2, 1, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYCHANNEL", _split, 3, 9, _lineNb)) {
-				return -1;
-			}
-			
-			
-			ch = tmlm.getChannelByName(_split[1]);
-			if (ch == null) {
-				error = "lossy channel not previsouly declared as a regular channel " + _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			try {
-				tmp0 = Integer.decode(_split[2]).intValue();
-				} catch (Exception e) {tmp0 = 5;}
-			try {
-				tmp1 = Integer.decode(_split[3]).intValue();
-				} catch (Exception e) {tmp1 = -1;}
-				
-				ch.setLossy(true, tmp0, tmp1);
-		} // LOSSYCHANNEL
-		
-		// EVENT
-		if(isInstruction("EVENT", _split[0])) {
-			if (!inDec) {
-				error = "An event may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!((_split.length > 4) && (_split.length < 7))) {
-				error = "An event must be declared with only 4 or 5 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length == 6) {
-				dec = 1;
-			} else {
-				dec = 0;
-			}
-			
-			id = getEvtId(_split[1]);
-			params = getParams(_split[1]);
-			
-			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
-			
-			if (!checkParameter("EVENT", _split, 1, 4, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("EVENT", _split, 2, 3, _lineNb)) {
-				return -1;
-			}
-			
-			if (_split.length == 6) {
-				if (!checkParameter("EVENT", _split, 3, 1, _lineNb)) {
-					return -1;
-				}
-			}
-			
-			if (!checkParameter("EVENT", _split, 3 + dec, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("EVENT", _split, 4 + dec, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (tmlm.getEventByName(id) != null) {
-				error = "Duplicate definition of event " + id;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split[2].toUpperCase().compareTo("NIB") == 0) {
-				blocking = true;
-			} else {
-				blocking = false;
-			}
-			
-			if (_split[2].toUpperCase().compareTo("INF") == 0) {
-				tmp = -1;
-			} else {
-				try {
-					tmp = Integer.decode(_split[3]).intValue();
-				} catch (Exception e) {
-					error = "Unvalid parameter #3: should be a numeric value";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			evt = new TMLEvent(id, null, tmp, blocking);
-			evt.addParam(params);
-			
-			t1 = tmlm.getTMLTaskByName(_split[3+dec]);
-			if (t1 == null) {
-				t1 = new TMLTask(_split[3+dec], null, null);
-				//TraceManager.addDev("New task:" + _split[3+dec]);
-				tmlm.addTask(t1);
-			}
-			t2 = tmlm.getTMLTaskByName(_split[4+dec]);
-			if (t2 == null) {
-				t2 = new TMLTask(_split[4+dec], null, null);
-				//TraceManager.addDev("New task:" + _split[4+dec]);
-				tmlm.addTask(t2);
-			}
-			evt.setTasks(t1, t2);
-			tmlm.addEvent(evt);
-			
-			
-		} // EVENT
-		
-		// LOSSYEVENT
-		if(isInstruction("LOSSYEVENT", _split[0])) {
-			if (!inDec) {
-				error = "A lossyevent may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!((_split.length > 3) && (_split.length < 5))) {
-				error = "A lossyevent must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
-			if (!checkParameter("LOSSYEVENT", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYEVENT", _split, 2, 1, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYEVENT", _split, 3, 9, _lineNb)) {
-				return -1;
-			}
-			
-			
-			evt = tmlm.getEventByName(_split[1]);
-			if (evt == null) {
-				error = "lossyevent not previsouly declared as a regular event " + _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			try {
-				tmp0 = Integer.decode(_split[2]).intValue();
-				} catch (Exception e) {tmp0 = 5;}
-			try {
-				tmp1 = Integer.decode(_split[3]).intValue();
-				} catch (Exception e) {tmp1 = -1;}
-				
-				evt.setLossy(true, tmp0, tmp1);
-		} // LOSSYEVENT
-		
-		// REQUEST
-		if((isInstruction("REQUEST", _split[0])) && (inDec)) {
-			if (!inDec) {
-				error = "A request may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length < 4) {
-				error = "A request must be declared with at least 4 paremeters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
-			id = getEvtId(_split[1]);
-			params = getParams(_split[1]);
-			
-			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
-			
-			if (!checkParameter("REQUEST", _split, 1, 4, _lineNb)) {
-				return -1;
-			}
-			
-			for(i=2; i<_split.length; i++) {
-				if (!checkParameter("REQUEST", _split, i, 0, _lineNb)) {
-					return -1;
-				}
-			}
-			
-			if (tmlm.getRequestByName(id) != null) {
-				error = "Duplicate definition of request " + id;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			request = new TMLRequest(id, null);
-			request.addParam(params);
-			
-			for(i=2; i<_split.length; i++) {
-				t1 = tmlm.getTMLTaskByName(_split[i]);
-				if (t1 == null) {
-					t1 = new TMLTask(_split[i], null, null);
-					//TraceManager.addDev("New task:" + _split[i]);
-					tmlm.addTask(t1);
-				}
-				if ((i+1) == _split.length) {
-					request.setDestinationTask(t1);
-					t1.setRequested(true);
-					t1.setRequest(request);
-				} else {
-					request.addOriginTask(t1);
-				}
-			}
-			
-			tmlm.addRequest(request);
-		} // REQUEST
-		
-		// LOSSYREQUEST
-		if(isInstruction("LOSSYREQUEST", _split[0])) {
-			if (!inDec) {
-				error = "A lossyrequest may not be declared in a non-declaration part of a TML specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!((_split.length > 3) && (_split.length < 5))) {
-				error = "A lossyrequest must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
-			if (!checkParameter("LOSSYREQUEST", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYREQUEST", _split, 2, 1, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("LOSSYREQUEST", _split, 3, 9, _lineNb)) {
-				return -1;
-			}
-			
-			
-			request = tmlm.getRequestByName(_split[1]);
-			if (request == null) {
-				error = "lossyrequest not previsouly declared as a regular event " + _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			try {
-				tmp0 = Integer.decode(_split[2]).intValue();
-				} catch (Exception e) {tmp0 = 5;}
-			try {
-				tmp1 = Integer.decode(_split[3]).intValue();
-				} catch (Exception e) {tmp1 = -1;}
-				
-				request.setLossy(true, tmp0, tmp1);
-		} // LOSSYREQUEST
-		
-		// TASK
-		if((isInstruction("TASK", _split[0]))) {
-			
-			//TraceManager.addDev("In task");
-			if (inTask) {
-				error = "A task may not be declared in the body of another task";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = true;
-			inTaskBehavior = false;
-			
-			if (_split.length != 2) {
-				error = "A request must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!checkParameter("TASK", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			//TraceManager.addDev("In task: 12");
-			task = tmlm.getTMLTaskByName(_split[1]);
-			if ((task != null)  && (task.getActivityDiagram() != null)) {
-				if (task.getActivityDiagram().getFirst() != null) {
-					error = "Duplicate definition for task "+ (_split[1]);
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			//TraceManager.addDev("In task: 13");
-			if (task == null) {
-				task = new TMLTask(_split[1], null, null);
-				tmlm.addTask(task);
-				//TraceManager.addDev("New task:" + _split[1]);
-			}
-			
-			TMLStartState start = new TMLStartState("start", null);
-			task.getActivityDiagram().setFirst(start);
-			tmlae = start;
-			
-			
-		} // TASK
-		
-		
-		// ENDTASK
-		if((isInstruction("ENDTASK", _split[0]))) {
-			if (!inTask) {
-				error = "A endtask may not be used outside the body of a task";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			inDec = true;
-			inTask = false;
-			inTaskDec = false;
-			inTaskBehavior = false;
-			
-			stop = new TMLStopState("stop", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			
-			task = null;
-		} // ENDTASK
-		
-		
-		// Attribute declaration
-		if ((isInstruction("INT", _split[0])) || (isInstruction("NAT", _split[0])) || (isInstruction("BOOL", _split[0]))){
-			if (!inTaskDec) {
-				error = "An attribute declaration must be done in a task right after its declaration, and before its bahavior";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			String inst = _split[0].toUpperCase();
-			
-			if (!((_split.length == 2) || (_split.length == 4))) {
-				error = "An attribute declaration must be done with either 1 or 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!checkParameter(inst, _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			if (_split.length > 2) {
-				if (!checkParameter(inst, _split, 2, 5, _lineNb)) {
-					return -1;
-				}
-				if (!checkParameter(inst, _split, 3, 6, _lineNb)) {
-					return -1;
-				}
-			}
-			
-			//TraceManager.addDev("Adding attribute " + _split[0] + " " + _split[1]);
-			
-			TMLAttribute ta = new TMLAttribute(_split[1], new TMLType(TMLType.getType(_split[0])));
-			if (_split.length > 2) {
-				ta.initialValue = _split[3];
-			} else {
-				ta.initialValue = ta.getDefaultInitialValue();
-			}
-			task.addAttribute(ta);
-		} // Attribute declaration
-		
-		// RANDOM
-		if((isInstruction("RANDOM", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A RANDOM operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length != 5) {
-				error = "A RANDOM operation must be declared with exactly 4 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!checkParameter("RANDOM", _split, 1, 1, _lineNb)) {
-				return -1;
-			}
-			
-			if (!checkParameter("RANDOM", _split, 2, 0, _lineNb)) {
-				return -1;
-			}
-			
-			random = new TMLRandom("random", null);
-			try {
-			 random.setFunctionId(Integer.decode(_split[1]).intValue());
-			} catch (Exception e) {
-			}
-			
-			random.setVariable(_split[2]);
-			random.setMinValue(_split[3]);
-			random.setMaxValue(_split[4]);
-			
-			TraceManager.addDev("RANDOM min=" + random.getMinValue() + " max=" + random.getMaxValue());
-			
-			task.getActivityDiagram().addElement(random);
-			tmlae.addNext(random);
-			tmlae = random;
-			
-		} // RANDOM
-		
-		// READ
-		if((isInstruction("READ", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A READ operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length != 3) {
-				error = "A READ operation must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!checkParameter("READ", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			/*if (!checkParameter("READ", _split, 2, 7, _lineNb)) {
-				return -1;
-			}*/
-			
-			ch = tmlm.getChannelByName(_split[1]);
-			if (ch == null ){
-				error = "Undeclared channel: " +  _split[1];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			if (ch.getDestinationTask() != task ){
-				error = "READ operations must be done only in destination task. Should be in task: " + ch.getDestinationTask().getName();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			
-			TMLReadChannel tmlrch = new TMLReadChannel(_split[1], null);
-			tmlrch.addChannel(ch);
-			tmlrch.setNbOfSamples(_split[2]);
-			task.getActivityDiagram().addElement(tmlrch);
-			tmlae.addNext(tmlrch);
-			tmlae = tmlrch;
-			
-		} // READ
-		
-		// WRITE
-		if((isInstruction("WRITE", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A WRITE operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length < 3) {
-				error = "A WRITE operation must be declared with at most 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!checkParameter("WRITE", _split, 1, 0, _lineNb)) {
-				return -1;
-			}
-			
-			TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
-			for(int k=0; k<_split.length-2; k++) {
-				ch = tmlm.getChannelByName(_split[1+k]);
-				if (ch == null ){
-					error = "Undeclared channel: " +  _split[1+k];
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				if (ch.getOriginTask() != task ){
-					error = "WRITE operations must be done only in origin task. Should be in task: " + ch.getOriginTask().getName();
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				
-				tmlwch.addChannel(ch);
-			}
-			
-			tmlwch.setNbOfSamples(_split[2]);
-			task.getActivityDiagram().addElement(tmlwch);
-			tmlae.addNext(tmlwch);
-			tmlae = tmlwch;
-			
-		} // WRITE
-		
-		// NOTIFY
-		if((isInstruction("NOTIFY", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A NOTIFY operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length < 2) {
-				error = "A NOTIFY operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			evt = tmlm.getEventByName(_split[1]);
-			if (evt == null) {
-				error = "Unknown event: " + _split[1] ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			dec = evt.getNbOfParams();
-			
-			if (_split.length != 2 + dec) {
-				error = "A NOTIFY operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLSendEvent sevt = new TMLSendEvent(evt.getName(), null);
-			sevt.setEvent(evt);
-			for(i=2; i<2 + dec; i++) {
-				sevt.addParam(_split[i]);
-			}
-			
-			task.getActivityDiagram().addElement(sevt);
-			tmlae.addNext(sevt);
-			tmlae = sevt;
-		} // NOTIFY
-		
-		// WAIT
-		if((isInstruction("WAIT", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A WAIT operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length < 2) {
-				error = "A WAIT operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			evt = tmlm.getEventByName(_split[1]);
-			if (evt == null) {
-				error = "Unknown event: " + _split[1] ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			dec = evt.getNbOfParams();
-			
-			if (_split.length != 2 + dec) {
-				error = "A WAIT operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			// Each param must be a declared attribute of the right type
-			for(i=2; i<2 + dec; i++) {	
-				attribute = task.getAttributeByName(_split[i]);
-				if (attribute == null) {
-					error = "Attribute: " + _split[i] + " is undeclared";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				if (attribute.type.getType() != evt.getType(i-2).getType()) {
-					error = "Attribute: " + _split[i] + " is not of the right type";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			
-			TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
-			wevt.setEvent(evt);
-			for(i=2; i<2 + dec; i++) {	
-				wevt.addParam(_split[i]);
-			}
-			
-			task.getActivityDiagram().addElement(wevt);
-			tmlae.addNext(wevt);
-			tmlae = wevt;
-		} // WAIT
-		
-		// NOTIFIED
-		if((isInstruction("NOTIFIED", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A NOTIFIED operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length != 3) {
-				error = "A NOTIFIED operation must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			evt = tmlm.getEventByName(_split[1]);
-			if (evt == null) {
-				error = "Unknown event: " + _split[1] ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			attribute = task.getAttributeByName(_split[2]);
-			if (attribute == null) {
-				error = "Attribute: " + _split[2] + " is undeclared";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			if (attribute.type.getType() != TMLType.NATURAL) {
-				error = "Attribute: " + _split[2] + " should be of natural type";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLNotifiedEvent nevt = new TMLNotifiedEvent(evt.getName(), null);
-			nevt.setEvent(evt);
-			nevt.setVariable(_split[2]);
-			
-			task.getActivityDiagram().addElement(nevt);
-			tmlae.addNext(nevt);
-			tmlae = nevt;
-		} // NOTIFIED
-		
-		// Send REQUEST
-		if((isInstruction("REQUEST", _split[0])) && (inTask)) {
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (_split.length < 2) {
-				error = "A REQUEST operation must be declared with at least 1 parameter (request name), and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			request = tmlm.getRequestByName(_split[1]);
-			if (request == null) {
-				error = "Unknown request: " + _split[1] ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			dec = request.getNbOfParams();
-			
-			if (_split.length != 2 + dec) {
-				error = "A REQUEST operation on request " + request.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLSendRequest sreq = new TMLSendRequest(request.getName(), null);
-			sreq.setRequest(request);
-			for(i=2; i<2 + dec; i++) {	
-				sreq.addParam(_split[i]);
-			}
-			
-			task.getActivityDiagram().addElement(sreq);
-			tmlae.addNext(sreq);
-			tmlae = sreq;
-		} // Send REQUEST
-		
-		// FOR
-		if((isInstruction("FOR", _split[0])) && (inTask)) {
-			//TraceManager.addDev("FOR encountered");
-			if (_split.length < 2) {
-				error = "FOR operation: missing parameters";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the three elements of FOR
-			String forp = _split[1];
-			String forps[];
-			tmp0 = forp.indexOf('(');
-				tmp1 = forp.lastIndexOf(')');
-				if ((tmp0 == -1) || (tmp1 == -1)) {
-					error = "FOR operation: badly formed parameters";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				forp = forp.substring(tmp0+1, tmp1);
-				forps = forp.split(";");
-				if (forps.length != 3) {
-					error = "FOR operation: badly formed parameters";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				
-				// All is ok: constructing the FOR
-				parseElt = new TMLParserSaveElt();
-				parseElt.type = TMLParserSaveElt.FOR;
-				parses.add(0, parseElt);
-				TMLForLoop loop = new TMLForLoop("loop", null);
-				loop.setInit(forps[0].trim());
-				loop.setCondition(forps[1].trim());
-				loop.setIncrement(forps[2].trim());
-				task.getActivityDiagram().addElement(loop);
-				parseElt.tmlae = loop;
-				tmlae.addNext(loop);
-				tmlae = loop;
-				
-		} // FOR
-		
-		// ENDFOR
-		if(isInstruction("ENDFOR", _split[0])) {
-			if (!inTask) {
-				error = "ENDFOR: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-				error = "ENDFOR: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.FOR) {
-				error = "ENDFOR: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			// All is ok: constructing the FOR
-			parses.remove(0);
-			stop = new TMLStopState("stop loop", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			tmlae = parseElt.tmlae;
-		} // ENDFOR
-		
-		// SELECTEVT
-		if((isInstruction("SELECTEVT", _split[0]))) {
-			if (!inTask) {
-				error = "SELECTEVT: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length > 1) {
-				error = "A SELECTEVT cannot have any parameters";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.SELECTEVT;
-			parses.add(0, parseElt);
-			TMLSequence seq = new TMLSequence("sequence", null);
-			parseElt.top = seq;
-			tmlae.addNext(seq);
-			TMLSelectEvt sel = new TMLSelectEvt("select evt", null);
-			parseElt.tmlae = sel;
-			seq.addNext(sel);
-			task.getActivityDiagram().addElement(seq);
-			task.getActivityDiagram().addElement(sel);
-			tmlae = sel;
-		} // SELECTEVT 
-		
-		// ENDSELECTEVT
-		if((isInstruction("ENDSELECTEVT", _split[0]))) {
-			if (!inTask) {
-				error = "ENDSELECTEVT: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-				error = "ENDSELECTEVT: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
-				error = "ENDSELECTEVT: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			parses.remove(0);
-			tmlae = parseElt.top;
-		} // ENDSELECTEVT
-		
-		// CASE
-		if((isInstruction("CASE", _split[0]))) {
-			if (!inTask) {
-			error = "CASE: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (parses.size() == 0) {
-			error = "CASE: corresponding SELECTEVT not found";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			} else {
-				parseElt = parses.get(0);
-				if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
-				error = "CASE: corresponding SELECTEVT not found";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if(_split.length < 2) {
-				error = "A CASE must have at least two parameters";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			evt = tmlm.getEventByName(_split[1]);
-			if (evt == null) {
-				error = "Unknown event: " + _split[1] ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			dec = evt.getNbOfParams();
-			
-			if (_split.length != 2 + dec) {
-				error = "A CASE operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
-			wevt.setEvent(evt);
-			for(i=2; i<2 + dec; i++) {
-				wevt.addParam(_split[i]);
-			}
-			
-			task.getActivityDiagram().addElement(wevt);
-			tmlae.addNext(wevt);
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.CASE;
-			parseElt.tmlae = wevt;
-			parseElt.top = tmlae;
-			parses.add(0, parseElt);
-			
-			tmlae = wevt;
-		} // CASE
-		
-		
-		// ENDCASE
-		if((isInstruction("ENDCASE", _split[0]))) {
-			if (!inTask) {
-			error = "ENDCASE: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-			error = "ENDCASE: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.CASE) {
-			error = "ENDCASE: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parses.remove(0);
-			stop = new TMLStopState("stop case", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			tmlae = parseElt.top;
-		} // ENDCASE
-		
-		// RANDOMSEQ
-		if((isInstruction("RANDOMSEQ", _split[0]))) {
-			if (!inTask) {
-				error = "RANDOMSEQ: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length > 1) {
-				error = "A RANDOMSEQ cannot have any parameters";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.RANDOMSEQ;
-			parses.add(0, parseElt);
-			TMLSequence seq = new TMLSequence("sequence", null);
-			parseElt.top = seq;
-			tmlae.addNext(seq);
-			TMLRandomSequence rseq = new TMLRandomSequence("random sequence", null);
-			parseElt.tmlae = rseq;
-			seq.addNext(rseq);
-			task.getActivityDiagram().addElement(seq);
-			task.getActivityDiagram().addElement(rseq);
-			tmlae = rseq;
-		} // RANDOMSEQ 
-		
-		// ENDRANDOMSEQ
-		if((isInstruction("ENDRANDOMSEQ", _split[0]))) {
-			if (!inTask) {
-				error = "ENDRANDOMSEQ: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-				error = "ENDRANDOMSEQ: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
-				error = "ENDRANDOMSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			parses.remove(0);
-			tmlae = parseElt.top;
-		} // ENDRANDOMSEQ
-		
-		
-		// SEQ
-		if((isInstruction("SEQ", _split[0]))) {
-			if (!inTask) {
-			error = "SEQ: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (parses.size() == 0) {
-				error = "SEQ: corresponding RANDOMSEQ not found";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			} else {
-				parseElt = parses.get(0);
-				if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
-				error = "SEQ: corresponding RANDOMSEQ not found";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if(_split.length >1 ) {
-				error = "A SEQ has no parameter";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!(parseElt.tmlae instanceof TMLRandomSequence)) {
-				error = "Malformed specification: unexpected SEQ";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLRandomSequence rseq = (TMLRandomSequence)parseElt.tmlae;
-			TMLSequence seq = new TMLSequence("sequence", null);
-			rseq.addNext(seq);
-			
-			task.getActivityDiagram().addElement(seq);
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.SEQ;
-			parseElt.tmlae = seq;
-			parseElt.top = rseq;
-			parses.add(0, parseElt);
-			
-			tmlae = seq;
-		} // SEQ
-		
-		// ENDSEQ
-		if((isInstruction("ENDSEQ", _split[0]))) {
-			if (!inTask) {
-			error = "ENDSEQ: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-			error = "ENDSEQ: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.SEQ) {
-			error = "ENDSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parses.remove(0);
-			stop = new TMLStopState("stop case", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			tmlae = parseElt.top;
-		} // ENDSEQ
-		
-		// RAND
-		if((isInstruction("RAND", _split[0]))) {
-			if (!inTask) {
-				error = "RAND: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length > 1) {
-				error = "A RAND cannot have any parameters";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.RAND;
-			parses.add(0, parseElt);
-			TMLSequence seq = new TMLSequence("sequence", null);
-			parseElt.top = seq;
-			tmlae.addNext(seq);
-			TMLChoice choice = new TMLChoice("choice evt", null);
-			parseElt.tmlae = choice;
-			seq.addNext(choice);
-			task.getActivityDiagram().addElement(seq);
-			task.getActivityDiagram().addElement(choice);
-			tmlae = choice;
-		} // RAND
-		
-		// ENDRAND
-		if((isInstruction("ENDRAND", _split[0]))) {
-			if (!inTask) {
-				error = "ENDRAND: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-				error = "ENDRAND: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.RAND) {
-				error = "ENDRAND: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			parses.remove(0);
-			tmlae = parseElt.top;
-		} // ENDRAND
-		
-		// CASERAND
-		if((isInstruction("CASERAND", _split[0]))) {
-			if (!inTask) {
-			error = "CASERAND: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (parses.size() == 0) {
-			error = "CASERAND: corresponding RAND not found";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			} else {
-				parseElt = parses.get(0);
-				if (parseElt.type != TMLParserSaveElt.RAND) {
-				error = "CASERAND: corresponding RAND not found";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if(_split.length != 2) {
-				error = "A CASERAND should have one parameter";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (!(parseElt.tmlae instanceof TMLChoice)) {
-				error = "Malformed specification";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			TMLChoice choice = (TMLChoice)parseElt.tmlae;
-			TMLSequence seq = new TMLSequence("sequence", null);
-			choice.addGuard("[" + _split[1] + "%]");
-			choice.addNext(seq);
-			
-			task.getActivityDiagram().addElement(seq);
-			
-			parseElt = new TMLParserSaveElt();
-			parseElt.type = TMLParserSaveElt.CASERAND;
-			parseElt.tmlae = seq;
-			parseElt.top = choice;
-			parses.add(0, parseElt);
-			
-			tmlae = seq;
-			
-		} // CASERAND
-		
-		
-		// ENDCASERAND
-		if((isInstruction("ENDCASERAND", _split[0]))) {
-			if (!inTask) {
-			error = "ENDCASERAND: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-			error = "ENDCASERAND: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.CASERAND) {
-			error = "ENDCASERAND: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parses.remove(0);
-			stop = new TMLStopState("stop case", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			tmlae = parseElt.top;
-		} // ENDCASERAND
-		
-		// IF
-		if((isInstruction("IF", _split[0]))) {
-			if (!inTask) {
-				error = "IF: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length != 2) {
-				error = "IF should be followed by one condition";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			String cond = _split[1].trim();
-			tmp0 = cond.indexOf('(');
-				tmp1 = cond.lastIndexOf(')');
-				if ((tmp0 == -1) || (tmp1 == -1)) {
-					error = "IF operation: badly formed condition";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				cond = cond.substring(tmp0+1, tmp1);
-				
-				parseElt = new TMLParserSaveElt();
-				parseElt.type = TMLParserSaveElt.IF;
-				parses.add(0, parseElt);
-				TMLSequence seq = new TMLSequence("sequence", null);
-				parseElt.top = seq;
-				tmlae.addNext(seq);
-				TMLChoice choice = new TMLChoice("if", null);
-				parseElt.tmlae = choice;
-				seq.addNext(choice);
-				task.getActivityDiagram().addElement(seq);
-				task.getActivityDiagram().addElement(choice);
-				
-				seq = new TMLSequence("sequence", null);
-				task.getActivityDiagram().addElement(seq);
-				choice.addNext(seq);
-				choice.addGuard("[" + cond + "]");
-				
-				tmlae = seq;
-		} // IF
-		
-		// ORIF
-		if((isInstruction("ORIF", _split[0]))) {
-			if (!inTask) {
-				error = "ORIF: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length != 2) {
-				error = "ORIF should be followed by one condition";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			
-			String cond = _split[1].trim();
-			//TraceManager.addDev("cond1=" + cond);
-			tmp0 = cond.indexOf('(');
-				tmp1 = cond.lastIndexOf(')');
-				if ((tmp0 == -1) || (tmp1 == -1)) {
-					error = "ORIF operation: badly formed condition";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				cond = cond.substring(tmp0+1, tmp1);
-				//TraceManager.addDev("cond2=" + cond);
-				
-				if (parses.size() == 0) {
-					error = "ORIF: badly placed instruction.";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				parseElt = parses.get(0);
-				if (parseElt.type != TMLParserSaveElt.IF) {
-					error = "ORIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				
-				if (parseElt.nbElse > 0) {
-					error = "ORIF: should not followed a else instruction";
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-				
-				stop = new TMLStopState("stop", null);
-				task.getActivityDiagram().addElement(stop);
-				tmlae.addNext(stop);
-				
-				TMLSequence seq = new TMLSequence("sequence", null);
-				TMLChoice choice = (TMLChoice)parseElt.tmlae;
-				task.getActivityDiagram().addElement(seq);
-				
-				choice.addNext(seq);
-				choice.addGuard("[" + cond + "]");
-				
-				tmlae = seq;
-		} // ORIF
-		
-		// ELSE
-		if((isInstruction("ELSE", _split[0]))) {
-			if (!inTask) {
-				error = "ELSE: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if(_split.length != 1) {
-				error = "ELSE should have no parameter";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if (parses.size() == 0) {
-				error = "ELSE: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.IF) {
-				error = "ELSE: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			stop = new TMLStopState("stop", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			
-			parseElt.nbElse ++;
-			
-			TMLSequence seq = new TMLSequence("sequence", null);
-			TMLChoice choice = (TMLChoice)parseElt.tmlae;
-			task.getActivityDiagram().addElement(seq);
-			
-			choice.addNext(seq);
-			choice.addGuard("[else]");
-			
-			tmlae = seq;
-		} // ELSE
-		
-		// ENDIF
-		if((isInstruction("ENDIF", _split[0]))) {
-			if (!inTask) {
-				error = "ENDIF: must be used in a Task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			// Extract the first element of the stack
-			if (parses.size() == 0) {
-				error = "ENDIF: badly placed instruction.";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			parseElt = parses.get(0);
-			if (parseElt.type != TMLParserSaveElt.IF) {
-				error = "ENDIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			stop = new TMLStopState("stop", null);
-			task.getActivityDiagram().addElement(stop);
-			tmlae.addNext(stop);
-			
-			parses.remove(0);
-			tmlae = parseElt.top;
-		} // ENDIF
-		
-		// EXECI
-		if((isInstruction("EXECI", _split[0]))) {
-			
-			if (!inTask) {
-				error = "An EXECI operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if ((_split.length < 2) ||(_split.length > 4)) {
-				error = "An EXECI operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length == 2) {
-				TMLExecI execi = new TMLExecI("execi", null);
-				execi.setAction(_split[1]);
-				tmlae.addNext(execi);
-				task.getActivityDiagram().addElement(execi);
-				tmlae = execi;
-			} else {
-				TMLExecIInterval execi = new TMLExecIInterval("execi", null);
-				execi.setMinDelay(_split[1]);
-				execi.setMaxDelay(_split[2]);
-				tmlae.addNext(execi);
-				task.getActivityDiagram().addElement(execi);
-				tmlae = execi;
-			}
-		} // EXECI
-		
-		// EXECC
-		if((isInstruction("EXECC", _split[0]))) {
-			
-			if (!inTask) {
-				error = "An EXECC operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if ((_split.length < 2) ||(_split.length > 4)) {
-				error = "An EXECC operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length == 2) {
-				TMLExecC execc = new TMLExecC("execc", null);
-				execc.setAction(_split[1]);
-				tmlae.addNext(execc);
-				task.getActivityDiagram().addElement(execc);
-				tmlae = execc;
-			} else {
-				TMLExecCInterval execci = new TMLExecCInterval("execci", null);
-				execci.setMinDelay(_split[1]);
-				execci.setMaxDelay(_split[2]);
-				tmlae.addNext(execci);
-				task.getActivityDiagram().addElement(execci);
-				tmlae = execci;
-			}
-		} // EXECC
-		
-		// DELAY
-		if((isInstruction("DELAY", _split[0]))) {
-			
-			if (!inTask) {
-				error = "A DELAY operation may only be performed in a task body";
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			if ((_split.length < 3) ||(_split.length > 5)) {
-				error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1) ;
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			if (_split.length == 3) {
-				if (!checkParameter("DELAY", _split, 2, 0, _lineNb)) {
-					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			if (_split.length == 4) {
-				if (!checkParameter("DELAY", _split, 3, 0, _lineNb)) {
-					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
-					addError(0, _lineNb, 0, error);
-					return -1;
-				}
-			}
-			
-			TMLDelay delay = new TMLDelay("delay", null);
-			delay.setMinDelay(_split[1]);
-			if (_split.length == 3) {
-				delay.setMaxDelay(_split[1]);
-				delay.setUnit(_split[2]);
-			} else {
-				delay.setMaxDelay(_split[2]);
-				delay.setUnit(_split[3]);
-			}
-			
-			
-			tmlae.addNext(delay);
-			task.getActivityDiagram().addElement(delay);
-			tmlae = delay;
-			
-		} // EXECC
-		
-		// Other command
-		if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
-			if (!inTask) {
-				error = "Syntax error in TML modeling: unrecognized instruction:" + _split[0];
-				addError(0, _lineNb, 0, error);
-				return -1;
-			}
-			
-			inDec = false;
-			inTask = true;
-			inTaskDec = false;
-			inTaskBehavior = true;
-			
-			TMLActionState action = new TMLActionState(_split[0], null);
-			action.setAction(_line);
-			tmlae.addNext(action);
-			task.getActivityDiagram().addElement(action);
-			tmlae = action;
-			
-		} // Other command
-		
-		return 0;
-	}
-	
-	// Type 0: id
-	// Type 1: numeral
-	// Type 2: channel type 
-	// Type 3: event type
-	// Type 4: event name
-	// Type 5: '='
-	// Type 6: attribute value
-	// Type 7: id or numeral
-	// Type 8:unit
-	
-	public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
-		boolean err = false;
-		String error;
-		
-		if(_parameter < _split.length) {
-			switch(_type) {
-			case 0:
-				if (!isAValidId(_split[_parameter])) {
-					err = true;
-				}
-				break;
-			case 1:
-				if (!isANumeral(_split[_parameter])) {
-					err = true;
-				}
-				break;
-			case 2:
-				if (!isIncluded(_split[_parameter], channeltypes)) {
-					err = true;
-				}
-				break;	
-			case 3:
-				if (!isIncluded(_split[_parameter], eventtypes)) {
-					err = true;
-				}
-				break;	
-			case 4:
-				if (!isAValidId(getEvtId(_split[_parameter]))) {
-					err = true;
-					//TraceManager.addDev("Unvalid id");
-				} else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-					//TraceManager.addDev("Unvalid param");
-					err = true;
-				}
-				break;
-			case 5:
-				if (!(_split[_parameter].equals("="))) {
-					TraceManager.addDev("Error of =");
-					err = true;
-				}
-				break;
-			case 6:
-				if (_inst.equals("BOOL")) {
-					String tmp = _split[_parameter].toUpperCase();
-					if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
-						err = true;
-					}
-				} else {
-					if (!isANumeral(_split[_parameter])) {
-						err = true;
-					}
-				}
-				break;	 
-			case 7:
-				if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
-					err = true;
-				}
-				break;	
-			case 8:
-				if (!isAValidUnit(_split[_parameter])) {
-					err = true;
-				}
-				break;	
-			case 9:
-				if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
-					err = true;
-				}
-				break;
-			}
-		} else {
-			err = true;
-		}
-		if (err) {
-			error = "Unvalid parameter #" + _parameter + "-> $" + _split[_parameter] + "$ <- in " + _inst + " instruction";
-			addError(0, _lineNb, 0, error);
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean isInstruction(String instcode, String inst) {
-		return (inst.toUpperCase().compareTo(instcode) == 0);
-	}
-	
-	public boolean isInstruction(String instcode) {
-		return (!checkKeywords(instcode));
-	}
-	
-	public static boolean isAValidId(String _id) {
-		if ((_id == null) || (_id.length() == 0)) {
-			return false;
-		}
-		
-		boolean b1 = (_id.substring(0,1)).matches("[a-zA-Z]");
-        boolean b2 = _id.matches("\\w*");
-		boolean b3 = checkKeywords(_id);
-		
-		return (b1 && b2 && b3);
-	}
-	
-	public boolean isANumeral(String _num) {
-		return _num.matches("\\d*");
-	}
-	
-	public boolean isANegativeOrPositiveNumeral(String _num) {
-		if (_num.startsWith("-")) {
-			return isANumeral(_num.substring(1, _num.length()));
-		}
-		return isANumeral(_num);
-	}
-	
-	public boolean isAValidUnit(String s) {
-		if (s.compareTo("ns") == 0) {
-			return true;
-		} else if (s.compareTo("us") == 0) {
-			return true;
-		} else if (s.compareTo("ms") == 0) {
-			return true;
-		} else if (s.compareTo("s") == 0) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public static boolean checkKeywords(String _id) {
-		String id = _id.toUpperCase();
-		for(int i=0; i<keywords.length; i++) {
-			if (id.compareTo(keywords[i]) == 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean isIncluded(String _id, String[] _list) {
-		String id = _id.toUpperCase();
-		for(int i=0; i<_list.length; i++) {
-			if (id.compareTo(_list[i]) == 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public String removeUndesiredWhiteSpaces(String _input, int _lineNb) {
-		String error, tmp;
-		int index0, index1, index2;
-		
-		if (_input.startsWith("EVENT ")) {
-			index0 = _input.indexOf('(');
-				index1 = _input.indexOf(')');
-				if ((index0 == -1) || (index1 == -1)) {
-					error = "Syntax Error: should be of the form EVENT evtname(<list of max three types>) + other parameters";
-					addError(0, _lineNb, 0, error);
-					return null;
-				}
-				return Conversion.replaceBetweenIndex(_input, index0, index1, " ", "");
-		}
-		
-		if (_input.startsWith("REQUEST ") && (inDec)) {
-			index0 = _input.indexOf('(');
-				index1 = _input.indexOf(')');
-				if ((index0 == -1) || (index1 == -1)) {
-					error = "Syntax Error: should be of the form REQUEST requestname(<list of max three types>) + other parameters";
-					addError(0, _lineNb, 0, error);
-					return null;
-				}
-				return Conversion.replaceBetweenIndex(_input, index0, index1, " ", "");
-		}
-		
-		if (_input.startsWith("FOR(")) {
-				_input = "FOR (" + _input.substring(4, _input.length());
-		}
-		
-		if (_input.startsWith("FOR (")) {
-				tmp = _input.substring(5, _input.length());
-				tmp = Conversion.replaceAllString(tmp, " ", "");
-				return "FOR (" + tmp;
-		}
-		
-		if (_input.startsWith("IF(")) {
-				_input = "IF (" + _input.substring(3, _input.length());
-		}
-		
-		if (_input.startsWith("IF (")) {
-				tmp = _input.substring(4, _input.length());
-				tmp = Conversion.replaceAllString(tmp, " ", "");
-				return "IF (" + tmp;
-		}
-		
-		if (_input.startsWith("ORIF(")) {
-				_input = "ORIF (" + _input.substring(5, _input.length());
-		}
-		
-		if (_input.startsWith("ORIF (")) {
-				tmp = _input.substring(6, _input.length());
-				tmp = Conversion.replaceAllString(tmp, " ", "");
-				return "ORIF (" + tmp;
-		}	
-		
-		return _input;
-	}
-	
-	private String getEvtId(String _input) {
-		int index = _input.indexOf('(');
-			if (index == -1) {
-				return _input;
-			}
-			return _input.substring(0, index);
-	}
-	
-	private String getParams(String _input) {
-		//TraceManager.addDev("input=" + _input);
-		int index0 = _input.indexOf('(');
-			int index1 = _input.indexOf(')');
-			if ((index0 == -1) || (index1 == -1)) {
-				return _input;
-			}
-			return _input.substring(index0 + 1, index1);
-	}
-	
-	private static String prepareString(String s) {
-		return s.replaceAll("\\s", "");
-	}
-	
-	public static String modifyString(String s) {
-		return prepareString(s);
-	}
+//	public void browseCode() {
+//		// Browse lines of code one after the other
+//		// Build accordinlgy the TMLModeling and updates errors and warnings
+//		// In case of fatal error, immedialty quit code bowsing
+//		
+//		StringReader sr = new StringReader(spec);
+//        BufferedReader br = new BufferedReader(sr);
+//        String s;
+//		String s1;
+//		String [] split;
+//		int lineNb = 0;
+//		
+//		inDec = true;
+//		inTask = false;
+//		inTaskDec = false;
+//		inTaskBehavior = false;
+//		
+//		
+//		String instruction;
+//        
+//		parses = new ArrayList<TMLParserSaveElt>();
+//		
+//        try {
+//            while((s = br.readLine()) != null) {
+//				if (s != null) {
+//					s = s.trim();
+//					//TraceManager.addDev("s=" + s);
+//					s = removeUndesiredWhiteSpaces(s, lineNb);
+//					s1 = Conversion.replaceAllString(s, "\t", " ");
+//					s1 = Conversion.replaceRecursiveAllString(s1, "  ", " ");
+//					//TraceManager.addDev("s1=" + s1);
+//					if (s1 != null) {
+//						split = s1.split("\\s");
+//						if (split.length > 0) {
+//							//TraceManager.addDev("analyse");
+//							analyseInstruction(s, lineNb, split);
+//							//TraceManager.addDev("end analyse");
+//						}
+//					}
+//					
+//					lineNb++;
+//				}
+//            }
+//        } catch (Exception e) {
+//            TraceManager.addError("Exception when reading specification: " + e.getMessage());
+//			addError(0, lineNb, 0, "Exception when reading specification");
+//        }
+//	}
+//	
+//	public void addError(int _type, int _lineNb, int _charNb, String _msg) {
+//		TMLTXTError error = new TMLTXTError(_type);
+//		error.lineNb = _lineNb;
+//		error.charNb = _charNb;
+//		error.message = _msg;
+//		errors.add(error);
+//	}
+//	
+//	public int analyseInstruction(String _line, int _lineNb, String[] _split) {
+//		String error;
+//		String params;
+//		String id;
+//		TMLChannel ch;
+//		TMLEvent evt;
+//		TMLRequest request;
+//		TMLTask t1, t2;
+//		TMLAttribute attribute;
+//		TMLType type;
+//		TMLStopState stop;
+//		TMLRandom random;
+//		int tmp, tmp0, tmp1, i;
+//		int dec = 0;
+//		boolean blocking;
+//		TMLParserSaveElt parseElt;
+//		
+//		//TraceManager.addDev("Analyzing instruction:" + _line);
+//		
+//		if (parses.size() > 0) {
+//			parseElt = parses.get(0);
+//			if ((parseElt.type == TMLParserSaveElt.SELECTEVT) && ((!isInstruction("CASE", _split[0]) && (!isInstruction("ENDSELECTEVT", _split[0]))))) {
+//				error = "CASE or ENDSELECTEVT instruction expected";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			if ((parseElt.type == TMLParserSaveElt.RAND) && ((!isInstruction("CASERAND", _split[0]) && (!isInstruction("ENDRAND", _split[0]))))) {
+//				error = "CASERAND or ENDRAND instruction expected";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//		}
+//		
+//		// CHANNEL
+//		if(isInstruction("CHANNEL", _split[0])) {
+//			if (!inDec) {
+//				error = "A channel may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!((_split.length > 5) && (_split.length < 8))) {
+//				error = "A channel must be declared with only 5 or 6 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length == 7) {
+//				dec = 1;
+//			} else {
+//				dec = 0;
+//			}
+//			
+//			if (!checkParameter("CHANNEL", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("CHANNEL", _split, 2, 2, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("CHANNEL", _split, 3, 1, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (_split.length == 7) {
+//				if (!checkParameter("CHANNEL", _split, 4, 1, _lineNb)) {
+//					return -1;
+//				}
+//			}
+//			
+//			
+//			if (!checkParameter("CHANNEL", _split, 4 + dec, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("CHANNEL", _split, 5 + dec, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (tmlm.getChannelByName(_split[1]) != null) {
+//				error = "Duplicate definition of channel " + _split[1];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split[2].toUpperCase().compareTo("NIB") == 0) {
+//				
+//			}
+//			
+//			ch = new TMLChannel(_split[1], null);
+//			ch.setTypeByName(_split[2]);
+//			try {
+//				tmp = Integer.decode(_split[3]).intValue();
+//				} catch (Exception e) {tmp = 4;}
+//				ch.setSize(tmp);
+//				
+//				if (_split.length == 7) {
+//					try {
+//						tmp = Integer.decode(_split[4]).intValue();
+//					} catch (Exception e) {tmp = 8;}
+//					//TraceManager.addDev("Setting max to" + tmp);
+//					ch.setMax(tmp);
+//				}
+//				
+//				t1 = tmlm.getTMLTaskByName(_split[4+dec]);
+//				if (t1 == null) {
+//					t1 = new TMLTask(_split[4+dec], null, null);
+//					//TraceManager.addDev("New task:" + _split[4+dec]);
+//					tmlm.addTask(t1);
+//				}
+//				t2 = tmlm.getTMLTaskByName(_split[5+dec]);
+//				if (t2 == null) {
+//					t2 = new TMLTask(_split[5+dec], null, null);
+//					//TraceManager.addDev("New task:" + _split[5+dec]);
+//					tmlm.addTask(t2);
+//				}
+//				ch.setTasks(t1, t2);
+//				tmlm.addChannel(ch);
+//		} // CHANNEL
+//		
+//		
+//		// LOSSYCHANNEL
+//		if(isInstruction("LOSSYCHANNEL", _split[0])) {
+//			if (!inDec) {
+//				error = "A lossychannel may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!((_split.length > 3) && (_split.length < 5))) {
+//				error = "A lossychannel must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			
+//			if (!checkParameter("LOSSYCHANNEL", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYCHANNEL", _split, 2, 1, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYCHANNEL", _split, 3, 9, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			
+//			ch = tmlm.getChannelByName(_split[1]);
+//			if (ch == null) {
+//				error = "lossy channel not previsouly declared as a regular channel " + _split[1];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			try {
+//				tmp0 = Integer.decode(_split[2]).intValue();
+//				} catch (Exception e) {tmp0 = 5;}
+//			try {
+//				tmp1 = Integer.decode(_split[3]).intValue();
+//				} catch (Exception e) {tmp1 = -1;}
+//				
+//				ch.setLossy(true, tmp0, tmp1);
+//		} // LOSSYCHANNEL
+//		
+//		// EVENT
+//		if(isInstruction("EVENT", _split[0])) {
+//			if (!inDec) {
+//				error = "An event may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!((_split.length > 4) && (_split.length < 7))) {
+//				error = "An event must be declared with only 4 or 5 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length == 6) {
+//				dec = 1;
+//			} else {
+//				dec = 0;
+//			}
+//			
+//			id = getEvtId(_split[1]);
+//			params = getParams(_split[1]);
+//			
+//			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
+//			
+//			if (!checkParameter("EVENT", _split, 1, 4, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("EVENT", _split, 2, 3, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (_split.length == 6) {
+//				if (!checkParameter("EVENT", _split, 3, 1, _lineNb)) {
+//					return -1;
+//				}
+//			}
+//			
+//			if (!checkParameter("EVENT", _split, 3 + dec, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("EVENT", _split, 4 + dec, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (tmlm.getEventByName(id) != null) {
+//				error = "Duplicate definition of event " + id;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split[2].toUpperCase().compareTo("NIB") == 0) {
+//				blocking = true;
+//			} else {
+//				blocking = false;
+//			}
+//			
+//			if (_split[2].toUpperCase().compareTo("INF") == 0) {
+//				tmp = -1;
+//			} else {
+//				try {
+//					tmp = Integer.decode(_split[3]).intValue();
+//				} catch (Exception e) {
+//					error = "Unvalid parameter #3: should be a numeric value";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			evt = new TMLEvent(id, null, tmp, blocking);
+//			evt.addParam(params);
+//			
+//			t1 = tmlm.getTMLTaskByName(_split[3+dec]);
+//			if (t1 == null) {
+//				t1 = new TMLTask(_split[3+dec], null, null);
+//				//TraceManager.addDev("New task:" + _split[3+dec]);
+//				tmlm.addTask(t1);
+//			}
+//			t2 = tmlm.getTMLTaskByName(_split[4+dec]);
+//			if (t2 == null) {
+//				t2 = new TMLTask(_split[4+dec], null, null);
+//				//TraceManager.addDev("New task:" + _split[4+dec]);
+//				tmlm.addTask(t2);
+//			}
+//			evt.setTasks(t1, t2);
+//			tmlm.addEvent(evt);
+//			
+//			
+//		} // EVENT
+//		
+//		// LOSSYEVENT
+//		if(isInstruction("LOSSYEVENT", _split[0])) {
+//			if (!inDec) {
+//				error = "A lossyevent may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!((_split.length > 3) && (_split.length < 5))) {
+//				error = "A lossyevent must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			
+//			if (!checkParameter("LOSSYEVENT", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYEVENT", _split, 2, 1, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYEVENT", _split, 3, 9, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			
+//			evt = tmlm.getEventByName(_split[1]);
+//			if (evt == null) {
+//				error = "lossyevent not previsouly declared as a regular event " + _split[1];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			try {
+//				tmp0 = Integer.decode(_split[2]).intValue();
+//				} catch (Exception e) {tmp0 = 5;}
+//			try {
+//				tmp1 = Integer.decode(_split[3]).intValue();
+//				} catch (Exception e) {tmp1 = -1;}
+//				
+//				evt.setLossy(true, tmp0, tmp1);
+//		} // LOSSYEVENT
+//		
+//		// REQUEST
+//		if((isInstruction("REQUEST", _split[0])) && (inDec)) {
+//			if (!inDec) {
+//				error = "A request may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length < 4) {
+//				error = "A request must be declared with at least 4 paremeters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			
+//			id = getEvtId(_split[1]);
+//			params = getParams(_split[1]);
+//			
+//			//TraceManager.addDev("Evt id=" + id +  "params=" + params);
+//			
+//			if (!checkParameter("REQUEST", _split, 1, 4, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			for(i=2; i<_split.length; i++) {
+//				if (!checkParameter("REQUEST", _split, i, 0, _lineNb)) {
+//					return -1;
+//				}
+//			}
+//			
+//			if (tmlm.getRequestByName(id) != null) {
+//				error = "Duplicate definition of request " + id;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			request = new TMLRequest(id, null);
+//			request.addParam(params);
+//			
+//			for(i=2; i<_split.length; i++) {
+//				t1 = tmlm.getTMLTaskByName(_split[i]);
+//				if (t1 == null) {
+//					t1 = new TMLTask(_split[i], null, null);
+//					//TraceManager.addDev("New task:" + _split[i]);
+//					tmlm.addTask(t1);
+//				}
+//				if ((i+1) == _split.length) {
+//					request.setDestinationTask(t1);
+//					t1.setRequested(true);
+//					t1.setRequest(request);
+//				} else {
+//					request.addOriginTask(t1);
+//				}
+//			}
+//			
+//			tmlm.addRequest(request);
+//		} // REQUEST
+//		
+//		// LOSSYREQUEST
+//		if(isInstruction("LOSSYREQUEST", _split[0])) {
+//			if (!inDec) {
+//				error = "A lossyrequest may not be declared in a non-declaration part of a TML specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!((_split.length > 3) && (_split.length < 5))) {
+//				error = "A lossyrequest must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			
+//			if (!checkParameter("LOSSYREQUEST", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYREQUEST", _split, 2, 1, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("LOSSYREQUEST", _split, 3, 9, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			
+//			request = tmlm.getRequestByName(_split[1]);
+//			if (request == null) {
+//				error = "lossyrequest not previsouly declared as a regular event " + _split[1];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			try {
+//				tmp0 = Integer.decode(_split[2]).intValue();
+//				} catch (Exception e) {tmp0 = 5;}
+//			try {
+//				tmp1 = Integer.decode(_split[3]).intValue();
+//				} catch (Exception e) {tmp1 = -1;}
+//				
+//				request.setLossy(true, tmp0, tmp1);
+//		} // LOSSYREQUEST
+//		
+//		// TASK
+//		if((isInstruction("TASK", _split[0]))) {
+//			
+//			//TraceManager.addDev("In task");
+//			if (inTask) {
+//				error = "A task may not be declared in the body of another task";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = true;
+//			inTaskBehavior = false;
+//			
+//			if (_split.length != 2) {
+//				error = "A request must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("TASK", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			//TraceManager.addDev("In task: 12");
+//			task = tmlm.getTMLTaskByName(_split[1]);
+//			if ((task != null)  && (task.getActivityDiagram() != null)) {
+//				if (task.getActivityDiagram().getFirst() != null) {
+//					error = "Duplicate definition for task "+ (_split[1]);
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			//TraceManager.addDev("In task: 13");
+//			if (task == null) {
+//				task = new TMLTask(_split[1], null, null);
+//				tmlm.addTask(task);
+//				//TraceManager.addDev("New task:" + _split[1]);
+//			}
+//			
+//			TMLStartState start = new TMLStartState("start", null);
+//			task.getActivityDiagram().setFirst(start);
+//			tmlae = start;
+//			
+//			
+//		} // TASK
+//		
+//		
+//		// ENDTASK
+//		if((isInstruction("ENDTASK", _split[0]))) {
+//			if (!inTask) {
+//				error = "A endtask may not be used outside the body of a task";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			inDec = true;
+//			inTask = false;
+//			inTaskDec = false;
+//			inTaskBehavior = false;
+//			
+//			stop = new TMLStopState("stop", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			
+//			task = null;
+//		} // ENDTASK
+//		
+//		
+//		// Attribute declaration
+//		if ((isInstruction("INT", _split[0])) || (isInstruction("NAT", _split[0])) || (isInstruction("BOOL", _split[0]))){
+//			if (!inTaskDec) {
+//				error = "An attribute declaration must be done in a task right after its declaration, and before its bahavior";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			String inst = _split[0].toUpperCase();
+//			
+//			if (!((_split.length == 2) || (_split.length == 4))) {
+//				error = "An attribute declaration must be done with either 1 or 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!checkParameter(inst, _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (_split.length > 2) {
+//				if (!checkParameter(inst, _split, 2, 5, _lineNb)) {
+//					return -1;
+//				}
+//				if (!checkParameter(inst, _split, 3, 6, _lineNb)) {
+//					return -1;
+//				}
+//			}
+//			
+//			//TraceManager.addDev("Adding attribute " + _split[0] + " " + _split[1]);
+//			
+//			TMLAttribute ta = new TMLAttribute(_split[1], new TMLType(TMLType.getType(_split[0])));
+//			if (_split.length > 2) {
+//				ta.initialValue = _split[3];
+//			} else {
+//				ta.initialValue = ta.getDefaultInitialValue();
+//			}
+//			task.addAttribute(ta);
+//		} // Attribute declaration
+//		
+//		// RANDOM
+//		if((isInstruction("RANDOM", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A RANDOM operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length != 5) {
+//				error = "A RANDOM operation must be declared with exactly 4 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("RANDOM", _split, 1, 1, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("RANDOM", _split, 2, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			random = new TMLRandom("random", null);
+//			try {
+//			 random.setFunctionId(Integer.decode(_split[1]).intValue());
+//			} catch (Exception e) {
+//			}
+//			
+//			random.setVariable(_split[2]);
+//			random.setMinValue(_split[3]);
+//			random.setMaxValue(_split[4]);
+//			
+//			TraceManager.addDev("RANDOM min=" + random.getMinValue() + " max=" + random.getMaxValue());
+//			
+//			task.getActivityDiagram().addElement(random);
+//			tmlae.addNext(random);
+//			tmlae = random;
+//			
+//		} // RANDOM
+//		
+//		// READ
+//		if((isInstruction("READ", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A READ operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length != 3) {
+//				error = "A READ operation must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("READ", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			/*if (!checkParameter("READ", _split, 2, 7, _lineNb)) {
+//				return -1;
+//			}*/
+//			
+//			ch = tmlm.getChannelByName(_split[1]);
+//			if (ch == null ){
+//				error = "Undeclared channel: " +  _split[1];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			if (ch.getDestinationTask() != task ){
+//				error = "READ operations must be done only in destination task. Should be in task: " + ch.getDestinationTask().getName();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			
+//			TMLReadChannel tmlrch = new TMLReadChannel(_split[1], null);
+//			tmlrch.addChannel(ch);
+//			tmlrch.setNbOfSamples(_split[2]);
+//			task.getActivityDiagram().addElement(tmlrch);
+//			tmlae.addNext(tmlrch);
+//			tmlae = tmlrch;
+//			
+//		} // READ
+//		
+//		// WRITE
+//		if((isInstruction("WRITE", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A WRITE operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length < 3) {
+//				error = "A WRITE operation must be declared with at most 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!checkParameter("WRITE", _split, 1, 0, _lineNb)) {
+//				return -1;
+//			}
+//			
+//			TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
+//			for(int k=0; k<_split.length-2; k++) {
+//				ch = tmlm.getChannelByName(_split[1+k]);
+//				if (ch == null ){
+//					error = "Undeclared channel: " +  _split[1+k];
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				if (ch.getOriginTask() != task ){
+//					error = "WRITE operations must be done only in origin task. Should be in task: " + ch.getOriginTask().getName();
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				
+//				tmlwch.addChannel(ch);
+//			}
+//			
+//			tmlwch.setNbOfSamples(_split[2]);
+//			task.getActivityDiagram().addElement(tmlwch);
+//			tmlae.addNext(tmlwch);
+//			tmlae = tmlwch;
+//			
+//		} // WRITE
+//		
+//		// NOTIFY
+//		if((isInstruction("NOTIFY", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A NOTIFY operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length < 2) {
+//				error = "A NOTIFY operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			evt = tmlm.getEventByName(_split[1]);
+//			if (evt == null) {
+//				error = "Unknown event: " + _split[1] ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			dec = evt.getNbOfParams();
+//			
+//			if (_split.length != 2 + dec) {
+//				error = "A NOTIFY operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLSendEvent sevt = new TMLSendEvent(evt.getName(), null);
+//			sevt.setEvent(evt);
+//			for(i=2; i<2 + dec; i++) {
+//				sevt.addParam(_split[i]);
+//			}
+//			
+//			task.getActivityDiagram().addElement(sevt);
+//			tmlae.addNext(sevt);
+//			tmlae = sevt;
+//		} // NOTIFY
+//		
+//		// WAIT
+//		if((isInstruction("WAIT", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A WAIT operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length < 2) {
+//				error = "A WAIT operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			evt = tmlm.getEventByName(_split[1]);
+//			if (evt == null) {
+//				error = "Unknown event: " + _split[1] ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			dec = evt.getNbOfParams();
+//			
+//			if (_split.length != 2 + dec) {
+//				error = "A WAIT operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			// Each param must be a declared attribute of the right type
+//			for(i=2; i<2 + dec; i++) {	
+//				attribute = task.getAttributeByName(_split[i]);
+//				if (attribute == null) {
+//					error = "Attribute: " + _split[i] + " is undeclared";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				if (attribute.type.getType() != evt.getType(i-2).getType()) {
+//					error = "Attribute: " + _split[i] + " is not of the right type";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			
+//			TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
+//			wevt.setEvent(evt);
+//			for(i=2; i<2 + dec; i++) {	
+//				wevt.addParam(_split[i]);
+//			}
+//			
+//			task.getActivityDiagram().addElement(wevt);
+//			tmlae.addNext(wevt);
+//			tmlae = wevt;
+//		} // WAIT
+//		
+//		// NOTIFIED
+//		if((isInstruction("NOTIFIED", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A NOTIFIED operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length != 3) {
+//				error = "A NOTIFIED operation must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			evt = tmlm.getEventByName(_split[1]);
+//			if (evt == null) {
+//				error = "Unknown event: " + _split[1] ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			attribute = task.getAttributeByName(_split[2]);
+//			if (attribute == null) {
+//				error = "Attribute: " + _split[2] + " is undeclared";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			if (attribute.type.getType() != TMLType.NATURAL) {
+//				error = "Attribute: " + _split[2] + " should be of natural type";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLNotifiedEvent nevt = new TMLNotifiedEvent(evt.getName(), null);
+//			nevt.setEvent(evt);
+//			nevt.setVariable(_split[2]);
+//			
+//			task.getActivityDiagram().addElement(nevt);
+//			tmlae.addNext(nevt);
+//			tmlae = nevt;
+//		} // NOTIFIED
+//		
+//		// Send REQUEST
+//		if((isInstruction("REQUEST", _split[0])) && (inTask)) {
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (_split.length < 2) {
+//				error = "A REQUEST operation must be declared with at least 1 parameter (request name), and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			request = tmlm.getRequestByName(_split[1]);
+//			if (request == null) {
+//				error = "Unknown request: " + _split[1] ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			dec = request.getNbOfParams();
+//			
+//			if (_split.length != 2 + dec) {
+//				error = "A REQUEST operation on request " + request.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLSendRequest sreq = new TMLSendRequest(request.getName(), null);
+//			sreq.setRequest(request);
+//			for(i=2; i<2 + dec; i++) {	
+//				sreq.addParam(_split[i]);
+//			}
+//			
+//			task.getActivityDiagram().addElement(sreq);
+//			tmlae.addNext(sreq);
+//			tmlae = sreq;
+//		} // Send REQUEST
+//		
+//		// FOR
+//		if((isInstruction("FOR", _split[0])) && (inTask)) {
+//			//TraceManager.addDev("FOR encountered");
+//			if (_split.length < 2) {
+//				error = "FOR operation: missing parameters";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the three elements of FOR
+//			String forp = _split[1];
+//			String forps[];
+//			tmp0 = forp.indexOf('(');
+//				tmp1 = forp.lastIndexOf(')');
+//				if ((tmp0 == -1) || (tmp1 == -1)) {
+//					error = "FOR operation: badly formed parameters";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				forp = forp.substring(tmp0+1, tmp1);
+//				forps = forp.split(";");
+//				if (forps.length != 3) {
+//					error = "FOR operation: badly formed parameters";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				
+//				// All is ok: constructing the FOR
+//				parseElt = new TMLParserSaveElt();
+//				parseElt.type = TMLParserSaveElt.FOR;
+//				parses.add(0, parseElt);
+//				TMLForLoop loop = new TMLForLoop("loop", null);
+//				loop.setInit(forps[0].trim());
+//				loop.setCondition(forps[1].trim());
+//				loop.setIncrement(forps[2].trim());
+//				task.getActivityDiagram().addElement(loop);
+//				parseElt.tmlae = loop;
+//				tmlae.addNext(loop);
+//				tmlae = loop;
+//				
+//		} // FOR
+//		
+//		// ENDFOR
+//		if(isInstruction("ENDFOR", _split[0])) {
+//			if (!inTask) {
+//				error = "ENDFOR: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//				error = "ENDFOR: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.FOR) {
+//				error = "ENDFOR: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			// All is ok: constructing the FOR
+//			parses.remove(0);
+//			stop = new TMLStopState("stop loop", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			tmlae = parseElt.tmlae;
+//		} // ENDFOR
+//		
+//		// SELECTEVT
+//		if((isInstruction("SELECTEVT", _split[0]))) {
+//			if (!inTask) {
+//				error = "SELECTEVT: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length > 1) {
+//				error = "A SELECTEVT cannot have any parameters";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.SELECTEVT;
+//			parses.add(0, parseElt);
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			parseElt.top = seq;
+//			tmlae.addNext(seq);
+//			TMLSelectEvt sel = new TMLSelectEvt("select evt", null);
+//			parseElt.tmlae = sel;
+//			seq.addNext(sel);
+//			task.getActivityDiagram().addElement(seq);
+//			task.getActivityDiagram().addElement(sel);
+//			tmlae = sel;
+//		} // SELECTEVT 
+//		
+//		// ENDSELECTEVT
+//		if((isInstruction("ENDSELECTEVT", _split[0]))) {
+//			if (!inTask) {
+//				error = "ENDSELECTEVT: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//				error = "ENDSELECTEVT: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
+//				error = "ENDSELECTEVT: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			parses.remove(0);
+//			tmlae = parseElt.top;
+//		} // ENDSELECTEVT
+//		
+//		// CASE
+//		if((isInstruction("CASE", _split[0]))) {
+//			if (!inTask) {
+//			error = "CASE: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (parses.size() == 0) {
+//			error = "CASE: corresponding SELECTEVT not found";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			} else {
+//				parseElt = parses.get(0);
+//				if (parseElt.type != TMLParserSaveElt.SELECTEVT) {
+//				error = "CASE: corresponding SELECTEVT not found";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if(_split.length < 2) {
+//				error = "A CASE must have at least two parameters";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			evt = tmlm.getEventByName(_split[1]);
+//			if (evt == null) {
+//				error = "Unknown event: " + _split[1] ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			dec = evt.getNbOfParams();
+//			
+//			if (_split.length != 2 + dec) {
+//				error = "A CASE operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
+//			wevt.setEvent(evt);
+//			for(i=2; i<2 + dec; i++) {
+//				wevt.addParam(_split[i]);
+//			}
+//			
+//			task.getActivityDiagram().addElement(wevt);
+//			tmlae.addNext(wevt);
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.CASE;
+//			parseElt.tmlae = wevt;
+//			parseElt.top = tmlae;
+//			parses.add(0, parseElt);
+//			
+//			tmlae = wevt;
+//		} // CASE
+//		
+//		
+//		// ENDCASE
+//		if((isInstruction("ENDCASE", _split[0]))) {
+//			if (!inTask) {
+//			error = "ENDCASE: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//			error = "ENDCASE: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.CASE) {
+//			error = "ENDCASE: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parses.remove(0);
+//			stop = new TMLStopState("stop case", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			tmlae = parseElt.top;
+//		} // ENDCASE
+//		
+//		// RANDOMSEQ
+//		if((isInstruction("RANDOMSEQ", _split[0]))) {
+//			if (!inTask) {
+//				error = "RANDOMSEQ: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length > 1) {
+//				error = "A RANDOMSEQ cannot have any parameters";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.RANDOMSEQ;
+//			parses.add(0, parseElt);
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			parseElt.top = seq;
+//			tmlae.addNext(seq);
+//			TMLRandomSequence rseq = new TMLRandomSequence("random sequence", null);
+//			parseElt.tmlae = rseq;
+//			seq.addNext(rseq);
+//			task.getActivityDiagram().addElement(seq);
+//			task.getActivityDiagram().addElement(rseq);
+//			tmlae = rseq;
+//		} // RANDOMSEQ 
+//		
+//		// ENDRANDOMSEQ
+//		if((isInstruction("ENDRANDOMSEQ", _split[0]))) {
+//			if (!inTask) {
+//				error = "ENDRANDOMSEQ: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//				error = "ENDRANDOMSEQ: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
+//				error = "ENDRANDOMSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			parses.remove(0);
+//			tmlae = parseElt.top;
+//		} // ENDRANDOMSEQ
+//		
+//		
+//		// SEQ
+//		if((isInstruction("SEQ", _split[0]))) {
+//			if (!inTask) {
+//			error = "SEQ: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (parses.size() == 0) {
+//				error = "SEQ: corresponding RANDOMSEQ not found";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			} else {
+//				parseElt = parses.get(0);
+//				if (parseElt.type != TMLParserSaveElt.RANDOMSEQ) {
+//				error = "SEQ: corresponding RANDOMSEQ not found";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if(_split.length >1 ) {
+//				error = "A SEQ has no parameter";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!(parseElt.tmlae instanceof TMLRandomSequence)) {
+//				error = "Malformed specification: unexpected SEQ";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLRandomSequence rseq = (TMLRandomSequence)parseElt.tmlae;
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			rseq.addNext(seq);
+//			
+//			task.getActivityDiagram().addElement(seq);
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.SEQ;
+//			parseElt.tmlae = seq;
+//			parseElt.top = rseq;
+//			parses.add(0, parseElt);
+//			
+//			tmlae = seq;
+//		} // SEQ
+//		
+//		// ENDSEQ
+//		if((isInstruction("ENDSEQ", _split[0]))) {
+//			if (!inTask) {
+//			error = "ENDSEQ: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//			error = "ENDSEQ: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.SEQ) {
+//			error = "ENDSEQ: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parses.remove(0);
+//			stop = new TMLStopState("stop case", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			tmlae = parseElt.top;
+//		} // ENDSEQ
+//		
+//		// RAND
+//		if((isInstruction("RAND", _split[0]))) {
+//			if (!inTask) {
+//				error = "RAND: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length > 1) {
+//				error = "A RAND cannot have any parameters";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.RAND;
+//			parses.add(0, parseElt);
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			parseElt.top = seq;
+//			tmlae.addNext(seq);
+//			TMLChoice choice = new TMLChoice("choice evt", null);
+//			parseElt.tmlae = choice;
+//			seq.addNext(choice);
+//			task.getActivityDiagram().addElement(seq);
+//			task.getActivityDiagram().addElement(choice);
+//			tmlae = choice;
+//		} // RAND
+//		
+//		// ENDRAND
+//		if((isInstruction("ENDRAND", _split[0]))) {
+//			if (!inTask) {
+//				error = "ENDRAND: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//				error = "ENDRAND: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.RAND) {
+//				error = "ENDRAND: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			parses.remove(0);
+//			tmlae = parseElt.top;
+//		} // ENDRAND
+//		
+//		// CASERAND
+//		if((isInstruction("CASERAND", _split[0]))) {
+//			if (!inTask) {
+//			error = "CASERAND: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (parses.size() == 0) {
+//			error = "CASERAND: corresponding RAND not found";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			} else {
+//				parseElt = parses.get(0);
+//				if (parseElt.type != TMLParserSaveElt.RAND) {
+//				error = "CASERAND: corresponding RAND not found";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if(_split.length != 2) {
+//				error = "A CASERAND should have one parameter";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (!(parseElt.tmlae instanceof TMLChoice)) {
+//				error = "Malformed specification";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			TMLChoice choice = (TMLChoice)parseElt.tmlae;
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			choice.addGuard("[" + _split[1] + "%]");
+//			choice.addNext(seq);
+//			
+//			task.getActivityDiagram().addElement(seq);
+//			
+//			parseElt = new TMLParserSaveElt();
+//			parseElt.type = TMLParserSaveElt.CASERAND;
+//			parseElt.tmlae = seq;
+//			parseElt.top = choice;
+//			parses.add(0, parseElt);
+//			
+//			tmlae = seq;
+//			
+//		} // CASERAND
+//		
+//		
+//		// ENDCASERAND
+//		if((isInstruction("ENDCASERAND", _split[0]))) {
+//			if (!inTask) {
+//			error = "ENDCASERAND: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//			error = "ENDCASERAND: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.CASERAND) {
+//			error = "ENDCASERAND: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parses.remove(0);
+//			stop = new TMLStopState("stop case", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			tmlae = parseElt.top;
+//		} // ENDCASERAND
+//		
+//		// IF
+//		if((isInstruction("IF", _split[0]))) {
+//			if (!inTask) {
+//				error = "IF: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length != 2) {
+//				error = "IF should be followed by one condition";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			String cond = _split[1].trim();
+//			tmp0 = cond.indexOf('(');
+//				tmp1 = cond.lastIndexOf(')');
+//				if ((tmp0 == -1) || (tmp1 == -1)) {
+//					error = "IF operation: badly formed condition";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				cond = cond.substring(tmp0+1, tmp1);
+//				
+//				parseElt = new TMLParserSaveElt();
+//				parseElt.type = TMLParserSaveElt.IF;
+//				parses.add(0, parseElt);
+//				TMLSequence seq = new TMLSequence("sequence", null);
+//				parseElt.top = seq;
+//				tmlae.addNext(seq);
+//				TMLChoice choice = new TMLChoice("if", null);
+//				parseElt.tmlae = choice;
+//				seq.addNext(choice);
+//				task.getActivityDiagram().addElement(seq);
+//				task.getActivityDiagram().addElement(choice);
+//				
+//				seq = new TMLSequence("sequence", null);
+//				task.getActivityDiagram().addElement(seq);
+//				choice.addNext(seq);
+//				choice.addGuard("[" + cond + "]");
+//				
+//				tmlae = seq;
+//		} // IF
+//		
+//		// ORIF
+//		if((isInstruction("ORIF", _split[0]))) {
+//			if (!inTask) {
+//				error = "ORIF: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length != 2) {
+//				error = "ORIF should be followed by one condition";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			
+//			String cond = _split[1].trim();
+//			//TraceManager.addDev("cond1=" + cond);
+//			tmp0 = cond.indexOf('(');
+//				tmp1 = cond.lastIndexOf(')');
+//				if ((tmp0 == -1) || (tmp1 == -1)) {
+//					error = "ORIF operation: badly formed condition";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				cond = cond.substring(tmp0+1, tmp1);
+//				//TraceManager.addDev("cond2=" + cond);
+//				
+//				if (parses.size() == 0) {
+//					error = "ORIF: badly placed instruction.";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				parseElt = parses.get(0);
+//				if (parseElt.type != TMLParserSaveElt.IF) {
+//					error = "ORIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				
+//				if (parseElt.nbElse > 0) {
+//					error = "ORIF: should not followed a else instruction";
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//				
+//				stop = new TMLStopState("stop", null);
+//				task.getActivityDiagram().addElement(stop);
+//				tmlae.addNext(stop);
+//				
+//				TMLSequence seq = new TMLSequence("sequence", null);
+//				TMLChoice choice = (TMLChoice)parseElt.tmlae;
+//				task.getActivityDiagram().addElement(seq);
+//				
+//				choice.addNext(seq);
+//				choice.addGuard("[" + cond + "]");
+//				
+//				tmlae = seq;
+//		} // ORIF
+//		
+//		// ELSE
+//		if((isInstruction("ELSE", _split[0]))) {
+//			if (!inTask) {
+//				error = "ELSE: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if(_split.length != 1) {
+//				error = "ELSE should have no parameter";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if (parses.size() == 0) {
+//				error = "ELSE: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.IF) {
+//				error = "ELSE: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			stop = new TMLStopState("stop", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			
+//			parseElt.nbElse ++;
+//			
+//			TMLSequence seq = new TMLSequence("sequence", null);
+//			TMLChoice choice = (TMLChoice)parseElt.tmlae;
+//			task.getActivityDiagram().addElement(seq);
+//			
+//			choice.addNext(seq);
+//			choice.addGuard("[else]");
+//			
+//			tmlae = seq;
+//		} // ELSE
+//		
+//		// ENDIF
+//		if((isInstruction("ENDIF", _split[0]))) {
+//			if (!inTask) {
+//				error = "ENDIF: must be used in a Task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			// Extract the first element of the stack
+//			if (parses.size() == 0) {
+//				error = "ENDIF: badly placed instruction.";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			parseElt = parses.get(0);
+//			if (parseElt.type != TMLParserSaveElt.IF) {
+//				error = "ENDIF: badly placed instruction. Was expecting: " + parseElt.getExpectedInstruction();
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			stop = new TMLStopState("stop", null);
+//			task.getActivityDiagram().addElement(stop);
+//			tmlae.addNext(stop);
+//			
+//			parses.remove(0);
+//			tmlae = parseElt.top;
+//		} // ENDIF
+//		
+//		// EXECI
+//		if((isInstruction("EXECI", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "An EXECI operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if ((_split.length < 2) ||(_split.length > 4)) {
+//				error = "An EXECI operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length == 2) {
+//				TMLExecI execi = new TMLExecI("execi", null);
+//				execi.setAction(_split[1]);
+//				tmlae.addNext(execi);
+//				task.getActivityDiagram().addElement(execi);
+//				tmlae = execi;
+//			} else {
+//				TMLExecIInterval execi = new TMLExecIInterval("execi", null);
+//				execi.setMinDelay(_split[1]);
+//				execi.setMaxDelay(_split[2]);
+//				tmlae.addNext(execi);
+//				task.getActivityDiagram().addElement(execi);
+//				tmlae = execi;
+//			}
+//		} // EXECI
+//		
+//		// EXECC
+//		if((isInstruction("EXECC", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "An EXECC operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if ((_split.length < 2) ||(_split.length > 4)) {
+//				error = "An EXECC operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length == 2) {
+//				TMLExecC execc = new TMLExecC("execc", null);
+//				execc.setAction(_split[1]);
+//				tmlae.addNext(execc);
+//				task.getActivityDiagram().addElement(execc);
+//				tmlae = execc;
+//			} else {
+//				TMLExecCInterval execci = new TMLExecCInterval("execci", null);
+//				execci.setMinDelay(_split[1]);
+//				execci.setMaxDelay(_split[2]);
+//				tmlae.addNext(execci);
+//				task.getActivityDiagram().addElement(execci);
+//				tmlae = execci;
+//			}
+//		} // EXECC
+//		
+//		// DELAY
+//		if((isInstruction("DELAY", _split[0]))) {
+//			
+//			if (!inTask) {
+//				error = "A DELAY operation may only be performed in a task body";
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			if ((_split.length < 3) ||(_split.length > 5)) {
+//				error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1) ;
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			if (_split.length == 3) {
+//				if (!checkParameter("DELAY", _split, 2, 0, _lineNb)) {
+//					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			if (_split.length == 4) {
+//				if (!checkParameter("DELAY", _split, 3, 0, _lineNb)) {
+//					error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+//					addError(0, _lineNb, 0, error);
+//					return -1;
+//				}
+//			}
+//			
+//			TMLDelay delay = new TMLDelay("delay", null);
+//			delay.setMinDelay(_split[1]);
+//			if (_split.length == 3) {
+//				delay.setMaxDelay(_split[1]);
+//				delay.setUnit(_split[2]);
+//			} else {
+//				delay.setMaxDelay(_split[2]);
+//				delay.setUnit(_split[3]);
+//			}
+//			
+//			
+//			tmlae.addNext(delay);
+//			task.getActivityDiagram().addElement(delay);
+//			tmlae = delay;
+//			
+//		} // EXECC
+//		
+//		// Other command
+//		if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
+//			if (!inTask) {
+//				error = "Syntax error in TML modeling: unrecognized instruction:" + _split[0];
+//				addError(0, _lineNb, 0, error);
+//				return -1;
+//			}
+//			
+//			inDec = false;
+//			inTask = true;
+//			inTaskDec = false;
+//			inTaskBehavior = true;
+//			
+//			TMLActionState action = new TMLActionState(_split[0], null);
+//			action.setAction(_line);
+//			tmlae.addNext(action);
+//			task.getActivityDiagram().addElement(action);
+//			tmlae = action;
+//			
+//		} // Other command
+//		
+//		return 0;
+//	}
+//	
+//	// Type 0: id
+//	// Type 1: numeral
+//	// Type 2: channel type 
+//	// Type 3: event type
+//	// Type 4: event name
+//	// Type 5: '='
+//	// Type 6: attribute value
+//	// Type 7: id or numeral
+//	// Type 8:unit
+//	
+///*	public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
+//		boolean err = false;
+//		String error;
+//		
+//		if(_parameter < _split.length) {
+//			switch(_type) {
+//			case 0:
+//				if (!isAValidId(_split[_parameter])) {
+//					err = true;
+//				}
+//				break;
+//			case 1:
+//				if (!isANumeral(_split[_parameter])) {
+//					err = true;
+//				}
+//				break;
+//			case 2:
+//				if (!isIncluded(_split[_parameter], channeltypes)) {
+//					err = true;
+//				}
+//				break;	
+//			case 3:
+//				if (!isIncluded(_split[_parameter], eventtypes)) {
+//					err = true;
+//				}
+//				break;	
+//			case 4:
+//				if (!isAValidId(getEvtId(_split[_parameter]))) {
+//					err = true;
+//					//TraceManager.addDev("Unvalid id");
+//				} else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
+//					//TraceManager.addDev("Unvalid param");
+//					err = true;
+//				}
+//				break;
+//			case 5:
+//				if (!(_split[_parameter].equals("="))) {
+//					TraceManager.addDev("Error of =");
+//					err = true;
+//				}
+//				break;
+//			case 6:
+//				if (_inst.equals("BOOL")) {
+//					String tmp = _split[_parameter].toUpperCase();
+//					if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+//						err = true;
+//					}
+//				} else {
+//					if (!isANumeral(_split[_parameter])) {
+//						err = true;
+//					}
+//				}
+//				break;	 
+//			case 7:
+//				if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
+//					err = true;
+//				}
+//				break;	
+//			case 8:
+//				if (!isAValidUnit(_split[_parameter])) {
+//					err = true;
+//				}
+//				break;	
+//			case 9:
+//				if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
+//					err = true;
+//				}
+//				break;
+//			}
+//		} else {
+//			err = true;
+//		}
+//		if (err) {
+//			error = "Unvalid parameter #" + _parameter + "-> $" + _split[_parameter] + "$ <- in " + _inst + " instruction";
+//			addError(0, _lineNb, 0, error);
+//			return false;
+//		}
+//		return true;
+//	}
+//*/
+//	
+//	public boolean isInstruction(String instcode, String inst) {
+//		return (inst.toUpperCase().compareTo(instcode) == 0);
+//	}
+//	
+//	public boolean isInstruction(String instcode) {
+//		return (!checkKeywords(instcode));
+//	}
+//	
+//	public static boolean isAValidId(String _id) {
+//		if ((_id == null) || (_id.length() == 0)) {
+//			return false;
+//		}
+//		
+//		boolean b1 = (_id.substring(0,1)).matches("[a-zA-Z]");
+//        boolean b2 = _id.matches("\\w*");
+//		boolean b3 = checkKeywords(_id);
+//		
+//		return (b1 && b2 && b3);
+//	}
+//	
+//	public boolean isANumeral(String _num) {
+//		return _num.matches("\\d*");
+//	}
+//	
+//	public boolean isANegativeOrPositiveNumeral(String _num) {
+//		if (_num.startsWith("-")) {
+//			return isANumeral(_num.substring(1, _num.length()));
+//		}
+//		return isANumeral(_num);
+//	}
+//	
+//	public boolean isAValidUnit(String s) {
+//		if (s.compareTo("ns") == 0) {
+//			return true;
+//		} else if (s.compareTo("us") == 0) {
+//			return true;
+//		} else if (s.compareTo("ms") == 0) {
+//			return true;
+//		} else if (s.compareTo("s") == 0) {
+//			return true;
+//		}
+//		
+//		return false;
+//	}
+//	
+//	public static boolean checkKeywords(String _id) {
+//		String id = _id.toUpperCase();
+//		for(int i=0; i<keywords.length; i++) {
+//			if (id.compareTo(keywords[i]) == 0) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+//	
+//	public boolean isIncluded(String _id, String[] _list) {
+//		String id = _id.toUpperCase();
+//		for(int i=0; i<_list.length; i++) {
+//			if (id.compareTo(_list[i]) == 0) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
+//	
+//	public String removeUndesiredWhiteSpaces(String _input, int _lineNb) {
+//		String error, tmp;
+//		int index0, index1, index2;
+//		
+//		if (_input.startsWith("EVENT ")) {
+//			index0 = _input.indexOf('(');
+//				index1 = _input.indexOf(')');
+//				if ((index0 == -1) || (index1 == -1)) {
+//					error = "Syntax Error: should be of the form EVENT evtname(<list of max three types>) + other parameters";
+//					addError(0, _lineNb, 0, error);
+//					return null;
+//				}
+//				return Conversion.replaceBetweenIndex(_input, index0, index1, " ", "");
+//		}
+//		
+//		if (_input.startsWith("REQUEST ") && (inDec)) {
+//			index0 = _input.indexOf('(');
+//				index1 = _input.indexOf(')');
+//				if ((index0 == -1) || (index1 == -1)) {
+//					error = "Syntax Error: should be of the form REQUEST requestname(<list of max three types>) + other parameters";
+//					addError(0, _lineNb, 0, error);
+//					return null;
+//				}
+//				return Conversion.replaceBetweenIndex(_input, index0, index1, " ", "");
+//		}
+//		
+//		if (_input.startsWith("FOR(")) {
+//				_input = "FOR (" + _input.substring(4, _input.length());
+//		}
+//		
+//		if (_input.startsWith("FOR (")) {
+//				tmp = _input.substring(5, _input.length());
+//				tmp = Conversion.replaceAllString(tmp, " ", "");
+//				return "FOR (" + tmp;
+//		}
+//		
+//		if (_input.startsWith("IF(")) {
+//				_input = "IF (" + _input.substring(3, _input.length());
+//		}
+//		
+//		if (_input.startsWith("IF (")) {
+//				tmp = _input.substring(4, _input.length());
+//				tmp = Conversion.replaceAllString(tmp, " ", "");
+//				return "IF (" + tmp;
+//		}
+//		
+//		if (_input.startsWith("ORIF(")) {
+//				_input = "ORIF (" + _input.substring(5, _input.length());
+//		}
+//		
+//		if (_input.startsWith("ORIF (")) {
+//				tmp = _input.substring(6, _input.length());
+//				tmp = Conversion.replaceAllString(tmp, " ", "");
+//				return "ORIF (" + tmp;
+//		}	
+//		
+//		return _input;
+//	}
+//	
+//	private String getEvtId(String _input) {
+//		int index = _input.indexOf('(');
+//			if (index == -1) {
+//				return _input;
+//			}
+//			return _input.substring(0, index);
+//	}
+//	
+//	private String getParams(String _input) {
+//		//TraceManager.addDev("input=" + _input);
+//		int index0 = _input.indexOf('(');
+//			int index1 = _input.indexOf(')');
+//			if ((index0 == -1) || (index1 == -1)) {
+//				return _input;
+//			}
+//			return _input.substring(index0 + 1, index1);
+//	}
+//	
+//	private static String prepareString(String s) {
+//		return s.replaceAll("\\s", "");
+//	}
+//	
+//	public static String modifyString(String s) {
+//		return prepareString(s);
+//	}
 }
