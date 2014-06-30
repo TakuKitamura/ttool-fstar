@@ -6809,7 +6809,7 @@ On prend b=1 comme exemple
 
 <Modeling type="TML Architecture" nameTab="Mapping2" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1400" minY="10" maxY="900" attributes="0" masterClockFrequency="200" >
-<COMPONENT type="1105" id="1675" >
+<COMPONENT type="1106" id="1675" >
 <cdparam x="290" y="308" />
 <sizeparam width="189" height="131" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
