@@ -233,13 +233,13 @@ public class TGComponentManager {
 	public static final int TMLARCHI_ARTIFACT = 1101;
 	public static final int TMLARCHI_BUSNODE = 1102;
 	public static final int TMLARCHI_COMMUNICATION_ARTIFACT = 1103;
-	public static final int TMLARCHI_EVENT_ARTIFACT = 1104;
-	public static final int TMLARCHI_HWANODE = 1105;
-	public static final int TMLARCHI_MEMORYNODE = 1106;
-	public static final int TMLARCHI_BRIDGENODE = 1107;
-	public static final int TMLARCHI_DMANODE = 1108;
-	public static final int TMLARCHI_CPNODE = 1109;
-	
+	public static final int TMLARCHI_HWANODE = 1104;
+	public static final int TMLARCHI_MEMORYNODE = 1105;
+	public static final int TMLARCHI_BRIDGENODE = 1106;
+	public static final int TMLARCHI_DMANODE = 1107;
+	public static final int TMLARCHI_CPNODE = 1108;
+	public static final int TMLARCHI_EVENT_ARTIFACT = 1109;
+
 	public static final int TMLCTD_CCOMPONENT = 1200;
 	public static final int TMLCTD_CPORT = 1201;
 	public static final int TMLCTD_PCOMPONENT = 1202;
