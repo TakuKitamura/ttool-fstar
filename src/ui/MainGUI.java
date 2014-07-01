@@ -1454,7 +1454,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
     
-    public int createAAD(String name) {
+    public int createADD(String name) {
         int index = addADDPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
         return index;
@@ -5752,6 +5752,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         setPanelMode();
         return true;
     }
+    
+    public boolean createADDDiagram(int index, String s) {
+        return createADDDiagram((TURTLEPanel)(tabs.elementAt(index)), s);
+    }
+
+    public boolean createADDDiagram(TURTLEPanel tp, String s) {
+        if (!(tp instanceof ADDPanel)) {
+            return false;
+        }
+
+        ((ADDPanel)tp).addDeploymentPanelDiagram(s);
+        setPanelMode();
+        return true;
+    }
+
 
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(((TURTLEPanel)(tabs.elementAt(index))), s);
@@ -5868,11 +5883,23 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
         return getAvatarPDPanel(tp, indexTab, s);
     }
+    
+    public ADDDiagramPanel getAvatarADDPanel(int index, int indexTab, String s) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(index));
+        return getAvatarADDPanel(tp, indexTab, s);
+    }
 
 
     public AvatarPDPanel getAvatarPDPanel(TURTLEPanel tp, int indexTab, String s) {
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (AvatarPDPanel)(tp.panelAt(indexTab));
+        }
+        return null;
+    }
+    
+    public ADDDiagramPanel getAvatarADDPanel(TURTLEPanel tp, int indexTab, String s) {
+        if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+            return (ADDDiagramPanel)(tp.panelAt(indexTab));
         }
         return null;
     }

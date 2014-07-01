@@ -69,8 +69,11 @@ public class ADDPanel extends TURTLEPanel {
     }
     
     public void init() {
-         
-        //  Class Diagram toolbar
+         addDeploymentPanelDiagram("Avatar deployment diagram");
+ 
+    }
+    
+    public boolean addDeploymentPanelDiagram(String s) {
         ADDDiagramToolBar toolBar = new ADDDiagramToolBar(mgui);
         toolbars.add(toolBar);
         
@@ -91,10 +94,10 @@ public class ADDPanel extends TURTLEPanel {
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("Avatar Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens Avatar deployment diagram");
         tabbedPane.setSelectedIndex(0);
-        
-        //jsp.setVisible(true);
- 
-    }
+       
+       
+        return true;
+    } 
     
     public String saveHeaderInXml() {
         return "<Modeling type=\"ADD\" nameTab=\"" + mgui.getTabName(this) + "\" >\n"; 

@@ -77,6 +77,7 @@ import ui.tree.*;
 import ui.window.*;
 
 // AVATAR
+import ui.avatardd.*;
 import ui.avatarbd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
@@ -3360,6 +3361,60 @@ public class GTURTLEModeling {
 						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
+				
+				
+			} else if (tdp instanceof ADDDiagramPanel) {
+				nl = doc.getElementsByTagName("ADDDiagramPanelCopy");
+				docCopy = doc;
+
+				if (nl == null) {
+					return;
+				}
+
+				//TraceManager.addDev("Toto 1");
+
+
+				ADDDiagramPanel addp = (ADDDiagramPanel)tdp;
+
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (addp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						addp.loadExtraParameters(elt);
+
+						//TraceManager.addDev("Toto 2");
+
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), addp);
+						//TraceManager.addDev("Toto 3");
+						makePostProcessing(addp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), addp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), addp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
+						connectConnectorsToRealPoints(addp);
+						addp.structureChanged();
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						makePostLoading(addp, beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
+					}
+				}
+				
 			} else if (tdp instanceof AvatarSMDPanel) {
 				nl = doc.getElementsByTagName("AVATARStateMachineDiagramPanelCopy");
 
@@ -3711,7 +3766,9 @@ public class GTURTLEModeling {
 		Element elt = (Element) node;
 		String type = elt.getAttribute("type");
 		// AVATAR
-		if (type.compareTo("AVATAR Design") == 0) {
+		if (type.compareTo("ADD") == 0) {
+			loadAvatarDeployment(node);
+		} else if (type.compareTo("AVATAR Design") == 0) {
 			loadAvatarDesign(node);
 		} else if (type.compareTo("Avatar Requirement") == 0) {
 			loadAvatarRequirement(node);
@@ -3780,6 +3837,33 @@ public class GTURTLEModeling {
 						loadAvatarSMD(elt, indexDesign);
 					}
 				}
+			}
+		}
+	}
+	
+	public void loadAvatarDeployment(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexReq;
+		int cpt_req = 0;
+
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexReq = mgui.createADD(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//TraceManager.addDev("Deployment nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("ADDDiagramPanel") == 0) {
+					loadADDDiagram(elt, indexReq, cpt_req);
+					cpt_req ++;
+				} 
 			}
 		}
 	}
@@ -4461,6 +4545,22 @@ public class GTURTLEModeling {
 
 
 		TDiagramPanel tdp = mgui.getAvatarMADPanel(indexAnalysis, indexTab, name);
+
+		if (tdp == null) {
+			throw new MalformedModelingException();
+		}
+		tdp.removeAll();
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadADDDiagram(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {
+		String name;
+
+		name = elt.getAttribute("name");
+		mgui.createAvatarPD(indexAnalysis, name);
+
+		TDiagramPanel tdp = mgui.getAvatarADDPanel(indexAnalysis, indexTab, name);
 
 		if (tdp == null) {
 			throw new MalformedModelingException();
