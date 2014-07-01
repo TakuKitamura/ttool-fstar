@@ -202,6 +202,8 @@ public class TMLCPChoice extends TGCWithInternalComponent {
 	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLCP;
     }
+    
+ 
 	
 	public TGConnectingPoint[] getConnectingPoints()	{
 		return connectingPoint;

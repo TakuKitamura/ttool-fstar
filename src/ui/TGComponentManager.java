@@ -82,6 +82,7 @@ import ui.ncdd.*;
 
 import ui.avatarmad.*;
 import ui.avatarbd.*;
+import ui.avatardd.*;
 import ui.avatarsmd.*;
 import ui.avatarrd.*;
 import ui.avatarpd.*;
@@ -383,6 +384,17 @@ public class TGComponentManager {
 	public static final int APD_PROPERTY_CONNECTOR = 5312;
 	public static final int APD_COMPOSITION_CONNECTOR = 5313;
 	
+	// Avatar Deployment Diagrams at 5350
+	public static final int ADD_CONNECTOR = 5350;
+	public static final int ADD_CPUNODE = 5351;
+	public static final int ADD_ARTIFACT = 5352;
+	public static final int ADD_BUSNODE = 5353;
+	public static final int ADD_TTYNODE = 5354;
+	public static final int ADD_RAMNODE = 5355;        
+	public static final int ADD_ROMNODE = 5356;
+	public static final int ADD_BRIDGENODE = 5357;
+	public static final int ADD_DMANODE = 5358;
+	
 	// AVATAR CD -> starts at 5400
 	public static final int ACD_BLOCK = 5400;
     public static final int ACD_ACTOR_STICKMAN = 5401;
@@ -550,6 +562,32 @@ public class TGComponentManager {
                 break;
             case AAD_PARTITION:
                 tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+                
+            //AVATAR DD
+            case ADD_CPUNODE:
+                tgc = new ADDCPUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+			case ADD_BUSNODE:
+                tgc = new ADDBusNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+            case ADD_TTYNODE:
+                tgc = new ADDTTYNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+			case ADD_BRIDGENODE:
+                tgc = new ADDBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+			case ADD_RAMNODE:
+                tgc = new ADDRAMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+			case ADD_ROMNODE:
+                tgc = new ADDROMNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+             case ADD_DMANODE:
+                tgc = new ADDDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+			case ADD_ARTIFACT:
+                tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -1059,6 +1097,8 @@ public class TGComponentManager {
 		} else if (tgc instanceof AvatarBDPortConnector) {
 			return AVATARBD_PORT_CONNECTOR;
 			
+		
+			
 		// AVATAR SMD
 		} else if (tgc instanceof AvatarSMDStartState) {
 			return AVATARSMD_START_STATE;
@@ -1084,6 +1124,27 @@ public class TGComponentManager {
 			return AVATARSMD_RESET_TIMER;
 		} else if (tgc instanceof AvatarSMDExpireTimer) {
 			return AVATARSMD_EXPIRE_TIMER;
+			
+			
+		//AVATAR DD
+		} else if (tgc instanceof ADDConnector) {
+            return ADD_CONNECTOR;
+        } else if (tgc instanceof ADDCPUNode) {
+            return ADD_CPUNODE;
+        } else if (tgc instanceof ADDBlockArtifact) {
+            return ADD_ARTIFACT;
+        } else if (tgc instanceof ADDBusNode) {
+            return ADD_BUSNODE;
+        } else if (tgc instanceof ADDTTYNode) {
+            return ADD_TTYNODE;
+        } else if (tgc instanceof ADDRAMNode) {
+            return ADD_RAMNODE;
+        } else if (tgc instanceof ADDROMNode) {
+            return ADD_ROMNODE;
+        } else if (tgc instanceof ADDBridgeNode) {
+            return ADD_BRIDGENODE;
+        } else if (tgc instanceof ADDDMANode) {
+            return ADD_DMANODE;
 			
 			
 		// AVATAR MAD

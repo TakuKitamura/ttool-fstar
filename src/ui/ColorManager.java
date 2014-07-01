@@ -270,7 +270,8 @@ public class ColorManager {
 		AVATAR_CODE = Color.black;
 		AVATAR_SEND_SIGNAL = Color.white;
 		AVATAR_RECEIVE_SIGNAL = Color.white;
-		
+		AVATAR_ASSUMPTION_ATTRIBUTES = Color.white;
+		AVATAR_ASSUMPTION_TOP = Color.white;		
 		
 	}
     

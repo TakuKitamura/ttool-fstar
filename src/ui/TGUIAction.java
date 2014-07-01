@@ -363,6 +363,20 @@ public class TGUIAction extends AbstractAction {
 	public static final int AMAD_IMPACT_CONNECTOR = 375;
 	public static final int AMAD_MEET_CONNECTOR = 377;
 	public static final int AMAD_VERSIONING_CONNECTOR = 376;
+	
+	//AVATAR Deployment diagram
+	public static final int ADD_EDIT = 398;
+    public static final int ADD_LINK = 399;
+    public static final int ADD_CPUNODE = 400;
+	public static final int ADD_BUSNODE = 401;
+    public static final int ADD_BLOCKARTIFACT = 402;
+	public static final int ADD_TTYNODE = 403;
+	public static final int ADD_RAMNODE = 404;
+	public static final int ADD_ROMNODE = 405;
+	public static final int ADD_DMANODE = 406;
+	public static final int ADD_BRIDGENODE = 407;
+
+	
     
 	// AVATAR Parametric Diagrams
 	public static final int APD_EDIT = 307;
@@ -528,7 +542,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 398;
+    public static final int NB_ACTION = 408;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -730,6 +744,19 @@ public class TGUIAction extends AbstractAction {
 		actions[AD_ARRAY_GET] = new TAction("add-array-get", "Add array get element", IconManager.imgic230, IconManager.imgic230, "Array get element", "Add an array get element action to the currently opened activity diagram", 0);
         actions[AD_ARRAY_SET] = new TAction("add-array-set", "Add array set element", IconManager.imgic232, IconManager.imgic232, "Array set element", "Add an array set element action to the currently opened activity diagram", 0);
 		
+        actions[ADD_EDIT] = new TAction("edit-add-diagram", "Edit AVATAR deployment diagram", IconManager.imgic100, IconManager.imgic101, "Edit AVATAR deployment diagram", "Make it possible to edit the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_LINK] = new TAction("add-add-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_CPUNODE] = new TAction("add-add-cpunode", "Add a CPU", IconManager.imgic1100, IconManager.imgic1100, "CPU", "Add a cpu node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_BUSNODE] = new TAction("add-add-busnode", "Add a Bus", IconManager.imgic1102, IconManager.imgic1102, "Bus", "Add a bus node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_TTYNODE] = new TAction("add-add-tty", "Add a tty node", IconManager.imgic1102, IconManager.imgic1102, "TTY", "Add a tty node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_BLOCKARTIFACT] = new TAction("add-add-blockartifact", "Map an AVATAR block", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR block", "Map an AVATAR block onto a node in the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_RAMNODE] = new TAction("add-add-ramnode", "Add a RAM", IconManager.imgic1106, IconManager.imgic1106, "RAM", "Add a hardware accelerator node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_ROMNODE] = new TAction("add-add-romnode", "Add a ROM", IconManager.imgic1108, IconManager.imgic1108, "ROM", "Add a memory node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_DMANODE] = new TAction("add-add-dmanode", "Add a DMA", IconManager.imgic1110, IconManager.imgic1110, "DMA", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
+        
+        
+        
         actions[TCD_PARALLEL_OPERATOR] = new TAction("add-parallel-operator", "Add Parallel composition operator", IconManager.imgic112, IconManager.imgic112, "Parallel composition operator", "Add a Parallel composition operator to the currently opened class diagram", 0);
         actions[TCD_CONNECTOR_ATTRIBUTE] = new TAction("add-attribute-connector", "Connects an association to a composition operator", IconManager.imgic108, IconManager.imgic108, "Attributes an association with a composition operator", "Adds a connector between an association and a composition operator to the currently opened class diagram", 0);
         actions[TCD_SEQUENCE_OPERATOR] = new TAction("add-sequence-operator", "Add Sequence composition operator", IconManager.imgic114, IconManager.imgic114, "Sequence composition operator", "Add a Sequence composition operator to the currently opened class diagram", 0);
