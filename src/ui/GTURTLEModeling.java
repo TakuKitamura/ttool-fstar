@@ -3848,6 +3848,7 @@ public class GTURTLEModeling {
 		int indexReq;
 		int cpt_req = 0;
 
+		TraceManager.addDev("Loading ADD 0");
 
 		nameTab = elt.getAttribute("nameTab");
 
@@ -3861,6 +3862,7 @@ public class GTURTLEModeling {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				elt = (Element)node;
 				if (elt.getTagName().compareTo("ADDDiagramPanel") == 0) {
+						TraceManager.addDev("Loading ADD 1");
 					loadADDDiagram(elt, indexReq, cpt_req);
 					cpt_req ++;
 				} 
@@ -4558,16 +4560,24 @@ public class GTURTLEModeling {
 		String name;
 
 		name = elt.getAttribute("name");
+		
+		TraceManager.addDev("ADD 2");
 		mgui.createAvatarPD(indexAnalysis, name);
 
+		TraceManager.addDev("ADD 3");
 		TDiagramPanel tdp = mgui.getAvatarADDPanel(indexAnalysis, indexTab, name);
+		
+		TraceManager.addDev("ADD 3.1");
 
 		if (tdp == null) {
+				TraceManager.addDev("ADD 3.2");
 			throw new MalformedModelingException();
 		}
 		tdp.removeAll();
+		TraceManager.addDev("ADD 4");
 
 		loadDiagram(elt, tdp);
+		TraceManager.addDev("ADD 5");
 	}
 	
 	public void loadAvatarPD(Element elt, int indexAnalysis, int indexTab) throws  MalformedModelingException, SAXException {

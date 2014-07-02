@@ -1714,6 +1714,11 @@ public class TGComponentManager {
 			case AAD_ASSOCIATION_CONNECTOR:
                 tgc = new AvatarADAssociationConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;	
+                
+             // AVATAR DD
+              case ADD_CONNECTOR:
+                tgc = new ADDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;	
 				
 			// AVATAR PD
 			case APD_ATTRIBUTE_CONNECTOR:

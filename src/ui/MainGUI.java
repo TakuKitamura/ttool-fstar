@@ -1283,6 +1283,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return list;
     }
+    
+    public Vector<String> getAllNonMappedAvatarBlockNames(ADDDiagramPanel tadp, String ref, String name) {
+        TURTLEPanel tp;
+        Vector<String> list = new Vector<String>();
+        boolean b;
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof AvatarDesignPanel) {
+                b = (mainTabbedPane.getTitleAt(i).compareTo(ref) == 0);
+                list.addAll(((AvatarDesignPanel)tp).getAllNonMappedAvatarBlockNames(mainTabbedPane.getTitleAt(i), tadp, b, name));
+            }
+        }
+
+        return list;
+    }
 
     public Vector<String> getAllCompositeComponent(TMLComponentTaskDiagramPanel tcdp) {
         TURTLEPanel tp;
@@ -5898,6 +5914,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
     
     public ADDDiagramPanel getAvatarADDPanel(TURTLEPanel tp, int indexTab, String s) {
+    		TraceManager.addDev("index=" + indexTab + " s=" + s + "title=" +tp.tabbedPane.getTitleAt(indexTab));
+    		
         if(tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
             return (ADDDiagramPanel)(tp.panelAt(indexTab));
         }

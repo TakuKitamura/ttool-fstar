@@ -51,6 +51,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
 import ui.avatarbd.*;
+import ui.avatardd.*;
 import ui.avatarsmd.*;
 
 
@@ -418,7 +419,10 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		}
 		
 	}
-	
+
+	public ArrayList<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
+		return abdp.getAllNonMappedAvatarBlockNames(_name, _tadp, ref, name);
+	}	
 	
     
 }

@@ -63,7 +63,7 @@ public class ADDROMNode extends ADDCommunicationNode implements  WithAttributes 
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
-    private String stereotype = "RAM";
+    private String stereotype = "ROM";
     
     private int index = 0;
 	private int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;

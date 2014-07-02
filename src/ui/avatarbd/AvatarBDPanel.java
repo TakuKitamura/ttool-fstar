@@ -50,7 +50,7 @@ package ui.avatarbd;
 import org.w3c.dom.*;
 
 import ui.*;
-import ui.tmldd.*;
+import ui.avatardd.*;
 import java.util.*;
 
 import myutil.*;
@@ -578,5 +578,30 @@ public class AvatarBDPanel extends TDiagramPanel {
     	}
     	ign = null;
     }
+    
+    public ArrayList<String> getAllNonMappedAvatarBlockNames(String _topName, ADDDiagramPanel _tadp, boolean ref, String _name) {
+		
+        Iterator iterator = componentList.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		String name;
+        
+		
+		for(AvatarBDBlock block: getFullBlockList()) {
+            
+				name = block.getBlockName();
+				if (ref && name.equals(_name)) {
+					list.add(_topName + "::" + name);
+				} else {
+					if (!_tadp.isMapped(_topName,  name)) {
+							list.add(_topName + "::" + name);
+					}
+				}
+            
+        }
+		
+		return list;
+	}
+	
+	
     
 }

@@ -71,6 +71,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 		private int fifoDepth = 0;
 		private int minLatency = 0;
 		
+
+		
 		public ADDBusNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 				super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 				
@@ -181,7 +183,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				int tmp;
 				String tmpName;
 				
-				/*JDialogBUSNode dialog = new JDialogBUSNode(frame, "Setting bus attributes", this);
+				JDialogADDBusNode dialog = new JDialogADDBusNode(frame, "Setting bus attributes", this);
 				dialog.setSize(500, 450);
 				GraphicLib.centerOnParent(dialog);
 				dialog.show(); // blocked until dialog has been closed
@@ -203,65 +205,82 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				
 				
 				
-				if (dialog.getByteDataSize().length() != 0) {	
+				if (dialog.getIndex().length() != 0) {	
 						try {
-								tmp = byteDataSize;
-								byteDataSize = Integer.decode(dialog.getByteDataSize()).intValue();
-								if (byteDataSize <= 0) {
-										byteDataSize = tmp;
+								tmp = index;
+								index = Integer.decode(dialog.getIndex()).intValue();
+								if (index < 0) {
+										index = tmp;
 										error = true;
-										errors += "Data size  ";
+										errors += "index ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "Data size  ";
+								errors += "index  ";
 						}
 				}
 				
-				if (dialog.getSliceTime().length() != 0) {	
+				if (dialog.getNbAttachedInitiat().length() != 0) {	
 						try {
-								tmp = sliceTime;
-								sliceTime = Integer.decode(dialog.getSliceTime()).intValue();
-								if (sliceTime <= 0) {
-										sliceTime = tmp;
+								tmp = nbAttachedInitiat;
+								nbAttachedInitiat = Integer.decode(dialog.getNbAttachedInitiat()).intValue();
+								if (nbAttachedInitiat < 0) {
+										nbAttachedInitiat = tmp;
 										error = true;
-										errors += "Slice time  ";
+										errors += "nbAttachedInitiat  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "Slice time  ";
+								errors += "nbAttachedInitiat  ";
 						}
 				}
 				
-				if (dialog.getPipelineSize().length() != 0) {	
+				
+				if (dialog.getNbAttachedTarget().length() != 0) {	
 						try {
-								tmp = pipelineSize;
-								pipelineSize = Integer.decode(dialog.getPipelineSize()).intValue();
-								if (pipelineSize <= 0) {
-										pipelineSize = tmp;
+								tmp = nbAttachedTarget;
+								nbAttachedTarget = Integer.decode(dialog.getNbAttachedTarget()).intValue();
+								if (nbAttachedTarget < 0) {
+										nbAttachedTarget = tmp;
 										error = true;
-										errors += "Pipeline size  ";
+										errors += "nbAttachedTarget  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "Pipeline size  ";
+								errors += "nbAttachedTarget  ";
+						}
+				}                 
+				
+				if (dialog.getFifoDepth().length() != 0) {	
+						try {
+								tmp = fifoDepth;
+								fifoDepth = Integer.decode(dialog.getFifoDepth()).intValue();
+								if (fifoDepth < 0) {
+										fifoDepth = tmp;
+										error = true;
+										errors += "fifoDepth  ";
+								}
+						} catch (Exception e) {
+								error = true;
+								errors += "fifoDepth  ";
 						}
 				}
 				
-				if (dialog.getClockRatio().length() != 0) {	
+				if (dialog.getMinLatency().length() != 0) {	
 						try {
-								tmp = clockRatio;
-								clockRatio = Integer.decode(dialog.getClockRatio()).intValue();
-								if (clockRatio <= 0) {
-										clockRatio = tmp;
+								tmp = minLatency;
+								minLatency = Integer.decode(dialog.getMinLatency()).intValue();
+								if (minLatency < 0) {
+										minLatency = tmp;
 										error = true;
-										errors += "Clock ratio  ";
+										errors += "minLatency  ";
 								}
 						} catch (Exception e) {
 								error = true;
-								errors += "Clock ratio  ";
+								errors += "minLatency  ";
 						}
 				}
+
 				
 				if (error) {
 						JOptionPane.showMessageDialog(frame,
@@ -269,7 +288,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 								"Error",
 								JOptionPane.INFORMATION_MESSAGE);
 						return false;
-				}*/
+				}
 				
 				return true;
 		}
@@ -354,6 +373,12 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 				attr += "fifoDepth = " + fifoDepth + "\n";
 				return attr;
 		}
+		
+				public int getIndex() { return index;}
+		public int getNbAttachedInitiat() { return nbAttachedInitiat;}
+		public int getNbAttachedTarget() { return nbAttachedTarget;}
+		public int getFifoDepth() { return fifoDepth;}
+		public int getMinLatency() { return minLatency;}
 		
 		
 }

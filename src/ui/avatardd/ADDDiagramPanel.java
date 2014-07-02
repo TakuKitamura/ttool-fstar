@@ -235,22 +235,23 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         }
         
         return ll;
-    }
+    }*/
 	
 	public boolean isMapped(String _ref, String _name) {
-		ListIterator iterator = getListOfNodes().listIterator();
-		TMLArchiNode node;
+		ListIterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		ADDCPUNode node;
 		Vector v;
-		TMLArchiArtifact artifact;
+		ADDBlockArtifact artifact;
 		int i;
 		String name = _ref + "::" + _name;
 		
 		while(iterator.hasNext()) {
-			node = (TMLArchiNode)(iterator.next());
-			if (node instanceof TMLArchiCPUNode) {
-				v =  ((TMLArchiCPUNode)(node)).getArtifactList();
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof ADDCPUNode) {
+				v =  ((ADDCPUNode)(tgc)).getArtifactList();
 				for(i=0; i<v.size(); i++) {
-					artifact = (TMLArchiArtifact)(v.get(i));
+					artifact = (ADDBlockArtifact)(v.get(i));
 					if (artifact.getValue().equals(name)) {
 						return true;
 					}
@@ -261,7 +262,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
 		return false;
 	}
 	
-	public void renameMapping(String oldName, String newName) {
+	/*public void renameMapping(String oldName, String newName) {
 		ListIterator iterator = getListOfNodes().listIterator();
 		TMLArchiNode node;
 		Vector v;

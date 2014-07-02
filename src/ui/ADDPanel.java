@@ -69,7 +69,7 @@ public class ADDPanel extends TURTLEPanel {
     }
     
     public void init() {
-         addDeploymentPanelDiagram("Avatar deployment diagram");
+         addDeploymentPanelDiagram("Avatar Deployment Diagram");
  
     }
     
@@ -82,7 +82,7 @@ public class ADDPanel extends TURTLEPanel {
         
         //Class	diagram
         tmladd = new ADDDiagramPanel(mgui, toolBar);
-        tmladd.setName("Avatar deployment diagram");
+        tmladd.setName("Avatar Deployment Diagram");
         tmladd.tp = this;
         tdp = tmladd;
         panels.add(tmladd); // Always first in list

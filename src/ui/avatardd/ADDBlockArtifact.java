@@ -68,7 +68,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 	
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToBlock";
-	protected String taskName = "name";
+	protected String taskName = "blockName";
     
     public ADDBlockArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -85,8 +85,8 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         removable = true;
         
         value = "AvatarDesign::block";
-        taskName = "name";
-		referenceTaskName = "AvatarBlock";
+        taskName = "Blockname";
+		referenceTaskName = "AvatarDesign";
         
         makeFullValue();
         
@@ -148,7 +148,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 		String tmp;
 		boolean error = false;
 		
-		/*JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this);
+		JDialogAvatarBlockArtifact dialog = new JDialogAvatarBlockArtifact(frame, "Setting artifact attributes", this);
 		dialog.setSize(400, 350);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
@@ -178,7 +178,6 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 			}
 		}
 		
-		priority = dialog.getPriority();
 			
 		if (error) {
 			JOptionPane.showMessageDialog(frame,
@@ -188,7 +187,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 		}
 		
 		makeFullValue();
-		*/
+	
 			
 		return !error;
       
