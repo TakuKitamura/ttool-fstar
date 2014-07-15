@@ -4424,7 +4424,6 @@ public class GTURTLEModeling {
 		}
 		
 		if (tdp instanceof TMLArchiDiagramPanel) {
-			TraceManager.addDev( "I AM STUCK HERE!" );
 			((TMLArchiDiagramPanel)tdp).loadExtraParameters(elt);
 		}
 		
@@ -4433,31 +4432,31 @@ public class GTURTLEModeling {
 			((AvatarBDPanel)tdp).loadExtraParameters(elt);
 		}
 
-		TraceManager.addDev("Element" + elt.toString());
+		//TraceManager.addDev("Element" + elt.toString());
 		// Loads components of the class diagram
-		TraceManager.addDev("Components");
+		//TraceManager.addDev("Components");
 		makeXMLComponents(elt.getElementsByTagName("COMPONENT"), tdp);
-		TraceManager.addDev("Post processing");
+		//TraceManager.addDev("Post processing");
 		makePostProcessing(tdp);
-		TraceManager.addDev("Connectors");
+		//TraceManager.addDev("Connectors");
 		makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), tdp);
-		TraceManager.addDev("Subcomponents");
+		//TraceManager.addDev("Subcomponents");
 		makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), tdp);
-		TraceManager.addDev("RealPoints");
+		//TraceManager.addDev("RealPoints");
 		connectConnectorsToRealPoints(tdp);
-		TraceManager.addDev("Structure changed");
+		//TraceManager.addDev("Structure changed");
 		tdp.structureChanged();
-		TraceManager.addDev("Post loading");
+		//TraceManager.addDev("Post loading");
 		makePostLoading(tdp, 0);
 		
-		TraceManager.addDev("Test connectors");
+		//TraceManager.addDev("Test connectors");
 		if (tdp instanceof TMLComponentTaskDiagramPanel) {
-			TraceManager.addDev("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((TMLComponentTaskDiagramPanel)tdp).setConnectorsToFront();
 		}
 		
 		if (tdp instanceof EBRDDPanel) {
-			TraceManager.addDev("Connectors...");
+			//TraceManager.addDev("Connectors...");
 			((EBRDDPanel)tdp).setConnectorsToFront();
 		}
 		
@@ -5781,7 +5780,7 @@ public class GTURTLEModeling {
 			int myX = -1, myY = -1, myWidth = -1, myHeight =-1;
 			int myMinWidth = -1, myMinHeight = -1, myMinDesiredWidth = -1, myMinDesiredHeight = -1;
 			int myMaxWidth = -1, myMaxHeight = -1;
-			String myName = null, myValue = null, endName = null, startName = null;
+			String myName = null, myValue = null;
 			int tmpx, tmpy, tmpid;
 			TGConnectingPoint p1 = null, p2=null;
 			Vector pointList = new Vector();
@@ -5813,8 +5812,6 @@ public class GTURTLEModeling {
 						myMinDesiredHeight = Integer.decode(elt.getAttribute("minDesiredHeight")).intValue();
 					} else if (elt.getTagName().equals("infoparam")) {
 						myName = elt.getAttribute("name");
-						startName = elt.getAttribute("start");
-						endName = elt.getAttribute("end");
 						myValue = elt.getAttribute("value");
 					} else if (elt.getTagName().equals("P1")) {
 						tmpx = Integer.decode(elt.getAttribute("x")).intValue() + decX;
@@ -5870,13 +5867,6 @@ public class GTURTLEModeling {
 			if (myName != null) {
 				tgco.setName(myName);
 			}
-			if(startName != null) {
-				tgco.setStartName(startName);
-			}
-			if( endName != null) {
-				tgco.setEndName(endName);
-			}
-
 			if ((myValue != null) && (!myValue.equals(null))){
 				tgco.setValueWithChange(myValue);
 			}
