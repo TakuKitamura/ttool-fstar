@@ -72,7 +72,6 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
     
     protected boolean automaticDrawing = true; // Used when user select to enhance the diagram automatically
 
-		protected String endName, startName;	//the name of the entities attached to the connector
     
     // WARNING: point of connectors must be put first in the list of internal components ...
     
@@ -91,9 +90,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
             //System.out.println("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
             tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, _minX, _maxX, _minY, _maxY, false, this, _tdp);
         }
-				endName = p2.getName();
-				startName = p1.getName();
-        name = "connector from " + startName + " to " + endName;
+        name = "connector";
         
         canBeCloned = false;
         removable = true;
@@ -651,7 +648,7 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
     }
 
     protected String translateNameValue() {
-        String s = "<infoparam name=\"" + name + "\" start=\"" + startName + "\" end=\"" + endName + "\" value=\"";
+        String s = "<infoparam name=\"" + name + "\" value=\"";
         s = s + GTURTLEModeling.transformString(value);
         return s +  "\" />\n";
 		}
@@ -797,26 +794,4 @@ public abstract class TGConnector extends TGCWithInternalComponent	{
 		return false;
 	}
 
-	public void setStartName( String _name )	{
-		startName = _name;
-		name = "connector from " + startName + " to " + endName;
-	}
-
-	public void setEndName( String _name )	{
-		endName = _name;
-		name = "connector from " + startName + " to " + endName;
-	}
-
-	public String getStartName()	{
-		return startName;
-	}
-
-	public String getEndName()	{
-		return endName;
-	}
-
-	//getName is declared as final in TGComponent
-	public String getConnectorName()	{
-		return "connector from " + startName + " to " + endName;
-	}
-}
+}//End of class

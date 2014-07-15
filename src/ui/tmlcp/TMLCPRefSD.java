@@ -184,28 +184,9 @@ public class TMLCPRefSD extends TGCOneLineText {
 		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
     if( (s != null) && (s.length() > 0) )	{
 			setName(s);
-			//When the name of a refToSD is changed, the connector name must be updated accordingly
-			if( connectingPoint[0].getReferenceToConnector() != null )	{
-				TGConnectorTMLCP connector = (TGConnectorTMLCP) connectingPoint[0].getReferenceToConnector();
-				connector.setEndName(s);
-				//TraceManager.addDev( connector.getName() );
-				if( connectingPoint[1].getReferenceToConnector() != null )	{
-					connector = (TGConnectorTMLCP) connectingPoint[1].getReferenceToConnector();
-					connector.setStartName(s);
-					//TraceManager.addDev( connector.getName() );
-				}
-			}
-			/*if( refToSD != null )	{
-				TraceManager.addDev( "About to change the name of the Diag" );
-				refToSD.setName(s);
-				//refToSD.changeName( index, s );
-			}*/
 			return true;
 		}
     return false;
     }
 
-	/*public void setIndex( int i )	{
-		index = i;
-	}*/
 }	//End of Class

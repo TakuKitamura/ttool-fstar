@@ -2208,12 +2208,12 @@ public class GTMLModeling  {
 				AD.addTMLCPElement( choice );
 			}
 			if( component instanceof ui.tmlcp.TGConnectorTMLCP)	{
-				TraceManager.addDev( k + " " + ((ui.TGConnector)component).getStartName() + "\t" +
-														((ui.TGConnector)component).getEndName() + "\t" + component.getY() );
-				TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector( ((ui.tmlcp.TGConnectorTMLCP)component).getStartName(),
-																														((ui.tmlcp.TGConnectorTMLCP)component).getEndName(),
-																														((ui.tmlcp.TGConnectorTMLCP)component).getY(),
-																														((TGConnectorTMLCP)component).getGuard(), component );
+				TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
+														((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
+				TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
+														((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather().getName(),
+														((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(),
+														((ui.tmlcp.TGConnectorTMLCP)component).getY(), ((TGConnectorTMLCP)component).getGuard(), component );
 				AD.addTMLCPElement( TMLCPconnector );
 			}
 		}
@@ -2373,7 +2373,6 @@ public class GTMLModeling  {
 									for( String param : connector.getParams() )	{
 										TraceManager.addDev( param );
 									}
-									//"(" + conn.getStartName() + ", " + conn.getEndName() + ")", conn.getY() );
 								}
 							}
 							/*ArrayList<CPSequenceDiagram.GraphicalSDElement> pippo = graphicalSD.getGraphicalSDElements();
@@ -2458,10 +2457,10 @@ public class GTMLModeling  {
 								}
 								if( component instanceof ui.tmlcp.TGConnectorTMLCP)	{
 									TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-									TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector( (( ui.tmlcp.TGConnectorTMLCP)component).getStartName(),
-																																			((ui.tmlcp.TGConnectorTMLCP)component).getEndName(),
-																																			((ui.tmlcp.TGConnectorTMLCP)component).getY(),
-																																			((TGConnectorTMLCP)component).getGuard(), component );
+									TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
+																	(( ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather().getName(),
+																	(( ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(),
+																	((ui.tmlcp.TGConnectorTMLCP)component).getY(), ((TGConnectorTMLCP)component).getGuard(), component );
 									AD.addTMLCPElement( TMLCPconnector );
 								}
 							}

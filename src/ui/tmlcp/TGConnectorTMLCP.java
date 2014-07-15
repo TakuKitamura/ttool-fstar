@@ -63,9 +63,7 @@ public class TGConnectorTMLCP extends TGConnector {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
 
-				endName = p2.getName();
-				startName = p1.getName();
-        name = "connector from " + startName + " to " + endName;
+        name = "connector";
 				_p1.setReferenceToConnector( this );
 				_p2.setReferenceToConnector( this );
 
@@ -96,4 +94,5 @@ public class TGConnectorTMLCP extends TGConnector {
 		}
 		return "noGuard";
 	}
-}
+
+}//End of class

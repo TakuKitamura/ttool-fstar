@@ -89,7 +89,7 @@ public class TGConnectingPoint implements CDElement {
 		public static final int SOUTH=2;
 		public static final int WEST=3;
 
-		private TGConnector referenceToConnector;
+		protected TGConnector referenceToConnector;
 
 		private boolean source = false;
    
