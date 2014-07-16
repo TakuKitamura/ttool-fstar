@@ -255,81 +255,66 @@ public class TMLCPTextSpecification {
 		}
 		//global variables should go here, but there are none up to now
 		sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
-		for( TMLCPConnector conn : listTMLCPConnectors )	{
+		/*for( TMLCPConnector conn : listTMLCPConnectors )	{
 			TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
-		}
-		//up to know I just consider sequence, activities, fork and join, no choices, no guards, no nested structures keep things simple!
-		currentElem = START;
-		nextElem = "seqXXX";
-		while( nextElem.substring(0,3).equals( "seq" ) || nextElem.substring(0,3).equals( "act" ) || nextElem.substring(0,4).equals( "join" ) )	{
-			for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
-				if( conn.getStartName().equals( currentElem ) )	{
-					nextElem = conn.getEndName();
+		}/*/
+		//no nested choices or fork-join to keep things simple!
+		//Yet to add: nested forks, choices and junctions
+			currentElem = START;
+			boolean endOfGraph = false;
+			boolean comingFromMain = true;	//flags to trace the history of the sub-routine calls
+			boolean comingFromChoice = false;
+			boolean comingFromFJ = false;
+			while( !endOfGraph )	{
+				nextElem = getNextElem();	//get the name of the next element
+				String token = nextElem.substring(0,4);
+				switch( token )	{
+					case "fork":	{	//The firts encountered object is a fork: go until join. Return the connector that follows the join
+						sb += exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ );
+						break;
+					}
+					case "junc":	{	//The first encountered object is a junction: count the loop
+						if( nextElem.length() >=8 )	{
+							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
+								//sb += CR + TAB + LOOP + loopCounter + CR + TAB + TAB;
+								loopCounter += 1;
+								}
+							}	//else I should trigger an error
+					break;
+					}
+					case "choi":	{ //The first encountered object is a choice: exploration of the graph will be over upon return
+						if( nextElem.length() >= 6 )	{
+							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
+								comingFromMain = true;
+								comingFromChoice = false;
+								comingFromFJ = false;
+								sb += CR + TAB + LOOP + loopCounter + CR + TAB + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+								endOfGraph = true;
+							}
+						}	//else I should trigger an error
+						break;
+					}
+					default:	{	//The first encountered object is a diagram reference name: a sequence
+						sb += nextElem + SEQUENCE_OP;
+						break;
+					}
+				}	//End of switch
+				if( nextElem.equals( "ERROR" ) || nextElem.equals( STOP ) )	{
+					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
 					break;
 				}
+				currentElem = nextElem; //advance to next connector
+			}	//End of while loop
+			if( comingFromFJ )	{
+				newSb = sb.substring( 0, sb.length()-2 );	// drop last PARALLELISM_OP
 			}
-			if( nextElem.substring(0,3).equals( "seq" ) || nextElem.substring(0,3).equals( "act" ) )	{		//returned diagram name
-				sb += nextElem + " " + SC + " ";
-			}
-			if( nextElem.substring(0,4).equals( "fork" ) )	{		//returned fork node
-				sb += "{ ";
-				ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
-				for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
-					if( conn.getStartName().equals( nextElem ) )	{
-						connToFork.add( conn );
-					}
-				}
-				for( TMLCPConnector conn: connToFork )	{	//Does not work in case diagrams dont have a unique name
-					sb += conn.getEndName() + "*";
-					nextElem = conn.getEndName();
-				}
-				newSb = sb.substring( 0, sb.length()-1 );
-				sb = newSb;
-			}
-			if( nextElem.substring(0,4).equals( "join" ) )	{
-				sb += " }" + SC;
-			}
-			//to avoid the problems with parenthesis I need to parse everything in a block that opens and closes parentheses!
-			// from a graphical viewpoint I am missing the possibility to add guards. I think I should not continue that much: add
-			// choice and junction, then refine all the missing parts: e.g., syntax analysis. KISS!
-			//if( nextElem.substring(0,6).equals( "choice" ) )	{
-				//sb += " || {";
-				//there can be three branches that must all terminate with either a stop state or a junction
-				//get branches
-				//ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
-				//for( TMLCPConnector conn: listTMLCPConnectors )	{	//Does not work in case diagrams dont have a unique name
-					//if( conn.getStartName().equals( nextElem ) )	{
-						//connToChoice.add( conn );
-					//}
-				//}
-				//explore them till stop state or junction
-				//for( TMLCPConnector conn: connToChoice )	{	//Does not work in case diagrams dont have a unique name
-					//nextElem = conn.getEndName();
-					//start again recursively
-				//}
-			//}	//I need to rethink the algotrithm...
-				//Better to stop here and boucler the existing with a complete syntax analysis and TML generation for all the ADs
-			if( nextElem.equals( "ERROR" ) )	{
-				TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
-			}
-			currentElem = nextElem;
-		}
-		newSb = sb.substring( 0, sb.length()-1 );	//drop last semi-colon
-		sb = newSb;
-		
-		//Yet to add:
-		//	1) nested forks
-		//	2) choices and junctions
-		//	I dont remember the grammar/syntax for choice nodes exactly, I need to check, I will put || bewteen two blocks!
+			newSb = sb.substring( 0, sb.length()-1 );	// drop last semi-colon
+			sb = newSb;
+			sb += CR;
+			sb += END + CR + END + CR2;
 
-		//
-		//It is misleading to base the algorithm on sorting connectors according to their Y coordinate
+		//} //End of Activity Diagram analysis
 
-		/*Collections.sort( listTMLCPConnectors );
-		TraceManager.addDev( "PRINTING ORDERED LIST" );
-		for( TMLCPConnector conn : listTMLCPConnectors )	{
-			TraceManager.addDev( "connector from " + conn.getStartName() + " to "  +  conn.getEndName()+ " " + conn.getYCoord() );
-		}*/
 		sb += CR;
 		sb += END + CR + END + CR2;
 
@@ -358,75 +343,61 @@ public class TMLCPTextSpecification {
 			}
 			//global variables should go here, but there are none up to now
 			sb += CR + MAIN + CR + TAB + "<>" + SC + " ";	//should I start with an open parenthesis?
-			//up to know I just consider sequence, activities, fork, join, choice but no junctions and no nested structures to keep things simple!
+			//up to know I just consider sequence, activities, fork, join, choice but no nested structures to keep things simple!
 			currentElem = START;
-
-			while( listTMLCPConnectors.size()!= 0 && !currentElem.equals(STOP) )	{		//Does not work in case diagrams dont have a unique name
-				nextElem = getNextElem();	//get next element and remove connector from currentElem to nextElem
+			endOfGraph = false;
+			comingFromMain = true;	//flags to trace the history of the sub-routine calls
+			comingFromChoice = false;
+			comingFromFJ = false;
+			while( !endOfGraph )	{
+				nextElem = getNextElem();	//get the name of the next element
 				String token = nextElem.substring(0,4);
 				switch( token )	{
-					case "fork":	{	//no nested fork!
-						sb += exploreTillNextJoin();
+					case "fork":	{	//The firts encountered object is a fork: go until join. Return the connector that follows the join
+						sb += exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ );
 						break;
 					}
-					case "join":	{
-						sb += " }" + SEQUENCE_OP;
-						break;
-					}
-					case "choi":	{
-						if( nextElem.length() >= 6 )	{
-							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
-								sb += exploreChoiceBranches() + "}";
-								nextElem = STOP;	//temporary: force termination here!
-							}
-						}
-						break;
-					}
-					case "junc":	{
+					case "junc":	{	//The first encountered object is a junction: count the loop
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
-								//ignore junction and continue straight on
-								sb += CR;
-								String tabString = TAB;
-								if( loopCounter < nbLoops )	{
-									for( int i = 0; i < loopCounter; i++ )	{
-										tabString += TAB;
-									}
-									loopDataStructure[ loopCounter ] = nextElem;
-									currentElem = nextElem;	//continue to next iteration
-									loopCounter += 1;
-									sb += tabString + LOOP + loopCounter + CR + tabString + TAB;
+								//sb += CR + TAB + LOOP + loopCounter + CR + TAB + TAB;
+								loopCounter += 1;
 								}
-								else	{
-									//error
-									TraceManager.addDev( "ERROR: TOO MANY LOOPS!" );
-								}
+							}	//else I should trigger an error
+					break;
+					}
+					case "choi":	{ //The first encountered object is a choice: exploration of the graph will be over upon return
+						if( nextElem.length() >= 6 )	{
+							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
+								comingFromMain = true;
+								comingFromChoice = false;
+								comingFromFJ = false;
+								sb += CR + TAB + LOOP + loopCounter + CR + TAB + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+								endOfGraph = true;
 							}
-						}
+						}	//else I should trigger an error
 						break;
 					}
-					default:	{	// found the name of a sequence/activity diagram
-						if( !nextElem.equals( STOP ) )	{
-							sb += nextElem + SEQUENCE_OP;
-						}
+					default:	{	//The first encountered object is a diagram reference name: a sequence
+						sb += nextElem + SEQUENCE_OP;
 						break;
 					}
 				}	//End of switch
-				if( nextElem.equals( "ERROR" ) )	{
+				if( nextElem.equals( "ERROR" ) || nextElem.equals( STOP ) )	{
 					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
-				}
-				if( nextElem.equals( STOP ) )	{ //exit while loop when reaching the last connector
 					break;
 				}
-				else	{
-					currentElem = nextElem;
-				}
+				currentElem = nextElem; //advance to next connector
 			}	//End of while loop
+			if( comingFromFJ )	{
+				newSb = sb.substring( 0, sb.length()-2 );	// drop last PARALLELISM_OP
+			}
 			newSb = sb.substring( 0, sb.length()-1 );	// drop last semi-colon
 			sb = newSb;
 			sb += CR;
 			sb += END + CR + END + CR2;
-		}
+
+		} //End of Activity Diagram analysis
 
 		/***************************************************************************/
 		//Generating code for Sequence Diagrams
@@ -470,159 +441,174 @@ public class TMLCPTextSpecification {
 		return sb;
 	}
 
-	//Does not work if there are choices!
-	private String exploreTillNextJoin()	{
+	//Does not work if there are nested fork-joins
+	private String exploreForkJoin( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ )	{
 
-		String token, globalSb = "", localSb = "";
-		boolean foundJoin = false;
+		String token, branchSb, globalSb = "";
+		boolean exit;
+		boolean fromMain = comingFromMain;
+		boolean fromChoice = comingFromChoice;
+		boolean fromFJ = comingFromFJ;
 		ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
 		TMLCPConnector conn;
 		int i;
 		ArrayList<String> diagsToJoin = new ArrayList<String>();
 
-		indexOfConnToRemove.clear();
+		//Retrieve all connectors starting from the fork node of nextElem
 		for( i = 0; i < listTMLCPConnectors.size(); i++ )	{
 			conn = listTMLCPConnectors.get(i);
 			if( conn.getStartName().equals( nextElem ) )	{
 				connToFork.add( conn );
-				indexOfConnToRemove.add(i);
 			}
 		}
-		removeConnectors();
-/*		for( int j = 0; j < connToFork.size(); j++ )	{	//Does not work in case diagrams dont have a unique name
-			sb += connToFork.get(j).getEndName() + PARALLELISM_OP;
-			nextElem = connToFork.get(j).getEndName();	//no nested fork: all connectors terminate in the same join
-		}*/
-		for( int j = 0; j < connToFork.size(); j++ )	{	//for each connector in connToChoice go until all branches terminate with the stop state
+		for( int j = 0; j < connToFork.size(); j++ )	{	//For each output connector of the start fork node
 			currentElem = connToFork.get(j).getEndName();
-			TraceManager.addDev("EXPLORING THE BRANCH FROM " + currentElem );
-			localSb += "{";
-			while( !currentElem.substring(0,4).equals("join") )	{
-				nextElem = getNextElem();	//get next element and remove connector
-				TraceManager.addDev("CURRENT ELEMENT: " + currentElem);
-				TraceManager.addDev("NEXT ELEMENT: " + nextElem);
-				if( nextElem.length() < 4 || currentElem.length() < 4 )	{	//temporary patch
-					break;
-				}
+			nextElem = currentElem;
+			//TraceManager.addDev("EXPLORING THE BRANCH FROM " + currentElem );
+			branchSb = "{";
+			exit = false;
+			while( !exit )	{
+				//TraceManager.addDev("CURRENT ELEMENT: " + currentElem);
+				//TraceManager.addDev("NEXT ELEMENT: " + nextElem);
 				token = nextElem.substring(0,4);
 				switch( token )	{
-					case "fork":	{	//not possible to have nested forks up to now
+					case "fork":	{	//ERROR: no nested forks
 						TraceManager.addDev( "ERROR: ENCOUNTERED NESTED FORK!" );
 						System.exit(0);
-						break;
+					break;
 					}
-					case "join":	{	//terminate exploring branch
-						diagsToJoin.add(currentElem); 
-						localSb += currentElem + CR + TAB;
+					case "join":	{	//End of branch, regardless if coming from main or choice exploration
+						//diagsToJoin.add(currentElem); 
+						/*branchSb += currentElem + "JOIN" + CR + TAB;
 						for( i = 0; i < loopCounter; i++ )	{
-							localSb += TAB;	
-						}
-						foundJoin = true;
-						break;
+							branchSb += TAB;	
+						}*/
+						exit = true;
+					break;
 					}
-					case "choi":	{	//pass control to the dedicated method
-						if( nextElem.length() >= 6 )	{
-							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
-								TraceManager.addDev("I AM CATCHING THE CHOICE");
-								localSb += exploreChoiceBranches();
-								foundJoin = true;	//patch
-								TraceManager.addDev("PRINTING EXPLORATION OF CHOICES");
-								TraceManager.addDev( localSb );
-							}
-						}
-						break;
-					}
-					case "junc":	{	//ignore?
+					case "junc":	{	//register the junction and go on
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
-								//must register the junction and keep going
-								break;
+								if( fromChoice )	{	//ERROR: no nested choices
+									TraceManager.addDev( "ERROR: ENCOUNTERED JUNCTION IN FORK WHILE COMING FROM CHOICE!" );
+									System.exit(0);
+								}
+								else	{
+									loopCounter += 1;
+								}
+							}
+						}	//else I should trigger an error
+					break;
+					}
+					case "choi":	{	//Encountered a choice within a fork-join
+						if( nextElem.length() >= 6 )	{
+							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
+								if( fromChoice )	{
+									TraceManager.addDev( "ERROR: ENCOUNTERED NESTED FORK!" );
+									System.exit(0);
+								}
+								else	{
+									fromMain = false;
+									fromChoice = false;
+									fromFJ = true;
+									branchSb += CR + TAB + LOOP + loopCounter + CR + TAB + TAB +
+															exploreChoiceBranches( fromMain, fromChoice, fromFJ );
+															//The exploration will return when encountering a join node
+									exit = true;	
+									//TraceManager.addDev("PRINTING EXPLORATION OF CHOICES");
+								}
 							}
 						}
-						break;
+					break;
 					}
-					case "stop":	{	//not possible, trigger error
-						if( nextElem.equals( STOP ) )	{
-							TraceManager.addDev( "ERROR: ENCOUNTERED STOP BEFORE JOIN!" );
-							System.exit(0);
-							break;
-						}
+					case "stop":	{	//ERROR: fork must always terminate with a join
+						TraceManager.addDev( "ERROR: ENCOUNTERED STOP BEFORE JOIN!" );
+						System.exit(0);
+					break;
 					}
 					default:	{	//Found a sequence/activity diagram, continue to explore
-						TraceManager.addDev("I AM IN THE DEFAULT BRANCH WITH " + currentElem);
-						localSb += currentElem + SEQUENCE_OP + SP;
+						//TraceManager.addDev("I AM IN THE DEFAULT BRANCH WITH " + currentElem);
+						branchSb += nextElem + SEQUENCE_OP + "HERE";
 						break;
 					}
 				}	//End of switch
 				if( nextElem.equals( "ERROR" ) )	{
 					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
-				}
-				if( foundJoin )	{
-					foundJoin = false;
-					break;	//exit while loop since found a join
-				}
-				if( nextElem.length() < 4 || currentElem.length() < 4 )	{	//temporary patch
 					break;
 				}
-				currentElem = nextElem; // otherwise never stop exploring...
+				currentElem = nextElem; // advance to next connector
+				nextElem = getNextElem();
 			}	//End of while
-			globalSb += localSb + "}" + SP + PARALLELISM_OP + SP;
-			TraceManager.addDev("TERMINATED BRANCH: " + localSb + "}");
-			localSb = "{";
+			globalSb += branchSb + "}" + SP + PARALLELISM_OP + SP;
+			//TraceManager.addDev("TERMINATED BRANCH: " + branchSb + "}");
 		}	//End of for, end of exploration of all branches
-		if( diagsToJoin.size() != 0 )	{
+		//Create the list of diagrams whose exeuction must be joined
+		/*if( diagsToJoin.size() != 0 )	{
 			globalSb += CR + "<";
 			for( String diag: diagsToJoin )	{
 				globalSb += diag + C;
 			}
-			String temp = globalSb.substring( 0, globalSb.length()-1 ) + ">" + SC; //drop the colon
+			String temp = globalSb.substring( 0, globalSb.length() - 1 ) + ">" + SC; //drop the colon
+			globalSb = temp;
+		}*/
+		if( fromChoice )	{
+			String temp = globalSb.substring( 0, globalSb.length() - 3 ); //drop the colon
 			globalSb = temp;
 		}
 		return globalSb;
 	}
-	/*	String newSb = sb.substring( 0, sb.length()-1 );	// delete last semicolon
-		return newSb;
-	}*/
 
-	private String exploreChoiceBranches()	{
+	private String exploreChoiceBranches( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ )	{
 	
-		boolean foundJunction = false;
-		boolean foundStop = false;
-		boolean foundJoin = false;
-		String token, globalSb = "", localSb = "";
+		boolean fromMain = comingFromMain;
+		boolean fromChoice = comingFromChoice;
+		boolean fromFJ = comingFromFJ;
+		boolean exit = false;
+		String token, branchSb, currentElemToPass = "", nextElemToPass = "", globalSb = "";
 		ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
 		ArrayList<String> diagsToJoin = new ArrayList<String>();
 		int i;
 		TMLCPConnector conn;
 
-		indexOfConnToRemove.clear();
+		//Retrieve all connectors starting from the choice node of nextElem
 		for( i = 0; i < listTMLCPConnectors.size(); i++ )	{
 			conn = listTMLCPConnectors.get(i);
 			if( conn.getStartName().equals( nextElem ) )	{
 				connToChoice.add( conn );
-				indexOfConnToRemove.add(i);
 			}
 		}
-		removeConnectors();
 		for( int j = 0; j < connToChoice.size(); j++ )	{
 			currentElem = connToChoice.get(j).getEndName();
-			localSb += connToChoice.get(j).getGuard();
-			while( !currentElem.equals(STOP) && !currentElem.substring(0,4).equals("join") && !currentElem.substring(0,4).equals("junc"))	{
-				nextElem = getNextElem();	//get next element and remove connector
+			nextElem = currentElem;
+			branchSb = connToChoice.get(j).getGuard() + "{";
+			exit = false;
+			while( !exit )	{
 				token = nextElem.substring(0,4);
 				switch( token )	{
-					case "fork":	{	//Not working up to now
-						//localSb += exploreTillNextJoin();	//explore till the next join and remove the explored connectors
-						break;
+					case "fork":	{	//Encountered a fork on a choice branch
+						fromMain = false;
+						fromFJ = false;
+						fromChoice = true;
+						branchSb += exploreForkJoin( fromMain, fromChoice, fromFJ );	//Explore until the closing join node
+					break;
 					}
 					case "join":	{	//Condition for exiting the branch
-						diagsToJoin.add(currentElem); 
-						localSb += currentElem + CR + TAB;
-						for( i = 0; i < loopCounter; i++ )	{
-							localSb += TAB;	
+						if( fromMain )	{
+							TraceManager.addDev( "ERROR: ENCOUNTERED JOIN IN CHOICE WHILE COMING FROM MAIN!" );
+							System.exit(0);
 						}
-						foundJoin = true;
-						break;
+						else if( fromFJ )	{
+							currentElemToPass = currentElem;
+							nextElemToPass = nextElem;
+							//diagsToJoin.add(currentElem); 
+							String temp = branchSb.substring( 0, branchSb.length() - 2 );	//remove trailing semicolon
+							branchSb = temp + "}" + SP + ENDLOOP + loopCounter + CR + TAB;
+							for( i = 0; i < loopCounter; i++ )	{
+								branchSb += TAB;	
+							}
+							exit = true;
+						}
+					break;
 					}
 					case "choi":	{	//not possible up to now to have nested choices
 						if( nextElem.length() >= 6 )	{
@@ -631,71 +617,71 @@ public class TMLCPTextSpecification {
 								System.exit(0);
 							}
 						}
-						break;
+					break;
 					}
-					case "junc":	{	//Condition for exiting the branch
+					case "junc":	{	//Terminate branch exploration
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
-								foundJunction = true;
-								localSb += currentElem + CR + TAB;
+								String temp = branchSb.substring( 0, branchSb.length() - 2 );	//remove trailing semicolon
+								branchSb = temp + "}" + CR + TAB;
 								for( i = 0; i < loopCounter; i++ )	{
-									localSb += TAB;	
+									branchSb += TAB;	
 								}
+								exit = true;
 							}
 						}
-						break;
+					break;
 					}
 					case "stop":	{	//Condition for exiting the branch
-						if( nextElem.equals( STOP ) )	{
-							foundStop = true;
-							String tabString = "";
-							localSb += currentElem + SC + SP;
-							for( i = 0; i < loopCounter; i++ )	{
-								localSb += ENDLOOP + i + SC + SP;
+						if( fromFJ )	{
+							TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE!" );
+							exit = true;
+							System.exit(0);
+						}
+						else if( fromMain )	{
+							//String tabString = "";
+							String temp = branchSb.substring( 0, branchSb.length() - 2 );	//remove trailing semicolon
+							branchSb = temp + SP + ENDLOOP + loopCounter + CR + TAB;
+							/*for( i = 0; i < loopCounter; i++ )	{
+								branchSb += ENDLOOP + i + SC + SP;
 								tabString += TAB;
 							}
-							String temp = localSb.substring(0,localSb.length()-2);	//remove last pair SC-SP
-							localSb = temp + CR + tabString + TAB;
-							break;
+							String temp = branchSb.substring( 0, branchSb.length()-2 );	//remove last pair SC-SP
+							branchSb = temp + CR + tabString + TAB;*/
+							exit = true;
 						}
+					break;
 					}
-					default:	{	//Found a sequence/activity diagram, continue to explore
-						localSb += currentElem + SEQUENCE_OP + SP;
-						break;
+					default:	{	//Found a reference to a sequence/activity diagram: sequence operator
+						branchSb += nextElem + SEQUENCE_OP + SP;
+					break;
 					}
 				}	//End of switch
 				if( nextElem.equals( "ERROR" ) )	{
 					TraceManager.addDev( "ERROR WHEN GENERATING TML CODE" );
+					System.exit(0);
 				}
-				if( foundJunction )	{
-					foundJunction = false;
-					break;	//exit while
-				}
-				if( foundStop )	{
-					foundStop = false;
-					break; //exit while
-				}
-				if( foundJoin )	{
-					foundJoin = false;
-					break;
-				}
-				currentElem = nextElem; // otherwise never stop exploring...
+				currentElem = nextElem; 	//advance to next connector
+				nextElem = getNextElem();
 			}	//End of while
-			globalSb += localSb;
-			localSb = "";
+			globalSb += branchSb;
 		}	//End of for, end of exploration of all branches
-		if( diagsToJoin.size() != 0 )	{
+		/*if( diagsToJoin.size() != 0 )	{
 			globalSb += "<";
 			for( String diag: diagsToJoin )	{
 				globalSb += diag + C;
 			}
 			String temp = globalSb.substring( 0, globalSb.length()-1 ) + ">" + SC; //drop the colon
 			globalSb = temp;
+		}*/
+		if( fromFJ )	{
+			currentElem = currentElemToPass;	//It was called from a fork-join and one of the branches had encountered the join
+			nextElem = nextElemToPass;
 		}
-		return globalSb;
+		return globalSb + ENDLOOP + loopCounter + SP;
 	}
 
-	//Look for a connector that starts from currentElem, get the endName as nextElem and remove the connector from the global list
+	//Look for a connector that starts from currentElem and get the endName
 	private String getNextElem()	{
 
 		TMLCPConnector conn;
@@ -708,9 +694,6 @@ public class TMLCPTextSpecification {
 				break;
 			}
 		}
-		//if( i < listTMLCPConnectors.size() )	{
-		//	listTMLCPConnectors.remove(i);
-		//}
 		return endName;
 	}
 
