@@ -104,7 +104,7 @@ public class TMLCPTextSpecification {
 
 	private String nextElem;	//used to produce the TML text
 	private String currentElem;	//used to produce the TML text
-	private String currentJunc;	//used to produce the TML text
+	private String currentJunc = "junction";	//used to produce the TML text
 	private ArrayList<String> junctionList = new ArrayList<String>();
 	private ArrayList<Integer> indexOfConnToRemove;
 	private ArrayList<TMLCPConnector> listTMLCPConnectors;
@@ -271,7 +271,7 @@ public class TMLCPTextSpecification {
 			}
 			switch( token )	{
 				case "fork":	{	//The firts encountered object is a fork: go until join. Return the connector that follows the join
-					sb += "{" + exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ );
+					sb += "{" + exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ, currentJunc );
 					//TraceManager.addDev( "Terminated exploreForkJoin in mainCP, currentElem: " + currentElem + " nextElem: " + nextElem );
 					if( !nextElem.equals(STOP) )	{
 						String temp = sb.substring(0,sb.length()-3);
@@ -302,7 +302,8 @@ public class TMLCPTextSpecification {
 							comingFromMain = true;
 							comingFromChoice = false;
 							comingFromFJ = false;
-							sb += /*CR + TAB + LOOP + loopCounter +*/ CR + TAB + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+							sb += CR + TAB + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ, currentJunc );
+							currentJunc = "";
 							endOfGraph = true;
 						}
 					}	//else I should trigger an error
@@ -377,7 +378,7 @@ public class TMLCPTextSpecification {
 				}
 				switch( token )	{
 					case "fork":	{	//The firts encountered object is a fork: go until join. Return the connector that follows the join
-						sb += "{" + exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ );
+						sb += "{" + exploreForkJoin( comingFromMain, comingFromChoice, comingFromFJ, currentJunc );
 						if( !nextElem.equals(STOP) )	{
 							String temp = sb.substring(0,sb.length()-3);
 							sb = temp;
@@ -393,6 +394,8 @@ public class TMLCPTextSpecification {
 					case "junc":	{	//The first encountered object is a junction: count the loop
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
+								currentJunc = nextElem;
+								junctionList.add( nextElem );
 								sb += CR + TAB + LOOP + loopCounter + CR + TAB;
 								//loopCounter += 1;
 								}
@@ -405,7 +408,8 @@ public class TMLCPTextSpecification {
 								comingFromMain = true;
 								comingFromChoice = false;
 								comingFromFJ = false;
-								sb += /*CR + TAB + LOOP + loopCounter + CR + TAB +*/ exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+								sb += exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ, currentJunc );
+								currentJunc = "";
 								endOfGraph = true;
 							}
 						}	//else I should trigger an error
@@ -480,13 +484,14 @@ public class TMLCPTextSpecification {
 	}
 
 	//Does not work if there are nested fork-joins
-	private String exploreForkJoin( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ )	{
+	private String exploreForkJoin( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ, String currentJunc )	{
 
 		String token, branchSb, globalSb = "";
 		boolean exit;
 		boolean fromMain = comingFromMain;
 		boolean fromChoice = comingFromChoice;
 		boolean fromFJ = comingFromFJ;
+		String currJunc = currentJunc;
 		ArrayList<TMLCPConnector> connToFork = new ArrayList<TMLCPConnector>();
 		TMLCPConnector conn;
 		int i;
@@ -554,8 +559,9 @@ public class TMLCPTextSpecification {
 									fromChoice = false;
 									fromFJ = true;
 									branchSb += /*CR + TAB + LOOP + loopCounter + CR + TAB +*/ 
-															exploreChoiceBranches( fromMain, fromChoice, fromFJ );
+															exploreChoiceBranches( fromMain, fromChoice, fromFJ, currJunc );
 															//The exploration will return when encountering a join node
+									currJunc = "";
 									loopCounter += 1;
 									exit = true;	
 									//TraceManager.addDev("PRINTING EXPLORATION OF CHOICES");
@@ -606,11 +612,12 @@ public class TMLCPTextSpecification {
 		return globalSb;
 	}
 
-	private String exploreChoiceBranches( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ )	{
+	private String exploreChoiceBranches( boolean comingFromMain, boolean comingFromChoice, boolean comingFromFJ, String currentJunc )	{
 	
 		boolean fromMain = comingFromMain;
 		boolean fromChoice = comingFromChoice;
 		boolean fromFJ = comingFromFJ;
+		String currJunc = currentJunc;
 		boolean exit = false;
 		String token, branchSb, currentElemToPass = "", nextElemToPass = "", globalSb = "";
 		ArrayList<TMLCPConnector> connToChoice = new ArrayList<TMLCPConnector>();
@@ -640,7 +647,7 @@ public class TMLCPTextSpecification {
 						fromMain = false;
 						fromFJ = false;
 						fromChoice = true;
-						branchSb += exploreForkJoin( fromMain, fromChoice, fromFJ );	//Explore until the closing join node
+						branchSb += exploreForkJoin( fromMain, fromChoice, fromFJ, currJunc );	//Explore until the closing join node
 					break;
 					}
 					case "join":	{	//Condition for exiting the branch
@@ -664,7 +671,13 @@ public class TMLCPTextSpecification {
 					case "choi":	{	//not possible up to now to have nested choices
 						if( nextElem.length() >= 6 )	{
 							if( nextElem.substring(0,6).equals("choice") )	{	//ensure the name starts with choice
-								TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE!" );
+								TraceManager.addDev( "ENCOUNTERED NESTED CHOICE WHILE COMING FROM CHOICE!" );
+								/*fromMain = false;
+								fromFJ = false;
+								fromChoice = true;
+								String recString = exploreChoiceBranches( fromMain, fromFJ, fromChoice, nextElem );
+								TraceManager.addDev( "FROM RECURSION WITH LOVE: " + CR + recString );*/
+								exit = true;
 								System.exit(0);
 							}
 						}
@@ -673,6 +686,9 @@ public class TMLCPTextSpecification {
 					case "junc":	{	//Terminate branch exploration
 						if( nextElem.length() >=8 )	{
 							if( nextElem.substring(0,8).equals("junction") )	{	//ensure the name starts with junction
+								if( currJunc.length() > 0 && !nextElem.equals( currJunc ) )	{
+									TraceManager.addDev( "DETECTED RECURSION AFTER DIAGRAM " + currentElem + " nE: " + nextElem + " cJ: " + currJunc );
+								}
 								String temp = branchSb.substring( 0, branchSb.length() - 2 );	//remove trailing semicolon
 								branchSb = temp + "}" + SC + SP + LOOP + loopCounter + CR + TAB;
 								/*for( i = 0; i < loopCounter; i++ )	{
@@ -685,7 +701,7 @@ public class TMLCPTextSpecification {
 					}
 					case "stop":	{	//Condition for exiting the branch
 						if( fromFJ )	{
-							TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE!" );
+							TraceManager.addDev( "ERROR: ENCOUNTERED NESTED CHOICE WHILE COMING FROM FJ!" );
 							exit = true;
 							System.exit(0);
 						}
