@@ -1184,6 +1184,21 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return index;
     }
 
+		//Return the list of all the TMLArchiDiagramPanels
+		public Vector<TMLArchiPanel> getTMLArchiDiagramPanels()	{
+
+			Vector<TMLArchiPanel> panelsList = new Vector<TMLArchiPanel>();
+			TURTLEPanel tp;
+
+      for(int i=0; i<tabs.size(); i++) {
+				tp = (TURTLEPanel)(tabs.elementAt(i));
+				if ( tp instanceof TMLArchiPanel) {
+					panelsList.add( (TMLArchiPanel) (tp) );
+				}
+			}
+			return panelsList;
+		}
+
     public Vector<String> getAllTMLTaskNames() {
         TURTLEPanel tp;
         Vector<String> list = new Vector<String>();

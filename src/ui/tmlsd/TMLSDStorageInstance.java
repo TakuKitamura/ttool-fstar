@@ -55,6 +55,7 @@ import java.util.*;
 
 import myutil.*;
 import ui.*;
+import ui.tmldd.*;
 import ui.window.*;
 
 import tmltranslator.tmlcp.*;
@@ -92,7 +93,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
         myImageIcon = IconManager.imgic500;
 	}
     
-	public boolean editOndoubleClick(JFrame frame) {
+	/*public boolean editOndoubleClick(JFrame frame) {
 			
 		String oldValue = name;
 		
@@ -135,10 +136,46 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 				}
 				return true;
 			}*/
-			return true;	//true means that the component has been modified
+//			return true;	//true means that the component has been modified
+	//}
+
+	public boolean editOndoubleClick(JFrame frame) {
+			
+		//Get the list of ArchiPanels, then ArchiDiagramPanels then Memory nodes
+		TDiagramPanel ttdp = getTDiagramPanel();
+		Vector<TMLArchiMemoryNode> memories = new Vector<TMLArchiMemoryNode>();
+		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
+
+		for( TMLArchiPanel panel: archiPanels )	{
+			TraceManager.addDev( "FOUND TML ARCHI PANEL named: " + panel );
+		}
+		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
+		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
+		for( int k = 0; k < archiComponentsList.size(); k++ )	{
+			if( archiComponentsList.get(k) instanceof TMLArchiMemoryNode )	{
+				memories.addElement( (TMLArchiMemoryNode) archiComponentsList.get(k) );
+				TraceManager.addDev( "Found memory node: " + archiComponentsList.get(k) );
+			}
+		}
+
+		//System.exit(0);
+
+		JDialogTMLCPSDInstance jdab = new JDialogTMLCPSDInstance( myAttributes, memories, null, frame,
+																											"Setting properties of " + name, "Attribute" );
+		setJDialogOptions(jdab);
+    jdab.setSize(650, 575);
+    GraphicLib.centerOnParent(jdab);
+    jdab.setVisible(true); // blocked until dialog has been closed
+    //makeValue();
+    //if (oldValue.equals(value)) {
+		//return false;
+    //}
+        
+		//rescaled = true;
+		return true;
 	}
 	
-	protected void setJDialogOptions( JDialogAttribute jda ) {
+	protected void setJDialogOptions( JDialogTMLCPSDInstance jda ) {
 		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
@@ -153,7 +190,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 		jda.enableInitialValue(true);
 		jda.enableRTLOTOSKeyword(true);
 		jda.enableJavaKeyword(false);
-		jda.enableTMLKeyword(false);
+		//jda.enableTMLKeyword(false);
 	}
 
 	@Override public int getType() {

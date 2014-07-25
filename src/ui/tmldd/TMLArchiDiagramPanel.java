@@ -47,7 +47,7 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmldd;
 
-
+import myutil.*;
 import org.w3c.dom.*;
 import java.util.*;
 
