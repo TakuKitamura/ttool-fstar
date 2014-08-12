@@ -159,13 +159,13 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 		}
 
 		//System.exit(0);
-
 		JDialogTMLCPSDInstance jdab = new JDialogTMLCPSDInstance( myAttributes, memories, null, frame,
-																											"Setting properties of " + name, "Attribute" );
+																											"Setting properties of " + name, "Attribute", this.name );
 		setJDialogOptions(jdab);
     jdab.setSize(650, 575);
     GraphicLib.centerOnParent(jdab);
     jdab.setVisible(true); // blocked until dialog has been closed
+		this.name = jdab.getName();																											
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;

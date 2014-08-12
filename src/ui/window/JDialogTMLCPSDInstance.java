@@ -66,7 +66,6 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
     
   private boolean cancelled = false;
     
-    
   private JPanel panel1, panel2;
     
   private Frame frame;
@@ -74,24 +73,24 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
     
   private String attrib; // "Attributes", "Gates", etc.
   
-   //Name panel
-   private JTextField nameOfInstance;
+  //Name panel
+  private JTextField nameOfInstance;
     
-    // Panel1
-    private JComboBox accessBox, typeBox;
-    private JTextField identifierText;
-    private JTextField initialValue;
-    private JButton addButton;
+  // Panel1
+  private JComboBox accessBox, typeBox;
+  private JTextField identifierText;
+  private JTextField initialValue;
+  private JButton addButton;
     
-    //Panel2
-    private JList listAttribute;
-    private JButton upButton;
-    private JButton downButton;
-    private JButton removeButton;
+  //Panel2
+  private JList listAttribute;
+  private JButton upButton;
+  private JButton downButton;
+  private JButton removeButton;
 		
-		//Panel 3
-	  private JButton removeMappingButton;
-		private JComboBox referenceMemoriesName;
+	//Panel 3
+	private JButton removeMappingButton;
+	private JComboBox referenceMemoriesName;
 
 
 	// Mapping of storage units
@@ -109,35 +108,26 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
   // Main Panel
   private JButton closeButton;
   private JButton cancelButton;
+
+	private String name = "";
     
   /** Creates new form  */
   public JDialogTMLCPSDInstance( Vector _attributes, Vector<TMLArchiMemoryNode> _memories, Vector _forbidden, Frame f, String title,
-																		String attrib )	{
+																		String attrib, String _name )	{
 		super(f, title, true);
 		frame = f;
 		attributesPar = _attributes;
 		memoriesPar = _memories;
-
-		
-		
-		/*if( memoriesPar == null ) {
-			hasMemories = false;
-		}*/
-		
+		this.name = _name;	
     forbidden = _forbidden;
     initValues = new Vector();
     this.attrib = attrib;
         
 	 	attributes = new Vector();
-		//methods = new Vector();
         
-    for(int i=0; i<attributesPar.size(); i++) {
-			attributes.addElement(((TAttribute)(attributesPar.elementAt(i))).makeClone());
+    for( int i = 0; i < attributesPar.size(); i++ ) {
+			attributes.addElement( ( (TAttribute)( attributesPar.elementAt(i) ) ).makeClone() );
 		}
-		
-		/*for(int i=0; i<methodsPar.size(); i++) {
-			methods.addElement(((AvatarMethod)(methodsPar.elementAt(i))).makeClone());
-		}*/
 		
     initComponents();
     myInitComponents();
@@ -182,9 +172,9 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         
         
         //Name panel
-        namePanel.add(new JLabel("Name of instance:"));
-        nameOfInstance = new JTextField("name", 30);
-        namePanel.add(nameOfInstance);
+        namePanel.add( new JLabel( "Name of storage instance:" ) );
+        nameOfInstance = new JTextField( this.name, 30 );
+        namePanel.add( nameOfInstance );
         
         //Panel1
         
@@ -631,6 +621,8 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
       for( int i=0; i < memories.size(); i++ ) {
      		memoriesPar.addElement( memories.elementAt(i) );
       }
+			this.name = nameOfInstance.getText();
+			TraceManager.addDev( "The text entered is " + this.name );
       dispose();
     }
     
@@ -713,4 +705,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         }
     }
     
+	public String getName()	{
+		return this.name;
+	}
 }	//End of class
