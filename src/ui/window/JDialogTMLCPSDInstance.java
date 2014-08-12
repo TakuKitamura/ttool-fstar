@@ -61,7 +61,7 @@ import myutil.*;
 public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 	
 	private Vector attributes, attributesPar, forbidden, initValues;
-	private Vector methods, methodsPar;
+	private Vector memoriesPar;
 	private boolean checkKeyword, checkJavaKeyword;
     
   private boolean cancelled = false;
@@ -75,7 +75,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
   private String attrib; // "Attributes", "Gates", etc.
     
     // Panel1
-    private JComboBox accessBox, typeBox, referenceMemoriesName;
+    private JComboBox accessBox, typeBox;
     private JTextField identifierText;
     private JTextField initialValue;
     private JButton addButton;
@@ -85,13 +85,18 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
     private JButton upButton;
     private JButton downButton;
     private JButton removeButton;
-	
-	// Method
-	private boolean hasMethods = true;
+		
+		//Panel 3
+	  private JButton removeMappingButton;
+		private JComboBox referenceMemoriesName;
+
+
+	// Mapping of storage units
+//	private boolean hasMemories = false;
 	private JPanel panel3, panel4;
 	private JTextField methodText;
 	private JButton addMappingButton;
-	private JList listMethod;
+	private JList listMethod, listStorageUnits;
   private JButton upMethodButton;
   private JButton downMethodButton;
   private JButton removeMethodButton;
@@ -103,26 +108,25 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
   private JButton cancelButton;
     
   /** Creates new form  */
-  public JDialogTMLCPSDInstance( Vector _attributes, Vector<TMLArchiMemoryNode> _methods, Vector _forbidden, Frame f, String title,
+  public JDialogTMLCPSDInstance( Vector _attributes, Vector<TMLArchiMemoryNode> _memories, Vector _forbidden, Frame f, String title,
 																		String attrib )	{
 		super(f, title, true);
 		frame = f;
 		attributesPar = _attributes;
-		methodsPar = _methods;
+		memoriesPar = _memories;
 
 		
 		
-		if (methodsPar == null) {
-			methodsPar = new Vector();
-			hasMethods = false;
-		}
+		/*if( memoriesPar == null ) {
+			hasMemories = false;
+		}*/
 		
     forbidden = _forbidden;
     initValues = new Vector();
     this.attrib = attrib;
         
 	 	attributes = new Vector();
-		methods = new Vector();
+		//methods = new Vector();
         
     for(int i=0; i<attributesPar.size(); i++) {
 			attributes.addElement(((TAttribute)(attributesPar.elementAt(i))).makeClone());
@@ -141,6 +145,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
 		removeButton.setEnabled(false);
     upButton.setEnabled(false);
     downButton.setEnabled(false);
+		removeMappingButton.setEnabled(false);
  }
     
  private void initComponents() {
@@ -315,8 +320,8 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         c3.fill = GridBagConstraints.HORIZONTAL;
 				
 				memories = new Vector<String>();
-				for( int j = 0; j < methodsPar.size(); j++ )	{
-					TMLArchiMemoryNode mem = (TMLArchiMemoryNode) methodsPar.get(j);
+				for( int j = 0; j < memoriesPar.size(); j++ )	{
+					TMLArchiMemoryNode mem = (TMLArchiMemoryNode) memoriesPar.get(j);
 					memories.add( mem.getName() );
 				}
 				referenceMemoriesName = new JComboBox( memories );
@@ -332,7 +337,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
         c3.fill = GridBagConstraints.BOTH;
         c3.gridheight = 3;
-        panel3.add(new JLabel(" "), c3);
+        panel3.add( new JLabel(" "), c3 );
         
         // fourth line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -346,16 +351,16 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         // fifth line panel3
         c3.gridheight = 1;
         c3.fill = GridBagConstraints.HORIZONTAL;
-        addMappingButton = new JButton("Map");
+        addMappingButton = new JButton("Map storage unit");
         addMappingButton.addActionListener(this);
         panel3.add( addMappingButton, c3 );
         
         // 1st line panel4
-        listMethod = new JList(methods);
-        listMethod.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listMethod.addListSelectionListener(this);
-        scrollPane = new JScrollPane(listMethod);
-        scrollPane.setSize(300, 250);
+        listStorageUnits = new JList( memories );
+        listStorageUnits.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
+        listStorageUnits.addListSelectionListener( this );
+        scrollPane = new JScrollPane( listStorageUnits );
+        scrollPane.setSize( 300, 250 );
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.BOTH;
         c4.gridheight = 5;
@@ -373,6 +378,9 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         // third line panel4
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.HORIZONTAL;
+        removeMappingButton = new JButton( "Remove storage unit" );
+        removeMappingButton.addActionListener( this );
+        panel4.add( removeMappingButton, c4 );
         /*upMethodButton = new JButton("Up");
         upMethodButton.addActionListener(this);
         panel4.add(upMethodButton, c4);
@@ -391,11 +399,11 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
 		panelAttr.add(panel2, BorderLayout.EAST);
 		tabbedPane.addTab("Attributes", panelAttr);
 		
-		if (hasMethods) {
+		//if (hasMethods) {
 			panelMethod.add(panel3, BorderLayout.WEST);
 			panelMethod.add(panel4, BorderLayout.EAST);
 			tabbedPane.addTab("Mapping", panelMethod);
-		}
+		//}
 		
 		tabbedPane.setSelectedIndex(tab);
 		
@@ -447,6 +455,8 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
             upAttribute();
         } else if (evt.getSource() == addMappingButton) {
 						addMappedUnit();
+				} else if (evt.getSource() == removeMappingButton) {
+						removeMappedUnit();
 				}
     }
     
@@ -483,113 +493,84 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         String value = initialValue.getText();
         TAttribute a;
         
-        if (s.length()>0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
-                int i = TAttribute.getAccess(o1.toString());
-                int j = TAttribute.getAvatarType(o2.toString());
-				
-				if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
-					value = "2";
-				}
-                
-                if ((i != -1) && (j!= -1)) {
-                    
-                    if ((value.length() < 1) || (initialValue.isEnabled() == false)){
-						
-                        value = "";
-                    } else {
-                        if (!TAttribute.isAValidInitialValue(j, value)) {
-                            JOptionPane.showMessageDialog(frame,
-								"The initial value is not valid",
-								"Error",
-								JOptionPane.INFORMATION_MESSAGE);
-                            return;
-                        }
-                    }
-                    if (j == TAttribute.OTHER) {
-                        a = new TAttribute(i, s, value, o2.toString());
-						a.isAvatar = true;
-                        //System.out.println("New attribute: " + o2.toString());
-                    } else {
-                        a = new TAttribute(i, s, value, j);
-						a.isAvatar = true;
-                    }
-                    //checks whether the same attribute already belongs to the list
-                    int index = attributes.size();
-                    if (attributes.contains(a)) {
-                        index = attributes.indexOf(a);
-                        a = (TAttribute)(attributes.elementAt(index));
-                        a.setAccess(i);
-                        if (j == TAttribute.OTHER) {
-                            a.setTypeOther(o2.toString());
-                        }
-                        a.setType(j);                        
-                        a.setInitialValue(value);
-                        //attributes.removeElementAt(index);
-                    } else {
-                        attributes.add(index, a);
-                    }
-                    listAttribute.setListData(attributes);
-                    identifierText.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(frame,
-						"Bad access / type",
-						"Error",
-						JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-            } else {
-                JOptionPane.showMessageDialog(frame,
-					"Bad identifier: identifier already in use, or invalid identifier",
-					"Error",
-					JOptionPane.INFORMATION_MESSAGE);
-                return;
+        if( s.length() > 0 ) {
+					if( ( TAttribute.isAValidId( s, checkKeyword, checkJavaKeyword ) ) && ( TAttribute.notIn(s, forbidden ) ) )	{
+						int i = TAttribute.getAccess(o1.toString());
+						int j = TAttribute.getAvatarType(o2.toString());
+						if( ( j == TAttribute.ARRAY_NAT ) && ( value.length() < 1 ) )	{
+							value = "2";
+						}
+						if ((i != -1) && (j!= -1)) {
+							if ((value.length() < 1) || (initialValue.isEnabled() == false))	{
+								value = "";
+							}
+							else	{
+								if( !TAttribute.isAValidInitialValue(j, value) ) {
+									JOptionPane.showMessageDialog( frame, "The initial value is not valid", "Error", JOptionPane.INFORMATION_MESSAGE );
+									return;
+								}
+              }
+							if( j == TAttribute.OTHER )	{
+								a = new TAttribute(i, s, value, o2.toString());
+								a.isAvatar = true;
+								//System.out.println("New attribute: " + o2.toString());
+							}
+							else	{
+								a = new TAttribute(i, s, value, j);
+								a.isAvatar = true;
+							}
+							//checks whether the same attribute already belongs to the list
+							int index = attributes.size();
+							if( attributes.contains(a) )	{
+								index = attributes.indexOf(a);
+								a = (TAttribute)(attributes.elementAt(index));
+								a.setAccess(i);
+								if( j == TAttribute.OTHER ) {
+									a.setTypeOther(o2.toString());
+								}
+								a.setType(j);                        
+                a.setInitialValue(value);
+                //attributes.removeElementAt(index);
+              }
+							else	{
+								attributes.add(index, a);
+							}
+							listAttribute.setListData(attributes);
+              identifierText.setText("");
+						}
+						else	{
+							JOptionPane.showMessageDialog( frame, "Bad access / type", "Error", JOptionPane.INFORMATION_MESSAGE);
+							return;
             }
-        } else {
-            JOptionPane.showMessageDialog(frame,
-				"Bad identifier",
-				"Error",
-				JOptionPane.INFORMATION_MESSAGE);
-            return;
+					}
+					else	{
+						JOptionPane.showMessageDialog( frame, "Bad identifier: identifier already in use, or invalid identifier",
+																					"Error", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
         }
-    }
+				else	{
+					JOptionPane.showMessageDialog( frame, "Bad identifier", "Error", JOptionPane.INFORMATION_MESSAGE );
+					return;
+        }
+			}	//End of method
 	
 	public void addMappedUnit() {
-		//TraceManager.addDev("addMappedUnit");
-    String s = methodText.getText();
-		AvatarMethod am = AvatarMethod.isAValidMethod(s);
-		am.setImplementationProvided(implementationProvided.isSelected());
-		AvatarMethod amtmp;
-        
-        if (am != null) {
-			// Checks whether the same method already belongs to the list
-			int index = -1;
-			for(int i=0; i<methods.size(); i++) {
-				amtmp = (AvatarMethod)(methods.get(i));
-				// Same id?
-				if (amtmp.equals(am)) {
-					index = i;
-					break;
-				}
-			}
-			if (index == -1) {
-				methods.add(am);
-			} else {
-				methods.removeElementAt(index);
-				methods.add(index, am);
-			}
-			listMethod.setListData(methods);
-			methodText.setText("");
-			
-        } else {
-            JOptionPane.showMessageDialog(frame,
-				"Badly formatted method declaration",
-				"Error",
-				JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-    }
+
+		TraceManager.addDev( "**************************" );
+		TraceManager.addDev( referenceMemoriesName.getSelectedItem().toString() );
+		TraceManager.addDev( "**************************" );
+		removeMappingButton.setEnabled( true );
+    String s = referenceMemoriesName.getSelectedItem().toString();//methodText.getText();
+		memories.add(s);
+		listStorageUnits.setListData( memories );
+	}
 	
+    public void removeMappedUnit() {
+			memories.removeElementAt( 0 );
+			listStorageUnits.setListData( memories );
+			removeMappingButton.setEnabled( false );
+    }
     
     public void removeAttribute() {
         int i = listAttribute.getSelectedIndex() ;
@@ -627,15 +608,15 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
 	
     public void closeDialog() {
     	cancelled = false;
-        attributesPar.removeAllElements();
-        for(int i=0; i<attributes.size(); i++) {
-            attributesPar.addElement(attributes.elementAt(i));
-        }
-		methodsPar.removeAllElements();
-        for(int i=0; i<methods.size(); i++) {
-            methodsPar.addElement(methods.elementAt(i));
-        }
-        dispose();
+      attributesPar.removeAllElements();
+      for(int i=0; i<attributes.size(); i++) {
+				attributesPar.addElement(attributes.elementAt(i));
+			}
+			memoriesPar.removeAllElements();
+      for( int i=0; i < memories.size(); i++ ) {
+     		memoriesPar.addElement( memories.elementAt(i) );
+      }
+      dispose();
     }
     
     public boolean hasBeenCancelled() {
@@ -678,7 +659,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
             }
         }
 		
-		i = listMethod.getSelectedIndex() ;
+		/*i = listMethod.getSelectedIndex() ;
         if (i == -1) {
             removeMethodButton.setEnabled(false);
             upMethodButton.setEnabled(false);
@@ -686,8 +667,8 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
             methodText.setText("");
             //initialValue.setText("");
         } else {
-            AvatarMethod am = (AvatarMethod)(methods.elementAt(i));
-            methodText.setText(am.toString());
+            String am = memories.elementAt(i);
+            methodText.setText( am );
             TraceManager.addDev("Implementation of " + am + " is: " +  am.isImplementationProvided());
             implementationProvided.setSelected(am.isImplementationProvided());
             removeMethodButton.setEnabled(true);
@@ -696,14 +677,14 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
             } else {
                 upMethodButton.setEnabled(false);
             }
-            if (i != methods.size() - 1) {
+            if (i != memories.size() - 1) {
                 downMethodButton.setEnabled(true);
             } else {
                 downMethodButton.setEnabled(false);
             }
-        }
+        }*/
 		
-    }
+    }	//End of method
     
     public void select(JComboBox jcb, String text) {
         String s;
