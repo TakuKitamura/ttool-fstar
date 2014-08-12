@@ -46,8 +46,6 @@ knowledge of the CeCILL license and that you accept its terms.
 
 package ui.tmlsd;
 
-//import java.awt.*;
-//import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
 
@@ -68,6 +66,10 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
         value = "msg?";
 				name = value;
         editable = true;
+
+				for( int i = 0; i < nParam; i++ )	{
+					params[i] = "";
+				}
     }
     
     public String getMessage() {
@@ -143,9 +145,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
       values[0] = this.name;
       for( int i = 0; i< nParam; i++ ) {
 				labels[i+1] = "Param #" + (i+1);
-				if( params[i] != "" && params[i] != null )	{
         	values[i+1] = params[i];
-				}
       }
          
       JDialogMultiString jdms = new JDialogMultiString( frame, "Setting message properties", nParam+1, labels, values );
@@ -178,6 +178,9 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 						value += params[i];
 					}
         }
+				else	{
+					value += ", ";
+				}
 			}
 			value += ")";
     }
@@ -193,17 +196,6 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		return toBeReturned;
 	}
 
-	/*public int getNumberParams()	{
-
-		int counter = 0;
-		for( int i = 0; i < nParam; i++	)	{
-			if( params[i] != null )	{
-				counter++;
-			}
-		}
-		return counter;
-	}*/
-	
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {  
         //System.out.println("Extra");
         if (GraphicLib.isInRectangle(x1, y1, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5 - heightValue, widthValue, heightValue)) {
@@ -213,24 +205,15 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
     }
 
 	 protected String translateExtraParam() {
-        String a;
         StringBuffer sb = new StringBuffer( "<extraparam>\n" );
         for( int i = 0; i < nParam; i++ )	{
 					//TraceManager.addDev("Attribute:" + i);
-					if( params[i] != "" )	{
-    	      a = params[i];
+					if( params[i].length() > 0 )	{
   	        //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
-	          //value = value + a + "\n";
-        	  sb.append( "<Parameter" );
-      	    //sb.append( /*a.getAccess()*/ );
-    	      sb.append( " id=\"" );
-  	        sb.append( a /*a.getAccess()*/ );
-	          //sb.append( "\" value=\"" );
-          	//sb.append( /*a.getInitialValue()*/ );
-        	  //sb.append( "\" type=\"" );
-      	    //sb.append( /*a.getType()*/ );
-    	      //sb.append( "\" typeOther=\"" );
-  	        //sb.append( /*a.getTypeOther()*/ );
+            sb.append("<Param index=\"");
+            sb.append(i);
+    	      sb.append( "\" id=\"" );
+  	        sb.append( params[i] );
 	          sb.append( "\" />\n" );
 					}
         }
@@ -244,7 +227,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
           NodeList nli;
           Node n1, n2;
           Element elt;
-          int access, type, counter = 0;
+          int access, type, k = 0;
           String typeOther;
           String id, valueAtt;
           
@@ -258,29 +241,12 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 								//System.out.println(n2);
 								if( n2.getNodeType() == Node.ELEMENT_NODE ) {
 									elt = (Element) n2;
-									TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
-									if( elt.getTagName().equals("Parameter") )	{
-										TraceManager.addDev("Analyzing parameter");
-										/*access = Integer.decode(elt.getAttribute("access")).intValue();
-										type = Integer.decode(elt.getAttribute("type")).intValue();
-										try {
-											typeOther = elt.getAttribute("typeOther");
-										}
-										catch ( Exception e )	{
-											typeOther = "";
-										}*/
+									//TraceManager.addDev( "I am analyzing " + elt.getTagName() );	
+									if( elt.getTagName().equals("Param") )	{
+										//TraceManager.addDev("Analyzing parameter");
+										k = Integer.decode(elt.getAttribute("index")).intValue();
 										id = elt.getAttribute("id");
-										/*valueAtt = elt.getAttribute("value");
-										if( valueAtt.equals("null") )	{
-											valueAtt = "";
-										}*/
-										if( (TAttribute.isAValidId(id, false, false) ) /*&& ( TAttribute.isAValidInitialValue(type, valueAtt))*/ )	{
-											//TraceManager.addDev("Adding parameter " + id + " typeOther=" + typeOther);
-											//TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-											//myAttributes.addElement(ta);
-											params[counter] = id;
-											counter++;
-											}
+										params[k] = id;
                     }
                   }
                 }
@@ -291,4 +257,4 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 					throw new MalformedModelingException();
 				}
     }
-}
+}	//End of class
