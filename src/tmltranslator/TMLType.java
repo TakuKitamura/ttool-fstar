@@ -138,11 +138,11 @@ public class TMLType {
   public static String getStringType(int type) {
   	switch(type) {
             case NATURAL:
-                return "INT";
+                return "int";
             case BOOLEAN:
-                return "BOOL";
+                return "bool";
             case OTHER:
-                return "OTHER";
+                return "other";
             default:
                 return "" + type;
         }
