@@ -914,32 +914,52 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     	}
     }
     
+    
     public void executeSimulation() throws InterruptedException {
     	if (hasError) {
     		jta.append("Simulation not executed: error");
     		return;
     	}
     	
+    	int toDo = automatic;
+    	
+    	if (toDo == 0) {
+    			if (exe.isSelected()) {
+    					toDo = ONE_TRACE;
+    			} else if (exeint.isSelected()) {
+    					toDo = ANIMATION;
+    			} else {
+    					toDo = FORMAL_VERIFICATION;
+    			}
+    	}
+    	
+    	
     	String cmd;
     	
-    	if (automatic > 0) {
-    		switch(automatic) {
-    		case MANUAL:
-    			
-    			
-    		}
+    	switch(toDo) {
+    			case ONE_TRACE:
+    					executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
+    					break;
+    			case ANIMATION:
+    					dispose();
+    					mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
+    					break;
+    			case FORMAL_VERIFICATION:
+    					executeSimulationCmd(exe2formal.getText(), "Running formal verification");
+    					break;
+  
+    	}
     		
-    	} else {
+    } 
+    	
+    	
+    	public void executeSimulationCmd(String cmd, String text) throws InterruptedException {
     		
-    		if (interactiveSimulationSelected) {
-    			dispose();
-    			mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
-    		} else {
-    		
+
     		try {
-    			cmd = exe2.getText();
     			
-    			jta.append("Executing SystemC code with command: \n" + cmd + "\n");
+    			
+    			jta.append(text + " with command: \n" + cmd + "\n");
     			
     			rshc = new RshClient(hostSystemC);
     			// It assumes that data are on the remote host
@@ -958,9 +978,8 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     			setButtons();
     			return;
     		}
-    		}
     	}
-    }
+  
     
  
     
