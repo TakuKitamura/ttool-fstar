@@ -928,13 +928,13 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     			
     			
     		}
+    		
+    	} else {
+    		
     		if (interactiveSimulationSelected) {
     			dispose();
     			mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
-    		}
-    	} else {
-    		
-    		
+    		} else {
     		
     		try {
     			cmd = exe2.getText();
@@ -957,6 +957,7 @@ public class JDialogSystemCGeneration extends javax.swing.JDialog implements Act
     			mode = 	STOPPED;
     			setButtons();
     			return;
+    		}
     		}
     	}
     }

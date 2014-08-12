@@ -5882,7 +5882,7 @@ public class GTURTLEModeling {
 
 			tgco.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
 
-			TraceManager.addDev("Making connecting points " + myType);
+			//TraceManager.addDev("Making connecting points " + myType);
 			for(i=0; i<tgcpList.size(); i++) {
 				p = (Point)(tgcpList.elementAt(i));
 				if (!tgco.setIdTGConnectingPoint(p.x, p.y)) {
@@ -5894,7 +5894,7 @@ public class GTURTLEModeling {
 				tdp.bringToFront(tgco);
 			}
 
-			TraceManager.addDev("Connecting points done " + myType);
+			//TraceManager.addDev("Connecting points done " + myType);
 
 		} catch (Exception e) {
 			TraceManager.addError("Exception on connectors: HERE I AM");

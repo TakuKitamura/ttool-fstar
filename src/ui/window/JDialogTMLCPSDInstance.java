@@ -41,7 +41,7 @@
 * Dialog for managing attributes, methods and signals of instances of Sequence Diagrams
 * Creation: 25/07/2014
 * @version 1.0 25/07/2014
-* @author Ludovic APVRILLE, Andrea ENRIC
+* @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
 
@@ -73,6 +73,9 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
 	private int tab;
     
   private String attrib; // "Attributes", "Gates", etc.
+  
+   //Name panel
+   private JTextField nameOfInstance;
     
     // Panel1
     private JComboBox accessBox, typeBox;
@@ -152,6 +155,7 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
 	JTabbedPane tabbedPane = new JTabbedPane();
 	Container c = getContentPane();
 		
+		JPanel namePanel = new JPanel();
 		JPanel panelAttr = new JPanel(new BorderLayout());
 		JPanel panelMethod = new JPanel(new BorderLayout());
     GridBagLayout gridbag0 = new GridBagLayout();
@@ -175,6 +179,14 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
         c.setLayout(gridbag0);
         
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        
+        //Name panel
+        namePanel.add(new JLabel("Name of instance:"));
+        nameOfInstance = new JTextField("name", 30);
+        namePanel.add(nameOfInstance);
+        
+        //Panel1
         
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
@@ -414,7 +426,10 @@ public class JDialogTMLCPSDInstance extends javax.swing.JDialog implements Actio
     c0.gridheight = 10;
     c0.weighty = 1.0;
     c0.weightx = 1.0;
-		c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+    c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+    
+    	c.add(namePanel, c0);
+    	
 		c.add(tabbedPane, c0);
         
         c0.gridwidth = 1;
