@@ -120,6 +120,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
     jdab.setVisible(true); // blocked until dialog has been closed
 		this.name = jdab.getName();																											
 		this.mappedUnit = jdab.getMappedUnit();
+		TraceManager.addDev( "Mapping done succesfully on " + this.mappedUnit );
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;
