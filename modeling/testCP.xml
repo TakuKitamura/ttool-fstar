@@ -682,18 +682,16 @@
 </SUBCOMPONENT>
 
 <CONNECTOR type="1523" id="350" >
-<cdparam x="396" y="86" />
+<cdparam x="396" y="96" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="HelloWorld" value="HelloWorld(I am seq11)" />
-<P1  x="396" y="86" id="242" />
-<P2  x="175" y="86" id="301" />
+<infoparam name="HelloWorld" value="HelloWorld(I am seq11, , hi, , bye)" />
+<P1  x="396" y="96" id="243" />
+<P2  x="175" y="96" id="302" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
+<Param index="0" id="I am seq11" />
+<Param index="2" id="hi" />
+<Param index="4" id="bye" />
 </extraparam>
 </CONNECTOR>
 
@@ -829,11 +827,6 @@
 <P2  x="233" y="100" id="403" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -1197,11 +1190,6 @@
 <P2  x="192" y="110" id="602" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -1337,11 +1325,6 @@
 <P2  x="220" y="116" id="703" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -1477,11 +1460,6 @@
 <P2  x="204" y="95" id="804" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -1617,11 +1595,6 @@
 <P2  x="233" y="107" id="905" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -1757,11 +1730,6 @@
 <P2  x="250" y="131" id="1006" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -3226,11 +3194,6 @@
 <P2  x="202" y="126" id="1535" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -3358,18 +3321,13 @@
 </COMPONENT>
 
 <CONNECTOR type="1523" id="1684" >
-<cdparam x="433" y="98" />
+<cdparam x="441" y="100" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="HelloWorld" value="HelloWorld(I am AnotherSD)" />
+<infoparam name="HelloWorld" value="HelloWorld(I am anotherSD)" />
 <P1  x="441" y="100" id="1586" />
 <P2  x="205" y="100" id="1636" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
@@ -3499,16 +3457,11 @@
 <CONNECTOR type="1523" id="1785" >
 <cdparam x="461" y="91" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="HelloWorld" value="HelloWorld(Yet Another SD)" />
+<infoparam name="HelloWorld" value="HelloWorld(I am YASD)" />
 <P1  x="461" y="91" id="1687" />
 <P2  x="195" y="91" id="1737" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
-<Parameter id="null" />
 </extraparam>
 </CONNECTOR>
 
