@@ -3478,8 +3478,8 @@
 <cdparam x="341" y="104" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to start state" value="Connector between ports" />
-<P1  x="328" y="86" id="1808" />
-<P2  x="569" y="86" id="1793" />
+<P1  x="328" y="86" id="1804" />
+<P2  x="569" y="86" id="1789" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1787" >
@@ -3494,8 +3494,8 @@
 <cdparam x="341" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to start state" value="Connector between ports" />
-<P1  x="328" y="177" id="1804" />
-<P2  x="569" y="177" id="1789" />
+<P1  x="328" y="177" id="1808" />
+<P2  x="569" y="177" id="1793" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1202" id="1803" >
@@ -3517,14 +3517,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="1790" >
 <father id="1803" num="0" />
-<cdparam x="556" y="177" />
+<cdparam x="556" y="86" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event Call" />
+<infoparam name="Primitive port" value="Event comm" />
 <TGConnectingPoint num="0" id="1789" />
 <extraparam>
-<Prop commName="Call" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3551,14 +3551,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1794" >
 <father id="1803" num="2" />
-<cdparam x="556" y="86" />
+<cdparam x="556" y="177" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event comm" />
+<infoparam name="Primitive port" value="Event Call" />
 <TGConnectingPoint num="0" id="1793" />
 <extraparam>
-<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="Call" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3588,14 +3588,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="1805" >
 <father id="1818" num="0" />
-<cdparam x="315" y="177" />
+<cdparam x="315" y="86" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event Call" />
+<infoparam name="Primitive port" value="Event comm" />
 <TGConnectingPoint num="0" id="1804" />
 <extraparam>
-<Prop commName="Call" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3622,14 +3622,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1809" >
 <father id="1818" num="2" />
-<cdparam x="315" y="86" />
+<cdparam x="315" y="177" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event comm" />
+<infoparam name="Primitive port" value="Event Call" />
 <TGConnectingPoint num="0" id="1808" />
 <extraparam>
-<Prop commName="comm" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="Call" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3792,6 +3792,41 @@
 
 <Modeling type="TML Architecture" nameTab="DIPLODOCUS Architecture" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1400" minY="10" maxY="1400" attributes="0" masterClockFrequency="200" >
+<COMPONENT type="5357" id="1976" >
+<cdparam x="442" y="220" />
+<sizeparam width="250" height="100" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
+<infoparam name="Bridge0" value="name" />
+<TGConnectingPoint num="0" id="1977" />
+<TGConnectingPoint num="1" id="1978" />
+<TGConnectingPoint num="2" id="1979" />
+<TGConnectingPoint num="3" id="1980" />
+<TGConnectingPoint num="4" id="1981" />
+<TGConnectingPoint num="5" id="1982" />
+<TGConnectingPoint num="6" id="1983" />
+<TGConnectingPoint num="7" id="1984" />
+<TGConnectingPoint num="8" id="1985" />
+<TGConnectingPoint num="9" id="1986" />
+<TGConnectingPoint num="10" id="1987" />
+<TGConnectingPoint num="11" id="1988" />
+<TGConnectingPoint num="12" id="1989" />
+<TGConnectingPoint num="13" id="1990" />
+<TGConnectingPoint num="14" id="1991" />
+<TGConnectingPoint num="15" id="1992" />
+<TGConnectingPoint num="16" id="1993" />
+<TGConnectingPoint num="17" id="1994" />
+<TGConnectingPoint num="18" id="1995" />
+<TGConnectingPoint num="19" id="1996" />
+<TGConnectingPoint num="20" id="1997" />
+<TGConnectingPoint num="21" id="1998" />
+<TGConnectingPoint num="22" id="1999" />
+<TGConnectingPoint num="23" id="2000" />
+<extraparam>
+<info stereotype="BRIDGE" nodeName="Bridge0" />
+</extraparam>
+</COMPONENT>
+
 <COMPONENT type="1105" id="1869" >
 <cdparam x="83" y="467" />
 <sizeparam width="261" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />

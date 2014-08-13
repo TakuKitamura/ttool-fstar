@@ -309,6 +309,7 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
 		  attr += "Clock ratio = " + clockRatio + "\n";
 		  return attr;
 	  }
+	   
 	  
     
 }
