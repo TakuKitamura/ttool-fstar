@@ -97,7 +97,7 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
         
         
         //Name panel
-        namePanel.add( new JLabel( "Name of storage instance:" ) );
+        namePanel.add( new JLabel( "Name of controller instance:" ) );
         nameOfInstance = new JTextField( this.name, 30 );
         namePanel.add( nameOfInstance );
         
@@ -217,12 +217,12 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
 		// Mapping
 		panel3 = new JPanel();
         panel3.setLayout(gridbag3);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Available storage units"));
+        panel3.setBorder(new javax.swing.border.TitledBorder("Available controller units"));
         panel3.setPreferredSize(new Dimension(300, 250));
         
         panel4 = new JPanel();
         panel4.setLayout(gridbag2);
-        panel4.setBorder(new javax.swing.border.TitledBorder("Mapped storage unit"));
+        panel4.setBorder(new javax.swing.border.TitledBorder("Mapped controller unit"));
         panel4.setPreferredSize(new Dimension(300, 250));
         
         // first line panel3
@@ -267,7 +267,7 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
         // fifth line panel3
         c3.gridheight = 1;
         c3.fill = GridBagConstraints.HORIZONTAL;
-        addMappingButton = new JButton("Map storage unit");
+        addMappingButton = new JButton("Map controller unit");
         addMappingButton.addActionListener(this);
         panel3.add( addMappingButton, c3 );
         
@@ -295,7 +295,7 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
         // third line panel4
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.HORIZONTAL;
-        removeMappingButton = new JButton( "Remove storage unit" );
+        removeMappingButton = new JButton( "Remove controller unit" );
         removeMappingButton.addActionListener( this );
         panel4.add( removeMappingButton, c4 );
         

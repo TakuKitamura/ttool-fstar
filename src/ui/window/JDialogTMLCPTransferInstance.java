@@ -97,7 +97,7 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
         
         
         //Name panel
-        namePanel.add( new JLabel( "Name of storage instance:" ) );
+        namePanel.add( new JLabel( "Name of transfer instance:" ) );
         nameOfInstance = new JTextField( this.name, 30 );
         namePanel.add( nameOfInstance );
         
@@ -217,12 +217,12 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
 		// Mapping
 		panel3 = new JPanel();
         panel3.setLayout(gridbag3);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Available storage units"));
+        panel3.setBorder(new javax.swing.border.TitledBorder("Available transfer units"));
         panel3.setPreferredSize(new Dimension(300, 250));
         
         panel4 = new JPanel();
         panel4.setLayout(gridbag2);
-        panel4.setBorder(new javax.swing.border.TitledBorder("Mapped storage unit"));
+        panel4.setBorder(new javax.swing.border.TitledBorder("Mapped transfer unit"));
         panel4.setPreferredSize(new Dimension(300, 250));
         
         // first line panel3
@@ -295,7 +295,7 @@ public class JDialogTMLCPTransferInstance extends JDialogTMLSDInstance implement
         // third line panel4
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         c4.fill = GridBagConstraints.HORIZONTAL;
-        removeMappingButton = new JButton( "Remove storage unit" );
+        removeMappingButton = new JButton( "Remove transfer unit" );
         removeMappingButton.addActionListener( this );
         panel4.add( removeMappingButton, c4 );
         
