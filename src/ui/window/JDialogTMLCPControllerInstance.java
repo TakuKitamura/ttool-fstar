@@ -37,7 +37,7 @@
 * knowledge of the CeCILL license and that you accept its terms.
 *
 * /**
-* Class JDialogTMLCPStorageInstance
+* Class JDialogTMLCPControllerInstance
 * Dialog for managing attributes, mapping and name of a SD instance
 * Creation: 25/07/2014
 * @version 1.0 25/07/2014
@@ -58,12 +58,12 @@ import ui.tmldd.*;
 import myutil.*;
 
 
-public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements ActionListener, ListSelectionListener  {
-	
+public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance implements ActionListener, ListSelectionListener  {
+    
   /** Creates new form  */
-  public JDialogTMLCPStorageInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
+  public JDialogTMLCPControllerInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
 																		String attrib, String _name )	{
-  	super( _attributes, _availableUnits, _forbidden, f, title, attrib, _name );
+  	super(_attributes, _availableUnits, _forbidden, f, title, attrib, _name );
 	}
     
  @Override protected void initComponents() {
@@ -241,12 +241,13 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
         c3.weightx = 1.0;
         c3.anchor = GridBagConstraints.CENTER;
 				c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel3.add(new JLabel("Storage unit:"), c3);
+        panel3.add(new JLabel("Controller unit:"), c3);
         
         // second line panel3
         c3.fill = GridBagConstraints.HORIZONTAL;
 				
 				for( int j = 0; j < unitsPar.size(); j++ )	{
+					//TMLArchiMemoryNode mem = (TMLArchiMemoryNode) memoriesPar.get(j);
 					availableUnits.add( ( (TMLArchiNode) unitsPar.get(j)).getName() );
 				}
 				referenceMemoriesName = new JComboBox( availableUnits );
@@ -337,7 +338,7 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
         c.add(cancelButton, c0);
     }
     
-    @Override public void closeDialog() {
+   @Override public void closeDialog() {
     	cancelled = false;
       attributesPar.removeAllElements();
       for(int i=0; i<attributes.size(); i++) {
@@ -345,7 +346,7 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
 			}
 			this.name = nameOfInstance.getText();
 			if( mappedUnits.size() > 1 )	{
-				JOptionPane.showMessageDialog( frame, "Only one Memory unit can be mapped per each Storage instance", 
+				JOptionPane.showMessageDialog( frame, "Only one CPU unit can be mapped per each Controller instance",
 																				"Error", JOptionPane.INFORMATION_MESSAGE );
 				return;
 			}

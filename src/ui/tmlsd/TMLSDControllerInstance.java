@@ -52,6 +52,8 @@ import javax.swing.*;
 import org.w3c.dom.*;
 import java.awt.event.*;
 
+import java.util.*;
+import ui.tmldd.*;
 import myutil.*;
 import ui.*;
 import ui.window.*;
@@ -93,51 +95,41 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
     
 	public boolean editOndoubleClick(JFrame frame) {
 			
-		String oldValue = name;
-		
-		JDialogAttribute jda = new JDialogAttribute( myAttributes, null, frame, "Setting attributes of " + this.name, "Attribute" );
-    setJDialogOptions( jda );
-    jda.setSize( 650, 375 );
-    GraphicLib.centerOnParent( jda );
-    jda.setVisible( true ); // blocked until dialog has been closed
+		//Get the list of ArchiPanels, then ArchiDiagramPanels then CPU nodes
+		TDiagramPanel ttdp = getTDiagramPanel();
+		Vector<TMLArchiNode> availableCPUs = new Vector<TMLArchiNode>();
+		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
+
+		for( TMLArchiPanel panel: archiPanels )	{
+			TraceManager.addDev( "FOUND TML ARCHI PANEL named: " + panel );
+		}
+		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
+		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
+		for( int k = 0; k < archiComponentsList.size(); k++ )	{
+			if( archiComponentsList.get(k) instanceof TMLArchiCPUNode )	{
+				availableCPUs.addElement( (TMLArchiNode) archiComponentsList.get(k) );
+				TraceManager.addDev( "Found cpu node: " + archiComponentsList.get(k) );
+			}
+		}
+
+		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( myAttributes, availableCPUs, null, frame,
+																											"Setting properties of " + name, "Attribute", this.name );
+		setJDialogOptions(jdab);
+    jdab.setSize(650, 575);
+    GraphicLib.centerOnParent(jdab);
+    jdab.setVisible(true); // blocked until dialog has been closed
+		this.name = jdab.getName();																											
+		this.mappedUnit = jdab.getMappedUnit();
     //makeValue();
     //if (oldValue.equals(value)) {
-	    //return false;
+		//return false;
     //}
-		/*rescaled = true;
+        
+		//rescaled = true;
 		return true;
-    }*/
-		
-			/*String s = this.name;
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog( frame,
-						"Could not change the name of the instance: the new name is not a valid name",
-						"Error", JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-				setName(s);
-				TraceManager.addDev( Integer.toString( connectingPoint.length ) );
-        for( int i = 0; i < connectingPoint.length; i++ ) {
-				//for each connecting point connected to something
-					if( connectingPoint[i].getReferenceToConnector() != null )	{
-						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
-						if( connectingPoint[i].isSource() )	{
-							connector.setStartName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-						else	{
-							connector.setEndName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-					}
-				}
-				return true;
-			}*/
-			return true;	//true means that the component has been modified
 	}
 	
-	protected void setJDialogOptions( JDialogAttribute jda ) {
+	protected void setJDialogOptions( JDialogTMLCPControllerInstance jda ) {
 		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
@@ -152,7 +144,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 		jda.enableInitialValue(true);
 		jda.enableRTLOTOSKeyword(true);
 		jda.enableJavaKeyword(false);
-		jda.enableTMLKeyword(false);
+		//jda.enableTMLKeyword(false);
 	}
 
 	@Override public int getType() {

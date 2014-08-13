@@ -93,79 +93,29 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
         myImageIcon = IconManager.imgic500;
 	}
     
-	/*public boolean editOndoubleClick(JFrame frame) {
-			
-		String oldValue = name;
-		
-		JDialogAttribute jda = new JDialogAttribute( myAttributes, null, frame, "Setting attributes of " + this.name, "Attribute" );
-    setJDialogOptions( jda );
-    jda.setSize( 650, 375 );
-    GraphicLib.centerOnParent( jda );
-    jda.setVisible( true ); // blocked until dialog has been closed
-    //makeValue();
-    //if (oldValue.equals(value)) {
-	    //return false;
-    //}
-		/*rescaled = true;
-		return true;
-    }*/
-		
-			/*String s = this.name;
-			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-				if (!TAttribute.isAValidId(s, false, false)) {
-					JOptionPane.showMessageDialog( frame,
-						"Could not change the name of the instance: the new name is not a valid name",
-						"Error", JOptionPane.INFORMATION_MESSAGE );
-					return false;
-				}
-				setName(s);
-				TraceManager.addDev( Integer.toString( connectingPoint.length ) );
-        for( int i = 0; i < connectingPoint.length; i++ ) {
-				//for each connecting point connected to something
-					if( connectingPoint[i].getReferenceToConnector() != null )	{
-						TGConnectorMessageAsyncTMLSD connector = (TGConnectorMessageAsyncTMLSD) connectingPoint[i].getReferenceToConnector();
-						if( connectingPoint[i].isSource() )	{
-							connector.setStartName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-						else	{
-							connector.setEndName(s);
-							TraceManager.addDev( connector.getConnectorName() );
-						}
-					}
-				}
-				return true;
-			}*/
-//			return true;	//true means that the component has been modified
-	//}
-
 	public boolean editOndoubleClick(JFrame frame) {
 			
 		//Get the list of ArchiPanels, then ArchiDiagramPanels then Memory nodes
 		TDiagramPanel ttdp = getTDiagramPanel();
-		Vector<TMLArchiMemoryNode> memories = new Vector<TMLArchiMemoryNode>();
+		Vector<TMLArchiNode> availableMemories = new Vector<TMLArchiNode>();
 		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
 
-		for( TMLArchiPanel panel: archiPanels )	{
-			TraceManager.addDev( "FOUND TML ARCHI PANEL named: " + panel );
-		}
 		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
 		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
 		for( int k = 0; k < archiComponentsList.size(); k++ )	{
 			if( archiComponentsList.get(k) instanceof TMLArchiMemoryNode )	{
-				memories.addElement( (TMLArchiMemoryNode) archiComponentsList.get(k) );
-				TraceManager.addDev( "Found memory node: " + archiComponentsList.get(k) );
+				availableMemories.addElement( (TMLArchiNode) archiComponentsList.get(k) );
 			}
 		}
 
-		//System.exit(0);
-		JDialogTMLCPSDInstance jdab = new JDialogTMLCPSDInstance( myAttributes, memories, null, frame,
+		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, availableMemories, null, frame,
 																											"Setting properties of " + name, "Attribute", this.name );
 		setJDialogOptions(jdab);
     jdab.setSize(650, 575);
     GraphicLib.centerOnParent(jdab);
     jdab.setVisible(true); // blocked until dialog has been closed
 		this.name = jdab.getName();																											
+		this.mappedUnit = jdab.getMappedUnit();
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;
@@ -175,7 +125,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 		return true;
 	}
 	
-	protected void setJDialogOptions( JDialogTMLCPSDInstance jda ) {
+	protected void setJDialogOptions( JDialogTMLCPStorageInstance jda ) {
 		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
