@@ -368,6 +368,9 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 	 protected String translateExtraParam() {
         TAttribute a;
         StringBuffer sb = new StringBuffer( "<extraparam>\n" );
+        sb.append( "<Mapping mappedOn=\"" );
+        sb.append( "" + mappedUnit );
+        sb.append( "\" />\n" );
         sb.append( "<Actor data=\"" );
         sb.append( ""+isActor );
         sb.append( "\" />\n" );
@@ -412,6 +415,9 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 										//System.out.println(n2);
 										if( n2.getNodeType() == Node.ELEMENT_NODE ) {
 											elt = (Element) n2;
+											if( elt.getTagName().equals("Mapping") ) {
+												mappedUnit = elt.getAttribute("mappedOn");
+											}
 											if( elt.getTagName().equals("Actor") ) {
 												if( elt.getAttribute("data").compareTo("true") == 0 ) {
 													isActor = true;

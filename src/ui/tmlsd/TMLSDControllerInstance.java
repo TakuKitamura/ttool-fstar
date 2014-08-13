@@ -96,6 +96,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 	public boolean editOndoubleClick(JFrame frame) {
 			
 		//Get the list of ArchiPanels, then ArchiDiagramPanels then CPU nodes
+		boolean mappedUnitExists = false;
 		TDiagramPanel ttdp = getTDiagramPanel();
 		Vector<TMLArchiNode> availableCPUs = new Vector<TMLArchiNode>();
 		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
@@ -108,19 +109,32 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 		for( int k = 0; k < archiComponentsList.size(); k++ )	{
 			if( archiComponentsList.get(k) instanceof TMLArchiCPUNode )	{
 				availableCPUs.addElement( (TMLArchiNode) archiComponentsList.get(k) );
-				TraceManager.addDev( "Found cpu node: " + archiComponentsList.get(k) );
+				//TraceManager.addDev( "Found cpu node: " + archiComponentsList.get(k) );
+				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}
 			}
+			if( archiComponentsList.get(k) instanceof TMLArchiHWANode )	{
+				availableCPUs.addElement( (TMLArchiNode) archiComponentsList.get(k) );
+				//TraceManager.addDev( "Found cpu node: " + archiComponentsList.get(k) );
+				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}
+			}
+		}
+		if( !mappedUnitExists )	{
+			mappedUnit = "";
 		}
 
 		JDialogTMLCPControllerInstance jdab = new JDialogTMLCPControllerInstance( myAttributes, availableCPUs, null, frame,
-																											"Setting properties of " + name, "Attribute", this.name );
+																											"Setting properties of " + name, "Attribute", name, mappedUnit );
 		setJDialogOptions(jdab);
     jdab.setSize(650, 575);
     GraphicLib.centerOnParent(jdab);
     jdab.setVisible(true); // blocked until dialog has been closed
-		this.name = jdab.getName();																											
-		this.mappedUnit = jdab.getMappedUnit();
-		TraceManager.addDev( "Mapping done succesfully on " + this.mappedUnit );
+		name = jdab.getName();																											
+		mappedUnit = jdab.getMappedUnit();
+		TraceManager.addDev( "Mapping done succesfully on " + mappedUnit );
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;

@@ -92,7 +92,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 		
 	//Panel 3
 	protected JButton removeMappingButton;
-	protected JComboBox referenceMemoriesName;
+	protected JComboBox referenceUnitsName;
 
 
 	// Mapping of storage units
@@ -108,7 +108,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
     
   /** Creates new form  */
   public JDialogTMLSDInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
-																		String attrib, String _name )	{
+																		String attrib, String _name, String _mappedUnit )	{
 		super(f, title, true);
 		frame = f;
 		attributesPar = _attributes;
@@ -117,6 +117,10 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
     forbidden = _forbidden;
     initValues = new Vector();
     this.attrib = attrib;
+		mappedUnits.removeAllElements();
+		if( _mappedUnit.length() > 0 )	{
+			mappedUnits.add( 0, _mappedUnit );
+		}
         
 	 	attributes = new Vector();
         
@@ -133,7 +137,12 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 		removeButton.setEnabled(false);
     upButton.setEnabled(false);
     downButton.setEnabled(false);
-		removeMappingButton.setEnabled(false);
+		if( mappedUnits.size() > 0 )	{
+			removeMappingButton.setEnabled(true);
+		}
+		else	{
+			removeMappingButton.setEnabled(false);
+		}
  }
     
  protected abstract void initComponents();
@@ -266,18 +275,19 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 	public void addMappedUnit() {
 
 		//TraceManager.addDev( "**************************" );
-		//TraceManager.addDev( referenceMemoriesName.getSelectedItem().toString() );
+		//TraceManager.addDev( referenceUnitsName.getSelectedItem().toString() );
 		//TraceManager.addDev( "**************************" );
-		removeMappingButton.setEnabled( true );
-    String s = referenceMemoriesName.getSelectedItem().toString();
-		mappedUnits.add(s);
+		mappedUnits.add( referenceUnitsName.getSelectedItem().toString() );
 		listMappedUnits.setListData( mappedUnits );
+		removeMappingButton.setEnabled( true );
 	}
 	
     public void removeMappedUnit() {
-			mappedUnits.removeElementAt( 0 );
+			mappedUnits.removeElementAt( listMappedUnits.getSelectedIndex() );
 			listMappedUnits.setListData( mappedUnits );
-			removeMappingButton.setEnabled( false );
+			if( mappedUnits.size() == 0 )	{
+				removeMappingButton.setEnabled( false );
+			}
     }
     
     public void removeAttribute() {

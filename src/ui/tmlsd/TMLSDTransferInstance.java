@@ -96,10 +96,9 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 	public boolean editOndoubleClick(JFrame frame) {
 			
 		//Get the list of ArchiPanels, then ArchiDiagramPanels then Memory nodes
+		boolean mappedUnitExists = false;
 		TDiagramPanel ttdp = getTDiagramPanel();
 		Vector<TMLArchiNode> availableTransferUnits = new Vector<TMLArchiNode>();
-//		Vector<TMLArchiBridgeNode> availableBridges = new Vector<TMLArchiBridgeNode>();
-	//	Vector<TMLArchiDMANode> availableDMAs = new Vector<TMLArchiDMANode>();
 		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
 
 		for( TMLArchiPanel panel: archiPanels )	{
@@ -110,27 +109,39 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 		for( int k = 0; k < archiComponentsList.size(); k++ )	{
 			if( archiComponentsList.get(k) instanceof TMLArchiBUSNode )	{
 				availableTransferUnits.addElement( (TMLArchiNode) archiComponentsList.get(k) );
-				TraceManager.addDev( "Found bus node: " + archiComponentsList.get(k) );
+				//TraceManager.addDev( "Found bus node: " + archiComponentsList.get(k) );
+				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}
 			}
 			if( archiComponentsList.get(k) instanceof TMLArchiBridgeNode )	{
 				availableTransferUnits.addElement( (TMLArchiNode) archiComponentsList.get(k) );
-				TraceManager.addDev( "Found bridge node: " + archiComponentsList.get(k) );
+				//TraceManager.addDev( "Found bridge node: " + archiComponentsList.get(k) );
+				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}
 			}
 			if( archiComponentsList.get(k) instanceof TMLArchiDMANode )	{
 				availableTransferUnits.addElement( (TMLArchiNode) archiComponentsList.get(k) );
-				TraceManager.addDev( "Found dma node: " + archiComponentsList.get(k) );
+				//TraceManager.addDev( "Found dma node: " + archiComponentsList.get(k) );
+				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}
 			}
+		}
+		if( !mappedUnitExists )	{
+			mappedUnit = "";
 		}
 
 		JDialogTMLCPTransferInstance jdab = new JDialogTMLCPTransferInstance( myAttributes, availableTransferUnits, null, frame,
-																											"Setting properties of " + name, "Attribute", this.name );
+																											"Setting properties of " + name, "Attribute", name, mappedUnit );
 		setJDialogOptions(jdab);
     jdab.setSize(650, 575);
     GraphicLib.centerOnParent(jdab);
     jdab.setVisible(true); // blocked until dialog has been closed
-		this.name = jdab.getName();																											
-		this.mappedUnit = jdab.getMappedUnit();
-		TraceManager.addDev( "Mapping done succesfully on " + this.mappedUnit );
+		name = jdab.getName();																											
+		mappedUnit = jdab.getMappedUnit();
+		TraceManager.addDev( "Mapping done succesfully on " + mappedUnit );
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;

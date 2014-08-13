@@ -62,8 +62,8 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
     
   /** Creates new form  */
   public JDialogTMLCPControllerInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
-																		String attrib, String _name )	{
-  	super(_attributes, _availableUnits, _forbidden, f, title, attrib, _name );
+																		String attrib, String _name, String _mappedUnit )	{
+  	super(_attributes, _availableUnits, _forbidden, f, title, attrib, _name, _mappedUnit );
 	}
     
  @Override protected void initComponents() {
@@ -250,8 +250,8 @@ public class JDialogTMLCPControllerInstance extends JDialogTMLSDInstance impleme
 					//TMLArchiMemoryNode mem = (TMLArchiMemoryNode) memoriesPar.get(j);
 					availableUnits.add( ( (TMLArchiNode) unitsPar.get(j)).getName() );
 				}
-				referenceMemoriesName = new JComboBox( availableUnits );
-        panel3.add( referenceMemoriesName, c3);
+				referenceUnitsName = new JComboBox( availableUnits );
+        panel3.add( referenceUnitsName, c3);
 
         // third line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row

@@ -62,8 +62,8 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
 	
   /** Creates new form  */
   public JDialogTMLCPStorageInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
-																		String attrib, String _name )	{
-  	super( _attributes, _availableUnits, _forbidden, f, title, attrib, _name );
+																		String attrib, String _name, String _mappedUnit )	{
+  	super( _attributes, _availableUnits, _forbidden, f, title, attrib, _name, _mappedUnit );
 	}
     
  @Override protected void initComponents() {
@@ -249,8 +249,8 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
 				for( int j = 0; j < unitsPar.size(); j++ )	{
 					availableUnits.add( ( (TMLArchiNode) unitsPar.get(j)).getName() );
 				}
-				referenceMemoriesName = new JComboBox( availableUnits );
-        panel3.add( referenceMemoriesName, c3);
+				referenceUnitsName = new JComboBox( availableUnits );
+        panel3.add( referenceUnitsName, c3);
 
         // third line panel3
         c3.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -342,6 +342,10 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
       attributesPar.removeAllElements();
       for(int i=0; i<attributes.size(); i++) {
 				attributesPar.addElement(attributes.elementAt(i));
+			}
+      unitsPar.removeAllElements();
+      for( int i = 0; i < mappedUnits.size(); i++ ) {
+				unitsPar.addElement( mappedUnits.elementAt(i) );
 			}
 			this.name = nameOfInstance.getText();
 			if( mappedUnits.size() > 1 )	{
