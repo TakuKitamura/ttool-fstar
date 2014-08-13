@@ -71,6 +71,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		protected static int heightActor = 30;
 		protected static int widthActor = 16;
 		protected Vector myAttributes;
+		protected String mappedUnit = "";	//The arch unit where the instance is mapped to
 	
     
     public TMLSDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
