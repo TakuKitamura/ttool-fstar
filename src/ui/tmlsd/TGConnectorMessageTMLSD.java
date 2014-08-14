@@ -178,9 +178,6 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 						value += params[i];
 					}
         }
-				else	{
-					value += ", ";
-				}
 			}
 			value += ")";
     }
