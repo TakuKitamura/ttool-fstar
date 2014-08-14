@@ -1,0 +1,942 @@
+/**********************************************************************************************************************
+Author: 			Andrea ENRICI
+Description: 	Parser for the communication Patterns
+***********************************************************************************************************************/
+
+options {
+	/* These are all the options offered by Javacc set with their default values */
+//  LOOKAHEAD = 2;
+//  CHOICE_AMBIGUITY_CHECK = 2;
+//  OTHER_AMBIGUITY_CHECK = 1;
+//  STATIC = true;
+//  DEBUG_PARSER = false;
+//  DEBUG_LOOKAHEAD = true;
+//  DEBUG_TOKEN_MANAGER = true;
+//  ERROR_REPORTING = true;
+//  JAVA_UNICODE_ESCAPE = false;
+//  UNICODE_INPUT = false;
+//  IGNORE_CASE = false;
+//  USER_TOKEN_MANAGER = false;
+//  USER_CHAR_STREAM = false;
+//  BUILD_PARSER = true;
+//  BUILD_TOKEN_MANAGER = true;
+//  SANITY_CHECK = true;
+	/*When LOOKAHEAD is more than 1, lookahead adequacy checking is not performed. Option FORCE_LA_CHECK must be set to true to
+	 * force checking */
+//  FORCE_LA_CHECK = true;
+//	TRACK_TOKENS = true;
+//	TOKEN_EXTENDS ="BaseToken";
+	MULTI=true;	/* Generate a multimode parse tree */
+	KEEP_LINE_COLUMN = false; 
+//	NODE_PREFIX="AST";
+}
+
+PARSER_BEGIN(CPparser) /* The parser class */
+
+//package compiler.tmlCPparser;
+import tmltranslator.*;
+import tmltranslator.tmlcp.*;
+import java.util.*;
+import myutil.*;
+import java.util.ArrayList;
+
+public class CPparser {
+
+	public static TMLCP topCP = new TMLCP( "noName", new Object() );
+
+  /* Main entry point. */
+  public static void main(String args[]) throws ParseException	{
+    CPparser parser = new CPparser(System.in);
+		try	{
+    	ASTStartSymbol n = parser.StartSymbol();
+			//print AST
+			//n.dump("");
+			//System.out.println("Thank you.");
+			topCP.printDataStructure();
+		}
+		catch ( Exception e )	{
+//			System.out.println("Ooops");
+			System.out.println(e.getMessage());
+//			e.printStackTrace();
+		}
+  }
+}
+
+PARSER_END(CPparser)
+
+SKIP:
+{
+	" "
+| "\t"
+| "\n"
+| "\r"
+| < "#" (~["\n","\r"])* ("\n" | "\r" | "\r\n") >	/* One-line comment */
+| < "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n") >	/* One-line comment */
+}
+
+/* The order in which TOKENs are declared matters! Moving the token declaration for the reserved keywords after the one for the
+ * identifiers makes parsing to go bananas as any reserved keyword is instead matched as an identifier! */
+/* Reserved keywords */
+TOKEN:
+{
+	< BOOLTYPE: "BOOL" >
+|	< INTTYPE: "INT" >
+| < START_KW: "START" >
+|	< ENDBLOCK: "END" >
+|	< MAINBLOCK: "MAIN" >
+|	< CP: "COMMUNICATION_PATTERN" >
+| < ACTIVITY_KW: "ACTIVITY" >
+| < SCENARIO_KW: "SCENARIO" >
+| < INCLUDE: "INCLUDE" >
+| < TRUECONST: "TRUE" >
+| < FALSECONST: "FALSE" >
+| < STORAGE_KW: "STORAGE" >
+| < CONTROLLER_KW: "CONTROLLER" >
+| < TRANSFER_KW: "TRANSFER" >
+| < ACTION_KW: <TRANSFER_ACT> | <TRANSFER_REQ> | <TRANSFER_DONE> | <READ_ACT> | <WRITE_ACT> >
+| < #TRANSFER_ACT: "Transfer" >
+| < #TRANSFER_REQ: "TransferRequest" >
+| < #TRANSFER_DONE: "TransferDone" >
+| < #READ_ACT: "Read" >
+| < #WRITE_ACT: "Write" >
+| < EXTENSION: <CP_LIB> >
+| < #CP_LIB: ".cplib" >
+}
+
+/* Operators */
+TOKEN:
+{
+	< BLOCKSTART: "{" >
+|	< BLOCKEND: "}" >
+|	< JOINSTART: "<" >
+|	< JOINEND: ">" >
+|	< SEQUENCING_OP: ";" >
+|	< PARALLELISM_OP: "*" >
+|	< SELECTION: "+" >
+|	< GUARDSTART: "[" >
+|	< GUARDEND: "]" >
+|	< ITERATIONSTART: "(" >
+|	< ITERATIONEND: ")" >
+|	< SEPARATOR: "," >
+| < ASSIGNMENT: "=" >
+| < EQUALITY: "==" >
+| < BITWISEOR: "|" >
+| < LOGICALOR: "||" >
+| < BITWISEAND: "&" >
+| < LOGICALAND: "&&" >
+| < BITWISEEXOR: "^" >
+| < INCREMENT: "++" >
+| < DECREMENT: "--" >
+| < STARTAD: "<>;" >
+| < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
+| < EOL: ("\n" | "\r" | "\r\n") >
+| < PATH_SEPARATOR: "/" >
+| < QUOTATION_MARK: "\"" >
+| < FULL_STOP: "." >
+}
+
+/* Identifiers */
+TOKEN:
+{
+	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT>)* (<LETTER> | <DIGIT>) >
+| < #LETTER: ["a"-"z","A"-"Z"] >
+|	< #DIGIT: ["0"-"9"] >
+|	< UNDERSCORE: "_" >
+//| < INCLUDE_SYMBOL: "$" >
+}
+
+/* Literals */
+TOKEN:
+{
+	< INTEGER_LITERAL: <DECIMAL_LITERAL> (["l","L"])? >
+| < #DECIMAL_LITERAL: ["0"-"9"] (["0"-"9"])* >
+}
+
+
+/* List of productions defining the non-terminals. They are implemented as methods of the above parser class*/
+/* Root production. */
+ASTStartSymbol StartSymbol():	/* The left hand side of this production is called Input and must be followed by colon */
+{
+	int i;
+	String space = " ";
+	String undefinedDiagStringList = "";
+	ArrayList<String> undefinedADList;
+	ArrayList<String> undefinedSDList;
+}
+{
+	( IncludeFiles() )*
+	( MappingList() )*
+	CommunicationPattern()
+	( ActivityDiagram() ( ActivityDiagram() )* ( SequenceDiagram() )+ | ( SequenceDiagram() )+ )
+	{
+		try	{
+			//check that all declared ADs have been defined
+			undefinedADList =  topCP.checkADsDefinition();
+			if( undefinedADList.size() != 0 )	{
+				for( i = 0; i < undefinedADList.size(); i++ )	{
+						undefinedDiagStringList += undefinedADList.get(i) + space;
+				}
+				String errorMessage = "TMLCP COMPILER ERROR: activity diagram(s) " + undefinedDiagStringList + "are not defined";
+				throw new UndefinedDiagramException( errorMessage );
+			}
+			//check that all SDs declared in ADs have been defined
+			undefinedDiagStringList = "";
+			undefinedSDList =  topCP.checkSDsDefinition();
+			if( undefinedSDList.size() != 0 )	{
+				for( i = 0; i < undefinedSDList.size(); i++ )	{
+					undefinedDiagStringList += undefinedSDList.get(i) + space;
+				}
+				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram(s) " + undefinedDiagStringList + "are not defined";
+				throw new UndefinedDiagramException( errorMessage );
+			}
+		}
+		catch( UndefinedDiagramException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+	}
+	<EOF>		/* Force the parser to reach EOF */
+	{
+		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
+		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
+		topCP.correctReferences();
+		return jjtThis;
+	}
+}
+
+/********************************************************************************************************************************
+Include Files Section: the grammar for parsing the inclusion of library files
+********************************************************************************************************************************/
+void IncludeFiles():
+{}
+{
+	<INCLUDE> <QUOTATION_MARK> (<FULL_STOP>)? (<PATH_SEPARATOR>)? ID() (<PATH_SEPARATOR> ID() )* <EXTENSION> <QUOTATION_MARK>
+}
+
+/* Scenario with mapping parameters within parentheses (the CP is mapped onto a list of architecture units) */
+void MappingList():
+{}
+{
+	ID() <ITERATIONSTART> ID() ( <SEPARATOR> ID() )+ <ITERATIONEND>
+}
+/********************************************************************************************************************************
+Activity Diagram Section
+********************************************************************************************************************************/
+//Fill the TMLCPActivityDiagram corrresponding to mainCP
+void CommunicationPattern():
+{
+	String name;
+	int i;
+	//TMLAttribute attr = new TMLAttribute();
+}
+{
+	<CP> name = ID()
+	{
+		topCP.setName( name );
+		TMLCPActivityDiagram mainCP = new TMLCPActivityDiagram( name, new Object() );
+		TMLCPStart ADStart = new TMLCPStart( name, new Object() );
+		mainCP.setStartElement( ADStart );
+		mainCP.addTMLCPElement( ADStart );
+	}
+	( ActivityDeclaration( topCP, mainCP ) )+	//fill both topCP and mainCP to check if all declared ads and sds are used
+	( ScenarioDeclaration( topCP, mainCP ) )* 
+
+	//Separate declaration from initialization because of filling-the-data-structure reasons
+	VariableDeclarationINT( mainCP )
+	VariableDeclarationBOOL( mainCP )
+	VariableInitialization( mainCP )
+
+	MainModule( mainCP )	//fill elements of mainCP
+
+	{ topCP.setMainCP( mainCP ); }
+
+	<ENDBLOCK>
+}
+
+//The code for the declaration of an Activity Diagram that is NOT the main CP
+void ActivityDiagram():
+{
+	String name;
+}
+{
+	<START_KW> <ACTIVITY_KW> name = ID()
+	{
+		TMLCPActivityDiagram currentAD = new TMLCPActivityDiagram( name, new Object() );
+	}
+
+	( ActivityDeclaration( topCP, currentAD ) )+	//fill otherCPs/sds of topCP
+	( ScenarioDeclaration( topCP, currentAD ) )*
+	VariableDeclarationINT( currentAD )
+	VariableDeclarationBOOL( currentAD )
+	VariableInitialization( currentAD )
+	
+	MainModule( currentAD )	//fill elements of the current AD
+
+	{
+		//try	{
+			//before adding check that the current AD has been declared at least once and has not been defined yet
+			topCP.addCPActivityDiagram( currentAD ); 
+		//}
+		/*catch( UndeclaredDiagramException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( MultipleDiagDeclarationsException	e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+
+	<ENDBLOCK>
+}
+
+void ActivityDeclaration( TMLCP topCP, TMLCPActivityDiagram currentAD ):
+{
+	String name;
+}
+{
+	<ACTIVITY_KW> name = ID()
+	{
+		//try	{
+			currentAD.addADname( name );
+		//}
+		/*catch( MultipleDiagDeclarationsException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( RecursionException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//try	{
+			currentAD.addADname( name );
+		//}
+		/*catch( MultipleDiagDeclarationsException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( RecursionException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	} 
+	)*
+}
+
+//Up to now I don't see the usefulness of such a method. The ParseException seems to work well for my purposes.
+//An error handler masked as a non-terminal for the grammar
+void error_skipto( int kind ):
+{}
+{
+	ID()
+  {
+	ParseException e = /*new ParseException( "This is my error message" );*/generateParseException();  // generate the exception object.
+	System.out.println(e.toString());  // print the error message
+//	System.exit(0);
+	Token t;
+	
+	do {
+	    t = getNextToken();
+	} while (t.kind != kind);
+	
+	// The above loop consumes tokens all the way up to a token of
+	// "kind".  We use a do-while loop rather than a while because the
+	// current token is the one immediately before the erroneous token
+	// (in our case the token immediately before what should have been
+	// "if"/"while".
+	}
+}
+
+
+/* Scenario declarations matching production. */
+void ScenarioDeclaration( TMLCP topCP, TMLCPActivityDiagram currentAD ):
+{
+	String name;
+}
+{
+  <SCENARIO_KW> name = ID()
+	{
+		//try	{
+			currentAD.addSDname( name );
+		//}
+		/*catch( MultipleDiagDeclarationsException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//try	{
+			currentAD.addSDname( name );
+		//}
+		/*catch( MultipleDiagDeclarationsException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+}
+
+/* Variable declarations matching production. */
+void VariableDeclarationINT( TMLCPActivityDiagram currentAD ):
+{
+	String name;
+	TMLAttribute var;
+	TMLType type = new TMLType(1);	// integer type
+}
+{
+  (
+	<INTTYPE> name = ID()
+	{
+		//try	{
+			var = new TMLAttribute( name, type );
+			currentAD.addVariable( var );
+		//}
+		/*catch( UndeclaredVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	( <SEPARATOR> name = ID()
+	{
+		//try	{
+			var = new TMLAttribute( name, type );
+			currentAD.addVariable( var );
+		//}
+		/*catch( UndeclaredVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+		)+
+}
+
+//ArrayList<TMLAttribute> VariableDeclarationBOOL( TMLCPActivityDiagram mainCP ):
+void VariableDeclarationBOOL( TMLCPActivityDiagram currentAD ):
+{
+	String name;
+	TMLType type = new TMLType(2);	// boolean type
+	TMLAttribute var;
+}
+{
+  (
+	<BOOLTYPE> name = ID()
+	{
+		//try	{
+			var = new TMLAttribute( name, type );
+			currentAD.addVariable( var );
+		//}
+		/*catch( UndeclaredVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	( <SEPARATOR> name = ID()
+	{ 
+		//try	{
+			var = new TMLAttribute( name, type );
+			currentAD.addVariable( var );
+		//}
+		/*catch( UndeclaredVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+		)+
+}
+
+/* Variable declarations matching production. */
+void VariableInitialization( TMLCPActivityDiagram currentAD ):
+{
+	Token t;
+	String name;
+	TMLType type = new TMLType(3);
+	TMLAttribute attr;
+}
+{
+	(
+	name = ID() <ASSIGNMENT>
+	( <TRUECONST>
+	{
+		type.setType(2);
+		//try	{
+			attr = new TMLAttribute( name, type );
+			currentAD.insertInitialValue( attr, "false" );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	| <FALSECONST>
+	{
+		type.setType(2);
+		//try	{
+			attr = new TMLAttribute( name, type );
+			currentAD.insertInitialValue( attr, "false" );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	| t = <INTEGER_LITERAL>
+	{
+		//try	{
+			type.setType(1);
+			attr = new TMLAttribute( name, type );
+			currentAD.insertInitialValue( attr, t.image );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	) )+
+}
+	
+/* Start of Module matching production. */
+void MainModule( TMLCPActivityDiagram currentAD ):
+{}
+{
+  <MAINBLOCK>
+	<STARTAD>
+	TOExpression( currentAD )
+	( JoinList( currentAD ) )*
+	<ENDBLOCK>
+}
+
+//The name of the joinNode is the concatenation of the names of the diagrams involved
+void JoinList( TMLCPActivityDiagram currentAD ):
+{
+	String name = "Join ";
+	String name2;
+}
+{
+	<JOINSTART> name2 = ID()	{ name = name + name2; }
+	
+	( <SEPARATOR> name2 = ID() { name = name + name2; } )+
+	{
+		TMLCPJoin joinNode = new TMLCPJoin( name, new Object() );
+		currentAD.addTMLCPElement( joinNode );
+	}
+	<JOINEND> <SEQUENCING_OP>	
+	{
+		TMLCPSequence seqNode = new TMLCPSequence( "sequence", new Object() );
+		currentAD.addTMLCPElement( seqNode );
+	}
+	
+	TOExpression( currentAD )
+
+}
+/* Make it work only for joining one scenario: there is only one join scenario after the join. */
+/* Right-recursive grammar for Total Order (TO) expressions. Parses also {scX} and unbalanced curly parentheses. Priority is
+ * encoded in the grammar to the parallelism * operator. */
+void TOExpression( TMLCPActivityDiagram currentAD ):
+{}
+{
+	TOTerm( currentAD ) TOExpressionPrime( currentAD ) 
+}
+
+void TOExpressionPrime( TMLCPActivityDiagram currentAD ):
+{}
+{
+	<SEQUENCING_OP>
+	{
+		TMLCPSequence seqNode = new TMLCPSequence( "sequence", new Object() );
+		currentAD.addTMLCPElement( seqNode );
+	}
+	TOTerm( currentAD ) TOExpressionPrime( currentAD )
+| {}
+}
+
+void TOTerm( TMLCPActivityDiagram currentAD ):
+{}
+{
+	TOFactor( currentAD ) TOTermPrime( currentAD )
+}
+
+void TOTermPrime( TMLCPActivityDiagram currentAD ):
+{}
+{
+	<PARALLELISM_OP> 
+	{
+	TMLCPFork forkNode = new TMLCPFork( "fork", new Object() );
+	currentAD.addTMLCPElement( forkNode);
+	}
+	TOFactor( currentAD ) TOTermPrime( currentAD )
+| {}
+}
+
+void TOFactor( TMLCPActivityDiagram currentAD ):
+{
+	String name;
+}
+{
+	<BLOCKSTART>
+		{
+		TMLCPStartGroup startNode = new TMLCPStartGroup( "startGroup", new Object() );
+		currentAD.addTMLCPElement( startNode );
+		}
+	TOExpression( currentAD ) <BLOCKEND>
+		{
+		TMLCPEndGroup endNode = new TMLCPEndGroup( "endGroup", new Object() );
+		currentAD.addTMLCPElement( endNode );
+		}
+	( GExpression( currentAD ) )*
+	|
+	name = ID()
+		{
+		//If the diagram has been declared, okay to add it to the data structure
+		//try	{
+			if( currentAD.declaredDiagram( name ) )	{
+				TMLCPElement ref;
+				if( currentAD.containsADDiagram( name ) )	{	//the diagram has been declared as a AD
+					currentAD.addTMLCPElement( new TMLCPRefAD( new TMLCPActivityDiagram( "refCP", new Object()), name, new Object() ) );
+				}
+				else if( currentAD.containsSDDiagram( name ) ){
+					currentAD.addTMLCPElement( new TMLCPRefSD( new TMLCPSequenceDiagram( "refSD", new Object()), name, new Object() ) );
+				}
+			}
+			else	{
+				if( name.equals( currentAD.getName() ) )	{
+					String errorMessage = "TMLCP COMPILER ERROR: detected recursion of diagram " + currentAD.getName();
+					throw new RecursionException( errorMessage );
+				}
+				else	{
+					String errorMessage = "TMLCP COMPILER ERROR: diagram " + name + " in diagram " + currentAD.getName() + " is undeclared";
+					throw new UndeclaredDiagramException( errorMessage );
+				}
+			}
+		//}
+		/*catch( RecursionException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( UndeclaredDiagramException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	( GExpression( currentAD ) )*
+}
+
+/* Right-recursive grammar for parsing the guard expressions. Same as the above grammar for parsing TO expressions. No priority is
+ * given to operators */
+void GExpression( TMLCPActivityDiagram currentAD ):
+{}
+{
+	GTerm( currentAD ) GExpressionPrime( currentAD )
+}
+
+void GExpressionPrime( TMLCPActivityDiagram currentAD ):
+{}
+{
+	<LOGICALOR> GTerm( currentAD ) GExpressionPrime( currentAD )
+| <LOGICALAND> GTerm( currentAD ) GExpressionPrime( currentAD )
+| {}
+}
+
+void GTerm( TMLCPActivityDiagram currentAD ):
+{}
+{
+	GFactor( currentAD ) GTermPrime( currentAD )
+}
+
+void GTermPrime( TMLCPActivityDiagram currentAD ):
+{}
+{
+	GFactor( currentAD ) GTermPrime( currentAD )
+| {}
+}
+
+void GFactor( TMLCPActivityDiagram currentAD ):
+{
+	String name;
+}
+{
+	<GUARDSTART> GExpression( currentAD ) <GUARDEND>
+	|
+	name = ID()
+	{
+		//try	{
+			TMLAttribute var = new TMLAttribute( name, new TMLType(2) );
+			currentAD.checkVariable( var );
+		//}
+		/*catch( UndefinedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+}
+
+/********************************************************************************************************************************
+Sequence Diagram Section
+********************************************************************************************************************************/
+
+void SequenceDiagram():
+{
+	String name;
+}
+{
+	<SCENARIO_KW> name = ID()
+	{
+		TMLCPSequenceDiagram currentSD = new TMLCPSequenceDiagram( name, new Object() );
+		//try	{
+			topCP.addCPSequenceDiagram( currentSD );
+		//}
+		/*catch( UndeclaredDiagramException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( MultipleDiagDeclarationsException	e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	ArchitectureNodes( currentSD )
+	( IntegerDeclaration( currentSD ) )*
+	( IntegerInitialization( currentSD ) )*
+	<MAINBLOCK> ( Action( currentSD ) )+	//I have to check that the action exists somewhere in a library of actions!
+	<ENDBLOCK>
+	<ENDBLOCK>
+}
+
+void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
+{
+	String name;
+}
+{
+	//storage nodes
+	<STORAGE_KW> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "STORAGE" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "STORAGE" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+	//controller nodes
+	<CONTROLLER_KW> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "CONTROLLER" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "CONTROLLER" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+	// transfer nodes
+	<TRANSFER_KW> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "TRANSFER" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//try	{
+			currentSD.addInstance( new TMLSDInstance( name, new Object(), "TRANSFER" ) );
+		//}
+		/*catch( MultipleInstanceDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+}
+
+void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
+{
+	String name;
+}
+{
+	<INTTYPE> name = ID() 
+	{
+		//try	{
+			currentSD.addVariable( new TMLAttribute( name, new TMLType(1) ) );
+		//}
+		/*catch( MultipleVariableDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID() 
+	{
+		//try	{
+			currentSD.addVariable( new TMLAttribute( name, new TMLType(1) ) );
+		//}
+		/*catch( MultipleVariableDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+}
+
+void IntegerInitialization( TMLCPSequenceDiagram currentSD ):
+{
+	String name;
+	Token t;
+}
+{
+	name = ID() <ASSIGNMENT> t = <INTEGER_LITERAL>
+	{
+		//try	{
+			currentSD.insertInitialValue( name, t.image );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+}
+
+void Action( TMLCPSequenceDiagram currentSD ):
+{
+	Token t;
+	String name, messageName, sender, receiver, errorMessage;
+}
+{
+	t = <ACTION_KW>
+	{
+		messageName = t.image;
+		TMLSDMessage message = new TMLSDMessage( messageName, new Object() );
+	}
+	<ITERATIONSTART> sender = ID()
+	{
+		//try	{ 
+			if( currentSD.containsInstance( sender ) )	{
+				message.addAttribute( new TMLSDAttribute( sender, new TMLSDType(2) ) ); 
+			}
+			else	{
+				errorMessage = "TMLCOMPILER ERROR: instance " + sender + " in diagram " + currentSD.getName() + " was not declared";
+				throw new UndeclaredInstanceException( errorMessage );
+			}
+		//}
+		/*catch( UndeclaredInstanceException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	<SEPARATOR> receiver = ID()	//the message receiver
+	{
+		//try	{ 
+			if( currentSD.containsInstance( receiver ) )	{
+				message.addAttribute( new TMLSDAttribute( receiver, new TMLSDType(2) ) ); 
+			}
+			else	{
+				errorMessage = "TMLCOMPILER ERROR: instance " + receiver + " in diagram " + currentSD.getName() + " was not declared";
+				throw new UndeclaredInstanceException( errorMessage );
+			}
+		//}
+		/*catch( UndeclaredInstanceException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID()
+	{
+		//only integer/natural variables are admitted here. Check if the message parameter has been initialized/declared/declared
+		//multiple times before adding to data structure
+		//try	{
+			switch( currentSD.isVariableInitialized( name ) )	{
+				case 0:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is uninitialized";
+									throw new UninitializedVariableException( errorMessage );
+									break;
+				case 1:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is declared multiple times";
+									throw new MultipleVariableDeclarationException( errorMessage );
+									break;
+				case 2:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is undeclared";
+									throw new UndeclaredVariableException( errorMessage );
+									break;
+				case 3:		message.addAttribute( new TMLSDAttribute( name, new TMLSDType(1) ) );
+									break;
+				default:	errorMessage = "TMLCOMPILER ERROR: failed initializing variable " + name;
+									throw new UninitializedVariableException( errorMessage );
+									break;
+			}
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( MultipleVariableDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}
+		catch( UndeclaredVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)+	//there is always at least one parameter
+	<ITERATIONEND> <SEQUENCING_OP>
+	{
+		TMLSDInstance instance;
+		currentSD.addMessage( message );
+		//add sendMessage to instance of the sender
+		//look for instance of sender
+		instance = currentSD.retrieveInstance( sender );
+		//add sendMessage element
+		TMLSDSendMessage sendMessage = new TMLSDSendMessage( message, messageName, new Object() );
+		instance.addElement( sendMessage );
+		//put back the instance into data structure
+		currentSD.addInstance( instance );
+		//similarly add receiveMessage to instance of the receiver
+		instance = currentSD.retrieveInstance( receiver );
+		TMLSDReceiveMessage receiveMessage = new TMLSDReceiveMessage( message, messageName, new Object() );
+		instance.addElement( receiveMessage );
+		currentSD.addInstance( instance );
+	}
+}
+
+String ID():
+{
+	Token t;
+}
+{
+	t = <IDENTIFIER>
+	{ jjtThis.setName(t.image); return t.image; }
+}
