@@ -228,7 +228,6 @@ public class TMLCPTextSpecification {
 	
 	public String makeDeclarations( TMLCP tmlcp ) {
 
-
 		ArrayList<TMLCPElement> listElements;
 		currentElem = "";
 		nextElem = "";
@@ -280,7 +279,7 @@ public class TMLCPTextSpecification {
 					}
 					else	{
 						endOfGraph = true;
-						String temp = sb.substring(0,sb.length()-3) + "}" + SEQUENCE_OP + SP + "><";
+						String temp = sb.substring(0,sb.length()-3) + "}" + SP + "><";
 						sb = temp;
 					}
 					encounteredSequence = false;
@@ -305,7 +304,9 @@ public class TMLCPTextSpecification {
 							if( encounteredSequence )	{
 								sb += CR + TAB2;	//When there is a sequence of diags before the choice node
 							}
-							sb += CR + TAB2 + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ ) + "><";
+							sb += CR + TAB2 + exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+							String temp = sb.substring(0, sb.length()-1) + SP + "><";	//drop semicolon
+							sb = temp;
 							endOfGraph = true;
 						}
 					}	//else I should trigger an error
@@ -324,7 +325,7 @@ public class TMLCPTextSpecification {
 				break;
 			}
 			if( nextElem.equals(STOP) )	{
-				String temp = sb.substring(0,sb.length()-11) + SP + "><";
+				String temp = sb.substring(0,sb.length()-12) + SP + "><";
 				sb = temp;
 				break;
 			}
@@ -380,7 +381,7 @@ public class TMLCPTextSpecification {
 						}
 						else	{
 							endOfGraph = true;
-							String temp = sb.substring(0,sb.length()-3) + "}" + SEQUENCE_OP + SP + "><";
+							String temp = sb.substring(0,sb.length()-3) + "}" + SP + "><";
 							sb = temp;
 						}
 						encounteredSequence = false;
@@ -407,7 +408,9 @@ public class TMLCPTextSpecification {
 								if( encounteredSequence )	{
 									sb += CR + TAB2;
 								}
-								sb += exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ ) + "><";
+								sb += exploreChoiceBranches( comingFromMain, comingFromChoice, comingFromFJ );
+								String temp = sb.substring(0, sb.length()-1) + SP + "><";	//drop semicolon
+								sb = temp;
 								currentJunc = "";
 								endOfGraph = true;
 							}
@@ -428,7 +431,7 @@ public class TMLCPTextSpecification {
 				currentElem = nextElem; //advance to next connector
 			}	//End of while loop
 			if( comingFromFJ )	{
-				newSb = sb.substring( 0, sb.length()-2 ) + " COMING_FROM_FJ";	// drop last PARALLELISM_OP
+				newSb = sb.substring( 0, sb.length()-2 );	// drop last PARALLELISM_OP
 			}
 			sb += CR + TAB + END + CR + END + CR2;
 
@@ -439,7 +442,7 @@ public class TMLCPTextSpecification {
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		for( int i = 0; i < listSDs.size(); i++ )	{
 			TMLCPSequenceDiagram SD = listSDs.get(i);
-			sb += "SCENARIO " + SD.getName() + CR + TAB;
+			sb += "SEQUENCE " + SD.getName() + CR + TAB;
 			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = SD.getInstances();
 			ArrayList<TMLSDMessage> listMessages = SD.getMessages();
 			ArrayList<TMLSDAction> listActions = SD.getActions();
@@ -448,7 +451,7 @@ public class TMLCPTextSpecification {
 				sb += inst.getType() + " " + inst.getName() + CR + TAB;
 			}
 			for( TMLAttribute attr: listAttributes )	{
-				sb += attr.getType().toString() + " " + attr.getName() + CR + TAB;
+				sb += attr.getType().toString().toUpperCase() + " " + attr.getName() + CR + TAB;
 			}
 			for( TMLAttribute attr: listAttributes )	{
 				if( attr.isBool() )	{
@@ -698,7 +701,7 @@ public class TMLCPTextSpecification {
 			currentElem = currentElemToPass;
 			nextElem = nextElemToPass;
 		}
-		return globalSb + ENDLOOP + loopCounter + SC + SP;
+		return globalSb + ENDLOOP + loopCounter + SP;
 	}
 
 	//Look for a connector that starts from currentElem and get the endName

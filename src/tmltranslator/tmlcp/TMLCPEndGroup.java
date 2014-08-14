@@ -1,7 +1,6 @@
-/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille, Andrea Enrici
+/**Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
 
 ludovic.apvrille AT enst.fr
-andrea.enrici AT enst.fr
 
 This software is a computer program whose purpose is to allow the 
 edition of TURTLE analysis, design and deployment diagrams, to 
@@ -37,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDMessage
+* Class TMLCPStart
 * Creation: 18/02/2014
-* @version 1.1 15/05/2014
-* @author Ludovic APVRILLE, Andrea ENRICI
+* @version 1.0 18/02/2014
+* @author Ludovic APVRILLE
 * @see
 */
 
@@ -48,63 +47,14 @@ package tmltranslator.tmlcp;;
 
 import java.util.*;
 
-import tmltranslator.*;
+
 import myutil.*;
 
-public class TMLSDMessage extends TMLElement  {
+public class TMLCPEndGroup extends TMLCPElement  {
 
-	//mind the difference between TMLSDAttribute and TMLAttribute!
-	private ArrayList<TMLSDAttribute> attributeList;	
-	private int yCoord;
-
-  public TMLSDMessage( String _name, Object _referenceObject ) {
-  	super( _name, _referenceObject );
-		this.yCoord = -1;
-		attributeList = new ArrayList<TMLSDAttribute>();
-	}
 	
-  public TMLSDMessage( String _name, int _yCoord, Object _referenceObject ) {
-  	super( _name, _referenceObject );
-		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLSDAttribute>();
-	}
-
-	public TMLSDMessage( String _name, int _yCoord, Object _referenceObject, ArrayList<String> _params )	{
-		super( _name, _referenceObject );
-		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLSDAttribute>();
-		for( String p: _params )	{
-			attributeList.add( new TMLSDAttribute(p) );
-		}
-	}
-    
-	public void addAttribute( TMLSDAttribute _attribute )	{
-		if( _attribute != null )
-			attributeList.add( _attribute );
-	}
-
-	public ArrayList<TMLSDAttribute> getAttributes()	{
-		return attributeList;
-	}
-
-	public int getYCoord()	{
-		return this.yCoord;
-	}
-
-	public void setYCoord( int _coord )	{
-		this.yCoord = _coord;
-	}
+    public TMLCPEndGroup(String _name, Object _referenceObject) {
+        super(_name, _referenceObject);
+    }
 	
-	@Override public String toString()	{
-		String s = this.name + "( ";
-		for( TMLSDAttribute attribute: attributeList )	{
-			if( attribute.getName() != "" && attribute.getName() != "null" && attribute.getName() != null )	{
-				s += attribute.getName() + ", ";
-			}
-		}
-		String newS = s.substring( 0, s.length()-2 );
-//		s.setCharAt( s.length()-1, ' ' );
-		s = newS + " )";
-		return s;
-	}
-}	//End of class
+}

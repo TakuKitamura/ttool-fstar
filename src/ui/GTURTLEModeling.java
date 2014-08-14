@@ -127,6 +127,9 @@ import proverifspec.*;
 
 import req.ebrdd.*;
 
+//Communication Pattern javaCC parser
+//import compiler.tmlCPparser.*;
+
 public class GTURTLEModeling {
 
 	//Added by Solange
@@ -412,7 +415,6 @@ public class GTURTLEModeling {
 			}
 		}
 		else	{
-
 			//This branch is activated if doing the syntax check from the application panel.
 			//It only generates the application TML text
 			if( tmap == null ) {
@@ -6144,7 +6146,7 @@ public class GTURTLEModeling {
 		gtmlm.setTasks(tasksToTakeIntoAccount);
 		tmlm = gtmlm.translateToTMLModeling(true);
 		//tmlm.removeAllRandomSequences();
-		//TraceManager.addDev("New TML Modeling:" + tmlm.toString());
+		TraceManager.addDev("New TML Modeling:" + tmlm.toString());
 		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
@@ -6194,7 +6196,6 @@ public class GTURTLEModeling {
         gctmlm.putPrefixName(true);
 		gctmlm.setComponents(componentsToTakeIntoAccount);
 		tmlm = gctmlm.translateToTMLModeling(true);
-		
 		mgui.generateTMLTxt();
 		artificialtmap = tmlm.getDefaultMapping();
 		tmap = null;
@@ -6283,22 +6284,28 @@ public class GTURTLEModeling {
 		}
 	}
 
-	//Newly introduced to perform Syntax check of CP diagrams
+	//Newly introduced to perform Syntax check of CP diagrams. Actually the mapping of CPs onto the architecture is done via SDs,
+	//onto the application is done onto blocks in the architecture. It would be better to have all the mapping information in one
+	//diagram. Up to now, not taking the mapping information into account
 	public boolean checkSyntaxTMLCP( Vector nodesToTakeIntoAccount, TMLCommunicationPatternPanel tmlcpp, boolean optimize ) {
 
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();
 		mgui.setMode( MainGUI.VIEW_SUGG_DESIGN_KO );
-		//TraceManager.addDev("New TML Mapping");
 		GTMLModeling gtmlm = new GTMLModeling( tmlcpp, true );
 		
 		gtmlm.setNodes( nodesToTakeIntoAccount );	//simply transforms the parameter from a Vector to LinkedList
 		tmlm = null;
 		tm = null;
 		tmState = 1;
-		tmlcp = gtmlm.translateToTMLCP();
+		tmlcp = gtmlm.translateToTMLCP();	//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
+		TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
+		mgui.generateTMLTxt();	//Now generating the TMLtxt code
+		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
+		//CPparser myCPparser = new CPparser( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+		//here I should call the javacc parser and feed it with the above-generated TMLtxt!
 		/*listE = gtmlm.getCorrespondanceTable();
-		checkingErrors = gtmlm.getCheckingErrors();
+		checkingErrors = gtmlm.getCheckingErrors();	//A vector
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
 			analyzeErrors();
@@ -6317,7 +6324,7 @@ public class GTURTLEModeling {
 			mgui.setMode( MainGUI.GEN_DESIGN_OK );
 			return true;
 		}*/
-		return true;	//temporary, just to check functionality
+		return true;	//It means that there are no errors
 	}
 	
 	public boolean translateTMLMapping(boolean _sample, boolean _channel, boolean _event, boolean _request, boolean _exec, boolean _busTransfers, boolean _scheduling, boolean _taskState, boolean _channelState, boolean _branching, boolean _terminateCPU, boolean _terminateCPUs, boolean _clocked, String _tickValue, boolean _endClocked, boolean _countTick, boolean _maxCountTick, String _maxCountTickValue, boolean _randomTask) {

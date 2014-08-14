@@ -92,22 +92,22 @@ public class TMLCPActivityDiagram  extends TMLElement {
     init();
   }
 
-  public void addVariable( TMLAttribute _var ) throws UndeclaredVariableException	{
+  public void addVariable( TMLAttribute _var ) /*throws UndeclaredVariableException*/	{
 
 		if( !definedVariable( _var ) )	{
   		globalVariables.add( _var );
 		}
 		else	{
 			String errorMessage = "TMLCP COMPILER ERROR: variable " + _var.getName() + " is defined multiple times in diagram " + this.name;
-			throw new UndeclaredVariableException( errorMessage );
+			//throw new UndeclaredVariableException( errorMessage );
 		}
   }
 
-	public void addADname( String _name )	throws MultipleDiagDeclarationsException, RecursionException	{
+	public void addADname( String _name )	/*throws MultipleDiagDeclarationsException, RecursionException*/	{
 
 		if( _name.equals( this.name ) )	{
 			String errorMessage = "TMLCP COMPILER ERROR: detected recursion of " + _name + " in diagram " + this.name;
-			throw new RecursionException( errorMessage );
+			//throw new RecursionException( errorMessage );
 		}
 		else	{
 			if( !containsADDiagram( _name ) )	{
@@ -115,19 +115,19 @@ public class TMLCPActivityDiagram  extends TMLElement {
 			}
 			else	{
 				String errorMessage = "TMLCP COMPILER ERROR: " + _name + " diagram is declared multiple times in diagram " + this.name;
-				throw new MultipleDiagDeclarationsException( errorMessage );
+				//throw new MultipleDiagDeclarationsException( errorMessage );
 			}
 		}
 	}
 
-	public void addSDname( String _name ) throws MultipleDiagDeclarationsException	{
+	public void addSDname( String _name ) /*throws MultipleDiagDeclarationsException*/	{
 
 		if( !containsSDDiagram( _name ) )	{
 			sds.add( _name );
 		}
 		else	{
 			String errorMessage = "TMLCP COMPILER ERROR: " + _name + " diagram is declared multiple times in diagram " + this.name;
-			throw new MultipleDiagDeclarationsException( errorMessage );
+			//throw new MultipleDiagDeclarationsException( errorMessage );
 		}
 	}
 
@@ -172,7 +172,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 			return ads.contains( _name );
 		}
 
-		public void insertInitialValue( TMLAttribute _attr, String value ) throws UninitializedVariableException {
+		public void insertInitialValue( TMLAttribute _attr, String value ) /*throws UninitializedVariableException*/ {
 			
 			int i = 0;
 			String str;
@@ -193,7 +193,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 			}
 			//The variable trying to be initialized was not declared
 			String errorMessage = "TMLCP COMPILER ERROR: variable " + _attr.getName() + " declared but not defined in diagram " + this.name;
-			throw new UninitializedVariableException( errorMessage );
+			//throw new UninitializedVariableException( errorMessage );
 		}
 
 	public ArrayList<TMLCPElement> getElements() {
@@ -220,11 +220,11 @@ public class TMLCPActivityDiagram  extends TMLElement {
         elements.add(_elt);
   }
   
-	public void checkVariable( TMLAttribute _var ) throws UndefinedVariableException	{
+	public void checkVariable( TMLAttribute _var ) /*throws UndefinedVariableException*/	{
 		
 		if( !definedVariable( _var ) )	{
 			String errorMessage = "TMLCP COMPILER ERROR: variable " + _var.getName() + " undeclared in diagram " + this.name;
-			throw new UndefinedVariableException( errorMessage );
+			//throw new UndefinedVariableException( errorMessage );
 		}
 	}
 
