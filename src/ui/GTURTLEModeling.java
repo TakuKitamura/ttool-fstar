@@ -2937,7 +2937,7 @@ public class GTURTLEModeling {
 					}
 				}
 			}  else if (tdp instanceof TMLCPPanel) {
-				nl = doc.getElementsByTagName("TMLCPPanelCopy");
+				nl = doc.getElementsByTagName("CommunicationPatternDiagramPanelCopy");
 				docCopy = doc;
 
 				if (nl == null) {

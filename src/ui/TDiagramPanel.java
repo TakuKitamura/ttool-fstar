@@ -593,6 +593,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append(s);
         sb.append("\n");
         sb.append(getXMLSelectedTail());
+        
+        //TraceManager.addDev("xml of selected components:" + sb);
+        
         return sb;
     }
     

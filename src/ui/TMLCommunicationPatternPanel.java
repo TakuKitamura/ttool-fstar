@@ -179,6 +179,9 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
     }
     
     public boolean removeEnabled(int index) {
+    	if (index ==0) {
+    			return false;
+    	}
         if ((panels.elementAt(index) instanceof TMLCPPanel) ||(panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0)){
             return true;
         }
@@ -186,6 +189,9 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
     }
     
     public boolean renameEnabled(int index) {
+    	if (index ==0) {
+    			return false;
+    	}
         if ((panels.elementAt(index) instanceof TMLCPPanel) ||(panels.elementAt(index) instanceof TMLSDPanel) || ((panels.elementAt(index) instanceof TMLCPPanel) & index != 0)){
             return true;
         }
