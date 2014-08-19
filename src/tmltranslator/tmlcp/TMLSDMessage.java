@@ -55,27 +55,44 @@ public class TMLSDMessage extends TMLElement  {
 
 	//mind the difference between TMLSDAttribute and TMLAttribute!
 	private ArrayList<TMLSDAttribute> attributeList;	
+	private String senderName = "";
+	private String receiverName = "";
 	private int yCoord;
 
-  public TMLSDMessage( String _name, Object _referenceObject ) {
+  public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ Object _referenceObject ) {
   	super( _name, _referenceObject );
 		this.yCoord = -1;
+		this.senderName = "";//_senderName;
+		this.receiverName = "";//_receiverName;
 		attributeList = new ArrayList<TMLSDAttribute>();
 	}
 	
-  public TMLSDMessage( String _name, int _yCoord, Object _referenceObject ) {
+  public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ int _yCoord, Object _referenceObject ) {
   	super( _name, _referenceObject );
+		this.senderName = "";//_senderName;
+		this.receiverName = "";//_receiverName;
 		this.yCoord = _yCoord;
 		attributeList = new ArrayList<TMLSDAttribute>();
 	}
 
-	public TMLSDMessage( String _name, int _yCoord, Object _referenceObject, ArrayList<String> _params )	{
+	public TMLSDMessage( String _name, String _senderName, String _receiverName, int _yCoord,
+												Object _referenceObject, ArrayList<String> _params )	{
 		super( _name, _referenceObject );
 		this.yCoord = _yCoord;
+		this.senderName = _senderName;
+		this.receiverName = _receiverName;
 		attributeList = new ArrayList<TMLSDAttribute>();
 		for( String p: _params )	{
 			attributeList.add( new TMLSDAttribute(p) );
 		}
+	}
+
+	public String getSenderName()	{
+		return senderName;
+	}
+
+	public String getReceiverName()	{
+		return receiverName;
 	}
     
 	public void addAttribute( TMLSDAttribute _attribute )	{

@@ -112,7 +112,9 @@ TOKEN:
 |	< JOINEND: ">" >
 |	< SEQUENCING_OP: ";" >
 |	< PARALLELISM_OP: "*" >
-|	< SELECTION: "+" >
+|	< MATH_PLUS: "+" >
+|	< MATH_MINUS: "-" >
+|	< DOT: "." >
 |	< GUARDSTART: "[" >
 |	< GUARDEND: "]" >
 |	< ITERATIONSTART: "(" >
@@ -133,7 +135,6 @@ TOKEN:
 | < EOL: ("\n" | "\r" | "\r\n") >
 | < PATH_SEPARATOR: "/" >
 | < QUOTATION_MARK: "\"" >
-| < FULL_STOP: "." >
 }
 
 /* Identifiers */
@@ -211,7 +212,7 @@ Include Files Section: the grammar for parsing the inclusion of library files
 void IncludeFiles():
 {}
 {
-	<INCLUDE> <QUOTATION_MARK> (<FULL_STOP>)? (<PATH_SEPARATOR>)? ID() (<PATH_SEPARATOR> ID() )* <EXTENSION> <QUOTATION_MARK>
+	<INCLUDE> <QUOTATION_MARK> (<DOT>)? (<PATH_SEPARATOR>)? ID() (<PATH_SEPARATOR> ID() )* <EXTENSION> <QUOTATION_MARK>
 }
 
 /* Scenario with mapping parameters within parentheses (the CP is mapped onto a list of architecture units) */
@@ -516,7 +517,7 @@ void VariableInitialization( TMLCPSequenceDiagram currentSD ):
 }
 {
 	//(
-	name = ID() <ASSIGNMENT>
+	t = <IDENTIFIER> { name = t.image; } <DOT> <IDENTIFIER> <ASSIGNMENT>
 	( <TRUECONST>
 	{
 		type.setType(2);
@@ -767,7 +768,8 @@ void SequenceDiagram():
 	//VariableDeclarationINT( mainCP )
 	//VariableDeclarationBOOL( mainCP )
 	( VariableInitialization( currentSD ) )*
-	<MAINBLOCK> ( Action( currentSD ) )+	//I have to check that the action exists somewhere in a library of actions!
+	<MAINBLOCK>
+	( Action( currentSD ) )+
 	<ENDBLOCK>
 	<ENDBLOCK>
 }
@@ -851,12 +853,13 @@ void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
 void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
 {
 	String name;
+	Token t;
 }
 {
-	<INTTYPE> name = ID() 
+	<INTTYPE> t = <IDENTIFIER> <DOT> <IDENTIFIER>
 	{
 		//try	{
-			currentSD.addVariable( new TMLAttribute( name, new TMLType(1) ) );
+			currentSD.addVariable( new TMLAttribute( t.image, new TMLType(1) ) );
 		//}
 		/*catch( MultipleVariableDeclarationException e )	{
 			System.out.println( e.getMessage() );
@@ -864,10 +867,10 @@ void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
 		}*/
 	}
 	(
-	<SEPARATOR> name = ID() 
+	<SEPARATOR> t = <IDENTIFIER> <DOT> <IDENTIFIER> 
 	{
 		//try	{
-			currentSD.addVariable( new TMLAttribute( name, new TMLType(1) ) );
+			currentSD.addVariable( new TMLAttribute( t.image, new TMLType(1) ) );
 		//}
 		/*catch( MultipleVariableDeclarationException e )	{
 			System.out.println( e.getMessage() );
@@ -880,12 +883,13 @@ void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
 void BooleanDeclaration( TMLCPSequenceDiagram currentSD ):
 {
 	String name;
+	Token t;
 }
 {
-	<BOOLTYPE> name = ID() 
+	<BOOLTYPE> t = <IDENTIFIER> <DOT> <IDENTIFIER> 
 	{
 		//try	{
-			currentSD.addVariable( new TMLAttribute( name, new TMLType(2) ) );
+			currentSD.addVariable( new TMLAttribute( t.image, new TMLType(2) ) );
 		//}
 		/*catch( MultipleVariableDeclarationException e )	{
 			System.out.println( e.getMessage() );
@@ -893,10 +897,10 @@ void BooleanDeclaration( TMLCPSequenceDiagram currentSD ):
 		}*/
 	}
 	(
-	<SEPARATOR> name = ID() 
+	<SEPARATOR> t = <IDENTIFIER> <DOT> <IDENTIFIER> 
 	{
 		//try	{
-			currentSD.addVariable( new TMLAttribute( name, new TMLType(2) ) );
+			currentSD.addVariable( new TMLAttribute( t.image, new TMLType(2) ) );
 		//}
 		/*catch( MultipleVariableDeclarationException e )	{
 			System.out.println( e.getMessage() );
@@ -912,7 +916,7 @@ void IntegerInitialization( TMLCPSequenceDiagram currentSD ):
 	Token t;
 }
 {
-	name = ID() <ASSIGNMENT> t = <INTEGER_LITERAL>
+	t = <IDENTIFIER> { name = t.image; } <DOT> <IDENTIFIER> <ASSIGNMENT> t = <INTEGER_LITERAL>
 	{
 		//try	{
 			currentSD.insertInitialValue( name, t.image );
@@ -930,7 +934,7 @@ void BooleanInitialization( TMLCPSequenceDiagram currentSD ):
 	Token t;
 }
 {
-	name = ID() <ASSIGNMENT>
+	t = <IDENTIFIER> { name = t.image; } <DOT> <IDENTIFIER> <ASSIGNMENT>
 	( t = <TRUECONST>
 	{
 		//try	{
@@ -960,98 +964,30 @@ void Action( TMLCPSequenceDiagram currentSD ):
 	String name, messageName, sender, receiver, errorMessage;
 }
 {
-	t = <ACTION_KW>
+	//t = <ACTION_KW>	//do not check for message names to belong to a library of messages here in the grammar!
+	t = <IDENTIFIER> <DOT> <IDENTIFIER>
+	//I can have either a message or a variable assignment. I distinguish between the two by inspecting if there is a '(' or a '='
+	( ( <ITERATIONSTART>
 	{
 		messageName = t.image;
 		TMLSDMessage message = new TMLSDMessage( messageName, new Object() );
-	}
-	<ITERATIONSTART> sender = ID()
-	{
-		//try	{ 
-			if( currentSD.containsInstance( sender ) )	{
-				message.addAttribute( new TMLSDAttribute( sender, new TMLSDType(2) ) ); 
-			}
-			else	{
-				errorMessage = "TMLCOMPILER ERROR: instance " + sender + " in diagram " + currentSD.getName() + " was not declared";
-				//throw new UndeclaredInstanceException( errorMessage );
-			}
-		//}
-		/*catch( UndeclaredInstanceException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}*/
-	}
-	<SEPARATOR> receiver = ID()	//the message receiver
-	{
-		//try	{ 
-			if( currentSD.containsInstance( receiver ) )	{
-				message.addAttribute( new TMLSDAttribute( receiver, new TMLSDType(2) ) ); 
-			}
-			else	{
-				errorMessage = "TMLCOMPILER ERROR: instance " + receiver + " in diagram " + currentSD.getName() + " was not declared";
-				//throw new UndeclaredInstanceException( errorMessage );
-			}
-		//}
-		/*catch( UndeclaredInstanceException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}*/
-	}
-	(
-	<SEPARATOR> name = ID()
-	{
-		//only integer/natural variables are admitted here. Check if the message parameter has been initialized/declared/declared
-		//multiple times before adding to data structure
-		//try	{
-			switch( currentSD.isVariableInitialized( name ) )	{
-				case 0:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is uninitialized";
-									//throw new UninitializedVariableException( errorMessage );
-									break;
-				case 1:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is declared multiple times";
-									//throw new MultipleVariableDeclarationException( errorMessage );
-									break;
-				case 2:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is undeclared";
-									//throw new UndeclaredVariableException( errorMessage );
-									break;
-				case 3:		message.addAttribute( new TMLSDAttribute( name, new TMLSDType(1) ) );
-									break;
-				default:	errorMessage = "TMLCOMPILER ERROR: failed initializing variable " + name;
-									//throw new UninitializedVariableException( errorMessage );
-									break;
-			}
-		//}
-		/*catch( UninitializedVariableException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}
-		catch( MultipleVariableDeclarationException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}
-		catch( UndeclaredVariableException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}*/
-	}
-	)+	//there is always at least one parameter
-	<ITERATIONEND> <SEQUENCING_OP>
-	{
-		TMLSDInstance instance;
-		currentSD.addMessage( message );
-		//add sendMessage to instance of the sender
-		//look for instance of sender
-		instance = currentSD.retrieveInstance( sender );
-		//add sendMessage element
-		TMLSDSendMessage sendMessage = new TMLSDSendMessage( message, messageName, new Object() );
-		instance.addElement( sendMessage );
-		//put back the instance into data structure
-		currentSD.addInstance( instance );
-		//similarly add receiveMessage to instance of the receiver
-		instance = currentSD.retrieveInstance( receiver );
-		TMLSDReceiveMessage receiveMessage = new TMLSDReceiveMessage( message, messageName, new Object() );
-		instance.addElement( receiveMessage );
-		currentSD.addInstance( instance );
-	}
+	}	
+	//Fill the data structure later, up to now just fiwing the grammar
+	( <IDENTIFIER> ( <SEPARATOR> <IDENTIFIER> )* )*	//the message can be void
+	<ITERATIONEND> )
+	| <ASSIGNMENT> Assignment() )
+}
+
+void Assignment():
+{}
+{
+	( MathematicalExpression() | <INTEGER_LITERAL> | <FALSECONST> | <TRUECONST> )
+}
+
+void MathematicalExpression():
+{}
+{
+	<IDENTIFIER> <DOT> <IDENTIFIER> ( <MATH_PLUS> | <MATH_MINUS> ) ( <IDENTIFIER> <DOT> <IDENTIFIER> | <INTEGER_LITERAL> )
 }
 
 String ID():

@@ -119,7 +119,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 
 	public void addAction( TMLSDAction _action ) {
 		actions.add( _action );
-		addItem( new TMLSDItem( _action.getAction(), _action.getYCoord() ) );
+		addItem( new TMLSDItem( _action.getAction(), _action.getInstanceName(), _action.getYCoord() ) );
 	}
 	
 	//commenting the throw exception because bot needed by the graphical 2 TMLTxt compiler yet
@@ -152,7 +152,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 	
 	public void addMessage( TMLSDMessage _msg ) {
   	messages.add( _msg );
-		addItem( new TMLSDItem( _msg.getName(), _msg.getYCoord() ) );
+		addItem( new TMLSDItem( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord() ) );
   }
     
 	public void insertInitialValue( String _name, String value ) /*throws UninitializedVariableException*/	{

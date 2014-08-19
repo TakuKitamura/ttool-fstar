@@ -54,11 +54,13 @@ import myutil.*;
 public class TMLSDAction extends TMLSDElement  {
 
 	private String action;
+	private String instanceName;
 	private int yCoord;
 	
-   public TMLSDAction( String _action, Object _referenceObject, int _yCoord ) {
+   public TMLSDAction( String _action, String _instanceName, Object _referenceObject, int _yCoord ) {
 		super( "action", _referenceObject);
     action = _action;
+		instanceName = _instanceName;
 		this.yCoord = _yCoord;
   }
     
@@ -69,5 +71,9 @@ public class TMLSDAction extends TMLSDElement  {
   public int getYCoord() {
   	return this.yCoord;
   }
+
+	public String getInstanceName()	{
+		return instanceName;
+	}
 	
 }

@@ -51,20 +51,34 @@ package tmltranslator;
 public class TMLAttribute extends DIPLOElement {
     
     public TMLType type;
-    public String name;
-    public String initialValue;
+    public String name = "";
+    public String initialValue = "";
+		private String instanceName = "";
     
-    public TMLAttribute( String _name, TMLType _type, String _initialValue ) {
+    public TMLAttribute( String _name, String _instanceName, TMLType _type, String _initialValue ) {
         this.name = _name;
+				this.instanceName = _instanceName;
         this.type = _type;
 				this.initialValue = _initialValue;
     }
     
+    public TMLAttribute( String _name, String _instanceName, TMLType _type ) {
+        this.name = _name;
+				this.instanceName = _instanceName;
+        this.type = _type;
+				this.initialValue = "NULL";
+    } 
+
     public TMLAttribute( String _name, TMLType _type ) {
-        name = _name;
-        type = _type;
-				initialValue = "NULL";
+        this.name = _name;
+				this.instanceName = "NO_NAME";
+        this.type = _type;
+				this.initialValue = "NULL";
     }
+
+		public String getInstanceName()	{
+			return instanceName;
+		}
     
     public String getName() {
       return name;

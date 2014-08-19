@@ -2285,12 +2285,12 @@ public class GTMLModeling  {
 								type = new TMLType(3);	//other type
 							}
 						}
-						SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
+						SD.addAttribute( new TMLAttribute( tokens[1], storage.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( storage.getNumberInternalComponents() > 0 )	{	// action states are stored as internal components of an instance
 						components = storage.getInternalComponents();
 						for( index2 = 0; index2 < storage.getNumberInternalComponents(); index2++ )	{
-							SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
+							SD.addAction( new TMLSDAction( components[index2].getValue(), storage.getName(), null, components[index2].getY() ) );
 						}
 					}
 				}
@@ -2308,12 +2308,12 @@ public class GTMLModeling  {
 							else	{	type = new TMLType(3);	/*other type*/	}
 						}
 						TraceManager.addDev( tokens[3].toUpperCase() );
-						SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
+						SD.addAttribute( new TMLAttribute( tokens[1], controller.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( controller.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 						components = controller.getInternalComponents();
 						for( index2 = 0; index2 < controller.getNumberInternalComponents(); index2++ )	{	//get action states
-							SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
+							SD.addAction( new TMLSDAction( components[index2].getValue(), controller.getName(), null, components[index2].getY() ) );
 						}
 					}
 				}
@@ -2330,18 +2330,20 @@ public class GTMLModeling  {
 							if( tokens[3].equals("Boolean") )	{	type = new TMLType(2);	}
 							else	{	type = new TMLType(3);	/*other type*/	}
 						}
-						SD.addAttribute( new TMLAttribute( tokens[1], type, tokens[2] ) );	//name, type, initial value
+						SD.addAttribute( new TMLAttribute( tokens[1], transfer.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( transfer.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 						components = transfer.getInternalComponents();
 						for( index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++ )	{	//get action states
-							SD.addAction( new TMLSDAction( components[index2].getValue(), null, components[index2].getY() ) );
+							SD.addAction( new TMLSDAction( components[index2].getValue(), transfer.getName(), null, components[index2].getY() ) );
 						}
 					}
 				}
 				if( elem instanceof TGConnectorMessageTMLSD )	{
 					connector = (TGConnectorMessageTMLSD) elemList.get(j);
-					SD.addMessage( new TMLSDMessage( connector.getValue(), connector.getY(), null, connector.getParams() ) );
+					String sender = connector.getTGConnectingPointP1().getFather().getName();
+					String receiver = connector.getTGConnectingPointP2().getFather().getName();
+					SD.addMessage( new TMLSDMessage( connector.getValue(), sender, receiver, connector.getY(), null, connector.getParams() ) );
 				}
 			}	//End of for over internal elements
 		return SD;

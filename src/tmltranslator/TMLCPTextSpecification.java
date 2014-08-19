@@ -451,14 +451,14 @@ public class TMLCPTextSpecification {
 				sb += inst.getType() + " " + inst.getName() + CR + TAB;
 			}
 			for( TMLAttribute attr: listAttributes )	{
-				sb += attr.getType().toString().toUpperCase() + " " + attr.getName() + CR + TAB;
+				sb += attr.getType().toString().toUpperCase() + " " + attr.getInstanceName() + "." + attr.getName() + CR + TAB;
 			}
 			for( TMLAttribute attr: listAttributes )	{
 				if( attr.isBool() )	{
-					sb += attr.getName() + " = " + attr.getInitialValue().toUpperCase() + CR + TAB;
+					sb += attr.getInstanceName() + "." + attr.getName() + " = " + attr.getInitialValue().toUpperCase() + CR + TAB;
 				}
 				else	{
-					sb += attr.getName() + " = " + attr.getInitialValue() + CR + TAB;
+					sb += attr.getInstanceName() + "." + attr.getName() + " = " + attr.getInitialValue() + CR + TAB;
 				}
 			}
 			String temp = "";//sb.substring( 0, sb.length()-3 );	//Remove trailing CR + TAB + TAB
@@ -470,8 +470,14 @@ public class TMLCPTextSpecification {
 				TraceManager.addDev( item.toString() );
 			}*/
 			for( TMLSDItem item: listItems )	{	
-				sb += item.getValue();
-				sb += CR + TAB + TAB;
+				if( item.getInstanceName().length() > 0 )	{	//the item is an action (attribute)
+					sb += item.getInstanceName() + "." + item.getValue();
+					sb += CR + TAB + TAB;
+				}
+				else	{
+					sb += item.getSenderName() + "." + item.getValue();
+					sb += CR + TAB + TAB;
+				}
 			}
 			temp = sb.substring( 0, sb.length()-1 );	//Remove trailing TAB
 			sb = temp + END + CR + END + CR2;

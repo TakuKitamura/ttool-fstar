@@ -56,12 +56,40 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 
 	//mind the difference between TMLSDAttribute and TMLAttribute!
 	private String value;
+	private String receiverName;
+	private String instanceName;
+	private String senderName;
 	private int yCoord;
 	
-    public TMLSDItem( String _value, int _yCoord ) {
+		//for messages
+    public TMLSDItem( String _value, String _senderName, String _receiverName, int _yCoord ) {
 			this.value = _value;
+			this.senderName = _senderName;
+			this.receiverName = _receiverName;
+			this.instanceName = "";
 			this.yCoord = _yCoord;
     }
+
+		//for attributes
+    public TMLSDItem( String _value, String _instanceName, int _yCoord ) {
+			this.value = _value;
+			this.senderName = "";//_senderName;
+			this.receiverName = "";//_receiverName;
+			this.instanceName = _instanceName;
+			this.yCoord = _yCoord;
+    }
+
+		public String getReceiverName()	{
+			return this.receiverName;
+		}
+
+		public String getSenderName()	{
+			return this.senderName;
+		}
+
+		public String getInstanceName()	{
+			return this.instanceName;
+		}
 
 		public String getValue()	{
 			return this.value;
