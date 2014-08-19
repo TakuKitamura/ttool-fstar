@@ -87,7 +87,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
         userResizable = true;
         
         value = "Controller instance name";
-        name = "Controller instance";
+        name = "ControllerInstance";
 				isActor = false;
         
         myImageIcon = IconManager.imgic500;

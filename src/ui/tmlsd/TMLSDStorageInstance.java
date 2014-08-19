@@ -87,7 +87,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
         userResizable = true;
         
         value = "Storage instance name";
-        name = "Storage instance";
+        name = "StorageInstance";
 				isActor = false;
         
         myImageIcon = IconManager.imgic500;

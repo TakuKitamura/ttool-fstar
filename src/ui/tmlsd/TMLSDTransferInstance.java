@@ -87,7 +87,7 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
         userResizable = true;
         
         value = "Transfer instance name";
-        name = "Transfer instance";
+        name = "TransferInstance";
 				isActor = false;
         
         myImageIcon = IconManager.imgic500;
