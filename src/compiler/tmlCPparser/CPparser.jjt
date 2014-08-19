@@ -85,8 +85,8 @@ TOKEN:
 |	< ENDBLOCK: "END" >
 |	< MAINBLOCK: "MAIN" >
 |	< CP: "COMMUNICATION_PATTERN" >
-| < ACTIVITY_KW: "ACTIVITY" >
-| < SCENARIO_KW: "SCENARIO" >
+| < ACTIVITY_DIAGRAM: "ACTIVITY" >
+| < SEQUENCE_DIAGRAM: "SEQUENCE" >
 | < INCLUDE: "INCLUDE" >
 | < TRUECONST: "TRUE" >
 | < FALSECONST: "FALSE" >
@@ -127,7 +127,8 @@ TOKEN:
 | < BITWISEEXOR: "^" >
 | < INCREMENT: "++" >
 | < DECREMENT: "--" >
-| < STARTAD: "<>;" >
+| < START_AD: "<>;" >
+| < END_AD: "><" >
 | < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
 | < EOL: ("\n" | "\r" | "\r\n") >
 | < PATH_SEPARATOR: "/" >
@@ -169,7 +170,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 	CommunicationPattern()
 	( ActivityDiagram() ( ActivityDiagram() )* ( SequenceDiagram() )+ | ( SequenceDiagram() )+ )
 	{
-		try	{
+		//try	{
 			//check that all declared ADs have been defined
 			undefinedADList =  topCP.checkADsDefinition();
 			if( undefinedADList.size() != 0 )	{
@@ -177,7 +178,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 						undefinedDiagStringList += undefinedADList.get(i) + space;
 				}
 				String errorMessage = "TMLCP COMPILER ERROR: activity diagram(s) " + undefinedDiagStringList + "are not defined";
-				throw new UndefinedDiagramException( errorMessage );
+				//throw new UndefinedDiagramException( errorMessage );
 			}
 			//check that all SDs declared in ADs have been defined
 			undefinedDiagStringList = "";
@@ -187,14 +188,14 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 					undefinedDiagStringList += undefinedSDList.get(i) + space;
 				}
 				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram(s) " + undefinedDiagStringList + "are not defined";
-				throw new UndefinedDiagramException( errorMessage );
+				//throw new UndefinedDiagramException( errorMessage );
 			}
 		}
-		catch( UndefinedDiagramException e )	{
+		/*catch( UndefinedDiagramException e )	{
 			System.out.println( e.getMessage() );
 			System.exit(0);
-		}
-	}
+		}*/
+	//}
 	<EOF>		/* Force the parser to reach EOF */
 	{
 		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
@@ -238,13 +239,15 @@ void CommunicationPattern():
 		mainCP.setStartElement( ADStart );
 		mainCP.addTMLCPElement( ADStart );
 	}
-	( ActivityDeclaration( topCP, mainCP ) )+	//fill both topCP and mainCP to check if all declared ads and sds are used
-	( ScenarioDeclaration( topCP, mainCP ) )* 
+	( ActivityDeclaration( topCP, mainCP ) | 	SequenceDeclaration( topCP, mainCP ) )+
+	//fill both topCP and mainCP to check if all declared ads and sds are used
+	//( SequenceDeclaration( topCP, mainCP ) )* 
 
 	//Separate declaration from initialization because of filling-the-data-structure reasons
-	VariableDeclarationINT( mainCP )
-	VariableDeclarationBOOL( mainCP )
-	VariableInitialization( mainCP )
+	//No variable declarations or initializations in ADs
+	//VariableDeclarationINT( mainCP )
+	//VariableDeclarationBOOL( mainCP )
+	//VariableInitialization( mainCP )
 
 	MainModule( mainCP )	//fill elements of mainCP
 
@@ -259,16 +262,18 @@ void ActivityDiagram():
 	String name;
 }
 {
-	<START_KW> <ACTIVITY_KW> name = ID()
+	<START_KW> <ACTIVITY_DIAGRAM> name = ID()
 	{
 		TMLCPActivityDiagram currentAD = new TMLCPActivityDiagram( name, new Object() );
 	}
 
-	( ActivityDeclaration( topCP, currentAD ) )+	//fill otherCPs/sds of topCP
-	( ScenarioDeclaration( topCP, currentAD ) )*
-	VariableDeclarationINT( currentAD )
-	VariableDeclarationBOOL( currentAD )
-	VariableInitialization( currentAD )
+	( ActivityDeclaration( topCP, currentAD ) | SequenceDeclaration( topCP, currentAD ) )+
+	//fill otherCPs/sds of topCP
+	//( SequenceDeclaration( topCP, currentAD ) )*
+	//No variable declarations or initializations in ADs
+	//VariableDeclarationINT( currentAD )
+	//VariableDeclarationBOOL( currentAD )
+	//VariableInitialization( currentAD )
 	
 	MainModule( currentAD )	//fill elements of the current AD
 
@@ -295,7 +300,7 @@ void ActivityDeclaration( TMLCP topCP, TMLCPActivityDiagram currentAD ):
 	String name;
 }
 {
-	<ACTIVITY_KW> name = ID()
+	<ACTIVITY_DIAGRAM> name = ID()
 	{
 		//try	{
 			currentAD.addADname( name );
@@ -353,12 +358,12 @@ void error_skipto( int kind ):
 
 
 /* Scenario declarations matching production. */
-void ScenarioDeclaration( TMLCP topCP, TMLCPActivityDiagram currentAD ):
+void SequenceDeclaration( TMLCP topCP, TMLCPActivityDiagram currentAD ):
 {
 	String name;
 }
 {
-  <SCENARIO_KW> name = ID()
+  <SEQUENCE_DIAGRAM> name = ID()
 	{
 		//try	{
 			currentAD.addSDname( name );
@@ -507,9 +512,10 @@ void MainModule( TMLCPActivityDiagram currentAD ):
 {}
 {
   <MAINBLOCK>
-	<STARTAD>
+	<START_AD>
 	TOExpression( currentAD )
 	( JoinList( currentAD ) )*
+	<END_AD>
 	<ENDBLOCK>
 }
 
@@ -608,11 +614,11 @@ void TOFactor( TMLCPActivityDiagram currentAD ):
 			else	{
 				if( name.equals( currentAD.getName() ) )	{
 					String errorMessage = "TMLCP COMPILER ERROR: detected recursion of diagram " + currentAD.getName();
-					throw new RecursionException( errorMessage );
+					//throw new RecursionException( errorMessage );
 				}
 				else	{
 					String errorMessage = "TMLCP COMPILER ERROR: diagram " + name + " in diagram " + currentAD.getName() + " is undeclared";
-					throw new UndeclaredDiagramException( errorMessage );
+					//throw new UndeclaredDiagramException( errorMessage );
 				}
 			}
 		//}
@@ -686,7 +692,7 @@ void SequenceDiagram():
 	String name;
 }
 {
-	<SCENARIO_KW> name = ID()
+	<SEQUENCE_DIAGRAM> name = ID()
 	{
 		TMLCPSequenceDiagram currentSD = new TMLCPSequenceDiagram( name, new Object() );
 		//try	{
@@ -851,7 +857,7 @@ void Action( TMLCPSequenceDiagram currentSD ):
 			}
 			else	{
 				errorMessage = "TMLCOMPILER ERROR: instance " + sender + " in diagram " + currentSD.getName() + " was not declared";
-				throw new UndeclaredInstanceException( errorMessage );
+				//throw new UndeclaredInstanceException( errorMessage );
 			}
 		//}
 		/*catch( UndeclaredInstanceException e )	{
@@ -867,7 +873,7 @@ void Action( TMLCPSequenceDiagram currentSD ):
 			}
 			else	{
 				errorMessage = "TMLCOMPILER ERROR: instance " + receiver + " in diagram " + currentSD.getName() + " was not declared";
-				throw new UndeclaredInstanceException( errorMessage );
+				//throw new UndeclaredInstanceException( errorMessage );
 			}
 		//}
 		/*catch( UndeclaredInstanceException e )	{
@@ -883,18 +889,18 @@ void Action( TMLCPSequenceDiagram currentSD ):
 		//try	{
 			switch( currentSD.isVariableInitialized( name ) )	{
 				case 0:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is uninitialized";
-									throw new UninitializedVariableException( errorMessage );
+									//throw new UninitializedVariableException( errorMessage );
 									break;
 				case 1:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is declared multiple times";
-									throw new MultipleVariableDeclarationException( errorMessage );
+									//throw new MultipleVariableDeclarationException( errorMessage );
 									break;
 				case 2:		errorMessage = "TMLCOMPILER ERROR: variable " + name + " in SD " + currentSD.getName() + " is undeclared";
-									throw new UndeclaredVariableException( errorMessage );
+									//throw new UndeclaredVariableException( errorMessage );
 									break;
 				case 3:		message.addAttribute( new TMLSDAttribute( name, new TMLSDType(1) ) );
 									break;
 				default:	errorMessage = "TMLCOMPILER ERROR: failed initializing variable " + name;
-									throw new UninitializedVariableException( errorMessage );
+									//throw new UninitializedVariableException( errorMessage );
 									break;
 			}
 		//}
