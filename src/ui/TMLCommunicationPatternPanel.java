@@ -85,7 +85,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         
         // TMLCPPanel	
         tmlcpp = new TMLCPPanel(mgui, toolBarMainCP);
-        tmlcpp.setName("Main CP");
+        tmlcpp.setName("MainCP");
         tmlcpp.tp = this;
         tdp = tmlcpp;
         panels.add(tmlcpp);
@@ -95,7 +95,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(toolBarMainCP, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Main CP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
+        tabbedPane.addTab("MainCP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
         tabbedPane.setSelectedIndex(0); 
         //jsp.setVisible(true);
     }
