@@ -1,0 +1,208 @@
+// TML Communication Pattern - FORMAT 0.1
+// Communication Pattern: /home/enrici/TURTLE/modeling/testCP.xml
+// Generated: Thu Aug 14 17:42:42 CEST 2014
+
+COMMUNICATION_PATTERN MainCP
+	SEQUENCE YASD
+	SEQUENCE AnotherSD
+	SEQUENCE CentralSD
+	ACTIVITY AD2_seq
+	ACTIVITY AD2_par
+	ACTIVITY activity22
+	SEQUENCE seq77
+	SEQUENCE seq66
+	SEQUENCE seq55
+	SEQUENCE seq44
+	SEQUENCE seq33
+	ACTIVITY activity11
+	SEQUENCE seq22
+	SEQUENCE seq11
+	
+	MAIN
+		<>; seq11;seq22;activity11;{{seq44} * {seq33} * {CentralSD}}; seq55;{{YASD} * {seq66} * {seq77} * {AnotherSD}}; activity22 ><
+	END
+END
+
+START ACTIVITY activity11
+	ACTIVITY parallel2
+	ACTIVITY parallel1
+	SEQUENCE acknowledge
+	SEQUENCE transfer
+	SEQUENCE configure
+	
+
+	MAIN
+		<>; configure;transfer;acknowledge;{{parallel1} * {parallel2}} ><
+	END
+END
+
+//START ACTIVITY activity22
+//	SEQUENCE Zama
+//	SEQUENCE figlio
+//	SEQUENCE prova
+//	SEQUENCE papa
+//	SEQUENCE tata
+//	SEQUENCE lala
+//	SEQUENCE mama
+//	
+//
+//	MAIN
+//		<>; lala;
+//		loop0
+//			[ toto == 2 ]{papa; figlio}; endloop0
+//			[ toto == 5]{mama; prova}; endloop0
+//			[ toto > 2]{tata; Zama}; loop0
+//		endloop0 ><
+//	END
+//END
+//
+//START ACTIVITY AD2_par
+//	SEQUENCE ExecuteTransfer2
+//	SEQUENCE AckTransfer2
+//	SEQUENCE ProgramTransfer2
+//	SEQUENCE AckTransfer1
+//	SEQUENCE ExecuteTransfer1
+//	SEQUENCE ProgramTransfer1
+//	
+//
+//	MAIN
+//		<>; {{ProgramTransfer2; 
+//		loop0
+//			[samples2 == 0]{AckTransfer2}; endloop0
+//		[samples2 > 0]{ExecuteTransfer2}; loop0
+//		endloop0 } * {ProgramTransfer1; 
+//		loop1
+//			[samples1 == 0]{AckTransfer1}; endloop1
+//		[samples1 > 0]{ExecuteTransfer1}; loop1
+//		endloop1 }} ><
+//	END
+//END
+//
+//START ACTIVITY AD2_seq
+//	SEQUENCE AckTransfer4
+//	SEQUENCE ExecuteTransfer4
+//	SEQUENCE ProgramTransfer4
+//	SEQUENCE AckTransfer3
+//	SEQUENCE ExecuteTransfer3
+//	SEQUENCE ProgramTransfer3
+//	
+//
+//	MAIN
+//		<>; ProgramTransfer3;
+//		loop0
+//			[samples3 > 0]{ExecuteTransfer3}; loop0
+//			[samples3 == 0]{AckTransfer3; ProgramTransfer4}; loop0
+//		endloop0 ><
+//	END
+//END
+
+SEQUENCE seq11
+	TRANSFER TransferInstance
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT TransferInstance.toto
+	INT ControllerInstance.toto
+	TransferInstance.toto = 2
+	ControllerInstance.toto = 1
+	StorateInstance.mamma = FALSE
+	
+	MAIN
+		Sender.HelloWorld(Receiver, Iamseq11, hi, bye)	//receiver, list of params
+		Instance.address = Instance.address + 6
+		Instance.HelloBuddy()
+	END
+END
+
+SEQUENCE seq22
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq22_toto
+	machin.seq22_toto = 5
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE seq33
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq33_toto
+	machin.seq33_toto = 7
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE seq44
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq44_toto
+	machin.seq44_toto = 0
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE seq55
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq55_toto
+	machin.seq55_toto = 3
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE seq66
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq_toto
+	machin.seq_toto = 123
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE seq77
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	INT machin.seq77_toto
+	machin.seq77_toto = 69
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE CentralSD
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE AnotherSD
+	CONTROLLER ControllerInstance
+	TRANSFER TransferInstance
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
+SEQUENCE YASD
+	CONTROLLER ControllerInstance
+	STORAGE StorageInstance
+	
+	MAIN
+		machin.HelloWorld()
+	END
+END
+
