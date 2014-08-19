@@ -225,7 +225,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		Vector signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
-		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal",  value, signals, false);
+		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false);
 		jdas.setSize(350, 300);
         GraphicLib.centerOnParent(jdas);
         jdas.show(); // blocked until dialog has been closed

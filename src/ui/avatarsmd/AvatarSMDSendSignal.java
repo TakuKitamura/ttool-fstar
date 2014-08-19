@@ -224,7 +224,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 		Vector signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
-		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receiving signal",  value, signals, true);
+		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting send signal",  value, signals, true);
 		jdas.setSize(350, 300);
         GraphicLib.centerOnParent(jdas);
         jdas.show(); // blocked until dialog has been closed
