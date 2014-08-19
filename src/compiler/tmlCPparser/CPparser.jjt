@@ -458,22 +458,72 @@ void VariableDeclarationBOOL( TMLCPActivityDiagram currentAD ):
 }
 
 /* Variable declarations matching production. */
-void VariableInitialization( TMLCPActivityDiagram currentAD ):
+//void VariableInitialization( TMLCPActivityDiagram currentAD ):
+//{
+//	Token t;
+//	String name;
+//	TMLType type = new TMLType(3);
+//	TMLAttribute attr;
+//}
+//{
+//	(
+//	name = ID() <ASSIGNMENT>
+//	( <TRUECONST>
+//	{
+//		type.setType(2);
+//		//try	{
+//			attr = new TMLAttribute( name, type );
+//			currentAD.insertInitialValue( attr, "false" );
+//		//}
+//		/*catch( UninitializedVariableException e )	{
+//			System.out.println( e.getMessage() );
+//			System.exit(0);
+//		}*/
+//	}
+//	| <FALSECONST>
+//	{
+//		type.setType(2);
+//		//try	{
+//			attr = new TMLAttribute( name, type );
+//			currentAD.insertInitialValue( attr, "false" );
+//		//}
+//		/*catch( UninitializedVariableException e )	{
+//			System.out.println( e.getMessage() );
+//			System.exit(0);
+//		}*/
+//	}
+//	| t = <INTEGER_LITERAL>
+//	{
+//		//try	{
+//			type.setType(1);
+//			attr = new TMLAttribute( name, type );
+//			currentAD.insertInitialValue( attr, t.image );
+//		//}
+//		/*catch( UninitializedVariableException e )	{
+//			System.out.println( e.getMessage() );
+//			System.exit(0);
+//		}*/
+//	}
+//	) )+
+//}
+
+void VariableInitialization( TMLCPSequenceDiagram currentSD ):
 {
 	Token t;
-	String name;
+	String name = "";
 	TMLType type = new TMLType(3);
 	TMLAttribute attr;
 }
 {
-	(
+	//(
 	name = ID() <ASSIGNMENT>
 	( <TRUECONST>
 	{
 		type.setType(2);
 		//try	{
 			attr = new TMLAttribute( name, type );
-			currentAD.insertInitialValue( attr, "false" );
+			currentSD.insertInitialValue( name, "true" );
+			//currentSD.insertInitialValue( attr, "false" );
 		//}
 		/*catch( UninitializedVariableException e )	{
 			System.out.println( e.getMessage() );
@@ -485,7 +535,8 @@ void VariableInitialization( TMLCPActivityDiagram currentAD ):
 		type.setType(2);
 		//try	{
 			attr = new TMLAttribute( name, type );
-			currentAD.insertInitialValue( attr, "false" );
+			currentSD.insertInitialValue( name, "false" );
+			//currentSD.insertInitialValue( attr, "false" );
 		//}
 		/*catch( UninitializedVariableException e )	{
 			System.out.println( e.getMessage() );
@@ -497,14 +548,15 @@ void VariableInitialization( TMLCPActivityDiagram currentAD ):
 		//try	{
 			type.setType(1);
 			attr = new TMLAttribute( name, type );
-			currentAD.insertInitialValue( attr, t.image );
+			currentSD.insertInitialValue( name, t.image );
+			//currentSD.insertInitialValue( attr, t.image );
 		//}
 		/*catch( UninitializedVariableException e )	{
 			System.out.println( e.getMessage() );
 			System.exit(0);
 		}*/
 	}
-	) )+
+	)// )+
 }
 	
 /* Start of Module matching production. */
@@ -647,6 +699,7 @@ void GExpressionPrime( TMLCPActivityDiagram currentAD ):
 {
 	<LOGICALOR> GTerm( currentAD ) GExpressionPrime( currentAD )
 | <LOGICALAND> GTerm( currentAD ) GExpressionPrime( currentAD )
+| <EQUALITY> GTerm( currentAD ) GExpressionPrime( currentAD )
 | {}
 }
 
@@ -681,6 +734,7 @@ void GFactor( TMLCPActivityDiagram currentAD ):
 			System.exit(0);
 		}*/
 	}
+	| <INTEGER_LITERAL>
 }
 
 /********************************************************************************************************************************
@@ -708,8 +762,11 @@ void SequenceDiagram():
 		}*/
 	}
 	ArchitectureNodes( currentSD )
-	( IntegerDeclaration( currentSD ) )*
-	( IntegerInitialization( currentSD ) )*
+	( IntegerDeclaration( currentSD ) | BooleanDeclaration( currentSD ) )*
+	//( IntegerInitialization( currentSD ) | BooleanInitialization( currentSD ) )*
+	//VariableDeclarationINT( mainCP )
+	//VariableDeclarationBOOL( mainCP )
+	( VariableInitialization( currentSD ) )*
 	<MAINBLOCK> ( Action( currentSD ) )+	//I have to check that the action exists somewhere in a library of actions!
 	<ENDBLOCK>
 	<ENDBLOCK>
@@ -721,7 +778,7 @@ void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
 }
 {
 	//storage nodes
-	<STORAGE_KW> name = ID()
+	( ( <STORAGE_KW> name = ID()
 	{
 		//try	{
 			currentSD.addInstance( new TMLSDInstance( name, new Object(), "STORAGE" ) );
@@ -742,9 +799,9 @@ void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
 			System.exit(0);
 		}*/
 	}
-	)*
+	)* ) |
 	//controller nodes
-	<CONTROLLER_KW> name = ID()
+	( <CONTROLLER_KW> name = ID()
 	{
 		//try	{
 			currentSD.addInstance( new TMLSDInstance( name, new Object(), "CONTROLLER" ) );
@@ -765,9 +822,9 @@ void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
 			System.exit(0);
 		}*/
 	}
-	)*
+	)* ) |
 	// transfer nodes
-	<TRANSFER_KW> name = ID()
+	( <TRANSFER_KW> name = ID()
 	{
 		//try	{
 			currentSD.addInstance( new TMLSDInstance( name, new Object(), "TRANSFER" ) );
@@ -788,7 +845,7 @@ void ArchitectureNodes( TMLCPSequenceDiagram currentSD ):
 			System.exit(0);
 		}*/
 	}
-	)*
+	)* ) )+	//at least one instance must be declared
 }
 
 void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
@@ -820,6 +877,35 @@ void IntegerDeclaration( TMLCPSequenceDiagram currentSD ):
 	)*
 }
 
+void BooleanDeclaration( TMLCPSequenceDiagram currentSD ):
+{
+	String name;
+}
+{
+	<BOOLTYPE> name = ID() 
+	{
+		//try	{
+			currentSD.addVariable( new TMLAttribute( name, new TMLType(2) ) );
+		//}
+		/*catch( MultipleVariableDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	(
+	<SEPARATOR> name = ID() 
+	{
+		//try	{
+			currentSD.addVariable( new TMLAttribute( name, new TMLType(2) ) );
+		//}
+		/*catch( MultipleVariableDeclarationException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	}
+	)*
+}
+
 void IntegerInitialization( TMLCPSequenceDiagram currentSD ):
 {
 	String name;
@@ -836,6 +922,36 @@ void IntegerInitialization( TMLCPSequenceDiagram currentSD ):
 			System.exit(0);
 		}*/
 	}
+}
+
+void BooleanInitialization( TMLCPSequenceDiagram currentSD ):
+{
+	String name = "";
+	Token t;
+}
+{
+	name = ID() <ASSIGNMENT>
+	( t = <TRUECONST>
+	{
+		//try	{
+			currentSD.insertInitialValue( name, t.image );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	} )
+	|
+	( t = <FALSECONST>
+	{
+		//try	{
+			currentSD.insertInitialValue( name, t.image );
+		//}
+		/*catch( UninitializedVariableException e )	{
+			System.out.println( e.getMessage() );
+			System.exit(0);
+		}*/
+	} )
 }
 
 void Action( TMLCPSequenceDiagram currentSD ):
