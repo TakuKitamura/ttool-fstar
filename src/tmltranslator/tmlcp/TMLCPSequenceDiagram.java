@@ -155,7 +155,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		addItem( new TMLSDItem( _msg.getName(), _msg.getYCoord() ) );
   }
     
-	public void insertInitialValue( String _name, String value ) throws UninitializedVariableException	{
+	public void insertInitialValue( String _name, String value ) /*throws UninitializedVariableException*/	{
 			
 		int i = 0;
 		String str;
@@ -177,7 +177,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 			}
 		}
 		String errorMessage = "TMLCOMPILER ERROR: variable " + _name + " in diagram " + this.name + " is not initialized";
-		throw new UninitializedVariableException( errorMessage );
+		//throw new UninitializedVariableException( errorMessage );
 	}
 
 	public boolean containsInstance( String _name )	{
