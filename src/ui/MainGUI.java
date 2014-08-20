@@ -3947,6 +3947,20 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         //TraceManager.addDev("Done");
     }
 
+    public String generateTMLCPTxt( Vector<TDiagramPanel> _cpPanelList ) {
+        String path = ConfigurationTTool.FILEPath;
+        if (file != null) {
+            path = file.getAbsolutePath();
+        }
+        //TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
+        if ( gtm.generateTMLCPTxt( path, _cpPanelList ) ) {
+            return ConfigurationTTool.TMLCodeDirectory;
+        }
+
+        return null;
+        //TraceManager.addDev("Done");
+    }
+
     public void generateDesign() {
         if (gtm.getTURTLEModelingState() == 1) {
             if (generateTURTLEModelingFromState(gtm.getTURTLEModelingState(), false, DESIGN) == -1) {
