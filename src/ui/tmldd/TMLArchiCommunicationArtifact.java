@@ -161,8 +161,8 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 		String tmp;
 		boolean error = false;
 		
-		JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting artifact attributes", this);
-		dialog.setSize(400, 350);
+		JDialogCommunicationArtifact dialog = new JDialogCommunicationArtifact(frame, "Setting channel artifact attributes", this);
+		dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
         

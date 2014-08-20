@@ -116,7 +116,7 @@ public class JDialogCommunicationArtifact extends javax.swing.JDialog implements
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("Artifact attributes"));
-        panel2.setPreferredSize(new Dimension(350, 250));
+        panel2.setPreferredSize(new Dimension(650, 350));
         
 		c1.gridwidth = 1;
         c1.gridheight = 1;
