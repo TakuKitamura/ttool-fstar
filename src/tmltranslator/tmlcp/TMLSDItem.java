@@ -55,28 +55,34 @@ import myutil.*;
 public class TMLSDItem implements Comparable<TMLSDItem>  {
 
 	//mind the difference between TMLSDAttribute and TMLAttribute!
-	private String value;
+	private String name;
 	private String receiverName;
 	private String instanceName;
 	private String senderName;
 	private int yCoord;
+	private ArrayList<TMLSDAttribute> attributeList;
 	
 		//for messages
-    public TMLSDItem( String _value, String _senderName, String _receiverName, int _yCoord ) {
-			this.value = _value;
+    public TMLSDItem( String _name, String _senderName, String _receiverName, int _yCoord, ArrayList<TMLSDAttribute> _listAttributes ) {
+			this.name = _name;
 			this.senderName = _senderName;
 			this.receiverName = _receiverName;
 			this.instanceName = "";
 			this.yCoord = _yCoord;
+			this.attributeList = new ArrayList<TMLSDAttribute>();
+			for( TMLSDAttribute p: _listAttributes )	{
+				this.attributeList.add( new TMLSDAttribute( p.getName() ) );
+			}
     }
 
 		//for attributes
-    public TMLSDItem( String _value, String _instanceName, int _yCoord ) {
-			this.value = _value;
+    public TMLSDItem( String _name, String _instanceName, int _yCoord ) {
+			this.name = _name;
 			this.senderName = "";//_senderName;
 			this.receiverName = "";//_receiverName;
 			this.instanceName = _instanceName;
 			this.yCoord = _yCoord;
+			this.attributeList = new ArrayList<TMLSDAttribute>();
     }
 
 		public String getReceiverName()	{
@@ -87,12 +93,16 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 			return this.senderName;
 		}
 
+		public ArrayList<TMLSDAttribute> getAttributes()	{
+			return this.attributeList;
+		}
+
 		public String getInstanceName()	{
 			return this.instanceName;
 		}
 
-		public String getValue()	{
-			return this.value;
+		public String getName()	{
+			return this.name;
 		}
 
 		public int getYCoord()	{
@@ -103,8 +113,8 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 			this.yCoord = _coord;
 		}
 
-		public void setValue( String _value )	{
-			this.value = _value;
+		public void setValue( String _name )	{
+			this.name = _name;
 		}
 	
 		public int compareTo( TMLSDItem _item )	{
@@ -125,6 +135,6 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 		};*/
 
 	@Override public String toString()	{
-		return "TMLSDItem " + this.value + " " + this.yCoord;
+		return "TMLSDItem " + this.name + " " + this.yCoord;
 	}
 }	//End of class

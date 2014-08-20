@@ -471,11 +471,25 @@ public class TMLCPTextSpecification {
 			}*/
 			for( TMLSDItem item: listItems )	{	
 				if( item.getInstanceName().length() > 0 )	{	//the item is an action (attribute)
-					sb += item.getInstanceName() + "." + item.getValue();
+					sb += item.getInstanceName() + "." + item.getName();
 					sb += CR + TAB + TAB;
 				}
-				else	{
-					sb += item.getSenderName() + "." + item.getValue();
+				else	{	//The item is a message
+					ArrayList<TMLSDAttribute> listAttr = item.getAttributes();
+					if( listAttr.size() == 0 )	{	//message with no parameters
+						sb += item.getSenderName() + "." + item.getName() + "(" + item.getReceiverName() + ")";						
+					}
+					else	{	//message with at least one parameter
+						sb += item.getSenderName() + "." + item.getName() + "(" + item.getReceiverName() + ",";
+						for( int p = 0; p < listAttr.size(); p++ )	{
+							if( p == (listAttr.size() - 1) )	{
+								sb += listAttr.get(p).getName() + ")";
+							}
+							else	{
+								sb += listAttr.get(p).getName() + ",";
+							}
+						}
+					}
 					sb += CR + TAB + TAB;
 				}
 			}

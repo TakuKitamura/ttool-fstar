@@ -2343,7 +2343,7 @@ public class GTMLModeling  {
 					connector = (TGConnectorMessageTMLSD) elemList.get(j);
 					String sender = connector.getTGConnectingPointP1().getFather().getName();
 					String receiver = connector.getTGConnectingPointP2().getFather().getName();
-					SD.addMessage( new TMLSDMessage( connector.getValue(), sender, receiver, connector.getY(), null, connector.getParams() ) );
+					SD.addMessage( new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), null, connector.getParams() ) );
 				}
 			}	//End of for over internal elements
 		return SD;
