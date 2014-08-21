@@ -1885,23 +1885,21 @@ public class GTMLModeling  {
 		return map;	// the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
 	}
 
-
 	//Checking the syntax of CP without mapping
-	public Vector<TDiagramPanel> getListOfCPPanels() {
+	public TMLCP translateToTMLCP() {
 
 		//tmlm = new TMLModeling( true );
 		//archi = new TMLArchitecture();
-		//tmlcp = new TMLCP();
+		tmlcp = new TMLCP();
 		//map = new TMLMapping( tmlm, archi, cp, false );
 		//map = new TMLMapping( tmlm, archi, false );
 		
-		//Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
-		//checkingErrors = new Vector();
-		//warnings = new Vector();
+		checkingErrors = new Vector();
+		warnings = new Vector();
 		//listE = new CorrespondanceTGElement();
 		
-		//TraceManager.addDev( "Making Communication Pattern data structure to check the syntax, without mapping" );
-		//makeCommunicationPattern(); //this routine will fill archi, but now it fills
+		TraceManager.addDev( "Making Communication Pattern data structure to check the syntax, without mapping" );
+		makeCommunicationPattern(); //this routine will fill archi, but now it fills
 		/*TraceManager.addDev( "Making TML modeling" );
 		if (!makeTMLModeling()) {	//Attention, this routine will provoke errors...
 			return null;
@@ -1915,8 +1913,7 @@ public class GTMLModeling  {
 		
 		removeActionsWithRecords();*/
 		
-		return tmlcpp.getPanels();
-		//return tmlcp;
+		return tmlcp;
 	}
 	
 	private boolean nameInUse(ArrayList<String> _names, String _name) {

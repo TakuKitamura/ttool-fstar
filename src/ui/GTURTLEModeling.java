@@ -399,27 +399,10 @@ public class GTURTLEModeling {
 			return null;
 		}
 	}
-
-	public boolean generateTMLCPTxt( String _title, Vector<TDiagramPanel> _cpPanelList )	{
-
-		if( _cpPanelList != null )	{	
-			TraceManager.addError( "About to generate the TMLText for CPs" );
-			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title, _cpPanelList );
-			specCP.toTextFormat();	//TMLCP.TMLCPGraphicalCP
-			try	{
-				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-			}
-			catch( Exception e ) {
-				TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
-				return false;
-			}
-		}
-		return true;
-	}
 	
 	public boolean generateTMLTxt( String _title ) {
 
-/*		if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
+		if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
 			TraceManager.addError( "About to generate the TMLText for CPs" );
 			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
 			specCP.toTextFormat( tmlcp );	//TMLCP.TMLCPGraphicalCP
@@ -431,7 +414,7 @@ public class GTURTLEModeling {
 				return false;
 			}
 		}
-		else	{*/
+		else	{
 			//This branch is activated if doing the syntax check from the application panel.
 			//It only generates the application TML text
 			if( tmap == null ) {
@@ -461,7 +444,7 @@ public class GTURTLEModeling {
 					return false;
 				}
 			}
-		//}
+		}
 		return true;	//temporary, just to check functionality
 	}
 	
@@ -6266,7 +6249,6 @@ public class GTURTLEModeling {
 		}
 	}
 	
-
 	public boolean checkSyntaxTMLMapping(Vector nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();
@@ -6316,9 +6298,9 @@ public class GTURTLEModeling {
 		tmlm = null;
 		tm = null;
 		tmState = 1;
-		//tmlcp = gtmlm.translateToTMLCP();	//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
+		tmlcp = gtmlm.translateToTMLCP();	//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
 		TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
-		mgui.generateTMLCPTxt( gtmlm.getListOfCPPanels() );	//Now generating the TMLtxt code
+		mgui.generateTMLTxt();	//Now generating the TMLtxt code
 		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
 		//CPparser myCPparser = new CPparser( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
 		//here I should call the javacc parser and feed it with the above-generated TMLtxt!

@@ -99,7 +99,6 @@ import ui.avatardd.*;
 
 import proverifspec.*;
 
-
 public  class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
 
     public static boolean systemcOn;
@@ -3941,20 +3940,6 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         }
         //TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
         if (gtm.generateTMLTxt(path)) {
-            return ConfigurationTTool.TMLCodeDirectory;
-        }
-
-        return null;
-        //TraceManager.addDev("Done");
-    }
-
-    public String generateTMLCPTxt( Vector<TDiagramPanel> _cpPanelList ) {
-        String path = ConfigurationTTool.FILEPath;
-        if (file != null) {
-            path = file.getAbsolutePath();
-        }
-        //TraceManager.addDev("Generating TML code: "+file.getAbsolutePath());
-        if ( gtm.generateTMLCPTxt( path, _cpPanelList ) ) {
             return ConfigurationTTool.TMLCodeDirectory;
         }
 
