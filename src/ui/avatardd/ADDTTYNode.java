@@ -171,230 +171,63 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 		return name;
 	}
 	
+	public int getIndex() {
+		return index;
+	}
+	
+	
 	public boolean editOndoubleClick(JFrame frame) {
-		boolean error = false;
-		String errors = "";
-		int tmp;
-		String tmpName;
-		
-		/*JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this);
-		dialog.setSize(500, 450);
-		GraphicLib.centerOnParent(dialog);
-		dialog.show(); // blocked until dialog has been closed
-		
-		if (!dialog.isRegularClose()) {
-			return false;
-		}
-		
-		if (dialog.getNodeName().length() != 0) {
-			tmpName = dialog.getNodeName();
-			tmpName = tmpName.trim();
-			if (!TAttribute.isAValidId(tmpName, false, false)) {
-				error = true;
-				errors += "Name of the node  ";
-			} else {
-				name = tmpName;
+			boolean error = false;
+			String errors = "";
+			int tmp;
+			String tmpName;
+			
+			JDialogADDTTYNode dialog = new JDialogADDTTYNode(frame, "Setting TTY attributes", this);
+			dialog.setSize(500, 450);
+			GraphicLib.centerOnParent(dialog);
+			dialog.show(); // blocked until dialog has been closed
+			
+			if (!dialog.isRegularClose()) {
+					return false;
 			}
-		}
-		
-		schedulingPolicy = dialog.getSchedulingPolicy();
-		if (schedulingPolicy == HwCPU.BASIC_ROUND_ROBIN) {
-			stereotype = "CPURR";
-		}
-		
-		if (schedulingPolicy == HwCPU.ROUND_ROBIN_PRIORITY_BASED) {
-			stereotype = "CPURRPB";
-		}
-		
-		if (dialog.getSliceTime().length() != 0) {	
-			try {
-				tmp = sliceTime;
-				sliceTime = Integer.decode(dialog.getSliceTime()).intValue();
-				if (sliceTime <= 0) {
-					sliceTime = tmp;
-					error = true;
-					errors += "Slice time  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Slice time  ";
+			
+			if (dialog.getNodeName().length() != 0) {
+					tmpName = dialog.getNodeName();
+					tmpName = tmpName.trim();
+					if (!TAttribute.isAValidId(tmpName, false, false)) {
+							error = true;
+							errors += "Name of the node  ";
+					} else {
+							name = tmpName;
+					}
 			}
-		}
-		
-		if (dialog.getNbOfCores().length() != 0) {	
-			try {
-				tmp = nbOfCores;
-				nbOfCores = Integer.decode(dialog.getNbOfCores()).intValue();
-				if (nbOfCores <= 0) {
-					nbOfCores = tmp;
-					error = true;
-					errors += "Data size  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Data size  ";
+			
+			
+			
+			if (dialog.getIndex().length() != 0) {	
+					try {
+							tmp = index;
+							index = Integer.decode(dialog.getIndex()).intValue();
+							if (index < 0) {
+									index = tmp;
+									error = true;
+									errors += "index ";
+							}
+					} catch (Exception e) {
+							error = true;
+							errors += "index  ";
+					}
 			}
-		}
-		
-		if (dialog.getByteDataSize().length() != 0) {	
-			try {
-				tmp = byteDataSize;
-				byteDataSize = Integer.decode(dialog.getByteDataSize()).intValue();
-				if (byteDataSize <= 0) {
-					byteDataSize = tmp;
-					error = true;
-					errors += "Data size  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Data size  ";
+			
+			if (error) {
+					JOptionPane.showMessageDialog(frame,
+							"Invalid value for the following attributes: " + errors,
+							"Error",
+							JOptionPane.INFORMATION_MESSAGE);
+					return false;
 			}
-		}
-		
-		if (dialog.getPipelineSize().length() != 0) {	
-			try {
-				tmp = pipelineSize;
-				pipelineSize = Integer.decode(dialog.getPipelineSize()).intValue();
-				if (pipelineSize <= 0) {
-					pipelineSize = tmp;
-					error = true;
-					errors += "Pipeline size  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Pipeline size  ";
-			}
-		}
-		
-		if (dialog.getGoIdleTime().length() != 0) {	
-			try {
-				tmp = goIdleTime;
-				goIdleTime = Integer.decode(dialog.getGoIdleTime()).intValue();
-				if (goIdleTime < 0) {
-					goIdleTime = tmp;
-					error = true;
-					errors += "Go idle time  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Go idle time  ";
-			}
-		}
-		
-		if (dialog.getMaxConsecutiveIdleCycles().length() != 0) {	
-			try {
-				tmp = goIdleTime;
-				maxConsecutiveIdleCycles = Integer.decode(dialog.getMaxConsecutiveIdleCycles()).intValue();
-				if (maxConsecutiveIdleCycles < 0) {
-					maxConsecutiveIdleCycles = tmp;
-					error = true;
-					errors += "Max consecutive idle cycles  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Max consecutive idle cycles  ";
-			}
-		}
-		
-		if (dialog.getExeciTime().length() != 0) {	
-			try {
-				tmp = execiTime;
-				execiTime = Integer.decode(dialog.getExeciTime()).intValue();
-				if (execiTime < 0) {
-					execiTime = tmp;
-					error = true;
-					errors += "execi time  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "execi time  ";
-			}
-		}
-		
-		if (dialog.getExeccTime().length() != 0) {	
-			try {
-				tmp = execcTime;
-				execcTime = Integer.decode(dialog.getExeccTime()).intValue();
-				if (execcTime < 0) {
-					execcTime = tmp;
-					error = true;
-					errors += "execc time  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "execc time  ";
-			}
-		}
-		
-		if (dialog.getTaskSwitchingTime().length() != 0) {	
-			try {
-				tmp = taskSwitchingTime;
-				taskSwitchingTime = Integer.decode(dialog.getTaskSwitchingTime()).intValue();
-				if (taskSwitchingTime <= 0) {
-					taskSwitchingTime = tmp;
-					error = true;
-					errors += "Task switching time  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Task switching time  ";
-			}
-		}
-		
-		if (dialog.getBranchingPredictionPenalty().length() != 0) {	
-			try {
-				tmp = branchingPredictionPenalty;
-				branchingPredictionPenalty = Integer.decode(dialog.getBranchingPredictionPenalty()).intValue();
-				if ((branchingPredictionPenalty < 0) || (branchingPredictionPenalty > 100)) {
-					branchingPredictionPenalty = tmp;
-					error = true;
-					errors += "Mis-branching prediction  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Mis-branching prediction  ";
-			}
-		}
-		
-		if (dialog.getCacheMiss().length() != 0) {	
-			try {
-				tmp = cacheMiss;
-				cacheMiss = Integer.decode(dialog.getCacheMiss()).intValue();
-				if ((cacheMiss < 0) || (cacheMiss > 100)) {
-					cacheMiss = tmp;
-					error = true;
-					errors += "Cache-miss  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Cache-miss  ";
-			}
-		}
-		
-		if (dialog.getClockRatio().length() != 0) {	
-			try {
-				tmp = clockRatio;
-				clockRatio = Integer.decode(dialog.getClockRatio()).intValue();
-				if (clockRatio < 1) {
-					clockRatio = tmp;
-					error = true;
-					errors += "Clock ratio  ";
-				}
-			} catch (Exception e) {
-				error = true;
-				errors += "Clock ratio  ";
-			}
-		}
-		
-		if (error) {
-			JOptionPane.showMessageDialog(frame,
-				"Invalid value for the following attributes: " + errors,
-				"Error",
-				JOptionPane.INFORMATION_MESSAGE);
-			return false;
-		}*/
-		
-		return true;
+			
+			return true;
 	}
 	
 	
