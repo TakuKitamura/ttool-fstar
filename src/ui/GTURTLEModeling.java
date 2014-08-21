@@ -6266,6 +6266,7 @@ public class GTURTLEModeling {
 		}
 	}
 	
+
 	public boolean checkSyntaxTMLMapping(Vector nodesToTakeIntoAccount, TMLArchiPanel tmlap, boolean optimize) {
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();

@@ -93,17 +93,6 @@ public class TMLCPTextSpecification {
 	private TMLActivityElement tmlae;
 	private ArrayList<TMLParserSaveElt> parses;
 	
-	/*private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW", 
-		"BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
-	"SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
-	"RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
-	
-	private String channeltypes[] = {"BRBW", "NBRNBW", "BRNBW"};
-	private String eventtypes[] = {"INF", "NIB", "NINB"};
-	
-	private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ORIF", "SELECTEVT", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
-	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};	*/
-
 	private String nextElem;	//used to produce the TML text
 	private String currentElem;	//used to produce the TML text
 	private String currentJunc = "junction";	//used to produce the TML text

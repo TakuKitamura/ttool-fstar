@@ -1885,6 +1885,7 @@ public class GTMLModeling  {
 		return map;	// the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
 	}
 
+
 	//Checking the syntax of CP without mapping
 	public Vector<TDiagramPanel> getListOfCPPanels() {
 
