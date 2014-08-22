@@ -375,6 +375,9 @@ public class TGUIAction extends AbstractAction {
 	public static final int ADD_ROMNODE = 405;
 	public static final int ADD_DMANODE = 406;
 	public static final int ADD_BRIDGENODE = 407;
+	public static final int ADD_ICUNODE = 408;
+	public static final int ADD_COPROMWMRNODE = 409;
+	public static final int ADD_TIMERNODE = 410;
 
 	
     
@@ -542,7 +545,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 408;
+    public static final int NB_ACTION = 411;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -754,6 +757,10 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_RAMNODE] = new TAction("add-add-ramnode", "Add a RAM", IconManager.imgic1108, IconManager.imgic1108, "RAM", "Add a hardware accelerator node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_ROMNODE] = new TAction("add-add-romnode", "Add a ROM", IconManager.imgic1108, IconManager.imgic1108, "ROM", "Add a memory node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_DMANODE] = new TAction("add-add-dmanode", "Add a DMA", IconManager.imgic1110, IconManager.imgic1110, "DMA", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_ICUNODE] = new TAction("add-add-icunode", "Add an ICU", IconManager.imgic1112, IconManager.imgic1112, "ICU", "Add a ICU node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_COPROMWMRNODE] = new TAction("add-add-copromwmrnode", "Add a MWMR Copro", IconManager.imgic1114, IconManager.imgic1114, "MWMR Copro", "Add a DMA node to the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_TIMERNODE] = new TAction("add-add-timernode", "Add a Timer", IconManager.imgic1116, IconManager.imgic1116, "Timer", "Add a timer node to the currently opened AVATAR deployment diagram", 0);
+        
         
         
         

@@ -72,7 +72,10 @@ public class ADDDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ADD_TTYNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_RAMNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_ROMNODE].setEnabled(b);
-		mgui.actions[TGUIAction.ADD_DMANODE].setEnabled(b);
+		mgui.actions[TGUIAction.ADD_DMANODE].setEnabled(b);      
+		mgui.actions[TGUIAction.ADD_ICUNODE].setEnabled(b);
+		mgui.actions[TGUIAction.ADD_COPROMWMRNODE].setEnabled(b);
+		mgui.actions[TGUIAction.ADD_TIMERNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
@@ -113,6 +116,15 @@ public class ADDDiagramToolBar extends TToolBar {
         this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.ADD_DMANODE]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        button = this.add(mgui.actions[TGUIAction.ADD_ICUNODE]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        button = this.add(mgui.actions[TGUIAction.ADD_COPROMWMRNODE]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        button = this.add(mgui.actions[TGUIAction.ADD_TIMERNODE]);
         button.addMouseListener(mgui.mouseHandler);
         
         this.addSeparator();

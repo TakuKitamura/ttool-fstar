@@ -2206,7 +2206,7 @@
 <SUBCOMPONENT type="-1" id="1229" >
 <father id="1244" num="0" />
 <cdparam x="680" y="447" />
-<sizeparam width="106" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="100" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[samples2 == 0]" />
@@ -2214,7 +2214,7 @@
 <SUBCOMPONENT type="-1" id="1230" >
 <father id="1244" num="1" />
 <cdparam x="790" y="447" />
-<sizeparam width="96" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="90" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[samples2 &gt; 0]" />
@@ -2222,7 +2222,7 @@
 <SUBCOMPONENT type="-1" id="1231" >
 <father id="1244" num="2" />
 <cdparam x="775" y="482" />
-<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ ]" />
@@ -2241,8 +2241,8 @@
 </COMPONENT>
 
 <COMPONENT type="1505" id="1260" >
-<cdparam x="884" y="503" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="890" y="503" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="ExecuteTransfer2" value="Reference to a SD" />
@@ -2259,8 +2259,8 @@
 </COMPONENT>
 
 <COMPONENT type="1505" id="1271" >
-<cdparam x="555" y="501" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="561" y="501" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AckTransfer2" value="Reference to a SD" />
@@ -2277,8 +2277,8 @@
 </COMPONENT>
 
 <COMPONENT type="1505" id="1282" >
-<cdparam x="708" y="258" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="714" y="258" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="ProgramTransfer2" value="Reference to a SD" />
@@ -2350,7 +2350,7 @@
 <SUBCOMPONENT type="-1" id="1303" >
 <father id="1318" num="0" />
 <cdparam x="223" y="439" />
-<sizeparam width="96" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="90" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[samples1 &gt; 0]" />
@@ -2358,7 +2358,7 @@
 <SUBCOMPONENT type="-1" id="1304" >
 <father id="1318" num="1" />
 <cdparam x="333" y="439" />
-<sizeparam width="106" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="100" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[samples1 == 0]" />
@@ -2366,15 +2366,15 @@
 <SUBCOMPONENT type="-1" id="1305" >
 <father id="1318" num="2" />
 <cdparam x="318" y="474" />
-<sizeparam width="14" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="12" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ ]" />
 </SUBCOMPONENT>
 
 <COMPONENT type="1505" id="1329" >
-<cdparam x="377" y="502" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="383" y="502" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="AckTransfer1" value="Reference to a SD" />
@@ -2391,8 +2391,8 @@
 </COMPONENT>
 
 <COMPONENT type="1505" id="1340" >
-<cdparam x="134" y="492" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="140" y="492" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="ExecuteTransfer1" value="Reference to a SD" />
@@ -2440,8 +2440,8 @@
 </COMPONENT>
 
 <COMPONENT type="1505" id="1368" >
-<cdparam x="251" y="254" />
-<sizeparam width="124" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="257" y="254" />
+<sizeparam width="113" height="35" minWidth="70" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="ProgramTransfer1" value="Reference to a SD" />
@@ -3569,7 +3569,7 @@
 <cdparam x="782" y="171" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="769" y="158" id="1909" />
+<P1  x="769" y="158" id="1917" />
 <P2  x="634" y="505" id="1858" />
 <Point x="839" y="171" />
 <Point x="839" y="560" />
@@ -3613,7 +3613,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="651" y="497" id="1853" />
-<P2  x="699" y="409" id="1896" />
+<P2  x="699" y="409" id="1898" />
 <Point x="699" y="497" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1842" >
@@ -3630,7 +3630,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="462" y="304" id="1883" />
-<P2  x="659" y="203" id="1911" />
+<P2  x="659" y="203" id="1915" />
 <Point x="462" y="248" />
 <Point x="659" y="248" />
 <AutomaticDrawing  data="true" />
@@ -3656,14 +3656,14 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="468" y="313" id="1881" />
-<P2  x="571" y="300" id="1898" />
+<P2  x="571" y="300" id="1896" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1849" >
 <cdparam x="231" y="225" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="231" y="199" id="1928" />
+<P1  x="231" y="199" id="1934" />
 <P2  x="446" y="313" id="1880" />
 <Point x="231" y="313" />
 <AutomaticDrawing  data="true" />
@@ -3680,23 +3680,23 @@
 <cdparam x="341" y="104" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to start state" value="Connector between ports" />
-<P1  x="328" y="86" id="1934" />
-<P2  x="569" y="86" id="1917" />
+<P1  x="328" y="86" id="1928" />
+<P2  x="569" y="86" id="1909" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1851" >
 <cdparam x="341" y="122" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to start state" value="Connector between ports" />
-<P1  x="328" y="132" id="1932" />
-<P2  x="569" y="132" id="1915" />
+<P1  x="328" y="132" id="1930" />
+<P2  x="569" y="132" id="1911" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1852" >
 <cdparam x="341" y="190" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to start state" value="Connector between ports" />
-<P1  x="328" y="177" id="1930" />
+<P1  x="328" y="177" id="1932" />
 <P2  x="569" y="177" id="1913" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -3800,14 +3800,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="1897" >
 <father id="1908" num="0" />
-<cdparam x="686" y="409" />
+<cdparam x="558" y="300" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel comm2Tom" />
+<infoparam name="Primitive port" value="Channel commTom" />
 <TGConnectingPoint num="0" id="1896" />
 <extraparam>
-<Prop commName="comm2Tom" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="commTom" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3817,14 +3817,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1899" >
 <father id="1908" num="1" />
-<cdparam x="558" y="300" />
+<cdparam x="686" y="409" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel commTom" />
+<infoparam name="Primitive port" value="Channel comm2Tom" />
 <TGConnectingPoint num="0" id="1898" />
 <extraparam>
-<Prop commName="commTom" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm2Tom" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3852,14 +3852,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="1910" >
 <father id="1927" num="0" />
-<cdparam x="756" y="158" />
+<cdparam x="556" y="86" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel comm2Alice" />
+<infoparam name="Primitive port" value="Event comm" />
 <TGConnectingPoint num="0" id="1909" />
 <extraparam>
-<Prop commName="comm2Alice" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3869,14 +3869,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1912" >
 <father id="1927" num="1" />
-<cdparam x="646" y="203" />
+<cdparam x="556" y="132" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel commAlice" />
+<infoparam name="Primitive port" value="Channel Phone" />
 <TGConnectingPoint num="0" id="1911" />
 <extraparam>
-<Prop commName="commAlice" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="Phone" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3903,14 +3903,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1916" >
 <father id="1927" num="3" />
-<cdparam x="556" y="132" />
+<cdparam x="646" y="203" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel Phone" />
+<infoparam name="Primitive port" value="Channel commAlice" />
 <TGConnectingPoint num="0" id="1915" />
 <extraparam>
-<Prop commName="Phone" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="commAlice" commType="0" origin="false" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3920,14 +3920,14 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1918" >
 <father id="1927" num="4" />
-<cdparam x="556" y="86" />
+<cdparam x="756" y="158" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event comm" />
+<infoparam name="Primitive port" value="Channel comm2Alice" />
 <TGConnectingPoint num="0" id="1917" />
 <extraparam>
-<Prop commName="comm" commType="1" origin="false" finite="false" blocking="true" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm2Alice" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3957,14 +3957,14 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="1929" >
 <father id="1944" num="0" />
-<cdparam x="218" y="199" />
+<cdparam x="315" y="86" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Channel commBob" />
+<infoparam name="Primitive port" value="Event comm" />
 <TGConnectingPoint num="0" id="1928" />
 <extraparam>
-<Prop commName="commBob" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="comm" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -3974,29 +3974,12 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="1931" >
 <father id="1944" num="1" />
-<cdparam x="315" y="177" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event Call" />
-<TGConnectingPoint num="0" id="1930" />
-<extraparam>
-<Prop commName="Call" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-<Type type="0" typeOther="" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1203" id="1933" >
-<father id="1944" num="2" />
 <cdparam x="315" y="132" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
 <infoparam name="Primitive port" value="Channel Phone" />
-<TGConnectingPoint num="0" id="1932" />
+<TGConnectingPoint num="0" id="1930" />
 <extraparam>
 <Prop commName="Phone" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
@@ -4006,16 +3989,33 @@
 <Type type="0" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="1203" id="1935" >
-<father id="1944" num="3" />
-<cdparam x="315" y="86" />
+<SUBCOMPONENT type="1203" id="1933" >
+<father id="1944" num="2" />
+<cdparam x="315" y="177" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port" value="Event comm" />
+<infoparam name="Primitive port" value="Event Call" />
+<TGConnectingPoint num="0" id="1932" />
+<extraparam>
+<Prop commName="Call" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+<Type type="0" typeOther="" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1203" id="1935" >
+<father id="1944" num="3" />
+<cdparam x="218" y="199" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port" value="Channel commBob" />
 <TGConnectingPoint num="0" id="1934" />
 <extraparam>
-<Prop commName="comm" commType="1" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
+<Prop commName="commBob" commType="0" origin="true" finite="false" blocking="false" maxSamples="8" widthSamples="4" isLossy="false" lossPercentage="0" maxNbOfLoss="0" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
 <Type type="0" typeOther="" />
@@ -4205,8 +4205,8 @@
 <Modeling type="TML Architecture" nameTab="DIPLODOCUS Architecture" >
 <TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="1400" minY="10" maxY="1400" attributes="0" masterClockFrequency="200" >
 <COMPONENT type="1108" id="1992" >
-<cdparam x="78" y="33" />
-<sizeparam width="250" height="109" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="718" y="760" />
+<sizeparam width="611" height="118" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="CP0" value="CP0" />
@@ -4220,16 +4220,16 @@
 <TGConnectingPoint num="7" id="1991" />
 <extraparam>
 <info stereotype="CP" nodeName="CP0" />
-<attributes reference="" />
+<attributes reference="MainCP" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="1983" >
 <father id="1992" num="0" />
-<cdparam x="95" y="78" />
-<sizeparam width="211" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="737" y="815" />
+<sizeparam width="330" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="39" minY="0" maxY="69" />
-<infoparam name="TGComponent" value="DIPLODOCUS_C_Design::Phone" />
+<cdrectangleparam minX="0" maxX="281" minY="0" maxY="78" />
+<infoparam name="TGComponent" value="DIPLODOCUS_C_Design::comm2Peter__comm2Tom" />
 <TGConnectingPoint num="0" id="1975" />
 <TGConnectingPoint num="1" id="1976" />
 <TGConnectingPoint num="2" id="1977" />
@@ -4239,7 +4239,7 @@
 <TGConnectingPoint num="6" id="1981" />
 <TGConnectingPoint num="7" id="1982" />
 <extraparam>
-<info value="DIPLODOCUS_C_Design::Phone" communicationName="Phone" referenceCommunicationName="DIPLODOCUS_C_Design" priority="0" typeName="channel" />
+<info value="DIPLODOCUS_C_Design::comm2Peter__comm2Tom" communicationName="comm2Peter__comm2Tom" referenceCommunicationName="DIPLODOCUS_C_Design" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 

@@ -394,6 +394,9 @@ public class TGComponentManager {
 	public static final int ADD_ROMNODE = 5356;
 	public static final int ADD_BRIDGENODE = 5357;
 	public static final int ADD_DMANODE = 5358;
+	public static final int ADD_ICUNODE = 5359;
+	public static final int ADD_COPROMWMRNODE = 5360;
+	public static final int ADD_TIMERNODE = 5361;
 	
 	// AVATAR CD -> starts at 5400
 	public static final int ACD_BLOCK = 5400;
@@ -586,6 +589,16 @@ public class TGComponentManager {
              case ADD_DMANODE:
                 tgc = new ADDDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
+                case ADD_ICUNODE:
+                tgc = new ADDICUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+                case ADD_COPROMWMRNODE:
+                tgc = new ADDCoproMWMRNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+                case ADD_TIMERNODE:
+                tgc = new ADDTimerNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+                
 			case ADD_ARTIFACT:
                 tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1144,7 +1157,13 @@ public class TGComponentManager {
         } else if (tgc instanceof ADDBridgeNode) {
             return ADD_BRIDGENODE;
         } else if (tgc instanceof ADDDMANode) {
-            return ADD_DMANODE;
+            return ADD_DMANODE;  
+            } else if (tgc instanceof ADDICUNode) {
+            return ADD_ICUNODE;
+            } else if (tgc instanceof ADDTimerNode) {
+            return ADD_TIMERNODE;
+            } else if (tgc instanceof ADDCoproMWMRNode) {
+            return ADD_COPROMWMRNODE;
 			
 			
 		// AVATAR MAD

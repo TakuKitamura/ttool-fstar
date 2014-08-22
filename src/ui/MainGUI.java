@@ -7703,6 +7703,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ROMNODE);
         }  else if (command.equals(actions[TGUIAction.ADD_DMANODE].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_DMANODE);
+            }  else if (command.equals(actions[TGUIAction.ADD_ICUNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ICUNODE);
+            }  else if (command.equals(actions[TGUIAction.ADD_COPROMWMRNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_COPROMWMRNODE);
+            }  else if (command.equals(actions[TGUIAction.ADD_TIMERNODE].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TIMERNODE);
         }  else if (command.equals(actions[TGUIAction.ADD_BLOCKARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ARTIFACT);
 
