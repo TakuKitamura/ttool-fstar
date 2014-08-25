@@ -152,7 +152,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 	
 	public void addMessage( TMLSDMessage _msg ) {
   	messages.add( _msg );
-		addItem( new TMLSDItem( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
+		//addItem( new TMLSDItem( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
   }
     
 	public void insertInitialValue( String _name, String value ) /*throws UninitializedVariableException*/	{

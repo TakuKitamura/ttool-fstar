@@ -1885,7 +1885,7 @@ public class GTMLModeling  {
 		return map;	// the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
 	}
 
-	//Checking the syntax of CP without mapping
+	//Checking the syntax of CP with mapping if present
 	public TMLCP translateToTMLCP() {
 
 		//tmlm = new TMLModeling( true );
@@ -1898,20 +1898,20 @@ public class GTMLModeling  {
 		warnings = new Vector();
 		//listE = new CorrespondanceTGElement();
 		
-		TraceManager.addDev( "Making Communication Pattern data structure to check the syntax, without mapping" );
-		makeCommunicationPattern(); //this routine will fill archi, but now it fills
-		/*TraceManager.addDev( "Making TML modeling" );
-		if (!makeTMLModeling()) {	//Attention, this routine will provoke errors...
+		TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
+		makeCommunicationPattern();
+		/*if (!makeTMLModeling()) {
 			return null;
-		}
+		}*/
 		TraceManager.addDev("Making mapping");
-		makeMapping();	//Attention this routine will fill map
+		//makeCPMapping();	//Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
+		//place only: the architecture DD
 		
-		TraceManager.addDev("<--- TML modeling:");
-		TraceManager.addDev("TML: " + tmlm.toString());
-		TraceManager.addDev("End of TML modeling --->");
+		TraceManager.addDev("<--- TMLCP modeling:");
+		TraceManager.addDev("TMLCP: " + tmlcp.toString());
+		TraceManager.addDev("End of TMLCP modeling --->");
 		
-		removeActionsWithRecords();*/
+		//removeActionsWithRecords();
 		
 		return tmlcp;
 	}
@@ -2587,6 +2587,64 @@ public class GTMLModeling  {
 		
 		return true;
 	}
+
+	//Inspect the architecture diagrams and retrieve mapping of channels onto CPs
+	private void makeCPMapping()	{
+		
+		//Why this code?
+		//if( nodesToTakeIntoAccount == null ) {
+
+		//take the architecture panel if it exists, otherwise return
+		Vector<TDiagramPanel> panelList	= tmlap.getPanels();
+		for( TDiagramPanel panel: panelList )	{
+			TraceManager.addDev( "Name of Panel: " + panel.getName() );
+		}
+		//}
+		//else	{
+		//	components = nodesToTakeIntoAccount;
+		//}
+		ListIterator iterator = components.listIterator();
+		
+		TGComponent tgc;
+		ArrayList<TMLArchiArtifact> artifacts;
+		ArrayList<TMLArchiCommunicationArtifact> artifactscomm;
+		ArrayList<TMLArchiEventArtifact> artifactsEvt;
+		HwNode node;
+		TMLTask task;
+		TMLElement elt;
+		String s;
+		
+		while( iterator.hasNext() ) {
+		TraceManager.addDev( "makeCPMapping 1" );
+			tgc = (TGComponent)( iterator.next() );
+			if( tgc instanceof TMLArchiCPNode ) {
+				TraceManager.addDev( "makeCPMapping 2" );
+				node = archi.getHwNodeByName( tgc.getName() );
+				if ( ( node != null ) && ( node instanceof HwCommunicationNode ) ) {
+					TraceManager.addDev( "makeCPMapping 3" );
+					artifactscomm = ( (TMLArchiCommunicationNode)(tgc) ).getChannelArtifactList();
+					for( TMLArchiCommunicationArtifact artifact: artifactscomm )	{
+						TraceManager.addDev("Exploring artifact " + artifact.getValue());
+						s = artifact.getReferenceCommunicationName();
+						s = s.replaceAll("\\s", "");
+						s = s + "__" + artifact.getCommunicationName();
+						TraceManager.addDev("Searching for:" + s);
+						elt = tmlm.getCommunicationElementByName(s);
+						TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
+						if( elt instanceof TMLChannel ) {
+							//TraceManager.addDev("Setting priority");
+							( (TMLChannel)(elt) ).setPriority( artifact.getPriority() );
+						}
+						if (elt != null) {
+							map.addCommToHwCommNode( elt, (HwCommunicationNode)node );
+						} else {
+							TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
+						}
+					}
+				}
+			}
+		}
+	}	//End of method
 	
 	private void makeMapping() {
 		if (nodesToTakeIntoAccount == null) {
@@ -2607,11 +2665,11 @@ public class GTMLModeling  {
 		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TMLArchiNode) {
-				node = archi.getHwNodeByName(tgc.getName());
-				if ((node != null) && (node instanceof HwExecutionNode)) {
-					artifacts = ((TMLArchiNode)(tgc)).getAllTMLArchiArtifacts();
-					for(TMLArchiArtifact artifact:artifacts) {
+			if( tgc instanceof TMLArchiCPNode )	{
+				node = archi.getHwNodeByName( tgc.getName() );
+				if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {	//why checking this instanceof?
+					artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
+					for( TMLArchiArtifact artifact:artifacts ) {
 						//TraceManager.addDev("Exploring artifact " + artifact.getValue());
 						s = artifact.getReferenceTaskName();
 						TraceManager.addDev("1) Trying to get task named:" + s); 

@@ -6302,10 +6302,8 @@ public class GTURTLEModeling {
 		TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
 		mgui.generateTMLTxt();	//Now generating the TMLtxt code
 		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
-		//CPparser myCPparser = new CPparser( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-		//here I should call the javacc parser and feed it with the above-generated TMLtxt!
 		/*listE = gtmlm.getCorrespondanceTable();
-		checkingErrors = gtmlm.getCheckingErrors();	//A vector
+		checkingErrors = gtmlm.getCheckingErrors();
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
 			analyzeErrors();

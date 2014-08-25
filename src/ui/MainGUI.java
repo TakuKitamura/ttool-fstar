@@ -1212,14 +1212,14 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         return list;
     }
 
-    public Vector<String> getAllTMLCP() {
+    public ArrayList<TMLCommunicationPatternPanel> getAllTMLCP() {
         TURTLEPanel tp;
-        Vector<String> list = new Vector<String>();
+        ArrayList<TMLCommunicationPatternPanel> list = new ArrayList<TMLCommunicationPatternPanel>();
 
         for(int i=0; i<tabs.size(); i++) {
             tp = (TURTLEPanel)(tabs.elementAt(i));
-            if (tp instanceof TMLCommunicationPatternPanel) {
-                list.add(mainTabbedPane.getTitleAt(i));
+            if( tp instanceof TMLCommunicationPatternPanel )	{
+							list.add( (TMLCommunicationPatternPanel) tp );
             }
         }
         return list;
