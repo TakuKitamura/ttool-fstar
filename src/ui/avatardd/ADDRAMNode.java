@@ -58,7 +58,7 @@ import ui.window.*;
 
 import tmltranslator.*;
 
-public class ADDRAMNode extends ADDMemoryNode implements WithAttributes {
+public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, WithAttributes {
     
     public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -112,6 +112,55 @@ public class ADDRAMNode extends ADDMemoryNode implements WithAttributes {
     public int getType() {
         return TGComponentManager.ADD_RAMNODE;
     }
+    
+    public boolean acceptSwallowedTGComponent(TGComponent tgc) {
+				//TraceManager.addDev("Accept swallowed?");
+				if (tgc instanceof ADDBlockArtifact) {
+						return true;
+				}
+				
+				return false;
+		}
+		
+		public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+				//TraceManager.addDev("Add swallowed?");
+				//Set its coordinates
+				if (tgc instanceof ADDChannelArtifact) {
+						tgc.setFather(this);
+						tgc.setDrawingZone(true);
+						((ADDChannelArtifact)tgc).resizeWithFather();
+						//TraceManager.addDev("Add swallowed!!!");
+						addInternalComponent(tgc, 0);
+						return true;
+				}
+				
+				return false;
+				
+		}
+		
+		public void removeSwallowedTGComponent(TGComponent tgc) {
+				removeInternalComponent(tgc);
+		}
+		
+		
+		public Vector getArtifactList() {
+				Vector v = new Vector();
+				for(int i=0; i<nbInternalTGComponent; i++) {
+						if (tgcomponent[i] instanceof ADDChannelArtifact) {
+								v.add(tgcomponent[i]);
+						}
+				}
+				return v;
+		}
+		
+		public void hasBeenResized() {
+				for(int i=0; i<nbInternalTGComponent; i++) {
+						if (tgcomponent[i] instanceof ADDChannelArtifact) {
+								((ADDChannelArtifact)tgcomponent[i]).resizeWithFather();
+						}
+				}
+				
+		}
     
    
 	  

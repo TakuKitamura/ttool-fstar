@@ -424,5 +424,9 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		return abdp.getAllNonMappedAvatarBlockNames(_name, _tadp, ref, name);
 	}	
 	
+	public ArrayList<String> getAllNonMappedAvatarChannelNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
+		return abdp.getAllNonMappedAvatarChannelNames(_name, _tadp);
+	}	
+	
     
 }

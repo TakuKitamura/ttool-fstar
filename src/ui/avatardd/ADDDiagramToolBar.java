@@ -68,7 +68,8 @@ public class ADDDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ADD_CPUNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_BUSNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_BRIDGENODE].setEnabled(b);
-        mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].setEnabled(b);
+        mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].setEnabled(b);    
+        mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].setEnabled(b);
         mgui.actions[TGUIAction.ADD_TTYNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_RAMNODE].setEnabled(b);
 		mgui.actions[TGUIAction.ADD_ROMNODE].setEnabled(b);
@@ -139,7 +140,9 @@ public class ADDDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.ADD_BRIDGENODE]);
         button.addMouseListener(mgui.mouseHandler);
 		button = this.add(mgui.actions[TGUIAction.ADD_RAMNODE]);
-        button.addMouseListener(mgui.mouseHandler);    
+        button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT]);
+        button.addMouseListener(mgui.mouseHandler);
         button = this.add(mgui.actions[TGUIAction.ADD_ROMNODE]);
         button.addMouseListener(mgui.mouseHandler);
         

@@ -685,5 +685,31 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 		return isLossy;
 	}
 	
+	public String getChannelName() {
+			String sig1 = "";
+			String sig2 = "";
+			if (inSignalsAtOrigin.size() > 0) {
+					sig1 = inSignalsAtOrigin.get(0);
+			} else if (outSignalsAtOrigin.size() > 0) {
+					sig1 = outSignalsAtOrigin.get(0);
+			}
+			if (outSignalsAtDestination.size() > 0) {
+					sig2 = outSignalsAtDestination.get(0);
+			} else if (inSignalsAtDestination.size() > 0) {
+					sig2 = inSignalsAtDestination.get(0);
+			}
+			
+			String b1 = "";
+			String b2 = "";
+			AvatarBDBlock b = getAvatarBDBlock1();
+			if (b != null) { b1 = b.getBlockName();}
+			b = getAvatarBDBlock2();
+			if (b != null) { b2 = b.getBlockName();}
+			
+			return b1 + "/" + sig1 + " #--# " + b2 + "/" + sig2;
+			
+			
+	}
+	
     
 }

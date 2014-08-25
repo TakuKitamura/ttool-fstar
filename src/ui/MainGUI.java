@@ -1314,6 +1314,22 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
         return list;
     }
+    
+    public Vector<String> getAllNonMappedAvatarChannelNames(ADDDiagramPanel tadp, String ref, String name) {
+        TURTLEPanel tp;
+        Vector<String> list = new Vector<String>();
+        boolean b;
+
+        for(int i=0; i<tabs.size(); i++) {
+            tp = (TURTLEPanel)(tabs.elementAt(i));
+            if (tp instanceof AvatarDesignPanel) {
+                b = (mainTabbedPane.getTitleAt(i).compareTo(ref) == 0);
+                list.addAll(((AvatarDesignPanel)tp).getAllNonMappedAvatarChannelNames(mainTabbedPane.getTitleAt(i), tadp, b, name));
+            }
+        }
+
+        return list;
+    }
 
     public Vector<String> getAllCompositeComponent(TMLComponentTaskDiagramPanel tcdp) {
         TURTLEPanel tp;
@@ -7711,6 +7727,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TIMERNODE);
         }  else if (command.equals(actions[TGUIAction.ADD_BLOCKARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ARTIFACT);
+        }  else if (command.equals(actions[TGUIAction.ADD_CHANNELARTIFACT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CHANNELARTIFACT);
 
         } else if (command.equals(actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
             actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_ASSOCIATION);

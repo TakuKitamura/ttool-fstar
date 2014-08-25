@@ -397,6 +397,7 @@ public class TGComponentManager {
 	public static final int ADD_ICUNODE = 5359;
 	public static final int ADD_COPROMWMRNODE = 5360;
 	public static final int ADD_TIMERNODE = 5361;
+	public static final int ADD_CHANNELARTIFACT = 5362;
 	
 	// AVATAR CD -> starts at 5400
 	public static final int ACD_BLOCK = 5400;
@@ -601,6 +602,9 @@ public class TGComponentManager {
                 
 			case ADD_ARTIFACT:
                 tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case ADD_CHANNELARTIFACT:
+                tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 				
 			// Others
@@ -1146,6 +1150,8 @@ public class TGComponentManager {
             return ADD_CPUNODE;
         } else if (tgc instanceof ADDBlockArtifact) {
             return ADD_ARTIFACT;
+        } else if (tgc instanceof ADDChannelArtifact) {
+            return ADD_CHANNELARTIFACT;
         } else if (tgc instanceof ADDBusNode) {
             return ADD_BUSNODE;
         } else if (tgc instanceof ADDTTYNode) {

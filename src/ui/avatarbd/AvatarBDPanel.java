@@ -581,7 +581,7 @@ public class AvatarBDPanel extends TDiagramPanel {
     
     public ArrayList<String> getAllNonMappedAvatarBlockNames(String _topName, ADDDiagramPanel _tadp, boolean ref, String _name) {
 		
-        Iterator iterator = componentList.listIterator();
+        //Iterator iterator = componentList.listIterator();
 		ArrayList<String> list = new ArrayList<String>();
 		String name;
         
@@ -598,6 +598,27 @@ public class AvatarBDPanel extends TDiagramPanel {
 				}
             
         }
+		
+		return list;
+	}
+	
+	public ArrayList<String> getAllNonMappedAvatarChannelNames(String _topName, ADDDiagramPanel _tadp) {
+		
+        Iterator iterator = componentList.listIterator();
+		ArrayList<String> list = new ArrayList<String>();
+		String name;
+        TGComponent tgc;
+		
+		while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if (tgc instanceof AvatarBDPortConnector) {
+						AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
+						name = port.getChannelName();
+						if (!_tadp.isChannelMapped(_topName,  name)) {
+							list.add(_topName + "::" + name);
+					}
+				}
+		}
 		
 		return list;
 	}

@@ -262,6 +262,31 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
 		return false;
 	}
 	
+	public boolean isChannelMapped(String _ref, String _name) {
+		ListIterator iterator = componentList.listIterator();
+		TGComponent tgc;
+		ADDMemoryNode node;
+		Vector v;
+		ADDChannelArtifact artifact;
+		int i;
+		String name = _ref + "::" + _name;
+		
+		while(iterator.hasNext()) {
+			tgc = (TGComponent)(iterator.next());
+			if (tgc instanceof ADDRAMNode) {
+				v =  ((ADDRAMNode)(tgc)).getArtifactList();
+				for(i=0; i<v.size(); i++) {
+					artifact = (ADDChannelArtifact)(v.get(i));
+					if (artifact.getValue().equals(name)) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	/*public void renameMapping(String oldName, String newName) {
 		ListIterator iterator = getListOfNodes().listIterator();
 		TMLArchiNode node;

@@ -378,6 +378,7 @@ public class TGUIAction extends AbstractAction {
 	public static final int ADD_ICUNODE = 408;
 	public static final int ADD_COPROMWMRNODE = 409;
 	public static final int ADD_TIMERNODE = 410;
+	public static final int ADD_CHANNELARTIFACT = 411;
 
 	
     
@@ -545,7 +546,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 411;
+    public static final int NB_ACTION = 412;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -753,6 +754,7 @@ public class TGUIAction extends AbstractAction {
         actions[ADD_BUSNODE] = new TAction("add-add-busnode", "Add a Bus", IconManager.imgic1102, IconManager.imgic1102, "Bus", "Add a bus node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_TTYNODE] = new TAction("add-add-tty", "Add a TTY node", IconManager.imgic1108, IconManager.imgic1108, "TTY", "Add a tty node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BLOCKARTIFACT] = new TAction("add-add-blockartifact", "Map an AVATAR block", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR block", "Map an AVATAR block onto a node in the currently opened AVATAR deployment diagram", 0);
+        actions[ADD_CHANNELARTIFACT] = new TAction("add-add-channelartifact", "Map an AVATAR Channel", IconManager.imgic702, IconManager.imgic702, "Map an AVATAR channel", "Map an AVATAR channel onto a memory in the currently opened AVATAR deployment diagram", 0);
         actions[ADD_BRIDGENODE] = new TAction("add-add-bridgenode", "Add a Bridge", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_RAMNODE] = new TAction("add-add-ramnode", "Add a RAM", IconManager.imgic1108, IconManager.imgic1108, "RAM", "Add a hardware accelerator node to the currently opened AVATAR deployment diagram", 0);
         actions[ADD_ROMNODE] = new TAction("add-add-romnode", "Add a ROM", IconManager.imgic1108, IconManager.imgic1108, "ROM", "Add a memory node to the currently opened AVATAR deployment diagram", 0);
