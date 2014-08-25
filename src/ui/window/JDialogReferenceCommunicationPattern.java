@@ -62,14 +62,14 @@ import myutil.*;
 public class JDialogReferenceCommunicationPattern extends javax.swing.JDialog implements ActionListener  {
     
     private boolean regularClose;
-	private boolean emptyList = false;
+		private boolean emptyList = false;
     
     private JPanel panel2;
     private Frame frame;
     private TMLArchiCPNode cp;
     
     protected JTextField name;
-	protected JComboBox referenceCommunicationPattern;
+		protected JComboBox referenceCommunicationPattern;
 	
     // Main Panel
     private JButton closeButton;

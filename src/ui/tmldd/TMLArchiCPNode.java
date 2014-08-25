@@ -176,43 +176,66 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     	return reference;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
+    public boolean editOndoubleClick( JFrame frame ) {
 		boolean error = false;
 		String errors = "";
 		String tmpName;
+
+		boolean mappedUnitExists = false;
+		TDiagramPanel ttdp = getTDiagramPanel();
+		LinkedList<TMLArchiNode> availableUnits = new LinkedList<TMLArchiNode>();
+		LinkedList<TMLArchiNode> mappedUnits = new LinkedList<TMLArchiNode>();
+		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
+
+		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
+		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
+		for( int k = 0; k < archiComponentsList.size(); k++ )	{
+			if( archiComponentsList.get(k) instanceof TMLArchiMemoryNode )	{
+				availableUnits.add( (TMLArchiNode) archiComponentsList.get(k) );
+				/*if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
+					mappedUnitExists = true;
+				}*/
+			}
+		}
+		/*if( !mappedUnitExists )	{
+			mappedUnit = "";
+		}*/
         
-		JDialogReferenceCommunicationPattern dialog = new JDialogReferenceCommunicationPattern(frame, "Setting CP attributes", this);
+		JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, availableUnits, mappedUnits, name );
 		dialog.setSize(500, 450);
-        GraphicLib.centerOnParent(dialog);
-        dialog.show(); // blocked until dialog has been closed
+		GraphicLib.centerOnParent(dialog);
+		dialog.show(); // blocked until dialog has been closed
+
+		//setJDialogOptions(jdab);
+		name = dialog.getNodeName();																											
+		mappedUnits = dialog.getMappedUnits();
         
-		if (!dialog.isRegularClose()) {
+		if( !dialog.isRegularClose() )	{
 			return false;
 		}
 		
-		if (dialog.getNodeName().length() != 0) {
+		if( dialog.getNodeName().length() != 0 )	{
 			tmpName = dialog.getNodeName();
 			tmpName = tmpName.trim();
-            if (!TAttribute.isAValidId(tmpName, false, false)) {
-                error = true;
+			if( !TAttribute.isAValidId(tmpName, false, false) )	{
+				error = true;
 				errors += "Name of the node  ";
-            } else {
-                name = tmpName;
-            }
+			}
+			else	{
+				name = tmpName;
+			}
 		}
 		
-		reference = dialog.getReference();
+		reference = dialog.getCPReference();
 		
-		if (error) {
-			JOptionPane.showMessageDialog(frame,
-                "Invalid value for the following attributes: " + errors,
-                "Error",
-                JOptionPane.INFORMATION_MESSAGE);
-            return false;
+		if( error )	{
+			JOptionPane.showMessageDialog( frame, "Invalid value for the following attributes: " + errors,
+                											"Error", JOptionPane.INFORMATION_MESSAGE);
+			return false;
 		}
 		
-        return true;
-    }
+		return true;
+	}	//End of method editOnDoubleClick
     
     
     

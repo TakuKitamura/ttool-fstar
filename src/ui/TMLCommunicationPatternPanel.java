@@ -120,7 +120,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
       toolBarPanel.add( jsp, BorderLayout.CENTER );
       tabbedPane.addTab( s, IconManager.imgic18, toolBarPanel, "Open the communication pattern sequence diagram of " + s );
 
-//			Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
+			//Vector<TDiagramPanel> panelList = tmlcpp.getPanels();
 			/*TDiagramPanel mainCP = panels.get( 0 );	//get the Main CP
 			TraceManager.addDev( mainCP.getName() );
 			LinkedList mainCPelems = mainCP.getComponentList();
@@ -177,6 +177,10 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
     public String toString() {
         return "DIPLODOCUS Communication Pattern: " + mgui.getTitleAt(this);
     }
+
+		public String getName()	{
+			return mgui.getTitleAt(this);
+		}
     
     public boolean removeEnabled(int index) {
     	if (index ==0) {
