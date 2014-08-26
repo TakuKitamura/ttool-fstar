@@ -334,5 +334,8 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
 		  return attr;
 	  }
 	  
+		public int getComponentType()	{
+			return TRANSFER;
+		}
     
 }

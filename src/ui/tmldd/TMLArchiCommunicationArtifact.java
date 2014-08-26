@@ -327,6 +327,4 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
 		return "Priority = " + priority;
 	}
 	
-
-    
 }

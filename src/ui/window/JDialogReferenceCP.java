@@ -63,23 +63,39 @@ import myutil.*;
 
 public class JDialogReferenceCP extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 
+	private final static int STORAGE = 0;
+	private final static int TRANSFER = 1;
+	private final static int CONTROLLER = 2;
+
 	private boolean regularClose;
-	private boolean emptyCPsList = false;
-	private boolean emptyInstancesList = false;
     
   private Frame frame;
   private TMLArchiCPNode cp;
   protected JTextField nameOfCP;
 	private String name = "";
 	private LinkedList<TMLArchiNode> availableUnits;
-	private LinkedList<TMLArchiNode> mappedUnits;
+	private Vector<String> mappedUnits;
 
-	ArrayList<TMLCommunicationPatternPanel> listCPs = new ArrayList<TMLCommunicationPatternPanel>();
-	Vector<String> listCPsNames = new Vector<String>();
-	ArrayList<TMLSDInstance> listInstances = new ArrayList<TMLSDInstance>();
-	Vector<String> listInstancesNames = new Vector<String>();
-	int indexListCPsNames = 0;
-	int indexListInstancesNames = 0;
+	private ArrayList<TMLCommunicationPatternPanel> listCPs = new ArrayList<TMLCommunicationPatternPanel>();
+	private Vector<String> listCPsNames = new Vector<String>();
+	
+	//private ArrayList<TMLSDInstance> listInstances = new ArrayList<TMLSDInstance>();
+	
+	//Each entry of the array list is a hash set of strings corresponding to a given CP in listCPs
+	private ArrayList<HashSet<String>> listInstancesHash = new ArrayList<HashSet<String>>();
+	private HashSet<String> sdStorageInstances = new HashSet<String>();
+	private HashSet<String> sdTransferInstances = new HashSet<String>();
+	private HashSet<String> sdControllerInstances = new HashSet<String>();
+		
+	private Vector<String> mappableArchUnits = new Vector<String>();
+	
+	private int indexListCPsNames = 0;
+	private int indexListInstancesNames = 0;
+	private int indexListArchUnitsNames = 0;
+
+	private boolean emptyCPsList = false;
+	private boolean emptyInstancesList = false;
+	private boolean emptyArchUnitsList = false;
 	
 	private boolean cancelled = false;
     
@@ -90,7 +106,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
     
   //Panel2
 	private JPanel panel2;
-  private JList listMapping;
+  private JList listMappedUnits;
   private JButton upButton;
   private JButton downButton;
   private JButton removeButton;
@@ -100,8 +116,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
   private JButton cancelButton;
 
     /** Creates new form  */
-  public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, LinkedList<TMLArchiNode> _availableUnits,
-																LinkedList<TMLArchiNode> _mappedUnits, String _name ) {
+  public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, /*LinkedList<TMLArchiNode> _availableUnits,*/
+																Vector<String> _mappedUnits, String _name ) {
 			
 	super( _frame, _title, true );
 	frame = _frame;
@@ -122,7 +138,12 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
         removeButton.setEnabled( false );
         upButton.setEnabled( false );
         downButton.setEnabled( false );
-				mapButton.setEnabled( false );
+				if( mappableArchUnits.size() > 0 )	{
+					mapButton.setEnabled( true );
+				}
+				else	{
+					mapButton.setEnabled( false );
+				}
         //makeComboBoxes();
     }
     
@@ -212,24 +233,23 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 				indexListInstancesNames = 0;
 				if( listCPs.size() == 0 ) {
-					listInstancesNames.add( "No instances to reference" );
+					HashSet temp = new HashSet<String>();
+					temp.add( "No instances to map" );
+					listInstancesHash.add( 0, temp );	//listInstancesHash is empty and temp can be safely added
 					emptyInstancesList = true;
 				}
 				else {
-					createListInstances( indexListCPsNames );	//Careful it creates just one list of instances!
-					eliminateInstancesWithSameName();
-					createListInstancesNames();
+					createListOfInstances();
 					indexListInstancesNames = indexOf( cp.getReference() );
-					//System.out.println("name=" + artifact.getFullValue() + " index=" + index);
 				}
 
 				//seventh line panel1
-        panel1.add(new JLabel("Instance:"), c1);
-        SDinstances = new JComboBox( listInstancesNames );
+        panel1.add( new JLabel( "Instance:" ), c1 );
+        SDinstances = new JComboBox( new Vector<String>( listInstancesHash.get( indexListCPsNames ) ) );
 				SDinstances.setSelectedIndex( 0 );
 				SDinstances.addActionListener( this );
-				SDinstances.setMinimumSize(new Dimension(150, 50));
-        panel1.add( SDinstances, c1);
+				SDinstances.setMinimumSize( new Dimension(150, 50) );
+        panel1.add( SDinstances, c1 );
 				
 				//eigth line panel1
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -237,14 +257,37 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
         c1.gridheight = 3;
         panel1.add(new JLabel(" "), c1);
 
-        /*c1.gridwidth = 1;        
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row*/
+				String selectedInstance = new Vector<String>( listInstancesHash.get( indexListCPsNames ) ).get(0);
+				if( sdStorageInstances.contains( selectedInstance ) )	{
+					mappableArchUnits = makeListOfMappableArchUnits( STORAGE );
+				}
+				else	{
+					if( sdTransferInstances.contains( selectedInstance ) )	{
+						mappableArchUnits = makeListOfMappableArchUnits( TRANSFER );
+					}
+					else	{
+						if( sdControllerInstances.contains( selectedInstance ) )	{
+							mappableArchUnits = makeListOfMappableArchUnits( CONTROLLER );
+						}
+					}
+				}
+				
+				indexListArchUnitsNames = 0;
+				if( mappableArchUnits.size() == 0 ) {
+					mappableArchUnits.add( "No mappable units" );
+					emptyArchUnitsList = true;
+				}
+				/*else {
+					makeListOfMappableArchUnits();
+					indexListArchUnitsNames = indexOf( cp.getReference() );
+				}*/
 				
 				//nineth line panel1
-        architectureUnit = new JComboBox();
-        panel1.add(new JLabel("Available architecture units:"), c1);
-				architectureUnit.setMinimumSize(new Dimension(150, 50));
-				architectureUnit.addActionListener(this);
+        architectureUnit = new JComboBox( mappableArchUnits );
+        panel1.add( new JLabel("Available architecture units:"), c1 );
+				architectureUnit.setSelectedIndex( 0 );
+				architectureUnit.setMinimumSize( new Dimension(150, 50) );
+				architectureUnit.addActionListener( this );
         panel1.add( architectureUnit, c1 );
         
         //tenth line panel1
@@ -261,11 +304,11 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
         panel1.add(mapButton, c1);
         
         // 1st line panel2
-        listMapping = new JList();
-        listMapping.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listMapping.addListSelectionListener(this);
-        JScrollPane scrollPane = new JScrollPane(listMapping);
-        //scrollPane.setSize(300, 250);
+        listMappedUnits = new JList( mappedUnits );
+        listMappedUnits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listMappedUnits.addListSelectionListener(this);
+        JScrollPane scrollPane = new JScrollPane( listMappedUnits );
+        scrollPane.setSize(300, 250);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         c2.fill = GridBagConstraints.BOTH;
         c2.gridheight = 5;
@@ -400,29 +443,42 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
         if (evt.getSource() == closeButton)  {
             closeDialog();
         } else if (evt.getSource() == mapButton) {
-            addInstances();
+            mapInstance();
          } else if (evt.getSource() == cancelButton) {
             cancelDialog();
          } else if (evt.getSource() == removeButton) {
-            removeInstances();
+            removeMappedInstance();
          } else if (evt.getSource() == downButton) {
-            downInstances();
+            downMappedInstance();
         } else if (evt.getSource() == upButton) {
-            upInstances();
+            upMappedInstance();
         }
     }	//End of method
 
-		private void addInstances()	{
-		}
+	private void mapInstance() {
 
-		private void removeInstances()	{
-		}
-	
-		private void downInstances()	{
-		}
+		//TraceManager.addDev( "**************************" );
+		//TraceManager.addDev( referenceUnitsName.getSelectedItem().toString() );
+		//TraceManager.addDev( "**************************" );
+		mappedUnits.add( referenceCommunicationPattern.getSelectedItem().toString() + "." + SDinstances.getSelectedItem().toString() +
+											" -> " + architectureUnit.getSelectedItem().toString() );
+		listMappedUnits.setListData( mappedUnits );
+		removeButton.setEnabled( true );
+	}
 
-		private void upInstances()	{
+	private void removeMappedInstance()	{
+  	mappedUnits.removeElementAt( listMappedUnits.getSelectedIndex() );
+		listMappedUnits.setListData( mappedUnits );
+		if( mappedUnits.size() == 0 )	{
+			removeButton.setEnabled( false );
 		}
+	}
+
+	private void downMappedInstance()	{
+	}
+
+	private void upMappedInstance()	{
+	}
 
 	/*private void updateAddButton() {
 		TraceManager.addDev("updateAddButton");
@@ -477,7 +533,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	}
     
 	public void valueChanged( ListSelectionEvent e ) {
-		int i = listMapping.getSelectedIndex() ;
+		int i = listMappedUnits.getSelectedIndex() ;
 		
 		if( i == -1 ) {
     	removeButton.setEnabled( false );
@@ -515,7 +571,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		return regularClose;
 	}
 
-	public LinkedList<TMLArchiNode> getMappedUnits()	{
+	public Vector<String> getMappedUnits()	{
 		return mappedUnits;
 	}
 
@@ -541,30 +597,63 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 	}
 
-	private void createListInstances( int index )	{
+	private void createListOfInstances()	{
 
-		//LinkedList componentList = listCPs.get( index ).tmlcpp.getComponentList();
+		//j indexes the CP and k indexes the components within a TMLSDPanel
+		HashSet<String> sdInstancesNames = new HashSet<String>();
+
 		if( listCPs.size() > 0 )	{
-			Vector<TDiagramPanel> panelList = listCPs.get( index ).getPanels();
-			for( int i = 0; i < panelList.size(); i++ )	{
-				TDiagramPanel panel = panelList.get(i);
-				//TraceManager.addDev( "Into createListInstances, panel name: " + panel.getName() );
-				if( panel instanceof TMLSDPanel )	{
-					//TraceManager.addDev( "Found TMLSDPanel named: " + panel.getName() );
-					LinkedList componentsList = panel.getComponentList();
-					for( int j = 0; j < componentsList.size(); j++ )	{
-						TGComponent elem = (TGComponent) componentsList.get(j);
-						if( elem instanceof TMLSDInstance )	{
-							//TraceManager.addDev( "Found a TMLSDInstance named: " + elem.getName() );
-							listInstances.add( (TMLSDInstance) elem );
+			for( int j = 0; j < listCPs.size(); j++ )	{
+				Vector<TDiagramPanel> panelList = listCPs.get(j).getPanels();	//the list of AD and SD panels for a given CP
+				for( TDiagramPanel panel: panelList )	{
+					//TraceManager.addDev( "Into createListInstances, panel name: " + panel.getName() );
+					if( panel instanceof TMLSDPanel )	{
+						//TraceManager.addDev( "Found TMLSDPanel named: " + panel.getName() );
+						LinkedList componentsList = panel.getComponentList();
+						for( int k = 0; k < componentsList.size(); k++ )	{
+							TGComponent elem = (TGComponent) componentsList.get(k);
+							if( elem instanceof TMLSDInstance )	{
+								//TraceManager.addDev( "Found a TMLSDInstance named: " + elem.getName() );
+								sdInstancesNames.add( elem.getName() );
+								if( elem instanceof TMLSDStorageInstance )	{
+									sdStorageInstances.add( elem.getName() );
+								}
+								if( elem instanceof TMLSDTransferInstance )	{
+									sdTransferInstances.add( elem.getName() );
+								}
+								if( elem instanceof TMLSDControllerInstance )	{
+									sdControllerInstances.add( elem.getName() );
+								}
+							}
 						}
 					}
 				}
+				listInstancesHash.add( j, sdInstancesNames );
+				sdInstancesNames = new HashSet<String>();	//better instead of using clear method
 			}
 		}
 	}
 
-	private void eliminateInstancesWithSameName()	{
+	private Vector<String> makeListOfMappableArchUnits( int instanceType )	{
+
+		//0 = storage, 1 = transfer, 2 = controller
+		Vector<TMLArchiPanel> listArchiPanels = cp.getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
+		TDiagramPanel panel = listArchiPanels.get(0).getPanels().get(0);	//Do not manage the case with more than 1 architecture panel
+		LinkedList componentList = panel.getComponentList();
+		Vector<String> list = new Vector<String>();
+
+		for( int k = 0; k < componentList.size(); k++ )	{
+			if( componentList.get(k) instanceof TMLArchiNode )	{
+				if( ( (TMLArchiNode) componentList.get(k) ).getComponentType() == instanceType )	{
+				//TraceManager.addDev( "Found a CPU named: " + elem.getName() );
+					list.add( ( (TMLArchiNode) componentList.get(k) ).getName() );
+				}
+			}
+		}
+		return list;
+	}
+
+	/*private void eliminateInstancesWithSameName()	{
 		if( listInstances.size() > 0 )	{
 			for( int i = 0; i < listInstances.size(); i++ )	{
 				TraceManager.addDev( "Into first loop, i = " + i );
@@ -580,15 +669,15 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				}
 			}	
 		}
-	}
+	}*/
 
-	private void createListInstancesNames()	{
+	/*private void createListInstancesNames()	{
 		if( listInstances.size() > 0 )	{
 			for( int i = 0; i < listInstances.size(); i++ )	{
-				listInstancesNames.add( listInstances.get(i).getName() );
+				listInstancesStrings.add( listInstances.get(i).getName() );
 				TraceManager.addDev( "Adding TMLSDInstance " + listInstances.get(i).getName() );
 			}
 		}
-	}
+	}*/
 
 }	//End of class

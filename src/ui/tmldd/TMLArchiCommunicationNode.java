@@ -144,4 +144,8 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
 	public int getDefaultConnector() {
   	return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
   }
+
+	public int getComponentType()	{
+		return OTHER;
+	}
 }

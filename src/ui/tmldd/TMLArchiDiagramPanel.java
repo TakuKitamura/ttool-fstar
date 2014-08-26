@@ -376,5 +376,5 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 		}	
 		return prio;
 	}
-    
+
 }//End of class

@@ -390,5 +390,8 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
 				return attr;
 		}
 		
+	public int getComponentType()	{
+		return TRANSFER;
+	}
 		
 }

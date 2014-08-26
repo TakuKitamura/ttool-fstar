@@ -60,6 +60,12 @@ import tmltranslator.*;
 
 public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
     protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+
+		//the return type of method getComponentType
+		public final static int STORAGE = 0;
+		public final static int TRANSFER = 1;
+		public final static int CONTROLLER = 2;
+		public final static int OTHER = 3;	//for CPNodes
 	
     public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -76,6 +82,8 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
 		
 		return artifacts;
 	}
+	
+	public abstract int getComponentType();
 	
 	public int getClockRatio(){
 		  return clockRatio;

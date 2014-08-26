@@ -174,6 +174,4 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
 		return "Priority = " + priority;
 	}
   
- 
-    
 }

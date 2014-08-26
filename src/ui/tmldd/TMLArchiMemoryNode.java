@@ -312,5 +312,8 @@ public class TMLArchiMemoryNode extends TMLArchiCommunicationNode implements Swa
 		  return attr;
 	  }
 	  
+		public int getComponentType()	{
+			return STORAGE;
+		}
     
 }

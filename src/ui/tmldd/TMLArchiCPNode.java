@@ -65,7 +65,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     private int derivationy = 3;
     private String stereotype = "CP";
     private String reference="";
-	
+		private Vector<String> mappedUnits = new Vector<String>();
     
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -181,31 +181,10 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 		String errors = "";
 		String tmpName;
 
-		boolean mappedUnitExists = false;
-		TDiagramPanel ttdp = getTDiagramPanel();
-		LinkedList<TMLArchiNode> availableUnits = new LinkedList<TMLArchiNode>();
-		LinkedList<TMLArchiNode> mappedUnits = new LinkedList<TMLArchiNode>();
-		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
-
-		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
-		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
-		for( int k = 0; k < archiComponentsList.size(); k++ )	{
-			if( archiComponentsList.get(k) instanceof TMLArchiMemoryNode )	{
-				availableUnits.add( (TMLArchiNode) archiComponentsList.get(k) );
-				/*if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
-					mappedUnitExists = true;
-				}*/
-			}
-		}
-		/*if( !mappedUnitExists )	{
-			mappedUnit = "";
-		}*/
-        
-		JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, availableUnits, mappedUnits, name );
+		JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name );
 		dialog.setSize(500, 450);
 		GraphicLib.centerOnParent(dialog);
 		dialog.show(); // blocked until dialog has been closed
-
 		//setJDialogOptions(jdab);
 		name = dialog.getNodeName();																											
 		mappedUnits = dialog.getMappedUnits();
@@ -298,6 +277,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         }
     }
     
+	public int getComponentType()	{
+		return OTHER;
+	}
     
     
 }

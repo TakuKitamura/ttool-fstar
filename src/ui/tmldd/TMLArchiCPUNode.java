@@ -624,5 +624,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 		return attr;
 		
 	}
+
+	public int getComponentType()	{
+		return CONTROLLER;
+	}
 	
 }

@@ -310,6 +310,9 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
 		  return attr;
 	  }
 	   
+	public int getComponentType()	{
+		return TRANSFER;
+	}
 	  
     
 }
