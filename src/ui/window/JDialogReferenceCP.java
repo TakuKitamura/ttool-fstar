@@ -128,6 +128,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		mappedUnits.clear();	//take into account the elements already mapped
 		mappedUnits.addAll( 0, _mappedUnits );
 	}
+	else	{
+		mappedUnits = new Vector<String>();
+	}
 		
   initComponents();
 	myInitComponents();
@@ -304,7 +307,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
         panel1.add(mapButton, c1);
         
         // 1st line panel2
-        listMappedUnits = new JList( mappedUnits );
+        listMappedUnits = new JList();
         listMappedUnits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listMappedUnits.addListSelectionListener(this);
         JScrollPane scrollPane = new JScrollPane( listMappedUnits );
@@ -452,18 +455,41 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
             downMappedInstance();
         } else if (evt.getSource() == upButton) {
             upMappedInstance();
-        }
+        }	else if( evt.getSource() == SDinstances )	{	//user has selected another instance
+					//update the list associated to the mappable arch units according to the instance type
+						updateMappableArchUnits();
+				}	else if( evt.getSource() == referenceCommunicationPattern )	{	//user has selected another CP. Previous mapping will be deleted
+						updateSDInstancesList();
+						updateMappableArchUnits();
+						emptyMappedUnitsList();
+				}
     }	//End of method
 
 	private void mapInstance() {
 
-		//TraceManager.addDev( "**************************" );
-		//TraceManager.addDev( referenceUnitsName.getSelectedItem().toString() );
-		//TraceManager.addDev( "**************************" );
-		mappedUnits.add( referenceCommunicationPattern.getSelectedItem().toString() + "." + SDinstances.getSelectedItem().toString() +
-											" -> " + architectureUnit.getSelectedItem().toString() );
-		listMappedUnits.setListData( mappedUnits );
-		removeButton.setEnabled( true );
+		if( listInstancesHash.get( referenceCommunicationPattern.getSelectedIndex() ).size() > 0 )	{
+			mappedUnits.add( referenceCommunicationPattern.getSelectedItem().toString() + "." + SDinstances.getSelectedItem().toString() +
+												" -> " + architectureUnit.getSelectedItem().toString() );
+			//remove the mapped instance from the list
+	    HashSet<String> SDinstancesHash = listInstancesHash.get( referenceCommunicationPattern.getSelectedIndex() );
+			Iterator<String> i = SDinstancesHash.iterator();
+			while( i.hasNext() )	{
+				String element = i.next();
+				TraceManager.addDev( "Comparing " + element + " with " + SDinstances.getSelectedItem().toString() );
+				if( element.equals( SDinstances.getSelectedItem().toString() ) )	{
+					i.remove();
+					TraceManager.addDev( "Removing instance: " + element );
+					break;
+				}
+			}
+			listInstancesHash.set( referenceCommunicationPattern.getSelectedIndex(), SDinstancesHash );
+			makeSDInstancesComboBox( new Vector<String>( SDinstancesHash) );
+			listMappedUnits.setListData( mappedUnits );
+			removeButton.setEnabled( true );
+			if( SDinstancesHash.size() == 0 )	{
+				mapButton.setEnabled( false );
+			}
+		}
 	}
 
 	private void removeMappedInstance()	{
@@ -480,6 +506,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private void upMappedInstance()	{
 	}
 
+
 	/*private void updateAddButton() {
 		TraceManager.addDev("updateAddButton");
         
@@ -491,24 +518,57 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			mapButton.setEnabled(as1.isCompatibleWith(as2));
 		}
 	}*/
+
+	private void updateSDInstancesList()	{
+
+		//makeSDInstancesComboBox();
+	}
+
+	private void updateMappableArchUnits()	{
+
+		Vector<String> mappableArchUnits = new Vector<String>();
+		String selectedInstance = SDinstances.getSelectedItem().toString();
+
+		if( sdStorageInstances.contains( selectedInstance ) )	{
+			mappableArchUnits = makeListOfMappableArchUnits( STORAGE );
+		}
+		else	{
+			if( sdTransferInstances.contains( selectedInstance ) )	{
+				mappableArchUnits = makeListOfMappableArchUnits( TRANSFER );
+			}
+			else	{
+				if( sdControllerInstances.contains( selectedInstance ) )	{
+					mappableArchUnits = makeListOfMappableArchUnits( CONTROLLER );
+				}
+			}
+		}
+		TraceManager.addDev( "Before makingArchComboBox: " + mappableArchUnits.toString() );
+		makeArchitectureUnitsComboBox( mappableArchUnits );
+		for( int i = 0; i < architectureUnit.getModel().getSize(); i++ )	{
+			TraceManager.addDev( "After makingArchComboBox: " + architectureUnit.getModel().getElementAt(i) );
+		}
+	}
     
-    /*private void makeComboBoxes() {
-        signalsBlock1.removeAllItems();
-        signalsBlock2.removeAllItems();
-        
-        int i;
-        AvatarSignal as;
-        
-        for(i=0; i<available1.size(); i++) {
-            as = (AvatarSignal)(available1.elementAt(i));
-            signalsBlock1.addItem(as.toString());
-        }
-        
-        for(i=0; i<available2.size(); i++) {
-            as = (AvatarSignal)(available2.elementAt(i));
-            signalsBlock2.addItem(as.toString());
-        }
-    }*/
+	private void emptyMappedUnitsList()	{
+		listMappedUnits.removeAll();
+		mappedUnits.clear();
+	}
+
+	private void makeArchitectureUnitsComboBox( Vector<String> newList )	{
+
+		architectureUnit.removeAllItems();
+		for( String s: newList ) {
+			architectureUnit.addItem( s );
+		}
+	}
+
+  private void makeSDInstancesComboBox( Vector<String> newList ) {
+
+  	SDinstances.removeAllItems();
+		for( String s: newList ) {
+			SDinstances.addItem( s );
+		}
+	}
     
     public void closeDialog() {
       regularClose = true;
