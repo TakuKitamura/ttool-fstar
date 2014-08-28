@@ -79,6 +79,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
     
     public void init() {
         
+       mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
         // Requirement Diagram toolbar
         //addRequirementDiagram("Requirement Diagram");
         
@@ -110,6 +111,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
+        
        
         return true;
     }

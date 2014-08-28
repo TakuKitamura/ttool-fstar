@@ -486,6 +486,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
     public void changeMade(TDiagramPanel tdp, int type) {
         hasChanged = true;
+        if (tdp != null) {
         switch (type) {
         case -1:
             // Structural change
@@ -515,6 +516,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             break;
         default:
 
+        }
         }
         setMode(MODEL_CHANGED);
         Point p;
@@ -1127,7 +1129,26 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         mainTabbedPane.setTitleAt(index, name);
         mainTabbedPane.setIconAt(index, IconManager.imgic98);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
-        dp.init();
+        dp.init(name);
+        if (addDefaultElements) {
+            dp.initElements();
+        }
+        //ystem.out.println("Design added");
+        return index;
+    }
+    
+    private int addAvatarMethodologyPanel(String name, int index, boolean addDefaultElements) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        AvatarMethodologyPanel dp = new AvatarMethodologyPanel(this);
+        tabs.add(index, dp);
+        mainTabbedPane.add(dp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open AVATAR methodology");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic98);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        dp.init(name);
         if (addDefaultElements) {
             dp.initElements();
         }
@@ -1476,6 +1497,12 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         mainTabbedPane.setSelectedIndex(index);
         return index;
     }
+    
+    public int createAvatarMethodology(String name) {
+        int index = addAvatarMethodologyPanel(name, -1, false);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
 
     public int createTMLDesign(String name) {
         int index = addTMLDesignPanel(name, -1);
@@ -1803,6 +1830,15 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public void newDiplodocusMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addDiplodocusMethodologyPanel("DIPLODOCUS_Methodology", -1, true);
+        ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size()-1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+    
+    public void newAvatarMethodology() {
+        //TraceManager.addDev("NEW DESIGN");
+        addAvatarMethodologyPanel("AVATAR_Methodology", -1, true);
         ((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size()-1);
         //paneAction(null);
@@ -5208,6 +5244,11 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
         tp.tabbedPane.setTitleAt(0, name);
     }
+    
+    public void setAvatarMethodologyDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
+        tp.tabbedPane.setTitleAt(0, name);
+    }
 
     public void setTMLTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = (TURTLEPanel)(tabs.elementAt(indexDesign));
@@ -6186,6 +6227,34 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     }
 
     public void paneDiplodocusMethodologyAction(ChangeEvent e) {
+        //TraceManager.addDev("Pane design action size=" + tabs.size());
+        try {
+
+            TDiagramPanel tdp1 = (TDiagramPanel)(getCurrentTURTLEPanel().panels.elementAt(getCurrentJTabbedPane().getSelectedIndex()));
+            //TraceManager.addDev("Pane design action 1");
+            if (activetdp != null) {
+
+                activetdp.activateActions(false);
+                unactivateDrawing();
+                activetdp.stopAddingConnector();
+            }
+            //TraceManager.addDev("Pane design action 1 on "+ tdp1.getName());
+            tdp1.activateActions(true);
+            activetdp = tdp1;
+
+            setEditMode();
+            setPanelMode();
+            //TraceManager.addDev("Pane design action 3");
+
+            // activate the   drawing   of the right pane
+            basicActivateDrawing();
+
+        } catch (Exception ex) {
+            //TraceManager.addDev("Exception pane design action");
+        }
+    }
+    
+    public void paneAvatarMethodologyAction(ChangeEvent e) {
         //TraceManager.addDev("Pane design action size=" + tabs.size());
         try {
 
@@ -8169,7 +8238,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement, newTMLDesign, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAVATARDD;
+            newNCDesign, sort, clone, newAttackTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -8209,6 +8278,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newAttackTree = createMenuItem("New AVATAR Attack Tree");
             newRequirement = createMenuItem("New TURTLE Requirement Diagram");
             newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
+            
             newTMLDesign = createMenuItem("New DIPLODOCUS Design");
             newTMLComponentDesign = createMenuItem("New Component-based DIPLODOCUS Design");
             newTMLArchi = createMenuItem("New DIPLODOCUS Architecture");
@@ -8221,6 +8291,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newAVATARAnalysis = createMenuItem("New AVATAR Analysis");
             newAVATARBD = createMenuItem("New AVATAR Design");
             newAVATARDD = createMenuItem("New AVATAR Deployment Diagram");
+            newAvatarMethodo = createMenuItem("New AVATAR Methodology");
 
             menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
             menu.add(moveLeft);
@@ -8277,6 +8348,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             if (avatarOn) {
                 menu.addSeparator();
+                menu.add(newAvatarMethodo);
                 menu.add(newAttackTree);
                 menu.add(newMAD);
                 menu.add(newAVATARRequirement);
@@ -8357,6 +8429,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                         mgui.newRequirement();
                     }    else if (e.getSource() == newTMLMethodo) {
                         mgui.newDiplodocusMethodology();
+                    }    else if (e.getSource() == newAvatarMethodo) {
+                        mgui.newAvatarMethodology();
                     } else if (ac.equals("New DIPLODOCUS Design")) {
                         mgui.newTMLDesign();
                     } else if (ac.equals("New Component-based DIPLODOCUS Design")) {

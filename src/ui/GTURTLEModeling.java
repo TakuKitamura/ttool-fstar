@@ -95,6 +95,7 @@ import avatartranslator.totpn.*;
 import tpndescription.*;
 
 import ui.diplodocusmethodology.*;
+import ui.avatarmethodology.*;
 import ui.tmlad.*;
 import ui.tmlcd.*;
 import ui.tmlcompd.*;
@@ -2840,6 +2841,59 @@ public class GTURTLEModeling {
 						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
 					}
 				}
+				
+				
+			}else if (tdp instanceof AvatarMethodologyDiagramPanel) {
+				nl = doc.getElementsByTagName("DiplodocusMethodologyDiagramPanelCopy");
+				docCopy = doc;
+
+				if (nl == null) {
+					return;
+				}
+
+				//TraceManager.addDev("Toto 1");
+
+
+				AvatarMethodologyDiagramPanel amdp = (AvatarMethodologyDiagramPanel)tdp;
+
+
+				for(i=0; i<nl.getLength(); i++) {
+					adn = nl.item(i);
+					if (adn.getNodeType() == Node.ELEMENT_NODE) {
+						elt = (Element) adn;
+
+						if (amdp == null) {
+							throw new MalformedModelingException();
+						}
+
+						//int xSel = Integer.decode(elt.getAttribute("xSel")).intValue();
+						//int ySel = Integer.decode(elt.getAttribute("ySel")).intValue();
+						//int widthSel = Integer.decode(elt.getAttribute("widthSel")).intValue();
+						//int heightSel = Integer.decode(elt.getAttribute("heightSel")).intValue();
+
+						decX = _decX;
+						decY = _decY;
+
+						amdp.loadExtraParameters(elt);
+
+						//TraceManager.addDev("Toto 2");
+
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " components");
+						makeXMLComponents(elt.getElementsByTagName("COMPONENT"), amdp);
+						//TraceManager.addDev("Toto 3");
+						makePostProcessing(amdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " connectors");
+						makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), amdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " subcomponents");
+						makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), amdp);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " real points");
+						connectConnectorsToRealPoints(amdp);
+						amdp.structureChanged();
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading " + beginIndex);
+						makePostLoading(amdp, beginIndex);
+						//TraceManager.addDev("TML task diagram : " + tmltdp.getName() + " post loading done");
+					}
+				}
 			}  else if (tdp instanceof TMLComponentTaskDiagramPanel) {
 				nl = doc.getElementsByTagName("TMLComponentTaskDiagramPanelCopy");
 				docCopy = doc;
@@ -3795,6 +3849,8 @@ public class GTURTLEModeling {
 			loadAttackTree(node);
 		} else if (type.compareTo("Diplodocus Methodology") == 0) {
 			loadDiplodocusMethodology(node);
+		} else if (type.compareTo("Avatar Methodology") == 0) {
+			loadAvatarMethodology(node);
 		} else if (type.compareTo("TML Design") == 0) {
 			loadTMLDesign(node);
 		} else if (type.compareTo("TML Component Design") == 0) {
@@ -4217,6 +4273,34 @@ public class GTURTLEModeling {
 					// Class diagram
 					//TraceManager.addDev("Loading TML CD");
 					loadDiplodocusMethodologyDiagram(elt, indexDesign);
+					//TraceManager.addDev("End loading TML CD");
+				}
+			}
+		}
+	}
+	
+	public void loadAvatarMethodology(Node node) throws  MalformedModelingException, SAXException {
+		Element elt = (Element) node;
+		String nameTab;
+		NodeList diagramNl;
+		int indexDesign;
+
+
+		nameTab = elt.getAttribute("nameTab");
+
+		indexDesign = mgui.createAvatarMethodology(nameTab);
+
+		diagramNl = node.getChildNodes();
+
+		for(int j=0; j<diagramNl.getLength(); j++) {
+			//TraceManager.addDev("Design nodes: " + j);
+			node = diagramNl.item(j);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				elt = (Element)node;
+				if (elt.getTagName().compareTo("AvatarMethodologyDiagramPanel") == 0) {
+					// Class diagram
+					//TraceManager.addDev("Loading TML CD");
+					loadAvatarMethodologyDiagram(elt, indexDesign);
 					//TraceManager.addDev("End loading TML CD");
 				}
 			}
@@ -4663,10 +4747,27 @@ public class GTURTLEModeling {
 		String name;
 		TDiagramPanel tdp;
 
-		// class diagram name
+		// Diagram name
 		name = elt.getAttribute("name");
 		mgui.setDiplodocusMethodologyDiagramName(indexDesign, name);
 		tdp = mgui.getMainTDiagramPanel(indexDesign);
+		tdp.setName(name);
+
+		TraceManager.addDev("tdp=" + tdp.getName());
+
+		loadDiagram(elt, tdp);
+	}
+	
+	public void loadAvatarMethodologyDiagram(Element elt, int indexDesign) throws  MalformedModelingException, SAXException {
+
+		String name;
+		TDiagramPanel tdp;
+
+		// class diagram name
+		name = elt.getAttribute("name");
+		mgui.setAvatarMethodologyDiagramName(indexDesign, name);
+		tdp = mgui.getMainTDiagramPanel(indexDesign);
+		tdp.setName(name);
 
 		//TraceManager.addDev("tdp=" + tdp.getName());
 

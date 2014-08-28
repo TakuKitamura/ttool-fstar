@@ -107,7 +107,11 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
     }
     
     public void init() {
-        addDiplodocusMethodologyDiagram("Diplodocus methodology");
+    	init("Diplodocus methodology");
+    }
+    
+    public void init(String name) {
+        addDiplodocusMethodologyDiagram(name);
        
         // Requirement Diagram toolbar
         //addRequirementDiagram("Requirement Diagram");
@@ -140,7 +144,7 @@ public class DiplodocusMethodologyPanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
-        
+        mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
         //TGComponent tgc = TGComponentManager.addComponent(100, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, dmd);
         
         

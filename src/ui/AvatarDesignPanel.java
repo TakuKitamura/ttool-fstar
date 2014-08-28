@@ -176,6 +176,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         tabbedPane.addTab("AVATAR Design", IconManager.imgic80, toolBarPanel, "Opens the AVATAR Design");
         tabbedPane.setSelectedIndex(0);
         //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+        mgui.changeMade(abdp, TDiagramPanel.NEW_COMPONENT);
         
         //jsp.setVisible(true);
  

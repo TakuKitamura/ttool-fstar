@@ -36,10 +36,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
- * Class AttackTreePanel
- * Management of attack trees
- * Creation: 03/11/2009
- * @version 1.0 03/11/2009
+ * Class AvatarMethodologyPanel
+ * Managenemt of the avatar methodology panels
+ * Creation: 27/08/2014
+ * @version 1.1 27/08/2014
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
@@ -49,14 +49,15 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import ui.atd.*;
+import ui.avatarmethodology.*;
+
 
 import java.util.*;
 
-public class AttackTreePanel extends TURTLEPanel {
-    public AttackTreeDiagramPanel atdp;
+public class AvatarMethodologyPanel extends TURTLEPanel {
+    public AvatarMethodologyDiagramPanel dmd;
     
-    public AttackTreePanel(MainGUI _mgui) {
+    public AvatarMethodologyPanel(MainGUI _mgui) {
         super(_mgui);
 		
         tabbedPane = new JTabbedPane();
@@ -67,7 +68,7 @@ public class AttackTreePanel extends TURTLEPanel {
 		
         cl = new ChangeListener() {
             public void stateChanged(ChangeEvent e){
-                mgui.paneRequirementAction(e);
+                mgui.paneDiplodocusMethodologyAction(e);
             }
         };
         tabbedPane.addChangeListener(cl);
@@ -75,46 +76,86 @@ public class AttackTreePanel extends TURTLEPanel {
 		
     }
     
+    // Put the methodology
+    public void initElements() {
+    	 //TGComponent tgc1 = dmd.addComponent(450, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, false);
+    	 //TGComponent tgc2 = dmd.addComponent(750, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE, false);
+    	 //TGComponent tgc3 = dmd.addComponent(600, 300, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING, false);
+    	 
+    	 //Connectors
+    	 
+    	 // App -> mapping
+    	 /*TGConnectingPoint p1, p2;
+    	 p1 = tgc1.getTGConnectingPointAtIndex(0);
+    	 p2 = tgc3.getTGConnectingPointAtIndex(0);
+    	 Vector listPoint = new Vector();
+    	 TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p1.setFree(false);
+    	 p2.setFree(false);
+    	 dmd.getComponentList().add(0, tgco);
+    	 
+    	 // Archi -> mapping
+    	 p1 = tgc2.getTGConnectingPointAtIndex(0);
+    	 p2 = tgc3.getTGConnectingPointAtIndex(1);
+    	 listPoint = new Vector();
+    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p1.setFree(false);
+    	 p2.setFree(false);
+    	 dmd.getComponentList().add(0, tgco);
+    	 
+    	  dmd.addComponent(50, 150, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT, false);*/
+    }
+    
     public void init() {
-        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
+    	init("Avatar methodology");
+    }
+    
+    public void init(String name) {
+        addAvatarMethodologyDiagram(name);
+       
         // Requirement Diagram toolbar
         //addRequirementDiagram("Requirement Diagram");
         
         //jsp.setVisible(true);
     }
     
-    public boolean addAttackTreeDiagram(String s) {
-        AttackTreeDiagramToolbar toolBarAt = new AttackTreeDiagramToolbar(mgui);
-        toolbars.add(toolBarAt);
+    public boolean addAvatarMethodologyDiagram(String s) {
+        AvatarMethodologyDiagramToolbar dmdt = new AvatarMethodologyDiagramToolbar(mgui);
+        toolbars.add(dmdt);
         
         toolBarPanel = new JPanel();
 		//toolBarPanel.setBackground(Color.red);
         toolBarPanel.setLayout(new BorderLayout());
 		//toolBarPanel.setBackground(ColorManager.MainTabbedPaneSelect);
         
-        //The diagram
-        atdp = new AttackTreeDiagramPanel(mgui, toolBarAt);
-        atdp.setName(s);
-        atdp.tp = this;
-        tdp = atdp;
-        panels.add(atdp);
-        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(atdp);
-        atdp.jsp = jsp;
+        //Class	diagram
+        dmd = new AvatarMethodologyDiagramPanel(mgui, dmdt);
+        dmd.setName(s);
+        dmd.tp = this;
+        tdp = dmd;
+        panels.add(dmd);
+        JScrollDiagramPanel jsp	= new JScrollDiagramPanel(dmd);
+        dmd.jsp = jsp;
         jsp.setWheelScrollingEnabled(true);
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
-        toolBarPanel.add(toolBarAt, BorderLayout.NORTH);
+        toolBarPanel.add(dmdt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic1074, toolBarPanel, "Opens Attack Tree Diagram");
+        tabbedPane.addTab(s, IconManager.imgic98, toolBarPanel, "Opens avatar methodology");
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
-       
+        
+        //TGComponent tgc = TGComponentManager.addComponent(100, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, dmd);
+        mgui.changeMade(dmd, TDiagramPanel.NEW_COMPONENT);
+        
         return true;
     }
-	    
+	
+
+	
 
     public String saveHeaderInXml() {
-        return "<Modeling type=\"AttackTree\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+        return "<Modeling type=\"Avatar Methodology\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
     }
     
     public String saveTailInXml() {
@@ -122,7 +163,7 @@ public class AttackTreePanel extends TURTLEPanel {
     }
     
     public String toString() {
-        return mgui.getTitleAt(this) + " (SysML Parametric Diagram)";
+        return mgui.getTitleAt(this) + " (Avatar Methodology)";
     }
     
     public boolean removeEnabled(int index) {
@@ -136,15 +177,14 @@ public class AttackTreePanel extends TURTLEPanel {
         if (panels.size() == 0) {
             return false;
         }
-        if ((panels.elementAt(index) instanceof AttackTreeDiagramPanel)){
-            return true;
-        }
+        
 		
-        return false;
-    }
-	
-	public boolean isATDEnabled() {
         return true;
     }
+	
+	public boolean isAvatarMethodologyEnabled() {
+		return true;
+	}
     
+
 }

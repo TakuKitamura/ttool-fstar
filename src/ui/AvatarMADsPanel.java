@@ -99,11 +99,12 @@ public class AvatarMADsPanel extends TURTLEPanel {
         panels.add(amadp);
         tabbedPane.addTab(s, IconManager.imgic63, toolBarPanel, "Opens Modeling Assumption Panel of " + s);
         //tabbedPane.setMnemonicAt(tabbedPane.getTabCount()-1, '^');
+        mgui.changeMade(amadp, TDiagramPanel.NEW_COMPONENT);
         return;
     }
     
     public void init() {
-         
+         mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
         //  Class Diagram toolbar
         /*AvatarMADToolBar toolBarAvatarMAD = new AvatarMADToolBar(mgui);
         toolbars.add(toolBarAvatarMAD);

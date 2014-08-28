@@ -3232,4 +3232,91 @@
 
 
 
+<Modeling type="Avatar Methodology" nameTab="AVATARMYMethodology" >
+<AvatarMethodologyDiagramPanel name="Ava methodology" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
+
+</AvatarMethodologyDiagramPanel>
+
+</Modeling>
+
+
+
+
+<Modeling type="Diplodocus Methodology" nameTab="DIPLODOCUS_Methodology" >
+<DiplodocusMethodologyDiagramPanel name="Dip methodology" minX="10" maxX="1400" minY="10" maxY="900" zoom="1.0" >
+<COMPONENT type="6003" id="1514" >
+<cdparam x="50" y="150" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="TGComponent" value="Requirements" />
+<TGConnectingPoint num="0" id="1510" />
+<TGConnectingPoint num="1" id="1511" />
+<TGConnectingPoint num="2" id="1512" />
+<TGConnectingPoint num="3" id="1513" />
+</COMPONENT>
+
+<COMPONENT type="6002" id="1520" >
+<cdparam x="600" y="300" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="TGComponent" value="Mapping" />
+<TGConnectingPoint num="0" id="1515" />
+<TGConnectingPoint num="1" id="1516" />
+<TGConnectingPoint num="2" id="1517" />
+<TGConnectingPoint num="3" id="1518" />
+<TGConnectingPoint num="4" id="1519" />
+</COMPONENT>
+
+<COMPONENT type="6001" id="1525" >
+<cdparam x="750" y="100" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="TGComponent" value="Architecture" />
+<TGConnectingPoint num="0" id="1521" />
+<TGConnectingPoint num="1" id="1522" />
+<TGConnectingPoint num="2" id="1523" />
+<TGConnectingPoint num="3" id="1524" />
+</COMPONENT>
+
+<COMPONENT type="6000" id="1530" >
+<cdparam x="450" y="100" />
+<sizeparam width="200" height="120" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="TGComponent" value="Application" />
+<TGConnectingPoint num="0" id="1526" />
+<TGConnectingPoint num="1" id="1527" />
+<TGConnectingPoint num="2" id="1528" />
+<TGConnectingPoint num="3" id="1529" />
+</COMPONENT>
+
+<CONNECTOR type="6004" id="1532" >
+<cdparam x="850" y="220" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
+<TGConnectingPoint num="0" id="1531" />
+<P1  x="850" y="220" id="1521" />
+<P2  x="720" y="300" id="1516" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+<CONNECTOR type="6004" id="1534" >
+<cdparam x="550" y="220" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="&lt;&lt;deriveReqt&gt;&gt;" />
+<TGConnectingPoint num="0" id="1533" />
+<P1  x="550" y="220" id="1526" />
+<P2  x="680" y="300" id="1515" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR>
+
+</DiplodocusMethodologyDiagramPanel>
+
+</Modeling>
+
+
+
+
 </TURTLEGMODELING>

@@ -82,6 +82,7 @@ import ui.avatarad.*;
 import ui.avatarcd.*;
 
 import ui.diplodocusmethodology.*;
+import ui.avatarmethodology.*;
 
 
 public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
@@ -115,6 +116,12 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof DiplodocusMethodologyDiagramPanel) {
             setIcon(IconManager.imgic98);
             setToolTipText("DIPLODOCUS Methodology");
+        } else if (value instanceof AvatarMethodologyPanel) {
+            setIcon(IconManager.imgic98);
+            setToolTipText("Avatar Methodology");
+        } else if (value instanceof AvatarMethodologyDiagramPanel) {
+            setIcon(IconManager.imgic98);
+            setToolTipText("Avatar Methodology");
         } else if (value instanceof TMLCommunicationPatternPanel) {
             setIcon(IconManager.imgic18);
             setToolTipText("DIPLODOCUS Communication Patterns");

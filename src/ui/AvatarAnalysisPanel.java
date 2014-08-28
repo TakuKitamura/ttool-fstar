@@ -73,7 +73,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
     }
     
     public void init() {
-        
+        mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
         /*//  Class Diagram toolbar
         InteractionOverviewDiagramToolBar toolBarIOD = new InteractionOverviewDiagramToolBar(mgui);
         toolbars.add(toolBarIOD);

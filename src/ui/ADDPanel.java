@@ -95,6 +95,7 @@ public class ADDPanel extends TURTLEPanel {
         tabbedPane.addTab("Avatar Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens Avatar deployment diagram");
         tabbedPane.setSelectedIndex(0);
        
+       mgui.changeMade(tmladd, TDiagramPanel.NEW_COMPONENT);
        
         return true;
     } 
