@@ -227,8 +227,14 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
-		sb.append("<attributes reference=\"" + reference + "\" ");
+				sb.append("<attributes reference=\"" + reference + "\" ");
         sb.append("/>\n");
+				for( String s: mappedUnits )	{
+					String[] firstPart = s.split( " : " );
+					String[] secondPart = firstPart[0].split("\\.");
+					sb.append( "<mappingInfo " + "CPname=\"" + secondPart[0] + "\" instanceName=\"" + secondPart[1] + 
+											"\" architectureUnit=\"" + firstPart[1] + "\" />\n" );
+				}
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -243,6 +249,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             int t1id;
             String sstereotype = null, snodeName = null;
             
+						mappedUnits.removeAllElements();
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //System.out.println(n1);
@@ -264,9 +271,14 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
                                 name = snodeName;
                             }
 							
-							if (elt.getTagName().equals("attributes")) {
+														if (elt.getTagName().equals("attributes")) {
                                 reference = elt.getAttribute("reference");
                             }
+														if( elt.getTagName().equals("mappingInfo")) {
+															String instanceName = elt.getAttribute( "instanceName" ) ;
+															String architectureUnit = elt.getAttribute( "architectureUnit" ) ;
+															mappedUnits.add( reference + "." + instanceName + " : " + architectureUnit );
+														}
                         }
                     }
                 }
