@@ -79,13 +79,15 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 	
 	protected int typeOfReference;
     
-    protected final static String[] TYPE_STR = {"Requirements", "Application", "Architecture", "Mapping"};
+    protected final static String[] TYPE_STR = {"Assumptions", "Requirements", "Analysis", "Design", "Properties", "Prototyping"};
 	protected final static int NB_TYPE = 3;
 	
-	protected final static int REQUIREMENT = 0;
-	protected final static int APPLICATION = 1;
-	protected final static int ARCHITECTURE = 2;
-	protected final static int MAPPING = 3;
+	protected final static int ASSUMPTIONS = 0;
+	protected final static int REQUIREMENT = 1;
+	protected final static int ANALYSIS = 2;
+	protected final static int DESIGN = 3;
+	protected final static int PROPERTY = 4;
+	protected final static int PROTOTYPING = 4;
 	
 	protected JMenuItem diagramReference; 
 	
@@ -405,7 +407,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         for(String s: ignored) {
         	t = null;
         	for(i=0; i<nbInternalTGComponent; i++) {
-        		dn =  (DiplodocusMethodologyDiagramName)tgcomponent[i];
+        		dn =  (AvatarMethodologyDiagramName)tgcomponent[i];
         		if (dn.getValue().compareTo(s) == 0) {
         			t = dn;
         			break;
@@ -422,7 +424,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         index = 0;
         int tmpx, tmpy; 
         for(String s: selected) {
-        	if (!hasDiplodocusMethodologyDiagramName(s)) {	
+        	if (!hasAvatarMethodologyDiagramName(s)) {	
         		tmpy = (int)(y + (40*tdp.getZoom()) + (index * 15 *tdp.getZoom()));
         		tmpx = (int)(AvatarMethodologyDiagramName.X_MARGIN*tdp.getZoom());
         		dn = new  AvatarMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
@@ -435,9 +437,9 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         }
     }
     
-    public abstract void makeValidationInfos(DiplodocusMethodologyDiagramName dn);
+    public abstract void makeValidationInfos(AvatarMethodologyDiagramName dn);
     
-    public boolean hasDiplodocusMethodologyDiagramName(String s) {
+    public boolean hasAvatarMethodologyDiagramName(String s) {
     	for(int i=0; i<nbInternalTGComponent; i++) {
     		if (tgcomponent[i].getValue().compareTo(s) == 0) {
     			return true;

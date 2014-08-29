@@ -98,6 +98,7 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         tabbedPane.addTab("MainCP", IconManager.imgic17, toolBarPanel, "Opens the main communication pattern");
         tabbedPane.setSelectedIndex(0); 
         //jsp.setVisible(true);
+        mgui.changeMade(tmlcpp, TDiagramPanel.NEW_COMPONENT);
     }
     
     public boolean addCPSequenceDiagram( String s ) {

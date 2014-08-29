@@ -91,6 +91,7 @@ public class TMLArchiPanel extends TURTLEPanel {
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab("DIPLODOCUS architecture and mapping Diagram", IconManager.imgic60, toolBarPanel, "Opens DIPLODOCUS architecture diagram");
         tabbedPane.setSelectedIndex(0);
+        mgui.changeMade(tmlap, TDiagramPanel.NEW_COMPONENT);
         
         //jsp.setVisible(true);
  

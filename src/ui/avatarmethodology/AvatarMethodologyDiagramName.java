@@ -61,31 +61,23 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     public final static int Y_MARGIN = 3;
     
     
-    protected final static int SIM_TRACE_APP_DIPLO = 0;
-    protected final static int SIM_ANIM_APP_DIPLO = 7;
-    protected final static int UPP_APP_DIPLO = 1;
-    protected final static int LOT_APP_DIPLO = 2;
-	protected final static int TML_APP_DIPLO = 3;
+    protected final static int SIM_ANIM = 0;
+    protected final static int UPP = 1;
+    protected final static int PROVERIF = 2;
+	protected final static int INVARIANTS = 3;
+	protected final static int PROTO = 4;
 	
-	protected final static int FV_MAPPING_DIPLO = 4;
-	protected final static int SIM_TRACE_MAPPING_DIPLO = 5;   
-	protected final static int SIM_ANIM_MAPPING_DIPLO = 8;   
-	protected final static int TML_MAPPING_DIPLO = 6;
 	
 	protected final String[] SHORT_ACTION_NAMES = {
-	"sim-trace", "upp", "lot", "tml", 
-	"fv", "sim-trace", "tmap", "sim-anim", "sim-anim"};
+	"simu", "upp", "proverif", "inv", 
+	"proto"};
 	
 	protected final String[] LONG_ACTION_NAMES = {
-	/*0*/ "Generate a vcd simulation trace of a DIPLODOCUS functional model", 
-	"Verify a DIPLODOCUS functional model with UPPAAL", 
-	"Generate a Reachability graph of a DIPLODOCUS functional model",
-	"Generate a TML text description of a DIPLODOCUS functional model",
-	"Formal verify a DIPLODOCUS mapping model", 
-	/*5*/ "Simulate a DIPLODOCUS mapping model", 
-	"Generate a TMAP/TARCHI/TML text dscription of a DIPLODOCUS mapping model",
-	"Simulate and animate DIPLODOCUS functional models",
-	"Simulate and animate DIPLODOCUS mapping models"
+	/*0*/ "Simulation and animate the model", 
+	"Verify safety propeties on the model with UPPAAL", 
+	"Verify security properties on the model with ProVerif",
+	"Verify mutual exclusions on the model with invariants",
+	"Generate executable code", 
 	};
 	
 	protected int[] validations;
@@ -272,7 +264,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         
         
         if (indexOnMe > -1) {
-        	DiplodocusMethodologyDiagramReference ref = ((DiplodocusMethodologyDiagramReference)(getFather()));
+        	AvatarMethodologyDiagramReference ref = ((AvatarMethodologyDiagramReference)(getFather()));
         	ref.makeCall(value, indexOnMe);
         }
         

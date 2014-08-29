@@ -36,16 +36,16 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class AvatarMethodologyDiagramReferenceToRequirement
-* Diagram reference requirement: Used to reference diagrams from the
-* Diplodocus methodology
-* Creation: 28/03/2014
-* @version 1.0 28/03/2014
+* Class AvatarMethodologyReferenceToDesign
+* Diagram reference to the main avatar design: Used to reference diagrams from the
+* Avatar methodology
+* Creation: 29/08/2014
+* @version 1.0 29/08/2014
 * @author Ludovic APVRILLE
 * @see
 */
 
-package ui.diplodocusmethodology;
+package ui.avatarmethodology;
 
 
 import java.awt.*;
@@ -58,10 +58,10 @@ import myutil.*;
 import ui.*;
 import ui.window.*;
 
-public class AvatarMethodologyDiagramReferenceToRequirement extends DiplodocusMethodologyDiagramReference  {
+public class AvatarMethodologyReferenceToDesign extends AvatarMethodologyDiagramReference  {
    
 	
-    public AvatarMethodologyDiagramReferenceToRequirement(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarMethodologyReferenceToDesign(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
 		initScaling(200, 120);
@@ -70,14 +70,14 @@ public class AvatarMethodologyDiagramReferenceToRequirement extends DiplodocusMe
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.WEST);
         
-        typeOfReference = REQUIREMENT;
+        typeOfReference = PROTOTYPING;
         
         addTGConnectingPointsCommentTop();    
         
     }
 	
     public  int getType() {
-        return TGComponentManager.AVATARMETHODOLOGY_REF_REQUIREMENT;
+        return TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN;
     }
     
     public boolean isAValidPanelType(TURTLEPanel panel) {
@@ -88,8 +88,12 @@ public class AvatarMethodologyDiagramReferenceToRequirement extends DiplodocusMe
     	return false;
     }
     
-    public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
-    	dn.setValidationsNumber(0);
+     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
+    	dn.setValidationsNumber(4);
+    	dn.setValidationsInfo(0, AvatarMethodologyDiagramName.SIM_ANIM);
+    	dn.setValidationsInfo(1, AvatarMethodologyDiagramName.UPP);
+    	dn.setValidationsInfo(2, AvatarMethodologyDiagramName.PROVERIF);    
+    	dn.setValidationsInfo(3, AvatarMethodologyDiagramName.INVARIANTS);
     }
     
     public boolean makeCall(String diagramName, int index) {

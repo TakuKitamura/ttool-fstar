@@ -128,6 +128,8 @@ public class TMLDesignPanel extends TURTLEPanel {
         tabbedPane.addTab("TML Task Diagram", IconManager.imgic62, toolBarPanel, "Opens TML task diagram");
         tabbedPane.setSelectedIndex(0);
         
+        mgui.changeMade(tmltdp, TDiagramPanel.NEW_COMPONENT);
+        
         //jsp.setVisible(true);
  
     }

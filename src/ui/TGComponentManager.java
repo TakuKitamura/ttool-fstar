@@ -38,7 +38,7 @@
  *
  * /**
  * Class TGComponentManager
- * Definition and creation of all possible TURTLE graphical component
+ * Definition and creation of all possible graphical components of TTool
  * Creation: 21/12/2003
  * @version 1.1 28/10/2005
  * @author Ludovic APVRILLE, Andrea ENRICI
@@ -80,6 +80,7 @@ import ui.osad.*;
 
 import ui.ncdd.*;
 
+import ui.avatarmethodology.*;
 import ui.avatarmad.*;
 import ui.avatarbd.*;
 import ui.avatardd.*;
@@ -419,6 +420,18 @@ public class TGComponentManager {
 	public static final int AAD_SEND_SIGNAL_ACTION = 5509;
 	public static final int AAD_ACCEPT_EVENT_ACTION = 5510;
 	public static final int AAD_PARTITION = 5511;
+	
+	
+	// Avatar Methodology Diagrams at 5600
+	public static final int AVATARMETHODOLOGY_REF_ASSUMPTIONS = 5601;
+	public static final int AVATARMETHODOLOGY_REF_REQUIREMENT = 5602;
+	public static final int AVATARMETHODOLOGY_REF_ANALYSIS = 5603;
+	public static final int AVATARMETHODOLOGY_REF_DESIGN = 5604;
+	public static final int AVATARMETHODOLOGY_REF_PROPERTIES = 5605;
+	public static final int AVATARMETHODOLOGY_REF_PROTOTYPE = 5606;      
+	public static final int AVATARMETHODOLOGY_DIAGRAM_NAME = 5607;      
+	public static final int AVATARMETHODOLOGY_CONNECTOR = 5608;      
+	
     
     public static final int EDIT = -1;
     public static final int COMPONENT = 0;
@@ -590,22 +603,46 @@ public class TGComponentManager {
              case ADD_DMANODE:
                 tgc = new ADDDMANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
-                case ADD_ICUNODE:
+            case ADD_ICUNODE:
                 tgc = new ADDICUNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
-                case ADD_COPROMWMRNODE:
+            case ADD_COPROMWMRNODE:
                 tgc = new ADDCoproMWMRNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
-                case ADD_TIMERNODE:
+            case ADD_TIMERNODE:
                 tgc = new ADDTimerNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break; 
-                
-			case ADD_ARTIFACT:
+            case ADD_ARTIFACT:
                 tgc = new ADDBlockArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case ADD_CHANNELARTIFACT:
                 tgc = new ADDChannelArtifact(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+                
+            //AVATAR Methodology
+            case AVATARMETHODOLOGY_REF_ASSUMPTIONS:
+                tgc = new AvatarMethodologyReferenceToAssumptions(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;   
+            case AVATARMETHODOLOGY_REF_REQUIREMENT:
+                tgc = new AvatarMethodologyReferenceToRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+            case AVATARMETHODOLOGY_REF_ANALYSIS:
+                tgc = new AvatarMethodologyReferenceToAnalysis(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+            case AVATARMETHODOLOGY_REF_DESIGN:
+                tgc = new AvatarMethodologyReferenceToDesign(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+            case AVATARMETHODOLOGY_REF_PROPERTIES:
+                tgc = new AvatarMethodologyReferenceToProperties(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+            case AVATARMETHODOLOGY_REF_PROTOTYPE:
+                tgc = new AvatarMethodologyReferenceToPrototype(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;  
+            case AVATARMETHODOLOGY_DIAGRAM_NAME:
+                tgc = new AvatarMethodologyDiagramName(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break; 
+                
+			
 				
 			// Others
             case TAD_DETERMINISTIC_DELAY:
@@ -1170,6 +1207,25 @@ public class TGComponentManager {
             return ADD_TIMERNODE;
             } else if (tgc instanceof ADDCoproMWMRNode) {
             return ADD_COPROMWMRNODE;
+            
+            
+            // AVATAR Methodology
+		} else if (tgc instanceof AvatarMethodologyReferenceToAssumptions) {
+			return AVATARMETHODOLOGY_REF_ASSUMPTIONS;   
+			} else if (tgc instanceof AvatarMethodologyReferenceToRequirement) {
+			return AVATARMETHODOLOGY_REF_REQUIREMENT;  
+			} else if (tgc instanceof AvatarMethodologyReferenceToAnalysis) {
+			return AVATARMETHODOLOGY_REF_ANALYSIS;   
+			} else if (tgc instanceof AvatarMethodologyReferenceToDesign) {
+			return AVATARMETHODOLOGY_REF_DESIGN;
+			} else if (tgc instanceof AvatarMethodologyReferenceToProperties) {
+			return AVATARMETHODOLOGY_REF_PROPERTIES;
+			} else if (tgc instanceof AvatarMethodologyReferenceToPrototype) {
+			return AVATARMETHODOLOGY_REF_PROTOTYPE;
+			} else if (tgc instanceof AvatarMethodologyDiagramName) {
+			return AVATARMETHODOLOGY_DIAGRAM_NAME;
+			} else if (tgc instanceof AvatarMethodologyConnector) {
+			return AVATARMETHODOLOGY_CONNECTOR;
 			
 			
 		// AVATAR MAD
@@ -1695,7 +1751,13 @@ public class TGComponentManager {
 			case AVATARSMD_CONNECTOR:
                 tgc = new AvatarSMDConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
                 break;     
-			
+			                 
+                
+             // AVATAR Methodology
+			case AVATARMETHODOLOGY_CONNECTOR:
+                tgc = new AvatarMethodologyConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
+                break;   
+                
             // AVATAR MAD
             case AVATARMAD_COMPOSITION_CONNECTOR:
                 tgc = new AvatarMADCompositionConnector(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp, p1, p2, listPoint);
