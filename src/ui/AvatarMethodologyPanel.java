@@ -78,9 +78,9 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
     
     // Put the methodology
     public void initElements() {
-    	 //TGComponent tgc1 = dmd.addComponent(450, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION, false);
-    	 //TGComponent tgc2 = dmd.addComponent(750, 100, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE, false);
-    	 //TGComponent tgc3 = dmd.addComponent(600, 300, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING, false);
+    	 TGComponent tgc1 = dmd.addComponent(150, 100, TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS, false);
+    	 TGComponent tgc2 = dmd.addComponent(250, 200, TGComponentManager.AVATARMETHODOLOGY_REF_REQUIREMENT, false);
+    	 TGComponent tgc3 = dmd.addComponent(350, 300, TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS, false);
     	 
     	 //Connectors
     	 
