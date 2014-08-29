@@ -410,7 +410,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					it.remove();
 				}
 				else	{
-					if( !doesInstanceExist( instanceName ) )	{
+					if( !doesInstanceExist( instanceName ) )	{	//if the instance exists, remove it from listInstancesHash
 						it.remove();
 					}
 					else	{
@@ -431,8 +431,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					listInstancesHash.set( i, tempHash );
 					sdInstancesCB.removeActionListener( this );
 					makeSDInstancesComboBox( new Vector<String>( tempHash ) );
-					sdInstancesCB.removeActionListener( this );
-					sdInstancesCB.setSelectedIndex( 0 );
+					sdInstancesCB.addActionListener( this );
+					//sdInstancesCB.setSelectedIndex( 0 );
 					return;
 				}
 			}
@@ -451,9 +451,16 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		
 		private boolean doesInstanceExist( String instanceName )	{
 
-			for( HashSet<String> set: listInstancesHash )	{
-				if( set.contains( instanceName ) )	{
-					TraceManager.addDev( "instanceName: " + instanceName + " exists" );
+			for( int i = 0; i < listInstancesHash.size(); i++ )	{
+				HashSet<String> tempHash = listInstancesHash.get(i);
+				if( tempHash.contains( instanceName ) )	{
+					//TraceManager.addDev( "instanceName: " + instanceName + " exists" );
+					tempHash.remove( instanceName );
+					listInstancesHash.set( i, tempHash );
+					sdInstancesCB.removeActionListener( this );
+					makeSDInstancesComboBox( new Vector<String>( tempHash ) );
+					sdInstancesCB.addActionListener( this );
+					TraceManager.addDev( "Removed " + instanceName + " the has set of instances is: " + ( new Vector<String>(tempHash)).toString() );
 					return true;
 				}
 			}
@@ -484,20 +491,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			if (evt.getSource() == closeButton)  {
 				closeDialog();
 			}
-			else if (evt.getSource() == mapButton) {
-				sdInstancesCB.removeActionListener( this );
-				mapInstance();
-				sdInstancesCB.addActionListener( this );
-				sdInstancesCB.setSelectedIndex(0);
-			}
 			else if (evt.getSource() == cancelButton) {
 				cancelDialog();
-			}
-			else if (evt.getSource() == removeButton) {
-				sdInstancesCB.removeActionListener( this );
-				removeMappedInstance();
-				sdInstancesCB.addActionListener( this );
-				sdInstancesCB.setSelectedIndex(0);
 			}
 			else if (evt.getSource() == downButton) {
 				downMappedInstance();
@@ -505,18 +500,34 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			else if (evt.getSource() == upButton) {
 				upMappedInstance();
 			}
+			else if (evt.getSource() == mapButton) {
+				freezeSDInstancesCB();
+				mapInstance();
+				unfreezeSDInstancesCB();
+				sdInstancesCB.setSelectedIndex(0);
+				valueChanged( null );
+			}
+			else if (evt.getSource() == removeButton) {
+				freezeSDInstancesCB();
+				removeMappedInstance();
+				unfreezeSDInstancesCB();
+				sdInstancesCB.setSelectedIndex(0);
+				valueChanged( null );
+			}
 			else if( evt.getSource() == sdInstancesCB )	{	//user has selected another instance
-				sdInstancesCB.removeActionListener( this );
+				freezeSDInstancesCB();
 				updateMappableArchUnits();
-				sdInstancesCB.addActionListener( this );
+				unfreezeSDInstancesCB();
+				valueChanged( null );
 			}
 			else if( evt.getSource() == communicationPatternsCB )	{	//user has selected another CP. Previous mapping will be deleted
-				sdInstancesCB.removeActionListener( this );
+				freezeSDInstancesCB();
 				updateSDInstancesList();
-				sdInstancesCB.addActionListener( this );
+				unfreezeSDInstancesCB();
 				sdInstancesCB.setSelectedIndex(0);
 				updateMappableArchUnits();
 				emptyMappedUnitsList();
+				valueChanged( null );
 			}
 		}	//End of method
 		
@@ -555,7 +566,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					sdInstancesSL = new Vector<String>( SDinstancesHash );
 					listInstancesHash.set( communicationPatternsCB.getSelectedIndex(), SDinstancesHash );
 					makeSDInstancesComboBox( sdInstancesSL );
-					//sdInstancesCB.setSelectedIndex(0);
 				}
 			}
 		}
@@ -572,10 +582,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				archUnitName = firstPart[1];
 				CPName = secondPart[0];
 				instanceName = secondPart[1];
-				// put back the instance name into the list and update the combobox
-				//
-				// from the CPname get the hash set
-				// from listCPs get the index of the CP corresponding to CPName. then access listInstancesHash and get the hash list
 				int indexCP;
 				for( indexCP = 0; indexCP < listCPs.size(); indexCP++ )	{
 					if( listCPs.get(indexCP).getName().equals( CPName ) )	{
@@ -643,13 +649,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		
 		private void emptyMappedUnitsList()	{
 
-			listMappedUnitsJL.removeAll();
-			mappedUnitsSL = new Vector<String>();
-			listMappedUnitsJL = new JList( mappedUnitsSL );
-			//listMappedUnitsJL.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			//listMappedUnitsJL.addListSelectionListener(this);
-			scrollPane = new JScrollPane( listMappedUnitsJL );
-			removeButton.setEnabled( false );
+			mappedUnitsSL.clear();
+			listMappedUnitsJL.setListData( mappedUnitsSL );
 		}
 		
 		private void makeArchitectureUnitsComboBox( Vector<String> newList )	{
@@ -691,17 +692,24 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 		
 		public void valueChanged( ListSelectionEvent e ) {	//this methos is abstract and must be implemented
-			int i = listMappedUnitsJL.getSelectedIndex() ;
 			
-			if( mappableArchUnitsSL.size() > 0 )	{
-				if( !mappableArchUnitsSL.get(0).equals( EMPTY_MAPPABLE_ARCH_UNITS_LIST ) )	{
-					mapButton.setEnabled( true );
-				}
-				else	{
-					mapButton.setEnabled( false );
+			//Enable or disable the mapping button
+			if( listCPs.size() > 0 )	{
+				if( sdInstancesSL.size() > 0 )	{
+					if( !sdInstancesSL.get(0).equals( EMPTY_INSTANCES_LIST ) )	{
+						if( mappableArchUnitsSL.size() > 0 )	{
+							if( !mappableArchUnitsSL.get(0).equals( EMPTY_MAPPABLE_ARCH_UNITS_LIST ) )	{
+								mapButton.setEnabled( true );
+							}
+						}
+					}
 				}
 			}
+			else	{
+				mapButton.setEnabled( false );
+			}
 
+			int i = listMappedUnitsJL.getSelectedIndex() ;
 			if( i == -1 ) {
 				removeButton.setEnabled( false );
 				upButton.setEnabled( false );
@@ -816,32 +824,13 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			}
 			return list;
 		}
-		
-		/*private void eliminateInstancesWithSameName()	{
-		if( listInstances.size() > 0 )	{
-		for( int i = 0; i < listInstances.size(); i++ )	{
-		TraceManager.addDev( "Into first loop, i = " + i );
-		String nameToFind = listInstances.get(i).getName();
-		if( i < listInstance.size() - 1 )	{
-		for( int j = i+1; j < listInstances.size(); j++ )	{
-		TraceManager.addDev( "Into second loop, j = " + j + " looking for " + nameToFind );
-		if( nameToFind.equals( listInstances.get(j).getName() ) )	{
-		listInstances.set( j, null );
-		TraceManager.addDev( "Removed instance " + nameToFind );
-		}
-		}
-		}
-		}	
-		}
-		}*/
-		
-		/*private void createListInstancesNames()	{
-		if( listInstances.size() > 0 )	{
-		for( int i = 0; i < listInstances.size(); i++ )	{
-		listInstancesStrings.add( listInstances.get(i).getName() );
-		TraceManager.addDev( "Adding TMLSDInstance " + listInstances.get(i).getName() );
-		}
-		}
-		}*/
+
+	private void freezeSDInstancesCB()	{
+		sdInstancesCB.removeActionListener( this );	
+	}
+
+	private void unfreezeSDInstancesCB()	{
+		sdInstancesCB.addActionListener( this );	
+	}
 		
 }	//End of class
