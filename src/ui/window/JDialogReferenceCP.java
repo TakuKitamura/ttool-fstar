@@ -82,8 +82,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private ArrayList<TMLCommunicationPatternPanel> listCPs = new ArrayList<TMLCommunicationPatternPanel>();
 	private Vector<String> communicationPatternsSL = new Vector<String>();
 	
-	//Each entry of the array list is a hash set of strings corresponding to a given CP in listCPs
 	private ArrayList<HashSet<String>> listInstancesHash = new ArrayList<HashSet<String>>();
+	//each entry of listInstancesHash corresponds to the entry with the same index in listCPs
 	private HashSet<String> sdStorageInstances = new HashSet<String>();
 	private HashSet<String> sdTransferInstances = new HashSet<String>();
 	private HashSet<String> sdControllerInstances = new HashSet<String>();
@@ -96,6 +96,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	//private int indexListArchUnitsNames = 0;
 	
 	private boolean emptyCPsList = false;
+	private boolean emptyListOfMappedUnits = true;	//true if there is no mapping info
 	//private boolean emptyInstancesList = false;
 	//private boolean emptyArchUnitsList = false;
 	
@@ -131,13 +132,15 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		//the validity of _mappedUnits is checked when initializing components
 		mappedUnitsSL = new Vector<String>();	//take into account the elements already mapped
 		mappedUnitsSL.addAll( 0, _mappedUnits );
+		emptyListOfMappedUnits = false;
 	}
 	else	{
 		mappedUnitsSL = new Vector<String>();
 	}
 	
 	initComponents();
-	myInitComponents();
+	valueChanged( null );
+	//myInitComponents();
 	pack();
 		}
 		
@@ -151,7 +154,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			else	{
 				mapButton.setEnabled( false );
 			}
-			//makeComboBoxes();
 		}
 		
 		private void initComponents() {
@@ -213,20 +215,20 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.gridheight = 3;
 			panel1.add(new JLabel(" "), c1);	//adds some vertical space in between two JLabels
 			
-			listCPs = cp.getTDiagramPanel().getMGUI().getAllTMLCP();
-			if( listCPs.size() == 0 ) {
-				communicationPatternsSL.add( EMPTY_CPS_LIST );
-				emptyCPsList = true;
-			}
-			else {
-				createListCPsNames();	//create communicationPatternsSL (ArrayList<String>) out of listCPs
+			communicationPatternsSL = createListCPsNames();	//fill listCPs and return the string version of the list of all CPs
+			/*if( !emptyCPsList ) {
 				indexListCPsNames = indexOf( cp.getReference() );
-			}
+			}*/
 			
 			//fifth line panel1
 			panel1.add( new JLabel( "Available CPs:"), c1 );
 			communicationPatternsCB = new JComboBox( communicationPatternsSL );
-			communicationPatternsCB.setSelectedIndex( indexListCPsNames );
+			if( !emptyListOfMappedUnits )	{
+				communicationPatternsCB.setSelectedItem( cp.getReference() );
+			}
+			else	{
+				communicationPatternsCB.setSelectedItem(0);
+			}
 			communicationPatternsCB.addActionListener( this );
 			communicationPatternsCB.setMinimumSize( new Dimension(150, 50) );
 			panel1.add( communicationPatternsCB, c1 );
@@ -237,18 +239,13 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.gridheight = 3;
 			panel1.add(new JLabel(" "), c1);
 			
-			/*if( listCPs.size() == 0 ) {
+			createListOfInstances();	//Create the array list of HashSets listInstancesHash from listCPs
+			if( listInstancesHash.get( communicationPatternsCB.getSelectedIndex() ).size() > 0 )	{	//protect against the case of a CP with no SDs
+				sdInstancesSL = new Vector<String>( listInstancesHash.get( communicationPatternsCB.getSelectedIndex() ) );
+			}
+			else	{
 				sdInstancesSL.add( EMPTY_INSTANCES_LIST );
 			}
-			else {*/
-				createListOfInstances();
-				if( listInstancesHash.get( indexListCPsNames ).size() > 0 )	{	//protect against the case of a CP with no SDs
-					sdInstancesSL = new Vector<String>( listInstancesHash.get( indexListCPsNames ) );
-				}
-				else	{
-					sdInstancesSL.add( EMPTY_INSTANCES_LIST );
-				}
-			//}
 			
 			//seventh line panel1
 			panel1.add( new JLabel( "Instance:" ), c1 );
@@ -779,12 +776,21 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			return 0;
 		}
 		
-		private void createListCPsNames()	{
+		private Vector<String> createListCPsNames()	{
+
+			Vector<String> list = new Vector<String>();
+			listCPs = cp.getTDiagramPanel().getMGUI().getAllTMLCP();
 			if( listCPs.size() > 0 )	{
 				for( int i = 0; i < listCPs.size(); i++ )	{
-					communicationPatternsSL.add( listCPs.get(i).getName() );
+					list.add( listCPs.get(i).getName() );
 				}
+				emptyCPsList = false;
 			}
+			else	{
+				list.add( EMPTY_CPS_LIST );
+				emptyCPsList = true;
+			}
+			return list;
 		}
 		
 		private void createListOfInstances()	{
