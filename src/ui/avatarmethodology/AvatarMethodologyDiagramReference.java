@@ -80,14 +80,14 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 	protected int typeOfReference;
     
     protected final static String[] TYPE_STR = {"Assumptions", "Requirements", "Analysis", "Design", "Properties", "Prototyping"};
-	protected final static int NB_TYPE = 3;
+	protected final static int NB_TYPE = 6;
 	
 	protected final static int ASSUMPTIONS = 0;
 	protected final static int REQUIREMENT = 1;
 	protected final static int ANALYSIS = 2;
 	protected final static int DESIGN = 3;
 	protected final static int PROPERTY = 4;
-	protected final static int PROTOTYPING = 4;
+	protected final static int PROTOTYPING = 5;
 	
 	protected JMenuItem diagramReference; 
 	

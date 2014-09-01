@@ -70,7 +70,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 	
 	protected final String[] SHORT_ACTION_NAMES = {
 	"simu", "upp", "proverif", "inv", 
-	"proto"};
+	"code-gen"};
 	
 	protected final String[] LONG_ACTION_NAMES = {
 	/*0*/ "Simulation and animate the model", 
@@ -206,7 +206,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         }
         
         if (onMe)
-        	g.drawRect(x-2, y-12, myWidth+4, 15);
+        	g.drawRect(x-2, y-12, myWidth+6, 15);
         
         return;
         

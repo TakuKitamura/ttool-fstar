@@ -80,30 +80,69 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
     public void initElements() {
     	 TGComponent tgc1 = dmd.addComponent(150, 100, TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS, false);
     	 TGComponent tgc2 = dmd.addComponent(250, 200, TGComponentManager.AVATARMETHODOLOGY_REF_REQUIREMENT, false);
-    	 TGComponent tgc3 = dmd.addComponent(350, 300, TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS, false);
+    	 TGComponent tgc3 = dmd.addComponent(350, 300, TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS, false);   
+    	 TGComponent tgc4 = dmd.addComponent(450, 400, TGComponentManager.AVATARMETHODOLOGY_REF_DESIGN, false);
+    	 TGComponent tgc5 = dmd.addComponent(550, 500, TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE, false);
+    	 TGComponent tgc6 = dmd.addComponent(200, 400, TGComponentManager.AVATARMETHODOLOGY_REF_PROPERTIES, false);
+    	 
     	 
     	 //Connectors
     	 
-    	 // App -> mapping
-    	 /*TGConnectingPoint p1, p2;
+    	 // Assumptions -> reqs
+    	 TGConnectingPoint p1, p2;
     	 p1 = tgc1.getTGConnectingPointAtIndex(0);
-    	 p2 = tgc3.getTGConnectingPointAtIndex(0);
+    	 p2 = tgc2.getTGConnectingPointAtIndex(0);
     	 Vector listPoint = new Vector();
-    	 TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 Point p = new Point(210, 235);
+    	 listPoint.add(p);
+    	 TGConnector tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
     	 p1.setFree(false);
     	 p2.setFree(false);
     	 dmd.getComponentList().add(0, tgco);
     	 
-    	 // Archi -> mapping
-    	 p1 = tgc2.getTGConnectingPointAtIndex(0);
-    	 p2 = tgc3.getTGConnectingPointAtIndex(1);
+    	 // Reqs -> Analysis
+    	 p1 = tgc2.getTGConnectingPointAtIndex(1);
+    	 p2 = tgc3.getTGConnectingPointAtIndex(0);
     	 listPoint = new Vector();
-    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p = new Point(310, 335);
+    	 listPoint.add(p);
+    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p1.setFree(false);
+    	 p2.setFree(false);
+    	 dmd.getComponentList().add(0, tgco);    
+    	 
+    	 // Analysis -> Design
+    	 p1 = tgc3.getTGConnectingPointAtIndex(1);
+    	 p2 = tgc4.getTGConnectingPointAtIndex(0);
+    	 listPoint = new Vector();
+    	 p = new Point(410, 435);
+    	 listPoint.add(p);
+    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p1.setFree(false);
+    	 p2.setFree(false);
+    	 dmd.getComponentList().add(0, tgco);      
+    	 
+    	 // Design -> Prototyping
+    	 p1 = tgc4.getTGConnectingPointAtIndex(1);
+    	 p2 = tgc5.getTGConnectingPointAtIndex(0);
+    	 listPoint = new Vector();
+    	 p = new Point(510, 535);
+    	 listPoint.add(p);
+    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
     	 p1.setFree(false);
     	 p2.setFree(false);
     	 dmd.getComponentList().add(0, tgco);
     	 
-    	  dmd.addComponent(50, 150, TGComponentManager.DIPLODODUSMETHODOLOGY_REF_REQUIREMENT, false);*/
+    	 // Reqs -> Prop
+    	 p1 = tgc2.getTGConnectingPointAtIndex(2);
+    	 p2 = tgc6.getTGConnectingPointAtIndex(0);
+    	 listPoint = new Vector();
+    	 tgco = TGComponentManager.addConnector(p1.getX(), p1.getY(), TGComponentManager.AVATARMETHODOLOGY_CONNECTOR, dmd, p1, p2, listPoint);
+    	 p1.setFree(false);
+    	 p2.setFree(false);
+    	 dmd.getComponentList().add(0, tgco);
+    	 
+    	 
     }
     
     public void init() {

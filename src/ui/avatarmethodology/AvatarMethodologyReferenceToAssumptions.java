@@ -64,11 +64,11 @@ public class AvatarMethodologyReferenceToAssumptions extends AvatarMethodologyDi
     public AvatarMethodologyReferenceToAssumptions(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-		initScaling(200, 120);
+		initScaling(200, 70);
         
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 1.0, TGConnectingPoint.WEST);
+        connectingPoint[0] = new AvatarMethodologyConnectingPoint(this, 0, 0, false, true, 0.30, 1.0, TGConnectingPoint.WEST);
         
         typeOfReference = ASSUMPTIONS;
         
