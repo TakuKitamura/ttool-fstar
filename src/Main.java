@@ -69,6 +69,7 @@ public class Main implements ActionListener {
 	public static boolean avatar = true ; // avatar profile
 	public static boolean proverif = false;
 	public static boolean experimental = false;
+	public static boolean avataronly = false;
 	
     public static void main(String[] args) {
     	
@@ -222,6 +223,11 @@ public class Main implements ActionListener {
 				avatar = false;
                 System.out.println("AVATAR unactivated - these are beta features that are meant to be used only for research purpose");
             }
+            
+            if (args[i].compareTo("-avataronly") ==0 )  {
+				avataronly = true;
+                System.out.println("Only the AVATAR is activated");
+            }
 			
 			if (args[i].compareTo("-proverif") ==0 )  {
 				proverif = true;
@@ -304,7 +310,7 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
         	splashFrame.setMessage("Creating main window");
         }
-        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, experimental);
+        MainGUI mainGUI = new MainGUI(systemc, lotos, proactive, tpn, os, uppaal, nc, avatar, proverif, avataronly, experimental);
         if (splashFrame != null) {
         	splashFrame.setMessage("Building graphical components");
         }

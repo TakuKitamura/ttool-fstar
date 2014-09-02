@@ -185,8 +185,10 @@ public class GTURTLEModeling {
 	private int nbSuggestedAnalysis;
 	private int nbTPN;
 
-	private ValidationDataTree vdt;
+	//private ValidationDataTree vdt;
 	private SearchTree st;
+	private SyntaxAnalysisTree mcvdt;
+	 private InvariantDataTree idt;
 
 	private Vector checkingErrors;
 	private Vector warnings;
@@ -236,7 +238,9 @@ public class GTURTLEModeling {
 		
 		invariants = new LinkedList<Invariant>();
 
-		vdt = new ValidationDataTree(mgui);
+		//vdt = new ValidationDataTree(mgui);
+		mcvdt = new SyntaxAnalysisTree(mgui);
+		idt = new InvariantDataTree(mgui);
 		st = new SearchTree(mgui);
 
 		/*if (!Charset.isSupported("UTF-8")) {
@@ -1180,14 +1184,16 @@ public class GTURTLEModeling {
 	}
 
 	public int getChildCount() {
-		return panels.size() + 2;
+		return panels.size() + 3;
 	}
 
 	public Object getChild(int index) {
 		if (index < panels.size()) {
 			return panels.elementAt(index);
 		} else if (index == panels.size()) {
-			return vdt;
+			return mcvdt;
+		} else if (index == (panels.size() + 1)) {
+			return idt;
 		} else {
 			return st;
 		}
@@ -1201,11 +1207,15 @@ public class GTURTLEModeling {
 			return index;
 		}
 
-		if (child == vdt) {
+		if (child == mcvdt) {
 			return panels.size();
 		}
 		
-		return panels.size()+1;
+		if (child == idt) {
+			return panels.size() + 1;
+		}
+		
+		return panels.size()+2;
 	}
 
 	// Projection management

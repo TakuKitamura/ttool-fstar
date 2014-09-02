@@ -51,7 +51,7 @@ import myutil.*;
 public class SyntaxAnalysisTree implements GenericTree {
     
     private MainGUI mgui;
-    private String name = "Syntax analysis / formal code generation";
+    private String name = "Syntax analysis";
     private SyntaxAnalysisErrorTree errort;
     private SyntaxAnalysisWarningTree warningt;
  

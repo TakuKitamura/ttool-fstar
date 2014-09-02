@@ -111,6 +111,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     public static boolean avatarOn;
     public static boolean proverifOn;
     public static boolean experimentalOn;
+    public static boolean avatarOnly;
 
     public final static int LOTOS = 0;
     public final static int RT_LOTOS = 1;
@@ -284,7 +285,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
     // Thread fof autosave
     PeriodicBehaviorThread pbt;
 
-    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean _experimental) {
+    public MainGUI(boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn, boolean _uppaalOn, boolean _ncOn, boolean _avatarOn, boolean _proverifOn, boolean
+    	_avatarOnly, boolean _experimental) {
         systemcOn = _systemcOn;
         lotosOn = _lotosOn;
         proactiveOn = _proactiveOn;
@@ -294,6 +296,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         ncOn = _ncOn;
         avatarOn = _avatarOn;
         proverifOn = _proverifOn;
+        avatarOnly = _avatarOnly;
         experimentalOn = _experimental;
 
         currentInvariant = null;
@@ -8293,7 +8296,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             newAVATARDD = createMenuItem("New AVATAR Deployment Diagram");
             newAvatarMethodo = createMenuItem("New AVATAR Methodology");
 
-            menu = new JPopupMenu("TURTLE analysis, design and deployment / DIPLODOCUS design / Proactive design");
+            menu = new JPopupMenu("Views");
             menu.add(moveLeft);
             menu.add(moveRight);
 
@@ -8312,7 +8315,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             menu.addSeparator();
 
-
+            if (!avatarOnly) {
             menu.add(newRequirement);
 
             menu.add(newAnalysis);
@@ -8344,6 +8347,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             if (ncOn) {
                 menu.addSeparator();
                 menu.add(newNCDesign);
+            }
             }
 
             if (avatarOn) {
