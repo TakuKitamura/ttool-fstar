@@ -134,13 +134,17 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	val = ".";
         }
         
-        widthAppli = g.getFontMetrics().stringWidth(val);
+        int curWidth = myWidth;
+        
+        
         
         Font f = g.getFont();
         
         if (onMe && indexOnMe == -1) {
         	g.setFont(f.deriveFont(Font.BOLD));
         }
+        widthAppli = g.getFontMetrics().stringWidth(val);
+        curWidth = Math.max(widthAppli, curWidth);
         g.drawString(val, x, y);
         g.setFont(f);
         
@@ -172,11 +176,18 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         //TraceManager.addDev("Tracing validation Validation size=" + validations.length);
         oneWritten = false;
         
+        
         g.setFont(f.deriveFont(Font.ITALIC));
         if ((validations != null) & (validations.length >0)) {
 			for(int i=validations.length-1; i>=0; i--) {
 				//TraceManager.addDev("Validations[" + i + "] = " + validations[i]);
+				
 				w1 = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
+				
+				
+				if ((onMe && indexOnMe == i)) {
+				g.setFont(f.deriveFont(Font.ITALIC));
+				}
 				
 				if ((currentMaxX - w1) > (x + w)) {
 					if ((onMe && indexOnMe == i)) {
@@ -205,8 +216,10 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	makeScale(g, w);
         }
         
+        //TraceManager.addDev("current width=" + curWidth);
         if (onMe)
-        	g.drawRect(x-2, y-12, myWidth+6, 15);
+        	
+        	g.drawRect(x-2, y-12, curWidth+5, 15);
         
         return;
         

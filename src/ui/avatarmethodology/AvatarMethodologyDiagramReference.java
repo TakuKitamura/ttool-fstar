@@ -400,8 +400,25 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         selected = jdmlos.getSelected();
         
         
-        // We must first remove from internalComponents the one that are now ignored
+        //We reconstruct the list of internal components.
         AvatarMethodologyDiagramName dn;
+        nbInternalTGComponent = 0;
+        tgcomponent = null;
+        int index = 0;
+        int tmpx, tmpy; 
+        for(String s: selected) {
+        	tmpy = (int)(y + (40*tdp.getZoom()) + (index * 15 *tdp.getZoom()));
+        		tmpx = (int)(AvatarMethodologyDiagramName.X_MARGIN*tdp.getZoom());
+        		dn = new  AvatarMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
+        		//makeValidationInfos(dn);
+        		dn.setValue(s);
+        		addInternalComponent(dn, index);
+        		index ++;
+        }
+        
+        
+        // We must first remove from internalComponents the one that are now ignored
+        /*AvatarMethodologyDiagramName dn;
         TGComponent t;
         int i;
         for(String s: ignored) {
@@ -434,7 +451,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         		
         	}
         	index ++;
-        }
+        }*/
     }
     
     public abstract void makeValidationInfos(AvatarMethodologyDiagramName dn);

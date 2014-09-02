@@ -398,9 +398,25 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         ignored = jdmlos.getIgnored();
         selected = jdmlos.getSelected();
         
+        //We reconstruct the list of internal components.
+        DiplodocusMethodologyDiagramName dn;
+        nbInternalTGComponent = 0;
+        tgcomponent = null;
+        int index = 0;
+        int tmpx, tmpy; 
+        for(String s: selected) {
+        	tmpy = (int)(y + (40*tdp.getZoom()) + (index * 15 *tdp.getZoom()));
+        		tmpx = (int)(DiplodocusMethodologyDiagramName.X_MARGIN*tdp.getZoom());
+        		dn = new  DiplodocusMethodologyDiagramName(x+tmpx, tmpy, x+tmpx, x+tmpx, tmpy, tmpy, true, this, getTDiagramPanel());
+        		//makeValidationInfos(dn);
+        		dn.setValue(s);
+        		addInternalComponent(dn, index);
+        		index ++;
+        }
+        
         
         // We must first remove from internalComponents the one that are now ignored
-        DiplodocusMethodologyDiagramName dn;
+        /*DiplodocusMethodologyDiagramName dn;
         TGComponent t;
         int i;
         for(String s: ignored) {
@@ -433,7 +449,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         		
         	}
         	index ++;
-        }
+        }*/
     }
     
     public abstract void makeValidationInfos(DiplodocusMethodologyDiagramName dn);

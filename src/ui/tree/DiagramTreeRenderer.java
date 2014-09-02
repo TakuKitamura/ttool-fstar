@@ -117,35 +117,35 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
             setIcon(IconManager.imgic98);
             setToolTipText("DIPLODOCUS Methodology");
         } else if (value instanceof AvatarMethodologyPanel) {
-            setIcon(IconManager.imgic98);
+            setIcon(IconManager.imgic99);
             setToolTipText("Avatar Methodology");
         } else if (value instanceof AvatarMethodologyDiagramPanel) {
-            setIcon(IconManager.imgic98);
+            setIcon(IconManager.imgic99);
             setToolTipText("Avatar Methodology");
         } else if (value instanceof TMLCommunicationPatternPanel) {
             setIcon(IconManager.imgic18);
             setToolTipText("DIPLODOCUS Communication Patterns");
         } else if (value instanceof AvatarCDPanel) {
             setIcon(IconManager.imgic600);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Avatar Use Case Diagram");
         } else if (value instanceof AvatarADPanel) {
             setIcon(IconManager.imgic5048);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Avatar Activity Diagram");
         } else if (value instanceof AvatarBDPanel) {
             setIcon(IconManager.imgic80);
             setToolTipText("Avatar Block Diagram");
         } else if (value instanceof AvatarSMDPanel) {
             setIcon(IconManager.imgic63);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Avatar SMD");
         } else if (value instanceof AvatarRequirementPanel) {
             setIcon(IconManager.imgic82);
             setToolTipText("Avatar Block Diagram");
         } else if (value instanceof AvatarPDPanel) {
             setIcon(IconManager.imgic82);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Avatar Property Diagram");
         } else if (value instanceof AvatarRDPanel) {
             setIcon(IconManager.imgic84);
-            setToolTipText("Avatar Block Diagram");
+            setToolTipText("Avatar Requirement Diagram");
         } else if (value instanceof GTURTLEModeling) {
             setIcon(IconManager.imgic8);
             setToolTipText("TURTLE modeling");

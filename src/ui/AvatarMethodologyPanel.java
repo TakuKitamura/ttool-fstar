@@ -179,7 +179,7 @@ public class AvatarMethodologyPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(mgui.INCREMENT);
         toolBarPanel.add(dmdt, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab(s, IconManager.imgic98, toolBarPanel, "Opens avatar methodology");
+        tabbedPane.addTab(s, IconManager.imgic99, toolBarPanel, "Opens avatar methodology");
         tabbedPane.setSelectedIndex(0); 
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
