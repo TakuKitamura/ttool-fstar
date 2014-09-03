@@ -52,6 +52,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
+import java.util.Collections;
 
 import ui.*;
 import ui.tmldd.*;
@@ -605,9 +606,21 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}
 		
 		private void downMappedInstance()	{
+
+			int index = listMappedUnitsJL.getSelectedIndex();
+			if( index < (mappedUnitsSL.size() - 1 ) )	{
+				Collections.swap( mappedUnitsSL, index, index + 1 );
+				listMappedUnitsJL.setListData( mappedUnitsSL );
+			}
 		}
 		
 		private void upMappedInstance()	{
+
+			int index = listMappedUnitsJL.getSelectedIndex();
+			if( index > 0 )	{
+				Collections.swap( mappedUnitsSL, index, index - 1 );
+				listMappedUnitsJL.setListData( mappedUnitsSL );
+			}
 		}
 		
 		private void updateSDInstancesList()  {
@@ -624,8 +637,6 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		
 		private void updateMappableArchUnits()	{
 			
-			//Vector<String> mappableArchUnits = new Vector<String>();
-			TraceManager.addDev( "Before accessing the comboBox" );
 			String selectedInstance = "";
 			if( sdInstancesCB.getSelectedItem() != null )	{
 				selectedInstance = sdInstancesCB.getSelectedItem().toString();
@@ -633,34 +644,34 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			else	{
 				selectedInstance = sdInstancesSL.get(0);
 			}
-			TraceManager.addDev( "Selected instance: " + selectedInstance );
+			//TraceManager.addDev( "Selected instance: " + selectedInstance );
 
 			if( sdStorageInstances.contains( selectedInstance ) )	{
 				mappableArchUnitsSL = makeListOfMappableArchUnits( STORAGE );
-				TraceManager.addDev( "Found a storage instance: " + mappableArchUnitsSL.toString() );
+				//TraceManager.addDev( "Found a storage instance: " + mappableArchUnitsSL.toString() );
 			}
 			else	{
 				if( sdTransferInstances.contains( selectedInstance ) )	{
 					mappableArchUnitsSL = makeListOfMappableArchUnits( TRANSFER );
-					TraceManager.addDev( "Found a transfer instance: " + mappableArchUnitsSL.toString() );
+					//TraceManager.addDev( "Found a transfer instance: " + mappableArchUnitsSL.toString() );
 				}
 				else	{
 					if( sdControllerInstances.contains( selectedInstance ) )	{
 						mappableArchUnitsSL = makeListOfMappableArchUnits( CONTROLLER );
-						TraceManager.addDev( "Found a controller instance: " + mappableArchUnitsSL.toString() );
+						//TraceManager.addDev( "Found a controller instance: " + mappableArchUnitsSL.toString() );
 					}
 					else	{	//is there is no instance to map
 						mappableArchUnitsSL = new Vector<String>();
 						mappableArchUnitsSL.add( EMPTY_MAPPABLE_ARCH_UNITS_LIST );
-						TraceManager.addDev( "Found OTHER instance: " + mappableArchUnitsSL.toString() );
+						//TraceManager.addDev( "Found OTHER instance: " + mappableArchUnitsSL.toString() );
 					}
 				}
 			}
-			TraceManager.addDev( "Before makingArchComboBox: " + mappableArchUnitsSL.toString() );
+			//TraceManager.addDev( "Before makingArchComboBox: " + mappableArchUnitsSL.toString() );
 			freezeArchitectureUnitsComboBox();
 			makeArchitectureUnitsComboBox( mappableArchUnitsSL );
 			unfreezeArchitectureUnitsComboBox();
-			TraceManager.addDev( "After makingArchComboBox: " + mappableArchUnitsSL.toString() );
+			//TraceManager.addDev( "After makingArchComboBox: " + mappableArchUnitsSL.toString() );
 		}
 		
 		private void freeMappedUnits()	{
@@ -685,6 +696,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		
 		private void makeSDInstancesComboBox( Vector<String> newList ) {
 			
+			if( ( newList.size() > 1 ) && ( newList.contains( EMPTY_INSTANCES_LIST ) ) )	{
+				newList.removeElementAt( newList.indexOf( EMPTY_INSTANCES_LIST ) );
+			}
 			sdInstancesCB.removeAllItems();
 			for( String s: newList ) {
 				sdInstancesCB.addItem( s );
