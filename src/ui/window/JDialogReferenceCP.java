@@ -348,10 +348,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			closeButton = new JButton("Save and Close", IconManager.imgic25);
 			//closeButton.setPreferredSize(new Dimension(600, 50));
 			closeButton.addActionListener(this);
-			panelButton.add(closeButton);
-			cancelButton = new JButton("Cancel", IconManager.imgic27);
+			panelButton.add( closeButton, c0 );
+			/*cancelButton = new JButton("Cancel", IconManager.imgic27);
 			cancelButton.addActionListener(this);
-			panelButton.add(cancelButton);
+			panelButton.add( cancelButton, c0 );
 			
 			JPanel middlePanel = new JPanel(new BorderLayout());
 			middlePanel.add(panel3, BorderLayout.NORTH);
@@ -361,6 +361,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			JPanel topPanel = new JPanel();
 			topPanel.add(panel1);
 			topPanel.add(panel2);
+			topPanel.add(panelButton);
 			c.setLayout(new BorderLayout());
 			c.add(topPanel, BorderLayout.CENTER);
 			c.add(middlePanel, BorderLayout.SOUTH);*/
