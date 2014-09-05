@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCP: data structure for the TMLTxt and the graphical2TMLTxt parsers
+* Class TMLCP: data structure for the TMLCP
 * Creation: 18/02/2014
 * @version 1.1 10/06/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -167,44 +167,10 @@ public class TMLCP extends TMLElement {
 		mainCP = _tmlcpSection;
 	}
 	
-	/*public void addCPActivityDiagram( TMLCPActivityDiagram _tmlcpSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException {
-
-		if( checkDiagramDeclaration( _tmlcpSection ) )	{
-			if( checkMultipleDiagramDeclaration( _tmlcpSection ) )	{
-				String errorMessage = "TMLCP COMPILER ERROR: activity diagram " + _tmlcpSection.getName() + " is defined multiple times";
-				throw new MultipleDiagDeclarationsException( errorMessage );
-			}
-			else	{
-  			otherCPs.add( _tmlcpSection );
-			}
-		}
-		else	{
-			String errorMessage = "TMLCP COMPILER ERROR: activity diagram " + _tmlcpSection.getName() + " undeclared";
-			throw new UndeclaredDiagramException( errorMessage );
-		}
-  }*/
-
 	public void addCPActivityDiagram( TMLCPActivityDiagram _diag )	{
 		otherCPs.add( _diag );
 	}
     
- /* public void addCPSequenceDiagram( TMLCPSequenceDiagram _tmlsdSection ) throws UndeclaredDiagramException, MultipleDiagDeclarationsException	{
-
-		if( checkDiagramDeclaration( _tmlsdSection ) )	{
-			if( checkMultipleDiagramDeclaration( _tmlsdSection ) )	{
-				String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " is defined multiple times";
-				throw new MultipleDiagDeclarationsException( errorMessage );
-			}
-			else	{
-   			sds.add( _tmlsdSection );
-			}
-		}
-		else	{
-			String errorMessage = "TMLCP COMPILER ERROR: sequence diagram " + _tmlsdSection.getName() + " undeclared";
-			throw new UndeclaredDiagramException( errorMessage );
-		}
-  }*/
-
 	public void addCPSequenceDiagram( TMLCPSequenceDiagram _sd )	{
 		sds.add( _sd );
 	}

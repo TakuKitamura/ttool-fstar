@@ -64,7 +64,6 @@ public class GTMLModeling  {
 	private TMLDesignPanel tmldp;
 	private TMLComponentDesignPanel tmlcdp;
 	private TMLArchiPanel tmlap;
-	private TMLCommunicationPatternPanel tmlcpp;
 	private TMLModeling tmlm;
 	private Vector checkingErrors, warnings;
 	private LinkedList tasksToTakeIntoAccount;
@@ -74,13 +73,17 @@ public class GTMLModeling  {
 	private static CorrespondanceTGElement listE;
 	private Hashtable<String, String> table;
 	
-	
 	//private ArrayList<HwNode> nodesToTakeIntoAccount;
 	private LinkedList nodesToTakeIntoAccount;
 
 	private TMLMapping map;
 	private TMLArchitecture archi;
+
+	//Attributes specific to Communication Patterns
 	private TMLCP tmlcp;
+	private TMLCommunicationPatternPanel tmlcpp;
+	private Vector<TDiagramPanel> diagramPanelsToTakeIntoAccount;
+	private Vector<TDiagramPanel> panels;
 	
 	private boolean putPrefixName = false;
 	
@@ -257,6 +260,10 @@ public class GTMLModeling  {
 	
 	public void setNodes(Vector nodes) {
 		nodesToTakeIntoAccount = new LinkedList(nodes);
+	}
+
+	public void setDiagramPanels( Vector panels ) {
+		diagramPanelsToTakeIntoAccount = new Vector<TDiagramPanel>( panels );
 	}
 	
 	public Vector getCheckingErrors() {
@@ -1885,25 +1892,56 @@ public class GTMLModeling  {
 		return map;	// the data structure map is returned to CheckSyntaxTMLMapping in GTURTLEModeling
 	}
 
-	//Checking the syntax of CP with mapping if present
-	public TMLCP translateToTMLCP() {
 
-		//tmlm = new TMLModeling( true );
-		//archi = new TMLArchitecture();
+	public TMLCP translateToTMLCPDataStructure()	{
+
 		tmlcp = new TMLCP();
-		//map = new TMLMapping( tmlm, archi, cp, false );
-		//map = new TMLMapping( tmlm, archi, false );
-		
 		checkingErrors = new Vector();
 		warnings = new Vector();
 		//listE = new CorrespondanceTGElement();
 		
-		TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
-		makeCommunicationPattern();
+		if( tmlcpp != null )	{
+			try	{
+				TraceManager.addDev( "Making Communication Pattern data structure to check the syntax" );
+				makeCPDataStructure();	//fill the data structure tmlcp
+			}
+			catch( MalformedTMLDesignException mtmlde )	{
+				TraceManager.addDev( "Modeling error: " + mtmlde.getMessage() );
+			}
+		}
+
+		TraceManager.addDev( "About to check the syntax of CPs" );
+		TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
+		syntax.checkSyntax();
+
+		CheckingError ce;
+		int type;
+		TGComponent tgc;
+		
+		/*if( syntax.hasErrors() >0 ) {
+			for( TMLError error: syntax.getErrors() ) {
+				if( error.type == TMLError.ERROR_STRUCTURE ) {
+					type = CheckingError.STRUCTURE_ERROR;
+				}
+				else {
+					type = CheckingError.BEHAVIOR_ERROR;
+				}
+				ce = new CheckingError( type, error.message );
+				tgc = listE.getTG( error.element );
+				if ( tgc != null ) {
+					ce.setTDiagramPanel( tgc.getTDiagramPanel() );
+					ce.setTGComponent( tgc );
+				}
+				ce.setTMLTask( error.task );
+				checkingErrors.add( ce );
+			}
+		}*/
+
+		//makeCPDataStructure();
 		/*if (!makeTMLModeling()) {
 			return null;
 		}*/
-		TraceManager.addDev("Making mapping");
+		//TraceManager.addDev("Making mapping");
 		//makeCPMapping();	//Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
 		//place only: the architecture DD
 		
@@ -2126,7 +2164,7 @@ public class GTMLModeling  {
 		}
 	}
 
-	private void makeCommunicationPattern() {
+	private void makeCPDataStructure() throws MalformedTMLDesignException {
 
 		TGComponent tgc;
 		ui.tmlsd.TMLSDPanel SDpanel;
@@ -2146,11 +2184,12 @@ public class GTMLModeling  {
 			else if( panelList.get( panelCounter ) instanceof ui.tmlcp.TMLCPPanel )	{
 				tmlcp.addCPActivityDiagram( createActivityDiagramDataStructure( (ui.tmlcp.TMLCPPanel) panelList.get( panelCounter ), names ) );
 			}
-			TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
+			//TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
 		}
 	}	//End of method
 
-	private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel, ArrayList<String> names )	{
+	private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel,
+																										ArrayList<String> names )	throws MalformedTMLDesignException {
 
 		tmltranslator.tmlcp.TMLCPStart start;
 		tmltranslator.tmlcp.TMLCPStop stop;
@@ -2162,65 +2201,76 @@ public class GTMLModeling  {
 		tmltranslator.tmlcp.TMLCPRefAD refAD;
 		tmltranslator.tmlcp.TMLCPRefSD refSD;
 
+				/*if (tmladp == null) {
+					String msg = tmlto.getValue() + " has no activity diagram";
+					CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
+					ce.setTDiagramPanel(tmldp.tmltdp);
+					ce.setTGComponent(tgc);
+					checkingErrors.add(ce);
+					throw new MalformedTMLDesignException(tmlto.getValue() + " msg");
+				}*/
+
 		LinkedList components = panel.getComponentList();
 		if( nameInUse( names, panel.getName() ) ) {
-			/*CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + ADpanel.getName());
+			String msg = panel.getName() + " already exists";
+			CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
 			ce.setTDiagramPanel( tmlcpp.tmlcpp );
-			ce.setTGComponent( ADpanel );
-			checkingErrors.add( ce );*/
-			TraceManager.addDev( "ERROR: two diagrams have the same name!" );
+			//ce.setTGComponent( components );
+			checkingErrors.add( ce );
+			throw new MalformedTMLDesignException( msg );
+			/*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
 			System.exit(0);
-			return new tmltranslator.tmlcp.TMLCPActivityDiagram( "ERROR", panel );
+			return new tmltranslator.tmlcp.TMLCPActivityDiagram( "ERROR", panel );*/
 			}
 		else {
 			names.add( panel.getName() );
-			TraceManager.addDev("Lenght of elements: " + components.size() );
+			//TraceManager.addDev("Lenght of elements: " + components.size() );
 			tmltranslator.tmlcp.TMLCPActivityDiagram AD  = new tmltranslator.tmlcp.TMLCPActivityDiagram( panel.getName(), panel );
 	
 			for( int k = 0; k < components.size(); k++ )	{
 				TGComponent component = (TGComponent) components.get(k);
 				if( component instanceof ui.tmlcp.TMLCPStartState )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
 				 	start = new tmltranslator.tmlcp.TMLCPStart( panel.getName() + "Start", component );
 					AD.addTMLCPElement( start );	//CAREFUL: the elements are not added in the same order as they appear in the GUI
 				}
 				if( component instanceof ui.tmlcp.TMLCPStopState )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 					stop = new tmltranslator.tmlcp.TMLCPStop( panel.getName() + "Stop", component );
 				}
 				if( component instanceof ui.tmlcp.TMLCPRefSD )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 					refSD = new tmltranslator.tmlcp.TMLCPRefSD( component.getName(), component );
 					AD.addTMLCPElement( refSD );
 				}
 				if( component instanceof ui.tmlcp.TMLCPRefAD )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 					refAD = new tmltranslator.tmlcp.TMLCPRefAD( component.getName(), component );
 					AD.addTMLCPElement( refAD );
 				}
 				if( component instanceof ui.tmlcp.TMLCPJunction )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 				 	junction = new tmltranslator.tmlcp.TMLCPJunction( component.getName(), component );
 					AD.addTMLCPElement( junction );
 				}
 				if( component instanceof ui.tmlcp.TMLCPJoin )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 				 	join = new tmltranslator.tmlcp.TMLCPJoin( component.getName(), component );
 					AD.addTMLCPElement( join );
 				}
 				if( component instanceof ui.tmlcp.TMLCPFork )	{
-					TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
 				 	fork = new tmltranslator.tmlcp.TMLCPFork( component.getName(), component );
 					AD.addTMLCPElement( fork );
 				}
 				if( component instanceof ui.tmlcp.TMLCPChoice )	{
-					TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
+					//TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
 				 	choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
 					AD.addTMLCPElement( choice );
 				}
 				if( component instanceof ui.tmlcp.TGConnectorTMLCP)	{
-					TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
-															((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
+					//TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
+					//										((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
 					TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
 															((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather().getName(),
 															((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(),
@@ -2233,7 +2283,8 @@ public class GTMLModeling  {
 	}	//End of method createActivityDiagramDataStructure 
 
 
-	private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel, ArrayList<String> names )	{
+	private tmltranslator.tmlcp.TMLCPSequenceDiagram createSequenceDiagramDataStructure( ui.tmlsd.TMLSDPanel panel,
+																									ArrayList<String> names )	throws MalformedTMLDesignException {
 
 		Vector attributes;
 		int index1;
@@ -2246,22 +2297,23 @@ public class GTMLModeling  {
 		String[] tokens;							//used to get the tokens of the string for a SD attribute
 		String delims = "[ +=:;]+";		//the delimiter chars used to parse attributes of SD instance
 
-		TraceManager.addDev( "ADDING TO DATA STRUCTURE THE DIAGRAM " + panel.getName() );
+		//TraceManager.addDev( "ADDING TO DATA STRUCTURE THE DIAGRAM " + panel.getName() );
 		if( nameInUse( names, panel.getName() ) ) {
-			// Node with the same name
-			/*CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + SDpanel.getName() );
+			String msg = panel.getName() + " already exists";
+			CheckingError ce = new CheckingError( CheckingError.STRUCTURE_ERROR, "Two diagrams have the same name: " + panel.getName() );
 			ce.setTDiagramPanel( tmlcpp.tmlcpp );
-			ce.setTGComponent( SDpanel );
-			checkingErrors.add( ce );*/
-			TraceManager.addDev( "ERROR: two diagrams have the same name!" );
+			//ce.setTGComponent( components );
+			checkingErrors.add( ce );
+			throw new MalformedTMLDesignException( msg );
+			/*TraceManager.addDev( "ERROR: two diagrams have the same name!" );
 			System.exit(0);
-			return new tmltranslator.tmlcp.TMLCPSequenceDiagram( "ERROR", panel );
+			return new tmltranslator.tmlcp.TMLCPSequenceDiagram( "ERROR", panel );*/
 		}
 		else {
 			names.add( panel.getName() );
 			tmltranslator.tmlcp.TMLCPSequenceDiagram SD = new tmltranslator.tmlcp.TMLCPSequenceDiagram( panel.getName(), panel );
 			LinkedList elemList = panel.getComponentList();
-			TraceManager.addDev("Adding to the data structure the elements of: " + panel.getName() );
+			//TraceManager.addDev("Adding to the data structure the elements of: " + panel.getName() );
 			//order messages according to the inverse of Y coordinate
 			for( int j = 0; j < elemList.size(); j++ )	{
 				TGComponent elem = (TGComponent) elemList.get(j);
@@ -2350,47 +2402,6 @@ public class GTMLModeling  {
 		}//End else name does not exist yet
 	}	//End of method createSequenceDiagramDataStructure
 
-		// Links between nodes
-		/*TGComponent tgc1, tgc2;
-		TGConnectingPoint p1, p2;
-		TMLArchiConnectorNode connector;
-		HwLink hwlink;
-		HwNode originNode;
-		
-		iterator = tmlap.tmlap.getComponentList().listIterator();
-		while(iterator.hasNext()) {
-			tgc = (TGComponent)(iterator.next());
-			if (tgc instanceof TMLArchiConnectorNode) {
-				//TraceManager.addDev("Found link");
-				connector = (TMLArchiConnectorNode)tgc;
-				tgc1 = null; tgc2 = null;
-				p1 = connector.getTGConnectingPointP1();
-				p2 = connector.getTGConnectingPointP2();
-				tgc1 = tgc.getTDiagramPanel().getComponentToWhichBelongs(p1);
-				tgc2 = tgc.getTDiagramPanel().getComponentToWhichBelongs(p2);
-				if ((tgc1 != null) && (tgc2 != null)) {
-					//TraceManager.addDev("Not null");
-					if (components.contains(tgc1) && components.contains(tgc2)) {
-						//TraceManager.addDev("Getting closer");
-						if (tgc2 instanceof TMLArchiBUSNode) {
-							originNode = listE.getHwNode(tgc1);
-							bus  = (HwBus)(listE.getHwNode(tgc2));
-							if ((originNode != null) && (bus != null)) {
-								hwlink = new HwLink("link_" +originNode.getName() + "_to_" + bus.getName());
-								hwlink.setPriority(connector.getPriority());
-								hwlink.bus = bus;
-								hwlink.hwnode = originNode;
-								listE.addCor(hwlink, connector);
-								archi.addHwLink(hwlink);
-								//TraceManager.addDev("Link added");
-							}
-						}
-					}
-				}
-			}
-		}
-	}*/
-	
 	private boolean makeTMLModeling() {
 		// Determine all TML Design to be used -> TMLDesignPanels
 		ArrayList<TMLDesignPanel> panels = new ArrayList<TMLDesignPanel>();

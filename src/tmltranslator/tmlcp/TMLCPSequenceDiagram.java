@@ -78,17 +78,6 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		items = new ArrayList<TMLSDItem>();
 	}
     
- 	/*public void addVariable( TMLAttribute _attr ) throws MultipleVariableDeclarationException	{
-
-		if( !checkVariableUniqueness( _attr.getName() ) )	{
-			String errorMessage = "TMLCOMPILER ERROR: variable " + _attr.getName() + " in diagram " + this.name + " has mutliple declarations";
-			throw new MultipleVariableDeclarationException( errorMessage );
-		}
-		else	{
-      globalVariables.add(_attr);
-    }
-	}*/
-
 	public ArrayList<TMLSDItem> getItems()	{
 		return items;
 	}
@@ -122,18 +111,6 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		addItem( new TMLSDItem( _action.getAction(), _action.getInstanceName(), _action.getYCoord() ) );
 	}
 	
-	//commenting the throw exception because bot needed by the graphical 2 TMLTxt compiler yet
-	/*public void addInstance( TMLSDInstance _elt ) throws MultipleInstanceDeclarationException {
-		
-		if( declaredInstance( _elt ) )	{
-			String errorMessage = "TMLCP COMPILER ERROR: instance " + _elt.getName() + " in diagram " + this.name + " declared multiple times";
-			throw new MultipleInstanceDeclarationException( errorMessage );
-		}
-		else	{
-	    instances.add( _elt );
-		}
- 	}*/
-
 	public void addInstance( TMLSDInstance _inst )	{
 		instances.add( _inst );
 	}
@@ -155,7 +132,7 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 		//addItem( new TMLSDItem( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
   }
     
-	public void insertInitialValue( String _name, String value ) /*throws UninitializedVariableException*/	{
+	public void insertInitialValue( String _name, String value ) {
 			
 		int i = 0;
 		String str;

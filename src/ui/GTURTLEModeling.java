@@ -6400,21 +6400,32 @@ public class GTURTLEModeling {
 	//diagram. Up to now, not taking the mapping information into account
 	public boolean checkSyntaxTMLCP( Vector nodesToTakeIntoAccount, TMLCommunicationPatternPanel tmlcpp, boolean optimize ) {
 
+		//nodesToTakeIntoAccount is the list of SDs and ADs corresponding that compose the CP selected for syntax checking
 		ArrayList<TMLError> warningsOptimize = new ArrayList<TMLError>();		
 		warnings = new Vector();
 		mgui.setMode( MainGUI.VIEW_SUGG_DESIGN_KO );
 		GTMLModeling gtmlm = new GTMLModeling( tmlcpp, true );
+
+		TraceManager.addDev( "NodesToTakeIntoAccount :" + nodesToTakeIntoAccount.toString() );
 		
-		gtmlm.setNodes( nodesToTakeIntoAccount );	//simply transforms the parameter from a Vector to LinkedList
+		//Useless because nodesToTakeIntoAccount does not include the mainCP!
+		//gtmlm.setDiagramPanels( nodesToTakeIntoAccount );	//passes the list of nodes (SDs and ADs) to gtml as a LinkedList
 		tmlm = null;
 		tm = null;
 		tmState = 1;
-		tmlcp = gtmlm.translateToTMLCP();	//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
+		//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
+		tmlcp = gtmlm.translateToTMLCPDataStructure();
 		TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
 		mgui.generateTMLTxt();	//Now generating the TMLtxt code
 		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
-		/*listE = gtmlm.getCorrespondanceTable();
-		checkingErrors = gtmlm.getCheckingErrors();
+		listE = gtmlm.getCorrespondanceTable();
+		//for( CorrespondanceTGElement element : listE.getNames() )	{
+			TraceManager.addDev( "Printing listE.getNames: " + listE.getNames().toString() );
+			TraceManager.addDev( "Printing listE.getTG: " + listE.getTG().toString() );
+			TraceManager.addDev( "Printing listE.getPanelNames: " + listE.getPanelNames().toString() );
+			TraceManager.addDev( "Printing listE.getData: " + listE.getData().toString() );
+		//}
+		/*checkingErrors = gtmlm.getCheckingErrors();
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
 			analyzeErrors();
