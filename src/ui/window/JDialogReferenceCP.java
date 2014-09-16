@@ -179,14 +179,14 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel1 = new JPanel();
 			panel1.setLayout(gridbag1);
 			panel1.setBorder(new javax.swing.border.TitledBorder("CP attributes"));
-			panel1.setMinimumSize(new Dimension(325, 250));
+			panel1.setPreferredSize(new Dimension(325, 250));
 			
 			panel2 = new JPanel();
 			panel2.setLayout(gridbag2);
 			panel2.setBorder(new javax.swing.border.TitledBorder("Managing mapping"));
-			panel2.setMinimumSize(new Dimension(325, 250));
+			panel2.setPreferredSize(new Dimension(325, 250));
 			
-			// first line panel1
+// first line panel1
 			c1.weighty = 1.0;
 			c1.weightx = 1.0;
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
