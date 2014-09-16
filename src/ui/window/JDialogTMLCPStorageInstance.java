@@ -66,28 +66,16 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
 	}
     
  @Override protected void initComponents() {
-	JTabbedPane tabbedPane = new JTabbedPane();
 	Container c = getContentPane();
 		
 		JPanel namePanel = new JPanel();
 		JPanel panelAttr = new JPanel(new BorderLayout());
-		JPanel panelMethod = new JPanel(new BorderLayout());
     GridBagLayout gridbag0 = new GridBagLayout();
     GridBagLayout gridbag1 = new GridBagLayout();
     GridBagLayout gridbag2 = new GridBagLayout();
-		GridBagLayout gridbag3 = new GridBagLayout();
-		GridBagLayout gridbag4 = new GridBagLayout();
-		GridBagLayout gridbag5 = new GridBagLayout();
-		GridBagLayout gridbag6 = new GridBagLayout();
-		GridBagLayout gridbag7 = new GridBagLayout();
     GridBagConstraints c0 = new GridBagConstraints();
     GridBagConstraints c1 = new GridBagConstraints();
     GridBagConstraints c2 = new GridBagConstraints();
-		GridBagConstraints c3 = new GridBagConstraints();
-		GridBagConstraints c4 = new GridBagConstraints();
-		GridBagConstraints c5 = new GridBagConstraints();
-		GridBagConstraints c6 = new GridBagConstraints();
-		GridBagConstraints c7 = new GridBagConstraints();
         
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -216,9 +204,7 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
         // main panel;
 				panelAttr.add(panel1, BorderLayout.WEST);
 				panelAttr.add(panel2, BorderLayout.EAST);
-				tabbedPane.addTab("Attributes", panelAttr);
 		
-		tabbedPane.setSelectedIndex(tab);
 		
         //c.add(panel1, c0);
         //c.add(panel2, c0);
@@ -231,7 +217,7 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
     
     	c.add(namePanel, c0);
     	
-		c.add(tabbedPane, c0);
+		c.add(panelAttr, c0);
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
