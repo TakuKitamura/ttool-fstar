@@ -188,7 +188,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
         if( s.length() > 0 ) {
 					if( ( TAttribute.isAValidId( s, checkKeyword, checkJavaKeyword ) ) && ( TAttribute.notIn(s, forbidden ) ) )	{
 						int i = TAttribute.getAccess(o1.toString());
-						int j = TAttribute.getAvatarType(o2.toString());
+						int j = TAttribute.getType(o2.toString());
 						if( ( j == TAttribute.ARRAY_NAT ) && ( value.length() < 1 ) )	{
 							value = "2";
 						}
@@ -198,18 +198,17 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 							}
 							else	{
 								if( !TAttribute.isAValidInitialValue(j, value) ) {
+									//TraceManager.addDev( "Initial value issue i = " + i + " j = " + j );
 									JOptionPane.showMessageDialog( frame, "The initial value is not valid", "Error", JOptionPane.INFORMATION_MESSAGE );
 									return;
 								}
               }
 							if( j == TAttribute.OTHER )	{
 								a = new TAttribute(i, s, value, o2.toString());
-								a.isAvatar = true;
 								//System.out.println("New attribute: " + o2.toString());
 							}
 							else	{
 								a = new TAttribute(i, s, value, j);
-								a.isAvatar = true;
 							}
 							//checks whether the same attribute already belongs to the list
 							int index = attributes.size();
