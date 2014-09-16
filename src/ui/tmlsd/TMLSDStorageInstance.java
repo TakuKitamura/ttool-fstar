@@ -94,36 +94,14 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 	}
     
 	public boolean editOndoubleClick(JFrame frame) {
-			
-		//Get the list of ArchiPanels, then ArchiDiagramPanels then Memory nodes
-		boolean mappedUnitExists = false;
-		TDiagramPanel ttdp = getTDiagramPanel();
-		Vector<TMLArchiNode> availableMemories = new Vector<TMLArchiNode>();
-		Vector<TMLArchiPanel> archiPanels = getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
 
-		TDiagramPanel archiDiagramPanel = archiPanels.get(0).getPanels().get(0);	// one ArchiPanel = one ArchiDiagramPanel
-		LinkedList archiComponentsList = archiDiagramPanel.getComponentList();
-		for( int k = 0; k < archiComponentsList.size(); k++ )	{
-			if( archiComponentsList.get(k) instanceof TMLArchiMemoryNode )	{
-				availableMemories.addElement( (TMLArchiNode) archiComponentsList.get(k) );
-				if( mappedUnit.equals( ((TMLArchiNode)archiComponentsList.get(k)).getName()) )	{
-					mappedUnitExists = true;
-				}
-			}
-		}
-		if( !mappedUnitExists )	{
-			mappedUnit = "";
-		}
-
-		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, availableMemories, null, frame,
-																											"Setting properties of " + name, "Attribute", name, mappedUnit );
+		JDialogTMLCPStorageInstance jdab = new JDialogTMLCPStorageInstance( myAttributes, null, frame,
+																											"Setting properties of " + name, "Attribute", name );
 		setJDialogOptions(jdab);
     jdab.setSize(650, 575);
     GraphicLib.centerOnParent(jdab);
     jdab.setVisible(true); // blocked until dialog has been closed
 		name = jdab.getName();																											
-		mappedUnit = jdab.getMappedUnit();
-		TraceManager.addDev( "Mapping done succesfully on " + mappedUnit );
     //makeValue();
     //if (oldValue.equals(value)) {
 		//return false;

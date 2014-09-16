@@ -38,7 +38,7 @@
 *
 * /**
 * Class JDialogTMLSDInstance
-* Dialog for managing attributes, mapping and name of a SD instance
+* Dialog for managing attributes and name of a SD instance
 * Creation: 25/07/2014
 * @version 1.0 25/07/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -62,8 +62,6 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 	
 	protected Vector attributes, attributesPar, forbidden, initValues;
 	protected Vector unitsPar;
-	protected Vector<String> mappedUnits = new Vector<String>();
-	protected Vector<String> availableUnits = new Vector<String>();
 	protected boolean checkKeyword, checkJavaKeyword;
     
   protected boolean cancelled = false;
@@ -91,15 +89,8 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
   protected JButton removeButton;
 		
 	//Panel 3
-	protected JButton removeMappingButton;
 	protected JComboBox referenceUnitsName;
 
-
-	// Mapping of storage units
-	protected JPanel panel3, panel4;
-	protected JButton addMappingButton;
-	protected JList listMappedUnits;
-	
   // Main Panel
   protected JButton closeButton;
   protected JButton cancelButton;
@@ -107,20 +98,14 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 	protected String name = "";
     
   /** Creates new form  */
-  public JDialogTMLSDInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
-																		String attrib, String _name, String _mappedUnit )	{
+  public JDialogTMLSDInstance( Vector _attributes, Vector _forbidden, Frame f, String title, String attrib, String _name )	{
 		super(f, title, true);
 		frame = f;
 		attributesPar = _attributes;
-		unitsPar = _availableUnits;
 		this.name = _name;	
     forbidden = _forbidden;
     initValues = new Vector();
     this.attrib = attrib;
-		mappedUnits.removeAllElements();
-		if( _mappedUnit.length() > 0 )	{
-			mappedUnits.add( 0, _mappedUnit );
-		}
         
 	 	attributes = new Vector();
         
@@ -137,12 +122,6 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
 		removeButton.setEnabled(false);
     upButton.setEnabled(false);
     downButton.setEnabled(false);
-		if( mappedUnits.size() > 0 )	{
-			removeMappingButton.setEnabled(true);
-		}
-		else	{
-			removeMappingButton.setEnabled(false);
-		}
  }
     
  protected abstract void initComponents();
@@ -170,11 +149,7 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
             downAttribute();
         } else if (evt.getSource() == upButton) {
             upAttribute();
-        } else if (evt.getSource() == addMappingButton) {
-						addMappedUnit();
-				} else if (evt.getSource() == removeMappingButton) {
-						removeMappedUnit();
-				}
+        }
     }
     
     public void addAccess(String s) {
@@ -272,24 +247,6 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
         }
 			}	//End of method
 	
-	public void addMappedUnit() {
-
-		//TraceManager.addDev( "**************************" );
-		//TraceManager.addDev( referenceUnitsName.getSelectedItem().toString() );
-		//TraceManager.addDev( "**************************" );
-		mappedUnits.add( referenceUnitsName.getSelectedItem().toString() );
-		listMappedUnits.setListData( mappedUnits );
-		removeMappingButton.setEnabled( true );
-	}
-	
-    public void removeMappedUnit() {
-			mappedUnits.removeElementAt( listMappedUnits.getSelectedIndex() );
-			listMappedUnits.setListData( mappedUnits );
-			if( mappedUnits.size() == 0 )	{
-				removeMappingButton.setEnabled( false );
-			}
-    }
-    
     public void removeAttribute() {
         int i = listAttribute.getSelectedIndex() ;
         if (i!= -1) {
@@ -382,12 +339,5 @@ public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implement
     
 	public String getName()	{
 		return this.name;
-	}
-
-	public String getMappedUnit()	{
-		if( mappedUnits.size() == 1 )	{
-			return mappedUnits.get(0);
-		}
-		return "";
 	}
 }	//End of class

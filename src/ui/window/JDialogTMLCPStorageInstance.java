@@ -38,7 +38,7 @@
 *
 * /**
 * Class JDialogTMLCPStorageInstance
-* Dialog for managing attributes, mapping and name of a SD instance
+* Dialog for managing attributes and name of a SD instance
 * Creation: 25/07/2014
 * @version 1.0 25/07/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
@@ -61,9 +61,8 @@ import myutil.*;
 public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements ActionListener, ListSelectionListener  {
 	
   /** Creates new form  */
-  public JDialogTMLCPStorageInstance( Vector _attributes, Vector<TMLArchiNode> _availableUnits, Vector _forbidden, Frame f, String title,
-																		String attrib, String _name, String _mappedUnit )	{
-  	super( _attributes, _availableUnits, _forbidden, f, title, attrib, _name, _mappedUnit );
+  public JDialogTMLCPStorageInstance( Vector _attributes, Vector _forbidden, Frame f, String title, String attrib, String _name )	{
+  	super( _attributes, _forbidden, f, title, attrib, _name );
 	}
     
  @Override protected void initComponents() {
@@ -214,100 +213,10 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
         removeButton.addActionListener(this);
         panel2.add(removeButton, c2);
 		
-		// Mapping
-		panel3 = new JPanel();
-        panel3.setLayout(gridbag3);
-        panel3.setBorder(new javax.swing.border.TitledBorder("Available storage units"));
-        panel3.setPreferredSize(new Dimension(300, 250));
-        
-        panel4 = new JPanel();
-        panel4.setLayout(gridbag2);
-        panel4.setBorder(new javax.swing.border.TitledBorder("Mapped storage unit"));
-        panel4.setPreferredSize(new Dimension(300, 250));
-        
-        // first line panel3
-        c3.gridwidth = 1;
-        c3.gridheight = 1;
-        c3.weighty = 1.0;
-        c3.weightx = 1.0;
-        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c3.fill = GridBagConstraints.BOTH;
-        c3.gridheight = 3;
-        panel3.add(new JLabel(" "), c3);
-        
-        c3.gridwidth = 1;
-        c3.gridheight = 1;
-        c3.weighty = 1.0;
-        c3.weightx = 1.0;
-        c3.anchor = GridBagConstraints.CENTER;
-				c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        panel3.add(new JLabel("Storage unit:"), c3);
-        
-        // second line panel3
-        c3.fill = GridBagConstraints.HORIZONTAL;
-				
-				for( int j = 0; j < unitsPar.size(); j++ )	{
-					availableUnits.add( ( (TMLArchiNode) unitsPar.get(j)).getName() );
-				}
-				referenceUnitsName = new JComboBox( availableUnits );
-        panel3.add( referenceUnitsName, c3);
-
-        // third line panel3
-        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c3.fill = GridBagConstraints.BOTH;
-        c3.gridheight = 3;
-        panel3.add( new JLabel(" "), c3 );
-        
-        // fourth line panel3
-        c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c3.fill = GridBagConstraints.BOTH;
-        c3.gridheight = 3;
-        
-        // fifth line panel3
-        c3.gridheight = 1;
-        c3.fill = GridBagConstraints.HORIZONTAL;
-        addMappingButton = new JButton("Map storage unit");
-        addMappingButton.addActionListener(this);
-        panel3.add( addMappingButton, c3 );
-        
-        // 1st line panel4
-
-        listMappedUnits = new JList( mappedUnits );
-        listMappedUnits.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
-        listMappedUnits.addListSelectionListener( this );
-        scrollPane = new JScrollPane( listMappedUnits );
-        scrollPane.setSize( 300, 250 );
-        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c4.fill = GridBagConstraints.BOTH;
-        c4.gridheight = 5;
-        c4.weighty = 10.0;
-        c4.weightx = 10.0;
-        panel4.add(scrollPane, c4);
-        
-        // 2nd line panel4
-        c4.weighty = 1.0;
-        c4.weightx = 1.0;
-        c4.fill = GridBagConstraints.BOTH;
-        c4.gridheight = 1;
-        panel4.add(new JLabel(""), c4);
-        
-        // third line panel4
-        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c4.fill = GridBagConstraints.HORIZONTAL;
-        removeMappingButton = new JButton( "Remove storage unit" );
-        removeMappingButton.addActionListener( this );
-        panel4.add( removeMappingButton, c4 );
-        
         // main panel;
-		panelAttr.add(panel1, BorderLayout.WEST);
-		panelAttr.add(panel2, BorderLayout.EAST);
-		tabbedPane.addTab("Attributes", panelAttr);
-		
-		//if (hasMethods) {
-			panelMethod.add(panel3, BorderLayout.WEST);
-			panelMethod.add(panel4, BorderLayout.EAST);
-			tabbedPane.addTab("Mapping", panelMethod);
-		//}
+				panelAttr.add(panel1, BorderLayout.WEST);
+				panelAttr.add(panel2, BorderLayout.EAST);
+				tabbedPane.addTab("Attributes", panelAttr);
 		
 		tabbedPane.setSelectedIndex(tab);
 		
@@ -344,16 +253,7 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
 				attributesPar.addElement(attributes.elementAt(i));
 			}
       unitsPar.removeAllElements();
-      for( int i = 0; i < mappedUnits.size(); i++ ) {
-				unitsPar.addElement( mappedUnits.elementAt(i) );
-			}
 			this.name = nameOfInstance.getText();
-			if( mappedUnits.size() > 1 )	{
-				JOptionPane.showMessageDialog( frame, "Only one Memory unit can be mapped per each Storage instance", 
-																				"Error", JOptionPane.INFORMATION_MESSAGE );
-				return;
-			}
       dispose();
     }
-    
 }	//End of class
