@@ -20651,7 +20651,7 @@ will be soon integrated in the simulation environment.
 
 
 
-<Modeling type="TML CP" nameTab="3parallelTransfers_CP" >
+<Modeling type="TML CP" nameTab="2parallelTransfers_CP" >
 <CommunicationPatternDiagramPanel name="MainCP" minX="10" maxX="1900" minY="10" maxY="900" >
 <COMPONENT type="301" id="6077" >
 <cdparam x="20" y="26" />
@@ -26475,7 +26475,7 @@ to the application HOC_PsiChart" />
 <sizeparam width="352" height="215" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
-<infoparam name="CP_3parallel" value="CP0" />
+<infoparam name="CP_2parallel" value="CP0" />
 <TGConnectingPoint num="0" id="9375" />
 <TGConnectingPoint num="1" id="9376" />
 <TGConnectingPoint num="2" id="9377" />
@@ -26485,32 +26485,32 @@ to the application HOC_PsiChart" />
 <TGConnectingPoint num="6" id="9381" />
 <TGConnectingPoint num="7" id="9382" />
 <extraparam>
-<info stereotype="CP" nodeName="CP_3parallel" />
-<attributes reference="3parallelTransfers_CP" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationController1" architectureUnit="MAINcpu" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationController2" architectureUnit="ADAIFEMdma" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="SourceStorage1" architectureUnit="ADAIFEMmemory" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="DestinationStorage1" architectureUnit="FEPmemory" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance1" architectureUnit="MAINbus" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance2" architectureUnit="MAINbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance3" architectureUnit="Crossbar" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance1" architectureUnit="ADAIFEMbus" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationController3" architectureUnit="MAINcpu" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationController4" architectureUnit="FEPdma" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="SourceStorage2" architectureUnit="ADAIFEMmemory" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="DestinationStorage2" architectureUnit="MAINmemory" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance2" architectureUnit="ADAIFEMbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance3" architectureUnit="Crossbar" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance4" architectureUnit="FEPbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance5" architectureUnit="FEPbus" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance4" architectureUnit="MAINbus" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance5" architectureUnit="MAINbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ConfigurationTransferInstance6" architectureUnit="Crossbar" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance6" architectureUnit="ADAIFEMbus" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance7" architectureUnit="FEPbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance8" architectureUnit="Crossbar" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance9" architectureUnit="MAINbridge" />
-<mappingInfo CPname="3parallelTransfers_CP" instanceName="ExecutionTransferInstance10" architectureUnit="MAINbus" />
+<info stereotype="CP" nodeName="CP_2parallel" />
+<attributes reference="2parallelTransfers_CP" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationController2" architectureUnit="ADAIFEMdma" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationController1" architectureUnit="MAINcpu" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationController3" architectureUnit="MAINcpu" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationController4" architectureUnit="FEPdma" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="SourceStorage1" architectureUnit="ADAIFEMmemory" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="DestinationStorage1" architectureUnit="FEPmemory" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="DestinationStorage2" architectureUnit="MAINmemory" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="SourceStorage2" architectureUnit="ADAIFEMmemory" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance1" architectureUnit="MAINbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance2" architectureUnit="MAINbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance3" architectureUnit="Crossbar" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance4" architectureUnit="MAINbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance5" architectureUnit="MAINbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ConfigurationTransferInstance6" architectureUnit="Crossbar" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance3" architectureUnit="Crossbar" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance10" architectureUnit="MAINbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance2" architectureUnit="ADAIFEMbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance1" architectureUnit="ADAIFEMbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance7" architectureUnit="ADAIFEMbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance6" architectureUnit="ADAIFEMbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance5" architectureUnit="FEPbus" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance4" architectureUnit="FEPbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance9" architectureUnit="MAINbridge" />
+<mappingInfo CPname="2parallelTransfers_CP" instanceName="ExecutionTransferInstance8" architectureUnit="Crossbar" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="214850" >
