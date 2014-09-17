@@ -26608,8 +26608,8 @@ to the application HOC_PsiChart" />
 </COMPONENT>
 
 <COMPONENT type="1105" id="9496" >
-<cdparam x="990" y="90" />
-<sizeparam width="424" height="428" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1049" y="311" />
+<sizeparam width="237" height="206" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="MAINmemory" value="name" />
@@ -26642,139 +26642,6 @@ to the application HOC_PsiChart" />
 <attributes byteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1103" id="9417" >
-<father id="9496" num="0" />
-<cdparam x="1008" y="240" />
-<sizeparam width="315" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="109" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAsink_ch_out__join2_ch_in2" />
-<TGConnectingPoint num="0" id="9409" />
-<TGConnectingPoint num="1" id="9410" />
-<TGConnectingPoint num="2" id="9411" />
-<TGConnectingPoint num="3" id="9412" />
-<TGConnectingPoint num="4" id="9413" />
-<TGConnectingPoint num="5" id="9414" />
-<TGConnectingPoint num="6" id="9415" />
-<TGConnectingPoint num="7" id="9416" />
-<extraparam>
-<info value="HOC_PsiChart::DMAsink_ch_out__join2_ch_in2" communicationName="DMAsink_ch_out__join2_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9426" >
-<father id="9496" num="1" />
-<cdparam x="1009" y="296" />
-<sizeparam width="313" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="111" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAcws_ch_out__join1_ch_in3" />
-<TGConnectingPoint num="0" id="9418" />
-<TGConnectingPoint num="1" id="9419" />
-<TGConnectingPoint num="2" id="9420" />
-<TGConnectingPoint num="3" id="9421" />
-<TGConnectingPoint num="4" id="9422" />
-<TGConnectingPoint num="5" id="9423" />
-<TGConnectingPoint num="6" id="9424" />
-<TGConnectingPoint num="7" id="9425" />
-<extraparam>
-<info value="HOC_PsiChart::DMAcws_ch_out__join1_ch_in3" communicationName="DMAcws_ch_out__join1_ch_in3" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9435" >
-<father id="9496" num="2" />
-<cdparam x="1011" y="351" />
-<sizeparam width="322" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="102" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAvsum_ch_out__join1_ch_in1" />
-<TGConnectingPoint num="0" id="9427" />
-<TGConnectingPoint num="1" id="9428" />
-<TGConnectingPoint num="2" id="9429" />
-<TGConnectingPoint num="3" id="9430" />
-<TGConnectingPoint num="4" id="9431" />
-<TGConnectingPoint num="5" id="9432" />
-<TGConnectingPoint num="6" id="9433" />
-<TGConnectingPoint num="7" id="9434" />
-<extraparam>
-<info value="HOC_PsiChart::DMAvsum_ch_out__join1_ch_in1" communicationName="DMAvsum_ch_out__join1_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9444" >
-<father id="9496" num="3" />
-<cdparam x="1011" y="408" />
-<sizeparam width="325" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="99" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAcwm2_ch_out__join1_ch_in2" />
-<TGConnectingPoint num="0" id="9436" />
-<TGConnectingPoint num="1" id="9437" />
-<TGConnectingPoint num="2" id="9438" />
-<TGConnectingPoint num="3" id="9439" />
-<TGConnectingPoint num="4" id="9440" />
-<TGConnectingPoint num="5" id="9441" />
-<TGConnectingPoint num="6" id="9442" />
-<TGConnectingPoint num="7" id="9443" />
-<extraparam>
-<info value="HOC_PsiChart::DMAcwm2_ch_out__join1_ch_in2" communicationName="DMAcwm2_ch_out__join1_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9453" >
-<father id="9496" num="4" />
-<cdparam x="1010" y="184" />
-<sizeparam width="277" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="147" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join1_ch_out__acc_ch_in" />
-<TGConnectingPoint num="0" id="9445" />
-<TGConnectingPoint num="1" id="9446" />
-<TGConnectingPoint num="2" id="9447" />
-<TGConnectingPoint num="3" id="9448" />
-<TGConnectingPoint num="4" id="9449" />
-<TGConnectingPoint num="5" id="9450" />
-<TGConnectingPoint num="6" id="9451" />
-<TGConnectingPoint num="7" id="9452" />
-<extraparam>
-<info value="HOC_PsiChart::join1_ch_out__acc_ch_in" communicationName="join1_ch_out__acc_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9462" >
-<father id="9496" num="5" />
-<cdparam x="1010" y="459" />
-<sizeparam width="285" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="139" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::acc_ch_out__join2_ch_in1" />
-<TGConnectingPoint num="0" id="9454" />
-<TGConnectingPoint num="1" id="9455" />
-<TGConnectingPoint num="2" id="9456" />
-<TGConnectingPoint num="3" id="9457" />
-<TGConnectingPoint num="4" id="9458" />
-<TGConnectingPoint num="5" id="9459" />
-<TGConnectingPoint num="6" id="9460" />
-<TGConnectingPoint num="7" id="9461" />
-<extraparam>
-<info value="HOC_PsiChart::acc_ch_out__join2_ch_in1" communicationName="acc_ch_out__join2_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9471" >
-<father id="9496" num="6" />
-<cdparam x="1011" y="136" />
-<sizeparam width="280" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="144" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join2_ch_out__sink_ch_in" />
-<TGConnectingPoint num="0" id="9463" />
-<TGConnectingPoint num="1" id="9464" />
-<TGConnectingPoint num="2" id="9465" />
-<TGConnectingPoint num="3" id="9466" />
-<TGConnectingPoint num="4" id="9467" />
-<TGConnectingPoint num="5" id="9468" />
-<TGConnectingPoint num="6" id="9469" />
-<TGConnectingPoint num="7" id="9470" />
-<extraparam>
-<info value="HOC_PsiChart::join2_ch_out__sink_ch_in" communicationName="join2_ch_out__sink_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
 
 <COMPONENT type="1100" id="9683" >
 <cdparam x="950" y="663" />
@@ -27164,7 +27031,7 @@ to the application HOC_PsiChart" />
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="20754" >
 <father id="9844" num="0" />
-<cdparam x="21" y="141" />
+<cdparam x="33" y="141" />
 <sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="42" minY="0" maxY="209" />
@@ -27183,7 +27050,7 @@ to the application HOC_PsiChart" />
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9792" >
 <father id="9844" num="1" />
-<cdparam x="13" y="243" />
+<cdparam x="28" y="247" />
 <sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="30" minY="0" maxY="209" />
@@ -27202,7 +27069,7 @@ to the application HOC_PsiChart" />
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9810" >
 <father id="9844" num="2" />
-<cdparam x="13" y="194" />
+<cdparam x="26" y="194" />
 <sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="30" minY="0" maxY="209" />
@@ -27221,7 +27088,7 @@ to the application HOC_PsiChart" />
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9819" >
 <father id="9844" num="3" />
-<cdparam x="13" y="293" />
+<cdparam x="27" y="299" />
 <sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="33" minY="0" maxY="209" />
@@ -27312,8 +27179,8 @@ to the application HOC_PsiChart" />
 </COMPONENT>
 
 <COMPONENT type="1105" id="9946" >
-<cdparam x="305" y="841" />
-<sizeparam width="405" height="216" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="287" y="841" />
+<sizeparam width="211" height="132" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="ADAIFEMmemory" value="name" />
@@ -27346,63 +27213,6 @@ to the application HOC_PsiChart" />
 <attributes byteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1103" id="9903" >
-<father id="9946" num="0" />
-<cdparam x="355" y="887" />
-<sizeparam width="276" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="129" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::src_ch_out__fork1_ch_in" />
-<TGConnectingPoint num="0" id="9895" />
-<TGConnectingPoint num="1" id="9896" />
-<TGConnectingPoint num="2" id="9897" />
-<TGConnectingPoint num="3" id="9898" />
-<TGConnectingPoint num="4" id="9899" />
-<TGConnectingPoint num="5" id="9900" />
-<TGConnectingPoint num="6" id="9901" />
-<TGConnectingPoint num="7" id="9902" />
-<extraparam>
-<info value="HOC_PsiChart::src_ch_out__fork1_ch_in" communicationName="src_ch_out__fork1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9912" >
-<father id="9946" num="1" />
-<cdparam x="337" y="946" />
-<sizeparam width="317" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="88" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out1__DMAsink_ch_in" />
-<TGConnectingPoint num="0" id="9904" />
-<TGConnectingPoint num="1" id="9905" />
-<TGConnectingPoint num="2" id="9906" />
-<TGConnectingPoint num="3" id="9907" />
-<TGConnectingPoint num="4" id="9908" />
-<TGConnectingPoint num="5" id="9909" />
-<TGConnectingPoint num="6" id="9910" />
-<TGConnectingPoint num="7" id="9911" />
-<extraparam>
-<info value="HOC_PsiChart::fork1_ch_out1__DMAsink_ch_in" communicationName="fork1_ch_out1__DMAsink_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="9921" >
-<father id="9946" num="2" />
-<cdparam x="336" y="1001" />
-<sizeparam width="324" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="81" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out2__DMAfork1_ch_in" />
-<TGConnectingPoint num="0" id="9913" />
-<TGConnectingPoint num="1" id="9914" />
-<TGConnectingPoint num="2" id="9915" />
-<TGConnectingPoint num="3" id="9916" />
-<TGConnectingPoint num="4" id="9917" />
-<TGConnectingPoint num="5" id="9918" />
-<TGConnectingPoint num="6" id="9919" />
-<TGConnectingPoint num="7" id="9920" />
-<extraparam>
-<info value="HOC_PsiChart::fork1_ch_out2__DMAfork1_ch_in" communicationName="fork1_ch_out2__DMAfork1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
 
 <COMPONENT type="1102" id="9971" >
 <cdparam x="126" y="708" />
@@ -27568,8 +27378,8 @@ to the application HOC_PsiChart" />
 </COMPONENT>
 
 <COMPONENT type="1105" id="10206" >
-<cdparam x="246" y="10" />
-<sizeparam width="694" height="319" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="246" y="183" />
+<sizeparam width="332" height="146" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="FEPmemory" value="name" />
@@ -27602,177 +27412,6 @@ to the application HOC_PsiChart" />
 <attributes byteDataSize="4"  clockRatio="1" />
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1103" id="10109" >
-<father id="10206" num="0" />
-<cdparam x="591" y="178" />
-<sizeparam width="288" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="406" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork3_ch_out2__cws_ch_in" />
-<TGConnectingPoint num="0" id="10101" />
-<TGConnectingPoint num="1" id="10102" />
-<TGConnectingPoint num="2" id="10103" />
-<TGConnectingPoint num="3" id="10104" />
-<TGConnectingPoint num="4" id="10105" />
-<TGConnectingPoint num="5" id="10106" />
-<TGConnectingPoint num="6" id="10107" />
-<TGConnectingPoint num="7" id="10108" />
-<extraparam>
-<info value="HOC_PsiChart::fork3_ch_out2__cws_ch_in" communicationName="fork3_ch_out2__cws_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10118" >
-<father id="10206" num="1" />
-<cdparam x="589" y="229" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="394" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork3_ch_out1__cwm1_ch_in" />
-<TGConnectingPoint num="0" id="10110" />
-<TGConnectingPoint num="1" id="10111" />
-<TGConnectingPoint num="2" id="10112" />
-<TGConnectingPoint num="3" id="10113" />
-<TGConnectingPoint num="4" id="10114" />
-<TGConnectingPoint num="5" id="10115" />
-<TGConnectingPoint num="6" id="10116" />
-<TGConnectingPoint num="7" id="10117" />
-<extraparam>
-<info value="HOC_PsiChart::fork3_ch_out1__cwm1_ch_in" communicationName="fork3_ch_out1__cwm1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10127" >
-<father id="10206" num="2" />
-<cdparam x="586" y="278" />
-<sizeparam width="316" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="378" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAfork1_ch_out__fork3_ch_in" />
-<TGConnectingPoint num="0" id="10119" />
-<TGConnectingPoint num="1" id="10120" />
-<TGConnectingPoint num="2" id="10121" />
-<TGConnectingPoint num="3" id="10122" />
-<TGConnectingPoint num="4" id="10123" />
-<TGConnectingPoint num="5" id="10124" />
-<TGConnectingPoint num="6" id="10125" />
-<TGConnectingPoint num="7" id="10126" />
-<extraparam>
-<info value="HOC_PsiChart::DMAfork1_ch_out__fork3_ch_in" communicationName="DMAfork1_ch_out__fork3_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10136" >
-<father id="10206" num="3" />
-<cdparam x="260" y="128" />
-<sizeparam width="298" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="396" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cws_ch_out__DMAcws_ch_in" />
-<TGConnectingPoint num="0" id="10128" />
-<TGConnectingPoint num="1" id="10129" />
-<TGConnectingPoint num="2" id="10130" />
-<TGConnectingPoint num="3" id="10131" />
-<TGConnectingPoint num="4" id="10132" />
-<TGConnectingPoint num="5" id="10133" />
-<TGConnectingPoint num="6" id="10134" />
-<TGConnectingPoint num="7" id="10135" />
-<extraparam>
-<info value="HOC_PsiChart::cws_ch_out__DMAcws_ch_in" communicationName="cws_ch_out__DMAcws_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10145" >
-<father id="10206" num="4" />
-<cdparam x="259" y="181" />
-<sizeparam width="292" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="402" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" />
-<TGConnectingPoint num="0" id="10137" />
-<TGConnectingPoint num="1" id="10138" />
-<TGConnectingPoint num="2" id="10139" />
-<TGConnectingPoint num="3" id="10140" />
-<TGConnectingPoint num="4" id="10141" />
-<TGConnectingPoint num="5" id="10142" />
-<TGConnectingPoint num="6" id="10143" />
-<TGConnectingPoint num="7" id="10144" />
-<extraparam>
-<info value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" communicationName="cwm1_ch_out__fork2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10154" >
-<father id="10206" num="5" />
-<cdparam x="258" y="231" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="394" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" />
-<TGConnectingPoint num="0" id="10146" />
-<TGConnectingPoint num="1" id="10147" />
-<TGConnectingPoint num="2" id="10148" />
-<TGConnectingPoint num="3" id="10149" />
-<TGConnectingPoint num="4" id="10150" />
-<TGConnectingPoint num="5" id="10151" />
-<TGConnectingPoint num="6" id="10152" />
-<TGConnectingPoint num="7" id="10153" />
-<extraparam>
-<info value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" communicationName="fork2_ch_out2__cwm2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10163" >
-<father id="10206" num="6" />
-<cdparam x="256" y="280" />
-<sizeparam width="297" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="397" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" />
-<TGConnectingPoint num="0" id="10155" />
-<TGConnectingPoint num="1" id="10156" />
-<TGConnectingPoint num="2" id="10157" />
-<TGConnectingPoint num="3" id="10158" />
-<TGConnectingPoint num="4" id="10159" />
-<TGConnectingPoint num="5" id="10160" />
-<TGConnectingPoint num="6" id="10161" />
-<TGConnectingPoint num="7" id="10162" />
-<extraparam>
-<info value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" communicationName="fork2_ch_out1__vsum_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10172" >
-<father id="10206" num="7" />
-<cdparam x="261" y="79" />
-<sizeparam width="322" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="372" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm2_ch_out__DMAcwm2_ch_in" />
-<TGConnectingPoint num="0" id="10164" />
-<TGConnectingPoint num="1" id="10165" />
-<TGConnectingPoint num="2" id="10166" />
-<TGConnectingPoint num="3" id="10167" />
-<TGConnectingPoint num="4" id="10168" />
-<TGConnectingPoint num="5" id="10169" />
-<TGConnectingPoint num="6" id="10170" />
-<TGConnectingPoint num="7" id="10171" />
-<extraparam>
-<info value="HOC_PsiChart::cwm2_ch_out__DMAcwm2_ch_in" communicationName="cwm2_ch_out__DMAcwm2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1103" id="10181" >
-<father id="10206" num="8" />
-<cdparam x="595" y="127" />
-<sizeparam width="316" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="378" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::vsum_ch_out__DMAvsum_ch_in" />
-<TGConnectingPoint num="0" id="10173" />
-<TGConnectingPoint num="1" id="10174" />
-<TGConnectingPoint num="2" id="10175" />
-<TGConnectingPoint num="3" id="10176" />
-<TGConnectingPoint num="4" id="10177" />
-<TGConnectingPoint num="5" id="10178" />
-<TGConnectingPoint num="6" id="10179" />
-<TGConnectingPoint num="7" id="10180" />
-<extraparam>
-<info value="HOC_PsiChart::vsum_ch_out__DMAvsum_ch_in" communicationName="vsum_ch_out__DMAvsum_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
-</extraparam>
-</SUBCOMPONENT>
 
 <CONNECTOR type="125" id="10207" >
 <cdparam x="819" y="496" />
@@ -27822,7 +27461,7 @@ to the application HOC_PsiChart" />
 <cdparam x="541" y="845" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from ADAIFEM_MSS to FEP_Bus" value="{info}" />
-<P1  x="406" y="841" id="9930" />
+<P1  x="392" y="841" id="9923" />
 <P2  x="313" y="758" id="9962" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -27884,17 +27523,6 @@ to the application HOC_PsiChart" />
 <info priority="0" />
 </extraparam>
 </CONNECTOR>
-<CONNECTOR type="125" id="10217" >
-<cdparam x="425" y="382" />
-<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector from FEP_MSS to FEP_Bus" value="{info}" />
-<P1  x="593" y="329" id="10188" />
-<P2  x="387" y="399" id="9761" />
-<AutomaticDrawing  data="true" />
-<extraparam>
-<info priority="0" />
-</extraparam>
-</CONNECTOR>
 <CONNECTOR type="125" id="10218" >
 <cdparam x="752" y="569" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -27910,7 +27538,7 @@ to the application HOC_PsiChart" />
 <cdparam x="1066" y="462" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="1202" y="518" id="9478" />
+<P1  x="1167" y="517" id="9478" />
 <P2  x="1167" y="544" id="9685" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -27954,7 +27582,7 @@ to the application HOC_PsiChart" />
 <cdparam x="548" y="415" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="419" y="329" id="10196" />
+<P1  x="329" y="329" id="10196" />
 <P2  x="324" y="399" id="9768" />
 <AutomaticDrawing  data="true" />
 <extraparam>
