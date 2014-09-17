@@ -93,13 +93,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private Vector<String> sdInstancesSL = new Vector<String>();
 	
 	private int indexListCPsNames = 0;
-	//private int indexListInstancesNames = 0;
-	//private int indexListArchUnitsNames = 0;
 	
 	private boolean emptyCPsList = false;
 	private boolean emptyListOfMappedUnits = true;	//true if there is no mapping info
-	//private boolean emptyInstancesList = false;
-	//private boolean emptyArchUnitsList = false;
 	
 	private boolean cancelled = false;
 	
@@ -121,8 +117,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JButton cancelButton;
 	
 	/** Creates new form  */
-	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, /*LinkedList<TMLArchiNode> _availableUnits,*/
-		Vector<String> _mappedUnits, String _name ) {
+	public JDialogReferenceCP( JFrame _frame,  String _title, TMLArchiCPNode _cp, Vector<String> _mappedUnits, String _name ) {
 	
 	super( _frame, _title, true );
 	frame = _frame;
@@ -186,7 +181,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel2.setBorder(new javax.swing.border.TitledBorder("Managing mapping"));
 			panel2.setPreferredSize(new Dimension(325, 250));
 			
-// first line panel1
+			// first line panel1
 			c1.weighty = 1.0;
 			c1.weightx = 1.0;
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -848,6 +843,10 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 								if( elem instanceof TMLSDInstance )	{
 									//TraceManager.addDev( "Found a TMLSDInstance named: " + elem.getName() );
 									sdInstancesNames.add( elem.getName() );
+									if( listCPs.get(j).getName().equals( communicationPatternsCB.getSelectedItem() ) )	{
+										//TraceManager.addDev( "Adding instance name " + elem.getName() + " to SL list" );
+										sdInstancesSL.add( elem.getName() );
+									}
 									if( elem instanceof TMLSDStorageInstance )	{
 										sdStorageInstances.add( elem.getName() );
 									}
@@ -862,7 +861,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 						}
 					}
 					listInstancesHash.add( j, sdInstancesNames );
-					sdInstancesNames = new HashSet<String>();	//better instead of using clear method
+					sdInstancesNames = new HashSet<String>();	//better than using clear method
 				}
 			}
 		}
@@ -870,9 +869,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		private Vector<String> makeListOfMappableArchUnits( int instanceType )	{
 			
 			//0 = storage, 1 = transfer, 2 = controller
-			Vector<TMLArchiPanel> listArchiPanels = cp.getTDiagramPanel().getMGUI().getTMLArchiDiagramPanels();
-			TDiagramPanel panel = listArchiPanels.get(0).getPanels().get(0);	//Do not manage the case with more than 1 architecture panel
-			LinkedList componentList = panel.getComponentList();
+			LinkedList componentList = cp.getTDiagramPanel().getComponentList();
 			Vector<String> list = new Vector<String>();
 			
 			for( int k = 0; k < componentList.size(); k++ )	{
