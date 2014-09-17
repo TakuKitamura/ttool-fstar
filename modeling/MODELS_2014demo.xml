@@ -5082,7 +5082,7 @@ algorithm. This model can be simulated and verified.
 </COMPONENT>
 
 <COMPONENT type="1105" id="1337" >
-<cdparam x="881" y="230" />
+<cdparam x="1035" y="237" />
 <sizeparam width="325" height="274" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
@@ -5118,11 +5118,11 @@ algorithm. This model can be simulated and verified.
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="1285" >
 <father id="1337" num="0" />
-<cdparam x="910" y="441" />
-<sizeparam width="277" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1064" y="448" />
+<sizeparam width="266" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="48" minY="0" maxY="234" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join1_ch_out__acc_ch_in" />
+<cdrectangleparam minX="0" maxX="59" minY="0" maxY="234" />
+<infoparam name="TGComponent" value="HOC_YChart::join1_ch_out__acc_ch_in" />
 <TGConnectingPoint num="0" id="1277" />
 <TGConnectingPoint num="1" id="1278" />
 <TGConnectingPoint num="2" id="1279" />
@@ -5132,16 +5132,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1283" />
 <TGConnectingPoint num="7" id="1284" />
 <extraparam>
-<info value="HOC_PsiChart::join1_ch_out__acc_ch_in" communicationName="join1_ch_out__acc_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::join1_ch_out__acc_ch_in" communicationName="join1_ch_out__acc_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1294" >
 <father id="1337" num="1" />
-<cdparam x="886" y="384" />
-<sizeparam width="303" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1049" y="390" />
+<sizeparam width="292" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="22" minY="0" maxY="234" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out3__join2_ch_in2" />
+<cdrectangleparam minX="0" maxX="33" minY="0" maxY="234" />
+<infoparam name="TGComponent" value="HOC_YChart::fork1_ch_out3__join2_ch_in2" />
 <TGConnectingPoint num="0" id="1286" />
 <TGConnectingPoint num="1" id="1287" />
 <TGConnectingPoint num="2" id="1288" />
@@ -5151,16 +5151,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1292" />
 <TGConnectingPoint num="7" id="1293" />
 <extraparam>
-<info value="HOC_PsiChart::fork1_ch_out3__join2_ch_in2" communicationName="fork1_ch_out3__join2_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::fork1_ch_out3__join2_ch_in2" communicationName="fork1_ch_out3__join2_ch_in2" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1303" >
 <father id="1337" num="2" />
-<cdparam x="904" y="334" />
-<sizeparam width="285" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1058" y="341" />
+<sizeparam width="274" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="40" minY="0" maxY="234" />
-<infoparam name="TGComponent" value="HOC_PsiChart::acc_ch_out__join2_ch_in1" />
+<cdrectangleparam minX="0" maxX="51" minY="0" maxY="234" />
+<infoparam name="TGComponent" value="HOC_YChart::acc_ch_out__join2_ch_in1" />
 <TGConnectingPoint num="0" id="1295" />
 <TGConnectingPoint num="1" id="1296" />
 <TGConnectingPoint num="2" id="1297" />
@@ -5170,16 +5170,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1301" />
 <TGConnectingPoint num="7" id="1302" />
 <extraparam>
-<info value="HOC_PsiChart::acc_ch_out__join2_ch_in1" communicationName="acc_ch_out__join2_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::acc_ch_out__join2_ch_in1" communicationName="acc_ch_out__join2_ch_in1" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1312" >
 <father id="1337" num="3" />
-<cdparam x="909" y="282" />
-<sizeparam width="280" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1063" y="289" />
+<sizeparam width="269" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="45" minY="0" maxY="234" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join2_ch_out__sink_ch_in" />
+<cdrectangleparam minX="0" maxX="56" minY="0" maxY="234" />
+<infoparam name="TGComponent" value="HOC_YChart::join2_ch_out__sink_ch_in" />
 <TGConnectingPoint num="0" id="1304" />
 <TGConnectingPoint num="1" id="1305" />
 <TGConnectingPoint num="2" id="1306" />
@@ -5189,13 +5189,13 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1310" />
 <TGConnectingPoint num="7" id="1311" />
 <extraparam>
-<info value="HOC_PsiChart::join2_ch_out__sink_ch_in" communicationName="join2_ch_out__sink_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::join2_ch_out__sink_ch_in" communicationName="join2_ch_out__sink_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="1100" id="1470" >
-<cdparam x="807" y="669" />
-<sizeparam width="472" height="295" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="767" y="669" />
+<sizeparam width="553" height="295" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="MAINcpu" value="name" />
@@ -5230,11 +5230,11 @@ algorithm. This model can be simulated and verified.
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1346" >
 <father id="1470" num="0" />
-<cdparam x="822" y="726" />
-<sizeparam width="154" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="782" y="726" />
+<sizeparam width="143" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="318" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::SINK" />
+<cdrectangleparam minX="0" maxX="410" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::SINK" />
 <TGConnectingPoint num="0" id="1338" />
 <TGConnectingPoint num="1" id="1339" />
 <TGConnectingPoint num="2" id="1340" />
@@ -5244,16 +5244,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1344" />
 <TGConnectingPoint num="7" id="1345" />
 <extraparam>
-<info value="HOC_PsiChart::SINK" taskName="SINK" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::SINK" taskName="SINK" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1355" >
 <father id="1470" num="1" />
-<cdparam x="822" y="786" />
-<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="782" y="786" />
+<sizeparam width="152" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="309" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cws" />
+<cdrectangleparam minX="0" maxX="401" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_cws" />
 <TGConnectingPoint num="0" id="1347" />
 <TGConnectingPoint num="1" id="1348" />
 <TGConnectingPoint num="2" id="1349" />
@@ -5263,16 +5263,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1353" />
 <TGConnectingPoint num="7" id="1354" />
 <extraparam>
-<info value="HOC_PsiChart::F_cws" taskName="F_cws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_cws" taskName="F_cws" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1364" >
 <father id="1470" num="2" />
-<cdparam x="817" y="845" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="777" y="845" />
+<sizeparam width="148" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="313" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_src" />
+<cdrectangleparam minX="0" maxX="405" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_src" />
 <TGConnectingPoint num="0" id="1356" />
 <TGConnectingPoint num="1" id="1357" />
 <TGConnectingPoint num="2" id="1358" />
@@ -5282,16 +5282,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1362" />
 <TGConnectingPoint num="7" id="1363" />
 <extraparam>
-<info value="HOC_PsiChart::F_src" taskName="F_src" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_src" taskName="F_src" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1373" >
 <father id="1470" num="3" />
-<cdparam x="821" y="901" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="781" y="901" />
+<sizeparam width="151" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="310" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_acc" />
+<cdrectangleparam minX="0" maxX="402" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::X_acc" />
 <TGConnectingPoint num="0" id="1365" />
 <TGConnectingPoint num="1" id="1366" />
 <TGConnectingPoint num="2" id="1367" />
@@ -5301,16 +5301,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1371" />
 <TGConnectingPoint num="7" id="1372" />
 <extraparam>
-<info value="HOC_PsiChart::X_acc" taskName="X_acc" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_acc" taskName="X_acc" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1382" >
 <father id="1470" num="4" />
-<cdparam x="963" y="902" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="960" y="910" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="297" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cwm2" />
+<cdrectangleparam minX="0" maxX="389" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_cwm2" />
 <TGConnectingPoint num="0" id="1374" />
 <TGConnectingPoint num="1" id="1375" />
 <TGConnectingPoint num="2" id="1376" />
@@ -5320,16 +5320,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1380" />
 <TGConnectingPoint num="7" id="1381" />
 <extraparam>
-<info value="HOC_PsiChart::F_cwm2" taskName="F_cwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_cwm2" taskName="F_cwm2" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1391" >
 <father id="1470" num="5" />
-<cdparam x="961" y="843" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="946" y="849" />
+<sizeparam width="151" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="310" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_acc" />
+<cdrectangleparam minX="0" maxX="402" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_acc" />
 <TGConnectingPoint num="0" id="1383" />
 <TGConnectingPoint num="1" id="1384" />
 <TGConnectingPoint num="2" id="1385" />
@@ -5339,16 +5339,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1389" />
 <TGConnectingPoint num="7" id="1390" />
 <extraparam>
-<info value="HOC_PsiChart::F_acc" taskName="F_acc" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_acc" taskName="F_acc" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1400" >
 <father id="1470" num="6" />
-<cdparam x="969" y="717" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="958" y="724" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="297" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cwm1" />
+<cdrectangleparam minX="0" maxX="389" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_cwm1" />
 <TGConnectingPoint num="0" id="1392" />
 <TGConnectingPoint num="1" id="1393" />
 <TGConnectingPoint num="2" id="1394" />
@@ -5358,16 +5358,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1398" />
 <TGConnectingPoint num="7" id="1399" />
 <extraparam>
-<info value="HOC_PsiChart::F_cwm1" taskName="F_cwm1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_cwm1" taskName="F_cwm1" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1409" >
 <father id="1470" num="7" />
-<cdparam x="973" y="783" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="958" y="786" />
+<sizeparam width="161" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="300" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_vsum" />
+<cdrectangleparam minX="0" maxX="392" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::F_vsum" />
 <TGConnectingPoint num="0" id="1401" />
 <TGConnectingPoint num="1" id="1402" />
 <TGConnectingPoint num="2" id="1403" />
@@ -5377,16 +5377,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1407" />
 <TGConnectingPoint num="7" id="1408" />
 <extraparam>
-<info value="HOC_PsiChart::F_vsum" taskName="F_vsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::F_vsum" taskName="F_vsum" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1418" >
 <father id="1470" num="8" />
-<cdparam x="1122" y="779" />
-<sizeparam width="157" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1141" y="788" />
+<sizeparam width="148" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="315" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join2" />
+<cdrectangleparam minX="0" maxX="405" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::fork1" />
 <TGConnectingPoint num="0" id="1410" />
 <TGConnectingPoint num="1" id="1411" />
 <TGConnectingPoint num="2" id="1412" />
@@ -5396,16 +5396,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1416" />
 <TGConnectingPoint num="7" id="1417" />
 <extraparam>
-<info value="HOC_PsiChart::join2" taskName="join2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::fork1" taskName="fork1" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1427" >
 <father id="1470" num="9" />
-<cdparam x="1120" y="840" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1125" y="843" />
+<sizeparam width="146" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="313" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1" />
+<cdrectangleparam minX="0" maxX="407" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::join2" />
 <TGConnectingPoint num="0" id="1419" />
 <TGConnectingPoint num="1" id="1420" />
 <TGConnectingPoint num="2" id="1421" />
@@ -5415,16 +5415,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1425" />
 <TGConnectingPoint num="7" id="1426" />
 <extraparam>
-<info value="HOC_PsiChart::fork1" taskName="fork1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::join2" taskName="join2" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1436" >
 <father id="1470" num="10" />
-<cdparam x="1120" y="902" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1144" y="910" />
+<sizeparam width="146" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="313" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2" />
+<cdrectangleparam minX="0" maxX="407" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::join1" />
 <TGConnectingPoint num="0" id="1428" />
 <TGConnectingPoint num="1" id="1429" />
 <TGConnectingPoint num="2" id="1430" />
@@ -5434,16 +5434,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1434" />
 <TGConnectingPoint num="7" id="1435" />
 <extraparam>
-<info value="HOC_PsiChart::fork2" taskName="fork2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::join1" taskName="join1" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1445" >
 <father id="1470" num="11" />
-<cdparam x="1122" y="715" />
-<sizeparam width="157" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1147" y="720" />
+<sizeparam width="148" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="315" minY="0" maxY="255" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join1" />
+<cdrectangleparam minX="0" maxX="405" minY="0" maxY="255" />
+<infoparam name="TGComponent" value="HOC_YChart::fork2" />
 <TGConnectingPoint num="0" id="1437" />
 <TGConnectingPoint num="1" id="1438" />
 <TGConnectingPoint num="2" id="1439" />
@@ -5453,7 +5453,7 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1443" />
 <TGConnectingPoint num="7" id="1444" />
 <extraparam>
-<info value="HOC_PsiChart::join1" taskName="join1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::fork2" taskName="fork2" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5603,7 +5603,7 @@ algorithm. This model can be simulated and verified.
 
 <COMPONENT type="1105" id="1667" >
 <cdparam x="275" y="79" />
-<sizeparam width="579" height="262" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="737" height="262" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="FEPmemory" value="name" />
@@ -5638,11 +5638,11 @@ algorithm. This model can be simulated and verified.
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="1579" >
 <father id="1667" num="0" />
-<cdparam x="537" y="180" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="613" y="183" />
+<sizeparam width="289" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="279" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" />
+<cdrectangleparam minX="0" maxX="448" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::fork2_ch_out2__cwm2_ch_in" />
 <TGConnectingPoint num="0" id="1571" />
 <TGConnectingPoint num="1" id="1572" />
 <TGConnectingPoint num="2" id="1573" />
@@ -5652,16 +5652,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1577" />
 <TGConnectingPoint num="7" id="1578" />
 <extraparam>
-<info value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" communicationName="fork2_ch_out2__cwm2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::fork2_ch_out2__cwm2_ch_in" communicationName="fork2_ch_out2__cwm2_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1588" >
 <father id="1667" num="1" />
-<cdparam x="540" y="234" />
-<sizeparam width="297" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="614" y="235" />
+<sizeparam width="286" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="282" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" />
+<cdrectangleparam minX="0" maxX="451" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::fork2_ch_out1__vsum_ch_in" />
 <TGConnectingPoint num="0" id="1580" />
 <TGConnectingPoint num="1" id="1581" />
 <TGConnectingPoint num="2" id="1582" />
@@ -5671,16 +5671,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1586" />
 <TGConnectingPoint num="7" id="1587" />
 <extraparam>
-<info value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" communicationName="fork2_ch_out1__vsum_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::fork2_ch_out1__vsum_ch_in" communicationName="fork2_ch_out1__vsum_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1597" >
 <father id="1667" num="2" />
 <cdparam x="290" y="284" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="289" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="279" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out1__cwm1_ch_in" />
+<cdrectangleparam minX="0" maxX="448" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::fork1_ch_out1__cwm1_ch_in" />
 <TGConnectingPoint num="0" id="1589" />
 <TGConnectingPoint num="1" id="1590" />
 <TGConnectingPoint num="2" id="1591" />
@@ -5690,16 +5690,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1595" />
 <TGConnectingPoint num="7" id="1596" />
 <extraparam>
-<info value="HOC_PsiChart::fork1_ch_out1__cwm1_ch_in" communicationName="fork1_ch_out1__cwm1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::fork1_ch_out1__cwm1_ch_in" communicationName="fork1_ch_out1__cwm1_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1606" >
 <father id="1667" num="3" />
 <cdparam x="291" y="180" />
-<sizeparam width="288" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="277" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="291" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out2__cws_ch_in" />
+<cdrectangleparam minX="0" maxX="460" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::fork1_ch_out2__cws_ch_in" />
 <TGConnectingPoint num="0" id="1598" />
 <TGConnectingPoint num="1" id="1599" />
 <TGConnectingPoint num="2" id="1600" />
@@ -5709,16 +5709,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1604" />
 <TGConnectingPoint num="7" id="1605" />
 <extraparam>
-<info value="HOC_PsiChart::fork1_ch_out2__cws_ch_in" communicationName="fork1_ch_out2__cws_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::fork1_ch_out2__cws_ch_in" communicationName="fork1_ch_out2__cws_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1615" >
 <father id="1667" num="4" />
-<cdparam x="542" y="284" />
-<sizeparam width="295" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="614" y="287" />
+<sizeparam width="284" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="284" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::vsum_ch_out__join1_ch_in1" />
+<cdrectangleparam minX="0" maxX="453" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::vsum_ch_out__join1_ch_in1" />
 <TGConnectingPoint num="0" id="1607" />
 <TGConnectingPoint num="1" id="1608" />
 <TGConnectingPoint num="2" id="1609" />
@@ -5728,16 +5728,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1613" />
 <TGConnectingPoint num="7" id="1614" />
 <extraparam>
-<info value="HOC_PsiChart::vsum_ch_out__join1_ch_in1" communicationName="vsum_ch_out__join1_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::vsum_ch_out__join1_ch_in1" communicationName="vsum_ch_out__join1_ch_in1" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1624" >
 <father id="1667" num="5" />
 <cdparam x="291" y="231" />
-<sizeparam width="292" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="281" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="287" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" />
+<cdrectangleparam minX="0" maxX="456" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::cwm1_ch_out__fork2_ch_in" />
 <TGConnectingPoint num="0" id="1616" />
 <TGConnectingPoint num="1" id="1617" />
 <TGConnectingPoint num="2" id="1618" />
@@ -5747,16 +5747,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1622" />
 <TGConnectingPoint num="7" id="1623" />
 <extraparam>
-<info value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" communicationName="cwm1_ch_out__fork2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::cwm1_ch_out__fork2_ch_in" communicationName="cwm1_ch_out__fork2_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1633" >
 <father id="1667" num="6" />
-<cdparam x="539" y="130" />
-<sizeparam width="298" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="612" y="128" />
+<sizeparam width="287" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="281" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm2_ch_out__join1_ch_in2" />
+<cdrectangleparam minX="0" maxX="450" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::cwm2_ch_out__join1_ch_in2" />
 <TGConnectingPoint num="0" id="1625" />
 <TGConnectingPoint num="1" id="1626" />
 <TGConnectingPoint num="2" id="1627" />
@@ -5766,16 +5766,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1631" />
 <TGConnectingPoint num="7" id="1632" />
 <extraparam>
-<info value="HOC_PsiChart::cwm2_ch_out__join1_ch_in2" communicationName="cwm2_ch_out__join1_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::cwm2_ch_out__join1_ch_in2" communicationName="cwm2_ch_out__join1_ch_in2" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="1642" >
 <father id="1667" num="7" />
 <cdparam x="290" y="130" />
-<sizeparam width="286" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="275" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="293" minY="0" maxY="222" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cws_ch_out__join1_ch_in3" />
+<cdrectangleparam minX="0" maxX="462" minY="0" maxY="222" />
+<infoparam name="TGComponent" value="HOC_YChart::cws_ch_out__join1_ch_in3" />
 <TGConnectingPoint num="0" id="1634" />
 <TGConnectingPoint num="1" id="1635" />
 <TGConnectingPoint num="2" id="1636" />
@@ -5785,7 +5785,7 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1640" />
 <TGConnectingPoint num="7" id="1641" />
 <extraparam>
-<info value="HOC_PsiChart::cws_ch_out__join1_ch_in3" communicationName="cws_ch_out__join1_ch_in3" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::cws_ch_out__join1_ch_in3" communicationName="cws_ch_out__join1_ch_in3" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -5863,10 +5863,10 @@ algorithm. This model can be simulated and verified.
 <SUBCOMPONENT type="1101" id="1701" >
 <father id="1753" num="0" />
 <cdparam x="36" y="241" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="36" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cwm2" />
+<cdrectangleparam minX="0" maxX="47" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChart::X_cwm2" />
 <TGConnectingPoint num="0" id="1693" />
 <TGConnectingPoint num="1" id="1694" />
 <TGConnectingPoint num="2" id="1695" />
@@ -5876,16 +5876,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1699" />
 <TGConnectingPoint num="7" id="1700" />
 <extraparam>
-<info value="HOC_PsiChart::X_cwm2" taskName="X_cwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_cwm2" taskName="X_cwm2" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1710" >
 <father id="1753" num="1" />
 <cdparam x="40" y="142" />
-<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="152" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="48" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cws" />
+<cdrectangleparam minX="0" maxX="59" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChart::X_cws" />
 <TGConnectingPoint num="0" id="1702" />
 <TGConnectingPoint num="1" id="1703" />
 <TGConnectingPoint num="2" id="1704" />
@@ -5895,16 +5895,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1708" />
 <TGConnectingPoint num="7" id="1709" />
 <extraparam>
-<info value="HOC_PsiChart::X_cws" taskName="X_cws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_cws" taskName="X_cws" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1719" >
 <father id="1753" num="2" />
 <cdparam x="36" y="192" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="36" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cwm1" />
+<cdrectangleparam minX="0" maxX="47" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChart::X_cwm1" />
 <TGConnectingPoint num="0" id="1711" />
 <TGConnectingPoint num="1" id="1712" />
 <TGConnectingPoint num="2" id="1713" />
@@ -5914,16 +5914,16 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1717" />
 <TGConnectingPoint num="7" id="1718" />
 <extraparam>
-<info value="HOC_PsiChart::X_cwm1" taskName="X_cwm1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_cwm1" taskName="X_cwm1" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="1728" >
 <father id="1753" num="3" />
 <cdparam x="36" y="291" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="161" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="39" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_vsum" />
+<cdrectangleparam minX="0" maxX="50" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChart::X_vsum" />
 <TGConnectingPoint num="0" id="1720" />
 <TGConnectingPoint num="1" id="1721" />
 <TGConnectingPoint num="2" id="1722" />
@@ -5933,7 +5933,7 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1726" />
 <TGConnectingPoint num="7" id="1727" />
 <extraparam>
-<info value="HOC_PsiChart::X_vsum" taskName="X_vsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_vsum" taskName="X_vsum" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6047,10 +6047,10 @@ algorithm. This model can be simulated and verified.
 <SUBCOMPONENT type="1103" id="1812" >
 <father id="1837" num="0" />
 <cdparam x="314" y="890" />
-<sizeparam width="276" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="265" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="26" minY="0" maxY="98" />
-<infoparam name="TGComponent" value="HOC_PsiChart::src_ch_out__fork1_ch_in" />
+<cdrectangleparam minX="0" maxX="37" minY="0" maxY="98" />
+<infoparam name="TGComponent" value="HOC_YChart::src_ch_out__fork1_ch_in" />
 <TGConnectingPoint num="0" id="1804" />
 <TGConnectingPoint num="1" id="1805" />
 <TGConnectingPoint num="2" id="1806" />
@@ -6060,7 +6060,7 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1810" />
 <TGConnectingPoint num="7" id="1811" />
 <extraparam>
-<info value="HOC_PsiChart::src_ch_out__fork1_ch_in" communicationName="src_ch_out__fork1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChart::src_ch_out__fork1_ch_in" communicationName="src_ch_out__fork1_ch_in" referenceCommunicationName="HOC_YChart" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6137,11 +6137,11 @@ algorithm. This model can be simulated and verified.
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1871" >
 <father id="1896" num="0" />
-<cdparam x="61" y="885" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="52" y="885" />
+<sizeparam width="148" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="20" minY="0" maxY="110" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_src" />
+<cdrectangleparam minX="0" maxX="31" minY="0" maxY="110" />
+<infoparam name="TGComponent" value="HOC_YChart::X_src" />
 <TGConnectingPoint num="0" id="1863" />
 <TGConnectingPoint num="1" id="1864" />
 <TGConnectingPoint num="2" id="1865" />
@@ -6151,7 +6151,7 @@ algorithm. This model can be simulated and verified.
 <TGConnectingPoint num="6" id="1869" />
 <TGConnectingPoint num="7" id="1870" />
 <extraparam>
-<info value="HOC_PsiChart::X_src" taskName="X_src" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChart::X_src" taskName="X_src" referenceTaskName="HOC_YChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -6247,7 +6247,7 @@ algorithm. This model can be simulated and verified.
 <cdparam x="425" y="382" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from FEP_MSS to FEP_Bus" value="{info}" />
-<P1  x="564" y="341" id="1649" />
+<P1  x="643" y="341" id="1649" />
 <P2  x="387" y="399" id="1670" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -6269,7 +6269,7 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1066" y="462" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="1043" y="504" id="1319" />
+<P1  x="1197" y="511" id="1319" />
 <P2  x="1043" y="544" id="1472" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -6313,7 +6313,7 @@ algorithm. This model can be simulated and verified.
 <cdparam x="548" y="415" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="419" y="341" id="1657" />
+<P1  x="459" y="341" id="1657" />
 <P2  x="324" y="399" id="1677" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -6356,8 +6356,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1504" y="267" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1499" y="262" id="2921" />
-<P2  x="1619" y="382" id="2569" />
+<P1  x="1504" y="267" id="2921" />
+<P2  x="1613" y="388" id="2569" />
 <Point x="1578" y="267" />
 <Point x="1578" y="388" />
 <AutomaticDrawing  data="true" />
@@ -6382,8 +6382,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="297" y="345" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="290" y="338" id="2515" />
-<P2  x="353" y="379" id="3243" />
+<P1  x="297" y="344" id="2515" />
+<P2  x="348" y="384" id="3243" />
 <Point x="325" y="344" />
 <Point x="325" y="384" />
 <AutomaticDrawing  data="true" />
@@ -6408,8 +6408,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1094" y="465" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1089" y="483" id="3181" />
-<P2  x="1672" y="437" id="2557" />
+<P1  x="1094" y="488" id="3181" />
+<P2  x="1672" y="450" id="2557" />
 <Point x="1672" y="487" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1920" >
@@ -6425,8 +6425,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1094" y="550" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1089" y="531" id="3143" />
-<P2  x="1698" y="437" id="2565" />
+<P1  x="1094" y="536" id="3143" />
+<P2  x="1698" y="450" id="2565" />
 <Point x="1698" y="535" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1922" >
@@ -6442,7 +6442,7 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1505" y="147" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1499" y="142" id="2998" />
+<P1  x="1504" y="147" id="2998" />
 <P2  x="1700" y="352" id="2563" />
 <Point x="1701" y="147" />
 <AutomaticDrawing  data="true" />
@@ -6459,24 +6459,24 @@ algorithm. This model can be simulated and verified.
 <cdparam x="488" y="371" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="482" y="368" id="3300" />
-<P2  x="546" y="367" id="3347" />
+<P1  x="487" y="373" id="3300" />
+<P2  x="540" y="373" id="3347" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1927" >
 <cdparam x="488" y="319" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="482" y="316" id="3262" />
-<P2  x="546" y="315" id="3349" />
+<P1  x="487" y="321" id="3262" />
+<P2  x="540" y="321" id="3349" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1929" >
 <cdparam x="604" y="395" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="603" y="381" id="3353" />
-<P2  x="741" y="457" id="2672" />
+<P1  x="603" y="394" id="3353" />
+<P2  x="736" y="462" id="2672" />
 <Point x="603" y="462" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1928" >
@@ -6492,8 +6492,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="633" y="395" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="632" y="381" id="3343" />
-<P2  x="741" y="542" id="2710" />
+<P1  x="632" y="394" id="3343" />
+<P2  x="736" y="547" id="2710" />
 <Point x="632" y="546" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1930" >
@@ -6510,7 +6510,7 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
 <P1  x="608" y="296" id="3351" />
-<P2  x="736" y="200" id="2255" />
+<P2  x="730" y="206" id="2255" />
 <Point x="608" y="206" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1932" >
@@ -6527,7 +6527,7 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
 <P1  x="631" y="296" id="3345" />
-<P2  x="736" y="276" id="2202" />
+<P2  x="731" y="281" id="2202" />
 <Point x="631" y="281" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1934" >
@@ -6543,16 +6543,16 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1091" y="466" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1065" y="479" id="3113" />
-<P2  x="1089" y="493" id="3186" />
+<P1  x="1069" y="483" id="3113" />
+<P2  x="1084" y="488" id="3186" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1937" >
 <cdparam x="1088" y="548" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1061" y="545" id="3128" />
-<P2  x="1089" y="541" id="3148" />
+<P1  x="1065" y="549" id="3128" />
+<P2  x="1084" y="536" id="3148" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1938" >
@@ -6560,47 +6560,47 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1022" y="516" id="3130" />
-<P2  x="1003" y="496" id="3115" />
+<P2  x="1003" y="504" id="3115" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1939" >
 <cdparam x="996" y="547" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="977" y="545" id="3132" />
-<P2  x="960" y="554" id="3205" />
+<P1  x="973" y="549" id="3132" />
+<P2  x="965" y="549" id="3205" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1940" >
 <cdparam x="1000" y="465" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="982" y="459" id="3117" />
-<P2  x="960" y="470" id="3167" />
+<P1  x="978" y="463" id="3117" />
+<P2  x="965" y="465" id="3167" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1941" >
 <cdparam x="876" y="548" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Composite port" value="Connector between ports" />
-<P1  x="870" y="544" id="2653" />
-<P2  x="960" y="544" id="3200" />
+<P1  x="875" y="549" id="2653" />
+<P2  x="955" y="549" id="3200" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1942" >
 <cdparam x="876" y="465" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Composite port" value="Connector between ports" />
-<P1  x="870" y="460" id="2691" />
-<P2  x="960" y="460" id="3162" />
+<P1  x="875" y="465" id="2691" />
+<P2  x="955" y="465" id="3162" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1946" >
 <cdparam x="995" y="289" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="995" y="276" id="3374" />
-<P2  x="1146" y="285" id="2140" />
+<P1  x="995" y="289" id="3374" />
+<P2  x="1141" y="290" id="2140" />
 <Point x="995" y="311" />
 <Point x="1118" y="311" />
 <Point x="1118" y="290" />
@@ -6634,8 +6634,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1024" y="289" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1024" y="276" id="3372" />
-<P2  x="1146" y="341" id="2102" />
+<P1  x="1024" y="289" id="3372" />
+<P2  x="1141" y="346" id="2102" />
 <Point x="1024" y="346" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1947" >
@@ -6651,24 +6651,24 @@ algorithm. This model can be simulated and verified.
 <cdparam x="885" y="289" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="736" y="213" id="2260" />
-<P2  x="756" y="202" id="2170" />
+<P1  x="743" y="206" id="2260" />
+<P2  x="752" y="206" id="2170" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1950" >
 <cdparam x="466" y="528" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="290" y="293" id="2521" />
-<P2  x="353" y="295" id="3281" />
+<P1  x="297" y="299" id="2521" />
+<P2  x="348" y="300" id="3281" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1953" >
 <cdparam x="1639" y="550" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1499" y="346" id="2883" />
-<P2  x="1619" y="424" id="2567" />
+<P1  x="1504" y="351" id="2883" />
+<P2  x="1613" y="430" id="2567" />
 <Point x="1539" y="351" />
 <Point x="1539" y="430" />
 <AutomaticDrawing  data="true" />
@@ -6694,46 +6694,46 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1434" y="319" id="2978" />
-<P2  x="1410" y="300" id="2963" />
+<P2  x="1410" y="308" id="2963" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1955" >
 <cdparam x="2132" y="540" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1474" y="348" id="2976" />
-<P2  x="1499" y="356" id="2888" />
+<P1  x="1478" y="352" id="2976" />
+<P2  x="1494" y="351" id="2888" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1956" >
 <cdparam x="2131" y="408" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1473" y="263" id="2961" />
-<P2  x="1499" y="272" id="2926" />
+<P1  x="1477" y="267" id="2961" />
+<P2  x="1494" y="267" id="2926" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1957" >
 <cdparam x="1971" y="538" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1370" y="353" id="2945" />
-<P2  x="1390" y="344" id="2974" />
+<P1  x="1375" y="348" id="2945" />
+<P2  x="1386" y="348" id="2974" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1958" >
 <cdparam x="1971" y="422" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1370" y="281" id="2907" />
-<P2  x="1390" y="272" id="2959" />
+<P1  x="1375" y="276" id="2907" />
+<P2  x="1386" y="276" id="2959" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1960" >
 <cdparam x="1647" y="101" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1499" y="57" id="3066" />
+<P1  x="1504" y="62" id="3066" />
 <P2  x="1659" y="352" id="2555" />
 <Point x="1660" y="62" />
 <AutomaticDrawing  data="true" />
@@ -6750,16 +6750,16 @@ algorithm. This model can be simulated and verified.
 <cdparam x="2209" y="230" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1474" y="143" id="3021" />
-<P2  x="1499" y="152" id="3003" />
+<P1  x="1478" y="147" id="3021" />
+<P2  x="1494" y="147" id="3003" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1962" >
 <cdparam x="2208" y="98" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1473" y="58" id="3036" />
-<P2  x="1499" y="67" id="3071" />
+<P1  x="1477" y="62" id="3036" />
+<P2  x="1494" y="62" id="3071" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1963" >
@@ -6767,31 +6767,31 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1435" y="114" id="3019" />
-<P2  x="1411" y="95" id="3034" />
+<P2  x="1411" y="103" id="3034" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1964" >
 <cdparam x="2048" y="228" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1370" y="150" id="3052" />
-<P2  x="1390" y="142" id="3017" />
+<P1  x="1375" y="145" id="3052" />
+<P2  x="1386" y="146" id="3017" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1965" >
 <cdparam x="2048" y="112" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1370" y="76" id="3090" />
-<P2  x="1390" y="67" id="3032" />
+<P1  x="1375" y="71" id="3090" />
+<P2  x="1386" y="71" id="3032" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1967" >
 <cdparam x="1969" y="1066" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1363" y="675" id="2768" />
-<P2  x="2071" y="531" id="2534" />
+<P1  x="1368" y="680" id="2768" />
+<P2  x="2071" y="544" id="2534" />
 <Point x="2072" y="682" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1966" >
@@ -6807,8 +6807,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1969" y="934" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1363" y="591" id="2806" />
-<P2  x="2042" y="531" id="2542" />
+<P1  x="1368" y="596" id="2806" />
+<P2  x="2042" y="544" id="2542" />
 <Point x="2042" y="596" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1968" >
@@ -6824,8 +6824,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1924" y="1066" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1338" y="677" id="2861" />
-<P2  x="1363" y="685" id="2773" />
+<P1  x="1342" y="681" id="2861" />
+<P2  x="1358" y="680" id="2773" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1971" >
@@ -6833,63 +6833,63 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1298" y="648" id="2863" />
-<P2  x="1275" y="629" id="2848" />
+<P2  x="1275" y="637" id="2848" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1972" >
 <cdparam x="1766" y="1065" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1234" y="685" id="2830" />
-<P2  x="1254" y="676" id="2859" />
+<P1  x="1239" y="680" id="2830" />
+<P2  x="1250" y="680" id="2859" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1973" >
 <cdparam x="1926" y="934" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1337" y="592" id="2846" />
-<P2  x="1363" y="601" id="2811" />
+<P1  x="1341" y="596" id="2846" />
+<P2  x="1358" y="596" id="2811" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1974" >
 <cdparam x="1766" y="933" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1234" y="618" id="2792" />
-<P2  x="1254" y="609" id="2844" />
+<P1  x="1239" y="613" id="2792" />
+<P2  x="1250" y="613" id="2844" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1975" >
 <cdparam x="533" y="802" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="371" y="380" id="3321" />
-<P2  x="353" y="389" id="3248" />
+<P1  x="367" y="384" id="3321" />
+<P2  x="358" y="384" id="3248" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1976" >
 <cdparam x="677" y="803" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="455" y="369" id="3319" />
-<P2  x="482" y="378" id="3305" />
+<P1  x="459" y="373" id="3319" />
+<P2  x="477" y="373" id="3305" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1977" >
 <cdparam x="679" y="674" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="456" y="318" id="3228" />
-<P2  x="482" y="326" id="3267" />
+<P1  x="460" y="322" id="3228" />
+<P2  x="477" y="321" id="3267" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1978" >
 <cdparam x="519" y="670" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="353" y="305" id="3286" />
-<P2  x="373" y="296" id="3230" />
+<P1  x="358" y="300" id="3286" />
+<P2  x="369" y="300" id="3230" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1979" >
@@ -6897,23 +6897,23 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="416" y="352" id="3323" />
-<P2  x="394" y="333" id="3232" />
+<P2  x="394" y="341" id="3232" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1980" >
 <cdparam x="2534" y="649" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1741" y="366" id="2559" />
-<P2  x="1813" y="368" id="2451" />
+<P1  x="1748" y="372" id="2559" />
+<P2  x="1808" y="373" id="2451" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1981" >
 <cdparam x="770" y="477" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="865" y="261" id="2221" />
-<P2  x="937" y="260" id="3368" />
+<P1  x="870" y="266" id="2221" />
+<P2  x="931" y="266" id="3368" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1982" >
@@ -6921,39 +6921,39 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="77" y="339" id="2580" />
-<P2  x="36" y="325" id="2593" />
+<P2  x="36" y="338" id="2593" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1983" >
 <cdparam x="221" y="583" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="135" y="344" id="2625" />
-<P2  x="168" y="343" id="2517" />
+<P1  x="140" y="349" id="2625" />
+<P2  x="162" y="349" id="2517" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1984" >
 <cdparam x="221" y="453" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="135" y="306" id="2606" />
-<P2  x="168" y="305" id="2519" />
+<P1  x="140" y="311" id="2606" />
+<P2  x="162" y="311" id="2519" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1985" >
 <cdparam x="245" y="934" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="119" y="350" id="2582" />
-<P2  x="135" y="354" id="2630" />
+<P1  x="126" y="356" id="2582" />
+<P2  x="130" y="349" id="2630" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1986" >
 <cdparam x="245" y="924" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="118" y="305" id="2595" />
-<P2  x="135" y="316" id="2611" />
+<P1  x="125" y="311" id="2595" />
+<P2  x="130" y="311" id="2611" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1987" >
@@ -6961,14 +6961,14 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1213" y="315" id="2072" />
-<P2  x="1177" y="296" id="2055" />
+<P2  x="1177" y="304" id="2055" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1989" >
 <cdparam x="2461" y="696" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1941" y="428" id="2470" />
+<P1  x="1946" y="433" id="2470" />
 <P2  x="2017" y="446" id="2538" />
 <Point x="2017" y="433" />
 <AutomaticDrawing  data="true" />
@@ -6985,7 +6985,7 @@ algorithm. This model can be simulated and verified.
 <cdparam x="2461" y="580" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1941" y="366" id="2432" />
+<P1  x="1946" y="371" id="2432" />
 <P2  x="2071" y="446" id="2540" />
 <Point x="2071" y="371" />
 <AutomaticDrawing  data="true" />
@@ -7002,8 +7002,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="342" y="573" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="218" y="354" id="2513" />
-<P2  x="1234" y="675" id="2825" />
+<P1  x="218" y="367" id="2513" />
+<P2  x="1229" y="680" id="2825" />
 <Point x="218" y="682" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1992" >
@@ -7019,8 +7019,8 @@ algorithm. This model can be simulated and verified.
 <cdparam x="308" y="573" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="196" y="354" id="2523" />
-<P2  x="1234" y="608" id="2787" />
+<P1  x="196" y="367" id="2523" />
+<P2  x="1229" y="613" id="2787" />
 <Point x="197" y="613" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1994" >
@@ -7036,32 +7036,32 @@ algorithm. This model can be simulated and verified.
 <cdparam x="1848" y="545" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1275" y="343" id="2083" />
-<P2  x="1370" y="343" id="2940" />
+<P1  x="1280" y="348" id="2083" />
+<P2  x="1365" y="348" id="2940" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1997" >
 <cdparam x="1848" y="432" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1275" y="271" id="2121" />
-<P2  x="1370" y="271" id="2902" />
+<P1  x="1280" y="276" id="2121" />
+<P2  x="1365" y="276" id="2902" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1998" >
 <cdparam x="1885" y="228" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1273" y="140" id="2313" />
-<P2  x="1370" y="140" id="3047" />
+<P1  x="1278" y="145" id="2313" />
+<P2  x="1365" y="145" id="3047" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="1999" >
 <cdparam x="1885" y="112" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1273" y="66" id="2351" />
-<P2  x="1370" y="66" id="3085" />
+<P1  x="1278" y="71" id="2351" />
+<P2  x="1365" y="71" id="3085" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2001" >
@@ -7069,7 +7069,7 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
 <P1  x="1022" y="191" id="3370" />
-<P2  x="1145" y="138" id="2370" />
+<P2  x="1140" y="143" id="2370" />
 <Point x="1023" y="143" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2000" >
@@ -7086,7 +7086,7 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
 <P1  x="999" y="191" id="3364" />
-<P2  x="1145" y="55" id="2332" />
+<P2  x="1140" y="60" id="2332" />
 <Point x="1000" y="60" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2002" >
@@ -7102,32 +7102,32 @@ algorithm. This model can be simulated and verified.
 <cdparam x="770" y="364" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="865" y="210" id="2183" />
-<P2  x="937" y="209" id="3366" />
+<P1  x="870" y="215" id="2183" />
+<P2  x="931" y="215" id="3366" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2005" >
 <cdparam x="2534" y="707" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1741" y="420" id="2561" />
-<P2  x="1813" y="421" id="2413" />
+<P1  x="1748" y="426" id="2561" />
+<P2  x="1808" y="426" id="2413" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2006" >
 <cdparam x="3237" y="813" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="2118" y="515" id="2536" />
-<P2  x="2188" y="516" id="2042" />
+<P1  x="2125" y="521" id="2536" />
+<P2  x="2183" y="521" id="2042" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2007" >
 <cdparam x="3237" y="766" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
-<P1  x="2118" y="480" id="2544" />
-<P2  x="2188" y="481" id="2040" />
+<P1  x="2125" y="486" id="2544" />
+<P2  x="2183" y="486" id="2040" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2008" >
@@ -7135,71 +7135,71 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1205" y="111" id="2300" />
-<P2  x="1179" y="91" id="2285" />
+<P2  x="1179" y="99" id="2285" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2009" >
 <cdparam x="1542" y="242" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1251" y="142" id="2298" />
-<P2  x="1273" y="150" id="2318" />
+<P1  x="1255" y="146" id="2298" />
+<P2  x="1268" y="145" id="2318" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2010" >
 <cdparam x="1378" y="239" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1145" y="148" id="2375" />
-<P2  x="1168" y="139" id="2302" />
+<P1  x="1150" y="143" id="2375" />
+<P2  x="1164" y="143" id="2302" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2011" >
 <cdparam x="1541" y="126" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1250" y="67" id="2283" />
-<P2  x="1273" y="76" id="2356" />
+<P1  x="1254" y="71" id="2283" />
+<P2  x="1268" y="71" id="2356" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2012" >
 <cdparam x="1378" y="110" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1145" y="65" id="2337" />
-<P2  x="1168" y="56" id="2287" />
+<P1  x="1150" y="60" id="2337" />
+<P2  x="1164" y="60" id="2287" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2013" >
 <cdparam x="2698" y="572" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1918" y="368" id="2398" />
-<P2  x="1941" y="376" id="2437" />
+<P1  x="1922" y="372" id="2398" />
+<P2  x="1936" y="371" id="2437" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2014" >
 <cdparam x="2535" y="575" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1813" y="378" id="2456" />
-<P2  x="1836" y="369" id="2400" />
+<P1  x="1818" y="373" id="2456" />
+<P2  x="1832" y="373" id="2400" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2015" >
 <cdparam x="2699" y="710" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1919" y="430" id="2489" />
-<P2  x="1941" y="438" id="2475" />
+<P1  x="1923" y="434" id="2489" />
+<P2  x="1936" y="433" id="2475" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2016" >
 <cdparam x="2535" y="704" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1813" y="431" id="2418" />
-<P2  x="1836" y="423" id="2491" />
+<P1  x="1818" y="426" id="2418" />
+<P2  x="1832" y="427" id="2491" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2017" >
@@ -7207,39 +7207,39 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="1874" y="411" id="2493" />
-<P2  x="1847" y="391" id="2402" />
+<P2  x="1847" y="399" id="2402" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2018" >
 <cdparam x="1757" y="290" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1256" y="344" id="2070" />
-<P2  x="1275" y="353" id="2088" />
+<P1  x="1260" y="348" id="2070" />
+<P2  x="1270" y="348" id="2088" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2019" >
 <cdparam x="1588" y="289" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1146" y="351" id="2107" />
-<P2  x="1169" y="344" id="2068" />
+<P1  x="1151" y="346" id="2107" />
+<P2  x="1165" y="348" id="2068" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2020" >
 <cdparam x="1744" y="177" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="1247" y="272" id="2053" />
-<P2  x="1275" y="281" id="2126" />
+<P1  x="1251" y="276" id="2053" />
+<P2  x="1270" y="276" id="2126" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2021" >
 <cdparam x="1588" y="173" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="1146" y="295" id="2145" />
-<P2  x="1166" y="286" id="2057" />
+<P1  x="1151" y="290" id="2145" />
+<P2  x="1162" y="290" id="2057" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2022" >
@@ -7247,55 +7247,55 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="803" y="249" id="2242" />
-<P2  x="767" y="230" id="2172" />
+<P2  x="767" y="238" id="2172" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2023" >
 <cdparam x="688" y="481" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="846" y="263" id="2244" />
-<P2  x="865" y="271" id="2226" />
+<P1  x="850" y="267" id="2244" />
+<P2  x="860" y="266" id="2226" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2024" >
 <cdparam x="524" y="487" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="736" y="286" id="2207" />
-<P2  x="759" y="277" id="2240" />
+<P1  x="741" y="281" id="2207" />
+<P2  x="755" y="281" id="2240" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2025" >
 <cdparam x="851" y="717" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="844" y="461" id="2731" />
-<P2  x="870" y="470" id="2696" />
+<P1  x="848" y="465" id="2731" />
+<P2  x="865" y="465" id="2696" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2026" >
 <cdparam x="853" y="848" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="843" y="545" id="2746" />
-<P2  x="870" y="554" id="2658" />
+<P1  x="847" y="549" id="2746" />
+<P2  x="865" y="549" id="2658" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2027" >
 <cdparam x="698" y="849" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="741" y="552" id="2715" />
-<P2  x="759" y="543" id="2744" />
+<P1  x="746" y="547" id="2715" />
+<P2  x="755" y="547" id="2744" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2028" >
 <cdparam x="698" y="692" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Composite port to Primitive port" value="Connector between ports" />
-<P1  x="741" y="467" id="2677" />
-<P2  x="761" y="458" id="2729" />
+<P1  x="746" y="462" id="2677" />
+<P2  x="757" y="462" id="2729" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2029" >
@@ -7303,15 +7303,15 @@ algorithm. This model can be simulated and verified.
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Primitive port" value="Connector between ports" />
 <P1  x="804" y="515" id="2748" />
-<P2  x="782" y="496" id="2733" />
+<P2  x="782" y="504" id="2733" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2030" >
 <cdparam x="811" y="348" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Primitive port to Composite port" value="Connector between ports" />
-<P1  x="837" y="211" id="2168" />
-<P2  x="865" y="220" id="2188" />
+<P1  x="841" y="215" id="2168" />
+<P2  x="860" y="215" id="2188" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="301" id="2039" >
@@ -14653,7 +14653,7 @@ transfers 32 bits/cycle
 </COMPONENT>
 
 <COMPONENT type="1105" id="4213" >
-<cdparam x="990" y="90" />
+<cdparam x="1202" y="78" />
 <sizeparam width="424" height="428" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
@@ -14689,11 +14689,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="4134" >
 <father id="4213" num="0" />
-<cdparam x="1011" y="136" />
-<sizeparam width="280" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1223" y="124" />
+<sizeparam width="322" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="144" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join2_ch_out__sink_ch_in" />
+<cdrectangleparam minX="0" maxX="102" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::join2_ch_out__sink_ch_in" />
 <TGConnectingPoint num="0" id="4126" />
 <TGConnectingPoint num="1" id="4127" />
 <TGConnectingPoint num="2" id="4128" />
@@ -14703,16 +14703,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4132" />
 <TGConnectingPoint num="7" id="4133" />
 <extraparam>
-<info value="HOC_PsiChart::join2_ch_out__sink_ch_in" communicationName="join2_ch_out__sink_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::join2_ch_out__sink_ch_in" communicationName="join2_ch_out__sink_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4143" >
 <father id="4213" num="1" />
-<cdparam x="1010" y="459" />
-<sizeparam width="285" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1222" y="447" />
+<sizeparam width="327" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="139" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::acc_ch_out__join2_ch_in1" />
+<cdrectangleparam minX="0" maxX="97" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::acc_ch_out__join2_ch_in1" />
 <TGConnectingPoint num="0" id="4135" />
 <TGConnectingPoint num="1" id="4136" />
 <TGConnectingPoint num="2" id="4137" />
@@ -14722,16 +14722,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4141" />
 <TGConnectingPoint num="7" id="4142" />
 <extraparam>
-<info value="HOC_PsiChart::acc_ch_out__join2_ch_in1" communicationName="acc_ch_out__join2_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::acc_ch_out__join2_ch_in1" communicationName="acc_ch_out__join2_ch_in1" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4152" >
 <father id="4213" num="2" />
-<cdparam x="1010" y="184" />
-<sizeparam width="277" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1222" y="172" />
+<sizeparam width="319" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="147" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join1_ch_out__acc_ch_in" />
+<cdrectangleparam minX="0" maxX="105" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::join1_ch_out__acc_ch_in" />
 <TGConnectingPoint num="0" id="4144" />
 <TGConnectingPoint num="1" id="4145" />
 <TGConnectingPoint num="2" id="4146" />
@@ -14741,16 +14741,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4150" />
 <TGConnectingPoint num="7" id="4151" />
 <extraparam>
-<info value="HOC_PsiChart::join1_ch_out__acc_ch_in" communicationName="join1_ch_out__acc_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::join1_ch_out__acc_ch_in" communicationName="join1_ch_out__acc_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4161" >
 <father id="4213" num="3" />
-<cdparam x="1011" y="408" />
-<sizeparam width="325" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1223" y="396" />
+<sizeparam width="367" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="99" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAcwm2_ch_out__join1_ch_in2" />
+<cdrectangleparam minX="0" maxX="57" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::DMAcwm2_ch_out__join1_ch_in2" />
 <TGConnectingPoint num="0" id="4153" />
 <TGConnectingPoint num="1" id="4154" />
 <TGConnectingPoint num="2" id="4155" />
@@ -14760,16 +14760,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4159" />
 <TGConnectingPoint num="7" id="4160" />
 <extraparam>
-<info value="HOC_PsiChart::DMAcwm2_ch_out__join1_ch_in2" communicationName="DMAcwm2_ch_out__join1_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::DMAcwm2_ch_out__join1_ch_in2" communicationName="DMAcwm2_ch_out__join1_ch_in2" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4170" >
 <father id="4213" num="4" />
-<cdparam x="1011" y="351" />
-<sizeparam width="322" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1223" y="339" />
+<sizeparam width="364" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="102" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAvsum_ch_out__join1_ch_in1" />
+<cdrectangleparam minX="0" maxX="60" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::DMAvsum_ch_out__join1_ch_in1" />
 <TGConnectingPoint num="0" id="4162" />
 <TGConnectingPoint num="1" id="4163" />
 <TGConnectingPoint num="2" id="4164" />
@@ -14779,16 +14779,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4168" />
 <TGConnectingPoint num="7" id="4169" />
 <extraparam>
-<info value="HOC_PsiChart::DMAvsum_ch_out__join1_ch_in1" communicationName="DMAvsum_ch_out__join1_ch_in1" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::DMAvsum_ch_out__join1_ch_in1" communicationName="DMAvsum_ch_out__join1_ch_in1" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4179" >
 <father id="4213" num="5" />
-<cdparam x="1009" y="296" />
-<sizeparam width="313" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1221" y="284" />
+<sizeparam width="355" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="111" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAcws_ch_out__join1_ch_in3" />
+<cdrectangleparam minX="0" maxX="69" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::DMAcws_ch_out__join1_ch_in3" />
 <TGConnectingPoint num="0" id="4171" />
 <TGConnectingPoint num="1" id="4172" />
 <TGConnectingPoint num="2" id="4173" />
@@ -14798,16 +14798,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4177" />
 <TGConnectingPoint num="7" id="4178" />
 <extraparam>
-<info value="HOC_PsiChart::DMAcws_ch_out__join1_ch_in3" communicationName="DMAcws_ch_out__join1_ch_in3" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::DMAcws_ch_out__join1_ch_in3" communicationName="DMAcws_ch_out__join1_ch_in3" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4188" >
 <father id="4213" num="6" />
-<cdparam x="1008" y="240" />
-<sizeparam width="315" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1220" y="228" />
+<sizeparam width="357" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="109" minY="0" maxY="388" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAsink_ch_out__join2_ch_in2" />
+<cdrectangleparam minX="0" maxX="67" minY="0" maxY="388" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::DMAsink_ch_out__join2_ch_in2" />
 <TGConnectingPoint num="0" id="4180" />
 <TGConnectingPoint num="1" id="4181" />
 <TGConnectingPoint num="2" id="4182" />
@@ -14817,13 +14817,13 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4186" />
 <TGConnectingPoint num="7" id="4187" />
 <extraparam>
-<info value="HOC_PsiChart::DMAsink_ch_out__join2_ch_in2" communicationName="DMAsink_ch_out__join2_ch_in2" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::DMAsink_ch_out__join2_ch_in2" communicationName="DMAsink_ch_out__join2_ch_in2" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="1100" id="4400" >
-<cdparam x="826" y="658" />
-<sizeparam width="682" height="389" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1060" y="648" />
+<sizeparam width="734" height="389" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="MAINcpu" value="name" />
@@ -14858,11 +14858,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4222" >
 <father id="4400" num="0" />
-<cdparam x="1277" y="739" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1532" y="721" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="523" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork3" />
+<cdrectangleparam minX="0" maxX="533" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork3" />
 <TGConnectingPoint num="0" id="4214" />
 <TGConnectingPoint num="1" id="4215" />
 <TGConnectingPoint num="2" id="4216" />
@@ -14872,16 +14872,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4220" />
 <TGConnectingPoint num="7" id="4221" />
 <extraparam>
-<info value="HOC_PsiChart::fork3" taskName="fork3" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::fork3" taskName="fork3" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4231" >
 <father id="4400" num="1" />
-<cdparam x="1277" y="896" />
-<sizeparam width="190" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1548" y="885" />
+<sizeparam width="232" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="492" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_DMAcws" />
+<cdrectangleparam minX="0" maxX="502" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_DMAcws" />
 <TGConnectingPoint num="0" id="4223" />
 <TGConnectingPoint num="1" id="4224" />
 <TGConnectingPoint num="2" id="4225" />
@@ -14891,16 +14891,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4229" />
 <TGConnectingPoint num="7" id="4230" />
 <extraparam>
-<info value="HOC_PsiChart::F_DMAcws" taskName="F_DMAcws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_DMAcws" taskName="F_DMAcws" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4240" >
 <father id="4400" num="2" />
-<cdparam x="1278" y="843" />
-<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1542" y="831" />
+<sizeparam width="241" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="483" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_DMAvsum" />
+<cdrectangleparam minX="0" maxX="493" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_DMAvsum" />
 <TGConnectingPoint num="0" id="4232" />
 <TGConnectingPoint num="1" id="4233" />
 <TGConnectingPoint num="2" id="4234" />
@@ -14910,16 +14910,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4238" />
 <TGConnectingPoint num="7" id="4239" />
 <extraparam>
-<info value="HOC_PsiChart::F_DMAvsum" taskName="F_DMAvsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_DMAvsum" taskName="F_DMAvsum" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4249" >
 <father id="4400" num="3" />
-<cdparam x="1278" y="790" />
-<sizeparam width="202" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1534" y="782" />
+<sizeparam width="244" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="480" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_DMAcwm2" />
+<cdrectangleparam minX="0" maxX="490" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_DMAcwm2" />
 <TGConnectingPoint num="0" id="4241" />
 <TGConnectingPoint num="1" id="4242" />
 <TGConnectingPoint num="2" id="4243" />
@@ -14929,16 +14929,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4247" />
 <TGConnectingPoint num="7" id="4248" />
 <extraparam>
-<info value="HOC_PsiChart::F_DMAcwm2" taskName="F_DMAcwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_DMAcwm2" taskName="F_DMAcwm2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4258" >
 <father id="4400" num="4" />
-<cdparam x="1273" y="993" />
-<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1547" y="987" />
+<sizeparam width="241" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="483" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_DMAfork1" />
+<cdrectangleparam minX="0" maxX="493" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_DMAfork1" />
 <TGConnectingPoint num="0" id="4250" />
 <TGConnectingPoint num="1" id="4251" />
 <TGConnectingPoint num="2" id="4252" />
@@ -14948,16 +14948,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4256" />
 <TGConnectingPoint num="7" id="4257" />
 <extraparam>
-<info value="HOC_PsiChart::F_DMAfork1" taskName="F_DMAfork1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_DMAfork1" taskName="F_DMAfork1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4267" >
 <father id="4400" num="5" />
-<cdparam x="837" y="996" />
-<sizeparam width="192" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1071" y="986" />
+<sizeparam width="234" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="490" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_DMAsink" />
+<cdrectangleparam minX="0" maxX="500" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_DMAsink" />
 <TGConnectingPoint num="0" id="4259" />
 <TGConnectingPoint num="1" id="4260" />
 <TGConnectingPoint num="2" id="4261" />
@@ -14967,16 +14967,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4265" />
 <TGConnectingPoint num="7" id="4266" />
 <extraparam>
-<info value="HOC_PsiChart::F_DMAsink" taskName="F_DMAsink" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_DMAsink" taskName="F_DMAsink" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4276" >
 <father id="4400" num="6" />
-<cdparam x="1070" y="741" />
-<sizeparam width="157" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1308" y="721" />
+<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="525" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join1" />
+<cdrectangleparam minX="0" maxX="535" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::join1" />
 <TGConnectingPoint num="0" id="4268" />
 <TGConnectingPoint num="1" id="4269" />
 <TGConnectingPoint num="2" id="4270" />
@@ -14986,16 +14986,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4274" />
 <TGConnectingPoint num="7" id="4275" />
 <extraparam>
-<info value="HOC_PsiChart::join1" taskName="join1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::join1" taskName="join1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4285" >
 <father id="4400" num="7" />
-<cdparam x="1277" y="946" />
-<sizeparam width="157" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1544" y="936" />
+<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="525" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::join2" />
+<cdrectangleparam minX="0" maxX="535" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::join2" />
 <TGConnectingPoint num="0" id="4277" />
 <TGConnectingPoint num="1" id="4278" />
 <TGConnectingPoint num="2" id="4279" />
@@ -15005,16 +15005,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4283" />
 <TGConnectingPoint num="7" id="4284" />
 <extraparam>
-<info value="HOC_PsiChart::join2" taskName="join2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::join2" taskName="join2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4294" >
 <father id="4400" num="8" />
-<cdparam x="1069" y="894" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1303" y="884" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="523" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1" />
+<cdrectangleparam minX="0" maxX="533" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork1" />
 <TGConnectingPoint num="0" id="4286" />
 <TGConnectingPoint num="1" id="4287" />
 <TGConnectingPoint num="2" id="4288" />
@@ -15024,16 +15024,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4292" />
 <TGConnectingPoint num="7" id="4293" />
 <extraparam>
-<info value="HOC_PsiChart::fork1" taskName="fork1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::fork1" taskName="fork1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4303" >
 <father id="4400" num="9" />
-<cdparam x="1070" y="844" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1304" y="834" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="523" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2" />
+<cdrectangleparam minX="0" maxX="533" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork2" />
 <TGConnectingPoint num="0" id="4295" />
 <TGConnectingPoint num="1" id="4296" />
 <TGConnectingPoint num="2" id="4297" />
@@ -15043,16 +15043,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4301" />
 <TGConnectingPoint num="7" id="4302" />
 <extraparam>
-<info value="HOC_PsiChart::fork2" taskName="fork2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::fork2" taskName="fork2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4312" >
 <father id="4400" num="10" />
-<cdparam x="1069" y="996" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1327" y="984" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="523" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_src" />
+<cdrectangleparam minX="0" maxX="533" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_src" />
 <TGConnectingPoint num="0" id="4304" />
 <TGConnectingPoint num="1" id="4305" />
 <TGConnectingPoint num="2" id="4306" />
@@ -15062,16 +15062,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4310" />
 <TGConnectingPoint num="7" id="4311" />
 <extraparam>
-<info value="HOC_PsiChart::F_src" taskName="F_src" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_src" taskName="F_src" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4321" >
 <father id="4400" num="11" />
-<cdparam x="1070" y="792" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1304" y="782" />
+<sizeparam width="204" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="520" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_acc" />
+<cdrectangleparam minX="0" maxX="530" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_acc" />
 <TGConnectingPoint num="0" id="4313" />
 <TGConnectingPoint num="1" id="4314" />
 <TGConnectingPoint num="2" id="4315" />
@@ -15081,16 +15081,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4319" />
 <TGConnectingPoint num="7" id="4320" />
 <extraparam>
-<info value="HOC_PsiChart::F_acc" taskName="F_acc" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_acc" taskName="F_acc" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4330" >
 <father id="4400" num="12" />
-<cdparam x="1069" y="944" />
-<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1303" y="934" />
+<sizeparam width="205" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="519" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cws" />
+<cdrectangleparam minX="0" maxX="529" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_cws" />
 <TGConnectingPoint num="0" id="4322" />
 <TGConnectingPoint num="1" id="4323" />
 <TGConnectingPoint num="2" id="4324" />
@@ -15100,16 +15100,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4328" />
 <TGConnectingPoint num="7" id="4329" />
 <extraparam>
-<info value="HOC_PsiChart::F_cws" taskName="F_cws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_cws" taskName="F_cws" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4339" >
 <father id="4400" num="13" />
-<cdparam x="839" y="893" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1073" y="883" />
+<sizeparam width="214" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="510" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_vsum" />
+<cdrectangleparam minX="0" maxX="520" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_vsum" />
 <TGConnectingPoint num="0" id="4331" />
 <TGConnectingPoint num="1" id="4332" />
 <TGConnectingPoint num="2" id="4333" />
@@ -15119,16 +15119,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4337" />
 <TGConnectingPoint num="7" id="4338" />
 <extraparam>
-<info value="HOC_PsiChart::F_vsum" taskName="F_vsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_vsum" taskName="F_vsum" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4348" >
 <father id="4400" num="14" />
-<cdparam x="838" y="944" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1072" y="934" />
+<sizeparam width="217" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="507" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cwm1" />
+<cdrectangleparam minX="0" maxX="517" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_cwm1" />
 <TGConnectingPoint num="0" id="4340" />
 <TGConnectingPoint num="1" id="4341" />
 <TGConnectingPoint num="2" id="4342" />
@@ -15138,16 +15138,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4346" />
 <TGConnectingPoint num="7" id="4347" />
 <extraparam>
-<info value="HOC_PsiChart::F_cwm1" taskName="F_cwm1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_cwm1" taskName="F_cwm1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4357" >
 <father id="4400" num="15" />
-<cdparam x="840" y="841" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1074" y="831" />
+<sizeparam width="217" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="507" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::F_cwm2" />
+<cdrectangleparam minX="0" maxX="517" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::F_cwm2" />
 <TGConnectingPoint num="0" id="4349" />
 <TGConnectingPoint num="1" id="4350" />
 <TGConnectingPoint num="2" id="4351" />
@@ -15157,16 +15157,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4355" />
 <TGConnectingPoint num="7" id="4356" />
 <extraparam>
-<info value="HOC_PsiChart::F_cwm2" taskName="F_cwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::F_cwm2" taskName="F_cwm2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4366" >
 <father id="4400" num="16" />
-<cdparam x="840" y="789" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1074" y="779" />
+<sizeparam width="204" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="520" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_acc" />
+<cdrectangleparam minX="0" maxX="530" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_acc" />
 <TGConnectingPoint num="0" id="4358" />
 <TGConnectingPoint num="1" id="4359" />
 <TGConnectingPoint num="2" id="4360" />
@@ -15176,16 +15176,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4364" />
 <TGConnectingPoint num="7" id="4365" />
 <extraparam>
-<info value="HOC_PsiChart::X_acc" taskName="X_acc" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_acc" taskName="X_acc" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4375" >
 <father id="4400" num="17" />
-<cdparam x="842" y="736" />
-<sizeparam width="154" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1076" y="726" />
+<sizeparam width="196" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="528" minY="0" maxY="349" />
-<infoparam name="TGComponent" value="HOC_PsiChart::SINK" />
+<cdrectangleparam minX="0" maxX="538" minY="0" maxY="349" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::SINK" />
 <TGConnectingPoint num="0" id="4367" />
 <TGConnectingPoint num="1" id="4368" />
 <TGConnectingPoint num="2" id="4369" />
@@ -15195,12 +15195,12 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4373" />
 <TGConnectingPoint num="7" id="4374" />
 <extraparam>
-<info value="HOC_PsiChart::SINK" taskName="SINK" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::SINK" taskName="SINK" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="1102" id="4425" >
-<cdparam x="994" y="544" />
+<cdparam x="1095" y="553" />
 <sizeparam width="346" height="50" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
@@ -15236,7 +15236,7 @@ transfers 32 bits/cycle
 </COMPONENT>
 
 <COMPONENT type="1106" id="4450" >
-<cdparam x="774" y="545" />
+<cdparam x="849" y="663" />
 <sizeparam width="100" height="100" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
@@ -15344,8 +15344,8 @@ transfers 32 bits/cycle
 </COMPONENT>
 
 <COMPONENT type="1100" id="4561" >
-<cdparam x="13" y="103" />
-<sizeparam width="205" height="249" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="10" y="51" />
+<sizeparam width="220" height="249" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="FEP" value="name" />
@@ -15380,11 +15380,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4509" >
 <father id="4561" num="0" />
-<cdparam x="13" y="293" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="10" y="241" />
+<sizeparam width="214" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="33" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_vsum" />
+<cdrectangleparam minX="0" maxX="6" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_vsum" />
 <TGConnectingPoint num="0" id="4501" />
 <TGConnectingPoint num="1" id="4502" />
 <TGConnectingPoint num="2" id="4503" />
@@ -15394,16 +15394,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4507" />
 <TGConnectingPoint num="7" id="4508" />
 <extraparam>
-<info value="HOC_PsiChart::X_vsum" taskName="X_vsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_vsum" taskName="X_vsum" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4518" >
 <father id="4561" num="1" />
-<cdparam x="13" y="194" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="10" y="142" />
+<sizeparam width="217" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="30" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cwm1" />
+<cdrectangleparam minX="0" maxX="3" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_cwm1" />
 <TGConnectingPoint num="0" id="4510" />
 <TGConnectingPoint num="1" id="4511" />
 <TGConnectingPoint num="2" id="4512" />
@@ -15413,16 +15413,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4516" />
 <TGConnectingPoint num="7" id="4517" />
 <extraparam>
-<info value="HOC_PsiChart::X_cwm1" taskName="X_cwm1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_cwm1" taskName="X_cwm1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4527" >
 <father id="4561" num="2" />
-<cdparam x="13" y="143" />
-<sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="10" y="91" />
+<sizeparam width="205" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="42" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cws" />
+<cdrectangleparam minX="0" maxX="15" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_cws" />
 <TGConnectingPoint num="0" id="4519" />
 <TGConnectingPoint num="1" id="4520" />
 <TGConnectingPoint num="2" id="4521" />
@@ -15432,16 +15432,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4525" />
 <TGConnectingPoint num="7" id="4526" />
 <extraparam>
-<info value="HOC_PsiChart::X_cws" taskName="X_cws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_cws" taskName="X_cws" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4536" >
 <father id="4561" num="3" />
-<cdparam x="13" y="243" />
-<sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="10" y="191" />
+<sizeparam width="217" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="30" minY="0" maxY="209" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_cwm2" />
+<cdrectangleparam minX="0" maxX="3" minY="0" maxY="209" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_cwm2" />
 <TGConnectingPoint num="0" id="4528" />
 <TGConnectingPoint num="1" id="4529" />
 <TGConnectingPoint num="2" id="4530" />
@@ -15451,7 +15451,7 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4534" />
 <TGConnectingPoint num="7" id="4535" />
 <extraparam>
-<info value="HOC_PsiChart::X_cwm2" taskName="X_cwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_cwm2" taskName="X_cwm2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -15565,10 +15565,10 @@ transfers 32 bits/cycle
 <SUBCOMPONENT type="1103" id="4620" >
 <father id="4663" num="0" />
 <cdparam x="314" y="1005" />
-<sizeparam width="324" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="366" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="81" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out2__DMAfork1_ch_in" />
+<cdrectangleparam minX="0" maxX="39" minY="0" maxY="176" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork1_ch_out2__DMAfork1_ch_in" />
 <TGConnectingPoint num="0" id="4612" />
 <TGConnectingPoint num="1" id="4613" />
 <TGConnectingPoint num="2" id="4614" />
@@ -15578,16 +15578,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4618" />
 <TGConnectingPoint num="7" id="4619" />
 <extraparam>
-<info value="HOC_PsiChart::fork1_ch_out2__DMAfork1_ch_in" communicationName="fork1_ch_out2__DMAfork1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork1_ch_out2__DMAfork1_ch_in" communicationName="fork1_ch_out2__DMAfork1_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4629" >
 <father id="4663" num="1" />
 <cdparam x="313" y="955" />
-<sizeparam width="317" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="359" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="88" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork1_ch_out1__DMAsink_ch_in" />
+<cdrectangleparam minX="0" maxX="46" minY="0" maxY="176" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork1_ch_out1__DMAsink_ch_in" />
 <TGConnectingPoint num="0" id="4621" />
 <TGConnectingPoint num="1" id="4622" />
 <TGConnectingPoint num="2" id="4623" />
@@ -15597,16 +15597,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4627" />
 <TGConnectingPoint num="7" id="4628" />
 <extraparam>
-<info value="HOC_PsiChart::fork1_ch_out1__DMAsink_ch_in" communicationName="fork1_ch_out1__DMAsink_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork1_ch_out1__DMAsink_ch_in" communicationName="fork1_ch_out1__DMAsink_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4638" >
 <father id="4663" num="2" />
 <cdparam x="313" y="899" />
-<sizeparam width="276" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="318" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="129" minY="0" maxY="176" />
-<infoparam name="TGComponent" value="HOC_PsiChart::src_ch_out__fork1_ch_in" />
+<cdrectangleparam minX="0" maxX="87" minY="0" maxY="176" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::src_ch_out__fork1_ch_in" />
 <TGConnectingPoint num="0" id="4630" />
 <TGConnectingPoint num="1" id="4631" />
 <TGConnectingPoint num="2" id="4632" />
@@ -15616,7 +15616,7 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4636" />
 <TGConnectingPoint num="7" id="4637" />
 <extraparam>
-<info value="HOC_PsiChart::src_ch_out__fork1_ch_in" communicationName="src_ch_out__fork1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::src_ch_out__fork1_ch_in" communicationName="src_ch_out__fork1_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -15693,11 +15693,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4697" >
 <father id="4722" num="0" />
-<cdparam x="52" y="881" />
-<sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="41" y="881" />
+<sizeparam width="201" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="42" minY="0" maxY="110" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_src" />
+<cdrectangleparam minX="0" maxX="0" minY="0" maxY="110" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_src" />
 <TGConnectingPoint num="0" id="4689" />
 <TGConnectingPoint num="1" id="4690" />
 <TGConnectingPoint num="2" id="4691" />
@@ -15707,13 +15707,13 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4695" />
 <TGConnectingPoint num="7" id="4696" />
 <extraparam>
-<info value="HOC_PsiChart::X_src" taskName="X_src" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_src" taskName="X_src" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
 <COMPONENT type="1100" id="4792" >
-<cdparam x="709" y="343" />
-<sizeparam width="229" height="193" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="770" y="340" />
+<sizeparam width="258" height="291" minWidth="150" minHeight="100" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="BRIDGEdma" value="name" />
@@ -15748,11 +15748,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="4731" >
 <father id="4792" num="0" />
-<cdparam x="714" y="482" />
-<sizeparam width="202" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="781" y="579" />
+<sizeparam width="241" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="27" minY="0" maxY="153" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_DMAcwm2" />
+<cdrectangleparam minX="0" maxX="17" minY="0" maxY="251" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_DMAfork1" />
 <TGConnectingPoint num="0" id="4723" />
 <TGConnectingPoint num="1" id="4724" />
 <TGConnectingPoint num="2" id="4725" />
@@ -15762,16 +15762,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4729" />
 <TGConnectingPoint num="7" id="4730" />
 <extraparam>
-<info value="HOC_PsiChart::X_DMAcwm2" taskName="X_DMAcwm2" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_DMAfork1" taskName="X_DMAfork1" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4740" >
 <father id="4792" num="1" />
-<cdparam x="720" y="461" />
-<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="783" y="526" />
+<sizeparam width="232" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="30" minY="0" maxY="153" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_DMAfork1" />
+<cdrectangleparam minX="0" maxX="26" minY="0" maxY="251" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_DMAcws" />
 <TGConnectingPoint num="0" id="4732" />
 <TGConnectingPoint num="1" id="4733" />
 <TGConnectingPoint num="2" id="4734" />
@@ -15781,16 +15781,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4738" />
 <TGConnectingPoint num="7" id="4739" />
 <extraparam>
-<info value="HOC_PsiChart::X_DMAfork1" taskName="X_DMAfork1" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_DMAcws" taskName="X_DMAcws" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4749" >
 <father id="4792" num="2" />
-<cdparam x="727" y="360" />
-<sizeparam width="190" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="785" y="378" />
+<sizeparam width="234" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="39" minY="0" maxY="153" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_DMAcws" />
+<cdrectangleparam minX="0" maxX="24" minY="0" maxY="251" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_DMAsink" />
 <TGConnectingPoint num="0" id="4741" />
 <TGConnectingPoint num="1" id="4742" />
 <TGConnectingPoint num="2" id="4743" />
@@ -15800,16 +15800,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4747" />
 <TGConnectingPoint num="7" id="4748" />
 <extraparam>
-<info value="HOC_PsiChart::X_DMAcws" taskName="X_DMAcws" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_DMAsink" taskName="X_DMAsink" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4758" >
 <father id="4792" num="3" />
-<cdparam x="717" y="424" />
-<sizeparam width="199" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="784" y="475" />
+<sizeparam width="241" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="30" minY="0" maxY="153" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_DMAvsum" />
+<cdrectangleparam minX="0" maxX="17" minY="0" maxY="251" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_DMAvsum" />
 <TGConnectingPoint num="0" id="4750" />
 <TGConnectingPoint num="1" id="4751" />
 <TGConnectingPoint num="2" id="4752" />
@@ -15819,16 +15819,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4756" />
 <TGConnectingPoint num="7" id="4757" />
 <extraparam>
-<info value="HOC_PsiChart::X_DMAvsum" taskName="X_DMAvsum" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_DMAvsum" taskName="X_DMAvsum" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="4767" >
 <father id="4792" num="4" />
-<cdparam x="718" y="380" />
-<sizeparam width="192" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="784" y="424" />
+<sizeparam width="244" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="37" minY="0" maxY="153" />
-<infoparam name="TGComponent" value="HOC_PsiChart::X_DMAsink" />
+<cdrectangleparam minX="0" maxX="14" minY="0" maxY="251" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::X_DMAcwm2" />
 <TGConnectingPoint num="0" id="4759" />
 <TGConnectingPoint num="1" id="4760" />
 <TGConnectingPoint num="2" id="4761" />
@@ -15838,7 +15838,7 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4765" />
 <TGConnectingPoint num="7" id="4766" />
 <extraparam>
-<info value="HOC_PsiChart::X_DMAsink" taskName="X_DMAsink" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_YChartMapping::X_DMAcwm2" taskName="X_DMAcwm2" referenceTaskName="HOC_YChartMapping" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -15880,7 +15880,7 @@ transfers 32 bits/cycle
 
 <COMPONENT type="1105" id="4923" >
 <cdparam x="246" y="10" />
-<sizeparam width="694" height="319" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="780" height="319" minWidth="100" minHeight="50" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2400" minY="10" maxY="1400" />
 <infoparam name="FEPmemory" value="name" />
@@ -15915,11 +15915,11 @@ transfers 32 bits/cycle
 </COMPONENT>
 <SUBCOMPONENT type="1103" id="4826" >
 <father id="4923" num="0" />
-<cdparam x="595" y="127" />
-<sizeparam width="316" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="652" y="79" />
+<sizeparam width="358" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="378" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::vsum_ch_out__DMAvsum_ch_in" />
+<cdrectangleparam minX="0" maxX="422" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::vsum_ch_out__DMAvsum_ch_in" />
 <TGConnectingPoint num="0" id="4818" />
 <TGConnectingPoint num="1" id="4819" />
 <TGConnectingPoint num="2" id="4820" />
@@ -15929,16 +15929,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4824" />
 <TGConnectingPoint num="7" id="4825" />
 <extraparam>
-<info value="HOC_PsiChart::vsum_ch_out__DMAvsum_ch_in" communicationName="vsum_ch_out__DMAvsum_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::vsum_ch_out__DMAvsum_ch_in" communicationName="vsum_ch_out__DMAvsum_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4835" >
 <father id="4923" num="1" />
 <cdparam x="261" y="79" />
-<sizeparam width="322" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="364" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="372" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm2_ch_out__DMAcwm2_ch_in" />
+<cdrectangleparam minX="0" maxX="416" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::cwm2_ch_out__DMAcwm2_ch_in" />
 <TGConnectingPoint num="0" id="4827" />
 <TGConnectingPoint num="1" id="4828" />
 <TGConnectingPoint num="2" id="4829" />
@@ -15948,16 +15948,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4833" />
 <TGConnectingPoint num="7" id="4834" />
 <extraparam>
-<info value="HOC_PsiChart::cwm2_ch_out__DMAcwm2_ch_in" communicationName="cwm2_ch_out__DMAcwm2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::cwm2_ch_out__DMAcwm2_ch_in" communicationName="cwm2_ch_out__DMAcwm2_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4844" >
 <father id="4923" num="2" />
-<cdparam x="256" y="280" />
-<sizeparam width="297" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="263" y="277" />
+<sizeparam width="339" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="397" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" />
+<cdrectangleparam minX="0" maxX="441" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork2_ch_out1__vsum_ch_in" />
 <TGConnectingPoint num="0" id="4836" />
 <TGConnectingPoint num="1" id="4837" />
 <TGConnectingPoint num="2" id="4838" />
@@ -15967,16 +15967,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4842" />
 <TGConnectingPoint num="7" id="4843" />
 <extraparam>
-<info value="HOC_PsiChart::fork2_ch_out1__vsum_ch_in" communicationName="fork2_ch_out1__vsum_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork2_ch_out1__vsum_ch_in" communicationName="fork2_ch_out1__vsum_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4853" >
 <father id="4923" num="3" />
-<cdparam x="258" y="231" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="260" y="229" />
+<sizeparam width="342" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="394" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" />
+<cdrectangleparam minX="0" maxX="438" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork2_ch_out2__cwm2_ch_in" />
 <TGConnectingPoint num="0" id="4845" />
 <TGConnectingPoint num="1" id="4846" />
 <TGConnectingPoint num="2" id="4847" />
@@ -15986,16 +15986,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4851" />
 <TGConnectingPoint num="7" id="4852" />
 <extraparam>
-<info value="HOC_PsiChart::fork2_ch_out2__cwm2_ch_in" communicationName="fork2_ch_out2__cwm2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork2_ch_out2__cwm2_ch_in" communicationName="fork2_ch_out2__cwm2_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4862" >
 <father id="4923" num="4" />
 <cdparam x="259" y="181" />
-<sizeparam width="292" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="334" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="402" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" />
+<cdrectangleparam minX="0" maxX="446" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::cwm1_ch_out__fork2_ch_in" />
 <TGConnectingPoint num="0" id="4854" />
 <TGConnectingPoint num="1" id="4855" />
 <TGConnectingPoint num="2" id="4856" />
@@ -16005,16 +16005,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4860" />
 <TGConnectingPoint num="7" id="4861" />
 <extraparam>
-<info value="HOC_PsiChart::cwm1_ch_out__fork2_ch_in" communicationName="cwm1_ch_out__fork2_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::cwm1_ch_out__fork2_ch_in" communicationName="cwm1_ch_out__fork2_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4871" >
 <father id="4923" num="5" />
 <cdparam x="260" y="128" />
-<sizeparam width="298" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="340" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="396" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::cws_ch_out__DMAcws_ch_in" />
+<cdrectangleparam minX="0" maxX="440" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::cws_ch_out__DMAcws_ch_in" />
 <TGConnectingPoint num="0" id="4863" />
 <TGConnectingPoint num="1" id="4864" />
 <TGConnectingPoint num="2" id="4865" />
@@ -16024,16 +16024,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4869" />
 <TGConnectingPoint num="7" id="4870" />
 <extraparam>
-<info value="HOC_PsiChart::cws_ch_out__DMAcws_ch_in" communicationName="cws_ch_out__DMAcws_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::cws_ch_out__DMAcws_ch_in" communicationName="cws_ch_out__DMAcws_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4880" >
 <father id="4923" num="6" />
-<cdparam x="586" y="278" />
-<sizeparam width="316" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="645" y="247" />
+<sizeparam width="358" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="378" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::DMAfork1_ch_out__fork3_ch_in" />
+<cdrectangleparam minX="0" maxX="422" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::DMAfork1_ch_out__fork3_ch_in" />
 <TGConnectingPoint num="0" id="4872" />
 <TGConnectingPoint num="1" id="4873" />
 <TGConnectingPoint num="2" id="4874" />
@@ -16043,16 +16043,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4878" />
 <TGConnectingPoint num="7" id="4879" />
 <extraparam>
-<info value="HOC_PsiChart::DMAfork1_ch_out__fork3_ch_in" communicationName="DMAfork1_ch_out__fork3_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::DMAfork1_ch_out__fork3_ch_in" communicationName="DMAfork1_ch_out__fork3_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4889" >
 <father id="4923" num="7" />
-<cdparam x="589" y="229" />
-<sizeparam width="300" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="645" y="189" />
+<sizeparam width="342" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="394" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork3_ch_out1__cwm1_ch_in" />
+<cdrectangleparam minX="0" maxX="438" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork3_ch_out1__cwm1_ch_in" />
 <TGConnectingPoint num="0" id="4881" />
 <TGConnectingPoint num="1" id="4882" />
 <TGConnectingPoint num="2" id="4883" />
@@ -16062,16 +16062,16 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4887" />
 <TGConnectingPoint num="7" id="4888" />
 <extraparam>
-<info value="HOC_PsiChart::fork3_ch_out1__cwm1_ch_in" communicationName="fork3_ch_out1__cwm1_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork3_ch_out1__cwm1_ch_in" communicationName="fork3_ch_out1__cwm1_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1103" id="4898" >
 <father id="4923" num="8" />
-<cdparam x="591" y="178" />
-<sizeparam width="288" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="648" y="133" />
+<sizeparam width="330" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="406" minY="0" maxY="279" />
-<infoparam name="TGComponent" value="HOC_PsiChart::fork3_ch_out2__cws_ch_in" />
+<cdrectangleparam minX="0" maxX="450" minY="0" maxY="279" />
+<infoparam name="TGComponent" value="HOC_YChartMapping::fork3_ch_out2__cws_ch_in" />
 <TGConnectingPoint num="0" id="4890" />
 <TGConnectingPoint num="1" id="4891" />
 <TGConnectingPoint num="2" id="4892" />
@@ -16081,7 +16081,7 @@ transfers 32 bits/cycle
 <TGConnectingPoint num="6" id="4896" />
 <TGConnectingPoint num="7" id="4897" />
 <extraparam>
-<info value="HOC_PsiChart::fork3_ch_out2__cws_ch_in" communicationName="fork3_ch_out2__cws_ch_in" referenceCommunicationName="HOC_PsiChart" priority="0" typeName="channel" />
+<info value="HOC_YChartMapping::fork3_ch_out2__cws_ch_in" communicationName="fork3_ch_out2__cws_ch_in" referenceCommunicationName="HOC_YChartMapping" priority="0" typeName="channel" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -16089,8 +16089,8 @@ transfers 32 bits/cycle
 <cdparam x="819" y="496" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from FEPdma to MAINbus" value="{info}" />
-<P1  x="938" y="536" id="4775" />
-<P2  x="994" y="544" id="4401" />
+<P1  x="1028" y="631" id="4775" />
+<P2  x="1095" y="553" id="4401" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -16100,7 +16100,7 @@ transfers 32 bits/cycle
 <cdparam x="657" y="496" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from FEPdma to Crossbar" value="{info}" />
-<P1  x="709" y="536" id="4773" />
+<P1  x="770" y="631" id="4773" />
 <P2  x="628" y="544" id="4453" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -16111,8 +16111,8 @@ transfers 32 bits/cycle
 <cdparam x="1028" y="668" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from MAINCPU to MAINBUS" value="{info}" />
-<P1  x="1167" y="658" id="4377" />
-<P2  x="1167" y="594" id="4407" />
+<P1  x="1427" y="648" id="4377" />
+<P2  x="1268" y="603" id="4407" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -16199,7 +16199,7 @@ transfers 32 bits/cycle
 <cdparam x="425" y="382" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from FEP_MSS to FEP_Bus" value="{info}" />
-<P1  x="593" y="329" id="4905" />
+<P1  x="636" y="329" id="4905" />
 <P2  x="387" y="399" id="4478" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -16210,8 +16210,8 @@ transfers 32 bits/cycle
 <cdparam x="752" y="569" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Bridge0 to mainBus" value="{info}" />
-<P1  x="874" y="595" id="4430" />
-<P2  x="994" y="569" id="4404" />
+<P1  x="949" y="713" id="4430" />
+<P2  x="1095" y="578" id="4404" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -16221,8 +16221,8 @@ transfers 32 bits/cycle
 <cdparam x="1066" y="462" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="1202" y="518" id="4195" />
-<P2  x="1167" y="544" id="4402" />
+<P1  x="1414" y="506" id="4195" />
+<P2  x="1268" y="553" id="4402" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <info priority="0" />
@@ -16254,7 +16254,7 @@ transfers 32 bits/cycle
 <cdparam x="828" y="570" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Bridge0 to Bus0" value="{info}" />
-<P1  x="774" y="595" id="4429" />
+<P1  x="849" y="713" id="4429" />
 <P2  x="628" y="569" id="4455" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -16265,7 +16265,7 @@ transfers 32 bits/cycle
 <cdparam x="548" y="415" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Memory0 to Bus0" value="{info}" />
-<P1  x="419" y="329" id="4913" />
+<P1  x="441" y="329" id="4913" />
 <P2  x="324" y="399" id="4485" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -16276,7 +16276,7 @@ transfers 32 bits/cycle
 <cdparam x="340" y="412" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from CPU0 to Bus0" value="{info}" />
-<P1  x="166" y="352" id="4552" />
+<P1  x="175" y="300" id="4552" />
 <P2  x="199" y="399" id="4484" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -26811,13 +26811,32 @@ to the application HOC_PsiChart" />
 <attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1"/>
 </extraparam>
 </COMPONENT>
-<SUBCOMPONENT type="1101" id="9505" >
+<SUBCOMPONENT type="1101" id="508844" >
 <father id="9683" num="0" />
-<cdparam x="985" y="713" />
-<sizeparam width="154" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="977" y="920" />
+<sizeparam width="165" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="280" minY="0" maxY="263" />
-<infoparam name="TGComponent" value="HOC_PsiChart::SINK" />
+<cdrectangleparam minX="0" maxX="269" minY="0" maxY="263" />
+<infoparam name="TGComponent" value="HOC_PsiChart::F_sink" />
+<TGConnectingPoint num="0" id="508845" />
+<TGConnectingPoint num="1" id="508846" />
+<TGConnectingPoint num="2" id="508847" />
+<TGConnectingPoint num="3" id="508848" />
+<TGConnectingPoint num="4" id="508849" />
+<TGConnectingPoint num="5" id="508850" />
+<TGConnectingPoint num="6" id="508851" />
+<TGConnectingPoint num="7" id="508852" />
+<extraparam>
+<info value="HOC_PsiChart::F_sink" taskName="F_sink" referenceTaskName="HOC_PsiChart" priority="0" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1101" id="9505" >
+<father id="9683" num="1" />
+<cdparam x="976" y="701" />
+<sizeparam width="165" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="0" maxX="269" minY="0" maxY="263" />
+<infoparam name="TGComponent" value="HOC_PsiChart::X_sink" />
 <TGConnectingPoint num="0" id="9497" />
 <TGConnectingPoint num="1" id="9498" />
 <TGConnectingPoint num="2" id="9499" />
@@ -26827,12 +26846,12 @@ to the application HOC_PsiChart" />
 <TGConnectingPoint num="6" id="9503" />
 <TGConnectingPoint num="7" id="9504" />
 <extraparam>
-<info value="HOC_PsiChart::SINK" taskName="SINK" referenceTaskName="HOC_PsiChart" priority="0" />
+<info value="HOC_PsiChart::X_sink" taskName="X_sink" referenceTaskName="HOC_PsiChart" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9514" >
-<father id="9683" num="1" />
-<cdparam x="985" y="774" />
+<father id="9683" num="2" />
+<cdparam x="979" y="758" />
 <sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="272" minY="0" maxY="263" />
@@ -26850,8 +26869,8 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9523" >
-<father id="9683" num="2" />
-<cdparam x="984" y="838" />
+<father id="9683" num="3" />
+<cdparam x="979" y="812" />
 <sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="259" minY="0" maxY="263" />
@@ -26869,7 +26888,7 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9532" >
-<father id="9683" num="3" />
+<father id="9683" num="4" />
 <cdparam x="1190" y="898" />
 <sizeparam width="175" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -26888,8 +26907,8 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9541" >
-<father id="9683" num="4" />
-<cdparam x="985" y="897" />
+<father id="9683" num="5" />
+<cdparam x="977" y="868" />
 <sizeparam width="172" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="262" minY="0" maxY="263" />
@@ -26907,7 +26926,7 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9550" >
-<father id="9683" num="5" />
+<father id="9683" num="6" />
 <cdparam x="1189" y="777" />
 <sizeparam width="163" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -26926,7 +26945,7 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9559" >
-<father id="9683" num="6" />
+<father id="9683" num="7" />
 <cdparam x="1188" y="713" />
 <sizeparam width="162" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -26945,7 +26964,7 @@ to the application HOC_PsiChart" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="9568" >
-<father id="9683" num="7" />
+<father id="9683" num="8" />
 <cdparam x="1191" y="841" />
 <sizeparam width="159" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
