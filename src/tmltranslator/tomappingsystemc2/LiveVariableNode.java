@@ -177,6 +177,7 @@ public class LiveVariableNode{
 		ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 		try{
 			//Object object = engine.eval("eval("+string+")");
+			TraceManager.addDev("Expression=" + expression);
 			engine.eval(expression);
 			Object object = engine.get("xx_xx");
 			if (object != null){
@@ -192,7 +193,8 @@ public class LiveVariableNode{
 			}else{
 				throw new IllegalArgumentException("Invalid expression: '"+expression+"'");
 			}
-		}catch (ScriptException e){
+		} catch (ScriptException e){
+			TraceManager.addDev("expression=" + expression);	
 			throw new IllegalArgumentException("Invalid input: '"+expression+"'", e);
 		}
 	}

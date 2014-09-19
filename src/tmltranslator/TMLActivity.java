@@ -180,7 +180,7 @@ public class TMLActivity extends TMLElement {
 		TMLForLoop loop = new TMLForLoop("loop for random sequence", _tmlrs.getReferenceObject());
 		elements.addElement(loop);
 		name = "looprd__" + _idRandomSequence;
-		TMLAttribute loopAttribute = new TMLAttribute(name, new TMLType(TMLType.NATURAL));
+		TMLAttribute loopAttribute = new TMLAttribute(name, name, new TMLType(TMLType.NATURAL), "0");
 		_task.addAttribute(loopAttribute);
 		loop.setInit(name + "=0");
 		loop.setCondition(name + " < " + nnext);
@@ -196,7 +196,7 @@ public class TMLActivity extends TMLElement {
 		
 		for(i=0; i<nnext; i++) {
 			name = "rd__" + _idRandomSequence + "__" + i;
-			attributes[i] = new TMLAttribute(name, new TMLType(TMLType.BOOLEAN));
+			attributes[i] = new TMLAttribute(name, name, new TMLType(TMLType.BOOLEAN), "false");
 			_task.addAttribute(attributes[i]);
 			
 			tmlactions[i] = new TMLActionState("Setting random sequence", _tmlrs.getReferenceObject());

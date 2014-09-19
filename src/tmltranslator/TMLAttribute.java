@@ -38,7 +38,7 @@
  *
  * /**
  * Class TMLAttribute
- * Notion of attrbiute for a TML Task
+ * Notion of attribute for a TML Task
  * Creation: 24/11/2005
  * @version 1.0 21/05/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
@@ -53,27 +53,27 @@ public class TMLAttribute extends DIPLOElement {
     public TMLType type;
     public String name = "";
     public String initialValue = "";
-		private String instanceName = "";
+    private String instanceName = "";
     
     public TMLAttribute( String _name, String _instanceName, TMLType _type, String _initialValue ) {
         this.name = _name;
-				this.instanceName = _instanceName;
+		this.instanceName = _instanceName;
         this.type = _type;
-				this.initialValue = _initialValue;
+		this.initialValue = _initialValue;
     }
     
     public TMLAttribute( String _name, String _instanceName, TMLType _type ) {
         this.name = _name;
-				this.instanceName = _instanceName;
+		this.instanceName = _instanceName;
         this.type = _type;
-				this.initialValue = "NULL";
+		this.initialValue = "NULL";
     } 
 
     public TMLAttribute( String _name, TMLType _type ) {
         this.name = _name;
-				this.instanceName = "NO_NAME";
+		this.instanceName = "NO_NAME";
         this.type = _type;
-				this.initialValue = "NULL";
+		this.initialValue = "NULL";
     }
 
 		public String getInstanceName()	{
