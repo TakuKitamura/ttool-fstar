@@ -2709,16 +2709,22 @@ public class GTMLModeling  {
 						s = artifact.getReferenceCommunicationName();
 						s = s.replaceAll("\\s", "");
 						s = s + "__" + artifact.getCommunicationName();
+						String[] vectChNames = artifact.getCommunicationName().split("__");
+						/*TraceManager.addDev( "Composing everything together: " + artifact.getReferenceCommunicationName() + "__" + vectChNames[0] +
+																"__" + artifact.getReferenceCommunicationName() + "__" + vectChNames[1] );*/
+						s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0] + "__" + artifact.getReferenceCommunicationName()
+								+ "__" + vectChNames[1];
 						TraceManager.addDev("Searching for:" + s);
 						elt = tmlm.getCommunicationElementByName(s);
 						TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
 						
 						if (elt instanceof TMLChannel) {
-							//TraceManager.addDev("Setting priority");
+							TraceManager.addDev("Setting priority");
 							((TMLChannel)(elt)).setPriority(artifact.getPriority());
 						}
 						
-						if (elt != null) {
+						if(elt != null) {
+							TraceManager.addDev( "Adding communication to Hardware Communication Node" );
 							map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
 						} else {
 							TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
