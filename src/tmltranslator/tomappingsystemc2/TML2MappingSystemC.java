@@ -301,7 +301,7 @@ public class TML2MappingSystemC {
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
 				TraceManager.addDev("Channel: " + channel.getName());
-				TraceManager.addDev("Channel origin node: " + tmlmapping.getHwNodeOf(channel.getOriginTask()) + " dest node: " + tmlmapping.getHwNodeOf(channel.getDestinationTask()) );
+				TraceManager.addDev("Channel origin node: " + channel.getOriginTask().getName() + " dest node: " + channel.getDestinationTask().getName());
 				TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasks().toString() );
 				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
 				if (channel.isLossy() && channel.getType()!=TMLChannel.NBRNBW) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();

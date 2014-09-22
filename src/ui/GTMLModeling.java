@@ -2699,6 +2699,7 @@ public class GTMLModeling  {
 				
 				// Other nodes (memory, bridge, bus)
 			}
+			TraceManager.addDev( "IN MAKE MAPPING: " + map.getMappedTasks().toString());
 			
 			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
 				node = archi.getHwNodeByName(tgc.getName());
@@ -2710,8 +2711,6 @@ public class GTMLModeling  {
 						s = s.replaceAll("\\s", "");
 						s = s + "__" + artifact.getCommunicationName();
 						String[] vectChNames = artifact.getCommunicationName().split("__");
-						/*TraceManager.addDev( "Composing everything together: " + artifact.getReferenceCommunicationName() + "__" + vectChNames[0] +
-																"__" + artifact.getReferenceCommunicationName() + "__" + vectChNames[1] );*/
 						s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0] + "__" + artifact.getReferenceCommunicationName()
 								+ "__" + vectChNames[1];
 						TraceManager.addDev("Searching for:" + s);
