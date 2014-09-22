@@ -301,6 +301,8 @@ public class TML2MappingSystemC {
 				}
 				declaration += tmp + "* " + channel.getExtendedName() + " = new " + tmp  +"(" + channel.getID() + ",\"" + channel.getName() + "\"," + channel.getSize() + ",";
 				TraceManager.addDev("Channel: " + channel.getName());
+				TraceManager.addDev("Channel origin node: " + tmlmapping.getHwNodeOf(channel.getOriginTask()) + " dest node: " + tmlmapping.getHwNodeOf(channel.getDestinationTask()) );
+				TraceManager.addDev( "the list of mapped tasks: " + tmlmapping.getMappedTasks().toString() );
 				declaration+= determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
 				if (channel.isLossy() && channel.getType()!=TMLChannel.NBRNBW) declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
 				declaration += ")"+ SCCR;
@@ -550,37 +552,50 @@ public class TML2MappingSystemC {
 		}
 	}
 
-	private String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute){
+	private String determineRouting( HwNode startNode, HwNode destNode, TMLElement commElemToRoute ){
+
+		//TraceManager.addDev( "Determine routing from " + startNode.getName() + " to " + destNode.getName() );
 		strwrap masters=new strwrap(), slaves=new strwrap();
 		LinkedList<HwCommunicationNode> path = new LinkedList<HwCommunicationNode>();
 		LinkedList<HwCommunicationNode> commNodes = new LinkedList<HwCommunicationNode>();
-		for (HwNode node: tmlmapping.getTMLArchitecture().getHwNodes()){
-			if (node instanceof HwCommunicationNode) commNodes.add((HwCommunicationNode) node);
+
+		for( HwNode node: tmlmapping.getTMLArchitecture().getHwNodes() )	{
+			if( node instanceof HwCommunicationNode )	{
+				commNodes.add((HwCommunicationNode) node);
+				TraceManager.addDev( "Inserted: " + ((HwCommunicationNode)node).getName() );
+			}
 		}
-		HwMemory memory = getMemConnectedToBusChannelMapped(commNodes, null, commElemToRoute);
-		if(memory==null){
-			System.out.println("no memories to map");
-			exploreBuses(0, commNodes, path, startNode, destNode, commElemToRoute);
-		}else{
+		if( startNode == null )	{
+			TraceManager.addDev( "NULL REFERENCE" );
+		}
+		else	{
+			TraceManager.addDev( "startNode: " + startNode.getName() );
+		}
+		HwMemory memory = getMemConnectedToBusChannelMapped( commNodes, null, commElemToRoute );
+		if( memory == null )	{
+			System.out.println( "no memories to map" );
+			exploreBuses( 0, commNodes, path, startNode, destNode, commElemToRoute );
+		}
+		else	{
 			LinkedList<HwCommunicationNode> commNodes2 = new LinkedList<HwCommunicationNode>(commNodes);
 			//exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute);
-			if (!exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute))
+			if( !exploreBuses( 0, commNodes, path, startNode, memory, commElemToRoute ) )	{
 				TraceManager.addDev("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			path.add(memory);
-			exploreBuses(0, commNodes2, path, memory, destNode, commElemToRoute);
-
+			}
+			path.add( memory );
+			exploreBuses( 0, commNodes2, path, memory, destNode, commElemToRoute );
 		}
 		int hopNum;
 		if ( (hopNum=extractPath(path, masters, slaves, startNode, destNode, false))<0){
 			hopNum=extractPath(path, masters, slaves, destNode, destNode, true)-hopNum;
 		}
-		/*TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
+		TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
 		for(HwCommunicationNode commElem:path){
 			TraceManager.addDev(commElem.getName());
 		}
 		TraceManager.addDev("number of elements: " + hopNum);
 		TraceManager.addDev("masters: " + masters.str);
-		TraceManager.addDev("slaves: " + slaves.str);*/
+		TraceManager.addDev("slaves: " + slaves.str);
 		return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
 	}
 
@@ -637,12 +652,15 @@ public class TML2MappingSystemC {
 		return false;
 	}
 
-	private HwMemory getMemConnectedToBusChannelMapped(LinkedList<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel){
-		for(HwCommunicationNode commNode: _commNodes){
-			if (commNode instanceof HwMemory){
-				if (_bus!=null) System.out.println(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
+	private HwMemory getMemConnectedToBusChannelMapped( LinkedList<HwCommunicationNode> _commNodes, HwBus _bus, TMLElement _channel )	{
+		for( HwCommunicationNode commNode: _commNodes )	{
+			if( commNode instanceof HwMemory )	{
+				if( _bus != null ) System.out.println(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
 				System.out.println(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel,commNode));
-				if ((_bus==null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) && tmlmapping.isCommNodeMappedOn(_channel,commNode)) return (HwMemory)commNode;
+				if( ( _bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus( commNode, _bus ) )
+						&& tmlmapping.isCommNodeMappedOn( _channel, commNode ) )	{
+						return (HwMemory)commNode;
+				}
 			}
 		}
 		return null;
