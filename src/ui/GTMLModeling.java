@@ -2676,7 +2676,7 @@ public class GTMLModeling  {
 		
 		while(iterator.hasNext()) {
 			tgc = (TGComponent)(iterator.next());
-			if( tgc instanceof TMLArchiCPNode )	{
+			//if( tgc instanceof TMLArchiCPNode )	{
 				node = archi.getHwNodeByName( tgc.getName() );
 				if( ( node != null ) && ( node instanceof HwExecutionNode ) ) {	//why checking this instanceof?
 					artifacts = ( (TMLArchiNode)(tgc) ).getAllTMLArchiArtifacts();
@@ -2698,7 +2698,7 @@ public class GTMLModeling  {
 				} 
 				
 				// Other nodes (memory, bridge, bus)
-			}
+			//}
 			TraceManager.addDev( "IN MAKE MAPPING: " + map.getMappedTasks().toString());
 			
 			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
