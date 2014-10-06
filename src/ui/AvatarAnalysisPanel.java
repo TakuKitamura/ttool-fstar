@@ -323,7 +323,8 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 		for(TGComponent elt: actors) {
 			if (elt.getX() > middleX && !systemAdded) {
 				sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
-				sdi.setValue(systemName);
+				sdi.setValue(systemName);   
+				sdi.setName(systemName);
 				sdi.setActor(false);
 				panel.addComponent(sdi, initX, initY, false, true);
 				initX += stepX;
@@ -331,6 +332,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 			}
 			sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
 			sdi.setValue(elt.getValue());
+			sdi.setName(elt.getValue());
 			sdi.setActor(true);
 			panel.addComponent(sdi, initX, initY, false, true);
 			initX += stepX;
@@ -339,6 +341,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
 		if (!systemAdded) {
 			sdi = (SDInstance)(TGComponentManager.addComponent(initX, initY, TGComponentManager.SD_INSTANCE, panel));
 			sdi.setValue(systemName);
+			sdi.setName(systemName);
 			sdi.setActor(false);
 			panel.addComponent(sdi, initX, initY, false, true);
 			initX += stepX;

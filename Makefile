@@ -97,6 +97,8 @@ myrelease: basic launcher ttooljar
 basic:
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
 
+jar: ttooljar
+
 ttooljar:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)
 	cp $(TTOOL_SRC)/ui/images/$(STD_LOGO) $(TTOOL_SRC)/ui/images/$(LOGO) 
