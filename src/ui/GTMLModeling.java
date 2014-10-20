@@ -148,6 +148,7 @@ public class GTMLModeling  {
 				addTMLChannels();
 				addTMLEvents();
 				addTMLRequests();
+				TraceManager.addDev("At line 151");
 				generateTasksActivityDiagrams();
 				removeActionsWithDollars();
 				removeActionsWithRecords();
@@ -208,6 +209,7 @@ public class GTMLModeling  {
 				addTMLCEvents();
 				TraceManager.addDev("Adding requests");
 				addTMLCRequests();
+				TraceManager.addDev("At line 211");
 				generateTasksActivityDiagrams();
 				removeActionsWithDollars();
 				removeActionsWithRecords();
@@ -456,6 +458,7 @@ public class GTMLModeling  {
 						//TraceManager.addDev("Adding event " + event.getName());
 					}
 				} else {
+					TraceManager.addDev( "Removing event "+ new String(tmleo.getEventName()) );
 					removedEvents.add(new String(tmleo.getEventName()));
 					CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Event " +  tmleo.getEventName() + " has been removed");
 					ce.setTDiagramPanel(tmldp.tmltdp);
@@ -1131,7 +1134,7 @@ public class GTMLModeling  {
 			tmltask = (TMLTask)(iterator.next());
 			generateTaskActivityDiagrams(tmltask);
 		}
-		
+		TraceManager.addDev( "errors: " + checkingErrors.size() );	
 		if (checkingErrors.size() > 0) {
 			throw new MalformedTMLDesignException("Error(s) found in activity diagrams");
 		}
@@ -1586,21 +1589,23 @@ public class GTMLModeling  {
 			} else if (tgc instanceof TMLADNotifiedEvent) {
 				event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADNotifiedEvent)tgc).getEventName()));
 				if (event == null) {
-					if (Conversion.containsStringInList(removedEvents, ((TMLADNotifiedEvent)tgc).getEventName())) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADNotifiedEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
-						ce.setTMLTask(tmltask);
-						ce.setTDiagramPanel(tadp);
-						ce.setTGComponent(tgc);
-						warnings.add(ce);
-						activity.addElement(new TMLJunction("void junction", tgc));
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-					} else {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
-						ce.setTMLTask(tmltask);
-						ce.setTDiagramPanel(tadp);
-						ce.setTGComponent(tgc);
-						checkingErrors.add(ce);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+					if( removedEvents.size() > 0 )	{
+						if (Conversion.containsStringInList(removedEvents, ((TMLADNotifiedEvent)tgc).getEventName())) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADNotifiedEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							warnings.add(ce);
+							activity.addElement(new TMLJunction("void junction", tgc));
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+						} else {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADNotifiedEvent)tgc).getEventName() + " is an unknown event");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							checkingErrors.add(ce);
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+						}
 					}
 				} else {
 					event.setNotified(true);
@@ -1615,21 +1620,23 @@ public class GTMLModeling  {
 			} else if (tgc instanceof TMLADWaitEvent) {
 				event = tmlm.getEventByName(getFromTable(tmltask, ((TMLADWaitEvent)tgc).getEventName()));
 				if (event == null) {
-					if (Conversion.containsStringInList(removedEvents, ((TMLADWaitEvent)tgc).getEventName())) {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWaitEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
-						ce.setTMLTask(tmltask);
-						ce.setTDiagramPanel(tadp);
-						ce.setTGComponent(tgc);
-						warnings.add(ce);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-						activity.addElement(new TMLJunction("void junction", tgc));
-					} else {
-						CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
-						ce.setTMLTask(tmltask);
-						ce.setTDiagramPanel(tadp);
-						ce.setTGComponent(tgc);
-						((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
-						checkingErrors.add(ce);
+					if( removedEvents.size() > 0 )	{
+						if (Conversion.containsStringInList(removedEvents, ((TMLADWaitEvent)tgc).getEventName())) {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "A call to " + ((TMLADWaitEvent)tgc).getEventName() + " has been removed because the corresponding event is not taken into account");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							warnings.add(ce);
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+							activity.addElement(new TMLJunction("void junction", tgc));
+						} else {
+							CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, ((TMLADWaitEvent)tgc).getEventName() + " is an unknown event");
+							ce.setTMLTask(tmltask);
+							ce.setTDiagramPanel(tadp);
+							ce.setTGComponent(tgc);
+							((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.UNKNOWN);
+							checkingErrors.add(ce);
+						}
 					}
 				} else {
 					//TraceManager.addDev("Nb of param of event:" + event.getNbOfParams());
