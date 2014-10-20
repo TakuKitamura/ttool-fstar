@@ -2699,8 +2699,6 @@ public class GTMLModeling  {
 				
 				// Other nodes (memory, bridge, bus)
 			//}
-			TraceManager.addDev( "IN MAKE MAPPING: " + map.getMappedTasks().toString());
-			
 			if ((tgc instanceof TMLArchiBUSNode) || (tgc instanceof TMLArchiBridgeNode) || (tgc instanceof TMLArchiMemoryNode)|| (tgc instanceof TMLArchiDMANode)) {
 				node = archi.getHwNodeByName(tgc.getName());
 				if ((node != null) && (node instanceof HwCommunicationNode)) {
@@ -2710,23 +2708,28 @@ public class GTMLModeling  {
 						s = artifact.getReferenceCommunicationName();
 						s = s.replaceAll("\\s", "");
 						s = s + "__" + artifact.getCommunicationName();
+						TraceManager.addDev( "s: " + s );
 						String[] vectChNames = artifact.getCommunicationName().split("__");
-						s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0] + "__" + artifact.getReferenceCommunicationName()
+						if( vectChNames.length > 1 )	{
+							s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0] + "__" + artifact.getReferenceCommunicationName()
 								+ "__" + vectChNames[1];
-						TraceManager.addDev("Searching for:" + s);
+							}
+						else	{
+							s = artifact.getReferenceCommunicationName() + "__" + vectChNames[0];
+						}
+						s = s.replaceAll("\\s", "");
+						TraceManager.addDev("Searching for " + s + " in " );
 						elt = tmlm.getCommunicationElementByName(s);
-						TraceManager.addDev("comm elts:" + tmlm.getStringListCommunicationElements());
-						
+						TraceManager.addDev("comm elts: " + tmlm.getStringListCommunicationElements());
 						if (elt instanceof TMLChannel) {
-							TraceManager.addDev("Setting priority");
+							TraceManager.addDev("Setting priority of " + elt + " to " + artifact.getPriority() );
 							((TMLChannel)(elt)).setPriority(artifact.getPriority());
 						}
-						
 						if(elt != null) {
-							TraceManager.addDev( "Adding communication to Hardware Communication Node" );
+							TraceManager.addDev( "Adding communication " + s + " to Hardware Communication Node " + ((HwCommunicationNode)node).getName() );
 							map.addCommToHwCommNode(elt, (HwCommunicationNode)node);
 						} else {
-							TraceManager.addDev("Null mapping: no element named: " + artifact.getCommunicationName());
+							TraceManager.addDev("Null mapping: no element named: " + s );
 						}
 					}
 					artifactsEvt = ( (TMLArchiCommunicationNode)(tgc) ).getEventArtifactList();
