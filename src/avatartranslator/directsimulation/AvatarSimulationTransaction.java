@@ -114,6 +114,21 @@ public class AvatarSimulationTransaction  {
 		
 	}
 	
+	public static void removeExecutedElement(AvatarStateMachineElement _asme) {
+		if (!allExecutedElements.contains(_asme)) {
+			return ;
+		}
+		
+		Integer val = hashOfAllElements.get(_asme);
+		if (val == null) {
+			return ;
+		}
+		
+		hashOfAllElements.put(_asme, new Integer(val.intValue()-1));
+		
+		
+	}
+	
 	public static synchronized long setID() {
 		long tmp = ID;
 		ID++;

@@ -956,6 +956,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		//resetThread();
 		previousTime = System.currentTimeMillis();
 		if (ass != null) {
+			resetMetElements();
 			ass.resetSimulation();
 			//ass.backOneTransactionBunch(); 
 		}
