@@ -66,6 +66,7 @@ public class AvatarSpecificationSimulation  {
 	public final static int DONT_EXECUTE = 4;
 	public final static int TERMINATED = 5;
 	public final static int KILLED = 6;
+	public final static int FIRST = 7;
 	
 	private int state;
 	
@@ -107,7 +108,7 @@ public class AvatarSpecificationSimulation  {
 		
 		initialize();
 		reset();
-		setState(GATHER);
+		setState(FIRST);
     }
     
     public Vector<AvatarSimulationAsynchronousTransaction> getAsynchronousMessages() {
@@ -291,31 +292,66 @@ public class AvatarSpecificationSimulation  {
 		//boolean executeNextState;
 		
 		while(true) {
-			//TraceManager.addDev("State=" + state);
+			TraceManager.addDev("State=" + state);
 			switch(state) {
 			case INITIALIZE:
+				TraceManager.addDev("-> -> INITIALIZE");
 				initialize();
 				setState(RESET);
 				break;
 				
 			case RESET:
+				TraceManager.addDev("-> -> RESET");
 				reset();
-				setState(GATHER);
+				// Execute silent transactions if necessary
+				setState(FIRST);
 				break;
 				
+			case FIRST:
+				TraceManager.addDev("-> -> FIRST");
+				//stopped = false;
+				AvatarSimulationPendingTransaction silent;
+				while(true) {
+					gatherPendingTransactions();
+					TraceManager.addDev("Gather done");
+					silent = getSilentTransactionToExecute(pendingTransactions);
+					if (silent == null) {
+						setState(GATHER);
+						break;
+						
+					} else {
+						TraceManager.addDev("Second option");
+						// Must execute the silent pending transactions until none available
+						Vector<AvatarSimulationPendingTransaction> vect=new Vector<AvatarSimulationPendingTransaction>();
+						vect.add(silent);
+						performSelectedTransactions(vect);
+						//nbOfCommands = 1;
+						//nbOfCommandsActivated = true;
+						TraceManager.addDev("Second option done");
+						setState(EXECUTE);
+					}
+				}
+				break;
+				
+				
+				
 			case GATHER:
+				TraceManager.addDev("-> -> GATHER");
 				gatherPendingTransactions();
 				if (pendingTransactions.size() == 0) {
 					setState(TERMINATED);
 					TraceManager.addDev("No more pending transactions");
 				} else {
+					TraceManager.addDev("pending transactions");
 					if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
+						TraceManager.addDev("1. pending transactions");
 						if (getSilentTransactionToExecute(pendingTransactions) == null) {
 							setState(DONT_EXECUTE);
 						} else {
 							setState(EXECUTE);
 						}
 					} else {
+						TraceManager.addDev("2. pending transactions");
 						setState(EXECUTE);
 					}
 				}
@@ -323,6 +359,7 @@ public class AvatarSpecificationSimulation  {
 				break;
 				
 			case EXECUTE:
+				TraceManager.addDev("-> -> EXECUTE");
 				silentTransactionExecuted = false;
 				selectedTransactions = selectTransactions(pendingTransactions);
 				
@@ -330,6 +367,7 @@ public class AvatarSpecificationSimulation  {
 					setState(TERMINATED);
 					TraceManager.addDev("Deadlock: no transaction can be selected");
 				} else {
+					
 					if (performSelectedTransactions(selectedTransactions)) {
 						if (!silentTransactionExecuted) {
 							if (nbOfCommandsActivated) {
@@ -359,18 +397,22 @@ public class AvatarSpecificationSimulation  {
 				break;
 				
 			case DONT_EXECUTE:
+				TraceManager.addDev("-> -> WAIT FOR EXECUTE");
 				waitForExecute();
 				break;
 				
 			case TERMINATED:
+				TraceManager.addDev("-> -> TERMINATED");
 				waitForResetOrNewState();
 				break;
 				
 			case KILLED:
+				TraceManager.addDev("-> -> KILLED");
 				TraceManager.addDev("Simulation killed");
 				return;
 				
 			default:
+				TraceManager.addDev("-> -> UNKNOWN");
 				TraceManager.addDev("Unknown state");
 				setState(KILLED);
 			}
@@ -398,7 +440,7 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public synchronized void  computeExternalCommands() {
-		
+		TraceManager.addDev("Computing external command");
 		
 		if (state == KILLED) {
 			return;
@@ -442,6 +484,7 @@ public class AvatarSpecificationSimulation  {
 			setState(EXECUTE);
 		}
 		
+		TraceManager.addDev("End of computing external command");
 		return;
 	}
 	
@@ -810,10 +853,12 @@ public class AvatarSpecificationSimulation  {
 	}
 	
 	public AvatarSimulationPendingTransaction getSilentTransactionToExecute(Vector<AvatarSimulationPendingTransaction> _pendingTransactions) {
+		TraceManager.addDev("executeEmptyTransition=" + executeEmptyTransition + " executeStateEntering=" + executeStateEntering);
 		if(!executeEmptyTransition && !executeStateEntering) {
 			return null;
 		}
 		
+		TraceManager.addDev("_pendingTransactions.size()=" + _pendingTransactions.size());
 		if (_pendingTransactions.size() == 0) {
 			return null;
 		}

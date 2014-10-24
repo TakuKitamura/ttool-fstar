@@ -926,6 +926,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		if (ass != null) {
 			ass.setNbOfCommands(AvatarSpecificationSimulation.MAX_TRANSACTION_IN_A_ROW);
 			ass.goSimulation();
+			//ass.backOneTransactionBunch(); 
 		}
 	}
 	
@@ -956,6 +957,7 @@ public	class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 		previousTime = System.currentTimeMillis();
 		if (ass != null) {
 			ass.resetSimulation();
+			//ass.backOneTransactionBunch(); 
 		}
 		//ass.killSimulation();
 	}
