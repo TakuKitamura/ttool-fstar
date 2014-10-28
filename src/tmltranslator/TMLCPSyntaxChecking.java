@@ -71,8 +71,8 @@ public class TMLCPSyntaxChecking {
 	private final String TIME_UNIT_ERROR = "unknown time unit";
 	
 	
-	private ArrayList<TMLError> errors;
-	private ArrayList<TMLError> warnings;
+	private ArrayList<TMLCPError> errors;
+	private ArrayList<TMLCPError> warnings;
 	private TMLCP tmlcp;
 	private TMLMapping mapping;
   
@@ -88,8 +88,8 @@ public class TMLCPSyntaxChecking {
 	
 	public void checkSyntax() {
 		
-		errors = new ArrayList<TMLError>();
-		warnings = new ArrayList<TMLError>();
+		errors = new ArrayList<TMLCPError>();
+		warnings = new ArrayList<TMLCPError>();
 		
 		//TraceManager.addDev( "Checking syntax" );
 		//Call here the routines to performan syntax checks
@@ -100,21 +100,109 @@ public class TMLCPSyntaxChecking {
 
 	private void checkMainCP()	{
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
+		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
+		ArrayList<String> listDiagramNames = new ArrayList<String>();
+		//check that all diagrams are connected
+
+		ArrayList<TMLCPElement> listElements = mainCP.getElements();
+		for( TMLCPElement elem : listElements )	{
+			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
+				listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
+			}
+			if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
+				listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
+			}
+			if( elem instanceof TMLCPConnector )	{
+				listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
+				listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
+			}
+		}
+
+		for( String s: listDiagramNames )	{
+			if( !listConnectorsStartEndNames.contains(s) )	{
+				TraceManager.addDev( "Diagram " + s + " has not been found to be connected!" );
+				addError( "Diagram " + s + " has not been found to be connected!", 0 );	//0 = missing diagram
+			}
+		}
 	}
 
 	private void checkActivityDiagrams()	{
 		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+
+		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
+		ArrayList<String> listDiagramNames = new ArrayList<String>();
+		//check that all diagrams are connected
+
+		for( TMLCPActivityDiagram diag: listADs )	{
+			ArrayList<TMLCPElement> listElements = diag.getElements();
+			for( TMLCPElement elem : listElements )	{
+				if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
+					listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
+				}
+				if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
+					listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
+				}
+				if( elem instanceof TMLCPConnector )	{
+					listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
+					listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
+				}
+			}
+			for( String s: listDiagramNames )	{
+				if( !listConnectorsStartEndNames.contains(s) )	{
+					TraceManager.addDev( "Diagram " + s + " is not connected in diagram " + diag.getName() );
+					addError( "Diagram " + s + " is not connected in diagram " + diag.getName(), TMLCPError.ERROR_STRUCTURE );
+				}
+			}
+			listConnectorsStartEndNames = new ArrayList<String>();
+			listDiagramNames = new ArrayList<String>();
+		}
 	}
 
 	private void checkSequenceDiagrams()	{
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
-		checkVariables( listSDs );
-		/*checkMessages( listSDs);
-		checkActions( listSDs );
-		checkInstances(listSDs );*/
+
+		for( TMLCPSequenceDiagram diag: listSDs )	{
+			ArrayList<TMLAttribute> attributes = diag.getAttributes();
+			checkMessages( diag, attributes );	// check that variables have been declared
+			//checkActions( diag, attributes );			// actions must be done on variables that have
+																						//	been declared and coherently boolean = boolean + 6 is not allowed
+			checkInstances( diag );	// instances within the same SD must all have different names
+		}
 	}
 
-	private void	checkVariables( ArrayList<TMLCPSequenceDiagram> listSDs )	{
+	private void checkMessages( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
+		ArrayList<TMLSDMessage> messages = diag.getMessages();
+		for( TMLSDMessage msg: messages )	{
+			ArrayList<TMLSDAttribute> attributesMsg = msg.getAttributes();
+			for( TMLSDAttribute attr: attributesMsg )	{
+				if( !attributes.contains( attr ) )	{	//class TMLSDMessage must have the method equals defined
+					TraceManager.addDev( " Attribute " + attr + " does not exist in diagram " + diag.getName()  );
+					addError( " Attribute " + attr + " does not exist in diagram " + diag.getName(), TMLCPError.ERROR_STRUCTURE );
+				}
+			}
+		}
+	}
+
+	private void checkActions( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
+		ArrayList<TMLSDAction> actions = diag.getActions();
+		for( TMLSDAction action: actions )	{
+			parsing2( action.getAction() );
+			//for each action look for the corresponding attribute and check if the action is correct
+		}
+	}
+
+	private void checkInstances( TMLCPSequenceDiagram diag )	{
+		ArrayList<TMLSDInstance> instances = diag.getInstances();
+		HashSet hash = new HashSet();
+		for( TMLSDInstance instance: instances )	{
+			if( !hash.contains( instance.getName() ) )	{
+				hash.add( instance.getName() );
+			}
+			else	{
+				TraceManager.addDev( "Error double instance name " + instance.getName() + " in diagram " + diag.getName()  );
+				addError( "Instance " + instance.getName() + " is declared multiple times in diagram " + diag.getName(), TMLCPError.ERROR_STRUCTURE );
+			}
+		}
 	}
 		
 	public int hasErrors()	{
@@ -131,19 +219,25 @@ public class TMLCPSyntaxChecking {
 		return warnings.size();
 	}
 	
-	public ArrayList<TMLError> getErrors() {
+	public ArrayList<TMLCPError> getErrors() {
 		return errors;
 	}
 	
-	public ArrayList<TMLError> getWarnings() {
+	public ArrayList<TMLCPError> getWarnings() {
 		return warnings;
 	}
 
-	public void addError( TMLTask t, TMLActivityElement elt, String message, int type )	{
+/*	public void addError( TMLTask t, TMLActivityElement elt, String message, int type )	{
 		TMLError error = new TMLError( type );
 		error.message = message;
 		error.task = t;
 		error.element = elt;
+		errors.add( error );
+	}*/
+
+	public void addError( String message, int type )	{
+		TMLCPError error = new TMLCPError( type );
+		error.message = message;
 		errors.add( error );
 	}
 
@@ -164,17 +258,90 @@ public class TMLCPSyntaxChecking {
 	
 	public String printErrors() {
 		String ret = "*** ERRORS:";
-		for( TMLError error: errors )	{
-			ret += "ERROR / task " + error.task.getName() + " / element " + error.element.getName() + ": " + error.message + "\n";
+		for( TMLCPError error: errors )	{
+			ret += "ERROR: " + error.message;
 		}
 		return ret;
 	}
 	
 	public String printWarnings() {
 		String ret = "";
-		for( TMLError error: warnings ) {
+		for( TMLCPError error: warnings ) {
 			ret += "ERROR / task " + error.task.getName() + " / element: " + error.element.getName() + ": " + error.message + "\n";
 		}
 		return ret;
+	}
+
+	public void parsing2( String parseCmd, String action) {
+		TMLExprParser parser;
+		SimpleNode root;
+		
+		// First parsing
+		parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
+		try {
+			//System.out.println("\nParsing :" + parseCmd + " " + action);
+			root = parser.CompilationUnit();
+			//root.dump("pref=");
+			//System.out.println("Parse ok");
+		} catch (ParseException e) {
+			//System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
+			addError( SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+			return;
+		} catch (TokenMgrError tke ) {
+			//System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+			addError( SYNTAX_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+			return;
+		}  
+		
+		// Second parsing
+		// We only replace variables values after the "=" sign
+		if (parseCmd.compareTo("natnumeral") == 0) {
+			return;
+		}
+		
+		int index = action.indexOf('=');
+		String modif = action;
+		
+		if ((parseCmd.compareTo("assnat") ==0) || (parseCmd.compareTo("assbool") ==0)) { 
+			if (index != -1) {
+				modif = action.substring(index+1, action.length());
+			}
+			
+			if (parseCmd.compareTo("assnat") ==0) {
+				parseCmd = "actionnat";
+			} else {
+				parseCmd = "actionbool";
+			}
+		}
+		
+		if (parseCmd.compareTo("natid") == 0) {
+			parseCmd = "natnumeral";
+		}
+		
+		for(TMLAttribute attr: t.getAttributes()) {
+			modif = tmlm.putAttributeValueInString(modif, attr);
+		}
+		parser = new TMLExprParser(new StringReader(parseCmd + " " + modif));
+		try {
+			//System.out.println("\nParsing :" + parseCmd + " " + modif);
+			root = parser.CompilationUnit();
+			//root.dump("pref=");
+			//System.out.println("Parse ok");
+		} catch (ParseException e) {
+			//System.out.println("ParseException --------> Parse error in :" + parseCmd + " " + action);
+			addError( VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+			return;
+		} catch (TokenMgrError tke ) {
+			//System.out.println("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+			addError( VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+			return;
+		}  
+		
+		// Tree analysis: if the tree contains a variable, then, this variable has not been declared
+		ArrayList<String> vars = root.getVariables();
+		for(String s: vars) {
+			addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+		}
+		
 	}
 }	//End of class

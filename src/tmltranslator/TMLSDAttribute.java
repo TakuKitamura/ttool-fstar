@@ -110,4 +110,24 @@ public class TMLSDAttribute extends DIPLOElement {
 			}
 			return "unknown";
 		}
+
+		@Override public boolean equals( Object o )	{
+			if( o == null )	{
+				return false;
+			}
+			if( !(o instanceof TMLSDAttribute ) )	{
+				return false;
+			}
+			TMLSDAttribute mt = (TMLSDAttribute) o;
+			if( !this.initialValue.equals( mt.initialValue ) )	{
+				return false;
+			}
+			if( !this.name.equals( mt.name ) )	{
+				return false;
+			}
+			if( !this.type.equals( mt.type ) )	{
+				return false;
+			}
+			return true;
+		}
 }	//End of class

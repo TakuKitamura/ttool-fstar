@@ -461,7 +461,7 @@ public class TMLSyntaxChecking {
 		}
 		
 	}
-	
+
 	public String printSummary() {
 		String ret = "";
 		if (errors.size() == 0) {

@@ -6425,14 +6425,14 @@ public class GTURTLEModeling {
 			TraceManager.addDev( "Printing listE.getPanelNames: " + listE.getPanelNames().toString() );
 			TraceManager.addDev( "Printing listE.getData: " + listE.getData().toString() );
 		//}
-		/*checkingErrors = gtmlm.getCheckingErrors();
+		checkingErrors = gtmlm.getCheckingErrors();
 		
 		if( (checkingErrors != null) && (checkingErrors.size() > 0) )	{
-			analyzeErrors();
-			warnings = gtmlm.getCheckingWarnings();
+			//analyzeErrors();
+			//warnings = gtmlm.getCheckingWarnings();
 			return false;
 		}
-		else {
+		/*else {
 			//tmcp.removeAllRandomSequences();
 			if( optimize )	{
 				warningsOptimize = tmap.optimize();

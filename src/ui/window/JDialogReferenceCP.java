@@ -89,8 +89,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private HashSet<String> sdTransferInstances = new HashSet<String>();
 	private HashSet<String> sdControllerInstances = new HashSet<String>();
 	
-	private Vector<String> mappableArchUnitsSL = new Vector<String>();
-	private Vector<String> sdInstancesSL = new Vector<String>();
+	private Vector<String> mappableArchUnitsSL;
+	private Vector<String> sdInstancesSL;
 	
 	private int indexListCPsNames = 0;
 	
@@ -235,6 +235,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.gridheight = 3;
 			panel1.add(new JLabel(" "), c1);
 			
+			sdInstancesSL = new Vector<String>();
 			createListsOfInstances();	//Create the array list of HashSets listInstancesHash from listCPs
 			if( sdInstancesSL.size() == 0 )	{	//protect against the case of a CP with no SDs
 				sdInstancesSL.add( EMPTY_INSTANCES_LIST );
@@ -254,6 +255,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			c1.gridheight = 3;
 			panel1.add(new JLabel(" "), c1);
 			
+			mappableArchUnitsSL = new Vector<String>();
 			makeListOfMappableArchUnitsSL();
 			
 			//nineth line panel1

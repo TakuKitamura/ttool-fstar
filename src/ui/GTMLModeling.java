@@ -1920,29 +1920,31 @@ public class GTMLModeling  {
 		TraceManager.addDev( "About to check the syntax of CPs" );
 		TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
 		syntax.checkSyntax();
+		//Takes the data structure tmlcp passed to the constructor and checks the syntax of the components of a cp. If there are errors (these
+		//are filled inside the class syntax), then CheckingErrors are filled according to the errors in class syntax
 
 		CheckingError ce;
 		int type;
 		TGComponent tgc;
 		
-		/*if( syntax.hasErrors() >0 ) {
-			for( TMLError error: syntax.getErrors() ) {
-				if( error.type == TMLError.ERROR_STRUCTURE ) {
+		if( syntax.hasErrors() > 0 ) {
+			for( TMLCPError error: syntax.getErrors() ) {
+				if( error.type == TMLCPError.ERROR_STRUCTURE ) {
 					type = CheckingError.STRUCTURE_ERROR;
 				}
 				else {
 					type = CheckingError.BEHAVIOR_ERROR;
 				}
 				ce = new CheckingError( type, error.message );
-				tgc = listE.getTG( error.element );
+				/*tgc = listE.getTG( error.element );
 				if ( tgc != null ) {
 					ce.setTDiagramPanel( tgc.getTDiagramPanel() );
 					ce.setTGComponent( tgc );
 				}
-				ce.setTMLTask( error.task );
+				ce.setTMLTask( error.task );*/
 				checkingErrors.add( ce );
 			}
-		}*/
+		}
 
 		//makeCPDataStructure();
 		/*if (!makeTMLModeling()) {

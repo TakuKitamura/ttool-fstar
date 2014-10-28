@@ -146,4 +146,21 @@ public class TMLSDType {
     public String toString() {
         return getStringType( type );
     }
+
+		@Override public boolean equals( Object o )	{
+			if( o == null ) {
+				return false;
+			}
+			if( !(o instanceof TMLSDType ) ) {
+				return false;
+			}
+			TMLSDType mt = (TMLSDType) o;
+		 	if( this.type != mt.type )  {
+				return false;
+			}
+			if( !this.typeOther.equals( mt.typeOther ) )  {
+				return false;
+			}
+			return true;
+		}
 }	//End of class
