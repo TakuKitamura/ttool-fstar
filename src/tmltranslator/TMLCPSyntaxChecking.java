@@ -172,13 +172,24 @@ public class TMLCPSyntaxChecking {
 
 	private void checkMessages( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
 		ArrayList<TMLSDMessage> messages = diag.getMessages();
+		boolean foundAttribute = false;
 		for( TMLSDMessage msg: messages )	{
 			ArrayList<TMLSDAttribute> attributesMsg = msg.getAttributes();
+			TraceManager.addDev( "PRINTING ATTRIBUTES OF MSG " + msg + attributesMsg.toString() );
 			for( TMLSDAttribute attr: attributesMsg )	{
-				if( !attributes.contains( attr ) )	{	//class TMLSDMessage must have the method equals defined
-					//TraceManager.addDev( " Attribute " + attr.getName() + " does not exist in diagram " + diag.getName()  );
+				for( TMLAttribute attr2: attributes )	{	//attributes of SD diagram
+					if( attr.getName().equals( attr2.getName() ) )	{
+						TraceManager.addDev( "FOUND MATCHING ATTRIBUTES " + attr.getName() + " " + attr2.getName() );
+						foundAttribute = true;
+						break;
+					}
+				}
+				if( !foundAttribute )	{
 					addError( " Attribute <<" + attr.getName() + ">> has not been declared in diagram <<" + diag.getName() + ">>",
 										TMLCPError.ERROR_STRUCTURE );
+				}
+				else	{
+					foundAttribute = false;
 				}
 			}
 		}
@@ -208,11 +219,6 @@ public class TMLCPSyntaxChecking {
 					}
 				}
 			}
-			/*if( !exists )	{
-				TraceManager.addDev( "Error undeclared attribute in action " + action.getAction() + " in diagram " + diag.getName()  );
-				addError( "Error undeclared attribute in action " + action.getAction() + " in diagram " + diag.getName(), TMLCPError.ERROR_STRUCTURE );
-			}
-			exists = false;*/
 		}
 	}
 
@@ -225,7 +231,8 @@ public class TMLCPSyntaxChecking {
 			}
 			else	{
 				//TraceManager.addDev( "Error double instance name " + instance.getName() + " in diagram " + diag.getName()  );
-				addError( "Instance <<" + instance.getName() + ">> is declared multiple times in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
+				addError( "Instance <<" + instance.getName() + ">> is declared multiple times in diagram <<" + diag.getName() + ">>",
+									TMLCPError.ERROR_STRUCTURE );
 			}
 		}
 	}
