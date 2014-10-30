@@ -137,8 +137,9 @@ public class TMLCPSyntaxChecking {
 	//the list of connectors of the AD diagram under examination
 	//At the same time, get the list of guards of choice elements
 	private void checkActivityDiagrams()	{
-		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
 
+		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
 		ArrayList<String> listDiagramNames = new ArrayList<String>();
 		ArrayList<String> localListOfSDDiagrams = new ArrayList<String>();
@@ -184,8 +185,13 @@ public class TMLCPSyntaxChecking {
 							}
 						}
 					}
+					checkChoiceGuards( listSDs, variableList, localListOfSDDiagrams, diag.getName() );
 					//check if they have been declared in the instances of a SD diagram
-					TraceManager.addDev( variableList.toString() );
+					TraceManager.addDev( "AD DIAGRAM " + diag.getName() );
+					TraceManager.addDev( "variableList: " + variableList.toString() );
+					TraceManager.addDev( "localListOfSDDiagrams: " + localListOfSDDiagrams.toString() );
+					localListOfSDDiagrams = new ArrayList<String>();
+					variableList = new HashSet();
 					/*for( TMLCPSequenceDiagram diagram: listSDDiagrams )	{
 						TraceManager.addDev( "NAME OF DIAGRAM: " + listSDDiagrams.toString() );
 						ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
@@ -207,6 +213,26 @@ public class TMLCPSyntaxChecking {
 			}
 			listConnectorsStartEndNames = new ArrayList<String>();
 			listDiagramNames = new ArrayList<String>();
+		}
+	}
+
+	public void checkChoiceGuards( ArrayList<TMLCPSequenceDiagram> listSDs, HashSet<String> variableList,
+																ArrayList<String> localListOfSDDiagrams, String diagName )	{
+
+		ArrayList<TMLAttribute> attributeList = new ArrayList<TMLAttribute>();
+		for( String s: localListOfSDDiagrams )	{
+			for( TMLCPSequenceDiagram sdDiagram: listSDs )	{
+				if( sdDiagram.getName().equals( s ) )	{
+					attributeList = sdDiagram.getAttributes();
+					TraceManager.addDev( "In diagram: " + diagName + "found SD diagram " + sdDiagram.getName()
+					+ " with corresponding attributes " + attributeList.toString() );
+				}
+			}
+		}
+		for( TMLAttribute attr: attributeList )	{
+			if( !variableList.contains( attr.getName() ) )	{
+				addError( "Attribute <<" + attr.getName() + ">> is not declared in diagram <<" + diagName + ">>", TMLCPError.ERROR_STRUCTURE );
+			}
 		}
 	}
 
