@@ -106,6 +106,7 @@ public class TMLCPSyntaxChecking {
 
 		ArrayList<TMLCPElement> listElements = mainCP.getElements();
 		for( TMLCPElement elem : listElements )	{
+			TraceManager.addDev( "ELEMENT in MAINCP: " + elem );
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
 				listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
 			}
@@ -115,6 +116,10 @@ public class TMLCPSyntaxChecking {
 			if( elem instanceof TMLCPConnector )	{
 				listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
 				listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
+			}
+			if( elem instanceof tmltranslator.tmlcp.TMLCPChoice )	{
+				ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
+				TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
 			}
 		}
 
@@ -145,6 +150,35 @@ public class TMLCPSyntaxChecking {
 				if( elem instanceof TMLCPConnector )	{
 					listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
 					listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getStartName() );
+				}
+				if( elem instanceof tmltranslator.tmlcp.TMLCPChoice )	{
+					ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
+					HashSet<String> variableList = new HashSet<String>();
+					for( String guard: guards )	{
+						guard = guard.replaceAll("\\s+","");
+						if( guard.length() > 0 )	{
+							String[] token = guard.split( "\\[" );
+							if( token[1].equals("]") )	{
+								break;
+							}
+							String[] token1 = token[1].split("=");
+							if( token1.length > 1 )	{
+								variableList.add( token1[0] );
+							}
+							else	{
+								String[] token2 = token1[0].split("<");
+								if( token2.length > 1 )	{
+									variableList.add( token2[0] );
+								}
+								else	{
+									String[] token3 = token2[0].split(">");
+									variableList.add( token3[0] );
+								}
+							}
+						}
+					}
+					//check if they have been declared in the instances of a SD diagram
+					TraceManager.addDev( variableList.toString() );
 				}
 			}
 			for( String s: listDiagramNames )	{
