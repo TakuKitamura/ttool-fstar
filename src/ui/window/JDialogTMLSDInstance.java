@@ -61,7 +61,6 @@ import myutil.*;
 public abstract class JDialogTMLSDInstance extends javax.swing.JDialog implements ActionListener, ListSelectionListener  {
 	
 	protected Vector attributes, attributesPar, forbidden, initValues;
-	protected Vector unitsPar;
 	protected boolean checkKeyword, checkJavaKeyword;
     
   protected boolean cancelled = false;

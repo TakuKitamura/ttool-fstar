@@ -238,7 +238,6 @@ public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance implements
       for(int i=0; i<attributes.size(); i++) {
 				attributesPar.addElement(attributes.elementAt(i));
 			}
-      unitsPar.removeAllElements();
 			this.name = nameOfInstance.getText();
       dispose();
     }
