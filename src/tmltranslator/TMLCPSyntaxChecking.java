@@ -98,6 +98,8 @@ public class TMLCPSyntaxChecking {
 		checkSequenceDiagrams();
 	}
 
+	//Check that all referenced diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name
+	//the list of connectors of the mainCP
 	private void checkMainCP()	{
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
@@ -131,11 +133,15 @@ public class TMLCPSyntaxChecking {
 		}
 	}
 
+	//Check that all diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name in
+	//the list of connectors of the AD diagram under examination
+	//At the same time, get the list of guards of choice elements
 	private void checkActivityDiagrams()	{
 		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
 
 		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
 		ArrayList<String> listDiagramNames = new ArrayList<String>();
+		ArrayList<String> localListOfSDDiagrams = new ArrayList<String>();
 		//check that all diagrams are connected
 
 		for( TMLCPActivityDiagram diag: listADs )	{
@@ -146,6 +152,7 @@ public class TMLCPSyntaxChecking {
 				}
 				if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
 					listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
+					localListOfSDDiagrams.add( ( (tmltranslator.tmlcp.TMLCPRefSD)elem ).getName() );
 				}
 				if( elem instanceof TMLCPConnector )	{
 					listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
@@ -179,7 +186,18 @@ public class TMLCPSyntaxChecking {
 					}
 					//check if they have been declared in the instances of a SD diagram
 					TraceManager.addDev( variableList.toString() );
-				}
+					/*for( TMLCPSequenceDiagram diagram: listSDDiagrams )	{
+						TraceManager.addDev( "NAME OF DIAGRAM: " + listSDDiagrams.toString() );
+						ArrayList<TMLAttribute> listAttributes = diagram.getAttributes();
+						for( TMLAttribute attr: listAttributes )	{
+							if( !variableList.contains( attr.getName() ) )	{
+								addError( "Variable <<" + attr.getName() + ">> is not declared in any diagram of <<" + diag.getName() + ">>",
+													TMLCPError.ERROR_STRUCTURE );
+							}
+						}
+					}*/
+				}	//endOfLoop over elements
+
 			}
 			for( String s: listDiagramNames )	{
 				if( !listConnectorsStartEndNames.contains(s) )	{
@@ -192,14 +210,18 @@ public class TMLCPSyntaxChecking {
 		}
 	}
 
+	//For each sequence diagram, check:
+	// - that the parameters of messages have been declared as attributes of the instances
+	// - that actions are syntactically correct (no arit operations on boolean, etc.)
+	// - that no 2 or more instances have the same name
 	private void checkSequenceDiagrams()	{
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 
 		for( TMLCPSequenceDiagram diag: listSDs )	{
 			ArrayList<TMLAttribute> attributes = diag.getAttributes();
-			checkMessages( diag, attributes );	// check that variables have been declared
+			checkMessages( diag, attributes );		// check that attributes have been declared
 			checkActions( diag, attributes );			// actions must be done on variables that have
-																						//	been declared and coherently boolean = boolean + 6 is not allowed
+																						// been declared and coherently boolean = boolean + 6 is not allowed
 			checkInstances( diag );	// instances within the same SD must all have different names
 		}
 	}
@@ -240,13 +262,13 @@ public class TMLCPSyntaxChecking {
 				//TraceManager.addDev( "PRINTING ATTRIBUTE NAMES: " + attribute.getName() );
 				if( attribute.getName().equals( temp ) )	{	
 					if( attribute.isBool() )	{
-						parsing( "assnat", action.getAction() );
+						parsing( "assbool", action.getAction() );
 						//TraceManager.addDev( "Found that the action is on a boolean variable: " + temp );
 						//exists = true;
 						break;
 					}
 					if( attribute.isNat() )	{
-						parsing( "assbool", action.getAction() );
+						parsing( "assnat", action.getAction() );
 						//TraceManager.addDev( "Found that the action is on a natural variable: " + temp );
 						//exists = true;
 						break;
