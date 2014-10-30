@@ -385,7 +385,7 @@ public class TMLSyntaxChecking {
 	
 	/**
 	* Parsing in two steps:
-	* 1. Parsing the expression with no varaible checking
+	* 1. Parsing the expression with no variable checking
 	* 2. Parsing the expression with variables values to see whether variables are well-placed or not
 	* The second parsing is performed iff the first one succeeds
 	*/

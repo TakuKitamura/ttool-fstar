@@ -343,6 +343,7 @@ public class TMLCPSyntaxChecking {
 		SimpleNode root;
 		
 		// First parsing
+		TraceManager.addDev("-------- Parsing of " + (parseCmd + " " + action));
 		parser = new TMLExprParser(new StringReader(parseCmd + " " + action));
 		try {
 			//System.out.println("\nParsing :" + parseCmd + " " + action);
