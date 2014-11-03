@@ -218,6 +218,8 @@ public class GTURTLEModeling {
 	public final static int MATRIX = 4;
 	public final static int UPPAAL = 5;
 	public final static int PROVERIF = 6;
+	
+	private boolean undoRunning = false;
 
 
 	//private Charset chset1, chset2;
@@ -1594,11 +1596,25 @@ public class GTURTLEModeling {
 		index2 = s.indexOf(")");
 		return s.substring(0, index1) + actionName + s.substring(index2+1, s.length());
 	}
+	
+	public void enableUndo(boolean b) {
+		undoRunning = !b;
+	}
+	
+	public boolean isUndoEnable() {
+		return !undoRunning;
+	}
 
 	// UNDO MANAGEMENT
-
+	// Shall not be performed when executing an undo
 	public void saveOperation(Point p) {
 
+		TraceManager.addDev("Save operation");
+		
+		if (undoRunning) {
+			return;
+		}
+		
 		String s = makeXMLFromTurtleModeling(-1);
 
 		if ((pointerOperation > -1) && (pointerOperation < savedOperations.size() - 1)) {
@@ -1633,12 +1649,17 @@ public class GTURTLEModeling {
 			savedPanels.removeElementAt(0);
 		}
 		pointerOperation = savedOperations.size() - 1;
+		TraceManager.addDev("Setting pointer to " + pointerOperation);
 
 		selectBackwardMode();
 	}
 
 	public void backward() {
+		undoRunning = true;
+		TraceManager.addDev("Nb Of saved operations:" + savedOperations.size() + " pointer=" + pointerOperation);
 		if ((pointerOperation < 1)	|| (savedOperations.size() < 2)) {
+			TraceManager.addDev("Undo not possible");
+			undoRunning = false;
 			return;
 		}
 
@@ -1646,11 +1667,15 @@ public class GTURTLEModeling {
 		mgui.reinitMainTabbedPane();
 		try {
 			pointerOperation --;
+			TraceManager.addDev("Decrementing pointer =" + pointerOperation);
 			loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+			
 		} catch (Exception e) {
 			TraceManager.addError("Exception in backward: " + e.getMessage());
 		}
 
+		TraceManager.addDev("Selecting tab");
+		
 		Point p = (Point)(savedPanels.elementAt(pointerOperation));
 		if (p != null) {
 			TDiagramPanel tdp = mgui.selectTab(p);
@@ -1659,7 +1684,10 @@ public class GTURTLEModeling {
 			tdp.repaint();
 		}
 
+		
+		TraceManager.addDev("Selecting backward mode");
 		selectBackwardMode();
+		undoRunning = false;
 	}
 
 	public void selectBackwardMode() {
@@ -1690,6 +1718,7 @@ public class GTURTLEModeling {
 			return;
 		}
 
+		undoRunning = true;
 		removeAllComponents();
 		mgui.reinitMainTabbedPane();
 
@@ -1709,6 +1738,7 @@ public class GTURTLEModeling {
 		}
 
 		selectBackwardMode();
+		undoRunning = false;
 	}
 
 
@@ -5399,7 +5429,7 @@ public class GTURTLEModeling {
 						//TraceManager.addDev("Component added to diagram tgc=" + tgc);
 						tdp.addBuiltComponent(tgc);
 					} else {
-						TraceManager.addDev("Component not added to diagram");
+						//TraceManager.addDev("Component not added to diagram");
 					}
 				} catch (MalformedModelingException mme) {
 					error = true;
@@ -5500,7 +5530,7 @@ public class GTURTLEModeling {
 				throw new MalformedModelingException();
 			}
 
-			TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
+			//TraceManager.addDev("Making TGComponent of type " + myType + " and of name " + myName);
 			//TGComponent is ready to be built
 			if(fatherId != -1) {
 				fatherId += decId;
@@ -5545,7 +5575,7 @@ public class GTURTLEModeling {
 			} else {
 				tgc = TGComponentManager.addComponent(myX, myY, myType, tdp);
 			}
-			TraceManager.addDev("TGComponent built " + myType);
+			//TraceManager.addDev("TGComponent built " + myType);
 
 			if (tgc == null) {
 				throw new MalformedModelingException();
@@ -5562,7 +5592,7 @@ public class GTURTLEModeling {
             }*/
 
 			String oldClassName = myValue;
-			TraceManager.addDev("Old class name=" + oldClassName);
+			//TraceManager.addDev("Old class name=" + oldClassName);
 			//Added by Solange
 			if ((myValue != null) && (!myValue.equals(null))){
 				if (tgc instanceof ProCSDComponent)
@@ -5664,10 +5694,10 @@ public class GTURTLEModeling {
 			}
 
 			//extra param
-			TraceManager.addDev("Extra params" + tgc.getClass());
+			//TraceManager.addDev("Extra params" + tgc.getClass());
 			//TraceManager.addDev("My value = " + tgc.getValue());
 			tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
-			TraceManager.addDev("Extra param ok");
+			//TraceManager.addDev("Extra param ok");
 
 			if ((tgc instanceof TCDTObject) && (decId > 0)) {
 				TCDTObject to = (TCDTObject)tgc;
@@ -5829,12 +5859,12 @@ public class GTURTLEModeling {
 		//mgui.updateAllPorts();
 		
 		// Update ports on all diagrams
-		TraceManager.addDev("Updating references / ports");
+		//TraceManager.addDev("Updating references / ports");
 		mgui.updateAllReferences();
 		
 		mgui.updateAllPorts();
 		
-		TraceManager.addDev("Pending connectors");
+		//TraceManager.addDev("Pending connectors");
 		// Make use of pending connectors
 		TGConnectingPoint p1, p2, p3, p4;
 		TDiagramPanel tdp;
@@ -5871,7 +5901,7 @@ public class GTURTLEModeling {
 			}
 		}
 		pendingConnectors.clear();
-		TraceManager.addDev("Last load done");
+		//TraceManager.addDev("Last load done");
 	}
 
 	public TGConnector makeXMLConnector(Node n, TDiagramPanel tdp) throws SAXException, MalformedModelingException {
@@ -5967,9 +5997,9 @@ public class GTURTLEModeling {
 			}
 
 			//TGConnector is ready to be built
-			TraceManager.addDev("Making TGConnector of type " + myType);
+			//TraceManager.addDev("Making TGConnector of type " + myType);
 			tgco = TGComponentManager.addConnector(myX, myY, myType, tdp, p1, p2, pointList);
-			TraceManager.addDev("TGConnector built " + myType);
+			//TraceManager.addDev("TGConnector built " + myType);
 
 			if (tgco == null) {
 				TraceManager.addDev( "TGCO is null myType: " + myType );

@@ -616,7 +616,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_CUT] = new TAction("cut-command", "Cut",IconManager.imgic330, IconManager.imgic331, "Cut", "Cut selected components", 'X');
         actions[ACT_COPY] = new TAction("copy-command", "Copy", IconManager.imgic332, IconManager.imgic333, "Copy", "Copy selected components", 'C');
         actions[ACT_PASTE] = new TAction("paste-command", "Paste",IconManager.imgic334, IconManager.imgic335, "Paste", "Paste - if possible - previously cut / copied components at the minimal position of the currently opened diagram", 'V');
-        actions[ACT_DELETE] = new TAction("delete-command", "Undo", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_BACK_SPACE);
+        actions[ACT_DELETE] = new TAction("delete-command", "Delete", IconManager.imgic336, IconManager.imgic337, "Delete", "Delete selected components", KeyEvent.VK_BACK_SPACE);
         
 		actions[ACT_ZOOM_MORE] = new TAction("zoommore-command", "Zoom +", IconManager.imgic316, IconManager.imgic317, "Zoom +", "Zoom +", '0');
         actions[ACT_ZOOM_LESS] = new TAction("zoomless-command", "Zoom -", IconManager.imgic314, IconManager.imgic315, "Zoom -", "Zoom -", '0');

@@ -2321,7 +2321,10 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             // load the new TURTLE modeling
             try {
                 //TraceManager.addDev("Merging");
+                gtm.enableUndo(false);
                 gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
+                gtm.enableUndo(true);
+                gtm.saveOperation(getCurrentSelectedPoint());
                 //gtm.saveOperation(tcdp);
                 frame.setTitle("TTool: " + file.getAbsolutePath());
                 makeLotosFile();
@@ -2376,9 +2379,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             // close current modeling
             closeTurtleModeling();
+            
+            
 
             // open the new TURTLE modeling
             newTurtleModeling();
+            
+            gtm.enableUndo(false);
 
             // Update configuration
             updateLastOpenFile(file);
@@ -2395,6 +2402,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 JOptionPane.showMessageDialog(frame, "Modeling could not be loaded (unsupported file) ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
                 frame.setTitle("TToolt: unamed project");
             }
+            gtm.enableUndo(true);
+            gtm.saveOperation(getCurrentSelectedPoint());
             dtree.forceUpdate();
         }
     }
@@ -2428,9 +2437,13 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
 
             // close current modeling
             closeTurtleModeling();
+            
+            
 
             // open the new TURTLE modeling
             newTurtleModeling();
+            
+            gtm.enableUndo(false);
 
             //TraceManager.addDev("Loading");
             // load the new TURTLE modeling
@@ -2445,6 +2458,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 frame.setTitle("TTool: unamed project");
             }
             dtree.forceUpdate();
+            gtm.enableUndo(true);
+            gtm.saveOperation(getCurrentSelectedPoint());
 
         }
 

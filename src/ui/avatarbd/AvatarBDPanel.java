@@ -253,7 +253,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         		n = nl.item(i);
         		if (n.getNodeType() == Node.ELEMENT_NODE) {
         			s = ((Element)n).getAttribute("value");
-        			TraceManager.addDev("Found value=" + s);
+        			//TraceManager.addDev("Found value=" + s);
         			if (s != null) {
         				mainCode += s + "\n";
         			}
@@ -273,7 +273,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         		n = nl.item(0);
         		if (n.getNodeType() == Node.ELEMENT_NODE) {
         			s = ((Element)n).getAttribute("value");
-        			TraceManager.addDev("Found value=" + s);
+        			//TraceManager.addDev("Found value=" + s);
         			if (s != null) {
         				if (s.compareTo("true") == 0) {
         					optimized = true;
@@ -296,7 +296,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         		n = nl.item(0);
         		if (n.getNodeType() == Node.ELEMENT_NODE) {
         			s = ((Element)n).getAttribute("value");
-        			TraceManager.addDev("Found value=" + s);
+        			//TraceManager.addDev("Found value=" + s);
         			if (s != null) {
         				val = s;
         			}
@@ -315,7 +315,7 @@ public class AvatarBDPanel extends TDiagramPanel {
         		n = nl.item(0);
         		if (n.getNodeType() == Node.ELEMENT_NODE) {
         			s = ((Element)n).getAttribute("value");
-        			TraceManager.addDev("Found value=" + s);
+        			//TraceManager.addDev("Found value=" + s);
         			if (s != null) {
         				ign = s;
         			}

@@ -76,7 +76,7 @@ public class AvatarMethod {
 		typeIds = _typeIds;
 		returnType = "";
 		implementationProvided = false;
-		 TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
+		 //TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
     }
 	
 	public AvatarMethod(String _id, String _types[], String _typeIds[], String _returnType) {
@@ -85,7 +85,7 @@ public class AvatarMethod {
 		typeIds = _typeIds;
 		returnType = _returnType;
 		implementationProvided = false;
-		 TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
+		 //TraceManager.addDev("(Cons) Implementation of " + this + " is now set to: " + implementationProvided);
     }
     
     public boolean isImplementationProvided() {
@@ -93,7 +93,7 @@ public class AvatarMethod {
     }
     
      public void setImplementationProvided(boolean _imp) {
-     	 TraceManager.addDev("Implementation of " + this + " is now set to: " + _imp);
+     	 //TraceManager.addDev("Implementation of " + this + " is now set to: " + _imp);
     	implementationProvided = _imp;
     }
 	
