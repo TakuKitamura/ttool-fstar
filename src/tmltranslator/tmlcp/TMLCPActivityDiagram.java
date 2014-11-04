@@ -223,7 +223,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 				for( j = 0; j < activityList.size(); j++ )	{
 					tempCP = activityList.get(j);
 					if( tempString.equals( tempCP.getName() ) )	{
-						TMLCPRefAD CPRef = new TMLCPRefAD( tempCP, tempElem.getName(), new Object() );
+						TMLCPRefAD CPRef = new TMLCPRefAD( tempCP, tempElem.getName(), tempCP );
 						elements.set( i, CPRef );
 						break;
 					}
@@ -234,7 +234,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 				for( k = 0; k < sequenceList.size(); k++ )	{
 					tempSD = sequenceList.get(k);
 					if( tempString.equals( tempSD.getName() ) )	{
-						TMLCPRefSD SDRef = new TMLCPRefSD( tempSD, tempElem.getName(), new Object() );
+						TMLCPRefSD SDRef = new TMLCPRefSD( tempSD, tempElem.getName(), tempSD );
 						elements.set( i, SDRef );
 						break;
 					}

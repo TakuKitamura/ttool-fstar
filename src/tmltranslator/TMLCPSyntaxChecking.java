@@ -98,22 +98,23 @@ public class TMLCPSyntaxChecking {
 		checkSequenceDiagrams();
 	}
 
-	//Check that all referenced diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name
-	//the list of connectors of the mainCP
+	//Check that all diagrams, forks, joins and choices are connected by retrieving the list
+	//of elements and checking if they appear as start or end name in the list of connectors
 	private void checkMainCP()	{
+
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
-		ArrayList<String> listDiagramNames = new ArrayList<String>();
+		ArrayList<String> listElementsToCheck = new ArrayList<String>();
 		//check that all diagrams are connected
 
 		ArrayList<TMLCPElement> listElements = mainCP.getElements();
 		for( TMLCPElement elem : listElements )	{
 			TraceManager.addDev( "ELEMENT in MAINCP: " + elem );
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
-				listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
+				listElementsToCheck.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
 			}
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefSD )	{
-				listDiagramNames.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
+				listElementsToCheck.add(((tmltranslator.tmlcp.TMLCPRefSD)elem).getName() );
 			}
 			if( elem instanceof TMLCPConnector )	{
 				listConnectorsStartEndNames.add( ((TMLCPConnector)elem).getEndName() );
@@ -121,14 +122,25 @@ public class TMLCPSyntaxChecking {
 			}
 			if( elem instanceof tmltranslator.tmlcp.TMLCPChoice )	{
 				ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPChoice)elem ).getGuards();
-				TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
+				listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPChoice)elem).getName() );
+				//TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
+			}
+			if( elem instanceof tmltranslator.tmlcp.TMLCPFork )	{
+				//ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPFork)elem ).getGuards();
+				listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPFork)elem).getName() );
+				//TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
+			}
+			if( elem instanceof tmltranslator.tmlcp.TMLCPJoin )	{
+				//ArrayList<String> guards = ( (tmltranslator.tmlcp.TMLCPFork)elem ).getGuards();
+				listElementsToCheck.add( ((tmltranslator.tmlcp.TMLCPJoin)elem).getName() );
+				//TraceManager.addDev( "PRINTING GUARDS: " + guards.toString() );
 			}
 		}
 
-		for( String s: listDiagramNames )	{
+		for( String s: listElementsToCheck )	{
 			if( !listConnectorsStartEndNames.contains(s) )	{
 				//TraceManager.addDev( "Diagram " + s + " in diagram " + mainCP.getName() " is not connected" );
-				addError( "Diagram <<" + s + ">> in diagram <<" + mainCP.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
+				addError( "Element <<" + s + ">> in diagram <<" + mainCP.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
 			}
 		}
 	}
