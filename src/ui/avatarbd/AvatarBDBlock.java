@@ -817,7 +817,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 
 								am = AvatarMethod.isAValidMethod(method);
 								if (am != null) {
-									TraceManager.addDev("Setting to " + implementation + " the implementation of " + am);
+									//TraceManager.addDev("Setting to " + implementation + " the implementation of " + am);
 									am.setImplementationProvided(implementation);
 									myMethods.add(am);
 								}

@@ -2198,7 +2198,7 @@ public class GTMLModeling  {
 	}	//End of method
 
 	private tmltranslator.tmlcp.TMLCPActivityDiagram createActivityDiagramDataStructure( ui.tmlcp.TMLCPPanel panel,
-																										ArrayList<String> names )	throws MalformedTMLDesignException {
+		 ArrayList<String> names )	throws MalformedTMLDesignException {
 
 		tmltranslator.tmlcp.TMLCPStart start;
 		tmltranslator.tmlcp.TMLCPStop stop;

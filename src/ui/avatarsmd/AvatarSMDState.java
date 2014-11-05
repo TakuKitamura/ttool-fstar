@@ -690,7 +690,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 			entryCode = null;
 		} else {
 			entryCode = Conversion.wrapText(tmpEntryCode);
-			TraceManager.addDev("Entry code = " + entryCode);
+			//TraceManager.addDev("Entry code = " + entryCode);
 		}
 		
 		

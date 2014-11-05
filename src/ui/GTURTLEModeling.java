@@ -133,137 +133,137 @@ import req.ebrdd.*;
 
 public class GTURTLEModeling {
 
-	//Added by Solange
+    //Added by Solange
 	
-	public GProactiveDesign gpdtemp;
+    public GProactiveDesign gpdtemp;
 
 
-	//
-	private Vector panels; /* analysis, design, deployment, tml design */
-	private TURTLEModeling tm;
-	private AvatarSpecification avatarspec;
-	private AVATAR2UPPAAL avatar2uppaal;
-	private AVATAR2ProVerif avatar2proverif;
-	private boolean optimizeAvatar;
-	private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
-	private TMLModeling tmlm;
-	private TMLMapping artificialtmap;
-	private TMLMapping tmap;
-	private TMLCP tmlcp;
-	private RequirementModeling rm;
-	private NCStructure ncs;
-	private MainGUI mgui;
-	private CorrespondanceTGElement listE;
-	private String rtlotos;
+    //
+    private Vector panels; /* analysis, design, deployment, tml design */
+    private TURTLEModeling tm;
+    private AvatarSpecification avatarspec;
+    private AVATAR2UPPAAL avatar2uppaal;
+    private AVATAR2ProVerif avatar2proverif;
+    private boolean optimizeAvatar;
+    private int tmState; // 0:generated, 1: to be generated from mapping, 2: to be generated from TML modeling
+    private TMLModeling tmlm;
+    private TMLMapping artificialtmap;
+    private TMLMapping tmap;
+    private TMLCP tmlcp;
+    private RequirementModeling rm;
+    private NCStructure ncs;
+    private MainGUI mgui;
+    private CorrespondanceTGElement listE;
+    private String rtlotos;
 	
-	private EBRDD ebrdd;
+    private EBRDD ebrdd;
 	
-	private UPPAALSpec uppaal;
-	private RelationTIFUPPAAL uppaalTIFTable;
-	private RelationTMLUPPAAL uppaalTMLTable;
+    private UPPAALSpec uppaal;
+    private RelationTIFUPPAAL uppaalTIFTable;
+    private RelationTMLUPPAAL uppaalTMLTable;
 	
-	private ProVerifSpec proverif;
+    private ProVerifSpec proverif;
 	
-	private AVATAR2TPN avatar2tpn;
-	private TPN tpnFromAvatar;
+    private AVATAR2TPN avatar2tpn;
+    private TPN tpnFromAvatar;
 	
-	private String tpn;
-	private String sim;
-	private String dta;
-	private String dtadot;
-	private String rg;
-	private String rgdot;
-	private String rgaut;
-	private String rgautdot;
-	private String rgautproj;
-	private String rgautprojdot;
-	private String tlsa;
-	private String tlsadot;
+    private String tpn;
+    private String sim;
+    private String dta;
+    private String dtadot;
+    private String rg;
+    private String rgdot;
+    private String rgaut;
+    private String rgautdot;
+    private String rgautproj;
+    private String rgautprojdot;
+    private String tlsa;
+    private String tlsadot;
 
-	private int nbRTLOTOS;
-	private int nbSuggestedDesign;
-	private int nbSuggestedAnalysis;
-	private int nbTPN;
+    private int nbRTLOTOS;
+    private int nbSuggestedDesign;
+    private int nbSuggestedAnalysis;
+    private int nbTPN;
 
-	//private ValidationDataTree vdt;
-	private SearchTree st;
-	private SyntaxAnalysisTree mcvdt;
-	 private InvariantDataTree idt;
+    //private ValidationDataTree vdt;
+    private SearchTree st;
+    private SyntaxAnalysisTree mcvdt;
+    private InvariantDataTree idt;
 
-	private Vector checkingErrors;
-	private Vector warnings;
+    private Vector checkingErrors;
+    private Vector warnings;
 	
-	private LinkedList<Invariant> invariants;
+    private LinkedList<Invariant> invariants;
 	
-	ArrayList<TGConnectorInfo> pendingConnectors;
+    ArrayList<TGConnectorInfo> pendingConnectors;
 
-	private Vector savedOperations;
-	private Vector savedPanels;
-	private int nbMaxSavedOperations = 10;
-	private int pointerOperation;
+    private Vector savedOperations;
+    private Vector savedPanels;
+    private int nbMaxSavedOperations = 10;
+    private int pointerOperation;
 
-	private DocumentBuilderFactory dbf;
-	private DocumentBuilder db;
-	private Document docCopy;
+    private DocumentBuilderFactory dbf;
+    private DocumentBuilder db;
+    private Document docCopy;
 
-	private int decX, decY, decId;
+    private int decX, decY, decId;
 
-	private static int graphId = 0;
+    private static int graphId = 0;
 
-	private int languageID;
-	public final static int RT_LOTOS = 0;
-	public final static int LOTOS = 1;
-	public final static int AUT = 2;
-	public final static int TPN = 3;
-	public final static int MATRIX = 4;
-	public final static int UPPAAL = 5;
-	public final static int PROVERIF = 6;
+    private int languageID;
+    public final static int RT_LOTOS = 0;
+    public final static int LOTOS = 1;
+    public final static int AUT = 2;
+    public final static int TPN = 3;
+    public final static int MATRIX = 4;
+    public final static int UPPAAL = 5;
+    public final static int PROVERIF = 6;
 	
-	private boolean undoRunning = false;
+    private boolean undoRunning = false;
 
 
-	//private Charset chset1, chset2;
+    //private Charset chset1, chset2;
 
-	public GTURTLEModeling(MainGUI _mgui, Vector _panels) {
-		mgui = _mgui;
-		panels = _panels;
-		try {
-			dbf = DocumentBuilderFactory.newInstance();
-			db = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			dbf = null;
-			db = null;
-		}
-		savedOperations = new Vector();
-		savedPanels = new Vector();
-		pointerOperation = -1;
+    public GTURTLEModeling(MainGUI _mgui, Vector _panels) {
+	mgui = _mgui;
+	panels = _panels;
+	try {
+	    dbf = DocumentBuilderFactory.newInstance();
+	    db = dbf.newDocumentBuilder();
+	} catch (ParserConfigurationException e) {
+	    dbf = null;
+	    db = null;
+	}
+	savedOperations = new Vector();
+	savedPanels = new Vector();
+	pointerOperation = -1;
 		
-		invariants = new LinkedList<Invariant>();
+	invariants = new LinkedList<Invariant>();
 
-		//vdt = new ValidationDataTree(mgui);
-		mcvdt = new SyntaxAnalysisTree(mgui);
-		idt = new InvariantDataTree(mgui);
-		st = new SearchTree(mgui);
+	//vdt = new ValidationDataTree(mgui);
+	mcvdt = new SyntaxAnalysisTree(mgui);
+	idt = new InvariantDataTree(mgui);
+	st = new SearchTree(mgui);
 
-		/*if (!Charset.isSupported("UTF-8")) {
-                        ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
-                }
+	/*if (!Charset.isSupported("UTF-8")) {
+	  ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
+	  }
 
-                chset1 = Charset.forName("UTF-8");*/
-	}
+	  chset1 = Charset.forName("UTF-8");*/
+    }
 
-	public int getLanguageID() {
-		return languageID;
-	}
+    public int getLanguageID() {
+	return languageID;
+    }
 	
-	public boolean isRegularTM() {
-		if (tm == null ){
-			return false;
-		}
-		return tm.isARegularTIFSpec();
+    public boolean isRegularTM() {
+	if (tm == null ){
+	    return false;
 	}
+	return tm.isARegularTIFSpec();
+    }
 	
-	 public LinkedList<Invariant> getInvariants() {
+    public LinkedList<Invariant> getInvariants() {
     	return invariants;
     }
     
@@ -278,530 +278,530 @@ public class GTURTLEModeling {
     
 
 	
-	public String saveTIF() {
-		if (tm == null) {
-			TraceManager.addDev("NO TIF to save");
-			return null;
-		}
+    public String saveTIF() {
+	if (tm == null) {
+	    TraceManager.addDev("NO TIF to save");
+	    return null;
+	}
 		
-		TIFExchange tif = new TIFExchange();
-		tif.setTURTLEModeling(tm);
-		String ret = tif.saveInXMLTIF();
-		TraceManager.addDev("TIF=\n" +  ret);
-		return ret;
-	}
+	TIFExchange tif = new TIFExchange();
+	tif.setTURTLEModeling(tm);
+	String ret = tif.saveInXMLTIF();
+	TraceManager.addDev("TIF=\n" +  ret);
+	return ret;
+    }
 	
-	public boolean openTIF(String s) {
-		TIFExchange tif = new TIFExchange();
-		boolean ret = false;
+    public boolean openTIF(String s) {
+	TIFExchange tif = new TIFExchange();
+	boolean ret = false;
 		
-		try {
-			ret = tif.loadFromXMLTIF(s);
-			if (ret) {
-				tm = tif.getTURTLEModeling();
-				tmState = 0;
-				TraceManager.addDev("Got TIF");
-				generateDesign();
-			}
-		} catch (Exception e) {
-			TraceManager.addDev("Exception on TIF: " + e.getMessage());
-		}
-		return ret;
+	try {
+	    ret = tif.loadFromXMLTIF(s);
+	    if (ret) {
+		tm = tif.getTURTLEModeling();
+		tmState = 0;
+		TraceManager.addDev("Got TIF");
+		generateDesign();
+	    }
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception on TIF: " + e.getMessage());
 	}
+	return ret;
+    }
 	
-	public boolean openSD(String s) {
-		SDExchange sde = new SDExchange();
-		boolean ret = false;
+    public boolean openSD(String s) {
+	SDExchange sde = new SDExchange();
+	boolean ret = false;
 		
-		try {
-			ret = sde.loadFromXMLSD(s);
-			if (ret) {
-				//tm = tif.getTURTLEModeling();
-				//tmState = 0;
-				TraceManager.addDev("Got SD");
-				generateIOD(sde.getHMSC(), sde.getMSC());
-			}
-		} catch (Exception e) {
-			TraceManager.addDev("Exception on SD: " + e.getMessage());
-		}
-		return ret;
+	try {
+	    ret = sde.loadFromXMLSD(s);
+	    if (ret) {
+		//tm = tif.getTURTLEModeling();
+		//tmState = 0;
+		TraceManager.addDev("Got SD");
+		generateIOD(sde.getHMSC(), sde.getMSC());
+	    }
+	} catch (Exception e) {
+	    TraceManager.addDev("Exception on SD: " + e.getMessage());
 	}
+	return ret;
+    }
 	
-	/*public void mergeChoices(boolean nonDeterministic) {
-		if (tm != null) {
-			tm.mergeChoices(nonDeterministic);
-		}
-	}*/
+    /*public void mergeChoices(boolean nonDeterministic) {
+      if (tm != null) {
+      tm.mergeChoices(nonDeterministic);
+      }
+      }*/
 	
-	public NCStructure getNCS() {
-		return ncs;
-	}
+    public NCStructure getNCS() {
+	return ncs;
+    }
 
-	public void generateRTLOTOS(File f) {
-		TURTLETranslator tt = new TURTLETranslator(tm);
-		rtlotos = tt.generateRTLOTOS();
-		warnings = tt.getWarnings();
-		nbRTLOTOS ++;
-		if (f != null) {
-			saveInFile(f, rtlotos);
-		}
-		languageID = RT_LOTOS;
-		mgui.setMode(MainGUI.RTLOTOS_OK);
+    public void generateRTLOTOS(File f) {
+	TURTLETranslator tt = new TURTLETranslator(tm);
+	rtlotos = tt.generateRTLOTOS();
+	warnings = tt.getWarnings();
+	nbRTLOTOS ++;
+	if (f != null) {
+	    saveInFile(f, rtlotos);
 	}
+	languageID = RT_LOTOS;
+	mgui.setMode(MainGUI.RTLOTOS_OK);
+    }
 	
-	public void generateFullLOTOS(File f) {
-		reinitSIM();
+    public void generateFullLOTOS(File f) {
+	reinitSIM();
         reinitDTA();
         reinitRG();
         reinitRGAUT();
         reinitRGAUTPROJDOT();
-		//TraceManager.addDev("generate LOTOS");
+	//TraceManager.addDev("generate LOTOS");
         generateLOTOS(f);
-	}
+    }
 
-	public void generateLOTOS(File f) {
-		//tm.print();
-		TraceManager.addDev("Generating Lotos");
-		TURTLETranslator tt = new TURTLETranslator(tm);
-		rtlotos = tt.generateLOTOS(true);
-		warnings = tt.getWarnings();
-		TraceManager.addDev("Lotos generated");
+    public void generateLOTOS(File f) {
+	//tm.print();
+	TraceManager.addDev("Generating Lotos");
+	TURTLETranslator tt = new TURTLETranslator(tm);
+	rtlotos = tt.generateLOTOS(true);
+	warnings = tt.getWarnings();
+	TraceManager.addDev("Lotos generated");
 
 		
 		
-		nbRTLOTOS ++;
-		if (f != null) {
-			saveInFile(f, rtlotos);
-		}
-		TraceManager.addDev("LOTOS to file done");
-		languageID = LOTOS;
-		mgui.setMode(MainGUI.RTLOTOS_OK);
+	nbRTLOTOS ++;
+	if (f != null) {
+	    saveInFile(f, rtlotos);
 	}
+	TraceManager.addDev("LOTOS to file done");
+	languageID = LOTOS;
+	mgui.setMode(MainGUI.RTLOTOS_OK);
+    }
 
-	public void generateTPN(File f) {
-		//tm.print();
-		TURTLE2TPN t2tpn = new TURTLE2TPN(tm);
-		tpn = t2tpn.generateTPN(false).toString();
-		warnings = t2tpn.getWarnings();
+    public void generateTPN(File f) {
+	//tm.print();
+	TURTLE2TPN t2tpn = new TURTLE2TPN(tm);
+	tpn = t2tpn.generateTPN(false).toString();
+	warnings = t2tpn.getWarnings();
 
-		nbTPN ++;
-		if (f != null) {
-			TraceManager.addDev("Saving in file: " + f);
-			saveInFile(f, tpn);
-		}
-		languageID = TPN;
-
-		// For debug purpose
-		//TraceManager.addDev(tpn);
-
-		mgui.setMode(MainGUI.RTLOTOS_OK);
+	nbTPN ++;
+	if (f != null) {
+	    TraceManager.addDev("Saving in file: " + f);
+	    saveInFile(f, tpn);
 	}
+	languageID = TPN;
 
-	public LinkedList generateAUT(String path) {
-		TML2AUT tml2aut = new TML2AUT(tmlm);
-		tml2aut.generateAutomatas(true);
+	// For debug purpose
+	//TraceManager.addDev(tpn);
+
+	mgui.setMode(MainGUI.RTLOTOS_OK);
+    }
+
+    public LinkedList generateAUT(String path) {
+	TML2AUT tml2aut = new TML2AUT(tmlm);
+	tml2aut.generateAutomatas(true);
+	try {
+	    return tml2aut.saveInFiles(path);
+	} catch (FileException fe) {
+	    return null;
+	}
+    }
+	
+    public boolean generateTMLTxt( String _title ) {
+
+	if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
+	    TraceManager.addError( "About to generate the TMLText for CPs" );
+	    TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+	    specCP.toTextFormat( tmlcp );	//TMLCP.TMLCPGraphicalCP
+	    try	{
+		specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+	    }
+	    catch( Exception e ) {
+		TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
+		return false;
+	    }
+	}
+	else	{
+	    //This branch is activated if doing the syntax check from the application panel.
+	    //It only generates the application TML text
+	    if( tmap == null ) {
+		TMLTextSpecification spec = new TMLTextSpecification( _title );
+		spec.toTextFormat( tmlm );	//TMLModeling
 		try {
-			return tml2aut.saveInFiles(path);
-		} catch (FileException fe) {
-			return null;
+		    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
 		}
-	}
-	
-	public boolean generateTMLTxt( String _title ) {
-
-		if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
-			TraceManager.addError( "About to generate the TMLText for CPs" );
-			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-			specCP.toTextFormat( tmlcp );	//TMLCP.TMLCPGraphicalCP
-			try	{
-				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-			}
-			catch( Exception e ) {
-				TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
-				return false;
-			}
+		catch( Exception e ) {
+		    TraceManager.addError( "File could not be saved: " + e.getMessage() );
+		    return false;
 		}
-		else	{
-			//This branch is activated if doing the syntax check from the application panel.
-			//It only generates the application TML text
-			if( tmap == null ) {
-				TMLTextSpecification spec = new TMLTextSpecification( _title );
-				spec.toTextFormat( tmlm );	//TMLModeling
-				try {
-					spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tml" );
-				}
-				catch( Exception e ) {
-					TraceManager.addError( "File could not be saved: " + e.getMessage() );
-					return false;
-				}
-			}
-			//This branch is activated if doing the syntax check from the architecture panel.
-			//It generates the text TML for the architecture and the application + mapping information
-			else {
-				TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
-				spec.toTextFormat( tmap );	//TMLMapping
-//			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-//			specCP.toTextFormat( tmap );	//TMLCP
-				try {
-					spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
-//				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
-				}
-				catch( Exception e ) {
-					TraceManager.addError( "Files could not be saved: " + e.getMessage() );
-					return false;
-				}
-			}
-		}
-		return true;	//temporary, just to check functionality
-	}
-	
-	/*public void setUPPAALData(String _uppaal, RelationTIFUPPAAL _uppaalTable) {
-		uppaal = _uppaal;
-		uppaalTable = _uppaalTable;
-	}*/
-
-	public boolean generateUPPAALFromTIF(String path, boolean debug, int nb, boolean choices, boolean variables) {
-		TURTLE2UPPAAL turtle2uppaal = new TURTLE2UPPAAL(tm);
-		turtle2uppaal.setChoiceDeterministic(choices);
-		turtle2uppaal.setVariablesAsActions(variables);
-		uppaal = turtle2uppaal.generateUPPAAL(debug, nb);
-		TraceManager.addDev("Building relation table");
-		uppaalTIFTable = turtle2uppaal.getRelationTIFUPPAAL();
-		TraceManager.addDev("Building relation table done");
-		uppaalTMLTable = null;
-		
-		languageID = UPPAAL;
-		mgui.setMode(MainGUI.UPPAAL_OK);
-		
+	    }
+	    //This branch is activated if doing the syntax check from the architecture panel.
+	    //It generates the text TML for the architecture and the application + mapping information
+	    else {
+		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+		spec.toTextFormat( tmap );	//TMLMapping
+		//			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
+		//			specCP.toTextFormat( tmap );	//TMLCP
 		try {
-			TraceManager.addDev("Saving specification in " + path + "\n");
-			turtle2uppaal.saveInFile(path);
-			TraceManager.addDev("UPPAAL specification has been generated in " + path + "\n");
-			return true;
-		} catch (FileException fe) {
-			TraceManager.addError("Exception: " + fe.getMessage());
-			return false;
+		    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
+		    //				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
 		}
+		catch( Exception e ) {
+		    TraceManager.addError( "Files could not be saved: " + e.getMessage() );
+		    return false;
+		}
+	    }
 	}
+	return true;	//temporary, just to check functionality
+    }
+	
+    /*public void setUPPAALData(String _uppaal, RelationTIFUPPAAL _uppaalTable) {
+      uppaal = _uppaal;
+      uppaalTable = _uppaalTable;
+      }*/
 
-	public boolean generateUPPAALFromTML(String _path, boolean _debug, int _size, boolean choices) {
-		TML2UPPAAL tml2uppaal = new TML2UPPAAL(tmlm);
-		//tml2uppaal.setChoiceDeterministic(choices);
-		tml2uppaal.setSizeInfiniteFIFO(_size);
-		uppaal = tml2uppaal.generateUPPAAL(_debug);
-		uppaalTMLTable = tml2uppaal.getRelationTMLUPPAAL();
-		uppaalTIFTable = null;
-		languageID = UPPAAL;
-		mgui.setMode(MainGUI.UPPAAL_OK);
-		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
-		try {
-			tml2uppaal.saveInFile(_path);
-			return true;
-		} catch (FileException fe) {
-			TraceManager.addError("Exception: " + fe.getMessage());
-			return false;
-		}
-	}
-	
-	public boolean generateUPPAALFromAVATAR(String _path) {
-		avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
-		//tml2uppaal.setChoiceDeterministic(choices);
-		//tml2uppaal.setSizeInfiniteFIFO(_size);
-		uppaal = avatar2uppaal.generateUPPAAL(true, optimizeAvatar);
-		warnings = avatar2uppaal.getWarnings();
-		uppaalTMLTable = null;
-		uppaalTIFTable = null;
-		languageID = UPPAAL;
-		mgui.setMode(MainGUI.UPPAAL_OK);
-		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
-		try {
-			avatar2uppaal.saveInFile(_path);
-			return true;
-		} catch (FileException fe) {
-			TraceManager.addError("Exception: " + fe.getMessage());
-			return false;
-		}
-	}
-	
-	public AvatarSpecification getAvatarSpecification() {
-		return avatarspec;
-	}
-	
-	public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation) {
-		avatar2proverif = new AVATAR2ProVerif(avatarspec);
-		//tml2uppaal.setChoiceDeterministic(choices);
-		//tml2uppaal.setSizeInfiniteFIFO(_size);
-		proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _advancedTranslation);
-		languageID = PROVERIF;
-		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
-		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
-		try {
-			avatar2proverif.saveInFile(_path);
-			TraceManager.addDev("Specification generated in " + _path);
-			return true;
-		} catch (FileException fe) {
-			TraceManager.addError("Exception: " + fe.getMessage());
-			return false;
-		}
-	}
-	
-	public TPN generateTPNFromAvatar() {
-		avatar2tpn = new AVATAR2TPN(avatarspec);
-		//tml2uppaal.setChoiceDeterministic(choices);
-		//tml2uppaal.setSizeInfiniteFIFO(_size);
-		tpnFromAvatar = avatar2tpn.generateTPN(true, true);
-		languageID = TPN;
-		return tpnFromAvatar;
-	}
-	
-		/*IntMatrix im = tpnFromAvatar.getIncidenceMatrix();
-		TraceManager.addDev("Farkas computing on " + im.toString());
-		im.Farkas();
-		TraceManager.addDev("Farkas done:" + im.toString());
+    public boolean generateUPPAALFromTIF(String path, boolean debug, int nb, boolean choices, boolean variables) {
+	TURTLE2UPPAAL turtle2uppaal = new TURTLE2UPPAAL(tm);
+	turtle2uppaal.setChoiceDeterministic(choices);
+	turtle2uppaal.setVariablesAsActions(variables);
+	uppaal = turtle2uppaal.generateUPPAAL(debug, nb);
+	TraceManager.addDev("Building relation table");
+	uppaalTIFTable = turtle2uppaal.getRelationTIFUPPAAL();
+	TraceManager.addDev("Building relation table done");
+	uppaalTMLTable = null;
 		
+	languageID = UPPAAL;
+	mgui.setMode(MainGUI.UPPAAL_OK);
 		
-		
-		languageID = TPN;
-		mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
-		//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
-		//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
-		return true;
-		/*try {
-			avatar2tpn.saveInFile(_path);
-			TraceManager.addDev("Specification generated in " + _path);
-			return true;
-		} catch (FileException fe) {
-			TraceManager.addError("Exception: " + fe.getMessage());
-			return false;
-		}*/
-		
-	public ArrayList<String> getUPPAALQueries() {
-		return getUPPAALQueries(mgui.getCurrentTURTLEPanel());
+	try {
+	    TraceManager.addDev("Saving specification in " + path + "\n");
+	    turtle2uppaal.saveInFile(path);
+	    TraceManager.addDev("UPPAAL specification has been generated in " + path + "\n");
+	    return true;
+	} catch (FileException fe) {
+	    TraceManager.addError("Exception: " + fe.getMessage());
+	    return false;
 	}
-	
-	public ArrayList<String> getUPPAALQueries(TURTLEPanel tp) {
-		TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
-		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
-		ArrayList<TClass> tclasses;
-		tp.getAllCheckableTGComponent(list);
-		
-		ArrayList<String> listQ = new ArrayList<String>();
-		
-		if (tp instanceof DesignPanel) {
-			ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
-			
-			//TraceManager.addDev("List size:" + listAD.size());
-			
-			if (listAD == null) {
-				return null;
-			}
-			
-			TClass t;
-			String s;
-			for(ADComponent adc:listAD) {
-				if (adc != null) {
-					t = tm.findTClass(adc);
-					//TraceManager.addDev("Found class:" + t.getName());
-					if (t!= null) {
-						tclasses = new ArrayList<TClass>();
-						tclasses.add(t);
-						// For handling tobjects
-						tm.addAllTClassesEndingWith(tclasses, "_" + t.getName());
-						for(TClass tc: tclasses) {
-							//TraceManager.addDev("Analyzing class:" + tc.getName());
-							s = uppaalTIFTable.getRQuery(tc, adc);
-							if (s != null) {
-								//TraceManager.addDev("Adding query:" + s);
-								listQ.add(s + "$" + adc);
-							}
-						}
-					}
-				}
-			}
-		} else if ((tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLDesignPanel)) {
-			//TraceManager.addDev("uppaalTMLTable");
-			ArrayList<TMLActivityElement> listAE = listE.getTMLActivityElementCorrespondance(list);
-			
-			if (listAE == null) {
-				return null;
-			}
-			
-			TMLTask task;
-			String s;
-			for(TMLActivityElement elt:listAE) {
-				if (elt != null) {
-					task = tmlm.findTMLTask(elt);
-					if (task!= null) {
-						s = uppaalTMLTable.getRQuery(task, elt);
-						if (s != null) {
-							//TraceManager.addDev("Adding query:" + s);
-							listQ.add(s + "$" + elt);
-						}
-					}
-				}
-			}
-			
-		} else if ((avatar2uppaal != null) && (tp instanceof AvatarDesignPanel)) {
-			TraceManager.addDev("Making UPPAAL queries");
-			for(TGComponent tgc: list) {
-				TraceManager.addDev("Making UPPAAL query for " + tgc);
-				String s = avatar2uppaal.getUPPAALIdentification(tgc);
-				TraceManager.addDev("Query: " + s);
-				if ((s!= null) && (s.length() > 0)) {
-					AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
-					listQ.add(s + "$" + block.getName() + "." + tgc);
-				} else {
-					TraceManager.addDev("Could not make query for " + tgc);
-				}
-			}
-		}
-		
-		return listQ;
-	}
+    }
 
-	public LinkedList generateLOTOSAUT(String path) {
-		TML2AUTviaLOTOS tml2aut = new TML2AUTviaLOTOS(tmlm, tm);
-		tml2aut.generateLOTOS(true);
-		return tml2aut.getSpecs();
-		/*try {
-            return tml2aut.saveInFiles(path);
-        } catch (FileException fe) {
-            return null;
-        }*/
+    public boolean generateUPPAALFromTML(String _path, boolean _debug, int _size, boolean choices) {
+	TML2UPPAAL tml2uppaal = new TML2UPPAAL(tmlm);
+	//tml2uppaal.setChoiceDeterministic(choices);
+	tml2uppaal.setSizeInfiniteFIFO(_size);
+	uppaal = tml2uppaal.generateUPPAAL(_debug);
+	uppaalTMLTable = tml2uppaal.getRelationTMLUPPAAL();
+	uppaalTIFTable = null;
+	languageID = UPPAAL;
+	mgui.setMode(MainGUI.UPPAAL_OK);
+	//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+	try {
+	    tml2uppaal.saveInFile(_path);
+	    return true;
+	} catch (FileException fe) {
+	    TraceManager.addError("Exception: " + fe.getMessage());
+	    return false;
 	}
-
-	public void generateSystemC() {
-		String path = ConfigurationTTool.SystemCCodeDirectory;
-		String list = FileUtils.deleteFiles(path, ".cpp");
-		if (list.length() == 0) {
-			TraceManager.addDev("No cpp files were deleted\n");
+    }
+	
+    public boolean generateUPPAALFromAVATAR(String _path) {
+	avatar2uppaal = new AVATAR2UPPAAL(avatarspec);
+	//tml2uppaal.setChoiceDeterministic(choices);
+	//tml2uppaal.setSizeInfiniteFIFO(_size);
+	uppaal = avatar2uppaal.generateUPPAAL(true, optimizeAvatar);
+	warnings = avatar2uppaal.getWarnings();
+	uppaalTMLTable = null;
+	uppaalTIFTable = null;
+	languageID = UPPAAL;
+	mgui.setMode(MainGUI.UPPAAL_OK);
+	//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+	try {
+	    avatar2uppaal.saveInFile(_path);
+	    return true;
+	} catch (FileException fe) {
+	    TraceManager.addError("Exception: " + fe.getMessage());
+	    return false;
+	}
+    }
+	
+    public AvatarSpecification getAvatarSpecification() {
+	return avatarspec;
+    }
+	
+    public boolean generateProVerifFromAVATAR(String _path, boolean _stateReachability, boolean _advancedTranslation) {
+	avatar2proverif = new AVATAR2ProVerif(avatarspec);
+	//tml2uppaal.setChoiceDeterministic(choices);
+	//tml2uppaal.setSizeInfiniteFIFO(_size);
+	proverif = avatar2proverif.generateProVerif(true, true, _stateReachability, _advancedTranslation);
+	languageID = PROVERIF;
+	mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
+	//mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
+	//uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+	try {
+	    avatar2proverif.saveInFile(_path);
+	    TraceManager.addDev("Specification generated in " + _path);
+	    return true;
+	} catch (FileException fe) {
+	    TraceManager.addError("Exception: " + fe.getMessage());
+	    return false;
+	}
+    }
+	
+    public TPN generateTPNFromAvatar() {
+	avatar2tpn = new AVATAR2TPN(avatarspec);
+	//tml2uppaal.setChoiceDeterministic(choices);
+	//tml2uppaal.setSizeInfiniteFIFO(_size);
+	tpnFromAvatar = avatar2tpn.generateTPN(true, true);
+	languageID = TPN;
+	return tpnFromAvatar;
+    }
+	
+    /*IntMatrix im = tpnFromAvatar.getIncidenceMatrix();
+      TraceManager.addDev("Farkas computing on " + im.toString());
+      im.Farkas();
+      TraceManager.addDev("Farkas done:" + im.toString());
+		
+		
+		
+      languageID = TPN;
+      mgui.setMode(MainGUI.EDIT_PROVERIF_OK);
+      //mgui.setMode(MainGUI.MODEL_PROVERIF_OK);
+      //uppaalTable = tml2uppaal.getRelationTIFUPPAAL(_debug);
+      return true;
+      /*try {
+      avatar2tpn.saveInFile(_path);
+      TraceManager.addDev("Specification generated in " + _path);
+      return true;
+      } catch (FileException fe) {
+      TraceManager.addError("Exception: " + fe.getMessage());
+      return false;
+      }*/
+		
+    public ArrayList<String> getUPPAALQueries() {
+	return getUPPAALQueries(mgui.getCurrentTURTLEPanel());
+    }
+	
+    public ArrayList<String> getUPPAALQueries(TURTLEPanel tp) {
+	TraceManager.addDev("Searching for queries on " + mgui.getTabName(tp));
+	ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+	ArrayList<TClass> tclasses;
+	tp.getAllCheckableTGComponent(list);
+		
+	ArrayList<String> listQ = new ArrayList<String>();
+		
+	if (tp instanceof DesignPanel) {
+	    ArrayList<ADComponent> listAD = listE.getADComponentCorrespondance(list);
+			
+	    //TraceManager.addDev("List size:" + listAD.size());
+			
+	    if (listAD == null) {
+		return null;
+	    }
+			
+	    TClass t;
+	    String s;
+	    for(ADComponent adc:listAD) {
+		if (adc != null) {
+		    t = tm.findTClass(adc);
+		    //TraceManager.addDev("Found class:" + t.getName());
+		    if (t!= null) {
+			tclasses = new ArrayList<TClass>();
+			tclasses.add(t);
+			// For handling tobjects
+			tm.addAllTClassesEndingWith(tclasses, "_" + t.getName());
+			for(TClass tc: tclasses) {
+			    //TraceManager.addDev("Analyzing class:" + tc.getName());
+			    s = uppaalTIFTable.getRQuery(tc, adc);
+			    if (s != null) {
+				//TraceManager.addDev("Adding query:" + s);
+				listQ.add(s + "$" + adc);
+			    }
+			}
+		    }
+		}
+	    }
+	} else if ((tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLDesignPanel)) {
+	    //TraceManager.addDev("uppaalTMLTable");
+	    ArrayList<TMLActivityElement> listAE = listE.getTMLActivityElementCorrespondance(list);
+			
+	    if (listAE == null) {
+		return null;
+	    }
+			
+	    TMLTask task;
+	    String s;
+	    for(TMLActivityElement elt:listAE) {
+		if (elt != null) {
+		    task = tmlm.findTMLTask(elt);
+		    if (task!= null) {
+			s = uppaalTMLTable.getRQuery(task, elt);
+			if (s != null) {
+			    //TraceManager.addDev("Adding query:" + s);
+			    listQ.add(s + "$" + elt);
+			}
+		    }
+		}
+	    }
+			
+	} else if ((avatar2uppaal != null) && (tp instanceof AvatarDesignPanel)) {
+	    TraceManager.addDev("Making UPPAAL queries");
+	    for(TGComponent tgc: list) {
+		TraceManager.addDev("Making UPPAAL query for " + tgc);
+		String s = avatar2uppaal.getUPPAALIdentification(tgc);
+		TraceManager.addDev("Query: " + s);
+		if ((s!= null) && (s.length() > 0)) {
+		    AvatarBlock block = avatar2uppaal.getBlockFromReferenceObject(tgc);
+		    listQ.add(s + "$" + block.getName() + "." + tgc);
 		} else {
-			TraceManager.addDev("Files deleted:\n" + list + "\n");
+		    TraceManager.addDev("Could not make query for " + tgc);
 		}
-
-		list = FileUtils.deleteFiles(path, ".x");
-
-		if (list.length() == 0) {
-			TraceManager.addDev("No x files were deleted\n");
-		} else {
-			TraceManager.addDev("Files deleted:\n" + list + "\n");
-		}
-
-		TML2SystemC tml2systc = new TML2SystemC(tmlm);
-		tml2systc.generateSystemC(true);
-		//tml2systc.print();
-		try {
-			tml2systc.saveFile(path, "appmodel");
-		} catch (FileException fe) {
-			TraceManager.addError("File could not be saved (SystemC)");
-		}
-
+	    }
 	}
-
-
-	public void saveSIM(File f) {
-		if ((sim != null) && (f != null)) {
-			saveInFile(f, sim);
-		}
-	}
-
-	public void saveDTA(File f) {
-		if ((dta != null) && (f != null)) {
-			saveInFile(f, dta);
-		}
-	}
-
-	public void saveDTADOT(File f) {
-		if ((dtadot != null) && (f != null)) {
-			saveInFile(f, dtadot);
-		}
-	}
-
-	public void saveRG(File f) {
-		if ((rg != null) && (f != null)) {
-			saveInFile(f, rg);
-		}
-	}
-
-	public void saveTLSA(File f) {
-		if ((rg != null) && (f != null)) {
-			saveInFile(f, tlsa);
-		}
-	}
-
-	public void saveRGAut(File f) {
-		if ((rgaut != null) && (f != null)) {
-			saveInFile(f, rgaut);
-		}
-	}
-
-	public void saveRGDOT(File f) {
-		if ((rgdot != null) && (f != null)) {
-			saveInFile(f, rgdot);
-		}
-	}
-
-	public void saveTLSADOT(File f) {
-		if ((rgdot != null) && (f != null)) {
-			saveInFile(f, tlsadot);
-		}
-	}
-
-	public void saveRGAutDOT(File f) {
-		if ((rgautdot != null) && (f != null)) {
-			saveInFile(f, rgautdot);
-		}
-	}
-
-	public void saveRGAutProj(File f) {
-		if ((rgautproj != null) && (f != null)) {
-			saveInFile(f, rgautproj);
-		}
-	}
-
-	public void saveRGAutProjDOT(File f) {
-		if ((rgautprojdot != null) && (f != null)) {
-			saveInFile(f, rgautprojdot);
-		}
-	}
-	
-	public void modifyMinimizedGraph() {
-		/*AUTMappingGraph graph = new AUTMappingGraph();
-		TraceManager.addDev("Building graph");
-		graph.buildGraph(rgautproj);
-		TraceManager.addDev("Renaming transitions");
-		graph.renameTransitions();
-		TraceManager.addDev("Merging transitions 23/4=" + (23/4) + "23%4="  + (23%4));
-		graph.mergeWriteTransitions();
-		graph.mergeReadTransitions();
-		graph.removeInternalTransitions();
-		TraceManager.addDev("Printing graph:\n" + graph.toAUTStringFormat());
-		TraceManager.addDev("Splitting transitions");
-		graph.splitTransitions();
-		modifiedaut = graph.toAUTStringFormat();
-		TraceManager.addDev("Printing graph:\n" + modifiedaut);
-		TraceManager.addDev("Translation in DOT format");
 		
-		// AUT  2 dot
-		String fileName = "graph";
-		try {
-			RshClient rshc = new RshClient(getHostAldebaran());
-			int id = rshc.getId();
-			fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);   
-			String data = rgautproj;
-			rshc.sendFileData(fileName + ".aut", data);
-			String cmd1 = getPathBcgio() + " -aldebaran " + fileName + ".aut" + " -graphviz " + fileName + ".dot";
-			data = processCmd(rshc, cmd1);
-			data = rshc.getFileData(fileName + ".dot");
-			modifiedautdot = data;
-			TraceManager.addDev("All done");
-		} catch (LauncherException le) {
-			TraceManager.addDev("Error: conversion failed");
-		}*/
+	return listQ;
+    }
+
+    public LinkedList generateLOTOSAUT(String path) {
+	TML2AUTviaLOTOS tml2aut = new TML2AUTviaLOTOS(tmlm, tm);
+	tml2aut.generateLOTOS(true);
+	return tml2aut.getSpecs();
+	/*try {
+	  return tml2aut.saveInFiles(path);
+	  } catch (FileException fe) {
+	  return null;
+	  }*/
+    }
+
+    public void generateSystemC() {
+	String path = ConfigurationTTool.SystemCCodeDirectory;
+	String list = FileUtils.deleteFiles(path, ".cpp");
+	if (list.length() == 0) {
+	    TraceManager.addDev("No cpp files were deleted\n");
+	} else {
+	    TraceManager.addDev("Files deleted:\n" + list + "\n");
 	}
+
+	list = FileUtils.deleteFiles(path, ".x");
+
+	if (list.length() == 0) {
+	    TraceManager.addDev("No x files were deleted\n");
+	} else {
+	    TraceManager.addDev("Files deleted:\n" + list + "\n");
+	}
+
+	TML2SystemC tml2systc = new TML2SystemC(tmlm);
+	tml2systc.generateSystemC(true);
+	//tml2systc.print();
+	try {
+	    tml2systc.saveFile(path, "appmodel");
+	} catch (FileException fe) {
+	    TraceManager.addError("File could not be saved (SystemC)");
+	}
+
+    }
+
+
+    public void saveSIM(File f) {
+	if ((sim != null) && (f != null)) {
+	    saveInFile(f, sim);
+	}
+    }
+
+    public void saveDTA(File f) {
+	if ((dta != null) && (f != null)) {
+	    saveInFile(f, dta);
+	}
+    }
+
+    public void saveDTADOT(File f) {
+	if ((dtadot != null) && (f != null)) {
+	    saveInFile(f, dtadot);
+	}
+    }
+
+    public void saveRG(File f) {
+	if ((rg != null) && (f != null)) {
+	    saveInFile(f, rg);
+	}
+    }
+
+    public void saveTLSA(File f) {
+	if ((rg != null) && (f != null)) {
+	    saveInFile(f, tlsa);
+	}
+    }
+
+    public void saveRGAut(File f) {
+	if ((rgaut != null) && (f != null)) {
+	    saveInFile(f, rgaut);
+	}
+    }
+
+    public void saveRGDOT(File f) {
+	if ((rgdot != null) && (f != null)) {
+	    saveInFile(f, rgdot);
+	}
+    }
+
+    public void saveTLSADOT(File f) {
+	if ((rgdot != null) && (f != null)) {
+	    saveInFile(f, tlsadot);
+	}
+    }
+
+    public void saveRGAutDOT(File f) {
+	if ((rgautdot != null) && (f != null)) {
+	    saveInFile(f, rgautdot);
+	}
+    }
+
+    public void saveRGAutProj(File f) {
+	if ((rgautproj != null) && (f != null)) {
+	    saveInFile(f, rgautproj);
+	}
+    }
+
+    public void saveRGAutProjDOT(File f) {
+	if ((rgautprojdot != null) && (f != null)) {
+	    saveInFile(f, rgautprojdot);
+	}
+    }
 	
-	protected String processCmd(RshClient rshc, String cmd) throws LauncherException {
+    public void modifyMinimizedGraph() {
+	/*AUTMappingGraph graph = new AUTMappingGraph();
+	  TraceManager.addDev("Building graph");
+	  graph.buildGraph(rgautproj);
+	  TraceManager.addDev("Renaming transitions");
+	  graph.renameTransitions();
+	  TraceManager.addDev("Merging transitions 23/4=" + (23/4) + "23%4="  + (23%4));
+	  graph.mergeWriteTransitions();
+	  graph.mergeReadTransitions();
+	  graph.removeInternalTransitions();
+	  TraceManager.addDev("Printing graph:\n" + graph.toAUTStringFormat());
+	  TraceManager.addDev("Splitting transitions");
+	  graph.splitTransitions();
+	  modifiedaut = graph.toAUTStringFormat();
+	  TraceManager.addDev("Printing graph:\n" + modifiedaut);
+	  TraceManager.addDev("Translation in DOT format");
+		
+	  // AUT  2 dot
+	  String fileName = "graph";
+	  try {
+	  RshClient rshc = new RshClient(getHostAldebaran());
+	  int id = rshc.getId();
+	  fileName = FileUtils.addBeforeFileExtension(fileName, "_" + id);   
+	  String data = rgautproj;
+	  rshc.sendFileData(fileName + ".aut", data);
+	  String cmd1 = getPathBcgio() + " -aldebaran " + fileName + ".aut" + " -graphviz " + fileName + ".dot";
+	  data = processCmd(rshc, cmd1);
+	  data = rshc.getFileData(fileName + ".dot");
+	  modifiedautdot = data;
+	  TraceManager.addDev("All done");
+	  } catch (LauncherException le) {
+	  TraceManager.addDev("Error: conversion failed");
+	  }*/
+    }
+	
+    protected String processCmd(RshClient rshc, String cmd) throws LauncherException {
         rshc.setCmd(cmd);
         String s = null;
         rshc.sendProcessRequest();
@@ -809,909 +809,911 @@ public class GTURTLEModeling {
         return s;
     }
 
-	public void showSIM(int type) {
-		if (sim != null) {
-			JFrameSimulationTrace jfst = new JFrameSimulationTrace("Last simulation trace", sim, type);
-			jfst.setIconImage(IconManager.img8);
-			jfst.setSize(900, 600);
-			GraphicLib.centerOnParent(jfst);
-			jfst.setVisible(true);
-		}
+    public void showSIM(int type) {
+	if (sim != null) {
+	    JFrameSimulationTrace jfst = new JFrameSimulationTrace("Last simulation trace", sim, type);
+	    jfst.setIconImage(IconManager.img8);
+	    jfst.setSize(900, 600);
+	    GraphicLib.centerOnParent(jfst);
+	    jfst.setVisible(true);
 	}
+    }
 
-	public String showDTA() {
-		if (dta != null) {
-			return runDOTTY(dtadot);
-		}
-		return null;
+    public String showDTA() {
+	if (dta != null) {
+	    return runDOTTY(dtadot);
 	}
+	return null;
+    }
 
-	public String showRG() {
-		if (rg != null) {
-			return runDOTTY(rgdot);
-		}
-		return null;
+    public String showRG() {
+	if (rg != null) {
+	    return runDOTTY(rgdot);
 	}
+	return null;
+    }
 
-	public String showTLSA() {
-		if (rg != null) {
-			return runDOTTY(tlsadot);
-		}
-		return null;
+    public String showTLSA() {
+	if (rg != null) {
+	    return runDOTTY(tlsadot);
 	}
+	return null;
+    }
 
-	public String showRGAut() {
-		if (rgaut != null) {
-			return runDOTTY(rgautdot);
-		}
-		return null;
+    public String showRGAut() {
+	if (rgaut != null) {
+	    return runDOTTY(rgautdot);
 	}
+	return null;
+    }
 	
-	public String showRGDiplodocus() {
-		TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
-		RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
-		ret.start();
-		return null;
+    public String showRGDiplodocus() {
+	TraceManager.addDev("Show diplodocus graph located in " + ConfigurationTTool.GGraphPath + "/tree.dot");
+	RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, null, null, ConfigurationTTool.DOTTYPath + " " + ConfigurationTTool.GGraphPath + "/tree.dot");
+	ret.start();
+	return null;
+    }
+
+    public String showRGAutProj() {
+	if (rgaut != null) {
+	    return runDOTTY(rgautprojdot);
+	}
+	return null;
+    }
+
+    public static String showGGraph(String ggraph) {
+	if (ggraph != null) {
+	    return runDOTTY(ggraph);
+	}
+	return null;
+    }
+
+    public static String runDOTTY(String data) {
+	String fileName = "graph" + graphId + ".dot";
+	graphId ++;
+
+	RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, fileName, data, ConfigurationTTool.DOTTYPath + " " + fileName);
+	ret.start();
+
+	return null;
+    }
+
+    public boolean useDynamicStructure(String data) {
+	int index1 = data.indexOf("behaviour");
+	if (index1 == -1) {
+	    return false;
 	}
 
-	public String showRGAutProj() {
-		if (rgaut != null) {
-			return runDOTTY(rgautprojdot);
-		}
-		return null;
+	data = data.substring(index1, data.length());
+
+	return (data.indexOf("Queue_nat") != -1);
+
+    }
+
+
+
+    public void saveInFile(File file, String s) {
+	TraceManager.addDev("Saving in file " + file.getAbsolutePath() + " size of file=" + s.length());
+	//TraceManager.addDev("Length of s=" + s.length());
+
+	int index1 = 0, index2;
+	int step = 1048576;
+	int length = s.length();
+	//String sub;
+
+	try {
+	    FileOutputStream fos = new FileOutputStream(file);
+	    while(index1<length) {
+		index2 = Math.min(index1+step, length);
+		fos.write(s.substring(index1, index2).getBytes());
+		index1 += step;
+	    }
+	    fos.close();
+	} catch(Exception e) {
+	    JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
+	    TraceManager.addError("Specification could not be saved " + e.getMessage());
 	}
 
-	public static String showGGraph(String ggraph) {
-		if (ggraph != null) {
-			return runDOTTY(ggraph);
-		}
-		return null;
+	/*try {
+	  FileOutputStream fos = new FileOutputStream(file);
+	  fos.write(s.getBytes());
+	  fos.close();
+	  } catch(Exception e) {
+	  JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
+	  TraceManager.addDev("Specification could not be saved " + e.getMessage());
+	  }*/
+    }
+
+    public String getLastRTLOTOSSpecification() {
+	return 	rtlotos;
+    }
+
+    public String getLastTextualDTA() {
+	return dta;
+    }
+
+    public String getLastGraphicalDTA() {
+	return dtadot;
+    }
+
+    public String getLastTextualRG() {
+	return rg;
+    }
+
+    public String getLastGraphicalRG() {
+	return rgdot;
+    }
+
+    public String getLastTextualTLSA() {
+	return tlsa;
+    }
+
+    public String getLastGraphicalTLSA() {
+	return tlsadot;
+    }
+
+    public String getLastTextualRGAUT() {
+	return rgaut;
+    }
+
+    public String getLastGraphicalRGAUT() {
+	return rgautdot;
+    }
+
+    public String getLastTextualRGAUTProj() {
+	return rgautproj;
+    }
+
+    public String getLastGraphicalRGAUTProj() {
+	return rgautprojdot;
+    }
+	
+    public String getLastProVerifSpecification() {
+	if (proverif == null) {
+	    return "";
+	}
+		
+	return proverif.getStringSpec();
+    }
+
+    public int getNbRTLOTOS() {
+	return nbRTLOTOS;
+    }
+
+    public String getLastTextualDesign() {
+	if (tm == null) {
+	    return "";
+	} else {
+	    return tm.printToStringBuffer().toString();
+	}
+    }
+
+    public int getNbSuggestedDesign() {
+	return nbSuggestedDesign;
+    }
+
+    // formal validation
+    public void reinitSIM() {
+	sim = null;
+	mgui.setMode(MainGUI.SIM_KO);
+    }
+
+    public void reinitDTA() {
+	dta = null;
+	dtadot = null;
+	mgui.setMode(MainGUI.DTADOT_KO);
+    }
+
+    public void reinitRG() {
+	rg = null;
+	rgdot = null;
+	mgui.setMode(MainGUI.RGDOT_KO);
+    }
+
+    public void reinitRGAUT() {
+	rgaut = null;
+	rgautdot = null;
+	mgui.setMode(MainGUI.RGAUTDOT_KO);
+	mgui.setMode(MainGUI.RGAUT_KO);
+    }
+
+    public void reinitRGAUTPROJDOT() {
+	rgautprojdot = null;
+	mgui.setMode(MainGUI.RGAUTPROJDOT_KO);
+    }
+
+    public void setSIM(String data) {
+	sim = data;
+	mgui.setMode(MainGUI.SIM_OK);
+    }
+
+    public void setDTA(String data) {
+	dta = data;
+    }
+
+    public void setDTADOT(String data) {
+	dtadot = data;
+	mgui.setMode(MainGUI.DTADOT_OK);
+    }
+
+    public void setRG(String data) {
+	rg = data;
+	mgui.setMode(MainGUI.RGDOT_OK);
+    }
+
+    public void setTLSA(String data) {
+	tlsa = data;
+	//mgui.setMode(MainGUI.TLSADOT_OK);
+    }
+
+    public void setTLSADOT(String data) {
+	tlsadot = data;
+	mgui.setMode(MainGUI.TLSADOT_OK);
+    }
+
+    public void setRGAut(String data) {
+	rgaut = data;
+	mgui.setMode(MainGUI.RGAUT_OK);
+    }
+
+    public String getLastRGAUT() {
+	return rgaut;
+    }
+
+    public void setRGDOT(String data) {
+	rgdot = data;
+	mgui.setMode(MainGUI.RGDOT_OK);
+    }
+
+    public void setRGAutDOT(String data) {
+	rgautdot = data;
+	mgui.setMode(MainGUI.RGAUTDOT_OK);
+    }
+
+    public void setRGAUTPROJ(String data) {
+	rgautproj = data;
+    }
+
+    public void setRGAUTPROJDOT(String data) {
+	rgautprojdot = data;
+	mgui.setMode(MainGUI.RGAUTPROJDOT_OK);
+    }
+
+    // Configuration
+
+    public String getPathRTL() {
+	return ConfigurationTTool.RTLPath;
+    }
+
+    public String getPathCaesar() {
+	return ConfigurationTTool.CaesarPath;
+    }
+
+    public String getPathCaesarOpen() {
+	return ConfigurationTTool.CaesarOpenPath;
+    }
+
+    public String getPathDTA2DOT() {
+	return ConfigurationTTool.DTA2DOTPath;
+    }
+
+    public String getPathRGSTRAP() {
+	return ConfigurationTTool.RGSTRAPPath;
+    }
+
+    public String getPathRG2TLSA() {
+	return ConfigurationTTool.RG2TLSAPath;
+    }
+
+    public String getHost() {
+	return ConfigurationTTool.RTLHost;
+    }
+
+    public static String getCaesarHost() {
+	return ConfigurationTTool.AldebaranHost;
+    }
+
+    public static String getHostAldebaran() {
+	return ConfigurationTTool.AldebaranHost;
+    }
+
+    public static String getPathAldebaran() {
+	return ConfigurationTTool.AldebaranPath;
+    }
+
+    public static String getPathBcgio() {
+	return ConfigurationTTool.BcgioPath;
+    }
+	
+    public static String getPathBisimulator() {
+	return ConfigurationTTool.BisimulatorPath;
+    }
+
+    public String getPathBcgmerge() {
+	return ConfigurationTTool.BcgmergePath;
+    }
+
+    public String getPathBcgmin() {
+	return ConfigurationTTool.BcgminPath;
+    }
+	
+    public String getPathVerifyta() {
+	return ConfigurationTTool.UPPAALVerifierPath;
+    }
+	
+    public String getPathUPPAALVerifier() {
+	return ConfigurationTTool.UPPAALVerifierPath;
+    }
+	
+    public String getPathUPPAALFile() {
+	return ConfigurationTTool.UPPAALCodeDirectory;
+    }
+	
+    public String getUPPAALVerifierHost() {
+	return ConfigurationTTool.UPPAALVerifierHost;
+    }
+	
+	
+
+    public TURTLEModeling getTURTLEModeling() {
+	return tm;
+    }
+	
+    public int getTURTLEModelingState() {
+	return tmState;
+    }
+
+    public TMLModeling getTMLModeling() {
+	return tmlm;
+    }
+	
+    public TMLMapping getArtificialTMLMapping() {
+	return artificialtmap;
+    }
+	
+    public TMLMapping getTMLMapping() {
+	return tmap;
+    }
+	
+    public UPPAALSpec getLastUPPAALSpecification() {
+	return uppaal;
+    }
+
+    // TREE MANAGEMENT
+
+    public String toString() {
+	return mgui.getTitle();
+    }
+
+    public int getChildCount() {
+	return panels.size() + 3;
+    }
+
+    public Object getChild(int index) {
+	if (index < panels.size()) {
+	    return panels.elementAt(index);
+	} else if (index == panels.size()) {
+	    return mcvdt;
+	} else if (index == (panels.size() + 1)) {
+	    return idt;
+	} else {
+	    return st;
 	}
 
-	public static String runDOTTY(String data) {
-		String fileName = "graph" + graphId + ".dot";
-		graphId ++;
+    }
 
-		RemoteExecutionThread ret = new RemoteExecutionThread(ConfigurationTTool.DOTTYHost, fileName, data, ConfigurationTTool.DOTTYPath + " " + fileName);
-		ret.start();
+    public int getIndexOfChild(Object child) {
+	int index = panels.indexOf(child);
 
-		return null;
+	if (index > -1) {
+	    return index;
 	}
 
-	public boolean useDynamicStructure(String data) {
-		int index1 = data.indexOf("behaviour");
-		if (index1 == -1) {
-			return false;
-		}
+	if (child == mcvdt) {
+	    return panels.size();
+	}
+		
+	if (child == idt) {
+	    return panels.size() + 1;
+	}
+		
+	return panels.size()+2;
+    }
 
-		data = data.substring(index1, data.length());
+    // Projection management
 
-		return (data.indexOf("Queue_nat") != -1);
+    public MasterGateManager getNewMasterGateManager() {
+	return new MasterGateManager(tm);
+    }
 
+    // Assume the inputData is in AUT format: generated by RTL or CADP
+    public String performProjection(String inputData, Vector gates) {
+	StringBuffer result = new StringBuffer("");
+	StringReader sr = new StringReader(inputData);
+	BufferedReader br = new BufferedReader(sr);
+	String s;
+	String actionName, actionName1;
+	int index, index1, index2;
+	MasterGateManager mgm = new MasterGateManager(tm, 1);
+	Gate g;
+	GroupOfGates gog;
+	Hashtable <String, GroupOfGates> hashtable = new Hashtable<String, GroupOfGates>();
+
+	int cpt = 0;
+
+	//TraceManager.addDev("input data=" + inputData);
+
+	// Fill Hashtable
+	TClassAndGateDS tag;
+	int j;
+	for(int i=0; i<gates.size(); i++) {
+	    tag = (TClassAndGateDS)(gates.get(i));
+	    //TraceManager.addDev("TClass:" + tag.getTClassName() + " Gate:" + tag.getGateName());
+	    //actionName = tag.getGateName();
+	    //g = mgm.getGate(tag.getTClassName(), actionName);
+	    //TraceManager.addDev("actionName = " + actionName + " gateName = " + g.getName()); 
+	    //if (g != null) {
+	    //gog = mgm.getGroupOfGatesByGate(g);
+	    gog = mgm.groupOf(tag.getTClassName(), tag.getGateName());
+	    if (gog != null) {
+		//TraceManager.addDev("Found a gog: >" + gog.getMasterGateName() + "<");
+		hashtable.put(gog.getMasterGateName().getName(), gog);
+		/*for(j=0;j<gog.size();j++) {
+		  g = gog.getGateAt(j);
+		  TraceManager.addDev("Putting: " + g.getName());
+		  hashtable.put(g.getName(), g);
+		  }*/
+	    }
+	    //}
 	}
 
+	try {
+	    while((s = br.readLine()) != null) {
+		/*if (cpt % 10000 == 0) {
+		  TraceManager.addDev("cpt=" + cpt);
+		  }*/
+		cpt ++;
 
+		if (s.startsWith("des")) {
+		    result.append(s + "\n");
+		} else if (s.startsWith("(")) {
+		    index = s.indexOf("\"t\"");
+		    if (index > 0) {
+			// temporal action
+			// replace t with i
+			s = s.replaceAll("\"t\"", "i");
+			result.append(s + "\n");
+		    } else {
+			//exit action?
+			index = s.indexOf("\"exit\"");
+			if (index > 0) {
+			    // exit action
+			    // replace t with i
+			    s = s.replaceAll("\"exit\"", "i");
+			    result.append(s + "\n");
+			} else {
+			    // regular action
+			    // find the name of this action
+			    index1 = s.indexOf("i(");
+			    index2 = s.indexOf(")");
+			    actionName = s.substring(index1 + 2, index2);
+			    index = actionName.indexOf("<");
+			    if (index < 0) {
+				actionName1 = actionName;
+			    } else {
+				actionName1 = actionName.substring(0, index);
+			    }
+			    TraceManager.addDev("Action = >" + actionName1 + "<");
 
-	public void saveInFile(File file, String s) {
-		TraceManager.addDev("Saving in file " + file.getAbsolutePath() + " size of file=" + s.length());
-		//TraceManager.addDev("Length of s=" + s.length());
+			    gog = hashtable.get(actionName1);
+			    if (gog == null) {
+				TraceManager.addDev("Not in hash");
+				result.append(makeIAction(s) + "\n");
+			    } else {
+				TraceManager.addDev("In hash");
+				result.append(makeAction(s, actionName) + "\n");
+			    }
 
-		int index1 = 0, index2;
-		int step = 1048576;
-		int length = s.length();
-		//String sub;
-
-		try {
-			FileOutputStream fos = new FileOutputStream(file);
-			while(index1<length) {
-				index2 = Math.min(index1+step, length);
-				fos.write(s.substring(index1, index2).getBytes());
-				index1 += step;
+			    // action to ignored or to project ?
+			    /*g = mgm.getGate(actionName1);
+			      if (g == null) {
+			      //TraceManager.addDev("null1");
+			      result.append(makeIAction(s) + "\n");
+			      } else {
+			      gog = mgm.getGroupOfGatesByGate(g);
+			      if (gog == null) {
+			      //TraceManager.addDev("null2");
+			      result.append(makeIAction(s) + "\n");
+			      } else {
+			      if (!belongTo(gog, gates)) {
+			      // Check if directly a master Gate!
+			      // A completer ...
+			      //TraceManager.addDev("null3");
+			      result.append(makeIAction(s) + "\n");
+			      } else {
+			      //TraceManager.addDev("action added: " + actionName);
+			      result.append(makeAction(s, actionName) + "\n");
+			      }
+			      }
+			      }*/
 			}
-			fos.close();
-		} catch(Exception e) {
-			JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
-			TraceManager.addError("Specification could not be saved " + e.getMessage());
+
+		    }
 		}
-
-		/*try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(s.getBytes());
-            fos.close();
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(mgui.frame, "Specification could not be saved " + e.getMessage(), "Lotos File Error", JOptionPane.INFORMATION_MESSAGE);
-            TraceManager.addDev("Specification could not be saved " + e.getMessage());
-        }*/
+	    }
+	} catch (Exception e) {
+	    TraceManager.addError("Exception during projection" + e.getMessage());
+	    return null;
 	}
+	return new String(result);
+    }
 
-	public String getLastRTLOTOSSpecification() {
-		return 	rtlotos;
-	}
+    // Assume the inputData is in AUT format and has been generated by CADP
+    // Note: might not work because of case sensitive problem...
+    public String convertCADP_AUT_to_RTL_AUT(String inputData, int max) {
+	StringBuffer result = new StringBuffer("");
+	StringReader sr = new StringReader(inputData);
+	BufferedReader br = new BufferedReader(sr);
+	String s, s1;
+	String actionName;
+	int index1, index2, index3, index4;
+	Gate g;
+	String g0, g1, g2;
+	int cpt, transi=0;
+	MasterGateManager mgm = new MasterGateManager(tm, 1);
+	Hashtable ht = mgm.getGatesUpperCaseHashTable();
+	warnings = new Vector();
 
-	public String getLastTextualDTA() {
-		return dta;
-	}
+	//TraceManager.addDev("input data=" + inputData);
 
-	public String getLastGraphicalDTA() {
-		return dtadot;
-	}
+	int cpt1 = 0;
 
-	public String getLastTextualRG() {
-		return rg;
-	}
+	try {
+	    while((s = br.readLine()) != null) {
+		cpt1 ++;
+		//if (cpt1 % 100000 == 0) {
+		//TraceManager.addDev("=" + cpt1 + " / " + transi);
+		//}
+		if (s.charAt(0) == '(') {
+		    index1 = s.indexOf(",");
+		    if ((index1 > -1) && ((index1+1) < s.length())) {
+			g1 = s.substring(0, index1 + 1);
+			s = s.substring(index1+1, s.length());
 
-	public String getLastGraphicalRG() {
-		return rgdot;
-	}
+			//TraceManager.addDev("g1=" + g1 + " s=" + s);
 
-	public String getLastTextualTLSA() {
-		return tlsa;
-	}
+			index2 = s.indexOf(",");
+			if ((index2 > -1) && ((index2+1) < s.length())) {
+			    g2 = s.substring(index2, s.length());
+			    s = s.substring(0, index2);
+			    s = s.trim();
 
-	public String getLastGraphicalTLSA() {
-		return tlsadot;
-	}
+			    //TraceManager.addDev("g2=" + g2 + " s=" + s);
 
-	public String getLastTextualRGAUT() {
-		return rgaut;
-	}
+			    // Get action id
+			    // Most common case: no data
+			    index3 = s.indexOf('"');
+			    if (index3 == -1) { // no data
+				actionName = s;
+				g0 = "";
+			    } else {
+				// Extract action name
+				actionName = s.substring(index3+1, s.indexOf('!')).trim();
 
-	public String getLastGraphicalRGAUT() {
-		return rgautdot;
-	}
-
-	public String getLastTextualRGAUTProj() {
-		return rgautproj;
-	}
-
-	public String getLastGraphicalRGAUTProj() {
-		return rgautprojdot;
-	}
-	
-	public String getLastProVerifSpecification() {
-		if (proverif == null) {
-			return "";
-		}
-		
-		return proverif.getStringSpec();
-	}
-
-	public int getNbRTLOTOS() {
-		return nbRTLOTOS;
-	}
-
-	public String getLastTextualDesign() {
-		if (tm == null) {
-			return "";
-		} else {
-			return tm.printToStringBuffer().toString();
-		}
-	}
-
-	public int getNbSuggestedDesign() {
-		return nbSuggestedDesign;
-	}
-
-	// formal validation
-	public void reinitSIM() {
-		sim = null;
-		mgui.setMode(MainGUI.SIM_KO);
-	}
-
-	public void reinitDTA() {
-		dta = null;
-		dtadot = null;
-		mgui.setMode(MainGUI.DTADOT_KO);
-	}
-
-	public void reinitRG() {
-		rg = null;
-		rgdot = null;
-		mgui.setMode(MainGUI.RGDOT_KO);
-	}
-
-	public void reinitRGAUT() {
-		rgaut = null;
-		rgautdot = null;
-		mgui.setMode(MainGUI.RGAUTDOT_KO);
-		mgui.setMode(MainGUI.RGAUT_KO);
-	}
-
-	public void reinitRGAUTPROJDOT() {
-		rgautprojdot = null;
-		mgui.setMode(MainGUI.RGAUTPROJDOT_KO);
-	}
-
-	public void setSIM(String data) {
-		sim = data;
-		mgui.setMode(MainGUI.SIM_OK);
-	}
-
-	public void setDTA(String data) {
-		dta = data;
-	}
-
-	public void setDTADOT(String data) {
-		dtadot = data;
-		mgui.setMode(MainGUI.DTADOT_OK);
-	}
-
-	public void setRG(String data) {
-		rg = data;
-		mgui.setMode(MainGUI.RGDOT_OK);
-	}
-
-	public void setTLSA(String data) {
-		tlsa = data;
-		//mgui.setMode(MainGUI.TLSADOT_OK);
-	}
-
-	public void setTLSADOT(String data) {
-		tlsadot = data;
-		mgui.setMode(MainGUI.TLSADOT_OK);
-	}
-
-	public void setRGAut(String data) {
-		rgaut = data;
-		mgui.setMode(MainGUI.RGAUT_OK);
-	}
-
-	public String getLastRGAUT() {
-		return rgaut;
-	}
-
-	public void setRGDOT(String data) {
-		rgdot = data;
-		mgui.setMode(MainGUI.RGDOT_OK);
-	}
-
-	public void setRGAutDOT(String data) {
-		rgautdot = data;
-		mgui.setMode(MainGUI.RGAUTDOT_OK);
-	}
-
-	public void setRGAUTPROJ(String data) {
-		rgautproj = data;
-	}
-
-	public void setRGAUTPROJDOT(String data) {
-		rgautprojdot = data;
-		mgui.setMode(MainGUI.RGAUTPROJDOT_OK);
-	}
-
-	// Configuration
-
-	public String getPathRTL() {
-		return ConfigurationTTool.RTLPath;
-	}
-
-	public String getPathCaesar() {
-		return ConfigurationTTool.CaesarPath;
-	}
-
-	public String getPathCaesarOpen() {
-		return ConfigurationTTool.CaesarOpenPath;
-	}
-
-	public String getPathDTA2DOT() {
-		return ConfigurationTTool.DTA2DOTPath;
-	}
-
-	public String getPathRGSTRAP() {
-		return ConfigurationTTool.RGSTRAPPath;
-	}
-
-	public String getPathRG2TLSA() {
-		return ConfigurationTTool.RG2TLSAPath;
-	}
-
-	public String getHost() {
-		return ConfigurationTTool.RTLHost;
-	}
-
-	public static String getCaesarHost() {
-		return ConfigurationTTool.AldebaranHost;
-	}
-
-	public static String getHostAldebaran() {
-		return ConfigurationTTool.AldebaranHost;
-	}
-
-	public static String getPathAldebaran() {
-		return ConfigurationTTool.AldebaranPath;
-	}
-
-	public static String getPathBcgio() {
-		return ConfigurationTTool.BcgioPath;
-	}
-	
-	public static String getPathBisimulator() {
-		return ConfigurationTTool.BisimulatorPath;
-	}
-
-	public String getPathBcgmerge() {
-		return ConfigurationTTool.BcgmergePath;
-	}
-
-	public String getPathBcgmin() {
-		return ConfigurationTTool.BcgminPath;
-	}
-	
-	public String getPathVerifyta() {
-		return ConfigurationTTool.UPPAALVerifierPath;
-	}
-	
-	public String getPathUPPAALVerifier() {
-		return ConfigurationTTool.UPPAALVerifierPath;
-	}
-	
-	public String getPathUPPAALFile() {
-		return ConfigurationTTool.UPPAALCodeDirectory;
-	}
-	
-	public String getUPPAALVerifierHost() {
-		return ConfigurationTTool.UPPAALVerifierHost;
-	}
-	
-	
-
-	public TURTLEModeling getTURTLEModeling() {
-		return tm;
-	}
-	
-	public int getTURTLEModelingState() {
-		return tmState;
-	}
-
-	public TMLModeling getTMLModeling() {
-		return tmlm;
-	}
-	
-	public TMLMapping getArtificialTMLMapping() {
-		return artificialtmap;
-	}
-	
-	public TMLMapping getTMLMapping() {
-		return tmap;
-	}
-	
-	public UPPAALSpec getLastUPPAALSpecification() {
-		return uppaal;
-	}
-
-	// TREE MANAGEMENT
-
-	public String toString() {
-		return mgui.getTitle();
-	}
-
-	public int getChildCount() {
-		return panels.size() + 3;
-	}
-
-	public Object getChild(int index) {
-		if (index < panels.size()) {
-			return panels.elementAt(index);
-		} else if (index == panels.size()) {
-			return mcvdt;
-		} else if (index == (panels.size() + 1)) {
-			return idt;
-		} else {
-			return st;
-		}
-
-	}
-
-	public int getIndexOfChild(Object child) {
-		int index = panels.indexOf(child);
-
-		if (index > -1) {
-			return index;
-		}
-
-		if (child == mcvdt) {
-			return panels.size();
-		}
-		
-		if (child == idt) {
-			return panels.size() + 1;
-		}
-		
-		return panels.size()+2;
-	}
-
-	// Projection management
-
-	public MasterGateManager getNewMasterGateManager() {
-		return new MasterGateManager(tm);
-	}
-
-	// Assume the inputData is in AUT format: generated by RTL or CADP
-	public String performProjection(String inputData, Vector gates) {
-		StringBuffer result = new StringBuffer("");
-		StringReader sr = new StringReader(inputData);
-		BufferedReader br = new BufferedReader(sr);
-		String s;
-		String actionName, actionName1;
-		int index, index1, index2;
-		MasterGateManager mgm = new MasterGateManager(tm, 1);
-		Gate g;
-		GroupOfGates gog;
-		Hashtable <String, GroupOfGates> hashtable = new Hashtable<String, GroupOfGates>();
-
-		int cpt = 0;
-
-		//TraceManager.addDev("input data=" + inputData);
-
-		// Fill Hashtable
-		TClassAndGateDS tag;
-		int j;
-		for(int i=0; i<gates.size(); i++) {
-			tag = (TClassAndGateDS)(gates.get(i));
-			//TraceManager.addDev("TClass:" + tag.getTClassName() + " Gate:" + tag.getGateName());
-			//actionName = tag.getGateName();
-			//g = mgm.getGate(tag.getTClassName(), actionName);
-			//TraceManager.addDev("actionName = " + actionName + " gateName = " + g.getName()); 
-			//if (g != null) {
-				//gog = mgm.getGroupOfGatesByGate(g);
-				gog = mgm.groupOf(tag.getTClassName(), tag.getGateName());
-				if (gog != null) {
-					//TraceManager.addDev("Found a gog: >" + gog.getMasterGateName() + "<");
-					hashtable.put(gog.getMasterGateName().getName(), gog);
-					/*for(j=0;j<gog.size();j++) {
-						g = gog.getGateAt(j);
-						TraceManager.addDev("Putting: " + g.getName());
-						hashtable.put(g.getName(), g);
-					}*/
+				// Format data
+				g0 = "<";
+				cpt = 0;
+				while((index4 = s.indexOf('!')) > -1) {
+				    s = s.substring(index4+1, s.length());
+				    if (cpt > 0) {
+					g0 += ",";
+				    }
+				    cpt ++;
+				    index4 = s.indexOf('!');
+				    if (index4 > -1) {
+					g0 += s.substring(0, index4);
+				    } else {
+					g0 += s.substring(0, s.indexOf('"')).trim();
+				    }
 				}
-			//}
-		}
+				g0 += ">";
+			    }
 
-		try {
-			while((s = br.readLine()) != null) {
-				/*if (cpt % 10000 == 0) {
-                 TraceManager.addDev("cpt=" + cpt);
-              }*/
-              cpt ++;
+			    // Working on action name!
+			    //g = mgm.getGateLowerCase(actionName);
+			    g = (Gate)(ht.get(actionName));
 
-              if (s.startsWith("des")) {
-            	  result.append(s + "\n");
-              } else if (s.startsWith("(")) {
-            	  index = s.indexOf("\"t\"");
-            	  if (index > 0) {
-            		  // temporal action
-            		  // replace t with i
-            		  s = s.replaceAll("\"t\"", "i");
-            		  result.append(s + "\n");
-            	  } else {
-            		  //exit action?
-            		  index = s.indexOf("\"exit\"");
-            		  if (index > 0) {
-            			  // exit action
-            			  // replace t with i
-            			  s = s.replaceAll("\"exit\"", "i");
-            			  result.append(s + "\n");
-            		  } else {
-            			  // regular action
-            			  // find the name of this action
-            			  index1 = s.indexOf("i(");
-            			  index2 = s.indexOf(")");
-            			  actionName = s.substring(index1 + 2, index2);
-            			  index = actionName.indexOf("<");
-            			  if (index < 0) {
-            				  actionName1 = actionName;
-            			  } else {
-            				  actionName1 = actionName.substring(0, index);
-            			  }
-            			  TraceManager.addDev("Action = >" + actionName1 + "<");
+			    if (g != null) {
+				//actionName1 = actionName;
+				actionName = g.getName();
+				//TraceManager.addDev("actionName = " + g.getName());
+				/*if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
+				  CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
+				  warnings.add(ce);
+				  }*/
+			    } else {
+				TraceManager.addDev("actionName is not in hashtable: ->" + actionName + "<- length=" + actionName.length());
+			    }
 
-						  gog = hashtable.get(actionName1);
-            			  if (gog == null) {
-							  TraceManager.addDev("Not in hash");
-            				  result.append(makeIAction(s) + "\n");
-            			  } else {
-							  TraceManager.addDev("In hash");
-            				  result.append(makeAction(s, actionName) + "\n");
-            			  }
-
-            			  // action to ignored or to project ?
-            			  /*g = mgm.getGate(actionName1);
-                            if (g == null) {
-                                //TraceManager.addDev("null1");
-                                result.append(makeIAction(s) + "\n");
-                            } else {
-                                gog = mgm.getGroupOfGatesByGate(g);
-                                if (gog == null) {
-                                    //TraceManager.addDev("null2");
-                                    result.append(makeIAction(s) + "\n");
-                                } else {
-                                    if (!belongTo(gog, gates)) {
-                                        // Check if directly a master Gate!
-                                        // A completer ...
-                                        //TraceManager.addDev("null3");
-                                        result.append(makeIAction(s) + "\n");
-                                    } else {
-                                        //TraceManager.addDev("action added: " + actionName);
-                                        result.append(makeAction(s, actionName) + "\n");
-                                    }
-                                }
-                            }*/
-            		  }
-
-            	  }
-              }
+			    // Store result
+			    result.append(g1 + "\"i(" + actionName + g0 + ")\"" + g2 + "\n");
 			}
-		} catch (Exception e) {
-			TraceManager.addError("Exception during projection" + e.getMessage());
+		    }
+		} else if (s.startsWith("des")) {
+		    index1 = s.indexOf(",");
+		    s1 = s.substring(index1+1, s.length());
+		    index1 = s1.indexOf(",");
+		    s1 = s1.substring(0, index1).trim();
+		    //TraceManager.addDev("nb of transitions=" + s);
+		    transi = Integer.decode(s1).intValue();
+		    if (transi > max) {
 			return null;
+		    }
+		    result.append(s + "\n");
 		}
-		return new String(result);
+	    }
+	} catch (Exception e) {
+	    TraceManager.addError("Exception convert0" + e.getMessage());
+	    return null;
 	}
+	return new String(result);
+    }
 
-	// Assume the inputData is in AUT format and has been generated by CADP
-	// Note: might not work because of case sensitive problem...
-	public String convertCADP_AUT_to_RTL_AUT(String inputData, int max) {
-		StringBuffer result = new StringBuffer("");
-		StringReader sr = new StringReader(inputData);
-		BufferedReader br = new BufferedReader(sr);
-		String s, s1;
-		String actionName;
-		int index1, index2, index3, index4;
-		Gate g;
-		String g0, g1, g2;
-		int cpt, transi=0;
-		MasterGateManager mgm = new MasterGateManager(tm, 1);
-		Hashtable ht = mgm.getGatesUpperCaseHashTable();
-		warnings = new Vector();
+    /*public String convertCADP_AUT_to_RTL_AUT(String inputData, int max) {
+      StringBuffer result = new StringBuffer("");
+      StringReader sr = new StringReader(inputData);
+      BufferedReader br = new BufferedReader(sr);
+      String s;
+      String actionName, actionName1;
+      int index, index1, index2, index3, index4, index5;
+      Gate g;
+      String g0, g1, g2;
+      int cpt, transi=0;
+      MasterGateManager mgm = new MasterGateManager(tm);
+      warnings = new Vector();
 
-		//TraceManager.addDev("input data=" + inputData);
+      //TraceManager.addDev("input data=" + inputData);
 
-		int cpt1 = 0;
+      int cpt1 = 0;
 
-		try {
-			while((s = br.readLine()) != null) {
-				cpt1 ++;
-				//if (cpt1 % 100000 == 0) {
-				//TraceManager.addDev("=" + cpt1 + " / " + transi);
-				//}
-				if (s.charAt(0) == '(') {
-					index1 = s.indexOf(",");
-					if ((index1 > -1) && ((index1+1) < s.length())) {
-						g1 = s.substring(0, index1 + 1);
-						s = s.substring(index1+1, s.length());
+      try {
+      while((s = br.readLine()) != null) {
+      cpt1 ++;
+      if (cpt1 % 100000 == 0) {
+      TraceManager.addDev("=" + cpt1 + " / " + transi);
+      }
+      if (s.charAt(0) == '(') {
+      index1 = s.indexOf(",");
+      if ((index1 > -1) && ((index1+1) < s.length())) {
+      g1 = s.substring(0, index1 + 1);
+      s = s.substring(index1+1, s.length());
 
-						//TraceManager.addDev("g1=" + g1 + " s=" + s);
+      //TraceManager.addDev("g1=" + g1 + " s=" + s);
 
-						index2 = s.indexOf(",");
-						if ((index2 > -1) && ((index2+1) < s.length())) {
-							g2 = s.substring(index2, s.length());
-							s = s.substring(0, index2);
-							s = s.trim();
+      index2 = s.indexOf(",");
+      if ((index2 > -1) && ((index2+1) < s.length())) {
+      g2 = s.substring(index2, s.length());
+      s = s.substring(0, index2);
+      s = s.trim();
 
-							//TraceManager.addDev("g2=" + g2 + " s=" + s);
+      //TraceManager.addDev("g2=" + g2 + " s=" + s);
 
-							// Get action id
-							// Most common case: no data
-							index3 = s.indexOf('"');
-							if (index3 == -1) { // no data
-								actionName = s;
-								g0 = "";
-							} else {
-								// Extract action name
-								actionName = s.substring(index3+1, s.indexOf('!')).trim();
+      // Get action id
+      // Most common case: no data
+      index3 = s.indexOf('"');
+      if (index3 == -1) { // no data
+      actionName = s;
+      g0 = "";
+      } else {
+      // Extract action name
+      actionName = s.substring(index3+1, s.indexOf('!')).trim();
 
-								// Format data
-								g0 = "<";
-								cpt = 0;
-								while((index4 = s.indexOf('!')) > -1) {
-									s = s.substring(index4+1, s.length());
-									if (cpt > 0) {
-										g0 += ",";
-									}
-									cpt ++;
-									index4 = s.indexOf('!');
-									if (index4 > -1) {
-										g0 += s.substring(0, index4);
-									} else {
-										g0 += s.substring(0, s.indexOf('"')).trim();
-									}
-								}
-								g0 += ">";
-							}
+      // Format data
+      g0 = "<";
+      cpt = 0;
+      while((index4 = s.indexOf('!')) > -1) {
+      s = s.substring(index4+1, s.length());
+      if (cpt > 0) {
+      g0 += ",";
+      }
+      cpt ++;
+      index4 = s.indexOf('!');
+      if (index4 > -1) {
+      g0 += s.substring(0, index4);
+      } else {
+      g0 += s.substring(0, s.indexOf('"')).trim();
+      }
+      }
+      g0 += ">";
+      }
 
-							// Working on action name!
-							//g = mgm.getGateLowerCase(actionName);
-							g = (Gate)(ht.get(actionName));
+      // Working on action name!
+      g = mgm.getGateLowerCase(actionName);
 
-							if (g != null) {
-								//actionName1 = actionName;
-								actionName = g.getName();
-								//TraceManager.addDev("actionName = " + g.getName());
-								/*if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
-                                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
-                                    warnings.add(ce);
-                                }*/
-							} else {
-								TraceManager.addDev("actionName is not in hashtable: ->" + actionName + "<- length=" + actionName.length());
-							}
+      if (g != null) {
+      actionName1 = actionName;
+      actionName = g.getName();
+      if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
+      CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
+      warnings.add(ce);
+      }
+      }
 
-							// Store result
-							result.append(g1 + "\"i(" + actionName + g0 + ")\"" + g2 + "\n");
-						}
-					}
-				} else if (s.startsWith("des")) {
-					index1 = s.indexOf(",");
-					s1 = s.substring(index1+1, s.length());
-					index1 = s1.indexOf(",");
-					s1 = s1.substring(0, index1).trim();
-					//TraceManager.addDev("nb of transitions=" + s);
-					transi = Integer.decode(s1).intValue();
-					if (transi > max) {
-						return null;
-					}
-					result.append(s + "\n");
-				}
-			}
-		} catch (Exception e) {
-			TraceManager.addError("Exception convert0" + e.getMessage());
-			return null;
+      // Store result
+      result.append(g1 + "\"i(" + actionName + g0 + ")\"" + g2 + "\n");
+      }
+      }
+      } else if (s.startsWith("des")) {
+      index1 = s.indexOf(",");
+      s = s.substring(index1+1, s.length());
+      index1 = s.indexOf(",");
+      s = s.substring(0, index1).trim();
+      //TraceManager.addDev("nb of transitions=" + s);
+      transi = Integer.decode(s).intValue();
+      if (transi > max) {
+      return null;
+      }
+      result.append(s + "\n");
+      }
+      }
+      } catch (Exception e) {
+      TraceManager.addError("Exception09545 " + e.getMessage());
+      return null;
+      }
+      return new String(result);
+      }*/
+
+    public boolean belongTo(GroupOfGates gog, Vector gates) {
+	int i, j;
+	TClassAndGateDS tcg;
+	String nameTClass, nameGate;
+	for(i=0; i<gog.size(); i++) {
+	    nameTClass = gog.getTClassAt(i).getName();
+	    nameGate = gog.getGateAt(i).getName();
+	    for(j=0; j<gates.size(); j++) {
+		tcg = (TClassAndGateDS)(gates.elementAt(j));
+		if ((tcg.getTClassName().compareTo(nameTClass) == 0) && (tcg.getGateName().compareTo(nameGate) == 0)) {
+		    //TraceManager.addDev("Projected gate");
+		    return true;
 		}
-		return new String(result);
-	}
-
-	/*public String convertCADP_AUT_to_RTL_AUT(String inputData, int max) {
-        StringBuffer result = new StringBuffer("");
-        StringReader sr = new StringReader(inputData);
-        BufferedReader br = new BufferedReader(sr);
-        String s;
-        String actionName, actionName1;
-        int index, index1, index2, index3, index4, index5;
-        Gate g;
-        String g0, g1, g2;
-        int cpt, transi=0;
-        MasterGateManager mgm = new MasterGateManager(tm);
-        warnings = new Vector();
-
-        //TraceManager.addDev("input data=" + inputData);
-
-        int cpt1 = 0;
-
-        try {
-            while((s = br.readLine()) != null) {
-              cpt1 ++;
-              if (cpt1 % 100000 == 0) {
-                TraceManager.addDev("=" + cpt1 + " / " + transi);
-              }
-                if (s.charAt(0) == '(') {
-                    index1 = s.indexOf(",");
-                    if ((index1 > -1) && ((index1+1) < s.length())) {
-                        g1 = s.substring(0, index1 + 1);
-                        s = s.substring(index1+1, s.length());
-
-                        //TraceManager.addDev("g1=" + g1 + " s=" + s);
-
-                        index2 = s.indexOf(",");
-                        if ((index2 > -1) && ((index2+1) < s.length())) {
-                            g2 = s.substring(index2, s.length());
-                            s = s.substring(0, index2);
-                            s = s.trim();
-
-                            //TraceManager.addDev("g2=" + g2 + " s=" + s);
-
-                            // Get action id
-                            // Most common case: no data
-                            index3 = s.indexOf('"');
-                            if (index3 == -1) { // no data
-                                actionName = s;
-                                g0 = "";
-                            } else {
-                                // Extract action name
-                                actionName = s.substring(index3+1, s.indexOf('!')).trim();
-
-                                // Format data
-                                g0 = "<";
-                                cpt = 0;
-                                while((index4 = s.indexOf('!')) > -1) {
-                                    s = s.substring(index4+1, s.length());
-                                    if (cpt > 0) {
-                                        g0 += ",";
-                                    }
-                                    cpt ++;
-                                    index4 = s.indexOf('!');
-                                    if (index4 > -1) {
-                                        g0 += s.substring(0, index4);
-                                    } else {
-                                        g0 += s.substring(0, s.indexOf('"')).trim();
-                                    }
-                                }
-                                g0 += ">";
-                            }
-
-                            // Working on action name!
-                            g = mgm.getGateLowerCase(actionName);
-
-                            if (g != null) {
-                                actionName1 = actionName;
-                                actionName = g.getName();
-                                if (mgm.nbOfPossibleGatesLowerCase(actionName1) > 1) {
-                                    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "Action " + actionName1 + " has several possible candidates ; " + actionName + " has been chosen");
-                                    warnings.add(ce);
-                                }
-                            }
-
-                            // Store result
-                            result.append(g1 + "\"i(" + actionName + g0 + ")\"" + g2 + "\n");
-                        }
-                    }
-                } else if (s.startsWith("des")) {
-                  index1 = s.indexOf(",");
-                  s = s.substring(index1+1, s.length());
-                  index1 = s.indexOf(",");
-                  s = s.substring(0, index1).trim();
-                  //TraceManager.addDev("nb of transitions=" + s);
-                  transi = Integer.decode(s).intValue();
-                  if (transi > max) {
-                    return null;
-                  }
-                  result.append(s + "\n");
-                }
-            }
-        } catch (Exception e) {
-            TraceManager.addError("Exception09545 " + e.getMessage());
-            return null;
-        }
-        return new String(result);
-    }*/
-
-	public boolean belongTo(GroupOfGates gog, Vector gates) {
-		int i, j;
-		TClassAndGateDS tcg;
-		String nameTClass, nameGate;
-		for(i=0; i<gog.size(); i++) {
-			nameTClass = gog.getTClassAt(i).getName();
-			nameGate = gog.getGateAt(i).getName();
-			for(j=0; j<gates.size(); j++) {
-				tcg = (TClassAndGateDS)(gates.elementAt(j));
-				if ((tcg.getTClassName().compareTo(nameTClass) == 0) && (tcg.getGateName().compareTo(nameGate) == 0)) {
-					//TraceManager.addDev("Projected gate");
-					return true;
-				}
-			}
-
-		}
-		return false;
+	    }
 
 	}
+	return false;
 
-	public String makeIAction(String s) {
-		int index1, index2;
-		index1 = s.indexOf("i(");
-		index2 = s.indexOf(")");
-		return s.substring(0, index1-1) + "i" + s.substring(index2+2, s.length());
+    }
+
+    public String makeIAction(String s) {
+	int index1, index2;
+	index1 = s.indexOf("i(");
+	index2 = s.indexOf(")");
+	return s.substring(0, index1-1) + "i" + s.substring(index2+2, s.length());
+    }
+
+    public String makeAction(String s, String actionName) {
+	int index1, index2;
+	index1 = s.indexOf("i(");
+	index2 = s.indexOf(")");
+	return s.substring(0, index1) + actionName + s.substring(index2+1, s.length());
+    }
+	
+    public void enableUndo(boolean b) {
+	undoRunning = !b;
+    }
+	
+    public boolean isUndoEnable() {
+	return !undoRunning;
+    }
+
+    // UNDO MANAGEMENT
+
+    // This function is not be performed when executing an undo
+    // if variable undoRunnin has been set to true
+    public void saveOperation(Point p) {
+	if (undoRunning) {
+	    return;
 	}
 
-	public String makeAction(String s, String actionName) {
-		int index1, index2;
-		index1 = s.indexOf("i(");
-		index2 = s.indexOf(")");
-		return s.substring(0, index1) + actionName + s.substring(index2+1, s.length());
+	TraceManager.addDev("Save operation");
+	
+	String s = makeXMLFromTurtleModeling(-1);
+	
+	if ((pointerOperation > -1) && (pointerOperation < savedOperations.size() - 1)) {
+	    // some save operations must be erased
+	    for (int i = pointerOperation +1; i<savedOperations.size(); i++) {
+		savedOperations.removeElementAt(i);
+		savedPanels.removeElementAt(i);
+		i --;
+	    }
 	}
 	
-	public void enableUndo(boolean b) {
-		undoRunning = !b;
-	}
-	
-	public boolean isUndoEnable() {
-		return !undoRunning;
-	}
-
-	// UNDO MANAGEMENT
-	// Shall not be performed when executing an undo
-	public void saveOperation(Point p) {
-
-		TraceManager.addDev("Save operation");
-		
-		if (undoRunning) {
-			return;
-		}
-		
-		String s = makeXMLFromTurtleModeling(-1);
-
-		if ((pointerOperation > -1) && (pointerOperation < savedOperations.size() - 1)) {
-			// some save operations must be erased
-			for (int i = pointerOperation +1; i<savedOperations.size(); i++) {
-				savedOperations.removeElementAt(i);
-				savedPanels.removeElementAt(i);
-				i --;
-			}
-		}
-
-		// save actions on tab
-		int size = savedPanels.size();
-		if (size > 0) {
-			Point p1  = (Point)(savedPanels.elementAt(size - 1)); // panels are saved under the form of a point -> x = analysis/design, y = panel
-			if (p == null)
-				p = p1;
-			if ((p1.x != p.x) || (p1.y != p.y)){
-				savedOperations.add(savedOperations.elementAt(size - 1));
-				savedPanels.add(p);
-				if (savedOperations.size() > nbMaxSavedOperations) {
-					savedOperations.removeElementAt(0);
-					savedPanels.removeElementAt(0);
-				}
-			}
-		}
-
-		savedOperations.add(s);
+	// save actions on tab
+	int size = savedPanels.size();
+	if (size > 0) {
+	    Point p1  = (Point)(savedPanels.elementAt(size - 1)); // panels are saved under the form of a point -> x = analysis/design, y = panel
+	    if (p == null)
+		p = p1;
+	    /*if ((p1.x != p.x) || (p1.y != p.y)){
+		savedOperations.add(savedOperations.elementAt(size - 1));
 		savedPanels.add(p);
 		if (savedOperations.size() > nbMaxSavedOperations) {
-			savedOperations.removeElementAt(0);
-			savedPanels.removeElementAt(0);
+		    savedOperations.removeElementAt(0);
+		    savedPanels.removeElementAt(0);
 		}
-		pointerOperation = savedOperations.size() - 1;
-		TraceManager.addDev("Setting pointer to " + pointerOperation);
-
-		selectBackwardMode();
+		}*/
 	}
-
-	public void backward() {
-		undoRunning = true;
-		TraceManager.addDev("Nb Of saved operations:" + savedOperations.size() + " pointer=" + pointerOperation);
-		if ((pointerOperation < 1)	|| (savedOperations.size() < 2)) {
-			TraceManager.addDev("Undo not possible");
-			undoRunning = false;
-			return;
-		}
-
-		removeAllComponents();
-		mgui.reinitMainTabbedPane();
-		try {
-			pointerOperation --;
-			TraceManager.addDev("Decrementing pointer =" + pointerOperation);
-			loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
-			
-		} catch (Exception e) {
-			TraceManager.addError("Exception in backward: " + e.getMessage());
-		}
-
-		TraceManager.addDev("Selecting tab");
-		
-		Point p = (Point)(savedPanels.elementAt(pointerOperation));
-		if (p != null) {
-			TDiagramPanel tdp = mgui.selectTab(p);
-			tdp.mode = tdp.NORMAL;
-			tdp.setDraw(true);
-			tdp.repaint();
-		}
-
-		
-		TraceManager.addDev("Selecting backward mode");
-		selectBackwardMode();
-		undoRunning = false;
+	
+	savedOperations.add(s);
+	savedPanels.add(p);
+	if (savedOperations.size() > nbMaxSavedOperations) {
+	    savedOperations.removeElementAt(0);
+	    savedPanels.removeElementAt(0);
 	}
+	pointerOperation = savedOperations.size() - 1;
+	TraceManager.addDev("Setting pointer to " + pointerOperation);
+	
+	selectBackwardMode();
+    }
 
-	public void selectBackwardMode() {
-		if (pointerOperation <0) {
-			mgui.setMode(MainGUI.NO_BACKWARD);
-			mgui.setMode(MainGUI.NO_FORWARD);
-		} else {
-
-			// forward
-			if (pointerOperation < savedOperations.size() - 1) {
-				mgui.setMode(MainGUI.FORWARD);
-			}  else {
-				mgui.setMode(MainGUI.NO_FORWARD);
-			}
-
-			// backward
-			if (pointerOperation > 0) {
-				mgui.setMode(MainGUI.BACKWARD);
-			} else {
-				mgui.setMode(MainGUI.NO_BACKWARD);
-			}
-		}
+    public void backward() {
+	undoRunning = true;
+	TraceManager.addDev("Nb Of saved operations:" + savedOperations.size() + " pointer=" + pointerOperation);
+	if ((pointerOperation < 1)	|| (savedOperations.size() < 2)) {
+	    TraceManager.addDev("Undo not possible");
+	    undoRunning = false;
+	    return;
 	}
-
+	
+	removeAllComponents();
+	mgui.reinitMainTabbedPane();
+	try {
+	    pointerOperation --;
+	    TraceManager.addDev("Decrementing pointer =" + pointerOperation);
+	    loadModelingFromXML((String)(savedOperations.elementAt(pointerOperation)));
+	    
+	} catch (Exception e) {
+	    TraceManager.addError("Exception in backward: " + e.getMessage());
+	}
+	
+	TraceManager.addDev("Selecting tab");
+	
+	Point p = (Point)(savedPanels.elementAt(pointerOperation));
+	if (p != null) {
+	    TraceManager.addDev("Selecting tab panel=" + p.getX() + " diagram=" + p.getY());
+	    TDiagramPanel tdp = mgui.selectTab(p);
+	    tdp.mode = tdp.NORMAL;
+	    tdp.setDraw(true);
+	    tdp.repaint();
+	}
+	
+	
+	TraceManager.addDev("Selecting backward mode");
+	selectBackwardMode();
+	undoRunning = false;
+    }
+    
+    public void selectBackwardMode() {
+	if (pointerOperation <0) {
+	    mgui.setMode(MainGUI.NO_BACKWARD);
+	    mgui.setMode(MainGUI.NO_FORWARD);
+	} else {
+	    
+	    // forward
+	    if (pointerOperation < savedOperations.size() - 1) {
+		mgui.setMode(MainGUI.FORWARD);
+	    }  else {
+		mgui.setMode(MainGUI.NO_FORWARD);
+	    }
+	    
+	    // backward
+	    if (pointerOperation > 0) {
+		mgui.setMode(MainGUI.BACKWARD);
+	    } else {
+		mgui.setMode(MainGUI.NO_BACKWARD);
+	    }
+	}
+    }
+    
 
 	public void forward() {
 		if ((pointerOperation < 0) || (pointerOperation > 	savedOperations.size() - 2)) {

@@ -311,7 +311,8 @@ public class AvatarSpecificationSimulation  {
 				TraceManager.addDev("-> -> FIRST");
 				//stopped = false;
 				AvatarSimulationPendingTransaction silent;
-				while(true) {
+				int maxNb = 0;
+				while(maxNb < 50) {
 					gatherPendingTransactions();
 					TraceManager.addDev("Gather done");
 					silent = getSilentTransactionToExecute(pendingTransactions);
@@ -321,6 +322,7 @@ public class AvatarSpecificationSimulation  {
 						
 					} else {
 						TraceManager.addDev("Second option");
+						maxNb ++;
 						// Must execute the silent pending transactions until none available
 						Vector<AvatarSimulationPendingTransaction> vect=new Vector<AvatarSimulationPendingTransaction>();
 						vect.add(silent);

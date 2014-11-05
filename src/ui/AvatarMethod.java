@@ -365,7 +365,7 @@ public class AvatarMethod {
     public String toSaveString() {
     	String ret = "";
 		if (implementationProvided) {
-			TraceManager.addDev("Implementation provided for " + toString());
+			//TraceManager.addDev("Implementation provided for " + toString());
 			ret += "$";
 		}
 		return ret + toString();

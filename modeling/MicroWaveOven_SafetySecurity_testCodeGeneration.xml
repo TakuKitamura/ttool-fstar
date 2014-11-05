@@ -13367,7 +13367,7 @@ or by a maintenance station
 <MainCode value=""/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="ObserverProp1;RemotelyControlledMicrowave;RemoteControl;MicroWaveOven;Bell;ControlPanel;Controller;Magnetron;Door;WirelessInterface;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="6095" >
@@ -13579,7 +13579,7 @@ or by a maintenance station
 </COMPONENT>
 
 <COMPONENT type="301" id="6163" >
-<cdparam x="125" y="225" />
+<cdparam x="130" y="222" />
 <sizeparam width="586" height="80" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -14661,7 +14661,7 @@ or by a maintenance station
 <cdparam x="516" y="268" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="1000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from List of all parameters of an Avatar SMD transition to UML Note" value="null" />
-<P1  x="531" y="250" id="6663" />
+<P1  x="531" y="264" id="6663" />
 <P2  x="607" y="233" id="6671" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
