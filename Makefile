@@ -97,7 +97,7 @@ myrelease: basic launcher ttooljar
 basic:
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java	
 
-jar: ttooljar
+jar: launcher ttooljar
 
 ttooljar:
 	rm -f $(TTOOL_BIN)/$(TTOOL_BINARY)

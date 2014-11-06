@@ -53,7 +53,7 @@ import myutil.*;
 
 //The method is not very suited for the language, I should come back later...
 public class TMLCPChoice extends TMLCPElement  {
-		private ArrayList<String> guards = new ArrayList<String>();
+    private ArrayList<String> guards;
 	
     public TMLCPChoice(String _name, ArrayList<String> _guards, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -63,6 +63,13 @@ public class TMLCPChoice extends TMLCPElement  {
 /*    public void addGuard( String _guard ) {
         nexts.add( new TMLCPElement( _guard, null ) );
     }*/
+
+    public void addGuard(String _guard) {
+	if (guards == null) {
+	    guards = new ArrayList<String>();
+	}
+	guards.add(_guard);
+    }
     
     public ArrayList<String> getGuards() {
     	return this.guards;

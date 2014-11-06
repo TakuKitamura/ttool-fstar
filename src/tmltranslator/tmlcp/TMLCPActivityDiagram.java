@@ -264,11 +264,25 @@ public class TMLCPActivityDiagram  extends TMLElement {
 
 		if ((src != null) && (dest != null)) {
 		    src.addNextElement(dest);
+		    if (src instanceof TMLCPChoice) {
+			((TMLCPChoice)src).addGuard(((TMLCPConnector)tempElem).getGuard());
+		    }
 		}
 		
 	    }
 	}
-	
+    }
+
+    public void removeADConnectors() {
+	LinkedList<TMLCPElement> toBeRemoved = new LinkedList<TMLCPElement>();
+	for(TMLCPElement tempElem: elements)  {
+	    if (tempElem instanceof TMLCPConnector) {
+		toBeRemoved.add(tempElem);
+	    }
+	}
+	for(TMLCPElement tempElem: toBeRemoved) {
+	    elements.remove(tempElem);
+	}
     }
 
 }       //End of class

@@ -319,6 +319,13 @@ public class TMLCP extends TMLElement {
 	
     }
 
+    public void removeADConnectors() {
+	mainCP.removeADConnectors();
+	for(TMLCPActivityDiagram diag: otherCPs) {
+	    diag.removeADConnectors();
+	}
+    }
+
     public void printDataStructure()    {
 
         ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();

@@ -2198,6 +2198,7 @@ public class GTMLModeling  {
 
 	tmlcp.correctReferences();
 	tmlcp.generateNexts();
+	tmlcp.removeADConnectors();
 	//tmlcp.splitADs();
 	
     }   //End of method
@@ -2281,7 +2282,8 @@ public class GTMLModeling  {
                 }
                 if( component instanceof ui.tmlcp.TMLCPChoice ) {
                     //TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
-                    choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
+                    // old way: adding guards choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
+		    choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), null, component );
                     AD.addTMLCPElement( choice );
                 }
                 if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
