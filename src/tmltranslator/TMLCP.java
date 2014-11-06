@@ -354,14 +354,14 @@ public class TMLCP extends TMLElement {
         for( i = 0; i < CPlist.size(); i++ )    {
             tempCP = CPlist.get(i);
             System.out.printf( "Activity Diagram n. %d: %s\n", i+1, tempCP.getName() );
-            listAttributes = tempCP.getAttributes();
+            /*listAttributes = tempCP.getAttributes();
 
             //Print attributes
             System.out.printf( "\tAttributes:\n");
             for( j = 0; j < listAttributes.size(); j++ )        {
                 attr = listAttributes.get( j );
                 System.out.printf( "\t\t%s\t%s\t%s\n",  attr.getName(), attr.getType(), attr.getInitialValue() );
-            }
+		}*/
 
             //Print list of AD sections
             ArrayList<String> ADList;

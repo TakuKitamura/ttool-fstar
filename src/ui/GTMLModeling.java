@@ -1957,7 +1957,7 @@ public class GTMLModeling  {
 	// Syntax has been checked -> splitting ads
 	// The splitting works only if there is no other operations than sequences and references to ADs/SDs
 	// between forks and joins
-	tmlcp.splitADs();
+	//tmlcp.splitADs();
 
         TraceManager.addDev("<--- TMLCP modeling:");
         TraceManager.addDev("TMLCP: " + tmlcp.toString());

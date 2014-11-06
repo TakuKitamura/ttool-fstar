@@ -55,7 +55,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 
     private TMLCPStart start;
     private ArrayList<TMLCPElement> elements; // Including the start element
-    private ArrayList<TMLAttribute> globalVariables;
+    //private ArrayList<TMLAttribute> globalVariables;
 
     private ArrayList<String> ads;      //a list of the activity diagrams declared in a section (for parsing of text)
     private ArrayList<String> sds;      //a list of the sequence diagrams declated in a section (for parsing of text)
@@ -64,7 +64,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
     private boolean hashCodeComputed = false;
 
 
-    private boolean definedVariable( TMLAttribute _var )        {
+    /*private boolean definedVariable( TMLAttribute _var )        {
 
         TMLAttribute var;
         int i;
@@ -79,10 +79,10 @@ public class TMLCPActivityDiagram  extends TMLElement {
             }
         }
         return false;
-    }
+	}*/
 
     private void init() {
-        globalVariables = new ArrayList<TMLAttribute>();
+        //globalVariables = new ArrayList<TMLAttribute>();
         elements = new ArrayList<TMLCPElement>();
         ads = new ArrayList<String>();
         sds = new ArrayList<String>();
@@ -93,9 +93,9 @@ public class TMLCPActivityDiagram  extends TMLElement {
         init();
     }
 
-    public void addVariable( TMLAttribute _var )        {
+    /*public void addVariable( TMLAttribute _var )        {
         globalVariables.add( _var );
-    }
+	}*/
 
     public void addADname( String _name )       {
         ads.add( _name );
@@ -105,7 +105,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         sds.add( _name );
     }
 
-    public boolean checkVariableNoType( TMLAttribute _attr )    {
+    /*public boolean checkVariableNoType( TMLAttribute _attr )    {
 
         int i = 0;
         String str;
@@ -124,7 +124,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
             }
         }
         return false;
-    }
+	}*/
 
     public boolean declaredDiagram( String _name )      {
         if( containsADDiagram( _name ) )        {
@@ -146,7 +146,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         return ads.contains( _name );
     }
 
-    public void insertInitialValue( TMLAttribute _attr, String value )  {
+    /*public void insertInitialValue( TMLAttribute _attr, String value )  {
 
         int i = 0;
         String str;
@@ -166,7 +166,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
             }
         }
         //The variable trying to be initialized was not declared
-    }
+	}*/
 
     public ArrayList<TMLCPElement> getElements() {
         return elements;
@@ -181,9 +181,9 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	return null;
     }
 
-    public ArrayList<TMLAttribute> getAttributes() {
+    /*public ArrayList<TMLAttribute> getAttributes() {
         return globalVariables;
-    }
+	}*/
 
     public ArrayList<String> getADlist()        {
         return ads;
@@ -201,7 +201,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         elements.add(_elt);
     }
 
-    public boolean definedBoolVariable( String _name )  {
+    /*public boolean definedBoolVariable( String _name )  {
 
         TMLAttribute var;
         int i;
@@ -215,7 +215,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
             }
         }
         return false;
-    }
+	}*/
 
     public void correctReferences( TMLCP _refTopCP )    {
 
@@ -302,8 +302,9 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	    } 
 	}
 
-	// Updating references to junctions
+	// Adding elements to diagrams
 	
+	// Replacing junctions by references to ADs
 
 	// Returns new elements
 	return refs.values();
