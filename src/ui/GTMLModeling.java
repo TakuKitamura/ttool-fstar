@@ -1954,6 +1954,11 @@ public class GTMLModeling  {
         //makeCPMapping();      //Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
         //place only: the architecture DD
 
+	// Syntax has been checked -> splitting ads
+	// The splitting works only if there is no other operations than sequences and references to ADs/SDs
+	// between forks and joins
+	tmlcp.splitADs();
+
         TraceManager.addDev("<--- TMLCP modeling:");
         TraceManager.addDev("TMLCP: " + tmlcp.toString());
         TraceManager.addDev("End of TMLCP modeling --->");
@@ -2199,7 +2204,7 @@ public class GTMLModeling  {
 	tmlcp.correctReferences();
 	tmlcp.generateNexts();
 	tmlcp.removeADConnectors();
-	//tmlcp.splitADs();
+	
 	
     }   //End of method
 

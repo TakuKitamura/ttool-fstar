@@ -285,4 +285,29 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	}
     }
 
+    // The splitting works only if there is no other operations than sequences and references to ADs/SDs
+    // between forks and joins
+    // The function removes junctions, and creates one new AD per junction
+    public Collection<TMLCPActivityDiagram> splitADs() {
+	int id = 0;
+	// For each junction, we create a new AD
+	ArrayList<TMLCPJunction> junctions = new ArrayList<TMLCPJunction>();
+	HashMap<TMLCPJunction, TMLCPActivityDiagram> refs = new HashMap<TMLCPJunction, TMLCPActivityDiagram>();
+	
+	for(TMLCPElement elt: elements)  {
+	    if (elt instanceof TMLCPJunction) {
+		junctions.add((TMLCPJunction)elt);
+		TMLCPActivityDiagram diag = new TMLCPActivityDiagram(getName() + "_" + id, referenceObject);
+		refs.put((TMLCPJunction)elt, diag);
+	    } 
+	}
+
+	// Updating references to junctions
+	
+
+	// Returns new elements
+	return refs.values();
+
+    }
+
 }       //End of class
