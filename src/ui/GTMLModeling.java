@@ -2303,6 +2303,7 @@ public class GTMLModeling  {
 		String toParse;
 		Object attribute;
 		TGConnectorMessageTMLSD connector;
+		tmltranslator.tmlcp.TMLSDInstance instance;
 		String[] tokens;							//used to get the tokens of the string for a SD attribute
 		String delims = "[ +=:;]+";		//the delimiter chars used to parse attributes of SD instance
 
@@ -2326,10 +2327,10 @@ public class GTMLModeling  {
 			//order messages according to the inverse of Y coordinate
 			for( int j = 0; j < elemList.size(); j++ )	{
 				TGComponent elem = (TGComponent) elemList.get(j);
+				//include the package name of the class to avoid confusion with the graphical TMLSDInstance
 				if( elem instanceof TMLSDStorageInstance )	{
+					instance = new tmltranslator.tmlcp.TMLSDInstance( ((TMLSDStorageInstance)elem).getName(), elem, "STORAGE" );
 					TMLSDStorageInstance storage = (TMLSDStorageInstance) elemList.get(j);
-					//include the package name of the class to avoid confusion with the graphical TMLSDInstance
-					SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( storage.getName(), null, "STORAGE" ) );
 					attributes = storage.getAttributes();
 					for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
 						attribute = attributes.get( index1 );
@@ -2346,18 +2347,19 @@ public class GTMLModeling  {
 								type = new TMLType(3);	//other type
 							}
 						}
-						SD.addAttribute( new TMLAttribute( tokens[1], storage.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
+						instance.addAttribute( new TMLAttribute( tokens[1], storage.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( storage.getNumberInternalComponents() > 0 )	{	// action states are stored as internal components of an instance
 						components = storage.getInternalComponents();
 						for( index2 = 0; index2 < storage.getNumberInternalComponents(); index2++ )	{
-							SD.addAction( new TMLSDAction( components[index2].getValue(), storage.getName(), null, components[index2].getY() ) );
+							instance.addAction( new TMLSDAction( components[index2].getValue(), storage.getName(), components[index2], components[index2].getY() ) );
 						}
 					}
+					SD.addInstance( instance );
 				}
 				if( elem instanceof TMLSDControllerInstance )	{
 					TMLSDControllerInstance controller = (TMLSDControllerInstance) elemList.get(j);
-					SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( controller.getName(), null, "CONTROLLER" ) );
+					instance = new tmltranslator.tmlcp.TMLSDInstance( controller.getName(), elem, "CONTROLLER" );
 					attributes = controller.getAttributes();
 					for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
 						attribute = attributes.get( index1 );
@@ -2368,19 +2370,19 @@ public class GTMLModeling  {
 							if( tokens[3].equals("Boolean") )	{	type = new TMLType(2);	}
 							else	{	type = new TMLType(3);	/*other type*/	}
 						}
-						TraceManager.addDev( tokens[3].toUpperCase() );
-						SD.addAttribute( new TMLAttribute( tokens[1], controller.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
+						instance.addAttribute( new TMLAttribute( tokens[1], controller.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( controller.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 						components = controller.getInternalComponents();
 						for( index2 = 0; index2 < controller.getNumberInternalComponents(); index2++ )	{	//get action states
-							SD.addAction( new TMLSDAction( components[index2].getValue(), controller.getName(), null, components[index2].getY() ) );
+							instance.addAction( new TMLSDAction( components[index2].getValue(), controller.getName(), components[index2], components[index2].getY() ) );
 						}
 					}
+					SD.addInstance( instance ); 
 				}
-				if( elem instanceof TMLSDTransferInstance )	{
+				if( elem instanceof TMLSDTransferInstance )	{	
 					TMLSDTransferInstance transfer = (TMLSDTransferInstance) elemList.get(j);
-					SD.addInstance( new tmltranslator.tmlcp.TMLSDInstance( transfer.getName(), null, "TRANSFER" ) );
+					instance = new tmltranslator.tmlcp.TMLSDInstance( transfer.getName(), elem, "TRANSFER" );
 					attributes = transfer.getAttributes();
 					for( index1 = 0; index1 < attributes.size(); index1++ )	{	// an attribute is a variable declaration
 						attribute = attributes.get( index1 );
@@ -2391,20 +2393,22 @@ public class GTMLModeling  {
 							if( tokens[3].equals("Boolean") )	{	type = new TMLType(2);	}
 							else	{	type = new TMLType(3);	/*other type*/	}
 						}
-						SD.addAttribute( new TMLAttribute( tokens[1], transfer.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
+						instance.addAttribute( new TMLAttribute( tokens[1], transfer.getName(), type, tokens[2] ) );	//name, instanceName, type, initial value
 					}
 					if( transfer.getNumberInternalComponents() > 0 )	{	//Action states are stored as internal components of an instance
 						components = transfer.getInternalComponents();
 						for( index2 = 0; index2 < transfer.getNumberInternalComponents(); index2++ )	{	//get action states
-							SD.addAction( new TMLSDAction( components[index2].getValue(), transfer.getName(), null, components[index2].getY() ) );
+							instance.addAction( new TMLSDAction( components[index2].getValue(), transfer.getName(), components[index2], components[index2].getY() ) );
 						}
 					}
+					SD.addInstance( instance );
 				}
 				if( elem instanceof TGConnectorMessageTMLSD )	{
 					connector = (TGConnectorMessageTMLSD) elemList.get(j);
 					String sender = connector.getTGConnectingPointP1().getFather().getName();
 					String receiver = connector.getTGConnectingPointP2().getFather().getName();
-					SD.addMessage( new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), null, connector.getParams() ) );
+					TMLSDMessage message = new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams() );
+					//( (tmltranslator.tmlcp.TMLSDInstance) connector.getTGConnectingPointP1().getFather() ).addMessage( message );
 				}
 			}	//End of for over internal elements
 		return SD;
