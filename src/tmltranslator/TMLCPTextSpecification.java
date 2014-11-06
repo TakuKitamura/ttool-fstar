@@ -639,7 +639,10 @@ public class TMLCPTextSpecification {
 		for( int j = 0; j < connToChoice.size(); j++ )	{
 			currentElem = connToChoice.get(j).getEndName();
 			nextElem = currentElem;
-			branchSb = TAB + connToChoice.get(j).getGuard() + "{";
+			
+			//branchSb = TAB + connToChoice.get(j).getGuard() + "{";
+			// TO BE MODIFIED
+			branchSb = TAB + "WARNING: NOGUARD" + "{";
 			exit = false;
 			while( !exit )	{
 				token = nextElem;
