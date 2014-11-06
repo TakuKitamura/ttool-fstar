@@ -311,6 +311,14 @@ public class TMLCP extends TMLElement {
         }
     }
 
+    public void generateNexts() {
+	mainCP.generateNexts();
+	for(TMLCPActivityDiagram diag: otherCPs) {
+	    diag.generateNexts();
+	}
+	
+    }
+
     public void printDataStructure()    {
 
         ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();

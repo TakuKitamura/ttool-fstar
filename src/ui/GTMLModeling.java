@@ -2197,6 +2197,7 @@ public class GTMLModeling  {
         }
 
 	tmlcp.correctReferences();
+	tmlcp.generateNexts();
 	//tmlcp.splitADs();
 	
     }   //End of method

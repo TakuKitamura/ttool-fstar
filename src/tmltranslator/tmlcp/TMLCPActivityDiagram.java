@@ -172,6 +172,15 @@ public class TMLCPActivityDiagram  extends TMLElement {
         return elements;
     }
 
+    public TMLCPElement getElementByName(String name) {
+	for(TMLCPElement elt: elements) {
+	    if (elt.getName().equals(name)) {
+		return elt;
+	    }
+	}
+	return null;
+    }
+
     public ArrayList<TMLAttribute> getAttributes() {
         return globalVariables;
     }
@@ -241,6 +250,25 @@ public class TMLCPActivityDiagram  extends TMLElement {
                 }
             }
         }
+    }
+
+    public void generateNexts() {
+	String startName, endName;
+	TMLCPElement src, dest;
+	for(TMLCPElement tempElem: elements)  {
+	    if (tempElem instanceof TMLCPConnector) {
+		startName = ((TMLCPConnector)tempElem).getStartName();
+		endName = ((TMLCPConnector)tempElem).getEndName();
+		src = getElementByName(startName);
+		dest = getElementByName(endName);
+
+		if ((src != null) && (dest != null)) {
+		    src.addNextElement(dest);
+		}
+		
+	    }
+	}
+	
     }
 
 }       //End of class
