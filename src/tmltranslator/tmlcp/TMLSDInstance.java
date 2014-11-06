@@ -37,9 +37,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDInstance, TML Sequence Diagram Instance Data Structure
+* Class TMLSDInstance, the class for the TML Sequence Diagram Instance in the tmlcp data structure. An instance is composed of
+* actions, messages, global variables and is associated to a mapped unit into the architecture.
 * Creation: 18/02/2014
-* @version 1.1 11/06/2014
+* @version 1.1 03/11/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
@@ -47,6 +48,7 @@ knowledge of the CeCILL license and that you accept its terms.
 package tmltranslator.tmlcp;;
 
 import tmltranslator.*;
+import ui.tmldd.*;
 import java.util.*;
 
 
@@ -56,16 +58,30 @@ public class TMLSDInstance extends TMLElement  {
 
 	private ArrayList<TMLSDElement> elements;
 	private String type;
+	private TMLArchiNode mappedUnit;	//the unit of the architecture where the instance is mapped to
+	private ArrayList<TMLAttribute> globalVariables;
+	private ArrayList<TMLSDMessage> messages; 
+	private ArrayList<TMLSDEvent> events;	//used to sort messages and actions according to their order, to produce the TMLTxt code
+	private ArrayList<TMLSDAction> actions;
 	
 	public TMLSDInstance( String _name, Object _referenceObject, String _type ) {
   	super( _name, _referenceObject );
 		this.type = _type;
-		elements = new ArrayList<TMLSDElement>();
+		init();
 	}
 
 	public TMLSDInstance( String _name ) {
   	super( _name, null );
 		elements = new ArrayList<TMLSDElement>();
+	}
+
+	private void init()	{
+
+		elements = new ArrayList<TMLSDElement>();
+		globalVariables = new ArrayList<TMLAttribute>();
+		messages = new ArrayList<TMLSDMessage>();
+		actions = new ArrayList<TMLSDAction>();
+		events = new ArrayList<TMLSDEvent>();
 	}
     
   public void addElement(TMLSDElement _elt) {
@@ -87,6 +103,81 @@ public class TMLSDInstance extends TMLElement  {
 	
 	public String getType()	{
 		return this.type;
+	}
+
+	public ArrayList<TMLSDEvent> getEvents()	{
+		return events;
+	}
+
+	public void addEvent( TMLSDEvent _event )	{
+		events.add( _event );
+	}
+
+	public void addVariable( TMLAttribute _attr )	{
+		globalVariables.add( _attr );
+	}
+
+	public void addAttribute( TMLAttribute _attribute )	{	//used by the graphical 2 TMLTxt compiler
+      globalVariables.add( _attribute );
+	}
+	
+	public ArrayList<TMLAttribute> getAttributes() {
+		return globalVariables;
+	}
+
+	/*public void addAttribute( TMLSDAction _action ) {
+		actions.add( _action );
+	}*/
+
+	public ArrayList<TMLSDAction> getActions() {
+		return actions;
+	}
+
+	public void addAction( TMLSDAction _action ) {
+		actions.add( _action );
+		addEvent( new TMLSDEvent( _action.getAction(), _action.getInstanceName(), _action.getYCoord() ) );
+	}
+	
+	public void addMappedUnit( TMLArchiNode _mappedUnit ) {
+    mappedUnit = _mappedUnit;
+ 	}
+   
+	public TMLArchiNode getMappedUnit()	{
+		return mappedUnit;
+	}
+	
+	public void addMessage( TMLSDMessage _msg ) {
+  	messages.add( _msg );
+		//addEvent( new TMLSDEvent( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
+  }
+    
+	public void insertInitialValue( String _name, String value ) {
+			
+		int i = 0;
+		String str;
+		TMLAttribute tempAttr;
+		TMLType tempType, _attrType;
+		TMLAttribute _attr = new TMLAttribute( _name, new TMLType(1) );
+
+		for( i = 0; i < globalVariables.size(); i++ )	{
+			tempAttr = globalVariables.get(i);
+			str = tempAttr.getName();
+			if( str.equals( _attr.getName() ) )	{
+				tempType = tempAttr.getType();
+				_attrType = _attr.getType();
+				if( tempType.getType() == _attrType.getType() )	{
+					_attr.initialValue = value;
+					globalVariables.set( i, _attr );
+					return;
+				}
+			}
+		}
+		String errorMessage = "TMLCOMPILER ERROR: variable " + _name + " in diagram " + this.name + " is not initialized";
+		//throw new UninitializedVariableException( errorMessage );
+	}
+
+	public ArrayList<TMLSDMessage> getMessages()	{
+		return messages;
 	}
 	
 }

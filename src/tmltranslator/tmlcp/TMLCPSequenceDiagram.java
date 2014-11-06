@@ -37,9 +37,10 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLCPSequenceDiagram. 
+* Class TMLCPSequenceDiagram. A sequence diagram is simply represented as a set of instances. Each instance is associated to
+* variables, actions, messages and a mapped unit (the architecture unit where the instance is mapped to).
 * Creation: 18/02/2014
-* @version 1.1 18/05/2014
+* @version 1.2 04/11/2014
 * @author Ludovic APVRILLE, Andrea ENRICI
 * @see
 */
@@ -53,13 +54,7 @@ import myutil.*;
 
 public class TMLCPSequenceDiagram  extends TMLElement {
 
-	private ArrayList<TMLSDInstance> instances; 
-	private ArrayList<TMLSDInstance> mappingInstances;
-	private ArrayList<TMLAttribute> globalVariables;
-	private ArrayList<TMLSDMessage> messages; 
-	//used to sort messages and actions according to their order in the graphical window, to produce the TMLTxt code
-	private ArrayList<TMLSDItem> items; 	
-	private ArrayList<TMLSDAction> actions;
+	private ArrayList<TMLSDInstance> instancesList; 
 	
 	private int hashCode;
 	private boolean hashCodeComputed = false;
@@ -71,94 +66,61 @@ public class TMLCPSequenceDiagram  extends TMLElement {
 	}
 
 	private void init() {
-		globalVariables = new ArrayList<TMLAttribute>();
-		instances = new ArrayList<TMLSDInstance>();
-		messages = new ArrayList<TMLSDMessage>();
+		//globalVariables = new ArrayList<TMLAttribute>();
+		instancesList = new ArrayList<TMLSDInstance>();
+		/*messages = new ArrayList<TMLSDMessage>();
 		actions = new ArrayList<TMLSDAction>();
-		items = new ArrayList<TMLSDItem>();
+		items = new ArrayList<TMLSDItem>();*/
 	}
     
-	public ArrayList<TMLSDItem> getItems()	{
-		return items;
-	}
-
-	public void addItem( TMLSDItem _item )	{
-		items.add( _item );
-	}
-
-	public void addVariable( TMLAttribute _attr )	{
-		globalVariables.add( _attr );
-	}
-
-	public void addAttribute( TMLAttribute _attribute )	{	//used by the graphical 2 TMLTxt compiler
-      globalVariables.add( _attribute );
-	}
-	
-	public ArrayList<TMLAttribute> getAttributes() {
-		return globalVariables;
-	}
-
-	public void addAttribute( TMLSDAction _action ) {
-		actions.add( _action );
-	}
-
-	public ArrayList<TMLSDAction> getActions() {
-		return actions;
-	}
-
-	public void addAction( TMLSDAction _action ) {
-		actions.add( _action );
-		addItem( new TMLSDItem( _action.getAction(), _action.getInstanceName(), _action.getYCoord() ) );
-	}
-	
 	public void addInstance( TMLSDInstance _inst )	{
-		instances.add( _inst );
+		instancesList.add( _inst );
 	}
 
-	public void addMappingInstance( TMLSDInstance _elt ) {
-    mappingInstances.add( _elt );
- 	}
-   
 	public ArrayList<TMLSDInstance> getInstances()	{
-		return instances;
+		return instancesList;
 	}
-	
-	public ArrayList<TMLSDInstance> getMappingInstances()	{
-		return mappingInstances;
-	}
-	
-	public void addMessage( TMLSDMessage _msg ) {
-  	messages.add( _msg );
-		//addItem( new TMLSDItem( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
-  }
-    
-	public void insertInitialValue( String _name, String value ) {
-			
-		int i = 0;
-		String str;
-		TMLAttribute tempAttr;
-		TMLType tempType, _attrType;
-		TMLAttribute _attr = new TMLAttribute( _name, new TMLType(1) );
 
-		for( i = 0; i < globalVariables.size(); i++ )	{
-			tempAttr = globalVariables.get(i);
-			str = tempAttr.getName();
-			if( str.equals( _attr.getName() ) )	{
-				tempType = tempAttr.getType();
-				_attrType = _attr.getType();
-				if( tempType.getType() == _attrType.getType() )	{
-					_attr.initialValue = value;
-					globalVariables.set( i, _attr );
-					return;
-				}
-			}
+	//return the list of all TMLAttributes declared for all instances
+	public ArrayList<TMLAttribute> getAttributes()	{
+		
+		ArrayList<TMLAttribute> attributesList = new ArrayList<TMLAttribute>();
+
+		for( TMLSDInstance instance: instancesList )	{
+			attributesList.addAll( instance.getAttributes() );
 		}
-		String errorMessage = "TMLCOMPILER ERROR: variable " + _name + " in diagram " + this.name + " is not initialized";
-		//throw new UninitializedVariableException( errorMessage );
+		return attributesList;
 	}
 
 	public ArrayList<TMLSDMessage> getMessages()	{
-		return messages;
+		
+		ArrayList<TMLSDMessage> messagesList = new ArrayList<TMLSDMessage>();
+
+		for( TMLSDInstance instance: instancesList )	{
+			messagesList.addAll( instance.getMessages() );
+		}
+		return messagesList;
+	}
+
+	public ArrayList<TMLSDAction> getActions()	{
+		
+		ArrayList<TMLSDAction> actionsList = new ArrayList<TMLSDAction>();
+
+		for( TMLSDInstance instance: instancesList )	{
+			actionsList.addAll( instance.getActions() );
+		}
+		return actionsList;
+	}
+
+	//An event is either an action or a message
+	public ArrayList<TMLSDEvent> getEvents()	{
+		
+		ArrayList<TMLSDEvent> eventsList = new ArrayList<TMLSDEvent>();
+
+		for( TMLSDInstance instance: instancesList )	{
+			eventsList.addAll( instance.getEvents() );
+		}
+		return eventsList;
 	}
 
 }	//End of class

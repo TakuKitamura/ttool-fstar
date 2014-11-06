@@ -463,13 +463,13 @@ public class TMLCPTextSpecification {
 			}
 			String temp = "";//sb.substring( 0, sb.length()-3 );	//Remove trailing CR + TAB + TAB
 			sb += CR + TAB + MAIN + CR + TAB + TAB;
-			ArrayList<TMLSDItem> listItems = SD.getItems();
-			Collections.sort( listItems ); 			//actions and messages must be ordered and printed according to Y before being written!
+			ArrayList<TMLSDEvent> listEvents = SD.getEvents();
+			Collections.sort( listEvents ); 			//actions and messages must be ordered and printed according to Y before being written!
 			/*TraceManager.addDev( "PRINTING SORTED ITEMS" );
-			for( TMLSDItem item: listItems )	{	//print the items
+			for( TMLSDEvent item: listEvents )	{	//print the items
 				TraceManager.addDev( item.toString() );
 			}*/
-			for( TMLSDItem item: listItems )	{	
+			for( TMLSDEvent item: listEvents )	{	
 				if( item.getInstanceName().length() > 0 )	{	//the item is an action (attribute)
 					sb += item.getInstanceName() + "." + item.getName();
 					sb += CR + TAB + TAB;

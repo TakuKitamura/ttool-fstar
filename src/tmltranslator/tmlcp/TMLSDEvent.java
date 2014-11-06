@@ -37,7 +37,7 @@ The fact that you are presently reading this means that you have had
 knowledge of the CeCILL license and that you accept its terms.
 
 /**
-* Class TMLSDItem. An item is either a message or an action. This class is used to produce the TML code corresponding to messages
+* Class TMLSDEvent. An event is either a message or an action. This class is used to produce the TML code corresponding to messages
 * and actions that are sorted according to the graphical version of a SD diagram.
 * Creation: 18/02/2014
 * @version 1.0 26/06/2014
@@ -52,7 +52,7 @@ import java.util.*;
 import tmltranslator.*;
 import myutil.*;
 
-public class TMLSDItem implements Comparable<TMLSDItem>  {
+public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
 	//mind the difference between TMLSDAttribute and TMLAttribute!
 	private String name;
@@ -61,9 +61,10 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 	private String senderName;
 	private int yCoord;
 	private ArrayList<TMLSDAttribute> attributeList;
+	private TMLSDInstance instance;	//the instance to which the event is associated
 	
 		//for messages
-    public TMLSDItem( String _name, String _senderName, String _receiverName, int _yCoord, ArrayList<TMLSDAttribute> _listAttributes ) {
+    public TMLSDEvent( String _name, String _senderName, String _receiverName, int _yCoord, ArrayList<TMLSDAttribute> _listAttributes ) {
 			this.name = _name;
 			this.senderName = _senderName;
 			this.receiverName = _receiverName;
@@ -76,7 +77,7 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
     }
 
 		//for attributes
-    public TMLSDItem( String _name, String _instanceName, int _yCoord ) {
+    public TMLSDEvent( String _name, String _instanceName, int _yCoord ) {
 			this.name = _name;
 			this.senderName = "";//_senderName;
 			this.receiverName = "";//_receiverName;
@@ -84,6 +85,12 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 			this.yCoord = _yCoord;
 			this.attributeList = new ArrayList<TMLSDAttribute>();
     }
+
+		/*public TMLSDEvent( TMLSDInstance _instance, String _message, TMLCPConnectingPoint_connectingPoint )	{
+			this.instance = _instance;
+			this.message = _message;	//the string Ludovic said, either an action or a message.
+			this.connectingPoint = _connectingPoint;
+		}*/
 
 		public String getReceiverName()	{
 			return this.receiverName;
@@ -99,6 +106,10 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 
 		public String getInstanceName()	{
 			return this.instanceName;
+		}
+
+		public TMLSDInstance getInstance()	{
+			return this.instance;
 		}
 
 		public String getName()	{
@@ -117,15 +128,15 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 			this.name = _name;
 		}
 	
-		public int compareTo( TMLSDItem _item )	{
+		public int compareTo( TMLSDEvent _item )	{
 
-			int compareValue = ((TMLSDItem) _item).getYCoord();
+			int compareValue = ((TMLSDEvent) _item).getYCoord();
 			//sort in ascending order
 			return this.yCoord - compareValue;
 		}
 
-		/*public static Comparator<TMLSDItem> yCoordComparator = new Comparator<TMLSDItem>()	{
-			public int compare( TMLSDItem _item1, TMLSDItem _item2 )	{
+		/*public static Comparator<TMLSDEvent> yCoordComparator = new Comparator<TMLSDEvent>()	{
+			public int compare( TMLSDEvent _item1, TMLSDEvent _item2 )	{
 				int yCoord1 = _item1.getYCoord(); 
 				int yCoord2 = _item2.getYCoord(); 
 
@@ -135,6 +146,6 @@ public class TMLSDItem implements Comparable<TMLSDItem>  {
 		};*/
 
 	@Override public String toString()	{
-		return "TMLSDItem " + this.name + " " + this.yCoord;
+		return "TMLSDEvent " + this.name + " " + this.yCoord;
 	}
 }	//End of class

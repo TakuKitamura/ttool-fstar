@@ -101,7 +101,7 @@ public class TMLAttribute extends DIPLOElement {
     }
     
 		public String toString() {
-    	return name + ":" + type.toString();
+    	return name + ":" + type.toString() + "=" + initialValue;
     }
     
     public boolean hasInitialValue() {

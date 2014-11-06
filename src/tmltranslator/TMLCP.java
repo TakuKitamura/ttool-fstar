@@ -420,4 +420,25 @@ public class TMLCP extends TMLElement {
 				}
 		}
 	}
+
+	public String toString()	{
+		
+		String s = "\n";
+		for( tmltranslator.tmlcp.TMLCPSequenceDiagram diag: sds )	{
+			s += "*** Sequence diagram " + diag.getName() + "\n";
+			for( tmltranslator.tmlcp.TMLSDInstance instance: diag.getInstances() )	{
+				s += "\t" + "--- Instance " + instance.getName() + "\n";
+				for( tmltranslator.tmlcp.TMLSDAction action: instance.getActions() )	{
+					s += "\t\t" + " +++ Action " + action.getAction() + "\n"; 
+				}
+				for( tmltranslator.TMLAttribute attribute: instance.getAttributes() )	{
+					s += "\t\t" + " +++ Attribute " + attribute.toString() + "\n"; 
+				}
+				for( tmltranslator.tmlcp.TMLSDMessage message: instance.getMessages() )	{
+					s += "\t\t" + " +++ Message " + message.toString() + "\n"; 
+				}
+			}
+		}
+		return s;
+	}
 }	//End of the class
