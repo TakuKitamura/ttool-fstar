@@ -51,7 +51,6 @@ import java.util.*;
 import myutil.*;
 
 public class TMLCPStart extends TMLCPElement  {
-
 	
     public TMLCPStart(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
