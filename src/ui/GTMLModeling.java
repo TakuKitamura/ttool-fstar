@@ -2289,7 +2289,7 @@ public class GTMLModeling  {
                     //                                                                          ((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
                     TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
                                                                             ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather().getName(),
-                                                                            ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(),
+                                                                            ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(), ((ui.tmlcp.TGConnectorTMLCP)component).getGuard(),
                                                                             ((ui.tmlcp.TGConnectorTMLCP)component).getY(), component );
                     AD.addTMLCPElement( TMLCPconnector );
                 }

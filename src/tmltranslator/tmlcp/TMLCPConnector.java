@@ -55,17 +55,23 @@ public class TMLCPConnector extends TMLCPElement implements Comparable<TMLCPConn
     private String startName;
     private String endName;
     private int yCoord;
+		private String guard;
 
-    public TMLCPConnector( String _startName, String _endName, int yCoord, Object _referenceObject ) {
+    public TMLCPConnector( String _startName, String _endName, String _guard, int yCoord, Object _referenceObject ) {
         super( "TMLCPconnector", _referenceObject );
         this.startName = _startName;
         this.endName = _endName;
         this.yCoord = yCoord;
+				this.guard = _guard;
     }
 
     public int getYCoord()      {
         return this.yCoord;
     }
+
+		public String getGuard()	{
+			return this.guard;
+		}
 
     public String getStartName()        {
         return this.startName;
