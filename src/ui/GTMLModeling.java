@@ -2253,7 +2253,8 @@ public class GTMLModeling  {
                 if( component instanceof ui.tmlcp.TMLCPStartState )     {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
                     start = new tmltranslator.tmlcp.TMLCPStart( panel.getName() + "Start", component );
-                    AD.addTMLCPElement( start );        //CAREFUL: the elements are not added in the same order as they appear in the GUI
+                    AD.setStartElement( start );
+		    AD.addTMLCPElement( start );        //CAREFUL: the elements are not added in the same order as they appear in the GUI
                 }
                 if( component instanceof ui.tmlcp.TMLCPStopState )      {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
