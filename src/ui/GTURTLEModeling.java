@@ -6450,7 +6450,7 @@ public class GTURTLEModeling {
 		tmlcp.toString();
 		/*TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
 		mgui.generateTMLTxt();	//Now generating the TMLtxt code
-		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
+		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );*/
 		listE = gtmlm.getCorrespondanceTable();
 		//for( CorrespondanceTGElement element : listE.getNames() )	{
 			TraceManager.addDev( "Printing listE.getNames: " + listE.getNames().toString() );
