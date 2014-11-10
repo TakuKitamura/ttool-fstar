@@ -212,6 +212,10 @@ public class TMLCPActivityDiagram  extends TMLElement {
         start = _elt;
     }
 
+    public TMLCPElement getStartElement() {
+	return start;
+    }
+
     public void addTMLCPElement(TMLCPElement _elt) {
         elements.add(_elt);
     }
@@ -307,6 +311,8 @@ public class TMLCPActivityDiagram  extends TMLElement {
         int id = 0;
         TMLCPActivityDiagram diag;
 
+	TraceManager.addDev("Splitting AD: " + getName());
+
         // For each junction, we create a new AD
         ArrayList<TMLCPJunction> junctions = new ArrayList<TMLCPJunction>();
 	ArrayList<TMLCPRefAD> refsAD = new ArrayList<TMLCPRefAD>();
@@ -320,6 +326,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 		diag.setStartElement(start);
 		diag.addTMLCPElement(start);
                 refs.put((TMLCPJunction)elt, diag);
+		TraceManager.addDev("Adding a new diag named: " + diag.getName());
             }
         }
 
@@ -345,7 +352,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	    
 	    // To be modified-> add elements from RefADs
 	    // Also, avoid to add already met elements
-            addElementsFromJunction(refAD, start, diag, refs, toBeRemoved);
+            addElementsFromJunction(junction, diag.getStartElement(), diag, refs, toBeRemoved);
         }
 
 	// Removing elements from main diagram
@@ -368,14 +375,15 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	}
 	
 	for(TMLCPElement elt: originInOld.getNextElements()) {
-	    if (elt instanceof TMLCPRefAD) {
+	    TraceManager.addDev("Exploring elt (0):" + elt.getName());
+	    if (elt instanceof TMLCPJunction) {
 		// Must replace the junction by a ref to an AD
-		//TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
-		//TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), elt.getReferenceObject());
-		newDiag.addTMLCPElement(elt);
-		originInNew.setNextElement(elt);
+		TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
+		TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), elt.getReferenceObject());
+		newDiag.addTMLCPElement(ref);
+		originInNew.setNextElement(ref);
 	    } else {
-		
+		TraceManager.addDev("Exploring elt (1):" + elt.getName());
 		if (originInOld != originInNew) {
 		    originInNew.addNextElement(elt);
 		}

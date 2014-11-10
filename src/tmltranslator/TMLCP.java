@@ -332,6 +332,7 @@ public class TMLCP extends TMLElement {
 	for(TMLCPActivityDiagram diag: otherCPs) {
 	    all.addAll(diag.splitADs());
 	}
+	otherCPs.addAll(all);
     }
 
     public void printDataStructure()    {
