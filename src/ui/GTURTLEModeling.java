@@ -6448,7 +6448,7 @@ public class GTURTLEModeling {
 		//tmlcp is the data structure for a CP corresponding to the graphical description with diagrams
 		tmlcp = gtmlm.translateToTMLCPDataStructure();
 		tmlcp.toString();
-		TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
+		/*TraceManager.addDev( "I AM ABOUT TO GENERATE THE TMLtxt CODE!" );
 		mgui.generateTMLTxt();	//Now generating the TMLtxt code
 		TraceManager.addDev( "TMLtxt CODE GENERATION DONE" );
 		listE = gtmlm.getCorrespondanceTable();

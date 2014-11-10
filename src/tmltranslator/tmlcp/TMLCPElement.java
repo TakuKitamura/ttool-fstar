@@ -60,6 +60,16 @@ public abstract class TMLCPElement extends TMLElement  {
         nexts = new ArrayList<TMLCPElement>();
     }
 
+    public String getShortName() {
+	int index = name.indexOf("_#");
+	if (index == 0) {
+	    return getName();
+	}
+	
+	return name.substring(0, index);
+
+    }
+
     public void addNextElement(TMLCPElement _elt) {
         nexts.add(_elt);
     }
@@ -77,10 +87,6 @@ public abstract class TMLCPElement extends TMLElement  {
         return nexts;
     }
 
-    public String toString()    {
-        return this.name;
-    }
-
     public void setNexts(ArrayList<TMLCPElement> _nexts) {
 	nexts = _nexts;
     }
@@ -91,6 +97,18 @@ public abstract class TMLCPElement extends TMLElement  {
 	    nexts.set(index, newOne); 
 	}
 	
+    }
+
+    public String toShortString() {
+	return getClass().getCanonicalName() + " " + getName() + "\n";
+    }
+
+    public String toString() {
+	String s = "\t+" + toShortString();
+	for(TMLCPElement elt: nexts) {
+	    s += "\t\t->" + elt.toShortString();
+	}
+	return s;
     }
 
 }       //End of class

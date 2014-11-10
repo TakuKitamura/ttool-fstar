@@ -105,6 +105,17 @@ public class TMLCPActivityDiagram  extends TMLElement {
         sds.add( _name );
     }
 
+    public int getSize() { return elements.size();}
+
+    public TMLCPElement getElementByReference(Object referenceObject) {
+	for(TMLCPElement elt: elements) {
+	    if (elt.getReferenceObject() == referenceObject) {
+		return elt;
+	    }
+	}
+	return null;
+    }
+
     /*public boolean checkVariableNoType( TMLAttribute _attr )    {
 
       int i = 0;
@@ -231,7 +242,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
         for(TMLCPElement tempElem: elements)  {
 
             if( tempElem instanceof TMLCPRefAD )        {
-                tempString = tempElem.getName();
+                tempString = tempElem.getShortName();
                 for(TMLCPActivityDiagram tempCP: activityList)      {
                     if( tempString.equals( tempCP.getName() ) ) {
                         ((TMLCPRefAD)tempElem).setReference(tempCP);
@@ -375,6 +386,14 @@ public class TMLCPActivityDiagram  extends TMLElement {
 		}
 	    }
 	}
+    }
+
+    public String toString() {
+	String s = "*** Activity diagram " + getName() + "\n";
+	for(TMLCPElement elt: elements) {
+	    s += elt.toString();
+	}
+	return s + "\n";
     }
 
 }       //End of class

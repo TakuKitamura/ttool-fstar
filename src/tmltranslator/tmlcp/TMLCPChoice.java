@@ -75,4 +75,16 @@ public class TMLCPChoice extends TMLCPElement  {
     	return this.guards;
     }
 
+    
+
+    public String toString() {
+	String s = "\t+ " + toShortString();
+	int i = 0;
+	for(TMLCPElement elt: nexts) {
+	    s += "\t\t->" + guards.get(i) + " " + elt.toShortString();
+	    i ++;
+	}
+	return s;
+    }
+
 }

@@ -1954,10 +1954,10 @@ public class GTMLModeling  {
         //makeCPMapping();      //Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
         //place only: the architecture DD
 
-	// Syntax has been checked -> splitting ads
-	// The splitting works only if there is no other operations than sequences and references to ADs/SDs
-	// between forks and joins
-	//tmlcp.splitADs();
+        // Syntax has been checked -> splitting ads
+        // The splitting works only if there is no other operations than sequences and references to ADs/SDs
+        // between forks and joins
+        //tmlcp.splitADs();
 
         TraceManager.addDev("<--- TMLCP modeling:");
         TraceManager.addDev("TMLCP: " + tmlcp.toString());
@@ -2201,11 +2201,12 @@ public class GTMLModeling  {
             //TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
         }
 
-	tmlcp.correctReferences();
-	tmlcp.generateNexts();
-	tmlcp.removeADConnectors();
-	
-	
+        tmlcp.correctReferences(); //Update references to the right activity and sequence diagrams
+        //tmlcp.generateNexts(); // Add nexts elements to CPElements
+        //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
+        tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
+
+
     }   //End of method
 
 
@@ -2247,52 +2248,56 @@ public class GTMLModeling  {
             names.add( panel.getName() );
             //TraceManager.addDev("Lenght of elements: " + components.size() );
             tmltranslator.tmlcp.TMLCPActivityDiagram AD  = new tmltranslator.tmlcp.TMLCPActivityDiagram( panel.getName(), panel );
+            int k;
+            TGComponent component;
+            String compID;
 
-            for( int k = 0; k < components.size(); k++ )        {
-                TGComponent component = (TGComponent) components.get(k);
+            for( k = 0; k < components.size(); k++ )        {
+                component = (TGComponent) components.get(k);
+                compID = component.getName() + "_#" + AD.getSize();
                 if( component instanceof ui.tmlcp.TMLCPStartState )     {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() );
-                    start = new tmltranslator.tmlcp.TMLCPStart( panel.getName() + "Start", component );
+                    start = new tmltranslator.tmlcp.TMLCPStart( compID, component );
                     AD.setStartElement( start );
-		    AD.addTMLCPElement( start );        //CAREFUL: the elements are not added in the same order as they appear in the GUI
+                    AD.addTMLCPElement( start );        //CAREFUL: the elements are not added in the same order as they appear in the GUI
                 }
                 if( component instanceof ui.tmlcp.TMLCPStopState )      {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    stop = new tmltranslator.tmlcp.TMLCPStop( panel.getName() + "Stop", component );
-		    AD.addTMLCPElement(stop); 
+                    stop = new tmltranslator.tmlcp.TMLCPStop( compID, component );
+                    AD.addTMLCPElement(stop);
                 }
                 if( component instanceof ui.tmlcp.TMLCPRefSD )  {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    refSD = new tmltranslator.tmlcp.TMLCPRefSD( component.getName(), component );
+                    refSD = new tmltranslator.tmlcp.TMLCPRefSD( compID, component );
                     AD.addTMLCPElement( refSD );
                 }
                 if( component instanceof ui.tmlcp.TMLCPRefAD )  {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    refAD = new tmltranslator.tmlcp.TMLCPRefAD( component.getName(), component );
+                    refAD = new tmltranslator.tmlcp.TMLCPRefAD( compID, component );
                     AD.addTMLCPElement( refAD );
                 }
                 if( component instanceof ui.tmlcp.TMLCPJunction )       {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    junction = new tmltranslator.tmlcp.TMLCPJunction( component.getName(), component );
+                    junction = new tmltranslator.tmlcp.TMLCPJunction( compID, component );
                     AD.addTMLCPElement( junction );
                 }
                 if( component instanceof ui.tmlcp.TMLCPJoin )   {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    join = new tmltranslator.tmlcp.TMLCPJoin( component.getName(), component );
+                    join = new tmltranslator.tmlcp.TMLCPJoin( compID, component );
                     AD.addTMLCPElement( join );
                 }
                 if( component instanceof ui.tmlcp.TMLCPFork )   {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    fork = new tmltranslator.tmlcp.TMLCPFork( component.getName(), component );
+                    fork = new tmltranslator.tmlcp.TMLCPFork( compID, component );
                     AD.addTMLCPElement( fork );
                 }
                 if( component instanceof ui.tmlcp.TMLCPChoice ) {
                     //TraceManager.addDev( k + component.getName() + "\t" + component.getValue() + "\t" + component.getY());
                     // old way: adding guards choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), ((ui.tmlcp.TMLCPChoice) component).getGuards(), component );
-		    choice = new tmltranslator.tmlcp.TMLCPChoice( component.getName(), null, component );
+                    choice = new tmltranslator.tmlcp.TMLCPChoice( compID, null, component );
                     AD.addTMLCPElement( choice );
                 }
-                if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
+                /*if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
                     //TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
                     //                                                                          ((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
                     TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
@@ -2300,8 +2305,42 @@ public class GTMLModeling  {
                                                                             ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(), ((ui.tmlcp.TGConnectorTMLCP)component).getGuard(),
                                                                             ((ui.tmlcp.TGConnectorTMLCP)component).getY(), component );
                     AD.addTMLCPElement( TMLCPconnector );
-                }
+		    }*/
             }   //End of for loop over components
+
+            // Handling connectors
+            for( k = 0; k < components.size(); k++ )        {
+                component = (TGComponent) components.get(k);
+                //compID = component.getName() + "__" + elements.size();
+                if( component instanceof ui.tmlcp.TGConnectorTMLCP)     {
+                    //TraceManager.addDev( k + " " + ((ui.TGConnector)component).getTGConnectingPointP1().getFather().getName() + "\t" +
+                    //                                                                          ((ui.TGConnector)component).getTGConnectingPointP2().getFather().getName() + "\t" + component.getY() );
+                    //Gathering start and end names;
+                    //String st, en;
+                    TGComponent stc, enc;
+                    TMLCPElement source, dest;
+
+                    stc = (TGComponent)(((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather());
+                    enc = (TGComponent)(((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather());
+                    source = AD.getElementByReference(stc);
+                    dest = AD.getElementByReference(enc);
+
+                    if ((source != null) && (dest != null)) {
+                        source.addNextElement(dest);
+                        if (source instanceof tmltranslator.tmlcp.TMLCPChoice) {
+                            ((tmltranslator.tmlcp.TMLCPChoice)source).addGuard(((ui.tmlcp.TGConnectorTMLCP)component).getGuard());
+                        }
+                    }
+
+                    /*TMLCPconnector = new tmltranslator.tmlcp.TMLCPConnector(
+                      ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP1().getFather().getName(),
+                      ((ui.tmlcp.TGConnectorTMLCP)component).getTGConnectingPointP2().getFather().getName(), ((ui.tmlcp.TGConnectorTMLCP)component).getGuard(),
+                      ((ui.tmlcp.TGConnectorTMLCP)component).getY(), component );
+                      AD.addTMLCPElement( TMLCPconnector );*/
+                }
+            }
+
+
             return AD;
         }       //End of else name does not exist yet
     }   //End of method createActivityDiagramDataStructure

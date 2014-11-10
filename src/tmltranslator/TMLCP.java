@@ -446,21 +446,15 @@ public class TMLCP extends TMLElement {
 
     public String toString()    {
 
-        String s = "\n";
+        String s = "\n*** Communication Pattern: " + getName() + "***\n";
+	s += mainCP.toString();
+
+	for( tmltranslator.tmlcp.TMLCPActivityDiagram diag:  otherCPs)       {
+	    s += diag.toString();
+	}
+
         for( tmltranslator.tmlcp.TMLCPSequenceDiagram diag: sds )       {
-            s += "*** Sequence diagram " + diag.getName() + "\n";
-            for( tmltranslator.tmlcp.TMLSDInstance instance: diag.getInstances() )      {
-                s += "\t" + "--- Instance " + instance.getName() + "\n";
-                for( tmltranslator.tmlcp.TMLSDAction action: instance.getActions() )    {
-                    s += "\t\t" + " +++ Action " + action.getAction() + "\n";
-                }
-                for( tmltranslator.TMLAttribute attribute: instance.getAttributes() )   {
-                    s += "\t\t" + " +++ Attribute " + attribute.toString() + "\n";
-                }
-                for( tmltranslator.tmlcp.TMLSDMessage message: instance.getMessages() ) {
-                    s += "\t\t" + " +++ Message " + message.toString() + "\n";
-                }
-            }
+	    s += sds.toString();
         }
         return s;
     }
