@@ -2481,8 +2481,13 @@ public class GTMLModeling  {
                     for( tmltranslator.tmlcp.TMLSDInstance tempInstance: SD.getInstances() )    {
                         if( tempInstance.getName().equals( sender ) )   {
                             TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
-                            tempInstance.addMessage( message );
-                            break;
+                            tempInstance.addMessage( message, TMLSDEvent.SEND_MESSAGE_EVENT );
+                            //break;
+                        }
+                        if( tempInstance.getName().equals( receiver ) )   {
+                            TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
+                            tempInstance.addMessage( message, TMLSDEvent.RECEIVE_MESSAGE_EVENT );
+                            //break;
                         }
                     }
                 }

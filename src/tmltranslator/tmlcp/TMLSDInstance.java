@@ -57,8 +57,6 @@ import myutil.*;
 
 public class TMLSDInstance extends TMLElement  {
 
-    private final static String MESSAGE_EVENT = "message";
-    private final static String ACTION_EVENT = "action";
     private String type;
     private TMLArchiNode mappedUnit;    //the unit of the architecture where the instance is mapped to
     private ArrayList<TMLAttribute> globalVariables;
@@ -120,7 +118,7 @@ public class TMLSDInstance extends TMLElement  {
     public void addAction( TMLSDAction _action ) {
 	//TraceManager.addDev("SD: Adding action in " + getName() + " nb of events: " + events.size());
         actions.add( _action );
-        events.add( new TMLSDEvent( _action, ACTION_EVENT, _action.getYCoord() ) );
+        events.add( new TMLSDEvent( _action, TMLSDEvent.ACTION_EVENT, _action.getYCoord() ) );
         Collections.sort( events );
     }
 
@@ -132,12 +130,19 @@ public class TMLSDInstance extends TMLElement  {
         return mappedUnit;
     }
 
-    public void addMessage( TMLSDMessage _msg ) {
-	//TraceManager.addDev("SD: Adding message in " + getName()+ " nb of events: " + events.size());
-        messages.add( _msg );
-        int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP1().getY();
-        events.add( new TMLSDEvent( _msg, MESSAGE_EVENT, yCoord ) );
-        Collections.sort( events );
+    public void addMessage( TMLSDMessage _msg, int _type ) {
+
+			//TraceManager.addDev("SD: Adding message in " + getName()+ " nb of events: " + events.size());
+			messages.add( _msg );
+			if( _type == TMLSDEvent.SEND_MESSAGE_EVENT )	{
+				int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP1().getY();
+  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.SEND_MESSAGE_EVENT, yCoord ) );
+			}
+			if( _type == TMLSDEvent.RECEIVE_MESSAGE_EVENT )	{
+	    	int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP2().getY();
+  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT, yCoord ) );
+			}
+			Collections.sort( events );
     }
 
     public void insertInitialValue( String _name, String value ) {

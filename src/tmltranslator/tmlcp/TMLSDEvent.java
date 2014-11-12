@@ -54,14 +54,19 @@ import myutil.*;
 
 public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
-    private final static String MESSAGE_EVENT = "message";
-    private final static String ACTION_EVENT = "action";
-    private final static String ERROR = "ERROR IN EVENT";
-    private String type;
+    public final static int SEND_MESSAGE_EVENT = 0;
+    public final static int RECEIVE_MESSAGE_EVENT = 1;
+    public final static int ACTION_EVENT = 2;
+
+    private final static String SEND_MESSAGE_LABEL = "SND:";
+    private final static String RECEIVE_MESSAGE_LABEL = "RCV:";
+    private final static String ACTION_LABEL = "ACT:";
+    private final static String ERROR = "ERROR_IN_EVENT";
+    private int type;
     private int yCoord;
     private Object ref;
 
-    public TMLSDEvent( Object _referenceObject, String _type, int _yCoord ) {
+    public TMLSDEvent( Object _referenceObject, int _type, int _yCoord ) {
         this.ref = _referenceObject;
         this.yCoord = _yCoord;
         this.type = _type;
@@ -88,14 +93,21 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
       };*/
 
     @Override public String toString()  {
-        if( type.equals( MESSAGE_EVENT ) )      {
-            TMLSDMessage msg = ( (TMLSDMessage) ref);
-            return msg.toString();
-        }
-        if( type.equals( ACTION_EVENT ) )       {
-            TMLSDAction action = ( (TMLSDAction) ref);
-            return action.toString();
-        }
-        return ERROR;
+
+			TMLSDMessage msg;
+
+			switch( type )	{
+				case 0:	//send message
+            msg = ( (TMLSDMessage) ref);
+        		return SEND_MESSAGE_LABEL + msg.toString();
+				case 1:	//receive message
+            msg = ( (TMLSDMessage) ref);
+        		return RECEIVE_MESSAGE_LABEL + msg.toString();
+				case 2:	//action
+     	      TMLSDAction action = ( (TMLSDAction) ref);
+            return ACTION_LABEL + action.toString();
+				default:
+						return ERROR;
+			}
     }
 }       //End of class

@@ -103,6 +103,8 @@ public class TMLCPTextSpecification {
 	private String beginArray[] = {"TASK", "FOR", "IF", "ELSE", "ORIF", "SELECTEVT", "CASE", "RAND", "CASERAND", "RANDOMSEQ", "SEQ"};
 	private String endArray[] = {"ENDTASK", "ENDFOR", "ENDIF", "ELSE", "ORIF", "ENDSELECTEVT", "ENDCASE", "ENDRAND", "ENDCASERAND", "ENDRANDOMSEQ", "ENDSEQ"};	*/
 
+	private static String SEQUENCE_DIAGRAM = "SEQUENCE";
+
 	private String nextElem;	//used to produce the TML text
 	private String currentElem;	//used to produce the TML text
 	private String currentJunc = "junction";	//used to produce the TML text
@@ -230,16 +232,24 @@ public class TMLCPTextSpecification {
 		//Generating code for Sequence Diagrams
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		for( TMLCPSequenceDiagram seqDiag: listSDs )	{
-			sb += "SEQUENCE " + seqDiag.getName() + CR2 + TAB;
+			sb += SEQUENCE_DIAGRAM + SP + seqDiag.getName() + CR2 + TAB;
 			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = seqDiag.getInstances();
-			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
-				sb += inst.getType() + " " + inst.getName() + CR + TAB;
-				ArrayList<TMLSDEvent> listEvents = inst.getEvents();
-				Collections.sort( listEvents ); 			
-				for( TMLSDEvent event: listEvents )	{	
-					sb += TAB + event.toString() + CR;
+			if( seqDiag.getAttributes().size() > 0 )	{
+				for( TMLAttribute attribute: seqDiag.getAttributes() )	{
+					sb += attribute.toString() + CR + TAB;
 				}
-				sb += CR + TAB;
+				sb += CR;
+			}
+			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
+				sb += TAB + inst.getType() + " " + inst.getName() + CR;
+				if( inst.getEvents().size() > 0 )	{
+					ArrayList<TMLSDEvent> listEvents = inst.getEvents();
+					Collections.sort( listEvents ); 			
+					for( TMLSDEvent event: listEvents )	{	
+						sb += TAB2 + event.toString() + CR;
+					}
+					sb += CR;
+				}
 			}
 		sb += END + CR2;
 		}
