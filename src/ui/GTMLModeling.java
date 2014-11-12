@@ -1918,8 +1918,8 @@ public class GTMLModeling  {
         }
 
         TraceManager.addDev( "About to check the syntax of CPs" );
-        TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
-        syntax.checkSyntax();
+        //TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
+        //syntax.checkSyntax();
         //Takes the data structure tmlcp passed to the constructor and checks the syntax of the components of a cp. If there are errors (these
         //are filled inside the class syntax), then CheckingErrors are filled according to the errors in class syntax
 
@@ -1927,7 +1927,7 @@ public class GTMLModeling  {
         int type;
         TGComponent tgc;
 
-        if( syntax.hasErrors() > 0 ) {
+        /*if( syntax.hasErrors() > 0 ) {
             for( TMLCPError error: syntax.getErrors() ) {
                 if( error.type == TMLCPError.ERROR_STRUCTURE ) {
                     type = CheckingError.STRUCTURE_ERROR;
@@ -1936,34 +1936,34 @@ public class GTMLModeling  {
                     type = CheckingError.BEHAVIOR_ERROR;
                 }
                 ce = new CheckingError( type, error.message );
-                /*tgc = listE.getTG( error.element );
+                tgc = listE.getTG( error.element );
                   if ( tgc != null ) {
                   ce.setTDiagramPanel( tgc.getTDiagramPanel() );
                   ce.setTGComponent( tgc );
                   }
-                  ce.setTMLTask( error.task );*/
+                  ce.setTMLTask( error.task );
                 checkingErrors.add( ce );
             }
-        }
+        }*/
 
-        //makeCPDataStructure();
-        /*if (!makeTMLModeling()) {
+        /*makeCPDataStructure();
+        if (!makeTMLModeling()) {
           return null;
-          }*/
-        //TraceManager.addDev("Making mapping");
-        //makeCPMapping();      //Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
+          }
+        TraceManager.addDev("Making mapping");
+        makeCPMapping();      //Inspect the architecture Deployment Diagram to retrieve mapping information, that is now located in one
         //place only: the architecture DD
 
         // Syntax has been checked -> splitting ads
         // The splitting works only if there is no other operations than sequences and references to ADs/SDs
         // between forks and joins
-        //tmlcp.splitADs();
+        tmlcp.splitADs();
 
         TraceManager.addDev("<--- TMLCP modeling:");
         TraceManager.addDev("TMLCP: " + tmlcp.toString());
         TraceManager.addDev("End of TMLCP modeling --->");
 
-        //removeActionsWithRecords();
+        removeActionsWithRecords();*/
 
         return tmlcp;
     }
@@ -2206,6 +2206,13 @@ public class GTMLModeling  {
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
         tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
 
+				for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )	{
+					TraceManager.addDev( "**********" );
+					for( tmltranslator.tmlcp.TMLSDInstance instance: seqDiag.getInstances() )	{
+						TraceManager.addDev( "PRINTING EVENTS: " + instance.getEvents() );
+					}
+					TraceManager.addDev( "**********" );
+				}
 
     }   //End of method
 
@@ -2357,6 +2364,7 @@ public class GTMLModeling  {
         String toParse;
         Object attribute;
         TGConnectorMessageTMLSD connector;
+				TMLSDMessage message;
         tmltranslator.tmlcp.TMLSDInstance instance;
         String[] tokens;                                                        //used to get the tokens of the string for a SD attribute
         String delims = "[ +=:;]+";             //the delimiter chars used to parse attributes of SD instance
@@ -2461,8 +2469,15 @@ public class GTMLModeling  {
                     connector = (TGConnectorMessageTMLSD) elemList.get(j);
                     String sender = connector.getTGConnectingPointP1().getFather().getName();
                     String receiver = connector.getTGConnectingPointP2().getFather().getName();
-                    TMLSDMessage message = new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams() );
-                    //( (tmltranslator.tmlcp.TMLSDInstance) connector.getTGConnectingPointP1().getFather() ).addMessage( message );
+										//Should check that instances do not have multiple names
+                    message = new TMLSDMessage( connector.getName(), sender, receiver, connector.getY(), connector, connector.getParams() );
+										for( tmltranslator.tmlcp.TMLSDInstance tempInstance: SD.getInstances() )	{
+											if( tempInstance.getName().equals( sender ) )	{
+												TraceManager.addDev( "Adding message " + message.toString() + " to instance " + tempInstance.toString() );
+												tempInstance.addMessage( message );
+												break;
+											}
+										}
                 }
             }   //End of for over internal elements
             return SD;

@@ -127,9 +127,9 @@ public class TMLCPSequenceDiagram  extends TMLElement {
     public String toString() {
         String s = "*** Sequence diagram " + getName() + "\n";
         for( tmltranslator.tmlcp.TMLSDInstance instance: getInstances() )      {
-            s += "\t" + "--- Instance " + instance.getName() + "\n";
+            s += "\t" + "--- Instance " + instance.toString() + "\n";
             for( tmltranslator.tmlcp.TMLSDAction action: instance.getActions() )    {
-                s += "\t\t" + " +++ Action " + action.getAction() + "\n";
+                s += "\t\t" + " +++ Action " + action.toString() + "\n";
             }
             for( tmltranslator.TMLAttribute attribute: instance.getAttributes() )   {
                 s += "\t\t" + " +++ Attribute " + attribute.toString() + "\n";

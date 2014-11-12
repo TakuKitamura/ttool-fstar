@@ -113,15 +113,16 @@ public class TMLSDMessage extends TMLElement  {
 	}
 	
 	@Override public String toString()	{
-		String s = this.name + "( ";
-		for( TMLSDAttribute attribute: attributeList )	{
-			if( attribute.getName() != "" && attribute.getName() != "null" && attribute.getName() != null )	{
-				s += attribute.getName() + ", ";
+
+		String s = this.name + "(";
+		if( attributeList.size() > 0 )	{
+			for( TMLSDAttribute attribute: attributeList )	{
+				s += attribute.getName() + ",";
 			}
+			String newS = s.substring( 0, s.length() - 1 );
+			s = newS;
 		}
-		String newS = s.substring( 0, s.length()-2 );
-//		s.setCharAt( s.length()-1, ' ' );
-		s = newS + " )";
+		s += ")";
 		return s;
 	}
 }	//End of class

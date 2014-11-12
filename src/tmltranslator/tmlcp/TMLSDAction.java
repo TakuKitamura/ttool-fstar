@@ -64,9 +64,9 @@ public class TMLSDAction extends TMLSDElement  {
 		this.yCoord = _yCoord;
   }
     
-  public String getAction() {
+  /*public String getAction() {
   	return action;
-  }
+  }*/
 
   public int getYCoord() {
   	return this.yCoord;
@@ -74,6 +74,10 @@ public class TMLSDAction extends TMLSDElement  {
 
 	public String getInstanceName()	{
 		return instanceName;
+	}
+
+	public String toString()	{
+		return action;
 	}
 	
 }

@@ -51,18 +51,20 @@ import tmltranslator.*;
 import ui.tmldd.*;
 import java.util.*;
 
+import ui.tmlsd.*;
 
 import myutil.*;
 
 public class TMLSDInstance extends TMLElement  {
 
-	private ArrayList<TMLSDElement> elements;
+	private final static String MESSAGE_EVENT = "message";
+	private final static String ACTION_EVENT = "action";
 	private String type;
 	private TMLArchiNode mappedUnit;	//the unit of the architecture where the instance is mapped to
 	private ArrayList<TMLAttribute> globalVariables;
 	private ArrayList<TMLSDMessage> messages; 
-	private ArrayList<TMLSDEvent> events;	//used to sort messages and actions according to their order, to produce the TMLTxt code
 	private ArrayList<TMLSDAction> actions;
+	private ArrayList<TMLSDEvent> events;	//used to sort messages and actions according to their order, to produce the TMLTxt code
 	
 	public TMLSDInstance( String _name, Object _referenceObject, String _type ) {
   	super( _name, _referenceObject );
@@ -70,27 +72,13 @@ public class TMLSDInstance extends TMLElement  {
 		init();
 	}
 
-	public TMLSDInstance( String _name ) {
-  	super( _name, null );
-		elements = new ArrayList<TMLSDElement>();
-	}
-
 	private void init()	{
 
-		elements = new ArrayList<TMLSDElement>();
 		globalVariables = new ArrayList<TMLAttribute>();
 		messages = new ArrayList<TMLSDMessage>();
 		actions = new ArrayList<TMLSDAction>();
 		events = new ArrayList<TMLSDEvent>();
 	}
-    
-  public void addElement(TMLSDElement _elt) {
-  	elements.add(_elt);
-  }
-    
-  public ArrayList<TMLSDElement> getElements() {
-  	return elements;
-  }
 
 	public void setType( String _type )	{
 		if( _type != "" )	{
@@ -125,17 +113,14 @@ public class TMLSDInstance extends TMLElement  {
 		return globalVariables;
 	}
 
-	/*public void addAttribute( TMLSDAction _action ) {
-		actions.add( _action );
-	}*/
-
 	public ArrayList<TMLSDAction> getActions() {
 		return actions;
 	}
 
 	public void addAction( TMLSDAction _action ) {
 		actions.add( _action );
-		addEvent( new TMLSDEvent( _action.getAction(), _action.getInstanceName(), _action.getYCoord() ) );
+		events.add( new TMLSDEvent( _action, ACTION_EVENT, _action.getYCoord() ) );
+		//Collections.sort( events );
 	}
 	
 	public void addMappedUnit( TMLArchiNode _mappedUnit ) {
@@ -148,9 +133,11 @@ public class TMLSDInstance extends TMLElement  {
 	
 	public void addMessage( TMLSDMessage _msg ) {
   	messages.add( _msg );
-		//addEvent( new TMLSDEvent( _msg.getName(), _msg.getSenderName(), _msg.getReceiverName(), _msg.getYCoord(), _msg.getAttributes() ) );
+		int yCoord = ( (TGConnectorMessageTMLSD) _msg.getReferenceObject()).getTGConnectingPointP1().getY();
+		events.add( new TMLSDEvent( _msg, MESSAGE_EVENT, yCoord ) );
+		//Collections.sort( events );
   }
-    
+
 	public void insertInitialValue( String _name, String value ) {
 			
 		int i = 0;
@@ -178,6 +165,10 @@ public class TMLSDInstance extends TMLElement  {
 
 	public ArrayList<TMLSDMessage> getMessages()	{
 		return messages;
+	}
+
+	public String toString()	{
+		return this.name + " : " + this.type;
 	}
 	
 }

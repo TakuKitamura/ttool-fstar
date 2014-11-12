@@ -54,85 +54,27 @@ import myutil.*;
 
 public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
-	//mind the difference between TMLSDAttribute and TMLAttribute!
-	private String name;
-	private String receiverName;
-	private String instanceName;
-	private String senderName;
+	private final static String MESSAGE_EVENT = "message";
+	private final static String ACTION_EVENT = "action";
+	private final static String ERROR = "ERROR IN EVENT";
+	private String type;
 	private int yCoord;
-	private ArrayList<TMLSDAttribute> attributeList;
-	private TMLSDInstance instance;	//the instance to which the event is associated
+	private Object ref;
 	
-		//for messages
-    public TMLSDEvent( String _name, String _senderName, String _receiverName, int _yCoord, ArrayList<TMLSDAttribute> _listAttributes ) {
-			this.name = _name;
-			this.senderName = _senderName;
-			this.receiverName = _receiverName;
-			this.instanceName = "";
+    public TMLSDEvent( Object _referenceObject, String _type, int _yCoord ) {
+			this.ref = _referenceObject;
 			this.yCoord = _yCoord;
-			this.attributeList = new ArrayList<TMLSDAttribute>();
-			for( TMLSDAttribute p: _listAttributes )	{
-				this.attributeList.add( new TMLSDAttribute( p.getName() ) );
-			}
+			this.type = _type;
     }
-
-		//for attributes
-    public TMLSDEvent( String _name, String _instanceName, int _yCoord ) {
-			this.name = _name;
-			this.senderName = "";//_senderName;
-			this.receiverName = "";//_receiverName;
-			this.instanceName = _instanceName;
-			this.yCoord = _yCoord;
-			this.attributeList = new ArrayList<TMLSDAttribute>();
-    }
-
-		/*public TMLSDEvent( TMLSDInstance _instance, String _message, TMLCPConnectingPoint_connectingPoint )	{
-			this.instance = _instance;
-			this.message = _message;	//the string Ludovic said, either an action or a message.
-			this.connectingPoint = _connectingPoint;
-		}*/
-
-		public String getReceiverName()	{
-			return this.receiverName;
-		}
-
-		public String getSenderName()	{
-			return this.senderName;
-		}
-
-		public ArrayList<TMLSDAttribute> getAttributes()	{
-			return this.attributeList;
-		}
-
-		public String getInstanceName()	{
-			return this.instanceName;
-		}
-
-		public TMLSDInstance getInstance()	{
-			return this.instance;
-		}
-
-		public String getName()	{
-			return this.name;
-		}
 
 		public int getYCoord()	{
-			return this.yCoord;
+			return yCoord;
 		}
 
-		public void setYCoord( int _coord )	{
-			this.yCoord = _coord;
-		}
+		@Override public int compareTo( TMLSDEvent _event )	{
 
-		public void setValue( String _name )	{
-			this.name = _name;
-		}
-	
-		public int compareTo( TMLSDEvent _item )	{
-
-			int compareValue = ((TMLSDEvent) _item).getYCoord();
-			//sort in ascending order
-			return this.yCoord - compareValue;
+			int compareValue = ((TMLSDEvent) _event).getYCoord();
+			return this.yCoord - compareValue;	//sort in ascending order
 		}
 
 		/*public static Comparator<TMLSDEvent> yCoordComparator = new Comparator<TMLSDEvent>()	{
@@ -146,6 +88,14 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 		};*/
 
 	@Override public String toString()	{
-		return "TMLSDEvent " + this.name + " " + this.yCoord;
+		if( type.equals( MESSAGE_EVENT ) )	{
+			TMLSDMessage msg = ( (TMLSDMessage) ref);
+			return msg.toString();
+		}
+		if( type.equals( ACTION_EVENT ) )	{
+			TMLSDAction action = ( (TMLSDAction) ref);
+			return action.toString();
+		}
+		return ERROR;
 	}
 }	//End of class
