@@ -227,33 +227,36 @@ public class TMLCPTextSpecification {
 
 	private String makeTMLTextSequenceDiagrams( TMLCP tmlcp )	{
 
-		String sb = "";
+		StringBuffer sb = new StringBuffer("");
+		StringBuffer sbAttributes = new StringBuffer("");
 
 		//Generating code for Sequence Diagrams
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
 		for( TMLCPSequenceDiagram seqDiag: listSDs )	{
-			sb += SEQUENCE_DIAGRAM + SP + seqDiag.getName() + CR2 + TAB;
+			sb.append( SEQUENCE_DIAGRAM + SP + seqDiag.getName() + CR2 );
 			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = seqDiag.getInstances();
 			if( seqDiag.getAttributes().size() > 0 )	{
 				for( TMLAttribute attribute: seqDiag.getAttributes() )	{
-					sb += attribute.toString() + CR + TAB;
+					sbAttributes.append( attribute.toString() + CR );
 				}
-				sb += CR;
 			}
 			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
-				sb += TAB + inst.getType() + " " + inst.getName() + CR;
+				sb.append( TAB + inst.getType() + " " + inst.getName() + CR );
 				if( inst.getEvents().size() > 0 )	{
 					ArrayList<TMLSDEvent> listEvents = inst.getEvents();
 					Collections.sort( listEvents ); 			
 					for( TMLSDEvent event: listEvents )	{	
-						sb += TAB2 + event.toString() + CR;
+						sb.append( TAB2 + event.toString() + CR );
 					}
-					sb += CR;
+					sb.append( CR );
 				}
 			}
-		sb += END + CR2;
+		sb.append( END + CR2 );
 		}
-		return sb;
+		if( sbAttributes.length() > 0 )	{
+			return sbAttributes.toString() + CR2 + sb.toString();
+		}
+		return sb.toString();
 	}
 	
 //	public String makeDeclarations( TMLCP tmlcp ) {
