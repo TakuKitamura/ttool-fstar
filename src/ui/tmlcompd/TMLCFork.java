@@ -97,6 +97,8 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
     public void internalDrawing(Graphics g) {
 
+	radius = width / 2;
+
         if (rescaled) {
             rescaled = false;
         }
@@ -106,7 +108,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
         // Zoom is assumed to be computed
         Color c = g.getColor();
-        g.drawRect(x, y, width, height);
+        //g.drawRect(x, y, width, height);
         if ((width > 2) && (height > 2)) {
             g.setColor(myColor);
             g.fillOval(x, y, radius*2, radius*2);
