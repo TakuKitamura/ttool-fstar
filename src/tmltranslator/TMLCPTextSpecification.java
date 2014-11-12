@@ -211,7 +211,9 @@ public class TMLCPTextSpecification {
 	
 	public String toTextFormat( TMLCP tmlcp ) {
 
-		spec = makeTMLTextSequenceDiagrams( tmlcp );
+		spec = makeHeader();
+		spec += makeTMLTextSequenceDiagrams( tmlcp );
+		//spec += maleTMLTextActivityDiagrams( tmlcp );
 		return spec;
 	}
 
@@ -223,6 +225,14 @@ public class TMLCPTextSpecification {
 		indent();
 		return spec;*/
 		return "FAKE";
+	}
+
+	private String makeHeader()	{
+
+		StringBuffer sb = new StringBuffer( "// TML Communication Pattern - FORMAT 0.1" + CR );
+	 	sb.append( "// Communication Pattern: " + title + CR );
+	  sb.append( "// Generated: " + new Date().toString() + CR2 );
+		return sb.toString();
 	}
 
 	private String makeTMLTextSequenceDiagrams( TMLCP tmlcp )	{
