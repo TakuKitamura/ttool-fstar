@@ -51,62 +51,71 @@ import myutil.*;
 
 
 public class AvatarState extends AvatarStateMachineElement {
-	private String entryCode;
-	
+    private String entryCode;
+    private boolean hidden; // i.e, not present in the original state machine
+
     public AvatarState(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-		
-		//TraceManager.addDev("CREATING state with name = "+ _name);
+
+        //TraceManager.addDev("CREATING state with name = "+ _name);
     }
-	
-	public AvatarState(String _name, Object _referenceObject, boolean _isCheckable) {
+
+    public AvatarState(String _name, Object _referenceObject, boolean _isCheckable) {
         super(_name, _referenceObject, _isCheckable);
-		//TraceManager.addDev("CREATING state with name = "+ _name);
+        //TraceManager.addDev("CREATING state with name = "+ _name);
     }
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
-		return as;
-	}
-	
-	public String getNiceName() {
-		return "State " + getName();
-	}
-	
-	public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
-		AvatarTransition at;
-		int cpt = 0;
-		
-		for(AvatarStateMachineElement asme: nexts) {
-			if (asme instanceof AvatarTransition) {
-				at = (AvatarTransition)asme;
-				if (at.isEmpty()) {
-					if (at.getNext(0) == this) {
-						cpt ++;
-					}
-				}
-			}
-		}
-		
-		
-		return cpt;
-	}
-	
-	public void addEntryCode(String _code) {
-		if (_code == null) {
-			return;
-		}
-    	if (entryCode == null) {
-    		entryCode = _code;
-    		return;
-    	}
-    	entryCode += _code + "\n";
+
+    public AvatarStateMachineElement basicCloneMe() {
+        AvatarState as = new AvatarState(getName(), getReferenceObject(), isCheckable());
+        return as;
     }
-    
+
+    public void setHidden(boolean _hidden) {
+	hidden = _hidden;
+    }
+
+    public boolean isHidden() {
+	return hidden;
+    }
+
+    public String getNiceName() {
+        return "State " + getName();
+    }
+
+    public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
+        AvatarTransition at;
+        int cpt = 0;
+
+        for(AvatarStateMachineElement asme: nexts) {
+            if (asme instanceof AvatarTransition) {
+                at = (AvatarTransition)asme;
+                if (at.isEmpty()) {
+                    if (at.getNext(0) == this) {
+                        cpt ++;
+                    }
+                }
+            }
+        }
+
+
+        return cpt;
+    }
+
+    public void addEntryCode(String _code) {
+        if (_code == null) {
+            return;
+        }
+        if (entryCode == null) {
+            entryCode = _code;
+            return;
+        }
+        entryCode += _code + "\n";
+    }
+
     public String getEntryCode() {
-    	if (entryCode == null) {
-    		return "";
-    	}
-    	return entryCode;
+        if (entryCode == null) {
+            return "";
+        }
+        return entryCode;
     }
 }
