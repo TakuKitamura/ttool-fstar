@@ -52,233 +52,233 @@ import ui.TGComponent;
 
 
 public abstract class AvatarStateMachineElement extends AvatarElement {
-	
-	protected LinkedList<AvatarStateMachineElement> nexts;
-	private AvatarState myState;
-	
-	private boolean isCheckable;
-	
+
+    protected LinkedList<AvatarStateMachineElement> nexts;
+    private AvatarState myState;
+
+    private boolean isCheckable;
+
     public AvatarStateMachineElement(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-		nexts = new LinkedList<AvatarStateMachineElement>();
+        nexts = new LinkedList<AvatarStateMachineElement>();
     }
-	
-	public AvatarStateMachineElement(String _name, Object _referenceObject, boolean _isCheckable) {
+
+    public AvatarStateMachineElement(String _name, Object _referenceObject, boolean _isCheckable) {
         super(_name, _referenceObject);
-		nexts = new LinkedList<AvatarStateMachineElement>();
-		isCheckable = _isCheckable;
+        nexts = new LinkedList<AvatarStateMachineElement>();
+        isCheckable = _isCheckable;
     }
-	
-	public void setCheckable() {
-		isCheckable = true;
-	}
-	
-	public boolean isCheckable() {
-		return isCheckable;
-	}
-	
-	public void addNext(AvatarStateMachineElement _element) {
-		nexts.add(_element);
-	}
-	
-	public AvatarStateMachineElement getNext(int _index) {
-		if (_index < nexts.size()) {
-			return nexts.get(_index);
-		}
-		return null;
-	}
-	
-	public void setState(AvatarState _as) {
-		myState = _as; 
-	}
-	
-	public AvatarState getState() {
-		return myState;
-	}
-	
-	public boolean hasInStrictUpperState(AvatarState _as) {
-		if (getState() != null) {
-			return getState().hasInUpperState(_as);
-		}
-		
-		return false;
-	}
-	
-	public boolean hasInUpperState(AvatarState _as) {
-		if (getState() == _as) {
-			return true;
-		}
-		
-		if (getState() != null) {
-			return getState().hasInUpperState(_as);
-		}
-		
-		return false;
-	}
-	
-	public boolean inAnUpperStateOf(AvatarState _state) {
-		if (_state == null) {
-			return false;
-		}
-		
-		AvatarState as = getState();
-		if (as == null) {
-			return true;
-		}
-		
-		while((_state = _state.getState()) != null) {
-			if (_state == as) {
-				return true;
-			}
-		}
-		
-		return false;
-		
-	}
-	
-	public String toString() {
-		String ret = getExtendedName() + " ID=" + getID();
-		if (myState == null) {
-			ret += " / top level operator\n";
-		} else {
-			ret += " / in state " + myState.getName() + " ID=" + myState.getID() + "\n"; 
-		}
-		
-		ret += "nexts= ";
-		int cpt=0;
-		for(AvatarStateMachineElement element: nexts) {
-			ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
-			cpt ++;
-		}
-		
-		ret += specificToString();
-		
-		return ret;
-	}
-	
-	public String getExtendedName() {
-		return getName();
-	}
-	
-	public String specificToString() {
-		return "";
-	}
-	
-	public int nbOfNexts() {
-		return nexts.size();
-	}
-	
-	public boolean hasNext(AvatarStateMachineElement _elt) {
-		return nexts.contains(_elt);
-	}
-	
-	public void removeNext(AvatarStateMachineElement _elt) {
-		nexts.remove(_elt);
-	}
-	
-	public void replaceAllNext(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
-		if (nexts.contains(oldone)) {
-			LinkedList<AvatarStateMachineElement> oldnexts = nexts;
-			nexts = new LinkedList<AvatarStateMachineElement>();
-			for(AvatarStateMachineElement elt: oldnexts) {
-				if (elt == oldone) {
-					nexts.add(newone);
-				} else {
-					nexts.add(oldone);
-				}
-			}
-		}
-	}
-	
-	public void removeAllNexts() {
-		nexts.clear();
-	}
-	
-	public boolean followedWithAnActionOnASignal() {
-		AvatarStateMachineElement element = getNext(0);
-		if (element == null) {
-			return false;
-		}
-		
-		return (element instanceof AvatarActionOnSignal);
-	}
-	
-	public abstract AvatarStateMachineElement basicCloneMe();
-	
-	
-	// Guard with an id and not(id)
-	public boolean hasElseChoiceType1() {
-		if (nexts.size() != 2) {
-			return false;
-		}
-		
-		AvatarStateMachineElement elt1, elt2;
-		
-		elt1 = getNext(0);
-		elt2 = getNext(1);
-		
-		if ( (!(elt1 instanceof AvatarTransition)) || (!(elt2 instanceof AvatarTransition))) {
-			return false;
-		}
-		
-		AvatarTransition at1, at2;
-		
-		at1 = (AvatarTransition)elt1;
-		at2 = (AvatarTransition)elt2;
-		
-		if ((!(at1.isGuarded())) || (!(at2.isGuarded()))) {
-			return false;
-		}
-		
-		String g1, g2;
-		g1 = at1.getGuard();
-		g2 = at2.getGuard();
-		
-		g1 = Conversion.replaceAllString(g1, "[", "");
-		g1 = Conversion.replaceAllString(g1, "]", "").trim();
-		g1 = Conversion.replaceAllString(g1, " ", "");
-		
-		g2 = Conversion.replaceAllString(g2, "[", "");
-		g2 = Conversion.replaceAllString(g2, "]", "").trim();
-		g2 = Conversion.replaceAllString(g2, " ", "");
-		
-		String g, n;
-		
-		if (g1.startsWith("not(")) {
-			n = g1;
-			g = g2;
-		} else {
-			g = g1;
-			n = g2;
-		}
-		
-		/*if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
-			return false;
-		}*/
-		
-		if (n.substring(4, n.length()-1).compareTo(g) != 0) {
-			return false;
-		}
-		
-		
-		return true;
-	}
-	
-	public boolean hasBreakpoint() {
-		if (referenceObject == null) {
-			return false;
-		}
-		
-		if (referenceObject instanceof TGComponent) {
-			TGComponent tgc = (TGComponent)referenceObject;
-			return tgc.getBreakpoint();
-		}
-		
-		return false;
-		
-	}
-	
-	public abstract String getNiceName();
-	
-    
+
+    public void setCheckable() {
+        isCheckable = true;
+    }
+
+    public boolean isCheckable() {
+        return isCheckable;
+    }
+
+    public void addNext(AvatarStateMachineElement _element) {
+        nexts.add(_element);
+    }
+
+    public AvatarStateMachineElement getNext(int _index) {
+        if (_index < nexts.size()) {
+            return nexts.get(_index);
+        }
+        return null;
+    }
+
+    public void setState(AvatarState _as) {
+        myState = _as;
+    }
+
+    public AvatarState getState() {
+        return myState;
+    }
+
+    public boolean hasInStrictUpperState(AvatarState _as) {
+        if (getState() != null) {
+            return getState().hasInUpperState(_as);
+        }
+
+        return false;
+    }
+
+    public boolean hasInUpperState(AvatarState _as) {
+        if (getState() == _as) {
+            return true;
+        }
+
+        if (getState() != null) {
+            return getState().hasInUpperState(_as);
+        }
+
+        return false;
+    }
+
+    public boolean inAnUpperStateOf(AvatarState _state) {
+        if (_state == null) {
+            return false;
+        }
+
+        AvatarState as = getState();
+        if (as == null) {
+            return true;
+        }
+
+        while((_state = _state.getState()) != null) {
+            if (_state == as) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public String toString() {
+        String ret = getExtendedName() + " ID=" + getID();
+        if (myState == null) {
+            ret += " / top level operator\n";
+        } else {
+            ret += " / in state " + myState.getName() + " ID=" + myState.getID() + "\n";
+        }
+
+        ret += "nexts= ";
+        int cpt=0;
+        for(AvatarStateMachineElement element: nexts) {
+            ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
+            cpt ++;
+        }
+
+        ret += specificToString();
+
+        return ret;
+    }
+
+    public String getExtendedName() {
+        return getName();
+    }
+
+    public String specificToString() {
+        return "";
+    }
+
+    public int nbOfNexts() {
+        return nexts.size();
+    }
+
+    public boolean hasNext(AvatarStateMachineElement _elt) {
+        return nexts.contains(_elt);
+    }
+
+    public void removeNext(AvatarStateMachineElement _elt) {
+        nexts.remove(_elt);
+    }
+
+    public void replaceAllNext(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
+        if (nexts.contains(oldone)) {
+            LinkedList<AvatarStateMachineElement> oldnexts = nexts;
+            nexts = new LinkedList<AvatarStateMachineElement>();
+            for(AvatarStateMachineElement elt: oldnexts) {
+                if (elt == oldone) {
+                    nexts.add(newone);
+                } else {
+                    nexts.add(oldone);
+                }
+            }
+        }
+    }
+
+    public void removeAllNexts() {
+        nexts.clear();
+    }
+
+    public boolean followedWithAnActionOnASignal() {
+        AvatarStateMachineElement element = getNext(0);
+        if (element == null) {
+            return false;
+        }
+
+        return (element instanceof AvatarActionOnSignal);
+    }
+
+    public abstract AvatarStateMachineElement basicCloneMe();
+
+
+    // Guard with an id and not(id)
+    public boolean hasElseChoiceType1() {
+        if (nexts.size() != 2) {
+            return false;
+        }
+
+        AvatarStateMachineElement elt1, elt2;
+
+        elt1 = getNext(0);
+        elt2 = getNext(1);
+
+        if ( (!(elt1 instanceof AvatarTransition)) || (!(elt2 instanceof AvatarTransition))) {
+            return false;
+        }
+
+        AvatarTransition at1, at2;
+
+        at1 = (AvatarTransition)elt1;
+        at2 = (AvatarTransition)elt2;
+
+        if ((!(at1.isGuarded())) || (!(at2.isGuarded()))) {
+            return false;
+        }
+
+        String g1, g2;
+        g1 = at1.getGuard();
+        g2 = at2.getGuard();
+
+        g1 = Conversion.replaceAllString(g1, "[", "");
+        g1 = Conversion.replaceAllString(g1, "]", "").trim();
+        g1 = Conversion.replaceAllString(g1, " ", "");
+
+        g2 = Conversion.replaceAllString(g2, "[", "");
+        g2 = Conversion.replaceAllString(g2, "]", "").trim();
+        g2 = Conversion.replaceAllString(g2, " ", "");
+
+        String g, n;
+
+        if (g1.startsWith("not(")) {
+            n = g1;
+            g = g2;
+        } else {
+            g = g1;
+            n = g2;
+        }
+
+        /*if (!AvatarAttribute.isAValidAttributeName(g.trim())) {
+          return false;
+          }*/
+
+        if (n.substring(4, n.length()-1).compareTo(g) != 0) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    public boolean hasBreakpoint() {
+        if (referenceObject == null) {
+            return false;
+        }
+
+        if (referenceObject instanceof TGComponent) {
+            TGComponent tgc = (TGComponent)referenceObject;
+            return tgc.getBreakpoint();
+        }
+
+        return false;
+
+    }
+
+    public abstract String getNiceName();
+
+
 }

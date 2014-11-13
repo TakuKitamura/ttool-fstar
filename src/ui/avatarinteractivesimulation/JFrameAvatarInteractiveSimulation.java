@@ -783,7 +783,7 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
             JCheckBox jcb = new JCheckBox(block.getName(), true);
             block.selected = true;
             jcb.addActionListener(this);
-            TraceManager.addDev("Adding block: " + block);
+            //TraceManager.addDev("Adding block: " + block);
             displayedBlocks.add(jcb);
             displayedBlockPanel.add(jcb, c);
         }
@@ -1225,14 +1225,14 @@ public  class JFrameAvatarInteractiveSimulation extends JFrame implements Avatar
 
         if (hashOfAllElements.hashCode() != nbOfAllExecutedElements) {
             Object objs[] = hashOfAllElements.keySet().toArray();
-            TraceManager.addDev("Parsing array of elements: " + objs.length);
+            //TraceManager.addDev("Parsing array of elements: " + objs.length);
             for(int i=0; i<objs.length; i++) {
                 o = objs[i];
-                TraceManager.addDev("objs: " + o);
+                //TraceManager.addDev("objs: " + o);
                 Object oo = ((AvatarStateMachineElement)o).getReferenceObject();
                 if (oo != null) {
                     tgc = (TGComponent)oo;
-                    TraceManager.addDev("TGComponent: " + tgc);
+                    //TraceManager.addDev("TGComponent: " + tgc);
                     tgc.setAVATARMet(hashOfAllElements.get(o).intValue());
                 }
 

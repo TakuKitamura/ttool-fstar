@@ -95,6 +95,8 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public void removeCompositeStates(AvatarBlock _block) {
+        TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
+
         // Contains in odd index: composite state
         // even index: new state replacing the start state
 
@@ -103,16 +105,17 @@ public class AvatarStateMachine extends AvatarElement {
 
         AvatarTransition at;
 
-        /*at = getCompositeTransition();
-          if (at != null) {
-          TraceManager.addDev("*** Found composite transition: " + at.toString());
-          }*/
+        at = getCompositeTransition();
+        if (at != null) {
+          TraceManager.addDev("********************************** Found composite transition: " + at.toString());
+	  // Adding intermediate states in transitions : splitting transitions
+          }
 
         LinkedList<AvatarStateMachineElement> toRemove = new LinkedList<AvatarStateMachineElement>();
 
         while((at = getCompositeTransition()) != null) {
-            TraceManager.addDev("*** Found composite transition: " + at.toString());
-            TraceManager.addDev(_block.toString());
+            TraceManager.addDev("*********************************** Found composite transition: " + at.toString());
+            //TraceManager.addDev(_block.toString());
             if (!(toRemove.contains(getPreviousElementOf(at)))) {
                 toRemove.add(getPreviousElementOf(at));
             }
@@ -249,7 +252,7 @@ public class AvatarStateMachine extends AvatarElement {
         if (_at.getNbOfAction() > 1) {
             TraceManager.addDev("New split state");
             AvatarState as = new AvatarState("splitstate", null);
-	    as.setHidden(true);
+            as.setHidden(true);
             as.setState(_currentState);
             AvatarTransition at = (AvatarTransition)(_at.basicCloneMe());
             _at.removeAllActionsButTheFirstOne();
@@ -262,7 +265,7 @@ public class AvatarStateMachine extends AvatarElement {
             addElement(at);
 
             splitAvatarTransition(at, _currentState);
-        }
+	  }
     }
 
     private void adaptCompositeTransition(AvatarTransition _at, AvatarStateMachineElement _element, int _transitionID) {
@@ -273,30 +276,83 @@ public class AvatarStateMachine extends AvatarElement {
 
         // It cannot be a start / stop state since they have been previously removed ..
         if (_element instanceof AvatarActionOnSignal) {
-            ll = getPreviousElementsOf(_element);
-            for(AvatarStateMachineElement element: ll) {
-                if (element instanceof AvatarTransition) {
+            AvatarStateMachineElement element = _element.getNext(0);
+            if (element instanceof AvatarTransition) {
+                if (!(((AvatarTransition)element).isEmpty())) {
+                    //We need to create a new state
                     tmp = findUniqueStateName("internalstate__");
                     TraceManager.addDev("Creating state with name=" + tmp);
                     as = new AvatarState(tmp, null);
-		    as.setHidden(true);
-                    element.removeNext(_element);
-                    element.addNext(as);
+                    addElement(as);
+                    as.setHidden(true);
                     at = new AvatarTransition("internaltransition", null);
                     addElement(at);
-                    at.addNext(_element);
-                    as.addNext(at);
-                    addElement(as);
+                    //_element -> at -> as -> element
+
+                    _element.removeNext(element);
+                    _element.addNext(at);
+
+                    at.addNext(as);
+                    as.addNext(element);
 
                     at = cloneCompositeTransition(_at);
-                    addElement(at);
+                    //addElement(at);
                     as.addNext(at);
-
                 } else {
-                    // Badly formed machine!
-                    TraceManager.addError("Badly formed sm (removing composite transition)");
+                    // We see if a state follows it. Otherwise, we create one
+                    if (!(element.getNext(0) instanceof AvatarState)) {
+                        //We need to create a new state
+                        tmp = findUniqueStateName("internalstate__");
+                        TraceManager.addDev("Creating state with name=" + tmp);
+                        as = new AvatarState(tmp, null);
+                        addElement(as);
+                        as.setHidden(true);
+                        at = new AvatarTransition("internaltransition", null);
+                        addElement(at);
+                        //_element -> at -> as -> element
+
+                        _element.removeNext(element);
+                        _element.addNext(at);
+
+                        at.addNext(as);
+                        as.addNext(element);
+
+                        at = cloneCompositeTransition(_at);
+                        //addElement(at);
+                        as.addNext(at);
+
+                    } else {
+                        //We link to this state-> will be done later
+                    }
                 }
             }
+            /*ll = getPreviousElementsOf(_element);
+              for(AvatarStateMachineElement element: ll) {
+              if (element instanceof AvatarTransition) {
+              // if empty transition: we do just nothing
+              if (!(((AvatarTransition)element).isEmpty())) {
+              tmp = findUniqueStateName("internalstate__");
+              TraceManager.addDev("Creating state with name=" + tmp);
+              as = new AvatarState(tmp, null);
+              as.setHidden(true);
+              element.removeNext(_element);
+              element.addNext(as);
+              at = new AvatarTransition("internaltransition", null);
+              addElement(at);
+              at.addNext(_element);
+              as.addNext(at);
+              addElement(as);
+
+              at = cloneCompositeTransition(_at);
+              addElement(at);
+              as.addNext(at);
+              }
+
+              } else {
+              // Badly formed machine!
+              TraceManager.addError("Badly formed sm (removing composite transition)");
+              }
+              }*/
 
         } else if (_element instanceof AvatarState) {
             at = cloneCompositeTransition(_at);
@@ -368,7 +424,7 @@ public class AvatarStateMachine extends AvatarElement {
                 if (le.size() > 0) {
                     as0 = new AvatarState("entrance__" + astate.getName(), astate.getReferenceObject());
                     as0.addNext(as.getNext(0));
-		    as0.setHidden(true);
+                    as0.setHidden(true);
                     as0.setState(astate);
                     for(AvatarStateMachineElement element: le) {
                         if (element instanceof AvatarTransition) {
@@ -620,7 +676,7 @@ public class AvatarStateMachine extends AvatarElement {
             TraceManager.addDev("-> Timer modification");
 
             AvatarState myState = new AvatarState("statefortransition__" + ID_ELT, _at.getReferenceObject());
-	    myState.setHidden(true);
+            myState.setHidden(true);
             AvatarTransition at2 = new AvatarTransition("transitionfortransition__" + ID_ELT, _at.getReferenceObject());
             ID_ELT ++;
             AvatarTransition at1 = (AvatarTransition)(next.getNext(0));
