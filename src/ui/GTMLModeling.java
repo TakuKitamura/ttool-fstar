@@ -1918,8 +1918,8 @@ public class GTMLModeling  {
         }
 
         TraceManager.addDev( "About to check the syntax of CPs" );
-        //TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
-        //syntax.checkSyntax();
+        TMLCPSyntaxChecking syntax = new TMLCPSyntaxChecking( tmlcp );
+        syntax.checkSyntax();
         //Takes the data structure tmlcp passed to the constructor and checks the syntax of the components of a cp. If there are errors (these
         //are filled inside the class syntax), then CheckingErrors are filled according to the errors in class syntax
 
@@ -1927,7 +1927,7 @@ public class GTMLModeling  {
         int type;
         TGComponent tgc;
 
-        /*if( syntax.hasErrors() > 0 ) {
+        if( syntax.hasErrors() > 0 ) {
           for( TMLCPError error: syntax.getErrors() ) {
           if( error.type == TMLCPError.ERROR_STRUCTURE ) {
           type = CheckingError.STRUCTURE_ERROR;
@@ -1944,7 +1944,7 @@ public class GTMLModeling  {
           ce.setTMLTask( error.task );
           checkingErrors.add( ce );
           }
-          }*/
+          }
 
         /*makeCPDataStructure();
           if (!makeTMLModeling()) {
@@ -2400,15 +2400,15 @@ public class GTMLModeling  {
                         attribute = attributes.get( index1 );
                         toParse = attribute.toString();
                         tokens = toParse.split( delims );
-                        if( tokens[3].equals("Natural") )       {
-                            type = new TMLType(1);
+                        if( tokens[ tokens.length - 1 ].equals("Natural") )       {
+                            type = new TMLType( TMLType.NATURAL );
                         }
                         else {
-                            if( tokens[3].equals("Boolean") )   {
-                                type = new TMLType(2);
+                            if( tokens[ tokens.length - 1 ].equals("Boolean") )   {
+                                type = new TMLType( TMLType.BOOLEAN );
                             }
                             else        {
-                                type = new TMLType(3);  //other type
+                                type = new TMLType( TMLType.OTHER );  //other type
                             }
                         }
                         instance.addAttribute( new TMLAttribute( tokens[1], storage.getName(), type, tokens[2] ) );     //name, instanceName, type, initial value
@@ -2429,10 +2429,10 @@ public class GTMLModeling  {
                         attribute = attributes.get( index1 );
                         toParse = attribute.toString();
                         tokens = toParse.split( delims );
-                        if( tokens[3].equals("Natural") )       { type = new TMLType(1);        }
+                        if( tokens[ tokens.length - 1 ].equals("Natural") )       { type = new TMLType( TMLType.NATURAL );        }
                         else {
-                            if( tokens[3].equals("Boolean") )   {       type = new TMLType(2);  }
-                            else        {       type = new TMLType(3);  /*other type*/  }
+                            if( tokens[ tokens.length - 1 ].equals("Boolean") )   {       type = new TMLType( TMLType.BOOLEAN );  }
+                            else        {       type = new TMLType( TMLType.OTHER );  /*other type*/  }
                         }
                         instance.addAttribute( new TMLAttribute( tokens[1], controller.getName(), type, tokens[2] ) );  //name, instanceName, type, initial value
                     }
@@ -2452,10 +2452,10 @@ public class GTMLModeling  {
                         attribute = attributes.get( index1 );
                         toParse = attribute.toString();
                         tokens = toParse.split( delims );
-                        if( tokens[3].equals("Natural") )       {       type = new TMLType(1);  }
+                        if( tokens[ tokens.length-1 ].equals("Natural") )       {       type = new TMLType( TMLType.NATURAL );  }
                         else {
-                            if( tokens[3].equals("Boolean") )   {       type = new TMLType(2);  }
-                            else        {       type = new TMLType(3);  /*other type*/  }
+                            if( tokens[ tokens.length-1 ].equals("Boolean") )   {       type = new TMLType( TMLType.BOOLEAN );  }
+                            else        {       type = new TMLType( TMLType.OTHER );  /*other type*/  }
                         }
                         instance.addAttribute( new TMLAttribute( tokens[1], transfer.getName(), type, tokens[2] ) );    //name, instanceName, type, initial value
                     }

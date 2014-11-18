@@ -91,10 +91,9 @@ public class TMLCPSyntaxChecking {
 		errors = new ArrayList<TMLCPError>();
 		warnings = new ArrayList<TMLCPError>();
 		
-		//TraceManager.addDev( "Checking syntax" );
 		//Call here the routines to performan syntax checks
-		checkMainCP();
-		checkActivityDiagrams();
+		/*checkMainCP();
+		checkActivityDiagrams();*/
 		checkSequenceDiagrams();
 	}
 
@@ -257,10 +256,37 @@ public class TMLCPSyntaxChecking {
 
 		for( TMLCPSequenceDiagram diag: listSDs )	{
 			ArrayList<TMLAttribute> attributes = diag.getAttributes();
-			checkMessages( diag, attributes );		// check that attributes have been declared
 			checkActions( diag, attributes );			// actions must be done on variables that have
+			checkMessages( diag, attributes );		// check that attributes have been declared
 																						// been declared and coherently boolean = boolean + 6 is not allowed
-			checkInstances( diag );	// instances within the same SD must all have different names
+			checkInstances( diag );								// instances within the same SD must all have different names
+		}
+	}
+
+	private void checkActions( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
+		ArrayList<TMLSDAction> actions = diag.getActions();
+		//boolean exists = false;
+		for( TMLSDAction action: actions )	{
+			String[] array = action.toString().split("=");
+			String temp = array[0].replaceAll("\\s+","");
+			//TraceManager.addDev( "CHECKING ACTIONS: " + temp + " of length " + temp.length() );
+			for( TMLAttribute attribute: attributes )	{
+				//TraceManager.addDev( "PRINTING ATTRIBUTE NAMES: " + attribute.getName() );
+				if( attribute.getName().equals( temp ) )	{	
+					if( attribute.isBool() )	{
+						parsing( "assbool", action.toString() );
+						//TraceManager.addDev( "Found that the action is on a boolean variable: " + temp );
+						//exists = true;
+						break;
+					}
+					if( attribute.isNat() )	{
+						parsing( "assnat", action.toString() );
+						//TraceManager.addDev( "Found that the action is on a natural variable: " + temp );
+						//exists = true;
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -284,33 +310,6 @@ public class TMLCPSyntaxChecking {
 				}
 				else	{
 					foundAttribute = false;
-				}
-			}
-		}
-	}
-
-	private void checkActions( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
-		ArrayList<TMLSDAction> actions = diag.getActions();
-		//boolean exists = false;
-		for( TMLSDAction action: actions )	{
-			String[] array = action.getAction().split("=");
-			String temp = array[0].replaceAll("\\s+","");
-			//TraceManager.addDev( "CHECKING ACTIONS: " + temp + " of length " + temp.length() );
-			for( TMLAttribute attribute: attributes )	{
-				//TraceManager.addDev( "PRINTING ATTRIBUTE NAMES: " + attribute.getName() );
-				if( attribute.getName().equals( temp ) )	{	
-					if( attribute.isBool() )	{
-						parsing( "assbool", action.getAction() );
-						//TraceManager.addDev( "Found that the action is on a boolean variable: " + temp );
-						//exists = true;
-						break;
-					}
-					if( attribute.isNat() )	{
-						parsing( "assnat", action.getAction() );
-						//TraceManager.addDev( "Found that the action is on a natural variable: " + temp );
-						//exists = true;
-						break;
-					}
 				}
 			}
 		}
