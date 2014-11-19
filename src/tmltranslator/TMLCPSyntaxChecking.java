@@ -308,6 +308,9 @@ public class TMLCPSyntaxChecking {
 				if( !isParameterDeclared( parameter, receiverInstance, diag ) )	{
 				addError( "Parameter <<" + parameter.getName() + ">> has not been declared in instance <<" + receiverInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
 				}
+				if( !checkTypeCoherency( parameter, senderInstance, receiverInstance, diag ) )	{
+					addError( "Parameter <<" + parameter.getName() + ">> is declared with different types in instance <<" + senderInstance + ">> and in instance <<" + receiverInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
+				}
 			}
 		}
 	}
@@ -324,6 +327,32 @@ public class TMLCPSyntaxChecking {
 			}
 		}
 		return false;
+	}
+
+	private boolean checkTypeCoherency( TMLAttribute parameter, String senderInstance, String receiverInstance, TMLCPSequenceDiagram diag )	{
+
+		int typeOfAttributeInSenderInstance = 0;
+		int typeOfAttributeInReceiverInstance = 0;
+
+		for( TMLSDInstance instance: diag.getInstances() )	{
+			if( instance.getName().equals( senderInstance ) )	{
+				for( TMLAttribute attribute: instance.getAttributes() )	{	//don't use contains() as parameter is created with some partial attributes
+					if( attribute.getName().equals( parameter.getName() ) )	{
+						typeOfAttributeInSenderInstance = attribute.getType().getType();
+						break;
+					}
+				}
+			}
+			if( instance.getName().equals( receiverInstance ) )	{
+				for( TMLAttribute attribute: instance.getAttributes() )	{	//don't use contains() as parameter is created with some partial attributes
+					if( attribute.getName().equals( parameter.getName() ) )	{
+						typeOfAttributeInReceiverInstance = attribute.getType().getType();
+						break;
+					}
+				}
+			}
+		}
+		return ( typeOfAttributeInSenderInstance == typeOfAttributeInReceiverInstance );
 	}
 
 	private void checkInstances( TMLCPSequenceDiagram diag )	{
