@@ -92,28 +92,32 @@ public class TMLCPSyntaxChecking {
 		errors = new ArrayList<TMLCPError>();
 		warnings = new ArrayList<TMLCPError>();
 		
-		checkMainCP();
-		/*checkActivityDiagrams();*/
+		/*checkMainCP();*/
+		checkActivityDiagrams();
 		checkSequenceDiagrams();
 	}
 
 	//Check that all diagrams, forks, joins and choices are connected by retrieving the list
-	//of elements and checking if they appear as start or end name in the list of connectors
-	private void checkMainCP()	{
+	//of elements and checking if they appear as start or end name in the list of connectors.
+	//First check the mainCP then check the other Activity Diagrams
+	private void checkActivityDiagrams()	{
 
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
-		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
-		ArrayList<String> listElementsToCheck = new ArrayList<String>();
 
-		//check that all diagrams are connected
-
+		//Checking mainCP
 		ArrayList<TMLCPElement> currentListOfElements = mainCP.getElements();
-		ArrayList<TMLCPElement> listOfElementsToCheck = mainCP.getElements();
-
 		checkStartState( currentListOfElements, mainCP );
 		checkDisconnectedSubParts( currentListOfElements, mainCP );
 		checkDiagramsBetweenForkAndJoin( currentListOfElements, mainCP );
 
+		//Checking the other ActivityDiagrams
+		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+		for( TMLCPActivityDiagram diag: listADs )	{
+			currentListOfElements = diag.getElements();
+			checkStartState( currentListOfElements, diag );
+			checkDisconnectedSubParts( currentListOfElements, diag );
+			checkDiagramsBetweenForkAndJoin( currentListOfElements, diag );
+		}
 		/*for( TMLCPElement elem: listElements )	{
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
 				listElementsToCheck.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
@@ -155,7 +159,7 @@ public class TMLCPSyntaxChecking {
 
 		int startCounter = 0;
 		for( TMLCPElement elem: diag.getElements() )	{
-			TraceManager.addDev( "ELEMENT in MAINCP: " + elem );
+			TraceManager.addDev( "ELEMENT in AD: " + elem );
 			if( elem instanceof TMLCPStart )	{
 				startCounter++;
 			}
@@ -199,9 +203,6 @@ public class TMLCPSyntaxChecking {
 			if( element instanceof TMLCPFork )	{
 				listOfForks.add( (TMLCPFork) element );
 			}
-			/*if( element instanceof TMLCPJoin )	{
-				listOfJoins.add( (TMLCPJoin) element );
-			}*/
 		}
 		for( TMLCPFork fork: listOfForks )	{
 			for( TMLCPElement element: fork.getNextElements() )	{
@@ -219,9 +220,6 @@ public class TMLCPSyntaxChecking {
 			}
 			listOfJoins.clear();
 		}
-		/*TraceManager.addDev( "LIST OF FORKS: " + listOfForks.toString() );
-		TraceManager.addDev( "########################################" );
-		TraceManager.addDev( "LIST OF JOINS: " + listOfJoins.toString() );*/
 	}
 
 	//Recursive function that explores the path from an element until a join node
@@ -246,7 +244,7 @@ public class TMLCPSyntaxChecking {
 	//Check that all diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name in
 	//the list of connectors of the AD diagram under examination
 	//At the same time, get the list of guards of choice elements
-	private void checkActivityDiagrams()	{
+	private void checkActivityDiagramsOLD()	{
 
 		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
 		ArrayList<TMLCPSequenceDiagram> listSDs = tmlcp.getCPSequenceDiagrams();
