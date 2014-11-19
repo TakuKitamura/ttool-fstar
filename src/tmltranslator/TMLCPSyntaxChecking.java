@@ -256,10 +256,11 @@ public class TMLCPSyntaxChecking {
 
 		for( TMLCPSequenceDiagram diag: listSDs )	{
 			ArrayList<TMLAttribute> attributes = diag.getAttributes();
-			checkActions( diag, attributes );			// actions must be done on variables that have
-			checkMessages( diag, attributes );		// check that attributes have been declared
-																						// been declared and coherently boolean = boolean + 6 is not allowed
-			checkInstances( diag );								// instances within the same SD must all have different names
+			//checkUniquenessOfAttributesNames( diag );	// already done in the GUI when declaring attributes
+			checkActions( diag, attributes );						// actions must be done on variables that have
+			checkMessages( diag );											// check that attributes have been declared
+																									// been declared and coherently boolean = boolean + 6 is not allowed
+			checkInstances( diag );											// instances within the same SD must all have different names
 		}
 	}
 
@@ -290,29 +291,39 @@ public class TMLCPSyntaxChecking {
 		}
 	}
 
-	private void checkMessages( TMLCPSequenceDiagram diag, ArrayList<TMLAttribute> attributes )	{
-		ArrayList<TMLSDMessage> messages = diag.getMessages();
-		boolean foundAttribute = false;
-		for( TMLSDMessage msg: messages )	{
-			ArrayList<TMLSDAttribute> attributesMsg = msg.getAttributes();
-			TraceManager.addDev( "PRINTING ATTRIBUTES OF MSG " + msg + attributesMsg.toString() );
-			for( TMLSDAttribute attr: attributesMsg )	{
-				for( TMLAttribute attr2: attributes )	{	//attributes of SD diagram
-					if( attr.getName().equals( attr2.getName() ) )	{
-						TraceManager.addDev( "FOUND MATCHING ATTRIBUTES " + attr.getName() + " " + attr2.getName() );
-						foundAttribute = true;
-						break;
-					}
+	// Check that for each message parameter, the corresponding attribute has been declared in both the sender
+	// and the receiver instances with the same name
+	private void checkMessages( TMLCPSequenceDiagram diag )	{
+
+		ArrayList<TMLSDMessage> messagesList = diag.getMessages();
+
+		for( TMLSDMessage message: messagesList )	{
+			String senderInstance = message.getSenderName();
+			String receiverInstance = message.getReceiverName();
+			ArrayList<TMLAttribute> parametersList = message.getAttributes();
+			for( TMLAttribute parameter: parametersList )	{
+				if( !isParameterDeclared( parameter, senderInstance, diag ) )	{
+				addError( "Parameter <<" + parameter.getName() + ">> has not been declared in instance <<" + senderInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
 				}
-				if( !foundAttribute )	{
-					addError( " Attribute <<" + attr.getName() + ">> has not been declared in diagram <<" + diag.getName() + ">>",
-										TMLCPError.ERROR_STRUCTURE );
-				}
-				else	{
-					foundAttribute = false;
+				if( !isParameterDeclared( parameter, receiverInstance, diag ) )	{
+				addError( "Parameter <<" + parameter.getName() + ">> has not been declared in instance <<" + receiverInstance + ">> in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
 				}
 			}
 		}
+	}
+
+	private boolean isParameterDeclared( TMLAttribute parameter, String instanceName, TMLCPSequenceDiagram diag )	{
+
+		for( TMLSDInstance instance: diag.getInstances() )	{
+			if( instance.getName().equals( instanceName ) )	{
+				for( TMLAttribute attribute: instance.getAttributes() )	{	//don't use contains() as parameter is created with some partial attributes
+					if( attribute.getName().equals( parameter.getName() ) )	{
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private void checkInstances( TMLCPSequenceDiagram diag )	{

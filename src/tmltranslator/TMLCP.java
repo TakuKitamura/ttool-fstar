@@ -430,7 +430,7 @@ public class TMLCP extends TMLElement {
 
             //Print Messages
             ArrayList<TMLSDMessage> listMessages;
-            ArrayList<TMLSDAttribute> msgAttributes;
+            ArrayList<TMLAttribute> msgAttributes;
             TMLSDMessage msg;
             listMessages = tempSD.getMessages();
             System.out.println( "\tMessages:" );

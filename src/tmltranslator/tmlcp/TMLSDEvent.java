@@ -64,10 +64,10 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
     private final static String ERROR = "ERROR_IN_EVENT";
     private int type;
     private int yCoord;
-    private Object ref;
+    private Object referenceObject;
 
     public TMLSDEvent( Object _referenceObject, int _type, int _yCoord ) {
-        this.ref = _referenceObject;
+        this.referenceObject = _referenceObject;
         this.yCoord = _yCoord;
         this.type = _type;
     }
@@ -75,6 +75,14 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
     public int getYCoord()      {
         return yCoord;
     }
+
+		public int getType()	{
+			return this.type;
+		}
+
+		public Object getReferenceObject()	{
+			return this.referenceObject;
+		}
 
     @Override public int compareTo( TMLSDEvent _event ) {
 	//TraceManager.addDev("Comparing events");
@@ -98,13 +106,13 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 
 			switch( type )	{
 				case 0:	//send message
-            msg = ( (TMLSDMessage) ref);
+            msg = ( (TMLSDMessage) referenceObject );
         		return SEND_MESSAGE_LABEL + msg.toString();
 				case 1:	//receive message
-            msg = ( (TMLSDMessage) ref);
+            msg = ( (TMLSDMessage) referenceObject );
         		return RECEIVE_MESSAGE_LABEL + msg.toString();
 				case 2:	//action
-     	      TMLSDAction action = ( (TMLSDAction) ref);
+     	      TMLSDAction action = ( (TMLSDAction) referenceObject );
             return ACTION_LABEL + action.toString();
 				default:
 						return ERROR;

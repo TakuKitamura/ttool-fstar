@@ -76,6 +76,13 @@ public class TMLAttribute extends DIPLOElement {
 		this.initialValue = "NULL";
     }
 
+    public TMLAttribute( String _name ) {
+  		this.name = _name;
+			this.instanceName = "NO_NAME";
+			this.type = new TMLType( TMLType.OTHER );
+			this.initialValue = "NULL";
+    }
+
 		public String getInstanceName()	{
 			return instanceName;
 		}

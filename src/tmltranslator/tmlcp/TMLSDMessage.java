@@ -53,27 +53,27 @@ import myutil.*;
 
 public class TMLSDMessage extends TMLElement  {
 
-	//mind the difference between TMLSDAttribute and TMLAttribute!
-	private ArrayList<TMLSDAttribute> attributeList;	
+	//mind the difference between TMLAttribute and TMLAttribute!
+	private ArrayList<TMLAttribute> attributeList;	
 	private String senderName = "";
 	private String receiverName = "";
 	private int yCoord;
 
-  public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ Object _referenceObject ) {
-  	super( _name, _referenceObject );
+  //public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ Object _referenceObject ) {
+  	/*super( _name, _referenceObject );
 		this.yCoord = -1;
 		this.senderName = "";//_senderName;
 		this.receiverName = "";//_receiverName;
-		attributeList = new ArrayList<TMLSDAttribute>();
-	}
+		attributeList = new ArrayList<TMLAttribute>();
+	}*/
 	
-  public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ int _yCoord, Object _referenceObject ) {
-  	super( _name, _referenceObject );
+  //public TMLSDMessage( String _name, /*String _senderName, String _receiverName,*/ int _yCoord, Object _referenceObject ) {
+  	/*super( _name, _referenceObject );
 		this.senderName = "";//_senderName;
 		this.receiverName = "";//_receiverName;
 		this.yCoord = _yCoord;
-		attributeList = new ArrayList<TMLSDAttribute>();
-	}
+		attributeList = new ArrayList<TMLAttribute>();
+	}*/
 
 	public TMLSDMessage( String _name, String _senderName, String _receiverName, int _yCoord,
 												Object _referenceObject, ArrayList<String> _params )	{
@@ -81,9 +81,9 @@ public class TMLSDMessage extends TMLElement  {
 		this.yCoord = _yCoord;
 		this.senderName = _senderName;
 		this.receiverName = _receiverName;
-		attributeList = new ArrayList<TMLSDAttribute>();
+		attributeList = new ArrayList<TMLAttribute>();
 		for( String p: _params )	{
-			attributeList.add( new TMLSDAttribute(p) );
+			attributeList.add( new TMLAttribute(p) );
 		}
 	}
 
@@ -95,12 +95,12 @@ public class TMLSDMessage extends TMLElement  {
 		return receiverName;
 	}
     
-	public void addAttribute( TMLSDAttribute _attribute )	{
+	public void addAttribute( TMLAttribute _attribute )	{
 		if( _attribute != null )
 			attributeList.add( _attribute );
 	}
 
-	public ArrayList<TMLSDAttribute> getAttributes()	{
+	public ArrayList<TMLAttribute> getAttributes()	{
 		return attributeList;
 	}
 
@@ -116,7 +116,7 @@ public class TMLSDMessage extends TMLElement  {
 
 		String s = this.name + "(";
 		if( attributeList.size() > 0 )	{
-			for( TMLSDAttribute attribute: attributeList )	{
+			for( TMLAttribute attribute: attributeList )	{
 				s += attribute.getName() + ",";
 			}
 			String newS = s.substring( 0, s.length() - 1 );
