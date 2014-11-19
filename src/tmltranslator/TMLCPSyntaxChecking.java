@@ -199,9 +199,9 @@ public class TMLCPSyntaxChecking {
 			if( element instanceof TMLCPFork )	{
 				listOfForks.add( (TMLCPFork) element );
 			}
-			if( element instanceof TMLCPJoin )	{
+			/*if( element instanceof TMLCPJoin )	{
 				listOfJoins.add( (TMLCPJoin) element );
-			}
+			}*/
 		}
 		for( TMLCPFork fork: listOfForks )	{
 			for( TMLCPElement element: fork.getNextElements() )	{
@@ -209,7 +209,15 @@ public class TMLCPSyntaxChecking {
 				if( joinNode == null )	{
 					addError( "Error in fork node <<" + element.toString() + ">> in diagram <<" + diag.getName(), TMLCPError.ERROR_STRUCTURE );
 				}
+				else	{
+					listOfJoins.add( joinNode );
+					if( Collections.frequency( listOfJoins, listOfJoins.get(0)) != listOfJoins.size() )	{
+						addError( "Error element <<" + element.toString() + ">> in diagram <<" + diag.getName() + ">> is not connected to the right join node", TMLCPError.ERROR_STRUCTURE );
+						break;
+					}
+				}
 			}
+			listOfJoins.clear();
 		}
 		/*TraceManager.addDev( "LIST OF FORKS: " + listOfForks.toString() );
 		TraceManager.addDev( "########################################" );
