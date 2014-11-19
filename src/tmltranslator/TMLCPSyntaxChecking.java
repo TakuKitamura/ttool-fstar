@@ -85,15 +85,15 @@ public class TMLCPSyntaxChecking {
 		mapping = _mapping;
 		tmlm = mapping.getTMLModeling();
     }*/
-	
+
+	//Checking the syntax of Activity and Sequence Diagrams
 	public void checkSyntax() {
 		
 		errors = new ArrayList<TMLCPError>();
 		warnings = new ArrayList<TMLCPError>();
 		
-		//Call here the routines to performan syntax checks
-		/*checkMainCP();
-		checkActivityDiagrams();*/
+		checkMainCP();
+		/*checkActivityDiagrams();*/
 		checkSequenceDiagrams();
 	}
 
@@ -104,11 +104,17 @@ public class TMLCPSyntaxChecking {
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 		ArrayList<String> listConnectorsStartEndNames = new ArrayList<String>();
 		ArrayList<String> listElementsToCheck = new ArrayList<String>();
+
 		//check that all diagrams are connected
 
-		ArrayList<TMLCPElement> listElements = mainCP.getElements();
-		for( TMLCPElement elem : listElements )	{
-			TraceManager.addDev( "ELEMENT in MAINCP: " + elem );
+		ArrayList<TMLCPElement> currentListOfElements = mainCP.getElements();
+		ArrayList<TMLCPElement> listOfElementsToCheck = mainCP.getElements();
+
+		checkStartState( currentListOfElements, mainCP );
+		checkDisconnectedSubParts( currentListOfElements, mainCP );
+		checkDiagramsBetweenForkAndJoin( currentListOfElements, mainCP );
+
+		/*for( TMLCPElement elem: listElements )	{
 			if( elem instanceof tmltranslator.tmlcp.TMLCPRefAD )	{
 				listElementsToCheck.add(((tmltranslator.tmlcp.TMLCPRefAD)elem).getName() );
 			}
@@ -141,7 +147,92 @@ public class TMLCPSyntaxChecking {
 				//TraceManager.addDev( "Diagram " + s + " in diagram " + mainCP.getName() " is not connected" );
 				addError( "Element <<" + s + ">> in diagram <<" + mainCP.getName() + ">> is not connected", TMLCPError.ERROR_STRUCTURE );
 			}
+		}*/
+	}
+
+	//Check that there is one and only one TMLCPStartState, if no start state or multiple start states, an error is raised
+	private void checkStartState( ArrayList<TMLCPElement> listElements, TMLCPActivityDiagram diag )	{
+
+		int startCounter = 0;
+		for( TMLCPElement elem: diag.getElements() )	{
+			TraceManager.addDev( "ELEMENT in MAINCP: " + elem );
+			if( elem instanceof TMLCPStart )	{
+				startCounter++;
+			}
 		}
+		if( startCounter > 1 )	{
+			addError( "Multiple start states in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
+		}
+ 		if( startCounter == 0 )	{
+			addError( "No start state has been detected in diagram <<" + diag.getName() + ">>", TMLCPError.ERROR_STRUCTURE );
+		}
+	}
+
+	//Look for disconnected sub-graphs by detecting elements which do not appear in the field next of any other element in the list
+	//of elements
+	private void checkDisconnectedSubParts( ArrayList<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )	{
+		
+		ArrayList<TMLCPElement> listOfElementsToCheck = currentListOfElements;
+		int counter = 0;
+
+		for( TMLCPElement currentElement: currentListOfElements )	{
+			if( !(currentElement instanceof TMLCPStart) )	{
+				for( TMLCPElement element: listOfElementsToCheck )	{
+					if( !element.getNextElements().contains( currentElement ) )	{
+						counter++;
+					}
+				}
+			}
+			if( counter == currentListOfElements.size() )	{
+				addError( "Element <<" + currentElement.toString()+ ">> in diagram <<" + diag.getName() + ">> is not correctly connected", TMLCPError.ERROR_STRUCTURE );
+			}
+			counter = 0;
+		}
+	}
+
+	private void checkDiagramsBetweenForkAndJoin( ArrayList<TMLCPElement> currentListOfElements, TMLCPActivityDiagram diag )	{
+
+		ArrayList<TMLCPFork> listOfForks = new ArrayList<TMLCPFork>();
+		ArrayList<TMLCPJoin> listOfJoins = new ArrayList<TMLCPJoin>();
+
+		for( TMLCPElement element: currentListOfElements )	{
+			if( element instanceof TMLCPFork )	{
+				listOfForks.add( (TMLCPFork) element );
+			}
+			if( element instanceof TMLCPJoin )	{
+				listOfJoins.add( (TMLCPJoin) element );
+			}
+		}
+		for( TMLCPFork fork: listOfForks )	{
+			for( TMLCPElement element: fork.getNextElements() )	{
+				TMLCPJoin joinNode = explorePath( element);
+				if( joinNode == null )	{
+					addError( "Error in fork node <<" + element.toString() + ">> in diagram <<" + diag.getName(), TMLCPError.ERROR_STRUCTURE );
+				}
+			}
+		}
+		/*TraceManager.addDev( "LIST OF FORKS: " + listOfForks.toString() );
+		TraceManager.addDev( "########################################" );
+		TraceManager.addDev( "LIST OF JOINS: " + listOfJoins.toString() );*/
+	}
+
+	//Recursive function that explores the path from an element until a join node
+	private TMLCPJoin explorePath( TMLCPElement element )	{
+
+		TMLCPJoin joinNode = new TMLCPJoin( element.toString(), element );
+		//TraceManager.addDev( "explorePath from element " + element.toString() );
+		if( element instanceof TMLCPJoin )	{	//stop condition
+			//TraceManager.addDev( "returning from explorePath with element " + element.toString() );
+			joinNode = (TMLCPJoin) element;
+		}
+		else if( (element instanceof TMLCPRefSD) || (element instanceof TMLCPRefAD) )	{
+			//TraceManager.addDev( "continuing in explorePath with element " + element.getNextElements().get(0).toString() );
+			joinNode = explorePath( element.getNextElements().get(0) );
+		}
+		else	{
+			joinNode = null;
+		}
+		return joinNode;
 	}
 
 	//Check that all diagrams are connected by retrieving the list of diagrams and checking if they appear as start or end name in
@@ -258,8 +349,7 @@ public class TMLCPSyntaxChecking {
 			ArrayList<TMLAttribute> attributes = diag.getAttributes();
 			//checkUniquenessOfAttributesNames( diag );	// already done in the GUI when declaring attributes
 			checkActions( diag, attributes );						// actions must be done on variables that have
-			checkMessages( diag );											// check that attributes have been declared
-																									// been declared and coherently boolean = boolean + 6 is not allowed
+			checkMessages( diag );											// check that attributes have been declared been declared and coherently boolean = boolean + 6 is not allowed
 			checkInstances( diag );											// instances within the same SD must all have different names
 		}
 	}
@@ -315,6 +405,7 @@ public class TMLCPSyntaxChecking {
 		}
 	}
 
+	//Check that the parameter has been declared in the instance corresponding to instanceName
 	private boolean isParameterDeclared( TMLAttribute parameter, String instanceName, TMLCPSequenceDiagram diag )	{
 
 		for( TMLSDInstance instance: diag.getInstances() )	{
@@ -328,7 +419,8 @@ public class TMLCPSyntaxChecking {
 		}
 		return false;
 	}
-
+	
+	//Check that the type of parameter is the samein both sender and receiver instances
 	private boolean checkTypeCoherency( TMLAttribute parameter, String senderInstance, String receiverInstance, TMLCPSequenceDiagram diag )	{
 
 		int typeOfAttributeInSenderInstance = 0;
