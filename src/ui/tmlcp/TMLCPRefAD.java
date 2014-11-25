@@ -60,31 +60,31 @@ public class TMLCPRefAD extends TGCOneLineText {
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
-    
+
     public TMLCPRefAD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
+
         width = 30;
         height = 35;
         minWidth = 70;
-        
+
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
-        
+
         addTGConnectingPointsComment();
-        
+
         moveable = true;
         editable = true;
         removable = true;
-        
+
         value = "Reference to a CP";
         name = "ActivityDiagram";
-        
+
         myImageIcon = IconManager.imgic400;
     }
-    
+
     public void internalDrawing(Graphics g) {
         //int w2 = g.getFontMetrics().stringWidth("ref");
         int w  = g.getFontMetrics().stringWidth(value) /*+ w2*/;
@@ -94,94 +94,94 @@ public class TMLCPRefAD extends TGCOneLineText {
             width = w1;
             //updateConnectingPoints();
         }
-        
-		Color c = g.getColor();
-		g.setColor(ColorManager.IOD_REFERENCE);
-		g.drawRect(x+1, y+1, width, height);
-		g.setColor(c);
-		
+
+        Color c = g.getColor();
+        g.setColor(ColorManager.IOD_REFERENCE);
+        g.drawRect(x+1, y+1, width, height);
+        g.setColor(c);
+
         g.drawRect(x, y, width, height);
-		
-		
+
+
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        
+
         g.drawString(name, x + (width - w) / 2, y + textY + 15);
-        g.drawString("iod", x+3, y+12);
+        g.drawString("ad", x+3, y+12);
         g.drawLine(x, y+15, x+15, y+15);
         g.drawLine(x+25, y, x+25, y+8);
         g.drawLine(x+15, y+15, x+25, y+8);
-		
+
 
     }
-    
+
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
-		
-		if ((int)(Line2D.ptSegDistSq(x+(width/2), y - lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-		
+
+        if ((int)(Line2D.ptSegDistSq(x+(width/2), y - lineLength, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
+            return this;
+        }
+
         return null;
     }
-    
+
     public String getAction() {
         return value;
     }
-    
-    
+
+
     public int getType() {
         return TGComponentManager.TMLCP_REF_CP;
     }
-    
+
     public void addActionToPopupMenu( JPopupMenu componentMenu, ActionListener menuAL, int x, int y ) {
 
-      componentMenu.addSeparator();
-      boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
-      JMenuItem isCPCreated;
-        
-      if( b ) {
-				isCPCreated = new JMenuItem("Open diagram");
-      }
-			else {
-          isCPCreated = new JMenuItem("Create communication pattern");
-      }
-        
-			isCPCreated.addActionListener( menuAL );
-      componentMenu.add( isCPCreated );
+        componentMenu.addSeparator();
+        boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
+        JMenuItem isCPCreated;
+
+        if( b ) {
+            isCPCreated = new JMenuItem("Open diagram");
+        }
+        else {
+            isCPCreated = new JMenuItem("Create communication pattern");
+        }
+
+        isCPCreated.addActionListener( menuAL );
+        componentMenu.add( isCPCreated );
     }
-    
+
     public boolean eventOnPopup( ActionEvent e ) {
 
-			boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
-      if (b) {
-				( (TMLCPPanel)tdp ).openTMLCPDiagram( name );
-      }
-			else {
-				( (TMLCPPanel)tdp ).createTMLCPDiagram( name );
-      }
-      return true;
-    }
-	
-	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLCP;
+        boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
+        if (b) {
+            ( (TMLCPPanel)tdp ).openTMLCPDiagram( name );
+        }
+        else {
+            ( (TMLCPPanel)tdp ).createTMLCPDiagram( name );
+        }
+        return true;
     }
 
-	@Override public boolean editOndoubleClick( JFrame frame ) {
-		
-		//System.out.println("Double click");
-     String text = "Reference to AD: ";
-    if( hasFather() ) {
-			text = getTopLevelName() + " / " + text;
+    public int getDefaultConnector() {
+        return TGComponentManager.CONNECTOR_TMLCP;
     }
-    String s = (String) JOptionPane.showInputDialog(frame, text,
-		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
-    if( (s != null) && (s.length() > 0) )	{
-			setName(s);
-			return true;
-		}
-    return false;
+
+    @Override public boolean editOndoubleClick( JFrame frame ) {
+
+        //System.out.println("Double click");
+        String text = "Reference to AD: ";
+        if( hasFather() ) {
+            text = getTopLevelName() + " / " + text;
+        }
+        String s = (String) JOptionPane.showInputDialog(frame, text,
+                                                        "Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
+        if( (s != null) && (s.length() > 0) )   {
+            setName(s);
+            return true;
+        }
+        return false;
     }
 }

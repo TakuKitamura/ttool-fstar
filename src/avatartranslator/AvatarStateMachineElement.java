@@ -78,7 +78,9 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     }
 
     public void addNext(AvatarStateMachineElement _element) {
-        nexts.add(_element);
+	if (_element != null) {
+	    nexts.add(_element);
+	}
     }
 
     public AvatarStateMachineElement getNext(int _index) {
@@ -147,8 +149,10 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         ret += "nexts= ";
         int cpt=0;
         for(AvatarStateMachineElement element: nexts) {
-            ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
-            cpt ++;
+	    if (element != null) {
+		ret += cpt + ":" + element.getName() + "/ ID=" + element.getID() + " ";
+		cpt ++;
+	    }
         }
 
         ret += specificToString();

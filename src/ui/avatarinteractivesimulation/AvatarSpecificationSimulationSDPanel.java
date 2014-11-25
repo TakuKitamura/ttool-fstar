@@ -708,6 +708,9 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         g.drawString(timeValue, 10, yMouse+g.getFontMetrics().getHeight()/2);
         g.drawString(timeValue, maxX-spaceAtEnd + 1, yMouse+g.getFontMetrics().getHeight()/2);
 
+
+	TraceManager.addDev("yMouse=" + yMouse);
+
         /*if (minIdValueMouse == maxIdValueMouse) {
           g.drawString("ID: " + minIdValueMouse, 10, yMouse+(g.getFontMetrics().getHeight()/2)+12);
           } else {
@@ -723,6 +726,11 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
             name = block.getBlock().getName();
             w = g.getFontMetrics().stringWidth(name);
             g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse - spaceVerticalText);
+	    
+
+	    // Write the name of the current state
+
+	    // Add the space between lifelines
             x += spaceBetweenLifeLines;
         }
         g.setColor(c);

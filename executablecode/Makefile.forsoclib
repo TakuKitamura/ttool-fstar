@@ -39,11 +39,11 @@ updategeneratedcode_hw:
 
 	cp ~/TTool/executableCode/Makefile.soclib ~/Prog/mutekh/examples/avatar/Makefile
 
-compilesoclib:
+compilesoclib_hw:
 	cd ~/Prog/mutekh; make CONF=examples/avatar/config BUILD=soclib-$(MUTEKH_CPU):pf-tutorial
 
 #DG 31.10.2014 ici ajoute un make dans le repertoire de la plateforme materielle
-runsoclib:
+runsoclib_hw:
 	echo "running soclib"
 	cd ~/Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ~/Prog/mutekh/avatar-soclib-$(MUTEKH_CPU).out
 allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib

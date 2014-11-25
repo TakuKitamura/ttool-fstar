@@ -164,6 +164,10 @@ public class AvatarSimulationBlock  {
 		boolean guardOk;
 		for(int i=0; i<lastTransaction.executedElement.nbOfNexts(); i++) {
 			asme = lastTransaction.executedElement.getNext(i);
+
+			if (asme == null) {
+			    TraceManager.addDev("Null element after: " + lastTransaction.executedElement.toString());
+			}
 			guardOk = true;
 			// Guard on transition ? -> must evaluate the guard!
 			if (asme instanceof AvatarTransition) {

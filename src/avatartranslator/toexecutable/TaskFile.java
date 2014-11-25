@@ -59,7 +59,7 @@ public class TaskFile {
     private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"";
 
     private final static String INCLUDE_HEADER_SOCLIB = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"srl.h\"\n#include \"mwmr.h\"\n ";
+    private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"/Users/ludovicapvrille/Prog/mutekh/libmwmr/include/mwmr/mwmr.h\"\n ";
 
     private final static String CR = "\n";
 
