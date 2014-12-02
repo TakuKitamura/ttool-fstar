@@ -327,12 +327,13 @@ public class TMLCP extends TMLElement {
     }
 
     public void splitADs() {
-	ArrayList<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
-	all.addAll(mainCP.splitADs());
-	for(TMLCPActivityDiagram diag: otherCPs) {
-	    all.addAll(diag.splitADs());
-	}
-	otherCPs.addAll(all);
+
+			ArrayList<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
+			all.addAll(mainCP.splitADs());
+			for(TMLCPActivityDiagram diag: otherCPs) {
+				all.addAll(diag.splitADs());
+			}
+		otherCPs.addAll(all);
     }
 
     public void printDataStructure()    {

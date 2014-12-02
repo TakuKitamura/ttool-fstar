@@ -623,7 +623,7 @@ public class GTMLModeling  {
         TMLChannel channel;
         TMLTask tt1, tt2;
 
-        //TraceManager.addDev("*** Adding channels ***");
+        TraceManager.addDev("*** Adding channels ***");
 
         while(iterator.hasNext()) {
             tgc = (TGComponent)(iterator.next());
@@ -2201,10 +2201,13 @@ public class GTMLModeling  {
             //TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
         }
 
+				TraceManager.addDev( "Before correcting references. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         tmlcp.correctReferences(); //Update references to the right activity and sequence diagrams
+				TraceManager.addDev( "After correcting references and before splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         //tmlcp.generateNexts(); // Add nexts elements to CPElements
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
         tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
+				TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
 
         for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
             TraceManager.addDev( "**********" );

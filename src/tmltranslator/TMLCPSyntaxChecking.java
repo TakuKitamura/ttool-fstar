@@ -102,6 +102,8 @@ public class TMLCPSyntaxChecking {
 	//First check the mainCP then check the other Activity Diagrams
 	private void checkActivityDiagrams()	{
 
+		ArrayList<TMLCPActivityDiagram> junctionsList = new ArrayList<TMLCPActivityDiagram>();
+		
 		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
 
 		//Checking mainCP
@@ -112,9 +114,15 @@ public class TMLCPSyntaxChecking {
 
 		//Checking the other ActivityDiagrams
 		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
+		//TraceManager.addDev( "The list of ADs contains: " + listADs.toString() );
 		for( TMLCPActivityDiagram diag: listADs )	{
+			if( diag.getName().toLowerCase().contains( "junction"	) )	{
+				junctionsList.add( diag );
+				break;
+			}
 			currentListOfElements = diag.getElements();
 			checkStartState( currentListOfElements, diag );
+			TraceManager.addDev( "DIAGRAM UNDER EXAMINATION IS: " + diag.getName() );
 			checkDisconnectedSubParts( currentListOfElements, diag );
 			checkDiagramsBetweenForkAndJoin( currentListOfElements, diag );
 		}
@@ -159,7 +167,7 @@ public class TMLCPSyntaxChecking {
 
 		int startCounter = 0;
 		for( TMLCPElement elem: diag.getElements() )	{
-			TraceManager.addDev( "ELEMENT in AD: " + elem );
+			//TraceManager.addDev( "ELEMENT in AD: " + elem );
 			if( elem instanceof TMLCPStart )	{
 				startCounter++;
 			}
@@ -182,11 +190,16 @@ public class TMLCPSyntaxChecking {
 		for( TMLCPElement currentElement: currentListOfElements )	{
 			if( !(currentElement instanceof TMLCPStart) )	{
 				for( TMLCPElement element: listOfElementsToCheck )	{
-					if( !element.getNextElements().contains( currentElement ) )	{
+					ArrayList<TMLCPElement> nextElements = element.getNextElements(); 
+					if( nextElements.get(0).getName().toLowerCase().contains( "junction" ) )	{
+						adsWithJunctionsList.add( diag );
+					}
+					if( !nextElements.contains( currentElement ) )	{	//counting how many times currentElement is NOT present as a next element
 						counter++;
 					}
 				}
 			}
+			//If currentElement is NEVER present as a next element it means its head is not connected
 			if( counter == currentListOfElements.size() )	{
 				addError( "Element <<" + currentElement.toString()+ ">> in diagram <<" + diag.getName() + ">> is not correctly connected", TMLCPError.ERROR_STRUCTURE );
 			}
