@@ -116,10 +116,6 @@ public class TMLCPSyntaxChecking {
 		ArrayList<TMLCPActivityDiagram> listADs = tmlcp.getCPActivityDiagrams();
 		//TraceManager.addDev( "The list of ADs contains: " + listADs.toString() );
 		for( TMLCPActivityDiagram diag: listADs )	{
-			if( diag.getName().toLowerCase().contains( "junction"	) )	{
-				junctionsList.add( diag );
-				break;
-			}
 			currentListOfElements = diag.getElements();
 			checkStartState( currentListOfElements, diag );
 			TraceManager.addDev( "DIAGRAM UNDER EXAMINATION IS: " + diag.getName() );
@@ -191,9 +187,6 @@ public class TMLCPSyntaxChecking {
 			if( !(currentElement instanceof TMLCPStart) )	{
 				for( TMLCPElement element: listOfElementsToCheck )	{
 					ArrayList<TMLCPElement> nextElements = element.getNextElements(); 
-					if( nextElements.get(0).getName().toLowerCase().contains( "junction" ) )	{
-						adsWithJunctionsList.add( diag );
-					}
 					if( !nextElements.contains( currentElement ) )	{	//counting how many times currentElement is NOT present as a next element
 						counter++;
 					}
