@@ -108,12 +108,12 @@ public class TMLCPActivityDiagram  extends TMLElement {
     public int getSize() { return elements.size();}
 
     public TMLCPElement getElementByReference(Object referenceObject) {
-	for(TMLCPElement elt: elements) {
-	    if (elt.getReferenceObject() == referenceObject) {
-		return elt;
-	    }
-	}
-	return null;
+        for(TMLCPElement elt: elements) {
+            if (elt.getReferenceObject() == referenceObject) {
+                return elt;
+            }
+        }
+        return null;
     }
 
     /*public boolean checkVariableNoType( TMLAttribute _attr )    {
@@ -184,7 +184,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
     }
 
     public boolean contains(TMLCPElement elt) {
-	return elements.contains(elt);
+        return elements.contains(elt);
     }
 
     public TMLCPElement getElementByName(String name) {
@@ -213,7 +213,7 @@ public class TMLCPActivityDiagram  extends TMLElement {
     }
 
     public TMLCPElement getStartElement() {
-	return start;
+        return start;
     }
 
     public void addTMLCPElement(TMLCPElement _elt) {
@@ -311,97 +311,116 @@ public class TMLCPActivityDiagram  extends TMLElement {
         int id = 0;
         TMLCPActivityDiagram diag;
 
-				TraceManager.addDev("Splitting AD: " + getName());
+        TraceManager.addDev("Splitting AD: " + getName());
 
         // For each junction, we create a new AD
         ArrayList<TMLCPJunction> junctions = new ArrayList<TMLCPJunction>();
-				ArrayList<TMLCPRefAD> refsAD = new ArrayList<TMLCPRefAD>();
-				ArrayList<TMLCPElement> toBeRemoved = new ArrayList<TMLCPElement>();
+        ArrayList<TMLCPRefAD> refsAD = new ArrayList<TMLCPRefAD>();
+        ArrayList<TMLCPElement> toBeRemoved = new ArrayList<TMLCPElement>();
         HashMap<TMLCPJunction, TMLCPActivityDiagram> refs = new HashMap<TMLCPJunction, TMLCPActivityDiagram>();
         for(TMLCPElement elt: elements)  {
             if (elt instanceof TMLCPJunction) {
                 junctions.add((TMLCPJunction)elt);
                 diag = new TMLCPActivityDiagram(elt.getName() + "_" + id, referenceObject);
-								TMLCPStart start = new TMLCPStart("StartFrom_" + elt.getName(), elt.getReferenceObject());
-								diag.setStartElement(start);
-								diag.addTMLCPElement(start);
+                TMLCPStart start = new TMLCPStart("StartFrom_" + elt.getName(), elt.getReferenceObject());
+                diag.setStartElement(start);
+                diag.addTMLCPElement(start);
                 refs.put((TMLCPJunction)elt, diag);
-								TraceManager.addDev("Adding a new diag named: " + diag.getName());
+                TraceManager.addDev("Adding a new diag named: " + diag.getName());
             }
         }
 
-	// We replace all junctions by a call to the corresponding ref AD, keeping the same nexts
-	for(TMLCPJunction junction: junctions) {
-	    TMLCPActivityDiagram toAD = refs.get(junction);
-	    TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), junction.getReferenceObject());
-	    refsAD.add(ref);
-	    elements.remove(junction);
-	    elements.add(ref);
-	    for(TMLCPElement elt: elements) {
-		elt.replaceNext(junction, ref);
-	    }
-	    ref.setNexts(junction.getNextElements());
-	}
+        // We replace all elements leading to a junction by a call to the corresponding ref AD, keeping the same nexts
+        for(TMLCPJunction junction: junctions) {
+            TMLCPActivityDiagram toAD = refs.get(junction);
+            //TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), junction.getReferenceObject());
+            //refsAD.add(ref);
+            elements.remove(junction);
+            //elements.add(ref);
+
+            // Replacing next to junction by new refs
+            int index;
+            int ID = 0;
+            for(TMLCPElement elt: elements) {
+                while(((index = elt.getNextElements().indexOf(junction)) != -1)) {
+                    TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName() + "_" + ID, junction.getReferenceObject());
+                    ID ++;
+		    refsAD.add(ref);
+                    //elements.add(ref);
+                    elt.setNextElementAtIndex(ref, index);
+		    /*TMLCPStop stop = new TMLCPStop(ref.getName() + "__stop_after_ref_" + ID, ref.getReferenceObject());
+		    elements.add(stop);
+		    ref.addNextElement(stop);*/
+                }
+                //ref.setNexts(junction.getNextElements());
+            }
+        }
+
+	// Removing nexts in new refs, and putting a stop
+        for(TMLCPRefAD ref: refsAD) {
+          ref.clearNexts();
+	  elements.add(ref);
+          TMLCPStop stop = new TMLCPStop(ref.getName() + "__stop_after_ref", ref.getReferenceObject());
+          elements.add(stop);
+          ref.addNextElement(stop);
+         }
 
         // Moving elements from old AD to split ADs
-	int cpt = 0;
+        int cpt = 0;
         for(TMLCPJunction junction: junctions) {
-            diag = refs.get(junction);	    
-	    TMLCPRefAD refAD = refsAD.get(cpt);
-	    cpt++;
-	    
-	    // To be modified-> add elements from RefADs
-	    // Also, avoid to add already met elements
+            diag = refs.get(junction);
+            //TMLCPRefAD refAD = refsAD.get(cpt);
+            //cpt++;
+
+            // To be modified-> add elements from RefADs
+            // Also, avoid to add already met elements
             addElementsFromJunction(junction, diag.getStartElement(), diag, refs, toBeRemoved);
         }
 
-	// Removing elements from main diagram
-	for(TMLCPElement elt: toBeRemoved) {
-	    elements.remove(elt);
-	}
+        // Removing elements from main diagram
+        for(TMLCPElement elt: toBeRemoved) {
+            elements.remove(elt);
+        }
 
-	// Removing nexts in new refs
-	for(TMLCPRefAD ref: refsAD) {
-	    ref.clearNexts();
-	}
+        
 
         // Returns new elements
         return refs.values();
     }
 
     private void addElementsFromJunction(TMLCPElement originInOld, TMLCPElement originInNew, TMLCPActivityDiagram newDiag, HashMap<TMLCPJunction, TMLCPActivityDiagram> refs, ArrayList<TMLCPElement> toBeRemoved) {
-	if (originInOld.getNextElements() == null) {
-	    return;
-	}
-	
-	for(TMLCPElement elt: originInOld.getNextElements()) {
-	    TraceManager.addDev("Exploring elt (0):" + elt.getName());
-	    if (elt instanceof TMLCPJunction) {
-		// Must replace the junction by a ref to an AD
-		TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
-		TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), elt.getReferenceObject());
-		newDiag.addTMLCPElement(ref);
-		originInNew.setNextElement(ref);
-	    } else {
-		TraceManager.addDev("Exploring elt (1):" + elt.getName());
-		if (originInOld != originInNew) {
-		    originInNew.addNextElement(elt);
-		}
-		if (!newDiag.contains(elt)) {
-		    newDiag.addTMLCPElement(elt);
-		    toBeRemoved.add(elt);
-		    addElementsFromJunction(elt, elt, newDiag, refs, toBeRemoved);
-		}
-	    }
-	}
+        if (originInOld.getNextElements() == null) {
+            return;
+        }
+
+        for(TMLCPElement elt: originInOld.getNextElements()) {
+            TraceManager.addDev("Exploring elt (0):" + elt.getName());
+            if (elt instanceof TMLCPJunction) {
+                // Must replace the junction by a ref to an AD
+                TMLCPActivityDiagram toAD = refs.get((TMLCPJunction)elt);
+                TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), elt.getReferenceObject());
+                newDiag.addTMLCPElement(ref);
+                originInNew.setNextElement(ref);
+            } else {
+                TraceManager.addDev("Exploring elt (1):" + elt.getName());
+                if (originInOld != originInNew) {
+                    originInNew.addNextElement(elt);
+                }
+                if (!newDiag.contains(elt)) {
+                    newDiag.addTMLCPElement(elt);
+                    toBeRemoved.add(elt);
+                    addElementsFromJunction(elt, elt, newDiag, refs, toBeRemoved);
+                }
+            }
+        }
     }
 
     public String toString() {
-	String s = "*** Activity diagram " + getName() + "\n";
-	for(TMLCPElement elt: elements) {
-	    s += elt.toString();
-	}
-	return s + "\n";
+        String s = "*** Activity diagram " + getName() + "\n";
+        for(TMLCPElement elt: elements) {
+            s += elt.toString();
+        }
+        return s + "\n";
     }
 
 }       //End of class

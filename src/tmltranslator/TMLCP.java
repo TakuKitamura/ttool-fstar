@@ -312,28 +312,28 @@ public class TMLCP extends TMLElement {
     }
 
     public void generateNexts() {
-	mainCP.generateNexts();
-	for(TMLCPActivityDiagram diag: otherCPs) {
-	    diag.generateNexts();
-	}
-	
+        mainCP.generateNexts();
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            diag.generateNexts();
+        }
+
     }
 
     public void removeADConnectors() {
-	mainCP.removeADConnectors();
-	for(TMLCPActivityDiagram diag: otherCPs) {
-	    diag.removeADConnectors();
-	}
+        mainCP.removeADConnectors();
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            diag.removeADConnectors();
+        }
     }
 
     public void splitADs() {
 
-			ArrayList<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
-			all.addAll(mainCP.splitADs());
-			for(TMLCPActivityDiagram diag: otherCPs) {
-				all.addAll(diag.splitADs());
-			}
-		otherCPs.addAll(all);
+        ArrayList<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
+        all.addAll(mainCP.splitADs());
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            all.addAll(diag.splitADs());
+        }
+        otherCPs.addAll(all);
     }
 
     public void printDataStructure()    {
@@ -361,9 +361,9 @@ public class TMLCP extends TMLElement {
             //Print attributes
             System.out.printf( "\tAttributes:\n");
             for( j = 0; j < listAttributes.size(); j++ )        {
-                attr = listAttributes.get( j );
-                System.out.printf( "\t\t%s\t%s\t%s\n",  attr.getName(), attr.getType(), attr.getInitialValue() );
-		}*/
+            attr = listAttributes.get( j );
+            System.out.printf( "\t\t%s\t%s\t%s\n",  attr.getName(), attr.getType(), attr.getInitialValue() );
+            }*/
 
             //Print list of AD sections
             ArrayList<String> ADList;
@@ -449,14 +449,14 @@ public class TMLCP extends TMLElement {
     public String toString()    {
 
         String s = "\n*** Communication Pattern: " + getName() + "***\n";
-	s += mainCP.toString();
+        s += mainCP.toString();
 
-	for( tmltranslator.tmlcp.TMLCPActivityDiagram diag:  otherCPs)       {
-	    s += diag.toString();
-	}
+        for( tmltranslator.tmlcp.TMLCPActivityDiagram diag:  otherCPs)       {
+            s += diag.toString();
+        }
 
         for( tmltranslator.tmlcp.TMLCPSequenceDiagram diag: sds )       {
-	    s += sds.toString();
+            s += sds.toString();
         }
         return s;
     }

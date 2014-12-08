@@ -78,6 +78,10 @@ public abstract class TMLCPElement extends TMLElement  {
         nexts.clear();
         addNextElement(_elt);
     }
+
+    public void setNextElementAtIndex(TMLCPElement _elt, int _index) {
+        nexts.set(_index, _elt); 
+    }
     
     public void clearNexts() {
 	nexts.clear();
@@ -98,6 +102,10 @@ public abstract class TMLCPElement extends TMLElement  {
 	}
 	
     }
+
+    
+
+
 
     public String toShortString() {
 	return getClass().getCanonicalName() + " " + getName() + "\n";

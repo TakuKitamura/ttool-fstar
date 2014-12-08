@@ -78,11 +78,14 @@ RELEASE_STD_FILES_LICENSES = LICENSE LICENSE_CECILL_ENG LICENSE_CECILL_FR
 
 
 
-all:
+all: basic jar
+
+
+svn:
 	date
 	svn update build.txt src/ui/DefaultText.java
 	$(JAVA) -jar $(BUILDER) $(BUILD_INFO) $(BUILD_TO_MODIFY)
-	svn commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
+	svn --username apvrille commit build.txt src/ui/DefaultText.java -m 'update on build version: builder.txt'
 	$(JAVAC) $(CLASSPATH) $(TTOOL_SRC) $(TTOOL_SRC)/*.java
 
 basicsvnapvrille:

@@ -1928,23 +1928,23 @@ public class GTMLModeling  {
         TGComponent tgc;
 
         if( syntax.hasErrors() > 0 ) {
-          for( TMLCPError error: syntax.getErrors() ) {
-          if( error.type == TMLCPError.ERROR_STRUCTURE ) {
-          type = CheckingError.STRUCTURE_ERROR;
-          }
-          else {
-          type = CheckingError.BEHAVIOR_ERROR;
-          }
-          ce = new CheckingError( type, error.message );
-          tgc = listE.getTG( error.element );
-          if ( tgc != null ) {
-          ce.setTDiagramPanel( tgc.getTDiagramPanel() );
-          ce.setTGComponent( tgc );
-          }
-          ce.setTMLTask( error.task );
-          checkingErrors.add( ce );
-          }
-          }
+            for( TMLCPError error: syntax.getErrors() ) {
+                if( error.type == TMLCPError.ERROR_STRUCTURE ) {
+                    type = CheckingError.STRUCTURE_ERROR;
+                }
+                else {
+                    type = CheckingError.BEHAVIOR_ERROR;
+                }
+                ce = new CheckingError( type, error.message );
+                tgc = listE.getTG( error.element );
+                if ( tgc != null ) {
+                    ce.setTDiagramPanel( tgc.getTDiagramPanel() );
+                    ce.setTGComponent( tgc );
+                }
+                ce.setTMLTask( error.task );
+                checkingErrors.add( ce );
+            }
+        }
 
         /*makeCPDataStructure();
           if (!makeTMLModeling()) {
@@ -2201,13 +2201,14 @@ public class GTMLModeling  {
             //TraceManager.addDev( "PANEL number: " + panelCounter + " " + panelList.get( panelCounter ) );
         }
 
-				TraceManager.addDev( "Before correcting references. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
+        TraceManager.addDev( "Before correcting references. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         tmlcp.correctReferences(); //Update references to the right activity and sequence diagrams
-				TraceManager.addDev( "After correcting references and before splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
+        TraceManager.addDev( "After correcting references and before splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
         //tmlcp.generateNexts(); // Add nexts elements to CPElements
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
         tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
-				TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
+	TraceManager.addDev( "After splitting ADs. OriginalCP:" + tmlcp.toString() );
+        TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
 
         for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
             TraceManager.addDev( "**********" );
@@ -2390,8 +2391,8 @@ public class GTMLModeling  {
             LinkedList elemList = panel.getComponentList();
             //TraceManager.addDev("Adding to the data structure the elements of: " + panel.getName() );
             //order messages according to the inverse of Y coordinate
-	    int j;
-	    TGComponent elem;
+            int j;
+            TGComponent elem;
             for(j = 0; j < elemList.size(); j++ )  {
                 elem = (TGComponent) elemList.get(j);
                 //include the package name of the class to avoid confusion with the graphical TMLSDInstance
@@ -2470,11 +2471,11 @@ public class GTMLModeling  {
                     }
                     SD.addInstance( instance );
                 }
-                
+
             }   //End of for over internal elements
-	    for(j = 0; j < elemList.size(); j++ )  {
-		elem = (TGComponent) elemList.get(j);
-		if( elem instanceof TGConnectorMessageTMLSD )   {
+            for(j = 0; j < elemList.size(); j++ )  {
+                elem = (TGComponent) elemList.get(j);
+                if( elem instanceof TGConnectorMessageTMLSD )   {
                     TraceManager.addDev("Analyzing message:" + elem);
                     connector = (TGConnectorMessageTMLSD) elemList.get(j);
                     String sender = connector.getTGConnectingPointP1().getFather().getName();
@@ -2494,8 +2495,8 @@ public class GTMLModeling  {
                         }
                     }
                 }
-		
-	    }
+
+            }
             return SD;
         }//End else name does not exist yet
     }   //End of method createSequenceDiagramDataStructure
