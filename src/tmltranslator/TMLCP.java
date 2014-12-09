@@ -337,20 +337,40 @@ public class TMLCP extends TMLElement {
     }
 
     public TMLCPElement getNonConnectedElement() {
-	TMLCPElement elt;
-	elt = mainCP.getNonConnectedElement();
-	if (elt != null) {
-	    return elt;
-	}
-	for(TMLCPActivityDiagram diag: otherCPs) {
-            elt = diag.getNonConnectedElement();
-	    if (elt != null) {
-		return elt;
-	    }
+        TMLCPElement elt;
+        elt = mainCP.getNonConnectedElement();
+        if (elt != null) {
+            return elt;
         }
-	return null;
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            elt = diag.getNonConnectedElement();
+            if (elt != null) {
+                return elt;
+            }
+        }
+        return null;
     }
 
+    public LinkedList<TMLCPElement> getAllNonConnectedElements() {
+        LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
+        TMLCPElement elt;
+        list.addAll(mainCP.getAllNonConnectedElements());
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            list.addAll(diag.getAllNonConnectedElements());
+        }
+        return list;
+    }
+
+    public LinkedList<TMLCPElement> removeAllNonConnectedElements() {
+        LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
+        TMLCPElement elt;
+        list.addAll(mainCP.removeAllNonConnectedElements());
+        for(TMLCPActivityDiagram diag: otherCPs) {
+            list.addAll(diag.removeAllNonConnectedElements());
+        }
+        return list;
+    }
+    
     public void printDataStructure()    {
 
         ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();

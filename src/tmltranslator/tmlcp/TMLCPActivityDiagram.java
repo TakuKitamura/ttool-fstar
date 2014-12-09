@@ -436,6 +436,53 @@ public class TMLCPActivityDiagram  extends TMLElement {
 	return null;
     }
 
+    public LinkedList<TMLCPElement> getAllNonConnectedElements() {
+	// Starting from Start state ... reaching all elements
+	// Then, see elements which are not in the reachable ones
+	if (start == null) {
+	    return null;
+	}
+
+	LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
+	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+	
+	computeReachableElements(start, reached);
+
+	// Find elements which were not reached
+	for(TMLCPElement elt: elements) {
+	    if (!(reached.contains(elt))) {
+		list.add(elt);
+	    }
+	}
+	return list;
+    }
+
+    public LinkedList<TMLCPElement> removeAllNonConnectedElements() {
+	// Starting from Start state ... reaching all elements
+	// Then, see elements which are not in the reachable ones
+	if (start == null) {
+	    return null;
+	}
+
+	LinkedList<TMLCPElement> list = new LinkedList<TMLCPElement>();
+	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+	
+	computeReachableElements(start, reached);
+
+	// Find elements which were not reached
+	for(TMLCPElement elt: elements) {
+	    if (!(reached.contains(elt))) {
+		list.add(elt);
+	    }
+	}
+
+	for(TMLCPElement elt: list) {
+	    elements.remove(elt);
+	}
+	
+	return list;
+    }
+
     private void computeReachableElements(TMLCPElement _elt, ArrayList<TMLCPElement> _reached) {
 	if (_reached.contains(_elt)) {
 	    return;
