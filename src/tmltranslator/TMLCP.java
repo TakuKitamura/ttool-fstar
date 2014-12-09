@@ -336,6 +336,21 @@ public class TMLCP extends TMLElement {
         otherCPs.addAll(all);
     }
 
+    public TMLCPElement getNonConnectedElement() {
+	TMLCPElement elt;
+	elt = mainCP.getNonConnectedElement();
+	if (elt != null) {
+	    return elt;
+	}
+	for(TMLCPActivityDiagram diag: otherCPs) {
+            elt = diag.getNonConnectedElement();
+	    if (elt != null) {
+		return elt;
+	    }
+        }
+	return null;
+    }
+
     public void printDataStructure()    {
 
         ArrayList<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();

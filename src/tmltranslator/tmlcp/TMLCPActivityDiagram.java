@@ -415,6 +415,39 @@ public class TMLCPActivityDiagram  extends TMLElement {
         }
     }
 
+
+    public TMLCPElement getNonConnectedElement() {
+	// Starting from Start state ... reaching all elements
+	// Then, see elements which are not in the reachable ones
+	if (start == null) {
+	    return null;
+	}
+
+	ArrayList<TMLCPElement> reached = new ArrayList<TMLCPElement>();
+	
+	computeReachableElements(start, reached);
+
+	// Find elements which were not reached
+	for(TMLCPElement elt: elements) {
+	    if (!(reached.contains(elt))) {
+		return elt;
+	    }
+	}
+	return null;
+    }
+
+    private void computeReachableElements(TMLCPElement _elt, ArrayList<TMLCPElement> _reached) {
+	if (_reached.contains(_elt)) {
+	    return;
+	}
+
+	_reached.add(_elt);
+
+	for(TMLCPElement elt: _elt.getNextElements()) {
+	    computeReachableElements(_elt, _reached);
+	}
+    }
+
     public String toString() {
         String s = "*** Activity diagram " + getName() + "\n";
         for(TMLCPElement elt: elements) {
