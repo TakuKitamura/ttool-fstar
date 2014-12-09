@@ -182,8 +182,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 		String tmpName;
 
 		JDialogReferenceCP dialog = new JDialogReferenceCP( frame, "Setting CP attributes", this, mappedUnits, name );
-		dialog.setSize(500, 450);
-		GraphicLib.centerOnParent(dialog);
+		dialog.setSize( 700, 550 );
+		GraphicLib.centerOnParent( dialog );
 		dialog.show(); // blocked until dialog has been closed
 		//setJDialogOptions(jdab);
 		name = dialog.getNodeName();																											
@@ -277,7 +277,9 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 														if( elt.getTagName().equals("mappingInfo")) {
 															String instanceName = elt.getAttribute( "instanceName" ) ;
 															String architectureUnit = elt.getAttribute( "architectureUnit" ) ;
+															TraceManager.addDev( "architectureUnit: " + architectureUnit );
 															mappedUnits.add( reference + "." + instanceName + " : " + architectureUnit );
+															TraceManager.addDev( "added: " + reference + "." + instanceName + " : " + architectureUnit );
 														}
                         }
                     }

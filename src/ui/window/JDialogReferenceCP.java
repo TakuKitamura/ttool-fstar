@@ -103,6 +103,8 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	private JPanel panel1;
 	private JComboBox sdInstancesCB, mappableArchUnitsCB, communicationPatternsCB;
 	private JButton mapButton;
+	private JList mappableArchUnitsJL;
+	private JScrollPane mappableArchUnitsSP;
 	
 	//Panel2
 	private JPanel panel2;
@@ -256,15 +258,30 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			panel1.add(new JLabel(" "), c1);
 			
 			mappableArchUnitsSL = new Vector<String>();
+
+			TraceManager.addDev( "before: " + mappableArchUnitsSL.toString() );
 			makeListOfMappableArchUnitsSL();
+			TraceManager.addDev( "after: " + mappableArchUnitsSL.toString() );
 			
 			//nineth line panel1
-			mappableArchUnitsCB = new JComboBox( mappableArchUnitsSL );
+			/*mappableArchUnitsCB = new JComboBox( mappableArchUnitsSL );
 			panel1.add( new JLabel("Available architecture units:"), c1 );
 			mappableArchUnitsCB.setSelectedIndex( 0 );
 			mappableArchUnitsCB.setMinimumSize( new Dimension(150, 50) );
 			mappableArchUnitsCB.addActionListener( this );
-			panel1.add( mappableArchUnitsCB, c1 );
+			panel1.add( mappableArchUnitsCB, c1 );*/
+
+			mappableArchUnitsJL = new JList( mappableArchUnitsSL );
+			mappableArchUnitsJL.setSelectionMode( ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
+			mappableArchUnitsJL.addListSelectionListener( this );
+			mappableArchUnitsSP = new JScrollPane( mappableArchUnitsJL );
+			mappableArchUnitsSP.setSize( 300, 250 );
+			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+			c1.fill = GridBagConstraints.BOTH;
+			c1.gridheight = 5;
+			c1.weighty = 10.0;
+			c1.weightx = 10.0;
+			panel1.add( mappableArchUnitsSP, c1 );
 			
 			//tenth line panel1
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -279,9 +296,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			mapButton.addActionListener(this);
 			panel1.add(mapButton, c1);
 			
-			//if( !emptyListOfMappedUnits )	{
-				checkValidityOfMappedUnits();	
-			//}
+			checkValidityOfMappedUnits();	
 
 			// 1st line panel2
 			listMappedUnitsJL = new JList( mappedUnitsSL );
@@ -368,6 +383,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		private void makeListOfMappableArchUnitsSL()	{
 
 			if( !sdInstancesSL.get(0).equals( EMPTY_INSTANCES_LIST ) )	{
+				TraceManager.addDev( "makeList: " + sdInstancesSL.get(0) );
 				if( sdStorageInstances.contains( sdInstancesSL.get(0) ) )	{
 					mappableArchUnitsSL = makeListOfMappableArchUnits( STORAGE );
 				}
@@ -389,33 +405,50 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 		private void checkValidityOfMappedUnits()	{
 			
-			String[] info;	//Will contain: info[0] = CPName, info[1] = instanceName, info[2] = arcUnitName
+			ArrayList<String> info;	//Will contain: info[0] = CPName, info[1] = instanceName, info[2] = arcUnitName
 
 			Iterator<String> it	= mappedUnitsSL.iterator();
 			while( it.hasNext() )	{
 				info = retrieveSingleInformationFromMappingString( it.next() );
-				if( !doesCPexist( info[0] ) )	{
+				if( !doesCPexist( info.get(0) ) )	{
 					it.remove();
 				}
 				else	{
-					if( !checkAndRemoveIfInstanceExists( info[1] ) )	{	//if the instance exists, remove it from listInstancesHash
+					if( !checkAndRemoveIfInstanceExists( info.get(1) ) )	{	//if the instance exists, remove it from listInstancesHash
 						it.remove();
 					}
 					else	{
-						if( !doesArchUnitExist( info[2] ) )	{
-							it.remove();
-							restoreInstanceName( info[0], info[1] );	//put back the instance in listInstancesHash
-						}
+						// a transfer instance was mapped on more than one arch unit
+							for( int i = 2; i < info.size(); i++ )	{
+								if( !doesArchUnitExist( info.get(i) ) )	{
+									it.remove();
+									restoreInstanceName( info.get(0), info.get(1) );	//put back the instance in listInstancesHash
+								}
+							}
 					}
 				}
 			}
 		}
 
-		private String[] retrieveSingleInformationFromMappingString( String s )	{
+		private ArrayList<String> retrieveSingleInformationFromMappingString( String s )	{
 
+			ArrayList<String> info = new ArrayList<String>();
 			String[] firstPart = s.split( " : " );
 			String[] secondPart = firstPart[0].split("\\.");
-			String[] info = { secondPart[0], secondPart[1], firstPart[1] }; //{ CPName, instanceName, archUnitName };
+			String[] otherUnits = firstPart[1].split("\\, ");
+			if( otherUnits.length > 1 )	{	//a transfer instance mapped on more than one arch unit
+				info.add( secondPart[0] );
+				info.add( secondPart[1] );
+				for( String st: otherUnits )	{
+					info.add( st ); //{ CPName, instanceName, archUnitNameS };
+				}
+				return info;
+			}
+			else	{
+				info.add( secondPart[0] );
+				info.add( secondPart[1] );
+				info.add( firstPart[1] ); //{ CPName, instanceName, archUnitName };
+			}
 			return info;
 		}
 
@@ -504,12 +537,14 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				mapInstance();
 				unfreezeSDInstancesCB();
 				sdInstancesCB.setSelectedIndex(0);
+				updateMappableArchUnits();
 				valueChanged( null );
 			}
 			else if( evt.getSource() == removeButton ) {
 				freezeSDInstancesCB();
 				removeMappedInstance();
 				sdInstancesCB.setSelectedIndex(0);
+				updateMappableArchUnits();
 				unfreezeSDInstancesCB();
 				valueChanged( null );
 			}
@@ -533,10 +568,28 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		}	//End of method
 		
 		private void mapInstance() {
-			
+
 			if( listInstancesHash.get( communicationPatternsCB.getSelectedIndex() ).size() > 0 )	{
-				mappedUnitsSL.add( communicationPatternsCB.getSelectedItem().toString() + "." + sdInstancesCB.getSelectedItem().toString() +
-													" : " + mappableArchUnitsCB.getSelectedItem().toString() );
+				int[] indices = mappableArchUnitsJL.getSelectedIndices();
+				if( indices.length > 1 )	{	//selecting more than one unit/instance
+					if( sdTransferInstances.contains( sdInstancesCB.getSelectedItem().toString() ) )	{
+						StringBuffer sb = new StringBuffer( communicationPatternsCB.getSelectedItem().toString() + "." +
+																								sdInstancesCB.getSelectedItem().toString() + " : " );
+						for( int i = 0; i < indices.length; i++ )	{
+							sb.append( mappableArchUnitsSL.get( indices[i]	) + ", ") ;
+						}
+						mappedUnitsSL.add( sb.toString().substring( 0, sb.length() - 2 ) );
+					}
+					else	{	//only transfer instances can be mapped on more than one architecture unit 
+            JOptionPane.showMessageDialog( frame, "More than one architecture unit seleted for mapping",
+																					"Error", JOptionPane.INFORMATION_MESSAGE );
+            return;
+					}
+				}
+				else	{	//selecting only one unit/instance
+					mappedUnitsSL.add( communicationPatternsCB.getSelectedItem().toString() + "." + sdInstancesCB.getSelectedItem().toString() +
+													" : " + mappableArchUnitsSL.get( mappableArchUnitsJL.getSelectedIndex() ) /*.toString()*/ );
+				}
 				//remove the mapped instance from the list
 				HashSet<String> SDinstancesHash = listInstancesHash.get( communicationPatternsCB.getSelectedIndex() );
 				Iterator<String> i = SDinstancesHash.iterator();
@@ -559,7 +612,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					makeSDInstancesComboBox( sdInstancesSL );
 					mappableArchUnitsSL.removeAllElements();
 					mappableArchUnitsSL.add( EMPTY_MAPPABLE_ARCH_UNITS_LIST );
-					makeArchitectureUnitsComboBox( mappableArchUnitsSL );
+					makeArchitectureUnitsScrollPane( mappableArchUnitsSL );
 					unfreezeAllComboBoxes();
 					//TraceManager.addDev( "The DS after removing instance: " + sdInstancesSL.toString() );
 					listInstancesHash.set( communicationPatternsCB.getSelectedIndex(), SDinstancesHash );
@@ -580,11 +633,11 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			String archUnitName, CPName, instanceName;
 
 			if( listMappedUnitsJL.getSelectedIndex() >= 0 )	{
-				String[] info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get( listMappedUnitsJL.getSelectedIndex() ) );
+				ArrayList<String> info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get( listMappedUnitsJL.getSelectedIndex() ) );
 				mappedUnitsSL.removeElementAt( listMappedUnitsJL.getSelectedIndex() );
-				CPName = info[0];
-				instanceName = info[1];
-				archUnitName = info[2];
+				CPName = info.get(0);
+				instanceName = info.get(1);
+				//archUnitName = info.get(2);
 				int indexCP;
 				for( indexCP = 0; indexCP < listCPs.size(); indexCP++ )	{
 					if( listCPs.get(indexCP).getName().equals( CPName ) )	{
@@ -666,9 +719,9 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 				}
 			}
 			//TraceManager.addDev( "Before makingArchComboBox: " + mappableArchUnitsSL.toString() );
-			freezeArchitectureUnitsComboBox();
-			makeArchitectureUnitsComboBox( mappableArchUnitsSL );
-			unfreezeArchitectureUnitsComboBox();
+			//freezeArchitectureUnitsComboBox();
+			makeArchitectureUnitsScrollPane( mappableArchUnitsSL );
+			//unfreezeArchitectureUnitsComboBox();
 			//TraceManager.addDev( "After makingArchComboBox: " + mappableArchUnitsSL.toString() );
 		}
 		
@@ -676,20 +729,18 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 
 			//before eliminating the list of mapped units, put the instances back in the general data structure
 			for( int i = 0; i < mappedUnitsSL.size(); i++ )	{
-				String[] info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get(i) );
-				restoreInstanceName( info[0], info[1] );
+				ArrayList<String> info = retrieveSingleInformationFromMappingString( mappedUnitsSL.get(i) );
+				restoreInstanceName( info.get(0), info.get(1) );
 			}
 			mappedUnitsSL.clear();
 			listMappedUnitsJL.setListData( mappedUnitsSL );
 		}
 		
-		private void makeArchitectureUnitsComboBox( Vector<String> newList )	{
+		private void makeArchitectureUnitsScrollPane( Vector<String> newList )	{
 			
-			mappableArchUnitsCB.removeAllItems();
-			for( String s: newList ) {
-				mappableArchUnitsCB.addItem( s );
-			}
+			//TraceManager.addDev( "Making scroll pane with: " + newList.toString() );
 			mappableArchUnitsSL = new Vector<String>( newList );
+			mappableArchUnitsJL.setListData( mappableArchUnitsSL );
 		}
 		
 		private void makeSDInstancesComboBox( Vector<String> newList ) {
@@ -892,23 +943,23 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 		sdInstancesCB.addActionListener( this );	
 	}
 
-	private void freezeArchitectureUnitsComboBox()	{
+	/*private void freezeArchitectureUnitsComboBox()	{
 		mappableArchUnitsCB.removeActionListener( this );	
-	}
+	}*/
 
-	private void unfreezeArchitectureUnitsComboBox()	{
+	/*private void unfreezeArchitectureUnitsComboBox()	{
 		mappableArchUnitsCB.addActionListener( this );	
-	}
+	}*/
 
 	private void freezeAllComboBoxes()	{
 		sdInstancesCB.removeActionListener( this );	
-		mappableArchUnitsCB.removeActionListener( this );	
+		//mappableArchUnitsCB.removeActionListener( this );	
 		communicationPatternsCB.removeActionListener( this );
 	}
 
 	private void unfreezeAllComboBoxes()	{
 		sdInstancesCB.addActionListener( this );	
-		mappableArchUnitsCB.addActionListener( this );	
+		//mappableArchUnitsCB.addActionListener( this );	
 		communicationPatternsCB.addActionListener( this );
 	}
 		
