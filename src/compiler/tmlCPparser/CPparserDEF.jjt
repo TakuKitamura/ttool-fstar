@@ -1,0 +1,269 @@
+/**********************************************************************************************************************
+Author: 			Andrea ENRICI
+Description: 	Parser for the communication Patterns
+***********************************************************************************************************************/
+
+options {
+	/* These are all the options offered by Javacc set with their default values */
+//  LOOKAHEAD = 2;
+//  CHOICE_AMBIGUITY_CHECK = 2;
+//  OTHER_AMBIGUITY_CHECK = 1;
+//  STATIC = true;
+//  DEBUG_PARSER = false;
+//  DEBUG_LOOKAHEAD = true;
+//  DEBUG_TOKEN_MANAGER = true;
+//  ERROR_REPORTING = true;
+//  JAVA_UNICODE_ESCAPE = false;
+//  UNICODE_INPUT = false;
+//  IGNORE_CASE = false;
+//  USER_TOKEN_MANAGER = false;
+//  USER_CHAR_STREAM = false;
+//  BUILD_PARSER = true;
+//  BUILD_TOKEN_MANAGER = true;
+//  SANITY_CHECK = true;
+	/*When LOOKAHEAD is more than 1, lookahead adequacy checking is not performed. Option FORCE_LA_CHECK must be set to true to
+	 * force checking */
+//  FORCE_LA_CHECK = true;
+//	TRACK_TOKENS = true;
+//	TOKEN_EXTENDS ="BaseToken";
+	MULTI=true;	/* Generate a multimode parse tree */
+	KEEP_LINE_COLUMN = false; 
+//	NODE_PREFIX="AST";
+}
+
+PARSER_BEGIN(CPparserDEF) /* The parser class */
+
+//package compiler.tmlCPparserDEF;
+import tmltranslator.*;
+import tmltranslator.tmlcp.*;
+import java.util.*;
+import myutil.*;
+import java.util.ArrayList;
+
+public class CPparserDEF {
+
+	public static TMLCP topCP = new TMLCP( "noName", new Object() );
+
+  /* Main entry point. */
+  public static void main(String args[]) throws ParseException	{
+    CPparserDEF parser = new CPparserDEF(System.in);
+		try	{
+    	ASTStartSymbol n = parser.StartSymbol();
+			//print AST
+			//n.dump("");
+			//System.out.println("Thank you.");
+			topCP.printDataStructure();
+		}
+		catch ( Exception e )	{
+//			System.out.println("Ooops");
+			System.out.println(e.getMessage());
+//			e.printStackTrace();
+		}
+  }
+}
+
+PARSER_END(CPparserDEF)
+
+SKIP:
+{
+	" "
+| "\t"
+| "\n"
+| "\r"
+| < "#" (~["\n","\r"])* ("\n" | "\r" | "\r\n") >	/* One-line comment */
+| < "//" (~["\n","\r"])* ("\n" | "\r" | "\r\n") >	/* One-line comment */
+}
+
+/* The order in which TOKENs are declared matters! Moving the token declaration for the reserved keywords after the one for the
+ * identifiers makes parsing to go bananas as any reserved keyword is instead matched as an identifier! */
+/* Reserved keywords */
+TOKEN:
+{
+	< BOOLTYPE: "BOOL" >
+|	< INTTYPE: "INT" >
+| < START_KW: "START" >
+|	< ENDBLOCK: "END" >
+|	< MAINBLOCK: "MAIN" >
+|	< CP: "COMMUNICATION_PATTERN" >
+| < ACTIVITY_DIAGRAM: "ACTIVITY" >
+| < SEQUENCE_DIAGRAM: "SEQUENCE" >
+| < INCLUDE: "INCLUDE" >
+| < TRUECONST: "TRUE" >
+| < FALSECONST: "FALSE" >
+| < STORAGE_KW: "STORAGE" >
+| < CONTROLLER_KW: "CONTROLLER" >
+| < TRANSFER_KW: "TRANSFER" >
+| < ACTION_KW: "ACT:" >
+| < RCV_MSG_KW: "RCV:" >
+| < SND_MSG_KW: "SND:" >
+| < #TRANSFER_ACT: "Transfer" >
+| < #TRANSFER_REQ: "TransferRequest" >
+| < #TRANSFER_DONE: "TransferDone" >
+| < #READ_ACT: "Read" >
+| < #WRITE_ACT: "Write" >
+| < EXTENSION: <CP_LIB> >
+| < #CP_LIB: ".cplib" >
+}
+
+/* Operators */
+TOKEN:
+{
+	< BLOCKSTART: "{" >
+|	< BLOCKEND: "}" >
+|	< JOINSTART: "<" >
+|	< JOINEND: ">" >
+|	< SEQUENCING_OP: ";" >
+|	< PARALLELISM_OP: "*" >
+|	< MATH_PLUS: "+" >
+|	< MATH_MINUS: "-" >
+|	< DOT: "." >
+|	< GUARDSTART: "[" >
+|	< GUARDEND: "]" >
+|	< ITERATIONSTART: "(" >
+|	< ITERATIONEND: ")" >
+|	< SEPARATOR: "," >
+| < ASSIGNMENT: "=" >
+| < EQUALITY: "==" >
+| < BITWISEOR: "|" >
+| < LOGICALOR: "||" >
+| < BITWISEAND: "&" >
+| < LOGICALAND: "&&" >
+| < BITWISEEXOR: "^" >
+| < INCREMENT: "++" >
+| < DECREMENT: "--" >
+| < START_AD: "<>;" >
+| < END_AD: "><" >
+| < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
+| < EOL: ("\n" | "\r" | "\r\n") >
+| < PATH_SEPARATOR: "/" >
+| < QUOTATION_MARK: "\"" >
+}
+
+/* Identifiers */
+TOKEN:
+{
+	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT>)* (<LETTER> | <DIGIT>) >
+| < #LETTER: ["a"-"z","A"-"Z"] >
+|	< #DIGIT: ["0"-"9"] >
+|	< UNDERSCORE: "_" >
+//| < INCLUDE_SYMBOL: "$" >
+}
+
+/* Literals */
+TOKEN:
+{
+	< INTEGER_LITERAL: <DECIMAL_LITERAL> (["l","L"])? >
+| < #DECIMAL_LITERAL: ["0"-"9"] (["0"-"9"])* >
+}
+
+
+/* List of productions defining the non-terminals. They are implemented as methods of the above parser class*/
+/* Root production. */
+ASTStartSymbol StartSymbol():	/* The left hand side of this production is called Input and must be followed by colon */
+{
+	int i;
+	String space = " ";
+	String undefinedDiagStringList = "";
+	ArrayList<String> undefinedADList;
+	ArrayList<String> undefinedSDList;
+}
+{
+	/*( IncludeFiles() )*
+	( MappingList() )*
+	CommunicationPattern()
+	( ActivityDiagram() ( ActivityDiagram() )* ( SequenceDiagram() )+ | ( SequenceDiagram() )+ )*/
+
+	// One or more attribute declaration followed by the declaration of the body of the Sequence Diagrams
+	( SequenceDiagramAttributeDeclaration() )+	
+	( SequenceDiagram() )+ | ( SequenceDiagram() )+
+	<EOF>		/* Force the parser to reach EOF */
+	{
+		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
+		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
+		topCP.correctReferences();
+		return jjtThis;
+	}
+}
+
+/********************************************************************************************************************************
+Include Files Section: the grammar for parsing the inclusion of library files
+********************************************************************************************************************************/
+/*void IncludeFiles():
+{}
+{
+	<INCLUDE> <QUOTATION_MARK> (<DOT>)? (<PATH_SEPARATOR>)? ID() (<PATH_SEPARATOR> ID() )* <EXTENSION> <QUOTATION_MARK>
+}
+
+void MappingList():
+{}
+{
+	ID() <ITERATIONSTART> ID() ( <SEPARATOR> ID() )+ <ITERATIONEND>
+}*/
+
+/********************************************************************************************************************************
+Sequence Diagram Section
+********************************************************************************************************************************/
+
+void SequenceDiagramAttributeDeclaration():
+{
+	String name;
+}
+{
+	name = ID()
+}
+
+// A SD is a list of instances. Each Instance is composed of messages or actions.
+void SequenceDiagram():
+{
+	String name;
+	ArrayList<TMLSDInstance> instancesList = new ArrayList<TMLSDInstance>();
+}
+{
+	<SEQUENCE_DIAGRAM> name = ID()
+	{
+		TMLCPSequenceDiagram currentSD = new TMLCPSequenceDiagram( name, new Object() );
+	}
+	( SequenceDiagramInstance() )+
+	<ENDBLOCK>
+}
+
+void SequenceDiagramInstance():
+{
+	String instanceName, type;
+	TMLSDAction action;
+}
+{
+	type = ID() instanceName = ID()
+	( Message() | action = Action( instanceName ) )+
+	// addActionFromParser(), addMessageFromParser()
+
+}
+
+void Message():
+{
+	String name;
+}
+{
+	( <RCV_MSG_KW> | <SND_MSG_KW> ) name = ID() "(" ( ID() )* ")"
+}
+
+TMLSDAction Action( String instanceName ):
+{
+	String actionName;
+}
+{
+	<ACTION_KW> actionName = ID() ID() <ASSIGNMENT> ( <INTEGER_LITERAL> | <FALSECONST> | <TRUECONST> )
+	{
+		TMLSDAction action = new TMLSDAction( actionName, instanceName );
+		return action;
+	}
+}
+
+String ID():
+{
+	Token t;
+}
+{
+	t = <IDENTIFIER>
+	{ jjtThis.setName(t.image); return t.image; }
+}

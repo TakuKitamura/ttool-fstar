@@ -122,6 +122,12 @@ public class TMLSDInstance extends TMLElement  {
         Collections.sort( events );
     }
 
+		//Add an action from the parser where there is no notion of yCoord. Events are already ordered.
+    public void addActionFromParser( TMLSDAction _action ) {
+        actions.add( _action );
+        events.add( new TMLSDEvent( _action, TMLSDEvent.ACTION_EVENT ) );
+    }
+
     public void addMappedUnit( TMLArchiNode _mappedUnit ) {
         mappedUnit = _mappedUnit;
     }
@@ -143,6 +149,18 @@ public class TMLSDInstance extends TMLElement  {
   	    events.add( new TMLSDEvent( _msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT, yCoord ) );
 			}
 			Collections.sort( events );
+    }
+
+		//Add a message from the parser where there is no notion of yCoord. Events are already ordered.
+    public void addMessageFromParser( TMLSDMessage _msg, int _type ) {
+
+			messages.add( _msg );
+			if( _type == TMLSDEvent.SEND_MESSAGE_EVENT )	{
+  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.SEND_MESSAGE_EVENT ) );
+			}
+			if( _type == TMLSDEvent.RECEIVE_MESSAGE_EVENT )	{
+  	    events.add( new TMLSDEvent( _msg, TMLSDEvent.RECEIVE_MESSAGE_EVENT ) );
+			}
     }
 
     public void insertInitialValue( String _name, String value ) {

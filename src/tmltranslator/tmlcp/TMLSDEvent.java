@@ -72,6 +72,12 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
         this.type = _type;
     }
 
+    public TMLSDEvent( Object _referenceObject, int _type ) {
+        this.referenceObject = _referenceObject;
+        this.yCoord = -1;
+        this.type = _type;
+    }
+
     public int getYCoord()      {
         return yCoord;
     }

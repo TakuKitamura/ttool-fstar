@@ -750,17 +750,7 @@ void SequenceDiagram():
 	<SEQUENCE_DIAGRAM> name = ID()
 	{
 		TMLCPSequenceDiagram currentSD = new TMLCPSequenceDiagram( name, new Object() );
-		//try	{
-			topCP.addCPSequenceDiagram( currentSD );
-		//}
-		/*catch( UndeclaredDiagramException e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}
-		catch( MultipleDiagDeclarationsException	e )	{
-			System.out.println( e.getMessage() );
-			System.exit(0);
-		}*/
+		topCP.addCPSequenceDiagram( currentSD );
 	}
 	ArchitectureNodes( currentSD )
 	( IntegerDeclaration( currentSD ) | BooleanDeclaration( currentSD ) )*

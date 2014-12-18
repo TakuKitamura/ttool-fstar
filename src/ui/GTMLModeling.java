@@ -643,7 +643,7 @@ public class GTMLModeling  {
                         TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     }
 
-                    if (portstome.size() != 1) {
+                    if ( (portstome.size() < 1) || (portstome.size() > 3) ) {
                         String msg = "port " + port1.getPortName() + " is not correctly connected";
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
                         ce.setTDiagramPanel(tmlcdp.tmlctdp);
@@ -763,7 +763,7 @@ public class GTMLModeling  {
                         TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                     }
 
-                    if (portstome.size() != 1) {
+                    if ( (portstome.size() < 1) || (portstome.size() > 3) ) {
                         String msg = "port " + port1.getPortName() + " is not correctly connected";
                         CheckingError ce = new CheckingError(CheckingError.STRUCTURE_ERROR, msg);
                         ce.setTDiagramPanel(tmlcdp.tmlctdp);
