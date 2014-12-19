@@ -65,6 +65,12 @@ public class TMLCPSequenceDiagram  extends TMLElement {
         init();
     }
 
+		// Constructor to be called from the parser, no reference object
+    public TMLCPSequenceDiagram( String _name )        {
+        super( _name, null );
+        init();
+    }
+
     private void init() {
         //globalVariables = new ArrayList<TMLAttribute>();
         instancesList = new ArrayList<TMLSDInstance>();

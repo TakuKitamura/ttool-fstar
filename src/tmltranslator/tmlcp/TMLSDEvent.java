@@ -113,10 +113,10 @@ public class TMLSDEvent implements Comparable<TMLSDEvent>  {
 			switch( type )	{
 				case 0:	//send message
             msg = ( (TMLSDMessage) referenceObject );
-        		return SEND_MESSAGE_LABEL + msg.toString();
+        		return SEND_MESSAGE_LABEL + msg.getReceiverName() + ":" + msg.toString();
 				case 1:	//receive message
             msg = ( (TMLSDMessage) referenceObject );
-        		return RECEIVE_MESSAGE_LABEL + msg.toString();
+        		return RECEIVE_MESSAGE_LABEL + msg.getSenderName() + ":" + msg.toString();
 				case 2:	//action
      	      TMLSDAction action = ( (TMLSDAction) referenceObject );
             return ACTION_LABEL + action.toString();

@@ -88,7 +88,7 @@ public class TMLSDMessage extends TMLElement  {
 	}
 	
 	// Constructor used for the TMLCPparser where in the TMLCP code there is no notion of yCoord and of referenceObject
-	public TMLSDMessage( String _name, String _senderName, String _receiverName, Object _referenceObject, ArrayList<String> _params )	{
+	public TMLSDMessage( String _name, String _senderName, String _receiverName, ArrayList<String> _params )	{
 		super( _name, null );
 		this.yCoord = -1;
 		this.senderName = _senderName;

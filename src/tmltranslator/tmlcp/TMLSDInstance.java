@@ -70,6 +70,13 @@ public class TMLSDInstance extends TMLElement  {
         init();
     }
 
+		//The constructor to be used from the parser. No reference to object
+    public TMLSDInstance( String _name, String _type ) {
+        super( _name, null );
+        this.type = _type;
+        init();
+    }
+
     private void init() {
 
         globalVariables = new ArrayList<TMLAttribute>();
@@ -99,9 +106,9 @@ public class TMLSDInstance extends TMLElement  {
         events.add( _event );
 	}*/
 
-    public void addVariable( TMLAttribute _attr )       {
+    /*public void addVariable( TMLAttribute _attr )       {
         globalVariables.add( _attr );
-    }
+    }*/
 
     public void addAttribute( TMLAttribute _attribute ) {       //used by the graphical 2 TMLTxt compiler
         globalVariables.add( _attribute );

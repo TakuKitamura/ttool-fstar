@@ -79,8 +79,8 @@ SKIP:
 /* Reserved keywords */
 TOKEN:
 {
-	< BOOLTYPE: "BOOL" >
-|	< INTTYPE: "INT" >
+	< BOOL_TYPE: "bool" >
+|	< INT_TYPE: "int" >
 | < START_KW: "START" >
 |	< ENDBLOCK: "END" >
 |	< MAINBLOCK: "MAIN" >
@@ -88,8 +88,8 @@ TOKEN:
 | < ACTIVITY_DIAGRAM: "ACTIVITY" >
 | < SEQUENCE_DIAGRAM: "SEQUENCE" >
 | < INCLUDE: "INCLUDE" >
-| < TRUECONST: "TRUE" >
-| < FALSECONST: "FALSE" >
+| < TRUECONST: "TRUE" | "true" >
+| < FALSECONST: "FALSE" | "false" >
 | < STORAGE_KW: "STORAGE" >
 | < CONTROLLER_KW: "CONTROLLER" >
 | < TRANSFER_KW: "TRANSFER" >
@@ -164,23 +164,34 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 	int i;
 	String space = " ";
 	String undefinedDiagStringList = "";
-	ArrayList<String> undefinedADList;
-	ArrayList<String> undefinedSDList;
+	TMLCP mainCP = new TMLCP();
+	TMLCPSequenceDiagram seqDiag;
+	ArrayList<TMLAttribute> attributeList;
 }
 {
-	/*( IncludeFiles() )*
-	( MappingList() )*
-	CommunicationPattern()
-	( ActivityDiagram() ( ActivityDiagram() )* ( SequenceDiagram() )+ | ( SequenceDiagram() )+ )*/
+	attributeList = SequenceDiagramAttributesDeclaration()	
 
-	// One or more attribute declaration followed by the declaration of the body of the Sequence Diagrams
-	( SequenceDiagramAttributeDeclaration() )+	
-	( SequenceDiagram() )+ | ( SequenceDiagram() )+
+	{	TraceManager.addDev( "#################" );
+		for( TMLAttribute attr: attributeList )	{
+			TraceManager.addDev( attr.toString() );
+			TraceManager.addDev( "#################" );
+		}
+	}
+
+	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
+
 	<EOF>		/* Force the parser to reach EOF */
+
 	{
 		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
 		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
-		topCP.correctReferences();
+		//topCP.correctReferences();
+		ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();
+		TraceManager.addDev( "***************" );
+		for( TMLCPSequenceDiagram diag: sdList )	{
+			TraceManager.addDev( diag.toString() );
+			TraceManager.addDev( "***************" );
+		}
 		return jjtThis;
 	}
 }
@@ -204,57 +215,110 @@ void MappingList():
 Sequence Diagram Section
 ********************************************************************************************************************************/
 
-void SequenceDiagramAttributeDeclaration():
+ArrayList<TMLAttribute> SequenceDiagramAttributesDeclaration():
 {
-	String name;
+	String instanceName, attributeName, attributeType;
+	Token t, t1;
+	ArrayList<TMLAttribute> attributeList = new ArrayList<TMLAttribute>();
 }
 {
-	name = ID()
+	( instanceName = ID() "." attributeName = ID() ":" ( t = <BOOL_TYPE> | t = <INT_TYPE> )
+		<ASSIGNMENT> ( t1 = <IDENTIFIER> | t1 = <INTEGER_LITERAL> | t1 = <FALSECONST> | t1 = <TRUECONST> )
+	{
+		if( t.image.equals("int") )	{
+			attributeList.add( new TMLAttribute( attributeName, instanceName, new TMLType ( TMLType.NATURAL ), t1.image ) );
+		}
+		else if( t.image.equals("bool") )	{
+			attributeList.add ( new TMLAttribute( attributeName, instanceName, new TMLType( TMLType.BOOLEAN ), t1.image ) );
+		}
+	}
+	)*
+	{ return attributeList; }
 }
 
 // A SD is a list of instances. Each Instance is composed of messages or actions.
-void SequenceDiagram():
+TMLCPSequenceDiagram SequenceDiagram( ArrayList<TMLAttribute> attributeList ):
 {
-	String name;
-	ArrayList<TMLSDInstance> instancesList = new ArrayList<TMLSDInstance>();
+	String diagramName;
+	TMLSDInstance instance;
 }
 {
-	<SEQUENCE_DIAGRAM> name = ID()
+	<SEQUENCE_DIAGRAM> diagramName = ID()
 	{
-		TMLCPSequenceDiagram currentSD = new TMLCPSequenceDiagram( name, new Object() );
+		TMLCPSequenceDiagram seqDiag = new TMLCPSequenceDiagram( diagramName );
 	}
-	( SequenceDiagramInstance() )+
+	(
+		instance = SequenceDiagramInstance( attributeList )
+		{ seqDiag.addInstance( instance ); }
+	)+
 	<ENDBLOCK>
+
+	{ return seqDiag; }
 }
 
-void SequenceDiagramInstance():
+TMLSDInstance SequenceDiagramInstance( ArrayList<TMLAttribute> attributeList ):
 {
-	String instanceName, type;
+	String instanceName, type, senderName, receiverName, messageName;
+	Token t;
 	TMLSDAction action;
+	TMLSDMessage message;
+	ArrayList<String> params = new ArrayList<String>();
 }
 {
-	type = ID() instanceName = ID()
-	( Message() | action = Action( instanceName ) )+
-	// addActionFromParser(), addMessageFromParser()
+	( t = <TRANSFER_KW> | t = <STORAGE_KW> | t = <CONTROLLER_KW> ) instanceName = ID()
+	{ 
+		TMLSDInstance instance = new TMLSDInstance( instanceName, t.image );
+		for( TMLAttribute attr: attributeList )	{
+			if( instanceName.equals( attr.getInstanceName() ) )	{
+				//TraceManager.addDev( "Adding attribute " attr.toString() + " to instance " + instanceName );
+				instance.addAttribute( attr );
+			}
+		}
+	}
 
+	(	<RCV_MSG_KW> senderName = ID() ":" messageName = ID() params =  MessageParameters() 
+		{ message = new TMLSDMessage( messageName, senderName, instanceName, params );
+			instance.addMessageFromParser( message, TMLSDEvent.RECEIVE_MESSAGE_EVENT ); }
+	|
+		<SND_MSG_KW> receiverName = ID() ":" messageName = ID() params = MessageParameters()
+		{ message = new TMLSDMessage( messageName, instanceName, receiverName, params );
+			instance.addMessageFromParser( message, TMLSDEvent.SEND_MESSAGE_EVENT ); }
+	|
+		action = Action( instanceName )
+		{ instance.addActionFromParser( action ); }
+	)+
+
+	{ return instance; }
 }
 
-void Message():
+ArrayList<String> MessageParameters():
 {
-	String name;
+	String /*messageName, receiverName, senderName,*/ s;
+	ArrayList<String> params = new ArrayList<String>();
 }
 {
-	( <RCV_MSG_KW> | <SND_MSG_KW> ) name = ID() "(" ( ID() )* ")"
+	( "()" | "(" s = ID() { params.add(s); } ( "," s = ID() { params.add(s); } )* ")" )
+	{
+		//TMLSDMessage message = new TMLSDMessage( messageName, "", instanceName, params );
+		return params;
+	}
+	/*|
+	<SND_MSG_KW> messageName = ID() "(" ( s = ID() { params.add(s); } )* ")"
+	{
+		TMLSDMessage message = new TMLSDMessage( messageName, instanceName, "", params );
+		return message;
+	}*/
 }
 
 TMLSDAction Action( String instanceName ):
 {
-	String actionName;
+	String s;
+	Token t;
 }
 {
-	<ACTION_KW> actionName = ID() ID() <ASSIGNMENT> ( <INTEGER_LITERAL> | <FALSECONST> | <TRUECONST> )
+	<ACTION_KW> s = ID() <ASSIGNMENT> ( t = <INTEGER_LITERAL> | t = <FALSECONST> | t = <TRUECONST> )
 	{
-		TMLSDAction action = new TMLSDAction( actionName, instanceName );
+		TMLSDAction action = new TMLSDAction( s + " = " + t.image, instanceName );
 		return action;
 	}
 }
