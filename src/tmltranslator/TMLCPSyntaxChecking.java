@@ -615,34 +615,37 @@ public class TMLCPSyntaxChecking {
 				//Do not raise a syntax error when variables appear in actions
 				ArrayList<String> boolAttrNamesList = new ArrayList<String>();	//a list of the boolean attribute names
 				ArrayList<String> natAttrNamesList = new ArrayList<String>();	//a list of the natural attribute names
+				for( TMLAttribute attr: attributes )	{
+					if( attr.isNat() )	{
+						natAttrNamesList.add( attr.getName() );
+					}
+					if( attr.isBool() )	{
+						boolAttrNamesList.add( attr.getName() );
+					}
+				}
 				if( parseCmd.equals( "assnat" ) )	{
-					for( TMLAttribute attr: attributes )	{
-						if( attr.isNat() )	{
-							natAttrNamesList.add( attr.getName() );
+        	for(String s: vars) {
+						if( !natAttrNamesList.contains( s ) )	{
+							if( boolAttrNamesList.contains( s ) )	{
+	            	addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+							}
+							else	{
+            		addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+							}
 						}
 					}
 				}
 				else if( parseCmd.equals( "assbool" ) )	{
-					for( TMLAttribute attr: attributes )	{
-						if( attr.isBool() )	{
-							boolAttrNamesList.add( attr.getName() );
+        	for(String s: vars) {
+						if( !boolAttrNamesList.contains( s ) )	{
+							if( natAttrNamesList.contains( s )	)	{
+	          		addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+							}
+							else	{
+            		addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+							}
 						}
 					}
 				}
-
-        for(String s: vars) {
-					if( !boolAttrNamesList.contains( s ) )	{
-          	addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-					}
-					else	{
-						if( !natAttrNamesList.contains( s ) )	{
-            	addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-						}
-						else	{
-            	addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-						}
-					}
-        }
-
     }
 }       //End of class
