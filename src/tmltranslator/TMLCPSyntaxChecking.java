@@ -67,6 +67,7 @@ public class TMLCPSyntaxChecking {
     private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
     private final String VARIABLE_ERROR = "variable is not used according to its type";
     private final String UNDECLARED_VARIABLE = "unknown variable";
+    private final String WRONG_VARIABLE_TYPE = "incorrect variable type";
     private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
     private final String TIME_UNIT_ERROR = "unknown time unit";
 
@@ -377,13 +378,13 @@ public class TMLCPSyntaxChecking {
                 //TraceManager.addDev( "PRINTING ATTRIBUTE NAMES: " + attribute.getName() );
                 if( attribute.getName().equals( temp ) )        {
                     if( attribute.isBool() )    {
-                        parsing( "assbool", action.toString() );
+                        parsing( "assbool", action.toString(), attributes );
                         //TraceManager.addDev( "Found that the action is on a boolean variable: " + temp );
                         //exists = true;
                         break;
                     }
                     if( attribute.isNat() )     {
-                        parsing( "assnat", action.toString() );
+                        parsing( "assnat", action.toString(), attributes );
                         //TraceManager.addDev( "Found that the action is on a natural variable: " + temp );
                         //exists = true;
                         break;
@@ -541,7 +542,7 @@ public class TMLCPSyntaxChecking {
         return ret;
     }
 
-    public void parsing( String parseCmd, String action) {
+    public void parsing( String parseCmd, String action, ArrayList<TMLAttribute> attributes ) {
         TMLExprParser parser;
         SimpleNode root;
 
@@ -610,8 +611,37 @@ public class TMLCPSyntaxChecking {
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
         ArrayList<String> vars = root.getVariables();
         TraceManager.addDev( "PRINTING VARS IN PARSING(): " + vars.toString() );
+				
+				//Do not raise a syntax error when variables appear in actions
+				ArrayList<String> boolAttrNamesList = new ArrayList<String>();	//a list of the boolean attribute names
+				ArrayList<String> natAttrNamesList = new ArrayList<String>();	//a list of the natural attribute names
+				if( parseCmd.equals( "assnat" ) )	{
+					for( TMLAttribute attr: attributes )	{
+						if( attr.isNat() )	{
+							natAttrNamesList.add( attr.getName() );
+						}
+					}
+				}
+				else if( parseCmd.equals( "assbool" ) )	{
+					for( TMLAttribute attr: attributes )	{
+						if( attr.isBool() )	{
+							boolAttrNamesList.add( attr.getName() );
+						}
+					}
+				}
+
         for(String s: vars) {
-            addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+					if( !boolAttrNamesList.contains( s ) )	{
+          	addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+					}
+					else	{
+						if( !natAttrNamesList.contains( s ) )	{
+            	addError( WRONG_VARIABLE_TYPE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+						}
+						else	{
+            	addError( UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+						}
+					}
         }
 
     }
