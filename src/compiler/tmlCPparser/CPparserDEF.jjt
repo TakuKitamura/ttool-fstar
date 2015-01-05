@@ -113,14 +113,14 @@ TOKEN:
 |	< JOINSTART: "<" >
 |	< JOINEND: ">" >
 |	< SEQUENCING_OP: ";" >
-|	< PARALLELISM_OP: "*" >
+|	< STAR_OP: "*" >
 |	< MATH_PLUS: "+" >
 |	< MATH_MINUS: "-" >
 |	< DOT: "." >
 |	< GUARDSTART: "[" >
 |	< GUARDEND: "]" >
-|	< ITERATIONSTART: "(" >
-|	< ITERATIONEND: ")" >
+|	< LEFT_PARENTHESIS: "(" >
+|	< RIGHT_PARENTHESIS: ")" >
 |	< SEPARATOR: "," >
 | < ASSIGNMENT: "=" >
 | < EQUALITY: "==" >
@@ -133,9 +133,9 @@ TOKEN:
 | < DECREMENT: "--" >
 | < START_AD: "<>;" >
 | < END_AD: "><" >
-| < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
+//| < ORDEROPERATOR: <SEQUENCING_OP> | <PARALLELISM_OP> >
 | < EOL: ("\n" | "\r" | "\r\n") >
-| < PATH_SEPARATOR: "/" >
+| < RIGHT_SLASH: "/" >
 | < QUOTATION_MARK: "\"" >
 }
 
@@ -312,15 +312,120 @@ ArrayList<String> MessageParameters():
 
 TMLSDAction Action( String instanceName ):
 {
+	String s, s1 = "";
+	Token t;
+}
+{
+	<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() ) //( t = <INTEGER_LITERAL> | t = <FALSECONST> | t = <TRUECONST> )
+	{
+		TraceManager.addDev( "***** " + s1 + " *****" );
+		TMLSDAction action = new TMLSDAction( s + " = " + s1, instanceName );
+		return action;
+	}
+}
+
+/* Right-recursive grammar for parsing mathematical expressions in actions. No priority is given to operators */
+String MAExpression():	//MA stands for Mathematical Action
+{
+	String s, s1;
+}
+{
+	s = MATerm() s1 = MAExpressionPrime()	{ return s + s1; }
+}
+
+String MAExpressionPrime():
+{
+	String s, s1;
+}
+{
+	<MATH_PLUS> s = MATerm() s1 = MAExpressionPrime()	{ return " + " + s + " " + s1; }
+| <MATH_MINUS> s = MATerm() s1 = MAExpressionPrime() { return " - " + s + " " + s1; }
+| <RIGHT_SLASH> s = MATerm() s1 = MAExpressionPrime() { return " / " + s + " " + s1; }
+| <STAR_OP> s = MATerm() s1 = MAExpressionPrime() { return " * " + s + " " + s1; }
+| {} { return ""; }
+}
+
+String MATerm():
+{
+	String s, s1;
+}
+{
+	//MAFactor() MATermPrime()
+	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
+}
+
+String MATermPrime():
+{
+	String s, s1;
+}
+{
+	s = MAFactor() s1 = MATermPrime()	{ return s + s1; }
+| {} { return ""; }
+}
+
+String MAFactor():
+{
 	String s;
 	Token t;
 }
 {
-	<ACTION_KW> s = ID() <ASSIGNMENT> ( t = <INTEGER_LITERAL> | t = <FALSECONST> | t = <TRUECONST> )
-	{
-		TMLSDAction action = new TMLSDAction( s + " = " + t.image, instanceName );
-		return action;
-	}
+	<LEFT_PARENTHESIS> s = MAExpression() <RIGHT_PARENTHESIS> { return "( " + s + " )"; }
+	|
+	s = ID() {return s; }
+	|
+	t = <INTEGER_LITERAL>	{ return t.image; }
+}
+
+/* Right-recursive grammar for parsing boolean expressions in actions. No priority is given to boolean operators */
+String BAExpression():	//BA stands for Boolean Action
+{
+	String s, s1;
+}
+{
+	s = BATerm() s1 = BAExpressionPrime()	{ return s + s1; }
+}
+
+String BAExpressionPrime():
+{
+	String s, s1;
+}
+{
+	<LOGICALOR> s = BATerm() s1 = BAExpressionPrime()	{ return " || " + s + s1; }
+| <LOGICALAND> s = BATerm() s1 = BAExpressionPrime()	{ return " && " + s + s1; }
+| <EQUALITY> s = BATerm() s1 = BAExpressionPrime()	{ return " == " + s + s1; }
+| {}	{ return ""; }
+}
+
+String BATerm():
+{
+	String s, s1;
+}
+{
+	s = BAFactor() s1 = BATermPrime()	{ return s + s1; }
+}
+
+String BATermPrime():
+{
+	String s, s1;
+}
+{
+	s = BAFactor() s1 = BATermPrime()	{ return s + s1; }
+| {}	{ return ""; }
+}
+
+String BAFactor():
+{
+	String s;
+	Token t;
+}
+{
+	<LEFT_PARENTHESIS> s = BAExpression() <RIGHT_PARENTHESIS>	{ return "( " + s + " )"; }
+	|
+	s = ID()	{ return s; }
+	|
+	t = <FALSECONST>	{ return t.image; }
+	|
+	t = <TRUECONST> { return t.image; }
 }
 
 String ID():
