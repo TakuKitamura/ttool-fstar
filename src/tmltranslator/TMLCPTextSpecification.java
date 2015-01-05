@@ -213,7 +213,7 @@ public class TMLCPTextSpecification {
 
 		spec = makeHeader();
 		spec += makeTMLTextSequenceDiagrams( tmlcp );
-		//spec += maleTMLTextActivityDiagrams( tmlcp );
+		spec += makeTMLTextActivityDiagrams( tmlcp );
 		return spec;
 	}
 
@@ -269,6 +269,146 @@ public class TMLCPTextSpecification {
 		return sb.toString();
 	}
 	
+	private String makeTMLTextActivityDiagrams( TMLCP tmlcp )	{
+
+		StringBuffer sb = new StringBuffer();
+		
+		ArrayList<TMLCPActivityDiagram> activityDiagList = tmlcp.getCPActivityDiagrams();
+		ArrayList<TMLCPActivityDiagram> junctionDiagList = new ArrayList<TMLCPActivityDiagram>();
+		ArrayList<String> diagsToRemove = new ArrayList<String>();
+
+		for( TMLCPActivityDiagram ad: activityDiagList )	{
+			//TraceManager.addDev( "#### " + ad.getName().substring( 0,7 ) );
+			String s = ad.getName();
+			if( s.length() >= 9 )	{
+				if( s.substring( 0,8 ).equals( "junction" ) )	{
+				TraceManager.addDev( "adding diagram: " + s );
+					junctionDiagList.add( ad );
+					diagsToRemove.add( ad.getName() );
+				}
+			}
+		}
+
+		// Remove junction diagrams from the main list
+		Iterator<TMLCPActivityDiagram> it = activityDiagList.iterator();
+		while( it.hasNext() )	{
+			TMLCPActivityDiagram temp = it.next();
+			if( diagsToRemove.contains( temp.getName() ) )	{
+				it.remove();
+			}
+		}
+
+		for( TMLCPActivityDiagram ad: activityDiagList )	{
+			sb.append( "\nACTIVITY " + ad.getName() + "\n\n\tMAIN\n" );
+			sb.append( makeSingleActivityDiagram( ad, junctionDiagList ) + "\n\tEND\n" );
+			sb.append( "\nEND " + ad.getName() + "\n" );
+		}
+		
+		/*TraceManager.addDev( "junctionDiagList: " + junctionDiagList.toString() );
+		TraceManager.addDev( "activityDiagList: " + activityDiagList.toString() );
+		TraceManager.addDev( "diagsToRemove: " + diagsToRemove.toString() );*/
+
+		return sb.toString();
+	}
+
+	private String makeSingleActivityDiagram( TMLCPActivityDiagram ad, ArrayList<TMLCPActivityDiagram> junctionDiagList )	{
+
+		StringBuffer sb = new StringBuffer( "\n\t<>; " );
+		TMLCPElement currentElement, nextElement;
+		ArrayList<TMLCPElement> nextElements;
+	
+		currentElement = getStartState( ad ); //.getNextElements().get( 0 );	//the next element after the start state
+		while( !(currentElement instanceof TMLCPStop) )	{
+			nextElements = currentElement.getNextElements();
+			if( nextElements.size() > 1 )	{	//currentElement is a fork node
+				sb.append( parseFork( nextElements ) );
+				//nextElement = parseFork( nextElements );
+				return sb.toString();	//problem with nextElement, solution: make sb a private attribute
+			}
+			else	{
+				nextElement = nextElements.get(0);
+				sb.append( procedure( nextElement ) );
+			}
+			currentElement = nextElement;
+		}
+
+		return sb.toString();
+	}
+
+	private String parseFork( ArrayList<TMLCPElement> elements )	{
+		
+		StringBuffer sb = new StringBuffer( " { " );
+		TMLCPElement nextElement;
+
+		for( TMLCPElement currentElement: elements )	{
+			nextElement = currentElement;
+			while( !(nextElement instanceof TMLCPJoin) )	{
+				if( nextElement instanceof TMLCPRefSD )	{
+					sb.append( removeHashKey( ((TMLCPRefSD) nextElement).getName() ) + " + " );
+				}
+				if( nextElement instanceof TMLCPRefAD )	{
+					String s = ( (TMLCPRefAD) nextElement ).getName();
+					if( s.length() >= 9 )	{
+						if( s.substring( 0,8 ).equals( "junction" ) )	{	//it is a reference to a junction diagram
+							sb.append( "" );
+						}
+						else	{	//it is a normal reference to a diagram
+							sb.append( removeHashKey( ((TMLCPRefAD) nextElement).getName() ) + " + " );
+						}
+					}
+				}
+			nextElement = nextElement.getNextElements().get(0);	//no nested fork and join
+			}
+			sb.append( " * " );
+		}
+		sb.append( " }" );
+
+		return sb.toString();
+	}
+
+	private String procedure( TMLCPElement nextElement )	{
+
+		StringBuffer sb = new StringBuffer();
+
+		if( nextElement instanceof TMLCPRefSD )	{
+			sb.append( removeHashKey( ((TMLCPRefSD) nextElement).getName() ) + " + " );
+		}
+		if( nextElement instanceof TMLCPRefAD )	{
+			String s = ( (TMLCPRefAD) nextElement ).getName();
+			if( s.length() >= 9 )	{
+				if( s.substring( 0,8 ).equals( "junction" ) )	{	//it is a reference to a junction diagram
+					sb.append( "" );
+				}
+				else	{	//it is a normal reference to a diagram
+					sb.append( removeHashKey( ((TMLCPRefAD) nextElement).getName() ) + " + " );
+				}
+			}
+		}
+		if( nextElement instanceof TMLCPJoin )	{
+			sb.append( "" );
+		}
+		if( nextElement instanceof TMLCPFork )	{
+			sb.append( "" );
+		}
+		return sb.toString();
+	}
+
+	private TMLCPElement getStartState( TMLCPActivityDiagram ad )	{
+	
+		ArrayList<TMLCPElement> elementsList = ad.getElements();
+		for( TMLCPElement elem: elementsList )	{
+			if( elem instanceof TMLCPStart )	{
+				return elem;
+			}
+		}
+		return null;
+	}
+
+	private String removeHashKey( String s )	{
+
+		String[] vector = s.split( "_#" );
+		return vector[0];
+	}
 //	public String makeDeclarations( TMLCP tmlcp ) {
 //
 //		ArrayList<TMLCPElement> listElements;
