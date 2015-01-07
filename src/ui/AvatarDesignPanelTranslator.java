@@ -1244,6 +1244,15 @@ public class AvatarDesignPanelTranslator {
                         listE.addCor(at, tgc);
                         tgc.setAVATARID(at.getID());
                         asm.addElement(at);
+
+			// Check for after on composite transitions
+			if (at.hasDelay() && (element1 instanceof AvatarState) && asm.isACompositeTransition(at)) {
+			    CheckingError ce = new CheckingError(CheckingError.BEHAVIOR_ERROR, "After clause cannot be used on composite transitions. Use timers instead.");
+			    ce.setAvatarBlock(_ab);
+			    ce.setTDiagramPanel(tdp);
+			    ce.setTGComponent(tgc);
+			    addCheckingError(ce);
+			}
                     }
                 }
             }
@@ -1488,6 +1497,10 @@ public class AvatarDesignPanelTranslator {
         }
 
         return !(TAttribute.isAValidId(tmp, false, false));
+    }
+
+    public void checkForAfterOnCompositeTransition() {
+	
     }
 
 

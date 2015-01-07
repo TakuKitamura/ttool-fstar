@@ -94,11 +94,12 @@ public class AvatarStateMachine extends AvatarElement {
         return sb.toString();
     }
 
+
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
         TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
-	LinkedList <AvatarState> lists = removeAllInternalStartStates();
+        LinkedList <AvatarState> lists = removeAllInternalStartStates();
 
         AvatarTransition at = getAvatarCompositeTransition();
 
@@ -107,42 +108,41 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         // We modify all composite states with intermediate states
-	
         for(int i=0; i<elements.size(); i++) {
-	    AvatarStateMachineElement element = elements.get(i);
+            AvatarStateMachineElement element = elements.get(i);
             if (element instanceof AvatarState) {
                 modifyStateForCompositeSupport((AvatarState)element);
             }
         }
 
-	// For each composite transition: Welink it to all the substates of the current state
-	AvatarState src;
-	while(((at = getAvatarCompositeTransition()) != null)) {
-	    src = (AvatarState)(getPreviousElementOf(at));
-	    elements.remove(at);
-	    
-	    // Add a new state after the transition
-	    /*String  tmp = findUniqueStateName("forCompositeTransition_state");
-	    AvatarState as = new AvatarState(tmp, at.getReferenceObject());
-	    elements.add(as);
-	    AvatarTransition ats = new AvatarTransition("forCompositeTransition_trans", at.getReferenceObject());
-	    elements.add(ats);
-	    ats.addNext(at.getNext(0));
-	    at.removeAllNexts();
-	    at.addNext(as);
-	    as.addNext(ats);*/
-	    
-	    // Link a clone of the transition  to all internal states
-	    
-	    for(int j=0; j<elements.size(); j++) {
-		AvatarStateMachineElement elt =  elements.get(j);
-		if ((elt instanceof AvatarState) && (elt.hasInUpperState(src))) {
-		    AvatarTransition att = cloneCompositeTransition(at);
-		    elt.addNext(att);
-		}
-	    }
+        // For each composite transition: Welink it to all the substates of the current state
+        AvatarState src;
+        while(((at = getAvatarCompositeTransition()) != null)) {
+            src = (AvatarState)(getPreviousElementOf(at));
+            elements.remove(at);
 
-	}
+            // Add a new state after the transition
+            /*String  tmp = findUniqueStateName("forCompositeTransition_state");
+              AvatarState as = new AvatarState(tmp, at.getReferenceObject());
+              elements.add(as);
+              AvatarTransition ats = new AvatarTransition("forCompositeTransition_trans", at.getReferenceObject());
+              elements.add(ats);
+              ats.addNext(at.getNext(0));
+              at.removeAllNexts();
+              at.addNext(as);
+              as.addNext(ats);*/
+
+            // Link a clone of the transition  to all internal states
+
+            for(int j=0; j<elements.size(); j++) {
+                AvatarStateMachineElement elt =  elements.get(j);
+                if ((elt instanceof AvatarState) && (elt.hasInUpperState(src))) {
+                    AvatarTransition att = cloneCompositeTransition(at);
+                    elt.addNext(att);
+                }
+            }
+
+        }
 
     }
 
@@ -268,15 +268,15 @@ public class AvatarStateMachine extends AvatarElement {
 
         for(AvatarStateMachineElement element: elements) {
             if (element instanceof AvatarTransition) {
-		AvatarTransition at = (AvatarTransition)element;
+                AvatarTransition at = (AvatarTransition)element;
                 //TraceManager.addDev("at? element=" + element);
                 // Transition fully in the internal state?
                 if (element.getNext(0).hasInUpperState(_state) == true) {
-		    AvatarStateMachineElement previous = getPreviousElementOf(element);
+                    AvatarStateMachineElement previous = getPreviousElementOf(element);
                     if (previous.hasInUpperState(_state) == true) {
-			if (!(at.isEmpty())) {
-			    v.add(at);
-			}
+                        if (!(at.isEmpty())) {
+                            v.add(at);
+                        }
                     }
                 }
             }
@@ -316,7 +316,7 @@ public class AvatarStateMachine extends AvatarElement {
 
             if (_at.getNbOfAction() > 1) {
                 TraceManager.addDev("New split state");
-		String  tmp = findUniqueStateName("splitstate_action__");
+                String  tmp = findUniqueStateName("splitstate_action__");
                 AvatarState as = new AvatarState(tmp, null);
                 as.setHidden(true);
                 as.setState(_currentState);
@@ -398,7 +398,7 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     // Checks whether the previous element is a state with an internal state machine
-    private boolean isACompositeTransition(AvatarTransition _at) {
+    public boolean isACompositeTransition(AvatarTransition _at) {
         AvatarStateMachineElement element = getPreviousElementOf(_at);
         if (element == null) {
             return false;

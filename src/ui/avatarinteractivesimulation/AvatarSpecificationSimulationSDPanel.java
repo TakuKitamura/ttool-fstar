@@ -87,7 +87,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     private int verticalLink = 10;
     private int lengthAsync = 50;
     private int spaceBroadcast = 25;
-    
+
     private boolean showHiddenStates = false;
 
 
@@ -116,10 +116,10 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 
     // Saving states
     private class StateYCd {
-	public String stateName; 
-	public int y;
+        public String stateName;
+        public int y;
     }
-    
+
     private HashMap<AvatarSimulationBlock, ArrayList<StateYCd>> statesMap = new HashMap<AvatarSimulationBlock, ArrayList<StateYCd>>();
 
     // Graphics
@@ -163,8 +163,8 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     }
 
     public void setShowHiddenStates(boolean _showHiddenStates) {
-	showHiddenStates = _showHiddenStates;
-	repaint();
+        showHiddenStates = _showHiddenStates;
+        repaint();
     }
 
     protected void paintComponent(Graphics g) {
@@ -173,7 +173,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
             return;
         }
 
-	statesMap.clear();
+        statesMap.clear();
 
         //TraceManager.addDev("Painting components");
         lastGraphics = (Graphics2D)g;
@@ -270,12 +270,54 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         //Vector<AvatarSimulationBlock> blocks = ass.getSimulationBlocks();
         Vector<AvatarSimulationBlock> blocks = ass.getSelectedSimulationBlocks();
 
+        // Find starting clock value
         if (allTransactions.size() > 0) {
-            ast = allTransactions.get(Math.max(0, allTransactions.size()-1000));
+            ast = allTransactions.get(Math.max(0, allTransactions.size()-drawnTransactions));
             clockValue = ast.clockValueWhenFinished-ast.duration;
             clockValueMouse = clockValue;
             g.drawString("@" + clockValue, 10, currentY+g.getFontMetrics().getHeight()/2);
+
+            // Find first name of states
+            if (allTransactions.size()-drawnTransactions > 0) {
+		AvatarSimulationTransaction astEnd = allTransactions.get(allTransactions.size() - drawnTransactions - 1);
+                for(AvatarSimulationBlock block: blocks) {
+		    String tmp = "start state";
+		    for(AvatarSimulationTransaction astr: allTransactions) {
+			if (astr == astEnd) break;
+			if ((astr.asb == block) && (astr.executedElement instanceof AvatarState)){
+			    tmp = ((AvatarState)(astr.executedElement)).getName();
+			}
+		    }
+		    ArrayList<StateYCd> states = null;
+                    if (statesMap.containsKey(block)) {
+                        states = statesMap.get(block);
+                    } else {
+                        states = new ArrayList<StateYCd>();
+                        statesMap.put(block, states);
+                    }
+                    StateYCd ycd = new StateYCd();
+                    ycd.stateName = tmp;
+                    ycd.y = 0;
+                    states.add(ycd);
+                }
+            } else {
+                for(AvatarSimulationBlock block: blocks) {
+		    ArrayList<StateYCd> states = null;
+                    if (statesMap.containsKey(block)) {
+                        states = statesMap.get(block);
+                    } else {
+                        states = new ArrayList<StateYCd>();
+                        statesMap.put(block, states);
+                    }
+                    StateYCd ycd = new StateYCd();
+                    ycd.stateName = "start state";
+                    ycd.y = 0;
+                    states.add(ycd);
+                }
+            }
         }
+
+
 
 
         int realLast;
@@ -297,20 +339,20 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
                 transactionsOfPoints.clear();
 
                 if (ast.executedElement instanceof AvatarState) {
-		    if ((showHiddenStates) || (!((AvatarState)ast.executedElement).isHidden())) {
-			newCurrentY = drawState(g, ast, (AvatarState)(ast.executedElement), xOfBlock, currentY);
-			ArrayList<StateYCd> states = null;
-			if (statesMap.containsKey(ast.asb)) {
-			    states = statesMap.get(ast.asb);
-			} else {
-			    states = new ArrayList<StateYCd>();
-			    statesMap.put(ast.asb, states);
-			}
-			StateYCd ycd = new StateYCd();
-			ycd.stateName = ((AvatarState)(ast.executedElement)).getName();
-			ycd.y = currentY + verticalLink;
-			states.add(ycd);
-		    }
+                    if ((showHiddenStates) || (!((AvatarState)ast.executedElement).isHidden())) {
+                        newCurrentY = drawState(g, ast, (AvatarState)(ast.executedElement), xOfBlock, currentY);
+                        ArrayList<StateYCd> states = null;
+                        if (statesMap.containsKey(ast.asb)) {
+                            states = statesMap.get(ast.asb);
+                        } else {
+                            states = new ArrayList<StateYCd>();
+                            statesMap.put(ast.asb, states);
+                        }
+                        StateYCd ycd = new StateYCd();
+                        ycd.stateName = ((AvatarState)(ast.executedElement)).getName();
+                        ycd.y = currentY + verticalLink;
+                        states.add(ycd);
+                    }
                 } else if (ast.executedElement instanceof AvatarTransition) {
                     newCurrentY = drawTransition(g, (AvatarTransition)(ast.executedElement), ast, xOfBlock, currentY);
                 } else if (ast.executedElement instanceof AvatarActionOnSignal) {
@@ -721,24 +763,24 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
     }
 
     private String getNameOfState(AvatarSimulationBlock block, int y) {
-	if (!(statesMap.containsKey(block))) {
-	    return null;
-	}
+        if (!(statesMap.containsKey(block))) {
+            return null;
+        }
 
-	String name = null;
-	ArrayList<StateYCd> ycd = statesMap.get(block);
-	if (ycd == null) {
-	    return name;
-	}
+        String name = null;
+        ArrayList<StateYCd> ycd = statesMap.get(block);
+        if (ycd == null) {
+            return name;
+        }
 
-	for(StateYCd st: ycd) {
-	    if (st.y > y) {
-		return name;
-	    }
-	    name = st.stateName;
-	}
+        for(StateYCd st: ycd) {
+            if (st.y > y) {
+                return name;
+            }
+            name = st.stateName;
+        }
 
-	return name;
+        return name;
     }
 
     private void drawInfo(Graphics g) {
@@ -750,7 +792,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         g.drawString(timeValue, maxX-spaceAtEnd + 1, yMouse+g.getFontMetrics().getHeight()/2);
 
 
-	//TraceManager.addDev("yMouse=" + yMouse);
+        //TraceManager.addDev("yMouse=" + yMouse);
 
         /*if (minIdValueMouse == maxIdValueMouse) {
           g.drawString("ID: " + minIdValueMouse, 10, yMouse+(g.getFontMetrics().getHeight()/2)+12);
@@ -763,29 +805,27 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
         Vector<AvatarSimulationBlock> blocks = ass.getSelectedSimulationBlocks();
         int x = spaceAtEnd;
 
-	Font normal =  g.getFont();
-	Font it = normal.deriveFont(Font.ITALIC);
+        Font normal =  g.getFont();
+        Font it = normal.deriveFont(Font.ITALIC);
 
         for(AvatarSimulationBlock block: blocks) {
             name = block.getBlock().getName();
             w = g.getFontMetrics().stringWidth(name);
             g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse - spaceVerticalText);
-	    
 
-	    // Write the name of the current state
-	    name = getNameOfState(block, yMouse);
-	    if (name == null) {
-		name = "start state";
-	    } else {
-		name = "state: " + name;
-	    }
-	    
-	    g.setFont(it);
-	    w = g.getFontMetrics().stringWidth(name);
+
+            // Write the name of the current state
+            name = getNameOfState(block, yMouse);
+            if (name == null) {
+                name = " - ";
+            }
+
+            g.setFont(it);
+            w = g.getFontMetrics().stringWidth(name);
             g.drawString(name, x + ((spaceBetweenLifeLines-w)/2), yMouse + (6 * spaceVerticalText));
-	    g.setFont(normal);
-				  
-	    // Add the space between lifelines
+            g.setFont(normal);
+
+            // Add the space between lifelines
             x += spaceBetweenLifeLines;
         }
         g.setColor(c);

@@ -343,8 +343,10 @@ public class TMLCPActivityDiagram  extends TMLElement {
             int ID = 0;
             for(TMLCPElement elt: elements) {
                 while(((index = elt.getNextElements().indexOf(junction)) != -1)) {
-                    TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName() + "_" + ID, junction.getReferenceObject());
-                    ID ++;
+                    //TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName() + "_" + ID, junction.getReferenceObject());
+                    //ID ++;
+		    TMLCPRefAD ref = new TMLCPRefAD(toAD, toAD.getName(), junction.getReferenceObject());
+                    //ID ++;
 		    refsAD.add(ref);
                     //elements.add(ref);
                     elt.setNextElementAtIndex(ref, index);

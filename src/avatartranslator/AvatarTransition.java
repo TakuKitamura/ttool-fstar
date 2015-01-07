@@ -51,292 +51,292 @@ import myutil.*;
 
 
 public class AvatarTransition extends AvatarStateMachineElement {
-	private String guard = "[ ]";
-	private String minDelay = "", maxDelay = "";
-	private String minCompute = "", maxCompute = "";
-	
-	private LinkedList<String> actions; // actions on variable, or method call
-	
+    private String guard = "[ ]";
+    private String minDelay = "", maxDelay = "";
+    private String minCompute = "", maxCompute = "";
+
+    private LinkedList<String> actions; // actions on variable, or method call
+
     public AvatarTransition(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
-		actions = new LinkedList<String>();
+        actions = new LinkedList<String>();
     }
-    
-	
-	public String getGuard() {
-		return guard;
-	}
-	
-	public void setGuard(String _guard) {
-		guard = _guard;
-	}
-	
-	public void addGuard(String _g) {
-		guard = "(" + guard + ") and (" + _g + ")";
-	}
-	
-	public int getNbOfAction() {
-		return actions.size();
-	}
-	
-	public String getAction(int _index) {
-		return actions.get(_index);
-	}
-	
-	public void addAction(String _action) {
-		actions.add(_action);
-	}
-	
-	public void setDelays(String _minDelay, String _maxDelay) {
-		minDelay = _minDelay;
-		maxDelay = _maxDelay;
-	}
-	
-	public void setComputes(String _minCompute, String _maxCompute) {
-		minCompute = _minCompute;
-		maxCompute = _maxCompute;
-	}
-	
-	public String getMinDelay() {
-		return minDelay;
-	}
-	
-	public String getMaxDelay() {
-		if (maxDelay.trim().length() ==0) {
-				return getMinDelay();
-		}
-		return maxDelay;
-	}
-	
-	public String getMinCompute() {
-		return minCompute;
-	}
-	
-	public String getMaxCompute() {
-		if (maxCompute.trim().length() ==0) {
-				return getMinCompute();
-		}
-		return maxCompute;
-	}
-	
-	public boolean hasElseGuard() {
-		if (guard == null) {
-			return false;
-		}
-		
-		return AvatarSpecification.isElseGuard(guard);
-	}
-	
-	public boolean hasNonDeterministicGuard() {
-		if (guard == null) {
-			return false;
-		}
-		
-		String tmp = Conversion.replaceAllChar(guard, ' ', "").trim();
-		
-		return tmp.compareTo("[]") == 0;
-		
-	}
-	
-	public boolean isEmpty() {
-		if (hasDelay() || hasCompute()) {
-			return false;
-		}
-		
-		return (actions.size()  == 0);
-	}
 
-	
-	public AvatarTransition cloneMe() {
-		AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
-		at.setGuard(getGuard());
-		at.setDelays(getMinDelay(), getMaxDelay());
-		at.setComputes(getMinCompute(), getMaxCompute());
-		
-		for(int i=0; i<getNbOfAction(); i++) {
-			at.addAction(getAction(i));
-		}
-		
-		for(int i=0; i<nbOfNexts(); i++) {
-			at.addNext(getNext(i));
-		}
-		
-		return at;
-	}
-	
-	public AvatarStateMachineElement basicCloneMe() {
-		AvatarTransition at = new AvatarTransition(getName() + "_clone", getReferenceObject());
-		
-		at.setGuard(getGuard());
-		
-		for(int i=0; i<getNbOfAction(); i++) {
-			at.addAction(getAction(i));
-		}
-		
-		at.setComputes(getMinCompute(), getMaxCompute());
-		
-		return at;
-	}
-	
-	public void removeAllActionsButTheFirstOne() {
-		if (actions.size() < 2) {
-			return;
-		}
-		String action = actions.get(0);
-		actions.clear();
-		actions.add(action);
-	}
-	
-	public void removeFirstAction() {
-		actions.remove(0);
-	}
-	
-	public void removeAllActions() {
-		actions.clear();
-	}
-	
-	// No actions
-	//public boolean isAGuardTransition() {
-	//}
-	
-	public boolean isGuarded() {
-		if (guard == null) {
-			return false;
-		}
-		
-		if (guard.trim().length() == 0) {
-			return false;
-		}
-		 
-		String s = Conversion.replaceAllString(guard, " ", "").trim();
-		if (s.compareTo("[]") == 0) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public boolean hasDelay() {
-		if (minDelay.trim().length() == 0) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public boolean hasCompute() {
-		if (minCompute.trim().length() ==0) {
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean hasActions() {
-		if (actions.size() == 0) {
-			return false;
-		}
-		
-		for(String s: actions) {
-			if (s.trim().length() > 0) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public String specificToString() {
-		String ret = "";
-		if (hasDelay()) {
-			ret += "minDelay=" + getMinDelay() + " maxDelay=" + getMaxDelay() + "\n"; 
-		}
-		
-		if (hasCompute()) {
-			ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";  
-		}
-		
-		for(String s: actions) {
-			if (s.trim().length() > 0) {
-				ret += s.trim() + " / ";
-			}
-		}
-		
-		if (ret.length() > 0) {
-			ret = "\n" + ret;
-		}
-		
-		return ret;
-	}
-	
-	
-	// Assumes actions are correctly formatted
-	public boolean hasMethodCall() {
-		
-		
-		for(String action: actions) {
-			if (isAMethodCall(action)) {
-				return true;
-			}
-		}
-		return false;
-			
-	}
-	
-	public static boolean isAMethodCall(String _action) {
-		int index;
-		index = _action.indexOf("=");
-		
-		// Method of the form f(...)
-		if (index == -1) {
-			return true;
-		}
-		
-		// Method of the form x = f(...)
-		_action = _action.substring(index+1, _action.length()).trim();
-		index = _action.indexOf("(");
-		if (index != -1) {
-			_action = _action.substring(0, index).trim();
-			if (_action.length() == 0) {
-				return false;
-				
-			}
-			boolean b1 = (_action.substring(0,1)).matches("[a-zA-Z]");
-			boolean b2 = _action.matches("\\w*");
-			if (b1 && b2) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	public String getNiceName() {
-		if (isGuarded())
-			return "Transition (guard=" + guard + ", ...)";
-		
-		if (hasDelay()) 
-			return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)";
-				
-		if (actions.size() > 0) {
-			return "Transition (" + actions.get(0) + ", ...)";
-		}
-		
-		return "Empty transition";
-	}
-    
+
+    public String getGuard() {
+        return guard;
+    }
+
+    public void setGuard(String _guard) {
+        guard = _guard;
+    }
+
+    public void addGuard(String _g) {
+        guard = "(" + guard + ") and (" + _g + ")";
+    }
+
+    public int getNbOfAction() {
+        return actions.size();
+    }
+
+    public String getAction(int _index) {
+        return actions.get(_index);
+    }
+
+    public void addAction(String _action) {
+        actions.add(_action);
+    }
+
+    public void setDelays(String _minDelay, String _maxDelay) {
+        minDelay = _minDelay;
+        maxDelay = _maxDelay;
+    }
+
+    public void setComputes(String _minCompute, String _maxCompute) {
+        minCompute = _minCompute;
+        maxCompute = _maxCompute;
+    }
+
+    public String getMinDelay() {
+        return minDelay;
+    }
+
+    public String getMaxDelay() {
+        if (maxDelay.trim().length() ==0) {
+            return getMinDelay();
+        }
+        return maxDelay;
+    }
+
+    public String getMinCompute() {
+        return minCompute;
+    }
+
+    public String getMaxCompute() {
+        if (maxCompute.trim().length() ==0) {
+            return getMinCompute();
+        }
+        return maxCompute;
+    }
+
+    public boolean hasElseGuard() {
+        if (guard == null) {
+            return false;
+        }
+
+        return AvatarSpecification.isElseGuard(guard);
+    }
+
+    public boolean hasNonDeterministicGuard() {
+        if (guard == null) {
+            return false;
+        }
+
+        String tmp = Conversion.replaceAllChar(guard, ' ', "").trim();
+
+        return tmp.compareTo("[]") == 0;
+
+    }
+
+    public boolean isEmpty() {
+        if (hasDelay() || hasCompute()) {
+            return false;
+        }
+
+        return (actions.size()  == 0);
+    }
+
+
+    public AvatarTransition cloneMe() {
+        AvatarTransition at = new AvatarTransition(getName(), getReferenceObject());
+        at.setGuard(getGuard());
+        at.setDelays(getMinDelay(), getMaxDelay());
+        at.setComputes(getMinCompute(), getMaxCompute());
+
+        for(int i=0; i<getNbOfAction(); i++) {
+            at.addAction(getAction(i));
+        }
+
+        for(int i=0; i<nbOfNexts(); i++) {
+            at.addNext(getNext(i));
+        }
+
+        return at;
+    }
+
+    public AvatarStateMachineElement basicCloneMe() {
+        AvatarTransition at = new AvatarTransition(getName() + "_clone", getReferenceObject());
+
+        at.setGuard(getGuard());
+
+        for(int i=0; i<getNbOfAction(); i++) {
+            at.addAction(getAction(i));
+        }
+
+        at.setComputes(getMinCompute(), getMaxCompute());
+
+        return at;
+    }
+
+    public void removeAllActionsButTheFirstOne() {
+        if (actions.size() < 2) {
+            return;
+        }
+        String action = actions.get(0);
+        actions.clear();
+        actions.add(action);
+    }
+
+    public void removeFirstAction() {
+        actions.remove(0);
+    }
+
+    public void removeAllActions() {
+        actions.clear();
+    }
+
+    // No actions
+    //public boolean isAGuardTransition() {
+    //}
+
+    public boolean isGuarded() {
+        if (guard == null) {
+            return false;
+        }
+
+        if (guard.trim().length() == 0) {
+            return false;
+        }
+
+        String s = Conversion.replaceAllString(guard, " ", "").trim();
+        if (s.compareTo("[]") == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean hasDelay() {
+        if (minDelay.trim().length() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean hasCompute() {
+        if (minCompute.trim().length() ==0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean hasActions() {
+        if (actions.size() == 0) {
+            return false;
+        }
+
+        for(String s: actions) {
+            if (s.trim().length() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public String specificToString() {
+        String ret = "";
+        if (hasDelay()) {
+            ret += "minDelay=" + getMinDelay() + " maxDelay=" + getMaxDelay() + "\n";
+        }
+
+        if (hasCompute()) {
+            ret += "minCompute=" + getMinCompute() + " maxcompute=" + getMaxCompute() + "\n";
+        }
+
+        for(String s: actions) {
+            if (s.trim().length() > 0) {
+                ret += s.trim() + " / ";
+            }
+        }
+
+        if (ret.length() > 0) {
+            ret = "\n" + ret;
+        }
+
+        return ret;
+    }
+
+
+    // Assumes actions are correctly formatted
+    public boolean hasMethodCall() {
+
+
+        for(String action: actions) {
+            if (isAMethodCall(action)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public static boolean isAMethodCall(String _action) {
+        int index;
+        index = _action.indexOf("=");
+
+        // Method of the form f(...)
+        if (index == -1) {
+            return true;
+        }
+
+        // Method of the form x = f(...)
+        _action = _action.substring(index+1, _action.length()).trim();
+        index = _action.indexOf("(");
+        if (index != -1) {
+            _action = _action.substring(0, index).trim();
+            if (_action.length() == 0) {
+                return false;
+
+            }
+            boolean b1 = (_action.substring(0,1)).matches("[a-zA-Z]");
+            boolean b2 = _action.matches("\\w*");
+            if (b1 && b2) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public String getNiceName() {
+        if (isGuarded())
+            return "Transition (guard=" + guard + ", ...)";
+
+        if (hasDelay())
+            return "Transition (delay=(" + minDelay + ", " + maxDelay + "), ...)";
+
+        if (actions.size() > 0) {
+            return "Transition (" + actions.get(0) + ", ...)";
+        }
+
+        return "Empty transition";
+    }
+
     public static String getVariableInAction(String action) {
         action = action.trim();
         int index = action.indexOf("=");
         if (index == -1) {
             return action;
         }
-        
+
         return action.substring(0, index).trim();
     }
-	
-	
-	
-	
-	
-    
+
+
+
+
+
+
 }
