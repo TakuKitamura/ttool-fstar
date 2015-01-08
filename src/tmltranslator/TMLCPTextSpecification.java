@@ -298,6 +298,10 @@ public class TMLCPTextSpecification {
 			}
 		}
 
+		TMLCPActivityDiagram mainCP = tmlcp.getMainCP();
+		sb.append( CR + "ACTIVITY " + mainCP.getName() + CR2 + TAB + "MAIN" );
+		sb.append( makeSingleActivityDiagram( mainCP ) + CR + TAB + "END" + CR );
+		sb.append( CR + "END " + mainCP.getName() + CR );
 		for( TMLCPActivityDiagram ad: activityDiagList )	{
 			sb.append( CR + "ACTIVITY " + ad.getName() + CR2 + TAB + "MAIN" );
 			sb.append( makeSingleActivityDiagram( ad ) + CR + TAB + "END" + CR );
@@ -393,7 +397,7 @@ public class TMLCPTextSpecification {
 			currentElement = currentElement.getNextElements().get(0);
 		}
 
-		return sb.toString();
+		return sb.toString() + "><";
 	}
 
 	private String parseSequence( TMLCPElement element )	{
@@ -430,13 +434,13 @@ public class TMLCPTextSpecification {
 			sbFork.append( "}" + SP + PARALLELISM_OP );
 		}
 		sbFork = removeTrailingSymbol( sbFork );
-		sbFork.append( "}" );
+		sbFork.append( "}" + SEQUENCE_OP );
 		return nextElement;
 	}
 
 	private String makeSingleJunctionDiagram( TMLCPActivityDiagram ad )	{
 
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer( ad.getName() + ":" + SP );
 		TMLCPElement currentElement, nextElement;
 		ArrayList<TMLCPElement> nextElements;
 	
@@ -465,6 +469,7 @@ public class TMLCPTextSpecification {
 	private String parseChoice( TMLCPElement currentElement, TMLCPActivityDiagram ad )	{
 
 		StringBuffer sb = new StringBuffer( CR + TAB + "LOOP" + SP + ad.getName() );
+		//this LOOP is the keywork that is used to look for the junction diagram name, removing it, causing the generation not to work
 		ArrayList<TMLCPElement> nextElements;
 		int index = 0;
 		ArrayList<TMLCPElement> branches = currentElement.getNextElements();
@@ -485,10 +490,10 @@ public class TMLCPTextSpecification {
 						String s = ( (TMLCPRefAD) element ).getName();
 						sb = removeTrailingSymbol( sb );
 						if( s.equals( ad.getName() ) )	{
-							sb.append( SP + "GOTO LOOP" + SP + s );
+							sb.append( SP + "GOTO" + SP + s );	// it is a reference to the same junction-choice block
 						}
 						else	{
-							sb.append( SP + "GOTO LOOP" + SP + "JUNCTION" + s );
+							sb.append( SP + "GOTO" + SP + "JUNCTION" + s );	//it is a reference to another junction-choice block
 						}
 						break;
 					}
@@ -498,13 +503,13 @@ public class TMLCPTextSpecification {
 					element = element.getNextElements().get(0);
 					if( element instanceof TMLCPStop )	{
 						sb = removeTrailingSymbol( sb );
-						sb.append( SP + "GOTO END_LOOP" + SP + ad.getName() );
+						sb.append( SP + "GOTO END" + SP + ad.getName() );
 					}
 				}
 			}	// end of while
 			index++;
 		}	// end of for
-		sb.append( CR + TAB + "END_LOOP" + SP + ad.getName() + CR );
+		sb.append( CR + TAB + "END" + SP + ad.getName() + CR );
 		return sb.toString();
 	}
 
