@@ -166,6 +166,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 	String undefinedDiagStringList = "";
 	TMLCP mainCP = new TMLCP();
 	TMLCPSequenceDiagram seqDiag;
+	TMLCPActivityDiagram actDiag;
 	ArrayList<TMLAttribute> attributeList;
 }
 {
@@ -180,6 +181,9 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 
 	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
 
+	//<MAIN> ActivityDiagram()	//First parse the main AD
+	( actDiag = ActivityDiagram( mainCP ) { mainCP.addCPActivityDiagram( actDiag ); } )*
+
 	<EOF>		/* Force the parser to reach EOF */
 
 	{
@@ -187,10 +191,17 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
 		//topCP.correctReferences();
 		ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();
+		ArrayList<TMLCPActivityDiagram> adList = mainCP.getCPActivityDiagrams();
 		TraceManager.addDev( "***************" );
 		for( TMLCPSequenceDiagram diag: sdList )	{
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "***************" );
+		}
+
+		TraceManager.addDev( "++++++++++++++++" );
+		for( TMLCPActivityDiagram diag: adList )	{
+			TraceManager.addDev( diag.toString() );
+			TraceManager.addDev( "++++++++++++++" );
 		}
 		return jjtThis;
 	}
@@ -436,3 +447,63 @@ String ID():
 	t = <IDENTIFIER>
 	{ jjtThis.setName(t.image); return t.image; }
 }
+
+/*###################################################################################"*/
+
+TMLCPActivityDiagram ActivityDiagram( TMLCP mainCP ):
+{
+	String name;
+	TMLCPActivityDiagram ad;
+	TMLCPElement elem;
+}
+{
+	<ACTIVITY_DIAGRAM> name = ID()	{ ad = new TMLCPActivityDiagram( name, null ); }
+	
+	"MAIN" "<>;" { TMLCPStart start = new TMLCPStart( "start", null ); ad.addTMLCPElement(start); }
+	elem = parseSequence( mainCP ) 
+	{
+		ad.addElement( elem );
+		return ad;
+	}
+	"END" "END" ID()
+
+}
+
+TMLCPElement parseSequence( TMLCP mainCP ):
+{
+	String name;
+	TMLCPElement elem;
+	boolean isSD = false;
+}
+{
+	name = ID()
+	{ 
+		for( TMLCPSequenceDiagram sd: mainCP.getCPSequenceDiagrams() )	{
+			if( sd.getName().equals( name ) )	{
+				isSD = true;
+			}
+		}
+		if( isSD )	{
+			elem = new TMLCPRefSD( name, null );
+			//nexts.add( elem );
+		}
+		else	{
+			elem = new TMLCPRefAD( name, null );
+			//nexts.add( elem );
+		}
+	}
+	<SEQUENCING_OP>	//( ( name = ID() ) | "><" ) )*
+	{ return elem; }
+}
+
+/*void parseJoinFork():
+{}
+{
+	ID()
+}
+
+void parseJunctionChoice():
+{}
+{
+	ID()
+}*/
