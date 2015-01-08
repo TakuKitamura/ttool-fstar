@@ -299,29 +299,71 @@ public class TMLCPTextSpecification {
 		}
 
 		for( TMLCPActivityDiagram ad: activityDiagList )	{
-			sb.append( "\nACTIVITY " + ad.getName() + "\n\n\tMAIN\n" );
-			sb.append( makeSingleActivityDiagram( ad ) + "\n\tEND\n" );
-			sb.append( "\nEND " + ad.getName() + "\n" );
+			sb.append( CR + "ACTIVITY " + ad.getName() + CR2 + TAB + "MAIN" );
+			sb.append( makeSingleActivityDiagram( ad ) + CR + TAB + "END" + CR );
+			sb.append( CR + "END " + ad.getName() + CR );
 		}
 
-		ArrayList<String> junctionSL = new ArrayList<String>();
+		ArrayList<String> junctionTMLCodeList = new ArrayList<String>();
+		ArrayList<String> junctionNamesList = new ArrayList<String>();
 		for( TMLCPActivityDiagram ad: junctionDiagList )	{
-			//sb2.append( "\nACTIVITY " + ad.getName() );
 			String temp = makeSingleJunctionDiagram( ad );
-			sb2.append( temp );
-			junctionSL.add( temp );
-			//sb2.append( "\nEND " + ad.getName() + "\n" );
+			sb2.append( temp );		//the total text
+			junctionTMLCodeList.add( temp );	//each entry contains the text for one single junctionAD
+			junctionNamesList.add( getJunctionName( temp ) );
 		}
 
-		for( String s: junctionSL )	{
-			if( s.contains( "JUNCTION" ) )	{
-				String[] v = s.split( "JUNCTION" );
-				TraceManager.addDev( "First part: " + v[0] );
-				TraceManager.addDev( "Second part: " + v[1] );
+		//Merge nested junction-choice
+		ArrayList<Integer> indexToRemove = new ArrayList<Integer>();
+		for( String s: junctionTMLCodeList )	{
+			if( !s.equals("") )	{
+				if( s.contains( "JUNCTION" ) )	{
+					String[] v = s.split( "JUNCTION" );
+					String[] v1 = v[1].split( CR );
+					String junctionName = v1[0];
+					int index = junctionNamesList.indexOf( junctionName );
+					if( index != -1 )	{	//junctionName not found
+						v = s.split( "JUNCTION(.)*\\n" );	//re-split the string to eliminate JUNCTION + junctionName
+						String completeText = v[0] + junctionName + CR + v[1] + CR + TAB + TAB + junctionTMLCodeList.get( index );
+						// merge the TML text code in the data structure
+						junctionTMLCodeList.set( junctionTMLCodeList.indexOf(s), completeText );
+						junctionTMLCodeList.set( index, "" );
+						junctionNamesList.set( index, "" );
+						indexToRemove.add( index );
+					}
+					else	{
+						String completeText = "";
+					}
+				}
 			}
 		}
 
-		return sb.toString() + sb2.toString();
+		for( Integer i: indexToRemove )	{
+			junctionNamesList.remove( (int) i);
+			junctionTMLCodeList.remove( (int) i);
+		}
+
+		for( String s: junctionNamesList )	{
+			if( sb.toString().contains( "JUNCTION " + s ) )	{
+				String[] v = sb.toString().split( "JUNCTION " + s );
+				sb = new StringBuffer( v[0] + junctionTMLCodeList.get( junctionNamesList.indexOf( s ) ) + v[1] );
+			}
+		}
+
+		return sb.toString();
+	}
+
+	private String getJunctionName( String temp )	{
+
+		String v[] = temp.split("\\n");
+		for( int i = 0; i < v.length; i++ )	{
+			if( v[i].contains( "LOOP" ) )	{
+				String v1[] = v[i].split("LOOP ");
+				String junctionName = v1[1];
+				return junctionName;
+			}
+		}
+		return "ERROR";
 	}
 
 	private String makeSingleActivityDiagram( TMLCPActivityDiagram ad )	{
@@ -335,7 +377,6 @@ public class TMLCPTextSpecification {
 			nextElements = currentElement.getNextElements();
 			if( nextElements.size() > 1 )	{	// currentElement is a fork node
 				sbFork = new StringBuffer();
-				//TraceManager.addDev( "I AM IN DIAGRAM: " + ad.getName() );
 				currentElement = parseFork( nextElements );	// currentElement is the closing join, use attribute sbFork
 				sb.append( sbFork.toString() );
 				sbFork.setLength(0);
@@ -343,10 +384,7 @@ public class TMLCPTextSpecification {
 			else	{	// currentElement is either a refToDiag or a junction
 				if( isAJunction( currentElement ) )	{
 					String s = ( (TMLCPRefAD) currentElement ).getName();
-					//sbJunction = new StringBuffer();
-					//sbJunction.append( parseJunction( getJunctionDiagram( s.substring(0, s.length()-2) , junctionDiagList ), junctionDiagList ) );
-					sb.append( "\nJUNCTION" + SP + s + "\n" );
-					//sbJunction.setLength(0);
+					sb.append( CR + "JUNCTION" + SP + s + CR );
 				}
 				else	{
 					sb.append( parseSequence( currentElement ) );
@@ -361,11 +399,11 @@ public class TMLCPTextSpecification {
 	private String parseSequence( TMLCPElement element )	{
 
 		if( element instanceof TMLCPRefSD )	{
-			String sb = ( removeHashKey( ((TMLCPRefSD) element).getName() ) + " + " );
+			String sb = ( removeHashKey( ((TMLCPRefSD) element).getName() ) + SEQUENCE_OP + SP );
 			return sb;
 		}
 		if( element instanceof TMLCPRefAD )	{
-			String sb = ( removeHashKey( ((TMLCPRefAD) element).getName() ) + " + " );
+			String sb = ( removeHashKey( ((TMLCPRefAD) element).getName() ) + SEQUENCE_OP + SP );
 			return sb;
 		}
 		return "";
@@ -375,7 +413,7 @@ public class TMLCPTextSpecification {
 		
 		TMLCPElement nextElement = null;
 		
-		sbFork.append( " { " );
+		sbFork.append( SP + "{" );
 		for( TMLCPElement currentElement: elements )	{
 			nextElement = currentElement;
 			sbFork.append( SP + "{" );
@@ -386,14 +424,13 @@ public class TMLCPTextSpecification {
 				else	{
 					sbFork.append( parseSequence( nextElement ) );
 				}
-			//TraceManager.addDev( "I am the nextElement causing the exception: " + nextElement.toString() );
 			nextElement = nextElement.getNextElements().get(0);	//no nested fork and join
 			}
-			sbFork = removeTrailingSymbol( sbFork );
-			sbFork.append( " } *" );
+			sbFork = removeTrailingSymbols( sbFork, 2 );
+			sbFork.append( "}" + SP + PARALLELISM_OP );
 		}
 		sbFork = removeTrailingSymbol( sbFork );
-		sbFork.append( " }" );
+		sbFork.append( "}" );
 		return nextElement;
 	}
 
@@ -427,14 +464,14 @@ public class TMLCPTextSpecification {
 
 	private String parseChoice( TMLCPElement currentElement, TMLCPActivityDiagram ad )	{
 
-		StringBuffer sb = new StringBuffer( "\n\tLOOP" + SP + ad.getName() + "\n\t" );
+		StringBuffer sb = new StringBuffer( CR + TAB + "LOOP" + SP + ad.getName() );
 		ArrayList<TMLCPElement> nextElements;
 		int index = 0;
 		ArrayList<TMLCPElement> branches = currentElement.getNextElements();
 		ArrayList<String> guards = ( (TMLCPChoice)currentElement ).getGuards();
 
 		for( TMLCPElement element: branches )	{	//for each of the branches go until a stop or a junction, only possible to find seq/fork
-			sb.append( "\n\t" + guards.get(index) + SP );
+			sb.append( CR + TAB2 + guards.get(index) + SP );
 			while( !(element instanceof TMLCPStop) )	{
 				nextElements = element.getNextElements();
 				if( nextElements.size() > 1 )	{	// currentElement is a fork node
@@ -448,10 +485,10 @@ public class TMLCPTextSpecification {
 						String s = ( (TMLCPRefAD) element ).getName();
 						sb = removeTrailingSymbol( sb );
 						if( s.equals( ad.getName() ) )	{
-							sb.append( "GOTO LOOP" + SP + s );
+							sb.append( SP + "GOTO LOOP" + SP + s );
 						}
 						else	{
-							sb.append( "GOTO LOOP" + SP + "JUNCTION" + s );
+							sb.append( SP + "GOTO LOOP" + SP + "JUNCTION" + s );
 						}
 						break;
 					}
@@ -461,14 +498,13 @@ public class TMLCPTextSpecification {
 					element = element.getNextElements().get(0);
 					if( element instanceof TMLCPStop )	{
 						sb = removeTrailingSymbol( sb );
-						sb.append( SP + "GOTO END_LOOP" );
+						sb.append( SP + "GOTO END_LOOP" + SP + ad.getName() );
 					}
 				}
 			}	// end of while
 			index++;
 		}	// end of for
-		//sb = removeTrailingSymbols( sb, 13 );
-		sb.append( "\n\tEND_LOOP\n" );
+		sb.append( CR + TAB + "END_LOOP" + SP + ad.getName() + CR );
 		return sb.toString();
 	}
 
