@@ -43,6 +43,9 @@ import java.util.ArrayList;
 public class CPparserDEF {
 
 	public static TMLCP topCP = new TMLCP( "noName", new Object() );
+	public static TMLCPFork fork1;
+	public static TMLCPJoin join1;
+	public static int counter = 0;
 
   /* Main entry point. */
   public static void main(String args[]) throws ParseException	{
@@ -181,7 +184,6 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 
 	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
 
-	//<MAIN> ActivityDiagram()	//First parse the main AD
 	( actDiag = ActivityDiagram( mainCP ) { mainCP.addCPActivityDiagram( actDiag ); } )*
 
 	<EOF>		/* Force the parser to reach EOF */
@@ -203,6 +205,9 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "++++++++++++++" );
 		}
+		TraceManager.addDev( "################" );
+		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "EMPTY" );
+		TraceManager.addDev( "Printing from the parsed DS:\n" + pippo.toTextFormat( mainCP ) );
 		return jjtThis;
 	}
 }
@@ -453,30 +458,51 @@ String ID():
 TMLCPActivityDiagram ActivityDiagram( TMLCP mainCP ):
 {
 	String name;
-	TMLCPActivityDiagram ad;
-	TMLCPElement elem;
+	TMLCPActivityDiagram ad = null;
+	TMLCPElement elem = null;
+	TMLCPElement prev = null;
 }
 {
-	<ACTIVITY_DIAGRAM> name = ID()	{ ad = new TMLCPActivityDiagram( name, null ); }
+	<ACTIVITY_DIAGRAM> name = ID()
+	{ ad = new TMLCPActivityDiagram( name, null ); }
 	
-	"MAIN" "<>;" { TMLCPStart start = new TMLCPStart( "start", null ); ad.addTMLCPElement(start); }
-	elem = parseSequence( mainCP ) 
+	"MAIN" "<>;"
 	{
-		ad.addElement( elem );
+		TMLCPStart start = new TMLCPStart( "start", null );
+		ad.addTMLCPElement(start);
+		prev = start;
+	}
+	( elem = parseReferenceToDiagram( mainCP )
+	{
+		if( elem != null )	{
+			prev.addNextElement( elem );
+			ad.addElement( elem );
+			prev = elem;
+		}
+	}
+	<SEQUENCING_OP> )*
+	
+	ad = parseForkJoin( ad, mainCP ) "><"	"END" "END" ID()
+	{
+		prev.addNextElement( fork1 );	// prev references the last elem parsed above by parseReferenceToDiagram()
+		fork1 = new TMLCPFork( "fork1" + counter, null );
+		TMLCPStop stop = new TMLCPStop( "stop" + counter, null );
+		//ad.addElement( fork1 );
+		join1.addNextElement( stop );	// (last element returned from the last parsing).addNextElement( stop );
+		ad.addElement( stop );
+		TraceManager.addDev( "Printing the Activity Diagram:\n" + ad.toString() );
 		return ad;
 	}
-	"END" "END" ID()
-
 }
 
-TMLCPElement parseSequence( TMLCP mainCP ):
+TMLCPElement parseReferenceToDiagram( TMLCP mainCP ):
 {
 	String name;
 	TMLCPElement elem;
 	boolean isSD = false;
 }
 {
-	name = ID()
+	name = ID()	//( ( name = ID() ) | "><" ) )*
 	{ 
 		for( TMLCPSequenceDiagram sd: mainCP.getCPSequenceDiagrams() )	{
 			if( sd.getName().equals( name ) )	{
@@ -485,24 +511,66 @@ TMLCPElement parseSequence( TMLCP mainCP ):
 		}
 		if( isSD )	{
 			elem = new TMLCPRefSD( name, null );
-			//nexts.add( elem );
+			return elem;
 		}
 		else	{
 			elem = new TMLCPRefAD( name, null );
 			//nexts.add( elem );
+			return elem;
 		}
 	}
-	<SEQUENCING_OP>	//( ( name = ID() ) | "><" ) )*
-	{ return elem; }
 }
 
-/*void parseJoinFork():
-{}
+//Modify the data structure of the activity diagram as TMLCPElement is an abstract class, so it is not possible to instantiate an
+//ArrayList<TMLCPElement> to be returned after parsing the fork-join
+TMLCPActivityDiagram parseForkJoin( TMLCPActivityDiagram ad, TMLCP mainCP ):
 {
-	ID()
+	String name;
+	TMLCPElement elem;
+	TMLCPElement prev;
+	boolean isSD = false;
+	//TMLCPFork fork = new TMLCPFork( "fork" + counter , null );
+	fork1 = new TMLCPFork( "fork1" + counter , null );
+	join1 = new TMLCPJoin( "join1" + counter , null );
+	counter++;
+}
+{
+	"{" "{" elem = parseReferenceToDiagram( mainCP )
+	{
+		fork1.addNextElement( elem );	//the next element of Fork is only the first element of the sequence
+		ad.addElement( elem );
+		prev = elem;
+	}
+	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
+	(
+	<SEQUENCING_OP> elem = parseReferenceToDiagram( mainCP )
+	{
+		if( elem != null )	{
+			prev.addNextElement( elem );
+			ad.addElement( elem );
+			prev = elem;
+		}
+	}
+	)*
+	"}"	// end of the first branch
+	{ prev.addNextElement( join1 ); }
+	( "*" "{" elem = parseReferenceToDiagram( mainCP )
+	{
+		fork1.addNextElement( elem );
+		ad.addElement( elem );
+		prev = elem;
+	}
+	"}"
+	{ prev.addNextElement( join1 ); }
+	)+	"};"
+	{
+		ad.addElement( fork1 );
+		ad.addElement( join1 );
+		return ad;
+	}
 }
 
-void parseJunctionChoice():
+/*void parseJunctionChoice():
 {}
 {
 	ID()
