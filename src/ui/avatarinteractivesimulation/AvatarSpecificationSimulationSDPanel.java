@@ -188,27 +188,29 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
             basicSpaceBetweenLifeLines = spaceBetweenLifeLines;
         }
 
+        try {
+            currentY = paintTopElements(g, currentX, currentY);
+            paintTransactions(g, currentX, currentY);
+            stamp ++;
 
-        currentY = paintTopElements(g, currentX, currentY);
-        paintTransactions(g, currentX, currentY);
-        stamp ++;
-
-        if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
-            maxX = Math.max(maxX, MAX_X);
-            maxY = Math.max(maxY, MAX_Y);
             if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
-                setNewSize();
-                //repaint();
+                maxX = Math.max(maxX, MAX_X);
+                maxY = Math.max(maxY, MAX_Y);
+                if ((oldMaxY != maxY) || (oldMaxX != maxX)) {
+                    setNewSize();
+                    //repaint();
+                }
+            } else {
+                if (mustScroll) {
+                    scrollToLowerPosition();
+                    mustScroll = false;
+                }
             }
-        } else {
-            if (mustScroll) {
-                scrollToLowerPosition();
-                mustScroll = false;
-            }
-        }
 
-        if (drawInfo) {
-            drawInfo(g);
+            if (drawInfo) {
+                drawInfo(g);
+            }
+        } catch (Exception e) {
         }
 
         //TraceManager.addDev("Painting components: done");
@@ -279,16 +281,16 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
 
             // Find first name of states
             if (allTransactions.size()-drawnTransactions > 0) {
-		AvatarSimulationTransaction astEnd = allTransactions.get(allTransactions.size() - drawnTransactions - 1);
+                AvatarSimulationTransaction astEnd = allTransactions.get(allTransactions.size() - drawnTransactions - 1);
                 for(AvatarSimulationBlock block: blocks) {
-		    String tmp = "start state";
-		    for(AvatarSimulationTransaction astr: allTransactions) {
-			if (astr == astEnd) break;
-			if ((astr.asb == block) && (astr.executedElement instanceof AvatarState)){
-			    tmp = ((AvatarState)(astr.executedElement)).getName();
-			}
-		    }
-		    ArrayList<StateYCd> states = null;
+                    String tmp = "start state";
+                    for(AvatarSimulationTransaction astr: allTransactions) {
+                        if (astr == astEnd) break;
+                        if ((astr.asb == block) && (astr.executedElement instanceof AvatarState)){
+                            tmp = ((AvatarState)(astr.executedElement)).getName();
+                        }
+                    }
+                    ArrayList<StateYCd> states = null;
                     if (statesMap.containsKey(block)) {
                         states = statesMap.get(block);
                     } else {
@@ -302,7 +304,7 @@ public class AvatarSpecificationSimulationSDPanel extends JPanel implements Mous
                 }
             } else {
                 for(AvatarSimulationBlock block: blocks) {
-		    ArrayList<StateYCd> states = null;
+                    ArrayList<StateYCd> states = null;
                     if (statesMap.containsKey(block)) {
                         states = statesMap.get(block);
                     } else {
