@@ -45,10 +45,15 @@ public class CPparserDEF {
 	public static TMLCP topCP = new TMLCP( "noName", new Object() );
 	public static TMLCPFork fork1;
 	public static TMLCPJoin join1;
+	public static TMLCPJunction junction;
+	public static TMLCPChoice choice;
 	public static int counter = 0;
+	public static int choiceCounter = 0;
+	public static int stopCounter = 0;
 	public static TMLCPActivityDiagram globalAD;
 	public static TMLCPElement previousElement;
 	public static TMLCPElement currentElement;
+	public static String SP = " ";
 
   /* Main entry point. */
   public static void main(String args[]) throws ParseException	{
@@ -89,6 +94,7 @@ TOKEN:
 |	< INT_TYPE: "int" >
 | < START_KW: "START" >
 |	< ENDBLOCK: "END" >
+|	< GOTO: "GOTO" >
 |	< MAINBLOCK: "MAIN" >
 |	< CP: "COMMUNICATION_PATTERN" >
 | < ACTIVITY_DIAGRAM: "ACTIVITY" >
@@ -102,6 +108,7 @@ TOKEN:
 | < ACTION_KW: "ACT:" >
 | < RCV_MSG_KW: "RCV:" >
 | < SND_MSG_KW: "SND:" >
+| < LOOP_KW: "LOOP" >
 | < #TRANSFER_ACT: "Transfer" >
 | < #TRANSFER_REQ: "TransferRequest" >
 | < #TRANSFER_DONE: "TransferDone" >
@@ -116,8 +123,8 @@ TOKEN:
 {
 	< BLOCKSTART: "{" >
 |	< BLOCKEND: "}" >
-|	< JOINSTART: "<" >
-|	< JOINEND: ">" >
+|	< MATH_SMALLER: "<" >
+|	< MATH_GREATER: ">" >
 |	< SEQUENCING_OP: ";" >
 |	< STAR_OP: "*" >
 |	< MATH_PLUS: "+" >
@@ -148,7 +155,8 @@ TOKEN:
 /* Identifiers */
 TOKEN:
 {
-	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT>)* (<LETTER> | <DIGIT>) >
+	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT>)* (<LETTER> | <DIGIT>) | ( <UNDERSCORE> "#" <DIGIT> <UNDERSCORE>
+	<DIGIT> )  >
 | < #LETTER: ["a"-"z","A"-"Z"] >
 |	< #DIGIT: ["0"-"9"] >
 |	< UNDERSCORE: "_" >
@@ -187,7 +195,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 
 	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
 
-	( ActivityDiagram( mainCP ) { mainCP.addCPActivityDiagram( globalAD ); } )*
+	( ActivityDiagram( mainCP ) /*{ mainCP.addCPActivityDiagram( globalAD ); }*/ )*
 
 	<EOF>		/* Force the parser to reach EOF */
 
@@ -195,22 +203,22 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
 		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
 		//topCP.correctReferences();
-		ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();
+		/*ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();*/
 		ArrayList<TMLCPActivityDiagram> adList = mainCP.getCPActivityDiagrams();
-		TraceManager.addDev( "***************" );
+		/*TraceManager.addDev( "***************" );
 		for( TMLCPSequenceDiagram diag: sdList )	{
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "***************" );
-		}
+		}*/
 
-		/*TraceManager.addDev( "++++++++++++++++" );
+		TraceManager.addDev( "++++++++++++++++" );
 		for( TMLCPActivityDiagram diag: adList )	{
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "++++++++++++++" );
 		}
-		TraceManager.addDev( "################" );
-		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "EMPTY" );*/
-		TraceManager.addDev( "Printing from the parsed DS:\n" + globalAD.toString() );
+		/*TraceManager.addDev( "################" );
+		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "EMPTY" );
+		TraceManager.addDev( "Printing from the parsed DS:\n" + globalAD.toString() );*/
 		return jjtThis;
 	}
 }
@@ -483,19 +491,13 @@ void ActivityDiagram( TMLCP mainCP ):
 	}
 	|
 	parseForkJoin( mainCP )
-	/*{
-		previousElement.addNextElement( fork1 );	// prev references the last elem parsed above by parseReferenceToDiagram()
-		fork1 = new TMLCPFork( "fork1" + counter, null );
-		TMLCPStop stop = new TMLCPStop( "stop" + counter, null );
-		join1.addNextElement( stop );	// (last element returned from the last parsing).addNextElement( stop );
-		globalAD.addElement( stop );
-		TraceManager.addDev( "Printing the Activity Diagram:\n" + globalAD.toString() );
-	}*/ )+
+	|
+	parseJunctionChoice( mainCP ) )+
 	{
 		currentElement = new TMLCPStop( "stop" + counter, null );
-		previousElement.addNextElement( currentElement );	// (last element returned from the last parsing).addNextElement( stop );
-		TraceManager.addDev( "Previous Element: " + previousElement.toString() );
+		previousElement.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
+		mainCP.addCPActivityDiagram( globalAD );
 	}
  	"><"	"END" "END" ID()
 }
@@ -571,8 +573,142 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 }
 
-/*void parseJunctionChoice():
+void parseJunctionChoice( TMLCP mainCP ):
+{
+	String s, s1;
+	ArrayList<String> guardList = new ArrayList<String>();
+	TMLCPChoice choice;
+	TMLCPElement lastElementBeforeChoice;
+}
+{
+	<LOOP_KW> s = ID() s1 = ID() ":"		// the second ID parses what follows the first underscore
+	{ 
+		mainCP.addCPActivityDiagram( globalAD );
+	 	globalAD = new TMLCPActivityDiagram( s + s1, null );
+		currentElement = new TMLCPStart( s + s1, null );
+		globalAD.addElement( currentElement );
+		previousElement = currentElement;
+	}
+	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
+	{
+		if( currentElement != null )	{
+			previousElement.addNextElement( currentElement );
+			globalAD.addElement( currentElement );
+			previousElement = currentElement;
+		}
+	}	)*	//In case there is a sequence between the junction and the choice
+	{
+		choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
+		choiceCounter++;
+		lastElementBeforeChoice = previousElement;
+	}
+	// start parsing the choice
+	( s = guard()
+	{
+		choice.addGuard(s);
+	}
+	 	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 	//the nextElement of a TMLCPChoice is the first element of the sequence
+	{
+		if( currentElement != null )	{
+			if( !(previousElement instanceof TMLCPStop) )	{	// avoid the spurious case when returning from the end of a branch
+				previousElement.addNextElement( currentElement );
+			}
+			globalAD.addElement( currentElement );
+			previousElement = currentElement;
+			choice.addNextElement( currentElement );
+		}
+	}	
+	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
+	{
+		if( currentElement != null )	{
+			previousElement.addNextElement( currentElement );
+			globalAD.addElement( currentElement );
+			previousElement = currentElement;
+		}
+	}	)+		//continues the sequence of diagrams
+	"-" <GOTO> ( "END" ID() ID()	//when there is a GOTO END it means there is a stop state: end of the branch!
+	{
+		currentElement = new TMLCPStop( "stop" + stopCounter, null );
+		previousElement.addNextElement( currentElement );
+		globalAD.addElement( currentElement );
+		stopCounter++;
+		previousElement = currentElement;
+		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
+	}
+	| ID() ID() )
+	)+
+	"END" ID() ID()
+	{
+		globalAD.addElement( choice );
+		previousElement = currentElement;
+		lastElementBeforeChoice.setNextElement( choice );
+	}
+}
+
+void specialID():
 {}
 {
-	ID()
-}*/
+	ID() <UNDERSCORE> 
+}
+
+String guard():
+{
+	String s;
+}
+{
+	"[" s = GExpression() "]"
+	{ return "[" + SP + s + SP + "]"; }
+}
+
+String GExpression():
+{
+	String s, s1;
+}
+{
+	s = GTerm() s1 = GExpressionPrime()
+	{ return s + s1; }
+}
+
+String GExpressionPrime():
+{
+	String s, s1;
+}
+{
+	<LOGICALOR> s = GTerm() s1 = GExpressionPrime()	{ return "||"  + s + s1; }
+| <LOGICALAND> s = GTerm() s1 = GExpressionPrime()	{ return "&&"  + s + s1; }
+| <EQUALITY> s = GTerm() s1 = GExpressionPrime()	{ return "=="  + s + s1; }
+| <MATH_GREATER> s = GTerm() s1 = GExpressionPrime() { return ">"  + s + s1; }
+| <MATH_SMALLER> s = GTerm() s1 = GExpressionPrime()	{ return "<"  + s + s1; }
+| {}	{ return ""; }
+}
+
+String GTerm():
+{
+	String s, s1;
+}
+{
+	s = GFactor() s1 = GTermPrime()
+	{ return s + s1; }
+}
+
+String GTermPrime():
+{
+	String s, s1;
+}
+{
+	s = GFactor() s1 = GTermPrime()	{ return s + s1; }
+| {}	{ return ""; }
+}
+
+String GFactor():
+{
+	String name, s;
+	Token t;
+}
+{
+	<GUARDSTART> s = GExpression() <GUARDEND> { return "[" + SP + s + SP + "]"; }
+	|
+	name = ID()	{ return name; }
+	|
+	t = <INTEGER_LITERAL>	{ return t.image; }
+}
