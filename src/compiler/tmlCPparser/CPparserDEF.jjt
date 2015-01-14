@@ -495,7 +495,7 @@ void ActivityDiagram( TMLCP mainCP ):
 	parseJunctionChoice( mainCP ) )+
 	{
 		currentElement = new TMLCPStop( "stop" + counter, null );
-		previousElement.addNextElement( currentElement );
+		//previousElement.addNextElement( currentElement );	//commented in order to remove the last element to have two next Elements
 		globalAD.addElement( currentElement );
 		mainCP.addCPActivityDiagram( globalAD );
 	}
@@ -508,7 +508,7 @@ void parseReferenceToDiagram( TMLCP mainCP ):
 	boolean isSD = false;
 }
 {
-	name = ID()	//( ( name = ID() ) | "><" ) )*
+	name = ID()
 	{ 
 		for( TMLCPSequenceDiagram sd: mainCP.getCPSequenceDiagrams() )	{
 			if( sd.getName().equals( name ) )	{
@@ -520,7 +520,6 @@ void parseReferenceToDiagram( TMLCP mainCP ):
 		}
 		else	{
 			currentElement = new TMLCPRefAD( name, null );
-			//nexts.add( elem );
 		}
 	}
 }
@@ -531,7 +530,6 @@ void parseForkJoin( TMLCP mainCP ):
 {
 	String name;
 	boolean isSD = false;
-	//TMLCPFork fork = new TMLCPFork( "fork" + counter , null );
 	fork1 = new TMLCPFork( "fork1" + counter , null );
 	join1 = new TMLCPJoin( "join1" + counter , null );
 	counter++;
@@ -578,7 +576,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 	String s, s1;
 	ArrayList<String> guardList = new ArrayList<String>();
 	TMLCPChoice choice;
-	TMLCPElement lastElementBeforeChoice;
+	TMLCPElement lastElementBeforeChoice, start;
 }
 {
 	<LOOP_KW> s = ID() s1 = ID() ":"		// the second ID parses what follows the first underscore
@@ -586,6 +584,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 		mainCP.addCPActivityDiagram( globalAD );
 	 	globalAD = new TMLCPActivityDiagram( s + s1, null );
 		currentElement = new TMLCPStart( s + s1, null );
+		start = currentElement;
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
 	}
@@ -626,7 +625,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 			previousElement = currentElement;
 		}
 	}	)+		//continues the sequence of diagrams
-	"-" <GOTO> ( "END" ID() ID()	//when there is a GOTO END it means there is a stop state: end of the branch!
+	"-" <GOTO> ( "END" ID() ID() //when there is a GOTO END it means there is a stop state: end of the branch!
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
@@ -635,11 +634,19 @@ void parseJunctionChoice( TMLCP mainCP ):
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
-	| ID() ID() )
+	| ID() ID()
+	{
+		currentElement.addNextElement( start );
+		/*TraceManager.addDev( " 1 Current Element: " + currentElement.toString() );
+		TraceManager.addDev( " 1 Previous Element: " + previousElement.toString() );*/
+	}
+	)
 	)+
 	"END" ID() ID()
 	{
 		globalAD.addElement( choice );
+		/*TraceManager.addDev( "Current Element: " + currentElement.toString() );
+		TraceManager.addDev( "Previous Element: " + previousElement.toString() );*/
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
 	}
@@ -648,7 +655,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 void specialID():
 {}
 {
-	ID() <UNDERSCORE> 
+	ID() <UNDERSCORE>
 }
 
 String guard():
