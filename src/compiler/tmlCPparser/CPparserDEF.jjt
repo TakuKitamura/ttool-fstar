@@ -524,8 +524,6 @@ void parseReferenceToDiagram( TMLCP mainCP ):
 	}
 }
 
-//Modify the data structure of the activity diagram as TMLCPElement is an abstract class, so it is not possible to instantiate an
-//ArrayList<TMLCPElement> to be returned after parsing the fork-join
 void parseForkJoin( TMLCP mainCP ):
 {
 	String name;
@@ -541,6 +539,7 @@ void parseForkJoin( TMLCP mainCP ):
 		fork1.addNextElement( currentElement );	//the next element of Fork is only the first element of the sequence
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
+		TraceManager.addDev( "Je me plante apres" );
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
 	(
@@ -555,15 +554,27 @@ void parseForkJoin( TMLCP mainCP ):
 	)*
 	"}"	// end of the first branch
 	{ previousElement.addNextElement( join1 ); }
+	// then one or more branches
 	( "*" "{" parseReferenceToDiagram( mainCP )
 	{
 		fork1.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
 	}
-	"}"
+	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
+	(
+	<SEQUENCING_OP> parseReferenceToDiagram( mainCP )
+	{
+		if( currentElement != null )	{
+			previousElement.addNextElement( currentElement );
+			globalAD.addElement( currentElement );
+			previousElement = currentElement;
+		}
+	}
+	)*
+	"}"	// end of a branch
 	{ previousElement.addNextElement( join1 ); }
-	)+	"};"
+	)+	"};"	// end of a whole fork-join
 	{
 		globalAD.addElement( fork1 );
 		globalAD.addElement( join1 );
