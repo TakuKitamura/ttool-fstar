@@ -495,7 +495,7 @@ void ActivityDiagram( TMLCP mainCP ):
 	parseJunctionChoice( mainCP ) )+
 	{
 		currentElement = new TMLCPStop( "stop" + counter, null );
-		//previousElement.addNextElement( currentElement );	//commented in order to remove the last element to have two next Elements
+		previousElement.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
 		mainCP.addCPActivityDiagram( globalAD );
 	}
@@ -584,7 +584,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 		mainCP.addCPActivityDiagram( globalAD );
 	 	globalAD = new TMLCPActivityDiagram( s + s1, null );
 		currentElement = new TMLCPStart( s + s1, null );
-		start = currentElement;
+		//start = currentElement;
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
 	}
@@ -634,9 +634,12 @@ void parseJunctionChoice( TMLCP mainCP ):
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
-	| ID() ID()
+	| s = ID() s1 = ID()
 	{
-		currentElement.addNextElement( start );
+		TMLCPElement refAD = new TMLCPRefAD( s + s1, null );
+		currentElement.addNextElement( refAD );
+		currentElement = refAD;
+		globalAD.addElement( refAD );
 		/*TraceManager.addDev( " 1 Current Element: " + currentElement.toString() );
 		TraceManager.addDev( " 1 Previous Element: " + previousElement.toString() );*/
 	}
