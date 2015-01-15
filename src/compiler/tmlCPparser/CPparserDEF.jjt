@@ -651,25 +651,15 @@ void parseJunctionChoice( TMLCP mainCP ):
 		currentElement.addNextElement( refAD );
 		currentElement = refAD;
 		globalAD.addElement( refAD );
-		/*TraceManager.addDev( " 1 Current Element: " + currentElement.toString() );
-		TraceManager.addDev( " 1 Previous Element: " + previousElement.toString() );*/
 	}
 	)
 	)+
 	"END" ID() ID()
 	{
 		globalAD.addElement( choice );
-		/*TraceManager.addDev( "Current Element: " + currentElement.toString() );
-		TraceManager.addDev( "Previous Element: " + previousElement.toString() );*/
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
 	}
-}
-
-void specialID():
-{}
-{
-	ID() <UNDERSCORE>
 }
 
 String guard():
