@@ -94,7 +94,7 @@ TOKEN:
 |	< INT_TYPE: "int" >
 | < START_KW: "START" >
 |	< ENDBLOCK: "END" >
-|	< GOTO: "GOTO" >
+|	< GOTO_KW: "GOTO" >
 |	< MAINBLOCK: "MAIN" >
 |	< CP: "COMMUNICATION_PATTERN" >
 | < ACTIVITY_DIAGRAM: "ACTIVITY" >
@@ -108,7 +108,7 @@ TOKEN:
 | < ACTION_KW: "ACT:" >
 | < RCV_MSG_KW: "RCV:" >
 | < SND_MSG_KW: "SND:" >
-| < LOOP_KW: "LOOP" >
+| < LOOP_KW: "LABEL" >
 | < #TRANSFER_ACT: "Transfer" >
 | < #TRANSFER_REQ: "TransferRequest" >
 | < #TRANSFER_DONE: "TransferDone" >
@@ -155,8 +155,8 @@ TOKEN:
 /* Identifiers */
 TOKEN:
 {
-	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT>)* (<LETTER> | <DIGIT>) | ( <UNDERSCORE> "#" <DIGIT> <UNDERSCORE>
-	<DIGIT> )  >
+	< IDENTIFIER: <LETTER> (<UNDERSCORE> | <LETTER> | <DIGIT> | "#" )* (<LETTER> | <DIGIT>) /*| ( <UNDERSCORE> "#" <DIGIT> <UNDERSCORE>
+	<DIGIT> ) */ >
 | < #LETTER: ["a"-"z","A"-"Z"] >
 |	< #DIGIT: ["0"-"9"] >
 |	< UNDERSCORE: "_" >
@@ -195,13 +195,11 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 
 	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
 
-	( ActivityDiagram( mainCP ) /*{ mainCP.addCPActivityDiagram( globalAD ); }*/ )*
+	( ActivityDiagram( mainCP ) { mainCP.addCPActivityDiagram( globalAD ); } )*
 
 	<EOF>		/* Force the parser to reach EOF */
 
 	{
-		//Must fill the Elements of each TMLCPActivityDiagram with the correct references to CPs and SDs that could not be done before
-		//encapsulate everything in one method as I do not know the type of the diagrams whose references where missing
 		//topCP.correctReferences();
 		/*ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();*/
 		ArrayList<TMLCPActivityDiagram> adList = mainCP.getCPActivityDiagrams();
@@ -216,9 +214,6 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "++++++++++++++" );
 		}
-		/*TraceManager.addDev( "################" );
-		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "EMPTY" );
-		TraceManager.addDev( "Printing from the parsed DS:\n" + globalAD.toString() );*/
 		return jjtThis;
 	}
 }
@@ -345,7 +340,7 @@ TMLSDAction Action( String instanceName ):
 {
 	<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() ) //( t = <INTEGER_LITERAL> | t = <FALSECONST> | t = <TRUECONST> )
 	{
-		TraceManager.addDev( "***** " + s1 + " *****" );
+		//TraceManager.addDev( "***** " + s1 + " *****" );
 		TMLSDAction action = new TMLSDAction( s + " = " + s1, instanceName );
 		return action;
 	}
@@ -460,8 +455,10 @@ String ID():
 	Token t;
 }
 {
-	t = <IDENTIFIER>
-	{ jjtThis.setName(t.image); return t.image; }
+	t = <IDENTIFIER> 	{ jjtThis.setName(t.image); return t.image; }
+	/*|
+	t = <IDENTIFIER> "_#" { return t.image + "_#"; }*/
+
 }
 
 /*###################################################################################"*/
@@ -473,7 +470,7 @@ void ActivityDiagram( TMLCP mainCP ):
 }
 {
 	<ACTIVITY_DIAGRAM> name = ID()
-	{ globalAD = new TMLCPActivityDiagram( name, null ); }
+	{ globalAD = new TMLCPActivityDiagram( name, null ); TraceManager.addDev( "PARSING DIAGRAM " + name ); }
 	
 	"MAIN" "<>;"
 	{
@@ -497,9 +494,11 @@ void ActivityDiagram( TMLCP mainCP ):
 		currentElement = new TMLCPStop( "stop" + counter, null );
 		previousElement.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
-		mainCP.addCPActivityDiagram( globalAD );
 	}
  	"><"	"END" "END" ID()
+	{
+		TraceManager.addDev( "Adding to DS: " + globalAD.toString() );
+	}
 }
 
 void parseReferenceToDiagram( TMLCP mainCP ):
@@ -539,7 +538,6 @@ void parseForkJoin( TMLCP mainCP ):
 		fork1.addNextElement( currentElement );	//the next element of Fork is only the first element of the sequence
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
-		TraceManager.addDev( "Je me plante apres" );
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
 	(
@@ -584,18 +582,14 @@ void parseForkJoin( TMLCP mainCP ):
 
 void parseJunctionChoice( TMLCP mainCP ):
 {
-	String s, s1;
+	String s;
 	ArrayList<String> guardList = new ArrayList<String>();
-	TMLCPChoice choice;
 	TMLCPElement lastElementBeforeChoice, start;
 }
 {
-	<LOOP_KW> s = ID() s1 = ID() ":"		// the second ID parses what follows the first underscore
+	<LOOP_KW> s = ID() ":"		// the second ID parses what follows the first underscore
 	{ 
-		mainCP.addCPActivityDiagram( globalAD );
-	 	globalAD = new TMLCPActivityDiagram( s + s1, null );
-		currentElement = new TMLCPStart( s + s1, null );
-		//start = currentElement;
+		currentElement = new TMLCPStart( s, null );
 		globalAD.addElement( currentElement );
 		previousElement = currentElement;
 	}
@@ -628,15 +622,8 @@ void parseJunctionChoice( TMLCP mainCP ):
 			choice.addNextElement( currentElement );
 		}
 	}	
-	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
-	{
-		if( currentElement != null )	{
-			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
-			previousElement = currentElement;
-		}
-	}	)+		//continues the sequence of diagrams
-	"-" <GOTO> ( "END" ID() ID() //when there is a GOTO END it means there is a stop state: end of the branch!
+	|	// the branch may end here directly, because there is just a reference to one diagram
+	( "><" //when there is a GOTO END it means there is a stop state: end of the branch!
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
@@ -645,20 +632,49 @@ void parseJunctionChoice( TMLCP mainCP ):
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
-	| s = ID() s1 = ID()
+	| <GOTO_KW> s = ID()
 	{
-		TMLCPElement refAD = new TMLCPRefAD( s + s1, null );
+		TMLCPElement refAD = new TMLCPRefAD( s, null );
+		currentElement.addNextElement( refAD );
+		currentElement = refAD;
+		globalAD.addElement( refAD );
+	}
+	)
+
+	|	// or it is followed by a longer sequence
+
+	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
+	{
+		if( currentElement != null )	{
+			previousElement.addNextElement( currentElement );
+			globalAD.addElement( currentElement );
+			previousElement = currentElement;
+		}
+	}	)+		//continues the sequence of diagrams
+	( "><" //when there is a GOTO END it means there is a stop state: end of the branch!
+	{
+		currentElement = new TMLCPStop( "stop" + stopCounter, null );
+		previousElement.addNextElement( currentElement );
+		globalAD.addElement( currentElement );
+		stopCounter++;
+		previousElement = currentElement;
+		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
+	}
+	| <GOTO_KW> s = ID()
+	{
+		TMLCPElement refAD = new TMLCPRefAD( s, null );
 		currentElement.addNextElement( refAD );
 		currentElement = refAD;
 		globalAD.addElement( refAD );
 	}
 	)
 	)+
-	"END" ID() ID()
+	"END" ID()
 	{
 		globalAD.addElement( choice );
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
+		//TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
 	}
 }
 
