@@ -468,6 +468,19 @@ void ActivityDiagram( TMLCP mainCP ):
 		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
+
+	( ActivityDiagramType1( mainCP ) | ActivityDiagramType2( mainCP )	)	// either sequences and parallelism or junction-choice
+
+ 	"><"	"END" "END" ID()
+
+	/*{
+		TraceManager.addDev( "Adding to DS: " + globalAD.toString() );
+	}*/
+}
+
+void ActivityDiagramType1( TMLCP mainCP ):
+{}
+{
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP>
 	{
 		if( currentElement != null )	{
@@ -476,19 +489,18 @@ void ActivityDiagram( TMLCP mainCP ):
 			previousElement = currentElement;
 		}
 	}
-	| parseForkJoin( mainCP ) )*
+	| parseForkJoin( mainCP ) )+
+}
 
-	( parseJunctionChoice( mainCP )
+void ActivityDiagramType2( TMLCP mainCP ):
+{}
+{
+	parseJunctionChoice( mainCP )
 	{
 		currentElement = new TMLCPStop( "stop" + counter, null );
 		previousElement.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
 	}
-	| {} )
- 	"><"	"END" "END" ID()
-	/*{
-		TraceManager.addDev( "Adding to DS: " + globalAD.toString() );
-	}*/
 }
 
 void parseReferenceToDiagram( TMLCP mainCP ):
@@ -664,7 +676,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 		globalAD.addElement( choice );
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
-		//TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
+		TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
 	}
 }
 
