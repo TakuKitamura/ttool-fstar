@@ -468,7 +468,6 @@ void ActivityDiagram( TMLCP mainCP ):
 		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
-	ActivityDiagramType1() | ActivityDiagramType2()
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP>
 	{
 		if( currentElement != null )	{
