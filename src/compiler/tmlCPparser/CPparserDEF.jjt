@@ -108,7 +108,7 @@ TOKEN:
 | < ACTION_KW: "ACT:" >
 | < RCV_MSG_KW: "RCV:" >
 | < SND_MSG_KW: "SND:" >
-| < LOOP_KW: "LABEL" >
+| < LABEL_KW: "LABEL" >
 | < #TRANSFER_ACT: "Transfer" >
 | < #TRANSFER_REQ: "TransferRequest" >
 | < #TRANSFER_DONE: "TransferDone" >
@@ -201,13 +201,13 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 
 	{
 		//topCP.correctReferences();
-		/*ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();*/
+		ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();
 		ArrayList<TMLCPActivityDiagram> adList = mainCP.getCPActivityDiagrams();
-		/*TraceManager.addDev( "***************" );
+		TraceManager.addDev( "***************" );
 		for( TMLCPSequenceDiagram diag: sdList )	{
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "***************" );
-		}*/
+		}
 
 		TraceManager.addDev( "++++++++++++++++" );
 		for( TMLCPActivityDiagram diag: adList )	{
@@ -315,21 +315,14 @@ TMLSDInstance SequenceDiagramInstance( ArrayList<TMLAttribute> attributeList ):
 
 ArrayList<String> MessageParameters():
 {
-	String /*messageName, receiverName, senderName,*/ s;
+	String s;
 	ArrayList<String> params = new ArrayList<String>();
 }
 {
 	( "()" | "(" s = ID() { params.add(s); } ( "," s = ID() { params.add(s); } )* ")" )
 	{
-		//TMLSDMessage message = new TMLSDMessage( messageName, "", instanceName, params );
 		return params;
 	}
-	/*|
-	<SND_MSG_KW> messageName = ID() "(" ( s = ID() { params.add(s); } )* ")"
-	{
-		TMLSDMessage message = new TMLSDMessage( messageName, instanceName, "", params );
-		return message;
-	}*/
 }
 
 TMLSDAction Action( String instanceName ):
@@ -456,9 +449,6 @@ String ID():
 }
 {
 	t = <IDENTIFIER> 	{ jjtThis.setName(t.image); return t.image; }
-	/*|
-	t = <IDENTIFIER> "_#" { return t.image + "_#"; }*/
-
 }
 
 /*###################################################################################"*/
@@ -478,6 +468,7 @@ void ActivityDiagram( TMLCP mainCP ):
 		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
+	ActivityDiagramType1() | ActivityDiagramType2()
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP>
 	{
 		if( currentElement != null )	{
@@ -486,19 +477,19 @@ void ActivityDiagram( TMLCP mainCP ):
 			previousElement = currentElement;
 		}
 	}
-	|
-	parseForkJoin( mainCP )
-	|
-	parseJunctionChoice( mainCP ) )+
+	| parseForkJoin( mainCP ) )*
+
+	( parseJunctionChoice( mainCP )
 	{
 		currentElement = new TMLCPStop( "stop" + counter, null );
 		previousElement.addNextElement( currentElement );
 		globalAD.addElement( currentElement );
 	}
+	| {} )
  	"><"	"END" "END" ID()
-	{
+	/*{
 		TraceManager.addDev( "Adding to DS: " + globalAD.toString() );
-	}
+	}*/
 }
 
 void parseReferenceToDiagram( TMLCP mainCP ):
@@ -587,7 +578,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 	TMLCPElement lastElementBeforeChoice, start;
 }
 {
-	<LOOP_KW> s = ID() ":"		// the second ID parses what follows the first underscore
+	<LABEL_KW> s = ID() ":"		// the second ID parses what follows the first underscore
 	{ 
 		currentElement = new TMLCPStart( s, null );
 		globalAD.addElement( currentElement );
