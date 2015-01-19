@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="16508" decX="70" decY="10" >
+<TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="10676" decX="129" decY="10" >
 
-<TMLSDPanelCopy name="TransferConfigure" xSel="70" ySel="10" widthSel="430" heightSel="545" >
-<COMPONENT type="1520" id="16410" >
-<cdparam x="282" y="53" />
+<TMLSDPanelCopy name="LoadConfigure" xSel="129" ySel="10" widthSel="356" heightSel="552" >
+<COMPONENT type="1520" id="10676" >
+<cdparam x="229" y="57" />
 <sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
-<infoparam name="CPU_controller" value="Storage instance name" />
-<TGConnectingPoint num="0" id="16460" />
-<TGConnectingPoint num="1" id="16461" />
-<TGConnectingPoint num="2" id="16462" />
-<TGConnectingPoint num="3" id="16463" />
-<TGConnectingPoint num="4" id="16464" />
-<TGConnectingPoint num="5" id="16465" />
-<TGConnectingPoint num="6" id="16466" />
-<TGConnectingPoint num="7" id="16467" />
-<TGConnectingPoint num="8" id="16468" />
-<TGConnectingPoint num="9" id="16469" />
-<TGConnectingPoint num="10" id="16470" />
-<TGConnectingPoint num="11" id="16471" />
-<TGConnectingPoint num="12" id="16472" />
-<TGConnectingPoint num="13" id="16473" />
-<TGConnectingPoint num="14" id="16474" />
-<TGConnectingPoint num="15" id="16475" />
-<TGConnectingPoint num="16" id="16476" />
-<TGConnectingPoint num="17" id="16477" />
-<TGConnectingPoint num="18" id="16478" />
-<TGConnectingPoint num="19" id="16479" />
-<TGConnectingPoint num="20" id="16480" />
-<TGConnectingPoint num="21" id="16481" />
-<TGConnectingPoint num="22" id="16482" />
-<TGConnectingPoint num="23" id="16483" />
-<TGConnectingPoint num="24" id="16484" />
-<TGConnectingPoint num="25" id="16485" />
-<TGConnectingPoint num="26" id="16486" />
-<TGConnectingPoint num="27" id="16487" />
-<TGConnectingPoint num="28" id="16488" />
-<TGConnectingPoint num="29" id="16489" />
-<TGConnectingPoint num="30" id="16490" />
-<TGConnectingPoint num="31" id="16491" />
-<TGConnectingPoint num="32" id="16492" />
-<TGConnectingPoint num="33" id="16493" />
-<TGConnectingPoint num="34" id="16494" />
-<TGConnectingPoint num="35" id="16495" />
-<TGConnectingPoint num="36" id="16496" />
-<TGConnectingPoint num="37" id="16497" />
-<TGConnectingPoint num="38" id="16498" />
-<TGConnectingPoint num="39" id="16499" />
-<TGConnectingPoint num="40" id="16500" />
-<TGConnectingPoint num="41" id="16501" />
-<TGConnectingPoint num="42" id="16502" />
-<TGConnectingPoint num="43" id="16503" />
-<TGConnectingPoint num="44" id="16504" />
-<TGConnectingPoint num="45" id="16505" />
-<TGConnectingPoint num="46" id="16506" />
-<TGConnectingPoint num="47" id="16507" />
-<TGConnectingPoint num="48" id="16508" />
+<infoparam name="CPU_Controller" value="Storage instance name" />
+<TGConnectingPoint num="0" id="10627" />
+<TGConnectingPoint num="1" id="10628" />
+<TGConnectingPoint num="2" id="10629" />
+<TGConnectingPoint num="3" id="10630" />
+<TGConnectingPoint num="4" id="10631" />
+<TGConnectingPoint num="5" id="10632" />
+<TGConnectingPoint num="6" id="10633" />
+<TGConnectingPoint num="7" id="10634" />
+<TGConnectingPoint num="8" id="10635" />
+<TGConnectingPoint num="9" id="10636" />
+<TGConnectingPoint num="10" id="10637" />
+<TGConnectingPoint num="11" id="10638" />
+<TGConnectingPoint num="12" id="10639" />
+<TGConnectingPoint num="13" id="10640" />
+<TGConnectingPoint num="14" id="10641" />
+<TGConnectingPoint num="15" id="10642" />
+<TGConnectingPoint num="16" id="10643" />
+<TGConnectingPoint num="17" id="10644" />
+<TGConnectingPoint num="18" id="10645" />
+<TGConnectingPoint num="19" id="10646" />
+<TGConnectingPoint num="20" id="10647" />
+<TGConnectingPoint num="21" id="10648" />
+<TGConnectingPoint num="22" id="10649" />
+<TGConnectingPoint num="23" id="10650" />
+<TGConnectingPoint num="24" id="10651" />
+<TGConnectingPoint num="25" id="10652" />
+<TGConnectingPoint num="26" id="10653" />
+<TGConnectingPoint num="27" id="10654" />
+<TGConnectingPoint num="28" id="10655" />
+<TGConnectingPoint num="29" id="10656" />
+<TGConnectingPoint num="30" id="10657" />
+<TGConnectingPoint num="31" id="10658" />
+<TGConnectingPoint num="32" id="10659" />
+<TGConnectingPoint num="33" id="10660" />
+<TGConnectingPoint num="34" id="10661" />
+<TGConnectingPoint num="35" id="10662" />
+<TGConnectingPoint num="36" id="10663" />
+<TGConnectingPoint num="37" id="10664" />
+<TGConnectingPoint num="38" id="10665" />
+<TGConnectingPoint num="39" id="10666" />
+<TGConnectingPoint num="40" id="10667" />
+<TGConnectingPoint num="41" id="10668" />
+<TGConnectingPoint num="42" id="10669" />
+<TGConnectingPoint num="43" id="10670" />
+<TGConnectingPoint num="44" id="10671" />
+<TGConnectingPoint num="45" id="10672" />
+<TGConnectingPoint num="46" id="10673" />
+<TGConnectingPoint num="47" id="10674" />
+<TGConnectingPoint num="48" id="10675" />
 <extraparam>
 <Mapping mappedOn="" />
 <Actor data="false" />
