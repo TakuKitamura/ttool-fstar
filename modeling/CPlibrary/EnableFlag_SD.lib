@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="140476" decX="33" decY="10" >
+
+<TMLSDPanelCopy name="EnableFlag_SD" xSel="33" ySel="10" widthSel="394" heightSel="550" >
+<COMPONENT type="1522" id="140369" >
+<cdparam x="149" y="42" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="DMA_Controller_1" value="Controller instance name" />
+<TGConnectingPoint num="0" id="140419" />
+<TGConnectingPoint num="1" id="140420" />
+<TGConnectingPoint num="2" id="140421" />
+<TGConnectingPoint num="3" id="140422" />
+<TGConnectingPoint num="4" id="140423" />
+<TGConnectingPoint num="5" id="140424" />
+<TGConnectingPoint num="6" id="140425" />
+<TGConnectingPoint num="7" id="140426" />
+<TGConnectingPoint num="8" id="140427" />
+<TGConnectingPoint num="9" id="140428" />
+<TGConnectingPoint num="10" id="140429" />
+<TGConnectingPoint num="11" id="140430" />
+<TGConnectingPoint num="12" id="140431" />
+<TGConnectingPoint num="13" id="140432" />
+<TGConnectingPoint num="14" id="140433" />
+<TGConnectingPoint num="15" id="140434" />
+<TGConnectingPoint num="16" id="140435" />
+<TGConnectingPoint num="17" id="140436" />
+<TGConnectingPoint num="18" id="140437" />
+<TGConnectingPoint num="19" id="140438" />
+<TGConnectingPoint num="20" id="140439" />
+<TGConnectingPoint num="21" id="140440" />
+<TGConnectingPoint num="22" id="140441" />
+<TGConnectingPoint num="23" id="140442" />
+<TGConnectingPoint num="24" id="140443" />
+<TGConnectingPoint num="25" id="140444" />
+<TGConnectingPoint num="26" id="140445" />
+<TGConnectingPoint num="27" id="140446" />
+<TGConnectingPoint num="28" id="140447" />
+<TGConnectingPoint num="29" id="140448" />
+<TGConnectingPoint num="30" id="140449" />
+<TGConnectingPoint num="31" id="140450" />
+<TGConnectingPoint num="32" id="140451" />
+<TGConnectingPoint num="33" id="140452" />
+<TGConnectingPoint num="34" id="140453" />
+<TGConnectingPoint num="35" id="140454" />
+<TGConnectingPoint num="36" id="140455" />
+<TGConnectingPoint num="37" id="140456" />
+<TGConnectingPoint num="38" id="140457" />
+<TGConnectingPoint num="39" id="140458" />
+<TGConnectingPoint num="40" id="140459" />
+<TGConnectingPoint num="41" id="140460" />
+<TGConnectingPoint num="42" id="140461" />
+<TGConnectingPoint num="43" id="140462" />
+<TGConnectingPoint num="44" id="140463" />
+<TGConnectingPoint num="45" id="140464" />
+<TGConnectingPoint num="46" id="140465" />
+<TGConnectingPoint num="47" id="140466" />
+<TGConnectingPoint num="48" id="140467" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="transferTerminated" value="" type="4" typeOther="" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="ID1" value="" type="0" typeOther="" />
+<Attribute access="2" id="counter" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1524" id="140468" >
+<father id="140369" num="0" />
+<cdparam x="154" y="88" />
+<sizeparam width="175" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
+<infoparam name="action state" value="transferTerminated = true" />
+<TGConnectingPoint num="0" id="140469" />
+<TGConnectingPoint num="1" id="140470" />
+<TGConnectingPoint num="2" id="140471" />
+<TGConnectingPoint num="3" id="140472" />
+<TGConnectingPoint num="4" id="140473" />
+<TGConnectingPoint num="5" id="140474" />
+<TGConnectingPoint num="6" id="140475" />
+<TGConnectingPoint num="7" id="140476" />
+</SUBCOMPONENT>
+
+
+</TMLSDPanelCopy>
+
+</TURTLEGSELECTEDCOMPONENTS>

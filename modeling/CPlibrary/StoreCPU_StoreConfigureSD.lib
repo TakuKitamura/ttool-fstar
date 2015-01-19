@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="7130" decX="216" decY="18" >
+
+<TMLSDPanelCopy name="StoreConfigure" xSel="216" ySel="18" widthSel="400" heightSel="537" >
+<COMPONENT type="1522" id="7130" >
+<cdparam x="319" y="55" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="CPU_Controller" value="Controller instance name" />
+<TGConnectingPoint num="0" id="7081" />
+<TGConnectingPoint num="1" id="7082" />
+<TGConnectingPoint num="2" id="7083" />
+<TGConnectingPoint num="3" id="7084" />
+<TGConnectingPoint num="4" id="7085" />
+<TGConnectingPoint num="5" id="7086" />
+<TGConnectingPoint num="6" id="7087" />
+<TGConnectingPoint num="7" id="7088" />
+<TGConnectingPoint num="8" id="7089" />
+<TGConnectingPoint num="9" id="7090" />
+<TGConnectingPoint num="10" id="7091" />
+<TGConnectingPoint num="11" id="7092" />
+<TGConnectingPoint num="12" id="7093" />
+<TGConnectingPoint num="13" id="7094" />
+<TGConnectingPoint num="14" id="7095" />
+<TGConnectingPoint num="15" id="7096" />
+<TGConnectingPoint num="16" id="7097" />
+<TGConnectingPoint num="17" id="7098" />
+<TGConnectingPoint num="18" id="7099" />
+<TGConnectingPoint num="19" id="7100" />
+<TGConnectingPoint num="20" id="7101" />
+<TGConnectingPoint num="21" id="7102" />
+<TGConnectingPoint num="22" id="7103" />
+<TGConnectingPoint num="23" id="7104" />
+<TGConnectingPoint num="24" id="7105" />
+<TGConnectingPoint num="25" id="7106" />
+<TGConnectingPoint num="26" id="7107" />
+<TGConnectingPoint num="27" id="7108" />
+<TGConnectingPoint num="28" id="7109" />
+<TGConnectingPoint num="29" id="7110" />
+<TGConnectingPoint num="30" id="7111" />
+<TGConnectingPoint num="31" id="7112" />
+<TGConnectingPoint num="32" id="7113" />
+<TGConnectingPoint num="33" id="7114" />
+<TGConnectingPoint num="34" id="7115" />
+<TGConnectingPoint num="35" id="7116" />
+<TGConnectingPoint num="36" id="7117" />
+<TGConnectingPoint num="37" id="7118" />
+<TGConnectingPoint num="38" id="7119" />
+<TGConnectingPoint num="39" id="7120" />
+<TGConnectingPoint num="40" id="7121" />
+<TGConnectingPoint num="41" id="7122" />
+<TGConnectingPoint num="42" id="7123" />
+<TGConnectingPoint num="43" id="7124" />
+<TGConnectingPoint num="44" id="7125" />
+<TGConnectingPoint num="45" id="7126" />
+<TGConnectingPoint num="46" id="7127" />
+<TGConnectingPoint num="47" id="7128" />
+<TGConnectingPoint num="48" id="7129" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="samplesToStore" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+
+</TMLSDPanelCopy>
+
+</TURTLEGSELECTEDCOMPONENTS>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="8347" decX="65" decY="23" >
+
+<TMLSDPanelCopy name="DMACycle_SD" xSel="65" ySel="23" widthSel="1117" heightSel="584" >
+<COMPONENT type="1520" id="8132" >
+<cdparam x="1072" y="56" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Dst_Storage_Instance_1" value="Storage instance name" />
+<TGConnectingPoint num="0" id="8083" />
+<TGConnectingPoint num="1" id="8084" />
+<TGConnectingPoint num="2" id="8085" />
+<TGConnectingPoint num="3" id="8086" />
+<TGConnectingPoint num="4" id="8087" />
+<TGConnectingPoint num="5" id="8088" />
+<TGConnectingPoint num="6" id="8089" />
+<TGConnectingPoint num="7" id="8090" />
+<TGConnectingPoint num="8" id="8091" />
+<TGConnectingPoint num="9" id="8092" />
+<TGConnectingPoint num="10" id="8093" />
+<TGConnectingPoint num="11" id="8094" />
+<TGConnectingPoint num="12" id="8095" />
+<TGConnectingPoint num="13" id="8096" />
+<TGConnectingPoint num="14" id="8097" />
+<TGConnectingPoint num="15" id="8098" />
+<TGConnectingPoint num="16" id="8099" />
+<TGConnectingPoint num="17" id="8100" />
+<TGConnectingPoint num="18" id="8101" />
+<TGConnectingPoint num="19" id="8102" />
+<TGConnectingPoint num="20" id="8103" />
+<TGConnectingPoint num="21" id="8104" />
+<TGConnectingPoint num="22" id="8105" />
+<TGConnectingPoint num="23" id="8106" />
+<TGConnectingPoint num="24" id="8107" />
+<TGConnectingPoint num="25" id="8108" />
+<TGConnectingPoint num="26" id="8109" />
+<TGConnectingPoint num="27" id="8110" />
+<TGConnectingPoint num="28" id="8111" />
+<TGConnectingPoint num="29" id="8112" />
+<TGConnectingPoint num="30" id="8113" />
+<TGConnectingPoint num="31" id="8114" />
+<TGConnectingPoint num="32" id="8115" />
+<TGConnectingPoint num="33" id="8116" />
+<TGConnectingPoint num="34" id="8117" />
+<TGConnectingPoint num="35" id="8118" />
+<TGConnectingPoint num="36" id="8119" />
+<TGConnectingPoint num="37" id="8120" />
+<TGConnectingPoint num="38" id="8121" />
+<TGConnectingPoint num="39" id="8122" />
+<TGConnectingPoint num="40" id="8123" />
+<TGConnectingPoint num="41" id="8124" />
+<TGConnectingPoint num="42" id="8125" />
+<TGConnectingPoint num="43" id="8126" />
+<TGConnectingPoint num="44" id="8127" />
+<TGConnectingPoint num="45" id="8128" />
+<TGConnectingPoint num="46" id="8129" />
+<TGConnectingPoint num="47" id="8130" />
+<TGConnectingPoint num="48" id="8131" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1521" id="8182" >
+<cdparam x="861" y="56" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Transfer_Instance_3" value="Transfer instance name" />
+<TGConnectingPoint num="0" id="8133" />
+<TGConnectingPoint num="1" id="8134" />
+<TGConnectingPoint num="2" id="8135" />
+<TGConnectingPoint num="3" id="8136" />
+<TGConnectingPoint num="4" id="8137" />
+<TGConnectingPoint num="5" id="8138" />
+<TGConnectingPoint num="6" id="8139" />
+<TGConnectingPoint num="7" id="8140" />
+<TGConnectingPoint num="8" id="8141" />
+<TGConnectingPoint num="9" id="8142" />
+<TGConnectingPoint num="10" id="8143" />
+<TGConnectingPoint num="11" id="8144" />
+<TGConnectingPoint num="12" id="8145" />
+<TGConnectingPoint num="13" id="8146" />
+<TGConnectingPoint num="14" id="8147" />
+<TGConnectingPoint num="15" id="8148" />
+<TGConnectingPoint num="16" id="8149" />
+<TGConnectingPoint num="17" id="8150" />
+<TGConnectingPoint num="18" id="8151" />
+<TGConnectingPoint num="19" id="8152" />
+<TGConnectingPoint num="20" id="8153" />
+<TGConnectingPoint num="21" id="8154" />
+<TGConnectingPoint num="22" id="8155" />
+<TGConnectingPoint num="23" id="8156" />
+<TGConnectingPoint num="24" id="8157" />
+<TGConnectingPoint num="25" id="8158" />
+<TGConnectingPoint num="26" id="8159" />
+<TGConnectingPoint num="27" id="8160" />
+<TGConnectingPoint num="28" id="8161" />
+<TGConnectingPoint num="29" id="8162" />
+<TGConnectingPoint num="30" id="8163" />
+<TGConnectingPoint num="31" id="8164" />
+<TGConnectingPoint num="32" id="8165" />
+<TGConnectingPoint num="33" id="8166" />
+<TGConnectingPoint num="34" id="8167" />
+<TGConnectingPoint num="35" id="8168" />
+<TGConnectingPoint num="36" id="8169" />
+<TGConnectingPoint num="37" id="8170" />
+<TGConnectingPoint num="38" id="8171" />
+<TGConnectingPoint num="39" id="8172" />
+<TGConnectingPoint num="40" id="8173" />
+<TGConnectingPoint num="41" id="8174" />
+<TGConnectingPoint num="42" id="8175" />
+<TGConnectingPoint num="43" id="8176" />
+<TGConnectingPoint num="44" id="8177" />
+<TGConnectingPoint num="45" id="8178" />
+<TGConnectingPoint num="46" id="8179" />
+<TGConnectingPoint num="47" id="8180" />
+<TGConnectingPoint num="48" id="8181" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1521" id="8232" >
+<cdparam x="392" y="56" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Transfer_Instance_2" value="Transfer instance name" />
+<TGConnectingPoint num="0" id="8183" />
+<TGConnectingPoint num="1" id="8184" />
+<TGConnectingPoint num="2" id="8185" />
+<TGConnectingPoint num="3" id="8186" />
+<TGConnectingPoint num="4" id="8187" />
+<TGConnectingPoint num="5" id="8188" />
+<TGConnectingPoint num="6" id="8189" />
+<TGConnectingPoint num="7" id="8190" />
+<TGConnectingPoint num="8" id="8191" />
+<TGConnectingPoint num="9" id="8192" />
+<TGConnectingPoint num="10" id="8193" />
+<TGConnectingPoint num="11" id="8194" />
+<TGConnectingPoint num="12" id="8195" />
+<TGConnectingPoint num="13" id="8196" />
+<TGConnectingPoint num="14" id="8197" />
+<TGConnectingPoint num="15" id="8198" />
+<TGConnectingPoint num="16" id="8199" />
+<TGConnectingPoint num="17" id="8200" />
+<TGConnectingPoint num="18" id="8201" />
+<TGConnectingPoint num="19" id="8202" />
+<TGConnectingPoint num="20" id="8203" />
+<TGConnectingPoint num="21" id="8204" />
+<TGConnectingPoint num="22" id="8205" />
+<TGConnectingPoint num="23" id="8206" />
+<TGConnectingPoint num="24" id="8207" />
+<TGConnectingPoint num="25" id="8208" />
+<TGConnectingPoint num="26" id="8209" />
+<TGConnectingPoint num="27" id="8210" />
+<TGConnectingPoint num="28" id="8211" />
+<TGConnectingPoint num="29" id="8212" />
+<TGConnectingPoint num="30" id="8213" />
+<TGConnectingPoint num="31" id="8214" />
+<TGConnectingPoint num="32" id="8215" />
+<TGConnectingPoint num="33" id="8216" />
+<TGConnectingPoint num="34" id="8217" />
+<TGConnectingPoint num="35" id="8218" />
+<TGConnectingPoint num="36" id="8219" />
+<TGConnectingPoint num="37" id="8220" />
+<TGConnectingPoint num="38" id="8221" />
+<TGConnectingPoint num="39" id="8222" />
+<TGConnectingPoint num="40" id="8223" />
+<TGConnectingPoint num="41" id="8224" />
+<TGConnectingPoint num="42" id="8225" />
+<TGConnectingPoint num="43" id="8226" />
+<TGConnectingPoint num="44" id="8227" />
+<TGConnectingPoint num="45" id="8228" />
+<TGConnectingPoint num="46" id="8229" />
+<TGConnectingPoint num="47" id="8230" />
+<TGConnectingPoint num="48" id="8231" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1520" id="8282" >
+<cdparam x="643" y="56" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="Src_Storage_Instance_1" value="Storage instance name" />
+<TGConnectingPoint num="0" id="8233" />
+<TGConnectingPoint num="1" id="8234" />
+<TGConnectingPoint num="2" id="8235" />
+<TGConnectingPoint num="3" id="8236" />
+<TGConnectingPoint num="4" id="8237" />
+<TGConnectingPoint num="5" id="8238" />
+<TGConnectingPoint num="6" id="8239" />
+<TGConnectingPoint num="7" id="8240" />
+<TGConnectingPoint num="8" id="8241" />
+<TGConnectingPoint num="9" id="8242" />
+<TGConnectingPoint num="10" id="8243" />
+<TGConnectingPoint num="11" id="8244" />
+<TGConnectingPoint num="12" id="8245" />
+<TGConnectingPoint num="13" id="8246" />
+<TGConnectingPoint num="14" id="8247" />
+<TGConnectingPoint num="15" id="8248" />
+<TGConnectingPoint num="16" id="8249" />
+<TGConnectingPoint num="17" id="8250" />
+<TGConnectingPoint num="18" id="8251" />
+<TGConnectingPoint num="19" id="8252" />
+<TGConnectingPoint num="20" id="8253" />
+<TGConnectingPoint num="21" id="8254" />
+<TGConnectingPoint num="22" id="8255" />
+<TGConnectingPoint num="23" id="8256" />
+<TGConnectingPoint num="24" id="8257" />
+<TGConnectingPoint num="25" id="8258" />
+<TGConnectingPoint num="26" id="8259" />
+<TGConnectingPoint num="27" id="8260" />
+<TGConnectingPoint num="28" id="8261" />
+<TGConnectingPoint num="29" id="8262" />
+<TGConnectingPoint num="30" id="8263" />
+<TGConnectingPoint num="31" id="8264" />
+<TGConnectingPoint num="32" id="8265" />
+<TGConnectingPoint num="33" id="8266" />
+<TGConnectingPoint num="34" id="8267" />
+<TGConnectingPoint num="35" id="8268" />
+<TGConnectingPoint num="36" id="8269" />
+<TGConnectingPoint num="37" id="8270" />
+<TGConnectingPoint num="38" id="8271" />
+<TGConnectingPoint num="39" id="8272" />
+<TGConnectingPoint num="40" id="8273" />
+<TGConnectingPoint num="41" id="8274" />
+<TGConnectingPoint num="42" id="8275" />
+<TGConnectingPoint num="43" id="8276" />
+<TGConnectingPoint num="44" id="8277" />
+<TGConnectingPoint num="45" id="8278" />
+<TGConnectingPoint num="46" id="8279" />
+<TGConnectingPoint num="47" id="8280" />
+<TGConnectingPoint num="48" id="8281" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+
+<COMPONENT type="1522" id="8341" >
+<cdparam x="161" y="56" />
+<sizeparam width="10" height="500" minWidth="10" minHeight="250" maxWidth="10" maxHeight="1500" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
+<infoparam name="DMA_Controller_1" value="Controller instance name" />
+<TGConnectingPoint num="0" id="8292" />
+<TGConnectingPoint num="1" id="8293" />
+<TGConnectingPoint num="2" id="8294" />
+<TGConnectingPoint num="3" id="8295" />
+<TGConnectingPoint num="4" id="8296" />
+<TGConnectingPoint num="5" id="8297" />
+<TGConnectingPoint num="6" id="8298" />
+<TGConnectingPoint num="7" id="8299" />
+<TGConnectingPoint num="8" id="8300" />
+<TGConnectingPoint num="9" id="8301" />
+<TGConnectingPoint num="10" id="8302" />
+<TGConnectingPoint num="11" id="8303" />
+<TGConnectingPoint num="12" id="8304" />
+<TGConnectingPoint num="13" id="8305" />
+<TGConnectingPoint num="14" id="8306" />
+<TGConnectingPoint num="15" id="8307" />
+<TGConnectingPoint num="16" id="8308" />
+<TGConnectingPoint num="17" id="8309" />
+<TGConnectingPoint num="18" id="8310" />
+<TGConnectingPoint num="19" id="8311" />
+<TGConnectingPoint num="20" id="8312" />
+<TGConnectingPoint num="21" id="8313" />
+<TGConnectingPoint num="22" id="8314" />
+<TGConnectingPoint num="23" id="8315" />
+<TGConnectingPoint num="24" id="8316" />
+<TGConnectingPoint num="25" id="8317" />
+<TGConnectingPoint num="26" id="8318" />
+<TGConnectingPoint num="27" id="8319" />
+<TGConnectingPoint num="28" id="8320" />
+<TGConnectingPoint num="29" id="8321" />
+<TGConnectingPoint num="30" id="8322" />
+<TGConnectingPoint num="31" id="8323" />
+<TGConnectingPoint num="32" id="8324" />
+<TGConnectingPoint num="33" id="8325" />
+<TGConnectingPoint num="34" id="8326" />
+<TGConnectingPoint num="35" id="8327" />
+<TGConnectingPoint num="36" id="8328" />
+<TGConnectingPoint num="37" id="8329" />
+<TGConnectingPoint num="38" id="8330" />
+<TGConnectingPoint num="39" id="8331" />
+<TGConnectingPoint num="40" id="8332" />
+<TGConnectingPoint num="41" id="8333" />
+<TGConnectingPoint num="42" id="8334" />
+<TGConnectingPoint num="43" id="8335" />
+<TGConnectingPoint num="44" id="8336" />
+<TGConnectingPoint num="45" id="8337" />
+<TGConnectingPoint num="46" id="8338" />
+<TGConnectingPoint num="47" id="8339" />
+<TGConnectingPoint num="48" id="8340" />
+<extraparam>
+<Mapping mappedOn="" />
+<Actor data="false" />
+<Attribute access="2" id="size" value="" type="0" typeOther="" />
+<Attribute access="2" id="sourceAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="destinationAddress" value="" type="0" typeOther="" />
+<Attribute access="2" id="ID1" value="" type="0" typeOther="" />
+<Attribute access="2" id="counter" value="" type="0" typeOther="" />
+</extraparam>
+</COMPONENT>
+<SUBCOMPONENT type="1524" id="8291" >
+<father id="8341" num="0" />
+<cdparam x="166" y="252" />
+<sizeparam width="161" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="5" maxX="5" minY="10" maxY="470" />
+<infoparam name="action state" value="counter = counter - size" />
+<TGConnectingPoint num="0" id="8283" />
+<TGConnectingPoint num="1" id="8284" />
+<TGConnectingPoint num="2" id="8285" />
+<TGConnectingPoint num="3" id="8286" />
+<TGConnectingPoint num="4" id="8287" />
+<TGConnectingPoint num="5" id="8288" />
+<TGConnectingPoint num="6" id="8289" />
+<TGConnectingPoint num="7" id="8290" />
+</SUBCOMPONENT>
+
+<CONNECTOR type="1523" id="8342" >
+<cdparam x="866" y="246" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Write" value="Write(destinationAddress, size)" />
+<P1  x="866" y="266" id="8153" />
+<P2  x="1077" y="266" id="8103" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="destinationAddress" />
+<Param index="1" id="size" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="1523" id="8343" >
+<cdparam x="166" y="216" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Write" value="Write(destinationAddress, size)" />
+<P1  x="166" y="236" id="8309" />
+<P2  x="866" y="236" id="8150" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="destinationAddress" />
+<Param index="1" id="size" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="1523" id="8344" >
+<cdparam x="397" y="186" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Transfer" value="Transfer(size)" />
+<P1  x="397" y="206" id="8197" />
+<P2  x="166" y="206" id="8306" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="size" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="1523" id="8345" >
+<cdparam x="648" y="155" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Transfer" value="Transfer(size)" />
+<P1  x="648" y="176" id="8244" />
+<P2  x="397" y="176" id="8194" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="size" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="1523" id="8346" >
+<cdparam x="397" y="126" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Read" value="Read(sourceAddress, size)" />
+<P1  x="397" y="146" id="8191" />
+<P2  x="648" y="146" id="8241" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="sourceAddress" />
+<Param index="1" id="size" />
+</extraparam>
+</CONNECTOR>
+<CONNECTOR type="1523" id="8347" >
+<cdparam x="183" y="95" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="Read" value="Read(sourceAddress, size)" />
+<P1  x="166" y="116" id="8297" />
+<P2  x="397" y="116" id="8188" />
+<AutomaticDrawing  data="true" />
+<extraparam>
+<Param index="0" id="sourceAddress" />
+<Param index="1" id="size" />
+</extraparam>
+</CONNECTOR>
+
+</TMLSDPanelCopy>
+
+</TURTLEGSELECTEDCOMPONENTS>
