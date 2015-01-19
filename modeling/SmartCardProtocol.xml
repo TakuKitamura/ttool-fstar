@@ -7308,11 +7308,11 @@ On prend b=1 comme exemple
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="2021" >
 <father id="2064" num="0" />
-<cdparam x="258" y="61" />
-<sizeparam width="108" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="373" y="61" />
+<sizeparam width="141" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="160" minY="0" maxY="104" />
-<infoparam name="TGComponent" value="AppC::TCPIP" />
+<cdrectangleparam minX="0" maxX="127" minY="0" maxY="104" />
+<infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="2013" />
 <TGConnectingPoint num="1" id="2014" />
 <TGConnectingPoint num="2" id="2015" />
@@ -7322,15 +7322,15 @@ On prend b=1 comme exemple
 <TGConnectingPoint num="6" id="2019" />
 <TGConnectingPoint num="7" id="2020" />
 <extraparam>
-<info value="AppC::TCPIP" taskName="TCPIP" referenceTaskName="AppC" priority="0" />
+<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="2030" >
 <father id="2064" num="1" />
 <cdparam x="313" y="110" />
-<sizeparam width="139" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="144" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="129" minY="0" maxY="104" />
+<cdrectangleparam minX="0" maxX="124" minY="0" maxY="104" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="2022" />
 <TGConnectingPoint num="1" id="2023" />
@@ -7346,11 +7346,11 @@ On prend b=1 comme exemple
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="2039" >
 <father id="2064" num="2" />
-<cdparam x="373" y="61" />
-<sizeparam width="136" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="258" y="61" />
+<sizeparam width="109" height="40" minWidth="75" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="132" minY="0" maxY="104" />
-<infoparam name="TGComponent" value="AppC::SmartCard" />
+<cdrectangleparam minX="0" maxX="159" minY="0" maxY="104" />
+<infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="2031" />
 <TGConnectingPoint num="1" id="2032" />
 <TGConnectingPoint num="2" id="2033" />
@@ -7360,7 +7360,7 @@ On prend b=1 comme exemple
 <TGConnectingPoint num="6" id="2037" />
 <TGConnectingPoint num="7" id="2038" />
 <extraparam>
-<info value="AppC::SmartCard" taskName="SmartCard" referenceTaskName="AppC" priority="0" />
+<info value="AppC::TCPIP" taskName="TCPIP" referenceTaskName="AppC" priority="0" />
 </extraparam>
 </SUBCOMPONENT>
 
