@@ -47,7 +47,8 @@ public class CPparserDEF {
 	public static TMLCPJoin join1;
 	public static TMLCPJunction junction;
 	public static TMLCPChoice choice;
-	public static int counter = 0;
+	public static int joinCounter = 0;
+	public static int forkCounter = 0;
 	public static int choiceCounter = 0;
 	public static int stopCounter = 0;
 	public static TMLCPActivityDiagram globalAD;
@@ -459,7 +460,10 @@ void ActivityDiagram( TMLCP mainCP ):
 }
 {
 	<ACTIVITY_DIAGRAM> name = ID()
-	{ globalAD = new TMLCPActivityDiagram( name, null ); TraceManager.addDev( "PARSING DIAGRAM " + name ); }
+	{
+		globalAD = new TMLCPActivityDiagram( name, null );
+		TraceManager.addDev( "PARSING DIAGRAM " + name );
+	}
 	
 	"MAIN" "<>;"
 	{
@@ -469,49 +473,37 @@ void ActivityDiagram( TMLCP mainCP ):
 	}
 
 	(
-		ActivityDiagramType1( mainCP )
-		{
-			TraceManager.addDev( "AFTER DIAGRAMTYPE1" );
-		}
-	|
-		ActivityDiagramType2( mainCP )
-		{
-			TraceManager.addDev( "AFTER DIAGRAMTYPE2" );
-		}
-	)	// either sequences and parallelism or junction-choice
-
- 	"><"	"END" "END" ID()
-
-	/*{
-		TraceManager.addDev( "Adding to DS: " + globalAD.toString() );
-	}*/
-}
-
-void ActivityDiagramType1( TMLCP mainCP ):
-{}
-{
-	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP>
+	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
 	{
 		if( currentElement != null )	{
+			if( currentElement instanceof TMLCPStop )	{
+				TraceManager.addDev( "current Node is a stop node: " + currentElement.getName() );
+			}
+			TraceManager.addDev( "Parsing Sequence, current Node is: " + currentElement.toString() );
 			previousElement.addNextElement( currentElement );
 			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}
-	| parseForkJoin( mainCP ) )+
+	|
+		parseForkJoin( mainCP )
+	|
+		parseGuard( mainCP ) 
+	)+
+ 	"END" "END" ID()
 }
 
-void ActivityDiagramType2( TMLCP mainCP ):
+/*void parseGuardWrapper( TMLCP mainCP ):
 {}
 {
-	parseJunctionChoice( mainCP )
+	parseGuard( mainCP )	//just parse one line of a guard
 	{
 		TraceManager.addDev( " --- After parseJunctionChoice ---\n" + globalAD.toString() );
-		currentElement = new TMLCPStop( "stop" + counter, null );
+		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
 		globalAD.addTMLCPElement( currentElement );
 	}
-}
+}*/
 
 void parseReferenceToDiagram( TMLCP mainCP ):
 {
@@ -539,9 +531,10 @@ void parseForkJoin( TMLCP mainCP ):
 {
 	String name;
 	boolean isSD = false;
-	fork1 = new TMLCPFork( "fork1" + counter , null );
-	join1 = new TMLCPJoin( "join1" + counter , null );
-	counter++;
+	fork1 = new TMLCPFork( "fork1" + forkCounter , null );
+	join1 = new TMLCPJoin( "join1" + joinCounter , null );
+	forkCounter++;
+	joinCounter++;
 }
 {
 	"{" "{" parseReferenceToDiagram( mainCP )
@@ -592,34 +585,18 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 }
 
-void parseJunctionChoice( TMLCP mainCP ):
+void parseGuard( TMLCP mainCP ):
 {
 	String s;
 	ArrayList<String> guardList = new ArrayList<String>();
 	TMLCPElement lastElementBeforeChoice, start;
+	choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
+	choiceCounter++;
+	lastElementBeforeChoice = previousElement;
 }
 {
-	<LABEL_KW> s = ID() ":"		// the second ID parses what follows the first underscore
-	{ 
-		currentElement = new TMLCPStart( s, null );
-		globalAD.addTMLCPElement( currentElement );
-		previousElement = currentElement;
-	}
-	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
-	{
-		if( currentElement != null )	{
-			previousElement.addNextElement( currentElement );
-			globalAD.addTMLCPElement( currentElement );
-			previousElement = currentElement;
-		}
-	}	)*	//In case there is a sequence between the junction and the choice
-	{
-		choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
-		choiceCounter++;
-		lastElementBeforeChoice = previousElement;
-	}
-	// start parsing the choice
-	( s = guard()
+	// start parsing the choie guard, only one line
+	s = guard()
 	{
 		choice.addGuard(s);
 	}
@@ -632,10 +609,13 @@ void parseJunctionChoice( TMLCP mainCP ):
 			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 			choice.addNextElement( currentElement );
+			TraceManager.addDev( "adding to choice: " + choice.toString() );
 		}
-	}	
+	}
+
 	|	// the branch may end here directly, because there is just a reference to one diagram
-	( "><" //when there is a GOTO END it means there is a stop state: end of the branch!
+
+	"><" //when there is >< it means end of the branch!
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
@@ -644,16 +624,8 @@ void parseJunctionChoice( TMLCP mainCP ):
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
-	| <GOTO_KW> s = ID()
-	{
-		TMLCPElement refAD = new TMLCPRefAD( s, null );
-		currentElement.addNextElement( refAD );
-		currentElement = refAD;
-		globalAD.addTMLCPElement( refAD );
-	}
-	)
 
-	|	// or it is followed by a longer sequence
+	|	// or it is followed by a longer sequence of diagrams
 
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
 	{
@@ -663,7 +635,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 			previousElement = currentElement;
 		}
 	}	)+		//continues the sequence of diagrams
-	( "><" //when there is a GOTO END it means there is a stop state: end of the branch!
+	"><" //when there is >< it means: end of the branch!
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
@@ -672,21 +644,12 @@ void parseJunctionChoice( TMLCP mainCP ):
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
-	| <GOTO_KW> s = ID()
-	{
-		TMLCPElement refAD = new TMLCPRefAD( s, null );
-		currentElement.addNextElement( refAD );
-		currentElement = refAD;
-		globalAD.addTMLCPElement( refAD );
-	}
-	)
-	)+
-	"END" ID()
+	//"END" ID()
 	{
 		globalAD.addTMLCPElement( choice );
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
-		TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
+		//TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
 	}
 }
 
@@ -751,3 +714,5 @@ String GFactor():
 	|
 	t = <INTEGER_LITERAL>	{ return t.image; }
 }
+
+
