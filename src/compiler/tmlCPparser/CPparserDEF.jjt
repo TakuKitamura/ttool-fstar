@@ -456,7 +456,6 @@ String ID():
 void ActivityDiagram( TMLCP mainCP ):
 {
 	String name;
-	TMLCPActivityDiagram ad = null;
 }
 {
 	<ACTIVITY_DIAGRAM> name = ID()
@@ -469,7 +468,17 @@ void ActivityDiagram( TMLCP mainCP ):
 		previousElement = currentElement;
 	}
 
-	( ActivityDiagramType1( mainCP ) | ActivityDiagramType2( mainCP )	)	// either sequences and parallelism or junction-choice
+	(
+		ActivityDiagramType1( mainCP )
+		{
+			TraceManager.addDev( "AFTER DIAGRAMTYPE1" );
+		}
+	|
+		ActivityDiagramType2( mainCP )
+		{
+			TraceManager.addDev( "AFTER DIAGRAMTYPE2" );
+		}
+	)	// either sequences and parallelism or junction-choice
 
  	"><"	"END" "END" ID()
 
@@ -485,7 +494,7 @@ void ActivityDiagramType1( TMLCP mainCP ):
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}
@@ -497,9 +506,10 @@ void ActivityDiagramType2( TMLCP mainCP ):
 {
 	parseJunctionChoice( mainCP )
 	{
+		TraceManager.addDev( " --- After parseJunctionChoice ---\n" + globalAD.toString() );
 		currentElement = new TMLCPStop( "stop" + counter, null );
 		previousElement.addNextElement( currentElement );
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 	}
 }
 
@@ -538,7 +548,7 @@ void parseForkJoin( TMLCP mainCP ):
 	{
 		previousElement.addNextElement( fork1 );
 		fork1.addNextElement( currentElement );	//the next element of Fork is only the first element of the sequence
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
@@ -547,7 +557,7 @@ void parseForkJoin( TMLCP mainCP ):
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}
@@ -558,7 +568,7 @@ void parseForkJoin( TMLCP mainCP ):
 	( "*" "{" parseReferenceToDiagram( mainCP )
 	{
 		fork1.addNextElement( currentElement );
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
@@ -567,7 +577,7 @@ void parseForkJoin( TMLCP mainCP ):
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}
@@ -576,8 +586,8 @@ void parseForkJoin( TMLCP mainCP ):
 	{ previousElement.addNextElement( join1 ); }
 	)+	"};"	// end of a whole fork-join
 	{
-		globalAD.addElement( fork1 );
-		globalAD.addElement( join1 );
+		globalAD.addTMLCPElement( fork1 );
+		globalAD.addTMLCPElement( join1 );
 		previousElement = join1;
 	}
 }
@@ -592,14 +602,14 @@ void parseJunctionChoice( TMLCP mainCP ):
 	<LABEL_KW> s = ID() ":"		// the second ID parses what follows the first underscore
 	{ 
 		currentElement = new TMLCPStart( s, null );
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 		previousElement = currentElement;
 	}
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}	)*	//In case there is a sequence between the junction and the choice
@@ -619,7 +629,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 			if( !(previousElement instanceof TMLCPStop) )	{	// avoid the spurious case when returning from the end of a branch
 				previousElement.addNextElement( currentElement );
 			}
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 			choice.addNextElement( currentElement );
 		}
@@ -629,7 +639,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 		stopCounter++;
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
@@ -639,7 +649,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 		TMLCPElement refAD = new TMLCPRefAD( s, null );
 		currentElement.addNextElement( refAD );
 		currentElement = refAD;
-		globalAD.addElement( refAD );
+		globalAD.addTMLCPElement( refAD );
 	}
 	)
 
@@ -649,7 +659,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
-			globalAD.addElement( currentElement );
+			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
 	}	)+		//continues the sequence of diagrams
@@ -657,7 +667,7 @@ void parseJunctionChoice( TMLCP mainCP ):
 	{
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
-		globalAD.addElement( currentElement );
+		globalAD.addTMLCPElement( currentElement );
 		stopCounter++;
 		previousElement = currentElement;
 		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
@@ -667,13 +677,13 @@ void parseJunctionChoice( TMLCP mainCP ):
 		TMLCPElement refAD = new TMLCPRefAD( s, null );
 		currentElement.addNextElement( refAD );
 		currentElement = refAD;
-		globalAD.addElement( refAD );
+		globalAD.addTMLCPElement( refAD );
 	}
 	)
 	)+
 	"END" ID()
 	{
-		globalAD.addElement( choice );
+		globalAD.addTMLCPElement( choice );
 		previousElement = currentElement;
 		lastElementBeforeChoice.setNextElement( choice );
 		TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
