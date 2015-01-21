@@ -221,6 +221,10 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "++++++++++++++" );
 		}
+
+		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "toto" );
+		String s = pippo.toTextFormat( mainCP );
+		TraceManager.addDev( s );
 		return jjtThis;
 	}
 }
@@ -338,9 +342,8 @@ TMLSDAction Action( String instanceName ):
 	Token t;
 }
 {
-	<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() ) //( t = <INTEGER_LITERAL> | t = <FALSECONST> | t = <TRUECONST> )
+	<ACTION_KW> s = ID() <ASSIGNMENT> ( s1 = BAExpression() | s1 = MAExpression() )
 	{
-		//TraceManager.addDev( "***** " + s1 + " *****" );
 		TMLSDAction action = new TMLSDAction( s + " = " + s1, instanceName );
 		return action;
 	}
@@ -468,7 +471,6 @@ void ActivityDiagram( TMLCP mainCP ):
 	<ACTIVITY_DIAGRAM> name = ID()
 	{
 		globalAD = new TMLCPActivityDiagram( name, null );
-		TraceManager.addDev( "PARSING DIAGRAM " + name );
 	}
 	
 	"MAIN" "<>;"
@@ -490,14 +492,17 @@ void ActivityDiagram( TMLCP mainCP ):
 	|
 		parseForkJoin( mainCP )
 	|
-		
-		parseGuard( mainCP ) 
+		parseChoiceLine( mainCP ) 
 	)+
  	"END" "END" ID()
 	{
-		if( thereIsAChoice )
+		if( thereIsAChoice )	{	//Correcting the additional stop node added when parsing a choice
+			ArrayList<TMLCPElement> elements = globalAD.getElements();
+			elements.remove( elements.size()-1 );
+			globalAD.addElements( elements );
 			globalAD.addTMLCPElement( choice );
 			thereIsAChoice = false;
+		}
 	}
 }
 
@@ -581,26 +586,21 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 }
 
-void parseGuard( TMLCP mainCP ):
+void parseChoiceLine( TMLCP mainCP ):	// parse the choice guard line
 {
 	String s;
 	ArrayList<String> guardList = new ArrayList<String>();
-	TMLCPElement lastElementBeforeChoice, start;
-	//choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
-	//choiceCounter++;
-	lastElementBeforeChoice = previousElement;
 }
 {
-	// start parsing the choie guard, only one line
-	s = guard()
+	s = parseGuard()
 	{
 		thereIsAChoice = true;
 		choice.addGuard(s);
-		//TraceManager.addDev( "currentElement: " + currentElement.toString() );
-		//TraceManager.addDev( "previousElement: " + previousElement.toString() );
-		currentElement.addNextElement( choice );
+		if( !(currentElement instanceof TMLCPChoice) )	{
+			currentElement.addNextElement( choice );
+		}
 	}
-	 	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 	//the nextElement of a TMLCPChoice is the first element of the sequence
+	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 	//the nextElement of a TMLCPChoice is the first element of the sequence
 	{
 		if( currentElement != null )	{
 			/*if( !(previousElement instanceof TMLCPStop) )	{	// avoid the spurious case when returning from the end of a branch
@@ -609,57 +609,48 @@ void parseGuard( TMLCP mainCP ):
 			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 			choice.addNextElement( currentElement );
-			//globalAD.addTMLCPElement( choice );
 		}
 	}
 
 	|	// the branch may end here directly, because there is just a reference to one diagram
 
-	"><" //when there is >< it means end of the branch!
+	"><" // end of the branch
 	{
-		TraceManager.addDev( "Branch ending DIRECTLY" );
-		TraceManager.addDev( "currentElement: " + currentElement.toString() );
-		TraceManager.addDev( "previousElement: " + previousElement.toString() );
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
-		previousElement.addNextElement( currentElement );
+		if( !(currentElement instanceof TMLCPStop && previousElement instanceof TMLCPStop) )	{
+			previousElement.addNextElement( currentElement );
+		}
+
 		globalAD.addTMLCPElement( currentElement );
 		stopCounter++;
 		previousElement = currentElement;
-		//currentElement = choice;	// end of a branch, the previous element is reset to the choice node
+		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}
 
-	|	// or it is followed by a longer sequence of diagrams
+	/*|	// or it is followed by a longer sequence of diagrams
 
 	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
 	{
+		TraceManager.addDev( "Passing by here" );
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
 			globalAD.addTMLCPElement( currentElement );
 			previousElement = currentElement;
 		}
-	}	)+		//continues the sequence of diagrams
-	"><" //when there is >< it means: end of the branch!
+	}
+	)+
+	"><" // end of the branch
 	{
-		TraceManager.addDev( "Branch ending AFTER" );
-		TraceManager.addDev( "currentElement: " + currentElement.toString() );
-		TraceManager.addDev( "previousElement: " + previousElement.toString() );
 		currentElement = new TMLCPStop( "stop" + stopCounter, null );
 		previousElement.addNextElement( currentElement );
 		globalAD.addTMLCPElement( currentElement );
 		stopCounter++;
 		previousElement = currentElement;
-		//currentElement = choice;	// end of a branch, the previous element is reset to the choice node
-	}
-	//"END" ID()
-	/*{
-		globalAD.addTMLCPElement( choice );
-		previousElement = currentElement;
-		//lastElementBeforeChoice.setNextElement( choice );
-		//TraceManager.addDev( "FINISHED PARSING AD IN JC" + globalAD.toString() );
+		currentElement = choice;	// end of a branch, the previous element is reset to the choice node
 	}*/
 }
 
-String guard():
+String parseGuard():
 {
 	String s;
 }
