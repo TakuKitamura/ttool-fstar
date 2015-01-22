@@ -31,16 +31,16 @@ options {
 //	NODE_PREFIX="AST";
 }
 
-PARSER_BEGIN(CPparserDEF) /* The parser class */
+PARSER_BEGIN(CPparser) /* The parser class */
 
-//package compiler.tmlCPparserDEF;
+//package compiler.tmlCPparser;
 import tmltranslator.*;
 import tmltranslator.tmlcp.*;
 import java.util.*;
 import myutil.*;
 import java.util.ArrayList;
 
-public class CPparserDEF {
+public class CPparser {
 
 	public static TMLCP topCP = new TMLCP( "noName", new Object() );
 	public static TMLCPFork fork1;
@@ -59,7 +59,7 @@ public class CPparserDEF {
 
   /* Main entry point. */
   public static void main(String args[]) throws ParseException	{
-    CPparserDEF parser = new CPparserDEF(System.in);
+    CPparser parser = new CPparser(System.in);
 		try	{
     	ASTStartSymbol n = parser.StartSymbol();
 			//print AST
@@ -75,7 +75,7 @@ public class CPparserDEF {
   }
 }
 
-PARSER_END(CPparserDEF)
+PARSER_END(CPparser)
 
 SKIP:
 {
