@@ -180,7 +180,7 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 	int i;
 	String space = " ";
 	String undefinedDiagStringList = "";
-	TMLCP mainCP = new TMLCP();
+	TMLCP topCP = new TMLCP();
 	TMLCPSequenceDiagram seqDiag;
 	TMLCPActivityDiagram actDiag;
 	ArrayList<TMLAttribute> attributeList;
@@ -195,21 +195,27 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 		}
 	}
 
-	( seqDiag = SequenceDiagram( attributeList ) { mainCP.addCPSequenceDiagram( seqDiag ); } )+
+	( seqDiag = SequenceDiagram( attributeList ) { topCP.addCPSequenceDiagram( seqDiag ); } )+
 
-	( ActivityDiagram( mainCP )
-		{
-			mainCP.addCPActivityDiagram( globalAD );
-			choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
-		}
+	ActivityDiagram( topCP )	// dedicated to set the first CP as the topCP
+	{
+		topCP.setMainCP( globalAD );
+		choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
+	}
+
+	( ActivityDiagram( topCP )
+	{
+		topCP.addCPActivityDiagram( globalAD );
+		choice = new TMLCPChoice( "choice" + choiceCounter, null, null );	// empty guardList (second argument)
+	}
 	)*
 
 	<EOF>		/* Force the parser to reach EOF */
 
 	{
 		//topCP.correctReferences();
-		ArrayList<TMLCPSequenceDiagram> sdList = mainCP.getCPSequenceDiagrams();
-		ArrayList<TMLCPActivityDiagram> adList = mainCP.getCPActivityDiagrams();
+		/*ArrayList<TMLCPSequenceDiagram> sdList = topCP.getCPSequenceDiagrams();
+		ArrayList<TMLCPActivityDiagram> adList = topCP.getCPActivityDiagrams();
 		TraceManager.addDev( "***************" );
 		for( TMLCPSequenceDiagram diag: sdList )	{
 			TraceManager.addDev( diag.toString() );
@@ -220,10 +226,10 @@ ASTStartSymbol StartSymbol():	/* The left hand side of this production is called
 		for( TMLCPActivityDiagram diag: adList )	{
 			TraceManager.addDev( diag.toString() );
 			TraceManager.addDev( "++++++++++++++" );
-		}
+		}*/
 
-		TMLCPTextSpecification pippo = new TMLCPTextSpecification( "toto" );
-		String s = pippo.toTextFormat( mainCP );
+		TMLCPTextSpecification toto = new TMLCPTextSpecification( "From parser" );
+		String s = toto.toTextFormat( topCP );
 		TraceManager.addDev( s );
 		return jjtThis;
 	}
@@ -303,7 +309,7 @@ TMLSDInstance SequenceDiagramInstance( ArrayList<TMLAttribute> attributeList ):
 		TMLSDInstance instance = new TMLSDInstance( instanceName, t.image );
 		for( TMLAttribute attr: attributeList )	{
 			if( instanceName.equals( attr.getInstanceName() ) )	{
-				//TraceManager.addDev( "Adding attribute " attr.toString() + " to instance " + instanceName );
+				//TraceManager.addDev( "Adding attribute " + attr.toString() + " to instance " + instanceName );
 				instance.addAttribute( attr );
 			}
 		}
@@ -463,7 +469,7 @@ String ID():
 
 /*###################################################################################"*/
 
-void ActivityDiagram( TMLCP mainCP ):
+void ActivityDiagram( TMLCP topCP ):
 {
 	String name;
 }
@@ -481,7 +487,7 @@ void ActivityDiagram( TMLCP mainCP ):
 	}
 
 	(
-	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
+	parseReferenceToDiagram( topCP )	<SEQUENCING_OP> 
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
@@ -490,9 +496,9 @@ void ActivityDiagram( TMLCP mainCP ):
 		}
 	}
 	|
-		parseForkJoin( mainCP )
+		parseForkJoin( topCP )
 	|
-		parseChoiceLine( mainCP ) 
+		parseChoiceLine( topCP ) 
 	)+
  	"END" "END" ID()
 	{
@@ -506,7 +512,7 @@ void ActivityDiagram( TMLCP mainCP ):
 	}
 }
 
-void parseReferenceToDiagram( TMLCP mainCP ):
+void parseReferenceToDiagram( TMLCP topCP ):
 {
 	String name;
 	boolean isSD = false;
@@ -514,7 +520,7 @@ void parseReferenceToDiagram( TMLCP mainCP ):
 {
 	name = ID()
 	{ 
-		for( TMLCPSequenceDiagram sd: mainCP.getCPSequenceDiagrams() )	{
+		for( TMLCPSequenceDiagram sd: topCP.getCPSequenceDiagrams() )	{
 			if( sd.getName().equals( name ) )	{
 				isSD = true;
 			}
@@ -528,7 +534,7 @@ void parseReferenceToDiagram( TMLCP mainCP ):
 	}
 }
 
-void parseForkJoin( TMLCP mainCP ):
+void parseForkJoin( TMLCP topCP ):
 {
 	String name;
 	boolean isSD = false;
@@ -538,7 +544,7 @@ void parseForkJoin( TMLCP mainCP ):
 	joinCounter++;
 }
 {
-	"{" "{" parseReferenceToDiagram( mainCP )
+	"{" "{" parseReferenceToDiagram( topCP )
 	{
 		previousElement.addNextElement( fork1 );
 		fork1.addNextElement( currentElement );	//the next element of Fork is only the first element of the sequence
@@ -547,7 +553,7 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
 	(
-	<SEQUENCING_OP> parseReferenceToDiagram( mainCP )
+	<SEQUENCING_OP> parseReferenceToDiagram( topCP )
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
@@ -559,7 +565,7 @@ void parseForkJoin( TMLCP mainCP ):
 	"}"	// end of the first branch
 	{ previousElement.addNextElement( join1 ); }
 	// then one or more branches
-	( "*" "{" parseReferenceToDiagram( mainCP )
+	( "*" "{" parseReferenceToDiagram( topCP )
 	{
 		fork1.addNextElement( currentElement );
 		globalAD.addTMLCPElement( currentElement );
@@ -567,7 +573,7 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 	// from now on is like parsing a normal sequence, in the sense that I ignore the fact of being inside a fork-join
 	(
-	<SEQUENCING_OP> parseReferenceToDiagram( mainCP )
+	<SEQUENCING_OP> parseReferenceToDiagram( topCP )
 	{
 		if( currentElement != null )	{
 			previousElement.addNextElement( currentElement );
@@ -586,7 +592,7 @@ void parseForkJoin( TMLCP mainCP ):
 	}
 }
 
-void parseChoiceLine( TMLCP mainCP ):	// parse the choice guard line
+void parseChoiceLine( TMLCP topCP ):	// parse the choice guard line
 {
 	String s;
 	ArrayList<String> guardList = new ArrayList<String>();
@@ -600,7 +606,7 @@ void parseChoiceLine( TMLCP mainCP ):	// parse the choice guard line
 			currentElement.addNextElement( choice );
 		}
 	}
-	parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 	//the nextElement of a TMLCPChoice is the first element of the sequence
+	parseReferenceToDiagram( topCP ) <SEQUENCING_OP> 	//the nextElement of a TMLCPChoice is the first element of the sequence
 	{
 		if( currentElement != null )	{
 			/*if( !(previousElement instanceof TMLCPStop) )	{	// avoid the spurious case when returning from the end of a branch
@@ -629,7 +635,7 @@ void parseChoiceLine( TMLCP mainCP ):	// parse the choice guard line
 
 	/*|	// or it is followed by a longer sequence of diagrams
 
-	( parseReferenceToDiagram( mainCP )	<SEQUENCING_OP> 
+	( parseReferenceToDiagram( topCP )	<SEQUENCING_OP> 
 	{
 		TraceManager.addDev( "Passing by here" );
 		if( currentElement != null )	{
