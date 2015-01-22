@@ -27,7 +27,7 @@ if [ -z $JAVACC ]; then echo -e "${RED}ERROR: javacc path not found${NC}"; exit;
 
 rm -r parser
 mkdir parser
-cp CPparser.jjt parser/
+cp CPparserDEF.jjt parser/
 cp ASTID.java parser/
 cp ParseException.java parser/
 #cp UniqueException.java parser/
@@ -36,11 +36,11 @@ cd parser
 
 #Invoke Javatree on the parser: DO IT ON THE .JJT FILE!
 echo -e "${BLUE}Invoking jjtree on the parser .jjt...${NC}"
-jjtree CPparser.jjt
+jjtree CPparserDEF.jjt
 
 #Invoke Javacc on the parser: DO IT ON THE .JJ FILE!
 echo -e "${BLUE}Invoking javacc on the parser .jj...${NC}"
-JAVACCcmd=$($JAVACC CPparser.jj)
+JAVACCcmd=$($JAVACC CPparserDEF.jj)
 
 #Test for errors when building the parser
 GREPcmd1=$(echo $JAVACCcmd | grep -c '0 errors')
@@ -62,5 +62,6 @@ javac -classpath ../../:parser parser/*.java
 
 #Test the parser on a sample file
 echo -e "${BLUE}Launching the parser...${NC}"
-java -classpath ./parser/:../../ CPparser < ./spec.tmlcp
+java -classpath ./parser/:../../ CPparserDEF < ./spec.tmlcp
+#java -classpath ./parser/:../../ CPparserDEF < ./spec.tmlcp
 #./HOC2.test
