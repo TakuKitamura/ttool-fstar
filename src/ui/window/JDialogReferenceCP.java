@@ -85,7 +85,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 	
 	private ArrayList<HashSet<String>> listInstancesHash = new ArrayList<HashSet<String>>();	// the list of AVAILABLE instances
 	// and array list containing the SD instances for each CP. The array list is indexed the same way as listCPs
-	private ArrayList<HashSet<String>> listOfMappedInstances = new ArrayList<HashSet<String>>(100);
+	private ArrayList<HashSet<String>> listOfMappedInstances = new ArrayList<HashSet<String>>();
 	private ArrayList<HashSet<String>> sdStorageInstances = new ArrayList<HashSet<String>>();
 	private ArrayList<HashSet<String>> sdTransferInstances = new ArrayList<HashSet<String>>();
 	private ArrayList<HashSet<String>> sdControllerInstances = new ArrayList<HashSet<String>>();
@@ -388,21 +388,24 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			Iterator<String> it	= mappedUnitsSL.iterator();
 			while( it.hasNext() )	{
 				info = retrieveSingleInformationFromMappingString( it.next() );
-				if( !doesCPexist( info.get(0) ) )	{
+				String CPname = info.get(0);
+				String instanceName = info.get(1);
+				if( !doesCPexist( CPname ) )	{
 					it.remove();
 				}
 				else	{
-					if( !checkAndRemoveIfInstanceExists( info.get(1) ) )	{	//if the instance exists, remove it from listInstancesHash
+					//if the instance exists, remove it from listInstancesHash and add it to the list of mapped instances
+					if( !checkAndRemoveIfInstanceExists( CPname, instanceName ) )	{	
 						it.remove();
 					}
 					else	{
 						// a transfer instance was mapped on more than one arch unit
-							for( int i = 2; i < info.size(); i++ )	{
-								if( !doesArchUnitExist( info.get(i) ) )	{
-									it.remove();
-									restoreInstanceName( info.get(0), info.get(1) );	//put back the instance in listInstancesHash
-								}
+						for( int i = 2; i < info.size(); i++ )	{
+							if( !doesArchUnitExist( info.get(i) ) )	{
+								it.remove();
+								restoreInstanceName( CPname, instanceName );	//put back the instance in listInstancesHash
 							}
+						}
 					}
 				}
 			}
@@ -455,23 +458,26 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			return false;
 		}
 		
-		private boolean checkAndRemoveIfInstanceExists( String instanceName )	{
+		private boolean checkAndRemoveIfInstanceExists( String CPname, String instanceName )	{
 
-			for( int i = 0; i < listInstancesHash.size(); i++ )	{
-				HashSet<String> tempHash = listInstancesHash.get(i);
-				if( tempHash.contains( instanceName ) )	{
-					//TraceManager.addDev( "instanceName: " + instanceName + " exists" );
-					tempHash.remove( instanceName );
-					listInstancesHash.set( i, tempHash );
-					freezeSDInstancesCB();
-					if( tempHash.size() == 0 )	{
-						tempHash.add( EMPTY_INSTANCES_LIST );
+			for( int i = 0; i < listCPs.size(); i++ )	{
+				if( listCPs.get(i).getName().equals( CPname ) )	{
+					HashSet<String> tempHash = listInstancesHash.get(i);
+					if( tempHash.contains( instanceName ) )	{
+						tempHash.remove( instanceName );
+						listInstancesHash.set( i, tempHash );
+						freezeSDInstancesCB();
+						if( tempHash.size() == 0 )	{
+							tempHash.add( EMPTY_INSTANCES_LIST );
+						}
+						makeSDInstancesComboBox( new Vector<String>( tempHash ) );
+						unfreezeSDInstancesCB();
+						HashSet<String> oldListOfMappedInstances = listOfMappedInstances.get(i);
+						oldListOfMappedInstances.remove( "VOID" );
+						oldListOfMappedInstances.add( instanceName );
+						listOfMappedInstances.set( i, oldListOfMappedInstances );
+						return true;
 					}
-					makeSDInstancesComboBox( new Vector<String>( tempHash ) );
-					unfreezeSDInstancesCB();
-					//sdInstancesCB.addActionListener( this );
-					//TraceManager.addDev( "Removed " + instanceName + " the has set of instances is: " + ( new Vector<String>(tempHash)).toString() );
-					return true;
 				}
 			}
 			return false;
@@ -572,16 +578,11 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 													" : " + mappableArchUnitsSL.get( mappableArchUnitsJL.getSelectedIndex() ) );
 				}
 				// add the mapped instance to the list of mapped instances
-				/*HashSet<String> oldListOfMappedInstances;
-				if( listOfMappedInstances.get(j).size() != 0 )	{
-					oldListOfMappedInstances = listOfMappedInstances.get(j);
-				}
-				else	{
-					oldListOfMappedInstances = new HashSet<String>();
-				}
+				HashSet<String> oldListOfMappedInstances;
+				oldListOfMappedInstances = listOfMappedInstances.get(j);
+				oldListOfMappedInstances.remove( "VOID" );
 				oldListOfMappedInstances.add( instanceToMap );
 				listOfMappedInstances.set( j, oldListOfMappedInstances );
-				TraceManager.addDev( "The DS of mapped instances: " + oldListOfMappedInstances.toString() );*/
 
 				//remove the mapped instance from the list of available instances
 				HashSet<String> SDinstancesHash = listInstancesHash.get( j );
@@ -637,10 +638,16 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 						break;
 					}
 				}
+				HashSet<String> oldListOfMappedInstances = listOfMappedInstances.get( indexCP );
+				oldListOfMappedInstances.remove( instanceName );
+				listOfMappedInstances.set( indexCP, oldListOfMappedInstances );
+				//TraceManager.addDev( "The DS of mapped instances: " + oldListOfMappedInstances.toString() );
+
 				HashSet<String> oldList = listInstancesHash.get( indexCP );	// it is the list of all instances for a given CP
-				TraceManager.addDev( "Adding " + instanceName + " to oldList: " + oldList.toString() );
+				//TraceManager.addDev( "Adding " + instanceName + " to oldList: " + oldList.toString() );
 				oldList.add( instanceName );
 				listInstancesHash.set( indexCP, oldList );
+				//TraceManager.addDev( "sdInstancesL: " + sdInstancesSL.toString() );
 				sdInstancesSL = new Vector<String>( oldList );
 				makeSDInstancesComboBox( sdInstancesSL );
 				listMappedUnitsJL.setListData( mappedUnitsSL );
@@ -890,6 +897,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 			HashSet<String> sdControllerInstances_local = new HashSet<String>();
 			HashSet<String> sdStorageInstances_local = new HashSet<String>();
 			HashSet<String> sdTransferInstances_local = new HashSet<String>();
+			HashSet<String> mappedSDInstances_local = new HashSet<String>();	//just to initialize the data structure
 			
 			//j indexes the CP and k indexes the components within a TMLSDPanel
 			if( listCPs.size() > 0 )	{
@@ -926,10 +934,12 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 							}
 						}	
 					}
-					listInstancesHash.add( j, sdInstancesNames );	//for each CP the list of instances
-					sdStorageInstances.add( j, sdStorageInstances_local );	//for each CP the list of storage instances
-					sdTransferInstances.add( j, sdTransferInstances_local );	//for each CP the list of controller instances
+					listInstancesHash.add( j, sdInstancesNames );									//for each CP the list of instances
+					sdStorageInstances.add( j, sdStorageInstances_local );				//for each CP the list of storage instances
+					sdTransferInstances.add( j, sdTransferInstances_local );			//for each CP the list of controller instances
 					sdControllerInstances.add( j, sdControllerInstances_local );	//for each CP the list of transfer instances
+					mappedSDInstances_local.add( "VOID" );
+					listOfMappedInstances.add( j, mappedSDInstances_local );			//just to initialize the data structure
 					TraceManager.addDev( "CP name: " + listCPs.get(j).getName() );
 					TraceManager.addDev( "List of storage instances: " + sdStorageInstances.get(j).toString() );
 					TraceManager.addDev( "List of transfer instances: " + sdTransferInstances.get(j).toString() );
@@ -938,6 +948,7 @@ public class JDialogReferenceCP extends javax.swing.JDialog implements ActionLis
 					sdStorageInstances_local = new HashSet<String>();
 					sdTransferInstances_local = new HashSet<String>();
 					sdControllerInstances_local = new HashSet<String>();
+					mappedSDInstances_local = new HashSet<String>();
 				}
 			}
 		}
