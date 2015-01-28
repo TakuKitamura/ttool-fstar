@@ -49,10 +49,10 @@ package ui;
 
 public class DefaultText  {
 
-    public static String BUILD = "11768";
-	public static String DATE = "2014/12/23 09:00:09 CET";
-
-
+    public static String BUILD = "11769";
+    public static String DATE = "2015/01/28 14:00:35 CET";
+    
+    
     public static StringBuffer sbAbout = makeAbout();
     
     public static String getAboutText() {
@@ -60,23 +60,22 @@ public class DefaultText  {
     }
     
     public static String getVersion() {
-        return "0.96-beta1"; /* Set new release March. 20th, 2014 */
+        return "0.97"; /* Set new release Jan. 28th, 2015 */
     }
-	
-	public static String getFullVersion() {
-		return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-	}
+    
+    public static String getFullVersion() {
+	return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
+    }
     
     private static StringBuffer makeAbout() {
         StringBuffer sb = new StringBuffer();
         sb.append("TTool version " + getFullVersion() + "\n\n");
-        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck - Telecom ParisTech - contact email: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck \n\n");
+        sb.append("Programmers\n\tLudovic Apvrille, Daniel Knorreck, Andrea Enrici - Telecom ParisTech - contact email: ludovic.apvrille@telecom-paristech.fr\n");
+        sb.append("\tCopyright Institut Telecom - Telecom ParisTech / Ludovic Apvrille / Daniel Knorreck / Andrea Enrici \n\n");
         sb.append("Online documentation\n\tLudovic Apvrille - Telecom ParisTech - ludovic.apvrille@telecom-paristech.fr\n\n\n");
         sb.append("For more information regarding TTool, and the UML/SysML profiles supportd by TTool:\n");
         sb.append("TTool's website: http://ttool.telecom-paristech.fr/\n\n");
         return sb;
     }
-	
-	
+		
 }
