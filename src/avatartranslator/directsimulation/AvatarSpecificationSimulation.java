@@ -346,11 +346,14 @@ public class AvatarSpecificationSimulation  {
                 } else {
                     //TraceManager.addDev("pending transactions");
                     if ((nbOfCommandsActivated) && (nbOfCommands < 1)) {
-                        //TraceManager.addDev("1. pending transactions");
+                        TraceManager.addDev("1. pending transactions");
                         if (getSilentTransactionToExecute(pendingTransactions) == null) {
+			    TraceManager.addDev("Dont execute");
                             setState(DONT_EXECUTE);
                         } else {
+			    TraceManager.addDev("Execute");
                             setState(EXECUTE);
+			    stopped = false;
                         }
                     } else {
                         //TraceManager.addDev("2. pending transactions");
@@ -361,15 +364,15 @@ public class AvatarSpecificationSimulation  {
                 break;
 
             case EXECUTE:
-                //TraceManager.addDev("-> -> EXECUTE");
+                TraceManager.addDev("-> -> EXECUTE");
                 silentTransactionExecuted = false;
                 selectedTransactions = selectTransactions(pendingTransactions);
 
                 if (selectedTransactions.size() == 0) {
                     setState(TERMINATED);
-                    //TraceManager.addDev("Deadlock: no transaction can be selected");
+                    TraceManager.addDev("Deadlock: no transaction can be selected");
                 } else {
-
+		    TraceManager.addDev("performSelectedTrans?");
                     if (performSelectedTransactions(selectedTransactions)) {
                         if (!silentTransactionExecuted) {
                             if (nbOfCommandsActivated) {
@@ -486,7 +489,7 @@ public class AvatarSpecificationSimulation  {
             setState(EXECUTE);
         }
 
-        //TraceManager.addDev("End of computing external command");
+        TraceManager.addDev("End of computing external command newState=" + newState + " state=" + state);
         return;
     }
 
