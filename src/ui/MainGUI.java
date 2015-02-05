@@ -8095,6 +8095,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);
         } else if (command.equals(actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);
+        } else if (command.equals(actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].getActionCommand())) {
+            actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_PORT_ARTIFACT);
 
 
 

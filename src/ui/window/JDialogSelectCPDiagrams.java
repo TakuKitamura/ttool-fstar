@@ -53,6 +53,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.util.*;
 
+import myutil.*;
+
 import ui.*;
 import ui.tmldd.*;
 import ui.tmlcp.*;
@@ -85,6 +87,8 @@ public class JDialogSelectCPDiagrams extends javax.swing.JDialog implements Acti
 		
 		super(f, title, true);
         
+		TraceManager.addDev( "Printing list of components: " + Arrays.toString( componentList.toArray()) );
+
     back = _back;
     if( ( validated == null ) || ( ignored == null ) ) {
 			val = makeNewVal( componentList );	//componentList must already contain something. Val contains a list of all TMLArchiNodes

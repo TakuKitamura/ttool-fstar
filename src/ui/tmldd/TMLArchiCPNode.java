@@ -296,4 +296,58 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
 
+	public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )	{
+        
+  	if( tgc instanceof TMLArchiCommunicationArtifact )	{
+			// Make it an internal component
+			// It's one of my son
+			//Set its coordinates
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			//System.out.println("Internal component");
+     	//tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
+      //System.out.println("cdRect comp swallow");
+      ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
+      //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+      //tgc.setCd(x, y);
+			//add it
+			addInternalComponent( tgc, 0 );
+			return true;
+		}
+		else	{
+  		if( tgc instanceof TMLArchiPortArtifact )	{
+				tgc.setFather( this );
+				tgc.setDrawingZone( true );
+        ( (TMLArchiPortArtifact)tgc ).resizeWithFather();
+				addInternalComponent( tgc, 0 );
+				return true;
+		}
+		return false;
+    }
+	}
+    
+	public void hasBeenResized() {
+    
+		for( int i = 0; i < nbInternalTGComponent; i++ )	{
+			if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
+				( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
+			}
+			else	{
+				if( tgcomponent[i] instanceof TMLArchiPortArtifact )	{
+					( (TMLArchiPortArtifact)tgcomponent[i] ).resizeWithFather();
+				}
+  		}
+  	}
+	}
+
+	public ArrayList<TMLArchiPortArtifact> getPortArtifactList() {
+
+  	ArrayList<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
+    for( int i = 0; i < nbInternalTGComponent; i++ )	{
+			if( tgcomponent[i] instanceof TMLArchiPortArtifact )	{
+				v.add( (TMLArchiPortArtifact)(tgcomponent[i]) );
+      }
+    }
+    return v;
+  }
 }

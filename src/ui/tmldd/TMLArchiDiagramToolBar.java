@@ -72,6 +72,7 @@ public class TMLArchiDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].setEnabled(b);
         mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].setEnabled(b);
+		mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_EVENT_ARTIFACT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].setEnabled(b);
 		mgui.actions[TGUIAction.TMLARCHI_DMANODE].setEnabled(b);
@@ -136,6 +137,8 @@ public class TMLArchiDiagramToolBar extends TToolBar {
         	button.addMouseListener(mgui.mouseHandler);
         }
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT]);
+        button.addMouseListener(mgui.mouseHandler);
+		button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
 
 		this.addSeparator();
