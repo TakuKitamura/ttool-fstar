@@ -1614,7 +1614,7 @@ public class GTURTLEModeling {
 	    return;
 	}
 
-	TraceManager.addDev("Save operation");
+	//TraceManager.addDev("Save operation");
 	
 	String s = makeXMLFromTurtleModeling(-1);
 	
@@ -1650,7 +1650,7 @@ public class GTURTLEModeling {
 	    savedPanels.removeElementAt(0);
 	}
 	pointerOperation = savedOperations.size() - 1;
-	TraceManager.addDev("Setting pointer to " + pointerOperation);
+	//TraceManager.addDev("Setting pointer to " + pointerOperation);
 	
 	selectBackwardMode();
     }

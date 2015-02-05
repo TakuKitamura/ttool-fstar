@@ -3132,6 +3132,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
                 return false;
             }
 
+	    adp.resetModelBacktracingProVerif();
+
             adp.setValidated(jdmc.getValidated());
             adp.setIgnored(jdmc.getIgnored());
             adp.setOptimized(jdmc.getOptimized());
