@@ -350,4 +350,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
     return v;
   }
+
+	public Vector<String> getMappedUnits()	{
+		return mappedUnits;
+	}
 }
