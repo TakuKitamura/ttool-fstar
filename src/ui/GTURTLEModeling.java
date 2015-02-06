@@ -128,6 +128,8 @@ import proverifspec.*;
 
 import req.ebrdd.*;
 
+import Ctranslator.*;
+
 //Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;
 
@@ -406,19 +408,64 @@ public class GTURTLEModeling {
 	    return null;
 	}
     }
+
+	public boolean generateCcode( String _title )	{
+
+		CwmMEC myCwm = new CwmMEC();
+
+		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
+		spec.toTextFormat( tmap );	//TMLMapping
+		
+		try {
+		    myCwm.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, "application.c" );
+		}
+		catch( Exception e ) {
+		    TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );
+		    return false;
+		}
+		return true;	/* temporary, just to check functionality */
+	}
 	
     public boolean generateTMLTxt( String _title ) {
 
 	if( tmlcp != null )	{	//Use the data structure filled by translateToTML... and pass it to the appropriate toTextFormat()
 	    TraceManager.addError( "About to generate the TMLText for CPs" );
 	    TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-	    specCP.toTextFormat( tmlcp );	//TMLCP.TMLCPGraphicalCP
+			
+			//get the architecture panel and the nodes
+			TMLArchiDiagramPanel tmlap = mgui.getTMLArchiDiagramPanels().get(0).tmlap;
+			LinkedList components = tmlap.getComponentList();
+			ListIterator iterator = components.listIterator();
+			TGComponent tgc;
+
+			while(iterator.hasNext()) {
+				tgc = (TGComponent)(iterator.next());
+				if (tgc instanceof TMLArchiCPNode) {
+					TMLArchiCPNode node = (TMLArchiCPNode) tgc;
+					TraceManager.addDev( "Found CP node: " + node.getName() );
+					TraceManager.addDev( "with mapping info: " + node.getMappedUnits() );
+				}
+			}
+			
+			ArrayList<TMLCommunicationPatternPanel> tmlcpPanelsList = new ArrayList<TMLCommunicationPatternPanel>();
+			//get the TMLCommunicationPatternPanels :)
+			for( int i = 0; i < mgui.tabs.size(); i++ )	{
+				TURTLEPanel panel = (TURTLEPanel)( mgui.tabs.get(i) );
+				if( panel instanceof TMLCommunicationPatternPanel )	{
+					tmlcpPanelsList.add( (TMLCommunicationPatternPanel) panel );
+					TraceManager.addDev( "Found TMLCommunicationPatternPanel: " + ((TMLCommunicationPatternPanel)panel).toString() );
+				}
+			}
+
+	    specCP.toTextFormat( tmlcp );	// the data structure tmlcp is filled with the info concerning the CP panel
+			// from which the button is pressed. If there are multiple CP panels this operation must be repeated for each panel. It
+			// should be no difficult to implement.
 	    try	{
-		specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
+				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
 	    }
 	    catch( Exception e ) {
-		TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
-		return false;
+				TraceManager.addError( "Writing TMLText for CPs, file could not be saved: " + e.getMessage() );
+				return false;
 	    }
 	}
 	else	{
@@ -440,11 +487,8 @@ public class GTURTLEModeling {
 	    else {
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 		spec.toTextFormat( tmap );	//TMLMapping
-		//			TMLCPTextSpecification specCP = new TMLCPTextSpecification( _title );
-		//			specCP.toTextFormat( tmap );	//TMLCP
 		try {
 		    spec.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec" );
-		    //				specCP.saveFile( ConfigurationTTool.TMLCodeDirectory + File.separator, "spec.tmlcp" );
 		}
 		catch( Exception e ) {
 		    TraceManager.addError( "Files could not be saved: " + e.getMessage() );
@@ -455,11 +499,6 @@ public class GTURTLEModeling {
 	return true;	//temporary, just to check functionality
     }
 	
-    /*public void setUPPAALData(String _uppaal, RelationTIFUPPAAL _uppaalTable) {
-      uppaal = _uppaal;
-      uppaalTable = _uppaalTable;
-      }*/
-
     public boolean generateUPPAALFromTIF(String path, boolean debug, int nb, boolean choices, boolean variables) {
 	TURTLE2UPPAAL turtle2uppaal = new TURTLE2UPPAAL(tm);
 	turtle2uppaal.setChoiceDeterministic(choices);

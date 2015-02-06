@@ -50,6 +50,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import ui.*;
+import ui.tmlcd.*;
 import java.util.*;
 
 import myutil.*;
@@ -60,6 +61,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private Frame frame;
     
     private String name;
+		private String dataFlowType = "VOID";
     private TType type1, type2, type3, type4, type5;
     private boolean isFinite, isBlocking, isOrigin;
     private String maxInFIFO, widthSamples;
@@ -75,7 +77,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     // Panel1
     private JTextField nameText, maxText, widthText;
     private JComboBox typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
-    private JComboBox origin, finite, blocking;
+    private JComboBox origin, finite, blocking, dfType;
 	private JLabel lossPercentageLabel, maxNbOfLossLabel;
 	private int portIndex;
     private Vector origins, finites, blockings, portTypes, types1, types2, types3, types4, types5;
@@ -90,7 +92,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private JButton closeButton;
     private JButton cancelButton;
 
-    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types) {
+    public JDialogTMLCompositePort(String _name, int _portIndex, TType _type1, TType _type2, TType _type3, TType _type4, TType _type5, boolean _isOrigin, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, String _widthSamples, boolean _isLossy, int _lossPercentage, int _maxNbOfLoss, Frame f, String title, Vector<String> _types, String _dataFlowType ) {
         super(f, title, true);
         frame = f;
         
@@ -102,6 +104,7 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
         
         data = false;
         
+				dataFlowType = _dataFlowType;
         maxInFIFO = _maxInFIFO;
 		widthSamples = _widthSamples;
 		isOrigin = _isOrigin;
@@ -174,6 +177,16 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     private void initComponents() {
 		int i;
 		
+				Vector<String> dataFlowTypes = new Vector<String>();
+				dataFlowTypes.add( TMLDataFlowType.UINT_16 );
+				dataFlowTypes.add( TMLDataFlowType.UINT_32 );
+				dataFlowTypes.add( TMLDataFlowType.UINT_64 );
+				dataFlowTypes.add( TMLDataFlowType.INT_16 );
+				dataFlowTypes.add( TMLDataFlowType.INT_32 );
+				dataFlowTypes.add( TMLDataFlowType.INT_64 );
+				dataFlowTypes.add( TMLDataFlowType.CPX_32 );
+				dataFlowTypes.add( TMLDataFlowType.CPX_64 );
+
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
@@ -355,6 +368,21 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
 			}
 		}
         panel2.add(typeList5, c2);
+
+        c2.gridwidth = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
+        panel2.add(new JLabel("Dataflow type"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        dfType = new JComboBox( dataFlowTypes );
+				if( dataFlowType.equals( "VOID" ) || dataFlowType.equals( "" ) )	{
+					dfType.setSelectedIndex( 0 );
+				}
+				else	{
+					dfType.setSelectedIndex( dataFlowTypes.indexOf( dataFlowType ) );
+				}
+				dfType.addActionListener(this);
+        panel2.add( dfType, c2);
         
         c2.gridwidth = 1;
         c2.fill = GridBagConstraints.HORIZONTAL;
@@ -486,8 +514,13 @@ public class JDialogTMLCompositePort extends javax.swing.JDialog implements Acti
     
     public void closeDialog() {
         data = true;
+				dataFlowType = (String)dfType.getItemAt( dfType.getSelectedIndex() );
         dispose();
     }
+
+		public String getDataFlowType()	{
+			return dataFlowType;
+		}
     
     public void cancelDialog() {
         dispose();

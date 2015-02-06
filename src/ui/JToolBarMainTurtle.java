@@ -64,7 +64,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     // Other
     JButton genrtlotos, genlotos, genuppaal, gendesign;
     JButton checkcode, simulation, validation;
-    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genjava, nc;
+    JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc;
 
     JTextField search;
 
@@ -225,6 +225,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             gentml = add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
             gentml.addMouseListener(mgui.mouseHandler);
             addSeparator();
+
+            genC = add(mgui.actions[TGUIAction.ACT_GEN_CCODE]);
+            genC.addMouseListener(mgui.mouseHandler);
+            addSeparator();
         }
 
         addSeparator();
@@ -326,6 +330,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
             gentml.setVisible(!b);
         }
 
+        if (genC != null) {
+            genC.setVisible(!b);
+        }
+
         if (genjava != null) {
             genjava.setVisible(!b);
         }
@@ -393,6 +401,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         if (gentml != null) {
             gentml.setVisible(b);
+        }
+
+        if (genC != null) {
+            genC.setVisible(b);
         }
 
         if (genjava != null) {

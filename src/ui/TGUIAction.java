@@ -435,6 +435,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_GEN_SYSTEMC = 148;
 	public static final int ACT_SIMU_SYSTEMC = 263;
 	public static final int ACT_GEN_TMLTXT = 215;
+		public static final int ACT_GEN_CCODE = 413;
     public static final int ACT_GEN_AUT = 157;
     public static final int ACT_GEN_AUTS = 202;
     public static final int ACT_GEN_DESIGN = 103;
@@ -547,7 +548,7 @@ public class TGUIAction extends AbstractAction {
     //Action for the help button created by Solange
     public static final int PRUEBA_1 = 205;
 
-    public static final int NB_ACTION = 413;
+    public static final int NB_ACTION = 414;
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
     
@@ -656,6 +657,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_SYSTEMC] = new TAction("gen_systemc-command", "Generate simulation code", IconManager.imgic61, IconManager.imgic61, "Generate code for simulation",  "Generates code for simulation", 0);
         actions[ACT_SIMU_SYSTEMC] = new TAction("simu_systemc", "Interactive Simulation", IconManager.imgic61, IconManager.imgic61, "Interactive simulation",  "Interactive simulation ", 0);
         actions[ACT_GEN_TMLTXT] = new TAction("gen_tmltxt-command", "Generate TML / TMAP in text format", IconManager.imgic66, IconManager.imgic66, "Generate TML / TMAP in text format",  "Generates TML / TMAP code in text format from TML Design diagrams", 0);
+        actions[ACT_GEN_CCODE] = new TAction("gen_Ccode-command", "Generate C code", IconManager.imgic66, IconManager.imgic66, "Generate C code",  "Generate C code from Design diagrams", 0);
         actions[ACT_GEN_AUT] = new TAction("gen_aut-command", "Generate automata", IconManager.imgic64, IconManager.imgic64, "Generate automata",  "Generates automata from TML Design diagrams", 0);
         actions[ACT_GEN_AUTS] = new TAction("gen_auts-command", "Generate automata via LOTOS", IconManager.imgic64, IconManager.imgic64, "Generate automata via LOTOS",  "Generates automata from TML Design diagrams, using LOTOS", 0);
         actions[ACT_GEN_DESIGN] = new TAction("gen_design-command", "Generate Design", IconManager.imgic58, IconManager.imgic59, "Generate Design from analysis",  "Generates a TURTLE design from a TURTLE analysis", 0);

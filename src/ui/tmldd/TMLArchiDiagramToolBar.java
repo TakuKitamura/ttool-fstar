@@ -140,6 +140,8 @@ public class TMLArchiDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 		button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
         button.addMouseListener(mgui.mouseHandler);
+		button = this.add(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT]);
+        button.addMouseListener(mgui.mouseHandler);
 
 		this.addSeparator();
 		

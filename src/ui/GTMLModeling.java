@@ -2207,16 +2207,16 @@ public class GTMLModeling  {
         //tmlcp.generateNexts(); // Add nexts elements to CPElements
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
         tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
-	TraceManager.addDev( "After splitting ADs. OriginalCP:" + tmlcp.toString() );
-        TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getCPActivityDiagrams().toString() );
+				TraceManager.addDev( "After splitting ADs. OriginalCP:" + tmlcp.toString() );
+        TraceManager.addDev( "After splitting ADs. The list of ADs contains: " + tmlcp.getMainCP().toString() + tmlcp.getCPActivityDiagrams().toString() );
 
-        for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
+        /*for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
             TraceManager.addDev( "**********" );
+            TraceManager.addDev( "DIAGRAM " + seqDiag.getName() );
             for( tmltranslator.tmlcp.TMLSDInstance instance: seqDiag.getInstances() )   {
-                TraceManager.addDev( "PRINTING EVENTS: " + instance.getEvents() );
+                TraceManager.addDev( "INSTANCE: " + instance.getName() + "\n" + instance.getAttributes() );
             }
-            TraceManager.addDev( "**********" );
-        }
+        }*/
 
     }   //End of method
 

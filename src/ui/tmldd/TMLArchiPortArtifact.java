@@ -65,7 +65,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected int fileX = 20;
     protected int fileY = 25;
     protected int cran = 5;
-	
+		protected String mappedMemory = "VOID";
     protected String oldValue = "";
     protected String referenceCommunicationName = "TMLCommunication";
 	protected String portName = "name";
@@ -161,10 +161,11 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 		String tmp;
 		boolean error = false;
 		
-		JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this);
+		JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory );
 		dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
+				mappedMemory = dialog.getMappedMemory();
         
 		if (!dialog.isRegularClose()) {
 			return false;

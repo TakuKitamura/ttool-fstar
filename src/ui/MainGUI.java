@@ -645,6 +645,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
         case GEN_SYSTEMC_OK:
             actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(true);
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(true);
+            actions[TGUIAction.ACT_GEN_CCODE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(true);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(true);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
@@ -683,6 +684,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
             actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(false);
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
@@ -708,6 +710,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
             actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(false);
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
             actions[TGUIAction.ACT_GEN_PROVERIF].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
@@ -723,6 +726,7 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
             actions[TGUIAction.ACT_GEN_SYSTEMC].setEnabled(false);
             actions[TGUIAction.ACT_GEN_TMLTXT].setEnabled(false);
+            actions[TGUIAction.ACT_GEN_CCODE].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(false);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(false);
             actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
@@ -4015,6 +4019,19 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             return ConfigurationTTool.TMLCodeDirectory;
         }
 
+        return null;
+        //TraceManager.addDev("Done");
+    }
+
+    public String generateCcode() {
+        String path = ConfigurationTTool.FILEPath;
+        if( file != null ) {
+					path = file.getAbsolutePath();
+        }
+        TraceManager.addDev("Generating C code: " + path );
+        if( gtm.generateCcode( path ) ) {
+					return ConfigurationTTool.CcodeDirectory;
+        }
         return null;
         //TraceManager.addDev("Done");
     }
@@ -7495,6 +7512,8 @@ public  class MainGUI implements ActionListener, WindowListener, KeyListener, Pe
             interactiveSimulationSystemC();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_TMLTXT].getActionCommand())) {
             generateTMLTxt();
+        } else if (command.equals(actions[TGUIAction.ACT_GEN_CCODE].getActionCommand())) {
+            generateCcode();
         } else if (command.equals(actions[TGUIAction.ACT_GEN_DESIGN].getActionCommand())) {
             generateDesign();
         } else if (command.equals(actions[TGUIAction.ACT_CHECKCODE].getActionCommand())) {

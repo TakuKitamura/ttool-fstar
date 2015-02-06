@@ -98,6 +98,7 @@ public class ConfigurationTTool {
     public static String NCDirectory = "";	
     public static String SystemCCodeDirectory = "";
 	public static String TMLCodeDirectory = "";
+	public static String CcodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
 	public static String SystemCCodeInteractiveExecuteCommand = "";
@@ -368,6 +369,9 @@ public class ConfigurationTTool {
 		// TML
 		
 		sb.append("TMLCodeDirectory" + TMLCodeDirectory + "\n");
+
+		//Application C code
+		sb.append("CcodeDirectory" + CcodeDirectory + "\n");
 		
 		// VCD
 		sb.append("VCDPath: " + VCDPath + "\n");
@@ -579,6 +583,10 @@ public class ConfigurationTTool {
 			nl = doc.getElementsByTagName("TMLCodeDirectory");
 			if (nl.getLength() > 0)
 				TMLCodeDirectory(nl);
+
+			nl = doc.getElementsByTagName("CcodeDirectory");
+			if (nl.getLength() > 0)
+				CcodeDirectory(nl);
 			
 			nl = doc.getElementsByTagName("VCDPath");
 			if (nl.getLength() > 0)
@@ -1018,6 +1026,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element)(nl.item(0));
             TMLCodeDirectory = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void CcodeDirectory(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element)(nl.item(0));
+            CcodeDirectory = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

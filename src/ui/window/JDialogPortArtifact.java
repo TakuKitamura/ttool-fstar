@@ -67,18 +67,20 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     private JPanel panel2;
     private Frame frame;
     private TMLArchiPortArtifact artifact;
-    
-	protected JComboBox referenceCommunicationName, priority;
+   private String mappedMemory = "VOID"; 
+	protected JComboBox referenceCommunicationName, priority, memory;
+	protected JTextField startAddress, endAddress;
 	
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact) {
+    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory ) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
+				mappedMemory = _mappedMemory;
 		
 		//System.out.println("New window");
         
@@ -152,11 +154,11 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		
 		TraceManager.addDev("Got communications");
 		
-        referenceCommunicationName = new JComboBox(portsList);
+    referenceCommunicationName = new JComboBox(portsList);
 		referenceCommunicationName.setSelectedIndex(index);
 		referenceCommunicationName.addActionListener(this);
-        //referenceTaskName.setEditable(true);
-        //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
+    //referenceTaskName.setEditable(true);
+    //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
 		
 		list = new Vector<String>();
@@ -165,8 +167,36 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		}
 		priority = new JComboBox(list);
 		priority.setSelectedIndex(artifact.getPriority());
+		panel2.add( new JLabel( "Priority: "),  c2 );
 		panel2.add(priority, c1);
 		
+		//Make the list of memories
+		LinkedList componentList = artifact.getTDiagramPanel().getComponentList();
+		Vector<String> memoryList = new Vector<String>();
+		for( int k = 0; k < componentList.size(); k++ )	{
+			if( componentList.get(k) instanceof TMLArchiMemoryNode )	{
+				memoryList.add( ( (TMLArchiMemoryNode) componentList.get(k) ).getName() );
+			}
+		}
+
+		memory = new JComboBox( memoryList );
+		if( mappedMemory.equals( "VOID" ) || mappedMemory.equals( "" ) )	{
+			memory.setSelectedIndex( 0 );
+		}
+		else	{
+			memory.setSelectedIndex( memoryList.indexOf( mappedMemory ) );
+		}
+		panel2.add( new JLabel( "Memory: "),  c2 );
+		panel2.add( memory, c1 );
+
+		startAddress = new JTextField("", 5 );
+		panel2.add( new JLabel( "Start address = "),  c2 );
+		c1.gridwidth = GridBagConstraints.REMAINDER;
+		panel2.add( startAddress, c1 );
+
+		endAddress = new JTextField("", 5 );
+		panel2.add( new JLabel( "End address = "),  c2 );
+		panel2.add( endAddress, c1 );
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
@@ -230,8 +260,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     
     public void closeDialog() {
         regularClose = true;
+				mappedMemory = (String) memory.getItemAt( memory.getSelectedIndex() );
         dispose();
     }
+
+		public String getMappedMemory()	{
+			return mappedMemory;
+		}
     
     public void cancelDialog() {
         dispose();
