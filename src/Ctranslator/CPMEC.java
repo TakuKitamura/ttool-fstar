@@ -37,9 +37,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class TaskMEC, Model Extension Construct (MEC) class for tasks
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
+   * Class CPMEC, Model Extension Construct (MEC) class for Communication Patterns
+   * Creation: 06/02/2014
+   * @version 1.0 06/02/2014
    * @author Andrea ENRICI
    * @see
    */
@@ -51,8 +51,8 @@ import java.nio.*;
 import myutil.*;
 //import Ctranslator.*;
 
-public abstract class TaskMEC	{
-
+public abstract class CPMEC	{
+	
 	public String CR = "\n";
 	public String node_type = new String();
 	public String inst_type = new String();
@@ -61,27 +61,16 @@ public abstract class TaskMEC	{
 	public String buff_init = new String();
 	public String init_code = new String();
 	public String exec_code = new String();
+	public String messages_code = new String();
+	public String attributes_code = new String();
 	public String cleanup_code = new String();
-	
-	public String ID0 = new String();
-	public String OD0 = new String();
-	public String XOP = new String();
-	public String BTC = new String();
-	
-	public TaskMEC()	{
+
+	public CPMEC()	{
 		node_type = "1";
 	}
 
-	public String getExecCode()	{
-		return exec_code;
-	}
-
-	public String getInitCode()	{
-		return init_code;
-	}
-
 	public String toString()	{
-		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + cleanup_code;
+		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + CR + init_code + CR + messages_code + CR + attributes_code + CR + cleanup_code;
 	}
 
 	public void saveFile( String path, String filename ) throws FileException {
@@ -89,4 +78,5 @@ public abstract class TaskMEC	{
 		TraceManager.addUser( "Saving C CP file in " + path + filename );
 		FileUtils.saveFile( path + filename, this.toString() );
 	}
+
 }	//End of class

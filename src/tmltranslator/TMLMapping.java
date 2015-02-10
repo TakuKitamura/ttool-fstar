@@ -518,8 +518,9 @@ public class TMLMapping {
 		}
 	}
 	
-	public String getSummaryTaskMapping() {
+	public ArrayList<String> getSummaryTaskMapping() {
 		StringBuffer sb = new StringBuffer("");
+		ArrayList<String> list = new ArrayList<String>();
 		int cpt = 0;
 		int found = 0;
 		
@@ -539,10 +540,48 @@ public class TMLMapping {
 					cpt ++;
 				}
 				sb.append(") ");
+				list.add( sb.toString() );
+				sb = new StringBuffer("");
 			}
 		}
 		
-		return sb.toString();
+		return list;
+		
+	}
+
+	public ArrayList<String> getSummaryCPMapping() {
+		ArrayList<String> list = new ArrayList<String>();
+		return list;
+	}
+
+	public ArrayList<String> getSummaryCommMapping() {
+		StringBuffer sb = new StringBuffer("");
+		ArrayList<String> list = new ArrayList<String>();
+		int cpt = 0;
+		int found = 0;
+		
+		for (HwNode node: tmla.getHwNodes()) {
+			if (node instanceof HwCommunicationNode) {
+				sb.append(node.getName() + "(");
+				found = 0;
+				cpt = 0;
+				for(HwCommunicationNode ex: oncommnodes) {
+					if (ex == node) {
+						if (found > 0) {
+							sb.append(", ");
+						}
+						found = 1;
+						sb.append(mappedcommelts.get(cpt).getName());
+					}
+					cpt ++;
+				}
+				sb.append(") ");
+				list.add( sb.toString() );
+				sb = new StringBuffer("");
+			}
+		}
+		
+		return list;
 		
 	}
 	

@@ -37,9 +37,9 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class CwaMEC, Model Extension Construct (MEC) class for Embb operation Component Wise Addition
-   * Creation: 05/02/2014
-   * @version 1.0 05/02/2014
+   * Class CpuStoreMEC, Model Extension Construct (MEC) class for Embb non-cachable CPU store operation
+   * Creation: 06/02/2014
+   * @version 1.0 06/02/2014
    * @author Andrea ENRICI
    * @see
    */
@@ -49,26 +49,16 @@ package Ctranslator;
 import java.util.*;
 //import Ctranslator.*;
 
-public class CwaMEC extends TaskMEC	{
+public class CpuStoreMEC extends CPMEC	{
 
-	public CwaMEC( String XOP, String ID0, String OD0, String BTC )	{
-
+	public CpuStoreMEC()	{
 		node_type = "FEP";
-		inst_type = "CWA";
+		inst_type = "SUM";
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
 		exec_code = "/*firm instruction*/" + CR +
-			" fep_set_l(&$XOP$, ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->l);" + CR +
 			" fep_set_qx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q);" + CR +
-			" fep_set_bx(&$XOP$,sig[$ID0$].roff + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->b);" + CR +
-			" fep_set_tx(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->t);" + CR +
-			" fep_set_qy(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->q);" + CR +
-			" fep_set_by(&$XOP$,sig[$ID1$].roff + ((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->b);" + CR +
-			" fep_set_ty(&$XOP$,((FEP_BUFF_TYPE*)sig[$ID1$].pBuff)->t);" + CR +
-			" fep_set_qz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bz(&$XOP$,sig[$OD0$].woff + ((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			" fep_set_tz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->t);" + CR +
 			"/*start execution*/" + CR +
 			"fep_start(&$XOP$);" + CR;
 		
@@ -76,9 +66,13 @@ public class CwaMEC extends TaskMEC	{
 			"void init_$XOP$(void){" + CR +
 			" fep_ctx_init(&$XOP$,0);" + CR +
 			" // initialize context" + CR +
-			" fep_set_op(&$XOP$,FEP_OP_CWA );" + CR +
-			" fep_set_l(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->l);" + CR +
+			" fep_set_op(&$XOP$,FEP_OP_MOV);" + CR +
+			" fep_set_r(&$XOP$, /*USER TODO*/);" + CR +
+			" fep_set_l(&$XOP$,/*USER TODO*/);" + CR +
+			" fep_set_bx(&$XOP$,/*USER TODO*/);" + CR +
+			" fep_set_qx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_wx(&$XOP$,/*USER TODO*/);" + CR +
+			" fep_set_tx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_sx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_nx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_mx(&$XOP$,/*USER TODO*/);" + CR +
@@ -86,23 +80,9 @@ public class CwaMEC extends TaskMEC	{
 			" fep_set_dx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_vrx(&$XOP$,/*USER TODO*/);" + CR +
 			" fep_set_vix(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_wy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_ny(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_my(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_py(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_dy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_vry(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_viy(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_qz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
-			" fep_set_bz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
-			" fep_set_tz(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->t);" + CR +
-			" fep_set_wz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_ri(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_nz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_mz(&$XOP$,/*USER TODO*/);" + CR +
-			" fep_set_sma(&$XOP$,1);" + CR +
+			" fep_set_sma(&$XOP$,2);" + CR +
+			" fep_set_qs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->q);" + CR +
+			" fep_set_bs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
 	}

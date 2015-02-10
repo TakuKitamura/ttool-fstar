@@ -37,32 +37,41 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class EmbbDmaMEC, Model Extension Construct (MEC) class for Embb's dma
+   * Class DmaMEC, Model Extension Construct (MEC) class for a DMA data transfer
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
    * @see
    */
 
-package tmltranslator.tmlcp;;
+package Ctranslator;
 
 import java.util.*;
-import tmltranslator.*;
-import myutil.*;
-//import compiler.tmlCPparser.myexceptions.*;
+//import Ctranslator.*;
 
-public class EmbbDmaMEC	{
+/* This is the code from Jair MEC. It refers to old drivers. So far I am just interested in the proof of concepts of generating
+ * code. */
+public class DmaMEC extends CPMEC	{
 
-	private String context = "struct embb_dma_context_s ctx_";
-	private String dmaStart = "embb_dma_start(";
-	private String dmaWait = "embb_dma_wait(";
-	private String dmaCtxInit = "embb_dma_ctx_init(";
-	private TMLCP tmlcp;
-	
-	/* The tmlcp CP of a DMA transfer */
-	public DmaMEC( TMLCP _tmlcp )	{
-		tmlcp = _tmlcp;
+	public DmaMEC()	{
+
+		node_type = "DMA";
+		inst_type = "I2M";
+		inst_decl = "DMA_CONTEXT";
+		buff_type = "MM_BUFF_TYPE";
+		buff_init = "= {/*bl*/,$OD0$_dat};";
+		exec_code = "/*firm instruction*/" + CR +
+			" dma_set_loc(&$XOP$, sig[$ID0$].roff * (((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->t+1) + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->b + ((FEP_BUFF_TYPE*)sig[$ID0$].pBuff)->q * FEP_QSIZE );" + CR +
+			" dma_set_mem(&$XOP$, sig[$OD0$].woff*4 + ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
+			" dma_set_bsize(&$XOP$, ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->bl );" + CR +
+			"dma_start_i2m(&$XOP$);" + CR;	
+			init_code = "/***** INIT $XOP$ I2M*******/" + CR +
+			"void init_$XOP$(void){" + CR +
+			" dma_ctx_init(&$XOP$, 0);" + CR +
+			" /* initialize context*/" + CR +
+			" dma_set_mem(&$XOP$, ((MM_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
+			"}" + CR;
+		cleanup_code = "dma_ctx_cleanup(&$XOP$);";
 	}
 
-
-}       //End of class
+}	//End of class

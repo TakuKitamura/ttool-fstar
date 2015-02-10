@@ -249,7 +249,9 @@ public class TMLCPTextSpecification {
 			ArrayList<tmltranslator.tmlcp.TMLSDInstance> listInstances = seqDiag.getInstances();
 			if( seqDiag.getAttributes().size() > 0 )	{
 				for( TMLAttribute attribute: seqDiag.getAttributes() )	{
-					sbAttributes.append( attribute.toString() + CR );
+					if( !sbAttributes.toString().contains( attribute.toString() ) )	{ //if attribute not already contained, then add it
+						sbAttributes.append( attribute.toString() + CR );
+					}
 				}
 			}
 			for( tmltranslator.tmlcp.TMLSDInstance inst: listInstances )	{
@@ -307,18 +309,21 @@ public class TMLCPTextSpecification {
 			sb.append( makeSingleActivityDiagram( ad ) + CR + TAB + "END" + CR );
 			sb.append( CR + "END " + ad.getName() + CR );
 		}
-
+		
+		//return sb.toString();
 		ArrayList<String> junctionTMLCodeList = new ArrayList<String>();
 		ArrayList<String> junctionNamesList = new ArrayList<String>();
 		for( TMLCPActivityDiagram ad: junctionDiagList )	{
-			String temp = makeSingleJunctionDiagram( ad );
-			sb2.append( temp );		//the total text
+			String temp = new String( CR + "ACTIVITY " + ad.getName() + CR2 + TAB + "MAIN" + CR + TAB );
+			temp += makeSingleJunctionDiagram( ad );
+			temp += ( TAB + "><" + CR + TAB + "END" + CR2 + "END " + ad.getName() + CR );
+			sb.append( temp );		//the total text
 			junctionTMLCodeList.add( temp );	//each entry contains the text for one single junctionAD
 			junctionNamesList.add( getJunctionName( temp ) );
 		}
 
 		//Merge nested junction-choice
-		ArrayList<Integer> indexToRemove = new ArrayList<Integer>();
+		/*ArrayList<Integer> indexToRemove = new ArrayList<Integer>();
 		for( String s: junctionTMLCodeList )	{
 			if( !s.equals("") )	{
 				if( s.contains( "JUNCTION" ) )	{
@@ -352,7 +357,7 @@ public class TMLCPTextSpecification {
 				String[] v = sb.toString().split( "JUNCTION " + s );
 				sb = new StringBuffer( v[0] + junctionTMLCodeList.get( junctionNamesList.indexOf( s ) ) + v[1] );
 			}
-		}
+		}*/
 
 		return sb.toString();
 	}
@@ -372,7 +377,7 @@ public class TMLCPTextSpecification {
 
 	private String makeSingleActivityDiagram( TMLCPActivityDiagram ad )	{
 
-		StringBuffer sb = new StringBuffer( "\n\t<>; " );
+		StringBuffer sb = new StringBuffer( TAB + CR + TAB + "<>; " );
 		TMLCPElement currentElement, nextElement;
 		ArrayList<TMLCPElement> nextElements;
 	
@@ -388,7 +393,7 @@ public class TMLCPTextSpecification {
 			else	{	// currentElement is either a refToDiag or a junction
 				if( isAJunction( currentElement ) )	{
 					String s = ( (TMLCPRefAD) currentElement ).getName();
-					sb.append( CR + "JUNCTION" + SP + s + CR );
+					sb.append( s + ";" + CR );
 				}
 				else	{
 					sb.append( parseSequence( currentElement ) );
@@ -397,7 +402,7 @@ public class TMLCPTextSpecification {
 			currentElement = currentElement.getNextElements().get(0);
 		}
 
-		return sb.toString() + "><";
+		return sb.toString() + TAB + "><";
 	}
 
 	private String parseSequence( TMLCPElement element )	{
@@ -440,7 +445,7 @@ public class TMLCPTextSpecification {
 
 	private String makeSingleJunctionDiagram( TMLCPActivityDiagram ad )	{
 
-		StringBuffer sb = new StringBuffer( ad.getName() + ":" + SP );
+		StringBuffer sb = new StringBuffer( "<>;" + SP );
 		TMLCPElement currentElement, nextElement;
 		ArrayList<TMLCPElement> nextElements;
 	
@@ -468,7 +473,7 @@ public class TMLCPTextSpecification {
 
 	private String parseChoice( TMLCPElement currentElement, TMLCPActivityDiagram ad )	{
 
-		StringBuffer sb = new StringBuffer( CR + TAB + "LOOP" + SP + ad.getName() );
+		StringBuffer sb = new StringBuffer( /*CR + TAB + "LOOP" + SP + ad.getName()*/ );
 		//this LOOP is the keywork that is used to look for the junction diagram name, removing it, causing the generation not to work
 		ArrayList<TMLCPElement> nextElements;
 		int index = 0;
@@ -482,7 +487,7 @@ public class TMLCPTextSpecification {
 				if( nextElements.size() > 1 )	{	// currentElement is a fork node
 					sbFork = new StringBuffer();
 					element = parseFork( nextElements ).getNextElements().get(0);	// use attribute sbFork - element is the element after the join node
-					sb.append( sbFork.toString() );
+					sb.append( sbFork.toString() + ";" );
 					sbFork.setLength(0);
 				}
 				else	{	//it is a simple sequence with no nested junctions, use element
@@ -490,10 +495,10 @@ public class TMLCPTextSpecification {
 						String s = ( (TMLCPRefAD) element ).getName();
 						sb = removeTrailingSymbol( sb );
 						if( s.equals( ad.getName() ) )	{
-							sb.append( SP + "GOTO" + SP + s );	// it is a reference to the same junction-choice block
+							sb.append( SP + s + ";" + SP + "><" );	// it is a reference to the same junction-choice block
 						}
 						else	{
-							sb.append( SP + "GOTO" + SP + "JUNCTION" + s );	//it is a reference to another junction-choice block
+							sb.append( SP + s + ";" + SP + "><" );	//it is a reference to another junction-choice block
 						}
 						break;
 					}
@@ -503,13 +508,13 @@ public class TMLCPTextSpecification {
 					element = element.getNextElements().get(0);
 					if( element instanceof TMLCPStop )	{
 						sb = removeTrailingSymbol( sb );
-						sb.append( SP + "GOTO END" + SP + ad.getName() );
+						sb.append( TAB + "><" );
 					}
 				}
 			}	// end of while
 			index++;
 		}	// end of for
-		sb.append( CR + TAB + "END" + SP + ad.getName() + CR );
+		sb.append( CR );
 		return sb.toString();
 	}
 

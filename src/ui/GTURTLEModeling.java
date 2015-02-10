@@ -411,13 +411,14 @@ public class GTURTLEModeling {
 
 	public boolean generateCcode( String _title )	{
 
-		CwmMEC myCwm = new CwmMEC();
-
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 		spec.toTextFormat( tmap );	//TMLMapping
-		
+
+		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, "test" );
+		myCode.toTextFormat( tmap );
+
 		try {
-		    myCwm.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, "application.c" );
+		    myCode.saveFile( ConfigurationTTool.CcodeDirectory + File.separator, "test" );
 		}
 		catch( Exception e ) {
 		    TraceManager.addError( "Application C files could not be saved: " + e.getMessage() );

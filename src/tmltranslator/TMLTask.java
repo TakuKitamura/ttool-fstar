@@ -135,6 +135,30 @@ public class TMLTask extends TMLElement {
 		}
 		return null;
 	}
+
+	public ArrayList<TMLReadChannel> getReadChannels()	{
+		
+		ArrayList<TMLReadChannel> list = new ArrayList<TMLReadChannel>();
+		for( int i = 0; i < getActivityDiagram().nElements(); i++ )	{
+			if( getActivityDiagram().get(i) instanceof TMLReadChannel )	{
+				list.add( (TMLReadChannel) getActivityDiagram().get(i) );
+				//TraceManager.addDev( "Element: " + task.getActivityDiagram().get(i).toString() );
+			}
+		}
+		return list;
+	}
+
+	public ArrayList<TMLWriteChannel> getWriteChannels()	{
+		
+		ArrayList<TMLWriteChannel> list = new ArrayList<TMLWriteChannel>();
+		for( int i = 0; i < getActivityDiagram().nElements(); i++ )	{
+			if( getActivityDiagram().get(i) instanceof TMLWriteChannel )	{
+				list.add( (TMLWriteChannel) getActivityDiagram().get(i) );
+				//TraceManager.addDev( "Element: " + task.getActivityDiagram().get(i).toString() );
+			}
+		}
+		return list;
+	}
     
     public TMLActivity getActivityDiagram() {
         return activity;

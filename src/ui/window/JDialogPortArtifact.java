@@ -69,20 +69,22 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     private TMLArchiPortArtifact artifact;
    private String mappedMemory = "VOID"; 
 	protected JComboBox referenceCommunicationName, priority, memory;
-	protected JTextField startAddress, endAddress;
+	protected JTextField startAddressTF, endAddressTF;
+	protected String startAddress, endAddress, mappedPort;
 	
     // Main Panel
     private JButton closeButton;
     private JButton cancelButton;
     
     /** Creates new form  */
-    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory ) {
+    public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, String _startAddress, String _endAddress, String _mappedPort ) {
         super(_frame, _title, true);
         frame = _frame;
         artifact = _artifact;
 				mappedMemory = _mappedMemory;
-		
-		//System.out.println("New window");
+				startAddress = _startAddress;
+				endAddress = _endAddress;
+				mappedPort = _mappedPort;
         
 		TraceManager.addDev("init components");
 		
@@ -155,10 +157,13 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		TraceManager.addDev("Got communications");
 		
     referenceCommunicationName = new JComboBox(portsList);
-		referenceCommunicationName.setSelectedIndex(index);
+		if( mappedPort.equals( "VOID" ) || mappedPort.equals( "" ) )	{
+			referenceCommunicationName.setSelectedIndex( 0 );
+		}
+		else	{
+			referenceCommunicationName.setSelectedIndex( portsList.indexOf( mappedPort ) );
+		}
 		referenceCommunicationName.addActionListener(this);
-    //referenceTaskName.setEditable(true);
-    //referenceTaskName.setFont(new Font("times", Font.PLAIN, 12));
 		panel2.add(referenceCommunicationName, c1);
 		
 		list = new Vector<String>();
@@ -189,14 +194,14 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
 		panel2.add( new JLabel( "Memory: "),  c2 );
 		panel2.add( memory, c1 );
 
-		startAddress = new JTextField("", 5 );
+		startAddressTF = new JTextField( startAddress, 5 );
 		panel2.add( new JLabel( "Start address = "),  c2 );
 		c1.gridwidth = GridBagConstraints.REMAINDER;
-		panel2.add( startAddress, c1 );
+		panel2.add( startAddressTF, c1 );
 
-		endAddress = new JTextField("", 5 );
+		endAddressTF = new JTextField( endAddress, 5 );
 		panel2.add( new JLabel( "End address = "),  c2 );
-		panel2.add( endAddress, c1 );
+		panel2.add( endAddressTF, c1 );
 		/*c1.gridwidth = 1;
         c1.gridheight = 1;
         c1.weighty = 1.0;
@@ -261,13 +266,28 @@ public class JDialogPortArtifact extends javax.swing.JDialog implements ActionLi
     public void closeDialog() {
         regularClose = true;
 				mappedMemory = (String) memory.getItemAt( memory.getSelectedIndex() );
+				startAddress = (String) startAddressTF.getText();
+				endAddress = (String) endAddressTF.getText();
+				//mappedPort = (String) referenceCommunicationName.getItemAt( .getSelectedIndex() );
         dispose();
     }
+
+		public String getMappedPort()	{
+			return mappedPort;
+		}
 
 		public String getMappedMemory()	{
 			return mappedMemory;
 		}
-    
+
+		public String getStartAddress()	{
+			return startAddress;
+		}
+
+		public String getEndAddress()	{
+			return endAddress;
+		}
+
     public void cancelDialog() {
         dispose();
     }

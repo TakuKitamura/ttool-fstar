@@ -44,16 +44,14 @@
    * @see
    */
 
-//package Ctranslator;
+package Ctranslator;
 
 import java.util.*;
 //import Ctranslator.*;
 
 public class FftMEC extends TaskMEC	{
 
-	private String CR = "\n";
-
-	public FftMEC()	{
+	public FftMEC( String XOP, String ID0, String OD0, String BTC )	{
 		node_type = "FEP";
 		inst_type = "FFT";
 		inst_decl = "FEP_CONTEXT";
@@ -82,10 +80,6 @@ public class FftMEC extends TaskMEC	{
 			" fep_set_wz(&$XOP$,/*USER TODO*/);" + CR +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
-	}
-
-	public String toString()	{
-		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + init_code + cleanup_code;
 	}
 
 }	//End of class

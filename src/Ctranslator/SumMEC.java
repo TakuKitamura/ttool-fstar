@@ -44,17 +44,15 @@
    * @see
    */
 
-//package Ctranslator;
+package Ctranslator;
 
 import java.util.*;
 //import Ctranslator.*;
 
 public class SumMEC extends TaskMEC	{
 
-	private String CR = "\n";
-
-	public SumMEC()	{
-		node_type = "FEP";/*                                           */
+	public SumMEC( String XOP, String ID0, String OD0, String BTC )	{
+		node_type = "FEP";
 		inst_type = "SUM";
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
@@ -87,10 +85,6 @@ public class SumMEC extends TaskMEC	{
 			" fep_set_bs(&$XOP$,((FEP_BUFF_TYPE*)sig[$OD0$].pBuff)->b);" + CR +
 			"}" + CR;
 		cleanup_code = "fep_ctx_cleanup(&$XOP$);";
-	}
-
-	public String toString()	{
-		return node_type + CR + inst_decl + CR + inst_type + CR + buff_type + CR + buff_init + CR + exec_code + init_code + cleanup_code;
 	}
 
 }	//End of class

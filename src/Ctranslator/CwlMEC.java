@@ -37,7 +37,7 @@
    knowledge of the CeCILL license and that you accept its terms.
 
    /**
-   * Class CwmMEC, Model Extension Construct (MEC) class for Embb Component Wise Multiplication operation
+   * Class CwlMEC, Model Extension Construct (MEC) class for Embb Component Wise Lookup operation
    * Creation: 05/02/2014
    * @version 1.0 05/02/2014
    * @author Andrea ENRICI
@@ -49,12 +49,12 @@ package Ctranslator;
 import java.util.*;
 //import Ctranslator.*;
 
-public class CwmMEC extends TaskMEC	{
+public class CwlMEC extends TaskMEC	{
 
-	public CwmMEC( String XOP, String ID0, String OD0, String BTC )	{
+	public CwlMEC( String XOP, String ID0, String OD0, String BTC )	{
 
 		node_type = "FEP";
-		inst_type = "CWM";
+		inst_type = "CWL";
 		inst_decl = "FEP_CONTEXT";
 		buff_type = "FEP_BUFF_TYPE";
 		buff_init = "= {/*l,b,q,t*/};";
@@ -73,7 +73,7 @@ public class CwmMEC extends TaskMEC	{
 			"void init_" + XOP + "(void){" + CR +
 			" fep_ctx_init(&" + XOP + ",0);" + CR +
 			" // initialize context" + CR +
-			" fep_set_op(&" + XOP + ",FEP_OP_CWM );" + CR +
+			" fep_set_op(&" + XOP + ",FEP_OP_CWL );" + CR +
 			" fep_set_r(&" + XOP + ",/*USER TODO*/);" + CR +
 			" fep_set_l(&" + XOP + ",((FEP_BUFF_TYPE*)sig[" + OD0 + "].pBuff)->l);" + CR +
 			" fep_set_wx(&" + XOP + ",/*USER TODO*/);" + CR +

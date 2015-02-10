@@ -70,6 +70,8 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     protected String referenceCommunicationName = "TMLCommunication";
 	protected String portName = "name";
 	protected String typeName = "port";
+	protected String startAddress = "";
+	protected String endAddress = "";
 	protected int priority = 5; // Between 0 and 10
     
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -161,11 +163,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 		String tmp;
 		boolean error = false;
 		
-		JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory );
+		JDialogPortArtifact dialog = new JDialogPortArtifact(frame, "Setting port artifact attributes", this, mappedMemory, startAddress, endAddress, value );
 		dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog);
         dialog.show(); // blocked until dialog has been closed
 				mappedMemory = dialog.getMappedMemory();
+				startAddress = dialog.getStartAddress();
+				endAddress = dialog.getEndAddress();
         
 		if (!dialog.isRegularClose()) {
 			return false;
@@ -235,6 +239,9 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 		/*sb.append("\" priority=\"");
 		sb.append(priority);*/
 		sb.append("\" typeName=\"" + typeName);
+		sb.append("\" mappedMemory=\"" + mappedMemory );
+		sb.append("\" startAddress=\"" + startAddress );
+		sb.append("\" endAddress=\"" + endAddress );
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -266,6 +273,9 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                                 sname = elt.getAttribute("portName");
                                 sreferenceCommunication = elt.getAttribute("referenceCommunicationName");
 								stype = elt.getAttribute("typeName");
+								mappedMemory = elt.getAttribute("mappedMemory");
+								startAddress = elt.getAttribute("startAddress");
+								endAddress = elt.getAttribute("endAddress");
 								//prio = elt.getAttribute("priority");
                             }
                             if (svalue != null) {
