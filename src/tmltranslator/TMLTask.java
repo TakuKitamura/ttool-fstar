@@ -159,6 +159,31 @@ public class TMLTask extends TMLElement {
 		}
 		return list;
 	}
+
+	public String getID0()	{
+		
+		if( getReadChannels().size() > 0 )	{
+			return getReadChannels().get(0).toString().split("__")[1];
+		}
+		else	{
+			return "";
+		}
+	}
+
+	public String getOD0()	{
+
+		if( getWriteChannels().size() > 0 )	{
+			return getWriteChannels().get(0).toString().split("__")[1];
+		}
+		else	{
+			return "";
+		}
+	}
+
+	public String getXOD()	{
+		return getName().split( "__" )[1];
+	}
+
     
     public TMLActivity getActivityDiagram() {
         return activity;

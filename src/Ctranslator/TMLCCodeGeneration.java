@@ -215,8 +215,8 @@ public class TMLCCodeGeneration	{
 							"/********* INIT PREX OPs signals ********/" + CR +
 							"sig[feed_out].f=true;" + CR +
 							"sig[src_out].f=true;" + CR +
-							"/********* OPs scheduller ***************/" + CR +
-							TAB + "while( ERROR: there are not exit signals )	{" + CR +
+							"/********* OPs scheduler ***************/" + CR +
+							TAB + "while( !exit_rule() )	{" + CR +
 							TAB2 + "for( int n_op = 0; n_op < NUM_OPS; ++n_op )	{" + CR +
 							TAB3 + "valid_signal = (*fire_rule[n_op])();" + CR +
 							TAB3 + "if( valid_signal )	{" + CR +
@@ -225,7 +225,7 @@ public class TMLCCodeGeneration	{
    						TAB3 + "}" + CR +
 							TAB2 + "}" + CR +
 							TAB2 + "if( blocked )	{" + CR +
-							TAB3 + "printf(\"ERROR:the system got blocked, no new signals\\n\");" + CR +
+							TAB3 + "printf(\"ERROR: the system got blocked, no new signals\\n\");" + CR +
 							TAB3 + "return 1;" + CR +
 							TAB2 + "}" + CR +
 							TAB2 + "blocked = true;" + CR +
@@ -341,6 +341,7 @@ public class TMLCCodeGeneration	{
 	private void generateInitProgram( ArrayList<TMLTask> mappedTasks )	{
 		
 		String init_code = "";
+		String XOD = "";
 
 		initString += "#include \"" + applicationName + "_final.h\"" + CR2;
 
@@ -361,29 +362,29 @@ public class TMLCCodeGeneration	{
 		initString += "/**** init code ****/" + CR;
 
 		for( TMLTask task: mappedTasks )	{
-			String XOD = task.getName().split( "__" )[1];
+			XOD = task.getXOD();
 			if( XOD.contains( "CWP" ) || XOD.contains( "cwp" ) )	{
-				CwpMEC cwp = new CwpMEC( XOD, "", "", "" );
+				CwpMEC cwp = new CwpMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwp.getInitCode();
 			}
 			if( XOD.contains( "CWM" ) || XOD.contains( "cwm" ) )	{
-				CwmMEC cwm = new CwmMEC( XOD, "", "", "" );
+				CwmMEC cwm = new CwmMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwm.getInitCode();
 			}
 			if( XOD.contains( "CWA" ) || XOD.contains( "cwa" ) )	{
-				CwaMEC cwa = new CwaMEC( XOD, "", "", "" );
+				CwaMEC cwa = new CwaMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwa.getInitCode();
 			}
 			if( XOD.contains( "CWL" ) || XOD.contains( "cwl" ) )	{
-				CwlMEC cwl = new CwlMEC( XOD, "", "", "" );
+				CwlMEC cwl = new CwlMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = cwl.getInitCode();
 			}
 			if( XOD.contains( "SUM" ) || XOD.contains( "sum" ) )	{
-				SumMEC sum = new SumMEC( XOD, "", "", "" );
+				SumMEC sum = new SumMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = sum.getInitCode();
 			}
 			if( XOD.contains( "FFT" ) || XOD.contains( "fft" ) )	{
-				FftMEC fft = new FftMEC( XOD, "", "", "" );
+				FftMEC fft = new FftMEC( XOD, task.getID0(), task.getOD0(), "" );
 				init_code = fft.getInitCode();
 			}
 			initString += init_code + CR;
@@ -404,7 +405,7 @@ public class TMLCCodeGeneration	{
 		}
 		initString += "}";
 	}
-
+	
 	private ArrayList<String> getTaskNamePerMappedUnit( String mappedUnit, ArrayList<TMLTask> mappedTasks )	{
 
 		ArrayList<String> list = new ArrayList<String>();
