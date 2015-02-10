@@ -108,7 +108,7 @@ public class TMLCCodeGeneration	{
 		headerString += libraries();
 		headerString += prototypes();
 		headerString += buffers();
-		headerString += instructions();
+		headerString += instructions( mappedTasks );
 		headerString += signals( mappedTasks );
 		headerString += variables();
 	}
@@ -142,8 +142,12 @@ public class TMLCCodeGeneration	{
 		return s;
 	}
 
-	private String instructions()	{
-		String s = 	"/**** Instructions *****/" + CR2;
+	private String instructions( ArrayList<TMLTask> mappedTasks )	{
+		String s = 	"/**** Instructions *****/" + CR;
+		for( String s1: getTaskNamePerMappedUnit( "FEP", mappedTasks ) )	{
+			s += "extern FEP_CONTEXT " + s1 + ";" + CR;
+		}
+		s += CR;
 		return s;
 	}
 
@@ -189,6 +193,7 @@ public class TMLCCodeGeneration	{
 
 	private String variables()	{
 		String s = 	"/**** variables *****/" + CR +
+								"extern SIG_TYPE sig[];" + CR +
 								"#endif";
 		return s;
 	}
@@ -287,18 +292,40 @@ public class TMLCCodeGeneration	{
 
 	private void fireRules( ArrayList<TMLTask> mappedTasks )	{
 
-		programString += "/**** OPs FIRE RULES ****/";
+		programString += "/**** OPs FIRE RULES ****/" + CR;
 		for( TMLTask task: mappedTasks )	{
 			String XOD = task.getName().split( "__" )[1];
-			programString += "bool fr_" + XOD + "( void )\t" + CR;
-			programString += "return (" + generateFireRuleCondition( task ) + " );" + CR;
-			programString += "}" + CR;
+			programString += "bool fr_" + XOD + "( void )\t{" + CR;
+			programString += "return (" + generateFireRuleCondition( task ) + ");" + CR;
+			programString += "}" + CR2;
 		}
 		programString += CR;
 	}
 
 	private String generateFireRuleCondition( TMLTask task )	{
-		return "";
+
+		ArrayList<TMLWriteChannel> writeChannels = task.getWriteChannels();
+		ArrayList<TMLReadChannel> readChannels = task.getReadChannels();
+		ArrayList<String> writeList = new ArrayList<String>();
+		ArrayList<String> readList = new ArrayList<String>();
+		String s2 = "";
+		String s1 = "";
+
+		if( readChannels.size() > 0 )	{
+			for( TMLReadChannel ch: readChannels )	{
+				s1 += "( sig.[" + ch.toString().split("__")[1] + "].f ) && ";
+			}
+		}
+
+		if( writeChannels.size() > 0 )	{
+			for( TMLWriteChannel ch: writeChannels )	{
+				s2 += "( !sig.[" + ch.toString().split("__")[1] + "].f ) && ";
+			}
+			String temp = s2.substring( 0, s2.length()-4 );
+			s2 = temp;
+		}
+
+		return s1 + s2;
 	}
 
 	private void registerFireRules( ArrayList<TMLTask> mappedTasks )	{
@@ -328,6 +355,7 @@ public class TMLCCodeGeneration	{
 		initString += CR;
 
 		initString += "/**** init buffers ****/" + CR +
+									"void " + applicationName + "_final_init()\t{" + CR + "}" + CR +
 									"void signal_to_buffer_init()\t{" + CR + "}" + CR2;
 
 		initString += "/**** init code ****/" + CR;
