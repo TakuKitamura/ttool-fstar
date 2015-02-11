@@ -414,7 +414,7 @@ public class GTURTLEModeling {
 		TMLMappingTextSpecification spec = new TMLMappingTextSpecification( _title );
 		spec.toTextFormat( tmap );	//TMLMapping
 
-		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, "test" );
+		TMLCCodeGeneration myCode = new TMLCCodeGeneration( _title, "test", mgui.frame );
 		myCode.toTextFormat( tmap );
 
 		try {
