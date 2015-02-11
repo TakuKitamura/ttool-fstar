@@ -145,6 +145,36 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
         g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
+        // Link to mapped units
+        if (c == ColorManager.POINTER_ON_ME_0) {
+            TDiagramPanel tdp = getTDiagramPanel();
+            TGComponent tgc;
+            if (tdp != null) {
+                for(String ss: mappedUnits) {
+                    int index = ss.indexOf(":");
+                    if (index > -1) {
+                        String[] tabOfNames = ss.substring(index+1, ss.length()).trim().split(",");
+                        for (int i=0; i<tabOfNames.length; i++) {
+                            String s = tabOfNames[i].trim();
+                            if (s.length() > 0) {
+                                ListIterator iterator = tdp.getComponentList().listIterator();
+                                while(iterator.hasNext()) {
+                                    tgc = (TGComponent)(iterator.next());
+                                    if (tgc instanceof TMLArchiNode) {
+                                        //TraceManager.addDev("Testing |" + tgc.getName() + "|  vs | " + s + "|");
+                                        if (tgc.getName().compareTo(s) == 0) {
+                                            //TraceManager.addDev("Ok");
+                                            GraphicLib.dashedLine(g, getX() + getWidth()/2, getY() + getHeight()/2, tgc.getX() + tgc.getWidth()/2, tgc.getY() + tgc.getHeight()/2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -296,62 +326,62 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
 
-	public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )	{
-        
-  	if( tgc instanceof TMLArchiCommunicationArtifact )	{
-			// Make it an internal component
-			// It's one of my son
-			//Set its coordinates
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			//System.out.println("Internal component");
-     	//tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
-      //System.out.println("cdRect comp swallow");
-      ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
-      //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
-      //tgc.setCd(x, y);
-			//add it
-			addInternalComponent( tgc, 0 );
-			return true;
-		}
-		else	{
-  		if( tgc instanceof TMLArchiPortArtifact )	{
-				tgc.setFather( this );
-				tgc.setDrawingZone( true );
-        ( (TMLArchiPortArtifact)tgc ).resizeWithFather();
-				addInternalComponent( tgc, 0 );
-				return true;
-		}
-		return false;
+    public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )     {
+
+        if( tgc instanceof TMLArchiCommunicationArtifact )      {
+            // Make it an internal component
+            // It's one of my son
+            //Set its coordinates
+            tgc.setFather(this);
+            tgc.setDrawingZone(true);
+            //System.out.println("Internal component");
+            //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
+            //System.out.println("cdRect comp swallow");
+            ((TMLArchiCommunicationArtifact)tgc).resizeWithFather();
+            //tgc.setCdRectangle(0, width - tgc.getWidth(), 0, height - tgc.getHeight());
+            //tgc.setCd(x, y);
+            //add it
+            addInternalComponent( tgc, 0 );
+            return true;
+        }
+        else    {
+            if( tgc instanceof TMLArchiPortArtifact )   {
+                tgc.setFather( this );
+                tgc.setDrawingZone( true );
+                ( (TMLArchiPortArtifact)tgc ).resizeWithFather();
+                addInternalComponent( tgc, 0 );
+                return true;
+            }
+            return false;
+        }
     }
-	}
-    
-	public void hasBeenResized() {
-    
-		for( int i = 0; i < nbInternalTGComponent; i++ )	{
-			if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
-				( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
-			}
-			else	{
-				if( tgcomponent[i] instanceof TMLArchiPortArtifact )	{
-					( (TMLArchiPortArtifact)tgcomponent[i] ).resizeWithFather();
-				}
-  		}
-  	}
-	}
 
-	public ArrayList<TMLArchiPortArtifact> getPortArtifactList() {
+    public void hasBeenResized() {
 
-  	ArrayList<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
-    for( int i = 0; i < nbInternalTGComponent; i++ )	{
-			if( tgcomponent[i] instanceof TMLArchiPortArtifact )	{
-				v.add( (TMLArchiPortArtifact)(tgcomponent[i]) );
-      }
+        for( int i = 0; i < nbInternalTGComponent; i++ )        {
+            if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
+                ( (TMLArchiCommunicationArtifact)tgcomponent[i] ).resizeWithFather();
+            }
+            else        {
+                if( tgcomponent[i] instanceof TMLArchiPortArtifact )    {
+                    ( (TMLArchiPortArtifact)tgcomponent[i] ).resizeWithFather();
+                }
+            }
+        }
     }
-    return v;
-  }
 
-	public Vector<String> getMappedUnits()	{
-		return mappedUnits;
-	}
+    public ArrayList<TMLArchiPortArtifact> getPortArtifactList() {
+
+        ArrayList<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
+        for( int i = 0; i < nbInternalTGComponent; i++ )        {
+            if( tgcomponent[i] instanceof TMLArchiPortArtifact )        {
+                v.add( (TMLArchiPortArtifact)(tgcomponent[i]) );
+            }
+        }
+        return v;
+    }
+
+    public Vector<String> getMappedUnits()      {
+        return mappedUnits;
+    }
 }
